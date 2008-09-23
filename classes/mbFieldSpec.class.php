@@ -177,13 +177,13 @@ class CMbFieldSpec {
     }
     
     // input mask
-    if ($field = $this->mask){
+    if ($field = $this->mask) {
       $regex = self::maskToRegex($this->mask);
       $rawvalue = self::unmaskData($propValue, $this->mask);
 
       if (!preg_match($regex, $propValue)) {
       	if (!preg_match($regex, self::maskData($propValue, $this->mask))) {
-          return 'La donnée ne respecte pas le masque "'.$this->mask.'"';
+          return "La donnée '$propValue' ne respecte pas le masque '$this->mask'";
       	} // else, that means the value is already the rawvalue
       } else {
         $object->{$this->fieldName} = $rawvalue;

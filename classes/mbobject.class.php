@@ -699,13 +699,15 @@ class CMbObject {
 
   /**
    * Repair all non checking properties when possible
-   * @return null if the object is ok a message if not
+   * @return null|array if the object is ok an array of message for repaired fields
    */
   function repair() {
+    $repaired = array();
     $properties = get_object_vars($this);
     foreach ($this->getProps() as $name => $value) {
       if ($value !== null) {
         if ($msg = $this->checkProperty($name)) {
+          $repaired[$name] = $msg;
           $spec = $this->_specs[$name];
           if (!$spec->notNull) {
             $this->$name = "";
@@ -713,6 +715,7 @@ class CMbObject {
         }
       }
     }
+    return $repaired;
   }
 
   /**

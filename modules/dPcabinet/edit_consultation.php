@@ -143,7 +143,7 @@ if ($consult->_id) {
   
   // Calcul des paramètres de DHE
   $patient->makeDHEUrl();
-  if (CModule::getInstalled("dPsante400") && (CAppUI::conf("interop mode_compat") == "medicap")) {
+  if (CModule::getInstalled("dPsante400") && CAppUI::conf("interop mode_compat") == "medicap") {
     $tmpEtab = array();
     $groupIdentEc = "";
     foreach($etablissements as $etab) {

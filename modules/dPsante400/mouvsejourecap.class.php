@@ -12,6 +12,13 @@ class CMouvSejourEcap extends CMouvement400 {
   const STATUS_ACTES         = 6;
   const STATUS_NAISSANCE     = 7;
   
+  const PROFIL_MEDECIN      =  1;
+  const PROFIL_CHIRURGIEN   =  2;
+  const PROFIL_ANESTHESISTE =  4;
+  const PROFIL_RADIOLOGUE   =  8;
+  const PROFIL_BIOLOGISTE   = 16;
+  const PROFIL_DENTISTE     = 32;
+  
   public $sejour        = null;
   public $etablissement = null;
   public $fonction      = null;
@@ -225,7 +232,6 @@ class CMouvSejourEcap extends CMouvement400 {
       $nomsPraticien     = split(" ", $prat400->consume("ZNOM"));
       $prenomsPraticiens = split(" ", $prat400->consume("ZPRE"));
   
-      $praticien->_user_type = 3; // Chirurgien
       $praticien->_user_username = substr(strtolower($prenomsPraticiens[0][0] . join($nomsPraticien, "")), 0, 20);
       $praticien->_user_last_name  = join(" ", $nomsPraticien);
       $praticien->_user_first_name = join(" ", $prenomsPraticiens);
@@ -267,8 +273,17 @@ class CMouvSejourEcap extends CMouvement400 {
       $praticien->commentaires .= "\nSpécialité (Nomenclature) : $CSP";
     }    
     
+    // Uniquement utilisé à la première utilisation
     $pratDefault = new CMediusers;
-    $pratDefault->function_id = $this->fonction->function_id;
+    $pratDefault->function_id = $this->fonction->_id;
+    
+    // Type de mediuser
+    $PROF = $prat400->consume("PROF");
+    if ($PROF & self::PROFIL_MEDECIN)      $pratDefault->_user_type = 13;
+    if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
+    if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
+    
+    mbExport($pratDefault->getProps(), "Prat default");
 
     $this->trace($praticien->getDBFields(), "Praticien à enregistrer");
     
@@ -334,6 +349,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient = new CPatient;
     $this->patient->nom              = $pat400->consume("ZNOM");
     $this->patient->prenom           = $pat400->consume("ZPRE");
+    
+    $this->patient->_specs["naissance"]->mask = null;
     $this->patient->naissance        = $pat400->consumeDate("DNAI");
     $this->patient->loadMatchingPatient();
     
@@ -345,15 +362,21 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient->tel              = $pat400->consumeTel("ZTL1");
     $this->patient->tel2             = $pat400->consumeTel("ZTL2");
     
-    $this->patient->matricule         = $pat400->consume("NSEC") . $pat400->consume("CSEC");
+//  Le matricule n'est actuellement que mal recu par la DHE donc on garde celle de Mediboard
+//    $this->patient->matricule         = $pat400->consume("NSEC") . $pat400->consume("CSEC");
+
     $this->patient->rang_beneficiaire = str_pad($pat400->consume("RBEN"), 2, "0", STR_PAD_LEFT);
 
 //    $this->patient->pays              = $pat400->consume("ZPAY");
     $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
     $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
+    $this->patient->repair();
+    $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
+    
 
     $this->id400Pat->bindObject($this->patient);
+    mbExport($this->patient->getDBFields(), "Naissance après sauvegarde");
 
     $this->markStatus(self::STATUS_PATIENT);
   }
@@ -420,7 +443,8 @@ class CMouvSejourEcap extends CMouvement400 {
       "2" => "exte",
       "3" => "seances",
       "4" => "ssr",
-      "5" => "psy"
+      "5" => "psy",
+      "6" => "urg" 
     );
     
     $TYHO = $dheECap->consume("TYHO");

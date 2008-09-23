@@ -61,7 +61,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     
     // Vérifier que c'est le même si existant
     if ($sejourDHE->_id &&  $sejourSej->_id && $sejourDHE->_id != $sejourSej->_id) {
-      throw new Exception("2 séjours différents trouvés pour DHE et Séjour");
+      throw new Exception("2 séjours différents trouvés pour DHE et Séjour (MbID: $sejourDHE->_id et $sejourSej->_id)");
     }
     
     // On choisit le Sejour DHE
@@ -90,12 +90,12 @@ class CMouvInterventionECap extends CMouvSejourEcap {
       return;
     }
     
-    // Déjà synchronisé, on laisse
-    if ($this->id400DHE->_id) {
-      $this->markStatus(self::STATUS_SEJOUR);
-      $this->markStatus(self::STATUS_PRATICIEN);
-      return;
-    }
+//    // Déjà synchronisé, on laisse
+//    if ($this->id400DHE->_id) {
+//      $this->markStatus(self::STATUS_SEJOUR);
+//      $this->markStatus(self::STATUS_PRATICIEN);
+//      return;
+//    }
 
     // Chargement de la DHE
     $values = array (

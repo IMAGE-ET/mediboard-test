@@ -783,12 +783,11 @@ class CPatient extends CMbObject {
   }
   
   function makeDHEUrl() {
-    global $dPconfig;
     $this->_urlDHE       = "#";
     $this->_urlDHEParams = array();
     // Construction de l'URL
-    if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
-	    $this->_urlDHE = $dPconfig["interop"]["base_url"];
+    if(CModule::getInstalled("dPsante400") && CAppUI::conf("interop mode_compat") == "medicap") {
+	    $this->_urlDHE = CAppUI::conf("interop base_url");
 	    $this->_urlDHEParams["logineCap"]       = "";
 	    $this->_urlDHEParams["codeAppliExt"]    = "mediboard";
 	    $this->_urlDHEParams["patIdentLogExt"]  = $this->patient_id;
@@ -796,7 +795,7 @@ class CPatient extends CMbObject {
 	    $this->_urlDHEParams["patPrenom"]       = $this->prenom;
 	    $this->_urlDHEParams["patNomJF"]        = $this->nom_jeune_fille;
 	    $this->_urlDHEParams["patSexe"]         = $this->sexe == "m" ? "1" : "2";
-	    $this->_urlDHEParams["patDateNaiss"]    = mbDateToLocale($this->naissance);
+	    $this->_urlDHEParams["patDateNaiss"]    = $this->naissance; //mbDateToLocale($this->naissance);
 	    $this->_urlDHEParams["patAd1"]          = $this->adresse;
 	    $this->_urlDHEParams["patCP"]           = $this->cp;
 	    $this->_urlDHEParams["patVille"]        = $this->ville;

@@ -64,7 +64,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
 <tr>
   <th class="title" colspan="100">
-  	Imports de {{$mouvs|@count}} mouvements de séjours
+  	Imports de {{$mouvs|@count}} {{tr}}CMouvement400-type-{{$type}}{{/tr}}
   	sur {{$count}} disponibles
   	{{if $dPconfig.dPsante400.group_id}}
   	<br />Filtré sur l'établissement '{{$dPconfig.dPsante400.group_id}}'

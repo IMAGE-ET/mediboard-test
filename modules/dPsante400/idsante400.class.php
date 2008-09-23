@@ -73,19 +73,16 @@
   function getCachedObject($delay = null) {
     // Get config cache duration
     if (null === $delay) {
-      global $dPconfig;
-      $delay = $dPconfig["dPsante400"]["cache_hours"];
+      $delay = CAppUI::conf("dPsante400 cache_hours");
     }
     
-    $delay = "+ $delay HOURS";
-
     // Look for object
     $this->_id = null;
     $this->loadMatchingObject("`last_update` DESC");
     $this->loadRefsFwd();
 
     // Check against cache duration
-    if ($delay && mbDateTime($delay, $this->last_update) < mbDateTime()) {
+    if (mbDateTime("+ $delay HOURS", $this->last_update) < mbDateTime()) {
       $this->_ref_object = new $this->object_class;
     }
 
@@ -123,6 +120,7 @@
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
     $this->loadMatchingObject("`last_update` DESC");
+    $this->_ref_object = null; // Prevent optimisation errors
     $this->loadRefs();
     
     // Object has not been found : never created or deleted since last binding
