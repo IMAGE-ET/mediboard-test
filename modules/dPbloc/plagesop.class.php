@@ -148,9 +148,9 @@ class CPlageOp extends CMbObject {
 	 *  et mise a jour des rank, de sorte qu'ils soient consecutifs
 	 **/
   function reorderOp() {
+    $tmpPlage = new CPlageOp;
+    $tmpPlage->load($this->_id);
     if(!$this->debut && $this->_id) {
-      $tmpPlage = new CPlageOp;
-      $tmpPlage->load($this->_id);
       $this->debut = $tmpPlage->debut;
       $this->temps_inter_op = $tmpPlage->temps_inter_op;
     }
@@ -164,7 +164,7 @@ class CPlageOp extends CMbObject {
         $op->rank = ++$i;
         $op->time_operation = $new_time;
         // Pour faire suivre un changement de salle
-        if($this->salle_id) {
+        if($this->salle_id && $this->salle_id != $tmpPlage->salle_id) {
           $op->salle_id = $this->salle_id;
         }
         $op->updateFormFields();

@@ -383,7 +383,6 @@ class COperation extends CCodable {
     if ($msg = parent::store()) {
       return $msg;
     }
-
     // Cas d'une annulation
     if (!$this->annulee) {
       // Si pas une annulation on recupére le sejour
