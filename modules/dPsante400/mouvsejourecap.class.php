@@ -371,12 +371,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
     $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
-    $this->patient->repair();
-    $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
-    
-
     $this->id400Pat->bindObject($this->patient);
-    mbExport($this->patient->getDBFields(), "Naissance après sauvegarde");
 
     $this->markStatus(self::STATUS_PATIENT);
   }
