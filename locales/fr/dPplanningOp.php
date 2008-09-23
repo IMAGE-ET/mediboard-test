@@ -698,4 +698,7 @@ $locales['CSejour-_protocole_prescription_chir_id-desc'] = '';
 $locales['config-dPbloc-CPlageOp-planning-col1'] = 'Colonne 1';
 $locales['config-dPbloc-CPlageOp-planning-col2'] = 'Colonne 2';
 $locales['config-dPbloc-CPlageOp-planning-col3'] = 'Colonne 3';
+$locales['COperation-depassement_anesth'] = 'Dépassement anesth.';
+$locales['COperation-depassement_anesth-court'] = 'DH An.';
+$locales['COperation-depassement_anesth-desc'] = 'Montant du dépassement d\'honoraire éventuel de l\'anesthésiste';
 ?>

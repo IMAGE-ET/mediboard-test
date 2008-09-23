@@ -408,4 +408,5 @@ $locales['CHprim21Sejour-msg-create'] = '';
 $locales['CHprim21Sejour-msg-delete'] = '';
 $locales['CHprim21Sejour-msg-modify'] = '';
 $locales['mod-hprim21-tab-vw_patients'] = '';
+$locales['mod-hprim21-tab-pat_hprim_selector'] = '';
 ?>

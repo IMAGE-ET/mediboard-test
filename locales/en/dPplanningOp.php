@@ -698,4 +698,7 @@ $locales['CSejour.all'] = '';
 $locales['CSejour.select'] = '';
 $locales['CTypeAnesth.all'] = '';
 $locales['CTypeAnesth.select'] = '';
+$locales['COperation-depassement_anesth'] = '';
+$locales['COperation-depassement_anesth-court'] = '';
+$locales['COperation-depassement_anesth-desc'] = '';
 ?>
