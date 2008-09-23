@@ -71,6 +71,12 @@ foreach($services as &$curr_service) {
   }
 }
 
+// Chargement des niveaux de prestations
+$prestations = CPrestation::loadCurrentList();
+foreach($prestations as &$prestation) {
+  $prestation->loadLastId400($tag);
+}
+
 // Chargement des etablissements externes
 $orderEtab = "nom";
 $etabExterne = new CEtabExterne();
@@ -78,6 +84,7 @@ $listEtabExternes = $etabExterne->loadList(null, $orderEtab);
 foreach($listEtabExternes as &$etabExterne){
 	$etabExterne->loadLastId400($tag);
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -88,6 +95,7 @@ $smarty->assign("today"            , $today);
 $smarty->assign("praticiens"       , $praticiens);
 $smarty->assign("persusers"        , $persusers);
 $smarty->assign("services"         , $services);
+$smarty->assign("prestations"      , $prestations);
 $smarty->assign("salles"           , $salles);
 $smarty->assign("listEtabExternes" , $listEtabExternes);
 

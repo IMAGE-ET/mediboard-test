@@ -61,7 +61,7 @@ class CPrestation extends CMbObject {
     global $g;
     $prestation = new CPrestation();
     $prestation->group_id = $g;
-    return $prestation->loadMatchingList();    
+    return $prestation->loadMatchingList("nom");    
   }
 }
 
