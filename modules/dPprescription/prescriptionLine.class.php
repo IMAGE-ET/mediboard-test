@@ -535,13 +535,15 @@ class CPrescriptionLine extends CMbObject {
  	
      // Fois par avec comme unite jour
     if($_prise->nb_fois && $_prise->unite_fois == "jour" && $this->_active){
-      foreach($_prise->_heures as $_heure){
-        $dateTimePrise = mbAddDateTime($_heure, $date);
-        if($this->_fin_reelle > $dateTimePrise && $poids_ok){
-		  @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[substr($_heure,0,2)]] += $_prise->quantite;	
-          @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
-          $prise_comptee = 1;
-	    }
+      if($_prise->_heures){
+	      foreach($_prise->_heures as $_heure){
+	        $dateTimePrise = mbAddDateTime($_heure, $date);
+	        if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+			      @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[substr($_heure,0,2)]] += $_prise->quantite;	
+	          @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+	          $prise_comptee = 1;
+		      }
+	      }
       }
     }
     

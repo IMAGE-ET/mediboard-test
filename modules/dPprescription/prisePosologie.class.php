@@ -86,7 +86,7 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_heures[] = $this->_ref_moment->heure;
     }
     
-    if($this->nb_fois){
+    if($this->nb_fois && $this->nb_fois <= 3 && $this->unite_fois == "jour"){
     	$this->_view .= " ".$this->nb_fois." fois";
       $this->_type = "fois_par";
       
