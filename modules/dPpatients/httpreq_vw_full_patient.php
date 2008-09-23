@@ -20,7 +20,7 @@ if(!$patient_id) {
 
 // Liste des Praticiens
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;

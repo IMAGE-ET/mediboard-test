@@ -276,7 +276,6 @@ class CMediusers extends CMbObject {
     if (!$this->_ref_function) {
       $this->loadRefFunction();
     }
-
     return $this->_ref_function->getPerm($permType);
   }
 

@@ -25,7 +25,7 @@ if(!$patient_id) {
 
 // Liste des Praticiens
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $codePraticienEc = null;

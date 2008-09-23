@@ -43,9 +43,9 @@ $is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 if($is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee) {
   if($is_admin) {
-    $listPrat = $mediuser->loadPraticiens(PERM_READ);
+    $listPrat = $mediuser->loadPraticiens(PERM_EDIT);
   } else {
-    $listPrat = $mediuser->loadPraticiens(PERM_READ, $mediuser->function_id);
+    $listPrat = $mediuser->loadPraticiens(PERM_EDIT, $mediuser->function_id);
   }
 } else {
   $listPrat = array($mediuser->_id => $mediuser);

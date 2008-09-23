@@ -70,9 +70,9 @@ if($filter->_mode_reglement) {
 $listPrat = new CMediusers();
 $is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
 if($is_admin) {
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
+  $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 } else {
-  $listPrat = $listPrat->loadPraticiens(PERM_READ, $mediuser->function_id);
+  $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $mediuser->function_id);
 }
 $where["plageconsult.chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
 $reglements = $reglement->loadList($where, "reglement.date, plageconsult.chir_id", null, null, $ljoin);

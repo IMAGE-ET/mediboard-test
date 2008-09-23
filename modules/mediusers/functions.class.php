@@ -121,7 +121,6 @@ class CFunctions extends CMbObject {
     $where["group_id"] = "= '$g'";
     $order = "text";
     $specs = $this->loadListWithPerms($perm_type, $where, $order);
-    
     return $specs;
   }
   

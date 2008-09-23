@@ -166,7 +166,7 @@ $listPrat = array();
 if ($patient->_id) {
   // Liste des praticiens disponibles
   $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_READ);
+  $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
   $patient->loadDossierComplet();
   foreach($patient->_ref_sejours as $key=>$sejour){
   	$sejour->loadNumDossier();
