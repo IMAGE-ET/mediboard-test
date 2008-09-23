@@ -31,7 +31,9 @@ foreach($plages as &$curr_plage) {
   $totalOp += count($curr_plage->_ref_operations);
   foreach($curr_plage->_ref_operations as &$curr_op) {
     $curr_op->loadRefsFwd();
+    $curr_op->_ref_sejour->loadNumDossier();
     $curr_op->_ref_sejour->loadRefPatient();
+    $curr_op->_ref_sejour->_ref_patient->loadIPP();
     $curr_op->loadExtCodesCCAM();
     $curr_op->loadHprimFiles();
   }
@@ -46,7 +48,9 @@ $urgences = $urgences->loadList($where, $order);
 $totalOp += count($urgences);
 foreach($urgences as &$curr_op) {
   $curr_op->loadRefsFwd();
+  $curr_op->_ref_sejour->loadNumDossier();
   $curr_op->_ref_sejour->loadRefPatient();
+  $curr_op->_ref_sejour->_ref_patient->loadIPP();
   $curr_op->loadExtCodesCCAM();
   $curr_op->loadHprimFiles();
 }

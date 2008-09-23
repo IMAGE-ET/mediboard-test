@@ -8,13 +8,14 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="6">
+    <th class="title" colspan="7">
       Liste des {{$totalOp}} intervention(s) du {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
   <tr>
     <th>Traité</th>
+    <th>Dossier</th>
     <th>Praticien</th>
     <th>Patient</th>
     <th>Heure</th>
@@ -31,6 +32,9 @@ Main.add(function () {
       <img src="images/icons/cross.png" alt="alerte" />
       {{/if}}
     </td>
+    <td>
+      [{{$curr_op->_ref_sejour->_num_dossier}}]
+    </td>
     <td class="text">
       Dr {{$curr_op->_ref_chir->_view}}
     </td>
@@ -38,6 +42,7 @@ Main.add(function () {
     <td class="text">
       <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_op->_ref_sejour->patient_id}}">
         {{$curr_op->_ref_sejour->_ref_patient->_view}}
+        [{{$curr_op->_ref_sejour->_ref_patient->_IPP}}]
       </a>
     </td>
     

@@ -28,6 +28,8 @@ $listSejours = $sejour->loadList($where, $order);
 foreach ($listSejours as $keySejour => $valueSejour) {
   $sejour =& $listSejours[$keySejour];
   $sejour->loadRefsFwd();
+  $sejour->loadNumDossier();
+  $sejour->_ref_patient->loadIPP();
   $sejour->loadRefGHM();
   $sejour->loadHprimFiles();
 }

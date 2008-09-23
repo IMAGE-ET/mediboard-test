@@ -15,6 +15,7 @@ Main.add(function () {
   </tr>
   <tr>
     <th>Traité</th>
+    <th>Dossier</th>
     <th>Praticien</th>
     <th>Patient</th>
     <th>Entrée</th>
@@ -32,6 +33,9 @@ Main.add(function () {
       <img src="images/icons/cross.png" alt="alerte" />
       {{/if}}
     </td>
+    <td>
+      [{{$curr_sejour->_num_dossier}}]
+    </td>
     <td class="text">
       Dr {{$curr_sejour->_ref_praticien->_view}}
     </td>
@@ -39,6 +43,7 @@ Main.add(function () {
     <td class="text">
       <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_sejour->patient_id}}">
         {{$curr_sejour->_ref_patient->_view}}
+        [{{$curr_sejour->_ref_patient->_IPP}}]
       </a>
     </td>
 
