@@ -36,7 +36,7 @@ var Menu = {
   <form name="ChangeGroup" action="?" method="get">
 
   <input type="hidden" name="m" value="{{$m}}" />
-  <select name="g" onchange="this.form.submit();">
+  <select name="g" style="width: 140px;" onchange="this.form.submit();">
     {{foreach from=$Etablissements item=currEtablissement}}
     <option value="{{$currEtablissement->_id}}" {{if $currEtablissement->_id == $g}}selected="selected"{{/if}}>
       {{$currEtablissement->_view}}
