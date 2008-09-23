@@ -283,8 +283,6 @@ class CMouvSejourEcap extends CMouvement400 {
     if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
     if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
     
-    mbExport($pratDefault->getProps(), "Prat default");
-
     $this->trace($praticien->getDBFields(), "Praticien à enregistrer");
     
     $id400Prat->bindObject($praticien, $pratDefault);
