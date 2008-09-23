@@ -33,11 +33,8 @@ $demain = mbDate("+ 1 day", $date);
 $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:00", $date);
 
-
 // Chargement des prestations
-$prestation = new CPrestation();
-$prestations = $prestation->loadList();
-
+$prestations = CPrestation::loadCurrentList();
 
 // Operations de la journée
 $today = new CSejour;

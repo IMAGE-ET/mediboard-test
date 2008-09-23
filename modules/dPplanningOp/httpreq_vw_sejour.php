@@ -18,8 +18,7 @@ $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 // Chargement des prestations
-$prestation = new CPrestation();
-$prestations = $prestation->loadList();
+$prestations = CPrestation::loadCurrentList();
 
 $sejour = new CSejour;
 $praticien = new CMediusers;

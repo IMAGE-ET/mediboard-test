@@ -14,10 +14,8 @@ $can->needsEdit();
 // Liste des Etablissements selon Permissions
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
-
 // Chargement des prestations
-$prestation = new CPrestation();
-$prestations = $prestation->loadList();
+$prestations = CPrestation::loadCurrentList();
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $chir_id      = mbGetValueFromGetOrSession("chir_id");

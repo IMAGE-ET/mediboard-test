@@ -53,6 +53,16 @@ class CPrestation extends CMbObject {
     $this->loadRefGroup();
   }
   
+  /**
+   * Niveaux de prestations pour l'établissement courant
+   * @return array[CPrestation]
+   */
+  static function loadCurrentList() {
+    global $g;
+    $prestation = new CPrestation();
+    $prestation->group_id = $g;
+    return $prestation->loadMatchingList();    
+  }
 }
 
 ?>
