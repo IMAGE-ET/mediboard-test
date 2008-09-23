@@ -205,7 +205,6 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $sortie_prevue = $operECap->consumeDateTime("DTSP", "HRSP");
     $entree_reelle = $operECap->consumeDateTime("DTER", "HREM");
     $sortie_reelle = $operECap->consumeDateTime("DTSR", "HRSR");
-    mbTrace($entree_reelle, "Entree réelle"); 
 
     $duree_prevue = $sortie_prevue > $entree_prevue ? 
       mbTimeRelative($entree_prevue, $sortie_prevue) : 
