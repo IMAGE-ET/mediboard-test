@@ -163,9 +163,7 @@ var Url = Class.create({
           
     };
     Object.extend(oOptions, oUserOptions);
-    
-    $(idInput).writeAttribute("autocomplete", "off");
-    
+
     // Autocomplete
     this.addParam("ajax", "1");
     this.addParam("suppressHeaders", "1");
