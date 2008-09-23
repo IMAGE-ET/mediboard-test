@@ -58,3 +58,15 @@
 	</span>
   {{/if}}
 </form>
+<br />
+{{if $operation->_id}}
+<form name="editOpFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_planning_aed" />
+  {{mb_field object=$operation field="operation_id" hidden=1 prop=""}}
+  {{mb_label object=$operation field="depassement_anesth"}}
+  {{mb_field object=$operation field="depassement_anesth" onchange="this.form.onsubmit()"}}
+  <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
+</form>
+{{/if}}
