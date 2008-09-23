@@ -124,7 +124,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return checkFormRDV(this)">
+<form name="editFrm" action="?m={{$m}}" class="nowatched" method="post" onsubmit="return checkFormRDV(this)">
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
