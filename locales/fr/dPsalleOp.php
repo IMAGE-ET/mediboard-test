@@ -126,4 +126,6 @@ $locales['CActeCCAM.code_association.3'] = '';
 $locales['CActeCCAM.code_association.4'] = '';
 $locales['CActeCCAM.code_association.5'] = '';
 $locales['CActeCCAM.select'] = '';
+$locales['config-dPsalleOp-CReveil'] = 'Affichage de la salle de réveil';
+$locales['config-dPsalleOp-CReveil-multi_tabs_reveil'] = 'Affichage de \'Attente / Réveil / Sortie\' en';
 ?>

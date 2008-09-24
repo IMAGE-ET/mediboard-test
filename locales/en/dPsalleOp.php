@@ -115,4 +115,17 @@ $locales['SSPI.SortieSalle'] = '';
 $locales['SSPI.EntreeReveil'] = '';
 $locales['SSPI.Chambre'] = '';
 $locales['SSPI.SortieReveil'] = '';
+$locales['config-dPsalleOp-CReveil'] = '';
+$locales['CActeCCAM-title-create'] = '';
+$locales['CActeCCAM-title-modify'] = '';
+$locales['CActeCCAM.all'] = '';
+$locales['CActeCCAM.code_association.'] = '';
+$locales['CActeCCAM.code_association.1'] = '';
+$locales['CActeCCAM.code_association.2'] = '';
+$locales['CActeCCAM.code_association.3'] = '';
+$locales['CActeCCAM.code_association.4'] = '';
+$locales['CActeCCAM.code_association.5'] = '';
+$locales['CActeCCAM.select'] = '';
+$locales['SSPI.RSPO'] = '';
+$locales['config-dPsalleOp-CReveil-multi_tabs_reveil'] = '';
 ?>

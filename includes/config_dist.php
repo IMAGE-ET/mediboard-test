@@ -216,6 +216,9 @@ $dPconfig["dPsalleOp"] = array(
   ),
   "max_add_minutes" => "10",
   "max_sub_minutes" => "30",
+  "CReveil"			=> array (
+  	"multi_tabs_reveil"	  => "1",
+  ),
 );
    
 $dPconfig["dPhospi"]["pathologies"] = 1;

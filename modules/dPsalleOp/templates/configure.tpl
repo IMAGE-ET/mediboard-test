@@ -201,6 +201,25 @@
     </td>             
   </tr>
   
+  {{assign var="class" value="CReveil"}}
+  <tr>
+    <th class="category" colspan="6">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+  </tr>
+  
+  {{assign var="var" value="multi_tabs_reveil"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]_1">3 onglets</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]_0">1 onglet</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
   
   <tr>
     <td class="button" colspan="100">
