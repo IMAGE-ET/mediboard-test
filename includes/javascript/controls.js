@@ -350,10 +350,13 @@ Element.addMethods('input', {
     reMask = new RegExp(reMask+"$");
     
     var matches = reMask.exec(element.value);
-
-    for (i = 1; (i < matches.length && i < 10); i++) {
-      format = format.replace("$"+i, matches[i]);
-    }
+    if (matches) {
+	    for (i = 1; (i < matches.length && i < 10); i++) {
+	      format = format.replace("$"+i, matches[i]);
+	    }
+	  } else {
+	    format = '';
+	  }
     return format;
   }
 });
