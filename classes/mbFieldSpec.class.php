@@ -24,6 +24,7 @@ class CMbFieldSpec {
   var $alphaAndNum    = null;
   var $xor            = null;
   var $mask           = null;
+  var $format         = null;
 
   var $msgError       = null;
 
@@ -67,7 +68,7 @@ class CMbFieldSpec {
     $propValue = $object->$fieldName;
     
     if ($propValue && $this->mask) {
-      $propValue = self::maskData($propValue, $this->mask);
+      $propValue = self::formattedToMasked($propValue, $this->mask, $this->format);
     }
     
     return htmlspecialchars($propValue);
@@ -179,64 +180,172 @@ class CMbFieldSpec {
     // input mask
     if ($field = $this->mask) {
       $regex = self::maskToRegex($this->mask);
-      $rawvalue = self::unmaskData($propValue, $this->mask);
+      $formatted = self::maskedToFormatted($propValue, $this->mask, $this->format);
+      $masked = self::formattedToMasked($propValue, $this->mask, $this->format);
 
       if (!preg_match($regex, $propValue)) {
-      	if (!preg_match($regex, self::maskData($propValue, $this->mask))) {
+      	if (!preg_match($regex, $masked)) {
           return "La donnée '$propValue' ne respecte pas le masque '$this->mask'";
       	} // else, that means the value is already the rawvalue
       } else {
-        $object->{$this->fieldName} = $rawvalue;
+        $object->{$this->fieldName} = $formatted;
       }
     }
 
     return null;
   }
+
+ /**
+  *  99/99/9999 >> 
+		array	(
+		  array('[0-9]', 2),
+		  '/',
+		  array('[0-9]', 2),
+		  '/',
+		  array('[0-9]', 4)
+		)
+  * 
+  */
+  static function maskToLexemes($mask) {
+    $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
+    $lexemes = array();
+    $prevChar = null;
+    $count = 0;
+
+    for ($i = 0; $i <= strlen($mask); $i++) {
+      $c = (isset($mask[$i]) ? $mask[$i] : null); // To manage the latest char
+
+      if (!isset(self::$charmap[$c])) {
+        if (isset(self::$charmap[$prevChar])) {
+          $lexemes[] = array(self::$charmap[$prevChar], $count);
+        }
+        if($c !== null) {
+          $lexemes[] = $c;
+        }
+        $prevChar = $c;
+        $count = 0;
+      }
+      else if ($prevChar !== $c) {
+        if (isset(self::$charmap[$prevChar])) {
+          $lexemes[] = array(self::$charmap[$prevChar] => $count);
+          $prevChar = $c;
+          $count = 0;
+        }
+        else {
+          $prevChar = $c;
+          $count++;
+        }
+      }
+      else if ($prevChar === $c) {
+        $count++;
+      }
+    }
+    
+    return $lexemes;
+  }
   
+ /**
+  *  99/99/9999 >> /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/ 
+  */
   static function maskToRegex($mask) {
     $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
     $regex = '/^';
-      
-    // Could be shorter, using str_replace
-    for ($i = 0; $i < strlen($mask); $i++) {
-      $regex .= isset(self::$charmap[$mask[$i]]) ? 
-        self::$charmap[$mask[$i]] :
-        (preg_match('`[A-Za-z0-9]`', $mask[$i]) ? '' : '\\').$mask[$i];
+    $lexemes = self::maskToLexemes($mask);
+    
+    foreach ($lexemes as $lex) {
+      $regex .= is_array($lex) ? 
+                  ('('.$lex[0].'{'.$lex[1].'})') : 
+                  (preg_match('`[A-Za-z0-9]`', $lex) ? '' : '\\').$lex;
     }
     $regex .= '$/';
     
     return $regex;
   }
   
-  static function unmaskData($data, $mask) {
+ /** Removes the mask from the string 
+  *   Example : 06-85-98-45-26  >> 0685984526
+  *   Or        31/10/1985      >> 1985-10-31 with the format $3-$2-$1
+  */
+  static function maskedToFormatted($data, $mask, $format = null) {
     $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
-    $rawvalue = '';
+    $formatted = '';
+    
+    // If no format is provided, this is the raw value
+    if (!$format) {
+	    // Could be shorter, using str_replace
+	    for ($i = 0; $i < strlen($mask); $i++) {
+	      if (isset(self::$charmap[$mask[$i]]) && isset($data[$i])) {
+	        $formatted .= $data[$i];
+	      }
+      }
+    } 
+    // else, we match the data to the format
+    else {
+      $regex = self::maskToRegex($mask);
+      $formatted = $format;
       
-    // Could be shorter, using str_replace
-    for ($i = 0; $i < strlen($mask); $i++) {
-      if (isset(self::$charmap[$mask[$i]]) && isset($data[$i])) {
-        $rawvalue .= $data[$i];
-      }
+      $matches = array();
+      preg_match($regex, $data, $matches);
+	    for ($i = 1; ($i < count($matches) && $i < 10); $i++) {
+	      $formatted = str_replace('$'.$i, $matches[$i], $formatted);
+	    }
     }
     
-    return $rawvalue;
+    return $formatted;
   }
-  
-  static function maskData($rawdata, $mask) {
+
+ /** Applies the mask to the string 
+  *   Example : 0685984526 >> 06-85-98-45-26
+  *   Or        1985-10-31 >> 31/10/1985 with the format $3-$2-$1
+  */
+  static function formattedToMasked($rawdata, $mask, $format = null) {
   	$mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
+  	$masked = '';
   	
-  	$value = '';
-  	$n = 0;
-    for ($i = 0; $i < strlen($mask); $i++) {
-      if (isset(self::$charmap[$mask[$i]]) && isset($rawdata[$n])) {
-        $value .= $rawdata[$n++];
-      }
-      else {
-      	$value .= $mask[$i];
-      }
-    }
+  	if (!$format) {
+	  	$n = 0;
+	    for ($i = 0; $i < strlen($mask); $i++) {
+        $masked .= isset(self::$charmap[$mask[$i]]) && isset($rawdata[$n]) ? 
+                     $rawdata[$n++] :
+                     $mask[$i];
+	    }
+  	} 
+  	else {
+			$lexemes = self::maskToLexemes($mask);
+			$areas = array();
+			$placeToLexeme = array(); // Makes the correspondance between the $1, $2, $3... in the format and the lexemes
+			
+			// We collect only the variable lexemes
+			$n = 0;
+			for ($i = 0; $i < count($lexemes); $i++) {
+			  if (is_array($lexemes[$i])) {
+			    $areas[++$n] = $lexemes[$i];
+			    $placeToLexeme[$n] = $i;
+			  }
+			}
+
+			$positions = array();
+			$formatRegex = "/^$format$/";
+			for ($i = 1; $i <= count($areas); $i++) {
+        $pos = strpos($formatRegex, '$'.$i);
+        $positions[$pos] = $i;
+			  $formatRegex = str_replace('$'.$i, ('('.$areas[$i][0].'{'.$areas[$i][1].'})'), $formatRegex);
+			}
+			
+			ksort($positions); // sort by key
+			$positions = array_values($positions); // to make keys contiguous
     
-    return $value;
+	    $matches = array();
+	    preg_match($formatRegex, $rawdata, $matches);
+      if (count($matches)) {
+		    foreach ($areas as $key => $area) {
+		      $lexemes[$placeToLexeme[$key]] = $matches[$positions[$key-1]];
+		    }
+	      $masked = implode('', $lexemes);
+      }
+  	}
+    
+    return $masked;
   }
 
   function checkTargetPropValue($object, $field){

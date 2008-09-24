@@ -953,7 +953,6 @@ Object.extend(Calendar, {
 } );
 
 function regFieldCalendar(sFormName, sFieldName, bTime) {
-  
   if (bTime == null) bTime = false;
   
   var sInputId = sFormName + "_" + sFieldName;
@@ -1415,7 +1414,7 @@ Element.addMethods({
   getProperties: function (element) {
     var props = {};
 
-    element.className.split(" ").without("").each(function (value) {
+    $w(element.className).each(function (value) {
       var params = value.split("|");
       props[params.shift()] = (params.length == 0) ? true : params.reduce();
     });

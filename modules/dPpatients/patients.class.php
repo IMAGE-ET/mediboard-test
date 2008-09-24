@@ -183,9 +183,9 @@ class CPatient extends CMbObject {
     
     
     if(CAppUI::conf("dPpatients CPatient date_naissance")){
-      $specs["naissance"]       = "notNull birthDate mask|99/99/9999";
+      $specs["naissance"]       = "notNull birthDate mask|99/99/9999 format|$3-$2-$1";
     } else {
-      $specs["naissance"]       = "birthDate mask|99/99/9999";  
+      $specs["naissance"]       = "birthDate mask|99/99/9999 format|$3-$2-$1";  
     }
     
     $specs["rques"]             = "text";
@@ -225,7 +225,7 @@ class CPatient extends CMbObject {
     $specs["assure_prenom"]            = "str";
     $specs["assure_nom_jeune_fille"]   = "str confidential";
     $specs["assure_sexe"]              = "enum list|m|f|j default|m";
-    $specs["assure_naissance"]         = "birthDate confidential mask|99/99/9999";
+    $specs["assure_naissance"]         = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
     $specs["assure_adresse"]           = "text confidential";
     $specs["assure_ville"]             = "str confidential";
     $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";

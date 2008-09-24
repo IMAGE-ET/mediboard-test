@@ -306,4 +306,54 @@ Element.addMethods('input', {
     if (Prototype.Browser.Gecko)
       element.removeEventListener('input', element.checkVal, false);
   }*/
+  , 
+  getFormatted: function (element, mask, format) {
+    var maskArray = mask.toArray();
+    var reMask = "^";
+    var prevChar = null;
+    var count = 0;
+    var charmap = element.options.charmap;
+    
+    if (!format) {
+      return element.rawvalue;
+    }
+    
+    for (i = 0; i < maskArray.length; i++) {
+      var c = (maskArray[i] ? maskArray[i] : null);
+
+      if (!charmap[c]) {
+        if (charmap[prevChar]) {
+          reMask += "("+charmap[prevChar]+"{"+count+"})";
+        }
+        reMask += (((/[A-Za-z0-9]/.match(c) || c == null)) ? "" : "\\" )+c;
+        prevChar = c;
+        count = 0;
+      }
+      
+      else if (prevChar != c) {
+        if (charmap[prevChar]) {
+	        reMask += "("+charmap[prevChar]+"{"+count+"})";
+	        prevChar = c;
+	        count = 0;
+	      }
+	      else {
+	        prevChar = c;
+	        count++;
+	      }
+      }
+      
+      else if (prevChar == c) {
+        count++;
+      }
+    }
+    
+    reMask = new RegExp(reMask+"$");
+    
+    var matches = reMask.exec(element.value);
+
+    for (i = 1; (i < matches.length && i < 10); i++) {
+      format = format.replace("$"+i, matches[i]);
+    }
+    return format;
+  }
 });

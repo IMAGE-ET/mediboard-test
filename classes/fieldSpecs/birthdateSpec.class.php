@@ -24,7 +24,7 @@ class CBirthDateSpec extends CMbFieldSpec {
     if (!$propValue || $propValue == "0000-00-00") {
       return "-";
     }
-    return mbDateToLocale($propValue);
+    return parent::getValue($object, $smarty, $params);
   }
   
   function getSpecType() {
@@ -34,12 +34,7 @@ class CBirthDateSpec extends CMbFieldSpec {
   function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = &$object->$fieldName;
-    
-    $matches = array();
-    if (preg_match ("/^([0-9]{2})([0-9]{2})([0-9]{4})$/", $propValue, $matches)) {
-      $propValue = sprintf("%04s-%02s-%02s", $matches[3], $matches[2], $matches[1]);
-    }
-    
+
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue)) {
       return "format de date invalide";
     }

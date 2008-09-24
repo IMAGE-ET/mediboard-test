@@ -83,6 +83,8 @@ function $V (element, value, fire) {
   if (!element) {
     return;
   }
+  
+  //element = element.name ? $(element.form[element.name]) : $(element);
   element = $(element);
   fire = Object.isUndefined(fire) ? true : fire;
   
@@ -316,12 +318,14 @@ function prepareForm(oForm, bForcePrepare) {
     oForm = document.forms[oForm];
   }
   oForm = $(oForm);
+  
+  var formClassNames = $w(oForm.className);
 
   // If this form hasn't been prepared yet
-  if (!oForm.hasClassName("prepared") || bForcePrepare) {
+  if (!formClassNames.indexOf("prepared") != -1 || bForcePrepare) {
   
     // Event Observer
-    if(oForm.hasClassName("watched")) {
+    if(formClassNames.indexOf("watched") != -1) {
       new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
     }
     // Form preparation
@@ -349,6 +353,9 @@ function prepareForm(oForm, bForcePrepare) {
     var aSpecFragments = null;
     while (oElement = oForm.elements[iElement++]) {
     	oElement = $(oElement);
+    	
+    	var elementClassNames = $w(oElement.className);
+    	var sElementName = oElement.getAttribute("name");
     	var props = oElement.getProperties();
 
     	// Locked object
@@ -357,8 +364,8 @@ function prepareForm(oForm, bForcePrepare) {
     	}
     	
       // Create id for each element if id is null
-      if (!oElement.id && oElement.name) {
-        oElement.id = sFormName + "_" + oElement.name;
+      if (!oElement.id && sElementName) {
+        oElement.id = sFormName + "_" + sElementName;
         if (oElement.type == "radio") {
           oElement.id += "_" + oElement.value;
         }
@@ -373,21 +380,21 @@ function prepareForm(oForm, bForcePrepare) {
       }
       
 			// Not null
-		  if (oElement.hasClassName("notNull")) {
+		  if (elementClassNames.indexOf("notNull") != -1) {
         notNullOK(oElement);
         oElement.observe("change", notNullOK);
         oElement.observe("keyup", notNullOK);
       }
       
 			// Can null
-		  if (oElement.hasClassName("canNull")) {
+		  if (elementClassNames.indexOf("canNull") != -1) {
         canNullOK(oElement);
         oElement.observe("change", canNullOK);
         oElement.observe("keyup", canNullOK);
       }
       
       // Select tree
-      if (oElement.hasClassName("select-tree") && Prototype.Browser.Gecko) {
+      if (elementClassNames.indexOf("select-tree") != -1 && Prototype.Browser.Gecko) {
         oElement.buildTree();
       }
 
@@ -408,7 +415,7 @@ function prepareForm(oForm, bForcePrepare) {
       // Won't make it resizable on IE
       if (oElement.type == "textarea" && !Prototype.Browser.IE) {
         oElement.setResizable({autoSave: true, step: 'font-size'});
-      }      
+      }
       
       // We mark this form as prepared
       oForm.addClassName("prepared");
@@ -623,7 +630,6 @@ var TimePicker = Class.create({
     var element = this;
     this.form = form;
     this.field = field;
-    this.existing = false;
 
     // Form field
     prepareForm(this.form);
@@ -646,71 +652,8 @@ var TimePicker = Class.create({
     // Time picker trigger
     this.trigger = $(this.fieldId+'_trigger');
     if (!this.trigger) {
-      this.trigger = new Element('img', {src: 'images/icons/time.png'});
-      this.trigger.id = this.fieldId+'_trigger';
+      this.trigger = new Element('img', {src: 'images/icons/time.png', id: this.fieldId+'_trigger'});
       formField.insert({after: this.trigger});
-    }
-    
-    // Time hour-minute selector
-    var picker = $(this.pickerId);
-    if (!picker) {
-      //picker.remove();
-      picker = new Element('table', {id: this.pickerId})
-                  .addClassName('time-picker');
-      $('main').appendChild(picker);
-      picker.absolutize().hide();
-      this.existing = false;
-    } else {
-      this.existing = true;
-    }
-    
-    if (!this.existing) {
-        // Hours
-      var str = '<tr><td><table class="hour"><tr>';
-      for (i = 0; i < 24; i++) {
-        if (i%12 == 0) str += '</tr><tr>';
-        var h = printf('%02d', i);
-        str += '<td class="hour-'+h+'">'+h+'</td>';
-      }
-      str += '</tr></table></td></tr>';
-      
-        // Minutes
-      str += '<tbody class="long" style="display: none;"><tr><td><table class="minute"><tr>';
-      for (i = 0; i < 60; i++) {
-        if (i%10 == 0) str += '</tr><tr>';
-        var m = printf('%02d', i);
-        str += '<td class="minute-'+m+'">:'+m+'</td>';
-      }
-      str += '</tr></table></td></tr></tbody>';
-      
-        // Short minutes
-      str += '<tbody class="short"><tr><td><table class="minute"><tr>';
-      for (i = 0; i < 60; i=i+5) {
-        if (i%30 == 0) str += '</tr><tr>';
-        var m = printf('%02d', i);
-        str += '<td class="minute-'+m+'">:'+m+'</td>';
-      }
-      str += '</tr></table></td></tr></tbody>';
-  
-      // Long-short switcher
-      str += '<tr><td><div class="switch">&gt;&gt;</div></td></tr>';
-      picker.insert(str);
-  
-      // Behaviour
-        // on click on the switch "long-short"
-      picker.select('.switch')[0].observe('click', element.toggleShortLong.bindAsEventListener(element));
-      
-        // on click on the hours 
-      picker.select('.hour td').each(function(hour) {
-        hour.observe('click', element.setHour.bindAsEventListener(element));
-      });
-      
-        // on click on the minutes
-      picker.select('.minute td').each(function(minute) {
-        minute.observe('click', element.setMinute.bindAsEventListener(element));
-      });
-      
-      this.highlight();
     }
     
     // on click on the trigger
@@ -730,10 +673,68 @@ var TimePicker = Class.create({
     }
   },
   
+  buildPicker: function () {
+    var element = this;
+		picker = new Element('table', {id: this.pickerId, className: 'time-picker'});
+		$('main').appendChild(picker);
+		picker.absolutize().hide();
+		
+		  // Hours
+		var str = '<tr><td><table class="hour"><tr>';
+		for (i = 0; i < 24; i++) {
+		  if (i%12 == 0) str += '</tr><tr>';
+		  var h = printf('%02d', i);
+		  str += '<td class="hour-'+h+'">'+h+'</td>';
+		}
+		str += '</tr></table></td></tr>';
+		
+		  // Minutes
+		str += '<tbody class="long" style="display: none;"><tr><td><table class="minute"><tr>';
+		for (i = 0; i < 60; i++) {
+		  if (i%10 == 0) str += '</tr><tr>';
+		  var m = printf('%02d', i);
+		  str += '<td class="minute-'+m+'">:'+m+'</td>';
+		}
+		str += '</tr></table></td></tr></tbody>';
+		
+		  // Short minutes
+		str += '<tbody class="short"><tr><td><table class="minute"><tr>';
+		for (i = 0; i < 60; i=i+5) {
+		  if (i%30 == 0) str += '</tr><tr>';
+		  var m = printf('%02d', i);
+		  str += '<td class="minute-'+m+'">:'+m+'</td>';
+		}
+		str += '</tr></table></td></tr></tbody>';
+		
+		// Long-short switcher
+		str += '<tr><td><div class="switch">&gt;&gt;</div></td></tr>';
+		picker.insert(str);
+		
+		// Behaviour
+		  // on click on the switch "long-short"
+		picker.select('.switch')[0].observe('click', element.toggleShortLong.bindAsEventListener(element));
+		
+		  // on click on the hours 
+		picker.select('.hour td').each(function(hour) {
+		  hour.observe('click', element.setHour.bindAsEventListener(element));
+		});
+		
+		  // on click on the minutes
+		picker.select('.minute td').each(function(minute) {
+		  minute.observe('click', element.setMinute.bindAsEventListener(element));
+		});
+		this.highlight();
+  },
+  
   // Show the selector
   togglePicker: function() {
     var element = this;
     var picker = $(this.pickerId);
+    
+    if (!picker) {
+      this.buildPicker();
+      picker = $(this.pickerId);
+    }
     
     // We hide every other picker
     $$('table.time-picker').each(function(o){if (o.id != element.pickerId) o.hide();});

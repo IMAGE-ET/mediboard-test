@@ -27,7 +27,9 @@ var ElementChecker = {
     this.sLabel = this.oLabel ? this.oLabel.innerHTML : oElement.name;
     
     this.oErrors = [];
-    this.sValue = (this.oProperties.mask ? this.oElement.rawvalue : $V(this.oElement));
+    this.sValue = (this.oProperties.mask ? 
+                     this.oElement.getFormatted(this.oProperties.mask, this.oProperties.format, this.oElement.options.charmap) : 
+                     $V(this.oElement));
 
     Object.extend(this.check, this);
   },
