@@ -322,7 +322,7 @@ function prepareForm(oForm, bForcePrepare) {
   var formClassNames = $w(oForm.className);
 
   // If this form hasn't been prepared yet
-  if (!formClassNames.indexOf("prepared") != -1 || bForcePrepare) {
+  if ((formClassNames.indexOf("prepared") == -1) || bForcePrepare) {
   
     // Event Observer
     if(formClassNames.indexOf("watched") != -1) {
