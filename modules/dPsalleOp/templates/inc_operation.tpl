@@ -4,6 +4,10 @@
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 
+
+{{assign var="sejour" value=$selOp->_ref_sejour}}
+{{assign var="patient" value=$sejour->_ref_patient}}
+
 <script type="text/javascript">
 
 function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
@@ -27,6 +31,13 @@ Main.add(function () {
     url.addParam("op","{{$selOp->_id}}");
     url.requestUpdate("bloodSalvage", {waitingText: null});
   }
+  
+  if($('Imeds_tab')){
+    var url = new Url;
+    url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+    url.addParam("sejour_id", {{$sejour->_id}});
+    url.requestUpdate('Imeds_tab', { waitingText : null });
+  }
 });
 
 function reloadPrescription(prescription_id){
@@ -37,7 +48,6 @@ function reloadPrescription(prescription_id){
 
 <!-- Informations générales sur l'intervention et le patient -->
 <table class="form">
-  {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
   <tr>
     <th class="title text" colspan="2">
       <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
@@ -92,6 +102,9 @@ function reloadPrescription(prescription_id){
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
   {{/if}}
+  {{if $isImedsInstalled}}
+    <li><a href="#Imeds_tab">Labo</a></li>
+  {{/if}}
 </ul>
   
 <hr class="control_tabs" />
@@ -122,7 +135,6 @@ function reloadPrescription(prescription_id){
 <!-- Troisieme onglet bis: codage diagnostics CIM -->
 <div id="threebis" style="display:none">
   <div id="cim">
-    {{assign var="sejour" value=$selOp->_ref_sejour}}
     {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
   </div>
 </div>
@@ -188,5 +200,10 @@ function reloadPrescription(prescription_id){
     <button type="submit" name="applyProtocole">Appliquer les protocoles</button>
   </form>
   {{/if}}
+</div>
+{{/if}}
+
+{{if $isImedsInstalled}}
+<div id="Imeds_tab" style="display:none">
 </div>
 {{/if}}
