@@ -211,6 +211,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       <td style="border:none">
 	         {{if $line->debut}}
 	           {{$line->debut|date_format:"%d/%m/%Y"}}
+	           {{if !$line->time_debut && $prescription->type == "sejour"}}
+	             {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}} 
+	           {{/if}}
 	         {{else}}
 	          -
 	         {{/if}}				   

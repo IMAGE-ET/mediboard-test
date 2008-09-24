@@ -406,40 +406,40 @@ class CPrescriptionLine extends CMbObject {
   	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
   	
     if(!$mode_feuille_soin){
-		$this->loadRefsAdministrations($date);
-		foreach($this->_ref_administrations as $_administration){
-		  $key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
-		  // Permet de stocker les administrations par unite de prise / type de prise
-		  @$this->_administrations[$key_administration][$date][$_administration->_heure]["quantite"] += $_administration->quantite;
-			
-		  // Stockage de la liste des administrations sous la forme d'un token field
-		  if(!isset($this->_administrations[$key_administration][$date][$_administration->_heure]["list"])){
-		    @$this->_administrations[$key_administration][$date][$_administration->_heure]["list"] = $_administration->_id;
-		  } else {
-		    @$this->_administrations[$key_administration][$date][$_administration->_heure]["list"] .= "|".$_administration->_id;
-		  }
-		  @$this->_administrations_by_line[$date] += $_administration->quantite;
-		  	
-		  // Chargement du log de creation de l'administration
-		  $log = new CUserLog;
-	      $log->object_id = $_administration->_id;
-		  $log->object_class = $_administration->_class_name;
-		  $log->loadMatchingObject();
-		  $log->loadRefsFwd();
-		  
-		  if($this->_class_name == "CPrescriptionLineMedicament"){
-		    $this->_ref_produit->loadConditionnement();
-		    $log->_ref_object->_ref_object =& $this;
-		  }
-		  
-		  if($_administration->prise_id){
-			$_administration->loadRefPrise();
-		  }
-	  	  @$this->_administrations[$key_administration][$date][$_administration->_heure]["administrations"][$_administration->_id] = $log;
-		  $_administration->loadRefsTransmissions();  
-		  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
-		  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
-	  }		
+			$this->loadRefsAdministrations($date);
+			foreach($this->_ref_administrations as $_administration){
+			  $key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
+			  // Permet de stocker les administrations par unite de prise / type de prise
+			  @$this->_administrations[$key_administration][$date][$_administration->_heure]["quantite"] += $_administration->quantite;
+				
+			  // Stockage de la liste des administrations sous la forme d'un token field
+			  if(!isset($this->_administrations[$key_administration][$date][$_administration->_heure]["list"])){
+			    @$this->_administrations[$key_administration][$date][$_administration->_heure]["list"] = $_administration->_id;
+			  } else {
+			    @$this->_administrations[$key_administration][$date][$_administration->_heure]["list"] .= "|".$_administration->_id;
+			  }
+			  @$this->_administrations_by_line[$date] += $_administration->quantite;
+			  	
+			  // Chargement du log de creation de l'administration
+			  $log = new CUserLog;
+		    $log->object_id = $_administration->_id;
+			  $log->object_class = $_administration->_class_name;
+			  $log->loadMatchingObject();
+			  $log->loadRefsFwd();
+			  
+			  if($this->_class_name == "CPrescriptionLineMedicament"){
+			    $this->_ref_produit->loadConditionnement();
+			    $log->_ref_object->_ref_object =& $this;
+			  }
+			  
+			  if($_administration->prise_id){
+				$_administration->loadRefPrise();
+			  }
+		  	  @$this->_administrations[$key_administration][$date][$_administration->_heure]["administrations"][$_administration->_id] = $log;
+			  $_administration->loadRefsTransmissions();  
+			  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
+			  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
+		  }		
     }		
     if(!$this->_ref_prises){
       $this->loadRefsPrises();

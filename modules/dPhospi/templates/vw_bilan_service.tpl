@@ -101,7 +101,7 @@ selectChap = function(name_chap, oField){
   <th colspan="2">Filtres</th>
 </tr>
 <tr>
-  <td>Horaires sélectionnées</td><td><strong>{{$dateTime_min}}</strong> au <strong>{{$dateTime_max}}</strong></td>
+  <td>Horaires sélectionnées</td><td><strong>{{$dateTime_min|date_format:"%d/%m/%Y à %Hh%M"}}</strong> au <strong>{{$dateTime_max|date_format:"%d/%m/%Y à %Hh%M"}}</strong></td>
 </tr>
 <tr>
   <td>Catégorie(s) sélectionnée(s)</td>
@@ -139,36 +139,40 @@ selectChap = function(name_chap, oField){
 	  <tr>
 	  <td colspan="2"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
 	  </tr>
+	  
+	  <!-- Affichage des prises prevues -->
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type}}
 	  <tr>
 	    <td style="width: 20px">{{$hour}}h</td>
         <td>
           <table style="width: 100%">
 	        {{foreach from=$prises_by_type key=type item=prises}}
-			  {{foreach from=$prises key=line_id item=prises_by_unite}}
+			      {{foreach from=$prises key=line_id item=prises_by_unite}}
 	            {{assign var=line value=$lines.$type.$line_id}}
 	            {{foreach from=$prises_by_unite key=unite_prise item=quantite}}
-	              <tr>
-				    <td style="border: none; width: 200px">{{$line->_view}}</td>
-				      <td style="border: none; width: 20px">{{$quantite}}</td>
-				      <td style="border: none; width: 60px;">
-				      {{if $type=="med"}}
-				        {{$unite_prise}}
-				      {{else}}
-				        {{$line->_unite_prise}}
-				      {{/if}}
-				      </td>
-				      <td style="border: none">
-				      {{$line->commentaire}}
-				      </td>
-				    </tr>
-				  {{/foreach}}
-				{{/foreach}} 
+	            <tr>
+				        <td style="border: none; width: 200px">{{$line->_view}}</td>
+				        <td style="border: none; width: 20px">
+				          {{$quantite.prevu}}
+				        </td>
+				        <td style="border: none; width: 60px;">
+				        {{if $type=="med"}}
+				          {{$unite_prise}}
+				        {{else}}
+				          {{$line->_unite_prise}}
+				        {{/if}}
+				        </td>
+				        <td style="border: none">
+				          {{$line->commentaire}}
+				        </td>
+				      </tr>
+				      {{/foreach}}
+				    {{/foreach}} 
 		      {{/foreach}}  
 		    </table>
 		  </td>
-	    </tr>	  
-	  {{/foreach}}	
+	    </tr>	   
+	  {{/foreach}}
 	{{/foreach}}
   {{/foreach}}
 {{/foreach}}

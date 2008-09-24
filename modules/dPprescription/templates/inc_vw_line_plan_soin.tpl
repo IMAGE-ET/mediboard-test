@@ -1,7 +1,12 @@
 {{assign var=line_id value=$line->_id}}
 {{assign var=line_class value=$line->_class_name}}
 <tr>
-  <td class="text"  style="border: 1px solid #ccc;">{{$line->_view}}</td>
+  <td class="text"  style="border: 1px solid #ccc;">
+    {{$line->_view}}
+    {{if $line->commentaire}}
+      ({{$line->commentaire}})
+    {{/if}}
+  </td>
   <td class="text"  style="border: 1px solid #ccc;">
     {{if is_numeric($unite_prise)}}
       <ul>
