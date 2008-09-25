@@ -1000,6 +1000,15 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - téléphone"         , $this->tel        );
     $template->addProperty("Patient - mobile"            , $this->tel2       );
     $template->addProperty("Patient - profession"        , $this->profession );
+    if($this->sexe == "m"){
+      $template->addProperty("Patient - il/elle"         , "il"              );
+      $template->addProperty("Patient - le/la"           , "le"              );
+      $template->addProperty("Patient - accord"          , ""                );
+    } else {
+      $template->addProperty("Patient - il/elle"         , "elle"            );
+      $template->addProperty("Patient - le/la"           , "la"              );
+      $template->addProperty("Patient - accord"          , "e"               );
+    }
     if($this->medecin_traitant) {
       $template->addProperty("Patient - médecin traitant"          , "{$this->_ref_medecin_traitant->nom} {$this->_ref_medecin_traitant->prenom}");
       $template->addProperty("Patient - médecin traitant - adresse", "{$this->_ref_medecin_traitant->adresse}\n{$this->_ref_medecin_traitant->cp} {$this->_ref_medecin_traitant->ville}");
