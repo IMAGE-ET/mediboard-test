@@ -1007,7 +1007,7 @@ class CPatient extends CMbObject {
     } else {
       $template->addProperty("Patient - il/elle"         , "elle"            );
       $template->addProperty("Patient - le/la"           , "la"              );
-      $template->addProperty("Patient - accord"          , "e"               );
+      $template->addProperty("Patient - accord genre"    , "e"               );
     }
     if($this->medecin_traitant) {
       $template->addProperty("Patient - médecin traitant"          , "{$this->_ref_medecin_traitant->nom} {$this->_ref_medecin_traitant->prenom}");
