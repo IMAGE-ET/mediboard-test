@@ -131,7 +131,9 @@ submitProtocole = function(){
       <form name="duplicate">
         <button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
       </form>
-        
+      
+      <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
+       
       {{else}}
         <!-- Prescription du Dr {{$prescription->_ref_praticien->_view}}<br /> -->
        

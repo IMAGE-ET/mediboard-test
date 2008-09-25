@@ -43,5 +43,11 @@ var Protocole = {
     url.setModuleAction("dPprescription", "httpreq_duplicate_protocole");
     url.addParam("protocole_id", protocole_id);
     url.requestUpdate("systemMsg", { waitingText : null });
+  },
+  preview: function(protocole_id){
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_preview_protocole");
+    url.addParam("protocole_id", protocole_id);
+    url.popup(800,600, "Previsualisation protocole");
   }
 }

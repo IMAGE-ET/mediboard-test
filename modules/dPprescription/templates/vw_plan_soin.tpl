@@ -15,9 +15,10 @@ ul {
 
 </style>
 
-<div class="plan_soin">
+<div class="plan_soin" {{if !$patient->_id}}style="overflow: auto; height: 500px;"{{/if}}>
 
 <!-- Header -->
+{{if $patient->_id}}
 <table style="width: 100%">
   <tr>
     <td>
@@ -39,6 +40,7 @@ ul {
     </td>
   </tr>
 </table>
+{{/if}}
 
 <table style="border-collapse: collapse; border: 1px solid #ccc" class="tbl">
   <!-- Header du tableau -->
@@ -62,7 +64,6 @@ ul {
       {{/foreach}}
     {{/foreach}}
   </tr>
-  
   <!-- Affichage des medicaments -->
   {{foreach from=$prescription->_lines.med item=_all_lines_unite_prise}}
     {{foreach from=$_all_lines_unite_prise key=unite_prise item=_line}}
@@ -72,7 +73,7 @@ ul {
   
   <!-- Séparation entre les medicaments et les elements -->
   <tr>
-    <td colspan="30" style="padding:0; height: 1px; border: 1px solid black;"></td>
+    <td colspan="1000" style="padding:0; height: 1px; border: 1px solid black;"></td>
   </tr>
    
   <!-- Affichage des elements -->
@@ -85,7 +86,7 @@ ul {
           <!-- Affichage d'une barre de separation entre chaque categorie -->
           {{if $smarty.foreach.foreach_elt.last && $smarty.foreach.foreach_cat.last}}
             <tr>
-              <td colspan="30" style="padding:0; height: 1px; border: 1px solid black;"></td>
+              <td colspan="1000" style="padding:0; height: 1px; border: 1px solid black;"></td>
             </tr>
           {{/if}}
         {{/foreach}}
@@ -93,6 +94,7 @@ ul {
     {{/foreach}}
   {{/foreach}}
   
+  {{if $patient->_id}}
   <!-- Footer du tableau -->
   <tbody class="hoverable">
     <tr>
@@ -114,6 +116,7 @@ ul {
 	<tr><td class="signature_ide" colspan="{{$tabHours.$date|@count}}" ></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td></tr>
 	<tr><td class="signature_ide" colspan="{{$tabHours.$date|@count}}" ></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td></tr>
   </tbody>
+  {{/if}}
 </table>
 
 <!-- Re-ouverture des tableaux -->
