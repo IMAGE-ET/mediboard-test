@@ -40,13 +40,11 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "category_prescription_id"       => "ref class|CCategoryPrescription",
-      "executant_prescription_line_id" => "ref class|CExecutantPrescriptionLine",
-      "commentaire"                    => "text"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["category_prescription_id"]       = "ref class|CCategoryPrescription";
+    $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
+    $specs["commentaire"]                    = "text";
+    return $specs;
   }
   
   function updateFormFields(){

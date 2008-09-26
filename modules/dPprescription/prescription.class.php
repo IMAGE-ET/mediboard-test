@@ -294,10 +294,24 @@ class CPrescription extends CMbObject {
     
     // Mode utilisé pour visualiser le protocole au moment de sa création
     $mode_preview = ($debut_sejour && $fin_sejour) ? 1 : 0;
-  	
-	  // Chargement du protocole
-	  $protocole = new CPrescription();
-	  $protocole->load($protocole_id);
+    
+    // Chargement du protocole
+    $protocole = new CPrescription();
+    $protocole->load($protocole_id);
+    
+    // Creation d'un protocole de pré-admission s'il n'y en a pas
+    if (!$mode_preview && $this->object_class === 'CSejour') {
+      $this->loadRefObject();
+	    $this->_ref_object->loadRefsPrescriptions();
+	    if (!$this->_ref_object->_ref_prescriptions["pre_admission"]->_id) {
+	      $prescription = new CPrescription;
+	      $prescription->object_class = "CSejour";
+	      $prescription->object_id = $this->object_id;
+	      $prescription->type = "pre_admission";
+	      $prescription->store();
+	      $this->_ref_object->_ref_prescriptions["pre_admission"] = $prescription;
+	    }
+    }
 	
 	  // Chargement des lignes de medicaments, d'elements et de commentaires
 	  $protocole->loadRefsLinesMed();

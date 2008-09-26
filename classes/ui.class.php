@@ -285,7 +285,7 @@ class CAppUI {
     if($msg){
       $this->setMsg("$action: $msg", UI_MSG_ERROR );
     }
-    $this->setMsg("$action", UI_MSG_OK );
+    $this->setMsg($action, UI_MSG_OK );
   }
 
   /**

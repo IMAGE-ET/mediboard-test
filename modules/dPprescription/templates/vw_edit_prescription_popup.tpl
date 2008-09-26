@@ -15,6 +15,26 @@ function viewProduit(cip){
   url.popup(900, 640, "Descriptif produit");
 }
 
+function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
+  if (list) {
+    var url = new Url;
+    url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
+    url.addParam("praticien_id", praticien_id);
+    url.addParam("selected_id", selected_id);
+    url.requestUpdate(list, { waitingText: null} );
+  }
+}
+
+Main.add(function () {
+  if (formAnesth = document.forms.editProtoPrescriptionAnesth) {
+    refreshListProtocolesPrescription('{{$praticien_sejour}}', formAnesth.protocole_id);
+  }
+  
+  if (formChir = document.forms.editProtoPrescriptionChir) {
+    refreshListProtocolesPrescription('{{$praticien_sejour}}', formChir.protocole_id);
+  }
+});
+
 </script>
 
 <table class="main">
@@ -131,18 +151,56 @@ function viewProduit(cip){
 				  <input type="hidden" name="del" value="0" />
 				  <input type="hidden" name="object_id" value="{{$sejour_id}}"/>
 				  <input type="hidden" name="object_class" value="CSejour" />
-				  <input type="hidden" name="callback" value="" />				  
+				  <input type="hidden" name="callback" value="" />
 				  <input type="hidden" name="type" value="pre_admission" />
 				  {{if $mode_anesth}}
-				    <button type=button class="submit" onclick="this.form.callback.value = 'reloadPrescription'; submitFormAjax(this.form, 'systemMsg');">Créer une prescription de sejour</button>				  
+				    <button type="button" class="submit" onclick="this.form.callback.value = 'reloadPrescription'; submitFormAjax(this.form, 'systemMsg');">Créer une prescription de sejour</button>				  
 				  {{else}}
-				  <button type=button class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+				  <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
 				    document.addPrescription.type.value = 'sejour';
 				    document.addPrescription.callback.value = 'reloadPrescription';
 				    submitFormAjax(document.addPrescription, 'systemMsg');
 				  } } );">Créer une prescription de sejour</button>
 				  {{/if}}
 				</form>
+        <br />
+        
+        {{if $operation_id}}
+        <form name="editProtoPrescriptionAnesth" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this, {
+         onComplete: function() { 
+            document.editProtoPrescriptionAnesth.callback.value = 'reloadPrescription';
+            submitFormAjax(document.editProtoPrescriptionAnesth, 'systemMsg');
+          } })">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+          <input type="hidden" name="operation_id" value="{{$operation_id}}" />
+          <input type="hidden" name="prescription_id" value="" />
+          <input type="hidden" name="praticien_id" value="{{$praticien_id}}" />
+          
+          {{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}
+          <select name="protocole_id" class="notNull"></select>
+          
+          <button type="submit">Appliquer</button>
+        </form>
+        <br />
+        <form name="editProtoPrescriptionChir" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this, {
+         onComplete: function() { 
+            document.editProtoPrescriptionChir.callback.value = 'reloadPrescription';
+            submitFormAjax(document.editProtoPrescriptionChir, 'systemMsg');
+          } })">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+          <input type="hidden" name="operation_id" value="{{$operation_id}}" />
+          <input type="hidden" name="prescription_id" value="" />
+          <input type="hidden" name="praticien_id" value="{{$praticien_id}}" />
+          <input type="hidden" name="callback" value="" />
+          
+          {{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}
+          <select name="protocole_id" class="notNull"></select>
+          
+          <button type="submit">Appliquer</button>
+        </form>
+        {{/if}}
 		  </td>
 		</tr>
    {{else}}

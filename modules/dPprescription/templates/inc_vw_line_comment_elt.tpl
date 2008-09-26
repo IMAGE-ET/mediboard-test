@@ -47,10 +47,6 @@
        {{if $line->_can_view_form_signature_praticien}} 
 	       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	     {{/if}}
-	     <!-- Affichage du formulaire de signature de l'infirmiere -->
-	     {{*if $line->_can_view_form_signature_infirmiere*}} 
-	       {{*include file="../../dPprescription/templates/line/inc_vw_form_validation_infirmiere.tpl"*}}  
-	     {{*/if*}}
 	   </td>
   </tr>
 </tbody>

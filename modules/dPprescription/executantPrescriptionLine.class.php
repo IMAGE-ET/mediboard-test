@@ -28,13 +28,11 @@ class CExecutantPrescriptionLine extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "category_prescription_id" => "ref class|CCategoryPrescription notNull",
-      "nom"         => "str notNull",
-      "description"  => "text"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["category_prescription_id"] = "ref class|CCategoryPrescription notNull";
+    $specs["nom"]         = "str notNull";
+    $specs["description"] = "text";
+    return $specs;
   }
   
   function updateFormFields(){

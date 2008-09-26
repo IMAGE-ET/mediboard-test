@@ -67,36 +67,34 @@ class CPrescriptionLine extends CMbObject {
 	
   
   function getSpecs() {
-    $specsParent = parent::getSpecs();
-    $specs = array (
-      "prescription_id"   => "notNull ref class|CPrescription cascade",
-      "ald"               => "bool",
-      "praticien_id"      => "notNull ref class|CMediusers",
-      "creator_id"        => "notNull ref class|CMediusers",
-      "signee"            => "bool",
-      "debut"             => "date",
-      "time_debut"        => "time",
-      "duree"             => "num",
-      "unite_duree"       => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "date_arret"        => "date",
-      "time_arret"        => "time",
-      "child_id"          => "ref class|$this->_class_name",
-      "decalage_line"     => "num",
-      "jour_decalage"     => "enum list|E|I|S|N default|E",
-      "fin"               => "date",
-      "valide_infirmiere" => "bool",
-      "jour_decalage_fin" => "enum list|I|S",
-      "decalage_line_fin" => "num",
-      "time_fin"          => "time",
-      "conditionnel"      => "bool",
-      "condition_active"  => "bool",
-      "unite_decalage"    => "enum list|jour|heure default|jour",
-      "unite_decalage_fin"=> "enum list|jour|heure default|jour",
-      "operation_id"      => "ref class|COperation",
-      "_fin"              => "date moreEquals|debut",
-      "_fin_reelle"   => "date"
-    );
-    return array_merge($specsParent, $specs);
+    $specs = parent::getSpecs();
+    $specs["prescription_id"]   = "notNull ref class|CPrescription cascade";
+    $specs["ald"]               = "bool";
+    $specs["praticien_id"]      = "notNull ref class|CMediusers";
+    $specs["creator_id"]        = "notNull ref class|CMediusers";
+    $specs["signee"]            = "bool";
+    $specs["debut"]             = "date";
+    $specs["time_debut"]        = "time";
+    $specs["duree"]             = "num";
+    $specs["unite_duree"]       = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
+    $specs["date_arret"]        = "date";
+    $specs["time_arret"]        = "time";
+    $specs["child_id"]          = "ref class|$this->_class_name";
+    $specs["decalage_line"]     = "num";
+    $specs["jour_decalage"]     = "enum list|E|I|S|N default|E";
+    $specs["fin"]               = "date";
+    $specs["valide_infirmiere"] = "bool";
+    $specs["jour_decalage_fin"] = "enum list|I|S";
+    $specs["decalage_line_fin"] = "num";
+    $specs["time_fin"]          = "time";
+    $specs["conditionnel"]      = "bool";
+    $specs["condition_active"]  = "bool";
+    $specs["unite_decalage"]    = "enum list|jour|heure default|jour";
+    $specs["unite_decalage_fin"]= "enum list|jour|heure default|jour";
+    $specs["operation_id"]      = "ref class|COperation";
+    $specs["_fin"]              = "date moreEquals|debut";
+    $specs["_fin_reelle"]       = "date";
+    return $specs;
   }
   
   /*
@@ -174,9 +172,9 @@ class CPrescriptionLine extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["prise_posologie"] = "CPrisePosologie object_id";
-    $backRefs["administration"] = "CAdministration object_id";
-    $backRefs["parent_line"] = "$this->_class_name child_id";  
-    $backRefs["transmissions"] = "CTransmissionMedicale object_id";
+    $backRefs["administration"]  = "CAdministration object_id";
+    $backRefs["parent_line"]     = "$this->_class_name child_id";  
+    $backRefs["transmissions"]   = "CTransmissionMedicale object_id";
     return $backRefs;
   }
   
@@ -452,17 +450,20 @@ class CPrescriptionLine extends CMbObject {
   function calculPrises($prescription, $date, $heures, $mode_feuille_soin = 0, $name_chap = "", $name_cat = ""){
   	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
   	
-  	foreach($this->_ref_prises as &$_prise){
+  	foreach($this->_ref_prises as &$_prise) {
   	  $prise_comptee = 0;
   	  
-  	  $key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
-	  $key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
-	  $poids_ok = 1;
-	  if(!is_numeric($_prise->unite_prise) && $this->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
-		//$quantite = 0;
-		$_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
+      $key_tab   = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
+      $key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
+		  $poids_ok = 1;
+		  
+		  if(!is_numeric($_prise->unite_prise) && $this->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
+			  //$quantite = 0;
+			  $_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
+			  
         // Dans le cas d'un unite_prise/kg
         if($_unite_prise != $_prise->unite_prise){
+        
           // On recupere le poids du patient pour calculer la quantite
           if(!$prescription->_ref_object->_ref_patient){
            $prescription->_ref_object->loadRefPatient();
@@ -475,7 +476,7 @@ class CPrescriptionLine extends CMbObject {
           $poids     = $const_med->poids;
 					
           if($poids){
-            $_prise->quantite  *= $poids;
+            $_prise->quantite *= $poids;
           } else {
           	$poids_ok = 0;
           	$_prise->quantite = 0;
@@ -485,15 +486,15 @@ class CPrescriptionLine extends CMbObject {
 
       // Moment unitaire
     if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les) && $this->_active){
-      $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-	  if(($this->_fin_reelle > $dateTimePrise || !$this->_fin_reelle) && $poids_ok){
-		if($_prise->_ref_moment->heure){
-	    @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
+	    $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
+		  if(($this->_fin_reelle > $dateTimePrise || !$this->_fin_reelle) && $poids_ok){
+				if($_prise->_ref_moment->heure){
+			    @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
+				}
+		  	@$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+		  	$prise_comptee = 1;
+		  }
 		}
-	  	@$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
-	  	$prise_comptee = 1;
-	  }
-	} 
 		  
 	// Moment unitaire dans le cas d'un Tous les
  	if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)  && $this->_active){

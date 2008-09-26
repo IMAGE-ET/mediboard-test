@@ -49,7 +49,11 @@
         <!-- Vue pharmacie -->
           {{if !$line->_protocole}}
             {{include file="../../dPprescription/templates/line/inc_vw_form_accord_praticien.tpl"}}
-            {{include file="../../dPprescription/templates/line/inc_vw_form_validation_pharma.tpl"}}
+            {{if $line->valide_pharma}}
+              <button type="button" class="cancel" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '0', '{{$mode_pharma}}');">Annuler la validation pharmacien</button>
+            {{else}}
+              <button type="button" class="tick" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '1', '{{$mode_pharma}}');">Validation pharmacien</button>
+            {{/if}}
           {{/if}}
         {{elseif !$line->_protocole}}
         <!-- Vue normale  -->
@@ -63,8 +67,12 @@
 						  {{if $line->_can_view_form_signature_praticien}}
 							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 							{{elseif $line->_can_view_form_signature_infirmiere}}
-							  {{include file="../../dPprescription/templates/line/inc_vw_form_validation_infirmiere.tpl"}}
-							{{/if}}
+                {{if $line->valide_infirmiere}}
+                  (Validée par l'infirmière)
+                {{else}}
+                  <button type="button" class="tick" onclick="submitValidationInfirmiere('{{$line->_class_name}}','{{$line->_id}}','{{$prescription->_id}}','{{$div_refresh}}','{{$mode_pharma}}')">Validation infirmière</button>
+                {{/if}}
+  					  {{/if}}
 					  {{else}}
 						  (Validé par le pharmacien)
 					  {{/if}}	

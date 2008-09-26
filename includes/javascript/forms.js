@@ -220,15 +220,11 @@ function getSurroundingForm(element) {
 var bGiveFormFocus = true;
 
 var FormObserver = {
-  changes        : 0,
-  lastFCKChange  : 0,
-  fckEditor      : null,
-  checkChanges : function() {
-    if(this.changes) {
-      return false;
-    } else {
-      return true;
-    }
+  changes       : 0,
+  lastFCKChange : 0,
+  fckEditor     : null,
+  checkChanges  : function() {
+    return !this.changes;
   },
   elementChanged : function() {
     this.changes++;
@@ -242,12 +238,11 @@ var FormObserver = {
 }
 
 Element.addMethods({
-  setResizable: function (oElement, oOptions) {
-    var oDefaultOptions = {
+  setResizable: function (element, options) {
+    options = Object.extend({
       autoSave: true,
       step: 1
-    };
-    Object.extend(oDefaultOptions, oOptions);
+    }, options);
   
     var staticOffset = null;
     var cookie = new CookieJar(); 
@@ -256,30 +251,30 @@ Element.addMethods({
     var oGrippie = new Element('div');
     
     // We remove the margin between the textarea and the grippie
-    oElement.style.marginBottom = '0';
+    element.style.marginBottom = '0';
     
     // grippie's class and style
     oGrippie.addClassName('grippie-h');
     oGrippie.setOpacity(0.5);
-    if (!oElement.visible()) {
+    if (!element.visible()) {
       oGrippie.hide();
     }
     
     // When the mouse is pressed on the grippie, we begin the drag
     oGrippie.onmousedown = startDrag;
-    oElement.insert({after: oGrippie});
+    element.insert({after: oGrippie});
     
     // Loads the height maybe saved in a cookie
     function loadHeight() {
-      if (h = cookie.getValue('ElementHeight', oElement.id)) {
-        oElement.setStyle({height: (h+'px')});
+      if (h = cookie.getValue('ElementHeight', element.id)) {
+        element.setStyle({height: (h+'px')});
       }
     }
     loadHeight.defer(); // deferred to prevent Firefox 2 resize bug
     
     function startDrag(e) {
-      staticOffset = oElement.getHeight() - Event.pointerY(e); 
-      oElement.setOpacity(0.4);
+      staticOffset = element.getHeight() - e.pointerY(); 
+      element.setOpacity(0.4);
       document.onmousemove = performDrag;
       document.onmouseup = endDrag;
       return false;
@@ -287,26 +282,26 @@ Element.addMethods({
   
     function performDrag(e) {
       var h = null;
-      if (typeof oDefaultOptions.step == 'string') {
-        var iStep = oElement.getStyle(oDefaultOptions.step);
+      if (typeof options.step == 'string') {
+        var iStep = element.getStyle(options.step);
         iStep = iStep.substr(0, iStep.length - 2);
         
-        h = Math.max(iStep*2, staticOffset + Event.pointerY(e)) - Math.round(oGrippie.getHeight()/2);
+        h = Math.max(iStep*2, staticOffset + e.pointerY()) - Math.round(oGrippie.getHeight()/2);
         h = Math.round(h / iStep)*iStep;
       } else {
-        h = Math.max(32, staticOffset + Event.pointerY(e));
+        h = Math.max(32, staticOffset + e.pointerY());
       }
-      oElement.setStyle({height: h + 'px'});
+      element.setStyle({height: h + 'px'});
       return false;
     }
   
     function endDrag(e) {
-      oElement.setStyle({opacity: 1});
+      element.setStyle({opacity: 1});
       document.onmousemove = null;
       document.onmouseup = null;
 
-      if (oElement.id) {
-        cookie.setValue('ElementHeight', oElement.id, oElement.getHeight() - Math.round(oGrippie.getHeight()/2));
+      if (element.id) {
+        cookie.setValue('ElementHeight', element.id, element.getHeight() - Math.round(oGrippie.getHeight()/2));
       }
       return false;
     }
@@ -314,7 +309,7 @@ Element.addMethods({
 } );
 
 function prepareForm(oForm, bForcePrepare) {
-  if (Object.isString(oForm)) {
+  if (typeof oForm == "string") {
     oForm = document.forms[oForm];
   }
   oForm = $(oForm);
@@ -374,8 +369,7 @@ function prepareForm(oForm, bForcePrepare) {
       // If the element has a mask and other properties, they may conflict
       if (Preferences.INFOSYSTEM && props.mask) {
         Assert.that(!(
-          props.min || props.max || props.minMax || props.bool || props.ref || 
-          props.minLength || props.maxLength || props.pct
+          props.min || props.max || props.minMax || props.bool || props.ref || props.pct || props.num
         ), "'"+oElement.id+"' mask may conflit with other props");
       }
       

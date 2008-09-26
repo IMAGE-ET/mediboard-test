@@ -29,6 +29,12 @@ if(oButton){
 }
 {{/if}}
 
+Main.add(function () {
+{{foreach from=$line->_ref_prises item=prise}}
+  prepareForm('addPrise-{{$prise->_id}}');
+{{/foreach}}
+});
+
 </script>
 
 {{assign var=line_id value=$line->_id}}
@@ -99,10 +105,3 @@ if(oButton){
   
   </form>
 {{/foreach}}
-
-<script type="text/javascript">
-{{foreach from=$line->_ref_prises item=prise}}
-  prepareForm(document.forms['addPrise-{{$prise->_id}}']);
-{{/foreach}}
-</script>
-

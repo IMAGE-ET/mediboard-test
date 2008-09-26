@@ -39,34 +39,30 @@ class CAdministration extends CMbMetaObject {
     $backRefs = parent::getBackRefs();
     $backRefs["transmissions"] = "CTransmissionMedicale object_id";
     return $backRefs;
-  }     
-  
+  }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "object_id"            => "notNull ref class|CMbObject meta|object_class",
-      "object_class"         => "notNull enum list|CPrescriptionLineMedicament|CPrescriptionLineElement",
-      "administrateur_id"    => "notNull ref class|CMediusers",
-      "prise_id"             => "ref class|CPrisePosologie",
-      "quantite"             => "float",
-      "unite_prise"          => "text",
-      "dateTime"             => "dateTime",
-      "commentaire"          => "text"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["object_id"]         = "notNull ref class|CMbObject meta|object_class";
+    $specs["object_class"]      = "notNull enum list|CPrescriptionLineMedicament|CPrescriptionLineElement";
+    $specs["administrateur_id"] = "notNull ref class|CMediusers";
+    $specs["prise_id"]          = "ref class|CPrisePosologie";
+    $specs["quantite"]          = "float";
+    $specs["unite_prise"]       = "text";
+    $specs["dateTime"]          = "dateTime";
+    $specs["commentaire"]       = "text";
+    return $specs;
   }
 
   function updateFormFields(){
   	parent::updateFormFields();
  
   	$this->_heure = substr(mbTime($this->dateTime), 0, 2);
-  	if(mbTime($this->dateTime) == "23:59:00"){
+  	if(mbTime($this->dateTime) === "23:59:00"){
   		$this->_heure = "24";
   	}
   	
-  	
-  	$this->_unite_prise = $this->unite_prise != "aucune_prise" ? $this->unite_prise : ""; // Parfois modifié par loadRefPrise
+  	$this->_unite_prise = ($this->unite_prise !== "aucune_prise" ? $this->unite_prise : ""); // Parfois modifié par loadRefPrise
   }
   
   function loadRefsFwd(){
@@ -79,7 +75,7 @@ class CAdministration extends CMbMetaObject {
     $dateFormat = "%d/%m/%Y à %Hh%M";
   
   	$this->_view = "Administration du ".mbTransformTime(null, $this->dateTime, $dateFormat)." par {$this->_ref_administrateur->_view}";
-  	if($this->object_class == "CPrescriptionLineMedicament"){
+  	if($this->object_class === "CPrescriptionLineMedicament") {
   		$this->_view .= " ({$this->_ref_object->_ref_produit->libelle})";
   	}
   }
@@ -88,7 +84,7 @@ class CAdministration extends CMbMetaObject {
   	$this->_ref_transmissions = $this->loadBackRefs("transmissions");
 		foreach($this->_ref_transmissions as &$_trans){
   	  $_trans->loadRefsFwd();
-    }					  
+    }
   }
   
   function loadRefPrise(){

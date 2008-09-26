@@ -42,6 +42,14 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     return $spec;
   }
   
+  function getSpecs() {
+    $specs = parent::getSpecs();
+    $specs["element_prescription_id"]        = "notNull ref class|CElementPrescription cascade";
+    $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
+    $specs["commentaire"]                    = "str";
+    return $specs;
+  }
+  
   function updateFormFields(){
     parent::updateFormFields();
     $this->loadRefElement();
@@ -75,12 +83,10 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }    
   }
   
-  
   function loadView() {
     $this->loadRefsPrises();
     $this->loadRefsTransmissions();
   }
-  
   
   /*
    * Vue modifiée en fonction de la présence de prises
@@ -139,7 +145,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
-    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id){
+    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && $this->_ref_prescription->type != "externe"){
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Suppression de la ligne
@@ -156,16 +162,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_modify_comment = 1;
     } 
 	}
-  
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "element_prescription_id"        => "notNull ref class|CElementPrescription cascade",
-      "executant_prescription_line_id" => "ref class|CExecutantPrescriptionLine",
-      "commentaire"                    => "str"
-    );
-    return array_merge($specsParent, $specs);
-  }
   
   function loadRefsFwd() {
     parent::loadRefsFwd();

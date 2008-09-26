@@ -64,14 +64,15 @@ var th_before = $("th-{{$hier}}");
 var th_today = $("th-{{$date}}");
 var th_after = $("th-{{$demain}}");
 
-
 var listTdBefore = $$('td.{{$hier}}');
 var listTdToday  = $$('td.{{$date}}');
 var listTdAfter  = $$('td.{{$demain}}');
  
-var reverseBefore = $$('td.{{$hier}}').reverse("false");
-var reverseToday = $$('td.{{$date}}').reverse("false");
-var reverseAfter = $$('td.{{$demain}}').reverse("false");
+var reverseBefore = listTdBefore.reverse(false);
+var reverseToday = listTdToday.reverse(false);
+var reverseAfter = listTdAfter.reverse(false);
+
+var planSoin = null;
 
 window.periodicalBefore = null;
 window.periodicalAfter = null;
@@ -80,7 +81,7 @@ Main.add(function () {
   listThHoursBefore = $$('.th_hours_{{$hier}}');
   listThHoursAfter = $$('.th_hours_{{$demain}}');
   
-  if(th_before && th_after){  
+  if(th_before && th_after) {
 	th_before.hide();
 	th_after.hide();
 	
@@ -197,7 +198,7 @@ showBefore = function(){
 
 <div id="jour" style="display:none">
 
-<table class="tbl">
+<table class="tbl" id="plan_soin">
   <tr>
     <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>

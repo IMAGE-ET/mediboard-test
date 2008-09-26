@@ -30,13 +30,11 @@ class CAssociationMoment extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "code_moment_id"      => "num notNull",
-      "moment_unitaire_id"  => "ref class|CMomentUnitaire notNull",
-      "OR"                  => "bool"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["code_moment_id"]     = "num notNull";
+    $specs["moment_unitaire_id"] = "ref class|CMomentUnitaire notNull";
+    $specs["OR"]                 = "bool";
+    return $specs;
   }
   
   function loadRefMomentUnitaire(){

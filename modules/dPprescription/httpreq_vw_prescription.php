@@ -11,9 +11,6 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$mbProduit = new CBcbProduit();
-$produits = $mbProduit->searchProduitAutocomplete("effe", 10);
-
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $object_class    = mbGetValueFromGet("object_class");
 $object_id       = mbGetValueFromGet("object_id");
@@ -22,6 +19,7 @@ $refresh_pharma  = mbGetValueFromGet("refresh_pharma", 0);
 $mode_protocole  = mbGetValueFromGetOrSession("mode_protocole", 0);
 $full_mode       = mbGetValueFromGet("full_mode", 0);
 $sejour_id       = mbGetValueFromGetOrSession("sejour_id");
+$operation_id    = mbGetValueFromGetOrSession("operation_id");
 $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre");
@@ -338,6 +336,8 @@ if($full_mode){
   $smarty->assign("protocoles_praticien", $protocoles_praticien);
   $smarty->assign("protocoles_function", $protocoles_function);
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
+  $smarty->assign("praticien_id", ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id));
+  $smarty->assign("operation_id", $operation_id);
   $smarty->display("vw_edit_prescription_popup.tpl");
   return;
 }

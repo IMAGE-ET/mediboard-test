@@ -25,12 +25,10 @@ class CMomentComplexe extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "code_moment_id" => "num notNull",
-      "visible"        => "bool"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["code_moment_id"] = "num notNull";
+    $specs["visible"]        = "bool";
+    return $specs;
   }
  
   // Chargement des moments complexes visibles
@@ -40,7 +38,6 @@ class CMomentComplexe extends CMbObject {
     $moments = $moment->loadMatchingList();
     return $moments;
   }
-  
   
   function updateFormFields(){
   	parent::updateFormFields();

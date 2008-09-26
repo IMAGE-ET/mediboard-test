@@ -33,10 +33,10 @@ Main.add( function(){
 } );
 
 submitProtocole = function(){
-  var oForm = document.applyProtocole;
+  var oForm = document.forms.applyProtocole;
   if(oForm.debut_date){
 	  var debut_date = oForm.debut_date.value;
-	  if(debut_date != "other"){
+	  if(debut_date != "other" && oForm.debut){
 	    oForm.debut.value = debut_date;
 	  }
   }
@@ -45,7 +45,7 @@ submitProtocole = function(){
   }
   submitFormAjax(oForm, 'systemMsg');
   oForm.protocole_id.value = '';
-  oForm.debut.value = '';
+  $V(oForm.debut, '');
 }
 
 </script>
@@ -196,7 +196,7 @@ submitProtocole = function(){
 									    }
 									  }
 					 				  Main.add( function(){
-					 				    prepareForm(document.applyProtocole);
+					 				    prepareForm("applyProtocole");
 					            Calendar.regField('applyProtocole', "debut", false, dates);
 					          } );
 					 				</script>				 				

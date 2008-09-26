@@ -320,19 +320,9 @@ class CSejour extends CCodable {
   }
   
   function applyProtocolesPrescription($operation_id = null) {
-    $this->loadRefsPrescriptions();
-    if (!$this->_ref_prescriptions["pre_admission"]->_id) {
-      $prescription = new CPrescription;
-      $prescription->object_class = "CSejour";
-      $prescription->object_id = $this->_id;
-      $prescription->type = "pre_admission";
-      $prescription->store();
-      $this->_ref_prescriptions["pre_admission"] = $prescription;
-    }
-    
     // Application du protocole de prescription
     $prescription = new CPrescription;
-    $prescription->object_class = "CSejour";
+    $prescription->object_class = $this->_class_name;
     $prescription->object_id = $this->_id;
     $prescription->type = "sejour";
     if ($msg = $prescription->store()) {

@@ -10,7 +10,24 @@ Main.add( function(){
       oDiv.show();
     {{/if}}
   }
+  
+  // Preparation du formulaire
+  prepareForm('form-stop-{{$line->_class_name}}-{{$line->_id}}');
+  
+  Calendar.regField('form-stop-{{$line->_class_name}}-{{$line->_id}}', "date_arret", false, dates);
 } );
+
+calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
+  // Date mais pas heure
+  if(oForm.date_arret.value && !oForm.time_arret.value){
+    oForm.time_arret.value = "00:00";
+  } else {
+    oForm.date_arret.value = "{{$today}}";
+    oForm.time_arret.value = "{{$now_time}}";
+  }
+  changeColor(object_id, object_class, oForm, traitement, cat_id);
+  Prescription.submitFormStop(oForm, object_id, object_class);
+}
 
 </script>
 
@@ -63,28 +80,3 @@ Main.add( function(){
 	  </table>
   {{/if}}
 </form>
-
-
-<script type="text/javascript">
-
-calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
-  // Date mais pas heure
-  if(oForm.date_arret.value && !oForm.time_arret.value){
-    oForm.time_arret.value = "00:00";
-  } else {
-    oForm.date_arret.value = "{{$today}}";
-    oForm.time_arret.value = "{{$now_time}}";
-  }
-  changeColor(object_id, object_class, oForm, traitement, cat_id);
-  Prescription.submitFormStop(oForm, object_id, object_class);
-}
-
-// Preparation du formulaire
-prepareForm(document.forms['form-stop-{{$line->_class_name}}-{{$line->_id}}']);
-
-Main.add( function(){
-  Calendar.regField('form-stop-{{$line->_class_name}}-{{$line->_id}}', "date_arret", false, dates);
-} );
-
-</script>
-          

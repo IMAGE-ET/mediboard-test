@@ -1384,14 +1384,16 @@ Object.extend (Control.Tabs, {
     return new CookieJar().getValue("TabState", tabName);
   },
   create: function (name, storeInCookie) {
-    var tab = new Control.Tabs(name);
-    if (storeInCookie) {
-      tab.options.afterChange = function (tab, tabName) {
-        Control.Tabs.storeTab(name, tab.id);
-      }
-      tab.setActiveTab(Control.Tabs.loadTab(name));
-    }
-    return tab;
+    if ($(name)) {
+	    var tab = new Control.Tabs(name);
+	    if (storeInCookie) {
+	      tab.options.afterChange = function (tab, tabName) {
+	        Control.Tabs.storeTab(name, tab.id);
+	      }
+	      tab.setActiveTab(Control.Tabs.loadTab(name));
+	    }
+	    return tab;
+	  }
   }
 } );
 

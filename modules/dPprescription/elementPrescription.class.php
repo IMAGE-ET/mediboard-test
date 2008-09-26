@@ -30,13 +30,11 @@ class CElementPrescription extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "category_prescription_id" => "notNull ref class|CCategoryPrescription",
-      "libelle"      => "notNull str",
-      "description"  => "text"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["category_prescription_id"] = "notNull ref class|CCategoryPrescription";
+    $specs["libelle"]      = "notNull str";
+    $specs["description"]  = "text";
+    return $specs;
   }
   
   function getBackRefs() {
@@ -52,17 +50,17 @@ class CElementPrescription extends CMbObject {
       
   static function getFavoris($praticien_id, $category) {
     $ds = CSQLDataSource::get("std");
-    $sql = "SELECT prescription_line_element.element_prescription_id, COUNT(*) AS total
+    $sql = 'SELECT prescription_line_element.element_prescription_id, COUNT(*) AS total
             FROM prescription_line_element, element_prescription, category_prescription, prescription
             WHERE prescription_line_element.prescription_id = prescription.prescription_id
             AND prescription_line_element.element_prescription_id = element_prescription.element_prescription_id
             AND element_prescription.category_prescription_id = category_prescription.category_prescription_id
-            AND category_prescription.chapitre = '$category'
-            AND prescription_line_element.praticien_id = '$praticien_id'
+            AND category_prescription.chapitre = \''.$category.'\'
+            AND prescription_line_element.praticien_id = \''.$praticien_id.'\'
             AND prescription.object_id IS NOT NULL
             GROUP BY prescription_line_element.element_prescription_id
             ORDER BY total DESC
-            LIMIT 0, 20";
+            LIMIT 0, 20';
     return $ds->loadlist($sql);
   }
   

@@ -64,6 +64,7 @@ $smarty->assign("prescription", $prescription);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("mode_protocole", $mode_protocole);
 $smarty->assign("mode_pharma", $mode_pharma);
+$smarty->assign("today"      , mbDate());
 $smarty->display("../../dPprescription/templates/vw_easy_mode.tpl");
 
 ?>

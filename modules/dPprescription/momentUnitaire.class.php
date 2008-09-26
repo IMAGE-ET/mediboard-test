@@ -30,16 +30,14 @@ class CMomentUnitaire extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "libelle"     => "str notNull",
-      "heure"       => "time",
-      "type_moment" => "enum list|matin|midi|soir|apres_midi|horaire|autre",
-      "principal"   => "bool",
-      "_heure"      => "num",
-      "_min"        => "num"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["libelle"]     = "str notNull";
+    $specs["heure"]       = "time";
+    $specs["type_moment"] = "enum list|matin|midi|soir|apres_midi|horaire|autre";
+    $specs["principal"]   = "bool";
+    $specs["_heure"]      = "num";
+    $specs["_min"]        = "num";
+    return $specs;
   }
 
   function getBackRefs() {
@@ -94,12 +92,7 @@ class CMomentUnitaire extends CMbObject {
 	function updateDBFields(){
 	 	parent::updateDBFields();	 	
 	  if($this->_heure !== null) {
-	   	if($this->_heure){
-	      $this->heure = 
-	      $this->_heure.":00:00";
-	   	} else {
-	  		$this->heure = "";
-	  	}
+	    $this->heure = ($this->_heure ? $this->_heure.":00:00" : '');
 	  }
 	}
 }

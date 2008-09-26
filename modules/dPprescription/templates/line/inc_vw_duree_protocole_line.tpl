@@ -1,13 +1,8 @@
 <script type="text/javascript">
 
-modifUniteDecal = function(oFieldJour, oFieldUnite){
-  if(oFieldJour.value != "I"){
-    $V(oFieldUnite,"jour");
-    oFieldUnite.disabled = "disabled";
-  } else {
-    oFieldUnite.disabled = "";
-  }
-}
+Main.add( function(){
+  prepareForm('editDuree-{{$typeDate}}-{{$line->_id}}'); 
+});
 
 </script>
 {{assign var=line_id value=$line->_id}}
@@ -56,10 +51,5 @@ modifUniteDecal = function(oFieldJour, oFieldUnite){
 				{{mb_field object=$line field=time_fin form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange"}}			
 		{{/if}}
     </form>
-    <script type="text/javascript">
-      Main.add( function(){
-       prepareForm(document.forms['editDuree-{{$typeDate}}-{{$line->_id}}']); 
-      } );
-    </script>
   </td>
 </tr>

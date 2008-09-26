@@ -80,8 +80,8 @@ class CUser extends CMbObject {
     $specs["user_first_name"] = "str maxLength|50";
     $specs["user_last_name"]  = "notNull str maxLength|50 confidential";
     $specs["user_email"]      = "str maxLength|255";
-    $specs["user_phone"]      = "str maxLength|30";
-    $specs["user_mobile"]     = "str maxLength|30";
+    $specs["user_phone"]      = "str maxLength|30 mask|99S99S99S99S99";
+    $specs["user_mobile"]     = "str maxLength|30 mask|99S99S99S99S99";
     $specs["user_address1"]   = "str maxLength|50";
     $specs["user_city"]       = "str maxLength|30";
     $specs["user_zip"]        = "str maxLength|11";

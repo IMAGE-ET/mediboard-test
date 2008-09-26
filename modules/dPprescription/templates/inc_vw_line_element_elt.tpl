@@ -34,7 +34,11 @@
 	      {{/if}}
 	      <!-- Affichage du formulaire de signature de l'infirmiere -->
 	      {{if $line->_can_view_form_signature_infirmiere}} 
-	        {{include file="../../dPprescription/templates/line/inc_vw_form_validation_infirmiere.tpl"}}  
+          {{if $line->valide_infirmiere}}
+            (Validée par l'infirmière)
+          {{else}}
+            <button type="button" class="tick" onclick="submitValidationInfirmiere('{{$line->_class_name}}','{{$line->_id}}','{{$prescription->_id}}','{{$div_refresh}}','{{$mode_pharma}}')">Validation infirmière</button>
+          {{/if}}
 	      {{/if}}
 	    </div>
 	    <!-- View de l'element -->
@@ -91,11 +95,9 @@
 			    <td style="border:none">
 			      <img src="images/icons/a_right.png" title="" alt="" />
 			    </td>
-				  <td style="border:none; text-align: left;">
-			      <div id="prises-Soin{{$line->_id}}">
+				  <td style="border:none; text-align: left;" id="prises-Soin{{$line->_id}}">
 			        <!-- Parcours des prises -->
 			        {{include file="../../dPprescription/templates/line/inc_vw_prises_posologie.tpl" type="Soin"}}
-			      </div>
 			    </td>
 	      </table>
       {{else}}

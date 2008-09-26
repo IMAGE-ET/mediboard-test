@@ -62,8 +62,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_can_vw_form_add_line_contigue      = null;
   var $_can_modify_dates                   = null;
   var $_can_modify_comment                 = null;
-  
-  
+
   var $_quantites = null;
   
   function getSpec() {
@@ -74,20 +73,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "code_cip"             => "notNull numchar|7",
-      "no_poso"              => "num max|128",
-      "commentaire"          => "str",
-      "valide_pharma"        => "bool",
-      "accord_praticien"     => "bool",
-      "substitution_line_id" => "ref class|CPrescriptionLineMedicament",
-      "_unite_prise"         => "str",
-      "_traitement"          => "bool"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["code_cip"]             = "notNull numchar|7";
+    $specs["no_poso"]              = "num max|128";
+    $specs["commentaire"]          = "str";
+    $specs["valide_pharma"]        = "bool";
+    $specs["accord_praticien"]     = "bool";
+    $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
+    $specs["_unite_prise"]         = "str";
+    $specs["_traitement"]          = "bool";
+    return $specs;
   }
-  
   
   function loadView() {
     $this->loadRefsPrises();
@@ -191,7 +187,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
-    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma){
+    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma && $this->_ref_prescription->type != "externe"){
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Affichage de l'icone Livret Therapeutique

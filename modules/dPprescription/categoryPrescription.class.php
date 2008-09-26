@@ -31,14 +31,12 @@ class CCategoryPrescription extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "chapitre"    => "notNull enum list|dmi|anapath|biologie|imagerie|consult|kine|soin|dm",
-      "nom"         => "notNull str",
-      "description" => "text",
-      "header"      => "text"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["chapitre"]    = "notNull enum list|dmi|anapath|biologie|imagerie|consult|kine|soin|dm";
+    $specs["nom"]         = "notNull str";
+    $specs["description"] = "text";
+    $specs["header"]      = "text";
+    return $specs;
   }
   
   function getBackRefs() {

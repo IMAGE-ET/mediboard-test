@@ -18,12 +18,11 @@ var Prescription = {
     urlPrescription.requestUpdate("produits_elements", { waitingText : null });
   }, 
   addLine: function(code) {
-    var oForm = document.addLine;
+    var oForm     = document.forms.addLine;
+    var oFormDate = document.forms.selDateLine;
     
-    var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
-      
     }
     if(oFormDate && oFormDate.time_debut){
       oForm.time_debut.value = oFormDate.time_debut.value;
@@ -46,9 +45,9 @@ var Prescription = {
   },
   addLineElement: function(element_id, chapitre, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante
-    var oForm = document.addLineElement;
+    var oForm     = document.forms.addLineElement;
+    var oFormDate = document.forms.selDateLine;
     
-    var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;
     }
@@ -87,8 +86,8 @@ var Prescription = {
 
 
   submitPriseElement: function(element_id){
-    var oFormElement = document.addLineElement;
-    var oForm = document.addPriseElement;
+    var oFormElement = document.forms.addLineElement;
+    var oForm        = document.forms.addPriseElement;
     oForm.object_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){
@@ -98,8 +97,8 @@ var Prescription = {
   },
   
   submitPriseElementWithoutRefresh: function(element_id){
-    var oFormElement = document.addLineElement;
-    var oForm = document.addPriseElement;
+    var oFormElement = document.forms.addLineElement;
+    var oForm        = document.forms.addPriseElement;
     oForm.object_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg');
   },
@@ -108,7 +107,7 @@ var Prescription = {
 
   addLineElementWithoutRefresh: function(element_id, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante
-    var oForm = document.addLineElement;
+    var oForm = document.forms.addLineElement;
     if(debut){
       oForm.debut.value = debut;
     }
@@ -130,7 +129,7 @@ var Prescription = {
   
   
   delLineWithoutRefresh: function(line_id) {
-    var oForm = document.addLine;
+    var oForm = document.forms.addLine;
     oForm.prescription_line_medicament_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg');
@@ -231,11 +230,12 @@ var Prescription = {
 	    }
     }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("sejour_id", sejour_id);
+    url.addParam("operation_id", operation_id);
     url.addParam("full_mode", "1");
     url.addParam("praticien_sortie_id", praticien_sortie_id);
     url.addParam("mode_anesth", mode_anesth);
@@ -301,18 +301,18 @@ var Prescription = {
   },
   refreshTabHeader: function(tabName, lineCount){
     // On cible le bon a href
-    tab = $$("ul li a[href=#"+tabName+"]");
+    tab = $('prescription_tab_group').select("a[href=#"+tabName+"]");
     
-    if (tab[0]) {
+    if (tab = tab[0]) {
       // On recupere le nom de l'onglet
-      tabSplit = tab[0].innerHTML.split(" ");
+      tabSplit = tab.innerHTML.split(" ");
       name_tab = tabSplit[0];
       
       // Si le nombre de ligne est > 0
       if(lineCount > 0){
-      tab[0].innerHTML = name_tab+" ("+lineCount+")";
+      tab.innerHTML = name_tab+" ("+lineCount+")";
       } else {
-        tab[0].innerHTML = name_tab;
+        tab.innerHTML = name_tab;
       }
     }
   },

@@ -72,6 +72,11 @@ foreach($elements as $element_id){
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;
 }
 
+if ($moment_unitaire_id) {
+	$_moment_explode = explode("-",$moment_unitaire_id);
+	$moment_unitaire_id = $_moment_explode[1];
+}
+
 foreach($lines as $cat_name => $lines_by_cat){
 	foreach($lines_by_cat as $_line){
 		if($cat_name != "dmi"){
@@ -92,11 +97,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 		  $_line->store();
 		  
 		  if($cat_name != "anapath" && $cat_name != "imagerie" && $cat_name != "consult"){
-        
-		  	
 		  	if($moment_unitaire_id){
-        	$_moment_explode = explode("-",$moment_unitaire_id);
-        	$moment_unitaire_id = $_moment_explode[1];
         	// Cas d'un moment complexe
         	if($_moment_explode[0] == "complexe"){
             $moment = new CBcbMoment();

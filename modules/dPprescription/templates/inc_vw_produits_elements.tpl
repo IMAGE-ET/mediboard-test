@@ -20,7 +20,135 @@ viewEasyMode = function(mode_protocole, mode_pharma){
   url.popup(900,500,"Mode grille");
 }
 
+setPrimaryKeyDosql = function (form, object_class, object_id) {
+  var field, dosql;
+  switch (object_class) {
+    case "CPrescriptionLineMedicament": 
+      field = "prescription_line_medicament_id";
+      dosql = "do_prescription_line_medicament_aed";
+      break;
+    case "CPrescriptionLineElement": 
+      field = "prescription_line_element_id";
+      dosql = "do_prescription_line_element_aed";
+      break;
+    case "CPrescriptionLineComment": 
+      field = "prescription_line_comment_id";
+      dosql = "do_prescription_line_comment_aed";
+      break;
+  }
+  form[field].value = object_id;
+  form.dosql.value = dosql;
+}
+
+submitALD = function(object_class, object_id, ald){
+  var oForm = getForm("editLineALD-"+object_class);
+  prepareForm(oForm);
+  
+  setPrimaryKeyDosql(oForm, object_class, object_id);
+  
+  oForm.ald.value = ald ? "1" : "0";
+  onSubmitFormAjax(oForm);
+}
+
+submitConditionnel = function(object_class, object_id, conditionnel){
+  var oForm = getForm("editLineConditionnel-"+object_class);
+  prepareForm(oForm);
+  
+  setPrimaryKeyDosql(oForm, object_class, object_id);
+  
+  oForm.conditionnel.value = conditionnel ? "1" : "0";
+  return onSubmitFormAjax(oForm);
+}
+
+submitValidationInfirmiere = function(object_class, object_id, prescription_id, div_refresh, mode_pharma) {
+  var oForm = getForm("validation_infirmiere-"+object_class);
+  prepareForm(oForm);
+  
+  setPrimaryKeyDosql(oForm, object_class, object_id);
+  
+  return onSubmitFormAjax(oForm, { onComplete: 
+    function() { 
+      Prescription.reload(prescription_id, '', div_refresh, '', mode_pharma); 
+    }
+  });
+}
+
+submitValidationPharmacien = function(prescription_id, object_id, valide_pharma, mode_pharma) {
+  var oForm = getForm("validation_pharma");
+  prepareForm(oForm);
+  oForm.valide_pharma.value = valide_pharma;
+  oForm.prescription_line_medicament_id.value = object_id;
+  onSubmitFormAjax(oForm, { onComplete: function() {
+    Prescription.reload(prescription_id, '', 'medicament', '', mode_pharma); }
+  });
+}
+
+submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
+  var oForm = getForm("valideAllLines");
+  prepareForm(oForm);
+  oForm.prescription_id.value = prescription_id;
+  oForm.chapitre.value = chapitre;
+  if (mode_pharma) {
+    oForm.mode_pharma.value = mode_pharma;
+  }
+  return onSubmitFormAjax(oForm);
+}
+
+submitAddComment = function (object_class, object_id, commentaire) {
+  var oForm = getForm("addComment-"+object_class);
+  prepareForm(oForm);
+  
+  setPrimaryKeyDosql(oForm, object_class, object_id);
+  
+  oForm.commentaire.value = commentaire;
+  return onSubmitFormAjax(oForm);
+}
+
+
+/***************/
+
+// Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
+changeColor = function(object_id, object_class, oForm, traitement, cat_id){   
+  if(oForm.date_arret){
+    var date_arret = oForm.date_arret.value;
+    var date_fin = date_arret;
+  }
+  
+  if(oForm._heure_arret && oForm._min_arret){
+    var heure_arret = oForm._heure_arret.value;
+    var min_arret = oForm._min_arret.value;
+    var date_fin = date_fin+" "+heure_arret+":"+min_arret+":00";
+  }
+    
+  // Entete de la ligne
+  var oDiv = $('th_line_'+object_class+'_'+object_id);
+  if(object_class == 'CPrescriptionLineMedicament'){
+    var oTbody = $('line_medicament_'+object_id);
+  } else {
+    var oTbody = $('line_element_'+object_id);
+  }
+  var classes_before = oTbody.className;
+  if(date_fin != "" && date_fin <= '{{$now}}'){
+    oDiv.addClassName("arretee");
+    oTbody.addClassName("line_stopped");
+  } else {
+    oDiv.removeClassName("arretee");
+    oTbody.removeClassName("line_stopped");
+  }
+  var classes_after = oTbody.className;
+  
+  // Deplacement de la ligne
+  if(classes_before != classes_after){
+    if(object_class == 'CPrescriptionLineMedicament'){
+      moveTbody(oTbody);
+    } else {
+      moveTbodyElt(oTbody, cat_id);
+    }
+  }
+}
 </script>
+
+{{include file="../../dPprescription/templates/js_functions.tpl"}}
 
 <form name="addPriseElement" action="?" method="post">
   <input type="hidden" name="m" value="dPprescription" />
@@ -58,7 +186,6 @@ viewEasyMode = function(mode_protocole, mode_pharma){
 </form>
 
 
-
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">
   <li><a href="#div_medicament">Médicaments</a></li>
@@ -71,18 +198,10 @@ viewEasyMode = function(mode_protocole, mode_pharma){
 {{/if}}
 </ul>
 
-
-
 <hr class="control_tabs" />
 
-
-
-
-
 {{if $prescription->_can_add_line}}
-
   {{if !$mode_protocole}}
-
   <table class="form" style="float: right; width: 110px;">
     <tr>
       <td class="date">
@@ -147,16 +266,88 @@ viewEasyMode = function(mode_protocole, mode_pharma){
   {{/foreach}}
 {{/if}}
 
+<!-- Formulaires regroupés -->
+<form name="editLineALD-CPrescriptionLineMedicament" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="ald" value="" />
+</form>
 
+<form name="editLineALD-CPrescriptionLineElement" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="ald" value="" />
+</form>
 
-<script type="text/javascript">
-	    	
-// UpdateFields de l'autocomplete des elements
-updateFieldsElement = function(selected, formElement, element) {
-	Element.cleanWhitespace(selected);
-	dn = selected.childNodes;
-  Prescription.addLineElement(dn[0].firstChild.nodeValue, dn[1].firstChild.nodeValue);
-  $(formElement+'_'+element).value = "";
-}
-     
-</script>
+<form name="editLineALD-CPrescriptionLineComment" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_comment_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="ald" value="" />
+</form>
+
+<form name="editLineConditionnel-CPrescriptionLineMedicament" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="conditionnel" value="" />
+</form>
+
+<form name="editLineConditionnel-CPrescriptionLineElement" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="conditionnel" value="" />
+</form>
+
+<form name="validation_infirmiere-CPrescriptionLineMedicament" action="?" method="post">
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="valide_infirmiere" value="1" />
+</form>
+
+<form name="validation_infirmiere-CPrescriptionLineElement" action="?" method="post">
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="valide_infirmiere" value="1" />
+</form>
+
+<form name="validation_pharma" action="" method="post">
+  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="valide_pharma" value="" />
+</form>
+
+<form name="valideAllLines" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+  <input type="hidden" name="prescription_id" value="" />
+  <input type="hidden" name="chapitre" value="" />
+  <input type="hidden" name="mode_pharma" value="" />
+</form>
+
+<form name="addComment-CPrescriptionLineMedicament" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="commentaire" value="" />
+</form>
+
+<form name="addComment-CPrescriptionLineElement" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="commentaire" value="" />
+</form>

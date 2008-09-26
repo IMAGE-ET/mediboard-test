@@ -9,20 +9,9 @@
 {{assign var="patient" value=$sejour->_ref_patient}}
 
 <script type="text/javascript">
-
-function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
-  if (list) {
-    var url = new Url;
-    url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
-    url.addParam("praticien_id", praticien_id);
-    url.addParam("selected_id", selected_id);
-    url.requestUpdate(list, { waitingText: null} );
-  }
-}
-
 Main.add(function () {
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}');
+    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}');
   }
   
   if($('bloodSalvage')){
@@ -175,31 +164,6 @@ function reloadPrescription(prescription_id){
 {{if $isPrescriptionInstalled}}
 <div id="prescription_sejour_tab" style="display:none">
   <div id="prescription_sejour"></div>
-  
-  {{assign var=prescription_pread value=$selOp->_ref_sejour->_ref_prescriptions.pre_admission}}
-  {{assign var=prescription_sejour value=$selOp->_ref_sejour->_ref_prescriptions.sejour}}
-  {{if !$prescription_pread->_id && !$prescription_sejour->_id}}
-  <!-- Choix d'un protocole de prescription et application, liste en fonction du praticien du sejour -->
-  <script type="text/javascript">
-  Main.add(function () {
-    var form = getForm("editProtoPrescription");
-    refreshListProtocolesPrescription('{{$selOp->_ref_sejour->praticien_id}}', form._protocole_prescription_anesth_id);
-    refreshListProtocolesPrescription('{{$selOp->_ref_sejour->praticien_id}}', form._protocole_prescription_chir_id);
-  });
-  </script>
-  
-  <form name="editProtoPrescription" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-    <input type="hidden" name="m" value="dPplanningOp" />
-    <input type="hidden" name="dosql" value="do_planning_aed" />
-    <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
-    <input type="hidden" name="del" value="0" />
-    {{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}
-    <select name="_protocole_prescription_anesth_id"></select><br />
-        {{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}
-    <select name="_protocole_prescription_chir_id"></select>
-    <button type="submit" name="applyProtocole">Appliquer les protocoles</button>
-  </form>
-  {{/if}}
 </div>
 {{/if}}
 

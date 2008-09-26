@@ -38,25 +38,18 @@ class CPrisePosologie extends CMbMetaObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "object_id"            => "notNull ref class|CMbObject meta|object_class cascade",
-      "object_class"         => "notNull enum list|CPrescriptionLineMedicament|CPrescriptionLineElement",
-      "moment_unitaire_id"   => "ref class|CMomentUnitaire",
-      "quantite"             => "float",
-      "nb_fois"              => "float",
-      "unite_fois"           => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "nb_tous_les"          => "float",
-      "unite_tous_les"       => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "decalage_prise"       => "num min|0",
-      "unite_prise"          => "text"
-    );
-    return array_merge($specsParent, $specs);
-  }
-  
-  function updateFormFields() {
-    parent::updateFormFields();
-    
+  	$specs = parent::getSpecs();
+    $specs["object_id"]          = "notNull ref class|CMbObject meta|object_class cascade";
+    $specs["object_class"]       = "notNull enum list|CPrescriptionLineMedicament|CPrescriptionLineElement";
+    $specs["moment_unitaire_id"] = "ref class|CMomentUnitaire";
+    $specs["quantite"]           = "float";
+    $specs["nb_fois"]            = "float";
+    $specs["unite_fois"]         = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
+    $specs["nb_tous_les"]        = "float";
+    $specs["unite_tous_les"]     = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
+    $specs["decalage_prise"]     = "num min|0";
+    $specs["unite_prise"]        = "text";
+    return $specs;
   }
   
   function getBackRefs() {
@@ -64,7 +57,6 @@ class CPrisePosologie extends CMbMetaObject {
     $backRefs["administration"] = "CAdministration prise_id";
     return $backRefs;
   }
-  
  
   function loadRefsFwd() {
     parent::loadRefsFwd();

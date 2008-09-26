@@ -1,98 +1,5 @@
 <script type="text/javascript">
 
-moveTbody = function(oTbody){
-  var oTableMed = $('med');
-  var oTableTrt = $('traitement');
-  var oTableMedArt = $('med_art');
-  var oTableTrtArt = $('traitement_art');
-  
-  if(oTbody.hasClassName('med')){
-    if(oTbody.hasClassName('line_stopped')){
-      oTableMedArt.insert(oTbody);      
-    } else {
-      oTableMed.insert(oTbody);     
-    } 
-  }
-  if (oTbody.hasClassName('traitement')){
-    if(oTbody.hasClassName('line_stopped')){
-      oTableTrtArt.insert(oTbody);      
-    } else {
-      oTableTrt.insert(oTbody);     
-    }       
-  }
-}
-
-
-// Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
-changeColor = function(object_id, object_class, oForm, traitement, cat_id){   
-  if(oForm.date_arret){
-    var date_arret = oForm.date_arret.value;
-    var date_fin = date_arret;
-  }
-  
-  if(oForm._heure_arret && oForm._min_arret){
-    var heure_arret = oForm._heure_arret.value;
-    var min_arret = oForm._min_arret.value;
-    var date_fin = date_fin+" "+heure_arret+":"+min_arret+":00";
-  }
-    
-  // Entete de la ligne
-  var oDiv = $('th_line_'+object_class+'_'+object_id);
-  if(object_class == 'CPrescriptionLineMedicament'){
-    var oTbody = $('line_medicament_'+object_id);
-  } else {
-    var oTbody = $('line_element_'+object_id);
-  }
-  var classes_before = oTbody.className;
-  if(date_fin != "" && date_fin <= '{{$now}}'){
-    oDiv.addClassName("arretee");
-    oTbody.addClassName("line_stopped");
-  } else {
-    oDiv.removeClassName("arretee");
-    oTbody.removeClassName("line_stopped");
-  }
-  var classes_after = oTbody.className;
-  
-  // Deplacement de la ligne
-  if(classes_before != classes_after){
-    if(object_class == 'CPrescriptionLineMedicament'){
-      moveTbody(oTbody);
-    } else {
-      moveTbodyElt(oTbody, cat_id);
-    }
-  }
-}
-
-// Fonction lancée lors de la modfication de la posologie
-submitPoso = function(oForm, curr_line_id){
-  // Suppression des prises de la ligne de prescription
-  oForm._delete_prises.value = "1";
-  submitFormAjax(oForm, 'systemMsg', { onComplete: 
-    function(){
-      // Preparation des prises pour la nouvelle posologie selectionnée
-      var url = new Url;
-      url.setModuleAction("dPprescription", "httpreq_prescription_prepare");
-      url.addParam("prescription_line_id", curr_line_id);
-      url.addParam("no_poso", oForm.no_poso.value);
-      url.addParam("code_cip", oForm._code_cip.value);
-      url.requestUpdate('prises-Med'+curr_line_id, { waitingText: null });
-    } 
-   }
-  );
-}
-
-Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}");
-
-// Permet de mettre la ligne en traitement
-transfertTraitement = function(line_id){
-  if(!line_id){
-    return;
-  }
-  var oForm = document.transfertToTraitement;
-  oForm.prescription_line_id.value = line_id;
-  submitFormAjax(oForm, "systemMsg");
-}
-
 // Initialisation des dates pour les calendars
 var date = new Date().toDATE();
 var dDate = Date.fromDATE(date); 
@@ -106,18 +13,36 @@ dates = {
   }
 }
 
-changePraticienMed = function(praticien_id){
-  var oFormAddLine = document.addLine;
-  var oFormAddLineCommentMed = document.addLineCommentMed;
-  
-  oFormAddLine.praticien_id.value = praticien_id;
-  oFormAddLineCommentMed.praticien_id.value = praticien_id;
-}
-
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){
     changePraticienMed(document.selPraticienLine.praticien_id.value);
+  }
+  
+  Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}");
+  
+  if(document.forms.addLine && document.forms.searchProd){
+    var oFormProduit = document.forms.searchProd;
+  
+    // Preparation des formulaire
+    prepareForm(document.forms.addLine);
+    prepareForm(oFormProduit);
+    
+    // Autocomplete des medicaments
+    urlAuto = new Url();
+    urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+    urlAuto.addParam("produit_max", 40);
+    
+    // callback => methode pour ajouter en post des parametres
+    // Faire un mini framework pour rajouter des elements du meme formulaire
+    urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+      minChars: 3,
+      updateElement: updateFieldsMedicament,
+      callback: 
+        function(input, queryString){
+          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')); 
+        }
+    } );
   }
 } );
 
@@ -138,21 +63,6 @@ Main.add( function(){
   });
   {{/if}}  
 {{/if}}
-
-
-// Test permettant de pré-selectionner la case à cocher 
-testPharma = function(line_id){
-  // si on est pas en mode pharmacie, on sort de la fonction
-  {{if !$mode_pharma}}return;{{/if}} 
-  var oFormAccordPraticien = document.forms["editLineAccordPraticien-"+line_id];
-  if(oFormAccordPraticien.accord_praticien.value == 0){
-    if(confirm("Modifiez vous cette ligne en accord avec le praticien ?")){
-      oFormAccordPraticien.__accord_praticien.checked = true;
-      $V(oFormAccordPraticien.accord_praticien,"1");
-    }
-  }
-}
-
 
 </script>
 
@@ -195,20 +105,13 @@ testPharma = function(line_id){
 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
 {{if $prescription->object_id && ($is_praticien || $mode_pharma)}}
 <div style="float: right">
-  <form name="valideAllLines" method="post" action="">
-    <input type="hidden" name="m" value="dPprescription" />
-    <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
-    <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-    <input type="hidden" name="chapitre" value="medicament" />
-    <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
-    <button class="tick" type="button" onclick="submitFormAjax(this.form,'systemMsg')">
+  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
     {{if $mode_pharma}}
       Valider toutes les lignes
     {{else}}
       Signer les lignes de médicaments
     {{/if}}
-    </button>
-  </form>
+  </button>
 </div>
 {{/if}}
 
@@ -410,40 +313,3 @@ testPharma = function(line_id){
 {{/foreach}}
 </table>
 {{/if}}
-
-<script type="text/javascript">
-
-if(document.addLine && document.searchProd){
-  // UpdateFields de l'autocomplete de medicaments
-  updateFieldsMedicament = function(selected) {
-    Element.cleanWhitespace(selected);
-    dn = selected.childNodes;
-    Prescription.addLine(dn[0].firstChild.nodeValue);
-    $('searchProd_produit').value = "";
-  }
-  
-  // Preparation des formulaire
-  prepareForm(document.addLine);
-  prepareForm(document.searchProd);
-  
-  var oFormProduit = document.searchProd;
-  
-  // Autocomplete des medicaments
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.addParam("produit_max", 40);
-  
-  // callback => methode pour ajouter en post des parametres
-  // Faire un mini framework pour rajouter des elements du meme formulaire
-  urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
-    minChars: 3,
-    updateElement: updateFieldsMedicament,
-    callback: 
-      function(input, queryString){
-        return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')); 
-      }
-  } );
-}
-
-
-</script>
