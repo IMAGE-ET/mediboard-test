@@ -14,6 +14,8 @@
 class CSpObject extends CMbObject {  
   public $_ref_id400 = null;
   
+  public $_current_group_id = null;
+  
   function CSpObject() {
     foreach (array_keys($this->getSpecs()) as $prop) {
       $this->$prop = null;
@@ -40,6 +42,7 @@ class CSpObject extends CMbObject {
    * @param int $g group_id
    */
   function changeDSN($g) {
+    $this->_current_group_id = $g;
     $this->_spec->dsn = "sherpa-$g";
     $this->_spec->init();
     

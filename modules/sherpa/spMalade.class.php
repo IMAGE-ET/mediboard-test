@@ -222,7 +222,8 @@ class CSpMalade extends CSpObject {
     $this->assvil = $this->makeString($patient->assure_ville, 25);
     
     // Information sur doublons
-    $patient->loadIPP();
+    $patient->_IPP = null;
+    $patient->loadIPP($this->_current_group_id);
     if ($patient->_IPP != $this->_id) {
       $this->maltel = "DOUBLON-$patient->_IPP";  
       $this->malfla = "D";  

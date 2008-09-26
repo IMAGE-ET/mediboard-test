@@ -884,13 +884,16 @@ class CPatient extends CMbObject {
     }
   }
   
-  function loadIPP() {
+  /**
+   * Charge l'IPP du patient pour l'établissement courant
+   * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
+   */
+  function loadIPP($group_id = null) {
     // Prevent loading twice
     if ($this->_IPP) {
       return;
     }
     
-  	global $g;
   	$tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp"); 
 
   	// Pas de tag IPP => pas d'affichage d'IPP
@@ -900,7 +903,12 @@ class CPatient extends CMbObject {
     }
 
     // Permettre des IPP en fonction de l'établissement
-  	$tag_ipp = str_replace('$g',$g, $tag_ipp);
+    if (!$group_id) {
+      global $g;
+      $group_id = $g;
+  	}
+  	
+    $tag_ipp = str_replace('$g',$group_id, $tag_ipp);
 
     // Récupération du premier IPP créé, utile pour la gestion des doublons
     $order = "id400 ASC";
