@@ -148,9 +148,22 @@ function reloadPrescription(prescription_id){
 <!-- Cinquieme onglet => Dossier Medical -->
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
 <div id="five" style="display:none">
+  {{if !$dossier_medical->_id}}
+  <div class="big-info">
+    Le dossier médical pour ce séjour n'est pas créé, ou ne contient pas d'éléments parmi :
+    <ul>
+      <li>{{tr}}CAddiction{{/tr}}</li>
+      <li>{{tr}}CAntecedent{{/tr}}</li>
+      <li>Diagnostics associés</li>
+    </ul>
+    Ces informations doivent-être renseignés pendant la consultation de pré-anesthésie
+  </div>
+
+	{{else}}
   <div class="text">
 		{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$dossier_medical}}
   </div>
+  {{/if}}
 
   <hr />
 

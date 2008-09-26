@@ -55,7 +55,7 @@ if ($op) {
   $selOp->_ref_sejour->loadRefsConsultAnesth();
   $selOp->_ref_sejour->loadRefsPrescriptions();
   $selOp->_ref_sejour->_ref_consult_anesth->loadRefsFwd();
-  
+
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();
   $selOp->loadPossibleActes();
@@ -108,6 +108,7 @@ if ($op) {
 	// Chargement des affectations de personnel pour la plageop et l'intervention
   loadAffectations($selOp, $tabPersonnel, $listPersAideOp, $listPersPanseuse, $timingAffect);
 }
+
 
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
