@@ -100,6 +100,8 @@ Main.add( function(){
   {{if $prescription->type=="pre_admission" && $prescription->object_id}}
   <input type="hidden" name="callback" value="transfertTraitement" />
   {{/if}}  
+  <input type="hidden" name="substitute_for" value="" />
+  <input type="hidden" name="substitution_active" value="1" />
 </form>
 
 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->

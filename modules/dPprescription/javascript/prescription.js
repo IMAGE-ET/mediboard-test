@@ -362,6 +362,12 @@ var Prescription = {
         Prescription.viewHistorique(prescription_id,'substitutions');
         break;
     }
+  }, 
+  viewSubstitutionLines: function(prescription_line_medicament_id){
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_add_substitution_line");
+    url.addParam("prescription_line_medicament_id", prescription_line_medicament_id);
+    url.popup(800,400, "Lignes de substitution");
   }
 };
 

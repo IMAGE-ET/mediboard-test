@@ -12,9 +12,11 @@
         class="{{if $line->_traitement}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
+        {{if !$line->_protocole}}
          Main.add( function(){
            moveTbody($('line_medicament_{{$line->_id}}'));
          });
+         {{/if}}
       </script>
       <div style="float:left;">
         {{if $line->_can_view_historique}}
@@ -77,6 +79,12 @@
 						  (Validé par le pharmacien)
 					  {{/if}}	
 			    {{/if}}
+        {{/if}}
+        {{if $line->_protocole && !$line->substitute_for}}
+          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}')">
+             Lignes de substitution
+            ({{$line->_count_substitution_lines}})
+            </button>
         {{/if}}
       </div>
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})">

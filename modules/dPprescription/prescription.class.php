@@ -150,10 +150,8 @@ class CPrescription extends CMbObject {
   }
   
   
-  function applyDateProtocole($_line, $praticien_id, $date_sel, $operation_id, 
-                              $debut_sejour, $fin_sejour, 
-                              $date_operation, $hour_operation, 
-                              $operation, $sejour, $mode_preview){
+  function applyDateProtocole(&$_line, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
+                              $hour_operation, $operation, $sejour, $mode_preview){
     global $AppUI;
 		$_line->loadRefsPrises();
 		$_line->_id = "";
@@ -338,35 +336,51 @@ class CPrescription extends CMbObject {
 	    }
 	  }
 	
-	  // Parcours des lignes de medicaments
-		foreach($protocole->_ref_prescription_lines as &$_line_med){	    
-		  $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-		                            $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+  // Parcours des lignes de medicaments
+	foreach($protocole->_ref_prescription_lines as &$_line_med){	    
+	  if(!$mode_preview){
+	    // Chargement des lignes de substitutions de la ligne de protocole
+	    $_line_med->loadRefsSubstitutionLines();
+		  $_substitutions = $_line_med->_ref_substitution_lines;
+	  }
+	  
+	  // Creation et modification de la ligne en fonction des dates
+    $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+	                            $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+	                            
+	  if(!$mode_preview){
+		  // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
+		  foreach($_substitutions as &$_line_subst){
+		    $_line_subst->substitute_for = $_line_med->_id;
+		    $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+	                                $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+	    }
+	  }  
+	}
+	
+	// Parcours des lignes d'elements
+	foreach($protocole->_ref_prescription_lines_element_by_cat as &$elements_by_chap){
+	  foreach($elements_by_chap as &$elements_by_cat){
+	    foreach($elements_by_cat as &$_lines){
+	      foreach($_lines as $_line_elt){
+	        $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+	                                  $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+	      } 
+	    }
+	  }
+	}
+	
+	// Parcours des lignes de commentaires
+	foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
+		$line_comment->_id = "";
+		$line_comment->prescription_id = $this->_id;
+		$line_comment->praticien_id = $praticien_id;
+		$line_comment->creator_id = $AppUI->user_id;
+		if(!$mode_preview){
+		  $msg = $line_comment->store();
+		  $AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
 		}
-		
-		// Parcours des lignes d'elements
-		foreach($protocole->_ref_prescription_lines_element_by_cat as &$elements_by_chap){
-		  foreach($elements_by_chap as &$elements_by_cat){
-		    foreach($elements_by_cat as &$_lines){
-		      foreach($_lines as $_line_elt){
-		        $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-		                                  $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
-		      } 
-		    }
-		  }
-		}
-		
-		// Parcours des lignes de commentaires
-		foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
-			$line_comment->_id = "";
-			$line_comment->prescription_id = $this->_id;
-			$line_comment->praticien_id = $praticien_id;
-			$line_comment->creator_id = $AppUI->user_id;
-			if(!$mode_preview){
-			  $msg = $line_comment->store();
-			  $AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
-			}
-		}
+	}
 	
 	  if($mode_preview){
 	    return $protocole;
@@ -490,6 +504,7 @@ class CPrescription extends CMbObject {
   	$whereMed["prescription_id"] = " = '$this->_id'";
   	$whereMed["child_id"] = "IS NULL";
   	$whereMed["substitution_line_id"] = "IS NULL";
+  	$whereMed["substitution_active"] = " = '1'";
   	if($praticien_sortie_id){
   		$where["praticien_id"] = " = '$praticien_sortie_id'";
   		$whereMed["praticien_id"] = " = '$praticien_sortie_id'";
@@ -566,6 +581,8 @@ class CPrescription extends CMbObject {
     if($with_subst != "1"){
       $where["substitution_line_id"] = "IS NULL";
     }
+    // Permet de ne pas afficher les lignes de substitutions
+    $where["substitution_active"] = " = '1'";
     
     $order = "prescription_line_medicament_id DESC";
     $this->_ref_prescription_lines = $line->loadList($where, $order);

@@ -748,7 +748,22 @@ class CSetupdPprescription extends CSetup {
 	        ADD `operation_id` INT (11) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.53";
+    $this->makeRevision("0.53");
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+	          ADD `substitute_for` INT (11) UNSIGNED,
+	          ADD `substitution_active` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament`
+						ADD INDEX (`substitution_line_id`),
+						ADD INDEX (`substitute_for`),
+						ADD INDEX (`time_debut`),
+						ADD INDEX (`time_arret`),
+						ADD INDEX (`time_fin`),
+						ADD INDEX (`operation_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.54";
   }  
 }
 

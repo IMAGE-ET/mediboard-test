@@ -21,19 +21,25 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
   var $valide_pharma    = null; 
   var $accord_praticien = null;
+  // Substitution sous forme d'historique
   var $substitution_line_id = null;
+  // Alternative entre plusieurs lignes
+  var $substitute_for      = null; 
+  var $substitution_active = null; 
   
   // Form Field
   var $_unites_prise    = null;
   var $_specif_prise    = null;
   var $_traitement      = null;
-
+  var $_count_substitution_lines = null;
+  
   // Object References
   var $_ref_prescription = null;
   var $_ref_produit      = null;
   var $_ref_posologie    = null;
   var $_ref_prescription_traitement = null;
-    
+  var $_ref_substitution_lines = null;
+  
   // Alertes
   var $_ref_alertes      = null;
   var $_ref_alertes_text = null;
@@ -73,16 +79,20 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function getSpecs() {
-  	$specs = parent::getSpecs();
-    $specs["code_cip"]             = "notNull numchar|7";
-    $specs["no_poso"]              = "num max|128";
-    $specs["commentaire"]          = "str";
-    $specs["valide_pharma"]        = "bool";
-    $specs["accord_praticien"]     = "bool";
-    $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
-    $specs["_unite_prise"]         = "str";
-    $specs["_traitement"]          = "bool";
-    return $specs;
+  	$specsParent = parent::getSpecs();
+    $specs = array (
+      "code_cip"             => "notNull numchar|7",
+      "no_poso"              => "num max|128",
+      "commentaire"          => "str",
+      "valide_pharma"        => "bool",
+      "accord_praticien"     => "bool",
+      "substitution_line_id" => "ref class|CPrescriptionLineMedicament",
+      "substitute_for"       => "ref class|CPrescriptionLineMedicament",
+      "substitution_active"  => "bool",
+      "_unite_prise"         => "str",
+      "_traitement"          => "bool"
+    );
+    return array_merge($specsParent, $specs);
   }
   
   function loadView() {
@@ -96,6 +106,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["prev_hist_line"]  = "CPrescriptionLineMedicament substitution_line_id";
+    $backRefs["substitutions"] = "CPrescriptionLineMedicament substitute_for";
     return $backRefs;
   }
   
@@ -129,6 +140,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($this->date_arret){
     	$this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
+    }
+    
+    if($this->_protocole){
+      $this->countSubstitionsLines();
     }
   }
   
@@ -349,6 +364,19 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
   
+  /*
+   * Chargement des lignes de substitution possibles
+   */
+  function loadRefsSubstitutionLines(){
+    $this->_ref_substitution_lines = $this->loadBackRefs("substitutions"); 
+  }
+  
+  /*
+   * Permet de connaitre le nombre de lignes de substitutions possibles
+   */
+  function countSubstitionsLines(){
+    $this->_count_substitution_lines = $this->countBackRefs("substitutions");
+  }
   
   function delete(){
     // Chargement de la substitution_line de l'objet à supprimer

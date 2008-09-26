@@ -13,6 +13,7 @@ selDivPoso = function(type, line_id, type_elt){
   var selectMoments = (type_elt == "mode_grille") ? 
                         window.opener.document.moment_unitaire.moment_unitaire_id :
                         document.moment_unitaire.moment_unitaire_id;
+  
                         
   oFormPrise.getElements().each (function (e) {
     if ((e.type != "hidden") && (e.name != "unite_prise") && (e.name != "quantite")) {
