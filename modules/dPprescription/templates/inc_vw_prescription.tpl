@@ -18,8 +18,15 @@ preselectType = function(contexte, oForm){
   {{/if}}
 }
 
-</script>
+Main.add(function () {
+  // Preparation du formulaire de creation de protocole
+  if(document.addProtocolePresc){
+    prepareForm(document.addProtocolePresc);  
+    preselectType("CConsultation");
+  }
+});
 
+</script>
 
 <!-- Formulaire de creation du protocole -->
 {{if !$prescription->_id && $mode_protocole && !$mode_pharma}}
@@ -41,25 +48,15 @@ preselectType = function(contexte, oForm){
 		       </th>
 		    </tr>
 		    <tr>
-		      <th>  
-		        {{mb_label object=$protocole field="libelle"}}
-		      </th>
-		      <td>
-				    {{mb_field object=$protocole field="libelle" class="notNull"}}  
-		      </td>
+		      <th>{{mb_label object=$protocole field="libelle"}}</th>
+		      <td>{{mb_field object=$protocole field="libelle" class="notNull"}}</td>
 		    </tr>
 		    <tr>
-		      <th>
-					  {{mb_label object=$protocole field="object_class"}}
-					</th>
-					<td>
-					  {{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}  
-					</td>
+		      <th>{{mb_label object=$protocole field="object_class"}}</th>
+					<td>{{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}</td>
 			  </tr>
 			  <tr>
-			    <th>
-			      {{mb_label object=$protocole field="type"}}
-			    </th>
+			    <th>{{mb_label object=$protocole field="type"}}</th>
 			    <td>
 			      <select name="type">
 			        <option value="pre_admission">Pré-admission</option>
@@ -99,12 +96,3 @@ preselectType = function(contexte, oForm){
 	  {{include file="../../dPprescription/templates/inc_vw_produits_elements.tpl"}}  
 	</div>
 {{/if}}
-
-
-<script type="text/javascript">
-// Preparation du formulaire de creation de protocole
-if(document.addProtocolePresc){
-  prepareForm(document.addProtocolePresc);  
-  preselectType("CConsultation");
-}
-</script>

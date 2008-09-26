@@ -77,14 +77,11 @@ Main.add( function(){
 	  
 	  <!-- Elements d'une categorie-->
 	  <table class="tbl" id="elt_{{$category->_id}}">
-
-	  <tr>
-	    <th class="title" colspan="9">{{$category->_view}}</th>
-	  </tr>	  
+      <tr><th class="title">{{$category->_view}}</th></tr>	  
 	  </table>
-	  <table class="tbl" id="elt_art_{{$category->_id}}">
-
-	  </table>
+    
+	  <table class="tbl" id="elt_art_{{$category->_id}}"></table>
+    
     <table class="tbl">
 	  {{foreach from=$lines_cat.element item=line_element}}
 	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_element->praticien_id) || !$praticien_sortie_id}}
@@ -95,16 +92,16 @@ Main.add( function(){
 	  
 	  <!-- Commentaires d'une categorie -->
 	  <table class="tbl">
-	  {{if $lines_cat.comment|@count}}
-	  <tr>
-	    <th colspan="9" class="element">Commentaires</th>
-	  </tr>
-	  {{/if}}
-	  {{foreach from=$lines_cat.comment item=line_comment}}
-	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_comment->praticien_id) || !$praticien_sortie_id}}
-	      {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
-	    {{/if}}
-	  {{/foreach}}
+  	  {{if $lines_cat.comment|@count}}
+  	  <tr>
+  	    <th colspan="9" class="element">Commentaires</th>
+  	  </tr>
+  	  {{/if}}
+  	  {{foreach from=$lines_cat.comment item=line_comment}}
+  	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_comment->praticien_id) || !$praticien_sortie_id}}
+  	      {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
+  	    {{/if}}
+  	  {{/foreach}}
 	  </table>
 	  {{/foreach}}
 	  
@@ -133,9 +130,7 @@ Main.add( function(){
 			      <tr>
 			        <!-- Affichage d'une ligne de commentaire -->
 			        {{if $_line->_class_name == "CPrescriptionLineComment"}}
-			          <td colspan="4">
-			            {{$_line->commentaire}}
-			          </td>
+			          <td colspan="4">{{$_line->commentaire}}</td>
 			        {{else}}
 			          {{assign var=chapitre value=$_line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 			          <!-- Affichage d'une ligne d'element -->
@@ -146,9 +141,7 @@ Main.add( function(){
 					      
 					      {{if $chapitre != "dmi"}}
 						      {{if !$_line->fin}}
-							    <td>
-							      {{mb_label object=$_line field="debut"}}: {{mb_value object=$_line field="debut"}}
-							    </td>
+							    <td>{{mb_label object=$_line field="debut"}}: {{mb_value object=$_line field="debut"}}</td>
 							    {{if $chapitre != "anapath" && $chapitre != "imagerie" && $chapitre != "consult"}}
 							    <td>
 							      {{mb_label object=$_line field="duree"}}: 
@@ -159,9 +152,7 @@ Main.add( function(){
 							        -
 							        {{/if}}
 							    </td>
-							    <td>
-							      {{mb_label object=$_line field="_fin"}}: {{mb_value object=$_line field="_fin"}}
-							    </td>
+							    <td>{{mb_label object=$_line field="_fin"}}: {{mb_value object=$_line field="_fin"}}</td>
 							    {{/if}}
 							    {{else}}
 							    <td colspan="3">
@@ -170,20 +161,12 @@ Main.add( function(){
 						      {{/if}}
 					      {{/if}}
 				      {{/if}}
-				        <td>
-					        Praticien: {{$_line->_ref_praticien->_view}}
-					      </td>
+				        <td>Praticien: {{$_line->_ref_praticien->_view}}</td>
                 <td>
 				      		{{mb_label object=$_line field="ald"}}:
-						      {{if $_line->ald}}
-						        Oui
-						      {{else}}
-						        Non
-						      {{/if}}
+						      {{if $_line->ald}}Oui{{else}}Non{{/if}}
 				        </td>
-				        <td>
-			            Exécutant: {{$_line->_ref_executant->_view}}
-			          </td>
+				        <td> Exécutant: {{$_line->_ref_executant->_view}}</td>
 				    </tr>
 			    {{/foreach}}
 			  {{/foreach}}
