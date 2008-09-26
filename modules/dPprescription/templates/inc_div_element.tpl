@@ -77,7 +77,7 @@ Main.add( function(){
 	  
 	  <!-- Elements d'une categorie-->
 	  <table class="tbl" id="elt_{{$category->_id}}">
-      <tr><th class="title">{{$category->_view}}</th></tr>	  
+      <tr><th class="title" colspan="9">{{$category->_view}}</th></tr>	  
 	  </table>
     
 	  <table class="tbl" id="elt_art_{{$category->_id}}"></table>
