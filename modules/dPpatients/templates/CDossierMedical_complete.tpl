@@ -70,6 +70,7 @@
     
     <td class="text">
       {{foreach from=$object->_ref_types_addiction key=curr_type item=list_addiction}}
+      {{if $list_addiction|@count}}
       <strong>
         {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
       </strong>
@@ -80,6 +81,7 @@
         </li>
         {{/foreach}}
       </ul>
+      {{/if}}
       {{foreachelse}}
         <i>Pas d'addictions</i>
       {{/foreach}}
