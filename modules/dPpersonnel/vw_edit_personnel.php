@@ -24,27 +24,27 @@ $personnel->load($personnel_id);
 
 // Chargement de la liste des affectations pour le filtre
 $filter = new CPersonnel();
-$whereFilter = array();
+$where = array();
 $ljoin["users"] = "users.user_id = personnel.user_id";
+
 $order = "users.user_last_name";
 
 if($emplacement){
-  $whereFilter["emplacement"] = " = '$emplacement'";
+  $where["emplacement"] = " = '$emplacement'";
   $filter->emplacement = $emplacement;
 }
 if($_user_last_name){
-  $whereFilter["user_last_name"] = "LIKE '%$_user_last_name%'";
+  $where["user_last_name"] = "LIKE '%$_user_last_name%'";
   $filter->_user_last_name = $_user_last_name;
 }
 if($_user_first_name){
-  $whereFilter["user_first_name"] = "LIKE '%$_user_first_name%'";
+  $where["user_first_name"] = "LIKE '%$_user_first_name%'";
   $filter->_user_first_name = $_user_first_name;
 }
 
 $filter->nullifyEmptyFields();
-$personnels = $filter->loadList($whereFilter, $order, null, null, $ljoin);
-
-foreach($personnels as $key => $_personnel){
+$personnels = $filter->loadGroupList($where, $order, null, null, $ljoin);
+foreach ($personnels as $key => $_personnel){
   $_personnel->loadRefUser();
 }
 

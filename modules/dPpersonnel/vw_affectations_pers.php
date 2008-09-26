@@ -10,10 +10,8 @@
 
 global $can;
 
-
-
-$object_id = mbGetValueFromGetOrSession("object_id","");
-$object_class = mbGetValueFromGetOrSession("object_class","");
+$object_id = mbGetValueFromGetOrSession("object_id");
+$object_class = mbGetValueFromGetOrSession("object_class");
 $list = mbGetValueFromGetOrSession("list","");
 
 $listUsers = array();
@@ -48,13 +46,14 @@ $personnel = new CPersonnel();
 $groupby = "user_id";
 $ljoin["users"] = "users.user_id = personnel.user_id";
 $order = "users.user_last_name";
-$personnels = $personnel->loadList(null, $order, null, $groupby, $ljoin);
+$personnels = $personnel->loadGroupList(array(), $order, null, $groupby, $ljoin);
 foreach($personnels as &$personnel){
   $mediuser = new CMediusers();
   $listUsers[$personnel->user_id] = $mediuser->load($personnel->user_id);
 }
 
 // Calcul des personnel_ids pour chaque user
+$where = array();
 foreach($listUsers as $key=>$user){
   $personnel = new CPersonnel();
   $where["user_id"] = " = '$key'"; 

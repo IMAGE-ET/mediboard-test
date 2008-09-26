@@ -63,15 +63,32 @@ class CPersonnel extends CMbObject {
     $this->_view = "Personnel $this->user_id";
   }
   
+  /**
+   * Load list overlay for current group
+   */
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+		$ljoin["users_mediboard"] = "users_mediboard.user_id = personnel.user_id";
+		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+
+    // Filtre sur l'établissement
+		global $g;
+		$where[] = "functions_mediboard.group_id = '$g'";
+    
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
+  
   static function loadListPers($emplacement, $actif = true){
     $personnel = new CPersonnel();
-    $personnel->emplacement = $emplacement;
-    if($actif) {
-      $personnel->actif = 1;
+    $where["emplacement"] = "= '$emplacement'";
+    
+    // Could have been ambiguous with CMediusers.actif
+    if ($actif) {
+      $where[] = "personnel.actif = '1'";
     }
+    
     $ljoin["users"] = "personnel.user_id = users.user_id";
     $order = "users.user_last_name";
-    $listPers = $personnel->loadMatchingList($order, null, null, $ljoin);
+    $listPers = $personnel->loadGroupList($where, $order, null, null, $ljoin);
     foreach($listPers as $pers){
       $pers->loadRefUser();
     }
