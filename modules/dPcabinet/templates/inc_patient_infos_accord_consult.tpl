@@ -53,6 +53,9 @@ function newDHE(oForm) {
 <table class="form">
   <tr>
     <th class="category">
+      <div style="float:left;" class="noteDiv CPatient-{{$consult->patient_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
 			{{if $patient->_id_vitale}}
       <div style="float:right;">
 	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
