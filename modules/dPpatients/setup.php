@@ -812,7 +812,12 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - addictions" , "Sejour - Addictions -- toutes"));
     $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - diagnostics", "Sejour - Diagnotics" ));
     
-    $this->mod_version = "0.70";
+    $this->makeRevision("0.70");
+    $sql = "ALTER TABLE `patients` ADD `email` VARCHAR (255) AFTER tel2;";
+    $this->addQuery($sql);
+    
+    
+    $this->mod_version = "0.71";
   }
 }
 

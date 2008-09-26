@@ -114,6 +114,11 @@
     <th>{{mb_label object=$patient field="tel2"}}</th>
     <td>{{mb_field object=$patient field="tel2" tabindex="162" onchange="copyAssureValues(this)"}}</td>  
   </tr>
+
+  <tr>
+    <th>{{mb_label object=$patient field="email"}}</th>
+    <td>{{mb_field object=$patient field="email" tabindex="163"}}</td>  
+  </tr>
     
   <tr>
     <th>{{mb_label object=$patient field="rques"}}</th>

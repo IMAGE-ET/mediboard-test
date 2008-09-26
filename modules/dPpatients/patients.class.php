@@ -33,6 +33,7 @@ class CPatient extends CMbObject {
   var $cp               = null;
   var $tel              = null;
   var $tel2             = null;
+  var $email            = null;
   var $medecin_traitant = null;
   var $medecin1         = null;
   var $medecin2         = null;
@@ -178,6 +179,7 @@ class CPatient extends CMbObject {
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
     $specs["tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["email"]             = "str confidential";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
     
