@@ -128,34 +128,20 @@ Main.add(function () {
       {{mb_value object=$mbmodule field=mod_version}}
     </td>
 
-    <td>
+    <td style="text-align: center; width: 1%;">
     	<!-- Actif -->
-      {{mb_ternary var=dot test=$mbmodule->mod_active value=dotgreen other=dotyellowanim}}
-      <img alt="dot" src="./images/icons/{{$dot}}.gif" />
-      {{if $mbmodule->mod_type == "core"}}
-      <strong>{{mb_value object=$mbmodule field=mod_active}}</strong>
-      {{else}}
-      <a class="action" {{if $can->edit}}href="{{$cmd}}=toggle"{{/if}}>
-      {{mb_value object=$mbmodule field=mod_active}}
-      </a>
-      {{/if}}
+      <input type="checkbox" {{if $can->edit && $mbmodule->mod_type!="core"}}onclick="location.href='{{$cmd}}=toggle'"{{/if}}
+      {{if $mbmodule->mod_active}}checked="checked"{{/if}} 
+      {{if $mbmodule->mod_type=="core"}}disabled="disabled"{{/if}} />
     </td>
 
-    <td style="text-align: center;">
-      {{mb_ternary var=dot test=$mbmodule->mod_ui_active value=dotgreen.gif other=dotredanim.gif}}
-      <img alt="dot" src="./images/icons/{{$dot}}" />
-      {{if $can->edit}}
-      <a class="action" href="{{$cmd}}=toggleMenu">
-      {{/if}}
-      {{mb_value object=$mbmodule field=mod_ui_active}}
-      {{if $can->edit}}
-      </a>
-      {{/if}}
+    <td style="text-align: center; width: 1%;">
+      <input type="checkbox" {{if $can->edit}}onclick="location.href='{{$cmd}}=toggleMenu'"{{/if}} 
+      {{if $mbmodule->mod_ui_active}}checked="checked"{{/if}}  />
     </td>
     
-    <td style="text-align: right;">{{$mbmodule->mod_ui_order}}</td>
-
-	  <td style="text-align: right;">
+    <td style="text-align: right; width: 1%;">
+      {{$mbmodule->mod_ui_order}}
 	    <img alt="updown" src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />
 	    {{if $can->edit}}
 	    <map name="map-{{$mbmodule->_id}}">
