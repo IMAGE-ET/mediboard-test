@@ -240,7 +240,7 @@ Main.add( function(){
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
     {{if !($prescription->type == "sortie" && $praticien_sortie_id != $_line_comment->praticien_id) || !$praticien_sortie_id}}
-      {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl"}}
+      {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl" prescription_reelle=$prescription}}
     {{/if}}
   {{/foreach}}
   
