@@ -68,6 +68,19 @@
 	      {{/if}} 
 	    </a>
 	  </div>
+	  {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_ref_substitution_lines|@count}}
+    <form action="?" method="post" name="changeLine-{{$line_id}}">
+      <input type="hidden" name="m" value="dPprescription" />
+      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+      <select name="prescription_line_medicament_id" style="width: 75px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshDossierSoin(); } } )">
+        <option value="">Conserver</option>
+      {{foreach from=$line->_ref_substitution_lines item=_line_subst}}
+        <option value="{{$_line_subst->_id}}">{{$_line_subst->_view}}
+        {{if !$_line_subst->substitute_for}}(originale){{/if}}</option>
+      {{/foreach}}
+      </select>
+    </form>
+    {{/if}}
 	</td>
   {{/if}}
   <td class="text">   

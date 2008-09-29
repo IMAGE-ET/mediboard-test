@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 refreshDossierSoin = function(){
-  loadTraitement('{{$sejour->_id}}','{{$real_date}}',document.click.nb_decalage.value);
+  loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value);
 }
 printDossierSoin = function(prescription_id, date){
   url = new Url;

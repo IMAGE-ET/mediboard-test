@@ -88,6 +88,24 @@ if($prescription->_id){
 
 	// Chargement des lignes
 	$prescription->loadRefsLinesMed("1","1");
+	
+	foreach($prescription->_ref_prescription_lines as &$_line_med){
+	  if(!$_line_med->countBackRefs("administration")){
+		  if(!$_line_med->substitute_for){
+		    $_line_med->loadRefsSubstitutionLines();   
+		  } else {
+		    $_base_line = new CPrescriptionLineMedicament();
+		    $_base_line->load($_line_med->substitute_for);
+		    $_base_line->loadRefsSubstitutionLines();
+		    $_line_med->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
+		    // Ajout de la ligne d'origine dans le tableau
+		    $_line_med->_ref_substitution_lines[$_base_line->_id] = $_base_line;
+		    // Suppression de la ligne actuelle
+		    unset($_line_med->_ref_substitution_lines[$_line_med->_id]);
+		  }
+	  }
+	}
+	
 	$prescription->loadRefsLinesElementByCat();
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
 		 
