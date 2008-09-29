@@ -734,4 +734,7 @@ $locales['CPatient.all'] = '';
 $locales['CPatient.select'] = '';
 $locales['CTraitement.all'] = '';
 $locales['CTraitement.select'] = '';
+$locales['CPatient-email'] = 'E-mail';
+$locales['CPatient-email-desc'] = 'Adresse e-mail du patient';
+$locales['CPatient-email-court'] = 'E-mail';
 ?>
