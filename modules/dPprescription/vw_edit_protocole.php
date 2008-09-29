@@ -35,7 +35,7 @@ if($praticien_id){
   $where = array();
   $where["praticien_id"] = " = '$praticien_id'";
   $where["object_id"] = "IS NULL";
-  $tabProtocoles = $prescription->loadList($where);
+  $tabProtocoles = $prescription->loadList($where, "libelle");
   foreach($tabProtocoles as $_protocole){
   	$protocoles[$_protocole->object_class][$_protocole->_id] = $_protocole;
   }
@@ -45,7 +45,7 @@ if($praticien_id){
   $where = array();
   $where["function_id"] = " = '$praticien->function_id'";
   $where["object_id"] = "IS NULL";
-  $tab_protocoles_function = $prescription->loadList($where);
+  $tab_protocoles_function = $prescription->loadList($where, "libelle");
   foreach($tab_protocoles_function as $_protocole){
   	$protocoles_function[$_protocole->object_class][$_protocole->_id] = $_protocole;
   }
@@ -56,7 +56,7 @@ if($function_id){
 	$where = array();
 	$where["function_id"] = " = '$function_id'";
 	$where["object_id"] = " IS NULL";
-  $tab_protocoles_function = $prescription->loadList($where);
+  $tab_protocoles_function = $prescription->loadList($where, "libelle");
   foreach($tab_protocoles_function as $_protocole){
   	$protocoles_function[$_protocole->object_class][$_protocole->_id] = $_protocole;
   }
