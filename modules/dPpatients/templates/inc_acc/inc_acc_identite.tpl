@@ -4,125 +4,101 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="2">
-      Identité
-    </th>
+    <th class="category" colspan="2">Identité</th>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="nom"}}</th>
-    <td>{{mb_field object=$patient field="nom" tabindex="101" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="nom" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="prenom"}}</th>
-    <td>{{mb_field object=$patient field="prenom" tabindex="102" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="prenom" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
-    <td>{{mb_field object=$patient field="nom_jeune_fille" tabindex="103" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="nom_jeune_fille" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="sexe"}}</th>
-    <td>{{mb_field object=$patient field="sexe" tabindex="104" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="sexe" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="naissance"}}</th>
-    <td>{{mb_field object=$patient field="naissance" tabindex="105" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="rang_naissance"}}</th>
-    <td>{{mb_field object=$patient field="rang_naissance" tabindex="108" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="rang_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="lieu_naissance"}}</th>
-    <td>{{mb_field object=$patient field="lieu_naissance" tabindex="109" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="lieu_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="nationalite"}}</th>
-    <td>{{mb_field object=$patient field="nationalite" tabindex="110" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="nationalite" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="profession"}}</th>
-    <td>{{mb_field object=$patient field="profession" tabindex="111" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="profession" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="matricule"}}</th>
-    <td>{{mb_field object=$patient field="matricule" tabindex="112" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
-
   <tr>
     <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
-    <td>{{mb_field object=$patient field="rang_beneficiaire" tabindex="113" onchange=showCopieIdentite()}}</td>
+    <td>{{mb_field object=$patient field="rang_beneficiaire" onchange=showCopieIdentite()}}</td>
 	</tr>
-
 </table>	
     
-    </td>
-    <td style="width: 50%">
+  </td>
+  <td style="width: 50%">
   	
 <table class="form">
   <tr>
-    <th class="category" colspan="2">
-      Coordonnées
-    </th>
+    <th class="category" colspan="2">Coordonnées</th>
   </tr>
-  
   <tr>
     <th>{{mb_label object=$patient field="adresse"}}</th>
-    <td>{{mb_field object=$patient field="adresse" tabindex="151" onchange="copyAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="adresse" onchange="copyAssureValues(this)"}}</td>
   </tr>
-  
   <tr>
     <th>{{mb_label object=$patient field="cp"}}</th>
     <td>
-      {{mb_field object=$patient field="cp" tabindex="152" size="31" maxlength="5" onchange="copyAssureValues(this)"}}
+      {{mb_field object=$patient field="cp" size="31" maxlength="5" onchange="copyAssureValues(this)"}}
       <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
     </td>
   </tr>
-
   <tr>
     <th>{{mb_label object=$patient field="ville"}}</th>
     <td>
-      {{mb_field object=$patient field="ville" tabindex="153" size="31" onchange="copyAssureValues(this)"}}
+      {{mb_field object=$patient field="ville" size="31" onchange="copyAssureValues(this)"}}
       <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
     </td>
   </tr>
-  
   <tr>
     <th>{{mb_label object=$patient field="pays"}}</th>
     <td>
-      {{mb_field object=$patient field="pays" tabindex="154" size="31"  onchange="copyAssureValues(this)"}}
+      {{mb_field object=$patient field="pays" size="31"  onchange="copyAssureValues(this)"}}
       <div style="display:none;" class="autocomplete" id="pays_auto_complete"></div>
     </td>
   </tr>
-  
   <tr>
     <th>{{mb_label object=$patient field="tel"}}</th>
-    <td>{{mb_field object=$patient field="tel" tabindex="161" onchange="copyAssureValues(this)"}}</td>  
+    <td>{{mb_field object=$patient field="tel" onchange="copyAssureValues(this)"}}</td>  
   </tr>
-
   <tr>
     <th>{{mb_label object=$patient field="tel2"}}</th>
-    <td>{{mb_field object=$patient field="tel2" tabindex="162" onchange="copyAssureValues(this)"}}</td>  
+    <td>{{mb_field object=$patient field="tel2" onchange="copyAssureValues(this)"}}</td>  
   </tr>
-
   <tr>
     <th>{{mb_label object=$patient field="email"}}</th>
-    <td>{{mb_field object=$patient field="email" tabindex="163"}}</td>  
+    <td>{{mb_field object=$patient field="email"}}</td>  
   </tr>
-    
   <tr>
     <th>{{mb_label object=$patient field="rques"}}</th>
-    <td>{{mb_field object=$patient field="rques" tabindex="170" onblur="this.form.rang_beneficiaire.value == '01' ?
+    <td>{{mb_field object=$patient field="rques" onblur="this.form.rang_beneficiaire.value == '01' ?
            tabs.changeTabAndFocus('beneficiaire', this.form.regime_sante) :
            tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
   </tr>

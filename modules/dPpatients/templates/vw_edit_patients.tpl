@@ -52,9 +52,9 @@ function printPatient(id) {
 var tabs;
 Main.add(function () {
   initInseeFields("editFrm", "cp", "ville","pays");
-  initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "tel3");
-  initInseeFields("editFrm", "employeur_cp", "employeur_ville", "tel4");
-  initPaysField("editFrm", "pays","tel");
+  initInseeFields("editFrm", "prevenir_cp", "prevenir_ville");
+  initInseeFields("editFrm", "employeur_cp", "employeur_ville");
+  initPaysField("editFrm", "pays", "tel");
   
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
   initPaysField("editFrm", "assure_pays","assure_tel");

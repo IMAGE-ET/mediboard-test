@@ -20,7 +20,7 @@
 	    </span>
     </td>
     <td class="text">{{$medecin->adresse}}, {{$medecin->cp}} {{$medecin->ville}}</td>
-    <td>{{$medecin->tel}}</td>
+    <td>{{mb_value object=$medecin field=tel}}</td>
     <td class="button">{{$nb_patients}}</td>
   </tr>
 	{{foreachelse}}
