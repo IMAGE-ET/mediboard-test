@@ -478,6 +478,8 @@ class COperation extends CCodable {
     $this->_ref_affectation = new CAffectation();
     $this->_ref_affectation->loadObject($where);
     $this->_ref_affectation->loadRefsFwd();
+    $this->_ref_affectation->_ref_lit->loadRefsFwd();
+    $this->_ref_affectation->_ref_lit->_ref_chambre->loadRefsFwd();
   }
   
   /**

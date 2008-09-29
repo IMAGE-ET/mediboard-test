@@ -80,10 +80,13 @@
           	</a>
           </td>
           {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id}}
-            <td style="text-align: right;">{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
+            <td style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap;">
+              {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
+              {{$_operation->_ref_affectation->_ref_lit->_view}}
+            </td>
           {{/if}}
           {{if $vueReduite}}
-            <td><button class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button></td>
+            <td style="width: 1%;"><button class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button></td>
           {{/if}}
   	  	</tr>
       </table>
