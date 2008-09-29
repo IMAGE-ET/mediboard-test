@@ -34,7 +34,7 @@ class CDateTimeSpec extends CMbFieldSpec {
         $object->$fieldName = mbDateTime();
         return null;
       } 
-    	return "format de dateTime invalide";
+    	return "format de dateTime invalide : '$propValue'";
     }
     return null;
   }

@@ -36,19 +36,19 @@ class CDateSpec extends CMbFieldSpec {
         $object->$fieldName = mbDate();
         return null;
       } 
-      return "format de date invalide";
+      return "format de date invalide : '$propValue'";
     }
     
     // Mois grégorien
     $mois = intval($matches[2]);
     if (!in_range($mois, 1, 12)) {
-      return "mois '$mois' non compris entre 1 et 12";
+      return "mois '$mois' non compris entre 1 et 12 ('$propValue')";
     }
       
     // Jour grégorien
     $mois = intval($matches[3]);
     if (!in_range($mois, 1, 31)) {
-      return "mois '$mois' non compris entre 1 et 12";
+      return "mois '$mois' non compris entre 1 et 12  ('$propValue')";
     }
     
       
