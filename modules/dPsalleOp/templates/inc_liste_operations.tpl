@@ -64,12 +64,31 @@
   
   {{else}}
   <td class="text">
-	  {{if $vueReduite}}
-	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
-	  {{/if}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+    {{if $dPconfig.dPbloc.CPlageOp.chambre_operation == 0}}
+  	  {{if $vueReduite}}
+  	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
+  	  {{/if}}
+      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
       {{$_operation->_ref_patient->_view}}
-    </a>
+      </a>
+    {{else}}
+      <table style="border: none; width: 100%;">
+        <tr>
+          <td>
+          	<a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+          	 {{$_operation->_ref_patient->_view}}
+          	</a>
+          </td>
+          {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id}}
+            <td style="text-align: right;">{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
+          {{/if}}
+          {{if $vueReduite}}
+            <td><button class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button></td>
+          {{/if}}
+  	  	</tr>
+      </table>
+      {{$_operation->libelle}}
+    {{/if}}
   </td>
   
 	{{if !$vueReduite}}

@@ -105,4 +105,5 @@ $locales['CSalle-title-create'] = '';
 $locales['CSalle-title-modify'] = '';
 $locales['CSalle.all'] = '';
 $locales['CSalle.select'] = '';
+$locales['config-dPbloc-CPlageOp-chambre_operation'] = 'Afficher l\'intervention et la chambre du patient dans le suivi des salles';
 ?>

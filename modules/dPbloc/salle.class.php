@@ -86,6 +86,10 @@ class CSalle extends CMbObject {
 		    $operation->loadRefPatient();
 		    $operation->loadExtCodesCCAM();
 		    $operation->updateSalle();
+
+		    if(CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
+		    	$operation->loadRefAffectation();
+		    }
 		    
 		    // Extraire les interventions non placées
 		    if ($operation->rank == 0) {

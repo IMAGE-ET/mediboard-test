@@ -85,6 +85,7 @@ class COperation extends CCodable {
   var $_datetime = null;
   var $_datetime_reel = null;
   var $_datetime_reel_fin = null;
+  var $_ref_affectation = null;
   
   // Links
   var $_link_editor = null;
@@ -466,6 +467,17 @@ class COperation extends CCodable {
   
   function getActeExecution() {
     $this->loadRefPlageOp();
+  }
+  
+  function loadRefAffectation() {
+  $this->loadRefPlageOp();
+    $where = array();
+    $where["sejour_id"] = "= $this->sejour_id";
+    $where["entree"] = " <= '$this->_datetime'";
+    $where["sortie"] = " >= '$this->_datetime'";
+    $this->_ref_affectation = new CAffectation();
+    $this->_ref_affectation->loadObject($where);
+    $this->_ref_affectation->loadRefsFwd();
   }
   
   /**

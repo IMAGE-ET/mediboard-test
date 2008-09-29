@@ -96,6 +96,20 @@
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>          
  </tr>
+
+  {{assign var="var" value="chambre_operation"}} 
+  <tr>
+   <th class="category" colspan="4">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
+ </tr>
+ <tr>
+    <td colspan="4" style="text-align: center">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>          
+ </tr>
+ 
  <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
