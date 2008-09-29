@@ -9,7 +9,7 @@
 	        <select name="praticien_id" onchange="this.form.submit()">
 	          <option value="">&mdash; Choix d'un chirurgien</option>
 	        {{foreach from=$praticiens item=_praticien}}
-	          <option value="{{$_praticien->_id}}" {{if $_praticien->_id == $praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}</option>
+	          <option class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" value="{{$_praticien->_id}}" {{if $_praticien->_id == $praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}</option>
 	        {{/foreach}}
 	        </select>
 	      {{/if}}
@@ -19,7 +19,7 @@
         <select name="anesth_id" onchange="this.form.submit()">
           <option value="">&mdash; Choix d'un anesthésiste</option>
         {{foreach from=$anesths item=_anesth}}
-          <option value="{{$_anesth->_id}}" {{if $_anesth->_id == $anesth_id}}selected="selected"{{/if}}>{{$_anesth->_view}}</option>
+          <option class="mediuser" style="border-color: #{{$_anesth->_ref_function->color}};" value="{{$_anesth->_id}}" {{if $_anesth->_id == $anesth_id}}selected="selected"{{/if}}>{{$_anesth->_view}}</option>
         {{/foreach}}
         </select>
       {{/if}}

@@ -154,7 +154,9 @@ class CPrescription extends CMbObject {
                               $hour_operation, $operation, $sejour, $mode_preview){
     global $AppUI;
 		$_line->loadRefsPrises();
-		$_line->_id = "";
+		if(!$mode_preview){
+		  $_line->_id = "";
+		}
     $_line->unite_duree = "jour";
     $_line->debut = "";
 		
@@ -239,6 +241,7 @@ class CPrescription extends CMbObject {
 		      if($unite_decalage_debut == "DAYS"){
 		        $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);
 		      } else {
+		        $_line->debut = $date_debut;
 		        $_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);
 		      }
 		    } else {
