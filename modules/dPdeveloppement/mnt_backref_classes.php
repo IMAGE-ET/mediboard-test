@@ -91,17 +91,21 @@ function checkBackRefs($c, $list_classes) {
       if ($fwdSpec->className == $backSpec->class && 
           $fwdSpec->fieldName == $backSpec->field) {
         $missing = false;
+        break;
       }
     }
     if ($missing) $missingBackRefs[$keyFwd] = $fwdSpec;
   }
-  
+  //mbTrace($backSpecs,'back');
   foreach ($backSpecs as $keyBack => $backSpec) {
     $excess = true;
+    //mbTrace($fwdSpecsTo, 'fwd');
     foreach ($fwdSpecsTo as $keyFwd => $fwdSpec) {
       if ($fwdSpec->className == $backSpec->class && 
-          $fwdSpec->fieldName == $backSpec->field) {
+          $fwdSpec->fieldName == $backSpec->field ||
+          $backSpec->class == $o->_class_name) {
         $excess = false;
+        break;
       }
     }
     if ($excess) $excessBackRefs[$keyBack] = $backSpec;
