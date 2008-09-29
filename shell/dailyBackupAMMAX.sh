@@ -9,6 +9,15 @@ BASH_PATH=$(dirname $0)
 
 announce_script "AMMAX daily backup"
 
+if [ "$#" -lt 2 ]
+then
+  user=ammaxuser
+  pass=userammax
+else
+  user=$1
+  pass=$2
+fi
+
 ## Make complete path
 
 # Make backup path
@@ -29,7 +38,7 @@ cd ${WEEKDAYPATH}
 
 # removes previous hotcopy if something went wrong
 rm -Rvf AMMAX 
-mysqldump --opt -u ammaxuser -puserammax AMMAX > AMMAX.sql
+mysqldump --opt -u ${user} -p${pass} AMMAX > AMMAX.sql
 check_errs $? "Failed to create MySQL dump" "MySQL dump done!"
 
 ## Compress archive and remove files
