@@ -29,19 +29,19 @@ cd ${WEEKDAYPATH}
 
 # removes previous hotcopy if something went wrong
 rm -Rvf AMMAX 
-mysqlhotcopy -u mbadmin -p adminmb AMMAX $WEEKDAYPATH
-check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
+mysqldump --opt -u ammaxuser -puserammax AMMAX > AMMAX.sql
+check_errs $? "Failed to create MySQL dump" "MySQL dump done!"
 
 ## Compress archive and remove files
 DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
 # Make the tarball
 rm -f AMMAX*.tar.gz
-tar cvfz AMMAX-${DATETIME}.tar.gz AMMAX/
+tar cvfz AMMAX-${DATETIME}.tar.gz AMMAX.sql
 check_errs $? "Failed to create backup tarball" "Tarball packaged!"
 
 # Remove temporary files
-rm -Rvf AMMAX
+rm -Rvf AMMAX.sql
 check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
 
 
