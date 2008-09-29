@@ -227,7 +227,7 @@ class CMbFieldSpec {
       }
       else if ($prevChar !== $c) {
         if (isset(self::$charmap[$prevChar])) {
-          $lexemes[] = array(self::$charmap[$prevChar] => $count);
+          $lexemes[] = array(self::$charmap[$prevChar], $count);
           $prevChar = $c;
           $count = 0;
         }
