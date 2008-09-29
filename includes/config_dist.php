@@ -247,7 +247,8 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   	"col1" => "interv",
 	"col2" => "sejour",
 	"col3" => "patient"
-  )
+  ),
+  "chambre_operation" => "0",
 );
 
 $dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
