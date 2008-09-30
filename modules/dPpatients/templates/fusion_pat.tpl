@@ -4,6 +4,20 @@
 Main.add(function () {
   var tabs = Control.Tabs.create('tab-fusion', false);
 });
+
+function setField (field, value) {
+  field = $(field);
+
+  var dateView = $(field.form.name+'_'+field.name+'_da');
+  if (dateView) {
+    dateView.update(value);
+    $V(field, (value ? Date.fromLocaleDate(value).toDATE() : ''));
+    return;
+  }
+  
+  $V(field, value); 
+  field.fire('mask:check');
+}
 </script>
 
 {{assign var=object1 value=$patient1}}
