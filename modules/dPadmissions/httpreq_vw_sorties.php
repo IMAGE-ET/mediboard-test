@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m;
 
 $can->needsRead();
 
@@ -44,7 +44,6 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 $where["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"] = " = '$mode'";
-$where["group_id"] = "= '$g'";
 $where["annule"] = " = '0'";
 
 // Afficher seulement les sorties non effectuées (sejour sans date de sortie reelle)
@@ -67,7 +66,7 @@ if($order_col == "_nomPraticien"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
-$listSejour = $listSejour->loadList($where, $order, null, null, $ljoin);
+$listSejour = $listSejour->loadGroupList($where, $order, null, null, $ljoin);
 
 foreach($listSejour as $key => $sejour){
   $sejour->loadRefPatient();

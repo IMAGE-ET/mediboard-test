@@ -69,10 +69,9 @@ class CPersonnel extends CMbObject {
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
 		$ljoin["users_mediboard"] = "users_mediboard.user_id = personnel.user_id";
 		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
-
     // Filtre sur l'établissement
-		global $g;
-		$where[] = "functions_mediboard.group_id = '$g'";
+		$g = CGroups::loadCurrent();
+		$where["functions_mediboard.group_id"] = "= '$g->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }

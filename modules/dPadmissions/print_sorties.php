@@ -22,7 +22,7 @@ $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
 $order = "users.user_last_name, users.user_first_name, sejour.sortie_prevue";
 
-$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+$sejours = $sejour->loadGroupList($where, $order, null, null, $ljoin);
 
 foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefPraticien();

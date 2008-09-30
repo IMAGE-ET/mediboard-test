@@ -20,7 +20,7 @@ $selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 $order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
 $order_way = mbGetValueFromGetOrSession("order_way", "ASC");
-$selTri = mbGetValueFromGetOrSession("selTri", "nom");
+$selTri    = mbGetValueFromGetOrSession("selTri", "nom");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
 
@@ -73,7 +73,7 @@ if($order_col == "_nomPraticien"){
 }
 
   
-$today = $today->loadList($where, $order, null, null, $ljoin);
+$today = $today->loadGroupList($where, $order, null, null, $ljoin);
 
 foreach ($today as $keySejour => $valueSejour) {
   $sejour =& $today[$keySejour];
