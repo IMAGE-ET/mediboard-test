@@ -24,7 +24,7 @@ SiblingsChecker = {
 	  url.addElement(oForm.patient_id);
 	  url.addElement(oForm.nom);
 	  url.addElement(oForm.prenom);
-	  url.addElement(oForm.naissance);
+	  url.addElement($(oForm.naissance).getFormatted("99/99/9999", "$3-$2-$1"));
 	  
 	  url.requestUpdate('systemMsg', { 
 	  	waitingText: "Vérification des doublons"
