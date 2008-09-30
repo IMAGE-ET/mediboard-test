@@ -278,7 +278,7 @@ function get_query_for_class($class, $errors = array()) {
         $change[$name] = "`$name` ";
       }
       else {
-        $change[$name] = "CHANGE `$name` ";
+        $change[$name] = "CHANGE `$name` `$name` ";
       }
       $change[$name] .= strtoupper($spec_obj['type']);
       
