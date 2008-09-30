@@ -20,6 +20,14 @@ viewEasyMode = function(mode_protocole, mode_pharma){
   url.popup(900,500,"Mode grille");
 }
 
+refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma) {
+  if (!window[chapitre+'Loaded']) {
+    WaitingMessage.cover("div_"+chapitre);
+    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma);
+    window[chapitre+'Loaded'] = true;
+  }
+}
+
 setPrimaryKeyDosql = function (form, object_class, object_id) {
   var field, dosql;
   switch (object_class) {
@@ -193,7 +201,7 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-  <li><a href="#div_{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+  <li><a href="#div_{{$_chapitre}}" onmouseup="refreshElementPrescription('{{$_chapitre}}');">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
   {{/foreach}}
 {{/if}}
 </ul>
@@ -260,9 +268,13 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 
 {{if !$mode_pharma}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-    <div id="div_{{$_chapitre}}" style="display:none;">
-      {{include file="../../dPprescription/templates/inc_div_element.tpl" element=$_chapitre}}
-    </div>
+    <script type="text/javascript">
+    window['{{$_chapitre}}Loaded'] = false;
+    Main.add( function(){
+      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}');
+    });
+    </script>
+    <div id="div_{{$_chapitre}}" style="display:none;"></div>
   {{/foreach}}
 {{/if}}
 

@@ -160,12 +160,13 @@ Main.add(function () {
 				    document.addPrescription.type.value = 'sejour';
 				    document.addPrescription.callback.value = 'reloadPrescription';
 				    submitFormAjax(document.addPrescription, 'systemMsg');
-				  } } );">Créer une prescription de sejour</button>
+				  } } );">Créer une prescription de séjour</button>
 				  {{/if}}
 				</form>
         <br />
         
         {{if $operation_id}}
+        {{if $anesth_id}}
         <form name="editProtoPrescriptionAnesth" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this, {
          onComplete: function() { 
             document.editProtoPrescriptionAnesth.callback.value = 'reloadPrescription';
@@ -175,14 +176,18 @@ Main.add(function () {
           <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
           <input type="hidden" name="operation_id" value="{{$operation_id}}" />
           <input type="hidden" name="prescription_id" value="" />
-          <input type="hidden" name="praticien_id" value="{{$praticien_id}}" />
+          <input type="hidden" name="praticien_id" value="{{$anesth_id}}" />
+          <input type="hidden" name="callback" value="" />
           
-          {{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}
+          <label for="protocole_id">{{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}</label>
           <select name="protocole_id" class="notNull"></select>
           
           <button type="submit">Appliquer</button>
         </form>
         <br />
+        {{/if}}
+        
+        {{if $chir_id}}
         <form name="editProtoPrescriptionChir" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this, {
          onComplete: function() { 
             document.editProtoPrescriptionChir.callback.value = 'reloadPrescription';
@@ -192,14 +197,15 @@ Main.add(function () {
           <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
           <input type="hidden" name="operation_id" value="{{$operation_id}}" />
           <input type="hidden" name="prescription_id" value="" />
-          <input type="hidden" name="praticien_id" value="{{$praticien_id}}" />
+          <input type="hidden" name="praticien_id" value="{{$chir_id}}" />
           <input type="hidden" name="callback" value="" />
           
-          {{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}
+          <label for="protocole_id">{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</label>
           <select name="protocole_id" class="notNull"></select>
           
           <button type="submit">Appliquer</button>
         </form>
+        {{/if}}
         {{/if}}
 		  </td>
 		</tr>
@@ -208,7 +214,7 @@ Main.add(function () {
 		    <td>
 		      <div class="big-info">
 		        {{if $full_mode}}
-		          Veuillez selectionner un séjour ou une Intervention pour pouvoir créer une prescription
+		          Veuillez selectionner un séjour ou une intervention pour pouvoir créer une prescription
 		        {{else}}
 		          Veuillez choisir un contexte (séjour ou consultation) pour la prescription
 		        {{/if}}

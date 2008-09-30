@@ -26,18 +26,20 @@ $praticien_id = mbGetValueFromGet("praticien_id");
 $service_id   = mbGetValueFromGet("service_id");
 $valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulement les prescriptions contenant des lignes non validees
 
-$filter_sejour->_date_min     = mbGetValueFromGetOrSession("_date_min");
-$filter_sejour->_date_max     = mbGetValueFromGetOrSession("_date_max");
+
+$date = mbDate();
+$filter_sejour->_date_min = mbGetValueFromGetOrSession('_date_min', $date.' 00:00:00');
+$filter_sejour->_date_max = mbGetValueFromGetOrSession('_date_max', $date.' 23:59:59');
+
 mbSetValueToSession('_date_min', $filter_sejour->_date_min);
 mbSetValueToSession('_date_max', $filter_sejour->_date_max);
 
 // Si aucune date n'est specifiée, on filtre par rapport à la date d'aujourd'hui
-if(!$filter_sejour->_date_min && !$filter_sejour->_date_max){
+/*if(!$filter_sejour->_date_min && !$filter_sejour->_date_max){
 	$now = mbDate();
 	$filter_sejour->_date_min = mbDateTime("- 7 DAYS", $now);
 	$filter_sejour->_date_max = mbDateTime("+ 7 DAYS", $now);
-}
-
+}*/
 
 // Initialisations
 $lines_medicament = array();
@@ -84,14 +86,12 @@ if($praticien_id || $service_id || ($filter_sejour->_date_min && $filter_sejour-
 }
 
 $prescriptions = array();
+
 // Chargement de toutes les prescriptions
 foreach($lines_medicament as $line_med){
 	if(!array_key_exists($line_med->prescription_id, $prescriptions)){
 	  $prescription = new CPrescription();
 	  $prescription->load($line_med->prescription_id);
-	  $prescription->loadRefPraticien();
-	  $prescription->loadRefsLinesMedComments();
-    $prescription->loadRefsLinesElementsComments();
     $prescriptions[$line_med->prescription_id] = $prescription;
 	}
 }

@@ -425,7 +425,7 @@ class CPrescription extends CMbObject {
    */
   function loadRefPraticien() {
   	$this->_ref_praticien = new CMediusers();
-  	$this->_ref_praticien->load($this->praticien_id);
+  	$this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
   }
   
   /*
@@ -453,7 +453,7 @@ class CPrescription extends CMbObject {
    */ 
   function loadRefObject(){
   	$this->_ref_object = new $this->object_class;
-    $this->_ref_object->load($this->object_id);
+    $this->_ref_object = $this->_ref_object->getCached($this->object_id);
   }
   
   /*
@@ -461,7 +461,7 @@ class CPrescription extends CMbObject {
    */
   function loadRefPatient(){
     $this->_ref_patient = new CPatient();
-    $this->_ref_patient->load($this->_ref_object->patient_id);	
+    $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->patient_id);	
   }
   
   /*
@@ -660,8 +660,8 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat($withRefs = "1"){
-  	$this->loadRefsLinesElement("",$withRefs);
+  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = ""){
+  	$this->loadRefsLinesElement($chapitre, $withRefs);
   	$this->_ref_prescription_lines_element_by_cat = array();
   	
   	foreach($this->_ref_prescription_lines_element as $line){
@@ -734,8 +734,8 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements (Elements + commentaires)
    */
-  function loadRefsLinesElementsComments($withRefs = "1"){
-  	$this->loadRefsLinesElementByCat($withRefs);
+  function loadRefsLinesElementsComments($withRefs = "1", $chapitre=""){
+  	$this->loadRefsLinesElementByCat($withRefs, $chapitre);
   	$this->loadRefsLinesComment("",$withRefs);
   	
   	// Suppression des ligne de medicaments

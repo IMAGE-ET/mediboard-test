@@ -19,10 +19,12 @@ $refresh_pharma  = mbGetValueFromGet("refresh_pharma", 0);
 $mode_protocole  = mbGetValueFromGetOrSession("mode_protocole", 0);
 $full_mode       = mbGetValueFromGet("full_mode", 0);
 $sejour_id       = mbGetValueFromGetOrSession("sejour_id");
+$chir_id         = mbGetValueFromGetOrSession("chir_id");
+$anesth_id       = mbGetValueFromGetOrSession("anesth_id");
 $operation_id    = mbGetValueFromGetOrSession("operation_id");
 $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
-$chapitre        = mbGetValueFromGetOrSession("chapitre");
+$chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
@@ -111,7 +113,7 @@ if($prescription->_id){
   $historique = $prescription->loadRefsLinesHistorique();
 	
   // Chargement des elements et commentaires d'elements
-  $prescription->loadRefsLinesElementsComments();
+  $prescription->loadRefsLinesElementsComments("", $chapitre);
   if(count($prescription->_ref_lines_elements_comments)){
 	  foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
 	  	foreach($cat_by_chap as $name_cat => $lines_by_cat){
@@ -333,10 +335,22 @@ $smarty->assign("now_time", mbTime());
 if($full_mode){
   $_sejour = new CSejour();
   $_sejour->load($sejour_id);
+  
+  $_operation = new COperation();
+  if($_operation->load($operation_id)) {
+	  $_operation->loadRefPlageOp();
+  }
+  
+  $_chir_id   = $chir_id   ? $chir_id : ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id);
+  $_anesth_id = $anesth_id ? $anesth_id : ($AppUI->_ref_user->isFromType(array("Anesthésiste")) ? 
+                                              $AppUI->user_id : 
+                                              ($_operation->_id ? $_operation->_ref_plageop->anesth_id : null));
+  
   $smarty->assign("protocoles_praticien", $protocoles_praticien);
   $smarty->assign("protocoles_function", $protocoles_function);
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
-  $smarty->assign("praticien_id", ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id));
+  $smarty->assign("chir_id", $_chir_id);
+  $smarty->assign("anesth_id", $_anesth_id);
   $smarty->assign("operation_id", $operation_id);
   $smarty->display("vw_edit_prescription_popup.tpl");
   return;
@@ -349,14 +363,16 @@ if($mode_protocole){
   $smarty->assign("functions", $functions);
   $smarty->assign("category", "medicament");
   $smarty->display("inc_vw_prescription.tpl");
+  return;
 }
 
 // Premier chargement de la pharmacie
 if($mode_pharma && $refresh_pharma){
   $smarty->assign("praticien", $prescription->_ref_praticien);
   $smarty->display("inc_vw_prescription.tpl");	
+  return;
 }
-	  	
+
 if(!$refresh_pharma && !$mode_protocole){
   // Refresh Pharma
   if($mode_pharma){

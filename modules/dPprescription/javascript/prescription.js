@@ -211,7 +211,11 @@ var Prescription = {
 	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
 	      } else {
 	        if(chapitre){
-	          urlPrescription.requestUpdate("div_"+chapitre, { waitingText: null } );     
+	          if (window[chapitre+'Loaded'] || chapitre == "medicament") {
+	            urlPrescription.requestUpdate("div_"+chapitre, { waitingText: null } );
+	          } else {
+	            urlPrescription.requestUpdate("div_"+chapitre);
+	          }
 	        } else {
 	         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
 	         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
@@ -230,12 +234,14 @@ var Prescription = {
 	    }
     }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("sejour_id", sejour_id);
     url.addParam("operation_id", operation_id);
+    url.addParam("chir_id", chir_id);
+    url.addParam("anesth_id", anesth_id);
     url.addParam("full_mode", "1");
     url.addParam("praticien_sortie_id", praticien_sortie_id);
     url.addParam("mode_anesth", mode_anesth);
