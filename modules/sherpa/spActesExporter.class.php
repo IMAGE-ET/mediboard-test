@@ -28,7 +28,8 @@ class CSpActesExporter {
 	  // Suppression des actes
 	  $sejour->loadNumDossier();
 	  if ($sejour->_num_dossier == "-") {
-	    break;
+      trigger_error("Pas de numéro de dossier pour le séjour [$sejour->_id] '$sejour->_view''", E_USER_WARNING);
+	    return;
 	  }
 	  
 	  // Suppression des anciens détails CCAM
