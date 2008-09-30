@@ -441,6 +441,18 @@ class COperation extends CCodable {
     return $msg;
   }
   
+  /**
+   * Load list overlay for current group
+   */
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+		$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+    // Filtre sur l'établissement
+		$g = CGroups::loadCurrent();
+		$where["sejour.group_id"] = "= '$g->_id'";
+    
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
+  
   function loadView() {
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();

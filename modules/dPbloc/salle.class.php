@@ -60,6 +60,17 @@ class CSalle extends CMbObject {
     $this->_view = $this->nom;
   }
   
+  /**
+   * Load list overlay for current group
+   */
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+    // Filtre sur l'établissement
+		$g = CGroups::loadCurrent();
+		$where["group_id"] = "= '$g->_id'";
+    
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
+  
   function loadRefsFwd(){
     // Chargement de l'établissement correspondant
     $this->_ref_group = new CGroups;

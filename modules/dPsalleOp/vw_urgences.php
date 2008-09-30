@@ -19,7 +19,7 @@ $where = array (
   "date" => "= '$date'",
 );
 $order = "salle_id, chir_id";
-$urgences = $operation->loadList($where, $order);
+$urgences = $operation->loadGroupList($where, $order);
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
   $urgence->_ref_sejour->loadRefPatient();
@@ -27,12 +27,9 @@ foreach ($urgences as &$urgence) {
 
 // Listes des salles
 $salle = new CSalle;
-$where = array (
-  "group_id" => "= '$g'",
-);
 $order = "nom";
 
-$listSalles = $salle->loadList($where, $order);
+$listSalles = $salle->loadGroupList(array(), $order);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -118,6 +118,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
     <select name="salle_id" onchange="this.form.submit();">
+      <option value="">&mdash; Choix de la salle</option>
       {{foreach from=$listSalles item=curr_salle}}
       <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $_operation->salle_id}}selected="selected"{{/if}}>
         {{$curr_salle->_view}}
