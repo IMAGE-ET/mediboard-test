@@ -12,8 +12,6 @@ function loadProfil(type){
   });  
 }
 
-
-
 var Functions = {
   collapse: function() {
     Element.hide.apply(null, $$("tbody.functionEffect"));
@@ -31,25 +29,14 @@ var Functions = {
   }
 }
 
-function deldate(sField){
-  oForm = document.mediuser;
-  ElemField = eval("oForm."+sField);
-  ElemField.value = "";
-  oDateDiv = $("mediuser_"+sField+"_da");
-  oDateDiv.innerHTML = "";
-}
-
-Main.add(function () {
 {{if $mediuserSel->_id}}
+Main.add(function () {
   loadProfil("{{$mediuserSel->_user_type}}");
+});
 {{/if}}
 
-  regFieldCalendar("mediuser", "deb_activite");
-  regFieldCalendar("mediuser", "fin_activite");
-});
-
 function changeRemote(o) {
-  var oPassword = o.form._user_password;
+  var oPassword = $(o.form._user_password);
   
   // can the user connect remotely ?
   var canRemote = $V(o)==0;
@@ -59,7 +46,7 @@ function changeRemote(o) {
   '{{$mediuserSel->_props._user_password_strong}}':
   '{{$mediuserSel->_props._user_password_weak}}';
   
-  oPassword.className += '{{if !$mediuserSel->user_id}} notNull{{/if}}';
+  {{if !$mediuserSel->user_id}}oPassword.addClassName('notNull');{{/if}}
   
   // we check the field
   checkFormElement(oPassword);
@@ -133,7 +120,6 @@ function changeRemote(o) {
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
       <input type="hidden" name="user_id" value="{{$mediuserSel->_id}}" />
       <input type="hidden" name="del" value="0" />
-      
 
       <table class="form">
         <tr>
@@ -176,14 +162,14 @@ function changeRemote(o) {
         <tr>
           <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
           <td class="date">
-            {{mb_field object=$mediuserSel field="deb_activite" form="mediuser"}}
+            {{mb_field object=$mediuserSel field="deb_activite" form="mediuser" register=true}}
           </td>
         </tr>
     
         <tr>
           <th>{{mb_label object=$mediuserSel field="fin_activite"}}</th>
           <td class="date">
-            {{mb_field object=$mediuserSel field="fin_activite" form="mediuser"}}
+            {{mb_field object=$mediuserSel field="fin_activite" form="mediuser" register=true}}
           </td>
         </tr>
         
@@ -265,7 +251,7 @@ function changeRemote(o) {
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="compte"}}</th>
-          <td>{{mb_field object=$mediuserSel field="compte}}</td>
+          <td>{{mb_field object=$mediuserSel field="compte"}}</td>
         </tr>
         
         {{if $banques}}
