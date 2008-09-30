@@ -6,7 +6,7 @@ Main.add(function () {
 });
 
 function setField (field, value, form) {
-  field = $(field);
+  field = $(document.forms[form].elements[field]);
 
   var dateView = $(form+'_'+field.name+'_da');
   if (dateView) {
