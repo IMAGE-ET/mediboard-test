@@ -92,7 +92,6 @@ Element.addMethods('input', {
     var valid = false;   
     var ignore = false; //Variable for ignoring control keys
     var firstNonMaskPos = null;
-    element.rawvalue = null;
     
     var re = new RegExp("^"+
       maskArray.collect(function(c) {
@@ -114,16 +113,6 @@ Element.addMethods('input', {
     // Add a placeholder
     function addPlaceholder (c, r) {
       element.options.charmap[c] = r;
-    }
-    
-    // Update the raw value, available by element.rawvalue
-    function updateRawValue() {
-      element.rawvalue = null;
-      buffer.each(function(c, i) {
-        if (!locked[i] && (c != element.options.placeholder)) {
-          element.rawvalue = (element.rawvalue || '') +  c;
-        }
-      });
     }
     
     // Focus event, called on element.onfocus
@@ -238,8 +227,7 @@ Element.addMethods('input', {
     }
     
     function writeBuffer() {
-      $V(element, buffer.join(''), element.rawvalue != null);
-      updateRawValue();
+      $V(element, buffer.join(''));
       return element.value;
     }
     
@@ -312,14 +300,21 @@ Element.addMethods('input', {
     var reMask = "^";
     var prevChar = null;
     var count = 0;
-    var charmap = element.options.charmap;
-    
-    if (!format) {
-      return element.rawvalue;
+    var charmap = null;
+
+    if (element.options) {
+      charmap = element.options.charmap;
+    } else {
+      return element.value;
     }
     
-    for (i = 0; i < maskArray.length; i++) {
-      var c = (maskArray[i] ? maskArray[i] : null);
+    for (i = 0; i <= maskArray.length; i++) {
+      if (!maskArray[i]) { // To manage the latest char
+        reMask += "("+charmap[prevChar]+"{"+count+"})";
+        break;
+      }
+    
+      var c = maskArray[i];
 
       if (!charmap[c]) {
         if (charmap[prevChar]) {
@@ -345,17 +340,24 @@ Element.addMethods('input', {
       else if (prevChar == c) {
         count++;
       }
+      
     }
-    
+
     reMask = new RegExp(reMask+"$");
     
     var matches = reMask.exec(element.value);
     if (matches) {
+      if (!format) {
+	      format = '';
+	      for (i = 1; (i < matches.length && i < 10); i++) {
+	        format += "$"+i;
+	      }
+	    }
 	    for (i = 1; (i < matches.length && i < 10); i++) {
 	      format = format.replace("$"+i, matches[i]);
 	    }
 	  } else {
-	    format = '';
+	    format = element.value;
 	  }
     return format;
   }

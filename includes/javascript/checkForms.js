@@ -18,19 +18,19 @@ var ElementChecker = {
     oElement = $(isArray?oElement[0]:oElement);
 
     this.oForm = oElement.form;
-    if (!oElement.getProperties) {
-      Console.debug(oElement);
-    }
     this.oProperties = oElement.getProperties();
     
     this.oLabel = oElement.getLabel();
     this.sLabel = this.oLabel ? this.oLabel.innerHTML : oElement.name;
     
+    if (this.oProperties.mask) {
+      this.oProperties.mask = this.oProperties.mask.gsub('S', ' ').gsub('P', '|');
+    }
     this.oErrors = [];
     this.sValue = (this.oProperties.mask ? 
-                     this.oElement.getFormatted(this.oProperties.mask, this.oProperties.format, this.oElement.options.charmap) : 
+                     this.oElement.getFormatted(this.oProperties.mask, this.oProperties.format) : 
                      $V(this.oElement));
-
+                     
     Object.extend(this.check, this);
   },
   
@@ -393,22 +393,24 @@ Object.extend(ElementChecker, {
     },
     
     birthDate: function() {
-      var values = /^(\d{2})(\d{2})(\d{4})$/.exec(this.sValue);
-      
-      if (parseInt(values[1]) > 31 || parseInt(values[2]) > 12) {
-        var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
-          this.sLabel,
-          values[1],
-          values[2]
-        );
-        
-        // Attention, un seul printf() ne fonctionne pas
-        msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
-        
-        if (!confirm(msg)) {
-          this.addError("birthDate", "N'a pas un format de date correct");
-        }
-      }
+      this.date();
+      var values = null;
+      if (values = this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
+	      if (parseInt(values[3]) > 31 || parseInt(values[2]) > 12) {
+	        var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
+	          this.sLabel,
+	          values[3],
+	          values[2]
+	        );
+	         
+	        // Attention, un seul printf() ne fonctionne pas
+	        msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
+	        
+	        if (!confirm(msg)) {
+	          this.addError("birthDate", "N'a pas un format de date correct");
+	        }
+	      }
+	    }
     },
     
     // time
