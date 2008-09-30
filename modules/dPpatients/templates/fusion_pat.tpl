@@ -16,7 +16,9 @@ function setField (field, value, form) {
   }
   
   $V(field, value); 
-  field.fire('mask:check');
+  if (field.fire) {
+    field.fire('mask:check');
+  }
 }
 </script>
 
