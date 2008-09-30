@@ -4,7 +4,7 @@
   <td class="{{$object1->_props.$field}}">
     <label>
       <input type="radio" name="_choix_{{$field}}" value="{{mb_value object=$object1 field=$field}}" checked="checked"
-      onclick="setField(this.form.{{$field}}, this.value);" />
+      onclick="setField(this.form.{{$field}}, this.value, this.form.name);" />
       {{if $object1->$field != null}}
         {{mb_value object=$object1 field=$field}}
       {{else}}
@@ -15,7 +15,7 @@
   <td class="{{$object2->_props.$field}}">
     <label>
       <input type="radio" name="_choix_{{$field}}" value="{{mb_value object=$object2 field=$field}}"
-      onclick="setField(this.form.{{$field}}, this.value);" />
+      onclick="setField(this.form.{{$field}}, this.value, this.form.name);" />
       {{if $object2->$field != null}}
         {{mb_value object=$object2 field=$field}}
       {{else}}

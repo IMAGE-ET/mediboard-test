@@ -5,10 +5,10 @@ Main.add(function () {
   var tabs = Control.Tabs.create('tab-fusion', false);
 });
 
-function setField (field, value) {
+function setField (field, value, form) {
   field = $(field);
 
-  var dateView = $(field.form.name+'_'+field.name+'_da');
+  var dateView = $(form+'_'+field.name+'_da');
   if (dateView) {
     dateView.update(value);
     $V(field, (value ? Date.fromLocaleDate(value).toDATE() : ''));
