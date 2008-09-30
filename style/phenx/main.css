@@ -1468,8 +1468,9 @@ ul.control_tabs_vertical li {
 
 ul.control_tabs_vertical li a {
   -moz-border-radius: 6px 0 0 6px;
-  -webkit-border-top-right-radius: 6px;
-  -webkit-border-bottom-right-radius: 6px;
+  -webkit-border-radius: 0;
+  -webkit-border-top-left-radius: 6px;
+  -webkit-border-bottom-left-radius: 6px;
   border-radius: 6px 0 0 6px;
   padding: 3px 8px;
   margin-bottom: 0.2em;
