@@ -108,6 +108,10 @@ class CSpActesExporter {
 	 * Associations diagnostics CIM Mediboard et les détails CIM Sherpa
 	 */
 	static function exportDetsCIM(CSejour &$sejour) {
+	  if (!isset(self::$detCIM[$sejour->_class_name])) {
+	    self::$detCIM[$sejour->_class_name] = array();
+	  }
+	  
 	  $spDetCIM = new CSpDetCIM();
 	  
 	  if ($sejour->DP) {
