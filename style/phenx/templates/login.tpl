@@ -1,6 +1,6 @@
 {{include file="common.tpl" nodebug=true}}
 
-<div id="login">
+<div id="login" {{if $dialog}}style="height: 50px; margin: auto; position: relative; top: 0; left: 0;"{{/if}}>
   {{if !$dialog}}
     <a href="http://www.mediboard.org/">
       <img src="images/pictures/mbNormal.gif" alt="{{$dPconfig.company_name}}" width="290" height="107" /><br />

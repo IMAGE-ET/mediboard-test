@@ -955,6 +955,7 @@ table.note th.low {
   -webkit-border-radius: 8px;
   border-radius: 8px;
   background: #ddd;
+  padding: 4px;
   width: 400px;
   height: 170px;
   margin-left: -200px;
