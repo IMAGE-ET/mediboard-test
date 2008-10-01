@@ -299,6 +299,10 @@ class CPatient extends CMbObject {
   }
 
   function loadIdVitale() {
+    if (!$this->_id) {
+      return;
+    }
+    
     $id_vitale = new CIdSante400();
     if (!$id_vitale->_ref_module) {
       return;
@@ -889,6 +893,10 @@ class CPatient extends CMbObject {
    * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
    */
   function loadIPP($group_id = null) {
+    if (!$this->_id) {
+      return;
+    }
+    
     // Prevent loading twice
     if ($this->_IPP) {
       return;
