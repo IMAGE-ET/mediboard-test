@@ -41,6 +41,7 @@ class CPrestation extends CMbObject {
   }
   
   function updateFormFields(){
+    parent::updateFormFields();
     $this->_view = $this->nom;
   }
   

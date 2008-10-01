@@ -175,4 +175,5 @@ $locales['cancel'] = '';
 $locales['CANCEL'] = '';
 $locales['None'] = 'Aucun';
 $locales['Move'] = 'Déplacer';
+$locales['Duplicate'] = 'Dupliquer';
 ?>

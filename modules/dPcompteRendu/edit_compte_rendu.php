@@ -24,19 +24,37 @@ $object_id       = mbGetValueFromGet("object_id"         , 0);
 // Faire ici le test des différentes variables dont on a besoin
 
 $compte_rendu = new CCompteRendu;
+// Modification d'un document
 if($compte_rendu_id) {
   $compte_rendu->load($compte_rendu_id);
-} else {
+} 
+
+// Création à partir d'un modèle
+else {
   $compte_rendu->load($modele_id);
   $compte_rendu->_id = null;
   $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
-  if($target_id && $target_class){
+  
+  // Utilisation des headers/footers
+  $compte_rendu->loadComponents();
+  if ($compte_rendu->header_id) {
+    $compte_rendu->source = $compte_rendu->_ref_header->source . "<hr />" . $compte_rendu->source;
+  }
+  
+  if ($compte_rendu->footer_id) {
+    $compte_rendu->source = $compte_rendu->source . "<hr />" . $compte_rendu->_ref_footer->source;
+  }
+  
+  // On fournit la cible
+  if ($target_id && $target_class){
     $compte_rendu->object_id = $target_id;
     $compte_rendu->object_class = $target_class;
   }
-  if($pack_id) {
+  
+  // A partir d'un pack
+  if ($pack_id) {
     $pack = new CPack;
     $pack->load($pack_id);
     $compte_rendu->nom = $pack->nom;

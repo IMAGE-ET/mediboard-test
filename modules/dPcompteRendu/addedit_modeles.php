@@ -64,18 +64,20 @@ else {
 	$droit = 0;
 }
 
+$templateManager->printMode = !$droit;
 
 if ($compte_rendu->_id) {
-  // si pas de droit en ecriture, pas besoin d'initialiser fckeditor
-  if($droit){
+  if ($droit) {
     $prat_id = $compte_rendu->chir_id;
     $templateManager->valueMode = false;
     $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->_id);
     $templateManager->loadHelpers($compte_rendu->chir_id, $compte_rendu->object_class);
     $templateManager->applyTemplate($compte_rendu);
-    $templateManager->initHTMLArea();
   }
+
+  $templateManager->initHTMLArea();
 }
+
 
 // Class and fields
 $listObjectClass     = array();
@@ -94,11 +96,24 @@ foreach($listObjectClass as $keyClass=>$value){
 
 // Headers and footers
 $component = new CCompteRendu();
+$footers = null;
+$headers = null;
 
-
-// 
-//$footer->chir_id = $compte_rendu->chir_id;
-//$footer->
+if ($compte_rendu->_id) {
+  if ($compte_rendu->chir_id) {
+    $footers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "footer");
+    $headers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "header");
+  }
+  
+  if ($compte_rendu->function_id) {
+    $footers = array(
+      "func" => CCompteRendu::loadModelesForFunc($compte_rendu->object_class, $compte_rendu->function_id, "footer")
+    );
+    $headers = array(
+      "func" => CCompteRendu::loadModelesForFunc($compte_rendu->object_class, $compte_rendu->function_id, "header")
+    );
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -114,6 +129,9 @@ $smarty->assign("listObjectClass"     , $listObjectClass);
 $smarty->assign("compte_rendu"        , $compte_rendu);
 $smarty->assign("listObjectAffichage" , $listObjectAffichage);
 $smarty->assign("droit"               , $droit);
+$smarty->assign("footers"             , $footers);
+$smarty->assign("headers"             , $headers);
+
 $smarty->display("addedit_modeles.tpl");
 
 ?>

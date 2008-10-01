@@ -100,7 +100,6 @@ Main.add(function () {
 {{*/if*}}
 </script>
 
-
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <table class="main">
@@ -148,7 +147,7 @@ Main.add(function () {
             <select {{if !$droit}}disabled='disabled'{{/if}} name="function_id" class="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
               <option value="">&mdash; Associer à une fonction &mdash;</option>
               {{foreach from=$listFunc item=curr_func}}
-              <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
               {{$curr_func->_view}}
               </option>
               {{/foreach}}
@@ -165,7 +164,7 @@ Main.add(function () {
             <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''; ">
               <option value="">&mdash; Associer à un praticien &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $compte_rendu->chir_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->chir_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
               </option>
               {{/foreach}}
@@ -176,15 +175,94 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
           <td>
-          {{if $droit}}
-            <input type="hidden" name="type" value="body" />
-            {{mb_field object=$compte_rendu field=type disabled="disabled"}}
-          {{else}}
-            {{mb_field object=$compte_rendu field=type disabled="disabled"}}
-          {{/if}}
+	          {{if $droit}}
+	            {{mb_field object=$compte_rendu field=type onchange="updateType()"}}
+	          {{else}}
+	            {{mb_field object=$compte_rendu field=type disabled="disable"}}
+	          {{/if}}
+          
+            <script type="text/javascript">
+            function updateType() {
+              var oForm = document.editFrm;
+              var bBody = oForm.type.value == "body";
+
+              // Height
+              $("height").setVisible(!bBody);
+              if (bBody) $V(oForm.height, '');
+
+							// Footers
+							var oFooter = $("footers");
+							if (oFooter) {
+	              oFooter.setVisible(bBody);
+	              if (!bBody) $V(oForm.footer_id, '');
+              }
+
+							// Headers
+							var oHeader = $("headers");
+							if (oHeader) {
+	              oHeader.setVisible(bBody);
+	              if (!bBody) $V(oForm.header_id, '');
+              }
+            }
+            
+            Main.add(updateType);
+            </script>
+          
           </td>
         </tr>
         
+        <tr id="height">
+          <th>{{mb_label object=$compte_rendu field=height}}</th>
+          <td>
+          {{if $droit}}
+            {{mb_field object=$compte_rendu field=height}}
+          {{else}}
+            {{mb_field object=$compte_rendu field=height readonly="readonly"}}
+          {{/if}}
+          </td>
+        </tr>
+          
+        {{if is_array($footers)}}
+        <tr id="footers">
+          <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
+          <td>
+					  <select name="footer_id" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}}>
+					    <option value="">&mdash; Choisir un pied-de-page</option>
+					    {{foreach from=$footers item=footersByOwner key=owner}}
+					    <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+					      {{foreach from=$footersByOwner item=_footer}}
+					      <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
+					      {{foreachelse}}
+					      <option value="">{{tr}}None{{/tr}}</option>
+					      {{/foreach}}
+					    </optgroup>
+					    {{/foreach}}
+					  </select>
+          </td>
+        </tr>
+        {{/if}}
+
+        {{if is_array($headers)}}
+        <tr id="headers">
+          <th>{{mb_label object=$compte_rendu field=header_id}}</th>
+          <td>
+					  <select name="header_id" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}}>
+					    <option value="">&mdash; Choisir une en-tête</option>
+					    {{foreach from=$headers item=headersByOwner key=owner}}
+					    <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+					      {{foreach from=$headersByOwner item=_header}}
+					      <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
+					      {{foreachelse}}
+					      <option value="">{{tr}}None{{/tr}}</option>
+					      {{/foreach}}
+					    </optgroup>
+					    {{/foreach}}
+					  </select>
+          </td>
+        </tr>
+        {{/if}}
+
+          
         <tr>
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
             <td>
@@ -210,8 +288,6 @@ Main.add(function () {
           </tr>
           
           <tr>
-            {{if !$droit}}<td colspan="2">{{else}}<td>{{/if}}
-            	<button class="modify" onclick="copie(this.form)">Dupliquer</button></td>
             {{if $droit}}
 	            <td class="button" colspan="2">
 	            {{if $compte_rendu->_id}}
@@ -226,29 +302,31 @@ Main.add(function () {
             {{/if}}
           </tr>
           
+          <tr>
+            <th class="category" colspan="2">Autres actions</th>
+          </tr>
+          
+          <tr>
+            <td class="button" colspan="2">
+               <button class="add" onclick="copie(this.form)">{{tr}}Duplicate{{/tr}}</button>
+            </td>
+          </tr>
+          
         </table>
       </td>
       
       <td class="greedyPane" style="height: 500px">
-       {{if $compte_rendu->compte_rendu_id}}
-         {{if $droit}}
-         {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
-
-         {{else}}
+       {{if $compte_rendu->_id}}
+         {{if !$droit}}
          <div class="big-info">
            Le présent modèle est en lecture seule. 
            <br/>Il comporte en l'état {{$compte_rendu->source|count_words}} mots.
            <br/>Vous pouvez le copier pour votre propre usage en cliquant sur <strong>Dupliquer</strong>. 
          </div>
-         {{mb_field object=$compte_rendu field="source" id="htmlarea" hidden="1"}}
-         
-         <!-- Affichage du compte rendu sous forme de fichier en lecture seule -->       
-         <hr/>
-         <div  class="previewfile">
-            {{$compte_rendu->source|smarty:nodefaults}}
-         </div>
          <hr/>
          {{/if}}
+
+         {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
        {{/if}}
       </td>
   </tr>

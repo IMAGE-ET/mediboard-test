@@ -19,7 +19,7 @@ $where = array();
 $where[] = "DATE(sejour.entree_prevue) = '". $date ."'";
 $where["sejour.annule"] = "= '0'";
 
-if($type){
+if ($type) {
   $where["type"] = " = '$type'";  
 }
 

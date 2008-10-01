@@ -742,8 +742,8 @@ class CSejour extends CCodable {
   }
   
   function loadFromNumDossier($num_dossier) {
-    global $dPconfig, $g;
-    $tag_dossier = $dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"];
+    global $g;
+    $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier");
     if (null == $tag_dossier = str_replace('$g',$g, $tag_dossier)) {
       return;
     }

@@ -20,7 +20,9 @@ Main.add(function () {
   <table class="form">
     {{assign var="infoPersonnel" value="0"}}
     {{foreach from=$praticiens item=curr_prat}}
-    {{include file=inc_idsherpa.tpl mbobject=$curr_prat}}
+    {{include file=inc_idsherpa.tpl mbobject=$curr_prat nodebug=1}}
+    {{foreachelse}}
+    <tr><td colspan="10"><div class="big-info">Aucun praticien pour cet établissement</div></td></tr>
     {{/foreach}}
   </table>
 </div>
@@ -29,7 +31,9 @@ Main.add(function () {
 <div id="Personnel" style="display: none;">
   <table class="form">
     {{foreach from=$persusers item=curr_pers}}  
-    {{include file=inc_idsherpa.tpl mbobject=$curr_pers infoPersonnel="1"}}
+    {{include file=inc_idsherpa.tpl mbobject=$curr_pers infoPersonnel="1" nodebug=1}}
+    {{foreachelse}}
+    <tr><td colspan="10"><div class="big-info">Aucun personnel pour cet établissement</div></td></tr>
     {{/foreach}}
   </table>
 </div>
@@ -38,7 +42,9 @@ Main.add(function () {
 <div id="Salles" style="display: none;">
   <table class="form">
     {{foreach from=$salles item=_salle}}
-    {{include file=inc_idsherpa.tpl mbobject=$_salle}}
+    {{include file=inc_idsherpa.tpl mbobject=$_salle nodebug=1}}
+    {{foreachelse}}
+    <tr><td colspan="10"><div class="big-info">Aucune salle pour cet établissement</div></td></tr>
     {{/foreach}}
   </table>
 </div>
@@ -46,15 +52,19 @@ Main.add(function () {
 <!-- Services -->
 <div id="Services" style="display: none;">
   <table class="form">
-    <tr>
     {{foreach from=$services item="curr_service"}}
+    <tr>
       <th class="category" colspan="2">{{$curr_service->_view}}</th>
     </tr>
-    {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
-    {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-    {{include file=inc_idsherpa.tpl mbobject=$curr_lit}}
-    {{/foreach}}
-    {{/foreach}}
+	    {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
+		    {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
+		    {{include file=inc_idsherpa.tpl mbobject=$curr_lit nodebug=1}}
+		    {{/foreach}}
+		    {{foreachelse}}
+		    <tr><td colspan="10"><div class="big-info">Aucune lit pour ce service</div></td></tr>
+	    {{/foreach}}
+    {{foreachelse}}
+    <tr><td colspan="10"><div class="big-info">Aucun service pour cet établissement</div></td></tr>
     {{/foreach}}
   </table>
 </div>
@@ -63,7 +73,9 @@ Main.add(function () {
 <div id="Prestations" style="display: none;">
   <table class="form">
     {{foreach from=$prestations item=_prestation}}
-    {{include file=inc_idsherpa.tpl mbobject=$_prestation}}
+    {{include file=inc_idsherpa.tpl mbobject=$_prestation nodebug=1}}
+    {{foreachelse}}
+    <tr><td colspan="10"><div class="big-info">Aucun niveau de prestation pour cet établissement</div></td></tr>
     {{/foreach}}
   </table>
 </div>
@@ -72,7 +84,9 @@ Main.add(function () {
 <div id="Etablissements" style="display: none;">
   <table class="form">
     {{foreach from=$listEtabExternes item=_etab}}
-    {{include file=inc_idsherpa.tpl mbobject=$_etab}}
+    {{include file=inc_idsherpa.tpl mbobject=$_etab nodebug=1}}
+    {{foreachelse}}
+    <tr><td colspan="10"><div class="big-info">Aucun établissement externe pour cet établissement</div></td></tr>
     {{/foreach}}
   </table>
 </div>

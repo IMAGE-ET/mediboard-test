@@ -162,7 +162,7 @@ Document.refreshList = function(){
       <form name="actionPat" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_idx_patients" />
-      <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
       {{if @$useVitale}}
       <input type="hidden" name="useVitale" value="1" />
       {{/if}}
@@ -170,11 +170,11 @@ Document.refreshList = function(){
       <button type="button" class="search" onclick="viewPatient()">
         Afficher
       </button>
-      <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
+      <button type="button" class="print" onclick="printPatient({{$patient->_id}})">
         Imprimer
       </button>
       {{if $canPatients->edit}}
-      <button type="button" class="modify" onclick="editPatient()">
+      <button type="button" class="edit" onclick="editPatient()">
         {{tr}}Modify{{/tr}}
         {{if @$useVitale}}avec Vitale{{/if}}
       </button>
@@ -192,19 +192,19 @@ Document.refreshList = function(){
     {{if !$app->user_prefs.simpleCabinet}}
     {{if $canPlanningOp->edit}}
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
       </a>
     </td>
     {{/if}}
     {{if $canPlanningOp->read}}
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
         Urgence
       </a>
     </td>
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
+      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
         Séjour
       </a>
     </td>
@@ -214,7 +214,7 @@ Document.refreshList = function(){
     <td colspan="4" class="button">
     {{/if}}
       {{if $canCabinet->edit}}
-      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
         Consultation
       </a>
       {{/if}}
@@ -229,7 +229,7 @@ Document.refreshList = function(){
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_consult_now" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->_id}}" />
 
       <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
 

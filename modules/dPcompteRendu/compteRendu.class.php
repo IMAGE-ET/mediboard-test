@@ -23,6 +23,7 @@ class CCompteRendu extends CMbMetaObject {
   var $file_category_id  = null;
   var $header_id         = null;
   var $footer_id         = null;
+  var $height            = null;
   
   /// Form fields
   var $_is_document      = false;
@@ -33,6 +34,8 @@ class CCompteRendu extends CMbMetaObject {
   var $_ref_chir         = null;
   var $_ref_category     = null;
   var $_ref_function     = null;
+  var $_ref_header       = null;
+  var $_ref_footer       = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -61,6 +64,7 @@ class CCompteRendu extends CMbMetaObject {
     $specs["file_category_id"] = "ref class|CFilesCategory";
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
+    $specs["height"]           = "float";
     $specs["valide"]           = "bool";
 
     $specs["_owner"]           = "enum list|prat|func";
@@ -104,6 +108,18 @@ class CCompteRendu extends CMbMetaObject {
     $this->_ref_category = new CFilesCategory;
     if($this->file_category_id){
       $this->_ref_category->load($this->file_category_id);
+    }
+  }
+  
+  function loadComponents() {
+    if (!$this->_ref_header) {
+	    $this->_ref_header = new CCompteRendu();
+	    $this->_ref_header->load($this->header_id);
+    }
+    
+    if (!$this->_ref_footer) {
+	    $this->_ref_footer = new CCompteRendu();
+	    $this->_ref_footer->load($this->footer_id);
     }
   }
 
@@ -178,7 +194,7 @@ class CCompteRendu extends CMbMetaObject {
    * Charge tous les modèles pour une classe d'objets associés à un utilisateur
    * @param $prat_id ref|CMediuser L'utilisateur concerné
    * @param $object_class string Nom de la classe d'objet, optionnel. Doit être un CMbObject
-   * @param $type enum list|header|body|footer Type de composant , optionnel. Doit être un CMbObject
+   * @param $type enum list|header|body|footer Type de composant, optionnel
    * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu> 
    */
   static function loadAllModelesForPrat($prat_id, $object_class = null, $type = null) {
@@ -230,16 +246,22 @@ class CCompteRendu extends CMbMetaObject {
   /**
    * DEPRECATED see loadAllModelesForPrat()
    * Charge les modèles pour une classe d'objets associés à un utilisateur
-   * @param $object_class Nom de la classe d'objet. Doit être un CMbObject
+   * @param $object_class string Nom de la classe d'objet. Doit être un CMbObject
    * @param $prat_id ref|CMediuser L'utilisateur concerné
+   * @param $type enum list|header|body|footer Type de composant, optionnel
    * @return array<CCompteRendu>
    */
-  static function loadModelesForPrat($object_class, $prat_id) {
+  static function loadModelesForPrat($object_class, $prat_id, $type = null) {
     $modele = new CCompteRendu();
     $where = array();
     $where["object_id"] = "IS NULL";
 		$where["object_class"] = "= '$object_class'";
     $where["chir_id"] = "= '$prat_id'";
+    
+    if ($type) {
+  		$where["type"] = "= '$type'";
+    }
+    
 		$order = "nom";
     return $modele->loadlist($where, $order);
   }
@@ -247,16 +269,22 @@ class CCompteRendu extends CMbMetaObject {
   /**
    * DEPRECATED see loadAllModelesForPrat()
    * Charge les modèles pour une classe d'objets associés à une fonction
-   * @param $object_class Nom de la classe d'objet. Doit être un CMbObject
+   * @param $object_class string Nom de la classe d'objet. Doit être un CMbObject
    * @param $function_id ref|CFonction L'utilisateur concerné
+   * @param $type enum list|header|body|footer Type de composant, optionnel
    * @return array<CCompteRendu>
    */
-  static function loadModelesForFunc($object_class, $function_id) {
+  static function loadModelesForFunc($object_class, $function_id, $type = null) {
     $modele = new CCompteRendu();
     $where = array();
     $where["object_id"] = "IS NULL";
 		$where["object_class"] = "= '$object_class'";
     $where["function_id"] = "= '$function_id'";
+   
+    if ($type) {
+  		$where["type"] = "= '$type'";
+    }
+    
 		$order = "nom";
     return $modele->loadlist($where, $order);
   }

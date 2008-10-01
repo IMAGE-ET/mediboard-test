@@ -265,7 +265,6 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($sql);
 
     $this->makeRevision("0.35");
-    
     $sql = "UPDATE `compte_rendu` 
 			SET `type` = 'body'
 			WHERE `object_id` IS NULL";
@@ -279,7 +278,12 @@ class CSetupdPcompteRendu extends CSetup {
       AND `object_id` IS NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+    $sql = "ALTER TABLE `compte_rendu` 
+			ADD `height` FLOAT;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.38";
   }
 }
 ?>

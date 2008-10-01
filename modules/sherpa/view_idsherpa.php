@@ -26,6 +26,9 @@ foreach ($praticiens as &$curr_prat) {
 $personnelsAidesOp = CPersonnel::loadListPers("op");
 $personnelsPanseuses = CPersonnel::loadListPers("op_panseuse");
 $persusers = array();
+$persusersAidesOp = array();
+$persusersPanseuses = array();
+$persusersType = array();
 
 foreach($personnelsAidesOp as &$curr_pers){
   $curr_pers->loadRefUser();

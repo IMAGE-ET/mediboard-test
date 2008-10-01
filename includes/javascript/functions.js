@@ -10,7 +10,7 @@ function main() {
 	  Main.init();
 	}
 	catch (e) {
-		Console.debug(e);
+		Console.debugException(e);
 	}
 }
 
@@ -299,6 +299,12 @@ var Console = {
       default:
         this.trace(oValue, "value");
     }
+  },
+  
+  debugException: function(exception) {
+  	var regexp = /([^@])+@(http[s]?:([^:]+))?:([\d]+)/g;
+    exception.stack = exception.stack.match(regexp);
+    this.debug(exception, "Exception", { level: 2 } );
   },
   
   debug: function(oValue, sLabel, oOptions) {

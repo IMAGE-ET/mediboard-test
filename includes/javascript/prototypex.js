@@ -73,5 +73,9 @@ Element.addMethods({
     }
     
     return element;
+  },
+  
+  setVisible: function(element, condition) {
+    element[condition ? "show" : "hide"]();
   }
 });
