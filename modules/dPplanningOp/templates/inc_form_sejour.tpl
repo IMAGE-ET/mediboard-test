@@ -557,7 +557,8 @@ Main.add( function(){
 </tr>
 <tr>
   <td>
-    <div id="prot_anesth_view"></div>
+    <div id="
+"></div>
     <input type="hidden" name="_protocole_prescription_anesth_id" value="" />
   </td>
   <td colspan="3"><select name="_protocole_prescription_chir_id"></select></td>

@@ -52,24 +52,29 @@ var ProtocoleSelector = {
       $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
     }
     
-    oOpForm[this.sCodes_ccam].value  = protocole.codes_ccam;
-    oOpForm[this.sLibelle].value     = protocole.libelle;
-    oOpForm[this.sHour_op].value     = protocole._hour_op;
-    oOpForm[this.sMin_op].value      = protocole._min_op;
-    oOpForm[this.sMateriel].value    = protocole.materiel;
-    oOpForm[this.sExamen].value      = protocole.examen;
-    oOpForm[this.sDepassement].value = protocole.depassement;
-    oOpForm[this.sForfait].value     = protocole.forfait;
-    oOpForm[this.sFournitures].value = protocole.fournitures;
-    oOpForm[this.sRques_op].value    = protocole.rques_operation;
-    oSejourForm[this.sDP].value            = protocole.DP;
-    oSejourForm[this.sConvalescence].value = protocole.convalescence;
-    oSejourForm[this.sRques_sej].value     = protocole.rques_sejour;
+    $V(oOpForm[this.sCodes_ccam],        protocole.codes_ccam);
+    $V(oOpForm[this.sLibelle],           protocole.libelle);
+    $V(oOpForm[this.sHour_op],           protocole._hour_op);
+    $V(oOpForm[this.sMin_op],            protocole._min_op);
+    $V(oOpForm[this.sMateriel],          protocole.materiel);
+    $V(oOpForm[this.sExamen],            protocole.examen);
+    
+    if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
+      $V(oOpForm[this.sDepassement],       protocole.depassement, false);
+      $V(oOpForm[this.sForfait],           protocole.forfait, false);
+      $V(oOpForm[this.sFournitures],       protocole.fournitures, false);
+    }
+    
+    $V(oOpForm[this.sRques_op],          protocole.rques_operation);
+    $V(oSejourForm[this.sDP],            protocole.DP);
+    $V(oSejourForm[this.sConvalescence], protocole.convalescence);
+    $V(oSejourForm[this.sRques_sej],     protocole.rques_sejour);
     
     refreshListCCAM("expert");
     refreshListCCAM("easy");
-    
-    $V(oSejourForm[this.sProtoPrescAnesth], protocole.protocole_prescription_anesth_id);
+    if (oSejourForm[this.sProtoPrescAnesth]) {
+      $V(oSejourForm[this.sProtoPrescAnesth], protocole.protocole_prescription_anesth_id);
+    }
     refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
     refreshListProtocolesPrescription(protocole.chir_id, oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
   }

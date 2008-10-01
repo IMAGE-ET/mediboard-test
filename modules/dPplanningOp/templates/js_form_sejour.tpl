@@ -26,10 +26,12 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
 }
 
 function refreshViewProtocoleAnesth(prescription_id) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "httpreq_vw_protocole_anesth");
-  url.addParam("prescription_id", prescription_id);
-  url.requestUpdate("prot_anesth_view", { waitingText: null} );
+  if($("prot_anesth_view")) {
+    var url = new Url;
+    url.setModuleAction("dPplanningOp", "httpreq_vw_protocole_anesth");
+    url.addParam("prescription_id", prescription_id);
+    url.requestUpdate("prot_anesth_view", { waitingText: null} );
+  }
 }
 
 function checkDureeHospi() {

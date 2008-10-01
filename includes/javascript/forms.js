@@ -81,6 +81,7 @@ Element.addMethods({
   */
 function $V (element, value, fire) {
   if (!element) {
+    Console.trace("Warning: This form field doesn't exist");
     return;
   }
   
