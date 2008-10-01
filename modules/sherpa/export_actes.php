@@ -31,7 +31,7 @@ if ($do = mbGetValueFromGet("do")) {
 		$where["type"] = "NOT IN ('exte')";
 		$where["sortie_reelle"] = "LIKE '$filter->_date_sortie%'";
 	  $order = "entree_reelle, sortie_reelle";
-	  $sejours = $sejour->loadList($where, $order);
+	  $sejours = $sejour->loadGroupList($where, $order);
 	}
 }
 
