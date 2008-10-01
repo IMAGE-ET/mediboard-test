@@ -1,13 +1,13 @@
 {{include file="common.tpl" nodebug=true}}
 
-<div style="text-align: center; height: 100%;">
-  <div style="margin: auto;">
+<div id="login">
   {{if !$dialog}}
-    <img src="images/pictures/mbNormal.gif" alt="MediBoard logo" /><br />
-    <a href="http://www.mediboard.org/">{{$dPconfig.company_name}}</a>
+    <a href="http://www.mediboard.org/">
+      <img src="images/pictures/mbNormal.gif" alt="{{$dPconfig.company_name}}" width="290" height="107" /><br />
+    </a>
   {{/if}}
 
-  <form name="loginFrm" action="?" method="post" onsubmit="return checkForm(this)" style="display: block;">
+  <form name="loginFrm" action="?" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="login" value="{{$time}}" />
     <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
     <input type="hidden" name="dialog" value="{{$dialog}}" />
@@ -25,18 +25,16 @@
       </tr>
     </table>
   </form>
-  <div id="systemMsg" style="position: relative;">{{$errorMessage|nl2br|smarty:nodefaults}}</div>
-
-  {{if !$dialog}}
-    <div style="position: absolute; bottom: 0; right: 0; vertical-align: middle; line-height: 15px;">
-      Mediboard {{$version.string}}
-      <a href="http://www.mozilla-europe.org/fr/products/firefox/" title="Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox">
-        <img src="http://www.spreadfirefox.com/community/images/affiliates/Buttons/80x15/firefox_80x15.png" alt="Firefox Logo" />
-      </a>
-    </div>
-  {{/if}}
-  </div>
+  <div id="systemMsg">{{$errorMessage|nl2br|smarty:nodefaults}}</div>
 </div>
+
+{{if !$dialog}}
+  <div id="version">Mediboard {{$version.string}}</div>
+  <a id="sponsor" href="http://www.mozilla-europe.org/fr/products/firefox/" title="Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox">
+    <img src="http://www.spreadfirefox.com/community/images/affiliates/Buttons/80x15/firefox_80x15.png" alt="Firefox Logo" />
+  </a>
+{{/if}}
+
 
 </body>
 </html>

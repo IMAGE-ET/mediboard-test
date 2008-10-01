@@ -89,18 +89,13 @@ function $V (element, value, fire) {
   fire = Object.isUndefined(fire) ? true : fire;
   
   // We get the tag and the type
-  var tag  = element.tagName ? element.tagName.toLowerCase() : null;
-  var type = element.type    ? element.type.toLowerCase()    : null;
+  var tag  = element.tagName || '';
+  var type = element.type    || '';
 
   // If it is a form element
-  if (Object.isElement(element) && (
-     tag == 'input' || 
-     tag == 'select' || 
-     tag == 'textarea')
-    ) {
-
+  if (Object.isElement(element) && tag.match(/^(input|select|textarea)$/i)) {
     // If the element is a checkbox, we check if it's checked
-    var oldValue = (type == 'checkbox') ? element.checked : $F(element);
+    var oldValue = (type.match(/^checkbox$/i) ? element.checked : $F(element));
 
     // If a value is provided
     if (!Object.isUndefined(value) && value != oldValue) {
@@ -132,12 +127,12 @@ function $V (element, value, fire) {
       var ret = [];
       $A(element).each(function (e) { // For every element in the list
         if ($V(e)) {
-          ret.push(e.value);
+          ret[ret.length] = e.value;
         }
-        type = e.type ? e.type.toLowerCase() : null;
+        type = e.type;
       });
       
-      if (type == 'radio') {
+      if (type.match(/^radio$/i)) {
         ret = ret.reduce();
       }
       return (ret && ret.length > 0) ? ret : null;
@@ -314,106 +309,108 @@ function prepareForm(oForm, bForcePrepare) {
   }
   oForm = $(oForm);
   
-  var formClassNames = $w(oForm.className);
-
-  // If this form hasn't been prepared yet
-  if ((formClassNames.indexOf("prepared") == -1) || bForcePrepare) {
-  
-    // Event Observer
-    if(formClassNames.indexOf("watched") != -1) {
-      new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
-    }
-    // Form preparation
-    var sFormName = oForm.getAttribute("name");
-    oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
-  
-    // Build label targets
-    var aLabels = oForm.select("label");
-    var iLabel = 0;
-    var oLabel = null;
-    var sFor = null;
-    while (oLabel = aLabels[iLabel++]) {
-      // oLabel.getAttribute("for") is not accessible in IE
-      if (sFor = oLabel.htmlFor) {
-        if (sFor.indexOf(sFormName) != 0) {
-          oLabel.htmlFor = sFormName + "_" + sFor;
-        }
-      }
-    }
-  
-    // For each element
-    var iElement = 0;
-    var oElement = null;
-    var sPropSpec = null;
-    var aSpecFragments = null;
-    while (oElement = oForm.elements[iElement++]) {
-    	oElement = $(oElement);
-    	
-    	var elementClassNames = $w(oElement.className);
-    	var sElementName = oElement.getAttribute("name");
-    	var props = oElement.getProperties();
-
-    	// Locked object
-    	if (oForm.lockAllFields) {
-    		oElement.disabled = true;
-    	}
-    	
-      // Create id for each element if id is null
-      if (!oElement.id && sElementName) {
-        oElement.id = sFormName + "_" + sElementName;
-        if (oElement.type == "radio") {
-          oElement.id += "_" + oElement.value;
-        }
-      }
-
-      // If the element has a mask and other properties, they may conflict
-      if (Preferences.INFOSYSTEM && props.mask) {
-        Assert.that(!(
-          props.min || props.max || props.minMax || props.bool || props.ref || props.pct || props.num
-        ), "'"+oElement.id+"' mask may conflit with other props");
-      }
-      
+  if (oForm) {
+		var formClassNames = $w(oForm.className);
+		
+		// If this form hasn't been prepared yet
+		if ((formClassNames.indexOf("prepared") == -1) || bForcePrepare) {
+		
+		  // Event Observer
+		  if(formClassNames.indexOf("watched") != -1) {
+		    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
+		  }
+		  // Form preparation
+		  var sFormName = oForm.getAttribute("name");
+		  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
+		
+		  // Build label targets
+		  var aLabels = oForm.select("label");
+		  var iLabel = 0;
+		  var oLabel = null;
+		  var sFor = null;
+		  while (oLabel = aLabels[iLabel++]) {
+		    // oLabel.getAttribute("for") is not accessible in IE
+		    if (sFor = oLabel.htmlFor) {
+		      if (sFor.indexOf(sFormName) != 0) {
+		        oLabel.htmlFor = sFormName + "_" + sFor;
+		      }
+		    }
+		  }
+		
+		  // For each element
+		  var iElement = 0;
+		  var oElement = null;
+		  var sPropSpec = null;
+		  var aSpecFragments = null;
+		  while (oElement = oForm.elements[iElement++]) {
+		  	oElement = $(oElement);
+		  	
+		  	var elementClassNames = $w(oElement.className);
+		  	var sElementName = oElement.getAttribute("name");
+		  	var props = oElement.getProperties();
+		
+		  	// Locked object
+		  	if (oForm.lockAllFields) {
+		  		oElement.disabled = true;
+		  	}
+		  	
+		    // Create id for each element if id is null
+		    if (!oElement.id && sElementName) {
+		      oElement.id = sFormName + "_" + sElementName;
+		      if (oElement.type == "radio") {
+		        oElement.id += "_" + oElement.value;
+		      }
+		    }
+		
+		    // If the element has a mask and other properties, they may conflict
+		    if (Preferences.INFOSYSTEM && props.mask) {
+		      Assert.that(!(
+		        props.min || props.max || props.minMax || props.bool || props.ref || props.pct || props.num
+		      ), "'"+oElement.id+"' mask may conflit with other props");
+		    }
+		    
 			// Not null
 		  if (elementClassNames.indexOf("notNull") != -1) {
-        notNullOK(oElement);
-        oElement.observe("change", notNullOK);
-        oElement.observe("keyup", notNullOK);
-      }
-      
+		      notNullOK(oElement);
+		      oElement.observe("change", notNullOK);
+		      oElement.observe("keyup", notNullOK);
+		    }
+		    
 			// Can null
 		  if (elementClassNames.indexOf("canNull") != -1) {
-        canNullOK(oElement);
-        oElement.observe("change", canNullOK);
-        oElement.observe("keyup", canNullOK);
-      }
-      
-      // Select tree
-      if (elementClassNames.indexOf("select-tree") != -1 && Prototype.Browser.Gecko) {
-        oElement.buildTree();
-      }
-
-      if (mask = props.mask) {
-        mask = mask.gsub('S', ' ').gsub('P', '|');
-        oElement.mask(mask);
-      }
-      
-      // Focus on first text input
-      if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
-        // Internet Explorer will not give focus to a not visible element but will raise an error
-        if (oElement.clientWidth > 0) {
-          oElement.focus();
-          bGiveFormFocus = false;
-        }
-      }
-      
-      // Won't make it resizable on IE
-      if (oElement.type == "textarea" && !Prototype.Browser.IE) {
-        oElement.setResizable({autoSave: true, step: 'font-size'});
-      }
-      
-      // We mark this form as prepared
-      oForm.addClassName("prepared");
-    }
+		      canNullOK(oElement);
+		      oElement.observe("change", canNullOK);
+		      oElement.observe("keyup", canNullOK);
+		    }
+		    
+		    // Select tree
+		    if (elementClassNames.indexOf("select-tree") != -1 && Prototype.Browser.Gecko) {
+		      oElement.buildTree();
+		    }
+		
+		    if (mask = props.mask) {
+		      mask = mask.gsub('S', ' ').gsub('P', '|');
+		      oElement.mask(mask);
+		    }
+		    
+		    // Focus on first text input
+		    if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
+		      // Internet Explorer will not give focus to a not visible element but will raise an error
+		      if (oElement.clientWidth > 0) {
+		        oElement.focus();
+		        bGiveFormFocus = false;
+		      }
+		    }
+		    
+		    // Won't make it resizable on IE
+		    if (oElement.type == "textarea" && !Prototype.Browser.IE) {
+		      oElement.setResizable({autoSave: true, step: 'font-size'});
+		    }
+		    
+		    // We mark this form as prepared
+		    oForm.addClassName("prepared");
+		  }
+		}
   }
 }
 
@@ -516,21 +513,6 @@ function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
   url.requestUpdateOffline(ioTarget, oDefaultOptions);
 }
 
-function followUp(event) {
-	// IE won't have a event target if handler is defined as an HTML attribute
-	if (!event.target) {
-		return;
-	}
-	
-	// Redirect to next field
-  var field = event.target;
-  if (field.value.length == field.maxLength) {
-    $(field.next()).activate();
-  }
-  
-  return true;
-}
-
 Object.extend(Form, {
   toObject: function (oForm) {
     var aFieldsForm  = Form.getElements(oForm);
@@ -562,6 +544,12 @@ function NumericField (form, element, step, min, max, showPlus, decimals) {
     this.step = (step != undefined) ? step : null;
     this.decimals = (decimals != undefined) ? decimals : null;
     this.showPlus = showPlus | null;
+    var that = this;
+    Main.add(function () {
+	    if ($(that.sField).disabled) {
+	      $("img_"+that.sField).hide();
+	    }
+    });
 }
 
 NumericField.prototype = {
@@ -648,6 +636,9 @@ var TimePicker = Class.create({
     if (!this.trigger) {
       this.trigger = new Element('img', {src: 'images/icons/time.png', id: this.fieldId+'_trigger'});
       formField.insert({after: this.trigger});
+    }
+    if (formField.disabled) {
+      this.trigger.hide();
     }
     
     // on click on the trigger
@@ -1092,18 +1083,17 @@ Element.addMethods('select', {
   }
 });
 
+// Form getter
 function getForm (form, prepare) {
   prepare = prepare || true;
   if (Object.isString(form) && document.forms[form]) {
-    if (prepare) prepareForm(document.forms[form]);
-    return $(document.forms[form]);
-  } else {
-    return form;
+    form = $(document.forms[form]);
   }
-  return null;
+  if (prepare) prepareForm(form);
+  return form;
 };
 
-// Form getter
+// Return the list of the elements, taking in account that ther can be nodelists of fields (like radio buttons)
 Element.addMethods('form', {
   getElementsEx: function (form) {
     var list = [];

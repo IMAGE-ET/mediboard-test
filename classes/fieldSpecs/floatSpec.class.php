@@ -139,7 +139,7 @@ class CFloatSpec extends CMbFieldSpec {
     <script type="text/javascript">
       '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').', '.(isset($decimals)?$decimals:'null').');
     </script>
-    <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
+    <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" id="img_'.$fieldId.'" />
     <map name="arrow_'.$fieldId.'" >
       <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.inc()" title="+" />
       <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.dec()" title="-" />

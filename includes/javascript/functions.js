@@ -938,6 +938,10 @@ Object.extend(Calendar, {
 	  if (!$(sInputId)) {
 	    return;
 	  }
+	  
+	  if ($(sInputId).disabled) {
+	    $(sInputId + "_trigger").hide();
+	  }
 	
 	  var cal = Calendar.setup( {
 	      inputField  : sInputId,
@@ -959,6 +963,10 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
   
   if (!$(sInputId)) {
     return;
+  }
+  
+  if ($(sInputId).disabled) {
+    $(sInputId + "_trigger").hide();
   }
 
   Calendar.setup( {
@@ -1412,6 +1420,7 @@ Class.extend (Control.Tabs, {
   }
 } );
 
+/** Gets the elements properties (specs) thanks to its className */
 Element.addMethods({
   getProperties: function (element) {
     var props = {};
@@ -1449,7 +1458,7 @@ var DOM = {
       }
     }
     catch (ex) {
-      alert('Cannot create <' + tag + '> element:\n' + Object.inspect(args));
+      alert('Cannot create <' + tag + '> element:\n' + Object.inspect(args) + '\n' + ex.message);
       e = null;
     }
     return e;
@@ -1467,3 +1476,13 @@ var DOM = {
 DOM.tags.each(function (tag) {
   DOM.defineTag (tag);
 });
+
+
+/** l10n functions */
+var l10n = {
+  tr: function (token) {
+    return locales ? (locales[token] || token) : token;
+  }
+}
+
+var $T = l10n.tr;
