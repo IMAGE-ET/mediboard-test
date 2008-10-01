@@ -343,10 +343,12 @@ class CSmartyDP extends Smarty {
    * @param string $tpl_file
    * @param string $vars
    */
-  function showDebugSpans($tpl_file, $vars) {
+  function showDebugSpans($tpl_file, $params) {
     // The span
-	  echo "\n<span class='smarty-include'>";
-	  echo "\n$tpl_file";
+	  echo "\n<span class='smarty-include ".(isset($params['ajax']) && $params['ajax'] == 1 ? 'ajax' : '')."'>\n$tpl_file";
+	  
+	  $vars = isset($params["smarty_include_vars"]) ? $params["smarty_include_vars"] : array();
+	  
 	  foreach ($vars as $var => $value) {
 	    $show = $value;
 	    if ($value instanceof CMbObject) {
@@ -357,7 +359,6 @@ class CSmartyDP extends Smarty {
 	      $count = count($value);
 	      $show = "array ($count)";
 	    }
-	
 	     
 	    echo "\n<br />$var: $show";
 	  }
@@ -383,7 +384,7 @@ class CSmartyDP extends Smarty {
       return;
     }
     
-    $this->showDebugSpans($tpl_file, $vars);
+    $this->showDebugSpans($tpl_file, $params);
     
     echo "\n<!-- Start include: $tpl_file -->\n";
     parent::_smarty_include($params);
@@ -406,7 +407,7 @@ class CSmartyDP extends Smarty {
       return;
     }
     
-    $this->showDebugSpans($resource_name, array());
+    $this->showDebugSpans($resource_name, $this->_tpl_vars);
    
     echo "\n<!-- Start display: $resource_name -->\n";
     parent::display($resource_name, $cache_id, $compile_id);

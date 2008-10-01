@@ -25,6 +25,14 @@ select, input[type=submit], input[type=reset], input[type=button], button {
   cursor: pointer;
 }
 
+/*input[disabled] {
+  display: inline;
+  border: none;
+  background: transparent;
+  width: auto;
+  color: #000;
+}*/
+
 select {
   padding: 0;
 }

@@ -183,17 +183,21 @@ div div.text {
 }
 
 span.smarty-include {
-	background: #444;
-	position: absolute;
-	color: #fff;
-	opacity: 0.7;
-	text-indent: 10px;		
-	width: 10px;
-	height: 10px;
-	overflow: hidden;
-	font-family: monospace;
-	font-size: 12px;
-	border: 1px solid #fff;
+  background: #444;
+  position: absolute;
+  color: #fff;
+  opacity: 0.7;
+  text-indent: 8px;    
+  width: 8px;
+  height: 8px;
+  overflow: hidden;
+  font-family: monospace;
+  font-size: 11px;
+  border: 1px solid #fff;
+}
+
+span.smarty-include.ajax {
+  background: #494;
 }
 
 span.smarty-include:hover {
