@@ -939,8 +939,9 @@ Object.extend(Calendar, {
 	    return;
 	  }
 	  
-	  if ($(sInputId).disabled) {
-	    $(sInputId + "_trigger").hide();
+	  var field;
+	  if ($(sInputId).disabled && (field = $(sInputId + "_trigger"))) {
+	    field.hide();
 	  }
 	
 	  var cal = Calendar.setup( {
@@ -965,8 +966,9 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
     return;
   }
   
-  if ($(sInputId).disabled) {
-    $(sInputId + "_trigger").hide();
+  var field;
+  if ($(sInputId).disabled && (field = $(sInputId + "_trigger"))) {
+    field.hide();
   }
 
   Calendar.setup( {

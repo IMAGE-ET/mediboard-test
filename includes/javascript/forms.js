@@ -547,8 +547,10 @@ function NumericField (form, element, step, min, max, showPlus, decimals) {
     this.showPlus = showPlus | null;
     var that = this;
     Main.add(function () {
-	    if ($(that.sField).disabled) {
-	      $("img_"+that.sField).hide();
+      prepareForm(form);
+      var field;
+	    if ($(that.sField).disabled && (field = $("img_"+that.sField))) {
+	      field.hide();
 	    }
     });
 }
