@@ -41,8 +41,7 @@ var ProtocoleSelector = {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
-    $V(oOpForm[this.sChir_id], protocole.chir_id);
-    oOpForm[this.sChir_id].onchange(); // Pour forcer la selection du praticien du sejour
+    $V(oOpForm[this.sChir_id], protocole.chir_id, true);
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       oSejourForm[this.sType].value = protocole.type;
