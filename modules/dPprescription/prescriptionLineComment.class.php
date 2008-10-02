@@ -112,7 +112,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
    */
   function loadRefExecutant(){
     $this->_ref_executant = new CExecutantPrescriptionLine();
-    $this->_ref_executant->load($this->executant_prescription_line_id);
+    $this->_ref_executant = $this->_ref_executant->getCached($this->executant_prescription_line_id);
   }
 }
 

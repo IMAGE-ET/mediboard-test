@@ -79,20 +79,18 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "code_cip"             => "notNull numchar|7",
-      "no_poso"              => "num max|128",
-      "commentaire"          => "str",
-      "valide_pharma"        => "bool",
-      "accord_praticien"     => "bool",
-      "substitution_line_id" => "ref class|CPrescriptionLineMedicament",
-      "substitute_for"       => "ref class|CPrescriptionLineMedicament",
-      "substitution_active"  => "bool",
-      "_unite_prise"         => "str",
-      "_traitement"          => "bool"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["code_cip"]             = "notNull numchar|7";
+    $specs["no_poso"]              = "num max|128";
+    $specs["commentaire"]          = "str";
+    $specs["valide_pharma"]        = "bool";
+    $specs["accord_praticien"]     = "bool";
+    $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
+    $specs["substitute_for"]       = "ref class|CPrescriptionLineMedicament";
+    $specs["substitution_active"]  = "bool";
+    $specs["_unite_prise"]         = "str";
+    $specs["_traitement"]          = "bool";
+    return $specs;
   }
   
   function loadView() {
@@ -105,8 +103,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    */
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["prev_hist_line"]  = "CPrescriptionLineMedicament substitution_line_id";
-    $backRefs["substitutions"] = "CPrescriptionLineMedicament substitute_for";
+    $backRefs["prev_hist_line"] = "CPrescriptionLineMedicament substitution_line_id";
+    $backRefs["substitutions"]  = "CPrescriptionLineMedicament substitute_for";
     return $backRefs;
   }
   

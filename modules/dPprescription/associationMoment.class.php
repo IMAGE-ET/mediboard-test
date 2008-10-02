@@ -39,7 +39,7 @@ class CAssociationMoment extends CMbObject {
   
   function loadRefMomentUnitaire(){
   	$this->_ref_moment_unitaire = new CMomentUnitaire();
-  	$this->_ref_moment_unitaire->load($this->moment_unitaire_id);
+  	$this->_ref_moment_unitaire = $this->_ref_moment_unitaire->getCached($this->moment_unitaire_id);
   }
 }
   

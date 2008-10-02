@@ -89,13 +89,13 @@ class CAdministration extends CMbMetaObject {
   
   function loadRefPrise(){
   	$this->_ref_prise = new CPrisePosologie();
-  	$this->_ref_prise->load($this->prise_id);
+  	$this->_ref_prise = $this->_ref_prise->getCached($this->prise_id);
   	$this->_unite_prise = $this->_ref_prise->_unite;
   }
   
   function loadRefAdministrateur(){
   	$this->_ref_administrateur = new CMediusers();
-  	$this->_ref_administrateur->load($this->administrateur_id);
+  	$this->_ref_administrateur = $this->_ref_administrateur->getCached($this->administrateur_id);
   }
   
   function loadRefLog(){

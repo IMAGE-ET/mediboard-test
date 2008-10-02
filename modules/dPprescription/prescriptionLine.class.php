@@ -124,7 +124,7 @@ class CPrescriptionLine extends CMbObject {
   function loadRefPrescription() {
     if (!$this->_ref_prescription) {
 	    $this->_ref_prescription = new CPrescription();
-	    $this->_ref_prescription->load($this->prescription_id);
+	    $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);
     }
   }
   
@@ -279,33 +279,30 @@ class CPrescriptionLine extends CMbObject {
     $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
     if($this->duree && $this->debut){
-      if($this->unite_duree == "minute" || $this->unite_duree == "heure" || $this->unite_duree == "demi_journee"){
-        $this->_fin = $this->debut;
-      }
-      if($this->unite_duree == "jour"){
-        $this->_fin = mbDate("+ $this->duree DAYS", $this->debut);
-      }
-      if($this->unite_duree == "semaine"){
-        $this->_fin = mbDate("+ $this->duree WEEKS", $this->debut);
-      }
-      if($this->unite_duree == "quinzaine"){
-        $duree_temp = 2 * $this->duree;
-        $this->_fin = mbDate("+ $duree_temp WEEKS", $this->debut);
-      }
-      if($this->unite_duree == "mois"){
-        $this->_fin = mbDate("+ $this->duree MONTHS", $this->debut);  
-      }
-      if($this->unite_duree == "trimestre"){
-        $duree_temp = 3 * $this->duree;
-        $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut);  
-      }
-      if($this->unite_duree == "semestre"){
-        $duree_temp = 6 * $this->duree;
-        $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut);  
-      }
-      if($this->unite_duree == "an"){
-        $this->_fin = mbDate("+ $this->duree YEARS", $this->debut);  
-      }
+      switch ($this->unite_duree) {
+	      case "minute":
+	      case "heure":
+	      case "demi_journee":
+	        $this->_fin = $this->debut; break;
+	      case "jour": 
+	        $this->_fin = mbDate("+ $this->duree DAYS", $this->debut); break;
+	      case "semaine":
+	        $this->_fin = mbDate("+ $this->duree WEEKS", $this->debut); break;
+	      case "quinzaine":
+	        $duree_temp = 2 * $this->duree;
+	        $this->_fin = mbDate("+ $duree_temp WEEKS", $this->debut); break;
+	      case "mois":
+	        $this->_fin = mbDate("+ $this->duree MONTHS", $this->debut); break;
+	      case "trimestre":
+	        $duree_temp = 3 * $this->duree;
+	        $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut); break;
+	      case "semestre":
+	        $duree_temp = 6 * $this->duree;
+	        $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut); break;
+	      case "an":
+	        $this->_fin = mbDate("+ $this->duree YEARS", $this->debut); break;
+	    }
+      
       // Si la duree est superieure à une journée, on transforme la date de fin
       if($this->debut != $this->_fin){
         $this->_fin = mbDate(" -1 DAYS", $this->_fin);  
