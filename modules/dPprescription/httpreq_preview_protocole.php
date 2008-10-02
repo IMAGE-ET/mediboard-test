@@ -9,13 +9,11 @@
 
 global $AppUI, $can, $m;
 
-$protocole_id = mbGetValueFromGetOrSession("protocole_id");
-$_entree      = mbGetValueFromGetOrSession("_entree");
-$_sortie      = mbGetValueFromGetOrSession("_sortie");
-$_datetime    = mbGetValueFromGetOrSession("_datetime");
-
-$borne_min = mbGetValueFromGetOrSession("borne_min");
-$borne_max = mbGetValueFromGetOrSession("borne_max");
+$protocole_id = mbGetValueFromGet("protocole_id");
+$pack_id      = mbGetValueFromGet("pack_id");
+$_entree      = mbGetValueFromGet("_entree");
+$_sortie      = mbGetValueFromGet("_sortie");
+$_datetime    = mbGetValueFromGet("_datetime");
 
 // Chargement des categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
@@ -46,21 +44,62 @@ foreach($list_hours as &$hour){
 }
 
 if($_entree && $_sortie && $_datetime){
-  // Chargement de la prescription
-  $prescription = $prescription->applyProtocole($protocole_id, null, null, null, $_entree, $_sortie, $_datetime);
+
   
-  foreach($prescription->_ref_prescription_lines as &$line){
-    $line->updateFormFields();
-  }
-  foreach($prescription->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
-	  foreach($elements_chap as $name_cat => $elements_cat){
-	    foreach($elements_cat as &$_elements){
-	 	    foreach($_elements as &$_line_element){
-	 	      $_line_element->updateFormFields();  
-	 	    }
-	    }
+	if($protocole_id){  
+	  // Chargement de la prescription
+	  $prescription = $prescription->applyProtocole($protocole_id, null, null, null, $_entree, $_sortie, $_datetime);
+	  
+	  foreach($prescription->_ref_prescription_lines as &$line){
+	    $line->updateFormFields();
 	  }
-  }
+	  foreach($prescription->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
+		  foreach($elements_chap as $name_cat => $elements_cat){
+		    foreach($elements_cat as &$_elements){
+		 	    foreach($_elements as &$_line_element){
+		 	      $_line_element->updateFormFields();  
+		 	    }
+		    }
+		  }
+	  }
+	}
+
+	if($pack_id){
+	  $prescriptions = array();  
+	  $prescription = new CPrescription();
+	  $prescription_globale = new CPrescription();
+	  $pack = new CPrescriptionProtocolePack();
+	  $pack->load($pack_id);
+	  $pack->loadRefsPackItems();
+	  
+	  // On applique le protocole pour chaque protocole du pack
+	  foreach($pack->_ref_protocole_pack_items as $_pack_item){
+	    $_pack_item->loadRefPrescription();
+	    $_prescription =& $_pack_item->_ref_prescription;
+	    $prescriptions[$_prescription->_id] = $prescription->applyProtocole($_prescription->_id, null, null, null, $_entree, $_sortie, $_datetime);
+	  }
+	  
+	  // Reconstrution de la prescription globale
+	  foreach($prescriptions as $curr_prescription){
+		  foreach($curr_prescription->_ref_prescription_lines as &$line){
+		    $line->updateFormFields();
+		    $prescription_globale->_ref_prescription_lines[$line->_id] = $line;
+		  }
+		  foreach($curr_prescription->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
+			  foreach($elements_chap as $name_cat => $elements_cat){
+			    foreach($elements_cat as $type => $_elements){
+			 	    foreach($_elements as &$_line_element){
+			 	      $_line_element->updateFormFields();  
+			 	      $prescription_globale->_ref_prescription_lines_element_by_cat[$name_chap][$name_cat][$type][$_line_element->_id] = $_line_element;
+			 	    }
+			    }
+			  }
+		  } 
+	  }
+	  $prescription =& $prescription_globale;
+	}
+
+
   $types = array("med", "elt");
   foreach($types as $type){
     $prescription->_prises[$type] = array();
@@ -78,6 +117,8 @@ if($_entree && $_sortie && $_datetime){
     }
   }  
 }
+
+
 
 // Remplissage des filter fields
 $operation = new COperation();
@@ -99,6 +140,8 @@ $smarty->assign("last_log", new CUserLog());
 $smarty->assign("pharmacien", new CMediusers());
 $smarty->assign("categories", $categories);
 $smarty->assign("patient", new CPatient());
+$smarty->assign("pack_id", $pack_id);
+$smarty->assign("protocole_id", $protocole_id);
 $smarty->display("inc_preview_protocole.tpl");
 
 ?>

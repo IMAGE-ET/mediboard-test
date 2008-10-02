@@ -201,7 +201,7 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-  <li><a href="#div_{{$_chapitre}}" onmouseup="refreshElementPrescription('{{$_chapitre}}');">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
   {{/foreach}}
 {{/if}}
 </ul>
@@ -263,7 +263,11 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 
 <!-- Declaration des divs -->
 <div id="div_medicament" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_medicament.tpl"}}
+  {{if $mode_pack}}
+    {{include file="../../dPprescription/templates/inc_div_medicament_short.tpl"}}
+  {{else}}
+    {{include file="../../dPprescription/templates/inc_div_medicament.tpl"}}
+  {{/if}}
 </div>
 
 {{if !$mode_pharma}}
@@ -274,7 +278,11 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
       Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}');
     });
     </script>
-    <div id="div_{{$_chapitre}}" style="display:none;"></div>
+    <div id="div_{{$_chapitre}}" style="display:none;">
+    {{if $mode_pack}}
+      {{include file="inc_div_element_short.tpl" element=$_chapitre}}
+    {{/if}}
+    </div>
   {{/foreach}}
 {{/if}}
 

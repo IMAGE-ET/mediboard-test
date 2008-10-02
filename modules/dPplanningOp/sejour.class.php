@@ -328,10 +328,15 @@ class CSejour extends CCodable {
     if ($msg = $prescription->store()) {
       return $msg;
     }
-    $prescription->applyProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), $operation_id);
-    $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), $operation_id);
+    
+    if($this->_protocole_prescription_anesth_id){
+      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), $operation_id);
+    }
+    if($this->_protocole_prescription_chir_id){
+      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), $operation_id);
+    }
   }
-  
+    
   function store() {
     if (null !== $this->mode_sortie) {
       if ("transfert" != $this->mode_sortie) {

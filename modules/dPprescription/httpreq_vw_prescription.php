@@ -32,6 +32,8 @@ $historique = array();
 // Initialisations
 $protocoles_praticien = array();
 $protocoles_function  = array();
+$packs_praticien      = array();
+$packs_function       = array();
 $listFavoris          = array();
 $poids                = "";
 $alertesAllergies     = array();
@@ -258,6 +260,12 @@ if($full_mode && $prescription->_id){
   $where["object_class"] = " = '$prescription->object_class'";
   $protocoles_praticien = $protocole->loadList($where);
   
+  // Chargement des packs du praticien
+  $pack_praticien = new CPrescriptionProtocolePack();
+  $pack_praticien->praticien_id = $prescription->_current_praticien_id;
+  $pack_praticien->object_class = $prescription->object_class;
+  $packs_praticien = $pack_praticien->loadMatchingList();
+  
   // Chargement des protocoles de la fonction
   $function_id = $prescription->_ref_current_praticien->function_id;
   $where = array();
@@ -265,6 +273,13 @@ if($full_mode && $prescription->_id){
   $where["object_id"] = "IS NULL";
   $where["object_class"] = " = '$prescription->object_class'";
   $protocoles_function = $protocole->loadList($where);
+  
+  // Chargement des packs de la fonction
+  $pack_function = new CPrescriptionProtocolePack(); 
+  $pack_function->function_id = $prescription->_ref_current_praticien->function_id;
+  $pack_function->object_class = $prescription->object_class;
+  $packs_function = $pack_function->loadMatchingList();
+  
 }
 
 $protocole_line = new CPrescriptionLineMedicament();
@@ -331,6 +346,7 @@ $smarty->assign("mode_protocole"     , $mode_protocole);
 $smarty->assign("prescriptions_sejour", $prescriptions_sejour);
 $smarty->assign("dossier_medical"    , $dossier_medical);
 $smarty->assign("now_time", mbTime());
+$smarty->assign("mode_pack", "0");
 
 if($full_mode){
   $_sejour = new CSejour();
@@ -347,7 +363,9 @@ if($full_mode){
                                               ($_operation->_id ? $_operation->_ref_plageop->anesth_id : null));
   
   $smarty->assign("protocoles_praticien", $protocoles_praticien);
-  $smarty->assign("protocoles_function", $protocoles_function);
+  $smarty->assign("protocoles_function" , $protocoles_function);
+  $smarty->assign("packs_praticien"     , $packs_praticien);
+  $smarty->assign("packs_function"      , $packs_function);
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
   $smarty->assign("chir_id", $_chir_id);
   $smarty->assign("anesth_id", $_anesth_id);

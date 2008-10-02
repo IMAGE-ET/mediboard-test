@@ -16,7 +16,7 @@ var Prescription = {
     url.addParam("prescription_id", prescription_id)
     url.addParam("protocole_id", protocole_id);
     urlPrescription.requestUpdate("produits_elements", { waitingText : null });
-  }, 
+  },
   addLine: function(code) {
     var oForm     = document.forms.addLine;
     var oFormDate = document.forms.selDateLine;
@@ -369,10 +369,11 @@ var Prescription = {
         break;
     }
   }, 
-  viewSubstitutionLines: function(prescription_line_medicament_id){
+  viewSubstitutionLines: function(prescription_line_medicament_id, mode_pack){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_add_substitution_line");
     url.addParam("prescription_line_medicament_id", prescription_line_medicament_id);
+    url.addParam("mode_pack", mode_pack);
     url.popup(800,400, "Lignes de substitution");
   }
 };

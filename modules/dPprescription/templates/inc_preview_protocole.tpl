@@ -2,7 +2,9 @@
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="a" value="{{$a}}" />
   <input type="hidden" name="dialog" value="1" />
-
+	<input type="hidden" name="pack_id" value="{{$pack_id}}" />
+	<input type="hidden" name="protocole_id" value="{{$protocole_id}}" />
+	
 <table class="tbl">
   <tr>
     <th colspan="4" class="title">Apercu du plan de soin</th>

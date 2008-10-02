@@ -80,7 +80,7 @@
 					  {{/if}}	
 			    {{/if}}
         {{/if}}
-        {{if $line->_protocole && !$line->substitute_for}}
+        {{if $line->_protocole && !$line->substitute_for && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}')">
              Lignes de substitution
             ({{$line->_count_substitution_lines}})

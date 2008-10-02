@@ -312,4 +312,11 @@ $locales['CPrescriptionLineElement.unite_decalage_fin.jour'] = '';
 $locales['CPrescriptionLineElement.unite_decalage_fin.heure'] = '';
 $locales['config-object_handlers-CPrescriptionLineHandler'] = '';
 $locales['mod-dPprescription-tab-vw_edit_liaison_admission'] = '';
+$locales['mod-dPprescription-tab-vw_edit_pack_protocole'] = '';
+$locales['CPrescriptionProtocolePack.object_class.CConsultation'] = '';
+$locales['CPrescriptionProtocolePack.object_class.CSejour'] = '';
+$locales['CPrescriptionProtocolePack-libelle'] = '';
+$locales['CPrescriptionProtocolePack-libelle-desc'] = '';
+$locales['CPrescriptionProtocolePack-object_class'] = '';
+$locales['CPrescriptionProtocolePack-object_class-desc'] = '';
 ?>

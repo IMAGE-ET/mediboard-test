@@ -763,7 +763,34 @@ class CSetupdPprescription extends CSetup {
 						ADD INDEX (`operation_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+    $sql = "CREATE TABLE `prescription_protocole_pack` (
+						`prescription_protocole_pack_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						`libelle` VARCHAR (255),
+						`praticien_id` INT (11) UNSIGNED,
+						`function_id` INT (11) UNSIGNED,
+            `object_class` ENUM ('CSejour','CConsultation') NOT NULL
+					 ) TYPE=MYISAM;";
+   $this->addQuery($sql);
+   
+   $sql = "ALTER TABLE `prescription_protocole_pack` 
+					 ADD INDEX (`praticien_id`),
+					 ADD INDEX (`function_id`);";
+   $this->addQuery($sql);
+   
+   $sql = "CREATE TABLE `prescription_protocole_pack_item` (
+						`prescription_protocole_pack_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						`prescription_protocole_pack_id` INT (11) UNSIGNED NOT NULL,
+						`prescription_id` INT (11) UNSIGNED NOT NULL
+					) TYPE=MYISAM;";
+   $this->addQuery($sql);
+   
+   $sql = "ALTER TABLE `prescription_protocole_pack_item` 
+	         ADD INDEX (`prescription_protocole_pack_id`),
+	         ADD INDEX (`prescription_id`);";
+   $this->addQuery($sql);
+  
+   $this->mod_version = "0.55";
   }  
 }
 

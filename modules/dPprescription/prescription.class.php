@@ -391,6 +391,32 @@ class CPrescription extends CMbObject {
   }
   
   /*
+   * Permet d'applique un protocole ou un pack à partir d'un identifiant (pack-$id ou prot-$id)
+   */
+  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id){
+    // Aplication du protocole/pack chir
+    if($pack_protocole_id){
+      $pack_protocole = explode("-", $pack_protocole_id);
+      $pack_id = ($pack_protocole[0] == "pack") ? $pack_protocole[1] : "";
+      $protocole_id = ($pack_protocole[0] == "prot") ? $pack_protocole[1] : "";
+      if($pack_id){
+        $pack = new CPrescriptionProtocolePack();
+			  $pack->load($pack_id);
+			  $pack->loadRefsPackItems();
+			  foreach($pack->_ref_protocole_pack_items as $_pack_item){
+			    $_pack_item->loadRefPrescription();
+			    $_protocole =& $_pack_item->_ref_prescription;
+			    $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id);
+			  }
+      }
+      if($protocole_id){
+        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id);
+      }
+    }
+  }
+  
+  
+  /*
    * Calcul du praticien_id responsable de la prescription
    */
   function calculPraticienId(){
@@ -833,6 +859,7 @@ class CPrescription extends CMbObject {
 		  }
     }
 		// Parcours des elements
+    if($this->_ref_prescription_lines_element_by_cat){
 		foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
 		  foreach($elements_chap as $name_cat => $elements_cat){
 		    // Initialisation du compteur de lignes
@@ -860,6 +887,7 @@ class CPrescription extends CMbObject {
 			  }
 		  }
     }
+   }
   }
 }
 

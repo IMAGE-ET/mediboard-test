@@ -99,6 +99,8 @@ $smarty->assign("function_id", $function_id);
 $smarty->assign("protocoleSel_id", "");
 $smarty->assign("mode_pharma", "0");
 $smarty->assign("class_category", new CCategoryPrescription());
+$smarty->assign("mode_pack", "0");
+$smarty->assign("protocole_id", $protocole_id);
 $smarty->display("vw_edit_protocole.tpl");
 
 ?>

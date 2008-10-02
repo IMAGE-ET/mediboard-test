@@ -852,4 +852,11 @@ $locales['config-object_handlers-CPrescriptionLineHandler'] = 'Modification auto
 $locales['CPrescription.protocole.select'] = 'Choisir un protocole';
 $locales['mod-dPprescription-tab-vw_edit_liaison_admission'] = 'Liaison admission';
 $locales['CPrescription.protocole.none'] = 'Aucun protocole';
+$locales['mod-dPprescription-tab-vw_edit_pack_protocole'] = 'Packs de protocoles';
+$locales['CPrescriptionProtocolePack.object_class.CConsultation'] = 'Consultation';
+$locales['CPrescriptionProtocolePack.object_class.CSejour'] = 'Séjour';
+$locales['CPrescriptionProtocolePack-libelle'] = 'Libelle';
+$locales['CPrescriptionProtocolePack-libelle-desc'] = 'Libelle';
+$locales['CPrescriptionProtocolePack-object_class'] = 'Contexte';
+$locales['CPrescriptionProtocolePack-object_class-desc'] = 'Contexte';
 ?>

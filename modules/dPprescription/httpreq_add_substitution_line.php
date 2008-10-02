@@ -10,6 +10,7 @@
 global $AppUI;
 
 $prescription_line_medicament_id = mbGetValueFromGetOrSession("prescription_line_medicament_id");
+$mode_pack = mbGetValueFromGet("mode_pack", "0");
 $line = new CPrescriptionLineMedicament();
 $line->load($prescription_line_medicament_id);
 
@@ -40,6 +41,7 @@ $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", 0);
 $smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("moments", $moments);
+$smarty->assign("mode_pack", $mode_pack);
 $smarty->display("../../dPprescription/templates/inc_vw_add_substitution_line.tpl");
 
 ?>

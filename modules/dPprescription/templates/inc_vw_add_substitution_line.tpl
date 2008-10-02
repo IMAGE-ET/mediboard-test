@@ -36,6 +36,7 @@
   <input type="hidden" name="substitution_active" value="0" />
 </form>
 
+{{if !$mode_pack}}
 <table class="tbl">
   <tr>
     <th class="title">Ajout d'une ligne de substitution</th>
@@ -68,9 +69,14 @@
     <th class="title">Affichage des lignes de substitutions</th>
   </tr>
 </table>
+{{/if}}
 <table class="tbl">
   {{foreach from=$line->_ref_substitution_lines item=curr_line}}
-    {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" mode_pharma=0}}
+    {{if $mode_pack}}
+      {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
+    {{else}}
+      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" mode_pharma=0}}
+    {{/if}}
   {{/foreach}}
   
 </table>

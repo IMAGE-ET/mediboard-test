@@ -24,17 +24,31 @@ $where["object_class"] = " = 'CSejour'";
 $where["object_id"] = "IS NULL";
 $protocoles_list_praticien = $prescription->loadList($where);
 
+// Chargement des packs du praticien
+$pack_praticien = new CPrescriptionProtocolePack();
+$pack_praticien->praticien_id = $praticien_id;
+$pack_praticien->object_class = 'CSejour';
+$packs_praticien = $pack_praticien->loadMatchingList();
+  
 $where["function_id"] = "= '$praticien->function_id'";
 $where["praticien_id"] = null;
 $protocoles_list_function = $prescription->loadList($where);
 
+ // Chargement des packs de la fonction
+$pack_function = new CPrescriptionProtocolePack(); 
+$pack_function->function_id = $praticien->function_id;
+$pack_function->object_class = 'CSejour';
+$packs_function = $pack_function->loadMatchingList();
+
+  
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("selected_id", $selected_id);
 $smarty->assign("protocoles_list_praticien", $protocoles_list_praticien);
 $smarty->assign("protocoles_list_function", $protocoles_list_function);
-
+$smarty->assign("packs_praticien", $packs_praticien);
+$smarty->assign("packs_function", $packs_function);
 $smarty->assign("nodebug", true);
 
 $smarty->display("inc_vw_list_protocoles_prescription.tpl");

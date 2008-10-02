@@ -13,12 +13,14 @@ global $AppUI, $can;
 $can->needsRead();
 
 $prescription_id = mbGetValueFromPost("prescription_id");
-$protocole_id    = mbGetValueFromPost("protocole_id");
+$pack_protocole_id    = mbGetValueFromPost("pack_protocole_id");
+
 $date_sel        = mbGetValueFromPost("debut", mbDate());
 $praticien_id    = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 $operation_id    = mbGetValueFromPost("operation_id");
 
-if(!$protocole_id){
+// Si aucun pack/protocole selectionne, on ne fait rien
+if(!$pack_protocole_id){
 	exit();
 }
 
@@ -36,7 +38,9 @@ if ($prescription_id) {
     $AppUI->setMsg($msg, UI_MSG_ERROR);
   }
 }
-$prescription->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id);
+
+// On applique le protocole ou le pack
+$prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id);
 
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id)</script>";
@@ -45,3 +49,4 @@ echo $AppUI->getMsg();
 exit();  
 
 ?>
+

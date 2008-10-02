@@ -15,6 +15,8 @@ function viewProduit(cip){
 
 </script>
 
+
+
 <table class="main">
   <tr>
     <!-- Affichage de la liste des protocoles pour le praticien selectionné -->
@@ -49,8 +51,16 @@ function viewProduit(cip){
     <!-- Affichage du protocole sélectionné-->
     <td>
       <div id="vw_protocole">
+        {{if !$protocole_id}}
 		    {{include file="inc_vw_prescription.tpl" httpreq=1 mode_protocole=1 prescription=$protocole category="medicament"}}
+		    {{/if}}
 		  </div>  
     </td>
   </tr>
 </table>
+
+{{if $protocole_id}}
+<script type="text/javascript">
+  Prescription.reload('{{$protocole_id}}', '', '', '1');
+</script>
+{{/if}}

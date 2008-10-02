@@ -4,6 +4,7 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module="dPprescription" script="protocole"}}
 
 <script type="text/javascript">
 
@@ -27,11 +28,11 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
 
 Main.add(function () {
   if (formAnesth = document.forms.editProtoPrescriptionAnesth) {
-    refreshListProtocolesPrescription('{{$praticien_sejour}}', formAnesth.protocole_id);
+    refreshListProtocolesPrescription('{{$anesth_id}}', formAnesth.pack_protocole_id);
   }
   
   if (formChir = document.forms.editProtoPrescriptionChir) {
-    refreshListProtocolesPrescription('{{$praticien_sejour}}', formChir.protocole_id);
+    refreshListProtocolesPrescription('{{$chir_id}}', formChir.pack_protocole_id);
   }
 });
 
@@ -176,9 +177,9 @@ Main.add(function () {
           <input type="hidden" name="callback" value="" />
           
           <label for="protocole_id">{{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}</label>
-          <select name="protocole_id" class="notNull"></select>
+          <select name="pack_protocole_id" class="notNull"></select>
           
-          <button type="submit">Appliquer</button>
+          <button class="submit" type="submit">Appliquer</button>
         </form>
         <br />
         {{/if}}
@@ -193,9 +194,9 @@ Main.add(function () {
           <input type="hidden" name="callback" value="" />
           
           <label for="protocole_id">{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</label>
-          <select name="protocole_id" class="notNull"></select>
+          <select name="pack_protocole_id" class="notNull"></select>
           
-          <button type="submit">Appliquer</button>
+          <button class="submit" type="submit">Appliquer</button>
         </form>
         {{/if}}
         {{/if}}
