@@ -484,10 +484,18 @@ class CPrescriptionLine extends CMbObject {
         }
       }
 
+      
+     // On met a jour la date de fin de la ligne de medicament si celle ci n'est pas indiquée
+     if($this->_class_name == "CPrescriptionLineMedicament"){
+       if(!$this->_fin_reelle){
+         $this->_fin_reelle = $this->_ref_prescription->_ref_object->_sortie;
+       }
+     }
+      
       // Moment unitaire
     if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les) && $this->_active){
 	    $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-		  if(($this->_fin_reelle > $dateTimePrise || !$this->_fin_reelle) && $poids_ok){
+		  if(($this->_fin_reelle > $dateTimePrise) && $poids_ok){
 				if($_prise->_ref_moment->heure){
 			    @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
 				}
