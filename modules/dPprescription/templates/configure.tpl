@@ -192,6 +192,28 @@ changeBox = function(oCheckbox, hour, oTokenField){
 	  </td>  
 	  <td colspan="2" />               
   </tr>
+  <tr>  
+	  <th><strong>4 fois par jour</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][4]" value="{{$dPconfig.$m.$class.$var.fois_par.4}}" /> heures
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  <tr>  
+	  <th><strong>5 fois par jour</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][5]" value="{{$dPconfig.$m.$class.$var.fois_par.5}}" /> heures
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  <tr>  
+	  <th><strong>6 fois par jour</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][6]" value="{{$dPconfig.$m.$class.$var.fois_par.6}}" /> heures
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  
   
   <!-- CSpObjectHandler --> 
   {{assign var=col value="object_handlers"}}

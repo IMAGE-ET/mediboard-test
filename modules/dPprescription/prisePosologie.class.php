@@ -78,10 +78,12 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_heures[] = $this->_ref_moment->heure;
     }
     
-    if($this->nb_fois && $this->nb_fois <= 3 && $this->unite_fois == "jour"){
+   if($this->nb_fois){
     	$this->_view .= " ".$this->nb_fois." fois";
       $this->_type = "fois_par";
-      
+   }
+   
+    if($this->nb_fois && $this->nb_fois <= 6 && $this->unite_fois == "jour"){  
       $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois"));
       foreach($this->_heures as &$_heure){
       	$_heure .= ":00:00";
