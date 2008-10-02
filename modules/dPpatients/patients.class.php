@@ -1021,7 +1021,7 @@ class CPatient extends CMbObject {
     if($this->sexe == "m"){
       $template->addProperty("Patient - il/elle"         , "il"              );
       $template->addProperty("Patient - le/la"           , "le"              );
-      $template->addProperty("Patient - accord"          , ""                );
+      $template->addProperty("Patient - accord genre"    , ""                );
     } else {
       $template->addProperty("Patient - il/elle"         , "elle"            );
       $template->addProperty("Patient - le/la"           , "la"              );
