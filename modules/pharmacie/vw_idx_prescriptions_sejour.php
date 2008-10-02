@@ -111,7 +111,7 @@ $smarty->assign("praticiens", $praticiens);
 $smarty->assign("services", $services);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("service_id", $service_id);
-
+$smarty->assign("mode_pack", "0");
 $smarty->display('vw_idx_prescriptions_sejour.tpl');
 
 ?>
