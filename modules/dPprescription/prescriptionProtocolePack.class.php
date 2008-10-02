@@ -35,7 +35,7 @@ class CPrescriptionProtocolePack extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["praticien_id"]  = "ref class|CMediusers";
     $specs["function_id"]   = "ref class|CFunctions";  
-    $specs["libelle"]       = "str";
+    $specs["libelle"]       = "notNull str";
     $specs["object_class"]  = "notNull enum list|CSejour|CConsultation";
     return $specs;
   }

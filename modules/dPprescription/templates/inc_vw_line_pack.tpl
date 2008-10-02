@@ -21,7 +21,7 @@
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
 	      <input type="hidden" name="prescription_id" value="{{$line->_ref_prescription->_id}}" />
-	      <button class="submit">{{$line->_ref_prescription->_view}}</button>
+	      <button class="edit">{{$line->_ref_prescription->_view}}</button>
 	    </form>
 	    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','1')">

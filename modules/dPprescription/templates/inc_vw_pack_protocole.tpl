@@ -81,7 +81,7 @@
 	  </tr>
 	 <tr>
 	   <td>
-	  <form name="createPack" action="?" method="post" onsubmit="return Protocole.addPack();">
+	  <form name="createPack" action="?" method="post" onsubmit="Protocole.addPack();">
 	    <input type="hidden" name="m" value="dPprescription" />
 	    <input type="hidden" name="dosql" value="do_prescription_protocole_pack_aed" />
 	    <input type="hidden" name="prescription_protocole_pack_id" value="" />
@@ -102,7 +102,11 @@
           <td colspan="2" style="text-align: center"><button type="button" class="submit" onclick="this.form.onsubmit()">Créer</button></td>
         </tr>
 	  </form>
+	  <script type="text/javascript">
+      prepareForm("createPack");
+     </script>
 	   </td>
 	  </tr>
 	</table>	       
 {{/if}}
+
