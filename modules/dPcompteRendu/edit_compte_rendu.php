@@ -25,7 +25,7 @@ $object_id       = mbGetValueFromGet("object_id"         , 0);
 
 $compte_rendu = new CCompteRendu;
 // Modification d'un document
-if($compte_rendu_id) {
+if ($compte_rendu_id) {
   $compte_rendu->load($compte_rendu_id);
 } 
 
@@ -36,15 +36,28 @@ else {
   $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
-  
+    
   // Utilisation des headers/footers
-  $compte_rendu->loadComponents();
-  if ($compte_rendu->header_id) {
-    $compte_rendu->source = $compte_rendu->_ref_header->source . "<hr />" . $compte_rendu->source;
-  }
-  
-  if ($compte_rendu->footer_id) {
-    $compte_rendu->source = $compte_rendu->source . "<hr />" . $compte_rendu->_ref_footer->source;
+  if ($compte_rendu->header_id || $compte_rendu->footer_id) {
+    $compte_rendu->loadComponents();
+    
+    $header = $compte_rendu->_ref_header;
+		if ($header->_id) {
+		  $header->source = "<div class='header' style='height: {$header->height}px;'>$header->source</div>";
+		  $header->height += 20;
+		  $compte_rendu->header_id = null;
+		}
+    
+    $footer = $compte_rendu->_ref_footer;
+		if ($footer->_id) {
+      $footer->source = "<div class='footer' style='height: {$footer->height}px;'>$footer->source</div>";
+		  $footer->height += 20;
+		  $compte_rendu->footer_id = null;
+		}
+		
+		$style = "<style type='text/css'>@media print { div.body { padding-top: {$header->height}px; padding-bottom: {$footer->height}px; } }'</style>";
+		$compte_rendu->source = "$style<div class='body'>$compte_rendu->source</div>";
+		$compte_rendu->source = $header->source . $footer->source . $compte_rendu->source;
   }
   
   // On fournit la cible

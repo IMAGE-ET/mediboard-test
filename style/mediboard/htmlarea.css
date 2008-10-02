@@ -2,6 +2,8 @@ body {
   font-family: Georgia, serifs;
   font-size: 12px;
   background: #fff;
+  padding: 2px;
+	padding-right: 6px;
 }
 
 textarea#htmlarea {
@@ -13,13 +15,15 @@ span.hilite {
   background: #f5f;
 }
 
-table {
-	margin: 2px;
-	border: 1px solid #888;
-	border-collapse: collapse;
-}
-
 @media screen {
+	.header, .footer {
+		margin: 10px;
+		border: 3px dashed #eee;
+		padding: 3px;
+	  opacity: 0.9;
+	  overflow: hidden;
+	}
+
 	html {
 		background: #eee;
 	}
@@ -28,8 +32,14 @@ table {
 	  border: 1px solid #aaa;
 	  margin: 10px;
 	  padding: 2px;
+	  padding-right: 6px;
 	}
 
+	table {
+		border: 1px solid #888;
+		border-collapse: collapse;
+	}
+	
 	span.field {
     background: #dde;
   }
@@ -56,6 +66,23 @@ table {
 }
 
 @media print {
+	.header, .footer {
+	  width: 98%;
+		position: fixed;
+	  overflow: hidden;
+		border: 0px solid #888;
+	}
+
+	.header {
+	  top: 0em;
+	  border-bottom-width: 1px;
+	}
+	
+	.footer {
+	  bottom: 0em;
+	  border-top-width: 1px;
+	}
+	
   hr.pagebreak {
     border-style: solid;
     border-top-color: #fff;

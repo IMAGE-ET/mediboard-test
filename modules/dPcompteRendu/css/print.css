@@ -18,9 +18,9 @@ div.header,
 div.footer {
   position: fixed; 
   background: #ddd;
-  opacity: 0.9;
   border: 0px solid #aaa;
   width: 100%;
+  opacity: 0.9;
   overflow: hidden;
 }
 
