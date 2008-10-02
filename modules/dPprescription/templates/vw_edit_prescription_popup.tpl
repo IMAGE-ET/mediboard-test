@@ -167,11 +167,7 @@ Main.add(function () {
         
         {{if $operation_id}}
         {{if $anesth_id}}
-        <form name="editProtoPrescriptionAnesth" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this, {
-         onComplete: function() { 
-            document.editProtoPrescriptionAnesth.callback.value = 'reloadPrescription';
-            submitFormAjax(document.editProtoPrescriptionAnesth, 'systemMsg');
-          } })">
+        <form name="editProtoPrescriptionAnesth" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this)">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
           <input type="hidden" name="operation_id" value="{{$operation_id}}" />
@@ -188,11 +184,7 @@ Main.add(function () {
         {{/if}}
         
         {{if $chir_id}}
-        <form name="editProtoPrescriptionChir" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this, {
-         onComplete: function() { 
-            document.editProtoPrescriptionChir.callback.value = 'reloadPrescription';
-            submitFormAjax(document.editProtoPrescriptionChir, 'systemMsg');
-          } })">
+        <form name="editProtoPrescriptionChir" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this)">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
           <input type="hidden" name="operation_id" value="{{$operation_id}}" />
