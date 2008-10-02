@@ -19,7 +19,7 @@ $banques = $banque->loadList(null, $order);
 // Récupération des fonctions
 $groups = new CGroups;
 $order = "text";
-$groups = $groups->loadList(null, $order);
+$groups = $groups->loadListWithPerms(PERM_EDIT, null, $order);
 foreach ($groups as &$group) {
   $group->loadRefsBack();
   foreach ($group->_ref_functions as &$function){

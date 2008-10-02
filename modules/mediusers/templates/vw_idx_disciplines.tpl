@@ -8,7 +8,11 @@
         <tr>
           <th>Spécialité Médicale</th>
           <th>Catégorie</th>
-          <th>Praticiens</th>
+          <th>
+            Praticiens
+            <br />
+            ({{$group->_view}})
+          </th>
         </tr>
         {{foreach from=$listDiscipline item=curr_discipline}}
         <tr>

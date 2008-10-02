@@ -556,6 +556,18 @@ class CMediusers extends CMbObject {
   }
 
   /**
+   * Load list overlay for current group
+   */
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    // Filtre sur l'établissement
+		$g = CGroups::loadCurrent();
+		$where["functions_mediboard.group_id"] = "= '$g->_id'";
+    
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
+
+  /**
    * Load functions with permissions for given group, current group by default
    * @param $permType perm_constant Level of permission
    * @param $group_id ref|CGroup filter on group

@@ -13,7 +13,8 @@ $can->needsRead();
 
 // Récupération des fonctions
 $listGroups = new CGroups;
-$listGroups = $listGroups->loadList();
+$order = "text";
+$listGroups = $listGroups->loadListWithPerms(PERM_EDIT, null, $order);
 
 foreach($listGroups as $key => $value) {
   $listGroups[$key]->loadRefs();

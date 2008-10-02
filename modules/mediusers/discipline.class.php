@@ -126,10 +126,15 @@ class CDiscipline extends CMbObject {
     
   // Backward references
   function loadRefsBack() {
-    $where = array(
-      "discipline_id" => "= '$this->discipline_id'");
+    $where = array("discipline_id" => "= '$this->discipline_id'");
     $this->_ref_users = new CMediusers;
     $this->_ref_users = $this->_ref_users->loadList($where);
+  }
+  
+  function loadGroupRefsBack() {
+    $where = array("discipline_id" => "= '$this->discipline_id'");
+    $this->_ref_users = new CMediusers;
+    $this->_ref_users = $this->_ref_users->loadGroupList($where);
   }
   
   function addCompat(&$compat, $patho1, $patho2, $septique1 = null, $septique2 = null) {
