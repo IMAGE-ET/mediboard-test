@@ -393,6 +393,8 @@ button.notext {
   font-size: 0;
   padding : 15px 0px 0px 0px;
   margin  : 1px 1px;
+  color: transparent;
+  overflow: hidden;
   width: 19px;
 }
 
@@ -404,6 +406,8 @@ a.notext{
   padding : 0px 0px 0px 16px;
   margin  : 1px 1px;
   height: 16px;
+  color: transparent;
+  overflow: hidden;
 }
 
 input {

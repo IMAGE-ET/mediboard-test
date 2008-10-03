@@ -102,15 +102,12 @@ a.buttonchange,
 a.buttonremove, 
 a.buttonadd, 
 a.buttondown {
-  /*color: #000;*/
   text-decoration: none;
   cursor: pointer;
-  /*border: 1px solid #909090;*/
   font-size: 1em;
   line-height: 1em;
   font-weight: normal;
   white-space: nowrap;
-  /*background: url(images/buttons/button_background.gif);*/
   margin:0;
 }
 
@@ -262,6 +259,10 @@ a.buttonremove:hover {
 
 button.notext, a.notext {
   font-size: 0;
+  color: transparent;
+  overflow: hidden;
+  text-indent: -1px;
+  width: 21px;
 }
 
 /*.numericField input {
