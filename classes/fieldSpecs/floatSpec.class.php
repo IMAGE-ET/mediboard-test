@@ -111,6 +111,9 @@ class CFloatSpec extends CMbFieldSpec {
       $max = $this->checkNumeric($this->max);
     }
     
+    $new_value = CMbArray::extract($params, "value");
+    if ($new_value !== null) $value = $new_value;
+    
     $decimals = CMbArray::extract($params, "decimals");
     
     $step = $this->checkNumeric(CMbArray::extract($params, "step"));

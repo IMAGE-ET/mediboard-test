@@ -53,17 +53,21 @@
         {{if $smarty.foreach.dispensation.first}}
         <td rowspan="{{$unites|@count}}" style="text-align: center" class="text">{{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})</td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
-          <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
-               class="tooltip-trigger">
-            <a href="#1">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</a>
-          </div>  
-          <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
-            <ul>
-              {{foreach from=$_patients item=_patient}}
-	              <li>{{$_patient->_view}}</li>
-	            {{/foreach}}
-            </ul>
-          </div>
+          {{if $mode_nominatif}}
+            {{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}
+          {{else}}
+            <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
+                 class="tooltip-trigger">
+              <a href="#1">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</a>
+            </div>  
+            <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
+              <ul>
+                {{foreach from=$_patients item=_patient}}
+                  <li>{{$_patient->_view}}</li>
+                {{/foreach}}
+              </ul>
+            </div>
+          {{/if}}
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
           {{if array_key_exists($code_cip,$delivrances)}}

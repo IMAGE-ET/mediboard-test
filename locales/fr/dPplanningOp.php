@@ -701,4 +701,13 @@ $locales['config-dPbloc-CPlageOp-planning-col3'] = 'Colonne 3';
 $locales['COperation-depassement_anesth'] = 'Dépassement anesth.';
 $locales['COperation-depassement_anesth-court'] = 'DH An.';
 $locales['COperation-depassement_anesth-desc'] = 'Montant du dépassement d\'honoraire éventuel de l\'anesthésiste';
+$locales['COperation-_move'] = '';
+$locales['COperation-_move-court'] = '';
+$locales['COperation-_move-desc'] = '';
+$locales['COperation-_pause_hour'] = '';
+$locales['COperation-_pause_hour-court'] = '';
+$locales['COperation-_pause_hour-desc'] = '';
+$locales['COperation-_pause_min'] = '';
+$locales['COperation-_pause_min-court'] = '';
+$locales['COperation-_pause_min-desc'] = '';
 ?>

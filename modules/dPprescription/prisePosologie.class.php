@@ -228,7 +228,7 @@ class CPrisePosologie extends CMbMetaObject {
   		if($nb_days == 0){
   			$day = mbDate($borne_min); // == mbDate($borne_max)	
 
-  			$date_heure = "$day ".$heure;
+  			$date_heure = "$day $heure";
 				if($date_heure > $borne_min && $date_heure < $borne_max){
 				  $nb = 1;
 				}

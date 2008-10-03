@@ -59,14 +59,18 @@ class CProductDelivery extends CMbObject {
     return $backRefs;
   }
   
+  function countDelivered() {
+    $this->loadRefsBack();
+    $sum = 0;
+    foreach ($this->_ref_delivery_traces as $trace) {
+      if ($trace->date_delivery)
+        $sum += $trace->quantity;
+    }
+    return $sum;
+  }
+  
   function isDelivered() {
-  	$this->loadRefsBack();
-  	$sum = 0;
-  	foreach ($this->_ref_delivery_traces as $trace) {
-  		if ($trace->date_delivery)
-  		  $sum += $trace->quantity;
-  	}
-  	return ($sum >= $this->quantity);
+  	return $this->countDelivered() >= $this->quantity;
   }
   
   function isReceived() {

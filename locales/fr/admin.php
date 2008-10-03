@@ -180,4 +180,10 @@ $locales['CPermObject-title-modify'] = 'Modification de la permission module';
 $locales['CUser-title-create'] = 'Création d\'un utilisateur';
 $locales['CUser-title-modify'] = 'Modification de l\'utilisateur';
 $locales['mod-ecap-tab-vw_identifiants'] = 'Identifiants';
+$locales['CPermModule.all'] = '';
+$locales['CPermModule.select'] = '';
+$locales['CPermObject.all'] = '';
+$locales['CPermObject.select'] = '';
+$locales['CUser.all'] = '';
+$locales['CUser.select'] = '';
 ?>

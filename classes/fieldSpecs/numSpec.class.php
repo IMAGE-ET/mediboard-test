@@ -194,6 +194,10 @@ class CNumSpec extends CMbFieldSpec {
     if ($max === null) {
       $max = $this->checkNumeric($this->max);
     }
+    
+    $new_value = CMbArray::extract($params, "value");
+    if ($new_value !== null) $value = $new_value;
+    
     $step = $this->checkNumeric(CMbArray::extract($params, "step"));
     
     CMbArray::defaultValue($params, "size", min($maxLength, 20));

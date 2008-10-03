@@ -646,4 +646,5 @@ $locales['CProductDiscrepancy.object_class.CProductStockService'] = '';
 $locales['CProductDiscrepancy.one'] = '';
 $locales['CProductDiscrepancy.select'] = '';
 $locales['CProductStock-back-'] = '';
+$locales['mod-dPstock-tab-vw_idx_discrepancy'] = 'Ecarts d\'inventaire';
 ?>

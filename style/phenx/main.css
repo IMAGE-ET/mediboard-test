@@ -974,6 +974,25 @@ table.note th.low {
   background: transparent;
 }
 
+#login h2 {
+  color: #666;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  background: #ddd;
+  padding: 12px;
+  padding-top: 4px;
+  padding-bottom: 10px;
+  /*display: block;
+  width: 100%;*/
+  -moz-border-radius: 8px 8px 0 0;
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  border-radius: 8px 8px 0 0;
+  top: -1.6em;
+  left: 8px;
+}
+
 #version {
   position: absolute; 
   bottom: 0; 
@@ -2636,4 +2655,15 @@ ul.select-tree li.drop {
 
 ul.select-tree .highlight {
   background: #ddd;
+}
+
+span.date img.time {
+  display: inline;
+  position: relative;
+  margin-left: -17px;
+  top: 5px;
+}
+
+span.date input.time {
+  padding-right: 17px;
 }

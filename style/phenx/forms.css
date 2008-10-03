@@ -6,6 +6,7 @@ input, select, textarea, button {
   font-size: 1em;
   margin: 1px;
   padding: 1px;
+  padding-top: 2px;
 }
 
 input[type=text], input[type=password], select, textarea {

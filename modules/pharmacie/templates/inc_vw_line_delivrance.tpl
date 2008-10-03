@@ -49,7 +49,7 @@
       <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
       <input type="hidden" name="date_delivery" value="now" />
-      {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=3}}
+      {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
       <input type="text" name="code" value="" />
       <button type="submit" class="tick">Délivrer</button>
     </form>

@@ -7,16 +7,12 @@
  *  @author Alexis Granger
  */
 
-global $g;
-
 $service_id =      mbGetValueFromGetOrSession('service_id');
 $patient_id =      mbGetValueFromGetOrSession('patient_id');
 $prescription_id = mbGetValueFromGetOrSession('prescription_id');
 
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
-mbSetValueToSession('_date_min', $date_min);
-mbSetValueToSession('_date_max', $date_max);
 
 if($prescription_id == "undefined"){
 	$prescription_id = "";
@@ -40,19 +36,26 @@ if($prescription_id){
 	$prescription = new CPrescription();
 	$prescription->load($prescription_id);
 	
-	  $prescription->loadRefsLinesMed(1,1);
-	
 	  // Stockage du sejour de la prescription
 	  $sejour =& $prescription->_ref_object;
 	  if(!$sejour->_ref_patient){
 	  	$sejour->loadRefPatient();
 	  }
+	  $patient =& $sejour->_ref_patient;
+	  
 	  // On borne les dates aux dates du sejour si besoin
-	  $date_min = ($date_min < $sejour->_entree) ? $sejour->_entree : $date_min;
-	  $date_max = ($date_max > $sejour->_sortie) ? $sejour->_sortie : $date_max;
-	
+	  $date_min = max($sejour->_entree, $date_min);
+	  $date_max = min($sejour->_sortie, $date_max);
+	  
+	  if ($date_min > $date_max) continue;
+	  
+    $prescription->loadRefsLinesMed(1,1);
 	  foreach($prescription->_ref_prescription_lines as $_line_med){ 
-	  	$patients[$_line_med->code_cip][$sejour->_ref_patient->_id] = $sejour->_ref_patient;
+	    if (!$_line_med->debut) continue;
+	    
+	    $cip = $_line_med->code_cip;
+	    
+	  	$patients[$cip][$sejour->_ref_patient->_id] = $sejour->_ref_patient;
 	    $_line_med->_ref_produit->loadConditionnement();
 	    
 	    // On remplit les bornes de la ligne avec les dates du sejour si besoin
@@ -70,66 +73,61 @@ if($prescription_id){
 	    $_line_med->calculQuantiteLine($date_min, $date_max);
 	    foreach($_line_med->_quantites as $unite_prise => $quantite){
 	    	$mode_kg = 0;
-	      $_unite_prise = str_replace('/kg', '', $unite_prise);
 	      
 	      // Dans le cas d'un unite_prise/kg
-	      if($_unite_prise != $unite_prise){
+	      if(stripos($unite_prise, '/kg') !== false){
 	      	$mode_kg = 1;
+	      	
 	        // On recupere le poids du patient pour calculer la quantite
-	        if(!$prescription->_ref_object->_ref_patient){
-	          $prescription->_ref_object->loadRefPatient();
-	        }
-	        $patient =& $prescription->_ref_object->_ref_patient;
 	        if(!$patient->_ref_constantes_medicales){
 	          $patient->loadRefConstantesMedicales();
 	        }
-	        $const_med = $patient->_ref_constantes_medicales;
-	        $poids     = $const_med->poids;
+
 	        // Si poids
-	        if($poids){
-	          $quantite  *= $poids;
+	        if($poids = $patient->_ref_constantes_medicales->poids){
+	          $quantite *= $poids;
 	        }
 	        // Si le poids n'est pas renseigné, on remet l'ancienne unite
 					else {
-						$_unite_prise = $unite_prise;
-						$warning[$_line_med->code_cip][$_unite_prise] = 1;
+						$warning[$cip][$unite_prise] = 1;
 					}
 	      }
-	      if (!isset($dispensations[$_line_med->code_cip])) {
-	        $dispensations[$_line_med->code_cip] = array();
+	      if (!isset($dispensations[$cip])) {
+	        $dispensations[$cip] = array();
 	      }
-	      if (!isset($dispensations[$_line_med->code_cip][$_unite_prise])) {
-	        $dispensations[$_line_med->code_cip][$_unite_prise] = 0;
+	      if (!isset($dispensations[$cip][$unite_prise])) {
+	        $dispensations[$cip][$unite_prise] = 0;
 	      }
 	      if(($mode_kg && $poids) || !$mode_kg){
-	        $dispensations[$_line_med->code_cip][$_unite_prise] += ceil($quantite);  
+	        $dispensations[$cip][$unite_prise] += ceil($quantite);  
 	      }  
 	    }
-	    if(!array_key_exists($_line_med->code_cip, $medicaments)){
-	      $medicaments[$_line_med->code_cip] =& $_line_med->_ref_produit;
+	    if(!isset($medicaments[$cip])){
+	      $medicaments[$cip] =& $_line_med->_ref_produit;
 	    }
 	  }
 	
 	
 	// Calcul du nombre de boites (unites de presentation)
-	foreach($dispensations as $code_cip => $unites){
+	foreach($dispensations as $cip => $unites){
 	  $product = new CProduct();
-	  $product->code = $code_cip;
+	  $product->code = $cip;
 	  $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
 	  
 	  if ($product->loadMatchingObject()) {
-	    $stocks[$code_cip] = new CProductStockGroup();
-	    $stocks[$code_cip]->group_id = $g;
-	    $stocks[$code_cip]->product_id = $product->_id;
-	    $stocks[$code_cip]->loadMatchingObject();
+	    global $g;
+	    $stocks[$cip] = new CProductStockGroup();
+	    $stocks[$cip]->group_id = $g;
+	    $stocks[$cip]->product_id = $product->_id;
+	    $stocks[$cip]->loadMatchingObject();
 	    
-	    $delivrances[$code_cip] = new CProductDelivery();
-	    $delivrances[$code_cip]->stock_id = $stocks[$code_cip]->_id;
-	    $delivrances[$code_cip]->service_id = $service_id;
-	    $delivrances[$code_cip]->loadRefsFwd();
+	    $delivrances[$cip] = new CProductDelivery();
+	    $delivrances[$cip]->stock_id = $stocks[$cip]->_id;
+	    $delivrances[$cip]->service_id = $service_id;
+	    $delivrances[$cip]->loadRefsFwd();
 	  }
 	  
-	  $medicament =& $medicaments[$code_cip]; 
+	  $medicament =& $medicaments[$cip]; 
 	  foreach($unites as $unite_prise => $quantite){
 	    if (!isset($medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation])) {
 	      $coef = 1;
@@ -138,21 +136,21 @@ if($prescription_id){
 	    }
 	    $_quantite = $quantite * $coef;
 	    // Affichage des quantites reference en fonction de l'unite de reference
-	    if (!isset($quantites_reference[$code_cip])) {
-	      $quantites_reference[$code_cip] = array();
+	    if (!isset($quantites_reference[$cip])) {
+	      $quantites_reference[$cip] = array();
 	    }
-	    if (!isset($quantites_reference[$code_cip][$unite_prise])) {
-	      $quantites_reference[$code_cip][$unite_prise] = 0;
+	    if (!isset($quantites_reference[$cip][$unite_prise])) {
+	      $quantites_reference[$cip][$unite_prise] = 0;
 	    }
-	    $quantites_reference[$code_cip][$unite_prise] += $_quantite;
-	     if (!isset($quantites_reference[$code_cip]["total"])) {
-	     	 $quantites_reference[$code_cip]["total"] = 0;
+	    $quantites_reference[$cip][$unite_prise] += $_quantite;
+	     if (!isset($quantites_reference[$cip]["total"])) {
+	     	 $quantites_reference[$cip]["total"] = 0;
 	     }
-	    $quantites_reference[$code_cip]["total"] += $_quantite;
+	    $quantites_reference[$cip]["total"] += $_quantite;
 	    $presentation = $_quantite/$medicament->nb_unite_presentation;
 	    $_presentation = $presentation/$medicament->nb_presentation;
-	    if (!isset($quantites[$code_cip])) $quantites[$code_cip] = 0;
-	    $quantites[$code_cip] += $_presentation;
+	    if (!isset($quantites[$cip])) $quantites[$cip] = 0;
+	    $quantites[$cip] += $_presentation;
 	  }
 	}
 	

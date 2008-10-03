@@ -13,8 +13,6 @@ $patient_id = mbGetValueFromGetOrSession('patient_id');
 $service_id = mbGetValueFromGetOrSession('service_id');
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
-mbSetValueToSession('_date_min', $date_min);
-mbSetValueToSession('_date_max', $date_max);
 
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();
