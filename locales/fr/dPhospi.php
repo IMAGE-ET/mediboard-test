@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPhospi-court'] = 'Hospitalisation';
+$locales['module-dPhospi-long'] = 'Gestion des hospitalisations';
 $locales['CAffectation-_sortie_dep-desc'] = 'Heure prévue';
 $locales['CAffectation'] = 'Affectations';
 $locales['CAffectation-back-lit_id'] = '';

@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPpatients-court'] = '';
+$locales['module-dPpatients-long'] = '';
 $locales['CAntecedent.type.carcino'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';

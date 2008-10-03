@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPpmsi-court'] = '';
+$locales['module-dPpmsi-long'] = '';
 $locales['mod-dPpmsi-tab-vw_list_interv'] = '';
 $locales['CGHM'] = 'Groupement Homogène de Malade';
 $locales['CGHM-back-sejour_id'] = '';
@@ -25,4 +27,15 @@ $locales['mod-dPpmsi-tab-labo_groupage'] = '';
 $locales['mod-dPpmsi-tab-vw_dossier'] = '';
 $locales['mod-dPpmsi-tab-vw_list_hospi'] = '';
 $locales['config-dPpmsi-systeme_facturation'] = '';
+$locales['CGHM-ghm_id'] = '';
+$locales['CGHM-ghm_id-court'] = '';
+$locales['CGHM-ghm_id-desc'] = '';
+$locales['CGHM-msg-create'] = '';
+$locales['CGHM-msg-delete'] = '';
+$locales['CGHM-msg-modify'] = '';
+$locales['CGHM-title-create'] = '';
+$locales['CGHM-title-modify'] = '';
+$locales['CGHM.all'] = '';
+$locales['CGHM.select'] = '';
+$locales['CSejour-back-GHM'] = '';
 ?>

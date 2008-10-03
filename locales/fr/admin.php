@@ -1,4 +1,6 @@
 <?php
+$locales['module-admin-court'] = 'Permissions';
+$locales['module-admin-long'] = 'Permissions utilisateurs';
 $locales['Auth-failed'] = 'Echec d\'authentification';
 $locales['Auth-failed-loginas-admin'] = 'Seuls les administrateurs peuvent se substituer à d\'autres utilisateurs';
 $locales['Auth-failed-nopassword'] = 'Merci de fournir un mot de passe';
@@ -135,6 +137,11 @@ $locales['CUser.modify'] = '';
 $locales['CUser.more'] = '';
 $locales['CUser.none'] = 'Pas d\'utilisateur';
 $locales['CUser.one'] = 'Un utilisateur';
+$locales['CUser-user_password-change'] = 'Changer le mot de passe utilisateur';
+$locales['CUser-user_password-nomatch'] = 'Vous avez entré un mauvais mot de passe';
+$locales['CUser-msg-password-updated'] = 'Votre mot de passe a été mis à jour';
+$locales['CUser-user_password-current'] = 'Mot de passe courant';
+$locales['CUser-user_password-new'] = 'Nouveau Mot de Passe';
 $locales['menu-toggleIcons'] = 'Afficher/masquer les icônes dans le menu';
 $locales['mod-admin-tab-edit_perms'] = 'Gestion des droits';
 $locales['mod-admin-tab-edit_prefs'] = 'Préférences utilisateur';

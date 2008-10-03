@@ -35,7 +35,7 @@
       <select name="pref_name[{{$var}}]" class="text" size="1">
         {{foreach from=$locales|smarty:nodefaults item=currLocale key=keyLocale}}
         <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.$module.$var}}selected="selected"{{/if}}>
-          {{tr}}{{$currLocale}}{{/tr}}
+          {{tr}}language.{{$currLocale}}{{/tr}}
         </option>
         {{/foreach}}
       </select>
@@ -330,9 +330,7 @@
   
   <tr>
     <td class="button" colspan="2">
-      <button type="submit" class="submit">
-        {{tr}}submit{{/tr}}
-      </button>
+      <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
 </table>

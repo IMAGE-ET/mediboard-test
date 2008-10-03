@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPplanningOp-court'] = 'Planning chir';
+$locales['module-dPplanningOp-long'] = 'Planning des chirurgiens';
 $locales['config-dPplanningOp-CSejour-patient_id'] = 'Possibilité de modifier le patient d\'un séjour';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';

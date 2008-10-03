@@ -47,7 +47,7 @@ class CSetupadmin extends CSetup {
     $this->addQuery($sql);
     
     function setup_changePerm(){
-      require_once("legacy/permission.class.php");
+      CAppUI::requireLegacyClass("permission");
       $error = "";
       $moduleClasses = array();
       $moduleClasses["dPetablissement"] = "CGroups";

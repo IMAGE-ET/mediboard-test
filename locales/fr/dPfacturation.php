@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPfacturation-court'] = 'Facturation';
+$locales['module-dPfacturation-long'] = 'Gestion des factures';
 $locales['CFacture'] = 'Facture';
 $locales['CFacture-date'] = 'Date';
 $locales['CFacture-date-court'] = '';

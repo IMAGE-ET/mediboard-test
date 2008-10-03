@@ -218,4 +218,8 @@ $locales['CRPU-_presence-desc'] = 'Temps de présence du patient dans l\'établiss
 $locales['CRPU-box_id-court'] = '';
 $locales['confirm-RPU-Hospitalisation'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation. \\nCette action irréversible effectue les actions suivantes :\\n\\t- Cloture du dossier UPATOU,\\n\\t- Création d\\\'un nouveau dossier d\\\'hospitalisation,\\n\\t- Transfert des actes de l\\\'ATU vers le nouveau dossier.\\n\\nSouhaitez-vous poursuivre ?';
 $locales['CRPU-_annule'] = 'RPU Annulé';
+$locales['CRPU-title-create'] = '';
+$locales['CRPU-title-modify'] = '';
+$locales['CRPU.all'] = '';
+$locales['CRPU.select'] = '';
 ?>

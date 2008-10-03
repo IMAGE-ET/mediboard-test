@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPetablissement-court'] = 'Etablissements';
+$locales['module-dPetablissement-long'] = 'Gestion des établissements';
 $locales['CGroups-service_urgences_id-desc'] = 'Service d\'urgences de l\'établissement';
 $locales['CEtabExterne-adresse'] = 'Adresse';
 $locales['CEtabExterne-adresse-desc'] = 'Adresse de l\'établissement';

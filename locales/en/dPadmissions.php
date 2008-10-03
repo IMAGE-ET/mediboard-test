@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPadmissions-court'] = '';
+$locales['module-dPadmissions-long'] = '';
 $locales['CPatient-_nomPatient'] = "";
 $locales['CPatient-_nomPatient-desc'] = "";
 $locales['CSejour-_nomPatient'] = "";

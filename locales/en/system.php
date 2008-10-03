@@ -1,4 +1,6 @@
 <?php
+$locales['module-system-court'] = 'Administration';
+$locales['module-system-long'] = 'System administration';
 $locales['mod-system-tab-view_ressources_logs'] = '';
 $locales['CAccessLog'] = '';
 $locales['CAccessLog-action'] = '';
@@ -245,4 +247,14 @@ $locales['CUserLog-title-modify'] = '';
 $locales['deleted'] = '';
 $locales['disabled'] = '';
 $locales['install'] = '';
+$locales['CAccessLog.all'] = '';
+$locales['CAccessLog.select'] = '';
+$locales['CMessage.all'] = '';
+$locales['CMessage.select'] = '';
+$locales['CModule.all'] = '';
+$locales['CModule.select'] = '';
+$locales['CNote.all'] = '';
+$locales['CNote.select'] = '';
+$locales['CUserLog.all'] = '';
+$locales['CUserLog.select'] = '';
 ?>

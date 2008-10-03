@@ -31,11 +31,9 @@
   
   {{if $curr_data is div by 20}}
   <tr>
-    <th class="category">Chaine</th>
+    <th class="category">Chaîne</th>
     {{foreach from=$locales item=curr_lang}}
-    <th class="category">
-      {{$curr_lang}}
-    </th>
+    <th class="category">{{tr}}language.{{$curr_lang}}{{/tr}}</th>
     {{/foreach}}
     <th class="category">
       <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
@@ -84,9 +82,7 @@
 
   <tr>
     <td class="button" colspan="{{$nb_cell}}">
-      <button type="submit" class="modify">
-        Sauvegarder
-      </button>
+      <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
 </table>

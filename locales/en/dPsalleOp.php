@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPsalleOp-court'] = '';
+$locales['module-dPsalleOp-long'] = '';
 $locales['config-dPsalleOp-CActeCCAM-contraste'] = '';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = '';

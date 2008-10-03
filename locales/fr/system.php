@@ -1,4 +1,6 @@
 <?php
+$locales['module-system-court'] = 'Administration';
+$locales['module-system-long'] = 'Administration système';
 $locales['mod-system-tab-view_ressources_logs'] = 'Logs ressources';
 $locales['CAccessLog'] = 'Logs d\'accès';
 $locales['CAccessLog-action'] = '';

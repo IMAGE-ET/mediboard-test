@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPadmissions-court'] = 'Admissions';
+$locales['module-dPadmissions-long'] = 'Gestion des admissions';
 $locales['CPatient-_nomPatient'] = "Patient";
 $locales['CPatient-_nomPatient-desc'] = "Tri par patient";
 $locales['CSejour-_nomPatient'] = "Patient";

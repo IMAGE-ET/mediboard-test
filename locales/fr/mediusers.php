@@ -1,4 +1,6 @@
 <?php
+$locales['module-mediusers-court'] = 'Mediusers';
+$locales['module-mediusers-long'] = 'Gestion des utilisateurs';
 $locales['CDiscipline'] = 'Disciplines';
 $locales['CDiscipline-categorie'] = 'Catégorie';
 $locales['CDiscipline-categorie-court'] = '';

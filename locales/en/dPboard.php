@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPboard-court'] = '';
+$locales['module-dPboard-long'] = '';
 $locales['mod-dPboard-tab-vw_mainboard'] = '';
 $locales['mod-dPboard-tab-vw_week'] = '';
 $locales['mod-dPboard-tab-vw_day'] = '';

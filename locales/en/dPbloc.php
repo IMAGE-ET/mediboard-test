@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPbloc-court'] = '';
+$locales['module-dPbloc-long'] = '';
 $locales['config-dPbloc-CPlageOp-hours_start'] = '';
 $locales['config-dPbloc-CPlageOp-hours_stop'] = '';
 $locales['config-dPbloc-CPlageOp-minutes_interval'] = '';

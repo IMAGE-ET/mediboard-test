@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPboard-court'] = 'Tableau de bord';
+$locales['module-dPboard-long'] = 'Tableau de bord';
 $locales['mod-dPboard-tab-vw_mainboard'] = '';
 $locales['mod-dPboard-tab-vw_week'] = 'Vue semaine';
 $locales['mod-dPboard-tab-vw_day'] = 'Vue journée';

@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPfiles-court'] = 'Fichiers';
+$locales['module-dPfiles-long'] = 'Gestion de fichiers';
 $locales['CFile'] = 'Fichiers';
 $locales['CFile-back-file_category_id'] = '';
 $locales['CFile-back-file_owner'] = '';

@@ -434,4 +434,8 @@ $locales['CSpEtablissement-msg-delete'] = '';
 $locales['CSpEtablissement-msg-modify'] = '';
 $locales['mod-sherpa-tab-view_urgdro'] = '';
 $locales['mod-sherpa-tab-view_detngap'] = '';
+$locales['CSpEtablissement-title-create'] = '';
+$locales['CSpEtablissement-title-modify'] = '';
+$locales['CSpEtablissement.all'] = '';
+$locales['CSpEtablissement.select'] = '';
 ?>

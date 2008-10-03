@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPgestionCab-court'] = 'Gestion cab';
+$locales['module-dPgestionCab-long'] = 'Gestion comptable de cabinet';
 $locales['CParamsPaie-csp-desc'] = 'Contribution solidarité exprimée en pourcentage';
 $locales['CEmployeCab'] = 'Employés';
 $locales['CEmployeCab-adresse'] = 'Adresse';

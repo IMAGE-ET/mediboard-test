@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPpatients-court'] = 'Dossiers patient';
+$locales['module-dPpatients-long'] = 'Gestion des dossiers patient';
 $locales['CAntecedent.type.carcino'] = 'Carcinologiques';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
 $locales['CAddiction'] = 'Addiction';

@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPlabo-court'] = 'Laboratoire';
+$locales['module-dPlabo-long'] = 'Gestion des examens de laboratoire';
 $locales['CCatalogueLabo-function_id-desc'] = 'Fonction associée au catalogue';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';

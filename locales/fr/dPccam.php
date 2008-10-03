@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPccam-court'] = 'CCAM';
+$locales['module-dPccam-long'] = 'Aide au codage CCAM';
 $locales['config-dPccam-CCodeCCAM-use_cache'] = 'Utiliser le cache';
 $locales['CCodeCCAM'] = 'Code CCAM';
 $locales['CCodeCCAM.remboursement.1'] = 'Remboursable';

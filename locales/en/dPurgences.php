@@ -218,4 +218,8 @@ $locales['CRPU-_presence'] = '';
 $locales['CRPU-_presence-court'] = '';
 $locales['CRPU-_presence-desc'] = '';
 $locales['CRPU-_annule'] = '';
+$locales['CRPU-title-create'] = '';
+$locales['CRPU-title-modify'] = '';
+$locales['CRPU.all'] = '';
+$locales['CRPU.select'] = '';
 ?>

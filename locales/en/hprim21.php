@@ -1,4 +1,6 @@
 <?php
+$locales['module-hprim21-court'] = '';
+$locales['module-hprim21-long'] = '';
 $locales['CHprim21Complementaire'] = '';
 $locales['CHprim21Complementaire-back-'] = '';
 $locales['CHprim21Complementaire-code_organisme'] = '';

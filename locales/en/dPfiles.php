@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPfiles-court'] = 'Files';
+$locales['module-dPfiles-long'] = 'Files management';
 $locales['CFile'] = 'File';
 $locales['CFile-back-file_category_id'] = '';
 $locales['CFile-back-file_owner'] = '';
@@ -60,4 +62,27 @@ $locales['CFile-msg-upload-error-1'] = '';
 $locales['CFile-msg-upload-error-2'] = '';
 $locales['CFile-msg-upload-error-3'] = '';
 $locales['CFile-msg-upload-error-4'] = '';
+$locales['CFile-file_id'] = '';
+$locales['CFile-file_id-court'] = '';
+$locales['CFile-file_id-desc'] = '';
+$locales['CFile-msg-create'] = '';
+$locales['CFile-msg-delete'] = '';
+$locales['CFile-msg-modify'] = '';
+$locales['CFile-title-create'] = '';
+$locales['CFile-title-modify'] = '';
+$locales['CFile.all'] = '';
+$locales['CFile.select'] = '';
+$locales['CFilesCategory-back-files'] = '';
+$locales['CFilesCategory-file_category_id'] = '';
+$locales['CFilesCategory-file_category_id-court'] = '';
+$locales['CFilesCategory-file_category_id-desc'] = '';
+$locales['CFilesCategory-msg-create'] = '';
+$locales['CFilesCategory-msg-delete'] = '';
+$locales['CFilesCategory-msg-modify'] = '';
+$locales['CFilesCategory-title-create'] = '';
+$locales['CFilesCategory-title-modify'] = '';
+$locales['CFilesCategory.all'] = '';
+$locales['CFilesCategory.select'] = '';
+$locales['CMbObject-back-files'] = '';
+$locales['CMediusers-back-files'] = '';
 ?>

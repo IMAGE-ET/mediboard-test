@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPpmsi-court'] = 'PMSI';
+$locales['module-dPpmsi-long'] = 'Reccueil des actes PMSI';
 $locales['mod-dPpmsi-tab-vw_list_interv'] = 'Liste des interventions';
 $locales['CGHM'] = 'Groupement Homogène de Malade';
 $locales['CGHM-back-sejour_id'] = '';

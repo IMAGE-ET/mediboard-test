@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPsalleOp-court'] = 'Salle d\'op';
+$locales['module-dPsalleOp-long'] = 'Gestion des salles d\'intervention';
 $locales['config-dPsalleOp-CActeCCAM-contraste'] = 'Affichage contrasté';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = 'Identifiant';

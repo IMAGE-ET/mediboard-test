@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPcompteRendu-court'] = 'Modèles';
+$locales['module-dPcompteRendu-long'] = 'Modèles de document';
 $locales['CPack.object_class.CPatient'] = 'Patient';
 $locales['CAideSaisie'] = 'Aide à la Saisie';
 $locales['CAideSaisie-back-function_id'] = '';

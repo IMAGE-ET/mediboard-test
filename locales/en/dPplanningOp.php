@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPplanningOp-court'] = '';
+$locales['module-dPplanningOp-long'] = '';
 $locales['config-dPplanningOp-CSejour-patient_id'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
@@ -701,4 +703,13 @@ $locales['CTypeAnesth.select'] = '';
 $locales['COperation-depassement_anesth'] = '';
 $locales['COperation-depassement_anesth-court'] = '';
 $locales['COperation-depassement_anesth-desc'] = '';
+$locales['COperation-_move'] = '';
+$locales['COperation-_move-court'] = '';
+$locales['COperation-_move-desc'] = '';
+$locales['COperation-_pause_hour'] = '';
+$locales['COperation-_pause_hour-court'] = '';
+$locales['COperation-_pause_hour-desc'] = '';
+$locales['COperation-_pause_min'] = '';
+$locales['COperation-_pause_min-court'] = '';
+$locales['COperation-_pause_min-desc'] = '';
 ?>

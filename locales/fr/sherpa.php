@@ -636,4 +636,8 @@ $locales['CSpUrgDos-msg-modify'] = '';
 $locales['CSpUrgDro-msg-create'] = '';
 $locales['CSpUrgDro-msg-delete'] = '';
 $locales['CSpUrgDro-msg-modify'] = '';
+$locales['CSpEtablissement-title-create'] = '';
+$locales['CSpEtablissement-title-modify'] = '';
+$locales['CSpEtablissement.all'] = '';
+$locales['CSpEtablissement.select'] = '';
 ?>

@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPcabinet-court'] = 'Cabinet';
+$locales['module-dPcabinet-long'] = 'Gestion de cabinet de consultation';
 $locales['CActeNGAP'] = 'Acte NGAP';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';

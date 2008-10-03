@@ -1,4 +1,6 @@
 <?php
+$locales['module-dPcim10-court'] = 'CIM10';
+$locales['module-dPcim10-long'] = 'Aide au codage CIM10';
 $locales['mod-dPcompteRendu-tab-vw_idx_packs'] = 'Packs de modèles';
 $locales['CCodeCIM10'] = 'Code CIM10';
 $locales['CFavoricim10'] = 'Favori CIM';

@@ -1,4 +1,6 @@
 <?php
+$locales['module-admin-court'] = 'Users';
+$locales['module-admin-long'] = 'Users Administration';
 $locales['CAffectation._mode_sortie.deces'] = '';
 $locales['CAffectation._mode_sortie.normal'] = '';
 $locales['CAffectation._mode_sortie.transfert'] = '';
@@ -129,6 +131,11 @@ $locales['CUser.modify'] = '';
 $locales['CUser.more'] = '';
 $locales['CUser.none'] = '';
 $locales['CUser.one'] = '';
+$locales['CUser-user_password-change'] = 'Change User Password';
+$locales['CUser-user_password-nomatch'] = 'You have entered the wrong old password';
+$locales['CUser-user_password-current'] = 'Current Password';
+$locales['CUser-user_password-new'] = 'New Password';
+$locales['CUser-msg-password-updated'] = '';
 $locales['menu-toggleIcons'] = 'Toggle icons in menu';
 $locales['mod-admin-tab-edit_perms'] = '';
 $locales['mod-admin-tab-edit_prefs'] = 'User preferences';
@@ -179,4 +186,10 @@ $locales['CUser-_user_password_strong-desc'] = '';
 $locales['CUser-_user_password_weak'] = '';
 $locales['CUser-_user_password_weak-court'] = '';
 $locales['CUser-_user_password_weak-desc'] = '';
+$locales['CPermModule.all'] = '';
+$locales['CPermModule.select'] = '';
+$locales['CPermObject.all'] = '';
+$locales['CPermObject.select'] = '';
+$locales['CUser.all'] = '';
+$locales['CUser.select'] = '';
 ?>

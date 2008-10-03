@@ -17,10 +17,10 @@
       </select>
     </th>
     <th>
-      <label for="language">Locales</label>
+      <label for="language">Language</label>
       <select name="language" onchange="this.form.submit();">
       {{foreach from=$locales item=langue}}
-      <option value="{{$langue}}"{{if $langue == $language}}selected="selected"{{/if}}>{{$langue}}</option>
+      <option value="{{$langue}}"{{if $langue == $language}}selected="selected"{{/if}}>{{tr}}language.{{$langue}}{{/tr}}</option>
       {{/foreach}}
       </select>
     </th>
@@ -95,9 +95,9 @@ Main.add(function () {
 				
         <tr>
           <th>Nom</th>
-          <th>Chaine</th>
-          <th>{{$language}}</th>
-          <th>Save</th>
+          <th>Chaîne</th>
+          <th>{{tr}}language.{{$language}}{{/tr}}</th>
+          <th>{{tr}}Save{{/tr}}</th>
         </tr>
         
         <tr>
