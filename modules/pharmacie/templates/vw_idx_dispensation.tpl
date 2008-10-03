@@ -34,13 +34,13 @@ updateFieldsMedicament = function(selected) {
 
 // Autocomplete des medicaments
 Main.add(function () {
-  oFormDispensation = getForm('dispensation-urgence');
-  
+  oFormDispensation = getForm('dispensation-urgence', true);
+
   urlAuto = new Url();
   urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
   urlAuto.addParam("produit_max", 40);
 
-  urlAuto.autoComplete(oFormDispensation.name+"_produit", "produit_auto_complete", {
+  urlAuto.autoComplete(oFormDispensation.produit, "produit_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsMedicament,
     callback: 
