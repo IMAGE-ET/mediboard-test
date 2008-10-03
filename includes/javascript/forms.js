@@ -546,11 +546,11 @@ function NumericField (form, element, step, min, max, showPlus, decimals) {
     this.decimals = (decimals != undefined) ? decimals : null;
     this.showPlus = showPlus | null;
     var that = this;
+    prepareForm(form);
     Main.add(function () {
-      prepareForm(form);
-      var field;
-	    if ($(that.sField).disabled && (field = $("img_"+that.sField))) {
-	      field.hide();
+      var img, field;
+	    if ((field = $(that.sField)) && field.disabled && (img = $("img_"+that.sField))) {
+	      img.hide();
 	    }
     });
 }
