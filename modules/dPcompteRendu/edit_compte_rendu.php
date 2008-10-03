@@ -41,23 +41,46 @@ else {
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {
     $compte_rendu->loadComponents();
     
-    $header = $compte_rendu->_ref_header;
+		$header = $compte_rendu->_ref_header;
+    $footer = $compte_rendu->_ref_footer;
+		
+		$style = "
+			<style type='text/css'>
+			div.header: {
+				height: {$header->height}px;
+			}
+
+			div.footer {
+   			height: {$footer->height}px;
+			}";
+    
 		if ($header->_id) {
-		  $header->source = "<div class='header' style='height: {$header->height}px;'>$header->source</div>";
+		  $header->source = "<div class='header'>$header->source</div>";
 		  $header->height += 20;
 		  $compte_rendu->header_id = null;
 		}
     
-    $footer = $compte_rendu->_ref_footer;
 		if ($footer->_id) {
-      $footer->source = "<div class='footer' style='height: {$footer->height}px;'>$footer->source</div>";
+      $footer->source = "<div class='footer'>$footer->source</div>";
 		  $footer->height += 20;
-		  $compte_rendu->footer_id = null;
+      $compte_rendu->footer_id = null;
 		}
 		
-		$style = "<style type='text/css'>@media print { div.body { padding-top: {$header->height}px; padding-bottom: {$footer->height}px; } }'</style>";
-		$compte_rendu->source = "$style<div class='body'>$compte_rendu->source</div>";
-		$compte_rendu->source = $header->source . $footer->source . $compte_rendu->source;
+	  $style.= "
+			
+			@media print { 
+				div.body { 
+					padding-top: {$header->height}px; 
+				} 
+
+				hr.pageBreak { 
+					padding-top: {$header->height}px; 
+				} 
+			}
+			</style>";
+
+		$compte_rendu->source = "<div class='body'>$compte_rendu->source</div>";
+		$compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
   }
   
   // On fournit la cible

@@ -111,25 +111,9 @@ Main.add(function () {
         <th>Etat</th>
       </tr>
       {{foreach from=$listPlage item=_plage}}
-      {{assign var="pct" value=$_plage->_fill_rate}}
-      {{if $pct gt 100}}
-      {{assign var="pct" value=100}}
-      {{/if}}
-      {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
-      {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
-      {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
-      {{else}}{{assign var="backgroundClass" value="full"}}
-      {{/if}} 
       <tr {{if $_plage->_id == $plageconsult_id}}class="selected"{{/if}} id="plage-{{$_plage->_id}}">
         <td>
-          <div class="progressBar">
-            <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-            <div class="text">
-              <a href="#nowhere" onclick="PlageConsult.changePlage({{$_plage->_id}})">
-                {{$_plage->date|date_format:"%A %d"}}
-              </a>
-            </div>
-          </div>
+          {{include file=inc_plage_etat.tpl}}
         </td>
         <td class="text">
           <div class="mediuser" style="border-color: #{{$_plage->_ref_chir->_ref_function->color}};">

@@ -134,7 +134,6 @@ $locales['mod-admin-tab-edit_perms'] = '';
 $locales['mod-admin-tab-edit_prefs'] = 'User preferences';
 $locales['mod-admin-tab-vw_all_perms'] = '';
 $locales['mod-admin-tab-vw_edit_users'] = '';
-$locales['mod-dPrepas-tab-vw_planning_repas'] = '';
 $locales['CPermModule-msg-create'] = '';
 $locales['CPermModule-msg-delete'] = '';
 $locales['CPermModule-msg-modify'] = '';

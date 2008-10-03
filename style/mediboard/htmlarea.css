@@ -67,7 +67,7 @@ span.hilite {
 
 @media print {
 	.header, .footer {
-	  width: 98%;
+	  width: 100%;
 		position: fixed;
 	  overflow: hidden;
 		border: 0px solid #888;
@@ -85,10 +85,7 @@ span.hilite {
 	
   hr.pagebreak {
     border-style: solid;
-    border-top-color: #fff;
-    border-right-color: #fff;
-    border-bottom-color: #fff;
-    border-left-color: #fff;
+    border-color: #fff;
     page-break-before:always;
   }
 }

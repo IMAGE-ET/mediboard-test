@@ -37,6 +37,10 @@ class CPlageconsult extends CMbObject {
   var $_total     = null;
   var $_fill_rate = null;
 
+  // Filter fields
+  var $_date_min = null;
+  var $_date_max = null;
+  
   // Object References
   var $_ref_chir          = null;
   var $_ref_consultations = null;
@@ -73,7 +77,12 @@ class CPlageconsult extends CMbObject {
       "_affected"  => "",
       "_total"     => "",
       "_fill_rate" => "",
+      
+      // Filter fields
+      "_date_min"  => "date",
+      "_date_max"  => "date moreThan|_date_min",
     );
+
     return array_merge($parentSpecs, $specs);
   }
   
@@ -147,6 +156,8 @@ class CPlageconsult extends CMbObject {
  * returns collision message, null for no collision
  */
   function hasCollisions() {
+    $this->completeField("date");
+    
     // Get all other plages the same day
     $where["chir_id"]         = "= '$this->chir_id'";
     $where["date"]            = "= '$this->date'";
@@ -156,6 +167,8 @@ class CPlageconsult extends CMbObject {
     
     $msg = null;
     
+    $this->completeField("debut");
+    $this->completeField("fin");
     foreach ($plages as $plage) {
       if (($plage->debut <  $this->fin   and $plage->fin >  $this->fin  )
         or($plage->debut <  $this->debut and $plage->fin >  $this->debut)
@@ -186,7 +199,7 @@ class CPlageconsult extends CMbObject {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
-
+    
     if ($this->plageconsult_id) {
       if (!$this->checkFrequence()) {
         return "Vous ne pouvez pas modifier la fréquence de cette plage";

@@ -1485,4 +1485,5 @@ $locales['mod-dPcabinet-tab-vw_journee'] = '';
 $locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie'] = '';
 $locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie-print_fiche'] = '';
 $locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie-print_fiche1'] = '';
+$locales['mod-dPcabinet-tab-transfert_plageconsult'] = '';
 ?>
