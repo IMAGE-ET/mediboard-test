@@ -53,19 +53,18 @@ if($DC_search){
 // --- RECHERCHE PRODUITS ---
 // Par default, recherche par nom
 $type_recherche = mbGetValueFromGet("type_recherche", "nom");
+
 // Texte recherché (nom, cip, ucd)
 $dialog = mbGetValueFromGet("dialog");
+
 // Recherche des elements supprimés
 $supprime = mbGetValueFromGet("supprime", 0);
+
 // Parametres de recherche
-if($type_recherche == "nom") {
-  $param_recherche = mbGetValueFromGet("position_text", "debut");
-}
-if($type_recherche == "cip") {
-  $param_recherche = "1";
-}
-if($type_recherche == "ucd") {
-  $param_recherche = "2";
+switch($type_recherche) {
+	case "nom": $param_recherche = mbGetValueFromGet("position_text", "debut"); break;
+	case "cip": $param_recherche = '1'; break;
+	case "ucd": $param_recherche = '2'; break;
 }
 $produits = array();
 

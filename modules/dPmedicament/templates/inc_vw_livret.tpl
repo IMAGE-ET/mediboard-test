@@ -8,8 +8,6 @@
 	}
 </script>
 
-
-
 <form action="?m=dPmedicament" method="post" name="addProduit" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
@@ -22,9 +20,11 @@
 <div style="font-size: 1.1em; text-align: center">
 {{foreach from=$tabLettre item=_lettre}}
   <a href="#" onclick="Livret.reloadAlpha('{{$_lettre}}')">
-   {{if $lettre == $_lettre}}<strong>[{{/if}}
-   {{$_lettre}}
-   {{if $lettre == $_lettre}}]</strong>{{/if}}
+    {{if $lettre == $_lettre}}
+      <strong>[{{$_lettre}}]</strong>
+    {{else}}
+      {{$_lettre}}
+    {{/if}}
   </a>
 {{/foreach}}
 </div>
@@ -61,12 +61,8 @@
         {{$produit_livret->_ref_produit->libelle}}
       </a>
     </td>
-    <td>
-      {{$produit_livret->_ref_produit->code_cip}}
-    </td>
-    <td>
-      {{$produit_livret->_ref_produit->code_ucd}}
-    </td>
+    <td>{{$produit_livret->_ref_produit->code_cip}}</td>
+    <td>{{$produit_livret->_ref_produit->code_ucd}}</td>
     <td>
       {{if $produit_livret->prix_hopital}}
         {{$produit_livret->prix_hopital}}&euro;
@@ -77,18 +73,10 @@
         {{$produit_livret->prix_ville}}&euro;
       {{/if}}
     </td>
-    <td>
-      {{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}
-    </td>
-    <td>
-      {{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}
-    </td>
-    <td>
-      {{$produit_livret->code_interne}}
-    </td> 
-    <td class="text">
-      {{$produit_livret->commentaire}}
-    </td> 
+    <td>{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>
+    <td>{{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}</td>
+    <td>{{$produit_livret->code_interne}}</td> 
+    <td class="text">{{$produit_livret->commentaire}}</td> 
   </tr>
   {{/foreach}}
 </table>

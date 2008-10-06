@@ -7,10 +7,6 @@
  *  @author Alexis Granger
  */
 
-
-
-global $g;
-
 $lettre = mbGetValueFromGet("lettre");
 
 $listProduits = array();
@@ -26,11 +22,13 @@ $tabLettre = range('A', 'Z');
 // --- Chargement de l'arbre ATC ---
 $codeATC = mbGetValueFromGet("codeATC");
 $classeATC = new CBcbClasseATC();
-// Nom du chapitre selectionne
-$chapitreATC = $classeATC->getLibelle($codeATC);
-// Chargements des sous chapitres
-$arbreATC = $classeATC->loadArbre($codeATC);
-
+if ($codeATC) {
+	$chapitreATC = $classeATC->getLibelle($codeATC); // Nom du chapitre selectionné
+	$arbreATC = $classeATC->loadArbre($codeATC); // Chargements des sous chapitres
+} else {
+	$chapitreATC = '';
+	$arbreATC = array();
+}
 
 // Création du template
 $smarty = new CSmartyDP();

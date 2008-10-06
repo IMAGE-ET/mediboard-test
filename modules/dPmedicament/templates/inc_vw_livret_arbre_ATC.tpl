@@ -7,7 +7,6 @@ if(Livret.urlEditProd) {
 
 </script>
 
-
 {{if !$codeATC}}
 <div class="big-info">
   Veuillez sélectionner la classe ATC dans laquelle vous désirez rechercher des produits
@@ -75,12 +74,8 @@ if(Livret.urlEditProd) {
         {{$produit->_ref_produit->libelle}}
       </a>
     </td>
-    <td>
-      {{$produit->code_cip}}
-    </td>
-    <td>
-      {{$produit->_ref_produit->code_ucd}}
-    </td>
+    <td>{{$produit->code_cip}}</td>
+    <td>{{$produit->_ref_produit->code_ucd}}</td>
     <td>
       {{if $produit->prix_hopital}}
         {{$produit->prix_hopital}}&euro;
@@ -91,18 +86,10 @@ if(Livret.urlEditProd) {
         {{$produit->prix_ville}}&euro;
       {{/if}}
     </td>
-    <td>
-      {{$produit->date_prix_hopital|date_format:"%d/%m/%Y"}}
-    </td>
-    <td>
-      {{$produit->date_prix_ville|date_format:"%d/%m/%Y"}}
-    </td>
-    <td>
-      {{$produit->code_interne}}
-    </td> 
-    <td>
-      {{$produit->commentaire}}
-    </td>   
+    <td>{{$produit->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>
+    <td>{{$produit->date_prix_ville|date_format:"%d/%m/%Y"}}</td>
+    <td>{{$produit->code_interne}}</td> 
+    <td>{{$produit->commentaire}}</td>   
   </tr>
   {{/foreach}}
 </table>

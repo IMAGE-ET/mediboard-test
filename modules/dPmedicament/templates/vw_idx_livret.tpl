@@ -96,9 +96,7 @@ function printLivret(){
 <table class="form">
    <tr>
      <th class="title">
-       <div style="float: right">
-       <button type="button" class="print" onclick="printLivret()">Imprimer le livret</button>
-       </div>
+       <button style="float: right" type="button" class="print" onclick="printLivret()">Imprimer le livret</button>
        Livret Thérapeutique
      </th>
    </tr>
@@ -147,5 +145,5 @@ function printLivret(){
 
 <!-- Affichage des produits du livret en fonction de la classe ATC -->
 <div id="ATC" style="display: none;">
-{{include file="inc_vw_livret_arbre_ATC.tpl"}}
+  {{include file="inc_vw_livret_arbre_ATC.tpl"}}
 </div>

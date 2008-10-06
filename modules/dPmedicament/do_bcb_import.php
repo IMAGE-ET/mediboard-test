@@ -22,9 +22,9 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
     for ($c = 0; $c < $num; $c++) {
       $data[$c] = trim($data[$c]);
     }
-
-    $cip = str_replace(array('.', '-'), '', $data[0]);
     
+    $cip = ereg_replace('[\s\.\\'.chr(160).'A-z.-]', '', $data[0]); // 160: espace insécable
+
     // if there is more than 1 column and the first isn't empty
     if ($num > 0 && ($cip != '') && is_numeric($cip) && (strlen($cip) == 7)) {
       $livret = new CBcbProduitLivretTherapeutique();
