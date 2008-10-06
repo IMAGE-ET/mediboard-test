@@ -221,44 +221,44 @@ class CFicheEi extends CMbObject {
     
     switch ($etat) {
       case "AUTHOR":
-        $where["user_id"] = "= '$user_id'";
+        $where["fiches_ei.user_id"] = "= '$user_id'";
         break;
       case "VALID_FICHE":
-        $where["date_validation"] = " IS NULL";
+        $where["fiches_ei.date_validation"] = " IS NULL";
         break;
       case "ATT_CS":
-        $where["date_validation"]         = " IS NOT NULL";
-        $where["service_date_validation"] = " IS NULL";
+        $where["fiches_ei.date_validation"]         = " IS NOT NULL";
+        $where["fiches_ei.service_date_validation"] = " IS NULL";
         if($user_id){
-          $where["service_valid_user_id"]   = "= '$user_id'";
+          $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
         }
         break;
       case "ATT_QUALITE":
-        $where["service_date_validation"] = " IS NOT NULL";
-        $where["qualite_date_validation"] = " IS NULL";
+        $where["fiches_ei.service_date_validation"] = " IS NOT NULL";
+        $where["fiches_ei.qualite_date_validation"] = " IS NULL";
         if($user_id){
-          $where["service_valid_user_id"]   = "= '$user_id'";
+          $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
         }
         break;
       case "ATT_VERIF":
-        $where["qualite_date_validation"]   = " IS NOT NULL";
-        $where["qualite_date_verification"] = " IS NULL";
-        $where["qualite_date_controle"]     = " IS NULL";
+        $where["fiches_ei.qualite_date_validation"]   = " IS NOT NULL";
+        $where["fiches_ei.qualite_date_verification"] = " IS NULL";
+        $where["fiches_ei.qualite_date_controle"]     = " IS NULL";
         break;
       case "ATT_CTRL":
-        $where["qualite_date_verification"] = " IS NOT NULL";
-        $where["qualite_date_controle"]     = " IS NULL";
+        $where["fiches_ei.qualite_date_verification"] = " IS NOT NULL";
+        $where["fiches_ei.qualite_date_controle"]     = " IS NULL";
         break;
       case "ALL_TERM":
         //
         if($user_id){
-          $where["service_valid_user_id"]   = "= '$user_id'";
-          $where["qualite_date_validation"] = " IS NOT NULL";
+          $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
+          $where["fiches_ei.qualite_date_validation"] = " IS NOT NULL";
         }else{
           if($where_termine){
             $where = array_merge($where,$where_termine);
           }
-          $where["qualite_date_controle"]     = " IS NOT NULL";
+          $where["fiches_ei.qualite_date_controle"]     = " IS NOT NULL";
         }
         $limit = "0, 100";
         break;
@@ -266,7 +266,7 @@ class CFicheEi extends CMbObject {
         $where["annulee"] = "= '1'";
         break;
     }
-    $order = "date_incident DESC";
+    $order = "fiches_ei.date_incident DESC";
     $listFiches = new CFicheEi;
     $listFiches = $listFiches->loadGroupList($where,$order,$limit);
     foreach($listFiches as $key=>$value){
