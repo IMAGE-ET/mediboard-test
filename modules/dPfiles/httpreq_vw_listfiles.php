@@ -62,6 +62,12 @@ if($selClass && $selKey){
   else if ($selClass == 'CConsultAnesth') {
     $praticienId = $object->_ref_consultation->_praticien_id;
   }
+  else if ($selClass == 'CSejour') {
+    $praticienId = $object->praticien_id;
+  }
+  else if ($selClass == 'COperation') {
+    $praticienId = $object->chir_id;
+  }
   else if ($userSel->isPraticien()) {
     $praticienId = $userSel->_id;
   }

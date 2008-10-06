@@ -98,7 +98,7 @@ var Document = {
   },
   
   refresh: function(div) {
-    var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d+) mode-(\w+)/);
+    var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
     
 	  var url = new Url;
 	  url.setModuleAction("dPcompteRendu", "httpreq_widget_documents");
