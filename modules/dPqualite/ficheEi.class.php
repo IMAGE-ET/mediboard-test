@@ -201,6 +201,19 @@ class CFicheEi extends CMbObject {
     return CAppUI::tr("CFicheEi-msg-canDelete");
   }
   
+  /**
+   * Load list overlay for current group
+   */
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+		$ljoin["users_mediboard"] = "users_mediboard.user_id = fiches_ei.user_id";
+		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    // Filtre sur l'établissement
+		$g = CGroups::loadCurrent();
+		$where["functions_mediboard.group_id"] = "= '$g->_id'";
+    
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
+  
   function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0){
     $where = array();
     $where["annulee"] = "= '$annule'";
@@ -255,7 +268,7 @@ class CFicheEi extends CMbObject {
     }
     $order = "date_incident DESC";
     $listFiches = new CFicheEi;
-    $listFiches = $listFiches->loadList($where,$order,$limit);
+    $listFiches = $listFiches->loadGroupList($where,$order,$limit);
     foreach($listFiches as $key=>$value){
       $listFiches[$key]->loadRefsFwd();
     }
