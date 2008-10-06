@@ -21,7 +21,6 @@ $module->registerTab("vw_compta"        , null , TAB_EDIT);
 $module->registerTab("vw_edit_tarifs"   , null , TAB_EDIT);
 $module->registerTab("vw_categories"    , null , TAB_EDIT);
 $module->registerTab("vw_banques"       , null , TAB_ADMIN);
-$module->registerTab("transfert_plageconsult"       , null , TAB_ADMIN);
 
 if (@$AppUI->user_prefs["GestionFSE"]) {
   $module->registerTab("vw_intermax", null , TAB_EDIT);
