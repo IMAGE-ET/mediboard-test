@@ -97,7 +97,6 @@
         {{if array_key_exists($unite_prise, $prescription->_intitule_prise.$suffixe.$line_id)}}
           {{foreach from=$prescription->_intitule_prise.$suffixe.$line_id.$unite_prise item=_prise}}
               <div style="white-space: nowrap;">
-              &bull;
               {{$_prise}}
             	{{if $line->_class_name == "CPrescriptionLineMedicament" && $unite_prise == $line->_ref_produit->libelle_presentation}}
 					      ({{$line->_ref_produit->libelle_unite_presentation}})
