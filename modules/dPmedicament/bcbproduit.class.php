@@ -260,7 +260,7 @@ class CBcbProduit extends CBcbObject {
     global $g;
     
   	$this->distObj->Specialite = 1;
-    $this->distObj->Supprime = 0;
+    $this->distObj->Supprime = 1;
     if($livretTherapeutique){
       $this->distObj->LivretTherapeutique = $g;  
     }
