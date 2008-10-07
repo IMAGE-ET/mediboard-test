@@ -65,7 +65,7 @@
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line_class}}', object_id: {{$line->_id}} } })">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
-	        {{$line->_view}}
+	        {{$line->_ucd_view}}
 	        {{if $line->_traitement}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}

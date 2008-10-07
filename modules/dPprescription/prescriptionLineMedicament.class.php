@@ -32,6 +32,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_specif_prise    = null;
   var $_traitement      = null;
   var $_count_substitution_lines = null;
+  var $_ucd_view        = null;
   
   // Object References
   var $_ref_prescription = null;
@@ -116,6 +117,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
+    $this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
+    
     $this->_duree_prise = "";
     
     if ($this->fin){
