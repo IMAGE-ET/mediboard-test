@@ -112,7 +112,6 @@ submitAddComment = function (object_class, object_id, commentaire) {
   return onSubmitFormAjax(oForm);
 }
 
-
 /***************/
 
 // Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne

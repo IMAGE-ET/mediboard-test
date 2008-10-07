@@ -1,9 +1,28 @@
+<script type="text/javascript">
+	submitAddCommentSubst = function (object_class, object_id, commentaire) {
+	  var oForm = getForm("addComment-"+object_class);
+	  prepareForm(oForm);
+	  oForm.dosql.value = "do_prescription_line_medicament_aed";
+	  oForm.prescription_line_medicament_id.value = object_id;
+	  oForm.commentaire.value = commentaire;
+	  submitFormAjax(oForm, 'systemMsg');
+	}
+</script>
+
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
 
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
+
+<form name="addComment-CPrescriptionLineMedicament" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="commentaire" value="" />
+</form>
 
 <!-- Select de moments unitaire -->
 <form name="moment_unitaire">

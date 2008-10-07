@@ -74,8 +74,10 @@ selectChap = function(name_chap, oField){
 	               <strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong>  
 	             </td>
 	             {{foreach from=$categories_by_chap item=categorie}}
-	               <td class="text">
+	               <td style="white-space: nowrap; float: left; width: 10em;">
+	                 <label title="{{$categorie->_view}}">
 	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="changeBox(this, oCatField)"/> {{$categorie->_view}}
+	                 </label>
 	               </td>
 	             {{/foreach}}
 	           </tr>

@@ -124,7 +124,6 @@ foreach($prescriptions as $_prescription){
               $prise->load($unite_prise);
               $unite_prise = $prise->unite_prise;
             }
-            
             // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
             if($patient->_ref_constantes_medicales->poids){
               $unite_prise = str_replace('/kg', '', $unite_prise);
@@ -162,7 +161,12 @@ foreach($list_lines as $_lines_by_type){
     $type = ($curr_line->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
     if($curr_line->_administrations){
 	    foreach($curr_line->_administrations as $unite_prise => $lines){
-	      // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
+	      if(is_numeric($unite_prise)){
+          $prise = new CPrisePosologie();
+          $prise->load($unite_prise);
+          $unite_prise = $prise->unite_prise;
+			  }        
+        // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
         if($patient->_ref_constantes_medicales->poids){
           $unite_prise = str_replace('/kg', '', $unite_prise);
         }
