@@ -443,7 +443,8 @@ class CPatient extends CMbObject {
   
     $this->evalAge();
     
-    if ($this->_age != "??" && $this->_age <= 15){
+    // Attention 0 != "??" est faux !
+    if ($this->_age !== "??" && $this->_age <= 15) {
       $this->_shortview = "Enf.";
       if($this->sexe == "m"){
         $this->_article = "le jeune";
@@ -451,20 +452,23 @@ class CPatient extends CMbObject {
       if($this->sexe == "j"){
         $this->_article = "la jeune";
       }
-    } elseif($this->sexe == "m"){
+    } 
+    elseif($this->sexe == "m"){
       $this->_shortview = "M.";
       $this->_article = "Monsieur";
-    } elseif($this->sexe == "f"){
+    } 
+    elseif($this->sexe == "f"){
       $this->_shortview = "Mme.";
       $this->_article = "Madame";
-    } else { 
+    } 
+    else { 
       $this->_shortview = "Mlle.";
       $this->_article = "Mademoiselle";
     }  
       
     $this->_view     = $this->_shortview." $this->nom $this->prenom";
     $this->_longview = $this->_article." $this->nom $this->prenom";
-    
+        
     // Navigation fields
     global $AppUI;
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[$AppUI->user_prefs["DossierCabinet"]] . $this->_id;
@@ -944,28 +948,6 @@ class CPatient extends CMbObject {
     return($testNom && $testPrenom);
   }
   
-  /**
-   * DEPRECATED, TO BE REMOVED 
-   * @return array[CPatient] Array of siblings
-   */
-  function getSiblingsOld() {
-  	$where = array();
-    
-  	CSQLDataSource::$trace = true;
-    $wherePairs[] = "(nom = %1 AND prenom = %2)";
-    if ($this->naissance != "0000-00-00") {
-      $wherePairs[] = "(nom = %1 AND naissance = %3)";
-      $wherePairs[] = "(prenom = %2 AND naissance = %3)";
-    }
-    
-    $where[] = $this->_spec->ds->prepare(join(" OR ", $wherePairs), $this->nom, $this->prenom, $this->naissance);
-    $siblings = $this->loadList($where);
-
-    CSQLDataSource::$trace = false;
-    unset($siblings[$this->_id]);
-    return $siblings;
-  }
-
   /**
    * Finds patient siblings with at least two exact matching traits out of 
    * nom, prenom, naissance
