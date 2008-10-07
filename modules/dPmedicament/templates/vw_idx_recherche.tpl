@@ -110,7 +110,7 @@ Main.add(function () {
     {{foreach from=$produits item="produit"}}
     <tr>
       <td>
-        {{if $dialog}}
+        {{if $dialog && !$produit->_supprime}}
         <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />
         {{/if}}
        
