@@ -92,7 +92,9 @@
   <small>
     {{if array_key_exists($line_id, $prescription->_intitule_prise.$suffixe)}}
       {{if is_numeric($unite_prise)}}
-        {{$prescription->_intitule_prise.$suffixe.$line_id.autre.$unite_prise}}</li>
+        <div style="white-space: nowrap;">
+        {{$prescription->_intitule_prise.$suffixe.$line_id.autre.$unite_prise}}
+        </div>
       {{else}}
         {{if array_key_exists($unite_prise, $prescription->_intitule_prise.$suffixe.$line_id)}}
           {{foreach from=$prescription->_intitule_prise.$suffixe.$line_id.$unite_prise item=_prise}}

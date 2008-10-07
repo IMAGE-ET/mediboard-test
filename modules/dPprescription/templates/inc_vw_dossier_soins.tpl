@@ -283,7 +283,7 @@ showBefore = function(){
 					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
 					     <th id="th-{{$_date}}">{{$_date|date_format:"%d/%m"}}</th>
 					    {{/foreach}}
-					    <th rowspan="2" colspan="2">Signatures<br /> Prat. / Pharm.</th>
+					    <th colspan="2">Sign.</th>
 					  </tr>
 					  <tr>
 					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
@@ -291,6 +291,8 @@ showBefore = function(){
 						    <th id="{{$_date}} {{$_hour}}:00:00" class="th_hours_{{$_date}}">{{$_hour}}h</th>          
 						  {{/foreach}} 
 					    {{/foreach}}
+					    <th>Dr</th>
+					    <th>Ph</th>
 					  </tr>
 			    {{/if}}
 			
