@@ -203,9 +203,22 @@ showBefore = function(){
     <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
   <tr>
-    <td>Poids: {{$poids}} kg</td>
-    <td>Age: {{$patient->_age}}</td>
-    <td>Taille: {{$patient->_ref_constantes_medicales->taille}}</td>
+    <td>Poids:
+      {{if $poids}}
+        {{$poids}} kg
+      {{else}}
+        ??
+      {{/if}}
+    </td>
+    <td>Age: {{$patient->_age}} ans</td>
+    <td>
+      Taille:
+      {{if $patient->_ref_constantes_medicales->taille}}
+        {{$patient->_ref_constantes_medicales->taille}} cm
+      {{else}}
+        ??
+      {{/if}}
+    </td>
   </tr>
 </table>
 

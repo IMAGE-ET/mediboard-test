@@ -115,6 +115,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
  
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
+    $this->_commercial_view = $this->_ref_produit->nom_commercial;
     $this->_duree_prise = "";
     
     if ($this->fin){

@@ -53,7 +53,7 @@ class CBcbProduit extends CBcbObject {
   function load($code_cip, $full_mode="1"){
     $this->distObj->SearchInfo($code_cip);
     
-    $infoProduit = $this->distObj->DataInfo;  
+    $infoProduit = $this->distObj->DataInfo;
 
     if($infoProduit->Charge == 1){
       $this->code_cip        = $infoProduit->Code_CIP;
@@ -93,7 +93,7 @@ class CBcbProduit extends CBcbObject {
 	   
 	    // Produit référent ?
 	    $this->getReferent();
-     }   
+     }
      
      
   }

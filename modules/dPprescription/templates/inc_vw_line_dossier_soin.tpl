@@ -65,7 +65,7 @@
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line_class}}', object_id: {{$line->_id}} } })">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
-	        {{$line->_ref_produit->libelle}}
+	        {{$line->_view}}
 	        {{if $line->_traitement}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}
@@ -88,27 +88,26 @@
     {{/if}}
 	</td>
   {{/if}}
-  <td class="text">   
+  <td class="text">
+  <small>
     {{if array_key_exists($line_id, $prescription->_intitule_prise.$suffixe)}}
       {{if is_numeric($unite_prise)}}
-        <ul>
-          <li>{{$prescription->_intitule_prise.$suffixe.$line_id.autre.$unite_prise}}</li>
-        </ul>
+        {{$prescription->_intitule_prise.$suffixe.$line_id.autre.$unite_prise}}</li>
       {{else}}
-        <ul>
         {{if array_key_exists($unite_prise, $prescription->_intitule_prise.$suffixe.$line_id)}}
           {{foreach from=$prescription->_intitule_prise.$suffixe.$line_id.$unite_prise item=_prise}}
-            <li>
+              <div style="white-space: nowrap;">
+              &bull;
               {{$_prise}}
             	{{if $line->_class_name == "CPrescriptionLineMedicament" && $unite_prise == $line->_ref_produit->libelle_presentation}}
 					      ({{$line->_ref_produit->libelle_unite_presentation}})
 					    {{/if}}
-            </li>
+					    </div>
           {{/foreach}}
         {{/if}}
-        </ul>
       {{/if}}
     {{/if}}
+    </small>
   </td>
   <!-- Affichage des heures de prises des medicaments -->			    
   {{foreach from=$tabHours item=_hours_by_date key=_date}}
