@@ -72,8 +72,6 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_view .= " ".$this->unite_prise;	
     }
     
-    $this->_short_view = $this->_view;
-    
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
       $this->_type = "moment";
@@ -81,8 +79,11 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_heures[] = $this->_ref_moment->heure;
     }
     
+    $this->_short_view = $this->_view;
+    
    if($this->nb_fois){
     	$this->_view .= " ".$this->nb_fois." fois";
+    	$this->_short_view .= " ".$this->nb_fois."X";
       $this->_type = "fois_par";
    }
    
@@ -95,13 +96,17 @@ class CPrisePosologie extends CMbMetaObject {
 
     if($this->unite_fois && !$this->nb_tous_les && !$this->moment_unitaire_id){
     	$this->_view .= " par ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
+    	$this->_short_view .= " / ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
+    	
     	$this->_unite = $this->unite_fois;
     }
     
     if($this->nb_tous_les && $this->unite_tous_les){
     	$this->_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
+    	$this->_short_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
     	if($this->decalage_prise){
     		$this->_view .= "(J+$this->decalage_prise)";
+    		$this->_short_view .= "(J+$this->decalage_prise)";
     	}
     	$this->_type = "tous_les";
     	$this->_unite = $this->unite_tous_les;

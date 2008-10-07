@@ -596,7 +596,7 @@ class CPrescriptionLine extends CMbObject {
  	  $prescription->_lines[$type][$this->_ref_produit->_ref_ATC_2_code][$this->_id][$key_tab] = $this;
  	}
 	$prescription->_prises[$type][$this->_id][$key_tab][] = $_prise;
-	$prescription->_intitule_prise[$type][$this->_id][$key_prise][$_prise->_id] = $_prise->_view;   
+	$prescription->_intitule_prise[$type][$this->_id][$key_prise][$_prise->_id] = $_prise->_short_view;   
     }    
   }
 }
