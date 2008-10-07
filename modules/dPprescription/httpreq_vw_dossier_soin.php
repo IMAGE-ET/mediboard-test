@@ -78,16 +78,10 @@ foreach($list_hours as &$hour){
   $heures[$hour] = $last_hour_in_array;
 }
 
-if($prescription->_id){	
-  $types = array("med", "elt");
- 	foreach($types as $type){
- 	  $prescription->_prises[$type] = array();
- 	  $prescription->_lines[$type] = array();
- 	  $prescription->_intitule_prise[$type] = array();
- 	}
+if($prescription->_id){
 
 	// Chargement des lignes
-	$prescription->loadRefsLinesMed("1","1");
+	$prescription->loadRefsLinesMedByCat("1","1");
 	
 	foreach($prescription->_ref_prescription_lines as &$_line_med){
 	  if(!$_line_med->countBackRefs("administration")){
@@ -111,7 +105,7 @@ if($prescription->_id){
 		 
 	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
 	if($traitement_personnel->_id){
-	  $traitement_personnel->loadRefsLinesMed("1","1");
+	  $traitement_personnel->loadRefsLinesMedByCat("1","1");
 	}
 	  	  
 	// Calcul du plan de soin pour la journée $date
@@ -121,13 +115,17 @@ if($prescription->_id){
     }
     $prescription->calculPlanSoin($_date, 0, $heures);
   }
-}	
+}
 
 // Calcul du rowspan pour les medicaments
-$prescription->_nb_produit_by_cat["med"] = 0;
-foreach($prescription->_lines["med"] as $_line){
-  foreach($_line as $line_med){
-    $prescription->_nb_produit_by_cat["med"]++;
+foreach($prescription->_lines["med"] as $_code_ATC => $_cat_ATC){
+  if(!isset($this->_nb_produit_by_cat[$_code_ATC])){
+    $prescription->_nb_produit_by_cat[$_code_ATC] = 0;
+  }
+  foreach($_cat_ATC as $_line) {
+    foreach($_line as $line_med){
+      $prescription->_nb_produit_by_cat[$_code_ATC]++;
+    }
   }
 }
 

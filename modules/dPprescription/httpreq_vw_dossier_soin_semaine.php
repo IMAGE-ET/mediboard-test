@@ -52,10 +52,14 @@ if($prescription_id){
 }
 
 // Calcul du rowspan pour les medicaments
-$prescription->_nb_produit_by_cat["med"] = 0;
-foreach($prescription->_lines["med"] as $_line){
-  foreach($_line as $line_med){
-    $prescription->_nb_produit_by_cat["med"]++;
+foreach($prescription->_lines["med"] as $_code_ATC => $_cat_ATC){
+  if(!isset($this->_nb_produit_by_cat[$_code_ATC])){
+    $prescription->_nb_produit_by_cat[$_code_ATC] = 0;
+  }
+  foreach($_cat_ATC as $_line) {
+    foreach($_line as $line_med){
+      $prescription->_nb_produit_by_cat[$_code_ATC]++;
+    }
   }
 }
 

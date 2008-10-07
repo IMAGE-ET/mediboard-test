@@ -7,8 +7,8 @@
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
       <!-- Cas d'une ligne de medicament -->
-      <th rowspan="{{$prescription->_nb_produit_by_cat.$type}}">
-        Medicaments
+      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type}}">
+        {{$line->_ref_produit->_ref_ATC_2_libelle}}
       </th>
     {{else}}
         <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
@@ -60,7 +60,7 @@
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line_class}}', object_id: {{$line->_id}} } })">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
-	        {{$line->_ref_produit->libelle}}       
+	        {{$line->_ref_produit->libelle}}
 	        {{if $line->_traitement}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}

@@ -283,17 +283,19 @@ showBefore = function(){
 			
 				  <!-- Affichage des medicaments -->
 				  <tbody id="_med" style="display: none;">
-				  {{foreach from=$lines.med item=_line name="foreach_med"}}
+				  {{foreach from=$lines.med item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
+				  {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
 				    {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
 					  {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
 					            line=$line_med
 					            nodebug=true
 					            first_foreach=foreach_med
 					            last_foreach=foreach_line
-					            type=med
+					            type=$_key_cat_ATC
 					            suffixe=med
 					            nb_line=$_line|@count
-					            dosql=do_prescription_line_medicament_aed}}	         
+					            dosql=do_prescription_line_medicament_aed}}
+					{{/foreach}}
 					{{/foreach}} 		 
 				  {{/foreach}}
 			    </tbody>

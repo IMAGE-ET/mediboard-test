@@ -71,7 +71,8 @@ Main.add(function () {
 	
 				  <!-- Affichage des medicaments -->
 				  <tbody id="plan_med" style="display: none;">
-				  {{foreach from=$prescription->_lines.med item=lines_unite_prise name="foreach_line"}}
+				  {{foreach from=$prescription->_lines.med key=name_cat item=lines_unite_prise_cat name="foreach_line_cat"}}
+				  {{foreach from=$lines_unite_prise_cat item=lines_unite_prise name="foreach_line"}}
 				    {{assign var=prescription_id value=$prescription->_id}}
 				    {{foreach from=$lines_unite_prise key=unite_prise item=line_med name="foreach_med"}}
 				      <!-- Si l'unite de prise est bien exprimé en format texte et pas en identifiant de prise -->
@@ -85,6 +86,7 @@ Main.add(function () {
 				                  last_foreach=foreach_line}}    
 					    {{/if}}
 				    {{/foreach}}
+				  {{/foreach}}
 				  {{/foreach}}
 				  </tbody>
 	  

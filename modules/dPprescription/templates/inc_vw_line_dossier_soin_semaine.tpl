@@ -4,7 +4,7 @@
 <tr>
    {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
 	   {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	        <th rowspan="{{$prescription->_nb_produit_by_cat.med}}">Médicaments</th>
+       <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}">{{$line->_ref_produit->_ref_ATC_2_libelle}}</th>
 	   {{else}}
 	     <th rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}">{{$categorie->_view}}</th>
 	   {{/if}}

@@ -595,7 +595,6 @@ class CPrescription extends CMbObject {
   	return $historique;
   }
   
-  
   /*
    * Chargement des lignes de prescription de médicament
    */
@@ -618,6 +617,24 @@ class CPrescription extends CMbObject {
     
     foreach($this->_ref_prescription_lines as &$_line){
     	$_line->_ref_produit->loadRefPosologies();
+    }
+  }
+  
+  
+  /*
+   * Chargement des lignes de prescription de médicament par catégorie ATC
+   */
+  
+  function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0) {
+    $this->loadRefsLinesMed($with_child, $with_subst);
+  	$this->_ref_prescription_lines_by_cat = array();
+    foreach($this->_ref_prescription_lines as &$_line){
+    	$_line->_ref_produit->loadClasseATC();
+    	$this->_ref_prescription_lines_by_cat[$_line->_ref_produit->_ref_ATC_2_code][$_line->_id] = $_line;
+    }
+    foreach($this->_ref_prescription_lines as &$_line){
+    	$_line->_ref_produit->loadClasseATC();
+    	$this->_ref_prescription_lines_by_cat[$_line->_ref_produit->_ref_ATC_2_code][$_line->_id] = $_line;
     }
   }
   
@@ -841,17 +858,18 @@ class CPrescription extends CMbObject {
 				    // Chargement des administrations
 						$_line_med->calculAdministrations($date, $mode_feuille_soin);
 						// Si aucune prise
-						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$_line_med->_id]["aucune_prise"]))){
-						  $this->_lines["med"][$_line_med->_id]["aucune_prise"] = $_line_med;
+            $_line_med->_ref_produit->loadClasseATC();
+						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$_line_med->_ref_produit->_ref_ATC_2_code][$_line_med->_id]["aucune_prise"]))){
+ 	            $this->_lines["med"][$_line_med->_ref_produit->_ref_ATC_2_code][$_line_med->_id]["aucune_prise"] = $_line_med;
 						  continue;
 						}
 						// Chargement des prises
 						$_line_med->calculPrises($this, $date, $heures, $mode_feuille_soin);
-							
+						
 						// Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 						if(!$mode_feuille_soin){
 						  if(@array_key_exists("aucune_prise", $_line_med->_administrations) && count($_line_med->_ref_prises) >= 1){
-						    $this->_lines["med"][$_line_med->_id]["aucune_prise"] = $_line_med;
+						    $this->_lines["med"][$_line_med->_ref_produit->_ref_ATC_2_code][$_line_med->_id]["aucune_prise"] = $_line_med;
 						  }
 						}
 				  }

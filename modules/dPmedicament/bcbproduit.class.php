@@ -297,7 +297,9 @@ class CBcbProduit extends CBcbObject {
   // Recherche des classes ATC d'un produit
   function loadClasseATC(){
     $classeATC = new CBcbClasseATC();
-    $this->_ref_classes_ATC = $classeATC->searchATCProduit($this->code_cip);  
+    $this->_ref_classes_ATC   = $classeATC->searchATCProduit($this->code_cip);
+    $this->_ref_ATC_2_code    = $this->_ref_classes_ATC[0]->classes[3]["code"];
+    $this->_ref_ATC_2_libelle = strtolower($this->_ref_classes_ATC[0]->classes[3]["libelle"]);
   }
   
   // Recherche des classes Therapeutique d'un produit
