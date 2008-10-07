@@ -213,7 +213,7 @@ viewBilanService = function(service_id, date){
   url.setModuleAction("dPhospi", "vw_bilan_service");
   url.addParam("service_id", service_id);
   url.addParam("date", date);
-  url.popup(700,500,"Bilan par service");
+  url.popup(800,500,"Bilan par service");
 }
 
 </script>

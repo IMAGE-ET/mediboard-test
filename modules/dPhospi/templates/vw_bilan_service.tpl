@@ -135,43 +135,55 @@ selectChap = function(name_chap, oField){
 
       </th>
     </tr>
-  	{{foreach from=$prises_by_dates key=date item=prises_by_hour}}
+  	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
 	  <tr>
-	  <td colspan="2"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+	    <td style="width: 20px; border:none;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+	    <td colspan="5">
+		    <table class="form">
+		      <tr>
+			      <th style="width: 250px; border:none;">Libellé</th> 
+					  <th style="width: 50px; border:none;">Prévues</th>
+					  <th style="width: 50px; border:none;">Effectuées</th>
+					  <th style="width: 150px; border:none;">Unité de prise</th>
+					  <th style="border:none;">Commentaire</th>
+					</tr>
+	      </table>
+      </td>
 	  </tr>
-	  
+
 	  <!-- Affichage des prises prevues -->
-	  {{foreach from=$prises_by_hour key=hour item=prises_by_type}}
+	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
 	  <tr>
 	    <td style="width: 20px">{{$hour}}h</td>
-        <td>
-          <table style="width: 100%">
-	        {{foreach from=$prises_by_type key=type item=prises}}
+      <td style="width: 100%">
+        <table class="form">
+		       {{foreach from=$prises_by_type key=type item=prises name="foreach_unite"}}
 			      {{foreach from=$prises key=line_id item=prises_by_unite}}
-	            {{assign var=line value=$lines.$type.$line_id}}
-	            {{foreach from=$prises_by_unite key=unite_prise item=quantite}}
-	            <tr>
-				        <td style="border: none; width: 200px">{{$line->_view}}</td>
-				        <td style="border: none; width: 20px">
-				          {{$quantite.prevu}}
-				        </td>
-				        <td style="border: none; width: 60px;">
-				        {{if $type=="med"}}
-				          {{$unite_prise}}
-				        {{else}}
-				          {{$line->_unite_prise}}
-				        {{/if}}
-				        </td>
-				        <td style="border: none">
-				          {{$line->commentaire}}
-				        </td>
-				      </tr>
+		           {{assign var=line value=$list_lines.$type.$line_id}}        
+		           {{foreach from=$prises_by_unite key=unite_prise item=quantite}}
+		           <tr>
+		             <td style="width: 250px; border:none;">{{$line->_view}}
+		             {{if array_key_exists('prevu', $quantite) && $quantite.prevu == $quantite.administre}}
+		             <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+		             {{/if}}
+		             </td> 
+				         <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+				         <td style="width: 50px; border:none; text-align: center;">{{if $quantite.administre}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+				         <td style="width: 150px; border:none;" class="text">
+				           {{if $type=="med"}}
+				            {{$line->_ref_produit->libelle_unite_presentation}}
+				           {{else}}
+				             {{$line->_unite_prise}}
+				           {{/if}}
+				         </td>
+				         <td class="text" style="border:none;">{{$line->commentaire}}</td>
+				       </tr>
 				      {{/foreach}}
 				    {{/foreach}} 
 		      {{/foreach}}  
-		    </table>
-		  </td>
-	    </tr>	   
+        </table>
+      </td>
+	  </tr>	   
 	  {{/foreach}}
 	{{/foreach}}
   {{/foreach}}

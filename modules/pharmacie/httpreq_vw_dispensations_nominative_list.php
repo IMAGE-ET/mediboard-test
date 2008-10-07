@@ -86,6 +86,7 @@ if($prescription_id){
 	        // Si poids
 	        if($poids = $patient->_ref_constantes_medicales->poids){
 	          $quantite *= $poids;
+            $unite_prise = str_replace('/kg', '', $unite_prise);
 	        }
 	        // Si le poids n'est pas renseigné, on remet l'ancienne unite
 					else {
@@ -127,7 +128,7 @@ if($prescription_id){
 	    $delivrances[$cip]->loadRefsFwd();
 	  }
 	  
-	  $medicament =& $medicaments[$cip]; 
+	  $medicament =& $medicaments[$cip];
 	  foreach($unites as $unite_prise => $quantite){
 	    if (!isset($medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation])) {
 	      $coef = 1;

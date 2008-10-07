@@ -37,23 +37,28 @@
     <td class="text" rowspan="{{$nb_line}}" style="text-align: center">
     {{if !$line->conditionnel}}
      -
-    {{/if}}
-    {{if !$line->_active}}
+    {{else}}
       <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="{{$dosql}}" />
         <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
-        <input type="hidden" name="debut" value="{{$real_date}}" />
-        <input type="hidden" name="time_debut" value="{{$real_time}}" />
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$line field="condition_active" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: 
-          function(){ refreshDossierSoin(); } });"}}
-        {{mb_label object=$line field="condition_active" typeEnum="checkbox"}}
-      </form>
-    {{/if}}
-    {{if $line->_active && $line->conditionnel}}
-    Actif
-    {{/if}}
+        
+        {{if !$line->condition_active}}
+	      <!-- Activation -->
+	      <input type="hidden" name="condition_active" value="1" />
+	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin(); } });">
+	        Activer
+	      </button>
+	      {{else}}
+ 				<!-- Activation -->
+	      <input type="hidden" name="condition_active" value="0" />
+	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin(); } });">
+	        Désactiver
+	      </button>
+	       {{/if}}
+       </form>
+		{{/if}}
     </td>
     <td class="text" rowspan="{{$nb_line}}">
 	  <div onclick="addCibleTransmission('{{$line_class}}', '{{$line->_id}}', '{{$line->_view}}');" 
@@ -93,7 +98,12 @@
         <ul>
         {{if array_key_exists($unite_prise, $prescription->_intitule_prise.$suffixe.$line_id)}}
           {{foreach from=$prescription->_intitule_prise.$suffixe.$line_id.$unite_prise item=_prise}}
-            <li>{{$_prise}}</li>
+            <li>
+              {{$_prise}}
+            	{{if $line->_class_name == "CPrescriptionLineMedicament" && $unite_prise == $line->_ref_produit->libelle_presentation}}
+					      ({{$line->_ref_produit->libelle_unite_presentation}})
+					    {{/if}}
+            </li>
           {{/foreach}}
         {{/if}}
         </ul>

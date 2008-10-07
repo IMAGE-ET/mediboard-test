@@ -15,10 +15,15 @@
     {{elseif $unite_prise != "aucune_prise"}}
   	  <ul>
 	  {{foreach from=$prescription->_intitule_prise.$suffixe.$line_id.$unite_prise item=_prise}}
-	    <li>{{$_prise}}</li>
+	    <li>{{$_prise}}
+	    {{if $line->_class_name == "CPrescriptionLineMedicament" && $unite_prise == $line->_ref_produit->libelle_presentation}}
+        ({{$line->_ref_produit->libelle_unite_presentation}})
+      {{/if}}
+    </li>
 	  {{/foreach}}
 	  </ul>
     {{/if}}
+    
   </td>
   <td class="text" style="text-align: center">
     {{if $line_class == "CPrescriptionLineMedicament" && $line->_traitement}}

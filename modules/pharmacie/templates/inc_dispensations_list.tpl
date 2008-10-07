@@ -51,7 +51,15 @@
         </td>
         
         {{if $smarty.foreach.dispensation.first}}
-        <td rowspan="{{$unites|@count}}" style="text-align: center" class="text">{{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})</td>
+        <td rowspan="{{$unites|@count}}" style="text-align: center" class="text">
+          {{if $medicament->nb_presentation == 1}}
+            {{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})
+          {{else}}
+            {{assign var=_nb value=$medicament->nb_unite_presentation*$medicament->nb_presentation}}
+             {{$quantites_reference.$code_cip.total}} / {{$_nb}} ({{$medicament->libelle_unite_presentation}})
+          {{/if}}
+        
+        </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
           {{if $mode_nominatif}}
             {{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}

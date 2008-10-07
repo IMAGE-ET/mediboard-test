@@ -98,20 +98,38 @@ class CBcbProduit extends CBcbObject {
      
   }
   
+  function loadLibellePresentation(){
+  	// Chargement du nombre de produit dans la presentation
+  	$ds = CSQLDataSource::get("bcb");
+    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
+    $_presentation = reset($ds->loadList($query));
+    $code_presentation_id = $_presentation['CODE_PRESENTATION'];
+
+    $query = "SELECT * FROM `IDENT_PRESENTATIONS` WHERE `CODE_PRESENTATION` = '$code_presentation_id';";
+    $libelle_presentation = reset($ds->loadList($query));
+    $this->libelle_presentation = $libelle_presentation['LIBELLE_PRESENTATION'];
+  }
   
-  function loadConditionnement(){
+  function loadUnitePresentation(){
   	// Chargement du nombre de produit dans la presentation
   	$ds = CSQLDataSource::get("bcb");
     $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
   	$conditionnement = reset($ds->loadList($query));
-  	$this->nb_unite_presentation = $conditionnement["NB_UNITE_DE_PRESENTATION"];
-  	
+   	$this->nb_unite_presentation = $conditionnement["NB_UNITE_DE_PRESENTATION"];
+    $this->nb_presentation = ($conditionnement["NB_PRESENTATION"]) ? $conditionnement["NB_PRESENTATION"] : "1";  	
+  
   	// Libelle de la presentation
   	$code_unite_presentation = $conditionnement['CODE_UNITE_DE_PRESENTATION'];
   	$query = "SELECT * FROM `IDENT_UNITES_DE_PRESENTATION` WHERE `CODE_UNITE_DE_PRESENTATION` = '$code_unite_presentation';";
   	$presentation = reset($ds->loadList($query));
   	$this->libelle_unite_presentation = $presentation["LIBELLE_UNITE_DE_PRESENTATION_PLURIEL"];
   	
+  	return $conditionnement;
+  }
+  
+  function loadConditionnement(){
+    $conditionnement = $this->loadUnitePresentation();
+    
   	// Dosages
   	$this->dosages = array();
   	$this->loadDosage($conditionnement["DOSAGEUNITE1"],$conditionnement["DOSAGEQTE1"]);
@@ -121,8 +139,6 @@ class CBcbProduit extends CBcbObject {
   	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE1"], $conditionnement["CODE_UNITE_DE_CONTENANCE1"], $conditionnement["NB_UP1"]);
   	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE2"], $conditionnement["CODE_UNITE_DE_CONTENANCE2"], $conditionnement["NB_UP2"]);
   	
-  	$this->nb_presentation = ($conditionnement["NB_PRESENTATION"]) ? $conditionnement["NB_PRESENTATION"] : "1";  	
-
     $this->loadLibelleConditionnement($conditionnement["CODE_CONDITIONNEMENT"]);    
   }
  

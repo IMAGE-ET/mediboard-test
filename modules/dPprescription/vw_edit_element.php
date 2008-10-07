@@ -13,7 +13,7 @@ $can->needsRead();
 
 $category_id = mbGetValueFromGetOrSession("category_id");
 $element_prescription_id = mbGetValueFromGetOrSession("element_prescription_id");
-
+$mode_duplication = mbGetValueFromGet("mode_duplication", "0");
 $elements_prescription = array();
 $element_prescription = new CElementPrescription();
 
@@ -34,13 +34,12 @@ $element_prescription->load($element_prescription_id);
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("mode_duplication", $mode_duplication);
 $smarty->assign("category", $category);
 $smarty->assign("category_id", $category_id);
 $smarty->assign("categories"   , $categories);
 $smarty->assign("element_prescription"     , $element_prescription);
 $smarty->assign("elements_prescription", $elements_prescription);
-
 $smarty->display("vw_edit_element.tpl");
 
 ?>

@@ -28,7 +28,7 @@ Main.add( function(){
 
   {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPrise$type$line_id}}
   {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
-  <select name="unite_prise">
+  <select name="unite_prise" style="width: 75px;">
     {{foreach from=$line->_unites_prise item=_unite}}
       <option value="{{$_unite}}">{{$_unite}}</option>
     {{/foreach}}

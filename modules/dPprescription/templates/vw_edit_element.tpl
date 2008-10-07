@@ -7,16 +7,18 @@
         <input type="hidden" name="element_prescription_id" value="" />
         <select name="category_id" onchange="this.form.submit()">
          <option value="">&mdash; Sélection d'une catégorie</option>
-         {{foreach from=$categories key=chapitre item=categories}}
+         {{foreach from=$categories key=chapitre item=_categories}}
+         {{$chapitre}}
          {{if $categories}}
          <optgroup label="{{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}">
-           {{foreach from=$categories item=_category}}
+           {{foreach from=$_categories item=_category}}
            <option value="{{$_category->_id}}" {{if $category_id == $_category->_id}}selected="selected"{{/if}}>{{$_category->nom}}</option>
            {{/foreach}}
          </optgroup>
          {{/if}}
          {{/foreach}}
        </select>
+
       </form>
     </td>
   </tr>
@@ -25,6 +27,9 @@
     <td>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0" class="buttonnew">
 			  Créer un élément
+			</a>
+			<a href="?m={{$m}}&amp;tab={{$tab}}&amp;mode_duplication=1" class="buttonnew">
+			  Dupliquer des elements
 			</a>
     </td>
   </tr>
@@ -52,6 +57,37 @@
 	      {{/foreach}}
        </table>
 		 </td>
+		 {{if $mode_duplication}}
+		 <td class="halfPane">
+		   <table class="form">
+		     <tr>
+		       <th class="category">Duplication</th>
+		     </tr>
+		     <tr>
+		       <td>
+		         <form name="duplicationElts" action="?" method="post">
+		           <input type="hidden" name="m" value="dPprescription" />
+		           <input type="hidden" name="dosql" value="do_duplicate_cat_elements_aed" />
+		           <input type="hidden" name="category_id" value="{{$category_id}}" />
+		           Dupliquer les elements de <strong>{{$category->_view}}</strong> vers
+		           <select name="category_dest_id">
+				         <option value="">&mdash; Sélection d'une catégorie</option>
+				         {{foreach from=$categories key=chapitre item=_categories}}
+				         {{if $categories}}
+				         <optgroup label="{{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}">
+				           {{foreach from=$_categories item=_category}}
+				           <option value="{{$_category->_id}}" {{if $_category->_id == $category->_id}}disabled="disabled"{{/if}}>{{$_category->nom}}</option>
+				           {{/foreach}}
+				         </optgroup>
+				         {{/if}}
+				         {{/foreach}}
+				       </select>
+				       <button type="button" class="submit" onclick="if(this.form.category_dest_id.value) { this.form.submit(); }">Valider</button>
+		       </td>
+		     </tr>
+		   </table>
+		 </td>
+		 {{else}}
 		 <td class="halfPane">
 		     <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 		     <input type="hidden" name="dosql" value="do_element_prescription_aed" />
@@ -98,7 +134,8 @@
 		       </tr>
 		     </table>
 		   </form> 
-      {{/if}}
-    </td>
+      </td>
+     {{/if}}
+  {{/if}}
   </tr>
 </table>

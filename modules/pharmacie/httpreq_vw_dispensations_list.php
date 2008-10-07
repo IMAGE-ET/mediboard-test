@@ -94,9 +94,11 @@ foreach($prescriptions as $_prescription){
           $patient->loadRefConstantesMedicales();
         }
         $poids = $patient->_ref_constantes_medicales->poids;
+        
         // Si poids
         if($poids){
           $quantite  *= $poids;
+          $unite_prise = str_replace('/kg', '', $unite_prise);
         }
         // Si le poids n'est pas renseigné, on remet l'ancienne unite
 				else {

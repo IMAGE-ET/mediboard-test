@@ -110,7 +110,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   
   function updateFormFields() {
-    parent::updateFormFields();
+    parent::updateFormFields();   
+    $this->_ref_produit->loadUnitePresentation();
+ 
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
     $this->_duree_prise = "";
@@ -284,10 +286,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->loadPosologie();
 
     $this->_ref_produit->loadRefPosologies();
+    $this->_ref_produit->loadLibellePresentation();
+    if($this->_ref_produit->libelle_presentation){
+      $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
+    }
     foreach($this->_ref_produit->_ref_posologies as $_poso){
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
       if($_poso->p_kg) {
-        $unite .= "/kg";
+        // On ajoute la poso avec les /kg
+        $this->_unites_prise[] = "$unite/kg";
       }
     	$this->_unites_prise[] = $unite;
     }

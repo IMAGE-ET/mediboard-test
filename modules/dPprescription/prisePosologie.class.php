@@ -28,8 +28,11 @@ class CPrisePosologie extends CMbMetaObject {
   
   var $_type                 = null; // Type de prise
   var $_unite                = null; // Unite de la prise
-  var $_heures                = null; // Heure de la prise
-  
+  var $_heures               = null; // Heure de la prise
+ 
+  var $_quantite_with_kg     = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du poids
+  var $_quantite_with_coef   = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du coef
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prise_posologie';
@@ -89,8 +92,8 @@ class CPrisePosologie extends CMbMetaObject {
       	$_heure .= ":00:00";
       }
     }
-    
-    if($this->unite_fois && !$this->nb_tous_les){
+
+    if($this->unite_fois && !$this->nb_tous_les && !$this->moment_unitaire_id){
     	$this->_view .= " par ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
     	$this->_unite = $this->unite_fois;
     }
@@ -221,6 +224,7 @@ class CPrisePosologie extends CMbMetaObject {
   	}
 
   
+  
   	if($this->moment_unitaire_id && $this->_ref_moment->heure){
   		$heure = $this->_ref_moment->heure;
   
@@ -249,6 +253,8 @@ class CPrisePosologie extends CMbMetaObject {
 				}
   		}
   	}
+  	
+ 
   	/*
 		if($this->moment_unitaire_id && !$this->_ref_moment->heure){
   	  $nb = 1;
@@ -273,6 +279,15 @@ class CPrisePosologie extends CMbMetaObject {
     if(!isset($quantite)){
     	$quantite = $this->quantite * $nb_days;
     }
+     
+    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
+    $_line = $this->_ref_object;
+    $_produit = $_line->_ref_produit;
+	  if($this->unite_prise == $_produit->libelle_presentation){
+	    $quantite *= $_produit->nb_unite_presentation;
+	    $this->unite_prise = $_produit->libelle_unite_presentation;
+	  }
+	  
     @$this->_ref_object->_quantites[$this->unite_prise] += $quantite;
   }
   

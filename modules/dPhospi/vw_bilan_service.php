@@ -60,7 +60,7 @@ foreach($list_heures as &$heure){
 
 $lines["med"] = array();
 $lines["elt"] = array();
-
+$list_lines = array();
 foreach($prescriptions as $_prescription){
   // Chargement des lignes
   $_prescription->loadRefsLinesMed("1");
@@ -96,16 +96,26 @@ foreach($prescriptions as $_prescription){
 	    $lines["elt"][$_line_element->_id] = $_line_element;
 	  }
   }  	
-
   foreach($dates as $_date){
     $_prescription->calculPlanSoin($_date, 1, $heures);
   }
 
- $patient_id = $sejour->_ref_patient->_id;
+ $patient =& $sejour->_ref_patient;
+ $patient_id = $patient->_id;
  if($_prescription->_list_prises){
  foreach($_prescription->_list_prises as $type => $prises){
   foreach($prises as $_date => $prises_by_date){
     foreach($prises_by_date as $line_id => $prises_by_unite){
+      $line_class = ($type == "med") ? "CPrescriptionLineMedicament" : "CPrescriptionLineElement";
+      if(isset($list_lines[$type][$line_id])){
+        $line = $list_lines[$type][$line_id];
+      } else {
+        $line = new $line_class;
+        $line->load($line_id);
+      }
+      $line->calculAdministrations($_date);
+      $list_lines[$type][$line->_id] = $line;
+      
       foreach($prises_by_unite as $unite_prise => $prises_by_hour)
         if($unite_prise != "total"){
           foreach($prises_by_hour as $_hour => $quantite){
@@ -114,13 +124,20 @@ foreach($prescriptions as $_prescription){
               $prise->load($unite_prise);
               $unite_prise = $prise->unite_prise;
             }
+            
+            // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
+            if($patient->_ref_constantes_medicales->poids){
+              $unite_prise = str_replace('/kg', '', $unite_prise);
+            }
+           
+            if($unite_prise)
             $dateTimePrise = "$_date $_hour:00:00";
 			      if(array_key_exists($line_id, $lines[$type])){
 	            if($dateTimePrise > $dateTime_min && $dateTimePrise < $dateTime_max) {
-		            @$lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$_hour][$type][$line_id][$unite_prise] += $quantite;
-	    	      } 
+	              @$lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$_hour][$type][$line_id][$unite_prise]["prevu"] += $quantite;
+	            }
 			      }
-          }  
+          }
         }
         // Tri par heures croissantes
         if(isset($lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date])){
@@ -131,7 +148,60 @@ foreach($prescriptions as $_prescription){
   }
  }
 }
-  
+
+// Reorganisation des administrations
+foreach($list_lines as $_lines_by_type){
+  foreach($_lines_by_type as $curr_line){
+    $curr_line->loadRefPrescription();
+    $curr_line->_ref_prescription->loadRefObject();
+    $sejour =& $curr_line->_ref_prescription->_ref_object;
+    $sejour->loadCurrentAffectation($date);
+    $sejour->loadRefPatient();
+    $patient =& $sejour->_ref_patient;
+    $patient->loadRefConstantesMedicales();
+    $type = ($curr_line->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
+    if($curr_line->_administrations){
+	    foreach($curr_line->_administrations as $unite_prise => $lines){
+	      // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
+        if($patient->_ref_constantes_medicales->poids){
+          $unite_prise = str_replace('/kg', '', $unite_prise);
+        }
+            
+	      foreach($lines as $_date => $lines_by_date){
+	        foreach($lines_by_date as $hour => $_line){
+	          // Quantite administre => $_line["quantite"];
+	          $administrations[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$hour][$type][$curr_line->_id][$unite_prise]["administre"] = $_line["quantite"];
+	        }
+	      }
+	    }
+    }
+  }
+}
+
+// Fusion des deux tableaux
+foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
+  foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
+    foreach($lines_by_date as $_date => &$lines_by_hours){
+      if(isset($administrations[$chambre_view][$sejour_id][$_date])){
+	      foreach($administrations[$chambre_view][$sejour_id][$_date] as $hour_adm => $adm){
+	        if(!array_key_exists($hour_adm, $lines_by_hours)){
+	          $lines_by_date[$_date][$hour_adm] = $administrations[$chambre_view][$sejour_id][$_date][$hour_adm];
+	        }
+	      }
+      }
+      foreach($lines_by_hours as $_hour => &$lines_by_type){
+        foreach($lines_by_type as $type => &$lines_by_unite){
+          foreach($lines_by_unite as $line_id => &$lines_by_type_prise){
+            foreach($lines_by_type_prise as $unite_prise => &$_line){  
+              @$_line["administre"] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type][$line_id][$unite_prise]["administre"];
+            }
+          }
+        }
+      }
+     ksort($lines_by_hours);
+    }
+  }
+}
 ksort($lines_by_patient);
 
 // Chargement de toutes les categories
@@ -168,7 +238,7 @@ $smarty->assign("categories", $categories);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("lines_by_patient", $lines_by_patient);
-$smarty->assign("lines", $lines);
+$smarty->assign("list_lines", $list_lines);
 $smarty->assign("dateTime_min", $dateTime_min);
 $smarty->assign("dateTime_max", $dateTime_max);
 $smarty->display('vw_bilan_service.tpl');

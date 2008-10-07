@@ -13,7 +13,7 @@ Main.add(function () {
     {{$mbProduit->libelle}}
     {{if $mbProduit->_ref_monographie->date_suppression}}
     <br />
-    Produit supprimé depuis le {{$mbProduit->_ref_monographie->date_suppression|date_format:"%d %b %Y"}}
+    Produit supprimé depuis le {{$mbProduit->_ref_monographie->date_suppression}}
     {{/if}}
     </th>
     

@@ -430,7 +430,7 @@ class CPrescriptionLine extends CMbObject {
 			  if($_administration->prise_id){
 				$_administration->loadRefPrise();
 			  }
-		  	  @$this->_administrations[$key_administration][$date][$_administration->_heure]["administrations"][$_administration->_id] = $log;
+		  	@$this->_administrations[$key_administration][$date][$_administration->_heure]["administrations"][$_administration->_id] = $log;
 			  $_administration->loadRefsTransmissions();  
 			  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
 			  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
@@ -454,7 +454,26 @@ class CPrescriptionLine extends CMbObject {
       $key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
 		  $poids_ok = 1;
 		  
-		  if(!is_numeric($_prise->unite_prise) && $this->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
+		  if($_prise->_ref_object->_class_name == "CPrescriptionLineMedicament" && !$_prise->_quantite_with_coef){
+		    $line    =& $_prise->_ref_object;
+		    $produit =& $line->_ref_produit; 
+		    $produit->loadConditionnement();
+		    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
+		    if($_prise->unite_prise == $produit->libelle_presentation){		        
+		      $_prise->quantite *= $produit->nb_unite_presentation;
+		    }
+		    
+		    // Gestion des unite autres unite de prescription
+		    if(!isset($produit->rapport_unite_prise[$_prise->unite_prise][$produit->libelle_unite_presentation])) {
+          $coef = 1;
+        } else {
+          $coef = $produit->rapport_unite_prise[$_prise->unite_prise][$produit->libelle_unite_presentation];
+        }
+        $_prise->_quantite_with_coef = 1;
+		    $_prise->quantite *= $coef;
+		  }
+		  
+		  if(!is_numeric($_prise->unite_prise) && $this->_class_name == "CPrescriptionLineMedicament" && !$_prise->_quantite_with_kg){
 			  //$quantite = 0;
 			  $_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
 			  
@@ -474,6 +493,7 @@ class CPrescriptionLine extends CMbObject {
 					
           if($poids){
             $_prise->quantite *= $poids;
+            $_prise->_quantite_with_kg = 1;
           } else {
           	$poids_ok = 0;
           	$_prise->quantite = 0;
