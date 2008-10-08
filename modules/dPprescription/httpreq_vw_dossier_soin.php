@@ -81,7 +81,7 @@ foreach($list_hours as &$hour){
 if($prescription->_id){
 
 	// Chargement des lignes
-	$prescription->loadRefsLinesMedByCat("1","1");
+	$prescription->loadRefsLinesMedByCat("1","1","service");
 	
 	foreach($prescription->_ref_prescription_lines as &$_line_med){
 	  if(!$_line_med->countBackRefs("administration")){
@@ -100,7 +100,7 @@ if($prescription->_id){
 	  }
 	}
 	
-	$prescription->loadRefsLinesElementByCat();
+	$prescription->loadRefsLinesElementByCat("1","","service");
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
 		 
 	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;

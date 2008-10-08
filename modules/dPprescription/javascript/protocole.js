@@ -5,6 +5,7 @@ var Protocole = {
     var oForm = document.addProtocolePresc;
     oForm.function_id.value = oFormPrat.function_id.value;
     oForm.praticien_id.value = oFormPrat.praticien_id.value;
+    oForm.group_id.value = oFormPrat.group_id.value;
     return onSubmitFormAjax(oForm);
   },
   // Suppression de protocole
@@ -12,31 +13,29 @@ var Protocole = {
     var oFormPrat = document.selPrat;
     submitFormAjax(oForm, 'systemMsg', {
       onComplete: function(){
-        Protocole.refreshList(oFormPrat.praticien_id.value,'',oFormPrat.function_id.value );
+        Protocole.refreshList();
       } 
     } );
   },
   // Refresh de la liste des protocoles
-  refreshList : function(praticien_id, protocoleSel_id, function_id) {
+  refreshList : function(protocoleSel_id) {
     var oForm = document.selPrat;
-    if(!praticien_id){
-      praticien_id = oForm.praticien_id.value;
-    }
-    if(!function_id){
-      function_id = oForm.function_id.value;
-    }
-   
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_list_protocoles");
-    url.addParam("praticien_id", praticien_id);
-    url.addParam("function_id", function_id);
+    url.addParam("praticien_id", oForm.praticien_id.value);
+    url.addParam("function_id", oForm.function_id.value);
+    url.addParam("group_id", oForm.group_id.value);
     url.addParam("protocoleSel_id", protocoleSel_id);
     url.requestUpdate("protocoles", { waitingText: null } );
+  },
+  refreshListProt: function(){
+    Protocole.refreshList();
+    Prescription.reload('','','','1');
   },
   // Edition d'un protocole
   edit : function(protocole_id, praticien_id, function_id) {
     Prescription.reload(protocole_id,"","","1");
-    Protocole.refreshList(praticien_id, protocole_id, function_id);
+    Protocole.refreshList(protocole_id);
   },
   duplicate: function(protocole_id){
     var url = new Url;
@@ -63,7 +62,7 @@ var Protocole = {
     var oFormPrat = document.selPrat;
     submitFormAjax(oFormDel, 'systemMsg' , {
       onComplete: function(){
-        Protocole.refreshListPack(oFormPrat.praticien_id.value,oFormPrat.function_id.value);
+        Protocole.refreshListPack();
         Protocole.viewPack("");
       } 
     } );
@@ -86,7 +85,7 @@ var Protocole = {
   reloadAfterAddPack: function(pack_id) {
     var oFormPrat = document.selPrat;
     Protocole.viewPack(pack_id);
-    Protocole.refreshListPack(oFormPrat.praticien_id.value, oFormPrat.function_id.value, pack_id);
+    Protocole.refreshListPack(pack_id);
   },
   addProtocoleToPack: function(protocole_id){
     var oFormAddProtocole = document.addDelProtocoleToPack;

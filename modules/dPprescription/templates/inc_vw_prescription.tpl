@@ -30,7 +30,7 @@ Main.add(function () {
 
 <!-- Formulaire de creation du protocole -->
 {{if !$prescription->_id && $mode_protocole && !$mode_pharma}}
-  {{if $function_id || $praticien_id}}
+  {{if $function_id || $praticien_id || $group_id}}
 		<form action="?m=dPprescription" method="post" name="addProtocolePresc" onsubmit="return Protocole.add();">	
 		   <input type="hidden" name="m" value="dPprescription" />
 		   <input type="hidden" name="dosql" value="do_prescription_aed" />
@@ -40,6 +40,7 @@ Main.add(function () {
 		   <input type="hidden" name="object_id" value=""/>
 		   <input type="hidden" name="praticien_id" value="" />
 		   <input type="hidden" name="function_id" value="" />
+		   <input type="hidden" name="group_id" value="" />
 		   <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
 		   <table class="form">
 		     <tr>
@@ -75,7 +76,7 @@ Main.add(function () {
 		</form>
   {{else}}
     <div class="big-info">
-      Veuillez sélectionner un praticien ou un cabinet pour créer des protocoles.
+      Veuillez sélectionner un praticien, un cabinet ou un établissement pour créer un protocole.
     </div>
   {{/if}}
 {{/if}}

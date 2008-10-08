@@ -16,37 +16,7 @@ $pack_id = mbGetValueFromGet("pack_id");
 $pack = new CPrescriptionProtocolePack();
 $pack->load($pack_id);
 
-// Intitialisation
-$protocoles_praticien = array();
-$protocoles_function = array();
-
-if($pack->praticien_id){
-  // Chargement des protocoles du praticien
-  $prescription = new CPrescription();
-  $where = array();
-  $where["praticien_id"] = " = '$pack->praticien_id'";
-  $where["object_id"] = "IS NULL";
-  $where["object_class"] = " = '$pack->object_class'";
-  $tabProtocoles_praticien = $prescription->loadList($where, "libelle");
-  foreach($tabProtocoles_praticien as $_protocole){
-  	$protocoles_praticien[$_protocole->object_class][$_protocole->_id] = $_protocole;
-  }
-}
-
-if($pack->praticien_id || $pack->function_id){
-  $pack->loadRefPraticien();
-  // Chargement des protocoles du cabinet
-  $_function_id = $pack->function_id ? $pack->function_id : $pack->_ref_praticien->function_id;
-  $prescription = new CPrescription();
-  $where = array();
-  $where["function_id"] = " = '$_function_id'";
-  $where["object_id"] = "IS NULL";
-  $where["object_class"] = " = '$pack->object_class'";
-  $tab_protocoles_function = $prescription->loadList($where, "libelle");
-  foreach($tab_protocoles_function as $_protocole){
-  	$protocoles_function[$_protocole->object_class][$_protocole->_id] = $_protocole;
-  }
-}
+$protocoles = CPrescription::loadAllProtocolesFor($praticien_id, $function_id, "", $pack->object_class);
 
 $prescription = new CPrescription();
 $prescription->loadRefsLinesMedComments();
@@ -106,8 +76,7 @@ $is_praticien = $user->isPraticien();
 $smarty = new CSmartyDP();
 $smarty->assign("praticien_id"         , $praticien_id);
 $smarty->assign("function_id"          , $function_id);
-$smarty->assign("protocoles_praticien" , $protocoles_praticien);
-$smarty->assign("protocoles_function"  , $protocoles_function);
+$smarty->assign("protocoles"           , $protocoles);
 $smarty->assign("pack"                 , $pack);
 $smarty->assign("prescription"         , $prescription);
 $smarty->assign("class_category"       , new CCategoryPrescription());

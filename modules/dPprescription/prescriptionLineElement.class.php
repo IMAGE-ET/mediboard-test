@@ -123,7 +123,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     
 		$perm_edit = (!$this->signee) && 
                  ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien);
-                 
+
+    $this->_perm_edit = $perm_edit;
+    
     // Modification des dates
     if($perm_edit){
     	$this->_can_modify_dates = 1;

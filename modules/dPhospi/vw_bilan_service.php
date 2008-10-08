@@ -63,10 +63,10 @@ $lines["elt"] = array();
 $list_lines = array();
 foreach($prescriptions as $_prescription){
   // Chargement des lignes
-  $_prescription->loadRefsLinesMed("1");
-  $_prescription->loadRefsLinesElementByCat();
+  $_prescription->loadRefsLinesMed("1","1","service");
+  $_prescription->loadRefsLinesElementByCat("1","","service");
   $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
-  $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1");
+  $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
   
   $sejour =& $_prescription->_ref_object;
   $sejour->loadRefPatient();

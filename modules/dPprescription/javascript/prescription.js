@@ -245,6 +245,7 @@ var Prescription = {
     url.addParam("full_mode", "1");
     url.addParam("praticien_sortie_id", praticien_sortie_id);
     url.addParam("mode_anesth", mode_anesth);
+    url.addParam("mode_protocole", "0");
     url.requestUpdate("prescription_sejour", { waitingText: null } );
   },
   reloadPrescPharma: function(prescription_id){
@@ -258,10 +259,10 @@ var Prescription = {
   },
   reloadAddProt: function(protocole_id) {
     Prescription.reload(protocole_id, '','', '1','0');
-    Protocole.refreshList('',protocole_id);
+    Protocole.refreshList(protocole_id);
   },
   reloadDelProt: function(){
-    Prescription.reload('', '','', '1','0');
+    Prescription.reload('','','','1','0');
   },
   reloadAlertes: function(prescription_id) {
     if(prescription_id){

@@ -206,8 +206,8 @@
     
       <!-- Insérer un commentaire dans la ligne -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-  
-   
+      <!-- Fomulaire de modification de l'emplacement -->
+  		{{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
       </td>
   </tr>
   {{if $prescription->type != "sortie" && !$line->_protocole}}

@@ -27,35 +27,21 @@
 	  </tr>
 	  <!-- Ajout de protocoles dans le pack -->
 	  <tr>
-	    <td>
-	      Praticien: 
-	     {{if $protocoles_praticien|@count}}
-		     <select name="protocole_prat_id" onchange="if(this.value) { Protocole.addProtocoleToPack(this.value); }">
-		       <option value="">&mdash; Protocoles du praticien</option>
-		     {{foreach from=$protocoles_praticien key=object_class item=_protocoles_praticien_by_class}}
-		       {{foreach from=$_protocoles_praticien_by_class item=_protocole_praticien}}
-		         <option value="{{$_protocole_praticien->_id}}">{{$_protocole_praticien->_view}}</option>
-		       {{/foreach}}
-		     {{/foreach}}
-		     </select>
-	     {{else}}
-	     Aucun protocole disponible
-	     {{/if}}
-	    </td>
-	    <td>
-	      Cabinet: 
-	      {{if $protocoles_function|@count}}
-	     <select name="protocole_func_id" onchange="if(this.value) { Protocole.addProtocoleToPack(this.value); }">
-	     <option value="">&mdash; Protocoles du cabinet</option>
-	     {{foreach from=$protocoles_function key=object_class item=_protocoles_function_by_class}}
-	       {{foreach from=$_protocoles_function_by_class item=_protocole_function}}
-	         <option value="{{$_protocole_function->_id}}">{{$_protocole_function->_view}}</option>
-	       {{/foreach}}
-	     {{/foreach}}
-	     </select>
-	     {{else}}
-	     Aucun protocole disponible
-	     {{/if}}
+	    <td style="text-align: center">
+	      <select name="protocole_id" onchange="if(this.value) { Protocole.addProtocoleToPack(this.value); }">
+	        <option value="">&mdash; Choix d'un protocole</option>
+	      {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
+				  {{if $_protocoles_by_owner|@count}}
+				    <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
+				  {{foreach from=$_protocoles_by_owner item=_protocoles key=type_protocole}}
+				  {{foreach from=$_protocoles item=protocole}}
+				    <option value="{{$protocole->_id}}">{{$protocole->_view}}</option>
+				  {{/foreach}}
+				  </optgroup>
+				  {{/foreach}}
+				  {{/if}}
+			  {{/foreach}}
+	      </select>
 	    </td>
 	  </tr>
 	  <!-- Affichage des protocoles du packs -->

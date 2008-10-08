@@ -172,6 +172,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
                  !$this->valide_pharma && 
                  ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma);
  
+    $this->_perm_edit = $perm_edit;
+    
     // Modification des dates et des commentaires
     if($perm_edit){
     	$this->_can_modify_dates = 1;

@@ -105,10 +105,16 @@ submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
 submitAddComment = function (object_class, object_id, commentaire) {
   var oForm = getForm("addComment-"+object_class);
   prepareForm(oForm);
-  
   setPrimaryKeyDosql(oForm, object_class, object_id);
-  
   oForm.commentaire.value = commentaire;
+  return onSubmitFormAjax(oForm);
+}
+
+submitEmplacement = function(object_class, object_id, emplacement){
+  var oForm = getForm("emplacement-"+object_class);
+  prepareForm(oForm);
+  setPrimaryKeyDosql(oForm, object_class, object_id);  
+  oForm.emplacement.value = emplacement;
   return onSubmitFormAjax(oForm);
 }
 
@@ -369,4 +375,20 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_element_id" value="" />
   <input type="hidden" name="commentaire" value="" />
+</form>
+
+<form name="emplacement-CPrescriptionLineMedicament" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="emplacement" value="" />
+</form>
+
+<form name="emplacement-CPrescriptionLineElement" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="emplacement" value="" />
 </form>

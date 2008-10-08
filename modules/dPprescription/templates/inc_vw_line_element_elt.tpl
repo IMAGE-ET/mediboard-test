@@ -152,6 +152,8 @@
       {{/if}}
       <!-- Formulaire d'ajout de commentaire -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
+      <!-- Formulaire de modification de l'emplacement -->
+      {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
     </td>   
   </tr>
   {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}

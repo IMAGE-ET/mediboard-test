@@ -20,12 +20,12 @@ $prescription = new CPrescription();
 
 if($prescription_id){
   $prescription->load($prescription_id);
-  $prescription->loadRefsLinesMed();
-  $prescription->loadRefsLinesElementByCat();
+  $prescription->loadRefsLinesMed("1","1","service");
+  $prescription->loadRefsLinesElementByCat("1","","service");
   $prescription->_ref_object->loadRefPrescriptionTraitement();	 
   $traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
   if($traitement_personnel->_id){
-    $traitement_personnel->loadRefsLinesMed("1","1"); 
+    $traitement_personnel->loadRefsLinesMed("1","1","service"); 
   }
 
   // Chargement du poids et de la chambre du patient

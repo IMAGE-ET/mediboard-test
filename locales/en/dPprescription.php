@@ -968,4 +968,11 @@ $locales['CPrescriptionProtocolePackItem.all'] = '';
 $locales['CPrescriptionProtocolePackItem.none'] = '';
 $locales['CPrescriptionProtocolePackItem.one'] = '';
 $locales['CPrescriptionProtocolePackItem.select'] = '';
+$locales['CPrescription._owner.prat'] = '';
+$locales['CPrescription._owner.func'] = '';
+$locales['CPrescription._owner.group'] = '';
+$locales['CPrescriptionLineMedicament.emplacement.service'] = '';
+$locales['CPrescriptionLineMedicament.emplacement.bloc'] = '';
+$locales['CPrescriptionLineElement.emplacement.service'] = '';
+$locales['CPrescriptionLineElement.emplacement.bloc'] = '';
 ?>

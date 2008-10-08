@@ -18,10 +18,15 @@ class CPrescription extends CMbObject {
   // DB Fields
   var $praticien_id    = null;
   var $function_id     = null;
+  var $group_id        = null;
+  
   var $object_class    = null;
   var $object_id       = null;
   var $libelle         = null;
   var $type            = null;
+  
+  // Form fields
+  var $_owner          = null;
   
   // Object References
   var $_ref_object     = null;
@@ -42,7 +47,6 @@ class CPrescription extends CMbObject {
   var $_current_praticien_id = null;  // Praticien utilisé pour l'affichage des protocoles / favoris dans la prescription
   var $_praticiens = null;            // Tableau de praticiens prescripteur
   var $_can_add_line = null;
-  
   var $_dateTime_min = null;
   var $_dateTime_max = null;
   
@@ -75,6 +79,7 @@ class CPrescription extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["praticien_id"]  = "ref class|CMediusers";
     $specs["function_id"]   = "ref class|CFunctions";  
+    $specs["group_id"]      = "ref class|CGroups";
     $specs["object_id"]     = "ref class|CCodable meta|object_class";
     $specs["object_class"]  = "notNull enum list|CSejour|CConsultation";
     $specs["libelle"]       = "str";
@@ -82,6 +87,7 @@ class CPrescription extends CMbObject {
     $specs["_type_sejour"]  = "notNull enum list|pre_admission|sejour|sortie";
     $specs["_dateTime_min"] = "dateTime";
     $specs["_dateTime_max"] = "dateTime";
+    $specs["_owner"]        = "enum list|prat|func|group";
     return $specs;
   }
   
@@ -97,7 +103,6 @@ class CPrescription extends CMbObject {
 	    	$this->_view .= "($this->libelle)";
 	    }
     }
-    
     $this->loadRefCurrentPraticien();
   }
   
@@ -445,7 +450,71 @@ class CPrescription extends CMbObject {
     return parent::store();
   }
   
-  
+  static function loadAllProtocolesFor($praticien_id, $function_id, $group_id, $object_class = null, $type = null) {
+    $_protocoles = array();
+    $protocoles = array(
+      "prat"  => array(), 
+      "func"  => array(),
+      "group" => array()
+    );
+    
+    if($praticien_id){
+      $praticien = new CMediusers;
+      $praticien->load($praticien_id);
+      $function_id = $praticien->function_id;
+    }
+    if($function_id){
+      $function = new CFunctions();
+      $function->load($function_id);
+      $group_id = $function->group_id;  
+    }
+    
+    // Clauses de recherche
+    $protocole = new CPrescription();
+    $where = array();
+    $where["object_id"] = "IS NULL";
+    
+    if ($object_class) {  
+  		$where["object_class"] = "= '$object_class'";
+    }
+    if ($type) {
+  		$where["type"] = "= '$type'";
+    }
+    
+    $order = "object_class, type, libelle";
+
+		// Protocoles du praticien
+    if($praticien_id){
+      $where["function_id"]  = "IS NULL";
+      $where["group_id"]     = "IS NULL";
+      $where["praticien_id"] = "= '$praticien_id'";
+      $_protocoles["prat"]    = $protocole->loadlist($where, $order);
+    }
+    
+		// Protocoles du cabinet
+    if($function_id){
+	 	  $where["praticien_id"] = "IS NULL";
+	 	  $where["group_id"]     = "IS NULL";
+      $where["function_id"]  = "= '$function_id'";
+      $_protocoles["func"]    = $protocole->loadlist($where, $order);
+    }
+    
+    // Protocoles de l'etablissement
+    if($group_id){
+      $where["function_id"]  = "IS NULL";
+      $where["praticien_id"] = "IS NULL";
+      $where["group_id"]     = "= '$group_id'";
+      $_protocoles["group"]   = $protocole->loadlist($where, $order);
+    }
+    
+    // Classement de tous les protocoles par object_class
+    foreach($_protocoles as $type => $protocoles_by_type){
+      foreach($protocoles_by_type as $protocole_id => $_protocole){
+        $protocoles[$type][$_protocole->object_class][$_protocole->_id] = $_protocole;
+      }
+    }
+		return $protocoles;
+  }
   /*
    * Chargement du praticien
    */
@@ -598,7 +667,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de prescription de médicament
    */
-  function loadRefsLinesMed($with_child = 0, $with_subst = 0) {
+  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="") {
     $line = new CPrescriptionLineMedicament();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
@@ -608,6 +677,9 @@ class CPrescription extends CMbObject {
     }
     if($with_subst != "1"){
       $where["substitution_line_id"] = "IS NULL";
+    }
+    if($emplacement){
+      $where["emplacement"] = "= '$emplacement'";
     }
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '1'";
@@ -625,8 +697,8 @@ class CPrescription extends CMbObject {
    * Chargement des lignes de prescription de médicament par catégorie ATC
    */
   
-  function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0) {
-    $this->loadRefsLinesMed($with_child, $with_subst);
+  function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0, $emplacement = "") {
+    $this->loadRefsLinesMed($with_child, $with_subst, $emplacement);
   	$this->_ref_prescription_lines_by_cat = array();
     foreach($this->_ref_prescription_lines as &$_line){
     	$_line->_ref_produit->loadClasseATC();
@@ -672,7 +744,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'element
    */
-  function loadRefsLinesElement($chapitre = "", $withRefs = "1"){
+  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement=""){
   	$line = new CPrescriptionLineElement();
   	$where = array();
   	$ljoin = array();
@@ -684,6 +756,9 @@ class CPrescription extends CMbObject {
   	}
   	
     $where["prescription_id"] = " = '$this->_id'";
+    if($emplacement){
+      $where["emplacement"] = "= '$emplacement'";
+    }
     
     $order = "prescription_line_element_id DESC";
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
@@ -703,8 +778,8 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = ""){
-  	$this->loadRefsLinesElement($chapitre, $withRefs);
+  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement=""){
+  	$this->loadRefsLinesElement($chapitre, $withRefs, $emplacement);
   	$this->_ref_prescription_lines_element_by_cat = array();
   	
   	foreach($this->_ref_prescription_lines_element as $line){

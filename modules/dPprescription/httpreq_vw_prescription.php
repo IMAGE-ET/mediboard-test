@@ -73,7 +73,7 @@ if($prescription_id){
 
 // Si pas de prescription_id et presence d'un sejour_id => chargement de la prescription de sejour
 $prescriptions_sejour = array();
-if(!$prescription->_id && $sejour_id){
+if(!$prescription->_id && $sejour_id && !$mode_protocole){
 	$prescription_sejour = new CPrescription();
 	$where = array();
   $where["object_id"] = " = '$sejour_id'";
@@ -248,6 +248,9 @@ if($mode_protocole){
   // Chargement des functions
   $function = new CFunctions();
   $functions = $function->loadSpecialites(PERM_EDIT);
+  
+  // Chargement des etablissement
+  $groups = CGroups::loadGroups(PERM_EDIT);
 }
 
 
@@ -377,8 +380,10 @@ if($full_mode){
 if($mode_protocole){
   $smarty->assign("function_id", "");
   $smarty->assign("praticien_id", "");
+  $smarty->assign("group_id", "");
   $smarty->assign("praticiens", $praticiens);
   $smarty->assign("functions", $functions);
+  $smarty->assign("groups", $groups);
   $smarty->assign("category", "medicament");
   $smarty->display("inc_vw_prescription.tpl");
   return;

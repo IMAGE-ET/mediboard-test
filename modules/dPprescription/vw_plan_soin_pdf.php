@@ -35,10 +35,10 @@ $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
 
 // Chargement des lignes
-$prescription->loadRefsLinesMed("1","1");
-$prescription->loadRefsLinesElementByCat();
+$prescription->loadRefsLinesMed("1","1","service");
+$prescription->loadRefsLinesElementByCat("1","","service");
 $prescription->_ref_object->loadRefPrescriptionTraitement();	  
-$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1");
+$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 
 $pharmacien = new CMediusers();
 

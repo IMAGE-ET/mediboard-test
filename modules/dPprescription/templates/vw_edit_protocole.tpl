@@ -13,9 +13,15 @@ function viewProduit(cip){
   url.popup(900, 640, "Descriptif produit");
 }
 
+Main.add( function(){
+  // Refesh de la liste des protocoles
+  Protocole.refreshList('{{$protocole_id}}');
+  {{if $protocole_id}}
+  Prescription.reload('{{$protocole_id}}', '', '', '1');
+  {{/if}}
+} );
+
 </script>
-
-
 
 <table class="main">
   <tr>
@@ -24,8 +30,8 @@ function viewProduit(cip){
 	    <form name="selPrat" action="?" method="get">
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
         <input type="hidden" name="m" value="dPprescription" />
-        <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.submit()">
-          <option value="">&mdash; Sélection d'un praticien</option>
+        <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();">
+          <option value="">&mdash; Choix d'un praticien</option>
 	        {{foreach from=$praticiens item=praticien}}
 	        <option class="mediuser" 
 	                style="border-color: #{{$praticien->_ref_function->color}};" 
@@ -34,19 +40,24 @@ function viewProduit(cip){
 	        </option>
 	        {{/foreach}}
 	      </select>
-	      <select name="function_id" onchange="this.form.praticien_id.value=''; this.form.submit()">
+	      <select name="function_id" onchange="this.form.praticien_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();">
           <option value="">&mdash; Choix du cabinet</option>
           {{foreach from=$functions item=_function}}
           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
           {{/foreach}}
         </select>
-	    </form><br />
-	    <a href="?m={{$m}}&amp;tab={{$tab}}" class="buttonnew">
-        Créer un protocole
-      </a>
-	    <div id="protocoles">
-		    {{include file="inc_vw_list_protocoles.tpl"}}
-	    </div>
+        <select name="group_id" onchange="this.form.function_id.value=''; this.form.praticien_id.value=''; Protocole.refreshListProt();">
+          <option value="">&mdash; Choix d'un établissement</option>
+          {{foreach from=$groups item=_group}}
+          <option value="{{$_group->_id}}" {{if $group_id == $_group->_id}}selected=selected{{/if}}>{{$_group->_view}}</option>
+          {{/foreach}}
+        </select>
+        <br />
+	      <button type="button" class="submit" onclick="this.form.submit();">
+	        Créer un protocole
+	      </button>
+	    </form>
+	    <div id="protocoles"></div>
     </td>
     <!-- Affichage du protocole sélectionné-->
     <td>
@@ -58,9 +69,3 @@ function viewProduit(cip){
     </td>
   </tr>
 </table>
-
-{{if $protocole_id}}
-<script type="text/javascript">
-  Prescription.reload('{{$protocole_id}}', '', '', '1');
-</script>
-{{/if}}

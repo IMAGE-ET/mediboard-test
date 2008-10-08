@@ -4,11 +4,12 @@ refreshListProtocole = function(oForm){
   var oFormFilter = document.selPrat;
   oFormFilter.praticien_id.value = oForm.praticien_id.value;
   oFormFilter.function_id.value = oForm.function_id.value;
+  oFormFilter.group_id.value = oForm.group_id.value;
   
-  if(oFormFilter.praticien_id.value || oFormFilter.function_id.value){
+  if(oFormFilter.praticien_id.value || oFormFilter.function_id.value || oFormFilter.group_id.value){
 	  submitFormAjax(oForm, 'systemMsg', { 
 	        onComplete : function() { 
-	           Protocole.refreshList(oForm.praticien_id.value,oForm.prescription_id.value, oForm.function_id.value) 
+	           Protocole.refreshList(oForm.prescription_id.value) 
 	        } 
 	  });
   }
@@ -102,14 +103,17 @@ submitProtocole = function(){
         <input type="hidden" name="dosql" value="do_prescription_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+        Libelle: 
         <input type="text" name="libelle" value="{{$prescription->libelle}}" 
                onchange="refreshListProtocole(this.form);" />
       
         <button class="tick notext" type="button"></button>
-      
+        <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
+         
+        <br />
          <!-- Modification du pratcien_id / user_id -->
-         <select name="praticien_id" onchange="this.form.function_id.value=''; refreshListProtocole(this.form)">
-          <option value="">&mdash; Sélection d'un praticien</option>
+         <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">
+          <option value="">&mdash; Choix d'un praticien</option>
 	        {{foreach from=$praticiens item=praticien}}
 	        <option class="mediuser" 
 	                style="border-color: #{{$praticien->_ref_function->color}};" 
@@ -119,20 +123,30 @@ submitProtocole = function(){
 	        {{/foreach}}
 	      </select>
 	      
-	      <select name="function_id" onchange="this.form.praticien_id.value=''; refreshListProtocole(this.form)">
+	      <select name="function_id" onchange="this.form.praticien_id.value='';this.form.group_id.value=''; refreshListProtocole(this.form)">
           <option value="">&mdash; Choix du cabinet</option>
           {{foreach from=$functions item=_function}}
           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" 
           {{if $_function->_id == $prescription->function_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
           {{/foreach}}
         </select>
+        
+        <select name="group_id" onchange="this.form.praticien_id.value='';this.form.function_id.value=''; refreshListProtocole(this.form)">
+          <option value="">&mdash; Choix d'un etablissement</option>
+          {{foreach from=$groups item=_group}}
+          <option value="{{$_group->_id}}" 
+          {{if $_group->_id == $prescription->group_id}}selected=selected{{/if}}>{{$_group->_view}}</option>
+          {{/foreach}}
+        </select>
+        
+        
       </form>
         
       <form name="duplicate">
         <button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
       </form>
       
-      <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
+     
        
       {{else}}
         <!-- Prescription du Dr {{$prescription->_ref_praticien->_view}}<br /> -->

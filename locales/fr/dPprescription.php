@@ -984,4 +984,11 @@ $locales['CPrescriptionProtocolePackItem.all'] = '';
 $locales['CPrescriptionProtocolePackItem.none'] = '';
 $locales['CPrescriptionProtocolePackItem.one'] = '';
 $locales['CPrescriptionProtocolePackItem.select'] = '';
+$locales['CPrescription._owner.prat'] = 'Praticien';
+$locales['CPrescription._owner.func'] = 'Cabinet';
+$locales['CPrescription._owner.group'] = 'Etablissement';
+$locales['CPrescriptionLineMedicament.emplacement.service'] = 'Service';
+$locales['CPrescriptionLineMedicament.emplacement.bloc'] = 'Bloc';
+$locales['CPrescriptionLineElement.emplacement.service'] = 'Service';
+$locales['CPrescriptionLineElement.emplacement.bloc'] = 'Bloc';
 ?>
