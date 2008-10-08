@@ -540,10 +540,10 @@ function NumericField (form, element, step, min, max, showPlus, decimals) {
   this.sForm = form;
   this.sElement = element;
   this.sField = form + "_" + element;
-  this.min  = (min  != undefined) ? min  : null;
-  this.max  = (max  != undefined) ? max  : null;
-  this.step = (step != undefined) ? step : null;
-  this.decimals = (decimals != undefined) ? decimals : null;
+  this.min  = Object.isUndefined(min)  ? null : min;
+  this.max  = Object.isUndefined(max)  ? null : max;
+  this.step = Object.isUndefined(step) ? null : step;
+  this.decimals = Object.isUndefined(decimals) ? null : decimals;
   this.showPlus = showPlus | null;
   var that = this;
 
@@ -579,6 +579,9 @@ NumericField.prototype = {
     var oField = $(getForm(this.sForm).elements[this.sElement]);
     var step = Number(this.getStep(-1));
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
+    if (this.min != null) {
+      result = (result >= this.min) ? result : this.min;
+    }
     if (this.decimals !== null) {
       result = printf("%."+this.decimals+"f", result);
     }
