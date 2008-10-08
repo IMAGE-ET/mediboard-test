@@ -110,6 +110,10 @@
         <tr>
           <td>
            {{$operation->_view}} <br />
+           {{foreach from=$operation->_codes_ccam item=curr_code}}
+             {{$curr_code}};
+           {{/foreach}}
+           <br />
            {{mb_label object=$operation field=cote}} : {{mb_value object=$operation field=cote}}<br />
            {{if $operation->libelle}}{{mb_label object=$operation field=libelle}} : {{mb_value object=$operation field=libelle}} <br />{{/if}}
            {{tr}}CBloodSalvage.anesthesia{{/tr}} : {{if $operation->_ref_type_anesth}}{{$operation->_ref_type_anesth->name}}  {{/if}} <br />

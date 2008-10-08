@@ -35,7 +35,7 @@ if($blood_salvage_id) {
 	} else {
 		$list = CAppUI::conf("bloodSalvage AntiCoagulantList");
     $anticoagulant_list = explode("|",$list);
-    if($blood_salvage->anticoagulant_cip){
+    if($blood_salvage->anticoagulant_cip !== null){
       $anticoag = $anticoagulant_list[$blood_salvage->anticoagulant_cip];		
     }
 	}
@@ -45,7 +45,7 @@ if($blood_salvage_id) {
   $timingAffect = array(); 
 	loadAffected($blood_salvage->_id, $list_nurse_sspi, $tabAffected, $timingAffect);
 	$version_patient = CModule::getActive("dPpatients");
-  $isInDM = ($version_patient->mod_version >= 0.71);
+  $isInDM = 0;//($version_patient->mod_version >= 0.71);
 	 
 }
 

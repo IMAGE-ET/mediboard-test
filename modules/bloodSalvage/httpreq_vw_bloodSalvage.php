@@ -45,7 +45,7 @@ if(CModule::getActive("dPmedicament")) {
 }
 
 $version_patient = CModule::getActive("dPpatients");
-$isInDM = ($version_patient->mod_version >= 0.71);
+$isInDM = 0; //($version_patient->mod_version >= 0.71);
 
 $selOp = new COperation();
 

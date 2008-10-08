@@ -308,7 +308,6 @@ class COperation extends CCodable {
  }
   
   function updateDBFields() {
-  global $AppUI;
     if (count($this->_codes_ccam)) {
       $this->codes_ccam = implode("|", $this->_codes_ccam);
     }
