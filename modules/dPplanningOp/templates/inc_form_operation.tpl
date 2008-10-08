@@ -29,12 +29,10 @@ Main.add(function () {
 <input type="hidden" name="_protocole_prescription_chir_id" value="" />
 {{mb_field object=$op field="_count_actes" hidden=1}}
 
-     
 <table class="form">
   <tr>
     <th class="category" colspan="3">
       {{if $op->operation_id}}
-      
       <div class="idsante400" id="COperation-{{$op->operation_id}}"></div>
       
       <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
