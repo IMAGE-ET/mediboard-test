@@ -605,8 +605,7 @@ class COperation extends CCodable {
   
   function loadRefsBack() {
     $this->loadRefsFiles();
-    $this->loadRefsActesCCAM();
-    $this->loadRefsActesNGAP();
+    $this->loadRefsActes();
     $this->loadRefsDocs();
   }
   

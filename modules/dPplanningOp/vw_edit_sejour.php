@@ -98,15 +98,27 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 
 
 // Préparation de l'alerte dans le cas d'annulation d'un sejour avec opération
-$msg_alert = "";
-if($sejour->_ref_operations){
-  foreach($sejour->_ref_operations as $keyOp => $dataOp ){
-    if($dataOp->annulee == 0){
-      $msg_alert .= "\n".$dataOp->_view." le ".substr($dataOp->_datetime, 8, 2)."/".substr($dataOp->_datetime, 5, 2)."/".substr($dataOp->_datetime, 0, 4);
+$cancel_alerts = array(
+  "all" => array(),
+  "acted" => array(),
+);
+
+$sejour->_ref_cancel_operations = array();
+$sejour->_ref_actes_operations = array();
+if($sejour->_ref_operations) {
+  foreach ($sejour->_ref_operations as $_operation ) {
+    if ($_operation->annulee == 0) {
+      $operation_view = " le " 
+				. mbDateToLocale(mbDate($_operation->_datetime)) 
+        . " par le Dr. " 
+				. $_operation->_ref_chir->_view;
+      $_operation->countActes();
+      if ($_operation->_count_actes) {
+        $cancel_alerts["acted"][] = $operation_view;
+      }
+      
+      $cancel_alerts["all"][] = $operation_view;
     }
-  }
-  if($msg_alert!=""){
-   	$msg_alert = "\n\nATTENTION ! Vous vous appretez à annuler des opérations :".$msg_alert;
   }
 }
 
@@ -129,7 +141,7 @@ $smarty->assign("op"            , new COperation);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);
-$smarty->assign("msg_alert"     , $msg_alert);
+$smarty->assign("cancel_alerts"     , $cancel_alerts);
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);

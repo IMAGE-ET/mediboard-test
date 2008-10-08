@@ -1,9 +1,12 @@
-<script type="text/javascript">
-	Main.add(function () {
-    Document.refreshList('{{$op->_id}}');
-	} );
-</script>
 <!-- $Id: $ -->
+
+<script type="text/javascript">
+Main.add(function () {
+   Document.refreshList('{{$op->_id}}');
+} );
+
+</script>
+
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 {{mb_include_script module="dPplanningOp" script="plage_selector"}}
 
@@ -18,10 +21,13 @@
 {{mb_field object=$op field="rank" hidden=1 prop=""}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
+
+<!-- Form Fields -->
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
 <input type="hidden" name="_class_name" value="COperation" />
 <input type="hidden" name="_protocole_prescription_anesth_id" value="" />
 <input type="hidden" name="_protocole_prescription_chir_id" value="" />
+{{mb_field object=$op field="_count_actes" hidden=1}}
 
      
 <table class="form">
@@ -254,11 +260,11 @@
     <td>{{mb_field object=$op field="rques" rows="3"}}</td>
   </tr>
   
-  {{if $op->_ref_actes_ccam|@count}}
+  {{if $op->_count_actes}}
   <tr>
     <td class="" colspan="3">
       <div class="little-info">
-      	L'intervention déjà codée.<br/>Impossible de modifier ces champs 
+      	L'intervention déjà codée.<br/>Impossible de modifier les champs ci-dessous 
       </div>
 		</td>
   </tr>

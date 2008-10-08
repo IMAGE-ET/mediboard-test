@@ -145,7 +145,6 @@ $smarty->assign("sejours"   , $sejours);
 $smarty->assign("modurgence", 0);
 $smarty->assign("today"     , $today);
 $smarty->assign("tomorow"   , $tomorow);
-$smarty->assign("msg_alert" , "");
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);

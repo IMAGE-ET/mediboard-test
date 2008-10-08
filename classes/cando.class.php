@@ -16,7 +16,7 @@ class CCanDo {
   var $edit       = null;
   var $view       = null;
   var $admin      = null;
-  var $setValues = null;
+  var $setValues  = null;
   
   function redirect($a = "access_denied", $params = null){
     global $AppUI, $actionType;

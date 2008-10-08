@@ -23,7 +23,6 @@ $sejour_id    = mbGetValueFromGet("sejour_id");
 $patient_id   = mbGetValueFromGet("pat_id");
 $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
-$msg_alert    = "";
 
 // L'utilisateur est-il un praticien
 $chir = new CMediusers;
@@ -125,7 +124,6 @@ $smarty->assign("sejours"   , $sejours);
 $smarty->assign("modurgence", 1);
 $smarty->assign("today"     , $today);
 $smarty->assign("tomorow"   , $tomorow);
-$smarty->assign("msg_alert" , $msg_alert);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);

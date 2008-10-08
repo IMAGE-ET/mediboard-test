@@ -197,13 +197,28 @@ function updateEntreePrevue() {
   updateSortiePrevue();
 }
 
+CanBloc = {{$modules.dPbloc->_can|json}};	
 
-
-function cancelOperation() {
+function cancelOperation() {  
   var oForm = document.editOp;
   var oElement = oForm.annulee;
   
   if (oElement.value == "0") {
+	  // Tester supérieur à 0 semble obligatoire
+	  if (oForm._count_actes.value > 0) {
+	    var msg = "Attention, l'intervention a probablement déjà eu lieu.\n\n";
+	
+	  	if (CanBloc.edit) {
+	  	  if (!confirm(msg + "Voulez-vous malgré tout l'annuler ?")) {
+	  	  	return;
+	  	 	}
+	  	}
+	  	else {
+	  	  alert(msg + "Veuillez vous adresser au responsable de bloc pour annuler cette intervention");
+	  	  return;
+	  	}
+	  }
+	  
     if (confirm("Voulez-vous vraiment annuler l'intervention ?")) {
       if (confirm("Souhaitez-vous annuler le Séjour correspondant ?\n\nATTENTION, cette action annulera toutes les interventions de ce séjour !")) {
         document.editSejour.annule.value = 1;

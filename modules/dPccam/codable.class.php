@@ -11,6 +11,7 @@ class CCodable extends CMbObject {
   var $_ref_anesth         = null;
   var $_anesth             = null;
   var $_associationCodesActes = null;
+  var $_count_actes        = null;
   
   // Abstract fields
   var $_praticien_id       = null;
@@ -130,6 +131,7 @@ class CCodable extends CMbObject {
   	$specs = parent::getSpecs();
   	$specs["codes_ccam"] = "str";
   	$specs["_codes_ccam"] = "";
+  	$specs["_count_actes"] = "int pos";
   	return $specs;
   }
   
@@ -140,14 +142,10 @@ class CCodable extends CMbObject {
     return null;
   }
   
-  /*
-  function loadRefsPrescriptions() {
-    $prescription = new CPrescription();
-    $where = array("object_class" => "= '$this->_class_name'", "object_id" => "= $this->_id");
-    $this->_ref_prescriptions = $prescription->loadList($where);
+  function countActes() {
+    $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam");
   }
-  */
-
+  
   function loadRefsActes(){
   	$this->_ref_actes = array();
   	
@@ -160,6 +158,8 @@ class CCodable extends CMbObject {
     foreach($this->_ref_actes_ngap as $acte_ngap){
       $this->_ref_actes[] = $acte_ngap;
     }
+    
+    $this->_count_actes = count($this->_ref_actes);
   }
   
   function loadRefsActesNGAP() {
