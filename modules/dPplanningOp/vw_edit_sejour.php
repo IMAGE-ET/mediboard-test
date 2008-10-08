@@ -103,9 +103,7 @@ $cancel_alerts = array(
   "acted" => array(),
 );
 
-$sejour->_ref_cancel_operations = array();
-$sejour->_ref_actes_operations = array();
-if($sejour->_ref_operations) {
+if ($sejour->_ref_operations) {
   foreach ($sejour->_ref_operations as $_operation ) {
     if ($_operation->annulee == 0) {
       $operation_view = " le " 
