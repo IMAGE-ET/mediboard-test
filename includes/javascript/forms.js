@@ -311,13 +311,11 @@ function prepareForm(oForm, bForcePrepare) {
   oForm = $(oForm);
   
   if (oForm) {
-		var formClassNames = $w(oForm.className);
-		
 		// If this form hasn't been prepared yet
-		if ((formClassNames.indexOf("prepared") == -1) || bForcePrepare) {
+		if (!oForm.hasClassName("prepared") || bForcePrepare) {
 		
 		  // Event Observer
-		  if(formClassNames.indexOf("watched") != -1) {
+		  if(oForm.hasClassName("watched")) {
 		    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
 		  }
 		  // Form preparation
@@ -539,26 +537,29 @@ Object.extend(Form, {
 
 
 function NumericField (form, element, step, min, max, showPlus, decimals) {
-    this.sField = form + "_" + element;
-    this.min  = (min  != undefined) ? min  : null;
-    this.max  = (max  != undefined) ? max  : null;
-    this.step = (step != undefined) ? step : null;
-    this.decimals = (decimals != undefined) ? decimals : null;
-    this.showPlus = showPlus | null;
-    var that = this;
-    prepareForm(form);
-    Main.add(function () {
-      var img, field;
-	    if ((field = $(that.sField)) && field.disabled && (img = $("img_"+that.sField))) {
-	      img.hide();
-	    }
-    });
+  this.sForm = form;
+  this.sElement = element;
+  this.sField = form + "_" + element;
+  this.min  = (min  != undefined) ? min  : null;
+  this.max  = (max  != undefined) ? max  : null;
+  this.step = (step != undefined) ? step : null;
+  this.decimals = (decimals != undefined) ? decimals : null;
+  this.showPlus = showPlus | null;
+  var that = this;
+
+  Main.add(function () {
+    var oField = $(getForm(that.sForm).elements[that.sElement]);
+    var img, field;
+    if (oField && oField.disabled && (img = $("img_"+that.sField))) {
+      img.hide();
+    }
+  });
 }
 
 NumericField.prototype = {
   // Increment function
   inc: function () {
-    var oField = $(this.sField);
+    var oField = $(getForm(this.sForm).elements[this.sElement]);
     var step = Number(this.getStep());
     var result = (parseInt(Number(oField.value) / step) + 1) * step;
     if (this.max != null) {
@@ -575,7 +576,7 @@ NumericField.prototype = {
 
   // Decrement function
   dec: function () {
-    var oField = $(this.sField);
+    var oField = $(getForm(this.sForm).elements[this.sElement]);
     var step = Number(this.getStep(-1));
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
     if (this.decimals !== null) {
@@ -593,7 +594,7 @@ NumericField.prototype = {
    *  Set it to -1 when decrementing, 0 when incrementing
    */
   getStep: function (ref) {
-    var oField = $(this.sField);
+    var oField = $(getForm(this.sForm).elements[this.sElement]);
     if (this.step == null) {
       var value = Math.abs(oField.value) + ((ref != undefined) ? ref : 0);
       if (value < 10)  return 1;
