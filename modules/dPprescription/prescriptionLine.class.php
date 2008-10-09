@@ -565,7 +565,8 @@ class CPrescriptionLine extends CMbObject {
        }
  	
      // Fois par avec comme unite jour
-    if($_prise->nb_fois && $_prise->unite_fois == "jour" && $this->_active){
+    if(($_prise->nb_fois && $_prise->unite_fois == "jour" && $this->_active) ||
+    ($_prise->quantite && !$_prise->moment_unitaire_id && !$_prise->nb_fois && !$_prise->unite_fois && !$_prise->unite_tous_les && !$_prise->nb_tous_les)){
       if($_prise->_heures){
 	      foreach($_prise->_heures as $_heure){
 	        $dateTimePrise = mbAddDateTime($_heure, $date);
@@ -577,7 +578,6 @@ class CPrescriptionLine extends CMbObject {
 	      }
       }
     }
-    
     
  	// Aucun moment unitaire, seulement Tous les ou Fois par, permet la generation du plan sur 5 jours
  	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois) && $this->_active && !$prise_comptee){

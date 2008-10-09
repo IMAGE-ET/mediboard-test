@@ -81,6 +81,9 @@ class CPrisePosologie extends CMbMetaObject {
     
     $this->_short_view = $this->_view;
     
+    if($this->unite_fois && !$this->nb_fois && !$this->moment_unitaire_id && !$this->nb_tous_les){
+      $this->nb_fois = 1;
+    }
    if($this->nb_fois){
     	$this->_view .= " ".$this->nb_fois." fois";
     	$this->_short_view .= " ".$this->nb_fois."X";
@@ -112,6 +115,13 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_unite = $this->unite_tous_les;
     	$this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
     }   
+    
+    if($this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
+      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1"));
+      foreach($this->_heures as &$_heure){
+      	$_heure .= ":00:00";
+      }
+    }    
   }
   
   /*
