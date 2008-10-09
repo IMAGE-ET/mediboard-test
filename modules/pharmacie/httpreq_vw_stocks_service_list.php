@@ -9,7 +9,7 @@
 global $g;
 
 $service_id = mbGetValueFromGetOrSession('service_id');
-$patient_id = mbGetValueFromGetOrSession('patient_id');
+$patient_id = mbGetValueFromGet('patient_id');
 
 // Services' stocks
 $list_stocks_service = new CProductStockService();
@@ -33,23 +33,27 @@ $whereTrace = array(
 
 foreach ($list_stocks_service as $stock) {
 	$stock->loadRefsFwd();
+	
+  // We load the unique negative delivery for this [service - group stock]
+  $stock_group = new CProductStockGroup();
+  $stock_group->loadObject(array('group_id' => " = '$g'", 'product_id' => "= $stock->product_id"));
+  
 	$ref = ($stock->order_threshold_optimum ? $stock->order_threshold_optimum : $stock->order_threshold_min);
 	$dispensation = new CProductDelivery();
 	$dispensation->service_id = $service_id;
 	$dispensation->patient_id = $patient_id;
-	$dispensation->quantity = ($stock->quantity < $ref) ?
-	  $ref - $stock->quantity : 0;
+	$dispensation->quantity = ($stock->quantity < $ref) ? $ref - $stock->quantity : 0;
+	$dispensation->stock_id = $stock_group->_id;
 	$list_dispensations[$stock->_id] = $dispensation;
 	
-	// We load the unique negative delivery for this [service - group stock]
-	$stock_group = new CProductStockGroup();
-	$stock_group->loadObject(array('group_id' => " = '$g'", 'product_id' => "= $stock->product_id"));
 	$where['stock_id'] = "= '$stock_group->_id'";
 	$delivery = new CProductDelivery();
 	$delivery->loadObject($where);
-	
+
 	// And then the negative traces for this delivery 
-  $whereTrace['delivery_id'] = "= '$delivery->_id'";
+	if ($delivery->_id) {
+    $whereTrace['delivery_id'] = "= '$delivery->_id'";
+	}
 	$list_returns[$stock->_id] = $trace->loadList($whereTrace);
 }
 
