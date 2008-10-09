@@ -265,6 +265,12 @@ class CPrescription extends CMbObject {
 	  	}
 	  }	  
 	  
+	  // Permet d'eviter les durees negatives lors de l'application d'un protocole
+	  if($_line->duree < 0){
+	    $_line->duree = 0;
+	  }
+	  
+
 	  $_line->prescription_id = $this->_id;
 	  $_line->praticien_id = $praticien_id;
 	  $_line->creator_id = $AppUI->user_id;
