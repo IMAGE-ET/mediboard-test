@@ -94,32 +94,8 @@ $heure_sortie_ambu   = $config["heure_sortie_ambu"];
 $heure_sortie_autre  = $config["heure_sortie_autre"];
 $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
-//$locked_sejour       = $config["locked"];
 
-
-// Préparation de l'alerte dans le cas d'annulation d'un sejour avec opération
-$cancel_alerts = array(
-  "all" => array(),
-  "acted" => array(),
-);
-
-if ($sejour->_ref_operations) {
-  foreach ($sejour->_ref_operations as $_operation ) {
-    if ($_operation->annulee == 0) {
-      $operation_view = " le " 
-				. mbDateToLocale(mbDate($_operation->_datetime)) 
-        . " par le Dr. " 
-				. $_operation->_ref_chir->_view;
-      $_operation->countActes();
-      if ($_operation->_count_actes) {
-        $cancel_alerts["acted"][] = $operation_view;
-      }
-      
-      $cancel_alerts["all"][] = $operation_view;
-    }
-  }
-}
-
+$sejour->makeCancelAlerts();
 $sejour->loadNumDossier();
 
 // Création du template
@@ -139,7 +115,6 @@ $smarty->assign("op"            , new COperation);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);
-$smarty->assign("cancel_alerts"     , $cancel_alerts);
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);

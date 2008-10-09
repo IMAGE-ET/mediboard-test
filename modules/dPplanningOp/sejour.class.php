@@ -109,11 +109,11 @@ class CSejour extends CCodable {
   var $_ext_diagnostic_relie     = null;
   var $_ref_hprim_files          = null;
   
-  
   // Distant fields
   var $_dates_operations = null;
   var $_num_dossier      = null;
   var $_list_constantes_medicales = null;
+  var $_cancel_alerts    = null;
   
   // Filter Fields
   var $_date_min	 			= null;
@@ -834,27 +834,6 @@ class CSejour extends CCodable {
     }
   }
   
-  function makeDatesOperations() {
-    $this->_dates_operations = array();
-    
-    // On s'assure d'avoir les opérations
-    if (!$this->_ref_operations) {
-      $this->loadRefsOperations();
-    }
-    
-    foreach ($this->_ref_operations as &$operation) {
-    	if($operation->annulee){
-    		continue;
-    	}
-      // On s'assure d'avoir les plages op
-      if (!$operation->_ref_plageop) {
-        $operation->loadRefPlageOp();
-      }
-
-      $this->_dates_operations[$operation->_id] = mbDate($operation->_datetime);
-    }
-  }
-  
   function loadRefsBack() {
     $this->loadRefsFiles();
     $this->loadRefsAffectations();
@@ -940,6 +919,64 @@ class CSejour extends CCodable {
     $this->loadRefDossierMedical();
     // Dossier médical
     $this->_ref_dossier_medical->fillTemplate($template, "Sejour");
+  }
+  
+  /**
+   * Builds an array containing surgery dates
+   */
+  function makeDatesOperations() {
+    $this->_dates_operations = array();
+    
+    // On s'assure d'avoir les opérations
+    if (!$this->_ref_operations) {
+      $this->loadRefsOperations();
+    }
+    
+    foreach ($this->_ref_operations as &$operation) {
+    	if ($operation->annulee){
+    		continue;
+    	}
+    	
+      // On s'assure d'avoir les plages op
+      if (!$operation->_ref_plageop) {
+        $operation->loadRefPlageOp();
+      }
+
+      $this->_dates_operations[$operation->_id] = mbDate($operation->_datetime);
+    }
+  }
+  
+  /**
+   * Builds san array containing cancel alerts for the sejour
+   */
+  function makeCancelAlerts() {
+	  $this->_cancel_alerts = array(
+		  "all" => array(),
+		  "acted" => array(),
+		);
+    
+    // On s'assure d'avoir les opérations
+    if (!$this->_ref_operations) {
+      $this->loadRefsOperations();
+    }
+    
+    if ($this->_ref_operations) {
+		  foreach ($this->_ref_operations as $_operation ) {
+		    $_operation->loadRefPraticien();
+		    if ($_operation->annulee == 0) {
+		      $operation_view = " le " 
+						. mbDateToLocale(mbDate($_operation->_datetime)) 
+		        . " par le Dr. " 
+						. $_operation->_ref_chir->_view;
+		      $_operation->countActes();
+		      if ($_operation->_count_actes) {
+		        $this->_cancel_alerts["acted"][] = $operation_view;
+		      }
+		      
+		      $this->_cancel_alerts["all"][] = $operation_view;
+		    }
+		  }
+		}
   }
   
 }

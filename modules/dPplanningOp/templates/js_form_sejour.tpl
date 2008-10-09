@@ -75,47 +75,52 @@ function removePlageOp(bIgnoreGroup){
 
 CanBloc = {{$modules.dPbloc->_can|json}};	
 
+function checkCancelAlerts() {
+ 	var msg = "Vous êtes sur le point d'annuler ce séjour, ceci entraîne :";
+ 	msg += "\n\n1. Tous les placements dans les lits seront supprimés.";
+ 	
+ 	{{if count($sejour->_cancel_alerts.all)}}
+ 	msg += "\n\n2. ATTENTION : Vous allez également annuler des opérations :";
+ 	{{foreach from=$sejour->_cancel_alerts.all item=alert}}
+ 	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
+ 	{{/foreach}}
+ 	{{/if}}
+ 	msg += "\n\nSouhaitez-vous continuer ?";
+ 	
+  if (!confirm(msg)) {
+    return;
+  }
+
+	{{if count($sejour->_cancel_alerts.acted)}}
+ 	msg = "Ce séjour contient une ou plusieurs interventions qui ont probablement déjà eu lieu :";
+	{{foreach from=$sejour->_cancel_alerts.acted item=alert}}
+	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
+	{{/foreach}}
+	if (CanBloc.edit) {
+	  if (!confirm(msg + "\n\nVoulez-vous malgré tout l'annuler ?")) {
+	  	return;
+	 	}
+	}
+	else {
+	  alert(msg + "\n\nVeuillez vous adresser au responsable de bloc pour annuler cette intervention.");
+	  return;
+	}
+	{{/if}}   	
+  
+  return true;
+}
+
 function cancelSejour() {
   var oForm = document.editSejour;
   var oElement = oForm.annule;
   
   // Annulation 
   if (oElement.value == "0") {
-  	var msg = "Vous êtes sur le point d'annuler ce séjour, ceci entraîne :";
-  	msg += "\n\n1. Tous les placements dans les lits seront supprimés.";
-  	
-  	{{if @$cancel_alerts}}
-  	{{if count($cancel_alerts.all)}}
-  	msg += "\n\n2. ATTENTION : Vous allez également annuler des opérations :";
-  	{{foreach from=$cancel_alerts.all item=alert}}
-  	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
-  	{{/foreach}}
-  	{{/if}}
-  	msg += "\n\nSouhaitez-vous continuer ?";
-  	
-    if (confirm(msg)) {
-	  	{{if count($cancel_alerts.acted)}}
-    	msg = "Ce séjour contient une ou plusieurs interventions qui ont probablement déjà eu lieu :";
-	  	{{foreach from=$cancel_alerts.acted item=alert}}
-	  	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
-	  	{{/foreach}}
-	  	if (CanBloc.edit) {
-	  	  if (!confirm(msg + "\n\nVoulez-vous malgré tout l'annuler ?")) {
-	  	  	return;
-	  	 	}
-	  	}
-	  	else {
-	  	  alert(msg + "\n\nVeuillez vous adresser au responsable de bloc pour annuler cette intervention.");
-	  	  return;
-	  	}
-	  	{{/if}}   	
-    
-      oElement.value = "1";
-      oForm.submit();
-      return;
-    }
-    {{/if}}
-    
+  	if (checkCancelAlerts()) {
+	    oElement.value = "1";
+	    oForm.submit();
+	    return;   
+  	}
   }
       
   // Rétablissement
