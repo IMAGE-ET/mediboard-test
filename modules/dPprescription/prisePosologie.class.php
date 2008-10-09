@@ -240,6 +240,8 @@ class CPrisePosologie extends CMbMetaObject {
   			$date_heure = "$day $heure";
 				if($date_heure > $borne_min && $date_heure < $borne_max){
 				  $nb = 1;
+				} else {
+				  $nb = 0;
 				}
 				
   		} 
@@ -248,7 +250,7 @@ class CPrisePosologie extends CMbMetaObject {
   		  // Pour cela, on verifie si la prise est faite le 1er et dernier jour
 				$first_prise = mbDate($borne_min)." $heure";
   		  $last_prise  = mbDate($borne_max)." $heure";
-			  $nb = $nb_days - 2;
+			  $nb = $nb_days - 1;
 
   		  if($first_prise > $borne_min){
 				  $nb++;

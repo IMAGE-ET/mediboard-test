@@ -47,6 +47,9 @@ $warning = array();
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 foreach($prescriptions as $_prescription){
+  $date_min = $_date_min;
+  $date_max = $_date_max;
+  
   // Stockage du sejour de la prescription
   $sejour =& $_prescription->_ref_object;
   if(!$sejour->_ref_patient){
@@ -57,11 +60,13 @@ foreach($prescriptions as $_prescription){
   // On borne les dates aux dates du sejour si besoin
   $date_min = max($sejour->_entree, $date_min);
   $date_max = min($sejour->_sortie, $date_max);
-  
+
   if ($date_min > $date_max) continue;
   
   $_prescription->loadRefsLinesMed(1,1);
   foreach($_prescription->_ref_prescription_lines as $_line_med){
+    
+    
     if (!$_line_med->debut) continue;
     
     $cip = $_line_med->code_cip;
@@ -70,6 +75,8 @@ foreach($prescriptions as $_prescription){
     $_line_med->_debut_reel = (!$_line_med->_debut_reel) ? $sejour->_entree : $_line_med->_debut_reel;
     $_line_med->_fin_reelle = (!$_line_med->_fin_reelle) ? $sejour->_sortie : $_line_med->_fin_reelle;
 
+    
+    
     // Si la ligne n'est pas dans les bornes donné, on en tient pas compte
     if (!($_line_med->_debut_reel >= $date_min && $_line_med->_debut_reel <= $date_max ||
           $_line_med->_fin_reelle >= $date_min && $_line_med->_fin_reelle <= $date_max ||
