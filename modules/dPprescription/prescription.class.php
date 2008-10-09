@@ -69,9 +69,10 @@ class CPrescription extends CMbObject {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["prescription_line_medicament"] = "CPrescriptionLineMedicament prescription_id";
-    $backRefs["prescription_line_element"]    = "CPrescriptionLineElement prescription_id";
-    $backRefs["prescription_line_comment"]    = "CPrescriptionLineComment prescription_id";
+    $backRefs["prescription_line_medicament"]     = "CPrescriptionLineMedicament prescription_id";
+    $backRefs["prescription_line_element"]        = "CPrescriptionLineElement prescription_id";
+    $backRefs["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
+    $backRefs["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
     return $backRefs;
   }
   
