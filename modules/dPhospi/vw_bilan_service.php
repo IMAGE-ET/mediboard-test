@@ -128,7 +128,6 @@ foreach($prescriptions as $_prescription){
             if($patient->_ref_constantes_medicales->poids){
               $unite_prise = str_replace('/kg', '', $unite_prise);
             }
-           
             if($unite_prise)
             $dateTimePrise = "$_date $_hour:00:00";
 			      if(array_key_exists($line_id, $lines[$type])){
@@ -159,8 +158,10 @@ foreach($list_lines as $_lines_by_type){
     $patient =& $sejour->_ref_patient;
     $patient->loadRefConstantesMedicales();
     $type = ($curr_line->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
+        
     if($curr_line->_administrations){
 	    foreach($curr_line->_administrations as $unite_prise => $lines){
+	     
 	      if(is_numeric($unite_prise)){
           $prise = new CPrisePosologie();
           $prise->load($unite_prise);
@@ -177,6 +178,7 @@ foreach($list_lines as $_lines_by_type){
 	          $administrations[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$hour][$type][$curr_line->_id][$unite_prise]["administre"] = $_line["quantite"];
 	        }
 	      }
+
 	    }
     }
   }
@@ -188,14 +190,30 @@ foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
     foreach($lines_by_date as $_date => &$lines_by_hours){
       if(isset($administrations[$chambre_view][$sejour_id][$_date])){
 	      foreach($administrations[$chambre_view][$sejour_id][$_date] as $hour_adm => $adm){
+	        // Si l'heure n'est pas presente pour ce patient, on la rajoute
 	        if(!array_key_exists($hour_adm, $lines_by_hours)){
-	          $lines_by_date[$_date][$hour_adm] = $administrations[$chambre_view][$sejour_id][$_date][$hour_adm];
+	          $lines_by_hours[$hour_adm] = $administrations[$chambre_view][$sejour_id][$_date][$hour_adm];
 	        }
 	      }
       }
       foreach($lines_by_hours as $_hour => &$lines_by_type){
+        if(isset($administrations[$chambre_view][$sejour_id][$_date][$_hour])){
+	        foreach($administrations[$chambre_view][$sejour_id][$_date][$_hour] as $type => $types){
+	          if(!array_key_exists($type, $lines_by_type)){
+	            $lines_by_type[$type] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type];
+	          }
+	        }
+	      }
         foreach($lines_by_type as $type => &$lines_by_unite){
+          if(isset($administrations[$chambre_view][$sejour_id][$_date][$_hour][$type])){
+	          foreach($administrations[$chambre_view][$sejour_id][$_date][$_hour][$type] as $line_id => $_lines){
+	            if(!array_key_exists($line_id, $lines_by_unite)){
+	              $lines_by_unite[$line_id] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type][$line_id];
+	            }
+	          }
+          }
           foreach($lines_by_unite as $line_id => &$lines_by_type_prise){
+
             foreach($lines_by_type_prise as $unite_prise => &$_line){  
               @$_line["administre"] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type][$line_id][$unite_prise]["administre"];
             }
