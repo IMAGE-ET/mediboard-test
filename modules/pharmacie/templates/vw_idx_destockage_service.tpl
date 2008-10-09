@@ -14,7 +14,7 @@ function refreshDestockagesList() {
 }
 </script>
 
-<form name="filter-destockage" action="?" method="post" onsubmit="if(checkForm(this)){ return filter.submit(); } else { return false; }">
+<form name="filter-destockage" action="?" method="get" onsubmit="if(checkForm(this)){ return filter.submit(); } else { return false; }">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>
