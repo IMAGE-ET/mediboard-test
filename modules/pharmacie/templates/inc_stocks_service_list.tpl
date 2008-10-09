@@ -6,9 +6,12 @@
     <th>Retour des services</th>
   </tr>
   {{foreach from=$list_stocks_service item=stock}}
-    
     <tr>
-      <td>{{$stock->_ref_product->_view}}</td>
+      <td>
+        <a href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
+        {{$stock->_ref_product->_view}}
+        </a>
+      </td>
       <td>{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>
       <td>
         {{assign var=id value=$stock->_id}}

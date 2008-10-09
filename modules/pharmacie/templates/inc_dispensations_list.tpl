@@ -1,16 +1,7 @@
 <script type="text/javascript">
-  {{if $mode_nominatif}}
-  $('list-nominatives-count').update({{$dispensations|@count}});
-  {{else}}
-  $('list-globales-count').update({{$dispensations|@count}});
-  {{/if}}
+  $('list-dispensations-count').update({{$dispensations|@count}});
 </script>
 
-{{if $mode_nominatif && !$prescription->_id}}
-  <div class="big-info">
-    Veuillez sélectionner un patient pour réaliser une dispensation nominative.
-  </div>
-{{else}}
 <table class="tbl">
   {{if $mode_nominatif}}
   <tr>
@@ -46,7 +37,21 @@
         </td>
         <td>
         {{if array_key_exists($code_cip,$quantites_reference) && array_key_exists($unite_prise, $quantites_reference.$code_cip)}}
-          {{$quantites_reference.$code_cip.$unite_prise}} {{$medicament->libelle_unite_presentation}}
+          {{if $mode_nominatif}}
+            {{$quantites_reference.$code_cip.$unite_prise}} {{$medicament->libelle_unite_presentation}}
+          {{else}}
+            <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
+                 class="tooltip-trigger">
+              <a href="#1">{{$quantites_reference.$code_cip.$unite_prise}} {{$medicament->libelle_unite_presentation}}</a>
+            </div>
+            <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
+              <ul>
+                {{foreach from=$_patients item=_patient}}
+                  <li>{{$_patient->_view}}</li>
+                {{/foreach}}
+              </ul>
+            </div>
+          {{/if}}
         {{/if}}
         </td>
         
@@ -61,21 +66,7 @@
         
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
-          {{if $mode_nominatif}}
-            {{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}
-          {{else}}
-            <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
-                 class="tooltip-trigger">
-              <a href="#1">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</a>
-            </div>  
-            <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
-              <ul>
-                {{foreach from=$_patients item=_patient}}
-                  <li>{{$_patient->_view}}</li>
-                {{/foreach}}
-              </ul>
-            </div>
-          {{/if}}
+          {{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
           {{if array_key_exists($code_cip,$delivrances)}}
@@ -127,7 +118,7 @@
             {{if $mode_nominatif}}
             <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
             {{/if}}
-            {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3}}
+            {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0}}
             <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
           </form>
           {{else}}
@@ -152,6 +143,9 @@
       </tr>
     {{/foreach}}
     </tbody>
+  {{foreachelse}}
+    <tr>
+      <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
 </table>
-{{/if}}

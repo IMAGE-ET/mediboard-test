@@ -2,23 +2,34 @@
 function refreshLists() {
   var form = getForm("filter");
   
-  urlGlobales = new Url;
-  urlGlobales.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
+  url = new Url;
+  if (form.patient_id && $V(form.patient_id)) {
+    url.setModuleAction("pharmacie", "httpreq_vw_dispensations_nominative_list");
+    $('list-dispensations-title').update('Nominatif');
+    $('list-stocks-title').update('Nominatif hors prescription');
+  }
+  else {
+    url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
+    $('list-dispensations-title').update('Global');
+    $('list-stocks-title').update('Global hors prescription');
+  }
+  $('list-dispensations-count').update(0);
   
-  urlNominatives = new Url;
-  urlNominatives.setModuleAction("pharmacie", "httpreq_vw_dispensations_nominative_list");
-
   $A(form.elements).each (function (e) {
-    urlGlobales.addParam(e.name, $V(e));
-    urlNominatives.addParam(e.name, $V(e));
+    url.addParam(e.name, $V(e));
   });
-
-  urlGlobales.requestUpdate("list-globales", { waitingText: null } );
-  urlNominatives.requestUpdate("list-nominatives", { waitingText: null } );
+  url.requestUpdate("list-dispensations");
 
   refreshStocks();
-  
   return false;
+}
+
+function refreshStocks() {
+  var formFilter = getForm("filter");
+  url = new Url;
+  url.setModuleAction("pharmacie", "httpreq_vw_stocks_service_list");
+  url.addParam("service_id", $V(formFilter.service_id));
+  url.requestUpdate("list-stocks", { waitingText: null } );
 }
 
 var oFormDispensation;
@@ -49,21 +60,13 @@ Main.add(function () {
       }
   });
 
-  refreshStocks();
+  refreshLists();
 });
 
 function updateDispensationUrgence(formUrgence) {
   var formFilter = getForm("filter");
   $V(formUrgence.service_id, $V(formFilter.service_id));
   $V(formUrgence.patient_id, $V(formFilter.patient_id));
-}
-
-function refreshStocks() {
-  var formFilter = getForm("filter");
-  url = new Url;
-  url.setModuleAction("pharmacie", "httpreq_vw_stocks_service_list");
-  url.addParam("service_id", $V(formFilter.service_id));
-  url.requestUpdate("list-stocks", { waitingText: null } );
 }
 </script>
 
@@ -85,13 +88,11 @@ function refreshStocks() {
       <button class="tick">Dispenser</button>
     </form>
   </li>
-  <li><a href="#list-globales">Globales (<span id="list-globales-count">0</span>)</a></li>
-  <li><a href="#list-nominatives">Nominatives (<span id="list-nominatives-count">0</span>)</a></li>
-  <li><a href="#list-stocks">{{tr}}CProductStockService.more{{/tr}}</a></li>
+  <li><a href="#list-stocks" id="list-stocks-title">Stocks</a></li>
+  <li><a href="#list-dispensations"><span id="list-dispensations-title">Global</span> (<span id="list-dispensations-count">0</span>)</a></li>
 </ul>
 <hr class="control_tabs" />
 
 <!-- Tabs containers -->
-<div id="list-globales" style="display: none;"></div>
-<div id="list-nominatives" style="display: none;"></div>
 <div id="list-stocks" style="display: none;"></div>
+<div id="list-dispensations" style="display: none;"></div>

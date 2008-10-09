@@ -16,6 +16,7 @@ function refreshDestockagesList() {
 
 <form name="filter-destockage" action="?" method="get" onsubmit="if(checkForm(this)){ return filter.submit(); } else { return false; }">
   <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="limit" value="" />
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
@@ -29,7 +30,7 @@ function refreshDestockagesList() {
         {{/foreach}}
         </select>
       </td>
-      <td><label><input name="all_stocks" type="checkbox" /> tous les stocks</label></td>
+      <td><label><input name="all_stocks" type="checkbox" {{if $all_stocks == 'true'}}checked="checked"{{/if}} /> tous les stocks</label></td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>

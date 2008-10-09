@@ -14,12 +14,18 @@
     </div>
   </td>
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
-  <td>{{mb_value object=$curr_delivery->_ref_stock field=quantity}}</td>
+  <td>
+    <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_group_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
+      {{mb_value object=$curr_delivery->_ref_stock field=quantity}} {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
+    </a>
+  </td>
   <td>{{mb_value object=$curr_delivery field=quantity}}</td>
   <td>
     {{assign var=id value=$curr_delivery->_id}}
     {{assign var=stock value=$stocks_service.$id}}
-    {{$stock->quantity}}
+    <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
+      {{$stock->quantity}}
+    </a>
   </td>
   <td>
   {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}

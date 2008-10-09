@@ -19,12 +19,10 @@ $service->group_id = $g;
 $list_services = $service->loadMatchingList('nom');
 
 $date = mbDate();
-$delivrance = new CProductDelivery();
-
 $date_min = mbGetValueFromGetOrSession('_date_min', $date.' 00:00:00');
 $date_max = mbGetValueFromGetOrSession('_date_max', $date.' 23:59:59');
-mbSetValueToSession('_date_min', $date_min);
-mbSetValueToSession('_date_max', $date_max);
+
+$delivrance = new CProductDelivery();
 $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;
 

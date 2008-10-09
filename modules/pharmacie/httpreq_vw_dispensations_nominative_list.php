@@ -47,7 +47,7 @@ if($prescription_id){
 	  $date_min = max($sejour->_entree, $date_min);
 	  $date_max = min($sejour->_sortie, $date_max);
 	  
-	  if ($date_min > $date_max) continue;
+	  //if ($date_min > $date_max) continue;
 	  
     $prescription->loadRefsLinesMed(1,1);
 	  foreach($prescription->_ref_prescription_lines as $_line_med){ 
@@ -72,6 +72,7 @@ if($prescription_id){
 	    // Calcul de la quantite en fonction des prises
 	    $_line_med->calculQuantiteLine($date_min, $date_max);
 	    foreach($_line_med->_quantites as $unite_prise => $quantite){
+	    	if ($quantite <= 0) continue;
 	    	$mode_kg = 0;
 	      
 	      // Dans le cas d'un unite_prise/kg
@@ -101,7 +102,7 @@ if($prescription_id){
 	      }
 	      if(($mode_kg && $poids) || !$mode_kg){
 	        $dispensations[$cip][$unite_prise] += ceil($quantite);  
-	      }  
+	      }
 	    }
 	    if(!isset($medicaments[$cip])){
 	      $medicaments[$cip] =& $_line_med->_ref_produit;

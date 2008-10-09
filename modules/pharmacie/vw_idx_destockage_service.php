@@ -11,6 +11,7 @@ global $can, $g;
 $can->needsRead();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
+$all_stocks = mbGetValueFromGetOrSession('all_stocks');
 
 // Services list
 $service = new CService();
@@ -34,6 +35,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('service_id',    $service_id);
 $smarty->assign('list_services', $list_services);
 $smarty->assign('delivrance',    $delivrance);
+$smarty->assign('all_stocks',    $all_stocks);
 
 $smarty->display('vw_idx_destockage_service.tpl');
 
