@@ -122,6 +122,7 @@ if($prescription->_id){
 	  		foreach($lines_by_cat as $type_elt => $lines_by_type){
 	  			foreach($lines_by_type as $key => $_line){
 	  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+	  			  $_line->loadRefsPrises();
 	  			}
 	  		}
 	  	}
