@@ -15,7 +15,7 @@ Main.add(function () {
 <select name="patient_id" onchange="editFieldPrescription($V(this))">
   <option value="">&mdash; Dispensations globales</option>
   {{foreach from=$patients item=_patient}}
-    <option value="{{$_patient->_id}}" {{if $_patient->_id == $patient_id}}selected="selected"{{/if}}>Dispensation pour {{$_patient->_view}}</option>
+    <option value="{{$_patient->_id}}" {{*if $_patient->_id == $patient_id}}selected="selected"{{/if*}}>Dispensation pour {{$_patient->_view}}</option>
   {{/foreach}}
 </select>
 
