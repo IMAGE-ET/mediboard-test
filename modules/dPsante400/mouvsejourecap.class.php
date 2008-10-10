@@ -54,6 +54,19 @@ class CMouvSejourEcap extends CMouvement400 {
     
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
+    
+    // Le séjour ne trouve pas son patient
+    if (!$this->patient->_id) {
+      $this->trace("Introuvable", "Patient");
+      $this->starStatus(self::STATUS_SEJOUR);
+      $this->starStatus(self::STATUS_OPERATION);
+      $this->starStatus(self::STATUS_PRATICIEN);
+      $this->starStatus(self::STATUS_ACTES);
+      $this->starStatus(self::STATUS_NAISSANCE);
+      return;
+    }
+    
+    // Contenu du séjour
     $this->syncSej();
     $this->syncDHE();
     $this->syncOperations();
@@ -278,10 +291,12 @@ class CMouvSejourEcap extends CMouvement400 {
     $pratDefault->function_id = $this->fonction->_id;
     
     // Type de mediuser
-    $PROF = $prat400->consume("PROF");
-    if ($PROF & self::PROFIL_MEDECIN)      $pratDefault->_user_type = 13;
-    if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
-    if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
+    if (isset($prat400)) {
+	    $PROF = $prat400->consume("PROF");
+	    if ($PROF & self::PROFIL_MEDECIN)      $pratDefault->_user_type = 13;
+	    if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
+	    if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
+    }
     
     $this->trace($praticien->getDBFields(), "Praticien à enregistrer");
     
@@ -333,7 +348,6 @@ class CMouvSejourEcap extends CMouvement400 {
     }
     
     $pat400 = new CRecordSante400();
-    
     $query = "SELECT * FROM $this->base.ECPAPF " .
         "\nWHERE PACIDC = ? " .
         "\nAND PADMED = ?";
@@ -342,6 +356,12 @@ class CMouvSejourEcap extends CMouvement400 {
       $DMED,
     );
     $pat400->query($query, $values);
+    if (!$pat400->data) {
+			$this->setStatus(self::STATUS_PATIENT);
+			$this->starStatus(self::STATUS_SEJOUR);
+			return;
+    }
+    
     $pat400->valuePrefix = "PA";
 
     $this->patient = new CPatient;

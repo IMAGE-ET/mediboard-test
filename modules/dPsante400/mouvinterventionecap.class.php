@@ -21,6 +21,19 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
+
+    // Le séjour ne trouve pas son patient
+    if (!$this->patient->_id) {
+      $this->trace("Introuvable", "Patient");
+      $this->starStatus(self::STATUS_SEJOUR);
+      $this->starStatus(self::STATUS_OPERATION);
+      $this->starStatus(self::STATUS_PRATICIEN);
+      $this->starStatus(self::STATUS_ACTES);
+      $this->starStatus(self::STATUS_NAISSANCE);
+      return;
+    }
+    
+    // Contenu du séjour
     $this->findSejour();
     $this->syncSej();
     $this->syncDHE();
