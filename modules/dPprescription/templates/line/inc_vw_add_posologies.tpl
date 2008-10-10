@@ -53,6 +53,6 @@ Main.add( function(){
   </span>
   
   {{if $line->_id}}
-    <button type="button" class="submit notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
+    <button type="button" class="add notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
   {{/if}}
 </form>

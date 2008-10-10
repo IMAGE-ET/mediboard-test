@@ -43,7 +43,7 @@ Main.add(function () {
   {{assign var=prise_id value=$prise->_id}}
   
   <form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block;">
-    <button style="float: right" type="button" class="cancel notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
+    <button style="float: right" type="button" class="remove notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
   
   
 	  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
