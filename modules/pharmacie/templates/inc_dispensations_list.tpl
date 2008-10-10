@@ -125,7 +125,10 @@
           Stock épuisé à la pharmacie
           {{/if}}
         {{else}}
-        Pas de stock à la pharmacie
+        Pas de stock à la pharmacie 
+        <button type="button" onclick="window.location.href='?m=dPstock&amp;tab=vw_idx_stock_group'" class="new">
+          Créer
+        </button>
         {{/if}}
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
