@@ -1,5 +1,5 @@
 <li>
-  <strong>{{$med->_ref_produit->libelle}}</strong>
+  <strong>{{$med->_ucd_view}}</strong>
   <ul>
     {{if $med->_ref_prises|@count || $med->_duree_prise || $med->date_arret || $med->_specif_prise}}
     <li>

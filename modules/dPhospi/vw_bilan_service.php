@@ -33,17 +33,17 @@ for($i=0; $i<=$nb_days; $i++){
 // Chargement de toutes les prescriptions
 $where = array();
 $ljoin = array();
-$ljoin['sejour'] = 'prescription.object_id = sejour.sejour_id';
-$ljoin['affectation'] = 'sejour.sejour_id = affectation.sejour_id';
-$ljoin['lit'] = 'affectation.lit_id = lit.lit_id';
-$ljoin['chambre'] = 'lit.chambre_id = chambre.chambre_id';
-$ljoin['service'] = 'chambre.service_id = service.service_id';
-$where['prescription.type'] = " = 'sejour'";
+$ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
+$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
+$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+$ljoin["service"] = "chambre.service_id = service.service_id";
+$where["prescription.type"] = " = 'sejour'";
 $where[] = "(sejour.entree_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR 
             (sejour.sortie_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR
             (sejour.entree_prevue <= '$date_min 00:00:00' AND sejour.sortie_prevue >= '$date_max 23:59:59')";
 
-$where['service.service_id'] = " = '$service_id'";
+$where["service.service_id"] = " = '$service_id'";
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 
@@ -72,6 +72,9 @@ foreach($prescriptions as $_prescription){
   $sejour->loadRefPatient();
   $sejour->loadRefsOperations();
   $sejour->loadCurrentAffectation($date);
+  if(!$sejour->_ref_curr_affectation->_id) {
+    continue;
+  }
   $sejour->_ref_last_operation->loadRefPlageOp();
 
   $patient =& $sejour->_ref_patient;
