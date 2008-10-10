@@ -16,7 +16,7 @@
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
   <td>
     <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_group_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
-      {{mb_value object=$curr_delivery->_ref_stock field=quantity}} {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
+      {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
     </a>
   </td>
   <td>{{mb_value object=$curr_delivery field=quantity}}</td>
