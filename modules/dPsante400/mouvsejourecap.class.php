@@ -366,7 +366,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $this->patient = new CPatient;
     $this->patient->nom              = $pat400->consume("ZNOM");
-    $this->patient->prenom           = $pat400->consume("ZPRE");
+    $this->patient->prenom           = mbGetValue($pat400->consume("ZPRE"), "Inconnu");
     
     $this->patient->_specs["naissance"]->mask = null;
     $this->patient->naissance        = $pat400->consumeDate("DNAI");
