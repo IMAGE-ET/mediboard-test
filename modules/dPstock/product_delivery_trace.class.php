@@ -61,10 +61,11 @@ class CProductDeliveryTrace extends CMbObject {
   	$this->completeField('quantity');
     $this->loadRefsFwd();
     $stock = $this->getStock();
+    $stock->loadRefsFwd();
     
     if ($this->date_delivery) {
       if (($this->quantity == 0) || ($stock->quantity < $this->quantity)) {
-        return 'Impossible de délivrer ce nombre d\'articles';
+        return 'Impossible de délivrer ce nombre de '.$stock->_ref_product->unit_title;
       }
     }
     
@@ -95,8 +96,8 @@ class CProductDeliveryTrace extends CMbObject {
       } 
       // if not, the stock is created
       else {
-	      $stock_service->order_threshold_min = $this->quantity;
-	      $stock_service->order_threshold_max = $this->quantity + 1;
+	      $stock_service->order_threshold_min = abs($this->quantity) + 1;
+	      $stock_service->order_threshold_max = $stock_service->order_threshold_min * 2;
         $stock_service->quantity = $this->quantity;
       }
 
@@ -128,7 +129,7 @@ class CProductDeliveryTrace extends CMbObject {
   
   function loadRefsFwd() {
     $this->_ref_delivery = new CProductDelivery();
-    $this->_ref_delivery->load($this->delivery_id); 
+    $this->_ref_delivery = $this->_ref_delivery->getCached($this->delivery_id); 
   }
 
   function getPerm($permType) {
