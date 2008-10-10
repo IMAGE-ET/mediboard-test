@@ -42,7 +42,7 @@ Main.add(function () {
 {{foreach from=$line->_ref_prises item=prise}}
   {{assign var=prise_id value=$prise->_id}}
   
-  <form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block;">
+  <form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block; clear: both;">
     <button style="float: right" type="button" class="remove notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
   
   
