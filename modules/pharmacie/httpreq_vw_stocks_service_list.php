@@ -53,8 +53,9 @@ foreach ($list_stocks_service as $stock) {
 	// And then the negative traces for this delivery 
 	if ($delivery->_id) {
     $whereTrace['delivery_id'] = "= '$delivery->_id'";
+    $list_returns[$stock->_id] = $trace->loadList($whereTrace);
 	}
-	$list_returns[$stock->_id] = $trace->loadList($whereTrace);
+	
 }
 
 // Smarty template
