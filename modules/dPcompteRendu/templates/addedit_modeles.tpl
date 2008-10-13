@@ -44,7 +44,6 @@ function supprimer() {
   form.submit();
 }
 
-{{*if !$compte_rendu->_id*}}
 // Taleau des categories en fonction de la classe du compte rendu
 var listObjectClass = {{$listObjectClass|@json}};
 
@@ -58,17 +57,23 @@ function loadObjectClass(value) {
   var form = document.editFrm;
   var select = form.elements['object_class'];
   var options = listObjectClass;
-  // delete all former options except first
+
+  // Delete all former options except first
   while (select.length > 1) {
     select.options[1] = null;
   }
-  // insert new ones
+  
+  // Insert new ones
   for (var elm in options) {
     var option = elm;
     if (typeof(options[option]) != "function") { // to filter prototype functions
       select.options[select.length] = new Option(aTraducClass[option], option, option == value);
     }
   }
+  
+  // Check null position
+  notNullOK(select);
+ 
   loadCategory();
 }
 
@@ -91,13 +96,10 @@ function loadCategory(value){
 }
 
 Main.add(function () {
-  {{if !$compte_rendu->_id}}
   loadObjectClass('{{$compte_rendu->object_class}}');
-  {{/if}}
   loadCategory('{{$compte_rendu->file_category_id}}');
 });
 
-{{*/if*}}
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -118,8 +120,8 @@ Main.add(function () {
       <table class="form">
         <tr>
           <th class="category" colspan="2">
-            {{if $compte_rendu->compte_rendu_id}}
-            <a style="float:right;" href="#" onclick="view_log('CCompteRendu',{{$compte_rendu->compte_rendu_id}})">
+            {{if $compte_rendu->_id}}
+            <a style="float:right;" href="#" onclick="view_log('CCompteRendu',{{$compte_rendu->_id}})">
             <img src="images/icons/history.gif" alt="historique" />
             </a>
             {{/if}}
@@ -266,15 +268,9 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
             <td>
-              {{*mb_field object=$compte_rendu field="object_class" hidden="1"*}}
-              {{if !$compte_rendu->_id}}
               <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()">
                 <option value="">&mdash; Choisir un objet</option>
               </select>
-              {{else}}
-                {{tr}}{{$compte_rendu->object_class}}{{/tr}}
-                {{mb_field object=$compte_rendu field="object_class" hidden=1 prop="" }}
-              {{/if}}
             </td>
           </tr>
 

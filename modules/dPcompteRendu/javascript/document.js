@@ -20,7 +20,7 @@ var Document = {
       url.addParam("target_class", target_class);
     }
     
-    url.popup(700, 700, "Document");
+    url.popup(800, 700, "Document");
   },
   
   createPack: function(pack_id, object_id, target_id, target_class) {
