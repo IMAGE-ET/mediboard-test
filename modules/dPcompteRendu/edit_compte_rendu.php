@@ -46,7 +46,7 @@ else {
 		
 		$style = "
 			<style type='text/css'>
-			div.header: {
+			div.header {
 				height: {$header->height}px;
 			}
 
