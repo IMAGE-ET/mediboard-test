@@ -106,8 +106,8 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
     document.form_prescription.sejour_id.value = sejour_id;
     if($('dossier_soins').visible()) {
       loadTraitement(sejour_id, date);
-      loadSuivi(sejour_id);
     }
+    loadSuivi(sejour_id);
   }
   if($('constantes-medicales')){
     constantesMedicalesDrawn = false;
