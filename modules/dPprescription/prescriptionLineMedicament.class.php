@@ -168,11 +168,29 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
                        !$this->valide_infirmiere && 
                        !$this->valide_pharma;
     
-		$perm_edit = (!$this->signee || $mode_pharma) && 
-                 !$this->valide_pharma && 
-                 ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma);
+		
  
+    // Cas d'une ligne de protocole  
+    if($this->_protocole){
+      $protocole =& $this->_ref_prescription;
+      if($protocole->praticien_id){
+        $protocole->loadRefPraticien();
+        $perm_edit = $protocole->_ref_praticien->canEdit();    
+      } elseif($protocole->function_id){
+        $protocole->loadRefFunction();
+        $perm_edit = $protocole->_ref_function->canEdit();
+      } elseif($protocole->group_id){
+        $protocole->loadRefGroup();
+        $perm_edit = $protocole->_ref_group->canEdit();
+      }
+    } else {
+      $perm_edit = (!$this->signee || $mode_pharma) && 
+                   !$this->valide_pharma && 
+                   ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma);
+    }
+    
     $this->_perm_edit = $perm_edit;
+    
     
     // Modification des dates et des commentaires
     if($perm_edit){

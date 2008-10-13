@@ -32,6 +32,9 @@ class CPrescription extends CMbObject {
   var $_ref_object     = null;
   var $_ref_patient    = null;
   var $_ref_current_praticien = null;
+  var $_ref_praticien = null;
+  var $_ref_function  = null;
+  var $_ref_group     = null;
   
   // BackRefs
   var $_ref_prescription_lines                = null;
@@ -528,6 +531,16 @@ class CPrescription extends CMbObject {
   function loadRefPraticien() {
   	$this->_ref_praticien = new CMediusers();
   	$this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
+  }
+
+  function loadRefFunction() {
+  	$this->_ref_function = new CFunctions();
+  	$this->_ref_function = $this->_ref_function->getCached($this->function_id);
+  }
+  
+  function loadRefGroup() {
+  	$this->_ref_group = new CGroups();
+  	$this->_ref_group = $this->_ref_group->getCached($this->group_id);
   }
   
   /*

@@ -16,6 +16,7 @@ Main.add( function(){
 <tr>
   <td></td>
   <td colspan="5">
+    {{if $line->_perm_edit}}
     <form name="editDuree-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -51,5 +52,43 @@ Main.add( function(){
 				{{mb_field object=$line field=time_fin form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange"}}			
 		{{/if}}
     </form>
+    {{else}}
+ 	
+		{{if $line->duree}}
+     Durée de {{mb_value object=$line field=duree}} jour(s) 
+    {{/if}}
+    {{if $line->jour_decalage && $line->unite_decalage}} 
+	    A partir de
+			{{if $prescription->object_class == "CSejour"}}
+			 {{mb_value object=$line field=jour_decalage}}
+			{{else}}
+			 J
+			{{/if}}
+			{{if $line->decalage_line >= 0}}+{{/if}} {{mb_value object=$line field=decalage_line size="3"}}
+			{{if $prescription->object_class == "CSejour"}}
+			  {{mb_value object=$line field=unite_decalage}}
+			{{else}}
+			 (jours)
+			{{/if}} 
+			 <!-- Heure de debut -->
+			 {{if $line->time_debut}}
+				 à {{mb_value object=$line field=time_debut}}
+			 {{/if}}
+		 {{/if}}
+		 
+		 {{if $line->jour_decalage_fin && $line->unite_decalage_fin}}
+			 <!-- Date de fin -->
+			 Jusqu'à {{mb_value object=$line field=jour_decalage_fin}}
+			 {{if $line->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$line field=decalage_line_fin increment=1 }}
+			 {{mb_value object=$line field=unite_decalage_fin }}
+			 <!-- Heure de fin -->
+			 {{if $line->time_fin}} 
+				à {{mb_value object=$line field=time_fin}}		
+			 {{/if}}	
+		 {{/if}}
+		
+		
+    
+    {{/if}}
   </td>
 </tr>
