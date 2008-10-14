@@ -87,7 +87,7 @@
 			 {{if $elt->time_fin}} 
 				à {{mb_value showPlus=1 object=$elt field=time_fin}}		
 			 {{/if}}	
-		 {{else}}
+		 {{elseif !$elt->duree}}
 		 pendant 1 jour
 		 {{/if}}
 		 
