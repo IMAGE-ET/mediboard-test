@@ -57,7 +57,7 @@ Main.add(function () {
           <!-- Pre-admission -->
           <td id="pre_admission" class="step {{if $prescription->type == 'pre_admission'}}selected{{/if}}">
           {{if $prescription_pre_admission->_id}}
-	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}');">
+	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true);">
 	              {{tr}}CPrescription.type.pre_admission{{/tr}}
 	            </a>
             {{if $prescription->type == "pre_admission" && !$prescription_sejour->_id}}
@@ -81,7 +81,7 @@ Main.add(function () {
           <td id="sejour" class="step {{if $prescription->type == 'sejour'}}selected{{/if}}">
 	          {{if $prescription_sejour->_id}}
 	            
-		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}');">
+		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true);">
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
 		      
@@ -103,7 +103,7 @@ Main.add(function () {
          
           <td id="sortie" class="step {{if $prescription->type == 'sortie'}}selected{{/if}}">
           {{if $prescriptions.sortie->_id}}
-              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}');">
+              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true);">
 		            {{tr}}CPrescription.type.sortie{{/tr}}
 		          </a>
 		          {{if $prescription->type == "sortie"}}
