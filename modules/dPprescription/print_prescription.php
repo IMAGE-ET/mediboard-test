@@ -208,7 +208,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 
 $traduction = array();
 $traduction["E"] = "l'entrée";
-$traduction["I"] = "l'intervention";
+$traduction["I"] = "I";
 $traduction["S"] = "la sortie";
 
 // Création du template

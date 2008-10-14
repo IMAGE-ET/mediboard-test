@@ -58,9 +58,10 @@
     
     <!-- Date de debut de la ligne -->
     {{if $med->jour_decalage && $med->unite_decalage}} 
-	    A partir de
+	    à
 			{{if $prescription->object_class == "CSejour"}}
-			 {{mb_value object=$med field=jour_decalage}}
+			{{assign var=line_jour_decalage value=$med->jour_decalage}}
+			 {{$traduction.$line_jour_decalage}}
 			{{else}}
 			 J
 			{{/if}}
@@ -84,8 +85,9 @@
 		 
 		 
 		 {{if $med->jour_decalage_fin && $med->unite_decalage_fin}}
+		   {{assign var=line_jour_decalage_fin value=$med->jour_decalage_fin}}
 			 <!-- Date de fin -->
-			 Jusqu'à {{mb_value showPlus=1 object=$med field=jour_decalage_fin}}
+			 jusqu'à {{$traduction.$line_jour_decalage_fin}}
 			 
 			 {{if ($med->unite_decalage_fin == "jour" && $med->decalage_line_fin > 0) || ($med->unite_decalage_fin == "heure")}}
 				 {{if $med->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$med field=decalage_line_fin increment=1 }}

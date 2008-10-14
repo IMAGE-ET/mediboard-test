@@ -51,7 +51,7 @@
     
     <!-- Date de debut de la ligne -->
     {{if $elt->jour_decalage && $elt->unite_decalage}} 
-	    A
+	    à
 			{{if $prescription->object_class == "CSejour"}}
 			 {{assign var=line_jour_decalage value=$elt->jour_decalage}}
 			 {{$traduction.$line_jour_decalage}}
@@ -77,7 +77,7 @@
 		 {{if $elt->jour_decalage_fin && $elt->unite_decalage_fin}}
 		   {{assign var=line_jour_decalage_fin value=$elt->jour_decalage_fin}}
 			 <!-- Date de fin -->
-			 Jusqu'à {{$traduction.$line_jour_decalage_fin}}
+			 jusqu'à {{$traduction.$line_jour_decalage_fin}}
 			 
 			 {{if ($elt->unite_decalage_fin == "jour" && $elt->decalage_line_fin > 0) || ($elt->unite_decalage_fin == "heure")}}
 				 {{if $elt->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line_fin increment=1 }}
