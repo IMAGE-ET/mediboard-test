@@ -64,7 +64,7 @@ class CTimeSpec extends CMbFieldSpec {
     $extra = CMbArray::makeXmlAttributes($params);
     $html  = '<span class="date"><input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
     if ($form) {
-      $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="date" />';
+      $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="time" />';
       if (!$this->notNull) {
         $html .= '<button class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
       }

@@ -158,11 +158,19 @@ class CMbObject {
   }
 
   /**
-   * Initilize object specification
+   * Initialize object specification
    * @return CMbObjectSpec the spec
    */
   function getSpec() {
     return new CMbObjectSpec();
+  }
+  
+  /**
+   * Returns the field's formatted value
+   * @return string The field's formatted value
+   */
+  function getFormattedValue($field) {
+  	return $this->_specs[$field]->getValue($this);
   }
   
   /**

@@ -117,6 +117,66 @@ class CRequest {
   function setLimit($limit) {
     $this->limit = $limit;
   }
+  
+  /**
+   * returns the SQL query fragment containing everuthing after the SELECT *
+   * @param $from The table names
+   */
+  function getRequestFrom($from) {
+    $sql = "\nFROM $from";
+
+    // Left join clauses
+    if ($this->ljoin) {
+      assert(is_array($this->ljoin));
+      foreach ($this->ljoin as $table => $condition) {
+        $sql .= "\nLEFT JOIN `$table` ON $condition";
+      }
+    }
+
+    // Right join clauses
+    if ($this->rjoin) {
+      assert(is_array($this->rjoin));
+      foreach ($this->rjoin as $table => $condition) {
+        $sql .= "\nRIGHT JOIN `$table` ON $condition";
+      }
+    }
+    
+    // Where clauses
+    if (is_array($this->where)) {
+      $where = $this->where;
+      foreach ($where as $field => $eq) {
+        if (is_string($field)) {
+          $rep = str_replace('.', '`.`', $field);
+          $where[$field] = "`$rep` $eq";
+        }
+        
+        $where[$field] = "($where[$field])";
+      }
+    }
+    
+    if ($this->where) {
+      $sql .= "\nWHERE ";
+      $sql .= is_array($this->where) ? implode("\nAND ", $where) : $this->where;
+    }
+      
+    // Group by fields
+    if ($this->group) {
+      $sql .= "\nGROUP BY ";
+      $sql .= is_array($this->group) ? implode(', ', $this->group) : $this->group;
+    }
+      
+    // Order by fields
+    if ($this->order) {
+      $sql .= "\nORDER BY ";
+      $sql .= is_array($this->order) ? implode(', ', $this->order) : $this->order;
+    }
+    
+    // Limits
+    if ($this->limit) {
+      $sql .= "\nLIMIT $this->limit";
+    }
+    return $sql;
+  }
 
   /**
    * returns the SQL string
@@ -160,80 +220,8 @@ class CRequest {
     
     // Table clauses
     $table = implode(', ', $arrayTable);
-    $sql .= "\nFROM $table";
-        
-
-    // Left join clauses
-    if ($this->ljoin) {
-      assert(is_array($this->ljoin));
-      foreach ($this->ljoin as $table => $condition) {
-        $sql .= "\nLEFT JOIN `$table` ON $condition";
-      }
-    }
-
-    // Right join clauses
-    if ($this->rjoin) {
-      assert(is_array($this->rjoin));
-      foreach ($this->rjoin as $table => $condition) {
-        $sql .= "\nRIGHT JOIN `$table` ON $condition";
-      }
-    }
-    
-    // Where clauses
-    
-    if (is_array($this->where)) {
-      $where = $this->where;
-      foreach ($where as $field => $eq) {
-        if (is_string($field)) {
-        	$rep = str_replace('.', '`.`', $field);
-        	$where[$field] = "`$rep` $eq";
-        }
-        
-        $where[$field] = "($where[$field])";
-      }
-    }
-    
-    if ($this->where) {
-      $sql .= "\nWHERE ";
-      $sql .= is_array($this->where) ? implode("\nAND ", $where) : $this->where;
-    }
-      
-    // Group by fields
-    if (is_array($this->group)) {
-      $groups = array();
-      foreach ($this->group as $key => $field) {
-        $groups[$key] = "`$field`";
-      }
-    }
-    
-    if ($this->group) {
-      $sql .= "\nGROUP BY ";
-      $sql .= is_array($this->group) ? implode(", ", $groups) : $this->group;
-    }
-      
-    // Order by fields
-    if (is_array($this->order)) {
-      foreach ($this->order as $key => $field) {
-        // We cannot use the `` syntax because it wont work
-        // with table.field syntax, neither the ASC/DESC one
-        //$this->$order[$key] = "`$field`";
-        $this->order[$key] = $field;
-      }
-    }
-    
-    if ($this->order) {
-      $sql .= "\nORDER BY ";
-      $sql .= is_array($this->order) ? implode(", ", $this->order) : $this->order;
-    }
-    
-    // Limits
-    if ($this->limit) {
-      $sql .= "\nLIMIT $this->limit";
-    }
-    return $sql;
+    return $sql . $this->getRequestFrom($table);
   }
-  
-
 
   /**
    * returns the SQL string that count the number of rows
@@ -254,77 +242,7 @@ class CRequest {
     
     // Table clauses
     $table = implode(', ', $arrayTable);
-    $sql .= "\nFROM $table";
-        
-
-    // Left join clauses
-    if ($this->ljoin) {
-      assert(is_array($this->ljoin));
-      foreach ($this->ljoin as $table => $condition) {
-        $sql .= "\nLEFT JOIN `$table` ON $condition";
-      }
-    }
-
-    // Right join clauses
-    if ($this->rjoin) {
-      assert(is_array($this->rjoin));
-      foreach ($this->rjoin as $table => $condition) {
-        $sql .= "\nRIGHT JOIN `$table` ON $condition";
-      }
-    }
-    
-    // Where clauses
-    
-    if (is_array($this->where)) {
-      $where = $this->where;
-      foreach ($where as $field => $eq) {
-        if (is_string($field)) {
-          $rep = str_replace('.', '`.`', $field);
-          $where[$field] = "`$rep` $eq";
-        }
-        
-        $where[$field] = "($where[$field])";
-      }
-    }
-    
-    if ($this->where) {
-      $sql .= "\nWHERE ";
-      $sql .= is_array($this->where) ? implode("\nAND ", $where) : $this->where;
-    }
-      
-    // Group by fields
-    if (is_array($this->group)) {
-      $groups = array();
-      foreach ($this->group as $key => $field) {
-        $groups[$key] = "`$field`";
-      }
-    }
-    
-    if ($this->group) {
-      $sql .= "\nGROUP BY ";
-      $sql .= is_array($this->group) ? implode(", ", $groups) : $this->group;
-    }
-      
-    // Order by fields
-    if (is_array($this->order)) {
-      foreach ($this->order as $key => $field) {
-        // We cannot use the `` syntax because it wont work
-        // with table.field syntax, neither the ASC/DESC one
-        //$this->$order[$key] = "`$field`";
-        $this->order[$key] = "$field";
-      }
-    }
-    
-    if ($this->order) {
-      $sql .= "\nORDER BY ";
-      $sql .= is_array($this->order) ? implode(", ", $this->order) : $this->order;
-    }
-    
-    // Limits
-    if ($this->limit) {
-      $sql .= "\nLIMIT $this->limit";
-    }
-    return $sql;
+    return $sql . $this->getRequestFrom($table);
   }
 }
 ?>

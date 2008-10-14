@@ -186,7 +186,7 @@ class CMbFieldSpec {
       if (!preg_match($regex, $propValue)) {
       	if (!preg_match($regex, $masked)) {
           return "La donnée '$propValue' ne respecte pas le masque '$this->mask'";
-      	} // else, that means the value is already the rawvalue
+      	} // else, that means the value is already the formatted value
       } else {
         $object->{$this->fieldName} = $formatted;
       }
