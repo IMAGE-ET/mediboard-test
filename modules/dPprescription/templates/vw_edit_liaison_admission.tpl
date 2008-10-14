@@ -41,16 +41,19 @@
   </tr>
   {{foreach from=$protocoles item=_protocole}}
   <tr>
-    <td>
+    <td class="text">
       <strong>
-      {{$_protocole->_ref_chir->_view - $_protocole->libelle}}
+      {{$_protocole->_ref_chir->_view}}
+      {{if $_protocole->libelle}}
+        - {{$_protocole->libelle}}
+      {{/if}}
       {{foreach from=$_protocole->_ext_codes_ccam item=_code}}
-        {{$_code->code}}
+        - {{$_code->code}}
       {{/foreach}}
       </strong>
       <br />  
       {{foreach from=$_protocole->_ext_codes_ccam item=_code_ccam}}
-        {{$_code_ccam->libelleLong}}
+        - {{$_code_ccam->libelleLong}}
         <br />
       {{/foreach}}
     </td>
