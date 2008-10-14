@@ -186,9 +186,9 @@ foreach($lines as $cat_name => $lines_by_cat){
 
 // Reload en full mode
 if($mode_protocole || $mode_pharma){
-echo "<script type='text/javascript'>window.opener.Prescription.reload('$prescription_id','','','$mode_protocole','$mode_pharma')</script>";
+echo "<script type='text/javascript'>window.opener.Prescription.reload('$prescription_id','','','$mode_protocole','$mode_pharma', null, false)</script>";
 } else {
-echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejour('$prescription_id')</script>";
+echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejour('$prescription_id', null, null, null, null, null, null, false)</script>";
 	
 }
 echo $AppUI->getMsg();

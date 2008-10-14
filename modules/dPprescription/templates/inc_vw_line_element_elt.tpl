@@ -5,7 +5,7 @@
 {{assign var=typeDate value=$element}}
 {{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
 <tbody id="line_element_{{$line->_id}}" class="hoverable elt
-       {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
+    {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
   <!-- Header de la ligne d'element -->
   <tr>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"

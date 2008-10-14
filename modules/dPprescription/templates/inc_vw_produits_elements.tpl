@@ -20,10 +20,10 @@ viewEasyMode = function(mode_protocole, mode_pharma){
   url.popup(900,500,"Mode grille");
 }
 
-refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma) {
+refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma, readonly) {
   if (!window[chapitre+'Loaded']) {
     WaitingMessage.cover("div_"+chapitre);
-    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma);
+    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma, null, readonly);
     window[chapitre+'Loaded'] = true;
   }
 }
@@ -206,7 +206,7 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true);"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
   {{/foreach}}
 {{/if}}
 </ul>

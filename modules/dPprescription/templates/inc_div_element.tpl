@@ -47,14 +47,25 @@ Main.add( function(){
 
 </script>
 
-<!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-{{if $prescription->object_id && $is_praticien}}
-<div style="float: right">
+
+
+<div style="float: right;">
+  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
+  <button class="tick" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
+    {{if $readonly}}Mode édition
+    {{else}}Lecture seule
+    {{/if}}
+  </button>
+  {{/if}}
+
+  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+  {{if $prescription->object_id && $is_praticien}}
   <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', '{{$element}}');">
   	Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"
   </button>
+  {{/if}}
 </div>
-{{/if}}
+
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
 {{if $prescription->_can_add_line}}
@@ -85,8 +96,12 @@ Main.add( function(){
     <table class="tbl">
 	  {{foreach from=$lines_cat.element item=line_element}}
 	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_element->praticien_id) || !$praticien_sortie_id}}
-	      {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription}}
-	    {{/if}}
+	      {{if $readonly}}
+          {{include file="inc_vw_line_element_readonly.tpl" _line_element=$line_element prescription_reelle=$prescription}}
+        {{else}}
+          {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription}}
+	      {{/if}}
+      {{/if}}
 	  {{/foreach}}
 	  </table>
 	  
@@ -99,8 +114,12 @@ Main.add( function(){
   	  {{/if}}
   	  {{foreach from=$lines_cat.comment item=line_comment}}
   	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_comment->praticien_id) || !$praticien_sortie_id}}
-  	      {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
-  	    {{/if}}
+          {{if $readonly}}
+            {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
+          {{else}}
+            {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
+  	      {{/if}}
+        {{/if}}
   	  {{/foreach}}
 	  </table>
 	  {{/foreach}}

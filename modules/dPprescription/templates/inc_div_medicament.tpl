@@ -1,3 +1,9 @@
+{{if $prescription->object_id}}
+  {{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
+{{else}}
+  {{assign var=traitements value=""}}
+{{/if}}
+
 <script type="text/javascript">
 
 // Initialisation des dates pour les calendars
@@ -104,9 +110,17 @@ Main.add( function(){
   <input type="hidden" name="substitution_active" value="1" />
 </form>
 
-<!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-{{if $prescription->object_id && ($is_praticien || $mode_pharma)}}
-<div style="float: right">
+<div style="float: right;">
+  {{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements)}}
+  <button class="tick" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
+    {{if $readonly}}Mode édition
+    {{else}}Lecture seule
+    {{/if}}
+  </button>
+  {{/if}}
+  
+  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+  {{if $prescription->object_id && ($is_praticien || $mode_pharma)}}
   <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
     {{if $mode_pharma}}
       Valider toutes les lignes
@@ -114,8 +128,9 @@ Main.add( function(){
       Signer les lignes de médicaments
     {{/if}}
   </button>
+  {{/if}}
 </div>
-{{/if}}
+
 
 {{if $prescription->object_id}}
   <select name="advAction" style="float: right">
@@ -190,13 +205,6 @@ Main.add( function(){
 <br />
 {{/if}}
 
-
-{{if $prescription->object_id}}
-  {{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
-{{else}}
-  {{assign var=traitements value=""}}
-{{/if}}
-
 <!-- Declaration des tableaux permettant de stocker toutes les lignes -->
 <table class="tbl" id="med">
 </table>
@@ -219,7 +227,11 @@ Main.add( function(){
     {{if !($prescription->type == "sortie" && $praticien_sortie_id != $curr_line->praticien_id) || !$praticien_sortie_id}}
     <!-- Si la ligne ne possede pas d'enfant -->
     {{if !$curr_line->child_id}}
-      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
+      {{if $readonly}}
+        {{include file="../../dPprescription/templates/inc_vw_line_medicament_readonly.tpl" prescription_reelle=$prescription}}
+      {{else}}
+        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
+      {{/if}}
     {{/if}}
     {{/if}}
   {{/foreach}}
@@ -233,14 +245,22 @@ Main.add( function(){
   <!-- Affichage des traitements -->
   {{if $prescription->object_id && $traitements}}
     {{foreach from=$traitements item=traitement}}
+      {{if $readonly}}
+        {{include file="../../dPprescription/templates/inc_vw_line_medicament_readonly.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+      {{else}}
         {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+      {{/if}}
     {{/foreach}}
   {{/if}}
   
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
     {{if !($prescription->type == "sortie" && $praticien_sortie_id != $_line_comment->praticien_id) || !$praticien_sortie_id}}
-      {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl" prescription_reelle=$prescription}}
+      {{if $readonly}}
+        {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl" prescription_reelle=$prescription}}
+      {{else}}
+        {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl" prescription_reelle=$prescription}}
+      {{/if}}
     {{/if}}
   {{/foreach}}
   
