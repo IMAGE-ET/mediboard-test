@@ -51,7 +51,11 @@
     
     <!-- Date de debut de la ligne -->
     {{if $elt->jour_decalage && $elt->unite_decalage}} 
+      {{if $elt->duree > 1 || $elt->jour_decalage_fin}}
+	    à partir de
+	    {{else}}
 	    à
+	    {{/if}}
 			{{if $prescription->object_class == "CSejour"}}
 			 {{assign var=line_jour_decalage value=$elt->jour_decalage}}
 			 {{$traduction.$line_jour_decalage}}
