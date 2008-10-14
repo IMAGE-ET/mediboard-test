@@ -1,5 +1,5 @@
 {{assign var=chapitre_category value=$elt->_ref_element_prescription->_ref_category_prescription->chapitre}}
-
+{{if !$elt->_protocole}}
 <li>
   <strong>{{$elt->_ref_element_prescription->_view}}</strong>
 
@@ -27,3 +27,68 @@
 	  </ul>
   {{/if}}    
 </li>
+{{else}}
+<li>
+  <strong>{{$elt->_ref_element_prescription->_view}}</strong>
+
+  {{if $elt->commentaire}}
+  <em>({{$elt->commentaire}})</em>
+  {{/if}}
+  {{if  $chapitre_category != "dmi"}}
+	  <ul>
+	    <li>
+			<!-- Affichage des prises s'il y en a -->
+		  {{foreach from=$elt->_ref_prises item=prise}}
+		    {{if $prise->quantite}}
+		      {{$prise->_view}}, 
+		    {{/if}}
+		  {{/foreach}}
+		  
+		  <!-- Duree de la prise --> 
+		 {{if $elt->duree}}
+     Durée de {{mb_value object=$elt field=duree}} jour(s) 
+    {{/if}}
+    
+    <!-- Date de debut de la ligne -->
+    {{if $elt->jour_decalage && $elt->unite_decalage}} 
+	    A partir de
+			{{if $prescription->object_class == "CSejour"}}
+			 {{mb_value object=$elt field=jour_decalage}}
+			{{else}}
+			 J
+			{{/if}}
+			{{if $elt->decalage_line >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line size="3"}}
+			{{if $prescription->object_class == "CSejour"}}
+			  {{mb_value object=$elt field=unite_decalage}}
+			{{else}}
+			 (jours)
+			{{/if}} 
+			 <!-- Heure de debut -->
+			 {{if $elt->time_debut}}
+				 à {{mb_value object=$elt field=time_debut}}
+			 {{/if}}
+		 {{/if}}
+		 
+		 {{if $elt->jour_decalage_fin && $elt->unite_decalage_fin}}
+			 <!-- Date de fin -->
+			 Jusqu'à {{mb_value showPlus=1 object=$elt field=jour_decalage_fin}}
+			 {{if $elt->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line_fin increment=1 }}
+			 {{mb_value object=$elt field=unite_decalage_fin }}
+			 <!-- Heure de fin -->
+			 {{if $elt->time_fin}} 
+				à {{mb_value showPlus=1 object=$elt field=time_fin}}		
+			 {{/if}}	
+		 {{/if}}
+		 
+		 {{if !$elt->duree && !($elt->jour_decalage && $elt->unite_decalage) && !($elt->jour_decalage_fin && $elt->unite_decalage_fin)}}
+		 Aucune date
+		 {{/if}}
+     {{if $elt->commentaire}}
+       , {{mb_value object=$elt field="commentaire"}}
+     {{/if}}
+     
+			</li>
+	  </ul>
+  {{/if}}    
+</li>
+{{/if}}
