@@ -11,7 +11,9 @@ Main.add(function () {
 function loadLivretArbreATC(codeATC){
   var url = new Url;
   url.setModuleAction("dPmedicament", "httpreq_vw_livret_arbre_ATC");
-  url.addParam("codeATC", codeATC);
+  if (codeATC !== '') {
+    url.addParam("codeATC", codeATC);
+  }
   url.requestUpdate("ATC", { waitingText: null } );
 }
 

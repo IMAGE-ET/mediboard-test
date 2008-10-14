@@ -20,16 +20,11 @@ $etablissement->loadRefLivretTherapeutique();
 $tabLettre = range('A', 'Z');
 
 // --- Chargement de l'arbre ATC ---
-$codeATC = mbGetValueFromGet("codeATC");
-$classeATC = new CBcbClasseATC();
-if ($codeATC) {
-	$chapitreATC = $classeATC->getLibelle($codeATC); // Nom du chapitre selectionné
-	$arbreATC = $classeATC->loadArbre($codeATC); // Chargements des sous chapitres
-} else {
-	$chapitreATC = '';
-	$arbreATC = array();
-}
-
+$codeATC     = mbGetValueFromGet("codeATC");
+$classeATC   = new CBcbClasseATC();
+$chapitreATC = $codeATC ? $classeATC->getLibelle($codeATC) : ''; // Nom du chapitre selectionné
+$arbreATC    = $classeATC->loadArbre($codeATC); // Chargements des sous chapitres
+ 
 // Création du template
 $smarty = new CSmartyDP();
 
