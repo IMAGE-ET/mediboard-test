@@ -1,7 +1,7 @@
 {{assign var=chapitre_category value=$elt->_ref_element_prescription->_ref_category_prescription->chapitre}}
 {{if !$elt->_protocole}}
 <li>
-  <strong>{{$elt->_ref_element_prescription->_view}}</strong>
+  <strong>{{$elt->_ref_element_prescription->_view}} {{if $elt->conditionnel}}(Conditionnel){{/if}}</strong>
 
   {{if $elt->commentaire}}
   <em>({{$elt->commentaire}})</em>
@@ -29,7 +29,7 @@
 </li>
 {{else}}
 <li>
-  <strong>{{$elt->_ref_element_prescription->_view}}</strong>
+  <strong>{{$elt->_ref_element_prescription->_view}} {{if $elt->conditionnel}}(Conditionnel){{/if}}</strong>
 
   {{if $elt->commentaire}}
   <em>({{$elt->commentaire}})</em>
@@ -51,9 +51,10 @@
     
     <!-- Date de debut de la ligne -->
     {{if $elt->jour_decalage && $elt->unite_decalage}} 
-	    A partir de
+	    A
 			{{if $prescription->object_class == "CSejour"}}
-			 {{mb_value object=$elt field=jour_decalage}}
+			 {{assign var=line_jour_decalage value=$elt->jour_decalage}}
+			 {{$traduction.$line_jour_decalage}}
 			{{else}}
 			 J
 			{{/if}}
@@ -74,8 +75,9 @@
 		 {{/if}}
 		 
 		 {{if $elt->jour_decalage_fin && $elt->unite_decalage_fin}}
+		   {{assign var=line_jour_decalage_fin value=$elt->jour_decalage_fin}}
 			 <!-- Date de fin -->
-			 Jusqu'à {{mb_value showPlus=1 object=$elt field=jour_decalage_fin}}
+			 Jusqu'à {{$traduction.$line_jour_decalage_fin}}
 			 
 			 {{if ($elt->unite_decalage_fin == "jour" && $elt->decalage_line_fin > 0) || ($elt->unite_decalage_fin == "heure")}}
 				 {{if $elt->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line_fin increment=1 }}
@@ -85,6 +87,8 @@
 			 {{if $elt->time_fin}} 
 				à {{mb_value showPlus=1 object=$elt field=time_fin}}		
 			 {{/if}}	
+		 {{else}}
+		 pendant 1 jour
 		 {{/if}}
 		 
 		 {{if !$elt->duree && !($elt->jour_decalage && $elt->unite_decalage) && !($elt->jour_decalage_fin && $elt->unite_decalage_fin)}}

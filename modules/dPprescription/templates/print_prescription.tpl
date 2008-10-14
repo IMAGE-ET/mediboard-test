@@ -138,6 +138,18 @@ Main.add(window.print);
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
       {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+        {{if !$prescription->object_id}}
+	        {{if $line_medicament_element_no_ald->_ref_substitution_lines|@count}}
+	        <br />
+	        <ul style="margin-left: 15px;">
+	        <strong>Substitutions possibles:</strong> 
+	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_med}}
+	          {{include file="inc_print_medicament.tpl" med=$_subst_line_med}}
+	        {{/foreach}}
+	        </ul>
+	        {{/if}}  
+        {{/if}}
+        
     {{/foreach}}
       {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
 		    <li>
