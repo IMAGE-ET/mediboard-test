@@ -16,7 +16,7 @@ $pack_id = mbGetValueFromGet("pack_id");
 $pack = new CPrescriptionProtocolePack();
 $pack->load($pack_id);
 
-$protocoles = CPrescription::loadAllProtocolesFor($praticien_id, $function_id, "", $pack->object_class);
+$protocoles = CPrescription::loadAllProtocolesFor($praticien_id, $function_id, null, $pack->object_class);
 
 $prescription = new CPrescription();
 $prescription->loadRefsLinesMedComments();

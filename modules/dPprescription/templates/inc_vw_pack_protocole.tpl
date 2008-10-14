@@ -30,17 +30,15 @@
 	    <td style="text-align: center">
 	      <select name="protocole_id" onchange="if(this.value) { Protocole.addProtocoleToPack(this.value); }">
 	        <option value="">&mdash; Choix d'un protocole</option>
-	      {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
-				  {{if $_protocoles_by_owner|@count}}
-				    <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
-				  {{foreach from=$_protocoles_by_owner item=_protocoles key=type_protocole}}
-				  {{foreach from=$_protocoles item=protocole}}
-				    <option value="{{$protocole->_id}}">{{$protocole->_view}}</option>
-				  {{/foreach}}
-				  </optgroup>
-				  {{/foreach}}
-				  {{/if}}
-			  {{/foreach}}
+  	      {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
+  				  {{if $_protocoles_by_owner|@count}}
+  				    <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
+    				  {{foreach from=$_protocoles_by_owner item=protocole}}
+      				  <option value="{{$protocole->_id}}">{{$protocole->libelle}}</option>
+    				  {{/foreach}}
+              </optgroup>
+  				  {{/if}}
+  			  {{/foreach}}
 	      </select>
 	    </td>
 	  </tr>

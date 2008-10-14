@@ -7,7 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $anesth_id = mbGetValueFromGetOrSession("anesth_id");
@@ -24,8 +24,7 @@ $is_admin  = $mediuser->isFromType(array("Administrator"));
 $praticien = new CMediusers();
 $chir = new CMediusers();
 $anesth = new CMediusers();
-$protocoles_list_praticien = array();
-$protocoles_list_function = array();
+$protocoles_list = array('chir' => array(), 'anesth' => array());
 
 // Chargement des protocoles de l'etablissement
 if($is_anesth || $is_admin){        
@@ -76,44 +75,30 @@ if($is_chir){
 }
 
 if($chir->_id){
-	// Chargement de la liste des protocoles
-	$prescription = new CPrescription();
-	$where = array();
-	$where["praticien_id"] = "= '$chir->_id'";
-	$where["object_class"] = " = 'CSejour'";
-	$where["object_id"] = "IS NULL";
-	$protocoles_list_praticien["chir"] = $prescription->loadList($where);
-	$where["function_id"] = "= '$chir->function_id'";
-	$where["praticien_id"] = null;
-	$protocoles_list_function["chir"] = $prescription->loadList($where);
+	$protocoles_list["chir"] = CPrescription::loadAllProtocolesFor($chir->_id, null, null, 'CSejour');
 }
 
 if($anesth->_id){
-	// Chargement de la liste des protocoles
-	$prescription = new CPrescription();
-	$where = array();
-	$where["praticien_id"] = "= '$anesth->_id'";
-	$where["object_class"] = " = 'CSejour'";
-	$where["object_id"] = "IS NULL";
-	$protocoles_list_praticien["anesth"] = $prescription->loadList($where);
-	$where["function_id"] = "= '$anesth->function_id'";
-	$where["praticien_id"] = null;
-	$protocoles_list_function["anesth"] = $prescription->loadList($where);
+  $protocoles_list["anesth"] = CPrescription::loadAllProtocolesFor($anesth->_id, null, null, 'CSejour');
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("protocoles_list_praticien", $protocoles_list_praticien);
-$smarty->assign("protocoles_list_function" , $protocoles_list_function);
-$smarty->assign("praticiens"               , $praticiens);
-$smarty->assign("anesths"                  , $anesths);
-$smarty->assign("protocoles"               , $protocoles);
-$smarty->assign("is_anesth"                , $is_anesth );
-$smarty->assign("is_chir"                  , $is_chir   );
-$smarty->assign("is_admin"                 , $is_admin  );
-$smarty->assign("praticien_id"             , $praticien_id);
-$smarty->assign("anesth_id"                , $anesth_id);
-$smarty->assign("all_prot"                 , $all_prot);
+$smarty->assign("protocoles_list", $protocoles_list);
+
+$smarty->assign("praticiens",   $praticiens);
+$smarty->assign("anesths",      $anesths);
+
+$smarty->assign("protocoles",   $protocoles);
+
+$smarty->assign("is_anesth",    $is_anesth);
+$smarty->assign("is_chir",      $is_chir);
+$smarty->assign("is_admin",     $is_admin);
+
+$smarty->assign("praticien_id", $praticien_id);
+$smarty->assign("anesth_id",    $anesth_id);
+
+$smarty->assign("all_prot",     $all_prot);
 $smarty->display("vw_edit_liaison_admission.tpl");
 
 ?>
