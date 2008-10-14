@@ -68,7 +68,7 @@
         <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
         <select name="protocole_prescription_anesth_id" 
                 onchange="{{if $is_admin}} if(this.value) { $('prot_anesth_{{$_protocole->_id}}').innerHTML = this.options[this.selectedIndex].text; } else { $('prot_anesth_{{$_protocole->_id}}').innerHTML = '' } {{/if}}
-                submitFormAjax(this.form, 'systemMsg');">
+                submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;">
           <option value="">&mdash; 
           {{if $is_admin}}
             Changer de protocole
@@ -102,7 +102,7 @@
         <input type="hidden" name="dosql" value="do_protocole_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
-        <select name="protocole_prescription_chir_id" onchange="submitFormAjax(this.form, 'systemMsg')">
+        <select name="protocole_prescription_chir_id" onchange="submitFormAjax(this.form, 'systemMsg')" style="max-width: 15em;">
           <option value="">&mdash; Sélection d'un protocole</option>
           {{foreach from=$protocoles_list.chir key=owner item=_protocoles_by_owner}}
             {{if $_protocoles_by_owner|@count}}
