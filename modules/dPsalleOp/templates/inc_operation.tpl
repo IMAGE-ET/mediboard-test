@@ -11,7 +11,7 @@
 <script type="text/javascript">
 Main.add(function () {
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}');
+    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null, true);
   }
   
   if($('bloodSalvage')){
@@ -30,7 +30,7 @@ Main.add(function () {
 });
 
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '');
+  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true);
 }
  
 </script>

@@ -43,7 +43,7 @@ if ($prescription_id) {
 $prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id);
 
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id)</script>";
+echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true)</script>";
 echo $AppUI->getMsg();
 
 exit();  
