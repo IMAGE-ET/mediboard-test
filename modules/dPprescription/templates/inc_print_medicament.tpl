@@ -64,27 +64,39 @@
 			{{else}}
 			 J
 			{{/if}}
-			{{if $med->decalage_line >= 0}}+{{/if}} {{mb_value object=$med field=decalage_line size="3"}}
-			{{if $prescription->object_class == "CSejour"}}
-			  {{mb_value object=$med field=unite_decalage}}
-			{{else}}
-			 (jours)
-			{{/if}} 
+			
+			{{if ($med->unite_decalage == "jour" && $med->decalage_line > 0) || ($med->unite_decalage == "heure")}}
+				{{if $med->decalage_line >= 0}}+{{/if}} 
+				{{mb_value object=$med field=decalage_line size="3"}}
+				{{if $prescription->object_class == "CSejour"}} 
+				  {{mb_value object=$med field=unite_decalage}}
+				{{else}}
+				  (jours)
+				{{/if}} 
+			{{/if}}
+			
+			
 			 <!-- Heure de debut -->
 			 {{if $med->time_debut}}
 				 à {{mb_value object=$med field=time_debut}}
 			 {{/if}}
 		 {{/if}}
 		 
+		 
 		 {{if $med->jour_decalage_fin && $med->unite_decalage_fin}}
 			 <!-- Date de fin -->
 			 Jusqu'à {{mb_value showPlus=1 object=$med field=jour_decalage_fin}}
-			 {{if $med->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$med field=decalage_line_fin increment=1 }}
-			 {{mb_value object=$med field=unite_decalage_fin }}
+			 
+			 {{if ($med->unite_decalage_fin == "jour" && $med->decalage_line_fin > 0) || ($med->unite_decalage_fin == "heure")}}
+				 {{if $med->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$med field=decalage_line_fin increment=1 }}
+				 {{mb_value object=$med field=unite_decalage_fin }}
+			 {{/if}}
 			 <!-- Heure de fin -->
 			 {{if $med->time_fin}} 
 				à {{mb_value showPlus=1 object=$med field=time_fin}}		
 			 {{/if}}	
+		 {{elseif $med->jour_decalage}}
+		    jusqu'à la fin du séjour.
 		 {{/if}}
 		 
 		 {{if !$med->duree && !($med->jour_decalage && $med->unite_decalage) && !($med->jour_decalage_fin && $med->unite_decalage_fin)}}

@@ -57,12 +57,16 @@
 			{{else}}
 			 J
 			{{/if}}
+			
+			{{if ($elt->unite_decalage == "jour" && $elt->decalage_line > 0) || ($elt->unite_decalage == "heure")}}
 			{{if $elt->decalage_line >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line size="3"}}
 			{{if $prescription->object_class == "CSejour"}}
 			  {{mb_value object=$elt field=unite_decalage}}
 			{{else}}
 			 (jours)
 			{{/if}} 
+			{{/if}}
+			
 			 <!-- Heure de debut -->
 			 {{if $elt->time_debut}}
 				 à {{mb_value object=$elt field=time_debut}}
@@ -72,8 +76,11 @@
 		 {{if $elt->jour_decalage_fin && $elt->unite_decalage_fin}}
 			 <!-- Date de fin -->
 			 Jusqu'à {{mb_value showPlus=1 object=$elt field=jour_decalage_fin}}
-			 {{if $elt->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line_fin increment=1 }}
-			 {{mb_value object=$elt field=unite_decalage_fin }}
+			 
+			 {{if ($elt->unite_decalage_fin == "jour" && $elt->decalage_line_fin > 0) || ($elt->unite_decalage_fin == "heure")}}
+				 {{if $elt->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line_fin increment=1 }}
+				 {{mb_value object=$elt field=unite_decalage_fin }}
+			 {{/if}}
 			 <!-- Heure de fin -->
 			 {{if $elt->time_fin}} 
 				à {{mb_value showPlus=1 object=$elt field=time_fin}}		

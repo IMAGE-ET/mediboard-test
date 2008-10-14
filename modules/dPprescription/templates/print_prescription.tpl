@@ -40,9 +40,13 @@ Main.add(window.print);
 	    <td class="right">
 	      le {{$date|date_format:"%d %B %Y"}}
 	      <br />
+	      {{if $prescription->object_id}}
 				A l'attention de 
 				<br />		      
 	      <strong>{{$prescription->_ref_patient->_view}}</strong>
+	      {{else}}
+	      Protocole: {{$prescription->libelle}}
+	      {{/if}}
 	    </td>
 	  </tr>
 	</table>    
