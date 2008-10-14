@@ -26,6 +26,7 @@ Main.add(function () {
 </script>
 
 {{if $prescription->_id}}
+{{assign var=prescription_id value=$prescription->_id}}
 	<table class="tbl">
 	  <tr>
 	    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
@@ -73,7 +74,6 @@ Main.add(function () {
 				  <tbody id="plan_med" style="display: none;">
 				  {{foreach from=$prescription->_lines.med key=name_cat item=lines_unite_prise_cat name="foreach_line_cat"}}
 				  {{foreach from=$lines_unite_prise_cat item=lines_unite_prise name="foreach_line"}}
-				    {{assign var=prescription_id value=$prescription->_id}}
 				    {{foreach from=$lines_unite_prise key=unite_prise item=line_med name="foreach_med"}}
 				      <!-- Si l'unite de prise est bien exprimé en format texte et pas en identifiant de prise -->
 				       {{if $smarty.foreach.foreach_med.first}}
