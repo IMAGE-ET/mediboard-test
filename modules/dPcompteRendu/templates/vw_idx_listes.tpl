@@ -102,10 +102,10 @@ Main.add(function () {
 
     <tr>
       <th class="category" colspan="2">
-      {{if $liste->liste_choix_id}}
-        Modification d'une liste
+      {{if $liste->_id}}
+        {{tr}}CListeChoix-title-modify{{/tr}} '{{$liste->_view}}'
       {{else}}
-        Création d'une liste
+        {{tr}}CListeChoix-title-create{{/tr}}
       {{/if}}
       </th>
     </tr>
@@ -150,14 +150,14 @@ Main.add(function () {
           <option value="">&mdash; Tous</option>
           <optgroup label="CR du praticien">
           {{foreach from=$listCrPrat item=curr_cr}}
-          <option value="{{$curr_cr->compte_rendu_id}}" {{if $liste->compte_rendu_id == $curr_cr->compte_rendu_id}}selected="selected"{{/if}}>
+          <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
             {{$curr_cr->nom}}
           </option>
           {{/foreach}}
           </optgroup>
           <optgroup label="CR du cabinet">
           {{foreach from=$listCrFunc item=curr_cr}}
-          <option value="{{$curr_cr->compte_rendu_id}}" {{if $liste->compte_rendu_id == $curr_cr->compte_rendu_id}}selected="selected"{{/if}}>
+          <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
             {{$curr_cr->nom}}
           </option>
           {{/foreach}}
@@ -186,16 +186,16 @@ Main.add(function () {
     </form>
 
   
-  {{if $liste->liste_choix_id}}
+  {{if $liste->_id}}
  
-    <table class="form">
-      {{if $liste->_valeurs|@count}}
+    {{if $liste->_valeurs|@count}}
+    <table class="tbl">
       <tr><th class="category" colspan="2">Choix diponibles</th></tr>
-      {{foreach from=$liste->_valeurs|smarty:nodefaults item=curr_valeur}}
+      {{foreach from=$liste->_valeurs item=curr_valeur name=choix}}
       <tr>
-        <td class="text">{{$curr_valeur}}</td>
-        <td>
-          <form name="delFrm{{$liste->liste_choix_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
+        <td class="text">{{$curr_valeur|nl2br}}</td>
+        <td style="width: 1%">
+          <form name="DelChoix-{{$smarty.foreach.choix.iteration}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="dosql" value="do_liste_aed" />
           {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
           <input type="hidden" name="del" value="0" />
@@ -203,26 +203,40 @@ Main.add(function () {
           {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
           {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
-          <button class="trash notext" type="submit">{{tr}}Delete{{/tr}}</button>
+          <button class="remove notext" type="submit">{{tr}}Delete{{/tr}}</button>
           </form>
         </td>
       </tr>
       {{/foreach}}
-      {{/if}}
-      <tr><th class="category" colspan="2">Ajouter un choix</th></tr>
-      <tr><td colspan="2">
-        <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
-        <input type="hidden" name="dosql" value="do_liste_aed" />
-        {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
-        <input type="hidden" name="del" value="0" />
-        {{mb_field object=$liste field="valeurs" hidden=1 prop=""}}
-        {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
-        {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
-        <input type="text" name="_new" value="" />
-        <button type="submit" class="tick notext">{{tr}}Delete{{/tr}}</button>
-        </form>
-      </td></tr>
     </table>
+    {{/if}}
+     
+    <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    
+    <input type="hidden" name="dosql" value="do_liste_aed" />
+    {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
+    <input type="hidden" name="del" value="0" />
+    {{mb_field object=$liste field="valeurs" hidden=1 prop=""}}
+    {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
+    {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
+
+    <table class="form">
+      <tr>
+      	<th class="category" colspan="2">Ajouter un choix</th>
+      </tr>
+      <tr>
+        <td>
+	        <textarea name="_new"></textarea>
+	      </td>
+	    </tr>
+	    <tr>
+        <td class="button">
+	        <button type="submit" class="add">{{tr}}Add{{/tr}}</button>
+      	</td>
+     	</tr>
+    </table>
+
+    </form>
 
   {{/if}}
   </td>  

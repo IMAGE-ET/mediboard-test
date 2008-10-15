@@ -16,12 +16,20 @@ span.hilite {
 }
 
 @media screen {
-	.header, .footer {
+	#header,  #footer {
 		margin: 10px;
-		border: 3px dashed #eee;
+		border: 3px dashed #ccc;
 		padding: 3px;
-	  opacity: 0.9;
+	  opacity: 0.4;
 	  overflow: hidden;
+	}
+	
+	#footer {
+	  display: none;
+	}
+	
+	#header:hover, #footer:hover {
+	  opacity: 1;
 	}
 
 	html {
@@ -66,19 +74,19 @@ span.hilite {
 }
 
 @media print {
-	.header, .footer {
+	#header, #footer {
 	  width: 100%;
 		position: fixed;
 	  overflow: hidden;
 		border: 0px solid #888;
 	}
 
-	.header {
+	#header {
 	  top: 0em;
 	  border-bottom-width: 1px;
 	}
 	
-	.footer {
+	#footer {
 	  bottom: 0em;
 	  border-top-width: 1px;
 	}

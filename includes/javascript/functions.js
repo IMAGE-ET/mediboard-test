@@ -3,7 +3,6 @@
 function main() {
 	try {
 	  prepareForms();
-	  initFCKEditor();
 	  SystemMessage.init();
 	  WaitingMessage.init();
 	  initPuces();
@@ -238,8 +237,6 @@ var SystemMessage = {
     SystemMessage.doEffect();
   }
 }
-
-function initFCKEditor() {}
 
 /**
  * Javascript console

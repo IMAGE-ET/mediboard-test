@@ -17,7 +17,7 @@ var FCKMbPrintCommand = function() {
 
 FCKMbPrintCommand.prototype.Execute = function() {
   FCK.EditorWindow.print() ;
-  if(confirm("Souhaitez-vous enregistrer ce document ?")){
+  if (confirm("Souhaitez-vous enregistrer ce document ?")){
     FCKSaveCommand.prototype.Execute();
   }
 }
@@ -35,8 +35,6 @@ var FCKToolbarMbPrint = function() {
   this.Command = FCKCommands.GetCommand("mbPrint");
   this.commandName = "mbPrint";
 }
-
-
 
 //***********************************
 

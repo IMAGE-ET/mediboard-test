@@ -46,22 +46,22 @@ else {
 		
 		$style = "
 			<style type='text/css'>
-			div.header {
+			#header {
 				height: {$header->height}px;
 			}
 
-			div.footer {
+			#footer {
    			height: {$footer->height}px;
 			}";
     
 		if ($header->_id) {
-		  $header->source = "<div class='header'>$header->source</div>";
+		  $header->source = "<div id='header'>$header->source</div>";
 		  $header->height += 20;
 		  $compte_rendu->header_id = null;
 		}
     
 		if ($footer->_id) {
-      $footer->source = "<div class='footer'>$footer->source</div>";
+      $footer->source = "<div id='footer'>$footer->source</div>";
 		  $footer->height += 20;
       $compte_rendu->footer_id = null;
 		}
@@ -69,7 +69,7 @@ else {
 	  $style.= "
 			
 			@media print { 
-				div.body { 
+			  #body { 
 					padding-top: {$header->height}px; 
 				} 
 
@@ -79,7 +79,7 @@ else {
 			}
 			</style>";
 
-		$compte_rendu->source = "<div class='body'>$compte_rendu->source</div>";
+		$compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
 		$compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
   }
   

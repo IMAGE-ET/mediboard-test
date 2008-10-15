@@ -51,6 +51,7 @@ class CListeChoix extends CMbObject {
     if ($this->chir_id and $this->function_id) {
       return "Une liste ne peut pas appartenir à la fois à une fonction et un utilisateur";
     }
+    
     if (!($this->chir_id or $this->function_id)) {
       return "Une liste doit appartenir à un utilisateur ou à une fonction";
     }
@@ -67,10 +68,8 @@ class CListeChoix extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    if($this->valeurs != "")
-      $this->_valeurs = explode("|", $this->valeurs);
-    else
-      $this->_valeurs = array();
+    $this->_view = $this->nom;
+    $this->_valeurs = $this->valeurs != "" ? explode("|", $this->valeurs) : array();
     natcasesort($this->_valeurs);
   }
   

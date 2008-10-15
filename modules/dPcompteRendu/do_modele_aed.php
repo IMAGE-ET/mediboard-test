@@ -25,10 +25,11 @@ if(isset($_POST["source"])) {
         //$fields[] = "<span class=\"name\">[Liste - ".htmlentities($temp->nom)."]</span>";
         //$values[] = "<span class=\"choice\">$value</span>";
         $fields[] = "[Liste - ".htmlentities($temp->nom)."]";
-        $values[] = "$value";
+        $values[] = nl2br("$value");
       }
     }
   }
+  
   $_POST["source"] = str_replace($fields, $values, $_POST["source"]);
 }
 

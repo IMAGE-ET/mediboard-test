@@ -19,7 +19,7 @@ FCKConfig.ToolbarSets["Default"] = [
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
 	['Save','Preview'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','mbPrint'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-','mbPrint', '-', 'mbHeader', 'mbFooter'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Table','Rule','Image', 'Smiley','SpecialChar','mbPageBreak'],
 	['FitWindow','Source','About'],
@@ -113,5 +113,8 @@ aToolbarSet.push(aMbToolbar);
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
+FCKConfig.Plugins.Add( 'mbheader', 'en,fr', sMbPluginsPath );
+FCKConfig.Plugins.Add( 'mbfooter', 'en,fr', sMbPluginsPath );
+FCKConfig.Debug = true;
 
 {{/if}}

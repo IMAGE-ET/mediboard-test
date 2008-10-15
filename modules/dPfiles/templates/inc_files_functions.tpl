@@ -19,7 +19,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : null, onComplete: initFCKEditor });
+  url.requestUpdate('bigView', { waitingText : null});
 }
 
 function setObject(oObject){

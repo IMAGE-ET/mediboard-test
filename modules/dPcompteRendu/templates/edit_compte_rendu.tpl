@@ -62,10 +62,10 @@ window.opener.Document.refreshList(
       <ul>
         {{foreach from=$lists item=curr_list}}
         <li>
-          <select name="_liste{{$curr_list->liste_choix_id}}" style="max-width: 200px;">
-            <option value="undef">&mdash; {{$curr_list->nom}} &mdash;</option>
-            {{foreach from=$curr_list->_valeurs|smarty:nodefaults item=curr_valeur}}
-            <option>{{$curr_valeur}}</option>
+          <select name="_liste{{$curr_list->liste_choix_id}}" style="max-width: 150px;">
+            <option value="undef">&mdash; {{$curr_list->nom}}</option>
+            {{foreach from=$curr_list->_valeurs item=curr_valeur}}
+            <option value="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
             {{/foreach}}
           </select>
         </li>
