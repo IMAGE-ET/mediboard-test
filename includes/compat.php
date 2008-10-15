@@ -12,7 +12,7 @@
 
 /**
  * (PHP 5 >= 5.1.0)
- * array_diff_key — Computes the difference of arrays using keys for comparison 
+ * array_diff_key Computes the difference of arrays using keys for comparison 
  * 
  * cf. http://php.net/manual/en/function.array-diff-key.php
  */
@@ -36,5 +36,20 @@ if (!function_exists('array_diff_key')) {
   }
 }
 
+
+/**
+ * (PHP 5 >= 5.1.0)
+ * property_exists Computes the difference of arrays using keys for comparison 
+ * 
+ * cf. http://php.net/manual/en/function.property-exists.php
+ */
+if (!function_exists('property_exists')) {
+  function property_exists($class, $property) {
+    $vars = is_object($class) ? 
+              get_object_vars($class) : 
+              get_class_vars($class);
+    return array_key_exists($property, $vars);
+  }
+} 
 
 ?>

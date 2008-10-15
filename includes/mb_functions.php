@@ -499,19 +499,32 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
     fclose( $file );
 }
 
+/** Commentaires conditionnels pour IE :
+<!--[if IE]>Si IE<![endif]-->
+<!--[if gte IE 5]> pour réserver le contenu à IE 5.0 et version plus récentes (actuellement E5.5, IE6.0 et IE7.0) <![endif]-->
+<!--[if IE 5.0]> pour IE 5.0 <![endif]-->
+<!--[if IE 5.5000]> pour IE 5.5 <![endif]-->
+<!--[if IE 6]> pour IE 6.0 <![endif]-->
+<!--[if gte IE 5.5000]> pour IE5.5 et supérieur <![endif]-->
+<!--[if lt IE 6]> pour IE5.0 et IE5.5 <![endif]-->
+<!--[if lt IE 7]> pour IE inférieur à IE7 <![endif]-->
+<!--[if lte IE 6]> pour IE5.0, IE5.5 et IE6.0 mais pas IE7.0<![endif]-->
+ */
+
 /**
  * Loads a javascript with build version postfix to prevent nasty cache effects
- * while updating the system.  
+ * while updating the system.
  */
-function mbLoadScript($filepath, $modeReturn = 0) {
+function mbLoadScript($filepath, $modeReturn = 0, $conditionnalComments = '') {
   global $version;
   $build = $version["build"];
   $tag = "\n<script type='text/javascript' src='$filepath?build=$build'></script>";
-  if ($modeReturn) { 
+  if ($conditionnalComments) {
+    $tag = "\n<!--[if $conditionnalComments]>$tag\n<![endif]-->";
+  }
+  if ($modeReturn) {
     return $tag;
   }
-  
-  echo $tag;
 }
 
 /**
@@ -582,6 +595,10 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
   
+  if (CAppUI::conf('debug')) {
+    //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js", $modeReturn, 'IE');
+  }
+  
   if($modeReturn)
     return $affichageScript;
 }
@@ -628,6 +645,28 @@ function mbConvertDecaBinary($number) {
   // Value with 3 significant digits, thent the unit
   $value = round($value, $value > 99 ? 0 : $value >  9 ? 1 : 2);
   return "$value $prefix$unit";
+}
+
+/** Used to get bytes from a string like "64M" */
+function toBytes($val) {
+  $val = trim($val);
+  $last = strtolower($val[strlen($val)-1]);
+  switch($last) {
+    case 't': $val *= 1024;     
+    case 'g': $val *= 1024;
+    case 'm': $val *= 1024;
+    case 'k': $val *= 1024;
+  }
+  return $val;
+}
+
+/** Must be like "64M" */ 
+function set_min_memory_limit($min) {
+  $actual = toBytes(ini_get('memory_limit'));
+  $new    = toBytes($min);
+  if ($new > $actual) {
+    ini_set('memory_limit', $min);
+  }
 }
 
 function getChildClasses($parent = "CMbObject", $properties = array()) {

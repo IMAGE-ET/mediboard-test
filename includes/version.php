@@ -8,7 +8,7 @@ $version = array (
   "patch" => 0,
   
   // Automated numbering (should be incremented at each commit)
-  "build" => 288,
+  "build" => 289,
 );
 
 $version["string"] = implode(".", $version);
