@@ -14,9 +14,6 @@ var FCKMbFooterCommand = function() {
 
 FCKMbFooterCommand.prototype.Execute = function() {
 	var oFooter = FCK.EditorDocument.getElementById("footer");
-	console.debug("Be");
-	console.debug("fore");
-	console.debug(oFooter.style.display);
 	oFooter.style.display = "block";
 	oMbFooterItem.RefreshState();
 }
@@ -28,8 +25,6 @@ FCKMbFooterCommand.prototype.GetState = function() {
 	  return FCK_TRISTATE_DISABLED;
 	}
 	
-	console.debug("After");
-	console.debug(oFooter.style.display);
 	return oFooter.style.display == "block" ? FCK_TRISTATE_ON : FCK_TRISTATE_OFF;
 }
 
