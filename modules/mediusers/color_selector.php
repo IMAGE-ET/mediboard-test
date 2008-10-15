@@ -7,7 +7,7 @@
 * @author Fabien Ménager
 */
 
-$hexa_values = array('00', '33', '66', '99', 'CC', 'FF');
+$hexa_values = array('33', '66', '99', 'CC', 'EE', 'FF');
 $range = range(0, count($hexa_values)-1);
 
 // Création du template
