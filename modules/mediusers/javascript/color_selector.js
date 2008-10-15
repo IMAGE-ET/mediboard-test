@@ -11,7 +11,7 @@ var ColorSelector = {
   pop: function() {
     var url = new Url();
     url.setModuleAction("mediusers", "color_selector");
-
+    url.addParam("color", $V(document.forms[this.sForm][this.sColor]));
     url.popup(this.options.width, this.options.height, "Color selector");
   },
   
@@ -20,7 +20,7 @@ var ColorSelector = {
     if (color) {
       $V(oForm[this.sColor], color);
     }
-    $('test').style.background = '#' + oForm[this.sColor].value;
-   
+    $('select_color').style.background = '#' + oForm[this.sColor].value;
+    
   }
 }

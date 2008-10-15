@@ -5,6 +5,12 @@
 Main.add(function () {
   initInseeFields("editFrm", "cp", "ville");
 });
+
+ColorSelector.init = function(){
+  this.sForm  = "editFrm";
+  this.sColor = "color";
+  this.pop();
+}
 </script>
 
 <table class="main">
@@ -90,19 +96,8 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$userfunction field="color"}}</th>
           <td>
-            <span id="test" title="test" style="background: #{{$userfunction->color}};">
-              <a href="#" onclick="ColorSelector.init()">cliquez ici</a>
-            </span>
+            <a href="#1" id="select_color" style="background: #{{$userfunction->color}};" onclick="ColorSelector.init()">cliquez ici</a>
             {{mb_field object=$userfunction field="color" hidden=1}}
-            
-            <script type="text/javascript">
-              ColorSelector.init = function(){
-                this.sForm  = "editFrm";
-                this.sColor = "color";
-                this.pop();
-              }
-            </script>
-         
           </td>
         </tr>
         <tr>
