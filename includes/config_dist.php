@@ -22,7 +22,7 @@ $dPconfig["offline"] = "0";
 
 $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 
-$dPconfig["date"] = "%m/%d/%Y";
+$dPconfig["date"] = "%d/%m/%Y";
 $dPconfig["time"] = "%Hh%M";
 $dPconfig["datetime"] = "%m/%d/%Y %H:%M";
 

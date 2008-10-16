@@ -17,22 +17,29 @@ Consultation = {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <table>
+      <table class="form">
         <tr>
-          <th colspan="2">
+          <th colspan="2" class="category">
             <a href="#" onclick="window.print()">
-              Rapport du {{$filter->_date_min|date_format:"%d/%m/%Y"}}
+              Rapport du {{$filter->_date_min|date_format:$dPconfig.date}}
               {{if $filter->_date_min != $filter->_date_max}}
-              au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
+              au {{$filter->_date_max|date_format::$dPconfig.date}}
               {{/if}}
             </a>
           </th>
         </tr>
-        {{if $prat->user_id}}
-        <tr><th colspan="2">Dr {{$prat->_view}}</th></tr>
+        {{if $prat->_id}}
+        <tr>
+          <th>{{mb_label object=$prat field=_user_last_name}}</th>
+          <td>{{mb_value object=$prat field=_view}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$prat field=adeli}}</th>
+          <td>{{mb_value object=$prat field=adeli}}</td>
+        </tr>
         {{/if}}
         <tr>
-          <td>{{mb_label object=$filter field=S_FSE_ETAT}}</td>
+          <th>{{mb_label object=$filter field=S_FSE_ETAT}}</th>
           <td>{{mb_value object=$filter field=S_FSE_ETAT}}</td>
         </tr>
       </table>

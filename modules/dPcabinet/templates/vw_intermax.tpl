@@ -46,6 +46,35 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   
 </table>
 
+
+<hr />
+
+<script type="text/javascript">
+
+function checkBilanCPS() {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_bilan_cps");
+  url.popup("700", "400", "Bilan CPS");
+  return false;
+}
+
+</script>
+
+<table class="tbl"> 
+  <tr>
+    <th class="title">Bilan d'utilisation de LogicMax</th>
+  </tr>
+  <tr>
+    <td class="button">
+      <button class="search" onclick="checkBilanCPS()">
+	    	{{tr}}Compute{{/tr}}
+      </button>
+    </td>
+  </tr>
+</table>
+
+<hr />
+
 <script type="text/javascript">
 
 function checkBilanFSE() {
@@ -57,15 +86,13 @@ function checkBilanFSE() {
   
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_bilan_fse");
-  $H(Form.toObject(oForm)).each(function (pair) { url.addParam(pair.key, pair.value) } );
+  $H(Form.toObject(oForm)).each(function (pair) { 
+  	url.addParam(pair.key, pair.value) 
+  } );
+  
   url.popup("700", "400", "Bilan FSE");
   return false;
 }
-
-Main.add(function() {
-  regFieldCalendar("BilanFSE", "_date_min");
-  regFieldCalendar("BilanFSE", "_date_max");
-} );
 
 </script>
 
@@ -102,11 +129,11 @@ Main.add(function() {
 
   <tr>
     <th>{{mb_label object=$filter field=_date_min}}</th>
-    <td class="date">{{mb_field object=$filter field=_date_min form=BilanFSE}}</td>
+    <td class="date">{{mb_field object=$filter field=_date_min form=BilanFSE register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$filter field=_date_max}}</th>
-    <td class="date">{{mb_field object=$filter field=_date_max form=BilanFSE}}</td>
+    <td class="date">{{mb_field object=$filter field=_date_max form=BilanFSE register=true}}</td>
   </tr>
 
   <tr>
