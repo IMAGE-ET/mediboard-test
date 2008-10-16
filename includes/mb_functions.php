@@ -226,10 +226,12 @@ function mbTransformTime($relative = null, $ref = null, $format) {
   
   $timestamp = $ref ? strtotime($ref) : time();
   if ($relative) {
+    /*
     global $AppUI;
     if($AppUI->user_id == 15) {
-      mbTrace($relative, "relative", true);
+      trigger_error($relative, "relative", true);
     }
+    */
   	$timestamp = strtotime($relative, $timestamp);
   } 
   return strftime($format, $timestamp);
