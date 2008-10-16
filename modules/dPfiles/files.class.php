@@ -335,11 +335,10 @@ class CFile extends CMbMetaObject {
     foreach($object->_ref_files as $keyFile=>$FileData) {
       $object->_ref_files[$keyFile]->canRead();
       if($object->_ref_files[$keyFile]->_canRead) {
-        if($FileData->file_category_id){
-          $affichageFile[$FileData->file_category_id]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
-        }else{
-          $affichageFile[0]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
-        }
+      	$id = $FileData->file_category_id ? $FileData->file_category_id : 0;
+        $affichageFile[$id]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
+        if (!isset($affichageFile[$id]["name"]))
+          $affichageFile[$id]["name"] = '';
       }
     }
     
@@ -347,11 +346,10 @@ class CFile extends CMbMetaObject {
     foreach($object->_ref_documents as $keyDoc=>$DocData) {
       $object->_ref_documents[$keyDoc]->canRead();
       if($object->_ref_documents[$keyDoc]->_canRead) {
-        if($DocData->file_category_id){
-          $affichageFile[$DocData->file_category_id]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
-        }else{
-          $affichageFile[0]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
-        }
+      	$id = $DocData->file_category_id ? $DocData->file_category_id : 0;
+        $affichageFile[$id]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
+        if (!isset($affichageFile[$id]["name"]))
+          $affichageFile[$id]["name"] = '';
       }
     }
     
