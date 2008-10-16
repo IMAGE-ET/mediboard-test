@@ -207,12 +207,12 @@ class CNumSpec extends CMbFieldSpec {
 	    $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
 	    $sHtml .= '
 	  <script type="text/javascript">
-      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').');
+      window["'.$fieldId.'_object"] = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').');
 		</script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" id="img_'.$fieldId.'" />
 	  <map name="arrow_'.$fieldId.'" >
-	    <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.inc()" title="+" />
-	    <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.dec()" title="-" />
+	    <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="window[\''.$fieldId.'_object\'].inc()" title="+" />
+	    <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="window[\''.$fieldId.'_object\'].dec()" title="-" />
 	  </map>
 	  </div>';
     } else {
