@@ -279,9 +279,10 @@ function mbTime($relative = null, $ref = null) {
  * @return int: number of intervals
  **/
 function mbTimeCountIntervals($reference, $relative, $interval) {
-  $refStamp = strtotime($reference) - strtotime("0:00:00");
-  $relStamp = strtotime($relative ) - strtotime("0:00:00");
-  $intStamp = strtotime($interval ) - strtotime("0:00:00");
+	$zero = strtotime("0:00:00");
+  $refStamp = strtotime($reference) - $zero;
+  $relStamp = strtotime($relative ) - $zero;
+  $intStamp = strtotime($interval ) - $zero;
   $diffStamp = $relStamp - $refStamp;
   $nbInterval = floatval($diffStamp / $intStamp);
   return intval($nbInterval);
@@ -307,9 +308,9 @@ function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
  * @return string: the resulting time */
 function mbAddTime($relative, $ref = null) {
   $fragments = explode(":", $relative);
-  $hours = @$fragments[0];
-  $minutes = @$fragments[1];
-  $seconds = @$fragments[2];
+  $hours   = isset($fragments[0]) ? $fragments[0] : '00';
+  $minutes = isset($fragments[1]) ? $fragments[1] : '00';
+  $seconds = isset($fragments[2]) ? $fragments[2] : '00';
   return mbTime("+$hours hours $minutes minutes $seconds seconds", $ref);
 }
 
@@ -318,9 +319,9 @@ function mbAddTime($relative, $ref = null) {
  * @return string: the resulting time */
 function mbSubTime($relative, $ref = null) {
   $fragments = explode(":", $relative);
-  $hours = @$fragments[0];
-  $minutes = @$fragments[1];
-  $seconds = @$fragments[2];
+  $hours   = isset($fragments[0]) ? $fragments[0] : '00';
+  $minutes = isset($fragments[1]) ? $fragments[1] : '00';
+  $seconds = isset($fragments[2]) ? $fragments[2] : '00';
   return mbTime("-$hours hours -$minutes minutes -$seconds seconds", $ref);
 }
 
@@ -329,9 +330,9 @@ function mbSubTime($relative, $ref = null) {
  * @return string: the resulting time */
 function mbAddDateTime($relative, $ref = null) {
   $fragments = explode(":", $relative);
-  $hours = @$fragments[0];
-  $minutes = @$fragments[1];
-  $seconds = @$fragments[2];
+  $hours   = isset($fragments[0]) ? $fragments[0] : '00';
+  $minutes = isset($fragments[1]) ? $fragments[1] : '00';
+  $seconds = isset($fragments[2]) ? $fragments[2] : '00';
   return mbDateTime("+$hours hours $minutes minutes $seconds seconds", $ref);
 }
 
