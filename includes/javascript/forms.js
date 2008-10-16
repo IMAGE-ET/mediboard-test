@@ -402,7 +402,7 @@ function prepareForm(oForm, bForcePrepare) {
 		    }
 		    
 		    // Won't make it resizable on IE
-		    if (oElement.type == "textarea" && (Prototype.Browser.Gecko || Prototype.Browser.Opera)) {
+		    if (oElement.type == "textarea" && oElement.id != "htmlarea" && (Prototype.Browser.Gecko || Prototype.Browser.Opera)) {
 		      oElement.setResizable({autoSave: true, step: 'font-size'});
 		    }
 		    

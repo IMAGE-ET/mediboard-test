@@ -3135,3 +3135,7 @@ background-color: #88f;
 	border: 1px solid #aaa;
 	background: #fff;
 }
+
+.administration-selected {
+  border: 2px dotted #000;
+}

@@ -132,8 +132,9 @@
 			     {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
 			       style="background-color: #aaa"
 			     {{else}}
-			       onclick="addAdministration({{$line_id}}, '{{$quantite}}', '{{$unite_prise}}', '{{$line_class}}','{{$_date}}','{{$_hour}}','{{$list_administrations}}');"
-			     {{/if}}
+             onclick="toggleSelectForAdministration(this, {{$line_id}}, '{{$quantite}}', '{{$unite_prise}}', '{{$line_class}}','{{$_date}}','{{$_hour}}','{{$list_administrations}}');"
+			       ondblclick="addAdministration({{$line_id}}, '{{$quantite}}', '{{$unite_prise}}', '{{$line_class}}','{{$_date}}','{{$_hour}}','{{$list_administrations}}');"
+           {{/if}}
 			     class="tooltip-trigger administration
 		         {{if $quantite > 0}}
 				   {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}
@@ -184,12 +185,13 @@
 		   </td>
 	   {{else}}
 	       <td style="text-align: center" class="{{$_date_hour}}">
-		       <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
+		       <div class="tooltip-trigger administration {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
 		            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}'} })"
 		            {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
                     style="background-color: #aaa"
                   {{else}}
-                    onclick="addAdministration({{$line_id}}, '', '{{$unite_prise}}', '{{$line_class}}','{{$_date}}','{{$_hour}}','{{$list_administrations}}');"
+                    onclick="toggleSelectForAdministration(this, {{$line_id}}, '', '{{$unite_prise}}', '{{$line_class}}','{{$_date}}','{{$_hour}}','{{$list_administrations}}');"
+                    ondblclick="addAdministration({{$line_id}}, '', '{{$unite_prise}}', '{{$line_class}}','{{$_date}}','{{$_hour}}','{{$list_administrations}}');"
                   {{/if}}
                   >
     	          {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}

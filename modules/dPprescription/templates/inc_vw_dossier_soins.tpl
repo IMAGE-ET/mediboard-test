@@ -22,7 +22,7 @@ addCibleTransmission = function(object_class, object_id, view) {
   oForm.text.focus();
 }
 
-addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations){
+addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations) {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_administration");
   url.addParam("line_id",  line_id);
@@ -34,6 +34,39 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.addParam("administrations", administrations);
   url.addParam("date_sel", "{{$date}}");
   url.popup(400,300,"Administration");
+}
+
+toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, date, heure, administrations) {
+  element = $(element);
+  if (element._administration) {
+    element.removeClassName('administration-selected');
+    element._administration = null;
+  }
+  else {
+    element.addClassName('administration-selected');
+    element._administration = {
+      line_id: line_id,
+      quantite: quantite,
+      key_tab: key_tab,
+      object_class: object_class,
+      date: date,
+      heure: heure/*,
+      administrations: administrations*/,
+      date_sel: '{{$date}}'
+    };
+  }
+}
+
+applyAdministrations = function () {
+  var administrations = {};
+  $('plan_soin').select('div.administration-selected').each(function(element) {
+    var adm = element._administration;
+    administrations[adm.line_id+'_'+adm.key_tab+'_'+adm.date+'_'+adm.heure] = adm;
+  });
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
+  url.addObjectParam("adm", administrations);
+  url.popup(700, 600, "Administrations multiples");
 }
 
 viewLegend = function(){
@@ -57,61 +90,64 @@ calculSoinSemaine = function(date, prescription_id){
   url.requestUpdate("semaine", { waitingText: null } );
 }
 
-
-
 // Initialisation
-var th_before = $("th-{{$hier}}");
-var th_today = $("th-{{$date}}");
-var th_after = $("th-{{$demain}}");
-
-var listTdBefore = $$('td.{{$hier}}');
-var listTdToday  = $$('td.{{$date}}');
-var listTdAfter  = $$('td.{{$demain}}');
- 
-var reverseBefore = listTdBefore.reverse(false);
-var reverseToday = listTdToday.reverse(false);
-var reverseAfter = listTdAfter.reverse(false);
-
-var planSoin = null;
+var planSoin;
+var th_before, th_today, th_after;
+var listTdBefore, listTdToday, listTdAfter;
+var reverseBefore, reverseToday, reverseAfter;
 
 window.periodicalBefore = null;
 window.periodicalAfter = null;
 
 Main.add(function () {
-  listThHoursBefore = $$('.th_hours_{{$hier}}');
-  listThHoursAfter = $$('.th_hours_{{$demain}}');
+  planSoin = $('plan_soin');
+  
+  // Initialisation
+  th_before = $("th-{{$hier}}");
+  th_today = $("th-{{$date}}");
+  th_after = $("th-{{$demain}}");
+  
+  listTdBefore = planSoin.select('td.{{$hier}}');
+  listTdToday  = planSoin.select('td.{{$date}}');
+  listTdAfter  = planSoin.select('td.{{$demain}}');
+  
+  reverseBefore = listTdBefore.reverse(false);
+  reverseToday  = listTdToday.reverse(false);
+  reverseAfter  = listTdAfter.reverse(false);
+
+  listThHoursBefore = planSoin.select('.th_hours_{{$hier}}');
+  listThHoursAfter = planSoin.select('.th_hours_{{$demain}}');
   
   if(th_before && th_after) {
-	th_before.hide();
-	th_after.hide();
-	
-	th_before.colSpan = 0;
-	th_today.colSpan = 12;
-	th_after.colSpan = 0;
-	  
-	  
-	listTdBefore.each(function(elt) { 
-	  elt.hide();
-	  $(elt.className).hide();
-	});
-	if(listTdBefore.size() == 0){
-	 // On masque les heures
-	 listThHoursBefore.each(function(elt) { 
-	   elt.hide();
-	 });
-	}
-	  
-	  
-	listTdAfter.each(function(elt) { 
-	  elt.hide();
-	  $(elt.className).hide();
-	});
-	if(listTdAfter.size() == 0){
-	 // On masque les heures
-	 listThHoursAfter.each(function(elt) { 
-	   elt.hide();
-	  });
-	}
+  	th_before.hide();
+  	th_after.hide();
+  	
+  	th_before.colSpan = 0;
+  	th_today.colSpan = 12;
+  	th_after.colSpan = 0;
+  	  
+  	  
+  	listTdBefore.each(function(elt) { 
+  	  elt.hide();
+  	  $(elt.className).hide();
+  	});
+  	if(listTdBefore.length == 0){
+      // On masque les heures
+      listThHoursBefore.each(function(elt) { 
+        elt.hide();
+      });
+  	}
+  	  
+  	listTdAfter.each(function(elt) { 
+  	  elt.hide();
+  	  $(elt.className).hide();
+  	});
+  	if(listTdAfter.length == 0){
+      // On masque les heures
+      listThHoursAfter.each(function(elt) { 
+        elt.hide();
+      });
+  	}
   }
 
   new Control.Tabs('tab_dossier_soin');
@@ -198,7 +234,7 @@ showBefore = function(){
 
 <div id="jour" style="display:none">
 
-<table class="tbl" id="plan_soin">
+<table class="tbl">
   <tr>
     <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
@@ -239,6 +275,9 @@ showBefore = function(){
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
 		      Imprimer la feuille de soins immédiate
 	      </button>
+        <button type="button" class="tick" onclick="applyAdministrations();">
+          Appliquer les administrations séléctionnées
+        </button>
 	    </td>
 	    <td style="text-align: right">
 	      <button type="button" class="search" onclick="viewLegend()">Légende</button>
@@ -273,12 +312,12 @@ showBefore = function(){
 		 	 	</table>
 		 	 	</td>
 		 	 	<td>
-				<table class="tbl" >
+				<table class="tbl" id="plan_soin">
 				  {{if $lines.med || $lines.elt}}
 					  <tr>
 					    <th rowspan="2">Catégorie</th>
 					    <th rowspan="2">Cond.</th>
-					    <th rowspan="2">Libelle</th>
+					    <th rowspan="2">Libellé</th>
 					    <th rowspan="2">Posologie</th>
 					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
 					     <th id="th-{{$_date}}">{{$_date|date_format:"%d/%m"}}</th>
