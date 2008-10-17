@@ -81,7 +81,7 @@ class CPrescriptionLine extends CMbObject {
     $specs["signee"]            = "bool";
     $specs["debut"]             = "date";
     $specs["time_debut"]        = "time";
-    $specs["duree"]             = "num";
+    $specs["duree"]             = "num min|0";
     $specs["unite_duree"]       = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
     $specs["date_arret"]        = "date";
     $specs["time_arret"]        = "time";
