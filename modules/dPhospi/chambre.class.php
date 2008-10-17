@@ -71,8 +71,8 @@ class CChambre extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_service = new CService;
-    $this->_ref_service->load($this->service_id);
+    $this->_ref_service = new CService();
+  	$this->_ref_service = $this->_ref_service->getCached($this->service_id);	
   }
 
   function loadRefsBack() {

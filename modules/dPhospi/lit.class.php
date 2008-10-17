@@ -87,8 +87,8 @@ class CLit extends CMbObject {
   }
   
   function loadRefChambre() {
-    $this->_ref_chambre = new CChambre;
-    $this->_ref_chambre->load($this->chambre_id);
+    $this->_ref_chambre = new CChambre();
+  	$this->_ref_chambre = $this->_ref_chambre->getCached($this->chambre_id);	
   }
 
   function loadRefsFwd() {

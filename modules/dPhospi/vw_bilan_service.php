@@ -99,8 +99,11 @@ foreach($prescriptions as $_prescription){
 				          if(is_array($prises_prevues_by_date['quantites'])){
 					          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
 					            if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-						            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+						            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
 						            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+						            if(!$chambre){
+						              continue;
+						            }
 	                      $chambres[$chambre->_id] = $chambre;
                         $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
 					            } else {
@@ -122,8 +125,11 @@ foreach($prescriptions as $_prescription){
 				        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 				          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
 			          		if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-					            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+					            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
 					            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+			          			if(!$chambre){
+						            continue;
+						          }
                       $chambres[$chambre->_id] = $chambre;
                        $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
 				            } else {
@@ -162,8 +168,11 @@ foreach($prescriptions as $_prescription){
 				          if(is_array($prises_prevues_by_date['quantites'])){
 					          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
                       if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-						            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+						            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
 						            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+                      	if(!$chambre){
+						              continue;
+						            }
 	                      $chambres[$chambre->_id] = $chambre;
 	                       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
 					            } else {
@@ -186,8 +195,11 @@ foreach($prescriptions as $_prescription){
 				        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 				          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
                     if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-					            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+					            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
 					            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+                    	if(!$chambre){
+						            continue;
+						          }
                       $chambres[$chambre->_id] = $chambre;
                       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
 				            } else {

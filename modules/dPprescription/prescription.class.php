@@ -803,6 +803,7 @@ class CPrescription extends CMbObject {
 	    	$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
 	    }
     	$line_element->_ref_element_prescription->loadRefCategory();
+    	
     }
   }
   
@@ -815,8 +816,8 @@ class CPrescription extends CMbObject {
   	$this->_ref_prescription_lines_element_by_cat = array();
   	
   	foreach($this->_ref_prescription_lines_element as $line){
-  		$category = new CCategoryPrescription();
-  		$category->load($line->_ref_element_prescription->category_prescription_id);
+  	  $line->_ref_element_prescription->loadRefCategory();
+  	  $category =& $line->_ref_element_prescription->_ref_category_prescription;
   		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
   		$this->_ref_lines_elements_comments[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
   	}

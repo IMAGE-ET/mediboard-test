@@ -180,22 +180,13 @@ class CAffectation extends CMbObject {
   }
 
   function loadRefLit() {
-    $where = array (
-      "lit_id" => "= '$this->lit_id'"
-    );
-
-    $this->_ref_lit = new CLit;
-    $this->_ref_lit->loadObject($where);
+    $this->_ref_lit = new CLit();
+  	$this->_ref_lit = $this->_ref_lit->getCached($this->lit_id);	
   }
 
   function loadRefSejour() {
-    $where = array (
-      "sejour_id" => "= '$this->sejour_id'"
-    );
-
-    $this->_ref_sejour = new CSejour;
-    $this->_ref_sejour->loadObject($where);
-
+    $this->_ref_sejour = new CSejour();
+    $this->_ref_sejour->load($this->sejour_id);
   }
 
   function loadRefsFwd() {
