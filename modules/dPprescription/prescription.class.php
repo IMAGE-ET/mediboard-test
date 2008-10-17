@@ -62,6 +62,8 @@ class CPrescription extends CMbObject {
   var $_transmissions = null;
   var $_prises_med = null;
   var $_list_prises_med = null;
+  var $_ref_lines_med_for_plan = null;
+  var $_ref_lines_elt_for_plan = null;
  
   function getSpec() {
     $spec = parent::getSpec();
@@ -958,23 +960,29 @@ class CPrescription extends CMbObject {
     foreach($lines as $cat_name => $lines_cat){
 		  if(count($lines_cat)){
 		    foreach($lines_cat as &$_line_med){
+		    	// On met a jour la date de fin de la ligne de medicament si celle ci n'est pas indiquée
+				  if(!$_line_med->_fin_reelle){
+				    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;
+				  }
+				  
 		  	  // Si la ligne est prescrite pour la date donnée
 				  if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     	
 				    // Chargement des administrations
 						$_line_med->calculAdministrations($date, $mode_feuille_soin);
 						// Si aucune prise
             $_line_med->_ref_produit->loadClasseATC();
-						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$_line_med->_ref_produit->_ref_ATC_2_code][$_line_med->_id]["aucune_prise"]))){
- 	            $this->_lines["med"][$_line_med->_ref_produit->_ref_ATC_2_code][$_line_med->_id]["aucune_prise"] = $_line_med;
-						  continue;
+            $code_ATC = $_line_med->_ref_produit->_ref_ATC_2_code;
+						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
+ 	            $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+ 	            continue;
 						}
 						// Chargement des prises
 						$_line_med->calculPrises($this, $date, $heures, $mode_feuille_soin);
 						
 						// Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 						if(!$mode_feuille_soin){
-						  if(@array_key_exists("aucune_prise", $_line_med->_administrations) && count($_line_med->_ref_prises) >= 1){
-						    $this->_lines["med"][$_line_med->_ref_produit->_ref_ATC_2_code][$_line_med->_id]["aucune_prise"] = $_line_med;
+						  if(isset($_line_med->_administrations['aucune_prise']) && count($_line_med->_ref_prises) >= 1){
+						    $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
 						  }
 						}
 				  }
@@ -983,34 +991,33 @@ class CPrescription extends CMbObject {
     }
 		// Parcours des elements
     if($this->_ref_prescription_lines_element_by_cat){
-		foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
-		  foreach($elements_chap as $name_cat => $elements_cat){
-		    // Initialisation du compteur de lignes
-		    foreach($elements_cat as &$_elements){
-		 	    foreach($_elements as &$_line_element){
-		        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
-		      	  // Chargement des administrations et des transmissions
-		      	  $_line_element->calculAdministrations($date, $mode_feuille_soin);
-		      	  // Si aucune prise  
-			        if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
-			          $this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-					      continue;
-					    }
-					    // Chargement des prises
-					    $_line_element->calculPrises($this, $date, $heures, $mode_feuille_soin, $name_chap, $name_cat);
-					
-					    // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
-					    if(!$mode_feuille_soin){
-					      if(@array_key_exists("aucune_prise", $_line_element->_administrations) && count($_line_element->_ref_prises) >= 1){
-						      $this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element; 
-					      }
-					    }
-			      }
-			    }
+			foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
+			  foreach($elements_chap as $name_cat => $elements_cat){
+			    // Initialisation du compteur de lignes
+			    foreach($elements_cat as &$_elements){
+			 	    foreach($_elements as &$_line_element){
+			        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+			      	  // Chargement des administrations et des transmissions
+			      	  $_line_element->calculAdministrations($date, $mode_feuille_soin);
+			      	  // Si aucune prise  
+				        if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
+				          $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+				          continue;
+						    }
+						    // Chargement des prises
+						    $_line_element->calculPrises($this, $date, $heures, $mode_feuille_soin, $name_chap, $name_cat);
+						    // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
+						    if(!$mode_feuille_soin){
+						      if(isset($_line_element->_administrations['aucune_prise']) && count($_line_element->_ref_prises) >= 1){
+							      $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+						      }
+						    }
+				      }
+				    }
+				  }
 			  }
-		  }
+	    }
     }
-   }
   }
 }
 

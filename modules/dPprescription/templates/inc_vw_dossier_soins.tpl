@@ -287,9 +287,7 @@ showBefore = function(){
 
   {{assign var=administrations value=$prescription->_administrations}}
 	{{assign var=transmissions value=$prescription->_transmissions}}	  
-	{{assign var=prises value=$prescription->_prises}}
-	{{assign var=list_prises value=$prescription->_list_prises}}
-  {{assign var=lines value=$prescription->_lines}}
+
   <table style="width: 100%">
 	  <tr>
 	    <td style="width: 1%">
@@ -297,12 +295,12 @@ showBefore = function(){
 			 	 <tr>
 					 <td>
 					   <ul id="tab_categories" class="control_tabs_vertical">
-						    {{if $lines.med}}
+						    {{if $prescription->_ref_lines_med_for_plan|@count}}
 						      <li><a href="#_med">Médicaments</a></li>
 						    {{/if}}
 							  {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
 							  {{foreach from=$specs_chapitre->_list item=_chapitre}}
-							    {{if array_key_exists($_chapitre, $lines.elt)}}
+							    {{if @is_array($prescription->_ref_lines_elt_for_plan.$_chapitre)}}
 							    <li><a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
 							    {{/if}}
 							  {{/foreach}}
@@ -313,7 +311,7 @@ showBefore = function(){
 		 	 	</td>
 		 	 	<td>
 				<table class="tbl" id="plan_soin">
-				  {{if $lines.med || $lines.elt}}
+				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count}}
 					  <tr>
 					    <th rowspan="2">Catégorie</th>
 					    <th rowspan="2">Cond.</th>
@@ -337,10 +335,10 @@ showBefore = function(){
 			
 				  <!-- Affichage des medicaments -->
 				  <tbody id="_med" style="display: none;">
-				  {{foreach from=$lines.med item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
-				  {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
-				    {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
-					  {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+				    {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
+				      {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
+				        {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
+					        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
 					            line=$line_med
 					            nodebug=true
 					            first_foreach=foreach_med
@@ -349,13 +347,13 @@ showBefore = function(){
 					            suffixe=med
 					            nb_line=$_line|@count
 					            dosql=do_prescription_line_medicament_aed}}
-					{{/foreach}}
-					{{/foreach}} 		 
-				  {{/foreach}}
+					      {{/foreach}}
+					    {{/foreach}} 		 
+				    {{/foreach}}
 			    </tbody>
 					
 				  <!-- Affichage des elements -->
-				  {{foreach from=$lines.elt key=name_chap item=elements_chap name="foreach_element"}}
+				  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap name="foreach_element"}}
 				       {{if !$smarty.foreach.foreach_element.first}}
 				         </tbody>
 				       {{/if}}

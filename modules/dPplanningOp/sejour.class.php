@@ -523,7 +523,7 @@ class CSejour extends CCodable {
 	$this->_ref_curr_affectation = new CAffectation();
   	$where = array();
   	$where["sejour_id"] = " = '$this->_id'";
-	$where["entree"] = "<= '$date'";
+	  $where["entree"] = "<= '$date'";
     $where["sortie"] = ">= '$date'";
     $this->_ref_curr_affectation->loadObject($where);
     if($this->_ref_curr_affectation->_id){

@@ -29,9 +29,11 @@ class CPrisePosologie extends CMbMetaObject {
   var $_type                 = null; // Type de prise
   var $_unite                = null; // Unite de la prise
   var $_heures               = null; // Heure de la prise
- 
+  var $_unite_temps          = null;
+  
   var $_quantite_with_kg     = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du poids
   var $_quantite_with_coef   = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du coef
+  var $_unite_sans_kg        = null;  // Unite sans le kg
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -101,7 +103,7 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_view .= " par ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
     	$this->_short_view .= " / ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
     	
-    	$this->_unite = $this->unite_fois;
+    	$this->_unite_temps = $this->unite_fois;
     }
     
     if($this->nb_tous_les && $this->unite_tous_les){
@@ -112,7 +114,7 @@ class CPrisePosologie extends CMbMetaObject {
     		$this->_short_view .= "(J+$this->decalage_prise)";
     	}
     	$this->_type = "tous_les";
-    	$this->_unite = $this->unite_tous_les;
+    	$this->_unite_temps = $this->unite_tous_les;
     	$this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
     }   
     
@@ -204,8 +206,8 @@ class CPrisePosologie extends CMbMetaObject {
   	$nb_hours = mbHoursRelative($borne_min, $borne_max);
   	$nb_days  = mbDaysRelative($borne_min, $borne_max);
   	$nb_minutes = mbMinutesRelative($borne_min, $borne_max);
-  
-  	switch($this->_unite){
+
+  	switch($this->_unite_temps){
   		case 'minute':
   			$nb = $nb_minutes; 
   			break;
@@ -216,7 +218,7 @@ class CPrisePosologie extends CMbMetaObject {
   	  	$nb = $nb_hours / 12;
   		  break;		  
   		case 'jour':
-  			$nb = $nb_hours / 24;
+  			$nb = $nb_days;
   		  break;  		
   		case 'semaine':
   			$nb = $nb_days / 7;
@@ -238,11 +240,9 @@ class CPrisePosologie extends CMbMetaObject {
   			break;
   	}
 
-  
-  
+
   	if($this->moment_unitaire_id && $this->_ref_moment->heure){
   		$heure = $this->_ref_moment->heure;
-  
   		// Si une seule journée, on regarde si la prise est pendant la journée
   		if($nb_days == 0){
   			$day = mbDate($borne_min); // == mbDate($borne_max)	
@@ -253,15 +253,13 @@ class CPrisePosologie extends CMbMetaObject {
 				} else {
 				  $nb = 0;
 				}
-				
   		} 
   		else {
   			// On calcule combien de fois la prise sera effectuée pendant la ligne
   		  // Pour cela, on verifie si la prise est faite le 1er et dernier jour
 				$first_prise = mbDate($borne_min)." $heure";
   		  $last_prise  = mbDate($borne_max)." $heure";
-			  $nb = $nb_days - 1;
-
+			  $nb = $nb_days - 2;
   		  if($first_prise > $borne_min){
 				  $nb++;
 				}
@@ -270,12 +268,6 @@ class CPrisePosologie extends CMbMetaObject {
 				}
   		}
   	}
-  	
- 
-  	/*
-		if($this->moment_unitaire_id && !$this->_ref_moment->heure){
-  	  $nb = 1;
-		}*/
 		if($this->moment_unitaire_id && !isset($nb)){
 		  $nb = 1;
 		}
@@ -286,8 +278,7 @@ class CPrisePosologie extends CMbMetaObject {
     }
     // Cas "Fois par" (avec unite_prise en jour)
     if($this->nb_fois && $this->unite_fois){
-    	$quantite = $this->quantite * $nb * $this->nb_fois;
-    	
+    	$quantite = $this->quantite * $nb * $this->nb_fois;	
     }
     // Cas "Tous les" ...
     if($this->nb_tous_les){
@@ -296,16 +287,75 @@ class CPrisePosologie extends CMbMetaObject {
     if(!isset($quantite)){
     	$quantite = $this->quantite * $nb_days;
     }
-     
-    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
-    $_line = $this->_ref_object;
-    $_produit = $_line->_ref_produit;
-	  if($this->unite_prise == $_produit->libelle_presentation){
-	    $quantite *= $_produit->nb_unite_presentation;
-	    $this->unite_prise = $_produit->libelle_unite_presentation;
-	  }
-	  
-    @$this->_ref_object->_quantites[$this->unite_prise] += $quantite;
+    
+    
+    //---------------------
+    // On reaffecte la quantite calculee
+    $this->quantite = $quantite;
+    
+
+		$line =& $this->_ref_object;
+		$produit =& $line->_ref_produit;
+		$prescription =& $line->_ref_prescription;
+		$sejour =& $prescription->_ref_object;
+		
+		$poids_ok = 1;
+		
+     if(!$this->_quantite_with_kg){
+			  $_unite_prise = str_replace('/kg', '', $this->unite_prise);
+			  if($_unite_prise != $this->unite_prise){
+			    // On recupere le poids du patient pour calculer la quantite
+
+	        if(!$sejour->_ref_patient){
+	         $sejour->loadRefPatient();
+	        }
+	        $patient =& $sejour->_ref_patient;          
+	        if(!$patient->_ref_constantes_medicales){
+	          $patient->loadRefConstantesMedicales();
+	        }
+	        $poids = $patient->_ref_constantes_medicales->poids;
+	        if($poids){
+			      $this->quantite *= $poids;
+			      $this->_quantite_with_kg = 1;  
+			      $this->_unite_sans_kg = $_unite_prise;
+	        } else {
+	          $poids_ok = 0;
+	          $this->quantite = 0;
+	        }
+        }
+      }
+      
+		  if(!$this->_quantite_with_coef && $poids_ok){
+		    $unite_prise = ($this->_unite_sans_kg) ? $this->_unite_sans_kg : $this->unite_prise;
+		    $produit->loadConditionnement();
+		    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
+		    if($this->unite_prise == $produit->libelle_presentation){		        
+		      $this->quantite *= $produit->nb_unite_presentation;
+		    }
+		    
+		    // Gestion des unite autres unite de prescription
+		    if(!isset($produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation])) {
+          $coef = 1;
+        } else {
+          $coef = $produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation];
+        }
+        
+        $this->_quantite_with_coef = 1;
+		    $this->quantite *= $coef;
+		    
+		    $this->_ref_object->_unite_administration = $produit->libelle_unite_presentation;
+		    $this->_ref_object->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
+		    $produit->_unite_dispensation = $this->_ref_object->_unite_dispensation;
+		    $produit->_unite_administration = $this->_ref_object->_unite_administration;
+		    
+		    if($this->_ref_object->_unite_dispensation == $produit->libelle_unite_presentation){
+		      $this->_ref_object->_ratio_administration_dispensation = 1;
+		    } else {
+		      $this->_ref_object->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
+		    }
+		  }
+      
+		  @$this->_ref_object->_quantite_administration += $this->quantite; 
   }
   
   

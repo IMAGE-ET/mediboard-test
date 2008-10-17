@@ -114,27 +114,26 @@ selectChap = function(name_chap, oField){
   </td>
 </tr>
 {{/if}}
-{{foreach from=$lines_by_patient key=chambre item=_lines_by_patient}}
+{{foreach from=$lines_by_patient key=chambre_id item=_lines_by_patient}}
   {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
     {{assign var=sejour value=$sejours.$sejour_id}}
     {{assign var=patient value=$sejour->_ref_patient}}
     <tr>
       <th colspan="2">
         <span style="float: left">
-          <strong>Chambre {{$chambre}}</strong>
+          {{assign var=chambre value=$chambres.$chambre_id}}
+          <strong>Chambre {{$chambre->_view}}</strong>
         </span>
-	    <span style="float: right">
-	      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
-	      DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
-	    </span>
-
-	    <strong>{{$patient->_view}}</strong>
-	    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
-	    <br />
-	    {{assign var=operation value=$sejour->_ref_last_operation}}
-	    Intervention: {{$operation->libelle}} le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-	    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
-
+		    <span style="float: right">
+		      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
+		      DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+		    </span>
+		    <strong>{{$patient->_view}}</strong>
+		    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
+		    <br />
+		    {{assign var=operation value=$sejour->_ref_last_operation}}
+		    Intervention: {{$operation->libelle}} le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
+		    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
       </th>
     </tr>
   	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
@@ -146,46 +145,46 @@ selectChap = function(name_chap, oField){
 			      <th style="width: 250px; border:none;">Libellé</th> 
 					  <th style="width: 50px; border:none;">Prévues</th>
 					  <th style="width: 50px; border:none;">Effectuées</th>
-					  <th style="width: 150px; border:none;">Unité de prise</th>
+					  <th style="width: 150px; border:none;">Unité d'admininstration</th>
 					  <th style="border:none;">Commentaire</th>
 					</tr>
 	      </table>
       </td>
 	  </tr>
-
 	  <!-- Affichage des prises prevues -->
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
-	  <tr>
-	    <td style="width: 20px">{{$hour}}h</td>
-      <td style="width: 100%">
-        <table class="form">
-		       {{foreach from=$prises_by_type key=type item=prises name="foreach_unite"}}
-			      {{foreach from=$prises key=line_id item=prises_by_unite}}
-		           {{assign var=line value=$list_lines.$type.$line_id}}        
-		           {{foreach from=$prises_by_unite key=unite_prise item=quantite}}
-		           <tr>
-		             <td style="width: 250px; border:none;">{{$line->_view}}
-		             {{if array_key_exists('prevu', $quantite) && $quantite.prevu == $quantite.administre}}
-		             <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-		             {{/if}}
-		             </td> 
-				         <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
-				         <td style="width: 50px; border:none; text-align: center;">{{if $quantite.administre}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-				         <td style="width: 150px; border:none;" class="text">
-				           {{if $type=="med"}}
-				            {{$line->_ref_produit->libelle_unite_presentation}}
-				           {{else}}
-				             {{$line->_unite_prise}}
-				           {{/if}}
-				         </td>
-				         <td class="text" style="border:none;">{{$line->commentaire}}</td>
-				       </tr>
-				      {{/foreach}}
-				    {{/foreach}} 
-		      {{/foreach}}  
-        </table>
-      </td>
-	  </tr>	   
+	    {{assign var=_date_time value="$date $hour:00:00"}}
+	  	{{if $_date_time >= $dateTime_min && $_date_time <= $dateTime_max}}
+			  <tr>
+			    <td style="width: 20px">{{$hour}}h</td>
+		      <td style="width: 100%">
+		        <table class="form">         
+				      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
+					      {{foreach from=$prises key=line_id item=quantite}}
+				          {{assign var=line value=$list_lines.$line_class.$line_id}}        
+						      <tr>
+				            <td style="width: 250px; border:none;">{{$line->_view}}
+				            {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
+				              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+				            {{/if}}
+				            </td> 
+						        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+						        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+						        <td style="width: 150px; border:none;" class="text">
+						          {{if $line_class=="CPrescriptionLineMedicament"}}
+						            {{$line->_ref_produit->libelle_unite_presentation}}
+						          {{else}}
+						            {{$line->_unite_prise}}
+						          {{/if}}
+						        </td>
+						        <td class="text" style="border:none;">{{$line->commentaire}}</td>
+						      </tr>
+						    {{/foreach}} 
+				      {{/foreach}}  
+		        </table>
+		      </td>
+			  </tr>
+		  {{/if}}
 	  {{/foreach}}
 	{{/foreach}}
   {{/foreach}}

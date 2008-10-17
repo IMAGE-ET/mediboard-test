@@ -42,7 +42,8 @@ class CBcbProduit extends CBcbObject {
   var $_ref_classes_thera    = null;
   var $_ref_equivalents      = null;
   var $_ref_posologies       = null;
-  
+  var $_unite_dispensation   = null;
+  var $_unite_administration = null;
   // Constructeur
   function CBcbProduit(){
     $this->distClass = "BCBProduit";
@@ -122,7 +123,7 @@ class CBcbProduit extends CBcbObject {
   	$code_unite_presentation = $conditionnement['CODE_UNITE_DE_PRESENTATION'];
   	$query = "SELECT * FROM `IDENT_UNITES_DE_PRESENTATION` WHERE `CODE_UNITE_DE_PRESENTATION` = '$code_unite_presentation';";
   	$presentation = $ds->loadHash($query);
-  	$this->libelle_unite_presentation = $presentation["LIBELLE_UNITE_DE_PRESENTATION_PLURIEL"];
+  	$this->libelle_unite_presentation = $presentation["LIBELLE_UNITE_DE_PRESENTATION"];
   	
   	return $conditionnement;
   }

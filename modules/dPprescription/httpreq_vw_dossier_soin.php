@@ -7,10 +7,10 @@
  *  @author Alexis Granger
  */
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
-$date      = mbGetValueFromGetOrSession("date");
+$sejour_id   = mbGetValueFromGetOrSession("sejour_id");
+$date        = mbGetValueFromGetOrSession("date");
 $nb_decalage = mbGetValueFromGetOrSession("nb_decalage",0);
-$now       = mbDateTime();
+$now         = mbDateTime();
 
 // Chargement du sejour
 $sejour = new CSejour();
@@ -38,7 +38,6 @@ $dates = array(mbDate("- 1 DAY", $date), $date, mbDate("+ 1 DAY", $date));
 
 $types = array("med", "elt");
 foreach($types as $type){
-  $prescription->_prises[$type] = array();
   $prescription->_lines[$type] = array();
   $prescription->_intitule_prise[$type] = array();
 }
@@ -79,7 +78,6 @@ foreach($list_hours as &$hour){
 }
 
 if($prescription->_id){
-
 	// Chargement des lignes
 	$prescription->loadRefsLinesMedByCat("1","1","service");
 	
@@ -110,39 +108,39 @@ if($prescription->_id){
 	  	  
 	// Calcul du plan de soin pour la journée $date
   foreach($dates as $_date){
-    foreach($types as $type){
-  	  $prescription->_list_prises[$type][$_date] = array();
-    }
     $prescription->calculPlanSoin($_date, 0, $heures);
   }
 }
 
 // Calcul du rowspan pour les medicaments
-foreach($prescription->_lines["med"] as $_code_ATC => $_cat_ATC){
-  if(!isset($this->_nb_produit_by_cat[$_code_ATC])){
-    $prescription->_nb_produit_by_cat[$_code_ATC] = 0;
-  }
-  foreach($_cat_ATC as $_line) {
-    foreach($_line as $line_med){
-      $prescription->_nb_produit_by_cat[$_code_ATC]++;
-    }
-  }
+if($prescription->_ref_lines_med_for_plan){
+	foreach($prescription->_ref_lines_med_for_plan as $_code_ATC => $_cat_ATC){
+	  if(!isset($prescription->_nb_produit_by_cat[$_code_ATC])){
+	    $prescription->_nb_produit_by_cat[$_code_ATC] = 0;
+	  }
+	  foreach($_cat_ATC as $_line) {
+	    foreach($_line as $line_med){
+	      $prescription->_nb_produit_by_cat[$_code_ATC]++;
+	    }
+	  }
+	}
 }
 
 // Calcul du rowspan pour les elements
-foreach($prescription->_lines["elt"] as $elements_chap){
-  foreach($elements_chap as $name_cat => $elements_cat){
-    if(!isset($this->_nb_produit_by_cat[$name_cat])){
-      $prescription->_nb_produit_by_cat[$name_cat] = 0;
-    }
-    foreach($elements_cat as $_element){
-      foreach($_element as $element){
-        $prescription->_nb_produit_by_cat[$name_cat]++;
-      }
-    }
-  }
-}     
-
+if($prescription->_ref_lines_elt_for_plan){
+	foreach($prescription->_ref_lines_elt_for_plan as $elements_chap){
+	  foreach($elements_chap as $name_cat => $elements_cat){
+	    if(!isset($prescription->_nb_produit_by_cat[$name_cat])){
+	      $prescription->_nb_produit_by_cat[$name_cat] = 0;
+	    }
+	    foreach($elements_cat as $_element){
+	      foreach($_element as $element){
+	        $prescription->_nb_produit_by_cat[$name_cat]++;
+	      }
+	    }
+	  }
+	}     
+}
 $transmission = new CTransmissionMedicale();
 $where = array();
 $where[] = "(object_class = 'CCategoryPrescription') OR 

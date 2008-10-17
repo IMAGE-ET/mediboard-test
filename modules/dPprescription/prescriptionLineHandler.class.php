@@ -77,10 +77,10 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
        // modification de la fin
        if($_line->jour_decalage_fin == "S"){
          $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
- 	     $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", mbDate($sejour->_sortie));	
+ 	       $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", mbDate($sejour->_sortie));	
          $_line->duree = mbDaysRelative($_line->debut, $date_fin);
          $_line->duree++;
-       }      
+       }
        if($_line->jour_decalage == "I" || $_line->jour_decalage_fin == "I"){
          // Si la ligne possede deja une operation_id 
          if($_line->operation_id){
@@ -123,8 +123,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
               }
               $_line->duree = mbDaysRelative($_line->debut, $date_fin);
               $_line->duree++;
-            }  
-          }  
+            }
+          }
+	        if($_line->duree < 0){
+	          $_line->duree = 1;
+	        }
         $_line->store();
       }
     }    

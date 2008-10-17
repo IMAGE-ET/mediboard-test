@@ -65,13 +65,13 @@ ul {
     {{/foreach}}
   </tr>
   <!-- Affichage des medicaments -->
-  {{foreach from=$prescription->_lines.med item=_all_lines_unite_prise_cat}}
+  {{foreach from=$prescription->_ref_lines_med_for_plan item=_all_lines_unite_prise_cat}}
     {{foreach from=$_all_lines_unite_prise_cat item=_all_lines_unite_prise}}
       {{foreach from=$_all_lines_unite_prise key=unite_prise item=_line}}
         {{include file="../../dPprescription/templates/inc_vw_line_plan_soin.tpl" line=$_line suffixe=med}}
     {{/foreach}}
    {{/foreach}} 
-  {{/foreach}} 
+  {{/foreach}}
   
   <!-- Séparation entre les medicaments et les elements -->
   <tr>
@@ -79,7 +79,7 @@ ul {
   </tr>
    
   <!-- Affichage des elements -->
-  {{foreach from=$prescription->_lines.elt key=name_chap item=elements_chap}}
+  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap}}
     {{foreach from=$elements_chap key=name_cat item=elements_cat}}
       {{assign var=categorie value=$categories.$name_chap.$name_cat}}
       {{foreach from=$elements_cat item=_element name="foreach_cat"}}

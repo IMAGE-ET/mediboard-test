@@ -43,9 +43,7 @@ Main.add(function () {
   {{assign var=prise_id value=$prise->_id}}
   
   <form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block; clear: both;">
-    <button style="float: right" type="button" class="remove notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
-  
-  
+    <button style="float: right" type="button" class="remove notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button>
 	  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="m" value="dPprescription" />
@@ -58,13 +56,6 @@ Main.add(function () {
 	  
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	  {{$prise->unite_prise}}
-	  <!-- 
-	  <select name="unite_prise" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">
-		  {{foreach from=$line->_unites_prise item=_unite}}
-		    <option value="{{$_unite}}" {{if $prise->unite_prise == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
-		  {{/foreach}}
-		</select>
-		 -->
 	  {{/if}}
 	  {{if $line->_class_name == "CPrescriptionLineElement"}}
 		  {{$line->_unite_prise}}
@@ -73,19 +64,6 @@ Main.add(function () {
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}
 		  {{$prise->_ref_moment->_view}}
-		  <!-- Selection du moment -->
-{{* MASQUAGE DES CHANGEMENT DE MOMENTS UNITAIRE
-		  <select name="moment_unitaire_id" style="width: 150px" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">      
-		    <option value="">&mdash; Sélection du moment</option>
-		    {{foreach from=$moments key=type_moment item=_moments}}
-		     <optgroup label="{{$type_moment}}">
-		     {{foreach from=$_moments item=moment}}
-		     <option value="{{$moment->_id}}" {{if $prise->moment_unitaire_id == $moment->_id}}selected="selected"{{/if}}>{{$moment->_view}}</option>
-		     {{/foreach}}
-		     </optgroup>
-		    {{/foreach}}
-		  </select>
-*}}
 	  {{/if}}
 	  
 	  <!-- Cas des fois par -->
@@ -101,7 +79,5 @@ Main.add(function () {
 			{{mb_value object=$prise field=unite_tous_les onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
 		  (J+{{mb_value object=$prise field=decalage_prise size=1 increment=1 min=0 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}})
 		{{/if}}
-	
-  
   </form>
 {{/foreach}}

@@ -102,7 +102,6 @@ if($_entree && $_sortie && $_datetime){
 
   $types = array("med", "elt");
   foreach($types as $type){
-    $prescription->_prises[$type] = array();
     $prescription->_lines[$type] = array();
     $prescription->_intitule_prise[$type] = array();
   }

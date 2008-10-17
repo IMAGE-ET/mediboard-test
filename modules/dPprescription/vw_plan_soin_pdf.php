@@ -19,14 +19,12 @@ $last_log = new CUserLog();
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
-
 // Chargement du patient
 $prescription->loadRefPatient();
 $patient =& $prescription->_ref_patient;
 $patient->loadIPP();
 $patient->loadRefConstantesMedicales();
-$const_med = $patient->_ref_constantes_medicales;
-$poids = $const_med->poids;
+$poids = $patient->_ref_constantes_medicales->poids;
 
 // Chargement du séjour
 $prescription->loadRefObject();
@@ -55,22 +53,12 @@ if($logs){
   $pharmacien->load($last_log->user_id);
 }
 
-
 $hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
 sort($hours); 
 
-$types = array("med", "elt");
-foreach($types as $type){
-  $prescription->_prises[$type] = array();
-  $prescription->_lines[$type] = array();
-  $prescription->_intitule_prise[$type] = array();
- }
-
-
  
- 
- // Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
-// dont les heures ne sont pas spécifié dans le tableau
+/* Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
+   dont les heures ne sont pas spécifié dans le tableau */
 $heures = array();
 $list_hours = range(0,23);
 $last_hour_in_array = reset($hours); 
@@ -81,13 +69,8 @@ foreach($list_hours as &$hour){
   }
   $heures[$hour] = $last_hour_in_array;
 }
- 
-
   
 foreach($dates as $_date){
-  foreach($types as $type){
-	$prescription->_list_prises[$type][$_date] = array();
-  }
   $prescription->calculPlanSoin($_date, 1, $heures);
   foreach($hours as $_hour){
   	$tabHours[$_date]["$_date $_hour:00:00"] = $_hour;

@@ -21,7 +21,8 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
   // Date mais pas heure
   if(oForm.date_arret.value && !oForm.time_arret.value){
     oForm.time_arret.value = "00:00";
-  } else {
+  }
+  if(!oForm.date_arret.value){
     oForm.date_arret.value = "{{$today}}";
     oForm.time_arret.value = "{{$now_time}}";
   }

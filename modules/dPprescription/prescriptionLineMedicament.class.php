@@ -69,8 +69,13 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_can_vw_form_add_line_contigue      = null;
   var $_can_modify_dates                   = null;
   var $_can_modify_comment                 = null;
-
-  var $_quantites = null;
+  var $_quantites                          = null;
+  
+  var $_unite_administration               = null;
+  var $_unite_dispensation                 = null;
+  var $_ratio_administration_dispensation  = null;
+  var $_quantite_administration = null;
+  var $_quantite_dispensation = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -322,7 +327,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     	$this->_unites_prise[] = $unite;
     }
-    $this->_unites_prise = array_unique($this->_unites_prise);
+    if(is_array($this->_unites_prise)){
+      $this->_unites_prise = array_unique($this->_unites_prise);
+    }
   }
   
   /*

@@ -51,6 +51,7 @@ $lines = array();
 $patients = array();
 $lines_by_patient = array();
 $sejours = array();
+$chambres = array();
 
 $list_heures = range(0,23);
 foreach($list_heures as &$heure){
@@ -67,167 +68,157 @@ foreach($prescriptions as $_prescription){
   $_prescription->loadRefsLinesElementByCat("1","","service");
   $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
   $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
+
+  foreach($dates as $_date){
+    $_prescription->calculPlanSoin($_date, 0, $heures);
+  }
   
   $sejour =& $_prescription->_ref_object;
-  $sejour->loadRefPatient();
   $sejour->loadRefsOperations();
-  $sejour->loadCurrentAffectation($date);
-  if(!$sejour->_ref_curr_affectation->_id) {
-    continue;
-  }
   $sejour->_ref_last_operation->loadRefPlageOp();
-
-  $patient =& $sejour->_ref_patient;
-  $patient->loadRefConstantesMedicales();
- 
   // Stockage de la liste des patients
   $sejours[$sejour->_id] = $sejour;
-
-  if(in_array("med", $cats)){
-		foreach($_prescription->_ref_prescription_lines as $_line_med){
-		  $lines["med"][$_line_med->_id] = $_line_med; 
-		}
-		foreach($_prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as $_line_trait){
-		  $lines["med"][$_line_trait->_id] = $_line_trait; 
-		}
-  }
   
-  // Chargement des lignes d'elements
-  $_prescription->loadRefsLinesElement();
-  foreach($_prescription->_ref_prescription_lines_element as $_line_element){
-    if(in_array($_line_element->_ref_element_prescription->category_prescription_id, $cats)){
-	    $lines["elt"][$_line_element->_id] = $_line_element;
-	  }
-  }  	
-  foreach($dates as $_date){
-    $_prescription->calculPlanSoin($_date, 1, $heures);
-  }
-
- $patient =& $sejour->_ref_patient;
- $patient_id = $patient->_id;
- if($_prescription->_list_prises){
- foreach($_prescription->_list_prises as $type => $prises){
-  foreach($prises as $_date => $prises_by_date){
-    foreach($prises_by_date as $line_id => $prises_by_unite){
-      $line_class = ($type == "med") ? "CPrescriptionLineMedicament" : "CPrescriptionLineElement";
-      if(isset($list_lines[$type][$line_id])){
-        $line = $list_lines[$type][$line_id];
-      } else {
-        $line = new $line_class;
-        $line->load($line_id);
-      }
-      $line->calculAdministrations($_date);
-      $list_lines[$type][$line->_id] = $line;
-      
-      foreach($prises_by_unite as $unite_prise => $prises_by_hour)
-        if($unite_prise != "total"){
-          foreach($prises_by_hour as $_hour => $quantite){
-            if(is_numeric($unite_prise)){
-              $prise = new CPrisePosologie();
-              $prise->load($unite_prise);
-              $unite_prise = $prise->unite_prise;
-            }
-            // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
-            if($patient->_ref_constantes_medicales->poids){
-              $unite_prise = str_replace('/kg', '', $unite_prise);
-            }
-            if($unite_prise)
-            $dateTimePrise = "$_date $_hour:00:00";
-			      if(array_key_exists($line_id, $lines[$type])){
-	            if($dateTimePrise > $dateTime_min && $dateTimePrise < $dateTime_max) {
-	              @$lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$_hour][$type][$line_id][$unite_prise]["prevu"] += $quantite;
-	            }
+  
+  $sejour->loadRefPatient();
+  $patient =& $sejour->_ref_patient;
+  $patient->loadRefConstantesMedicales();
+  
+  
+  // Parcours des medicament du plan de soin
+  if(in_array("med", $cats)){
+    if($_prescription->_ref_lines_med_for_plan){
+			foreach($_prescription->_ref_lines_med_for_plan as $_code_ATC => &$_cat_ATC){
+			  foreach($_cat_ATC as &$_lines_by_unite) {
+			    foreach($_lines_by_unite as &$_line_med){
+			      $list_lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
+			      // Prises prevues
+		        if(is_array($_line_med->_quantity_by_date)){
+				      foreach($_line_med->_quantity_by_date as $unite_prise => &$prises_prevues_by_unite){
+				        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
+				          if(is_array($prises_prevues_by_date['quantites'])){
+					          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
+					            if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
+						            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+						            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+	                      $chambres[$chambre->_id] = $chambre;
+                        $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
+					            } else {
+					              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
+					              $chambre = $affectation->_ref_lit->_ref_chambre;
+					            }
+					            if($prise_prevue){
+					              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue;
+					              $prise_prevue = 0;
+					            }
+					          }
+				          }
+				        }
+				      }
+		        }
+			      // Administration effectuees
+			      if(is_array($_line_med->_administrations)){
+				      foreach($_line_med->_administrations as $unite_prise => &$administrations_by_unite){
+				        foreach($administrations_by_unite as $_date => &$administrations_by_date){
+				          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
+			          		if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
+					            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+					            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+                      $chambres[$chambre->_id] = $chambre;
+                       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
+				            } else {
+				              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
+				              $chambre = $affectation->_ref_lit->_ref_chambre;
+				            }
+                     
+				            $quantite = $administrations_by_hour["quantite"];
+				            if($quantite){
+				              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
+				              $administrations_by_hour["quantite"] = 0;
+				            }
+				          }
+				        }
+				      }
 			      }
-          }
-        }
-        // Tri par heures croissantes
-        if(isset($lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date])){
-          ksort($lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date]);
-        }
-      }
-    }
+			    }
+			  }
+			} 
+	  }
   }
- }
+	// Parcours des elements du plan de soin
+  if($_prescription->_ref_lines_elt_for_plan){
+	  foreach($_prescription->_ref_lines_elt_for_plan as &$elements_chap){
+		  foreach($elements_chap as $name_cat => &$elements_cat){
+		    if(!in_array($name_cat, $cats)){
+		      continue;
+		    }
+		    foreach($elements_cat as &$_element){
+		      foreach($_element as &$_line_elt){
+			      $list_lines[$_line_elt->_class_name][$_line_elt->_id] = $_line_elt;
+			      // Prises prevues
+		        if(is_array($_line_elt->_quantity_by_date)){
+				      foreach($_line_elt->_quantity_by_date as $unite_prise => &$prises_prevues_by_unite){
+				        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
+				          if(is_array($prises_prevues_by_date['quantites'])){
+					          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
+                      if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
+						            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+						            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+	                      $chambres[$chambre->_id] = $chambre;
+	                       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
+					            } else {
+					              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
+					              $chambre = $affectation->_ref_lit->_ref_chambre;
+					            }
+
+					            if($prise_prevue){
+					              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue;
+					              $prise_prevue = 0;
+					            }
+					          }
+				          }
+				        }
+				      }
+		        }
+			      // Administration effectuees
+			      if(is_array($_line_elt->_administrations)){
+				      foreach($_line_elt->_administrations as $unite_prise => &$administrations_by_unite){
+				        foreach($administrations_by_unite as $_date => &$administrations_by_date){
+				          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
+                    if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
+					            $sejour->loadCurrentAffectation("$_date $_hour:00:00");
+					            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+                      $chambres[$chambre->_id] = $chambre;
+                      $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
+				            } else {
+				              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
+				              $chambre = $affectation->_ref_lit->_ref_chambre;
+				            }
+
+				            $quantite = $administrations_by_hour["quantite"];
+				            if($quantite){
+				              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
+				              $administrations_by_hour["quantite"] = 0;
+				            }
+				          }
+				        }
+				      }
+			      }
+			    }
+			  }
+			}
+	  }
+  }
 }
 
-// Reorganisation des administrations
-foreach($list_lines as $_lines_by_type){
-  foreach($_lines_by_type as $curr_line){
-    $curr_line->loadRefPrescription();
-    $curr_line->_ref_prescription->loadRefObject();
-    $sejour =& $curr_line->_ref_prescription->_ref_object;
-    $sejour->loadCurrentAffectation($date);
-    $sejour->loadRefPatient();
-    $patient =& $sejour->_ref_patient;
-    $patient->loadRefConstantesMedicales();
-    $type = ($curr_line->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
-        
-    if($curr_line->_administrations){
-	    foreach($curr_line->_administrations as $unite_prise => $lines){
-	     
-	      if(is_numeric($unite_prise)){
-          $prise = new CPrisePosologie();
-          $prise->load($unite_prise);
-          $unite_prise = $prise->unite_prise;
-			  }        
-        // On supprime le kg de l'unite de prise si le poids du patient est indiqué (quantite calculée dans calculPrises())
-        if($patient->_ref_constantes_medicales->poids){
-          $unite_prise = str_replace('/kg', '', $unite_prise);
-        }
-            
-	      foreach($lines as $_date => $lines_by_date){
-	        foreach($lines_by_date as $hour => $_line){
-	          // Quantite administre => $_line["quantite"];
-	          $administrations[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$hour][$type][$curr_line->_id][$unite_prise]["administre"] = $_line["quantite"];
-	        }
-	      }
-
-	    }
-    }
-  }
-}
-
-// Fusion des deux tableaux
+// Tri des lignes
 foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
   foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
     foreach($lines_by_date as $_date => &$lines_by_hours){
-      if(isset($administrations[$chambre_view][$sejour_id][$_date])){
-	      foreach($administrations[$chambre_view][$sejour_id][$_date] as $hour_adm => $adm){
-	        // Si l'heure n'est pas presente pour ce patient, on la rajoute
-	        if(!array_key_exists($hour_adm, $lines_by_hours)){
-	          $lines_by_hours[$hour_adm] = $administrations[$chambre_view][$sejour_id][$_date][$hour_adm];
-	        }
-	      }
-      }
-      foreach($lines_by_hours as $_hour => &$lines_by_type){
-        if(isset($administrations[$chambre_view][$sejour_id][$_date][$_hour])){
-	        foreach($administrations[$chambre_view][$sejour_id][$_date][$_hour] as $type => $types){
-	          if(!array_key_exists($type, $lines_by_type)){
-	            $lines_by_type[$type] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type];
-	          }
-	        }
-	      }
-        foreach($lines_by_type as $type => &$lines_by_unite){
-          if(isset($administrations[$chambre_view][$sejour_id][$_date][$_hour][$type])){
-	          foreach($administrations[$chambre_view][$sejour_id][$_date][$_hour][$type] as $line_id => $_lines){
-	            if(!array_key_exists($line_id, $lines_by_unite)){
-	              $lines_by_unite[$line_id] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type][$line_id];
-	            }
-	          }
-          }
-          foreach($lines_by_unite as $line_id => &$lines_by_type_prise){
-
-            foreach($lines_by_type_prise as $unite_prise => &$_line){  
-              @$_line["administre"] = $administrations[$chambre_view][$sejour_id][$_date][$_hour][$type][$line_id][$unite_prise]["administre"];
-            }
-          }
-        }
-      }
-     ksort($lines_by_hours);
+      ksort($lines_by_hours);
     }
   }
 }
-ksort($lines_by_patient);
 
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
@@ -264,6 +255,7 @@ $smarty->assign("prescription", $prescription);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("lines_by_patient", $lines_by_patient);
 $smarty->assign("list_lines", $list_lines);
+$smarty->assign("chambres", $chambres);
 $smarty->assign("dateTime_min", $dateTime_min);
 $smarty->assign("dateTime_max", $dateTime_max);
 $smarty->display('vw_bilan_service.tpl');
