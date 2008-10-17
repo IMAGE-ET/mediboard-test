@@ -7,48 +7,89 @@
 * @author Fabien Ménager
 */
 
-global $can;
+global $can, $AppUI;
 $can->needsAdmin();
 
 set_time_limit(360);
 ini_set('memory_limit', '128M');
 
-$category_id = mbGetValueFromGet('category_id');
+$category_id     = mbGetValueFromGet('category_id');
+
 $category = new CProductCategory();
 if (!$category_id || !$category->load($category_id)) {
   CAppUI::stepAjax('Veuillez choisir une catégorie de produits correspondant au livret thérapeutique de l\'établissement', UI_MSG_ERROR);
   return;
 }
 
+$messages = array();
+
 // Chargement du livret thérapeutique de l'établissement
 $group = CGroups::loadCurrent();
-$group->loadRefLivretTherapeutique('%', 10000);
+$group->loadRefLivretTherapeutique('%', 1000, false);
 
 // Chargement des produits du livret thérapeutique
 foreach ($group->_ref_produits_livret as $produit_livret) {
+	$produit_livret->_ref_produit->loadConditionnement();
+	$produit_livret->_ref_produit->loadLibellePresentation();
   $product = new CProduct();
-  $product->name        = $produit_livret->_ref_produit->libelle;
-  $product->description = $produit_livret->commentaire;
-  $product->code        = $produit_livret->code_cip;
-  $product->category_id = $category_id;
+  $product->code          = $produit_livret->code_cip;
+  
+  $product->name          = $produit_livret->_ref_produit->libelle;
+  $product->description   = $produit_livret->commentaire;
+  
+  $product->quantity      = $produit_livret->_ref_produit->nb_presentation;
+  $product->item_title    = $produit_livret->_ref_produit->libelle_presentation;
+  
+  $product->unit_quantity = $produit_livret->_ref_produit->nb_unite_presentation;
+  $product->unit_title    = $produit_livret->_ref_produit->libelle_unite_presentation;
+  
+  $product->packaging     = $produit_livret->_ref_produit->libelle_conditionnement;
+  $product->category_id   = $category_id;
+  
+  // On vérifie si le fabriquant du produit est déjà dans la base de données
+  if ($produit_livret->_ref_produit->nom_laboratoire) {
+    $societe = new CSociete();
+    $societe->name = $produit_livret->_ref_produit->nom_laboratoire;
+    if (!$societe->loadMatchingObject()) {
+      $societe->store();
+      $msg = 'Société ajoutée';
+      if (!isset($messages[$msg])) $messages[$msg] = 0;
+      $messages[$msg]++;
+    }
+    $product->societe_id = $societe->_id;
+  }
+
   $msg = $product->store();
 
   // Sauvegarde du nouveau produit correspondant au médicament
   if (!$msg) {
+  	$product->updateFormFields();
+  	
     $stock = new CProductStockGroup();
     $stock->product_id = $product->_id;
     $stock->group_id = $group->_id;
-    $stock->quantity = 1;
-    $stock->order_threshold_min = 1;
-    $stock->order_threshold_max = 1;
-    if ($msg = $stock->store()) {
-      CAppUI::stepAjax($msg, UI_MSG_ALERT);
+    if (!$stock->loadMatchingObject()) {
+	    $stock->quantity = $product->_unit_quantity;
+	    $stock->order_threshold_min = $stock->quantity;
+	    $stock->order_threshold_max = $stock->quantity * 2;
+	    if ($msg = $stock->store()) {
+	    	if (!isset($messages[$msg])) $messages[$msg] = 0;
+	      $messages[$msg]++;
+	    } else {
+	    	$msg = 'Stock produit ajouté';
+	      if (!isset($messages[$msg])) $messages[$msg] = 0;
+	      $messages[$msg]++;
+	    }
     }
   } else {
-    CAppUI::stepAjax($msg, UI_MSG_ALERT);
+    if (!isset($messages[$msg])) $messages[$msg] = 0;
+    $messages[$msg]++;
   }
 }
 
+foreach ($messages as $msg => $count) {
+	CAppUI::stepAjax("$msg x $count", UI_MSG_ALERT);
+}
 CAppUI::stepAjax('Synchronisation des produits terminée', UI_MSG_OK);
 
 // Sauvegarde de la catégorie en variable de config
