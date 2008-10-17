@@ -30,6 +30,7 @@ function closeApplyAdministrations(dontClose) {
   {{if $administrations|@count && $sejour_id && $date_sel}}
     if (anyFormSubmitted && window.opener) {
       window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+      window.opener.loadSuivi('{{$sejour_id}}');
     }
   {{/if}}
   if (!dontClose) {
