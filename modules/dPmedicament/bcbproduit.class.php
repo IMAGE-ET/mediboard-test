@@ -50,7 +50,7 @@ class CBcbProduit extends CBcbObject {
   }
 
   // Chargement d'un produit
-  function load($code_cip, $full_mode="1"){
+  function load($code_cip, $full_mode = true){
     $this->distObj->SearchInfo($code_cip);
     
     $infoProduit = $this->distObj->DataInfo;
@@ -102,11 +102,11 @@ class CBcbProduit extends CBcbObject {
   	// Chargement du nombre de produit dans la presentation
   	$ds = CSQLDataSource::get("bcb");
     $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
-    $_presentation = reset($ds->loadList($query));
+    $_presentation = $ds->loadHash($query);
     $code_presentation_id = $_presentation['CODE_PRESENTATION'];
 
     $query = "SELECT * FROM `IDENT_PRESENTATIONS` WHERE `CODE_PRESENTATION` = '$code_presentation_id';";
-    $libelle_presentation = reset($ds->loadList($query));
+    $libelle_presentation = $ds->loadHash($query);
     $this->libelle_presentation = $libelle_presentation['LIBELLE_PRESENTATION'];
   }
   
@@ -114,14 +114,14 @@ class CBcbProduit extends CBcbObject {
   	// Chargement du nombre de produit dans la presentation
   	$ds = CSQLDataSource::get("bcb");
     $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
-  	$conditionnement = reset($ds->loadList($query));
+  	$conditionnement = $ds->loadHash($query);
    	$this->nb_unite_presentation = $conditionnement["NB_UNITE_DE_PRESENTATION"];
     $this->nb_presentation = ($conditionnement["NB_PRESENTATION"]) ? $conditionnement["NB_PRESENTATION"] : "1";  	
   
   	// Libelle de la presentation
   	$code_unite_presentation = $conditionnement['CODE_UNITE_DE_PRESENTATION'];
   	$query = "SELECT * FROM `IDENT_UNITES_DE_PRESENTATION` WHERE `CODE_UNITE_DE_PRESENTATION` = '$code_unite_presentation';";
-  	$presentation = reset($ds->loadList($query));
+  	$presentation = $ds->loadHash($query);
   	$this->libelle_unite_presentation = $presentation["LIBELLE_UNITE_DE_PRESENTATION_PLURIEL"];
   	
   	return $conditionnement;
@@ -217,7 +217,7 @@ class CBcbProduit extends CBcbObject {
   }
   
   // $livretTherapeutique = 1 pour une recherche dans le livret Therapeutique
-  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0){   
+  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true){   
     // Type_recherche
     // 0 ou 256 => recherche par nom
     // 1: recherche par CIP
@@ -248,7 +248,7 @@ class CBcbProduit extends CBcbObject {
     foreach($this->distObj->TabProduit as $key => $prod){
       // Chargement du produit
       $produit = new CBcbProduit();
-      $produit->load($prod->CodeCIP);
+      $produit->load($prod->CodeCIP, $full_mode);
       
       $produits[$prod->CodeCIP] = $produit; 
     }  

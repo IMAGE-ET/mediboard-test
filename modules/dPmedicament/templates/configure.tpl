@@ -209,13 +209,13 @@ var Livret = {
       <form name="sync-products" action="" onsubmit="return false">
         {{assign var="class" value="CBcbProduitLivretTherapeutique"}}
         {{assign var="var" value="product_category_id"}}
-        <select name="{{$m}}[{{$class}}][{{$var}}]">
-          <option value="0">{{tr}}CProductCategory.select{{/tr}}</option>
+        <select name="{{$m}}[{{$class}}][{{$var}}]" class="notNull">
+          <option value="">{{tr}}CProductCategory.select{{/tr}}</option>
           {{foreach from=$categories_list item=category}}
             <option value="{{$category->_id}}" {{if $category->_id==$dPconfig.$m.$class.$var}}selected="selected"{{/if}}>{{$category->name}}</option>
           {{/foreach}}
         </select>
-        <button class="tick" onclick="startSyncProducts($V(this.form['{{$m}}[{{$class}}][{{$var}}]']))" >Synchroniser les produits du stock</button>
+        <button class="tick" onclick="if (!checkForm(this.form)) return false; startSyncProducts($V(this.form['{{$m}}[{{$class}}][{{$var}}]']));" >Synchroniser les produits du stock</button>
       </form>
     </td>
     <td id="do_sync_products"></td>

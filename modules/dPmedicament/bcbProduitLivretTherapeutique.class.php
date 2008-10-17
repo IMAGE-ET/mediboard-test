@@ -51,14 +51,30 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
     $ds = CSQLDataSource::get("bcb");
     $ds->exec($query);
     return $ds->affectedRows();
-  }  
+  }
+  
+  static function getProduits($order = 'CODECIP', $limit = null, $full_mode = true) {
+  	global $g;
+    $ds = CSQLDataSource::get("bcb");
+    $query = "SELECT `CODECIP` FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
+    if ($order) $query .= " ORDER BY $order";
+    if ($limit) $query .= " LIMIT $limit";
+    $results = $ds->loadList($query);
+    $list = array();
+    foreach ($results as $plt) {
+    	$produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();
+      $produitLivretTherapeutique->load($plt['CODECIP']);
+      $produitLivretTherapeutique->loadRefProduit($full_mode);
+      $list[] = $produitLivretTherapeutique;
+    }
+    return $list;
+  }
   
   function load($code_cip) {
     global $g;
     $ds = CSQLDataSource::get("bcb");
     $query = "SELECT * FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g' AND `CODECIP` = '$code_cip';";
-    $result = reset($ds->loadList($query));
-    if($result){
+    if($result = $ds->loadHash($query)){
       $this->group_id          = $result["CODEETABLISSEMENT"];
       $this->code_cip          = $result["CODECIP"];
       $this->prix_hopital      = $result["PRIXHOPITAL"];
@@ -69,27 +85,25 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
       $this->commentaire       = $result["COMMENTAIRE"];
       // return true si le produit existe => chargement
       return true;
-    }  
+    }
     // return false si le produit n'existe pas
     return false;
   }
   
-  
   function updateFormFields(){
-    $this->date_prix_hopital = preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_hopital);
-    $this->date_prix_ville = preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_ville);
+    $this->date_prix_hopital = mbDateFromLocale("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_hopital);
+    $this->date_prix_ville = mbDateFromLocale("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_ville);
   }
-  
   
   function updateDBFields(){
-    $this->distObj->DatePrixHopital = preg_replace("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixHopital);
-	  $this->distObj->DatePrixVille = preg_replace("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixVille);
+    $this->distObj->DatePrixHopital = mbDateToLocale("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixHopital);
+	  $this->distObj->DatePrixVille = mbDateToLocale("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixVille);
   }
     
-  function loadRefProduit(){
+  function loadRefProduit($full_mode = true){
     $this->_ref_produit = new CBcbProduit();
     if($this->code_cip){
-      $this->_ref_produit->load($this->code_cip);
+      $this->_ref_produit->load($this->code_cip, $full_mode);
     }
   }
 } 
