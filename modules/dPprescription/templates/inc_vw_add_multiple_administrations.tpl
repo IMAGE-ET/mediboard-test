@@ -16,7 +16,7 @@ function submitAllAdministrations() {
     if (!checkForm(f)) return false;
     submitFormAjax(f, 'systemMsg');
     anyFormSubmitted = true;
-    f.up().update('Administration effectuée');
+    f.up().update('Soin effectué');
   }
   
   if (transForm.text.value) {
@@ -46,7 +46,7 @@ Main.add(function () {
 </script>
 
 <button type="button" class="cancel" onclick="closeApplyAdministrations()">{{tr}}Cancel{{/tr}}</button>
-<button type="button" class="tick" onclick="submitAllAdministrations()">Administrer</button>
+<button type="button" class="tick" onclick="submitAllAdministrations()">Tout valider</button>
 
 <table class="form" id="administrations">
 {{foreach from=$administrations item=adm key=line_id name=by_adm}}
@@ -91,7 +91,7 @@ Main.add(function () {
     {{/foreach}}
   {{/foreach}}
 {{foreachelse}}
-  <tr><td>Veuillez choisir au moins une prise</td></tr>
+  <tr><td>Veuillez choisir au moins un soin à effectuer</td></tr>
 {{/foreach}}
 </table>
 
