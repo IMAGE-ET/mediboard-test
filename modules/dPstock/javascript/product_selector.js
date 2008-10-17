@@ -4,8 +4,11 @@ var ProductSelector = {
   sForm       : null,
   sId         : null,
   sView       : null,
+  sQuantity   : null,
+  sPackaging  : null,
+  sUnit       : null,
   options : {
-    width : 700,
+    width : 750,
     height: 400
   },
 
@@ -17,9 +20,12 @@ var ProductSelector = {
     url.popup(this.options.width, this.options.height, "Sélecteur de produit");
   },
 
-  set: function(product_id, product_name) {
+  set: function(product_id, product_name, quantity, unit, packaging) {
     var oForm = document[this.sForm];
-    $V(oForm[this.sId], product_id, true);
-    $V(oForm[this.sView], product_name, true);
+    $V(oForm[this.sId],        product_id, true);
+    $V(oForm[this.sView],      product_name, true);
+    $V(oForm[this.sUnit],      unit, true);
+    $V(oForm[this.sPackaging], packaging, true);
+    $V(oForm[this.sQuantity],  quantity, true);
   }
 }

@@ -108,7 +108,7 @@ class CProductStockGroup extends CProductStock {
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+    $this->_ref_group = $this->_ref_group->getCached($this->group_id);
   }
 
   function loadRefsBack(){

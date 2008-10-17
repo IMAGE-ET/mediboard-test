@@ -142,33 +142,39 @@ class CProductOrder extends CMbObject {
   	// for every stock
     foreach($list_stocks as $stock) {
     	$stock->updateFormFields();
+    	$stock->loadRefsFwd();
     	
     	// if the stock is in the "red" or "orange" zone
     	if ($stock->_zone_future < 2) {
 
     		$current_stock = $stock->quantity;
-    		if ($stock->order_threshold_optimum) {
-    		  $expected_stock = $stock->order_threshold_optimum;
-    		} else {
-    		  $expected_stock = ($stock->order_threshold_max-$stock->order_threshold_min)/2;
-    		}
+    		
+    		$expected_stock = $stock->order_threshold_optimum ? 
+    		  $stock->order_threshold_optimum :
+    		  ($stock->order_threshold_max-$stock->order_threshold_min) / 2;
     		
     		// we get the best reference for this product
-    		$where = array();
-    		$where['product_id'] = " = '{$stock->_ref_product->_id}'";
+    		$where = array(
+    		  'product_id' => " = '{$stock->_ref_product->_id}'",
+    	  );
     		$orderby = 'price / quantity ASC';
     		$best_reference = new CProductReference();
     		
     		if ($best_reference->loadObject($where, $orderby) && $best_reference->quantity > 0) {
+    			$best_reference->loadRefsFwd();
+    			$best_reference->_ref_product->updateFormFields();
+    			
+    			$qty = $best_reference->quantity * $best_reference->_ref_product->_unit_quantity;
+    			
       		// and we fill the order item with the good quantity of the stock's product
       		while ($current_stock < $expected_stock) {
-      		  $current_stock += $best_reference->quantity;
+      		  $current_stock += $qty;
       	  }
       	  
       	  // we store the new order item in the current order
       	  $order_item = new CProductOrderItem();
           $order_item->order_id = $this->_id;
-      	  $order_item->quantity = $current_stock / $best_reference->quantity;
+      	  $order_item->quantity = $current_stock / $qty;
       	  $order_item->reference_id = $best_reference->_id;
       	  $order_item->unit_price = $best_reference->price;
       	  $order_item->store();
@@ -259,12 +265,10 @@ class CProductOrder extends CMbObject {
     }
     
     if ($this->_order && !$this->date_ordered) {
-      if (count($this->_ref_order_items) == 0) {
-        $this->_order = null;
-      } else {
+      if (count($this->_ref_order_items) != 0) {
         $this->date_ordered = mbDateTime();
-        $this->_order = null;
       }
+      $this->_order = null;
     }
     
     // If the flag _receive is true, and if not every item has been received, we mark all them as received
@@ -298,10 +302,10 @@ class CProductOrder extends CMbObject {
 
 	function loadRefsFwd(){
 		$this->_ref_societe = new CSociete();
-		$this->_ref_societe->load($this->societe_id);
+		$this->_ref_societe = $this->_ref_societe->getCached($this->societe_id);
 		
 		$this->_ref_group = new CGroups();
-    $this->_ref_group->load($this->group_id);
+    $this->_ref_group = $this->_ref_group->getCached($this->group_id);
 	}
 	
 	function delete() {

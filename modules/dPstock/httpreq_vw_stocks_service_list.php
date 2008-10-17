@@ -32,15 +32,15 @@ $orderby = 'product.name ASC';
 $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_stock_service.product_id'; // product to stock
 
-$stock_service = new CProductStockService();
-$list_stocks_service_count = $stock_service->countList($where, $orderby, null, null, $leftjoin);
-$list_stocks_service = $stock_service->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
+$stock = new CProductStockService();
+$list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_stocks_service', $list_stocks_service);
-$smarty->assign('list_stocks_service_count', $list_stocks_service_count);
+$smarty->assign('list_stocks', $list_stocks);
+$smarty->assign('list_stocks_count', $list_stocks_count);
 
 $smarty->display('inc_stocks_service_list.tpl');
 

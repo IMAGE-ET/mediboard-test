@@ -65,7 +65,7 @@ class CProductDeliveryTrace extends CMbObject {
     
     if ($this->date_delivery) {
       if (($this->quantity == 0) || ($stock->quantity < $this->quantity)) {
-        return 'Impossible de délivrer ce nombre de '.$stock->_ref_product->unit_title;
+        return 'Impossible de délivrer ce nombre de '.$stock->_ref_product->_unit_title;
       }
     }
     

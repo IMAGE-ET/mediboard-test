@@ -1,21 +1,21 @@
 <script type="text/javascript">
 Main.add(function () {
-  refreshCategoriesList(null, {{$selected_category}});
+  refreshCategoriesList(null, '{{$selected_category}}');
   
   {{if $selected_category}}
-    refreshProductsList({{$selected_category}}, null, {{$selected_product}});
+    refreshProductsList('{{$selected_category}}', null, '{{$selected_product}}');
     refreshProductInfo({{$selected_product}});
   {{else}}
     refreshProductsList(-1, null{{if $selected_product}}, {{$selected_product}}{{/if}});
   {{/if}}
 });
 
-function setClose(oField) {
-  if (oField) {
-    if (oField.value > 0) {
-      var name = oField.options[oField.selectedIndex].text;
+function setClose(oForm) {
+  if (oForm) {
+    if ($V(oForm.product) > 0) {
+      var name = oForm.product.options[oForm.product.selectedIndex].text;
       var oSelector = window.opener.ProductSelector;
-      oSelector.set(oField.value, name);
+      oSelector.set($V(oForm.product), name, $V(oForm._unit_quantity), $V(oForm._unit_title), $V(oForm.packaging));
     }
   }
   window.close();
@@ -76,7 +76,7 @@ function refreshProductInfo(product_id) {
   </tr>
   <tr style="height:1%;">
     <td>
-      <button class="tick" id="setclose_button" onclick="setClose(this.form.product);">{{tr}}Select{{/tr}}</button>
+      <button class="tick" id="setclose_button" onclick="setClose(this.form);">{{tr}}Select{{/tr}}</button>
       <button class="cancel" id="close_button" onclick="setClose();">{{tr}}Cancel{{/tr}}</button>
     </td>
   </tr>

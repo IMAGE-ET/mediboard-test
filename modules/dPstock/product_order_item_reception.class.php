@@ -46,7 +46,7 @@ class CProductOrderItemReception extends CMbObject {
   
   function loadRefOrderItem() {
     $this->_ref_order_item = new CProductOrderItem();
-    $this->_ref_order_item->load($this->order_item_id);
+    $this->_ref_order_item = $this->_ref_order_item->getCached($this->order_item_id);
   }
 
   function loadRefsFwd() {
@@ -60,18 +60,23 @@ class CProductOrderItemReception extends CMbObject {
     $this->_ref_order_item->_ref_reference->loadRefsFwd();
     $this->_ref_order_item->_ref_reference->_ref_product->loadRefStock();
     
-    $stock = $this->_ref_order_item->_ref_reference->_ref_product->_ref_stock_group;
-    
-    if ($stock)
-      $stock->quantity += $this->quantity;
+    $product = $this->_ref_order_item->_ref_reference->_ref_product;
+    $product->updateFormFields();
+
+    if ($product->loadRefStock()) {
+    	$stock = $product->_ref_stock_group;
+      $stock->quantity += $this->quantity * $product->_unit_quantity;
+    }
     else {
-      global $AppUI;
+      global $AppUI, $g;
+      $qty = $this->quantity * $product->_unit_quantity;
       $stock = new CProductStockGroup();
-      $stock->product_id = $this->_ref_order_item->_ref_reference->product_id;
-      $stock->quantity = $this->quantity;
-      $stock->order_threshold_min = 1;
-      $stock->order_threshold_max = 1;
-      $AppUI->setMsg('Un nouveau stock pour ['.$this->_ref_order_item->_ref_reference->_ref_product->_view.'] a été créé', UI_MSG_INFO);
+      $stock->product_id = $product->_id;
+      $stock->group_id = $g;
+      $stock->quantity = $qty;
+      $stock->order_threshold_min = $qty;
+      $stock->order_threshold_max = $qty * 2;
+      $AppUI->setMsg('Un nouveau stock pour ['.$product->_view.'] a été créé', UI_MSG_OK);
     }
     if ($msg = $stock->store()) {
       return $msg;

@@ -26,9 +26,8 @@ $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.o
 if ($keywords) {
 	$where_or = array();
 	
-	 // we seek among the societes
-  $seeks = $societe->getSeeks();
-  foreach($seeks as $col => $comp) {
+	// we seek among the societes
+  foreach($societe->_seek as $col => $comp) {
     $where_societe_or[] = "societe.$col $comp '%$keywords%'";
   }
   $where_societe[] = implode(' OR ', $where_societe_or);
@@ -68,12 +67,6 @@ switch ($type) {
     unset($where['product_order.date_ordered']);
 		break;
 }
-
-    /*$where[] = 'product_order_item.quantity > (
-       SELECT SUM(product_order_item_reception.quantity)
-       FROM product_order_item_reception 
-       LEFT JOIN `product_order_item` ON product_order_item_reception.order_item_id = product_order_item.order_item_id
-     )';*/
 
 if ($g) {
   $where['product_order.group_id'] = " = $g";

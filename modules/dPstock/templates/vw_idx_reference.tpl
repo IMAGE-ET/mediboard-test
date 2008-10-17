@@ -6,7 +6,22 @@ Main.add(function () {
   filterFields = ["category_id", "societe_id", "keywords", "limit"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
   referencesFilter.submit();
+  updateUnitQuantity(getForm("edit_reference"), "equivalent_quantity");
 });
+
+function updateUnitQuantity(form, view) {
+  $(view).update('('+(form.quantity.value * form._unit_quantity.value)+' '+form._unit_title.value+')');
+}
+
+ProductSelector.init = function(){
+  this.sForm      = "edit_reference";
+  this.sId        = "product_id";
+  this.sView      = "product_name";
+  this.sQuantity  = "_unit_quantity";
+  this.sUnit      = "_unit_title";
+  this.sPackaging = "packaging";
+  this.pop({{$reference->product_id}});
+}
 </script>
 
 <table class="main">
@@ -47,6 +62,8 @@ Main.add(function () {
       <input type="hidden" name="dosql" value="do_reference_aed" />
 	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
       <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="_unit_quantity" value="{{$reference->_ref_product->_unit_quantity}}" onchange="updateUnitQuantity(this.form, 'equivalent_quantity')" />
+      <input type="hidden" name="_unit_title" value="{{$reference->_ref_product->_unit_title}}" />
       <table class="form">
         <tr>
           {{if $reference->_id}}
@@ -73,23 +90,19 @@ Main.add(function () {
             <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
             <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
-            <script type="text/javascript">
-            ProductSelector.init = function(){
-              this.sForm = "edit_reference";
-              this.sId   = "product_id";
-              this.sView = "product_name";
-              this.pop({{$reference->product_id}});
-            }
-            </script>
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="quantity"}}</th>
-          <td>{{mb_field object=$reference field="quantity" increment=1 form=edit_reference min="0"}}</td>
+          <td>
+            {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min="1" size=4 onchange="updateUnitQuantity(this.form, 'equivalent_quantity')"}}
+            <input type="text" name="packaging" readonly="readonly" disabled="disabled" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
+            <span id="equivalent_quantity"></span>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="price"}}</th>
-          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=5 min="0" size="8"}}</td>
+          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=5 min="0" size=8}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="code"}}</th>

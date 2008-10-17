@@ -18,10 +18,10 @@ $count = null;
 $where_or = array();
 
 if ($keywords) {
+	foreach ($product->_seek as $col => $comp) {
+	  $where_or[] = "`$col` $comp '%$keywords%'";
+	}
 	$where = array();
-	$where_or[] = "`name` LIKE '%$keywords%'";
-	$where_or[] = "`description` LIKE '%$keywords%'";
-	$where_or[] = "`code` LIKE '%$keywords%'";
 	$where[] = implode(' OR ', $where_or);
 	
   $list_products = $product->loadList($where, 'name', 20);

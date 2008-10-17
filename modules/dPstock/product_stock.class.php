@@ -27,6 +27,9 @@ class CProductStock extends CMbObject {
   var $_max                     = null;
   // In which part of the graph the quantity is
   var $_zone                    = null;
+  
+  var $_package_quantity        = null; // The number of packages
+  var $_package_mod             = null; // The modulus of the quantity
 
   // Object References
   //    Single
@@ -52,7 +55,11 @@ class CProductStock extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
+    $this->_ref_product->updateFormFields();
     $this->_view = $this->_ref_product->_view;
+    $units = $this->_ref_product->_unit_quantity ? $this->_ref_product->_unit_quantity : 1;
+    $this->_package_quantity = round($this->quantity / $units);
+    $this->_package_mod      = $this->quantity % $units;
 
     // Calculation of the levels for the bargraph
     $max = max(array($this->quantity, $this->order_threshold_max)) / 100;
@@ -80,7 +87,7 @@ class CProductStock extends CMbObject {
 
   function loadRefsFwd(){
     $this->_ref_product = new CProduct;
-    $this->_ref_product->load($this->product_id);
+    $this->_ref_product = $this->_ref_product->getCached($this->product_id);
   }
   
   function getPerm($permType) {

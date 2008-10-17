@@ -1,20 +1,30 @@
-<div id="list-stocks-service-total-count" style="display: none;">{{$list_stocks_service_count}}</div>
+<div id="list-stocks-total-count" style="display: none;">{{$list_stocks_count}}</div>
 
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
     <th>{{tr}}CProductStockService-service_id{{/tr}}</th>
     <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
+    <th>{{tr}}CProductStockService-_package_quantity-court{{/tr}}</th>
     <th></th>
   </tr>
   
 <!-- Stocks service list -->
-{{foreach from=$list_stocks_service item=curr_stock_service}}
+{{foreach from=$list_stocks item=curr_stock}}
   <tr>
-    <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$curr_stock_service->_id}}" title="{{tr}}CProductStockService.modify{{/tr}}">{{$curr_stock_service->_ref_product->_view}}</a></td>
-    <td>{{$curr_stock_service->_ref_service->_view}}</td>
-    <td>{{$curr_stock_service->quantity}}</td>
-    <td>{{include file="inc_bargraph.tpl" stock=$curr_stock_service}}</td>
+    <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$curr_stock->_id}}" title="{{tr}}CProductStockService.modify{{/tr}}">{{$curr_stock->_ref_product->_view}}</a></td>
+    <td>{{$curr_stock->_ref_service->_view}}</td>
+    <td>{{$curr_stock->quantity}}</td>
+    <td>
+      {{if $curr_stock->_package_quantity > 1}}
+        <b>{{$curr_stock->_package_quantity}}</b>
+      {{/if}}
+      {{if $curr_stock->_package_quantity > 1 && $curr_stock->_package_mod > 0}} / {{/if}}
+      {{if $curr_stock->_package_mod > 0}}
+        {{$curr_stock->_package_mod}}
+      {{/if}}
+    </td>
+    <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
   </tr>
 {{foreachelse}}
   <tr>

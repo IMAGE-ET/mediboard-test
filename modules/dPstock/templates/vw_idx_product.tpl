@@ -38,7 +38,7 @@ Main.add(function () {
       <div id="list-products"></div>
     </td>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct.create{{/tr}}</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	  <input type="hidden" name="product_id" value="{{$product->_id}}" />
@@ -46,13 +46,13 @@ Main.add(function () {
       <table class="form">
         <tr>
           {{if $product->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProduct.modify{{/tr}} {{$product->_view}}</th>
+          <th class="title modify" colspan="2">{{$product->name}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CProduct.create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProduct-title-create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>
-          <th>{{mb_label object=$product field="name"}}</th>
+          <th style="width: 1%;">{{mb_label object=$product field="name"}}</th>
           <td>{{mb_field object=$product field="name"}}</td>
         </tr>
         <tr>
@@ -88,7 +88,32 @@ Main.add(function () {
           <td>{{mb_field object=$product field="description"}}</td>
         </tr>
         <tr>
-          <td class="button" colspan="4">
+          <th>{{mb_label object=$product field="code"}}</th>
+          <td>{{mb_field object=$product field="code"}}</td>
+        </tr>
+        <tr><th colspan="2" class="title" style="font-size: 1em;">{{tr}}CProduct-packaging{{/tr}}</th></tr>
+        <tr>
+          <th>{{mb_label object=$product field="quantity"}}</th>
+          <td>{{mb_field object=$product field="quantity"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$product field="item_title"}}</th>
+          <td>{{mb_field object=$product field="item_title"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$product field="unit_quantity"}}</th>
+          <td>{{mb_field object=$product field="unit_quantity"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$product field="unit_title"}}</th>
+          <td>{{mb_field object=$product field="unit_title"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$product field="packaging"}}</th>
+          <td>{{mb_field object=$product field="packaging"}}</td>
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
             {{if $product->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'})">

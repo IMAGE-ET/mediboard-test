@@ -12,13 +12,12 @@ $can->needsRead();
 
 $track = array();
 $orderby = 'date_dispensation DESC';
-$where['code'] = 'IS NOT NULL';
 
 $product = new CProduct();
 $product->loadList();
 
 $list = new CProductDelivery;
-$list = $list->loadList($where, $orderby);
+$list = $list->loadList(null, $orderby);
 
 // Création du template
 $smarty = new CSmartyDP();

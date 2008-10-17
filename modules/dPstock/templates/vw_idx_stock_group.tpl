@@ -7,6 +7,14 @@ Main.add(function () {
   stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_group_list", "list-stocks", filterFields);
   stocksFilter.submit();
 });
+
+ProductSelector.init = function(){
+  this.sForm = "edit_stock";
+  this.sId   = "product_id";
+  this.sView = "product_name";
+  this.sUnit = "_unit_title";
+  this.pop({{$stock->product_id}});
+}
 </script>
 
 <table class="main">
@@ -36,67 +44,63 @@ Main.add(function () {
     <td class="halfPane">
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0">{{tr}}CProductStockGroup.create{{/tr}}</a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_stock_group_aed" />
-      <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-      <input type="hidden" name="group_id" value="{{$g}}" />
-      <input type="hidden" name="del" value="0" />
-      <table class="form">
-        <tr>
-          {{if $stock->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProductStockGroup.modify{{/tr}} {{$stock->_view}}</th>
-          {{else}}
-          <th class="title" colspan="2">{{tr}}CProductStockGroup.create{{/tr}}</th>
-          {{/if}}
-        </tr>
-        <tr>
-          <th>{{mb_label object=$stock field="quantity"}}</th>
-          <td>{{mb_field object=$stock field="quantity" form="edit_stock" increment="1" min=0}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$stock field="product_id"}}</th>
-          <td class="readonly">
-          <input type="hidden" name="product_id" value="{{$stock->product_id}}" class="{{$stock->_props.product_id}}" />
-          <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
-          <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
-          <script type="text/javascript">
-            ProductSelector.init = function(){
-              this.sForm = "edit_stock";
-              this.sId   = "product_id";
-              this.sView = "product_name";
-              this.pop({{$stock->product_id}});
-            }
-          </script>
-        </td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$stock field="order_threshold_critical"}}</th>
-        <td>{{mb_field object=$stock field="order_threshold_critical" form="edit_stock" increment="1" min=0}}</td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$stock field="order_threshold_min"}}</th>
-        <td>{{mb_field object=$stock field="order_threshold_min" form="edit_stock" increment="1"}}</td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$stock field="order_threshold_optimum"}}</th>
-        <td>{{mb_field object=$stock field="order_threshold_optimum" form="edit_stock" increment="1" min=0}}</td>
-      </tr>
-      <tr>
-        <th>{{mb_label object=$stock field="order_threshold_max"}}</th>
-        <td>{{mb_field object=$stock field="order_threshold_max" form="edit_stock" increment="1"}}</td>
-      </tr>
-      <tr>
-        <td class="button" colspan="4">{{if $stock->_id}}
-          <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">
-            {{tr}}Delete{{/tr}}
-          </button>
-          {{else}}
-          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-          {{/if}}
-        </td>
-      </tr>
-    </table>
-    </form>
+        <input type="hidden" name="dosql" value="do_stock_group_aed" />
+        <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
+        <input type="hidden" name="group_id" value="{{$g}}" />
+        <input type="hidden" name="del" value="0" />
+        <table class="form">
+          <tr>
+            {{if $stock->_id}}
+            <th class="title modify" colspan="2">{{tr}}CProductStockGroup.modify{{/tr}} {{$stock->_view}}</th>
+            {{else}}
+            <th class="title" colspan="2">{{tr}}CProductStockGroup.create{{/tr}}</th>
+            {{/if}}
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="quantity"}}</th>
+            <td>
+              {{mb_field object=$stock field="quantity" form="edit_stock" size=4 increment=true min=0}}
+              <input type="text" name="_unit_title" readonly="readonly" disabled="disabled" value="{{$stock->_ref_product->_unit_title}}" size="30" style="border: none; background: transparent; color: inherit;" />
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="product_id"}}</th>
+            <td class="readonly">
+              {{mb_field object=$stock field="product_id" hidden=true}}
+              <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
+              <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="order_threshold_critical"}}</th>
+            <td>{{mb_field object=$stock field="order_threshold_critical" form="edit_stock" size=4 increment=true min=0}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="order_threshold_min"}}</th>
+            <td>{{mb_field object=$stock field="order_threshold_min" form="edit_stock" size=4 increment=true min=0}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="order_threshold_optimum"}}</th>
+            <td>{{mb_field object=$stock field="order_threshold_optimum" form="edit_stock" size=4 increment=true min=0}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="order_threshold_max"}}</th>
+            <td>{{mb_field object=$stock field="order_threshold_max" form="edit_stock" size=4 increment=true min=0}}</td>
+          </tr>
+          <tr>
+            <td class="button" colspan="4">
+              {{if $stock->_id}}
+                <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">
+                  {{tr}}Delete{{/tr}}
+                </button>
+              {{else}}
+                <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+              {{/if}}
+            </td>
+          </tr>
+        </table>
+      </form>
     </td>
   </tr>
 </table>

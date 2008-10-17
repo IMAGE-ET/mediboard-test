@@ -16,16 +16,16 @@ $category_id      = mbGetValueFromGetOrSession('category_id');
 $service_id       = mbGetValueFromGetOrSession('service_id');
 
 // Loads the stock 
-$stock_service = new CProductStockService();
+$stock = new CProductStockService();
 
 // If stock_id has been provided, we load the associated product
 if ($stock_service_id) {
-  $stock_service->stock_id = $stock_service_id;
-  $stock_service->loadMatchingObject();
-  $stock_service->loadRefsFwd();
-  $stock_service->_ref_product->loadRefsFwd();
+  $stock->stock_id = $stock_service_id;
+  $stock->loadMatchingObject();
+  $stock->loadRefsFwd();
+  $stock->_ref_product->loadRefsFwd();
 }
-$stock_service->updateFormFields();
+$stock->updateFormFields();
 
 // Categories list
 $list_categories = new CProductCategory();
@@ -39,7 +39,7 @@ $list_services = $list_services->loadList($where, 'nom');
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('stock_service', $stock_service);
+$smarty->assign('stock', $stock);
 
 $smarty->assign('category_id', $category_id);
 $smarty->assign('service_id',  $service_id);

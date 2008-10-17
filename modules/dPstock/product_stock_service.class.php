@@ -45,14 +45,13 @@ class CProductStockService extends CProductStock {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
     $this->_view = $this->_ref_product->_view." ({$this->_ref_service->_view})";
   }
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->_ref_service = new CService();
-    $this->_ref_service->load($this->service_id);
+    $this->_ref_service = $this->_ref_service->getCached($this->service_id);
   }
   
   function getPerm($permType) {

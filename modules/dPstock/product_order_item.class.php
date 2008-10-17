@@ -101,12 +101,12 @@ class CProductOrderItem extends CMbObject {
   
   function loadReference() {
     $this->_ref_reference = new CProductReference();
-    $this->_ref_reference->load($this->reference_id);
+    $this->_ref_reference = $this->_ref_reference->getCached($this->reference_id);
   }
   
   function loadOrder() {
     $this->_ref_order = new CProductOrder();
-    $this->_ref_order->load($this->order_id);
+    $this->_ref_order = $this->_ref_order->getCached($this->order_id);
   }
 
   function loadRefsFwd() {
