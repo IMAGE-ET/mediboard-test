@@ -28,7 +28,7 @@
 	        {{assign var=nb_administre value=$line->_administrations_by_line.$date}}
 	      {{/if}}
 	      {{assign var=nb_prevue value="0"}}
-	      {{if $line->_quantity_by_date.$date.total}}
+	      {{if @$line->_quantity_by_date.$date.total}}
 	        {{assign var=nb_prevue value=$line->_quantity_by_date.$date.total}} 
 	      {{/if}}
 	      <span class="administration
