@@ -91,19 +91,23 @@ class CGroups extends CMbObject {
       $this->_shortview = $this->text;
   }
   
-  function loadRefLivretTherapeutique($lettre = "%", $limit = 50){
+  function loadRefLivretTherapeutique($lettre = "%", $limit = 50, $full_mode = true){
     global $g;
-    $produit = new CBcbProduit();
-    
-    $produits = array();
-    // Chargement des produits du livret Therapeutique en fonction d'une lettre
-    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, $g);
-    
-    foreach($produits as $key => $prod){
-      $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();
-      $produitLivretTherapeutique->load($prod->code_cip);
-      $produitLivretTherapeutique->_ref_produit = $prod;
-      $this->_ref_produits_livret[] = $produitLivretTherapeutique;
+    if ($lettre != '%') {
+	    $produit = new CBcbProduit();
+	    
+	    // Chargement des produits du livret Therapeutique en fonction d'une lettre
+	    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, $g, $full_mode);
+	    
+	    $this->_ref_produits_livret = array();
+	    foreach($produits as $key => $prod){
+	      $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();
+	      $produitLivretTherapeutique->load($key);
+	      $produitLivretTherapeutique->_ref_produit = $prod;
+	      $this->_ref_produits_livret[] = $produitLivretTherapeutique;
+	    }
+    } else {
+  	  $this->_ref_produits_livret = CBcbProduitLivretTherapeutique::getProduits('CODECIP', $limit, $full_mode);
     }
   }
 
@@ -137,7 +141,7 @@ class CGroups extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
-    $template->addProperty("Etablissement - Nom"       , $this->text );
+    $template->addProperty("Etablissement - Nom"       , $this->text);
     $template->addProperty("Etablissement - Adresse"   , "$this->adresse $this->cp $this->ville");
     $template->addProperty("Etablissement - Téléphone" , $this->tel);
     $template->addProperty("Etablissement - Fax"       , $this->fax);
