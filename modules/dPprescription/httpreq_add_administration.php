@@ -56,6 +56,12 @@ $prise->quantite = $quantite;
 
 $dateTime = ($heure==24) ? "$date 23:59:00" : "$date $heure:00:00";
 
+// Chargement du sejour
+$line->_ref_prescription->loadRefObject();
+$sejour = $line->_ref_prescription->_ref_object;
+$sejour->loadRefPatient();
+$sejour->_ref_patient->loadRefsAffectations();
+
 // Transmission
 $transmission = new CTransmissionMedicale();
 
@@ -67,10 +73,11 @@ $smarty->assign("transmission", $transmission);
 $smarty->assign("line", $line);
 $smarty->assign("unite_prise", $unite_prise);
 $smarty->assign("prise", $prise);
-$smarty->assign("sejour_id", $line->_ref_prescription->_ref_object->_id);
+$smarty->assign("sejour", $sejour);
 $smarty->assign("date", $date);
 $smarty->assign("prise_id", $prise_id);
 $smarty->assign("dateTime", $dateTime);
+$smarty->assign("notToday", $dateTime != mbDate());
 $smarty->display("../../dPprescription/templates/inc_vw_add_administration.tpl");
 
 ?>

@@ -564,8 +564,8 @@ class CPrescriptionLine extends CMbObject {
         }
       }
       
-      if(!isset( $this->_quantity_by_date[$date]['total'])){
-         $this->_quantity_by_date[$date]['total'] = 0;
+      if(!isset($this->_quantity_by_date[$date]['total'])){
+        $this->_quantity_by_date[$date]['total'] = 0;
       }
      		      
 			// Moment unitaire

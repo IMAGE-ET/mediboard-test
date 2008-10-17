@@ -15,12 +15,12 @@ function submitTransmission(administration_id){
   oFormTransmission.object_id.value = administration_id;
   if(oFormTransmission.text.value != ''){
     submitFormAjax(oFormTransmission, 'systemMsg', { onComplete: function(){ 
-      window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
-      window.opener.loadSuivi('{{$sejour_id}}');
+      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+      window.opener.loadSuivi('{{$sejour->_id}}');
       window.close();
     } } )
   } else {
-    window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+    window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
     window.close();  
   }
 }
@@ -29,7 +29,7 @@ function cancelAdministration(administration_id){
   var oFormDelAdministration = document.delAdministration;
   oFormDelAdministration.administration_id.value = administration_id;
   submitFormAjax(oFormDelAdministration, 'systemMsg', { onComplete: function(){
-    window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+    window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
     window.close();
   } } );
 }
@@ -46,9 +46,18 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 
 </script>
 
+<h2>
+  Soins de {{$sejour->_ref_patient->_view}} 
+  ({{if $sejour->_ref_patient->_ref_curr_affectation->_id}}
+    {{$sejour->_ref_patient->_ref_curr_affectation->_view}}
+  {{else}}
+    Non placé actuellement
+  {{/if}})
+</h2>
+
 <table class="form">
   <tr>
-    <th class="title">Liste des administrations</th>
+    <th class="title">Liste des soins</th>
   </tr>
   {{foreach from=$administrations item=_administration}}
   {{assign var=log value=$_administration->_ref_log}}
@@ -96,6 +105,12 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	  </tr>
 	  <tr>
 	    <td>
+        {{if $notToday}}
+          <div class="little-info">
+            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %Hh"}}, 
+            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+          </div>
+        {{/if}}
 	      {{mb_label object=$prise field=quantite}}
 	      {{mb_field object=$prise field=quantite min=1 increment=1 form=addAdministration}}
 	      
@@ -118,7 +133,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 				<input type="hidden" name="m" value="dPhospi" />
 				<input type="hidden" name="object_class" value="" />
 				<input type="hidden" name="object_id" value="" />
-				<input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
+				<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 				<input type="hidden" name="user_id" value="{{$app->user_id}}" />
 				<input type="hidden" name="date" value="now" />
 				{{mb_label object=$transmission field="text"}}

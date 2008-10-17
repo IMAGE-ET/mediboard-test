@@ -33,7 +33,7 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.addParam("heure", heure);
   url.addParam("administrations", administrations);
   url.addParam("date_sel", "{{$date}}");
-  url.popup(400,300,"Administration");
+  url.popup(500,400,"Administration");
 }
 
 toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, date, heure, administrations) {

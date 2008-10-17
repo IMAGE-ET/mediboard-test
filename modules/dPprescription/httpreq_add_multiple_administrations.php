@@ -10,7 +10,7 @@
 $adm = mbGetValueFromGet("adm");
 $list_administrations = array();
 
-$sejour_id = null;
+$sejour = new CSejour();
 $date_sel = null;
 
 if (count($adm) > 0) {
@@ -57,8 +57,15 @@ if (count($adm) > 0) {
 		
 		$curr_adm['dateTime'] = ($ad['heure']==24) ? $ad['date'].' 23:59:00' : $ad['date'].' '.$ad['heure'].':00:00';
 		
+		$curr_adm['notToday'] = ($ad['date'] != mbDate());
+		
 		if (!$date_sel)  $date_sel  = isset($ad['date_sel']) ? $ad['date_sel'] : null;
-		if (!$sejour_id) $sejour_id = $line->_ref_prescription->_ref_object->_id;
+		if (!$sejour->_id) {
+			$line->_ref_prescription->loadRefObject();
+			$sejour = $line->_ref_prescription->_ref_object;
+			$sejour->loadRefPatient();
+			$sejour->_ref_patient->loadRefsAffectations();
+		}
 	}
 }
 
@@ -66,7 +73,7 @@ if (count($adm) > 0) {
 $smarty = new CSmartyDP();
 $smarty->assign("administrations", $list_administrations);
 $smarty->assign("date_sel", $date_sel);
-$smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("sejour", $sejour);
 $smarty->assign("transmission", new CTransmissionMedicale());
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
