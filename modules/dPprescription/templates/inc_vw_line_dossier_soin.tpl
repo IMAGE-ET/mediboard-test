@@ -61,7 +61,7 @@
 		{{/if}}
     </td>
     <td class="text" rowspan="{{$nb_line}}">
-	  <div onclick="addCibleTransmission('{{$line_class}}', '{{$line->_id}}', '{{$line->_view}}');" 
+	  <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line_class}}', object_id: {{$line->_id}} } })">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
