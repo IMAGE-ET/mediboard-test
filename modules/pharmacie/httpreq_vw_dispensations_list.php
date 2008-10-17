@@ -98,6 +98,10 @@ foreach($prescriptions as $_prescription){
         $dispensations[$_line_med->code_cip]["quantite_dispensation"] = 0;
       }     
       $dispensations[$_line_med->code_cip]["quantite_administration"] += $_line_med->_quantite_administration;
+      
+	    if(strstr($_line_med->_quantite_dispensation,'.')){
+	      $_line_med->_quantite_dispensation = ceil($_line_med->_quantite_dispensation);
+	    }
       $dispensations[$_line_med->code_cip]["quantite_dispensation"] += $_line_med->_quantite_dispensation;
 
       @$besoin_patient[$_line_med->code_cip][$patient->_id]["patient"] = $patient; 
