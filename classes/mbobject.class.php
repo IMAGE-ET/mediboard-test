@@ -224,11 +224,9 @@ class CMbObject {
   }
   
   function getNumDocsAndFiles($permType = null){
-    if(!$permType){
-      $this->_nb_files_docs = $this->getNumFiles() + $this->getNumDocs();
-    }else{
-      $this->_nb_files_docs = $this->getNumDocsAndFilesWithPerm($permType);
-    }
+    $this->_nb_files_docs = $permType ? 
+                               $this->getNumDocsAndFilesWithPerm($permType) : 
+                               $this->getNumFiles() + $this->getNumDocs();
     return $this->_nb_files_docs;
   }
   
@@ -1121,25 +1119,17 @@ class CMbObject {
 
     // Deleting backRefs
     foreach ($this->_backRefs as $backName => $backRef) {
-      $backRefParts = split(" ", $backRef);
+      $backRefParts = explode(' ', $backRef);
       $backClass = $backRefParts[0];
       $backField = $backRefParts[1];
       $backObject = new $backClass;
       $backSpec =& $backObject->_specs[$backField];
       $backMeta = $backSpec->meta;      
       
-      // Cas du module non installé
-      if (!$backObject->_ref_module) {
-        continue; 
-      }
-      
-      // Cas de l'interdiction de suppression
-      if (!$backSpec->cascade) {
-        continue;
-      }
-            
-      // Cas de l'interdiction de la non liaison des backRefs
-      if ($backSpec->unlink) {
+      /* Cas du module non installé, 
+       * Cas de l'interdiction de suppression, 
+       * Cas de l'interdiction de la non liaison des backRefs */
+      if (!$backObject->_ref_module || !$backSpec->cascade|| $backSpec->unlink) {
         continue; 
       }
       
@@ -1200,8 +1190,7 @@ class CMbObject {
       foreach($keywords as $key) {
         $sql .= "\nAND (0";
         foreach($this->_seek as $keySeek => $spec) {
-          $listSpec = array();
-          $listSpec = explode("|", $spec);
+          $listSpec = explode('|', $spec);
           switch($listSpec[0]) {
             case "equal":
               $sql .= "\nOR `$keySeek` = '$key'";
@@ -1246,9 +1235,9 @@ class CMbObject {
    */
   function getDBFields() {
     $result = array();
-    
-    foreach(get_object_vars($this) as $key => $value) {
-      if ($key[0] != "_") {
+    $vars = get_object_vars($this);
+    foreach($vars as $key => $value) {
+      if ($key[0] != '_') {
         $result[$key] = $value;
       }
     }
@@ -1261,7 +1250,8 @@ class CMbObject {
    * @return void
    */
   function escapeDBFields() {
-    foreach ($this->getDBFields() as $propName => $propValue) {
+  	$db_fields = $this->getDBFields();
+    foreach ($db_fields as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = addslashes($propValue);
       }
@@ -1273,7 +1263,8 @@ class CMbObject {
    * @return void
    */
   function unescapeDBFields() {
-    foreach ($this->getDBFields() as $propName => $propValue) {
+  	$db_fields = $this->getDBFields();
+    foreach ($db_fields as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = stripslashes($propValue);
       }
@@ -1457,13 +1448,11 @@ class CMbObject {
   function loadAides($user_id, $needle = null) {
     // Initialisation des aides
   	foreach ($this->_helped_fields as $field => $prop) {
-      $this->_aides[$field] = array();
-      $this->_aides[$field]["no_enum"] = null;
-      
+      $this->_aides[$field] = array("no_enum" => null);
       if ($prop) {
       	// Création des entrées pour les enums
-        $this->_aides[$field][""] = null;
-          foreach($this->_enums[$prop] as $valueEnum) {
+        $this->_aides[$field][''] = null;
+        foreach($this->_enums[$prop] as $valueEnum) {
           $this->_aides[$field][$valueEnum] = null;
         }
       }
