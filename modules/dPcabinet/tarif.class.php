@@ -25,7 +25,9 @@ class CTarif extends CMbObject {
   // Form fields
   var $_type = null;
   var $_somme = null;
-
+  var $_codes_ngap = array();
+  var $_codes_ccam = array();
+  
   // Object References
   var $_ref_chir     = null;
   var $_ref_function = null;
@@ -42,7 +44,7 @@ class CTarif extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["chir_id"]     = "ref class|CMediusers";
+    $specs["chir_id"]     = "ref class|CMediusers xor|function_id";
     $specs["function_id"] = "ref class|CFunctions";
     $specs["description"] = "notNull str confidential";
     $specs["secteur1"]    = "notNull currency min|0";
@@ -63,15 +65,15 @@ class CTarif extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->description; 	 
-    
-    if ($this->chir_id == null)
-      $this->_type = "chir";
-    else
-      $this->_type = "function";
+    $this->_type = $this->chir_id == null ? "chir" : "function";
+    $this->_codes_ngap = explode("|", $this->codes_ngap);
+    $this->_codes_ccam = explode("|", $this->codes_ccam);
+    CMbArray::removeValue("", $this->_codes_ngap);
+    CMbArray::removeValue("", $this->_codes_ccam);
   }
   
   function updateDBFields() {
-  	if($this->_type !== null) {
+  	if ($this->_type !== null) {
       if($this->_type == "chir")
         $this->function_id = "";
       else
@@ -97,6 +99,7 @@ class CTarif extends CMbObject {
     $this->codes_ccam  = $consult->_tokens_ccam;
     $this->codes_ngap  = $consult->_tokens_ngap;
     $this->chir_id     = $consult->_ref_chir->_id;
+    $this->function_id = "";
   }
   
   

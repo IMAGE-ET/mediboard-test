@@ -1,5 +1,3 @@
-{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
-
 <script type="text/javascript">
 
 var Tarif = {
@@ -20,18 +18,6 @@ var Tarif = {
     Math.round(oForm.secteur1.value*100)/100;
     
   }
-}
-
-
-// Permet d'ajouter un code NGAP au tokenField
-function addCodeNgap(){
-  var oForm = document.editFrm;
-  var _quantite_ngap    = oForm._quantite_ngap.value;
-  var _code_ngap        = oForm._code_ngap.value;
-  var _coefficient_ngap = oForm._coefficient_ngap.value;
-  var code_ngap = _quantite_ngap+"-"+_code_ngap+"-"+_coefficient_ngap;
-  
-  oNgapField.add(code_ngap);
 }
 
 function refreshTotal() {
@@ -62,94 +48,28 @@ function modifSecteur2(){
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
-var oCcamField = null;
-
-function refreshListCCAM() {
-  oCcamNode = document.getElementById("listCodesCcam");
-  
-  var oForm = document.editFrm;
-  var aCcam = oForm.codes_ccam.value.split("|");
-
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCcam = aCcam.without("");
-  
-  var aCodeNodes = new Array();
-  var iCode = 0;
-  while (sCode = aCcam[iCode++]) {
-    var sCodeNode = sCode.substr(0,11);
-      sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
-      sCodeNode += "<\/button>";
-    aCodeNodes.push(sCodeNode);  
-  }
-  oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
-}
-
-
-function refreshListNGAP(){
-  var oForm = document.editFrm;
-  var aNgap = oForm.codes_ngap.value.split("|");
-  aNgapNode = document.getElementById('listCodesNGAP');
-  var aCodeNodesNgap = new Array();
-  var iCodeNgap = 0;
-  while(sCode = aNgap[iCodeNgap++]){
-    var explodeCode = sCode.split("-");
-    var _quantite = explodeCode[0];
-    var _code = explodeCode[1];
-    var _coefficient = explodeCode[2];
-    var sCode_ = _quantite+"-"+_code+"-"+_coefficient;
-    var sCodeNode = sCode_;
-        sCodeNode += "<button class='cancel notext' type='button' onclick='oNgapField.remove(\"" + sCode + "\")'>";
-        sCodeNode += "<\/button>";
-    aCodeNodesNgap.push(sCodeNode);
-  }
-  aNgapNode.innerHTML = aCodeNodesNgap.join(" / ");
-}
-
-
-
-function updateTokenCcam(){
-  refreshListCCAM();    
-  document.editFrm._codeCCAM.value = "";
-}
-
-function updateTokenNgap(){
-  refreshListNGAP();
-  document.editFrm._quantite_ngap.value = "";
-  document.editFrm._code_ngap.value = "";
-  document.editFrm._coefficient_ngap.value = "";
-}
-
 Main.add(function () {
   refreshTotal();
-
-  refreshListCCAM();
-  refreshListNGAP();
-
-  // Creation du tokenField
-  oCcamField = new TokenField(document.editFrm.codes_ccam, {   
-    onChange : updateTokenCcam
-  } );
-  
-  oNgapField = new TokenField(document.editFrm.codes_ngap, {
-    onChange : updateTokenNgap
-  } );
 });
 
 </script>
 
 <table class="main">
   <tr>
-    <td colspan="2">
-      <a class="buttonnew" href="?m={{$m}}&amp;tarif_id=null">Créer un nouveau tarif</a>
+    <td colspan="2" class="halfPane">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id=0">
+      	{{tr}}CTarif-title-create{{/tr}}
+      </a>
     </td>
   </tr>
   <tr>
-    <td>
+    <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th colspan="3" class="title">Tarifs du praticien</th>
+          <th colspan="3" class="title">{{tr}}CMediusers-back-tarifs{{/tr}}</th>
         </tr>
-        {{if $is_praticien=="0" && $is_admin_or_secretaire=="0"}}
+        
+        {{if !$user->_is_praticien && !$user->_is_secretaire}}
         <tr>
           <td class="text">
             <div class="big-info">
@@ -158,17 +78,19 @@ Main.add(function () {
           </td>
         </tr>
         {{/if}}
-        {{if $is_admin_or_secretaire=="1"}}
+        
+        {{if $user->_is_secretaire}}
         <tr>
           <td colspan="3">
             <form action="?" name="selection" method="get">
+              <input type="hidden" name="tarif_id" value="" />
               <input type="hidden" name="m" value="{{$m}}" />
-              <select name="tarifPrat" onchange="this.form.submit()">
+              <select name="prat_id" onchange="this.form.submit()">
                 <option value="">&mdash; Aucun praticien</option>
-                {{foreach from=$listPrat item=curr_prat}}
-                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}"
-                {{if $curr_prat->_id == $tarifMediuser->_id}}selected="selected"{{/if}}>
-                  {{$curr_prat->_view}}
+                {{foreach from=$listPrat item=_prat}}
+                <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
+                {{if $_prat->_id == $prat->_id}}selected="selected"{{/if}}>
+                  {{$_prat->_view}}
                 </option>
                 {{/foreach}}
               </select>
@@ -176,28 +98,31 @@ Main.add(function () {
           </td>
         </tr>
         {{/if}}
+        
 
-        {{if $is_praticien=="1" || $is_admin_or_secretaire=="1"}}
+        {{if $user->_is_praticien || $user->_is_secretaire}}
         <tr>
           <th>{{mb_label class=CTarif field=description}}</th>
           <th>{{mb_label class=CTarif field=secteur1}}</th>
           <th>{{mb_label class=CTarif field=secteur2}}</th>
         </tr>
 
-        {{foreach from=$listeTarifsChir item=curr_tarif}}
-        <tr>
+        {{foreach from=$listeTarifsChir item=_tarif}}
+        <tr {{if $_tarif->_id == $tarif->_id}}class="selected"{{/if}}>
           <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{mb_value object=$curr_tarif field=description}}</a>
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id={{$_tarif->_id}}">
+            	{{mb_value object=$_tarif field=description}}
+            </a>
           </td>
-          <td>{{mb_value object=$curr_tarif field=secteur1}}</td>
-          <td>{{mb_value object=$curr_tarif field=secteur2}}</td>
+          <td>{{mb_value object=$_tarif field=secteur1}}</td>
+          <td>{{mb_value object=$_tarif field=secteur2}}</td>
         </tr>
         {{/foreach}}
         {{/if}}
       </table>
     
       <table class="tbl">
-        <tr><th colspan="3" class="title">Tarifs du cabinet</th></tr>
+        <tr><th colspan="3" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th></tr>
 
         <tr>
           <th>{{mb_label class=CTarif field=description}}</th>
@@ -205,13 +130,15 @@ Main.add(function () {
           <th>{{mb_label class=CTarif field=secteur2}}</th>
         </tr>
 
-        {{foreach from=$listeTarifsSpe item=curr_tarif}}
-        <tr>
+        {{foreach from=$listeTarifsSpe item=_tarif}}
+        <tr {{if $_tarif->_id == $tarif->_id}}class="selected"{{/if}}>
           <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{mb_value object=$curr_tarif field=description}}</a>
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id={{$_tarif->_id}}">
+            	{{mb_value object=$_tarif field=description}}
+            </a>
           </td>
-          <td>{{mb_value object=$curr_tarif field=secteur1}}</td>
-          <td>{{mb_value object=$curr_tarif field=secteur2}}</td>
+          <td>{{mb_value object=$_tarif field=secteur1}}</td>
+          <td>{{mb_value object=$_tarif field=secteur2}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -220,85 +147,68 @@ Main.add(function () {
     <td>
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_tarif_aed" />
-      {{mb_field object=$tarif field="tarif_id" hidden=1 prop=""}}
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="chir_id" value="{{$tarifMediuser->user_id}}" />
-      {{mb_field object=$tarifMediuser field="function_id" hidden=1 prop=""}}
+      {{mb_field object=$tarif field="tarif_id" hidden=1 prop=""}}
+
       <table class="form">
-        {{if $tarif->tarif_id}}
-        <tr><th class="title modify" colspan="2">Modifier ce tarif</th></tr>
+        {{if $tarif->_id}}
+        <tr><th class="title modify" colspan="2">{{tr}}CTarif-title-modify{{/tr}} '{{$tarif->_view}}'</th></tr>
         {{else}}
-        <tr><th class="title" colspan="2">Créer un nouveau tarif</th></tr>
+        <tr><th class="title" colspan="2">{{tr}}CTarif-title-create{{/tr}}</th></tr>
         {{/if}}
         <tr>
           <th>{{mb_label object=$tarif field="_type"}}</th>
           <td>
-            {{if $is_praticien}}
+            {{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
+			      {{mb_field object=$prat field="function_id" hidden=1 prop=""}}
+			      <input type="hidden" name="chir_id" value="{{$prat->user_id}}" />
             <select name="_type">
               <option value="chir" {{if $tarif->chir_id}} selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
             </select>
-            {{elseif !$tarif->_id || $tarif->function_id}}
-            <input type="hidden" name="_type" value="function" />
-            Tarif de cabinet
+            
             {{else}}
-            <input type="hidden" name="_type" value="chir" />
-            Tarif du Dr {{$tarifMediuser->_view}}
+			      <input  type="hidden" name="function_id" value="" />
+            <select name="chir_id">
+              <option value="">&mdash; Choisir un praticien</option>
+              {{foreach from=$listPrat item=_prat}}
+              <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
+                {{if $_prat->_id == $prat->_id}}selected="selected"{{/if}}>
+                {{$_prat->_view}}
+              </option>
+              {{/foreach}}
+            </select>
             {{/if}}
           </td>
         </tr>
+
         <tr>
           <th>{{mb_label object=$tarif field="description"}}</th>
-          <td>
-            {{mb_field object=$tarif field="description"}}
-          </td>
+          <td>{{mb_field object=$tarif field="description"}}</td>
         </tr>
+        
         <tr>
-          <th>
-            {{mb_label object=$tarif field="codes_ccam" defaultFor="_codeCCAM"}}
-          </th>
-          <td>
-            <input type="text" name="_codeCCAM" size="10" value="" />
-            <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
-            <input type="hidden" name="_codable_class" value="CConsultation" />
-         <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>             
-            <script type="text/javascript">
-           CCAMSelector.init = function(){
-             this.sForm  = "editFrm";
-             this.sView  = "_codeCCAM";
-             //this.sTarif = "_tarif";
-             this.sChir  = "chir_id";
-             this.sClass = "_codable_class";
-             this.pop();
-           }
-         </script>
-          </td>
-          </tr>
-          <tr>
-            <th>
-              Liste des codes CCAM
-              {{mb_field object=$tarif field="codes_ccam" onchange="refreshListCCAM();" hidden=1 prop=""}}
-            </th>
-            <td colspan="2" class="text" id="listCodesCcam">
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Ajout d'un code NGAP
-              {{mb_field object=$tarif field="codes_ngap" hidden="1"}}
-            </th>
-            <td>
-                Quantite:<input name="_quantite_ngap" type="text" size="3" /> 
-                Code:<input name="_code_ngap" type="text" size="3" />
-                Coefficient:<input name="_coefficient_ngap" type="text" size="3" />
-                <button class="tick notext" type="button" onclick="addCodeNgap()">Ajouter Code NGAP</button>
-            </td>
-          </tr>
-          <tr>
-            <th>Liste des codes NGAP</th>
-            <td colspan="2" class="text" id="listCodesNGAP">
-            </td>
-          </tr>
+          <th>{{mb_label object=$tarif field=codes_ccam}}</th>
+			    <td>
+			    	{{foreach from=$tarif->_codes_ccam item=_code_ccam}}
+						{{$_code_ccam}}<br />
+			    	{{foreachelse}}
+			    	<em>{{tr}}None{{/tr}}</em>
+						{{/foreach}}
+			    </td>
+        </tr>
+
+        <tr>
+          <th>{{mb_label object=$tarif field=codes_ngap}}</th>
+         <td>
+         	{{foreach from=$tarif->_codes_ngap item=_code_ngap}}
+					{{$_code_ngap}}<br />
+         	{{foreachelse}}
+         	<em>{{tr}}None{{/tr}}</em>
+					{{/foreach}}
+         </td>
+        </tr>
+
         <tr>
           <th>{{mb_label object=$tarif field="secteur1"}}</th>
           <td>{{mb_field object=$tarif field="secteur1" size="6" onChange="refreshTotal();"}}<input type="hidden" name="_tarif" /></td>
@@ -308,26 +218,40 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field="secteur2"}}</th>
           <td>{{mb_field object=$tarif field="secteur2" size="6" onChange="refreshTotal();"}}</td>
         </tr>
+        
         <tr>
-          <th>Somme</th>
+          <th>{{mb_label object=$tarif field=_somme}}</th>
           <td>
             {{mb_field object=$tarif field="_somme" onchange="modifSecteur2()"}}
           </td>
         </tr>
+        
         <tr>
           <td class="button" colspan="2">
-            {{if $tarif->tarif_id}}
-            <button class="modify" type="submit">Modifier</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le tarif',objName:'{{$tarif->description|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
-            </button>
+            {{if $tarif->_id}}
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le tarif',objName:'{{$tarif->description|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
             {{else}}
-            <button class="submit" type="submit" name="btnFuseAction">Créer</button>
+            <button class="submit" type="submit" name="btnFuseAction">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>
+        
       </table>
+      
       </form>
+      
+      <div class="big-info">
+        Compte-tenu du grand nombre de paramètres possibles pour les cotations NGAP et CCAM,
+        il n'est pas possible de manipuler ces codes dans la présente interface.<br />
+        Pour créer un tarif contenant des codes CCAM et NGAP, effectuer une cotation réelle
+        pendant une consultation en trois étapes :
+        <ul>
+          <li><em>Ajouter</em> des actes dans le volet <strong>Actes</strong></li>
+          <li><em>Valider</em> la cotation la cotation dans le volet <strong>Docs. et Règlements</strong>, section <strong>Règlement</strong></li>
+          <li><em>Cliquer</em> <strong>Nouveau tarif</strong> dans cette même section</li>
+        </ul>
+      </div>
     </td>
   </tr>
 </table>

@@ -118,4 +118,5 @@ $locales['None'] = 'None';
 $locales['Move'] = 'Move';
 $locales['Duplicate'] = 'Duplicate';
 $locales['Compute'] = 'Compute';
+$locales['cabinet'] = '';
 ?>

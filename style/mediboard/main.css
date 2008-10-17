@@ -864,7 +864,7 @@ table.form th {
   color: #000;
   white-space: nowrap;
   background-color: #eee;
-  vertical-align: top;
+  vertical-align: middle;
   text-align: right;
   font-weight: normal;
   padding: 2px 4px;
