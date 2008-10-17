@@ -41,11 +41,6 @@ function closeApplyAdministrations(dontClose) {
   }
 }
 
-Main.add(function () {
-  window.onbeforeunload = function () {
-    closeApplyAdministrations (true);
-  }
-});
 </script>
 
 <h2>
