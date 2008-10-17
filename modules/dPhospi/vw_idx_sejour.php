@@ -241,6 +241,7 @@ if($service_id){
 			foreach($_chambre->_ref_lits as &$_lits){
 				foreach($_lits->_ref_affectations as &$_affectation){
 					$_affectation->_ref_sejour->loadRefsPrescriptions();
+					$_affectation->_ref_sejour->_ref_praticien->loadRefFunction();
 					if($_affectation->_ref_sejour->_ref_prescriptions){
 						if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
 						  $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
