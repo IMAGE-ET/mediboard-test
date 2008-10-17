@@ -102,52 +102,54 @@ window.periodicalAfter = null;
 Main.add(function () {
   planSoin = $('plan_soin');
   
-  // Initialisation
-  th_before = $("th-{{$hier}}");
-  th_today = $("th-{{$date}}");
-  th_after = $("th-{{$demain}}");
+  if (planSoin) {
+    // Initialisation
+    th_before = $("th-{{$hier}}");
+    th_today = $("th-{{$date}}");
+    th_after = $("th-{{$demain}}");
   
-  listTdBefore = planSoin.select('td.{{$hier}}');
-  listTdToday  = planSoin.select('td.{{$date}}');
-  listTdAfter  = planSoin.select('td.{{$demain}}');
+    listTdBefore = planSoin.select('td.{{$hier}}');
+    listTdToday  = planSoin.select('td.{{$date}}');
+    listTdAfter  = planSoin.select('td.{{$demain}}');
+    
+    reverseBefore = listTdBefore.reverse(false);
+    reverseToday  = listTdToday.reverse(false);
+    reverseAfter  = listTdAfter.reverse(false);
   
-  reverseBefore = listTdBefore.reverse(false);
-  reverseToday  = listTdToday.reverse(false);
-  reverseAfter  = listTdAfter.reverse(false);
-
-  listThHoursBefore = planSoin.select('.th_hours_{{$hier}}');
-  listThHoursAfter = planSoin.select('.th_hours_{{$demain}}');
+    listThHoursBefore = planSoin.select('.th_hours_{{$hier}}');
+    listThHoursAfter = planSoin.select('.th_hours_{{$demain}}');
   
-  if(th_before && th_after) {
-  	th_before.hide();
-  	th_after.hide();
-  	
-  	th_before.colSpan = 0;
-  	th_today.colSpan = 12;
-  	th_after.colSpan = 0;
-  	  
-  	  
-  	listTdBefore.each(function(elt) { 
-  	  elt.hide();
-  	  $(elt.className).hide();
-  	});
-  	if(listTdBefore.length == 0){
-      // On masque les heures
-      listThHoursBefore.each(function(elt) { 
-        elt.hide();
-      });
-  	}
-  	  
-  	listTdAfter.each(function(elt) { 
-  	  elt.hide();
-  	  $(elt.className).hide();
-  	});
-  	if(listTdAfter.length == 0){
-      // On masque les heures
-      listThHoursAfter.each(function(elt) { 
-        elt.hide();
-      });
-  	}
+    if(th_before && th_after) {
+    	th_before.hide();
+    	th_after.hide();
+    	
+    	th_before.colSpan = 0;
+    	th_today.colSpan = 12;
+    	th_after.colSpan = 0;
+    	  
+    	  
+    	listTdBefore.each(function(elt) { 
+    	  elt.hide();
+    	  $(elt.className).hide();
+    	});
+    	if(listTdBefore.length == 0){
+        // On masque les heures
+        listThHoursBefore.each(function(elt) { 
+          elt.hide();
+        });
+    	}
+    	  
+    	listTdAfter.each(function(elt) { 
+    	  elt.hide();
+    	  $(elt.className).hide();
+    	});
+    	if(listTdAfter.length == 0){
+        // On masque les heures
+        listThHoursAfter.each(function(elt) { 
+          elt.hide();
+        });
+    	}
+    }
   }
 
   new Control.Tabs('tab_dossier_soin');
@@ -161,30 +163,34 @@ showHideElement = function(list_show, list_hide, th1, th2, signe){
   var class_after = "";
   var class_before = "";
   
-  list_show.each(function(elt) { 
-    // si l'element n'est pas visible, on sauvegarde sa classe _class
-    if(!elt.visible() && (class_after == "" || class_after == elt.className)){
-      modif = "1";
-      elt.show();
-      class_after = elt.className;
-      if(!$(elt.className).visible()){
-        signe == "-" ? oFormClick.nb_decalage.value-- : oFormClick.nb_decalage.value++;
-        $(elt.className).show();
+  if (list_show) {
+    list_show.each(function(elt) { 
+      // si l'element n'est pas visible, on sauvegarde sa classe _class
+      if(!elt.visible() && (class_after == "" || class_after == elt.className)){
+        modif = "1";
+        elt.show();
+        class_after = elt.className;
+        if(!$(elt.className).visible()){
+          signe == "-" ? oFormClick.nb_decalage.value-- : oFormClick.nb_decalage.value++;
+          $(elt.className).show();
+        }
       }
-    }
-  });
+    });
+  }
   
-  // On affiche le premier element qui est caché dans listTdAfter
-  list_hide.each(function(elt) { 
-    // si l'element n'est pas visible, on sauvegarde sa classe _class
-    if(elt.visible() && (class_before == "" || class_before == elt.className) && class_after != ""){
-      elt.hide();
-      class_before = elt.className;
-      if($(elt.className).visible()){
-        $(elt.className).hide();
+  if (list_hide) {
+    // On affiche le premier element qui est caché dans listTdAfter
+    list_hide.each(function(elt) { 
+      // si l'element n'est pas visible, on sauvegarde sa classe _class
+      if(elt.visible() && (class_before == "" || class_before == elt.className) && class_after != ""){
+        elt.hide();
+        class_before = elt.className;
+        if($(elt.className).visible()){
+          $(elt.className).hide();
+        }
       }
-    }
-  });
+    });
+  }
   if(modif == 1){
     th1.colSpan++;
     th1.colSpan > 0 ? th1.show() : th1.hide();	
