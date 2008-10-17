@@ -572,8 +572,8 @@ class CPrescriptionLine extends CMbObject {
 			if($_prise->moment_unitaire_id){
 		    $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
 		    if(($this->_fin_reelle > $dateTimePrise) && $poids_ok){
-				  if($_prise->_ref_moment->heure){
-				   @$this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
+				  if($_prise->_ref_moment->heure && count($heures)){
+				   $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
 				  }
 		  	  $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
 		  	  $prise_comptee = 1;
@@ -586,7 +586,9 @@ class CPrescriptionLine extends CMbObject {
 		 	  $heure = reset($_prise->_heures);
 		 	  $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
 		 	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
-		      $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($heure, 0, 2)]] += $_prise->quantite;
+		 	    if(count($heures)){
+		        $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($heure, 0, 2)]] += $_prise->quantite;
+		 	    }
           $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
 		      $prise_comptee = 1;
 			  }
@@ -600,7 +602,9 @@ class CPrescriptionLine extends CMbObject {
 		      $_hour_tab = str_pad($_hour_tab, 2, "0", STR_PAD_LEFT);
 		      $dateTimePrise = mbAddDateTime("$_hour_tab:00:00", $date);
 		      if($this->_fin_reelle > $dateTimePrise && $poids_ok && @$heures[$_hour_tab] != ""){
-		        $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[$_hour_tab]] += $_prise->quantite;
+		        if(count($heures)){
+		          $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[$_hour_tab]] += $_prise->quantite;
+		        }
             $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
 		        $prise_comptee = 1;
 		      }
@@ -614,7 +618,9 @@ class CPrescriptionLine extends CMbObject {
 		     foreach($_prise->_heures as $_heure){
 		       $dateTimePrise = mbAddDateTime($_heure, $date);
 		       if($this->_fin_reelle > $dateTimePrise && $poids_ok){
-		         @$this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_heure,0,2)]] += $_prise->quantite;
+		         if(count($heures)){
+		           $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_heure,0,2)]] += $_prise->quantite;
+		         }
 		         $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
 		         $prise_comptee = 1;
 		      }
