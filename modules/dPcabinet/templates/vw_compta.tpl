@@ -63,12 +63,28 @@ Main.add(function () {
           <th>{{mb_label object=$filter field="_date_min"}}</th>
           <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false"}}</td>
           <td rowspan="2">
-            <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
-            <label for="select_days_day">Jour courant</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
-            <label for="select_days_week">Semaine courante</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
-            <label for="select_days_month">Mois courant</label>
+            <table>
+              <tr>
+                <td>
+                  <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+                  <label for="select_days_day">Jour courant</label>
+                  <br />
+                  <input type="radio" name="select_days" onclick="changeDate('{{$yesterday}}','{{$yesterday}}');"  value="yesterday" /> 
+                  <label for="select_days_day">La veille</label>
+                  <br />
+                  <input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
+                  <label for="select_days_week">Semaine courante</label>
+                  <br />
+                </td>
+                <td>
+                  <input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
+                  <label for="select_days_month">Mois courant</label>
+                  <br />
+                  <input type="radio" name="select_days" onclick="changeDate('{{$three_month_deb}}','{{$month_fin}}');" value="three_month" /> 
+                  <label for="select_days_month">3 derniers mois</label>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>
@@ -139,6 +155,9 @@ Main.add(function () {
         <tr>
           <td class="button" colspan="3">
             <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
+            {{if $app->user_prefs.GestionFSE}}
+              <button class="search" type="submit" onclick="document.printFrm.a.value='print_noemie';">Rapprochements Noemie</button>
+            {{/if}}
           </td>
         </tr>
       </table>

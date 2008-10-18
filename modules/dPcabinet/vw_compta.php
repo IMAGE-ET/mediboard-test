@@ -11,14 +11,16 @@ global $AppUI, $can, $m;
 $can->needsEdit();
 
 // Gestion des bouton radio des dates
-$now       = mbDate();
-$week_deb  = mbDate("last sunday", $now);
-$week_fin  = mbDate("next sunday", $week_deb);
-$week_deb  = mbDate("+1 day"     , $week_deb);
-$rectif     = mbTransformTime("+0 DAY", $now, "%d")-1;
-$month_deb  = mbDate("-$rectif DAYS", $now);
-$month_fin  = mbDate("+1 month", $month_deb);
-$month_fin  = mbDate("-1 day", $month_fin);
+$now             = mbDate();
+$yesterday       = mbDate("-1 DAY"     , $now);
+$week_deb        = mbDate("last sunday", $now);
+$week_fin        = mbDate("next sunday", $week_deb);
+$week_deb        = mbDate("+1 day"     , $week_deb);
+$rectif          = mbTransformTime("+0 DAY", $now, "%d")-1;
+$month_deb       = mbDate("-$rectif DAYS", $now);
+$month_fin       = mbDate("+1 month"     , $month_deb);
+$three_month_deb = mbDate("-3 month"     , $month_fin);
+$month_fin       = mbDate("-1 day"       , $month_fin);
 
 $filter = new CConsultation;
 
@@ -61,9 +63,11 @@ $smarty->assign("is_praticien"          , $is_praticien);
 $smarty->assign("is_admin_or_secretaire", $is_admin_or_secretaire);
 $smarty->assign("listPrat"              , $listPrat);
 $smarty->assign("now"                   , $now);
+$smarty->assign("yesterday"                   , $yesterday);
 $smarty->assign("week_deb"              , $week_deb);
 $smarty->assign("week_fin"              , $week_fin);
 $smarty->assign("month_deb"             , $month_deb);
+$smarty->assign("three_month_deb"       , $three_month_deb);
 $smarty->assign("month_fin"             , $month_fin);
 
 $smarty->display("vw_compta.tpl");
