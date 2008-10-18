@@ -76,7 +76,7 @@ $smarty->assign("listeTarifsChir", $listeTarifsChir);
 $smarty->assign("listeTarifsSpe" , $listeTarifsSpe);
 $smarty->assign("tarif"          , $tarif);
 $smarty->assign("prat"           , $prat);
-$smarty->assign("listPrat"              , $listPrat);
+$smarty->assign("listPrat"       , $listPrat);
 
 $smarty->display("vw_edit_tarifs.tpl");
 
