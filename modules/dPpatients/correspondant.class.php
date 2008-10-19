@@ -37,14 +37,7 @@ class CCorrespondant extends CMbObject {
     $specs["patient_id"] = "notNull ref class|CPatient";
     return $specs;
   }
-  
-  function countPatients() {
-    $this->_count_patients_traites = $this->countBackRefs("patients_traites");
-    $this->_count_patients1 = $this->countBackRefs("patients1");
-    $this->_count_patients2 = $this->countBackRefs("patients2");
-    $this->_count_patients3 = $this->countBackRefs("patients3");
-  }
-  
+    
   function updateFormFields() {
     parent::updateFormFields();
   }
