@@ -17,7 +17,7 @@ class CCorrespondant extends CMbObject {
 	var $correspondant_id = null;
 
   // DB Fields
-	var $medicin_id = null;
+	var $medecin_id = null;
   var $patient_id = null;
 
   // Object References
@@ -33,7 +33,7 @@ class CCorrespondant extends CMbObject {
     
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["medicin_id"] = "notNull ref class|CMedecin";
+    $specs["medecin_id"] = "notNull ref class|CMedecin";
     $specs["patient_id"] = "notNull ref class|CPatient";
     return $specs;
   }

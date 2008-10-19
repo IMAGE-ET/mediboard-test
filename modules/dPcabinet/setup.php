@@ -1193,13 +1193,13 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.06");
     $sql = "CREATE TABLE `correspondant` (
 			`correspondant_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-			`medicin_id` INT (11) UNSIGNED NOT NULL,
+			`medecin_id` INT (11) UNSIGNED NOT NULL,
 			`patient_id` INT (11) UNSIGNED NOT NULL
 			) TYPE=MYISAM;";
     $this->addQuery($sql);
 
     $sql = "ALTER TABLE `correspondant` 
-			ADD INDEX (`medicin_id`),
+			ADD INDEX (`medecin_id`),
 			ADD INDEX (`patient_id`);";
     $this->addQuery($sql);
     
