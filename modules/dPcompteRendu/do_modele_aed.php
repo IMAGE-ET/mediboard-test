@@ -39,9 +39,14 @@ if(isset($_POST["source"])) {
     CDestinataire::makeAllFor($object);
     $allDest = CDestinataire::$destByClass;
     // On sort l'en-tête et le pied de page
-    $header = "";
-    $body   = $_POST["source"];
-    $footer = "";
+    $posBody      = strpos($_POST["source"], '<div id=\"body\">');
+    if($posBody) {
+      $headerfooter = substr($_POST["source"], 0, $posBody);
+      $body         = substr($_POST["source"], $posBody+strlen('<div id=\"body\">'), -strlen("</div>"));
+    } else {
+      $headerfooter = "";
+      $body         = $_POST["source"];
+    }
     // On crée les fichiers pour chaque destinataire
     $copyTo = "";
     foreach($destinataires as $curr_dest) {
@@ -64,11 +69,14 @@ if(isset($_POST["source"])) {
       $allSources[] = str_replace($fields, $values, $body);
     }
     // On concatène les en-tête, pieds de page et body's
-    $_POST["source"] = $header;
-    $_POST["source"] .= "<div id=\"body\">";
-    $_POST["source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
-    $_POST["source"] .= "</div>";
-    $_POST["source"] .= $footer;
+    if($headerfooter) {
+      $_POST["source"] = $headerfooter;
+      $_POST["source"] .= "<div id=\"body\">";
+      $_POST["source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
+      $_POST["source"] .= "</div>";
+    } else {
+      $_POST["source"] = implode("<hr class=\"pageBreak\" />", $allSources);
+    }
   }
   
 }
