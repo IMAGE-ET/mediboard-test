@@ -18,11 +18,16 @@ class CTemplateManager {
   var $template = null;
   var $document = null;
   var $usedLists = array();
+  var $isCourrier = null;
   
   var $valueMode = true; // @todo : changer en applyMode
   var $printMode = false;
   
   function CTemplateManager() {
+    $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
+    $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
+    $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
+    $this->addProperty("Courrier - copie à"              , "[Courrier - copie à]");
     global $AppUI;
     $user = new CMediusers();
     $user->load($AppUI->user_id);
@@ -56,12 +61,12 @@ class CTemplateManager {
   		$this->sections[$section] = array();
   	}
   	$this->sections[$section][$field] = array (
-  		"view" => $item,
-		"field" => $field,
-		"value" => $value,
-		"fieldHTML" => htmlentities("[{$field}]"),
-		"valueHTML" => $value
-  	);
+  	  "view"      => $item,
+      "field"     => $field,
+      "value"     => $value,
+      "fieldHTML" => htmlentities("[{$field}]"),
+      "valueHTML" => $value
+    );
   }
 
   function addList($name, $choice = null) {
@@ -104,7 +109,7 @@ class CTemplateManager {
     $smarty = new CSmartyDP("modules/dPcompteRendu");
     $smarty->assign("templateManager", $this);
     $smarty->display("init_htmlarea.tpl");
-	}
+  }
   
   function setFields($modeleType) {
     if ($modeleType){
@@ -143,7 +148,7 @@ class CTemplateManager {
   
   function loadHelpers($user_id, $modeleType) {
     $compte_rendu = new CCompteRendu();
-  	
+    
     // Chargement de l'utilisateur courant
     $currUser = new CMediusers();
     $currUser->load($user_id);
@@ -168,15 +173,15 @@ class CTemplateManager {
     
     $this->helpers["Aide de l'utilisateur"] = "";
     foreach($aidesUser as $aideUser){
-    	if($aideUser->depend_value == $modeleType){
-    	  $this->helpers[$aideUser->name] = $aideUser->text;
-    	}
+      if($aideUser->depend_value == $modeleType){
+        $this->helpers[$aideUser->name] = $aideUser->text;
+      }
     }
     $this->helpers["Aide de la fonction"] = "";
     foreach($aidesFunc as $aideFunc){
-    	if($aideFunc->depend_value == $modeleType){
-    	  $this->helpers[$aideFunc->name] = $aideFunc->text;
-    	} 
+      if($aideFunc->depend_value == $modeleType){
+        $this->helpers[$aideFunc->name] = $aideFunc->text;
+      } 
    }
   }
   
@@ -184,10 +189,10 @@ class CTemplateManager {
     $fields = array();
     $values = array();
     foreach($this->sections as $properties) {
-    	foreach($properties as $property) {
-	        $fields[] = $property["fieldHTML"];
-	        $values[] = nl2br($property["valueHTML"]);
-    	}
+      foreach($properties as $property) {
+          $fields[] = $property["fieldHTML"];
+          $values[] = nl2br($property["valueHTML"]);
+      }
     }
     
     if(count($fields)) {
@@ -197,7 +202,7 @@ class CTemplateManager {
   
   // Obtention des listes utilisées dans le document
   function getUsedLists($lists) {
-  	$this->usedLists = array();
+    $this->usedLists = array();
     foreach($lists as $key => $value) {
       $pos = strpos($this->document, htmlentities(stripslashes("[Liste - $value->nom]")));
       if($pos !== false) {
@@ -206,6 +211,15 @@ class CTemplateManager {
     }
     ksort($this->usedLists);
     return $this->usedLists;
+  }
+  
+  // Vérification s'il s'agit d'un courrier
+  function isCourrier() {
+    $pos = strpos($this->document, "[Courrier -");
+    if($pos) {
+      $this->isCourrier = true;
+    }
+    return $this->isCourrier;
   }
 }
 ?>

@@ -16,6 +16,7 @@ $do->redirectDelete = "m=$m&new=1";
 if(isset($_POST["source"])) {
   $fields = array();
   $values = array();
+  $destinataires = array();
   foreach($_POST as $key => $value) {
     if(preg_match("/_liste([0-9]+)/", $key, $result)) {
       $temp = new CListeChoix;
@@ -27,10 +28,49 @@ if(isset($_POST["source"])) {
         $fields[] = "[Liste - ".htmlentities($temp->nom)."]";
         $values[] = nl2br("$value");
       }
+    } elseif(preg_match("/_dest_([\w]+)_([0-9]+)/", $key, $dest)) {
+      $destinataires[] = $dest;
     }
   }
-  
   $_POST["source"] = str_replace($fields, $values, $_POST["source"]);
+  if(count($destinataires)) {
+    $object = new $_POST["object_class"];
+    $object->load($_POST["object_id"]);
+    CDestinataire::makeAllFor($object);
+    $allDest = CDestinataire::$destByClass;
+    // On sort l'en-tête et le pied de page
+    $header = "";
+    $body   = $_POST["source"];
+    $footer = "";
+    // On crée les fichiers pour chaque destinataire
+    $copyTo = "";
+    foreach($destinataires as $curr_dest) {
+      $copyTo .= $allDest[$curr_dest[1]][$curr_dest[2]]->nom."; ";
+    }
+    $allSources = array();
+    foreach($destinataires as &$curr_dest) {
+      $fields = array(
+        htmlentities("[Courrier - nom destinataire]"),
+        htmlentities("[Courrier - adresse destinataire]"),
+        htmlentities("[Courrier - cp ville destinataire]"),
+        htmlentities("[Courrier - copie à]")
+      );
+      $values = array(
+        $allDest[$curr_dest[1]][$curr_dest[2]]->nom,
+        $allDest[$curr_dest[1]][$curr_dest[2]]->adresse,
+        $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
+        $copyTo
+      );
+      $allSources[] = str_replace($fields, $values, $body);
+    }
+    // On concatène les en-tête, pieds de page et body's
+    $_POST["source"] = $header;
+    $_POST["source"] .= "<div id=\"body\">";
+    $_POST["source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
+    $_POST["source"] .= "</div>";
+    $_POST["source"] .= $footer;
+  }
+  
 }
 
 $do->doBind();

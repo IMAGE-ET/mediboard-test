@@ -105,9 +105,6 @@ $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
-CDestinataire::makeAllFor($object);
-mbTrace(CDestinataire::$destByClass, "Destinataires pour la '$object->_view'");
-
 $medichir = new CMediusers;
 if($compte_rendu->_ref_object->_class_name == "CConsultAnesth"){
   $praticien_id = $compte_rendu->_ref_object->_ref_consultation->_praticien_id;
@@ -136,6 +133,14 @@ $chirLists = new CListeChoix;
 $chirLists = $chirLists->loadList($where, $order);
 $lists = $templateManager->getUsedLists($chirLists);
 
+// Récupération des éléments de destinataires de courrier
+$isCourrier = $templateManager->isCourrier();
+$destinataires = array();
+if($isCourrier) {
+  CDestinataire::makeAllFor($object);
+  $destinataires = CDestinataire::$destByClass;
+}
+
 $templateManager->initHTMLArea();
 
 // Création du template
@@ -146,6 +151,7 @@ $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);
 $smarty->assign("lists"          , $lists);
+$smarty->assign("destinataires"  , $destinataires);
 
 $smarty->display("edit_compte_rendu.tpl");
 

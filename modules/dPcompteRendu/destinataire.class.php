@@ -73,10 +73,10 @@ class CDestinataire {
 	  	
 	  	// Employeur
       $dest = new CDestinataire($tag);
-	  	$dest->tag     = "prevenir";
-      $dest->nom     = "$patient->prevenir_nom $patient->prevenir_prenom";
-	  	$dest->adresse = $patient->prevenir_adresse;
-	  	$dest->cpville = "$patient->prevenir_cp $patient->prevenir_ville";
+	  	$dest->tag     = "employeur";
+      $dest->nom     = $patient->employeur_nom;
+	  	$dest->adresse = $patient->employeur_adresse;
+	  	$dest->cpville = "$patient->employeur_cp $patient->employeur_ville";
 	  	$dest->email   = "";
 	  	self::$destByClass[$mbObject->_class_name][] = $dest;
 	  }
@@ -85,7 +85,7 @@ class CDestinataire {
 	  	$medecin = $mbObject;
 	  	
       $dest = new CDestinataire($tag);
-      $dest->nom     = $medecin->_view;
+      $dest->nom     = "Dr $medecin->_view";
 	  	$dest->adresse = $medecin->adresse;
 	  	$dest->cpville = "$medecin->cp $medecin->ville";
 	  	$dest->email   = "";

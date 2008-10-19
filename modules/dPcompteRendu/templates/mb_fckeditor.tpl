@@ -115,6 +115,6 @@ FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbheader', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbfooter', 'en,fr', sMbPluginsPath );
-FCKConfig.Debug = true;
+FCKConfig.Debug = false;
 
 {{/if}}
