@@ -114,5 +114,5 @@ if($javascript){
 }
 
 mbtrace($zipFile->listContent(), "Contenu de l'archive");
-exit;
+CApp::rip();
 ?>

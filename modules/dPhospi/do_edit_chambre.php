@@ -24,7 +24,7 @@ if($id) {
 
 if($ajax) {
   $AppUI->getMsg();
-  exit(0);
+  CApp::rip();
 }
 
 $AppUI->redirect("m=$m#adm$id");

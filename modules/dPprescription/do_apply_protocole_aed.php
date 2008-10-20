@@ -20,8 +20,8 @@ $praticien_id    = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 $operation_id    = mbGetValueFromPost("operation_id");
 
 // Si aucun pack/protocole selectionne, on ne fait rien
-if(!$pack_protocole_id){
-	exit();
+if (!$pack_protocole_id){
+  CApp::rip();
 }
 
 // Chargement de la prescription
@@ -45,8 +45,6 @@ $prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true)</script>";
 echo $AppUI->getMsg();
-
-exit();  
-
+CApp::rip();
 ?>
 

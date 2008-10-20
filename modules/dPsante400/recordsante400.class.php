@@ -27,7 +27,7 @@ class CRecordSante400 {
     
     if (null == $dsn = $dsnConfig["dsn"]) {
       trigger_error("Data Source Name not defined, please configure module", E_USER_ERROR);
-      die;
+      CApp::rip();
     }
     
     // Fake data source for chrono purposes

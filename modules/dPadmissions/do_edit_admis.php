@@ -54,10 +54,10 @@ switch ($mode) {
   }
 }
 
-if($ajax) {
+if ($ajax) {
   $dbError = $ds->error();
   echo "<div class='message'>Action effectuée</div>";
-  exit(0);
+  CApp::rip();
 }
 
 $AppUI->redirect("m=$m#adm$id");

@@ -59,6 +59,6 @@ if($_moment_explode[0] == "unitaire"){
 			return $msg;
 		}
   }
-  exit();
+  CApp::rip();
 }
 ?>

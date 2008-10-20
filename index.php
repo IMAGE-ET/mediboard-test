@@ -27,13 +27,13 @@ require_once("./includes/config.php");
 require_once("./includes/version.php");
 require_once("./classes/sharedmemory.class.php");
 
-if($dPconfig["offline"]) {
+if ($dPconfig["offline"]) {
   header("location: offline.php");
   die("Le système est actuellement en cours de maintenance");
 }
 
 // Check that the user has correctly set the root directory
-is_file($dPconfig["root_dir"]."/includes/config.php") 
+is_file ($dPconfig["root_dir"]."/includes/config.php") 
   or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
 
 require_once("./includes/mb_functions.php");
@@ -48,6 +48,9 @@ $phpChrono->start();
 // Load AppUI from session
 require_once("./classes/ui.class.php");
 require_once("./includes/session.php");
+
+// Register shutdown
+register_shutdown_function(array("CApp", "checkPeace"));
 
 // Write the HTML headers
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
@@ -124,7 +127,8 @@ if (!$AppUI->user_id) {
     $tplAjax->assign("performance", $performance);
     $tplAjax->display("ajax_errors.tpl");
 
-  } else {
+  } 
+  else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
     $smartyLogin->assign("localeCharSet"        , $locale_char_set);
     $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
@@ -144,7 +148,7 @@ if (!$AppUI->user_id) {
   // Destroy the current session and output login page
   session_unset();
   session_destroy();
-  exit;
+  CApp::rip();
 }
 
 // Show errors to admin
@@ -340,4 +344,5 @@ if ($ajax) {
 ob_end_flush();
 require "./includes/access_log.php";
 
+CApp::rip();
 ?>

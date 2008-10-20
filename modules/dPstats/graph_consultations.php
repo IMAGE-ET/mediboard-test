@@ -68,7 +68,7 @@ foreach($datax as $x) {
 }
 
 //mbTrace($result);
-//mbTrace($datax); die;
+//mbTrace($datax); CApp::rip();
 
 // Set up the title for the graph
 $title = "Nombre de consultations";

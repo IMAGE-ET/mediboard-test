@@ -31,8 +31,8 @@
 
 <table class="tbl">
   <tr>
-    <th class="category" colspan="7">Information LogicMax</th>
-    <th class="category" colspan="6">Liaison Mediboard</th>
+    <th class="title" colspan="7">Information LogicMax</th>
+    <th class="title" colspan="6">Liaison Mediboard</th>
   </tr>
 
   <tr>

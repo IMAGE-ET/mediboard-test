@@ -18,6 +18,6 @@ $fonction = @$intermax["FONCTION"]["NOM"];
 $AppUI->stepAjax("Fonction Intermax '$fonction' reçue", UI_MSG_OK);
 $AppUI->callbackAjax("Intermax.handleResult", $fonction);
 
-die();
+CApp::rip();
 
 ?>

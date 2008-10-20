@@ -39,7 +39,7 @@ class CResultatsLaboGraph extends Graph {
 //    mbTrace($ydata, "Ydata");
 //    mbTrace($min, "Min");
 //    mbTrace($max, "Max");
-//    die();
+//    CApp::rip();
 
     // Setup the graph.
     $this->Graph(360, 250, "auto");

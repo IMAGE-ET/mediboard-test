@@ -41,7 +41,7 @@ $AppUI->displayMsg($msg, "CPrescription-msg-create");
 if($msg){
 	echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";
 	echo $AppUI->getMsg();
-  exit();
+  CApp::rip();
 }
 
 
@@ -123,6 +123,5 @@ foreach($lines as $cat => $lines_by_type){
 
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id)</script>";
 echo $AppUI->getMsg();
-exit();
-
+CApp::rip();
 ?>

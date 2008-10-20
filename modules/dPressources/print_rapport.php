@@ -21,7 +21,7 @@ $filter->paye = mbGetValueFromGetOrSession("type");
 $prat_id = mbGetValueFromGet("prat_id", 0);
 if(!$prat_id) {
   echo "Vous devez choisir un praticien valide";
-  exit(0);
+  CApp::rip();
 }
 if($filter->_date_max > mbDate())
  $filter->_date_max = mbDate();

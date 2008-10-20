@@ -18,10 +18,36 @@ define("UI_MSG_ERROR"  , 4);
 $GLOBALS["translate"] = array();
 
 /**
- * The Application Class
+ * The true application class
+ */
+class CApp {
+  static $inPeace = false;
+  
+  /**
+   * Will trigger an error for logging purpose whenever the application dies unexpectely
+   */
+  static function checkPeace() {
+    if (!self::$inPeace) {
+      trigger_error("Application died unexpectedly", E_USER_ERROR);
+      
+    }
+  }
+  
+  /**
+   * Make application die properly
+   */
+  static function rip() {
+    self::$inPeace = true;
+    die;
+  }
+}
+
+
+/**
+ * The Application UI weird Class
  * 
  * @TODO Should at least be static
- * @TODO Should at best be fragmented : too many unrelated responsabilities
+ * @TODO Is being split into CApp et CUI classes
  */
 class CAppUI {
   var $user_id = 0;
@@ -233,11 +259,13 @@ class CAppUI {
     $session_id = SID;
 
     session_write_close();
-  // are the params empty
+  
+    // are the params empty
     if (!$params) {
     // has a place been saved
       $params = !empty($this->state["SAVEDPLACE$hist"]) ? $this->state["SAVEDPLACE$hist"] : $this->defaultRedirect;
     }
+    
     // Fix to handle cookieless sessions
     if ($session_id != "") {
       if (!$params)
@@ -246,7 +274,7 @@ class CAppUI {
         $params .= "&" . $session_id;
     }
     header("Location: index.php?$params");
-    exit(); // stop the PHP execution
+    CApp::rip();
   }
   
  /**
@@ -362,7 +390,7 @@ class CAppUI {
     echo "\n<div class='$class'>$msg</div>";
     
     if ($msgType == UI_MSG_ERROR) {
-      die;
+      CApp::rip();
     }
   }
 

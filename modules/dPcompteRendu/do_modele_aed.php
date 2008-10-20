@@ -97,7 +97,7 @@ if($do->ajax){
  if ($callBack) {
    echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
  }
- exit;
+ CApp::rip();
  
 }else{
 

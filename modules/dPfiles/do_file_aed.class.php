@@ -121,7 +121,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       if ($callBack) {
         echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
       }
-      exit;
+      CApp::rip();
     }     
     if ($this->redirect !== null) {
       $AppUI->redirect($this->redirect);

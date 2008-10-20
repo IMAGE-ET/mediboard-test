@@ -56,6 +56,5 @@ if(!$line->substitute_for){
 }
 
 echo $AppUI->getMsg();
-exit();
-
+CApp::rip();
 ?>

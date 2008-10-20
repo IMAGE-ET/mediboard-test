@@ -192,6 +192,5 @@ echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejou
 	
 }
 echo $AppUI->getMsg();
-exit();
-
+CApp::rip();
 ?>

@@ -282,7 +282,7 @@ abstract class CSQLDataSource {
    */
   function loadResult($sql) {
     $cur = $this->exec($sql);
-    $cur or exit($this->error());
+    $cur or CApp::rip();
     $ret = null;
     if ($row = $this->fetchRow($cur)) {
       $ret = reset($row);
@@ -312,7 +312,7 @@ abstract class CSQLDataSource {
       return true;
     } else {
       $cur = $this->exec($sql);
-      $cur or exit($this->error());
+      $cur or CApp::rip();
       if ($object = $this->fetchObject($cur)) {
         $this->freeResult($cur);
         return true;
@@ -330,7 +330,7 @@ abstract class CSQLDataSource {
    **/
   function loadHash($query) {
     $cur = $this->exec($query);
-    $cur or exit($this->error());
+    $cur or CApp::rip();
     $hash = $this->fetchAssoc($cur);
     $this->freeResult($cur);
     return $hash;
@@ -343,7 +343,7 @@ abstract class CSQLDataSource {
    **/
   function loadHashList($query) {
     $cur = $this->exec($query);
-    $cur or exit($this->error());
+    $cur or CApp::rip();
     $hashlist = array();
     while ($hash = $this->fetchArray($cur)) {
       $hashlist[$hash[0]] = $hash[1];

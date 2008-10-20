@@ -66,5 +66,5 @@ if($del == 1){
 }
  
 echo $AppUI->getMsg();
-exit();
+CApp::rip();
 ?>

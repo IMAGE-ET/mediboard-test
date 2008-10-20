@@ -70,6 +70,5 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Protocole.edit($protocole->_id)</script>";
 echo $AppUI->getMsg();
-exit();   
-
+CApp::rip();
 ?>

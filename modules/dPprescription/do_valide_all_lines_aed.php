@@ -322,6 +322,5 @@ $prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescr
 
 echo "<script type='text/javascript'>Prescription.reload($prescription_id,'', '$chapitre','','$mode_pharma');</script>";
 echo $AppUI->getMsg();
-exit();
-
+CApp::rip();
 ?>

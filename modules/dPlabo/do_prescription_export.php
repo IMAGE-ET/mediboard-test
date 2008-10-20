@@ -13,7 +13,7 @@ global $AppUI, $can, $m, $dPconfig;
 function redirect() {
   global $AppUI;
   echo $AppUI->getMsg();
-  exit;
+  CApp::rip();
 }
 
 if (!class_exists("DOMDocument")) {

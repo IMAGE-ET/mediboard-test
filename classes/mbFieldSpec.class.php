@@ -99,7 +99,7 @@ class CMbFieldSpec {
       foreach($targetPropValue as $key => $value) {
         if ($value === null) {
           trigger_error("La valeur du champ '$key' impliqué dans un xor dans la classe '$this->className' n'est pas présente dans le formulaire", E_USER_ERROR);
-          die();
+          CApp::rip();
         }
         $noValue  &= !$value;
         $nbValues += ($value !== "");

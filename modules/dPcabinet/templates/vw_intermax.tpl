@@ -54,7 +54,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 function checkBilanCPS() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_bilan_cps");
-  url.popup("700", "400", "Bilan CPS");
+  url.popup("800", "500", "Bilan CPS");
   return false;
 }
 

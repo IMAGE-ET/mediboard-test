@@ -44,6 +44,5 @@ if($mode_protocole || $mode_pharma){
   echo "<script type='text/javascript'>Prescription.reloadPrescSejour($line->prescription_id)</script>";
 }
 echo $AppUI->getMsg();
-exit();
-
+CApp::rip();
 ?>

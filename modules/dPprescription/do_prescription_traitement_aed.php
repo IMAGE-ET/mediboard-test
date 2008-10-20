@@ -63,6 +63,5 @@ if($traitement == 0){
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament')</script>";
 echo $AppUI->getMsg();
-exit();
-
+CApp::rip();
 ?>

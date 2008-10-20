@@ -38,7 +38,12 @@ class CBcbObject {
         $dPconfig["db"]["bcb"]["dbpass"], 
         $TypeDatabase
       );
-      if ($Result < 1) die("Erreur base " . $Result . " :" . $objDatabase->GetLastError());
+      
+      if ($Result < 1) {
+        trigger_error("Erreur base " . $Result . " : " . $objDatabase->GetLastError(), E_USER_ERROR);
+        CApp::rip();
+      }
+      
       self::$objDatabase = $objDatabase;
       self::$TypeDatabase = $TypeDatabase;
     }  
@@ -61,7 +66,12 @@ class CBcbObject {
         $dPconfig["db"]["bcbges"]["dbpass"],
         $TypeDatabaseGestion
       );
-      if ($Result < 1) die("Erreur base gestion " . $Result . " :" . $objDatabaseGestion->GetLastError());
+      
+      if ($Result < 1) {
+        trigger_error("Erreur base gestion " . $Result . " : " . $objDatabase->GetLastError(), E_USER_ERROR);
+        CApp::rip();
+      }
+
       self::$objDatabaseGestion = $objDatabaseGestion;
       self::$TypeDatabaseGestion = $TypeDatabaseGestion;   
     }

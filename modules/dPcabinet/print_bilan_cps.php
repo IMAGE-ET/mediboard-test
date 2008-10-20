@@ -59,7 +59,7 @@ foreach ($cpss as &$cps) {
     $func->_count_active++;
   }
   
-  $prat->_ref_function =& $func;
+  $prat->_ref_function = $func;
 }
 
 // Création du template

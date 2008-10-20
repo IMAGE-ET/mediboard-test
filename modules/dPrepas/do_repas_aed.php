@@ -54,7 +54,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
         }
         $smarty->display("add_del_repas_offline.tpl");
       }
-      exit;
+			CApp::rip();
     }
 
     if ($this->redirect !== null) {
