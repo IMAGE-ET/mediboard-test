@@ -108,7 +108,7 @@ class CDoObjectAddEdit {
       $callBack = $this->callBack;
       echo nl2br($AppUI->getMsg());
       if ($callBack) {
-        echo "\n<script type='text/javascript'>window['$callBack']($idValue);</script>";
+        echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
       }
       exit;
     }

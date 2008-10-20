@@ -373,7 +373,7 @@ class CAppUI {
   */
   static function callbackAjax($callback, $value) {
     $value = smarty_modifier_json($value);
-    echo "\n<script type='text/javascript'>window['$callback']($value);</script>";
+    echo "\n<script type='text/javascript'>$callback($value);</script>";
   }
   
   
