@@ -11,7 +11,8 @@ $composant = mbGetValueFromGet("composant", "");
 $code = mbGetValueFromGet("code", "");
 $libelle = mbGetValueFromGet("libelle", "");
 
-$rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant", 0);
+$rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant");
+$rechercheLivretComposant = ($rechercheLivretComposant == "true") ? "1" : "0";
 
 // Chargement des compositions qui contienne le composant recherche
 $composition = new CBcbComposition();
