@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*  
+ * @package Mediboard
+ * @subpackage dPstock
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 <table class="form">
   <tr>
     <th style="width: 5%;">{{mb_title object=$product field=name}}</th>

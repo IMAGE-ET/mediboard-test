@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*  
+ * @package Mediboard
+ * @subpackage dPstock
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />

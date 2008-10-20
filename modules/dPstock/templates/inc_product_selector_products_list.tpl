@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*  
+ * @package Mediboard
+ * @subpackage dPstock
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 {{$count}} 
 {{if $count==0}}
   {{tr}}CProduct.one{{/tr}}

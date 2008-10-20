@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*  
+ * @package Mediboard
+ * @subpackage dPstock
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 <tr>
   <td>{{$stock->_view}}</td>
   <td id="stock-{{$stock->_id}}-bargraph">{{include file="inc_bargraph.tpl"}}</td>

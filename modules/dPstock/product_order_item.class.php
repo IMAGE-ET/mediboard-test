@@ -1,10 +1,11 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPtock
- *	@version $Revision$
- *  @author Fabien Ménager
+ * @package Mediboard
+ * @subpackage dPstock
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CProductOrderItem extends CMbObject {

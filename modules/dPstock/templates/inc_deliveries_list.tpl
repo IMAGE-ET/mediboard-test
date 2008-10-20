@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*  
+ * @package Mediboard
+ * @subpackage dPstock
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">20 {{tr}}last{{/tr}} {{tr}}CProductDelivery.more{{/tr}}</th>
