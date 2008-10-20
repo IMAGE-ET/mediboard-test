@@ -175,7 +175,7 @@ submitProtocole = function(){
 			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 			        <select name="pack_protocole_id" style="width: 80px;">
 			          <option value="">&mdash; Sélection</option>
-			          {{if $protocoles_praticien|@count || $packs_praticiens|@count}}
+			          {{if $protocoles_praticien|@count || $packs_praticien|@count}}
 				          <optgroup label="Praticien">
 					          {{foreach from=$protocoles_praticien item=_protocole_praticien}}
 					          <option value="prot-{{$_protocole_praticien->_id}}">{{$_protocole_praticien->_view}}</option>
