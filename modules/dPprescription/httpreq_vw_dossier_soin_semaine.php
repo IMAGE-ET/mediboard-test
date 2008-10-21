@@ -40,14 +40,17 @@ if($prescription_id){
   }
 }
 
+
 // Calcul du rowspan pour les medicaments
 if($prescription->_ref_lines_med_for_plan){
 	foreach($prescription->_ref_lines_med_for_plan as $_code_ATC => $_cat_ATC){
 	  if(!isset($prescription->_nb_produit_by_cat[$_code_ATC])){
 	    $prescription->_nb_produit_by_cat[$_code_ATC] = 0;
 	  }
-	  foreach($_cat_ATC as $_lines_ny_unite) {
-	    $prescription->_nb_produit_by_cat[$_code_ATC]++;
+	  foreach($_cat_ATC as $_line) {
+	    foreach($_line as $line_med){
+	      $prescription->_nb_produit_by_cat[$_code_ATC]++;
+	    }
 	  }
 	}
 }
@@ -59,12 +62,30 @@ if($prescription->_ref_lines_elt_for_plan){
 	    if(!isset($prescription->_nb_produit_by_cat[$name_cat])){
 	      $prescription->_nb_produit_by_cat[$name_cat] = 0;
 	    }
-	    foreach($elements_cat as $_elements_by_unite){
-	      $prescription->_nb_produit_by_cat[$name_cat]++;
+	    foreach($elements_cat as $_element){
+	      foreach($_element as $element){
+	        $prescription->_nb_produit_by_cat[$name_cat]++;
+	      }
 	    }
 	  }
-	}    
+	}     
 }
+
+// Chargement des transmissions de la prescriptions
+$transmission = new CTransmissionMedicale();
+$where = array();
+$where[] = "(object_class = 'CCategoryPrescription') OR 
+            (object_class = 'CPrescriptionLineElement') OR 
+            (object_class = 'CPrescriptionLineMedicament')";
+
+$where["sejour_id"] = " = '$sejour->_id'";
+$transmissions_by_class = $transmission->loadList($where);
+
+foreach($transmissions_by_class as $_transmission){
+  $_transmission->loadRefsFwd();
+	$prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+}
+
 
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();

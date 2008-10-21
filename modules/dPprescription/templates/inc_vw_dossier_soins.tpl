@@ -233,7 +233,7 @@ showBefore = function(){
 </form>
 
 <ul id="tab_dossier_soin" class="control_tabs">
-  <li><a href="#jour">Administration</a></li>
+  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}');"><a href="#jour">Administration</a></li>
   <li onclick="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
 </ul>
 <hr class="control_tabs" />
@@ -291,7 +291,6 @@ showBefore = function(){
 	  </tr>
 	</table>
 
-  {{assign var=administrations value=$prescription->_administrations}}
 	{{assign var=transmissions value=$prescription->_transmissions}}	  
 
   <table style="width: 100%">
@@ -349,8 +348,6 @@ showBefore = function(){
 					            nodebug=true
 					            first_foreach=foreach_med
 					            last_foreach=foreach_line
-					            type=$_key_cat_ATC
-					            suffixe=med
 					            nb_line=$_line|@count
 					            dosql=do_prescription_line_medicament_aed}}
 					      {{/foreach}}
@@ -373,8 +370,6 @@ showBefore = function(){
 							                    nodebug=true
 							                    first_foreach=foreach_cat
 							                    last_foreach=foreach_elt
-							                    type=$name_cat
-							                    suffixe=elt
 							                    nb_line=$_element|@count
 							                    dosql=do_prescription_line_element_aed}}
 							   {{/foreach}}

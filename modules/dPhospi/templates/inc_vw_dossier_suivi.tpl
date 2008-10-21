@@ -44,7 +44,7 @@ delCibleTransmission = function() {
 	      <br />
 	      {{mb_field object=$observation field="text"}}
 	      <br />
-	      <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button> 
+	      <button type="button" class="add" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Add{{/tr}}</button> 
       </form>
       {{/if}}
     </td>     
@@ -72,7 +72,7 @@ delCibleTransmission = function() {
       <br />
       {{mb_field object=$transmission field="text"}}
       <br />
-      <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button>
+      <button type="button" class="add" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Add{{/tr}}</button>
       </form>
     </td>
   </tr>
@@ -128,7 +128,7 @@ delCibleTransmission = function() {
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="observation_medicale_id" value="{{$curr_suivi->_id}}" />
         <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
-        <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form, '$prescription->_id')">{{tr}}Delete{{/tr}}</button>
       </form>
       {{/if}}
     </td>
@@ -165,7 +165,7 @@ delCibleTransmission = function() {
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="transmission_medicale_id" value="{{$curr_suivi->_id}}" />
         <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
-        <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Delete{{/tr}}</button>
       </form>
       {{/if}}
     </td>

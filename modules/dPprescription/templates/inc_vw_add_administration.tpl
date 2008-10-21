@@ -4,24 +4,32 @@ var oFormClick = window.opener.document.click;
 
 function submitAdmission(){
   oFormAdministration = document.addAdministration;
+  checkForm(oFormAdministration);
   submitFormAjax(oFormAdministration, 'systemMsg');
 }
 
 // Fonction appelée en callback du formulaire d'administration
 function submitTransmission(administration_id){
   oFormTransmission   = document.editTrans;
-
   oFormTransmission.object_class.value = "CAdministration";
   oFormTransmission.object_id.value = administration_id;
   if(oFormTransmission.text.value != ''){
     submitFormAjax(oFormTransmission, 'systemMsg', { onComplete: function(){ 
-      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+      {{if $mode_plan}}
+        window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
+      {{else}}
+        window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+      {{/if}}
       window.opener.loadSuivi('{{$sejour->_id}}');
       window.close();
     } } )
   } else {
-    window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
-    window.close();  
+    {{if $mode_plan}}
+      window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
+    {{else}}
+      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+    {{/if}}
+    window.close();
   }
 }
 
@@ -29,7 +37,11 @@ function cancelAdministration(administration_id){
   var oFormDelAdministration = document.delAdministration;
   oFormDelAdministration.administration_id.value = administration_id;
   submitFormAjax(oFormDelAdministration, 'systemMsg', { onComplete: function(){
-    window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+    {{if $mode_plan}}
+      window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
+    {{else}} 
+      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+    {{/if}}
     window.close();
   } } );
 }
@@ -55,30 +67,33 @@ function checkTransmission(quantite_prevue, quantite_saisie){
   {{/if}})
 </h2>
 
-<table class="form">
-  <tr>
-    <th class="title">Liste des soins</th>
-  </tr>
-  {{foreach from=$administrations item=_administration}}
-  {{assign var=log value=$_administration->_ref_log}}
-  <tr>
-    <td>
-      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
-      {{$log->_ref_object->quantite}} 
-      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-        {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
-      {{else}}
-        {{$line->_unite_prise}}
-      {{/if}}
-      administré par {{$log->_ref_user->_view}} le {{$log->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>
-    </td>
-  </tr>
-  {{foreachelse}}
-  <tr>
-    <td>Aucune administration</td>
-  </tr>
-  {{/foreach}}
-</table>
+{{if $administrations}}
+	<table class="form">
+	  <tr>
+	    <th class="title">Liste des soins</th>
+	  </tr>
+	  {{foreach from=$administrations item=_administration}}
+	  {{assign var=log value=$_administration->_ref_log}}
+	  <tr>
+	    <td>
+	      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
+	      {{$log->_ref_object->quantite}} 
+	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	        {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
+	      {{else}}
+	        {{$line->_unite_prise}}
+	      {{/if}}
+	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>
+	    </td>
+	  </tr>
+	  {{foreachelse}}
+	  <tr>
+	    <td>Aucune administration</td>
+	  </tr>
+	  {{/foreach}}
+	</table>
+{{/if}}
+
 
 <form name="delAdministration" method="post" action="?">
   <input type="hidden" name="dosql" value="do_administration_aed" />
@@ -107,8 +122,13 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	    <td>
         {{if $notToday}}
           <div class="little-info">
-            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %Hh"}}, 
-            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+            {{if $mode_plan}}
+              Attention, vous êtes sur le point d'administrer pour le {{$date|date_format:"%d/%m/%Y"}}, 
+	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+	          {{else}}
+	            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %Hh"}}, 
+	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+            {{/if}}
           </div>
         {{/if}}
 	      {{mb_label object=$prise field=quantite}}
@@ -119,6 +139,16 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      {{else}}
 	        {{$line->_unite_prise}}
 	      {{/if}} 
+	      
+	      {{if $mode_plan}}
+	      à
+	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$date}} '+this.value);">
+	        <option value="">&mdash; Heure</option>
+	        {{foreach from=$hours item=_hour}}
+	        <option value="{{if $_hour == '24'}}23:59:00{{else}}{{$_hour}}:00:00{{/if}}">{{$_hour}}h</option>
+	        {{/foreach}}
+	      </select>
+	      {{/if}}
 	    </td>
 	  </tr>
 	</table>

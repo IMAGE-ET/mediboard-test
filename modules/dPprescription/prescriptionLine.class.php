@@ -421,20 +421,28 @@ class CPrescriptionLine extends CMbObject {
 			    $this->_transmissions[$key_administration][$date][$_administration->_heure]['nb'] = '';
 			    $this->_transmissions[$key_administration][$date][$_administration->_heure]['list'][$_administration->_id] = '';
 			  }
-			  if(!isset($this->_administrations_by_line[$date])){
-			    $this->_administrations_by_line[$date] = 0;
+			  if(!isset($this->_administrations_by_line[$key_administration][$date])){
+			    $this->_administrations_by_line[$key_administration][$date] = 0;
 			  }
 			  
 			  // Permet de stocker les administrations par unite de prise / type de prise
 			  $this->_administrations[$key_administration][$date][$_administration->_heure]['quantite'] += $_administration->quantite;
 				
-			  // Stockage de la liste des administrations sous la forme d'un token field
+			  // Stockage de la liste des administrations en fonction de la date et de l'heure sous la forme d'un token field
 			  if(!isset($this->_administrations[$key_administration][$date][$_administration->_heure]['list'])){
 			    $this->_administrations[$key_administration][$date][$_administration->_heure]['list'] = $_administration->_id;
 			  } else {
 			    $this->_administrations[$key_administration][$date][$_administration->_heure]['list'] .= "|".$_administration->_id;
 			  }
-			  $this->_administrations_by_line[$date] += $_administration->quantite;
+			  
+			  // Sockage de la liste des administrations en fonction de la date sous forme de token field
+			  if(!isset($this->_administrations[$key_administration][$date]['list'])){
+			    $this->_administrations[$key_administration][$date]['list'] = $_administration->_id;
+			  } else {
+			    $this->_administrations[$key_administration][$date]['list'] .= "|".$_administration->_id;
+			  }
+			  
+			  $this->_administrations_by_line[$key_administration][$date] += $_administration->quantite;
 			  	
 			  // Chargement du log de creation de l'administration
 			  $log = new CUserLog;
@@ -445,8 +453,8 @@ class CPrescriptionLine extends CMbObject {
 			  
 			  if($this->_class_name == "CPrescriptionLineMedicament"){
 			    $this->_ref_produit->loadConditionnement();
-			    $log->_ref_object->_ref_object =& $this;
 			  }
+			  $log->_ref_object->_ref_object =& $this;
 			  
 			  if($_administration->prise_id){
 				  $_administration->loadRefPrise();
@@ -564,8 +572,8 @@ class CPrescriptionLine extends CMbObject {
         }
       }
       
-      if(!isset($this->_quantity_by_date[$date]['total'])){
-        $this->_quantity_by_date[$date]['total'] = 0;
+      if(!isset($this->_quantity_by_date[$key_tab][$date]['total'])){
+        $this->_quantity_by_date[$key_tab][$date]['total'] = 0;
       }
      		      
 			// Moment unitaire
@@ -575,7 +583,7 @@ class CPrescriptionLine extends CMbObject {
 				  if($_prise->_ref_moment->heure && count($heures)){
 				   $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
 				  }
-		  	  $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
+		  	  $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
 		  	  $prise_comptee = 1;
 		    }
 			}
@@ -589,7 +597,7 @@ class CPrescriptionLine extends CMbObject {
 		 	    if(count($heures)){
 		        $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($heure, 0, 2)]] += $_prise->quantite;
 		 	    }
-          $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
+          $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
 		      $prise_comptee = 1;
 			  }
 		 	}
@@ -605,7 +613,7 @@ class CPrescriptionLine extends CMbObject {
 		        if(count($heures)){
 		          $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[$_hour_tab]] += $_prise->quantite;
 		        }
-            $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
+            $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
 		        $prise_comptee = 1;
 		      }
 		    }  
@@ -621,7 +629,7 @@ class CPrescriptionLine extends CMbObject {
 		         if(count($heures)){
 		           $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_heure,0,2)]] += $_prise->quantite;
 		         }
-		         $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
+		         $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
 		         $prise_comptee = 1;
 		      }
 		     }
@@ -632,9 +640,9 @@ class CPrescriptionLine extends CMbObject {
 		 	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois) && !$prise_comptee){
 		 	  if($_prise->_unite_temps == 'jour'){
 		 	    if($_prise->nb_fois){
-		 	  	  $this->_quantity_by_date[$date]['total'] += $_prise->quantite * $_prise->nb_fois;
+		 	  	  $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite * $_prise->nb_fois;
 			  	  if($_prise->nb_tous_les && $_prise->calculDatesPrise($date)){
-		 	  	    $this->_quantity_by_date[$date]['total'] += $_prise->quantite;
+		 	  	    $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
 			  		}
 		 	  	}
 		 	  }

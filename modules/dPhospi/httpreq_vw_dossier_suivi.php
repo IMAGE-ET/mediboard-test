@@ -18,6 +18,13 @@ if(!$user->isPraticien()) {
 
 $sejour_id = mbGetValueFromGet("sejour_id", 0);
 
+// Chargement de la prescription
+$prescription = new CPrescription();
+$prescription->object_class = "CSejour";
+$prescription->object_id = $sejour_id;
+$prescription->type = "sejour";
+$prescription->loadMatchingObject();
+
 $observation  = new CObservationMedicale();
 $transmission = new CTransmissionMedicale();
 
@@ -52,7 +59,7 @@ $smarty->assign("transmission"        , $transmission);
 $smarty->assign("user"                , $user);
 $smarty->assign("isPraticien"         , $user->isPraticien());
 $smarty->assign("sejour"              , $sejour);
-
+$smarty->assign("prescription"        , $prescription);
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>

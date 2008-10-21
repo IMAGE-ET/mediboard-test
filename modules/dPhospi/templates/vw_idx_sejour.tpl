@@ -154,12 +154,19 @@ function loadSuivi(sejour_id) {
   }
 }
 
-function submitSuivi(oForm) {
+function submitSuivi(oForm, prescription_id) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
     loadSuivi(sejour_id); 
     if(oForm.object_class.value != ""){
-      loadTraitement(sejour_id,'{{$date}}');
+      // Refresh de la partie administration
+      if($('jour').visible()){
+        loadTraitement(sejour_id,'{{$date}}');
+      }
+      // Refresh de la partie plan de soin
+      if($('semaine').visible()){
+        calculSoinSemaine('{{$date}}', prescription_id);
+      }  
     }  
   } });
 }

@@ -35,12 +35,6 @@ $prescription_id = $prescription->_id;
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();
 $dates = array(mbDate("- 1 DAY", $date), $date, mbDate("+ 1 DAY", $date));
-
-$types = array("med", "elt");
-foreach($types as $type){
-  $prescription->_lines[$type] = array();
-  $prescription->_intitule_prise[$type] = array();
-}
  
 $hours_deb = "02|04|06|08|10|12";
 $hours_fin = "14|16|18|20|22|24";

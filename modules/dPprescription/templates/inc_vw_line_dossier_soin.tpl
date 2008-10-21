@@ -7,22 +7,22 @@
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
       <!-- Cas d'une ligne de medicament -->
-      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type}}">
+      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$_key_cat_ATC}}">
         {{$line->_ref_produit->_ref_ATC_2_libelle}}
       </th>
     {{else}}
         <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
         {{assign var=categorie_id value=$categorie->_id}}
-        <th class="text {{if @$transmissions.CCategoryPrescription.$categorie_id|@count}}transmission{{else}}transmission_possible{{/if}}" 
-            rowspan="{{$prescription->_nb_produit_by_cat.$type}}" 
-            onclick="addCibleTransmission('CCategoryPrescription','{{$type}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-          <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$type}}'} })">
+        <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
+            rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
+            onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
+          <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}'} })">
             <a href="#">{{$categorie->nom}}</a>
           </div>
-          <div id="tooltip-content-{{$type}}" style="display: none; color: black; text-align: left">
-       		{{if @is_array($transmissions.CCategoryPrescription.$type)}}
+          <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
+       		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
   		      <ul>
-  			  {{foreach from=$transmissions.CCategoryPrescription.$type item=_trans}}
+  			  {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
   			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_trans->text}}</li>
   			  {{/foreach}}
   		      </ul>
@@ -178,9 +178,9 @@
 						   {{foreach from=$line->_administrations.$unite_prise.$_date.$_hour.administrations item=_log_administration}}
 						     {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
 						     {{if $line_class == "CPrescriptionLineMedicament"}}
-							     <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		 
+							     <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>		 
 							   {{else}}
-								   <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         				        
+								   <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         				        
 							   {{/if}}        
 							   <ul>
 							     {{foreach from=$line->_transmissions.$unite_prise.$_date.$_hour.list.$administration_id item=_transmission}}
