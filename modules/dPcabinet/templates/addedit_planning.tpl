@@ -23,13 +23,11 @@ function changePause(){
   if(oForm._pause.checked){
     oForm.patient_id.value = "";
     oForm._pat_name.value = "";
-    $('viewPatient').hide();
-    myNode = document.getElementById("infoPat");
-    myNode.innerHTML = "";
-    myNode = document.getElementById("clickPat");
-    myNode.innerHTML = "Infos patient (indisponibles)";
+    $("viewPatient").hide();
+    $("infoPat").update("");
+    $("clickPat").update("Infos patient (indisponibles)");
   }else{
-    $('viewPatient').show();
+    $("viewPatient").show();
   }
 }
 
@@ -83,6 +81,12 @@ function checkFormRDV(oForm){
     PatSelector.init();
     return false;
   }else{
+    var infoPat = $('infoPat');
+    var operations = infoPat.select('input[name=_operation_id]');
+    var checkedOperation = operations.find(function (o) {return o.checked});
+    if (checkedOperation) {
+      oForm._operation_id.value = checkedOperation.value;
+    }
     return checkForm(oForm);
   }
 }
@@ -105,7 +109,6 @@ function printDocument(iDocument_id) {
     url.popup(700, 600, "Document");
     return true;
   }
-  
   return false;
 }
 
@@ -132,6 +135,7 @@ Main.add(function () {
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
+<input type="hidden" name="_operation_id" value="" />
 
 <table class="form">
   {{if $consult->consultation_id}}
