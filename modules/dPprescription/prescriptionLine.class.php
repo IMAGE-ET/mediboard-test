@@ -566,11 +566,12 @@ class CPrescriptionLine extends CMbObject {
 		  
       // Intialisation des tableaux
       if(!isset($this->_quantity_by_date[$key_tab][$date])){
-        $list_hours = range(1,24);
+        $list_hours = range(0,23);
         foreach($list_hours as &$hour){
           $this->_quantity_by_date[$key_tab][$date]['quantites'][str_pad($hour, 2, "0", STR_PAD_LEFT)] = '';   
         }
       }
+      
       
       if(!isset($this->_quantity_by_date[$key_tab][$date]['total'])){
         $this->_quantity_by_date[$key_tab][$date]['total'] = 0;
