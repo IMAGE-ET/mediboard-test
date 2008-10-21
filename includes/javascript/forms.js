@@ -156,6 +156,7 @@ function pasteHelperContent(oHelpElement) {
   oHelpElement.value = "";
   var caret = oAreaField.caret();
   oAreaField.caret(caret.begin, caret.end, sValue + '\n');
+  oAreaField.caret(oAreaField.value.length);
   oAreaField.scrollTop = oAreaField.scrollHeight;
 }
 
