@@ -192,4 +192,10 @@ $locales['CPack.select'] = '';
 $locales['CCompteRendu-height'] = 'Hauteur';
 $locales['CCompteRendu-height-court'] = 'Haut.';
 $locales['CCompteRendu-height-desc'] = 'Hauteur du composant (en-tête/pied-de-page) en lignes';
+$locales['CDestinataire.tag.patient'] = 'Patient';
+$locales['CDestinataire.tag.assure'] = 'Assuré';
+$locales['CDestinataire.tag.prevenir'] = 'Personne à prévenir';
+$locales['CDestinataire.tag.employeur'] = 'Employeur';
+$locales['CDestinataire.tag.traitant'] = 'Médecin traitant';
+$locales['CDestinataire.tag.correspondant'] = 'Médecin correspondant';
 ?>

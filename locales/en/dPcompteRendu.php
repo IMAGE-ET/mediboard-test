@@ -191,4 +191,11 @@ $locales['CPack-title-create'] = '';
 $locales['CPack-title-modify'] = '';
 $locales['CPack.all'] = '';
 $locales['CPack.select'] = '';
+$locales['CDestinataire.tag.patient'] = '';
+$locales['CCompteRendu-back-'] = '';
+$locales['CDestinataire.tag.assure'] = '';
+$locales['CDestinataire.tag.prevenir'] = '';
+$locales['CDestinataire.tag.employeur'] = '';
+$locales['CDestinataire.tag.traitant'] = '';
+$locales['CDestinataire.tag.correspondant'] = '';
 ?>
