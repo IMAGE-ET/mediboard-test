@@ -384,6 +384,9 @@ $dPconfig["dPprescription"] = array (
         "6" => "08|10|12|14|16|18"
       )
     )
+  ),
+  "CAdministration" => array(
+    "hors_plage" => "0"
   )
 );
 

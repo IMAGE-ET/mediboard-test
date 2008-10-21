@@ -236,6 +236,20 @@ changeBox = function(oCheckbox, hour, oTokenField){
     </td>
   </tr>  
   
+  {{assign var=class value="CAdministration"}}
+  {{assign var=var value="hors_plage"}}
+  <tr>
+    <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}} en dehors des plages prevues</th>
+  </tr>
+  <tr>  
+    <td colspan="6" style="text-align: center">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

@@ -141,6 +141,10 @@
 				  <div onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
 				    {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
 				      style="background-color: #aaa"
+				      {{if $dPconfig.dPprescription.CAdministration.hors_plage}}
+				        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
+			          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
+				      {{/if}}
 				    {{else}}
 				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
 			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
