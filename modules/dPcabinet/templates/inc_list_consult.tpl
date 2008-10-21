@@ -1,7 +1,9 @@
 {{if !$board}}
 {{if $canCabinet->view}}
 <script type="text/javascript">
+Main.add( function () {
   regRedirectPopupCal("{{$date}}", "?m={{$current_m}}&tab={{$tab}}&date=");
+} );
 </script>
 {{/if}}
 <form name="changeView" action="?" method="get">
@@ -18,9 +20,8 @@
       </td>
     </tr>
     <tr>
-      <th>
       {{if $canCabinet->view}}
-      <label for="vue2" title="Type de vue du planning">Type de vue</label></th>
+      <th><label for="vue2" title="Type de vue du planning">Type de vue</label></th>
       <td colspan="5">
         <select name="vue2" onchange="this.form.submit()">
           <option value="0"{{if $vue == "0"}}selected="selected"{{/if}}>Tout afficher</option>
@@ -72,13 +73,15 @@
   <tbody class="hoverable">
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2">
+
       {{if $canCabinet->view}}
       <a href="?m={{$current_m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
       {{else}}
       <a href="#nowhere" title="Impossible de modifier le RDV">
-      </a>
       {{/if}}
+      </a>
+      
       {{if $curr_consult->patient_id}}
       {{if $canCabinet->view}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}" style="margin-bottom: 4px;">

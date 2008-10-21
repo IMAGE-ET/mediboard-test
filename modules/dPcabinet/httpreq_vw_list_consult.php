@@ -14,14 +14,13 @@ $current_m = mbGetValueFromGet("current_m", $m);
 $can->needsEdit();
 $ds = CSQLDataSource::get("std");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
-$today     = mbDate();
-$hour      = mbTime(null);
+$hour      = mbTime();
 $board     = mbGetValueFromGet("board", 0);
 $boardItem = mbGetValueFromGet("boardItem", 0);
-$plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
+$plageconsult_id = mbGetValueFromGet("plageconsult_id");
 
 $prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
-$selConsult = mbGetValueFromGetOrSession("selConsult", null);
+$selConsult = mbGetValueFromGetOrSession("selConsult");
 
 $consult = new CConsultation;
 
@@ -78,13 +77,8 @@ $vue = mbGetValueFromGetOrSession("vue2", 0);
 
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
-  $plage->loadRefsBack();
-  foreach ($plage->_ref_consultations as $keyConsult => &$consultation) {
-    if ($vue && ($consultation->chrono == CConsultation::TERMINE)) {
-      unset($plage->_ref_consultations[$keyConsult]);
-      continue;
-    }
-
+  $plage->loadRefsConsultations(true, !$vue);
+  foreach ($plage->_ref_consultations as &$consultation) {
     $consultation->loadRefPatient();
     $consultation->loadRefCategorie();
     $consultation->getNumDocsAndFiles();
@@ -100,7 +94,6 @@ $smarty->assign("board"    , $board);
 $smarty->assign("date"     , $date);
 $smarty->assign("hour"     , $hour);
 $smarty->assign("vue"      , $vue);
-$smarty->assign("today"    , $today);
 $smarty->assign("userSel"  , $userSel);
 $smarty->assign("listPlage", $listPlage);
 $smarty->assign("consult"  , $consult);

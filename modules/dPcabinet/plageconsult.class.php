@@ -40,6 +40,7 @@ class CPlageconsult extends CMbObject {
   // Filter fields
   var $_date_min = null;
   var $_date_max = null;
+  var $_function_id = null;
   
   // Object References
   var $_ref_chir          = null;
@@ -79,9 +80,10 @@ class CPlageconsult extends CMbObject {
       "_fill_rate" => "",
       
       // Filter fields
-      "_date_min"  => "date",
-      "_date_max"  => "date moreThan|_date_min",
-    );
+      "_date_min"    => "date",
+      "_date_max"    => "date moreThan|_date_min",
+      "_function_id" => "ref class|CFunction",
+      );
 
     return array_merge($parentSpecs, $specs);
   }
@@ -93,17 +95,30 @@ class CPlageconsult extends CMbObject {
     );
   }
   
-  function loadRefsBack($withCanceled = true) {
+  /**
+   * Load consultations
+   * @param bool $withCanceled Include cancelled consults
+   * @param bool $withClosed Include closed consults
+   */
+  function loadRefsConsultations($withCanceled = true, $withClosed = true) {
+    $where["plageconsult_id"] = "= '$this->_id'";
+    
     if (!$withCanceled) {
       $where["annule"] = "= '0'";
     }
+
+    if (!$withClosed) {
+      $where["chrono"] = "!=  '" . CConsultation::TERMINE . "'";   
+    }
     
-    $where["plageconsult_id"] = "= '$this->plageconsult_id'";
     $order = "heure";
-
-    $this->_ref_consultations = new CConsultation();
-    $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order);
-
+    $consult = new CConsultation();
+    $this->_ref_consultations = $consult->loadList($where, $order);
+  }
+  
+  
+  function loadRefsBack($withCanceled = true) {
+    $this->loadRefsConsultations();    
     $this->loadFillRate();
   }
   

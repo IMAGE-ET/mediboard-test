@@ -59,7 +59,6 @@ Main.add(function () {
        {{assign var="hour" value=$hour}}
        {{assign var="boardItem" value=$boardItem}}
        {{assign var="board" value=$board}}
-       {{assign var="today" value=$today}}
        {{assign var="tab" value=""}}
        {{assign var="vue" value="0"}}
        {{assign var="userSel" value=$curr_day.anesthesiste}}

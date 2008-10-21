@@ -11,15 +11,20 @@ Main.add(function () {
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>
-          <th class="title" colspan="3">Sélection d'un cabinet</th>
+          <th class="title" colspan="100">
+          	Journée de consultation du
+            {{$date|date_format:"%A %d %B %Y"}}
+            <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+           </th>
         </tr>
+        
         <tr>
           <th>
-            <label for="cabinet_id" title="Sélectionner un cabinet">Cabinet: </label>
+            <label for="cabinet_id" title="Sélectionner un cabinet">Cabinet</label>
           </th>
           <td>
             <select name="cabinet_id" onchange="submit()">
-              <option value="">&mdash; Choisir un cabinet &mdash;</option>
+              <option value="">&mdash; Choisir un cabinet</option>
               {{foreach from=$cabinets item=curr_cabinet}}
                 <option value="{{$curr_cabinet->_id}}" class="mediuser" style="border-color: #{{$curr_cabinet->color}}" {{if $curr_cabinet->_id == $cabinet_id}} selected="selected" {{/if}}>
                   {{$curr_cabinet->_view}}
@@ -27,21 +32,28 @@ Main.add(function () {
               {{/foreach}}
             </select>
           </td>
+          
+		      <th>
+		      	<label for="closed" title="Type de vue du planning">Type de vue</label></th>
+		      <td colspan="5">
+		        <select name="closed" onchange="this.form.submit()">
+		          <option value="1"{{if $closed == "1"}}selected="selected"{{/if}}>Tout afficher</option>
+		          <option value="0"{{if $closed == "0"}}selected="selected"{{/if}}>Masquer les Terminées</option>
+		        </select>
+		      </td>
+          
           <td>
-            {{$date|date_format:"%A %d %B %Y"}}
-            <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
           </td>
+
         </tr>
       </table> 
+      
       </form>
     </td>
   </tr>
   <tr>
     <td>
       <table class="form">
-        <tr>
-          <th class="title" colspan="100">Affichage du planning</th>
-        </tr>
         <tr>
         {{foreach from=$praticiens item=curr_prat}}
           <th class="title">
@@ -59,7 +71,6 @@ Main.add(function () {
        {{assign var="hour" value=$hour}}
        {{assign var="boardItem" value=$boardItem}}
        {{assign var="board" value=$board}}
-       {{assign var="today" value=$today}}
        {{assign var="tab" value=""}}
        {{assign var="vue" value="0"}}
        {{assign var="userSel" value=$curr_day.prat}}
