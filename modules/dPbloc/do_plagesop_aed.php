@@ -25,6 +25,9 @@ $header   = array();
 $msgNo    = null;
 
 if ($del) {
+  
+  // Suppression
+
   $obj->load();
 
   $deleted = 0;
@@ -32,7 +35,7 @@ if ($del) {
   $not_found = 0;
 
   while ($repeat--) {
-    $msg = NULL;
+    $msg = null;
     if ($obj->plageop_id) {
       if (!$msg = $obj->canDeleteEx()) {
         if ($msg = $obj->delete()) {
@@ -62,6 +65,7 @@ if ($del) {
   $msgNo = $deleted ? UI_MSG_ALERT : UI_MSG_ERROR;
 
   $_SESSION["dPbloc"]["id"] = null;
+  
 } else {
 
   //Modification
