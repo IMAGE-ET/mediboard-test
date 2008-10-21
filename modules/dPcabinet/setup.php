@@ -1189,18 +1189,9 @@ class CSetupdPcabinet extends CSetup {
         `acte_ngap`.`object_class` = 'CConsultation' AND 
         `acte_ngap`.`executant_id` = 0";
     $this->addQuery($sql);
-    
+        
     $this->makeRevision("1.06");
-    $sql = "CREATE TABLE `correspondant` (
-			`correspondant_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-			`medecin_id` INT (11) UNSIGNED NOT NULL,
-			`patient_id` INT (11) UNSIGNED NOT NULL
-			) TYPE=MYISAM;";
-    $this->addQuery($sql);
-
-    $sql = "ALTER TABLE `correspondant` 
-			ADD INDEX (`medecin_id`),
-			ADD INDEX (`patient_id`);";
+    $sql = "SELECT 'Dummy Query'";
     $this->addQuery($sql);
     
     $this->mod_version = "1.07";

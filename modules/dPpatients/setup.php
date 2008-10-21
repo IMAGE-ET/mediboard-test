@@ -815,9 +815,18 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.70");
     $sql = "ALTER TABLE `patients` ADD `email` VARCHAR (255) AFTER tel2;";
     $this->addQuery($sql);
-    
-    
-    $this->mod_version = "0.71";
+
+    $this->makeRevision("0.71");
+    $sql = "CREATE TABLE IF NOT EXISTS `correspondant` (
+			`correspondant_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+			`medecin_id` INT (11) UNSIGNED NOT NULL,
+			`patient_id` INT (11) UNSIGNED NOT NULL,
+		  KEY (`medecin_id`),
+		  KEY (`patient_id`)
+			) TYPE=MYISAM;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.72";
   }
 }
 
