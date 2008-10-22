@@ -38,7 +38,6 @@ if($object->_id){
 	$dossier_medical =& $patient->_ref_dossier_medical;
   $dossier_medical->loadRefsAntecedents();
   $dossier_medical->loadRefsTraitements();
-  $dossier_medical->loadRefsAddictions();
   // Chargement des prescrptions
 	$object->loadRefsPrescriptions();
 }

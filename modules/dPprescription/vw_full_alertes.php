@@ -31,7 +31,6 @@ if($prescription->object_id) {
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->updateFormFields();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAntecedents();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
   $prescription->_ref_object->loadRefsPrescriptions();
   $prescription->loadRefsLinesMed();
   

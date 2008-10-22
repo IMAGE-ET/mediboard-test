@@ -173,7 +173,6 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $dossier_medical->updateFormFields();
 		  $dossier_medical->loadRefsAntecedents();
 		  $dossier_medical->loadRefsTraitements();
-		  $dossier_medical->loadRefsAddictions();
 		  $dossier_medical->countAntecedents();
 		  
 		  // Calcul des alertes de la prescription

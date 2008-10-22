@@ -159,7 +159,6 @@ if($prescription->_id && $mode_pharma){
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->_ref_dossier_medical->loadRefsAntecedents();
   $patient->_ref_dossier_medical->loadRefsTraitements();
-  $patient->_ref_dossier_medical->loadRefsAddictions();
   
   // Gestion des alertes
   $allergies    = new CBcbControleAllergie();
