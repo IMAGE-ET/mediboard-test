@@ -66,18 +66,25 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
      
    foreach($lines as $lines_by_type){
      foreach($lines_by_type as $_line){
+       if(!$_line->decalage_line){
+         $_line->decalage_line = 0;
+       }
+       if(!$_line->decalage_line_fin){
+         $_line->decalage_line_fin = 0;
+       }
+       
        if($_line->jour_decalage == "E"){  
          $signe = ($_line->decalage_line >= 0) ? "+" : "";
- 	     $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $sejour->_entree);
+ 	       $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $sejour->_entree);
        } 
        if($_line->jour_decalage == "S"){
          $signe_debut = ($_line->decalage_line >= 0) ? "+" : "";
- 	     $_line->debut = mbDate("$signe_debut $_line->decalage_line DAYS", mbDate($sejour->_sortie));	
+ 	       $_line->debut = mbDate("$signe_debut $_line->decalage_line DAYS", mbDate($sejour->_sortie));	
        }    
        // modification de la fin
        if($_line->jour_decalage_fin == "S"){
          $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
- 	       $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", mbDate($sejour->_sortie));	
+ 	       $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", mbDate($sejour->_sortie));   	
          $_line->duree = mbDaysRelative($_line->debut, $date_fin);
          $_line->duree++;
        }
@@ -114,7 +121,6 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
             // modification de la fin
             if($_line->jour_decalage_fin == "I"){
               $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
-             
               if($_line->unite_decalage_fin == "heure"){
                 $date_fin = $date_operation;
                 $_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $hour_operation);   
@@ -130,7 +136,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 	        }
         $_line->store();
       }
-    }    
+    }
   }
   
   function onMerge(CMbObject &$mbObject) {
