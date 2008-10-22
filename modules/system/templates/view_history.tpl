@@ -33,7 +33,7 @@
 
     <th>{{mb_label object=$filter field=object_class}}</th>
     <td>
-      <select name="object_class" class="str maxLength|25">
+      <select name="object_class" class="str">
         <option value="0">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>
