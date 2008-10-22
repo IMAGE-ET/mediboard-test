@@ -70,7 +70,7 @@ Main.add(function () {
                   <label for="select_days_day">Jour courant</label>
                   <br />
                   <input type="radio" name="select_days" onclick="changeDate('{{$yesterday}}','{{$yesterday}}');"  value="yesterday" /> 
-                  <label for="select_days_day">La veille</label>
+                  <label for="select_days_yesterday">La veille</label>
                   <br />
                   <input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
                   <label for="select_days_week">Semaine courante</label>
@@ -81,7 +81,7 @@ Main.add(function () {
                   <label for="select_days_month">Mois courant</label>
                   <br />
                   <input type="radio" name="select_days" onclick="changeDate('{{$three_month_deb}}','{{$month_fin}}');" value="three_month" /> 
-                  <label for="select_days_month">3 derniers mois</label>
+                  <label for="select_days_three_month">3 derniers mois</label>
                 </td>
               </tr>
             </table>

@@ -212,8 +212,8 @@ class CSejour extends CCodable {
     $specs["_date_max_stat"]  = "date moreEquals|_date_min_stat";
     $specs["_filter_type"]    = "enum list|comp|ambu|exte|seances|ssr|psy";
     $specs["_num_dossier"]    = "str";
-    $specs["_ccam_libelle"]   = "bool default|1";
-    $specs["_coordonnees"]   = "bool default|1";
+    $specs["_ccam_libelle"]   = "bool default|0";
+    $specs["_coordonnees"]    = "bool default|0";
     
     $specs["_duree_prevue"]   = "num";
     $specs["_duree_reelle"]   = "num";

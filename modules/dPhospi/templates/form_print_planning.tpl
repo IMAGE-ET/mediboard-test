@@ -27,7 +27,6 @@ function popPlanning() {
   url.addElement(form.convalescence);
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.addParam("_coordonnees", $V(form._coordonnees));
-  url.addElement(form._coordonnees);
   url.popup(850, 600, "Planning");
   return;
 }
@@ -63,10 +62,14 @@ function changeDateCal(){
           <th>{{mb_label object=$filter field="_date_min"}}</th>
           <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
+            <input type="radio" name="select_days" onclick="changeDate('{{$yesterday_deb}}','{{$yesterday_fin}}');" value="yesterday" /> 
+            <label for="select_days_yesterday">Hier ({{$yesterday_deb|date_format:"%d/%m/%Y"}})</label>
+            <br />
             <input type="radio" name="select_days" onclick="changeDate('{{$today_deb}}','{{$today_fin}}');" value="today" checked="checked" /> 
-              <label for="select_days_today">Aujourd'hui</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$tomorrow_deb}}','{{$tomorrow_fin}}');" value="tomorrow" /> 
-              <label for="select_days_tomorrow">Lendemain</label>
+            <label for="select_days_today">Aujourd'hui ({{$today_deb|date_format:"%d/%m/%Y"}})</label>
+            <br />
+            <input type="radio" name="select_days" onclick="changeDate('{{$tomorrow_deb}}','{{$tomorrow_fin}}');" value="tomorrow" /> 
+            <label for="select_days_tomorrow">Demain ({{$tomorrow_deb|date_format:"%d/%m/%Y"}})</label>
           </td>
         </tr>
 
@@ -86,7 +89,7 @@ function changeDateCal(){
         
         <tr>
           <th>{{mb_label object=$filter field=_horodatage}}</th>
-          <td>{{mb_field object=$filter field=_horodatage}}</td>
+          <td colspan="2">{{mb_field object=$filter field=_horodatage}}</td>
         </tr>
 
         <tr>

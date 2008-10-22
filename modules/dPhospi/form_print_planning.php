@@ -36,17 +36,21 @@ $where = array();
 $where["group_id"] = "= '$g'";
 $listServ = $listServ->loadListWithPerms(PERM_READ,$where);
 
+$yesterday  = mbDate("-1 day", $today);
 $tomorrow   = mbDate("+1 day", $today);
 
-$today_deb  = "$today 06:00:00";
-$today_fin  = "$today 21:00:00";
-
-$tomorrow_deb = "$tomorrow 06:00:00";
-$tomorrow_fin = "$tomorrow 21:00:00";
+$yesterday_deb  = "$yesterday 06:00:00";
+$yesterday_fin  = "$yesterday 21:00:00";
+$today_deb      = "$today 06:00:00";
+$today_fin      = "$today 21:00:00";
+$tomorrow_deb   = "$tomorrow 06:00:00";
+$tomorrow_fin   = "$tomorrow 21:00:00";
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("yesterday_deb"    , $yesterday_deb);
+$smarty->assign("yesterday_fin"    , $yesterday_fin);
 $smarty->assign("today_deb"    , $today_deb);
 $smarty->assign("today_fin"    , $today_fin);
 $smarty->assign("tomorrow_deb" , $tomorrow_deb);

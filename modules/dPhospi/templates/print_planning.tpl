@@ -144,11 +144,6 @@ function printAdmission(id) {
               {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans)
             </a>
           </td>
-          <td class="text">
-            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
-              {{$patient->rques}}
-            </a>
-          </td>
           
 			    {{if $filter->_coordonnees}}
 			    <td>
@@ -163,6 +158,12 @@ function printAdmission(id) {
 			      {{mb_value object=$patient field=tel2}}
 			    </td>
 			    {{/if}}
+			    
+          <td class="text">
+            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
+              {{$patient->rques}}
+            </a>
+          </td>
         </tr>
         {{/foreach}}
       </table>
