@@ -10,6 +10,8 @@
 $sejour_id   = mbGetValueFromGetOrSession("sejour_id");
 $date        = mbGetValueFromGetOrSession("date");
 $nb_decalage = mbGetValueFromGetOrSession("nb_decalage",0);
+$line_type   = mbGetValueFromGet("line_type", "service");
+$mode_bloc   = mbGetValueFromGet("mode_bloc", 0);
 $now         = mbDateTime();
 
 // Chargement du sejour
@@ -34,6 +36,10 @@ $prescription_id = $prescription->_id;
 
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();
+
+$operation = new COperation();
+$operations = array();
+
 $dates = array(mbDate("- 1 DAY", $date), $date, mbDate("+ 1 DAY", $date));
  
 $hours_deb = "02|04|06|08|10|12";
@@ -58,6 +64,7 @@ foreach($hours_deb as $_hour_deb){
   $tabHours[$demain]["$_hour_deb:00:00"] = $_hour_deb;
 }
 
+
 // Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
 // dont les heures ne sont pas spécifié dans le tableau
 $heures = array();
@@ -73,7 +80,7 @@ foreach($list_hours as &$hour){
 
 if($prescription->_id){
 	// Chargement des lignes
-	$prescription->loadRefsLinesMedByCat("1","1","service");
+	$prescription->loadRefsLinesMedByCat("1","1",$line_type);
 	
 	foreach($prescription->_ref_prescription_lines as &$_line_med){
 	  if(!$_line_med->countBackRefs("administration")){
@@ -92,18 +99,37 @@ if($prescription->_id){
 	  }
 	}
 	
-	$prescription->loadRefsLinesElementByCat("1","","service");
-	$prescription->_ref_object->loadRefPrescriptionTraitement();
-		 
+	$prescription->loadRefsLinesElementByCat("1","",$line_type);
+	$prescription->_ref_object->loadRefPrescriptionTraitement();	 
 	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
 	if($traitement_personnel->_id){
 	  $traitement_personnel->loadRefsLinesMedByCat("1","1");
 	}
 	  	  
-	// Calcul du plan de soin pour la journée $date
-  foreach($dates as $_date){
-    $prescription->calculPlanSoin($_date, 0, $heures);
+  if($line_type == "service"){
+	  foreach($dates as $_date){
+	    $prescription->calculPlanSoin($_date, 0, $heures);
+	  }
+  } else {
+    $prescription->calculPlanSoin($date, 0, $heures);
   }
+  
+  // Chargement des operations
+  if($prescription->_ref_object->_class_name == "CSejour"){
+    $operation = new COperation();
+    $operation->sejour_id = $prescription->object_id;
+    $operation->annulee = "0";
+    $_operations  = $operation->loadMatchingList();
+    foreach($_operations as $_operation){
+      if($_operation->time_operation != "00:00:00"){
+        $_operation->loadRefPlageOp(); 
+        $hour_operation = mbTransformTime(null, $_operation->time_operation, '%H');
+        $hour_operation = (($hour_operation % 2) == 0) ? $hour_operation : $hour_operation-1;
+        $hour_operation .= ":00:00";
+        $operations["{$_operation->_ref_plageop->date} $hour_operation"] = $_operation->time_operation;
+      }
+    }
+  }	 
 }
 
 // Calcul du rowspan pour les medicaments
@@ -154,6 +180,9 @@ $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 $real_date = mbDate();
 $real_time = mbTime();
 
+
+		 
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("heures", $heures);
@@ -173,6 +202,8 @@ $smarty->assign("categories"         , $categories);
 $smarty->assign("real_date"          , $real_date);
 $smarty->assign("real_time"          , $real_time);
 $smarty->assign("categorie"          , new CCategoryPrescription());
+$smarty->assign("mode_bloc"          , $mode_bloc);
+$smarty->assign("operations"         , $operations);
 $smarty->display("inc_vw_dossier_soins.tpl");
 
 ?>

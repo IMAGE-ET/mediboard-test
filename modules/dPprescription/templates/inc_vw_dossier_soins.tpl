@@ -100,6 +100,11 @@ window.periodicalBefore = null;
 window.periodicalAfter = null;
 
 Main.add(function () {
+
+{{if $mode_bloc}}
+  loadSuivi('{{$sejour->_id}}');
+{{/if}}
+
   planSoin = $('plan_soin');
   
   if (planSoin) {
@@ -151,8 +156,9 @@ Main.add(function () {
     	}
     }
   }
-
-  new Control.Tabs('tab_dossier_soin');
+  {{if !$mode_bloc}}
+    new Control.Tabs('tab_dossier_soin');
+  {{/if}}
   var tabs = Control.Tabs.create('tab_categories', true);
 });
 
@@ -193,7 +199,7 @@ showHideElement = function(list_show, list_hide, th1, th2, signe){
   }
   if(modif == 1){
     th1.colSpan++;
-    th1.colSpan > 0 ? th1.show() : th1.hide();	
+    th1.colSpan > 0 ? th1.show() : th1.hide();
     th2.colSpan--;
     th2.colSpan > 0 ? th2.show() : th2.hide();
   }
@@ -232,13 +238,15 @@ showBefore = function(){
   <input type="hidden" name="nb_decalage" value="0" />
 </form>
 
-<ul id="tab_dossier_soin" class="control_tabs">
-  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}');"><a href="#jour">Administration</a></li>
-  <li onclick="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
-</ul>
-<hr class="control_tabs" />
+{{if !$mode_bloc}}
+	<ul id="tab_dossier_soin" class="control_tabs">
+	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}');"><a href="#jour">Administration</a></li>
+	  <li onclick="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
+	</ul>
+  <hr class="control_tabs" />
+{{/if}}
 
-<div id="jour" style="display:none">
+<div id="jour" {{if !$mode_bloc}}style="display:none"{{/if}}>
 
 <table class="tbl">
   <tr>
@@ -265,6 +273,7 @@ showBefore = function(){
 </table>
 
 {{if $prescription_id}}
+  {{if !$mode_bloc}}
   <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
 	<h2 style="text-align: center">
 	    <a href="#1" onclick="showBefore()" onmousedown="periodicalBefore = new PeriodicalExecuter(showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
@@ -275,12 +284,15 @@ showBefore = function(){
 	      <img src="images/icons/next.png" alt="&gt;" />
       </a>
 	 </h2>
+	 {{/if}}
 	<table style="width: 100%">
 	  <tr>
 	    <td>
+	    {{if !$mode_bloc}}
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
 		      Imprimer la feuille de soins immédiate
 	      </button>
+	    {{/if}}
         <button type="button" class="tick" onclick="applyAdministrations();">
           Appliquer les administrations séléctionnées
         </button>
@@ -330,7 +342,15 @@ showBefore = function(){
 					  <tr>
 					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
 				          {{foreach from=$_hours_by_date item=_hour}}
-						    <th id="{{$_date}} {{$_hour}}:00:00" class="th_hours_{{$_date}}">{{$_hour}}h</th>          
+				          <th id="{{$_date}} {{$_hour}}:00:00" class="th_hours_{{$_date}}" 
+				              style='text-align: center; 
+				              {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+				              {{$_hour}}h
+					             {{if array_key_exists("$_date $_hour:00:00", $operations)}}
+					                {{assign var=_hour_op value="$_date $_hour:00:00"}}
+					                <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>
+					              {{/if}}
+				              </th>   
 						  {{/foreach}} 
 					    {{/foreach}}
 					    <th>Dr</th>
@@ -387,4 +407,10 @@ showBefore = function(){
   </div>
 {{/if}}
 </div>
-<div id="semaine" style="display:none"></div>
+
+{{if $mode_bloc}}
+  <!-- Affichage des transmissions dans le cas de l'affichage au bloc -->
+  <div id="dossier_suivi"></div>
+{{else}}
+  <div id="semaine" style="display:none"></div>
+{{/if}}

@@ -29,6 +29,37 @@ Main.add(function () {
   }
 });
 
+
+function loadTraitement(sejour_id, date) {
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("date", date);
+  url.addParam("line_type", "bloc");
+  url.addParam("mode_bloc", "1");
+  url.requestUpdate("soins", { waitingText: null } );
+}
+
+function loadSuivi(sejour_id) {
+  if(sejour_id) {
+    var urlSuivi = new Url;
+    urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+    urlSuivi.addParam("sejour_id", sejour_id);
+    urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+  }
+}
+
+function submitSuivi(oForm, prescription_id) {
+  sejour_id = oForm.sejour_id.value;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
+    loadSuivi(sejour_id); 
+    if(oForm.object_class.value != ""){
+      // Refresh de la partie administration
+      loadTraitement(sejour_id,'{{$date}}');
+    }  
+  } });
+}
+
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true);
 }
@@ -80,7 +111,7 @@ function reloadPrescription(prescription_id){
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#one">Timings</a></li>
-  <li><a href="#two">Anesthésie</a></li>
+  <li onclick="reloadAnesth('{{$selOp->_id}}');"><a href="#two">Anesthésie</a></li>
   {{if $isbloodSalvageInstalled}}
   <li><a href="#bloodSalvage">Cell Saver</a></li>
   {{/if}}
@@ -90,6 +121,7 @@ function reloadPrescription(prescription_id){
   <li><a href="#five">Dossier</a></li>
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
+    <li onclick="loadTraitement('{{$selOp->sejour_id}}','{{$date}}');"><a href="#soins">Soins</a></li>
   {{/if}}
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
@@ -174,8 +206,12 @@ function reloadPrescription(prescription_id){
 </div>
 
 {{if $isPrescriptionInstalled}}
+<!-- Affichage de la prescription -->
 <div id="prescription_sejour_tab" style="display:none">
   <div id="prescription_sejour"></div>
+</div>
+<!-- Affichage du dossier de soins avec les lignes "bloc" -->
+<div id="soins" style="display:none">
 </div>
 {{/if}}
 

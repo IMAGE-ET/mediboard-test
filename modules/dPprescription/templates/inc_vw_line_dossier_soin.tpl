@@ -121,7 +121,7 @@
   
   <!-- Affichage des heures de prises des medicaments -->			    
   {{foreach from=$tabHours item=_hours_by_date key=_date}}
-	  {{foreach from=$_hours_by_date item=_hour}}
+	  {{foreach from=$_hours_by_date item=_hour}}  
 		  {{assign var=list_administrations value=""}}
 		  {{if @$line->_administrations.$unite_prise.$_date.$_hour.list}}
 		    {{assign var=list_administrations value=$line->_administrations.$unite_prise.$_date.$_hour.list}}
@@ -132,7 +132,8 @@
 	    {{if @is_array($line->_quantity_by_date.$unite_prise.$_date)}}
 				{{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$_date}}
 				
-	      <td style="text-align: center" class="{{$_date_hour}}">
+	      <td class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+					            
 			    {{assign var=quantite value="-"}}
 			    {{if (($line->_debut_reel < $_date_hour && $line->_fin_reelle > $_date_hour) || (!$line->_fin_reelle && $line_class == "CPrescriptionLineMedicament")) && array_key_exists($_hour, $prise_line.quantites)}}
 				    {{assign var=quantite value=$prise_line.quantites.$_hour}}
@@ -203,7 +204,7 @@
 	       </div>
 		   </td>
 	   {{else}}
-	     <td style="text-align: center" class="{{$_date_hour}}">
+	      <td class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 		     <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
 		          onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
 		            {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}

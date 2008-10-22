@@ -16,7 +16,6 @@ $can->needsRead();
 $listPersAideOp = array();
 $listPersPanseuse = array();
 
-$ptaticien_id = mbGetValueFromGetOrSession("praticien_id");
 $salle        = mbGetValueFromGetOrSession("salle");
 $op           = mbGetValueFromGetOrSession("op");
 $date         = mbGetValueFromGetOrSession("date", mbDate());
@@ -42,6 +41,9 @@ $timingAffect = array();
 // Opération selectionnée
 $selOp = new COperation;
 $timing = array();
+$prescription = new CPrescription();
+$protocoles = array();
+$anesth_id = "";
 
 if ($op) {
   $selOp->load($op);
@@ -107,8 +109,18 @@ if ($op) {
 
 	// Chargement des affectations de personnel pour la plageop et l'intervention
   loadAffectations($selOp, $tabPersonnel, $listPersAideOp, $listPersPanseuse, $timingAffect);
+  
+  // Chargement de la prescription de sejour
+  $prescription->object_id = $selOp->sejour_id;
+	$prescription->object_class = "CSejour";
+	$prescription->type = "sejour";
+	$prescription->loadMatchingObject();
+	
+	$anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
+	if($anesth_id){
+	  $protocoles = CPrescription::loadAllProtocolesFor($anesth_id, null, null, 'CSejour');
+	}
 }
-
 
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
@@ -162,7 +174,10 @@ $smarty->assign("listPersPanseuse", $listPersPanseuse        );
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
-$smarty->assign("timingAffect"    , $timingAffect);
+$smarty->assign("timingAffect"    , $timingAffect            );
+$smarty->assign("prescription"    , $prescription            );
+$smarty->assign("protocoles"      , $protocoles              );
+$smarty->assign("anesth_id"       , $anesth_id               );
 $smarty->display("vw_operations.tpl");
 
 ?>
