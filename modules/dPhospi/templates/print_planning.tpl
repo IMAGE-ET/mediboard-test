@@ -16,7 +16,10 @@ function printAdmission(id) {
     <th>
       <a href="#" onclick="window.print()">
         Planning du {{$filter->_date_min|date_format:"%A %d %b %Y à %Hh%M"}}
-        au {{$filter->_date_max|date_format:"%A %d %B %Y à %Hh%M"}} ({{$total}} admissions)
+        au {{$filter->_date_max|date_format:"%A %d %B %Y à %Hh%M"}} 
+        : {{$total}} séjour(s)
+        <br />
+        Filtrés sur : {{mb_label class=CSejour field=$filter->_horodatage}}
       </a>
     </th>
   </tr>
@@ -27,20 +30,21 @@ function printAdmission(id) {
     <td>
       <strong>
         {{$key_day|date_format:"%a %d %b %Y"}} 
-        &mdash; Dr {{$praticien->_view}} : {{$curr_prat.sejours|@count}} admission(s)
-      </strong>
+        &mdash; Dr {{$praticien->_view}} : 
+        {{mb_label class=CSejour field=$filter->_horodatage}}
+        x {{$curr_prat.sejours|@count}} 
     </td>
   </tr>
   <tr>
     <td>
 	    <table class="tbl">
 	      <tr>
-		      <th colspan="6"><strong>Admission</strong></th>
+		      <th colspan="6"><strong>Séjour</strong></th>
 		      <th colspan="5"><strong>Intervention(s)</strong></th>
-		      <th colspan="3"><strong>Patient</strong></th>
+		      <th colspan="5"><strong>Patient</strong></th>
 		    </tr>
 		    <tr>
-		      <th>Heure</th>
+		      <th>{{mb_title class=CSejour field=$filter->_horodatage}}</th>
 		      <th>Type</th>
           <th>Dur.</th>
           <th>Conv.</th>
@@ -53,11 +57,16 @@ function printAdmission(id) {
           <th>Remarques</th>
           <th>Nom / Prenom</th>
           <th>Naissance (Age)</th>
+			    {{if $filter->_coordonnees}}
+			    <th>Adresse</th>
+			    <th>Tel</th>
+			    {{/if}}
           <th>Remarques</th>
         </tr>
+        {{assign var=horodatage value=$filter->_horodatage}}
         {{foreach from=$curr_prat.sejours item=curr_sejour}}
         <tr>
-          <td>{{$curr_sejour->entree_prevue|date_format:"%Hh%M"}}</td>
+          <td>{{$curr_sejour->$horodatage|date_format:$dPconfig.time}}</td>
           <td>
             {{if !$curr_sejour->facturable}}
             <strong>NF</strong>
@@ -123,21 +132,37 @@ function printAdmission(id) {
               <br />
             {{/foreach}}
           </td>
+          
+          {{assign var=patient value=$curr_sejour->_ref_patient}}
           <td>
             <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
-              {{$curr_sejour->_ref_patient->_view}}
+              {{$patient->_view}}
             </a>
           </td>
           <td>
             <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
-              {{mb_value object=$curr_sejour->_ref_patient field="naissance"}} ({{$curr_sejour->_ref_patient->_age}} ans)
+              {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans)
             </a>
           </td>
           <td class="text">
             <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
-              {{$curr_sejour->_ref_patient->rques}}
+              {{$patient->rques}}
             </a>
           </td>
+          
+			    {{if $filter->_coordonnees}}
+			    <td>
+			    	{{mb_value object=$patient field=adresse}}
+			    	<br />
+			    	{{mb_value object=$patient field=cp}} 
+			    	{{mb_value object=$patient field=ville}}
+			    </td>
+			    <td>
+			      {{mb_value object=$patient field=tel}}
+			      <br />
+			      {{mb_value object=$patient field=tel2}}
+			    </td>
+			    {{/if}}
         </tr>
         {{/foreach}}
       </table>

@@ -24,7 +24,7 @@ $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 
 $dPconfig["date"] = "%d/%m/%Y";
 $dPconfig["time"] = "%Hh%M";
-$dPconfig["datetime"] = "%m/%d/%Y %H:%M";
+$dPconfig["datetime"] = "%d/%m/%Y %Hh%M";
 
 // Standard database config
 $dPconfig["db"]["std"] = array(

@@ -15,13 +15,15 @@ $filter = new CSejour();
 $today      = mbDate();
 $filter->_date_min     = mbGetValueFromGetOrSession("_date_min","$today 06:00:00");
 $filter->_date_max     = mbGetValueFromGetOrSession("_date_max","$today 21:00:00");
+$filter->_horodatage   = mbGetValueFromGetOrSession("_horodatage", "entree_prevue");
 $filter->_admission    = mbGetValueFromGetOrSession("_admission");
 $filter->_service      = mbGetValueFromGetOrSession("_service");
 $filter->praticien_id  = mbGetValueFromGetOrSession("praticien_id");
 $filter->convalescence = mbGetValueFromGetOrSession("convalescence");
 $filter->_specialite   = mbGetValueFromGetOrSession("_specialite");
 $filter->_filter_type  = mbGetValueFromGetOrSession("_filter_type");
-$filter->_ccam_libelle = mbGetValueFromGetOrSession("_ccam_libelle");
+$filter->_ccam_libelle = mbGetValueFromGetOrSession("_ccam_libelle", 1);
+$filter->_coordonnees  = mbGetValueFromGetOrSession("_coordonnees");
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);

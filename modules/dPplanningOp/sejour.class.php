@@ -120,6 +120,7 @@ class CSejour extends CCodable {
   var $_date_max 				= null;
   var $_date_entree     = null;
   var $_date_sortie     = null;
+  var $_horodatage      = null;
   var $_admission 			= null;
   var $_service 				= null;
   var $_type_admission  = null;
@@ -128,6 +129,7 @@ class CSejour extends CCodable {
   var $_date_max_stat 	= null;
   var $_filter_type 		= null;
   var $_ccam_libelle    = null;
+  var $_coordonnees     = null;
   
   // Object tool field
   var $_modifier_sortie = null;
@@ -201,6 +203,7 @@ class CSejour extends CCodable {
     $specs["_date_sortie"] 		= "date";
     $specs["_date_min"] 		  = "dateTime";
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
+    $specs["_horodatage"]     = "enum list|entree_prevue|entree_reelle|sortie_prevue|sortie_relle";
     $specs["_admission"] 		  = "text";
     $specs["_service"] 	      = "text";
     $specs["_type_admission"] = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
@@ -210,6 +213,8 @@ class CSejour extends CCodable {
     $specs["_filter_type"]    = "enum list|comp|ambu|exte|seances|ssr|psy";
     $specs["_num_dossier"]    = "str";
     $specs["_ccam_libelle"]   = "bool default|1";
+    $specs["_coordonnees"]   = "bool default|1";
+    
     $specs["_duree_prevue"]   = "num";
     $specs["_duree_reelle"]   = "num";
     $specs["_date_entree_prevue"] = "date";

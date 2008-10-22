@@ -14,8 +14,9 @@ CAppUI::requireModuleFile($m, "inc_vw_affectations");
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 $filter = new CSejour();
-$filter->_date_min     = mbGetValueFromGet("_date_min", date("Y-m-d")." 06:00:00");
-$filter->_date_max     = mbGetValueFromGet("_date_max", date("Y-m-d")." 21:00:00");
+$filter->_date_min     = mbGetValueFromGet("_date_min", mbDate() ." 06:00:00");
+$filter->_date_max     = mbGetValueFromGet("_date_max", mbDate() ." 21:00:00");
+$filter->_horodatage   = mbGetValueFromGet("_horodatage", "entree_prevue");
 $filter->_service      = mbGetValueFromGet("_service", 0);
 $filter->_filter_type  = mbGetValueFromGet("_filter_type", 0);
 $filter->praticien_id  = mbGetValueFromGet("praticien_id", 0);
@@ -23,6 +24,7 @@ $filter->_specialite   = mbGetValueFromGet("_specialite", 0);
 $filter->convalescence = mbGetValueFromGet("convalescence", 0);
 $filter->_admission    = mbGetValueFromGet("_admission", "heure");
 $filter->_ccam_libelle = mbGetValueFromGet("_ccam_libelle", 1);
+$filter->_coordonnees  = mbGetValueFromGet("_coordonnees", 0);
 
 $total   = 0;
 
@@ -33,9 +35,10 @@ $sejourReq = new CRequest;
 $sejourReq->addLJoinClause("patients", "patients.patient_id = sejour.patient_id");
 $sejourReq->addLJoinClause("users", "users.user_id = sejour.praticien_id");
 
-$sejourReq->addWhereClause("sejour.entree_prevue", "BETWEEN '$filter->_date_min' AND '$filter->_date_max'");
+$sejourReq->addWhereClause("sejour.$filter->_horodatage", "BETWEEN '$filter->_date_min' AND '$filter->_date_max'");
 $sejourReq->addWhereClause("sejour.group_id", "= '$g'");
 $sejourReq->addWhereClause("sejour.annule", "= '0'");
+
 // On supprime les sejours d'urgence
 $sejourReq->addWhereClause("sejour.type", "!= 'urg'");
 
@@ -63,9 +66,10 @@ $sejourReq->addOrder("DATE(sejour.entree_prevue)");
 $sejourReq->addOrder("users.user_last_name");
 $sejourReq->addOrder("users.user_first_name");
 
-if($filter->_admission  == "heure") {
+if ($filter->_admission  == "heure") {
   $sejourReq->addOrder("TIME(sejour.entree_prevue)");
-} else {
+} 
+else {
   $sejourReq->addOrder("patients.nom");
   $sejourReq->addOrder("patients.prenom");
   $sejourReq->addOrder("DATE(sejour.entree_prevue)");
@@ -104,7 +108,7 @@ foreach ($sejours as $key => &$sejour) {
     $operation->loadRefsFwd();
   }
 
-  $curr_date = mbDate(null, $sejour->entree_prevue);
+  $curr_date = mbDate(null, $sejour->{$filter->_horodatage});
   $curr_prat = $sejour->praticien_id;
   $listDays[$curr_date][$curr_prat]["praticien"] =& $sejour->_ref_praticien;
   $listDays[$curr_date][$curr_prat]["sejours"][] =& $sejour;

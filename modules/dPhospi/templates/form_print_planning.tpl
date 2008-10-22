@@ -18,6 +18,7 @@ function popPlanning() {
   url.setModuleAction("dPhospi", "print_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
+  url.addElement(form._horodatage);
   url.addElement(form.ordre);
   url.addElement(form._service);
   url.addElement(form._filter_type);
@@ -25,7 +26,9 @@ function popPlanning() {
   url.addElement(form._specialite);
   url.addElement(form.convalescence);
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
-  url.popup(700, 500, "Planning");
+  url.addParam("_coordonnees", $V(form._coordonnees));
+  url.addElement(form._coordonnees);
+  url.popup(850, 600, "Planning");
   return;
 }
 
@@ -43,11 +46,6 @@ function changeDateCal(){
   oForm.select_days[1].checked = false;
 }
 
-Main.add(function () {
-  regFieldCalendar("paramFrm", "_date_min", true);
-  regFieldCalendar("paramFrm", "_date_max", true);
-});
-
 </script>
 
 <form name="paramFrm" action="?m=dPhospi" method="post" onsubmit="return checkFormPrint()">
@@ -63,7 +61,7 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$today_deb}}','{{$today_fin}}');" value="today" checked="checked" /> 
               <label for="select_days_today">Aujourd'hui</label>
@@ -74,7 +72,7 @@ Main.add(function () {
 
         <tr>
           <th>{{mb_label object=$filter field="_date_max"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_admission"}}</th>
@@ -84,6 +82,11 @@ Main.add(function () {
               <option value="nom">Par nom du patient</option>
             </select>
           </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$filter field=_horodatage}}</th>
+          <td>{{mb_field object=$filter field=_horodatage}}</td>
         </tr>
 
         <tr>
@@ -104,16 +107,16 @@ Main.add(function () {
 
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Paramètres de filtrage</th>
+          <th class="category" colspan="2">Paramètres de filtre</th>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_filter_type"}}</th>
-          <td>{{mb_field object=$filter field="_filter_type" defaultOption="&mdash; Tous types d'admission &mdash;"}}</td>
+          <td>{{mb_field object=$filter field="_filter_type" defaultOption="&mdash; Tous types d'admission"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="praticien_id"}}</th>
           <td><select name="praticien_id">
-            <option value="0">&mdash; Tous les praticiens &mdash;</option>
+            <option value="0">&mdash; Tous les praticiens</option>
             {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
             {{/foreach}}
@@ -122,7 +125,7 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td><select name="_specialite">
-            <option value="0">&mdash; Toutes les spécialités &mdash;</option>
+            <option value="0">&mdash; Toutes les spécialités</option>
             {{foreach from=$listSpec item=curr_spec}}
               <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
             {{/foreach}}
@@ -132,7 +135,7 @@ Main.add(function () {
           <th>{{mb_label object=$filter field="convalescence"}}</th>
           <td>
             <select name="convalescence">
-              <option value="0">&mdash; Indifférent &mdash;</option>
+              <option value="0">&mdash; Indifférent</option>
               <option value="o">avec</option>
               <option value="n">sans</option>
             </select>
@@ -141,6 +144,10 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
           <td>{{mb_field object=$filter field="_ccam_libelle"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_coordonnees"}}</th>
+          <td>{{mb_field object=$filter field="_coordonnees"}}</td>
         </tr>
       </table>
 

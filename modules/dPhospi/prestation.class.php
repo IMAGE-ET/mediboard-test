@@ -25,6 +25,12 @@ class CPrestation extends CMbObject {
     return $spec;
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["sejours"]  = "CSejour prestation_id";
+    return $backRefs;
+  }
+    
   function getSpecs(){
   	$specs = parent::getSpecs();
     $specs["group_id"] = "notNull ref class|CGroups";
