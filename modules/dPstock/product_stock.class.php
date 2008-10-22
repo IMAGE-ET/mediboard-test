@@ -50,6 +50,8 @@ class CProductStock extends CMbObject {
     $specs['_optimum']                 = 'pct';
     $specs['_max']                     = 'pct';
     $specs['_zone']                    = 'num';
+    $specs['_package_quantity']        = 'str';
+    $specs['_package_mod']             = 'str';
     return $specs;
   }
 

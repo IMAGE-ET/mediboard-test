@@ -97,10 +97,8 @@ class CProductStockGroup extends CProductStock {
   static function getFromCode($code) {
     $stock = new CProductStockGroup();
     
-    $where = array();
-    $where['product.code'] = "= '$code'";
-    $ljoin = array();
-    $ljoin['product'] = 'product_stock_group.product_id = product.product_id';
+    $where = array('product.code' => "= '$code'");
+    $ljoin = array('product' => 'product_stock_group.product_id = product.product_id');
 
     $stock->loadObject($where, null, null, $ljoin);
     return $stock;
@@ -125,15 +123,17 @@ class CProductStockGroup extends CProductStock {
 
   function check() {
     if($this->product_id && $this->group_id) {
-      $where['product_id'] = "= '$this->product_id'";
-      $where['group_id']   = "= '$this->group_id'";
-      $where['stock_id']   = " != '$this->stock_id'";
+      $where = array(
+        'product_id' => "= '$this->product_id'",
+        'group_id'   => "= '$this->group_id'",
+        'stock_id'   => "!= '$this->stock_id'"
+      );
       
       $VerifDuplicateKey = new CProductStockGroup();
       $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);
       
       if(count($ListVerifDuplicateKey) != 0) {
-        return 'Erreur : Le stock de ce produit existe déjà';
+        return 'Erreur : un stock pour ce produit existe déjà';
       }
     }
     

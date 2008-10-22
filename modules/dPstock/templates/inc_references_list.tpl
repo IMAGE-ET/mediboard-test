@@ -18,6 +18,7 @@
     {{/if}}
     <th>{{tr}}CProductReference-code{{/tr}}</th>
     <th>{{tr}}CProductReference-quantity{{/tr}}</th>
+    <th>{{tr}}CProduct-_quantity{{/tr}}</th>
     <th>{{tr}}CProductReference-price{{/tr}}</th>
     <th>{{tr}}CProductReference-_unit_price{{/tr}}</th>
     {{if $order_id}}<th style="width: 1%;"></th>{{/if}}
@@ -37,18 +38,21 @@
       <td>{{$curr_reference->_ref_societe->_view}}</td>
     {{/if}}
     <td>{{mb_value object=$curr_reference field=code}}</td>
-    <td>{{mb_value object=$curr_reference field=quantity}}</td>
+    <td>{{mb_value object=$curr_reference field=quantity}} {{mb_value object=$curr_reference->_ref_product field=packaging}}</td>
+    <td>{{$curr_reference->_ref_product->_quantity}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=price decimals=5}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=_unit_price decimals=5}}</td>
     {{if $order_id}}
     <td>
-      <form name="product-reference-{{$curr_reference->_id}}" action="?" method="post">
+      {{assign var=id value=$curr_reference->_id}}
+      {{assign var=packaging value=$curr_reference->_ref_product->packaging}}
+      <form name="product-reference-{{$id}}" action="?" method="post">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_item_aed" />
         <input type="hidden" name="order_id" value="{{$order_id}}" />
         <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
-        <input type="text" name="quantity" value="1" size="2" />
-        <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})">{{tr}}Add{{/tr}}</button>
+        {{mb_field object=$curr_reference field=quantity size=2 form="product-reference-$id" increment=true value=1 title="$packaging"}}
+        <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{$packaging}}">{{tr}}Add{{/tr}}</button>
       </form>
     </td>
     {{/if}}

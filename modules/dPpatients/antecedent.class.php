@@ -20,6 +20,17 @@ class CAntecedent extends CMbObject {
   // Form Fields
   var $_search = null;
   
+  static $types = array(
+	  'med', 'alle', 'trans', 'obst', 
+	  'chir', 'fam', 'anesth', 'gyn', 
+	  'cardio', 'pulm', 'stomato', 'plast', 
+	  'ophtalmo', 'digestif', 'gastro', 
+	  'stomie', 'uro', 'ortho', 'traumato', 'amput',
+	  'neurochir', 'greffe', 'thrombo', 'cutane',
+	  'hemato', 'rhumato', 'neuropsy', 'infect',
+	  'endocrino', 'carcino', 'orl', 'addiction', 'habitus'
+	);
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'antecedent';
@@ -29,14 +40,19 @@ class CAntecedent extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["type"        ] = "enum list|".CAppUI::conf("dPpatients CAntecedent types");
-    $specs["date"        ] = "date";
-    $specs["rques"       ] = "text";
+    $specs["type"]  = "enum list|".CAppUI::conf("dPpatients CAntecedent types");
+    $specs["date"]  = "date";
+    $specs["rques"] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";
     
     $specs["_search"] = "str";
     
     return $specs;
+  }
+  
+  function loadRefDossierMedical(){ 
+    $this->_ref_dossier_medical = new CDossierMedical();
+    $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
   
   function store() {
@@ -56,6 +72,7 @@ class CAntecedent extends CMbObject {
         // Transformation du code CIM pour le tester
         $match = str_replace(".","",$match);
         $match = strtoupper($match);
+        
         // Chargement du code CIM 10
         $code_cim10 = new CCodeCIM10($match, 1);
     
@@ -75,11 +92,6 @@ class CAntecedent extends CMbObject {
         }
       }
     }
-  }
-  
-  function loadRefDossierMedical(){ 
-    $this->_ref_dossier_medical = new CDossierMedical();
-    $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
   
   function getHelpedFields(){

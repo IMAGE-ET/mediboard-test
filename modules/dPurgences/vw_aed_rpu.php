@@ -53,11 +53,7 @@ else {
   $patient              = new CPatient;
 }
 
-
-// Gestion des addictions, traitements, antecedents, diagnostics
-$addiction = new CAddiction();
-$addiction->loadAides($AppUI->user_id);
-
+// Gestion des traitements, antecedents, diagnostics
 $traitement = new CTraitement();
 $traitement->loadAides($AppUI->user_id);
 
@@ -83,7 +79,6 @@ $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $userSel);
 $smarty->assign("today"               , mbDate());
-$smarty->assign("addiction"           , $addiction);
 $smarty->assign("traitement"          , $traitement);
 $smarty->assign("antecedent"          , $antecedent);
 $smarty->assign("rpu"                 , $rpu);

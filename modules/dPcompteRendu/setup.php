@@ -8,7 +8,7 @@
 */
 
 class CSetupdPcompteRendu extends CSetup {
-  static function getTemplaceReplaceQuery($search, $replace) {
+  static function getTemplateReplaceQuery($search, $replace) {
     return 'UPDATE `compte_rendu` 
       SET `source` = REPLACE(`source`, "['.htmlentities($search).']", "['.htmlentities($replace).']") 
       WHERE `object_id` IS NULL';

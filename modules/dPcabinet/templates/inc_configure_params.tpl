@@ -5,7 +5,7 @@
 
 <table class="form">
 
-  <!-- Mode d'addictions -->  
+  <!-- Prise de rendez-vous -->  
   <tr>
     <th class="category" colspan="100">Prise de rendez-vous</th>
   </tr>
@@ -22,26 +22,6 @@
       <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/>
-    </td>
-  </tr>
-
-  <!-- Mode d'addictions -->  
-  <tr>
-    <th class="category" colspan="100">Mode d'addictions</th>
-  </tr>
-  
-  <tr>
-    {{assign var="var" value="addictions"}}
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <select class="bool" name="{{$m}}[{{$var}}]">
-        <option value="0" {{if 0 == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-1{{/tr}}</option>
-      </select>
     </td>
   </tr>
 

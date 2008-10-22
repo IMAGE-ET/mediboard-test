@@ -118,7 +118,7 @@ class CPlageconsult extends CMbObject {
   
   
   function loadRefsBack($withCanceled = true) {
-    $this->loadRefsConsultations();    
+    $this->loadRefsConsultations($withCanceled);
     $this->loadFillRate();
   }
   

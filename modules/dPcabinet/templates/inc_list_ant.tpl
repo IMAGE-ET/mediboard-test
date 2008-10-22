@@ -36,8 +36,6 @@ Traitement = {
 
 </script>
 
-{{include file="inc_consult_anesth/inc_list_addiction.tpl}}    
-
 <strong>Antécédents du patient</strong>
 <ul>
 {{if $dossier_medical->_ref_antecedents}}
@@ -46,28 +44,26 @@ Traitement = {
   {{foreach from=$list_antecedent item=curr_antecedent}}
   <li>
     <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
-
-    <input type="hidden" name="m" value="dPpatients" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="dosql" value="do_antecedent_aed" />
-    <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
-    
-    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
-      {{tr}}delete{{/tr}}
-    </button> 
-    {{if $_is_anesth && $sejour->_id}}
-    <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
-      {{tr}}add{{/tr}}
-    </button>
-    {{/if}}         
-    {{if $curr_antecedent->date}}
-      {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
-    {{/if}}
-
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_antecedent_aed" />
+      <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+      
+      <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
+        {{tr}}delete{{/tr}}
+      </button> 
+      {{if $_is_anesth && $sejour->_id}}
+      <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
+        {{tr}}add{{/tr}}
+      </button>
+      {{/if}}         
+      {{if $curr_antecedent->date}}
+        {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+      {{/if}}
 	  </form>
 
     <strong>{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</strong> :
-    <!-- Ajout d'un affichage d'historique de la creation de l'addiction -->
+    <!-- Ajout d'un affichage d'historique de la creation de l'antecedent -->
     <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">
       {{$curr_antecedent->rques}}
     </span>

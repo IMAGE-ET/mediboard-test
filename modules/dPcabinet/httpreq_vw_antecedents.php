@@ -26,9 +26,6 @@ $patient->loadStaticCIM10($AppUI->user_id);
 $antecedent = new CAntecedent();
 $antecedent->loadAides($AppUI->user_id);
 
-$addiction = new CAddiction();
-$addiction->loadAides($AppUI->user_id);
-
 $traitement = new CTraitement();
 $traitement->loadAides($AppUI->user_id);
 
@@ -39,7 +36,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("current_m", "dPcabinet");
 $smarty->assign("sejour_id", $sejour->_id);
 $smarty->assign("patient", $patient);
-$smarty->assign("addiction", $addiction);
 $smarty->assign("antecedent", $antecedent);
 $smarty->assign("traitement", $traitement);
 $smarty->assign("_is_anesth", "1");

@@ -37,6 +37,7 @@ class CProduct extends CMbObject {
   // Undividable quantity
   var $_unit_quantity      = null;
   var $_unit_title         = null;
+  var $_quantity           = null; // The quantity view
   
   // This group's stock id
   var $_ref_stock_group    = null;
@@ -70,6 +71,7 @@ class CProduct extends CMbObject {
     $specs['packaging']     = 'str';
     $specs['_unit_title']   = 'str';
     $specs['_unit_quantity']= 'float pos';
+    $specs['_quantity']     = 'str';
     return $specs;
   }
 

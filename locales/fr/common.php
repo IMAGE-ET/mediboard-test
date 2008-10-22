@@ -119,4 +119,5 @@ $locales['Move'] = 'Déplacer';
 $locales['Duplicate'] = 'Dupliquer';
 $locales['Compute'] = 'Calculer';
 $locales['cabinet'] = '';
+$locales['Refresh'] = 'Rafraîchir';
 ?>

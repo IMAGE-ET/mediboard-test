@@ -9,7 +9,7 @@
 
 
 /**
- * Dossier Médical liés aux notions d'antécédents, traitements, addictions et diagnostics
+ * Dossier Médical liés aux notions d'antécédents, traitements et diagnostics
  */
 class CDossierMedical extends CMbMetaObject {
   // DB Fields
@@ -25,11 +25,9 @@ class CDossierMedical extends CMbMetaObject {
   // Back references
   var $_ref_antecedents = null;
   var $_ref_traitements = null;
-  var $_ref_addictions  = null;
   var $_ref_etats_dents = null;
   
   // Derived back references
-  var $_ref_types_addiction  = null;
   var $_count_antecedents = null;
   
   function getSpec() {
@@ -47,7 +45,6 @@ class CDossierMedical extends CMbMetaObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["antecedents"] = "CAntecedent dossier_medical_id";
-    $backRefs["addictions" ] = "CAddiction dossier_medical_id";
     $backRefs["traitements"] = "CTraitement dossier_medical_id";
     return $backRefs;
   }
@@ -56,7 +53,6 @@ class CDossierMedical extends CMbMetaObject {
     parent::loadRefsBack();
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
-    $this->loadRefsAddictions();
   }
   
   function loadRefObject(){  
@@ -140,25 +136,6 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
   
-  function loadRefsAddictions() {
-    // Initialisation du classement
-    $add = new CAddiction();
-    foreach (explode("|", $add->_specs["type"]->list) as $type) {
-      $this->_ref_types_addiction[$type] = array();
-    }
-
-    $order = "type ASC";
-    if (null == $this->_ref_addictions = $this->loadBackRefs("addictions", $order)) {
-      return;
-    }
-
-    // Classement des addictions
-    $this->_ref_types_addiction = array();
-    foreach ($this->_ref_addictions as $_addiction) {
-      $this->_ref_types_addiction[$_addiction->type][$_addiction->_id] = $_addiction;
-    }
-  }
-  
   /**
    * Identifiant de dossier médical lié à l'objet fourni. 
    * Crée le dossier médical si nécessaire
@@ -229,30 +206,6 @@ class CDossierMedical extends CMbMetaObject {
         $sTraitements .= $curr_trmt->traitement;
       }
       $template->addProperty("$champ - Traitements", $sTraitements !== "" ? $sTraitements : null);
-    }
-    
-    // Addictions
-    $this->loadRefsAddictions();
-    if (is_array($this->_ref_addictions)) {
-      $sAddictions = "";
-      foreach ($this->_ref_types_addiction as $keyAdd => $currTypeAdd) {
-        $sAddictionsParType = "";
-        $sType =  CAppUI::tr("CAddiction.type.".$keyAdd);
-        foreach ($currTypeAdd as $currAdd) {
-          $sAddictionsParType .= "<br /> &bull; ";
-          $sAddictionsParType .= $currAdd->addiction;
-        }
-
-        $template->addProperty("$champ - Addictions - $sType", $sAddictionsParType);
-        
-        if (count($currTypeAdd)) {
-	        $sAddictions .="<br />";
-	        $sAddictions .= $sType;
-	        $sAddictions .= $sAddictionsParType;
-        }
-      }
-      
-      $template->addProperty("$champ - Addictions -- toutes", $sAddictions !== "" ? $sAddictions : null);
     }
     
     // Etat dentaire

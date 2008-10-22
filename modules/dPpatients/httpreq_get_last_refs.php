@@ -27,6 +27,10 @@ foreach($patient->_ref_sejours as $key => $sejour) {
   }
 }
 foreach($patient->_ref_consultations as $key => $consult) {
+	if ($patient->_ref_consultations[$key]->annule) {
+		unset($patient->_ref_consultations[$key]);
+		continue;
+	}
   $patient->_ref_consultations[$key]->loadRefsFwd();
   $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
 }

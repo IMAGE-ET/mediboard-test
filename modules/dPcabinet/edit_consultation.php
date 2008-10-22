@@ -191,9 +191,6 @@ if ($consult->_id){
 $antecedent = new CAntecedent();
 $antecedent->loadAides($userSel->user_id);
 
-$addiction = new CAddiction();
-$addiction->loadAides($userSel->user_id);
-
 $traitement = new CTraitement();
 $traitement->loadAides($userSel->user_id);
 
@@ -298,7 +295,6 @@ $smarty->assign("anesth"         , $anesth);
 $smarty->assign("consult"        , $consult);
 $smarty->assign("antecedent"     , $antecedent);
 $smarty->assign("traitement"     , $traitement);
-$smarty->assign("addiction"      , $addiction);
 $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);

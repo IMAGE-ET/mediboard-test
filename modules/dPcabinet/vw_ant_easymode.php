@@ -25,9 +25,6 @@ $canUser = $user->canDo();
 //$canUser->needsEdit(array("chirSel"=>0));
 
 // Chargement des aides à la saisie
-$addiction = new CAddiction();
-$addiction->loadAides($user->user_id);
-
 $antecedent = new CAntecedent();
 $antecedent->loadAides($user->user_id);
 
@@ -37,7 +34,6 @@ $traitement->loadAides($user->user_id);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("addiction" , $addiction);
 $smarty->assign("antecedent", $antecedent);
 $smarty->assign("traitement", $traitement);
 

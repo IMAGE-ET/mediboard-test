@@ -787,7 +787,7 @@ class CSetupdPpatients extends CSetup {
                   "Anesthésie - TA");
     $count = count($repl);
     for ($i = 0; $i < $count; $i++) {
-      $sql = CSetupdPcompteRendu::getTemplaceReplaceQuery($find[$i], $repl[$i]);
+      $sql = CSetupdPcompteRendu::getTemplateReplaceQuery($find[$i], $repl[$i]);
       $this->addQuery($sql);
     }
     
@@ -802,15 +802,15 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
   	
     $this->makeRevision("0.69");
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - antécédents", "Patient - Antécédents -- tous"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - traitements", "Patient - Traitements"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - addictions" , "Patient - Addictions -- toutes"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - diagnostics", "Patient - Diagnotics" ));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - antécédents", "Patient - Antécédents -- tous"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - traitements", "Patient - Traitements"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - addictions" , "Patient - Addictions -- toutes"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - diagnostics", "Patient - Diagnotics" ));
     
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - antécédents", "Sejour - Antécédents -- tous"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - traitements", "Sejour - Traitements"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - addictions" , "Sejour - Addictions -- toutes"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - diagnostics", "Sejour - Diagnotics" ));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - antécédents", "Sejour - Antécédents -- tous"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - traitements", "Sejour - Traitements"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - addictions" , "Sejour - Addictions -- toutes"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - diagnostics", "Sejour - Diagnotics" ));
     
     $this->makeRevision("0.70");
     $sql = "ALTER TABLE `patients` ADD `email` VARCHAR (255) AFTER tel2;";
@@ -825,8 +825,63 @@ class CSetupdPpatients extends CSetup {
 		  KEY (`patient_id`)
 			) TYPE=MYISAM;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.72");
+    $sql = "ALTER TABLE `antecedent`
+            CHANGE `type` `type`
+            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl','addiction','habitus');";
+    $this->addQuery($sql);
+    
+    // If there is a type
+    $sql = "INSERT INTO `antecedent` (`type`, `rques`, `dossier_medical_id`)
+            SELECT 'addiction', CONCAT(UPPER(LEFT(`type`, 1)), LOWER(SUBSTRING(`type`, 2)), ': ', `addiction`), `dossier_medical_id`
+            FROM `addiction`
+            WHERE `type` IS NOT NULL AND `type` <> '0'";
+    $this->addQuery($sql);
+    
+    // If there is no type
+    $sql = "INSERT INTO `antecedent` (`type`, `rques`, `dossier_medical_id`)
+            SELECT 'addiction', `addiction`, `dossier_medical_id`
+            FROM `addiction`
+            WHERE `type` IS NULL OR `type` = '0'";
+    $this->addQuery($sql);
+    
+    // If there is a type
+    $sql = "UPDATE `aide_saisie` SET 
+              `class` = 'CAntecedent', 
+              `field` = 'rques', 
+              `name` = CONCAT(UPPER(LEFT(`depend_value`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `name`),
+              `text` = CONCAT(UPPER(LEFT(`depend_value`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `text`),
+              `depend_value` = 'addiction'
+            WHERE 
+              `class` = 'CAddiction'
+               AND `depend_value` IS NOT NULL";
+    $this->addQuery($sql);
+    
+    // If there is no type
+    $sql = "UPDATE `aide_saisie` SET 
+              `class` = 'CAntecedent', 
+              `field` = 'rques', 
+              `depend_value` = 'addiction'
+            WHERE 
+              `class` = 'CAddiction'
+               AND `depend_value` IS NULL";
+    $this->addQuery($sql);
+    
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - Addictions -- toutes", "Patient - Antécédents - Addictions"));
+    
+    $addiction_types = array('tabac', 'oenolisme', 'cannabis');
+    foreach ($addiction_types as $type) {
+      $typeTrad = CAppUI::tr("CAddiction.type.$type");
+      $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - Addictions - $typeTrad", "Sejour - Antécédents - Addictions"));
+      $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - Addictions - $typeTrad", "Patient - Antécédents - Addictions"));
+    }
+    
+    /*$sql = "DROP TABLE `addiction`";
+    $this->addQuery($sql);*/
 
-    $this->mod_version = "0.72";
+    $this->mod_version = "0.73";
   }
 }
 

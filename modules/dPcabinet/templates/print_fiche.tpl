@@ -204,32 +204,7 @@
     {{/if}}
   </tr>
   <tr>
-    <td class="halfPane">
-      <table width="100%">
-        <tr>
-          <th class="category">Addictions</th>
-        </tr>
-        <tr>
-          <td>
-          {{if $dossier_medical->_ref_addictions}}
-            {{foreach from=$dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-              {{if $list_addiction|@count}}
-              <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
-              {{foreach from=$list_addiction item=curr_addiction}}
-                <ul>
-                  <li>
-                    {{$curr_addiction->addiction}}
-                  </li>
-                </ul>
-              {{/foreach}}
-              {{/if}}
-            {{/foreach}}
-          {{/if}}
-          </td>
-        </tr>
-      </table>
-    </td>
-    <td class="halfPane">
+    <td class="halfPane" rowspan="2">
       <table width="100%">
         <tr>
           <th class="category">Antécédents</th>
@@ -239,20 +214,20 @@
           {{if $dossier_medical->_ref_antecedents}}
             {{foreach from=$dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
-              <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
-              {{foreach from=$currTypeAnt item=currAnt}}
-              <ul>
-                <li> 
-                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
-                  {{/if}}
-                  {{$currAnt->rques}} 
-                </li>
-              </ul>
-              {{/foreach}}
+                <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
+                {{foreach from=$currTypeAnt item=currAnt}}
+                <ul>
+                  <li> 
+                    {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                      {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                    {{/if}}
+                    {{$currAnt->rques}} 
+                  </li>
+                </ul>
+                {{/foreach}}
               {{/if}}
-              {{/foreach}}
-            {{else}}
+            {{/foreach}}
+          {{else}}
             <ul>
             <li>Pas d'antécédents</li>
             </ul>
@@ -261,8 +236,6 @@
         </tr>
       </table>
     </td>
-  </tr>
-  <tr>
   	
     {{if is_array($dossier_medical->_ref_traitements)}}
     <!-- Traitements -->
@@ -292,6 +265,9 @@
       </table>
     </td>
     {{/if}}
+    
+    </tr>
+    <tr>
     
     <!-- Examens cliniques -->
     <td class="halfPane">

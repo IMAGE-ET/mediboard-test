@@ -152,7 +152,6 @@ function reloadPrescription(prescription_id){
   <div class="big-info">
     Le dossier médical pour ce séjour n'est pas créé, ou ne contient pas d'éléments parmi :
     <ul>
-      <li>{{tr}}CAddiction{{/tr}}</li>
       <li>{{tr}}CAntecedent{{/tr}}</li>
       <li>Diagnostics associés</li>
     </ul>

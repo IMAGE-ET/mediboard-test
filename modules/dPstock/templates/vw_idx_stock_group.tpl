@@ -14,7 +14,7 @@
 <script type="text/javascript">
 Main.add(function () {
   filterFields = ["category_id", "keywords", "only_ordered_stocks", "limit"];
-  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_group_list", "list-stocks", filterFields);
+  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_group_list", "list-stocks-group", filterFields);
   stocksFilter.submit();
 });
 
@@ -48,7 +48,7 @@ ProductSelector.init = function(){
         <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
       </form>
   
-      <div id="list-stocks"></div>
+      <div id="list-stocks-group"></div>
     </td>
 
     <td class="halfPane">

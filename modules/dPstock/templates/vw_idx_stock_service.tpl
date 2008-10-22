@@ -14,7 +14,7 @@
 <script type="text/javascript">
 Main.add(function () {
   filterFields = ["category_id", "keywords", "service_id", "limit"];
-  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_service_list", "list-stocks", filterFields);
+  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_service_list", "list-stocks-service", filterFields);
   stocksFilter.submit();
 });
 
@@ -50,7 +50,7 @@ ProductSelector.init = function(){
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button>
       </form>
   
-      <div id="list-stocks"></div>
+      <div id="list-stocks-service"></div>
     </td>
 
     <td class="halfPane">

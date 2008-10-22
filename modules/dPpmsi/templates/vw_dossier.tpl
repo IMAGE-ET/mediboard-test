@@ -253,7 +253,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th class="category" colspan="2">Diagnostics CIM</th>
-          <th class="category" colspan="2">Addictions</th>
+          <th class="category" colspan="2">Antécedents</th>
         </tr>
         <tr>
           <td class="text" colspan="2">
@@ -261,108 +261,63 @@ Main.add(function () {
               {{include file="inc_list_diags.tpl"}}
 		        </div>
           </td>
-          <td class="text" colspan="2">
+          <td class="text" colspan="2" {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}rowspan="3"{{/if}}>
             <ul>
               <li>Du patient
                 <ul>
-	                {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-	                {{if $list_addiction|@count}}
-					        <li>
-					          {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
-					          {{foreach from=$list_addiction item=curr_addiction}}
-					          <ul>
-					            <li>{{$curr_addiction->addiction}}</li>
-					          </ul>
-					          {{/foreach}}
-					        </li>
-					        {{/if}}
-			            {{foreachelse}}
-			            <li>Pas d'addiction</li>
-		              {{/foreach}}
-		            </ul>
-		          </li>
+                  {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+                  {{if $list_antecedent|@count}}
+                  <li>
+                    {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+                    {{foreach from=$list_antecedent item=curr_antecedent}}
+                    <ul>
+                      <li>
+                        {{if $curr_antecedent->date}}
+                          {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+                        {{/if}}
+                        <em>{{$curr_antecedent->rques}}</em>
+                      </li>
+                    </ul>
+                    {{/foreach}}
+                  </li>
+                  {{/if}}
+                  {{foreachelse}}
+                  <li>Pas d'antécédents</li>
+                  {{/foreach}}
+                </ul>
+              </li>
               <li>Significatifs du séjour
                 <ul>
-	                {{foreach from=$_sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-	                {{if $list_addiction|@count}}
-					        <li>
-					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-					          {{foreach from=$list_addiction item=curr_addiction}}
-					          <ul>
-					            <li>{{$curr_addiction->addiction}}</li>
-					          </ul>
-					          {{/foreach}}
-					        </li>
-					        {{/if}}
-			            {{foreachelse}}
-			            <li>Pas d'addiction</li>
-		              {{/foreach}}
-		            </ul>
-		          </li>
+                  {{foreach from=$_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+                  {{if $list_antecedent|@count}}
+                  <li>
+                    {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+                    {{foreach from=$list_antecedent item=curr_antecedent}}
+                    <ul>
+                      <li>
+                        {{if $curr_antecedent->date}}
+                          {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+                        {{/if}}
+                        <em>{{$curr_antecedent->rques}}</em>
+                      </li>
+                    </ul>
+                    {{/foreach}}
+                  </li>
+                  {{/if}}
+                  {{foreachelse}}
+                  <li>Pas d'antécédents</li>
+                  {{/foreach}}
+                </ul>
+              </li>
             </ul>
           </td>
         </tr>
         
+        {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}
         <tr>
-          <th class="category" colspan="2">Antécedents</th>
-          {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}
           <th class="category" colspan="2">Traitements</th>
-          {{/if}}
         </tr>
-        
         <tr>
-          <td class="text" colspan="2">
-            <ul>
-              <li>Du patient
-                <ul>
-			            {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-			            {{if $list_antecedent|@count}}
-					        <li>
-					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-					          {{foreach from=$list_antecedent item=curr_antecedent}}
-					          <ul>
-					            <li>
-					              {{if $curr_antecedent->date}}
-			                    {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
-			                  {{/if}}
-			                  <em>{{$curr_antecedent->rques}}</em>
-			                </li>
-					          </ul>
-					          {{/foreach}}
-					        </li>
-					        {{/if}}
-			            {{foreachelse}}
-			            <li>Pas d'antécédents</li>
-			            {{/foreach}}
-			          </ul>
-			        </li>
-              <li>Significatifs du séjour
-                <ul>
-			            {{foreach from=$_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-			            {{if $list_antecedent|@count}}
-					        <li>
-					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-					          {{foreach from=$list_antecedent item=curr_antecedent}}
-					          <ul>
-					            <li>
-					              {{if $curr_antecedent->date}}
-			                    {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
-			                  {{/if}}
-			                  <em>{{$curr_antecedent->rques}}</em>
-			                </li>
-					          </ul>
-					          {{/foreach}}
-					        </li>
-					        {{/if}}
-			            {{foreachelse}}
-			            <li>Pas d'antécédents</li>
-			            {{/foreach}}
-			          </ul>
-			        </li>
-            </ul>
-          </td>
-
-          {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}
           <td class="text" colspan="2">
             <ul>
               <li>Du patient
@@ -399,9 +354,9 @@ Main.add(function () {
 		          </li>
             </ul>
           </td>
-          {{/if}}
-
         </tr>
+        {{/if}}
+       
         {{foreach from=$_sejour->_ref_operations item=curr_op}}
         <tr>
           <th class="category" colspan="4">

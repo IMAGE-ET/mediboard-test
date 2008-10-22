@@ -375,20 +375,22 @@ Document.refreshList = function(){
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
     <td class="text">
-      {{if $curr_consult->annule}}
-      [ANNULE]
-      {{else}}
-      {{if $curr_consult->_canEdit}}
       <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
-      <a class="tooltip-trigger"
-         href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}"
-         onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: {{$curr_consult->_id}} } })"
-       >
+      {{if $curr_consult->annule}}
+        <span title="Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} à {{$curr_consult->heure|date_format:"%Hh%M"}} - {{$curr_consult->_etat}}">
+        [ANNULE]
+        </span>
       {{else}}
-      <a href="#nothing">
-      {{/if}}
+        {{if $curr_consult->_canEdit}}
+          <a class="tooltip-trigger"
+             href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}"
+             onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: {{$curr_consult->_id}} } })"
+           >
+        {{else}}
+          <a href="#nothing">
+        {{/if}}
         Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} à {{$curr_consult->heure|date_format:"%Hh%M"}} - {{$curr_consult->_etat}}
       </a>
       {{/if}}

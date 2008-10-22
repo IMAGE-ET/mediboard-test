@@ -23,13 +23,17 @@
   <tr>
     <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</td>
     <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}</td>
-    <td>{{mb_value object=$curr_item field=quantity}}</td>
+    <td>{{mb_value object=$curr_item field=quantity}}x {{$curr_item->_ref_reference->_ref_product->_quantity}}</td>
     <td>{{mb_value object=$curr_item field=unit_price}}</td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="4">{{tr}}CProductOrderItem.none{{/tr}}</td>
   </tr>
   {{/foreach}}
   <tr>
-    <td colspan="6" id="order-{{$object->_id}}-total" style="border-top: 1px solid #666;">
-      <span style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$object field=_total}}</span>
+    <td colspan="4" id="order-{{$object->_id}}-total" style="border-top: 1px solid #666; text-align: right;">
+      {{tr}}Total{{/tr}} : {{mb_value object=$object field=_total}}
     </td>
   </tr>
 </table>

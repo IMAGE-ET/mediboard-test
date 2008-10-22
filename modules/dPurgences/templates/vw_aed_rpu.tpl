@@ -58,7 +58,6 @@ Main.add(function () {
   
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
-    Try.these(document.editAddictFrm.type.onchange);
   }
 });
 

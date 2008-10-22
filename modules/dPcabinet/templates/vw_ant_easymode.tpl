@@ -1,19 +1,4 @@
 <script type="text/javascript">
-function addAddiction(rques, type) {
-  if (window.opener) {
-    var oForm = window.opener.document.forms['editAddictFrm'];
-    if (oForm) {
-      oForm.addiction.value = rques;
-      oForm.type.value = type;
-      window.opener.onSubmitAddiction(oForm);
-      $(type+'-'+rques+'-button').setOpacity(0.3);
-      $(type+'-'+rques+'-label').setOpacity(0.3);
-      $(type+'-'+rques+'-button').onclick = null;
-      $(type+'-'+rques+'-label').onclick = null;
-    }
-  }
-}
-
 function addAntecedent(rques, type) {
   if (window.opener) {
     var oForm = window.opener.document.forms['editAntFrm'];
@@ -52,43 +37,12 @@ Main.add(function () {
 {{assign var=numCols value=4}}
 
 <ul id="tab-antecedents" class="control_tabs">
-  <li><a href="#addictions">Addictions</a></li>
   <li><a href="#antecedents">Antécédents</a></li>
   <li><a href="#traitements">Traitements</a></li>
 </ul>
 <hr class="control_tabs" />
 
 <table class="main tbl">
-
-  <!-- Addictions -->
-  <tbody id="addictions" style="display: none;">
-  {{foreach from=$addiction->_aides.addiction item=curr_type key=curr_key}}
-    {{if $curr_key != "no_enum"}}
-    {{if $curr_type && $curr_key}}
-    <tr>
-      <th colspan="{{$numCols*2}}">{{$addiction->_enumsTrans.type.$curr_key}}</th>
-    </tr>
-    {{/if}}
-    <tr>
-    {{foreach from=$curr_type item=curr_helper_for key=curr_helper_for_key}}
-      {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
-      {{assign var=i value=$smarty.foreach.helpers.iteration}}
-      
-      <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
-      <td class="text" {{if $i==$curr_helper_for|@count}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
-        <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
-          {{$curr_helper}}
-        </label>
-      </td>
-      {{if ((($i % $numCols) == 0) && $i != 1)}}</tr><tr>{{/if}}
-      {{/foreach}}
-    {{/foreach}}
-    </tr>
-    {{/if}}
-  {{/foreach}}
-  </tbody>
-  
-  
   <!-- Antécédents -->
   <tbody id="antecedents" style="display: none;">
   {{foreach from=$antecedent->_aides.rques item=curr_type key=curr_key}}

@@ -147,7 +147,6 @@ class CProductOrder extends CMbObject {
     	
     	// if the stock is in the "red" or "orange" zone
     	if ($stock->_zone_future < 2) {
-
     		$current_stock = $stock->quantity;
     		
     		$expected_stock = $stock->order_threshold_optimum ? 
@@ -157,6 +156,7 @@ class CProductOrder extends CMbObject {
     		// we get the best reference for this product
     		$where = array(
     		  'product_id' => " = '{$stock->_ref_product->_id}'",
+    		  'societe_id' => " = '$this->societe_id'",
     	  );
     		$orderby = 'price / quantity ASC';
     		$best_reference = new CProductReference();

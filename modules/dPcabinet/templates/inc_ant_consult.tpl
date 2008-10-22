@@ -71,7 +71,7 @@ easyMode = function() {
 }
 
 /**
- * Mise a jour du champ _sejour_id pour la creation d'antecedent, de traitement et d'addiction
+ * Mise a jour du champ _sejour_id pour la creation d'antecedent et de traitement
  * et la widget de dossier medical
  */
 DossierMedical = {
@@ -86,9 +86,6 @@ DossierMedical = {
 	  if(document.editAntFrm){
 	    document.editAntFrm._sejour_id.value    = sejour_id;
 	  }
-	  if(document.editAddictFrm){
-	    document.editAddictFrm._sejour_id.value = sejour_id;
-    }
   },
   
   reloadDossierPatient: function() {
@@ -126,8 +123,11 @@ Main.add(function () {
   <tr>
     <td class="text">
       <button class="edit" type="button" onclick="easyMode();">Mode de saisie simplifié</button>
-    
-     {{include file="../../dPcabinet/templates/inc_consult_anesth/inc_addictions.tpl}}
+      
+      <div class="little-info">
+      	Les addictions sont désormais gérés comme un type d'antécédent, à l'instar d'Habitus.<br />
+        Merci d'utiliser le formulaire ci-dessous pour manipler les addictions.
+      </div>
       <hr />
       
       <!-- Antécédents -->

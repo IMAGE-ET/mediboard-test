@@ -9,14 +9,6 @@
   <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
 </form>
 
-<form name="frmCopyAddiction" action="?m=dPcabinet" method="post">
-  <input type="hidden" name="m" value="dPpatients" /> 
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="dosql" value="do_copy_addiction" />
-  <input type="hidden" name="addiction_id" value="" />
-  <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
-</form>
-
 <form name="frmCopyTraitement" action="?m=dPcabinet" method="post">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
@@ -45,16 +37,7 @@ copyTraitement = function(traitement_id){
   onSubmitDossierMedical(oForm);
 }
 
-copyAddiction = function(addiction_id) {
-	var oForm = document.frmCopyAddiction;
-	oForm.addiction_id.value = addiction_id;
-	onSubmitDossierMedical(oForm);
-}
-
 </script>
-
-
-{{include file="inc_consult_anesth/inc_list_addiction_anesth.tpl}}    
 
 <strong>Antécédents significatifs</strong>
 <ul>

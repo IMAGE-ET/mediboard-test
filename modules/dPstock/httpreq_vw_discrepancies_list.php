@@ -36,9 +36,10 @@ $list_stocks       = $stock->loadList($where, $orderby, $limit?$limit:20, null, 
 // Smarty template
 $smarty = new CSmartyDP();
 
+$smarty->assign('stock',             $stock);
 $smarty->assign('list_stocks',       $list_stocks);
 $smarty->assign('list_stocks_count', $list_stocks_count);
 
-$smarty->display('inc_stocks_service_list.tpl');
+$smarty->display('inc_stocks_list.tpl');
 
 ?>

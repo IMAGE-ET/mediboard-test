@@ -71,7 +71,6 @@ $patient->loadIPP();
 $patient->loadRefDossierMedical();
 $patient->_ref_dossier_medical->loadRefsTraitements();
 $patient->_ref_dossier_medical->loadRefsAntecedents();
-$patient->_ref_dossier_medical->loadRefsAddictions();
 
 // Suppression des consultations d'urgences
 foreach($patient->_ref_consultations as $keyConsult => $consult){

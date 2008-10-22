@@ -119,7 +119,7 @@
         </tr>
         <tr>
           <td style="font-weight: bold; white-space: normal; font-size:130%;">
-          {{if $dossier_medical->_ref_antecedents}}
+          {{if $dossier_medical->_ref_antecedents && array_key_exists('alle', $dossier_medical->_ref_antecedents)}}
             {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
               <ul>
                 <li> 
@@ -140,26 +140,8 @@
       </table>
     </td>
     <td width="50%">
-      <!-- Addictions / docs édités / Intubation / Prémédication -->
+      <!-- Docs édités / Intubation / Prémédication -->
       <table width="100%">
-        <tr>
-          <th class="category">Addictions</th>
-        </tr>
-        <tr>
-          <td>
-          {{if $dossier_medical->_ref_addictions}}
-            {{foreach from=$dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-              {{if $list_addiction|@count}}
-              {{tr}}CAddiction.type.{{$curr_type}}{{/tr}} :
-              {{foreach from=$list_addiction item=curr_addiction}}
-                {{$curr_addiction->addiction}} ;
-              {{/foreach}}
-              <br />
-              {{/if}}
-            {{/foreach}}
-          {{/if}}
-          </td>
-        </tr>
         <tr>
           <th class="category">Documents édités</th>
         </tr>

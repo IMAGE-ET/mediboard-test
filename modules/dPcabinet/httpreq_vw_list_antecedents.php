@@ -26,11 +26,10 @@ $patient->load($patient_id);
 $patient->loadRefDossierMedical();
 $dossier_medical =& $patient->_ref_dossier_medical;
 
-// Chargements des antecedents, traitements et addictions du dossier_medical
+// Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
 	$dossier_medical->loadRefsAntecedents();
 	$dossier_medical->loadRefsTraitements();
-	$dossier_medical->loadRefsAddictions();
 }
 
 // Création du template

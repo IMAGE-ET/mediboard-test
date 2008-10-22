@@ -12,7 +12,6 @@
     <th class="title">Traitement(s)</th>
     {{/if}}
     <th class="title">Diagnostic(s)</th>
-    <th class="title">Addiction(s)</th>
   </tr>
   
   <tr>
@@ -66,25 +65,6 @@
         <i>Pas de diagnostics</i>
       {{/foreach}}
       {{if $object->_ext_codes_cim|@count}}</ul>{{/if}}
-    </td>
-    
-    <td class="text">
-      {{foreach from=$object->_ref_types_addiction key=curr_type item=list_addiction}}
-      {{if $list_addiction|@count}}
-      <strong>
-        {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
-      </strong>
-      <ul>
-        {{foreach from=$list_addiction item=curr_addiction}}
-        <li>
-          {{mb_value object=$curr_addiction field="addiction"}}
-        </li>
-        {{/foreach}}
-      </ul>
-      {{/if}}
-      {{foreachelse}}
-        <i>Pas d'addictions</i>
-      {{/foreach}}
     </td>
   </tr>
 </table>

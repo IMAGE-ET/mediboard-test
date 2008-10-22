@@ -20,7 +20,7 @@ Main.add(function () {
   }
 
   {{if $order->_id && !$order->date_ordered}}
-  filterFields = ["category_id", "keywords", "order_id"];
+  filterFields = ["category_id", "keywords", "order_id", "societe_id"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
   {{/if}}
 
@@ -68,8 +68,6 @@ Main.add(function () {
   </table>
 </form>
 
-
-
 {{else}}
 <table class="main">
   <tr>
@@ -78,6 +76,7 @@ Main.add(function () {
       <form action="?" name="filter-references" method="post" onsubmit="return referencesFilter.submit();">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
+        <input type="hidden" name="societe_id" value="{{$order->societe_id}}" />
         <select name="category_id" onchange="referencesFilter.submit();">
           <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
@@ -87,10 +86,6 @@ Main.add(function () {
         <input type="text" name="keywords" value="" />
         <button type="button" class="search" name="search" onclick="referencesFilter.submit();">{{tr}}Search{{/tr}}</button>
       </form>
-    
-      <!-- <div style="text-align: right;">
-      <button type="button" class="down" onclick="">{{tr}}Suggest{{/tr}}</button>
-      </div> -->
       <div id="list-references"></div>
     </td>
   {{/if}}
@@ -118,7 +113,7 @@ Main.add(function () {
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="cancelled" value="1" />
-        <button class="trash" type="button" onclick="submitOrder(this.form, {close: true})">{{tr}}Remove{{/tr}}</button>
+        <button class="trash" type="button" onclick="submitOrder(this.form, {close: true})">Annuler la commande</button>
       </form>
       
       <table class="form">

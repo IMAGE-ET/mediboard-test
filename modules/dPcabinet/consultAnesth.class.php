@@ -230,7 +230,6 @@ class CConsultAnesth extends CMbObject {
     }
     $this->_ref_sejour->loadRefDossierMedical();
     $this->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
-    $this->_ref_sejour->_ref_dossier_medical->loadRefsAddictions();
     $this->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
      
     foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {

@@ -823,7 +823,6 @@ class CPatient extends CMbObject {
     $this->loadIPP();
     $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->loadRefsAntecedents();
-    $this->_ref_dossier_medical->loadRefsAddictions();
     $this->_ref_dossier_medical->loadRefsTraitements();  
   }
   

@@ -25,23 +25,27 @@ function refreshValue(element, klass, id, field) {
  *  @param options Options used to execute functions after the submit : {refreshLists, close}
  */
 function submitOrder (oForm, options) {
-  options = Object.extend(options, {
+  options = Object.extend({
     close: false,
     confirm: false,
     refreshLists: false
-  });
+  }, options);
   
   if (!options.confirm || (options.confirm && confirm('Voulez-vous vraiment effectuer cette action ?'))) {
-    submitFormAjax(oForm, 'systemMsg',{
+    return onSubmitFormAjax(oForm, {
       onComplete: function() {
         if (options.close && window.opener) {
           window.close();
         } else {
           refreshOrder($V(oForm.order_id), options);
         }
+        if (options.refreshLists) {
+        alert('toto');refreshLists();
+        }
       }
     });
   }
+  else return false;
 }
 
 /** Submit order item function
@@ -108,8 +112,8 @@ function refreshLists(keywords) {
 }
 
 function popupOrder(iOrderId, width, height, bAutofill) {
-  width = width || 500;
-  height = height || 500;
+  width = width || 800;
+  height = height || 600;
 
   var url = new Url();
   url.setModuleAction("dPstock", "vw_aed_order");

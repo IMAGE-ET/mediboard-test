@@ -129,11 +129,10 @@ Main.add(function () {
 
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
-    Try.these(document.editAddictFrm.type.onchange);
   }
   
   {{if $consult->_id}}
-  // Chargement des antecedents, traitements, addictions, diagnostics du patients
+  // Chargement des antecedents, traitements, diagnostics du patients
   DossierMedical.reloadDossierPatient();
   {{/if}}
 });

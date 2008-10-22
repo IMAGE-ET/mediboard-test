@@ -21,10 +21,9 @@ $sejour->load($sejour_id);
 $sejour->loadRefDossierMedical();
 $dossier_medical =& $sejour->_ref_dossier_medical;
 
-// Chargement des antecedents, traitements et addictions
+// Chargement des antecedents et traitements
 $dossier_medical->loadRefsAntecedents();
 $dossier_medical->loadRefsTraitements();
-$dossier_medical->loadRefsAddictions();
 
 // Création du template
 $smarty = new CSmartyDP();
