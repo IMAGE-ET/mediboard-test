@@ -125,8 +125,8 @@ Main.add(function () {
       <button class="edit" type="button" onclick="easyMode();">Mode de saisie simplifié</button>
       
       <div class="little-info">
-      	Les addictions sont désormais gérés comme un type d'antécédent, à l'instar d'Habitus.<br />
-        Merci d'utiliser le formulaire ci-dessous pour manipler les addictions.
+      	Les addictions sont désormais gérées comme un type d'antécédent, à l'instar d'Habitus.<br />
+        Merci d'utiliser le formulaire ci-dessous pour manipuler les addictions.
       </div>
       <hr />
       
