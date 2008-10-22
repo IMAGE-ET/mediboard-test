@@ -158,8 +158,8 @@ class CUser extends CMbObject {
 
   function updateFormFields () {
     parent::updateFormFields();
-    $this->user_last_name  =         function_exists('mb_strtoupper') ? mb_strtoupper($this->user_last_name)  : strtoupper($this->user_last_name);
-    $this->user_first_name = ucwords(function_exists('mb_strtolower') ? mb_strtolower($this->user_first_name) : strtolower($this->user_first_name));
+    $this->user_last_name  =         mb_strtoupper($this->user_last_name);
+    $this->user_first_name = ucwords(mb_strtolower($this->user_first_name));
     $this->_view = "$this->user_last_name $this->user_first_name";
     $this->_login_locked = $this->user_login_errors >= CAppUI::conf('admin CUser max_login_attempts');
   }
