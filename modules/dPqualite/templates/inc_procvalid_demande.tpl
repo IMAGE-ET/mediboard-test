@@ -61,7 +61,7 @@
       </label>
     </th>
     <td>
-      <select name="ged[doc_theme_id]" class="notNull {{$docGed->_props.doc_theme_id}}">
+      <select name="ged[doc_theme_id]" class="{{$docGed->_props.doc_theme_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_theme_id-desc{{/tr}}</option>
         {{foreach from=$listThemes item=curr_theme}}
         <option value="{{$curr_theme->doc_theme_id}}" {{if $docGed->doc_theme_id == $curr_theme->doc_theme_id}} selected="selected" {{/if}} >
