@@ -919,8 +919,9 @@ class CPrescription extends CMbObject {
   	foreach($favoris as $_fav){
   		$produit = new CBcbProduit();
   		$produit->load($_fav["code_cip"],"0");
-  		$listFavoris["medicament"][] = $produit;
+  		$listFavoris["medicament"][$produit->libelle] = $produit;
     }
+    ksort($listFavoris["medicament"]);
   	return $listFavoris["medicament"];
   }
   
