@@ -106,10 +106,10 @@ $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
 $medichir = new CMediusers;
-if($compte_rendu->_ref_object->_class_name == "CConsultAnesth"){
-  $praticien_id = $compte_rendu->_ref_object->_ref_consultation->_praticien_id;
+if($object->_class_name == "CConsultAnesth"){
+  $praticien_id = $object->_ref_consultation->_praticien_id;
 } else {
-  $praticien_id = $compte_rendu->_ref_object->_praticien_id;
+  $praticien_id = $object->_praticien_id;
 }
 $medichir->load($praticien_id);
 //$medichir->load($compte_rendu->_ref_chir->user_id);
