@@ -203,7 +203,7 @@ class CSejour extends CCodable {
     $specs["_date_sortie"] 		= "date";
     $specs["_date_min"] 		  = "dateTime";
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
-    $specs["_horodatage"]     = "enum list|entree_prevue|entree_reelle|sortie_prevue|sortie_relle";
+    $specs["_horodatage"]     = "enum list|entree_prevue|entree_reelle|sortie_prevue|sortie_reelle";
     $specs["_admission"] 		  = "text";
     $specs["_service"] 	      = "text";
     $specs["_type_admission"] = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
