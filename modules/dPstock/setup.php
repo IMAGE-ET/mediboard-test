@@ -232,7 +232,7 @@ class CSetupdPstock extends CSetup {
       `quantity` INT (11) NOT NULL,
       `code` VARCHAR (255),
       `date` DATETIME NOT NULL
-    );';
+    ) TYPE=MYISAM;';
     $this->addQuery($sql);
     
     $sql = 'ALTER TABLE `product_order_item_reception` 
@@ -248,7 +248,7 @@ class CSetupdPstock extends CSetup {
       `quantity` INT (11) NOT NULL,
       `code` VARCHAR (255),
       `date_delivery` DATETIME NOT NULL,
-      `date_reception` DATETIME);';
+      `date_reception` DATETIME) TYPE=MYISAM;';
     $this->addQuery($sql);
     
     $sql = 'ALTER TABLE `product_delivery_trace` 
@@ -290,7 +290,7 @@ class CSetupdPstock extends CSetup {
 		  `date` DATETIME NOT NULL,
 		  `description` TEXT,
 		  `object_id` INT (11) UNSIGNED NOT NULL,
-		  `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL);';
+		  `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL) TYPE=MYISAM;';
     $this->addQuery($sql);
     
 		$sql = 'ALTER TABLE `product_discrepancy` 
