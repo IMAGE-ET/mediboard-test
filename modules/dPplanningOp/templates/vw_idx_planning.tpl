@@ -4,17 +4,12 @@
 
 <script type="text/javascript">
 
-function updateListOperations(date, urgence) {
+function updateListOperations(date) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
 
   url.addParam("chirSel" , "{{$selChir}}");
   url.addParam("date"    , date);
-  if(!urgence){
-    url.addParam("urgences", "{{$urgences}}");
-  }else{
-    url.addParam("urgences", urgence);
-  }
 
   url.requestUpdate('operations', { waitingText:null } );
 }
@@ -63,41 +58,36 @@ Main.add(function () {
           <th>Plage</th>
           <th colspan="2">Nb. Opér.</th>
         </tr>
-        {{foreach from=$listPlages item=curr_plage}}
-        {{if $curr_plage.spec_id}}
+        {{foreach from=$listDays key=curr_date item=curr_day}}
+        <tbody class="hoverable">
         <tr>
-          <td style="background: #aae" align="right">{{$curr_plage.date|date_format:"%a %d"}}</td>
-          <td style="background: #aae" align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
-          <td style="background: #aae" align="center">{{$curr_plage.total}}</td>
-          <td style="background: #aae" align="center">Plage de spécialité</td>
-        </tr>
-        {{else}}
-        <tr>
-          <td align="right">
-          	<a href="#nothing" onclick="updateListOperations('{{$curr_plage.date|date_format:"%Y-%m-%d"}}', '0')">
-          	{{$curr_plage.date|date_format:"%a %d"}}</a>
+          <td align="right" rowspan="{{$curr_day|@count}}">
+            <a href="#nothing" onclick="updateListOperations('{{$curr_date|date_format:"%Y-%m-%d"}}')">
+              {{$curr_date|date_format:"%a %d"}}
+            </a>
           </td>
-          
-          <td align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
-
-          {{if $curr_plage.total}}
+          {{foreach from=$curr_day item=curr_plage}}
+          <td align="center">
+            {{if $curr_plage.plageop_id}}
+              {{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}
+            {{else}}
+              Hors plage
+            {{/if}}
+          </td>
           <td align="center">{{$curr_plage.total}}</td>
-          <td align="center">{{$curr_plage.duree|date_format:"%Hh%M"}}</td>
-          {{else}}
-          <td colspan="2" align="center">&mdash;</td>
-          {{/if}}
-          
+          <td align="center text">
+            {{if $curr_plage.plageop_id && $curr_plage.spec_id}}
+              Plage de Spécialité
+            {{else}}
+              {{$curr_plage.duree|date_format:"%Hh%M"}}
+            {{/if}}
+          </td>
         </tr>
-        {{/if}}
-        {{/foreach}}
-        {{if $listUrgences|@count}}
         <tr>
-          <td align="right"><a href="?m={{$m}}&amp;tab=vw_idx_planning&amp;urgences=1">Urgences</a></td>
-          <td align="center">-</td>
-          <td align="center">{{$listUrgences|@count}}</td>
-          <td align="center">-</td>
+          {{/foreach}}
         </tr>
-        {{/if}}
+        </tbody>
+        {{/foreach}}
       </table>
       
       

@@ -14,9 +14,6 @@ $ds = CSQLDataSource::get("std");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
-
-$urgences = mbGetValueFromGetOrSession("urgences", 0);
-
 // Sélection du praticien
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
@@ -38,7 +35,7 @@ $mediuser = new CMediusers;
 $listChir = $mediuser->loadPraticiens(PERM_EDIT);
 
 // Planning du mois
-$sql = "SELECT plagesop.*," .
+$sql = "SELECT plagesop.*, plagesop.date AS opdate," .
 		"\nSEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree," .
 		"\nCOUNT(operations.operation_id) AS total" .
 		"\nFROM plagesop" .
@@ -56,12 +53,28 @@ if($selChirLogin) {
 }
 
 // Urgences du mois
-$listUrgences = new COperation;
-$where = array();
-$where["date"] = "LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'";
-$where["chir_id"] = "= '$selChirLogin'";
-$order = "date";
-$listUrgences = $listUrgences->loadList($where, $order);
+$sql = "SELECT operations.*, operations.date AS opdate," .
+		"\nSEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree," .
+		"\nCOUNT(operations.operation_id) AS total" .
+		"\nFROM operations" .
+    "\nWHERE operations.annulee = '0'" .
+		"\nAND operations.chir_id = '$selChirLogin'" .
+		"\nAND operations.date LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'" .
+		"\nGROUP BY operations.date" .
+		"\nORDER BY operations.date";
+if($selChirLogin) {
+  $listUrgences = $ds->loadList($sql);
+} else {
+  $listUrgences = null;
+}
+
+$listDays = array();
+foreach($listPlages as $curr_ops) {
+  $listDays[$curr_ops["opdate"]][$curr_ops["plageop_id"]] = $curr_ops;
+}
+foreach($listUrgences as $curr_ops) {
+  $listDays[$curr_ops["opdate"]]["hors_plage"] = $curr_ops;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -71,9 +84,7 @@ $smarty->assign("lastmonth"   , $lastmonth   );
 $smarty->assign("nextmonth"   , $nextmonth   );
 $smarty->assign("listChir"    , $listChir    );
 $smarty->assign("selChir"     , $selChir     );
-$smarty->assign("listPlages"  , $listPlages  );
-$smarty->assign("listUrgences", $listUrgences);
-$smarty->assign("urgences"    , $urgences);
+$smarty->assign("listDays"    , $listDays    );
 
 $smarty->display("vw_idx_planning.tpl");
 

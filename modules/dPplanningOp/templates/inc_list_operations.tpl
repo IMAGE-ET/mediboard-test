@@ -28,63 +28,6 @@
     <th>{{mb_title class=COperation field=time_operation}}</th>
     <th>{{mb_title class=COperation field=temp_operation}}</th>
   </tr>
-  
-  {{if $urgences}}
-  {{foreach from=$listUrgences item=curr_op}}
-  <tbody class="hoverable">
-
-  <tr>
-  
-    <td class="text" {{if !$board}}rowspan="2"{{/if}}>
-      <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
-        class="tooltip-trigger"
-        onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_op->_ref_sejour->_ref_patient->_id}} } })"
-      >
-        {{$curr_op->_ref_sejour->_ref_patient->_view}}
-      </a>
-    </td>
-    
-    <td class="text">
-      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{if $curr_op->libelle}}
-          <em>[{{$curr_op->libelle}}]</em>
-          <br />
-        {{/if}}
-        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        <strong>{{$curr_code->code}}</strong>
-        {{if !$board}}
-        : {{$curr_code->libelleLong}}
-        {{/if}}
-        <br />
-        {{/foreach}}
-      </a>
-    </td>
-    <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled{{/if}}">
-      {{if $curr_op->annulee}}
-        [ANNULEE]
-      {{else}}
-      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
-      </a>
-      {{/if}}
-    </td>
-    <td style="text-align: center;">
-      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->temp_operation|date_format:"%Hh%M"}}
-      </a>
-    </td>
-  </tr>
-
-  {{if !$board}}
-	<tr>
-    <td colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$curr_op}}
-    </td>
-  </tr>
-  {{/if}}
-
-  {{/foreach}}
-  {{else}}
   {{foreach from=$listDay item=curr_plage}}
   <tr>
     <th colspan="6">{{$curr_plage->_ref_salle->nom}} : de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
@@ -157,6 +100,65 @@
   </tbody>
   {{/foreach}}
   {{/foreach}}
+  
+  {{if $listUrgences|@count}}
+  <tr>
+    <th colspan="6">Hors plage</th>
+  </tr>
   {{/if}}
+  {{foreach from=$listUrgences item=curr_op}}
+  <tbody class="hoverable">
+
+  <tr>
+  
+    <td class="text" {{if !$board}}rowspan="2"{{/if}}>
+      <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
+        class="tooltip-trigger"
+        onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_op->_ref_sejour->_ref_patient->_id}} } })"
+      >
+        {{$curr_op->_ref_sejour->_ref_patient->_view}}
+      </a>
+    </td>
+    
+    <td class="text">
+      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
+        {{if $curr_op->libelle}}
+          <em>[{{$curr_op->libelle}}]</em>
+          <br />
+        {{/if}}
+        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+        <strong>{{$curr_code->code}}</strong>
+        {{if !$board}}
+        : {{$curr_code->libelleLong}}
+        {{/if}}
+        <br />
+        {{/foreach}}
+      </a>
+    </td>
+    <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled{{/if}}">
+      {{if $curr_op->annulee}}
+        [ANNULEE]
+      {{else}}
+      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
+        {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
+      </a>
+      {{/if}}
+    </td>
+    <td style="text-align: center;">
+      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
+        {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+      </a>
+    </td>
+  </tr>
+
+  {{if !$board}}
+	<tr>
+    <td colspan="10">
+      {{include file=inc_documents_operation.tpl operation=$curr_op}}
+    </td>
+  </tr>
+  {{/if}}
+
+  {{/foreach}}
 </table>
   
