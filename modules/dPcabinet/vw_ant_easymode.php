@@ -42,9 +42,7 @@ foreach ($antecedent->_helped_fields as $field => $prop) {
     foreach ($antecedent->_enums[$prop] as $type) {
     	$where["depend_value"] = "= '$type'";
       $aides = $aide->loadList($where, $order);
-      if (count($aides)) {
-		    $aides_antecedent[$type] = $aides;
-      }
+		  $aides_antecedent[$type] = $aides;
     }
     
     $where["depend_value"] = 'IS NULL';

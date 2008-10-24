@@ -67,7 +67,7 @@ easyMode = function() {
   var url = new Url();
   url.setModuleAction("dPcabinet", "vw_ant_easymode");
   url.addParam("user_id", "{{$userSel->_id}}");
-  url.pop(width, height, "easyMode");
+  url.pop(width, height, "Mode grille");
 }
 
 /**
@@ -122,7 +122,7 @@ Main.add(function () {
 <table class="form">
   <tr>
     <td class="text">
-      <button class="edit" type="button" onclick="easyMode();">Mode de saisie simplifié</button>
+      <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
       
       <div class="little-info">
       	Les addictions sont désormais gérées comme un type d'antécédent, à l'instar d'Habitus.<br />

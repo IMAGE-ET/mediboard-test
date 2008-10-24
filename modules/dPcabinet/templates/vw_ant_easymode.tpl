@@ -61,6 +61,8 @@ Main.add(function () {
             {{$curr_aide->name}}
           </td>
           {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
+        {{foreachelse}}
+          <td>{{tr}}CAideSaisie.none{{/tr}}</td>
         {{/foreach}}
         </tr>
       </table>
