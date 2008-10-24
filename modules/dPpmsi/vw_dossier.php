@@ -38,6 +38,7 @@ if ($patient->patient_id) {
     $sejour->_ref_dossier_medical->loadRefsAntecedents();
     $sejour->_ref_dossier_medical->loadRefsTraitements();
     $sejour->loadRefsAffectations();
+    $sejour->loadNumDossier();
   }
   
   //Affectation

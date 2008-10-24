@@ -37,11 +37,11 @@ Main.add(function () {
       <label for="id400" title="Saisir le numéro de dossier">Numéro de dossier</label>
     </th>
     <td>
-      <input type="text" class="notNull" name="id400" value="{{$_sejour->_ref_numdos->id400}}" size="8" />
-      <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_numdos->tag}}" />
+      <input type="text" class="notNull" name="id400" value="{{if $_sejour->_ref_numdos}}{{$_sejour->_ref_numdos->id400}}{{/if}}" size="8" />
+      <input type="hidden" class="notNull" name="tag" value="{{if $_sejour->_ref_numdos}}{{$_sejour->_ref_numdos->tag}}{{/if}}" />
       <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
       <input type="hidden" class="notNull" name="object_class" value="CSejour" />
-      <input type="hidden" name="last_update" value="{{$_sejour->_ref_numdos->last_update}}" />
+      <input type="hidden" name="last_update" value="{{if $_sejour->_ref_numdos}}{{$_sejour->_ref_numdos->last_update}}{{/if}}" />
     </td>
     <td class="button" rowspan="2">
       <button class="submit" type="submit">Valider</button>

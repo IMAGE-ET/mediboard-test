@@ -32,10 +32,8 @@ function choosePreselection(oSelect) {
   var sCode = aParts.pop();
 
   var oForm = oSelect.form;
-  oForm.code_uf.value = sCode;
-  oForm.code_uf.onchange();
-  oForm.libelle_uf.value = sLibelle;
-  oForm.libelle_uf.onchange();
+  $V(oForm.code_uf, sCode);
+  $V(oForm.libelle_uf, sLibelle);
   
   oSelect.value = "";
 }
