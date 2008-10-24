@@ -34,7 +34,6 @@
     <th>Durée</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
-  {{if $curr_consult->patient_id}}
   <tr>
     {{if $curr_consult->premiere}}
     <td style="background-color:#eaa">
@@ -48,6 +47,7 @@
         <img src="./modules/dPcabinet/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
       </div>
     </td>
+    {{if $curr_consult->patient_id}}
     <td>{{$curr_consult->_ref_patient->_view}}</td>
     {{if $coordonnees}}
     <td>{{$curr_consult->_ref_patient->adresse}}<br />{{$curr_consult->_ref_patient->cp}} {{$curr_consult->_ref_patient->ville}}</td>
@@ -63,6 +63,11 @@
         ({{mb_value object=$curr_consult->_ref_patient field="naissance"}})
       {{/if}}
     </td>
+    {{else}}
+    <td colspan="{{if $coordonnees}}4{{else}}2{{/if}}">
+      [PAUSE]
+    </td>
+    {{/if}}
     <td class="text">
       {{$curr_consult->motif|nl2br}}
       {{if $curr_consult->_ref_consult_anesth->_id && $curr_consult->_ref_consult_anesth->operation_id}}
@@ -87,7 +92,6 @@
     <td class="text">{{$curr_consult->rques|nl2br}}</td>
     <td class="text">{{$curr_consult->duree}} x {{$curr_plage->freq|date_format:"%M"}} min</td>
   </tr>
-  {{/if}}
   {{/foreach}}
   {{/foreach}}
 </table>
