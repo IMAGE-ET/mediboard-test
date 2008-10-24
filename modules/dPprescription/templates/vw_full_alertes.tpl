@@ -1,20 +1,22 @@
 {{if $alertesInteractions|@count}}
 <table class="tbl">
   <tr>
-    <th colspan="5">{{$alertesInteractions|@count}} interaction(s)</th>
+    <th colspan="6">{{$alertesInteractions|@count}} interaction(s)</th>
   </tr>
   <tr>
+    <th>Niveau</th>
+    <th>Gravité</th>
     <th>Produit</th>
     <th>Interéagit avec</th>
-    <th>Gravité</th>
     <th>Mécanisme</th>
     <th>Conduite à tenir</th>
   </tr>
   {{foreach from=$alertesInteractions item=curr_alerte}}
   <tr>
+    <td class="text">{{$curr_alerte->Niveau}}</td>
+    <td class="text">{{$curr_alerte->Gravite}}</td>
     <td class="text">{{$curr_alerte->Nom1}} ({{$curr_alerte->strClasse1}})</td>
     <td class="text">{{$curr_alerte->Nom2}} ({{$curr_alerte->strClasse2}})</td>
-    <td class="text">{{$curr_alerte->Niveau}}</td>
     <td class="text">{{$curr_alerte->Type}} : {{$curr_alerte->Message}}</td>
     <td class="text">{{$curr_alerte->strConduite}}</td>
   </tr>

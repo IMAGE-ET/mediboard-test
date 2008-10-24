@@ -10,7 +10,6 @@
 require_once("bcbObject.class.php");
 
 class CBcbControleInteraction extends CBcbObject {
-  
   // Constructeur
   function CBcbControleInteraction(){
     $this->distClass = "BCBControleInteraction";
@@ -27,8 +26,14 @@ class CBcbControleInteraction extends CBcbObject {
   
   function getInteractions() {
     $this->testInteractions();
+    // Chargement du niveau de gravité (erreur dans la classe BCB)
+    foreach($this->distObj->gtabInter as $_interaction){
+      $gravite = $_interaction->Gravite;
+      $ds = CSQLDataSource::get("bcb");
+      $query = "SELECT `NIVEAUGRAVITE` FROM `INTER_GRAVITES` WHERE `LIBELLEGRAVITE` = '$gravite'";
+      $_interaction->Niveau = $ds->loadResult($query);
+    }
     return $this->distObj->gtabInter;
   }
-  
 }
 ?>

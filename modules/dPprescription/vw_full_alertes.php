@@ -25,13 +25,15 @@ $prescription->load($prescription_id);
 
 if($prescription->object_id) {
   $prescription->loadRefsFwd();
-  $prescription->_ref_object->loadRefSejour();
-  $prescription->_ref_object->loadRefPatient();
-  $prescription->_ref_object->_ref_patient->loadRefDossierMedical();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->updateFormFields();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAntecedents();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
-  $prescription->_ref_object->loadRefsPrescriptions();
+  $object =& $prescription->_ref_object;
+  $object->loadRefSejour();
+  $object->loadRefPatient();
+  $patient =& $object->_ref_patient;
+  $patient->loadRefDossierMedical();
+  $patient->_ref_dossier_medical->updateFormFields();
+  $patient->_ref_dossier_medical->loadRefsAntecedents();
+  $patient->_ref_dossier_medical->loadRefsTraitements();
+  $object->loadRefsPrescriptions();
   $prescription->loadRefsLinesMed();
   
   // Calcul des alertes
