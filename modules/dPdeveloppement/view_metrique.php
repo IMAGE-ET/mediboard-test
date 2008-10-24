@@ -7,38 +7,31 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
+
 $ds = CSQLDataSource::get("std");
+
+// Nom des classes à récupérer
+$listesClasses = array(
+  'CUser', 'CSalle', 'CPatient', 'CChambre', 'CLit', 
+  'CConsultation', 'CCompteRendu', 'CSejour', 'COperation', 
+  'CFile', 'CPrescription', 'CPrescriptionLineMedicament', 
+  'CNaissance', 'CRPU'
+);
+
 $result = array();
-
-// Nom des tables à récupérer
-$listesTables = array( "users"           => "Utilisateurs",
-                        "sallesbloc"      => "Salles d'opération",
-                        "patients"        => "Dossiers patient",
-                        "consultation"    => "Consultations",
-                        "compte_rendu"    => "Comptes rendus",
-                        "sejour"          => "Séjours",
-                        "operations"      => "Opérations",
-                        "files_mediboard" => "Fichiers joints");
-
-
-foreach ($listesTables as $keyListTables => $currListTables){
-
-  $sql="SHOW TABLE STATUS LIKE '$keyListTables'";
+foreach ($listesClasses as $class){
+	$object = new $class;
+  $sql = "SHOW TABLE STATUS LIKE '{$object->_spec->table}'";
   $statusTable = $ds->loadList($sql);
-  if($statusTable){
-    $result[$keyListTables]["descr"]  = $currListTables;
-    $result[$keyListTables]["nombre"] = $statusTable[0]["Rows"];
-  }
+  if ($statusTable)
+    $result[$class] = $statusTable[0];
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("result" , $result);
-
 $smarty->display("view_metrique.tpl");
 
 ?>

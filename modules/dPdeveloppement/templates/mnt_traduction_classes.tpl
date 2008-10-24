@@ -30,10 +30,10 @@
 
 
 <!-- Modification des items -->
-<form action="?m={{$m}}" name="translate" method="post">
+<form action="?m=dPdeveloppement" name="translate" method="post">
 
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="tab" value="{{$tab}}" />
+<input type="hidden" name="m" value="dPdeveloppement" />
+<input type="hidden" name="tab" value="mnt_traduction_classes" />
 <input type="hidden" name="module" value="{{$module}}" />
 <input type="hidden" name="trans[]" value="{{$trans}}" />
 <input type="hidden" name="language" value="{{$language}}" />
