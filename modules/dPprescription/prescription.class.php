@@ -225,42 +225,30 @@ class CPrescription extends CMbObject {
 	  	if($unite_decalage_fin == "DAYS"){
 	      $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin);	
 	  	} else {
-	  	  $_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $time_fin);   
+	  	  //$_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $time_fin);   
+	  	  $date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
+	  	  $date_fin = mbDate($date_time_fin);
+	  	  $time_fin = mbTime($date_time_fin);
 	  	}
 	  }
 
 	  // Decalage du debut
-    if($_line->_class_name == "CPrescriptionLineMedicament"){
-	    if($_line->decalage_line){
-	      $signe = ($_line->decalage_line >= 0) ? "+" : "";
-			  if($unite_decalage_debut == "DAYS"){ 
-		      $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);	
-			  } else {
-			    $_line->debut = $date_debut;
-			    $_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);	  
-			  }
-	    } else {
-		  $_line->debut = mbDate($date_debut);
-	    }
+    if($_line->decalage_line){
+      $signe = ($_line->decalage_line >= 0) ? "+" : "";
+		  if($unite_decalage_debut == "DAYS"){ 
+	      $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);	
+		  } else {
+		    //$_line->debut = $date_debut;
+		    //$_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);	  
+        $date_time_debut = mbDateTime("$signe $_line->decalage_line HOURS", "$date_debut $time_debut");
+	  	  $_line->debut = mbDate($date_time_debut);
+	  	  $_line->time_debut = mbTime($date_time_debut);
+	  	  
+		  }
+    } else {
+	    $_line->debut = mbDate($date_debut);
     }
 
-	  else if($_line->_class_name == "CPrescriptionLineElement"){
-		  $chapitre = $_line->_ref_element_prescription->_ref_category_prescription->chapitre;
-	    if($chapitre != "dmi"){
-		    $signe = ($_line->decalage_line >= 0) ? "+" : "";
-		    if($_line->decalage_line){
-		      if($unite_decalage_debut == "DAYS"){
-		        $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);
-		      } else {
-		        $_line->debut = $date_debut;
-		        $_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);
-		      }
-		    } else {
-		      $_line->debut = mbDate($date_debut);
-		    }
-		    	
-	    }
-	  }
 
 	  // Calcul de la duree
 	  if($_line->jour_decalage_fin){
