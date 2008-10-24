@@ -1,3 +1,11 @@
+{{if !$app->_is_intranet}}
+<div class="big-info">
+Pour des raisons de sécurité, l'affichage des résultats de laboratoire n'est pas disponible depuis l'accès distant.
+<br />
+Merci de réessayer ultérieurement depuis un accès sur site.
+</div>
+
+{{else}}
 <script type="text/javascript">
 
 Main.add(function() {
@@ -12,6 +20,7 @@ Main.add(function() {
   <input type="hidden" name="password" value="{{$idImeds.password}}" />
 </form>
  
+ 
 <iframe 
   id="Imeds-patient"
   name="Imeds-patient"
@@ -20,3 +29,4 @@ Main.add(function() {
   >
   Serveur de résultats indisponible pour le patient '{{$patient->_view}}';
 </iframe>
+{{/if}}

@@ -53,6 +53,8 @@ class CAppUI {
   var $user_id = 0;
   
   var $_ref_user = null;
+  
+  var $_is_intranet = null;
 
   // DEPRECATED Use $_ref_user instead
   // @TODO Remove all calls to these variables
@@ -528,23 +530,14 @@ class CAppUI {
     }
     
     // Test if remote connection is allowed
-    $browserIP = explode(".", $_SERVER["REMOTE_ADDR"]);
-    $ip0 = intval($browserIP[0]);
-    $ip1 = intval($browserIP[1]);
-    $ip2 = intval($browserIP[2]);
-    $ip3 = intval($browserIP[3]);
-    $is_local[1] = ($ip0 == 127 && $ip1 == 0 && $ip2 == 0 && $ip3 == 1);
-    $is_local[2] = ($ip0 == 10);
-    $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
-    $is_local[4] = ($ip0 == 192 && $ip1 == 168);
-    $is_local[0] = $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
-    $is_local[0] = $is_local[0] && ($_SERVER["REMOTE_ADDR"] != CAppUI::conf("system reverse_proxy"));
-    if (!$is_local[0] && $this->user_remote == 1 && $user->user_type != 1) {
+    $this->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != CAppUI::conf("system reverse_proxy")); 
+    if (!$this->_is_intranet && $this->user_remote == 1 && $user->user_type != 1) {
       $this->setMsg("User has no remote access", UI_MSG_ERROR);
       return false;
     }
 
     $this->user_id   = $user->_id;
+    
     
     // DEPRECATED
     $this->user_first_name = $user->user_first_name;

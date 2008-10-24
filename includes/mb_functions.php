@@ -799,7 +799,7 @@ function in_range($value, $min, $max) {
  * Check if a number is a valid Luhn number
  * see http://en.wikipedia.org/wiki/Luhn
  * @param code string String representing a potential Luhn number
- * @return boolean
+ * @return bool
  */
 function luhn ($code) {
   $code = preg_replace('/\D|\s/', '', $code);
@@ -827,12 +827,30 @@ function luhn ($code) {
 
 /**
  * Check wether a URL exists (200 HTTP Header)
- * @param $url string URL to check
- * @return boolean
+ * @param string $url URL to check
+ * @return bool
  */
 function url_exists($url) {
   $headers = @get_headers($url);
   return (preg_match("|200|", $headers[0])); 
+}
+
+/**
+ * Check wether a IP address is in intranet-like form
+ * @param string $ip IP address to check
+ * @return bool
+ */
+function is_intranet_ip($ip) {
+  $browserIP = explode(".", $ip);
+  $ip0 = intval($browserIP[0]);
+  $ip1 = intval($browserIP[1]);
+  $ip2 = intval($browserIP[2]);
+  $ip3 = intval($browserIP[3]);
+  $is_local[1] = ($ip0 == 127 && $ip1 == 0 && $ip2 == 0 && $ip3 == 1);
+  $is_local[2] = ($ip0 == 10);
+  $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
+  $is_local[4] = ($ip0 == 192 && $ip1 == 168);
+  return $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
 }
 
 ?>
