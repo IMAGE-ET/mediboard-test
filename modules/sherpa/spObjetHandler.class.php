@@ -133,11 +133,10 @@ class CSpObjectHandler extends CMbObjectHandler {
    * @return array|CIdSante400
    */
   static function getIds400For(CMbObject &$mbObject) {
-    global $g, $m;
+    global $g;
     
     // Instance for current group
-    $id400 = new CIdSante400;
-    $id400->loadLatestFor($mbObject, "sherpa group:$g");
+    $id400 = self::getId400For($mbObject);
     if (!$id400->_id) {
       // May not create if id should not be built (e.g. when merging)
       if ($id400->id400 = self::makeId($mbObject)) {
@@ -163,8 +162,11 @@ class CSpObjectHandler extends CMbObjectHandler {
    */
   static function getId400For(CMbObject &$mbObject) {
     global $g;
+
+//  Should not use CIdSante400::loadLatestFor(); 
 //    $id400 = new CIdSante400;
 //    $id400->loadLatestFor($mbObject, "sherpa group:$g");
+
     $order = "id400 ASC";
     $id400 = new CIdSante400;
     $id400->tag = "sherpa group:$g";
@@ -207,11 +209,15 @@ class CSpObjectHandler extends CMbObjectHandler {
       return;
     }
     
-    // Special triggers
+    // Special pre-triggers
     if ($mbObject instanceof CSejour) {
-      if ($mbObject->fieldModified("sortie_reelle")) {
-        CSpActesExporter::exportSejour($mbObject);
-      }
+      //	ALREADY DONE AS POST TRIGGER, SEE BELOW      
+//      if ($mbObject->fieldModified("sortie_reelle")) {
+//        CSpActesExporter::exportSejour($mbObject);
+//      }
+      $sejour = $mbObject;
+      $sejour->loadRefPatient();
+      $this->getIds400For($sejour->_ref_patient);
     }
     
 
@@ -256,7 +262,7 @@ class CSpObjectHandler extends CMbObjectHandler {
       }
     }
     
-    // Special triggers
+    // Special post-triggers
     if ($mbObject instanceof CSejour) {
       if ($mbObject->fieldModified("sortie_reelle")) {
         CSpActesExporter::exportSejour($mbObject);

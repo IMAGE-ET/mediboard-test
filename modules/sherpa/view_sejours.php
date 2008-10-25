@@ -1,11 +1,11 @@
 <?php
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision: 2165 $
-* @author Sherpa
-*/
+ * @package Mediboard
+ * @subpackage dPpatients
+ * @version $Revision: 2165 $
+ * @author Sherpa
+ */
 
 global $can, $m;
 
