@@ -73,6 +73,7 @@ class CAffectation extends CMbObject {
   }
 
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_duree = mbDaysRelative($this->entree, $this->sortie);
   }
 
@@ -118,9 +119,11 @@ class CAffectation extends CMbObject {
       $oldAff->load($this->_id);
       $oldAff->loadRefsAffectations();
     }
-    if($msg = parent::store()) {
+    
+    if ($msg = parent::store()) {
       return $msg;
     }
+    
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
 

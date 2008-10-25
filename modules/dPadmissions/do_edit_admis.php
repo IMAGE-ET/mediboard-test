@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPadmissions
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @TODO REMPLACER PAR UN DO_MULTI_SEJOUR_AED CAR ON PERD LES LOGS
+ * @package Mediboard
+ * @subpackage dPadmissions
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 global $AppUI, $m;
 $ds = CSQLDataSource::get("std");
@@ -19,31 +20,6 @@ $id    = mbGetValueFromPost("id", 0);
 $dateTime = mbDateTime();
 
 switch ($mode) {
-  case "admis" : {
-    if ($id) {
-      if($value == "o") {
-        $sql = "UPDATE sejour SET" .
-          "\n`entree_reelle` = '$dateTime'" .
-          "\nWHERE sejour_id = '$id';";
-      } else {
-        $sql = "UPDATE sejour SET" .
-          "\n`entree_reelle` = NULL" .
-          "\nWHERE sejour_id = '$id';";
-      }
-     
-      $result = $ds->exec($sql); $ds->error();
-    }
-    break;
-  }
-  case "saisie" : {
-    if($id) {
-      $sql = "UPDATE sejour" .
-        "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .
-        "\nWHERE sejour.sejour_id = '$id';";
-      $result = $ds->exec($sql); $ds->error();
-    }
-    break;
-  }
   case "allsaisie" : {
       $sql = "UPDATE sejour" .
         "\nSET sejour.saisi_SHS = '$value', sejour.modif_SHS = '0'" .

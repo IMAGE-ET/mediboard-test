@@ -36,19 +36,18 @@
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <form name="editChFrm{{$curr_adm->sejour_id}}" action="?" method="post">
   
-  <input type="hidden" name="m" value="dPhospi" />
-  <input type="hidden" name="otherm" value="dPadmissions" />
-  <input type="hidden" name="dosql" value="do_edit_chambre" />
-  <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_sejour_aed" />
+  <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
   {{if $curr_adm->chambre_seule}}
-  <input type="hidden" name="value" value="0" />
+  <input type="hidden" name="chambre_seule" value="0" />
   <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form);">
-    simple
+    Chambre simple
   </button>
   {{else}}
-  <input type="hidden" name="value" value="1" />
+  <input type="hidden" name="chambre_seule" value="1" />
   <button class="change" type="button" onclick="submitAdmission(this.form);">
-    double
+    Chambre double
   </button>
   {{/if}}
   </form>
@@ -84,45 +83,47 @@
 {{else}}
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <form name="editAdmFrm{{$curr_adm->sejour_id}}" action="?" method="post">
-  <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="dosql" value="do_edit_admis" />
-  <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
-  <input type="hidden" name="mode" value="admis" />
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_sejour_aed" />
+  <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
+
   {{if !$curr_adm->entree_reelle}}
-  <input type="hidden" name="value" value="o" />
-  
-  <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_adm->entree_prevue) || ($date_demain < $curr_adm->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">
-    Admis
-  </button>
+	  <input type="hidden" name="entree_reelle" value="now" />
+	  <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_adm->entree_prevue) || ($date_demain < $curr_adm->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">
+	    Admettre
+	  </button>
+	  
   {{else}}
-  <input type="hidden" name="value" value="n" />
-  <button class="cancel" type="button" onclick="submitAdmission(this.form);">
-    Annuler
-  </button>
-  <br />
+	  <input type="hidden" name="entree_reelle" value="" />
+	  <button class="cancel" type="button" onclick="submitAdmission(this.form);">
+	    {{tr}}Cancel{{/tr}}
+	  </button>
+	  <br />
   
-  {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
-    {{$curr_adm->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
-  {{else}}
-  {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}
-  {{/if}}
+ 	  {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
+	    {{$curr_adm->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+	    <br>
+	  {{else}}
+	  {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}
+	  {{/if}}
   {{/if}}
   </form>
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <form name="editSaisFrm{{$curr_adm->sejour_id}}" action="?" method="post">
-  <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="dosql" value="do_edit_admis" />
-  <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
-  <input type="hidden" name="mode" value="saisie" />
+
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_sejour_aed" />
+  <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
+
   {{if !$curr_adm->saisi_SHS}}
-  <input type="hidden" name="value" value="1" />
+  <input type="hidden" name="saisi_SHS" value="1" />
   <button class="tick" type="button" onclick="submitAdmission(this.form);">
     {{tr}}CSejour-saisi_SHS{{/tr}}
   </button>
   {{else}}
-  <input type="hidden" name="value" value="0" />
+  <input type="hidden" name="saisi_SHS" value="0" />
   <button class="cancel" type="button" onclick="submitAdmission(this.form);">
     {{tr}}Cancel{{/tr}}
   </button>

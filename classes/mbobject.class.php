@@ -819,10 +819,11 @@ class CMbObject {
    * Prepare the user log before object persistence (store or delete)
    */
   function doLog() {
-    // Si object non loggable
-    if (!$this->_spec->loggable){
+    // Aucun log à produire (non loggable, pas de modifications, etc.)
+    if (!$this->_ref_last_log) {
       return;
     }
+    
     $this->_ref_last_log->store();
   }
   

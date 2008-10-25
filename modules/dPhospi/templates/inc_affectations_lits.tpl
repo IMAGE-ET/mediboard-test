@@ -304,19 +304,21 @@ Septique
 <tr class="dates">
   <td class="text" colspan="2">
     {{if $can->edit}}
-    <form name="editChFrm{{$sejour->_id}}" action="?" method="post">
-    <input type="hidden" name="m" value="{{$m}}" />
-    <input type="hidden" name="dosql" value="do_edit_chambre" />
-    <input type="hidden" name="id" value="{{$sejour->_id}}" />
+    <form name="editChFrm{{$sejour->_id}}" action="?m=dPhospi" method="post">
+
+	  <input type="hidden" name="m" value="dPplanningOp" />
+	  <input type="hidden" name="dosql" value="do_sejour_aed" />
+	  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+
     {{if $sejour->chambre_seule}}
-    <input type="hidden" name="value" value="0" />
+    <input type="hidden" name="chambre_seule" value="0" />
     <button class="change" type="submit" style="color: #f22;">
-      chambre simple
+      Chambre simple
     </button>
     {{else}}
-    <input type="hidden" name="value" value="1" />
+    <input type="hidden" name="chambre_seule" value="1" />
     <button class="change" type="submit">
-      chambre double
+      Chambre double
     </button>
     {{/if}}
     </form>
