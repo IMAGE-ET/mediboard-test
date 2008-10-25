@@ -194,17 +194,16 @@ class CSpSejMed extends CSpObject {
       $sercod = $sejour->facturable ? "PB" : "EX";
     } 
     else {
-      if ($sejour->type == "comp") $sercod = "2";
-      $duree_time = mbHoursRelative($sejour->_entree, $sejour->_sortie);
-      if ($duree_time  <= 48) $sercod = "A";
-      
+      $sercod = $sejour->type == "comp" ? "2" : "A";
+
       if (!$sejour->chambre_seule) {
-        $sercod .= 2;
-      } else {
+        $sercod .= "2";
+      } 
+      else {
 	      $presta = new CPrestation();
 	      $presta->load($sejour->prestation_id);
         $idPresta = CSpObjectHandler::getId400For($presta);
-        $sercod .= mbGetValue($idPresta->id400, 1);
+        $sercod .= mbGetValue($idPresta->id400, "1");
       }
       
       if ($sejour->reanimation) {
