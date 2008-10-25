@@ -781,7 +781,6 @@ class CMbObject {
       }
     }
     
-    mbDump($fields);
     $object_id = $this->_id;
     
     $type = "store";
@@ -826,7 +825,6 @@ class CMbObject {
     }
     $this->_ref_last_log->store();
   }
-  
   
   /**
    * Inserts a new row if id is zero or updates an existing row in the database table
