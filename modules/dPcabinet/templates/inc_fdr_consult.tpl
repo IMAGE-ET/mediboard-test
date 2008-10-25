@@ -1,12 +1,6 @@
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
 
-<script type="text/javascript">
-  function reloadAfterUploadFile(){
-    File.refresh('{{$consult->_id}}','{{$consult->_class_name}}');
-  }
-</script>
-
 <table class="form">
   <tr>
     <th class="category">Fiches et fichiers liés</th>
@@ -25,9 +19,11 @@
       
       <!-- Fichiers -->
       {{mb_include_script module="dPcabinet" script="file"}}
+      <div id="files">
       <script type="text/javascript">
-        File.register('{{$consult->_id}}','{{$consult->_class_name}}');
+        File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
       </script>
+      </div>
     </td>
     
     <td style="width:50%" id="documents-fdr"> 

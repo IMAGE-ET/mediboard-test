@@ -1,5 +1,6 @@
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_include_script module="dPcabinet" script="file"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}

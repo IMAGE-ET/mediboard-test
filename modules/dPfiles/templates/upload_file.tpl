@@ -3,6 +3,10 @@
 if (window.opener.reloadAfterUploadFile) {
   window.opener.reloadAfterUploadFile();
 }
+
+if (window.opener.File.refresh) {
+	window.opener.File.refresh("{{$object_id}}", "{{$object_class}}");
+}
 </script>
 {{/if}}
 
