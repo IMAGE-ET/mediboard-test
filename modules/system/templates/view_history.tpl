@@ -86,7 +86,7 @@
 <table class="tbl">
   {{if $dialog}}
   <tr>
-    <th colspan="4" class="title">
+    <th colspan="5" class="title">
       {{if $list|@count > 0}}
       Historique de {{$item}}
       {{else}}

@@ -272,7 +272,7 @@ class CMbObject {
     // Field is not valued or Nothing in base
     if ($this->$field === null || !$this->_id) {
       return false;
-    }
+    }    
     
     // Load DB version
     $this->loadOldObject();
@@ -760,8 +760,10 @@ class CMbObject {
   function updateDBFields() {
   }
   
-  
-  function log() {
+  /**
+   * Prepare the user log before object persistence (store or delete)
+   */
+  function prepareLog() {
   	global $AppUI;
   	
     // Si object non loggable
@@ -772,12 +774,14 @@ class CMbObject {
     // Analyse changes fields
     $fields = array();
     $db_fields = $this->getDBFields();
+    
     foreach ($db_fields as $propName => $propValue) {
       if ($this->fieldModified($propName)) {
         $fields[] = $propName;
       }
     }
     
+    mbDump($fields);
     $object_id = $this->_id;
     
     $type = "store";
@@ -808,11 +812,20 @@ class CMbObject {
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
-    $log->store();
     
     $this->_ref_last_log = $log;
   }
   
+  /**
+   * Prepare the user log before object persistence (store or delete)
+   */
+  function doLog() {
+    // Si object non loggable
+    if (!$this->_spec->loggable){
+      return;
+    }
+    $this->_ref_last_log->store();
+  }
   
   
   /**
@@ -824,7 +837,9 @@ class CMbObject {
     // Properties checking
     $this->updateDBFields();
 
+    // Préparation du log
     $this->loadOldObject();
+    $this->prepareLog();
     
     if ($msg = $this->check()) {
       return CAppUI::tr(get_class($this)) . 
@@ -849,9 +864,9 @@ class CMbObject {
     // Load the object to get all properties
     $this->load();
     
-    // Creation du log une fois le store terminé
-    $this->log();
-    
+    // Enregistrement du log une fois le store terminé
+    $this->doLog();
+        
     // Trigger event
     $this->onStore();
 
@@ -1111,8 +1126,10 @@ class CMbObject {
    * @return null|string null if successful otherwise returns and error message
    */
   function delete() {
+    // Préparation du log
     $this->loadOldObject();
-    
+    $this->prepareLog();
+        
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
@@ -1157,9 +1174,9 @@ class CMbObject {
     // Deletion successful
     $this->_id = null;
    
-    // Creation du log une fois le delete terminé
-    $this->log();
-    
+    // Enregistrement du log une fois le delete terminé
+    $this->doLog();
+        
     // Event Handlers
     $this->onDelete();
 
@@ -1533,7 +1550,8 @@ class CMbObject {
   	$where["object_class"] = " = '$this->_class_name'";
   	$where["fields"] = " LIKE '%$fieldName%'";
   	$log->loadObject($where, $order);
-  	if($log->_id){
+  	
+  	if ($log->_id){
   	  $log->loadRefsFwd();
   	}
   	return $log;
