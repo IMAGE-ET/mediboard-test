@@ -228,7 +228,11 @@ class CRPU extends CMbObject {
     $sejour->entree_reelle = $this->_entree;
     $sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
     $sejour->annule        = $this->_annule;
-        
+
+    // Le patient est souvent chargé à vide ce qui pose problème
+    // dans le onStore(). Ne pas supprimer.
+    $sejour->_ref_patient = null;
+
     if ($msg = $sejour->store()) {
       return $msg;
     }

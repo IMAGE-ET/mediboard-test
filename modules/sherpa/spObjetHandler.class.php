@@ -142,7 +142,7 @@ class CSpObjectHandler extends CMbObjectHandler {
       if ($id400->id400 = self::makeId($mbObject)) {
         $id400->last_update = mbDateTime();
 	      if ($msg = $id400->store()) {
-	        trigger_error("Error updating '$mbObject->_view' : $msg", E_USER_WARNING);
+	        trigger_error("Error updating '$mbObject->_class_name' '$mbObject->_id' : $msg", E_USER_WARNING);
 	        return;
 	      }
       }
