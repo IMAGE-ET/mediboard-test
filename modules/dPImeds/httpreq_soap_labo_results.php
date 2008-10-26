@@ -27,8 +27,9 @@ $idCIDC->loadLatestFor($etab, "Imeds cidc");
 $results = array();
 
 if (CAppUI::conf("dPImeds url") != '') {
-  $urlImeds = parse_url(CAppUI::conf("dPImeds url"));
-  $serviceAdresse = $urlImeds["scheme"]."://".$urlImeds["host"]."/dllimeds/webimeddll.asmx";
+	$urlImeds = parse_url(CAppUI::conf("dPImeds url"));
+	$urlImeds['path'] = "/dllimeds/webimeddll.asmx";
+	$serviceAdresse = make_url($urlImeds);
   
   if (!url_exists($serviceAdresse)) {
     CAppUI::stepAjax("Serveur IMeds inatteignable à l'addresse : $serviceAdresse", UI_MSG_ERROR);

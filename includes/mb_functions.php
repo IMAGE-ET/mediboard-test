@@ -836,6 +836,37 @@ function url_exists($url) {
 }
 
 /**
+ * Build a url string based on components in an array
+ * @param array $components Components, as of parse_url (see PHP documentation)
+ * @return string
+ */
+function make_url($components) {
+  $url = $components["scheme"] . "://";
+
+  if (isset($components["user"])) {
+    $url .= $components["user"] . ":" . $components["pass"] . "@";
+  }
+  
+  $url .=  $components["host"];
+  
+  if (isset($components["port"])) {
+    $url .=  ":" . $components["port"];
+  }
+  
+  $url .=  $components["path"];
+  
+  if (isset($components["query"])) {
+    $url .=  "?" . $components["query"];
+  }
+  
+  if (isset($components["fragment"])) {
+    $url .=  "#" . $components["fragment"];
+  }
+  
+  return $url;
+}
+
+/**
  * Check wether a IP address is in intranet-like form
  * @param string $ip IP address to check
  * @return bool

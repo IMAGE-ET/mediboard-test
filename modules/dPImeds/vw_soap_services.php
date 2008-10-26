@@ -8,7 +8,13 @@
 */
 
 $urlImeds = parse_url(CAppUI::conf("dPImeds url"));
-$serviceAdresse = $urlImeds["scheme"]."://".$urlImeds["host"]."/dllimeds/webimeddll.asmx";
+$urlImeds['path'] = "/dllimeds/webimeddll.asmx";
+$serviceAdresse = make_url($urlImeds);
+
+if (!url_exists($serviceAdresse)) {
+  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur IMeds inatteignable à l'addresse : $serviceAdresse");
+  return;
+}
 
 $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
 $functions = $client->__getFunctions();
