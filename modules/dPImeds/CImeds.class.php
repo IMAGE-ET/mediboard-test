@@ -58,7 +58,6 @@ class CImeds {
 		$id400->loadLatestFor($AppUI->_ref_user, "Imeds_password");
 		$idImeds["password"] = md5($id400->id400);
 		
-		mbDump($idImeds);
 		return $idImeds;
   }
 }
