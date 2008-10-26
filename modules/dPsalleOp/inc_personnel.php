@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dpSalleOp
+* @subpackage dPsalleOp
 * @version $Revision: 1124 $
 * @author Alexis Granger
 */

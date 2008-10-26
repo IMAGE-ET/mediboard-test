@@ -1,6 +1,6 @@
 <form name="reglement-{{$acte_ccam->_id}}" method="post">
 <input type="hidden" name="dosql" value="do_acteccam_aed" />
-<input type="hidden" name="m" value="dpSalleOp" />
+<input type="hidden" name="m" value="dPsalleOp" />
 <input type="hidden" name="acte_id" value="{{$acte_ccam->_id}}" />
 <input type="hidden" name="_check_coded" value="0" />	    
 {{foreach from=$acte_ccam->_modificateurs item="modificateur"}}
