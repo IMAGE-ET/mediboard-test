@@ -76,6 +76,8 @@ foreach($listUrgences as $curr_ops) {
   $listDays[$curr_ops["opdate"]]["hors_plage"] = $curr_ops;
 }
 
+ksort($listDays);
+
 // Création du template
 $smarty = new CSmartyDP();
 
