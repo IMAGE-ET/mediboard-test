@@ -10,18 +10,23 @@
     <td>
 			<table class="tbl">
 			  <tr>
-			    <th>Code CIP</th>
-			    <th>Code UCD</th>
-			    <th>Libelle produit</th>
-			    <th>Laboratoire</th>
-			    <th>Prix hôpital</th>
-			    <th>Prix ville</th>
-			    <th>Date prix hôpital</th>
-			    <th>Date prix ville</th>
-			    <th>Code interne</th>
+			    <th rowspan="2">Code CIP</th>
+			    <th rowspan="2">Code UCD</th>
+			    <th rowspan="2">Libelle produit</th>
+			    <th rowspan="2">Laboratoire</th>
+			    <th colspan="2">Hôpital</th>
+			    <th colspan="2">Ville</th>
+			    <th rowspan="2">Code interne</th>
 			  </tr>
+        <tr>
+          <th>Date</th>
+          <th>Prix</th>
+          <th>Date</th>
+          <th>Prix</th>
+        </tr>
 			{{foreach from=$produits_livret item="produit_livret"}}
 			  {{assign var="produit" value=$produit_livret->_ref_produit}}
+        {{if $produit->code_cip}}
 			  <tr>
 			    <td>   
 			      {{$produit->code_cip}}
@@ -35,37 +40,24 @@
 			      <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
 			      {{/if}}
 			    </td>
-			    <td>
-			      {{$produit->code_ucd}}
-			    </td>
-			    <td>
-			      {{$produit->libelle}}
-			    </td>
-			    <td>
-			      {{$produit->nom_laboratoire}}
-			    </td>
+			    <td>{{$produit->code_ucd}}</td>
+			    <td>{{$produit->libelle}}</td>
+			    <td>{{$produit->nom_laboratoire}}</td>
+          <td>{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>
 			    <td>
 			      {{if $produit_livret->prix_hopital}}
 			        {{$produit_livret->prix_hopital}}&euro;
 			      {{/if}}
 			    </td>
+          <td>{{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}</td>
 			    <td>
 			      {{if $produit_livret->prix_ville}}
 			        {{$produit_livret->prix_ville}}&euro;
 			      {{/if}}
 			    </td>
-			    <td>
-			      {{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}
-			    </td>
-			    <td>
-			      {{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}
-			    </td>
-			    <td>
-			      {{$produit_livret->code_interne}}
-			    </td>
-			    
-			    
+			    <td>{{$produit_livret->code_interne}}</td>
 			  </tr>
+        {{/if}}
 			  {{/foreach}}
 			</table>
 	  </td>

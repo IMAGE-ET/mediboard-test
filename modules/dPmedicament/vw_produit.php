@@ -29,14 +29,8 @@ $mbProduit->loadClasseATC();
 // Chargement des classes therapeutiques du produit
 $mbProduit->loadClasseTherapeutique();
 
-$tabEspace = array();
-for($i=0; $i<=13; $i++){
-  @$tabEspace[$i] = $tabEspace[$i-1]."&nbsp;";
-}
-
 // Creation du template
 $smarty = new CSmartyDP();
-$smarty->assign("tabEspace", $tabEspace);
 $smarty->assign("mbProduit", $mbProduit);
 $smarty->display("vw_produit.tpl");
 

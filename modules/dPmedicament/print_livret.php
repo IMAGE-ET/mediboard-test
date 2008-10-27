@@ -11,7 +11,7 @@
 $etablissement = CGroups::loadCurrent();
 
 // Chargement des produits du livret therapeutique
-$etablissement->loadRefLivretTherapeutique("%","2000");
+$etablissement->loadRefLivretTherapeutique('%', 2000, true);
 
 // Création du template
 $smarty = new CSmartyDP();

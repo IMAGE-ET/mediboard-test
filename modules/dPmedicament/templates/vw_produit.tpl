@@ -90,7 +90,7 @@ Main.add(function () {
 
       <!-- Données cliniques -->
       <div id="two" style="display: none;">
-        <ul id="tab-clinique" class="control_tabs">
+        <ul id="tab-clinique" class="control_tabs_vertical" style="width: 20em;">
           <li><a href="#indications">Indications thérapeutiques</a></li>
           <li><a href="#posologie">Posologie et mode d'administration</a></li>
           <li><a href="#contre_indications">Contre-indications</a></li>
@@ -101,93 +101,93 @@ Main.add(function () {
           <li><a href="#effets_indesirables">Effets indésirables</a></li>
           <li><a href="#surdosage">Surdosage</a></li>
         </ul>
-        <hr class="control_tabs" />  
-      
-        <div id="indications" style="display: none;">{{$mbProduit->_ref_monographie->indications|smarty:nodefaults}}</div>
-        <div id="posologie" style="display: none;">{{$mbProduit->_ref_monographie->posologie|smarty:nodefaults}}</div>
-        <div id="contre_indications" style="display: none;">{{$mbProduit->_ref_monographie->contre_indications|smarty:nodefaults}}</div>
-        <div id="precautions_emploi" style="display: none;">{{$mbProduit->_ref_monographie->precautions_emploi|smarty:nodefaults}}</div>
-        <div id="interactions" style="display: none;">{{$mbProduit->_ref_monographie->interactions|smarty:nodefaults}}</div>
-        <div id="grossesse_allaitement" style="display: none;">{{$mbProduit->_ref_monographie->grossesse_allaitement|smarty:nodefaults}}</div>
-        <div id="effets_aptitude" style="display: none;">{{$mbProduit->_ref_monographie->effets_aptitude|smarty:nodefaults}}</div>
-        <div id="effets_indesirables" style="display: none;">{{$mbProduit->_ref_monographie->effets_indesirables|smarty:nodefaults}}</div>
-        <div id="surdosage" style="display: none;">{{$mbProduit->_ref_monographie->surdosage|smarty:nodefaults}}</div>
+
+        <div style="margin-left: 20.5em;">
+          <div id="indications" style="display: none;">{{$mbProduit->_ref_monographie->indications|smarty:nodefaults}}</div>
+          <div id="posologie" style="display: none;">{{$mbProduit->_ref_monographie->posologie|smarty:nodefaults}}</div>
+          <div id="contre_indications" style="display: none;">{{$mbProduit->_ref_monographie->contre_indications|smarty:nodefaults}}</div>
+          <div id="precautions_emploi" style="display: none;">{{$mbProduit->_ref_monographie->precautions_emploi|smarty:nodefaults}}</div>
+          <div id="interactions" style="display: none;">{{$mbProduit->_ref_monographie->interactions|smarty:nodefaults}}</div>
+          <div id="grossesse_allaitement" style="display: none;">{{$mbProduit->_ref_monographie->grossesse_allaitement|smarty:nodefaults}}</div>
+          <div id="effets_aptitude" style="display: none;">{{$mbProduit->_ref_monographie->effets_aptitude|smarty:nodefaults}}</div>
+          <div id="effets_indesirables" style="display: none;">{{$mbProduit->_ref_monographie->effets_indesirables|smarty:nodefaults}}</div>
+          <div id="surdosage" style="display: none;">{{$mbProduit->_ref_monographie->surdosage|smarty:nodefaults}}</div>
+        </div>
       </div>
 
       <!-- Propriétés pharmacologiques -->
       <div id="three" style="display: none;">
-        <ul id="tab-pharmaco" class="control_tabs">
+        <ul id="tab-pharmaco" class="control_tabs_vertical" style="width: 20em;">
           <li><a href="#classification">Classification thérapeutique</a></li>
           <li><a href="#pharmacodynamie">Propriétés pharmacodynamiques</a></li>
           <li><a href="#pharmacocinetique">Propriétés pharmacocinétiques</a></li>
           <li><a href="#securite_preclinique">Données de sécurité précliniques</a></li>
         </ul>
-        <hr class="control_tabs" />  
 
-        <div id="classification" style="display: none;">
-          <table class="tbl">
-            <tr>
-              <th>Classification ATC</th>
-            </tr>
-            <!-- Parcours des classes ATC du produit -->
-            {{foreach from=$mbProduit->_ref_classes_ATC item=classeATC name=classesATC}}
-            
-              <!-- Initialisation du compteur -->
-              {{counter start=0 skip=2 assign="compteur"}}
-              {{foreach from=$classeATC->classes item=classe}}
-                {{if $classe.libelle}}
-                <tr>
-                  <td>
-                    {{$tabEspace.$compteur|smarty:nodefaults}}
-                    <img src="./images/icons/dotgrey.gif" alt="" title="" />
-                    {{$classe.libelle}} ({{$classe.code}})
-                  </td>
-                </tr>
-                {{/if}}
-                {{counter}}
+        <div style="margin-left: 20.5em;">
+          <div id="classification" style="display: none;">
+            <table class="tbl">
+              <tr>
+                <th>Classification ATC</th>
+              </tr>
+              <!-- Parcours des classes ATC du produit -->
+              {{foreach from=$mbProduit->_ref_classes_ATC item=classeATC name=classesATC}}
+              
+                <!-- Initialisation du compteur -->
+                {{counter start=0 skip=2 assign="compteur"}}
+                {{foreach from=$classeATC->classes item=classe name="classes"}}
+                  {{if $classe.libelle}}
+                    <tr>
+                      <td style="padding-left: {{$compteur}}em;">
+                        <img src="./images/icons/dotgrey.gif" alt="" title="" />
+                        {{$classe.libelle}} ({{$classe.code}})
+                      </td>
+                    </tr>
+                    {{counter}}
+                  {{/if}}
+                {{/foreach}}
+                
+  							{{if !$smarty.foreach.classesATC.last}}
+  							<tr>
+  							  <td>&nbsp;</td>
+  							</tr>
+  							{{/if}}
               {{/foreach}}
               
-							{{if !$smarty.foreach.classesATC.last}}
-							<tr>
-							  <td>&nbsp;</td>
-							</tr>
-							{{/if}}
-            {{/foreach}}
-            
-            <tr>
-              <th>Classification BCB</th>
-            </tr>
-            <!-- Parcours des classes ATC du produit -->
-            {{foreach from=$mbProduit->_ref_classes_thera item=classeThera name=classesThera}}
-            
-              <!-- Initialisation du compteur -->
-              {{counter start=0 skip=2 assign="compteur"}}
-              {{foreach from=$classeThera->classes item=classe}}
-                {{if $classe.libelle}}
-                <tr>
-                  <td>
-                    {{$tabEspace.$compteur|smarty:nodefaults}} 
-                    <img src="./images/icons/dotgrey.gif" alt="" title="" />
-                    {{$classe.libelle}} ({{$classe.code}})
-                  </td>
-                </tr>
-                {{/if}}
-                {{counter}}
+              <tr>
+                <th>Classification BCB</th>
+              </tr>
+              <!-- Parcours des classes ATC du produit -->
+              {{foreach from=$mbProduit->_ref_classes_thera item=classeThera name=classesThera}}
+              
+                <!-- Initialisation du compteur -->
+                {{counter start=0 skip=2 assign="compteur"}}
+                {{foreach from=$classeThera->classes item=classe name=classes}}
+                  {{if $classe.libelle}}
+                    <tr>
+                      <td style="padding-left: {{$compteur}}em;">
+                        <img src="./images/icons/dotgrey.gif" alt="" title="" />
+                        {{$classe.libelle}} ({{$classe.code}})
+                      </td>
+                    </tr>
+                    {{counter}}
+                  {{/if}}
+                {{/foreach}}
+                
+  							{{if !$smarty.foreach.classesThera.last}}
+  							<tr>
+  							<td>&nbsp;</td>
+  							</tr>
+  							{{/if}}
               {{/foreach}}
               
-							{{if !$smarty.foreach.classesThera.last}}
-							<tr>
-							<td>&nbsp;</td>
-							</tr>
-							{{/if}}
-            {{/foreach}}
+            </table>
+          </div>
             
-          </table>
+          <div id="pharmacodynamie" style="display: none;">{{$mbProduit->_ref_monographie->pharmacodynamie|smarty:nodefaults}}</div>
+          <div id="pharmacocinetique" style="display: none;">{{$mbProduit->_ref_monographie->pharmacocinetique|smarty:nodefaults}}</div>
+          <div id="securite_preclinique" style="display: none;">{{$mbProduit->_ref_monographie->securite_preclinique|smarty:nodefaults}}</div>
         </div>
-          
-        <div id="pharmacodynamie" style="display: none;">{{$mbProduit->_ref_monographie->pharmacodynamie|smarty:nodefaults}}</div>
-        <div id="pharmacocinetique" style="display: none;">{{$mbProduit->_ref_monographie->pharmacocinetique|smarty:nodefaults}}</div>
-        <div id="securite_preclinique" style="display: none;">{{$mbProduit->_ref_monographie->securite_preclinique|smarty:nodefaults}}</div>
       </div>
 
       <!-- Données pharmaceutiques -->
