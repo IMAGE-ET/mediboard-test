@@ -65,12 +65,12 @@ class CProductDeliveryTrace extends CMbObject {
     $stock->loadRefsFwd();
     
     if ($this->date_delivery) {
-      if (!CAppUI::conf('dPstock CProductStockGroup infinite_quantity') && (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
+      if (CAppUI::conf('dPstock CProductStockGroup infinite_quantity') == '0' && (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
         return 'Impossible de délivrer ce nombre de '.$stock->_ref_product->_unit_title;
       }
     }
     
-    if (!CAppUI::conf('dPstock CProductStockGroup infinite_quantity')) {
+    if (CAppUI::conf('dPstock CProductStockGroup infinite_quantity') == '0') {
 	    // If we want to deliver, just provide a delivery date
 	    if ($this->date_delivery) {
 	      $stock->quantity -= $this->quantity;
