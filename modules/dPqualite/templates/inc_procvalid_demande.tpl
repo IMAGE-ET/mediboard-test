@@ -81,36 +81,7 @@
     <td>
       <select name="ged[doc_chapitre_id]" class="notNull {{$docGed->_props.doc_chapitre_id}}">
         <option value="">&mdash; {{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}</option>
-        {{*1er niveau*}}
-        {{foreach from=$listChapitres item=curr_chapitre}}
-        <option value="{{$curr_chapitre->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre->doc_chapitre_id}}selected="selected"{{/if}} >
-          {{$curr_chapitre->_view}}
-        </option>
-        {{*2ème niveau*}}
-        {{foreach from=$curr_chapitre->_ref_chapitres_doc item=curr_chapitre2}}
-        <option value="{{$curr_chapitre2->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre2->doc_chapitre_id}}selected="selected"{{/if}} >
-          |&mdash;{{$curr_chapitre2->_view}}
-        </option>
-        {{*3ème niveau*}}
-        {{foreach from=$curr_chapitre2->_ref_chapitres_doc item=curr_chapitre3}}
-        <option value="{{$curr_chapitre3->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre3->doc_chapitre_id}}selected="selected"{{/if}} >
-          |&mdash;|&mdash;{{$curr_chapitre3->_view}}
-        </option>
-        {{*4ème niveau*}}
-        {{foreach from=$curr_chapitre3->_ref_chapitres_doc item=curr_chapitre4}}
-        <option value="{{$curr_chapitre4->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre4->doc_chapitre_id}}selected="selected"{{/if}} >
-          |&mdash;|&mdash;|&mdash;{{$curr_chapitre4->_view}}
-        </option>
-        {{*5ème niveau*}}
-        {{foreach from=$curr_chapitre4->_ref_chapitres_doc item=curr_chapitre5}}
-        <option value="{{$curr_chapitre5->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre5->doc_chapitre_id}}selected="selected"{{/if}} >
-          |&mdash;|&mdash;|&mdash;|&mdash;{{$curr_chapitre5->_view}}
-        </option>
-        {{/foreach}}
-        {{/foreach}}
-        {{/foreach}}
-        {{/foreach}}
-        {{/foreach}}
+        {{include file=inc_options_chapitres.tpl chapitres=$listChapitres chapitre_id=$docGed->doc_chapitre_id}}
       </select>
     </td>
   </tr>

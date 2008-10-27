@@ -28,8 +28,8 @@
       </a>
       <table class="tbl">
         <tr>
-          <th colspan="4">
-            {{$nav_chapitre->_path}}
+          <th colspan="4" class="title">
+            Hierarchie : {{$nav_chapitre->_path|default:"Tous"}}
           </th>
         </tr>
         <tr>
@@ -59,6 +59,8 @@
             <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$curr_chapitre->_id}}" title="Ouvrir">
               <img src="images/icons/downarrow.png" title="Ouvrir" />
             </a>
+            {{else}}
+            <img src="images/icons/rightarrow.png" title="Dernier niveau atteint" />
             {{/if}}
           </td>
           <td class="text greedyPane">
