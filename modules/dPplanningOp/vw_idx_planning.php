@@ -49,7 +49,7 @@ $sql = "SELECT plagesop.*, plagesop.date AS opdate," .
 if($selChirLogin) {
   $listPlages = $ds->loadList($sql);
 } else {
-  $listPlages = null;
+  $listPlages = array();
 }
 
 // Urgences du mois
@@ -65,7 +65,7 @@ $sql = "SELECT operations.*, operations.date AS opdate," .
 if($selChirLogin) {
   $listUrgences = $ds->loadList($sql);
 } else {
-  $listUrgences = null;
+  $listUrgences = array();
 }
 
 $listDays = array();
