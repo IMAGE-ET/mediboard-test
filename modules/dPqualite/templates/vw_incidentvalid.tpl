@@ -84,7 +84,7 @@ function printIncident(ficheId){
       </ul>
       <hr class="control_tabs" />
       
-      {{if !$can->admin}}
+      {{if !$can->admin && $can->edit}}
       <div id="CSATraiter" style="display: none;">
         {{assign var="listeFiches" value=$listFiches.ATT_CS}}
         {{include file="inc_ei_liste.tpl"}}
@@ -97,7 +97,7 @@ function printIncident(ficheId){
         {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
         {{include file="inc_ei_liste.tpl"}}
       </div>
-      {{else}}
+      {{elseif $can->admin}}
       <div id="QualNewFiches" style="display: none;">
         {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
         {{include file="inc_ei_liste.tpl"}}
