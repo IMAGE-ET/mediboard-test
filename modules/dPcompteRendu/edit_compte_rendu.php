@@ -105,16 +105,21 @@ $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
-$medichir = new CMediusers;
-if($object->_class_name == "CConsultAnesth"){
-  $praticien_id = $object->_ref_consultation->_praticien_id;
-} else {
-  $praticien_id = $object->_praticien_id;
-}
-$medichir->load($praticien_id);
-//$medichir->load($compte_rendu->_ref_chir->user_id);
+// Calcul du user concerné
+$user = new CMediusers;
+$user->_id = $AppUI->user_id;
 
-//Chargement des catégories
+if ($object instanceof CConsultAnesth) {
+	$user->_id = $object->_ref_consultation->_praticien_id;
+}
+
+if ($object instanceof CCodable) {
+	$user->_id = $object->_praticien_id;
+}
+
+$user->load();
+
+// Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Gestion du template
@@ -122,12 +127,12 @@ $templateManager = new CTemplateManager;
 
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->source;
-$templateManager->loadHelpers($medichir->user_id, $compte_rendu->object_class);
-$templateManager->loadLists($medichir->user_id);
+$templateManager->loadHelpers($user->_id, $compte_rendu->object_class);
+$templateManager->loadLists($user->_id);
 $templateManager->applyTemplate($compte_rendu);
 
 $where = array();
-$where[] = "(chir_id = '$medichir->user_id' OR function_id = '$medichir->function_id')";
+$where[] = "(chir_id = '$user->_id' OR function_id = '$user->function_id')";
 $order = "chir_id, function_id";
 $chirLists = new CListeChoix;
 $chirLists = $chirLists->loadList($where, $order);
