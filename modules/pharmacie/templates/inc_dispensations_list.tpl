@@ -13,7 +13,9 @@
   <tr>
     <th>Quantité à administrer</th>
     <th>Quantité à dispenser</th>
+    {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
     <th>Stock pharmacie</th>
+    {{/if}}
     <th>Déjà effectuées</th>
     <th>Dispensation</th>
     <th>Stock du service</th>
@@ -95,6 +97,7 @@
          Aucune
        {{/foreach}}
      </td>
+     {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
      <td style="text-align: center">
      {{if array_key_exists($code_cip,$delivrances)}}
        {{assign var=delivrance value=$delivrances.$code_cip}}
@@ -124,6 +127,7 @@
      </button>
      {{/if}}
      </td>
+     {{/if}}
      <td style="text-align: center">
      {{if $stocks_service.$code_cip}}
        {{assign var=stock_service value=$stocks_service.$code_cip}}

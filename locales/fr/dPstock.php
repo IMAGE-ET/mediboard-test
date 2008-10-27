@@ -1,5 +1,6 @@
 <?php
 $locales['config-dPstock-CProductOrder-order_number_format'] = 'Format des numéros de bons de commande';
+$locales['config-dPstock-CProductStockGroup-infinite_quantity'] = 'Stock établissement infini';
 $locales['CProduct-_shortview-court'] = '';
 $locales['CProduct-_shortview-desc'] = '';
 $locales['CProduct-_shortview'] = '';
@@ -108,7 +109,7 @@ $locales['CProductOrder-_count_received-court'] = 'Reçus';
 $locales['CProductOrder-_count_received-desc'] = 'Nombre d\'articles reçus';
 $locales['CProductOrder-_count_received'] = 'Articles reçus';
 $locales['CProductOrder-_date_received-court'] = 'Date réception';
-$locales['CProductOrder-_date_received-desc'] = 'Date de récéption et ajout dans le stock';
+$locales['CProductOrder-_date_received-desc'] = 'Date de réception et ajout dans le stock';
 $locales['CProductOrder-_date_received'] = 'Date de réception';
 $locales['CProductOrder-_order-court'] = 'Passer';
 $locales['CProductOrder-_order-desc'] = 'Passer la commande';

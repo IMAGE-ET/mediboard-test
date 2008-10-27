@@ -65,24 +65,26 @@ class CProductDeliveryTrace extends CMbObject {
     $stock->loadRefsFwd();
     
     if ($this->date_delivery) {
-      if (($this->quantity == 0) || ($stock->quantity < $this->quantity)) {
+      if (!CAppUI::conf('dPstock CProductStockGroup infinite_quantity') && (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
         return 'Impossible de délivrer ce nombre de '.$stock->_ref_product->_unit_title;
       }
     }
     
-    // If we want to deliver, just provide a delivery date
-    if ($this->date_delivery) {
-      $stock->quantity -= $this->quantity;
-      if ($msg = $stock->store()) return $msg;
-    }
-    
-    // Un-deliver
-    else if ($this->_undeliver) {
-      $stock->quantity += $this->quantity;
-      $this->_undeliver = null;
-      
-      if ($msg = $stock->store()) return $msg;
-      return $this->delete();
+    if (!CAppUI::conf('dPstock CProductStockGroup infinite_quantity')) {
+	    // If we want to deliver, just provide a delivery date
+	    if ($this->date_delivery) {
+	      $stock->quantity -= $this->quantity;
+	      if ($msg = $stock->store()) return $msg;
+	    }
+	    
+	    // Un-deliver
+	    else if ($this->_undeliver) {
+	      $stock->quantity += $this->quantity;
+	      $this->_undeliver = null;
+	      
+	      if ($msg = $stock->store()) return $msg;
+	      return $this->delete();
+	    }
     }
     
     // If we want to receive, just provide a reception date

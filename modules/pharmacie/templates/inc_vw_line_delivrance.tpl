@@ -14,11 +14,13 @@
     </div>
   </td>
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+  {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
   <td>
     <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_group_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
       {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
     </a>
   </td>
+  {{/if}}
   <td>{{mb_value object=$curr_delivery field=quantity}}</td>
   <td>
     {{assign var=id value=$curr_delivery->_id}}

@@ -439,6 +439,9 @@ $dPconfig["dPstock"] = array (
   "CProductOrder" => array(
     "order_number_format" => "%y%m%d%H%M%S%id",
   ),
+  "CProductStockGroup" => array(
+    "infinite_quantity" => 0
+  )
 );
 
 $dPconfig["dPpmsi"] = array(
