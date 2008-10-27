@@ -52,7 +52,7 @@ Main.add( function(){
 <div style="float: right;">
   {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
   <button class="tick" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
-    {{if $readonly}}Mode édition
+    {{if $readonly}}Modification
     {{else}}Lecture seule
     {{/if}}
   </button>

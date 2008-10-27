@@ -113,7 +113,7 @@ Main.add( function(){
 <div style="float: right;">
   {{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements)}}
   <button class="tick" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
-    {{if $readonly}}Mode édition
+    {{if $readonly}}Modification
     {{else}}Lecture seule
     {{/if}}
   </button>
