@@ -1,7 +1,7 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
-    <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
+    <th>{{tr}}CProductStockService{{/tr}}</th>
     <th>{{tr}}CProductDelivery{{/tr}}</th>
     <th>Retour des services</th>
   </tr>
