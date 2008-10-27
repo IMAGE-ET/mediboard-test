@@ -1,3 +1,13 @@
+/* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage includes
+ * @version $Revision$
+ * @author OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
 dojo.require("dojo.dom");
 dojo.require("dojo.io.*");
 dojo.require("dojo.event.*");

@@ -1,11 +1,12 @@
-<?php /* $Id: mbFieldSpec.class.php 2134 2007-06-29 12:48:22Z MyttO $ */
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: $
- *  @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 class CMbObjectSpec {
   // Specification fields

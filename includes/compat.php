@@ -1,14 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
- * @subpackage Style
- * @version $Revision: 1913 $
+ * @subpackage includes
+ * @version $Revision$
  * @author Thomas Despoix
- * 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * Expose PHP implementation of missing built-in function
  */
-
 
 /**
  * (PHP 5 >= 5.1.0)

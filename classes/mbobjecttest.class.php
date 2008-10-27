@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: $
- *  @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Romain Ollivier
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 // Test class for CMbObject class
 

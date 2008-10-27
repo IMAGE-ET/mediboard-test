@@ -1,3 +1,13 @@
+/* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage includes
+ * @version $Revision$
+ * @author Fabien Ménager
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
 function getKeycode(e) {
   return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
 }

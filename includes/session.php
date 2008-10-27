@@ -1,10 +1,11 @@
-<?php
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
- * @subpackage Includes
- * @version $Revision: 26 $
+ * @subpackage includes
+ * @version $Revision$
  * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
 // Load AppUI from session

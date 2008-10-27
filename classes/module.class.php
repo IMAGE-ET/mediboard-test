@@ -2,10 +2,11 @@
 
 /**
  * @package Mediboard
- * @subpackage system
- * @version $Revision: $
+ * @subpackage classes
+ * @version $Revision$
  * @author Romain Ollivier
-*/
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireSystemClass("mbobject");
 

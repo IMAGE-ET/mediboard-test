@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage includes
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 /**
  * Recursively applies a function to values of an array

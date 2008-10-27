@@ -1,11 +1,13 @@
-<?php /* $Id: errors.php 1390 2006-12-13 09:55:29Z maskas $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
- * @subpackage Style
- * @version $Revision: 1390 $
+ * @subpackage includes
+ * @version $Revision$
  * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 global $performance, $shm;
 $performance["autoload"] = 0;
 

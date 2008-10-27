@@ -1,12 +1,12 @@
-<?php
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Alexis Granger
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
-
 
 class CIngresDataSource extends CSQLDataSource {
   private $nextLimit = null;

@@ -1,11 +1,12 @@
-<?php /* $Id: mbobject.class.php 2252 2007-07-12 10:00:15Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: 1793 $
- *  @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 /**
  * Class CMbObjectHandler 

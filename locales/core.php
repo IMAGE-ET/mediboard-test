@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage locales
+ * @version $Revision$
+ * @author OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $shm;
 $root_dir = CAppUI::conf("root_dir");

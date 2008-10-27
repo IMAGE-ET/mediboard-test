@@ -1,11 +1,11 @@
 <?php /* $Id$ */
 
-
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @author  Thomas Despoix
- *  @version $Revision: 16 $
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 // Use $dPconfig for both application and install wizard to use it

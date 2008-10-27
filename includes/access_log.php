@@ -1,10 +1,11 @@
-<?php /* $Id: errors.php 26 2006-05-04 16:12:16Z Rhum1 $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
- * @subpackage Includes
- * @version $Revision: 26 $
+ * @subpackage includes
+ * @version $Revision$
  * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $m, $action;
@@ -17,10 +18,11 @@ if (!$ds->loadTable("access_log")) {
 $module = $m;
 $period = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");
 
-$where = array();
-$where["module"] = "= '$module'";
-$where["action"] = "= '$action'";
-$where["period"] = "= '$period'";
+$where = array(
+  "module" => "= '$module'",
+  "action" => "= '$action'",
+  "period" => "= '$period'",
+)
 
 $log = new CAccessLog();
 $log->loadObject($where);

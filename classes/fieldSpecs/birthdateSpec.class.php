@@ -1,11 +1,12 @@
-<?php /* $Id: dateSpec.class.php 2269 2007-07-16 15:19:31Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: $
- *  @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireSystemClass("mbFieldSpec");
 

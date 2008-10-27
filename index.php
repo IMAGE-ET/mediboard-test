@@ -1,10 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage locales
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 include_once("./includes/magic_quotes_gpc.php");
 

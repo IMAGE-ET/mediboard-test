@@ -1,11 +1,11 @@
-<?php /* CLASSES $Id$ */
+<?php /* $Id$ */
 
 /**
- * @package dotproject
- * @subpackage core
- * @license http://opensource.org/licenses/bsd-license.php BSD License
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
  * @author Thomas Despoix (based on work of Andrew Eddie)
- * @version $Revision: 1765 $
+ * @license BSD License, see http://opensource.org/licenses/bsd-license.php
  **/
 
 // Message No Constants

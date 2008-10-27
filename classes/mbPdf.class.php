@@ -1,10 +1,11 @@
-<?php
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @author  Alexis Granger
- *  @version $Revision: $
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Alexis Granger
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 define ("K_TCPDF_EXTERNAL_CONFIG", "config_externe");

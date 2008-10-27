@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: $
- *  @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Sébastien Fillonneau
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireSystemClass("mbFieldSpec");
 CAppUI::requireSystemClass("fieldSpecs/numSpec");

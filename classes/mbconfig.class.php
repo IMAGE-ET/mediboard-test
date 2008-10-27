@@ -1,10 +1,11 @@
-<?php /* CLASSES $Id$ */
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @author  Thomas Despoix
- *  @version $Revision: 1414 $
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Thomas Despoix
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
 // Throws some E_STRICT errors

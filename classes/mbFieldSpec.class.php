@@ -1,11 +1,11 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: $
- *  @author Sébastien Fillonneau
- *  @author Fabien Ménager
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Sébastien Fillonneau
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CMbFieldSpec {
