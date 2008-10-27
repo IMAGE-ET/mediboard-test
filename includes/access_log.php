@@ -22,7 +22,7 @@ $where = array(
   "module" => "= '$module'",
   "action" => "= '$action'",
   "period" => "= '$period'",
-)
+);
 
 $log = new CAccessLog();
 $log->loadObject($where);
