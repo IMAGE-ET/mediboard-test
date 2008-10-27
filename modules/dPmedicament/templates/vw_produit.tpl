@@ -219,7 +219,7 @@ Main.add(function () {
             <th>Instructions pour l'utilisation, la manipulation et l'élimination</th>
           </tr>
           <tr>
-            <td>
+            <td class="text">
               {{$mbProduit->_ref_monographie->instruction_manipulation|smarty:nodefaults}}
             </td>
           </tr>
