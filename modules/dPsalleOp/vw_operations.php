@@ -16,6 +16,8 @@ $can->needsRead();
 $listPersAideOp = array();
 $listPersPanseuse = array();
 
+// Ne pas supprimer, utilisé pour mettre le particien en session
+$praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $salle        = mbGetValueFromGetOrSession("salle");
 $op           = mbGetValueFromGetOrSession("op");
 $date         = mbGetValueFromGetOrSession("date", mbDate());
