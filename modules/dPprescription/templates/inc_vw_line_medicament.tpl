@@ -110,7 +110,7 @@
     </td>
     
     {{if !$line->_protocole}}
-    <td colspan="2">
+    <td colspan="3">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
       <script type="text/javascript">
 	      if(document.forms["editDates-Med-{{$line->_id}}"]){
@@ -218,7 +218,7 @@
         {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
       </div>
     </td>
-    <td>
+    <td colspan="2">
       <!-- Ajouter une ligne (même dans le cas du traitement)-->
       {{if $line->_can_vw_form_add_line_contigue}}
 	      <div>
