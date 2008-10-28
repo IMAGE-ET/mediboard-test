@@ -63,7 +63,7 @@ Main.add(function () {
           	 {{if $prescription->type == "pre_admission"}}
 	            <form name="selPratForPresc" method="get" action="">
 			          <select name="selPraticien" 
-			                  onchange="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}',this.value);">
+			                  onchange="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true);">
 			              <option value="">Tous</option>
 				            {{foreach from=$prescription->_praticiens item=_praticien}}
 				              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
@@ -99,7 +99,7 @@ Main.add(function () {
 				      {{if $prescription->type == "sejour"}}
 				            <form name="selPratForPresc" method="get" action="">
 						          <select name="selPraticien" 
-						                  onchange="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}',this.value);">
+						                  onchange="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true);">
 						              <option value="">Tous</option>
 							            {{foreach from=$prescription->_praticiens item=_praticien}}
 							              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
@@ -131,7 +131,7 @@ Main.add(function () {
 		          {{if $prescription->type == "sortie"}}
 		            <form name="selPratForPresc" method="get" action="">
 				          <select name="selPraticien" 
-				                  onchange="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}',this.value);">
+				                  onchange="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true);">
 				              <option value="">Tous</option>
 					            {{foreach from=$prescription->_praticiens item=_praticien}}
 					              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
