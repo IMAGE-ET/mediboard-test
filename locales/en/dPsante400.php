@@ -59,4 +59,5 @@ $locales['CIdSante400-id_sante400_id-court'] = '';
 $locales['CIdSante400-id_sante400_id-desc'] = '';
 $locales['CIdSante400.all'] = '';
 $locales['CIdSante400.select'] = '';
+$locales['config-interop-mode_compat'] = '';
 ?>

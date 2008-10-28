@@ -48,7 +48,7 @@ class COperation extends CCodable {
   
   var $annulee = null;
   
-  //timings enregistrés
+  // Timings enregistrés
   var $entree_bloc     = null;
   var $entree_salle    = null;
   var $pose_garrot     = null;

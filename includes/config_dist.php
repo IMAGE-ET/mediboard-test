@@ -468,5 +468,16 @@ $dPconfig["bloodSalvage"] = array (
     "inLivretTherapeutique" => "1",
     "AntiCoagulantList" => "",
 );
-  
+
+$dPconfig["ecap"] = array (
+  "dhe" => array (
+    "rooturl" => "",
+  ),
+  "soap" => array (
+    "rooturl" => "",
+    "user" => "",
+    "pass" => "",
+  ),
+);
+
 ?>

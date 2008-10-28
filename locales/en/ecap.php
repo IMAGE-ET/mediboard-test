@@ -1,7 +1,8 @@
 <?php
-$locales['root_dir'] = 'C:/Documents and Settings/Thomas/Mes documents/Projects/Mediboard';
-$locales['base_url'] = 'http://localhost\\';
-$locales['site_domain'] = 'localhost';
 $locales['module-ecap-court'] = 'eCAPeCAP';
 $locales['module-ecap-long'] = '';
+$locales['DHE-Reason-codeClinique'] = '';
+$locales['mod-ecap-tab-vw_identifiants'] = '';
+$locales['DHE-Reason-codePraticienEc'] = '';
+$locales['DHE-Reason-patDateNaiss'] = '';
 ?>

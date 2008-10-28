@@ -30,37 +30,8 @@ $patient->loadRefDossierMedical();
 $patient->_ref_dossier_medical->loadRefsAntecedents();
 $patient->_ref_dossier_medical->loadRefsTraitements();
 
-$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
-$codePraticienEc = null;
 $userSel = new CMediusers;
 $userSel->load($AppUI->user_id);
-
-$patient->makeDHEUrl();
-if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
-  $tmpEtab = array();
-  $groupIdentEc = "";
-  foreach($etablissements as $etab) {
-    $idExt = new CIdSante400;
-    $idExt->loadLatestFor($etab);
-    if($idExt->id400) {
-      $tmpEtab[$idExt->id400] = $etab;
-    }
-    if($etab->_id == $g) {
-      $groupIdentEc = $idExt->id400;
-    }
-  }
-  $etablissements = $tmpEtab;
-
-  $idExt = new CIdSante400;
-  $idExt->loadLatestFor($patient, "eCap CIDC:".$groupIdentEc);
-  $patIdentEc = $idExt->id400;
-  $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
-
-  $idExt = new CIdSante400;
-  $idExt->loadLatestFor($userSel, "eCap CIDC:".$groupIdentEc);
-  $codePraticienEc = $idExt->id400;
-  $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
-}
 
 // Suppression des consultations d'urgences
 foreach($patient->_ref_consultations as $keyConsult => $consult){
@@ -74,7 +45,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("codePraticienEc"    , $codePraticienEc   );
 $smarty->assign("listPrat"           , $listPrat          );
 $smarty->assign("patient"            , $patient           );
 $smarty->assign("isImedsInstalled"   , CModule::getActive("dPImeds"));

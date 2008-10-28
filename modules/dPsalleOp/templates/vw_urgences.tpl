@@ -30,7 +30,7 @@ Main.add(function () {
       </a>
     </td>
     <td>
-    {{if array_key_exists($curr_op->salle_id, $listSalles)}}
+    {{if !$curr_op->salle_id || array_key_exists($curr_op->salle_id, $listSalles)}}
       <form name="editOpFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="del" value="0" />

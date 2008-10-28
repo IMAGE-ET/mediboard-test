@@ -31,7 +31,6 @@ $listChirs = $listChirs->loadPraticiens();
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
 
-$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
 
 if($current_m == "dPurgences"){
@@ -99,7 +98,6 @@ $consultAnesth =& $consult->_ref_consult_anesth;
 
 // Consultation courante
 $consult->_ref_chir =& $userSel;
-$codePraticienEc = null;
 
 // Chargement de la consultation
 if ($consult->_id) {
@@ -140,40 +138,6 @@ if ($consult->_id) {
   
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
-  
-  // Calcul des paramètres de DHE
-  $patient->makeDHEUrl();
-  if (CModule::getInstalled("dPsante400") && CAppUI::conf("interop mode_compat") == "medicap") {
-    $tmpEtab = array();
-    $groupIdentEc = "";
-    foreach($etablissements as $etab) {
-      $idExt = new CIdSante400;
-      if ($idExt->_ref_module) {
-	      $idExt->loadLatestFor($etab, "eCap");
-	      if($idExt->id400) {
-	        $tmpEtab[$idExt->id400] = $etab;
-	      }
-        if($etab->_id == $g) {
-          $groupIdentEc = $idExt->id400;
-        }
-      }
-    }
-    $etablissements = $tmpEtab;
-    
-    $idExt = new CIdSante400;
-    if ($idExt->_ref_module) {
-      $idExt->loadLatestFor($patient, "eCap CIDC:".$groupIdentEc);
-	    $patIdentEc = $idExt->id400;
-	    $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
-    }
-
-    $idExt = new CIdSante400;
-    if ($idExt->_ref_module) {
-	    $idExt->loadLatestFor($userSel, "eCap CIDC:".$groupIdentEc);
-	    $codePraticienEc = $idExt->id400;
-	    $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
-    }
-  }
 } else {
   $consultAnesth->consultation_anesth_id = 0;
 }
@@ -284,8 +248,6 @@ $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);
-$smarty->assign("codePraticienEc", $codePraticienEc);
-$smarty->assign("etablissements" , $etablissements);
 $smarty->assign("date"           , $date);
 $smarty->assign("hour"           , $hour);
 $smarty->assign("vue"            , $vue);

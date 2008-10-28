@@ -40,6 +40,23 @@ var Moves = {
     <th class="category" colspan="100">Connexion à la source de données</th>
   </tr>
   
+  {{assign var="mod" value="interop"}}
+  {{assign var="var" value="mode_compat"}}
+  <tr>
+    <th>
+      <label for="{{$mod}}[{{$var}}]" title="{{tr}}config-{{$mod}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$mod}}-{{$var}}{{/tr}}
+    </th>
+    <td>
+      <select name="{{$mod}}[{{$var}}]">
+        <option value="default" {{if $dPconfig.$mod.$var == "default"}}selected="selected"{{/if}}>Par défaut</option>
+        <option value="medicap" {{if $dPconfig.$mod.$var == "medicap"}}selected="selected"{{/if}}>Medicap</option>
+        <option value="tonkin"  {{if $dPconfig.$mod.$var == "tonkin"}}selected="selected"{{/if}}>Tonkin</option>
+      </select>
+    </td>
+  </tr> 
+
+
   {{assign var="var" value="dsn"}}
   <tr>
     <th>

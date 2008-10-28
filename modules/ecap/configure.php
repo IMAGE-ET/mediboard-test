@@ -12,6 +12,7 @@ $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("paths", CMedicap::$paths);
 $smarty->display("configure.tpl");
 
 ?>

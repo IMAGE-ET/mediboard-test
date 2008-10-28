@@ -1091,7 +1091,8 @@ div.loading {
 }
 
 
-div.little-info{
+div.little-info ,
+div.little-warning {
   margin: 10px 15px;
   min-height: 15px;
   background-repeat: no-repeat;
@@ -1100,12 +1101,19 @@ div.little-info{
   border-style: solid;
   padding: 5px;
   padding-left: 30px;
+}
+
+div.little-info {
   background-image: url(images/icons/little-info.png);
  	background-color: #eef;
   border-color: #55a;
-  
 }
 
+div.little-warning {
+  background-image: url(images/icons/little-warning.png);
+  background-color: #ffd;
+  border-color: #da0;
+}
 
 div.big-success,
 div.big-info,

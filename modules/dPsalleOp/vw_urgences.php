@@ -24,9 +24,10 @@ foreach ($urgences as &$urgence) {
   $urgence->_ref_sejour->loadRefPatient();
 }
 
-// Listes des salles
+// Toutes les salles des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
+// Les salles autorisées
 $salle = new CSalle();
 $listSalles = $salle->loadListWithPerms(PERM_READ);
 
