@@ -3,6 +3,7 @@
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_include_script module=dPprescription script=prescription_med}}
 
 
 {{assign var="sejour" value=$selOp->_ref_sejour}}
@@ -18,7 +19,7 @@ Main.add(function () {
     var url = new Url;
     url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage");
     url.addParam("op","{{$selOp->_id}}");
-    url.requestUpdate("bloodSalvage", {waitingText: null});
+    url.requestUpdate("bloodSalvage", { waitingText: null});
   }
   
   if($('Imeds_tab')){
@@ -142,12 +143,28 @@ function reloadPrescription(prescription_id){
 
 <!-- Deuxieme onglet => Anesthesie -->
 <div id="two" style="display:none">
-  <div id="anesth">
-  {{include file="inc_vw_anesth.tpl"}}
-  </div>
-  <div id="info_anesth">
+	<script type="text/javascript">
+	Main.add(function () {
+	  Control.Tabs.create('tabs-anesth', true);
+	});
+	</script>
+	
+	<ul id="tabs-anesth" class="control_tabs">
+	  <li><a href="#info_anesth">Dossier d'anesthésie</a></li>
+	  <li><a href="#anesth">Induction peropératoire</a></li>
+	</ul>
+	
+	<hr class="control_tabs" />
+  
+  <div id="info_anesth" style="display: none;">
   {{include file="inc_vw_info_anesth.tpl"}}
   </div>
+  <div id="anesth" style="display: none;">
+    {{*A priori inutile de le charger la première fois
+    	* include file="inc_vw_anesth.tpl"
+  	  *}}
+  </div>  
+  
 </div>
 {{if $isbloodSalvageInstalled}}
 <!--  Cell Saver -->

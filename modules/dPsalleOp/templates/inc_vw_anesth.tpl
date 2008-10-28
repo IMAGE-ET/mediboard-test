@@ -54,7 +54,7 @@
 		{{if $prescription->_id}}
 		  <td>
 		    Protocoles de prescription
-		    <form name="applyProtocole" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this)">
+		    <form name="applyProtocole" action="?m=dPprescription" method="post" onsubmit="return onSubmitProtocole(this);">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
           <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
@@ -83,11 +83,29 @@
 		  </td>
 		{{/if}}
   </tr>
+	  <tr>
+	   <th class="category" colspan="4">Prescription résumée</th>
+	  </tr>
   <tr>
     <td id="vue-medicaments-prescription">
     </td>
   </tr>
 </table>
-{{mb_include_script module=dPprescription script=prescription_med}}
-<script type="text/javascript">prescriptionMed.register("{{$selOp->sejour_id}}", "vue-medicaments-prescription");</script>
+
+<script type="text/javascript">
+onSubmitProtocole = function(form) {
+	return onSubmitFormAjax(form, { 
+		onComplete : function() {
+			prescriptionMed.refresh("{{$selOp->sejour_id}}"); 
+		}
+	} );
+}
+
+prescriptionMed.register("{{$selOp->sejour_id}}", "vue-medicaments-prescription");
+</script>
+
+{{else}}
+<div class="big-info">
+Module {{tr}}module-dPprescription-court{{/tr}} non installé.
+</div>
 {{/if}}
