@@ -268,29 +268,16 @@ changeBox = function(oCheckbox, hour, oTokenField){
 	</tr>
 	<tr>
     <th colspan="6" class="category">
-      <label for="{{$m}}[{{$class}}][{{$var}}][allergie]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}
-      </label>  
+      Autres
     </th>
   </tr>
   <tr>
-	  <td colspan="6" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][allergie]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="6" class="category">
+    <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}][IPC]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-IPC{{/tr}}">
           {{tr}}config-{{$m}}-{{$class}}-{{$var}}-IPC{{/tr}}
       </label>  
     </th>
-  </tr>
-  <tr>
-	  <td colspan="6" style="text-align: center">
+	  <td colspan="3" style="text-align: center">
 	    <select name="{{$m}}[{{$class}}][{{$var}}][IPC]">
         <option value="0" {{if 0 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>0</option>
         <option value="1" {{if 1 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>1</option>
@@ -299,14 +286,26 @@ changeBox = function(oCheckbox, hour, oTokenField){
 	  </td>
 	</tr>
 	<tr>
-    <th colspan="6" class="category">
+	  <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][allergie]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][allergie]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}][hors_livret]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-hors_livret{{/tr}}">
           {{tr}}config-{{$m}}-{{$class}}-{{$var}}-hors_livret{{/tr}}
       </label>  
     </th>
-  </tr>
- <tr>
-	  <td colspan="6" style="text-align: center">
+	  <td colspan="3" style="text-align: center">
 	    <select name="{{$m}}[{{$class}}][{{$var}}][hors_livret]">
         <option value="0" {{if 0 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>0</option>
         <option value="1" {{if 1 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>1</option>
