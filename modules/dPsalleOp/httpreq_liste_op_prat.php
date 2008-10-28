@@ -14,9 +14,8 @@ $can->needsRead();
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 
-// Liste des salles
-$listSalles = new CSalle;
-$listSalles = $listSalles->loadGroupList();
+// Selection des salles
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
 // Chargement des chirurgiens
 $listPermPrats = new CMediusers;
@@ -57,7 +56,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("vueReduite"    , false        );
 $smarty->assign("praticien"     , $praticien   );
 $smarty->assign("salle"         , new CSalle   );
-$smarty->assign("listSalles"    , $listSalles  );
+$smarty->assign("listBlocs"     , $listBlocs   );
 $smarty->assign("listPrats"     , $listPrats   );
 $smarty->assign("date"          , $date        );
 $smarty->assign("operation_id"  , $operation_id);
