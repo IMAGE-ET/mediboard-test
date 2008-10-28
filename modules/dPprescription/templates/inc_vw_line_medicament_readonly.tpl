@@ -6,7 +6,7 @@
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="{{if $line->_traitement}}traitement{{/if}}
+        class="element {{if $line->_traitement}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
         {{if !$line->_protocole}}

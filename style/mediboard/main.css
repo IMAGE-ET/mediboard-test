@@ -2978,10 +2978,15 @@ table.main td.step.selected {
   background: #B2CCFF;
 }
 
-table.tbl th.element {
+table.tbl th.element{
   background-color: #ddf;
   color: #000;
 }
+
+table.tbl th.element a{
+  color: #000;
+}
+
 
 .div_signature {
   position: absolute;
@@ -2997,7 +3002,7 @@ table.tbl th.arretee {
 }
 
 table.tbl th.traitement {
-  background-color: #5a5;
+  background-color: #bdb;
 }
 
 .time-picker {
