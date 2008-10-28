@@ -31,7 +31,7 @@
     </th>
   </tr>
   <tr>
-    <td>
+    <td colspan="2">
       <!-- Date d'arret de la ligne -->
       <div style="float: right;">
       {{if $line->date_arret}}
@@ -81,18 +81,18 @@
     </td>
   </tr>
   <tr>
-    <td colspan="4">
-    <div style="float: right;"><b>Exécutant</b>: {{if $line->executant_prescription_line_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}</div>
-    {{if $line->_ref_prises|@count}}
-      Posologie:
-      <ul>
-      {{foreach from=$line->_ref_prises item=_prise}}
-        <li>{{$_prise->_view}}</li>
-      {{/foreach}}
-      </ul>
-    {{else}}
-      Aucune posologie
-    {{/if}}
+    <td style="width: 1%;">Posologie:</td>
+    <td>
+      <div style="float: right;"><b>Exécutant</b>: {{if $line->executant_prescription_line_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}</div>
+      {{if $line->_ref_prises|@count}}
+        <ul>
+        {{foreach from=$line->_ref_prises item=_prise}}
+          <li>{{$_prise->_view}}</li>
+        {{/foreach}}
+        </ul>
+      {{else}}
+        Aucune posologie
+      {{/if}}
     </td>
   </tr>
 </tbody>

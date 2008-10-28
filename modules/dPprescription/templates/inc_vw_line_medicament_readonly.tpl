@@ -64,7 +64,7 @@
       <br />
       {{/if}}
     </td>
-    <td>
+    <td colspan="2">
       <!-- Date d'arret de la ligne -->
       <div style="float: right;">
       {{if $line->date_arret}}
@@ -119,9 +119,9 @@
     <td style="text-align: left;">
       {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
     </td>
-    <td colspan="4">
+    <td style="width: 1%;">Posologie:</td>
+    <td>
     {{if $line->_ref_prises|@count}}
-      Posologie:
       <ul>
       {{foreach from=$line->_ref_prises item=_prise}}
         <li>{{$_prise->_view}}</li>
