@@ -138,7 +138,7 @@ class CPrescription extends CMbObject {
 		     ($day == 6)){
 		  	$this->_can_add_line = 1;
 		  }
-		}	
+		}
   }
   
   function check() {  	

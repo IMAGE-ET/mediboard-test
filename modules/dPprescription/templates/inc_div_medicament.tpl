@@ -110,104 +110,114 @@ Main.add( function(){
   <input type="hidden" name="substitution_active" value="1" />
 </form>
 
-<div style="float: right;">
-  {{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements)}}
-  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
-    {{if $readonly}}Modification
-    {{else}}Lecture seule
-    {{/if}}
-  </button>
-  {{/if}}
-  
- 
-  {{if $mode_pharma}}
-    <strong>
-	    {{mb_label object=$prescription field=_score_prescription}} {{mb_value object=$prescription field=_score_prescription}}
- 	  </strong>
-  {{/if}}
-
-  {{if $mode_pharma && $prescription->_score_prescription == "2"}}
-    <strong>Validation auto. impossible</strong>
-  {{/if}}
-  
-  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-  {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
-  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
-    {{if $mode_pharma}}
-      Valider toutes les lignes
-    {{else}}
-      Signer les lignes de médicaments
-    {{/if}}
-  </button>
-  {{/if}}
-</div>
 
 
-{{if $prescription->object_id && !$mode_pharma}}
-  <select name="advAction" style="float: right">
-    <option value="">&mdash; Actions spécifiques</option>
-    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
-    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
-  </select>
-{{/if}}
-{{if $prescription->_can_add_line}}
+<table class="form">
+  <tr>
+    <th class="category">Nouvelle ligne</th>
+    <th class="category">Actions</th>
+  </tr>
+  <tr>
+    <td>
+    {{if $prescription->_can_add_line}}
+			<!-- Affichage des div des medicaments et autres produits -->
+			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
+			    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
+			      <option value="">&mdash; Médicaments les plus utilisés</option>
+			      {{if array_key_exists("medicament", $listFavoris)}}
+			      {{foreach from=$listFavoris.medicament item=curr_prod}}
+			      <option value="{{$curr_prod->code_cip}}">
+			        {{$curr_prod->libelle}}
+			      </option>
+			      {{/foreach}}
+			      {{/if}}
+			    </select>
+			    <button class="new" onclick="$('add_line_comment_med').show();">Ajouter un commentaire</button>
+			    
+			    <br />
+			    <input type="text" name="produit" value="" size="12" />
+			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
+			    Livret Thérap.
+			    
+			    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+			    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
+			    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
+			
+			    <script type="text/javascript">
+			      MedSelector.init = function(onglet){
+			        this.sForm = "searchProd";
+			        this.sView = "produit";
+			        this.sCode = "code_cip";
+			        this.sRechercheLivret = document.searchProd._recherche_livret.value;
+			        this.sSearch = document.searchProd.produit.value;
+			        this.sOnglet = onglet;
+			        this.selfClose = false;
+			        this.pop();
+			      }
+			  </script>
+			  </form>
+			  
+			  <br />
+			  
+			  <div id="add_line_comment_med" style="display: none">
+			   <button class="cancel notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
+			   <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">
+			      <input type="hidden" name="m" value="dPprescription" />
+			      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+			      <input type="hidden" name="del" value="0" />
+			      <input type="hidden" name="prescription_line_comment_id" value="" />
+			      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+			      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+			      <input type="hidden" name="chapitre" value="medicament" />
+			      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
+			      <input name="commentaire" type="text" size="98" />
+			      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
+			    </form>
+			 </div> 
+			{{/if}} 
+    </td>
 
-  
-<!-- Affichage des div des medicaments et autres produits -->
-  <form action="?" method="get" name="searchProd" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
-      <option value="">&mdash; Médicaments les plus utilisés</option>
-      {{if array_key_exists("medicament", $listFavoris)}}
-      {{foreach from=$listFavoris.medicament item=curr_prod}}
-      <option value="{{$curr_prod->code_cip}}">
-        {{$curr_prod->libelle}}
-      </option>
-      {{/foreach}}
-      {{/if}}
-    </select>
-    <button class="new" onclick="$('add_line_comment_med').show();">Ajouter un commentaire</button>
-    
-    <br />
-    <input type="text" name="produit" value="" size="12" />
-    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
-    Livret Thérap.
-    
-    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
-    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
+    <td>  
+      {{if $prescription->object_id}}
+			  <select name="advAction" style="float: right">
+			    <option value="">&mdash; Actions spécifiques</option>
+			    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
+			    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
+			  </select>
+			{{/if}}
+			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements)}}
+			  <button class="tick" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
+			    {{if $readonly}}Modification
+			    {{else}}Lecture seule
+			    {{/if}}
+			  </button>
+		  {{/if}}
+		  <br />
+		  {{if $mode_pharma}}
+		    <strong>
+			    {{mb_label object=$prescription field=_score_prescription}} {{mb_value object=$prescription field=_score_prescription}}
+		 	  </strong>
+		  {{/if}}
+		
+		  {{if $mode_pharma && $prescription->_score_prescription == "2"}}
+		    <strong>Validation auto. impossible</strong>
+		  {{/if}}
+		  
+		  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+		  {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
+		  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
+		    {{if $mode_pharma}}
+		      Valider toutes les lignes
+		    {{else}}
+		      Signer les lignes de médicaments
+		    {{/if}}
+		  </button>
+		  {{/if}}
+    </td>
+  </tr>
+</table>
 
-    <script type="text/javascript">
-      MedSelector.init = function(onglet){
-        this.sForm = "searchProd";
-        this.sView = "produit";
-        this.sCode = "code_cip";
-        this.sRechercheLivret = document.searchProd._recherche_livret.value;
-        this.sSearch = document.searchProd.produit.value;
-        this.sOnglet = onglet;
-        this.selfClose = false;
-        this.pop();
-      }
-  </script>
-  </form>
-  
-  <br />
-  
-  <div id="add_line_comment_med" style="display: none">
-   <button class="cancel notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
-   <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">
-      <input type="hidden" name="m" value="dPprescription" />
-      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="prescription_line_comment_id" value="" />
-      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-      <input type="hidden" name="chapitre" value="medicament" />
-      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
-      <input name="commentaire" type="text" size="98" />
-      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
-    </form>
- </div> 
-{{elseif !$mode_pharma}}
+{{if !$mode_pharma && !$prescription->_can_add_line}}
   <div class="big-info">
     L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
     entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures

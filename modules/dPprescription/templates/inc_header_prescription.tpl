@@ -159,12 +159,22 @@ submitProtocole = function(){
 
     </th>
   </tr>
+  
+  <tr>
+    {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
+    <th class="category">Protocoles</th>
+    {{/if}}
+    {{if $prescription->_can_add_line && !$mode_protocole}}
+      <th class="category">Date d'ajout de lignes</th>
+    {{/if}}
+    <th class="category">Impressions</th>
+  </tr>
   <tr>
   {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
-   <td style="text-align: right;">
+   <td class="date" style="text-align: right;">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
-	      <table class="form" style="border: 2px ridge #68C;">
+	      <table class="form">
 	        <tr>
 		        <td>
 			        Protocoles de {{$prescription->_ref_current_praticien->_view}}
@@ -196,8 +206,7 @@ submitProtocole = function(){
 			            </optgroup>
 			          {{/if}}
 			        </select>
-			        </td>
-			        <td class="date">
+							<br />
 				 				{{if $prescription->type != "externe"}}
 				 				Intervention
 				 				  <select name="operation_id">
@@ -229,8 +238,55 @@ submitProtocole = function(){
       </form>
     </td>  
   {{/if}}
+  
+  {{if $prescription->_can_add_line}}
+  {{if !$mode_protocole}}
+      <td class="date">
+        <form name="selDateLine" action="?" method="get"> 
+      
+        {{if $prescription->type != "externe"}}   
+	        <select name="debut_date" 
+					        onchange="$('selDateLine_debut_da').innerHTML = new String;
+	 				                    this.form.debut.value = '';
+	 				          				  if(this.value == 'other') { 
+	 				          					  $('calendarProt').show();
+	 				          				  } else { 			    
+	 				          				    this.form.debut.value = this.value;
+	 				          				    $('calendarProt').hide();
+	 				          				  }">
+	     				  
+				    <option value="other">Autre date</option>
+				    <optgroup label="Séjour">
+				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
+				      <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+				    </optgroup>
+				    <optgroup label="Intervention">
+				    {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
+				      <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
+				    {{/foreach}}
+						</optgroup>
+				  </select>		 				
+				  <!-- Prescription externe -->
+				  <div id="calendarProt" style="border:none; margin-right: 60px">
+				    {{mb_field object=$filter_line field="debut" form=selDateLine}}
+				    {{mb_field object=$filter_line field="time_debut" form=selDateLine}}      
+				  </div>
+        {{else}}
+           {{mb_field object=$filter_line field="debut" form="selDateLine"}}
+        {{/if}}
+        
+         <script type="text/javascript">
+	  	   Main.add( function(){
+		       prepareForm(document.selDateLine);
+		       Calendar.regField("selDateLine", "debut", false);
+	    	} );
+        </script>	
+	    </form>
+	    </td>
+	  {{/if}} 
+	{{/if}}
+ 
   <td style="text-align: right">
-
       <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
         <option value="">Impressions / Historiques / Alertes</option>
 	 		  <!-- Impression de la prescription -->

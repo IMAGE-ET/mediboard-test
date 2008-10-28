@@ -48,29 +48,42 @@ Main.add( function(){
 </script>
 
 
-
-<div style="float: right;">
-  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
-  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
-    {{if $readonly}}Modification
-    {{else}}Lecture seule
+<table class="form">
+  <tr>
+    {{if $prescription->_can_add_line}}
+      <th class="category">Nouvelle ligne</th>
     {{/if}}
-  </button>
-  {{/if}}
-
-  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-  {{if $prescription->object_id && $is_praticien}}
-  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', '{{$element}}');">
-  	Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"
-  </button>
-  {{/if}}
-</div>
+    <th class="category">Actions</th>
+  </tr>
+  <tr>
+    {{if $prescription->_can_add_line}}
+    <td>
+      {{include file="inc_vw_form_addLine.tpl"}}
+    </td>
+    {{/if}}
+    <td>
+		  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
+		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
+		    {{if $readonly}}Modification
+		    {{else}}Lecture seule
+		    {{/if}}
+		  </button>
+		  {{/if}}
+		
+		  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+		  {{if $prescription->object_id && $is_praticien}}
+		  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', '{{$element}}');">
+		  	Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"
+		  </button>
+		  {{/if}}
+    </td>
+  </tr>
+</table>
 
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
-{{if $prescription->_can_add_line}}
-  {{include file="inc_vw_form_addLine.tpl"}}
-{{else}}
+ 
+{{if !$prescription->_can_add_line}}
   <div class="big-info">
     L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
     entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures

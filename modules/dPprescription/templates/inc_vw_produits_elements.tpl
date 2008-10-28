@@ -198,7 +198,6 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
   <input type="hidden" name="_chapitre" value="" />
 </form>
 
-
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">
   <li><a href="#div_medicament">Médicaments</a></li>
@@ -211,58 +210,10 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 {{/if}}
 </ul>
 
+
 <hr class="control_tabs" />
 
-{{if $prescription->_can_add_line}}
-  {{if !$mode_protocole}}
-  <table class="form" style="float: right; width: 110px;">
-    <tr>
-      <td class="date">
-        <form name="selDateLine" action="?" method="get" style="float: right"> 
-      
-        {{if $prescription->type != "externe"}}   
-	        <select name="debut_date" 
-					        onchange="$('selDateLine_debut_da').innerHTML = new String;
-	 				                    this.form.debut.value = '';
-	 				          				  if(this.value == 'other') { 
-	 				          					  $('calendarProt').show();
-	 				          				  } else { 			    
-	 				          				    this.form.debut.value = this.value;
-	 				          				    $('calendarProt').hide();
-	 				          				  }">
-	     				  
-				    <option value="other">Autre date</option>
-				    <optgroup label="Séjour">
-				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
-				      <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
-				    </optgroup>
-				    <optgroup label="Intervention">
-				    {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
-				      <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
-				    {{/foreach}}
-						</optgroup>
-				  </select>		 				
-				  <!-- Prescription externe -->
-				  <div id="calendarProt" style="border:none; margin-right: 60px">
-				    {{mb_field object=$filter_line field="debut" form=selDateLine}}
-				    {{mb_field object=$filter_line field="time_debut" form=selDateLine}}      
-				  </div>
-        {{else}}
-           {{mb_field object=$filter_line field="debut" form="selDateLine"}}
-        {{/if}}
-        
-         <script type="text/javascript">
-	  	   Main.add( function(){
-		       prepareForm(document.selDateLine);
-		       Calendar.regField("selDateLine", "debut", false);
-	    	} );
-        </script>	
-	    </form>
-	    </td>
-	  </tr>
-	</table>
-  {{/if}} 
-{{/if}}
+
 
 
 
