@@ -83,5 +83,11 @@
 		  </td>
 		{{/if}}
   </tr>
+  <tr>
+    <td id="vue-medicaments-prescription">
+    </td>
+  </tr>
 </table>
+{{mb_include_script module=dPprescription script=prescription_med}}
+<script type="text/javascript">prescriptionMed.register("{{$selOp->sejour_id}}", "vue-medicaments-prescription");</script>
 {{/if}}
