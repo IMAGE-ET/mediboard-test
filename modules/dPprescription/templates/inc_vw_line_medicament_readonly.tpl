@@ -19,9 +19,9 @@
           {{if $line->_can_view_historique}}
             <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
           {{/if}}
-          <b>{{mb_label object=$line field="conditionnel"}}</b>: {{if $line->conditionnel}}Oui{{else}}Non{{/if}},  
-          <b>{{mb_label object=$line field="ald"}}</b>: {{if $line->ald}}Oui{{else}}Non{{/if}},
-          <b>{{mb_label object=$line field="_traitement"}}</b>: {{if $line->_traitement}}Oui{{else}}Non{{/if}}
+          {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
+          {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
+          {{if $line->_traitement}}{{mb_label object=$line field="_traitement"}}&nbsp;{{/if}}
       </div>
       <div style="float: right;">
         {{if $line->_can_view_signature_praticien}}

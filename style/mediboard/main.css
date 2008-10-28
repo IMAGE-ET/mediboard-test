@@ -438,20 +438,22 @@ select {
 
 optgroup {
   font-style: normal;
-  font-size: 10px;
+  font-size: 1em;
   font-weight: bold;
-  padding: 0px;
-  padding-left: 5px;
+  padding: 0;
   background: #fff;
 }
 
 option {
   font-style: normal;
-  font-size: 10px;
+  font-size: 1em;
   font-weight: normal;
-  padding: 0px;
-  padding-right: 4px;
+  padding: 0;
   background: #fff;
+}
+
+optgroup option {
+  padding-left: 1em;
 }
 
 option.novalue {
@@ -2995,7 +2997,7 @@ table.tbl th.arretee {
 }
 
 table.tbl th.traitement {
-  background-color: #7c7;
+  background-color: #5a5;
 }
 
 .time-picker {

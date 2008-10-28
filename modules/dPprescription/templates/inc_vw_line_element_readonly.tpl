@@ -12,8 +12,8 @@
          });
       </script>
       <div style="float: left;">
-        <b>{{mb_label object=$line field="conditionnel"}}</b>: {{if $line->conditionnel}}Oui{{else}}Non{{/if}},  
-        <b>{{mb_label object=$line field="ald"}}</b>: {{if $line->ald}}Oui{{else}}Non{{/if}}
+        {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{if}}
+        {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
       </div>
       <div style="float: right;">
         <!-- Affichage de la signature du praticien -->
