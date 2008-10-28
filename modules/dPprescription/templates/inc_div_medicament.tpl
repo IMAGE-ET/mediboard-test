@@ -143,7 +143,7 @@ Main.add( function(){
 </div>
 
 
-{{if $prescription->object_id}}
+{{if $prescription->object_id && !$mode_pharma}}
   <select name="advAction" style="float: right">
     <option value="">&mdash; Actions spécifiques</option>
     <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
