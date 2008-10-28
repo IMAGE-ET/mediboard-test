@@ -287,19 +287,24 @@ submitProtocole = function(){
 	{{/if}}
  
   <td style="text-align: right">
-      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
-        <option value="">Impressions / Historiques / Alertes</option>
+      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';"
+              style="width: 100px;">
+        <option value="">&mdash; Action</option>
 	 		  <!-- Impression de la prescription -->
+	 		  <optgroup label="Imprimer">
 			  {{if $prescription->type != "sortie"}}
-			  <option value="printPrescription">Impression de la prescription</option>
+			  <option value="printPrescription">Prescription</option>
 			  {{/if}}
 		    {{if !$mode_protocole}}
 			     {{if $prescription->type != "externe"}}
-			       <option value="printOrdonnance">Impression de l'ordonnance</option>
+			       <option value="printOrdonnance">Ordonnance</option>
 				   {{/if}}				   
-				   <option value="viewAlertes">Affichage des alertes</option>
-					 <option value="viewHistorique">Affichage de l'historique</option>
-				   <option value="viewSubstitutions">Affichage des substitutions</option>
+				   </optgroup>
+				   <optgroup label="Afficher">
+					   <option value="viewAlertes">Alertes</option>
+						 <option value="viewHistorique">Historique</option>
+					   <option value="viewSubstitutions">Substitutions</option>
+				   </optgroup>
          {{/if}}      
         </select>
       {{if !$mode_protocole}}
