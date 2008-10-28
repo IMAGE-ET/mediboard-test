@@ -167,7 +167,7 @@ submitProtocole = function(){
     {{if $prescription->_can_add_line && !$mode_protocole}}
       <th class="category">Date d'ajout de lignes</th>
     {{/if}}
-    <th class="category">Impressions</th>
+    <th class="category">Outils</th>
   </tr>
   <tr>
   {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
@@ -183,7 +183,7 @@ submitProtocole = function(){
 			        <input type="hidden" name="del" value="0" />
 			        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			        <select name="pack_protocole_id" style="width: 80px;">
+			        <select name="pack_protocole_id" style="width: 100px;">
 			          <option value="">&mdash; Sélection</option>
 			          {{if $protocoles_praticien|@count || $packs_praticien|@count}}
 				          <optgroup label="Praticien">
