@@ -92,7 +92,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["valide_pharma"]        = "bool";
     $specs["accord_praticien"]     = "bool";
     $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
-    $specs["substitute_for"]       = "ref class|CPrescriptionLineMedicament";
+    $specs["substitute_for"]       = "ref class|CPrescriptionLineMedicament cascade";
     $specs["substitution_active"]  = "bool";
     $specs["_unite_prise"]         = "str";
     $specs["_traitement"]          = "bool";
