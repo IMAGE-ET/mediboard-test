@@ -45,7 +45,7 @@
         {{/if}}
       </div>
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})" style="font-weight: bold;">
-        {{$line->_view}}
+        {{$line->_ucd_view}}
       </a>
     </th>
   </tr>

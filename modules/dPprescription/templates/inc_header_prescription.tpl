@@ -55,7 +55,7 @@ submitProtocole = function(){
 
 <table class="form">
   <tr>
-    <th class="title" colspan="3">
+    <th class="title text" colspan="3">
     <form name="moment_unitaire">
 	    <select name="moment_unitaire_id" style="width: 150px; display: none;">  
 	      <option value="">&mdash; Sélection du moment</option>
