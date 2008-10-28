@@ -30,7 +30,7 @@ class CBcbControleInteraction extends CBcbObject {
     foreach($this->distObj->gtabInter as $_interaction){
       $gravite = $_interaction->Gravite;
       $ds = CSQLDataSource::get("bcb");
-      $query = "SELECT `NIVEAUGRAVITE` FROM `INTER_GRAVITES` WHERE `LIBELLEGRAVITE` = '$gravite'";
+      $query = $ds->prepare("SELECT `NIVEAUGRAVITE` FROM `INTER_GRAVITES` WHERE `LIBELLEGRAVITE` = %", $gravite);
       $_interaction->Niveau = $ds->loadResult($query);
     }
     return $this->distObj->gtabInter;
