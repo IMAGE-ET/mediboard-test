@@ -179,8 +179,8 @@ var Prescription = {
   },
   reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly) {
       // Select de choix du praticien
-      if(document.selSortie){
-        var praticien_sortie_id = document.selSortie.selPraticien.value;
+      if(document.selPratForPresc){
+        var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
       }
   
       var oForm = document.addLine;    
@@ -271,8 +271,8 @@ var Prescription = {
   printPrescription: function(prescription_id, ordonnance,print) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
-    if(document.selSortie){
-      var praticien_sortie_id = document.selSortie.selPraticien.value;
+    if(document.selPratForPresc){
+      var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
     }
       
     if(prescription_id){

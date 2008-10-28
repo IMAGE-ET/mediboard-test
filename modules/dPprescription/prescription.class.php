@@ -665,6 +665,52 @@ class CPrescription extends CMbObject {
   }
   
   
+  function getPraticiens(){
+    $ds = CSQLDataSource::get("std");
+    $sql = "SELECT DISTINCT prescription_line_medicament.praticien_id
+						FROM prescription_line_medicament
+						WHERE prescription_line_medicament.prescription_id = '$this->_id'";
+    $praticiens_med = $ds->loadList($sql);
+    
+    $sql = "SELECT DISTINCT prescription_line_element.praticien_id
+						FROM prescription_line_element
+						WHERE prescription_line_element.prescription_id = '$this->_id'";
+    $praticiens_elt = $ds->loadList($sql);
+    
+    $sql = "SELECT DISTINCT prescription_line_comment.praticien_id
+						FROM prescription_line_comment
+						WHERE prescription_line_comment.prescription_id = '$this->_id'";
+    $praticiens_comment = $ds->loadList($sql);
+    
+    foreach($praticiens_med as $_prats_med){
+      foreach($_prats_med as $_prat_med_id){
+        if(!isset($this->_praticiens[$_prat_med_id])){
+          $praticien = new CMediusers();
+          $praticien->load($_prat_med_id);
+          $this->_praticiens[$praticien->_id] = $praticien->_view;
+        }
+      }
+    }
+    foreach($praticiens_elt as $_prats_elt){
+      foreach($_prats_elt as $_prat_elt_id){
+        if(!isset($this->_praticiens[$_prat_elt_id])){
+          $praticien = new CMediusers();
+          $praticien->load($_prat_elt_id);
+          $this->_praticiens[$praticien->_id] = $praticien->_view;
+        }
+      }
+    }
+    foreach($praticiens_comment as $_prats_comment){
+      foreach($_prats_comment as $_prat_comment_id){
+        if(!isset($this->_praticiens[$_prat_comment_id])){
+          $praticien = new CMediusers();
+          $praticien->load($_prat_comment_id);
+          $this->_praticiens[$praticien->_id] = $praticien->_view;
+        }
+      }
+    }
+  }
+  
   /*
    * Chargement de l'historique
    */
@@ -749,7 +795,7 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines as &$line_med){
   		if($withRefs){
   			$line_med->loadRefsPrises();
-  		  $this->_praticiens[$line_med->praticien_id] = $line_med->_ref_praticien->_view;
+  		  //$this->_praticiens[$line_med->praticien_id] = $line_med->_ref_praticien->_view;
   		}
   		$this->_ref_lines_med_comments["med"][] = $line_med;
   	}
@@ -757,7 +803,7 @@ class CPrescription extends CMbObject {
   	if(isset($this->_ref_prescription_lines_comment["medicament"][""]["comment"])){
       foreach($this->_ref_prescription_lines_comment["medicament"][""]["comment"] as &$comment_med){
   	  	if($withRefs){
-  	  	  $this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
+  	  	  //$this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
   	  	}
   	  	$this->_ref_lines_med_comments["comment"][] = $comment_med;
       }
@@ -791,8 +837,8 @@ class CPrescription extends CMbObject {
     	if($withRefs){
 	    	$line_element->loadRefsPrises();
 	    	$line_element->loadRefExecutant();
-	    	$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
 	    }
+	    //$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
     	$line_element->_ref_element_prescription->loadRefCategory();
     	
     }
@@ -862,7 +908,7 @@ class CPrescription extends CMbObject {
   	  }
       $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
       $this->_ref_lines_elements_comments[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
-      $this->_praticiens[$_line_comment->praticien_id] = $_line_comment->_ref_praticien->_view;
+      //$this->_praticiens[$_line_comment->praticien_id] = $_line_comment->_ref_praticien->_view;
     }
   }
   

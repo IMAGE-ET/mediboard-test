@@ -314,15 +314,12 @@ submitProtocole = function(){
 				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
 			 </div>   
       {{/if}}
-       
- 
-
-    
      <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');">Mode grille</button>
- 
-  
-  </td>
-  
+    </td>
   </tr>  
-
+  {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}
+  <tr>
+    <th class="category" style="background-color: #B00; color: #fff" colspan="3">Prescription affichée partiellement :<br />certaines lignes ont été prescrites par d'autres praticiens</th>
+  </tr>
+  {{/if}}
 </table>

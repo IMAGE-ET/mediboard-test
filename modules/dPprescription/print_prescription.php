@@ -29,7 +29,10 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsFwd();
 
-
+// L'impression de la prescription par praticien n'est effectuée que dans le cadre de la prescription de sortie
+if($prescription->type != "sortie"){
+  $praticien_sortie_id = "";
+}
 
 // Chargement du praticien
 if($praticien_sortie_id){

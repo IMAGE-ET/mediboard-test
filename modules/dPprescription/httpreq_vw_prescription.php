@@ -29,6 +29,7 @@ $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 $readonly        = mbGetValueFromGet("readonly", true);
 
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
+
 $historique = array();
 // Initialisations
 $protocoles_praticien = array();
@@ -109,6 +110,8 @@ $categories = $full_mode || $chapitre != "medicament" ? CCategoryPrescription::l
 
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
+  $prescription->getPraticiens();
+
   // Calcul des droits de la prescription	
 	$prescription->getAdvancedPerms($is_praticien, $mode_pharma);
   

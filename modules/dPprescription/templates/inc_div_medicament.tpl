@@ -53,22 +53,22 @@ Main.add( function(){
 } );
 
 
-{{if $prescription->type == "sortie"}}
-  {{if $prescription->_praticiens|@count}}
-  var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
-  var chps = document.selSortie.selPraticien;
-  chps.innerHTML = "";
-  chps.insert('<option value="">Tous</option>');
-  for(var prat in praticiens){
-    chps.insert('<option value='+prat+'>'+praticiens[prat]+'</option>');
-  }
-  var praticien_sortie_id = {{$praticien_sortie_id|json}};
-  
-  $A(chps).each( function(option) {
-    option.selected = option.value==praticien_sortie_id;
-  });
-  {{/if}}  
-{{/if}}
+
+{{if $prescription->_praticiens|@count}}
+	var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
+	var chps = document.selPratForPresc.selPraticien;
+	chps.innerHTML = "";
+	chps.insert('<option value="">Tous</option>');
+	for(var prat in praticiens){
+	  chps.insert('<option value='+prat+'>'+praticiens[prat]+'</option>');
+	}
+	var praticien_sortie_id = {{$praticien_sortie_id|json}};
+	
+	$A(chps).each( function(option) {
+	  option.selected = option.value==praticien_sortie_id;
+});
+{{/if}}  
+
 
 </script>
 
@@ -245,7 +245,7 @@ Main.add( function(){
 <table class="tbl">
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $curr_line->praticien_id) || !$praticien_sortie_id}}
+    {{if !$praticien_sortie_id || ($praticien_sortie_id == $curr_line->praticien_id)}}
     <!-- Si la ligne ne possede pas d'enfant -->
     {{if !$curr_line->child_id}}
       {{if $readonly}}
@@ -276,7 +276,7 @@ Main.add( function(){
   
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
-    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $_line_comment->praticien_id) || !$praticien_sortie_id}}
+    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_line_comment->praticien_id)}}
       {{if $readonly}}
         {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl" prescription_reelle=$prescription}}
       {{else}}

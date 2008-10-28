@@ -28,21 +28,21 @@ Main.add( function(){
   }
 } );
 
-{{if $prescription->type == "sortie"}}
-  {{if $prescription->_praticiens|@count}}
-  var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
-  var chps = document.selSortie.selPraticien;
-  chps.innerHTML = "";
-  chps.insert('<option value="">Tous</option>');
-  for(var prat in praticiens){
-    chps.insert('<option value='+prat+'>'+praticiens[prat]+'</option>');
-  }
-  var praticien_sortie_id = {{$praticien_sortie_id|json}};
-  $A(chps).each( function(option) {
+
+{{if $prescription->_praticiens|@count}}
+	 var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
+	 var chps = document.selPratForPresc.selPraticien;
+	 chps.innerHTML = "";
+	 chps.insert('<option value="">Tous</option>');
+	 for(var prat in praticiens){
+	   chps.insert('<option value='+prat+'>'+praticiens[prat]+'</option>');
+	 }
+	 var praticien_sortie_id = {{$praticien_sortie_id|json}};
+	 $A(chps).each( function(option) {
 	  option.selected = option.value==praticien_sortie_id;
-	});
-  {{/if}}
+	 });
 {{/if}}
+
 
 
 </script>
@@ -108,7 +108,7 @@ Main.add( function(){
     
     <table class="tbl">
 	  {{foreach from=$lines_cat.element item=line_element}}
-	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_element->praticien_id) || !$praticien_sortie_id}}
+	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_element->praticien_id)}}
 	      {{if $readonly}}
           {{include file="inc_vw_line_element_readonly.tpl" _line_element=$line_element prescription_reelle=$prescription}}
         {{else}}
@@ -126,7 +126,7 @@ Main.add( function(){
   	  </tr>
   	  {{/if}}
   	  {{foreach from=$lines_cat.comment item=line_comment}}
-  	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_comment->praticien_id) || !$praticien_sortie_id}}
+  	    {{if !$praticien_sortie_id || ($praticien_sortie_id != $line_comment->praticien_id)}}
           {{if $readonly}}
             {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
           {{else}}
