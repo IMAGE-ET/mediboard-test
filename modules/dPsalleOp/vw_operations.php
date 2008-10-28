@@ -119,7 +119,7 @@ if ($op) {
 	$prescription->loadMatchingObject();
 	
 	$anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
-	if($anesth_id && CModule::$active['dPprescription']){
+	if($anesth_id && CModule::getActive('dPprescription')){
 	  $protocoles = CPrescription::loadAllProtocolesFor($anesth_id, null, null, 'CSejour');
 	}
 }
