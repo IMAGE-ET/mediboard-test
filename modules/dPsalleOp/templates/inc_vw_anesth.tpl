@@ -54,7 +54,7 @@
 		{{if $prescription->_id}}
 		  <td>
 		    Protocoles de prescription
-		    <form name="applyProtocole" action="?m=dPprescription" method="post" onsubmit="return onSubmitProtocole(this);">
+		    <form name="ApplyProtocoleAnesth" action="?m=dPprescription" method="post" onsubmit="return onSubmitProtocole(this);">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
           <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
