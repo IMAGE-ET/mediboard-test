@@ -255,7 +255,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
     // Suppression de la ligne
-    if(($perm_edit && $is_praticien) || $this->_protocole){
+    if ($perm_edit || $this->_protocole){
       $this->_can_delete_line = 1;
   	}
   	// Affichage du bouton "Modifier une ligne"

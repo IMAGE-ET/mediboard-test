@@ -168,7 +168,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Suppression de la ligne
-    if(($perm_edit && $is_praticien) || $this->_protocole){
+    if ($perm_edit || $this->_protocole) {
   	  $this->_can_delete_line = 1;
   	}
   	// Modification de la posologie
@@ -176,7 +176,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_modify_poso = 1;
     }
     // Modification de l'executant et du commentaire
-    if($perm_edit){
+    if ($perm_edit){
     	$this->_can_select_executant = 1;
     	$this->_can_modify_comment = 1;
     } 
