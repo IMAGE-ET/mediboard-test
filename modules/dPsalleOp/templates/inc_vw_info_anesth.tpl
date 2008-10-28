@@ -238,7 +238,8 @@
     <td class="text">
       <div class="big-info">
         Aucune consultation d'anesthésie n'a été effectuée pour ce patient.
-        Vous devez créer son dossier d'anesthésie pour y accéder.
+        <br />
+        Vous devez <strong>créer son dossier d'anesthésie</strong> pour y accéder.
       </div>
     </td>
   </tr>
