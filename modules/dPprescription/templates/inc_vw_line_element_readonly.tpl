@@ -12,7 +12,7 @@
          });
       </script>
       <div style="float: left;">
-        {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{if}}
+        {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
         {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
       </div>
       <div style="float: right;">
