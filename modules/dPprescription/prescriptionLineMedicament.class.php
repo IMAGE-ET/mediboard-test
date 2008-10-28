@@ -437,7 +437,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Controle des allergies
    */
   function checkAllergies($listAllergies, $prescription) {
-    if(!isset($prescrition->_scores["allergie"])){
+    if(!isset($prescription->_scores["allergie"])){
       $prescription->_scores["allergie"] = 0;
     }
     $this->_ref_alertes["allergie"] = array();
