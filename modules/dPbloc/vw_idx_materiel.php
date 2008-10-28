@@ -8,8 +8,6 @@
 */
  
 global $AppUI, $can, $m, $g;
-$ds = CSQLDataSource::get("std");
-
 $can->needsRead();
 
 $now       = mbDate();
@@ -26,19 +24,16 @@ $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 
 $where = array();
 
-$salle = new CSalle;
-$whereSalle = array();
-$whereSalle["group_id"] = "= '$g'";
-$where["plagesop.salle_id"] = $ds->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+$salle = new CSalle();
+$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+$where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";
 $where["commande_mat"] = $typeAff ? "= '1'" : "!= '1'";
 $where["annulee"]      = $typeAff ? "= '1'" : "!= '1'";
 
-$order = array();
-$order[] = "plagesop.date";
-$order[] = "rank";
+$order = "plagesop.date, rank";
 
 $op = new COperation;
 $op = $op->loadList($where, $order, null, null, $ljoin);

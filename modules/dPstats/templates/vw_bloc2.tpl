@@ -21,6 +21,14 @@ Main.add(function () {
             <div id="bloc_deblist_da">{{$deblist|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="deblist" class="notNull date" value="{{$deblist}}" />
             <img id="bloc_deblist_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <select name="bloc_id">
+              <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
+              {{foreach from=$listBlocs item=curr_bloc}}
+              <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id }}selected="selected"{{/if}}>
+                {{$curr_bloc->nom}}
+              </option>
+              {{/foreach}}
+            </select>
             <button class="search" type="submit">Afficher</button>
           </td>
         </tr>

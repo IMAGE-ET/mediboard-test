@@ -14,11 +14,9 @@ $plageop_id = mbGetValueFromGetOrSession("plageop_id");
 
 // Liste des Salles
 $salle = new CSalle();
-$where = array();
-$where["group_id"] = "= '$g'";
-$order = "'nom'";
-$listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
+$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");
 
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
@@ -92,9 +90,9 @@ foreach($listSalles as $keySalle=>$valSalle){
 foreach($listPlages[$date] as &$plage){
     $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
     for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
-      $affichages[$date."-s".$plage->salle_id."-".$time] = "full";
+      $affichages["$date-s$plage->salle_id-$time"] = "full";
     } 
-    $affichages[$date."-s".$plage->salle_id."-".$plage->debut] = $plage->_id;
+    $affichages["$date-s$plage->salle_id-$plage->debut"] = $plage->_id;
 }
 
 // Liste des Spécialités
@@ -107,6 +105,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("listPlages"     , $listPlages        );
 $smarty->assign("_temps_inter_op", $_temps_inter_op   );
 $smarty->assign("listSalles"     , $listSalles        );
+$smarty->assign("listBlocs"      , $listBlocs         );
 $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );
 $smarty->assign("affichages"     , $affichages        );

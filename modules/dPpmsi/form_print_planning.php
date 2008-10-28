@@ -7,11 +7,10 @@
 * @author Romain Ollivier
 */
  
-global $AppUI, $can, $m, $dPconfig;
-
+global $AppUI, $can, $g;
 $can->needsRead();
 
-$now       = mbDate();
+$now = mbDate();
 
 $filter = new COperation;
 $filter->_date_min     = mbGetValueFromGet("_date_min", $now);
@@ -35,9 +34,8 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
-$order = "nom";
-$salle = new CSalle();
-$listSalles = $salle->loadListWithPerms(PERM_READ, null, $order);
+// Récupération des salles
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -49,7 +47,7 @@ $smarty->assign("now"          , $now);
 $smarty->assign("yesterday"    , $yesterday);
 $smarty->assign("listPrat"     , $listPrat);
 $smarty->assign("listSpec"     , $listSpec);
-$smarty->assign("listSalles"   , $listSalles);
+$smarty->assign("listBlocs"    , $listBlocs);
 
 $smarty->display("form_print_planning.tpl");
 

@@ -15,6 +15,7 @@ $module->registerTab("vw_edit_interventions", null, TAB_EDIT);
 $module->registerTab("vw_suivi_salles"      , null, TAB_EDIT);
 $module->registerTab("vw_urgences"          , null, TAB_EDIT);
 $module->registerTab("vw_idx_materiel"      , null, TAB_EDIT);
+$module->registerTab("vw_idx_blocs"         , null, TAB_EDIT);
 $module->registerTab("vw_idx_salles"        , null, TAB_EDIT);
 $module->registerTab("print_planning"       , null, TAB_READ);
 

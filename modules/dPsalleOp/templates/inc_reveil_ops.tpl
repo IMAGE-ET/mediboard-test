@@ -116,9 +116,9 @@ submitOperationForm = function(oFormOperation,sens) {
         -
       {{/if}}
     </td>
-    <td>
-    </td>
   </tr>
+  {{foreachelse}}
+  <tr><td colspan="20">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
 

@@ -24,11 +24,7 @@ for($i = 8; $i <= 20; $i++) {
 }
 
 // Liste des minutes
-$listMins = array();
-$listMins[] = 00;
-$listMins[] = 15;
-$listMins[] = 30;
-$listMins[] = 45;
+$listMins = array(00, 15, 30, 45);
 
 end($listHours);
 end($listMins);
@@ -139,10 +135,7 @@ function writePlage(&$aAffichage,$listPlages,$type,$sHeureDeb,$sHeureFin,$sMinDe
 
 // Liste des Salles
 $listSalles = new CSalle();
-$where = array();
-$where["group_id"] = "= '$g'";
-$order = "'nom'";
-$listSalles = $listSalles->loadList($where, $order);
+$listSalles = $listSalles->loadGroupList();
 
 // Plages de Consultations
 $plageConsult     = new CPlageconsult();
@@ -235,6 +228,7 @@ $smarty->assign("debut"             , $debut);
 $smarty->assign("listHours"         , $listHours);
 $smarty->assign("listMins"          , $listMins);
 $smarty->assign("plagesConsult"     , $plagesConsult);
+$smarty->assign("nodebug"           , true);
 
 $smarty->display("inc_semainier.tpl");
 ?>

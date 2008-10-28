@@ -33,7 +33,9 @@ class CGroups extends CMbObject {
 
   // Object References
   var $_ref_functions = null;
+  var $_ref_blocs = null;
   var $_ref_produits_livret = null;
+  static $_ref_current = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -48,7 +50,7 @@ class CGroups extends CMbObject {
     $backRefs["functions"]     = "CFunctions group_id";
     $backRefs["menus"]         = "CMenu group_id";
     $backRefs["plats"]         = "CPlat group_id";
-    $backRefs["salles"]        = "CSalle group_id";
+    $backRefs["blocs"]         = "CBlocOperatoire group_id";
     $backRefs["sejours"]       = "CSejour group_id";
     $backRefs["services"]      = "CService group_id";
     $backRefs["stocks"]        = "CStock group_id";
@@ -118,6 +120,22 @@ class CGroups extends CMbObject {
     $this->_ref_functions = CMediusers::loadFonctions($permType, $this->_id);
   }
   
+  /**
+   * Load blocs operatoires with given permission
+   */
+  function loadBlocs($permType = PERM_READ, $load_salles = true) {
+  	$bloc = new CBlocOperatoire();
+  	$where = array('group_id' => "='$this->_id'");
+    $this->_ref_blocs = $bloc->loadListWithPerms($permType, $where, 'nom');
+    
+    if ($load_salles) {
+			foreach ($this->_ref_blocs as &$bloc) {
+			  $bloc->loadRefsSalles();
+			}
+    }
+		return $this->_ref_blocs;
+  }
+  
   function loadRefsBack() {
     $this->loadFunctions();
   }
@@ -157,9 +175,11 @@ class CGroups extends CMbObject {
    */
   static function loadCurrent() {
     global $g;
-    $group = new CGroups();
-    $group->load($g);
-    return $group;
+    if (!self::$_ref_current) {
+	    self::$_ref_current = new CGroups();
+	    self::$_ref_current->load($g);
+    }
+    return self::$_ref_current;
   }
 }
 ?>

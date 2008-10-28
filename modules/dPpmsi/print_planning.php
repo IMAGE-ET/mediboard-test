@@ -35,10 +35,7 @@ $plagesop = new CPlageOp;
 $where = array();
 $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
-$order = array();
-$order[] = "date";
-$order[] = "salle_id";
-$order[] = "debut";
+$order = "date, salle_id, debut";
 
 $chir_id = mbGetValueFromGet("chir");
 $user = new CMediusers();
@@ -50,10 +47,13 @@ if($filter->_prat_id) {
 }
 
 // En fonction de la salle
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+
 $salle = new CSalle;
-$whereSalle = array();
-$whereSalle["group_id"] = "= '$g'";
-$where["salle_id"] = $ds->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)), $filter->salle_id);
+$whereSalle = array('bloc_id' => $ds->prepareIn(array_keys($listBlocs)));
+$listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
+
+$where["salle_id"] = $ds->prepareIn(array_keys($listSalles), $filter->salle_id);
 
 $plagesop = $plagesop->loadList($where, $order);
 $plagesop["urgences"] = new CPlageOp();

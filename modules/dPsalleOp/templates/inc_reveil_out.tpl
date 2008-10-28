@@ -101,6 +101,8 @@ submitSortieForm = function(oFormSortie,reveil) {
       </form>
     </td>
   </tr>
+  {{foreachelse}}
+  <tr><td colspan="20">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
 

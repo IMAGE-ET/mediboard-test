@@ -32,10 +32,6 @@ if($dialog){
 $object_id = mbGetValueFromGet("object_id");
 $object_class = mbGetValueFromGet("object_class");
 
-$salle = new CSalle();
-$salle->group_id = $g;
-$listSalle = $salle->loadMatchingList();
-
 $praticien = new CMediusers();
 $listPraticien = $praticien->loadPraticiens();
 

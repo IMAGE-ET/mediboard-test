@@ -113,8 +113,7 @@ class CMouvSejourEcap extends CMouvement400 {
     } 
         
     $etab400 = new CRecordSante400();
-    $query = "SELECT * FROM $this->base.ECCIPF " .
-        "\nWHERE CICIDC = ?";
+    $query = "SELECT * FROM $this->base.ECCIPF WHERE CICIDC = ?";
     $values = array (
       $CIDC,       
     );
@@ -141,6 +140,14 @@ class CMouvSejourEcap extends CMouvement400 {
     $id400EtabSHS->last_update = mbDateTime();
     $id400EtabSHS->id400 =  $etab400->consume("CSHS");
     $id400EtabSHS->store();
+    
+    $this->etablissement->loadBlocs();
+    if (!count($this->etablissement->_ref_blocs)) {
+    	$bloc = new CBlocOperatoire();
+    	$bloc->group_id = $this->etablissement->_id;
+    	$bloc->nom = "Bloc Import eCap";
+    	$bloc->store();
+    }
     
     $this->trace($etab400->data, "Données établissement non importées");
     
@@ -186,8 +193,9 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->markCache(self::STATUS_FONCSALL);
       return;
     } 
-
-    $this->salle->group_id = $this->etablissement->_id;
+    $this->etablissement->loadBlocs();
+    $bloc = reset($this->etablissement->_ref_blocs);
+    $this->salle->bloc_id = $bloc->_id;
     $this->salle->nom = "Import eCap";
     $this->salle->stats = "0";
     

@@ -7,15 +7,16 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$date_now = mbDate();
-$modif_operation = $date>=$date_now;
-$hour = mbTime(null);
+$date    = mbGetValueFromGetOrSession("date", mbDate());
+$bloc_id = mbGetValueFromGetOrSession("bloc_id");
+
+$modif_operation = $date >= mbDate();
+$hour = mbTime();
+
+$timing = array();
 
 // Selection des plages opératoires de la journée
 $plages = new CPlageOp;
@@ -23,44 +24,50 @@ $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
 
-$timing = array();
+$salle = new CSalle();
+$whereSalle = array("bloc_id" => " = '$bloc_id'");
 
-$listOps = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+$where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 $where["sortie_salle"] = "IS NOT NULL";
 $where["entree_reveil"] = "IS NULL";
 $order = "sortie_salle";
-$listOps = $listOps->loadList($where, $order);
-foreach($listOps as $key => $value) {
-  $listOps[$key]->loadRefChir();
-  $listOps[$key]->loadRefSejour();
-  $listOps[$key]->loadRefPlageOp();
-  if($listOps[$key]->_ref_sejour->type == "exte"){
-    unset($listOps[$key]);
+
+$operation = new COperation;
+$listOperations = $operation->loadList($where, $order);
+
+foreach($listOperations as $key => &$op) {
+  $op->loadRefSejour();
+
+  if($op->_ref_sejour->type == "exte"){
+    unset($listOperations[$key]);
     continue;
   }
   
-  $listOps[$key]->_ref_sejour->loadRefPatient();
+  $op->loadRefChir();
+  $op->loadRefPlageOp();
+  
+  $op->_ref_sejour->loadRefPatient();
+  
   //Tableau des timings
   $timing[$key]["entree_reveil"] = array();
   $timing[$key]["sortie_reveil"] = array();
   foreach($timing[$key] as $key2 => $value2) {
-    for($i = -10; $i < 10 && $value->$key2 !== null; $i++) {
-      $timing[$key][$key2][] = mbTime("$i minutes", $value->$key2);
+    for($i = -10; $i < 10 && $op->$key2 !== null; $i++) {
+      $timing[$key][$key2][] = mbTime("$i minutes", $op->$key2);
     }
   }
   if (CModule::getActive("bloodSalvage")) {
-    $listOps[$key]->blood_salvage= new CBloodSalvage;
-    $where = array();
-    $where["operation_id"] = "= '$key'";
-    $listOps[$key]->blood_salvage->loadObject($where);
-    $listOps[$key]->blood_salvage->loadRefPlageOp();
-    $listOps[$key]->blood_salvage->totaltime = "00:00:00";
-    if($listOps[$key]->blood_salvage->recuperation_start && $listOps[$key]->blood_salvage->transfusion_end) {
-      $listOps[$key]->blood_salvage->totaltime = mbTimeRelative($listOps[$key]->blood_salvage->recuperation_start, $listOps[$key]->blood_salvage->transfusion_end);
-    } elseif($listOps[$key]->blood_salvage->recuperation_start){
-      $listOps[$key]->blood_salvage->totaltime = mbTimeRelative($listOps[$key]->blood_salvage->recuperation_start,mbDate($listOps[$key]->blood_salvage->_datetime)." ".mbTime());
+    $op->blood_salvage = new CBloodSalvage;
+    $op->blood_salvage->operation_id = $key;
+    $op->blood_salvage->loadMatchingObject();
+    $op->blood_salvage->loadRefPlageOp();
+    $op->blood_salvage->totaltime = "00:00:00";
+    if($op->blood_salvage->recuperation_start && $op->blood_salvage->transfusion_end) {
+      $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
+    } elseif($op->blood_salvage->recuperation_start){
+      $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start,mbDate($op->blood_salvage->_datetime)." ".mbTime());
     }
   }
 }
@@ -72,18 +79,17 @@ if(Cmodule::getActive("dPpersonnel")) {
   $personnels = $personnel->loadListPers("reveil");
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("personnels"             , $personnels              );
-$smarty->assign("plages"                 , $plages                  );
-$smarty->assign("listOps"                , $listOps                 );
-$smarty->assign("timing"                 , $timing                  );
-$smarty->assign("date"                   , $date                    );
+$smarty->assign("personnels"             , $personnels);
+$smarty->assign("plages"                 , $plages);
+$smarty->assign("listOps"                , $listOperations);
+$smarty->assign("timing"                 , $timing);
+$smarty->assign("date"                   , $date);
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
-$smarty->assign("hour"                   , $hour        );
-$smarty->assign("modif_operation"        , $modif_operation         );
+$smarty->assign("hour"                   , $hour);
+$smarty->assign("modif_operation"        , $modif_operation);
 
 $smarty->display("inc_reveil_ops.tpl");
 

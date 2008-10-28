@@ -15,8 +15,7 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 
 // Selection des salles
 $listSalles = new CSalle;
-$where = array("group_id"=>"= '$g'");
-$listSalles = $listSalles->loadList($where);
+$listSalles = $listSalles->loadGroupList();
 
 $totalOp = 0;
 

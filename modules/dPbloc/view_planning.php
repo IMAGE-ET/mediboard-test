@@ -37,10 +37,7 @@ $affectations_plage = array();
 $where = array();
 $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
-$order = array();
-$order[] = "date";
-$order[] = "salle_id";
-$order[] = "debut";
+$order = "date, salle_id, debut";
 
 $chir_id = mbGetValueFromGet("chir");
 $user = new CMediusers();
@@ -51,14 +48,14 @@ if ($filter->_specialite or $filter->_prat_id) {
   $chir = new CMediusers;
   // Chargement de la liste des chirs qui ont la specialite selectionnee
   $chirs = $chir->loadList(array ("function_id" => "= '$filter->_specialite '"));
-  $where["chir_id"] = $ds->prepareIn(array_keys($chirs), $filter->_prat_id);
+  $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($chirs), $filter->_prat_id);
 }
 
 // En fonction de la salle
-$salle = new CSalle;
+$salle = new CSalle();
 $whereSalle = array();
-$whereSalle["group_id"] = "= '$g'";
-$where["salle_id"] = $ds->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)), $filter->salle_id);
+$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+$where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
 $plagesop = $plagesop->loadList($where, $order);
 

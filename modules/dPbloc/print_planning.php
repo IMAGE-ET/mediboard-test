@@ -7,15 +7,14 @@
 * @author Romain Ollivier
 */
  
-global $AppUI, $can, $m, $dPconfig;
-
+global $AppUI, $can;
 $can->needsRead();
 
-$now       = mbDate();
+$now = mbDate();
 
 $filter = new COperation;
-$filter->_date_min     = mbGetValueFromGet("_date_min"    , "$now");
-$filter->_date_max     = mbGetValueFromGet("_date_max"    , "$now");
+$filter->_date_min     = mbGetValueFromGet("_date_min", $now);
+$filter->_date_max     = mbGetValueFromGet("_date_max", $now);
 $filter->_prat_id      = mbGetValueFromGetOrSession("_prat_id");
 $filter->salle_id      = mbGetValueFromGetOrSession("salle_id");
 $filter->_plage        = mbGetValueFromGetOrSession("_plage");

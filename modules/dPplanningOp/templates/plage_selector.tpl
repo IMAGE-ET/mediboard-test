@@ -105,7 +105,7 @@ Main.add(function () {
                   {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"{{/if}}
                 >
                   {{$curr_plage->date|date_format:"%a %d"}} 
-                  en {{$curr_plage->_ref_salle->nom}}
+                  en {{$curr_plage->_ref_salle->_view}}
                 </label>
               </div>
             </div>
@@ -129,7 +129,7 @@ Main.add(function () {
               </table>
             </div>
           </td>
-          <td>
+          <td style="width: 1%;">
             {{if !$over || !$dPconfig.dPbloc.CPlageOp.locked}}
             {{if (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0) || ($curr_plage->max_intervention == ""))}}
             <input type="radio" name="list" value="{{$curr_plage->plageop_id}}"

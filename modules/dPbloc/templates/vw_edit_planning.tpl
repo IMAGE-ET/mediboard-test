@@ -43,7 +43,7 @@ function popPlanning(debut) {
       </table>
       {{if $plagesel->plageop_id}}
       <a class="buttonnew" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
-        Créer une nouvelle plage opératoire
+        {{tr}}CPlageOp-title-create{{/tr}}
       </a>
       {{/if}}
       {{if $can->edit}}
@@ -59,10 +59,10 @@ function popPlanning(debut) {
             <a style="float:right;" href="#" onclick="view_log('CPlageOp',{{$plagesel->plageop_id}})">
               <img src="images/icons/history.gif" alt="historique" />
             </a>
-            Modifier la plage opératoire
+            {{tr}}CPlageOp-title-modify{{/tr}}
           {{else}}
           <th class="category" colspan="6">
-            Ajouter une plage opératoire
+            {{tr}}CPlageOp-title-create{{/tr}}
           {{/if}}
           </th>
         </tr>
@@ -86,11 +86,17 @@ function popPlanning(debut) {
         <th>{{mb_label object=$plagesel field="salle_id"}}</th>
         <td>
           <select name="salle_id" class="{{$plagesel->_props.salle_id}}">
-            <option value="">&mdash; Choisir une salle</option>
-            {{foreach from=$listSalles item=salle}}
-            <option value="{{$salle->salle_id}}" {{if $plagesel->salle_id == $salle->salle_id}} selected="selected"{{/if}} >
-              {{$salle->nom}}
-            </option>
+            <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
+            {{foreach from=$listBlocs item=curr_bloc}}
+            <optgroup label="{{$curr_bloc->nom}}">
+              {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+              <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
+                {{$curr_salle->nom}}
+              </option>
+              {{foreachelse}}
+              <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+              {{/foreach}}
+            </optgroup>
             {{/foreach}}
           </select>
         </td>
@@ -198,12 +204,8 @@ function popPlanning(debut) {
         </td>
       </tr>
       <tr>
-        <th>
-          {{mb_label object=$plagesel field="max_intervention"}}
-        </th>
-        <td>
-					{{mb_field object=$plagesel field="max_intervention" size="1"}}
-        </td>
+        <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
+        <td>{{mb_field object=$plagesel field="max_intervention" size="1"}}</td>
       </tr>
       <tr>
         <td class="button" colspan="4">

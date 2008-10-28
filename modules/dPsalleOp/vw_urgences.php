@@ -18,18 +18,17 @@ $operation = new COperation;
 $where = array (
   "date" => "= '$date'",
 );
-$order = "salle_id, chir_id";
-$urgences = $operation->loadGroupList($where, $order);
+$urgences = $operation->loadGroupList($where, "salle_id, chir_id");
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
   $urgence->_ref_sejour->loadRefPatient();
 }
 
 // Listes des salles
-$salle = new CSalle;
-$order = "nom";
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
-$listSalles = $salle->loadGroupList(array(), $order);
+$salle = new CSalle();
+$listSalles = $salle->loadListWithPerms(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -37,6 +36,7 @@ $smarty = new CSmartyDP();
 $smarty->debugging = false;
 
 $smarty->assign("urgences"  , $urgences);
+$smarty->assign("listBlocs",  $listBlocs);
 $smarty->assign("listSalles", $listSalles);
 $smarty->assign("date",$date);
 

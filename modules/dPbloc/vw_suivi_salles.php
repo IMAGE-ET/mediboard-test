@@ -10,7 +10,8 @@
 global $can, $g;
 $can->needsRead();
 
-$date_suivi  = mbGetValueFromGetOrSession("date_suivi", mbDate());
+$date_suivi = mbGetValueFromGetOrSession("date_suivi", mbDate());
+$bloc_id = mbGetValueFromGetOrSession("bloc_id");
 
 // Chargement des Anesthésistes
 $listAnesths = new CMediusers;
@@ -20,12 +21,19 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
-// Chargement des salles
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+
+$bloc = new CBlocOperatoire();
+if (!$bloc->load($bloc_id)) {
+  $bloc = reset($listBlocs);
+}
+$bloc->loadRefs();
+
 $salle = new CSalle;
-$where = array("group_id"=>"= '$g'");
-$order = "'nom'";
-$listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
-foreach ($listSalles as &$salle) {
+$where = array("bloc_id" => "='$bloc->_id'");
+$bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
+
+foreach ($bloc->_ref_salles as &$salle) {
   $salle->loadRefsForDay($date_suivi);
 }
 
@@ -34,7 +42,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("vueReduite"     , true);
 $smarty->assign("listAnesths"    , $listAnesths);
-$smarty->assign("listSalles"     , $listSalles);
+$smarty->assign("listBlocs"      , $listBlocs);
+$smarty->assign("bloc"           , $bloc);
 $smarty->assign("date_suivi"     , $date_suivi);
 $smarty->assign("operation_id"   , 0);
 

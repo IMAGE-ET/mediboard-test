@@ -7,59 +7,64 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsEdit();
 
-$deblist = mbGetValueFromGetOrSession("deblist", mbDate("-1 WEEK"));
+$deblist = mbGetValueFromGet("deblist", mbDate("-1 WEEK"));
 $finlist = mbDate("+1 DAY", $deblist);
+$bloc_id = mbGetValueFromGetOrSession("bloc_id");
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
-$listSalles = new CSalle;
-$where["stats"] = "= '1'";
-$order = "nom";
-$listSalles = $listSalles->loadList($where, $order);
+$listBlocs = CGroups::loadCurrent()->loadBlocs();
+$bloc = new CBlocOperatoire();
+if (!$bloc->load($bloc_id)) {
+  $bloc = reset($listBlocs);
+}
 
-$listDisciplines = new CDiscipline();
-$listDisciplines = $listDisciplines->loadUsedDisciplines();
+$where = array(
+  "stats"   => "= '1'",
+  "bloc_id" => "= '$bloc->_id'",
+);
+$order = "nom";
+$salle = new CSalle;
+$listSalles = $salle->loadList($where, $order);
 
 // Récupération des plages
-$plage = new CPlageOp;
-$listPlages = array();
-$where = array();
-$where["date"] = "BETWEEN '$deblist' AND '$finlist'";
+$where = array(
+  "date"     => "BETWEEN '$deblist' AND '$finlist'",
+  "salle_id" => CSQLDataSource::prepareIn(array_keys($listSalles)),
+);
 $order = "date, salle_id, debut, chir_id";
+
+$plage = new CPlageOp;
 $listPlages = $plage->loadList($where, $order);
 
 // Récupération des interventions
-foreach($listPlages as $keyPlage => $curr_plage) {
-  $listPlages[$keyPlage]->loadRefs(0);
-  $listPlages[$keyPlage]->loadRefsFwd();
-  $listPlages[$keyPlage]->loadRefsBack(0, "entree_salle");
+foreach($listPlages as &$curr_plage) {
+  $curr_plage->loadRefs(0);
+  $curr_plage->loadRefsFwd();
+  $curr_plage->loadRefsBack(0, "entree_salle");
+  
   $i = 1;
-  foreach($listPlages[$keyPlage]->_ref_operations as $keyOp => $curr_op) {
-    $listPlages[$keyPlage]->_ref_operations[$keyOp]->_rank_reel = $i;
-    $i++;
-    $next = next($listPlages[$keyPlage]->_ref_operations);
-    if($next !== false) {
-      $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = $next->entree_salle;
-    } else {
-      $listPlages[$keyPlage]->_ref_operations[$keyOp]->_pat_next = null;
-    }
-    $listPlages[$keyPlage]->_ref_operations[$keyOp]->loadRefs();
-    $listPlages[$keyPlage]->_ref_operations[$keyOp]->loadLogs();
-    $listPlages[$keyPlage]->_ref_operations[$keyOp]->_ref_sejour->loadRefs();
+  foreach($curr_plage->_ref_operations as &$curr_op) {
+    $curr_op->_rank_reel = $i++;
+    $next = next($curr_plage->_ref_operations);
+    $curr_op->_pat_next = (($next !== false) ? $next->entree_salle : null);
+    $curr_op->loadRefs();
+    $curr_op->loadLogs();
+    $curr_op->_ref_sejour->loadRefs();
   }
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("deblist"   , $deblist);
+$smarty->assign("deblist",    $deblist);
 $smarty->assign("listPlages", $listPlages);
+$smarty->assign("listBlocs",  $listBlocs);
+$smarty->assign("bloc",       $bloc);
 
 $smarty->display("vw_bloc2.tpl");
 

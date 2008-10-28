@@ -16,11 +16,17 @@
     <th><label for="salle" title="Salle d'opération">Salle</label></th>
     <td>
       <select name="salle" onchange="this.form.submit()">
-        <option value="">&mdash; Aucune salle</option>
-        {{foreach from=$listSalles item=curr_salle}}
-        <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $salle->_id}} selected="selected" {{/if}}>
-          {{$curr_salle->nom}}
-        </option>
+        <option value="">&mdash; {{tr}}CSalle.none{{/tr}}</option>
+        {{foreach from=$listBlocs item=curr_bloc}}
+        <optgroup label="{{$curr_bloc->nom}}">
+          {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+          <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $salle->_id}}selected="selected"{{/if}}>
+            {{$curr_salle->nom}}
+          </option>
+          {{foreachelse}}
+          <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+          {{/foreach}}
+        </optgroup>
         {{/foreach}}
       </select>
     </td>

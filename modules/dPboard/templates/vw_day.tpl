@@ -119,24 +119,18 @@ Main.add(function () {
 
     <!--  Consultations -->
     <td class="viewport" style="width: 50%" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
-      <div style="position:absolute" id="icon-consultations">
-        <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
-          <img src="modules/dPcabinet/images/icon.png" height="24" width="24" />
-        </a>
-      </div>
-      <div id="consultations">
-      </div>
+      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}" style="position:absolute" id="icon-consultations">
+        <img src="modules/dPcabinet/images/icon.png" height="24" width="24" />
+      </a>
+      <div id="consultations"></div>
     </td>
     
     <!-- Operations -->
     <td class="viewport" style="width: 50%" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
-      <div style="position:absolute" id="icon-operations">
-        <a href="?m=dPplanningOp&amp;tab=vw_idx_patients">
-          <img src="modules/dPplanningOp/images/icon.png" height="24" width="24" />
-        </a>
-      </div>
-      <div id="operations">
-      </div>
+      <a href="?m=dPplanningOp&amp;tab=vw_idx_patients"style="position:absolute" id="icon-operations">
+        <img src="modules/dPplanningOp/images/icon.png" height="24" width="24" />
+      </a>
+      <div id="operations"></div>
     </td>
     
   </tr>
@@ -145,22 +139,16 @@ Main.add(function () {
   
     <!-- Recherche de patients -->
     <td class="viewport" style="width: 50%" id="patients-viewport" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
-      <div style="position:absolute" id="icon-patients">
-        <a href="?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
-          <img src="modules/dPpatients/images/icon.png" height="24" width="24" />
-        </a>
-      </div>
-      <div id="patients" style="overflow: auto">
-      </div>
+      <a href="?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}" style="position:absolute" id="icon-patients">
+        <img src="modules/dPpatients/images/icon.png" height="24" width="24" />
+      </a>
+      <div id="patients" style="overflow: auto"></div>
     </td>
 
     <!-- Patients hospitalisés -->
     <td class="viewport" style="width: 50%" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
-      <div style="position:absolute" id="icon-hospi">
-        <img src="modules/dPhospi/images/icon.png" height="24" width="24" />
-      </div>
-      <div id="hospi" style="overflow: auto">
-      </div>
+      <img src="modules/dPhospi/images/icon.png" height="24" width="24" style="position:absolute" id="icon-hospi" />
+      <div id="hospi" style="overflow: auto"></div>
     </td>
     
   </tr>

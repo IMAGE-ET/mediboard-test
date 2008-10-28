@@ -49,9 +49,7 @@ $persusers = array_merge($persusersAidesOp, $persusersPanseuses);
 
 // Chargement de services
 $salle = new CSalle();
-$salle->group_id = $g;
-$order = "nom";
-$salles = $salle->loadMatchingList($order);
+$salles = $salle->loadGroupList();
 
 foreach ($salles as &$_salle) {
 	$_salle->loadLastId400($tag);

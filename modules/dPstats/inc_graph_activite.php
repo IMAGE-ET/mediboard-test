@@ -32,21 +32,22 @@ for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
   $jscalls[] = "javascript:zoomGraphIntervention('$nameMonth');";
 }
 
-$sql = "SELECT * FROM sallesbloc
-  WHERE stats = '1'
-  AND group_id = '$g'";
+$where = array();
+$where['stats'] = " = '1'";
 if($salle_id) {
-  $sql .= "\nAND salle_id = '$salle_id'";
+  $where['salle_id'] = " = '$salle_id'";
 }
 
-$ds = CSQLDataSource::get("std");
-$salles = $ds->loadlist($sql);
+$salles = new CSalle();
+$ds = $salles->_spec->ds;
+
+$salles = $salles->loadGroupList($where, false);
 
 $opbysalle = array();
 $i=0;
 foreach($salles as $salle) {
-  $curr_salle_id = $salle["salle_id"];
-  $opbysalle[$curr_salle_id]["legend"] = wordwrap($salle["nom"], 10);
+  $curr_salle_id = $salle->salle_id;
+  $opbysalle[$curr_salle_id]["legend"] = $salle->_view;
   $opbysalle[$curr_salle_id]["total"] = 0;
   
   $sql = "SELECT COUNT(operations.operation_id) AS total,
@@ -118,12 +119,12 @@ if($codes_ccam) {
 global $graph, $options;
 
 $options = array( 
-	"width" => 480,
+	"width" => 700,
 	"height" => 300,
 	"title" => $title,
 	"subtitle" => $subtitle,
 	"sizeFontTitle" => 10,
-	"margin" => array(50,100,50,70),
+	"margin" => array(50,160,50,70),
 	"posLegend" => array(0.02, 0.06, "right", "top"), 
 	"sizeFontAxis" => 8,
 	"labelAngle" => 50,

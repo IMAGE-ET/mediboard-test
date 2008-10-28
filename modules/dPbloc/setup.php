@@ -172,7 +172,35 @@ class CSetupdPbloc extends CSetup {
             CHANGE `max_intervention` `max_intervention` INT(11);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+    $sql = "CREATE TABLE `bloc_operatoire` (
+					  `bloc_operatoire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+					  `group_id` INT (11) UNSIGNED NOT NULL,
+					  `nom` VARCHAR (255) NOT NULL);";
+    $this->addQuery($sql);
+    
+		$sql = "ALTER TABLE `bloc_operatoire` ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "INSERT INTO `bloc_operatoire` (`nom`, `group_id`)
+            SELECT 'Bloc principal', `group_id`
+            FROM `groups_mediboard`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `sallesbloc` 
+            CHANGE `group_id` `bloc_id` INT( 11 ) UNSIGNED NOT NULL";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `sallesbloc` 
+            SET `bloc_id` = (
+              SELECT `bloc_operatoire_id` 
+              FROM `bloc_operatoire` 
+              WHERE `sallesbloc`.`bloc_id` = `bloc_operatoire`.`group_id`
+              LIMIT 1
+            );";
+    $this->addQuery($sql);
+   
+    $this->mod_version = "0.23";
   }  
 }
 ?>

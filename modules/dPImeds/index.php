@@ -7,9 +7,6 @@
 * @author Romain Ollivier
 */
 
-// @todo: Put the following in $config_dist;
-global $dPconfig;
-
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_results"      , null, TAB_READ);

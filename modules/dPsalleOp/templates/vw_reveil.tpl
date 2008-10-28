@@ -3,17 +3,20 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  new Control.Tabs('main_tab_group');
+  new Control.Tabs('reveil_tabs');
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
+  opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('ops', { frequency: 90 });
   
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
+  opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");
   opsUpdater.addParam("date","{{$date}}");
   opsUpdater.requestUpdate("reveil", {waitingText: null});
   
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_out");
+  opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");
   opsUpdater.addParam("date","{{$date}}");
   opsUpdater.requestUpdate("out", {waitingText: null});
   
@@ -22,7 +25,7 @@ Main.add(function () {
 </script>
 
 	<!-- Tabulations -->
-	<ul id="main_tab_group" class="control_tabs">
+	<ul id="reveil_tabs" class="control_tabs">
 	  {{if $dPconfig.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
 	  	<li><a href="#ops">{{tr}}SSPI.Attente{{/tr}} (<span id="liops">0</span>)</a></li>
 	  	<li><a href="#reveil">{{tr}}SSPI.Reveil{{/tr}} (<span id="lireveil">0</span>)</a></li>
@@ -33,8 +36,19 @@ Main.add(function () {
 	  <li style="float:right; font-weight: bold;">
 		  <form action="?" name="selection" method="get">
 		    <input type="hidden" name="m" value="{{$m}}" />
-		      <span id="heure">{{$hour|date_format:"%Hh%M"}}</span> - {{$date|date_format:"%A %d %B %Y"}}
-		    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />    
+        <input type="hidden" name="tab" value="vw_reveil" />
+		    <span id="heure">{{$hour|date_format:"%Hh%M"}}</span> - {{$date|date_format:"%A %d %B %Y"}}
+		    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <select name="bloc_id" onchange="this.form.submit();">
+          <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
+          {{foreach from=$blocs_list item=curr_bloc}}
+            <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
+              {{$curr_bloc->nom}}
+            </option>
+          {{foreachelse}}
+            <option value="" disabled="disabled">{{tr}}CBlocOperatoire.none{{/tr}}</option>
+          {{/foreach}}
+        </select>
 	    </form>
 	  </li>
 	</ul>

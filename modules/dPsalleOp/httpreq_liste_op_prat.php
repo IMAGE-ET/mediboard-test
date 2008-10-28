@@ -16,8 +16,7 @@ $operation_id = mbGetValueFromGetOrSession("operation_id");
 
 // Liste des salles
 $listSalles = new CSalle;
-$where = array("group_id"=>"= '$g'");
-$listSalles = $listSalles->loadList($where);
+$listSalles = $listSalles->loadGroupList();
 
 // Chargement des chirurgiens
 $listPermPrats = new CMediusers;

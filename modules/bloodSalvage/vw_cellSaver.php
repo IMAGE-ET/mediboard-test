@@ -7,7 +7,7 @@
  *  @author Alexandre Germonneau
  */
 
-global  $can, $m, $g, $dPconfig;
+global  $can;
 $can->needsRead();
 
 $cell_saver_id = mbGetValueFromGetOrSession("cell_saver_id");

@@ -26,8 +26,7 @@ function viewItem(oTd, sClassName, id, date) {
     }
   });
 
-  oElement = $(sClassName+id);
-  oElement.show();
+  oElement = $(sClassName+id).show();
   
   if(oElement.alt == "infos - cliquez pour fermer") {
     return;
@@ -57,8 +56,7 @@ function viewItem(oTd, sClassName, id, date) {
 }
 
 function hideItem(sClassName, id) {
-  oElement = $(sClassName+id);
-  oElement.hide();
+  $(sClassName+id).hide();
 }
 
 function updateSemainier() {
@@ -102,10 +100,7 @@ Main.add(function () {
   <tbody class="viewported">
 
   <tr>
-    <td class="viewport" colspan="2">
-      <div id="semainier">
-      </div>
-    </td>
+    <td id="semainier" class="viewport" colspan="2"></td>
   </tr>
   
   </tbody>

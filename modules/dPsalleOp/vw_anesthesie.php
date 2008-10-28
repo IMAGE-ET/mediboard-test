@@ -12,7 +12,6 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
-$salle = mbGetValueFromGetOrSession("salle");
 $op    = mbGetValueFromGetOrSession("op");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 

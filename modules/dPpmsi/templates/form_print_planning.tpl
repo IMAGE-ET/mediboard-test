@@ -124,20 +124,24 @@ Main.add(function () {
           <th>{{mb_label object=$filter field="salle_id"}}</th>
           <td>
             <select name="salle_id">
-              <option value="0">&mdash; Toutes les salles &mdash;</option>
-              {{foreach from=$listSalles item=curr_salle}}
-                <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+              <option value="0">&mdash; {{tr}}CSalle.all{{/tr}}</option>
+              {{foreach from=$listBlocs item=curr_bloc}}
+              <optgroup label="{{$curr_bloc->nom}}">
+                {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+                <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
                   {{$curr_salle->nom}}
                 </option>
+                {{foreachelse}}
+                <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+                {{/foreach}}
+              </optgroup>
               {{/foreach}}
             </select>
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filterSejour field="type"}}</th>
-          <td>
-            {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
-          </td>
+          <td>{{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}</td>
         </tr>
            <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>

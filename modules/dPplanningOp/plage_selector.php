@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g, $dPconfig;
-
+global $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
@@ -31,12 +30,9 @@ $mediChir = new CMediusers();
 $mediChir->load($chir);
 
 // Chargement des plages pour le chir ou sa spécialité
-$listSalles = new CSalle;
-$where = array();
-
-$where["group_id"] = $ds->prepare("= %",$group_id);
-
-$listSalles = $listSalles->loadList($where);
+$salle = new CSalle;
+$where = array('bloc_id' => $ds->prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ))));
+$listSalles = $salle->loadListWithPerms(PERM_READ, $where);
 
 $listPlages = new CPlageOp;
 $where = array();
@@ -78,7 +74,7 @@ if(strlen($nmonth) == 1){
 }
 
 // Heures d'admission
-$config              =& $dPconfig["dPplanningOp"]["CSejour"];
+$config              = CAppUI::conf("dPplanningOp CSejour");
 $hours               = range($config["heure_deb"], $config["heure_fin"]);
 $mins                = range(0, 59, $config["min_intervalle"]);
 $heure_entree_veille = $config["heure_entree_veille"];

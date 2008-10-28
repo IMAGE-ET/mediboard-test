@@ -19,16 +19,21 @@ function showLegend() {
 
 <table class="main">
   <tr>
-    <td>
-      <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
-    </td>
-    <th colspan="{{$listSalles|@count}}">
+    <td><a href="#" onclick="showLegend()" class="buttonsearch">Légende</a></td>
+    <th colspan="100">
+      <select name="bloc_id" onchange="location.href='?m={{$m}}&tab={{$tab}}&date_suivi={{$date_suivi}}&bloc_id='+$V(this)">
+      {{foreach from=$listBlocs item=curr_bloc}}
+        <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
+          {{$curr_bloc->nom}}
+        </option>
+      {{/foreach}}
+      </select>
       {{$date_suivi|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
   <tr>
-  {{foreach from=$listSalles item=_salle}}
+    {{foreach from=$bloc->_ref_salles item=_salle}}
     <td>
       <table class="form">
         <tr>
@@ -38,6 +43,8 @@ function showLegend() {
       {{assign var="salle" value=$_salle}}     
       {{include file="../../dPsalleOp/templates/inc_details_plages.tpl"}}
     </td>
-  {{/foreach}}
+    {{foreachelse}}
+    <td>{{tr}}CSalle.none{{/tr}}</td>
+    {{/foreach}}
   </tr>
 </table>

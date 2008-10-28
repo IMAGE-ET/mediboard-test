@@ -60,6 +60,7 @@ $smarty->assign("date"       , $date);
 $smarty->assign("listSejours", $listSejours);
 $smarty->assign("crList"     , $crList);
 $smarty->assign("hospiList"  , $hospiList);
+$smarty->assign("nodebug"    , true);
 
 $smarty->display("inc_vw_hospi.tpl");
 

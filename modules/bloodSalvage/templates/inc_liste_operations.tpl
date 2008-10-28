@@ -91,17 +91,24 @@
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
-    <input type="hidden" name="dosql" value="do_planning_aed" />
-    <input type="hidden" name="m" value="dPplanningOp" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
-    <select name="salle_id" onchange="this.form.submit();">
-      {{foreach from=$listSalles item=curr_salle}}
-      <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $_operation->salle_id}}selected="selected"{{/if}}>
-        {{$curr_salle->_view}}
-      </option>
-      {{/foreach}}
-    </select>
+      <input type="hidden" name="dosql" value="do_planning_aed" />
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+      <select name="salle_id" onchange="this.form.submit()">
+        <option value="">&mdash; {{tr}}CSalle.none{{/tr}}</option>
+        {{foreach from=$listBlocs item=curr_bloc}}
+        <optgroup label="{{$curr_bloc->nom}}">
+          {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+          <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $_operation->_id}}selected="selected"{{/if}}>
+            {{$curr_salle->nom}}
+          </option>
+          {{foreachelse}}
+          <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+          {{/foreach}}
+        </optgroup>
+        {{/foreach}}
+      </select>
     </form>
   </td>
 </tr>

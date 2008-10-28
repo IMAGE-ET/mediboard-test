@@ -24,10 +24,7 @@ for($i = 0; $i < 7; $i++) {
 
 // Liste des Salles
 $salle = new CSalle();
-$where = array();
-$where["group_id"] = "= '$g'";
-$order = "'nom'";
-$listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
+$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");
 
 // Création du tableau de visualisation
 $affichages = array();
@@ -80,9 +77,9 @@ foreach($listDays as $keyDate=>$valDate){
   foreach($listPlages[$keyDate] as $plage){
     $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
     for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
-      $affichages["$keyDate-s".$plage->salle_id."-".$time] = "full";
+      $affichages["$keyDate-s$plage->salle_id-$time"] = "full";
     } 
-    $affichages["$keyDate-s".$plage->salle_id."-".$plage->debut] = $plage->_id;
+    $affichages["$keyDate-s$plage->salle_id-$plage->debut"] = $plage->_id;
   }
 }
 

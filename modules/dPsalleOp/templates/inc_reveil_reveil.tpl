@@ -42,7 +42,7 @@ submitReveilForm = function(oFormOperation,sens) {
 	      url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
 	      url.addParam('date',"{{$date}}");
 	      url.requestUpdate("out");
-      }   
+      }
     }
   });
 }
@@ -180,6 +180,8 @@ submitReveilForm = function(oFormOperation,sens) {
       {{else}}-{{/if}}
     </td>
   </tr>
+  {{foreachelse}}
+  <tr><td colspan="20">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
 

@@ -15,13 +15,13 @@ class CSalle extends CMbObject {
 	var $salle_id = null;
   
   // DB references
-  var $group_id = null;
+  var $bloc_id = null;
 	
   // DB Fields
   var $nom   = null;
   var $stats = null;
   
-  var $_ref_group = null;
+  var $_ref_bloc = null;
   
   // Object references per day
   var $_ref_plages = null;
@@ -44,9 +44,9 @@ class CSalle extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["group_id"] = "notNull ref class|CGroups";
-    $specs["nom"]      = "notNull str";
-    $specs["stats"]    = "notNull bool";
+    $specs["bloc_id"] = "notNull ref class|CBlocOperatoire";
+    $specs["nom"]     = "notNull str";
+    $specs["stats"]   = "notNull bool";
     return $specs;
   }
   
@@ -58,24 +58,46 @@ class CSalle extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->nom;
+    $this->loadRefBloc();
+    $bloc = &$this->_ref_bloc;
+    
+    $where = array(
+      'group_id' => "= '$bloc->group_id'"
+    );
+    $this->_view = '';
+    if ($bloc->countList($where) > 1) {
+    	$this->_view = $bloc->nom.' - ';
+    }
+    $this->_view .= $this->nom;
   }
   
   /**
    * Load list overlay for current group
    */
-  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+  function loadGroupList($where = array(), $order = 'bloc_id, nom', $limit = null, $groupby = null, $ljoin = array()) {
+  	$list_blocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, false);
+  	
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["group_id"] = "= '$g->_id'";
+		$where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($list_blocs));
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
+  function getPerm($permType) {
+  	$this->loadRefBloc();
+  	return $this->_ref_bloc->getPerm($permType) && parent::getPerm($permType);
+  }
+  
+  function loadRefBloc(){
+  	if (!$this->_ref_bloc) {
+	    // Chargement du bloc correspondant
+	    $this->_ref_bloc = new CBlocOperatoire();
+	    $this->_ref_bloc->load($this->bloc_id);
+    }
+  }
+  
   function loadRefsFwd(){
-    // Chargement de l'établissement correspondant
-    $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+    $this->loadRefBloc();
   }
   
   /**

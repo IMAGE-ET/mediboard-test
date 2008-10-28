@@ -273,10 +273,7 @@ Main.add(function () {
   
   {{if $view == "week"}}
   <tr>
-    <td style="border: 1px dotted #000;" colspan="2">
-      <div id="semainier">
-      </div>
-    </td>
+    <td id="semainier" style="border: 1px dotted #000;" colspan="2"></td>
   </tr>
   {{/if}}
 </table>

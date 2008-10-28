@@ -27,6 +27,7 @@ $finact        = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
 
 $prat_id       = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
 $salle_id      = $filter->salle_id = mbGetValueFromGetOrSession("salle_id", 0);
+$bloc_id       = mbGetValueFromGet("bloc_id");
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 $codes_ccam    = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
@@ -42,10 +43,24 @@ $map_graph_interventions = preg_replace("/javascript:/", "#nothing\" onclick=\""
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
+$bloc = new CBlocOperatoire();
+$listBlocs = CGroups::loadCurrent()->loadBlocs();
+
+$listBlocsForSalles = $listBlocs;
+
 $listSalles = new CSalle;
 $where["stats"] = "= '1'";
-$order = "nom";
-$listSalles = $listSalles->loadList($where, $order);
+
+if (!$bloc->load($bloc_id)) {
+  $bloc = reset($listBlocs);
+}
+else {
+	foreach ($listBlocsForSalles as $key => &$curr_bloc) {
+		if ($curr_bloc->_id != $bloc->_id) {
+			unset ($listBlocsForSalles[$key]);
+		}
+	}
+}
 
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
@@ -53,11 +68,14 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user_id"                 , $AppUI->user_id);
-$smarty->assign("filter"       			  		, $filter       );
+$smarty->assign("user_id"                 , $AppUI->user_id );
+$smarty->assign("filter"       			  		, $filter         );
 $smarty->assign("map_graph_interventions" , $map_graph_interventions);
 $smarty->assign("listPrats"      		  		, $listPrats      );
 $smarty->assign("listSalles"     		  		, $listSalles     );
+$smarty->assign("listBlocs"               , $listBlocs      );
+$smarty->assign("listBlocsForSalles"      , $listBlocsForSalles);
+$smarty->assign("bloc"                    , $bloc           );
 $smarty->assign("listDisciplines"		  		, $listDisciplines);
 
 $smarty->display("vw_bloc.tpl");

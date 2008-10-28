@@ -18,7 +18,7 @@ function delCode(iCode){
   var oForm = document.edit_type_ei;
   oEvenementField.remove(iCode);
   
-  var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
+  var oElement = oForm["_ItemsSel_cat_" + oForm._elemOpen.value];
   oItemSelField = new TokenField(oElement);
   oItemSelField.remove(iCode);
   
@@ -29,7 +29,7 @@ function putCode(iCode){
   var oForm = document.edit_type_ei;
   oEvenementField.add(iCode);
   
-  var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
+  var oElement = oForm["_ItemsSel_cat_" + oForm._elemOpen.value];
   oItemSelField = new TokenField(oElement);
   oItemSelField.add(iCode);
   
@@ -40,7 +40,7 @@ function refreshListChoix(){
   var oCategorie = oForm._cat_evenement.options;
   var sListeChoix = "";
   for(i=0; i< oCategorie.length; i++){
-    var oElement = eval("oForm._ItemsSel_cat_" + oCategorie[i].value);
+    var oElement = oForm["_ItemsSel_cat_" + oCategorie[i].value];
     if(oElement.value){
       sListeChoix += "<strong>" + oCategorie[i].text + "</strong><ul>";
       var aItems = oElement.value.split("|");

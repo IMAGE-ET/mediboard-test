@@ -20,7 +20,7 @@ var PlageOpSelector = {
   },
   
   options : {
-    width : 450,
+    width : 600,
     height: 450
   },
 
