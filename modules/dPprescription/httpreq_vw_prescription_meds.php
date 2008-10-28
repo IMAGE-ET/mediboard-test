@@ -16,6 +16,7 @@ $sejour_id = mbGetValueFromGetOrSession("sejour_id");
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+$prescription = new CPrescription();
 
 // Chargement de la prescription
 $prescription_sejour = new CPrescription();
