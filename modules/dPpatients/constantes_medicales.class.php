@@ -22,6 +22,11 @@ class CConstantesMedicales extends CMbObject {
   var $pouls                 = null;
   var $spo2                  = null;
   var $temperature           = null;
+  var $score_sensibilite     = null;
+  var $score_motricite       = null;
+  var $EVA                   = null;
+  var $score_sedation        = null;
+  var $frequence_respiratoire = null;
 
   // Object References
   //    Single
@@ -36,7 +41,8 @@ class CConstantesMedicales extends CMbObject {
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
   
-  static $list_constantes = array('poids', 'taille', 'ta', 'pouls', 'spo2', 'temperature');
+  static $list_constantes = array('poids', 'taille', 'ta', 'pouls', 'spo2', 'temperature', 'score_sensibilite',
+                                  'score_motricite','EVA','score_sedation','frequence_respiratoire');
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,20 +53,25 @@ class CConstantesMedicales extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['patient_id']    = 'notNull ref class|CPatient';
-    $specs['datetime']      = 'notNull dateTime';
-    $specs['context_class'] = 'str';
-    $specs['context_id']    = 'ref class|CMbObject meta|context_class cascade';
-    $specs['poids']         = 'float pos';
-    $specs['taille']        = 'num pos';
-    $specs['ta']            = 'str maxLength|10';
-    $specs['pouls']         = 'num pos';
-    $specs['spo2']          = 'float minMax|0|100';
-    $specs['temperature']   = 'float minMax|20|50'; // Au cas ou il y aurait des malades très malades
-    $specs['_imc']          = '';
-    $specs['_vst']          = '';
-    $specs['_ta_systole']   = 'num';
-    $specs['_ta_diastole']  = 'num';
+    $specs['patient_id']            = 'notNull ref class|CPatient';
+    $specs['datetime']               = 'notNull dateTime';
+    $specs['context_class']          = 'str';
+    $specs['context_id']             = 'ref class|CMbObject meta|context_class cascade';
+    $specs['poids']                  = 'float pos';
+    $specs['taille']                 = 'num pos';
+    $specs['ta']                     = 'str maxLength|10';
+    $specs['pouls']                  = 'num pos';
+    $specs['spo2']                   = 'float minMax|0|100';
+    $specs['temperature']            = 'float minMax|20|50'; // Au cas ou il y aurait des malades très malades
+    $specs['score_sensibilite']      = 'float minMax|0|5';
+    $specs['score_motricite']        = 'float minMax|0|5';
+    $specs['EVA']                    = 'float minMax|0|10';
+    $specs['score_sedation']         = 'float';
+    $specs['frequence_respiratoire'] = "float";
+    $specs['_imc']                   = '';
+    $specs['_vst']                   = '';
+    $specs['_ta_systole']            = 'num';
+    $specs['_ta_diastole']           = 'num';
     return $specs;
   }
 

@@ -28,9 +28,8 @@ editConstantes = function (const_id){
 }
 
 insertGraph = function (container, data, id, width, height) {
-  container.insert('<br /><b>'+data.title+(data.unit?(' ('+data.unit+')'):'')+'</b>');
+  container.insert('<b id="title-'+id+'"><br />'+data.title+(data.unit?(' ('+data.unit+')'):'')+'</b>');
   container.insert('<div id="'+id+'" style="width: '+width+'; height: '+height+';"></div>');
-  
   last_date = null;
   return Flotr.draw($(id), data.series, data.options);
 }
@@ -132,11 +131,17 @@ options = {
 };
 
 // We initalize the graphs with the default options
-
 initializeGraph(data.ta, options);
+initializeGraph(data.poids, options);
+initializeGraph(data.taille, options);
 initializeGraph(data.pouls, options);
 initializeGraph(data.temperature, options);
 initializeGraph(data.spo2, options);
+initializeGraph(data.score_sensibilite, options);
+initializeGraph(data.score_motricite, options);
+initializeGraph(data.score_sedation, options);
+initializeGraph(data.frequence_respiratoire, options);
+initializeGraph(data.EVA, options);
 
 // And we put the the specific options
 data.ta.options.colors = ['silver', '#00A8F0', '#C0D800'];
@@ -150,20 +155,82 @@ drawGraph = function() {
   var c = $('constantes-medicales-graph');
   if (c) {
     g[0] = insertGraph(c, data.ta, 'constantes-medicales-ta', '500px', '120px');
-    g[1] = insertGraph(c, data.pouls, 'constantes-medicales-pouls', '500px', '120px');
-    g[2] = insertGraph(c, data.temperature, 'constantes-medicales-temperature', '500px', '120px');
-    g[3] = insertGraph(c, data.spo2, 'constantes-medicales-spo2', '500px', '120px');
+    g[1] = insertGraph(c, data.poids, 'constantes-medicales-poids', '500px', '120px');
+    g[2] = insertGraph(c, data.taille, 'constantes-medicales-taille', '500px', '120px');
+    g[3] = insertGraph(c, data.pouls, 'constantes-medicales-pouls', '500px', '120px');
+    g[4] = insertGraph(c, data.temperature, 'constantes-medicales-temperature', '500px', '120px');
+    g[5] = insertGraph(c, data.spo2, 'constantes-medicales-spo2', '500px', '120px');
+    g[6] = insertGraph(c, data.score_sensibilite, 'constantes-medicales-score_sensibilite', '500px', '120px');
+    g[7] = insertGraph(c, data.score_motricite, 'constantes-medicales-score_motricite', '500px', '120px');
+    g[8] = insertGraph(c, data.score_sedation, 'constantes-medicales-score_sedation', '500px', '120px');
+    g[9] = insertGraph(c, data.frequence_respiratoire, 'constantes-medicales-frequence_respiratoire', '500px', '120px');
+    g[10] = insertGraph(c, data.EVA, 'constantes-medicales-EVA', '500px', '120px');
   }
 };
 
+
+hideGraph = function(id) {
+  $(id).hide();
+  $('title-'+id).hide();
+}
+
+showGraph = function(id){
+  $(id).show();
+  $('title-'+id).show();
+}
+
+toggleGraph = function(id){
+  if($(id).visible()){
+    hideGraph(id);
+  } else {
+    showGraph(id);
+  }
+  checkbox = document.forms['edit-constantes-medicales'].elements['checkbox-'+id];
+  var cookie = new CookieJar();
+  cookie.setValue('graphsToShow', id, checkbox.checked);
+}
+
+
 Main.add(function () {
-  prepareForm(document.forms['edit-constantes-medicales']);
+  var oForm = document.forms['edit-constantes-medicales'];
+
+  prepareForm(oForm);
   drawGraph();
+  
+  var cookie = new CookieJar();
+
+  // Si le cookie n'existe pas, on affiche seulement les 4 principaux graphs
+  if(!cookie.get('graphsToShow')){
+    cookie.setValue('graphsToShow', 'constantes-medicales-ta', true);
+    cookie.setValue('graphsToShow', 'constantes-medicales-pouls', true);
+    cookie.setValue('graphsToShow', 'constantes-medicales-temperature', true);
+    cookie.setValue('graphsToShow', 'constantes-medicales-spo2', true);
+  }
+  
+  // Recuperation de la valeur du cookie, on masque les graphs qui ne sont pas selectionnés
+  {{foreach from=$graphs item=graph_name}}
+    oForm["checkbox-{{$graph_name}}"].checked = cookie.getValue('graphsToShow', '{{$graph_name}}');
+    if(oForm["checkbox-{{$graph_name}}"].checked == false){ hideGraph('{{$graph_name}}'); }
+  {{/foreach}}
+
 });
 </script>
 
-<div id="constantes-medicales-form">
-{{include file="inc_form_edit_constantes_medicales.tpl"}}
-</div>
-
-<div id="constantes-medicales-graph"></div>
+<table>
+  <tr>
+    <td colspan="2">
+     <button class="hslip" title="Afficher/cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
+     Formulaire
+    </button>
+  </tr>
+  <tr>
+    <td>
+      <div id="constantes-medicales-form">
+			  {{include file="inc_form_edit_constantes_medicales.tpl"}}
+			</div>
+    </td>
+    <td>
+      <div id="constantes-medicales-graph" style="margin-left: 5px; margin-top: -15px;"></div>
+    </td>
+  </tr>
+</table>

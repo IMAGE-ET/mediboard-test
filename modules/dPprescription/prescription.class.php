@@ -53,7 +53,6 @@ class CPrescription extends CMbObject {
   var $_dateTime_min = null;
   var $_dateTime_max = null;
   
-  
   // Dossier/Feuille de soin
   var $_prises = null;
   var $_list_prises = null;
@@ -64,7 +63,10 @@ class CPrescription extends CMbObject {
   var $_list_prises_med = null;
   var $_ref_lines_med_for_plan = null;
   var $_ref_lines_elt_for_plan = null;
- 
+  
+  var $_scores = null; // Tableau de stockage des scores de la prescription 
+  var $_score_prescription = null; // Score de la prescription, 0:ok, 1:alerte, 2:grave
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription';
@@ -94,6 +96,7 @@ class CPrescription extends CMbObject {
     $specs["_dateTime_min"] = "dateTime";
     $specs["_dateTime_max"] = "dateTime";
     $specs["_owner"]        = "enum list|prat|func|group";
+    $specs["_score_prescription"] = "enum list|0|1|2";
     return $specs;
   }
   

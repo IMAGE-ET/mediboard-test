@@ -881,7 +881,16 @@ class CSetupdPpatients extends CSetup {
     /*$sql = "DROP TABLE `addiction`";
     $this->addQuery($sql);*/
 
-    $this->mod_version = "0.73";
+    $this->makeRevision("0.73");
+    $sql = "ALTER TABLE `constantes_medicales` 
+						ADD `score_sensibilite` FLOAT,
+						ADD `score_motricite` FLOAT,
+						ADD `EVA` FLOAT,
+						ADD `score_sedation` FLOAT,
+						ADD `frequence_respiratoire` FLOAT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.74";
   }
 }
 

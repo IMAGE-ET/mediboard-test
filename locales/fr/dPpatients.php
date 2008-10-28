@@ -760,4 +760,14 @@ $locales['CCorrespondant.all'] = '';
 $locales['CCorrespondant.none'] = '';
 $locales['CCorrespondant.one'] = '';
 $locales['CCorrespondant.select'] = '';
+$locales['CConstantesMedicales-score_sensibilite'] = 'Sensibilité';
+$locales['CConstantesMedicales-score_sensibilite-desc'] = 'Score de sensibilité';
+$locales['CConstantesMedicales-score_motricite'] = 'Motricité';
+$locales['CConstantesMedicales-score_motricite-desc'] = 'Score de motricité';
+$locales['CConstantesMedicales-score_sedation'] = 'Sédation';
+$locales['CConstantesMedicales-score_sedation-desc'] = 'Score de sédation';
+$locales['CConstantesMedicales-frequence_respiratoire'] = 'Freq. respiratoire';
+$locales['CConstantesMedicales-frequence_respiratoire-desc'] = 'Fréquence respiratoire';
+$locales['CConstantesMedicales-EVA'] = 'EVA';
+$locales['CConstantesMedicales-EVA-desc'] = 'EVA';
 ?>

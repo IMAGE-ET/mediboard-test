@@ -203,15 +203,33 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $alertesIPC          = $IPC->getIPC();
 		  $alertesProfil       = $profil->getProfil();
 		  
+		  $prescription->_scores["hors_livret"] = 0;
 		  foreach($lines as $type_line){
 		    foreach($type_line as &$line) {
-		      $line->checkAllergies($alertesAllergies);
-		      $line->checkInteractions($alertesInteractions);
-		      $line->checkIPC($alertesIPC);
-		      $line->checkProfil($alertesProfil);
+		      $line->checkAllergies($alertesAllergies, $prescription);
+		      $line->checkIPC($alertesIPC, $prescription);
+		      $line->checkInteractions($alertesInteractions, $prescription);
+		      $line->checkProfil($alertesProfil, $prescription);
+		      if(!$line->_ref_produit->inLivret){
+		        $prescription->_scores["hors_livret"]++;
+		      }
 		    }
 		  }
 		
+		  $score_prescription = 0;
+		  foreach($prescription->_scores as $type_score => $_score){
+		    // Si _score est un array (interaction ou profil)
+		    if(is_array($_score)){
+		      if(array_key_exists("niveau_max", $_score)){
+		        $niveau_max = "niv".$_score["niveau_max"];
+		        $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score $niveau_max"));
+		      }
+		    } elseif($_score > 0) {
+		      $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score"));
+		    }
+		  }
+		  $prescription->_score_prescription = $score_prescription;
+		  
 			// Chargement du poids du patient
 			$patient->loadRefConstantesMedicales();
 		  $constantes_medicales = $patient->_ref_constantes_medicales;

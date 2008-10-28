@@ -739,4 +739,14 @@ $locales['CTraitement.all'] = '';
 $locales['CTraitement.select'] = '';
 $locales['CPatient-email-desc'] = '';
 $locales['CPatient-email-court'] = '';
+$locales['CConstantesMedicales-score_sensibilite'] = '';
+$locales['CConstantesMedicales-score_sensibilite-desc'] = '';
+$locales['CConstantesMedicales-score_motricite'] = '';
+$locales['CConstantesMedicales-score_motricite-desc'] = '';
+$locales['CConstantesMedicales-score_sedation'] = '';
+$locales['CConstantesMedicales-score_sedation-desc'] = '';
+$locales['CConstantesMedicales-frequence_respiratoire'] = '';
+$locales['CConstantesMedicales-frequence_respiratoire-desc'] = '';
+$locales['CConstantesMedicales-EVA'] = '';
+$locales['CConstantesMedicales-EVA-desc'] = '';
 ?>

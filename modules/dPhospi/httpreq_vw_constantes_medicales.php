@@ -49,6 +49,16 @@ $data = array(
       ),
     ),
   ),
+  'poids' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
+  'taille' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
   'temperature' => array(
     'series' => array(
       array('data' => array()),
@@ -64,6 +74,31 @@ $data = array(
       array('data' => array()),
     ),
   ),
+  'score_sensibilite' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
+  'score_motricite' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
+  'score_sedation' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
+  'EVA' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
+  'frequence_respiratoire' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  )
 );
 
 // Petite fonction utilitaire de récupération des valeurs
@@ -85,11 +120,15 @@ if ($sejour->_list_constantes_medicales) {
     
     $data['ta']['series'][0]['data'][$i] = array($i, getValue($cst->_ta_systole));
     $data['ta']['series'][1]['data'][$i] = array($i, getValue($cst->_ta_diastole));
-  
     $data['pouls']['series'][0]['data'][$i] = array($i, getValue($cst->pouls));
-  
+    $data['poids']['series'][0]['data'][$i] = array($i, getValue($cst->poids));
+    $data['taille']['series'][0]['data'][$i] = array($i, getValue($cst->taille));
     $data['temperature']['series'][0]['data'][$i] = array($i, getValue($cst->temperature));
-    
+    $data['score_sensibilite']['series'][0]['data'][$i] = array($i, getValue($cst->score_sensibilite));
+    $data['score_motricite']['series'][0]['data'][$i] = array($i, getValue($cst->score_motricite));
+    $data['score_sedation']['series'][0]['data'][$i] = array($i, getValue($cst->score_sedation));
+    $data['frequence_respiratoire']['series'][0]['data'][$i] = array($i, getValue($cst->frequence_respiratoire));
+    $data['EVA']['series'][0]['data'][$i] = array($i, getValue($cst->EVA));
     $data['spo2']['series'][0]['data'][$i] = array($i, getValue($cst->spo2));
     $i++;
   }
@@ -132,6 +171,20 @@ $data['pouls']['options']['yaxis'] = array(
   'max' => getMax(120, $data['pouls']['series'][0]['data']), // max
 );
 
+$data['poids']['title'] = 'Poids';
+$data['poids']['unit'] = 'Kg';
+$data['poids']['options']['yaxis'] = array(
+  'min' => getMin(0,  $data['poids']['series'][0]['data']), // min
+  'max' => getMax(150, $data['poids']['series'][0]['data']), // max
+);
+
+$data['taille']['title'] = 'Taille';
+$data['taille']['unit'] = 'cm';
+$data['taille']['options']['yaxis'] = array(
+  'min' => getMin(0,  $data['taille']['series'][0]['data']), // min
+  'max' => getMax(220, $data['taille']['series'][0]['data']), // max
+);
+
 $data['temperature']['title'] = htmlentities('Température');
 $data['temperature']['unit'] = htmlentities('°C');
 $data['temperature']['standard'] = 37.5;
@@ -147,9 +200,44 @@ $data['spo2']['options']['yaxis'] = array(
   'max' => getMax(100, $data['spo2']['series'][0]['data']), // max
 );
 
+$data['score_sensibilite']['title'] = htmlentities('Score de sensibilité');
+$data['score_sensibilite']['options']['yaxis'] = array(
+  'min' => getMin(0,   $data['score_sensibilite']['series'][0]['data']), // min
+  'max' => getMax(5, $data['score_sensibilite']['series'][0]['data']), // max
+);
+
+$data['score_motricite']['title'] = htmlentities('Score de motricité');
+$data['score_motricite']['options']['yaxis'] = array(
+  'min' => getMin(0,   $data['score_motricite']['series'][0]['data']), // min
+  'max' => getMax(5, $data['score_motricite']['series'][0]['data']), // max
+);
+
+$data['EVA']['title'] = htmlentities('EVA');
+$data['EVA']['options']['yaxis'] = array(
+  'min' => getMin(0,   $data['EVA']['series'][0]['data']), // min
+  'max' => getMax(10, $data['EVA']['series'][0]['data']), // max
+);
+
+$data['score_sedation']['title'] = htmlentities('Score de sédation');
+$data['score_sedation']['options']['yaxis'] = array(
+  'min' => getMin(70,   $data['score_sedation']['series'][0]['data']), // min
+  'max' => getMax(100, $data['score_sedation']['series'][0]['data']), // max
+);
+
+$data['frequence_respiratoire']['title'] = htmlentities('Fréquence respiratoire');
+$data['frequence_respiratoire']['options']['yaxis'] = array(
+  'min' => getMin(70,   $data['frequence_respiratoire']['series'][0]['data']), // min
+  'max' => getMax(100, $data['frequence_respiratoire']['series'][0]['data']), // max
+);
+
+// Tableau contenant le nom de tous les graphs
+$graphs = array("constantes-medicales-ta","constantes-medicales-poids","constantes-medicales-taille","constantes-medicales-pouls",
+                 "constantes-medicales-temperature","constantes-medicales-spo2","constantes-medicales-score_sensibilite",
+                 "constantes-medicales-score_motricite","constantes-medicales-score_sedation","constantes-medicales-frequence_respiratoire",
+                 "constantes-medicales-EVA");
+                   
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign('constantes', $constantes);
 $smarty->assign('sejour',     $sejour);
 $smarty->assign('data',       $data);
@@ -158,7 +246,7 @@ $smarty->assign('hours',      $hours);
 $smarty->assign('const_ids',  $const_ids);
 $smarty->assign('token',      time());
 $smarty->assign('latest_constantes', $latest_constantes);
-
+$smarty->assign('graphs', $graphs);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 
 ?>

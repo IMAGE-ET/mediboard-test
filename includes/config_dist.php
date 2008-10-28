@@ -327,7 +327,26 @@ $dPconfig["dPprescription"] = array (
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
     "infirmiere_borne_start" => "20",
-    "infirmiere_borne_stop"  => "08"
+    "infirmiere_borne_stop"  => "08",
+    "scores" => array(
+      "interaction" => array(
+        "niv1" => "1",
+        "niv2" => "1",
+        "niv3" => "2",
+        "niv4" => "2"
+      ),
+      "profil" => array( 
+        "niv0" => "1",
+        "niv1" => "1",
+        "niv2" => "1",
+        "niv9" => "1",
+        "niv30" => "1",
+        "niv39" => "1"
+      ),
+      "allergie" => "2",
+      "IPC" => "2",
+      "hors_livret" => "1"
+    ),
   ),
   "CCategoryPrescription" => array (
     "dmi" => array(
@@ -367,6 +386,7 @@ $dPconfig["dPprescription"] = array (
     "principaux" => "0"
   ),
   "CPrisePosologie" => array(
+    "select_poso_bcb" => "1",
     "heures_prise" => "02|06|08|12|14|18|22|24",
     "heures" => array(
       "tous_les" => "14",

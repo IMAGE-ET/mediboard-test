@@ -115,7 +115,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
    * Calcul des droits
    */
   function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {	
-		global $AppUI;
+		global $AppUI, $can;
 
 	  $perm_infirmiere = $this->creator_id == $AppUI->user_id && 
                        !$this->signee && 
@@ -137,8 +137,8 @@ class CPrescriptionLineElement extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-      $perm_edit = (!$this->signee) && 
-                 ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien);
+      $perm_edit = $can->admin || ((!$this->signee) && 
+                 ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien));
     }
     
     $this->_perm_edit = $perm_edit;

@@ -182,17 +182,17 @@ if($prescription->_id && $mode_pharma){
   $alertesInteractions = $interactions->getInteractions();
   $alertesIPC          = $IPC->getIPC();
   $alertesProfil       = $profil->getProfil();
+  $prescription->_scores["hors_livret"] = 0;
+  
   foreach ($prescription->_ref_prescription_lines as &$_line) {
   	if(!$_line->child_id){
-	    $_line->checkAllergies($alertesAllergies);
-	    $_line->checkInteractions($alertesInteractions);
-	    $_line->checkIPC($alertesIPC);
-	    $_line->checkProfil($alertesProfil);
-  	}
-  	if($_line->_nb_alertes == "0" && $_line->valide_pharma == "0" && $_line->_ref_produit->inLivret){
-  		$medicaments[$_line->_id] = $_line;
-  	}
-  }
+	    $_line->checkAllergies($alertesAllergies, $prescription);
+	    $_line->checkInteractions($alertesInteractions, $prescription);
+	    $_line->checkIPC($alertesIPC, $prescription);
+	    $_line->checkProfil($alertesProfil, $prescription);
+  	} 
+  	$medicaments[$_line->_id] = $_line;
+  } 
 }
 
 

@@ -166,7 +166,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	 * Une fois que la ligne est validé par la praticien ou par le pharmacien, l'infirmiere ne peut plus y toucher
   	 */
   	
-		global $AppUI;
+		global $AppUI, $can;
 		
 		$perm_infirmiere = $this->creator_id == $AppUI->user_id && 
                        !$this->signee && 
@@ -189,9 +189,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-      $perm_edit = (!$this->signee || $mode_pharma) && 
+      $perm_edit = $can->admin || ((!$this->signee || $mode_pharma) && 
                    !$this->valide_pharma && 
-                   ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma);
+                   ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma));
     }
     
     $this->_perm_edit = $perm_edit;
@@ -436,35 +436,54 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Controle des allergies
    */
-  function checkAllergies($listAllergies) {
+  function checkAllergies($listAllergies, $prescription) {
+    if(!isset($prescrition->_scores["allergie"])){
+      $prescription->_scores["allergie"] = 0;
+    }
     $this->_ref_alertes["allergie"] = array();
+    $niveau_max = 0;
     foreach($listAllergies as $key => $all) {
       if($all->CIP == $this->code_cip) {
         $this->_nb_alertes++;
         $this->_ref_alertes["allergie"][$key]      = $all;
         $this->_ref_alertes_text["allergie"][$key] = $all->LibelleAllergie;
+        $prescription->_scores["allergies"]++;
       }
+      $prescription->_scores["allergie"][] = $all;
     }
   }
   
   /*
    * Controle des interactions
    */
-  function checkInteractions($listInteractions) {
+  function checkInteractions($listInteractions, $prescription) {
+    if(!isset($prescription->_scores["interaction"])){
+      $prescription->_scores["interaction"] = array();
+    }
     $this->_ref_alertes["interaction"] = array();
+   
+    $niveau_max = 0;
     foreach($listInteractions as $key => $int) {
       if($int->CIP1 == $this->code_cip || $int->CIP2 == $this->code_cip) {
         $this->_nb_alertes++;
         $this->_ref_alertes["interaction"][$key]      = $int;
         $this->_ref_alertes_text["interaction"][$key] = $int->Type;
+        @$prescription->_scores["interaction"]["niv$int->Niveau"]++;
       }
+      $niveau_max = max($int->Niveau, $niveau_max);
+    }
+    if(count($prescription->_scores["interaction"])){
+      $prescription->_scores["interaction"]["niveau_max"] = $niveau_max;
     }
   }
   
   /*
    * Controle des IPC
    */
-  function checkIPC($listIPC) {
+  function checkIPC($listIPC, $prescription) {
+    if(!isset($prescription->_scores["IPC"])){
+      $prescription->_scores["IPC"] = 0;
+    }
     $this->_ref_alertes["IPC"]      = array();
     $this->_ref_alertes_text["IPC"] = array();
   }
@@ -472,14 +491,23 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Controle du profil du patient
    */
-  function checkProfil($listProfil) {
+  function checkProfil($listProfil, $prescription) {
+    if(!isset($prescription->_scores["profil"])){
+      $prescription->_scores["profil"] = array();
+    }
     $this->_ref_alertes["profil"] = array();
-    foreach($listProfil as $key => $pro) {
-      if($pro->CIP == $this->code_cip) {
+    $niveau_max = 0;
+    foreach($listProfil as $key => $profil) {
+      if($profil->CIP == $this->code_cip) {
         $this->_nb_alertes++;
-        $this->_ref_alertes["profil"][$key]      = $pro;
-        $this->_ref_alertes_text["profil"][$key] = $pro->LibelleMot;
+        $this->_ref_alertes["profil"][$key]      = $profil;
+        $this->_ref_alertes_text["profil"][$key] = $profil->LibelleMot;
+        @$prescription->_scores["profil"]["niv$profil->Niveau"]++;
       }
+      $niveau_max = max($profil->Niveau, $niveau_max);
+    }
+    if(count($prescription->_scores["profil"])){
+      $prescription->_scores["profil"]["niveau_max"] = $niveau_max;
     }
   }
   

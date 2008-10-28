@@ -105,9 +105,219 @@ changeBox = function(oCheckbox, hour, oTokenField){
     </td>             
   </tr>
   
+  
+  
+  <!-- Gestion des scores de prescription -->
+  {{assign var="var" value="scores"}}
+  <tr>
+    <th class="title" colspan="6">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+  </tr>
+	<tr>
+    <th colspan="6" class="category">
+       {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv1]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv1{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv1{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv1]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv1}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv1}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv1}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv2]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv2{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv2{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv2]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv2}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv2}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv2}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv3]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv3{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv3{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv3]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv3}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv3}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv3}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv4]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv4{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv4{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv4]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv4}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv4}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv4}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="6" class="category">
+       {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv0]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv0{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv0{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv0]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv0}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv0}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv0}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv1]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv1{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv1{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv1]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv1}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv1}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv1}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv2]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv2{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv2{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv2]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv2}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv2}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv2}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv9]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv9{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv9{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv9]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv9}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv9}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv9}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv30]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv30{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv30{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv30]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv30}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv30}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv30}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv39]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv39{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv39{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv39]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv39}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv39}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv39}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="6" class="category">
+      <label for="{{$m}}[{{$class}}][{{$var}}][allergie]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}
+      </label>  
+    </th>
+  </tr>
+  <tr>
+	  <td colspan="6" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][allergie]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="6" class="category">
+      <label for="{{$m}}[{{$class}}][{{$var}}][IPC]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-IPC{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-IPC{{/tr}}
+      </label>  
+    </th>
+  </tr>
+  <tr>
+	  <td colspan="6" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][IPC]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="6" class="category">
+      <label for="{{$m}}[{{$class}}][{{$var}}][hors_livret]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-hors_livret{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-hors_livret{{/tr}}
+      </label>  
+    </th>
+  </tr>
+ <tr>
+	  <td colspan="6" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][hors_livret]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+  
   {{assign var="class" value="CCategoryPrescription"}}
   <tr>
-   <th class="category" colspan="6">
+   <th class="title" colspan="6">
       <label for="{{$m}}[{{$class}}]" title="{{tr}}config-{{$m}}-{{$class}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}{{/tr}}
       </label>    
@@ -212,6 +422,23 @@ changeBox = function(oCheckbox, hour, oTokenField){
 	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][6]" value="{{$dPconfig.$m.$class.$var.fois_par.6}}" /> heures
 	  </td>  
 	  <td colspan="2" />               
+  </tr>
+  
+  {{assign var="var" value="select_poso_bcb"}}
+  <tr>
+    <th class="category" colspan="6">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+  </tr>
+  <tr>  
+    <td colspan="6" style="text-align: center">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
   </tr>
   
   

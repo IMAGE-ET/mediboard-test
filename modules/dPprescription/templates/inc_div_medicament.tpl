@@ -119,8 +119,19 @@ Main.add( function(){
   </button>
   {{/if}}
   
+ 
+  {{if $mode_pharma}}
+    <strong>
+	    {{mb_label object=$prescription field=_score_prescription}} {{mb_value object=$prescription field=_score_prescription}}
+ 	  </strong>
+  {{/if}}
+
+  {{if $mode_pharma && $prescription->_score_prescription == "2"}}
+    <strong>Validation auto. impossible</strong>
+  {{/if}}
+  
   <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-  {{if $prescription->object_id && ($is_praticien || $mode_pharma)}}
+  {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
   <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
     {{if $mode_pharma}}
       Valider toutes les lignes
