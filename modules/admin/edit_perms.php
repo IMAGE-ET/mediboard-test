@@ -109,10 +109,10 @@ $profileUser = new CUser();
 $profilesList = array();
 if ($user->profile_id) {
 	$profileUser->profile_id = $user->profile_id;
-	$profilesList = $profileUser->loadMatchingList('user_first_name');
+	$profilesList = $profileUser->loadMatchingList('user_last_name');
 } else if ($user->template) {
 	$profileUser->profile_id = $user->_id;
-	$profilesList = $profileUser->loadMatchingList('user_first_name');
+	$profilesList = $profileUser->loadMatchingList('user_last_name');
 }
 
 
