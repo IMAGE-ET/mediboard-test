@@ -10,7 +10,7 @@
         </tr>
         {{foreach from=$listSalles item=curr_salle key=keySalle}}
         <tr>
-          <td class="salle">{{$curr_salle->_view}}</td>
+          <td class="salle">{{$curr_salle->nom}}</td>
           {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
           {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
             {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min:00"}}
@@ -93,4 +93,8 @@
            {{/foreach}}
           {{/foreach}}
         </tr>
+        {{foreachelse}}
+        <tr>
+          <td colspan="100">{{tr}}CSalle.none{{/tr}}</td>
+        </tr> 
         {{/foreach}} 

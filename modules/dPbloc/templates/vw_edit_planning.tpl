@@ -33,10 +33,24 @@ function popPlanning(debut) {
 <table class="main">
   <tr>
     <td class="greedyPane" style="text-align:center;">
-      <a href="#" onclick="popPlanning('{{$date}}');">
-        <strong>{{$date|date_format:"%A %d %B"}}</strong><br />
-        <img src="images/icons/print.png" height="15" width="15" alt="imprimer" border="0" />
-      </a>
+      <button class="print" onclick="popPlanning('{{$date}}');" style="font-weight: bold;">
+        {{$date|date_format:"%A %d %B"}}
+      </button>
+      
+      <form action="?" name="selection" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_edit_planning" />
+        <select name="bloc_id" onchange="this.form.submit();">
+          {{foreach from=$listBlocs item=curr_bloc}}
+            <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
+              {{$curr_bloc->nom}}
+            </option>
+          {{foreachelse}}
+            <option value="" disabled="disabled">{{tr}}CBlocOperatoire.none{{/tr}}</option>
+          {{/foreach}}
+        </select>
+      </form>
+      
       <table id="planningBloc">
       {{assign var=curr_day value=$date}}
       {{include file="inc_planning_day.tpl"}}
@@ -87,16 +101,12 @@ function popPlanning(debut) {
         <td>
           <select name="salle_id" class="{{$plagesel->_props.salle_id}}">
             <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
-            {{foreach from=$listBlocs item=curr_bloc}}
-            <optgroup label="{{$curr_bloc->nom}}">
-              {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+            {{foreach from=$listSalles item=curr_salle}}
               <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
                 {{$curr_salle->nom}}
               </option>
-              {{foreachelse}}
+            {{foreachelse}}
               <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
-              {{/foreach}}
-            </optgroup>
             {{/foreach}}
           </select>
         </td>
@@ -205,7 +215,7 @@ function popPlanning(debut) {
       </tr>
       <tr>
         <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
-        <td>{{mb_field object=$plagesel field="max_intervention" size="1"}}</td>
+        <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
       </tr>
       <tr>
         <td class="button" colspan="4">

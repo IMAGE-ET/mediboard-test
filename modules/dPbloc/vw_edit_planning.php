@@ -11,12 +11,24 @@ global $AppUI, $can, $m, $g;
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $plageop_id = mbGetValueFromGetOrSession("plageop_id");
+$bloc_id = mbGetValueFromGetOrSession("bloc_id");
 
 // Liste des Salles
-$salle = new CSalle();
-$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");
+/*$salle = new CSalle();
+$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom")*/;
 
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+
+$bloc = new CBlocOperatoire();
+if (!$bloc->load($bloc_id)) {
+  $bloc = reset($listBlocs);
+}
+
+$bloc->loadRefsSalles();
+
+if (!$listSalles = $bloc->_ref_salles) {
+	$listSalles = array();
+}
 
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
@@ -43,7 +55,6 @@ $anesths = $mediuser->loadAnesthesistes();
 
 
 $_temps_inter_op = range(0,59,15);
-
 
 // Récupération des plages pour le jour demandé
 $listPlage = new CPlageOp();
@@ -106,6 +117,7 @@ $smarty->assign("listPlages"     , $listPlages        );
 $smarty->assign("_temps_inter_op", $_temps_inter_op   );
 $smarty->assign("listSalles"     , $listSalles        );
 $smarty->assign("listBlocs"      , $listBlocs         );
+$smarty->assign("bloc"           , $bloc              );
 $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );
 $smarty->assign("affichages"     , $affichages        );

@@ -9,7 +9,8 @@
 
 global $AppUI, $can, $m, $g;
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date    = mbGetValueFromGetOrSession("date", mbDate());
+$bloc_id = mbGetValueFromGetOrSession("bloc_id");
 
 $date = mbDate("last sunday", $date);
 $fin  = mbDate("next sunday", $date);
@@ -23,8 +24,22 @@ for($i = 0; $i < 7; $i++) {
 }
 
 // Liste des Salles
-$salle = new CSalle();
-$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");
+/*$salle = new CSalle();
+$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");*/
+
+// Liste des blocs
+$listBlocs = CGroups::loadCurrent()->loadBlocs();
+
+$bloc = new CBlocOperatoire();
+if (!$bloc->load($bloc_id)) {
+	$bloc = reset($listBlocs);
+}
+
+$bloc->loadRefsSalles();
+
+if (!$listSalles = $bloc->_ref_salles) {
+  $listSalles = array();
+}
 
 // Création du tableau de visualisation
 $affichages = array();
@@ -92,6 +107,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listPlages"     , $listPlages        );
 $smarty->assign("listDays"       , $listDays          );
+$smarty->assign("listBlocs"      , $listBlocs         );
+$smarty->assign("bloc"           , $bloc              );
 $smarty->assign("listSalles"     , $listSalles        );
 $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );
