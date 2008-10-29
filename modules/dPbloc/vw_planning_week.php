@@ -31,7 +31,7 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");*/
 $listBlocs = CGroups::loadCurrent()->loadBlocs();
 
 $bloc = new CBlocOperatoire();
-if (!$bloc->load($bloc_id)) {
+if (!$bloc->load($bloc_id) && count($listBlocs)) {
 	$bloc = reset($listBlocs);
 }
 
