@@ -18,7 +18,7 @@ $hour = mbTime();
 $blocs_list = CGroups::loadCurrent()->loadBlocs();
 
 $bloc = new CBlocOperatoire();
-if(!$bloc->load($bloc_id)) {
+if(!$bloc->load($bloc_id) && count($blocs_list)) {
 	$bloc = reset($blocs_list);
 }
 
