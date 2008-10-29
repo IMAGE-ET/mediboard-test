@@ -35,12 +35,11 @@ function cancelObject(oObject) {
     <td class="button readonly">
       <input type="text" name="_object_view" value="" readonly="readonly" />
       <input type="hidden" name="object_id" value="" />
-      <br />
-      <button type="button" class="cancel" onclick="cancelObject()">
-        Pas d'objet
-      </button>
       <button type="button" class="search" onclick="ObjectSelector.init()">
         Chercher un objet
+      </button>
+      <button type="button" class="cancel" onclick="cancelObject()">
+        Pas d'objet
       </button>
       <script language="Javascript" type="text/javascript">
         ObjectSelector.init = function(){  
