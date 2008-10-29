@@ -54,7 +54,7 @@ Main.add(function () {
         <tr>
         {{foreach from=$profilesList item=curr_user name="users"}}
           <td style="width: {{$width}}%; text-align: right;">
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$curr_user->_id}}" style="float: left;">
+            <a href="?m={{$m}}&amp;tab=vw_edit_users&amp;user_id={{$curr_user->_id}}" style="float: left;">
               {{$curr_user->_view}}
             </a>
             <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$curr_user->_id}}'">
