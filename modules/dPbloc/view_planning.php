@@ -55,6 +55,9 @@ if ($filter->_specialite or $filter->_prat_id) {
 $salle = new CSalle();
 $whereSalle = array();
 $whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+if($filter->salle_id) {
+  $whereSalle["salle_id"] = "= $filter->salle_id";
+}
 $where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
 $plagesop = $plagesop->loadList($where, $order);
