@@ -105,7 +105,17 @@ $visibility = array(PERM_DENY => "caché",
                     PERM_READ => "vue",
                     PERM_EDIT => "administration");
 
-                    
+$profileUser = new CUser();
+$profilesList = array();
+if ($user->profile_id) {
+	$profileUser->profile_id = $user->profile_id;
+	$profilesList = $profileUser->loadMatchingList('user_first_name');
+} else if ($user->template) {
+	$profileUser->profile_id = $user->_id;
+	$profilesList = $profileUser->loadMatchingList('user_first_name');
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -118,10 +128,12 @@ $smarty->assign("listPermsModulesProfil"   , $listPermsModulesProfil   );
 $smarty->assign("listPermsObjectsUser"     , $listPermsObjectsUser     );
 $smarty->assign("listPermsObjectsProfil"   , $listPermsObjectsProfil   );
 $smarty->assign("listPermsModuleComplet"   , $listPermsModuleComplet   );
-$smarty->assign("listPermsObjectComplet"    , $listPermsObjectComplet  );
+$smarty->assign("listPermsObjectComplet"   , $listPermsObjectComplet   );
 $smarty->assign("permission"               , $permission               );
 $smarty->assign("visibility"               , $visibility               );
 $smarty->assign("profile"                  , $profile                  );
+$smarty->assign("profilesList"             , $profilesList             );
+
 $smarty->display("edit_perms.tpl");
 
 ?>

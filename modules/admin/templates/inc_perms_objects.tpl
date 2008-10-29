@@ -20,9 +20,6 @@ function cancelObject(oObject) {
 
 <table class="form">
   <tr>
-    <th colspan="4" class="title">Droits sur les objets</th>
-  </tr>
-  <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
       <select class="select-tree" name="object_class">

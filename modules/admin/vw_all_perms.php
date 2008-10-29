@@ -15,9 +15,7 @@ $can->needsAdmin();
 $listModules = CModule::getActive();
 
 // Liste des utilisateurs
-$function = new CFunctions();
-$where = array("group_id" => "= '$g'");
-$listFunctions = $function->loadListWithPerms(PERM_READ, $where, "text");
+$listFunctions = CGroups::loadCurrent()->loadFunctions(PERM_READ);
 foreach($listFunctions as &$curr_function) {
   $curr_function->loadRefsUsers();
 }
@@ -41,12 +39,16 @@ $matrice = array();
 foreach($listFunctions as $curr_func) {
   foreach($curr_func->_ref_users as $curr_user) {
     $permModule = new CPermModule();
+    
     $whereGeneral["user_id"] = "= '$curr_user->user_id'";
     $where["user_id"]        = "= '$curr_user->user_id'";
     $listPermsModules        = $permModule->loadList($where);
+    
     $where["user_id"]        = "= '$curr_user->_profile_id'";
     $listPermsModulesProfil  = $permModule->loadList($where);
+    
     $permModule->loadObject($whereGeneral);
+    
     if($permModule->_id) {
       $permGeneralPermission = $permModule->permission;
       $permGeneralView       = $permModule->view;

@@ -8,10 +8,6 @@
 
 <table class="form">
   <tr>
-    <th colspan="4" class="title">Droits sur les modules
-    </th>
-  </tr>
-  <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
       <select name="mod_id">
