@@ -25,10 +25,6 @@ class CBlocOperatoire extends CMbObject {
   // Object references
   var $_ref_salles = null;
   
-  function getPerm($perm_type) {
-    return true;
-  }
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'bloc_operatoire';
