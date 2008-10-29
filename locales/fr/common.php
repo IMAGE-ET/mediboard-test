@@ -120,4 +120,14 @@ $locales['Duplicate'] = 'Dupliquer';
 $locales['Compute'] = 'Calculer';
 $locales['cabinet'] = '';
 $locales['Refresh'] = 'Rafraîchir';
+$locales['second'] = 'seconde';
+$locales['seconds'] = 'secondes';
+$locales['minutes'] = 'minutes';
+$locales['minute'] = 'minute';
+$locales['week'] = 'semaine';
+$locales['weeks'] = 'semaines';
+$locales['month'] = 'mois';
+$locales['months'] = 'mois';
+$locales['years'] = 'années';
+$locales['year'] = 'année';
 ?>

@@ -387,6 +387,38 @@ function mbMinutesRelative($from, $to) {
   return $minutes;
 }
 
+class CMbDate {
+  static $secs_per = array (
+    "year"   => 31536000, // 60 * 60 * 24 * 365
+    "month"  =>  2592000, // 60 * 60 * 24 * 30
+    "week"   =>   604800, // 60 * 60 * 24 * 7
+    "day"    =>    86400, // 60 * 60 * 24
+    "hour"   =>     3600, // 60 * 60
+    "minute" =>       60, // 60 
+    "second" =>        1, // 1 
+   );
+    
+  static function relative($from, $to) {
+	  if (!$from || !$to) {
+	    return null;
+	  }
+    
+	  // Compute diff in seconds
+	  $diff = strtotime($to) - strtotime($from);
+	  
+	  // Find the best unit
+	  foreach (self::$secs_per as $unit => $secs) {
+	    if (abs($diff / $secs) > 1) {
+	    	break;
+	    }
+	  }
+
+	  return array (
+	    "unit" => $unit, 
+	    "count" => intval($diff / $secs)
+	  );
+  }
+}
 
 /**
  * Return the std variance of an array

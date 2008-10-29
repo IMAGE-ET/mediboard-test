@@ -39,7 +39,7 @@ class CPermObject extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["user_id"]      = "notNull ref class|CUser";
+    $specs["user_id"]      = "notNull ref class|CUser cascade";
     $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
     $specs["object_class"] = "notNull str";
     $specs["permission"]   = "notNull numchar maxLength|1";

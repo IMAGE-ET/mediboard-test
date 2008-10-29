@@ -57,7 +57,7 @@
   </tr>
 
   {{foreach from=$users item=curr_user}}
-  <tr>
+  <tr {{if $curr_user->_id == $user->_id}}class="selected"{{/if}}>
     <td>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$curr_user->_id}}">
         {{$curr_user->user_username}}

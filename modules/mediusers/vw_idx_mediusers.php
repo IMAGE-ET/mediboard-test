@@ -22,9 +22,12 @@ $order = "text";
 $groups = $groups->loadListWithPerms(PERM_EDIT, null, $order);
 foreach ($groups as &$group) {
   $group->loadRefsBack();
-  foreach ($group->_ref_functions as &$function){
+  foreach ($group->_ref_functions as &$_function){
     // Récuperation des utilisateurs
-    $function->loadRefs();
+    $_function->loadRefs();
+    foreach ($_function->_ref_users as $_user) {
+      $_user->loadRefProfile();
+    }
   }
 }
 

@@ -14,9 +14,17 @@ class CDateTimeSpec extends CMbFieldSpec {
   
   function getValue($object, $smarty = null, $params = null) {
     if ($smarty) require_once $smarty->_get_plugin_filepath('modifier','date_format');
+    
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    $format = mbGetValue(@$params["format"], "%d/%m/%Y %H:%M");
+    
+    $format = CMbArray::extract($params, "format", "%d/%m/%Y %H:%M");
+    if ($format == "relative") {
+      $relative = CMbDate::relative($propValue, mbDateTime());
+      return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
+      
+    }
+    
     return ($propValue && $propValue != "0000-00-00 00:00:00") ?
       smarty_modifier_date_format($propValue, $format) :
       "";

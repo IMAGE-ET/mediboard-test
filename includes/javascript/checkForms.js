@@ -561,7 +561,7 @@ function checkFormElement(oElement) {
 	ElementChecker.prepare(oElement);
 	
 	// Recuperation de l'element HTML qui accueillera le message.
-	var oMsg = $(oElement.name+'_message');
+	var oMsg = $(oElement.id+'_message');
 	if (oMsg && ElementChecker.oProperties.password) {
     ElementChecker.checkElement();
 		if (ElementChecker.oErrors.length) {

@@ -64,9 +64,11 @@ class CMediusers extends CMbObject {
   var $_ref_banque     = null;
   var $_ref_function   = null;
   var $_ref_discipline = null;
+  var $_ref_profile    = null;
+  var $_ref_user       = null;
   var $_ref_packs      = array();
   var $_ref_protocoles = array();
-
+  
   // Object references per day
   var $_ref_plages = null;
   var $_ref_urgences = null;
@@ -100,6 +102,7 @@ class CMediusers extends CMbObject {
     $specs["_user_email"]      = "str confidential";
     $specs["_user_phone"]      = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["_user_adresse"]    = "str confidential";
+    $specs["_user_last_login"] = "dateTime";
     $specs["_user_cp"]         = "num length|5 confidential";
     $specs["_user_ville"]      = "str confidential";
     $specs["_profile_id"]      = "num";
@@ -210,7 +213,7 @@ class CMediusers extends CMbObject {
     parent::updateFormFields();
 
     $user = new CUser();
-    if($result = $user->load($this->user_id)) {
+    if ($user->load($this->user_id)) {
       $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;
@@ -229,18 +232,22 @@ class CMediusers extends CMbObject {
       $this->checkConfidential();
       $this->_view            = $this->_user_last_name." ".$this->_user_first_name;
       $this->_shortview       = "";
-      $arrayLastName = explode(" ", $this->_user_last_name);
-      $arrayFirstName = explode("-", $this->_user_first_name);
-      foreach($arrayFirstName as $key => $value) {
-        if($value != '')
-        $this->_shortview .=  strtoupper($value[0]);
+
+      // Initiales du prénom      
+      foreach (explode("-", $this->_user_first_name) as $value) {
+        if ($value != '') {
+	        $this->_shortview .=  strtoupper($value[0]);
+        }
       }
-      foreach($arrayLastName as $key => $value) {
+      
+      // Initiales du nom
+      foreach (explode(" ", $this->_user_last_name) as $value) {
         if($value != '')
         $this->_shortview .=  strtoupper($value[0]);
       }
     }
     
+    $this->_ref_user = $user;
     $this->updateSpecs();
   }
 
@@ -249,6 +256,11 @@ class CMediusers extends CMbObject {
     $this->_ref_banque->load($this->banque_id);
   }
 
+  function loadRefProfile(){
+    $this->_ref_profile = new CUser();
+    $this->_ref_profile->load($this->_profile_id);
+  }
+  
   function loadRefFunction() {
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);

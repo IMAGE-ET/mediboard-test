@@ -26,16 +26,10 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       	//$AppUI->setMsg($msg, UI_MSG_ERROR);
         $AppUI->redirect($this->redirectError);
       }
-    } else {
-      // Copy permissions
-
-      /*
-      if ($profile_id = dPgetParam($_POST, "_profile_id")) {
-        $user = new CUser;
-        $user->load($this->_obj->user_id);
-        $msg = $user->copyPermissionsFrom($profile_id, true);
-      }
-      */
+    } 
+    else {
+      // Keep trace for redirections
+      mbSetValueToSession($this->objectKeyGetVarName, $this->_obj->_id);
       
       // si modifDroit = 0, pas le droit de les modifier
       $modifDroit = mbGetAbsValueFromPostOrSession("modifDroit", "1");

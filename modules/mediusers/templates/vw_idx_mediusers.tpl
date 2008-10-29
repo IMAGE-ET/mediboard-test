@@ -14,15 +14,15 @@ function loadProfil(type){
 
 var Functions = {
   collapse: function() {
-    Element.hide.apply(null, $$("tbody.functionEffect"));
+  	$$("tbody.functionEffect").each(Element.hide);
   },
   
   expand: function() {
-    Element.show.apply(null, $$("tbody.functionEffect"));
+  	$$("tbody.functionEffect").each(Element.show);
   },
   
   initEffect: function(function_id) {
-    new PairEffect("function" + function_id, { 
+    new PairEffect("CFunctions-" + function_id, { 
       bStoreInCookie: false,
       bStartVisible: function_id == "{{$mediuserSel->function_id}}"
     } );
@@ -58,49 +58,83 @@ function changeRemote(o) {
   <tr>
     <td class="greedyPane">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
-        Créer un utilisateur
+        {{tr}}CMediusers-title-create{{/tr}}
       </a>
+      
       <table class="tbl">
         <tr>
           <th style="width: 32px;">
             <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="réduire" />
             <img src="images/icons/expand.gif"  onclick="Functions.expand()" alt="agrandir" />
           </th>
-          <th>{{tr}}CMediusers-_user_username{{/tr}}</th>
-          <th>{{tr}}CMediusers-_user_last_name{{/tr}}</th>
-          <th>{{tr}}CMediusers-_user_first_name{{/tr}}</th>
-          <th>{{tr}}CMediusers-_user_type{{/tr}}</th>
+          <th>{{mb_title class=CUser field=user_username}}</th>
+          <th>{{mb_title class=CUser field=user_last_name}}</th>
+          <th>{{mb_title class=CUser field=user_first_name}}</th>
+          <th>{{mb_title class=CUser field=user_type}}</th>
+          <th>{{mb_title class=CUser field=profile_id}}</th>
+          <th>{{mb_title class=CUser field=user_last_login}}</th>
         </tr>
         {{foreach from=$groups item=curr_group}}
         <tr>
-          <th class="title" colspan="5">
+          <th class="title" colspan="10">
             {{$curr_group->text}}
           </th>
         </tr>
         {{foreach from=$curr_group->_ref_functions item=_function}}
-        <tr id="function{{$_function->_id}}-trigger">
+        <tr id="{{$_function->_guid}}-trigger">
           <td style="background-color: #{{$_function->color}}" />
-          <td colspan="4">
+          <td colspan="10">
             <strong>{{$_function->text}}</strong>
             ({{$_function->_ref_users|@count}})
           </td>
         </tr>
-        <tbody class="functionEffect" id="function{{$_function->_id}}">
-        <tr class="script"><td><script type="text/javascript">Functions.initEffect({{$_function->_id}});</script></td></tr>
+        
+        <tbody class="functionEffect" id="{{$_function->_guid}}">
+        
+        <tr class="script">
+        	<td>
+        		<script type="text/javascript">Functions.initEffect({{$_function->_id}});</script>
+        	</td>
+        </tr>
+        
         {{foreach from=$_function->_ref_users item=curr_user}}
         <tr {{if $curr_user->_id == $mediuserSel->_id}}class="selected"{{/if}}>
           <td style="background-color: #{{$_function->color}}" />
+
           {{assign var=user_id value=$curr_user->_id}}
           {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
-          <td>
-            <a href="{{$href}}">
-              {{$curr_user->_user_username}}
-              {{if $curr_user->_user_last_login}}({{$curr_user->_user_last_login|date_format:"%d/%m/%Y %Hh%M"}}){{/if}}
-            </a>
-          </td>
-          <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
-          <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
-          <td><a href="{{$href}}">{{$curr_user->_user_type}}</a></td>
+        	{{if $curr_user->_ref_user->_id}}
+	
+	          <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
+	          <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
+	          <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
+	
+	          <td>
+	          	{{assign var=type value=$curr_user->_user_type}}
+	          	{{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
+	          </td>
+	          
+	          <td>
+	          	{{$curr_user->_ref_profile->user_username}}
+	          </td>
+	          
+	          <td>
+	            {{if $curr_user->_user_last_login}}
+	            <label title="{{mb_value object=$curr_user field=_user_last_login}}">
+	              {{mb_value object=$curr_user field=_user_last_login format=relative}}
+	            </label>
+	          	{{/if}}
+	          </td>
+
+					{{else}}
+					  <td colspan="10">
+					  	<div class="little-warning">
+					  	  Pas d'utilisateur <em>core</em> pour 
+					  	  <a class="action" href="{{$href}}">ce Mediuser</a>.
+					  	</div>
+					  </td>
+					{{/if}}
+          
         </tr>
         {{/foreach}}
         </tbody>
@@ -131,14 +165,18 @@ function changeRemote(o) {
               <img src="images/icons/history.gif" alt="historique" title="historique"/>
             </a>
             
-            Modification de l'utilisateur &lsquo;{{$mediuserSel->_user_username}}&rsquo;
+						{{tr}}CMediusers-title-modify{{/tr}} 
+						'{{$mediuserSel->_user_username}}'
+          </th>
+						
           {{else}}
           <th class="title" colspan="2">
             <input type="hidden" name="_user_type" value="0" />
-            Création d'un nouvel utilisateur
-          {{/if}}
+            {{tr}}CMediusers-title-create{{/tr}}
           </th>
+          {{/if}}
         </tr>
+
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_username"}}</th>
           <td>{{mb_field object=$mediuserSel field="_user_username"}}</td>
@@ -147,7 +185,7 @@ function changeRemote(o) {
           <th>{{mb_label object=$mediuserSel field="_user_password"}}</th>
           <td>
 	          <input type="password" name="_user_password" class="{{$mediuserSel->_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" onkeyup="checkFormElement(this);" value="" />
-	          <span id="_user_password_message"></span>
+	          <span id="mediuser__user_password_message"></span>
           </td>
         </tr>
         <tr>
@@ -180,14 +218,21 @@ function changeRemote(o) {
         <tr>
           <th>{{mb_label object=$mediuserSel field="function_id"}}</th>
           <td>
-            <select name="function_id" class="{{$mediuserSel->_props.function_id}}">
-              <option value="">&mdash; Choisir une fonction &mdash;</option>
+            <select name="function_id" style="width: 150px;" class="{{$mediuserSel->_props.function_id}}">
+              <option value="">&mdash; Choisir une fonction</option>
               {{foreach from=$groups item=curr_group}}
               <optgroup label="{{$curr_group->text}}">
               {{foreach from=$curr_group->_ref_functions item=_function}}
-              <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}" {{if $_function->_id == $mediuserSel->function_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}"
+              	 {{if $_function->_id == $mediuserSel->function_id}} selected="selected" {{/if}}
+              >
                 {{$_function->text}}
               </option>
+              {{foreachelse}}
+              <option value="" disabled="disabled">
+              	{{tr}}CFunctions.none{{/tr}}
+              </option>
+              
               {{/foreach}}
               </optgroup>
               {{/foreach}}
@@ -197,8 +242,8 @@ function changeRemote(o) {
         <tr>
           <th>{{mb_label object=$mediuserSel field="discipline_id"}}</th>
           <td>
-            <select name="discipline_id" class="{{$mediuserSel->_props.discipline_id}}">
-              <option value="">&mdash; Choisir une spécialité &mdash;</option>
+            <select name="discipline_id" style="width: 150px;" class="{{$mediuserSel->_props.discipline_id}}">
+              <option value="">&mdash; Choisir une spécialité</option>
               {{foreach from=$disciplines item=curr_discipline}}
               <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $mediuserSel->discipline_id}} selected="selected" {{/if}}>
                 {{$curr_discipline->_view}}
@@ -210,8 +255,8 @@ function changeRemote(o) {
         <tr>
           <th>{{mb_label object=$mediuserSel field="spec_cpam_id"}}</th>
           <td>
-            <select name="spec_cpam_id" class="{{$mediuserSel->_props.spec_cpam_id}}">
-              <option value="">&mdash; Choisir une spécialité &mdash;</option>
+            <select name="spec_cpam_id" style="width: 150px;" class="{{$mediuserSel->_props.spec_cpam_id}}">
+              <option value="">&mdash; Choisir une spécialité</option>
               {{foreach from=$spec_cpam item=curr_spec}}
               <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $mediuserSel->spec_cpam_id}} selected="selected" {{/if}}>
                 {{$curr_spec->_view}}
@@ -223,8 +268,8 @@ function changeRemote(o) {
         <tr>
         <th>{{mb_label object=$mediuserSel field="_user_type"}}</th>
           <td>
-            <select name="_user_type" class="{{$mediuserSel->_props._user_type}}" onChange="loadProfil(this.value)">
-            {{foreach from=$utypes|smarty:nodefaults key=curr_key item=type}}
+            <select name="_user_type"  style="width: 150px;" class="{{$mediuserSel->_props._user_type}}" onchange="loadProfil(this.value)">
+            {{foreach from=$utypes key=curr_key item=type}}
               <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
             {{/foreach}}
             </select>
@@ -233,7 +278,7 @@ function changeRemote(o) {
         <tr>
           <th>{{mb_label object=$mediuserSel field="_profile_id"}}</th>
           <td>
-            <select name="_profile_id">
+            <select name="_profile_id" style="width: 150px;">
               <option value="">&mdash; Choisir un profil</option>
               {{foreach from=$profiles item=curr_profile}}
               <option value="{{$curr_profile->user_id}}" {{if $curr_profile->user_id == $mediuserSel->_profile_id}} selected="selected" {{/if}}>{{$curr_profile->user_username}}</option>
@@ -254,12 +299,12 @@ function changeRemote(o) {
           <td>{{mb_field object=$mediuserSel field="compte"}}</td>
         </tr>
         
-        {{if $banques}}
+        {{if is_array($banques)}}
         <!-- Choix de la banque quand disponible -->
         <tr>
           <th>{{mb_label object=$mediuserSel field="banque_id"}}</th>
           <td>
-	          <select name="banque_id">
+	          <select name="banque_id" style="width: 150px;">
 		          <option value="">&mdash; Choix d'une banque</option>
 		          {{foreach from=$banques item="banque"}}
 	            <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>
@@ -299,12 +344,12 @@ function changeRemote(o) {
         <tr>
           <td class="button" colspan="2">
             {{if $mediuserSel->user_id}}
-            <button class="modify" type="submit">Valider</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$mediuserSel->_user_username|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
+              {{tr}}Delete{{/tr}}
             </button>
             {{else}}
-            <button class="submit" type="submit">Créer</button>
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>

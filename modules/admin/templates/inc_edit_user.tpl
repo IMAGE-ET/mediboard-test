@@ -34,7 +34,7 @@
   <tr>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
     <td><input tabindex="103" type="password" name="_user_password" class="{{$specs._user_password}}{{if !$user->user_id}} notNull{{/if}}" value="" onkeyup="checkFormElement(this)" />
-		<span id="_user_password_message"></span>
+		<span id="editFrm__user_password_message"></span>
     </td>
   </tr>
   <tr>
