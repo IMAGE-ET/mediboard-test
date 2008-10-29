@@ -9,7 +9,7 @@ function doAction(sAction) {
 
 </script>
 
-<h2>Création et remplissage des la base des GHS / GHM</h2>
+<h2>Installation des schémas HPRIM XML</h2>
 
 <table class="tbl">
 
@@ -147,3 +147,7 @@ function doAction(sAction) {
 </table>
 
 </form>
+
+<h2>Base de données de transit</h2>
+
+{{include file="../../system/templates/configure_dsn.tpl" dsn=Transit}}

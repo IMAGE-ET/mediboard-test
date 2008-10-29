@@ -11,16 +11,10 @@ require_once("checkauth.php");
 require_once("checkconfig.php");
 
 // Data sources to test in the wizard
+global $dPconfig;
 $dbConfigs = array (
-  "std"     => $dPconfig["db"]["std"],
-  "cim10"   => $dPconfig["db"]["cim10"],
-  "ccamV2"  => $dPconfig["db"]["ccamV2"],
-  "GHS1010" => $dPconfig["db"]["GHS1010"],
-  "INSEE"   => $dPconfig["db"]["INSEE"],
-  "Transit" => $dPconfig["db"]["Transit"],
+  "std"     => $dPconfig["db"]["std"]
 );
-
-unset($dbConfigs["ccam"]);
 
 require_once("mbdb.class.php");
 require_once("addusers.sql.php");
@@ -117,7 +111,7 @@ if (@$_POST["adminhost"]) {
 
 </form>
 
-<form name="createBases" action="initialize.php" method="post">
+<form name="generateCode" action="initialize.php" method="post">
 
 <input type="hidden" name="generate" value="true"/>
   
@@ -150,16 +144,17 @@ if (@$_POST["adminhost"]) {
 
 <h3>Tests de connexion</h3>
 
-<p>
-  Le tableau suivant récapitule les tests de connectivité aux différentes
-  bases de données.
-<p>
+<div class="big-info">
+  Désormais, seule la source de données principale <tt>std</tt> est créée et testée dans l'assistant d'installation.
+  <br />
+  L'administration des bases de données secondaires est déléguée à <strong>la configuration de chacun des modules correspondant.</strong>.
+</div>
 
 <table class="tbl">
   <tr>
     <th>Configuration</th>
     <th>Test de connectivité</th>
-  <tr>
+  </tr>
   <?php 
   foreach($dbConfigs as $dbConfigName => $dbConfig) { 
     $dbConnection = new CMbDb(

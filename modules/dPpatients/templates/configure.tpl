@@ -178,6 +178,8 @@ function activateAntecedent(ant, active) {
 
 <h2>Import de la base de données des codes INSEE / ISO</h2>
 
+{{include file="../../system/templates/configure_dsn.tpl" dsn=INSEE}}
+
 <script type="text/javascript">
 
 function startINSEE() {

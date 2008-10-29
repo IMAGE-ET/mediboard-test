@@ -1,3 +1,5 @@
+{{include file="../../system/templates/configure_dsn.tpl" dsn=cim10}}
+
 <script language="JavaScript" type="text/javascript">
 
 function startCIM10() {

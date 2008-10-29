@@ -1,19 +1,3 @@
-<script language="JavaScript" type="text/javascript">
-
-function startCCAM() {
-  var CCAMUrl = new Url;
-  CCAMUrl.setModuleAction("dPccam", "httpreq_do_add_ccam");
-  CCAMUrl.requestUpdate("ccam");
-}
-
-function startNGAP(){
-  var NGAPUrl = new Url;
-  NGAPUrl.setModuleAction("dPccam", "httpreq_do_add_ngap");
-  NGAPUrl.requestUpdate("ngap");
-}
-
-</script>
-
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
@@ -52,7 +36,25 @@ function startNGAP(){
 
 </form>
 
+{{include file="../../system/templates/configure_dsn.tpl" dsn=ccamV2}}
+
 <h2>Import de la base de données CCAM</h2>
+
+<script language="JavaScript" type="text/javascript">
+
+function startCCAM() {
+  var CCAMUrl = new Url;
+  CCAMUrl.setModuleAction("dPccam", "httpreq_do_add_ccam");
+  CCAMUrl.requestUpdate("ccam");
+}
+
+function startNGAP(){
+  var NGAPUrl = new Url;
+  NGAPUrl.setModuleAction("dPccam", "httpreq_do_add_ngap");
+  NGAPUrl.requestUpdate("ngap");
+}
+
+</script>
 
 <table class="tbl">
   <tr>

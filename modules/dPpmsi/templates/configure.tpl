@@ -1,32 +1,3 @@
-<script type="text/javascript">
-
-var aActionTypes = ["extractFiles", "AddCM", "AddDiagCM", "AddActes", "AddGHM", "AddCMA", "AddIncomp", "AddArbre"];
-
-function doGHSAction(sType, bFollowed) {
-  var nType = aActionTypes.indexOf(sType);
-  if (nType == null) {
-    return;
-  }
-
-  var sNextType = aActionTypes[++nType];
-  var oOptions = {
-    onComplete : function () {
-      doGHSAction(sNextType, true);
-    }
-  };
- 
-  if (!bFollowed) {
-    oOptions.onComplete = null;
-  }
-  
-  var url = new Url;
-  url.setModuleAction("dPpmsi", "httpreq_do_ghs_action");
-  url.addParam("type", sType);
-  url.requestUpdate(sType, oOptions);
-}
-
-</script>
-
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
@@ -64,6 +35,36 @@ function doGHSAction(sType, bFollowed) {
 
 <h2>Création et remplissage des la base des GHS / GHM</h2>
 
+{{include file="../../system/templates/configure_dsn.tpl" dsn=GHS1010}}
+
+<script type="text/javascript">
+
+var aActionTypes = ["extractFiles", "AddCM", "AddDiagCM", "AddActes", "AddGHM", "AddCMA", "AddIncomp", "AddArbre"];
+
+function doGHSAction(sType, bFollowed) {
+  var nType = aActionTypes.indexOf(sType);
+  if (nType == null) {
+    return;
+  }
+
+  var sNextType = aActionTypes[++nType];
+  var oOptions = {
+    onComplete : function () {
+      doGHSAction(sNextType, true);
+    }
+  };
+ 
+  if (!bFollowed) {
+    oOptions.onComplete = null;
+  }
+  
+  var url = new Url;
+  url.setModuleAction("dPpmsi", "httpreq_do_ghs_action");
+  url.addParam("type", sType);
+  url.requestUpdate(sType, oOptions);
+}
+
+</script>
 <table class="main">
   <tr>
     <td>

@@ -69,121 +69,34 @@ $dPconfig = $mbConfig->values;
     <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
   </tr>
 
-</table>
-
-<table class="form">
-
   <tr>
-    <th class="category" colspan="4">Configurations des bases de données</th>
+    <th class="category" colspan="2">Configuration de la base de données principale</th>
   </tr>
 
   <tr>
-    <th colspan="2"><label for="dbtype" title="Type de base de données. Seul mysql est possible pour le moment">Type de base de données :</label></th>
-    <td colspan="2" class="readonly"><input type="text" readonly="readonly" size="20" name="dbtype" value="<?php echo @$dPconfig["dbtype"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th class="category" colspan="2">Base de données principale</th>
-    <th class="category" colspan="2">Base de données des GHM</th>
+    <th><label for="dbtype" title="Type de base de données. Seul mysql est possible pour le moment">Type de base de données :</label></th>
+    <td class="readonly"><input type="text" readonly="readonly" size="20" name="dbtype" value="<?php echo @$dPconfig["dbtype"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[std][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
     <td><input type="text" size="40" name="db[std][dbhost]" value="<?php echo @$dPconfig["db"]["std"]["dbhost"]; ?>" /></td>
-    <th><label for="db[GHS1010][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
-    <td><input type="text" size="40" name="db[GHS1010][dbhost]" value="<?php echo @$dPconfig["db"]["GHS1010"]["dbhost"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[std][dbname]" title="Nom de la base">Nom de la base :</label></th>
     <td><input type="text" size="40" name="db[std][dbname]" value="<?php echo @$dPconfig["db"]["std"]["dbname"]; ?>" /></td>
-    <th><label for="db[GHS1010][dbname]" title="Nom de la base">Nom de la base :</label></th>
-    <td><input type="text" size="40" name="db[GHS1010][dbname]" value="<?php echo @$dPconfig["db"]["GHS1010"]["dbname"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[std][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
     <td><input type="text" size="40" name="db[std][dbuser]" value="<?php echo @$dPconfig["db"]["std"]["dbuser"]; ?>" /></td>
-    <th><label for="db[GHS1010][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
-    <td><input type="text" size="40" name="db[GHS1010][dbuser]" value="<?php echo @$dPconfig["db"]["GHS1010"]["dbuser"]; ?>" /></td>
   </tr>
 
   <tr>
     <th><label for="db[std][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
     <td><input type="text" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" /></td>
-    <th><label for="db[GHS1010][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
-    <td><input type="text" size="40" name="db[GHS1010][dbpass]" value="<?php echo @$dPconfig["db"]["GHS1010"]["dbpass"]; ?>" /></td>
   </tr>
-
-  <tr>
-    <th class="category" colspan="2">Base de données CCAM</th>
-    <th class="category" colspan="2">Base de données CIM</th>
-  </tr>
-
-  <tr>
-    <th><label for="db[ccamV2][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
-    <td><input type="text" size="40" name="db[ccamV2][dbhost]" value="<?php echo @$dPconfig["db"]["ccamV2"]["dbhost"]; ?>" /></td>
-    <th><label for="db[cim10][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
-    <td><input type="text" size="40" name="db[cim10][dbhost]" value="<?php echo @$dPconfig["db"]["cim10"]["dbhost"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="db[ccamV2][dbname]" title="Nom de la base">Nom de la base :</label></th>
-    <td><input type="text" size="40" name="db[ccamV2][dbname]" value="<?php echo @$dPconfig["db"]["ccamV2"]["dbname"]; ?>" /></td>
-    <th><label for="db[cim10][dbname]" title="Nom de la base">Nom de la base :</label></th>
-    <td><input type="text" size="40" name="db[cim10][dbname]" value="<?php echo @$dPconfig["db"]["cim10"]["dbname"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="db[ccamV2][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
-    <td><input type="text" size="40" name="db[ccamV2][dbuser]" value="<?php echo @$dPconfig["db"]["ccamV2"]["dbuser"]; ?>" /></td>
-    <th><label for="db[cim10][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
-    <td><input type="text" size="40" name="db[cim10][dbuser]" value="<?php echo @$dPconfig["db"]["cim10"]["dbuser"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="db[ccamV2][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
-    <td><input type="text" size="40" name="db[ccamV2][dbpass]" value="<?php echo @$dPconfig["db"]["ccamV2"]["dbpass"]; ?>" /></td>
-    <th><label for="db[cim10][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
-    <td><input type="text" size="40" name="db[cim10][dbpass]" value="<?php echo @$dPconfig["db"]["cim10"]["dbpass"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th class="category" colspan="2">Base de donées INSEE</th>
-    <th class="category" colspan="2">Base de donées Transit</th>
-  </tr>
-
-  <tr>
-    <th><label for="db[INSEE][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
-    <td><input type="text" size="40" name="db[INSEE][dbhost]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbhost"]; ?>" /></td>
-    <th><label for="db[Transit][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
-    <td><input type="text" size="40" name="db[Transit][dbhost]" value="<?php echo @$dPconfig["db"]["Transit"]["dbhost"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="db[INSEE][dbname]" title="Nom de la base">Nom de la base :</label></th>
-    <td><input type="text" size="40" name="db[INSEE][dbname]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbname"]; ?>" /></td>
-    <th><label for="db[Transit][dbname]" title="Nom de la base">Nom de la base :</label></th>
-    <td><input type="text" size="40" name="db[Transit][dbname]" value="<?php echo @$dPconfig["db"]["Transit"]["dbname"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="db[INSEE][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
-    <td><input type="text" size="40" name="db[INSEE][dbuser]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbuser"]; ?>" /></td>
-    <th><label for="db[Transit][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
-    <td><input type="text" size="40" name="db[Transit][dbuser]" value="<?php echo @$dPconfig["db"]["Transit"]["dbuser"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="db[INSEE][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
-    <td><input type="text" size="40" name="db[INSEE][dbpass]" value="<?php echo @$dPconfig["db"]["INSEE"]["dbpass"]; ?>" /></td>
-    <th><label for="db[Transit][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
-    <td><input type="text" size="40" name="db[Transit][dbpass]" value="<?php echo @$dPconfig["db"]["Transit"]["dbpass"]; ?>" /></td>
-  </tr>
-
-</table>
-
-<table class="form">
 
   <tr>
     <th class="category" colspan="2">Paramètres d'IHM</th>
@@ -233,10 +146,6 @@ $dPconfig = $mbConfig->values;
     </td>
   </tr>
 
-</table>
-
-<table class="form">
-
   <tr>
     <th class="category" colspan="2">Paramètres d'indexation de fichiers</th>
   </tr>
@@ -261,9 +170,6 @@ $dPconfig = $mbConfig->values;
     <td><input type="text" size="40" name="ft[application/pdf]" value="<?php echo $dPconfig['ft']['application/pdf'] ?>" /></td>
   </tr>
 
-</table>
-
-<table class="form">
   <tr>
     <th class="category" colspan="2">Graphiques</th>
   </tr>
