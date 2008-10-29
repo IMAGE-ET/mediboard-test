@@ -76,7 +76,7 @@ function cancelObject(oObject) {
     <th>Classe</th>
     <th>Objet</th>
     <th>Type</th>
-    <th colspan="2">Permission</th>
+    <th>Permission</th>
   </tr>
   
   
