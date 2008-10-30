@@ -35,6 +35,13 @@ class CExecutantPrescriptionLine extends CMbObject {
     return $specs;
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["prescription_line_element"]   = "CPrescriptionLineElement executant_prescription_line_id";
+    $backRefs["prescription_line_comment"]   = "CPrescriptionLineComment executant_prescription_line_id";
+    return $backRefs;
+  }
+  
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = $this->nom;	
