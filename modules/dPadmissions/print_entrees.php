@@ -33,6 +33,7 @@ foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefsAffectations();
   $sejour->loadRefPatient();
+  $sejour->loadRefPrestation();
   $sejour->_ref_first_affectation->loadRefLit();
   $sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
   

@@ -33,7 +33,7 @@ function printAdmission(id) {
       <table class="tbl">
         <tr>
           <th colspan="4"><strong>Patient</strong></th>
-          <th colspan="6"><strong>Sejour</strong></th>
+          <th colspan="7"><strong>Sejour</strong></th>
         </tr>
         <tr>
           <th>Nom / Prenom</th>
@@ -45,6 +45,7 @@ function printAdmission(id) {
           <th>Dur.</th>
           <th>Conv.</th>
           <th>Chambre</th>
+          <th>Prest.</th>
           <th>Remarques</th>
         </tr>
         {{foreach from=$curr_prat.sejours item=curr_sejour}}
@@ -86,6 +87,7 @@ function printAdmission(id) {
             {{/if}}
             ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
           </td>
+          <td class="text">{{$curr_sejour->_ref_prestation->_view}}</td>
           <td class="text">{{$curr_sejour->rques}}</td>
         </tr>
         {{/foreach}}
