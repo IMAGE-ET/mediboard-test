@@ -610,7 +610,7 @@ class CPrescriptionLine extends CMbObject {
 		    if((24 - substr($time_debut, 0, 2)) >= $_prise->nb_tous_les){
 		      $tab = range(substr($time_debut, 0, 2), 24, $_prise->nb_tous_les);
 		    } else {
-		      $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($time_debut, 0, 2)]] += $_prise->quantite;
+		      @$this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($time_debut, 0, 2)]] += $_prise->quantite;
 		    }
 		    if(isset($tab)){
 			    foreach($tab as $_hour_tab){
