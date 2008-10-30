@@ -67,16 +67,21 @@ foreach($hours_deb as $_hour_deb){
 
 // Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
 // dont les heures ne sont pas spécifié dans le tableau
-$heures = array();
-$list_hours = range(1,24);
-$last_hour_in_array = reset($tabHours[$date]); 
+$list_hours = range(0,24);
+$last_hour_in_array = reset($hours);
+krsort($list_hours); 
 foreach($list_hours as &$hour){
   $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
-  if(in_array($hour, $tabHours[$date])){
+  if(in_array($hour, $hours)){
     $last_hour_in_array = $hour;
   }
-  $heures[$hour] = $last_hour_in_array;
+  if($last_hour_in_array >= $hour){
+    $heures[$hour] = $last_hour_in_array;
+  } else {
+    $heures[$hour] = end($hours);
+  }
 }
+ksort($heures);
 
 if($prescription->_id){
 	// Chargement des lignes
@@ -179,9 +184,6 @@ $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
 $real_date = mbDate();
 $real_time = mbTime();
-
-
-		 
 
 // Création du template
 $smarty = new CSmartyDP();

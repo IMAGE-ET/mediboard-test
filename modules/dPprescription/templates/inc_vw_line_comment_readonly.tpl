@@ -2,16 +2,13 @@
 
 <tbody class="hoverable">
    <tr>
-     <td>
-       {{if $line->_can_vw_form_executant}}
-         {{$line->_ref_executant->_view}}: 
-       {{/if}}
+     <td colspan="2">
        {{$line->commentaire}}
      </td>
-     <td style="width: 0.1%;">
-       <b>{{mb_label object=$line field="ald"}}</b>: {{if $line->ald}}Oui{{else}}Non{{/if}}
-     </td>
      <td style="text-align: right;">
+     <b>Exécutant</b>: {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
+       <b>{{mb_label object=$line field="ald"}}</b>: {{if $line->ald}}Oui{{else}}Non{{/if}}
+       
        <!-- Affichage de la signature du praticien -->
        {{if $line->_can_view_signature_praticien}}
          {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
@@ -21,3 +18,5 @@
      </td>
   </tr>
 </tbody>
+
+

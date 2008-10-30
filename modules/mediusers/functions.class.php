@@ -52,6 +52,7 @@ class CFunctions extends CMbObject {
     $backRefs["plages_op"] = "CPlageOp spec_id";
     $backRefs["rubriques"] = "CRubrique function_id";
     $backRefs["tarifs"] = "CTarif function_id";
+    $backRefs["function_category_prescription"] = "CFunctionCategoryPrescription function_id";
     return $backRefs;
   }
 

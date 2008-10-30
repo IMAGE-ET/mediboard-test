@@ -56,7 +56,10 @@ $listPrats = $is_praticien ? null : $user->loadPraticiens(PERM_EDIT);
 
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
-$executants = CExecutantPrescriptionLine::getAllExecutants();
+
+// Chargement des executants
+$executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
+$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
 
 // Calcul de la div à rafraichir
 if ($element_id){
@@ -65,7 +68,6 @@ if ($element_id){
   $element->loadRefCategory();
   $chapitre = $element->_ref_category_prescription->chapitre;
 }
-
 
 // Chargement de la prescription
 $prescription = new CPrescription();
@@ -242,19 +244,15 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		    $whereOp = array();
 		    $whereOp["annulee"] = " = '0'";
 		    $object->loadRefsOperations($whereOp);
-		    
-		    //$object->makeDatesOperations();
 		    foreach($object->_ref_operations as $_operation){
 		      $_operation->loadRefPlageOp();
 		      $prescription->_dates_dispo[$_operation->_id] = $_operation->_datetime;
 		    }
-		    //$prescription->_dates_dispo[] = mbDate($object->_entree);
 		 }
 	  }
 	}
 }
 	
-
 // Chargement des fovoris 
 if($prescription->_id){
 	if($prescription->_current_praticien_id){
@@ -304,7 +302,6 @@ if($full_mode && $prescription->_id){
   $pack_function->function_id = $prescription->_ref_current_praticien->function_id;
   $pack_function->object_class = $prescription->object_class;
   $packs_function = $pack_function->loadMatchingList();
-  
 }
 
 $protocole_line = new CPrescriptionLineMedicament();

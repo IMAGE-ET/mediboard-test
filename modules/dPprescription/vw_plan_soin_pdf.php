@@ -55,21 +55,26 @@ if($logs){
 
 $hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
 sort($hours); 
-
  
 /* Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
    dont les heures ne sont pas spécifié dans le tableau */
 $heures = array();
 $list_hours = range(0,23);
-$last_hour_in_array = reset($hours); 
+$last_hour_in_array = reset($hours);
+krsort($list_hours); 
 foreach($list_hours as &$hour){
   $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
   if(in_array($hour, $hours)){
     $last_hour_in_array = $hour;
   }
-  $heures[$hour] = $last_hour_in_array;
+  if($last_hour_in_array >= $hour){
+    $heures[$hour] = $last_hour_in_array;
+  } else {
+    $heures[$hour] = end($hours);
+  }
 }
-  
+ksort($heures);
+
 foreach($dates as $_date){
   $prescription->calculPlanSoin($_date, 1, $heures);
   foreach($hours as $_hour){

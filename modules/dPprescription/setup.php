@@ -809,7 +809,30 @@ class CSetupdPprescription extends CSetup {
 	         ADD `emplacement` ENUM ('service','bloc') DEFAULT 'service' NOT NULL;";
    $this->addQuery($sql);
    
-   $this->mod_version = "0.57";
+   $this->makeRevision("0.57");
+   $sql = "CREATE TABLE `function_category_prescription` (
+						`function_category_prescription_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						`function_id` INT (11) UNSIGNED NOT NULL,
+						`category_prescription_id` INT (11) UNSIGNED NOT NULL
+					) TYPE=MYISAM;";
+   $this->addQuery($sql);
+    
+	 $sql = "ALTER TABLE `function_category_prescription` 
+					 ADD INDEX (`function_id`),
+					 ADD INDEX (`category_prescription_id`);";
+   $this->addQuery($sql);
+   
+   $this->makeRevision("0.58");
+   $sql = "ALTER TABLE `prescription_line_element` 
+					 ADD `user_executant_id` INT (11) UNSIGNED;";
+   $this->addQuery($sql);
+   
+   $sql = "ALTER TABLE `prescription_line_comment` 
+					 ADD `user_executant_id` INT (11) UNSIGNED;";
+   $this->addQuery($sql);
+   
+   $this->mod_version = "0.59";
+   
   }  
 }
 

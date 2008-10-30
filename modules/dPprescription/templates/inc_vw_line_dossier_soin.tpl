@@ -135,7 +135,7 @@
 	      <td class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 					            
 			    {{assign var=quantite value="-"}}
-			    {{if (($line->_debut_reel < $_date_hour && $line->_fin_reelle > $_date_hour) || (!$line->_fin_reelle && $line_class == "CPrescriptionLineMedicament")) && array_key_exists($_hour, $prise_line.quantites)}}
+			    {{if (($line->_debut_reel <= $_date_hour && $line->_fin_reelle > $_date_hour) || (!$line->_fin_reelle && $line_class == "CPrescriptionLineMedicament")) && array_key_exists($_hour, $prise_line.quantites)}}
 				    {{assign var=quantite value=$prise_line.quantites.$_hour}}
 				  {{/if}}
 				  

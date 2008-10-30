@@ -12,6 +12,10 @@ global $AppUI, $can, $m;
 $type = mbGetValueFromGet("type");
 $libelle = mbGetValueFromGet("libelle");
 
+if(!$libelle){
+  $libelle = '%';
+}
+
 $categories = array();
 $tabElements = array();
 $elements = array();
@@ -36,6 +40,10 @@ if($libelle){
 
 foreach($elements as $element){
 	$tabElements[$element->category_prescription_id][] = $element;
+}
+
+if($libelle == '%'){
+  $libelle = '';
 }
 
 // Création du template

@@ -1,6 +1,21 @@
-<table class="main">
+<script type="text/javascript">
+
+// Initialisation des onglets
+Main.add( function(){
+  menuTabs = Control.Tabs.create('executant_tab', true);
+} );
+
+function removeFunction(function_category_id){
+  var oForm = document.delFunction;
+  oForm.function_category_prescription_id.value = function_category_id;
+  oForm.submit();
+}
+
+</script>
+<table>
   <tr>    
     <td>
+     <strong> Catégorie :</strong>
       <form name="selCat" method="get" action="?">
         <input type="hidden" name="tab" value="vw_edit_executant" />
         <input type="hidden" name="m" value="dPprescription" />
@@ -20,6 +35,15 @@
       </form>
     </td>
   </tr>
+</table>
+
+<ul id="executant_tab" class="control_tabs">
+  <li><a href="#executant">Exécutants</a></li>
+  <li><a href="#fonction">Fonctions</a></li>
+</ul>
+<hr class="control_tabs" />
+
+<table class="main" id="executant" style="display: none">
   {{if $category_id}}
   <tr>
     <td>
@@ -98,7 +122,68 @@
 		       </tr>
 		     </table>
 		   </form> 
-      {{/if}}
     </td>
   </tr>
+  {{else}}
+  <tr>
+    <td>
+      <div class="big-info">
+        Veuillez sélectionner une catégorie
+      </div>
+    </td>
+  </tr>
+  {{/if}}     
+</table>
+
+<table class="form" id="fonction" style="display: none">
+  {{if $category_id}}
+  <tr>
+    <th class="category">Ajouter une fonction</th>
+    <th class="category">Liste des fonctions</th>
+  </tr>
+  <tr>
+    <td style="width: 20%;">
+      <form name="addFunction" action="" method="post">
+        <input type="hidden" name="dosql" value="do_function_category_prescription_aed" />
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="function_category_prescription_id" value="" />
+        <input type="hidden" name="category_prescription_id" value="{{$category_id}}" />
+      	<select name="function_id">
+		      {{foreach from=$functions item=function}}
+			 		  <option value="{{$function->_id}}">{{$function->_view}}</option>
+		      {{/foreach}}
+        </select>
+        <button type="button" class="submit" onclick="this.form.submit();">Ajouter la fonction</button>
+      </form>
+    </td>
+    <td>
+	    <form name="delFunction" action="" method="post">
+	      <input type="hidden" name="dosql" value="do_function_category_prescription_aed" />
+	      <input type="hidden" name="m" value="dPprescription" />
+	      <input type="hidden" name="del" value="1" />
+	      <input type="hidden" name="function_category_prescription_id" value="" />
+	    </form>  
+      <table class="tbl">
+        {{foreach from=$associations item=_association}} 
+          <tr>
+            <td>
+              {{$_association->_ref_function->_view}}
+            </td>
+            <td>
+              <button type="button" class="cancel notext" onclick="removeFunction('{{$_association->_id}}')"></button>
+            </td>
+          </tr>
+        {{/foreach}}
+      </table>
+    </td>
+  </tr>
+  {{else}}
+  <tr>
+    <td>
+      <div class="big-info">
+        Veuillez sélectionner une catégorie
+      </div>
+    </td>
+  </tr>
+  {{/if}}
 </table>

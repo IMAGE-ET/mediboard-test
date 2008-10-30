@@ -18,11 +18,13 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $element_prescription_id        = null;
   var $commentaire                    = null;
   var $executant_prescription_line_id = null; 
+  var $user_executant_id              = null;
   
   // Object references
   var $_ref_element_prescription      = null;
   var $_ref_executant                 = null;
-
+  var $_executant                     = null;
+  
   // Can fields
   var $_can_select_executant               = null;
   var $_can_delete_line                    = null;
@@ -46,6 +48,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $specs = parent::getSpecs();
     $specs["element_prescription_id"]        = "notNull ref class|CElementPrescription cascade";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
+    $specs["user_executant_id"]              = "ref class|CMediusers xor|executant_prescription_line_id";
     $specs["commentaire"]                    = "str";
     return $specs;
   }
@@ -80,7 +83,24 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     if($this->date_arret){
     	$this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
-    }    
+    }
+  }
+  
+  function updateDBFields(){
+    parent::updateDBFields();
+    if($this->_executant !== null){
+      if($this->_executant == ""){
+        $this->executant_prescription_line_id = "";
+        $this->user_executant_id = "";
+      } else {
+	      $explode_executant = explode("-", $this->_executant);
+	      if($explode_executant[0] == "CExecutantPrescriptionLine"){
+	        $this->executant_prescription_line_id = $explode_executant[1];
+	      } else {
+	        $this->user_executant_id = $explode_executant[1];
+	      }
+      }
+    }
   }
   
   function loadView() {
@@ -203,10 +223,20 @@ class CPrescriptionLineElement extends CPrescriptionLine {
    */
   function loadRefExecutant(){
     if (!$this->_ref_executant) {
-	    $executant = new CExecutantPrescriptionLine();
-	    $this->_ref_executant = $executant->getCached($this->executant_prescription_line_id);
+      if($this->executant_prescription_line_id){
+		    $executant = new CExecutantPrescriptionLine();
+		    $this->_ref_executant = $executant->getCached($this->executant_prescription_line_id);
+      }
+      if($this->user_executant_id){
+        $user = new CMediusers();
+        $this->_ref_executant = $user->getCached($this->user_executant_id);
+      }
     }
   }
 }
+
+
+
+
 
 ?>

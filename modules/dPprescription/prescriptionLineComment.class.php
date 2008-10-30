@@ -18,11 +18,13 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   var $commentaire               = null;
   var $category_prescription_id  = null;
   var $executant_prescription_line_id = null;
+  var $user_executant_id              = null;
   
   // Object references
   var $_ref_category_prescription = null;
   var $_ref_executant = null;
-
+  var $_executant = null;
+  
   // Can fields
   var $_can_vw_form_executant = null;
   var $_can_select_executant = null;
@@ -43,6 +45,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   	$specs = parent::getSpecs();
     $specs["category_prescription_id"]       = "ref class|CCategoryPrescription";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
+    $specs["user_executant_id"]              = "ref class|CMediusers xor|executant_prescription_line_id";
     $specs["commentaire"]                    = "text";
     return $specs;
   }
@@ -53,29 +56,45 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     $this->_view = $this->commentaire;
   }
   
+  function updateDBFields(){
+    parent::updateDBFields();
+    if($this->_executant !== null){
+      if($this->_executant == ""){
+        $this->executant_prescription_line_id = "";
+        $this->user_executant_id = "";
+      } else {
+	      $explode_executant = explode("-", $this->_executant);
+	      if($explode_executant[0] == "CExecutantPrescriptionLine"){
+	        $this->executant_prescription_line_id = $explode_executant[1];
+	      } else {
+	        $this->user_executant_id = $explode_executant[1];
+	      }
+      }
+    }
+  }
+  
+  
   /*
    * Calcul des droits
    */
   function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {
-		global $AppUI;
+		global $AppUI, $can;
 		
 	  $perm_infirmiere = $this->creator_id == $AppUI->user_id;                
-		$perm_edit = !$this->signee && ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien);             
+		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien));             
                  
-    if($this->_class_name == "CPrescriptionLineElement"){
-    	// Visualisation du forulaire de gestion d'executant
-    	$this->_can_vw_form_executant = 1;  
-    	// Modification de l'executant
-    	if($perm_edit){
-    		$this->_can_select_executant = 1;
-    	}
+    // Executant
+    if($perm_edit){
+      $this->_can_select_executant = 1;
+      $this->_can_vw_form_executant = 1;  
     }
+   
     // View ALD
     if($perm_edit && !$this->_protocole){
       $this->_can_view_form_ald = 1;
     }
     // Suppression de la ligne
-    if(($perm_edit && $is_praticien) || $this->_protocole){
+    if(($perm_edit) || $this->_protocole){
   	  $this->_can_delete_line = 1;
   	}
   	// View signature praticien
@@ -92,7 +111,6 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     }
 	}
   
-	
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefCategory();
@@ -111,8 +129,16 @@ class CPrescriptionLineComment extends CPrescriptionLine {
    * Chargement de l'executant
    */
   function loadRefExecutant(){
-    $this->_ref_executant = new CExecutantPrescriptionLine();
-    $this->_ref_executant = $this->_ref_executant->getCached($this->executant_prescription_line_id);
+    if (!$this->_ref_executant) {
+      if($this->executant_prescription_line_id){
+		    $executant = new CExecutantPrescriptionLine();
+		    $this->_ref_executant = $executant->getCached($this->executant_prescription_line_id);
+      }
+      if($this->user_executant_id){
+        $user = new CMediusers();
+        $this->_ref_executant = $user->getCached($this->user_executant_id);
+      }
+    }
   }
 }
 

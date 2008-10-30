@@ -37,7 +37,7 @@ function setClose(element_id) {
   {{foreach from=$catElement item=element}}
   <tr>
     <td>
-      <img src="./images/icons/plus.gif" onclick="setClose('{{$element->_id}}')" alt="Ajouter cet élément à la prescription" title="Ajouter à la prescription" />
+      <button type="button" class="add notext" onclick="setClose('{{$element->_id}}')" alt="Ajouter cet élément à la prescription" title="Ajouter à la prescription">Ajouter</button>
       {{$element->_view}}
     </td>
   </tr>
