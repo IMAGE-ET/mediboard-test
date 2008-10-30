@@ -55,7 +55,16 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Chargement de la liste des executants
 $executant = new CExecutantPrescriptionLine();
-$executants = $executant->loadList();
+$_executants = $executant->loadList();
+foreach($_executants as $_executant){
+  $executants[$_executant->_guid] = $_executant;
+}
+
+$mediuser = new CMediusers();
+$mediusers = $mediuser->loadList();
+foreach($mediusers as $_mediuser){
+  $executants[$_mediuser->_guid] = $_mediuser;
+}
 
 // Chargement des lignes de prescriptions
 $prescription->loadRefsLinesMedComments();
@@ -151,8 +160,8 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 			  }
 			  
 				$executant = "aucun";
-		    if($element->executant_prescription_line_id){
-		      $executant = $element->executant_prescription_line_id;
+		    if($element->_ref_executant){
+		      $executant = $element->_ref_executant->_guid;
 		    }
 	      $linesElt[$name_chap][$executant]["ald"] = array();
 		    $linesElt[$name_chap][$executant]["no_ald"] = array();	
@@ -193,9 +202,9 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 				  }
 			  }
 			  
-				$executant = "aucun";
-		    if($element->executant_prescription_line_id){
-		      $executant = $element->executant_prescription_line_id;
+			  $executant = "aucun";
+		    if($element->_ref_executant){
+		      $executant = $element->_ref_executant->_guid;
 		    }
 		    if($element->ald){
 		    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
