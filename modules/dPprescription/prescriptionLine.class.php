@@ -606,18 +606,26 @@ class CPrescriptionLine extends CMbObject {
 		 	// Seulement Tous les avec comme unite les heures
 		  if(!$_prise->moment_unitaire_id && $_prise->nb_tous_les && $_prise->unite_tous_les == "heure"){
 		    $time_debut = ($this->debut == $date) ? $this->time_debut : "00:00:00";
-		    $tab = range(substr($time_debut, 0, 2), 24, $_prise->nb_tous_les);
-		    foreach($tab as $_hour_tab){
-		      $_hour_tab = str_pad($_hour_tab, 2, "0", STR_PAD_LEFT);
-		      $dateTimePrise = mbAddDateTime("$_hour_tab:00:00", $date);
-		      if($this->_fin_reelle > $dateTimePrise && $poids_ok && @$heures[$_hour_tab] != ""){
-		        if(count($heures)){
-		          $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[$_hour_tab]] += $_prise->quantite;
-		        }
-            $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
-		        $prise_comptee = 1;
-		      }
-		    }  
+		    
+		    if((24 - substr($time_debut, 0, 2)) >= $_prise->nb_tous_les){
+		      $tab = range(substr($time_debut, 0, 2), 24, $_prise->nb_tous_les);
+		    } else {
+		      $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($time_debut, 0, 2)]] += $_prise->quantite;
+		    }
+		    if(isset($tab)){
+			    foreach($tab as $_hour_tab){
+			      $_hour_tab = str_pad($_hour_tab, 2, "0", STR_PAD_LEFT);
+			      $dateTimePrise = mbAddDateTime("$_hour_tab:00:00", $date);
+			      if($this->_fin_reelle > $dateTimePrise && $poids_ok && @$heures[$_hour_tab] != ""){
+			        if(count($heures)){
+			          $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[$_hour_tab]] += $_prise->quantite;
+			        }
+	            $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
+			        $prise_comptee = 1;
+			      }
+			    }  
+		    }
+		    
 		  }
 		 	
 		  // Fois par avec comme unite jour
