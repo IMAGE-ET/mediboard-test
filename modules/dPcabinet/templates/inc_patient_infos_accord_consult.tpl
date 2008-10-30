@@ -76,7 +76,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 	      {{else}}
 	      <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
 	      <br/>
-	      <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id},{{$consult->patient_id}})">Nouveau séjour</button>
+	      <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouveau séjour</button>
 	      <br/>
 	    	{{/if}}
     	{{/if}}
