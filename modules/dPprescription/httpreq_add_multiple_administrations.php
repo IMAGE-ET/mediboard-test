@@ -65,6 +65,7 @@ if (count($adm) > 0) {
 			$sejour = $line->_ref_prescription->_ref_object;
 			$sejour->loadRefPatient();
 			$sejour->_ref_patient->loadRefsAffectations();
+			$sejour->_ref_patient->_ref_curr_affectation->updateFormFields();
 		}
 	}
 }

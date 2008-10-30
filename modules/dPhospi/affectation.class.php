@@ -74,6 +74,8 @@ class CAffectation extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
+    $this->loadView();
+    $this->_view = $this->_ref_lit->_view;
     $this->_duree = mbDaysRelative($this->entree, $this->sortie);
   }
 

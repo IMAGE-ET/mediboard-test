@@ -63,6 +63,7 @@ $line->_ref_prescription->loadRefObject();
 $sejour = $line->_ref_prescription->_ref_object;
 $sejour->loadRefPatient();
 $sejour->_ref_patient->loadRefsAffectations();
+$sejour->_ref_patient->_ref_curr_affectation->updateFormFields();
 
 // Heures disponibles pour l'administration
 $hours = array('02','04','06','08','10','12','14','16','18','20','22','24');
