@@ -5,6 +5,11 @@
 
 /* XHTML elements */
 
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   font-family: arial, sans-serif;
   font-size: 11px;  
@@ -1338,7 +1343,7 @@ table.note th.low {
   /* @import "./login.css";   */
 
 #login {
-  margin: 40px 0px 0px; 
+  padding-top: 40px; 
 }
 
 #login table {

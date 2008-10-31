@@ -54,15 +54,7 @@ function thumb($params, &$smarty) {
 }
 
 function smarty_modifier_json($object) {
-  if (function_exists("json_encode")) {
-    return json_encode($object);
-  }
-  
-  // create a new instance of Services_JSON
-  $json = new Services_JSON();
-  $sJson = html_entity_decode($json->encode($object),ENT_NOQUOTES);
-  
-  return strtr($sJson, array("&quot;"=>"\\\""));
+  return json_encode($object);
 }
 
 function smarty_modifier_const($object, $constName) {
@@ -382,7 +374,7 @@ class CSmartyDP extends Smarty {
     // Only at debug time
     if (!CAppUI::conf("debug") || 
         isset($params["smarty_include_vars"]['nodebug']) ||
-        in_array(basename($tpl_file), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
+        in_array(basename($tpl_file), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::_smarty_include($params);
       return;
     }
@@ -405,7 +397,7 @@ class CSmartyDP extends Smarty {
     // Only at debug time
     if (!CAppUI::conf("debug") || 
         isset($this->_tpl_vars['nodebug']) ||
-        in_array(basename($resource_name), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
+        in_array(basename($resource_name), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::display($resource_name, $cache_id, $compile_id);
       return;
     }

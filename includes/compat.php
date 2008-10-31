@@ -60,8 +60,8 @@ if (!function_exists('property_exists')) {
  */
 if(!function_exists('memory_get_usage')) {
   function memory_get_usage($real_usage = false) {
-  	/*$os = php_uname('s');
-  	$pid = getmypid();
+    /*$os = php_uname('s');
+    $pid = getmypid();
     if (substr($os, 0, 3) === 'WIN') {
       exec("tasklist /FI \"PID eq $pid\" /FO LIST", $output);
       return preg_replace('/[\D]/', '', $output[5]) * 1024;
@@ -71,14 +71,31 @@ if(!function_exists('memory_get_usage')) {
       $output = explode(' ', $output[0]);
       return $output[1] * 1024;
     } */
-  	return '-';
+    return '-';
+  }
+}
+
+
+/**
+ * (PHP 5 >= 5.2.0, PECL json:1.2.0-1.2.1)
+ * json_encode Returns the JSON representation of a value
+ * 
+ * cf. http://php.net/json_encode
+ */
+if(!function_exists('json_encode')) {
+  function json_encode($object) {
+    // create a new instance of Services_JSON
+    $json = new Services_JSON();
+    $sJson = html_entity_decode($json->encode($object), ENT_NOQUOTES);
+    
+    return str_replace("&quot;", "\\\"", $sJson);
   }
 }
 
 if (!function_exists('mb_strtoupper')) {
-	function mb_strtoupper($string) {
-		return strtoupper($string);
-	}
+  function mb_strtoupper($string) {
+    return strtoupper($string);
+  }
 }
 
 if (!function_exists('mb_strtolower')) {
