@@ -1,3 +1,20 @@
+<script type="text/javascript">
+
+Main.add(function () {
+  var oForm = document.forms['edit-constantes-medicales'];
+  prepareForm(oForm);  
+  var cookie = new CookieJar();
+  // Recuperation de la valeur du cookie, on masque les graphs qui ne sont pas selectionnés
+  {{foreach from=$graphs item=graph_name}}
+    oForm["checkbox-{{$graph_name}}"].checked = cookie.getValue('graphsToShow', '{{$graph_name}}');
+    if(oForm["checkbox-{{$graph_name}}"].checked == false){ hideGraph('{{$graph_name}}'); }
+  {{/foreach}}
+});
+</script>
+
+
+</script>
+
 <form name="edit-constantes-medicales" action="?" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
