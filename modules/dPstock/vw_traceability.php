@@ -11,18 +11,95 @@
 global $can;
 $can->needsRead();
 
-$track = array();
-$orderby = 'date_dispensation DESC';
+$code = mbGetValueFromGetOrSession('code');
 
-$product = new CProduct();
-$product->loadList();
+$codes = array();
+$products = array();
 
-$list = new CProductDelivery;
-$list = $list->loadList(null, $orderby);
+if (strlen($code) > 2) {
+	$where = array(
+	  'code' => "LIKE '%$code%'"
+	);
+	
+	$delivery = new CProductDeliveryTrace();
+	$list_deliveries = $delivery->loadList($where, 'date_delivery');
+	
+	$reception = new CProductOrderItemReception();
+	$list_order_reception = $reception->loadList($where, 'date');
+
+	foreach ($list_order_reception as $trace) {
+	  if (!isset($codes[$trace->code])) {
+	    $codes[$trace->code] = array();
+	  }
+	  
+	  if (!isset($products[$trace->code])) {
+      $trace->loadRefOrderItem();
+      $trace->_ref_order_item->loadReference();
+      $trace->_ref_order_item->_ref_reference->loadRefsFwd();
+      $products[$trace->code] = $trace->_ref_order_item->_ref_reference->_ref_product;
+	  }
+	  
+	  // date_reception
+		if ($trace->date) {
+		  if (!isset($codes[$trace->code][$trace->date])) {
+		    $codes[$trace->code][$trace->date] = array(
+		      'date_reception' => null,
+			    'date_delivery' => null,
+			    'date_delivery_reception' => null,
+		    );
+		  }
+		  $codes[$trace->code][$trace->date]['date_reception'] = $trace->date;//$trace;
+		}
+	}
+	
+	foreach ($list_deliveries as $trace) {
+		if (!isset($codes[$trace->code])) {
+			$codes[$trace->code] = array();
+		}
+		
+	  if (!isset($products[$trace->code])) {
+	  	$stock = $trace->getStock();
+	  	$stock->loadRefsFwd();
+      $products[$trace->code] = $stock->_ref_product;
+    }
+		
+		// date_delivery
+		if ($trace->date_delivery) {
+		  if (!isset($codes[$trace->code][$trace->date_delivery])) {
+		    $codes[$trace->code][$trace->date_delivery] = array(
+          'date_reception' => null,
+          'date_delivery' => null,
+          'date_delivery_reception' => null,
+	      );
+		  }
+		  $codes[$trace->code][$trace->date_delivery]['date_delivery'] = $trace->date_delivery;//$trace;
+		}
+	  
+	  // date_delivery_reception
+		if ($trace->date_reception) {
+		  if (!isset($codes[$trace->code][$trace->date_reception])) {
+		    $codes[$trace->code][$trace->date_reception] = array(
+          'date_reception' => null,
+          'date_delivery' => null,
+          'date_delivery_reception' => null,
+	      );
+		  }
+		  $codes[$trace->code][$trace->date_reception]['date_delivery_reception'] = $trace->date_reception;//$trace;
+		}
+	}
+}
+
+foreach ($codes as &$_code) {
+	ksort($_code);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('list', $list);
+
+$smarty->assign('codes',    $codes);
+$smarty->assign('code',     $code);
+$smarty->assign('products', $products);
+
 $smarty->display('vw_traceability.tpl');
 
 ?>

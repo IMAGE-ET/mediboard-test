@@ -89,6 +89,7 @@ class CProduct extends CMbObject {
     if ($this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
 	    $this->unit_quantity = round($this->unit_quantity);
 	  }
+	  if ($this->unit_quantity === 0) $this->unit_quantity = null;
 	  $this->_quantity = '';
     if ($this->item_title && $this->quantity) {
     	$this->_quantity .= "$this->quantity $this->item_title x ";
@@ -135,20 +136,32 @@ class CProduct extends CMbObject {
     return ($this->_ref_category->getPerm($permType));
   }
   
-  function store() {
+  function check() {
+  	if ($msg = parent::check()) {
+  		return $msg;
+  	}
+
+  	$this->completeField('code');
   	$this->completeField('quantity');
   	$this->completeField('unit_quantity');
+  	
   	if(!$this->quantity)          $this->quantity = 1;
-  	if($this->unit_quantity == 0) $this->unit_quantity = null;
-    if(!$this->_id) {
-      $duplicate_code = new CProduct();
-      $duplicate_code->code = $this->code;
-      $duplicate_code->loadMatchingObject();
-      if ($duplicate_code->_id) {
-        $this->_id = $duplicate_code->_id;
-      }
-    }
-    return parent::store();
+    if($this->unit_quantity == 0) $this->unit_quantity = null;
+    
+  	if ($this->code) {
+	    $product = new CProduct();
+	    $product->code = $this->code;
+	    $duplicates = $product->loadMatchingList();
+	    if ($this->_id) {
+		    foreach ($duplicates as $id => &$duplicate) {
+		    	if ($duplicate->_id == $this->_id) {
+		    	  unset($duplicates[$id]);
+		    	}
+		    }
+	    }
+    
+      if (count($duplicates)) return 'Un produit avec ce code existe déjà';
+  	}
   }
 }
 ?>

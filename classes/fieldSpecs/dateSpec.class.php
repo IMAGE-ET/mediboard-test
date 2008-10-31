@@ -47,9 +47,9 @@ class CDateSpec extends CMbFieldSpec {
     }
       
     // Jour grégorien
-    $mois = intval($matches[3]);
-    if (!in_range($mois, 1, 31)) {
-      return "mois '$mois' non compris entre 1 et 12  ('$propValue')";
+    $jour = intval($matches[3]);
+    if (!in_range($jour, 1, 31)) {
+      return "jour '$jour' non compris entre 1 et 31 ('$propValue')";
     }
     
       
