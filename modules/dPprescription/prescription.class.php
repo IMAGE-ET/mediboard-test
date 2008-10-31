@@ -232,6 +232,7 @@ class CPrescription extends CMbObject {
 	  	  $date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
 	  	  $date_fin = mbDate($date_time_fin);
 	  	  $time_fin = mbTime($date_time_fin);
+	  	  $_line->time_fin = $time_fin;
 	  	}
 	  }
 

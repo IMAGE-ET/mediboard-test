@@ -60,6 +60,51 @@ class CFunctionCategoryPrescription extends CMbObject {
     $this->_ref_function = new CFunctions();
     $this->_ref_function->load($this->function_id);
   }
-}
   
+  function check(){
+    if($this->countSiblings()){
+      return "Association deja présente dans la table";  
+    }
+    return parent::check();  
+  }
+  
+  function countSiblings() {
+    $function_category = new CFunctionCategoryPrescription();
+    $function_category->function_id = $this->function_id;
+    $function_category->category_prescription_id = $this->category_prescription_id;
+    return $function_category->countMatchingList();
+  }
+  
+  function canDeleteEx(){
+    $this->completeField("function_id");
+    $this->completeField("category_prescription_id");
+    
+    // Chargement des users de la fonction
+    $this->loadRefFunction();
+    $this->_ref_function->loadRefsUsers();
+    $users_id = array_keys($this->_ref_function->_ref_users);
+    
+    // Calcul du nombre de lignes d'elements
+    $prescription_line_element = new CPrescriptionLineElement();
+    $where = array();
+    $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
+    $where["element_prescription.category_prescription_id"] = " = '$this->category_prescription_id'";
+    $where["prescription_line_element.user_executant_id"] = CSQLDataSource::prepareIn($users_id);
+    $count_lines_element = $prescription_line_element->countList($where, null, null, null, $ljoin);
+    
+    // Calcul du nombre de lignes de commentaires
+    $prescription_line_comment = new CPrescriptionLineComment();
+    $where = array();
+    $where["category_prescription_id"] = " = '$this->category_prescription_id'";
+    $where["user_executant_id"] = CSQLDataSource::prepareIn($users_id);
+    $count_lines_comment = $prescription_line_comment->countList($where);
+    
+    $count = $count_lines_element + $count_lines_comment;
+    if($count > 0){
+      return "Cet Objet est lié à $count lignes de prescription";
+    }
+    return parent::canDeleteEx();
+  }
+}
+
 ?>
