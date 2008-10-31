@@ -630,6 +630,18 @@ class CMbObject {
   }
   
   /**
+   * Load an object from a GUID
+   */
+  static function loadFromGuid($guid) {
+    list($class, $id) = explode('-', $guid);
+    if ($class && $id) {
+	    $object = new $class;
+	    return $object->load($id);
+    }
+    return false;
+  }
+  
+  /**
    * Load object view information 
    */
   
