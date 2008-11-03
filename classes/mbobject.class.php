@@ -851,7 +851,6 @@ class CMbObject {
 
     // Préparation du log
     $this->loadOldObject();
-    $this->prepareLog();
     
     if ($msg = $this->check()) {
       return CAppUI::tr(get_class($this)) . 
@@ -877,6 +876,7 @@ class CMbObject {
     $this->load();
     
     // Enregistrement du log une fois le store terminé
+    $this->prepareLog();
     $this->doLog();
         
     // Trigger event
@@ -1140,7 +1140,6 @@ class CMbObject {
   function delete() {
     // Préparation du log
     $this->loadOldObject();
-    $this->prepareLog();
         
     if ($msg = $this->canDeleteEx()) {
       return $msg;
@@ -1187,6 +1186,7 @@ class CMbObject {
     $this->_id = null;
    
     // Enregistrement du log une fois le delete terminé
+    $this->prepareLog();
     $this->doLog();
         
     // Event Handlers
