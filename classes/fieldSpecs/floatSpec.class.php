@@ -100,7 +100,7 @@ class CFloatSpec extends CMbFieldSpec {
     $maxLength = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
     CMbArray::defaultValue($params, "maxlength", $maxLength);
-    $fieldId = str_replace('-', '_', $form.'_'.$field);
+    $fieldId = $form.'_'.$field;
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {
