@@ -1,5 +1,4 @@
 <script type="text/javascript">
-
 Main.add( function(){
   oCatField = new TokenField(document.filter_prescription.token_cat); 
   
@@ -11,16 +10,6 @@ Main.add( function(){
   });
 } );
 
-// Fonction permettant de modifier le tokenField lors de la selection des checkboxs
-changeBox = function(oCheckbox, oTokenField){
-  if(oCheckbox.checked){
-    oTokenField.add(oCheckbox.value);
-  } else {
-    oTokenField.remove(oCheckbox.value);
-  }
-}
-
-
 selectChap = function(name_chap, oField){
   $$('input.'+name_chap).each(function(oCheckbox) { 
     if(!oCheckbox.checked){
@@ -29,7 +18,6 @@ selectChap = function(name_chap, oField){
     }
   });
 }
-	
 </script>
 
 <div class="not-printable">
@@ -63,7 +51,7 @@ selectChap = function(name_chap, oField){
              <strong>Médicaments</strong>
            </td>
            <td>
-             <input type="checkbox" value="med" onclick="changeBox(this, oCatField)" />
+             <input type="checkbox" value="med" onclick="oCatField.toggle(this.value, this.checked);" />
            </td>
          </tr>
          {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
@@ -76,7 +64,7 @@ selectChap = function(name_chap, oField){
 	             {{foreach from=$categories_by_chap item=categorie}}
 	               <td style="white-space: nowrap; float: left; width: 10em;">
 	                 <label title="{{$categorie->_view}}">
-	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="changeBox(this, oCatField)"/> {{$categorie->_view}}
+	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}
 	                 </label>
 	               </td>
 	             {{/foreach}}

@@ -1,6 +1,43 @@
 <script type="text/javascript">
-
 var oEvenementField = null;
+
+function viewItems(iCategorie){
+  var oForm = document.forms.FrmEI;
+  $('Items' + oForm._elemOpen.value).hide();
+  $('Items' + iCategorie).show();
+  oForm._elemOpen.value = iCategorie;
+}
+
+function toggleCode(iCode, bForceTo){
+  var oForm = document.forms.FrmEI;
+  oEvenementField.toggle(iCode, bForceTo);
+  
+  var oElement = oForm["_ItemsSel_cat_" + oForm._elemOpen.value];
+  oItemSelField = new TokenField(oElement);
+  oItemSelField.toggle(iCode, bForceTo);
+  
+  refreshListChoix();
+}
+
+function refreshListChoix(){
+  var oForm = document.FrmEI;
+  var oCategorie = oForm._cat_evenement.options;
+  var sListeChoix = "";
+  for (i = 0; i < oCategorie.length; i++) {
+    var oElement = oForm["_ItemsSel_cat_" + oCategorie[i].value];
+    if (oElement.value) {
+      oItemSelField = new TokenField(oElement);
+      sListeChoix += "<strong>" + oCategorie[i].text + "</strong><ul>";
+      var aItems = oItemSelField.getValues();
+      iCode = 0;
+      while (sCode = aItems[iCode++]) {
+        sListeChoix += "<li>" + $('titleItem' + sCode).title + "</li>";
+      }
+      sListeChoix += "</ul>";
+    }
+  }
+  $('listChoix').innerHTML = sListeChoix;
+}
 
 function choixSuiteEven(){
   var oForm = document.FrmEI;
@@ -11,62 +48,6 @@ function choixSuiteEven(){
     $('suiteEvenAutre').hide();
     oForm.suite_even_descr.class="{{$fiche->_props.suite_even_descr}}";
   }
-}
-
-function viewItems(iCategorie){
-  var oForm = document.FrmEI;
-  $('Items' + oForm._elemOpen.value).hide();
-  $('Items' + iCategorie).show();
-  oForm._elemOpen.value = iCategorie;
-}
-
-function checkCode(oElement){
-  if(oElement.checked == true){
-    putCode(oElement.name);
-  }else{
-    delCode(oElement.name);
-  }
-}
-function delCode(iCode){
-  var oForm = document.FrmEI;
-  oEvenementField.remove(iCode);
-  
-  var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
-  oItemSelField = new TokenField(oElement);
-  oItemSelField.remove(iCode);
-  
-  refreshListChoix();
-}
-
-function putCode(iCode){
-  var oForm = document.FrmEI;
-  oEvenementField.add(iCode);
-  
-  var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
-  oItemSelField = new TokenField(oElement);
-  oItemSelField.add(iCode);
-  
-  refreshListChoix();
-}
-
-function refreshListChoix(){
-  var oForm = document.FrmEI;
-  var oCategorie = oForm._cat_evenement.options;
-  var sListeChoix = "";
-  for(i=0; i< oCategorie.length; i++){
-    var oElement = eval("oForm._ItemsSel_cat_" + oCategorie[i].value);
-    if(oElement.value){
-      sListeChoix += "<strong>" + oCategorie[i].text + "</strong><ul>";
-      var aItems = oElement.value.split("|");
-      oItems = aItems.without("");
-      iCode = 0;
-      while (sCode = aItems[iCode++]) {
-        sListeChoix += "<li>" + $('titleItem' + sCode).title + "</li>";
-      }
-      sListeChoix += "</ul>";
-    }
-  }
-  $('listChoix').innerHTML = sListeChoix;
 }
 
 Main.add(function () {
@@ -209,7 +190,8 @@ Main.add(function () {
              <tr>
              {{/if}}
                <td class="text">
-                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="javascript:checkCode(this);" {{if $curr_item->checked}}checked="checked"{{/if}}/><label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
+                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="toggleCode(this.name, this.checked);" {{if $curr_item->checked}}checked="checked"{{/if}}/>
+                 <label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
                </td>
              {{if (($curr_data+1) is div by 3 || $smarty.foreach.itemEvenement.last)}}
              </tr>
@@ -246,7 +228,7 @@ Main.add(function () {
         <tr>
           <th colspan="2">{{mb_label object=$fiche field="suite_even"}}</th> 
           <td colspan="2">
-            <select name="suite_even" class="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
+            <select name="suite_even" class="{{$fiche->_props.suite_even}}" onchange="choixSuiteEven();">
               <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
             </select>

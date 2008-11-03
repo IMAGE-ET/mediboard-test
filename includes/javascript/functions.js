@@ -9,16 +9,16 @@
  */
 
 function main() {
-	try {
-	  prepareForms();
-	  SystemMessage.init();
-	  WaitingMessage.init();
-	  initPuces();
-	  Main.init();
-	}
-	catch (e) {
-		Console.debugException(e);
-	}
+  try {
+    prepareForms();
+    SystemMessage.init();
+    WaitingMessage.init();
+    initPuces();
+    Main.init();
+  }
+  catch (e) {
+    Console.debugException(e);
+  }
 }
 
 document.observe('dom:loaded', main);
@@ -64,9 +64,9 @@ Main.add(function() { showBody.defer(); });*/
  * References manipulation
  */
 var References = {
-	/**
-	 * Clean references involved in memory leaks
-	 */
+  /**
+   * Clean references involved in memory leaks
+   */
   clean: function(obj) {
     var elements = obj.descendants();
     for (var j = 0; j < elements.length; j++) {
@@ -84,16 +84,16 @@ var References = {
 }
 
 var WaitingMessage = {
-	init: function() {
-		window.onbeforeunload = function () {
-		  if(FormObserver.checkChanges()) {
-  		  WaitingMessage.show();
-  		} else {
-  		  return "Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous appuyez sur OK, ces données seront perdues.";
-  		}
+  init: function() {
+    window.onbeforeunload = function () {
+      if(FormObserver.checkChanges()) {
+        WaitingMessage.show();
+      } else {
+        return "Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous appuyez sur OK, ces données seront perdues.";
+      }
     };
-	},
-	
+  },
+  
   show: function() {
     var eDoc  = document.documentElement;
     var eMask = $('waitingMsgMask');
@@ -146,7 +146,7 @@ var WaitingMessage = {
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     if (descendant) {
-      if(descendant.tagName.toString().toLowerCase() == "tr") {
+      if (descendant.tagName.match(/^tr$/i)) {
         descendant.insert({bottom: eDiv});
         return;
       }
@@ -307,7 +307,7 @@ var Console = {
   },
   
   debugException: function(exception) {
-  	var regexp = /([^@])+@(http[s]?:([^:]+))?:([\d]+)/g;
+    var regexp = /([^@])+@(http[s]?:([^:]+))?:([\d]+)/g;
     exception.stack = exception.stack.match(regexp);
     this.debug(exception, "Exception", { level: 2 } );
   },
@@ -465,7 +465,7 @@ var PairEffect = Class.create({
 
   // Constructor
   initialize: function(idTarget, oOptions) {
-  	
+    
     var oDefaultOptions = {
       idTarget       : idTarget,
       idTrigger      : idTarget + "-trigger",
@@ -520,7 +520,7 @@ var PairEffect = Class.create({
  */
 
 Object.extend(PairEffect, {
-	declaredEffects : {},
+  declaredEffects : {},
 
   // Initialize a whole group giving the className for all targets
   initGroup: function(sTargetsClass, oOptions) {
@@ -550,9 +550,9 @@ Object.extend(PairEffect, {
 var TogglePairEffect = Class.create({
   // Constructor
   initialize: function(idTarget1, idTarget2, oOptions) {
-  	
+    
     var oDefaultOptions = {
-    	idFirstVisible : 1,
+      idFirstVisible : 1,
       idTarget1      : idTarget1,
       idTarget2      : idTarget2,
       idTrigger1     : idTarget1 + "-trigger",
@@ -576,8 +576,8 @@ var TogglePairEffect = Class.create({
     var fShow = this.show.bind(this);
     oTrigger1.observe("click", function() { fShow(2); } );
     oTrigger2.observe("click", function() { fShow(1); } );
-  	
-  	this.show(this.oOptions.idFirstVisible);
+    
+    this.show(this.oOptions.idFirstVisible);
   },
   
   show: function(iWhich) {
@@ -585,10 +585,10 @@ var TogglePairEffect = Class.create({
     var oTarget2  = $(this.oOptions.idTarget2);
     var oTrigger1 = $(this.oOptions.idTrigger1);
     var oTrigger2 = $(this.oOptions.idTrigger2);
-		oTarget1[1 == iWhich ? "show" : "hide"]();
-		oTarget2[2 == iWhich ? "show" : "hide"]();
-		oTrigger1[1 == iWhich ? "show" : "hide"]();
-		oTrigger2[2 == iWhich ? "show" : "hide"]();
+    oTarget1[1 == iWhich ? "show" : "hide"]();
+    oTarget2[2 == iWhich ? "show" : "hide"]();
+    oTrigger1[1 == iWhich ? "show" : "hide"]();
+    oTrigger2[2 == iWhich ? "show" : "hide"]();
   }
   
 } );
@@ -598,7 +598,7 @@ var TogglePairEffect = Class.create({
  */
 
 Object.extend(TogglePairEffect, {
-	declaredEffects : {},
+  declaredEffects : {},
 
   // Initialize a whole group giving the className for all targets
   initGroup: function(sTargetsClass, oOptions) {
@@ -644,28 +644,28 @@ var ViewPort = {
   },
   
   SetFrameHeight: function(oFrame, oOptions){
-	  var oDefaultOptions = {
-	    iBottomMargin : 15
-	  }
-	    
-	  var fYFramePos        = 0;
-	  var fNavHeight        = 0;
-	  var fFrameHeight      = 0;
-	  var fFrameHeightFinal = 0;
-	  
-	  // Calcul de la position top de la frame
-	  fYFramePos = Position.cumulativeOffset(oFrame)[1];  
-	  
-	  // hauteur de la fenetre
-	  fNavHeight = window.getInnerDimensions().y;
-	  
-	  // Calcul de la hauteur de la div
-	  fFrameHeight = fNavHeight - fYFramePos;
-	
-	  // Ajustement de la hauteur
-	  fFrameHeightFinal = fFrameHeight - oDefaultOptions.iBottomMargin
-	  
-	  oFrame.setAttribute("height", fFrameHeightFinal);
+    var oDefaultOptions = {
+      iBottomMargin : 15
+    }
+      
+    var fYFramePos        = 0;
+    var fNavHeight        = 0;
+    var fFrameHeight      = 0;
+    var fFrameHeightFinal = 0;
+    
+    // Calcul de la position top de la frame
+    fYFramePos = Position.cumulativeOffset(oFrame)[1];  
+    
+    // hauteur de la fenetre
+    fNavHeight = window.getInnerDimensions().y;
+    
+    // Calcul de la hauteur de la div
+    fFrameHeight = fNavHeight - fYFramePos;
+  
+    // Ajustement de la hauteur
+    fFrameHeightFinal = fFrameHeight - oDefaultOptions.iBottomMargin
+    
+    oFrame.setAttribute("height", fFrameHeightFinal);
   }
 }
 
@@ -879,41 +879,41 @@ function reloadNotes(){
 
 
 Object.extend(Calendar, {
-	// This function is bound to date specification
-	dateStatus: function(date) {
-	  var sDate = date.toDATE();
-	  var aStyles = [];
-	
-	  if (this.limit.start && this.limit.start > sDate ||
+  // This function is bound to date specification
+  dateStatus: function(date) {
+    var sDate = date.toDATE();
+    var aStyles = [];
+  
+    if (this.limit.start && this.limit.start > sDate ||
         this.limit.stop && this.limit.stop < sDate) {
-	    aStyles.push("disabled");
-	  }
-	
-		if (this.current.start || this.current.stop) {
-	    aStyles.push("current");
-		}
-		
-	  if (this.current.start && this.current.start > sDate ||
+      aStyles.push("disabled");
+    }
+  
+    if (this.current.start || this.current.stop) {
+      aStyles.push("current");
+    }
+    
+    if (this.current.start && this.current.start > sDate ||
         this.current.stop && this.current.stop < sDate) {
-	    aStyles = aStyles.without("current");
-	  }
-	  
-	  if (this.spots.include(sDate)) {
-	    aStyles.push("spot");
-	  }
-	  
-	  aStyles.uniq();
-	  return aStyles.join(" ");
+      aStyles = aStyles.without("current");
+    }
+    
+    if (this.spots.include(sDate)) {
+      aStyles.push("spot");
+    }
+    
+    aStyles.uniq();
+    return aStyles.join(" ");
   },
 
-	prepareDates: function(dates) {
-	  dates.current.start = Calendar.prepareDate(dates.current.start);
-	  dates.current.stop  = Calendar.prepareDate(dates.current.stop);
-	  dates.limit.start = Calendar.prepareDate(dates.limit.start);
-	  dates.limit.stop  = Calendar.prepareDate(dates.limit.stop);
-	  dates.spots = dates.spots.map(Calendar.prepareDate);
-	},
-	
+  prepareDates: function(dates) {
+    dates.current.start = Calendar.prepareDate(dates.current.start);
+    dates.current.stop  = Calendar.prepareDate(dates.current.stop);
+    dates.limit.start = Calendar.prepareDate(dates.limit.start);
+    dates.limit.stop  = Calendar.prepareDate(dates.limit.stop);
+    dates.spots = dates.spots.map(Calendar.prepareDate);
+  },
+  
   prepareDate: function(datetime) {
     if (!datetime) {
       return null;
@@ -923,49 +923,49 @@ Object.extend(Calendar, {
   },
   
   regField: function(sFormName, sFieldName, bTime, userDates) {
-		if (userDates && !Object.isArray(userDates.spots)) {
-			userDates.spots = Object.values(userDates.spots);
-		}
+    if (userDates && !Object.isArray(userDates.spots)) {
+      userDates.spots = Object.values(userDates.spots);
+    }
 
-	  var dates = {
-		  current: {
-		    start: null,
-		    stop: null
-		  },
-		  limit: {
-		    start: null,
-		    stop: null
-		  },
-		  spots: []
-		};
-				
-		Object.extend(dates, userDates);
+    var dates = {
+      current: {
+        start: null,
+        stop: null
+      },
+      limit: {
+        start: null,
+        stop: null
+      },
+      spots: []
+    };
+        
+    Object.extend(dates, userDates);
 
-		Calendar.prepareDates(dates);
-		
+    Calendar.prepareDates(dates);
+    
 
-		// Test element existence
-		var sInputId = sFormName + "_" + sFieldName;
-	  if (!$(sInputId)) {
-	    return;
-	  }
-	  
-	  var field;
-	  if ($(sInputId).disabled && (field = $(sInputId + "_trigger"))) {
-	    field.hide();
-	  }
-	
-	  var cal = Calendar.setup( {
-	      inputField  : sInputId,
-	      displayArea : sInputId + "_da",
-	      ifFormat    : "%Y-%m-%d" + (bTime ? " %H:%M:%S" : ""),
-	      daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
-	      button      : sInputId + "_trigger",
-	      showsTime   : bTime,
-	      dateStatusFunc: Calendar.dateStatus.bind(dates)
-	    } 
-	  );
-	}
+    // Test element existence
+    var sInputId = sFormName + "_" + sFieldName;
+    if (!$(sInputId)) {
+      return;
+    }
+    
+    var field;
+    if ($(sInputId).disabled && (field = $(sInputId + "_trigger"))) {
+      field.hide();
+    }
+  
+    var cal = Calendar.setup( {
+        inputField  : sInputId,
+        displayArea : sInputId + "_da",
+        ifFormat    : "%Y-%m-%d" + (bTime ? " %H:%M:%S" : ""),
+        daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
+        button      : sInputId + "_trigger",
+        showsTime   : bTime,
+        dateStatusFunc: Calendar.dateStatus.bind(dates)
+      } 
+    );
+  }
 } );
 
 function regFieldCalendar(sFormName, sFieldName, bTime) {
@@ -1048,52 +1048,52 @@ var Duration = {
 }
 
 Object.extend(Date, { 
-	isDATETIME: function(sDateTime) {
-	  return sDateTime.match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/);
-	},
-	
+  isDATETIME: function(sDateTime) {
+    return sDateTime.match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/);
+  },
+  
   fromDATE: function(sDate) {
-	  // sDate must be: YYYY-MM-DD
-	  var aParts = sDate.split("-");
-	  Assert.that(aParts.length == 3, "'%s' is not a valid DATE", sDate);
-	
-	  var year  = parseInt(aParts[0], 10);
-	  var month = parseInt(aParts[1], 10);
-	  var day   = parseInt(aParts[2], 10);
-	  
-	  return new Date(year, month - 1, day); // Js months are 0-11!!
-	},
+    // sDate must be: YYYY-MM-DD
+    var aParts = sDate.split("-");
+    Assert.that(aParts.length == 3, "'%s' is not a valid DATE", sDate);
+  
+    var year  = parseInt(aParts[0], 10);
+    var month = parseInt(aParts[1], 10);
+    var day   = parseInt(aParts[2], 10);
+    
+    return new Date(year, month - 1, day); // Js months are 0-11!!
+  },
 
   fromDATETIME : function(sDateTime) {
-	  // sDateTime must be: YYYY-MM-DD HH:MM:SS
-	  var aHalves = sDateTime.split(" ");
-	  Assert.that(aHalves.length == 2, "'%s' is not a valid DATETIME", sDateTime);
-	
-	  var sDate = aHalves[0];
-	  var date = Date.fromDATE(sDate);
-	
-	  var sTime = aHalves[1];
-	  var aParts = sTime.split(":");
-	  Assert.that(aParts.length == 3, "'%s' is not a valid TIME", sTime);
-	
-	  date.setHours  (parseInt(aParts[0], 10));
-	  date.setMinutes(parseInt(aParts[1], 10));
-	  date.setSeconds(parseInt(aParts[2], 10));
-	  
-	  return date;
-	},
+    // sDateTime must be: YYYY-MM-DD HH:MM:SS
+    var aHalves = sDateTime.split(" ");
+    Assert.that(aHalves.length == 2, "'%s' is not a valid DATETIME", sDateTime);
+  
+    var sDate = aHalves[0];
+    var date = Date.fromDATE(sDate);
+  
+    var sTime = aHalves[1];
+    var aParts = sTime.split(":");
+    Assert.that(aParts.length == 3, "'%s' is not a valid TIME", sTime);
+  
+    date.setHours  (parseInt(aParts[0], 10));
+    date.setMinutes(parseInt(aParts[1], 10));
+    date.setSeconds(parseInt(aParts[2], 10));
+    
+    return date;
+  },
 
   fromLocaleDate : function(sDate) {
-	  // sDate must be: dd/mm/yyyy
-	  var aParts = sDate.split("/");
-	  Assert.that(aParts.length == 3, "'%s' is not a valid display date", sDate);
-	
-	  var year  = parseInt(aParts[2], 10);
-	  var month = parseInt(aParts[1], 10);
-	  var day   = parseInt(aParts[0], 10);
-	  
-	  return new Date(year, month - 1, day); // Js months are 0-11!!
-	},
+    // sDate must be: dd/mm/yyyy
+    var aParts = sDate.split("/");
+    Assert.that(aParts.length == 3, "'%s' is not a valid display date", sDate);
+  
+    var year  = parseInt(aParts[2], 10);
+    var month = parseInt(aParts[1], 10);
+    var day   = parseInt(aParts[0], 10);
+    
+    return new Date(year, month - 1, day); // Js months are 0-11!!
+  },
 
   fromLocaleDateTime : null
   
@@ -1102,104 +1102,113 @@ Object.extend(Date, {
 
 Class.extend(Date, {
   toDATE: function() {
-	  var y = this.getFullYear();
-	  var m = this.getMonth()+1; // Js months are 0-11!!
-	  var d = this.getDate();
-	  
-	  return printf("%04d-%02d-%02d", y, m, d);
-	},
+    var y = this.getFullYear();
+    var m = this.getMonth()+1; // Js months are 0-11!!
+    var d = this.getDate();
+    
+    return printf("%04d-%02d-%02d", y, m, d);
+  },
   
   toDATETIME: function(useSpace) {
-	  var h = this.getHours();
-	  var m = this.getMinutes();
-	  var s = this.getSeconds();
-	  
-	  if(useSpace)
-	    return this.toDATE() + printf(" %02d:%02d:%02d", h, m, s);
-	  else
-	    return this.toDATE() + printf("+%02d:%02d:%02d", h, m, s);
-	},
+    var h = this.getHours();
+    var m = this.getMinutes();
+    var s = this.getSeconds();
+    
+    if(useSpace)
+      return this.toDATE() + printf(" %02d:%02d:%02d", h, m, s);
+    else
+      return this.toDATE() + printf("+%02d:%02d:%02d", h, m, s);
+  },
   
   toLocaleDate: function() {
-	  var y = this.getFullYear();
-	  var m = this.getMonth()+1; // Js months are 0-11!!
-	  var d = this.getDate();
-	  
-	  return printf("%02d/%02d/%04d", d, m, y);
-	},
+    var y = this.getFullYear();
+    var m = this.getMonth()+1; // Js months are 0-11!!
+    var d = this.getDate();
+    
+    return printf("%02d/%02d/%04d", d, m, y);
+  },
   
   toLocaleDateTime: function () {
-	  var h = this.getHours();
-	  var m = this.getMinutes();
-	  
-	  return this.toLocaleDate() + printf(" %02d:%02d", h, m);
-	},
+    var h = this.getHours();
+    var m = this.getMinutes();
+    
+    return this.toLocaleDate() + printf(" %02d:%02d", h, m);
+  },
   
   addDays: function(iDays) {
     this.setDate(this.getDate() + iDays);
   }
 } );
 
-function TokenField(oElement, oOptions){
-  this.oElement = oElement;
-  
-  var oDefaultOptions = {
-    onChange: function(){},
-    confirm : null,
-    sProps  : null
-  };
-  Object.extend(oDefaultOptions, oOptions);
-  this.oOptions = oDefaultOptions;
-}
-
-TokenField.prototype.onComplete = function(){
-  if (this.oOptions.onChange != null)
-    this.oOptions.onChange();
-  return true;
-}
-
-TokenField.prototype.add = function(sValue,multiple) {
-  if(!sValue){
-    return false;
-  }
-  if(this.oOptions.sProps){
-    oCode = new Element('input');
-    oCode.value = sValue;
-    oCode.className = this.oOptions.sProps;
-    ElementChecker.prepare(oCode);
-    ElementChecker.checkElement();
-    if(ElementChecker.oErrors.length) {
-      alert(ElementChecker.getErrorMessage());
+/** Token field used to manage multiple enumerations easily.
+ *  @param element The element used to get piped values : token1|token2|token3
+ *  @param options Accepts the following keys : onChange, confirm, sProps
+ */
+var TokenField = Class.create({
+  initialize: function(element, options) {
+    this.element = element;
+    
+    this.options = Object.extend({
+      onChange: Prototype.emptyFunction,
+      confirm : null,
+      sProps  : null
+    }, options || {});
+  },
+  onComplete: function(value) {
+    if(this.options.onChange != null)
+      this.options.onChange(value);
+    return true;
+  },
+  add: function(value, multiple) {
+    if (!value) {
       return false;
     }
-  }
-  var aToken = this.oElement.value.split("|");
-  aToken = aToken.without("");
-  aToken.push(sValue);
-  if(!multiple){
-    aToken.uniq();
-  }
-  this.oElement.value = aToken.join("|");
-  this.onComplete();
-  return true;
-}
+    if(this.options.sProps) {
+      oCode = new Element('input', {value: value, className: this.options.sProps});
+      ElementChecker.prepare(oCode);
+      ElementChecker.checkElement();
+      if(ElementChecker.oErrors.length) {
+        alert(ElementChecker.getErrorMessage());
+        return false;
+      }
+    }
+    var aToken = this.getValues();
+    aToken.push(value);
+    if(!multiple) aToken = aToken.uniq();
+    
+    this.onComplete(this.setValues(aToken));
+    return true;
+  },
+  remove: function(value) {
+    if(!value || (this.options.confirm && !confirm(this.options.confirm))) {
+      return false;
+    }
 
-TokenField.prototype.remove = function(sValue) {
-  if(this.oOptions.confirm && !confirm(this.oOptions.confirm)){
-    return false;
+    this.onComplete(this.setValues(this.getValues().without(value)));
+    return true;
+  },
+  contains: function(value) {
+   return (this.getValues().indexOf(value) != -1);
+  },
+  toggle: function(value, force, multiple) {
+    if (!Object.isUndefined(force)) {
+      return this[force?"add":"remove"](value, multiple);
+    }
+    return this[this.contains(value)?"remove":"add"](value);
+  },
+  getValues: function(asString) {
+    if (asString) {
+      return this.element.value;
+    }
+    return this.element.value.split("|").without("");
+  },
+  setValues: function(values) {
+    if (Object.isArray(values)) {
+      values = values.join("|");
+    }
+    return this.element.value = values;
   }
-  var aToken = this.oElement.value.split("|");
-  aToken = aToken.without("");
-  
-  var iPos = aToken.indexOf(sValue);
-  if (iPos != -1) {
-    aToken.splice(iPos, 1);
-  }
-  
-  this.oElement.value = aToken.join("|");
-  this.onComplete();	
-  return true;
-}
+});
 
 function view_log(classe, id) {
   url = new Url();
@@ -1406,15 +1415,15 @@ Object.extend (Control.Tabs, {
   },
   create: function (name, storeInCookie) {
     if ($(name)) {
-	    var tab = new Control.Tabs(name);
-	    if (storeInCookie) {
-	      tab.options.afterChange = function (tab, tabName) {
-	        Control.Tabs.storeTab(name, tab.id);
-	      }
-	      tab.setActiveTab(Control.Tabs.loadTab(name));
-	    }
-	    return tab;
-	  }
+      var tab = new Control.Tabs(name);
+      if (storeInCookie) {
+        tab.options.afterChange = function (tab, tabName) {
+          Control.Tabs.storeTab(name, tab.id);
+        }
+        tab.setActiveTab(Control.Tabs.loadTab(name));
+      }
+      return tab;
+    }
   }
 } );
 
@@ -1452,7 +1461,7 @@ Element.addMethods({
  **/
 var DOM = {
   defineTag: function (tag) {
-    window[tag.toUpperCase()] = function () {
+    DOM[tag] = function () {
       return DOM.createNode(tag, arguments);
     };
   },
@@ -1479,9 +1488,9 @@ var DOM = {
   
   tags: [
     'a', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
-    'h1', 'h2', 'h3', 'hr', 'img', 'input', 'label', 'legend',
-    'li', 'ol', 'optgroup', 'option', 'p', 'pre', 'select',
-    'span', 'strong', 'table', 'tbody', 'td', 'textarea',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'img', 'input', 'label', 
+    'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'pre', 
+    'select', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
     'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
   ]
 };
@@ -1497,5 +1506,7 @@ var l10n = {
     return locales ? (locales[token] || token) : token;
   }
 }
+
+locales = {};
 
 var $T = l10n.tr;

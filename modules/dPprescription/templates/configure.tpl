@@ -1,4 +1,5 @@
 <script type="text/javascript">
+var oHourField = null;
 Main.add( function(){
   oHourField = new TokenField(document.editConfig["dPprescription[CPrisePosologie][heures_prise]"]); 
   
@@ -9,16 +10,6 @@ Main.add( function(){
     }
   });
 } );
-
-// Fonction permettant de modifier le tokenField lors de la selection des checkboxs
-changeBox = function(oCheckbox, hour, oTokenField){
-  if(oCheckbox.checked){
-    oTokenField.add(hour);
-  } else {
-    oTokenField.remove(hour);
-  }
-}
-
 </script>
 
 
@@ -367,7 +358,7 @@ changeBox = function(oCheckbox, hour, oTokenField){
     <td><strong>Heures disponibles</td>
     <td colspan="5" class="text">
     {{foreach from=$listHours item=_hour}}
-      <input class="hour" type="checkbox" value="{{$_hour}}" onclick="changeBox(this,'{{$_hour}}', oHourField);" /> {{$_hour}}
+      <input class="hour" type="checkbox" value="{{$_hour}}" onclick="oHourField.toggle('{{$_hour}}', this.checked);" /> {{$_hour}}
     {{/foreach}}
     <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>

@@ -2,49 +2,33 @@
 var oEvenementField = null;
 
 function viewItems(iCategorie){
-  var oForm = document.edit_type_ei;
+  var oForm = document.forms.edit_type_ei;
   $('Items' + oForm._elemOpen.value).hide();
   $('Items' + iCategorie).show();
   oForm._elemOpen.value = iCategorie;
 }
-function checkCode(oElement){
-  if(oElement.checked == true){
-    putCode(oElement.name);
-  }else{
-    delCode(oElement.name);
-  }
-}
-function delCode(iCode){
-  var oForm = document.edit_type_ei;
-  oEvenementField.remove(iCode);
+
+function toggleCode(iCode, bForceTo){
+  var oForm = document.forms.edit_type_ei;
+  oEvenementField.toggle(iCode, bForceTo);
   
   var oElement = oForm["_ItemsSel_cat_" + oForm._elemOpen.value];
   oItemSelField = new TokenField(oElement);
-  oItemSelField.remove(iCode);
+  oItemSelField.toggle(iCode, bForceTo);
   
   refreshListChoix();
 }
 
-function putCode(iCode){
-  var oForm = document.edit_type_ei;
-  oEvenementField.add(iCode);
-  
-  var oElement = oForm["_ItemsSel_cat_" + oForm._elemOpen.value];
-  oItemSelField = new TokenField(oElement);
-  oItemSelField.add(iCode);
-  
-  refreshListChoix();
-}
 function refreshListChoix(){
-  var oForm = document.edit_type_ei;
+  var oForm = document.forms.edit_type_ei;
   var oCategorie = oForm._cat_evenement.options;
   var sListeChoix = "";
-  for(i=0; i< oCategorie.length; i++){
+  for (i = 0; i < oCategorie.length; i++) {
     var oElement = oForm["_ItemsSel_cat_" + oCategorie[i].value];
-    if(oElement.value){
+    if (oElement.value) {
+      oItemSelField = new TokenField(oElement);
       sListeChoix += "<strong>" + oCategorie[i].text + "</strong><ul>";
-      var aItems = oElement.value.split("|");
-      oItems = aItems.without("");
+      var aItems = oItemSelField.getValues();
       iCode = 0;
       while (sCode = aItems[iCode++]) {
         sListeChoix += "<li>" + $('titleItem' + sCode).title + "</li>";
@@ -57,7 +41,7 @@ function refreshListChoix(){
 
 Main.add(function () {
   refreshListChoix();
-  oEvenementField = new TokenField(document.edit_type_ei.evenements);
+  oEvenementField = new TokenField(document.forms.edit_type_ei.evenements);
 });
 
 </script>
@@ -128,9 +112,9 @@ Main.add(function () {
           <td>
             <input type="hidden" name="evenements" class="{{$type_ei->_props.evenements}}" value="{{$type_ei->evenements}}"/>
             <input type="hidden" name="_elemOpen" value="{{$firstdiv}}" />
-            <select name="_cat_evenement" onchange="javascript:viewItems(this.value);">
+            <select name="_cat_evenement" onchange="viewItems(this.value);">
             {{foreach from=$listCategories item=curr_evenement}}
-            <option value="{{$curr_evenement->ei_categorie_id}}"{{if $curr_evenement->ei_categorie_id==$firstdiv}} selected="selected"{{/if}}>
+            <option value="{{$curr_evenement->ei_categorie_id}}" {{if $curr_evenement->ei_categorie_id==$firstdiv}}selected="selected"{{/if}}>
               {{$curr_evenement->nom}}
             </option>
             {{/foreach}}
@@ -148,7 +132,8 @@ Main.add(function () {
              <tr>
              {{/if}}
                <td class="text">
-                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="javascript:checkCode(this);" {{if $curr_item->checked}}checked="checked"{{/if}}/><label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
+                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="toggleCode(this.name, this.checked);" {{if $curr_item->checked}}checked="checked"{{/if}}/>
+                 <label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
                </td>
              {{if (($curr_data+1) is div by 3 || $smarty.foreach.itemEvenement.last)}}
              </tr>

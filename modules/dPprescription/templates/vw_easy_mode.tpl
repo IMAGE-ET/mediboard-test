@@ -5,15 +5,6 @@
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
  
 <script type="text/javascript">
-
-changeButton = function(oCheckbox, element_id, oTokenField, modeCategorie){
-  if(oCheckbox.checked){
-    oTokenField.add(element_id);
-  } else {
-    oTokenField.remove(element_id);
-  }
-}
-
 // Ajout de tous les elements d'une categorie
 function addCategorie(categorie_id, oTokenField){
   // Parcours de tous les boutons
@@ -47,7 +38,6 @@ function resetModeEasy(){
   
   
   var oFormToken = document.add_med_element;
-  oFormToken.token_med.value = '';
   oFormToken.token_elt.value = '';
 
   $$('input.valeur').each( function(input) {
@@ -135,7 +125,6 @@ Main.add( function(){
   menuTabs = Control.Tabs.create('main_prescription_easy_group', false);
   
   // Initialisation des TokenFields
-  oMedField = new TokenField(document.add_med_element.token_med); 
   oEltField = new TokenField(document.add_med_element.token_elt); 
   
   // Modification du praticien_id si celui-ci est spécifié
@@ -197,7 +186,6 @@ Main.add( function(){
 		  <form name="add_med_element" action="?" method="post" onsubmit="return submitAllElements();">
 			  <input type="hidden" name="m" value="dPprescription" />
 			  <input type="hidden" name="dosql" value="do_add_elements_easy_aed" />
-			  <input type="hidden" name="token_med" value="" />
 			  <input type="hidden" name="token_elt" value="" />
 			  <input type="hidden" name="prescription_id" value="{{$prescription_id}}" />
 			  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
@@ -263,7 +251,7 @@ Main.add( function(){
 	        <td style="width: 1%;">
 	          <input type="checkbox" name="elt-{{$element->_id}}" 
 	                  class="{{$categorie->_id}}" 
-	                  onclick="changeButton(this,'{{$element->_id}}',oEltField);" />    
+	                  onclick="oEltField.toggle('{{$element->_id}}', this.checked);" />    
           </td>
           <td>		         
             <label id="label-{{$element->_id}}" for="elt-{{$element->_id}}">{{$element->_view}}</label>
