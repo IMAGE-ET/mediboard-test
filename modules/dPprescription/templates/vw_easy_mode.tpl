@@ -230,7 +230,6 @@ Main.add( function(){
 
 <!-- Tabulations -->
 <ul id="main_prescription_easy_group" class="control_tabs">
-  <li><a href="#div_medicament">Médicaments</a></li>
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_nom_chapitre}}
   <li><a href="#div_{{$_nom_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_nom_chapitre}}{{/tr}}</a></li>
@@ -244,28 +243,6 @@ Main.add( function(){
 <table class="main">
   <tr>
   <td>
-		<!-- Affichage des contenus des tabs -->
-    <div id="div_medicament" style="display: none;">
-	  <table class="tbl">
-	  <tr>
-	    <th colspan="4">Favoris</th>
-	  </tr>
-	  <tr>
-	  {{foreach from=$medicaments item=medicament name=meds}}
-	    {{assign var=i value=$smarty.foreach.meds.iteration}}
-	        <td style="width: 1%;">
-	          
-	          <input type="checkbox" name="med-{{$medicament->code_cip}}"
-	                 class="med"
-	                 onclick="changeButton(this,'{{$medicament->code_cip}}',oMedField);" />
-	        </td>
-	        <td>
-	          <label for="med-{{$medicament->code_cip}}">{{$medicament->libelle}}</label>
-	        </td>
-	     {{if ((($i % 2) == 0))}}</tr>{{if !$smarty.foreach.meds.last}}<tr>{{/if}}{{/if}}
-	  {{/foreach}}
-	   </table>
-    </div>
 		{{foreach from=$chapitres key=name_chap item=chapitre}}
     <div id="div_{{$name_chap}}" style="display: none;">
 	    <table class="tbl">

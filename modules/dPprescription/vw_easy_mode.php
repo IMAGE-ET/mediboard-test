@@ -42,12 +42,6 @@ if($prescription->_ref_object->_class_name == "CSejour"){
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
-// chargement des medicaments favoris du praticien
-$medicaments = array();
-if($prescription->_current_praticien_id){
-  $medicaments = CPrescription::getFavorisMedPraticien($prescription->_current_praticien_id);
-}
-
 $filter_line_element = new CPrescriptionLineMedicament();
 $filter_line_element->debut = mbDate();
 
@@ -59,7 +53,6 @@ $smarty->assign("filter_line_element", $filter_line_element);
 $smarty->assign("moments", $moments);
 $smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("class_category", new CCategoryPrescription());
-$smarty->assign("medicaments", $medicaments);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("mode_protocole", $mode_protocole);
