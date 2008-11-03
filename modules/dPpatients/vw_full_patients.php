@@ -48,9 +48,9 @@ foreach($patient->_ref_consultations as $keyConsult => $consult){
 }
 
 $can_view_dossier_medical = 
-  CModule::getCanDo('dPcabinet')->read ||
-  CModule::getCanDo('dPbloc')->read ||
-  CModule::getCanDo('dPplanningOp')->read || 
+  CModule::getCanDo('dPcabinet')->edit ||
+  CModule::getCanDo('dPbloc')->edit ||
+  CModule::getCanDo('dPplanningOp')->edit || 
   $AppUI->_ref_user->isFromType(array("Infirmière"));
 
 // Création du template

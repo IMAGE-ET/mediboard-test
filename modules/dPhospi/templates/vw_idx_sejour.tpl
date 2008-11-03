@@ -114,17 +114,21 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
     constantesMedicalesDrawn = false;
     refreshConstantesHack(sejour_id);
   }
+  {{if $can_view_dossier_medical}}
   if($('antecedents')){
     loadAntecedents(sejour_id);    
   }
+  {{/if}}
 }
 
+{{if $can_view_dossier_medical}}
 function loadAntecedents(sejour_id){
   var url = new Url;
   url.setModuleAction("dPcabinet","httpreq_vw_antecedents");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('antecedents', { waitingText: null } )
 }
+{{/if}}
 
 function loadResultLabo(sejour_id) {
   var url = new Url;
@@ -417,7 +421,7 @@ viewBilanService = function(service_id, date){
     
         <li><a href="#documents">Documents</a></li>
         
-        {{if $isPrescriptionInstalled}}
+        {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
         <li><a href="#antecedents">Antécédents</a></li>
         {{/if}}
         
@@ -521,12 +525,14 @@ viewBilanService = function(service_id, date){
         </div>
       </div>
 
+      {{if $can_view_dossier_medical}}
       <div id="antecedents" style="display: none;">
         <div class="big-info">
           Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
           consulter et modifier les antécédents du le patient concerné.
         </div>
       </div>
+      {{/if}}
       
     </td>
   </tr>

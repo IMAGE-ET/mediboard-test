@@ -255,7 +255,11 @@ if($service_id){
 	$sejoursParService[$service->_id] = $service;
 }
 
-
+$can_view_dossier_medical = 
+  CModule::getCanDo('dPcabinet')->edit ||
+  CModule::getCanDo('dPbloc')->edit ||
+  CModule::getCanDo('dPplanningOp')->edit || 
+  $AppUI->_ref_user->isFromType(array("Infirmière"));
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -270,6 +274,7 @@ $smarty->assign("totalLits"              , $totalLits);
 $smarty->assign("date"                   , $date);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
+$smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("demain"                 , mbDate("+ 1 day", $date));
 $smarty->assign("services"               , $services);
 $smarty->assign("sejoursParService"      , $sejoursParService);
