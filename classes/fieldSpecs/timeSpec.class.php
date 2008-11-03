@@ -67,7 +67,7 @@ class CTimeSpec extends CMbFieldSpec {
     if ($form) {
       $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="time" />';
       if (!$this->notNull) {
-        $html .= '<button class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
+        $html .= '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
       }
     $html .= '<script type="text/javascript">Main.add(function() { new TimePicker("'.$form.'", "'.$field.'"); } ); </script>';
     }
