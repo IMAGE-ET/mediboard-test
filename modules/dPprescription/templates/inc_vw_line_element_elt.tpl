@@ -103,17 +103,6 @@
       {{else}}
         <table>
           <tr>
-          <!-- 
-            <td style="border:none;">
-         
-             {{if !$line->signee}}
-			        <div class="little-info">
-						     Vous devez être le responsable de cette ligne pour rajouter des posologies <br />
-						  </div>
-						  {{/if}}
-						  
-			      </td>
-			       -->
 			      <td style="border:none;"> 
 			        <!-- Affichage des prises -->
 			        {{if $line->_ref_prises|@count}}
@@ -133,6 +122,7 @@
   </tr>
   {{/if}}
   {{/if}}
+  
   <tr>
     {{if $category->chapitre == "dmi"}}
     <td style="width: 25px">
@@ -144,7 +134,7 @@
     </td>
     {{/if}}
     <td {{if $category->chapitre != "dmi"}}colspan="3"{{else}}colspan="6"{{/if}}>
-      {{if $prescription->type == "sortie" || $line->_protocole}}
+      {{if $prescription->type != "sortie" || $line->_protocole}}
 	      <div style="float: right">
 	        <!-- Formulaire de selection d'un executant -->
 	        {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
@@ -156,6 +146,8 @@
       {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
     </td>   
   </tr>
+  
+  
   {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
   <tr>
   <td></td>
@@ -171,8 +163,8 @@
         </div>
      {{/if}}
     </td>
-    
-  
   </tr>
   {{/if}}
+  
+  
 </tbody>
