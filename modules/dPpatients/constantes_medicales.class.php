@@ -68,8 +68,8 @@ class CConstantesMedicales extends CMbObject {
     $specs['EVA']                    = 'float minMax|0|10';
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = "float";
-    $specs['_imc']                   = '';
-    $specs['_vst']                   = '';
+    $specs['_imc']                   = 'float';
+    $specs['_vst']                   = 'float';
     $specs['_ta_systole']            = 'num';
     $specs['_ta_diastole']           = 'num';
     return $specs;

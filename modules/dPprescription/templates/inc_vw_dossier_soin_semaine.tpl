@@ -42,36 +42,20 @@ Main.add(function () {
 </script>
 
 {{if $prescription->_id}}
-	<table class="tbl">
-	  <tr>
-	    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
-	  </tr>
-	  <tr>
-	    <td>Poids: {{$patient->_ref_constantes_medicales->poids}} kg</td>
-	    <td>Age: {{$patient->_age}}</td>
-	    <td>Taille: {{$patient->_ref_constantes_medicales->taille}}
-	  </tr>
-	</table>
 	<table>
 	  <tr>
 	    <td style="width: 1%">
-			 <table>
-			 	<tr>
-				  <td>
-					  <ul id="tab_categories_plan" class="control_tabs_vertical">
-						  {{if $prescription->_ref_lines_med_for_plan|@count}}
-						    <li><a href="#plan_med">Médicaments</a></li>
-						  {{/if}}
-							{{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
-							{{foreach from=$specs_chapitre->_list item=_chapitre}}
-							  {{if @is_array($prescription->_ref_lines_elt_for_plan.$_chapitre)}}
-							    <li><a href="#plan_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
-							  {{/if}}
-							{{/foreach}}
-					  </ul>	
-		 	      </td>
-	 	      </tr>
-	      </table>  
+			  <ul id="tab_categories_plan" class="control_tabs_vertical">
+				  {{if $prescription->_ref_lines_med_for_plan|@count}}
+				    <li><a href="#plan_med">Médicaments</a></li>
+				  {{/if}}
+					{{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
+					{{foreach from=$specs_chapitre->_list item=_chapitre}}
+					  {{if @is_array($prescription->_ref_lines_elt_for_plan.$_chapitre)}}
+					    <li><a href="#plan_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+					  {{/if}}
+					{{/foreach}}
+			  </ul>
 	    </td>
 	    <td>
 	      <table class="tbl">  
@@ -124,7 +108,7 @@ Main.add(function () {
 						      {{/foreach}}
 						    {{/foreach}}
 						  {{/foreach}}
-						{{/foreach}}	
+						{{/foreach}}
 	        </tbody>
 	      </table>
 	    </td>

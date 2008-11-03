@@ -35,14 +35,13 @@ Main.add(function () {
     <tr>
       <th class="title">Libelle</th>
       <th class="title">Nouvelles</th>
-      <th class="title">Dernières</th>
-      <th></th>
+      <th class="title" colspan="2">Dernières</th>
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=poids}} (Kg)</th>
       <td>{{mb_field object=$constantes field=poids size="4"}}</td>
       <td style="text-align: center">{{if $const->poids}}{{mb_value object=$const field=poids size="4"}}{{/if}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-poids" onchange="toggleGraph('constantes-medicales-poids');" /></td>
+      <td style="width: 0.1%;"><input type="checkbox" name="checkbox-constantes-medicales-poids" onchange="toggleGraph('constantes-medicales-poids');" /></td>
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=taille}} (cm)</th>

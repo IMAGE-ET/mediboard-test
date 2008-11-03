@@ -131,17 +131,9 @@ options = {
 };
 
 // We initalize the graphs with the default options
-initializeGraph(data.ta, options);
-initializeGraph(data.poids, options);
-initializeGraph(data.taille, options);
-initializeGraph(data.pouls, options);
-initializeGraph(data.temperature, options);
-initializeGraph(data.spo2, options);
-initializeGraph(data.score_sensibilite, options);
-initializeGraph(data.score_motricite, options);
-initializeGraph(data.score_sedation, options);
-initializeGraph(data.frequence_respiratoire, options);
-initializeGraph(data.EVA, options);
+{{foreach from=$data key=name item=field}}
+initializeGraph(data.{{$name}}, options);
+{{/foreach}}
 
 // And we put the the specific options
 data.ta.options.colors = ['silver', '#00A8F0', '#C0D800'];
@@ -215,6 +207,37 @@ Main.add(function () {
 
 });
 </script>
+
+{{assign var=patient value=$sejour->_ref_patient}}
+<table class="tbl">
+  <tr>
+    <th colspan="10" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+  </tr>
+  <tr>
+    <td style="width: 25%;">
+      {{mb_title object=$patient->_ref_constantes_medicales field=poids}}:
+      {{if $patient->_ref_constantes_medicales->poids}}
+        {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
+      {{else}}??{{/if}}
+    </td>
+    <td style="width: 25%;">
+      {{mb_title object=$patient field=naissance}}: 
+      {{mb_value object=$patient field=naissance}} ({{$patient->_age}} ans)
+    </td>
+    <td style="width: 25%;">
+      {{mb_title object=$patient->_ref_constantes_medicales field=taille}}:
+      {{if $patient->_ref_constantes_medicales->taille}}
+        {{mb_value object=$patient->_ref_constantes_medicales field=taille}} cm
+      {{else}}??{{/if}}
+    </td>
+    <td style="width: 25%;">
+      {{mb_title object=$patient->_ref_constantes_medicales field=_imc}}:
+      {{if $patient->_ref_constantes_medicales->_imc}}
+        {{mb_value object=$patient->_ref_constantes_medicales field=_imc}}
+      {{else}}??{{/if}}
+    </td>
+  </tr>
+</table>
 
 <table>
   <tr>

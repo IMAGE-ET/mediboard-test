@@ -238,6 +238,36 @@ showBefore = function(){
   <input type="hidden" name="nb_decalage" value="0" />
 </form>
 
+<table class="tbl">
+  <tr>
+    <th colspan="10" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+  </tr>
+  <tr>
+    <td style="width: 25%;">
+      {{mb_title object=$patient->_ref_constantes_medicales field=poids}}:
+      {{if $patient->_ref_constantes_medicales->poids}}
+        {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
+      {{else}}??{{/if}}
+    </td>
+    <td style="width: 25%;">
+      {{mb_title object=$patient field=naissance}}: 
+      {{mb_value object=$patient field=naissance}} ({{$patient->_age}} ans)
+    </td>
+    <td style="width: 25%;">
+      {{mb_title object=$patient->_ref_constantes_medicales field=taille}}:
+      {{if $patient->_ref_constantes_medicales->taille}}
+        {{mb_value object=$patient->_ref_constantes_medicales field=taille}} cm
+      {{else}}??{{/if}}
+    </td>
+    <td style="width: 25%;">
+      {{mb_title object=$patient->_ref_constantes_medicales field=_imc}}:
+      {{if $patient->_ref_constantes_medicales->_imc}}
+        {{mb_value object=$patient->_ref_constantes_medicales field=_imc}}
+      {{else}}??{{/if}}
+    </td>
+  </tr>
+</table>
+
 {{if !$mode_bloc}}
 	<ul id="tab_dossier_soin" class="control_tabs">
 	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}');"><a href="#jour">Administration</a></li>
@@ -247,30 +277,6 @@ showBefore = function(){
 {{/if}}
 
 <div id="jour" {{if !$mode_bloc}}style="display:none"{{/if}}>
-
-<table class="tbl">
-  <tr>
-    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
-  </tr>
-  <tr>
-    <td>Poids:
-      {{if $poids}}
-        {{$poids}} kg
-      {{else}}
-        ??
-      {{/if}}
-    </td>
-    <td>Age: {{$patient->_age}} ans</td>
-    <td>
-      Taille:
-      {{if $patient->_ref_constantes_medicales->taille}}
-        {{$patient->_ref_constantes_medicales->taille}} cm
-      {{else}}
-        ??
-      {{/if}}
-    </td>
-  </tr>
-</table>
 
 {{if $prescription_id}}
   {{if !$mode_bloc}}
