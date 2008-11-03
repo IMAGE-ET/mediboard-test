@@ -6,17 +6,11 @@ function startINSEE() {
   url.requestUpdate("INSEE");
 }
 
-function activateAntecedent(ant, active) {
-  oTypesAnt = document.editConfig["dPpatients[CAntecedent][types]"];
-  aTypesAnt = oTypesAnt.value.split('|').without('');
-  if(active && aTypesAnt.indexOf(ant) == -1) {
-    aTypesAnt.push(ant);
-  }
-  else {
-    aTypesAnt = aTypesAnt.without(ant);
-  }
-  oTypesAnt.value = aTypesAnt.join('|');
-}
+var oTokenAntecedents = null;
+Main.add(function () {
+  var oField = getForm("editConfig")["dPpatients[CAntecedent][types]"];
+  oTokenAntecedents = new TokenField(oField);
+});
 
 </script>
 
@@ -104,7 +98,7 @@ function activateAntecedent(ant, active) {
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>
-      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="100" />
       
     </th>
     <td class="text" colspan="3">
@@ -115,7 +109,7 @@ function activateAntecedent(ant, active) {
           <label>
             <input type="checkbox" name="types_antecedents[]" value="{{$ant}}" 
             {{if in_array($ant, $types_antecedents_active)}}checked="checked"{{/if}} 
-            onchange="activateAntecedent('{{$ant}}', this.checked)"
+            onchange="oTokenAntecedents.toggle('{{$ant}}', this.checked)"
             /> 
             {{tr}}CAntecedent.type.{{$ant}}{{/tr}}
           </label>
