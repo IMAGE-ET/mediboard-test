@@ -523,7 +523,7 @@ class CMbFieldSpec {
     $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
 
     if (!$this->notNull) {
-      $aHtml[] = '<button class="cancel notext" type="button" onclick="$V('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
+      $aHtml[] = '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
     }
     
     if ($register) {
