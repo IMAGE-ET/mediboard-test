@@ -217,4 +217,6 @@
 </table>
 
 <!-- Dossier Médical -->
-{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$object->_ref_dossier_medical}}
+{{if $can_view_dossier_medical}}
+  {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$object->_ref_dossier_medical}}
+{{/if}}
