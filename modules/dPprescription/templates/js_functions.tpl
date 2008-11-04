@@ -7,6 +7,7 @@ selDivPoso = function(type, line_id, type_elt){
   
   oDivFoisPar = $('foisPar'+type_elt+line_id);
   oDivTousLes = $('tousLes'+type_elt+line_id);
+  oDivDecalageIntervention = $('decalage_intervention'+type_elt+line_id);
   
   oFormPrise = document.forms['addPrise'+type_elt+line_id].show();
   
@@ -27,6 +28,9 @@ selDivPoso = function(type, line_id, type_elt){
       oFormPrise.decalage_prise.enable().show();
       oDivFoisPar.hide();
       oDivTousLes.show();
+      if(oDivDecalageIntervention){
+        oDivDecalageIntervention.hide();
+      }
     case  "moment"+type_elt: 
       if (oFormPrise.moment_unitaire_id.empty()) {
         $A(selectMoments.childNodes).each(function (optgroup) {
@@ -40,30 +44,43 @@ selDivPoso = function(type, line_id, type_elt){
       oFormPrise.unite_fois.enable().show();
       oDivFoisPar.show();
       oDivTousLes.hide();
+      if(oDivDecalageIntervention){
+        oDivDecalageIntervention.hide();
+      }
+    break;
+    case  "decalage_intervention"+type_elt: 
+      oFormPrise.decalage_intervention.enable().show();
+      oDivFoisPar.hide();
+      oDivTousLes.hide();
+      if(oDivDecalageIntervention){
+        oDivDecalageIntervention.show();
+      }
     break;
   }
-  
   if (type == "moment"+type_elt) {
     oDivFoisPar.hide();
     oDivTousLes.hide();
+    if(oDivDecalageIntervention){
+      oDivDecalageIntervention.hide();
+    }
   }
 }
 
-reloadPrises = function(prescription_line_id, type){
+reloadPrises = function(prescription_line_id, chapitre){
   url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_prises");
   url.addParam("prescription_line_id", prescription_line_id);
-  url.addParam("type", type);
-  url.requestUpdate('prises-'+type+prescription_line_id, { waitingText: null });
+  url.addParam("chapitre", chapitre);
+  url.requestUpdate('prises-'+chapitre+prescription_line_id, { waitingText: null });
 }
 
-onSubmitPrise = function(oForm, type){
+onSubmitPrise = function(oForm, chapitre){
   if (!checkForm(oForm) || !oForm.object_id.value){
     return;
   }
   return onSubmitFormAjax(oForm, { onComplete:
     function(){
-      reloadPrises(oForm.object_id.value, type);
+      reloadPrises(oForm.object_id.value, chapitre);
       oForm.quantite.value = 1;
       oForm.moment_unitaire_id.value = "";
   } });

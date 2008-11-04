@@ -140,6 +140,15 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 	        if($_line->duree < 0){
 	          $_line->duree = 1;
 	        }
+	        
+	        $_line->loadRefsPrises();
+	        foreach($_line->_ref_prises as &$_prise){
+			      if($_prise->decalage_intervention != NULL){
+							$signe_decalage_intervention = ($_prise->decalage_intervention >= 0) ? "+" : "";
+						  $_prise->heure_prise = mbTime("$signe_decalage_intervention $_prise->decalage_intervention HOURS", $hour_operation);	  
+						  $_prise->store();
+			      }
+	        }
         $_line->store();
       }
     }

@@ -159,6 +159,68 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
     }
   }
 }
+
+modifFormDate = function(nb_prises, form_name, protocole,line_id){
+  var oForm = document.forms[form_name];
+  
+  if(protocole == 0){
+    oDiv = $('info_date_'+line_id);
+    if(nb_prises > 0){
+	    oForm.hide();
+	    oDiv.show();
+    } else {
+      oForm.show();
+      oDiv.hide();
+    }
+  }
+
+  if(protocole == 1){
+	  if(nb_prises > 0){
+	    $V(oForm.duree,"1",false); 
+	    $V(oForm.jour_decalage,"I",false); 
+	    $V(oForm.decalage_line,"+0",false);
+	    $V(oForm.unite_decalage,"jour",false)
+	    $V(oForm.time_debut,"",false);
+	    $V(oForm.jour_decalage_fin,"",false);
+	    $V(oForm.decalage_line_fin,"",false);
+	    $V(oForm.unite_decalage_fin,"",false);
+	    $V(oForm.time_fin,"",false);
+	    
+	    $('img_'+oForm.decalage_line_fin.id).hide();
+	    $('img_'+oForm.decalage_line.id).hide();
+	    $('img_'+oForm.duree.id).hide();
+	    $(oForm.time_debut.id+"_trigger").hide();
+	    $(oForm.time_debut.id+"_cancel").hide();
+	    	    
+	    $(oForm.time_fin.id+"_trigger").hide();
+	    $(oForm.time_fin.id+"_cancel").hide();
+	    
+	    onSubmitFormAjax(oForm);
+	    
+	    oForm.duree.disabled = "disabled";
+	    oForm.jour_decalage.disabled = "disabled";
+	    oForm.decalage_line.disabled = "disabled";
+	    oForm.unite_decalage.disabled = "disabled";
+	    oForm.time_debut.disabled = "disabled";
+	    oForm.jour_decalage_fin.disabled = "disabled";
+	    oForm.decalage_line_fin.disabled = "disabled";
+	    oForm.unite_decalage_fin.disabled = "disabled";
+	    oForm.time_fin.disabled = "disabled";
+	    
+	  } else {
+	    oForm.duree.disabled = false;
+	    oForm.jour_decalage.disabled = false;
+	    oForm.decalage_line.disabled = false;
+	    oForm.unite_decalage.disabled = false;
+	    oForm.time_debut.disabled = false;
+	    oForm.jour_decalage_fin.disabled = false;
+	    oForm.decalage_line_fin.disabled = false;
+	    oForm.unite_decalage_fin.disabled = false;
+	    oForm.time_fin.disabled = false;
+	  }
+  }
+}
+
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}

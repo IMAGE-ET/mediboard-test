@@ -73,7 +73,7 @@ class CAdministration extends CMbMetaObject {
   	}
   	
     $dateFormat = "%d/%m/%Y à %Hh%M";
-  
+
   	$this->_view = "Administration du ".mbTransformTime(null, $this->dateTime, $dateFormat)." par {$this->_ref_administrateur->_view}";
   	if($this->object_class === "CPrescriptionLineMedicament") {
   		$this->_view .= " ({$this->_ref_object->_ref_produit->libelle})";

@@ -109,7 +109,7 @@ function submitAllElements(){
     $V(oForm.decalage_prise    , oFormPrise.decalage_prise.value);
   }
   
-  if (!oForm.token_med.value && !oForm.token_elt.value) {
+  if (!oForm.token_elt.value) {
     return false;
   }
   

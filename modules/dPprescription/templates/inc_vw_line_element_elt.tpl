@@ -95,7 +95,7 @@
 			    <td style="border:none">
 			      <img src="images/icons/a_right.png" title="" alt="" />
 			    </td>
-				  <td style="border:none; text-align: left;" id="prises-Soin{{$line->_id}}">
+				  <td style="border:none; text-align: left;" id="prises-{{$typeDate}}{{$line->_id}}">
 			        <!-- Parcours des prises -->
 			        {{include file="../../dPprescription/templates/line/inc_vw_prises_posologie.tpl" type="Soin"}}
 			    </td>
@@ -147,7 +147,6 @@
     </td>   
   </tr>
   
-  
   {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
   <tr>
   <td></td>
@@ -160,6 +159,4 @@
     </td>
   </tr>
   {{/if}}
-  
-  
 </tbody>

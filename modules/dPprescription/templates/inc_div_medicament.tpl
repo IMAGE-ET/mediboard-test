@@ -224,8 +224,6 @@ Main.add( function(){
     L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
     entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures
   </div>
-{{else}}
-<br />
 {{/if}}
 
 <!-- Declaration des tableaux permettant de stocker toutes les lignes -->

@@ -19,18 +19,24 @@ class CPrisePosologie extends CMbMetaObject {
   var $moment_unitaire_id    = null;
   var $quantite              = null;
   
+  // Fois par
   var $nb_fois               = null;
   var $unite_fois            = null;
+  
+  // Tous les
   var $nb_tous_les           = null;
   var $unite_tous_les        = null;
-  var $decalage_prise        = null;   // decalage de la prise J + $decalage (par defaut 0)
+  var $decalage_prise        = null;  // decalage de la prise J + $decalage (par defaut 0)
   var $unite_prise           = null;
-  
+
+  // I +/- X heures
+  var $decalage_intervention = null;  // decalage en heures par rapport à l'intervention
+  var $heure_prise           = null;  // heure calculée
+
   var $_type                 = null; // Type de prise
   var $_unite                = null; // Unite de la prise
   var $_heures               = null; // Heure de la prise
   var $_unite_temps          = null;
-  
   var $_quantite_with_kg     = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du poids
   var $_quantite_with_coef   = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du coef
   var $_unite_sans_kg        = null;  // Unite sans le kg
@@ -54,6 +60,8 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["unite_tous_les"]     = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
     $specs["decalage_prise"]     = "num min|0";
     $specs["unite_prise"]        = "text";
+    $specs["decalage_intervention"] = "num";
+    $specs["heure_prise"]           = "time";
     return $specs;
   }
   
@@ -117,6 +125,11 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_unite_temps = $this->unite_tous_les;
     	$this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
     }   
+    
+    if($this->heure_prise){
+      $this->_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
+      $this->_short_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
+    }
     
     if($this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
       $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1"));

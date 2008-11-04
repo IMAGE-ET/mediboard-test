@@ -200,7 +200,7 @@ Main.add( function(){
 				      		{{mb_label object=$_line field="ald"}}:
 						      {{if $_line->ald}}Oui{{else}}Non{{/if}}
 				        </td>
-				        <td> Exécutant: {{$_line->_ref_executant->_view}}</td>
+				        <td> Exécutant: {{if $_line->_ref_executant}}{{$_line->_ref_executant->_view}}{{else}}Aucun{{/if}}</td>
 				    </tr>
 			    {{/foreach}}
 			  {{/foreach}}

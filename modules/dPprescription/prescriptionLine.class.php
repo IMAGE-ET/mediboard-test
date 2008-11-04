@@ -68,6 +68,8 @@ class CPrescriptionLine extends CMbObject {
   var $_quantity_by_date = null;
   var $_prises_for_plan   = null;
 
+  var $_nb_prises_interv = null; // Nombre de prises qui dependent de l'intervention
+
   // Can fields
   var $_perm_edit = null;
   
@@ -210,6 +212,9 @@ class CPrescriptionLine extends CMbObject {
   function loadRefsPrises(){
     $this->_ref_prises = $this->loadBackRefs("prise_posologie");
     foreach ($this->_ref_prises as &$prise) {
+      if($prise->decalage_intervention != NULL){
+        $this->_nb_prises_interv++;
+      }
       $prise->_ref_object =& $this;
       $prise->loadRefsFwd();
     }
@@ -488,7 +493,7 @@ class CPrescriptionLine extends CMbObject {
 		 	}
 		 	
 		 	// Cle permettant de ranger les prises prevues, unite_prise si la prise est de type moment sinon prise->_id
-		 	$key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
+		 	$key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $_prise->unite_prise : $_prise->_id;
       
 		 	// Stockage des lignes qui composent le plan de soin
   	 	if($name_chap && $name_cat){
@@ -500,7 +505,7 @@ class CPrescriptionLine extends CMbObject {
   	 	}
 			
 		 	// Stockage du libelle de l'unite de prise
-		 	if($_prise->moment_unitaire_id){
+		 	if($_prise->moment_unitaire_id || $_prise->heure_prise){
 		 	  $this->_prises_for_plan[$_prise->unite_prise][$_prise->_id] = $_prise;
 		 	} else {
 		 	  $this->_prises_for_plan[$_prise->_id] = $_prise;
@@ -622,7 +627,7 @@ class CPrescriptionLine extends CMbObject {
 		  
 		  // Fois par avec comme unite jour
 		  if(($_prise->nb_fois && $_prise->unite_fois == 'jour') || ($_prise->quantite && !$_prise->moment_unitaire_id && 
-		      !$_prise->nb_fois && !$_prise->unite_fois && !$_prise->unite_tous_les && !$_prise->nb_tous_les)){
+		      !$_prise->nb_fois && !$_prise->unite_fois && !$_prise->unite_tous_les && !$_prise->nb_tous_les && !$_prise->heure_prise)){
 		    if($_prise->_heures){
 		     foreach($_prise->_heures as $_heure){
 		       $dateTimePrise = mbAddDateTime($_heure, $date);
@@ -637,6 +642,15 @@ class CPrescriptionLine extends CMbObject {
 		    }
 		  }
 		    
+		  // Heure de prises specifié (I+x heures)
+      if($_prise->heure_prise){
+        if(count($heures)){
+          $this->_quantity_by_date[$key_tab][$date]['quantites'][$heures[substr($_prise->heure_prise,0,2)]] += $_prise->quantite;
+        }
+        $this->_quantity_by_date[$key_tab][$date]['total'] += $_prise->quantite;
+		    $prise_comptee = 1;
+      }
+		  
 		 	// Aucun moment unitaire, seulement Tous les ou Fois par, permet la generation du plan sur 5 jours
 		 	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois) && !$prise_comptee){
 		 	  if($_prise->_unite_temps == 'jour'){

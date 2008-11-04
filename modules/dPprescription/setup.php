@@ -831,7 +831,13 @@ class CSetupdPprescription extends CSetup {
 					 ADD `user_executant_id` INT (11) UNSIGNED;";
    $this->addQuery($sql);
    
-   $this->mod_version = "0.59";
+   $this->makeRevision("0.59");
+   $sql = "ALTER TABLE `prise_posologie` 
+					 ADD `decalage_intervention` INT (11),
+					 ADD `heure_prise` TIME;";
+	 $this->addQuery($sql);
+
+	 $this->mod_version = "0.60";
    
   }  
 }

@@ -13,12 +13,15 @@ Main.add( function(){
 	  <input name="typePrise" type="radio" value="moment{{$type}}"   onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_moment{{$type}}"> Moment</label>
 	  <input name="typePrise" type="radio" value="foisPar{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}"> x fois par y</label>
 	  <input name="typePrise" type="radio" value="tousLes{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}"> Tous les x y</label>
+	  {{if $line->_protocole}}
+	  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_decalage_intervention{{$type}}"> I + x heures</label>
+	  {{/if}}
 	</form>
 </div>
 
 <br />
 
-<form name="addPrise{{$type}}{{$line->_id}}" action="?" method="post" style="display: none;" onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$type}}');">
+<form name="addPrise{{$type}}{{$line->_id}}" action="?" method="post" style="display: none;" onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$typeDate}}');">
   <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPprescription" />
@@ -51,6 +54,12 @@ Main.add( function(){
     {{mb_field object=$prise_posologie field=unite_tous_les}}
  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPrise$type$line_id}})
   </span>
+  
+  {{if $line->_protocole}}
+  <span id="decalage_intervention{{$type}}{{$line->_id}}" style="display: none;">
+  à I {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} heures
+  </span>
+  {{/if}}
   
   {{if $line->_id}}
     <button type="button" class="add notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>

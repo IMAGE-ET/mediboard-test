@@ -12,17 +12,19 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $prescription_line_id = mbGetValueFromGetOrSession("prescription_line_id");
-$type = mbGetValueFromGetOrSession("type");
+$typeDate = mbGetValueFromGetOrSession("chapitre");
 
 // Chargement de la ligne de prescription
-if($type == "Med"){
+if($typeDate == "Med"){
   // Medicaments
 	$prescription_line = new CPrescriptionLineMedicament();
   $prescription_line->load($prescription_line_id);
+  $type = "Med";
 } else {
   // Elements
 	$prescription_line = new CPrescriptionLineElement();
 	$prescription_line->load($prescription_line_id);
+  $type = "Soin";
 }
 
 // Chargement des prises de la ligne de prescription
@@ -35,8 +37,9 @@ $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 $smarty = new CSmartyDP();
 
 $smarty->assign("type", $type);
-$smarty->assign("line"       , $prescription_line);
-$smarty->assign("moments"         , $moments);
+$smarty->assign("typeDate" , $typeDate);
+$smarty->assign("line"     , $prescription_line);
+$smarty->assign("moments"  , $moments);
 
 $smarty->display("../../dPprescription/templates/line/inc_vw_prises_posologie.tpl");
 

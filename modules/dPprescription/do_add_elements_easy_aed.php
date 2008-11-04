@@ -9,7 +9,6 @@
 
 global $AppUI;
 
-$token_med          = mbGetValueFromPost("token_med");
 $token_elt          = mbGetValueFromPost("token_elt");
 $prescription_id    = mbGetValueFromPost("prescription_id");
 $debut              = mbGetValueFromPost("debut");
@@ -39,9 +38,6 @@ $medicaments = array();
 $elements = array();
 
 // Explode des listes d'elements et de medicaments
-if($token_med){
-  $medicaments = explode("|",$token_med);
-}
 if($token_elt){
   $elements    = explode("|",$token_elt);
 }

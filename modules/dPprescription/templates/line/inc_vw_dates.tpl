@@ -165,6 +165,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     
   </table>
  </form> 
+ <div id="info_date_{{$line->_id}}"class="little-info" style="display: none;">
+   Cette ligne de prescription est liée à l'intervention, elle est seulement appliquée le jour de l'intervention, le {{$line->debut|date_format:"%d/%m/%Y"}}
+ </div>
   {{else}}
 	  <table>
 	    <tr>
