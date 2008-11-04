@@ -152,11 +152,6 @@
   <tr>
   <td></td>
     <td>
-	    <div style="float: right">
-		    <!-- Formulaire de selection d'un executant -->
-		    {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
-		  </div>
-	 
      {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole}}
         <div id="stop-CPrescriptionLineElement-{{$line->_id}}"> 
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
