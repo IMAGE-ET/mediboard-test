@@ -91,7 +91,7 @@ window.opener.Document.refreshList(
     <td class="button text">
       <div id="multiple-info" class="little-info" style="display: none;">
         Pour pouvoir utiliser les choix multiples, cliquez sur les options voulues pour les sélectionner
-        tout en maintenant la touche <tt>CTRL</tt> si vous utilisez MS Windows (<tt>CMS</tt> avec Mac OS).
+        tout en maintenant la touche <tt>CTRL</tt> si vous utilisez MS Windows (<tt>CMD</tt> avec Mac OS).
       </div>
       <script type="text/javascript">
         function toggleOptions() {
