@@ -160,16 +160,17 @@ class CConsultation extends CCodable {
     $specs["patient_date_reglement"] = "date";
     $specs["tiers_date_reglement"]   = "date";
     $specs["du_patient"]          = "currency";
+    $specs["du_tiers"  ]            = "currency";
     $specs["_du_patient_restant"] = "currency";
     $specs["_reglements_total_patient"] = "currency";
-    $specs["du_tiers"]            = "currency";
+    $specs["_reglements_total_tiers"  ] = "currency";
+    $specs["_etat_reglement_patient"] = "enum list|reglee|non_reglee";
+    $specs["_etat_reglement_tiers"  ] = "enum list|reglee|non_reglee";
     
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date"]             = "date";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
-    $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
-    $specs["_etat_reglement_tiers"]= "enum list|reglee|non_reglee";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_prat_id"]          = "text";

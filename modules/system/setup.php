@@ -92,9 +92,7 @@ class CSetupsystem extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("1.0.7");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'MenuPosition', 'top');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("MenuPosition", "top");
     
     $this->makeRevision("1.0.8");
     $sql = "ALTER TABLE `message`

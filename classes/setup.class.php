@@ -33,6 +33,7 @@ class CSetup {
 
   /**
    * Creates a revision of a given name
+   * @param string $revision Revision number of form x.y
    */
   function makeRevision($revision) {
   	 
@@ -56,13 +57,17 @@ class CSetup {
     $this->functions[current($this->revisions)][] = $function;
   }
   
-  
+  /**
+   * Set a time limit for un actual upgrade
+   * @param int $limit Limits in seconds
+   */
   function setTimeLimit($limit){
     $this->timeLimit[current($this->revisions)] = $limit;
   }
   
   /**
    * Associates an SQL query to a module revision
+   * @param string $query SQL query
    */
   function addQuery($query) {
     // Table creation ?
@@ -84,9 +89,21 @@ class CSetup {
     
     $this->queries[current($this->revisions)][] = $query;
   }
-
+  
+  /**
+   * Add a preference query to current revision definition 
+   * @param string $name Name of the preference
+   * @param string $default Default value of the preference
+   */
+  function addPrefQuery($name, $default) {
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
+      VALUES ('0', '$name', '$default');";
+    $this->addQuery($sql);
+  }
+  
   /**
    * Registers a table in the module
+   * @param string $table Table name
    */
   function addTable($table) {
     if (in_array($table, $this->tables)) {
@@ -97,6 +114,7 @@ class CSetup {
 
   /**
    * Remove a table in the module
+   * @param string $table Table name
    */
   function dropTable($table) {
     CMbArray::removeValue($table, $this->tables);
@@ -104,6 +122,8 @@ class CSetup {
 
   /**
    * Change a table name in the module
+   * @param string $tableFrom Table former name
+   * @param string $tableFrom Table latter name
    */
   function renameTable($tableFrom, $tableTo) {
     $this->dropTable($tableFrom);
@@ -124,6 +144,7 @@ class CSetup {
      
   /**
    * Launches module upgrade process
+   * @param string $oldRevision revision befoire upgrade
    */
   function upgrade($oldRevision) {
     global $AppUI;

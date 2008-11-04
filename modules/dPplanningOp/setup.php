@@ -622,10 +622,8 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.66");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'mode', '1');";
-    $this->addQuery($sql);
-    
+    $this->addPrefQuery("mode", "1");
+        
     $this->makeRevision("0.67");
     $sql = "UPDATE `user_preferences` SET `pref_name` = 'mode_dhe' WHERE `pref_name` = 'mode';";
     $this->addQuery($sql);

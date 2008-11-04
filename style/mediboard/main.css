@@ -1182,6 +1182,14 @@ div.big-error {
   div.message {
     display: none;
   }
+  
+  div#goUp {
+  	display: none;
+  }
+
+  div#performance {
+  	display: none;
+  }
 }
 
   /* @import "./tooltip.css   */

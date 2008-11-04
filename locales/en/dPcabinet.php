@@ -1554,4 +1554,6 @@ $locales['CTechniqueComp-title-create'] = '';
 $locales['CTechniqueComp-title-modify'] = '';
 $locales['CTechniqueComp.all'] = '';
 $locales['CTechniqueComp.select'] = '';
+$locales['pref-resumeCompta'] = '';
+$locales['pref-resumeCompta-desc'] = '';
 ?>

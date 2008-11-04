@@ -571,9 +571,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.61");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'DefaultPeriod', 'month');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("DefaultPeriod", "month");
     
     $this->makeRevision("0.62");
     $sql = "ALTER TABLE `tarifs` " .
@@ -592,19 +590,13 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.63");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'simpleCabinet', '0');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("simpleCabinet", "0");
     
     $this->makeRevision("0.64");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'GestionFSE', '0');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("GestionFSE", "0");
     
     $this->makeRevision("0.65");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'DossierCabinet', 'dPcabinet');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("DossierCabinet", "dPcabinet");
     
     $this->makeRevision("0.66");
     $sql = "UPDATE `consultation` SET  `rques` = NULL  WHERE `rques` = 'NULL'";
@@ -621,9 +613,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.68");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'ccam', '0');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("ccam", "0");
     
     $this->makeRevision("0.69");
     $sql = "ALTER TABLE `tarifs` ADD `codes_ccam` VARCHAR(255);";
@@ -1033,9 +1023,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.98");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
-        "\nVALUES ('0', 'view_traitement', '1');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("view_traitement", "1");
     
     $this->makeRevision("0.99");
     // Table temporaire contenant les consultation_id des accident_travail à 1
@@ -1063,9 +1051,7 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("1.00");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
-            VALUES ('0', 'autoCloseConsult', '0');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("autoCloseConsult", "0");
     
     $this->makeRevision("1.01");
     $sql = "ALTER TABLE `acte_ngap` 
@@ -1194,7 +1180,10 @@ class CSetupdPcabinet extends CSetup {
     $sql = "SELECT 'Dummy Query'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.07";
+    $this->makeRevision("1.07");
+    $this->addPrefQuery("resumeCompta", "1");
+    
+    $this->mod_version = "1.08";
   }
 }
 ?>

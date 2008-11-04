@@ -37,7 +37,7 @@
   {{assign var="mod" value="ecap"}}
   {{assign var="class" value="dhe"}}
   <tr>
-    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}</th>
+    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}{{/tr}}</th>
   </tr>
 
   {{assign var="var" value="rooturl"}}
@@ -56,7 +56,7 @@
   {{assign var="mod" value="ecap"}}
   {{assign var="class" value="soap"}}
   <tr>
-    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}</th>
+    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}{{/tr}}</th>
   </tr>
 
   {{assign var="var" value="rooturl"}}

@@ -24,16 +24,9 @@ var PlageConsultSelector = {
   set: function(heure, id, date, freq, chir_id, chirname) {
     var oForm = document[this.sForm];
     oForm[this.sHeure].value = heure;
-    oForm[this.sPlageconsult_id].value = id;
-    
     oForm[this.sDate].value = date;
-     
     oForm[this.sDuree].value = freq;
     oForm[this.sChir_id].value = chir_id;
- 
-     if(oForm[this.sPlageconsult_id].onchange){
-        oForm[this.sPlageconsult_id].onchange();
-     }
-         
+    $V(oForm[this.sPlageconsult_id], id, true);
   }
 }

@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <th>
-      <a href="#" onclick="window.print()">
+      <a href="#print" onclick="window.print()">
         Main courante du {{$date|date_format:"%A %d %b %Y"}}
       </a>
     </th>
@@ -10,9 +10,9 @@
     <td>
       <table class="tbl">
         <tr>
-			    <th>{{mb_label class=CRPU field=ccmu         }}</th>
-			    <th>{{mb_label class=CRPU field=_patient_id" }}</th>
-			    <th>{{mb_label class=CRPU field=_entree      }}</th>
+			    <th>{{mb_label class=CRPU field=ccmu       }}</th>
+			    <th>{{mb_label class=CRPU field=_patient_id}}</th>
+			    <th>{{mb_label class=CRPU field=_entree    }}</th>
 			    <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
 			    <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
 		  	  <th>Prise en charge</th>
@@ -32,7 +32,7 @@
 			    <td>{{$sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 			    <td>{{$sejour->_ref_praticien->_view}}</td>
 			    <td>{{$rpu->diag_infirmier|nl2br}}</td>
-			    <td>({{$rpu->_count_consultations}})
+			    <td>
 			    {{if $consult->_id}}
 			    {{$consult->_ref_plageconsult->_ref_chir->_view}}
 			    {{/if}}

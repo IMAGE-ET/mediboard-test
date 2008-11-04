@@ -17,6 +17,20 @@ class CMedicap {
       "documents" => "/GestionDocumentaire.asmx",
     ),
   );
+  
+  static $urls = array();
+  
+  static function makeURLs() {
+    $soap = CAppUI::conf("ecap soap");
+    $dhe = CAppUI::conf("ecap dhe");
+    
+    self::$urls = array (
+    "dhe" => $dhe["rooturl"] . "/InterfaceCabinets/Generique/AppelDHE.aspx",
+    "soap" => array (
+      "documents" => $soap["rooturl"] . "/GestionDocumentaire.asmx",
+      ),    
+    );
+  }
 }
 
 ?>

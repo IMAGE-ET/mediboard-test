@@ -120,7 +120,7 @@ delCibleTransmission = function() {
         <strong>{{$curr_suivi->text|nl2br}}</strong>
       </div>
     </td>
-    <td>
+    <td class="button">
     {{if $curr_suivi->user_id == $user->_id}}
       <form name="delObs{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_observation_aed" />

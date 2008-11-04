@@ -1554,4 +1554,6 @@ $locales['CTechniqueComp-title-create'] = '';
 $locales['CTechniqueComp-title-modify'] = '';
 $locales['CTechniqueComp.all'] = '';
 $locales['CTechniqueComp.select'] = '';
+$locales['pref-resumeCompta'] = 'Compta dans les résumés';
+$locales['pref-resumeCompta-desc'] = 'Afficher la comptabilité du patient dans le résumé de dossier';
 ?>

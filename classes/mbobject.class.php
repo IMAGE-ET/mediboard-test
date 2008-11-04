@@ -189,7 +189,8 @@ class CMbObject {
   }
 
   /**
-   * Chargement des Fichiers et Documents
+   * Load files for object
+   * @return int file count
    */
   function loadRefsFiles() {
     $file = new CFile();
@@ -199,6 +200,10 @@ class CMbObject {
     }
   }
 
+  /**
+   * Load documents for object
+   * @return int document count
+   */
   function loadRefsDocs() {
     $document = new CCompteRendu();
     if ($document->_ref_module && $this->_id) {
@@ -210,6 +215,10 @@ class CMbObject {
     }
   }
   
+  /**
+   * Load documents and files for object
+   * @return int document + files count
+   */
   function loadRefsFilesAndDocs() {
   	$nb_files = $this->loadRefsFiles();
     $nb_docs  = $this->loadRefsDocs();
@@ -224,10 +233,10 @@ class CMbObject {
     return $this->countBackRefs("files");
   }
   
-  function getNumDocsAndFiles($permType = null){
+  function getNumDocsAndFiles($permType = null) {
     $this->_nb_files_docs = $permType ? 
-                               $this->getNumDocsAndFilesWithPerm($permType) : 
-                               $this->getNumFiles() + $this->getNumDocs();
+      $this->getNumDocsAndFilesWithPerm($permType) : 
+      $this->getNumFiles() + $this->getNumDocs();
     return $this->_nb_files_docs;
   }
   

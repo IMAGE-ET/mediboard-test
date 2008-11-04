@@ -138,8 +138,7 @@ class CSetupdPhospi extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.21");
-    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` ) VALUES ('0', 'ccam_sejour', '0');";
-    $this->addQuery($sql);
+    $this->addPrefQuery("ccam_sejour", "0");
 
     $this->makeRevision("0.22");
     $sql = "ALTER TABLE `service`

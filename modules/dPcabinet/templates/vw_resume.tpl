@@ -18,25 +18,20 @@ function newExam(sAction, consultation_id) {
 
 </script>
 
-<!-- Dossier Médical -->
-{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$patient->_ref_dossier_medical}}
-
 <table class="tbl">
   <tr>
-    <th colspan="4" class="title">{{$patient->_view}}</th>
+    <th colspan="10" class="title">
+    	{{$patient->_view}}
+    </th>
   </tr>
 
-	</tr>
-    <th colspan="2">
-    	Fichiers du patient
-    </th>
-    <th colspan="2">
-    	Documents du patient
-    </th>
+	<tr>
+    <th style="width: 50%;">Fichiers du patient</th>
+    <th style="width: 50%;">Documents du patient</th>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td>
       {{foreach from=$patient->_ref_documents item=curr_doc}}
       <a href="#document-{{$curr_doc->_id}}" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
         {{$curr_doc->nom}}
@@ -45,7 +40,7 @@ function newExam(sAction, consultation_id) {
       <em>Aucun</em>
       {{/foreach}}
     </td>
-    <td colspan="2">
+    <td>
       {{foreach from=$patient->_ref_files item=curr_file}}
       <a href="#file-{{$curr_file->_id}}" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
         {{$curr_file->file_name}}
@@ -55,14 +50,37 @@ function newExam(sAction, consultation_id) {
       {{/foreach}}
     </td>
   </tr>
-  
+</table>
+
+<!-- Dossier Médical -->
+{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$patient->_ref_dossier_medical}}
+
+<table class="tbl">
   <tr>
-    <th colspan="4" class="title">Consultations</th>
+    <th colspan="4" class="title">
+    	<div style="float:right">
+	    	<input type="checkbox" id="toggle_compta" onchange="Compta.toggle();" 
+	    		{{if $app->user_prefs.resumeCompta == 1}}checked="checked"{{/if}}
+	    		/>
+	    	<label for="toggle_compta" title="Afficher/masquer les données comptables">Compta</label>
+	    	<script type="text/javascript">
+	    	var Compta = {
+	    	  toggle: function() {
+	    	    $$(".compta").each(Element[($V("toggle_compta") ? "show" : "hide")]);
+	    	  }
+	    	}
+	    	
+	    	Main.add(Compta.toggle);
+	    	</script>
+    	</div>
+
+    	Consultations
+    </th>
   </tr>
   <tr>
     <th>Résumé</th>
     <th>Documents</th>
-    <th>
+    <th class="compta">
       <label title="Réglements du patient et l'assurance maladie, en rouge si non réglé en totalité">
         Règlement<br />Patient - AM
       </label>
@@ -77,23 +95,23 @@ function newExam(sAction, consultation_id) {
       &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
         {{if $curr_consult->motif}}
 	      <br />
-	      <strong>Motif:</strong>
-	      <i>{{$curr_consult->motif}}</i>
+	      <strong>{{mb_label object=$curr_consult field=motif}}</strong>
+	      <em>{{mb_value object=$curr_consult field=motif}}</em>
 	    {{/if}}
 	    {{if $curr_consult->rques}}
 	      <br />
-	      <strong>Remarques:</strong>
-	      <i>{{$curr_consult->rques}}</i>
+	      <strong>{{mb_label object=$curr_consult field=rques}}</strong>
+	      <em>{{mb_value object=$curr_consult field=rques}}</em>
 	    {{/if}}
 	    {{if $curr_consult->examen}}
 	      <br />
-	      <strong>Examens:</strong>
-	      <i>{{$curr_consult->examen}}</i>
+	      <strong>{{mb_label object=$curr_consult field=examen}}</strong>
+	      <em>{{mb_value object=$curr_consult field=examen}}</em>
 	    {{/if}}
 	    {{if $curr_consult->traitement}}
 	      <br />
-	      <strong>Traitement:</strong>
-	      <i>{{$curr_consult->traitement}}</i>
+	      <strong>{{mb_label object=$curr_consult field=traitement}}</strong>
+	      <em>{{mb_value object=$curr_consult field=traitement}}</em>
 	    {{/if}}
 	    {{if $curr_consult->_ref_examaudio->examaudio_id}}
 	      <br />
@@ -115,23 +133,24 @@ function newExam(sAction, consultation_id) {
       {{/foreach}}
     </td>
     
-    <td style="text-align: center">
+    <td  class="compta" style="text-align: center">
     {{if $curr_consult->tarif}}
       {{if $curr_consult->du_patient}}
       <div style="display: inline; {{if !$curr_consult->patient_date_reglement}} color: #f00;{{/if}}">
-        {{$curr_consult->_reglements_total_patient}}&euro;
+        {{mb_value object=$curr_consult field=_reglements_total_patient}}
       </div>
       /
       {{/if}}
-      {{$curr_consult->du_patient}}&euro;
+
+      {{mb_value object=$curr_consult field=du_patient}}
       -
       {{if $curr_consult->du_tiers}}
       <div style="display: inline; {{if !$curr_consult->tiers_date_reglement}} color: #f00;{{/if}}">
-        {{$curr_consult->_reglements_total_tiers}}&euro;
+        {{mb_value object=$curr_consult field=_reglements_total_tiers}}
       </div>
       /
       {{/if}}
-      {{$curr_consult->du_tiers}}&euro;
+      {{mb_value object=$curr_consult field=du_tiers}}
     {{/if}}
     </td>
   </tr>
