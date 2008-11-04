@@ -61,9 +61,10 @@ function closeApplyAdministrations(dontClose) {
 	  {{foreach from=$adm item=by_unite_prise key=unite_prise name=adm_by_unite_prise}}
 	    {{foreach from=$by_unite_prise item=by_date key=date}}
 	      {{foreach from=$by_date item=by_hour key=hour}}
-	        {{assign var=_unite value=$unite_prise|utf8_decode}}
-	        {{assign var=key value="$line_id-$_unite-$date-$hour"|smarty:nodefaults|JSAttribute}}
-	        {{if $smarty.foreach.adm_by_unite_prise.first}}
+          {{assign var=_unite value=$by_hour.unite_prise|smarty:nodefaults|JSAttribute}}
+          {{assign var=_prise value=$by_hour.prise_id|smarty:nodefaults|JSAttribute}}
+          {{assign var=key value="$line_id-$_unite-$_prise-$date-$hour"|smarty:nodefaults|JSAttribute}}
+          {{if $smarty.foreach.adm_by_unite_prise.first}}
 	        <tr>
 	          <th class="title" colspan="2">{{$by_hour.line->_view}}</th>
 	        </tr>

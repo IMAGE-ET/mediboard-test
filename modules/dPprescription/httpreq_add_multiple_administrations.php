@@ -19,6 +19,8 @@ if (count($adm) > 0) {
 		$ad['prise_id']    =  is_numeric($ad['key_tab'])  ? $ad['key_tab'] : '';
 		$ad['unite_prise'] = !is_numeric($ad['key_tab'])  ? utf8_decode($ad['key_tab']) : '';
 		
+		$ad['key_tab'] = str_replace('/', '-', $ad['key_tab']);
+		
 		// Un peu d'initialisation lourde ...
 	  if (!isset($list_administrations[$ad['line_id']])) {
 	    $list_administrations[$ad['line_id']] = array();
