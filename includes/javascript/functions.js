@@ -269,9 +269,12 @@ var Console = {
       eDiv.setStyle({ marginLeft: nIndent + "em" });
     }
 
-    var eParent = $(this.id);
-    eParent.insert(eDiv);
-    eParent.scrollTop = eParent.scrollHeight;
+    $(this.id).insert(eDiv);
+    Console.scrollDown.defer();
+  },
+  
+  scrollDown: function() {
+    $(Console.id).scrollTop = $(Console.id).scrollHeight;
   },
   
   traceValue: function(oValue) {
