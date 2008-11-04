@@ -25,6 +25,7 @@
 	       </form>
        {{/if}}
      </td>
+     {{if $line->category_prescription_id}}
      <td>
        {{if $line->_can_vw_form_executant}}
          <div style="float: right">
@@ -33,6 +34,7 @@
        {{/if}}
        {{$line->commentaire}}
      </td>
+     {{/if}}
      <td style="width: 25px">
        {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
      </td>

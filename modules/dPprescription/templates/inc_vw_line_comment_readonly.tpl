@@ -6,7 +6,9 @@
        {{$line->commentaire}}
      </td>
      <td style="text-align: right;">
-     <b>Exécutant</b>: {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
+     {{if $line->category_prescription_id}}
+       <b>Exécutant</b>: {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
+     {{/if}}
        <b>{{mb_label object=$line field="ald"}}</b>: {{if $line->ald}}Oui{{else}}Non{{/if}}
        
        <!-- Affichage de la signature du praticien -->
