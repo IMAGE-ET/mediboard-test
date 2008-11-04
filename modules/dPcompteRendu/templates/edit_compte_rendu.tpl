@@ -73,27 +73,42 @@ window.opener.Document.refreshList(
     </td>
   </tr>
   {{/if}}
+
+  {{if $lists|@count}}
   <tr>
     <td class="listeChoixCR" id="liste">
-      {{if $lists|@count}}
-      <ul>
         {{foreach from=$lists item=curr_list}}
-        <li>
-          <select name="_liste{{$curr_list->liste_choix_id}}" style="max-width: 150px;">
+          <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]">
             <option value="undef">&mdash; {{$curr_list->nom}}</option>
             {{foreach from=$curr_list->_valeurs item=curr_valeur}}
-            <option value="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
+            <option value="{{$curr_valeur}}" title="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
             {{/foreach}}
           </select>
-        </li>
         {{/foreach}}
-        <li>
-          <button class="tick notext" type="submit">{{tr}}Save{{/tr}}</button>
-        </li>
-      </ul>
-      {{/if}}
     </td>
   </tr>
+  <tr>
+    <td class="button text">
+      <div id="multiple-info" class="little-info" style="display: none;">
+        Pour pouvoir utiliser les choix multiples, cliquez sur les options voulues pour les sélectionner
+        tout en maintenant la touche <tt>CTRL</tt> si vous utilisez MS Windows (<tt>CMS</tt> avec Mac OS).
+      </div>
+      <script type="text/javascript">
+        function toggleOptions() {
+          $$("#liste select").each(function(select) {
+            select.size = select.size != 4 ? 4 : 1;
+            select.multiple = select.multiple != true ? true : false;
+            select.options[0].selected = false;
+          } );
+          $("multiple-info").toggle();
+        }
+      </script>
+      <button class="hslip" type="button" onclick="toggleOptions();">{{tr}}Multiple options{{/tr}}</button>
+      <button class="tick" type="submit">{{tr}}Save{{/tr}}</button>
+    </td>
+  </tr>
+  {{/if}}
+
   <tr>
     <td style="height: 600px">
       <textarea id="htmlarea" name="source">

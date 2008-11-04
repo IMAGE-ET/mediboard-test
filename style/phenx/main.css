@@ -1892,15 +1892,10 @@ table#weber td {
 }
 
 /* Liste de choix dans les comptes rendus */
-td.listeChoixCR ul {
-  list-style-type: none;
-  list-style-position: inside;
-}
-
-td.listeChoixCR ul li {
-  display: inline;
-  float: left;
-  margin: 2px 2px 2px 0px;
+td.listeChoixCR select {
+	margin: 1px;
+	float: left;
+  width: 120px;	
 }
 
 /* Installation wizard */
