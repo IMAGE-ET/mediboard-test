@@ -31,44 +31,32 @@ function storageMain(){
 }
 
 function vwEtatButton(iEtat){
+  $('tdMenuRecupServ').className  = "button";
+  $('tdMenuRecupRepas').className = "button";
+  $('tdMenuModifRepas').className = "button";
+  $('tdMenuSynchro').className    = "button";
   switch (iEtat) {
     case ETAT_DEFAULT:
-      $('tdMenuRecupServ').className  = "button iconSelected";
-      $('tdMenuRecupRepas').className = "button";
-      $('tdMenuModifRepas').className = "button";
-      $('tdMenuSynchro').className    = "button";
-      break;
     case ETAT_SERV_RECUP:
-      $('tdMenuRecupServ').className  = "button iconSelected";
-      $('tdMenuRecupRepas').className = "button";
-      $('tdMenuModifRepas').className = "button";
-      $('tdMenuSynchro').className    = "button";
+      $('tdMenuRecupServ').addClassName("iconSelected");
       break;
     case ETAT_REPAS_RECUP:
-      $('tdMenuRecupServ').className  = "button";
-      $('tdMenuRecupRepas').className = "button iconSelected";
-      $('tdMenuModifRepas').className = "button";
-      $('tdMenuSynchro').className    = "button";
+      $('tdMenuRecupRepas').addClassName("iconSelected");
       break;
     case ETAT_REPAS_MODIF:
-      $('tdMenuRecupServ').className  = "button";
-      $('tdMenuRecupRepas').className = "button";
-      $('tdMenuModifRepas').className = "button iconSelected";
-      $('tdMenuSynchro').className    = "button";
+      $('tdMenuModifRepas').addClassName("iconSelected");
       break;
     case ETAT_SYNCH:
-      $('tdMenuRecupServ').className  = "button";
-      $('tdMenuRecupRepas').className = "button";
-      $('tdMenuModifRepas').className = "button";
-      $('tdMenuSynchro').className    = "button iconSelected";
+      $('tdMenuSynchro').addClassName("iconSelected");
       break;
   }
 }
 
 function setEtatOffline(iEtat){
   if(!odPrepas){
-    odPrepas = {}
-    odPrepas["config"] = {};
+    odPrepas = {
+      config: {}
+    };
   }
   vwEtatButton(iEtat);
   odPrepas["config"]["etatOffline"] = iEtat;

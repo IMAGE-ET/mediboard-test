@@ -110,7 +110,8 @@ function $V (element, value, fire) {
     if (!Object.isUndefined(value) && value != oldValue) {
       element.setValue(value);
       if (fire) {
-        (element.onchange || Prototype.emptyFunction).bind(element)();
+        (element.onchange || Prototype.emptyFunction).bindAsEventListener(element)();
+        element.fire("ui:change");
       }
     }
     
@@ -200,15 +201,15 @@ function putHelperContent(oElem, sFieldSelect) {
   }
 }
 
-function notNullOK(oElement) {
-  if (!Object.isElement(oElement)) oElement = oElement.element();
+function notNullOK(oEvent) {
+  var oElement = oEvent.element();
   if (oLabel = oElement.getLabel()) {
     oLabel.className = ($V(oElement) ? "notNullOK" : "notNull");
-  } 
+  }
 }
 
-function canNullOK(oElement) {
-  if (!Object.isElement(oElement)) oElement = oElement.element();
+function canNullOK(oEvent) {
+  var oElement = oEvent.element();
   if (oLabel = oElement.getLabel()) {
     oLabel.className = ($V(oElement) ? "notNullOK" : "canNull");
   } 
@@ -376,21 +377,25 @@ function prepareForm(oForm, bForcePrepare) {
 		        props.min || props.max || props.minMax || props.bool || props.ref || props.pct || props.num
 		      ), "'"+oElement.id+"' mask may conflit with other props");
 		    }
-		    
-			// Not null
-		  if (elementClassNames.indexOf("notNull") != -1) {
-		      notNullOK(oElement);
-		      oElement.observe("change", notNullOK);
-		      oElement.observe("keyup", notNullOK);
+
+			  // Not null
+    	  if (elementClassNames.indexOf("notNull") != -1) {
+          oElement.observe("change", notNullOK)
+                  .observe("keyup",  notNullOK)
+                  .observe("ui:change", notNullOK);
 		    }
-		    
-			// Can null
-		  if (elementClassNames.indexOf("canNull") != -1) {
-		      canNullOK(oElement);
-		      oElement.observe("change", canNullOK);
-		      oElement.observe("keyup", canNullOK);
-		    }
-		    
+
+        // Can null
+        if (elementClassNames.indexOf("canNull") != -1) {
+          oElement.observe("change", canNullOK)
+                  .observe("keyup",  canNullOK)
+                  .observe("ui:change", canNullOK);
+        }
+        
+        // ui:change is a custom event fired on the native onchange throwed by $V, 
+        // because fire doesn't work with native events 
+        oElement.fire("ui:change");
+
 		    // Select tree
 		    if (elementClassNames.indexOf("select-tree") != -1 && Prototype.Browser.Gecko) {
 		      oElement.buildTree();

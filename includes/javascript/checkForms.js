@@ -388,7 +388,7 @@ Object.extend(ElementChecker, {
         this.addError("bool", "Ne peut être différent de 0 ou 1");
     },
     
-    // enum
+    // enum (must be surrounded by quotes, IE bug)
     "enum": function() {
       if (!this.oProperties.list) {
         Console.error("Spécification 'list' manquante pour le champ " + this.sLabel);

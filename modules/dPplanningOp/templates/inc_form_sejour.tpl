@@ -42,7 +42,7 @@ function checkSejour() {
 function checkPresta(){
   var oForm = document.editSejour;
   var oFormEasy = document.editOpEasy;
-  if(oForm.prestation_id.value != ""){
+  if($V(oForm.prestation_id) != ""){
     if (oForm) {
       $V(oForm.chambre_seule, "1");
     }
@@ -60,7 +60,7 @@ function checkChambreSejour(){
   $V(oFormEasy.chambre_seule, valeur_chambre, false);
   
   if(valeur_chambre == "0"){
-    oForm.prestation_id.value = "";
+    $V(oForm.prestation_id, "", false);
   }
 }
 
@@ -72,7 +72,7 @@ function checkChambreSejourEasy(){
   $V(oForm.chambre_seule, valeur_chambre);
   
   if(valeur_chambre == "0"){
-    oForm.prestation_id.value = "";
+    $V(oForm.prestation_id, "", false);
   }
 }
 

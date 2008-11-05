@@ -777,9 +777,9 @@ var ObjectTooltip = Class.create({
     var eTrigger = $(this.sTrigger);  
     
     var eDiv  = Dom.cloneElemById("tooltipTpl",true);
-    eDiv.hide();
-    eDiv.addClassName(this.mode.sClass);
-    eDiv.removeAttribute("_extended");
+    eDiv.hide()
+        .addClassName(this.mode.sClass)
+        .removeAttribute("_extended");
     this.sDiv = eDiv.identify();
     eTrigger.insert({after: eDiv});
     
@@ -965,8 +965,9 @@ Object.extend(Calendar, {
         daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
         button      : sInputId + "_trigger",
         showsTime   : bTime,
-        dateStatusFunc: Calendar.dateStatus.bind(dates)
-      } 
+        dateStatusFunc: Calendar.dateStatus.bind(dates),
+        onUpdate    : function () {$(sInputId).fire("ui:change")}
+      }
     );
   }
 } );
@@ -991,7 +992,8 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
       ifFormat    : "%Y-%m-%d" + (bTime ? " %H:%M:%S" : ""),
       daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
       button      : sInputId + "_trigger",
-      showsTime   : bTime
+      showsTime   : bTime,
+      onUpdate    : function () {$(sInputId).fire("ui:change")}
     } 
   );
 }
@@ -1262,13 +1264,6 @@ var Note = Class.create({
 // *******
 var notWhitespace   = /\S/;
 Dom = {
-  createMessage : function (sMsg, sClassName) {
-    var eDiv = document.createElement("div");
-    eDiv.className = sClassName;
-    eDiv.innerHTML = sMsg;
-    return eDiv;
-  },
-  
   writeElem : function(elem_replace_id,elemReplace){
     elem = $(elem_replace_id);
     while (elem.firstChild) {

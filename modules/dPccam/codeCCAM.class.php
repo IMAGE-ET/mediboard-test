@@ -188,9 +188,7 @@ class CCodeCCAM {
   
   function getTarification() {
     $ds =& $this->_spec->ds;
-    $query = "SELECT * FROM infotarif WHERE ";
-    $query .= $ds->prepare("CODEACTE = %", $this->code);
-    $query .= " ORDER BY DATEEFFET DESC";
+    $query = $ds->prepare("SELECT * FROM infotarif WHERE CODEACTE = % ORDER BY DATEEFFET DESC", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $this->remboursement = $row["REMBOURSEMENT"];
@@ -246,9 +244,9 @@ class CCodeCCAM {
   function getActivites() {
     $ds =& $this->_spec->ds;
     // Extraction des activités
-    $query = "SELECT ACTIVITE AS numero " .
-        "\nFROM activiteacte " .
-        "\nWHERE CODEACTE = %";
+    $query = "SELECT ACTIVITE AS numero
+				      FROM activiteacte
+				      WHERE CODEACTE = %";
     $query = $ds->prepare($query, $this->code);
     $result = $ds->exec($query);
     while($obj = $ds->fetchObject($result)) {
@@ -265,9 +263,9 @@ class CCodeCCAM {
     // Détail des activités
     foreach($this->activites as &$activite) {
       // Type de l'activité
-      $query = "SELECT LIBELLE AS `type`" .
-          "\nFROM activite " .
-          "\nWHERE CODE = %";
+      $query = "SELECT LIBELLE AS `type`
+			          FROM activite
+			          WHERE CODE = %";
       $query = $ds->prepare($query, $activite->numero);
       $result = $ds->exec($query);
       $obj = $ds->fetchObject($result);
@@ -298,11 +296,11 @@ class CCodeCCAM {
   function getModificateursFromActivite(&$activite) {
     $ds =& $this->_spec->ds;
     // recherche de la dernière date d'effet
-    $query = "SELECT MAX(DATEEFFET) AS LASTDATE".
-        "\nFROM modificateuracte" .
-        "\nWHERE CODEACTE = %1" .
-        "\nAND CODEACTIVITE = %2" .
-        "\nGROUP BY CODEACTE";
+    $query = "SELECT MAX(DATEEFFET) AS LASTDATE
+			        FROM modificateuracte
+			        WHERE CODEACTE = %1
+			        AND CODEACTIVITE = %2
+			        GROUP BY CODEACTE";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
@@ -310,19 +308,19 @@ class CCodeCCAM {
     // Extraction des modificateurs
     $activite->modificateurs = array();
     $modificateurs =& $activite->modificateurs;
-    $query = "SELECT * FROM modificateuracte " .
-        "\nWHERE CODEACTE = %1" .
-        "\nAND CODEACTIVITE = %2" .
-        "\nAND DATEEFFET = '$lastDate'" .
-        "\nGROUP BY MODIFICATEUR";
+    $query = "SELECT * FROM modificateuracte
+			        WHERE CODEACTE = %1
+			        AND CODEACTIVITE = %2
+			        AND DATEEFFET = '$lastDate'
+			        GROUP BY MODIFICATEUR";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
     
     while($row = $ds->fetchArray($result)) {
-      $query = "SELECT CODE AS code, LIBELLE AS libelle" .
-          "\nFROM modificateur " .
-          "\nWHERE CODE = %" .
-          "\nORDER BY CODE";
+      $query = "SELECT CODE AS code, LIBELLE AS libelle
+			          FROM modificateur
+			          WHERE CODE = %
+			          ORDER BY CODE";
       $query = $ds->prepare($query, $row["MODIFICATEUR"]);
       $modificateurs[] = $ds->fetchObject($ds->exec($query));
     }
@@ -333,12 +331,12 @@ class CCodeCCAM {
     // Extraction des phases
     $activite->phases = array();
     $phases =& $activite->phases;
-    $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
-        "\nFROM phaseacte " .
-        "\nWHERE CODEACTE = %1" .
-        "\nAND ACTIVITE = %2" .
-        "\nGROUP BY PHASE" .
-        "\nORDER BY PHASE, DATE1 DESC";
+    $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif
+			        FROM phaseacte
+			        WHERE CODEACTE = %1
+			        AND ACTIVITE = %2
+			        GROUP BY PHASE
+			        ORDER BY PHASE, DATE1 DESC";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
           

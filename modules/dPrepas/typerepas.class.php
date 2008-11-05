@@ -32,23 +32,23 @@ class CTypeRepas extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["menus"] = "CMenu typerepas";
-      $backRefs["plats"] = "CPlat typerepas";
-      $backRefs["repas"] = "CRepas typerepas_id";
-      $backRefs["valid_repas"] = "CValidationRepas typerepas_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["menus"] = "CMenu typerepas";
+    $backRefs["plats"] = "CPlat typerepas";
+    $backRefs["repas"] = "CRepas typerepas_id";
+    $backRefs["valid_repas"] = "CValidationRepas typerepas_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "nom"      => "notNull str",
-      "group_id" => "notNull ref class|CGroups",
-      "debut"    => "notNull time",
-      "fin"      => "notNull time moreThan|debut"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["nom"]      = "notNull str";
+    $specs["group_id"] = "notNull ref class|CGroups";
+    $specs["debut"]    = "notNull time";
+    $specs["fin"]      = "notNull time moreThan|debut";
+    $specs["_debut"]   = "notNull time";
+    $specs["_fin"]     = "notNull time moreThan|_debut";
+    return $specs;
   }
   
   function updateDBFields() {
@@ -66,6 +66,5 @@ class CTypeRepas extends CMbObject {
     $this->_debut = substr($this->debut, 0, 2);
     $this->_fin   = substr($this->fin  , 0, 2);
   }
-  
 }
 ?>
