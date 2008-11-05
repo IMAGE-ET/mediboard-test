@@ -117,7 +117,7 @@ class CGroups extends CMbObject {
    * Load functions with given permission
    */
   function loadFunctions($permType = PERM_READ) {
-    $this->_ref_functions = CMediusers::loadFonctions($permType, $this->_id);
+    return $this->_ref_functions = CMediusers::loadFonctions($permType, $this->_id);
   }
   
   /**

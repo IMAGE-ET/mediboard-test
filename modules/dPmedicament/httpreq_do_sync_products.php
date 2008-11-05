@@ -16,7 +16,7 @@ ini_set('memory_limit', '128M');
 $category_id     = mbGetValueFromGet('category_id');
 
 $category = new CProductCategory();
-if (!$category_id || !$category->load($category_id)) {
+if (!$category->load($category_id)) {
   CAppUI::stepAjax('Veuillez choisir une catégorie de produits correspondant au livret thérapeutique de l\'établissement', UI_MSG_ERROR);
   return;
 }
@@ -31,8 +31,11 @@ $group->loadRefLivretTherapeutique('%', 1000, false);
 foreach ($group->_ref_produits_livret as $produit_livret) {
 	$produit_livret->_ref_produit->loadConditionnement();
 	$produit_livret->_ref_produit->loadLibellePresentation();
+	
   $product = new CProduct();
   $product->code          = $produit_livret->code_cip;
+  
+  $product->loadMatchingObject();
   
   $product->name          = $produit_livret->_ref_produit->libelle;
   $product->description   = $produit_livret->commentaire;
@@ -45,6 +48,7 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
   
   $product->packaging     = $produit_livret->_ref_produit->libelle_conditionnement;
   $product->category_id   = $category_id;
+  
   
   // On vérifie si le fabriquant du produit est déjà dans la base de données
   if ($produit_livret->_ref_produit->nom_laboratoire) {
