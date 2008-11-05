@@ -35,9 +35,6 @@ class CPatient extends CMbObject {
   var $tel2             = null;
   var $email            = null;
   var $medecin_traitant = null;
-  var $medecin1         = null;
-  var $medecin2         = null;
-  var $medecin3         = null;
   var $incapable_majeur = null;
   var $ATNC             = null;
   var $matricule        = null;
@@ -129,9 +126,7 @@ class CPatient extends CMbObject {
   var $_ref_curr_affectation = null;
   var $_ref_next_affectation = null;
   var $_ref_medecin_traitant = null;
-  var $_ref_medecin1         = null;
-  var $_ref_medecin2         = null;
-  var $_ref_medecin3         = null;
+  var $_ref_medecins_correspondants = null;
   var $_ref_dossier_medical  = null;
   var $_ref_IPP              = null;
   var $_ref_constantes_medicales = null;
@@ -161,9 +156,6 @@ class CPatient extends CMbObject {
     $specs["prenom_soundex2"]   = "str";
     $specs["nomjf_soundex2"]    = "str";
     $specs["medecin_traitant"]  = "ref class|CMedecin";
-    $specs["medecin1"]          = "ref class|CMedecin";
-    $specs["medecin2"]          = "ref class|CMedecin";
-    $specs["medecin3"]          = "ref class|CMedecin";
     $specs["matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
@@ -713,18 +705,7 @@ class CPatient extends CMbObject {
     $this->_ref_medecin_traitant = new CMedecin();
     $this->_ref_medecin_traitant->load($this->medecin_traitant);
 
-    // medecin1
-    $this->_ref_medecin1 = new CMedecin();
-    $this->_ref_medecin1->load($this->medecin1);
-
-    // medecin2
-    $this->_ref_medecin2 = new CMedecin();
-    $this->_ref_medecin2->load($this->medecin2);
-
-    // medecin3
-    $this->_ref_medecin3 = new CMedecin();
-    $this->_ref_medecin3->load($this->medecin3);
-    
+    $this->loadRefsCorrespondants();
     $this->loadIdVitale();
   }
   
@@ -861,6 +842,19 @@ class CPatient extends CMbObject {
     }
   }
   
+  function loadRefsCorrespondants() {
+    $this->_ref_medecins_correspondants = array();
+  	if ($this->_id) {
+	  	$correspondant = new CCorrespondant();
+	  	$correspondant->patient_id = $this->_id;
+  	  $this->_ref_medecins_correspondants = $correspondant->loadMatchingList();
+  	  foreach ($this->_ref_medecins_correspondants as &$corresp) {
+  	  	$corresp->loadRefs();
+  	  }
+  	}
+  	return $this->_ref_medecins_correspondants;
+  }
+
   /**
    * Charge l'IPP du patient pour l'établissement courant
    * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
@@ -984,27 +978,6 @@ class CPatient extends CMbObject {
     } else {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
-    }
-    if($this->medecin1) {
-      $template->addProperty("Patient - médecin correspondant 1"          , "{$this->_ref_medecin1->nom} {$this->_ref_medecin1->prenom}");
-      $template->addProperty("Patient - médecin correspondant 1 - adresse", "{$this->_ref_medecin1->adresse}\n{$this->_ref_medecin1->cp} {$this->_ref_medecin1->ville}");
-    } else {
-      $template->addProperty("Patient - médecin correspondant 1");
-      $template->addProperty("Patient - médecin correspondant 1 - adresse");
-    }
-    if($this->medecin2) {
-      $template->addProperty("Patient - médecin correspondant 2"          , "{$this->_ref_medecin2->nom} {$this->_ref_medecin2->prenom}");
-      $template->addProperty("Patient - médecin correspondant 2 - adresse", "{$this->_ref_medecin2->adresse}\n{$this->_ref_medecin2->cp} {$this->_ref_medecin2->ville}");
-    } else {
-      $template->addProperty("Patient - médecin correspondant 2");
-      $template->addProperty("Patient - médecin correspondant 2 - adresse");
-    }
-    if($this->medecin3) {
-      $template->addProperty("Patient - médecin correspondant 3"          , "{$this->_ref_medecin3->nom} {$this->_ref_medecin3->prenom}");
-      $template->addProperty("Patient - médecin correspondant 3 - adresse", "{$this->_ref_medecin3->adresse}\n{$this->_ref_medecin3->cp} {$this->_ref_medecin3->ville}");
-    } else {
-      $template->addProperty("Patient - médecin correspondant 3");
-      $template->addProperty("Patient - médecin correspondant 3 - adresse");
     }
     
     $const_med = $this->_ref_constantes_medicales;

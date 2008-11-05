@@ -890,7 +890,22 @@ class CSetupdPpatients extends CSetup {
 						ADD `frequence_respiratoire` FLOAT;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.74";
+    
+    $this->makeRevision("0.74");
+    for ($i = 1; $i <= 3; $i++) {
+	    $sql = "INSERT INTO `correspondant` (`medecin_id`, `patient_id`)
+	            SELECT `medecin$i`, `patient_id`
+	            FROM `patients`
+	            WHERE `medecin$i` IS NOT NULL";
+	    $this->addQuery($sql);
+    }
+    $sql = "ALTER TABLE `patients`
+					  DROP `medecin1`,
+					  DROP `medecin2`,
+					  DROP `medecin3`";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.75";
   }
 }
 

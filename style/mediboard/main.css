@@ -187,6 +187,13 @@ div div.text {
   white-space: normal;
 }
 
+.control {
+  border: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
 span.smarty-include {
   background: #444;
   position: absolute;
@@ -844,24 +851,7 @@ div.dateTime {
   margin: 2px;
 }
 
-/* a 'standard' table */
-
-table.std {
-  border: solid #8c8 3px;
-  background: #eef;
-}
-table.std th {
-  background-color: #888;
-  color: #fff;
-  border: outset #ccc 1px;
-}
-
-table.std td.hilite {
-  background-color: #fff;
-}
-
 /* Form tables */
-
 table.form {
   width: 100%;
   border-spacing: 1px;
@@ -899,11 +889,6 @@ table.form th.category label {
   text-align: center;
   background-color: #aaa;
   vertical-align: middle;
-}
-
-table.form th.mandatory {
-  color: #000;
-  font-weight: bold;
 }
 
 label.notNull {
@@ -1196,7 +1181,7 @@ div.big-error {
 
   /* @import "./tooltip.css   */
 
-span.tooltip-trigger {
+.tooltip-trigger {
   cursor: pointer;
 }
 
@@ -1833,7 +1818,7 @@ ul.control_tabs .separator, ul.control_tabs_vertical .separator {
 }
 
 
-ul.control_tabs_vertical{
+ul.control_tabs_vertical {
   float: left;
 }
 
@@ -2089,12 +2074,6 @@ table#weeklyPlanning td.selectedOp {
   background: #ddd;
   border: #99f 1px solid;
 }
-
-table#weeklyPlanning td.empty {
-  background: #eee;
-  height: 3px; 
-}
-
 table#weeklyPlanning td.empty {
   background: #eee;
   height: 3px; 
@@ -2237,10 +2216,6 @@ div.tree-header {
 }
 
 table.affectations {
-
-}
-
-table.affectations {
 	width: 100%;
 }
 
@@ -2249,17 +2224,12 @@ table.affectations td.fullService {
   background-color: #fff;
 }
 
-  /* @import "./consultation.css"; */
-
-
+/* @import "./consultation.css"; */
 table#weber td {
   text-align: center;
 }
 
-table#weber tr.values {
-  display: none;
-}
-
+table#weber tr.values, 
 table#weber tr.vocales {
   display: none;
 }

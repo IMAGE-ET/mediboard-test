@@ -28,7 +28,4 @@
     <th class="title" colspan="4">Médecins correspondants</th>
   </tr>
   {{include field="medecin_traitant" file="inc_acc/inc_fusion_field_ref.tpl"}}
-  {{include field="medecin1"         file="inc_acc/inc_fusion_field_ref.tpl"}}
-  {{include field="medecin2"         file="inc_acc/inc_fusion_field_ref.tpl"}}
-  {{include field="medecin3"         file="inc_acc/inc_fusion_field_ref.tpl"}}
 </table>

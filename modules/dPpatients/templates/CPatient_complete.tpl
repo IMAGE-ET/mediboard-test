@@ -183,35 +183,20 @@
     <td class="text">
       <strong>{{mb_label object=$object field="medecin_traitant"}}</strong>
       {{if $object->medecin_traitant}}
-        <br />
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin_traitant}} } });">
+        <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin_traitant}} } });">
           Dr {{mb_value object=$object->_ref_medecin_traitant field="_view"}}
-        </span>
-        
+        </div>
       {{/if}}
     </td>
     <td class="text">
       <strong>Médecins correspondants</strong>
-      {{if $object->medecin1}}
-        <br />
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin1}} } });">
-          Dr {{mb_value object=$object->_ref_medecin1 field="_view"}}
-        </span>
-      {{/if}}
-      
-      {{if $object->medecin2}}
-        <br />
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin2}} } });">
-          Dr {{mb_value object=$object->_ref_medecin2 field="_view"}}
-        </span>
-      {{/if}}
-      
-      {{if $object->medecin3}}
-        <br />
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin3}} } });">
-          Dr {{mb_value object=$object->_ref_medecin3 field="_view"}}
-        </span>
-      {{/if}}
+      {{foreach from=$object->_ref_medecins_correspondants item=curr_corresp}}
+        <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$curr_corresp->medecin_id}} } });">
+          Dr {{mb_value object=$curr_corresp->_ref_medecin field="_view"}}
+        </div>
+      {{foreachelse}}
+        <div>{{tr}}CCorrespondant.none{{/tr}}</div>
+      {{/foreach}}
     </td>
   </tr>
 </table>

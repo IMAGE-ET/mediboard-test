@@ -7,12 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
+global $AppUI, $can;
 $can->needsRead();
 
 $dialog     = mbGetValueFromGet("dialog");
-$type       = mbGetValueFromGetOrSession("type", "_traitant");
 $medecin_id = mbGetValueFromGetOrSession("medecin_id");
 
 // Récuperation du medecin sélectionné
@@ -21,8 +19,7 @@ if(mbGetValueFromGet("new", 0)) {
   $medecin->load(null);
   mbSetValueToSession("medecin_id", null);
 }
-else {
-  $medecin->load($medecin_id);
+else if ($medecin->load($medecin_id)) {
   $medecin->countPatients();
 }
 
@@ -51,7 +48,6 @@ $medecins = $medecins->loadList($where, "nom, prenom", "0, 50");
 $smarty = new CSmartyDP();
 
 $smarty->assign("dialog"     , $dialog);
-$smarty->assign("type"       , $type);
 $smarty->assign("nom"        , $medecin_nom);
 $smarty->assign("prenom"     , $medecin_prenom);
 $smarty->assign("departement", $medecin_dept);

@@ -3,9 +3,8 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
-
-function setClose(iId, sNom, sPrenom, sType) {
-  window.opener.Medecin.set(iId, sNom, sPrenom, sType);
+function setClose(id) {
+  window.opener.Medecin.set(id);
   window.close();
 }
 
@@ -80,47 +79,47 @@ Main.add(function () {
         </tr>
 
         {{foreach from=$medecins item=curr_medecin}}
-        {{assign var="medecin_id" value=$curr_medecin->medecin_id}}
+        {{assign var=medecin_id value=$curr_medecin->_id}}
         <tr>
           {{if $dialog}}
             {{assign var="href" value="#"}}
           {{else}}
             {{assign var="href" value="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
-            <td><input type="checkbox" name="fusion_{{$medecin_id}}" /></td>
+            <td><input type="checkbox" name="fusion_{{$curr_medecin->_id}}" /></td>
           {{/if}}
           <td class="text">
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
               {{$curr_medecin->_view}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
               {{$curr_medecin->adresse}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
               {{$curr_medecin->ville}}
             </a>
           </td>
           <td>
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
               {{$curr_medecin->cp}}
             </a>
           </td>
           <td>
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
               {{mb_value object=$curr_medecin field=tel}}
             </a>
           </td>
           <td>
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
               {{mb_value object=$curr_medecin field=fax}}
             </a>
           </td>
           {{if $dialog}}
             <td>
-              <button type="button" class="tick" onclick="setClose({{$medecin_id}}, '{{$curr_medecin->nom|smarty:nodefaults|JSAttribute}}', '{{$curr_medecin->prenom|smarty:nodefaults|JSAttribute}}', '{{$type|smarty:nodefaults|JSAttribute}}')">Selectionner</button>
+              <button type="button" class="tick" onclick="setClose({{$curr_medecin->_id}})">Selectionner</button>
             </td>
           {{/if}}
         </tr>
@@ -141,15 +140,15 @@ Main.add(function () {
       {{mb_field object=$medecin field="medecin_id" hidden=1 prop=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
-        {{if !$dialog && $medecin->medecin_id}}
+        {{if !$dialog && $medecin->_id}}
         <tr>
           <td colspan="2"><a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;new=1">Créer un nouveau médecin</a></td>
         </tr>
         {{/if}}
         <tr>
           <th class="category" colspan="2">
-            {{if $medecin->medecin_id}}
-	         <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->medecin_id}})">
+            {{if $medecin->_id}}
+	         <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->_id}})">
                <img src="images/icons/history.gif" alt="historique" />
               </a>
               Modification du Dr {{$medecin->_view}}
@@ -222,7 +221,7 @@ Main.add(function () {
 
         <tr>
           <td class="button" colspan="4">
-            {{if $medecin->_id}}
+            {{if $curr_medecin->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
@@ -246,16 +245,8 @@ Main.add(function () {
           <td>{{$medecin->_count_patients_traites}}</td>
         </tr>
         <tr>
-          <th>{{tr}}CMedecin-back-patients1{{/tr}}</th>
-          <td>{{$medecin->_count_patients1}}</td>
-        </tr>
-        <tr>
-          <th>{{tr}}CMedecin-back-patients2{{/tr}}</th>
-          <td>{{$medecin->_count_patients2}}</td>
-        </tr>
-        <tr>
-          <th>{{tr}}CMedecin-back-patients3{{/tr}}</th>
-          <td>{{$medecin->_count_patients3}}</td>
+          <th>{{tr}}CMedecin-back-patients_correspondants{{/tr}}</th>
+          <td>{{$medecin->_count_patients_correspondants}}</td>
         </tr>
       </table>
       {{/if}}

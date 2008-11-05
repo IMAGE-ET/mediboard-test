@@ -14,25 +14,34 @@
   <tr><th>Adresse: </th><td>{{$patient->adresse|nl2br}} - {{$patient->cp}} {{$patient->ville}}</td></tr>
   <tr><th>Remarques: </th><td>{{$patient->rques|nl2br}}</td></tr>
   
-  {{if $patient->_ref_medecin_traitant->medecin_id || $patient->_ref_medecin1->medecin_id || $patient->_ref_medecin2->medecin_id || $patient->_ref_medecin3->medecin_id}}
-  <tr><th class="category" colspan="2">Medecins correspondants</th></tr>
+  {{if $patient->_ref_medecin_traitant->medecin_id || $patient->_ref_medecins_correspondants|@count}}
+  <tr><th class="category" colspan="2">Médecins correspondants</th></tr>
+
+  {{if $patient->_ref_medecin_traitant->medecin_id}}
+    <tr>
+      <th>Médecin traitant: </th>
+      <td>
+        {{$patient->_ref_medecin_traitant->_view}}<br />
+        {{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />
+        {{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}
+      </td>
+    </tr>
   {{/if}}
   
-  {{if $patient->_ref_medecin_traitant->medecin_id}}
-  <tr><th>Medecin traitant: </th><td>{{$patient->_ref_medecin_traitant->_view}}</td></tr>
-  <tr><th></th><td>{{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />{{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}</td></tr>
+  {{if $patient->_ref_medecins_correspondants|@count}}
+    <tr>
+      <th>Médecins correspondants: </th>
+      <td>
+        {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
+        <div style="float: left; margin-right: 1em; margin-bottom: 0.5em; margin-top: 0.4em; width: 15em;">
+          {{$curr_corresp->_ref_medecin->_view}}<br />
+          {{$curr_corresp->_ref_medecin->adresse|nl2br}}<br />
+          {{$curr_corresp->_ref_medecin->cp}} {{$curr_corresp->_ref_medecin->ville}}
+        </div>
+        {{/foreach}}
+      </td>
+    </tr>
   {{/if}}
-  {{if $patient->_ref_medecin1->medecin_id}}
-  <tr><th>Medecin correspondant 1: </th><td>{{$patient->_ref_medecin1->_view}}</td></tr>
-  <tr><th></th><td>{{$patient->_ref_medecin1->adresse|nl2br}}<br />{{$patient->_ref_medecin1->cp}} {{$patient->_ref_medecin1->ville}}</td></tr>
-  {{/if}}
-  {{if $patient->_ref_medecin2->medecin_id}}
-  <tr><th>Medecin correspondant 2: </th><td>{{$patient->_ref_medecin2->_view}}</td></tr>
-  <tr><th></th><td>{{$patient->_ref_medecin2->adresse|nl2br}}<br />{{$patient->_ref_medecin2->cp}} {{$patient->_ref_medecin2->ville}}</td></tr>
-  {{/if}}
-  {{if $patient->_ref_medecin3->medecin_id}}
-  <tr><th>Medecin correspondant 3: </th><td>{{$patient->_ref_medecin3->_view}}</td></tr>
-  <tr><th></th><td>{{$patient->_ref_medecin3->adresse|nl2br}}<br />{{$patient->_ref_medecin3->cp}} {{$patient->_ref_medecin3->ville}}</td></tr>
   {{/if}}
   
   {{if $patient->_ref_sejours|@count}}

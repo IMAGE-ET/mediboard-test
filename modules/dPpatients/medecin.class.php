@@ -41,9 +41,7 @@ class CMedecin extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["patients_traites"] = "CPatient medecin_traitant";
-    $backRefs["patients1"] = "CPatient medecin1";
-    $backRefs["patients2"] = "CPatient medecin2";
-    $backRefs["patients3"] = "CPatient medecin3";
+    $backRefs["patients_correspondants"] = "CCorrespondant medecin_id";
     return $backRefs;
   }
     
@@ -74,10 +72,8 @@ class CMedecin extends CMbObject {
   }
   
   function countPatients() {
-    $this->_count_patients_traites = $this->countBackRefs("patients_traites");
-    $this->_count_patients1 = $this->countBackRefs("patients1");
-    $this->_count_patients2 = $this->countBackRefs("patients2");
-    $this->_count_patients3 = $this->countBackRefs("patients3");
+    $this->_count_patients_traites        = $this->countBackRefs("patients_traites");
+    $this->_count_patients_correspondants = $this->countBackRefs("patients_correspondants");
   }
   
   function updateFormFields() {

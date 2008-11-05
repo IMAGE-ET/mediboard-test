@@ -1,9 +1,10 @@
 {{include file="common.tpl" nodebug=true}}
 
 <div id="login" {{if $dialog}}style="height: 50px; margin: auto; position: relative; top: 0; left: 0;"{{/if}}>
+  <h2>{{$dPconfig.company_name}}</h2>
   {{if !$dialog}}
     <a href="http://www.mediboard.org/">
-      <img src="images/pictures/mbNormal.gif" alt="{{$dPconfig.company_name}}" width="290" height="107" /><br />
+      <img src="images/pictures/mbNormal.gif" alt="{{$dPconfig.company_name}}" title="{{$dPconfig.company_name}}" width="290" height="107" /><br />
     </a>
   {{/if}}
 
@@ -29,7 +30,7 @@
 </div>
 
 {{if !$dialog}}
-  <div id="version">Mediboard {{$version.string}}</div>
+  <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">v.{{$version.string}}</div>
   <a id="sponsor" href="http://www.mozilla-europe.org/fr/products/firefox/" title="Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox">
     <img src="http://www.spreadfirefox.com/community/images/affiliates/Buttons/80x15/firefox_80x15.png" alt="Firefox Logo" />
   </a>

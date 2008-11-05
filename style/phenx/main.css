@@ -477,7 +477,9 @@ div.draggable {
   cursor: move;
 }
 
-tbody.hoverable:hover tr td,table.tbl tr:hover td,div.tree-header:hover {
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
+div.tree-header:hover {
   background-color: #EEEEEE;
 }
 
@@ -530,22 +532,6 @@ div.dateTime {
 .date img {
   cursor: pointer;
   margin: 2px;
-}
-
-/* a 'standard' table */
-table.std {
-  border: solid #8c8 3px;
-  background: #eef;
-}
-
-table.std th {
-  background-color: #888;
-  color: #fff;
-  border: outset #ccc 1px;
-}
-
-table.std td.hilite {
-  background-color: #fff;
 }
 
 /* Form tables */

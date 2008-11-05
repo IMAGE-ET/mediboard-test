@@ -19,8 +19,7 @@ $current = mbGetValueFromGet("current", 0);
 $new = mbGetValueFromGet("new", 0);
 $link = mbGetValueFromGet("link", 0);
 
-$sql = "SELECT * FROM import_patients" .
-    "\nLIMIT ".($current*$step).", $step";
+$sql = "SELECT * FROM import_patients LIMIT ".($current*$step).", $step";
 $listImport = $ds->loadlist($sql);
 
 foreach($listImport as $key => $value) {
@@ -28,10 +27,10 @@ foreach($listImport as $key => $value) {
   if($tmpNom == '') $tmpNom = "-";
   $tmpPrenom = addslashes(trim($value["prenom"]));
   if($tmpPrenom == '') $tmpPrenom = "-";
-  $sql = "SELECT patient_id FROM patients" .
-  		"\nWHERE patients.nom = '$tmpNom'" .
-  		"\nAND patients.prenom = '$tmpPrenom'" .
-  		"\nAND patients.naissance = '".$value["naissance"]."'";
+  $sql = "SELECT patient_id FROM patients
+		  		WHERE patients.nom = '$tmpNom'
+		  		AND patients.prenom = '$tmpPrenom'
+		  		AND patients.naissance = '".$value["naissance"]."'";
   $match = $ds->loadlist($sql);
   if(!count($match)) {
   	$pat = new CPatient;
@@ -54,48 +53,43 @@ foreach($listImport as $key => $value) {
     $pat->cp = $value["cp"];
     $pat->tel = $value["tel"];
     $pat->tel2 = $value["tel2"];
-    if($pat->medecin_traitant) {
-      $sql = "SELECT medecin_id" .
-      		"FROM import_medecins" .
-      		"WHERE medecin_id = '".$value["medecin_traitant"]."'";
-      $med = $ds->loadlist($sql);
-      $pat->medecin_traitant = $med[0]["mb_id"];
+    
+    if($value["medecin_traitant"]) {
+      $sql = "SELECT medecin_id, mb_id
+		      		FROM import_medecins
+		      		WHERE medecin_id = '".$value["medecin_traitant"]."'";
+      $med = $ds->loadHash($sql);
+      $pat->medecin_traitant = $med["mb_id"];
     }
-    if($pat->medecin1) {
-      $sql = "SELECT medecin_id" .
-      		"FROM import_medecins" .
-      		"WHERE medecin_id = '".$value["medecin1"]."'";
-      $med = $ds->loadlist($sql);
-      $pat->medecin1 = $med[0]["mb_id"];
-    }
-    if($pat->medecin2) {
-      $sql = "SELECT medecin_id" .
-      		"FROM import_medecins" .
-      		"WHERE medecin_id = '".$value["medecin2"]."'";
-      $med = $ds->loadlist($sql);
-      $pat->medecin2 = $med[0]["mb_id"];
-    }
-    if($pat->medecin3) {
-      $sql = "SELECT medecin_id" .
-      		"FROM import_medecins" .
-      		"WHERE medecin_id = '".$value["medecin3"]."'";
-      $med = $ds->loadlist($sql);
-      $pat->medecin3 = $med[0]["mb_id"];
-    }
+    
     $pat->incapable_majeur = $value["incapable_majeur"];
     $pat->ATNC = $value["ATNC"];
     $pat->matricule = $value["matricule"];
     $pat->rques = $value["rques"];
     echo $pat->store();
-    $sql = "UPDATE import_patients" .
-    		"\nSET mb_id = '".$pat->patient_id."'" .
-    		"\nWHERE patient_id = '".$value["patient_id"]."'";
+    
+    for($i = 1; $i <= 3; $i++) {
+      if($value["medecin$i"]) {
+        $sql = "SELECT medecin_id, mb_id
+                FROM dermato_import_medecins
+                WHERE medecin_id = '".$value["medecin$i"]."'";
+        $med = $ds->loadHash($sql);
+        $corresp = new CCorrespondant();
+        $corresp->medecin_id = $med["mb_id"];
+        $corresp->patient_id = $pat->_id;
+        echo $corresp->store();
+      }
+    }
+    
+    $sql = "UPDATE import_patients
+		    		SET mb_id = '".$pat->patient_id."'
+		    		WHERE patient_id = '".$value["patient_id"]."'";
     $ds->exec($sql);
     $new++;
   } else {
-    $sql = "UPDATE import_patients" .
-    		"\nSET mb_id = '".$match[0]["patient_id"]."'" .
-    		"\nWHERE patient_id = '".$value["patient_id"]."'";
+    $sql = "UPDATE import_patients
+		    		SET mb_id = '".$match[0]["patient_id"]."'
+		    		WHERE patient_id = '".$value["patient_id"]."'";
     $ds->exec($sql);
     $link++;
   }

@@ -47,7 +47,7 @@ class CCorrespondant extends CMbObject {
     $this->_ref_patient = $patient->getCached($this->patient_id);
     
     $medecin = new CMedecin();
-    $this->_ref_medecin = $patient->getCached($this->medecin_id);
+    $this->_ref_medecin = $medecin->getCached($this->medecin_id);
   }
 }
 ?>

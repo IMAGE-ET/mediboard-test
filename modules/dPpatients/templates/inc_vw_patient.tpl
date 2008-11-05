@@ -116,7 +116,7 @@ Document.refreshList = function(){
     <td>{{mb_value object=$patient field="tel2"}}</td>
   </tr>
   
-  {{if $patient->medecin_traitant || $patient->medecin1 || $patient->medecin2 || $patient->medecin3}}
+  {{if $patient->medecin_traitant || $patient->_ref_medecins_correspondants|@count}}
   <tr>
     <th class="category" colspan="4">Médecins correspondants</th>
   </tr>
@@ -128,21 +128,11 @@ Document.refreshList = function(){
         Dr {{$patient->_ref_medecin_traitant->_view}} ;
       </span>
       {{/if}}
-      {{if $patient->medecin1}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin1}} } });">
-        Dr {{$patient->_ref_medecin1->_view}} ;
-      </span>
-      {{/if}}
-      {{if $patient->medecin2}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin2}} } });">
-        Dr {{$patient->_ref_medecin2->_view}} ;
-      </span>
-      {{/if}}
-      {{if $patient->medecin3}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin3}} } });">
-        Dr {{$patient->_ref_medecin3->_view}} ;
-      </span>
-      {{/if}}
+      {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$curr_corresp->medecin_id}} } });">
+          Dr {{$curr_corresp->_ref_medecin->_view}} ;
+        </span>
+      {{/foreach}}
     </td>
   </tr>
   {{/if}}

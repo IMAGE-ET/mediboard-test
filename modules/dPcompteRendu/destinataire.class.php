@@ -108,9 +108,10 @@ class CDestinataire {
 	    
 	    $patient->loadRefsFwd();
 	    self::makeFor($patient->_ref_medecin_traitant, "traitant");
-	    self::makeFor($patient->_ref_medecin1, "correspondant");
-	    self::makeFor($patient->_ref_medecin2, "correspondant");
-	    self::makeFor($patient->_ref_medecin3, "correspondant");
+	    
+	    foreach ($patient->_ref_medecins_correspondants as &$corresp) {
+	    	self::makeFor($corresp->_ref_medecin, "correspondant");
+	    }
 	  }
 
 	  if ($mbObject instanceof CConsultation) {
