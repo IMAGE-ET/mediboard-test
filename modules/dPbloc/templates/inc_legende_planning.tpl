@@ -2,7 +2,7 @@
 
 <script language="javascript" type="text/javascript">
 Main.add(function () {
-  regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regRedirectFlat("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 });
 </script>
 

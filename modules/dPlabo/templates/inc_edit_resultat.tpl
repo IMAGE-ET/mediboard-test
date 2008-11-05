@@ -3,7 +3,6 @@
 <script type="text/javascript">
   // Explicit form preparation for Ajax loading
   prepareForm(document.editPrescriptionItem);
-  regFieldCalendar('editPrescriptionItem', 'date');
 </script>
 
 <form name="editPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -51,7 +50,7 @@
   {{if $prescription->_status >= $prescription|const:"VALIDEE"}}
   <tr>
     <th>{{mb_label object=$prescriptionItem field="date"}}</th>
-    <td>{{mb_value object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
+    <td>{{mb_value object=$prescriptionItem field="date" form="editPrescriptionItem" register=true}}</td>
   </tr>
 
   {{if !$examen->_external}}

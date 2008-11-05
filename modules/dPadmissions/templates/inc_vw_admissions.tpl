@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
+Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
 
 </script>
 

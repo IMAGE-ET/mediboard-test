@@ -124,7 +124,6 @@ Main.add(function () {
   
   {{if $consult->consultation_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
-  regFieldCalendar("editAntFrm", "date");
   {{/if}}
 
   if (document.editAntFrm) {

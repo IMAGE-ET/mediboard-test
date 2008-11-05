@@ -1,12 +1,3 @@
-<script type="text/javascript">
-
-Main.add(function () {
-  regFieldCalendar("hospitalisation", "_date_min_stat");
-  regFieldCalendar("hospitalisation", "_date_max_stat");
-});
-
-</script>
-
 <table class="main">
   <tr>
     <td>
@@ -18,7 +9,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min_stat"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false" register=true}} </td>
           <td>{{mb_label object=$filter field="_service"}}</td>
           <td>
             <select name="service_id">
@@ -33,7 +24,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max_stat"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false" register=true}} </td>
           <td>{{mb_label object=$filter field="praticien_id"}}</td>
           <td>
             <select name="prat_id">

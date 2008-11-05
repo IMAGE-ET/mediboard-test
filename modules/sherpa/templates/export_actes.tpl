@@ -1,9 +1,3 @@
-<script type="text/javascript">
-Main.add(function() {
-	Calendar.regField("Filter", "_date_sortie");	
-} );
-</script>
-
 <!-- Filter -->
 <form name="Filter" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
 
@@ -23,7 +17,7 @@ Main.add(function() {
 
   <tr>
     <th>{{mb_label object=$filter field=_date_sortie}}</th>
-    <td class="date">{{mb_field object=$filter field=_date_sortie form=Filter}}</td>
+    <td class="date">{{mb_field object=$filter field=_date_sortie form=Filter register=true}}</td>
   </tr>
 
   <tr>

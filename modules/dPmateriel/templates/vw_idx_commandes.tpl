@@ -1,11 +1,3 @@
-<script type="text/javascript">
-
-Main.add(function () {
-  regFieldCalendar("editcommande", "date");
-});
-
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -75,7 +67,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$commande field="date"}}</th>
-          <td class="date">{{mb_field object=$commande field="date" form="editcommande"}}</td>
+          <td class="date">{{mb_field object=$commande field="date" form="editcommande" register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$commande field="reference_id"}}</th>

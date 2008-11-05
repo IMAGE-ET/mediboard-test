@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  regRedirectPopupCal("{{$date_suivi}}", "?m={{$m}}&tab={{$tab}}&date_suivi=");
+  Calendar.regRedirectPopup("{{$date_suivi}}", "?m={{$m}}&tab={{$tab}}&date_suivi=");
 });
 
 </script>

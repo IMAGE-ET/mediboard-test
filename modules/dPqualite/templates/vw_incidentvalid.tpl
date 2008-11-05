@@ -273,7 +273,7 @@ function printIncident(ficheId){
         <tr>
           <td colspan="2" class="button">
 			    	<script type="text/javascript">
-			    		Main.add(function() { regFieldCalendar("ProcEditFrm", "qualite_date_controle"); } );
+			    		Main.add(function() { Calendar.regField("ProcEditFrm", "qualite_date_controle"); } );
 			    	</script>
           
             <input type="hidden" name="qualite_user_id" value="{{$user_id}}" />
@@ -312,7 +312,7 @@ function printIncident(ficheId){
               {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
 			    	<script type="text/javascript">
-			    		Main.add(function() { regFieldCalendar("ProcEditFrm", "qualite_date_verification"); } );
+			    		Main.add(function() { Calendar.regField("ProcEditFrm", "qualite_date_verification"); } );
 			    	</script>
             
           </td>

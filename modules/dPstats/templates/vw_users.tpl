@@ -1,10 +1,10 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  regFieldCalendar("users", "debutlog");
-  regFieldCalendar("users", "finlog");
-  regFieldCalendar("Form1", "debutact");
-  regFieldCalendar("Form1", "finact");
+  Calendar.regField("users", "debutlog");
+  Calendar.regField("users", "finlog");
+  Calendar.regField("Form1", "debutact");
+  Calendar.regField("Form1", "finact");
 });
 
 </script>

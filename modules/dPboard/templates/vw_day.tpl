@@ -92,7 +92,7 @@ Main.add(function () {
   ViewPort.SetAvlHeight("operations", 0.5);
   ViewPort.SetAvlHeight("patients", 1);
   ViewPort.SetAvlHeight("hospi", 1);
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 });
 
 </script>

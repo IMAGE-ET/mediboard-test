@@ -19,12 +19,6 @@ function popMateriel() {
   url.addElement(form._date_max);
   url.popup(700, 550, 'Materiel');
 }
-
-Main.add(function () {
-  regFieldCalendar("paramFrm", "_date_min");
-  regFieldCalendar("paramFrm", "_date_max");
-});
-
 </script>
 
 
@@ -82,17 +76,17 @@ Main.add(function () {
         <th colspan="2" class="category">Imprimer l'historique</th>
       </tr>
       <tr>
-          <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false"}} </td>
+        <td>{{mb_label object=$filter field="_date_min"}}</td>
+        <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" register=true}} </td>
       </tr>
       <tr>
-          <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date" >{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false"}}</td>
+        <td>{{mb_label object=$filter field="_date_max"}}</td>
+        <td class="date" >{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" register=true}}</td>
       </tr>
-	  <tr>
-	      <td colspan="2" class="button">
-	        <button type="button" onclick="checkFormPrint()" class="search">Afficher</button>
-	      </td>
+  	  <tr>
+        <td colspan="2" class="button">
+          <button type="button" onclick="checkFormPrint()" class="search">Afficher</button>
+        </td>
 	    </tr>
 	  </table>
 	  

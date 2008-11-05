@@ -6,7 +6,7 @@
   {{$date|date_format:"%A %d %B %Y"}}
   <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
   <script type="text/javascript">
-    regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_idx_planning&date=");
+    Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_planning&date=");
   </script>
 </div>
 {{/if}}

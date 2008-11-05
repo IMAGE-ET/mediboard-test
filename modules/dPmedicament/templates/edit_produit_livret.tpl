@@ -11,8 +11,8 @@ function submitProduitLivret(lettre, codeATC, code_cip){
 }
 
 Main.add(function() {
-  regFieldCalendar("editProduitLivret", "date_prix_hopital");
-  regFieldCalendar("editProduitLivret", "date_prix_ville");
+  Calendar.regField("editProduitLivret", "date_prix_hopital");
+  Calendar.regField("editProduitLivret", "date_prix_ville");
 });
 
 </script>

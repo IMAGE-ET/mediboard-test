@@ -58,6 +58,10 @@ modifSecteur2 = function(){
   $V(oForm.du_patient, somme);
   $V(oForm.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
 }
+
+Main.add( function(){
+  prepareForm(document.accidentTravail);
+});
 </script>
 
 {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$app->user_prefs.GestionFSE}}
@@ -95,34 +99,27 @@ modifSecteur2 = function(){
           <!-- Règlements -->  
           <td>
           
-          <form name="accidentTravail" action="" method="post">
-            <input type="hidden" name="m" value="dPcabinet" />
-            <input type="hidden" name="dosql" value="do_consultation_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
-            <table class="form">
-              <tr>
-                <th>
-                 {{mb_label object=$consult field="accident_travail"}}
-               </th>
-               <td class="date">
-                 {{mb_field object=$consult field="accident_travail" form="accidentTravail" onchange="submitFormAjax(this.form,'systemMsg');"}}
-               </td>
-               <td>
-                 {{if $patient->cmu}}
-                 <strong>Bénéficiaire d'une CMU</strong>
-                 {{/if}}
-               </td>
-             </tr>
-            </table>  
-          </form>
-          <script type="text/javascript">
-            Main.add( function(){
-              prepareForm(document.accidentTravail);
-              regFieldCalendar('accidentTravail', "accident_travail");
-            });
-          </script>
-            
+            <form name="accidentTravail" action="" method="post">
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="dosql" value="do_consultation_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
+              <table class="form">
+                <tr>
+                  <th>
+                   {{mb_label object=$consult field="accident_travail"}}
+                 </th>
+                 <td class="date">
+                   {{mb_field object=$consult field="accident_travail" form="accidentTravail" onchange="submitFormAjax(this.form,'systemMsg');" register=true}}
+                 </td>
+                 <td>
+                   {{if $patient->cmu}}
+                   <strong>Bénéficiaire d'une CMU</strong>
+                   {{/if}}
+                 </td>
+               </tr>
+              </table>  
+            </form>
             
             <!-- Formulaire de selection de tarif -->
             <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

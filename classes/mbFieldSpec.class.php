@@ -528,9 +528,8 @@ class CMbFieldSpec {
     
     if ($register) {
       $time = $this instanceof CDateTimeSpec ? "true" : "false";
-      $aHtml[] = '<script type="text/javascript">Main.add(function() { regFieldCalendar("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
-		}
-    
+      $aHtml[] = '<script type="text/javascript">Main.add(function() { Calendar.regField("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
+    }
     return implode("\n", $aHtml);
   }
 

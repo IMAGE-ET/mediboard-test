@@ -33,7 +33,7 @@ function putArrivee(oForm) {
 }
 
 Main.add(function () {
-  regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&plageconsult_id=0&debut="); 
+  Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&plageconsult_id=0&debut="); 
   
   PairEffect.initGroup("functionEffect", { 
     bStoreInCookie: true,

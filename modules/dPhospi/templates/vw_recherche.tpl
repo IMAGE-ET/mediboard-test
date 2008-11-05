@@ -8,7 +8,7 @@ function popPlanning(date) {
 }
 
 Main.add(function () {
-  regRedirectFlatCal("{{$date_recherche}}", "?m={{$m}}&tab={{$tab}}&date_recherche=", null, true);
+  Calendar.regRedirectFlat("{{$date_recherche}}", "?m={{$m}}&tab={{$tab}}&date_recherche=", null, true);
 });
 
 </script>

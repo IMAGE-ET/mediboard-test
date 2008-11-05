@@ -969,72 +969,47 @@ Object.extend(Calendar, {
         onUpdate    : function () {$(sInputId).fire("ui:change")}
       }
     );
+  },
+  
+  regRedirectPopup: function(sInitDate, sRedirectBase, sContainerId, bTime) {
+    if (sContainerId == null) sContainerId = "changeDate";
+    if (bTime == null) bTime = false;
+    
+    Calendar.setup( {
+        button      : sContainerId,
+        date        : Date.fromDATE(sInitDate),
+        showsTime   : bTime,
+        onUpdate    : function(calendar) { 
+          if (calendar.dateClicked) {
+            sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
+            window.location = sRedirectBase + sDate;
+          }
+        }
+      } 
+    );
+  },
+  
+  regRedirectFlat: function(sInitDate, sRedirectBase, sContainerId, bTime) {
+    if (sContainerId == null) sContainerId = "calendar-container";
+    if (bTime == null) bTime = false;
+  
+    dInit = bTime ? Date.fromDATETIME(sInitDate) : Date.fromDATE(sInitDate);
+    
+    Calendar.setup( {
+        date         : dInit,
+        showsTime    : bTime,
+        flat         : sContainerId,
+        flatCallback : function(calendar) { 
+          if (calendar.dateClicked) {
+            sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
+            window.location = sRedirectBase + sDate;
+          }
+        }
+      } 
+    );
   }
 } );
 
-function regFieldCalendar(sFormName, sFieldName, bTime) {
-  if (bTime == null) bTime = false;
-  
-  var sInputId = sFormName + "_" + sFieldName;
-  
-  if (!$(sInputId)) {
-    return;
-  }
-  
-  var field;
-  if ($(sInputId).disabled && (field = $(sInputId + "_trigger"))) {
-    field.hide();
-  }
-
-  Calendar.setup( {
-      inputField  : sInputId,
-      displayArea : sInputId + "_da",
-      ifFormat    : "%Y-%m-%d" + (bTime ? " %H:%M:%S" : ""),
-      daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
-      button      : sInputId + "_trigger",
-      showsTime   : bTime,
-      onUpdate    : function () {$(sInputId).fire("ui:change")}
-    } 
-  );
-}
-
-function regRedirectPopupCal(sInitDate, sRedirectBase, sContainerId, bTime) {
-  if (sContainerId == null) sContainerId = "changeDate";
-  if (bTime == null) bTime = false;
-  
-  Calendar.setup( {
-      button      : sContainerId,
-      date        : Date.fromDATE(sInitDate),
-      showsTime   : bTime,
-      onUpdate    : function(calendar) { 
-        if (calendar.dateClicked) {
-          sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
-          window.location = sRedirectBase + sDate;
-        }
-      }
-    } 
-  );
-}
-
-function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
-  if (sContainerId == null) sContainerId = "calendar-container";
-  if (bTime == null) bTime = false;
-
-  dInit = bTime ? Date.fromDATETIME(sInitDate) : Date.fromDATE(sInitDate);
-  
-  Calendar.setup( {
-      date         : dInit,
-      showsTime    : bTime,
-      flat         : sContainerId,
-      flatCallback : function(calendar) { 
-        if (calendar.dateClicked) {
-          sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
-          window.location = sRedirectBase + sDate;
-        }
-      }
-    } 
-  );
-}
 
 /**
  * Durations expressed in milliseconds

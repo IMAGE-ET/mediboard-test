@@ -72,7 +72,7 @@ function loadObjectClass(value) {
   }
   
   // Check null position
-  notNullOK(select);
+  select.fire("ui:change");
  
   loadCategory();
 }

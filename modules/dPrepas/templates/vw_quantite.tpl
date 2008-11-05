@@ -10,7 +10,7 @@ function reloadChambres(){
 }
 
 Main.add(function () {
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date="); 
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date="); 
   {{if $service_id}}
   reloadChambres();
   {{/if}}

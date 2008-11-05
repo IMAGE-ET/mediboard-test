@@ -20,7 +20,7 @@ Main.add(function () {
   opsUpdater.addParam("date","{{$date}}");
   opsUpdater.requestUpdate("out", {waitingText: null});
   
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
 });
 </script>
 

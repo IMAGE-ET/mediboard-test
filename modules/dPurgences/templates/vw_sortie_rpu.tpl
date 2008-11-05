@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 });
 
 function modeSortieDest(mode_sortie, rpu_id) {

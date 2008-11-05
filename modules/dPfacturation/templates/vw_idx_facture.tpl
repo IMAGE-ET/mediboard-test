@@ -1,11 +1,5 @@
 {{mb_include_script module="system" script="object_selector"}}
 
-<script type="text/javascript">
-Main.add(function () {
-  regFieldCalendar("editfacture", "date");
-});
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
@@ -57,7 +51,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$facture field="date"}}</th>
-          <td class="date">{{mb_field object=$facture field="date" form="editfacture"}}</td>
+          <td class="date">{{mb_field object=$facture field="date" form="editfacture" register=true}}</td>
         </tr>
         <tr>	
           	<th>{{mb_label object=$facture field="sejour_id"}}</th>

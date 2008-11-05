@@ -7,8 +7,8 @@ Main.add(function () {
   {{if $isprat}}
   PairEffect.initGroup("effectCategory");
   {{/if}}
-  regFieldCalendar("addPlage", "date");
-  regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut="); 
+  Calendar.regField("addPlage", "date");
+  Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut="); 
 });
 </script>
 

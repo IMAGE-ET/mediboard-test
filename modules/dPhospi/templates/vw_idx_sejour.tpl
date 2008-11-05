@@ -201,7 +201,7 @@ function printPatient(patient_id) {
 }
 
 Main.add(function () {
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
   /* Tab initialization */
   var tab_sejour = Control.Tabs.create('tab-sejour', true);

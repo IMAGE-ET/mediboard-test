@@ -6,7 +6,7 @@ Main.add(function () {
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('ops', { frequency: 90 });
   
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_brancardage&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_brancardage&date=");
 });
 
 </script>

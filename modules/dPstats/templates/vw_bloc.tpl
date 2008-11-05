@@ -1,7 +1,6 @@
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
-
 function zoomGraphIntervention(date){
   url = new Url();
   url.setModuleAction("dPstats", "graph_activite_zoom");
@@ -14,12 +13,6 @@ function zoomGraphIntervention(date){
   url.addParam("size"         , 2);
   url.popup(760, 400, "ZoomMonth");
 }
-
-Main.add(function () {
-  regFieldCalendar("bloc", "_date_min");
-  regFieldCalendar("bloc", "_date_max");
-});
-
 </script>
 
 <table class="main">
@@ -35,7 +28,7 @@ Main.add(function () {
         </tr>
         <tr>
            <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="bloc" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="bloc" canNull="false" register=true}} </td>
           <td>{{mb_label class=CSalle field="bloc_id"}}</td>
           <td>
             <select name="bloc_id">
@@ -67,7 +60,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="bloc" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="bloc" canNull="false" register=true}} </td>
           <td>{{mb_label object=$filter field="_prat_id"}}</td>
           <td colspan="3">
             <select name="prat_id">

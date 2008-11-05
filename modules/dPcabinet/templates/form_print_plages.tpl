@@ -1,7 +1,6 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-
 function checkFormPrint() {
   var form = document.paramFrm;
   if(!(checkForm(form))){
@@ -36,13 +35,6 @@ function changeDateCal(){
   oForm.select_days[2].checked = false;
   oForm.select_days[3].checked = false;
 }
-
-Main.add(function () {
-  regFieldCalendar("paramFrm", "_date_min");
-  regFieldCalendar("paramFrm", "_date_max");
-});
-
-
 </script>
 
 <form name="paramFrm" action="?m=dPcabinet" method="post" onsubmit="return checkFormPrint()">
@@ -55,7 +47,7 @@ Main.add(function () {
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
               <label for="select_days_day">Jour courant</label>
@@ -69,7 +61,7 @@ Main.add(function () {
         </tr>
         <tr>
            <td>{{mb_label object=$filter field="_date_max"}}</td>
-           <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
+           <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
         </tr>
       </table>
 

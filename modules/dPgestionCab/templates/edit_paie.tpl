@@ -1,7 +1,6 @@
 <!-- $Id: form_print_planning.tpl 23 2006-05-04 15:05:35Z MyttO $ -->
 
 <script type="text/javascript">
-
 function printFiche(iFiche_id) {
   var url = new Url();
   url.setModuleAction("dPgestionCab", "print_fiche");
@@ -14,12 +13,6 @@ function saveFiche() {
   oForm.dosql.value = "do_fichePaie_save";
   oForm.submit();
 }
-
-Main.add(function () {
-  regFieldCalendar("editFrm", "debut");
-  regFieldCalendar("editFrm", "fin");
-});
-
 </script>
 
 <table class="main">
@@ -70,11 +63,11 @@ Main.add(function () {
         {{/if}}
         <tr>
           <th>{{mb_label object=$fichePaie field="debut"}}</th>
-          <td class="date">{{mb_field object=$fichePaie field="debut" form="editFrm"}}</td>
+          <td class="date">{{mb_field object=$fichePaie field="debut" form="editFrm" register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fichePaie field="fin"}} </th>
-          <td class="date">{{mb_field object=$fichePaie field="fin" form="editFrm"}}</td>
+          <td class="date">{{mb_field object=$fichePaie field="fin" form="editFrm" register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fichePaie field="salaire"}}</th>

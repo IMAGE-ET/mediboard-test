@@ -1,7 +1,7 @@
 <script language="JavaScript" type="text/javascript">
 Main.add(function () {
-  regFieldCalendar("addPlage", "date");
-  regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut=");
+  Calendar.regField("addPlage", "date");
+  Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut=");
 });
 </script>
 

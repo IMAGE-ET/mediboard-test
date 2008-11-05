@@ -5,7 +5,6 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  regFieldCalendar("recherche", "date_debut");
   var tabs = new Control.Tabs('tab-resultats');  
 });
 

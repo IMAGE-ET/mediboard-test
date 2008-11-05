@@ -1,12 +1,5 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
-Main.add(function () {
-  regFieldCalendar("editFrm", "deb", true);
-  regFieldCalendar("editFrm", "fin", true);
-});
-</script>
-
 <table class="main">
 
 <tr>
@@ -97,12 +90,12 @@ Main.add(function () {
 
     <tr>
       <th>{{mb_label object=$message field="deb"}}</th>
-      <td class="date">{{mb_field object=$message field="deb" form="editFrm"}}</td>
+      <td class="date">{{mb_field object=$message field="deb" form="editFrm" register=true}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$message field="fin"}}</th>
-      <td class="date">{{mb_field object=$message field="fin" form="editFrm"}}</td>
+      <td class="date">{{mb_field object=$message field="fin" form="editFrm" register=true}}</td>
     </tr>
     
     <tr>

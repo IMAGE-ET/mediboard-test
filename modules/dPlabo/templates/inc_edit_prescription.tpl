@@ -3,7 +3,6 @@
 <script type="text/javascript">
   // Explicit form preparation for Ajax loading
   prepareForm(document.addEditPrescription);
-  regFieldCalendar('addEditPrescription', 'date', true);
 </script>
 
 <form name="addEditPrescription" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -31,7 +30,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$prescription field="date"}}</th>
-    <td class="date">{{mb_field object=$prescription field="date" form="addEditPrescription"}}</td>
+    <td class="date">{{mb_field object=$prescription field="date" form="addEditPrescription" register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$prescription field="praticien_id"}}</th>

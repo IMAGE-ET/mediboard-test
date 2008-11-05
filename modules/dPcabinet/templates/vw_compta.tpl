@@ -37,12 +37,6 @@ function changeDate(sDebut, sFin){
   $('printFrm__date_min_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
   $('printFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
 }
-
-Main.add(function () {
-  regFieldCalendar("printFrm", "_date_min");
-  regFieldCalendar("printFrm", "_date_max");
-});
-
 </script>
 
 
@@ -61,7 +55,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false" register=true}}</td>
           <td rowspan="2">
             <table>
               <tr>
@@ -89,7 +83,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_max"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
         </tr> 
         
         <tr>

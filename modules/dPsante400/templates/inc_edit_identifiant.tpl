@@ -76,7 +76,7 @@
 
   <tr>
     <td>{{mb_label object=$idSante400 field="last_update"}}</td>
-    <td class="date">{{mb_field object=$idSante400 field="last_update" form="editFrm" canNull="false"}} </td>
+    <td class="date">{{mb_field object=$idSante400 field="last_update" form="editFrm" canNull="false" register=true}} </td>
   </tr>
 
         

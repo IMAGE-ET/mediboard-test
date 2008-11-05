@@ -11,12 +11,6 @@ function printRapport() {
   url.addElement(form.mode_paiement_id);
   url.popup(700, 550, "Rapport");
 }
-
-Main.add(function () {
-  regFieldCalendar("editFrm", "date");
-  regFieldCalendar("selectFrm", "_date_min");
-  regFieldCalendar("selectFrm", "_date_max");
-});
 </script>
 
 <table class="main">
@@ -51,7 +45,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$gestioncab field="date"}}</th>
-          <td class="date">{{mb_field object=$gestioncab field="date" form="editFrm"}}</td>
+          <td class="date">{{mb_field object=$gestioncab field="date" form="editFrm" register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$gestioncab field="rubrique_id"}}</th>
@@ -133,14 +127,14 @@ Main.add(function () {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm" canNull="false"}}</td>
+          <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm" canNull="false" register=true}}</td>
           <td class="button" colspan="3">
             <button type="submit" class="print" onclick="printRapport()">Imprimer</button>
           </td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date" >{{mb_field object=$filter field="_date_max" form="selectFrm"  canNull="false"}}</td>
+          <td class="date" >{{mb_field object=$filter field="_date_max" form="selectFrm"  canNull="false" register=true}}</td>
           <td class="button" colspan="3">
             <button type="submit" class="search">Afficher</button>
           </td>

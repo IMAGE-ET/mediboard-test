@@ -2,7 +2,7 @@
 
 {{if !$dialog}}
 Main.add(function () {
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_signature_actes&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_signature_actes&date=");
 });
 {{/if}}
 

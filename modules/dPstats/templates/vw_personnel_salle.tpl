@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  regFieldCalendar("personnelSalle", "deb_personnel");
-  regFieldCalendar("personnelSalle", "fin_personnel");
+  Calendar.regField("personnelSalle", "deb_personnel");
+  Calendar.regField("personnelSalle", "fin_personnel");
 });
 
 </script>

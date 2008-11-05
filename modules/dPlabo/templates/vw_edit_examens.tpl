@@ -20,9 +20,6 @@ var Analyse = {
 }
 
 Main.add(function () {
-  regFieldCalendar('editExamen', 'deb_application');
-  regFieldCalendar('editExamen', 'fin_application');
-
   var tabs = new Control.Tabs('tab-examen');
 });
 </script>

@@ -29,7 +29,7 @@
 </form>
 
 <script type="text/javascript">
-	regRedirectPopupCal("{{$date}}", "?m={{$m}}&op=0&date=");
+	Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&op=0&date=");
 </script>
       
 {{include file="inc_details_op_prat.tpl"}}

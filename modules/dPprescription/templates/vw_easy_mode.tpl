@@ -168,10 +168,10 @@ Main.add( function(){
 	     if(document.forms["editDates-{{$typeDate}}-"]){
 	       prepareForm("editDates-{{$typeDate}}-");  
 				 {{if !$line->fin}} 
-	         regFieldCalendar("editDates-{{$typeDate}}-", "debut");
-	         regFieldCalendar("editDates-{{$typeDate}}-", "_fin");     
+	         Calendar.regField("editDates-{{$typeDate}}-", "debut");
+	         Calendar.regField("editDates-{{$typeDate}}-", "_fin");     
 	       {{else}}
-	         regFieldCalendar("editDates-{{$typeDate}}-", "fin");     
+	         Calendar.regField("editDates-{{$typeDate}}-", "fin");     
 	       {{/if}}
 	     }
 	     </script>

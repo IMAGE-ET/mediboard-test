@@ -2,7 +2,7 @@
 {{if $canCabinet->view}}
 <script type="text/javascript">
 Main.add( function () {
-  regRedirectPopupCal("{{$date}}", "?m={{$current_m}}&tab={{$tab}}&date=");
+  Calendar.regRedirectPopup("{{$date}}", "?m={{$current_m}}&tab={{$tab}}&date=");
 } );
 </script>
 {{/if}}

@@ -129,7 +129,7 @@ function setToNow(element) {
     <tr {{if !$can->admin}}style="display: none;"{{/if}}>
       <th>{{mb_label object=$acte field=execution}}</th>
       <td class="date" colspan="3">
-	      {{mb_field object=$acte field=execution form="formActe-$view"}}
+	      {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
         <button type="button" class="tick" onclick="setToNow(this.form.execution);">
           Maintenant
         </button>
@@ -343,7 +343,6 @@ function setToNow(element) {
   oElement = $('acte{{$key}}');
   oForm = getSurroundingForm(oElement);
   prepareForm(oForm);
-	Calendar.regField("formActe-{{$view}}", "execution", true);
 </script>
 
 {{/if}}

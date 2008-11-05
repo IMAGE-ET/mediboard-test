@@ -89,9 +89,6 @@ Main.add(function () {
       input.disabled = "true";
     });
   {{/if}}
-
-  regFieldCalendar("editAffectation", "debut", true);
-  regFieldCalendar("editAffectation", "fin", true);
 });
 </script>
 
@@ -297,11 +294,11 @@ Main.add(function () {
       </tr>
       <tr>
         <th>{{mb_label object=$affectation field="debut"}}</th>
-        <td class="date">{{mb_field object=$affectation field="debut" form="editAffectation"}}</td>
+        <td class="date">{{mb_field object=$affectation field="debut" form="editAffectation" register=true}}</td>
       </tr>
       <tr>  
         <th>{{mb_label object=$affectation field="fin"}}</th>
-        <td class="date">{{mb_field object=$affectation field="fin" form="editAffectation"}}</td>
+        <td class="date">{{mb_field object=$affectation field="fin" form="editAffectation" register=true}}</td>
       </tr>
       <tr>
         <td colspan="2" style="text-align: center">

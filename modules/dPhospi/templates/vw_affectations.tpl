@@ -12,11 +12,7 @@ Main.add(function () {
   } );
   {{/foreach}}
 
-  regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-  
- 
-  regFieldCalendar("addAffectationsejour", "entree", true);
-  regFieldCalendar("addAffectationsejour", "sortie", true);
+  Calendar.regRedirectFlat("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 });
 
 </script>
@@ -131,11 +127,11 @@ Main.add(function () {
         </tr>
         <tr>
           <td class="date"><em>Entrée</em></td>
-          <td class="date">{{mb_field object=$affectation field="entree" form="addAffectationsejour" }}</td>
+          <td class="date">{{mb_field object=$affectation field="entree" form="addAffectationsejour" register=true}}</td>
         </tr>
         <tr>
           <td class="date"><em>Sortie</em></td>
-          <td class="date">{{mb_field object=$affectation field="sortie" form="addAffectationsejour" }}</td>
+          <td class="date">{{mb_field object=$affectation field="sortie" form="addAffectationsejour" register=true}}</td>
       </tr>
       <tr>
         <td class="date highlight" colspan="2">

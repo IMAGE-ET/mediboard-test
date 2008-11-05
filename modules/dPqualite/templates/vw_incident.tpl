@@ -51,7 +51,7 @@ function choixSuiteEven(){
 }
 
 Main.add(function () {
-  regFieldCalendar("FrmEI", "_incident_date");
+  Calendar.regField("FrmEI", "_incident_date");
   refreshListChoix();
   
   oEvenementField = new TokenField(document.FrmEI.evenements);

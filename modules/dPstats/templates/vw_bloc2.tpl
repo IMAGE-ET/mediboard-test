@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  regFieldCalendar("bloc", "deblist");
+  Calendar.regField("bloc", "deblist");
 });
 
 </script>
