@@ -110,7 +110,7 @@ function $V (element, value, fire) {
     if (!Object.isUndefined(value) && value != oldValue) {
       element.setValue(value);
       if (fire) {
-        element.fire("change");
+        (element.onchange || Prototype.emptyFunction).bind(element)();
       }
     }
     
