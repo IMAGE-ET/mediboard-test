@@ -127,6 +127,20 @@ class CDestinataire {
 	    $consultAnesth->loadRefConsultation();
 	    self::makeAllFor($consultAnesth->_ref_consultation);
 	  }
+	  
+	  if ($mbObject instanceof CSejour) {
+	    $sejour = $mbObject;
+	    
+	    $sejour->loadRefPatient();
+	    self::makeAllFor($sejour->_ref_patient);
+	  }
+	  
+	  if ($mbObject instanceof COperation) {
+	    $operation = $mbObject;
+	    
+	    $operation->loadRefSejour();
+	    self::makeAllFor($operation->_ref_sejour);
+	  }
 	}
 }
 ?>
