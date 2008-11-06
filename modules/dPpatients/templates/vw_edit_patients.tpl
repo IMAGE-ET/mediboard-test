@@ -65,7 +65,7 @@ Main.add(function () {
 </script>
 
 {{if $patient->_id}}
-<a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a></td>
+<a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a>
 {{/if}}
 <table class="main">
   <tr>
