@@ -1,7 +1,7 @@
 <!-- Formulaire d'elements les plus utilisés -->
 <form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
   <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" style="width: 145px;">
-    <option value="">&mdash; Produits les plus utilisés</option>
+    <option value="">&mdash; les plus utilisés</option>
     {{if array_key_exists($element, $listFavoris)}}
     {{foreach from=$listFavoris.$element item=curr_element}}
     <option value="{{$curr_element->_id}}">
