@@ -518,19 +518,23 @@ class CMbFieldSpec {
     
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
-    $aHtml[] = '<div class="'.$this->getSpecType().'" id="'.$id.'_da">'.$date.'</div>';
-    $aHtml[] = '<input type="hidden" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
-    $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
+    $html = array();
+    $html[] = '<div class="control">';
+    //$html[] = '<input type="text" value="'.$date.'" class="'.$this->getSpecType().'" id="'.$id.'_da" disabled="disabled" />';
+    $html[] = '<div class="'.$this->getSpecType().'" id="'.$id.'_da">'.$date.'</div>';
+    $html[] = '<input type="hidden" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
+    $html[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"  class="trigger" />';
 
     if (!$this->notNull) {
-      $aHtml[] = '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
+      $html[] = '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
     }
     
     if ($register) {
       $time = $this instanceof CDateTimeSpec ? "true" : "false";
-      $aHtml[] = '<script type="text/javascript">Main.add(function() { Calendar.regField("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
+      $html[] = '<script type="text/javascript">Main.add(function() { Calendar.regField("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
     }
-    return implode("\n", $aHtml);
+    $html[] = '</div>';
+    return implode("\n", $html);
   }
 
   function getFormHtmlElement($object, $params, $value, $className){

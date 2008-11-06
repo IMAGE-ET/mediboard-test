@@ -1,0 +1,11 @@
+.control {
+  display: inline;
+}
+
+.dPsalleOp button.notext,
+.dPsalleOp button.notext:hover {
+  font-size: 0;
+  width: 24px;
+  height: 24px;
+  padding-left: 30px;
+}

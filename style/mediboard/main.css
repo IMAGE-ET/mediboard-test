@@ -192,6 +192,26 @@ div div.text {
   background: transparent;
   margin: 0;
   padding: 0;
+  position: relative;
+  display: inline; /* IE */
+  display: inline-block;
+  vertical-align: middle;
+  height: auto;
+}
+
+.control * {
+  position: relative;
+}
+
+.control .trigger {
+  cursor: pointer;
+  margin: 2px 1px;
+}
+
+.control input, 
+.control button, 
+.control select {
+  margin: 0;
 }
 
 span.smarty-include {
@@ -829,28 +849,6 @@ table.tbl tr.clear th {
   border: none;
 }
 
-table.tbl td.date div {
-  font-size: 11px;
-  border: 1px dotted;
-  padding: 0px 1px;
-  margin: 1px;
-  min-height: 15px;
-  float: left;
-}
-
-div.date {
-	width: 60px;
-}
-
-div.dateTime {
-	width: 90px;
-}
-
-.date img {
-  cursor: pointer;
-  margin: 2px;
-}
-
 /* Form tables */
 table.form {
   width: 100%;
@@ -951,13 +949,23 @@ table.form td.button {
   vertical-align: middle;
 }
 
-table.form td.date div {
+td.date div.dateTime,
+td.date div.date {
   font-size: 11px;
   border: 1px dotted;
-  padding: 0px 1px;
+  padding: 1px;
   margin: 1px;
   min-height: 15px;
+  /*display: inline;*/
   float: left;
+}
+
+div.date {
+  width: 60px;
+}
+
+div.dateTime {
+  width: 90px;
 }
 
 div.autocomplete {
@@ -1538,42 +1546,101 @@ span.hilite {
 /* Module specific CSS*/
   /* @import "./modules.css";   */
 
-table.dPsalleOp select,
-table.dPsalleOp option,
-table.dPsalleOp optgroup,
-table.dPsalleOp input,
-table.dPsalleOp button  {
-  font-size: 14px;
+.dPsalleOp select,
+.dPsalleOp option,
+.dPsalleOp optgroup {
+  padding: 0;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.dPsalleOp select {
+  margin-bottom: 1px;
+}
+
+.dPsalleOp input:focus,
+.dPsalleOp select:focus,
+.dPsalleOp option:focus,
+.dPsalleOp optgroup:focus {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.dPsalleOp option,
+.dPsalleOp optgroup {
+  padding-left: 3px;
+}
+
+.dPsalleOp input,
+.dPsalleOp button {
+  font-size: 1.4em;
+  height: 1.6em;
   font-weight: normal;
+  vertical-align: middle;
 }
 
-table.dPsalleOp select,
-table.dPsalleOp input,
-table.dPsalleOp button  {
-  height: 24px;
-}
-
-table.dPsalleOp option,
-table.dPsalleOp optgroup  {
+.dPsalleOp input[type=text] {
   padding: 2px;
+  padding-bottom: 0px;
+  padding-left: 1px;
+  height: 1.4em;
+  font-size: 1.3em;
 }
 
-table.dPsalleOp optgroup option {
+.dPsalleOp button, 
+.dPsalleOp button:hover {
+  padding-left: 1.4em;
+  padding-right: 3px;
+  background-position: 3px 140%;
+  background-color: #A9C8CD;
+  background-repeat: repeat-x;
+}
+
+.dPsalleOp label,
+.dPsalleOp td.date div.date {
+  padding: 4px;
+}
+
+.dPsalleOp td.date div.date {
+  font-size: 1.15em;
+}
+
+.dPsalleOp optgroup option {
   padding-left: 1em;
 }
 
-table.dPsalleOp optgroup {
-  font-weight: bold;
+.dPsalleOp button.notext,
+.dPsalleOp button.notext:hover,
+.dPsalleOp .control .trigger  {
+  width: 1.6em;
+  height: 1.6em;
 }
 
-table.dPsalleOp .notext  {
-  font-size: 0px;
+/** @todo : needed to repeat */
+.dPsalleOp button.notext,
+.dPsalleOp button.notext:hover {
+  background-position: 1px 140%;
+  background-color: #A9C8CD;
+  background-repeat: repeat-x;
 }
 
-  /* @import "./contacts.css";  */
+
+.dPsalleOp .control .trigger {
+  margin: 1px;
+  top: 3px;
+}
+
+.dPsalleOp .control button,
+.dPsalleOp .control input {
+  top: -4px;
+}
+
+.dPsalleOp ul.control_tabs li a, 
+.dPsalleOp ul.control_tabs_vertical li a {
+  font-size: 1.3em;
+}
 
 /* contacts table */
-
 table.contacts {
 	background-color: #888;
 }

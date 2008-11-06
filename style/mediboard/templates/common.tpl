@@ -13,6 +13,11 @@
   {{$mediboardCommonStyle|smarty:nodefaults}}
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
+  
+  <!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
+  <![endif]-->
+  
   <script type="text/javascript">
     {{if $offline}}
     var config = {{$configOffline|@json}};
@@ -23,6 +28,10 @@
     Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
   </script>
+  
+  {{if 0 && $app->user_id}}
+  <script type="text/javascript" src="?m=system&amp;a=js_locales&amp;suppressHeaders=1&amp;cache=1&amp;build={{$version.build}}"></script>
+  {{/if}}
 </head>
 
 <body>

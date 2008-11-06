@@ -204,7 +204,7 @@ class CNumSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     if ($form && $increment) {
-	    $sHtml  = '<div class="numericField">';
+	    $sHtml  = '<div class="control numericField">';
 	    $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
 	    $sHtml .= '
 	  <script type="text/javascript">

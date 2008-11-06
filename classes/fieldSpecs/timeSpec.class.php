@@ -63,16 +63,20 @@ class CTimeSpec extends CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
-    $html  = '<span class="date"><input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
-    if ($form) {
-      $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="time" />';
-      if (!$this->notNull) {
-        $html .= '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
-      }
-    $html .= '<script type="text/javascript">Main.add(function() { new TimePicker("'.$form.'", "'.$field.'"); } ); </script>';
-    }
     
-    return $html.'</span>';
+    $html = array();
+    $html[] = '<div class="control '.$class.'">';
+    $html[] = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
+    if ($form) {
+      $html[] = '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="trigger" />';
+      if (!$this->notNull) {
+        $html[] = '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
+      }
+      $html[] = '<script type="text/javascript">Main.add(function() { new TimePicker("'.$form.'", "'.$field.'"); } ); </script>';
+    }
+    $html[] = '</div>';
+    
+    return implode("\n", $html);
   }
 }
 
