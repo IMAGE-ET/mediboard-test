@@ -821,6 +821,7 @@ class CMbObject {
       return;
     }
     
+    // TODO: supprimer ces lignes
     $system_version = explode(".", CModule::getInstalled("system")->mod_version);
     if ($system_version[0] == 1 && $system_version[1] == 0 && $system_version[2] < 4){
       return;	
@@ -1222,7 +1223,7 @@ class CMbObject {
    *  Generic seek method
    *  @return the first 100 records which fits the keywords
    */
-  function seek($keywords) {
+  function seek($keywords, $limit = 100) {
     $sql = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
     if(count($keywords) and count($this->_seek)) {
       foreach($keywords as $key) {
@@ -1262,7 +1263,7 @@ class CMbObject {
       $sql .= "\n$keySeek,";
     }
     $sql .= "\n {$this->_spec->key}";
-    $sql .=" LIMIT 0,100";
+    $sql .=" LIMIT 0,".($limit?$limit:100);
     
     return $this->loadQueryList($sql);
   }

@@ -44,7 +44,7 @@ class CMedecin extends CMbObject {
     $backRefs["patients_correspondants"] = "CCorrespondant medecin_id";
     return $backRefs;
   }
-    
+
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["nom"]             = "notNull str confidential";

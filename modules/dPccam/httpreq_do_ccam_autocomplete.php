@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
+global $can;
 $ds = CSQLDataSource::get("ccamV2");
 
 if($codeacte = @$_POST["codeacte"]){

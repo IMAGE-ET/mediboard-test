@@ -3,17 +3,14 @@
 <script type="text/javascript">
 Medecin = {
   form: null,
-  widgetId: null,
-  edit : function(form, widget_id) {
+  edit : function(form) {
     this.form = form;
-    this.widgetId = widget_id;
     var url = new Url();
     url.setModuleAction("dPpatients", "vw_medecins");
     url.popup(700, 450, "Medecin");
   },
   
-  del: function(form, widget_id) {
-    var widget = $(widget_id).widget;
+  del: function(form) {
     if (confirm("Voulez vous vraiment supprimer ce médecin ?")) {
       if (form.medecin_traitant) {
         $V(form.medecin_traitant, '');
@@ -21,21 +18,26 @@ Medecin = {
       else {
         $V(form.del, 1);
       }
-      onSubmitFormAjax(form, {onComplete: function() {widget.refresh()} });
     }
   },
   
   set: function(id) {
-    var widget = $(this.widgetId).widget;
-    if (this.form.medecin_traitant) {
-      $V(this.form.medecin_traitant, id);
-    } 
-    else {
-      $V(this.form.medecin_id, id);
-    }
-    onSubmitFormAjax(this.form, {onComplete: widget.refresh.bind(widget)});
+    $V(this.form.medecin_traitant ? this.form.medecin_traitant : this.form.medecin_id, id);
   }
 };
+
+submitMedecin = function(form) {
+  return onSubmitFormAjax(form, {
+    onComplete: function() {$('{{$widget_id}}').widget.refresh()} 
+  });
+}
+
+{{if $patient && $patient->_id}}
+Main.add(function () {
+  initMedecinAutocomplete("correspondant-new-{{$patient->_id}}", "_view");
+  initMedecinAutocomplete("traitant-edit-{{$patient->_id}}", "_view");
+});
+{{/if}}
 </script>
 
 {{if $patient && $patient->_id}}
@@ -45,46 +47,50 @@ Medecin = {
       {{mb_label object=$patient field="medecin_traitant"}}
       {{mb_field object=$patient field="medecin_traitant" hidden=1}}
     </th>
-    <td class="readonly">
-      <form name="traitant-edit-{{$patient->_id}}" action="?" method="post">
+    <td>
+      <form name="traitant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
-        <input type="hidden" name="medecin_traitant" value="" />
-        <input type="text" name="_view" size="30" value="Dr {{$patient->_ref_medecin_traitant->_view}}" ondblclick="Medecin.edit(this.form, '{{$widget_id}}')" readonly="readonly" />
-        <button class="search" type="button" onclick="Medecin.edit(this.form, '{{$widget_id}}')">Choisir</button>
-        <button class="cancel notext" type="button" onclick="Medecin.del(this.form, '{{$widget_id}}')">{{tr}}Delete{{/tr}}</button>
+        <input type="hidden" name="medecin_traitant" value="{{$patient->medecin_traitant}}" onchange="this.form.onsubmit()" />
+        Dr <input type="text" name="_view" size="30" value="{{$patient->_ref_medecin_traitant->_view}}" ondblclick="Medecin.edit(this.form)" />
+        <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display:none;" class="autocomplete"></div>
+        <button class="search" type="button" onclick="Medecin.edit(this.form)">Choisir</button>
+        <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
     </td>
   </tr>
   {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp name=corresp}}
   <tr>
-    <th>{{tr}}CCorrespondant{{/tr}} {{$smarty.foreach.corresp.iteration}}</th>
+    {{if $smarty.foreach.corresp.first}}
+      <th rowspan="{{$patient->_ref_medecins_correspondants|@count}}">{{tr}}CPatient-back-medecins_correspondants{{/tr}}</th>
+    {{/if}}
     <td class="readonly">
-      <form name="correspondant-edit-{{$patient->_id}}" action="?" method="post">
+      <form name="correspondant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_correspondant_aed" />
-        <input type="hidden" name="del" value="" />
+        <input type="hidden" name="del" value="" onchange="this.form.onsubmit()" />
         <input type="hidden" name="correspondant_id" value="{{$curr_corresp->_id}}" />
         <input type="hidden" name="patient_id" value="{{$curr_corresp->_ref_patient->_id}}" />
-        <input type="hidden" name="medecin_id" value="{{$curr_corresp->_ref_medecin->_id}}" />
-        <input type="text" name="_view" size="30" value="Dr {{$curr_corresp->_ref_medecin->_view}}" ondblclick="Medecin.edit(this.form, '{{$widget_id}}')" readonly="readonly" />
-        <button class="search" type="button" onclick="Medecin.edit(this.form, '{{$widget_id}}')">Choisir</button>
-        <button class="cancel notext" type="button" onclick="Medecin.del(this.form, '{{$widget_id}}')">{{tr}}Delete{{/tr}}</button>
+        <input type="hidden" name="medecin_id" value="{{$curr_corresp->_ref_medecin->_id}}" onchange="this.form.onsubmit()" />
+        Dr <input type="text" name="_view" size="30" value="{{$curr_corresp->_ref_medecin->_view}}" ondblclick="Medecin.edit(this.form)" readonly="readonly" />
+        <button class="search" type="button" onclick="Medecin.edit(this.form)">Choisir</button>
+        <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
     </td>
   </tr>
   {{/foreach}}
   <tr>
     <th>{{tr}}CCorrespondant-title-create{{/tr}}</th>
-    <td class="readonly">
-      <form name="correspondant-new-{{$patient->_id}}" action="?" method="post">
+    <td>
+      <form name="correspondant-new-{{$patient->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_correspondant_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
-        <input type="hidden" name="medecin_id" value="" />
-        <input type="text" name="_view" size="30" value="" ondblclick="Medecin.edit(this.form, '{{$widget_id}}')" readonly="readonly" />
-        <button class="search" type="button" onclick="Medecin.edit(this.form, '{{$widget_id}}')">Choisir</button>
+        <input type="hidden" name="medecin_id" value="" onchange="this.form.onsubmit()" />
+        Dr <input type="text" name="_view" size="30" value="" ondblclick="Medecin.edit(this.form)" />
+        <div id="correspondant-new-{{$patient->_id}}__view_autocomplete" style="display:none;" class="autocomplete"></div>
+        <button class="search" type="button" onclick="Medecin.edit(this.form)">Choisir</button>
       </form>
     </td>
   </tr>

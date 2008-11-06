@@ -1,3 +1,24 @@
+function initMedecinAutocomplete(formName, fieldName, doFocus) {
+  var form = getForm(formName);
+  var field = $(form[fieldName]);
+  var choices = formName+'_'+fieldName+'_autocomplete';
+  Assert.that(field, "Medecin field '%s'is missing", fieldName);
+  Assert.that($(choices), "Medecin complete div '%s'is missing", choices);
+
+  new Ajax.Autocompleter(
+    field,
+    choices,
+    '?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_medecins_autocomplete&keywords_field='+fieldName, {
+      method: 'get',
+      minChars: 2,
+      frequency: 0.15,
+      updateElement : function(element) {
+        $V((form.medecin_id ? form.medecin_id : form.medecin_traitant), element.id.split('-')[1]);
+      }
+    }
+  );
+}
+
 var Correspondants = Correspondants || Class.create({
   initialize: function (patient_id, options) {
     this.module = "dPpatients";
