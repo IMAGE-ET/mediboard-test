@@ -396,12 +396,6 @@ Object.extend(ElementChecker, {
       }
     },
     
-    // date
-    date: function() {
-      if(!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))
-        this.addError("date", "N'a pas un format de date correct");
-    },
-    
     birthDate: function() {
       this.date();
       var values = null;
@@ -423,15 +417,33 @@ Object.extend(ElementChecker, {
 	    }
     },
     
+    // date
+    date: function() {
+    	if (["now", "current"].include(this.sValue)) {
+    		return;
+    	}
+
+      if (!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))
+        this.addError("date", "N'a pas un format de date correct");
+    },
+    
     // time
     time: function() {
+    	if (["now", "current"].include(this.sValue)) {
+    		return;
+    	}
+
       if(!this.sValue.match(/^(\d{1,2}):?(\d{1,2}):?(\d{1,2})?$/))
         this.addError("time", "N'a pas un format d'heure correct");
     },
     
     // dateTime
     dateTime: function() {
-      if(!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ \+](\d{1,2}):(\d{1,2}):(\d{1,2})$/))
+    	if (["now", "current"].include(this.sValue)) {
+    		return;
+    	}
+    	
+      if (!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ \+](\d{1,2}):(\d{1,2}):(\d{1,2})$/))
         this.addError("dateTime", "N'a pas un format de date/heure correct");
     },
     

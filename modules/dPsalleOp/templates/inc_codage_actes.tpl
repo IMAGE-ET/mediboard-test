@@ -10,10 +10,8 @@ function viewCode(code, class){
 }
 
 function setToNow(element) {
-  var dNow = new Date();
-  element.value = dNow.toDATETIME();
-  $(element.id + "_da").innerHTML = dNow.toLocaleDateTime();
-  
+  element.value = "now";
+  $(element.id + "_da").innerHTML = "Maintenant";
 }
 
 </script>
@@ -126,7 +124,7 @@ function setToNow(element) {
     </tr>
     
     <!-- Execution -->
-    <tr {{if !$can->admin}}style="display: none;"{{/if}}>
+    <tr {{if !$can->edit}}style="display: none;"{{/if}}>
       <th>{{mb_label object=$acte field=execution}}</th>
       <td class="date" colspan="3">
 	      {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
