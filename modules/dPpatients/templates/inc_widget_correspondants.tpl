@@ -55,7 +55,7 @@ Main.add(function () {
         <input type="hidden" name="medecin_traitant" value="{{$patient->medecin_traitant}}" onchange="this.form.onsubmit()" />
         Dr <input type="text" name="_view" size="30" value="{{$patient->_ref_medecin_traitant->_view}}" ondblclick="Medecin.edit(this.form)" />
         <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display:none;" class="autocomplete"></div>
-        <button class="search" type="button" onclick="Medecin.edit(this.form)">Choisir</button>
+        <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
     </td>
@@ -74,7 +74,7 @@ Main.add(function () {
         <input type="hidden" name="patient_id" value="{{$curr_corresp->_ref_patient->_id}}" />
         <input type="hidden" name="medecin_id" value="{{$curr_corresp->_ref_medecin->_id}}" onchange="this.form.onsubmit()" />
         Dr <input type="text" name="_view" size="30" value="{{$curr_corresp->_ref_medecin->_view}}" ondblclick="Medecin.edit(this.form)" readonly="readonly" />
-        <button class="search" type="button" onclick="Medecin.edit(this.form)">Choisir</button>
+        <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Change{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
     </td>
@@ -90,13 +90,13 @@ Main.add(function () {
         <input type="hidden" name="medecin_id" value="" onchange="this.form.onsubmit()" />
         Dr <input type="text" name="_view" size="30" value="" ondblclick="Medecin.edit(this.form)" />
         <div id="correspondant-new-{{$patient->_id}}__view_autocomplete" style="display:none;" class="autocomplete"></div>
-        <button class="search" type="button" onclick="Medecin.edit(this.form)">Choisir</button>
+        <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
       </form>
     </td>
   </tr>
 </table>
 {{else}}
   <div class="big-info">
-    Veuillez enregistrer le patient avant de pouvoir modifier ses médecins correspondants
+    Veuillez créer la fiche patient avant de pouvoir modifier ses médecins correspondants
   </div>
 {{/if}}

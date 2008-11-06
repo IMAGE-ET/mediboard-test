@@ -387,6 +387,9 @@ function mbMinutesRelative($from, $to) {
   return $minutes;
 }
 
+/**
+ * Date utility class
+ */
 class CMbDate {
   static $secs_per = array (
     "year"   => 31536000, // 60 * 60 * 24 * 365
@@ -398,17 +401,28 @@ class CMbDate {
     "second" =>        1, // 1 
    );
     
-  static function relative($from, $to) {
-	  if (!$from || !$to) {
+  /**
+   * Compute user friendly approximative duration between two date time
+   * @param datetime $from Starting time
+   * @param datetime $to Ending time, now if null
+   * @param int $min_count The minimum count to reach the upper unit, 2 if undefined
+   * @return array("unit" => string, "count" => int)
+   */
+  static function relative($from, $to = null, $min_count = 2) {
+	  if (!$from) {
 	    return null;
 	  }
     
+	  if (!$to) {
+	    $to = mbDateTime();
+	  }
+	  
 	  // Compute diff in seconds
 	  $diff = strtotime($to) - strtotime($from);
 	  
 	  // Find the best unit
 	  foreach (self::$secs_per as $unit => $secs) {
-	    if (abs($diff / $secs) > 1) {
+	    if (abs($diff / $secs) > $min_count) {
 	    	break;
 	    }
 	  }

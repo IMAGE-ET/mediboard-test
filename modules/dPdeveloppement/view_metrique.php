@@ -25,8 +25,10 @@ foreach ($listesClasses as $class){
 	$object = new $class;
   $sql = "SHOW TABLE STATUS LIKE '{$object->_spec->table}'";
   $statusTable = $ds->loadList($sql);
-  if ($statusTable)
+  if ($statusTable) {
     $result[$class] = $statusTable[0];
+    $result[$class]["Update_relative"] = CMbDate::relative($result[$class]["Update_time"]);
+  }
 }
 
 // Création du template

@@ -8,7 +8,12 @@
   <tr>
     <td>{{tr}}{{$class}}{{/tr}}</td>
     <td>{{$curr_result.Rows}}</td>
-    <td>{{$curr_result.Update_time|date_format:"%d/%m/%Y %Hh%M"}}</td>
+    <td>
+      {{assign var=relative value=$curr_result.Update_relative}}
+      <label title="{{$curr_result.Update_time|date_format:$dPconfig.datetime}}">
+      	{{$relative.count}} {{tr}}{{$relative.unit}}{{if $relative.count > 1}}s{{/if}}{{/tr}}
+      </label>
+    </td>
   </tr>
   {{/foreach}}
 </table>

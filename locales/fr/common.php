@@ -85,7 +85,7 @@ $locales['Restore'] = 'Rétablir';
 $locales['Save'] = 'Enregistrer';
 $locales['Search'] = 'Rechercher';
 $locales['Select'] = 'Sélectionner';
-$locales['Choose'] = 'Veuillez Choisir';
+$locales['Choose'] = 'Choisir';
 $locales['Show'] = 'Voir';
 $locales['Start'] = 'Commencer';
 $locales['Starts'] = 'Débuts';
@@ -130,4 +130,5 @@ $locales['month'] = 'mois';
 $locales['months'] = 'mois';
 $locales['years'] = 'années';
 $locales['year'] = 'année';
+$locales['Change'] = 'Changer';
 ?>

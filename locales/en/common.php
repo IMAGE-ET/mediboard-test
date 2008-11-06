@@ -89,7 +89,7 @@ $locales['Restore'] = '';
 $locales['Save'] = 'Save';
 $locales['Search'] = 'Search';
 $locales['Select'] = 'Select';
-$locales['Choose'] = 'Please choose';
+$locales['Choose'] = 'Choose';
 $locales['Show'] = 'Show';
 $locales['Start'] = '';
 $locales['Starts'] = 'Starts';
@@ -130,4 +130,5 @@ $locales['month'] = 'month';
 $locales['months'] = 'months';
 $locales['years'] = 'years';
 $locales['year'] = 'year';
+$locales['Change'] = '';
 ?>
