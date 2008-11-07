@@ -30,15 +30,17 @@ $mediChir = new CMediusers();
 $mediChir->load($chir);
 
 // Chargement des plages pour le chir ou sa spécialité
+/*
 $salle = new CSalle;
 $where = array('bloc_id' => $ds->prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ))));
 $listSalles = $salle->loadListWithPerms(PERM_READ, $where);
+*/
 
 $listPlages = new CPlageOp;
 $where = array();
 $where[]           = $ds->prepare("(plagesop.chir_id = %1 OR plagesop.spec_id = %2)",$mediChir->user_id,$mediChir->function_id);
 $where["date"]     = "LIKE '$year-$month-__'";
-$where["salle_id"] = $ds->prepareIn(array_keys($listSalles));
+//$where["salle_id"] = $ds->prepareIn(array_keys($listSalles));
 $order = "date, debut";
 $listPlages = $listPlages->loadList($where, $order);
 
