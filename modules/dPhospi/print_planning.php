@@ -90,7 +90,7 @@ $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
-  $sejour->loadRefPatient();
+  $sejour->loadRefPatient(1);
   $sejour->_ref_first_affectation->loadRefLit();
   $affectation =& $sejour->_ref_first_affectation;
   $affectation->_ref_lit->loadCompleteView();
@@ -102,11 +102,10 @@ foreach ($sejours as $key => &$sejour) {
     unset($sejours[$key]);
     continue;
   } 
-
-  $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
+  $sejour->loadRefPraticien(1);
 
   foreach($sejour->_ref_operations as &$operation) {
-    $operation->loadRefsFwd();
+    $operation->loadRefsFwd(1);
   }
 
   $curr_date = mbDate(null, $sejour->{$filter->_horodatage});

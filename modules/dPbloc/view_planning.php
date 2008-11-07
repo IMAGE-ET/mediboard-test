@@ -64,7 +64,7 @@ $plagesop = $plagesop->loadList($where, $order);
 
 // Operations de chaque plage
 foreach($plagesop as &$plage) {
-  $plage->loadRefsFwd();
+  $plage->loadRefsFwd(1);
   
   $where = array();
   $where["plageop_id"] = "= '$plage->_id'";
@@ -83,12 +83,12 @@ foreach($plagesop as &$plage) {
   $listOp = $listOp->loadList($where, $order);
 
   foreach($listOp as $keyOp => &$operation) {
-    $operation->loadRefsFwd();
+    $operation->loadRefsFwd(1);
     $sejour =& $operation->_ref_sejour;
     if($filterSejour->type && $filterSejour->type != $sejour->type) {
       unset($listOp[$keyOp]);
     } else {
-     $sejour->loadRefsFwd();   
+     $sejour->loadRefsFwd(1);   
      // On utilise la first_affectation pour contenir l'affectation courante du patient
      $sejour->_ref_first_affectation = $sejour->getCurrAffectation($operation->_datetime);
      $affectation =& $sejour->_ref_first_affectation;

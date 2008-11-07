@@ -38,16 +38,16 @@ $listPlage = $listPlage->loadList($where, $order);
 
 // Pour chaque plage on selectionne les consultations
 foreach($listPlage as $keyPlage => $plage) {
-  $listPlage[$keyPlage]->loadRefs(false);
+  $listPlage[$keyPlage]->loadRefs(false, 1);
   $consultation =& $listPlage[$keyPlage]->_ref_consultations;
   foreach($consultation as $keyCons => $consult) {
-    $consultation[$keyCons]->loadRefPatient();
+    $consultation[$keyCons]->loadRefPatient(1);
     $consultation[$keyCons]->loadRefCategorie();
     $consultation[$keyCons]->loadRefConsultAnesth();
     $consult_anesth =& $consultation[$keyCons]->_ref_consult_anesth;
     if($consult_anesth->consultation_anesth_id && $consult_anesth->operation_id){
       $consult_anesth->loadRefOperation();
-      $consult_anesth->_ref_operation->loadRefsFwd();
+      $consult_anesth->_ref_operation->loadRefsFwd(1);
       $consult_anesth->_date_op =& $consult_anesth->_ref_operation->_ref_plageop->date;
     } 
   }

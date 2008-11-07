@@ -321,9 +321,9 @@ class CConsultation extends CCodable {
   }
   
   function loadView() {
-  	$this->loadRefPlageConsult();
+  	$this->loadRefPlageConsult(1);
     $this->loadRefsFichesExamen(); 
-    $this->loadRefsFwd();
+    $this->loadRefsFwd(1);
     $this->loadRefsActesCCAM();
   }
 
@@ -709,9 +709,13 @@ class CConsultation extends CCodable {
     }
   }
   
-  function loadRefCategorie() {
+  function loadRefCategorie($cache = 0) {
     $this->_ref_categorie = new CConsultationCategorie();
-    $this->_ref_categorie->load($this->categorie_id);
+    if($cache) {
+      $this->_ref_categorie = $this->_ref_categorie->getCached($this->categorie_id);
+    } else {
+      $this->_ref_categorie->load($this->categorie_id);
+    }
   }
   
   function loadComplete() {
@@ -722,23 +726,31 @@ class CConsultation extends CCodable {
     }
   }
   
-  function loadRefPatient() {
+  function loadRefPatient($cache = 0) {
     if ($this->_ref_patient) {
       return;
     }
     
     $this->_ref_patient = new CPatient;
-    $this->_ref_patient->load($this->patient_id);
+    if($cache) {
+      $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
+    } else {
+      $this->_ref_patient->load($this->patient_id);
+    }
   }
   
   // Chargement du sejour et du RPU dans le cas d'une urgence
-  function loadRefSejour(){
+  function loadRefSejour($cache = 0){
     if ($this->_ref_sejour) {
       return;
     }
     
     $this->_ref_sejour = new CSejour();
-    $this->_ref_sejour->load($this->sejour_id);
+    if($cache) {
+      $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+    } else {
+      $this->_ref_sejour->load($this->sejour_id);
+    }
     $this->_ref_sejour->loadRefRPU();
   }
   
@@ -746,14 +758,18 @@ class CConsultation extends CCodable {
     $this->loadRefPlageConsult();
   }
   
-  function loadRefPlageConsult() {
+  function loadRefPlageConsult($cache = 0) {
     if ($this->_ref_plageconsult) {
       return; 
     }
 
     $this->_ref_plageconsult = new CPlageconsult;
-    $this->_ref_plageconsult->load($this->plageconsult_id);
-    $this->_ref_plageconsult->loadRefsFwd();
+    if($cache) {
+      $this->_ref_plageconsult = $this->_ref_plageconsult->getCached($this->plageconsult_id);
+    } else {
+      $this->_ref_plageconsult->load($this->plageconsult_id);
+    }
+    $this->_ref_plageconsult->loadRefsFwd($cache);
     
     // Foreign fields
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
@@ -764,7 +780,7 @@ class CConsultation extends CCodable {
   }
   
   function loadRefPraticien(){
-  	$this->loadRefPlageConsult();
+  	$this->loadRefPlageConsult(1);
     $this->_ref_praticien =& $this->_ref_chir;
   }
   
@@ -772,10 +788,10 @@ class CConsultation extends CCodable {
   	$this->loadRefPlageConsult();
   }
   
-  function loadRefsFwd() {
-    $this->loadRefPatient();
-    $this->_ref_patient->loadRefConstantesMedicales();
-    $this->loadRefPlageConsult();
+  function loadRefsFwd($cache = 0) {
+    $this->loadRefPatient($cache);
+    $this->_ref_patient->loadRefConstantesMedicales(1);
+    $this->loadRefPlageConsult($cache);
     $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".mbTransformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
     $this->loadExtCodesCCAM();
@@ -895,7 +911,7 @@ class CConsultation extends CCodable {
       } else {
         $this->_ref_reglements_tiers[$curr_reglement->_id] = $curr_reglement;
       }
-      $curr_reglement->loadRefsBack();
+      $curr_reglement->loadRefsFwd(1);
     }
     
     // Calcul de la somme du restante du patient

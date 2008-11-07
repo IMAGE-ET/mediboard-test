@@ -126,13 +126,13 @@ class CConstantesMedicales extends CMbObject {
   function loadRefContext() {
     if ($this->context_class && $this->context_id) {
       $this->_ref_context = new $this->context_class;
-      $this->_ref_context->load($this->context_id);
+      $this->_ref_context = $this->_ref_context->getCached($this->context_id);
     }
   }
   
   function loadRefPatient() {
     $this->_ref_patient = new CPatient;
-    $this->_ref_patient->load($this->patient_id);
+    $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
   }
 
   function loadRefsFwd() {

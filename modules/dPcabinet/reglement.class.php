@@ -43,16 +43,19 @@ class CReglement extends CMbObject {
     return $specs;
   }
   
-  function loadRefsFwd() {
-    if (!$this->_ref_consultation) {
+  function loadRefsFwd($cache = 0) {
+    if(!$this->_ref_consultation) {
  	    $this->_ref_consultation = new CConsultation();
-  	  $this->_ref_consultation->load($this->consultation_id);
+ 	    if($cache) {
+        $this->_ref_consultation = $this->_ref_consultation->getCached($this->consultation_id);
+ 	    } else {
+ 	      $this->_ref_consultation->load($this->consultation_id);
+ 	    }
     }
-  }
-  
-  function loadRefsBack() {
-    $this->_ref_banque = new CBanque();
-    $this->_ref_banque->load($this->banque_id);
+    if(!$this->_ref_banque) {
+      $this->_ref_banque = new CBanque();
+      $this->_ref_banque = $this->_ref_banque->getCached($this->banque_id);
+    }
   }
   
   function check () {

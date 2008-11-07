@@ -79,8 +79,8 @@ $reglements = $reglement->loadList($where, "reglement.date, plageconsult.chir_id
 $listReglements = array();
 $listConsults = array();
 foreach($reglements as $curr_reglement) {
-  $curr_reglement->loadRefs();
-  $curr_reglement->_ref_consultation->loadRefsFwd();
+  $curr_reglement->loadRefsFwd(1);
+  $curr_reglement->_ref_consultation->loadRefsFwd(1);
   if($curr_reglement->emetteur == "patient") {
     $recapReglement["total"]["du_patient"] += $curr_reglement->montant;
     $recapReglement["total"]["nb_reglement_patient"]++;

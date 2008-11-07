@@ -139,19 +139,23 @@ class CPlageconsult extends CMbObject {
     }
   }
   
-  function loadRefs($withCanceled = true) {
-    $this->loadRefsFwd();
+  function loadRefs($withCanceled = true, $cache = 0) {
+    $this->loadRefsFwd($cache);
     $this->loadRefsBack($withCanceled);
   }
   
-  function loadRefsFwd() {
+  function loadRefsFwd($cache = 0) {
     $this->_ref_chir = new CMediusers();
-    $this->_ref_chir->load($this->chir_id);
+    if($cache) {
+      $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
+    } else {
+      $this->_ref_chir->load($this->chir_id);
+    }
   }
   
   function getPerm($permType) {
     if(!$this->_ref_chir) {
-      $this->loadRefsFwd();
+      $this->loadRefsFwd(1);
     }
     return $this->_ref_chir->getPerm($permType) && $this->_ref_module->getPerm($permType);
   }
