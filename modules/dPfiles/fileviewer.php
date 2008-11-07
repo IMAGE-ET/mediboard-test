@@ -86,6 +86,12 @@ if($file_id = mbGetValueFromGet("file_id")) {
 //      $finUrl .= "&fltr[]=usm";
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
       //header("Location: images/pictures/acroread.png");
+    } elseif(strpos($file->file_type, "csv") !== false) {
+      header("Location: images/pictures/spreadsheet.png");
+    } elseif(strpos($file->file_type, "xls") !== false) {
+      header("Location: images/pictures/spreadsheet.png");
+    } elseif(strpos($file->file_type, "ods") !== false) {
+      header("Location: images/pictures/spreadsheet.png");
     } elseif(strpos($file->file_type, "text") !== false) {
       header("Location: images/pictures/text.png");
     } elseif(strpos($file->file_type, "msword") !== false) {

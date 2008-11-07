@@ -53,8 +53,7 @@ class CBlocOperatoire extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
-    $this->_view = $this->_ref_group->_view.' - '.$this->nom;
+    $this->_view = $this->nom;
   }
   
   /**

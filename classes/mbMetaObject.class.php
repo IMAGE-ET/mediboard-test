@@ -50,7 +50,8 @@ class CMbMetaObject extends CMbObject {
     }
 
   	$this->_ref_object = new $this->object_class;
-    if (!$this->_ref_object->load($this->object_id)) {
+  	$this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    if (!$this->_ref_object->_id) {
       $this->_ref_object->load(null);
       $this->_ref_object->_view = "Element supprimé";
     }

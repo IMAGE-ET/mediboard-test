@@ -465,14 +465,19 @@ class COperation extends CCodable {
     }
   }
   
-  function loadRefChir() {
+  function loadRefChir($cache = 0) {
     $this->_ref_chir = new CMediusers;
-    $this->_ref_chir->load($this->chir_id);
+    if($cache) {
+      $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
+    } else {
+      $this->_ref_chir->load($this->chir_id);
+    }
+    
     $this->_praticien_id = $this->_ref_chir->_id;
   }
   
-  function loadRefPraticien(){
-    $this->loadRefChir();
+  function loadRefPraticien($cache = 0){
+    $this->loadRefChir($cache);
     $this->_ref_praticien =& $this->_ref_chir;
   }
   
@@ -512,15 +517,23 @@ class COperation extends CCodable {
     }
   }
   
-  function loadRefPlageOp() {
+  function loadRefPlageOp($cache = 0) {
     $this->_ref_anesth = new CMediusers;
-    $this->_ref_anesth->load($this->anesth_id);
+    if($cache) {
+      $this->_ref_anesth = $this->_ref_anesth->getCached($this->anesth_id);
+    } else {
+      $this->_ref_anesth->load($this->anesth_id);
+    }
     $this->_ref_plageop = new CPlageOp;
     
     // Avec plage d'opération
     if ($this->plageop_id) {
-      $this->_ref_plageop->load($this->plageop_id);
-      $this->_ref_plageop->loadRefsFwd();
+      if($cache) {
+        $this->_ref_plageop = $this->_ref_plageop->getCached($this->plageop_id);
+      } else {
+        $this->_ref_plageop->load($this->plageop_id);
+      }
+      $this->_ref_plageop->loadRefsFwd($cache);
       
       if (!$this->anesth_id) {
         $this->_ref_anesth =& $this->_ref_plageop->_ref_anesth;
@@ -574,32 +587,36 @@ class COperation extends CCodable {
     $this->_ref_consult_anesth->loadMatchingObject($order);
   }
   
-  function loadRefSejour() {
+  function loadRefSejour($cache = 0) {
     if ($this->_ref_sejour) {
       return;
     }
 
     $this->_ref_sejour = new CSejour();
-	  $this->_ref_sejour->load($this->sejour_id);
+    if($cache) {
+      $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+    } else {
+      $this->_ref_sejour->load($this->sejour_id);
+    }
   }
   
-  function loadRefPatient() {
-    $this->loadRefSejour();
-    $this->_ref_sejour->loadRefPatient();
+  function loadRefPatient($cache = 0) {
+    $this->loadRefSejour($cache);
+    $this->_ref_sejour->loadRefPatient($cache);
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
   }
   
-  function loadRefsFwd() {
+  function loadRefsFwd($cache = 0) {
     $this->loadRefsConsultAnesth();
     $this->_ref_consult_anesth->loadRefConsultation();
     $this->_ref_consult_anesth->_ref_consultation->getNumDocsAndFiles();
     $this->_ref_consult_anesth->_ref_consultation->canRead();
     $this->_ref_consult_anesth->_ref_consultation->canEdit();
-    $this->loadRefChir();
-    $this->loadRefPlageOp();
+    $this->loadRefChir($cache);
+    $this->loadRefPlageOp($cache);
     $this->loadExtCodesCCAM();
-    $this->loadRefSejour();
-    $this->_ref_sejour->loadRefsFwd();
+    $this->loadRefSejour($cache);
+    $this->_ref_sejour->loadRefsFwd($cache);
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
   }
   

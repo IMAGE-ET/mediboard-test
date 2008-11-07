@@ -574,18 +574,26 @@ class CSejour extends CCodable {
     $this->_ref_dossier_medical->loadObject($where);
   }
   
-  function loadRefEtabExterne(){
+  function loadRefEtabExterne($cache = 0){
     $this->_ref_etabExterne = new CEtabExterne();
-    $this->_ref_etabExterne->load($this->etablissement_transfert_id);
+    if($cache) {
+      $this->_ref_etabExterne = $this->_ref_etabExterne->getCached($this->etablissement_transfert_id);
+    } else {
+      $this->_ref_etabExterne->load($this->etablissement_transfert_id);
+    }
   }
   
-  function loadRefPatient() {
+  function loadRefPatient($cache = 0) {
     if ($this->_ref_patient) {
       return;
     }
     
     $this->_ref_patient = new CPatient;
-    $this->_ref_patient->load($this->patient_id);
+    if($cache) {
+      $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
+    } else {
+      $this->_ref_patient->load($this->patient_id);
+    }
     $this->getDroitsCMU();
 
     // View
@@ -597,9 +605,13 @@ class CSejour extends CCodable {
     $this->_view .= mbTransformTime(null, $this->sortie_prevue, "%d/%m/%Y");
   }
   
-  function loadRefPraticien() {
+  function loadRefPraticien($cache = 0) {
     $this->_ref_praticien = new CMediusers;
-    $this->_ref_praticien->load($this->praticien_id);
+    if($cache) {
+      $this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
+    } else {
+      $this->_ref_praticien->load($this->praticien_id);
+    }
   }
   
   function loadExtDiagnostics() {
@@ -607,9 +619,13 @@ class CSejour extends CCodable {
     $this->_ext_diagnostic_relie     = $this->DR ? new CCodeCIM10($this->DR, 1) : null;
   }
   
-  function loadRefPrestation() {
+  function loadRefPrestation($cache = 0) {
     $this->_ref_prestation = new CPrestation;
-    $this->_ref_prestation->load($this->prestation_id);
+    if($cache) {
+      $this->_ref_prestation = $this->_ref_prestation->getCached($this->prestation_id);
+    } else {
+      $this->_ref_prestation->load($this->prestation_id);
+    }
   }
   
   function loadRefsTransmissions(){
@@ -617,10 +633,14 @@ class CSejour extends CCodable {
   }
   
   
-  function loadRefEtablissement() {
+  function loadRefEtablissement($cache = 0) {
     // Chargement de l'établissement correspondant
     $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+    if($cache) {
+      $this->_ref_group = $this->_ref_group->getCached($this->group_id);
+    } else {
+      $this->_ref_group->load($this->group_id);
+    }
   }
   
   function loadRefRPU() {
@@ -690,11 +710,11 @@ class CSejour extends CCodable {
     $this->_list_constantes_medicales = $this->_list_constantes_medicales->loadList($where, 'datetime ASC');
   }
   
-  function loadRefsFwd() {
-    $this->loadRefPatient();
-    $this->loadRefPraticien();
-    $this->loadRefEtablissement();
-    $this->loadRefEtabExterne();
+  function loadRefsFwd($cache = 0) {
+    $this->loadRefPatient($cache);
+    $this->loadRefPraticien($cache);
+    $this->loadRefEtablissement($cache);
+    $this->loadRefEtabExterne($cache);
     $this->loadExtCodesCCAM();
   }
   

@@ -92,24 +92,40 @@ class CPlageOp extends CMbObject {
     $this->loadRefsBack($annulee);
   }
   
-  function loadRefChir() {
+  function loadRefChir($cache = 0) {
     $this->_ref_chir = new CMediusers;
-    $this->_ref_chir->load($this->chir_id);
+    if($cache) {
+      $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
+    } else {
+      $this->_ref_chir->load($this->chir_id);
+    }
   }
   
-  function loadRefAnesth() {
+  function loadRefAnesth($cache = 0) {
     $this->_ref_anesth = new CMediusers;
-    $this->_ref_anesth->load($this->anesth_id);
+    if($cache) {
+      $this->_ref_anesth = $this->_ref_anesth->getCached($this->anesth_id);
+    } else {
+      $this->_ref_anesth->load($this->anesth_id);
+    }
   }
     
-  function loadRefSpec() {
+  function loadRefSpec($cache = 0) {
     $this->_ref_spec = new CFunctions;
-    $this->_ref_spec->load($this->spec_id);
+    if($cache) {
+      $this->_ref_spec = $this->_ref_spec->getCached($this->spec_id);
+    } else {
+      $this->_ref_spec->load($this->spec_id);
+    }
   }
   
-  function loadRefSalle() {
+  function loadRefSalle($cache = 0) {
     $this->_ref_salle = new CSalle;
-    $this->_ref_salle->load($this->salle_id);
+    if($cache) {
+      $this->_ref_salle = $this->_ref_salle->getCached($this->salle_id);
+    } else {
+      $this->_ref_salle->load($this->salle_id);
+    }
   }
   
   function makeView(){
@@ -123,11 +139,11 @@ class CPlageOp extends CMbObject {
     }	
   }
 
-  function loadRefsFwd() {
-    $this->loadRefChir();
-    $this->loadRefAnesth();
-    $this->loadRefSpec();
-    $this->loadRefSalle();
+  function loadRefsFwd($cache = 0) {
+    $this->loadRefChir($cache);
+    $this->loadRefAnesth($cache);
+    $this->loadRefSpec($cache);
+    $this->loadRefSalle($cache);
     $this->makeView();
   }
   
