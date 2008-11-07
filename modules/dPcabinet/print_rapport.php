@@ -111,7 +111,7 @@ foreach(explode("|", $reglement->_specs["mode"]->list) as $curr_type) {
 $listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
 $listPlages = array();
 foreach($listConsults as $consult) {
-  $consult->loadRefsFwd();
+  $consult->loadRefsFwd(1);
   $consult->loadrefsReglements();
   $consult->_new_patient_reglement = new CReglement();
   $consult->_new_patient_reglement->mode = "especes";
@@ -144,8 +144,8 @@ foreach($listConsults as $consult) {
   }
   if(!isset($listPlages[$consult->plageconsult_id])) {
     $plageConsult = new CPlageconsult();
-    $plageConsult->load($consult->plageconsult_id);
-    $plageConsult->loadRefsFwd();
+    $plageConsult = $plageConsult->getCached($consult->plageconsult_id);
+    $plageConsult->loadRefsFwd(1);
     $listPlages[$consult->plageconsult_id]["plage"] = $plageConsult;
     $listPlages[$consult->plageconsult_id]["total"]["secteur1"] = 0;
     $listPlages[$consult->plageconsult_id]["total"]["secteur2"] = 0;
