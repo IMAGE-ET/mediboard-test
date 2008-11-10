@@ -55,6 +55,7 @@ class CGroups extends CMbObject {
     $backRefs["services"]      = "CService group_id";
     $backRefs["stocks"]        = "CStock group_id";
     $backRefs["type_repas"]    = "CTypeRepas group_id";
+    $backRefs["modeles"]       = "CCompteRendu group_id";
     return $backRefs;
   }
   

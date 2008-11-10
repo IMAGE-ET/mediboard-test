@@ -55,10 +55,10 @@ class CCompteRendu extends CMbMetaObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["chir_id"]          = "ref xor|function_id|group_id|object_id class|CMediusers";
-    $specs["function_id"]      = "ref xor|chir_id|group_id|object_id class|CFunctions";
-    $specs["group_id"]         = "ref xor|chir_id|function_id|object_id class|CFunctions";
-    $specs["object_id"]        = "ref xor|function_id|chir_id|group_id class|CMbObject meta|object_class";
+    $specs["chir_id"]          = "ref class|CMediusers xor|function_id|group_id|object_id";
+    $specs["function_id"]      = "ref class|CFunctions xor|chir_id|group_id|object_id";
+    $specs["group_id"]         = "ref class|CGroups xor|chir_id|function_id|object_id";
+    $specs["object_id"]        = "ref class|CMbObject meta|object_class xor|function_id|chir_id|group_id";
     $specs["object_class"]     = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour";
     $specs["nom"]              = "notNull str";
     $specs["type"]             = "enum list|header|body|footer";

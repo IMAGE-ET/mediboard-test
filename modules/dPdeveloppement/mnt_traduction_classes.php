@@ -159,8 +159,10 @@ function addConfigConfigCategory($chapter, $category, $values) {
   }
 }
 
-foreach (CAppUI::conf($module) as $category => $values) {
-  addConfigConfigCategory($module, $category, $values);
+if ($categories = @CAppUI::conf($module)) {
+	foreach ($categories as $category => $values) {
+	  addConfigConfigCategory($module, $category, $values);
+	}
 }
 
 if ($module == "system") {

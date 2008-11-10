@@ -198,4 +198,10 @@ $locales['CDestinataire.tag.prevenir'] = 'Personne à prévenir';
 $locales['CDestinataire.tag.employeur'] = 'Employeur';
 $locales['CDestinataire.tag.traitant'] = 'Médecin traitant';
 $locales['CDestinataire.tag.correspondant'] = 'Médecin correspondant';
+$locales['CCompteRendu-group_id'] = 'Etablissement';
+$locales['CCompteRendu-group_id-court'] = 'Etab.';
+$locales['CCompteRendu-group_id-desc'] = 'Etablissement auquel le modèle est associé';
+$locales['CCompteRendu._owner.etab'] = 'Modèle d\'établissement';
+$locales['CFunctions-back-'] = '';
+$locales['CGroups-back-modeles'] = 'Modèles';
 ?>
