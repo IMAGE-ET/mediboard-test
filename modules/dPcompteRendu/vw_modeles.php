@@ -11,53 +11,35 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Liste des praticiens accessibles
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+$user = new CMediusers();
 
-// Utilisateur sélectionné ou utilisateur courant
-$prat_id = mbGetValueFromGetOrSession("prat_id", $AppUI->user_id);
+// Liste des praticiens et cabinets accessibles
+$praticiens = $user->loadPraticiens(PERM_EDIT);
 
-$userSel = new CMediusers;
-$userSel->load($prat_id);
-$userSel->loadRefs();
+// Filtres
+$filtre = new CCompteRendu();
+$filtre->chir_id      = mbGetValueFromGetOrSession("chir_id", $AppUI->user_id);
+$filtre->object_class = mbGetValueFromGetOrSession("object_class");
+$filtre->type         = mbGetValueFromGetOrSession("type");
 
-if ($userSel->isPraticien()) {
-  mbSetValueToSession("prat_id", $userSel->user_id);
+$user = new CMediusers;
+$user->load($filtre->chir_id);
+$user->loadRefFunction();
+$user->_ref_function->loadRefGroup();
+
+if ($user->isPraticien()) {
+  mbSetValueToSession("prat_id", $user->user_id);
 }
 
-$modeles = CCompteRendu::loadAllModelesForPrat($prat_id);
-
-// Liste des modèles pour le praticien
-$listModelePrat = array();
-if ($userSel->user_id) {
-  $where = array();
-  $where["chir_id"] = "= '$userSel->user_id'";
-  $where["object_id"] = "IS NULL";
-  $order = "object_class, nom";
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
-}
-
-// Liste des modèles pour la fonction du praticien
-$listModeleFunc = array();
-if ($userSel->user_id) {
-  $where = array();
-  $where["function_id"] = "= '$userSel->function_id'";
-  $where["object_id"] = "IS NULL";
-  $order = "object_class, nom";
-  $listModeleFunc = new CCompteRendu;
-  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
-}
+$modeles = CCompteRendu::loadAllModelesForPrat($filtre->chir_id, $filtre->object_class, $filtre->type);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("userSel"       , $userSel);
-$smarty->assign("listPrat"      , $listPrat);
-$smarty->assign("modeles"       , $modeles);
-$smarty->assign("listModelePrat", $listModelePrat);
-$smarty->assign("listModeleFunc", $listModeleFunc);
+$smarty->assign("user"      , $user);
+$smarty->assign("filtre"    , $filtre);
+$smarty->assign("praticiens", $praticiens);
+$smarty->assign("modeles"   , $modeles);
 
 $smarty->display("vw_modeles.tpl");
 

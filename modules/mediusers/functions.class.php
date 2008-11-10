@@ -90,6 +90,10 @@ class CFunctions extends CMbObject {
   
   // Forward references
   function loadRefsFwd() {
+    $this->loadRefGroup();
+  }
+  
+  function loadRefGroup() {
     $this->_ref_group = new CGroups();
     $this->_ref_group->load($this->group_id);
   }

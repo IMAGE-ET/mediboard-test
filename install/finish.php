@@ -124,11 +124,14 @@ if (@$_POST["changePassword"] and $password != "admin") {
 
 <p>
   A cette étape le framework général de Mediboard est fonctionnel. Il est maintenant 
-  nécessaire d'installer et paramétrer un par un les modules que vous souhaitez installer.
-  A l'heure actuelle, les couplages inter-modules sont encore assez important, 
-  c'est pourquoi il est recommandé sinon obligatoire de tous les installer, quitte à les
-  cacher de l'interface.
+  nécessaire d'installer et paramétrer un par un les modules que vous souhaitez utiliser.
 </p>
+
+<div class="big-info">
+A l'heure actuelle, les couplages inter-modules sont encore assez importants, 
+c'est pourquoi il est recommandé sinon obligatoire de tous les installer, quitte à les
+désactiver ou les masquer du menu principal (<em>cf.</em> Administration des modules).
+</div>
 
 <p>  
   A partir de maintenant, il est nécessaire de s'authentifier auprès du système en tant

@@ -16,6 +16,7 @@ class CMbPath {
   /**
    * Ensures a directory exists by building all tree sub-diriectories if possible
    * @param string $dir directory path
+   * @param octal $chmod like value
    * @return boolean job done
    */
   static function forceDir($dir, $mode = 0755) {

@@ -289,8 +289,8 @@ Document.refreshList = function(){
       <a href="#nothing">
       {{/if}}
         {{if $curr_sejour->_num_dossier && $curr_sejour->group_id == $g}}[{{$curr_sejour->_num_dossier}}]{{/if}}
-        Séjour du {{$curr_sejour->_entree|date_format:"%d %b %Y"}} 
-        au {{$curr_sejour->_sortie|date_format:"%d %b %Y"}}
+        Séjour du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
+        au {{$curr_sejour->_sortie|date_format:$dPconfig.date}}
         {{if $curr_sejour->_nb_files_docs}}
           - ({{$curr_sejour->_nb_files_docs}} Doc.)
         {{/if}}
@@ -317,7 +317,7 @@ Document.refreshList = function(){
     <td class="text">
       <ul>
       <li>
-      <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
+      <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'intervention" />
       </a>
       {{if $curr_sejour->group_id == $g && $curr_op->_canEdit}}
@@ -332,7 +332,7 @@ Document.refreshList = function(){
       {{else}}
       <a class="tooltip-trigger" title="Modification d'intervention non autorisée" href="#nothing">
       {{/if}}
-        Intervention le {{$curr_op->_datetime|date_format:"%d %b %Y"}}
+        Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
         {{if $curr_op->_nb_files_docs}}
           - ({{$curr_op->_nb_files_docs}} Doc.)
         {{/if}}

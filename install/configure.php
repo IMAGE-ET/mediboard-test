@@ -45,16 +45,6 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <th><label for="company_name" title="Nom de la société">Nom de la société :</label></th>
-    <td><input type="text" size="40" name="company_name" value="<?php echo $dPconfig['company_name'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="page_title" title="Titre de la page web dans la barre de navigation">Titre de la page web :</label></th>
-    <td><input type="text" size="40" name="page_title" value="<?php echo $dPconfig['page_title'] ?>" /></td>
-  </tr>
-
-  <tr>
     <th><label for="base_url" title="Url Racine pour le système">Url racine :</label></th>
     <td><input type="text" size="40" name="base_url" value="<?php echo $dPconfig['base_url'] ?>" /></td>
   </tr>
@@ -69,6 +59,23 @@ $dPconfig = $mbConfig->values;
     <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
   </tr>
 
+  <tr>
+    <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée ?</label></th>
+    <td>
+      <div style="float: right">
+      <?php
+        $rootName = basename($dPconfig["root_dir"]);
+        require_once("../classes/sharedmemory.class.php");
+        require_once("../modules/system/httpreq_do_empty_shared_memory.php");
+      ?>
+      </div>
+      <select name="shared_memory" size="1">
+        <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Disque</option>
+        <option value="eaccelerator" <?php if ($dPconfig['shared_memory'] == 'eaccelerator') { echo 'selected="selected"'; } ?> >eAccelerator</option>
+        <option value="apc"          <?php if ($dPconfig['shared_memory'] == 'apc'         ) { echo 'selected="selected"'; } ?> >APC</option>
+      </select>
+    </td>
+  </tr>
   <tr>
     <th class="category" colspan="2">Configuration de la base de données principale</th>
   </tr>
@@ -103,46 +110,12 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <th><label for="currency_symbol" title="Symbole monétaire. Entités HTML acceptées">Symbole monétaire :</label></th>
-    <td><input type="text" size="40" name="currency_symbol" value="<?php echo $dPconfig['currency_symbol'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="hide_confidential" title="Brouiller les données confidentielles. Utiles pour le monde de démonstration">Brouiller les données confidentielles ?</label></th>
-    <td><input type="text" size="40" name="hide_confidential" value="<?php echo $dPconfig['hide_confidential'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="locale_warn" title="Alerter les absence de traduction. En ajoutant une marque autour">Alerter les absence de traduction ? </label></th>
-    <td><input type="text" size="40" name="locale_warn" value="<?php echo $dPconfig['locale_warn'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="debug" title="Version de débogage. Affiche toutes les alertes PHP et la console Smarty">Version de débogage ?</label></th>
-    <td><input type="text" size="40" name="debug" value="<?php echo $dPconfig['debug'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="readonly" title="Version en lecture seule. Empeche toute modification des données de Mediboard">Version readonly ?</label></th>
-    <td><input type="text" size="40" name="readonly" value="<?php echo $dPconfig['readonly'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée ?</label></th>
-    <td>
-      <select name="shared_memory" size="1">
-        <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Disque</option>
-        <option value="eaccelerator" <?php if ($dPconfig['shared_memory'] == 'eaccelerator') { echo 'selected="selected"'; } ?> >eAccelerator</option>
-        <option value="apc"          <?php if ($dPconfig['shared_memory'] == 'apc'         ) { echo 'selected="selected"'; } ?> >APC</option>
-      </select>
-      
-      <div>
-      <?php
-        $rootName = basename($dPconfig["root_dir"]);
-        require_once("../classes/sharedmemory.class.php");
-        require_once("../modules/system/httpreq_do_empty_shared_memory.php");
-      ?>
-      </div>
+    <td colspan="10" class="text">
+    	<div class="little-info">
+    	  Ces paramètres sont désormais gérés dans la 
+    	  <strong>configuration du module Administration</strong>,
+    	  disponible après la fin de la première installation.
+    	</div>
     </td>
   </tr>
 

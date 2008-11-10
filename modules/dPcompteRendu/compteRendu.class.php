@@ -14,6 +14,7 @@ class CCompteRendu extends CMbMetaObject {
   // DB References
   var $chir_id           = null; // not null when is a template associated to a user
   var $function_id       = null; // not null when is a template associated to a function
+  var $group_id          = null; // not null when is a template associated to a group
   
   // DB fields
   var $nom               = null;
@@ -54,9 +55,10 @@ class CCompteRendu extends CMbMetaObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["chir_id"]          = "ref xor|function_id|object_id class|CMediusers";
-    $specs["function_id"]      = "ref xor|chir_id|object_id class|CFunctions";
-    $specs["object_id"]        = "ref xor|function_id|chir_id class|CMbObject meta|object_class";
+    $specs["chir_id"]          = "ref xor|function_id|group_id|object_id class|CMediusers";
+    $specs["function_id"]      = "ref xor|chir_id|group_id|object_id class|CFunctions";
+    $specs["group_id"]         = "ref xor|chir_id|function_id|object_id class|CFunctions";
+    $specs["object_id"]        = "ref xor|function_id|chir_id|group_id class|CMbObject meta|object_class";
     $specs["object_class"]     = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour";
     $specs["nom"]              = "notNull str";
     $specs["type"]             = "enum list|header|body|footer";
@@ -67,7 +69,7 @@ class CCompteRendu extends CMbMetaObject {
     $specs["height"]           = "float";
     $specs["valide"]           = "bool";
 
-    $specs["_owner"]           = "enum list|prat|func";
+    $specs["_owner"]           = "enum list|prat|func|etab";
 
     return $specs;
   }
@@ -101,6 +103,7 @@ class CCompteRendu extends CMbMetaObject {
     
     if ($this->chir_id    ) $this->_owner = "prat";
     if ($this->function_id) $this->_owner = "func";
+    if ($this->group_id   ) $this->_owner = "etab";
   }
 
   function loadCategory(){
@@ -201,6 +204,7 @@ class CCompteRendu extends CMbMetaObject {
     $modeles = array(
       "prat" => array(), 
       "func" => array(),
+      "etab" => array(),
     );
     
     // Pas de praticien
@@ -214,6 +218,7 @@ class CCompteRendu extends CMbMetaObject {
       trigger_error("User '$prat_id' does not exist");
       return $modeles; 
     }
+    $prat->loadRefFunction();
     
     // Clauses de recherche
     $modele = new CCompteRendu();
@@ -231,64 +236,26 @@ class CCompteRendu extends CMbMetaObject {
     $order = "object_class, type, nom";
 
 		// Modèle du praticien
-    $where["chir_id"] = "= '$prat_id'";
+    $where["chir_id"]     = "= '$prat->_id'";
     $where["function_id"] = "IS NULL";
+    $where["group_id"]    = "IS NULL";
     $modeles["prat"] = $modele->loadlist($where, $order);
     
 		// Modèle de la fonction
-    $where["chir_id"] = "IS NULL";
+    $where["chir_id"]     = "IS NULL";
     $where["function_id"] = "= '$prat->function_id'";
+    $where["group_id"]    = "IS NULL";
     $modeles["func"] = $modele->loadlist($where, $order);
 
-		return $modeles;
+		// Modèle de l'établissement
+    $where["chir_id"]     = "IS NULL";
+    $where["function_id"] = "IS NULL";
+    $where["group_id"]    = " = '$prat->_group_id'";
+    $modeles["etab"] = $modele->loadlist($where, $order);
+
+    return $modeles;
   }
     
-  /**
-   * DEPRECATED see loadAllModelesForPrat()
-   * Charge les modèles pour une classe d'objets associés à un utilisateur
-   * @param $object_class string Nom de la classe d'objet. Doit être un CMbObject
-   * @param $prat_id ref|CMediuser L'utilisateur concerné
-   * @param $type enum list|header|body|footer Type de composant, optionnel
-   * @return array<CCompteRendu>
-   */
-  static function loadModelesForPrat($object_class, $prat_id, $type = null) {
-    $modele = new CCompteRendu();
-    $where = array();
-    $where["object_id"] = "IS NULL";
-		$where["object_class"] = "= '$object_class'";
-    $where["chir_id"] = "= '$prat_id'";
-    
-    if ($type) {
-  		$where["type"] = "= '$type'";
-    }
-    
-		$order = "nom";
-    return $modele->loadlist($where, $order);
-  }
-  
-  /**
-   * DEPRECATED see loadAllModelesForPrat()
-   * Charge les modèles pour une classe d'objets associés à une fonction
-   * @param $object_class string Nom de la classe d'objet. Doit être un CMbObject
-   * @param $function_id ref|CFonction L'utilisateur concerné
-   * @param $type enum list|header|body|footer Type de composant, optionnel
-   * @return array<CCompteRendu>
-   */
-  static function loadModelesForFunc($object_class, $function_id, $type = null) {
-    $modele = new CCompteRendu();
-    $where = array();
-    $where["object_id"] = "IS NULL";
-		$where["object_class"] = "= '$object_class'";
-    $where["function_id"] = "= '$function_id'";
-   
-    if ($type) {
-  		$where["type"] = "= '$type'";
-    }
-    
-		$order = "nom";
-    return $modele->loadlist($where, $order);
-  }
-  
   function getPerm($permType) {
     if(!($this->_ref_chir || $this->_ref_function) || !$this->_ref_object) {
       $this->loadRefsFwd();

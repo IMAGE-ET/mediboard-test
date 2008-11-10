@@ -18,6 +18,8 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
+$listEtab = array(CGroups::loadCurrent());
+
 // L'utilisateur est-il praticien?
 $prat_id = mbGetValueFromGetOrSession("selPrat");
 
@@ -100,18 +102,17 @@ $footers = null;
 $headers = null;
 
 if ($compte_rendu->_id) {
-  if ($compte_rendu->chir_id) {
-    $footers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "footer");
-    $headers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "header");
+  $footers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "footer");
+  $headers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "header");
+  
+  if ($compte_rendu->_owner != "prat") {
+    unset($footers["prat"]);
+    unset($headers["prat"]);
   }
   
-  if ($compte_rendu->function_id) {
-    $footers = array(
-      "func" => CCompteRendu::loadModelesForFunc($compte_rendu->object_class, $compte_rendu->function_id, "footer")
-    );
-    $headers = array(
-      "func" => CCompteRendu::loadModelesForFunc($compte_rendu->object_class, $compte_rendu->function_id, "header")
-    );
+  if ($compte_rendu->_owner == "etab") {
+    unset($footers["func"]);
+    unset($headers["func"]);
   }
 }
 
@@ -124,6 +125,7 @@ $smarty->assign("user_id"             , $user_id);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("compte_rendu_id"     , $compte_rendu_id);
 $smarty->assign("listPrat"            , $listPrat);
+$smarty->assign("listEtab"            , $listEtab);
 $smarty->assign("listFunc"            , $listFunc);
 $smarty->assign("listObjectClass"     , $listObjectClass);
 $smarty->assign("compte_rendu"        , $compte_rendu);

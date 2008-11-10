@@ -1,11 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPcabinet
+ * @version $Revision: $
+ * @author Alexis Granger
+ */
 
 $ds = CSQLDataSource::get("ccamV2");
 

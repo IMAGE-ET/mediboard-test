@@ -9,12 +9,14 @@
 
 global $AppUI, $can, $m;
 
+
 // only user_type of Administrator (1) can access this page
 $can->edit |= ($AppUI->user_type != 1);
 $can->needsEdit();
 
 $module = mbGetValueFromGetOrSession("module" , "system");
 $classes = CModule::getClassesFor($module);
+global $language;
 $language = mbGetValueFromGetOrSession("language",'fr');
 
 // Hack to have CModule in system locale file
@@ -68,8 +70,8 @@ $items = array();
 $completions = array();
 
 // Ajoute un item de localisation
-function addLocale($class, $cat, $name, $language) {
-  global $trans, $items, $completions;
+function addLocale($class, $cat, $name) {
+  global $trans, $items, $completions, $language;
   $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
   
   // Stats
@@ -88,22 +90,22 @@ foreach ($classes as $class) {
   $classname = $object->_class_name;
   
   // Traductions au niveau classe
-  addLocale($classname, $classname, "$classname", $language);
-  addLocale($classname, $classname, "$classname.none", $language);
-  addLocale($classname, $classname, "$classname.one", $language);
-  addLocale($classname, $classname, "$classname.all", $language);
-  addLocale($classname, $classname, "$classname.select", $language);
-  addLocale($classname, $classname, "$classname-msg-create", $language);
-  addLocale($classname, $classname, "$classname-msg-modify", $language);
-  addLocale($classname, $classname, "$classname-msg-delete", $language);
-  addLocale($classname, $classname, "$classname-title-create", $language);
-  addLocale($classname, $classname, "$classname-title-modify", $language);
+  addLocale($classname, $classname, "$classname");
+  addLocale($classname, $classname, "$classname.none");
+  addLocale($classname, $classname, "$classname.one");
+  addLocale($classname, $classname, "$classname.all");
+  addLocale($classname, $classname, "$classname.select");
+  addLocale($classname, $classname, "$classname-msg-create");
+  addLocale($classname, $classname, "$classname-msg-modify");
+  addLocale($classname, $classname, "$classname-msg-delete");
+  addLocale($classname, $classname, "$classname-title-create");
+  addLocale($classname, $classname, "$classname-title-modify");
   
   // Traductions pour la clé 
   $prop = $object->_spec->key;
-  addLocale($classname, $prop, "$classname-$prop", $language);
-  addLocale($classname, $prop, "$classname-$prop-desc", $language);
-  addLocale($classname, $prop, "$classname-$prop-court", $language);
+  addLocale($classname, $prop, "$classname-$prop");
+  addLocale($classname, $prop, "$classname-$prop-desc");
+  addLocale($classname, $prop, "$classname-$prop-court");
   
   // Traductions de chaque propriété
 	foreach ($object->_specs as $prop => $spec) { 
@@ -115,28 +117,56 @@ foreach ($classes as $class) {
       continue;
     }
     
-	  addLocale($classname, $prop, "$classname-$prop", $language);
-	  addLocale($classname, $prop, "$classname-$prop-desc", $language);
-	  addLocale($classname, $prop, "$classname-$prop-court", $language);
+	  addLocale($classname, $prop, "$classname-$prop");
+	  addLocale($classname, $prop, "$classname-$prop-desc");
+	  addLocale($classname, $prop, "$classname-$prop-court");
   
     if ($spec instanceof CEnumSpec) {
       if (!$spec->notNull) {
-	      addLocale($classname, $prop, "$classname.$prop.", $language);
+	      addLocale($classname, $prop, "$classname.$prop.");
       }
       
       foreach (explode("|", $spec->list) as $value) {
-	      addLocale($classname, $prop, "$classname.$prop.$value", $language);
+	      addLocale($classname, $prop, "$classname.$prop.$value");
       }
     }
     
     if ($spec instanceof CRefSpec) {
-      // CAccessLog serves as dummy class when we need to instanciate anyhow
-      $fwdClass = ($spec->class != "CMbObject") ? $spec->class : "CAccessLog";//&& has_default_constructor($spec->class) ? $spec->class : "CAccessLog";
+      $fwdClass = $spec->class;
       $fwdObject = new $fwdClass;
       
       // Find corresponding back name
       $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backRefs);
-	    addLocale($classname, $prop, "$spec->class-back-$backName", $language);
+	    addLocale($classname, $prop, "$spec->class-back-$backName");
+    }
+  }
+}
+
+// Parcours des variables de configuration
+function addConfigConfigCategory($chapter, $category, $values) {
+  $prefix = $chapter ? "$chapter-$category" : $category;
+  
+  if (!is_array($values)) {
+    addLocale("Config", "global", "config-$prefix");
+    addLocale("Config", "global", "config-$prefix-desc");
+    return;
+  }
+  
+  foreach ($values as $key => $value) {
+    addLocale("Config", $category, "config-$prefix-$key");
+    addLocale("Config", $category, "config-$prefix-$key-desc");
+    
+  }
+}
+
+foreach (CAppUI::conf($module) as $category => $values) {
+  addConfigConfigCategory($module, $category, $values);
+}
+
+if ($module == "system") {
+  foreach (CAppUI::conf() as $chapter => $values) {
+    if (!CModule::exists($chapter) && $chapter != "db") {
+      addConfigConfigCategory(null, $chapter, $values);
     }
   }
 }
@@ -144,13 +174,13 @@ foreach ($classes as $class) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("items"  		, $items);
+$smarty->assign("items"  	    , $items);
 $smarty->assign("completions" , $completions);
 $smarty->assign("locales"  		, $localesDirs);
 $smarty->assign("modules"  		, $modules);
 $smarty->assign("module"   		, $module);
 $smarty->assign("trans"    		, $trans);
-$smarty->assign("language"    		, $language);
+$smarty->assign("language"    , $language);
 
 $smarty->display("mnt_traduction_classes.tpl");
 ?>

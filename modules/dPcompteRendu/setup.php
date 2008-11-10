@@ -283,7 +283,16 @@ class CSetupdPcompteRendu extends CSetup {
 			ADD `height` FLOAT;";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+    $sql = "ALTER TABLE `compte_rendu` 
+			ADD `group_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `compte_rendu` 
+			ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.39";
   }
 }
 ?>

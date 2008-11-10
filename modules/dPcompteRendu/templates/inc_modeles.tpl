@@ -1,9 +1,5 @@
 <table class="tbl">
 	<tr>
-	  <th class="title" colspan="10">Modèles de {{$object->_view}}</th>
-	</tr>
-
-	<tr>
 	  <th>{{mb_title class=CCompteRendu field=nom}}</th>
 	  <th>{{mb_title class=CCompteRendu field=object_class}}</th>
 	  <th>{{mb_title class=CCompteRendu field=type}}</th>
@@ -13,7 +9,7 @@
 	{{foreach from=$modeles item=_modele}}
 	<tr>
 	  <td>
-	    <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$_modele->compte_rendu_id}}">
+	    <a href="?m={{$m}}&amp;tab=addedit_modeles&amp;compte_rendu_id={{$_modele->compte_rendu_id}}">
 	   	{{mb_value object=$_modele field=nom}}
 	    </a>
 	  </td>

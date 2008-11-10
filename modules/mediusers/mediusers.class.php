@@ -55,6 +55,9 @@ class CMediusers extends CMbObject {
   var $_is_secretaire        = null;
   var $_user_password_weak   = null;
   var $_user_password_strong = null;
+  
+  // Distant fields
+  var $_group_id = null;
 
   // CPS
   var $_bind_cps = null;
@@ -107,8 +110,7 @@ class CMediusers extends CMbObject {
     $specs["_user_ville"]      = "str confidential";
     $specs["_profile_id"]      = "num";
     $specs["_user_type"]       = "notNull num minMax|0|20";
-      
-    // @TODO refactor with only $spec["propName"] = "propSpec" syntax
+    $specs["_group_id"]        = "notNull ref class|CGroups";
     
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";
@@ -264,6 +266,7 @@ class CMediusers extends CMbObject {
   function loadRefFunction() {
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
+    $this->_group_id = $this->_ref_function->group_id;
   }
 
   function loadRefDiscipline() {
@@ -586,20 +589,23 @@ class CMediusers extends CMbObject {
    * @return array<CFunctions> Found functions
    */
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
-    global $g;
+    $group = CGroups::loadCurrent(); 
     $functions = new CFunctions;
-    $functions->group_id = mbGetValue($group_id, $g);
-    if($type) {
+    $functions->group_id = mbGetValue($group_id, $group->_id);
+
+    if ($type) {
       $functions->type = $type;
     }
+
     $order = "text";
     $functions = $functions->loadMatchingList($order);
 
     if ($permType) {
-      foreach ($functions as $_id => $function) {
+      foreach ($functions as $_id => &$function) {
         if (!$function->getPerm($permType)) {
           unset($functions[$_id]);
         }
+        $function->_ref_group = $group;
       }
     }
     return $functions;

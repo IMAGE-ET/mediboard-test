@@ -1,11 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage system
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author Alexis Granger
+ */
 
 global $can;
 $can->needsAdmin();

@@ -603,6 +603,10 @@ class CAppUI {
   static function conf($path = '') {
     global $dPconfig;
     $conf = $dPconfig;
+    if (!$path) {
+      return $conf;
+    }
+    
     $items = explode(' ', $path);
     foreach ($items as $part) {
     	$conf = $conf[$part];

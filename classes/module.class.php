@@ -285,6 +285,15 @@ class CModule extends CMbObject {
   }
   
   /**
+   * Check if a module exist
+   * @param string $moduleName
+   * @return bool
+   */
+  static function exists($moduleName) {
+    return is_dir("./modules/$moduleName"); 
+  }
+  
+  /**
    * Returns all or a named installed module
    */
   static function getInstalled($moduleName = null) {
