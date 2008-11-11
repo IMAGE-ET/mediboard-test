@@ -2,7 +2,7 @@
   * @param $object CMbObject Target Object for documents
   * @param $modelesByOwner array|CCompteRendu sorted by owner
   * @param $packs array|CPack  List of packs
-  * @param $praticien CMediuser Owner of modèles
+  * @param $praticien CMediuser Owner of modeles
   *}}
   
 {{assign var=object_class value=$object->_class_name}}
@@ -26,6 +26,7 @@
         {{foreach from=$modelesByOwner key=owner item=_modeles}}
         {{if $owner == "prat"}}{{assign var=ref_owner value=$praticien}}{{/if}}
         {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
+        {{if $owner == "etab"}}{{assign var=ref_owner value=$praticien->_ref_function->_ref_group}}{{/if}}
         <optgroup label="{{tr}}CCompteRendu-_owner{{/tr}} {{$ref_owner->_view}}">
           {{foreach from=$_modeles item=_modele}}
           <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>

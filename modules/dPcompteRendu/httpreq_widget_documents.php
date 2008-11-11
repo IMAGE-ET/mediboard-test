@@ -36,6 +36,7 @@ else {
 	$praticien = new CMediusers();
 	$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
 	$praticien->loadRefFunction();
+	$praticien->_ref_function->loadRefGroup();
 }
 
 $praticien->canDo();

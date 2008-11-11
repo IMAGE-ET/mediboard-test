@@ -10,7 +10,7 @@ ModeleSelector = Class.create({
   sModele_id : null,
   sObject_id : null,
   options : {
-    width : 600,
+    width : 700,
     height: 500
   },
   
