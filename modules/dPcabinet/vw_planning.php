@@ -58,7 +58,8 @@ if(!$plageSel->plageconsult_id) {
 } else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
-$plageSel->loadRefs();
+$plageSel->loadRefsFwd(1);
+$plageSel->loadRefsBack();
 
 if ($plageSel->_affected) {
   $firstconsult = reset($plageSel->_ref_consultations);
@@ -73,8 +74,8 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
     unset($plageSel->_ref_consultations[$keyConsult]);
     continue;
   }
-  $consultation->loadRefPatient();
-  $consultation->loadRefCategorie();
+  $consultation->loadRefPatient(1);
+  $consultation->loadRefCategorie(1);
   $consultation->getNumDocsAndFiles();    
 }
 
@@ -189,7 +190,7 @@ foreach($listDays as $keyDate=>$valDate){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affichages", $affichages);  
+$smarty->assign("affichages"        , $affichages);  
 $smarty->assign("listPlages"        , $listPlages);
 $smarty->assign("_firstconsult_time", $_firstconsult_time);
 $smarty->assign("_lastconsult_time" , $_lastconsult_time);
