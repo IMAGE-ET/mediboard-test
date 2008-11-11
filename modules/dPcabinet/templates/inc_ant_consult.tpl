@@ -157,8 +157,8 @@ Main.add(function () {
             {{mb_label object=$antecedent field="rques"}}
             {{foreach from=$antecedent->_aides.rques item=_helpers key=dependsOn}}
             {{if $dependsOn != "no_enum"}} 
-            <select name="_helpers_rques-{{$dependsOn}}" size="1" onchange="pasteHelperContent(this)" style="display:none;">
-              <option value="">&mdash; Choisir une aide</option>
+            <select name="_helpers_rques-{{$dependsOn}}" style="width: 80px;" size="1" onchange="pasteHelperContent(this)" style="display:none;">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
                 <optgroup label="{{$sTitleOpt}}">
                   {{html_options options=$list_aides}}
@@ -286,7 +286,7 @@ Main.add(function () {
       <form name="addDiagFrm" action="?m=dPcabinet" method="post">
         <strong>Ajouter un diagnostic</strong>
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
-        <button class="search" type="button" onclick="CIM10Selector.init()">Chercher un diagnostic</button>
+        <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
         <input type="text" name="code_diag" size="5"/>
         <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)">Valider</button>
         <script type="text/javascript">   

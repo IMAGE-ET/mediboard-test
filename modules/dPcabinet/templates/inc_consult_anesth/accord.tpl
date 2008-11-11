@@ -40,7 +40,7 @@ Main.add(function () {
   <li><a href="#AntTrait">Antécédents</a></li>
   
   {{if $isPrescriptionInstalled}}
-  <li><a href="#prescription_sejour">Traitement et prescription</a></li>
+  <li><a href="#prescription_sejour">Trait. et prescription</a></li>
   {{/if}}
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>

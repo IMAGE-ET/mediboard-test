@@ -7,7 +7,7 @@
   
   {{if !$consult_anesth->operation_id}}
   <!-- Choix du séjour -->
-  <select name="sejour_id" onchange="submitOpConsult()">
+  <select name="sejour_id" style="max-width: 250px;" onchange="submitOpConsult()">
     <option value="">Pas de séjour</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <option value="{{$curr_sejour->_id}}"{{if $consult_anesth->sejour_id==$curr_sejour->_id}} selected="selected"{{/if}}>
@@ -21,7 +21,7 @@
   <!-- Choix de l'intervention -->
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
-  <select name="operation_id" onchange="submitOpConsult()">
+  <select name="operation_id" style="max-width: 250px;" onchange="submitOpConsult()">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <optgroup label="Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
