@@ -27,7 +27,7 @@ $consult = new CConsultation;
 // Test compliqué afin de savoir quelle consultation charger
 if (isset($_GET["selConsult"])) {
   if($consult->load($selConsult)) {
-    $consult->loadRefPlageConsult();
+    $consult->loadRefPlageConsult(1);
     $prat_id = $consult->_ref_plageconsult->chir_id;
     mbSetValueToSession("chirSel", $prat_id);
   } else {
@@ -35,7 +35,7 @@ if (isset($_GET["selConsult"])) {
   }
 } else {
   if ($consult->load($selConsult)) {
-    $consult->loadRefsFwd();
+    $consult->loadRefsFwd(1);
     if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       mbSetValueToSession("selConsult");
@@ -79,8 +79,8 @@ foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
   $plage->loadRefsConsultations(true, !$vue);
   foreach ($plage->_ref_consultations as &$consultation) {
-    $consultation->loadRefPatient();
-    $consultation->loadRefCategorie();
+    $consultation->loadRefPatient(1);
+    $consultation->loadRefCategorie(1);
     $consultation->getNumDocsAndFiles();
   }
 }
