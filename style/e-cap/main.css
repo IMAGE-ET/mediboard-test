@@ -603,12 +603,7 @@ select {
 }
 
 optgroup {
-  font-style: normal;
   font-size: 10px;
-  font-weight: bold;
-  padding: 0px;
-  padding-left: 5px;
-  background: #fff;
 }
 
 option {

@@ -472,7 +472,8 @@ optgroup {
   font-style: normal;
   font-size: 1em;
   font-weight: bold;
-  padding: 0;
+  padding: 0 4px;
+  margin: 1 0px;
   background: #fff;
 }
 
