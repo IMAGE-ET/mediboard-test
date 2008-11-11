@@ -88,7 +88,7 @@ foreach($deplacements as $key => $value) {
   if(!$deplacements[$key]->_ref_next->affectation_id) {
     unset($deplacements[$key]);
   } else {
-    $deplacements[$key]->_ref_sejour->loadRefsFwd();
+    $deplacements[$key]->_ref_sejour->loadRefsFwd(1);
     $deplacements[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
     $deplacements[$key]->_ref_lit->loadCompleteView();
     $deplacements[$key]->_ref_lit->loadRefChambre();

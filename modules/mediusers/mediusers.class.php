@@ -255,23 +255,23 @@ class CMediusers extends CMbObject {
 
   function loadRefBanque(){
     $this->_ref_banque = new CBanque();
-    $this->_ref_banque->load($this->banque_id);
+    $this->_ref_banque = $this->_ref_banque->getCached($this->banque_id);
   }
 
   function loadRefProfile(){
     $this->_ref_profile = new CUser();
-    $this->_ref_profile->load($this->_profile_id);
+    $this->_ref_profile = $this->_ref_profile->getCached($this->_profile_id);
   }
   
   function loadRefFunction() {
     $this->_ref_function = new CFunctions;
-    $this->_ref_function->load($this->function_id);
-    $this->_group_id = $this->_ref_function->group_id;
+    $this->_ref_function = $this->_ref_function->getCached($this->function_id);
+    $this->_group_id     = $this->_ref_function->group_id;
   }
 
   function loadRefDiscipline() {
     $this->_ref_discipline = new CDiscipline;
-    $this->_ref_discipline->load($this->discipline_id);
+    $this->_ref_discipline = $this->_ref_discipline->getCached($this->discipline_id);
   }
 
   function loadRefsFwd() {

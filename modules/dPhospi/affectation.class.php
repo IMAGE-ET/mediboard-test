@@ -184,19 +184,27 @@ class CAffectation extends CMbObject {
     return $msg;
   }
 
-  function loadRefLit() {
+  function loadRefLit($cache = 1) {
     $this->_ref_lit = new CLit();
-  	$this->_ref_lit = $this->_ref_lit->getCached($this->lit_id);	
+    if($cache) {
+      $this->_ref_lit = $this->_ref_lit->getCached($this->lit_id);
+    } else {
+      $this->_ref_lit->load($this->lit_id);
+    }
   }
 
-  function loadRefSejour() {
+  function loadRefSejour($cache = 1) {
     $this->_ref_sejour = new CSejour();
-    $this->_ref_sejour->load($this->sejour_id);
+    if($cache) {
+      $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+    } else {
+      $this->_ref_sejour->load($this->sejour_id);
+    }
   }
 
-  function loadRefsFwd() {
-    $this->loadRefLit();
-    $this->loadRefSejour();
+  function loadRefsFwd($cache = 1) {
+    $this->loadRefLit($cache);
+    $this->loadRefSejour($cache);
     $this->loadRefsAffectations();
   }
 
