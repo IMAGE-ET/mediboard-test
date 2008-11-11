@@ -289,7 +289,7 @@ Document.refreshList = function(){
       <a href="#nothing">
       {{/if}}
         {{if $curr_sejour->_num_dossier && $curr_sejour->group_id == $g}}[{{$curr_sejour->_num_dossier}}]{{/if}}
-        Séjour du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
+        Du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
         au {{$curr_sejour->_sortie|date_format:$dPconfig.date}}
         {{if $curr_sejour->_nb_files_docs}}
           - ({{$curr_sejour->_nb_files_docs}} Doc.)
@@ -368,11 +368,6 @@ Document.refreshList = function(){
       <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
-      {{if $curr_consult->annule}}
-        <span title="Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} à {{$curr_consult->heure|date_format:"%Hh%M"}} - {{$curr_consult->_etat}}">
-        [ANNULE]
-        </span>
-      {{else}}
         {{if $curr_consult->_canEdit}}
           <a class="tooltip-trigger"
              href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}"
@@ -381,14 +376,17 @@ Document.refreshList = function(){
         {{else}}
           <a href="#nothing">
         {{/if}}
-        Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} à {{$curr_consult->heure|date_format:"%Hh%M"}} - {{$curr_consult->_etat}}
+        Le {{$curr_consult->_date|date_format:$dPconfig.date}} - {{$curr_consult->_etat}}
       </a>
-      {{/if}}
     </td>
-    <td>
-      Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
-    </td>
+
+    {{if $curr_consult->annule}}
+    <td class="cancelled">[Consult annulée]</td>
+    {{else}}
+    <td>Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</td>
+    {{/if}}
   </tr>
+
   {{/foreach}}
   {{/if}}
 </table>
