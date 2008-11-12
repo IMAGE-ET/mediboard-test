@@ -979,6 +979,12 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
     }
+    $this->loadRefsCorrespondants();
+    foreach($this->_ref_medecins_correspondants as $corresp) {
+      $corresp->loadRefsFwd();
+      $template->addProperty("Patient - correspondant (Dr ".$corresp->_ref_medecin->nom.")", "{$corresp->_ref_medecin->nom} {$corresp->_ref_medecin->prenom}");
+      $template->addProperty("Patient - correspondant (Dr ".$corresp->_ref_medecin->nom.") - adresse", "{$corresp->_ref_medecin->adresse}\n{$corresp->_ref_medecin->cp} {$corresp->_ref_medecin->ville}");
+    }
     
     $const_med = $this->_ref_constantes_medicales;
     $template->addProperty("Patient - poids",  $const_med->poids." kg");
