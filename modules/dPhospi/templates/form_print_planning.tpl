@@ -63,13 +63,13 @@ function changeDateCal(){
           <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$yesterday_deb}}','{{$yesterday_fin}}');" value="yesterday" /> 
-            <label for="select_days_yesterday">Hier ({{$yesterday_deb|date_format:"%d/%m/%Y"}})</label>
+            <label for="select_days_yesterday">Hier</label>
             <br />
             <input type="radio" name="select_days" onclick="changeDate('{{$today_deb}}','{{$today_fin}}');" value="today" checked="checked" /> 
-            <label for="select_days_today">Aujourd'hui ({{$today_deb|date_format:"%d/%m/%Y"}})</label>
+            <label for="select_days_today">Aujourd'hui</label>
             <br />
             <input type="radio" name="select_days" onclick="changeDate('{{$tomorrow_deb}}','{{$tomorrow_fin}}');" value="tomorrow" /> 
-            <label for="select_days_tomorrow">Demain ({{$tomorrow_deb|date_format:"%d/%m/%Y"}})</label>
+            <label for="select_days_tomorrow">Demain</label>
           </td>
         </tr>
 
