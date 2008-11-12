@@ -104,4 +104,8 @@ if (!function_exists('mb_strtolower')) {
   }
 }
 
+if (!defined('PHP_INT_MAX')) {
+	define('PHP_INT_MAX', pow(2, 31)-1);
+}
+
 ?>
