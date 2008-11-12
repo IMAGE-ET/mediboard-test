@@ -80,7 +80,7 @@ foreach($listOperations as $key => &$op) {
   $timing[$key]["entree_reveil"] = array();
   $timing[$key]["sortie_reveil"] = array();
   foreach($timing[$key] as $key2 => $value2) {
-    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && key2 !== null; $i++) {
+    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $key2 !== null; $i++) {
       $timing[$key][$key2][] = mbTime("$i minutes", $op->$key2);
     }
   }
