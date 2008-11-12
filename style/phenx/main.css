@@ -568,7 +568,7 @@ table.form th.category {
 table.form th.category label {
   font-weight: bold;
   text-align: center;
-  background-color: #CCCCCC;
+  background-color: transparent;
   vertical-align: middle;
 }
 

@@ -85,7 +85,7 @@ table.form th.category label {
   font-weight: bold;  
   font-style: italic;  
   text-align: center;
-  background-color: #638cc9;
+  background-color: transparent;
 }
 
 table.form th.mandatory {

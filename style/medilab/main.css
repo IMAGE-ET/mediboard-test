@@ -74,18 +74,18 @@ table.form tr.triggerHide th {
 table.form th.category {
   color: #fff;
   font-weight: bold;  
-  font-style: italic;  
+  font-style: normal;  
   text-align: center;
-  background-color: #68c;
+  background-color: #ae0040;
   border: #68c 1px outset;
 }
 
 table.form th.category label {
   color: #fff;
   font-weight: bold;  
-  font-style: italic;  
+  font-style: normal;  
   text-align: center;
-  background-color: #68c;
+  background-color: transparent;
 }
 
 table.form th.mandatory {
@@ -828,16 +828,6 @@ table.form td,
 table.form th,
 table.form td.readonly input {
 	background-color: #fff;
-}
-
-table.form th.category {
-  background-color: #ae0040;
-  font-style: normal;
-}
-
-table.form th.category label {
-  background-color: #ae0040;
-  font-style: normal;
 }
 
 input, 
