@@ -1611,8 +1611,13 @@ span.hilite {
 }
 
 .dPsalleOp button.notext,
-.dPsalleOp button.notext:hover,
-.dPsalleOp .control .trigger  {
+.dPsalleOp button.notext:hover {
+  font-size: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.dPsalleOp .control .trigger {
   width: 1.6em;
   height: 1.6em;
 }
@@ -1624,7 +1629,6 @@ span.hilite {
   background-color: #A9C8CD;
   background-repeat: repeat-x;
 }
-
 
 .dPsalleOp .control .trigger {
   margin: 1px;
