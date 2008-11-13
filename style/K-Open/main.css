@@ -534,3 +534,8 @@ table.dialog #systemMsg {
 div.message, div.loading, div.error, div.warning {
    white-space: nowrap;
 }
+
+.dPsalleOp button, 
+.dPsalleOp button:hover {
+  padding-left: 1.4em;
+}

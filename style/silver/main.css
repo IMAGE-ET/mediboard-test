@@ -304,3 +304,9 @@ button.notext, button.notext:hover{
 a.notext, a.notext:hover{
   padding : 0px 0px 1px 18px;
 }
+
+.dPsalleOp button, 
+.dPsalleOp button:hover {
+  background-position: 3px 140%;
+  background-repeat: repeat-x;
+}

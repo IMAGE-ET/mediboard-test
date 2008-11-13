@@ -1592,9 +1592,9 @@ span.hilite {
 .dPsalleOp button:hover {
   padding-left: 1.4em;
   padding-right: 3px;
-  background-position: 3px 140%;
+  background-position: 3px center;
   background-color: #A9C8CD;
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
 }
 
 .dPsalleOp label,
@@ -1610,24 +1610,23 @@ span.hilite {
   padding-left: 1em;
 }
 
-.dPsalleOp button.notext,
-.dPsalleOp button.notext:hover {
-  font-size: 0;
-  width: 24px;
-  height: 24px;
-}
-
 .dPsalleOp .control .trigger {
   width: 1.6em;
   height: 1.6em;
 }
 
+.dPsalleOp button.notext {
+  font-size: 0;
+  width: 24px;
+  height: 24px;
+}
+
 /** @todo : needed to repeat */
 .dPsalleOp button.notext,
 .dPsalleOp button.notext:hover {
-  background-position: 1px 140%;
+  background-position: 3px center;
   background-color: #A9C8CD;
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
 }
 
 .dPsalleOp .control .trigger {
