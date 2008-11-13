@@ -104,30 +104,30 @@ class CBloodSalvage extends CMbObject {
   
   function loadRefPatient() {
     $this->_ref_patient = new CPatient();
-    $this->_ref_operation->loadRefPatient();
+    $this->_ref_operation->loadRefPatient(1);
     $this->_ref_patient = $this->_ref_operation->_ref_patient;
   }
   
   function loadRefOperation() {
     $this->_ref_operation = new COperation();
-    $this->_ref_operation->load($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp();
+    $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
+    $this->_ref_operation->loadRefPlageOp(1);
   }
   
   function loadRefCellSaver() {
   	$this->_ref_cell_saver = new CCellSaver();
-    $this->_ref_cell_saver->load($this->cell_saver_id);  
+    $this->_ref_cell_saver = $this->_ref_cell_saver->getCached($this->cell_saver_id);  
   }
   
   function loadRefTypeEi() {
   	$this->_ref_incident_type = new CTypeEi();
-    $this->_ref_incident_type->load($this->type_ei_id);
+    $this->_ref_incident_type = $this->_ref_incident_type->getCached($this->type_ei_id);
   }
   
   function loadRefPlageOp() {
     $this->_ref_operation = new COperation;
-    $this->_ref_operation->load($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp();
+    $this->_ref_operation = $this->_ref_operation->getCached($this->operation_id);
+    $this->_ref_operation->loadRefPlageOp(1);
     $this->_datetime = $this->_ref_operation->_datetime;
   }
 	/*
