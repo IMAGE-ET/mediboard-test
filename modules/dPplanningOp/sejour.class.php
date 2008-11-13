@@ -343,20 +343,39 @@ class CSejour extends CCodable {
   }
     
   function store() {
+    
+    // Vérification de la validité des codes CIM
+    if($this->DP != null) {
+      $dp = new CCodeCIM10($this->DP, 1);
+      if(!$dp->exist) {
+        $this->DP = "";
+      }
+    }
+    if($this->DR != null) {
+      $dr = new CCodeCIM10($this->DR, 1);
+      if(!$dr->exist) {
+        $this->DR = "";
+      }
+    }
+    
+    // Annulation de l'établissement de transfert si le mode de sortie n'est pas transfert
     if (null !== $this->mode_sortie) {
       if ("transfert" != $this->mode_sortie) {
         $this->etablissement_transfert_id = "";
       }
     }
     
+    // Annulation de la sortie réelle si on annule le mode de sortie
     if($this->mode_sortie === ""){
       $this->sortie_reelle = "";
     }
   	
+    // On fait le store du séjour
   	if ($msg = parent::store()) {
       return $msg;
     }
 
+    // Cas d'une annulation de séjour
     if ($this->annule) {
       $this->delAffectations();
       $this->cancelOperations();

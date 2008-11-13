@@ -15,20 +15,21 @@ class CCodeCIM10 {
   var $_spec = null;
   
   // Lite props
-  var $code = null;
-  var $sid = null;
-  var $level = null;
+  var $code    = null;
+  var $sid     = null;
+  var $level   = null;
   var $libelle = null;
+  var $exist   = null;
   
   // Others props
-  var $descr = null;
+  var $descr     = null;
   var $glossaire = null;
-  var $include = null;
-  var $indir = null;
-  var $notes = null;
+  var $include   = null;
+  var $indir     = null;
+  var $notes     = null;
   
   // Références
-  var $_exclude = null;
+  var $_exclude   = null;
   var $_levelsSup = null;
   var $_levelsInf = null;
 
@@ -61,6 +62,7 @@ class CCodeCIM10 {
   
   // Chargement des données Lite
   function loadLite($lang = self::LANG_FR) {
+    $this->exist = true;
     $ds =& $this->_spec->ds;
     
     $this->_lang = $lang;
@@ -73,6 +75,7 @@ class CCodeCIM10 {
     $row = $ds->fetchArray($result);
     if ($row["total"] == 0) {
       $this->libelle = "Code CIM inexistant";
+      $this->exist = false;
       return false;
     }
     // sid
@@ -105,7 +108,7 @@ class CCodeCIM10 {
   
   // Chargement des données
   function load($lang = self::LANG_FR) {
-    if (!$this->loadLite($lang, 0)){
+    if (!$this->loadLite($lang)){
       return false;
     }
     $ds =& $this->_spec->ds;

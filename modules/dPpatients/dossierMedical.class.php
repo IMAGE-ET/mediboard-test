@@ -82,9 +82,10 @@ class CDossierMedical extends CMbMetaObject {
       $listCodesCim = $oldDossier->codes_cim;
     }
     if($this->_added_code_cim) {
-      if($listCodesCim) {
+      $da = new CCodeCIM10($this->_added_code_cim, 1);
+      if($listCodesCim && $da->exist) {
         $this->codes_cim = "$listCodesCim|$this->_added_code_cim";
-      } else {
+      } elseif($da->exist) {
         $this->codes_cim = $this->_added_code_cim;
       }
     }
