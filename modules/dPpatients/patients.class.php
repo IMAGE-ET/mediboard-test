@@ -869,11 +869,9 @@ class CPatient extends CMbObject {
       return;
     }
     
-  	$tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp"); 
-
   	// Pas de tag IPP => pas d'affichage d'IPP
-  	if(!$tag_ipp) {
-  		$this->_IPP = "";
+  	if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+  		$this->_IPP = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
     	return;
     }
 

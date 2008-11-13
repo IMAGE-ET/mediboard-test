@@ -751,10 +751,10 @@ class CSejour extends CCodable {
 
   function loadNumDossier() {
     // Aucune configuration de numéro de dossier
-    if (!CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
-      $this->_num_dossier = "";
+    if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
+      $this->_num_dossier = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
       return;
-    }
+    }  
     
     // Objet inexistatn
     if (!$this->_id) {
@@ -764,7 +764,7 @@ class CSejour extends CCodable {
     // sinon, $_num_dossier = valeur id400
     // creation du tag de l'id Externe
     global $g;
-    $tag = str_replace('$g',$g, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
+    $tag = str_replace('$g',$g, $tag_dossier);
 
     // Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();
