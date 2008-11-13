@@ -82,7 +82,7 @@ class CPlageconsult extends CMbObject {
       // Filter fields
       "_date_min"    => "date",
       "_date_max"    => "date moreThan|_date_min",
-      "_function_id" => "ref class|CFunction",
+      "_function_id" => "ref class|CFunctions",
       );
 
     return array_merge($parentSpecs, $specs);

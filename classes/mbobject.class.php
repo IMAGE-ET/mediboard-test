@@ -629,7 +629,7 @@ class CMbObject {
 
   function updateFormFields() {
     $this->_guid = "$this->_class_name-$this->_id";
-    $this->_view = "$this->_class_name#$this->_id";
+	  $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
     $this->_shortview = "#$this->_id";
     if ($module = $this->_ref_module) {
       $path = "$module->mod_name/templates/$this->_class_name";

@@ -23,7 +23,7 @@ Consultation = {
             <a href="#" onclick="window.print()">
               Rapport du {{$filter->_date_min|date_format:$dPconfig.date}}
               {{if $filter->_date_min != $filter->_date_max}}
-              au {{$filter->_date_max|date_format::$dPconfig.date}}
+              au {{$filter->_date_max|date_format:$dPconfig.date}}
               {{/if}}
             </a>
           </th>
@@ -56,13 +56,15 @@ Consultation = {
 
   {{foreach from=$days key=_day item=_fses}}
   <tr>
-    <td colspan="2"><strong>{{$_day|date_format:"%a %d %b %Y"}}</strong></td>
+    <td colspan="2"><strong>{{$_day|date_format:$dPconfig.longdate}}</strong></td>
   </tr>
   <tr>
     <td colspan="2">
       <table class="tbl">
         <tr>
           <th width="15%">{{mb_label object=$filter field=S_FSE_NUMERO_FSE}}</th>
+          <th width="05%">{{mb_title object=$filter field=S_FSE_NUM_LOT}}</th>
+          <th width="05%">{{mb_title class=CLmLot   field=S_LOT_FIC}}</th>
           <th width="15%">{{mb_label object=$filter field=_consult_id}}</th>
           <th width="15%">{{mb_label object=$filter field=S_FSE_ETAT}}</th>
           <th width="15%">{{mb_label object=$filter field=S_FSE_TOTAL_FACTURE}}</th>
@@ -81,6 +83,24 @@ Consultation = {
 			      </button>
 			    </td>
 			      
+			    <td>
+			      {{assign var=lot value=$_fse->_ref_lot}}
+			      {{if $lot->_id}}
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmLot', object_id: '{{$lot->_id}}' } })">
+			      {{$lot->_id|pad:6:'0':'left'}}
+				  	</span>
+						{{/if}}
+			      
+			    </td>
+			    
+			    <td>
+			      {{if $lot->S_LOT_FIC}}
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFichier', object_id: '{{$lot->S_LOT_FIC}}' } })">
+			      {{$lot->S_LOT_FIC|pad:6:'0':'left'}}
+				  	</span>
+						{{/if}}
+			    </td>
+			    
           <td>
             {{if $_fse->_consult_id}}
 				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: '{{$_fse->_consult_id}}' } })">
@@ -99,7 +119,7 @@ Consultation = {
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="3" style="font-weight:bold; text-align:right">Total pour {{$cumuls.$_day.count}} FSE</td>
+          <td colspan="5" style="font-weight:bold; text-align:right">Total pour {{$cumuls.$_day.count}} FSE</td>
           <td style="font-weight:bold;">{{$cumuls.$_day.S_FSE_TOTAL_FACTURE|string_format:"%.2f"}}&euro;</td>
         </tr>
       </table>

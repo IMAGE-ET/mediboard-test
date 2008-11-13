@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage cabinet
+* @subpackage dPcabinet
 * @version $Revision: 2249 $
 * @author Thomas Despoix
 */

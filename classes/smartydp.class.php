@@ -53,6 +53,32 @@ function thumb($params, &$smarty) {
   return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" alt=\"thumb\" />";
 }
 
+/**
+  * Smarty plugin
+  *
+  * @author   Pablo Dias <pablo at grafia dot com dot br>
+  * @abstract pad a string to a certain length with another string. like php/str_pad
+  *
+  * Example:  {$text|pad:20:'.':'both'}
+  *    will pad $string with dots, in both sides
+  *    until $text length equal to 20 characteres
+  *    (assuming that $text has less than 20 characteres)
+  *
+  * @param string $string The string to be padded
+  * @param int $length Desired string length
+  * @param string $pad_string - string used to pad
+  * @param enum $pad_type - both, left or right
+  */
+
+function smarty_modifier_pad($string, $length, $pad_string=' ', $pad_type='left') {
+  static $pads = array(
+    'left' => 0, 
+    'right'=> 1, 
+    'both' => 2
+  );
+  return str_pad($string, $length ,$pad_string,$pads[$pad_type]);
+} 
+
 function smarty_modifier_json($object) {
   return json_encode($object);
 }
@@ -302,6 +328,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_ternary"        , "smarty_function_mb_ternary");
     $this->register_function("mb_colonne"        , "smarty_function_mb_colonne");
     $this->register_function("mb_include_script" , "smarty_function_mb_include_script");
+    $this->register_modifier("pad"               , "smarty_modifier_pad");
     $this->register_modifier("json"              , "smarty_modifier_json");
     $this->register_modifier("const"             , "smarty_modifier_const");
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");

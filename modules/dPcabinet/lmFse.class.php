@@ -1,3 +1,4 @@
+
 <?php /* $Id: patients.class.php 2249 2007-07-11 16:00:10Z mytto $ */
 
 /**
@@ -26,13 +27,13 @@ class CLmFSE extends CLmObject {
   
   // References
   var $_ref_id = null;
+  var $_ref_lot = null;
   
   // Distant field
   var $_consult_id = null;
 
 	function updateFormFields() {
 	  parent::updateFormFields();
-	  $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
 	  $this->_annulee = $this->S_FSE_ETAT == "3";
 	}
 	
@@ -49,12 +50,12 @@ class CLmFSE extends CLmObject {
     
     // DB Fields
     $specs["S_FSE_NUMERO_FSE"]        = "ref class|CLmFSE";
-    $specs["S_FSE_ETAT"]              = "enum list|2|3|4|5|6|7|8|9|10";
-    $specs["S_FSE_MODE_SECURISATION"] = "enum list|0|1|2|3|4|5";
+    $specs["S_FSE_ETAT"]              = "enum list|1|2|3|4|5|6|7|8|9|10";
+    $specs["S_FSE_MODE_SECURISATION"] = "enum list|0|1|2|3|4|5|255";
     $specs["S_FSE_DATE_FSE"]          = "date";
     $specs["S_FSE_CPS"]               = "num";
     $specs["S_FSE_VIT"]               = "num";
-    $specs["S_FSE_NUM_LOT"]           = "num";
+    $specs["S_FSE_NUM_LOT"]           = "ref class|CLmLot";
     $specs["S_FSE_TOTAL_FACTURE"]     = "currency";
     $specs["S_FSE_TOTAL_AMO"]         = "currency";
     $specs["S_FSE_TOTAL_ASSURE"]      = "currency";
@@ -68,6 +69,11 @@ class CLmFSE extends CLmObject {
     $specs["_consult_id"] = "ref class|CConsultation";
     
     return $specs;
+  }
+  
+  function loadRefLot() {
+    $lot = new CLmLot();
+    $this->_ref_lot = $lot->getCached($this->S_FSE_NUM_LOT);
   }
   
   function loadRefIdExterne() {
