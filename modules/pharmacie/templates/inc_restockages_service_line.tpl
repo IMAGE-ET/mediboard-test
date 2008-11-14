@@ -19,7 +19,7 @@
   <td>
     {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
       {{assign var=id value=$trace->_id}}
-      <form name="delivery-trace-{{$curr_delivery->_id}}-receive" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+      <form name="delivery-trace-{{$id}}-receive" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
         <input type="hidden" name="m" value="dPstock" /> 
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
