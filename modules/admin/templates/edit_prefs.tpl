@@ -261,25 +261,6 @@
   
   {{/if}}
   
-  {{assign var="module" value="dPhospi"}}
-  {{if $prefsUser.$module}}
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
-  {{assign var="var" value="ccam_sejour"}}
-  <tr>
-    <th>
-      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  {{/if}}
-  
   {{assign var="module" value="dPcabinet"}}
   {{if $prefsUser.$module}}
   
@@ -296,6 +277,44 @@
       <select name="pref_name[{{$var}}]">
         <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
         <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+  {{/if}}
+  
+  {{assign var="module" value="dPcompteRendu"}}
+  {{if $prefsUser.$module}}
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
+  </tr>
+  {{assign var="var" value="saveOnPrint"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+  {{/if}}
+  
+  {{assign var="module" value="dPhospi"}}
+  {{if $prefsUser.$module}}
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
+  </tr>
+  {{assign var="var" value="ccam_sejour"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
       </select>
     </td>
   </tr>

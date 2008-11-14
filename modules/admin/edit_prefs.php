@@ -81,6 +81,9 @@ $array_list_module_pref = array (
   "dPhospi" => array (
     "ccam_sejour",
   ),
+  "dPcompteRendu" => array(
+    "saveOnPrint",
+  ),
   "system" => array (
     "INFOSYSTEM",
   ),

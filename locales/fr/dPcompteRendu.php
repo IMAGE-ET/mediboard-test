@@ -204,4 +204,8 @@ $locales['CCompteRendu-group_id-desc'] = 'Etablissement auquel le modèle est ass
 $locales['CCompteRendu._owner.etab'] = 'Modèle d\'établissement';
 $locales['CFunctions-back-'] = '';
 $locales['CGroups-back-modeles'] = 'Modèles';
+$locales['pref-saveOnPrint'] = 'Demande de sauvegarde lors de l\'impression';
+$locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
+$locales['pref-saveOnPrint-0'] = 'Non';
+$locales['pref-saveOnPrint-1'] = 'Oui';
 ?>

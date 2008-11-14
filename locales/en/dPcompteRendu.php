@@ -198,4 +198,14 @@ $locales['CDestinataire.tag.prevenir'] = '';
 $locales['CDestinataire.tag.employeur'] = '';
 $locales['CDestinataire.tag.traitant'] = '';
 $locales['CDestinataire.tag.correspondant'] = '';
+$locales['pref-saveOnPrint'] = '';
+$locales['CCompteRendu-group_id'] = '';
+$locales['CCompteRendu-group_id-court'] = '';
+$locales['CCompteRendu-group_id-desc'] = '';
+$locales['CCompteRendu._owner.etab'] = '';
+$locales['CFunctions-back-'] = '';
+$locales['CGroups-back-modeles'] = '';
+$locales['pref-saveOnPrint-desc'] = '';
+$locales['pref-saveOnPrint-0'] = '';
+$locales['pref-saveOnPrint-1'] = '';
 ?>

@@ -15,11 +15,15 @@ FCKConfig.ToolbarSets["Default"] = [
 ] ;
 
 {{else}}
-
+  {{if $app->user_prefs.saveOnPrint}}
+    var textForPrint = 'mbPrint';
+  {{else}}
+    var textForPrint = 'Print';
+  {{/if}}
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
 	['Save','Preview'],
-	['Cut','Copy','Paste','PasteText','PasteWord','-','mbPrint', '-', 'mbHeader', 'mbFooter'],
+	['Cut','Copy','Paste','PasteText','PasteWord','-',textForPrint,'-','mbHeader','mbFooter'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Table','Rule','Image', 'Smiley','SpecialChar','mbPageBreak'],
 	['FitWindow','Source','About'],

@@ -291,8 +291,11 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "ALTER TABLE `compte_rendu` 
 			ADD INDEX (`group_id`);";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.39");
+    $this->addPrefQuery("saveOnPrint", 1);
 
-    $this->mod_version = "0.39";
+    $this->mod_version = "0.40";
   }
 }
 ?>
