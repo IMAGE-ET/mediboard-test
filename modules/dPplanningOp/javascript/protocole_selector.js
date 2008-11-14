@@ -41,11 +41,9 @@ var ProtocoleSelector = {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
+    
+    // Champs de l'intervention
     $V(oOpForm[this.sChir_id], protocole.chir_id, true);
-    if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
-      $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
-      oSejourForm[this.sType].value = protocole.type;
-    }
     if(oOpFormEasy) {
       $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
       $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
@@ -65,10 +63,27 @@ var ProtocoleSelector = {
       $V(oOpForm[this.sFournitures],       protocole.fournitures, false);
     }
     
-    $V(oOpForm[this.sRques_op],          protocole.rques_operation);
-    $V(oSejourForm[this.sDP],            protocole.DP);
-    $V(oSejourForm[this.sConvalescence], protocole.convalescence);
-    $V(oSejourForm[this.sRques_sej],     protocole.rques_sejour);
+    $V(oOpForm[this.sRques_op], protocole.rques_operation);
+    
+    // Champs du séjour
+    
+    if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
+      $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
+      oSejourForm[this.sType].value = protocole.type;
+    }
+    if(!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value) {
+      $V(oSejourForm[this.sDP], protocole.DP);
+    }
+    if(oSejourForm.sejour_id.value && oSejourForm[this.sConvalescence].value) {
+      $V(oSejourForm[this.sConvalescence], oSejourForm[this.sConvalescence].value+"\n"+protocole.convalescence);
+    } else {
+      $V(oSejourForm[this.sConvalescence], protocole.convalescence);
+    }
+    if(oSejourForm.sejour_id.value && oSejourForm[this.sRques_sej].value) {
+      $V(oSejourForm[this.sRques_sej], oSejourForm[this.sRques_sej].value+"\n"+protocole.rques_sejour);
+    } else {
+      $V(oSejourForm[this.sRques_sej], protocole.rques_sejour);
+    }
     
     refreshListCCAM("expert");
     refreshListCCAM("easy");
