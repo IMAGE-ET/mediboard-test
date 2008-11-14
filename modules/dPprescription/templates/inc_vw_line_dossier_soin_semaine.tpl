@@ -28,7 +28,7 @@
   			{{else}}
   			  Aucune transmission
   			{{/if}}
-		  </div>           
+		  </div>
 	    </th>
     {{/if}}
   {{/if}}	
@@ -46,6 +46,9 @@
 	      {{/if}} 
 	    </a>
 	  </div>
+	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	    {{$line->voie}}
+	  {{/if}}
    </td>
    <!-- Affichage de la prise -->
 	 <td class="text">

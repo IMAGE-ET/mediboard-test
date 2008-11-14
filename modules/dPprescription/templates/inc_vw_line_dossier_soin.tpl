@@ -73,6 +73,9 @@
 	      {{/if}} 
 	    </a>
 	  </div>
+	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	    {{$line->voie}}
+	  {{/if}}
 	  {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_ref_substitution_lines|@count}}
     <form action="?" method="post" name="changeLine-{{$line_id}}">
       <input type="hidden" name="m" value="dPprescription" />

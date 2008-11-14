@@ -26,6 +26,11 @@ if($prescription_id){
   if($traitement_personnel->_id){
     $traitement_personnel->loadRefsLinesMed("1","1","service"); 
   }
+  
+  $prescription->loadRefsPerfusions();
+  foreach($prescription->_ref_perfusions as &$_perfusion){
+    $_perfusion->loadRefsLines();
+  }
 
   // Chargement du poids et de la chambre du patient
   $sejour =& $prescription->_ref_object;
@@ -76,7 +81,8 @@ $transmission = new CTransmissionMedicale();
 $where = array();
 $where[] = "(object_class = 'CCategoryPrescription') OR 
             (object_class = 'CPrescriptionLineElement') OR 
-            (object_class = 'CPrescriptionLineMedicament')";
+            (object_class = 'CPrescriptionLineMedicament') OR 
+            (object_class = 'CPerfusion')";
 
 $where["sejour_id"] = " = '$sejour->_id'";
 $transmissions_by_class = $transmission->loadList($where);

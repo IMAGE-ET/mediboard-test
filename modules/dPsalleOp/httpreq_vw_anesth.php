@@ -45,6 +45,13 @@ if($operation_id){
 	$prescription->type = "sejour";
 	$prescription->loadMatchingObject();
 	
+	// Chargement des perfusions
+	if($prescription->_id){
+	  $prescription->loadRefsPerfusions();
+	  foreach($prescription->_ref_perfusions as &$_perfusion){
+	    $_perfusion->loadRefsLines();
+	  }
+	}
 	$anesth_id = ($operation->anesth_id) ? $operation->anesth_id : $operation->_ref_plageop->anesth_id;
 	if($anesth_id && CModule::getActive('dPprescription')){
 	  $protocoles = CPrescription::loadAllProtocolesFor($anesth_id, null, null, 'CSejour');

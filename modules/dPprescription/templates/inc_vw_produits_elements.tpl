@@ -118,7 +118,49 @@ submitEmplacement = function(object_class, object_id, emplacement){
   return onSubmitFormAjax(oForm);
 }
 
-/***************/
+submitVoie = function(line_medicament_id, libelle_voie){
+  var oForm = getForm("voie");
+  prepareForm(oForm);
+  oForm.prescription_line_medicament_id.value = line_medicament_id;
+  oForm.voie.value = libelle_voie;
+  return onSubmitFormAjax(oForm);
+}
+
+
+submitSignaturePraticien = function(perfusion_id, prescription_id, signature_praticien){
+  var oForm = getForm("perf_signature_prat");
+  prepareForm(oForm);
+  oForm.perfusion_id.value = perfusion_id;
+  oForm.signature_prat.value = signature_praticien;
+  return onSubmitFormAjax(oForm, { onComplete: function(){
+  	Prescription.reloadPrescSejour(prescription_id);	
+  } } );
+}
+
+submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_pharmacien){
+  var oForm = getForm("perf_signature_pharma");
+  prepareForm(oForm);
+  oForm.perfusion_id.value = perfusion_id;
+  oForm.signature_pharma.value = signature_pharmacien;
+  return onSubmitFormAjax(oForm, { onComplete: function(){
+    {{if $mode_pharma}}
+  	  Prescription.reloadPrescPharma(prescription_id);
+  	{{else}}
+  	  Prescription.reloadPrescSejour(prescription_id);	
+  	{{/if}}
+  } } );
+}
+
+submitValidationInfir = function(perfusion_id, prescription_id, validation_infir){
+  var oForm = getForm("perf_validation_infir");
+  prepareForm(oForm);
+  oForm.perfusion_id.value = perfusion_id;
+  oForm.validation_infir.value = validation_infir;
+  return onSubmitFormAjax(oForm, { onComplete: function(){
+  	Prescription.reloadPrescSejour(prescription_id);	
+  } } );
+}
+
 
 // Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
 changeColor = function(object_id, object_class, oForm, traitement, cat_id){   
@@ -160,9 +202,26 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
   }
 }
 
+changeColorPerf = function(perf_id, oForm){
+  if(oForm.date_arret.value != ''){
+    var _fin = oForm.date_arret.value; 
+  } else {
+    var _fin = oForm.date_debut.value;
+  }
+  var oTbody = $('perfusion-'+perf_id);
+  var oTh = $('th-perf-'+perf_id);
+  if(_fin <= '{{$now}}'){
+    oTh.addClassName("arretee");
+    oTbody.addClassName("line_stopped");
+  } else {
+    oTh.removeClassName("arretee");
+    oTbody.removeClassName("line_stopped");
+  }
+}
+
 modifFormDate = function(nb_prises, form_name, protocole,line_id){
   var oForm = document.forms[form_name];
-  
+ 
   if(protocole == 0){
     oDiv = $('info_date_'+line_id);
     if(nb_prises > 0){
@@ -221,6 +280,17 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   }
 }
 
+toggleTypePerfusion = function(oForm){
+  if(!oForm.type){
+    return;
+  }
+	if(oForm.perfusion_id.value == ""){
+	  oForm.type.show();
+	} else {
+	  oForm.type.hide();
+	}
+}
+		  		  
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
@@ -272,12 +342,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 {{/if}}
 </ul>
 
-
 <hr class="control_tabs" />
-
-
-
-
 
 <!-- Declaration des divs -->
 <div id="div_medicament" style="display:none;">
@@ -404,4 +469,36 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_element_id" value="" />
   <input type="hidden" name="emplacement" value="" />
+</form>
+
+<form name="voie" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="voie" value="" />
+</form>
+
+<form name="perf_signature_prat" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_perfusion_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="signature_prat" value="" />
+</form>
+
+<form name="perf_signature_pharma" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_perfusion_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="signature_pharma" value="" />
+</form>
+
+<form name="perf_validation_infir" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_perfusion_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="validation_infir" value="" />
 </form>

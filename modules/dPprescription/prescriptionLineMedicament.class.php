@@ -26,6 +26,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   // Alternative entre plusieurs lignes
   var $substitute_for      = null; 
   var $substitution_active = null; 
+  var $voie = null;
+                
+  static $perfusables = array ("Voie intraveineuse","Voie intramusculaire");
   
   // Form Field
   var $_unites_prise    = null;
@@ -33,7 +36,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_traitement      = null;
   var $_count_substitution_lines = null;
   var $_ucd_view        = null;
-  
+  var $_is_perfusable   = null;
+    
   // Object References
   var $_ref_prescription = null;
   var $_ref_produit      = null;
@@ -86,7 +90,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["code_cip"]             = "notNull numchar|7";
+    $specs["code_cip"]             = "notNull numchar length|7";
     $specs["no_poso"]              = "num max|128";
     $specs["commentaire"]          = "str";
     $specs["valide_pharma"]        = "bool";
@@ -96,6 +100,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["substitution_active"]  = "bool";
     $specs["_unite_prise"]         = "str";
     $specs["_traitement"]          = "bool";
+    $specs["voie"]                 = "notNull str";
     return $specs;
   }
   
@@ -113,7 +118,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $backRefs["substitutions"]  = "CPrescriptionLineMedicament substitute_for";
     return $backRefs;
   }
-  
   
   function updateFormFields() {
     parent::updateFormFields();   
@@ -154,6 +158,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($this->_protocole){
       $this->countSubstitionsLines();
     }
+    $this->isPerfusable();
   }
   
   /*
@@ -189,7 +194,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-      $perm_edit = $can->admin || ((!$this->signee || $mode_pharma) && 
+      $perm_edit = ($can->admin && !$mode_pharma) || ((!$this->signee || $mode_pharma) && 
                    !$this->valide_pharma && 
                    ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma));
     }
@@ -215,7 +220,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_ald = 1;
     }
     // View Conditionnel
-    if($perm_edit){
+    if($perm_edit && !($this->_protocole && $this->substitute_for)){
     	$this->_can_view_form_conditionnel = 1;
     }
     // View formulaire traitement
@@ -280,6 +285,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function store(){
+    // Sauvegarde de la voie lors de la creation de la ligne
+    if(!$this->_id && !$this->voie){
+      $this->loadRefProduit();
+      $this->voie = $this->_ref_produit->voies[0];
+    }
+    
   	if($msg = parent::store()){
   		return $msg;
   	}
@@ -332,6 +343,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
   
+  function isPerfusable(){
+    foreach($this->_ref_produit->voies as $_voie){
+      if(in_array($_voie, self::$perfusables)){
+        $this->_is_perfusable = true;
+        break;
+      }
+    }
+  }
+
   /*
    * Chargement du produit
    */
@@ -339,7 +359,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	$this->_ref_produit = new CBcbProduit();
   	$this->_ref_produit->load($this->code_cip);
   }
-  
   
   /*
    * Chargement de la posologie
@@ -424,93 +443,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
         return $msg;
       }
     }
-    
     // Suppression de la ligne
     if($msg = parent::delete()){
       return $msg;
     }
   }
-  
-  
-  
-  /*
-   * Controle des allergies
-   */
-  function checkAllergies($listAllergies, $prescription) {
-    if(!isset($prescription->_scores["allergie"])){
-      $prescription->_scores["allergie"] = 0;
-    }
-    $this->_ref_alertes["allergie"] = array();
-    $niveau_max = 0;
-    foreach($listAllergies as $key => $all) {
-      if($all->CIP == $this->code_cip) {
-        $this->_nb_alertes++;
-        $this->_ref_alertes["allergie"][$key]      = $all;
-        $this->_ref_alertes_text["allergie"][$key] = $all->LibelleAllergie;
-        $prescription->_scores["allergies"]++;
-      }
-      $prescription->_scores["allergie"][] = $all;
-    }
-  }
-  
-  /*
-   * Controle des interactions
-   */
-  function checkInteractions($listInteractions, $prescription) {
-    if(!isset($prescription->_scores["interaction"])){
-      $prescription->_scores["interaction"] = array();
-    }
-    $this->_ref_alertes["interaction"] = array();
    
-    $niveau_max = 0;
-    foreach($listInteractions as $key => $int) {
-      if($int->CIP1 == $this->code_cip || $int->CIP2 == $this->code_cip) {
-        $this->_nb_alertes++;
-        $this->_ref_alertes["interaction"][$key]      = $int;
-        $this->_ref_alertes_text["interaction"][$key] = $int->Type;
-        @$prescription->_scores["interaction"]["niv$int->Niveau"]++;
-      }
-      $niveau_max = max($int->Niveau, $niveau_max);
-    }
-    if(count($prescription->_scores["interaction"])){
-      $prescription->_scores["interaction"]["niveau_max"] = $niveau_max;
-    }
-  }
-  
-  /*
-   * Controle des IPC
-   */
-  function checkIPC($listIPC, $prescription) {
-    if(!isset($prescription->_scores["IPC"])){
-      $prescription->_scores["IPC"] = 0;
-    }
-    $this->_ref_alertes["IPC"]      = array();
-    $this->_ref_alertes_text["IPC"] = array();
-  }
-  
-  /*
-   * Controle du profil du patient
-   */
-  function checkProfil($listProfil, $prescription) {
-    if(!isset($prescription->_scores["profil"])){
-      $prescription->_scores["profil"] = array();
-    }
-    $this->_ref_alertes["profil"] = array();
-    $niveau_max = 0;
-    foreach($listProfil as $key => $profil) {
-      if($profil->CIP == $this->code_cip) {
-        $this->_nb_alertes++;
-        $this->_ref_alertes["profil"][$key]      = $profil;
-        $this->_ref_alertes_text["profil"][$key] = $profil->LibelleMot;
-        @$prescription->_scores["profil"]["niv$profil->Niveau"]++;
-      }
-      $niveau_max = max($profil->Niveau, $niveau_max);
-    }
-    if(count($prescription->_scores["profil"])){
-      $prescription->_scores["profil"]["niveau_max"] = $niveau_max;
-    }
-  }
-  
   /*
    * Chargement du log de validation par le pharmacien
    */

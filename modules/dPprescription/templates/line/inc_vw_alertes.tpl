@@ -1,28 +1,38 @@
+{{if !$line->_protocole}}
 {{assign var="color" value=#ccc}}
-{{if $line->_nb_alertes}}
-  {{if $line->_ref_alertes.IPC || $line->_ref_alertes.profil}}
+{{assign var=code_cip value=$line->code_cip}}
+
+{{if (array_key_exists($code_cip, $prescription_reelle->_alertes.allergie) ||
+     array_key_exists($code_cip, $prescription_reelle->_alertes.interaction) ||
+     array_key_exists($code_cip, $prescription_reelle->_alertes.profil) ||
+     array_key_exists($code_cip, $prescription_reelle->_alertes.IPC))}}
+  {{if array_key_exists($code_cip, $prescription_reelle->_alertes.profil) ||
+       array_key_exists($code_cip, $prescription_reelle->_alertes.IPC)}}
     {{assign var="image" value="note_orange.png"}}
     {{assign var="color" value=#fff288}}
   {{/if}}  
-  {{if $line->_ref_alertes.allergie || $line->_ref_alertes.interaction}}
+  {{if array_key_exists($code_cip, $prescription_reelle->_alertes.allergie) ||
+       array_key_exists($code_cip, $prescription_reelle->_alertes.interaction)}}
     {{assign var="image" value="note_red.png"}}
     {{assign var="color" value=#ff7474}}
   {{/if}}  
   <img src="images/icons/{{$image}}" title="" alt="" 
-       onmouseover="$('line-{{$line->_id}}').show();"
-       onmouseout="$('line-{{$line->_id}}').hide();" />
+       onmouseover="$('line-{{$line->_guid}}').show();"
+       onmouseout="$('line-{{$line->_guid}}').hide();" />
 {{/if}}
-<div id="line-{{$line->_id}}" class="tooltip" style="display: none; background-color: {{$color}}; border-style: ridge; padding-right:5px; ">
-{{foreach from=$line->_ref_alertes_text key=type item=curr_type}}
-  {{if $curr_type|@count}}
-    <ul>
-    {{foreach from=$curr_type item=curr_alerte}}
-      <li>
-        <strong>{{tr}}CPrescriptionLineMedicament-alerte-{{$type}}-court{{/tr}} :</strong>
-        {{$curr_alerte}}
-      </li>
-    {{/foreach}}
-    </ul>
-  {{/if}}
-{{/foreach}}
+
+<div id="line-{{$line->_guid}}" class="tooltip" style="display: none; background-color: {{$color}}; border-style: ridge; padding-right:5px; ">
+	{{foreach from=$prescription_reelle->_alertes key=type item=curr_type}}
+	  {{if array_key_exists($code_cip, $curr_type)}}
+	    <ul>
+	    {{foreach from=$curr_type.$code_cip item=_alerte}}
+	      <li>
+	        <strong>{{tr}}CPrescriptionLineMedicament-alerte-{{$type}}-court{{/tr}} :</strong>
+	        {{$_alerte}}
+	      </li>
+	    {{/foreach}}
+	    </ul>
+	  {{/if}}
+	{{/foreach}}
 </div>
+{{/if}}

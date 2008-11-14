@@ -73,6 +73,12 @@ ul {
    {{/foreach}} 
   {{/foreach}}
   
+  <!-- Affichage des perfusions -->
+  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion}}
+    {{include file="../../dPprescription/templates/inc_vw_perf_plan_soin.tpl"}}
+  {{/foreach}}
+  
+  
   <!-- Séparation entre les medicaments et les elements -->
   <tr>
     <td colspan="1000" style="padding:0; height: 1px; border: 1px solid black;"></td>

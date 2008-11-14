@@ -46,6 +46,13 @@ foreach($prescription->_ref_prescription_lines as $_line){
 	$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
 }
 
+// Chargement des lignes de perfusions
+$prescription->loadRefsPerfusions();
+foreach($prescription->_ref_perfusions as $_perfusion){
+  $_perfusion->loadRefsLines();  
+  $_perfusion->loadRefPraticien();
+}
+
 // Chargement du dernier pharmacien qui a validé une ligne
 if($logs){
   ksort($logs);

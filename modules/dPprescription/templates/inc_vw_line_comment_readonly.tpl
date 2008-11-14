@@ -2,7 +2,7 @@
 
 <tbody class="hoverable">
    <tr>
-     <td colspan="2">
+     <td colspan="4">
        {{$line->commentaire}}
      </td>
      <td style="text-align: right;">
@@ -20,5 +20,3 @@
      </td>
   </tr>
 </tbody>
-
-

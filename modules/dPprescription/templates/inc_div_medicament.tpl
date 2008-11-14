@@ -187,7 +187,7 @@ Main.add( function(){
 			    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
 			  </select>
 			{{/if}}
-			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements)}}
+			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements || $prescription->_ref_perfusions)}}
 			  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
 			    {{if $readonly}}Modification
 			    {{else}}Lecture seule
@@ -241,7 +241,7 @@ Main.add( function(){
 
 
 
-{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements}}
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements || $prescription->_ref_perfusions}}
 <table class="tbl">
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
@@ -285,6 +285,16 @@ Main.add( function(){
     {{/if}}
   {{/foreach}}
   
+  <!-- Parcours des perfusions -->
+  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_perfusion->praticien_id)}}
+	    {{if $readonly}}
+	      {{include file="../../dPprescription/templates/inc_vw_perfusion_readonly.tpl" prescription_reelle=$prescription}}    
+	    {{else}}
+	      {{include file="../../dPprescription/templates/inc_vw_perfusion.tpl" prescription_reelle=$prescription}}
+	    {{/if}}
+    {{/if}}
+  {{/foreach}}
  </table> 
 {{else}}
   <div class="big-info"> 

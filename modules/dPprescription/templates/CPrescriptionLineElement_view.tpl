@@ -72,7 +72,9 @@
   <tr>
     <td colspan="3">
       Exécutant: 
-      {{$line->_ref_executant->_view}}
+      {{if $line->_ref_executant}}
+        {{$line->_ref_executant->_view}}
+      {{/if}}
     </td>
   </tr>
   {{if $line->_ref_transmissions|@count}}

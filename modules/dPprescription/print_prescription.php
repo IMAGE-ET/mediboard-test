@@ -82,6 +82,13 @@ if($prescription->_ref_object->_ref_prescription_traitement->_id){
 	}
 }
 
+// Chargement des perfusions
+$prescription->loadRefsPerfusions();
+foreach($prescription->_ref_perfusions as &$_perfusion){
+  $_perfusion->loadRefsLines();
+}
+
+
 $medicament = 0;
 $comment = 0;
 
@@ -107,17 +114,13 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		}
 	  // mode ordonnnance
 		if($ordonnance){
-
 			if($line_medicament->_fin_reelle && $line_medicament->_fin_reelle < mbDate()){
 				continue;
 			}
-			
 			// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
-		  
 			if(!$line_medicament->signee || $line_medicament->praticien_id != $AppUI->user_id){
 		  	continue;
 		  }
-		  
 		  $line_medicament->loadRefLogSignee();
 		  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
 		  if($now > mbDateTime($line_medicament->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
@@ -130,6 +133,32 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  	$lines["medicaments"][$key]["no_ald"][] = $line_medicament;
 	  }
 	}
+}
+
+// Parcours des perfusions
+foreach($prescription->_ref_perfusions as $_perfusion){
+	if($praticien_sortie_id && $_perfusion->praticien_id != $praticien_sortie_id){
+		continue;
+	}	
+	if($_perfusion->next_perf_id){
+		continue;
+	}
+	// Mode ordonnance
+	if($ordonnance){
+		if($_perfusion->_fin < mbDate()){
+			continue;
+		}
+		// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
+		if(!$_perfusion->signature_prat || $_perfusion->praticien_id != $AppUI->user_id){
+	  	continue;
+	  }
+	  $line_medicament->loadRefLogSignaturePrat();
+	  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
+	  if($now > mbDateTime($_praticien->_ref_log_signature_prat->date. "+ $time_print_ordonnance hours")){
+	  	continue;
+	  }
+  }
+  $lines["medicaments"]["med"]["no_ald"][] = $_perfusion;
 }
 
 

@@ -113,7 +113,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("type", "Med");
 $smarty->assign("line", $prescription_line);
 $smarty->assign("moments", $moments);
-
+$smarty->assign("typeDate","Med");
 $smarty->display("../../dPprescription/templates/line/inc_vw_prises_posologie.tpl");
 
 ?>

@@ -5,7 +5,8 @@
   <td class="text"  style="border: 1px solid #ccc;">
     {{if $line->_class_name == "CPrescriptionLineMedicament"}}
       {{$line->_ucd_view}}
-    {{else}}
+      - {{$line->voie}}
+	  {{else}}
       {{$line->_view}}
     {{/if}}
     {{if $line->commentaire}}

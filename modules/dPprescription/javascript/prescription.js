@@ -249,7 +249,15 @@ var Prescription = {
     url.addParam("mode_pharma", "1");
     url.addParam("refresh_pharma", "1");
     url.addParam("mode_protocole", "0");
+    url.addParam("readonly", 0);
     url.requestUpdate("prescription_pharma", { waitingText: null } );
+  },
+  reloadPrescPerf: function(prescription_id, mode_pharma){
+    if(mode_pharma == '1'){
+      Prescription.reloadPrescPharma(prescription_id);
+    } else {
+      Prescription.reloadPrescSejour(prescription_id);
+    }
   },
   reloadAddProt: function(protocole_id) {
     Prescription.reload(protocole_id, '','', '1','0');

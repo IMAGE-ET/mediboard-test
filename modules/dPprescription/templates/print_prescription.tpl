@@ -112,7 +112,11 @@ Main.add(window.print);
     </h3>
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
-      {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+      {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
+        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+      {{else}}
+        {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald}}
+      {{/if}} 
     {{/foreach}}
     {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
 		  <li>
@@ -137,7 +141,11 @@ Main.add(window.print);
     <!-- Affichage des no_ald -->
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
-      {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+      {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
+        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+      {{else}}
+        {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald}}
+      {{/if}}
         {{if !$prescription->object_id}}
 	        {{if $line_medicament_element_no_ald->_ref_substitution_lines|@count}}
 	        <br />

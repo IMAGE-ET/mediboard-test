@@ -112,6 +112,7 @@ $medicaments = array();
 $elements = array();
 $comments = array();
 $lines = array();
+$perfusions = array();
 
 // Validation d'une ligne
 if($prescription_line_id){	
@@ -146,56 +147,21 @@ if($prescription_id && $chapitre == "medicament"){
 }
 
 
-// Si mode pharma en validation globale, chargement de tous les medicaments de la prescription et calcul des interactions
+// Si mode pharma en validation globale, chargement de tous les medicaments de la prescription
 if($prescription->_id && $mode_pharma){
-	$prescription->loadRefObject();
-	$prescription->_ref_object->loadRefPatient();
 	$prescription->loadRefsLinesMed();
-	$sejour =& $prescription->_ref_object;
-	$patient =& $sejour->_ref_patient;
-	
-	// Chargement du dossier medical du patient
-	$patient->loadRefDossierMedical();
-  $patient->_ref_dossier_medical->updateFormFields();
-  $patient->_ref_dossier_medical->loadRefsAntecedents();
-  $patient->_ref_dossier_medical->loadRefsTraitements();
-  
-  // Gestion des alertes
-  $allergies    = new CBcbControleAllergie();
-  $allergies->setPatient($patient);
-  $interactions = new CBcbControleInteraction();
-  $IPC          = new CBcbControleIPC();
-  $profil       = new CBcbControleProfil();
-  $profil->setPatient($patient);
-  
+  $prescription->loadRefsPerfusions();	
   foreach ($prescription->_ref_prescription_lines as &$_line_med) {
   	if(!$_line_med->child_id){
-	    // Chargement de la posologie
-	    // Ajout des produits pour les alertes
-	    $allergies->addProduit($_line_med->code_cip);
-	    $interactions->addProduit($_line_med->code_cip);
-	    $IPC->addProduit($_line_med->code_cip);
-	    $profil->addProduit($_line_med->code_cip);
+	    $medicaments[$_line_med->_id] = $_line_med;
   	}
   }
-  $alertesAllergies    = $allergies->getAllergies();
-  $alertesInteractions = $interactions->getInteractions();
-  $alertesIPC          = $IPC->getIPC();
-  $alertesProfil       = $profil->getProfil();
-  $prescription->_scores["hors_livret"] = 0;
-  
-  foreach ($prescription->_ref_prescription_lines as &$_line) {
-  	if(!$_line->child_id){
-	    $_line->checkAllergies($alertesAllergies, $prescription);
-	    $_line->checkInteractions($alertesInteractions, $prescription);
-	    $_line->checkIPC($alertesIPC, $prescription);
-	    $_line->checkProfil($alertesProfil, $prescription);
-  	} 
-  	$medicaments[$_line->_id] = $_line;
-  } 
+  foreach($prescription->_ref_perfusions as &$_perfusion){
+    if(!$_perfusion->next_perf_id){
+      $perfusions[$_perfusion->_id] = $_perfusion;
+    }
+  }
 }
-
-
 
 // Validation de tous les medicaments
 if($prescription_id && $chapitre=="medicament" && !$mode_pharma){
@@ -206,8 +172,14 @@ if($prescription_id && $chapitre=="medicament" && !$mode_pharma){
 	$prescriptionLineMedicament->signee = "0";
 	$medicaments = $prescriptionLineMedicament->loadMatchingList();
 
+	// Chargement des perfusions
+  $perfusion = new CPerfusion();
+  $perfusion->prescription_id = $prescription_id;
+  $perfusion->praticien_id = $AppUI->user_id;
+  $perfusion->signature_prat = "0";
+  $perfusions = $perfusion->loadMatchingList();
+
   $prescriptionLineComment = new CPrescriptionLineComment();
-  
   $where = array();
   $where["prescription_id"] = " = '$prescription_id'";
   $where["praticien_id"] = " = '$AppUI->user_id'";
@@ -253,6 +225,17 @@ foreach($medicaments as $key => $lineMedicament){
 	}
 	$msg = $lineMedicament->store();
 	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
+}
+
+// Parcours des perfusions et passage de valide a 1
+foreach($perfusions as &$_perfusion){
+  if($mode_pharma){
+    $_perfusion->signature_pharma = 1;
+  } else {
+    $_perfusion->signature_prat = 1;
+  }
+  $msg = $_perfusion->store();
+  $AppUI->displayMsg($msg, "CPerfusion-msg-store");
 }
 
 // Parcours des medicaments et passage de valide à 1

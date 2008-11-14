@@ -113,6 +113,91 @@ foreach($prescriptions as $_prescription){
       $produits[$_line_med->code_cip] = $_line_med->_ref_produit;
     }
   }
+  
+  // Chargement des perfusions
+  $_prescription->loadRefsPerfusions();
+  
+  foreach($_prescription->_ref_perfusions as $_perfusion){
+    if (!(($_perfusion->_debut >= $date_min) && ($_perfusion->_debut <= $date_max))){
+     continue;     
+    }
+    
+    $_perfusion->loadRefsLines();
+    foreach($_perfusion->_ref_lines as &$_perf_line){
+      $produit = $_perf_line->_ref_produit;
+      $produit->loadLibellePresentation();
+      
+      $poids_ok = 1;
+      $_unite_prise = str_replace('/kg','',$_perf_line->unite);
+      if($_unite_prise != $_perf_line->unite){
+        if(!$patient->_ref_constantes_medicales){
+	        $patient->loadRefConstantesMedicales();
+	      }
+        $poids = $patient->_ref_constantes_medicales->poids;
+        if($poids){
+		      $_perf_line->quantite *= $poids;
+		      $_perf_line->_unite_sans_kg = $_unite_prise;
+        } else {
+          $poids_ok = 0;
+          $_perf_line->quantite = 0;
+        } 
+      }
+      
+      if($poids_ok){
+        $unite_prise = ($_perf_line->_unite_sans_kg) ? $_perf_line->_unite_sans_kg : $_perf_line->unite;
+		    $produit->loadConditionnement();
+		    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)		    
+		    if($_perf_line->unite == $produit->libelle_presentation){		        
+		      $_perf_line->quantite *= $produit->nb_unite_presentation;
+		    }
+		    // Gestion des unite autres unite de prescription
+		    if(!isset($produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation])) {
+          $coef = 1;
+        } else {
+          $coef = $produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation];
+        }
+        
+        $_perf_line->_quantite_with_coef = 1;
+		    $_perf_line->quantite *= $coef;
+		    
+		    $_perf_line->_unite_administration = $produit->libelle_unite_presentation;
+		    $_perf_line->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
+		    $produit->_unite_dispensation = $_perf_line->_unite_dispensation;
+		    $produit->_unite_administration = $_perf_line->_unite_administration;
+		    
+		    if($_perf_line->_unite_dispensation == $produit->libelle_unite_presentation){
+		      $_perf_line->_ratio_administration_dispensation = 1;
+		    } else {
+		      $_perf_line->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
+		    }
+		  }
+		  @$_perf_line->_quantite_administration += $_perf_line->quantite; 
+	
+	    if($_perf_line->_quantite_administration){
+	      $_perf_line->_quantite_dispensation = $_perf_line->_quantite_administration * $_perf_line->_ratio_administration_dispensation;
+	      if(!isset($dispensations[$_perf_line->code_cip]["quantite_administration"])){
+	        $dispensations[$_perf_line->code_cip]["quantite_administration"] = 0;
+	      }  
+	      if(!isset($dispensations[$_perf_line->code_cip]["quantite_dispensation"])){
+	        $dispensations[$_perf_line->code_cip]["quantite_dispensation"] = 0;
+	      }     
+	      $dispensations[$_perf_line->code_cip]["quantite_administration"] += $_perf_line->_quantite_administration;
+	      
+		    if(strstr($_perf_line->_quantite_dispensation,'.')){
+		      $_perf_line->_quantite_dispensation = ceil($_perf_line->_quantite_dispensation);
+		    }
+	      $dispensations[$_perf_line->code_cip]["quantite_dispensation"] += $_perf_line->_quantite_dispensation;
+	
+	      @$besoin_patient[$_perf_line->code_cip][$patient->_id]["patient"] = $patient; 
+	      @$besoin_patient[$_perf_line->code_cip][$patient->_id]["quantite_administration"] = $_perf_line->_quantite_administration;
+	      @$besoin_patient[$_perf_line->code_cip][$patient->_id]["quantite_dispensation"] = $_perf_line->_quantite_dispensation;
+	      
+	    }
+	    if($_perf_line->_ref_produit->_unite_dispensation){
+	      $produits[$_perf_line->code_cip] = $_perf_line->_ref_produit;
+	    }
+    } 
+  }
 }
 
 foreach($besoin_patient as $code_cip => &$quantites_by_patient){

@@ -219,7 +219,8 @@ class CPrisePosologie extends CMbMetaObject {
   	$nb_hours = mbHoursRelative($borne_min, $borne_max);
   	$nb_days  = mbDaysRelative($borne_min, $borne_max);
   	$nb_minutes = mbMinutesRelative($borne_min, $borne_max);
-
+ 	  //$nb_days++;
+ 	  
   	switch($this->_unite_temps){
   		case 'minute':
   			$nb = $nb_minutes; 
@@ -253,8 +254,8 @@ class CPrisePosologie extends CMbMetaObject {
   			break;
   	}
 
-
   	if($this->moment_unitaire_id && $this->_ref_moment->heure){
+  	  $nb_days++;
   		$heure = $this->_ref_moment->heure;
   		// Si une seule journée, on regarde si la prise est pendant la journée
   		if($nb_days == 0){
@@ -266,8 +267,7 @@ class CPrisePosologie extends CMbMetaObject {
 				} else {
 				  $nb = 0;
 				}
-  		} 
-  		else {
+  		} else {
   			// On calcule combien de fois la prise sera effectuée pendant la ligne
   		  // Pour cela, on verifie si la prise est faite le 1er et dernier jour
 				$first_prise = mbDate($borne_min)." $heure";
@@ -306,7 +306,6 @@ class CPrisePosologie extends CMbMetaObject {
     // On reaffecte la quantite calculee
     $this->quantite = $quantite;
     
-
 		$line =& $this->_ref_object;
 		$produit =& $line->_ref_produit;
 		$prescription =& $line->_ref_prescription;
@@ -346,7 +345,7 @@ class CPrisePosologie extends CMbMetaObject {
 		      $this->quantite *= $produit->nb_unite_presentation;
 		    }
 		    
-		    // Gestion des unite autres unite de prescription
+		    // Gestion des autres unite de prescription
 		    if(!isset($produit->rapport_unite_prise[$unite_prise][$produit->libelle_unite_presentation])) {
           $coef = 1;
         } else {
@@ -367,7 +366,6 @@ class CPrisePosologie extends CMbMetaObject {
 		      $this->_ref_object->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
 		    }
 		  }
-      
 		  @$this->_ref_object->_quantite_administration += $this->quantite; 
   }
   

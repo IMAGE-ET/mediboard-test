@@ -837,8 +837,96 @@ class CSetupdPprescription extends CSetup {
 					 ADD `heure_prise` TIME;";
 	 $this->addQuery($sql);
 
-	 $this->mod_version = "0.60";
-   
+	 $this->makeRevision("0.60");
+	 
+	 $sql = "ALTER TABLE `prescription_line_medicament` 
+					 ADD `voie` VARCHAR (255);";
+	 $this->addQuery($sql);
+	 
+	 function updateVoie(){
+     $ds_std = CSQLDataSource::get("std");
+     $ds_bcb = CSQLDataSource::get("bcb");
+             
+     // Recuperation des tous les codes cip
+     $sql = "SELECT DISTINCT code_cip 
+             FROM prescription_line_medicament;";
+     $codes_cip = $ds_std->loadColumn($sql);
+     
+     // Parcours des cip et stockage de la premiere voie trouvée
+     foreach($codes_cip as $code_cip){
+       $sql = "SELECT IDENT_VOIES.LIBELLEVOIE FROM `IDENT_VOIES`
+							 LEFT JOIN `IDENT_PRODUITS_VOIES` ON `IDENT_PRODUITS_VOIES`.`CODEVOIE` = `IDENT_VOIES`.`CODEVOIE`
+							 WHERE `IDENT_PRODUITS_VOIES`.`CODECIP` = '$code_cip';";
+       $voie = $ds_bcb->loadHash($sql);
+       $codeCip_voie[$code_cip] = $voie["LIBELLEVOIE"];
+     }
+     foreach($codeCip_voie as $code_cip => $libelle_voie){
+	     $sql = "UPDATE `prescription_line_medicament`
+	             SET `voie` = '$libelle_voie'
+							 WHERE `code_cip` = '$code_cip'
+               AND `voie` IS NULL;";
+	     $res = $ds_std->exec($sql);
+     }
+     return true;
+    }
+    $this->addFunctions("updateVoie");
+	  
+    $this->makeRevision("0.61");
+    $sql = "CREATE TABLE `perfusion` (
+							`perfusion_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`prescription_id` INT (11) UNSIGNED,
+							`type` ENUM ('seringue','PCA') NOT NULL,
+							`libelle` VARCHAR (255),
+							`vitesse` INT (10) UNSIGNED,
+							`voie` VARCHAR (255),
+							`date_debut` DATE,
+							`time_debut` TIME,
+							`duree` INT (10) UNSIGNED,
+							`next_perf_id` INT (11) UNSIGNED,
+							`praticien_id` INT (11) UNSIGNED,
+							`creator_id` INT (11) UNSIGNED,
+							`signature_prat` ENUM ('0','1'),
+							`signature_pharma` ENUM ('0','1'),
+							`validation_infir` ENUM ('0','1'),
+							`date_arret` DATE,
+							`time_arret` TIME
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `perfusion` 
+						ADD INDEX (`prescription_id`),
+						ADD INDEX (`date_debut`),
+						ADD INDEX (`time_debut`),
+						ADD INDEX (`next_perf_id`),
+						ADD INDEX (`praticien_id`),
+						ADD INDEX (`creator_id`),
+						ADD INDEX (`date_arret`),
+						ADD INDEX (`time_arret`);";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `perfusion_line` (
+							`perfusion_line_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`perfusion_id` INT (11) UNSIGNED NOT NULL,
+							`code_cip` INT (7) UNSIGNED ZEROFILL NOT NULL,
+							`quantite` INT (11),
+							`unite` VARCHAR (255),
+							`date_debut` DATE,
+							`time_debut` TIME
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `perfusion_line` 
+						ADD INDEX (`perfusion_id`),
+						ADD INDEX (`date_debut`),
+						ADD INDEX (`time_debut`);";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.62");
+    $sql = "ALTER TABLE `perfusion` 
+	          ADD `accord_praticien` ENUM ('0','1');";
+    $this->addQuery($sql);
+    
+	  $this->mod_version = "0.63";
   }  
 }
 

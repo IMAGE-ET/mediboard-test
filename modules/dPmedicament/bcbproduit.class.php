@@ -26,11 +26,19 @@ class CBcbProduit extends CBcbObject {
   var $numero_AMM            = null;
   var $date_AMM              = null;
   var $agrement              = null;
-  
+    
   // Others Fields
   var $_referent             = null;
   var $_generique            = null;
   var $_supprime             = null;
+  
+  var $voies                      = null;
+  var $libelle_presentation       = null;
+  var $nb_presentation            = null;
+  var $libelle_unite_presentation = null;
+  var $libelle_conditionnement    = null;
+  var $rapport_unite_prise        = null;
+  var $dosages                    = null;
   
   // Objects references
   var $_ref_DCI              = null;
@@ -44,6 +52,10 @@ class CBcbProduit extends CBcbObject {
   var $_ref_posologies       = null;
   var $_unite_dispensation   = null;
   var $_unite_administration = null;
+  
+  var $_ref_ATC_2_libelle = null;
+  var $_ref_ATC_2_code    = null;
+  
   // Constructeur
   function CBcbProduit(){
     $this->distClass = "BCBProduit";
@@ -95,8 +107,16 @@ class CBcbProduit extends CBcbObject {
 	    // Produit référent ?
 	    $this->getReferent();
      }
-     
-     
+     $this->loadVoies();
+  }
+  
+  
+  function loadVoies(){
+    $ds = CSQLDataSource::get("bcb");
+    $query = "SELECT IDENT_VOIES.LIBELLEVOIE FROM `IDENT_VOIES`
+							LEFT JOIN `IDENT_PRODUITS_VOIES` ON `IDENT_PRODUITS_VOIES`.`CODEVOIE` = `IDENT_VOIES`.`CODEVOIE`
+							WHERE `IDENT_PRODUITS_VOIES`.`CODECIP` = '$this->code_cip';";
+    $this->voies = $ds->loadColumn($query);
   }
   
   function loadLibellePresentation(){
@@ -216,7 +236,7 @@ class CBcbProduit extends CBcbObject {
   	$livretThera = new CBcbProduitLivretTherapeutique();
   	$this->inLivret = $livretThera->distObj->isLivret($g, $this->code_cip);
   }
-  
+
   // $livretTherapeutique = 1 pour une recherche dans le livret Therapeutique
   function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true){   
     // Type_recherche

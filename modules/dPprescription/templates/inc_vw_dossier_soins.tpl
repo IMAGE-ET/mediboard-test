@@ -318,6 +318,9 @@ showBefore = function(){
 			 	 <tr>
 					 <td>
 					   <ul id="tab_categories" class="control_tabs_vertical">
+						    {{if $prescription->_ref_perfusions_for_plan|@count}}
+						      <li><a href="#_perf">Perfusions</a></li>
+						    {{/if}}
 						    {{if $prescription->_ref_lines_med_for_plan|@count}}
 						      <li><a href="#_med">Médicaments</a></li>
 						    {{/if}}
@@ -334,7 +337,7 @@ showBefore = function(){
 		 	 	</td>
 		 	 	<td>
 				<table class="tbl" id="plan_soin">
-				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count}}
+				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || $prescription->_ref_perfusions_for_plan|@count}}
 					  <tr>
 					    <th rowspan="2">Catégorie</th>
 					    <th rowspan="2">Cond.</th>
@@ -364,6 +367,13 @@ showBefore = function(){
 					  </tr>
 			    {{/if}}
 			
+			    <!-- Affichage des perfusions -->
+					<tbody id="_perf" style="display:none;">
+					  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion}}
+					    {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl"}}
+					  {{/foreach}}
+					</tbody>
+					
 				  <!-- Affichage des medicaments -->
 				  <tbody id="_med" style="display: none;">
 				    {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
@@ -380,6 +390,10 @@ showBefore = function(){
 					    {{/foreach}} 		 
 				    {{/foreach}}
 			    </tbody>
+					
+					
+					
+					
 					
 				  <!-- Affichage des elements -->
 				  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap name="foreach_element"}}
@@ -403,6 +417,8 @@ showBefore = function(){
 							{{/foreach}}
 						{{/foreach}}
 					 </tbody>
+					 
+					 
 				</table>
 	    </td>
 	  </tr>

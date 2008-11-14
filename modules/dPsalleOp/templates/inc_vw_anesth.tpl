@@ -14,7 +14,7 @@ reloadPrescriptionAnesth = function(prescription_id){
 	<input type="hidden" name="del" value="0" />    
 	<table class="form">
 	  <tr>
-	   <th class="category" colspan="4">Anesthésie</th>
+	   <th class="title" colspan="4">Anesthésie</th>
 	  </tr>
 	  <!-- Choix anesthésiste et type anesthésie -->
 	  <tr>
@@ -60,7 +60,7 @@ reloadPrescriptionAnesth = function(prescription_id){
 {{if $isPrescriptionInstalled}}
 <table class="form">
   <tr>
-	  <td>
+	  <td colspan="5">
 			{{if !$prescription->_id}}
 	  		<!-- Formulaire permettant de creer une prescription de sejour -->
 			  <form action="?m=dPprescription" method="post" name="addPrescriptionAnesth" onsubmit="return checkForm(this);">
@@ -103,16 +103,50 @@ reloadPrescriptionAnesth = function(prescription_id){
        </form>
      </td>
   </tr>
-	  <tr>
-	   <th class="category" colspan="4">Prescription résumée</th>
-	  </tr>
+	<tr>
+	   <th class="title" colspan="5">Prescription résumée</th>
+	</tr>
   <tr>
-    <td id="vue-medicaments-prescription">
+    <td id="vue-medicaments-prescription" colspan="5">
+    </td>
+  </tr>
+  <tr>
+    <th class="title" colspan="5">Perfusion</td>
+  </tr>
+  <tr> 
+    <td style="width: 1%">
+       <img src="images/pictures/perfusion.png" alt="Perfusion" />
+    </td>
+    <td colspan="4">
+      <table class="form">
+			  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+			  <tr>
+				  <td class="category" colspan="2"><strong>{{$_perfusion->_view}}</strong></td>
+			  </tr>
+				<tr>		  
+			    <td>
+			    <ul>
+			        {{foreach from=$_perfusion->_ref_lines item=_line}}
+			         <li>{{$_line->_view}}</li>
+			        {{/foreach}}
+			    </ul>
+			  {{/foreach}} 
+      </table>
     </td>
   </tr>
 </table>
 
 <script type="text/javascript">
+
+submitPerfusion = function(){
+  oForm = getForm("addPerfusion");
+  return onSubmitFormAjax(oForm, {
+    onComplete: function(){
+      reloadAnesth('{{$selOp->_id}}');
+    }
+  } );
+}
+
 onSubmitProtocole = function(form) {
 	return onSubmitFormAjax(form, { 
 		onComplete : function() {

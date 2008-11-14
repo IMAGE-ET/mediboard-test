@@ -19,6 +19,9 @@
          {{/if}}
       </script>
       <div style="float:left;">
+            <!-- Fomulaire de modification de l'emplacement -->
+  		  {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
+  		
         {{if $line->_can_view_historique}}
           <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
         {{/if}}
@@ -92,6 +95,43 @@
       </a>
     </th>
   </tr>
+  
+    {{if $line->_is_perfusable && !$line->_protocole && !$line->_traitement}}
+	  <tr>
+	    <td />
+	    <td>
+	      <div class="little-info text">Ce <strong>produit est injectable</strong>, vous pouvez l'<em>associer à une perfusion</em> existante ou une nouvelle.</div>
+	    </td>
+	    <td>
+	    		<form name="addPerfusionLine-{{$line->_id}}">
+		  		  <input type="hidden" name="dosql" value="do_line_to_perfusion_aed" />
+		  		  <input type="hidden" name="m" value="dPprescription" />
+		  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
+		  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
+		  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);">
+		  		    <option value="">Nouvelle perfusion</option>
+		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+		  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
+		  		  {{/foreach}}
+		  		  </select>
+		  		  {{mb_field object=$perfusion field="type" defaultOption="&mdash; Type"}}
+		  		  
+			  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+			  		  onComplete: function() { Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$mode_pharma}}') } 
+			  		} );">
+			  		  Ajouter à la perfusion
+			  		</button>
+		  		</form>
+		  		<script type="text/javascript">
+						Main.add( function(){
+						  toggleTypePerfusion(document.forms["addPerfusionLine-{{$line->_id}}"]);
+						} );
+		  		</script>	
+	    </td>
+	  </tr>
+  {{/if}}
+  
+  
   <!-- Pas traitement ni protocole -->
   <tr>
     <td style="text-align: center">
@@ -144,7 +184,7 @@
 	  <td style="text-align: left">
 	    <!-- Affichage des alertes -->
 	    {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
-	  </td>  
+	  </td>
     <td colspan="3">
       <table style="width:100%">
         <tr>
@@ -206,10 +246,23 @@
     
       <!-- Insérer un commentaire dans la ligne -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-      <!-- Fomulaire de modification de l'emplacement -->
-  		{{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
+
+  		
+  		 <!-- Si seulement 1 voie possible ou affichage bloqué-->
+  		{{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
+  		  {{$line->voie}}
+  		{{else}}
+	  		<select name="voie-{{$line->_id}}" onchange="return submitVoie('{{$line->_id}}',this.value);">
+		  		{{foreach from=$line->_ref_produit->voies item=libelle_voie}}
+		  		  <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
+		  		{{/foreach}}
+	  		</select>
+  		{{/if}}
+  				
       </td>
   </tr>
+ 
+    		
   {{if $prescription->type != "sortie" && !$line->_protocole}}
   <tr>
   <td></td>

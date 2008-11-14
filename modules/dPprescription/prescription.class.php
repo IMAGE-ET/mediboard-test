@@ -35,12 +35,14 @@ class CPrescription extends CMbObject {
   var $_ref_praticien = null;
   var $_ref_function  = null;
   var $_ref_group     = null;
+
   
   // BackRefs
   var $_ref_prescription_lines                = null;
   var $_ref_prescription_lines_element        = null;
   var $_ref_prescription_lines_element_by_cat = null;
   var $_ref_prescription_lines_comment        = null;
+  var $_ref_perfusions                        = null;
   
   // Others Fields
   var $_type_sejour = null;
@@ -63,10 +65,12 @@ class CPrescription extends CMbObject {
   var $_list_prises_med = null;
   var $_ref_lines_med_for_plan = null;
   var $_ref_lines_elt_for_plan = null;
+  var $_ref_perfusions_for_plan = null;
   
   var $_scores = null; // Tableau de stockage des scores de la prescription 
   var $_score_prescription = null; // Score de la prescription, 0:ok, 1:alerte, 2:grave
-
+  var $_alertes = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription';
@@ -80,6 +84,7 @@ class CPrescription extends CMbObject {
     $backRefs["prescription_line_element"]        = "CPrescriptionLineElement prescription_id";
     $backRefs["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
     $backRefs["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
+    $backRefs["perfusion"]                        = "CPerfusion prescription_id";
     return $backRefs;
   }
   
@@ -557,6 +562,20 @@ class CPrescription extends CMbObject {
   }
   
   /*
+   * Chargement des perfusions
+   */
+  function loadRefsPerfusions($with_child = 0){
+    //$this->_ref_perfusions = $this->loadBackRefs("perfusion");
+    $perfusion = new CPerfusion();
+    $where = array();
+    $where["prescription_id"] = " = '$this->_id'";
+    if($with_child != 1){
+      $where["next_perf_id"] = "IS NULL";
+    }
+    $this->_ref_perfusions = $perfusion->loadList($where);
+  }
+  
+  /*
    * Chargement du praticien utilisé pour l'affichage des protocoles/favoris
    */
   function loadRefCurrentPraticien() {
@@ -691,6 +710,11 @@ class CPrescription extends CMbObject {
 						FROM prescription_line_comment
 						WHERE prescription_line_comment.prescription_id = '$this->_id'";
     $praticiens_comment = $ds->loadList($sql);
+
+    $sql = "SELECT DISTINCT perfusion.praticien_id
+						FROM perfusion
+						WHERE perfusion.prescription_id = '$this->_id'";
+    $praticiens_perf = $ds->loadList($sql);
     
     foreach($praticiens_med as $_prats_med){
       foreach($_prats_med as $_prat_med_id){
@@ -715,6 +739,15 @@ class CPrescription extends CMbObject {
         if(!isset($this->_praticiens[$_prat_comment_id])){
           $praticien = new CMediusers();
           $praticien->load($_prat_comment_id);
+          $this->_praticiens[$praticien->_id] = $praticien->_view;
+        }
+      }
+    }
+    foreach($praticiens_perf as $_prats_perf){
+      foreach($_prats_perf as $_prat_perf_id){
+        if(!isset($this->_praticiens[$_prat_perf_id])){
+          $praticien = new CMediusers();
+          $praticien->load($_prat_perf_id);
           $this->_praticiens[$praticien->_id] = $praticien->_view;
         }
       }
@@ -996,6 +1029,79 @@ class CPrescription extends CMbObject {
   
 
   /*
+   * Controle des allergies
+   */
+  function checkAllergies($listAllergies, $code_cip) {
+    if(!isset($this->_scores["allergie"])){
+      $this->_scores["allergie"] = 0;
+    }
+    $this->_alertes["allergie"] = array();
+    $niveau_max = 0;
+    foreach($listAllergies as $key => $all) {
+      if($all->CIP == $code_cip) {
+        $this->_alertes["allergie"][$code_cip][$key] = $all->LibelleAllergie;
+        $this->_scores["allergies"]++;
+      }
+      $this->_scores["allergie"][] = $all;
+    }
+  }
+  
+  /*
+   * Controle des interactions
+   */
+  function checkInteractions($listInteractions, $code_cip) {
+    if(!isset($prescription->_scores["interaction"])){
+      $this->_scores["interaction"] = array();
+    }
+    $this->_alertes["interaction"] = array();
+    
+    $niveau_max = 0;
+    foreach($listInteractions as $key => $int) {
+      if($int->CIP1 == $code_cip || $int->CIP2 == $code_cip) {
+        @$this->_alertes["interaction"][$int->CIP1][$key] = $int->Type;
+        @$this->_alertes["interaction"][$int->CIP2][$key] = $int->Type;
+        @$this->_scores["interaction"]["niv$int->Niveau"]++;
+      }
+      $niveau_max = max($int->Niveau, $niveau_max);
+    }
+    if(count($this->_scores["interaction"])){
+      $this->_scores["interaction"]["niveau_max"] = $niveau_max;
+    }
+  }
+  
+  /*
+   * Controle des IPC
+   */
+  function checkIPC($listIPC, $code_cip) {
+    if(!isset($this->_scores["IPC"])){
+      $this->_scores["IPC"] = 0;
+    }
+    @$this->_alertes["IPC"] = array();
+  }
+  
+  /*
+   * Controle du profil du patient
+   */
+  function checkProfil($listProfil, $code_cip) {
+    if(!isset($this->_scores["profil"])){
+      $this->_scores["profil"] = array();
+    }
+    $this->_alertes["profil"] = array();
+
+    $niveau_max = 0;
+    foreach($listProfil as $key => $profil) {
+      if($profil->CIP == $code_cip) {
+        @$this->_alertes["profil"][$code_cip][$key] = $profil->LibelleMot;    
+        @$this->_scores["profil"]["niv$profil->Niveau"]++;
+      }
+      $niveau_max = max($profil->Niveau, $niveau_max);
+    }
+    if(count($this->_scores["profil"])){
+      $this->_scores["profil"]["niveau_max"] = $niveau_max;
+    }
+  }
+  
+  /*
    * Génération du Dossier/Feuille de soin
    */
   function calculPlanSoin($date, $mode_feuille_soin = 0, $heures = array()){  
@@ -1021,6 +1127,8 @@ class CPrescription extends CMbObject {
 						// Si aucune prise
             $_line_med->_ref_produit->loadClasseATC();
             $code_ATC = $_line_med->_ref_produit->_ref_ATC_2_code;
+           
+            
 						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
  	            $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
  	            continue;
@@ -1066,6 +1174,14 @@ class CPrescription extends CMbObject {
 				  }
 			  }
 	    }
+    }
+    // Parcours des perfusions
+    if($this->_ref_perfusions){
+      foreach($this->_ref_perfusions as &$_perfusion){
+        if(($date >= mbDate($_perfusion->_debut)) && ($date <= mbDate($_perfusion->_fin))){
+          $this->_ref_perfusions_for_plan[$_perfusion->_id] = $_perfusion;
+        }
+      }
     }
   }
 }

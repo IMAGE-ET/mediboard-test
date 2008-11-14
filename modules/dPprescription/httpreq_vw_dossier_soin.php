@@ -111,6 +111,11 @@ if($prescription->_id){
 	  $traitement_personnel->loadRefsLinesMedByCat("1","1");
 	}
 	  	  
+	// Chargement des perfusions
+  $prescription->loadRefsPerfusions();
+  foreach($prescription->_ref_perfusions as &$_perfusion){
+    $_perfusion->loadRefsLines();
+  }
   if($line_type == "service"){
 	  foreach($dates as $_date){
 	    $prescription->calculPlanSoin($_date, 0, $heures);
@@ -170,7 +175,8 @@ $transmission = new CTransmissionMedicale();
 $where = array();
 $where[] = "(object_class = 'CCategoryPrescription') OR 
             (object_class = 'CPrescriptionLineElement') OR 
-            (object_class = 'CPrescriptionLineMedicament')";
+            (object_class = 'CPrescriptionLineMedicament') OR 
+						(object_class = 'CPerfusion')";
 
 $where["sejour_id"] = " = '$sejour->_id'";
 $transmissions_by_class = $transmission->loadList($where);

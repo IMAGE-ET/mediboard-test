@@ -112,6 +112,8 @@ $categories = $full_mode || $chapitre != "medicament" ? CCategoryPrescription::l
 
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
+  $prescription->loadRefsPerfusions();
+  	
   $prescription->getPraticiens();
 
   // Calcul des droits de la prescription	
@@ -193,7 +195,15 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  if($prescription_traitement->_id){
 		    $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
 		  }
-		  
+		  foreach($prescription->_ref_perfusions as $_perfusion){
+		    $_perfusion->loadRefsLines();
+		    foreach($_perfusion->_ref_lines as $_perf_line){
+		      $allergies->addProduit($_perf_line->code_cip);
+			    $interactions->addProduit($_perf_line->code_cip);
+			    $IPC->addProduit($_perf_line->code_cip);
+			    $profil->addProduit($_perf_line->code_cip);
+		    }
+		  }
 		  foreach($lines as $type => $type_line){
 			  foreach($type_line as &$line) {
 			    $allergies->addProduit($line->code_cip);
@@ -202,7 +212,6 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 			    $profil->addProduit($line->code_cip);
 			  }
 		  }
-		  
 		  $alertesAllergies    = $allergies->getAllergies();
 		  $alertesInteractions = $interactions->getInteractions();
 		  $alertesIPC          = $IPC->getIPC();
@@ -211,16 +220,26 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $prescription->_scores["hors_livret"] = 0;
 		  foreach($lines as $type_line){
 		    foreach($type_line as &$line) {
-		      $line->checkAllergies($alertesAllergies, $prescription);
-		      $line->checkIPC($alertesIPC, $prescription);
-		      $line->checkInteractions($alertesInteractions, $prescription);
-		      $line->checkProfil($alertesProfil, $prescription);
+		      $prescription->checkAllergies($alertesAllergies, $line->code_cip);
+		      $prescription->checkIPC($alertesIPC, $line->code_cip);
+		      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
+		      $prescription->checkProfil($alertesProfil, $line->code_cip);
 		      if(!$line->_ref_produit->inLivret){
 		        $prescription->_scores["hors_livret"]++;
 		      }
 		    }
 		  }
-		
+		  foreach($prescription->_ref_perfusions as $_perfusion){
+		  	foreach($_perfusion->_ref_lines as $_perf_line){
+		  	  $prescription->checkAllergies($alertesAllergies, $_perf_line->code_cip);
+			    $prescription->checkIPC($alertesIPC, $_perf_line->code_cip);
+			    $prescription->checkInteractions($alertesInteractions, $_perf_line->code_cip);
+			    $prescription->checkProfil($alertesProfil, $_perf_line->code_cip);
+			    if(!$_perf_line->_ref_produit->inLivret){
+			      $prescription->_scores["hors_livret"]++;
+			    }
+			  }
+		  }
 		  $score_prescription = 0;
 		  foreach($prescription->_scores as $type_score => $_score){
 		    // Si _score est un array (interaction ou profil)
@@ -248,7 +267,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		      $_operation->loadRefPlageOp();
 		      $prescription->_dates_dispo[$_operation->_id] = $_operation->_datetime;
 		    }
-		 }
+		  }
 	  }
 	}
 }
@@ -257,6 +276,17 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 if($prescription->_id){
 	if($prescription->_current_praticien_id){
     $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
+	}
+
+	foreach($prescription->_ref_perfusions as &$_perfusion){
+	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);
+	  $_perfusion->loadRefPraticien();
+	  $_perfusion->countParentLine();
+	  if($_perfusion->_ref_lines){
+		  foreach($_perfusion->_ref_lines as &$line_perf){
+		    $line_perf->loadRefsFwd();
+		  }
+	  }
 	}
 }
 
@@ -370,7 +400,7 @@ $smarty->assign("dossier_medical"    , $dossier_medical);
 $smarty->assign("now_time", mbTime());
 $smarty->assign("mode_pack", "0");
 $smarty->assign("readonly",            $readonly && $prescription->object_id);
-
+$smarty->assign("perfusion", new CPerfusion());
 if($full_mode){
   $_sejour = new CSejour();
   $_sejour->load($sejour_id);

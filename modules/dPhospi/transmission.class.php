@@ -41,7 +41,7 @@ class CTransmissionMedicale extends CMbMetaObject {
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
-  	$specs["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration";
+  	$specs["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPerfusion";
     $specs["sejour_id"]    = "notNull ref class|CSejour";
     $specs["user_id"]      = "notNull ref class|CMediusers";
     $specs["degre"]        = "notNull enum list|low|high default|low";
@@ -59,10 +59,7 @@ class CTransmissionMedicale extends CMbMetaObject {
   
   function loadRefsFwd() {
   	parent::loadRefsFwd();
-  	if($this->_ref_object){
-  	  $this->_ref_object->loadRefsFwd();
-  	}
-    $this->_ref_sejour = new CSejour;
+  	$this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
