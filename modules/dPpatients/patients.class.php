@@ -979,12 +979,17 @@ class CPatient extends CMbObject {
     }
     $this->loadRefsCorrespondants();
     $i = 0;
+    $noms = array();
     foreach ($this->_ref_medecins_correspondants as $corresp) {
       $i++;
       $corresp->loadRefsFwd();
-      $template->addProperty("Patient - médecin correspondant $i", "{$corresp->_ref_medecin->nom} {$corresp->_ref_medecin->prenom}");
+      $nom = "{$corresp->_ref_medecin->nom} {$corresp->_ref_medecin->prenom}";
+      $noms[] = $nom;
+      $template->addProperty("Patient - médecin correspondant $i", $nom);
       $template->addProperty("Patient - médecin correspondant $i - adresse", "{$corresp->_ref_medecin->adresse}\n{$corresp->_ref_medecin->cp} {$corresp->_ref_medecin->ville}");
     }
+    
+    $template->addProperty("Patient - médecin correspondants", join($noms, " - "));
     
     $const_med = $this->_ref_constantes_medicales;
     $template->addProperty("Patient - poids",  $const_med->poids." kg");
