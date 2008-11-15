@@ -1,19 +1,25 @@
 <script type="text/javascript">
 
-submitSortieForm = function(oFormSortie,reveil) {
-  submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){
-      var url = new Url;
-      url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
-      url.addParam('date',"{{$date}}");
-      url.requestUpdate("out");
-      if(reveil) {
-      url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
-      url.addParam('date',"{{$date}}");
-      url.requestUpdate("reveil");
-      }
-    }
-  });
+submitSortieForm = function(oFormSortie) {
+  submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){ refreshOutPanels() }});
 }
+
+function refreshOutPanels() {
+  var url = new Url;
+      
+  url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
+  url.addParam('date',"{{$date}}");
+  url.requestUpdate("reveil", {waitingText : null});
+
+  url.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
+  url.addParam('date',"{{$date}}");
+  url.requestUpdate("ops", {waitingText : null});
+  
+  url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
+  url.addParam('date',"{{$date}}");
+  url.requestUpdate("out", {waitingText : null});
+}
+
 </script>
 
 
@@ -56,6 +62,7 @@ submitSortieForm = function(oFormSortie,reveil) {
       {{/if}}
     </td>
     <td class="button">
+      {{if $curr_op->entree_reveil}}
       {{if $can->edit}}
       <form name="editEntreeReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
@@ -68,10 +75,14 @@ submitSortieForm = function(oFormSortie,reveil) {
       {{else}}
       {{mb_value object=$curr_op field="entree_reveil"}}
       {{/if}}
-      
-      {{if $curr_op->_ref_affectation_reveil->_id}}
-      <br />{{$curr_op->_ref_affectation_reveil->_ref_personnel->_ref_user->_view}}
+      {{else}}
+        pas de passage SSPI
       {{/if}}
+      
+      {{foreach from=$curr_op->_ref_affectations_personnel.reveil item=curr_affectation}}
+        <br />
+        {{$curr_affectation->_ref_personnel->_ref_user->_view}}
+      {{/foreach}}
       
     </td>
     <td class="button">
@@ -84,7 +95,7 @@ submitSortieForm = function(oFormSortie,reveil) {
         {{mb_field object=$curr_op field=sortie_reveil}}
         <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
 
-        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form,1);">{{tr}}Cancel{{/tr}}</button>
+        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form);">{{tr}}Cancel{{/tr}}</button>
         {{elseif $modif_operation}}
         <select name="sortie_reveil" onchange="submitSortieForm(this.form);">
           <option value="">-</option>
@@ -94,7 +105,7 @@ submitSortieForm = function(oFormSortie,reveil) {
           </option>
           {{/foreach}}
         </select>
-        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form,1);">{{tr}}Cancel{{/tr}}</button>
+        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form);">{{tr}}Cancel{{/tr}}</button>
         {{else}}
           {{mb_value object=$curr_op field="sortie_reveil"}}
         {{/if}}

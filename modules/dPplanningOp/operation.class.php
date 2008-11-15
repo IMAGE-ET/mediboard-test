@@ -674,7 +674,7 @@ class COperation extends CCodable {
   }
   
   function fillLimitedTemplate(&$template) {
-    $this->loadRefsFwd();
+    $this->loadRefsFwd(1);
 
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
@@ -696,6 +696,12 @@ class COperation extends CCodable {
     $template->addProperty("Opération - date"                 , mbTransformTime(null, $this->_datetime, $dateFormat));
     $template->addProperty("Opération - heure"                , mbTransformTime(null, $this->time_operation, $timeFormat));
     $template->addProperty("Opération - durée"                , mbTransformTime(null, $this->temp_operation, $timeFormat));
+    if($this->debut_op && $this->fin_op) {
+      $duree_relle = mbTimeRelative($this->debut_op, $this->fin_op, '%02dh%02d');
+    } else {
+      $duree_relle = "?";
+    }
+    $template->addProperty("Opération - durée réelle"         , $duree_relle);
     $template->addProperty("Opération - entrée bloc"          , mbTransformTime(null, $this->entree_salle, $timeFormat));
     $template->addProperty("Opération - pose garrot"          , mbTransformTime(null, $this->pose_garrot, $timeFormat));
     $template->addProperty("Opération - début op"             , mbTransformTime(null, $this->debut_op, $timeFormat));

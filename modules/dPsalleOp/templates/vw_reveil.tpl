@@ -8,7 +8,7 @@ Main.add(function () {
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
   opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");
   opsUpdater.addParam("date", "{{$date}}");
-  opsUpdater.periodicalUpdate('ops', { frequency: 90 });
+  opsUpdater.periodicalUpdate("ops", { frequency: 90 });
   
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
   opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");

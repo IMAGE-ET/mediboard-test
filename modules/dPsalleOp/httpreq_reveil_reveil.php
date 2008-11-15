@@ -37,22 +37,16 @@ $operation = new COperation;
 $listOperations = $operation->loadList($where, $order);
 
 foreach($listOperations as $key => &$op) {
-  $op->loadRefSejour();
+  $op->loadRefSejour(1);
   
   if($op->_ref_sejour->type == "exte"){
     unset($listOperations[$key]);
     continue;
   }
   
-  $op->loadRefChir();
-  $op->loadRefPatient();
+  $op->loadRefChir(1);
+  $op->loadRefPatient(1);
   $op->loadAffectationsPersonnel();
-  //_ref_affectation_reveil permet de stocker l'affectation qui a pour emplacement reveil
-  $op->_ref_affectation_reveil = new CAffectationPersonnel();
-  
-  if($op->_ref_affectations_personnel["reveil"]){
-    $op->_ref_affectation_reveil = reset($op->_ref_affectations_personnel["reveil"]);
-  }
   
   if (CModule::getActive("bloodSalvage")) {
 	  $op->blood_salvage= new CBloodSalvage;
@@ -74,7 +68,7 @@ foreach($listOperations as $key => &$op) {
     $op->_ref_sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
   
-  $op->loadRefPlageOp();
+  $op->loadRefPlageOp(1);
   
   //Tableau des timings
   $timing[$key]["entree_reveil"] = array();
@@ -86,9 +80,17 @@ foreach($listOperations as $key => &$op) {
   }
 }
 
+// Chargement de la liste du personnel pour le reveil
+$personnels = array();
+if(Cmodule::getActive("dPpersonnel")) {
+  $personnel  = new CPersonnel();
+  $personnels = $personnel->loadListPers("reveil");
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("personnels"             , $personnels);
 $smarty->assign("listReveil"             , $listOperations);
 $smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);

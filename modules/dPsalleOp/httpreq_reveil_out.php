@@ -29,7 +29,6 @@ $whereSalle = array("bloc_id" => " = '$bloc_id'");
 $where = array();
 $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
-$where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NOT NULL";
 $order = "sortie_reveil DESC";
 
@@ -37,28 +36,23 @@ $operation = new COperation;
 $listOperations = $operation->loadList($where, $order);
 
 foreach($listOperations as $key => &$op) {
-  $op->loadRefSejour();
+  $op->loadRefSejour(1);
   
   if($op->_ref_sejour->type == "exte"){
     unset($listOperations[$key]);
     continue;
   }
   
-  $op->loadRefChir();
+  $op->loadRefChir(1);
   $op->loadAffectationsPersonnel();
-  $op->_ref_affectation_reveil = new CAffectationPersonnel();
-  
-  if($op->_ref_affectations_personnel["reveil"]){
-    $op->_ref_affectation_reveil = reset($op->_ref_affectations_personnel["reveil"]);
-  }
 
-  $op->_ref_sejour->loadRefPatient();
+  $op->_ref_sejour->loadRefPatient(1);
   $op->_ref_sejour->loadRefsAffectations();
   if($op->_ref_sejour->_ref_first_affectation->_id) {
     $op->_ref_sejour->_ref_first_affectation->loadRefLit();
     $op->_ref_sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
-  $op->loadRefPlageOp();
+  $op->loadRefPlageOp(1);
   
   //Tableau des timings
   $timing[$key]["entree_reveil"] = array();

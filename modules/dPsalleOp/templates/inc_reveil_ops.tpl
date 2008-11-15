@@ -12,20 +12,26 @@ checkPersonnel = function(oFormAffectation, oFormOperation){
     submitOperationForm(oFormOperation,1);
   }
 }
-submitOperationForm = function(oFormOperation,sens) {
-  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){
-      var url = new Url;
-      url.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
-      url.addParam('date',"{{$date}}");
-      url.requestUpdate("ops");
-      if(sens==1) {
-	      url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
-	      url.addParam('date',"{{$date}}");
-	      url.requestUpdate("reveil");
-      }
-    }
-  });
+submitOperationForm = function(oFormOperation) {
+  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshOpsPanels() }});
 }
+
+refreshOpsPanels = function() {
+  var url = new Url;
+  
+  url.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
+  url.addParam('date',"{{$date}}");
+  url.requestUpdate("ops", {waitingText : null});
+
+  url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
+  url.addParam('date',"{{$date}}");
+  url.requestUpdate("reveil", {waitingText : null});
+	    
+  url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
+  url.addParam('date',"{{$date}}");
+  url.requestUpdate("out", {waitingText : null});
+}
+
 </script>
 
 
@@ -39,6 +45,7 @@ submitOperationForm = function(oFormOperation,sens) {
     {{/if}}
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
+    <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
   </tr>    
   {{foreach from=$listOps item=curr_op}}
   <tr>
@@ -95,7 +102,7 @@ submitOperationForm = function(oFormOperation,sens) {
         <input type="hidden" name="object_class" value="{{$curr_op->_class_name}}" />
         <input type="hidden" name="tag" value="reveil" />
         <input type="hidden" name="realise" value="0" />
-        <select name="personnel_id">
+        <select name="personnel_id" style="max-width: 120px;"
         <option value="">&mdash; Personnel</option>
         {{foreach from=$personnels item="personnel"}}
         <option value="{{$personnel->_id}}">{{$personnel->_ref_user->_view}}</option>
@@ -112,9 +119,37 @@ submitOperationForm = function(oFormOperation,sens) {
         <input type="hidden" name="entree_reveil" value="" /> 
         <button class="tick notext" type="button" onclick="checkPersonnel(document.selPersonnel{{$curr_op->_id}}, this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
+      
+      {{foreach from=$curr_op->_ref_affectations_personnel.reveil item=curr_affectation}}
+        <br />
+        <form name="delPersonnel{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPpersonnel" />
+          <input type="hidden" name="dosql" value="do_affectation_aed" />
+          <input type="hidden" name="del" value="1" />
+          <input type="hidden" name="affect_id" value="{{$curr_affectation->_id}}" />
+          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshOpsPanels(); }})">
+            {{tr}}Delete{{/tr}}
+          </button>
+        </form>
+        {{$curr_affectation->_ref_personnel->_ref_user->_view}}
+      {{/foreach}}
       {{else}}
         -
       {{/if}}
+    </td>
+    <td class="button">
+      {{if $can->edit || $modif_operation}}
+      <form name="editEntreeReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="sortie_reveil" value="" />
+        <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil, 'current') ; submitOperationForm(this.form)">
+          {{tr}}Modify{{/tr}}
+        </button>
+      </form>
+      {{else}}-{{/if}}
     </td>
   </tr>
   {{foreachelse}}

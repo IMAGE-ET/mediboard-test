@@ -32,23 +32,24 @@ $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPe
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 $where["sortie_salle"] = "IS NOT NULL";
 $where["entree_reveil"] = "IS NULL";
+$where["sortie_reveil"] = "IS NULL";
 $order = "sortie_salle";
 
 $operation = new COperation;
 $listOperations = $operation->loadList($where, $order);
 
 foreach($listOperations as $key => &$op) {
-  $op->loadRefSejour();
+  $op->loadRefSejour(1);
 
   if($op->_ref_sejour->type == "exte"){
     unset($listOperations[$key]);
     continue;
   }
   
-  $op->loadRefChir();
-  $op->loadRefPlageOp();
-  
-  $op->_ref_sejour->loadRefPatient();
+  $op->loadRefChir(1);
+  $op->loadRefPlageOp(1);
+  $op->_ref_sejour->loadRefPatient(1);
+  $op->loadAffectationsPersonnel();
   
   //Tableau des timings
   $timing[$key]["entree_reveil"] = array();

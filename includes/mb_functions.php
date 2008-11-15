@@ -361,12 +361,12 @@ function mbDaysRelative($from, $to) {
  * Returns the time difference between two times in hours
  * @return string hh:mm:ss diff duration
  **/
-function mbTimeRelative($from, $to) {
+function mbTimeRelative($from, $to, $format = '%d:%02d:%02d') {
   $diff = strtotime($to) - strtotime($from); 
   $hours = intval($diff / 3600);
   $mins = intval(($diff % 3600) / 60);
   $secs = intval($diff % 60);
-  return sprintf('%d:%02d:%02d', $hours, $mins, $secs);
+  return sprintf($format, $hours, $mins, $secs);
 }
 
 function mbHoursRelative($from, $to) {
