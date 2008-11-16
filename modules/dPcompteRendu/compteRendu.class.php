@@ -207,18 +207,15 @@ class CCompteRendu extends CMbMetaObject {
       "etab" => array(),
     );
     
-    // Pas de praticien
-    if (!$prat_id) {
-      return $modeles;
-    }
-    
     // Chargement du praticien
     $prat = new CMediusers;
-    if (!$prat->load($prat_id)) {
-      trigger_error("User '$prat_id' does not exist");
+    
+    // Pas de praticien
+    if (!$prat_id || !$prat->load($prat_id)) {
       return $modeles; 
     }
     $prat->loadRefFunction();
+    $prat->_ref_function->loadRefGroup();
     
     // Clauses de recherche
     $modele = new CCompteRendu();

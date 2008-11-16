@@ -27,7 +27,7 @@
         {{if $owner == "prat"}}{{assign var=ref_owner value=$praticien}}{{/if}}
         {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
         {{if $owner == "etab"}}{{assign var=ref_owner value=$praticien->_ref_function->_ref_group}}{{/if}}
-        <optgroup label="{{tr}}CCompteRendu-_owner{{/tr}} {{$ref_owner->_view}}">
+        <optgroup label="{{tr}}CCompteRendu-_owner{{/tr}} {{if $ref_owner}}{{$ref_owner->_view}}{{/if}}">
           {{foreach from=$_modeles item=_modele}}
           <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
           {{foreachelse}}

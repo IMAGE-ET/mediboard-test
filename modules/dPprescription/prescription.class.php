@@ -1050,7 +1050,7 @@ class CPrescription extends CMbObject {
    * Controle des interactions
    */
   function checkInteractions($listInteractions, $code_cip) {
-    if(!isset($prescription->_scores["interaction"])){
+    if(!isset($this->_scores["interaction"])){
       $this->_scores["interaction"] = array();
     }
     $this->_alertes["interaction"] = array();
