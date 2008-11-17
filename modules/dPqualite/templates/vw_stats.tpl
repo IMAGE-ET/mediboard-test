@@ -12,14 +12,19 @@ function resetEvts() {
   oEvenementField.setValues('');
 
   $H(countChecked).each(function (pair) {
-    countChecked[pair.key] = 0;
+    if (pair.key !== null) {
+      countChecked[pair.key] = 0;
+    }
   });
   refreshEvtCounts();
 }
 
 function refreshEvtCounts() {
   $H(countChecked).each(function (pair) {
-    $('selected-evts-'+pair.key+'-count').update(pair.value);
+    var counter = $('selected-evts-'+pair.key+'-count');
+    if (counter) {
+      counter.update(pair.value);
+    }
   });
 }
 
