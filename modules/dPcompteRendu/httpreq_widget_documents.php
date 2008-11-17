@@ -35,10 +35,10 @@ if ($AppUI->_ref_user->isPraticien()) {
 else {
 	$praticien = new CMediusers();
 	$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
-	$praticien->loadRefFunction();
-	$praticien->_ref_function->loadRefGroup();
 }
 
+$praticien->loadRefFunction();
+$praticien->_ref_function->loadRefGroup();
 $praticien->canDo();
 
 // Modèles du praticien
