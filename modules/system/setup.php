@@ -78,17 +78,17 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.6");
     $sql = "CREATE TABLE `note` (
-              `note_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-              `user_id` INT( 11 ) UNSIGNED NOT NULL ,
-              `object_id` INT( 11 ) UNSIGNED NOT NULL ,
-              `object_class` VARCHAR( 25 ) NOT NULL ,
-              `public` ENUM('0','1') NOT NULL DEFAULT '0',
-              `degre` ENUM('low','high') NOT NULL DEFAULT 'low',
-              `date` DATETIME NOT NULL ,
-              `libelle` VARCHAR( 255 ) NOT NULL ,
-              `text` TEXT NULL ,
-              INDEX ( `user_id` , `object_id` , `object_class` , `public` , `degre` , `date` )
-            ) ENGINE = MYISAM COMMENT = 'Table des notes sur les objets';";
+	      `note_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	      `user_id` INT( 11 ) UNSIGNED NOT NULL ,
+	      `object_id` INT( 11 ) UNSIGNED NOT NULL ,
+	      `object_class` VARCHAR( 25 ) NOT NULL ,
+	      `public` ENUM('0','1') NOT NULL DEFAULT '0',
+	      `degre` ENUM('low','high') NOT NULL DEFAULT 'low',
+	      `date` DATETIME NOT NULL ,
+	      `libelle` VARCHAR( 255 ) NOT NULL ,
+	      `text` TEXT NULL ,
+	      INDEX ( `user_id` , `object_id` , `object_class` , `public` , `degre` , `date` )
+	    ) ENGINE = MYISAM COMMENT = 'Table des notes sur les objets';";
     $this->addQuery($sql);
     
     $this->makeRevision("1.0.7");
@@ -96,20 +96,26 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.8");
     $sql = "ALTER TABLE `message`
-            ADD `urgence` ENUM('normal','urgent') DEFAULT 'normal' NOT NULL;";
+      ADD `urgence` ENUM('normal','urgent') DEFAULT 'normal' NOT NULL;";
     $this->addQuery($sql);
     
     $this->makeRevision("1.0.9");
     $sql = "ALTER TABLE `message`
-            ADD `module_id` INT(11) UNSIGNED;";
+	    ADD `module_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
     
     $this->makeRevision("1.0.10");
     $sql = "ALTER TABLE `user_log`
-            CHANGE `object_class` `object_class` VARCHAR(255) NOT NULL;";
+      CHANGE `object_class` `object_class` VARCHAR(255) NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.11";
+    $this->makeRevision("1.0.11");
+    $sql = "ALTER TABLE `user_log` 
+			CHANGE `type` `type` ENUM ('create','store','merge','delete') NOT NULL,
+			ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.12";
   }
 }
 ?>

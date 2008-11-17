@@ -6,7 +6,7 @@ function view_history_patient(id){
   url = new Url();
   url.setModuleAction("dPpatients", "vw_history");
   url.addParam("patient_id", id);
-  url.popup(600, 500, "history");
+  url.popup(600, 500, "patient history");
 }
 
 function viewPatient() {

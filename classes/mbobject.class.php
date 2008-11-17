@@ -807,7 +807,7 @@ class CMbObject {
     
     $type = "store";
     if ($this->_old->_id == null) {
-      $type = "create";
+      $type = $this->_merging ? "merge" : "create";
       $fields = array();
     }
     
@@ -1551,7 +1551,7 @@ class CMbObject {
   }
   
   function loadLogs() {
-    $order = "date ASC";
+    $order = "date DESC";
     $limit = "0, 100";
     $this->_ref_logs = $this->loadBackRefs("logs", $order, $limit);
 
