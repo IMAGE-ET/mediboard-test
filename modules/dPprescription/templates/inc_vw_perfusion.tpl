@@ -190,7 +190,7 @@
 	              <table class="form">
 		              <tr>
 		                
-		                <td style="border:none;">
+		                <td style="border:none; width:1%;">
 		                  {{if $_perfusion->_can_delete_perfusion_line}}
 			                  <button class="trash notext" type="button" onclick="$V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
 			                    onComplete: function(){

@@ -500,6 +500,13 @@ function importElementsPrescription(){
   url.setModuleAction("dPprescription", "import_elements_prescription");
   url.popup(700, 500, "export_elements_prescription");
 }
+
+function updateVoie(){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_update_voie");
+  url.requestUpdate("update_voie");
+}
+
 </script>
 
 <table class="tbl">
@@ -524,5 +531,10 @@ function importElementsPrescription(){
 
   <tr>
     <td colspan="2"><button class="tick" onclick="importElementsPrescription()" >Importer les éléments de prescriptions</button></td>
+  </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="updateVoie()">Mettre à jour la voie pour les lignes de medicaments</button></td>
+    <td id="update_voie"></td>
   </tr>
 </table>

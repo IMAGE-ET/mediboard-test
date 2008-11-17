@@ -842,35 +842,7 @@ class CSetupdPprescription extends CSetup {
 	 $sql = "ALTER TABLE `prescription_line_medicament` 
 					 ADD `voie` VARCHAR (255);";
 	 $this->addQuery($sql);
-	 
-	 function updateVoie(){
-     $ds_std = CSQLDataSource::get("std");
-     $ds_bcb = CSQLDataSource::get("bcb");
-             
-     // Recuperation des tous les codes cip
-     $sql = "SELECT DISTINCT code_cip 
-             FROM prescription_line_medicament;";
-     $codes_cip = $ds_std->loadColumn($sql);
-     
-     // Parcours des cip et stockage de la premiere voie trouvée
-     foreach($codes_cip as $code_cip){
-       $sql = "SELECT IDENT_VOIES.LIBELLEVOIE FROM `IDENT_VOIES`
-							 LEFT JOIN `IDENT_PRODUITS_VOIES` ON `IDENT_PRODUITS_VOIES`.`CODEVOIE` = `IDENT_VOIES`.`CODEVOIE`
-							 WHERE `IDENT_PRODUITS_VOIES`.`CODECIP` = '$code_cip';";
-       $voie = $ds_bcb->loadHash($sql);
-       $codeCip_voie[$code_cip] = $voie["LIBELLEVOIE"];
-     }
-     foreach($codeCip_voie as $code_cip => $libelle_voie){
-	     $sql = "UPDATE `prescription_line_medicament`
-	             SET `voie` = '$libelle_voie'
-							 WHERE `code_cip` = '$code_cip'
-               AND `voie` IS NULL;";
-	     $res = $ds_std->exec($sql);
-     }
-     return true;
-    }
-    $this->addFunctions("updateVoie");
-	  
+	 	  
     $this->makeRevision("0.61");
     $sql = "CREATE TABLE `perfusion` (
 							`perfusion_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
