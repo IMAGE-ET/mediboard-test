@@ -63,6 +63,7 @@ function initializeGraph(src, data) {
     selection: src.options.selection || {}
   };
 
+  Object.extend(src.options,        data);
   Object.extend(src.options.xaxis,  data.xaxis);
   Object.extend(src.options.yaxis,  data.yaxis);
   Object.extend(src.options.mouse,  data.mouse);
@@ -94,19 +95,13 @@ options = {
   mouse: {
     track: true,
     trackFormatter: trackFormatter,
-    lineColor: 'red',
-    sensibility: 6,
     trackDecimals: 1,
-    radius: 4
+    relative: true
   },
-  /*bars: {
-    outlineWidth: 1
-  },*/
   xaxis: {
     noTicks: 12,
     tickDecimals: 1,
     ticks: false,
-    lineWidth: 1,
     tickFormatter: tickFormatter,
     min: 0,
     max: Math.max(dates.length-1, 12)
@@ -120,10 +115,6 @@ options = {
   grid: {
     backgroundColor: '#fff'
   },
-  /*selection: {
-    mode: 'x',
-    fps: 30
-  },*/
   legend: {
     position: 'nw',
     backgroundOpacity: 0
