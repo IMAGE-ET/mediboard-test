@@ -110,7 +110,8 @@ class CPerfusion extends CMbObject {
     $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree HOURS", "$this->_debut") : $this->_debut;
     $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" : $this->_date_fin; 
 
-    $this->_protocole = $this->prescription_id ? '0' : '1';
+    $this->loadRefPrescription();
+    $this->_protocole = $this->_ref_prescription->object_id ? '0' : '1';
   }
   
   function updateDBFielfs(){
@@ -140,6 +141,7 @@ class CPerfusion extends CMbObject {
                        !$this->signature_pharma;
     
     // Cas d'une ligne de protocole  
+   
     if($this->_protocole){
       $protocole =& $this->_ref_prescription;
       if($protocole->praticien_id){
@@ -290,7 +292,7 @@ class CPerfusion extends CMbObject {
    */
   function loadRefPrescription(){
     $this->_ref_prescription = new CPrescription();
-    $this->_ref_perfusion = $this->_ref_prescription->getCached($this->prescription_id);
+    $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);
   }
   
   /*
