@@ -17,7 +17,7 @@ $evts       = mbGetValueFromGet("evenements");
 $comparison = mbGetValueFromGetOrSession("comparison", "elem_concerne");
 
 $series = array();
-$series_by_name = array();
+$series_data = array();
 
 $dates = array();
 $ticks = array();
@@ -55,11 +55,13 @@ foreach ($filters as $key => $val) {
 
 if (isset($enums[$comparison])) {
 	foreach ($enums[$comparison] as $li => $tr) {
-		$series[] = array(
-		  'label' => utf8_encode($tr), 
-		  'data' => array()
-	  );
-	  $series_data[$li] = &$series[count($series)-1]['data'];
+		if ($filters[$comparison] == null || $filters[$comparison] == $li){
+			$series[] = array(
+			  'label' => utf8_encode($tr), 
+			  'data' => array()
+		  );
+		  $series_data[$li] = &$series[count($series)-1]['data'];
+		}
 	}
 	
 	foreach ($series_data as $id => &$data) {
@@ -68,6 +70,7 @@ if (isset($enums[$comparison])) {
 			$where[$comparison] = ($id == 'unknown' ? 'IS NULL' : "= '$id'");
 			$where['date_fiche'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
 			$count = 0;
+			
 			if (!$evts || count($list_evts) <= 0) {
 			  $count = $fiche->countList($where);
 			}
