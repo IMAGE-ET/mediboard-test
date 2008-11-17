@@ -130,4 +130,5 @@ $locales['CActeCCAM.code_association.5'] = '';
 $locales['CActeCCAM.select'] = '';
 $locales['SSPI.RSPO'] = '';
 $locales['config-dPsalleOp-CReveil-multi_tabs_reveil'] = '';
+$locales['SSPI.Responsable'] = '';
 ?>
