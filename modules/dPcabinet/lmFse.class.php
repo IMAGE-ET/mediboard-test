@@ -1,4 +1,3 @@
-
 <?php /* $Id: patients.class.php 2249 2007-07-11 16:00:10Z mytto $ */
 
 /**
