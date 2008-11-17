@@ -1186,7 +1186,8 @@ var TokenField = Class.create({
     if (Object.isArray(values)) {
       values = values.join("|");
     }
-    return this.element.value = values;
+    this.onComplete(this.element.value = values);
+    return values;
   }
 });
 

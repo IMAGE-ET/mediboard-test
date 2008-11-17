@@ -635,8 +635,12 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
-  $affichageScript .= mbLoadScript("lib/flotr/flotr/flotr.debug-0.1.0alpha.js", $modeReturn);
-  $affichageScript .= mbLoadScript("lib/flotr/flotr/lib/excanvas.js", $modeReturn); // for IE
+  // Flotr
+  $affichageScript .= mbLoadScript("lib/flotr-svn/flotr.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr-svn/lib/excanvas.js", $modeReturn, 'IE'); // for IE
+  $affichageScript .= mbLoadScript("lib/flotr-svn/lib/base64.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr-svn/lib/canvas2image.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr-svn/lib/canvastext.js", $modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
@@ -650,7 +654,7 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
   
   if (CAppUI::conf('debug')) {
-    //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js", $modeReturn, 'IE');
+    //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2.1/firebug-lite-compressed.js", $modeReturn, 'IE');
   }
   
   if($modeReturn)

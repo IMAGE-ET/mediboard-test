@@ -180,12 +180,8 @@ $library = new CLibrary;
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
 $library->fileName = "scriptaculous-js-1.8.1.tar.gz";
-//$library->fileName = "scriptaculous-js-1.8.0_pre1.tar.gz";
-
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
-
 $library->sourceDir = "scriptaculous-js-1.8.1";
-//$library->sourceDir = "scriptaculous-js-1.8.0_pre1";
 $library->targetDir = "scriptaculous";
 
 $patch = new CLibraryPatch;
@@ -236,7 +232,6 @@ $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
 $library->fileName = "FCKeditor_2.3.2.tar.gz";
-//$library->fileName = "FCKeditor_2.5.1.tar.gz";
 //$library->fileName = "FCKeditor_2.6.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "FCKeditor";
@@ -288,7 +283,7 @@ $library->targetDir = "control_suite";
 
 CLibrary::$all[$library->name] = $library;
 
-$library = new CLibrary;
+/*$library = new CLibrary;
 $library->name = "Flotr plotting library";
 $library->url = "http://solutoire.com/flotr/";
 $library->fileName = "flotr-0.1.0alpha.tar.gz";
@@ -297,7 +292,7 @@ $library->sourceDir = "flotr-0.1.0alpha";
 $library->targetDir = "flotr";
 
 CLibrary::$all[$library->name] = $library;
-
+*/
 ?>
 
 <?php showHeader(); ?>
