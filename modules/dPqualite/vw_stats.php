@@ -46,6 +46,13 @@ foreach ($enums as $key => &$val) {
   }
 }
 
+$where = array();
+foreach ($filters as $key => $val) {
+  if ($val != null) {
+    $where[$key] = ($val == 'unknown' ? 'IS NULL' : " = '$val'");
+  }
+}
+
 if (isset($enums[$comparison])) {
 	foreach ($enums[$comparison] as $li => $tr) {
 		$series[] = array(
@@ -84,13 +91,6 @@ if (isset($enums[$comparison])) {
 			++$i;
 		}
 	}
-}
-
-$where = array();
-foreach ($filters as $key => $val) {
-  if ($val != null) {
-    $where[$key] = ($val == 'unknown' ? 'IS NULL' : " = '$val'");
-  }
 }
 
 $list_categories = new CEiCategorie;
