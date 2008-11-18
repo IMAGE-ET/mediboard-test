@@ -9,7 +9,7 @@
  */
 
 global $can, $g;
-$can->needsAdmin();
+$can->needsEdit();
 
 $service_id  = mbGetValueFromGetOrSession('service_id');
 $category_id = mbGetValueFromGetOrSession('category_id');

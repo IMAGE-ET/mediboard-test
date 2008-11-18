@@ -10,7 +10,7 @@
 
 global $can, $g;
 
-$can->needsAdmin();
+$can->needsEdit();
 
 $stock_service_id = mbGetValueFromGetOrSession('stock_service_id');
 $category_id      = mbGetValueFromGetOrSession('category_id');

@@ -9,7 +9,6 @@
  */
 
 global $can, $g;
-
 $can->needsRead();
 
 $list_stocks = new CProductStockGroup();
