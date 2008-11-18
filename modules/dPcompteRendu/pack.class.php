@@ -64,8 +64,7 @@ class CPack extends CMbObject {
           $this->_object_class = $this->_modeles[$value]->object_class;
       }
       
-      $this->_source = implode("<hr class='pageBreak' />", CMbArray::pluck($this->_modeles, "source"));   
-      
+      $this->_source = implode('<hr class="pagebreak" />', CMbArray::pluck($this->_modeles, "source"));   
     }
     if($this->_object_class == null)
       $this->_object_class = "COperation";

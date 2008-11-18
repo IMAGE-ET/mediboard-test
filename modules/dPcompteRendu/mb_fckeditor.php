@@ -34,6 +34,7 @@ require_once("$mbPath/classes/ui.class.php");
 require_once("$mbPath/includes/session.php");
 require_once("$mbPath/classes/sharedmemory.class.php");
 require_once("$mbPath/includes/autoload.php" );
+require_once("$mbPath/includes/version.php" );
 
 $templateManager =& $_SESSION[$m]["templateManager"];
 
@@ -43,6 +44,7 @@ CAppUI::requireSystemClass("smartydp");
 $smarty = new CSmartyDP(CAppUI::conf("root_dir")."/modules/$m");
 
 $smarty->assign("templateManager", $templateManager);
+$smarty->assign("version", $version);
 $smarty->assign("nodebug", true);
 
 $smarty->display("mb_fckeditor.tpl");

@@ -294,8 +294,18 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.39");
     $this->addPrefQuery("saveOnPrint", 1);
+    
+    $this->makeRevision("0.40");
+    $sql = "UPDATE `compte_rendu` 
+      SET `source` = REPLACE(`source`, '<br style=\"page-break-after: always;\" />', '<hr class=\"pagebreak\" />')";
+    // attention: dans le code source de la classe Cpack, on a :
+    // <br style='page-break-after:always' />
+    // Mais FCKeditor le transforme en :
+    // <br style="page-break-after: always;" />
+    // Apres verification, c'est toujours comme ça quil a transformé, donc c'est OK.
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.40";
+    $this->mod_version = "0.41";
   }
 }
 ?>

@@ -231,32 +231,23 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
-$library->fileName = "FCKeditor_2.3.2.tar.gz";
-//$library->fileName = "FCKeditor_2.6.tar.gz";
+$library->fileName = "FCKeditor_2.6.3.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
-$library->sourceDir = "FCKeditor";
+$library->sourceDir = "fckeditor";
 $library->targetDir = "fckeditor";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
 $patch->subDirName = "browser";
 $patch->sourceName = "config.php";
-$patch->targetDir = "editor/filemanager/browser/default/connectors/php";
+$patch->targetDir = "editor/filemanager/connectors/php";
 
 $library->patches[] = $patch;
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
-$patch->subDirName = "uploader";
-$patch->sourceName = "config.php";
-$patch->targetDir = "editor/filemanager/upload/php";
-
-$library->patches[] = $patch;
-
-$patch = new CLibraryPatch;
-$patch->dirName = "fckeditor";
-$patch->sourceName = "fck_showtableborders_gecko.css";
-$patch->targetDir = "editor/css";
+$patch->sourceName = "fckeditor.html";
+$patch->targetDir = "editor";
 
 $library->patches[] = $patch;
 

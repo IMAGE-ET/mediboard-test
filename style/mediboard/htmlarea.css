@@ -18,7 +18,7 @@ span.hilite {
 @media screen {
 	#header,  #footer {
 		margin: 10px;
-		border: 3px dashed #ccc;
+		border: 2px dashed #ccc;
 		padding: 3px;
 	  opacity: 0.4;
 	  overflow: hidden;
@@ -92,8 +92,7 @@ span.hilite {
 	}
 	
   hr.pagebreak {
-    border-style: solid;
-    border-color: #fff;
+    visibility: hidden;
     page-break-before:always;
   }
 }

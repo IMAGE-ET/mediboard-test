@@ -24,13 +24,17 @@ $object_id       = mbGetValueFromGet("object_id"         , 0);
 // Faire ici le test des différentes variables dont on a besoin
 
 $compte_rendu = new CCompteRendu;
+
 // Modification d'un document
 if ($compte_rendu_id) {
   $compte_rendu->load($compte_rendu_id);
-} 
+}
 
 // Création à partir d'un modèle
 else {
+	$header = null;
+	$footer = null;
+	
   $compte_rendu->load($modele_id);
   $compte_rendu->_id = null;
   $compte_rendu->chir_id = $praticien_id;
@@ -43,44 +47,6 @@ else {
     
 		$header = $compte_rendu->_ref_header;
     $footer = $compte_rendu->_ref_footer;
-		
-		$style = "
-			<style type='text/css'>
-			#header {
-				height: {$header->height}px;
-			}
-
-			#footer {
-   			height: {$footer->height}px;
-			}";
-    
-		if ($header->_id) {
-		  $header->source = "<div id='header'>$header->source</div>";
-		  $header->height += 20;
-		  $compte_rendu->header_id = null;
-		}
-    
-		if ($footer->_id) {
-      $footer->source = "<div id='footer'>$footer->source</div>";
-		  $footer->height += 20;
-      $compte_rendu->footer_id = null;
-		}
-		
-	  $style.= "
-			
-			@media print { 
-			  #body { 
-					padding-top: {$header->height}px; 
-				} 
-
-				hr.pageBreak { 
-					padding-top: {$header->height}px; 
-				} 
-			}
-			</style>";
-
-		$compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
-		$compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
   }
   
   // On fournit la cible
@@ -95,9 +61,61 @@ else {
     $pack->load($pack_id);
     $compte_rendu->nom = $pack->nom;
     $compte_rendu->object_class = $pack->object_class;
-    //$compte_rendu->object_class = $pack->_object_class;
     $compte_rendu->source = $pack->_source;
+    
+    // Parcours des modeles du pack pour trouver le premier header et footer
+    foreach($pack->_modeles as $mod) {
+    	if ($mod->header_id || $mod->footer_id) {
+    		$mod->loadComponents();
+    	}
+    	if (!isset($header)) $header = $mod->_ref_header;
+    	if (!isset($footer)) $footer = $mod->_ref_footer;
+    	if ($header && $footer) break;
+    }
   }
+  
+  if ($header || $footer) {
+  	$header->height = isset($header->height) ? $header->height : 20;
+  	$footer->height = isset($footer->height) ? $footer->height : 20;
+  	
+    $style = "
+      <style type='text/css'>
+      #header {
+        height: {$header->height}px;
+      }
+
+      #footer {
+        height: {$footer->height}px;
+      }";
+    
+    if ($header->_id) {
+      $header->source = "<div id='header'>$header->source</div>";
+      $header->height += 20;
+      $compte_rendu->header_id = null;
+    }
+    
+    if ($footer->_id) {
+      $footer->source = "<div id='footer'>$footer->source</div>";
+      $footer->height += 20;
+      $compte_rendu->footer_id = null;
+    }
+    
+    $style.= "
+      @media print { 
+        #body { 
+          padding-top: {$header->height}px; 
+        } 
+
+        hr.pagebreak { 
+          padding-top: {$header->height}px; 
+        } 
+      }
+      </style>";
+
+    $compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
+    $compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
+  }
+
   $compte_rendu->updateFormFields();
 }
 
