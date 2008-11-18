@@ -56,8 +56,10 @@ class CLibrary {
     
     /// Clear out all libraries
     if (!$libSel){
-      foreach (glob("$libsDir/*") as $libDir) {  
-        CMbPath::remove($libDir);
+      foreach (glob("$libsDir/*") as $libDir) {
+      	if (strpos($libDir, '-svn') === false) {
+          CMbPath::remove($libDir);
+      	}
       }
       return;
     } 
@@ -65,7 +67,7 @@ class CLibrary {
     // Clear out selected lib
     $library = self::$all[$libSel];
     if ($targetDir = $library->targetDir) {
-      CMbPath::remove("$libsDir/$targetDir");
+      @CMbPath::remove("$libsDir/$targetDir");
     }
   } 
     
