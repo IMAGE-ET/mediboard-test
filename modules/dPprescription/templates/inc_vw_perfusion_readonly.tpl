@@ -1,7 +1,7 @@
 <tbody id="perfusion-{{$_perfusion->_id}}" class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
-    <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
+    <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       <!--  Validation infirmiere -->
 		  {{if $_perfusion->_can_vw_form_signature_infirmiere}}
         <div style="float: right">
@@ -29,7 +29,7 @@
       <strong>
 				Perfusion :
 				{{foreach from=$_perfusion->_ref_lines item=_line name=perf_line}}
-				 {{$_line->_view}}{{if !$smarty.foreach.perf_line.last}},{{/if}}
+				 {{$_line->_ucd_view}}{{if !$smarty.foreach.perf_line.last}},{{/if}}
 				{{/foreach}}         
       </strong>
     </th>

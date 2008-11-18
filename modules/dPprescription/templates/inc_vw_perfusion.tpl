@@ -1,7 +1,7 @@
 <tbody id="perfusion-{{$_perfusion->_id}}" class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
-    <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
+    <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       {{if $_perfusion->_count_parent_line}}
 	      <div style="float: left">
 	        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
@@ -74,7 +74,7 @@
 			<strong>
 				Perfusion :
 				{{foreach from=$_perfusion->_ref_lines item=_line name=perf_line}}
-				 {{$_line->_view}}{{if !$smarty.foreach.perf_line.last}},{{/if}}
+				 {{$_line->_ucd_view}}{{if !$smarty.foreach.perf_line.last}},{{/if}}
 				{{/foreach}}         
       </strong>
     </th>
@@ -210,7 +210,7 @@
 		                  {{/if}}
 		                </td>
 					          	 
-					          <td style="width: 200px; border:none; vertical-align:middle;" class="text">
+					          <td style="width: 30%; border:none; vertical-align:middle;" class="text">
 					            {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 					            {{if $line->_can_vw_livret_therapeutique}}
 									      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
@@ -220,7 +220,7 @@
 									    {{/if}} 
 					            <strong>{{$line->_ucd_view}}</strong>
 					          </td>
-			              <td style="border:none;">
+			              <td style="border:none; width: 20%;">
 					            {{mb_label object=$line field=quantite}}
 					            {{if $_perfusion->_can_modify_perfusion_line}}
 					              {{mb_field object=$line field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
@@ -235,10 +235,10 @@
 										  {{/if}}
 					     		  </td>
 					     		  {{if !$line->_protocole}}
-							        <td  style="border:none;  vertical-align:middle;">
+							        <td  style="border:none;  vertical-align:middle; width: 1%">
 							          {{mb_label object=$line field=date_debut}} 
 						          </td>
-						          <td class="date"  style="border:none;">
+						          <td class="date"  style="border:none; width: 20%">
 						            {{if $_perfusion->_can_modify_perfusion_line}}
 							            {{mb_field object=$line field=date_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
 							            {{mb_field object=$line field=time_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
