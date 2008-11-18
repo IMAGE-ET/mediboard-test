@@ -8,9 +8,16 @@ Main.add( function(){
 </script>
 {{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
 <table class="tbl">
+  <!-- Affichage des lignes de medicaments -->
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     {{include file="inc_vw_line_pack.tpl" line=$curr_line}}
   {{/foreach}}
+  
+  <!-- Affichage des lignes de perfusions -->
+  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+    {{include file="inc_vw_line_perf_pack.tpl"}}
+  {{/foreach}}
+  
   
   {{if $prescription->_ref_lines_med_comments.comment|@count}}
   <tr>

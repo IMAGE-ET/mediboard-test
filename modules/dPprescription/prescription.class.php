@@ -345,7 +345,12 @@ class CPrescription extends CMbObject {
 	  $protocole->loadRefsLinesMed();
 	  $protocole->loadRefsLinesElementByCat();
 	  $protocole->loadRefsLinesAllComments();
-
+	  // Chargement des perfusions et des lignes associées
+    $protocole->loadRefsPerfusions();
+    foreach($protocole->_ref_perfusions as &$_perfusion){
+      $_perfusion->loadRefsLines(); 
+    }
+    
 	  $operation = new COperation();
 	  $hour_operation = "";
   	$sejour = new CSejour();
@@ -362,51 +367,102 @@ class CPrescription extends CMbObject {
 	    }
 	  }
 	
-  // Parcours des lignes de medicaments
-	foreach($protocole->_ref_prescription_lines as &$_line_med){	    
-	  if(!$mode_preview){
-	    // Chargement des lignes de substitutions de la ligne de protocole
-	    $_line_med->loadRefsSubstitutionLines();
-		  $_substitutions = $_line_med->_ref_substitution_lines;
-	  }
-	  
-	  // Creation et modification de la ligne en fonction des dates
-    $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-	                            $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
-	                            
-	  if(!$mode_preview){
-		  // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
-		  foreach($_substitutions as &$_line_subst){
-		    $_line_subst->substitute_for = $_line_med->_id;
-		    $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-	                                $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
-	    }
-	  }  
-	}
-	
-	// Parcours des lignes d'elements
-	foreach($protocole->_ref_prescription_lines_element_by_cat as &$elements_by_chap){
-	  foreach($elements_by_chap as &$elements_by_cat){
-	    foreach($elements_by_cat as &$_lines){
-	      foreach($_lines as $_line_elt){
-	        $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-	                                  $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
-	      } 
-	    }
-	  }
-	}
-	
-	// Parcours des lignes de commentaires
-	foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
-		$line_comment->_id = "";
-		$line_comment->prescription_id = $this->_id;
-		$line_comment->praticien_id = $praticien_id;
-		$line_comment->creator_id = $AppUI->user_id;
-		if(!$mode_preview){
-		  $msg = $line_comment->store();
-		  $AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
+	  // Parcours des lignes de medicaments
+		foreach($protocole->_ref_prescription_lines as &$_line_med){	    
+		  if(!$mode_preview){
+		    // Chargement des lignes de substitutions de la ligne de protocole
+		    $_line_med->loadRefsSubstitutionLines();
+			  $_substitutions = $_line_med->_ref_substitution_lines;
+		  }
+		  
+		  // Creation et modification de la ligne en fonction des dates
+	    $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+		                            $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+		                            
+		  if(!$mode_preview){
+			  // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
+			  foreach($_substitutions as &$_line_subst){
+			    $_line_subst->substitute_for = $_line_med->_id;
+			    $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+		                                $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+		    }
+		  }  
 		}
-	}
+		
+		// Parcours des lignes d'elements
+		foreach($protocole->_ref_prescription_lines_element_by_cat as &$elements_by_chap){
+		  foreach($elements_by_chap as &$elements_by_cat){
+		    foreach($elements_by_cat as &$_lines){
+		      foreach($_lines as $_line_elt){
+		        $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+		                                  $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+		      } 
+		    }
+		  }
+		}
+	
+		// Parcours des perfusions
+	  foreach($protocole->_ref_perfusions as &$_perfusion){
+	    $_perfusion->loadRefPraticien();
+	    $_perfusion->_id = "";
+	    $_perfusion->prescription_id = $this->_id;
+	    $_perfusion->praticien_id = $praticien_id;
+	    $_perfusion->creator_id = $AppUI->user_id;
+	    
+	    if($_perfusion->decalage_interv != NULL){
+	      if(!$mode_preview){
+				  if($operation_id){
+				    $_perfusion->operation_id = $operation_id;
+				  } else {
+				    $_perfusion->date_debut = "";
+				    $_perfusion->time_debut = "";
+				  }
+				}
+			 	
+	      if($date_operation){
+	  	    $date_debut = mbDate($date_operation);
+	  	    $time_debut = mbTime($date_operation); 
+	  	  } else {
+		  	  if($operation->_id){
+		  	    $date_debut = $operation->_ref_plageop->date; 
+	  	      $time_debut = $hour_operation;
+		  	  }
+	  	  }
+	  	  if($_perfusion->decalage_interv == ""){
+	  	    $_perfusion->decalage_interv = 0;
+	  	  }
+	  	  $signe = ($_perfusion->decalage_interv >= 0) ? "+" : "";
+	      $date_time_debut = mbDateTime("$signe $_perfusion->decalage_interv HOURS", "$date_debut $time_debut");
+	  	  $_perfusion->date_debut = mbDate($date_time_debut);
+	  	  $_perfusion->time_debut = mbTime($date_time_debut);
+	    }
+	    
+	    if(!$mode_preview){
+	      $msg = $_perfusion->store();
+	      $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+	    }
+	    foreach($_perfusion->_ref_lines as $_line){
+	      $_line->_id = "";
+	      $_line->perfusion_id = $_perfusion->_id;
+	      if(!$mode_preview){
+	        $msg = $_line->store();
+			    $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+	      }
+	    }
+	  }
+  
+  
+		// Parcours des lignes de commentaires
+		foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
+			$line_comment->_id = "";
+			$line_comment->prescription_id = $this->_id;
+			$line_comment->praticien_id = $praticien_id;
+			$line_comment->creator_id = $AppUI->user_id;
+			if(!$mode_preview){
+			  $msg = $line_comment->store();
+			  $AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
+			}
+		}
 	
 	  if($mode_preview){
 	    return $protocole;
@@ -662,6 +718,11 @@ class CPrescription extends CMbObject {
   	$this->_counts_by_chapitre["med"] = $line_med->countList($whereMed);
   	$this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
   	
+  	$perfusion_line  = new CPerfusionLine();
+  	$ljoinPerf["perfusion"] = "perfusion_line.perfusion_id = perfusion.perfusion_id";
+  	$wherePerf["perfusion.prescription_id"] = " = '$this->_id'";
+  	$wherePerf["perfusion.next_perf_id"] = " IS NULL";
+  	$this->_counts_by_chapitre["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
   	
   	// Count sur les elements
   	$ljoin_element["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
@@ -994,15 +1055,30 @@ class CPrescription extends CMbObject {
   static function getFavorisMedPraticien($praticien_id){
   	$favoris = array();
   	$listFavoris = array();
-  	$listFavoris["medicament"] = array();
   	$favoris = CBcbProduit::getFavoris($praticien_id);
   	foreach($favoris as $_fav){
   		$produit = new CBcbProduit();
   		$produit->load($_fav["code_cip"],"0");
-  		$listFavoris["medicament"][$produit->libelle] = $produit;
+  		$listFavoris[$produit->libelle] = $produit;
     }
-    ksort($listFavoris["medicament"]);
-  	return $listFavoris["medicament"];
+    ksort($listFavoris);
+  	return $listFavoris;
+  }
+  
+  /*
+   * Chargement des injectables favoris du praticien
+   */
+  static function getFavorisInjectablePraticien($praticien_id){
+  	$favoris_inj = array();
+  	$listFavoris = array();
+  	$favoris_inj = CBcbProduit::getFavorisInjectable($praticien_id);
+  	foreach($favoris_inj as $_fav_inj){
+  		$produit = new CBcbProduit();
+  		$produit->load($_fav_inj["code_cip"],"0");
+  		$listFavoris[$produit->libelle] = $produit;
+    }
+    ksort($listFavoris);
+  	return $listFavoris;
   }
   
   /*
@@ -1010,6 +1086,8 @@ class CPrescription extends CMbObject {
    */
   static function getFavorisPraticien($praticien_id){
   	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
+  	$listFavoris["injectable"] = CPrescription::getFavorisInjectablePraticien($praticien_id);
+  	
   	$category = new CCategoryPrescription();
   	
     foreach($category->_specs["chapitre"]->_list as $chapitre){

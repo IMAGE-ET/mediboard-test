@@ -252,11 +252,15 @@ var Prescription = {
     url.addParam("readonly", 0);
     url.requestUpdate("prescription_pharma", { waitingText: null } );
   },
-  reloadPrescPerf: function(prescription_id, mode_pharma){
+  reloadPrescPerf: function(prescription_id, mode_protocole, mode_pharma){
     if(mode_pharma == '1'){
       Prescription.reloadPrescPharma(prescription_id);
     } else {
-      Prescription.reloadPrescSejour(prescription_id);
+	    if(mode_protocole == '1') {
+	      Prescription.reload(prescription_id,'','medicament','1','0');
+	    } else {
+	      Prescription.reloadPrescSejour(prescription_id);
+	    }
     }
   },
   reloadAddProt: function(protocole_id) {

@@ -1,6 +1,6 @@
 {{if $line->_class_name == "CPrescriptionLineComment"}}
   <tr>
-    <td>
+    <td colspan="8">
     <div style="float: right">
       {{$line->_ref_prescription->_view}}
     </div>
@@ -8,7 +8,7 @@
   </tr>
 {{else}}
   <tr>
-    <th colspan="4">
+    <th colspan="8">
     <div style="float: left">
 	      {{mb_label object=$line field="conditionnel"}}:
 	      {{if $line->conditionnel}} Oui
@@ -35,7 +35,7 @@
     </th>
   </tr>
   <tr>
-  <td>
+  <td colspan="8">
     <!-- Duree de la ligne -->
     {{if $line->duree}}
      Durée de {{mb_value object=$line field=duree}} jour(s) 
@@ -81,7 +81,7 @@
 	</td>
   </tr>
   <tr>
-    <td colspan="4">
+    <td colspan="8">
     Posologie:<br />
 			<ul>
 			{{foreach from=$line->_ref_prises item=_prise}}

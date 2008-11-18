@@ -96,7 +96,7 @@
     </th>
   </tr>
   
-    {{if $line->_is_perfusable && !$line->_protocole && !$line->_traitement}}
+  {{if $line->_is_perfusable && !$line->_traitement && !$line->substitute_for}}
 	  <tr>
 	    <td />
 	    <td>
@@ -117,8 +117,9 @@
 		  		  {{mb_field object=$perfusion field="type" defaultOption="&mdash; Type"}}
 		  		  
 			  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
-			  		  onComplete: function() { Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$mode_pharma}}') } 
-			  		} );">
+			  		  onComplete: function() { 
+			  			  Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$line->_protocole}}','{{$mode_pharma}}')  
+			  		  } } );">
 			  		  Ajouter à la perfusion
 			  		</button>
 		  		</form>

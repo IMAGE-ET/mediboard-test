@@ -101,9 +101,11 @@ $lines["medicaments"]["comment"]["no_ald"] = array();
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
 	  if(!$prescription->object_id){
-	    $line_medicament->loadRefsSubstitutionLines();
-	    foreach($line_medicament->_ref_substitution_lines as &$_subst_line){
-	      $_subst_line->loadRefsPrises();
+	    if($line_medicament->_class_name == "CPrescriptionLineMedicament"){
+		    $line_medicament->loadRefsSubstitutionLines();
+		    foreach($line_medicament->_ref_substitution_lines as &$_subst_line){
+		      $_subst_line->loadRefsPrises();
+		    }
 	    }
 	  }
 		if($praticien_sortie_id && $line_medicament->praticien_id != $praticien_sortie_id){

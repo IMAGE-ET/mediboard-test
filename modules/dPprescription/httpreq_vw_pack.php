@@ -39,7 +39,9 @@ if($pack->_id){
     if($_prescription->_ref_lines_med_comments){
       foreach($_prescription->_ref_lines_med_comments as $type => $lines_by_type){
 	      foreach($lines_by_type as $_line){
-	        $_line->countSubstitionsLines();
+	        if($_line->_class_name == "CPrescriptionLineMedicament"){
+	          $_line->countSubstitionsLines();
+	        }
 	        $prescription->_ref_lines_med_comments[$type][] = $_line;
 	      }
 	    }
@@ -57,6 +59,15 @@ if($pack->_id){
 	      }
 	    }
     }
+    // Merge des perfusions
+    $_prescription->loadRefsPerfusions();
+    if($_prescription->_ref_perfusions){
+      foreach($_prescription->_ref_perfusions as $_perfusion){
+        $_perfusion->loadRefsLines();
+        $prescription->_ref_perfusions[$_perfusion->_id] = $_perfusion;
+      }
+    }
+    
     // Compteur de lignes
     $_prescription->countLinesMedsElements();
     foreach($_prescription->_counts_by_chapitre as $chapitre => $_count_by_chap){

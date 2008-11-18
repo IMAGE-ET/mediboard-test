@@ -357,6 +357,20 @@ class CBcbProduit extends CBcbObject {
             LIMIT 0, 20";
     return $ds->loadlist($sql);
   }
+  
+  static function getFavorisInjectable($praticien_id) {
+    $ds = CSQLDataSource::get("std");
+    $sql = "SELECT perfusion_line.code_cip, COUNT(*) AS total
+            FROM perfusion, perfusion_line, prescription
+            WHERE perfusion_line.perfusion_id = perfusion.perfusion_id
+            AND perfusion.prescription_id = prescription.prescription_id
+            AND perfusion.praticien_id = $praticien_id
+            AND prescription.object_id IS NOT NULL
+            GROUP BY perfusion_line.code_cip
+            ORDER BY total DESC
+            LIMIT 0, 20";
+    return $ds->loadlist($sql);
+  }
 }
 
 ?>

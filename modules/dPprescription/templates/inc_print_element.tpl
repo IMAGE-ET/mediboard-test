@@ -94,10 +94,7 @@
 		 {{elseif !$elt->duree}}
 		 pendant 1 jour
 		 {{/if}}
-		 
-		 {{if !$elt->duree && !($elt->jour_decalage && $elt->unite_decalage) && !($elt->jour_decalage_fin && $elt->unite_decalage_fin)}}
-		 Aucune date
-		 {{/if}}
+		
      {{if $elt->commentaire}}
        , {{mb_value object=$elt field="commentaire"}}
      {{/if}}

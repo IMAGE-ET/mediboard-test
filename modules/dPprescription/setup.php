@@ -898,7 +898,17 @@ class CSetupdPprescription extends CSetup {
 	          ADD `accord_praticien` ENUM ('0','1');";
     $this->addQuery($sql);
     
-	  $this->mod_version = "0.63";
+    $this->makeRevision("0.63");
+    $sql = "ALTER TABLE `perfusion` 
+            ADD `operation_id` INT (11) UNSIGNED,
+	          ADD `decalage_interv` INT (11);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `perfusion` 
+            ADD INDEX (`operation_id`);";
+    $this->addQuery($sql);
+    
+	  $this->mod_version = "0.64";
   }  
 }
 

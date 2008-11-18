@@ -113,7 +113,20 @@ $categories = $full_mode || $chapitre != "medicament" ? CCategoryPrescription::l
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
   $prescription->loadRefsPerfusions();
-  	
+  
+	foreach($prescription->_ref_perfusions as $_perfusion){
+    $_perfusion->loadRefsLines();
+	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);
+	  $_perfusion->loadRefPraticien();
+	  $_perfusion->countParentLine();
+	  if($_perfusion->_ref_lines){
+		  foreach($_perfusion->_ref_lines as &$line_perf){
+		    $line_perf->loadRefsFwd();
+		  }
+	  }
+	}
+	
+	
   $prescription->getPraticiens();
 
   // Calcul des droits de la prescription	
@@ -196,7 +209,6 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		    $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
 		  }
 		  foreach($prescription->_ref_perfusions as $_perfusion){
-		    $_perfusion->loadRefsLines();
 		    foreach($_perfusion->_ref_lines as $_perf_line){
 		      $allergies->addProduit($_perf_line->code_cip);
 			    $interactions->addProduit($_perf_line->code_cip);
@@ -276,17 +288,6 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 if($prescription->_id){
 	if($prescription->_current_praticien_id){
     $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
-	}
-
-	foreach($prescription->_ref_perfusions as &$_perfusion){
-	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);
-	  $_perfusion->loadRefPraticien();
-	  $_perfusion->countParentLine();
-	  if($_perfusion->_ref_lines){
-		  foreach($_perfusion->_ref_lines as &$line_perf){
-		    $line_perf->loadRefsFwd();
-		  }
-	  }
 	}
 }
 

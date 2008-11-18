@@ -30,7 +30,7 @@
 				</div>
 		  {{/if}}
 		  
-		        <!-- Signature pharmacien -->
+		  <!-- Signature pharmacien -->
       {{if $_perfusion->_can_vw_form_signature_pharmacien}}
         <div style="float: right">
 					{{if $_perfusion->signature_pharma}}
@@ -92,7 +92,7 @@
               {{if $_perfusion->_can_delete_perfusion}}
 	              <button type="button" class="trash notext" onclick="$V(this.form.del,'1'); return onSubmitFormAjax(this.form, { 
 	                onComplete: function(){
-			              Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$mode_pharma}}');
+			              Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
 			            }        
 	              } );"></button>
               {{/if}}
@@ -116,24 +116,34 @@
 				    <td style="border:none;">
 	            <strong>{{mb_value object=$_perfusion field="voie"}}</strong>
             </td>
-            <td style="border:none;">
-              {{mb_label object=$_perfusion field="date_debut"}}
-            </td>
-        		<td class="date"  style="border:none;">
-        		  {{if $_perfusion->_can_modify_perfusion}}
-		            {{mb_field object=$_perfusion field=date_debut form="editPerf-$perfusion_id" onchange="changeColorPerf($perfusion_id,this.form); return onSubmitFormAjax(this.form);"}}
-		            {{mb_field object=$_perfusion field=time_debut form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}}
-	            {{else}}
-	              {{mb_value object=$_perfusion field=date_debut}}
-		            {{mb_value object=$_perfusion field=time_debut}}
-	            {{/if}}
-	            <script type="text/javascript">
-								Main.add( function(){
-								  prepareForm('editPerf-{{$perfusion_id}}'); 
-								  Calendar.regField("editPerf-{{$perfusion_id}}", "date_debut", false);
-								});
-							</script>
-	          </td>
+
+	          
+            {{if $_perfusion->_protocole}}
+						  <td style="border:none;">
+						  {{mb_label object=$_perfusion field="date_debut"}}
+						    à I {{mb_field object=$_perfusion field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} h
+						  </td>
+						{{else}}
+						  <td style="border:none;">
+	              {{mb_label object=$_perfusion field="date_debut"}}
+	            </td>
+	        		<td class="date"  style="border:none;">
+	        		  {{if $_perfusion->_can_modify_perfusion}}
+			            {{mb_field object=$_perfusion field=date_debut form="editPerf-$perfusion_id" onchange="changeColorPerf($perfusion_id,this.form); return onSubmitFormAjax(this.form);"}}
+			            {{mb_field object=$_perfusion field=time_debut form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}}
+		            {{else}}
+		              {{mb_value object=$_perfusion field=date_debut}}
+			            {{mb_value object=$_perfusion field=time_debut}}
+		            {{/if}}
+		            <script type="text/javascript">
+									Main.add( function(){
+									  prepareForm('editPerf-{{$perfusion_id}}'); 
+									  Calendar.regField("editPerf-{{$perfusion_id}}", "date_debut", false);
+									});
+								</script>			
+						  </td>				
+						{{/if}}
+
             <td style="border:none;">
 					   {{mb_label object=$_perfusion field=duree}}
 					   {{if $_perfusion->_can_modify_perfusion}}
@@ -147,7 +157,7 @@
 				      {{if $_perfusion->_can_vw_form_add_perf_contigue}}
 				        <button type="button" class="new" onclick="$V(this.form._add_perf_contigue, '1');
 				                                                      return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$mode_pharma}}');
+				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
 				          } } );">Modifier</button>
 				        <input type="hidden" name="_add_perf_contigue" value="" />
 				        
@@ -159,13 +169,13 @@
 				        {{if $_perfusion->date_arret}}
 				          
 				          <button type="button" class="cancel" onclick="this.form.date_arret.value=''; this.form.time_arret.value=''; return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$mode_pharma}}');
+				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
 				          } } );">Annuler l'arrêt</button>
 				          <br />
 				          {{mb_value object=$_perfusion field=date_arret}} à {{mb_value object=$_perfusion field=time_arret}}
 				        {{else}}
 				          <button type="button" class="stop" onclick="this.form.date_arret.value='current';this.form.time_arret.value='current'; return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$mode_pharma}}');
+				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
 				          } } );">Arrêter</button>
 				        {{/if}}
 				      {{/if}}
@@ -194,7 +204,7 @@
 		                  {{if $_perfusion->_can_delete_perfusion_line}}
 			                  <button class="trash notext" type="button" onclick="$V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
 			                    onComplete: function(){
-			                      Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$mode_pharma}}');
+			                      Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
 			                    }
 			                  } );"></button>
 		                  {{/if}}
@@ -224,24 +234,26 @@
 					              {{mb_value object=$line field=unite}}					            
 										  {{/if}}
 					     		  </td>
-						        <td  style="border:none;  vertical-align:middle;">
-						          {{mb_label object=$line field=date_debut}} 
-					          </td>
-					          <td class="date"  style="border:none;">
-					            {{if $_perfusion->_can_modify_perfusion_line}}
-						            {{mb_field object=$line field=date_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
-						            {{mb_field object=$line field=time_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
-						          {{else}}
-						            {{mb_value object=$line field=date_debut}}
-						            {{mb_value object=$line field=time_debut}}
-					            {{/if}}
-					            <script type="text/javascript">
-												Main.add( function(){
-												  prepareForm('editLinePerf-{{$line->_id}}'); 
-												  Calendar.regField("editLinePerf-{{$line->_id}}", "date_debut", false);
-												});
-											</script>
-					          </td>
+					     		  {{if !$line->_protocole}}
+							        <td  style="border:none;  vertical-align:middle;">
+							          {{mb_label object=$line field=date_debut}} 
+						          </td>
+						          <td class="date"  style="border:none;">
+						            {{if $_perfusion->_can_modify_perfusion_line}}
+							            {{mb_field object=$line field=date_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
+							            {{mb_field object=$line field=time_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
+							          {{else}}
+							            {{mb_value object=$line field=date_debut}}
+							            {{mb_value object=$line field=time_debut}}
+						            {{/if}}
+						            <script type="text/javascript">
+													Main.add( function(){
+													  prepareForm('editLinePerf-{{$line->_id}}'); 
+													  Calendar.regField("editLinePerf-{{$line->_id}}", "date_debut", false);
+													});
+												</script>
+						          </td>
+					          {{/if}}
 			            </tr>
 		            </table>
 	            </form>  

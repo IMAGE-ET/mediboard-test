@@ -32,6 +32,8 @@ class CPerfusion extends CMbObject {
   var $date_arret       = null; // Date d'arret de la perf (si arret anticipé) 
   var $time_arret       = null; // Heure d'arret de la perf (si arret anticipe)
   var $accord_praticien = null;
+  var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de perfusions)
+  var $operation_id     = null;
   
   // Fwd Refs
   var $_ref_prescription = null;
@@ -91,6 +93,8 @@ class CPerfusion extends CMbObject {
     $specs["accord_praticien"] = "bool";
     $specs["_debut"]           = "dateTime";
     $specs["_fin"]             = "dateTime";
+    $specs["decalage_interv"]  = "num";
+    $specs["operation_id"]     = "ref class|COperation";
     return $specs;
   }
 

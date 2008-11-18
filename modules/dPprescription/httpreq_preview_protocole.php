@@ -44,8 +44,6 @@ foreach($list_hours as &$hour){
 }
 
 if($_entree && $_sortie && $_datetime){
-
-  
 	if($protocole_id){  
 	  // Chargement de la prescription
 	  $prescription = $prescription->applyProtocole($protocole_id, null, null, null, $_entree, $_sortie, $_datetime);
@@ -61,6 +59,9 @@ if($_entree && $_sortie && $_datetime){
 		 	    }
 		    }
 		  }
+	  }
+	  foreach($prescription->_ref_perfusions as &$_perfusion){
+	    $_perfusion->updateFormFields();
 	  }
 	}
 

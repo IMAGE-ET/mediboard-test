@@ -126,10 +126,19 @@ Main.add( function(){
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 			    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
 			      <option value="">&mdash; les plus utilisés</option>
+			      <optgroup label="Produits les plus utilisés"></optgroup>
 			      {{if array_key_exists("medicament", $listFavoris)}}
 			      {{foreach from=$listFavoris.medicament item=curr_prod}}
 			      <option value="{{$curr_prod->code_cip}}">
 			        {{$curr_prod->libelle}}
+			      </option>
+			      {{/foreach}}
+			      {{/if}}
+			      <optgroup label="Injectables les plus utilisés"></optgroup>
+			      {{if array_key_exists("injectable", $listFavoris)}}
+			      {{foreach from=$listFavoris.injectable item=curr_inj}}
+			      <option value="{{$curr_inj->code_cip}}">
+			        {{$curr_inj->libelle}}
 			      </option>
 			      {{/foreach}}
 			      {{/if}}
