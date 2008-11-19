@@ -92,7 +92,7 @@ foreach($compte_rendu->_enums["object_class"] as $valueClass){
 foreach($listObjectClass as $keyClass=>$value){
   $listCategory = CFilesCategory::listCatClass($keyClass);
   foreach($listCategory as $keyCat=>$valueCat){
-    $listObjectClass[$keyClass][$keyCat] = htmlentities($listCategory[$keyCat]->nom);
+    $listObjectClass[$keyClass][$keyCat] = utf8_encode($listCategory[$keyCat]->nom);
   }
 }
 
