@@ -1,11 +1,7 @@
-{{if !$app->_is_intranet}}
-<div class="big-info">
-Pour des raisons de sécurité, l'affichage des résultats de laboratoire n'est pas disponible depuis l'accès distant.
-<br />
-Merci de réessayer ultérieurement depuis un <strong>accès sur site</strong>.
-</div>
-
+{{if !$url}}
+{{include file=inc_nourl_notices.tpl}}
 {{else}}
+
 <script type="text/javascript">
 
 Main.add(function() {

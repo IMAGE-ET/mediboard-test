@@ -45,7 +45,13 @@ class CProductReference extends CMbObject {
     return $specs;
   }
 
-  function updateFormFields() {
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+ 	  $backRefs["order_items"] = "CProductOrderItem reference_id";
+	  return $backRefs;
+	}
+
+	function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = "{$this->_ref_product->_view} (par {$this->quantity})";

@@ -39,7 +39,7 @@ class CElementPrescription extends CMbObject {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["prescription_line_element"] = "CPrescriptionLineElement prescription_line_element_id";
+    $backRefs["prescription_lines"] = "CPrescriptionLineElement element_prescription_id";
     return $backRefs;
   }
   

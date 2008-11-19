@@ -55,7 +55,13 @@ class CProductStock extends CMbObject {
     return $specs;
   }
 
-  function updateFormFields() {
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["discrepancies"] = "CProductDiscrepancy object_id";
+	  return $backRefs;
+	}
+
+	function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_ref_product->updateFormFields();

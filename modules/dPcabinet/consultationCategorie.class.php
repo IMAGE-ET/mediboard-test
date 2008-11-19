@@ -34,6 +34,12 @@ class CConsultationCategorie extends CMbObject {
     return $specs;
   }
   
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["consultations"] = "CConsultation categorie_id";
+	  return $backRefs;
+	}
+
   function updateFormFields() {
   	parent::updateFormFields();
     $this->_view = $this->nom_categorie;

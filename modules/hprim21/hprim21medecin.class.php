@@ -51,8 +51,14 @@ class CHprim21Medecin extends CHprim21Object {
     );
     return array_merge($specsParent, $specs);
   }
+
+  function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["hprim21_sejours"] = "CHprim21Sejour hprim21_medecin_id";
+	  return $backRefs;
+	}  
   
-  function bindToLine($line, &$reader) {
+	function bindToLine($line, &$reader) {
     $this->setEmetteur($reader);
     
     $elements = explode($reader->separateur_champ, $line);

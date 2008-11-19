@@ -40,12 +40,13 @@ class CMomentUnitaire extends CMbObject {
     return $specs;
   }
 
-  function getBackRefs() {
-    $back = parent::getBackRefs();
-    $back["associations"] = "CAssociationMoment moment_unitaire_id";
-    return $back;
-  }
-  
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["associations"] = "CAssociationMoment moment_unitaire_id";
+	  $backRefs["prises"]       = "CPrisePosologie moment_unitaire_id";
+	  return $backRefs;
+	}
+	
   // Chargement des moments
   static function loadAllMoments(){
     $moment = new CMomentUnitaire();

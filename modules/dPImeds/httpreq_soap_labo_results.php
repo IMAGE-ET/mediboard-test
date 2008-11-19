@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-$list_sejours = explode("-", mbGetValueFromGet("list_sejours", array()));
+$list_sejours = explode("-", mbGetValueFromGet("list_sejours"));
 $date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
 $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
 
@@ -31,12 +31,8 @@ if (CAppUI::conf("dPImeds url") != '') {
 	$urlImeds['path'] = "/dllimeds/webimeddll.asmx";
 	$serviceAdresse = make_url($urlImeds);
   
-  if (!url_exists($serviceAdresse)) {
-    CAppUI::stepAjax("Serveur IMeds inatteignable à l'addresse : $serviceAdresse", UI_MSG_ERROR);
-  }
-  
-  $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
-  
+	mbDump($serviceAdresse, "SOAP URL");
+	
   $requestParams = array (
     "strIDC"           => "$idCIDC->id400",
     "strDIV"           => "$idCSDV->id400",
@@ -47,7 +43,18 @@ if (CAppUI::conf("dPImeds url") != '') {
     "listePatients"    => array(),
     "PWD"              => ""
   );
+    
+	mbDump($requestParams, "SOAP Params"); 
+	
+	$soap_url = CImeds::getSoapUrl();
+	
+    
+  if (!url_exists($serviceAdresse)) {
+    CAppUI::stepAjax("Serveur IMeds inatteignable à l'addresse : $serviceAdresse", UI_MSG_ERROR);
+  }
   
+  $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
+    
   $results = $client->GetInfoLabo($requestParams);
   $countResults = $results->GetInfoLaboResult;
   

@@ -146,19 +146,21 @@ class CSejour extends CCodable {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["affectations"]  = "CAffectation sejour_id";
-    $backRefs["factures"]      = "CFacture sejour_id";
-    $backRefs["GHM"]           = "CGHM sejour_id";
-    $backRefs["operations"]    = "COperation sejour_id";
-    $backRefs["rpu"]           = "CRPU sejour_id";
-    $backRefs["consultations"] = "CConsultation sejour_id";
-    $backRefs["prescriptions"] = "CPrescription object_id";
-    $backRefs["observations"]  = "CObservationMedicale sejour_id";
-    $backRefs["transmissions"] = "CTransmissionMedicale sejour_id";
-    return $backRefs;
-  }
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["affectations"]         = "CAffectation sejour_id";
+	  $backRefs["consultations_anesths"] = "CConsultAnesth sejour_id";
+	  $backRefs["consultations"]        = "CConsultation sejour_id";
+	  $backRefs["factures"]             = "CFacture sejour_id";
+	  $backRefs["GHM"]                  = "CGHM sejour_id";
+	  $backRefs["hprim21_sejours"]      = "CHprim21Sejour sejour_id";
+	  $backRefs["observations"]         = "CObservationMedicale sejour_id";
+	  $backRefs["operations"]           = "COperation sejour_id";
+	  $backRefs["rpu"]                  = "CRPU sejour_id";
+	  $backRefs["rpu_mute"]             = "CRPU mutation_sejour_id";
+	  $backRefs["transmissions"]        = "CTransmissionMedicale sejour_id";
+	  return $backRefs;
+	}
 
   function getSpecs() {
    	$specs = parent::getSpecs();

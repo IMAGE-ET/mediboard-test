@@ -745,35 +745,51 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
   return $listClasses;
 }
 
-function getInstalledClasses($properties = array()) {
+
+function getMbClasses($properties = array()) {
   global $AppUI;
   $AppUI->getAllClasses();
-  $listClasses = getChildClasses("CMbObject", $properties);
-  foreach ($listClasses as $key => $class) {
-    if(!has_default_constructor($class)){
-      unset($listClasses[$key]);
+  $classes = getChildClasses("CMbObject", $properties);
+  foreach ($classes as $key => $class) {
+    // La classes est-elle instanciable ?
+    if (!has_default_constructor($class)){
+      unset($classes[$key]);
     	continue;
     }
 
     // Instanciation escapée au cas où cela génère des erreurs liées au DSN
     $object = @new $class;
+    
     // On test si on a réussi à l'instancier
-    if(!$object->_class_name) {
-      unset($listClasses[$key]);
+    if (!$object->_class_name) {
+      unset($classes[$key]);
     	continue;
     }
+    
     // On teste si son dns est standard
-    if($object->_spec->dsn != "std") {
-      unset($listClasses[$key]);
+    if ($object->_spec->dsn != "std") {
+      unset($classes[$key]);
     	continue;
-    }
-   // On test si l'objet a bin un module de référence
-    if ($object->_ref_module === null) {
-      unset($listClasses[$key]);
     }
   }
   
-  return $listClasses;
+  return $classes;
+}
+
+
+function getInstalledClasses($properties = array()) {
+  $classes = getMbClasses();
+  foreach ($classes as $key => $class) {
+    // Instanciation escapée au cas où cela génère des erreurs liées au DSN
+    $object = @new $class;
+    
+    // On test si l'objet a bin un module de référence
+    if ($object->_ref_module === null) {
+      unset($classes[$key]);
+    }
+  }
+  
+  return $classes;
 }
 
 /**

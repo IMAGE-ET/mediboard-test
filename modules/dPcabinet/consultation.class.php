@@ -102,6 +102,7 @@ class CConsultation extends CCodable {
   // Distant fields
   var $_ref_chir                 = null;
   var $_date                     = null;
+  var $_datetime                 = null;
   var $_is_anesth                = null; 
   var $_du_patient_restant       = null;
   var $_reglements_total_patient = null;
@@ -169,6 +170,7 @@ class CConsultation extends CCodable {
     
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date"]             = "date";
+    $specs["_datetime"]         = "dateTime";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
@@ -771,10 +773,11 @@ class CConsultation extends CCodable {
     }
     $this->_ref_plageconsult->loadRefsFwd($cache);
     
-    // Foreign fields
+    // Distant fields
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
     $this->_date = $this->_ref_plageconsult->date;
-    $this->_acte_execution = mbAddDateTime($this->heure,$this->_date);
+    $this->_datetime = mbAddDateTime($this->heure,$this->_date);
+    $this->_acte_execution = $this->_datetime;
     $this->_is_anesth = $this->_ref_chir->isFromType(array("Anesthésiste"));
     $this->_praticien_id = $this->_ref_plageconsult->_ref_chir->_id;
   }

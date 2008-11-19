@@ -15,7 +15,7 @@ $can->needsRead();
 $class_name = mbGetValueFromGetOrSession('class_name', null);
 
 // Liste des noms des classes installées
-$list_class_names = getInstalledClasses();
+$list_class_names = getMbClasses();
 
 $list_selected_classes = array(); // Liste des noms de classes selectionnées
 $list_classes = array(); // Liste des classes
@@ -56,22 +56,44 @@ function getBackSpecs($c) {
   return $backSpecs;
 }
 
+global $refSpecsByTarget;
+$refSpecsByTarget = array();
+foreach ($list_class_names as $class) {
+  $object = new $class;
+  
+  // Classe abstraite (non pesistente)
+  if (!$object->_spec->table) {
+    continue;    
+  }
+  
+  foreach ($object->_specs as $spec) {
+    // Pas une ref
+    if (!$spec instanceof CRefSpec) {
+      continue;
+    }
+    
+    // Pas un DB Field
+    if (!$spec->fieldName || $spec->fieldName[0] == '_') {
+    	continue;
+    }
+    
+    // Pas la clé primaire
+    if ($object->_class_name == $spec->class && $object->_spec->key == $spec->fieldName) {
+      continue;
+    }
+    
+    $refSpecsByTarget[$spec->class][] = $spec;
+  }
+}
+
 // Consrtuit la liste des backSpecs qui devraient etre presentes 
 // dans la classe en fonction des specs de chaque classe
-function getFwdSpecsTo($c, $list_classes) {
+function getFwdSpecsTo($c, $list_classes) {  
   $o = getClass($c);
   $c = $o->_class_name;
-  
-  $backRefs = array();
-  foreach ($list_classes as $class) {
-    $target = new $class;
-    foreach ($target->_specs as $spec) {
-      if ($spec instanceof CRefSpec && $class != $c && $spec->class == $c) {
-        $backRefs[] = $spec;
-      }
-    }
-  }
-  return $backRefs;
+
+  global $refSpecsByTarget;
+  return array_key_exists($c, $refSpecsByTarget) ? $refSpecsByTarget[$c] : array();
 }
 
 // Verifie les backSpecs, en renvoyant, un tableau des specs superflues et les specs manquantes

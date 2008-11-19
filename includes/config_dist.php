@@ -247,7 +247,11 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "chambre_operation" => "0",
 );
 
-$dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
+$dPconfig["dPImeds"] = array (
+  "url" => "http://localhost/mediboard/modules/dPImeds/demo/listedossiers.aspx.htm",
+  "remote_url" => "",
+  "soap_url" => "",
+);
 
 $dPconfig["dPfiles"] = array (
   "nb_upload_files" => "1",

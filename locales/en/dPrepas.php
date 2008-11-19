@@ -67,7 +67,6 @@ $locales['CTypeRepas-msg-typevue'] = 'Types de repas';
 $locales['CAffectation-back-repas'] = '';
 $locales['CGroups-back-menus'] = '';
 $locales['CGroups-back-plats'] = '';
-$locales['CGroups-back-type_repas'] = '';
 $locales['CMenu-back-repas'] = '';
 $locales['CMenu-boisson-court'] = '';
 $locales['CMenu-debut-court'] = '';

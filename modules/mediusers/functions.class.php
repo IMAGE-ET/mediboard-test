@@ -40,22 +40,28 @@ class CFunctions extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["aides"] = "CAideSaisie function_id";
-    $backRefs["compte_rendu"] = "CCompteRendu function_id";
-    $backRefs["fiches_compta"] = "CGestionCab function_id";
-    $backRefs["liste_choix"] = "CListeChoix function_id";
-    $backRefs["users"] = "CMediusers function_id";
-    $backRefs["paiements"] = "CModePaiement function_id";
-    $backRefs["pack_examens"] = "CPackExamensLabo function_id";
-    $backRefs["plages_op"] = "CPlageOp spec_id";
-    $backRefs["rubriques"] = "CRubrique function_id";
-    $backRefs["tarifs"] = "CTarif function_id";
-    $backRefs["function_category_prescription"] = "CFunctionCategoryPrescription function_id";
-    return $backRefs;
-  }
-
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["aides"]                          = "CAideSaisie function_id";
+	  $backRefs["catalogues_labo"]                = "CCatalogueLabo function_id";
+	  $backRefs["compte_rendu"]                   = "CCompteRendu function_id";
+	  $backRefs["consultation_cats"]              = "CConsultationCategorie function_id";
+	  $backRefs["employes"]                       = "CEmployeCab function_id";
+	  $backRefs["executants_prescription"]        = "CFunctionCategoryPrescription function_id";
+	  $backRefs["fiches_compta"]                  = "CGestionCab function_id";
+	  $backRefs["services_urgence_pour"]          = "CGroups service_urgences_id";
+	  $backRefs["liste_choix"]                    = "CListeChoix function_id";
+	  $backRefs["users"]                          = "CMediusers function_id";
+	  $backRefs["paiements"]                      = "CModePaiement function_id";
+	  $backRefs["pack_examens"]                   = "CPackExamensLabo function_id";
+	  $backRefs["plages_op"]                      = "CPlageOp spec_id";
+	  $backRefs["prescriptions"]                  = "CPrescription function_id";
+	  $backRefs["packs_prescription_protocole"]   = "CPrescriptionProtocolePack function_id";
+	  $backRefs["rubriques"]                      = "CRubrique function_id";
+	  $backRefs["tarifs"]                         = "CTarif function_id";
+	  return $backRefs;
+	}
+	
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["group_id"] = "notNull ref class|CGroups";

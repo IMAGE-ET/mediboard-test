@@ -12,7 +12,7 @@
   {{assign var="var" value="url"}}
   <tr>
     <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
       </label>  
     </th>
@@ -21,7 +21,18 @@
     </td>
   </tr>  
   
-  
+  {{assign var="var" value="remote_url"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" class="url" size="50" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/>
+    </td>
+  </tr>  
+    
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

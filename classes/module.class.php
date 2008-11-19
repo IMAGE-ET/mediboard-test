@@ -87,11 +87,12 @@ class CModule extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["permissions"] = "CPermModule mod_id";
-    return $backRefs;
-  }
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["messages"]    = "CMessage module_id";
+	  $backRefs["permissions"] = "CPermModule mod_id";
+	  return $backRefs;
+	}
   
   function getSpecs() {
   	$specs = parent::getSpecs();

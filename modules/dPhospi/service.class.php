@@ -36,12 +36,14 @@ class CService extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["chambres"] = "CChambre service_id";
-    $backRefs["valid_repas"] = "CValidationRepas service_id";
-    return $backRefs;
-  }
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["chambres"]               = "CChambre service_id";
+	  $backRefs["product_deliveries"]     = "CProductDelivery service_id";
+	  $backRefs["product_stock_services"] = "CProductStockService service_id";
+	  $backRefs["valid_repas"]            = "CValidationRepas service_id";
+	  return $backRefs;
+	}
 
   function getSpecs() {
   	$specs = parent::getSpecs();

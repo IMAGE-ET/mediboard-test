@@ -4,7 +4,7 @@
   
   <label for="class_name" title="Veuillez sélectionner une classe">Choix de la classe</label>
   <select name="class_name" onchange="submit();">
-    <option value=""{{if !$class_name}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
+    <option value=""{{if !$class_name}} selected="selected"{{/if}}>&mdash; Toutes les classes</option>
     {{foreach from=$list_class_names item=curr_class_name}}
     <option value="{{$curr_class_name}}"{{if $class_name==$curr_class_name}} selected="selected"{{/if}}>{{$curr_class_name}} - {{tr}}{{$curr_class_name}}{{/tr}}</option>
     {{/foreach}}

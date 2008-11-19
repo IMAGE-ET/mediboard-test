@@ -206,7 +206,6 @@ $locales['CValidationRepas.one'] = '';
 $locales['CAffectation-back-repas'] = '';
 $locales['CGroups-back-menus'] = '';
 $locales['CGroups-back-plats'] = '';
-$locales['CGroups-back-type_repas'] = '';
 $locales['CMenu-back-repas'] = '';
 $locales['CMenu-menu_id'] = '';
 $locales['CMenu-menu_id-court'] = '';

@@ -46,6 +46,7 @@ class CDossierMedical extends CMbMetaObject {
     $backRefs = parent::getBackRefs();
     $backRefs["antecedents"] = "CAntecedent dossier_medical_id";
     $backRefs["traitements"] = "CTraitement dossier_medical_id";
+    $backRefs["etats_dent"]  = "CEtatDent dossier_medical_id";
     return $backRefs;
   }
 

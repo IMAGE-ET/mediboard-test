@@ -137,15 +137,19 @@ class CPatient extends CMbObject {
     $spec->key   = 'patient_id';
     return $spec;
   }
+
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["constantes"]            = "CConstantesMedicales patient_id";
+	  $backRefs["consultations"]         = "CConsultation patient_id";
+	  $backRefs["correspondants"]        = "CCorrespondant patient_id";
+	  $backRefs["hprim21_patients"]      = "CHprim21Patient patient_id";
+	  $backRefs["prescriptions_labo"]    = "CPrescriptionLabo patient_id";
+	  $backRefs["product_deliveries"]    = "CProductDelivery patient_id";
+	  $backRefs["sejours"]               = "CSejour patient_id";
+	  return $backRefs;
+	}  
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["consultations"] = "CConsultation patient_id";
-    $backRefs["prescriptions_labo"] = "CPrescriptionLabo patient_id";
-    $backRefs["sejours"] = "CSejour patient_id";
-    return $backRefs;
-  }
- 
   function getSpecs() {
     $specs = parent::getSpecs();
     

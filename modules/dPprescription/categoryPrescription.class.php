@@ -43,6 +43,7 @@ class CCategoryPrescription extends CMbObject {
     $backRefs = parent::getBackRefs();
     $backRefs["elements_prescription"]   = "CElementPrescription category_prescription_id";
     $backRefs["executants_prescription"] = "CExecutantPrescriptionLine category_prescription_id";
+    $backRefs["functions_category"]      = "CFunctionCategoryPrescription category_prescription_id";
     $backRefs["comments_prescription"]   = "CPrescriptionLineComment category_prescription_id";
     return $backRefs;
   }     

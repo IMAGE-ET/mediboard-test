@@ -64,9 +64,9 @@ class CCodable extends CMbObject {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["actes_ngap"] = "CActeNGAP object_id";
-    $backRefs["actes_ccam"] = "CActeCCAM object_id";
-    //$backRefs["prescriptions"] = "CPrescription object_id";
+    $backRefs["actes_ngap"]    = "CActeNGAP object_id";
+    $backRefs["actes_ccam"]    = "CActeCCAM object_id";
+    $backRefs["prescriptions"] = "CPrescription object_id";
     return $backRefs;
   }
 

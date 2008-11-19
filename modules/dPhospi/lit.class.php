@@ -39,7 +39,8 @@ class CLit extends CMbObject {
  
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["affectations"] = "CAffectation lit_id";
+    $backRefs["affectations"]     = "CAffectation lit_id";
+    $backRefs["affectations_rpu"] = "CRPU box_id";
     return $backRefs;
   }
 

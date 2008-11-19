@@ -376,7 +376,7 @@ Document.refreshList = function(){
         {{else}}
           <a href="#nothing">
         {{/if}}
-        Le {{$curr_consult->_date|date_format:$dPconfig.date}} - {{$curr_consult->_etat}}
+        Le {{$curr_consult->_datetime|date_format:$dPconfig.datetime}} - {{$curr_consult->_etat}}
       </a>
     </td>
 

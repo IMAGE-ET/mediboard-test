@@ -49,12 +49,13 @@ class CPackExamensLabo extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["items_examen_labo"] = "CPackItemExamenLabo pack_examens_labo_id";
-    return $backRefs;
-  }
-
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["items_examen_labo"]         = "CPackItemExamenLabo pack_examens_labo_id";
+	  $backRefs["prescriptions_labo_examen"] = "CPrescriptionLaboExamen pack_examens_labo_id";
+	  return $backRefs;
+	}
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->libelle;

@@ -526,7 +526,9 @@ class CAppUI {
     }
     
     // Test if remote connection is allowed
-    $this->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != CAppUI::conf("system reverse_proxy")); 
+    $this->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != CAppUI::conf("system reverse_proxy"));
+    mbDump(is_intranet_ip($_SERVER["REMOTE_ADDR"]), $_SERVER["REMOTE_ADDR"]);
+     
     if (!$this->_is_intranet && $this->user_remote == 1 && $user->user_type != 1) {
       $this->setMsg("User has no remote access", UI_MSG_ERROR);
       return false;

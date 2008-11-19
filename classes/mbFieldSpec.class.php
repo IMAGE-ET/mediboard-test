@@ -11,7 +11,9 @@
 class CMbFieldSpec {
   var $object         = null;
   var $spec           = null;
+  var $className      = null;
   var $fieldName      = null;
+  var $prop           = null;
   var $default        = null;
 
   var $notNull        = null;

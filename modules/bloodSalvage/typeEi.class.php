@@ -42,6 +42,12 @@ class CTypeEi extends CMbObject {
     return $specs;
   }
   
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["blood_salvages"] = "CBloodSalvage type_ei_id";
+	  return $backRefs;
+	}
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;

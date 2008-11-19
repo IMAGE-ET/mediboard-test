@@ -169,6 +169,13 @@ class CHprim21Patient extends CHprim21Object {
     return array_merge($specsParent, $specs);
   }
     
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["hprim21_complementaires"] = "CHprim21Complementaire hprim21_patient_id";
+	  $backRefs["hprim21_sejours"]         = "CHprim21Sejour hprim21_patient_id";
+	  return $backRefs;
+	}
+
   function updateDBFields() {
   	
   	parent::updateDBFields();

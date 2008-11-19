@@ -64,11 +64,12 @@ class CUser extends CMbObject {
 
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["favoris_CCAM"] = "CFavoriCCAM favoris_user";
-    $backRefs["favoris_CIM10"] = "CFavoricim10 favoris_user";
+    $backRefs["favoris_CCAM"]       = "CFavoriCCAM favoris_user";
+    $backRefs["favoris_CIM10"]      = "CFavoricim10 favoris_user";
     $backRefs["permissions_module"] = "CPermModule user_id";
-    $backRefs["permissions_objet"] = "CPermObject user_id";
-    $backRefs["logs"] = "CUserLog user_id";
+    $backRefs["permissions_objet"]  = "CPermObject user_id";
+    $backRefs["logs"]               = "CUserLog user_id";
+    $backRefs["profiled_users"]     = "CUser profile_id";
     return $backRefs;
   }
 

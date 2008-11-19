@@ -85,6 +85,8 @@ class CPrescription extends CMbObject {
     $backRefs["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
     $backRefs["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
     $backRefs["perfusion"]                        = "CPerfusion prescription_id";
+		$backRefs["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
+		$backRefs["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
     return $backRefs;
   }
   
