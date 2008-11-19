@@ -6,6 +6,7 @@ var bAutoSelectSpans = {{if $templateManager->valueMode}} false {{else}} true {{
 sMbPath = "../../../";
 sMbPluginsPath = sMbPath + "modules/dPcompteRendu/fcke_plugins/" ;
 FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$version.build}}";
+FCKConfig.EnterMode = 'br';
 FCKConfig.Debug = false;
 
 {{if $templateManager->printMode}}
