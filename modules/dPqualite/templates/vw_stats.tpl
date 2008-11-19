@@ -154,9 +154,10 @@ var filterForm = null;
   
   <button type="submit" class="search">Filtrer</button>
 
-  <div id="stats" style="width: 600px; height: 300px; margin: auto;"></div>
-  
-  <button onclick="graph.downloadCSV()" type="button" class="submit">Fichier CSV</button>
-  <button onclick="graph.selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
+  <div style="text-align: center;">
+    <div id="stats" style="width: 600px; height: 300px; margin: auto;"></div>
+    <button onclick="graph.downloadCSV()" type="button" class="submit">Fichier CSV</button>
+    <button onclick="graph.selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
+  </div>
 </form>
 
