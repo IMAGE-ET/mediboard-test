@@ -38,16 +38,17 @@ $where = array();
 $ljoin = array();
 
 $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
+$ljoin["perfusion"] = "perfusion.prescription_id = prescription.prescription_id";
 $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
 	
 $where["prescription.type"] = " = 'sejour'";
 if($valide_pharma == 0){
-  $where["valide_pharma"] = " = '0'";
+  $where[] = "prescription_line_medicament.valide_pharma != '1' OR perfusion.signature_pharma != '1'";
 }
 
 // Filtre sur le praticiens (lignes)
 if($praticien_id){
-	$where["prescription_line_medicament.praticien_id"] = " = '$praticien_id'";
+	$where[] = " prescription_line_medicament.praticien_id = '$praticien_id' OR perfusion.praticien_id = '$praticien_id'";
 }
 
 // Filtre sur le service, date des affectations

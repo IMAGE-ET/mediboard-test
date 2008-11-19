@@ -40,14 +40,16 @@ if($type == "sejour" || $type == "sortie_manquante"){
 }
 
 if($signee == "0"){
-$where[] = "(prescription_line_element.praticien_id = '$praticien_id' AND prescription_line_element.signee = '$signee') 
-						OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee = '$signee')";
+$where[] = "(prescription_line_element.praticien_id = '$praticien_id' AND prescription_line_element.signee != '1') 
+						OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee != '1')
+            OR (perfusion.praticien_id = '$praticien_id' AND perfusion.signature_prat != '1')";
 } else {
   $where[] = "(prescription_line_element.praticien_id = '$praticien_id') OR (prescription_line_medicament.praticien_id = '$praticien_id')";
 }
 
 $ljoin["prescription_line_element"] = "prescription_line_element.prescription_id = prescription.prescription_id";
 $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
+$ljoin["perfusion"] = "perfusion.prescription_id = prescription.prescription_id";
 
 $prescriptions = array();
 $prescription = new CPrescription();
