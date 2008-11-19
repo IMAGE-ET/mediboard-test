@@ -1224,18 +1224,17 @@ class CMbObject {
    *  @return the first 100 records which fits the keywords
    */
   function seek($keywords, $where = array(), $limit = 100) {
-    $sql = "SELECT * FROM `{$this->_spec->table}` WHERE ";
+    $sql = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
     
     if ($where && count($where)) {
 	    foreach ($where as $col => $value) {
-	    	$sql .= "$col $value AND ";
+	    	$sql .= " AND $col $value";
 	    }
     }
-    else $sql .= '1 AND';
     
     if(count($keywords) and count($this->_seek)) {
       foreach($keywords as $key) {
-        $sql .= "\n (0";
+        $sql .= "\nAND (0";
         foreach($this->_seek as $keySeek => $spec) {
           $listSpec = explode('|', $spec);
           switch($listSpec[0]) {
