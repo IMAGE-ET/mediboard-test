@@ -33,6 +33,25 @@
     </td>
   </tr>  
     
+  {{assign var="var" value="soap_url"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td class="text">
+      <input type="text" class="url" size="50" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/>
+      {{$soap_path}}
+      <br/>
+      <div class="big-info">
+        L'URL du serveur est prise par défaut, mais il est permis de fournir une URL spécifique pour les services web.
+        <br/>Actuellement l'<strong>URL utilisée pour les services web</strong> est :
+        <pre>{{$soap_url}}</pre>
+      </div>
+    </td>
+  </tr>  
+
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

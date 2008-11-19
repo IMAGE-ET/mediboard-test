@@ -25,6 +25,7 @@ $idCDIV->loadLatestFor($etab,"Imeds cdiv");
 $idCIDC = new CIdSante400();
 $idCIDC->loadLatestFor($etab, "Imeds cidc");
 
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -33,6 +34,8 @@ $smarty->assign("idCDIV", $idCDIV);
 $smarty->assign("idCIDC", $idCIDC);
 $smarty->assign("etab",   $etab);
 $smarty->assign("today",  $today);
+$smarty->assign("soap_path", CImeds::$soap_path);
+$smarty->assign("soap_url" , CImeds::getSoapUrl());
 
 $smarty->display("configure.tpl");
 

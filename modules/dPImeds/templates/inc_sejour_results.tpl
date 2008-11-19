@@ -2,6 +2,8 @@
 {{include file=inc_nourl_notices.tpl}}
 {{else}}
 
+<script type="text/javascript">
+
 Main.add(function() {
   var oForm = document.Imeds_sejour_form;
   oForm.submit();

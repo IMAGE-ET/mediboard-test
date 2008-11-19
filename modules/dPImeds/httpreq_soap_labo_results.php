@@ -14,29 +14,13 @@ $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
 // Chargement de l'etablissement courant
 $etab = CGroups::loadCurrent();
 
-// Chargement des id400 de l'etablissement courant
-$idCSDV = new CIdSante400();
-$idCSDV->loadLatestFor($etab, "Imeds csdv");
-
-$idCDIV = new CIdSante400();
-$idCDIV->loadLatestFor($etab,"Imeds cdiv");
-
-$idCIDC = new CIdSante400();
-$idCIDC->loadLatestFor($etab, "Imeds cidc");
-
 $results = array();
-
-if (CAppUI::conf("dPImeds url") != '') {
-	$urlImeds = parse_url(CAppUI::conf("dPImeds url"));
-	$urlImeds['path'] = "/dllimeds/webimeddll.asmx";
-	$serviceAdresse = make_url($urlImeds);
-  
-	mbDump($serviceAdresse, "SOAP URL");
-	
+if (null != $soap_url = CImeds::getSoapUrl()) {	
+  $ids = CImeds::getIdentifiants();
   $requestParams = array (
-    "strIDC"           => "$idCIDC->id400",
-    "strDIV"           => "$idCSDV->id400",
-    "strSDV"           => "$idCSDV->id400",
+    "strIDC"           => $ids["cidc"],
+    "strDIV"           => $ids["cdiv"],
+    "strSDV"           => $ids["csdv"],
     "dateDebutPeriode" => $date_debut,
     "dateFinPeriode"   => $date_fin,
     "listeNumSejours"  => $list_sejours,
@@ -44,16 +28,11 @@ if (CAppUI::conf("dPImeds url") != '') {
     "PWD"              => ""
   );
     
-	mbDump($requestParams, "SOAP Params"); 
-	
-	$soap_url = CImeds::getSoapUrl();
-	
-    
-  if (!url_exists($serviceAdresse)) {
-    CAppUI::stepAjax("Serveur IMeds inatteignable à l'addresse : $serviceAdresse", UI_MSG_ERROR);
+  if (!url_exists($soap_url)) {
+    CAppUI::stepAjax("Serveur IMeds inatteignable à l'addresse : $soap_url", UI_MSG_ERROR);
   }
   
-  $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
+  $client = new SoapClient($soap_url."?WSDL", array('exceptions' => 0));
     
   $results = $client->GetInfoLabo($requestParams);
   $countResults = $results->GetInfoLaboResult;

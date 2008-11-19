@@ -10,6 +10,7 @@
 class CImeds {
   
   static $soap_path = "/dllimeds/webimeddll.asmx";
+  
   /**
    * Url du dossier altéré par le protocole en cours
    * @return string Url
@@ -40,50 +41,54 @@ class CImeds {
    * @return string Url
    */
   static function getSoapUrl() {
-    if (null == $url = CAppUI::conf("dPImeds soap_url")) {
-      $url = CAppUI::conf("dPImeds url");
+    $url = null;
+    
+    // Url spécifique
+    if ($url = CAppUI::conf("dPImeds soap_url")) {
+      $url .= CImeds::$soap_path;
     }
     
-    if (!$url) {
-    	return;
+    // URL du serveur
+    elseif ($url = CAppUI::conf("dPImeds url")) {
+		  $parsed = parse_url($url);
+		  $parsed['path'] = CImeds::$soap_path;
+		  $url = make_url($parsed);
     }
-    
-	  $urlImeds = parse_url($url);
-	  $urlImeds['path'] = CImeds::$soap_path;
-	  $serviceAdresse = make_url($urlImeds);
+
+	  return $url;
   }
   
   /**
    * Identifiants Imeds
    * @return array
    */
-  static function getIdentifiants() {
-		$idImeds = array();
-		
+  static function getIdentifiants() {		
+    $ids = array();
+    
 		// Chargement des id externes
 		$etablissement = CGroups::loadCurrent();
 		
 		$id400 = new CIdSante400;
 		$id400->loadLatestFor($etablissement, "Imeds cidc");
-		$idImeds["cidc"] = $id400->id400;
+		$ids["cidc"] = $id400->id400;
 		$id400 = new CIdSante400;
 		$id400->loadLatestFor($etablissement, "Imeds cdiv");
-		$idImeds["cdiv"] = $id400->id400;
+		$ids["cdiv"] = $id400->id400;
 		$id400 = new CIdSante400;
 		$id400->loadLatestFor($etablissement, "Imeds csdv");
-		$idImeds["csdv"] = $id400->id400;
+		$ids["csdv"] = $id400->id400;
 		
 		// Chargement des id externes du user courant
     global $AppUI;
 
     $id400 = new CIdSante400();
 		$id400->loadLatestFor($AppUI->_ref_user, "Imeds_login");
-		$idImeds["login"] = $id400->id400;
+	  $ids["login"] = $id400->id400;
 		$id400 = new CIdSante400();
 		$id400->loadLatestFor($AppUI->_ref_user, "Imeds_password");
-		$idImeds["password"] = md5($id400->id400);
+		$ids["password"] = md5($id400->id400);
 		
-		return $idImeds;
+		return $ids;
   }
 }
 ?>

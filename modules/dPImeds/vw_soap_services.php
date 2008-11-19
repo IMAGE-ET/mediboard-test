@@ -7,16 +7,16 @@
 * @author Romain Ollivier
 */
 
-$urlImeds = parse_url(CAppUI::conf("dPImeds url"));
-$urlImeds['path'] = "/dllimeds/webimeddll.asmx";
-$serviceAdresse = make_url($urlImeds);
+global $can;
+$can->needsRead();
 
-if (!url_exists($serviceAdresse)) {
+$soap_url = CImeds::getSoapUrl();
+if (!url_exists($soap_url)) {
   CAppUI::stepMessage(UI_MSG_ERROR, "Serveur IMeds inatteignable à l'addresse : $serviceAdresse");
   return;
 }
 
-$client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
+$client = new SoapClient($soap_url."?WSDL", array('exceptions' => 0));
 $functions = $client->__getFunctions();
 
 // Création du template
