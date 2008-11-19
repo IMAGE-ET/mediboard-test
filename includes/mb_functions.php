@@ -636,16 +636,11 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
   // Flotr
-  if(is_file("lib/flotr-svn/flotr.js")) {
-    $affichageScript .= mbLoadScript("lib/flotr-svn/flotr.js", $modeReturn);
-    $affichageScript .= mbLoadScript("lib/flotr-svn/lib/excanvas.js", $modeReturn, 'IE'); // for IE
-    $affichageScript .= mbLoadScript("lib/flotr-svn/lib/base64.js", $modeReturn);
-    $affichageScript .= mbLoadScript("lib/flotr-svn/lib/canvas2image.js", $modeReturn);
-    $affichageScript .= mbLoadScript("lib/flotr-svn/lib/canvastext.js", $modeReturn);
-  } else {
-    $affichageScript .= mbLoadScript("lib/flotr/flotr/flotr.debug-0.1.0alpha.js", $modeReturn);
-    $affichageScript .= mbLoadScript("lib/flotr/flotr/lib/excanvas.js", $modeReturn); // for IE
-  }
+  $affichageScript .= mbLoadScript("lib/flotr/flotr.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr/lib/excanvas.js", $modeReturn, 'IE'); // for IE
+  $affichageScript .= mbLoadScript("lib/flotr/lib/base64.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr/lib/canvas2image.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr/lib/canvastext.js", $modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);

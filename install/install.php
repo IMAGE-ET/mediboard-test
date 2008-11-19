@@ -276,16 +276,15 @@ $library->targetDir = "control_suite";
 
 CLibrary::$all[$library->name] = $library;
 
-/*$library = new CLibrary;
+$library = new CLibrary;
 $library->name = "Flotr plotting library";
 $library->url = "http://solutoire.com/flotr/";
-$library->fileName = "flotr-0.1.0alpha.tar.gz";
+$library->fileName = "flotr.r53.tar.gz";
 $library->description = "Création de graphiques en JS";
-$library->sourceDir = "flotr-0.1.0alpha";
+$library->sourceDir = "flotr";
 $library->targetDir = "flotr";
 
 CLibrary::$all[$library->name] = $library;
-*/
 ?>
 
 <?php showHeader(); ?>
