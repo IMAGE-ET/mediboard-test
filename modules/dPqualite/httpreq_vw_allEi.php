@@ -7,21 +7,20 @@
 * @author Sébastien Fillonneau
 */
 
-global $can, $m;
-
+global $can;
 $can->needsAdmin();
-$ds = CSQLDataSource::get("std");
-$allEi_user_id   = mbGetValueFromGetOrSession("allEi_user_id",null);
+
+$allEi_user_id   = mbGetValueFromGetOrSession("allEi_user_id", null);
 
 $listUsersTermine = new CMediusers;
 $listUsersTermine = $listUsersTermine->loadListFromType();
 
 $where_allei = array();
 if($allEi_user_id){
-  $where_allei["user_id"] = $ds->prepare("= %",$allEi_user_id);
+  $where_allei["fiches_ei.user_id"] = "= '$allEi_user_id'";
 }
 
-$listeFiches = CFicheEi::loadFichesEtat("ALL_TERM",null,$where_allei);
+$listeFiches = CFicheEi::loadFichesEtat("ALL_TERM", null, $where_allei);
 
 // Création du template
 $smarty = new CSmartyDP();

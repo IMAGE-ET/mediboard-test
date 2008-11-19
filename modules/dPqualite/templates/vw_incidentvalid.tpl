@@ -1,10 +1,4 @@
 <script language="Javascript" type="text/javascript">
-{{if $can->edit}}
-function writeHeader(iId, sValue){
-  $(iId).innerHTML = sValue;
-}
-{{/if}}
-
 {{if $can->admin}}
 function search_AllEI(){
   var oForm = document.EiALL_TERM;
@@ -45,6 +39,9 @@ function printIncident(ficheId){
   return;
 }
 
+Main.add(function() {
+  Control.Tabs.create('tab-incident', true);
+});
 </script>
 
 {{assign var="listeFichesTitle" value=""}}
@@ -52,11 +49,6 @@ function printIncident(ficheId){
 <table class="main">
   <tr>
     <td class="halfPane">
-      
-    	<script type="text/javascript">
-    		Main.add(function() { Control.Tabs.create('tab-incident', true) } );
-    	</script>
-
       <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin && $can->edit}}
         <li><a href="#CSATraiter">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
@@ -86,52 +78,39 @@ function printIncident(ficheId){
       
       {{if !$can->admin && $can->edit}}
       <div id="CSATraiter" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ATT_CS}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_CS}}
       </div>
       <div id="CSEnCours" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_QUALITE}}
       </div>
       <div id="CSAllEIHeader" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ALL_TERM}}
       </div>
       {{elseif $can->admin}}
       <div id="QualNewFiches" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.VALID_FICHE}}
       </div>
       <div id="QualAttCS" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ATT_CS}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_CS}}
       </div>
       <div id="QualValidMesures" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_QUALITE}}
       </div>
       <div id="QualVerif" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ATT_VERIF}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_VERIF}}
       </div>
       <div id="QualCtrl" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ATT_CTRL}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_CTRL}}
       </div>
       <div id="QualAllEI" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
-        {{assign var="voletAcc" value="ALL_TERM"}}
-        {{include file="inc_ei_liste.tpl"}}
-        {{assign var="voletAcc" value=""}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ALL_TERM voletAcc="ALL_TERM"}}
       </div>
       <div id="QualAnnuleEI" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.ANNULE}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ANNULE}}
       </div>
       {{/if}}
       <div id="QualMyEI" style="display: none;">
-        {{assign var="listeFiches" value=$listFiches.AUTHOR}}
-        {{include file="inc_ei_liste.tpl"}}
+        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.AUTHOR}}
       </div>
     </td>
     

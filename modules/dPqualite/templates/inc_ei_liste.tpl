@@ -75,7 +75,7 @@
 </form>
 {{/if}}
 {{if $reloadAjax}}
-<script language="Javascript" type="text/javascript">
-writeHeader("QualAllEIHeader", "{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listeFiches|@count}})");
+<script type="text/javascript">
+  $("QualAllEIHeader").update("{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listeFiches|@count}})");
 </script>
 {{/if}}

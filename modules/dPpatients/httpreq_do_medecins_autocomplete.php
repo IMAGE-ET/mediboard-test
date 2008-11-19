@@ -7,13 +7,14 @@
 * @author Fabien Ménager
 */
 
-global $can;
+global $can, $AppUI;
 
-$keywords = @$_GET[$_GET["keywords_field"]];
+$keywords = mbGetValueFromPost("_view");
 
 if($can->read && $keywords) {
   $medecin = new CMedecin();
-  $matches = $medecin->seek(explode(' ', $keywords), 30);
+  $default_cp = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
+  $matches = $medecin->seek(explode(' ', $keywords), array('cp' => "LIKE '".$default_cp."___'"), 30);
   
   // Création du template
   $smarty = new CSmartyDP();

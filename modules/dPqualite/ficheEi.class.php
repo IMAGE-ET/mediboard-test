@@ -142,8 +142,8 @@ class CFicheEi extends CMbObject {
   }
     
   function updateFormFields() {
-    global $AppUI;
     parent::updateFormFields();
+    
     if($this->date_incident){
       $this->_incident_heure = substr($this->date_incident, 11, 2);
       $this->_incident_min   = substr($this->date_incident, 14, 2);

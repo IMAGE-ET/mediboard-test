@@ -12,12 +12,10 @@ Medecin = {
   
   del: function(form) {
     if (confirm("Voulez vous vraiment supprimer ce médecin ?")) {
-      if (form.medecin_traitant) {
+      if (form.medecin_traitant)
         $V(form.medecin_traitant, '');
-      }
-      else {
+      else
         $V(form.del, 1);
-      }
     }
   },
   
@@ -34,8 +32,25 @@ submitMedecin = function(form) {
 
 {{if $patient && $patient->_id}}
 Main.add(function () {
-  initMedecinAutocomplete("correspondant-new-{{$patient->_id}}", "_view");
-  initMedecinAutocomplete("traitant-edit-{{$patient->_id}}", "_view");
+  var formCorresp = getForm("correspondant-new-{{$patient->_id}}");
+  urlCorresp = new Url();
+  urlCorresp.setModuleAction("dPpatients", "httpreq_do_medecins_autocomplete");
+  urlCorresp.autoComplete(formCorresp._view, formCorresp._view.id+'_autocomplete', {
+    minChars: 2,
+    updateElement : function(element) {
+      $V(formCorresp.medecin_id, element.id.split('-')[1]);
+    }
+  });
+  
+  var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
+  urlTraitant = new Url();
+  urlTraitant.setModuleAction("dPpatients", "httpreq_do_medecins_autocomplete");
+  urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
+    minChars: 2,
+    updateElement : function(element) {
+      $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
+    }
+  });
 });
 {{/if}}
 </script>
@@ -54,7 +69,7 @@ Main.add(function () {
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <input type="hidden" name="medecin_traitant" value="{{$patient->medecin_traitant}}" onchange="this.form.onsubmit()" />
         Dr <input type="text" name="_view" size="30" value="{{$patient->_ref_medecin_traitant->_view}}" ondblclick="Medecin.edit(this.form)" />
-        <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display:none;" class="autocomplete"></div>
+        <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
         <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
@@ -89,7 +104,7 @@ Main.add(function () {
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <input type="hidden" name="medecin_id" value="" onchange="this.form.onsubmit()" />
         Dr <input type="text" name="_view" size="30" value="" ondblclick="Medecin.edit(this.form)" />
-        <div id="correspondant-new-{{$patient->_id}}__view_autocomplete" style="display:none;" class="autocomplete"></div>
+        <div id="correspondant-new-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
         <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
       </form>
     </td>
