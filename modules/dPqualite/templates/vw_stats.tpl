@@ -34,11 +34,12 @@ function toggleEvt(catId, val, forceTo) {
   refreshEvtCounts();
 }
 
+var graph;
 Main.add(function () {
   filterForm = getForm('stats-filter');
 
   // Let's draw the graph
-  var graph = Flotr.draw(
+  graph = Flotr.draw(
     $('stats'),
     series, Object.extend({
       bars: {show:true, barWidth:0.5, stacked:true, fillOpacity: 0.6},
@@ -154,5 +155,8 @@ var filterForm = null;
   <button type="submit" class="search">Filtrer</button>
 
   <div id="stats" style="width: 600px; height: 300px; margin: auto;"></div>
+  
+  <button onclick="graph.downloadCSV()" type="button" class="submit">Fichier CSV</button>
+  <button onclick="graph.selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
 </form>
 
