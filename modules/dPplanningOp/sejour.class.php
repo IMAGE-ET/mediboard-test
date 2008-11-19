@@ -343,17 +343,20 @@ class CSejour extends CCodable {
   }
     
   function store() {
+    global $AppUI;
     
     // Vérification de la validité des codes CIM
     if($this->DP != null) {
       $dp = new CCodeCIM10($this->DP, 1);
       if(!$dp->exist) {
+        $AppUI->setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         $this->DP = "";
       }
     }
     if($this->DR != null) {
       $dr = new CCodeCIM10($this->DR, 1);
       if(!$dr->exist) {
+        $AppUI->setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         $this->DR = "";
       }
     }
