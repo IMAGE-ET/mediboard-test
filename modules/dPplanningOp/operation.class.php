@@ -209,6 +209,7 @@ class COperation extends CCodable {
 	  $backRefs["prescription_comments"]    = "CPrescriptionLineComment operation_id";
 	  $backRefs["prescription_elements"]    = "CPrescriptionLineElement operation_id";
 	  $backRefs["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
+	  $backRefs["perfusion"]                = "CPerfusion operation_id";
 	  return $backRefs;
 	}
 
