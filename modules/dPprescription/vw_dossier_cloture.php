@@ -25,6 +25,13 @@ $lines_elt = array();
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElementByCat();
 
+// Chargement des perfusions
+$prescription->loadRefsPerfusions();
+foreach($prescription->_ref_perfusions as $_perfusion){
+  $_perfusion->loadRefsLines();  
+  $dossier[$_perfusion->date_debut]["perfusion"][$_perfusion->_id] = $_perfusion;
+}
+
 // Chargement de toutes les transmissions du sejour
 $sejour->loadRefsTransmissions();
 foreach($sejour->_ref_transmissions as &$_transmission){

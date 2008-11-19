@@ -27,6 +27,8 @@
       <strong>
         {{if $chap == "medicament"}}
           Médicament
+        {{elseif $chap == "perfusion"}}
+          Perfusions
         {{else}}
           {{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}
         {{/if}}
@@ -34,31 +36,49 @@
     </td>
   </tr>
     {{foreach from=$lines key=line_id item=administrations}}
-      {{if $chap == "medicament"}}
-        {{assign var=line value=$lines_med.$line_id}}
-      {{else}}
-        {{assign var=line value=$lines_elt.$line_id}}
-      {{/if}}
-      <tr>
-        <td>
-          {{$line->_view}}
-        </td>
-        <td>  
-          {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
-            {{$quantite}} 
-            {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-              {{$line->_ref_produit->libelle_unite_presentation}}
-            {{else}}
-              {{$line->_unite_prise}}
-            {{/if}}: 
-            {{foreach from=$_administrations_by_quantite item=_administration}}
-            {{$_administration->dateTime|date_format:"%Hh%M"}}
-            {{/foreach}}
-            <br />
+      {{if $chap == "perfusion"}}
+        {{assign var=_perfusion value=$administrations}}
+        <tr>
+          <td class="text">
+              {{$_perfusion->_view}}
+              {{if $_perfusion->duree}} pendant {{$_perfusion->duree}} heures{{/if}}
+              {{if $_perfusion->time_debut}} à partir de {{mb_value object=$_perfusion field="time_debut"}}{{/if}} 
+          </td>
+          <td>
+          <ul>
+          {{foreach from=$_perfusion->_ref_lines item=_line_med}}
+            <li>{{$_line_med->_view}}</li>
           {{/foreach}}
-        </td>  
+          </ul>
+          </td>
         </tr>
-    {{/foreach}} 
+      {{else}}
+	      {{if $chap == "medicament"}}
+	        {{assign var=line value=$lines_med.$line_id}}
+	      {{else}}
+	        {{assign var=line value=$lines_elt.$line_id}}
+	      {{/if}}
+	      <tr>
+	        <td>
+	          {{$line->_view}}
+	        </td>
+	        <td>  
+	          {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
+	            {{$quantite}} 
+	            {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	              {{$line->_ref_produit->libelle_unite_presentation}}
+	            {{else}}
+	              {{$line->_unite_prise}}
+	            {{/if}}: 
+	            {{foreach from=$_administrations_by_quantite item=_administration}}
+	            {{$_administration->dateTime|date_format:"%Hh%M"}}
+	            {{/foreach}}
+	            <br />
+	          {{/foreach}}
+	        </td>  
+	        </tr>
+      {{/if}}  
+    {{/foreach}}
   {{/foreach}}
 {{/foreach}}
 </table>
