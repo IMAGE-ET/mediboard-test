@@ -1223,7 +1223,7 @@ class CMbObject {
    *  Generic seek method
    *  @return the first 100 records which fits the keywords
    */
-  function seek($keywords, $where, $limit = 100) {
+  function seek($keywords, $where = array(), $limit = 100) {
     $sql = "SELECT * FROM `{$this->_spec->table}` WHERE ";
     
     if ($where && count($where)) {
