@@ -1,19 +1,36 @@
-{{if $voletAcc}}
-<form name="Ei{{$voletAcc}}" action="?m={{$m}}">
+<script type="text/javascript">
+  Main.add(function() {
+    var list = $("tab-incident").select('a[href="#{{$type}}"] span');
+    list.last().update("{{$countFiches}}");
+  });
+</script>
+
+{{if $countFiches > 20}}
+<div style="text-align: right;">
+  {{if $first >= 20}}
+  <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first-20}}')" style="font-weight: bold; font-size: 1.5em; float: left;">&lt;&lt;</a>
+  {{/if}}
+  {{if $first < $countFiches - 20}}
+  <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first+20}}')" style="font-weight: bold; font-size: 1.5em;">&gt;&gt;</a>
+  {{/if}}
+</div>
 {{/if}}
-<table class="tbl" id="ei_liste">
+
+<table class="tbl" style="clear: both;">
   <tr>
     <th class="category">{{tr}}Date{{/tr}}</th>
     <th class="category">
-      {{if $voletAcc=="ALL_TERM"}}
-        <select name="allEi_user_id" onchange="search_AllEI()">
-        <option value="">&mdash; {{tr}}_CFicheEi_allusers{{/tr}}</option>
-        {{foreach from=$listUsersTermine item=curr_user}}        
-          <option value="{{$curr_user->user_id}}"{{if $curr_user->user_id==$allEi_user_id}} selected="selected"{{/if}}>
-            {{$curr_user->_view}}
-          </option>
-        {{/foreach}}
-        </select>
+      {{if $type=="ALL_TERM" && $can->admin}}
+        <form name="Ei{{$type}}" action="?m={{$m}}">
+          <select name="user_id" onchange="search_AllEI(this)">
+          <option value="">&mdash; {{tr}}_CFicheEi_allusers{{/tr}}</option>
+          {{foreach from=$listUsersTermine item=curr_user}}
+            <option value="{{$curr_user->user_id}}"{{if $curr_user->user_id==$selected_user_id}} selected="selected"{{/if}}>
+              {{$curr_user->_view}}
+            </option>
+          {{/foreach}}
+          </select>
+        </form>
       {{else}}
         {{tr}}CFicheEi-user_id-court{{/tr}}
       {{/if}}
@@ -24,7 +41,6 @@
     <th class="category">{{tr}}CFicheEi-qualite_date_verification-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-qualite_date_controle-court{{/tr}}</th>
   </tr>
-  {{if $listeFiches|@count}}
   {{foreach from=$listeFiches item=currFiche}}
   <tr>
     <td class="text">
@@ -63,19 +79,9 @@
       {{else}}-{{/if}}
     </td>
   </tr>
-  {{/foreach}}
-  
-  {{else}}
+  {{foreachelse}}
   <tr>
     <td colspan="7">{{tr}}CFicheEi.none{{/tr}}</td>
   </tr>
-  {{/if}}
+  {{/foreach}}
 </table>
-{{if $voletAcc}}
-</form>
-{{/if}}
-{{if $reloadAjax}}
-<script type="text/javascript">
-  $("QualAllEIHeader").update("{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listeFiches|@count}})");
-</script>
-{{/if}}

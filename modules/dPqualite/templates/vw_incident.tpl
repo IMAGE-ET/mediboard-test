@@ -114,12 +114,8 @@ Main.add(function () {
             {{html_options options=$fiche->_enumsTrans.type_incident selected=$fiche->type_incident}}
             </select>
           </td>
-          <th><label for="_incident_date" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}">{{tr}}CFicheEi-date_incident{{/tr}}</label></th>
-          <td class="date">
-            <div id="FrmEI__incident_date_da">{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date|date_format:"%d/%m/%Y"}}{{else}}{{$datenow|date_format:"%d/%m/%Y"}}{{/if}}</div>
-            <input type="hidden" name="_incident_date" class="notNull date" value="{{if $fiche->fiche_ei_id}}{{$fiche->_incident_date}}{{else}}{{$datenow}}{{/if}}" />
-            <img id="FrmEI__incident_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-date_incident-desc{{/tr}}"/>
-         </td>
+          <th>{{mb_label object=$fiche field="_incident_date"}}</th>
+          <td class="date">{{mb_field object=$fiche field="_incident_date" form=FrmEI register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fiche field="elem_concerne"}}</th>
@@ -127,21 +123,10 @@ Main.add(function () {
             <select name="elem_concerne" class="{{$fiche->_props.elem_concerne}}">
             <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.elem_concerne selected=$fiche->elem_concerne}}
-            </select>            
+            </select>
           </td>
           <th>{{mb_label object=$fiche field="_incident_heure"}}</th>
-          <td>
-            <select name="_incident_heure">
-            {{foreach from=$heures|smarty:nodefaults item=curr_heure}}
-              <option value="{{$curr_heure}}"{{if (!$fiche->fiche_ei_id && $curr_heure==$heurenow) || ($fiche->fiche_ei_id && $curr_heure==$fiche->_incident_heure)}}selected="selected"{{/if}}>{{$curr_heure}}</option>
-            {{/foreach}}
-            </select> h
-            <select name="_incident_min">
-            {{foreach from=$mins|smarty:nodefaults item=minute}}
-              <option value="{{$minute}}"{{if (!$fiche->fiche_ei_id && $minute==$minnow) || ($fiche->fiche_ei_id && $minute==$fiche->_incident_min)}}selected="selected"{{/if}}>{{$minute}}</option>
-            {{/foreach}}
-            </select> min
-          </td>
+          <td>{{mb_field object=$fiche field="_incident_heure" form=FrmEI}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fiche field="elem_concerne_detail"}}</th>

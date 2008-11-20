@@ -58,7 +58,6 @@ class CFicheEi extends CMbObject {
   // Form fields
   var $_incident_date       = null;
   var $_incident_heure      = null;
-  var $_incident_min        = null;
   var $_ref_evenement       = null;
   var $_ref_items           = null;
   var $_etat_actuel         = null;
@@ -72,49 +71,52 @@ class CFicheEi extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "user_id"                      => "notNull ref class|CMediusers",    
-      "date_fiche"                   => "notNull dateTime",
-      "date_incident"                => "notNull dateTime",
-      "evenements"                   => "notNull str maxLength|255",
-      "lieu"                         => "notNull str maxLength|50",
-      "type_incident"                => "notNull enum list|inc|ris",
-      "elem_concerne"                => "notNull enum list|pat|vis|pers|med|mat",
-      "elem_concerne_detail"         => "notNull text",
-      "autre"                        => "text",
-      "descr_faits"                  => "notNull text",
-      "mesures"                      => "notNull text",
-      "descr_consequences"           => "notNull text",
-      "suite_even"                   => "notNull enum list|trans|plong|deces|autre",
-      "suite_even_descr"             => "text",
-      "deja_survenu"                 => "enum list|non|oui",
-      //Prise en charge de la fiche
-      "degre_urgence"                => "enum list|1|2|3|4",
-      "gravite"                      => "enum list|1|2|3|4|5",
-      "vraissemblance"               => "enum list|1|2|3|4|5",
-      "plainte"                      => "enum list|non|oui",
-      "commission"                   => "enum list|non|oui",
-      "annulee"                      => "bool",
-      "remarques"                    => "text",
-      //1ere Validation Qualité
-      "valid_user_id"                => "ref class|CMediusers",
-      "date_validation"              => "dateTime",
-      //Validation Chef de Projet
-      "service_valid_user_id"        => "ref class|CMediusers",
-      "service_date_validation"      => "dateTime",
-      "service_actions"              => "text",
-      "service_descr_consequences"   => "text",
-      //2nde Validation Qualité
-      "qualite_user_id"              => "ref class|CMediusers",
-      "qualite_date_validation"      => "dateTime",
-      "qualite_date_verification"    => "date",
-      "qualite_date_controle"        => "date",
-      // Form fields
-      "_incident_heure"              => "num",
-      "_incident_min"                => "num"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["user_id"]                    = "notNull ref class|CMediusers";    
+    $specs["date_fiche"]                 = "notNull dateTime";
+    $specs["date_incident"]              = "notNull dateTime";
+    $specs["evenements"]                 = "notNull str maxLength|255";
+    $specs["lieu"]                       = "notNull str maxLength|50";
+    $specs["type_incident"]              = "notNull enum list|inc|ris";
+    $specs["elem_concerne"]              = "notNull enum list|pat|vis|pers|med|mat";
+    $specs["elem_concerne_detail"]       = "notNull text";
+    $specs["autre"]                      = "text";
+    $specs["descr_faits"]                = "notNull text";
+    $specs["mesures"]                    = "notNull text";
+    $specs["descr_consequences"]         = "notNull text";
+    $specs["suite_even"]                 = "notNull enum list|trans|plong|deces|autre";
+    $specs["suite_even_descr"]           = "text";
+    $specs["deja_survenu"]               = "enum list|non|oui";
+    
+    //Prise en charge de la fiche
+    $specs["degre_urgence"]              = "enum list|1|2|3|4";
+    $specs["gravite"]                    = "enum list|1|2|3|4|5";
+    $specs["vraissemblance"]             = "enum list|1|2|3|4|5";
+    $specs["plainte"]                    = "enum list|non|oui";
+    $specs["commission"]                 = "enum list|non|oui";
+    $specs["annulee"]                    = "bool";
+    $specs["remarques"]                  = "text";
+    
+    //1ere Validation Qualité
+    $specs["valid_user_id"]              = "ref class|CMediusers";
+    $specs["date_validation"]            = "dateTime";
+    
+    //Validation Chef de Projet
+    $specs["service_valid_user_id"]      = "ref class|CMediusers";
+    $specs["service_date_validation"]    = "dateTime";
+    $specs["service_actions"]            = "text";
+    $specs["service_descr_consequences"] = "text";
+    
+    //2nde Validation Qualité
+    $specs["qualite_user_id"]            = "ref class|CMediusers";
+    $specs["qualite_date_validation"]    = "dateTime";
+    $specs["qualite_date_verification"]  = "date";
+    $specs["qualite_date_controle"]      = "date";
+    
+    // Form fields
+    $specs["_incident_heure"]            = "notNull time";
+    $specs["_incident_date"]             = "notNull date";
+    return $specs;
   }
   
   function loadRefsAuthor(){
@@ -145,12 +147,12 @@ class CFicheEi extends CMbObject {
     parent::updateFormFields();
     
     if($this->date_incident){
-      $this->_incident_heure = substr($this->date_incident, 11, 2);
-      $this->_incident_min   = substr($this->date_incident, 14, 2);
-      $this->_incident_date  = substr($this->date_incident, 0, 4)."-".substr($this->date_incident, 5, 2)."-".substr($this->date_incident, 8, 2);
+      $this->_incident_heure = substr($this->date_incident, 11, 5);
+      $this->_incident_date  = substr($this->date_incident, 0, 10);
     }
+    
     if($this->evenements){
-      $this->_ref_evenement = explode("|", $this->evenements);
+      $this->_ref_evenement = explode('|', $this->evenements);
     }
     
     if($this->qualite_date_controle) {
@@ -166,6 +168,7 @@ class CFicheEi extends CMbObject {
     } else {
       $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_CTRL");
     }
+    
     // Calcul de la criticité
     if($this->gravite && $this->vraissemblance) {
       $tabCriticite = array(
@@ -177,7 +180,8 @@ class CFicheEi extends CMbObject {
       );
       $this->_criticite = $tabCriticite[$this->gravite][$this->vraissemblance];
     }
-    $this->_view = str_pad($this->fiche_ei_id, 3, "0", STR_PAD_LEFT). " - ".substr($this->date_fiche,8,2)."/".substr($this->date_fiche,5,2)."/".substr($this->date_fiche,0,4);
+    
+    $this->_view = sprintf("%03d - %s", $this->fiche_ei_id, mbDateToLocale(substr($this->date_fiche, 0, 10)));
   }
   
   function loadRefItems() {
@@ -190,10 +194,8 @@ class CFicheEi extends CMbObject {
   }
   
   function updateDBFields() {
-    if($this->_incident_date!==null && $this->_incident_heure!==null && $this->_incident_min!=null){
-      $this->date_incident = $this->_incident_date." ";
-      $this->date_incident .= $this->_incident_heure .":";
-      $this->date_incident .= $this->_incident_min .":00";
+    if($this->_incident_date !== null && $this->_incident_heure !== null){
+      $this->date_incident = "$this->_incident_date $this->_incident_heure:00";
     }
   }
   
@@ -204,20 +206,21 @@ class CFicheEi extends CMbObject {
   /**
    * Load list overlay for current group
    */
-  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array(), $countOnly = false) {
 		$ljoin["users_mediboard"] = "users_mediboard.user_id = fiches_ei.user_id";
 		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filtre sur l'établissement
 		$g = CGroups::loadCurrent();
 		$where["functions_mediboard.group_id"] = "= '$g->_id'";
     
-    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+    return $countOnly ? 
+              $this->countList($where, null, $limit, $groupby, $ljoin) :
+              $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
-  function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0){
+  function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0, $countOnly = false, $first = 0){
     $where = array();
     $where["annulee"] = "= '$annule'";
-    $limit = null;
     
     switch ($etat) {
       case "AUTHOR":
@@ -230,14 +233,14 @@ class CFicheEi extends CMbObject {
         $where["fiches_ei.date_validation"]         = " IS NOT NULL";
         $where["fiches_ei.service_date_validation"] = " IS NULL";
         if($user_id){
-          $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
+          $where["fiches_ei.service_valid_user_id"] = "= '$user_id'";
         }
         break;
       case "ATT_QUALITE":
         $where["fiches_ei.service_date_validation"] = " IS NOT NULL";
         $where["fiches_ei.qualite_date_validation"] = " IS NULL";
         if($user_id){
-          $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
+          $where["fiches_ei.service_valid_user_id"] = "= '$user_id'";
         }
         break;
       case "ATT_VERIF":
@@ -250,29 +253,32 @@ class CFicheEi extends CMbObject {
         $where["fiches_ei.qualite_date_controle"]     = " IS NULL";
         break;
       case "ALL_TERM":
-        //
         if($user_id){
           $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
           $where["fiches_ei.qualite_date_validation"] = " IS NOT NULL";
         }else{
           if($where_termine){
-            $where = array_merge($where,$where_termine);
+            $where = array_merge($where, $where_termine);
           }
-          $where["fiches_ei.qualite_date_controle"]     = " IS NOT NULL";
+          $where["fiches_ei.qualite_date_controle"]   = " IS NOT NULL";
         }
-        $limit = "0, 100";
         break;
       case "ANNULE":
         $where["annulee"] = "= '1'";
         break;
     }
-    $order = "fiches_ei.date_incident DESC";
-    $listFiches = new CFicheEi;
-    $listFiches = $listFiches->loadGroupList($where,$order,$limit);
-    foreach($listFiches as $key=>$value){
-      $listFiches[$key]->loadRefsFwd();
+    $order = "fiches_ei.date_incident DESC, fiches_ei.fiche_ei_id DESC";
+    $listFiches = new CFicheEi();
+    if ($countOnly) {
+      return $listFiches->loadGroupList($where, null, null, null, null, true);
     }
-    return $listFiches;
+    else {
+      $listFiches = $listFiches->loadGroupList($where, $order, ($first+0).',20');
+      foreach($listFiches as &$fiche){
+        $fiche->loadRefsFwd();
+      }
+      return $listFiches;
+    }
   }
 }
 ?>

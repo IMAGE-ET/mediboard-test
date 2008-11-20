@@ -1,11 +1,13 @@
 <script language="Javascript" type="text/javascript">
 {{if $can->admin}}
-function search_AllEI(){
-  var oForm = document.EiALL_TERM;
+function search_AllEI(field){
+  var id = $V(field);
+  $("tab-incident").select('a[href="#ALL_TERM"] span.user')[0].update(field.options[field.selectedIndex].text);
+  
   var url = new Url;
   url.setModuleAction("dPqualite", "httpreq_vw_allEi");
-  url.addParam("allEi_user_id", oForm.allEi_user_id.value);
-  url.requestUpdate('QualAllEI');
+  url.addParam("user_id", id);
+  url.requestUpdate('ALL_TERM');
 }
 
 function annuleFiche(oForm,annulation){
@@ -31,6 +33,16 @@ function saveVerifControle(oForm){
 }
 {{/if}}
 
+function loadListFiches(type, first) {
+  if ($(type).empty() || first) {
+    var url = new Url;
+    url.setModuleAction("dPqualite", "httpreq_vw_allEi");
+    url.addParam("type", type);
+    url.addParam("first", first);
+    url.requestUpdate(type);
+  }
+}
+
 function printIncident(ficheId){
   var url = new Url;
   url.setModuleAction("dPqualite", "print_fiche"); 
@@ -40,83 +52,60 @@ function printIncident(ficheId){
 }
 
 Main.add(function() {
-  Control.Tabs.create('tab-incident', true);
+  var tab = Control.Tabs.create('tab-incident', true);
+  loadListFiches(tab.activeContainer.id);
 });
 </script>
 
-{{assign var="listeFichesTitle" value=""}}
-{{assign var="voletAcc" value=""}}
 <table class="main">
   <tr>
     <td class="halfPane">
       <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin && $can->edit}}
-        <li><a href="#CSATraiter">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
+        <li onclick="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#CSEnCours">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
+        <li onclick="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#CSAllEIHeader">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})</a></li>
+        <li onclick="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
         {{elseif $can->admin}}
-        <li><a href="#QualNewFiches">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})</a></li>
+        <li onclick="loadListFiches('VALID_FICHE')"><a href="#VALID_FICHE">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} (<span>{{$listCounts.VALID_FICHE}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#QualAttCS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
+        <li onclick="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#QualValidMesures">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
+        <li onclick="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#QualVerif">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})</a></li>
+        <li onclick="loadListFiches('ATT_VERIF')"><a href="#ATT_VERIF">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} (<span>{{$listCounts.ATT_VERIF}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#QualCtrl">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})</a></li>
+        <li onclick="loadListFiches('ATT_CTRL')"><a href="#ATT_CTRL">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} (<span>{{$listCounts.ATT_CTRL}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#QualAllEI">{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})</a></li>
+        <li onclick="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_allfiches{{/tr}} <span class="user">{{if $selectedUser->_id}}pour {{$selectedUser->_view}}{{/if}}</span> (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li><a href="#QualAnnuleEI">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})</a></li>
+        <li onclick="loadListFiches('ANNULE')"><a href="#ANNULE">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} (<span>{{$listCounts.ANNULE}}</span>)</a></li>
         {{/if}}
         <li class="linebreak"></li>
-        <li><a href="#QualMyEI">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} ({{$listFiches.AUTHOR|@count}})</a></li>
+        <li onclick="loadListFiches('AUTHOR')"><a href="#AUTHOR">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} (<span>{{$listCounts.AUTHOR}}</span>)</a></li>
       </ul>
       <hr class="control_tabs" />
       
       {{if !$can->admin && $can->edit}}
-      <div id="CSATraiter" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_CS}}
-      </div>
-      <div id="CSEnCours" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_QUALITE}}
-      </div>
-      <div id="CSAllEIHeader" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ALL_TERM}}
-      </div>
+        <div id="ATT_CS" style="display: none;"></div>
+        <div id="ATT_QUALITE" style="display: none;"></div>
+        <div id="ALL_TERM" style="display: none;"></div>
       {{elseif $can->admin}}
-      <div id="QualNewFiches" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.VALID_FICHE}}
-      </div>
-      <div id="QualAttCS" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_CS}}
-      </div>
-      <div id="QualValidMesures" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_QUALITE}}
-      </div>
-      <div id="QualVerif" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_VERIF}}
-      </div>
-      <div id="QualCtrl" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ATT_CTRL}}
-      </div>
-      <div id="QualAllEI" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ALL_TERM voletAcc="ALL_TERM"}}
-      </div>
-      <div id="QualAnnuleEI" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.ANNULE}}
-      </div>
+        <div id="VALID_FICHE" style="display: none;"></div>
+        <div id="ATT_CS" style="display: none;"></div>
+        <div id="ATT_QUALITE" style="display: none;"></div>
+        <div id="ATT_VERIF" style="display: none;"></div>
+        <div id="ATT_CTRL" style="display: none;"></div>
+        <div id="ALL_TERM" style="display: none;"></div>
+        <div id="ANNULE" style="display: none;"></div>
       {{/if}}
-      <div id="QualMyEI" style="display: none;">
-        {{include file="inc_ei_liste.tpl" listeFiches=$listFiches.AUTHOR}}
-      </div>
+      
+      <div id="AUTHOR" style="display: none;"></div>
     </td>
     
-    
     <td class="halfPane">
-    {{if $fiche->fiche_ei_id}}
+    {{if $fiche->_id}}
       <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_ficheEi_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
@@ -188,7 +177,7 @@ Main.add(function() {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <input type="hidden" name="valid_user_id" value="{{$user_id}}" />
+            <input type="hidden" name="valid_user_id" value="{{$app->user_id}}" />
             <button class="edit" type="button" onclick="window.location.href='?m={{$m}}&amp;tab=vw_incident&amp;fiche_ei_id={{$fiche->fiche_ei_id}}';">
               {{tr}}Edit{{/tr}}
             </button>
@@ -255,7 +244,7 @@ Main.add(function() {
 			    		Main.add(function() { Calendar.regField("ProcEditFrm", "qualite_date_controle"); } );
 			    	</script>
           
-            <input type="hidden" name="qualite_user_id" value="{{$user_id}}" />
+            <input type="hidden" name="qualite_user_id" value="{{$app->user_id}}" />
             <input type="hidden" name="qualite_date_controle" value="" />
             <button class="modify" type="submit">
               {{tr}}button-CFicheEi-valid{{/tr}}
