@@ -121,10 +121,7 @@ class CPermModule extends CMbObject {
 
     // Tri du tableau de droit final en fonction des cle (perm_module_id)
     ksort($permsFinal);
-    
-    
-    $listPermsModules = array();
-    
+
     $listPermsModules = $permsFinal;
     if($user_id !== null) {
       $currPermsModules = array();
