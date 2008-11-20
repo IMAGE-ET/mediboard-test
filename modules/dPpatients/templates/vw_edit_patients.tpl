@@ -135,6 +135,7 @@ Main.add(function () {
         {{/if}}
         
         {{mb_field object=$patient field="patient_id" hidden=1 prop=""}}
+	      {{mb_field object=$patient field="medecin_traitant" hidden=1}}
         {{if $dialog}}
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         {{/if}}
@@ -153,7 +154,7 @@ Main.add(function () {
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
       {{if $patient->_id}}
-        <button tabindex="400" type="submit" class="submit" onclick="return document.forms.editFrm.onsubmit();">
+        <button tabindex="400" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Modify{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}
@@ -162,11 +163,11 @@ Main.add(function () {
         <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
           {{tr}}Print{{/tr}}
         </button>
-        <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
+        <button type="button" class="trash" onclick="confirmDeletion(document.editFrm,{typeName:'le patient',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
           {{tr}}Delete{{/tr}}
         </button>
       {{else}}
-        <button tabindex="400" type="submit" class="submit" onclick="return document.forms.editFrm.onsubmit();">
+        <button tabindex="400" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Create{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}

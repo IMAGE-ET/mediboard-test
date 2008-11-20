@@ -125,7 +125,7 @@ Document.refreshList = function(){
     <td colspan="4" class="text">
       {{if $patient->medecin_traitant}}
       <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin_traitant}} } });">
-        Dr {{$patient->_ref_medecin_traitant->_view}} ;
+        <strong>Dr {{$patient->_ref_medecin_traitant->_view}}</strong> ;
       </span>
       {{/if}}
       {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}

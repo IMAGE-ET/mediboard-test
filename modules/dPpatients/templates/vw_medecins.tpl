@@ -3,8 +3,8 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
-function setClose(id) {
-  window.opener.Medecin.set(id);
+function setClose(id, view) {
+  window.opener.Medecin.set(id, view);
   window.close();
 }
 
@@ -81,45 +81,50 @@ Main.add(function () {
         {{foreach from=$medecins item=curr_medecin}}
         {{assign var=medecin_id value=$curr_medecin->_id}}
         <tr>
-          {{if $dialog}}
-            {{assign var="href" value="#"}}
-          {{else}}
-            {{assign var="href" value="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
-            <td><input type="checkbox" name="fusion_{{$curr_medecin->_id}}" /></td>
+          {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
+
+          {{if !$dialog}}
+          <td><input type="checkbox" name="fusion_{{$curr_medecin->_id}}" /></td>
           {{/if}}
+
           <td class="text">
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
+          	<script type="text/javascript">
+          	</script>
+          
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{$curr_medecin->_view}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{$curr_medecin->adresse}}
             </a>
           </td>
           <td class="text">
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{$curr_medecin->ville}}
             </a>
           </td>
           <td>
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{$curr_medecin->cp}}
             </a>
           </td>
           <td>
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{mb_value object=$curr_medecin field=tel}}
             </a>
           </td>
           <td>
-            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}})"{{/if}}>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{mb_value object=$curr_medecin field=fax}}
             </a>
           </td>
           {{if $dialog}}
             <td>
-              <button type="button" class="tick" onclick="setClose({{$curr_medecin->_id}})">Selectionner</button>
+              <button type="button" class="tick" onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )">
+              	{{tr}}Select{{/tr}}
+              </button>
             </td>
           {{/if}}
         </tr>
