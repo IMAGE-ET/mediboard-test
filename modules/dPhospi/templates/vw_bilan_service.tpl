@@ -139,39 +139,63 @@ selectChap = function(name_chap, oField){
 	      </table>
       </td>
 	  </tr>
-	  <!-- Affichage des prises prevues -->
+	  
+	  <!-- Affichage specifique aux perfusions -->
+    {{if array_key_exists('perf', $prises_by_hour)}}
+	    {{assign var=perfusion value=$prises_by_hour.perf}}
+	    <tr>
+	      <td>Perfusion</td>
+	      <td>
+	        {{$perfusion->_view}} 
+	        {{if $perfusion->time_debut}}
+	        à {{mb_value object=$perfusion field="time_debut"}}
+	        {{/if}}
+	        {{if $perfusion->duree}}
+             pendant {{$perfusion->duree}} heures.
+          {{/if}}
+	        <ul>
+	          {{foreach from=$perfusion->_ref_lines item=perf_line}}
+              <li>{{$perf_line->_view}}</li> 
+ 	          {{/foreach}}
+	        </ul>
+	      </td>
+	    </tr>
+	  {{/if}}
+	  
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
-	    {{assign var=_date_time value="$date $hour:00:00"}}
-	  	{{if $_date_time >= $dateTime_min && $_date_time <= $dateTime_max}}
-			  <tr>
-			    <td style="width: 20px">{{$hour}}h</td>
-		      <td style="width: 100%">
-		        <table class="form">         
-				      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
-					      {{foreach from=$prises key=line_id item=quantite}}
-				          {{assign var=line value=$list_lines.$line_class.$line_id}}        
-						      <tr>
-				            <td style="width: 250px; border:none;">{{$line->_view}}
-				            {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
-				              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-				            {{/if}}
-				            </td> 
-						        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
-						        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-						        <td style="width: 150px; border:none;" class="text">
-						          {{if $line_class=="CPrescriptionLineMedicament"}}
-						            {{$line->_ref_produit->libelle_unite_presentation}}
-						          {{else}}
-						            {{$line->_unite_prise}}
-						          {{/if}}
-						        </td>
-						        <td class="text" style="border:none;">{{$line->commentaire}}</td>
-						      </tr>
-						    {{/foreach}} 
-				      {{/foreach}}  
-		        </table>
-		      </td>
-			  </tr>
+	    {{if $hour != "perf"}}
+		    {{assign var=_date_time value="$date $hour:00:00"}}
+		  	{{if $_date_time >= $dateTime_min && $_date_time <= $dateTime_max}}
+				  <tr>
+				    <td style="width: 20px">{{$hour}}h</td>
+			      <td style="width: 100%">
+			        <table class="form">         
+					      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
+						      {{foreach from=$prises key=line_id item=quantite}}
+					          {{assign var=line value=$list_lines.$line_class.$line_id}}        
+							      <tr>
+					            <td style="width: 250px; border:none;">{{$line->_view}}
+					            {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
+					              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+					            {{/if}}
+					            </td> 
+							        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+							        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+							        <td style="width: 150px; border:none;" class="text">
+							          {{if $line_class=="CPrescriptionLineMedicament"}}
+							            {{$line->_ref_produit->libelle_unite_presentation}}
+							          {{else}}
+							            {{$line->_unite_prise}}
+							          {{/if}}
+							        </td>
+							        <td class="text" style="border:none;">{{$line->commentaire}}</td>
+							      </tr>
+							    {{/foreach}} 
+					      {{/foreach}}  
+			        </table>
+			      </td>
+				  </tr>
+			  {{/if}}
 		  {{/if}}
 	  {{/foreach}}
 	{{/foreach}}

@@ -69,6 +69,9 @@ foreach($prescriptions as $_prescription){
   $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
   $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 
+  // Chargement des perfusions 
+  $_prescription->loadRefsPerfusions();
+  
   foreach($dates as $_date){
     $_prescription->calculPlanSoin($_date, 0, $heures);
   }
@@ -85,8 +88,26 @@ foreach($prescriptions as $_prescription){
   $patient->loadRefConstantesMedicales();
   
   
-  // Parcours des medicament du plan de soin
   if(in_array("med", $cats)){
+    // Parcours et stockage des perfusions
+    if($_prescription->_ref_perfusions){
+      foreach($_prescription->_ref_perfusions as $_perfusion){
+        $_perfusion->loadRefsLines();
+        $affectation = $sejour->getCurrAffectation($_perfusion->_debut);
+        $affectation->loadRefLit();
+        $affectation->_ref_lit->loadCompleteView();    
+        $chambre = $affectation->_ref_lit->_ref_chambre;
+        if(!$chambre){
+          continue;
+        }
+        $chambres[$chambre->_id] = $chambre;
+        if(in_array($_perfusion->date_debut, $dates)){
+          $lines_by_patient[$chambre->_id][$sejour->_id][$_perfusion->date_debut]["perf"] = $_perfusion;
+        }
+      }
+    }
+  
+    // Parcours des medicament du plan de soin  
     if($_prescription->_ref_lines_med_for_plan){
 			foreach($_prescription->_ref_lines_med_for_plan as $_code_ATC => &$_cat_ATC){
 			  foreach($_cat_ATC as &$_lines_by_unite) {
@@ -226,9 +247,7 @@ foreach($prescriptions as $_prescription){
 // Tri des lignes
 foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
   foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
-    foreach($lines_by_date as $_date => &$lines_by_hours){
-      ksort($lines_by_hours);
-    }
+    ksort($lines_by_date);
   }
 }
 

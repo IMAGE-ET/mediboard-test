@@ -286,8 +286,19 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	
 // Chargement des fovoris 
 if($prescription->_id){
-	if($prescription->_current_praticien_id){
+	if($prescription->object_id && $prescription->_current_praticien_id){
     $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
+	} else {
+	  // Dans le cas d'un protocole
+    // Si le protocole appartient à un praticien, on charge les favoris du praticien
+	  if($prescription->praticien_id){
+      $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);
+	  } else {
+	  // Sinon, on charge les favoris du user courant si c'est un praticien (protocole de cabinet et d'etablissement)
+	    if($is_praticien){
+	      $listFavoris = CPrescription::getFavorisPraticien($AppUI->user_id);
+	    }
+	  }
 	}
 }
 
