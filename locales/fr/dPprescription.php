@@ -1253,4 +1253,5 @@ $locales['CPerfusion-decalage_interv-desc'] = 'Décalage intervention';
 $locales['CPerfusion-operation_id'] = 'Opération';
 $locales['CPerfusion-operation_id-court'] = 'Opération';
 $locales['CPerfusion-operation_id-desc'] = 'Opération';
+$locales['CPerfusion.type.classique'] = 'Classique';
 ?>

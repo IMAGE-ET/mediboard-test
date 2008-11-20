@@ -1,6 +1,6 @@
 {{assign var=perfusion_id value=$_perfusion->_id}}
 
-<tr id="line_{{$line_class}}_{{$line_id}}">
+<tr id="line_{{$_perfusion->_guid}}">
  	<td style="text-align: center;">-</td>
  	<td style="text-align: center;">-</td>
  	<td class="text">

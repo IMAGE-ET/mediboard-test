@@ -908,7 +908,12 @@ class CSetupdPprescription extends CSetup {
             ADD INDEX (`operation_id`);";
     $this->addQuery($sql);
     
-	  $this->mod_version = "0.64";
+    $this->makeRevision("0.64");
+    $sql = "ALTER TABLE `perfusion` 
+	          CHANGE `type` `type` ENUM ('classique','seringue','PCA') NOT NULL;";
+    $this->addQuery($sql);
+    
+	  $this->mod_version = "0.65";
   }  
 }
 
