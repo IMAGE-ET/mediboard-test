@@ -74,7 +74,11 @@ th.category.modify {
 }
 
 table.form td.cancelled,
+table.form tr.selected td.cancelled,
 table.tbl td.cancelled,
+table.tbl tr:hover td.cancelled,
+table.tbl tr.selected td.cancelled,
+table.tbl tbody.hoverable td.cancelled,
 th.cancelled,
 th.category.cancelled,
 table.form th.category.cancelled {

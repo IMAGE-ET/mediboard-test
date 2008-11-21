@@ -63,10 +63,14 @@
         {{/foreach}}
       </a>
     </td>
-    <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled{{/if}}">
-      {{if $curr_op->annulee}}
-        [ANNULEE]
-      {{else}}
+
+    {{if $curr_op->annulee}}
+    <td class="cancelled" colspan="2">
+      [ANNULEE]
+    </td>
+
+    {{else}}
+    <td style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
         {{if $curr_op->time_operation != "00:00:00"}}
           Validé pour 
@@ -80,21 +84,23 @@
         <br/>{{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
         {{/if}}
       </a>
-      {{/if}}
     </td>
     <td style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
         {{$curr_op->temp_operation|date_format:"%Hh%M"}}
       </a>
     </td>
+    {{/if}}
   </tr>
   
   {{if !$board}}
+  {{if !$curr_op->annulee}}
 	<tr>
     <td colspan="10">
       {{include file=inc_documents_operation.tpl operation=$curr_op}}
     </td>
   </tr>
+  {{/if}}
   {{/if}}
   
   </tbody>

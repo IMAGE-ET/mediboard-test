@@ -250,7 +250,7 @@ Document.refreshList = function(){
   <tr>
     <td colspan="3">
       {{$affectation->_ref_lit->_view}}
-      depuis le {{$affectation->entree|date_format:"%d %b %Y à %Hh%M"}}
+      depuis le {{mb_value object=$affectation field=entree}}
     </td>
   </tr>
   {{assign var="affectation" value=$patient->_ref_next_affectation}}
@@ -261,7 +261,7 @@ Document.refreshList = function(){
   <tr>
     <td colspan="3">
       {{$affectation->_ref_lit->_view}}
-      depuis {{$affectation->entree|date_format:"%d %b %Y à %Hh%M"}}
+      depuis le {{mb_value object=$affectation field=entree}}
     </td>
   </tr>
   {{/if}}
@@ -312,6 +312,7 @@ Document.refreshList = function(){
     {{/if}}
     {{/if}}
   </tr>
+  
   {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
   <tr>
     <td class="text">
