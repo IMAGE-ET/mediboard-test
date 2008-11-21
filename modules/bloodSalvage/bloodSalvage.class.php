@@ -18,16 +18,16 @@ class CBloodSalvage extends CMbObject {
 	
 	//DB References 
 	var $operation_id = null;
-	var $cell_saver_id = null;																						// The Cell Saver equipment
-	var $type_ei_id = null;																	      				// Reference to an incident type
+	var $cell_saver_id = null;     // The Cell Saver equipment
+	var $type_ei_id = null;        // Reference to an incident type
 	
 	//DB Fields
-	var $wash_volume = null; 																							// *Volume de lavage*
-	var $saved_volume = null; 																						// *Volume récupéré pendant la manipulation*
-	var $hgb_pocket = null;																						  // *Hémoglobine de la poche récupérée*
-	var $hgb_patient = null;																		  		  // *Hémoglobine du patient post transfusion*
+	var $wash_volume = null;       // *Volume de lavage*
+	var $saved_volume = null;      // *Volume récupéré pendant la manipulation*
+	var $hgb_pocket = null;        // *Hémoglobine de la poche récupérée*
+	var $hgb_patient = null;       // *Hémoglobine du patient post transfusion*
 	var $transfused_volume = null;
-	var $anticoagulant_cip = null;                                    // *Code CIP de l'anticoagulant utilisé*
+	var $anticoagulant_cip = null; // *Code CIP de l'anticoagulant utilisé*
 	var $receive_kit = null;
 	var $wash_kit = null;
 	var $sample = null;

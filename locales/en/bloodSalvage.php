@@ -173,4 +173,5 @@ $locales['msg-CCellSaver-modify'] = '';
 $locales['msg-CTypeEi-create'] = '';
 $locales['msg-CTypeEi-delete'] = '';
 $locales['msg-CTypeEi-modify'] = '';
+$locales['mod-bloodSalvage-tab-vw_stats'] = 'Statistics';
 ?>

@@ -12,7 +12,7 @@ $can->needsRead();
 
 $soap_url = CImeds::getSoapUrl();
 if (!url_exists($soap_url)) {
-  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur IMeds inatteignable à l'addresse : $serviceAdresse");
+  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur IMeds inatteignable à l'adresse : $serviceAdresse");
   return;
 }
 

@@ -14,7 +14,7 @@ CMedicap::makeURLs();
 $serviceURL = CMedicap::$urls["soap"]["documents"];
 
 if (!url_exists($serviceURL)) {
-  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'addresse : $serviceURL");
+  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
   return;
 }
 

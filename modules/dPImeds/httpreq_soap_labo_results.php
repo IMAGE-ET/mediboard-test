@@ -29,7 +29,7 @@ if (null != $soap_url = CImeds::getSoapUrl()) {
   );
     
   if (!url_exists($soap_url)) {
-    CAppUI::stepAjax("Serveur IMeds inatteignable à l'addresse : $soap_url", UI_MSG_ERROR);
+    CAppUI::stepAjax("Serveur IMeds inatteignable à l'adresse : $soap_url", UI_MSG_ERROR);
   }
   
   $client = new SoapClient($soap_url."?WSDL", array('exceptions' => 0));
