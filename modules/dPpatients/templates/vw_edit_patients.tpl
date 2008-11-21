@@ -135,7 +135,11 @@ Main.add(function () {
         {{/if}}
         
         {{mb_field object=$patient field="patient_id" hidden=1 prop=""}}
-	      {{mb_field object=$patient field="medecin_traitant" hidden=1}}
+        
+        {{if !$patient->_id}}
+				{{mb_field object=$patient field="medecin_traitant" hidden=1}}
+				{{/if}}
+				
         {{if $dialog}}
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         {{/if}}
