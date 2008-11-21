@@ -27,7 +27,14 @@ $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 $readonly        = mbGetValueFromGet("readonly", true);
-$lite            = mbGetValueFromGet("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
+
+/*
+ * Desactivation du mode Lite
+ * Pour la re-actvation du mode lite
+ *   --> $lite = mbGetValueFromGet("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
+ *   --> supprimer les commentaires dans inc_div_element.tpl et inc_div_medicament.tpl
+ */
+$lite = 0;
 
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
 
