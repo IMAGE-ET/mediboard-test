@@ -335,14 +335,14 @@ toggleTypePerfusion = function(oForm){
   <li><a href="#div_medicament">Médicaments</a></li>
 
 {{if $app->user_prefs.mode_readonly}}
-  {{assign var=lite value=false}}
+  {{assign var=_lite value=false}}
 {{else}}
-  {{assign var=lite value=true}}
+  {{assign var=_lite value=true}}
 {{/if}}
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
   {{/foreach}}
 {{/if}}
 </ul>
