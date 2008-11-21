@@ -913,7 +913,10 @@ class CSetupdPprescription extends CSetup {
 	          CHANGE `type` `type` ENUM ('classique','seringue','PCA') NOT NULL;";
     $this->addQuery($sql);
     
-	  $this->mod_version = "0.65";
+    $this->makeRevision("0.65");
+    $this->addPrefQuery("mode_readonly", "0");
+
+	  $this->mod_version = "0.66";
   }  
 }
 

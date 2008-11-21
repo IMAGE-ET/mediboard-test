@@ -65,13 +65,20 @@ Main.add( function(){
     {{/if}}
     <td>
 		  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
-		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}});">
+		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}}, {{if $readonly}}false{{else}}true{{/if}});">
 		    {{if $readonly}}Modification
 		    {{else}}Lecture seule
 		    {{/if}}
 		  </button>
 		  {{/if}}
 		
+			{{if $readonly}}
+			  <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
+			    {{if $lite}}Vue complète
+			    {{else}}Vue simplifiée
+			    {{/if}}
+			  </button>
+			{{/if}}  
 		  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
 		  {{if $prescription->object_id && $is_praticien}}
 		  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', '{{$element}}');">
@@ -92,6 +99,19 @@ Main.add( function(){
   </div>
 {{/if}}
 
+ {{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
+ <table class="tbl">
+   <th style="width:20%;">Libellé</th>
+   <th style="width:10%;">Catégorie</th>
+   <th style="width:10%;">Praticien</th>
+   <th style="width:10%;">Début</th>
+   <th style="width:10%;">Durée</th>
+   <th style="width:20%;">Prises</th>
+   <th style="width:10%;">Exécutant</th>
+   <th style="width:10%">Emplacement</th>
+ </table>
+ {{/if}}
+	  
 {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 
   {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}
@@ -100,10 +120,12 @@ Main.add( function(){
   <!-- Parcours des elements de type $element -->
   {{foreach from=$lines item=lines_cat key=category_id}}
 	  {{assign var=category value=$categories.$element.$category_id}}
-	  
+	
 	  <!-- Elements d'une categorie-->
 	  <table class="tbl" id="elt_{{$category->_id}}">
+	    {{if !$lite}}
       <tr><th class="title" colspan="9">{{$category->_view}}</th></tr>	  
+      {{/if}}
 	  </table>
     
 	  <table class="tbl" id="elt_art_{{$category->_id}}"></table>
@@ -112,9 +134,13 @@ Main.add( function(){
 	  {{foreach from=$lines_cat.element item=line_element}}
 	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_element->praticien_id)}}
 	      {{if $readonly}}
-          {{include file="inc_vw_line_element_readonly.tpl" _line_element=$line_element prescription_reelle=$prescription}}
+	        {{if $lite}}
+	          {{include file="inc_vw_line_element_lite.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
+	        {{else}}
+            {{include file="inc_vw_line_element_readonly.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
+          {{/if}}
         {{else}}
-          {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription}}
+          {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
 	      {{/if}}
       {{/if}}
 	  {{/foreach}}
@@ -123,31 +149,59 @@ Main.add( function(){
 	  <!-- Commentaires d'une categorie -->
 	  <table class="tbl">
   	  {{if $lines_cat.comment|@count}}
+  	  {{if !$lite}}
   	  <tr>
   	    <th colspan="9" class="element">Commentaires</th>
   	  </tr>
   	  {{/if}}
+  	  {{/if}}
   	  {{foreach from=$lines_cat.comment item=line_comment}}
   	    {{if !$praticien_sortie_id || ($praticien_sortie_id != $line_comment->praticien_id)}}
           {{if $readonly}}
-            {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
+            {{if $lite}}
+              {{assign var=line value=$line_comment}}  
+							 <tr>
+							   <td style="width:20%;" class="text">
+							     {{$line->commentaire}}
+							   </td>
+							   <td style="width:10%;" class="text">{{$category->_view}}</td>
+							   <td style="width:10%;" class="text">
+							   							     <!-- Affichage de la signature du praticien -->
+							     {{if $line->_can_view_signature_praticien}}
+							       {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+							     {{elseif !$line->_protocole}}
+							       {{$line->_ref_praticien->_view}}    
+							     {{/if}}
+							     </td>
+							   <td style="width:10%;"></td>
+							   <td style="width:10%;"></td>
+							   <td style="width:20%;"></td>
+							   
+							   <td style="width: 10%;">
+								   {{if $line->executant_prescription_line_id || $line->user_executant_id}}
+								     {{$line->_ref_executant->_view}}
+								   {{/if}}
+							   </td>
+							   <td style="width: 10%;">  
+
+							   </td>
+							</tr>
+            {{else}}
+              {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}
+            {{/if}}
           {{else}}
-            {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
+            {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}
   	      {{/if}}
         {{/if}}
   	  {{/foreach}}
 	  </table>
 	  {{/foreach}}
-	  
-	  
   {{else}}
   <div class="big-info"> 
      Il n'y a aucun élément de type "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}" dans cette prescription.
   </div>
   {{/if}}
-  
   <br />
-  
   {{if $prescription->object_id}}
   <!-- Affichage de l'historique -->
   <table class="tbl">
@@ -208,5 +262,4 @@ Main.add( function(){
 			{{/if}}
 		{{/foreach}}
 	</table>
-	
-  {{/if}}
+{{/if}}

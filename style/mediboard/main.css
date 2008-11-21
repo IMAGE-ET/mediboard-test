@@ -3060,11 +3060,11 @@ table.tbl th.element a{
 	margin-top: -3px;
 }
 
-table.tbl th.arretee {		
+table.tbl th.arretee, table.tbl td.arretee{		
 	background-image: url(images/icons/ray.gif);
 }
 
-table.tbl th.traitement {
+table.tbl th.traitement, table.tbl td.traitement {
   background-color: #bdb;
 }
 

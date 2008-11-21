@@ -209,6 +209,8 @@ class CPerfusion extends CMbObject {
     $new_perf->load($this->_id);
     $new_perf->loadRefsLines();
     $new_perf->_id = "";
+    $new_perf->signature_pharma = 0;
+    $new_perf->signature_prat = 0;
     if($msg = $new_perf->store()){
       return $msg;
     }

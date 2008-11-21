@@ -177,7 +177,7 @@ var Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg", { waitingText : null });
   },
-  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly) {
+  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly, lite) {
       // Select de choix du praticien
       if(document.selPratForPresc){
         var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
@@ -196,6 +196,8 @@ var Prescription = {
       urlPrescription.addParam("mode_pharma", mode_pharma);
       urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
       urlPrescription.addParam("readonly", readonly?1:0);
+      urlPrescription.addParam("lite", lite?1:0);
+      
      
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { waitingText : null, onComplete: function(){ Prescription.testPharma(line_id) } });      

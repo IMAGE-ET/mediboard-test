@@ -360,6 +360,26 @@
   </tr>
   {{/if}}
   
+  {{assign var="module" value="dPprescription"}}
+  {{if $prefsUser.$module}}  
+  <tr>
+    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
+  </tr>
+
+  {{assign var="var" value="mode_readonly"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="2">
       <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>

@@ -87,6 +87,9 @@ $array_list_module_pref = array (
   "system" => array (
     "INFOSYSTEM",
   ),
+  "dPprescription" => array (
+    "mode_readonly",
+  )
 );
 
 foreach($array_list_module_pref as $modulename => $listPrefs){

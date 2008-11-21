@@ -20,10 +20,10 @@ viewEasyMode = function(mode_protocole, mode_pharma){
   url.popup(900,500,"Mode grille");
 }
 
-refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma, readonly) {
+refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma, readonly, lite) {
   if (!window[chapitre+'Loaded']) {
     WaitingMessage.cover("div_"+chapitre);
-    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma, null, readonly);
+    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma, null, readonly, lite);
     window[chapitre+'Loaded'] = true;
   }
 }
@@ -334,10 +334,15 @@ toggleTypePerfusion = function(oForm){
 <ul id="prescription_tab_group" class="control_tabs">
   <li><a href="#div_medicament">Médicaments</a></li>
 
+{{if $app->user_prefs.mode_readonly}}
+  {{assign var=lite value=false}}
+{{else}}
+  {{assign var=lite value=true}}
+{{/if}}
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true);"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
   {{/foreach}}
 {{/if}}
 </ul>

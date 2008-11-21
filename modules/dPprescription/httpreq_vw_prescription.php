@@ -27,6 +27,7 @@ $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 $readonly        = mbGetValueFromGet("readonly", true);
+$lite            = mbGetValueFromGet("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
 
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
 
@@ -412,6 +413,7 @@ $smarty->assign("dossier_medical"    , $dossier_medical);
 $smarty->assign("now_time", mbTime());
 $smarty->assign("mode_pack", "0");
 $smarty->assign("readonly",            $readonly && $prescription->object_id);
+$smarty->assign("lite", $lite);
 $smarty->assign("perfusion", new CPerfusion());
 if($full_mode){
   $_sejour = new CSejour();

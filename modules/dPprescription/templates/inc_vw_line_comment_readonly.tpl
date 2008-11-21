@@ -5,7 +5,7 @@
      <td colspan="4">
        {{$line->commentaire}}
      </td>
-     <td style="text-align: right;">
+     <td style="text-align: right;" colspan="2">
      {{if $line->category_prescription_id}}
        <b>Exécutant</b>: {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
      {{/if}}

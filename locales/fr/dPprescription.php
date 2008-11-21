@@ -1254,4 +1254,8 @@ $locales['CPerfusion-operation_id'] = 'Opération';
 $locales['CPerfusion-operation_id-court'] = 'Opération';
 $locales['CPerfusion-operation_id-desc'] = 'Opération';
 $locales['CPerfusion.type.classique'] = 'Classique';
+$locales['pref-mode_readonly-0'] = 'Mode simple';
+$locales['pref-mode_readonly-1'] = 'Mode complet';
+$locales['pref-mode_readonly'] = 'Type d\'affichage par defaut du mode Lecture seule';
+$locales['pref-mode_readonly-desc'] = 'Type d\'affichage par defaut du mode lecture seule';
 ?>
