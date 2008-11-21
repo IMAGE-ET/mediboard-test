@@ -61,8 +61,10 @@ class CPlageressource extends CMbObject {
       "tarif"   		=> "notNull currency min|0 confidential",
       "libelle" 		=> "str confidential",
       "paye"    		=> "bool",
-      "_date_min" 		=> "date",
-      "_date_max" 		=> "date moreEquals|_date_min"
+      "_date_min" 	=> "date",
+      "_date_max" 	=> "date moreEquals|_date_min",
+      "_hour_deb"   => "time",
+      "_hour_fin"   => "time",
     );
     return array_merge($specsParent, $specs);
   }
