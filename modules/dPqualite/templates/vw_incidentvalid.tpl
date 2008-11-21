@@ -6,7 +6,7 @@ function search_AllEI(field){
   
   var url = new Url;
   url.setModuleAction("dPqualite", "httpreq_vw_allEi");
-  url.addParam("user_id", id);
+  url.addParam("selected_user_id", id);
   url.requestUpdate('ALL_TERM');
 }
 

@@ -78,22 +78,19 @@ $listCounts["ATT_CTRL"]    = 0;
 $listCounts["ALL_TERM"]    = 0;
 $listCounts["ANNULE"]      = 0;
 
-$userNotAdmin = (!$can->admin && $can->edit);
-
 foreach ($listCounts as $type => &$count) {
-	$user_id = null;
-  if ($type == "ALL_TERM") {
-    $user_id = $selected_user_id;
+  $user_id = null;
+  $where = null;
+  if($type == "AUTHOR" || ($can->edit && !$can->admin)){
+    $user_id = $AppUI->user_id;
   }
-	
-	if ($userNotAdmin || $type == "AUTHOR") {
-	  $user_id = $AppUI->user_id;
-	}
-	
-	$where = array();
-	if($user_id && $userNotAdmin){
-	  $where["fiches_ei.user_id"] = "= '$user_id'";
-	}
+  
+  if($type == "ALL_TERM" && $can->admin){
+    $where = array();
+    if($selected_user_id){
+      $where["fiches_ei.user_id"] = "= '$selected_user_id'";
+    }
+  }
   $count = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, true);
 }
 

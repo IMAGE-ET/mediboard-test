@@ -14,22 +14,20 @@ $selected_user_id = mbGetValueFromGetOrSession("selected_user_id");
 $type = mbGetValueFromGetOrSession("type");
 $first = mbGetValueFromGetOrSession("first");
 
-$user_id = null;
 $listUsersTermine = new CMediusers;
-if ($type == "ALL_TERM") {
-  $listUsersTermine = $listUsersTermine->loadListFromType();
-  $user_id = $selected_user_id;
-}
 
-$userNotAdmin = ($can->edit && !$can->admin);
-
-if ($userNotAdmin || $type == "AUTHOR") {
+$user_id = null;
+$where = null;
+if($type == "AUTHOR" || ($can->edit && !$can->admin)){
   $user_id = $AppUI->user_id;
 }
 
-$where = array();
-if($user_id && $userNotAdmin){
-  $where["fiches_ei.user_id"] = "= '$user_id'";
+if($type == "ALL_TERM" && $can->admin){
+$listUsersTermine = $listUsersTermine->loadListFromType();
+  $where = array();
+  if($selected_user_id){
+    $where["fiches_ei.user_id"] = "= '$selected_user_id'";
+  }
 }
 
 $countFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, true);
