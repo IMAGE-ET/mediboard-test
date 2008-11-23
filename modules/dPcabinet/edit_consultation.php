@@ -53,7 +53,7 @@ if(isset($_GET["date"])) {
 }
 
 // Test compliqué afin de savoir quelle consultation charger
-if(isset($_GET["selConsult"])) {
+if (isset($_GET["selConsult"])) {
   if($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
     $prat_id = $consult->_ref_plageconsult->chir_id;
