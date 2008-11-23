@@ -10,7 +10,7 @@
 {{assign var=const_med value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{assign var=ant value=$dossier_medical->_ref_antecedents}}
-<table class="form" id="admission" style="page-break-after: always;">
+<table class="form" id="admission">
   <tr>
     <td colspan="2">
       <!-- Bordereau d'en-tête -->
@@ -39,9 +39,13 @@
           <td style="white-space: nowrap;">{{if $const_med->taille}}{{$const_med->taille}} cm{{else}}-{{/if}}</td>
           <th>Séjour</th>
           <td>
+            {{if $sejour->_id}}
             {{mb_value object=$sejour field="type"}}
             du {{mb_value object=$sejour field="_entree"}}
             au {{mb_value object=$sejour field="_sortie"}}
+            {{else}}
+            -
+            {{/if}}
           </td>
         </tr>
         <tr>
@@ -50,7 +54,13 @@
           <th>Poids</th>
           <td style="white-space: nowrap;">{{if $const_med->poids}}{{$const_med->poids}} kg{{else}}-{{/if}}</td>
           <th>Intervention</th>
-          <td>Dr {{$operation->_ref_chir->_view}} - le {{mb_value object=$operation->_ref_plageop field="date"}}</td>
+          <td>
+            {{if $operation->_id}}
+            Dr {{$operation->_ref_chir->_view}} - le {{mb_value object=$operation->_ref_plageop field="date"}}
+            {{else}}
+            -
+            {{/if}}
+          </td>
         </tr>
       </table>
     </td>
@@ -198,23 +208,49 @@
     </td>
   </tr>
   <tr>
-    <td colspan="2">
-      <table width="100%">
-        <tr>
-          <th class="category">Antécédents</th>
-        </tr>
-      </table>
-    </td>
+    <td colspan="2"><hr /></td>
   </tr>
   <tr>
     <td>
       <!-- Atcd chirurgicaux / anesthésiques -->
       <table width="100%">
         <tr>
-          <th class="category">Chirurgicaux</th>
+          <th class="category">ATCD Chirurgicaux</th>
         </tr>
         <tr>
-          <th class="category">Anesthésiques</th>
+          <td>
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('chir', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.chir item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category">ATCD Anesthésiques</th>
+        </tr>
+        <tr>
+          <td>
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('anesth', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.anesth item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
         </tr>
       </table>
     </td>
@@ -222,26 +258,154 @@
       <!-- Atcd Cardio / Uro-Nephro / NeuroPsy / Endoc / Gyneco / Autres -->
       <table width="100%">
         <tr>
-          <th class="category">Cardiovasculaires</th>
+          <th class="category">Examen Cardiovasculaire</th>
         </tr>
         <tr>
-          <th class="category">Uro-nephrologiques</th>
+          <td>
+            {{$consult_anesth->examenCardio}}
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('cardio', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.cardio item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
         </tr>
         <tr>
-          <th class="category">Neuro-psychiatriques</th>
+          <th class="category">Examen Pulmonaire</th>
         </tr>
         <tr>
-          <th class="category">Endocrinologiques</th>
+          <td>
+            {{$consult_anesth->examenPulmo}}
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('pulmo', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.pulmo item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
         </tr>
         <tr>
-          <th class="category">Gynécologiques</th>
+          <th class="category">Uro-nephrologie</th>
+        </tr>
+        <tr>
+          <td>
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('uro', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.uro item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category">Neuro-psychiatrie</th>
+        </tr>
+        <tr>
+          <td>
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('neuropsy', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.neuropsy item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category">Endocrinologie</th>
+        </tr>
+        <tr>
+          <td>
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('endocrino', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.endocrino item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category">Gynécologie</th>
+        </tr>
+        <tr>
+          <td>
+            {{if $dossier_medical->_ref_antecedents && array_key_exists('gyn', $dossier_medical->_ref_antecedents)}}
+            <ul>
+            {{foreach from=$dossier_medical->_ref_antecedents.gyn item=currAnt}}
+              <li> 
+                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                {{$currAnt->rques}} 
+              </li>
+            {{/foreach}}
+            </ul>
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th class="category">Autres</th>
         </tr>
+        <tr>
+          <td>
+            {{$consult->examen}}
+            <ul>
+              {{foreach from=$dossier_medical->_ref_antecedents key=type_name item=curr_type}}
+              {{if $type_name != 'alle'
+                && $type_name != 'chir'
+                && $type_name != 'anesth'
+                && $type_name != 'cardio'
+                && $type_name != 'uro'
+                && $type_name != 'neuropsy'
+                && $type_name != 'endocrino'
+                && $type_name != 'gyn'}}
+                {{foreach from=$curr_type item=currAnt}}
+                <li> 
+                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                  {{/if}}
+                  {{$currAnt->rques}} 
+                </li>
+                {{/foreach}}
+              {{/if}}
+              {{/foreach}}
+            </ul>
+          </td>
+        </tr>
       </table>
     </td>
   </tr>
+  <!-- Non impression de la biologie pour l'instant
   <tr>
     <td colspan="2">
       <!-- Biologie -->
@@ -253,6 +417,7 @@
       </table>
     </td>
   </tr>
+  -->
 </table>
 
 <table class="main">
