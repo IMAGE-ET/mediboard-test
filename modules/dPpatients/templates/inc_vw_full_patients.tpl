@@ -116,7 +116,6 @@ Main.add(function () {
 		</td>
 		{{/if}}
 	{{/if}}
-	</td>
   
   <td style="text-align:right;">
   {{if $curr_sejour->_canRead}}
@@ -267,6 +266,7 @@ Main.add(function () {
 
 {{assign var="consult_anesth" value=$curr_op->_ref_consult_anesth}}
 {{if $consult_anesth->_id}}
+{{assign var="curr_consult" value=$consult_anesth->_ref_consultation}}
 <tr>
   <td style="padding-left: 20px;">
     <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
@@ -429,8 +429,8 @@ Main.add(function () {
     <td class="button">
       <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Urgence
-    {{/if}}
       </a>
+    {{/if}}
     </td>
   </tr>
   {{/if}}
