@@ -135,9 +135,9 @@
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$rpu field="mode_sortie"}}</strong>
+      <strong>{{mb_label object=$rpu field="_mode_sortie"}}</strong>
       {{if $rpu->_mode_sortie}}
-      {{mb_value object=$rpu field=mode_sortie}}
+      {{mb_value object=$rpu field=_mode_sortie}}
       {{/if}}
     </td>
   </tr>
