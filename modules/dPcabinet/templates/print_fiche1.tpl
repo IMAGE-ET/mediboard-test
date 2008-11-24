@@ -56,7 +56,7 @@
           <th>Intervention</th>
           <td>
             {{if $operation->_id}}
-            Dr {{$operation->_ref_chir->_view}} - le {{mb_value object=$operation->_ref_plageop field="date"}}
+            Dr {{$operation->_ref_chir->_view}} - le {{$operation->_datetime|date_format:"%d/%m/%Y"}}
             {{else}}
             -
             {{/if}}
