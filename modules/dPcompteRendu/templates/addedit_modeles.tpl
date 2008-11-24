@@ -6,10 +6,10 @@ function popFile(objectClass, objectId, elementClass, elementId, sfn){
 }
 
 function copie() {
-
+  var oForm = document.editFrm;
+  
   {{if $droit}}
     if(confirm('Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?')){
-      var oForm = document.editFrm;
       oForm.compte_rendu_id.value = "";
       
       {{if $isPraticien}}
@@ -20,11 +20,8 @@ function copie() {
       oForm.nom.value = "Copie de "+oForm.nom.value;
       oForm.submit(); 
     }  
-  {{/if}}
-  
-  {{if !$droit}}
-    var oForm = document.editFrm;
-    oForm.compte_rendu_id.value = '';
+  {{else}}
+    oForm.compte_rendu_id.value = "";
     oForm.chir_id.value = "{{$user_id}}";
     oForm.nom.value = "Copie de "+oForm.nom.value;
     oForm.submit();
@@ -252,7 +249,7 @@ Main.add(function () {
 					      {{foreach from=$footersByOwner item=_footer}}
 					      <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
 					      {{foreachelse}}
-					      <option value="">{{tr}}None{{/tr}}</option>
+					      <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
 					      {{/foreach}}
 					    </optgroup>
 					    {{/foreach}}
@@ -272,7 +269,7 @@ Main.add(function () {
 					      {{foreach from=$headersByOwner item=_header}}
 					      <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
 					      {{foreachelse}}
-					      <option value="">{{tr}}None{{/tr}}</option>
+					      <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
 					      {{/foreach}}
 					    </optgroup>
 					    {{/foreach}}

@@ -26,7 +26,7 @@ if ($pack->load(mbGetValueFromGetOrSession("pack_id"))) {
 
 // Modèles de l'utilisateur
 $object_class = mbGetValueFromGetOrSession("object_class");
-$modeles = CCompteRendu::loadAllModelesForPrat($user->_id);
+$modeles = CCompteRendu::loadAllModelesFor($user->_id);
 
 // Création du template
 $smarty = new CSmartyDP();

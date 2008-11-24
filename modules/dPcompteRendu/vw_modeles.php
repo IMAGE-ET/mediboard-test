@@ -31,7 +31,7 @@ if ($user->isPraticien()) {
   mbSetValueToSession("prat_id", $user->user_id);
 }
 
-$modeles = CCompteRendu::loadAllModelesForPrat($filtre->chir_id, $filtre->object_class, $filtre->type);
+$modeles = CCompteRendu::loadAllModelesFor($filtre->chir_id, 'prat', $filtre->object_class, $filtre->type);
 
 // Création du template
 $smarty = new CSmartyDP();

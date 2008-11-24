@@ -57,14 +57,11 @@ $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
 $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 
-// si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus
-if(!($compte_rendu->_id)||($secretaire)||($compte_rendu->chir_id == $mediuser->user_id)||($compte_rendu->function_id==$mediuser->function_id)){
-	$droit = 1;
-}
-// sinon, seulement, droit en lecture
-else {
-	$droit = 0;
-}
+// si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus, sinon, seulement droit en lecture
+$droit = (!($compte_rendu->_id)||
+           ($secretaire)||
+           ($compte_rendu->chir_id == $mediuser->user_id)||
+           ($compte_rendu->function_id==$mediuser->function_id));
 
 $templateManager->printMode = !$droit;
 
@@ -102,8 +99,25 @@ $footers = null;
 $headers = null;
 
 if ($compte_rendu->_id) {
-  $footers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "footer");
-  $headers = CCompteRendu::loadAllModelesForPrat($compte_rendu->chir_id, $compte_rendu->object_class, "header");
+	// Si modèle de fonction, on charge en fonction d'un des praticiens de la fonction
+	if ($compte_rendu->chir_id) {
+		$owner = 'prat';
+    $id = $compte_rendu->chir_id;
+	}
+	else if ($compte_rendu->function_id) {
+		$owner = 'func';
+		$id = $compte_rendu->function_id;
+	}
+	else if ($compte_rendu->group_id) {
+		$owner = 'etab';
+    $id = $compte_rendu->group_id;
+	} else {
+    $owner = 'etab';
+    $id = CGroups::loadCurrent()->_id;
+	}
+	
+  $footers = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "footer");
+  $headers = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "header");
   
   if ($compte_rendu->_owner != "prat") {
     unset($footers["prat"]);

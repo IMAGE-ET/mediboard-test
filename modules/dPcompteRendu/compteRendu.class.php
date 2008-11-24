@@ -198,24 +198,16 @@ class CCompteRendu extends CMbMetaObject {
    * @param $prat_id ref|CMediuser L'utilisateur concerné
    * @param $object_class string Nom de la classe d'objet, optionnel. Doit être un CMbObject
    * @param $type enum list|header|body|footer Type de composant, optionnel
-   * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu> 
+   * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu>, "etab" => array<CCompteRendu>)
    */
-  static function loadAllModelesForPrat($prat_id, $object_class = null, $type = null) {
+  static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null) {
     $modeles = array(
-      "prat" => array(), 
+      "prat" => array(),
       "func" => array(),
       "etab" => array(),
     );
     
-    // Chargement du praticien
-    $prat = new CMediusers;
-    
-    // Pas de praticien
-    if (!$prat_id || !$prat->load($prat_id)) {
-      return $modeles; 
-    }
-    $prat->loadRefFunction();
-    $prat->_ref_function->loadRefGroup();
+    if (!$id) return $modeles;
     
     // Clauses de recherche
     $modele = new CCompteRendu();
@@ -223,33 +215,65 @@ class CCompteRendu extends CMbMetaObject {
     $where["object_id"] = "IS NULL";
     
     if ($object_class) {  
-  		$where["object_class"] = "= '$object_class'";
+      $where["object_class"] = "= '$object_class'";
     }
     
     if ($type) {
-  		$where["type"] = "= '$type'";
+      $where["type"] = "= '$type'";
     }
     
     $order = "object_class, type, nom";
 
-		// Modèle du praticien
-    $where["chir_id"]     = "= '$prat->_id'";
-    $where["function_id"] = "IS NULL";
-    $where["group_id"]    = "IS NULL";
-    $modeles["prat"] = $modele->loadlist($where, $order);
+    switch ($owner) {
+    	case 'prat': // Modèle du praticien
+        $prat = new CMediusers();
+        if (!$prat->load($id)) return $modeles;
+        $prat->loadRefFunction();
+
+		    $where["chir_id"]     = "= '$prat->_id'";
+		    $where["function_id"] = "IS NULL";
+		    $where["group_id"]    = "IS NULL";
+		    $modeles["prat"] = $modele->loadlist($where, $order);
+		    
+    	case 'func': // Modèle de la fonction
+    		if (isset($prat)) {
+    			$func_id = $prat->function_id;
+    		} else {
+	        $func = new CFunctions();
+	        if (!$func->load($id)) return $modeles;
+	        
+	        $func_id = $func->_id;
+    		}
+        
+		    $where["chir_id"]     = "IS NULL";
+		    $where["function_id"] = "= '$func_id'";
+		    $where["group_id"]    = "IS NULL";
+		    $modeles["func"] = $modele->loadlist($where, $order);
+		    
+    	case 'etab': // Modèle de l'établissement
+    		$etab_id = CGroups::loadCurrent()->_id;
+    		if ($owner == 'etab') {
+          $etab = new CGroups();
+          if (!$etab->load($id)) return $modeles;
+          
+          $etab_id = $etab->_id;
+    		}
+        else if (isset($func)) {
+          $etab_id = $func->group_id;
+        } 
+        else if(isset($func_id)) {
+        	$func = new CFunctions();
+        	$func->load($func_id);
+        	
+        	$etab_id = $func->group_id;
+        }
+        
+		    $where["chir_id"]     = "IS NULL";
+		    $where["function_id"] = "IS NULL";
+		    $where["group_id"]    = " = '$etab_id'";
+		    $modeles["etab"] = $modele->loadlist($where, $order);
+    }
     
-		// Modèle de la fonction
-    $where["chir_id"]     = "IS NULL";
-    $where["function_id"] = "= '$prat->function_id'";
-    $where["group_id"]    = "IS NULL";
-    $modeles["func"] = $modele->loadlist($where, $order);
-
-		// Modèle de l'établissement
-    $where["chir_id"]     = "IS NULL";
-    $where["function_id"] = "IS NULL";
-    $where["group_id"]    = " = '$prat->_group_id'";
-    $modeles["etab"] = $modele->loadlist($where, $order);
-
     return $modeles;
   }
     
