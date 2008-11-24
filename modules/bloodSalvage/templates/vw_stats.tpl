@@ -1,20 +1,15 @@
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
-<span id="graph-data-source">
 <script type="text/javascript">
-  series = {{$series|@json}};
-  options = {{$options|@json}};
-</script>
-</span>
+var series = {{$series|@json}};
+var options = {{$options|@json}};
 
-<script type="text/javascript">
 var oCcamField = null;
 var graph;
 var filterForm;
 
 function drawGraph() {
   // Let's draw the graph
-  $('stats').update();
   graph = Flotr.draw(
     $('stats'),
     series, Object.extend({
@@ -30,23 +25,10 @@ function drawGraph() {
   );
 }
 
-function submitFilter() {
-  var obj = {};
-  filterForm.getElements().each(function (e) {
-    obj[e.name] = $V(e);
-  });
-  url = new Url;
-  url.setModuleAction("bloodSalvage", "vw_stats");
-  url.addObjectParam(obj);
-  url.addParam("ajax", 1);
-  url.requestUpdate('graph-data-source', { waitingText : null, onComplete: function() {drawGraph()} });
-  return false;
-}
-
 Main.add(function () {
   filterForm = getForm('stats-filter');
 
-  drawGraph();
+  drawGraph(series, options);
   
   oCcamField = new TokenField(filterForm["filters[codes_ccam]"], { 
     onChange : updateTokenCcam

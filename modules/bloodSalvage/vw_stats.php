@@ -13,7 +13,6 @@ $can->needsAdmin();
 $filters         = mbGetValueFromGetOrSession('filters', array());
 $months_count    = mbGetValueFromGetOrSession('months_count', 12);
 $months_relative = mbGetValueFromGetOrSession('months_relative', 0);
-$ajax            = mbGetValueFromGet('ajax', false);
 
 $possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa');
 foreach ($possible_filters as $n) {
@@ -81,26 +80,22 @@ foreach ($dates as $month => $date) {
 $options['xaxis'] = array('ticks' => $ticks);
 $series = array(array('data' => $data, 'label' => utf8_encode(CAppUI::tr('CBloodSalvage'))));
 
-if ($ajax && false) {
-  echo '<script type="text/javascript">series = '.json_encode($series).'; options = '.json_encode($options).';</script>';
-} else {
-	$smarty = new CSmartyDP();
-	
-	// Filter
-	$smarty->assign('filters',         $filters);
-	$smarty->assign('months_relative', $months_relative);
-	$smarty->assign('months_count',    $months_count);
-	
-	// Lists
-	$mediuser = new CMediusers();
-	$smarty->assign('list_anesth', $mediuser->loadListFromType(array('Anesthésiste')));
-	$smarty->assign('list_chir',   $mediuser->loadListFromType(array('Chirurgien')));
-	$smarty->assign('list_codes_asa', range(1, 5));
-	
-	// Plot data
-	$smarty->assign('series',  $series);
-	$smarty->assign('options', $options);
-	
-	$smarty->display('vw_stats.tpl');
-}
+$smarty = new CSmartyDP();
+
+// Filter
+$smarty->assign('filters',         $filters);
+$smarty->assign('months_relative', $months_relative);
+$smarty->assign('months_count',    $months_count);
+
+// Lists
+$mediuser = new CMediusers();
+$smarty->assign('list_anesth', $mediuser->loadListFromType(array('Anesthésiste')));
+$smarty->assign('list_chir',   $mediuser->loadListFromType(array('Chirurgien')));
+$smarty->assign('list_codes_asa', range(1, 5));
+
+// Plot data
+$smarty->assign('series',  $series);
+$smarty->assign('options', $options);
+
+$smarty->display('vw_stats.tpl');
 ?>
