@@ -75,7 +75,7 @@
 
         {{if $curr_consult->motif}}<br />{{/if}}
         Intervention le {{$curr_consult->_ref_consult_anesth->_date_op|date_format:"%d/%m/%Y"}}
-        - Dr {{$curr_op->_ref_plageop->_ref_chir->_view}}<br />
+        - Dr {{$curr_op->_ref_praticien}}<br />
         {{if $curr_op->libelle}}
           <em>[{{$curr_op->libelle}}]</em>
           <br />
