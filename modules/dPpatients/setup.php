@@ -905,7 +905,22 @@ class CSetupdPpatients extends CSetup {
 					  DROP `medecin3`";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.75";
+    $this->makeRevision("0.75");
+    $sql = "DELETE FROM `constantes_medicales` WHERE 
+		        (`poids` IS NULL OR `poids` = 0) AND
+		        (`taille` IS NULL OR `taille` = 0) AND
+		        `ta` IS NULL AND
+		        `pouls` IS NULL AND
+		        `spo2` IS NULL AND
+		        `temperature` IS NULL AND
+		        `score_sensibilite` IS NULL AND
+            `score_motricite` IS NULL AND
+            `EVA` IS NULL AND
+            `score_sedation` IS NULL AND
+            `frequence_respiratoire` IS NULL;";
+		$this->addQuery($sql);
+    
+    $this->mod_version = "0.76";
   }
 }
 
