@@ -70,12 +70,11 @@ function setClose(modele_id, object_id) {
 	<div class="little-info">
 	  Cliquez sur un modèle pour l'utiliser !
 	  <br />
-	  Les section grisées contiennent des champs potentiellement incompatibles avec le contexte courant
+	  Les sections grisées contiennent des champs potentiellement incompatibles avec le contexte courant.
 	</div>
 {{else}}
 	<div class="big-info">
-	  Les modèles pour le praticien courant ne vous sont pas accessibles.
-	  <br />
+	  Les modèles pour le praticien courant ne vous sont pas accessibles.<br />
 	  Vous devriez changer le praticien pour accéder à d'autres modèles.
 	</div>
 {{/if}}
