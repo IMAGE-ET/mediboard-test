@@ -140,7 +140,7 @@ Main.add(function () {
 <table class="form">
   {{if $consult->consultation_id}}
   <tr>
-    <td><a class="buttonnew" href="?m={{$m}}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
+    <td><a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
   </tr>
   {{/if}}
   <tr>
@@ -314,7 +314,16 @@ Main.add(function () {
           {{/if}}
         
           </tbody>
-        
+        <tr>
+          <td colspan="5">
+            {{if $dPconfig.dPcabinet.CConsultAnesth.format_auto_rques}}
+              <div class="little-info">
+              Si vous laissez les champs "Remarques" ou "Motif" vides, <br />
+              ils seront pré-remplis selon <a href="?m=dPcabinet&amp;tab=configure">la configuration du module</a>.
+              </div>
+            {{/if}}
+          </td>
+        </tr>
       </table>
     
     </td>

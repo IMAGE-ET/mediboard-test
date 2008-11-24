@@ -4,10 +4,14 @@
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">
+  <colgroup>
+    <col style="width: 30%;" />
+  </colgroup>
 
   <!-- Prise de rendez-vous -->  
   <tr>
-    <th class="category" colspan="100">Prise de rendez-vous</th>
+    <th class="category" colspan="2">Prise de rendez-vous</th>
+    <th class="category">Aide</th>
   </tr>
   
   <tr>
@@ -23,13 +27,30 @@
       <label for="{{$m}}[{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/>
     </td>
+    
+    <td rowspan="100">
+      <div class="big-info">
+        <b>Format des champs auto :</b>
+        <ul>
+          <li><b>%N</b> - Nom praticien interv</li>
+          <li><b>%P</b> - Prénom praticien interv</li>
+          <li><b>%S</b> - Initiales praticien interv</li>
+          <li><b>%L</b> - Libellé intervention</li>
+          <li><b>%I</b> - Jour intervention</li>
+          <li><b>%i</b> - Heure intervention</li>
+          <li><b>%E</b> - Jour d'entrée</li>
+          <li><b>%e</b> - Heure d'entrée</li>
+          <li><b>%T</b> - Type de séjour (A, O, E...)</li>
+        </ul>
+      </div>
+    </td>
   </tr>
 
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
     
   <tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>
@@ -46,12 +67,36 @@
       </select>
     </td>
   </tr>
+  
+  {{assign var="var" value="format_auto_motif"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" />
+    </td>
+  </tr>
+  
+  {{assign var="var" value="format_auto_rques"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" />
+    </td>
+  </tr>
 
   <!-- CPlageconsult -->  
   {{assign var="class" value="CPlageconsult"}}
     
   <tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   {{assign var="var" value="hours_start"}}
@@ -112,7 +157,7 @@
   <!-- CPrescription -->  
   {{assign var="class" value="CPrescription"}}
   <tr>
-    <th class="category" colspan="100">Prescriptions</th>
+    <th class="category" colspan="2">Prescriptions</th>
   </tr>
   <tr>
     {{assign var="var" value="view_prescription"}}

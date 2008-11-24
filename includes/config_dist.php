@@ -23,6 +23,9 @@ $dPconfig["time"] = "%Hh%M";
 $dPconfig["datetime"] = "%d/%m/%Y %Hh%M";
 $dPconfig["longdate"] = "%A %d %B %Y";
 
+$dPconfig["graph_engine"] = "jpgraph";
+$dPconfig["graph_svg"] = "non";
+
 // Standard database config
 $dPconfig["db"]["std"] = array(
   "dbtype" => "mysql",      // Change to use another dbms
@@ -220,16 +223,32 @@ $dPconfig["dPsalleOp"] = array(
    
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
-$dPconfig["dPcabinet"]["keepchir"]   = 1;
-$dPconfig["dPcabinet"]["CPlageconsult"] = array (
-  "hours_start"      => "8",
-  "hours_stop"       => "20",
-  "minutes_interval" => "15",
-);
-$dPconfig["dPcabinet"]["CConsultAnesth"]["feuille_anesthesie"] = "print_fiche";
-
-$dPconfig["dPcabinet"]["CPrescription"] = array (
-  "view_prescription" => "0"
+$dPconfig["dPcabinet"] = array(
+  "keepchir" => 1,
+  "CPlageconsult" => array (
+	  "hours_start"      => "8",
+	  "hours_stop"       => "20",
+	  "minutes_interval" => "15",
+	),
+	"CConsultAnesth" => array(
+	  "feuille_anesthesie" => "print_fiche",
+	  /* Format des champs auto :
+	   * %N - Nom praticien interv
+	   * %P - Prénom praticien interv
+	   * %S - Initiales praticien interv
+	   * %L - Libellé intervention
+	   * %I - Jour intervention
+	   * %i - Heure intervention
+	   * %E - Jour d'entrée
+	   * %e - Heure d'entrée
+	   * %T - Type de séjour (A, O, E...)
+	   */
+    "format_auto_motif" => "Pré-anésth. %I %L %S",
+    "format_auto_rques" => "%T %E %e",
+	),
+	"CPrescription" => array (
+    "view_prescription" => "0"
+  )
 );
 
 $dPconfig["dPbloc"]["CPlageOp"] = array (
@@ -238,11 +257,11 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "minutes_interval" => "15",
   "plage_vide"       => "0",
   "libelle_ccam"     => "1", 
-  "locked"          => "1",
+  "locked"           => "1",
   "planning" => array (
   	"col1" => "interv",
-	"col2" => "sejour",
-	"col3" => "patient"
+		"col2" => "sejour",
+		"col3" => "patient"
   ),
   "chambre_operation" => "0",
 );
@@ -257,11 +276,6 @@ $dPconfig["dPfiles"] = array (
   "nb_upload_files" => "1",
   "upload_max_filesize" => "2M"
 );
-
-$dPconfig["graph_engine"] = "jpgraph";
-
-$dPconfig["graph_svg"] = "non";
-
 
 $dPconfig["dPpatients"] = array (
   "CPatient" => array (
