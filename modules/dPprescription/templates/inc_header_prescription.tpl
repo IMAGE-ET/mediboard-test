@@ -287,6 +287,14 @@ submitProtocole = function(){
 	{{/if}}
  
   <td style="text-align: right">
+        {{if !$mode_protocole}}
+       <div id="antecedent_allergie">
+				     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+				     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+			 </div>   
+      {{/if}}
+      
       <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';"
               style="width: 100px;">
         <option value="">&mdash; Action</option>
@@ -307,13 +315,7 @@ submitProtocole = function(){
 				   </optgroup>
          {{/if}}      
         </select>
-      {{if !$mode_protocole}}
-       <div id="antecedent_allergie">
-				     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-				     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-			 </div>   
-      {{/if}}
+
      <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');">Mode grille</button>
     </td>
   </tr>  

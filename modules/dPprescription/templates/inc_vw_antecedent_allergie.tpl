@@ -7,7 +7,7 @@
         onmouseover="$('allergies{{$sejour_id}}').show();"
         onmouseout="$('allergies{{$sejour_id}}').hide();" />
  
-   <div id="allergies{{$sejour_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px;">
+   <div id="allergies{{$sejour_id}}" class="tooltip" style="text-align:left; display: none; background-color: #ddd; border-style: ridge; padding:3px;">
      <strong>Allergies</strong>
      <ul>
       {{foreach from=$allergies item=allergie}}
@@ -29,7 +29,7 @@
         onmouseover="$('antecedents{{$sejour_id}}').show();"
         onmouseout="$('antecedents{{$sejour_id}}').hide();" />
   
-   <div id="antecedents{{$sejour_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px;">
+   <div id="antecedents{{$sejour_id}}" class="tooltip" style="text-align:left;  display: none; background-color: #ddd; border-style: ridge; padding:3px;">
      <ul>
       {{foreach from=$antecedents key=name item=cat}}
       {{if $name != "alle" && $cat|@count}}
