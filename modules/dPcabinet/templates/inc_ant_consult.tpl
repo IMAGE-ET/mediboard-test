@@ -157,7 +157,7 @@ Main.add(function () {
             {{mb_label object=$antecedent field="rques"}}
             {{foreach from=$antecedent->_aides.rques item=_helpers key=dependsOn}}
             {{if $dependsOn != "no_enum"}} 
-            <select name="_helpers_rques-{{$dependsOn}}" style="width: 80px;" size="1" onchange="pasteHelperContent(this)" style="display:none;">
+            <select name="_helpers_rques-{{$dependsOn}}" style="width: 80px; display:none;" size="1" onchange="pasteHelperContent(this)">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
                 <optgroup label="{{$sTitleOpt}}">
