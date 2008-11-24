@@ -79,7 +79,7 @@ Main.add(function () {
 			          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			          <input type="hidden" name="type" value="sejour" />
 			          <button type="button" 
-			                  class="add" 
+			                  class="add createPresc" 
 			                  onclick="submitFormAjax(this.form, 'systemMsg');">
 			            Séjour
 			          </button> 
@@ -114,7 +114,7 @@ Main.add(function () {
 				          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 				          <input type="hidden" name="type" value="sortie" />
 						      <button type="button" 
-						              class="add" 
+						              class="add createPresc" 
 						              onclick="submitFormAjax(this.form, 'systemMsg');">			       
 						       Sortie
 						      </button>

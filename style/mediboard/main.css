@@ -1601,6 +1601,16 @@ span.hilite {
   background-repeat: no-repeat;
 }
 
+.dPsalleOp .createPresc, .dPsalleOp .createPresc:hover {
+	padding-left: 0.8em;
+  background-position:1px 140%;
+  background-color: #A9C8CD;
+  background-repeat: no-repeat;
+  height: 25px;
+  width: 70px;
+  font-size: 0.8em;
+}
+
 .dPsalleOp label,
 .dPsalleOp td.date div.date {
   padding: 4px;
