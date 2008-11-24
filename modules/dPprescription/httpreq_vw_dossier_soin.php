@@ -106,9 +106,10 @@ if($prescription->_id){
 	
 	$prescription->loadRefsLinesElementByCat("1","",$line_type);
 	$prescription->_ref_object->loadRefPrescriptionTraitement();	 
+	
 	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
 	if($traitement_personnel->_id){
-	  $traitement_personnel->loadRefsLinesMedByCat("1","1");
+	  $traitement_personnel->loadRefsLinesMedByCat("1","1",$line_type);
 	}
 	  	  
 	// Chargement des perfusions
