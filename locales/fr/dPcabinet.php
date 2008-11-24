@@ -1693,4 +1693,15 @@ $locales['CLmLot.one'] = 'Un lot LogicMax';
 $locales['CLmLot.select'] = 'Choisir un lot LogicMax';
 $locales['CLmFichier-back-lots'] = 'Liste de lots';
 $locales['CLmLot-back-fses'] = 'Liste de FSE';
+$locales['CConsultation-_datetime'] = '';
+$locales['CConsultation-_datetime-court'] = '';
+$locales['CConsultation-_datetime-desc'] = '';
+$locales['CConsultationCategorie-back-consultations'] = '';
+$locales['CFunctions-back-consultation_cats'] = '';
+$locales['CMediusers-back-actes_ngap_executes'] = '';
+$locales['CSejour-back-consultations_anesths'] = '';
+$locales['config-dPcabinet-CConsultAnesth-format_auto_motif'] = 'Format du motif automatique de consultation de pré-anesthésie';
+$locales['config-dPcabinet-CConsultAnesth-format_auto_motif-desc'] = '';
+$locales['config-dPcabinet-CConsultAnesth-format_auto_rques'] = 'Format des remarques automatiques de consultation de pré-anesthésie';
+$locales['config-dPcabinet-CConsultAnesth-format_auto_rques-desc'] = '';
 ?>
