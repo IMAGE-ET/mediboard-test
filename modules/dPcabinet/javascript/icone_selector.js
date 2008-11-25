@@ -19,10 +19,9 @@ var IconeSelector = {
     var oForm = document[this.sForm];
     
     // Champs text qui contient le nom de l'icone
-    oForm[this.sView].value = view;
-    oForm[this.sView].onchange();
+    $V(oForm[this.sView], view);
     
-    //Affichage de l'icone
-    $('iconeBackground').src = "./modules/dPcabinet/categories/"+view;
+    // Affichage de l'icone
+    $('iconeBackground').src = "./modules/dPcabinet/images/categories/"+view;
   }
 }

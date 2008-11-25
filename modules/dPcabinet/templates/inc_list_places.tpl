@@ -78,7 +78,7 @@
           </div>
           <div style="float:right">
           {{foreach from=$_place.consultations item=_consultation}}
-            <img src="./modules/dPcabinet/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+            <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
           {{/foreach}}
           </div>
         </td>

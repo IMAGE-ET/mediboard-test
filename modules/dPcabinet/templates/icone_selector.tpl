@@ -6,16 +6,9 @@ function setClose(icone) {
 }
 </script>
 
-
-<table class="main">
-  <tr>
-    <th class="title">Icones disponibles</th>
-  </tr>
-  <tr>
-    <td>
-      {{foreach from=$icones item="icone"}}
-        <a href="#"><img src="./modules/dPcabinet/categories/{{$icone}}" onclick="setClose('{{$icone}}')" alt="" /></a>
-      {{/foreach}}
-    </td>
-  </tr>
-</table>
+<h2>Icones disponibles</h2>
+<div>
+  {{foreach from=$icones item="icone"}}
+    <a href="#"><img src="./modules/dPcabinet/images/categories/{{$icone}}" onclick="setClose('{{$icone}}')" alt="" /></a>
+  {{/foreach}}
+</div>

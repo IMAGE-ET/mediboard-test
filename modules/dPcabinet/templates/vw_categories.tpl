@@ -32,7 +32,7 @@
 		{{foreach from=$categories item=_categorie}}
 		<tr {{if $_categorie->_id == $categorie->_id}}class="selected"{{/if}}>
 		  <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id={{$_categorie->_id}}">{{$_categorie->nom_categorie}}</a></td>
-		  <td><img src="./modules/dPcabinet/categories/{{$_categorie->nom_icone}}" /></td>
+		  <td><img src="./modules/dPcabinet/images/categories/{{$_categorie->nom_icone}}" /></td>
 		</tr>
 		{{/foreach}}
 	  </table>
@@ -68,20 +68,20 @@
 		    <th>{{mb_label object=$categorie field="nom_icone"}}</th>
 		    <td>
 		    {{if $categorie->_id}}
-		     <img id="iconeBackground" onclick="IconeSelector.init()" src="./modules/dPcabinet/categories/{{$categorie->nom_icone}}" />
+		     <img id="iconeBackground" onclick="IconeSelector.init()" src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" />
 		    {{else}}
 		      <img id="iconeBackground" src="images/icons/search.png" onclick="IconeSelector.init()" />
 		     {{/if}}
 		     <input type="hidden" name="nom_icone" value="{{$categorie->nom_icone}}"  class="notNull" />
-             <script type="text/javascript">
-                IconeSelector.init = function(){
-                  this.sForm = "editFrm";
-                  this.sView = "nom_icone";
-                  this.pop();
-                }
-             </script>
-             </td>      
-		  </tr>    
+         <script type="text/javascript">
+            IconeSelector.init = function(){
+              this.sForm = "editFrm";
+              this.sView = "nom_icone";
+              this.pop();
+            }
+         </script>
+       </td>
+		  </tr>
 		  <tr>
 		    <td class="button" colspan="2">
 		      {{if $categorie->_id}}

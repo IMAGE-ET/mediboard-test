@@ -34,8 +34,7 @@ function changeTonalValue(sCote, sConduction, iFrequence, iNewValue) {
   if(oForm.examaudio_id.value==""){
     oForm.submit();
   }else{
-    var fctReloadOnComplete = eval("reloadGraphTonale"+sCote);
-    submitFormAjax(oForm, 'systemMsg', { onComplete : fctReloadOnComplete});
+    submitFormAjax(oForm, 'systemMsg', { onComplete : window["reloadGraphTonale"+sCote]});
   }
 }
 
@@ -116,8 +115,7 @@ function changeTympanValue(sCote, iPression, iNewValue) {
   if(oForm.examaudio_id.value==""){
     oForm.submit();
   }else{
-    var fctReloadOnComplete = eval("reloadGraphTympan"+sCote);
-    submitFormAjax(oForm, 'systemMsg', { onComplete : fctReloadOnComplete});
+    submitFormAjax(oForm, 'systemMsg', { onComplete : window["reloadGraphTympan"+sCote]});
   }
 }
 

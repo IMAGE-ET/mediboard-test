@@ -44,7 +44,7 @@
         {{$curr_consult->heure|date_format:"%Hh%M"}}
       </div>
       <div style="display: inline; float: right;">  
-        <img src="./modules/dPcabinet/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
+        <img src="./modules/dPcabinet/images/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
       </div>
     </td>
     {{if $curr_consult->patient_id}}

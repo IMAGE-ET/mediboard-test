@@ -338,7 +338,7 @@ Main.add(function () {
             </div>
             {{if $curr_consult->categorie_id}}
             <div style="float: right">
-              <img src="./modules/dPcabinet/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
+              <img src="./modules/dPcabinet/images/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
             </div>
             {{/if}}
           </td>

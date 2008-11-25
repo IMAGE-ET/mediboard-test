@@ -6,7 +6,7 @@ function showQuestion(question){
 function hideQuestion(question){
   if(question){
     var oForm = document.editFrmNyha;
-    var oField = eval("oForm." + question);
+    var oField = oForm[question];
     
     if(oField[0].checked || oField[1].checked){
       oField[2].checked = true;
@@ -18,7 +18,7 @@ function hideQuestion(question){
 
 function changeValue(sField,sRepYes,sRepNo){
   var oForm = document.editFrmNyha;
-  var oField = eval("oForm." + sField);
+  var oField = oForm[sField];
   if(oField[1].checked){
     showQuestion(sRepYes);
     hideQuestion(sRepNo);

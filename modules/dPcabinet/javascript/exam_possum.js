@@ -31,7 +31,7 @@ function calculPhysio(){
           scorePhysio += 1;
         }
       }else if(elm != "ouverture_yeux" && elm != "rep_verbale"){
-        oField = eval("oForm."+elm);
+        oField = oForm[elm];
         if(oField && oField.value!=""){
           scorePhysio += listScorePhysio[elm][oField.value];
         }
@@ -48,7 +48,7 @@ function calculOper(){
   scoreOper = 0;
   for (var elm in listScoreOper) {
     if (typeof(listScoreOper[elm]) != "function") { // to filter prototype functions
-      oField = eval("oForm."+elm);
+      oField = oForm[elm];
       if(oField && oField.value!=""){
         scoreOper += listScoreOper[elm][oField.value];
       }
