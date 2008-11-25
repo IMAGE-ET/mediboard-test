@@ -104,8 +104,9 @@ function getMax($n, $array) {
   $max = -PHP_INT_MAX;
   
   foreach ($array as $a) {
-    if (!isset($a[1])) $a[1] = $n;
-    $max = max($n, $a[1]);
+    if (isset($a[1])) {
+      $max = max($n, $a[1], $max);
+    }
   }
   return $max;
 }
@@ -114,8 +115,9 @@ function getMin($n, $array) {
   $min = PHP_INT_MAX;
   
   foreach ($array as $a) {
-    if (!isset($a[1])) $a[1] = $n;
-    $min = min($n, $a[1]);
+    if (isset($a[1])) {
+      $min = min($n, $a[1], $min);
+    }
   }
   return $min;
 }
