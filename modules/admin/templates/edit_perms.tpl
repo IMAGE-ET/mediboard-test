@@ -66,6 +66,8 @@ Main.add(function () {
             {{include file="loginas.tpl" loginas_user=$curr_user}}
           </td>
           {{if ($smarty.foreach.users.index % $numCols) == ($numCols-1) && !$smarty.foreach.users.last}}</tr><tr>{{/if}}
+        {{foreachelse}}
+          <td>{{tr}}CMediusers.none{{/tr}}</td>
         {{/foreach}}
         </tr>
       </table>
