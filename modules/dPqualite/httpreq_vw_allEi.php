@@ -8,7 +8,7 @@
 */
 
 global $can, $AppUI;
-$can->needsEdit();
+$can->needsRead();
 
 $type              = mbGetValueFromGetOrSession("type");
 $first             = mbGetValueFromGetOrSession("first");
