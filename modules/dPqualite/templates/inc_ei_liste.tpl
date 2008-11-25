@@ -9,12 +9,12 @@
 <div style="text-align: right;">
   {{if $first >= 20}}
   <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first-20}}')" style="font-weight: bold; font-size: 1.5em; float: left;">
-  [{{$first-20}} - {{$first}}] &lt;&lt;
+  [{{$first-19}} - {{$first}}] &lt;&lt;
   </a>
   {{/if}}
   {{if $first < $countFiches - 20}}
   <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first+20}}')" style="font-weight: bold; font-size: 1.5em;">
-  &gt;&gt; [{{$first+21}} - {{$first+41}}]
+  &gt;&gt; [{{$first+21}} - {{$first+40}}]
   </a>
   
   {{/if}}
