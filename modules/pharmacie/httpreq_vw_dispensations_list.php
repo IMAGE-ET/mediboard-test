@@ -46,6 +46,7 @@ $besoin_patient = array();
 
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+if ($prescriptions) {
 foreach($prescriptions as $_prescription){
   $date_min = $_date_min;
   $date_max = $_date_max;
@@ -199,6 +200,7 @@ foreach($prescriptions as $_prescription){
     } 
   }
 }
+}
 
 foreach($besoin_patient as $code_cip => &$quantites_by_patient){
   foreach($quantites_by_patient as $patient_id => &$quantites){
@@ -211,11 +213,13 @@ foreach($besoin_patient as $code_cip => &$quantites_by_patient){
 	}
 }
 
+$category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+
 // Calcul du nombre de boites (unites de presentation)
 foreach($dispensations as $cip => $unites){
   $product = new CProduct();
   $product->code = $cip;
-  $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+  $product->category_id = $category_id;
   
   if ($product->loadMatchingObject()) {
     $stocks[$cip] = new CProductStockGroup();
@@ -243,7 +247,7 @@ foreach($dispensations as $code_cip => &$_quantites){
   $where = array();
   $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min' AND '$_date_max'"; // entre les deux dates
   $where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
-  $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+  $where['product.category_id'] = "= '$category_id'";
   $where['product_delivery.patient_id'] = "IS NULL";
   $where['product_delivery.quantity'] = " > 0";
   // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement

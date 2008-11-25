@@ -32,14 +32,16 @@ $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 
 $tab_prescription_id = array();
-foreach($prescriptions as &$_prescription){
-	if(!$_prescription->_ref_object){
-		$_prescription->loadRefObject();
+if ($prescriptions) {
+	foreach($prescriptions as &$_prescription){
+		if(!$_prescription->_ref_object){
+			$_prescription->loadRefObject();
+		}
+		$sejour =& $_prescription->_ref_object;
+		$sejour->loadRefPatient();
+		$patients[$sejour->patient_id] =& $sejour->_ref_patient;
+		$tab_prescription_id[$sejour->patient_id] = $_prescription->_id;
 	}
-	$sejour =& $_prescription->_ref_object;
-	$sejour->loadRefPatient();
-	$patients[$sejour->patient_id] =& $sejour->_ref_patient;
-	$tab_prescription_id[$sejour->patient_id] = $_prescription->_id;
 }
 
 // Smarty template

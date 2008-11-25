@@ -2,6 +2,7 @@
   $('list-dispensations-count').update({{$dispensations|@count}});
 </script>
 
+{{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity&&true}}
 <table class="tbl">
   {{if $mode_nominatif}}
   <tr>
@@ -13,8 +14,8 @@
   <tr>
     <th>Quantité à administrer</th>
     <th>Quantité à dispenser</th>
-    {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
-    <th>Stock pharmacie</th>
+    {{if !$infinite}}
+      <th>Stock pharmacie</th>
     {{/if}}
     <th>Déjà effectuées</th>
     <th>Dispensation</th>
@@ -63,18 +64,20 @@
       <td>
         {{$quantite_dispensation}} {{$produit->_unite_dispensation}}    
       </td>
-     <td style="text-align: center">
-       {{if array_key_exists($code_cip,$delivrances)}}
-         {{assign var=delivrance value=$delivrances.$code_cip}}
-         {{$delivrance->_ref_stock->quantity}}
-       {{else}}
-         0
-       {{/if}}
-     </td>
+      {{if !$infinite}}
+        <td style="text-align: center">
+         {{if array_key_exists($code_cip,$delivrances)}}
+           {{assign var=delivrance value=$delivrances.$code_cip}}
+           {{$delivrance->_ref_stock->quantity}}
+         {{else}}
+           0
+         {{/if}}
+        </td>
+      {{/if}}
      <td style="text-align: left">       
        {{foreach from=$done.$code_cip item=curr_done name="done"}}
          {{if !$smarty.foreach.done.first}}
-             {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
+           {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
              <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
              <div class="tooltip-trigger" 
                   onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done->_id}}'} })">
@@ -97,13 +100,12 @@
          Aucune
        {{/foreach}}
      </td>
-     {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
      <td style="text-align: center">
-     {{if array_key_exists($code_cip,$delivrances)}}
-       {{assign var=delivrance value=$delivrances.$code_cip}}
-       {{if $delivrance->_ref_stock->quantity>0}}
-       <script type="text/javascript">prepareForm('form-dispensation-{{$code_cip}}');</script>
-       <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+     {{if $infinite}}
+      {{if array_key_exists($code_cip,$delivrances)}}
+        {{assign var=delivrance value=$delivrances.$code_cip}}
+        <script type="text/javascript">prepareForm('form-dispensation-{{$code_cip}}');</script>
+        <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
          <input type="hidden" name="m" value="dPstock" />
          <input type="hidden" name="tab" value="{{$tab}}" />
          <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -116,18 +118,38 @@
          {{/if}}
          {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0}}
          <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
-       </form>
-       {{else}}
-       Stock épuisé à la pharmacie
+        </form>
        {{/if}}
      {{else}}
-     Pas de stock à la pharmacie 
-     <button type="button" onclick="window.location.href='?m=dPstock&amp;tab=vw_idx_stock_group'" class="new">
-       Créer
-     </button>
+       {{if array_key_exists($code_cip,$delivrances)}}
+         {{assign var=delivrance value=$delivrances.$code_cip}}
+         {{if $delivrance->_ref_stock->quantity>0}}
+         <script type="text/javascript">prepareForm('form-dispensation-{{$code_cip}}');</script>
+         <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+           <input type="hidden" name="m" value="dPstock" />
+           <input type="hidden" name="tab" value="{{$tab}}" />
+           <input type="hidden" name="dosql" value="do_delivery_aed" />
+           <input type="hidden" name="del" value="0" />
+           <input type="hidden" name="date_dispensation" value="now" />
+           <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
+           <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
+           {{if $mode_nominatif}}
+           <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
+           {{/if}}
+           {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0}}
+           <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
+         </form>
+         {{else}}
+         Stock épuisé à la pharmacie
+         {{/if}}
+       {{else}}
+         Pas de stock à la pharmacie 
+         <button type="button" onclick="window.location.href='?m=dPstock&amp;tab=vw_idx_stock_group'" class="new">
+           Créer
+         </button>
+       {{/if}}
      {{/if}}
      </td>
-     {{/if}}
      <td style="text-align: center">
      {{if $stocks_service.$code_cip}}
        {{assign var=stock_service value=$stocks_service.$code_cip}}
