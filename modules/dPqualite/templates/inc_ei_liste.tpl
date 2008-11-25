@@ -8,10 +8,15 @@
 {{if $countFiches > 20}}
 <div style="text-align: right;">
   {{if $first >= 20}}
-  <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first-20}}')" style="font-weight: bold; font-size: 1.5em; float: left;">&lt;&lt;</a>
+  <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first-20}}')" style="font-weight: bold; font-size: 1.5em; float: left;">
+  [{{$first-20}} - {{$first}}] &lt;&lt;
+  </a>
   {{/if}}
   {{if $first < $countFiches - 20}}
-  <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first+20}}')" style="font-weight: bold; font-size: 1.5em;">&gt;&gt;</a>
+  <a href="#1" onclick="loadListFiches('{{$type}}', '{{$first+20}}')" style="font-weight: bold; font-size: 1.5em;">
+  &gt;&gt; [{{$first+21}} - {{$first+41}}]
+  </a>
+  
   {{/if}}
 </div>
 {{/if}}
@@ -42,7 +47,7 @@
     <th class="category">{{tr}}CFicheEi-qualite_date_controle-court{{/tr}}</th>
   </tr>
   {{foreach from=$listeFiches item=currFiche}}
-  <tr>
+  <tr {{if $currFiche->_id == $selected_fiche_id}}class="selected"{{/if}}>
     <td class="text">
       <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
         {{$currFiche->date_incident|date_format:"%d/%m/%Y %Hh%M"}}

@@ -10,9 +10,10 @@
 global $can, $AppUI;
 $can->needsEdit();
 
-$selected_user_id = mbGetValueFromGetOrSession("selected_user_id");
-$type = mbGetValueFromGetOrSession("type");
-$first = mbGetValueFromGetOrSession("first");
+$type              = mbGetValueFromGetOrSession("type");
+$first             = mbGetValueFromGetOrSession("first");
+$selected_user_id  = mbGetValueFromGetOrSession("selected_user_id");
+$selected_fiche_id = mbGetValueFromGetOrSession("selected_fiche_id");
 
 $listUsersTermine = new CMediusers;
 
@@ -42,6 +43,7 @@ $smarty->assign("countFiches"      , $countFiches);
 $smarty->assign("type"             , $type);
 $smarty->assign("first"            , $first);
 $smarty->assign("selected_user_id" , $selected_user_id);
+$smarty->assign("selected_fiche_id", $selected_fiche_id);
 
 $smarty->display("inc_ei_liste.tpl");
 

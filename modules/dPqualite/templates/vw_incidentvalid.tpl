@@ -37,6 +37,7 @@ function loadListFiches(type, first) {
   if ($(type).empty() || first) {
     var url = new Url;
     url.setModuleAction("dPqualite", "httpreq_vw_allEi");
+    url.addParam("selected_fiche_id", '{{$selected_fiche_id}}');
     url.addParam("type", type);
     url.addParam("first", first);
     url.requestUpdate(type);
@@ -53,7 +54,7 @@ function printIncident(ficheId){
 
 Main.add(function() {
   var tab = Control.Tabs.create('tab-incident', true);
-  loadListFiches(tab.activeContainer.id);
+  loadListFiches(tab.activeContainer.id, '{{$first}}');
 });
 </script>
 

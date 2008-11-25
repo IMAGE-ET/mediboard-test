@@ -14,6 +14,7 @@ $fiche_ei_id         = mbGetValueFromGetOrSession("fiche_ei_id",null);
 $ficheAnnuleVisible  = mbGetValueFromGetOrSession("ficheAnnuleVisible" , 0);
 $ficheTermineVisible = mbGetValueFromGetOrSession("ficheTermineVisible" , 0);
 $selected_user_id    = mbGetValueFromGetOrSession("selected_user_id");
+$first               = mbGetValueFromGetOrSession("first");
 
 $catFiche = array();
 $fiche = new CFicheEi();
@@ -99,10 +100,12 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("catFiche"         , $catFiche);
 $smarty->assign("fiche"            , $fiche);
+$smarty->assign("first"            , $first);
 $smarty->assign("today"            , mbDate());
 $smarty->assign("listUsersEdit"    , $listUsersEdit);
 $smarty->assign("listCounts"       , $listCounts);
 $smarty->assign("selectedUser"     , $selectedUser);
+$smarty->assign("selected_fiche_id", $fiche_ei_id);
 
 $smarty->display("vw_incidentvalid.tpl");
 ?>
