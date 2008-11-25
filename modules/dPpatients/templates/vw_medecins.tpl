@@ -226,7 +226,7 @@ Main.add(function () {
 
         <tr>
           <td class="button" colspan="4">
-            {{if $curr_medecin->_id}}
+            {{if $medecin->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
