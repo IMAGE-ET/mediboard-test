@@ -4,19 +4,19 @@
 SiblingsChecker = {
   textDifferent: null,
   textSiblings: null,
+  formName: null,
   
 	// Mutex
   running : false,
 
   // Send Ajax request
-  request: function() {
+  request: function(oForm) {
 	  if (this.running) {
 	    return;
 	  }
 	  
 	  this.running = true;
-	  
-  	var oForm = document.editFrm;
+  	this.formName = oForm.name;
 
 	  var url = new Url;
 	  url.setModuleAction("dPpatients", "httpreq_get_siblings");
@@ -37,7 +37,7 @@ SiblingsChecker = {
     confirmed &= !this.textDifferent || confirm(this.textDifferent);
     confirmed &= !this.textSiblings  || confirm(this.textSiblings);
     if (confirmed) {
-      document.editFrm.submit();
+      document.forms[this.formName].submit();
     }
 	  this.running = false;
   }

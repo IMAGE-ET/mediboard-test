@@ -38,7 +38,7 @@ function confirmCreation(oForm){
     return false;
   }
   
-  SiblingsChecker.request();
+  SiblingsChecker.request(oForm);
   return false;
 }
 
@@ -133,6 +133,7 @@ Main.add(function () {
         {{if $patient->_bind_vitale}}
         <input type="hidden" name="_bind_vitale" value="1" />
         {{/if}}
+        <button type="submit" style="display: none;">&nbsp;</button>
         
         {{mb_field object=$patient field="patient_id" hidden=1 prop=""}}
         
