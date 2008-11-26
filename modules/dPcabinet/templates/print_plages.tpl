@@ -149,5 +149,3 @@
   </tr>
   {{/foreach}}
 </table>
-
-<
