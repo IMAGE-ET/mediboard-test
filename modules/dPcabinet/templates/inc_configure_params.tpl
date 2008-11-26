@@ -32,15 +32,15 @@
       <div class="big-info">
         <b>Format des champs auto :</b>
         <ul>
-          <li><b>%N</b> - Nom praticien interv</li>
-          <li><b>%P</b> - Prénom praticien interv</li>
-          <li><b>%S</b> - Initiales praticien interv</li>
-          <li><b>%L</b> - Libellé intervention</li>
-          <li><b>%I</b> - Jour intervention</li>
-          <li><b>%i</b> - Heure intervention</li>
-          <li><b>%E</b> - Jour d'entrée</li>
-          <li><b>%e</b> - Heure d'entrée</li>
-          <li><b>%T</b> - Type de séjour (A, O, E...)</li>
+          <li><tt>%N</tt> - Nom praticien interv</li>
+          <li><tt>%P</tt> - Prénom praticien interv</li>
+          <li><tt>%S</tt> - Initiales praticien interv</li>
+          <li><tt>%L</tt> - Libellé intervention</li>
+          <li><tt>%I</tt> - Jour intervention</li>
+          <li><tt>%i</tt> - Heure intervention</li>
+          <li><tt>%E</tt> - Jour d'entrée</li>
+          <li><tt>%e</tt> - Heure d'entrée</li>
+          <li><tt>%T</tt> - Type de séjour (A, O, E...)</li>
         </ul>
       </div>
     </td>
@@ -76,7 +76,7 @@
       </label>  
     </th>
     <td>
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" />
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>
   
@@ -88,7 +88,7 @@
       </label>  
     </th>
     <td>
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" />
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>
 

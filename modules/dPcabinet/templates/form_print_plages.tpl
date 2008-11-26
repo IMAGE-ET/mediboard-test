@@ -17,6 +17,7 @@ function popPlages() {
   url.addElement(form._date_max);
   url.addElement(form.chir);
   url.addParam("_coordonnees",$V(form._coordonnees));
+  url.addParam("_plages_vides",$V(form._plages_vides));
   url.popup(700, 550, "Planning");
 }
 
@@ -82,6 +83,10 @@ function changeDateCal(){
         <tr>
           <th>{{mb_label object=$filter field="_coordonnees"}}</th>
           <td>{{mb_field object=$filter field="_coordonnees"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_plages_vides"}}</th>
+          <td>{{mb_field object=$filter field="_plages_vides"}}</td>
         </tr>
       </table>
 

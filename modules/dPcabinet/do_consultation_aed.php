@@ -43,44 +43,44 @@ else {
     $consultAnesth->loadObject($where);
     $consultAnesth->consultation_id = $do->_obj->consultation_id;
     
-    if(isset($_POST["_operation_id"])){
+    if (isset($_POST["_operation_id"])) {
       $consultAnesth->operation_id = $_POST["_operation_id"];
       $consultAnesth->loadRefOperation();
-    }
-    
-    // Remplissage du motif de pré-anesthésie si creation et champ motif vide
-    if ($consultAnesth->_ref_operation->_id) {
-    	$format_motif = CAppUI::conf('dPcabinet CConsultAnesth format_auto_motif');
-    	$format_rques = CAppUI::conf('dPcabinet CConsultAnesth format_auto_rques');
-    	
-    	if (($format_motif && !$do->_obj->motif) || ($format_rques && !$do->_obj->rques)) {
-	    	$op = $consultAnesth->_ref_operation;
-	    	$op->loadRefChir();
-	    	$op->_ref_chir->updateFormFields();
-	    	$op->loadRefPlageOp();
-	    	$op->loadRefSejour();
-	    	
-        $items = array(
-          '%N' => $op->_ref_chir->_user_first_name,
-          '%P' => $op->_ref_chir->_user_last_name,
-          '%S' => substr($op->_ref_chir->_user_first_name, 0, 1).substr($op->_ref_chir->_user_last_name, 0, 1),
-          '%L' => $op->libelle,
-          '%I' => mbTransformTime(null, $op->_ref_plageop->date, CAppUI::conf('date')),
-          '%E' => mbTransformTime(null, $op->_ref_sejour->entree_prevue, CAppUI::conf('date')),
-          '%e' => mbTransformTime(null, $op->_ref_sejour->entree_prevue, CAppUI::conf('time')),
-          '%T' => strtoupper(substr($op->_ref_sejour->type, 0, 1))
-        );
 
-	    	if ($format_motif && !$do->_obj->motif) {
-	    		$do->_obj->motif = str_replace(array_keys($items), $items, $format_motif);
-	    	}
+	    // Remplissage du motif de pré-anesthésie si creation et champ motif vide
+	    if ($consultAnesth->_ref_operation->_id) {
+	    	$format_motif = CAppUI::conf('dPcabinet CConsultAnesth format_auto_motif');
+	    	$format_rques = CAppUI::conf('dPcabinet CConsultAnesth format_auto_rques');
 	    	
-    	  if ($format_rques && !$do->_obj->rques) {
-          $do->_obj->rques = str_replace(array_keys($items), $items, $format_rques);
-        }
-	    	$do->_obj->store();
-    	}
-    }
+	    	if (($format_motif && !$do->_obj->motif) || ($format_rques && !$do->_obj->rques)) {
+		    	$op = $consultAnesth->_ref_operation;
+		    	$op->loadRefChir();
+		    	$op->_ref_chir->updateFormFields();
+		    	$op->loadRefPlageOp();
+		    	$op->loadRefSejour();
+		    	
+	        $items = array(
+	          '%N' => $op->_ref_chir->_user_first_name,
+	          '%P' => $op->_ref_chir->_user_last_name,
+	          '%S' => $op->_ref_chir->_shortview,
+	          '%L' => $op->libelle,
+	          '%I' => mbTransformTime(null, $op->_ref_plageop->date, CAppUI::conf('date')),
+	          '%E' => mbTransformTime(null, $op->_ref_sejour->entree_prevue, CAppUI::conf('date')),
+	          '%e' => mbTransformTime(null, $op->_ref_sejour->entree_prevue, CAppUI::conf('time')),
+	          '%T' => strtoupper(substr($op->_ref_sejour->type, 0, 1))
+	        );
+	
+		    	if ($format_motif && !$do->_obj->motif) {
+		    		$do->_obj->motif = str_replace(array_keys($items), $items, $format_motif);
+		    	}
+		    	
+	    	  if ($format_rques && !$do->_obj->rques) {
+	          $do->_obj->rques = str_replace(array_keys($items), $items, $format_rques);
+	        }
+		    	$do->_obj->store();
+	    	}
+	    }
+    }    
     
     $consultAnesth->store();
   }

@@ -117,7 +117,8 @@ class CConsultation extends CCodable {
   var $_etat_reglement_tiers   = null;
   var $_type_affichage     = null;
   var $_coordonnees        = null;
-
+  var $_plages_vides       = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'consultation';
@@ -175,6 +176,7 @@ class CConsultation extends CCodable {
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
+    $specs["_plages_vides"]     = "bool default|1";
     $specs["_prat_id"]          = "text";
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";

@@ -70,23 +70,24 @@
     {{/if}}
     <td class="text">
       {{$curr_consult->motif|nl2br}}
-      {{if $curr_consult->_ref_consult_anesth->_id && $curr_consult->_ref_consult_anesth->operation_id}}
-        {{assign var=curr_op value=$curr_consult->_ref_consult_anesth->_ref_operation}}
+      {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
+      {{if $consult_anesth->_id && $consult_anesth->operation_id}}
+        <div style="border-left: 4px solid #aaa; padding-left: 5px;">
+        {{assign var=operation value=$consult_anesth->_ref_operation}}
 
-        {{if $curr_consult->motif}}<br />{{/if}}
-        Intervention le {{$curr_consult->_ref_consult_anesth->_date_op|date_format:"%d/%m/%Y"}}
-        - Dr {{$curr_op->_ref_praticien->_view}}<br />
-        {{if $curr_op->libelle}}
-          <em>[{{$curr_op->libelle}}]</em>
+        Intervention le {{$operation->_datetime|date_format:$dPconfig.date}}
+        - Dr {{$operation->_ref_praticien->_view}}<br />
+        {{if $operation->libelle}}
+          <em>[{{$operation->libelle}}]</em>
           <br />
         {{/if}}
-        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+        {{foreach from=$operation->_ext_codes_ccam item=curr_code}}
           {{if !$curr_code->_code7}}<strong>{{/if}}
-          {{$curr_code->libelleLong|truncate:60:"...":false}}
-          <em>({{$curr_code->code}})</em>
+          {{$curr_code->code}} : {{$curr_code->libelleLong|truncate}}
           {{if !$curr_code->_code7}}</strong>{{/if}}
           <br/>
         {{/foreach}}
+        </div>
       {{/if}}
     </td>
     <td class="text">{{$curr_consult->rques|nl2br}}</td>
