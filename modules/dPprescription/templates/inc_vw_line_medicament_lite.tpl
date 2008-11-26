@@ -5,7 +5,7 @@
   {{if $line->_traitement}}traitement{{else}}med{{/if}}
   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
   
-    <td style="width: 20%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
+    <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->_traitement}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
@@ -47,7 +47,7 @@
         {{/if}}
       {{/if}}
     </td>
-    <td style="width: 15%">
+    <td style="width: 10%">
       <!-- Duree de la ligne -->
       {{if $line->duree && $line->unite_duree}}
         {{mb_value object=$line field=duree}}  

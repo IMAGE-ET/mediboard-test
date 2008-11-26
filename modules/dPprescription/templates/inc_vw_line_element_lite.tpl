@@ -2,7 +2,7 @@
 <!-- Header de la ligne d'element -->
 <tr id="line_element_{{$line->_id}}" class="hoverable elt
   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">    
-  <td style="width:20%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
+  <td style="width:15%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
       class="text {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
     <script type="text/javascript">
        Main.add( function(){
@@ -25,7 +25,7 @@
     {{/if}}
   </td>
 
-	<td style="width:10%;">
+	<td style="width:15%;">
 	  <!-- Date de debut -->
     {{if $line->debut}}
       {{mb_value object=$line field=debut}}

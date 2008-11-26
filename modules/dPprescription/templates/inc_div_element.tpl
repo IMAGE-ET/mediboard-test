@@ -102,10 +102,10 @@ Main.add( function(){
 
  {{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
  <table class="tbl">
-   <th style="width:20%;">Libellé</th>
+   <th style="width:15%;">Libellé</th>
    <th style="width:10%;">Catégorie</th>
    <th style="width:10%;">Praticien</th>
-   <th style="width:10%;">Début</th>
+   <th style="width:15%;">Début</th>
    <th style="width:10%;">Durée</th>
    <th style="width:20%;">Prises</th>
    <th style="width:10%;">Exécutant</th>
@@ -162,7 +162,7 @@ Main.add( function(){
             {{if $lite}}
               {{assign var=line value=$line_comment}}  
 							 <tr>
-							   <td style="width:20%;" class="text">
+							   <td style="width:15%;" class="text">
 							     {{$line->commentaire}}
 							   </td>
 							   <td style="width:10%;" class="text">{{$category->_view}}</td>
@@ -174,7 +174,7 @@ Main.add( function(){
 							       {{$line->_ref_praticien->_view}}    
 							     {{/if}}
 							     </td>
-							   <td style="width:10%;"></td>
+							   <td style="width:15%;"></td>
 							   <td style="width:10%;"></td>
 							   <td style="width:20%;"></td>
 							   
