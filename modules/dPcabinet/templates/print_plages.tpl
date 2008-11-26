@@ -30,14 +30,14 @@
   </tr>
   
   <tr>
-    <th>Nom / Prénom</th>
+    <th style="width: 15%;">Nom / Prénom</th>
     {{if $coordonnees}}
-    <th>Adresse</th>
-    <th>Tel</th>
+    <th style="width: 15%;">Adresse</th>
+    <th style="width: 01%;">Tel</th>
     {{/if}}
-    <th>Age</th>
-    <th>Motif</th>
-    <th>Remarques</th>
+    <th style="width: 01%;">Age</th>
+    <th style="width: 25%;">Motif</th>
+    <th style="width: 25%;">Remarques</th>
     <th>Durée</th>
   </tr>
   
@@ -77,9 +77,10 @@
 	    </td>
 	    {{/if}}
 
-    <td rowspan="2">
+    <td rowspan="2" style="text-align: center; ">
       {{$patient->_age}} ans
       {{if $patient->_age != "??"}}
+        <br />
         ({{mb_value object=$patient field="naissance"}})
       {{/if}}
     </td>
