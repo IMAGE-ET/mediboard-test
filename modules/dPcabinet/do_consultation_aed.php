@@ -60,8 +60,8 @@ else {
 		    	$op->loadRefSejour();
 		    	
 	        $items = array(
-	          '%N' => $op->_ref_chir->_user_first_name,
-	          '%P' => $op->_ref_chir->_user_last_name,
+	          '%N' => $op->_ref_chir->_user_last_name,
+	          '%P' => $op->_ref_chir->_user_first_name,
 	          '%S' => $op->_ref_chir->_shortview,
 	          '%L' => $op->libelle,
 	          '%I' => mbTransformTime(null, $op->_ref_plageop->date, CAppUI::conf('date')),
