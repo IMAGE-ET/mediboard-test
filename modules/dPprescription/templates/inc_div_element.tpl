@@ -72,7 +72,6 @@ Main.add( function(){
 		  </button>
 		  {{/if}}
 		  
-		  <!-- 
 			{{if $readonly}}
 			  <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
 			    {{if $lite}}Vue complète
@@ -80,7 +79,6 @@ Main.add( function(){
 			    {{/if}}
 			  </button>
 			{{/if}}
-			 -->
 			   
 		  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
 		  {{if $prescription->object_id && $is_praticien}}
