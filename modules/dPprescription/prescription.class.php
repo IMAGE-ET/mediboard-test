@@ -1115,7 +1115,9 @@ class CPrescription extends CMbObject {
     if(!isset($this->_scores["allergie"])){
       $this->_scores["allergie"] = 0;
     }
-    $this->_alertes["allergie"] = array();
+    if(!isset($this->_alertes["allergie"])){
+      $this->_alertes["allergie"] = array();
+    }
     $niveau_max = 0;
     foreach($listAllergies as $key => $all) {
       if($all->CIP == $code_cip) {
@@ -1133,7 +1135,9 @@ class CPrescription extends CMbObject {
     if(!isset($this->_scores["interaction"])){
       $this->_scores["interaction"] = array();
     }
-    $this->_alertes["interaction"] = array();
+    if(!isset($this->_alertes["interaction"])){
+      $this->_alertes["interaction"] = array();
+    }
     
     $niveau_max = 0;
     foreach($listInteractions as $key => $int) {
@@ -1166,7 +1170,9 @@ class CPrescription extends CMbObject {
     if(!isset($this->_scores["profil"])){
       $this->_scores["profil"] = array();
     }
-    $this->_alertes["profil"] = array();
+    if(!isset($this->_alertes["profil"])){
+      $this->_alertes["profil"] = array();
+    }
 
     $niveau_max = 0;
     foreach($listProfil as $key => $profil) {
