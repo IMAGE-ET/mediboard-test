@@ -2,7 +2,12 @@
   $('list-dispensations-count').update({{$dispensations|@count}});
 </script>
 
-{{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity&&true}}
+{{if $dPconfig.dPstock.CProductStockGroup.infinite_quantity == 1}}
+  {{assign var=infinite value=1}}
+{{else}}
+  {{assign var=infinite value=0}}
+{{/if}}
+
 <table class="tbl">
   {{if $mode_nominatif}}
   <tr>
@@ -119,6 +124,11 @@
          {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0}}
          <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
         </form>
+       {{else}}
+         Pas de stock à la pharmacie 
+         <button type="button" onclick="window.location.href='?m=dPstock&amp;tab=vw_idx_stock_group'" class="new">
+           Créer
+         </button>
        {{/if}}
      {{else}}
        {{if array_key_exists($code_cip,$delivrances)}}
