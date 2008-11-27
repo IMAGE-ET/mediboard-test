@@ -12,7 +12,7 @@ $can->needsRead();
 
 $soap_url = CImeds::getSoapUrl();
 if (!url_exists($soap_url)) {
-  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur IMeds inatteignable à l'adresse : $serviceAdresse");
+  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur IMeds inatteignable à l'adresse : $soap_url");
   return;
 }
 
@@ -22,7 +22,7 @@ $functions = $client->__getFunctions();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("adresse", $serviceAdresse);
+$smarty->assign("soap_url", $soap_url);
 $smarty->assign("functions", $functions);
 
 $smarty->display("vw_soap_services.tpl");

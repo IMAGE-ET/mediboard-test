@@ -5,7 +5,7 @@
         <tr>
           <th>
             Liste des fonctions disponibles
-            <a href="{{$adresse}}" title="accéder directement au serveur">(accéder directement au serveur)</a>
+            <a href="{{$soap_url}}" title="accéder directement au serveur">(accéder directement au serveur)</a>
           </th>
         </tr>
         {{foreach from=$functions item=curr_function}}
