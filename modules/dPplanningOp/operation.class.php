@@ -695,6 +695,7 @@ class COperation extends CCodable {
     $template->addProperty("Opération - CCAM3 - code"         , @$this->_ext_codes_ccam[2]->code);
     $template->addProperty("Opération - CCAM3 - description"  , @$this->_ext_codes_ccam[2]->libelleLong);
     $template->addProperty("Opération - CCAM complet"         , implode(" - ", $this->_codes_ccam));
+    $template->addProperty("Opération - CCAM - descriptions"  , implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong")));
     $template->addProperty("Opération - salle"                , @$this->_ref_plageop->_ref_salle->nom);
     $template->addProperty("Opération - côté"                 , $this->cote);
     $template->addProperty("Opération - date"                 , mbTransformTime(null, $this->_datetime, $dateFormat));
