@@ -39,21 +39,19 @@ class CChapitreDoc extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["chapitres_doc"] = "CChapitreDoc pere_id";
-      $backRefs["chapitres_ged"] = "CDocGed doc_chapitre_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["chapitres_doc"] = "CChapitreDoc pere_id";
+    $backRefs["chapitres_ged"] = "CDocGed doc_chapitre_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "pere_id"  => "ref class|CChapitreDoc",
-      "group_id" => "ref class|CGroups",
-      "nom"      => "notNull str maxLength|50",
-      "code"     => "notNull str maxLength|10"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["pere_id"]  = "ref class|CChapitreDoc";
+    $specs["group_id"] = "ref class|CGroups";
+    $specs["nom"]      = "notNull str maxLength|50";
+    $specs["code"]     = "notNull str maxLength|10";
+    return $specs;
   }
   
   function updateFormFields() {
@@ -114,6 +112,5 @@ class CChapitreDoc extends CMbObject {
       }
     }
   }
-  
 }
 ?>

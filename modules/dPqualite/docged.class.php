@@ -56,26 +56,24 @@ class CDocGed extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["documents_ged_suivi"] = "CDocGedSuivi doc_ged_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["documents_ged_suivi"] = "CDocGedSuivi doc_ged_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "group_id"         => "ref class|CGroups",
-      "user_id"          => "ref class|CMediusers",
-      "doc_chapitre_id"  => "ref class|CChapitreDoc",
-      "doc_theme_id"     => "ref class|CThemeDoc",
-      "doc_categorie_id" => "ref class|CCategorieDoc",
-      "titre"            => "str maxLength|50",
-      "etat"             => "notNull enum list|0|16|32|48|64",
-      "version"          => "currency min|0",
-      "annule"           => "bool",
-      "num_ref"          => "num"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["group_id"]         = "ref class|CGroups";
+    $specs["user_id"]          = "ref class|CMediusers";
+    $specs["doc_chapitre_id"]  = "ref class|CChapitreDoc";
+    $specs["doc_theme_id"]     = "ref class|CThemeDoc";
+    $specs["doc_categorie_id"] = "ref class|CCategorieDoc";
+    $specs["titre"]            = "str maxLength|50";
+    $specs["etat"]             = "notNull enum list|0|16|32|48|64";
+    $specs["version"]          = "currency min|0";
+    $specs["annule"]           = "bool";
+    $specs["num_ref"]          = "num";
+    return $specs;
   }
 
   function getEtatRedac() {

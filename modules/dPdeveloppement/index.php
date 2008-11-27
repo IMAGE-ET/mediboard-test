@@ -14,7 +14,7 @@ $module->registerTab("view_logs"           		, null, TAB_READ);
 $module->registerTab("mnt_table_classes"   		, null, TAB_READ);
 $module->registerTab("mnt_backref_classes" 		, null, TAB_READ);
 $module->registerTab("mnt_traduction_classes" , null, TAB_READ);
-$module->registerTab("echantillonnage"     		, null, TAB_READ);
+//$module->registerTab("echantillonnage"     		, null, TAB_READ);
 $module->registerTab("launch_tests"        		, null, TAB_READ);
 $module->registerTab("form_tester"            , null, TAB_READ);
 ?>

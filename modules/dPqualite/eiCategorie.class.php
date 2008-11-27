@@ -28,17 +28,15 @@ class CEiCategorie extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["items"] = "CEiItem ei_categorie_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["items"] = "CEiItem ei_categorie_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "nom" => "notNull str maxLength|50"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["nom"] = "notNull str maxLength|50";
+    return $specs;
   }
   
   function loadRefsBack() {
@@ -48,6 +46,5 @@ class CEiCategorie extends CMbObject {
     $order = "nom ASC";
     $this->_ref_items = $this->_ref_items->loadList($where, $order);
   }
-  
 }
 ?>

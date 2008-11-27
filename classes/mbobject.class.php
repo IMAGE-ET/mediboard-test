@@ -1440,15 +1440,30 @@ class CMbObject {
    * Build Enums variant returning values
    */
   function getEnumsTrans() {
-    $enumsTrans = array();
-    foreach ($this->_enums as $propName => $enumValues) {
+  	if (!$this->_enums) $this->_enums = $this->getEnums();
+  	
+  	$enumsTrans = array();
+  	foreach ($this->_enums as $name => $enum) {
+  	  if ($this->_specs[$name] instanceof CEnumSpec) {
+        foreach ($enum as $val) {
+          $enumsTrans[$name][$val] = CAppUI::tr("$this->_class_name.$name.$val");
+        }
+      }
+      elseif ($this->_specs[$name] instanceof CBoolSpec) {
+        $enumsTrans[$name] = array(
+          0 => CAppUI::tr("bool.0"),
+          1 => CAppUI::tr("bool.1"),
+        );
+      }
+  	}
+  	
+    /*foreach ($this->_enums as $propName => $enumValues) {
       $enumsTrans[$propName] = array_flip($enumValues);
       foreach($enumsTrans[$propName] as $key => $item) {
         $enumsTrans[$propName][$key] = CAppUI::tr("$this->_class_name.$propName.$key");
       }
       asort($enumsTrans[$propName]);
-    }
-        
+    }*/
     return $enumsTrans;
   }
   

@@ -27,18 +27,16 @@ class CCategorieDoc extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["documents_ged"] = "CDocGed doc_categorie_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["documents_ged"] = "CDocGed doc_categorie_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "nom"  => "notNull str maxLength|50",
-      "code" => "notNull str maxLength|1"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["nom"]  = "notNull str maxLength|50";
+    $specs["code"] = "notNull str maxLength|1";
+    return $specs;
   }
   
   function updateFormFields() {
@@ -46,6 +44,5 @@ class CCategorieDoc extends CMbObject {
     $this->_view = $this->code ." - " . $this->nom;
     $this->_shortview = $this->code; 
   }  
-
 }
 ?>

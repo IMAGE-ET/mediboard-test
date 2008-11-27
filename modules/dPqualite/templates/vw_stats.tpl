@@ -1,64 +1,109 @@
 <script type="text/javascript">
-var series = {{$series|@json}};
+var graphs = {{$graphs|@json}};
 var options = {{$options|@json}};
-var countChecked = {{$count_checked|@json}};
+var categories = {{$list_categories_json|@json}};
 
-function refreshCount(value) {
-  $("selected-categories-count").update(value.split('|').without('').length || 'toutes');
+function refreshCount() {
+  $("selected-categories-count").update(oEvenementField.getValues().length);
 }
 
-function resetEvts() {
-  $('categories').select('input').each(function(e) {$V(e, false, true)}); 
-  oEvenementField.setValues('');
-
-  $H(countChecked).each(function (pair) {
-    if (pair.key !== null) {
-      countChecked[pair.key] = 0;
-    }
-  });
+function selectAll() {
+  $('categories').select('input').each(function(e) {$V(e, true, true)}); 
+  getTokensFromInputs();
   refreshEvtCounts();
 }
 
-function refreshEvtCounts() {
-  $H(countChecked).each(function (pair) {
-    var counter = $('selected-evts-'+pair.key+'-count');
-    if (counter) {
-      counter.update(pair.value);
+function getTokensFromInputs() {
+  oEvenementField.setValues($("tokens-list").select("input[type=checkbox]").findAll(function(e) {return e.checked}).pluck("name"));
+}
+
+function setTokensToInputs() {
+  var values = oEvenementField.getValues();
+  $("tokens-list").select("input[type=checkbox]").each(function(e) {
+    if (values.indexOf(name)!=-1 && e.name == name || !values.length) {
+      e.checked = true;
     }
   });
+  checkCategories();
+}
+
+function refreshEvtCounts() {
+  categories.each(function (c) {
+    var counter = $('selected-evts-'+c+'-count');
+    if (counter) {
+      counter.update($("category-"+c).select("input[type=checkbox]").findAll(function(e) {return e.checked}).length);
+    }
+  });
+}
+
+function toggleTokens(checkbox, element) {
+  $(element).select("input[type=checkbox]").each(function(e) {
+    e.checked = checkbox.checked;
+  });
+  getTokensFromInputs();
+  refreshEvtCounts();
 }
 
 function toggleEvt(catId, val, forceTo) {
   oEvenementField.toggle(val, forceTo);
-  countChecked[catId] = countChecked[catId] + (forceTo ? 1 : -1);
   refreshEvtCounts();
 }
 
-var graph;
-Main.add(function () {
-  filterForm = getForm('stats-filter');
+function checkCategories() {
+  categories.each(function (c) {
+    var checked = $("category-"+c).select("input[type=checkbox]").findAll(function(e) {return e.checked}).length;
+    if (checked == $("category-"+c).select("input[type=checkbox]").length) {
+      $("category-"+c+"-checkbox").checked = true;
+    }
+  });
+}
 
-  // Let's draw the graph
-  graph = Flotr.draw(
-    $('stats'),
-    series, Object.extend({
+function refreshGraph(size) {
+  size = size.split('x');
+  var width = size[0], height = size[1];
+  
+  $H(graphs).each(function (pair) {
+    $("stats-"+pair.key).setStyle({
+      width: width+'px',
+      height: height+'px'
+    });
+    drawGraph(pair.key);
+  });
+}
+
+var graph = [];
+function drawGraph(id) {
+  graph[id] = Flotr.draw(
+    $('stats-'+id),
+    graphs[id], Object.extend({
       bars: {show:true, barWidth:0.5, stacked:true, fillOpacity: 0.6},
       mouse: {track: false},
-      yaxis: {min: 0},
+      yaxis: {min: 0, tickFormatter: function(v) { return Math.round(v).toString() } },
+      grid: {verticalLines: false, backgroundColor: '#fff'},
+      legend: {position: 'nw'},
       HtmlText: false,
       showDataGrid: true,
       tabGraphLabel: 'Graphique',
       tabDataLabel: 'Données'
     }, options)
   );
+}
+
+Main.add(function () {
+  filterForm = getForm('stats-filter');
+
+  $H(graphs).each(function(pair) {
+    drawGraph(pair.key);
+  });
   
-  Control.Tabs.create('filters-tabs');
-  Control.Tabs.create('evenements-tabs');
-  
-  refreshCount($V(filterForm.evenements));
-  refreshEvtCounts();
+  Control.Tabs.create('filters-tabs', true);
+  Control.Tabs.create('evenements-tabs', true);
   
   oEvenementField = new TokenField(filterForm.evenements, {onChange: refreshCount});
+  setTokensToInputs();
+  checkCategories();
+  refreshCount();
+  refreshEvtCounts();
 });
 
 var oEvenementField = null;
@@ -69,50 +114,72 @@ var filterForm = null;
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="evenements" value="{{$evenements}}" />
-  
-  <label for="comparison">Données de comparaison</label>
-  <select name="comparison">
-    {{foreach from=$fiche->_enumsTrans item=enum key=type}}
-      <option value="{{$type}}" {{if $comparison == $type}}selected="selected"{{/if}}>{{tr}}CFicheEi-{{$type}}{{/tr}}</option>
-    {{/foreach}}
-  </select>
-  
-  <label for="months_count">Depuis</label>
-  <select name="months_count">
-    <option value="24" {{if $months_count == 24}}selected="selected"{{/if}}>24 mois</option>
-    <option value="12" {{if $months_count == 12}}selected="selected"{{/if}}>12 mois</option>
-    <option value="6" {{if $months_count == 6}}selected="selected"{{/if}}>6 mois</option>
-  </select>
-          
+     
   <ul class="control_tabs" id="filters-tabs">
+    <li><a href="#time">Filtre chronologique</a></li>
     <li><a href="#data">Filtres données</a></li>
     <li>
       <a href="#categories" style="padding-top: 2px; padding-bottom: 1px; padding-right: 1px;">
         Catégories (<span id="selected-categories-count">0</span> sélectionnées) 
-        <button type="button" class="cancel" onclick="resetEvts()">Tout décocher</button>
+        <button type="button" class="cancel" onclick="selectAll()">Tout cocher</button>
       </a>
     </li>
   </ul>
   <hr class="control_tabs" />
   
-  <table class="main form" id="data" style="display: none;">
-    {{foreach from=$enums item=enum key=name name=enum}}
-      {{if $smarty.foreach.enum.index % 2 == 0 || $smarty.foreach.enum.first}}
-        <tr>
-      {{/if}}
-      <th><label for="filters[{{$name}}]">{{tr}}CFicheEi-{{$name}}{{/tr}}</label></th>
-      <td>
-        <select name="filters[{{$name}}]">
-          <option value=""> &mdash; Tous</option>
-          {{foreach from=$enum item=val key=key}}
-            <option value="{{$key}}" {{if $filters.$name == $key}}selected="selected"{{/if}}>{{$val}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-      {{if $smarty.foreach.enum.index+1 % 2 == 0 || $smarty.foreach.enum.last}}
-        </tr>
-      {{/if}}
-    {{/foreach}}
+  <table class="main form">
+    <tbody id="time" style="display: none;">
+      <tr>
+        <td>
+          <label for="months_count">Durée</label>
+          <select name="months_count">
+            <option value="3" {{if $months_count == 3}}selected="selected"{{/if}}>3 mois</option>
+            <option value="6" {{if $months_count == 6}}selected="selected"{{/if}}>6 mois</option>
+            <option value="12" {{if $months_count == 12}}selected="selected"{{/if}}>12 mois</option>
+            <option value="24" {{if $months_count == 24}}selected="selected"{{/if}}>24 mois</option>
+          </select>
+          
+          <label for="months_relative">Fin de la période il y a</label>
+          <select name="months_relative">
+            {{foreach from=$list_months item=c}}
+            <option value="{{$c}}" {{if $months_relative == $c}}selected="selected"{{/if}}>{{$c}} mois</option>
+            {{/foreach}}
+          </select>
+        </td>
+      </tr>
+    </tbody>
+    
+    <tbody id="data" style="display: none;">
+      <tr>
+        <td colspan="20">
+          <div class="little-info">
+            Les cases à cocher vous permettent de choisir quels graphiques vous souhaitez afficher.
+          </div>
+        </td>
+      </tr>
+      {{foreach from=$enums item=enum key=name name=enum}}
+        {{if $smarty.foreach.enum.index % 2 == 0 || $smarty.foreach.enum.first}}
+          <tr>
+        {{/if}}
+        <th>
+          <label for="filters[{{$name}}]">{{tr}}CFicheEi-{{$name}}{{/tr}}</label>
+          <input type="checkbox" value="{{$name}}" name="comparison[{{$name}}]" {{if in_array($name,$comparison)}}checked="checked"{{/if}} />
+        </th>
+        <td>
+          {{if $name != 'evenements'}}
+          <select name="filters[{{$name}}]">
+            <option value=""> &mdash; Tous</option>
+            {{foreach from=$enum item=val key=key}}
+              <option value="{{$key}}" {{if $filters.$name == $key}}selected="selected"{{/if}}>{{$val}}</option>
+            {{/foreach}}
+          </select>
+          {{/if}}
+        </td>
+        {{if $smarty.foreach.enum.index+1 % 2 == 0 || $smarty.foreach.enum.last}}
+          </tr>
+        {{/if}}
+      {{/foreach}}
+    </tbody>
   </table>
   
   <table id="categories" style="display: none;">
@@ -121,15 +188,16 @@ var filterForm = null;
         <ul class="control_tabs_vertical" id="evenements-tabs">
           {{foreach from=$list_categories item=curr_evenement name=categories}}
           <li>
+            <input id="category-{{$curr_evenement->ei_categorie_id}}-checkbox" type="checkbox" onclick="toggleTokens(this, 'category-{{$curr_evenement->ei_categorie_id}}'); " style="float: right; margin: 3px;" />
             <a href="#category-{{$curr_evenement->ei_categorie_id}}" style="font-size: 1em; padding: 1px 3px; font-weight: normal;">
-            {{$curr_evenement->nom}}
-            (<span id="selected-evts-{{$curr_evenement->ei_categorie_id}}-count">0</span>)
+              {{$curr_evenement->nom}}
+              (<span id="selected-evts-{{$curr_evenement->ei_categorie_id}}-count">0</span>)
             </a>
           </li>
           {{/foreach}}
         </ul>
       </td>
-      <td style="vertical-align: top;">
+      <td style="vertical-align: top;" id="tokens-list">
         {{foreach from=$list_categories item=curr_evenement name=categories}}
           <table class="tbl" id="category-{{$curr_evenement->ei_categorie_id}}" style="display: none;">
            {{foreach from=$curr_evenement->_ref_items item=curr_item name=evt_item}}
@@ -152,12 +220,26 @@ var filterForm = null;
     </tr>
   </table>
   
-  <button type="submit" class="search">Filtrer</button>
-
   <div style="text-align: center;">
-    <div id="stats" style="width: 600px; height: 300px; margin: auto;"></div>
-    <button onclick="graph.downloadCSV()" type="button" class="submit">Fichier CSV</button>
-    <button onclick="graph.selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
+    <button type="submit" class="search">Filtrer</button>
+    
+    <select name="size" onchange="refreshGraph($V(this))">
+      <option value="" disabled="disabled" selected="selected">Taille des graphiques</option>
+      <option value="400x200">Petit</option>
+      <option value="600x300">Normal</option>
+      <option value="700x500">Grand</option>
+      <option value="800x600">Très grand</option>
+    </select>
   </div>
+
+  {{foreach from=$graphs item=graph key=id}}
+    <div style="text-align: center; clear: both;" id="graphs">
+      <h2>{{tr}}CFicheEi-{{$id}}{{/tr}}</h2>
+      <div id="stats-{{$id}}" style="width: 600px; height: 300px; margin: auto;"></div>
+      <button onclick="graph['{{$id}}'].downloadCSV()" type="button" class="submit">Fichier CSV</button>
+      <button onclick="graph['{{$id}}'].saveImage('png')" type="button" class="submit">Fichier image</button>
+      <button onclick="graph['{{$id}}'].selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
+    </div>
+  {{/foreach}}
 </form>
 
