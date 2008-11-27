@@ -26,6 +26,7 @@ selectChap = function(name_chap, oField){
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="vw_bilan_service" />
   <input type="hidden" name="dialog" value="1" />
+  <input type="hidden" name="do" value="1" />
  <table class="form">
   <tr>
     <th class="category" colspan="4">Sélection des horaires</th>
