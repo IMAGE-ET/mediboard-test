@@ -40,10 +40,10 @@ class CProductStock extends CMbObject {
     $specs = parent::getSpecs();
     $specs['product_id']               = 'notNull ref class|CProduct';
     $specs['quantity']                 = 'num notNull';
-    $specs['order_threshold_critical'] = 'num';
-    $specs['order_threshold_min']      = 'num pos notNull moreEquals|order_threshold_critical';
-    $specs['order_threshold_optimum']  = 'num pos moreEquals|order_threshold_min';
-    $specs['order_threshold_max']      = 'num pos notNull moreEquals|order_threshold_optimum';
+    $specs['order_threshold_critical'] = 'num min|0';
+    $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
+    $specs['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
+    $specs['order_threshold_max']      = 'num min|0 notNull moreEquals|order_threshold_optimum';
     $specs['_quantity']                = 'pct';
     $specs['_critical']                = 'pct';
     $specs['_min']                     = 'pct';
