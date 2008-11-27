@@ -44,19 +44,19 @@ Main.add(function () {
 <ul id="tabs-modules" class="control_tabs">
   <li>
   	<a href="#prat">
-  		Praticien: {{$user->_view}}
+  		{{tr}}CUser{{/tr}}: {{$user->_view}}
   		<small>({{$modeles.prat|@count}})</small>
   	</a>
   </li>
   <li>
   	<a href="#func">
-  		Cabinet: {{$user->_ref_function->_view}}
+  		{{tr}}CFunctions{{/tr}}: {{$user->_ref_function->_view}}
   		<small>({{$modeles.func|@count}})</small>
   	</a>
   </li>
   <li>
   	<a href="#etab">
-  		Etablissement: {{$user->_ref_function->_ref_group->_view}}
+  		{{tr}}CGroups{{/tr}}: {{$user->_ref_function->_ref_group->_view}}
   		<small>({{$modeles.etab|@count}})</small>
   	</a>
   </li>

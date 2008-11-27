@@ -83,13 +83,28 @@ function smarty_modifier_json($object) {
   return json_encode($object);
 }
 
-function smarty_modifier_const($object, $constName) {
-  $class = new ReflectionClass($object);
-  if (null == $const = $class->getConstant($constName)) {
-    trigger_error("Constant '$constName' for class '$class->name' does not exist", E_USER_WARNING);
+function smarty_modifier_const($object, $name) {
+	// If the first arg is an instance, we get its class name
+	if (!is_string($object)) {
+		$object = get_class($object);
+	}
+  return constant("$object::$name");
+}
+
+function smarty_modifier_static($object, $name) {
+  if (!is_string($object)) {
+    $object = get_class($object);
   }
   
-  return $const;
+  $class = new ReflectionClass($object);
+  $statics = $class->getStaticProperties();
+  if (!isset($statics[$name])) {
+    trigger_error("Static variable '$name' for class '$class->name' does not exist", E_USER_WARNING);
+  }
+  else {
+  	$static = $statics[$name];
+  }
+  return $static;
 }
 
 function JSAttribute($string){
@@ -331,6 +346,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("pad"               , "smarty_modifier_pad");
     $this->register_modifier("json"              , "smarty_modifier_json");
     $this->register_modifier("const"             , "smarty_modifier_const");
+    $this->register_modifier("static"            , "smarty_modifier_static");
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
