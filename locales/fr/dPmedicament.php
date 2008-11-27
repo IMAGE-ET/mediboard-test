@@ -31,4 +31,12 @@ $locales['BCBScripts-extract_ok'] = 'Extraction des scripts BCB réussie : %s fic
 $locales['BCBScripts-test'] = 'Test l\'existence des scripts BCB';
 $locales['BCBScripts-install'] = 'Install les scripts BCB';
 $locales['BCBScripts_password'] = 'Mot de passe';
+$locales['config-dPmedicament-CBcbClasseATC-niveauATC'] = '';
+$locales['config-dPmedicament-CBcbClasseATC-niveauATC-desc'] = '';
+$locales['config-dPmedicament-CBcbClasseTherapeutique-niveauBCB'] = '';
+$locales['config-dPmedicament-CBcbClasseTherapeutique-niveauBCB-desc'] = '';
+$locales['config-dPmedicament-CBcbProduit-use_cache'] = 'Mise en cache';
+$locales['config-dPmedicament-CBcbProduit-use_cache-desc'] = 'Mise en cache des produits BCB';
+$locales['config-dPmedicament-CBcbProduitLivretTherapeutique-product_category_id'] = '';
+$locales['config-dPmedicament-CBcbProduitLivretTherapeutique-product_category_id-desc'] = '';
 ?>

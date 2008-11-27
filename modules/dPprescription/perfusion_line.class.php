@@ -96,16 +96,15 @@ class CPerfusionLine extends CMbObject {
    * Chargement du produit
    */
   function loadRefProduit(){
-    $this->_ref_produit = new CBcbProduit();
-    $this->_ref_produit->load($this->code_cip);
+  	$this->_ref_produit = CBcbProduit::get($this->code_cip);
   }
   
   function loadRefsFwd() {
   	parent::loadRefsFwd();
     $this->loadRefPerfusion();
 
-    $this->_ref_produit->loadRefPosologies();
-    $this->_ref_produit->loadLibellePresentation();
+//    $this->_ref_produit->loadRefPosologies();
+//    $this->_ref_produit->loadLibellePresentation();
     if($this->_ref_produit->libelle_presentation){
       $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
     }

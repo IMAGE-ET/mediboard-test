@@ -121,7 +121,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function updateFormFields() {
     parent::updateFormFields();   
-    $this->_ref_produit->loadUnitePresentation();
  
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
@@ -325,11 +324,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->loadRefProduit();
     $this->loadPosologie();
 
-    $this->_ref_produit->loadRefPosologies();
-    $this->_ref_produit->loadLibellePresentation();
-    if($this->_ref_produit->libelle_presentation){
+    if ($this->_ref_produit->libelle_presentation){
       $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
     }
+
     foreach($this->_ref_produit->_ref_posologies as $_poso){
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
       if($_poso->p_kg) {
@@ -338,7 +336,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     	$this->_unites_prise[] = $unite;
     }
-    if(is_array($this->_unites_prise)){
+    
+    if (is_array($this->_unites_prise)){
       $this->_unites_prise = array_unique($this->_unites_prise);
     }
   }
@@ -356,8 +355,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Chargement du produit
    */
   function loadRefProduit(){
-  	$this->_ref_produit = new CBcbProduit();
-  	$this->_ref_produit->load($this->code_cip);
+  	$this->_ref_produit = CBcbProduit::get($this->code_cip);
   }
   
   /*

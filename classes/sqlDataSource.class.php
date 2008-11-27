@@ -213,7 +213,7 @@ abstract class CSQLDataSource {
    * @param string $query SQL Query
    * @return resource The result resource on SELECT, true on others, false if failed 
    **/
-    function exec($query) {
+  function exec($query) {
     if (CSQLDataSource::$trace) {
       trigger_error("Exécution SQL sur DataSource '$this->dsn' : $query", E_USER_NOTICE);
     }

@@ -11,14 +11,10 @@
 $cip = mbGetValueFromGetOrSession("CIP");
 
 // Chargement du produit
-$mbProduit = new CBcbProduit();
-$mbProduit->load($cip);
+//$mbProduit = new CBcbProduit();
+//$mbProduit->load($cip, true);
 
-// Chargement de la monographie du produit
-$mbProduit->loadRefMonographie();
-
-// Chargement de la composition du produit
-$mbProduit->loadRefComposition();
+$mbProduit = CBcbProduit::get($cip, true);
 
 // Chargement des donnees technico-reglementaires
 $mbProduit->loadRefEconomique();

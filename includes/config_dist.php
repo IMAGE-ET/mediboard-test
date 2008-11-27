@@ -329,6 +329,9 @@ $dPconfig["dPlabo"] = array (
 );
 
 $dPconfig["dPmedicament"] = array (
+  "CBcbProduit" => array (
+    "use_cache" => "0",
+  ),
   "CBcbClasseATC" => array (
     "niveauATC" => "2",
   ),

@@ -56,19 +56,54 @@ class CBcbProduit extends CBcbObject {
   var $_ref_ATC_2_libelle = null;
   var $_ref_ATC_2_code    = null;
   
-  // Constructeur
+	static $loaded = array();
+	static $useCount = 0;
+    
+	/**
+	 * Chargement avec mise en cache
+	 */
+	static function get($code_cip, $full_mode = true) {
+		self::$useCount++;
+		
+    if (!CAppUI::conf("dPmedicament CBcbProduit use_cache") || !$full_mode) {
+		  $produit = new CBcbProduit();
+		  $produit->load($code_cip, $full_mode);
+		  return $produit;
+		}
+
+		// On instancie si ca n'existe pas
+		if (!isset(self::$loaded[$code_cip])) {
+			self::$loaded[$code_cip] = new CBcbProduit();
+ 	    self::$loaded[$code_cip]->load($code_cip, $full_mode);
+		} 
+		
+  	$produit =& self::$loaded[$code_cip];
+   	return $produit->copy();
+	}
+	
+	// Constructeur
   function CBcbProduit(){
     $this->distClass = "BCBProduit";
     parent::__construct();
   }
-
+  
+	/**
+	 * Should use clone with appropriate behaviour
+	 * But a bit complicated to implement
+	 */
+	function copy() {
+	  $obj = unserialize(serialize($this));
+	  return $obj;
+	  
+	}
+  
   // Chargement d'un produit
   function load($code_cip, $full_mode = true){
     $this->distObj->SearchInfo($code_cip);
     
     $infoProduit = $this->distObj->DataInfo;
 
-    if($infoProduit->Charge == 1){
+    if ($infoProduit->Charge == 1) {
       $this->code_cip        = $infoProduit->Code_CIP;
       if (isset($infoProduit->Code_Ucd)) {
         $this->code_ucd        = $infoProduit->Code_Ucd;
@@ -82,7 +117,7 @@ class CBcbProduit extends CBcbObject {
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
     
-   if($full_mode){
+   if ($full_mode){
 	    // Chargement de la monographie (permet d'obtenir la date de suppression) 
 	    $this->loadRefMonographie();
 	
@@ -106,8 +141,13 @@ class CBcbProduit extends CBcbObject {
 	   
 	    // Produit référent ?
 	    $this->getReferent();
-     }
-     $this->loadVoies();
+
+	    $this->loadRefPosologies();
+	    $this->loadLibellePresentation();
+      $this->loadUnitePresentation();
+    }
+     
+    $this->loadVoies();
   }
   
   

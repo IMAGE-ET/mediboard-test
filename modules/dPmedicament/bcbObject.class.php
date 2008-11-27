@@ -23,19 +23,18 @@ class CBcbObject {
   
   function initBCBConnection() {
     
-    global $dPconfig;
     include_once("lib/bcb/PackageBCB.php");
     
     // Connexion a la base BCB
-    if(!self::$objDatabase) {  
-      // Connexion a la base BCB
+    if (!self::$objDatabase) {  
       $objDatabase = new BCBConnexion();
       $TypeDatabase=2;
+      $db = CAppUI::conf("db bcb");
       $Result = $objDatabase->ConnectDatabase("org.gjt.mm.mysql.Driver", 
-        $dPconfig["db"]["bcb"]["dbhost"], 
-        $dPconfig["db"]["bcb"]["dbname"], 
-        $dPconfig["db"]["bcb"]["dbuser"], 
-        $dPconfig["db"]["bcb"]["dbpass"], 
+        $db["dbhost"], 
+        $db["dbname"], 
+        $db["dbuser"], 
+        $db["dbpass"], 
         $TypeDatabase
       );
       
@@ -59,11 +58,12 @@ class CBcbObject {
       // Connexion a la base BCB Gestion
       $objDatabaseGestion = new BCBConnexionGestion();
       $TypeDatabaseGestion=2;
+      $db = CAppUI::conf("db bcbges");
       $Result = $objDatabaseGestion->ConnectDatabase("org.gjt.mm.mysql.Driver",
-        $dPconfig["db"]["bcbges"]["dbhost"], 
-        $dPconfig["db"]["bcbges"]["dbname"],
-        $dPconfig["db"]["bcbges"]["dbuser"],
-        $dPconfig["db"]["bcbges"]["dbpass"],
+        $db["dbhost"], 
+        $db["dbname"], 
+        $db["dbuser"], 
+        $db["dbpass"], 
         $TypeDatabaseGestion
       );
       

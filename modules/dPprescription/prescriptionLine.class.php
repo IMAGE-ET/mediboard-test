@@ -456,9 +456,10 @@ class CPrescriptionLine extends CMbObject {
 			  $log->loadMatchingObject();
 			  $log->loadRefsFwd();
 			  
-			  if($this->_class_name == "CPrescriptionLineMedicament"){
+			  if ($this->_class_name == "CPrescriptionLineMedicament"){
 			    $this->_ref_produit->loadConditionnement();
 			  }
+			  
 			  $log->_ref_object->_ref_object =& $this;
 			  
 			  if($_administration->prise_id){

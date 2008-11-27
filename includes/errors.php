@@ -113,7 +113,7 @@ function mbTrace($var, $label = null, $log = false) {
   $export = htmlspecialchars($export);
   $errorTime = date("Y-m-d H:i:s");
   
-  $msg = "<pre>[$errorTime] $label: $export</pre>";
+  $msg = "\n<pre>[$errorTime] $label: $export</pre>";
   
   if ($log) {
     global $logPath;

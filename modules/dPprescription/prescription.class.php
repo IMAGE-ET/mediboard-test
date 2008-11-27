@@ -861,10 +861,6 @@ class CPrescription extends CMbObject {
     
     $order = "prescription_line_medicament_id DESC";
     $this->_ref_prescription_lines = $line->loadList($where, $order);
-    
-    foreach($this->_ref_prescription_lines as &$_line){
-    	$_line->_ref_produit->loadRefPosologies();
-    }
   }
   
   
