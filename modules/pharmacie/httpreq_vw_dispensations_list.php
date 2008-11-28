@@ -273,6 +273,7 @@ foreach($dispensations as $code_cip => &$_quantites){
   $stocks_service[$code_cip] = CProductStockService::getFromCode($code_cip, $service_id);
 }
 
+
 // Smarty template
 $smarty = new CSmartyDP();
 //$smarty->assign('warning', $warning);
@@ -283,9 +284,10 @@ $smarty->assign('delivrances', $delivrances);
 $smarty->assign('produits'  , $produits);
 $smarty->assign('done'  , $done);
 $smarty->assign('stocks_service'  , $stocks_service);
-
 $smarty->assign('service_id', $service_id);
-
+$smarty->assign("date_min", $_date_min);
+$smarty->assign("date_max", $_date_max);
+$smarty->assign("now", mbDateTime());
 $smarty->assign('mode_nominatif', "0");
 $smarty->display('inc_dispensations_list.tpl');
 

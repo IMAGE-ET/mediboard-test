@@ -1,3 +1,9 @@
+{{if $now < $date_min || $now > $date_max}}
+	<div class="big-info">
+	  La date courante n'est pas comprise dans l'intervalle spécifié, les dispensations effectuées ne seront pas affichées.
+	</div>
+{{/if}}
+
 <script type="text/javascript">
   $('list-dispensations-count').update({{$dispensations|@count}});
 </script>
