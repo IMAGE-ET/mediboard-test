@@ -3,6 +3,13 @@
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 
+<script type="text/javascript">
+function markAsSelected(element) {
+  $("prescriptions-list").select('.selected').each(function (e) {e.removeClassName('selected')});
+  $(element).up(1).addClassName('selected');
+}
+</script>
+
 <table class="main">
   <tr>
     <td colspan="2">
@@ -56,14 +63,14 @@
   </tr>
   <tr>
     <td style="width: 150px;">
-      <table class="tbl">  
+      <table class="tbl" id="prescriptions-list">  
         <tr>
           <th>Prescriptions</th>
         </tr>
 				{{foreach from=$prescriptions item=_prescription}}
 				<tr>
 				  <td style="width: 100px">
-				    <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescPharma('{{$_prescription->_id}}')">
+				    <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescPharma('{{$_prescription->_id}}'); markAsSelected(this);">
 						  {{$_prescription->_ref_object->_view}}<br />
 				      {{$_prescription->_ref_patient->_view}}
 				    </a>
