@@ -34,7 +34,7 @@
     {{/if}}
     {{assign var=produit value=$produits.$code_cip}}
     <tr>
-      <th colspan="10">{{$produit->libelle}}</th>
+      <th colspan="10" class="element">{{$produit->libelle}}</th>
     </tr>
     <tr>
       <!-- Quantite à administrer -->
