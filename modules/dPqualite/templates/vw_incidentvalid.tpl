@@ -1,12 +1,13 @@
 <script language="Javascript" type="text/javascript">
 {{if $can->admin}}
-function search_AllEI(field){
-  var id = $V(field);
-  $("tab-incident").select('a[href="#ALL_TERM"] span.user')[0].update(field.options[field.selectedIndex].text);
+function filterAllEi(field){
+  if (field.name == "selected_user_id") {
+    $("tab-incident").select('a[href="#ALL_TERM"] span.user')[0].update(field.options[field.selectedIndex].text);
+  }
   
   var url = new Url;
   url.setModuleAction("dPqualite", "httpreq_vw_allEi");
-  url.addParam("selected_user_id", id);
+  url.addElement(field);
   url.requestUpdate('ALL_TERM');
 }
 

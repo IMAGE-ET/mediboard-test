@@ -13,6 +13,7 @@ $can->needsRead();
 $type              = mbGetValueFromGetOrSession("type");
 $first             = mbGetValueFromGetOrSession("first");
 $selected_user_id  = mbGetValueFromGetOrSession("selected_user_id");
+$selected_service_valid_user_id = mbGetValueFromGetOrSession("selected_service_valid_user_id");
 $selected_fiche_id = mbGetValueFromGetOrSession("selected_fiche_id");
 
 $listUsersTermine = new CMediusers;
@@ -23,11 +24,26 @@ if($type == "AUTHOR" || ($can->edit && !$can->admin)){
   $user_id = $AppUI->user_id;
 }
 
+$list_service_valid_users = new CMediusers;
 if($type == "ALL_TERM" && $can->admin){
-$listUsersTermine = $listUsersTermine->loadListFromType();
+  $listUsersTermine = $listUsersTermine->loadListFromType();
   $where = array();
   if($selected_user_id){
     $where["fiches_ei.user_id"] = "= '$selected_user_id'";
+  }
+  
+  if($selected_service_valid_user_id){
+    $where["fiches_ei.service_valid_user_id"] = "= '$selected_service_valid_user_id'";
+  }
+  
+  // Chargement de la liste des Chef de services / utilisateur
+  $module = CModule::getInstalled("dPqualite");
+  $perm = new CPermModule;
+  $list_service_valid_users = $list_service_valid_users->loadListFromType(null, PERM_READ);
+  foreach($list_service_valid_users as $keyUser => $infoUser){
+    if(!$perm->getInfoModule("permission", $module->mod_id, PERM_EDIT, $keyUser)){
+      unset($list_service_valid_users[$keyUser]);
+    }
   }
 }
 
@@ -38,11 +54,13 @@ $listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false, $coun
 $smarty = new CSmartyDP();
 
 $smarty->assign("listUsersTermine" , $listUsersTermine);
+$smarty->assign("list_service_valid_users", $list_service_valid_users);
 $smarty->assign("listeFiches"      , $listeFiches);
 $smarty->assign("countFiches"      , $countFiches);
 $smarty->assign("type"             , $type);
 $smarty->assign("first"            , $first);
 $smarty->assign("selected_user_id" , $selected_user_id);
+$smarty->assign("selected_service_valid_user_id" , $selected_service_valid_user_id);
 $smarty->assign("selected_fiche_id", $selected_fiche_id);
 
 $smarty->display("inc_ei_liste.tpl");
