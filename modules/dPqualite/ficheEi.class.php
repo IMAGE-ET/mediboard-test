@@ -7,10 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-
-/**
- * The CFicheEi class
- */
 class CFicheEi extends CMbObject {
   // DB Table key
   var $fiche_ei_id = null;
@@ -142,6 +138,20 @@ class CFicheEi extends CMbObject {
       $this->_ref_qualite_valid->load($this->qualite_user_id);
     }
   }
+  
+  function loadCriticite() {
+    // Calcul de la criticité
+    if($this->gravite && $this->vraissemblance) {
+      $tabCriticite = array(
+        1 => array( 1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
+        2 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
+        3 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
+        4 => array( 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
+        5 => array( 1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3)
+      );
+      $this->_criticite = $tabCriticite[$this->gravite][$this->vraissemblance];
+    }
+  }
     
   function updateFormFields() {
     parent::updateFormFields();
@@ -169,17 +179,7 @@ class CFicheEi extends CMbObject {
       $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_CTRL");
     }
     
-    // Calcul de la criticité
-    if($this->gravite && $this->vraissemblance) {
-      $tabCriticite = array(
-        1 => array( 1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
-        2 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
-        3 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
-        4 => array( 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
-        5 => array( 1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3)
-      );
-      $this->_criticite = $tabCriticite[$this->gravite][$this->vraissemblance];
-    }
+    $this->loadCriticite();
     
     $this->_view = sprintf("%03d - %s", $this->fiche_ei_id, mbDateToLocale(substr($this->date_fiche, 0, 10)));
   }

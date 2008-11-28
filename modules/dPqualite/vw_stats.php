@@ -14,7 +14,7 @@ $months_count    = mbGetValueFromGetOrSession("months_count", 12);
 $months_relative = mbGetValueFromGetOrSession("months_relative", 0);
 $filters         = mbGetValueFromGetOrSession("filters", array());
 $evts            = mbGetValueFromGet("evenements");
-$comparison      = mbGetValueFromGetOrSession("comparison", array("elem_concerne", "degre_urgence", "evenements"));
+$comparison      = mbGetValueFromGetOrSession("comparison", array("elem_concerne", "_criticite", "evenements"));
 
 $graphs = array();
 
@@ -42,9 +42,14 @@ $enums['evenements'] = array();
 foreach($types as $key => $type) {
 	$enums['evenements'][$key] = $type->nom;
 }
+$enums['_criticite'] = array();
+$range = range(1, 5);
+foreach($range as $n) {
+  $enums['_criticite'][$n] = $n;
+}
 
 foreach ($enums as $key => &$enum) {
-  if ((isset($fiche->_specs[$key]) && !$fiche->_specs[$key]->notNull) || $key == 'evenements') {
+  if ((isset($fiche->_specs[$key]) && !$fiche->_specs[$key]->notNull) || $key == 'evenements' || $key == '_criticite') {
     $enum['unknown'] = 'Inconnu';
   }
   if (!isset($filters[$key])) {
@@ -88,55 +93,65 @@ foreach ($comparison as $comp) {
 					$where['date_fiche'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
 					$count = 0;
 					
-					if ($comp != 'evenements') {
-					  $where[$comp] = ($id == 'unknown' ? 'IS NULL' : "= '$id'");
+					switch ($comp) {
+						case 'evenements':
+						  // Filtrage sur les types d'evenements
+	            /*if (!$evts || count($list_evts) <= 0) {
+	              $count = $fiche->countList($where);
+	            }
+	            else {*/
+	              $list = $fiche->loadList($where);
+	
+	              if ($id != 'unknown') {
+	                $where['evenements'] = 'IS NOT NULL';
+	                $types[$id]->loadRefsBack();
+	                $list_types = $types[$id]->_ref_items;
+	                
+	                foreach ($list as &$f) {
+	                  $fiche_evts = explode('|', $f->evenements);
+	                  
+	                  foreach ($fiche_evts as $e) {
+	                    if (array_key_exists($e, $list_types)) {
+	                      $count++;
+	                    }
+	                  }
+	                }
+	              }
+	              else {
+	                $where['evenements'] = 'IS NULL';
+	              }
+	            //}
+						break;
 						
-						// Filtrage sur les types d'evenements
-						if (!$evts || count($list_evts) <= 0) {
-						  $count = $fiche->countList($where);
-						}
-						else {
-							$where['evenements'] = 'IS NOT NULL';
-							$list = $fiche->loadList($where);
-			
-							foreach ($list as &$f) {
-								$fiche_evts = explode('|', $f->evenements);
-								
-								foreach ($fiche_evts as $e) {
-								  if (in_array($e, $list_evts)) {
-								  	$count++;
-								  }
-								}
-							}
-						}
-					}
-					else {
-            // Filtrage sur les types d'evenements
-            /*if (!$evts || count($list_evts) <= 0) {
-              $count = $fiche->countList($where);
-            }
-            else {*/
-              $list = $fiche->loadList($where);
-
-              if ($id != 'unknown') {
-              	$where['evenements'] = 'IS NOT NULL';
-	              $types[$id]->loadRefsBack();
-	              $list_types = $types[$id]->_ref_items;
-	              
+						case '_criticite':
+				      $list = $fiche->loadList($where);
+              foreach ($list as $key => $fiche) {
+              	$fiche->loadCriticite();
+              	if ($id == $fiche->_criticite || ($id == 'unknown' && !$fiche->_criticite)) $count++;
+              }
+					  break;
+					  
+						default: 
+						  $where[$comp] = ($id == 'unknown' ? 'IS NULL' : "= '$id'");
+	            
+	            // Filtrage sur les types d'evenements
+	            if (!$evts || count($list_evts) <= 0) {
+	              $count = $fiche->countList($where);
+	            }
+	            else {
+	              $where['evenements'] = 'IS NOT NULL';
+	              $list = $fiche->loadList($where);
+	      
 	              foreach ($list as &$f) {
 	                $fiche_evts = explode('|', $f->evenements);
 	                
 	                foreach ($fiche_evts as $e) {
-	                  if (array_key_exists($e, $list_types)) {
+	                  if (in_array($e, $list_evts)) {
 	                    $count++;
 	                  }
 	                }
 	              }
-              }
-              else {
-              	$where['evenements'] = 'IS NULL';
-              }
-            //}
+	            }
 					}
 					
 					if (!isset($series_data['total'][$i])) { 

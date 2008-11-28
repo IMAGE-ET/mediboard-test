@@ -166,7 +166,7 @@ var filterForm = null;
           <input type="checkbox" value="{{$name}}" name="comparison[{{$name}}]" {{if in_array($name,$comparison)}}checked="checked"{{/if}} />
         </th>
         <td>
-          {{if $name != 'evenements'}}
+          {{if $name != 'evenements' && $name != '_criticite'}}
           <select name="filters[{{$name}}]">
             <option value=""> &mdash; Tous</option>
             {{foreach from=$enum item=val key=key}}
