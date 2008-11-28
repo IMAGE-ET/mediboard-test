@@ -21,7 +21,7 @@
        onmouseout="$('line-{{$line->_guid}}').hide();" />
 {{/if}}
 
-<div id="line-{{$line->_guid}}" class="tooltip" style="display: none; background-color: {{$color}}; border-style: ridge; padding-right:5px; ">
+<div id="line-{{$line->_guid}}" class="tooltip" style="text-align: left; display: none; background-color: {{$color}}; border-style: ridge; padding-right:5px; ">
 	{{foreach from=$prescription_reelle->_alertes key=type item=curr_type}}
 	  {{if array_key_exists($code_cip, $curr_type)}}
 	    <ul>

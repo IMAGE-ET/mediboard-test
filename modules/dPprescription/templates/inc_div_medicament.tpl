@@ -260,12 +260,12 @@ Main.add( function(){
     <th colspan="6">Médicaments</th>
   </tr>
   <tr>
+    <th style="width: 5%;">Alertes</th> 
     <th style="width: 25%">Produit</th>
     <th style="width: 20%">Praticien</th>
     <th style="width: 15%">Début</th>
     <th style="width: 10%">Durée</th>
     <th style="width: 25%;">Posologie</th>
-    <th style="width: 5%;">Alertes</th> 
   </tr>
 </table>
 {{/if}}

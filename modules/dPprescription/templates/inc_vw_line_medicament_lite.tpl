@@ -4,7 +4,18 @@
   <tr id="line_medicament_{{$line->_id}}" class="hoverable 
   {{if $line->_traitement}}traitement{{else}}med{{/if}}
   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
-  
+    <td style="text-align: center; width: 5%;">
+      {{if $line->_can_vw_livret_therapeutique}}
+      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+      {{/if}}  
+      {{if $line->_can_vw_hospi}}
+      <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+      {{/if}}
+      {{if $line->_can_vw_generique}}
+      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
+      {{/if}}
+      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
+    </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->_traitement}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
@@ -64,17 +75,5 @@
 	      Aucune posologie
 	    {{/if}}
     </td>
-    
-    <td style="text-align: center; width: 5%;">
-      {{if $line->_can_vw_livret_therapeutique}}
-      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
-      {{/if}}  
-      {{if $line->_can_vw_hospi}}
-      <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
-      {{/if}}
-      {{if $line->_can_vw_generique}}
-      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
-      {{/if}}
-      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
-    </td>
+   
   </tr>
