@@ -148,6 +148,7 @@ class CConstantesMedicales extends CMbObject {
     // Verifie si au moins une des valeurs est remplie
     $ok = false;
     foreach (CConstantesMedicales::$list_constantes as $const) {
+      $this->completeField($const);
       if ($this->$const) {
         $ok = true;
         break;

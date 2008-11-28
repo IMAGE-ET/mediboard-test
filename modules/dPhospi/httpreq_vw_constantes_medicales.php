@@ -203,7 +203,7 @@ $graphs = array();
 foreach ($data as $name => &$field) {
 	$graphs[] = "constantes-medicales-$name";
 }
-                   
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('constantes', $constantes);
