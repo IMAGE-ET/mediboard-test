@@ -57,7 +57,19 @@
       </button>
     </td>  
     <td class="text">
-      <a href="#produit{{$produit_livret->code_cip}}" onclick="viewProduit({{$produit_livret->code_cip}})">
+			<div style="float: right">
+      {{if $produit_livret->_ref_produit->hospitalier}}
+      <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+      {{/if}}
+      {{if $produit_livret->_ref_produit->_generique}}
+      <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
+      {{/if}}
+      {{if $produit_livret->_ref_produit->_referent}}
+      <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
+      {{/if}}
+      </div>
+      <a href="#produit{{$produit_livret->code_cip}}" 
+      {{if $produit_livret->_ref_produit->_supprime}}style="color:red"{{/if}}onclick="viewProduit({{$produit_livret->code_cip}})">
         {{$produit_livret->_ref_produit->libelle}}
       </a>
     </td>
