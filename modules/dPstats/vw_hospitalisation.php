@@ -32,7 +32,7 @@ $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
 $listServices = new CService;
-$listServices = $listServices->loadList();
+$listServices = $listServices->loadGroupList();
 
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();

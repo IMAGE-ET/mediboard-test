@@ -28,9 +28,8 @@ $where["stats"] = "= '1'";
 if($bloc->_id) {
   $where["bloc_id"] = "= '$bloc->_id'";
 }
-$order = "nom";
 $salle = new CSalle;
-$listSalles = $salle->loadList($where, $order);
+$listSalles = $salle->loadGroupList($where);
 
 // Récupération des plages
 $where = array(

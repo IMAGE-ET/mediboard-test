@@ -25,6 +25,8 @@ $listHospis = $listHospis + $sejour->_enumsTrans["type"];
 
 $total = 0;
 
+$ds = CSQLDataSource::get("std");
+
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
@@ -38,16 +40,17 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
 }
 
-$sql = "SELECT * FROM service";
-if($service_id)
-  $sql .= "\nWHERE service_id = '$service_id'";
-$ds = CSQLDataSource::get("std");
-$services = $ds->loadlist($sql);
+
+$where = array();
+if($service_id) {
+  $where["service_id"] = "= '$service_id'";
+}
+$services = $serviceSel->loadGroupList($where);
 
 $patbyservice = array();
 foreach($services as $service) {
-  $id = $service["service_id"];
-  $patbyservice[$id]["legend"] = wordwrap($service["nom"], 10);
+  $id = $service->_id;
+  $patbyservice[$id]["legend"] = wordwrap($service->nom, 10);
   $sql = "SELECT COUNT(DISTINCT affectation.sejour_id) AS total," .
     "\nservice.nom AS nom," .
     "\nDATE_FORMAT(affectation.entree, '%m/%Y') AS mois," .

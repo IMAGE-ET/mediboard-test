@@ -54,6 +54,7 @@ foreach($listHospis as $type=>$vType) {
     "\nINNER JOIN users_mediboard" .
     "\nON sejour.praticien_id = users_mediboard.user_id" .
     "\nWHERE sejour.entree_prevue BETWEEN '$debut 00:00:00' AND '$fin 23:59:59'" .
+    "\nAND sejour.group_id = '".CGroups::loadCurrent()->_id."'" .
     "\nAND sejour.type = '$type'" .
     "\nAND sejour.annule = '0'";
   if($prat_id)
