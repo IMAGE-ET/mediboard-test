@@ -64,6 +64,18 @@ class CService extends CMbObject {
   function updateFormFields(){
     $this->_view = $this->nom;
   }
+  
+  /**
+   * Load list overlay for current group
+   */
+  function loadGroupList($where = array(), $order = 'nom', $limit = null, $groupby = null, $ljoin = array()) {
+    // Filtre sur l'établissement
+		$g = CGroups::loadCurrent();
+		$where["group_id"] = "= '$g->_id'";
+    
+    $list = $this->loadList($where, $order, $limit, $groupby, $ljoin);
+    return $list;
+  }
 
   function loadRefsBack() {
     // Backward references
