@@ -1,6 +1,7 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
+    <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
     <th>{{tr}}CProductStockService{{/tr}}</th>
     <th>{{tr}}CProductDelivery{{/tr}}</th>
     <th>Retour des services</th>
@@ -12,6 +13,7 @@
         {{$stock->_ref_product->_view}}
         </a>
       </td>
+      <td>{{mb_value object=$stock field=quantity}}</td>
       <td>{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>
       <td>
         {{assign var=id value=$stock->_id}}

@@ -22,9 +22,18 @@ function refreshLists() {
 
   return false;
 }
+
+function printPreparePlan() {
+  var form = getForm("filter");
+  var url = new Url;
+  url.setModuleAction("pharmacie", "print_prepare_plan");
+  url.addObjectParam(form.serialize());
+  url.pop(800, 600, 'Plan de cueillette');
+}
 </script>
 
 {{include file=inc_filter_delivrances.tpl}}
+<button type="button" class="print" onclick="printPreparePlan()">Imprimer plan de cueillette</button>
 
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-globales">Globales (<span id="list-globales-count">0</span>)</a></li>
