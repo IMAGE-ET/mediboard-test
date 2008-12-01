@@ -41,9 +41,9 @@ class CDMICategory extends CMbObject {
   
 	function getBackRefs() {
 	  $backRefs = parent::getBackRefs();
+	  $backRefs["dmis"] = "CDMI category_id";
 	  return $backRefs;
 	}
-
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;

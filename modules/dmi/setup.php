@@ -36,7 +36,24 @@ class CSetupdmi extends CSetup {
 			ADD INDEX (`group_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.03";
+    $this->makeRevision("0.03");
+    $sql = "CREATE TABLE `dmi` (
+		`dmi_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+		`nom` VARCHAR (255) NOT NULL,
+		`en_lot` ENUM ('0','1'),
+		`description` TEXT,
+		`reference` VARCHAR (255) NOT NULL,
+		`lot` VARCHAR (255),
+		`dans_livret` ENUM ('0','1'),
+		`category_id` INT (11) UNSIGNED NOT NULL
+		) TYPE=MYISAM;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `dmi` 
+	ADD INDEX (`category_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.04";
   }
 }
 ?>

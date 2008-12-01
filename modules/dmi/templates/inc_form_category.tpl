@@ -44,7 +44,11 @@
 
 		<tr>
 		  <td colspan="2" class="button">
-		  	<button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+		  	{{if $category->_id}}
+				<button type="submit" class="submit">{{tr}}Modify{{/tr}}</button>
+			{{else}}
+				<button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+			{{/if}}
 		  </td>
 		</tr>
 	</table>
