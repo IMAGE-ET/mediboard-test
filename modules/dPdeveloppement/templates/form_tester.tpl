@@ -3,8 +3,8 @@ var form;
 Main.add(function () {
   form = getForm("test");
   $('dom-creator').insert(
-    DIV({className: 'big-info'}, 
-      A({href: 'http://www.mozilla-europe.org', target: '_blank'}, 
+    DOM.div({className: 'big-info'}, 
+      DOM.a({href: 'http://www.mozilla-europe.org', target: '_blank'}, 
         'Cette info est générée par le DOM creator !'
       )
     )
