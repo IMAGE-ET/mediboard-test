@@ -1,0 +1,31 @@
+<?php
+$locales[''] = '';
+$locales['CDMICategory'] = 'Catégorie de DMI';
+$locales['CDMICategory-category_id'] = 'Id';
+$locales['CDMICategory-category_id-court'] = 'Id';
+$locales['CDMICategory-category_id-desc'] = 'Identifiant interne de catégorie';
+$locales['CDMICategory-description'] = 'Description';
+$locales['CDMICategory-description-court'] = 'Desc.';
+$locales['CDMICategory-description-desc'] = 'Description de la catégorie';
+$locales['CDMICategory-msg-create'] = 'Catégorie de DMI créée';
+$locales['CDMICategory-msg-delete'] = 'Catégorie de DMI supprimée';
+$locales['CDMICategory-msg-modify'] = 'Catégorie de DMI modifiée';
+$locales['CDMICategory-nom'] = 'Nom';
+$locales['CDMICategory-nom-court'] = 'Nom';
+$locales['CDMICategory-nom-desc'] = 'Nom de la catégorie';
+$locales['CDMICategory-title-create'] = 'Création de catégorie DMI';
+$locales['CDMICategory-title-modify'] = 'Modification de catégorie DMI';
+$locales['CDMICategory.all'] = 'Toutes les catégories de DMI';
+$locales['CDMICategory.none'] = 'Pas de catégorie de DMI';
+$locales['CDMICategory.one'] = 'Une catégorie de DMI';
+$locales['CDMICategory.select'] = 'Choisir une catégorie';
+$locales['module-dmi-court'] = 'DMI';
+$locales['module-dmi-long'] = 'Gestion des Dispositifs Médicaux Implantables';
+$locales['mod-dmi-tab-vw_categories'] = 'Catégories';
+$locales['mod-dmi-tab-vw_elements'] = 'DMI';
+$locales['CDMICategory-group_id'] = 'Etablissement';
+$locales['CDMICategory-group_id-court'] = 'Etab.';
+$locales['CDMICategory-group_id-desc'] = 'Etablissement auquel est associée la catégorie';
+$locales['CGroups-back-'] = '';
+$locales['CGroups-back-dmi_categories'] = 'Catégories de DMI';
+?>
