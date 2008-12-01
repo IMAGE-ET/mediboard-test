@@ -124,6 +124,10 @@ Main.add(function () {
         {{if $produit->_referent}}
         <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
         {{/if}}
+        
+        {{if !$produit->inLivret}}
+        <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+        {{/if}}
       </td>
       <td>
         {{$produit->code_ucd}}
