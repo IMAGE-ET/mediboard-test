@@ -36,13 +36,15 @@
     {{/if}}
     <td>{{$curr_stock->quantity}}</td>
     <td>
-      {{if $curr_stock->_package_quantity > 1}}
-        <b>{{$curr_stock->_package_quantity}}</b>
+      {{*if $curr_stock->_package_quantity > 0 && $curr_stock->_package_mod > 0}}
+        {{assign var=both value=true}}
+      {{else}}
+        {{assign var=both value=false}}
+      {{/if*}}
+      {{if $curr_stock->_package_quantity > 0}}
+        <strong>{{$curr_stock->_package_quantity}} {{$curr_stock->_ref_product->packaging}}</strong> + 
       {{/if}}
-      {{if $curr_stock->_package_quantity > 1 && $curr_stock->_package_mod > 0}} / {{/if}}
-      {{if $curr_stock->_package_mod > 0}}
-        {{$curr_stock->_package_mod}}
-      {{/if}}
+      {{$curr_stock->_package_mod-0}}
     </td>
     <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
   </tr>
