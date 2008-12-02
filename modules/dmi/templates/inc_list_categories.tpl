@@ -25,6 +25,9 @@
       {{assign var=group_id value=$_category->group_id}}
     	{{$groups.$group_id->_view}}
     </td>
+     <td>
+     
+    </td>
   </tr>
 	{{/foreach}}
 

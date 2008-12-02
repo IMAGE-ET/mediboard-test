@@ -10,6 +10,7 @@
 
 global $can, $g;
 $can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 // Récupération des catégories
 $DMICategory = new CDMICategory;
@@ -19,10 +20,16 @@ $DMICategories = $DMICategory->loadMatchingList();
 
 // Chargement du DMI selectionné
 $dmi = new CDMI;
+$where[] = "`category_id` ".$ds->prepareIn(array_keys($DMICategories));
 $dmi->load(mbGetValueFromGetOrSession("dmi_id"));
 
 // Chargement de tous les dmis
-$dmis = $dmi->loadList(null, "nom");
+$dmis = $dmi->loadList($where, "nom");
+
+$category_dmi = new CDMICategory;
+$category_dmi->load($dmi->category_id);
+if($category_dmi->group_id != $g)
+  $dmi=new CDMI;
 
 // Création du template
 $smarty = new CSmartyDP();
