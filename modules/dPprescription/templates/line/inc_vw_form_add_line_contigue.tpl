@@ -7,5 +7,5 @@
   <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-  <button type="button" class="new" onclick="addLineContigue(document.forms['addLineCont-{{$line->_id}}'])">Modifier la ligne</button>
+  <button type="button" class="new" onclick="addLineContigue(document.forms['addLineCont-{{$line->_id}}'])">Faire évoluer</button>
 </form>
