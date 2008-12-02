@@ -16,8 +16,8 @@ if($can->read && $keywords) {
   $default_cp = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
   $where = array();
   $where['cp'] = "LIKE '".$default_cp."___'";
-  $where[] = "nom LIKE '%$keywords%' OR prenom LIKE '%$keywords%'";
-  $matches = $medecin->loadList($where, 'nom', 30);
+  $where[] = "nom LIKE '$keywords%' OR prenom LIKE '$keywords%'";
+  $matches = $medecin->loadList($where, 'nom', 20);
   
   // Création du template
   $smarty = new CSmartyDP();
