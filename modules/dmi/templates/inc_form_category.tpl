@@ -23,8 +23,10 @@
       <td>
         <select name="group_id" class="{{$category->_props.group_id}}">
           <option value="">&mdash; {{tr}}CGroups.select{{/tr}}</option>
+          {{mb_ternary var=group_id test=$category->group_id value=$category->group_id other=$g}}
+
           {{foreach from=$groups item=_group}}
-          <option value="{{$_group->_id}}" {{if $_group->_id == $category->group_id}} selected="selected" {{/if}}>
+          <option value="{{$_group->_id}}" {{if $_group->_id == $group_id}} selected="selected" {{/if}}>
             {{$_group->_view}}
           </option>
           {{/foreach}}

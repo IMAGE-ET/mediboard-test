@@ -22,6 +22,10 @@ $category->load(mbGetValueFromGetOrSession("category_id"));
 
 // Chargement de toutes les catégories
 $categories = $category->loadList(null, "nom");
+foreach ($categories as $_category) {
+	$_category->countRefsDMI();
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();

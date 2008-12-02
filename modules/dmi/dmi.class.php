@@ -49,8 +49,8 @@ function getSpec() {
   }
   
 	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	 return $backRefs;
+		$backRefs = parent::getBackRefs();
+		return $backRefs;
 	}
 
   function updateFormFields() {

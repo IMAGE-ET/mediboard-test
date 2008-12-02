@@ -20,12 +20,18 @@ $DMICategories = $DMICategory->loadMatchingList();
 
 // Chargement du DMI selectionné
 $dmi = new CDMI;
-$where[] = "`category_id` ".$ds->prepareIn(array_keys($DMICategories));
+$dmi->category_id = mbGetValueFromGet("category_id");
 $dmi->load(mbGetValueFromGetOrSession("dmi_id"));
 
 // Chargement de tous les dmis
+foreach ($DMICategories as $_category) {
+  $_category->loadRefsDMI();
+}
+
+$where[] = "`category_id` ".$ds->prepareIn(array_keys($DMICategories));
 $dmis = $dmi->loadList($where, "nom");
 
+// Vérification du groupe courant pour le DMI sélectionné
 $category_dmi = new CDMICategory;
 $category_dmi->load($dmi->category_id);
 if($category_dmi->group_id != $g)

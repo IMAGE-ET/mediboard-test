@@ -17,6 +17,12 @@ class CDMICategory extends CMbObject {
   var $description = null;
   var $group_id    = null;
   
+  // Form Fields
+  var $_count_dmis = null;
+  
+  // Collections
+  var $_ref_dmis = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dmi_category';
@@ -44,9 +50,18 @@ class CDMICategory extends CMbObject {
 	  $backRefs["dmis"] = "CDMI category_id";
 	  return $backRefs;
 	}
+	
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
+  }
+  
+  function loadRefsDMI() {
+    $this->_ref_dmis = $this->loadBackRefs("dmis", "nom");
+  }
+  
+  function countRefsDMI() {
+    $this->_count_dmis = $this->countBackRefs("dmis");
   }
 }
 
