@@ -7,13 +7,15 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $g;
 
 $can->needsRead();
 
 $doc_ged_id   = mbGetValueFromGetOrSession("doc_ged_id" , 0);
 $selTheme     = mbGetValueFromGetOrSession("selTheme"   , 0);
 $selChapitre  = mbGetValueFromGetOrSession("selChapitre", 0);
+$sort_by_date = mbGetValueFromGet("sort_by_date");
+
 $fileSel = new CFile;
 
 $docGed = new CDocGed;
@@ -67,8 +69,8 @@ if($selChapitre){
 }
 $ljoin = array();
 $ljoin["doc_ged_suivi"] = "doc_ged.doc_ged_id = doc_ged_suivi.doc_ged_id";
-    
-$procedures = $procedures->loadList($where, null, null, null, $ljoin);
+
+$procedures = $procedures->loadList($where, ($sort_by_date?'doc_ged_suivi.date DESC':null), null, null, $ljoin);
 foreach($procedures as $keyProc=>$currProc){
   $procedures[$keyProc]->loadRefs();
   $procedures[$keyProc]->loadLastActif();
@@ -84,6 +86,7 @@ $smarty->assign("listChapitres"  , $listChapitres);
 $smarty->assign("procedures"     , $procedures);
 $smarty->assign("docGed"         , $docGed);
 $smarty->assign("fileSel"        , $fileSel);
+$smarty->assign("sort_by_date"   , $sort_by_date);
 
 $smarty->display("vw_procedures.tpl");
 ?>

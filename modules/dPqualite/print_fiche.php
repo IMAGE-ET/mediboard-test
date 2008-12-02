@@ -23,17 +23,14 @@ if(!$fiche->load($fiche_ei_id)){
   // Liste des Catégories d'EI
   $listCategories = new CEiCategorie;
   $listCategories = $listCategories->loadList(null, "nom");
-  //  
+
   foreach($listCategories as $keyCat=>$valueCat){
-    $cattrouvee = null;
-    
     foreach($fiche->_ref_items as $keyItem=>$valueItem){
       if($fiche->_ref_items[$keyItem]->ei_categorie_id==$keyCat){
-        if(!$cattrouvee){
+        if(!isset($catFiche[$listCategories[$keyCat]->nom])){
           $catFiche[$listCategories[$keyCat]->nom] = array();
         }
         $catFiche[$listCategories[$keyCat]->nom][] = $fiche->_ref_items[$keyItem];
-        $cattrouvee = 1;
       }
     }
   }
@@ -41,7 +38,9 @@ if(!$fiche->load($fiche_ei_id)){
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("catFiche" , $catFiche);
 $smarty->assign("fiche"    , $fiche);
+
 $smarty->display("print_fiche.tpl");
 ?>

@@ -59,38 +59,33 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     if($this->_objBefore->group_id && $this->_obj->doc_chapitre_id && $this->_obj->doc_categorie_id && !$this->_objBefore->num_ref){
       // Nouvelle Procédure
       $this->_obj->version = 1;
+      
+      $where = array();
+      $where["num_ref"]          = "IS NOT NULL";
+      $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
+      $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
+      $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
+      $where["annule"]           = "= '0'";
+      $order = "num_ref DESC";
+        
       if($this->_obj->num_ref) {
-        $this->_obj->num_ref = intval($this->_obj->num_ref);
         // Numérotée manuellement
-        $where = array();
-        $where["num_ref"]          = "IS NOT NULL";
-        $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
-        $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
-        $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
-        $where["num_ref"]          = "= '".$this->_obj->num_ref."'";
-        $where["annule"]           = "= '0'";
-        $order = "num_ref DESC";
+        $where["num_ref"] = "= '".$this->_obj->num_ref."'";
         $sameNumRef = new CDocGed;
         $sameNumRef->loadObject($where,$order);
         if($sameNumRef->_id) {
           $this->_obj->num_ref = null;
         }
       }
-      if(!$this->_obj->num_ref) {
+      else {
         // Pas de numéro : Récup n° dernier doc dans meme chapitre et catégorie
-        $where = array();
-        $where["num_ref"]          = "IS NOT NULL";
-        $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
-        $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
-        $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
-        $where["annule"]           = "= '0'";
-        $order = "num_ref DESC";
+        $where["num_ref"] = "IS NOT NULL";
         $lastNumRef = new CDocGed;
         $lastNumRef->loadObject($where,$order);
-        if(!$lastNumRef->doc_ged_id){
+        if(!$lastNumRef->_id){
           $this->_obj->num_ref = 1;
         }else{
-          $this->_obj->num_ref = intval($lastNumRef->num_ref) + 1;
+          $this->_obj->num_ref = $lastNumRef->num_ref + 1;
         }
       }
     }
@@ -101,7 +96,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     }
     
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR );
+      $AppUI->setMsg($msg, UI_MSG_ERROR);
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -139,7 +134,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
       $this->_obj->file_id  = $file_id;
     }
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR );
+      $AppUI->setMsg($msg, UI_MSG_ERROR);
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }

@@ -143,11 +143,11 @@ class CFicheEi extends CMbObject {
     // Calcul de la criticité
     if($this->gravite && $this->vraissemblance) {
       $tabCriticite = array(
-        1 => array( 1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
-        2 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
-        3 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
-        4 => array( 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
-        5 => array( 1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3)
+        1 => array(1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
+        2 => array(1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
+        3 => array(1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
+        4 => array(1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
+        5 => array(1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3),
       );
       $this->_criticite = $tabCriticite[$this->gravite][$this->vraissemblance];
     }

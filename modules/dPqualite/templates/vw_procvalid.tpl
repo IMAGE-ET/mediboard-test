@@ -254,7 +254,7 @@ function redactionDoc(oForm){
       <input type="hidden" name="ged[etat]" value="" />
       
       <input type="hidden" name="suivi[doc_ged_suivi_id]" value="{{$docGed->_lastentry->doc_ged_suivi_id}}" />
-      <input type="hidden" name="suivi[user_id]" value="{{$user_id}}" />  
+      <input type="hidden" name="suivi[user_id]" value="{{$app->user_id}}" />  
       <input type="hidden" name="suivi[actif]" value="{{$docGed->_lastentry->actif}}" /> 
       <input type="hidden" name="suivi[file_id]" value="{{$docGed->_lastentry->file_id}}" />    
 

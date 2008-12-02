@@ -7,9 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-/**
- * The CChapitreDoc class
- */
 class CChapitreDoc extends CMbObject {
   // DB Table key
   var $doc_chapitre_id = null;
@@ -90,7 +87,7 @@ class CChapitreDoc extends CMbObject {
   
   function computePath() {
     if (!$this->pere_id) {
-      return $this->_path = $this->code."-";
+      return $this->_path = "$this->code-";
     }
     
     $this->loadParent();
@@ -102,9 +99,8 @@ class CChapitreDoc extends CMbObject {
   }
   
   function loadChapsDeep($n = 0) {
-    global $dPconfig;
     $this->_level = $n;
-    if($dPconfig["dPqualite"]["CChapitreDoc"]["profondeur"] > ($this->_level + 1)) {
+    if(CAppUI::conf("dPqualite CChapitreDoc profondeur") > ($this->_level + 1)) {
       $this->loadSections();
       foreach ($this->_ref_chapitres_doc as &$_chapitre) {
         $_chapitre->_ref_pere =& $this;

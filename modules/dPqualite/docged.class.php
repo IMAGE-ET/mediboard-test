@@ -7,10 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-/**
- * The CDocGed class
- */
- 
 class CDocGed extends CMbObject {
   const MODELE   = 0;
   const DEMANDE  = 16;
@@ -72,43 +68,39 @@ class CDocGed extends CMbObject {
     $specs["etat"]             = "notNull enum list|0|16|32|48|64";
     $specs["version"]          = "currency min|0";
     $specs["annule"]           = "bool";
-    $specs["num_ref"]          = "num";
+    $specs["num_ref"]          = "float";
     return $specs;
   }
 
   function getEtatRedac() {
-    global $AppUI;
     $etat = array();
     $etat[self::DEMANDE]   = CAppUI::tr("CDocGed-msg-etatredac_DEMANDE");
     $etat[self::REDAC]     = CAppUI::tr("CDocGed-msg-etatredac_REDAC");
     $etat[self::VALID]     = CAppUI::tr("CDocGed-msg-etatredac_VALID");
     if($this->annule){
-      $etat[self::TERMINE]   = CAppUI::tr("CDocGed-msg-etat_INDISPO");
+      $etat[self::TERMINE] = CAppUI::tr("CDocGed-msg-etat_INDISPO");
     }else{
-      $etat[self::TERMINE]   = CAppUI::tr("CDocGed-msg-etat_DISPO");  
+      $etat[self::TERMINE] = CAppUI::tr("CDocGed-msg-etat_DISPO");
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
   }
   
   function getEtatValid() {
-    global $AppUI;
     $etat = array();
     $etat[self::DEMANDE]   = CAppUI::tr("CDocGed-msg-etatvalid_DEMANDE");
     $etat[self::REDAC]     = CAppUI::tr("CDocGed-msg-etatvalid_REDAC");
     $etat[self::VALID]     = CAppUI::tr("CDocGed-msg-etatvalid_VALID");
     if($this->annule){
-      $etat[self::TERMINE]   = CAppUI::tr("CDocGed-msg-etat_INDISPO");
+      $etat[self::TERMINE] = CAppUI::tr("CDocGed-msg-etat_INDISPO");
     }else{
-      $etat[self::TERMINE]   = CAppUI::tr("CDocGed-msg-etat_DISPO");  
+      $etat[self::TERMINE] = CAppUI::tr("CDocGed-msg-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
   }
     
   function loadRefsFwd() {
-    global $dPconfig;
-    
     $this->_ref_user = new CMediusers();
     $this->_ref_user->load($this->user_id);
     
@@ -116,29 +108,30 @@ class CDocGed extends CMbObject {
     $this->_ref_group->load($this->group_id);
     
     $this->_ref_chapitre = new CChapitreDoc;
-    if($this->doc_chapitre_id) {
-      $this->_ref_chapitre->load($this->doc_chapitre_id);
+    if ($this->_ref_chapitre->load($this->doc_chapitre_id)) {
       $this->_ref_chapitre->computePath();
     }
+    
     $this->_ref_theme = new CThemeDoc;
-    if ($this->doc_theme_id) {
-      $this->_ref_theme->load($this->doc_theme_id);
-    }
+    $this->_ref_theme->load($this->doc_theme_id);
+    
     $this->_ref_categorie = new CCategorieDoc;
-    if ($this->doc_categorie_id) {
-      $this->_ref_categorie->load($this->doc_categorie_id);
-    }
+    $this->_ref_categorie->load($this->doc_categorie_id);
+    
     if($this->doc_chapitre_id && $this->doc_categorie_id) {
-      if($dPconfig["dPqualite"]["CDocGed"]["_reference_doc"]) {
-        $this->_reference_doc = $this->_ref_categorie->code . "-" . $this->_ref_chapitre->_path . str_pad($this->num_ref, 3, "0", STR_PAD_LEFT);
+    	$ref = str_pad(sprintf("%3.1f", $this->num_ref), 5, '0', STR_PAD_LEFT);
+    	while (strlen($ref) > 3 && ($ref[strlen($ref)-1] == '0' || $ref[strlen($ref)-1] == '.')) {
+    		$ref = substr($ref, 0, -1);
+    	}
+      if(CAppUI::conf("dPqualite CDocGed _reference_doc")) {
+        $this->_reference_doc = $this->_ref_categorie->code."-".$this->_ref_chapitre->_path.$ref;
       } else {
-        $this->_reference_doc = $this->_ref_chapitre->_path . $this->_ref_categorie->code . "-" . str_pad($this->num_ref, 3, "0", STR_PAD_LEFT);
+        $this->_reference_doc = $this->_ref_chapitre->_path.$this->_ref_categorie->code."-".$ref;
       }
     }
   }
   
-  function loadProc($user_id = null,$where,$annule = null){
-    
+  function loadProc($user_id = null, $where, $annule = null){
     if($user_id){
       $where["user_id"] = "= '$user_id'";
     }
@@ -146,8 +139,7 @@ class CDocGed extends CMbObject {
       $where["annule"] = "= '$annule'";
     }
     $procDemandee = new CDocGed;
-    $procDemandee = $procDemandee->loadList($where);
-    return $procDemandee;
+    return $procDemandee->loadList($where);
   }
   
   function loadProcDemande($user_id = null,$annule = null){
@@ -172,8 +164,7 @@ class CDocGed extends CMbObject {
   
   function loadProcRedacAndValid($user_id = null,$annule = null){
     // Chargement des Procédures en Attente d'upload d'un fichier (Redaction)
-    $where = array();
-    $where[] = "(`doc_ged`.etat = '".self::VALID."' || `doc_ged`.etat = '".self::REDAC."')";
+    $where = array("(`doc_ged`.etat = '".self::VALID."' || `doc_ged`.etat = '".self::REDAC."')");
     return $this->loadProc($user_id,$where,$annule);
   }
   
@@ -244,12 +235,11 @@ class CDocGed extends CMbObject {
     $where["num_ref"]          = "= '".$this->num_ref."'";
     $where["annule"]           = "= '0'";
     $order = "num_ref DESC";
-    $sameNumRef = new CDocGed;
-    $sameNumRef->loadObject($where,$order);
+    $sameNumRef = new self;
+    $sameNumRef->loadObject($where, $order);
     if($sameNumRef->_id) {
       return "Un document existe déjà avec la même référence";
     }
-    return null;
   }
   
   function canDeleteEx() {
@@ -276,10 +266,9 @@ class CDocGed extends CMbObject {
     if(!$this->_lastentry){
       $this->loadLastEntry();
     }
-    $msg = null;
     if ($msg = $this->canDeleteEx()) {
       return $msg;
-    }    
+    }
     $this->_lastactif->delete_suivi($this->doc_ged_id, $this->_lastactif->doc_ged_suivi_id);
     if($this->_lastactif->doc_ged_suivi_id){
       $this->etat = self::TERMINE;

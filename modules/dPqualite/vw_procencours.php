@@ -42,7 +42,6 @@ foreach($procTermine as $keyProc => $currProc){
   $procTermine[$keyProc]->loadFirstEntry();
 }
 
-
 // Procédure en Cours de demande
 $procDemande = new CDocGed;
 $procDemande = $procDemande->loadProcDemande($AppUI->user_id);
@@ -74,7 +73,7 @@ $smarty->assign("etablissements" , $etablissements);
 $smarty->assign("procDemande"    , $procDemande);
 $smarty->assign("procEnCours"    , $procEnCours);
 $smarty->assign("docGed"         , $docGed);
-$smarty->assign("g"              , $g);
-$smarty->assign("user_id"        , $AppUI->user_id);
+
 $smarty->display("vw_procencours.tpl");
+
 ?>

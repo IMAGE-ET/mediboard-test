@@ -7,9 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-/**
- * The CDocGedSuivi class
- */
 class CDocGedSuivi extends CMbObject {
   // DB Table key
   var $doc_ged_suivi_id = null;
@@ -57,7 +54,7 @@ class CDocGedSuivi extends CMbObject {
   
   function loadProcComplete(){
     // Chargement des procédures Terminées
-  }  
+  }
   
   function loadHistory($doc_ged_id = null){
     // Chargement de l'historique complet pour une procédure
@@ -87,7 +84,6 @@ class CDocGedSuivi extends CMbObject {
   
   function delete() {
     // Suppression du fichier correspondant
-    $msg = null;
     if ($this->file_id){
       $this->loadFile();
       if($this->_ref_file->file_id){

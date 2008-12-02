@@ -111,9 +111,7 @@ $smarty->assign("listCategories"    , $listCategories);
 $smarty->assign("listThemes"        , $listThemes);
 $smarty->assign("listChapitres"     , $listChapitres);
 $smarty->assign("docGed"            , $docGed);
-$smarty->assign("g"                 , $g);
 $smarty->assign("versionDoc"        , $versionDoc);
-$smarty->assign("user_id"           , $AppUI->user_id);
 
 $smarty->display("vw_procvalid.tpl");
 ?>

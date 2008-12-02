@@ -38,6 +38,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </option>
         {{/foreach}}
       </select>
+      <input type="checkbox" name="sort_by_date" onclick="this.form.submit();" {{if $sort_by_date}}checked="checked"{{/if}} /> Trier par date
       
       <br />
       <label for="selChapitre" title="{{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}">{{tr}}CDocGed-doc_chapitre_id{{/tr}}</label>

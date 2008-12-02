@@ -7,9 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-/**
- * The CEiCategorie class
- */
 class CEiCategorie extends CMbObject {
   // DB Table key
   var $ei_categorie_id  = null;
@@ -40,11 +37,7 @@ class CEiCategorie extends CMbObject {
   }
   
   function loadRefsBack() {
-    $this->_ref_items = new CEiItem;
-    $where = array();
-    $where["ei_categorie_id"] = "= '$this->ei_categorie_id'";
-    $order = "nom ASC";
-    $this->_ref_items = $this->_ref_items->loadList($where, $order);
+    $this->_ref_items = $this->loadBackRefs("items", "nom");
   }
 }
 ?>

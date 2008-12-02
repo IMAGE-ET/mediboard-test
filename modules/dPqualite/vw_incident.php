@@ -100,7 +100,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("fiche"          , $fiche);
 $smarty->assign("firstdiv"       , $firstdiv);
-$smarty->assign("user_id"        , $AppUI->user_id);
 $smarty->assign("listCategories" , $listCategories);
 $smarty->assign("listFct"        , $listFct);
 

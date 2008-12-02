@@ -1,12 +1,11 @@
 <script language="Javascript" type="text/javascript">
-
 function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
   url.addParam("nonavig", 1);
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
-
 </script>
+
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -184,10 +183,10 @@ function popFile(objectClass, objectId, elementClass, elementId){
       <input type="hidden" name="del" value="0" />      
 
       <input type="hidden" name="ged[doc_ged_id]" value="{{$docGed->doc_ged_id}}" />  
-      <input type="hidden" name="ged[user_id]" value="{{$user_id}}" />
+      <input type="hidden" name="ged[user_id]" value="{{$app->user_id}}" />
       <input type="hidden" name="ged[annule]" value="{{$docGed->annule|default:"0"}}" />
             
-      <input type="hidden" name="suivi[user_id]" value="{{$user_id}}" />  
+      <input type="hidden" name="suivi[user_id]" value="{{$app->user_id}}" />  
       <input type="hidden" name="suivi[actif]" value="0" /> 
       <input type="hidden" name="suivi[file_id]" value="" />    
       

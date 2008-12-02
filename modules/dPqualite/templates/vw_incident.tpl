@@ -79,7 +79,7 @@ Main.add(function () {
                 {{foreach from=$currFct->_ref_users item=currUser}}
                 <option class="mediuser" style="border-color: #{{$currFct->color}};" value="{{$currUser->user_id}}" 
                 {{if ($fiche->fiche_ei_id && $fiche->user_id==$currUser->user_id)
-                      || (!$fiche->fiche_ei_id && $user_id==$currUser->user_id)}}
+                      || (!$fiche->fiche_ei_id && $app->user_id==$currUser->user_id)}}
                   selected="selected"
                 {{/if}}
                 >
@@ -92,7 +92,7 @@ Main.add(function () {
           </td>
         </tr>
         {{else}}
-        <input type="hidden" name="user_id" value="{{if $fiche->fiche_ei_id}}{{$fiche->user_id}}{{else}}{{$user_id}}{{/if}}" />
+        <input type="hidden" name="user_id" value="{{if $fiche->fiche_ei_id}}{{$fiche->user_id}}{{else}}{{$app->user_id}}{{/if}}" />
         {{/if}}
         
         <tr>

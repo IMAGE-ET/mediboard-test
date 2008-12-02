@@ -7,9 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-/**
- * The CThemeDoc class
- */
 class CThemeDoc extends CMbObject {
   // DB Table key
   var $doc_theme_id = null;
@@ -29,18 +26,16 @@ class CThemeDoc extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["documents_ged"] = "CDocGed doc_theme_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["documents_ged"] = "CDocGed doc_theme_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "group_id" => "ref class|CGroups",
-      "nom"      => "notNull str maxLength|50"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["group_id"] = "ref class|CGroups";
+    $specs["nom"]      = "notNull str maxLength|50";
+    return $specs;
   }
 
   function updateFormFields() {
@@ -58,6 +53,5 @@ class CThemeDoc extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefGroup();
   }
-    
 }
 ?>

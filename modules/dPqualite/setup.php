@@ -224,7 +224,11 @@ class CSetupdPqualite extends CSetup {
               CHANGE `group_id` `group_id` int(11) UNSIGNED DEFAULT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    $sql = "ALTER TABLE `doc_ged` CHANGE `num_ref` `num_ref` DECIMAL(5,1) NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.19";
     
   }
 }
