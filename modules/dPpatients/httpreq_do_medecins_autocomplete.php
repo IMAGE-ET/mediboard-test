@@ -14,7 +14,10 @@ $keywords = mbGetValueFromPost("_view");
 if($can->read && $keywords) {
   $medecin = new CMedecin();
   $default_cp = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
-  $matches = $medecin->seek(explode(' ', $keywords), array('cp' => "LIKE '".$default_cp."___'"), 30);
+  $where = array();
+  $where['cp'] = "LIKE '".$default_cp."___'";
+  $where[] = "nom LIKE '%$keywords%' OR prenom LIKE '%$keywords%'";
+  $matches = $medecin->loadList($where, 'nom', 30);
   
   // Création du template
   $smarty = new CSmartyDP();

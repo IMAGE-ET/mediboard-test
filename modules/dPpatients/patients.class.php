@@ -458,8 +458,8 @@ class CPatient extends CMbObject {
       $this->_article = "Mademoiselle";
     }  
       
-    $this->_view     = $this->_shortview." $this->nom $this->prenom";
-    $this->_longview = $this->_article." $this->nom $this->prenom";
+    $this->_view     = "$this->_shortview $this->nom $this->prenom";
+    $this->_longview = "$this->_article $this->nom $this->prenom";
         
     // Navigation fields
     global $AppUI;

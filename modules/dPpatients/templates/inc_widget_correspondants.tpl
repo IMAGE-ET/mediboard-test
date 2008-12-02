@@ -59,7 +59,7 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       $V(formCorresp.medecin_id, element.id.split('-')[1]);
-      $V(formCorresp._view, element.select(".view")[0].innerHTML);
+      $V(formCorresp._view, element.select(".view")[0].innerHTML.stripTags());
     }
   });
 	{{/if}}
