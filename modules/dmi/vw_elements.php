@@ -10,7 +10,6 @@
 
 global $can, $g;
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
 
 // Récupération des catégories
 $DMICategory = new CDMICategory;
@@ -19,29 +18,28 @@ $order = "text";
 $DMICategories = $DMICategory->loadMatchingList();
 
 // Chargement du DMI selectionné
+$dmi_id = mbGetValueFromGetOrSession("dmi_id");
 $dmi = new CDMI;
 $dmi->category_id = mbGetValueFromGet("category_id");
-$dmi->load(mbGetValueFromGetOrSession("dmi_id"));
+$dmi->load($dmi_id);
 
 // Chargement de tous les dmis
 foreach ($DMICategories as $_category) {
   $_category->loadRefsDMI();
 }
 
-$where[] = "`category_id` ".$ds->prepareIn(array_keys($DMICategories));
-$dmis = $dmi->loadList($where, "nom");
-
 // Vérification du groupe courant pour le DMI sélectionné
 $category_dmi = new CDMICategory;
 $category_dmi->load($dmi->category_id);
-if($category_dmi->group_id != $g)
-  $dmi=new CDMI;
+if ($category_dmi->group_id != $g) {
+  $dmi = new CDMI;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("dmis", $dmis);
 $smarty->assign("dmi", $dmi);
+$smarty->assign("dmi_id", $dmi_id);
 $smarty->assign("DMICategories",$DMICategories);
 $smarty->display("vw_elements.tpl");
 
