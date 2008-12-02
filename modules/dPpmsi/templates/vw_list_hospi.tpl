@@ -9,7 +9,7 @@ Main.add(function () {
 <table class="tbl">
   <tr>
     <th class="title" colspan="8">
-      Liste des {{$listSejours|@count}} personne(s) hospitalisée(s) au {{$date|date_format:"%A %d %B %Y"}}
+      Liste des {{$listSejours|@count}} personne(s) hospitalisée(s) au {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
@@ -48,11 +48,11 @@ Main.add(function () {
     </td>
 
     <td class="text">
-      {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
+      {{$curr_sejour->entree_prevue|date_format:$dPconfig.datetime}}
     </td>
 
     <td class="text">
-      {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
+      {{$curr_sejour->sortie_prevue|date_format:$dPconfig.datetime}}
     </td>
     
     <td class="text" {{if !$GHM->_CM}}style="background-color:#fdd"{{/if}}>

@@ -7,7 +7,7 @@ Main.add(function () {
 <table class="tbl main">
   <tr>
     <th class="title" colspan="7">
-      Urgences du {{$date|date_format:"%A %d %B %Y"}}
+      Urgences du {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
@@ -26,7 +26,7 @@ Main.add(function () {
     <td>Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">
       <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-      {{$curr_op->_datetime|date_format:"%Hh%M"}}
+      {{$curr_op->_datetime|date_format:$dPconfig.time}}
       </a>
     </td>
     <td>

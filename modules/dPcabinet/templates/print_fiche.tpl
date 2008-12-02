@@ -16,7 +16,7 @@
         </tr>
         <tr>
           <th>Date </th>
-          <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
+          <td>{{$consult->_ref_plageconsult->date|date_format:$dPconfig.longdate}}</td>
           <th>Anesthésiste </th>
           <td>Dr {{$consult->_ref_chir->_view}}</td>
         </tr>
@@ -326,7 +326,7 @@
         </tr>
         <tr>
           <th>Date </th>
-          <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
+          <td>{{$consult->_ref_plageconsult->date|date_format:$dPconfig.longdate}}</td>
           <th>Anesthésiste </th>
           <td>Dr {{$consult->_ref_chir->_view}}</td>
         </tr>

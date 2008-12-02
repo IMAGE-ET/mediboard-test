@@ -29,7 +29,7 @@
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  {{$curr_adm->entree_prevue|date_format:"%Hh%M"}} ({{$curr_adm->type|truncate:1:"":true}})
+  {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} ({{$curr_adm->type|truncate:1:"":true}})
   </a>
 </td>
 
@@ -101,10 +101,10 @@
 	  <br />
   
  	  {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
-	    {{$curr_adm->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+	    {{$curr_adm->entree_reelle|date_format:$dPconfig.datetime}}
 	    <br>
 	  {{else}}
-	  {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}
+	  {{$curr_adm->entree_reelle|date_format:$dPconfig.time}}
 	  {{/if}}
   {{/if}}
   </form>

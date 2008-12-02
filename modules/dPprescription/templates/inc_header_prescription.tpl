@@ -211,7 +211,7 @@ submitProtocole = function(){
 				 				Intervention
 				 				  <select name="operation_id">
 				 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
-				 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:"%d/%m/%Y à %Hh%M"}}</option>
+				 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
 				 				    {{/foreach}}
  									</select>
 				 				{{else}}

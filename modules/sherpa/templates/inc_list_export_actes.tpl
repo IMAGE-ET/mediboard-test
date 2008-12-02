@@ -4,7 +4,7 @@
   <tr>
     <th class="title" colspan="12">
       Envoi d'actes pour les séjours sortis le : 
-      {{$filter->_date_sortie|date_format:"%A %d %B %Y"}}
+      {{$filter->_date_sortie|date_format:$dPconfig.longdate}}
     </th>
   </tr>
   {{/if}}

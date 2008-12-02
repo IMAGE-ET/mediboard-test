@@ -15,7 +15,7 @@
   {{foreach from=$consult->_ref_logs item=curr_object}}
   <tr>
     <td>{{$curr_object->_ref_user->_view}}</td>
-    <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+    <td>{{$curr_object->date|date_format:$dPconfig.datetime}}</td>
     <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
@@ -35,7 +35,7 @@
   {{foreach from=$consult->_ref_consult_anesth->_ref_logs item=curr_object}}
   <tr>
     <td>{{$curr_object->_ref_user->_view}}</td>
-    <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+    <td>{{$curr_object->date|date_format:$dPconfig.datetime}}</td>
     <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}

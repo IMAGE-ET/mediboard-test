@@ -193,6 +193,17 @@ class CConsultAnesth extends CMbObject {
   function loadRefOperation() {
     $this->_ref_operation = new COperation;
     $this->_ref_operation->load($this->operation_id);
+    
+    // Chargement du séjour associé
+    if ($this->_ref_operation->_id) {
+      $this->_ref_operation->loadRefSejour();
+      $this->_ref_operation->loadRefPlageOp();
+      $this->_ref_sejour =& $this->_ref_operation->_ref_sejour;
+    } 
+    else {
+      $this->loadRefSejour();
+    }
+    
   }
 
   function loadRefSejour() {
@@ -221,13 +232,8 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_consultation->loadRefsExamPossum();
     $this->_ref_consultation->loadRefsExamIgs();
     
-    $this->loadRefOperation();
-    if(!$this->_ref_operation->_id) {
-      $this->loadRefSejour();
-    } else {
-      $this->_ref_operation->loadRefSejour();
-      $this->_ref_sejour =& $this->_ref_operation->_ref_sejour;
-    }
+    $this->loadRefOperation();    
+    
     $this->_ref_sejour->loadRefDossierMedical();
     $this->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
@@ -243,12 +249,6 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_consultation->_ref_patient->loadRefConstantesMedicales();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->loadRefOperation();
-    if(!$this->_ref_operation->_id) {
-      $this->loadRefSejour();
-    } else {
-      $this->_ref_operation->loadRefSejour();
-      $this->_ref_sejour =& $this->_ref_operation->_ref_sejour;
-    }
     $this->_ref_operation->loadRefsFwd();
     $this->_date_consult =& $this->_ref_consultation->_date;
     $this->_date_op =& $this->_ref_operation->_datetime;

@@ -74,10 +74,10 @@ function validationRepas(typerepas_id){
                 {{foreach from=$listTypeRepas key=keyType item=curr_type}}
                 <td class="button">
                   {{if ($date == $curr_affect->entree|date_format:"%Y-%m-%d" 
-                       && $curr_affect->entree|date_format:"%H:%M" > $curr_type->fin)
+                       && $curr_affect->entree|date_format:$dPconfig.time > $curr_type->fin)
                        ||
                        ($date == $curr_affect->sortie|date_format:"%Y-%m-%d"  
-                       && $curr_type->debut > $curr_affect->sortie|date_format:"%H:%M")
+                       && $curr_type->debut > $curr_affect->sortie|date_format:$dPconfig.time)
                   }}
                   -
                   {{elseif $curr_affect->_list_repas.$date.$keyType->repas_id && $curr_affect->_list_repas.$date.$keyType->menu_id}}

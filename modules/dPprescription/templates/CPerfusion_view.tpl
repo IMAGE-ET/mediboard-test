@@ -64,7 +64,7 @@
 	  {{foreach from=$perf->_ref_transmissions item=_transmission}}
 	  <tr>
 	    <td colspan="3">
-	      {{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}
+	      {{$_transmission->_view}} le {{$_transmission->date|date_format:$dPconfig.datetime}}:<br /> {{$_transmission->text}}
 	    </td>
 	  </tr>
 	  {{/foreach}}

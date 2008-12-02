@@ -80,7 +80,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               view:'{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
             <strong>
             Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}} &mdash;
-            {{$curr_consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}} &mdash;
+            {{$curr_consult->_ref_plageconsult->date|date_format:$dPconfig.longdate}} &mdash;
             {{$curr_consult->_etat}}
             </strong>
           </td>

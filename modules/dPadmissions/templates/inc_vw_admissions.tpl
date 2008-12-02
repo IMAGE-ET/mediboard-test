@@ -8,7 +8,7 @@ Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
   <tr>
     <th colspan="9">
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
-      {{$date|date_format:"%A %d %B %Y"}}
+      {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
       <br /> 

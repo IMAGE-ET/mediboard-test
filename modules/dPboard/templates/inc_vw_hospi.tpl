@@ -71,7 +71,7 @@ PairEffect.initGroup("functionEffect", {
   </tr>
   {{foreach from=$listAff item=curr_aff}}
   <tr id="operSejour{{$curr_aff->sejour_id}}-trigger">
-    <td>{{$curr_aff->sortie|date_format:"%Hh%M"}}</td>
+    <td>{{$curr_aff->sortie|date_format:$dPconfig.time}}</td>
     <td style="background-image: none;padding: 2px;">{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
     <td style="background-image: none;padding: 2px;">{{$curr_aff->_ref_lit->_view}}</td>
   </tr>

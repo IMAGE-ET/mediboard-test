@@ -81,7 +81,7 @@ Main.add(function () {
             {{if $selPrat}}
               Dr {{$listPrat.$selPrat->_view}} -
             {{/if}}
-            {{$date_recherche|date_format:"%A %d %B %Y"}} : {{$listAff|@count}} patient(s)
+            {{$date_recherche|date_format:$dPconfig.longdate}} : {{$listAff|@count}} patient(s)
           </th>
         </tr>
         <tr>
@@ -120,13 +120,13 @@ Main.add(function () {
           <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
           <td class="text">{{$curr_aff->_ref_lit->nom}}</td>
           <td class="text">
-            Du {{$sejour->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
-            au {{$sejour->sortie_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
+            Du {{$sejour->entree_prevue|date_format:$dPconfig.datetime}}
+            au {{$sejour->sortie_prevue|date_format:$dPconfig.datetime}}
             ({{$sejour->_duree_prevue}} jours)
           </td>
           <td class="text">
-            Du {{$curr_aff->entree|date_format:"%d/%m/%Y à %Hh%M"}}
-            au {{$curr_aff->sortie|date_format:"%d/%m/%Y à %Hh%M"}}
+            Du {{$curr_aff->entree|date_format:$dPconfig.datetime}}
+            au {{$curr_aff->sortie|date_format:$dPconfig.datetime}}
             ({{$curr_aff->_duree}} jours)
           </td>
           <td>

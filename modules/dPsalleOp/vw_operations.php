@@ -53,12 +53,25 @@ if ($op) {
   $selOp->loadRefs();
 //  $actesup = $selOp->_ref_actes_ccam->_ref_exec
 
-  $selOp->_ref_sejour->loadExtDiagnostics();
-  $selOp->_ref_sejour->loadRefDossierMedical();
-  $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
-  $selOp->_ref_sejour->loadRefsConsultAnesth();
-  $selOp->_ref_sejour->loadRefsPrescriptions();
-  $selOp->_ref_sejour->_ref_consult_anesth->loadRefsFwd();
+  $sejour =& $selOp->_ref_sejour;
+  $sejour->loadExtDiagnostics();
+  $sejour->loadRefDossierMedical();
+  $sejour->_ref_dossier_medical->loadRefsBack();
+  $sejour->loadRefsConsultAnesth();
+  $sejour->loadRefsPrescriptions();
+  $sejour->_ref_consult_anesth->loadRefsFwd();
+
+  // Chargement des consultation d'anesthésie pour les associations a posteriori
+  $patient =& $sejour->_ref_patient;
+  $patient->loadRefsConsultations();
+  foreach ($patient->_ref_consultations as $consultation) {
+    $consultation->loadRefConsultAnesth();
+    $consult_anesth =& $consultation->_ref_consult_anesth;
+    if ($consult_anesth->_id) {
+      $consultation->loadRefPlageConsult();
+      $consult_anesth->loadRefOperation();
+    }
+  }
 
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();

@@ -28,7 +28,7 @@ function showLegend() {
         </option>
       {{/foreach}}
       </select>
-      {{$date_suivi|date_format:"%A %d %B %Y"}}
+      {{$date_suivi|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>

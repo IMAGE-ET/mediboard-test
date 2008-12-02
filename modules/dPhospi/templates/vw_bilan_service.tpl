@@ -92,7 +92,7 @@ selectChap = function(name_chap, oField){
   <th colspan="2">Filtres</th>
 </tr>
 <tr>
-  <td>Horaires sélectionnées</td><td><strong>{{$dateTime_min|date_format:"%d/%m/%Y à %Hh%M"}}</strong> au <strong>{{$dateTime_max|date_format:"%d/%m/%Y à %Hh%M"}}</strong></td>
+  <td>Horaires sélectionnées</td><td><strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong></td>
 </tr>
 <tr>
   <td>Catégorie(s) sélectionnée(s)</td>

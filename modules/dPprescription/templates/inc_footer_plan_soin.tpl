@@ -12,7 +12,7 @@
   <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2" rowspan="3"></td>
   <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2" rowspan="3">
   {{if $pharmacien->_id}}
-    {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
+    {{$pharmacien->_view}} {{$last_log->date|date_format:$dPconfig.datetime}}
   {{/if}}  
   </td>
   <td class="signature_ide" colspan="{{$tabHours.$date|@count}}" ></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td>

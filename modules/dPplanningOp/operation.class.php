@@ -573,7 +573,9 @@ class COperation extends CCodable {
     else {
       $this->_acte_execution = mbDateTime();
     }
-    
+
+    $this->_view = "Intervention du ";
+    $this->_view .= mbTransformTime(null, $this->_datetime, CAppUI::conf("date"));
   }
   
   function preparePossibleActes() {

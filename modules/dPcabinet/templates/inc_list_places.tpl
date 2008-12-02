@@ -47,7 +47,7 @@
         <th colspan="3">
           Dr {{$plage->_ref_chir->_view}}
           <br />
-          Plage du {{$plage->date|date_format:"%A %d %B %Y"}}
+          Plage du {{$plage->date|date_format:$dPconfig.longdate}}
         </th>
       </tr>
       <tr>
@@ -67,14 +67,14 @@
       </tr>
       {{else}}
       <tr>
-        <th colspan="3">Pas de plage le {{$date|date_format:"%A %d %B %Y"}}</th>
+        <th colspan="3">Pas de plage le {{$date|date_format:$dPconfig.longdate}}</th>
       </tr>
       {{/if}}
       {{foreach from=$listPlace item=_place}}
       <tr>
         <td>
           <div style="float:left">
-          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time|date_format:"%H:%M"}}')">{{$_place.time|date_format:"%Hh%M"}}</button>
+          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time|date_format:$dPconfig.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
           </div>
           <div style="float:right">
           {{foreach from=$_place.consultations item=_consultation}}

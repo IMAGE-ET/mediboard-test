@@ -45,7 +45,7 @@
 		  {{$_operation->_ref_chir->_view}}
 		  {{else}}
 	      {{if $_operation->time_operation != "00:00:00"}}
-	        {{$_operation->time_operation|date_format:"%Hh%M"}}
+	        {{$_operation->time_operation|date_format:$dPconfig.time}}
 	      {{else}}
 	        NP
 	      {{/if}}
@@ -104,7 +104,7 @@
     </a>
   </td>
   <td>{{tr}}COperation.cote.{{$_operation->cote}}{{/tr}}</td>
-  <td>{{$_operation->temp_operation|date_format:"%Hh%M"}}</td>
+  <td>{{$_operation->temp_operation|date_format:$dPconfig.time}}</td>
   {{/if}}
   {{/if}}
 </tr>

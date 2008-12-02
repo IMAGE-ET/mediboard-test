@@ -29,7 +29,7 @@ Main.add(function () {
       <table class="tbl">
         <tr>
           <th colspan="3" class="title">
-            Plages en attente de paiement &mdash; {{$today|date_format:"%A %d %B %Y"}}
+            Plages en attente de paiement &mdash; {{$today|date_format:$dPconfig.longdate}}
           </th>
         </tr>
         <tr>
@@ -55,7 +55,7 @@ Main.add(function () {
               <button type="submit" class="submit">Valider le paiement</button>
               </form>
             </td>
-            <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
+            <td>{{$curr_plage->date|date_format:$dPconfig.longdate}}</td>
             <td>{{$curr_plage->tarif}} €</td>
           </tr>
           {{/foreach}}

@@ -101,7 +101,7 @@ function refreshOutPanels() {
           <option value="">-</option>
           {{foreach from=$timing.$key.sortie_reveil|smarty:nodefaults item=curr_time}}
           <option value="{{$curr_time}}" {{if $curr_time == $curr_op->sortie_reveil}}selected="selected"{{/if}}>
-            {{$curr_time|date_format:"%Hh%M"}}
+            {{$curr_time|date_format:$dPconfig.time}}
           </option>
           {{/foreach}}
         </select>

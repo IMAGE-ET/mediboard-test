@@ -25,7 +25,7 @@ function saveSortie(oFormSortie, oFormAffectation){
       </form>
     </td>
     <th>
-    {{$date|date_format:"%A %d %B %Y"}}
+    {{$date|date_format:$dPconfig.longdate}}
     <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     
     </th>
@@ -89,14 +89,14 @@ function saveSortie(oFormSortie, oFormAffectation){
                 </td>
                 <td>
                 {{if $curr_sortie->effectue}}
-                  {{$curr_sortie->sortie|date_format:"%Hh%M"}}
+                  {{$curr_sortie->sortie|date_format:$dPconfig.time}}
                 {{else}}
                 <form name="editSortie{{$curr_sortie->affectation_id}}" action="">
                   <select name="sortie">
                   {{assign var="curr_id" value=$curr_sortie->_id}}
                   {{foreach from=$timing.$curr_id|smarty:nodefaults item="time"}}
                   <option value="{{$time}}" {{if $time==$curr_sortie->sortie}}selected = "selected"{{/if}}>
-                   {{$time|date_format:"%Hh%M"}}
+                   {{$time|date_format:$dPconfig.time}}
                   </option>
                   {{/foreach}}
                   </select>
@@ -164,7 +164,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <td class="text">
                   {{$curr_sortie->_ref_lit->_view}}
                 </td>
-                <td>{{$curr_sortie->sortie|date_format:"%Hh%M"}}</td>
+                <td>{{$curr_sortie->sortie|date_format:$dPconfig.time}}</td>
               </tr>
               {{/foreach}}
               <tr><th colspan="5">Ambulatoires</th></tr>
@@ -210,7 +210,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <td class="text">
                   {{$curr_sortie->_ref_lit->_view}}
                 </td>
-                <td>{{$curr_sortie->sortie|date_format:"%Hh%M"}}</td>
+                <td>{{$curr_sortie->sortie|date_format:$dPconfig.time}}</td>
               </tr>
               {{/foreach}}
             </table>

@@ -5,7 +5,7 @@
   <tr>
     <th class="category">{{$listEntree|@count}} patients en attente</th>
     <th class="category" colspan="2">
-      {{$date|date_format:"%A %d %B %Y"}}
+      {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
@@ -22,7 +22,7 @@
   </tr> 
   {{foreach from=$listEntree item=curr_op}}
   <tr>
-    <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
+    <td>{{$curr_op->time_operation|date_format:$dPconfig.time}}</td>
     <td>{{$curr_op->_ref_salle->nom}}</td>
     <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>

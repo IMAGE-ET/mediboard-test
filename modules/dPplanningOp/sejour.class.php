@@ -462,9 +462,9 @@ class CSejour extends CCodable {
 
     if($this->entree_prevue && $this->sortie_prevue) {
       $this->_view = "Séjour du ";
-      $this->_view .= mbTransformTime(null, $this->entree_prevue, "%d/%m/%Y");
+      $this->_view .= mbTransformTime(null, $this->entree_prevue, CAppUI::conf("date"));
       $this->_view .= " au ";
-      $this->_view .= mbTransformTime(null, $this->sortie_prevue, "%d/%m/%Y");
+      $this->_view .= mbTransformTime(null, $this->sortie_prevue, CAppUI::conf("date"));
     }
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
     $this->_praticien_id = $this->praticien_id;

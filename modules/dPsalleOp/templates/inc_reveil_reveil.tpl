@@ -83,13 +83,13 @@ refreshReveilPanels = function() {
 	        <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$curr_op->_id}});">         
 	        <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo" />
 	        {{if $curr_op->blood_salvage->totaltime > "00:00:00"}}  
-	         Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:"%Hh%M"}}
+	         Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:$dPconfig.time}}
 	        {{else}}
 	          Non débuté
 	        {{/if}} 
 	      </a>
 	      </div>
-	      {{if $curr_op->blood_salvage->totaltime|date_format:"%H:%M" > "05:00"}} 
+	      {{if $curr_op->blood_salvage->totaltime|date_format:$dPconfig.time > "05:00"}} 
 	      <div style="float:right; display:inline">
 	      
 	      <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">
@@ -166,7 +166,7 @@ refreshReveilPanels = function() {
           <option value="">-</option>
           {{foreach from=$timing.$key.entree_reveil|smarty:nodefaults item=curr_time}}
           <option value="{{$curr_time}}" {{if $curr_time == $curr_op->entree_reveil}}selected="selected"{{/if}}>
-            {{$curr_time|date_format:"%Hh%M"}}
+            {{$curr_time|date_format:$dPconfig.time}}
           </option>
           {{/foreach}}
         </select>

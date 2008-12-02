@@ -22,7 +22,7 @@
        		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
   		      <ul>
   			  {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
-  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_trans->text}}</li>
+  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
   			  {{/foreach}}
   		      </ul>
   			{{else}}
@@ -126,9 +126,9 @@
 					     {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
 					    
 					     {{if $line_class == "CPrescriptionLineMedicament"}}
-						     <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>		 
+						     <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}</li>		 
 						   {{else}}
-							   <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         				        
+							   <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}</li>		         				        
 						   {{/if}}        
 						
 						   {{if @$line->_transmissions.$unite_prise.$date.$hour.list.$administration_id}}
@@ -137,7 +137,7 @@
 					     </script>  
 					     <ul>
 						     {{foreach from=$line->_transmissions.$unite_prise.$date.$hour.list.$administration_id item=_transmission}}
-			             <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}</li>
+			             <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$dPconfig.datetime}}:<br /> {{$_transmission->text}}</li>
 						     {{/foreach}}
 						   </ul>
 						   {{/if}}

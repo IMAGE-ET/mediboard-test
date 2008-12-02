@@ -3,7 +3,7 @@
 <input id="currDateJSAccess" name="currDateJSAccess" type="hidden" value="{{$date}}" />
 {{if !$board}}
 <div style="font-weight:bold; height:20px; text-align:center;">
-  {{$date|date_format:"%A %d %B %Y"}}
+  {{$date|date_format:$dPconfig.longdate}}
   <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
   <script type="text/javascript">
     Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_planning&date=");
@@ -30,7 +30,7 @@
   </tr>
   {{foreach from=$listDay item=curr_plage}}
   <tr>
-    <th colspan="6">{{$curr_plage->_ref_salle->nom}} : de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
+    <th colspan="6">{{$curr_plage->_ref_salle->nom}} : de {{$curr_plage->debut|date_format:$dPconfig.time}} à {{$curr_plage->fin|date_format:$dPconfig.time}}</th>
   </tr>
   
   {{foreach from=$curr_plage->_ref_operations item=curr_op}}
@@ -74,20 +74,20 @@
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
         {{if $curr_op->time_operation != "00:00:00"}}
           Validé pour 
-          <br/ >{{$curr_op->time_operation|date_format:"%Hh%M"}}
+          <br/ >{{$curr_op->time_operation|date_format:$dPconfig.time}}
         {{else}}
           Non validé
         {{/if}}
         <br />
         {{if $curr_op->horaire_voulu}}
         souhaité pour 
-        <br/>{{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
+        <br/>{{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
         {{/if}}
       </a>
     </td>
     <td style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+        {{$curr_op->temp_operation|date_format:$dPconfig.time}}
       </a>
     </td>
     {{/if}}
@@ -152,7 +152,7 @@
     </td>
     <td style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+        {{$curr_op->temp_operation|date_format:$dPconfig.time}}
       </a>
     </td>
   </tr>

@@ -7,7 +7,7 @@
   <input type="hidden" name="radio_fin" value="{{$rpu->radio_fin}}" />
   {{if $rpu->radio_debut}}
   	<strong>{{mb_label object=$rpu field=radio_debut}}</strong>
-    {{$rpu->radio_debut|date_format:"%Hh%M"}}
+    {{$rpu->radio_debut|date_format:$dPconfig.time}}
     <button class="cancel notext" type="button" onclick="this.form.radio_debut.value=''; submitRadio(this.form)">{{tr}}Cancel{{/tr}}</button>
   {{else}}
     <button class="submit" type="button" onclick="this.form.radio_debut.value='current'; submitRadio(this.form)">{{tr}}CRPU-radio_debut{{/tr}}</button>
@@ -15,7 +15,7 @@
   
   {{if $rpu->radio_fin}}
   	<strong>{{mb_label object=$rpu field=radio_fin}}</strong>
-    {{$rpu->radio_fin|date_format:"%Hh%M"}}
+    {{$rpu->radio_fin|date_format:$dPconfig.time}}
     <button class="cancel notext" type="button" onclick="this.form.radio_fin.value=''; submitRadio(this.form)">{{tr}}Cancel{{/tr}}</button>
   {{else}}
     <button class="submit" type="button" onclick="this.form.radio_fin.value='current'; submitRadio(this.form)">{{tr}}CRPU-radio_fin{{/tr}}</button>

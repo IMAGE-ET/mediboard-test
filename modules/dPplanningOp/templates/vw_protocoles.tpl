@@ -191,7 +191,7 @@ function setClose(protocole_id) {
           {{/if}}
           <tr>
             <th>Temps opératoire :</th>
-            <td>{{$protSel->temp_operation|date_format:"%Hh%M"}}</td>
+            <td>{{$protSel->temp_operation|date_format:$dPconfig.time}}</td>
           </tr>
 
           {{if $protSel->depassement}}

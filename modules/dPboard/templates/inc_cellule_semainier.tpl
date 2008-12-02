@@ -22,7 +22,7 @@
     <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$plageInfos->date}}" 
        onmouseover="viewItem(this, 'CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')">
       {{if $plageInfos->libelle}}{{$plageInfos->libelle}}<br />{{/if}}
-      {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
+      {{$plageInfos->debut|date_format:$dPconfig.time}} - {{$plageInfos->fin|date_format:$dPconfig.time}}
     </a>
     <div class="progressBar">
       <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
@@ -32,7 +32,7 @@
     <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;date={{$plageInfos->date}}"
        onmouseover="viewItem(this, 'CPlageOp',{{$plageInfos->_id}},'{{$curr_day}}')">
       {{$plageInfos->_ref_salle->nom}}<br />
-      {{$plageInfos->debut|date_format:"%Hh%M"}} - {{$plageInfos->fin|date_format:"%Hh%M"}}
+      {{$plageInfos->debut|date_format:$dPconfig.time}} - {{$plageInfos->fin|date_format:$dPconfig.time}}
     </a>
     <div class="progressBar">
       <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>

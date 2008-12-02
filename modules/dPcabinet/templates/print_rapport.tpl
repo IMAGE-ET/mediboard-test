@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 
 <table class="main">
   <tr>
@@ -167,8 +167,8 @@
   <tr>
     <td colspan="2">
       <strong>
-        {{$curr_plage.plage->date|date_format:"%A %d %B %Y"}}
-        de {{$curr_plage.plage->debut|date_format:"%Hh%M"}} à {{$curr_plage.plage->fin|date_format:"%Hh%M"}}
+        {{$curr_plage.plage->date|date_format:$dPconfig.longdate}}
+        de {{$curr_plage.plage->debut|date_format:$dPconfig.time}} à {{$curr_plage.plage->fin|date_format:$dPconfig.time}}
         - Dr {{$curr_plage.plage->_ref_chir->_view}}
       </strong>
     </td>

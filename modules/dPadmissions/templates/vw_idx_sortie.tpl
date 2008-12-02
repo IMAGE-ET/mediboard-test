@@ -95,7 +95,7 @@ Main.add(function () {
       <a style="float: right;" href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
       <strong>
         <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
-        {{$date|date_format:"%A %d %B %Y"}}
+        {{$date|date_format:$dPconfig.longdate}}
         <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
         <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$demain}}"> >>> </a>
       </strong>

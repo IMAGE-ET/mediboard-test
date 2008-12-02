@@ -37,9 +37,9 @@
       </button>
       <br />
       {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
-        {{$curr_sortie->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+        {{$curr_sortie->sortie_reelle|date_format:$dPconfig.datetime}}
       {{else}}
-        {{$curr_sortie->sortie_reelle|date_format:"%Hh%M"}}
+        {{$curr_sortie->sortie_reelle|date_format:$dPconfig.time}}
       {{/if}}
       / 
       {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
@@ -80,7 +80,7 @@
 
     </td>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      {{$curr_sortie->sortie_prevue|date_format:"%Hh%M"}}
+      {{$curr_sortie->sortie_prevue|date_format:$dPconfig.time}}
       {{if $curr_sortie->_ref_last_affectation->confirme}}
         <img src="images/icons/tick.png" alt="Sortie confirmée par le praticien" />
       {{/if}}

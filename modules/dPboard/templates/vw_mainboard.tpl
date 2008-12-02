@@ -205,7 +205,7 @@ Main.add(function () {
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
       <input type="hidden" name="m" value="{{$m}}" />
-      {{$date|date_format:"%A %d %B %Y"}}
+      {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
       </form>

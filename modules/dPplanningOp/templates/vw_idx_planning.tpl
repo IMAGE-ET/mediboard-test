@@ -69,7 +69,7 @@ Main.add(function () {
           {{foreach from=$curr_day item=curr_plage}}
           <td align="center">
             {{if $curr_plage.plageop_id}}
-              {{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}
+              {{$curr_plage.debut|date_format:$dPconfig.time}} à {{$curr_plage.fin|date_format:$dPconfig.time}}
             {{else}}
               Hors plage
             {{/if}}
@@ -79,7 +79,7 @@ Main.add(function () {
             {{if $curr_plage.plageop_id && $curr_plage.spec_id}}
               Plage de Spécialité
             {{else}}
-              {{$curr_plage.duree|date_format:"%Hh%M"}}
+              {{$curr_plage.duree|date_format:$dPconfig.time}}
             {{/if}}
           </td>
         </tr>

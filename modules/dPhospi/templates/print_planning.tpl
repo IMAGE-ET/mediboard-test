@@ -90,7 +90,7 @@ function printAdmission(id) {
             {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
               {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
               {{if $curr_operation->time_operation != "00:00:00"}}
-                à {{$curr_operation->time_operation|date_format:"%Hh%M"}}
+                à {{$curr_operation->time_operation|date_format:$dPconfig.time}}
               {{/if}}
               <br />
             {{/foreach}}

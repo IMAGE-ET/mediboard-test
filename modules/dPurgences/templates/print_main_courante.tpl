@@ -29,7 +29,7 @@
 			    {{/if}}
 			    </td>
 			    <td>{{$sejour->_ref_patient->_view}}</td>
-			    <td>{{$sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+			    <td>{{$sejour->_entree|date_format:$dPconfig.datetime}}</td>
 			    <td>{{$sejour->_ref_praticien->_view}}</td>
 			    <td>{{$rpu->diag_infirmier|nl2br}}</td>
 			    <td>

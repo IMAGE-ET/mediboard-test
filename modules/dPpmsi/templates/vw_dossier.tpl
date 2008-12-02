@@ -359,7 +359,7 @@ Main.add(function () {
         <tr>
           <th class="category" colspan="4">
             Intervention par le Dr {{$curr_op->_ref_chir->_view}}
-            &mdash; {{$curr_op->_datetime|date_format:"%A %d %B %Y"}}
+            &mdash; {{$curr_op->_datetime|date_format:$dPconfig.longdate}}
             &mdash; 
             {{if $curr_op->salle_id}}
               {{$curr_op->_ref_salle->nom}}

@@ -87,53 +87,11 @@
     <th class="category" colspan="10">{{tr}}config-{{$category}}{{/tr}}</th>
   </tr>
   
-  {{assign var="var" value="date"}}
-  <tr>
-    <th>
-      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
-    </td>
-  </tr>
-    
-  {{assign var="var" value="time"}}
-  <tr>
-    <th>
-      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
-    </td>
-  </tr>
-    
-  {{assign var="var" value="datetime"}}
-  <tr>
-    <th>
-      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
-    </td>
-  </tr>
-    
-  {{assign var="var" value="longdate"}}
-  <tr>
-    <th>
-      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
-    </td>
-  </tr>
+  {{include file=inc_config_date_format.tpl var=date}}
+  {{include file=inc_config_date_format.tpl var=time}}
+  {{include file=inc_config_date_format.tpl var=longdate}}
+  {{include file=inc_config_date_format.tpl var=longtime}}
+  {{include file=inc_config_date_format.tpl var=datetime}}
 
   {{assign var="var" value="type_telephone"}}
   <tr>

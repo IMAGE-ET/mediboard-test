@@ -71,7 +71,7 @@
 	              {{$line->_unite_prise}}
 	            {{/if}}: 
 	            {{foreach from=$_administrations_by_quantite item=_administration}}
-	            {{$_administration->dateTime|date_format:"%Hh%M"}}
+	            {{$_administration->dateTime|date_format:$dPconfig.time}}
 	            {{/foreach}}
 	            <br />
 	          {{/foreach}}

@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 
 <table class="main">
   <tr>
@@ -123,7 +123,7 @@
   {{if $filter->_type_affichage}}
   {{foreach from=$listReglements key=key_date item=curr_date}}
   <tr>
-    <td colspan="2"><strong>Règlements du {{$key_date|date_format:"%A %d %B %Y"}}</strong></td>
+    <td colspan="2"><strong>Règlements du {{$key_date|date_format:$dPconfig.longdate}}</strong></td>
   </tr>
   <tr>
     <td colspan="2">

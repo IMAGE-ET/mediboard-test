@@ -69,10 +69,10 @@ Main.add(function () {
           <td>{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
           <td>{{$curr_plage->_ref_salle->_view}}</td>
           <td>{{$curr_plage->_ref_operations|@count}}</td>
-          <td>{{$curr_plage->_duree_prevue|date_format:"%Hh%M"}}</td>
-          <td>{{$curr_plage->_duree_first_to_last|date_format:"%Hh%M"}}</td>
+          <td>{{$curr_plage->_duree_prevue|date_format:$dPconfig.time}}</td>
+          <td>{{$curr_plage->_duree_first_to_last|date_format:$dPconfig.time}}</td>
           <td>
-            {{$curr_plage->_duree_total_op|date_format:"%Hh%M"}}
+            {{$curr_plage->_duree_total_op|date_format:$dPconfig.time}}
             ({{$curr_plage->_op_for_duree_totale}}/{{$curr_plage->_ref_operations|@count}})
           </td>
           <td>{{$curr_plage->_ref_affectations_personnel.op|@count}}</td>
@@ -84,19 +84,19 @@ Main.add(function () {
           <td>
             <strong>
               {{$total.days_duree_prevue}}j
-              {{$total.duree_prevue|date_format:"%Hh%M"}}
+              {{$total.duree_prevue|date_format:$dPconfig.time}}
             </strong>
           </td>
           <td>
             <strong>
               {{$total.days_duree_first_to_last}}j
-              {{$total.duree_first_to_last|date_format:"%Hh%M"}}
+              {{$total.duree_first_to_last|date_format:$dPconfig.time}}
             </strong>
           </td>
           <td>
             <strong>
               {{$total.days_duree_reelle}}j
-              {{$total.duree_reelle|date_format:"%Hh%M"}}
+              {{$total.duree_reelle|date_format:$dPconfig.time}}
             </strong>
           </td>
           <td colspan="2"></td>

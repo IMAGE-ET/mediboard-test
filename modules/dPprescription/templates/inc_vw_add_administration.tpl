@@ -83,7 +83,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      {{else}}
 	        {{$line->_unite_prise}}
 	      {{/if}}
-	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>
+	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:$dPconfig.datetime}}</li>
 	    </td>
 	  </tr>
 	  {{foreachelse}}

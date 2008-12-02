@@ -59,13 +59,13 @@ refreshOpsPanels = function() {
           <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$curr_op->_id}});">         
           <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo">
           {{if $curr_op->blood_salvage->totaltime > "00:00:00"}}  
-            Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:"%Hh%M"}}
+            Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:$dPconfig.time}}
           {{else}}
             Non débuté
           {{/if}} 
         </a>
         </div>
-        {{if $curr_op->blood_salvage->totaltime|date_format:"%H:%M" > "05:00"}} 
+        {{if $curr_op->blood_salvage->totaltime|date_format:$dPconfig.time > "05:00"}} 
         <div style="float:right; display:inline">
         
         <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">
@@ -159,5 +159,5 @@ refreshOpsPanels = function() {
 
 <script type="text/javascript">
   $('liops').innerHTML = {{$listOps|@count}};
-  $('heure').innerHTML = "{{$hour|date_format:"%Hh%M"}}";
+  $('heure').innerHTML = "{{$hour|date_format:$dPconfig.time}}";
 </script>

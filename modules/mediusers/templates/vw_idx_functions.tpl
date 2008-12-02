@@ -80,7 +80,7 @@ ColorSelector.init = function(){
           <th>{{mb_label object=$userfunction field="group_id"}}</th>
           <td>
             <select name="group_id" class="{{$userfunction->_props.group_id}}">
-              <option value="">&mdash; choisir un établissement</option>
+              <option value="">&mdash; {{tr}}CGroups.select{{/tr}}</option>
               {{foreach from=$listGroups item=curr_group}}
               <option value="{{$curr_group->group_id}}" {{if $curr_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
                 {{$curr_group->text}}

@@ -6,8 +6,8 @@
   <table class="form">
     <tr>
       <th class="category" colspan="2">
-        <div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>
-        {{$date|date_format:"%A %d %B %Y"}}
+        <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
+        {{$date|date_format:$dPconfig.longdate}}
         <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
       </th>
     </tr>
@@ -40,7 +40,7 @@
   		    {{$rspo->_ref_sejour->_ref_patient->_view}}
         </a>
 		  </td>
-		  <td class="text">{{$rspo->entree_reveil|date_format:"%H:%M"}}</td>
+		  <td class="text">{{$rspo->entree_reveil|date_format:$dPconfig.time}}</td>
 		</tr>
 	{{foreachelse}}
 	<tr>

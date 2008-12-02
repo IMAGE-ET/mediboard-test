@@ -225,26 +225,84 @@
 
 {{else}}
 
+<div class="big-info">
+  Aucun dossier d'anesthésie n'a été associé à cette intervention ou ce séjour
+  <br />
+  Vour pouvez :
+  <ul>
+    <li>Soit <strong>associer un dossier d'anesthésie</strong> d'une consultation passée,</li>
+    <li>Soit <strong>créer un nouveau dossier d'anesthésie</strong>.</li>
+  </ul>
+</div>
 
-<form name="createConsult" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-<input type="hidden" name="dosql" value="do_consult_now" />
-<input type="hidden" name="m" value="dPcabinet" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="consultation_id" value="" />
-<input type="hidden" name="_operation_id" value="{{$selOp->_id}}" />
-<input type="hidden" name="_m_redirect" value="{{$m}}" />
+
 <table class="form">
+	<tr>
+	  <th colspan="3" class="category">Associer un dossier existant</th>
+	</tr>
+
+	{{foreach from=$patient->_ref_consultations item=_consultation}}
+	{{assign var=consult_anesth value=$_consultation->_ref_consult_anesth}}
+	{{if $consult_anesth->_id}}
+	<tr>
+	  <th>
+	  	{{tr}}CConsultation{{/tr}} 
+	  	du {{$_consultation->_date|date_format:$dPconfig.date}}
+	 	</th>
+	 	
+	  {{if $_consultation->annule}}
+	  <td colspan="2" class="cancelled">[Consultation annulée]</td>
+		{{else}}	 	
+	 	<td style="width: 1%;">
+	  	Dr {{$_consultation->_ref_chir->_view}} 
+	  </td> 
+	  <td>
+	    {{if $consult_anesth->_ref_operation->_id}}
+		    Déjà associé :
+		    <strong>{{$consult_anesth->_ref_operation->_view}}</strong>
+			{{elseif $consult_anesth->_ref_sejour->_id}}
+		    Déjà associé :
+		    <strong>{{$consult_anesth->_ref_sejour->_view}}</strong>
+		  {{else}}
+		  
+		  <form name="addOpFrm" action="?m={{$m}}" method="post">
+
+		  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+		  <input type="hidden" name="del" value="0" />
+		  <input type="hidden" name="m" value="dPcabinet" />
+		  <input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->_id}}" />
+		  <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+
+	    <button class="tick">{{tr}}Associate{{/tr}}</button>
+	    
+	    </form>
+			{{/if}}
+	  </td>
+	  {{/if}}
+	</tr>
+	{{/if}}
+	{{foreachelse}}
+	<tr>
+	  <td><em>Aucun dossier d'anesthésie existant pour ce patient</em></td>
+	</tr>
+	{{/foreach}}
+	
+
+	<tr>
+	  <th colspan="3" class="category">Créer un nouveau dossier</th>
+	</tr>
   <tr>
-    <td class="text">
-      <div class="big-info">
-        Aucune consultation d'anesthésie n'a été effectuée pour ce patient.
-        <br />
-        Vous devez <strong>créer son dossier d'anesthésie</strong> pour y accéder.
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td class="button">
+    <td colspan="3" class="button">
+
+			<form name="createConsult" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+			
+			<input type="hidden" name="dosql" value="do_consult_now" />
+			<input type="hidden" name="m" value="dPcabinet" />
+			<input type="hidden" name="del" value="0" />
+			<input type="hidden" name="consultation_id" value="" />
+			<input type="hidden" name="_operation_id" value="{{$selOp->_id}}" />
+			<input type="hidden" name="_m_redirect" value="{{$m}}" />
+			
       <select name="prat_id">
         {{foreach from=$listAnesths item=curr_anesth}}
         <option value="{{$curr_anesth->user_id}}" {{if $selOp->_ref_anesth->user_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
@@ -252,10 +310,13 @@
         </option>
         {{/foreach}}
       </select>
-      <button type="submit" class="submit">Créer</button>
+
+      <button type="submit" class="new">{{tr}}Create{{/tr}}</button>
+
+			</form>
+
     </td>
   </tr>
 </table>
-</form>
 
 {{/if}}

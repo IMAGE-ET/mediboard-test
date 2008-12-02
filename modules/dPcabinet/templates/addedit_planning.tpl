@@ -283,7 +283,7 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$consult field="heure"}}</th>
           <td class="readonly">
-            <input type="text" name="heure" value="{{$consult->heure|date_format:"%H:%M"}}" size="4" readonly="readonly" />
+            <input type="text" name="heure" value="{{$consult->heure|date_format:$dPconfig.time}}" size="4" readonly="readonly" />
           </td>
         </tr>
         <tr>

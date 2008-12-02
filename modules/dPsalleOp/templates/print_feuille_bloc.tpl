@@ -41,7 +41,7 @@
         <tr>
           <th>Date</th>
           <td class="greedyPane">
-            {{$operation->_ref_plageop->date|date_format:"%A %d %B %Y"}}
+            {{$operation->_ref_plageop->date|date_format:$dPconfig.longdate}}
           </td>
         </tr>
         <tr>
@@ -128,7 +128,7 @@
           <th>Entrée en salle</th>
           <td class="halfPane">
             {{if $operation->entree_salle}}
-              {{$operation->entree_salle|date_format:"%Hh%M"}}
+              {{$operation->entree_salle|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -138,7 +138,7 @@
           <th>Debut d'induction</th>
           <td class="halfPane">
             {{if $operation->induction_debut}}
-              {{$operation->induction_debut|date_format:"%Hh%M"}}
+              {{$operation->induction_debut|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -148,7 +148,7 @@
           <th>Fin d'induction</th>
           <td class="halfPane">
             {{if $operation->induction_fin}}
-              {{$operation->induction_fin|date_format:"%Hh%M"}}
+              {{$operation->induction_fin|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -158,7 +158,7 @@
           <th>Pose du garrot</th>
           <td class="halfPane">
             {{if $operation->pose_garrot}}
-              {{$operation->pose_garrot|date_format:"%Hh%M"}}
+              {{$operation->pose_garrot|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -168,7 +168,7 @@
           <th>Début de l'intervention</th>
           <td class="halfPane">
             {{if $operation->debut_op}}
-              {{$operation->debut_op|date_format:"%Hh%M"}}
+              {{$operation->debut_op|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -178,7 +178,7 @@
           <th>Fin de l'intervention</th>
           <td class="halfPane">
             {{if $operation->fin_op}}
-              {{$operation->fin_op|date_format:"%Hh%M"}}
+              {{$operation->fin_op|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -188,7 +188,7 @@
           <th>Retrait du garrot</th>
           <td class="halfPane">
             {{if $operation->retrait_garrot}}
-              {{$operation->retrait_garrot|date_format:"%Hh%M"}}
+              {{$operation->retrait_garrot|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -198,7 +198,7 @@
           <th>Sortie de salle</th>
           <td class="halfPane">
             {{if $operation->sortie_salle}}
-              {{$operation->sortie_salle|date_format:"%Hh%M"}}
+              {{$operation->sortie_salle|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -208,7 +208,7 @@
           <th>Entrée salle réveil</th>
           <td class="halfPane">
             {{if $operation->entree_reveil}}
-              {{$operation->entree_reveil|date_format:"%Hh%M"}}
+              {{$operation->entree_reveil|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -218,7 +218,7 @@
           <th>Sortie salle de réveil</th>
           <td class="halfPane">
             {{if $operation->sortie_reveil}}
-              {{$operation->sortie_reveil|date_format:"%Hh%M"}}
+              {{$operation->sortie_reveil|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -234,7 +234,7 @@
           <th>Présence en salle</th>
           <td class="halfPane">
             {{if $operation->_presence_salle}}
-              {{$operation->_presence_salle|date_format:"%Hh%M"}}
+              {{$operation->_presence_salle|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}
@@ -244,7 +244,7 @@
           <th>Durée d'intervention</th>
           <td class="halfPane">
             {{if $operation->_duree_interv}}
-              {{$operation->_duree_interv|date_format:"%Hh%M"}}
+              {{$operation->_duree_interv|date_format:$dPconfig.time}}
             {{else}}
             &mdash;
             {{/if}}

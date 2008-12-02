@@ -10,7 +10,7 @@
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="1" />
         Dr {{$plage->_ref_chir->_view}}<br />
-        {{$plage->date|date_format:"%A %d %B %Y"}}<br />
+        {{$plage->date|date_format:$dPconfig.longdate}}<br />
         {{$plage->_ref_salle->nom}} :
         <select name="_heuredeb" class="notNull num">
         {{foreach from=$listHours item=heure}}
@@ -203,10 +203,10 @@
         </a><br />
         Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
         <br />
-        Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+        Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
         {{if $curr_op->horaire_voulu}}
         <br />
-        Horaire souhaité: {{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
+        Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
         {{/if}}
         {{if $listPlages|@count != '1'}}
         <br />
@@ -220,7 +220,7 @@
           <select name="plageop_id" onchange="this.form.submit()">
             {{foreach from=$listPlages item="_plage"}}
             <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>
-            {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:"%Hh%M"}} à {{$plage->fin|date_format:"%Hh%M"}}
+            {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:$dPconfig.time}} à {{$plage->fin|date_format:$dPconfig.time}}
             </option>
             {{/foreach}}
           </select>
@@ -292,10 +292,10 @@
           </a><br />
           Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
             <br />
-          Horaire : {{$curr_op->time_operation|date_format:"%Hh%M"}} - Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+          Horaire : {{$curr_op->time_operation|date_format:$dPconfig.time}} - Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
           {{if $curr_op->horaire_voulu}}
           <br />
-          Horaire souhaité: {{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
+          Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
           {{/if}}
           <br />
           Pause : 

@@ -4,7 +4,7 @@
       <a href="#" onclick="window.print()">
         &mdash; Dr {{$prat->_view}} &mdash<br />
         Plages du {{$filter->_date_min|date_format:"%A %d %b %Y"}}
-        au {{$filter->_date_max|date_format:"%A %d %B %Y"}}<br />
+        au {{$filter->_date_max|date_format:$dPconfig.longdate}}<br />
         {{$plages|@count}}
         {{if $filter->paye}}
         plage(s) payée(s)
@@ -26,11 +26,11 @@
         </tr>
         {{foreach from=$plages item=curr_plage}}
         <tr>
-          <td>{{$curr_plage->date|date_format:"%A %d %B %Y"}}</td>
+          <td>{{$curr_plage->date|date_format:$dPconfig.longdate}}</td>
           <td>
-            {{$curr_plage->debut|date_format:"%Hh%M"}}
+            {{$curr_plage->debut|date_format:$dPconfig.time}}
             &mdash
-            {{$curr_plage->fin|date_format:"%Hh%M"}}
+            {{$curr_plage->fin|date_format:$dPconfig.time}}
           </td>
           <td>{{$curr_plage->libelle}}</td>
           <td>{{$curr_plage->tarif}} €</td>

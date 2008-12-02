@@ -131,4 +131,5 @@ $locales['months'] = 'mois';
 $locales['years'] = 'années';
 $locales['year'] = 'année';
 $locales['Change'] = 'Changer';
+$locales['Associate'] = 'Associer';
 ?>

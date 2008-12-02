@@ -25,12 +25,12 @@
           {{else}}
           <td style="background-color: #afa;">
           {{/if}}
-            {{$curr_temps->estimation|date_format:"%Hh%M"}}
+            {{$curr_temps->estimation|date_format:$dPconfig.time}}
           </td>
-          <td>{{$curr_temps->occup_moy|date_format:"%Hh%M"}}</td>
-          <td><i>{{if $curr_temps->occup_ecart != "-"}}{{$curr_temps->occup_ecart|date_format:"%Hh%M"}}{{else}}-{{/if}}</i></td>
-          <td>{{$curr_temps->duree_moy|date_format:"%Hh%M"}}</td>
-          <td><i>{{if $curr_temps->duree_ecart != "-"}}{{$curr_temps->duree_ecart|date_format:"%Hh%M"}}{{else}}-{{/if}}</i></td>
+          <td>{{$curr_temps->occup_moy|date_format:$dPconfig.time}}</td>
+          <td><i>{{if $curr_temps->occup_ecart != "-"}}{{$curr_temps->occup_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
+          <td>{{$curr_temps->duree_moy|date_format:$dPconfig.time}}</td>
+          <td><i>{{if $curr_temps->duree_ecart != "-"}}{{$curr_temps->duree_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
         </tr>
         {{/foreach}}
         
@@ -44,11 +44,11 @@
           {{else}}
           <td style="background-color: #afa;">
           {{/if}}
-            {{$total.estim_moy|date_format:"%Hh%M"}}
+            {{$total.estim_moy|date_format:$dPconfig.time}}
           </td>
-          <td>{{$total.occup_moy|date_format:"%Hh%M"}}</td>
+          <td>{{$total.occup_moy|date_format:$dPconfig.time}}</td>
           <td>-</td>
-          <td>{{$total.duree_moy|date_format:"%Hh%M"}}</td>
+          <td>{{$total.duree_moy|date_format:$dPconfig.time}}</td>
           <td>-</td>
         </tr>
       </table>

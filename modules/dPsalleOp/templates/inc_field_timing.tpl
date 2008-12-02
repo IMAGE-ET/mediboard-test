@@ -17,13 +17,13 @@
         <option value="">-</option>
         {{foreach from=$timing.$field item=curr_time}}
         <option value="{{$curr_time}}" {{if $curr_time == $object->$field}}selected="selected"{{/if}}>
-          {{$curr_time|date_format:"%Hh%M"}}
+          {{$curr_time|date_format:$dPconfig.time}}
         </option>
         {{/foreach}}
       </select>
       <button type="button" class="cancel notext" onclick="$V(this.form.{{$field}}, '', true);">{{tr}}Cancel{{/tr}}</button>
     {{else}}
-      {{$object->$field|date_format:"%Hh%M"}}
+      {{$object->$field|date_format:$dPconfig.time}}
     {{/if}}
   
   {{elseif $can->edit || $modif_operation}}

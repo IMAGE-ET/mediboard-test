@@ -84,9 +84,9 @@
 
       <a href="{{$rpu_link}}">
         {{if $curr_sejour->_date_entree_prevue == $date}}
-        {{$curr_sejour->_entree|date_format:"%Hh%M"}}
+        {{$curr_sejour->_entree|date_format:$dPconfig.time}}
         {{else}}
-        {{$curr_sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}
+        {{$curr_sejour->_entree|date_format:$dPconfig.datetime}}
         {{/if}}
         {{if $curr_sejour->_num_dossier}}
           [{{$curr_sejour->_num_dossier}}]
@@ -111,7 +111,7 @@
 		  <td id="attente-{{$sejour_id}}" style="background-color: {{$background}}; text-align: center">
 		    {{if $consult && $consult->_id}}
 			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-			      Consultation à {{$consult->heure|date_format:"%Hh%M"}}
+			      Consultation à {{$consult->heure|date_format:$dPconfig.time}}
 			      {{if $date != $consult->_ref_plageconsult->date}}
 			      <br/>le {{$consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
 			      {{/if}}
@@ -119,7 +119,7 @@
 			    {{if !$curr_sejour->sortie_reelle}}
 			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
 			    {{else}}
-			      (sortie à {{$curr_sejour->sortie_reelle|date_format:"%Hh%M"}})
+			      (sortie à {{$curr_sejour->sortie_reelle|date_format:$dPconfig.time}})
 			    {{/if}}
 		
 		    {{else}}

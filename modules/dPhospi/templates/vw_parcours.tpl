@@ -35,17 +35,17 @@ function editIntervention(op_id) {
 	</tr>
 	<tr>
 		{{if ($diagramme.bloc.type) != "none"}}
-			<td class="only done ray" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+			<td class="only done ray" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date|date_format:$dPconfig.datetime}}</td>
 		{{else}}
-			<td class="only" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+			<td class="only" colspan=2> ADMIS <br/> Date : {{$diagramme.admission.entree.date|date_format:$dPconfig.datetime}}</td>
 		{{/if}}
 		<td> </td>
 		{{if ($diagramme.bloc.type) != "none" && $diagramme.admission.sortie.reelle == "sortie_prevue"}}
-			<td class="only expect ray" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:"%d/%m/%Y à %Hh%M"}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
+			<td class="only expect ray" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:$dPconfig.datetime}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
 		{{elseif ($diagramme.admission.sortie.reelle) == "sortie_reelle"}}
-			<td class="only current" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:"%d/%m/%Y à %Hh%M"}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>	
+			<td class="only current" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:$dPconfig.datetime}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>	
 		{{else}}
-			<td class="only" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:"%d/%m/%Y à %Hh%M"}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
+			<td class="only" colspan=2> SORTIE <br/> Date : {{$diagramme.admission.sortie.date|date_format:$dPconfig.datetime}} <br/> Mode Sortie : {{$diagramme.admission.sortie.mode_sortie}}</td>
 		{{/if}}
 		<td> </td>
 	</tr>
@@ -135,7 +135,7 @@ function editIntervention(op_id) {
     			<img src="images/icons/tick.png" alt="edit" title="Etat du Séjour" />
 	    		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
 	      			onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })">
-	      			Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
+	      			Intervention du {{$curr_op->_datetime|date_format:$dPconfig.datetime}}
 	   	 		</a>
 	   	 {{else}}
 	   	 		{{if ($curr_op->_id == $diagramme.bloc.id)}}	
@@ -151,7 +151,7 @@ function editIntervention(op_id) {
     			{{/if}}
 	   	 		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
 	      		onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })">
-	      		Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y à %Hh%M"}}
+	      		Intervention du {{$curr_op->_datetime|date_format:$dPconfig.datetime}}
 	   	 		</a>
 	   	 	{{/if}}
 	   	 	</span>
@@ -170,17 +170,17 @@ function editIntervention(op_id) {
 	<tr>
 		{{if ($diagramme.bloc.sortieSalle) == ""}}
 			<td class="space"> </td>
-			<td class="only current"> EN SALLE <br/> Heure : {{$diagramme.bloc.salle|date_format:"%H:%M"}}</td>
+			<td class="only current"> EN SALLE <br/> Heure : {{$diagramme.bloc.salle|date_format:$dPconfig.time}}</td>
 		{{else}}
 			<td class="space"> </td>
-			<td class="only done ray"> EN SALLE <br/> Heure : {{$diagramme.bloc.salle|date_format:"%H:%M"}}</td>
+			<td class="only done ray"> EN SALLE <br/> Heure : {{$diagramme.bloc.salle|date_format:$dPconfig.time}}</td>
 		{{/if}}	
 		<td> </td>
 		{{if ($diagramme.bloc.sortieSalleReveil) == ""}}
 			<td class="only expect ray"> SORTIE SALLE DE RÉVEIL </td>
 			<td class="space"> </td>
 		{{else}}
-			<td class="only done ray"> SORTIE SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.sortieSalleReveil|date_format:"%H:%M"}} </td>
+			<td class="only done ray"> SORTIE SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.sortieSalleReveil|date_format:$dPconfig.time}} </td>
 			<td class="space"> </td>
 		{{/if}}	
 		<td> </td>
@@ -199,20 +199,20 @@ function editIntervention(op_id) {
 			<td class="only expect ray"> SORTIE DE SALLE </td>
 		{{elseif ($diagramme.bloc.salleReveil) != ""}}
 			<td class="space"> </td>
-			<td class="only done ray"> SORTIE DE SALLE <br/> Heure : {{$diagramme.bloc.sortieSalle|date_format:"%H:%M"}} </td>
+			<td class="only done ray"> SORTIE DE SALLE <br/> Heure : {{$diagramme.bloc.sortieSalle|date_format:$dPconfig.time}} </td>
 		{{else}}
 			<td class="space"> </td>
-			<td class="only current"> SORTIE DE SALLE <br/> Heure : {{$diagramme.bloc.sortieSalle|date_format:"%H:%M"}} </td>
+			<td class="only current"> SORTIE DE SALLE <br/> Heure : {{$diagramme.bloc.sortieSalle|date_format:$dPconfig.time}} </td>
 		{{/if}}
 		<td class="arrowright">  </td>
 		{{if ($diagramme.bloc.salleReveil) == ""}}
 			<td class="only expect ray"> EN SALLE DE RÉVEIL </td>
 			<td class="space"> </td>
 		{{elseif ($diagramme.bloc.sortieSalleReveil) != ""}}
-			<td class="only done ray"> EN SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.salleReveil|date_format:"%H:%M"}} </td>
+			<td class="only done ray"> EN SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.salleReveil|date_format:$dPconfig.time}} </td>
 			<td class="space"> </td>
 		{{else}}
-			<td class="only current"> EN SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.salleReveil|date_format:"%H:%M"}} </td>
+			<td class="only current"> EN SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.salleReveil|date_format:$dPconfig.time}} </td>
 			<td class="space"> </td>
 		{{/if}}
 		<td> </td>
@@ -220,9 +220,9 @@ function editIntervention(op_id) {
 	{{elseif ($diagramme.bloc.type) == "done"}}
 	<tr>
 		<td class="space"> </td>
-		<td class="only done ray"> EN SALLE <br/> Heure : {{$diagramme.bloc.salle|date_format:"%H:%M"}}</td>
+		<td class="only done ray"> EN SALLE <br/> Heure : {{$diagramme.bloc.salle|date_format:$dPconfig.time}}</td>
 		<td> </td>
-		<td class="only done ray"> SORTIE SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.sortieSalleReveil|date_format:"%H:%M"}} </td>
+		<td class="only done ray"> SORTIE SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.sortieSalleReveil|date_format:$dPconfig.time}} </td>
 		<td class="space"> </td>
 		<td> </td>
 	</tr>
@@ -236,9 +236,9 @@ function editIntervention(op_id) {
 	</tr>
 	<tr>
 		<td class="space"> </td>
-		<td class="only done ray"> SORTIE DE SALLE <br/> Heure : {{$diagramme.bloc.sortieSalle|date_format:"%H:%M"}} </td>
+		<td class="only done ray"> SORTIE DE SALLE <br/> Heure : {{$diagramme.bloc.sortieSalle|date_format:$dPconfig.time}} </td>
 		<td class="arrowright">  </td>
-		<td class="only done ray"> EN SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.salleReveil|date_format:"%H:%M"}} </td>
+		<td class="only done ray"> EN SALLE DE RÉVEIL <br/> Heure : {{$diagramme.bloc.salleReveil|date_format:$dPconfig.time}} </td>
 		<td class="space"> </td>
 		<td> </td>
 	</tr>

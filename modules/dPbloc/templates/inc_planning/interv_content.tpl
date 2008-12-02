@@ -2,7 +2,7 @@
 		  {{if $curr_op->annulee}}
 		    <td class="cancelled">ANNULEE</td>
 		  {{elseif $curr_op->rank}}
-		    <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
+		    <td>{{$curr_op->time_operation|date_format:$dPconfig.time}}</td>
 		  {{else}}
 		    <td>NP</td>
 		  {{/if}}

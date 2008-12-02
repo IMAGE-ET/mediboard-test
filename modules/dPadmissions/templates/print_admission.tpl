@@ -87,7 +87,7 @@
   
   <tr>
     <th>Date d'admission :</th>
-    <td>{{$admission->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+    <td>{{$admission->entree_prevue|date_format:$dPconfig.datetime}}</td>
   </tr>
 
   <tr>

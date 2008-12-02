@@ -111,7 +111,7 @@ delCibleTransmission = function() {
         </strong>
       </td>
       <td>
-           {{$curr_suivi->date|date_format:"%Hh%M"}}
+           {{$curr_suivi->date|date_format:$dPconfig.time}}
       </td>
     
     <td class="text" colspan="2">
@@ -146,7 +146,7 @@ delCibleTransmission = function() {
       {{/if}}    
       </td>
       <td>
-        {{$curr_suivi->date|date_format:"%Hh%M"}}
+        {{$curr_suivi->date|date_format:$dPconfig.time}}
       </td>
     <td class="text" colspan="2">
       

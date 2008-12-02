@@ -106,8 +106,8 @@ Main.add(function () {
           <td class="text">{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
           <td class="text">{{$curr_plage->_ref_salle->_ref_bloc->_view}}</td>
           <td class="text">{{$curr_plage->_ref_salle->_view}}</td>
-          <td class="text">{{$curr_plage->debut|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_plage->fin|date_format:"%Hh%M"}}</td>
+          <td class="text">{{$curr_plage->debut|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_plage->fin|date_format:$dPconfig.time}}</td>
           <td class="text">{{$curr_op->rank}}</td>
           <td class="text">{{$curr_op->_rank_reel}}</td>
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
@@ -125,22 +125,22 @@ Main.add(function () {
           <td class="text">{{tr}}CConsultAnesth.ASA.{{$curr_op->_ref_consult_anesth->ASA}}{{/tr}}</td>
           <td class="text">
             {{if $curr_op->_ref_first_log}}
-              {{$curr_op->_ref_first_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
+              {{$curr_op->_ref_first_log->date|date_format:$dPconfig.datetime}}
             {{else}}
               &mdash;
             {{/if}}
           </td>
-          <td class="text">{{$curr_op->entree_salle|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->induction_debut|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->induction_fin|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->pose_garrot|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->debut_op|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->fin_op|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->retrait_garrot|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->sortie_salle|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->_pat_next|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->entree_reveil|date_format:"%Hh%M"}}</td>
-          <td class="text">{{$curr_op->sortie_reveil|date_format:"%Hh%M"}}</td>
+          <td class="text">{{$curr_op->entree_salle|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->induction_debut|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->induction_fin|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->pose_garrot|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->debut_op|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->fin_op|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->retrait_garrot|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->sortie_salle|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->_pat_next|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->entree_reveil|date_format:$dPconfig.time}}</td>
+          <td class="text">{{$curr_op->sortie_reveil|date_format:$dPconfig.time}}</td>
         </tr>
         {{/foreach}}
         {{/foreach}}

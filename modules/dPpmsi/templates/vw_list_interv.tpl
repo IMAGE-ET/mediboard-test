@@ -9,7 +9,7 @@ Main.add(function () {
 <table class="tbl">
   <tr>
     <th class="title" colspan="7">
-      Liste des {{$totalOp}} intervention(s) du {{$date|date_format:"%A %d %B %Y"}}
+      Liste des {{$totalOp}} intervention(s) du {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
@@ -48,7 +48,7 @@ Main.add(function () {
     
     <td>
       {{if $curr_op->rank}}
-        {{$curr_op->time_operation|date_format:"%Hh%M"}}
+        {{$curr_op->time_operation|date_format:$dPconfig.time}}
       {{else}}
         NP
       {{/if}}

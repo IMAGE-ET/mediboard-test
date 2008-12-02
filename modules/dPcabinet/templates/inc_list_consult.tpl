@@ -12,8 +12,8 @@ Main.add( function () {
   <table class="form">
     <tr>
       <td colspan="6" style="text-align: center; width: 100%; font-weight: bold;">
-        <div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>
-        {{$date|date_format:"%A %d %B %Y"}}
+        <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
+        {{$date|date_format:$dPconfig.longdate}}
         {{if $canCabinet->view}}
         <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
         {{/if}}
@@ -60,7 +60,7 @@ Main.add( function () {
   {{if $listPlage|@count}}
   {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th colspan="3">{{$curr_plage->debut|date_format:"%Hh%M"}} - {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
+    <th colspan="3">{{$curr_plage->debut|date_format:$dPconfig.time}} - {{$curr_plage->fin|date_format:$dPconfig.time}}</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
@@ -146,7 +146,7 @@ Main.add( function () {
         {{if $destination->_ref_chir->_id != $curr_plage->_ref_chir->_id}}
         <option value={{$destination->_id}} style="font-size: 9px;">
           {{$destination->_ref_chir->_view}}
-          ({{$destination->debut|date_format:"%Hh%M"}} - {{$destination->fin|date_format:"%Hh%M"}})
+          ({{$destination->debut|date_format:$dPconfig.time}} - {{$destination->fin|date_format:$dPconfig.time}})
         </option>
         {{/if}}
         {{/foreach}}

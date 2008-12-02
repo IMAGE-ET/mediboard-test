@@ -12,6 +12,9 @@ $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("now", mbDateTime());
+
 $smarty->display("configure.tpl");
 
 ?>

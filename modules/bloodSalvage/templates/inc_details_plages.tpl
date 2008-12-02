@@ -23,7 +23,8 @@
         {{else}}
           -
         {{/if}}
-        {{$_plage->debut|date_format:"%Hh%M"}} à {{$_plage->fin|date_format:"%Hh%M"}}
+        {{$_plage->debut|date_format:$dPconfig.time}} à 
+        {{$_plage->fin|date_format:$dPconfig.time}}
       </a>
     </th>
   </tr>

@@ -29,7 +29,7 @@ function printAdmission(id) {
       {{if $curr_plageop->_id}}
       <strong>Dr {{$curr_plageop->_ref_chir->_view}}</strong> -
       <strong>{{$curr_plageop->_ref_salle->nom}}</strong>
-      de {{$curr_plageop->debut|date_format:"%Hh%M"}} à {{$curr_plageop->fin|date_format:"%Hh%M"}}
+      de {{$curr_plageop->debut|date_format:$dPconfig.time}} à {{$curr_plageop->fin|date_format:$dPconfig.time}}
       le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
     
       {{if $curr_plageop->anesth_id}}
@@ -124,7 +124,7 @@ function printAdmission(id) {
           <!-- Intervention -->
           <td>
           {{if $curr_op->rank}}
-            {{$curr_op->time_operation|date_format:"%Hh%M"}}
+            {{$curr_op->time_operation|date_format:$dPconfig.time}}
           {{elseif $curr_op->date}}
           URGENCE
           {{else}}

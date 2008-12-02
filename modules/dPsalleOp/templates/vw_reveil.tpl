@@ -37,7 +37,7 @@ Main.add(function () {
 		  <form action="?" name="selection" method="get">
 		    <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_reveil" />
-		    <span id="heure">{{$hour|date_format:"%Hh%M"}}</span> - {{$date|date_format:"%A %d %B %Y"}}
+		    <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
 		    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
         <select name="bloc_id" onchange="this.form.submit();">
           <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>

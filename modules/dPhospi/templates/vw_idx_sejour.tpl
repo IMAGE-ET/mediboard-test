@@ -239,7 +239,7 @@ viewBilanService = function(service_id, date){
       <table class="form" id="left-column" style="width:200px;">
         <tr>
           <th class="category">
-            {{$date|date_format:"%A %d %B %Y"}}
+            {{$date|date_format:$dPconfig.longdate}}
             <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
           </th>
         </tr>

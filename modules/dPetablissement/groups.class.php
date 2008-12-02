@@ -63,7 +63,8 @@ class CGroups extends CMbObject {
 	  $backRefs["product_stocks"]          = "CProductStockGroup group_id";
 	  $backRefs["protocoles_prescription"] = "CPrescription group_id";
 	  $backRefs["etablissements_sherpa"]   = "CSpEtablissement group_id";
-    
+    $backRefs["dmi_categories"]          = "CDMICategory group_id";
+	  
     return $backRefs;
   }
   

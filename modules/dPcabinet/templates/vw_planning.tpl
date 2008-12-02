@@ -115,7 +115,7 @@ Main.add(function () {
               <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$plage->_nbQuartHeure}}">
               <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage">
                 {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
-                {{$plage->debut|date_format:"%Hh%M"}} - {{$plage->fin|date_format:"%Hh%M"}}
+                {{$plage->debut|date_format:$dPconfig.time}} - {{$plage->fin|date_format:$dPconfig.time}}
               </a>
               {{assign var="pct" value=$plage->_fill_rate}}
               {{if $pct gt 100}}
@@ -277,7 +277,7 @@ Main.add(function () {
 	        </tr>
 	        <tr>
 	          <td class="button" colspan="2">
-	            <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:"%A %d %B %Y"}}'})">
+	            <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$dPconfig.longdate}}'})">
 	              Supprimer
 	            </button>
 	          </td>
@@ -299,7 +299,7 @@ Main.add(function () {
           <th colspan="10">
             <strong>
             {{if $plageSel->plageconsult_id}}
-            Consultations du {{$plageSel->date|date_format:"%A %d %B %Y"}}
+            Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
             {{else}}
             Pas de plage selectionnée
             {{/if}}
@@ -331,9 +331,9 @@ Main.add(function () {
           <td {{$style|smarty:nodefaults}}>
             <div style="float: left">
             {{if $curr_consult->patient_id!=0}}
-              <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:"%Hh%M"}}</a>
+              <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:$dPconfig.time}}</a>
             {{else}}
-              {{$curr_consult->heure|date_format:"%Hh%M"}}
+              {{$curr_consult->heure|date_format:$dPconfig.time}}
             {{/if}}
             </div>
             {{if $curr_consult->categorie_id}}

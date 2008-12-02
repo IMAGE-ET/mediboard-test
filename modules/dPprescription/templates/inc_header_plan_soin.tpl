@@ -13,7 +13,7 @@
 	      Poids {{$poids}}{{if $poids}} kg{{/if}}
 	    </td>
 	    <td style="border:none;">
-	      Début du séjour: {{$sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}<br />
+	      Début du séjour: {{$sejour->_entree|date_format:$dPconfig.datetime}}<br />
 	      {{if $sejour->_ref_curr_affectation->_id}}
 	        Chambre {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}
 	      {{/if}}
