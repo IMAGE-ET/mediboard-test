@@ -24,8 +24,12 @@ $dmi->category_id = mbGetValueFromGet("category_id");
 $dmi->load($dmi_id);
 
 // Chargement de tous les dmis
-foreach ($DMICategories as $_category) {
+foreach ($DMICategories as &$_category) {
   $_category->loadRefsDMI();
+    foreach ($_category->_ref_dmis as &$_dmi)
+    {
+    	$_dmi->loadRefProduit();
+    }
 }
 
 // Vérification du groupe courant pour le DMI sélectionné

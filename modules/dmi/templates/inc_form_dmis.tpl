@@ -33,21 +33,13 @@
   		<th>{{mb_label object=$dmi field=nom}}</th>
   		<td>{{mb_field object=$dmi field=nom}}</td>
   	</tr>
-  		<tr>
-  		<th>{{mb_label object=$dmi field=en_lot}}</th>
-  		<td>{{mb_field object=$dmi field=en_lot}}</td>
-  	</tr>
   	<tr>
   		<th>{{mb_label object=$dmi field=description}}</th>
   		<td>{{mb_field object=$dmi field=description}}</td>
   	</tr>
   	<tr>
-  		<th>{{mb_label object=$dmi field=reference}}</th>
-  		<td>{{mb_field object=$dmi field=reference}}</td>
-  	</tr>
-  	<tr>
-  		<th>{{mb_label object=$dmi field=lot}}</th>
-  		<td>{{mb_field object=$dmi field=lot}}</td>
+  		<th>{{mb_label object=$dmi field=code}}</th>
+  		<td>{{mb_field object=$dmi field=code}}</td>
   	</tr>
   	<tr>
   		<th>{{mb_label object=$dmi field=dans_livret}}</th>

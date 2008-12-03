@@ -1,6 +1,6 @@
 {{* $Id: $ *}}
 
-{{if $dmi_id != $dmi->_id}}
+{{if $dmi_id!="0" && $dmi_id != $dmi->_id}}
 <div class="big-warning">
   Le DMI voulu (#{{$dmi_id}}) n'a pas pu être chargé. Deux raisons sont possibles :
   <ul>
@@ -12,11 +12,11 @@
 
 <table class="main">
   <tr>
+    <td colspan="10">{{include file=inc_check_dPstock.tpl}}</td>
+  </tr>
+  <tr>
     <td>{{include file=inc_list_dmis.tpl}}</td>
-    <td>
-     {{include file=inc_form_dmis.tpl}}
-     ...
-    </td>
+    <td>{{include file=inc_form_dmis.tpl}}</td>
   </tr>
 </table>
 

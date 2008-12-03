@@ -50,10 +50,17 @@ class CSetupdmi extends CSetup {
     $this->addQuery($sql);
 
     $sql = "ALTER TABLE `dmi` 
-	ADD INDEX (`category_id`);";
+	  ADD INDEX (`category_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.04";
+    $this->makeRevision("0.04");
+    $sql = "ALTER TABLE `dmi` 
+    CHANGE `reference` `code` VARCHAR (255) NOT NULL,
+    DROP `en_lot`,
+    DROP `lot`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.05";
   }
 }
 ?>

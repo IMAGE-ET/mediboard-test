@@ -8,11 +8,9 @@
   <tr>
     <th>{{mb_title class=CDMI field=nom}}</th>
     <th>{{mb_title class=CDMI field=description}}</th>
-    <th>{{mb_title class=CDMI field=reference}}</th>
-    <th>{{mb_title class=CDMI field=lot}}</th>
-    <th>{{mb_title class=CDMI field=category_id}}</th>
-    <th>{{mb_title class=CDMI field=en_lot}}</th>
+    <th>{{mb_title class=CDMI field=code}}</th>
     <th>{{mb_title class=CDMI field=dans_livret}}</th>
+    <th>{{mb_title class=CDMI field=_produit_existant}}</th>
   </tr>
 
 	{{foreach from=$DMICategories item=_category}}
@@ -35,20 +33,20 @@
 	    	{{mb_value object=$_dmi field=description}}
 	    </td>
 	    <td>
-	    	{{mb_value object=$_dmi field=reference}}
-	    </td>
-	    <td>
-	    	{{mb_value object=$_dmi field=lot}}
-	    </td>
-	    <td>
-	      {{assign var=category_id value=$_dmi->category_id}}
-	    	{{$DMICategories.$category_id->_view}}
-	    </td>
-	    <td>
-	    	{{mb_value object=$_dmi field=en_lot}}
+	    	{{mb_value object=$_dmi field=code}}
 	    </td>
 	    <td>
 	    	{{mb_value object=$_dmi field=dans_livret}}
+	    </td>
+	    <td> 
+	        {{if $_dmi->_produit_existant}}
+	          <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_dmi->_ref_product->_id}}">
+            {{mb_value object=$_dmi field=_produit_existant}}
+            </a>
+	       {{else}}
+	         {{mb_value object=$_dmi field=_produit_existant}}
+	       {{/if}}
+	      
 	    </td>
 	  </tr>
 	  {{foreachelse}}

@@ -14,14 +14,17 @@ class CDMI extends CMbObject {
 
   // DB fields
   var $nom         	= null;
-  var $en_lot		= null;
   var $description	= null;
-  var $reference	= null;
-  var $lot	= null;
+  var $code	= null;
   var $dans_livret	= null;
   
   var $category_id	= null;
   
+  //Object reference
+  var $_ref_product = null;
+  
+  var $_produit_existant = null;
+    
 function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dmi';
@@ -32,12 +35,11 @@ function getSpec() {
  function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["nom"]			= "notNull str";
-    $specs["en_lot"]			= "bool";
     $specs["description"]	= "text";
-    $specs["reference"]		= "notNull str";
-    $specs["lot"]			= "str";
+    $specs["code"]		= "notNull str";
     $specs["dans_livret"]	= "bool";
     $specs["category_id"]= "notNull ref class|CDMICategory";
+    $specs["_produit_existant"]= "bool";
     return $specs;
   }
   
@@ -56,7 +58,23 @@ function getSpec() {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
+    $this->_produit_existant = 0;
   }
+  
+  function loadRefProduit() {
+     $this->_ref_product = new CProduct;
+     $this->_ref_product->code = $this->code;
+     
+     if($this->_ref_product->loadMatchingObject()==null)
+     {
+        $this->_ref_product  = new CProduct;
+        $this->_produit_existant = 0;
+     }
+     else
+     {
+     	  $this->_produit_existant = 1;
+     }
+    }
 }
 
 ?>

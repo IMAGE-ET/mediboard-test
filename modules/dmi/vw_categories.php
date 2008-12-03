@@ -20,21 +20,22 @@ $groups = $group->loadListWithPerms(PERM_EDIT, null, $order);
 $category = new CDMICategory;
 $category->load(mbGetValueFromGetOrSession("category_id"));
 
-// Chargement de toutes les catégories
-$categories = $category->loadList(null, "nom");
-foreach ($categories as $_category) {
-	$_category->countRefsDMI();
-}
+// Chargement des DMI de la categorie
+$category->loadRefsDMI();
 
+// Chargement de toutesles catégoies
+foreach ($groups as $_group) {
+  $_group->loadRefsDMICategories();
+  foreach ($_group->_ref_dmi_categories as $_category) {
+    $_category->countRefsDMI();
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("categories", $categories);
 $smarty->assign("category", $category);
 $smarty->assign("groups", $groups);
 
 $smarty->display("vw_categories.tpl");
-
-
 ?>

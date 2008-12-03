@@ -36,6 +36,7 @@ class CGroups extends CMbObject {
   var $_ref_blocs = null;
   var $_ref_produits_livret = null;
   static $_ref_current = null;
+  var $_ref_dmi_categories = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -190,6 +191,10 @@ class CGroups extends CMbObject {
 	    self::$_ref_current->load($g);
     }
     return self::$_ref_current;
+  }
+  
+  function loadRefsDMICategories() {
+    $this->_ref_dmi_categories = $this->loadBackRefs("dmi_categories", "nom");
   }
 }
 ?>

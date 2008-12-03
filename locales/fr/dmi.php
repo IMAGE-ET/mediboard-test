@@ -63,4 +63,7 @@ $locales['CDMI.none'] = 'Pas de DMI';
 $locales['CDMI.one'] = 'Un DMI';
 $locales['CDMI.select'] = 'Choisir un DMI';
 $locales['CDMICategory-back-dmis'] = 'DMI de la catégorie';
+$locales['CDMI-code'] = 'Code';
+$locales['CDMI-code-court'] = 'Code';
+$locales['CDMI-code-desc'] = 'Code du DMI';
 ?>
