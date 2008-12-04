@@ -503,4 +503,14 @@ $dPconfig["ecap"] = array (
   ),
 );
 
+$dPconfig["pharmacie"] = array (
+  "dispensation_schedule" => "024"
+);
+
+$dPconfig["dmi"] = array (
+  "CDMI" => array(
+    "product_category_id" => null
+  )
+);
+
 ?>

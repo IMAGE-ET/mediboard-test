@@ -184,6 +184,7 @@
       <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
+        <button type="button" class="print" onclick="printBarcodeGrid('{{$curr_order->_id}}')">Imprimer les codes barres</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />

@@ -28,7 +28,34 @@ Main.add(function () {
   refreshOrder({{$order->_id}}, {refreshLists: false});
   {{/if}}
 });
+
+function cancelReception(reception_id, on_complete) {
+  var form = getForm("cancel-reception");
+  $V(form.order_item_reception_id, reception_id);
+  return onSubmitFormAjax(form, {onComplete: on_complete});
+}
+
+function barcodePrintedReception(reception_id, value) {
+  var form = getForm("barcode_printed-reception");
+  $V(form.order_item_reception_id, reception_id);
+  $V(form.barcode_printed, value ? '1' : '0');
+  return onSubmitFormAjax(form);
+}
 </script>
+
+<form name="cancel-reception" action="" method="post" onsubmit="return checkForm(this)">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+  <input type="hidden" name="order_item_reception_id" value="" />
+  <input type="hidden" name="_cancel" value="1" />
+</form>
+
+<form name="barcode_printed-reception" action="" method="post" onsubmit="return checkForm(this)">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+  <input type="hidden" name="order_item_reception_id" value="" />
+  <input type="hidden" name="barcode_printed" value="" />
+</form>
 
 {{if !$order->_id}}
 <form name="order-new" action="?m={{$m}}&amp;a=vw_aed_order&amp;dialog=1" method="post" onsubmit="return checkForm(this)">

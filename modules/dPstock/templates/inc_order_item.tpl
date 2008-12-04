@@ -59,7 +59,7 @@
   
   <!-- Receive item -->
   <td style="width: 1%; white-space: nowrap;">
-    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshOrder({{$order->_id}})})">
+    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {refreshOrder({{$order->_id}})} })">
       {{if $ajax}}
       <script type="text/javascript">
           prepareForm('form-item-receive-{{$curr_item->_id}}');
@@ -69,16 +69,53 @@
       <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       <input type="hidden" name="date" value="now" />
-      {{mb_field 
-        object=$curr_item 
-        field=quantity
-        form=form-item-receive-$id 
-        increment=true
-        size="3"
-        max=$curr_item->quantity
-        min=0
-      }}
-      <button type="submit" class="tick">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
+      
+      <table>
+        <tr>
+          <th>{{tr}}CProductOrderItemReception-code{{/tr}}</th>
+          <th>{{tr}}CProductOrderItemReception-lapsing_date-court{{/tr}}</th>
+          <th>{{tr}}CProductOrderItemReception-quantity{{/tr}}</th>
+          <th></th>
+          <th>{{tr}}CProductOrderItemReception-barcode_printed-court{{/tr}}</th>
+        </tr>
+        {{foreach from=$curr_item->_ref_receptions item=curr_reception}}
+        <tr>
+          <td>{{$curr_reception->code}}</td>
+          <td>{{mb_value object=$curr_reception field=lapsing_date}}</td>
+          <td>{{mb_value object=$curr_reception field=quantity}}</td>
+          <td>
+            {{mb_value object=$curr_reception field=date}} 
+            <button type="button" class="cancel notext" onclick="cancelReception({{$curr_reception->_id}}, function() {refreshOrder({{$order->_id}})})">{{tr}}Cancel{{/tr}}</button>
+          </td>
+          <td>
+            <input type="checkbox" name="barcode_printed" {{if $curr_reception->barcode_printed == 1}}checked="checked"{{/if}} onclick="barcodePrintedReception({{$curr_reception->_id}},this.checked)" />
+          </td>
+        </tr>
+        {{/foreach}}
+        <tr>
+          <td>
+            <input type="text" name="code" value="" size="6" />
+          </td>
+          <td>
+            <input type="text" name="lapsing_date" value="" size="6" class="date mask|99/99/9999 format|$3-$2-$1" />
+          </td>
+          <td>
+            {{mb_field 
+              object=$curr_item 
+              field=quantity
+              form=form-item-receive-$id 
+              increment=true
+              size="3"
+              max=$curr_item->quantity
+              min=0
+              value=$curr_item->quantity-$curr_item->_quantity_received
+            }}
+          </td>
+          <td>
+            <button type="submit" class="tick">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
+          </td>
+         </tr>
+       </table>
     </form>
   </td>
   {{/if}}

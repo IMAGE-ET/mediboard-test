@@ -16,11 +16,15 @@ class CProductOrderItemReception extends CMbObject {
   var $order_item_id      = null;
   var $quantity           = null;
   var $code               = null;
+  var $lapsing_date       = null;
   var $date               = null;
+  var $barcode_printed    = null;
 
   // Object References
   //    Single
   var $_ref_order_item    = null;
+  
+  var $_cancel            = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,7 +38,9 @@ class CProductOrderItemReception extends CMbObject {
     $specs['order_item_id'] = 'notNull ref class|CProductOrderItem';
     $specs['quantity']      = 'notNull num';
     $specs['code']          = 'str';
+    $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
     $specs['date']          = 'notNull dateTime';
+    $specs['barcode_printed'] = 'bool';
     return $specs;
   }
   
@@ -61,7 +67,7 @@ class CProductOrderItemReception extends CMbObject {
     $this->_ref_order_item->_ref_reference->loadRefsFwd();
     $this->_ref_order_item->_ref_reference->_ref_product->loadRefStock();
     
-    $product = $this->_ref_order_item->_ref_reference->_ref_product;
+    $product = &$this->_ref_order_item->_ref_reference->_ref_product;
     $product->updateFormFields();
 
     if ($product->loadRefStock()) {
@@ -81,6 +87,14 @@ class CProductOrderItemReception extends CMbObject {
     }
     if ($msg = $stock->store()) {
       return $msg;
+    }
+    
+    if ($this->_cancel && $this->_id) {
+    	$product->_ref_stock_group->quantity -= $this->quantity;
+    	$product->_ref_stock_group->store();
+    	$this->delete();
+    	$this->_cancel = null;
+    	return;
     }
     
     return parent::store();

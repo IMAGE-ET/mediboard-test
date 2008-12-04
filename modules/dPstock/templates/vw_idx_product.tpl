@@ -47,7 +47,7 @@ Main.add(function () {
 
       <div id="list-products"></div>
     </td>
-    <td class="halfPane">
+    <td class="halfPane" style="width: 1%;">
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
@@ -96,6 +96,10 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$product field="description"}}</th>
           <td>{{mb_field object=$product field="description"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$product field="renewable"}}</th>
+          <td>{{mb_field object=$product field="renewable"}}</td>
         </tr>
         <tr><th colspan="2" class="title" style="font-size: 1em;">{{tr}}CProduct-packaging{{/tr}}</th></tr>
         <tr>

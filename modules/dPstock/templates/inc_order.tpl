@@ -26,6 +26,7 @@
     <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
       <span style="float: right;">{{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span></span>
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
+      <button type="button" class="print" onclick="printBarcodeGrid('{{$order->_id}}')">Imprimer les codes barres</button>
       
       {{if !$order->date_ordered && $order->_ref_order_items|@count > 0}}
        <form name="order-lock-{{$order->_id}}" action="?" method="post">

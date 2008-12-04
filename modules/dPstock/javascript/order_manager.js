@@ -135,3 +135,14 @@ function popupOrderForm(iOrderId, width, height) {
 
   url.popup(width, height, "Bon de commande");
 }
+
+function printBarcodeGrid(order_id, receptions_list, force_print) {
+  var url = new Url;
+  url.setModuleAction("dPstock", "print_reception_barcodes");
+  url.addParam("order_id", order_id);
+  url.addParam("receptions_list", receptions_list);
+  url.addParam("force_print", force_print);
+  url.addParam("suppressHeaders", true);
+
+  url.popup(600, 600, "Codes barres");
+}

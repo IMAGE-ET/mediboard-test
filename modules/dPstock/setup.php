@@ -311,7 +311,17 @@ class CSetupdPstock extends CSetup {
 		  ADD `packaging` VARCHAR (255)';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.95';
+    $this->makeRevision('0.95');
+    $sql = 'ALTER TABLE `product_order_item_reception` ADD `lapsing_date` DATE NOT NULL AFTER `code`';
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `product` ADD `renewable` ENUM( '0', '1', '2' ) NOT NULL";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `product_order_item_reception` ADD `barcode_printed` ENUM( '0', '1' ) NOT NULL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.96';
   }
 }
 

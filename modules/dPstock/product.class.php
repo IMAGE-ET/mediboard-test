@@ -23,6 +23,7 @@ class CProduct extends CMbObject {
   var $unit_quantity     = null;
   var $unit_title        = null;
   var $packaging         = null;
+  var $renewable         = null;
 
   // Object References
   //    Single
@@ -38,6 +39,8 @@ class CProduct extends CMbObject {
   var $_unit_quantity      = null;
   var $_unit_title         = null;
   var $_quantity           = null; // The quantity view
+  
+  var $_unique_usage       = null;
   
   // This group's stock id
   var $_ref_stock_group    = null;
@@ -69,7 +72,9 @@ class CProduct extends CMbObject {
     $specs['unit_title']    = 'str';
     $specs['unit_quantity'] = 'float pos';
     $specs['packaging']     = 'str';
+    $specs['renewable']     = 'enum list|0|1|2';
     $specs['_unit_title']   = 'str';
+    $specs['_unique_usage'] = 'bool';
     $specs['_unit_quantity']= 'float pos';
     $specs['_quantity']     = 'str';
     return $specs;
@@ -103,6 +108,8 @@ class CProduct extends CMbObject {
     	$this->_unit_quantity = ($this->unit_quantity ? $this->unit_quantity : 1);
       $this->_unit_title = $this->unit_title;
     }
+    
+    $this->_unique_usage = ($this->unit_quantity < 2 && !$this->renewable);
   }
 
   function loadRefsBack() {

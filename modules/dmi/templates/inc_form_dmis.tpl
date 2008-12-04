@@ -1,5 +1,15 @@
 {{* $Id: $ *}}
 
+<script type="text/javascript">
+  var modifOk = false;
+  function codeModified() {
+    if (!modifOk) {
+      return modifOk = confirm('Voulez vous réélement modifier le code ?\n Ceci peut impliquer des incohérences.');
+    }
+    else return true;
+  }
+</script>
+
 <form name="EditDMI" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="del" value="0" />
@@ -39,7 +49,7 @@
   	</tr>
   	<tr>
   		<th>{{mb_label object=$dmi field=code}}</th>
-  		<td>{{mb_field object=$dmi field=code}}</td>
+  		<td>{{mb_field object=$dmi field=code onkeypress="return codeModified()"}}</td>
   	</tr>
   	<tr>
   		<th>{{mb_label object=$dmi field=dans_livret}}</th>

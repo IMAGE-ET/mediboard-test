@@ -11,12 +11,13 @@
     <th>{{mb_title class=CDMI field=code}}</th>
     <th>{{mb_title class=CDMI field=dans_livret}}</th>
     <th>{{mb_title class=CDMI field=_produit_existant}}</th>
+    <th>{{mb_title class=CProduct field=renewable}}</th>
   </tr>
 
 	{{foreach from=$DMICategories item=_category}}
 		<tr>
 		  <th class="category" colspan="10">
-		    <a href="?m={{$m}}&amp;tab=vw_categories;&amp;category_id={{$_category->_id}}">
+		    <a href="?m={{$m}}&amp;tab=vw_categories&amp;category_id={{$_category->_id}}">
 			    {{$_category->_view}}
 			  </a>
 		  </th>
@@ -48,6 +49,9 @@
 	       {{/if}}
 	      
 	    </td>
+      <td>
+        {{mb_value object=$_dmi->_ref_product field=renewable}}
+      </td>
 	  </tr>
 	  {{foreachelse}}
 	  <tr>
