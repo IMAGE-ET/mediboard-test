@@ -509,7 +509,7 @@ $dPconfig["pharmacie"] = array (
 
 $dPconfig["dmi"] = array (
   "CDMI" => array(
-    "product_category_id" => null
+    "product_category_id" => ''
   )
 );
 
