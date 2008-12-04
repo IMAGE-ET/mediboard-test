@@ -478,7 +478,12 @@ if(!$refresh_pharma && !$mode_protocole){
       // refresh Element
       else {
         $smarty->assign("element", $chapitre);
-        $smarty->display("inc_div_element.tpl");
+        if (false && CModule::$active['dmi'] && $chapitre == 'dmi') {
+        	$smarty->display("../../dmi/templates/inc_div_dmi.tpl");
+        }
+        else {
+          $smarty->display("inc_div_element.tpl");
+        }
       }
     }
   }
