@@ -85,7 +85,7 @@ class CDestinataire {
 	  	$medecin = $mbObject;
 	  	
       $dest = new CDestinataire($tag);
-      $dest->nom     = "Dr $medecin->_view";
+      $dest->nom     = $medecin->_view;
 	  	$dest->adresse = $medecin->adresse;
 	  	$dest->cpville = "$medecin->cp $medecin->ville";
 	  	$dest->email   = "";

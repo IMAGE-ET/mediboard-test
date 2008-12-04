@@ -25,7 +25,7 @@
   {{include field="ATNC"             file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
 
   <tr>
-    <th class="title" colspan="4">Médecins correspondants</th>
+    <th class="title" colspan="4">Correspondants médicaux</th>
   </tr>
   {{include field="medecin_traitant" file="inc_acc/inc_fusion_field_ref.tpl"}}
 </table>

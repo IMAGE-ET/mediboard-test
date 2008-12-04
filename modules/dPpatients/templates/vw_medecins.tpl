@@ -31,22 +31,34 @@ Main.add(function () {
       
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Recherche d'un médecin</th>
+          <th class="category" colspan="2">Recherche d'un correspondant</th>
         </tr>
   
         <tr>
-          <th><label for="medecin_nom" title="Nom complet ou partiel du médecin recherché">Nom</label></th>
+          <th><label for="medecin_nom" title="Nom complet ou partiel du correspondant recherché">Nom</label></th>
           <td><input tabindex="1" type="text" name="medecin_nom" value="{{$nom|stripslashes}}" /></td>
         </tr>
         
         <tr>
-          <th><label for="medecin_prenom" title="Prénom complet ou partiel du médecin recherché">Prénom</label></th>
+          <th><label for="medecin_prenom" title="Prénom complet ou partiel du correspondant recherché">Prénom</label></th>
           <td><input tabindex="2" type="text" name="medecin_prenom" value="{{$prenom|stripslashes}}" /></td>
         </tr>
         
         <tr>
-          <th><label for="medecin_dept" title="Département du médecin recherché">Département (00 pour tous)</label></th>
+          <th><label for="medecin_dept" title="Département du correspondant recherché">Département (00 pour tous)</label></th>
           <td><input tabindex="3" type="text" name="medecin_dept" value="{{$departement|stripslashes}}" /></td>
+        </tr>
+        
+        <tr>
+          <th><label for="medecin_type" title="Type de correspondant recherché">Type</label></th>
+          <td>
+            <select name="medecin_type">
+              <option value=""> &mdash; Tous</option>
+              {{foreach from=$list_types item=curr_type key=key}}
+                <option value="{{$key}}" {{if $type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
+              {{/foreach}}
+            </select>
+          </td>
         </tr>
         
         <tr>
@@ -67,14 +79,15 @@ Main.add(function () {
           {{if !$dialog}}
           <th><button type="submit" class="search">Fusion</button></th>
           {{/if}}
-          <th>Nom - Prénom</th>
-          <th>Adresse</th>
-          <th>Ville</th>
-          <th>CP</th>
-          <th>Telephone</th>
-          <th>Fax</th>
+          <th>{{mb_title class=CMedecin field=nom}}</th>
+          <th>{{mb_title class=CMedecin field=adresse}}</th>
+          <th>{{mb_title class=CMedecin field=ville}}</th>
+          <th>{{mb_title class=CMedecin field=cp}}</th>
+          <th>{{mb_title class=CMedecin field=tel}}</th>
+          <th>{{mb_title class=CMedecin field=fax}}</th>
+          <th>{{mb_title class=CMedecin field=type}}</th>
           {{if $dialog}}
-          <th>Sélectionner</th>
+          <th>{{tr}}Select{{/tr}}</th>
           {{/if}}
         </tr>
 
@@ -120,6 +133,11 @@ Main.add(function () {
               {{mb_value object=$curr_medecin field=fax}}
             </a>
           </td>
+          <td>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
+              {{mb_value object=$curr_medecin field=type}}
+            </a>
+          </td>
           {{if $dialog}}
             <td>
               <button type="button" class="tick" onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )">
@@ -147,16 +165,16 @@ Main.add(function () {
       <table class="form">
         {{if !$dialog && $medecin->_id}}
         <tr>
-          <td colspan="2"><a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;new=1">Créer un nouveau médecin</a></td>
+          <td colspan="2"><a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;new=1">Créer un nouveau correspondant</a></td>
         </tr>
         {{/if}}
         <tr>
           <th class="category" colspan="2">
             {{if $medecin->_id}}
-	         <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->_id}})">
-               <img src="images/icons/history.gif" alt="historique" />
+	            <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->_id}})">
+                <img src="images/icons/history.gif" alt="historique" />
               </a>
-              Modification du Dr {{$medecin->_view}}
+              Modification de la fiche de {{$medecin->_view}}
             {{else}}
               Création d'une fiche
             {{/if}}
@@ -208,6 +226,11 @@ Main.add(function () {
           <th>{{mb_label object=$medecin field="email"}}</th>
           <td>{{mb_field object=$medecin field="email"}}</td>
         </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="type"}}</th>
+          <td>{{mb_field object=$medecin field="type"}}</td>
+        </tr>
 
         <tr>
           <th>{{mb_label object=$medecin field="disciplines"}}</th>
@@ -228,7 +251,7 @@ Main.add(function () {
           <td class="button" colspan="4">
             {{if $medecin->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le correspondant',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
             {{else}}

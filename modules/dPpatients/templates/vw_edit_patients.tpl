@@ -121,7 +121,7 @@ Main.add(function () {
       <ul id="tab-patient" class="control_tabs">
         <li><a href="#identite">Identité</a></li>
         <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
-        <li><a href="#medecins">Médecins correspondants</a></li>
+        <li><a href="#medecins">Correspondants médicaux</a></li>
         <li><a href="#correspondance">Correspondance</a></li>
         <li><a href="#assure">Assuré social</a></li>
       </ul>

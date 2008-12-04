@@ -184,15 +184,15 @@
       <strong>{{mb_label object=$object field="medecin_traitant"}}</strong>
       {{if $object->medecin_traitant}}
         <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin_traitant}} } });">
-          Dr {{mb_value object=$object->_ref_medecin_traitant field="_view"}}
+          {{mb_value object=$object->_ref_medecin_traitant field="_view"}}
         </div>
       {{/if}}
     </td>
     <td class="text">
-      <strong>Médecins correspondants</strong>
+      <strong>Correspondants médicaux</strong>
       {{foreach from=$object->_ref_medecins_correspondants item=curr_corresp}}
         <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$curr_corresp->medecin_id}} } });">
-          Dr {{mb_value object=$curr_corresp->_ref_medecin field="_view"}}
+          {{mb_value object=$curr_corresp->_ref_medecin field="_view"}}
         </div>
       {{foreachelse}}
         <div>{{tr}}CCorrespondant.none{{/tr}}</div>

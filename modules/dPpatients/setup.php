@@ -926,7 +926,11 @@ class CSetupdPpatients extends CSetup {
             `frequence_respiratoire` IS NULL";
 		$this->addQuery($sql);
     
-    $this->mod_version = "0.76";
+		$this->makeRevision("0.76");
+		$sql = "ALTER TABLE `medecin` ADD `type` ENUM ('medecin','kine','sagefemme','infirmier') NOT NULL DEFAULT 'medecin';";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.77";
   }
 }
 

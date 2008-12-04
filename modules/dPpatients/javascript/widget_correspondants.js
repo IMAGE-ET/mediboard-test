@@ -29,7 +29,7 @@ var Correspondants = Correspondants || Class.create({
       this.refresh();
     /*}
     else {
-      var button = new Element('button', {className: 'new', type: 'button'}).update("Médecins correspondants");
+      var button = new Element('button', {className: 'new', type: 'button'}).update("Correspondants médicaux");
       var that = this;
       button.observe('click', function() {that.popup()});
       $(this.widget_id).update(button);

@@ -2,7 +2,7 @@
   <tr>
     <th>
       <a href="#" onclick="window.print()">
-        &mdash; Dr {{$prat->_view}} &mdash<br />
+        &mdash; Dr {{$prat->_view}} &mdash;<br />
         Plages du {{$filter->_date_min|date_format:"%A %d %b %Y"}}
         au {{$filter->_date_max|date_format:$dPconfig.longdate}}<br />
         {{$plages|@count}}

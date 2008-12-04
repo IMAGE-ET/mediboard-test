@@ -27,6 +27,7 @@ class CMedecin extends CMbObject {
   var $disciplines     = null;
   var $orientations    = null;
   var $complementaires = null;
+  var $type            = null;
 
   // Object References
   var $_ref_patients = null;
@@ -59,6 +60,7 @@ class CMedecin extends CMbObject {
     $specs["disciplines"]     = "text confidential";
     $specs["orientations"]    = "text confidential";
     $specs["complementaires"] = "text confidential";
+    $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier default|medecin";
     return $specs;
   }
   
@@ -78,7 +80,12 @@ class CMedecin extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "$this->nom $this->prenom";
+    if ($this->type == 'medecin') {
+    	$this->_view = "Dr. $this->nom $this->prenom";
+    }
+    else {
+    	$this->_view = "$this->nom $this->prenom ({$this->_enumsTrans['type'][$this->type]})";
+    }
   }
 	 
   function loadRefs() {

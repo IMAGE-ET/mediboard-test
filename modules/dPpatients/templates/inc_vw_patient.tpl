@@ -118,19 +118,19 @@ Document.refreshList = function(){
   
   {{if $patient->medecin_traitant || $patient->_ref_medecins_correspondants|@count}}
   <tr>
-    <th class="category" colspan="4">Médecins correspondants</th>
+    <th class="category" colspan="4">Correspondants médicaux</th>
   </tr>
   
   <tr>
     <td colspan="4" class="text">
       {{if $patient->medecin_traitant}}
       <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin_traitant}} } });">
-        <strong>Dr {{$patient->_ref_medecin_traitant->_view}}</strong> ;
+        <strong>{{$patient->_ref_medecin_traitant->_view}}</strong> ;
       </span>
       {{/if}}
       {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
         <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$curr_corresp->medecin_id}} } });">
-          Dr {{$curr_corresp->_ref_medecin->_view}} ;
+          {{$curr_corresp->_ref_medecin->_view}} ;
         </span>
       {{/foreach}}
     </td>

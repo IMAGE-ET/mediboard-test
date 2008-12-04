@@ -15,7 +15,7 @@
   <tr><th>Remarques: </th><td>{{$patient->rques|nl2br}}</td></tr>
   
   {{if $patient->_ref_medecin_traitant->medecin_id || $patient->_ref_medecins_correspondants|@count}}
-  <tr><th class="category" colspan="2">Médecins correspondants</th></tr>
+  <tr><th class="category" colspan="2">Correspondants médicaux</th></tr>
 
   {{if $patient->_ref_medecin_traitant->medecin_id}}
     <tr>
@@ -30,7 +30,7 @@
   
   {{if $patient->_ref_medecins_correspondants|@count}}
     <tr>
-      <th>Médecins correspondants: </th>
+      <th>Correspondants médicaux: </th>
       <td>
         {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
         <div style="float: left; margin-right: 1em; margin-bottom: 0.5em; margin-top: 0.4em; width: 15em;">

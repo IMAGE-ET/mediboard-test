@@ -39,7 +39,7 @@
             ({{$patient->_age}} ans)
             - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
             {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}}          
-            {{if $patient->medecin_traitant}}Médecin traitant : Dr {{$patient->_ref_medecin_traitant->_view}}<br />{{/if}}      
+            {{if $patient->medecin_traitant}}Médecin traitant : {{$patient->_ref_medecin_traitant->_view}}<br />{{/if}}      
             <br />    
             {{if $const_med->poids}}<strong>{{$const_med->poids}} kg</strong> - {{/if}}
             {{if $const_med->taille}}<strong>{{$const_med->taille}} cm</strong> - {{/if}}
