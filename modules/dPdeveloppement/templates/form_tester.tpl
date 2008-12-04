@@ -31,7 +31,7 @@ Main.add(function () {
   {{foreach from=$specs item=class key=spec}}
     <tr>
       <th>{{mb_title object=$object field=$spec}}</th>
-      <td>{{mb_field object=$object field=$spec form=test register=1}}</td>
+      <td>{{mb_field object=$object field=$spec form=test register=1 increment=1}}</td>
     </tr>
   {{/foreach}}
   </table>
