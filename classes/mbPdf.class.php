@@ -61,6 +61,57 @@ class CMbPdf extends TCPDF {
   public function Write($h, $txt, $link='', $fill=0, $align='', $ln=false, $stretch=0) {
     return parent::Write($h, to_utf8($txt), $link, $fill, $align, $ln, $stretch);
   }
+  
+  public function WriteBarcodeGrid($x, $y, $width, $height, $col_num, $row_num, $data) {
+  	$cell_width = $width / $col_num;
+  	$cell_height = $height / $row_num;
+  	$i = 0;
+
+  	$delta_x = 0;
+  	$delta_y = 0;
+    $this->SetFontSize(7);
+    $this->SetDrawColor(20, 20, 20);
+    
+    $barcode_height = 8;
+    $barcode_width_ratio = 0.8;
+    
+  	foreach ($data as $cell) {
+  		if ($i % $col_num == 0 && $i != 0) {
+  			$y += $cell_height;
+  			$delta_x = 0;
+  		}
+  		
+  		$line_height = ($cell_height - $barcode_height) / (count($cell));
+  		
+  	  $this->Rect($x + $delta_x, $y + $delta_y, $cell_width, $cell_height);
+  		foreach ($cell as $line) {
+  			// if it's a barcode
+  			if (is_array($line)) {
+  				// draw barcode
+  				$this->writeBarcode($x + $delta_x + ($cell_width*(1 - $barcode_width_ratio)/ 2), 
+  				                    $y + $delta_y, $cell_width*$barcode_width_ratio, 
+  				                    $barcode_height, $line['type'], false, false, 2, $line['barcode']);
+  				                    
+  				$delta_y += $barcode_height;
+  				
+  				$this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
+  				                           $y + $delta_y, $line['label'], 0, 0, 0);
+  				                           
+  				$delta_y += $line_height;
+  			}
+  			else {
+	  			// print line
+	  			$this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
+	  			                           $y + $delta_y, utf8_encode($line), 0, 0, 0);
+	  			                           
+	  			$delta_y += $line_height;
+  			}
+  		}
+  		$delta_y = 0;
+  		$delta_x += $cell_width;
+  		$i++;
+  	}
+  }
 }
 
 
