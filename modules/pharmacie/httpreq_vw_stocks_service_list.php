@@ -6,6 +6,7 @@
  *  @version $Revision: $
  *  @author Alexis Granger
  */
+
 global $g;
 
 $service_id = mbGetValueFromGetOrSession('service_id');
@@ -13,7 +14,8 @@ $patient_id = mbGetValueFromGet('patient_id');
 
 // Services' stocks
 $list_stocks_service = new CProductStockService();
-$list_stocks_service = $list_stocks_service->loadList(array('service_id' => " = '$service_id'"));
+$list_stocks_service->service_id = $service_id;
+$list_stocks_service = $list_stocks_service->loadMatchingList();
 
 // Dispensations list, calculated
 $list_dispensations = array();
@@ -36,7 +38,9 @@ foreach ($list_stocks_service as $stock) {
 	
   // We load the unique negative delivery for this [service - group stock]
   $stock_group = new CProductStockGroup();
-  $stock_group->loadObject(array('group_id' => " = '$g'", 'product_id' => "= $stock->product_id"));
+  $stock_group->group_id = $g;
+  $stock_group->product_id = $stock->product_id;
+  $stock_group->loadMatchingObject();
   
 	$ref = ($stock->order_threshold_optimum ? $stock->order_threshold_optimum : $stock->order_threshold_min);
 	$dispensation = new CProductDelivery();
@@ -55,7 +59,6 @@ foreach ($list_stocks_service as $stock) {
     $whereTrace['delivery_id'] = "= '$delivery->_id'";
     $list_returns[$stock->_id] = $trace->loadList($whereTrace);
 	}
-	
 }
 
 // Smarty template

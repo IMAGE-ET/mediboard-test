@@ -14,8 +14,7 @@ $service_id = mbGetValueFromGetOrSession('service_id');
 
 // Services list
 $service = new CService();
-$service->group_id = $g;
-$list_services = $service->loadMatchingList('nom');
+$list_services = $service->loadGroupList();
 
 $date = mbDate();
 $delivrance = new CProductDelivery();

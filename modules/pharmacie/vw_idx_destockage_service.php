@@ -15,8 +15,7 @@ $all_stocks = mbGetValueFromGetOrSession('all_stocks');
 
 // Services list
 $service = new CService();
-$service->group_id = $g;
-$list_services = $service->loadMatchingList('nom');
+$list_services = $service->loadGroupList();
 
 $date = mbDate();
 $delivrance = new CProductDelivery();
