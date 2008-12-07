@@ -35,14 +35,9 @@ function setClose(date, salle_id) {
 Main.add(function () {
   var oFormSejour = window.opener.document.editSejour;
   var form = document.frmSelector;   
-  if(!oFormSejour.sejour_id.value) {
-    if(oFormSejour.type.value == "ambu"){
-      $V(form.admission, "jour");
-    } else {
-      $V(form.admission, "veille");
-    }
-  } else {
-    $V(form.admission, "aucune");
+  $V(form.admission, "aucune");
+  if (!oFormSejour.sejour_id.value) {
+    $V(form.admission, ["ambu", "exte"].include(oFormSejour.type.value) ? "jour" : "veille");
   }
 });
 </script>
