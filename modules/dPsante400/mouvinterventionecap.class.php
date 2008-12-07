@@ -226,8 +226,8 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $operation->date = mbDate($entree_prevue);
     $operation->time_operation = mbTime($entree_prevue);
     $operation->temp_operation = $duree_prevue;
-    $operation->entree_salle = mbTime($entree_reelle);
-    $operation->sortie_salle = mbTime($sortie_reelle);
+    $operation->debut_op = mbTime($entree_reelle);
+    $operation->fin_op   = mbTime($sortie_reelle);
     
     // Anesthésiste
     if ($CPRT = $operECap->consume("CPRT")) {
