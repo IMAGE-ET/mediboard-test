@@ -89,7 +89,7 @@
                 {{$curr_tech->technique}}
               </li>
               {{foreachelse}}
-              <li>Pas de technique complémentaire</li>
+              <li>Pas de technique complémentaire prévu</li>
               {{/foreach}}
             </ul>
           </td>
@@ -383,11 +383,11 @@
         <tr>
         {{if $consult->_ref_consult_anesth->_intub_difficile}}
           <td colspan="3" style="font-weight: bold; text-align:center; color:#F00;">
-            Intubation Difficile Prévisible
+            Intubation difficile prévisible
           </td>
         {{else}}
           <td colspan="3" style="font-weight: bold; text-align:center;">
-            Pas Intubation Difficile Prévisible
+            Pas d'intubation difficile prévisible
           </td>        
         {{/if}}
         </tr>

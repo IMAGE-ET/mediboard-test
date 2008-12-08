@@ -67,7 +67,7 @@
   </tr>
   <tr>
     <td width="50%">
-      <!-- Examens complémentaires / Traitements / Allergies -->
+      <!-- Examens complémentaires / Traitements / Allergies / Code ASA-->
       <table width="100%">
         <tr>
           <th class="category">Examens complémentaires</th>
@@ -147,10 +147,13 @@
           {{/if}}
           </td>
         </tr>
+        <tr>
+          <th class="category">Code ASA : {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</th>
+        </tr>
       </table>
     </td>
     <td width="50%">
-      <!-- Docs édités / Intubation / Prémédication -->
+      <!-- Docs édités / Intubation / Prémédication / Techniques complémentaires-->
       <table width="100%">
         <tr>
           <th class="category">Documents édités</th>
@@ -171,27 +174,27 @@
         <tr>
           <td>
             <strong>Mallampati :</strong>
-            {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
+            {{tr}}CConsultAnesth.mallampati.{{$consult_anesth->mallampati}}{{/tr}}
             <br />
             <strong>Ouverture de la bouche :</strong>
-            {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
+            {{tr}}CConsultAnesth.bouche.{{$consult_anesth->bouche}}{{/tr}}
             <br />
             <strong>Distance thyro-mentonière :</strong>
-            {{tr}}CConsultAnesth.distThyro.{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}
+            {{tr}}CConsultAnesth.distThyro.{{$consult_anesth->distThyro}}{{/tr}}
             <br />
             <strong>Etat bucco-dentaire :</strong>
-            {{$consult->_ref_consult_anesth->etatBucco|nl2br}}
+            {{$consult_anesth->etatBucco|nl2br}}
             <br />
             <strong>Conclusion :</strong>
-            {{$consult->_ref_consult_anesth->conclusion|nl2br}}
+            {{$consult_anesth->conclusion|nl2br}}
             <br />
-            {{if $consult->_ref_consult_anesth->_intub_difficile}}
+            {{if $consult_anesth->_intub_difficile}}
             <span style="font-weight: bold; text-align:center; color:#F00;">
-              Intubation Difficile Prévisible
+              Intubation difficile prévisible
             </span>
             {{else}}
             <span style="font-weight: bold; text-align:center;">
-              Pas Intubation Difficile Prévisible
+              Pas d'intubation difficile prévisible
             </span>        
             {{/if}}
           </td>
@@ -201,7 +204,23 @@
         </tr>
         <tr>
           <td>
-            {{$consult->_ref_consult_anesth->premedication|nl2br}}
+            {{$consult_anesth->premedication|nl2br}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category">Techniques complémentaires</th>
+        </tr>
+        <tr>
+          <td>
+            <ul>
+              {{foreach from=$consult_anesth->_ref_techniques item=curr_tech}}
+              <li>
+                {{$curr_tech->technique}}<br />
+              </li>
+              {{foreachelse}}
+              <li>Pas de technique complémentaire prévu</li>
+              {{/foreach}}
+            </ul>
           </td>
         </tr>
       </table>
@@ -212,7 +231,7 @@
   </tr>
   <tr>
     <td>
-      <!-- Atcd chirurgicaux / anesthésiques -->
+      <!-- Atcd chirurgicaux / anesthésiques / Biologie-->
       <table width="100%">
         <tr>
           <th class="category">ATCD Chirurgicaux</th>
@@ -250,6 +269,78 @@
             {{/foreach}}
             </ul>
             {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category">Biologie</th>
+        </tr>
+        <tr>
+          <td>
+            <table>
+              <tr>
+                <td style="width: 50%">
+                  {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
+                    Groupe sanguin&nbsp;:&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}}&nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->rai && $consult->_ref_consult_anesth->rai!="?"}}
+                    RAI&nbsp;:&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->hb}}
+                    Hb&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->hb}}&nbsp;g/dl
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->ht}}
+                    Ht&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->na}}&nbsp;%
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->ht}}
+                    Ht&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->ht_final}}&nbsp;%
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->_psa}}
+                    PSA&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->_psa}}&nbsp;ml/mg<br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->plaquettes}}
+                    Plaquettes&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->plaquettes}}&nbsp;(x1000)&nbsp;/mm3
+                  {{/if}}
+                </td>
+                <td style="width: 50%">
+                  {{if $consult->_ref_consult_anesth->creatinine}}
+                    Créatinine&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->na}}&nbsp;mg/l
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->_clairance}}
+                    Créatinine&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->_clairance}}&nbsp;ml/min
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->na}}
+                    Na+&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->na}}&nbsp;mmol/l
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->k}}
+                    K+&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->k}}&nbsp;mmol/l<br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->tp}}
+                    TP&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->tp}}&nbsp;%
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->tca}}
+                    TCA&nbsp:&nbsp;{{$consult->_ref_consult_anesth->tca_temoin}}&nbsp;s&nbsp;/&nbsp;{{$consult->_ref_consult_anesth->tca}}&nbsp;s
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->tsivy}}
+                    TS Ivy&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->tsivy|date_format:"%M min %S s"}}
+                    <br />
+                  {{/if}}
+                  {{if $consult->_ref_consult_anesth->ecbu && $consult->_ref_consult_anesth->ecbu!="?"}}
+                    ECBU&nbsp;:&nbsp;{{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
+                    <br />
+                  {{/if}}
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
