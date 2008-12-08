@@ -685,16 +685,15 @@ var ObjectTooltip = Class.create({
     this.sTrigger = eTrigger.identify();
     this.sDiv = null;
     this.sTarget = null;
-    this.idTimeOut = null;
+    this.idTimeout = null;
 
-    this.oOptions = {
+    this.oOptions = Object.extend({
       mode: "objectView",
       popup: false,
-      duration: 400,
+      duration: 0.3,
       params: {}
-    };
+    }, oOptions);
     
-    Object.extend(this.oOptions, oOptions);
     this.mode = ObjectTooltip.modes[this.oOptions.mode];
 
     if (!this.oOptions.popup) {
@@ -704,35 +703,44 @@ var ObjectTooltip = Class.create({
   },
   
   launchShow: function() {
-    if (!this.idTimeOut) {
-      this.idTimeout = setTimeout(this.show.bind(this), this.oOptions.duration);
-    }
+    this.idTimeout = this.show.bind(this).delay(this.oOptions.duration);
+  },
+  
+  launchHide: function() {
+    this.idTimeoutHide = this.hide.bind(this).delay(this.oOptions.duration);
+  },
+  
+  cancelHide: function() {
+    window.clearTimeout(this.idTimeoutHide);
   },
   
   show: function() {
     var eDiv    = $(this.sDiv);
     var eTarget = $(this.sTarget);
+    
     if (this.oOptions.popup || !eTarget.innerHTML) {
       this.load();
     }
     if (!this.oOptions.popup) {
-      eDiv.show();
       this.reposition();
     }
   },
   
   hide: function() {
-    var eDiv = $(this.sDiv);
-    clearTimeout(this.idTimeout);
-    eDiv.hide();
-  },
-  
-  stopShow: function() {
-    clearTimeout(this.idTimeout);
+    $(this.sDiv).hide();
   },
   
   reposition: function() {
-    $(this.sDiv).unoverflow();
+    eTrigger = $(this.sTrigger);
+    if (!eTrigger) return; // necessary, unless it throws an error some times (why => ?)
+    
+    var dim = eTrigger.getDimensions();
+    
+    $(this.sDiv)
+        .show()
+        .setStyle({marginTop: '0', marginLeft: '0'})
+        .clonePosition(eTrigger, {offsetTop: dim.height, offsetLeft: Math.min(dim.width, 20), setWidth: false, setHeight: false})
+        .unoverflow();
   },
   
   load: function() {
@@ -744,45 +752,37 @@ var ObjectTooltip = Class.create({
       
       if(!this.oOptions.popup) {
         url.requestUpdate(eTarget, {onComplete: this.reposition.bind(this)});
-        return;
       } else {
         url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
-        return;
       }
     } else {
       var elt = $(this.oOptions.params.element);
-      eTarget.update(elt.show());
+      eTarget.update(elt.remove().show());
+      this.reposition();
     }
   },
   
   addHandlers: function() {
-    var eDiv     = $(this.sDiv);
-    var eTrigger = $(this.sTrigger);
-    
-    switch (this.oOptions.mode) {
-      case "objectView":
-      case "translate":
-      case "dom":
-      case "objectViewHistory":
-        eTrigger.observe("mouseout", this.hide.bind(this));
-        break;
-      case "objectNotes":
-        eTrigger.observe("mouseout", this.stopShow.bind(this));
-        eDiv.observe("click", this.hide.bind(this));
-        break;
-    }
+    $(this.sTrigger)
+        .observe("mouseout", this.launchHide.bind(this))
+        .observe("mouseover", this.cancelHide.bind(this));
+        
+    $(this.sDiv)
+        .observe("mouseout", this.launchHide.bind(this))
+        .observe("mouseover", this.cancelHide.bind(this));
   },
   
   createDiv: function() {
-    var eTrigger = $(this.sTrigger);  
+    var eTrigger = $(this.sTrigger);
     
     var eDiv  = Dom.cloneElemById("tooltipTpl",true);
     eDiv.hide()
         .addClassName(this.mode.sClass)
         .removeAttribute("_extended");
+        
     this.sDiv = eDiv.identify();
-    eTrigger.insert({after: eDiv});
-    
+    $(document.body).insert(eDiv);
+
     var eTarget = eDiv.select(".content")[0];
     eTarget.removeAttribute("_extended");
     
@@ -844,24 +844,20 @@ Object.extend(ObjectTooltip, {
 
 function initNotes(){
   $$("div.noteDiv").each(function(pair) {
-    var sClassDiv = pair.className;
-    var aClass    = sClassDiv.split(" ");
-    var aInfos    = aClass[1].split("-");
+    var aInfos = pair.className.split(" ")[1].split("-");
 
     url = new Url;
     url.setModuleAction("system", "httpreq_get_notes_image");
     url.addParam("object_class" , aInfos[0]);
     url.addParam("object_id"    , aInfos[1]);
     url.requestUpdate(pair, { waitingText : null });
-      
   });
 }
 
 
 function initSante400(){
   $$("div.idsante400").each(function(element) {
-    var sIdDiv = element.id;
-    var aInfos = sIdDiv.split("-");
+    var aInfos = element.id.split("-");
   
     url = new Url;
     url.setModuleAction("system", "httpreq_vw_object_idsante400");
@@ -892,20 +888,15 @@ Object.extend(Calendar, {
       aStyles.push("disabled");
     }
   
-    if (this.current.start || this.current.stop) {
+    if (!(this.current.start && this.current.start > sDate || this.current.stop && this.current.stop < sDate) &&
+         (this.current.start || this.current.stop)) {
       aStyles.push("current");
-    }
-    
-    if (this.current.start && this.current.start > sDate ||
-        this.current.stop && this.current.stop < sDate) {
-      aStyles = aStyles.without("current");
     }
     
     if (this.spots.include(sDate)) {
       aStyles.push("spot");
     }
     
-    aStyles.uniq();
     return aStyles.join(" ");
   },
 

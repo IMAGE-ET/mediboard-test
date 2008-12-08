@@ -1244,6 +1244,8 @@ div.tooltip table.decoration td.right {
 
 div.tooltip table.decoration td.content {
   border: 4px solid #fff;
+  white-space: nowrap;
+  background: #fff;
 }
 
 div.postit {
@@ -1280,7 +1282,7 @@ div.postit table.decoration td.left {
 }
 
 div.postit table.decoration td.top {
-  background: #ff6 url(../../images/icons/cancel.png) top right no-repeat;
+  background: #ff6;
 	opacity: 1;
   border-top-width: 1px;
   border-right-width: 1px;
@@ -1319,6 +1321,7 @@ div.postit table.decoration td.content {
   overflow: scroll;
   padding-right: 10px;
   padding-bottom: 10px;
+  white-space: nowrap;
 }
 
 table.note {

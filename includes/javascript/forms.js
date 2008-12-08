@@ -549,83 +549,90 @@ Object.extend(Form, {
   }
 } );
 
-
-function NumericField (form, element, step, min, max, showPlus, decimals) {
-  this.sForm = form;
-  this.sElement = element;
-  this.sField = form + "_" + element;
-  this.min  = Object.isUndefined(min)  ? null : min;
-  this.max  = Object.isUndefined(max)  ? null : max;
-  this.step = Object.isUndefined(step) ? null : step;
-  this.decimals = Object.isUndefined(decimals) ? null : decimals;
-  this.showPlus = showPlus | null;
-  var that = this;
-
-  Main.add(function () {
-    var oField = $(getForm(that.sForm).elements[that.sElement]);
-    var img, field;
-    if (oField && oField.disabled && (img = $("img_"+that.sField))) {
-      img.hide();
-    }
-  });
-}
-
-NumericField.prototype = {
-  // Increment function
-  inc: function () {
-    var oField = $(getForm(this.sForm).elements[this.sElement]);
-    var step = Number(this.getStep());
-    var result = (parseInt(Number(oField.value) / step) + 1) * step;
-    if (this.max != null) {
-      result = (result <= this.max) ? result : this.max;
-    }
-    if (this.decimals !== null) {
-      result = printf("%."+this.decimals+"f", result);
-    }
-    result = ((this.showPlus && result >= 0)?'+':'')+result;
+Element.addMethods('input', {
+  addSpinner: function(element, options) {
+    options = Object.extend({
+      min: null,
+      max: null,
+      step: null,
+      decimals: null,
+      showPlus: false,
+      spinnerElement: null
+    }, options);
     
-    $V(oField, result, true);
-    oField.select();
-  },
-
-  // Decrement function
-  dec: function () {
-    var oField = $(getForm(this.sForm).elements[this.sElement]);
-    var step = Number(this.getStep(-1));
-    var result = (parseInt(Number(oField.value) / step) - 1) * step;
-    if (this.min != null) {
-      result = (result >= this.min) ? result : this.min;
-    }
-    if (this.decimals !== null) {
-      result = printf("%."+this.decimals+"f", result);
-    }
-    result = ((this.showPlus && result >= 0)?'+':'')+result;
+    element.spinner = {
+      /** Calculate appropriate step
+       *  ref is the reference to calculate the step, it is useful to avoid having bad steps :
+       *  for exampele, when we have oField.value = 10, if we decrement, we'll have 5 instead of 9 without this ref
+       *  Set it to -1 when decrementing, 0 when incrementing
+       */
+      getStep: function (ref) {
+        ref |= 0;
+        if (options.step == null) {
+          var value = Math.abs(element.value) + ref;
+          if (value < 10)  return 1;
+          if (value < 50)  return 5;
+          if (value < 100) return 10;
+          if (value < 500) return 50;
+          if (value < 1000) return 100;
+          if (value < 5000) return 500;
+          return 1000;
+        } else {
+          return options.step;
+        }
+      },
+     
+      // Increment function
+      inc: function () {
+        var step = Number(element.spinner.getStep());
+        var result = (parseInt(Number(element.value) / step) + 1) * step;
+        if (options.max != null) {
+          result = (result <= options.max) ? result : options.max;
+        }
+        if (options.decimals !== null) {
+          result = printf("%."+options.decimals+"f", result);
+        }
+        result = ((options.showPlus && result >= 0)?'+':'')+result;
+        
+        $V(element, result, true);
+        element.select();
+      },
     
-    $V(oField, result, true);
-    oField.select();
-  },
+      // Decrement function
+      dec: function () {
+        var step = Number(element.spinner.getStep(-1));
+        var result = (parseInt(Number(element.value) / step) - 1) * step;
+        if (options.min != null) {
+          result = (result >= options.min) ? result : options.min;
+        }
+        if (options.decimals !== null) {
+          result = printf("%."+options.decimals+"f", result);
+        }
+        result = ((options.showPlus && result >= 0)?'+':'')+result;
+        
+        $V(element, result, true);
+        element.select();
+      }
+    }
+    
+    Main.add(function () {
+      if (!options.spinnerElement && !element.disabled) {
+        options.spinnerElement = new Element('img', {src: './images/icons/numeric_updown.gif', usemap: '#arrow_'+element.id, alt: 'spinner'});
+        element.insert({after: options.spinnerElement});
   
-  /** Calculate appropriate step
-   *  ref is the reference to calculate the step, it is useful to avoid having bad steps :
-   *  for exampele, when we have oField.value = 10, if we decrement, we'll have 5 instead of 9 without this ref
-   *  Set it to -1 when decrementing, 0 when incrementing
-   */
-  getStep: function (ref) {
-    var oField = $(getForm(this.sForm).elements[this.sElement]);
-    if (this.step == null) {
-      var value = Math.abs(oField.value) + ((ref != undefined) ? ref : 0);
-      if (value < 10)  return 1;
-      if (value < 50)  return 5;
-      if (value < 100) return 10;
-      if (value < 500) return 50;
-      if (value < 1000) return 100;
-      if (value < 5000) return 500;
-      return 1000;
-    } else {
-      return this.step;
-    }
+        var map  = new Element('map', {name: 'arrow_'+element.id});
+        options.spinnerElement.insert({after: map});
+        
+        map.insert(new Element('area', {coords:'0,0,10,8',   href:'#1', tabIndex:10000, title:'+'}).observe('click', element.spinner.inc));
+        map.insert(new Element('area', {coords:'0,10,10,18', href:'#1', tabIndex:10000, title:'-'}).observe('click', element.spinner.dec));
+      }
+    
+      if (element.disabled && options.spinnerElement) {
+        options.spinnerElement.hide();
+      }
+    });
   }
-}
+});
 
 // The time picker
 var TimePicker = Class.create({

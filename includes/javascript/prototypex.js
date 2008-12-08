@@ -67,10 +67,14 @@ Element.addMethods({
   unoverflow: function(element) {
     var dim = element.getDimensions(); // Element dimensions
     var pos = element.cumulativeOffset(); // Element position
-    var viewport = $(document.documentElement).getDimensions(); // Viewport size
+    var scroll = document.viewport.getScrollOffsets(); // Viewport offset
+    var viewport = document.viewport.getDimensions(); // Viewport size
+
+    pos.left -= scroll.left;
+    pos.top -= scroll.top;
 
     pos.right  = pos[2] = pos.left + dim.width;  // Element right position
-    pos.bottom = pos[3] = pos.top  + dim.height; // Element bottom position
+    pos.bottom = pos[3] = pos.top + dim.height; // Element bottom position
     
     // If the element exceeds the viewport on the right
     if (pos.right > viewport.width) {
@@ -86,6 +90,6 @@ Element.addMethods({
   },
   
   setVisible: function(element, condition) {
-    element[condition ? "show" : "hide"]();
+    return element[condition ? "show" : "hide"]();
   }
 });

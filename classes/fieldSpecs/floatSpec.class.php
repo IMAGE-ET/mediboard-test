@@ -141,12 +141,22 @@ class CFloatSpec extends CMbFieldSpec {
       $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
       $sHtml .= '
     <script type="text/javascript">
-      window["'.$fieldId.'_object"] = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').', '.(isset($decimals)?$decimals:'null').');
+      Main.add(function(){
+        $(document.forms["'.$form.'"]["'.$field.'"]).addSpinner({';
+          if ($step)       $sHtml .= "step: $step,";
+          if ($this->pos)  $sHtml .= "min: 0,";
+          elseif($min)     $sHtml .= "min: $min,";
+          if (isset($max)) $sHtml .= "max: $max,";
+          if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
+          if ($decimals)   $sHtml .= "decimals: $decimals,";
+          $sHtml .= 'spinnerElement: $("img_'.$fieldId.'")
+        });
+      });
     </script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" id="img_'.$fieldId.'" />
     <map name="arrow_'.$fieldId.'" >
-      <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="window[\''.$fieldId.'_object\'].inc()" title="+" />
-      <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="window[\''.$fieldId.'_object\'].dec()" title="-" />
+      <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.inc()" title="+" />
+      <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.dec()" title="-" />
     </map>
     </div>';
     }
