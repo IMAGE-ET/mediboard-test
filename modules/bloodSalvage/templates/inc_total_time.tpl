@@ -1,8 +1,8 @@
 <table class="form">
   <tr>
-	<td style ="text-align:center;">
-	<b>Durée totale RSPO : </b>
-	<input name="total" size="3" maxLength="5" type="text" value="{{$totaltime|date_format:$dPconfig.time}}" />
+	<td style="text-align:center;">
+	  <b>Durée totale RSPO : </b>
+	  {{$totaltime|date_format:$dPconfig.time}}
 	</td>
 	</tr>
 </table>
