@@ -16,7 +16,7 @@ $praticiens = $mediuser->loadPraticiens();
 
 // Chargement de la liste des services
 $service = new CService();
-$list_services = $service->loadGroupList();
+$services = $service->loadGroupList();
 
 // Recuperation des valeurs
 $praticien_id  = mbGetValueFromGet("praticien_id");
