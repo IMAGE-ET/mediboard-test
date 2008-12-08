@@ -74,7 +74,7 @@
       <tr>
         <td>
           <div style="float:left">
-          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time|date_format:$dPconfig.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
+          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
           </div>
           <div style="float:right">
           {{foreach from=$_place.consultations item=_consultation}}
