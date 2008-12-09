@@ -167,7 +167,7 @@
 				  <script type="text/javascript">
 				  {{if $mode_dossier == "planification" && !$quantite}}
 		        Droppables.add("drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}", {
-		           //accept: '{{$line_id}}_{{$unite_prise}}',
+		           accept: '{{$line_id}}_{{$unite_prise}}',
 		           onDrop: function(element) {
 		            addPlanification("{{$app->user_id}}", "{{$_date}}","{{$_hour}}:00:00", "{{$unite_prise}}", "{{$line_id}}", "{{$line_class}}", element.id);
 		          },
