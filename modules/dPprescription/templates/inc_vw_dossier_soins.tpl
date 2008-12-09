@@ -389,13 +389,22 @@ showBefore = function(){
 	      </button>
 	    {{/if}}
         <button type="button" class="tick" onclick="applyAdministrations();">
+          {{if $mode_dossier == "administration"}}
           Appliquer les administrations séléctionnées
+          {{/if}}
+          {{if $mode_dossier == "planification"}}
+          Appliquer les planifications séléctionnées
+          {{/if}}
         </button>
 	    </td>
 	    <td style="text-align: center">
 	      <form name="mode_dossier_soin">
-	        <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration"}}checked="checked"{{/if}} onclick="refreshDossierSoin('administration')"/>Administration
-          <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} onclick="refreshDossierSoin('planification')" />Planification
+	        <label>
+	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration"}}checked="checked"{{/if}} onclick="refreshDossierSoin('administration')"/>Administration
+          </label>
+          <label>
+            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} onclick="refreshDossierSoin('planification')" />Planification
+          </label>
        </form>
 	    </td>
 	    <td style="text-align: right">
