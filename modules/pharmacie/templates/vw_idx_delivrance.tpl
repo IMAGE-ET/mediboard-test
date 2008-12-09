@@ -36,8 +36,8 @@ function printPreparePlan() {
 <button type="button" class="print" onclick="printPreparePlan()">Imprimer plan de cueillette</button>
 
 <ul id="tab_delivrances" class="control_tabs">
-  <li><a href="#list-globales">Globales (<span id="list-globales-count">0</span>)</a></li>
-  <li><a href="#list-nominatives">Nominatives (<span id="list-nominatives-count">0</span>)</a></li>
+  <li><a href="#list-globales">Globales <small>(0)</small></a></li>
+  <li><a href="#list-nominatives">Nominatives <small>(0)</small></a></li>
 </ul>
 <hr class="control_tabs" />
 

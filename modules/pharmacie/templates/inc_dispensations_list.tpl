@@ -5,7 +5,7 @@
 {{/if}}
 
 <script type="text/javascript">
-  $('list-dispensations-count').update({{$dispensations|@count}});
+  $$('a[href=#list-dispensations] small').first().update('({{$dispensations|@count}})');
 </script>
 
 {{if $dPconfig.dPstock.CProductStockGroup.infinite_quantity == 1}}
@@ -52,24 +52,20 @@
           <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })" class="tooltip-trigger">
             <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
           </div>
-          <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
-            <ul>
-              {{foreach from=$patients item=_patient}}
-                {{assign var=patient value=$_patient.patient}}
-                <li>
-                  {{$patient->_view}}
-                  <ul>
-                    <li>
-	                    {{$_patient.quantite_administration}} {{$produit->_unite_administration}} 
-	                    {{if $produit->_unite_dispensation != $produit->_unite_administration}}
-	                      ({{$_patient.quantite_dispensation}} {{$produit->_unite_dispensation}})
-	                    {{/if}}
-                    </li>
-                  </ul>
-                </li>
-              {{/foreach}}
-            </ul>
-          </div>
+          <table id="tooltip-content-{{$code_cip}}" style="display: none;" class="tbl">
+          {{foreach from=$patients item=_patient}}
+            {{assign var=patient value=$_patient.patient}}
+            <tr>
+              <th>{{$patient->_view}}</th>
+              <td>
+                {{$_patient.quantite_administration}} {{$produit->_unite_administration}} 
+                {{if $produit->_unite_dispensation != $produit->_unite_administration}}
+                  ({{$_patient.quantite_dispensation}} {{$produit->_unite_dispensation}})
+                {{/if}}
+              </td>
+            </tr>
+          {{/foreach}}
+          </table>
         {{/if}}
       </td>
       <!-- Quantite à dispenser pour permettre l'administration -->
@@ -90,7 +86,7 @@
        {{foreach from=$done.$code_cip item=curr_done name="done"}}
          {{if !$smarty.foreach.done.first}}
            {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
-             <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
+             <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">{{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
              <div class="tooltip-trigger" 
                   onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done->_id}}'} })">
                {{$curr_done->quantity}} {{$produit->_unite_dispensation}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
@@ -112,7 +108,7 @@
          Aucune
        {{/foreach}}
      </td>
-     <td style="text-align: center">
+     <td style="text-align: left; width: 0.1%;">
      {{if $infinite}}
       {{if array_key_exists($code_cip,$delivrances)}}
         {{assign var=delivrance value=$delivrances.$code_cip}}
@@ -128,8 +124,28 @@
          {{if $mode_nominatif}}
          <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
          {{/if}}
-         {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0}}
-         <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
+         {{if $delivrance->quantity == 0}}
+           {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
+         {{else}}
+           {{assign var=style value=""}}
+         {{/if}}
+         
+         <button type="submit" class="tick notext" title="Dispenser" style="{{$style}} float: right;">Dispenser</button>
+         
+         {{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
+         {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
+           {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0 style=$style 
+             onchange="this.form._quantity_package.value = this.value/$qty"}}
+           
+           (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
+                  onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
+           {{$delivrance->_ref_stock->_ref_product->packaging}})
+           <script type="text/javascript">
+            getForm("form-dispensation-{{$code_cip}}")._quantity_package.addSpinner({min:0});
+           </script>
+         {{else}}
+           {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0 style=$style}}
+         {{/if}}
         </form>
        {{else}}
          Pas de stock à la pharmacie 
@@ -153,8 +169,28 @@
            {{if $mode_nominatif}}
            <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
            {{/if}}
-           {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0}}
-           <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
+           {{if $delivrance->quantity == 0}}
+             {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
+           {{else}}
+             {{assign var=style value=""}}
+           {{/if}}
+           
+           <button type="submit" class="tick notext" title="Dispenser" style="{{$style}} float: right;">Dispenser</button>
+           
+           {{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
+           {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
+             {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0 style=$style 
+               onchange="this.form._quantity_package.value = this.value/$qty"}}
+             
+             (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
+                    onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
+             {{$delivrance->_ref_stock->_ref_product->packaging}})
+             <script type="text/javascript">
+              getForm("form-dispensation-{{$code_cip}}")._quantity_package.addSpinner({min:0});
+             </script>
+           {{else}}
+             {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3 min=0 style=$style}}
+           {{/if}}
          </form>
          {{else}}
          Stock épuisé à la pharmacie

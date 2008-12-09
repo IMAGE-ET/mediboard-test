@@ -9,7 +9,9 @@
   {{foreach from=$list_stocks_service item=stock}}
     <tr>
       <td>
-        <a href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
+        <a class="tooltip-trigger" 
+           onmouseover="ObjectTooltip.create(this, {mode: 'objectView',  params: {object_class: 'CProduct', object_id: '{{$stock->_ref_product->_id}}'} })"
+           href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
         {{$stock->_ref_product->_view}}
         </a>
       </td>

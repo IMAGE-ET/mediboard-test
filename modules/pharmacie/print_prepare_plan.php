@@ -18,7 +18,7 @@ mbSetValueToSession('_date_max', $date_max);
 
 $order_by = 'date_dispensation DESC';
 $where = array ();
-$where[] = "date_dispensation BETWEEN '$date_min' AND '$date_max'";
+$where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
 
 $list_services = new CService();

@@ -21,7 +21,7 @@
   {{/foreach}}
 </table>
 <script type="text/javascript">
-  $('list-globales-count').update({{$deliveries_global|@count}});
+  $$('a[href=#list-globales] small').first().update('({{$deliveries_global|@count}})');
 </script>
 
 {{elseif $mode == "nominatif"}}
@@ -48,6 +48,6 @@
 </table>
 
 <script type="text/javascript">
-  $('list-nominatives-count').update({{$deliveries_nominatif|@count}});
+  $$('a[href=#list-nominatives] small').first().update('({{$deliveries_nominatif|@count}})');
 </script>
 {{/if}}

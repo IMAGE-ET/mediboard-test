@@ -616,12 +616,16 @@ Element.addMethods('input', {
     }
     
     Main.add(function () {
-      if (!options.spinnerElement && !element.disabled) {
+      if (!options.spinnerElement) {
+        var container = new Element('div', {className: 'control numericField'});
+        element.wrap(container);
+        element.addClassName('num');
+        
         options.spinnerElement = new Element('img', {src: './images/icons/numeric_updown.gif', usemap: '#arrow_'+element.id, alt: 'spinner'});
-        element.insert({after: options.spinnerElement});
+        container.insert(options.spinnerElement);
   
         var map  = new Element('map', {name: 'arrow_'+element.id});
-        options.spinnerElement.insert({after: map});
+        container.insert(map);
         
         map.insert(new Element('area', {coords:'0,0,10,8',   href:'#1', tabIndex:10000, title:'+'}).observe('click', element.spinner.inc));
         map.insert(new Element('area', {coords:'0,10,10,18', href:'#1', tabIndex:10000, title:'-'}).observe('click', element.spinner.dec));

@@ -19,7 +19,7 @@ $conf = array_flip(str_split(CAppUI::conf('pharmacie dispensation_schedule')));
 
 // Liste des jours de la semaine et le planning de dispensation
 for($i = 0; $i < 7; $i++) {
-	$list_days[$i] = date('l', $monday+$i*$day);
+	$list_days[$i] = strftime('%A', $monday+$i*$day);
 	$list_days_schedule[$i] = array_key_exists($i, $conf);
 }
 

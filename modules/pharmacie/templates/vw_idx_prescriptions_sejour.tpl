@@ -20,11 +20,11 @@ function markAsSelected(element) {
           <tr>
 			      <th>A partir du</th>
 			      <td class="date">  
-			        {{mb_field object=$filter_sejour field="_date_min" form=filterForm canNull=false register=true}}
+			        {{mb_field object=$filter_sejour field="_date_entree" form=filterForm canNull=false register=true}}
 			      </td>
 			      <th>Jusqu'au</th>
 			      <td class="date">
-			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm canNull=false register=true}}
+			        {{mb_field object=$filter_sejour field="_date_sortie" form=filterForm canNull=false register=true}}
 	          </td>
             <td>
               <select name="service_id">

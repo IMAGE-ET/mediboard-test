@@ -13,7 +13,7 @@ function refreshLists() {
     $('list-dispensations-title').update('Global');
     $('list-stocks-title').update('Global hors prescription');
   }
-  $('list-dispensations-count').update(0);
+  $$('a[href=#list-dispensations] small').first().update('(0)');
   
   $A(form.elements).each (function (e) {
     url.addParam(e.name, $V(e));
@@ -88,11 +88,11 @@ function updateDispensationUrgence(formUrgence) {
       <button class="tick">Dispenser</button>
     </form>
   </li>
+  <li><a href="#list-dispensations"><span id="list-dispensations-title">Global</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Stocks</a></li>
-  <li><a href="#list-dispensations"><span id="list-dispensations-title">Global</span> (<span id="list-dispensations-count">0</span>)</a></li>
 </ul>
 <hr class="control_tabs" />
 
 <!-- Tabs containers -->
-<div id="list-stocks" style="display: none;"></div>
 <div id="list-dispensations" style="display: none;"></div>
+<div id="list-stocks" style="display: none;"></div>
