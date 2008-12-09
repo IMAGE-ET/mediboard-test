@@ -714,6 +714,10 @@ var ObjectTooltip = Class.create({
     window.clearTimeout(this.idTimeoutHide);
   },
   
+  cancelShow: function() {
+    window.clearTimeout(this.idTimeout);
+  },
+  
   show: function() {
     var eDiv    = $(this.sDiv);
     var eTarget = $(this.sTarget);
@@ -764,10 +768,12 @@ var ObjectTooltip = Class.create({
   
   addHandlers: function() {
     $(this.sTrigger)
+        .observe("mouseout", this.cancelShow.bind(this))
         .observe("mouseout", this.launchHide.bind(this))
         .observe("mouseover", this.cancelHide.bind(this));
         
     $(this.sDiv)
+        .observe("mouseout", this.cancelShow.bind(this))
         .observe("mouseout", this.launchHide.bind(this))
         .observe("mouseover", this.cancelHide.bind(this));
   },
