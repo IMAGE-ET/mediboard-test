@@ -10,8 +10,8 @@ function refreshLists() {
   }
   else {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
-    $('list-dispensations-title').update('Global');
-    $('list-stocks-title').update('Global hors prescription');
+    $('list-dispensations-title').update('Reglobalisé');
+    $('list-stocks-title').update('Global');
   }
   $$('a[href=#list-dispensations] small').first().update('(0)');
   
@@ -88,8 +88,8 @@ function updateDispensationUrgence(formUrgence) {
       <button class="tick">Dispenser</button>
     </form>
   </li>
-  <li><a href="#list-dispensations"><span id="list-dispensations-title">Global</span> <small>(0)</small></a></li>
-  <li><a href="#list-stocks" id="list-stocks-title">Stocks</a></li>
+  <li><a href="#list-dispensations"><span id="list-dispensations-title">Reglobalisé</span> <small>(0)</small></a></li>
+  <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
 </ul>
 <hr class="control_tabs" />
 
