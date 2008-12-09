@@ -165,9 +165,11 @@
 				  {{/if}}
 				  
 				  <script type="text/javascript">
+
+				  
 				  {{if $mode_dossier == "planification" && !$quantite}}
 		        Droppables.add("drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}", {
-		           accept: '{{$line_id}}_{{$unite_prise}}',
+		           accept: "{{$line_id}}_{{$unite_prise|replace:' ':'_'}}",
 		           onDrop: function(element) {
 		            addPlanification("{{$app->user_id}}", "{{$_date}}","{{$_hour}}:00:00", "{{$unite_prise}}", "{{$line_id}}", "{{$line_class}}", element.id);
 		          },
@@ -188,7 +190,7 @@
 				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				    {{/if}}
-				    class="{{$line_id}}_{{$unite_prise}}
+				    class="{{$line_id}}_{{$unite_prise|replace:' ':'_'}}
 				    {{if $quantite && $mode_dossier == "planification" && $prise_line.quantites.$_hour|@count < 4}}
 				      draggable
 				    {{/if}}  
