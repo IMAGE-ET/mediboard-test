@@ -278,7 +278,7 @@ foreach($dispensations as $code_cip => &$_quantites){
 
   // Chargement des dispensation déjé effectuée
   $where = array();
-  $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min' AND '$_date_max'"; // entre les deux dates
+  $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min 00:00:00' AND '$_date_max 23:59:59'"; // entre les deux dates
   $where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
   $where['product.category_id'] = "= '$category_id'";
   $where['product_delivery.patient_id'] = "IS NULL";

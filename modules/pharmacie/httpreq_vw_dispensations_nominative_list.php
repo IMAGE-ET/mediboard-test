@@ -246,7 +246,7 @@ if($prescription->_id){
 	  }
 	  // Chargement des dispensation déjé effectuée
 	  $where = array();
-	  $where['product_delivery.date_dispensation'] = "BETWEEN '$date_min' AND '$date_max'"; // entre les deux dates
+	  $where['product_delivery.date_dispensation'] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'"; // entre les deux dates
 	  $where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
 	  $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
 	  $where['product_delivery.patient_id'] = "IS NOT NULL";
