@@ -738,7 +738,17 @@ class CSetupdPplanningOp extends CSetup {
                "\nADD `depassement_anesth` FLOAT NULL AFTER `fournitures`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.87";
+    $this->makeRevision("0.87");
+    $sql = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM - code",        "Opération - CCAM1 - code");
+    $this->addQuery($sql);
+    
+    $sql = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM - description", "Opération - CCAM1 - description");
+    $this->addQuery($sql);
+    
+    $sql = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM complet", "Opération - CCAM - codes");
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.88";
   }
 }
 ?>
