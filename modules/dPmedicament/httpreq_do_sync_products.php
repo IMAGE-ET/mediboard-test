@@ -40,10 +40,10 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
   $product->name          = $produit_livret->_ref_produit->libelle;
   $product->description   = $produit_livret->commentaire;
   
-  $product->quantity      = $produit_livret->_ref_produit->nb_presentation;
+  $product->quantity      = $produit_livret->_ref_produit->nb_presentation ? $produit_livret->_ref_produit->nb_presentation : 1;
   $product->item_title    = $produit_livret->_ref_produit->libelle_presentation;
   
-  $product->unit_quantity = $produit_livret->_ref_produit->nb_unite_presentation;
+  $product->unit_quantity = $produit_livret->_ref_produit->nb_unite_presentation ? $produit_livret->_ref_produit->nb_unite_presentation : 1;
   $product->unit_title    = $produit_livret->_ref_produit->libelle_unite_presentation;
   
   $product->packaging     = $produit_livret->_ref_produit->libelle_conditionnement;
