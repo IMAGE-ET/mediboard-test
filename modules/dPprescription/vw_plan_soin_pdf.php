@@ -66,7 +66,7 @@ sort($hours);
 /* Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
    dont les heures ne sont pas spécifié dans le tableau */
 $heures = array();
-$list_hours = range(0,23);
+$list_hours = range(0,24);
 $last_hour_in_array = reset($hours);
 krsort($list_hours); 
 foreach($list_hours as &$hour){

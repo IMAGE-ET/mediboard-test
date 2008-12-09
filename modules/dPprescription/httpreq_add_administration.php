@@ -20,7 +20,10 @@ $date_sel             = mbGetValueFromGet("date_sel");
 $mode_plan            = mbGetValueFromGet("mode_plan", false);
 $prescription_id      = mbGetValueFromGet("prescription_id");
 $list_administrations = mbGetValueFromGet("administrations");
+$planification_id       = mbGetValueFromGet("planification_id");
+$mode_dossier = mbGetValueFromGet("mode_dossier");
 $administrations      = array();
+$planification = new CAdministration();
 
 // Chargement de la ligne
 $line = new $object_class;
@@ -43,6 +46,17 @@ if($list_administrations){
       $line->_ref_produit->loadConditionnement();
     }
     $administrations[$administration->_id] = $administration;
+  }
+}
+
+if($planification_id){
+  $planification->load($planification_id);
+  $planification->loadRefsFwd();
+  $planification->loadRefLog();
+  $line =& $planification->_ref_object;
+  $line->loadRefsFwd();
+  if($line->_class_name == "CPrescriptionLineMedicament"){
+    $line->_ref_produit->loadConditionnement();
   }
 }
 
@@ -75,6 +89,7 @@ $transmission = new CTransmissionMedicale();
 $smarty = new CSmartyDP();
 $smarty->assign("date_sel", $date_sel);
 $smarty->assign("administrations", $administrations);
+$smarty->assign("planification", $planification);
 $smarty->assign("transmission", $transmission);
 $smarty->assign("line", $line);
 $smarty->assign("unite_prise", $unite_prise);
@@ -88,5 +103,6 @@ $smarty->assign("notToday", $date != mbDate());
 $smarty->assign("mode_plan", $mode_plan);
 $smarty->assign("hours", $hours);
 $smarty->assign("prescription_id", $prescription_id);
+$smarty->assign("mode_dossier", $mode_dossier);
 $smarty->display("../../dPprescription/templates/inc_vw_add_administration.tpl");
 ?>

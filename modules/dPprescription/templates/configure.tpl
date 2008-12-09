@@ -355,7 +355,7 @@ Main.add( function(){
 
   {{assign var="var" value="heures_prise"}}
   <tr>
-    <td><strong>Heures disponibles</td>
+    <td><strong>Heures disponibles pour la feuille de soin</td>
     <td colspan="5" class="text">
     {{foreach from=$listHours item=_hour}}
       <input class="hour" type="checkbox" value="{{$_hour}}" onclick="oHourField.toggle('{{$_hour}}', this.checked);" /> {{$_hour}}
@@ -410,6 +410,36 @@ Main.add( function(){
 	  <th><strong>6 fois par jour</strong></th>
 	  <td colspan="3" style="text-align: center">
 	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][6]" value="{{$dPconfig.$m.$class.$var.fois_par.6}}" /> heures
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  
+  {{assign var="var" value="semaine"}}
+  <tr>  
+	  <th><strong>1 fois par semaine</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][1]" value="{{$dPconfig.$m.$class.$var.1}}" />
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  <tr>  
+	  <th><strong>2 fois par semaine</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][2]" value="{{$dPconfig.$m.$class.$var.2}}" />
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  <tr>  
+	  <th><strong>3 fois par semaine</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][3]" value="{{$dPconfig.$m.$class.$var.3}}" />
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
+  <tr>  
+	  <th><strong>4 fois par semaine</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][4]" value="{{$dPconfig.$m.$class.$var.4}}" />
 	  </td>  
 	  <td colspan="2" />               
   </tr>

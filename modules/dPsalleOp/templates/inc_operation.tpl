@@ -31,13 +31,14 @@ Main.add(function () {
 });
 
 
-function loadTraitement(sejour_id, date) {
+function loadTraitement(sejour_id, date, mode_dossier) {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
   url.addParam("sejour_id", sejour_id);
   url.addParam("date", date);
   url.addParam("line_type", "bloc");
   url.addParam("mode_bloc", "1");
+  url.addParam("mode_dossier", mode_dossier);
   url.requestUpdate("soins", { waitingText: null } );
 }
 
@@ -56,7 +57,7 @@ function submitSuivi(oForm, prescription_id) {
     loadSuivi(sejour_id); 
     if(oForm.object_class.value != ""){
       // Refresh de la partie administration
-      loadTraitement(sejour_id,'{{$date}}');
+      loadTraitement(sejour_id,'{{$date}}','','administration');
     }  
   } });
 }
@@ -122,7 +123,7 @@ function reloadPrescription(prescription_id){
   <li><a href="#five">Dossier</a></li>
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
-    <li onclick="loadTraitement('{{$selOp->sejour_id}}','{{$date}}');"><a href="#soins">Soins</a></li>
+    <li onclick="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
   {{/if}}
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>

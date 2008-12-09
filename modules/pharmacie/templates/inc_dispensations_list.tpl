@@ -35,6 +35,7 @@
   {{foreach from=$dispensations key=code_cip item=quantites}}
     {{assign var=quantite_administration value=$quantites.quantite_administration}}
     {{assign var=quantite_dispensation value=$quantites.quantite_dispensation}}
+    {{if $quantite_administration}}
     {{if !$mode_nominatif}}
       {{assign var=patients value=$besoin_patient.$code_cip}}
     {{/if}}
@@ -166,7 +167,7 @@
        {{/if}}
      {{/if}}
      </td>
-     <td style="text-align: center">
+     <td style="text-align: center" class="text">
      {{if $stocks_service.$code_cip}}
        {{assign var=stock_service value=$stocks_service.$code_cip}}
        {{if $stock_service->quantity>0}}
@@ -178,6 +179,7 @@
      {{/if}}
      </td>
    </tr>  
+  {{/if}}
   {{foreachelse}}
     <tr>
       <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>

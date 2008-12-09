@@ -9,6 +9,7 @@
 
 $adm = mbGetValueFromGet("adm");
 $list_administrations = array();
+$mode_dossier = mbGetValueFromGet("mode_dossier");
 
 $sejour = new CSejour();
 $date_sel = null;
@@ -78,6 +79,7 @@ $smarty->assign("administrations", $list_administrations);
 $smarty->assign("date_sel", $date_sel);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("transmission", new CTransmissionMedicale());
+$smarty->assign("mode_dossier", $mode_dossier);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

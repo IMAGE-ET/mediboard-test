@@ -29,12 +29,12 @@
   			{{else}}
   			  Aucune transmission
   			{{/if}}
-		  </div>           
+		  </div>
 	    </th>
     {{/if}}
-  {{/if}}			      
+  {{/if}}
   {{if $smarty.foreach.$last_foreach.first}}
-    <td class="text" rowspan="{{$nb_line}}" style="text-align: center">
+    <td class="text" rowspan="{{$nb_line}}" style="text-align: center;">
     {{if !$line->conditionnel}}
      -
     {{else}}
@@ -73,9 +73,15 @@
 	      {{/if}} 
 	    </a>
 	  </div>
+	  <small>
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
 	  {{/if}}
+    <br />
+    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+      ({{$line->_unite_administration}})<br />
+    {{/if}}
+    </small>
 	  {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_ref_substitution_lines|@count}}
     <form action="?" method="post" name="changeLine-{{$line_id}}">
       <input type="hidden" name="m" value="dPprescription" />
@@ -102,10 +108,6 @@
         <div style="white-space: nowrap;">
 	        {{assign var=prise value=$line->_prises_for_plan.$unite_prise}}
 	        {{$prise->_short_view}}
-	        <br />
-	        {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	          ({{$prise->_ref_object->_unite_administration}})<br />
-	        {{/if}}
         </div>
       {{else}}
         <!-- Cas des posologies sous forme de moments -->
@@ -114,9 +116,6 @@
             {{$_prise->_short_view}}
 					</div>
         {{/foreach}}
-        {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-          ({{$_prise->_ref_object->_unite_administration}})<br />
-        {{/if}}
       {{/if}}
     {{/if}}
     </small>
@@ -125,39 +124,80 @@
   <!-- Affichage des heures de prises des medicaments -->			    
   {{foreach from=$tabHours item=_hours_by_date key=_date}}
 	  {{foreach from=$_hours_by_date item=_hour}}  
+	
 		  {{assign var=list_administrations value=""}}
 		  {{if @$line->_administrations.$unite_prise.$_date.$_hour.list}}
 		    {{assign var=list_administrations value=$line->_administrations.$unite_prise.$_date.$_hour.list}}
 		  {{/if}}
+		  {{assign var=planification_id value=""}}
+		  {{if @$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
+		    {{assign var=planification_id value=$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
+		  {{/if}}
+		  
 		  {{assign var=_date_hour value="$_date $_hour:00:00"}}						    
 		
 		  <!-- S'il existe des prises prevues pour la date $_date -->
-	    {{if @is_array($line->_quantity_by_date.$unite_prise.$_date)}}
+	    {{if @is_array($line->_quantity_by_date.$unite_prise.$_date) || @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
 				{{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$_date}}
 				
-	      <td class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-					            
+	      <td id="drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+		    
+					<!-- Quantites prevues -->
 			    {{assign var=quantite value="-"}}
-			    {{if (($line->_debut_reel <= $_date_hour && $line->_fin_reelle > $_date_hour) || (!$line->_fin_reelle && $line_class == "CPrescriptionLineMedicament")) && array_key_exists($_hour, $prise_line.quantites)}}
-				    {{assign var=quantite value=$prise_line.quantites.$_hour}}
+			    {{assign var=quantite_depart value="-"}}
+			    {{assign var=heure_reelle value=""}}
+			    {{if (($line->_debut_reel <= $_date_hour && $line->_fin_reelle > $_date_hour) || (!$line->_fin_reelle && $line_class == "CPrescriptionLineMedicament")) 
+			         && (@array_key_exists($_hour, $prise_line.quantites) || $line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee)}}
+			          
+			      {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+			        {{assign var=quantite value=$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+			      {{else}}
+					    {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
+					    {{if @$prise_line.quantites.$_hour.0.heure_reelle}}
+					    {{assign var=heure_reelle value=$prise_line.quantites.$_hour.0.heure_reelle}}
+					    {{/if}}
+				    {{/if}}
 				  {{/if}}
 				  
+				  {{assign var=_quantite value=$quantite}}
+				  {{if !$heure_reelle}}
+				    {{assign var=heure_reelle value=$_hour}}
+				  {{/if}}
+				  
+				  <script type="text/javascript">
+				  {{if $mode_dossier == "planification" && !$quantite}}
+		        Droppables.add("drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}", {
+		           //accept: '{{$line_id}}_{{$unite_prise}}',
+		           onDrop: function(element) {
+		            addPlanification("{{$app->user_id}}", "{{$_date}}","{{$_hour}}:00:00", "{{$unite_prise}}", "{{$line_id}}", "{{$line_class}}", element.id);
+		          },
+		          hoverclass:'soin-selected'
+		        } );
+		        {{/if}}
+		      </script>
+				  			   
 				  <div onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
-				    {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
+				       id="drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
+				       {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
 				      style="background-color: #aaa"
 				      {{if $dPconfig.dPprescription.CAdministration.hors_plage}}
-				        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
-			          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
+				        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
+			          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				      {{/if}}
 				    {{else}}
-				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
-			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
+				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
+			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				    {{/if}}
-				    class="tooltip-trigger administration
+				    class="{{$line_id}}_{{$unite_prise}}
+				    {{if $quantite && $mode_dossier == "planification" && $prise_line.quantites.$_hour|@count < 4}}
+				      draggable
+				    {{/if}}  
+				      tooltip-trigger administration
 			      {{if $quantite > 0}}
-					    {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}
-						     {{if $line->_administrations.$unite_prise.$_date.$_hour.quantite == $quantite}} administre
-						     {{elseif $line->_administrations.$unite_prise.$_date.$_hour.quantite == 0}} administration_annulee
+					    {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)
+					         && @$line->_administrations.$unite_prise.$_date.$_hour.quantite != ''}}
+						     {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite == $quantite}} administre
+						     {{elseif @$line->_administrations.$unite_prise.$_date.$_hour.quantite == 0}} administration_annulee
 						     {{else}} administration_partielle
 						     {{/if}}
 					     {{else}}
@@ -166,20 +206,39 @@
 						     {{/if}}
 					     {{/if}}
 				     {{/if}}
-					 {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}">
+					 {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}
+					 {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+					 planification{{/if}}">
+					 
 		       {{if $quantite!="-" || @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}
 						 {{if !$quantite}}
 						   {{assign var=quantite value="0"}}
 						 {{/if}}
-			       {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}
-				       {{$line->_administrations.$unite_prise.$_date.$_hour.quantite}}/{{$quantite}}
-			       {{elseif $line->_active}}
-				       {{if $quantite}}0/{{$quantite}}{{/if}}
-				     {{/if}}
-
+						 {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+						    {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite}}
+						      {{$line->_administrations.$unite_prise.$_date.$_hour.quantite}}
+						    {{else}}
+						      0
+						    {{/if}}
+						    /{{$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+						 {{else}}
+				       {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite}}
+					       {{$line->_administrations.$unite_prise.$_date.$_hour.quantite}}/{{$quantite}}
+				       {{elseif $line->_active}}
+					       {{if $quantite}}0/{{$quantite}}{{/if}}
+					     {{/if}}
+						 {{/if}}
 				   {{/if}}
+				   
+				   
 					</div>
-			    
+			    <script type="text/javascript">
+			      // $prise_line.quantites.$_hour|@count < 4 => pour empecher de deplacer une case ou il y a plusieurs prises
+            {{if $quantite && $mode_dossier == "planification" && $prise_line.quantites.$_hour|@count < 4}}
+				      drag = new Draggable("drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
+				    {{/if}}
+				  </script>
+          
 			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 				   {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 				     <ul>
@@ -217,7 +276,7 @@
                     ondblclick='addAdministration({{$line_id}}, "", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}");'
                   {{/if}}
                   >
-    	          {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}
+    	          {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite}}
 	                {{$line->_administrations.$unite_prise.$_date.$_hour.quantite}} / -
 	              {{/if}}
 	           </div>
@@ -271,4 +330,4 @@
 	    - 
 	  {{/if}}
   </td>
-</tr>	 
+</tr>

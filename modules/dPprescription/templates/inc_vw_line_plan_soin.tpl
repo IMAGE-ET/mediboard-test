@@ -64,13 +64,21 @@
 		             {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}text-align: center">
 		    {{assign var=quantite value=""}}  
 		    
-		    {{if @is_array($line->_quantity_by_date.$unite_prise.$date)}}
-		      {{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$date}}	            
-		      {{if array_key_exists($_hour, $prise_line.quantites)}}
-		        {{assign var=quantite value=$prise_line.quantites.$_hour}}
+		    {{if @is_array($line->_quantity_by_date.$unite_prise.$date.quantites)
+		         || @$line->_administrations.$unite_prise.$date.$_hour.quantite_planifiee}}
+		   
+		       {{if @$line->_administrations.$unite_prise.$date.$_hour.quantite_planifiee}}
+			        {{assign var=quantite value=$line->_administrations.$unite_prise.$date.$_hour.quantite_planifiee}}
+			     {{else}}
+		           {{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$date}}
+			         {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
 		      {{/if}}
 		    {{/if}}
-	
+		    
+		    {{if $quantite == 0}}
+		      {{assign var=quantite value=""}}
+		    {{/if}}
+		    
 		    {{if $line_class == "CPrescriptionLineMedicament"}}
 				  {{if $line->_debut_reel > $_real_hour || ($line->_fin_reelle && $line->_fin_reelle < $_real_hour) || !$line->_active}}
 				    <img src="images/icons/gris.gif" />

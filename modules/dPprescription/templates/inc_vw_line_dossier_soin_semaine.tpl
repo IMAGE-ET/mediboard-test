@@ -122,6 +122,7 @@
 			     <ul>
 			      {{foreach from=$line->_administrations.$unite_prise.$date key=hour item=administrations_by_hours}}
 			      {{if $hour != 'list'}}
+			      {{if @$administrations_by_hours.administrations}}
 					   {{foreach from=$administrations_by_hours.administrations item=_log_administration}}
 					     {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
 					    
@@ -142,6 +143,7 @@
 						   </ul>
 						   {{/if}}
 					   {{/foreach}}
+					   {{/if}}
 					   {{/if}}
 					   {{/foreach}}
 				   </ul>

@@ -7,12 +7,13 @@
  *  @author Alexis Granger
  */
 
-$sejour_id   = mbGetValueFromGetOrSession("sejour_id");
-$date        = mbGetValueFromGetOrSession("date");
-$nb_decalage = mbGetValueFromGetOrSession("nb_decalage",0);
-$line_type   = mbGetValueFromGet("line_type", "service");
-$mode_bloc   = mbGetValueFromGet("mode_bloc", 0);
-$now         = mbDateTime();
+$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
+$date         = mbGetValueFromGetOrSession("date");
+$nb_decalage  = mbGetValueFromGetOrSession("nb_decalage",0);
+$line_type    = mbGetValueFromGet("line_type", "service");
+$mode_bloc    = mbGetValueFromGet("mode_bloc", 0);
+$now          = mbDateTime();
+$mode_dossier = mbGetValueFromGet("mode_dossier", "administration");
 
 // Chargement du sejour
 $sejour = new CSejour();
@@ -213,6 +214,7 @@ $smarty->assign("real_time"          , $real_time);
 $smarty->assign("categorie"          , new CCategoryPrescription());
 $smarty->assign("mode_bloc"          , $mode_bloc);
 $smarty->assign("operations"         , $operations);
+$smarty->assign("mode_dossier"       , $mode_dossier);
 $smarty->display("inc_vw_dossier_soins.tpl");
 
 ?>

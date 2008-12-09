@@ -65,7 +65,7 @@ class CProtocole extends CMbObject {
     $specs["DP"]              = "code cim10";
     $specs["convalescence"]   = "text confidential";
     $specs["rques_sejour"]    = "text confidential";
-    $specs["libelle"]         = "str confidential";
+    $specs["libelle"]         = "str";
     $specs["examen"]          = "text confidential";
     $specs["materiel"]        = "text confidential";
     $specs["duree_hospi"]     = "notNull num minMax|0|36500";

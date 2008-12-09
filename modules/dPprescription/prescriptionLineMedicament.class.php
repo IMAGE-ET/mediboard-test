@@ -300,7 +300,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   		}
   	}
   }
-  
+    
   /*
    * Calcul des quantite de medicaments à fournir pour les dates indiquées
    */
@@ -317,8 +317,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   		$this->_quantites = array();
   	}
   }
-  
-  
+
   function loadRefsFwd() {
   	parent::loadRefsFwd();
     $this->loadRefProduit();

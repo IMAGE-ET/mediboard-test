@@ -106,7 +106,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   if($('dossier_soins')){
     document.form_prescription.sejour_id.value = sejour_id;
     if($('dossier_soins').visible()) {
-      loadTraitement(sejour_id, date);
+      loadTraitement(sejour_id, date,'','administration');
     }
     loadSuivi(sejour_id);
   }
@@ -137,12 +137,13 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds', { waitingText : null });
 }
 
-function loadTraitement(sejour_id, date, nb_decalage) {
+function loadTraitement(sejour_id, date, nb_decalage, mode_dossier) {
   if(sejour_id) {
     var urlTt = new Url;
     urlTt.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
     urlTt.addParam("sejour_id", sejour_id);
     urlTt.addParam("date", date);
+    urlTt.addParam("mode_dossier", mode_dossier);
     if(nb_decalage){
       urlTt.addParam("nb_decalage", nb_decalage);
     }
@@ -166,7 +167,7 @@ function submitSuivi(oForm, prescription_id) {
     if(oForm.object_class.value != ""){
       // Refresh de la partie administration
       if($('jour').visible()){
-        loadTraitement(sejour_id,'{{$date}}');
+        loadTraitement(sejour_id,'{{$date}}','','administration');
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
@@ -407,7 +408,7 @@ viewBilanService = function(service_id, date){
         <li onclick="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Soins</a></li>
+        <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_soins">Soins</a></li>
         <li onclick="reloadAntAllergie(document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescription</a></li>
         {{/if}}
         

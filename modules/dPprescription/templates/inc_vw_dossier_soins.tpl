@@ -1,8 +1,70 @@
 <script type="text/javascript">
-
-refreshDossierSoin = function(){
-  loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value);
+		     
+oDragOptions = {
+  constraint: 'horizontal',
+  revert: true,
+  ghosting: true,
+  starteffect : function(element) { 
+    new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
+  },
+  reverteffect: function(element, top_offset, left_offset) {
+    var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
+    element._revert = new Effect.Move(element, { 
+      x: -left_offset, 
+      y: -top_offset, 
+      duration: dur
+    } );
+  },
+  endeffect: function(element) { 
+    new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
+  }        
 }
+           
+addPlanification = function(administrateur_id, date, time, unite_prise, object_id, object_class, element_id){
+  // Split de l'element_id
+  element = element_id.split("_");
+  original_date = element[3]+" "+element[4]+":00:00";
+  quantite = element[5];
+  planification_id = element[6];
+
+	var oForm = document.addPlanif;
+	  
+  $V(oForm.administrateur_id, administrateur_id);
+  
+  $V(oForm.object_id, object_id);
+  $V(oForm.object_class, object_class);
+  
+  prise_id = !isNaN(unite_prise) ? unite_prise : '';
+  unite_prise = isNaN(unite_prise) ? unite_prise : '';
+
+  $V(oForm.unite_prise, unite_prise);
+  $V(oForm.prise_id, prise_id);
+	$V(oForm.quantite, quantite);
+ 
+  if(time == "24:00:00"){
+    time = "23:59:00";
+  }
+  dateTime = date+" "+time
+  
+  $V(oForm.dateTime, dateTime);
+  if(planification_id){
+    $V(oForm.administration_id, planification_id);
+    oForm.original_dateTime.writeAttribute("disabled", "disabled");
+  } else { 
+    $V(oForm.original_dateTime, original_date);
+  }
+  
+	if(original_date != dateTime){
+	  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+	    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value,'{{$mode_dossier}}');
+	  } } ); 
+  }
+}
+
+refreshDossierSoin = function(mode_dossier){
+  loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier);
+}
+
 printDossierSoin = function(prescription_id, date){
   url = new Url;
   url.setModuleAction("dPprescription", "vw_plan_soin_pdf");
@@ -22,7 +84,7 @@ addCibleTransmission = function(object_class, object_id, view) {
   oForm.text.focus();
 }
 
-addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations) {
+addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations, planification_id) {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_administration");
   url.addParam("line_id",  line_id);
@@ -32,7 +94,9 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.addParam("date", date);
   url.addParam("heure", heure);
   url.addParam("administrations", administrations);
+  url.addParam("planification_id", planification_id);
   url.addParam("date_sel", "{{$date}}");
+  url.addParam("mode_dossier", "{{$mode_dossier}}");
   url.popup(500,400,"Administration");
 }
 
@@ -66,6 +130,7 @@ applyAdministrations = function () {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
   url.addObjectParam("adm", administrations);
+  url.addParam("mode_dossier", "{{$mode_dossier}}");
   url.popup(700, 600, "Administrations multiples");
 }
 
@@ -163,7 +228,7 @@ Main.add(function () {
 });
 
 var oFormClick = document.click;
-  
+
 showHideElement = function(list_show, list_hide, th1, th2, signe){
   var modif = "0";
   var class_after = "";
@@ -238,6 +303,22 @@ showBefore = function(){
   <input type="hidden" name="nb_decalage" value="0" />
 </form>
 
+<form name="addPlanif" action="" method="post">
+  <input type="hidden" name="dosql" value="do_administration_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="administration_id" value="" />
+  <input type="hidden" name="planification" value="1" />
+  <input type="hidden" name="administrateur_id" value="" />
+  <input type="hidden" name="dateTime" value="" />
+  <input type="hidden" name="quantite" value="" />
+  <input type="hidden" name="unite_prise" value="" />
+  <input type="hidden" name="prise_id" value="" />
+  <input type="hidden" name="object_id" value="" />
+  <input type="hidden" name="object_class" value="" />
+  <input type="hidden" name="original_dateTime" value="" />
+</form>
+
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
@@ -268,9 +349,10 @@ showBefore = function(){
   </tr>
 </table>
 
+
 {{if !$mode_bloc}}
 	<ul id="tab_dossier_soin" class="control_tabs">
-	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}');"><a href="#jour">Administration</a></li>
+	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#jour">Administration</a></li>
 	  <li onclick="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
 	</ul>
   <hr class="control_tabs" />
@@ -302,6 +384,12 @@ showBefore = function(){
         <button type="button" class="tick" onclick="applyAdministrations();">
           Appliquer les administrations séléctionnées
         </button>
+	    </td>
+	    <td style="text-align: center">
+	      <form name="mode_dossier_soin">
+	        <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration"}}checked="checked"{{/if}} onclick="refreshDossierSoin('administration')"/>Administration
+          <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} onclick="refreshDossierSoin('planification')" />Planification
+       </form>
 	    </td>
 	    <td style="text-align: right">
 	      <button type="button" class="search" onclick="viewLegend()">Légende</button>
@@ -391,10 +479,6 @@ showBefore = function(){
 				    {{/foreach}}
 			    </tbody>
 					
-					
-					
-					
-					
 				  <!-- Affichage des elements -->
 				  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap name="foreach_element"}}
 				       {{if !$smarty.foreach.foreach_element.first}}
@@ -417,8 +501,6 @@ showBefore = function(){
 							{{/foreach}}
 						{{/foreach}}
 					 </tbody>
-					 
-					 
 				</table>
 	    </td>
 	  </tr>

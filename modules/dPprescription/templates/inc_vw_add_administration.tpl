@@ -8,6 +8,18 @@ function submitAdmission(){
   submitFormAjax(oFormAdministration, 'systemMsg');
 }
 
+function submitPlanification(){
+  var oForm = document.addPlanification;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+    {{if $mode_plan}}
+      window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
+    {{else}} 
+      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}');
+    {{/if}}
+    window.close();
+  } } ); 
+}
+
 // Fonction appelée en callback du formulaire d'administration
 function submitTransmission(administration_id){
   oFormTransmission   = document.editTrans;
@@ -18,7 +30,7 @@ function submitTransmission(administration_id){
       {{if $mode_plan}}
         window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
       {{else}}
-        window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+        window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}');
       {{/if}}
       window.opener.loadSuivi('{{$sejour->_id}}');
       window.close();
@@ -27,7 +39,7 @@ function submitTransmission(administration_id){
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
     {{else}}
-      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}');
     {{/if}}
     window.close();
   }
@@ -40,7 +52,7 @@ function cancelAdministration(administration_id){
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
     {{else}} 
-      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}');
     {{/if}}
     window.close();
   } } );
@@ -67,7 +79,18 @@ function checkTransmission(quantite_prevue, quantite_saisie){
   {{/if}})
 </h2>
 
-{{if $administrations}}
+
+<form name="delAdministration" method="post" action="?">
+  <input type="hidden" name="dosql" value="do_administration_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="administration_id" value="" />
+</form>
+
+<hr class="control_tabs" />
+
+{{if $mode_dossier == "administration" || $mode_plan}}
+{{if $administrations || $mode_plan}}
 	<table class="form">
 	  <tr>
 	    <th class="title">Liste des soins</th>
@@ -94,13 +117,6 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	</table>
 {{/if}}
 
-
-<form name="delAdministration" method="post" action="?">
-  <input type="hidden" name="dosql" value="do_administration_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="del" value="1" />
-  <input type="hidden" name="administration_id" value="" />
-</form>
 
 <form name="addAdministration" method="post" action="?" onsubmit="return checkTransmission('{{$prise->quantite}}', this.quantite.value)">
   <input type="hidden" name="dosql" value="do_administration_aed" />
@@ -179,3 +195,76 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	  </td>
 	</tr>
 </table>
+{{/if}}
+
+{{if $mode_dossier == "planification"}}
+	{{if $planification->_id}}
+		<table class="form">
+		  <tr>
+		    <th class="title">Planification</th>
+		  </tr>
+		  {{assign var=log value=$planification->_ref_log}}
+		  <tr>
+		    <td>
+		      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$planification->_id}}')"></button>
+		      {{$log->_ref_object->quantite}} 
+		      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		        {{$planification->_ref_object->_ref_produit->libelle_unite_presentation}} 
+		      {{else}}
+		        {{$line->_unite_prise}}
+		      {{/if}}
+		      le {{$log->_ref_object->dateTime|date_format:"%d/%m/%Y à %Hh%M"}}</li>
+		    </td>
+		  </tr>
+		</table>
+	{{/if}}
+  {{if !$planification->_id && !$prise->quantite}}
+	<form name="addPlanification" method="post" action="?">
+	  <input type="hidden" name="dosql" value="do_administration_aed" />
+	  <input type="hidden" name="m" value="dPprescription" />
+	  <input type="hidden" name="del" value="0" />
+	  <input type="hidden" name="administration_id" value="" />
+	  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
+	  <input type="hidden" name="object_id" value="{{$line->_id}}" />
+	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+	  <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
+	  <input type="hidden" name="dateTime" value="{{$dateTime}}" />
+	  <input type="hidden" name="prise_id" value="{{$prise_id}}" />
+	  <input type="hidden" name="planification" value="1" />
+		<table class="form">
+		  <tr>
+		    <th class="title" colspan="2">Planification d'administration de {{$line->_view}}</th>
+		  </tr>
+		  <tr>
+		    <td>
+		      {{mb_label object=$prise field=quantite}}
+		      {{mb_field object=$prise field=quantite min=1 increment=1 form=addPlanification}}
+		      
+		      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		        {{$line->_ref_produit->libelle_unite_presentation}}
+		      {{else}}
+		        {{$line->_unite_prise}}
+		      {{/if}} 
+		      
+		      {{if $mode_plan}}
+		      à
+		      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$date}} '+this.value);">
+		        <option value="">&mdash; Heure</option>
+		        {{foreach from=$hours item=_hour}}
+		        <option value="{{if $_hour == '24'}}23:59:00{{else}}{{$_hour}}:00:00{{/if}}">{{$_hour}}h</option>
+		        {{/foreach}}
+		      </select>
+		      {{else}}
+		      à {{$dateTime|date_format:"%Hh%M"}}
+		      {{/if}}
+		    </td>
+		  </tr>
+		  <tr>
+		    <td colspan="2" style="text-align: center;">
+		      <button type="button" class="submit" onclick="submitPlanification();">Planifier</button>
+		    </td>
+		  </tr>
+		</table>
+	</form>
+	{{/if}}
+{{/if}}

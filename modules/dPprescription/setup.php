@@ -916,7 +916,23 @@ class CSetupdPprescription extends CSetup {
     $this->makeRevision("0.65");
     $this->addPrefQuery("mode_readonly", "0");
 
-	  $this->mod_version = "0.66";
+    $this->makeRevision("0.66");
+    $sql = "ALTER TABLE `prise_posologie` 
+	          CHANGE `unite_tous_les` `unite_tous_les` ENUM ('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an','lundi','mardi',
+																		'mercredi','jeudi','vendredi','samedi','dimanche');";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.67");
+    $sql = "ALTER TABLE `administration` 
+	          ADD `planification` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.68");
+    $sql = "ALTER TABLE `administration` 
+						ADD `original_dateTime` DATETIME;";
+    $this->addQuery($sql);
+   
+    $this->mod_version = "0.69";
   }  
 }
 

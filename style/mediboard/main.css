@@ -3187,7 +3187,7 @@ ul.select-tree .highlight {
 }
 
 .a_administrer {
-background-color: #88f;
+background-color: #bbf;
 }
 
 .administration_partielle {
@@ -3212,6 +3212,10 @@ background-color: #88f;
 
 .transmission_possible {
   text-decoration: underline;
+}
+
+.planification {
+  border: 2px solid #EA0;
 }
 
 .preview {
@@ -3284,4 +3288,8 @@ background-color: #88f;
 }
 .flotr-tab:hover {
   background: #ccc;
+}
+
+table.tbl td.soin-selected div{
+  background: #666;
 }

@@ -20,6 +20,10 @@ class CAdministration extends CMbMetaObject {
   var $commentaire       = null;  // Commentaire sur l'administration
   var $prise_id          = null;
   
+  // Gestion des replanifications
+  var $planification     = null;  // Flag permettant de gerer les plannifications
+  var $original_dateTime = null;  // Champ permettant de stocker la date d'origine de la prise prevue replanifiée
+  
   // Form field
   var $_heure = null;
   
@@ -51,6 +55,8 @@ class CAdministration extends CMbMetaObject {
     $specs["unite_prise"]       = "text";
     $specs["dateTime"]          = "dateTime";
     $specs["commentaire"]       = "text";
+    $specs["planification"]     = "bool default|0";
+    $specs["original_dateTime"] = "dateTime";
     return $specs;
   }
 

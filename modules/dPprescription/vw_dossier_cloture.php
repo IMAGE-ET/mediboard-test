@@ -44,7 +44,9 @@ foreach($prescription->_ref_prescription_lines as $_line_med){
 	$lines_med[$_line_med->_id] = $_line_med;
 	$_line_med->loadRefsAdministrations();
 	foreach($_line_med->_ref_administrations as $_administration_med){
-		$dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
+	  if(!$_administration_med->planification){
+		  $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
+	  }
 	}
 }
 
@@ -55,7 +57,9 @@ foreach($prescription->_ref_prescription_lines_element_by_cat as $chap => $_line
 			$lines_elt[$_line_elt->_id] = $_line_elt;
 		  $_line_elt->loadRefsAdministrations();
 		  foreach($_line_elt->_ref_administrations as $_administration_elt){
-		    $dossier[mbDate($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
+		    if(!$_administration_elt->planification){
+		      $dossier[mbDate($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
+		    }
 		  }
 		}
 	}

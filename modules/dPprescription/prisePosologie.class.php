@@ -40,7 +40,8 @@ class CPrisePosologie extends CMbMetaObject {
   var $_quantite_with_kg     = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du poids
   var $_quantite_with_coef   = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du coef
   var $_unite_sans_kg        = null;  // Unite sans le kg
-
+  var $_quantite_dispensation = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prise_posologie';
@@ -57,7 +58,7 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["nb_fois"]            = "float";
     $specs["unite_fois"]         = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
     $specs["nb_tous_les"]        = "float";
-    $specs["unite_tous_les"]     = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
+    $specs["unite_tous_les"]     = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche default|jour";
     $specs["decalage_prise"]     = "num min|0";
     $specs["unite_prise"]        = "text";
     $specs["decalage_intervention"] = "num";
@@ -114,7 +115,7 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_unite_temps = $this->unite_fois;
     }
     
-    if($this->nb_tous_les && $this->unite_tous_les){
+    if($this->unite_tous_les){
     	$this->_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
     	$this->_short_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
     	if($this->decalage_prise){

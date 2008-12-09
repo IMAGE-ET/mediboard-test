@@ -19,8 +19,8 @@ $list_services = $service->loadGroupList();
 
 $date = mbDate();
 $delivrance = new CProductDelivery();
-$date_min = mbGetValueFromGetOrSession('_date_min', $date.' 00:00:00');
-$date_max = mbGetValueFromGetOrSession('_date_max', $date.' 23:59:59');
+$date_min = mbGetValueFromGetOrSession('_date_min', $date);
+$date_max = mbGetValueFromGetOrSession('_date_max', $date);
 
 mbSetValueToSession('_date_min', $date_min);
 mbSetValueToSession('_date_max', $date_max);

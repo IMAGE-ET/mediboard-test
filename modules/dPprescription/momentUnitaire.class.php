@@ -84,7 +84,11 @@ class CMomentUnitaire extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->libelle;
+    if($this->type_moment == "horaire"){
+      $this->_view = "à $this->libelle";
+    } else {
+      $this->_view = $this->libelle;
+    }
     if($this->heure) {
       $this->_heure = intval(substr($this->heure, 0, 2));
     }

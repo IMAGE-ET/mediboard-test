@@ -421,6 +421,12 @@ $dPconfig["dPprescription"] = array (
         "5" => "08|10|12|14|16",
         "6" => "08|10|12|14|16|18"
       )
+    ),
+    "semaine" => array(
+      "1" => "lundi",
+      "2" => "lundi|mercredi",
+      "3" => "lundi|mercredi|vendredi",
+      "4" => "lundi|mercredi|vendredi|samedi"
     )
   ),
   "CAdministration" => array(

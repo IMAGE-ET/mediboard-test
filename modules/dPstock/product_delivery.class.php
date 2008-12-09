@@ -43,8 +43,8 @@ class CProductDelivery extends CMbObject {
     $specs['quantity']          = 'notNull num';
     $specs['service_id']        = 'notNull ref class|CService';
     $specs['patient_id']        = 'ref class|CPatient';
-    $specs['_date_min']         = 'notNull dateTime';
-    $specs['_date_max']         = 'notNull dateTime moreThan|_date_min';
+    $specs['_date_min']         = 'notNull date';
+    $specs['_date_max']         = 'notNull date moreEquals|_date_min';
     return $specs;
   }
 

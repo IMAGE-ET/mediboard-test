@@ -29,7 +29,7 @@
           <td>{{$curr_plage->date|date_format:$dPconfig.longdate}}</td>
           <td>
             {{$curr_plage->debut|date_format:$dPconfig.time}}
-            &mdash
+            &mdash;
             {{$curr_plage->fin|date_format:$dPconfig.time}}
           </td>
           <td>{{$curr_plage->libelle}}</td>

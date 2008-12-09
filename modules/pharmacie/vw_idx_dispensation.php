@@ -62,8 +62,8 @@ mbTrace($array_last[$today]);
 mbTrace($today);
 mbTrace($array_next[$today]);*/
 
-$date_min = mbGetValueFromGet('_date_min', $day_min.' 00:00:00');
-$date_max = mbGetValueFromGet('_date_max', $day_max.' 23:59:59');
+$date_min = mbGetValueFromGet('_date_min', $day_min);
+$date_max = mbGetValueFromGet('_date_max', $day_max);
 
 $delivrance = new CProductDelivery();
 $delivrance->_date_min = $date_min;
