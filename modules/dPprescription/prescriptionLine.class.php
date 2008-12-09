@@ -675,7 +675,7 @@ class CPrescriptionLine extends CMbObject {
         }
 		  }
 		  // Fois par avec comme unite jour
-		  if(($_prise->nb_fois && $_prise->unite_fois == 'jour') || ($_prise->quantite && !$_prise->moment_unitaire_id && 
+		  if(($_prise->nb_fois && $_prise->unite_fois == 'jour' && !$_prise->unite_tous_les) || ($_prise->quantite && !$_prise->moment_unitaire_id && 
 		      !$_prise->nb_fois && !$_prise->unite_fois && !$_prise->unite_tous_les && !$_prise->nb_tous_les && !$_prise->heure_prise)){
 		    if($_prise->_heures){
 		      foreach($_prise->_heures as $curr_heure){
