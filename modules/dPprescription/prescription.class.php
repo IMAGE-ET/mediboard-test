@@ -1297,7 +1297,7 @@ class CPrescription extends CMbObject {
 							        if(!isset($_line_element->_quantity_by_date[$_type][$_date]['total'])){
 							          $_line_element->_quantity_by_date[$_type][$_date]['total'] = 0;
 									    }
-									    if(isset($quantity_by_hour['quantites'])){
+									    if(isset($_quantity_by_hour['quantites'])){
 								        foreach($_quantity_by_hour['quantites'] as $_hour => $_quantity){
 													$heure_reelle = @$_quantity[0]["heure_reelle"];
 		
