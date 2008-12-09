@@ -647,16 +647,18 @@ class CPrescriptionLine extends CMbObject {
 			}
 		 	// Tous les sans moment unitaire
 		 	if(!$_prise->moment_unitaire_id && $_prise->unite_tous_les == "jour"){
-		 	  $heure = reset($_prise->_heures);
-		 	  $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
-		 	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
-		 	    if(count($heures)){
-		 	      $_heure = substr($heure, 0, 2);
-		        $line_plan_soin[$heures[$_heure]]["total"] += $_prise->quantite;
-		        $line_plan_soin[$heures[$_heure]]["total_disp"] += $_prise->_quantite_dispensation;
-		        $line_plan_soin[$heures[$_heure]][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_heure);
-		 	    }
-			  }
+		 	  if($_prise->_heures){
+			 	  $heure = reset($_prise->_heures);
+			 	  $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
+			 	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+			 	    if(count($heures)){
+			 	      $_heure = substr($heure, 0, 2);
+			        $line_plan_soin[$heures[$_heure]]["total"] += $_prise->quantite;
+			        $line_plan_soin[$heures[$_heure]]["total_disp"] += $_prise->_quantite_dispensation;
+			        $line_plan_soin[$heures[$_heure]][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_heure);
+			 	    }
+				  }
+		 	  }
 		 	}
 		 	// Seulement Tous les avec comme unite les heures
 		  if(!$_prise->moment_unitaire_id && $_prise->nb_tous_les && $_prise->unite_tous_les == "heure"){
