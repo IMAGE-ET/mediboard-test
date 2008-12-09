@@ -1229,29 +1229,32 @@ class CPrescription extends CMbObject {
 				        if(!isset($_line_med->_quantity_by_date[$_type][$_date]['total'])){
 				          $_line_med->_quantity_by_date[$_type][$_date]['total'] = 0;
 						    }
-				        foreach($quantity_by_hour['quantites'] as $_hour => $quantity){
-				          $heure_reelle = @$quantity[0]["heure_reelle"];
-
-				          // Recherche d'une planification correspondant à cette prise prevue
-                  $planification = new CAdministration();
-                  if(is_numeric($_type)){
-	                  $planification->prise_id = $_type;
-	                } else {
-	                  $planification->unite_prise = $_type;
-	                }
-	                $planification->original_dateTime = "$_date $heure_reelle:00:00";
-	                $planification->object_id = $_line_med->_id;
-	                $planification->object_class = "CPrescriptionLineMedicament";
-	                $count_planifications = $planification->countMatchingList();
-	                if($count_planifications){
-	                  $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-	                  $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total_disp'] = 0;
-	                }
-	                if($mode_semainier){
-						        $_line_med->_quantity_by_date[$_type][$_date]['total'] += $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
-						        $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-	                }
-				        }
+						    if(isset($quantity_by_hour['quantites'])){
+					        foreach($quantity_by_hour['quantites'] as $_hour => $quantity){
+					          $heure_reelle = @$quantity[0]["heure_reelle"];
+	
+					          // Recherche d'une planification correspondant à cette prise prevue
+	                  $planification = new CAdministration();
+	                  if(is_numeric($_type)){
+		                  $planification->prise_id = $_type;
+		                } else {
+		                  $planification->unite_prise = $_type;
+		                }
+		                $planification->original_dateTime = "$_date $heure_reelle:00:00";
+		                $planification->object_id = $_line_med->_id;
+		                $planification->object_class = "CPrescriptionLineMedicament";
+		                $count_planifications = $planification->countMatchingList();
+		                if($count_planifications){
+		                  $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
+		                  $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total_disp'] = 0;
+		                }
+		                if($mode_semainier){
+							        $_line_med->_quantity_by_date[$_type][$_date]['total'] += $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
+							        $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
+		                }
+					        }
+						    }
+				        
 				      }
 				    }
 				  }
@@ -1294,29 +1297,31 @@ class CPrescription extends CMbObject {
 							        if(!isset($_line_element->_quantity_by_date[$_type][$_date]['total'])){
 							          $_line_element->_quantity_by_date[$_type][$_date]['total'] = 0;
 									    }
-							        foreach($_quantity_by_hour['quantites'] as $_hour => $_quantity){
-												$heure_reelle = @$_quantity[0]["heure_reelle"];
-	
-			                  // Recherche d'une planification correspondant à cette prise prevue
-			                  $planification = new CAdministration();
-			                  if(is_numeric($_type)){
-				                  $planification->prise_id = $_type;
-				                } else {
-				                  $planification->unite_prise = $_type;
-				                }
-				                $planification->original_dateTime = "$_date $heure_reelle:00:00";
-				                $planification->object_id = $_line_element->_id;
-				                $planification->object_class = "CPrescriptionLineElement";
-				                $count_planifications = $planification->countMatchingList();
-				                
-				                if($count_planifications){
-				                  $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-				                }
-							        	if($mode_semainier){
-									        $_line_element->_quantity_by_date[$_type][$_date]['total'] += $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
-									        $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-				                }
-							        }
+									    if(isset($quantity_by_hour['quantites'])){
+								        foreach($_quantity_by_hour['quantites'] as $_hour => $_quantity){
+													$heure_reelle = @$_quantity[0]["heure_reelle"];
+		
+				                  // Recherche d'une planification correspondant à cette prise prevue
+				                  $planification = new CAdministration();
+				                  if(is_numeric($_type)){
+					                  $planification->prise_id = $_type;
+					                } else {
+					                  $planification->unite_prise = $_type;
+					                }
+					                $planification->original_dateTime = "$_date $heure_reelle:00:00";
+					                $planification->object_id = $_line_element->_id;
+					                $planification->object_class = "CPrescriptionLineElement";
+					                $count_planifications = $planification->countMatchingList();
+					                
+					                if($count_planifications){
+					                  $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
+					                }
+								        	if($mode_semainier){
+										        $_line_element->_quantity_by_date[$_type][$_date]['total'] += $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
+										        $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
+					                }
+								        }
+									    }
 							      }
 							    }
 							  }

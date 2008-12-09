@@ -27,6 +27,13 @@ addPlanification = function(administrateur_id, date, time, unite_prise, object_i
   quantite = element[5];
   planification_id = element[6];
 
+	// Hack pour corriger le probleme des planifications sur aucune prise prevue
+	if(element[2] == 'aucune' && element[3] == 'prise'){
+	  original_date = element[4]+" "+element[5]+":00:00";
+	  quantite = element[6];
+    planification_id = element[7];
+	}
+
 	var oForm = document.addPlanif;
 	  
   $V(oForm.administrateur_id, administrateur_id);

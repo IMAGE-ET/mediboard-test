@@ -147,7 +147,7 @@
 			    {{assign var=quantite_depart value="-"}}
 			    {{assign var=heure_reelle value=""}}
 			    {{if (($line->_debut_reel <= $_date_hour && $line->_fin_reelle > $_date_hour) || (!$line->_fin_reelle && $line_class == "CPrescriptionLineMedicament")) 
-			         && (@array_key_exists($_hour, $prise_line.quantites) || $line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee)}}
+			         && (@array_key_exists($_hour, $prise_line.quantites) || @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee)}}
 			          
 			      {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
 			        {{assign var=quantite value=$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
@@ -165,9 +165,8 @@
 				  {{/if}}
 				  
 				  <script type="text/javascript">
-
-				  
-				  {{if $mode_dossier == "planification" && !$quantite}}
+ 
+				  {{if $mode_dossier == "planification" && ($quantite == "0" || $quantite == '-')}}
 		        Droppables.add("drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}", {
 		           accept: "{{$line_id}}_{{$unite_prise|replace:' ':'_'}}",
 		           onDrop: function(element) {
@@ -191,7 +190,7 @@
 			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				    {{/if}}
 				    class="{{$line_id}}_{{$unite_prise|replace:' ':'_'}}
-				    {{if $quantite && $mode_dossier == "planification" && $prise_line.quantites.$_hour|@count < 4}}
+				    {{if $quantite && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
 				      draggable
 				    {{/if}}  
 				      tooltip-trigger administration
@@ -236,7 +235,7 @@
 					</div>
 			    <script type="text/javascript">
 			      // $prise_line.quantites.$_hour|@count < 4 => pour empecher de deplacer une case ou il y a plusieurs prises
-            {{if $quantite && $mode_dossier == "planification" && $prise_line.quantites.$_hour|@count < 4}}
+            {{if $quantite && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
 				      drag = new Draggable("drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
 				    {{/if}}
 				  </script>
