@@ -79,6 +79,10 @@ class CMbObject {
     return $this->CMbObject();
   }
   
+  function __toString() {
+  	return $this->_view;
+  }
+  
   function CMbObject() {    
     static $spec          = null;
     static $class         = null;
