@@ -102,9 +102,11 @@ class CPrisePosologie extends CMbMetaObject {
    }
    
     if($this->nb_fois && $this->nb_fois <= 6 && $this->unite_fois == "jour"){  
-      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois"));
-      foreach($this->_heures as &$_heure){
-      	$_heure .= ":00:00";
+      if(CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois")){
+	      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois"));
+	      foreach($this->_heures as &$_heure){
+	      	$_heure .= ":00:00";
+	      }
       }
     }
 
@@ -124,7 +126,9 @@ class CPrisePosologie extends CMbMetaObject {
     	}
     	$this->_type = "tous_les";
     	$this->_unite_temps = $this->unite_tous_les;
-    	$this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
+    	if(CAppUI::conf("dPprescription CPrisePosologie heures tous_les")){
+    	  $this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
+    	}
     }   
     
     if($this->heure_prise){
@@ -133,9 +137,11 @@ class CPrisePosologie extends CMbMetaObject {
     }
     
     if($this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
-      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1"));
-      foreach($this->_heures as &$_heure){
-      	$_heure .= ":00:00";
+      if(CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1")){
+	      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1"));
+	      foreach($this->_heures as &$_heure){
+	      	$_heure .= ":00:00";
+	      }
       }
     }    
   }

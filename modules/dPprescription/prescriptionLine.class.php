@@ -694,7 +694,7 @@ class CPrescriptionLine extends CMbObject {
 		    }
 		  }
 		  // Fois par avec comme unite semaine
-      if($_prise->nb_fois && $_prise->unite_fois == 'semaine'){
+      if($_prise->nb_fois && $_prise->unite_fois == 'semaine' && CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}")){
         $list_jours = explode('|',CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}"));
         // Parcours des jours concernés
         foreach($list_jours as $_jour){
@@ -723,7 +723,7 @@ class CPrescriptionLine extends CMbObject {
             $heure = substr($_prise->_ref_moment->heure,0,2);
           } else {
             // On stocke l'heure de prise correspondant à 1 fois par jour
-            $heure = CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1");
+            $heure = ($conf = CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1")) ? $conf : "10";
           }
           $line_plan_soin[$heures[$heure]]["total"] += $_prise->quantite;
           $line_plan_soin[$heures[$heure]]["total_disp"] += $_prise->_quantite_dispensation;
