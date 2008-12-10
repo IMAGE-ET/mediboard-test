@@ -13,8 +13,9 @@ preselectType = function(contexte, oForm){
 
 Main.add(function () {
   // Preparation du formulaire de creation de protocole
-  var form = getForm("addProtocolePresc");
+  var form = document.forms.addProtocolePresc;
   if(form){
+    prepareForm(form);
     preselectType("CSejour", form);
   }
 });

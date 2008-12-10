@@ -167,20 +167,23 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  }
 	  }
 	  
+	  $prescription_traitement = new CPrescription();
 	  // Chargement de la prescription de traitement
-	  $object =& $prescription->_ref_object;
-	  $object->loadRefPrescriptionTraitement();
-	  $prescription_traitement =& $object->_ref_prescription_traitement;
-	  if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
-			 if($prescription_traitement->_id){
-				$prescription_traitement->loadRefsLinesMed();
-				foreach($prescription_traitement->_ref_prescription_lines as &$line){
-					$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
-				  $line->loadRefsPrises();
-			  }
-			}
-	  }
-	  
+    if($prescription->object_id){
+		  $object =& $prescription->_ref_object;
+		  $object->loadRefPrescriptionTraitement();
+		  $prescription_traitement =& $object->_ref_prescription_traitement;
+		  if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
+				 if($prescription_traitement->_id){
+					$prescription_traitement->loadRefsLinesMed();
+					foreach($prescription_traitement->_ref_prescription_lines as &$line){
+						$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+					  $line->loadRefsPrises();
+				  }
+				}
+		  }
+    }
+    
 	  // Pour une prescription non protocole
 	  if ($prescription->object_id) {
 			// Chargement du patient
@@ -199,61 +202,82 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  
 		  // Calcul des alertes de la prescription
 		  $allergies    = new CBcbControleAllergie();
-		  $allergies->setPatient($prescription->_ref_object->_ref_patient);
-		  $interactions = new CBcbControleInteraction();
-		  $IPC          = new CBcbControleIPC();
+		  $allergies->setPatient($patient);
 		  $profil       = new CBcbControleProfil();
-		  $profil->setPatient($prescription->_ref_object->_ref_patient);
-		  
-		  $lines = array();
-		  $lines["prescription"] = $prescription->_ref_prescription_lines;
-		  if($prescription_traitement->_id){
-		    $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
+		  $profil->setPatient($patient);
+	  }
+
+	  $interactions = new CBcbControleInteraction();
+		$IPC          = new CBcbControleIPC();
+	  
+	  $lines = array();
+	  $lines["prescription"] = $prescription->_ref_prescription_lines;
+	  if($prescription_traitement->_id){
+	    $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
+	  }
+	  foreach($prescription->_ref_perfusions as $_perfusion){
+	    foreach($_perfusion->_ref_lines as $_perf_line){
+	      if($prescription->object_id){
+	        $allergies->addProduit($_perf_line->code_cip);
+	        $profil->addProduit($_perf_line->code_cip);
+	      }			    
+		    $interactions->addProduit($_perf_line->code_cip);
+		    $IPC->addProduit($_perf_line->code_cip);
+	    }
+	  }
+	  foreach($lines as $type => $type_line){
+		  foreach($type_line as &$line) {
+		    if($prescription->object_id){
+		      $allergies->addProduit($line->code_cip);
+		      $profil->addProduit($line->code_cip);
+		    }			    
+		    $interactions->addProduit($line->code_cip);
+		    $IPC->addProduit($line->code_cip);
 		  }
-		  foreach($prescription->_ref_perfusions as $_perfusion){
-		    foreach($_perfusion->_ref_lines as $_perf_line){
-		      $allergies->addProduit($_perf_line->code_cip);
-			    $interactions->addProduit($_perf_line->code_cip);
-			    $IPC->addProduit($_perf_line->code_cip);
-			    $profil->addProduit($_perf_line->code_cip);
+	  }
+	  if($prescription->object_id){
+	    $alertesAllergies    = $allergies->getAllergies();
+	    $alertesProfil       = $profil->getProfil();
+	  }		  
+	  $alertesInteractions = $interactions->getInteractions();
+	  $alertesIPC          = $IPC->getIPC();
+	  
+	  if(!$prescription->object_id){
+	    $prescription->_alertes["allergie"] = array();
+	    $prescription->_alertes["profil"] = array(); 
+	  }
+	  
+	  $prescription->_scores["hors_livret"] = 0;
+	  foreach($lines as $type_line){
+	    foreach($type_line as &$line) {
+	      if($prescription->object_id){
+	        $prescription->checkAllergies($alertesAllergies, $line->code_cip);
+	        $prescription->checkProfil($alertesProfil, $line->code_cip);
+	      }		      
+	      $prescription->checkIPC($alertesIPC, $line->code_cip);
+	      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
+
+	      if(!$line->_ref_produit->inLivret){
+	        $prescription->_scores["hors_livret"]++;
+	      }
+	    }
+	  }
+	  foreach($prescription->_ref_perfusions as $_perfusion){
+	  	foreach($_perfusion->_ref_lines as $_perf_line){
+	  	  if($prescription->object_id){
+	  	    $prescription->checkAllergies($alertesAllergies, $_perf_line->code_cip);
+	  	    $prescription->checkProfil($alertesProfil, $_perf_line->code_cip);
+	  	  }			    
+		    $prescription->checkIPC($alertesIPC, $_perf_line->code_cip);
+		    $prescription->checkInteractions($alertesInteractions, $_perf_line->code_cip);
+
+		    if(!$_perf_line->_ref_produit->inLivret){
+		      $prescription->_scores["hors_livret"]++;
 		    }
 		  }
-		  foreach($lines as $type => $type_line){
-			  foreach($type_line as &$line) {
-			    $allergies->addProduit($line->code_cip);
-			    $interactions->addProduit($line->code_cip);
-			    $IPC->addProduit($line->code_cip);
-			    $profil->addProduit($line->code_cip);
-			  }
-		  }
-		  $alertesAllergies    = $allergies->getAllergies();
-		  $alertesInteractions = $interactions->getInteractions();
-		  $alertesIPC          = $IPC->getIPC();
-		  $alertesProfil       = $profil->getProfil();
+	  }
 		  
-		  $prescription->_scores["hors_livret"] = 0;
-		  foreach($lines as $type_line){
-		    foreach($type_line as &$line) {
-		      $prescription->checkAllergies($alertesAllergies, $line->code_cip);
-		      $prescription->checkIPC($alertesIPC, $line->code_cip);
-		      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
-		      $prescription->checkProfil($alertesProfil, $line->code_cip);
-		      if(!$line->_ref_produit->inLivret){
-		        $prescription->_scores["hors_livret"]++;
-		      }
-		    }
-		  }
-		  foreach($prescription->_ref_perfusions as $_perfusion){
-		  	foreach($_perfusion->_ref_lines as $_perf_line){
-		  	  $prescription->checkAllergies($alertesAllergies, $_perf_line->code_cip);
-			    $prescription->checkIPC($alertesIPC, $_perf_line->code_cip);
-			    $prescription->checkInteractions($alertesInteractions, $_perf_line->code_cip);
-			    $prescription->checkProfil($alertesProfil, $_perf_line->code_cip);
-			    if(!$_perf_line->_ref_produit->inLivret){
-			      $prescription->_scores["hors_livret"]++;
-			    }
-			  }
-		  }
+		if($prescription->object_id){
 		  $score_prescription = 0;
 		  foreach($prescription->_scores as $type_score => $_score){
 		    // Si _score est un array (interaction ou profil)
@@ -282,7 +306,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		      $prescription->_dates_dispo[$_operation->_id] = $_operation->_datetime;
 		    }
 		  }
-	  }
+		}
 	}
 }
 	

@@ -1,4 +1,4 @@
-{{if !$line->_protocole}}
+
 {{assign var="color" value=#ccc}}
 {{assign var=code_cip value=$line->code_cip}}
 
@@ -35,4 +35,3 @@
 	  {{/if}}
 	{{/foreach}}
 </div>
-{{/if}}

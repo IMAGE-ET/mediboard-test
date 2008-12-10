@@ -303,17 +303,17 @@ submitProtocole = function(){
 			  {{if $prescription->type != "sortie"}}
 			  <option value="printPrescription">Prescription</option>
 			  {{/if}}
-		    {{if !$mode_protocole}}
-			     {{if $prescription->type != "externe"}}
-			       <option value="printOrdonnance">Ordonnance</option>
-				   {{/if}}				   
+			   {{if ($prescription->type != "externe") && $prescription->object_id}}
+			     <option value="printOrdonnance">Ordonnance</option>
+				 {{/if}}				   
 				   </optgroup>
 				   <optgroup label="Afficher">
 					   <option value="viewAlertes">Alertes</option>
+						 {{if $prescription->object_id}}
 						 <option value="viewHistorique">Historique</option>
-					   <option value="viewSubstitutions">Substitutions</option>
-				   </optgroup>
-         {{/if}}      
+						 <option value="viewSubstitutions">Substitutions</option>
+					   {{/if}}
+				   </optgroup> 
         </select>
 
      <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');">Mode grille</button>
