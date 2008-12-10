@@ -79,7 +79,7 @@ Main.add(function () {
 		{{/if}}
   
     <!-- Cas des tous les -->
-    {{if $prise->unite_tous_les}}
+    {{if $prise->unite_tous_les && !$prise->unite_fois}}
       tous les
 			{{mb_value object=$prise field=nb_tous_les size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}				   
 			{{mb_value object=$prise field=unite_tous_les onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
