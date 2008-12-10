@@ -177,6 +177,16 @@ Main.add( function(){
 		          <th class="title" colspan="2">{{$by_hour.line->_view}}</th>
 		        </tr>
 		        {{/if}}
+		        {{assign var=planification value=$by_hour.prise}}
+		        {{if $planification->quantite}}
+		        <tr>
+		          <td>
+		            <div class="little-info">
+		              Il est impossible de planifier sur cette case car elle possède déjà une prise prévue.
+		            </div>
+		          </td>
+		        </tr>
+		        {{else}}
 		        <tr>
 		          <td id="adm_{{$key}}">
 		            {{if $by_hour.line->_class_name == "CPrescriptionLineMedicament"}}
@@ -204,6 +214,7 @@ Main.add( function(){
 	              </form>
 		          </td>
 		        </tr>
+		        {{/if}}
 		      {{/foreach}}
 		    {{/foreach}}
 		  {{/foreach}}
