@@ -27,6 +27,7 @@ Main.add(function () {
       <th>Intitulé</th>
       <th>Caracteristiques</th>
       <th>Lits disponibles</th>
+      <th>{{mb_title class=CChambre field=annule}}</th>
     </tr> 
 	{{foreach from=$services item=curr_service}}
 	<tr id="service{{$curr_service->_id}}-trigger">
@@ -43,6 +44,11 @@ Main.add(function () {
             {{$curr_lit->nom}}
           </a>
         {{/foreach}}
+        </td>
+        <td>
+          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->_id}}&amp;lit_id=0">
+            {{mb_value object=$curr_chambre field=annule}}
+          </a>
         </td>
       </tr>
       {{/foreach}}
@@ -90,6 +96,10 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$chambreSel field="caracteristiques"}}</th>
       <td>{{mb_field object=$chambreSel field="caracteristiques"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$chambreSel field="annule"}}</th>
+      <td>{{mb_field object=$chambreSel field="annule"}}</td>
     </tr>
     <tr>
       <td class="button" colspan="2">

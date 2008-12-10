@@ -20,8 +20,9 @@ class CChambre extends CMbObject {
   var $service_id = null;
 
   // DB Fields
-  var $nom = null;
+  var $nom              = null;
   var $caracteristiques = null; // côté rue, fenêtre, lit accompagnant, ...
+  var $annule           = null;
 
   // Form Fields
   var $_nb_lits_dispo        = null;
@@ -35,7 +36,7 @@ class CChambre extends CMbObject {
 
   // Object references
   var $_ref_service = null;
-  var $_ref_lits = null;
+  var $_ref_lits    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -55,6 +56,7 @@ class CChambre extends CMbObject {
     $specs["service_id"]       = "notNull ref class|CService";
     $specs["nom"]              = "notNull str";
     $specs["caracteristiques"] = "text confidential";
+    $specs["annule"]           = "bool";
     return $specs;
   }
   

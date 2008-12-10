@@ -49,8 +49,14 @@
       {{if $curr_chambre->_conflits_pathologies}}
       <img src="images/icons/path.png" alt="warning" title="{{$curr_chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
       {{/if}}
+      
+      {{if $curr_chambre->annule == 1}}
+      <img src="images/icons/annule.png" alt="warning" title="Chambre plus utilisée" />
+      {{/if}}
 
-      <strong><a name="chambre{{$curr_chambre->_id}}">{{$curr_chambre->nom}}</a></strong>
+      <a name="chambre{{$curr_chambre->_id}}" style="font-weight: bold;">
+        {{$curr_chambre->nom}}
+      </a>
     </th>
   </tr>
   {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}

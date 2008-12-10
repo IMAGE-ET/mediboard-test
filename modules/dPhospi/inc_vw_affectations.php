@@ -130,7 +130,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "") {
       }
     }
     $chambre->checkChambre();
-    $service->_nb_lits_dispo += $chambre->_nb_lits_dispo;
+    $service->_nb_lits_dispo += ($chambre->annule == 0 ? $chambre->_nb_lits_dispo : 0);
   }
 }
 

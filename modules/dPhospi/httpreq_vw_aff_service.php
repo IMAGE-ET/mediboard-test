@@ -14,6 +14,7 @@ CAppUI::requireModuleFile($m, "inc_vw_affectations");
 $can->needsRead();
 
 $date = mbGetValueFromGetOrSession("date", mbDate()); 
+$afficher_chambres_cachees = mbGetValueFromGetOrSession("afficher_chambres_cachees");
 $mode = mbGetValueFromGetOrSession("mode", 0);
 
 // Chargement du service
@@ -28,6 +29,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("date"        , $date );
 $smarty->assign("demain"      , mbDate("+ 1 day", $date));
 $smarty->assign("curr_service", $service);
+$smarty->assign("afficher_chambres_cachees", $afficher_chambres_cachees);
 
 $smarty->display("inc_affectations_services.tpl");
 

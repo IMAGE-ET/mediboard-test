@@ -21,6 +21,7 @@ $heureLimit = "16:00:00";
 $date      = mbGetValueFromGetOrSession("date", mbDate()); 
 $mode      = mbGetValueFromGetOrSession("mode", 0); 
 $filterAdm = mbGetValueFromGetOrSession("filterAdm", "tout");
+$afficher_chambres_cachees = mbGetValueFromGetOrSession("afficher_chambres_cachees");
 $triAdm    = mbGetValueFromGetOrSession("triAdm", "praticien");
 
 // Récupération du service à ajouter/éditer
@@ -56,24 +57,13 @@ $where[] = "affectation.affectation_id IS NULL";
 
 $leftjoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 
-$select = "count(sejour.sejour_id) AS total";  
-$table = "sejour";
-
-$sql = new CRequest();
-$sql->addTable($table);
-$sql->addSelect($select);
-$sql->addWhere($where);
-$sql->addLJoin($leftjoin);
-
-$alerte = $ds->loadResult($sql->getRequest());
+$sejour = new CSejour();
+$alerte = $sejour->countList($where, null, null, null, $leftjoin);
 
 // Liste des patients à placer
-
 $groupSejourNonAffectes = array();
 
 if ($can->edit) {
-
-		
   switch ($triAdm) {
     case "date_entree" :
       $orderTri = "entree_prevue ASC";
@@ -82,7 +72,6 @@ if ($can->edit) {
       $orderTri = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
       break;
   }
-
 	
   switch ($filterAdm) {
     case "ambu" :
@@ -167,5 +156,7 @@ $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("services"              , $services);
 $smarty->assign("alerte"                , $alerte);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
+$smarty->assign("afficher_chambres_cachees", $afficher_chambres_cachees);
+
 $smarty->display("vw_affectations.tpl");
 ?>

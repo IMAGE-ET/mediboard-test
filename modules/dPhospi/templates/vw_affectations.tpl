@@ -39,13 +39,19 @@ Main.add(function () {
   </tr>
 
   <tr>
-    <td>
-      <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
-      <a href="#" onclick="showRapport('{{$date}}')" class="buttonprint">Rapport</a>
+    <td style="width: 0.1%;">
+      <button type="button" onclick="showLegend()" class="search">Légende</button>
+      <button type="button" onclick="showRapport('{{$date}}')" class="print">Rapport</button>
     </td>
     
     <td>
       <form name="chgAff" action="?m={{$m}}" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
+      
+      <input type="hidden" name="afficher_chambres_cachees" value="{{$afficher_chambres_cachees}}" />
+      <label><input type="checkbox" onclick="$V(this.form.afficher_chambres_cachees, (this.checked ? 1 : 0)); this.form.submit();" {{if $afficher_chambres_cachees == 1}}checked="checked"{{/if}} /> Afficher les chambres cachées</label>
+      <br />
       {{foreach from=$services item=curr_service}}
         <input
           type="checkbox"
@@ -81,34 +87,31 @@ Main.add(function () {
       <div id="calendar-container"></div>
       {{if $can->edit}}
       
-      <table class="form">
-        <tr>
-          <td class="button">
-            <form name="chgFilter" action="?m={{$m}}" method="get">
-              <input type="hidden" name="m" value="{{$m}}" />
-              <label for="filterAdm" title="Admissions à afficher">Admissions</label>
-              <select name="filterAdm" onchange="submit()">
+      <form name="chgFilter" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <table class="form">
+          <tr>
+            <th><label for="filterAdm" title="Admissions à afficher">Admissions</label></th>
+            <td>
+              <select name="filterAdm" onchange="this.form.submit()">
                 <option value="tout" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash; Tout afficher</option>
                 <option value="ambu" {{if $filterAdm == "ambu"}}selected="selected"{{/if}}>Ambulatoires</option>
                 <option value="comp" {{if $filterAdm == "comp"}}selected="selected"{{/if}}>Hospi. complètes</option>
                 <option value="csejour" {{if $filterAdm == "csejour"}}selected="selected"{{/if}}>Courts séjours</option>
               </select>
-            </form>
-          </td>
-        </tr>
-        <tr>
-          <td class="button">
-            <form name="chgFilter_" action="?m={{$m}}" method="get">
-              <input type="hidden" name="m" value="{{$m}}" />
-              <label for="triAdm" title="Admissions à afficher">Trier par</label>
-              <select name="triAdm" onchange="submit()">
+            </td>
+          </tr>
+          <tr>
+            <th><label for="triAdm">Trier par</label></th>
+            <td>
+              <select name="triAdm" onchange="this.form.submit()">
                 <option value="praticien" {{if $triAdm == "praticien"}}selected="selected"{{/if}}>Praticien</option>
                 <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Heure d'entrée</option>
               </select>
-            </form>
-          </td>
-        </tr>
-      </table>
+            </td>
+          </tr>
+        </table>
+      </form>
       
       <form name="addAffectationsejour" action="?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_affectation_aed" />
