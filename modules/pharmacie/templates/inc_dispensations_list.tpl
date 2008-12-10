@@ -1,5 +1,5 @@
 {{if $now < $date_min || $now > $date_max}}
-	<div class="big-info">
+	<div class="little-info">
 	  La date courante n'est pas comprise dans l'intervalle spécifié, les dispensations effectuées ne seront pas affichées.
 	</div>
 {{/if}}
