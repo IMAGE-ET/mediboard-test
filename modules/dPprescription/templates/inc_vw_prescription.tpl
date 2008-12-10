@@ -1,28 +1,21 @@
 <script type="text/javascript">
 
 preselectType = function(contexte, oForm){
-  if(!oForm){
-    var oForm = document.addProtocolePresc; 
-  }
   {{if $contexteType}}
-	  contexteType = {{$contexteType|@json}};
-	  _contexteType = contexteType[contexte];
-	  if(contexte == "CConsultation"){
-	    oForm.type.value = "externe";
-	  } else {
-	    oForm.type.value = "pre_admission";
-	  }
+	  var contexteType = {{$contexteType|@json}};
+	  var types = contexteType[contexte];
+	  $V(oForm.type, types[0]);
 	  $A(oForm.type).each( function(input) {
-	    input.disabled = !_contexteType.include(input.value);
+	    input.disabled = !types.include(input.value);
 	  });
   {{/if}}
 }
 
 Main.add(function () {
   // Preparation du formulaire de creation de protocole
-  if(document.addProtocolePresc){
-    prepareForm(document.addProtocolePresc);  
-    preselectType("CConsultation");
+  var form = getForm("addProtocolePresc");
+  if(form){
+    preselectType("CSejour", form);
   }
 });
 
@@ -54,7 +47,7 @@ Main.add(function () {
 		    </tr>
 		    <tr>
 		      <th>{{mb_label object=$protocole field="object_class"}}</th>
-					<td>{{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}</td>
+					<td>{{mb_field object=$protocole field="object_class" onchange="preselectType(this.value, this.form)"}}</td>
 			  </tr>
 			  <tr>
 			    <th>{{mb_label object=$protocole field="type"}}</th>

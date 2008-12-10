@@ -351,12 +351,10 @@ if($full_mode && $prescription->_id){
 $protocole_line = new CPrescriptionLineMedicament();
 $protocole_line->debut = mbDate();
 
-$contexteType = array();
-$contexteType["CConsultation"][] = "externe";
-$contexteType["CSejour"][] = "pre_admission";
-$contexteType["CSejour"][] = "sortie";
-$contexteType["CSejour"][] = "sejour";
-$contexteType["CSejour"][] = "traitement";
+$contexteType = array(
+  "CConsultation" => array("externe"),
+  "CSejour"       => array("pre_admission", "sortie", "sejour"),
+);
 
 // Liste d'heures et de minutes pour l'arret des lignes
 $hours = range(0,23);
