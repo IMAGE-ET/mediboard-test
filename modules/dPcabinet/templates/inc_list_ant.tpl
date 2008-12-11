@@ -15,6 +15,12 @@ Antecedent = {
     };
     
     confirmDeletion(oForm, oOptions, oOptionsAjax);
+  },
+  
+  cancel: function(oForm, onComplete) {
+    $V(oForm.annule, 1);
+    onSubmitFormAjax(oForm, {onComplete: onComplete});
+    $V(oForm.annule, '');
   }
 }
 
@@ -48,10 +54,19 @@ Traitement = {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
       <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+      <input type="hidden" name="annule" value="" />
       
+      <button class="cancel notext" type="button" onclick="Antecedent.cancel(this.form, DossierMedical.reloadDossierPatient)">
+        {{tr}}cancel{{/tr}}
+      </button>
+      
+      <!-- Seulement si l'utilisateur est le créateur -->
+      {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
       <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
         {{tr}}delete{{/tr}}
-      </button> 
+      </button>
+      {{/if}}
+      
       {{if $_is_anesth && $sejour->_id}}
       <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
         {{tr}}add{{/tr}}

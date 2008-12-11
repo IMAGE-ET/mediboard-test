@@ -46,20 +46,27 @@ copyTraitement = function(traitement_id){
   {{foreach from=$list_antecedent item=curr_antecedent}}
   <li>
     <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
-
-    <input type="hidden" name="m" value="dPpatients" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="dosql" value="do_antecedent_aed" />
-    <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_antecedent_aed" />
+      <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+      <input type="hidden" name="annule" value="" />
+      
+      <button class="cancel notext" type="button" onclick="Antecedent.cancel(this.form, DossierMedical.reloadDossierSejour)">
+        {{tr}}cancel{{/tr}}
+      </button>
+      
+      <!-- Seulement si l'utilisateur est le créateur -->
+      {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
+      <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
+        {{tr}}delete{{/tr}}
+      </button>
+      {{/if}}
+    </form>
     
-    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
-     {{tr}}delete{{/tr}}
-    </button>          
     {{if $curr_antecedent->date}}
       {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
     {{/if}}
-    
-	  </form>
 
 	  <strong>{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</strong> :
 	  <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">

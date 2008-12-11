@@ -116,7 +116,8 @@ class CDossierMedical extends CMbMetaObject {
 
     // Classements des antécédents
     foreach ($antecedents as $_antecedent) {
-      $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
+    	if ($_antecedent->annule == 0)
+        $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
     }
   }
   
@@ -133,6 +134,7 @@ class CDossierMedical extends CMbMetaObject {
   	$where = array();
   	$where["type"] = " != 'alle'";
   	$where["dossier_medical_id"] = " = '$this->_id'";
+  	$where["annule"] = " != '1'";
   	$this->_count_antecedents = $antedecent->countList($where);
   }
   
@@ -182,9 +184,7 @@ class CDossierMedical extends CMbMetaObject {
         $template->addProperty("$champ - Antécédents - $sType", $sAntecedentsParType);
         
         if (count($currTypeAnt)) {
-	        $sAntecedents .="<br />";
-	        $sAntecedents .= $sType;
-	        $sAntecedents .= $sAntecedentsParType;
+	        $sAntecedents .="<br />{$sType}{$sAntecedentsParType}";
         }
       }
       

@@ -16,6 +16,7 @@ class CAntecedent extends CMbObject {
   var $date               = null;
   var $rques              = null;
   var $dossier_medical_id = null;
+  var $annule             = null;
   
   // Form Fields
   var $_search = null;
@@ -44,9 +45,9 @@ class CAntecedent extends CMbObject {
     $specs["date"]  = "date";
     $specs["rques"] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";
+    $specs["annule"] = "bool";
     
     $specs["_search"] = "str";
-    
     return $specs;
   }
   

@@ -29,6 +29,12 @@ $dossier_medical =& $patient->_ref_dossier_medical;
 // Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
 	$dossier_medical->loadRefsAntecedents();
+  foreach ($dossier_medical->_ref_antecedents as $type) {
+    foreach ($type as &$ant) {
+      $ant->loadLogs();
+    }
+  }
+  
 	$dossier_medical->loadRefsTraitements();
 }
 
