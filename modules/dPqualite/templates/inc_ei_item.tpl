@@ -56,7 +56,7 @@
       <form name="chgMode" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <select name="vue_item" onchange="submit()">
-        <option value="">&mdash; {{tr}}_CEiItem_allcategorie{{/tr}}</option>
+        <option value="">&mdash; {{tr}}CEiCategorie.all{{/tr}}</option>
         {{foreach from=$listCategories item=curr_cat}}        
           <option value="{{$curr_cat->ei_categorie_id}}"{{if $curr_cat->ei_categorie_id==$vue_item}} selected="selected"{{/if}}>
             {{$curr_cat->nom}}

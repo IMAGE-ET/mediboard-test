@@ -131,73 +131,67 @@ class CDocGed extends CMbObject {
     }
   }
   
-  function loadProc($user_id = null, $where, $annule = null){
+  static function loadProc($user_id = null, $where, $annule = null){
     if($user_id){
       $where["user_id"] = "= '$user_id'";
     }
     if($annule !== null){
       $where["annule"] = "= '$annule'";
     }
-    $procDemandee = new CDocGed;
-    return $procDemandee->loadList($where);
+    $proc = new CDocGed;
+    return $proc->loadList($where);
   }
   
-  function loadProcDemande($user_id = null,$annule = null){
+  static function loadProcDemande($user_id = null,$annule = null){
     // Chargement des Procédures en cours de demande    
     $where = array();
     $where["etat"] = "= '".self::DEMANDE."'";
-    return $this->loadProc($user_id,$where,$annule);
+    return self::loadProc($user_id,$where,$annule);
   }
   
-  function loadProcTermineOuRefuse($user_id = null,$annule = null){
+  static function loadProcTermineOuRefuse($user_id = null,$annule = null){
     $where = array();           
     $where["etat"] = "= '".self::TERMINE."'";
-    return $this->loadProc($user_id,$where,$annule);
+    return self::loadProc($user_id,$where,$annule);
   }
 
-  function loadProcRedac($user_id = null,$annule = null){
+  static function loadProcRedac($user_id = null,$annule = null){
     // Chargement des Procédures en Attente d'upload d'un fichier (Redaction)
     $where = array();           
     $where["etat"] = "= '".self::REDAC."'";
-    return $this->loadProc($user_id,$where,$annule);
+    return self::loadProc($user_id,$where,$annule);
   }
   
-  function loadProcRedacAndValid($user_id = null,$annule = null){
+  static function loadProcRedacAndValid($user_id = null,$annule = null){
     // Chargement des Procédures en Attente d'upload d'un fichier (Redaction)
     $where = array("(`doc_ged`.etat = '".self::VALID."' || `doc_ged`.etat = '".self::REDAC."')");
-    return $this->loadProc($user_id,$where,$annule);
+    return self::loadProc($user_id,$where,$annule);
   }
   
   function loadLastActif(){
     // Récupération du dernier document Actif
     $this->_lastactif = new CDocGedSuivi;
-    $where = array();
-    $where["doc_ged_id"] = "= '$this->doc_ged_id'";
-    $where["actif"] = "= '1'";
-    $order = "date DESC";
-    $this->_lastactif->loadObject($where, $order);
+    $this->_lastactif->doc_ged_id = $this->doc_ged_id;
+    $this->_lastactif->actif = 1;
+    $this->_lastactif->loadMatchingObject("date DESC");
     $this->_lastactif->loadRefsFwd();
   }
   
   function loadLastEntry(){
     // Récupération derniere entrée
     $this->_lastentry = new CDocGedSuivi;
-    $where = array();
-    $where["doc_ged_id"] = "= '$this->doc_ged_id'";
-    $order = "date DESC";
-    $this->_lastentry->loadObject($where, $order);
+    $this->_lastentry->doc_ged_id = $this->doc_ged_id;
+    $this->_lastentry->loadMatchingObject("date DESC");
     $this->_lastentry->loadRefsFwd();
   }
   
   function loadFirstEntry(){
     // Récupération derniere entrée
     $this->_firstentry = new CDocGedSuivi;
-    $where = array();
-    $where["doc_ged_id"] = "= '$this->doc_ged_id'";
-    $where["user_id"] = "= '$this->user_id'";
-    $where["etat"] = "= '".self::DEMANDE."'";
-    $order = "date DESC";
-    $this->_firstentry->loadObject($where, $order);
+    $this->_firstentry->doc_ged_id = $this->doc_ged_id;
+    $this->_firstentry->user_id = $this->user_id;
+    $this->_firstentry->etat = self::DEMANDE;
+    $this->_firstentry->loadMatchingObject("date DESC");
     $this->_firstentry->loadRefsFwd();
   }
   

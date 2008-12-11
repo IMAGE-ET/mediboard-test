@@ -64,28 +64,28 @@ Main.add(function() {
     <td class="halfPane">
       <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin && $can->edit}}
-        <li onclick="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
         {{elseif $can->admin}}
-        <li onclick="loadListFiches('VALID_FICHE')"><a href="#VALID_FICHE">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} (<span>{{$listCounts.VALID_FICHE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('VALID_FICHE')"><a href="#VALID_FICHE">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} (<span>{{$listCounts.VALID_FICHE}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ATT_VERIF')"><a href="#ATT_VERIF">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} (<span>{{$listCounts.ATT_VERIF}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_VERIF')"><a href="#ATT_VERIF">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} (<span>{{$listCounts.ATT_VERIF}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ATT_CTRL')"><a href="#ATT_CTRL">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} (<span>{{$listCounts.ATT_CTRL}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_CTRL')"><a href="#ATT_CTRL">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} (<span>{{$listCounts.ATT_CTRL}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_allfiches{{/tr}} <span class="user">{{if $selectedUser->_id}}pour {{$selectedUser->_view}}{{/if}}</span> (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}CFicheEi.all{{/tr}} <span class="user">{{if $selectedUser->_id}}pour {{$selectedUser->_view}}{{/if}}</span> (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('ANNULE')"><a href="#ANNULE">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} (<span>{{$listCounts.ANNULE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ANNULE')"><a href="#ANNULE">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} (<span>{{$listCounts.ANNULE}}</span>)</a></li>
         {{/if}}
         <li class="linebreak"></li>
-        <li onclick="loadListFiches('AUTHOR')"><a href="#AUTHOR">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} (<span>{{$listCounts.AUTHOR}}</span>)</a></li>
+        <li onmouseup="loadListFiches('AUTHOR')"><a href="#AUTHOR">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} (<span>{{$listCounts.AUTHOR}}</span>)</a></li>
       </ul>
       <hr class="control_tabs" />
       

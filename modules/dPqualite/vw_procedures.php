@@ -11,12 +11,11 @@ global $can, $g;
 
 $can->needsRead();
 
-$doc_ged_id   = mbGetValueFromGetOrSession("doc_ged_id" , 0);
-$selTheme     = mbGetValueFromGetOrSession("selTheme"   , 0);
-$selChapitre  = mbGetValueFromGetOrSession("selChapitre", 0);
-$sort_by_date = mbGetValueFromGet("sort_by_date");
-
-$fileSel = new CFile;
+$doc_ged_id   = mbGetValueFromGetOrSession("doc_ged_id");
+$theme_id     = mbGetValueFromGetOrSession("theme_id");
+$chapitre_id  = mbGetValueFromGetOrSession("chapitre_id");
+$sort_by      = mbGetValueFromGetOrSession("sort_by", "date");
+$sort_way     = mbGetValueFromGetOrSession("sort_way", "DESC");
 
 $docGed = new CDocGed;
 if(!$docGed->load($doc_ged_id)){
@@ -54,39 +53,18 @@ foreach($listChapitres as &$_chapitre) {
   $_chapitre->loadChapsDeep(); 
 }
 
-// Procédure active et non annule
-$procedures = new CDocGed;
-
-$where = array();
-$where["annule"]   = "= '0'";
-$where[] = "group_id = '$g' OR group_id IS NULL";
-$where["actif"]    = "= '1'";
-if($selTheme){
-  $where["doc_theme_id"] = "= '$selTheme'";
-}
-if($selChapitre){
-  $where["doc_chapitre_id"] = "= '$selChapitre'";
-}
-$ljoin = array();
-$ljoin["doc_ged_suivi"] = "doc_ged.doc_ged_id = doc_ged_suivi.doc_ged_id";
-
-$procedures = $procedures->loadList($where, ($sort_by_date?'doc_ged_suivi.date DESC':null), null, null, $ljoin);
-foreach($procedures as $keyProc=>$currProc){
-  $procedures[$keyProc]->loadRefs();
-  $procedures[$keyProc]->loadLastActif();
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("selTheme"       , $selTheme);
-$smarty->assign("selChapitre"    , $selChapitre);
+$smarty->assign("theme_id"       , $theme_id);
+$smarty->assign("chapitre_id"    , $chapitre_id);
 $smarty->assign("listThemes"     , $listThemes);
 $smarty->assign("listChapitres"  , $listChapitres);
-$smarty->assign("procedures"     , $procedures);
 $smarty->assign("docGed"         , $docGed);
-$smarty->assign("fileSel"        , $fileSel);
-$smarty->assign("sort_by_date"   , $sort_by_date);
+$smarty->assign("fileSel"        , new CFile);
+$smarty->assign("sort_by"        , $sort_by);
+$smarty->assign("sort_way"       , $sort_way);
 
 $smarty->display("vw_procedures.tpl");
+
 ?>

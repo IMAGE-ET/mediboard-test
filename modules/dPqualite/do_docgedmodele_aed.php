@@ -19,9 +19,9 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     global $AppUI;
     $this->CDoObjectAddEdit("CDocGed", "doc_ged_id");
     
-    $this->createMsg = CAppUI::tr("msg-".$this->className."-create_modele");
-    $this->modifyMsg = CAppUI::tr("msg-".$this->className."-modify_modele");
-    $this->deleteMsg = CAppUI::tr("msg-".$this->className."-delete_modele");
+    $this->createMsg = CAppUI::tr("msg-$this->className-create_modele");
+    $this->modifyMsg = CAppUI::tr("msg-$this->className-modify_modele");
+    $this->deleteMsg = CAppUI::tr("msg-$this->className-delete_modele");
   }
   
   function doBind() {
@@ -81,9 +81,9 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
     global $AppUI;
     $this->CDoObjectAddEdit("CDocGedSuivi", "doc_ged_suivi_id");
     
-    $this->createMsg = CAppUI::tr("msg-".$this->className."-create_modele");
-    $this->modifyMsg = CAppUI::tr("msg-".$this->className."-modify_modele");
-    $this->deleteMsg = CAppUI::tr("msg-".$this->className."-delete_modele");
+    $this->createMsg = CAppUI::tr("msg-$this->className-create_modele");
+    $this->modifyMsg = CAppUI::tr("msg-$this->className-modify_modele");
+    $this->deleteMsg = CAppUI::tr("msg-$this->className-delete_modele");
   }
   
   function doBind() {
