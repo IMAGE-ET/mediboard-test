@@ -700,21 +700,21 @@ class COperation extends CCodable {
     $template->addProperty("Opération - CCAM - descriptions"  , implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong")));
     $template->addProperty("Opération - salle"                , @$this->_ref_plageop->_ref_salle->nom);
     $template->addProperty("Opération - côté"                 , $this->cote);
-    $template->addProperty("Opération - date"                 , mbTransformTime(null, $this->_datetime, $dateFormat));
-    $template->addProperty("Opération - heure"                , mbTransformTime(null, $this->time_operation, $timeFormat));
-    $template->addProperty("Opération - durée"                , mbTransformTime(null, $this->temp_operation, $timeFormat));
+    $template->addDateProperty("Opération - date"             , $this->_datetime);
+    $template->addTimeProperty("Opération - heure"            , $this->time_operation);
+    $template->addTimeProperty("Opération - durée"            , $this->temp_operation);
     if($this->debut_op && $this->fin_op) {
       $duree_relle = mbTimeRelative($this->debut_op, $this->fin_op, '%02dh%02d');
     } else {
       $duree_relle = "?";
     }
     $template->addProperty("Opération - durée réelle"         , $duree_relle);
-    $template->addProperty("Opération - entrée bloc"          , mbTransformTime(null, $this->entree_salle, $timeFormat));
-    $template->addProperty("Opération - pose garrot"          , mbTransformTime(null, $this->pose_garrot, $timeFormat));
-    $template->addProperty("Opération - début op"             , mbTransformTime(null, $this->debut_op, $timeFormat));
-    $template->addProperty("Opération - fin op"               , mbTransformTime(null, $this->fin_op, $timeFormat));
-    $template->addProperty("Opération - retrait garrot"       , mbTransformTime(null, $this->retrait_garrot, $timeFormat));
-    $template->addProperty("Opération - sortie bloc"          , mbTransformTime(null, $this->sortie_salle, $timeFormat));
+    $template->addTimeProperty("Opération - entrée bloc"      , $this->entree_salle);
+    $template->addTimeProperty("Opération - pose garrot"      , $this->pose_garrot);
+    $template->addTimeProperty("Opération - début op"         , $this->debut_op);
+    $template->addTimeProperty("Opération - fin op"           , $this->fin_op);
+    $template->addTimeProperty("Opération - retrait garrot"   , $this->retrait_garrot);
+    $template->addTimeProperty("Opération - sortie bloc"      , $this->sortie_salle);
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , $this->examen);
     $template->addProperty("Opération - matériel"             , $this->materiel);

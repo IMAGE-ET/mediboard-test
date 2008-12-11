@@ -31,8 +31,8 @@ class CTemplateManager {
     global $AppUI;
     $user = new CMediusers();
     $user->load($AppUI->user_id);
-    $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, "%d/%m/%Y"));
-    $this->addProperty("Général - heure courante", mbTransformTime(null, null, "%Hh%M"));
+    $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, CAppUI::conf("date")));
+    $this->addProperty("Général - heure courante", mbTransformTime(null, null, CAppUI::conf("time")));
     $this->addProperty("Général - rédacteur"     , $user->_view);
   }
 
@@ -67,6 +67,21 @@ class CTemplateManager {
       "fieldHTML" => htmlentities("[{$field}]"),
       "valueHTML" => $value
     );
+  }
+  
+  function addDateProperty($field, $value = null) {
+    $value = $value ? mbTransformTime(null, $value, CAppUI::conf("date")) : "";
+    $this->addProperty($field, $value);
+  }
+  
+  function addTimeProperty($field, $value = null) {
+    $value = $value ? mbTransformTime(null, $value, CAppUI::conf("time")) : "";
+    $this->addProperty($field, $value);
+  }
+  
+  function addDateTimeProperty($field, $value = null) {
+    $value = $value ? mbTransformTime(null, $value, CAppUI::conf("datetime")) : "";
+    $this->addProperty($field, $value);
   }
 
   function addList($name, $choice = null) {

@@ -919,13 +919,11 @@ class CSejour extends CCodable {
   }
   
   function fillLimitedTemplate(&$template) {
-    $dateFormat = "%d / %m / %Y";
-    $timeFormat = "%Hh%M";
     
-    $template->addProperty("Admission - Date"                 , mbTransformTime(null, $this->entree_prevue, $dateFormat));
-    $template->addProperty("Admission - Heure"                , mbTransformTime(null, $this->entree_prevue, $timeFormat));
+    $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
+    $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
-    $template->addProperty("Hospitalisation - Date sortie"    , mbTransformTime(null, $this->sortie_prevue, $dateFormat));
+    $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
     
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);

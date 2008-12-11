@@ -995,8 +995,8 @@ class CConsultation extends CCodable {
   
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
-    $template->addProperty("Consultation - date"      , mbTransformTime("+0 DAY", $this->_ref_plageconsult->date, "%d / %m / %Y") );
-    $template->addProperty("Consultation - heure"     , $this->heure);
+    $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
+    $template->addTimeProperty("Consultation - heure" , $this->heure);
     $template->addProperty("Consultation - motif"     , $this->motif);
     $template->addProperty("Consultation - remarques" , $this->rques);
     $template->addProperty("Consultation - examen"    , $this->examen);
