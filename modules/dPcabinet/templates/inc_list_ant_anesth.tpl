@@ -52,14 +52,14 @@ copyTraitement = function(traitement_id){
       <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
       <input type="hidden" name="annule" value="" />
       
-      <button class="cancel notext" type="button" onclick="Antecedent.cancel(this.form, DossierMedical.reloadDossierSejour)">
-        {{tr}}cancel{{/tr}}
+      <button title="{{tr}}Cancel{{/tr}}" class="cancel notext" type="button" onclick="Antecedent.cancel(this.form, DossierMedical.reloadDossierSejour)">
+        {{tr}}Cancel{{/tr}}
       </button>
       
       <!-- Seulement si l'utilisateur est le créateur -->
       {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
-      <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
-        {{tr}}delete{{/tr}}
+      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
+        {{tr}}Delete{{/tr}}
       </button>
       {{/if}}
     </form>
