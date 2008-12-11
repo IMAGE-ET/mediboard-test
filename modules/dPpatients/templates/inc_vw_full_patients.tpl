@@ -28,11 +28,11 @@ function popEtatSejour(sejour_id) {
   url.pop(1000, 550, 'Etat du Séjour');
 }
 
+{{if $isImedsInstalled}}
 Main.add(function () {
-  {{if $isImedsInstalled}}
-    ImedsResultsWatcher.loadResults();
-  {{/if}}
+  ImedsResultsWatcher.loadResults();
 });
+{{/if}}
  
 </script>
   
@@ -93,7 +93,7 @@ Main.add(function () {
       Du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
       au {{$curr_sejour->_sortie|date_format:$dPconfig.date}}
     </span>
-    <script language="Javascript" type="text/javascript">
+    <script type="text/javascript">
       ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
     </script>
   </td>

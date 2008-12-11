@@ -933,8 +933,12 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.77");
     $sql = "ALTER TABLE `antecedent` ADD `annule` ENUM('0','1') DEFAULT '0'";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.78");
+    $sql = "ALTER TABLE `medecin` ADD `portable` BIGINT(10) UNSIGNED ZEROFILL NULL";
+    $this->addQuery($sql);
 		
-    $this->mod_version = "0.78";
+    $this->mod_version = "0.79";
   }
 }
 

@@ -77,7 +77,7 @@ Main.add(function () {
       <table class="tbl">
         <tr>
           {{if !$dialog}}
-          <th><button type="submit" class="search">Fusion</button></th>
+          <th><button type="submit" class="search notext" title="Fusion">Fusion</button></th>
           {{/if}}
           <th>{{mb_title class=CMedecin field=nom}}</th>
           <th>{{mb_title class=CMedecin field=adresse}}</th>
@@ -85,6 +85,7 @@ Main.add(function () {
           <th>{{mb_title class=CMedecin field=cp}}</th>
           <th>{{mb_title class=CMedecin field=tel}}</th>
           <th>{{mb_title class=CMedecin field=fax}}</th>
+          <th>{{mb_title class=CMedecin field=portable}}</th>
           <th>{{mb_title class=CMedecin field=type}}</th>
           {{if $dialog}}
           <th>{{tr}}Select{{/tr}}</th>
@@ -135,6 +136,11 @@ Main.add(function () {
           </td>
           <td>
             <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
+              {{mb_value object=$curr_medecin field=portable}}
+            </a>
+          </td>
+          <td>
+            <a href="{{$href}}" {{if $dialog}}onclick="setClose({{$curr_medecin->_id}}, '{{$curr_medecin->_view|smarty:nodefaults|JSAttribute}}' )"{{/if}}>
               {{mb_value object=$curr_medecin field=type}}
             </a>
           </td>
@@ -146,8 +152,9 @@ Main.add(function () {
             </td>
           {{/if}}
         </tr>
+        {{foreachelse}}
+        <tr><td colspan="20">{{tr}}CMedecin.none{{/tr}}</td></tr>
         {{/foreach}}
-        
       </table>
 
       {{if !$dialog}}
@@ -220,6 +227,11 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$medecin field="fax"}}</th>
           <td>{{mb_field object=$medecin field="fax"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$medecin field="portable"}}</th>
+          <td>{{mb_field object=$medecin field="portable"}}</td>
         </tr>
         
         <tr>

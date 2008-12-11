@@ -23,6 +23,7 @@ class CMedecin extends CMbObject {
 	var $cp              = null;
 	var $tel             = null;
 	var $fax             = null;
+	var $portable        = null;
 	var $email           = null;
   var $disciplines     = null;
   var $orientations    = null;
@@ -56,6 +57,7 @@ class CMedecin extends CMbObject {
     $specs["cp"]              = "numchar maxLength|5 confidential";
     $specs["tel"]             = "numchar length|10 confidential mask|99S99S99S99S99";
     $specs["fax"]             = "numchar length|10 confidential mask|99S99S99S99S99";
+    $specs["portable"]        = "numchar length|10 confidential mask|99S99S99S99S99";
     $specs["email"]           = "str confidential";
     $specs["disciplines"]     = "text confidential";
     $specs["orientations"]    = "text confidential";
