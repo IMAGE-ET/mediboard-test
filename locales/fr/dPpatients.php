@@ -797,4 +797,10 @@ $locales['config-dPpatients-CTraitement-enabled'] = '';
 $locales['config-dPpatients-CTraitement-enabled-desc'] = '';
 $locales['config-dPpatients-intermax-auto_watch'] = '';
 $locales['config-dPpatients-intermax-auto_watch-desc'] = '';
+$locales['CAntecedent-annule'] = '';
+$locales['CAntecedent-annule-court'] = '';
+$locales['CAntecedent-annule-desc'] = '';
+$locales['CMedecin-portable'] = 'Téléphone portable';
+$locales['CMedecin-portable-court'] = 'Portable';
+$locales['CMedecin-portable-desc'] = 'Numéro de téléphone portable';
 ?>
