@@ -7,7 +7,9 @@
  *  @author Alexis Granger
  */
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+global $AppUI;
+
+$praticien_id = mbGetValueFromGetOrSession("praticien_id", $AppUI->user_id);
 $function_id = mbGetValueFromGetOrSession("function_id");
 $group_id = mbGetValueFromGetOrSession("group_id");
 $protocole_id = mbGetValueFromGet("prescription_id");
@@ -19,7 +21,7 @@ $listFavoris = array();
 
 // Chargement de la liste des praticiens
 $praticien = new CMediusers();
-$praticiens = $praticien->loadPraticiens();
+$praticiens = $praticien->loadPraticiens(PERM_EDIT);
 $praticien->load($praticien_id);
 
 // Chargement des functions
