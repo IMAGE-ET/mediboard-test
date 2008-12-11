@@ -6,7 +6,7 @@ function submitNote(){
   var oForm = document.editFrm;
   
   if(checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', {onComplete: reloadNotes});
+    submitFormAjax(oForm, 'systemMsg', {onComplete: function() {reloadNotes(); window.close()} });
     oForm.reset();
   }
 }
