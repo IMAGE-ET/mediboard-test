@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
  */
 
-global $can;
+global $can, $g;
 $can->needsAdmin();
 
 $months_count    = mbGetValueFromGetOrSession("months_count", 12);
@@ -57,6 +57,10 @@ foreach ($enums as $key => &$enum) {
   }
 }
 
+$ljoin = array();
+$ljoin['users_mediboard'] = 'users_mediboard.user_id = fiches_ei.user_id';
+$ljoin['functions_mediboard'] = 'functions_mediboard.function_id = users_mediboard.function_id';
+
 foreach ($comparison as $comp) {
 	if (isset($enums[$comp]) && $enums[$comp]) {
 		$series = array();
@@ -79,6 +83,7 @@ foreach ($comparison as $comp) {
 		$series_data['total'] = &$series[count($series)-1]['data'];
 		
 		$where = array();
+		$where['functions_mediboard.group_id'] = "='$g'";
 		foreach ($filters as $key => $val) {
 		  if ($val != null) {
 		    $where[$key] = ($val == 'unknown' ? 'IS NULL' : " = '$val'");
@@ -100,7 +105,7 @@ foreach ($comparison as $comp) {
 	              $count = $fiche->countList($where);
 	            }
 	            else {*/
-	              $list = $fiche->loadList($where);
+	              $list = $fiche->loadList($where, null, null, null, $ljoin);
 	
 	              if ($id != 'unknown') {
 	                $where['evenements'] = 'IS NOT NULL';
@@ -124,7 +129,7 @@ foreach ($comparison as $comp) {
 						break;
 						
 						case '_criticite':
-				      $list = $fiche->loadList($where);
+				      $list = $fiche->loadList($where, null, null, null, $ljoin);
               foreach ($list as $key => $fiche) {
               	$fiche->loadCriticite();
               	if ($id == $fiche->_criticite || ($id == 'unknown' && !$fiche->_criticite)) $count++;
@@ -136,11 +141,11 @@ foreach ($comparison as $comp) {
 	            
 	            // Filtrage sur les types d'evenements
 	            if (!$evts || count($list_evts) <= 0) {
-	              $count = $fiche->countList($where);
+	              $count = $fiche->countList($where, null, null, null, $ljoin);
 	            }
 	            else {
 	              $where['evenements'] = 'IS NOT NULL';
-	              $list = $fiche->loadList($where);
+	              $list = $fiche->loadList($where, null, null, null, $ljoin);
 	      
 	              foreach ($list as &$f) {
 	                $fiche_evts = explode('|', $f->evenements);
