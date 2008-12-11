@@ -77,7 +77,7 @@ if ($operation_id) {
   $op->loadRefs();
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
-  $sejour->makeCancelAlerts();
+  $sejour->makeCancelAlerts($op->_id);
   $chir =& $op->_ref_chir;
   $patient =& $sejour->_ref_patient;
 }

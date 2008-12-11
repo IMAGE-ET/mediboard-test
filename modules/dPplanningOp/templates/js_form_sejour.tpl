@@ -79,14 +79,13 @@ function checkCancelAlerts() {
  	var msg = "Vous êtes sur le point d'annuler ce séjour, ceci entraîne :";
  	msg += "\n\n1. Tous les placements dans les lits seront supprimés.";
  	
- 	{{if count($sejour->_cancel_alerts.all)}}
- 	msg += "\n\n2. ATTENTION : Vous allez également annuler des opérations :";
+	{{if count($sejour->_cancel_alerts.all)}}
+ 	msg += "\n\n2. Attention, vous allez également annuler des opérations :";
  	{{foreach from=$sejour->_cancel_alerts.all item=alert}}
  	msg += "\n\t- " + "{{$alert|smarty:nodefaults|escape:'javascript'}}";
  	{{/foreach}}
  	{{/if}}
- 	msg += "\n\nSouhaitez-vous continuer ?";
- 	
+ 	msg += "\n\nSouhaitez-vous continuer ?"; 	
   if (!confirm(msg)) {
     return;
   }

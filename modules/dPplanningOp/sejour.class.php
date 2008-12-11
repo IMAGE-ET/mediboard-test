@@ -1003,9 +1003,11 @@ class CSejour extends CCodable {
   }
   
   /**
-   * Builds san array containing cancel alerts for the sejour
+   * Builds an array containing cancel alerts for the sejour
+   * @param ref|COperation excluded_id Exclude given operation
+   * @return void Valuate $this->_cancel_alert
    */
-  function makeCancelAlerts() {
+  function makeCancelAlerts($excluded_id = null) {
 	  $this->_cancel_alerts = array(
 		  "all" => array(),
 		  "acted" => array(),
@@ -1018,7 +1020,15 @@ class CSejour extends CCodable {
     
     if ($this->_ref_operations) {
 		  foreach ($this->_ref_operations as $_operation ) {
+		    // Needed for correct view
 		    $_operation->loadRefPraticien();
+		    $_operation->loadRefPlageOp();
+		    
+		    // Exclude one
+		    if ($_operation->_id == $excluded_id) {
+		      continue;
+		    }
+		    
 		    if ($_operation->annulee == 0) {
 		      $operation_view = " le " 
 						. mbDateToLocale(mbDate($_operation->_datetime)) 
@@ -1026,14 +1036,13 @@ class CSejour extends CCodable {
 						. $_operation->_ref_chir->_view;
 		      $_operation->countActes();
 		      if ($_operation->_count_actes) {
-		        $this->_cancel_alerts["acted"][] = $operation_view;
+		        $this->_cancel_alerts["acted"][$_operation->_id] = $operation_view;
 		      }
 		      
-		      $this->_cancel_alerts["all"][] = $operation_view;
+		      $this->_cancel_alerts["all"][$_operation->_id] = $operation_view;
 		    }
 		  }
 		}
   }
-  
 }
 ?>
