@@ -418,10 +418,16 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td>
+    {{if !$sejour->type}}
+    {{$sejour->type}}
+    {{/if}}
     <select name="type" onchange="changeTypeHospi()">
     {{foreach from=$sejour->_enumsTrans.type item="curr_type" key="key"}}
       {{if $key != 'urg' || $urgInstalled}}
-      <option value="{{$key}}" {{if $sejour->type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
+      <option value="{{$key}}"
+        {{if $sejour->type == $key || (!$sejour->type && $key == $sejour->_specs.type->default)}}selected="selected"{{/if}}>
+        {{$curr_type}}
+      </option>
       {{/if}}
     {{/foreach}}
     </select>
