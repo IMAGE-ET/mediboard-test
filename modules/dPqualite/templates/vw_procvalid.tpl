@@ -1,5 +1,5 @@
 {{if $docGed->doc_ged_id}}
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 
 function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;

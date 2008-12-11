@@ -1,4 +1,4 @@
-<script>
+<script type="text/javascript">
   function clearChapter() {
     document.selection.level1.value = "";
     document.selection.level2.value = "";

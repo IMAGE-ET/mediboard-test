@@ -80,7 +80,7 @@
     </td>
   </tr>
 </table>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
   new PairEffect("menuIcons", { bStartVisible: true });
 </script>
 {{/if}}

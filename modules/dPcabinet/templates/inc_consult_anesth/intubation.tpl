@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 function verifIntubDifficileAndSave(oForm){
   if(oForm.mallampati[2].checked || oForm.mallampati[3].checked
     || oForm.bouche[0].checked || oForm.bouche[1].checked

@@ -57,7 +57,7 @@
     <button type="button" class="search" onclick="ObjectSelector.init()">
         Chercher un objet
       </button>
-      <script language="Javascript" type="text/javascript">
+      <script type="text/javascript">
         ObjectSelector.init = function(){  
           this.sForm     = "filterFrm";
           this.sId       = "object_id";

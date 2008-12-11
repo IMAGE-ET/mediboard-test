@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 Main.add(function () {
   Calendar.regRedirectFlat("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 });

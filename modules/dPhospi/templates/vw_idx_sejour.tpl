@@ -13,7 +13,7 @@
 {{assign var="module" value="dPhospi"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
      
 function loadActesNGAP(sejour_id){
   var url = new Url;
@@ -319,7 +319,7 @@ viewBilanService = function(service_id, date){
                   <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
-                  <script language="Javascript" type="text/javascript">
+                  <script type="text/javascript">
                     ImedsResultsWatcher.addSejour('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->_num_dossier}}');
                   </script>
                 </td>

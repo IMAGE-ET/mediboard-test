@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 {{if $can->admin}}
 function filterAllEi(field){
   if (field.name == "selected_user_id") {

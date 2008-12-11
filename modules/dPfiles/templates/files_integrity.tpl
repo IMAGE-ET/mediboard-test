@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 
 function checkIntegrity() {
   var url = new Url;

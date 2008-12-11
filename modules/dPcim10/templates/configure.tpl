@@ -1,6 +1,6 @@
 {{include file="../../system/templates/configure_dsn.tpl" dsn=cim10}}
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 
 function startCIM10() {
   var CIM10Url = new Url;

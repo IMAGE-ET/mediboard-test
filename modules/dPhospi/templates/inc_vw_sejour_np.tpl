@@ -14,7 +14,7 @@
   <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
     {{$curr_sejour->_ref_patient->_view}}
   </a>
-  <script language="Javascript" type="text/javascript">
+  <script type="text/javascript">
     ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
   </script>
   </td>

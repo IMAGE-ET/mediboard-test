@@ -1,4 +1,4 @@
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function synchronizeSejours() {
   var url = new Url();
   url.setModuleAction("dPhospi", "httpreq_do_synchronize_sejours");

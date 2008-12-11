@@ -1,4 +1,4 @@
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 Main.add(function () {
   Calendar.regField("addPlage", "date");
   Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut=");

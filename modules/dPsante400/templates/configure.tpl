@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 
 function purgeObjects() {
   if (confirm("Merci de confirmer la purge de tous les éléments synchronisés")) {

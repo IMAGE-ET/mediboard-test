@@ -1,6 +1,6 @@
 {{mb_include_script module="system" script="object_selector"}}
 
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 
 function cancelObject(oObject) {
   var oForm = document.editPermObj;
@@ -41,7 +41,7 @@ function cancelObject(oObject) {
       <button type="button" class="cancel" onclick="cancelObject()">
         Pas d'objet
       </button>
-      <script language="Javascript" type="text/javascript">
+      <script type="text/javascript">
         ObjectSelector.init = function(){  
           this.sForm     = "editPermObj";
           this.sId       = "object_id";

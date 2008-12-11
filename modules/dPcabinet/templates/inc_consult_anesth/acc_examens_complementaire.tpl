@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 function calculClairance () {
   var oFormExam  = document.forms["editExamCompFrm"];
   var oFormConst = document.forms["edit-constantes-medicales"];

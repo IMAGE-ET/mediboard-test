@@ -103,7 +103,7 @@ echo '<p>'.$new.' éléments créés, '.$link.' éléments liés.</p><hr>';
 if(count($listImport) == $step) {
   echo '<a onclick="javascript:next();">'.(count($listImport)).' suivant >>></a>';
   ?>
-  <script language="JavaScript" type="text/javascript">
+  <script type="text/javascript">
     function next() {
       var url = "index.php?m=dPinterop&dialog=1&a=put_patients";
       url += "&current=<?php echo $current; ?>";

@@ -111,7 +111,7 @@ if($do->ajax){
   if($do->_obj->object_id && !intval(dPgetParam($_POST, "del"))) {
     $do->redirectStore = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
   ?>
-    <script language="javascript">
+    <script type="text/javascript">
       var url = 'index.php?m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=';
       url += '<?php echo $do->_obj->_id ?>';
       window.location.href = url;

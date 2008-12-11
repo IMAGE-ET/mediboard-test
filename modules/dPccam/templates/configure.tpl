@@ -40,7 +40,7 @@
 
 <h2>Import de la base de données CCAM</h2>
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 
 function startCCAM() {
   var CCAMUrl = new Url;

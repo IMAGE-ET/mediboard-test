@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 
 function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
