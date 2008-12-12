@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
  */
  
-global $AppUI, $can, $m, $dPconfig, $g;
+global $can, $g;
 
 $can->needsAdmin();
 
@@ -34,11 +34,7 @@ if($typeVue){
   // Liste des Themes
   $listThemes = new CThemeDoc;
   $where = array();
-  if($etablissement) {
-    $where["group_id"] = "= '$etablissement'";
-  } else {
-    $where["group_id"] = "IS NULL";
-  }
+  $where["group_id"] = $etablissement ? "= '$etablissement'" : "IS NULL";
   $listThemes = $listThemes->loadList($where);
   
   // Création du Template
@@ -46,7 +42,7 @@ if($typeVue){
   $smarty->assign("listThemes" , $listThemes);
   $smarty->display("vw_edit_themes.tpl");
 }else{
-  $maxDeep = $dPconfig["dPqualite"]["CChapitreDoc"]["profondeur"] - 2;
+  $maxDeep = CAppUI::conf("dPqualite CChapitreDoc profondeur") - 2;
   // Chargement du chapitre demandé
   $doc_chapitre_id = mbGetValueFromGetOrSession("doc_chapitre_id", null);
   $chapitre = new CChapitreDoc;
@@ -66,16 +62,8 @@ if($typeVue){
   // Liste des Chapitres
   $listChapitres = new CChapitreDoc;
   $where = array();
-  if($etablissement) {
-    $where["group_id"] = "= '$etablissement'";
-  } else {
-    $where["group_id"] = "IS NULL";
-  }
-  if($nav_chapitre->_id) {
-    $where["pere_id"] = "= $nav_chapitre->_id";
-  } else {
-    $where["pere_id"] = "IS NULL";
-  }
+  $where["group_id"] = $etablissement ? "= '$etablissement'" : "IS NULL";
+  $where["pere_id"] = $nav_chapitre->_id ? "= $nav_chapitre->_id" : "IS NULL";
   $listChapitres = $listChapitres->loadList($where);
   
   // Création du Template

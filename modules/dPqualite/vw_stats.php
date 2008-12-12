@@ -43,7 +43,7 @@ foreach($types as $key => $type) {
 	$enums['evenements'][$key] = $type->nom;
 }
 $enums['_criticite'] = array();
-$range = range(1, 5);
+$range = range(1, 3);
 foreach($range as $n) {
   $enums['_criticite'][$n] = $n;
 }
