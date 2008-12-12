@@ -63,7 +63,10 @@ class CCodeCCAM {
     $this->_spec = self::$spec;
     
     if (strlen($code) > 7){
-    // Cas ou l'activite et la phase sont indiquées dans le code (ex: BFGA004-1-0)
+      if (!preg_match("/[a-z]{4}[0-9]{3}(-[0-9])?(-[0-9])?/", $code)) {
+         return "Le code $code n'est pas formaté correctement";
+      }
+      // Cas ou l'activite et la phase sont indiquées dans le code (ex: BFGA004-1-0)
       $detailCode = explode("-", $code);
       $this->code = strtoupper($detailCode[0]);
       $this->_activite = $detailCode[1];
