@@ -53,8 +53,7 @@ if ($order->_id) {
 					$d[] = $reception->code;
 					
 					$d[] = array(
-					  'barcode' => $item->_ref_reference->_ref_product->code.$reception->code,
-					  'label'   => "{$item->_ref_reference->_ref_product->code} {$reception->code}",
+					  'barcode' => $item->_ref_reference->_ref_product->code." ".$reception->code,
 					  'type'    => 'C128B'
 					);
 					$j++;
@@ -82,7 +81,7 @@ else if ($receptions_list) {
 	      $d[] = $reception->code;
 	      
 	      $d[] = array(
-	        'barcode' => $item->_ref_reference->_ref_product->code.$reception->code,
+	        'barcode' => $item->_ref_reference->_ref_product->code." ".$reception->code,
 	        'label'   => "{$item->_ref_reference->_ref_product->code} {$reception->code}",
 	        'type'    => 'C128B'
 	      );

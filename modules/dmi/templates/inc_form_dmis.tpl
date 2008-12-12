@@ -18,11 +18,11 @@
   
   <table class="form">
   	<tr>
-  		<th class="category {{if $dmi->_id}}modify{{/if}}" colspan="2">
+  		<th class="category {{if $dmi->_id}}modify{{/if}}" colspan="10">
   			{{if $dmi->_id}}
 	      	{{tr}}CDMI-title-modify{{/tr}} '{{$dmi->_view}}'
 				{{else}}
-				{{tr}}CDMI-title-create{{/tr}}
+				  {{tr}}CDMI-title-create{{/tr}}
 				{{/if}}
   		</th>
   	</tr>

@@ -5,7 +5,7 @@
  * @subpackage dmi
  * @version $Revision: $
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @author Thomas Despoix
+ * @author Stéphanie Subilia
  */
 
 global $can, $g;
@@ -29,6 +29,7 @@ foreach ($DMICategories as &$_category) {
     foreach ($_category->_ref_dmis as &$_dmi)
     {
     	$_dmi->loadRefProduit();
+    	$_dmi->_ref_product->loadRefsFwd();
     }
 }
 

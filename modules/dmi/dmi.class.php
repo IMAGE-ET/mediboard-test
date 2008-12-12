@@ -5,7 +5,7 @@
 	* @subpackage dmi
 	* @version $Revision: $
  	* @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
-	* @author Thomas Despoix
+	* @author Stéphanie subilia
 	*/
 
 class CDMI extends CMbObject {

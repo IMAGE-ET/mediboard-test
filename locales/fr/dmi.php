@@ -66,4 +66,10 @@ $locales['CDMICategory-back-dmis'] = 'DMI de la catégorie';
 $locales['CDMI-code'] = 'Code';
 $locales['CDMI-code-court'] = 'Code';
 $locales['CDMI-code-desc'] = 'Code du DMI';
+$locales['delivered_quantity'] = 'Quantité deliverée';
+$locales['CDMI-_produit_existant'] = 'Produit  existant';
+$locales['CDMI-_produit_existant-court'] = 'Produit  existant';
+$locales['CDMI-_produit_existant-desc'] = 'Produit  existant';
+$locales['config-dmi-CDMI-product_category_id'] = 'Catégorie';
+$locales['config-dmi-CDMI-product_category_id-desc'] = 'Catégorie';
 ?>

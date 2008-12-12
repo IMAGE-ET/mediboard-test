@@ -11,7 +11,6 @@
     <th>{{mb_title class=CDMI field=code}}</th>
     <th>{{mb_title class=CDMI field=dans_livret}}</th>
     <th>{{mb_title class=CDMI field=_produit_existant}}</th>
-    <th>{{mb_title class=CProduct field=renewable}}</th>
   </tr>
 
 	{{foreach from=$DMICategories item=_category}}
@@ -39,7 +38,7 @@
 	    <td>
 	    	{{mb_value object=$_dmi field=dans_livret}}
 	    </td>
-	    <td> 
+	    <!-- <td onmouseover="$('dmi-{{$_dmi->_id}}').show();" onmouseout="$('dmi-{{$_dmi->_id}}').hide();"> 
 	        {{if $_dmi->_produit_existant}}
 	          <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_dmi->_ref_product->_id}}">
             {{mb_value object=$_dmi field=_produit_existant}}
@@ -47,10 +46,48 @@
 	       {{else}}
 	         {{mb_value object=$_dmi field=_produit_existant}}
 	       {{/if}}
-	      
-	    </td>
-      <td>
-        {{mb_value object=$_dmi->_ref_product field=renewable}}
+	       <div id="dmi-{{$_dmi->_id}}" class="tooltip" style="display: none; width: 200px;">
+                    <table class="tbl">
+                      <tr>
+                        <th colspan="10">Produit {{$_dmi->code}}</th>
+                      </tr>
+                      <tr>
+                        <th>{{mb_title class=CProduct field=name}}</th>
+                        <td>{{mb_value object=$_dmi->_ref_product field=name}}</td>
+                      </tr>
+                      <tr>
+                        <th>{{mb_title class=CProduct field=description}}</th>
+                        <td>{{mb_value object=$_dmi->_ref_product field=description}}</td>
+                      </tr>
+                      <tr>
+                        <th>{{mb_title class=CSociete field=name}}</th>
+                        <td>{{mb_value object=$_dmi->_ref_product->_ref_societe field=name}}</td>
+                      </tr>
+                      <tr>
+                        <th>{{tr}}CProductCategory{{/tr}}</th>
+                        <td>{{mb_value object=$_dmi->_ref_product->_ref_category field=name}}</td>
+                      </tr>
+                      <tr>
+                        <th>{{mb_title class=CProduct field=renewable}}</th>
+                        <td>{{mb_value object=$_dmi->_ref_product field=renewable}}</td>
+                      </tr>
+                      <tr>
+                        <th>{{mb_title class=CProduct field=_unique_usage}}</th>
+                        <td>{{mb_value object=$_dmi->_ref_product field=_unique_usage}}</td>
+                      </tr>
+                    </table>
+                  </div>
+	    </td>-->
+	    <td >
+	       <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProduct', object_id: '{{$_dmi->_ref_product->_id}}' } })"> 
+        {{if $_dmi->_produit_existant}}
+            <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_dmi->_ref_product->_id}}">
+            {{mb_value object=$_dmi field=_produit_existant}}
+            </a>
+         {{else}}
+           {{mb_value object=$_dmi field=_produit_existant}}
+         {{/if}}
+         </span>
       </td>
 	  </tr>
 	  {{foreachelse}}

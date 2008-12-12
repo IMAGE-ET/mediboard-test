@@ -170,5 +170,9 @@ class CProduct extends CMbObject {
       if (count($duplicates)) return 'Un produit avec ce code existe déjà';
   	}
   }
+  function loadView()
+  {
+  	$this->loadRefsFwd();
+  }
 }
 ?>

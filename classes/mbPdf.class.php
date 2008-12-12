@@ -95,7 +95,7 @@ class CMbPdf extends TCPDF {
   				$delta_y += $barcode_height;
   				
   				$this->writeHTMLCell(0, $line_height, $x + $delta_x + ($cell_width*(1 - $barcode_width_ratio) / 2), 
-  				                           $y + $delta_y, $line['label'], 0, 0, 0);
+  				                           $y + $delta_y, str_replace("x",' ',$line['barcode']), 0, 0, 0);
   				                           
   				$delta_y += $line_height;
   			}
