@@ -58,6 +58,14 @@ class CFicheEi extends CMbObject {
   var $_ref_items           = null;
   var $_etat_actuel         = null;
   var $_criticite           = null;
+  
+  static $criticite_matrice = array(
+    1 => array(1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
+    2 => array(1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
+    3 => array(1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
+    4 => array(1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
+    5 => array(1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3),
+  );
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -139,17 +147,10 @@ class CFicheEi extends CMbObject {
     }
   }
   
+  // Calcul de la criticité
   function loadCriticite() {
-    // Calcul de la criticité
     if($this->gravite && $this->vraissemblance) {
-      $tabCriticite = array(
-        1 => array(1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
-        2 => array(1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
-        3 => array(1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
-        4 => array(1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
-        5 => array(1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3),
-      );
-      $this->_criticite = $tabCriticite[$this->gravite][$this->vraissemblance];
+      $this->_criticite = self::$criticite_matrice[$this->gravite][$this->vraissemblance];
     }
   }
     

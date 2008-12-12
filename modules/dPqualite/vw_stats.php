@@ -49,7 +49,7 @@ foreach($range as $n) {
 }
 
 foreach ($enums as $key => &$enum) {
-  if ((isset($fiche->_specs[$key]) && !$fiche->_specs[$key]->notNull) || $key == 'evenements' || $key == '_criticite') {
+  if ((isset($fiche->_specs[$key]) && !$fiche->_specs[$key]->notNull) || $key == 'evenements') {
     $enum['unknown'] = 'Inconnu';
   }
   if (!isset($filters[$key])) {
@@ -84,6 +84,8 @@ foreach ($comparison as $comp) {
 		
 		$where = array();
 		$where['functions_mediboard.group_id'] = "='$g'";
+		$where['fiches_ei.annulee'] = "!= '1'";
+		$where['fiches_ei.date_validation'] = "IS NOT NULL";
 		foreach ($filters as $key => $val) {
 		  if ($val != null) {
 		    $where[$key] = ($val == 'unknown' ? 'IS NULL' : " = '$val'");
