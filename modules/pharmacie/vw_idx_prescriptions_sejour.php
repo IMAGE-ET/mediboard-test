@@ -25,8 +25,8 @@ $valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulemen
 
 $date = mbDate();
 $filter_sejour = new CSejour();
-$filter_sejour->_date_entree = mbGetValueFromGet('_date_entree', mbGetValueFromSession('_date_min'), $date);
-$filter_sejour->_date_sortie = mbGetValueFromGet('_date_sortie', mbGetValueFromSession('_date_max'), $date);
+$filter_sejour->_date_entree = mbGetValueFromGet('_date_entree', mbGetValueFromSession('_date_min', $date));
+$filter_sejour->_date_sortie = mbGetValueFromGet('_date_sortie', mbGetValueFromSession('_date_max', $date));
 
 mbSetValueToSession('_date_min', $filter_sejour->_date_entree);
 mbSetValueToSession('_date_max', $filter_sejour->_date_sortie);
