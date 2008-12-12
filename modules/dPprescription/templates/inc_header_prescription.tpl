@@ -316,7 +316,7 @@ submitProtocole = function(){
 				   </optgroup> 
         </select>
 
-     <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');">Mode grille</button>
+     <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
     </td>
   </tr>  
   {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}

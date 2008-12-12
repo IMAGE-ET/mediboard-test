@@ -123,6 +123,7 @@ function submitAllElements(){
 Main.add( function(){
   // Initialisation des onglets
   menuTabs = Control.Tabs.create('main_prescription_easy_group', false);
+  menuTabs.setActiveTab('{{$chapitre}}');
   
   // Initialisation des TokenFields
   oEltField = new TokenField(document.add_med_element.token_elt); 

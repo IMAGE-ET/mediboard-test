@@ -20,6 +20,7 @@ foreach($chapitres as &$categories){
 $prescription_id = mbGetValueFromGet("prescription_id");
 $mode_protocole  = mbGetValueFromGet("mode_protocole");
 $mode_pharma     = mbGetValueFromGet("mode_pharma");
+$chapitre        = mbGetValueFromGet("chapitre");
 
 
 // chargement de la prescription
@@ -57,6 +58,7 @@ $smarty->assign("prescription", $prescription);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("mode_protocole", $mode_protocole);
 $smarty->assign("mode_pharma", $mode_pharma);
+$smarty->assign("chapitre", $chapitre);
 $smarty->assign("today"      , mbDate());
 $smarty->display("../../dPprescription/templates/vw_easy_mode.tpl");
 

@@ -2,7 +2,7 @@
 
 // Initialisation des onglets
 Main.add( function(){
-  menuTabs = Control.Tabs.create('prescription_tab_group', false);
+  window.menuTabs = Control.Tabs.create('prescription_tab_group', false);
 } );
 
 // Initialisation des alertes
@@ -11,12 +11,13 @@ if($('alertes')){
 }
 
 // Lancement du mode de saisie popup
-viewEasyMode = function(mode_protocole, mode_pharma){
+viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
   var url = new Url();
   url.setModuleAction("dPprescription","vw_easy_mode");
   url.addParam("prescription_id", '{{$prescription->_id}}');
   url.addParam("mode_protocole", mode_protocole);
   url.addParam("mode_pharma", mode_pharma);
+  url.addParam("chapitre", chapitre);
   url.popup(900,500,"Mode grille");
 }
 
