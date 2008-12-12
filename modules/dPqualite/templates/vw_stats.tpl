@@ -82,11 +82,21 @@ function drawGraph(id) {
       grid: {verticalLines: false, backgroundColor: '#fff'},
       legend: {position: 'nw'},
       HtmlText: false,
-      showDataGrid: true,
-      tabGraphLabel: 'Graphique',
-      tabDataLabel: 'Données'
+      spreadsheet: {
+        show: true,
+        tabGraphLabel: 'Graphique',
+        tabDataLabel: 'Données',
+        toolbarDownload: 'Fichier CSV',
+        toolbarSelectAll: 'Seléctionner tout le tableau'
+      }
     }, options)
   );
+}
+
+function showLegendeCriticite() {
+  var url = new Url;
+  url.setModuleAction("dPqualite", "vw_legende_criticite");
+  url.pop(220, 150, "Légende de la criticité");
 }
 
 Main.add(function () {
@@ -173,6 +183,8 @@ var filterForm = null;
               <option value="{{$key}}" {{if $filters.$name == $key}}selected="selected"{{/if}}>{{$val}}</option>
             {{/foreach}}
           </select>
+          {{elseif $name == '_criticite'}}
+            <button type="button" class="search" onclick="showLegendeCriticite()">Légende</button>
           {{/if}}
         </td>
         {{if $smarty.foreach.enum.index+1 % 2 == 0 || $smarty.foreach.enum.last}}
@@ -188,7 +200,7 @@ var filterForm = null;
         <ul class="control_tabs_vertical" id="evenements-tabs">
           {{foreach from=$list_categories item=curr_evenement name=categories}}
           <li>
-            <input id="category-{{$curr_evenement->ei_categorie_id}}-checkbox" type="checkbox" onclick="toggleTokens(this, 'category-{{$curr_evenement->ei_categorie_id}}'); " style="float: right; margin: 3px;" />
+            <input id="category-{{$curr_evenement->ei_categorie_id}}-checkbox" type="checkbox" onclick="toggleTokens(this, 'category-{{$curr_evenement->ei_categorie_id}}'); " style="float: right; margin: 3px; clear: right;" />
             <a href="#category-{{$curr_evenement->ei_categorie_id}}" style="font-size: 1em; padding: 1px 3px; font-weight: normal;">
               {{$curr_evenement->nom}}
               (<span id="selected-evts-{{$curr_evenement->ei_categorie_id}}-count">0</span>)
@@ -236,9 +248,7 @@ var filterForm = null;
     <div style="text-align: center; clear: both;" id="graphs">
       <h2>{{tr}}CFicheEi-{{$id}}{{/tr}}</h2>
       <div id="stats-{{$id}}" style="width: 600px; height: 300px; margin: auto;"></div>
-      <button onclick="graph['{{$id}}'].downloadCSV()" type="button" class="submit">Fichier CSV</button>
-      <button onclick="graph['{{$id}}'].saveImage('png')" type="button" class="submit">Fichier image</button>
-      <button onclick="graph['{{$id}}'].selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
+      <button onclick="graph['{{$id}}'].saveImage()" type="button" class="submit">Enregistrer l'image</button>
     </div>
   {{/foreach}}
 </form>

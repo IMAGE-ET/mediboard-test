@@ -3234,6 +3234,11 @@ background-color: #bbf;
   border-bottom: none;
   background: #fff;
 }
+.flotr-datagrid-toolbar {
+  padding: 1px;
+  border-bottom: 1px solid #ccc;
+  background: #f9f9f9;
+}
 .flotr-datagrid {
   border-collapse: collapse;
   border-spacing: 0;

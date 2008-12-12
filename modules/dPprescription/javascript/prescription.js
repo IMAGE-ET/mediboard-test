@@ -251,7 +251,7 @@ var Prescription = {
     url.addParam("mode_pharma", "1");
     url.addParam("refresh_pharma", "1");
     url.addParam("mode_protocole", "0");
-    url.addParam("readonly", 0);
+    url.addParam("readonly", 1);
     url.requestUpdate("prescription_pharma", { waitingText: null } );
   },
   reloadPrescPerf: function(prescription_id, mode_protocole, mode_pharma){
