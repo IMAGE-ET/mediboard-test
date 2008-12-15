@@ -713,7 +713,7 @@ class CMbObject {
   function extendsWith($mbObject) {
     $targetClass = get_class($mbObject);
     $thisClass = get_class($this);
-    if ($targetClass != $thisClass) {
+    if ($targetClass !== $thisClass) {
       trigger_error(printf("Target object has not the same class (%s) as this (%s)", $targetClass, $thisClass), E_USER_WARNING);
       return;
     }
@@ -761,7 +761,7 @@ class CMbObject {
     $properties = get_object_vars($this);
     
     foreach($this->_props as $propName => $propSpec) {
-      if ($propName[0] != '_') {
+      if ($propName[0] !== '_') {
         if (!array_key_exists($propName, $properties)) {
           trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
         } else {
@@ -821,7 +821,7 @@ class CMbObject {
       $fields = array();
     }
 
-    if (!count($fields) && $type == "store") {
+    if (!count($fields) && $type === "store") {
       return;
     }
     
@@ -1043,7 +1043,7 @@ class CMbObject {
     if (!$object->_id) {
       return "transferNoId";
     }
-    if ($object->_class_name != $this->_class_name) {
+    if ($object->_class_name !== $this->_class_name) {
       return "transferDifferentType";
     }
     
@@ -1287,7 +1287,7 @@ class CMbObject {
     $result = array();
     $vars = get_object_vars($this);
     foreach($vars as $key => $value) {
-      if ($key[0] != '_') {
+      if ($key[0] !== '_') {
         $result[$key] = $value;
       }
     }
