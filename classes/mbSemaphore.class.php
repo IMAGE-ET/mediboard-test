@@ -15,15 +15,17 @@ class CMbSemaphore {
   
   var $key     = null;
   var $process = null;
+  var $path    = null;
   
   /**
    * CMbSemaphore Constructor
    * @param string $key semaphore identifier
    */
   function __construct($key) {
-    $lockPath = CAppUI::conf("root_dir")."/tmp/locks";
-    CMbPath::forceDir($lockPath);
+    $this->path = CAppUI::conf("root_dir")."/tmp/locks";
+    CMbPath::forceDir($this->path);
     $this->process = getmypid();
+    $this->key = $key;
   }
   
   /**
@@ -37,7 +39,7 @@ class CMbSemaphore {
     $timeout = intval(min($timeout, 10) * 1000000);
     $step    = intval(min($step   , 10) * 1000000);
     
-    $this->key = fopen("$lockPath/$key", "w+");
+    $this->key = fopen("$this->path/$this->key", "w+");
     while (!flock($this->key, LOCK_EX + LOCK_NB) && $i < $timeout) {
       usleep($step);
       $i += $step;
