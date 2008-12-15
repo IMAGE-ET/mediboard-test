@@ -98,7 +98,7 @@
                  <input type="hidden" name="dosql" value="do_delivery_aed" />
                  <input type="hidden" name="del" value="1" />
                  <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
-                 <button type="submit" class="cancel notext" title="Annuler">Annuler</button>
+                 <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
                </form>
                <br />
            {{/foreach}}
@@ -200,6 +200,7 @@
            Créer
          </button>
        {{/if}}
+     {{/if}}
      </td>
      <td style="text-align: center" class="text">
      {{if $stocks_service.$code_cip}}
@@ -212,8 +213,7 @@
        {{$produit->_unite_dispensation}}
      {{/if}}
      </td>
-   </tr>  
-  {{/if}}
+   </tr>
   {{foreachelse}}
     <tr>
       <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>
