@@ -6,9 +6,12 @@ function submitAllAdministrations() {
   var submitForms = $('administrations').select('form');
   var transForm = getForm('editTrans');
 
-  for (var i = 0; i < submitForms.length; i++) {
-    var f = submitForms[i];
-    
+	if (transForm.text.value) {
+	  submitFormAjax(transForm, 'systemMsg');
+	}
+	
+	for (var i = 0; i < submitForms.length; i++) {
+    var f = submitForms[i];  
     if (f != transForm) {
 	      if (($V(f.quantite_prevue)-0 != $V(f.quantite)-0) && !transForm.text.value) {
 	        alert('Veuillez ajouter une transmission');
@@ -16,16 +19,17 @@ function submitAllAdministrations() {
 	        return false;
 	      }
       if (!checkForm(f)) return false;
-      submitFormAjax(f, 'systemMsg');
+      if(i == (submitForms.length - 2)) {
+        submitFormAjax(f, 'systemMsg', { onComplete: function(){ 
+          closeApplyAdministrations();
+        } } );
+      } else {
+        submitFormAjax(f, 'systemMsg'); 
+      }
       anyFormSubmitted = true;
       f.up().update('Soin effectué');
     }
   }
-  
-	if (transForm.text.value) {
-	  submitFormAjax(transForm, 'systemMsg');
-	}
-  closeApplyAdministrations();
   return true;
 }
 
@@ -35,11 +39,16 @@ function submitAllPlanifications(){
   for (var i = 0; i < submitForms.length; i++) {
     var f = submitForms[i];    
     if (!checkForm(f)) return false;
-    submitFormAjax(f, 'systemMsg');
+    if(i == (submitForms.length - 1)){
+      submitFormAjax(f, 'systemMsg', { onComplete: function(){ 
+        closeApplyAdministrations();
+      } } );
+    } else {
+      submitFormAjax(f, 'systemMsg');
+    }
     anyFormSubmitted = true;
     f.up().update('Soin effectué');
   }
-  closeApplyAdministrations();
   return true;
 }
 
