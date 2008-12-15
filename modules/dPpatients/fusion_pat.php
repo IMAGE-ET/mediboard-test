@@ -33,6 +33,7 @@ if (!$patient1->load($listIds[0]) || !$patient2->load($listIds[1])){
 
 $patient1->loadRefsFwd();
 $patient2->loadRefsFwd();
+$testMerge = $patient1->checkMerge($patient1, $patient2);
 
 // On base le résultat sur patient1
 $finalPatient = new CPatient;
@@ -46,6 +47,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("patient1"    , $patient1    );
 $smarty->assign("patient2"    , $patient2    );
 $smarty->assign("finalPatient", $finalPatient);
+$smarty->assign("testMerge"   , $testMerge);
 
 $smarty->display("fusion_pat.tpl");
 ?>

@@ -286,6 +286,7 @@ class CSejour extends CCodable {
     // Ne concerne pas les annulés
     $this->completeField("annule");
     $this->completeField("type");
+    $this->completeField("group_id");
     if ($this->annule || $this->type == "urg") {
       return $collisions;
     }
@@ -300,6 +301,7 @@ class CSejour extends CCodable {
     
     $where["annule"] = " = '0'";
     $where["type"] = " != 'urg'";
+    $where["group_id"] = " = 'urg'";
     $patient->loadRefsSejours($where);
     
     // suppression de la liste des sejours le sejour courant
@@ -321,9 +323,14 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    return (mbDate($sejour->entree_prevue) <= mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) >= mbDate($this->sortie_prevue))
-         or(mbDate($sejour->entree_prevue) <= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) >= mbDate($this->entree_prevue))
-         or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue));
+    $sameGroup = $this->group_id == $sejour->group_id;
+    if(!$sameGroup) {
+      return false;
+    } else {
+      return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
+         or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
+         or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
+    }
   }
   
   function applyProtocolesPrescription($operation_id = null) {

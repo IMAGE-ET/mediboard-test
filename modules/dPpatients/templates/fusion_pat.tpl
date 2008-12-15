@@ -28,6 +28,14 @@ function setField (field, value, form) {
 
 <h2 class="module {{$m}}">Fusion de patients</h2>
 
+{{if $testMerge}}
+<div class="big-warning">
+  <strong>La fusion de ces deux patients n'est pas possible</strong> à cause des problèmes suivants :<br />
+  - {{$testMerge}}<br />
+  Veuillez corriger ces problèmes avant toute fusion.
+</div>
+{{/if}}
+
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_patients_fusion" />
   <input type="hidden" name="del" value="0" />

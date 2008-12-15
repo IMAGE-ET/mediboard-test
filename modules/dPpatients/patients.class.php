@@ -251,6 +251,27 @@ class CPatient extends CMbObject {
     );
   }
   
+  function checkMerge(CPatient $patient1, CPatient $patient2) {
+    $patient1->loadRefsSejours();
+    $patient2->loadRefsSejours();
+    foreach($patient1->_ref_sejours as $sej_pat1) {
+      foreach($patient2->_ref_sejours as $sej_pat2) {
+        if($sej_pat1->collides($sej_pat2)) {
+          return "Conflit de séjours";
+        }
+      }
+    }
+    return null;
+  }
+  
+  function merge(CPatient $patient1, CPatient $patient2) {
+    if ($msg = $this->checkMerge($patient1, $patient2)) {
+      return CAppUI::tr(get_class($this)) . 
+        CAppUI::tr("CMbObject-msg-merge-failed") .
+        CAppUI::tr($msg);
+    }  
+  }
+  
   function store() {
     // Standard store
     if ($msg = parent::store()) {
