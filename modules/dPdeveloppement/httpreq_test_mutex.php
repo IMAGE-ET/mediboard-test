@@ -15,6 +15,8 @@ CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);
 
 $mutex = new CMbSemaphore("test");
 
+CAppUI::stepAjax("process $mutex->process", UI_MSG_OK);
+
 switch ($action) {
   case "stall" :
   $mutex->acquire();

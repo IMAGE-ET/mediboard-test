@@ -13,7 +13,8 @@
  */
 class CMbSemaphore {
   
-  var $key = null;
+  var $key     = null;
+  var $process = null;
   
   /**
    * CMbSemaphore Constructor
@@ -23,6 +24,7 @@ class CMbSemaphore {
     $lockPath = CAppUI::conf("root_dir")."/tmp/locks";
     CMbPath::forceDir($lockPath);
     $this->key = fopen("$lockPath/$key", "w+");
+    $this->process = getmypid();
   }
   
   /**
