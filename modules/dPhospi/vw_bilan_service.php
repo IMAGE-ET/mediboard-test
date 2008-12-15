@@ -7,9 +7,10 @@
 * @author Alexis Granger
 */
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date         = mbGetValueFromGetOrSession("date", mbDate());
 $dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
+$hide_filters = mbGetValueFromGet("hide_filters", '1') == '1';
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -17,6 +18,7 @@ $date_max = mbDate($dateTime_max);
 // Filtres du sejour
 $token_cat = mbGetValueFromGet("token_cat","");
 $cats = explode("|",$token_cat);
+
 $service_id = mbGetValueFromGetOrSession("service_id");
 
 // Filtres sur l'heure des prises
@@ -285,7 +287,7 @@ $token_cat = implode("|", $cats);
 
 $cat_used = array();
 foreach($cats as $_cat){
-  if($_cat == "med"){
+  if($_cat === "med"){
     $cat_used["med"] = "Médicament";
   } else {
     if(!array_key_exists($_cat, $cat_used)){
@@ -298,6 +300,7 @@ foreach($cats as $_cat){
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign("hide_filters", $hide_filters);
 $smarty->assign("cat_used", $cat_used);
 $smarty->assign("token_cat", $token_cat);
 $smarty->assign("cats", $cats);

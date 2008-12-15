@@ -46,13 +46,20 @@
     <tr>
       <!-- Quantite à administrer -->
       <td>
+        <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })" class="tooltip-trigger">
+          <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
+        </div>
+        <table id="tooltip-content-{{$code_cip}}" style="display: none;" class="tbl">
         {{if $mode_nominatif}}
-          {{$quantite_administration}} {{$produit->_unite_administration}}
+          <tr>
+            <th>{{$lines.$code_cip->_duree_prise}}</th>
+          </tr>
+          {{foreach from=$lines.$code_cip->_ref_prises item=prise}}
+            <tr>
+              <td>{{$prise}}</td>
+            </tr>
+          {{/foreach}}
         {{else}}
-          <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })" class="tooltip-trigger">
-            <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
-          </div>
-          <table id="tooltip-content-{{$code_cip}}" style="display: none;" class="tbl">
           {{foreach from=$patients item=_patient}}
             {{assign var=patient value=$_patient.patient}}
             <tr>
@@ -65,15 +72,15 @@
               </td>
             </tr>
           {{/foreach}}
-          </table>
         {{/if}}
+        </table>
       </td>
       <!-- Quantite à dispenser pour permettre l'administration -->
       <td>
         {{$quantite_dispensation}} {{$produit->_unite_dispensation}}    
       </td>
       {{if !$infinite}}
-        <td style="text-align: center">
+        <td>
          {{if array_key_exists($code_cip,$delivrances)}}
            {{assign var=delivrance value=$delivrances.$code_cip}}
            {{$delivrance->_ref_stock->quantity}}
@@ -93,7 +100,6 @@
                <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
              </div>
              {{foreachelse}}
-               {{$curr_done->quantity}} {{$produit->_unite_dispensation}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
                <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
                  <input type="hidden" name="m" value="dPstock" />
                  <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -101,6 +107,7 @@
                  <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
                  <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
                </form>
+               {{$curr_done->quantity}} {{$produit->_unite_dispensation}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
                <br />
            {{/foreach}}
          {{/if}}
@@ -130,7 +137,7 @@
            {{assign var=style value=""}}
          {{/if}}
          
-         <button type="submit" class="tick notext" title="Dispenser" style="{{$style}} float: right;">Dispenser</button>
+         <button type="submit" class="tick notext" title="Dispenser" style="{{$style}} float: left;">Dispenser</button>
          
          {{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
          {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
@@ -175,7 +182,7 @@
              {{assign var=style value=""}}
            {{/if}}
            
-           <button type="submit" class="tick notext" title="Dispenser" style="{{$style}} float: right;">Dispenser</button>
+           <button type="submit" class="tick notext" title="Dispenser" style="{{$style}} float: left;">Dispenser</button>
            
            {{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
            {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
@@ -203,7 +210,7 @@
        {{/if}}
      {{/if}}
      </td>
-     <td style="text-align: center" class="text">
+     <td class="text">
      {{if $stocks_service.$code_cip}}
        {{assign var=stock_service value=$stocks_service.$code_cip}}
        {{if $stock_service->quantity>0}}

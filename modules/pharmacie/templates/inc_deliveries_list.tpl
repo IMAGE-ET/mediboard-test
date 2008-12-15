@@ -1,4 +1,5 @@
 {{if $mode == "global"}}
+<button type="button" class="print" onclick="printPreparePlan()">Imprimer plan de cueillette</button>
 <table class="tbl">
   <!-- Affichage des delivrances globales -->
   <tr>
@@ -25,6 +26,7 @@
 </script>
 
 {{elseif $mode == "nominatif"}}
+<button type="button" class="print" onclick="printPreparePlan(true)">Imprimer plan de cueillette</button>
 <table class="tbl">
   <!-- Affichage des delivrances nominatives -->
   <tr>
@@ -46,7 +48,6 @@
   </tr>
   {{/foreach}}
 </table>
-
 <script type="text/javascript">
   $$('a[href=#list-nominatives] small').first().update('({{$deliveries_nominatif|@count}})');
 </script>

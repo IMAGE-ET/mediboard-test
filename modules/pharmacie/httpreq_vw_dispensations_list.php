@@ -15,8 +15,8 @@ $service_id = mbGetValueFromGetOrSession('service_id');
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
 
-$_date_min = $date_min;
-$_date_max = $date_max;
+$date_min_orig = $date_min;
+$date_max_orig = $date_max;
 
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();
@@ -50,14 +50,14 @@ $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 
 // Creation du tableau de dates
 $dates = array();
-if($_date_min != $_date_max){
-	$date = $_date_min;
-	while($date <= $_date_max){
+if($date_max_orig != $date_min_orig){
+	$date = $date_min_orig;
+	while($date <= $date_max_orig){
 	  $dates[] = $date;
 	  $date = mbDate("+ 1 DAY", $date);
 	}
 } else {
-  $dates[] = $_date_min; 
+  $dates[] = $date_min_orig; 
 }
 
 
@@ -69,8 +69,8 @@ foreach($list_heures as &$heure){
 
 if($prescriptions) {
   foreach($prescriptions as $_prescription){	  
-    $date_min = $_date_min;
-	  $date_max = $_date_max;
+    $date_min = $date_min_orig;
+	  $date_max = $date_max_orig;
 	  
 	  // Stockage du sejour de la prescription
 	  $sejour =& $_prescription->_ref_object;
@@ -159,7 +159,7 @@ if($prescriptions) {
 	      $produit = $_perf_line->_ref_produit;
 	      $produit->loadLibellePresentation();
 	      
-	      $poids_ok = 1;
+	      $poids_ok = true;
 	      $_unite_prise = str_replace('/kg','',$_perf_line->unite);
 	      if($_unite_prise != $_perf_line->unite){
 	        if(!$patient->_ref_constantes_medicales){
@@ -170,7 +170,7 @@ if($prescriptions) {
 			      $_perf_line->quantite *= $poids;
 			      $_perf_line->_unite_sans_kg = $_unite_prise;
 	        } else {
-	          $poids_ok = 0;
+	          $poids_ok = false;
 	          $_perf_line->quantite = 0;
 	        }
 	      }
@@ -284,7 +284,7 @@ foreach($dispensations as $code_cip => &$_quantites){
 
   // Chargement des dispensation déjé effectuée
   $where = array();
-  $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min 00:00:00' AND '$_date_max 23:59:59'"; // entre les deux dates
+  $where['product_delivery.date_dispensation'] = "BETWEEN '$date_min_orig 00:00:00' AND '$date_max_orig 23:59:59'"; // entre les deux dates
   $where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
   $where['product.category_id'] = "= '$category_id'";
   $where['product_delivery.patient_id'] = "IS NULL";
@@ -324,8 +324,8 @@ $smarty->assign('produits'  , $produits);
 $smarty->assign('done'  , $done);
 $smarty->assign('stocks_service'  , $stocks_service);
 $smarty->assign('service_id', $service_id);
-$smarty->assign("date_min", $_date_min);
-$smarty->assign("date_max", $_date_max);
+$smarty->assign("date_min", $date_min_orig);
+$smarty->assign("date_max", $date_max_orig);
 $smarty->assign("now", mbDate());
 $smarty->assign('mode_nominatif', "0");
 $smarty->display('inc_dispensations_list.tpl');

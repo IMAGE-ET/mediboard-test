@@ -1,3 +1,4 @@
+{{if !$hide_filters}}
 <script type="text/javascript">
 Main.add( function(){
   oCatField = new TokenField(document.filter_prescription.token_cat); 
@@ -20,89 +21,93 @@ selectChap = function(name_chap, oField){
 }
 </script>
 
-<div class="not-printable">
-<form name="filter_prescription" action="?" method="get">
+<form name="filter_prescription" action="?" method="get" class="not-printable">
   <input type="hidden" name="token_cat" value="{{$token_cat}}" />     
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="vw_bilan_service" />
   <input type="hidden" name="dialog" value="1" />
   <input type="hidden" name="do" value="1" />
- <table class="form">
-  <tr>
-    <th class="category" colspan="4">Sélection des horaires</th>
-  </tr>
-  <tr>
-    <td>A partir du</td>
-    <td class="date">
-      {{mb_field object=$prescription field="_dateTime_min" canNull="false" form="filter_prescription" register="true"}}
-    </td>
-    <td>Jusqu'au</td>
-    <td class="date">
-      {{mb_field object=$prescription field="_dateTime_max" canNull="false" form="filter_prescription" register="true"}}
-     </td>
-   </tr>
-   <tr>
-     <th class="category" colspan="4">Sélection des catégories</th>
-   </tr>
-   <tr>
-     <td colspan="4">
-       <table>
-         <tr>
-           <td>
-             <strong>Médicaments</strong>
-           </td>
-           <td>
-             <input type="checkbox" value="med" onclick="oCatField.toggle(this.value, this.checked);" />
-           </td>
-         </tr>
-         {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
-           {{if $categories_by_chap|@count}}
-	           <tr>
-	             <td>
-	               <button type="button" onclick="selectChap('{{$name}}', oCatField);" class="tick">Tous</button>
-	               <strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong>  
-	             </td>
-	             {{foreach from=$categories_by_chap item=categorie}}
-	               <td style="white-space: nowrap; float: left; width: 10em;">
-	                 <label title="{{$categorie->_view}}">
-	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}
-	                 </label>
-	               </td>
-	             {{/foreach}}
-	           </tr>
-           {{/if}}
-         {{/foreach}}
-       </table>
-     </td>
-  </tr>
-  <tr>
-    <td style="text-align: center" colspan="4">
-      <button class="tick">Filtrer</button>
-      {{if $lines_by_patient|@count}}
-        <button class="print" type="button" onclick="window.print()">Imprimer les résultats</button>
-      {{/if}}
-    </td>
-  </tr>
-</table>
+  <table class="form">
+    <tr>
+      <th class="category" colspan="4">Sélection des horaires</th>
+    </tr>
+    <tr>
+      <td>A partir du</td>
+      <td class="date">
+        {{mb_field object=$prescription field="_dateTime_min" canNull="false" form="filter_prescription" register="true"}}
+      </td>
+      <td>Jusqu'au</td>
+      <td class="date">
+        {{mb_field object=$prescription field="_dateTime_max" canNull="false" form="filter_prescription" register="true"}}
+       </td>
+     </tr>
+     <tr>
+       <th class="category" colspan="4">Sélection des catégories</th>
+     </tr>
+     <tr>
+       <td colspan="4">
+         <table>
+           <tr>
+             <td>
+               <strong>Médicaments</strong>
+             </td>
+             <td>
+               <input type="checkbox" value="med" onclick="oCatField.toggle(this.value, this.checked);" />
+             </td>
+           </tr>
+           {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
+             {{if $categories_by_chap|@count}}
+  	           <tr>
+  	             <td>
+  	               <button type="button" onclick="selectChap('{{$name}}', oCatField);" class="tick">Tous</button>
+  	               <strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong>  
+  	             </td>
+  	             {{foreach from=$categories_by_chap item=categorie}}
+  	               <td style="white-space: nowrap; float: left; width: 10em;">
+  	                 <label title="{{$categorie->_view}}">
+  	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}
+  	                 </label>
+  	               </td>
+  	             {{/foreach}}
+  	           </tr>
+             {{/if}}
+           {{/foreach}}
+         </table>
+       </td>
+    </tr>
+    <tr>
+      <td style="text-align: center" colspan="4">
+        <button class="tick">Filtrer</button>
+        {{if $lines_by_patient|@count}}
+          <button class="print" type="button" onclick="window.print()">Imprimer les résultats</button>
+        {{/if}}
+      </td>
+    </tr>
+  </table>
 </form>
-</div>
+{{/if}}
+
 <table class="tbl">
 {{if $lines_by_patient|@count}}
 <tr>
   <th colspan="2">Filtres</th>
 </tr>
 <tr>
-  <td>Horaires sélectionnées</td><td><strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong></td>
+  <td colspan="2">
+    Horaires sélectionnées: 
+    <strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong>
+  </td>
 </tr>
 <tr>
-  <td>Catégorie(s) sélectionnée(s)</td>
-  <td class="text">
-{{foreach from=$cat_used item=_cat_view name=cat}}
-  <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
-{{/foreach}}
+  <td colspan="2">
+    Catégorie(s) sélectionnée(s):
+    {{foreach from=$cat_used item=_cat_view name=cat}}
+      <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
+    {{/foreach}}
   </td>
 </tr>
 {{/if}}
+
 {{foreach from=$lines_by_patient key=chambre_id item=_lines_by_patient}}
   {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
     {{assign var=sejour value=$sejours.$sejour_id}}

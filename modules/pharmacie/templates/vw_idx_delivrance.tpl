@@ -23,17 +23,28 @@ function refreshLists() {
   return false;
 }
 
-function printPreparePlan() {
+function printPreparePlan(nominatif) {
   var form = getForm("filter");
   var url = new Url;
-  url.setModuleAction("pharmacie", "print_prepare_plan");
-  url.addObjectParam(form.serialize());
+  
+  if (nominatif) {
+    url.setModuleAction("dPhospi", "vw_bilan_service");
+    url.addParam("token_cat", "med");
+    url.addParam("do", 1);
+    url.addParam("_dateTime_min", $V(form._date_min)+' 00:00:00');
+    url.addParam("_dateTime_max", $V(form._date_max)+' 23:59:59');
+    url.addParam("hide_filters", 1);
+  }
+  else {
+    url.setModuleAction("pharmacie", "print_prepare_plan");
+    url.addObjectParam(form.serialize());
+  }
+  
   url.pop(800, 600, 'Plan de cueillette');
 }
 </script>
 
 {{include file=inc_filter_delivrances.tpl}}
-<button type="button" class="print" onclick="printPreparePlan()">Imprimer plan de cueillette</button>
 
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-globales">Globales <small>(0)</small></a></li>

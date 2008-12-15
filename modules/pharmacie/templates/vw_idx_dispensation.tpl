@@ -33,11 +33,16 @@ function refreshStocks() {
 }
 
 function dispenseAll() {
+  var submitted = false;
   $("list-dispensations").select("form").each(function(f) {
-    if ((!f.del || $V(f.del) == 0) &&  $V(f.patient_id) && $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
-      f.onsubmit();
+    if ((!f.del || $V(f.del) == "0") &&  $V(f.patient_id) && $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
+      submitFormAjax(f, 'systemMsg');
+      submitted = false;
     }
   });
+  if (submitted) {
+    refreshLists.defer();
+  }
 }
 
 var oFormDispensation;
