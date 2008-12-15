@@ -19,6 +19,7 @@
   <tr>
     <th colspan="10" class="title">
       Dispensation pour {{$prescription->_ref_object->_ref_patient->_view}}
+      <button type="button" onclick="dispenseAll()" class="tick">Tout dispenser</button>
     </th>
   </tr>
   {{/if}}

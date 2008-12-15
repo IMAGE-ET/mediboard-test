@@ -32,6 +32,14 @@ function refreshStocks() {
   url.requestUpdate("list-stocks", { waitingText: null } );
 }
 
+function dispenseAll() {
+  $("list-dispensations").select("form").each(function(f) {
+    if ((!f.del || $V(f.del) == 0) &&  $V(f.patient_id) && $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
+      f.onsubmit();
+    }
+  });
+}
+
 var oFormDispensation;
 
 // UpdateFields de l'autocomplete de medicaments
