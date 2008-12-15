@@ -31,9 +31,6 @@
 
 {{if !$dialog}}
   <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">v.{{$version.string}}</div>
-  <a id="sponsor" href="http://www.mozilla-europe.org/fr/products/firefox/" title="Pour un meilleur confort et plus de sécurité, nous recommandons d'utiliser le navigateur Firefox">
-    <img src="http://www.spreadfirefox.com/community/images/affiliates/Buttons/80x15/firefox_80x15.png" alt="Firefox Logo" />
-  </a>
 {{/if}}
 
 
