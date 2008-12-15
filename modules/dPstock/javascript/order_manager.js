@@ -40,7 +40,7 @@ function submitOrder (oForm, options) {
           refreshOrder($V(oForm.order_id), options);
         }
         if (options.refreshLists) {
-        alert('toto');refreshLists();
+          refreshLists();
         }
       }
     });
