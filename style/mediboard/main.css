@@ -1372,6 +1372,10 @@ table.note th.low {
   white-space: normal;
 }
 
+#login input, #login label {
+	font-size: 200%;
+}
+
   /* @import "./header.css";  */
 
 /* Global header */
