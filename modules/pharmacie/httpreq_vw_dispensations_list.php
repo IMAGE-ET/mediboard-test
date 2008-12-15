@@ -231,7 +231,11 @@ if($prescriptions) {
   }
 }  
 
-
+foreach ($dispensations as $key => &$disp) {
+  if ($disp["quantite_administration"] == 0) {
+  	unset($dispensations[$key]);
+  }
+}
 
 foreach($besoin_patient as $code_cip => &$quantites_by_patient){
   foreach($quantites_by_patient as $patient_id => &$quantites){

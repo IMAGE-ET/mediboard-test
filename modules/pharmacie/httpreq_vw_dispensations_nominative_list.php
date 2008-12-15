@@ -218,6 +218,9 @@ if($prescription->_id){
   
   
 	foreach($dispensations as $cip => $quantite){
+	  if ($dispensations[$cip]["quantite_administration"] == 0) {
+	    unset($dispensations[$cip]); continue;
+	  }
 	  $product = new CProduct();
 	  $product->code = $cip;
 	  $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
