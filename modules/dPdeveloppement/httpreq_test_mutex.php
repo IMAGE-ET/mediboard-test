@@ -15,23 +15,23 @@ CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);
 
 $mutex = new CMbSemaphore("test");
 
-CAppUI::stepAjax("process $mutex->process", UI_MSG_OK);
+CAppUI::stepAjax("test_mutex-process", UI_MSG_OK, $mutex->process);
 
 switch ($action) {
   case "stall" :
-  $mutex->acquire();
+  CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire());
   sleep(5);
   $mutex->release();
   break;
 
   case "die" : 
-  $mutex->acquire();
+  CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire());
   sleep(5);
   CApp::rip();
   break;
 
   case "run" :
-  $mutex->acquire();
+  CAppUI::stepAjax("test_mutex-acquired", UI_MSG_OK, $mutex->acquire());
   $mutex->release();
   break;
 

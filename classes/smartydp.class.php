@@ -22,12 +22,13 @@ function do_translation($params, $content, &$smarty, &$repeat) {
     foreach ($params as $_key => $_val) {
       switch ($_key) {
         case "escape":
-          if($_val=="JSAttribute"){
-            $content = JSAttribute($content);
-          }else{
-            $content = smarty_modifier_escape($content, $_val);
-          }
+        if ($_val=="JSAttribute"){
+          $content = JSAttribute($content);
           break;
+        }
+
+        $content = smarty_modifier_escape($content, $_val);
+        break;
           
         default:
       }

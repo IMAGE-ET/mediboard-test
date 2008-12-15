@@ -19,4 +19,7 @@ $locales['test_mutex-stall'] = '';
 $locales['test_mutex-die'] = '';
 $locales['test_mutex-run'] = '';
 $locales['mutex_tester-desc'] = '';
+$locales['test_mutex-acquired'] = '';
+$locales['mutex_tester-info1'] = '';
+$locales['mutex_tester-info2'] = '';
 ?>

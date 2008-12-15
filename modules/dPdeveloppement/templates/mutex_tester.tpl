@@ -1,6 +1,10 @@
 <h2>{{tr}}mutex_tester-title{{/tr}}</h2>
 
-<div class="big-info">{{tr nl2br=1}}mutex_tester-desc{{/tr}}</div>
+<div class="big-info">
+	{{tr}}mutex_tester-info1{{/tr}}
+	<br />
+	{{tr}}mutex_tester-info2{{/tr}}
+</div>
 
 <script type="text/javascript">
 
