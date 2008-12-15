@@ -21,4 +21,7 @@ $locales['test_mutex-run'] = 'Vérouille et libère sans attendre';
 $locales['test_mutex-acquired'] = 'Vérou posé après \'%.2f\' secondes';
 $locales['mutex_tester-info1'] = 'Les actions si dessous sont mutuellement exclues par un verrou posé et relâché par chacune d\'entre elle.';
 $locales['mutex_tester-info2'] = 'Il suffit de les lancer chacune à son tour dans l\'ordre voulu pour tester les capacités du Mutex de Mediboard.';
+$locales['test_mutex-dummy'] = 'Ne fait rien';
+$locales['mutex_teste-desc'] = '';
+$locales['mutex_tester-desc'] = '';
 ?>

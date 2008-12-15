@@ -22,4 +22,6 @@ $locales['mutex_tester-desc'] = '';
 $locales['test_mutex-acquired'] = '';
 $locales['mutex_tester-info1'] = '';
 $locales['mutex_tester-info2'] = '';
+$locales['test_mutex-dummy'] = '';
+$locales['test_mutex-process'] = '';
 ?>

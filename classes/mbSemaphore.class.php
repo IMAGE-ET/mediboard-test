@@ -38,7 +38,7 @@ class CMbSemaphore {
     $timeout = intval(min($timeout, 10) * 1000000);
     $step    = intval(min($step   , 10) * 1000000);
     
-    while(!flock($this->key, LOCK_EX + LOCK_NB) && $i < $timeout) {
+    while (!flock($this->key, LOCK_EX + LOCK_NB) && $i < $timeout) {
       usleep($step);
       $i += $step;
     }

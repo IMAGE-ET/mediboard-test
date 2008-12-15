@@ -14,6 +14,7 @@ $actions = array(
   "stall",
   "die",
   "run",
+  "dummy",
 );
 
 // Création du template

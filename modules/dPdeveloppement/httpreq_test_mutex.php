@@ -35,6 +35,9 @@ switch ($action) {
   $mutex->release();
   break;
 
+  case "dummy" :
+  break;
+  
   default:
   CAppUI::stepAjax("test_mutex-fail", UI_MSG_WARNING, $action);
   return;
