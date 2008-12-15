@@ -264,14 +264,6 @@ class CPatient extends CMbObject {
     return null;
   }
   
-  function merge(CPatient $patient1, CPatient $patient2) {
-    if ($msg = $this->checkMerge($patient1, $patient2)) {
-      return CAppUI::tr(get_class($this)) . 
-        CAppUI::tr("CMbObject-msg-merge-failed") .
-        CAppUI::tr($msg);
-    }  
-  }
-  
   function store() {
     // Standard store
     if ($msg = parent::store()) {

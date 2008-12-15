@@ -55,6 +55,10 @@ if (!$patient2->load($_POST["patient2_id"])) {
   $do->errorRedirect("Patient 2 n'existe pas ou plus");
 }
 
+if($testMerge = $patient1->checkMerge($patient1, $patient2)) {
+  $do->errorRedirect($testMerge);
+}
+
 $do->doBind();
 
 // Création du nouveau patient
