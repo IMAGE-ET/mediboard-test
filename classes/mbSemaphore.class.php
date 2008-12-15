@@ -31,7 +31,7 @@ class CMbSemaphore {
    * @param float $step the step between each acquire attempt in seconds (max 10s)
    * @return boolean the job is done
    */
-  function acquire($timeout = 5, $step = 0.1) {
+  function acquire($timeout = 10, $step = 0.1) {
     $i       = 0;
     $timeout = intval(min($timeout, 10) * 1000000);
     $step    = intval(min($step   , 10) * 1000000);
