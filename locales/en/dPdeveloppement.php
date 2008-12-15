@@ -24,4 +24,5 @@ $locales['mutex_tester-info1'] = '';
 $locales['mutex_tester-info2'] = '';
 $locales['test_mutex-dummy'] = '';
 $locales['test_mutex-process'] = '';
+$locales['mutex_tester-info3'] = '';
 ?>

@@ -4,6 +4,8 @@
 	{{tr}}mutex_tester-info1{{/tr}}
 	<br />
 	{{tr}}mutex_tester-info2{{/tr}}
+	<br />
+	<strong>{{tr}}mutex_tester-info3{{/tr}}</strong>
 </div>
 
 <script type="text/javascript">
