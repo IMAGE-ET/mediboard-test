@@ -45,7 +45,7 @@ class CMbSemaphore {
       $i += $step;
     }
     
-    return $i;
+    return $i / 1000000;
   }
   
   /**
