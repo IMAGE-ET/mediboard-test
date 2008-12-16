@@ -46,13 +46,13 @@ $typesEcap = array(
       "1.2.0" => "Libéllé long pour 1.2.0",
       "1.2.1" => "Libéllé long pour 1.2.1",
 		),
-  ),
-  "COperation" => array(
     "AT" => array(
       "2.1.0" => "Libéllé long pour 2.1.0",
       "2.1.1" => "Libéllé long pour 2.1.1",
       "2.1.2" => "Libéllé long pour 2.1.2",
     ),
+	),
+  "COperation" => array(
     "IN" => array(
       "2.2.0" => "Libéllé long pour 2.2.0",
     ),
