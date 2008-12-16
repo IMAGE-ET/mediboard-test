@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 // Si ligne de traitement perso finie, on empeche le passage en ligne de prescription normale
 Main.add( function(){
   var oDiv = $('editLineTraitement-{{$line->_id}}');
@@ -15,16 +16,6 @@ Main.add( function(){
   
   Calendar.regField('form-stop-{{$line->_class_name}}-{{$line->_id}}', "date_arret", false, dates);
 } );
-
-stopLine = function(oForm, object_id, object_class, traitement, cat_id) {
-  if (traitement) {
-    oForm.date_arret.onchange = function() {calculDateArret(oForm, object_id, object_class, traitement, cat_id)};
-    $(oForm.name+'_date_arret_trigger').onclick();
-  }
-  else {
-    calculDateArret(oForm, object_id, object_class, traitement, cat_id);
-  }
-}
 
 calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
   // Date mais pas heure
@@ -82,7 +73,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 	        {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
 	        <button type="button" 
 	                class="stop" 
-	                onclick="stopLine(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}','{{$category_id}}');">  
+	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}','{{$category_id}}');">  
 	          Arrêter
 	        </button>
 	      </td>
