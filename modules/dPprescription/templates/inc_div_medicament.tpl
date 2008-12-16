@@ -117,7 +117,7 @@ Main.add( function(){
 <table class="form">
   <tr>
     <th class="category">Nouvelle ligne</th>
-    <th class="category">Actions</th>
+    <th class="category" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
     <td>
@@ -188,14 +188,7 @@ Main.add( function(){
 			{{/if}} 
     </td>
 
-    <td>  
-      {{if $prescription->object_id}}
-			  <select name="advAction" style="float: right">
-			    <option value="">&mdash; Actions spécifiques</option>
-			    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
-			    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
-			  </select>
-			{{/if}}
+    <td style="text-align: center;">
 			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements || $prescription->_ref_perfusions)}}
 			  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}},{{if $readonly}}false{{else}}true{{/if}});">
 			    {{if $readonly}}Modification
@@ -204,34 +197,12 @@ Main.add( function(){
 			  </button>
 			  
 			  {{if $readonly}}
-			  	<button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
+        <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
 			    {{if $lite}}Vue complète
 			    {{else}}Vue simplifiée
 			    {{/if}}
 	 		  </button>
 			  {{/if}}
-			       
-		  {{/if}}
-		  <br />
-		  {{if $mode_pharma}}
-		    <strong>
-			    {{mb_label object=$prescription field=_score_prescription}} {{mb_value object=$prescription field=_score_prescription}}
-		 	  </strong>
-		  {{/if}}
-		
-		  {{if $mode_pharma && $prescription->_score_prescription == "2"}}
-		    <strong>Validation auto. impossible</strong>
-		  {{/if}}
-		  
-		  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-		  {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
-		  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
-		    {{if $mode_pharma}}
-		      Valider toutes les lignes
-		    {{else}}
-		      Signer les lignes de médicaments
-		    {{/if}}
-		  </button>
 		  {{/if}}
     </td>
   </tr>
