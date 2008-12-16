@@ -1372,12 +1372,14 @@ table.note th.low {
   white-space: normal;
 }
 
-#login input, #login label {
-	font-size: 200%;
+#login input, #login label{
+	font-size: 1.4em;
 }
 
 #login button {
-	font-size: 150%;
+  font-size: 1.3em;
+	height: 1.5em;
+	background-position: left 110%;
 }
 
   /* @import "./header.css";  */
