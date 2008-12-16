@@ -22,7 +22,7 @@ $requestParams = array (
   "aTypeObjet"             => "SJ",
 );
 
-mbDump($requestParams, "Paramètres de la requête, 'ListerTypeDocument'");
+mbExport($requestParams, "Paramètres de la requête, 'ListerTypeDocument'");
 
 if (!url_exists($serviceURL)) {
   CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
@@ -32,7 +32,7 @@ if (!url_exists($serviceURL)) {
 $client = new SoapClient("$serviceURL?WSDL", array('exceptions' => 0));
 $results = $client->ListerTypeDocument($requestParams);
 $typesEcap = simplexml_load_string($results->ListerTypeDocumentResult->any);
-mbDump($typesEcap, "Retour requête");
+mbExport($typesEcap, "Retour requête");
 
 $typesEcap = array(
   "CPatient" => array (
