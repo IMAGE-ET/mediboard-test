@@ -39,7 +39,7 @@ Main.add(function () {
   </tr>
 
   <tr>
-    <td style="width: 0.1%;">
+    <td>
       <button type="button" onclick="showLegend()" class="search">Légende</button>
       <button type="button" onclick="showRapport('{{$date}}')" class="print">Rapport</button>
     </td>
@@ -48,10 +48,7 @@ Main.add(function () {
       <form name="chgAff" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
-      
-      <input type="hidden" name="afficher_chambres_cachees" value="{{$afficher_chambres_cachees}}" />
-      <label><input type="checkbox" onclick="$V(this.form.afficher_chambres_cachees, (this.checked ? 1 : 0)); this.form.submit();" {{if $afficher_chambres_cachees == 1}}checked="checked"{{/if}} /> Afficher les chambres cachées</label>
-      <br />
+
       {{foreach from=$services item=curr_service}}
         <input
           type="checkbox"

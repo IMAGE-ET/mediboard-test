@@ -21,7 +21,6 @@ $heureLimit = "16:00:00";
 $date      = mbGetValueFromGetOrSession("date", mbDate()); 
 $mode      = mbGetValueFromGetOrSession("mode", 0); 
 $filterAdm = mbGetValueFromGetOrSession("filterAdm", "tout");
-$afficher_chambres_cachees = mbGetValueFromGetOrSession("afficher_chambres_cachees");
 $triAdm    = mbGetValueFromGetOrSession("triAdm", "praticien");
 
 // Récupération du service à ajouter/éditer
@@ -156,7 +155,6 @@ $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("services"              , $services);
 $smarty->assign("alerte"                , $alerte);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
-$smarty->assign("afficher_chambres_cachees", $afficher_chambres_cachees);
 
 $smarty->display("vw_affectations.tpl");
 ?>
