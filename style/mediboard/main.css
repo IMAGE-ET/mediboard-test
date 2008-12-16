@@ -1376,6 +1376,10 @@ table.note th.low {
 	font-size: 200%;
 }
 
+#login button {
+	font-size: 150%;
+}
+
   /* @import "./header.css";  */
 
 /* Global header */
