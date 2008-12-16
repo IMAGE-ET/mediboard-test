@@ -33,6 +33,7 @@ function printPreparePlan(nominatif) {
     url.addParam("do", 1);
     url.addParam("_dateTime_min", $V(form._date_min)+' 00:00:00');
     url.addParam("_dateTime_max", $V(form._date_max)+' 23:59:59');
+    url.addParam("service_id", $V(form.service_id));
     url.addParam("hide_filters", 1);
   }
   else {

@@ -10,14 +10,18 @@
 $date         = mbGetValueFromGetOrSession("date", mbDate());
 $dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
-$hide_filters = mbGetValueFromGet("hide_filters", '1') == '1';
+$hide_filters = mbGetValueFromGet("hide_filters", '') == '1';
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
 
 // Filtres du sejour
 $token_cat = mbGetValueFromGet("token_cat","");
-$cats = explode("|",$token_cat);
+$elts = $cats = explode("|",$token_cat);
+
+CMbArray::removeValue("med", $elts);
+$do_elements = (count($elts) > 0);
+$do_medicaments = (in_array("med", $cats));
 
 $service_id = mbGetValueFromGetOrSession("service_id");
 
@@ -68,7 +72,9 @@ if (mbGetValueFromGet("do")) {
 	foreach($prescriptions as $_prescription){
 	  // Chargement des lignes
 	  $_prescription->loadRefsLinesMed("1","1","service");
-	  $_prescription->loadRefsLinesElementByCat("1","","service");
+	  if ($do_elements) {
+	    $_prescription->loadRefsLinesElementByCat("1","","service");
+	  }
 	  $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
 	  $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 	
@@ -91,7 +97,7 @@ if (mbGetValueFromGet("do")) {
 	  $patient->loadRefConstantesMedicales();
 	  
 	  
-	  if(in_array("med", $cats)){
+	  if($do_medicaments){
 	    // Parcours et stockage des perfusions
 	    if($_prescription->_ref_perfusions){
 	      foreach($_prescription->_ref_perfusions as $_perfusion){
@@ -138,8 +144,6 @@ if (mbGetValueFromGet("do")) {
 						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue["total"] = 0;
 						            }
-						            
-						            
 						          }
 					          }
 					        }
