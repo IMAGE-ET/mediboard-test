@@ -16,7 +16,7 @@
       <table>
         <tr>
           <td rowspan="3" class="logo">
-            {{thumb src="images/pictures/mbNormal.gif" w="140" f="png"}}
+            {{thumb src="images/pictures/logo.png" w="140" f="png"}}
             <!-- <img src="./style/{{$uistyle}}/images/pictures/tonkin.gif" alt="Groupe Tonkin" />-->
           </td>
           <th width="1%">
