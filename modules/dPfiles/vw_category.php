@@ -22,6 +22,7 @@ $listCategory = new CFilesCategory;
 $listCategory = $listCategory->loadList();
 
 // LIste des Class
+CAppUI::getAllClasses();
 $listClass = getChildClasses();
 
 

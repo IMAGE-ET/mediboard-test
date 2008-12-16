@@ -195,9 +195,14 @@ class CSetupdPfiles extends CSetup {
 			SET `class` = 'CSejour'
 			WHERE `file_category_id` = 3;";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `files_category` 
+			ADD `validation_auto` ENUM ('0','1');";
+    $this->addQuery($sql);
     
     
-    $this->mod_version = "0.19";
+    $this->mod_version = "0.20";
   }
 }
 ?>

@@ -11,4 +11,7 @@ $locales['config-ecap-soap'] = 'Services web e-Cap';
 $locales['config-ecap-soap-user'] = 'Utilisateur service web';
 $locales['config-ecap-soap-pass'] = 'Mot de passe service web';
 $locales['config-ecap-dhe'] = 'DHE e-Cap';
+$locales['mod-ecap-tab-vw_soap_services'] = 'Services Web';
+$locales['mod-ecap-tab-export_documents'] = 'Envoi de documents';
+$locales['mod-ecap-tab-manage_categories'] = 'Catégories de documents';
 ?>

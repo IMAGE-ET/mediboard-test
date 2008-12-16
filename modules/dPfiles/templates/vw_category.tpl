@@ -31,10 +31,12 @@
     </td>
     <td class="halfPane">
       <form name="editCat" action="?m={{$m}}&amp;tab=vw_category" method="post" onsubmit="return checkForm(this)">
+
       <input type="hidden" name="m" value="dPfiles" />
       <input type="hidden" name="dosql" value="do_filescategory_aed" />
-	  <input type="hidden" name="file_category_id" value="{{$category->file_category_id}}" />
+	  	<input type="hidden" name="file_category_id" value="{{$category->file_category_id}}" />
       <input type="hidden" name="del" value="0" />
+
       <table class="form">
         <tr>
           {{if $category->file_category_id}}
@@ -43,10 +45,17 @@
           <th class="title" colspan="2">Création d'une catégorie</th>
           {{/if}}
         </tr> 
+        
         <tr>
           <th>{{mb_label object=$category field="nom"}}</th>
           <td>{{mb_field object=$category field="nom"}}</td>
         </tr>
+
+        <tr>
+          <th>{{mb_label object=$category field="validation_auto"}}</th>
+          <td>{{mb_field object=$category field="validation_auto"}}</td>
+        </tr>
+
         <tr>
           <th><label for="class" title="Class de la catégorie">Class</label></th>
           <td>

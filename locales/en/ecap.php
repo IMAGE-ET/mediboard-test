@@ -11,4 +11,7 @@ $locales['config-ecap-soap'] = '';
 $locales['config-ecap-soap-user'] = '';
 $locales['config-ecap-soap-pass'] = '';
 $locales['config-ecap-dhe'] = '';
+$locales['mod-ecap-tab-vw_soap_services'] = '';
+$locales['mod-ecap-tab-export_documents'] = '';
+$locales['mod-ecap-tab-manage_categories'] = '';
 ?>

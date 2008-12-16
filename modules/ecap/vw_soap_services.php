@@ -22,25 +22,6 @@ $client = new SoapClient("$serviceURL?WSDL", array('exceptions' => 0));
 
 $functions = $client->__getFunctions();
 
-$requestParams = array (
-  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
-  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
-  "aTypeIdentifiantActeur" => "loginUser",
-  "aIdentifiantActeur"     => "pr1",
-  "aIdClinique"            => CAppUI::conf("dPsante400 group_id"),
-  "aTypeObjet"             => "SJ",
-);
-
-mbDump($requestParams);
-
-$results = $client->ListerTypeDocument($requestParams);
-mbTrace($results->ListerTypeDocumentResult);
-
-$types = simplexml_load_string($results->ListerTypeDocumentResult->any);
-
-mbTrace($types);
-
-
 // Création du template
 $smarty = new CSmartyDP();
 

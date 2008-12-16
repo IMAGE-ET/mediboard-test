@@ -15,6 +15,7 @@ class CFilesCategory extends CMbObject {
   var $file_category_id = null;	
   var $nom = null;
   var $class = null;
+  var $validation_auto = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -35,6 +36,7 @@ class CFilesCategory extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["nom"]   = "notNull str";
     $specs["class"] = "str";
+    $specs["validation_auto"] = "bool";
     return $specs;
   }
   
@@ -42,6 +44,17 @@ class CFilesCategory extends CMbObject {
     return array (
       "nom" => "like"
     );
+  }
+  
+  static function loadListByClass() {
+    $category = new CFilesCategory();
+    $categories = $category->loadList(null, "nom");
+    $catsByClass = array();
+    foreach ($categories as $_category) {
+      $catsByClass[$_category->class][$_category->_id] = $_category; 
+    }
+    unset($catsByClass[""]);
+    return $catsByClass;
   }
     
   static function listCatClass($paramclass = null) {
