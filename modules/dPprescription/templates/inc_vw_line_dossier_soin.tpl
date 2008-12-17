@@ -177,7 +177,9 @@
 				  {{/if}}
 				  
 	      <td id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" 
-	      		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if $mode_dossier == 'planification' && ($quantite == '0' || $quantite == '-')}}canDrop{{/if}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+	      		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if $mode_dossier == 'planification' && ($quantite == '0' || $quantite == '-')}}canDrop{{/if}}" 
+	      		style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
+	      		{{if $mode_dossier == "planification"}}background-color: #CAFFBA;{{/if}}'>
 		   
 					
 				  				  			   
@@ -186,6 +188,8 @@
 				       {{if $mode_dossier == 'planification'}}onmousedown="addDroppablesDiv(this);"{{/if}}
 				       {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
 				      style="background-color: #aaa"
+				       
+				       
 				      {{if $dPconfig.dPprescription.CAdministration.hors_plage}}
 				        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 			          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
@@ -273,7 +277,9 @@
 	       {{/if}}
 		   </td>
 	   {{else}}
-	      <td class="{{$_view_date}}-{{$moment_journee}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+	      <td class="{{$_view_date}}-{{$moment_journee}}" 
+	          style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
+	          {{if $mode_dossier == "planification"}}background-color: #CAFFBA;{{/if}}'>
 		     <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
 		          {{if $mode_dossier == "administration"}}onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'{{/if}}
 		            {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}

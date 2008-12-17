@@ -266,5 +266,9 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 		  </tr>
 		</table>
 	</form>
+	{{elseif !$planification->_id}}
+     <div class="little-info">
+       Il est impossible de planifier sur cette case car elle possède déjà une prise prévue.
+     </div>
 	{{/if}}
 {{/if}}
