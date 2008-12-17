@@ -7,16 +7,22 @@
 * @author Alexis Granger
 */
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date         = mbGetValueFromGetOrSession("date", mbDate());
 $dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
+$hide_filters = mbGetValueFromGet("hide_filters", '') == '1';
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
 
 // Filtres du sejour
 $token_cat = mbGetValueFromGet("token_cat","");
-$cats = explode("|",$token_cat);
+$elts = $cats = explode("|",$token_cat);
+
+CMbArray::removeValue("med", $elts);
+$do_elements = (count($elts) > 0);
+$do_medicaments = (in_array("med", $cats));
+
 $service_id = mbGetValueFromGetOrSession("service_id");
 
 // Filtres sur l'heure des prises
@@ -61,7 +67,9 @@ if (mbGetValueFromGet("do")) {
 	foreach($prescriptions as $_prescription){
 	  // Chargement des lignes
 	  $_prescription->loadRefsLinesMed("1","1","service");
-	  $_prescription->loadRefsLinesElementByCat("1","","service");
+	  if ($do_elements) {
+	    $_prescription->loadRefsLinesElementByCat("1","","service");
+	  }
 	  $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
 	  $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 	
@@ -84,7 +92,7 @@ if (mbGetValueFromGet("do")) {
 	  $patient->loadRefConstantesMedicales();
 	  
 	  
-	  if(in_array("med", $cats)){
+	  if($do_medicaments){
 	    // Parcours et stockage des perfusions
 	    if($_prescription->_ref_perfusions){
 	      foreach($_prescription->_ref_perfusions as $_perfusion){
@@ -265,8 +273,6 @@ foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
   }
 }
 
-
-
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
@@ -280,7 +286,7 @@ $token_cat = implode("|", $cats);
 
 $cat_used = array();
 foreach($cats as $_cat){
-  if($_cat == "med"){
+  if($_cat === "med"){
     $cat_used["med"] = "Médicament";
   } else {
     if(!array_key_exists($_cat, $cat_used)){
@@ -293,6 +299,7 @@ foreach($cats as $_cat){
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign("hide_filters", $hide_filters);
 $smarty->assign("cat_used", $cat_used);
 $smarty->assign("token_cat", $token_cat);
 $smarty->assign("cats", $cats);
