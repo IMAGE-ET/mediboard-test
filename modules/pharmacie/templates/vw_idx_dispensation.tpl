@@ -7,12 +7,19 @@ function refreshLists() {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_nominative_list");
     $('list-dispensations-title').update('Nominatif');
     $('list-stocks-title').update('Nominatif hors prescription');
+    $('li-tranmissions').show();
   }
   else {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
     $('list-dispensations-title').update('Nominatif reglobalisé');
     $('list-stocks-title').update('Global');
+    $('li-tranmissions').hide();
   }
+  
+  if(!($('li-tranmissions').visible())){
+    $('list-transmissions').hide();
+  }
+  
   $$('a[href=#list-dispensations] small').first().update('(0)');
   
   $A(form.elements).each (function (e) {
@@ -103,9 +110,11 @@ function updateDispensationUrgence(formUrgence) {
   </li>
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nomitatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
+  <li id="li-tranmissions"><a href="#list-transmissions">Transmissions</a></li>
 </ul>
 <hr class="control_tabs" />
 
 <!-- Tabs containers -->
 <div id="list-dispensations" style="display: none;"></div>
 <div id="list-stocks" style="display: none;"></div>
+<div id="list-transmissions" style="display:none"></div>

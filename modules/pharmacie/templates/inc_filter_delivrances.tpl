@@ -16,7 +16,7 @@ function refreshPatient(){
 }
 </script>
 
-<form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
+<form name="filter" action="?" method="get" onsubmit="loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>

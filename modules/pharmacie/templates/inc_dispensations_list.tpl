@@ -6,6 +6,20 @@
 
 <script type="text/javascript">
   $$('a[href=#list-dispensations] small').first().update('({{$dispensations|@count}})');
+  
+  loadSuivi = function(sejour_id) {
+   var urlSuivi = new Url;
+   urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+   urlSuivi.addParam("sejour_id", sejour_id);
+   urlSuivi.requestUpdate("list-transmissions", { waitingText: null } );
+  }
+ 
+	submitSuivi = function(oForm) {
+	  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
+	    loadSuivi(oForm.sejour_id.value);
+	  } });
+	}
+
 </script>
 
 {{if $dPconfig.dPstock.CProductStockGroup.infinite_quantity == 1}}

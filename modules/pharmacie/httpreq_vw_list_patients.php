@@ -8,7 +8,7 @@
  */
 
 $patients = array();
-
+$sejours = array();
 $patient_id = mbGetValueFromGetOrSession('patient_id');
 $service_id = mbGetValueFromGetOrSession('service_id');
 $date_min = mbGetValueFromGetOrSession('_date_min').' 00:00:00';
@@ -40,12 +40,14 @@ if ($prescriptions) {
 		$sejour =& $_prescription->_ref_object;
 		$sejour->loadRefPatient();
 		$patients[$sejour->patient_id] =& $sejour->_ref_patient;
+		$sejours[$sejour->patient_id] = $sejour->_id;
 		$tab_prescription_id[$sejour->patient_id] = $_prescription->_id;
 	}
 }
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign("sejours"             , $sejours);
 $smarty->assign("patients"            , $patients);
 $smarty->assign("tab_prescription_id" , $tab_prescription_id);
 $smarty->assign("patient_id"          , $patient_id);

@@ -14,6 +14,8 @@ $prescription_id = mbGetValueFromGetOrSession('prescription_id');
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
 
+$lines = array();
+
 // Creation du tableau de dates
 $dates = array();
 if($date_min != $date_max){
@@ -60,11 +62,7 @@ if($prescription->_id){
   $date_min = max($sejour->_entree, $date_min);
   $date_max = min($sejour->_sortie, $date_max);
 
-  if ($date_min > $date_max) {
-    continue;
-  }
-  
-   $prescription->loadRefsLinesMed("1","1","service");
+  $prescription->loadRefsLinesMed("1","1","service");
 
   $lines_med = array();
   $lines_med["medicament"] = $prescription->_ref_prescription_lines;
