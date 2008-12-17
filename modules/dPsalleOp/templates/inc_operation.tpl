@@ -69,7 +69,7 @@ function reloadPrescription(prescription_id){
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="title text" colspan="2">
       <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
@@ -90,22 +90,42 @@ function reloadPrescription(prescription_id){
     </th>
   </tr>
   
+  {{if $selOp->_ref_sejour->rques || $selOp->rques || $selOp->materiel}}
   <!-- Mise en avant du matériel et remarques -->
-  {{if $selOp->materiel}}
   <tr>
-    <td class="text">
-      <strong>{{mb_label object=$selOp field=materiel}} :</strong> 
-      {{mb_value object=$selOp field=materiel}}
-    </td>
-  </tr>
-  {{/if}}
-  
-  {{if $selOp->rques}}
-  <tr>
-    <td class="text">
-      <strong>{{mb_label object=$selOp field=rques}} :</strong> 
+    {{if $selOp->_ref_sejour->rques || $selOp->rques}}
+    {{if !$selOp->materiel}}
+    <td class="text big-warning" colspan="2">
+    {{else}}
+    <td class="text big-warning halfPane">
+    {{/if}}
+      {{if $selOp->_ref_sejour->rques}}
+      <strong>{{mb_label object=$selOp->_ref_sejour field=rques}}</strong>
+      <br />
+      {{mb_value object=$selOp->_ref_sejour field=rques}}
+      <br />
+      {{/if}}
+      {{if $selOp->rques}}
+      <strong>{{mb_label object=$selOp field=rques}}</strong>
+      <br />
       {{mb_value object=$selOp field=rques}}
+      <br />
+      {{/if}}
     </td>
+    {{/if}}
+    {{if $selOp->materiel}}
+    {{if !$selOp->_ref_sejour->rques && !$selOp->rques}}
+    <td class="text big-info" colspan="2">
+    {{else}}
+    <td class="text big-info halfPane">
+    {{/if}}
+      {{if $selOp->materiel}}
+      <strong>{{mb_label object=$selOp field=materiel}}</strong>
+      <br /> 
+      {{mb_value object=$selOp field=materiel}}
+      {{/if}}
+    </td>
+    {{/if}}
   </tr>
   {{/if}}
 </table>

@@ -782,16 +782,43 @@ span.error {
   background-color: #f00;
 }
 
+table.tbl td.big-error,
+span.big-error {
+  background-image: url(images/icons/error.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #fee;
+  padding-left: 55px;
+}
+
 table.tbl td.warning,
 table.tbl tr:hover td.warning,
 span.warning {
   background-color: #fc0;
 }
 
+table.tbl td.big-warning,
+span.big-warning {
+  background-image: url(images/icons/warning.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #ffd;
+  padding-left: 55px;
+}
+
 table.tbl td.ok,
 table.tbl tr:hover td.ok,
 span.ok {
   background-color: #afa;
+}
+
+table.tbl td.big-info,
+span.big-info {
+  background-image: url(images/icons/info.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #eef;
+  padding-left: 55px;
 }
 
 table.tbl tr.selected td,
