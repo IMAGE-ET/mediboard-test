@@ -14,6 +14,9 @@
       {{if $line->_can_vw_generique}}
       <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
       {{/if}}
+      {{if $line->_ref_produit->_supprime}}
+      <br /><img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
+      {{/if}}
       {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 

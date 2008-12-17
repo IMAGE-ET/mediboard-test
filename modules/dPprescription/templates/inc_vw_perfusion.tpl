@@ -218,6 +218,9 @@
 									    {{if $line->_can_vw_generique}}
 									      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
 									    {{/if}} 
+                      {{if $line->_ref_produit->_supprime}}
+                        <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
+                      {{/if}}
 					            <strong>{{$line->_ucd_view}}</strong>
 					          </td>
 			              <td style="border:none; width: 20%;">

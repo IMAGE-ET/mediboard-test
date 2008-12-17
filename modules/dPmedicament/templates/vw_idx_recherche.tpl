@@ -102,7 +102,8 @@ Main.add(function () {
   </form>
   <table class="tbl">
     <tr>
-      <th>CIP</th>
+      <th style="width: 0.1%;">CIP</th>
+      <th style="width: 0.1%;"></th>
       <th>UCD</th>
       <th>Produit</th>
       <th>Laboratoire</th>
@@ -115,18 +116,23 @@ Main.add(function () {
         {{/if}}
        
         {{$produit->code_cip}}
-        {{if $produit->hospitalier}}
-        <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
-        {{/if}}
-        {{if $produit->_generique}}
-        <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
-        {{/if}}
-        {{if $produit->_referent}}
-        <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
+      </td>
+      <td>
+        {{if !$produit->inLivret}}
+        <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret thérapeutique" title="Produit non présent dans le livret thérapeutique" />
         {{/if}}
         
-        {{if !$produit->inLivret}}
-        <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+        {{if $produit->hospitalier}}
+        <img src="./images/icons/hopital.gif" alt="Produit hospitalier" title="Produit hospitalier" />
+        {{/if}}
+        {{if $produit->_generique}}
+        <img src="./images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
+        {{/if}}
+        {{if $produit->_referent}}
+        <img src="./images/icons/referents.gif" alt="Produit référent" title="Produit référent" />
+        {{/if}}
+        {{if $produit->_supprime}}
+        <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
         {{/if}}
       </td>
       <td>

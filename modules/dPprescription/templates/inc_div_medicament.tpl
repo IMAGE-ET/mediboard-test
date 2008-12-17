@@ -117,7 +117,7 @@ Main.add( function(){
 <table class="form">
   <tr>
     <th class="category">Nouvelle ligne</th>
-    <th class="category" style="width: 1%;">Affichage</th>
+    <th class="category" style="width: 1%;">Actions</th>
   </tr>
   <tr>
     <td>
@@ -204,6 +204,18 @@ Main.add( function(){
 	 		  </button>
 			  {{/if}}
 		  {{/if}}
+      
+      <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+      {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
+      <br />
+      <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
+        {{if $mode_pharma}}
+          Valider toutes les lignes
+        {{else}}
+          Signer les lignes de médicaments
+        {{/if}}
+      </button>
+      {{/if}}
     </td>
   </tr>
 </table>

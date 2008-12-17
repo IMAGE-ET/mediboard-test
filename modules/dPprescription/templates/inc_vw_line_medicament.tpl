@@ -148,6 +148,9 @@
       <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
       <br />
       {{/if}}
+      {{if $line->_ref_produit->_supprime}}
+      <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
+      {{/if}}
     </td>
     
     {{if !$line->_protocole}}
