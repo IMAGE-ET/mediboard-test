@@ -24,6 +24,13 @@ oDragOptions = {
 }
 
 addDroppablesDiv = function(draggable){
+  $("before").onmouseover = function(){ 
+    timeOutBefore = setTimeout(showBefore, 1000);
+  }
+  $("after").onmouseover = function(){ 
+    timeOutAfter = setTimeout(showAfter, 1000);
+  }
+  
   $(draggable).up(1).select('td').each(function(td) {
 	  if(td.hasClassName("canDrop")){
 	    Droppables.add(td.id, {
@@ -43,6 +50,8 @@ addDroppablesDiv = function(draggable){
 				  }
 	        addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id);
 	        Droppables.drops.clear(); 
+	        $("before").onmouseover = null;
+	        $("after").onmouseover = null;
 	      },
 	      hoverclass:'soin-selected'
 	    } );

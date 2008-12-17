@@ -128,11 +128,9 @@
   </td>
   
   {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
-  <th id="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseover="timeOutBefore = setTimeout(showBefore, 1000);" onmouseout="clearTimeout(timeOutBefore);">
+  <th id="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutBefore);">
    <img src="images/icons/a_left.png" title="" alt="" />
   </th>
-  
-
   {{/if}}
   
   <!-- Affichage des heures de prises des medicaments -->			 
@@ -324,7 +322,7 @@
  {{/foreach}}
  
  {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
-   <th id="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseover="timeOutAfter = setTimeout(showAfter, 1000);"  onmouseout="clearTimeout(timeOutAfter);">
+   <th id="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutAfter);">
      <img src="images/icons/a_right.png" title="" alt="" />
    </th>
  {{/if}}
