@@ -68,7 +68,7 @@
 	 	<td>{{mb_value object=$_category field=validation_auto}}</td>
 	 	<td>
 
-			<form name="EditIdEcap-{{$_category->_guid}}" action="?m={{$m}}&amp;tab={{$tab}}" method="post" onsubmit="return checkForm(this)">
+			<form name="EditIdEcap-{{$_category->_guid}}" action="?m={{$m}}&amp;tab={{$tab}}" method="post" onsubmit="return onSubmitFormAjax(this);">
 			  <input type="hidden" name="m" value="dPsante400" />
 			  <input type="hidden" name="dosql" value="do_idsante400_aed" />
 			  <input type="hidden" name="del" value="0" />
