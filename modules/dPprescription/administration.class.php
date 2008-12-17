@@ -62,12 +62,7 @@ class CAdministration extends CMbMetaObject {
 
   function updateFormFields(){
   	parent::updateFormFields();
- 
   	$this->_heure = substr(mbTime($this->dateTime), 0, 2);
-  	if(mbTime($this->dateTime) === "23:59:00"){
-  		$this->_heure = "24";
-  	}
-  	
   	$this->_unite_prise = ($this->unite_prise !== "aucune_prise" ? $this->unite_prise : ""); // Parfois modifié par loadRefPrise
   }
   

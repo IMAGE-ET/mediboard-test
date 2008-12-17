@@ -39,19 +39,27 @@
   <th colspan="2" class="title" style="width: 7cm">Prescription</th>
   <th rowspan="2" class="title" style="width: 1cm">Prescripteur</th>
   <th rowspan="2" style="width: 5px"></th>
-  {{foreach from=$dates item=date}}
-  <th colspan="{{$tabHours.$date|@count}}" class="title" style="width: 5cm; border-right: 1px solid black; border-left: 1px solid black;">{{$date|date_format:"%d/%m/%Y"}}</th>
+  {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+      <th colspan="{{if $moment_journee == 'soir'}}{{$soir|@count}}{{/if}}
+				   				 {{if $moment_journee == 'nuit'}}{{$nuit|@count}}{{/if}}
+				     			 {{if $moment_journee == 'matin'}}{{$matin|@count}}{{/if}}"
+				  class="title" style="width: 5cm;">{{$moment_journee}} du {{$_date|date_format:"%d/%m/%Y"}}</th>
+    {{/foreach}}
   {{/foreach}}
 </tr>
 <tr>
   <th class="title" style="width: 4cm">Produit</th>
   <th class="title" style="width: 3cm">Posologie</th>
-  {{foreach from=$dates item=date }}
-    {{foreach from=$tabHours.$date item=_hour name=foreach_date}}
-      <th style="{{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
-                 {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}">
-        {{$_hour}}h
-      </th>
+  {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+      {{foreach from=$_dates key=_date_reelle item=_hours}}
+        {{foreach from=$_hours key=_heure_reelle item=_hour}}
+		      <th>
+		        {{$_hour}}h
+		      </th>
+        {{/foreach}}
+      {{/foreach}}
     {{/foreach}}
   {{/foreach}}
 </tr>

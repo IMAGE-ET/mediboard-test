@@ -92,15 +92,7 @@ Main.add( function(){
 
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
- 
-{{if !$prescription->_can_add_line}}
-  <div class="big-info">
-    L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
-    entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures
-  </div>
-{{/if}}
-
- {{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
+{{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
  <table class="tbl">
    <th style="width:15%;">Libellé</th>
    <th style="width:10%;">Catégorie</th>
@@ -111,7 +103,7 @@ Main.add( function(){
    <th style="width:10%;">Exécutant</th>
    <th style="width:10%">Emplacement</th>
  </table>
- {{/if}}
+{{/if}}
 	  
 {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 

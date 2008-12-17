@@ -19,28 +19,50 @@ $_datetime    = mbGetValueFromGet("_datetime");
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Creation du tableau de dates
+$tabHours = array();
+$matin = range(CAppUI::conf("dPprescription CPrisePosologie heures matin min"), CAppUI::conf("dPprescription CPrisePosologie heures matin max"));
+$soir = range(CAppUI::conf("dPprescription CPrisePosologie heures soir min"), CAppUI::conf("dPprescription CPrisePosologie heures soir max"));
+$nuit_soir = range(CAppUI::conf("dPprescription CPrisePosologie heures nuit min"), 23);
+$nuit_matin = range(00, CAppUI::conf("dPprescription CPrisePosologie heures nuit max"));
+
+foreach($matin as &$_hour_matin){
+  $_hour_matin = str_pad($_hour_matin, 2, "0", STR_PAD_LEFT);  
+}
+foreach($soir as &$_soir_matin){
+  $_soir_matin = str_pad($_soir_matin, 2, "0", STR_PAD_LEFT);  
+}
+foreach($nuit_soir as &$_hour_nuit_soir){
+  $nuit[] = str_pad($_hour_nuit_soir, 2, "0", STR_PAD_LEFT);
+}
+foreach($nuit_matin as &$_hour_nuit_matin){
+  $nuit[] = str_pad($_hour_nuit_matin, 2, "0", STR_PAD_LEFT);
+}
+
+
 $dates = array();
 if($_entree && $_sortie && $_datetime){
-	$date = $_entree;
+	$date = mbDate($_entree);
 	while($date < $_sortie){
-	  $dates[] = $date;
+	  $dates[mbDate($date)] = array("matin" => $matin, "soir" => $soir, "nuit" => $nuit);
 	  $date = mbDate("+ 1 DAY", $date);
 	}
 }
 $prescription = new CPrescription();
 
-$tabHours = array();
-$heures = array();
-$list_hours = range(0,23);
-$hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
-sort($hours); 
-$last_hour_in_array = reset($hours); 
-foreach($list_hours as &$hour){
-  $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
-  if(in_array($hour, $hours)){
-    $last_hour_in_array = $hour;
+
+$composition_dossier = array();
+foreach($dates as $curr_date => $_date){
+  foreach($_date as $moment_journee => $_hours){
+    $composition_dossier[] = "$curr_date-$moment_journee";
+    foreach($_hours as $_hour){
+      $date_reelle = $curr_date;
+      if($moment_journee == "nuit" && $_hour < "12:00:00"){
+        $date_reelle = mbDate("+ 1 DAY", $curr_date);
+      }
+      $_dates[$date_reelle] = $date_reelle;
+      $tabHours[$curr_date][$moment_journee][$date_reelle]["$_hour:00:00"] = $_hour;
+    }
   }
-  $heures[$hour] = $last_hour_in_array;
 }
 
 if($_entree && $_sortie && $_datetime){
@@ -99,22 +121,15 @@ if($_entree && $_sortie && $_datetime){
 	  }
 	  $prescription =& $prescription_globale;
 	}
-
-
+	
   $types = array("med", "elt");
   foreach($types as $type){
     $prescription->_lines[$type] = array();
     $prescription->_intitule_prise[$type] = array();
   }
   // Calcul du plan de soin 
-  foreach($dates as $_date){
-    foreach($types as $type){
-      $prescription->_list_prises[$type][$_date] = array();
-    }
-    $prescription->calculPlanSoin($_date, 1, $heures);
-    foreach($hours as $_hour){
-  	  $tabHours[$_date]["$_date $_hour:00:00"] = $_hour;
-    }
+  foreach($dates as $_date => $_hours){
+    $prescription->calculPlanSoin($_date, 1);
   }  
 }
 
@@ -142,6 +157,9 @@ $smarty->assign("categories", $categories);
 $smarty->assign("patient", new CPatient());
 $smarty->assign("pack_id", $pack_id);
 $smarty->assign("protocole_id", $protocole_id);
+$smarty->assign("matin", $matin);
+$smarty->assign("soir", $soir);
+$smarty->assign("nuit", $nuit);
 $smarty->display("inc_preview_protocole.tpl");
 
 ?>

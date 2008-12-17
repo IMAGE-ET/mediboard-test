@@ -7,22 +7,16 @@
 * @author Alexis Granger
 */
 
-$date         = mbGetValueFromGetOrSession("date", mbDate());
+$date = mbGetValueFromGetOrSession("date", mbDate());
 $dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
-$hide_filters = mbGetValueFromGet("hide_filters", '') == '1';
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
 
 // Filtres du sejour
 $token_cat = mbGetValueFromGet("token_cat","");
-$elts = $cats = explode("|",$token_cat);
-
-CMbArray::removeValue("med", $elts);
-$do_elements = (count($elts) > 0);
-$do_medicaments = (in_array("med", $cats));
-
+$cats = explode("|",$token_cat);
 $service_id = mbGetValueFromGetOrSession("service_id");
 
 // Filtres sur l'heure des prises
@@ -40,6 +34,7 @@ $lines_by_patient = array();
 $sejours = array();
 $list_lines = array();
 $chambres = array();
+
 if (mbGetValueFromGet("do")) {
 	// Chargement de toutes les prescriptions
 	$where = array();
@@ -61,20 +56,12 @@ if (mbGetValueFromGet("do")) {
 	$lines = array();
 	$patients = array();
 	
-	$list_heures = range(0,24);
-	foreach($list_heures as &$heure){
-	  $heure = str_pad($heure, 2, "0", STR_PAD_LEFT);
-	  $heures[$heure] = $heure;
-	}
-	
 	$lines["med"] = array();
 	$lines["elt"] = array();
 	foreach($prescriptions as $_prescription){
 	  // Chargement des lignes
 	  $_prescription->loadRefsLinesMed("1","1","service");
-	  if ($do_elements) {
-	    $_prescription->loadRefsLinesElementByCat("1","","service");
-	  }
+	  $_prescription->loadRefsLinesElementByCat("1","","service");
 	  $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
 	  $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 	
@@ -82,7 +69,7 @@ if (mbGetValueFromGet("do")) {
 	  $_prescription->loadRefsPerfusions();
 	  
 	  foreach($dates as $_date){
-	    $_prescription->calculPlanSoin($_date, 0, $heures);
+	    $_prescription->calculPlanSoin($_date, 0);
 	  }
 	  
 	  $sejour =& $_prescription->_ref_object;
@@ -97,7 +84,7 @@ if (mbGetValueFromGet("do")) {
 	  $patient->loadRefConstantesMedicales();
 	  
 	  
-	  if($do_medicaments){
+	  if(in_array("med", $cats)){
 	    // Parcours et stockage des perfusions
 	    if($_prescription->_ref_perfusions){
 	      foreach($_prescription->_ref_perfusions as $_perfusion){
@@ -143,7 +130,7 @@ if (mbGetValueFromGet("do")) {
 						            if($prise_prevue["total"]){
 						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue["total"] = 0;
-						            }
+						            }			            
 						          }
 					          }
 					        }
@@ -278,6 +265,8 @@ foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
   }
 }
 
+
+
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
@@ -291,7 +280,7 @@ $token_cat = implode("|", $cats);
 
 $cat_used = array();
 foreach($cats as $_cat){
-  if($_cat === "med"){
+  if($_cat == "med"){
     $cat_used["med"] = "Médicament";
   } else {
     if(!array_key_exists($_cat, $cat_used)){
@@ -304,7 +293,6 @@ foreach($cats as $_cat){
 
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("hide_filters", $hide_filters);
 $smarty->assign("cat_used", $cat_used);
 $smarty->assign("token_cat", $token_cat);
 $smarty->assign("cats", $cats);

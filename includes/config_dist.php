@@ -349,8 +349,6 @@ $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
-    "infirmiere_borne_start" => "20",
-    "infirmiere_borne_stop"  => "08",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",
@@ -410,7 +408,6 @@ $dPconfig["dPprescription"] = array (
   ),
   "CPrisePosologie" => array(
     "select_poso_bcb" => "1",
-    "heures_prise" => "02|06|08|12|14|18|22|24",
     "heures" => array(
       "tous_les" => "14",
       "fois_par" => array(
@@ -420,6 +417,18 @@ $dPconfig["dPprescription"] = array (
         "4" => "08|10|14|18",
         "5" => "08|10|12|14|16",
         "6" => "08|10|12|14|16|18"
+      ),
+      "matin" => array(
+        "min" => "06",
+        "max" => "13"
+      ),
+      "soir" => array(
+        "min" => "14",
+        "max" => "21"
+      ),
+      "nuit" => array(
+        "min" => "22",
+        "max" => "05"
       )
     ),
     "semaine" => array(

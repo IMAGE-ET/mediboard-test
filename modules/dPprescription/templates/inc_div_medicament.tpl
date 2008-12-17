@@ -208,12 +208,6 @@ Main.add( function(){
   </tr>
 </table>
 
-{{if !$mode_pharma && !$prescription->_can_add_line}}
-  <div class="big-info">
-    L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
-    entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures
-  </div>
-{{/if}}
 
 <!-- Declaration des tableaux permettant de stocker toutes les lignes -->
 {{if $lite && $prescription->_ref_lines_med_comments.med}}

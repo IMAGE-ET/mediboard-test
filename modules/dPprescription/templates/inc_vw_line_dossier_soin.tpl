@@ -3,6 +3,12 @@
 {{assign var=transmissions_line value=$line->_transmissions}}
 {{assign var=administrations_line value=$line->_administrations}}
 
+{{if $line->_class_name == "CPrescriptionLineMedicament"}}
+  {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.med}}
+{{else}}
+  {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
+{{/if}}
+
 <tr id="line_{{$line_class}}_{{$line_id}}">
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
@@ -121,10 +127,20 @@
     </small>
   </td>
   
-  <!-- Affichage des heures de prises des medicaments -->			    
-  {{foreach from=$tabHours item=_hours_by_date key=_date}}
-	  {{foreach from=$_hours_by_date item=_hour}}  
-	
+  {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
+  <th id="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseover="timeOutBefore = setTimeout(showBefore, 1000);" onmouseout="clearTimeout(timeOutBefore);">
+   <img src="images/icons/a_left.png" title="" alt="" />
+  </th>
+  
+
+  {{/if}}
+  
+  <!-- Affichage des heures de prises des medicaments -->			 
+  {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+      {{foreach from=$_dates key=_date item=_hours}}
+        {{foreach from=$_hours key=_heure_reelle item=_hour}}
+
 		  {{assign var=list_administrations value=""}}
 		  {{if @$line->_administrations.$unite_prise.$_date.$_hour.list}}
 		    {{assign var=list_administrations value=$line->_administrations.$unite_prise.$_date.$_hour.list}}
@@ -134,15 +150,13 @@
 		    {{assign var=planification_id value=$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
 		  {{/if}}
 		  
-		  {{assign var=_date_hour value="$_date $_hour:00:00"}}						    
+		  {{assign var=_date_hour value="$_date $_heure_reelle"}}						    
 		
 		  <!-- S'il existe des prises prevues pour la date $_date -->
 	    {{if @is_array($line->_quantity_by_date.$unite_prise.$_date) || @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
 				{{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$_date}}
 				
-	      <td id="drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-		    
-					<!-- Quantites prevues -->
+				<!-- Quantites prevues -->
 			    {{assign var=quantite value="-"}}
 			    {{assign var=quantite_depart value="-"}}
 			    {{assign var=heure_reelle value=""}}
@@ -164,21 +178,14 @@
 				    {{assign var=heure_reelle value=$_hour}}
 				  {{/if}}
 				  
-				  <script type="text/javascript">
- 
-				  {{if $mode_dossier == "planification" && ($quantite == "0" || $quantite == '-')}}
-		        Droppables.add("drop_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}", {
-		           accept: "{{$line_id}}_{{$unite_prise|replace:' ':'_'}}",
-		           onDrop: function(element) {
-		            addPlanification("{{$app->user_id}}", "{{$_date}}","{{$_hour}}:00:00", "{{$unite_prise}}", "{{$line_id}}", "{{$line_class}}", element.id);
-		          },
-		          hoverclass:'soin-selected'
-		        } );
-		        {{/if}}
-		      </script>
-				  			   
-				  <div onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
+	      <td id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" 
+	      		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if $mode_dossier == 'planification' && ($quantite == '0' || $quantite == '-')}}canDrop{{/if}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+		   
+					
+				  				  			   
+				  <div {{if $mode_dossier == "administration"}}onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'{{/if}}
 				       id="drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
+				       {{if $mode_dossier == 'planification'}}onmousedown="addDroppablesDiv(this);"{{/if}}
 				       {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
 				      style="background-color: #aaa"
 				      {{if $dPconfig.dPprescription.CAdministration.hors_plage}}
@@ -189,8 +196,7 @@
 				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				    {{/if}}
-				    class="{{$line_id}}_{{$unite_prise|replace:' ':'_'}}
-				    {{if $quantite && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
+				    class="{{if $quantite && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
 				      draggable
 				    {{/if}}  
 				      tooltip-trigger administration
@@ -240,6 +246,7 @@
 				    {{/if}}
 				  </script>
           
+          {{if $mode_dossier == "administration"}}
 			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 				   {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 				     <ul>
@@ -265,11 +272,12 @@
 				     {{/if}}
 			   {{/if}}
 	       </div>
+	       {{/if}}
 		   </td>
 	   {{else}}
-	      <td class="{{$_date_hour}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+	      <td class="{{$_view_date}}-{{$moment_journee}}" style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 		     <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
-		          onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
+		          {{if $mode_dossier == "administration"}}onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'{{/if}}
 		            {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
                     style="background-color: #aaa"
                   {{else}}
@@ -281,6 +289,7 @@
 	                {{$line->_administrations.$unite_prise.$_date.$_hour.quantite}} / -
 	              {{/if}}
 	           </div>
+	           {{if $mode_dossier == "administration"}}
 	           <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 		         {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 			         <ul>
@@ -306,11 +315,20 @@
 			         {{/if}}
 			       {{/if}}
 			    </div>
+			    {{/if}}
 		     </td>
-		 {{/if}}
-	 {{/foreach}}
- {{/foreach}}		   
-
+		   {{/if}}
+	     {{/foreach}}
+     {{/foreach}}		   
+   {{/foreach}}
+ {{/foreach}}
+ 
+ {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
+   <th id="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseover="timeOutAfter = setTimeout(showAfter, 1000);"  onmouseout="clearTimeout(timeOutAfter);">
+     <img src="images/icons/a_right.png" title="" alt="" />
+   </th>
+ {{/if}}
+ 
  <!-- Signature du praticien -->
  <td style="text-align: center">
    {{if $line->signee}}

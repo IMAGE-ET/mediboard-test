@@ -70,7 +70,7 @@ if($prise_id){
 $prise = new CPrisePosologie();
 $prise->quantite = $quantite;
 
-$dateTime = ($heure==24) ? "$date 23:59:00" : "$date $heure:00:00";
+$dateTime = "$date $heure:00:00";
 
 // Chargement du sejour
 $line->_ref_prescription->loadRefObject();
@@ -80,7 +80,10 @@ $sejour->_ref_patient->loadRefsAffectations();
 $sejour->_ref_patient->_ref_curr_affectation->updateFormFields();
 
 // Heures disponibles pour l'administration
-$hours = array('02','04','06','08','10','12','14','16','18','20','22','24');
+$hours = range(0,23);
+foreach($hours as &$_hour){
+  $_hour = str_pad($_hour, 2, "0", STR_PAD_LEFT);
+}
 
 // Transmission
 $transmission = new CTransmissionMedicale();

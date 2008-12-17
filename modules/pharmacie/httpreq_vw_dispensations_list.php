@@ -60,13 +60,6 @@ if($date_max_orig != $date_min_orig){
   $dates[] = $date_min_orig; 
 }
 
-
-$list_heures = range(0,24);
-foreach($list_heures as &$heure){
-  $heure = str_pad($heure, 2, "0", STR_PAD_LEFT);
-  $heures[$heure] = $heure;
-}
-
 if($prescriptions) {
   foreach($prescriptions as $_prescription){	  
     $date_min = $date_min_orig;
@@ -98,7 +91,7 @@ if($prescriptions) {
 	  
 	  // Calcul du plan de soin
     foreach($dates as $_date){
-      $_prescription->calculPlanSoin($_date, 0, $heures, 0, 1);
+      $_prescription->calculPlanSoin($_date, 0, 0, 1);
     }
     
      // Parcours des prises prevues pour les medicaments
@@ -110,7 +103,7 @@ if($prescriptions) {
 	          }  
 	          foreach($_line_med->_quantity_by_date as $type => $quantity_by_date){
 					  	foreach($quantity_by_date as $date => $quantity_by_hour){
-					  		if($quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
+					  		if(@$quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
 						  	  foreach($quantity_by_hour['quantites'] as $hour => $quantity){
 							      @$dispensations[$_line_med->code_cip]["quantite_administration"] += $quantity["total"];
 							      @$dispensations[$_line_med->code_cip]["quantite_dispensation"] += $quantity["total_disp"];

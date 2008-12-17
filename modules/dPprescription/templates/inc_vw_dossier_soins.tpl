@@ -4,23 +4,53 @@ oDragOptions = {
   constraint: 'horizontal',
   revert: true,
   ghosting: true,
-  starteffect : function(element) { 
+  starteffect : function(element) {	
     new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
+    element.hide();
   },
   reverteffect: function(element, top_offset, left_offset) {
     var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
     element._revert = new Effect.Move(element, { 
       x: -left_offset, 
       y: -top_offset, 
-      duration: dur
+      duration: 0
     } );
+
+   element.show();
   },
   endeffect: function(element) { 
     new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
-  }        
+  }       
 }
-           
-addPlanification = function(administrateur_id, date, time, unite_prise, object_id, object_class, element_id){
+
+addDroppablesDiv = function(draggable){
+  $(draggable).up(1).select('td').each(function(td) {
+	  if(td.hasClassName("canDrop")){
+	    Droppables.add(td.id, {
+	      onDrop: function(element) {
+			    _td = td.id.split("_");
+			    line_id = _td[1];
+			    line_class = _td[2];
+			    unite_prise = _td[3];
+			    date = _td[4];
+			    hour = _td[5];
+			    
+				  // Hack pour corriger le probleme des planifications sur aucune prise prevue
+				  if(_td[3] == 'aucune' && _td[4] == 'prise'){
+				    unite_prise = "aucune_prise";
+				    date = _td[5];
+				    hour = _td[6];
+				  }
+	        addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id);
+	        Droppables.drops.clear(); 
+	      },
+	      hoverclass:'soin-selected'
+	    } );
+    } 
+  });
+}
+
+addPlanification = function(date, time, unite_prise, object_id, object_class, element_id){
   // Split de l'element_id
   element = element_id.split("_");
   original_date = element[3]+" "+element[4]+":00:00";
@@ -35,8 +65,7 @@ addPlanification = function(administrateur_id, date, time, unite_prise, object_i
 	}
 
 	var oForm = document.addPlanif;
-	  
-  $V(oForm.administrateur_id, administrateur_id);
+  $V(oForm.administrateur_id, '{{$app->user_id}}');
   
   $V(oForm.object_id, object_id);
   $V(oForm.object_class, object_class);
@@ -47,10 +76,7 @@ addPlanification = function(administrateur_id, date, time, unite_prise, object_i
   $V(oForm.unite_prise, unite_prise);
   $V(oForm.prise_id, prise_id);
 	$V(oForm.quantite, quantite);
- 
-  if(time == "24:00:00"){
-    time = "23:59:00";
-  }
+
   dateTime = date+" "+time
   
   $V(oForm.dateTime, dateTime);
@@ -164,150 +190,68 @@ calculSoinSemaine = function(date, prescription_id){
 
 // Initialisation
 var planSoin;
-var th_before, th_today, th_after;
-var listTdBefore, listTdToday, listTdAfter;
-var reverseBefore, reverseToday, reverseAfter;
+var oFormClick = document.click;
+var composition_dossier = {{$composition_dossier|@json}};
 
 window.periodicalBefore = null;
 window.periodicalAfter = null;
 
-Main.add(function () {
-
-{{if $mode_bloc}}
-  loadSuivi('{{$sejour->_id}}');
-{{/if}}
-
-  planSoin = $('plan_soin');
-  
-  if (planSoin) {
-    // Initialisation
-    th_before = $("th-{{$hier}}");
-    th_today = $("th-{{$date}}");
-    th_after = $("th-{{$demain}}");
-  
-    listTdBefore = planSoin.select('td.{{$hier}}');
-    listTdToday  = planSoin.select('td.{{$date}}');
-    listTdAfter  = planSoin.select('td.{{$demain}}');
-    
-    reverseBefore = listTdBefore.reverse(false);
-    reverseToday  = listTdToday.reverse(false);
-    reverseAfter  = listTdAfter.reverse(false);
-  
-    listThHoursBefore = planSoin.select('.th_hours_{{$hier}}');
-    listThHoursAfter = planSoin.select('.th_hours_{{$demain}}');
-  
-    if(th_before && th_after) {
-    	th_before.hide();
-    	th_after.hide();
-    	
-    	th_before.colSpan = 0;
-    	th_today.colSpan = 12;
-    	th_after.colSpan = 0;
-    	  
-    	  
-    	listTdBefore.each(function(elt) { 
-    	  elt.hide();
-    	  $(elt.className).hide();
-    	});
-    	if(listTdBefore.length == 0){
-        // On masque les heures
-        listThHoursBefore.each(function(elt) { 
-          elt.hide();
-        });
-    	}
-    	  
-    	listTdAfter.each(function(elt) { 
-    	  elt.hide();
-    	  $(elt.className).hide();
-    	});
-    	if(listTdAfter.length == 0){
-        // On masque les heures
-        listThHoursAfter.each(function(elt) { 
-          elt.hide();
-        });
-    	}
+// Deplacement du dossier de soin
+moveDossierSoin = function(){
+  periode_visible = composition_dossier[oFormClick.nb_decalage.value];
+  composition_dossier.each(function(moment){
+    listToHide = $('plan_soin').select('.'+moment);
+    listToHide.each(function(elt) { 
+      elt.show();
+    });  
+  });
+  composition_dossier.each(function(moment){
+    if(moment != periode_visible){
+	    listToHide = $('plan_soin').select('.'+moment);
+	    listToHide.each(function(elt) { 
+	      elt.hide();
+	    });  
     }
+  });
+}
+
+
+timeOutBefore = null;
+timeOutAfter = null;
+
+// Deplacement du dossier vers la gauche
+showBefore = function(){
+  if(oFormClick.nb_decalage.value >= 1){
+    oFormClick.nb_decalage.value = parseInt(oFormClick.nb_decalage.value) - 1;
+    moveDossierSoin();
   }
+}
+// Deplacement du dossier de soin vers la droite
+showAfter = function(){
+  if(oFormClick.nb_decalage.value <= 3){
+    oFormClick.nb_decalage.value = parseInt(oFormClick.nb_decalage.value) + 1;
+    moveDossierSoin();
+  }
+}
+
+Main.add(function () {
+	{{if $mode_bloc}}
+	  loadSuivi('{{$sejour->_id}}');
+	{{/if}}
+
+	// Deplacement du dossier de soin
+  moveDossierSoin();
+
   {{if !$mode_bloc}}
     new Control.Tabs('tab_dossier_soin');
   {{/if}}
   var tabs = Control.Tabs.create('tab_categories', true);
 });
 
-var oFormClick = document.click;
-
-showHideElement = function(list_show, list_hide, th1, th2, signe){
-  var modif = "0";
-  var class_after = "";
-  var class_before = "";
-  
-  if (list_show) {
-    list_show.each(function(elt) { 
-      // si l'element n'est pas visible, on sauvegarde sa classe _class
-      if(!elt.visible() && (class_after == "" || class_after == elt.className)){
-        modif = "1";
-        elt.show();
-        class_after = elt.className;
-        if(!$(elt.className).visible()){
-          signe == "-" ? oFormClick.nb_decalage.value-- : oFormClick.nb_decalage.value++;
-          $(elt.className).show();
-        }
-      }
-    });
-  }
-  
-  if (list_hide) {
-    // On affiche le premier element qui est caché dans listTdAfter
-    list_hide.each(function(elt) { 
-      // si l'element n'est pas visible, on sauvegarde sa classe _class
-      if(elt.visible() && (class_before == "" || class_before == elt.className) && class_after != ""){
-        elt.hide();
-        class_before = elt.className;
-        if($(elt.className).visible()){
-          $(elt.className).hide();
-        }
-      }
-    });
-  }
-  if(modif == 1){
-    th1.colSpan++;
-    th1.colSpan > 0 ? th1.show() : th1.hide();
-    th2.colSpan--;
-    th2.colSpan > 0 ? th2.show() : th2.hide();
-  }
-}
-
-showAfter = function(){
-  if(th_before && th_before.colSpan == 0){
-    showHideElement(listTdAfter, listTdToday, th_after, th_today, "+");
-  } else {
-    showHideElement(listTdToday, listTdBefore, th_today, th_before, "+");
-  }
-}
-
-showBefore = function(){
-  if(th_after && th_after.colSpan == 0){
-    showHideElement(reverseBefore, reverseToday, th_before, th_today, "-");
-  } else {
-    showHideElement(reverseToday, reverseAfter, th_today, th_after, "-");
-  }
-}
-
-// Décalage
-{{if $signe_decalage == "+"}}
-  for(i=0; i< {{$nb_decalage}}; i++){
-    showAfter();
-  }
-{{else}}
-  for(i=0; i< {{$nb_decalage}}; i++){
-    showBefore();
-  }
-{{/if}}
-
 </script>
 
 <form name="click">
-  <input type="hidden" name="nb_decalage" value="0" />
+  <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
 </form>
 
 <form name="addPlanif" action="" method="post">
@@ -370,14 +314,8 @@ showBefore = function(){
 {{if $prescription_id}}
   {{if !$mode_bloc}}
   <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
-	<h2 style="text-align: center">
-	    <a href="#1" onclick="showBefore()" onmousedown="periodicalBefore = new PeriodicalExecuter(showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
-        <img src="images/icons/prev.png" alt="&lt;"/>
-      </a>
+	 <h2 style="text-align: center">
 	    Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-      <a href="#1" onclick="showAfter()" onmousedown="periodicalAfter = new PeriodicalExecuter(showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
-	      <img src="images/icons/next.png" alt="&gt;" />
-      </a>
 	 </h2>
 	 {{/if}}
 	<table style="width: 100%">
@@ -447,25 +385,48 @@ showBefore = function(){
 					    <th rowspan="2">Cond.</th>
 					    <th rowspan="2">Libellé</th>
 					    <th rowspan="2">Posologie</th>
-					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
-					     <th id="th-{{$_date}}">{{$_date|date_format:"%d/%m"}}</th>
+					    	    
+      
+					    {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+				        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+				          <th class="{{$_date}}-{{$moment_journee}}"
+				              colspan="{{if $moment_journee == 'soir'}}{{$count_soir}}{{/if}}
+				          						 {{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}
+				          						 {{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
+				          	
+				          			 
+					          <a href="#1" onclick="showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
+							        <img src="images/icons/prev.png" alt="&lt;"/>
+							      </a>				
+					          <a href="#1" onclick="showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
+								      <img src="images/icons/next.png" alt="&gt;" />
+							      </a>		 
+					          <strong>{{$moment_journee}} du {{$_date|date_format:"%d/%m"}}</strong>
+									</th>
+						    {{/foreach}} 
 					    {{/foreach}}
 					    <th colspan="2">Sign.</th>
 					  </tr>
 					  <tr>
-					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
-				          {{foreach from=$_hours_by_date item=_hour}}
-				          <th id="{{$_date}} {{$_hour}}:00:00" class="th_hours_{{$_date}}" 
-				              style='text-align: center; 
-				              {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-				              {{$_hour}}h
-					             {{if array_key_exists("$_date $_hour:00:00", $operations)}}
-					                {{assign var=_hour_op value="$_date $_hour:00:00"}}
-					                <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>
-					              {{/if}}
+					    <th></th>
+					    {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+				        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+				          {{foreach from=$_dates key=_date_reelle item=_hours}}
+				            {{foreach from=$_hours key=_heure_reelle item=_hour}}
+				              <th class="{{$_date}}-{{$moment_journee}}" 
+				                  style='text-align: center; 
+			                  {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+			                  {{$_hour}}h
+				                {{if array_key_exists("$_date $_hour:00:00", $operations)}}
+				                  {{assign var=_hour_op value="$_date $_hour:00:00"}}
+				                  <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>
+				                {{/if}}
 				              </th>   
-						  {{/foreach}} 
+						        {{/foreach}}
+						      {{/foreach}}
+						    {{/foreach}} 
 					    {{/foreach}}
+					    <th></th>
 					    <th>Dr</th>
 					    <th>Ph</th>
 					  </tr>
@@ -473,8 +434,8 @@ showBefore = function(){
 			
 			    <!-- Affichage des perfusions -->
 					<tbody id="_perf" style="display:none;">
-					  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion}}
-					    {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl"}}
+					  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion name=foreach_perfusion}}
+					    {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
 					  {{/foreach}}
 					</tbody>
 					
@@ -488,6 +449,7 @@ showBefore = function(){
 					            nodebug=true
 					            first_foreach=foreach_med
 					            last_foreach=foreach_line
+					            global_foreach=foreach_cat
 					            nb_line=$_line|@count
 					            dosql=do_prescription_line_medicament_aed}}
 					      {{/foreach}}
@@ -501,7 +463,7 @@ showBefore = function(){
 				         </tbody>
 				       {{/if}}
 					     <tbody id="_cat-{{$name_chap}}" style="display: none;">  
-							    {{foreach from=$elements_chap key=name_cat item=elements_cat}}
+							    {{foreach from=$elements_chap key=name_cat item=elements_cat name="foreach_chap"}}
 							      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
 							      {{foreach from=$elements_cat item=_element name="foreach_cat"}}
 							        {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 	          
@@ -510,6 +472,7 @@ showBefore = function(){
 							                    nodebug=true
 							                    first_foreach=foreach_cat
 							                    last_foreach=foreach_elt
+							                    global_foreach=foreach_chap
 							                    nb_line=$_element|@count
 							                    dosql=do_prescription_line_element_aed}}
 							   {{/foreach}}

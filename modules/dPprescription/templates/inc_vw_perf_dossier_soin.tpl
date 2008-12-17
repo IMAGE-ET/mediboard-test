@@ -19,23 +19,43 @@
  	  </ul>
  	</td>	      
  
+  {{if $smarty.foreach.foreach_perfusion.first}}
+  <th rowspan="{{$prescription->_ref_perfusions_for_plan|@count}}" onmouseover="timeOutBefore = setTimeout(showBefore, 1000);" onmouseout="clearTimeout(timeOutBefore);">
+   <a href="#1" onclick="showBefore();">
+     <img src="images/icons/a_left.png" title="" alt="" />
+   </a>
+  </th>
+  {{/if}}
+  
   <!-- Affichage des heures de prises des medicaments -->			    
-  {{foreach from=$tabHours item=_hours_by_date key=_date}}
-	  {{foreach from=$_hours_by_date item=_hour}}  
-	    {{assign var=_date_hour value="$_date $_hour:00:00"}}
-		    <td class="{{$_date_hour}}" 
-		        style='{{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
-		    {{if ($_date_hour > $_perfusion->_debut) && ($_date_hour < $_perfusion->_fin)}}
-		      background-image: url(images/pictures/perf_line.png);
-		      background-repeat: repeat-x;		    
-		      background-position: center;
-		    {{else}}
-		      background-color: #aaa;
-		    {{/if}}'>
-		    </td>    
-		{{/foreach}}
- {{/foreach}}		   
+  {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+      {{foreach from=$_dates key=_date item=_hours}}
+        {{foreach from=$_hours key=_heure_reelle item=_hour}}
+		      {{assign var=_date_hour value="$_date $_heure_reelle"}}	
+			    <td class="{{$_view_date}}-{{$moment_journee}}"
+			        style='{{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
+			    {{if ($_date_hour >= $_perfusion->_debut) && ($_date_hour < $_perfusion->_fin)}}
+			      background-image: url(images/pictures/perf_line.png);
+			      background-repeat: repeat-x;		    
+			      background-position: center;
+			    {{else}}
+			      background-color: #aaa;
+			    {{/if}}'>
+			    </td>    
+		    {{/foreach}}
+     {{/foreach}}		   
+   {{/foreach}}
+ {{/foreach}}		
 
+ {{if $smarty.foreach.foreach_perfusion.first}}
+ <th rowspan="{{$prescription->_ref_perfusions_for_plan|@count}}" onmouseover="timeOutAfter = setTimeout(showAfter, 1000);"  onmouseout="clearTimeout(timeOutAfter);">
+   <a href="#1" onclick="showAfter();">
+     <img src="images/icons/a_right.png" title="" alt="" />
+   </a>
+ </th>
+ {{/if}}
+ 
  <!-- Signature du praticien -->
  <td style="text-align: center">
    {{if $_perfusion->signature_prat}}

@@ -1,15 +1,13 @@
 <script type="text/javascript">
-var oHourField = null;
-Main.add( function(){
-  oHourField = new TokenField(document.editConfig["dPprescription[CPrisePosologie][heures_prise]"]); 
-  
-  var hours = {{$heures_prise|@json}};
-  $$('input.hour').each( function(oCheckbox) {
-    if(hours.include(oCheckbox.value)){
-      oCheckbox.checked = true;
-    }
-  });
-} );
+
+checkValue = function(field1, field2){
+	if((parseInt(field1.value, '10') + 1) < 10){
+	  field2.value = "0"+(parseInt(field1.value, '10') + 1);
+	} else {
+    field2.value = parseInt(field1.value, '10') + 1;
+  }
+}
+
 </script>
 
 
@@ -59,44 +57,6 @@ Main.add( function(){
       heures
     </td>             
   </tr>
-  
-  {{assign var="var" value="infirmiere_borne"}}
-  <tr>
-    <th class="category" colspan="6">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-  </tr>
-
-  <tr>  
-    {{assign var="var" value="infirmiere_borne_start"}}
-    <td colspan="3" style="text-align: center">
-      Du soir
-      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
-      {{foreach from=$listHoursSoir item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
-          {{$_hour}}
-        </option>
-      {{/foreach}}
-      </select>
-      heures
-    </td>
-    {{assign var="var" value="infirmiere_borne_stop"}}
-    <td colspan="3" style="text-align: center">
-      au matin
-      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
-      {{foreach from=$listHoursMatin item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
-          {{$_hour}}
-        </option>
-      {{/foreach}}
-      </select>
-      heures
-    </td>             
-  </tr>
-  
-  
   
   <!-- Gestion des scores de prescription -->
   {{assign var="var" value="scores"}}
@@ -353,16 +313,6 @@ Main.add( function(){
    </th>
   </tr>
 
-  {{assign var="var" value="heures_prise"}}
-  <tr>
-    <td><strong>Heures disponibles pour la feuille de soin</td>
-    <td colspan="5" class="text">
-    {{foreach from=$listHours item=_hour}}
-      <input class="hour" type="checkbox" value="{{$_hour}}" onclick="oHourField.toggle('{{$_hour}}', this.checked);" /> {{$_hour}}
-    {{/foreach}}
-    <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
   {{assign var="var" value="heures"}}
   <tr>  
 	  <th><strong>Tous les</strong></th>
@@ -413,7 +363,74 @@ Main.add( function(){
 	  </td>  
 	  <td colspan="2" />               
   </tr>
+
+  <!-- Gestion des horaires matin/soir/nuit -->
+  <tr>  
+	  <th><strong>Matin</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    De 
+	    <select name="{{$m}}[{{$class}}][{{$var}}][matin][min]"
+	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][nuit][max]'])">
+	      {{foreach from=$listHours item=_hour}}
+	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.matin.min}}selected="selected"{{/if}}>{{$_hour}}h</option>
+	      {{/foreach}}
+	    </select>
+	    à 
+	    <select name="{{$m}}[{{$class}}][{{$var}}][matin][max]" 
+	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][soir][min]'])">
+	      {{foreach from=$listHours item=_hour}}
+	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.matin.max}}selected="selected"{{/if}}>{{$_hour}}h</option>
+	      {{/foreach}}
+	    </select>
+	  </td>      
+	  <td colspan="2" />           
+  </tr>
   
+  <tr>  
+	  <th><strong>Soir</strong></th>
+	  <td colspan="3" style="text-align: center">  
+	    De 
+	    <select name="{{$m}}[{{$class}}][{{$var}}][soir][min]"
+	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][matin][max]'])">
+	      {{foreach from=$listHours item=_hour}}
+	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.soir.min}}selected="selected"{{/if}}>{{$_hour}}h</option>
+	      {{/foreach}}
+	    </select>
+	    à 
+	    <select name="{{$m}}[{{$class}}][{{$var}}][soir][max]" 
+	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][nuit][min]'])">
+	      {{foreach from=$listHours item=_hour}}
+	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.soir.max}}selected="selected"{{/if}}>{{$_hour}}h</option>
+	      {{/foreach}}
+	    </select>
+	  </td> 
+	  <td colspan="2" />            
+  </tr>
+  
+  <tr>  
+	  <th><strong>Nuit</strong></th>
+	  <td colspan="3" style="text-align: center">  
+	    De 
+	    <select name="{{$m}}[{{$class}}][{{$var}}][nuit][min]"
+	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][soir][max]'])">
+	      {{foreach from=$listHours item=_hour}}
+	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.nuit.min}}selected="selected"{{/if}}>{{$_hour}}h</option>
+	      {{/foreach}}
+	    </select>
+	    à 
+	    <select name="{{$m}}[{{$class}}][{{$var}}][nuit][max]"
+	   				  onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][matin][min]'])">
+	      {{foreach from=$listHours item=_hour}}
+	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.nuit.max}}selected="selected"{{/if}}>{{$_hour}}h</option>
+	      {{/foreach}}
+	    </select>
+	  </td>         
+	  <td colspan="2" />    
+  </tr>
+  
+      
+    
+    
   {{assign var="var" value="semaine"}}
   <tr>  
 	  <th><strong>1 fois par semaine</strong></th>

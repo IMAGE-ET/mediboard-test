@@ -56,43 +56,48 @@
 	  {{if $line_class == "CPrescriptionLineMedicament" && !$line->valide_pharma}}P{{/if}}
     {{/if}}
   </td>
-  <!-- Affichage des heures de prises des medicaments -->
-  {{foreach from=$dates item=date}}
-		{{foreach from=$tabHours.$date key=_real_hour item=_hour name="foreach_date"}}
-		  <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
-		             {{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
-		             {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}text-align: center">
-		    {{assign var=quantite value=""}}  
-		    
-		    {{if @is_array($line->_quantity_by_date.$unite_prise.$date.quantites)
-		         || @$line->_administrations.$unite_prise.$date.$_hour.quantite_planifiee}}
-		   
-		       {{if @$line->_administrations.$unite_prise.$date.$_hour.quantite_planifiee}}
-			        {{assign var=quantite value=$line->_administrations.$unite_prise.$date.$_hour.quantite_planifiee}}
-			     {{else}}
-		           {{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$date}}
-			         {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
-		      {{/if}}
-		    {{/if}}
-		    
-		    {{if $quantite == 0}}
-		      {{assign var=quantite value=""}}
-		    {{/if}}
-		    
-		    {{if $line_class == "CPrescriptionLineMedicament"}}
-				  {{if $line->_debut_reel > $_real_hour || ($line->_fin_reelle && $line->_fin_reelle < $_real_hour) || !$line->_active}}
-				    <img src="images/icons/gris.gif" />
-				  {{else}}
-				   {{$quantite}}
-				  {{/if}}
-		    {{else}}
-		      {{if $line->_debut_reel > $_real_hour || $line->_fin_reelle < $_real_hour || !$line->_active}}
-	          <img src="images/icons/gris.gif" />
-	        {{else}}
-	          {{$quantite}}
-	        {{/if}}
-		    {{/if}}
-		  </td>
-		{{/foreach}}
+
+  <!-- Affichage des heures de prises des medicaments -->			 
+  {{foreach from=$tabHours item=_hours_by_moment}}
+    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+      {{foreach from=$_dates key=_date item=_hours  }}
+        {{foreach from=$_hours key=_heure_reelle item=_hour}}
+        
+        {{assign var=_date_hour value="$_date $_heure_reelle"}}			
+				  <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
+				    {{assign var=quantite value=""}}  
+				    
+				    {{if @is_array($line->_quantity_by_date.$unite_prise.$_date.quantites)
+				         || @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+				   
+				       {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+					        {{assign var=quantite value=$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
+					     {{else}}
+				           {{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$_date}}
+					         {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
+				      {{/if}}
+				    {{/if}}
+				    
+				    {{if $quantite == 0}}
+				      {{assign var=quantite value=""}}
+				    {{/if}}
+				    
+				    {{if $line_class == "CPrescriptionLineMedicament"}}
+						  {{if $line->_debut_reel > $_date_hour || ($line->_fin_reelle && $line->_fin_reelle < $_date_hour) || !$line->_active}}
+						    <img src="images/icons/gris.gif" />
+						  {{else}}
+						   {{$quantite}}
+						  {{/if}}
+				    {{else}}
+				      {{if $line->_debut_reel > $_date_hour || $line->_fin_reelle < $_date_hour || !$line->_active}}
+			          <img src="images/icons/gris.gif" />
+			        {{else}}
+			          {{$quantite}}
+			        {{/if}}
+				    {{/if}}
+				  </td>
+		    {{/foreach}}
+      {{/foreach}}
+    {{/foreach}}
   {{/foreach}}
 </tr>

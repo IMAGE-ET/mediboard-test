@@ -15,26 +15,6 @@ $patient = new CPatient();
 // Creation du tableau de dates
 $dates = array(mbDate("-2 DAYS", $date),mbDate("-1 DAYS", $date),$date,mbDate("+1 DAYS", $date),mbDate("+2 DAYS", $date));
 
-$hours_deb = "02|04|06|08|10|12";
-$hours_fin = "14|16|18|20|22|24";
-$hours = $hours_deb."|".$hours_fin;
-$hours = explode("|",$hours);
-$list_hours = range(0,24);
-$last_hour_in_array = reset($hours);
-krsort($list_hours); 
-foreach($list_hours as &$hour){
-  $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
-  if(in_array($hour, $hours)){
-    $last_hour_in_array = $hour;
-  }
-  if($last_hour_in_array >= $hour){
-    $heures[$hour] = $last_hour_in_array;
-  } else {
-    $heures[$hour] = end($hours);
-  }
-}
-ksort($heures);
-
 // Chargement de la prescription
 $prescription = new CPrescription();
 if($prescription_id){
@@ -61,7 +41,7 @@ if($prescription_id){
 
   // Calcul du plan de soin 
   foreach($dates as $_date){
-    $prescription->calculPlanSoin($_date, 0, $heures, 1);
+    $prescription->calculPlanSoin($_date, 0, 1);
   }
 }
 

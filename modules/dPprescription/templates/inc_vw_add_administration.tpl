@@ -161,7 +161,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$date}} '+this.value);">
 	        <option value="">&mdash; Heure</option>
 	        {{foreach from=$hours item=_hour}}
-	        <option value="{{if $_hour == '24'}}23:59:00{{else}}{{$_hour}}:00:00{{/if}}">{{$_hour}}h</option>
+	        <option value="{{$_hour}}:00:00">{{$_hour}}h</option>
 	        {{/foreach}}
 	      </select>
 	      {{/if}}
@@ -251,7 +251,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 		      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$date}} '+this.value);">
 		        <option value="">&mdash; Heure</option>
 		        {{foreach from=$hours item=_hour}}
-		        <option value="{{if $_hour == '24'}}23:59:00{{else}}{{$_hour}}:00:00{{/if}}">{{$_hour}}h</option>
+		        <option value="{{$_hour}}:00:00">{{$_hour}}h</option>
 		        {{/foreach}}
 		      </select>
 		      {{else}}

@@ -165,7 +165,6 @@
       {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" mode_pharma=0}}
     {{/if}}
   {{/foreach}}
-  
 </table>
 
 <script type="text/javascript">

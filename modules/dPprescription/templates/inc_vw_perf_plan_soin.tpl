@@ -26,15 +26,19 @@
     {{/if}}
   </td>
   <!-- Affichage des heures de prises des medicaments -->
-  {{foreach from=$dates item=date}}
-		{{foreach from=$tabHours.$date key=_real_hour item=_hour name="foreach_date"}}
-		  <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
-		             {{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
-		             {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}text-align: center">
-			  {{if $_perfusion->_debut > $_real_hour || ($_perfusion->_fin < $_real_hour)}}
-			    <img src="images/icons/gris.gif" />
-			  {{/if}}
-	  </td>
-		{{/foreach}}
-  {{/foreach}}
+  {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+      {{foreach from=$_dates key=_date_reelle item=_hours}}
+        {{foreach from=$_hours key=_heure_reelle item=_hour}} 
+            {{assign var=_date_hour value="$_date_reelle $_heure_reelle"}}	
+					  <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
+					             text-align: center">
+						  {{if $_perfusion->_debut > $_date_hour || ($_perfusion->_fin <= $_date_hour)}}
+						    <img src="images/icons/gris.gif" />
+						  {{/if}}
+				    </td>
+	        {{/foreach}}
+	      {{/foreach}}
+	    {{/foreach}}
+	  {{/foreach}}
 </tr>

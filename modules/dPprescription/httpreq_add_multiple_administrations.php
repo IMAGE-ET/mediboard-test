@@ -58,7 +58,7 @@ if (count($adm) > 0) {
 		$curr_adm['prise']->quantite = $ad['quantite'];
 		$curr_adm['prise_id'] = $ad['prise_id'];
 		
-		$curr_adm['dateTime'] = ($ad['heure']==24) ? $ad['date'].' 23:59:00' : $ad['date'].' '.$ad['heure'].':00:00';
+		$curr_adm['dateTime'] = $ad['date'].' '.$ad['heure'].':00:00';
 		
 		$curr_adm['notToday'] = ($ad['date'] != mbDate());
 		

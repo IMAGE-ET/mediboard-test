@@ -184,7 +184,9 @@
   <tr>  
 	  <td style="text-align: left">
 	    <!-- Affichage des alertes -->
-	    {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
+	    {{if !($line->_protocole && $line->substitute_for)}}
+	      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
+	    {{/if}}
 	  </td>
     <td colspan="3">
       <table style="width:100%">
