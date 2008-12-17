@@ -9,7 +9,16 @@ Main.add( function(){
       oCheckbox.checked = true;
     }
   });
+  
+  getForm("filter_prescription")._dateTime_min.observe("ui:change", resetPeriodes);
+  getForm("filter_prescription")._dateTime_max.observe("ui:change", resetPeriodes);
 } );
+
+function resetPeriodes() {
+  getForm("filter_prescription").select('input[name=periode]').each(function(e) {
+    e.checked = false;
+  });
+}
 
 selectChap = function(name_chap, oField){
   $$('input.'+name_chap).each(function(oCheckbox) { 
@@ -19,6 +28,44 @@ selectChap = function(name_chap, oField){
     }
   });
 }
+
+var periodes = {{$dPconfig.dPprescription.CPrisePosologie.heures|@json}};
+selectPeriode = function(element) {
+  var form = getForm("filter_prescription");
+  var start = form.elements._dateTime_min;
+  var end = form.elements._dateTime_max;
+  
+  var startDate = Date.fromDATETIME($V(start));
+  var endDate = Date.fromDATETIME($V(start));
+  
+  if (element.value == 'matin' || element.value == 'soir' || element.value == 'nuit') {
+    startDate.setHours(periodes[element.value].min);
+
+    var dayOffset = 0;
+    if (periodes[element.value].max < periodes[element.value].min) {
+      dayOffset = 1;
+    }
+    endDate.setDate(startDate.getDate()+dayOffset);
+    endDate.setHours(periodes[element.value].max);
+  }
+  else {
+    startDate.setHours(0);
+    startDate.setMinutes(0);
+    startDate.setSeconds(0);
+    endDate.setTime(startDate.getTime()+24*60*60*1000-1000);
+  }
+  
+  $(start.id+'_da').update(startDate.toLocaleDateTime());
+  $(end.id+'_da').update(endDate.toLocaleDateTime());
+  
+  startDate = startDate.toDATETIME(true);
+  endDate = endDate.toDATETIME(true);
+  
+  $V(start, startDate, false);
+  $V(end, endDate, false);
+}
+
+
 </script>
 
 <form name="filter_prescription" action="?" method="get" class="not-printable">
@@ -32,11 +79,15 @@ selectChap = function(name_chap, oField){
       <th class="category" colspan="4">Sélection des horaires</th>
     </tr>
     <tr>
-      <td>A partir du</td>
+      <th>A partir du</th>
       <td class="date">
         {{mb_field object=$prescription field="_dateTime_min" canNull="false" form="filter_prescription" register="true"}}
+        <label><input type="radio" name="periode" value="matin" onclick="selectPeriode(this)" {{if $periode=='matin'}}checked="checked"{{/if}} /> Matin</label>
+        <label><input type="radio" name="periode" value="soir" onclick="selectPeriode(this)" {{if $periode=='soir'}}checked="checked"{{/if}}/> Soir</label>
+        <label><input type="radio" name="periode" value="nuit" onclick="selectPeriode(this)" {{if $periode=='nuit'}}checked="checked"{{/if}}/> Nuit</label>
+        <label><input type="radio" name="periode" value="today" onclick="selectPeriode(this)" {{if $periode=='today'}}checked="checked"{{/if}}/> Aujourd'hui</label>
       </td>
-      <td>Jusqu'au</td>
+      <th>Jusqu'au</th>
       <td class="date">
         {{mb_field object=$prescription field="_dateTime_max" canNull="false" form="filter_prescription" register="true"}}
        </td>

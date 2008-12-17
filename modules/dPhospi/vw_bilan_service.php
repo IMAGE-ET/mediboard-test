@@ -11,6 +11,7 @@ $date         = mbGetValueFromGetOrSession("date", mbDate());
 $dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
 $hide_filters = mbGetValueFromGet("hide_filters", '') == '1';
+$periode      = mbGetValueFromGet("periode");
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -300,6 +301,7 @@ foreach($cats as $_cat){
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("hide_filters", $hide_filters);
+$smarty->assign("periode", $periode);
 $smarty->assign("cat_used", $cat_used);
 $smarty->assign("token_cat", $token_cat);
 $smarty->assign("cats", $cats);
