@@ -323,7 +323,7 @@ class CPrescriptionLine extends CMbObject {
     
     // Calcul du debut reel de la ligne
     $time_debut = ($this->time_debut) ? $this->time_debut : "00:00:00";
-    $this->_debut_reel = $this->debut." $time_debut";
+    $this->_debut_reel = "$this->debut $time_debut";
     
     $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
   }
@@ -376,7 +376,7 @@ class CPrescriptionLine extends CMbObject {
     
     
     // Si prescription de sortie, on duplique la ligne en ligne de prescription
-    if($prescription->type == "sortie" && $new_line->_traitement && !$date_arret_tp){
+    if($prescription->type === "sortie" && $new_line->_traitement && !$date_arret_tp){
       $new_line->prescription_id = $prescription_id;
     }
     $new_line->creator_id = $AppUI->user_id;
@@ -396,9 +396,9 @@ class CPrescriptionLine extends CMbObject {
     $old_line = new CPrescriptionLineMedicament();
     $old_line->load($this->_id);
     
-    if(!($prescription->type == "sortie" && $old_line->_traitement && !$date_arret_tp)){
+    if(!($prescription->type === "sortie" && $old_line->_traitement && !$date_arret_tp)){
       $old_line->child_id = $new_line->_id;
-      if($prescription->type != "sortie" && !$old_line->date_arret){
+      if($prescription->type !== "sortie" && !$old_line->date_arret){
         $old_line->date_arret = mbDate();
         $old_line->time_arret = mbTime();
       }
@@ -410,7 +410,7 @@ class CPrescriptionLine extends CMbObject {
    * Chargement des administrations et transmissions
    */
   function calculAdministrations($date, $mode_feuille_soin = 0, $mode_dispensation=0){
-  	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
+  	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
   	$this->loadRefsAdministrations($date);
   	
   	// Pour la feuille de soin imprimable
@@ -493,7 +493,7 @@ class CPrescriptionLine extends CMbObject {
 					  $log->loadMatchingObject();
 					  $log->loadRefsFwd();
 					  
-					  if($this->_class_name == "CPrescriptionLineMedicament"){
+					  if($this->_class_name === "CPrescriptionLineMedicament"){
 					    $this->_ref_produit->loadConditionnement();
 					  }
 					  $log->_ref_object->_ref_object =& $this;
@@ -519,11 +519,11 @@ class CPrescriptionLine extends CMbObject {
    */
   function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = ""){
                           
-  	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
+  	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
   	
   	foreach($this->_ref_prises as &$_prise) {
   	  // Dans le cas d'un element, on affecte l'unite de prise prevu pour cet element
-  	  if($_prise->_ref_object->_class_name == "CPrescriptionLineElement"){
+  	  if($_prise->_ref_object->_class_name === "CPrescriptionLineElement"){
   	    $_prise->unite_prise =  $_prise->_ref_object->_unite_prise;
   	  }  
   	  // Si la prise est de type tous_les et que 
@@ -554,7 +554,7 @@ class CPrescriptionLine extends CMbObject {
 
 		  $poids_ok = 1;
 
-  	  if($this->_class_name == "CPrescriptionLineMedicament" && !$_prise->_quantite_with_kg){
+  	  if($this->_class_name === "CPrescriptionLineMedicament" && !$_prise->_quantite_with_kg){
 			  $_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
 			  if($_unite_prise != $_prise->unite_prise){
 			    // On recupere le poids du patient pour calculer la quantite
@@ -578,7 +578,7 @@ class CPrescriptionLine extends CMbObject {
         }
       }
       
-		  if($this->_class_name == "CPrescriptionLineMedicament" && !$_prise->_quantite_with_coef){
+		  if($this->_class_name === "CPrescriptionLineMedicament" && !$_prise->_quantite_with_coef){
 		    $unite_prise = ($_prise->_unite_sans_kg) ? $_prise->_unite_sans_kg : $_prise->unite_prise;
 
 		    $produit =& $this->_ref_produit; 
@@ -667,7 +667,7 @@ class CPrescriptionLine extends CMbObject {
         }
 		  }
 		  // Fois par avec comme unite jour
-		  if(($_prise->nb_fois && $_prise->unite_fois == 'jour' && !$_prise->unite_tous_les) || ($_prise->quantite && !$_prise->moment_unitaire_id && 
+		  if(($_prise->nb_fois && $_prise->unite_fois === 'jour' && !$_prise->unite_tous_les) || ($_prise->quantite && !$_prise->moment_unitaire_id && 
 		      !$_prise->nb_fois && !$_prise->unite_fois && !$_prise->unite_tous_les && !$_prise->nb_tous_les && !$_prise->heure_prise)){
 		    if($_prise->_heures){
 		      foreach($_prise->_heures as $curr_heure){
@@ -682,7 +682,7 @@ class CPrescriptionLine extends CMbObject {
 		    }
 		  }
 		  // Fois par avec comme unite semaine
-      if($_prise->nb_fois && $_prise->unite_fois == 'semaine' && CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}")){
+      if($_prise->nb_fois && $_prise->unite_fois === 'semaine' && CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}")){
         $list_jours = explode('|',CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}"));
         // Parcours des jours concernés
         foreach($list_jours as $_jour){

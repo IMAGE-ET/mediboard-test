@@ -140,7 +140,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	    	$this->_duree_prise .= " pendant ".$this->duree." ".CAppUI::tr("CPrescriptionLineMedicament.unite_duree.".$this->unite_duree);
 	    }
     }
-    if($this->_ref_prescription->type == "traitement"){
+    if($this->_ref_prescription->type === "traitement"){
     	$this->_traitement = "1";
     }
 
@@ -235,15 +235,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
-    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma && $this->_ref_prescription->type != "externe"){
+    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma && $this->_ref_prescription->type !== "externe"){
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Affichage de l'icone Livret Therapeutique
-    if(!$this->_ref_produit->inLivret && ($prescription_type == "sejour" || $this->_protocole)){
+    if(!$this->_ref_produit->inLivret && ($prescription_type === "sejour" || $this->_protocole)){
       $this->_can_vw_livret_therapeutique = 1;
     }
     // Affichage de l'icone Produit Hospitalier
-    if(!$this->_ref_produit->hospitalier && ($prescription_type == "sortie" || $this->_protocole)){
+    if(!$this->_ref_produit->hospitalier && ($prescription_type === "sortie" || $this->_protocole)){
       $this->_can_vw_hospi = 1;
     }
     // Affichage de l'icone generique
@@ -254,7 +254,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($perm_edit){
     	$this->_can_modify_poso = 1;
     	// On ne peut modifier une ligne de traitement personnel seulement en pre_admission
-      if($this->_traitement && ($prescription_type != "pre_admission")){
+      if($this->_traitement && ($prescription_type !== "pre_admission")){
       	$this->_can_modify_poso = 0;
       }
     }
@@ -263,7 +263,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->_can_delete_line = 1;
   	}
   	// Affichage du bouton "Modifier une ligne"
-  	if(!$this->_protocole && $this->_ref_prescription->type != "externe"){
+  	if(!$this->_protocole && $this->_ref_prescription->type !== "externe"){
   		$this->_can_vw_form_add_line_contigue = 1;
   	}
 	}

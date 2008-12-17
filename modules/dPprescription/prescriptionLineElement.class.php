@@ -94,7 +94,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
         $this->user_executant_id = "";
       } else {
 	      $explode_executant = explode("-", $this->_executant);
-	      if($explode_executant[0] == "CExecutantPrescriptionLine"){
+	      if($explode_executant[0] === "CExecutantPrescriptionLine"){
 	        $this->executant_prescription_line_id = $explode_executant[1];
 	      } else {
 	        $this->user_executant_id = $explode_executant[1];
@@ -234,9 +234,5 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
   }
 }
-
-
-
-
 
 ?>

@@ -146,7 +146,7 @@ class CPrescription extends CMbObject {
       $prescription = new CPrescription();
       $prescription->object_id = $this->object_id;
       $prescription->object_class = $this->object_class;
-      if($prescription->type != "externe"){
+      if($prescription->type !== "externe"){
         $prescription->praticien_id = $this->praticien_id;
       }
       $prescription->type = $this->type;
@@ -210,8 +210,8 @@ class CPrescription extends CMbObject {
 	  	case 'S': $date_fin = ($fin_sejour) ? $fin_sejour : $sejour->_sortie; break;
 	  }
 	  
-	  $unite_decalage_debut = $_line->unite_decalage == "heure" ? "HOURS" : "DAYS";
-	  $unite_decalage_fin   = $_line->unite_decalage_fin == "heure" ? "HOURS" : "DAYS";
+	  $unite_decalage_debut = $_line->unite_decalage === "heure" ? "HOURS" : "DAYS";
+	  $unite_decalage_fin   = $_line->unite_decalage_fin === "heure" ? "HOURS" : "DAYS";
 
 	  if(!$_line->jour_decalage){
 	    $date_debut = $date_sel;  
@@ -220,7 +220,7 @@ class CPrescription extends CMbObject {
 	  // Decalage de la fin
 	  if($_line->decalage_line_fin){
 	    $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
-	  	if($unite_decalage_fin == "DAYS"){
+	  	if($unite_decalage_fin === "DAYS"){
 	      $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin);	
 	  	} else {
 	  	  //$_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $time_fin);   
@@ -234,7 +234,7 @@ class CPrescription extends CMbObject {
 	  // Decalage du debut
     if($_line->decalage_line){
       $signe = ($_line->decalage_line >= 0) ? "+" : "";
-		  if($unite_decalage_debut == "DAYS"){ 
+		  if($unite_decalage_debut === "DAYS"){ 
 	      $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);	
 		  } else {
 		    //$_line->debut = $date_debut;
@@ -252,7 +252,7 @@ class CPrescription extends CMbObject {
 	  // Calcul de la duree
 	  if($_line->jour_decalage_fin){
 	  	$_line->duree = mbDaysRelative($_line->debut, $date_fin);
-	  	if($_line->jour_decalage_fin != "S"){
+	  	if($_line->jour_decalage_fin !== "S"){
 	  	  $_line->duree++;
 	  	}
 	  }	  
@@ -268,7 +268,7 @@ class CPrescription extends CMbObject {
 	  $_line->creator_id = $AppUI->user_id;
 	  
 	  if(!$mode_preview){
-		  if($_line->jour_decalage == "I" || $_line->jour_decalage_fin == "I"){
+		  if($_line->jour_decalage === "I" || $_line->jour_decalage_fin === "I"){
 		    if($operation_id){
 		      $_line->operation_id = $operation_id;
 		    } else {
@@ -289,7 +289,7 @@ class CPrescription extends CMbObject {
 			  $prise->_id = "";
 				$prise->object_id = $_line->_id;
 				$prise->object_class = $_line->_class_name;
-				if($prise->decalage_intervention != NULL){
+				if($prise->decalage_intervention != null){
 					if($date_operation){
 	  	      $time_operation = mbTime($date_operation); 
 	  	    } elseif ($operation->_id) {
@@ -352,7 +352,7 @@ class CPrescription extends CMbObject {
 			if($operation->_id){
   		  $hour_operation = $operation->fin_op ? $operation->fin_op : ($operation->debut_op ? $operation->debut_op : $operation->time_operation);
   		}
-		  if($this->_ref_object->_class_name == "CSejour"){
+		  if($this->_ref_object->_class_name === "CSejour"){
 		  	$sejour =& $this->_ref_object;
 	    }
 	  }
@@ -399,7 +399,7 @@ class CPrescription extends CMbObject {
 	    $_perfusion->praticien_id = $praticien_id;
 	    $_perfusion->creator_id = $AppUI->user_id;
 	    
-	    if($_perfusion->decalage_interv != NULL){
+	    if($_perfusion->decalage_interv != null){
 	      if(!$mode_preview){
 				  if($operation_id){
 				    $_perfusion->operation_id = $operation_id;
@@ -466,8 +466,8 @@ class CPrescription extends CMbObject {
     // Aplication du protocole/pack chir
     if($pack_protocole_id){
       $pack_protocole = explode("-", $pack_protocole_id);
-      $pack_id = ($pack_protocole[0] == "pack") ? $pack_protocole[1] : "";
-      $protocole_id = ($pack_protocole[0] == "prot") ? $pack_protocole[1] : "";
+      $pack_id = ($pack_protocole[0] === "pack") ? $pack_protocole[1] : "";
+      $protocole_id = ($pack_protocole[0] === "prot") ? $pack_protocole[1] : "";
       if($pack_id){
         $pack = new CPrescriptionProtocolePack();
 			  $pack->load($pack_id);
@@ -497,7 +497,7 @@ class CPrescription extends CMbObject {
   	  $object->load($this->object_id);
   	  $object->loadRefsFwd();
   		
-  		if($this->type != "sejour"){
+  		if($this->type !== "sejour"){
   		  $this->praticien_id = $AppUI->_ref_user->isPraticien() ? $AppUI->_ref_user->_id : $object->_praticien_id;
   		}
   		else {
@@ -812,18 +812,20 @@ class CPrescription extends CMbObject {
   	$this->loadRefObject();
   	$historique = array();
   	$this->_ref_object->loadRefsPrescriptions();
-  	if($this->type == "sejour" || $this->type == "sortie"){
+  	if($this->type === "sejour" || $this->type === "sortie"){
   		$prescription_pre_adm =& $this->_ref_object->_ref_prescriptions["pre_admission"];
   		$prescription_pre_adm->loadRefsLinesMedComments("0");
   		$prescription_pre_adm->loadRefsLinesElementsComments("0");
   		$historique["pre_admission"] = $prescription_pre_adm;
+  		
+  	  if($this->type === "sortie"){
+        $prescription_sejour =& $this->_ref_object->_ref_prescriptions["sejour"];
+        $prescription_sejour->loadRefsLinesMedComments("0");
+        $prescription_sejour->loadRefsLinesElementsComments("0");
+        $historique["sejour"] = $prescription_sejour;
+      }
   	}
-  	if($this->type == "sortie"){
-  		$prescription_sejour =& $this->_ref_object->_ref_prescriptions["sejour"];
-  		$prescription_sejour->loadRefsLinesMedComments("0");
-  		$prescription_sejour->loadRefsLinesElementsComments("0");
-  		$historique["sejour"] = $prescription_sejour;
-  	}
+
   	return $historique;
   }
   
@@ -973,11 +975,11 @@ class CPrescription extends CMbObject {
   	$order = "prescription_line_comment_id DESC";
   	$ljoin = array();
   	
-  	if ($chapitre && $chapitre != "medicament"){
+  	if ($chapitre && $chapitre !== "medicament"){
   		$ljoin["category_prescription"] = "prescription_line_comment.category_prescription_id = category_prescription.category_prescription_id";
   	  $where["category_prescription.chapitre"] = " = '$chapitre'"; 	
   	}
-  	if ($chapitre == "medicament"){
+  	if ($chapitre === "medicament"){
   	  $where["category_prescription_id"] = " IS NULL"; 		
   	}
   	
