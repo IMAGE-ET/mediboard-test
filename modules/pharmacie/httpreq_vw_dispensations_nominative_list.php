@@ -87,7 +87,7 @@ if($prescription->_id){
           $lines[$_line_med->code_cip] = $_line_med;
           foreach($_line_med->_quantity_by_date as $type => $quantity_by_date){
 				  	foreach($quantity_by_date as $date => $quantity_by_hour){
-				  		if ($quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
+				  		if (@$quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
 					  	  foreach($quantity_by_hour['quantites'] as $hour => $quantity){
 						      @$dispensations[$_line_med->code_cip]["quantite_administration"] += $quantity["total"];
 						      @$dispensations[$_line_med->code_cip]["quantite_dispensation"] += $quantity["total_disp"];
