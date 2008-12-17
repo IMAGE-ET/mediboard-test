@@ -1198,12 +1198,22 @@ function view_log(classe, id) {
   url.popup(600, 500, "history");
 }
 
+function guid_log(guid) {
+  var parts = guid.split("-");
+  view_log(parts[0], parts[1]);
+}
+
 function view_idsante400(classe, id) {
   url = new Url();
   url.setModuleAction("dPsante400", "view_identifiants");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.popup(750, 400, "sante400");
+}
+
+function guid_ids(guid) {
+  var parts = guid.split("-");
+  view_idsante400(parts[0], parts[1]);
 }
 
 function uploadFile(classe, id, categorie_id){

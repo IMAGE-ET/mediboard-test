@@ -17,6 +17,10 @@ class CFilesCategory extends CMbObject {
   var $class = null;
   var $validation_auto = null;
   
+  var $_count_documents = null;
+  var $_count_files     = null;
+  var $_count_doc_items = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'files_category';
@@ -26,9 +30,9 @@ class CFilesCategory extends CMbObject {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["compte_rendu"] = "CCompteRendu file_category_id";
-    $backRefs["employes"] = "CEmployeCab function_id";
-    $backRefs["files"] = "CFile file_category_id";
+    $backRefs["documents"] = "CCompteRendu file_category_id";
+    $backRefs["files"]     = "CFile file_category_id";
+    $backRefs["employes"]  = "CEmployeCab function_id";
     return $backRefs;
   }
 
@@ -44,6 +48,13 @@ class CFilesCategory extends CMbObject {
     return array (
       "nom" => "like"
     );
+  }
+  
+  function countDocItems() {
+    $this->_count_documents = $this->countBackRefs("documents");
+    $this->_count_files     = $this->countBackRefs("files"    );
+    
+    $this->_count_doc_items = $this->_count_documents + $this->_count_files;
   }
   
   static function loadListByClass() {
