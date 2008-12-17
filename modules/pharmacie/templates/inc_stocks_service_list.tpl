@@ -1,8 +1,9 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
-    <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
     <th>{{tr}}CProductStockService{{/tr}}</th>
+    <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>{{tr}}CProductDelivery{{/tr}}</th>
     <th>Retour des services</th>
   </tr>
@@ -15,8 +16,9 @@
         {{$stock->_ref_product->_view}}
         </a>
       </td>
-      <td>{{mb_value object=$stock field=quantity}}</td>
       <td>{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>
+      <td style="text-align: center;">{{mb_value object=$stock field=quantity}}</td>
+      <td>{{mb_value object=$stock->_ref_product field=_unit_title}}</td>
       <td>
         {{assign var=id value=$stock->_id}}
         <form name="dispensation-{{$id}}" action="?" method="post" onsubmit="return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">

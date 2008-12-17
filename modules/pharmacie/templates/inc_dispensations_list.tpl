@@ -46,6 +46,7 @@
     <th>Déjà effectuées</th>
     <th>Dispensation</th>
     <th>Stock du service</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
   </tr>
   {{foreach from=$dispensations key=code_cip item=quantites}}
     {{assign var=quantite_administration value=$quantites.quantite_administration}}
@@ -90,9 +91,7 @@
         </table>
       </td>
       <!-- Quantite à dispenser pour permettre l'administration -->
-      <td>
-        {{$quantite_dispensation}} {{$produit->_unite_dispensation}}    
-      </td>
+      <td>{{$quantite_dispensation}}</td>
       {{if !$infinite}}
         <td>
          {{if array_key_exists($code_cip,$delivrances)}}
@@ -110,7 +109,7 @@
              <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">{{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
              <div class="tooltip-trigger" 
                   onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done->_id}}'} })">
-               {{$curr_done->quantity}} {{$produit->_unite_dispensation}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
+               {{$curr_done->quantity}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
                <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
              </div>
              {{foreachelse}}
@@ -121,7 +120,7 @@
                  <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
                  <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
                </form>
-               {{$curr_done->quantity}} {{$produit->_unite_dispensation}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
+               {{$curr_done->quantity}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
                <br />
            {{/foreach}}
          {{/if}}
@@ -226,15 +225,10 @@
      </td>
      <td class="text">
      {{if $stocks_service.$code_cip}}
-       {{assign var=stock_service value=$stocks_service.$code_cip}}
-       {{if $stock_service->quantity>0}}
-         {{$stock_service->quantity}}
-       {{else}}
-         0
-       {{/if}}
-       {{$produit->_unite_dispensation}}
+       {{$stocks_service.$code_cip->quantity-0}}
      {{/if}}
      </td>
+     <td>{{$produit->_unite_dispensation}}</td>   
    </tr>
   {{foreachelse}}
     <tr>

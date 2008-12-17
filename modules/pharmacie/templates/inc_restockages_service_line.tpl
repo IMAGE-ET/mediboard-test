@@ -16,6 +16,7 @@
     </div>
   </td>
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+  <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
   <td>
     {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
       {{assign var=id value=$trace->_id}}

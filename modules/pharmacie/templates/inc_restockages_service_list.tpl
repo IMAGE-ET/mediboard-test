@@ -5,6 +5,7 @@
     <th>{{tr}}CProductDelivery-service_id{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>Réception</th>
   </tr>
   {{foreach from=$deliveries_global item=curr_delivery_global}}
@@ -26,6 +27,7 @@ $$('a[href=#list-globales] small').first().update('({{$deliveries_global|@count}
     <th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>Réception</th>
   </tr>
   {{foreach from=$deliveries_nominatif item=curr_delivery_nominatif}}

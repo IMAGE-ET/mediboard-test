@@ -11,6 +11,7 @@
     {{/if}}
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>Stock service</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th></th>
   </tr>
   {{foreach from=$deliveries_global item=curr_delivery_global}}
@@ -38,6 +39,7 @@
     {{/if}}
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>Stock service</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th></th>
   </tr>
   {{foreach from=$deliveries_nominatif item=curr_delivery_nominatif}}

@@ -1,6 +1,7 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CProduct{{/tr}}</th>
+    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>Stock précédent</th>
     <th>Articles théoriquement utilisés</th>
     <th>Nouveau stock</th>
@@ -21,8 +22,9 @@
         {{$stock->_ref_product->_view}}
       </div>
     </td>
-    <td>{{$stock->quantity+$curr_destockage.nb_produit}}</td>
-    <td>{{$curr_destockage.nb_produit}}</td>
+    <td>{{$stock->_ref_product->_unit_title}}</td>
+    <td style="text-align: center;">{{$stock->quantity+$curr_destockage.nb_produit}}</td>
+    <td style="text-align: center;">{{$curr_destockage.nb_produit}}</td>
     <td>
       <script type="text/javascript">
         prepareForm("destockage-{{$stock->_id}}");
