@@ -66,8 +66,8 @@ if($prescription->_id){
   
    $prescription->loadRefsLinesMed("1","1","service");
 
-  $lines = array();
-   $lines["medicament"] = $prescription->_ref_prescription_lines;
+  $lines_med = array();
+  $lines_med["medicament"] = $prescription->_ref_prescription_lines;
 
   // Chargement des perfusions 
   $prescription->loadRefsPerfusions();
@@ -78,21 +78,19 @@ if($prescription->_id){
    }
    
     // Parcours des prises prevues pour les medicaments
-    foreach($lines as $lines_by_type){
+    foreach($lines_med as $lines_by_type){
       foreach($lines_by_type as $_line_med){
          if($_line_med->_quantity_by_date){
           if(!isset($produits[$_line_med->code_cip])){
              $produits[$_line_med->code_cip] = $_line_med->_ref_produit;
-          }  
+          }
+          $lines[$_line_med->code_cip] = $_line_med;
           foreach($_line_med->_quantity_by_date as $type => $quantity_by_date){
 				  	foreach($quantity_by_date as $date => $quantity_by_hour){
 				  		if ($quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
 					  	  foreach($quantity_by_hour['quantites'] as $hour => $quantity){
 						      @$dispensations[$_line_med->code_cip]["quantite_administration"] += $quantity["total"];
 						      @$dispensations[$_line_med->code_cip]["quantite_dispensation"] += $quantity["total_disp"];
-						      @$besoin_patient[$_line_med->code_cip][$patient->_id]["patient"] = $patient; 
-	  				      @$besoin_patient[$_line_med->code_cip][$patient->_id]["quantite_administration"] += $quantity["total"];
-						      @$besoin_patient[$_line_med->code_cip][$patient->_id]["quantite_dispensation"] += $quantity["total_disp"];
 					  	  }
 				  		}
 				  	}
@@ -110,9 +108,6 @@ if($prescription->_id){
 								    @$dispensations[$_line_med->code_cip]["quantite_administration"] += $quantite_planifiee;
 								    $quantite_dispensation = $quantite_planifiee * $_line_med->_ratio_administration_dispensation; 
 								    @$dispensations[$_line_med->code_cip]["quantite_dispensation"] += $quantite_dispensation;
-							      @$besoin_patient[$_line_med->code_cip][$patient->_id]["patient"] = $patient; 
-							      @$besoin_patient[$_line_med->code_cip][$patient->_id]["quantite_administration"] += $quantite_planifiee;
-					          @$besoin_patient[$_line_med->code_cip][$patient->_id]["quantite_dispensation"] += $quantite_dispensation;
 			            }
 		            }
 		          }
@@ -120,7 +115,7 @@ if($prescription->_id){
 		      }
         }
       }
-     }   
+    }   
 
     // Gestion des perfusions
 	  $prescription->loadRefsPerfusions();
@@ -195,11 +190,6 @@ if($prescription->_id){
 			      $_perf_line->_quantite_dispensation = ceil($_perf_line->_quantite_dispensation);
 			    }
 		      $dispensations[$_perf_line->code_cip]["quantite_dispensation"] += $_perf_line->_quantite_dispensation;
-		
-		      @$besoin_patient[$_perf_line->code_cip][$patient->_id]["patient"] = $patient; 
-		      @$besoin_patient[$_perf_line->code_cip][$patient->_id]["quantite_administration"] = $_perf_line->_quantite_administration;
-		      @$besoin_patient[$_perf_line->code_cip][$patient->_id]["quantite_dispensation"] = $_perf_line->_quantite_dispensation;
-		      
 		    }
 		    if($_perf_line->_ref_produit->_unite_dispensation){
 		      $produits[$_perf_line->code_cip] = $_perf_line->_ref_produit;
@@ -276,6 +266,7 @@ if($prescription->_id){
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("produits"           , $produits);
+$smarty->assign("lines"              , $lines);
 $smarty->assign('dispensations'      , $dispensations);
 $smarty->assign('delivrances'        , $delivrances);
 $smarty->assign('done'               , $done);
