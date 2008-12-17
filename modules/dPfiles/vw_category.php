@@ -14,14 +14,13 @@ $can->needsAdmin();
 $file_category_id = mbGetValueFromGetOrSession("file_category_id");
 
 // Chargement de la catégorie demandé
-$category=new CFilesCategory;
+$category = new CFilesCategory;
 $category->load($file_category_id);
 
 // Liste des Catégories
-$listCategory = new CFilesCategory;
-$listCategory = $listCategory->loadList();
+$listCategory = $category->loadList(null, "class, nom");
 
-// LIste des Class
+// Liste des Classes disponibles
 CAppUI::getAllClasses();
 $listClass = getChildClasses();
 

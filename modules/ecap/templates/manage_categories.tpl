@@ -6,18 +6,22 @@
   </ul>
 </div>
 
-<h1>Types de documents dans eCap (fake)</h1>
+<h1>Types de documents dans eCap</h1>
 
 <ul>
-  {{foreach from=$typesEcap item=typesEcapByClass key=class}}
+  {{foreach from=$typesEcapByMbClass key=mbClass item=typesEcapByEcObject}}
   <li>
-	{{tr}}{{$class}}{{/tr}}
+	{{tr}}{{$mbClass}}{{/tr}}
 	  <ul>
-		  {{foreach from=$typesEcapByClass item=typesEcapByEcapObject key=ecapObject}}
-	    <li>{{$ecapObject}}
+		  {{foreach from=$typesEcapByEcObject item=typesEcap key=ecObject}}
+	    <li>{{$ecObject}}
 	      <ul>
-				  {{foreach from=$typesEcapByEcapObject key=type item=libelle}}
-				  <li><strong>{{$type}}</strong> : {{$libelle}}</li>
+				  {{foreach from=$typesEcap item=type}}
+				  <li style="padding-left: {{$type->level}}cm;">
+				  	<strong>{{$type->id|string_format:"%02s"}}</strong> 
+				  	<em>[CN: {{$type->cnCode|string_format:"%02s"}} / {{$type->cnType|string_format:"%03s"}}]</em> 
+				  	{{$type->libelle}}
+				  </li>
 				  {{/foreach}}
 	      </ul>
 	    </li>
@@ -44,7 +48,6 @@
 	{{foreach from=$_catsByClass item=_category}}
   <tr>
 	  <td>{{mb_value object=$_category field=nom}}</td>
-	 	<td>{{mb_value object=$_category field=validation_auto}}</td>
 	 	<td>
 
       <form name="Edit-{{$_category->_guid}}" action="?m={{$m}}&amp;tab={{$tab}}" method="post" onsubmit="return checkForm(this)">
@@ -76,12 +79,15 @@
 			  <input type="hidden" name="last_update" value="now" />
 			  
 			  <select name="id400" > 
-			    <option value="">&mdash; Choisir un type e-Cap</option>
+			    <option value="0">&mdash; Choisir un type e-Cap</option>
 					{{assign var=category_class value=$_category->class}}
-			    {{foreach from=$typesEcap.$category_class key=EcapObject item=typesByEcapObject}}
-			    <optgroup label="{{$EcapObject}}">
-				  {{foreach from=$typesByEcapObject key=type item=libelle}}
-				  <option value="{{$type}}" {{if $idEcap->id400 == $type}}selected="selected"{{/if}}>{{$libelle}}</option>
+			    {{foreach from=$typesEcapByMbClass.$category_class key=EcObject item=typesEcap}}
+			    <optgroup label="{{$EcObject}}">
+				  {{foreach from=$typesEcap item=type}}
+				  <option value="{{$type->id}}" style="padding-left: {{$type->level}}cm;" {{if $idEcap->id400 == $type->id}}selected="selected"{{/if}}>
+				  	[CN: {{$type->cnCode|string_format:"%02s"}} / {{$type->cnType|string_format:"%03s"}}] 
+				  	{{$type->libelle}}
+				  </option>
 				  {{/foreach}}
 			    </optgroup>
 					{{/foreach}}

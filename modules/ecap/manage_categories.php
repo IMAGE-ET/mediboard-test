@@ -13,51 +13,79 @@ $can->needsEdit();
 CMedicap::makeURLs();
 $serviceURL = CMedicap::$urls["soap"]["documents"];
 
-$requestParams = array (
-  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
-  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
-  "aTypeIdentifiantActeur" => 1,
-  "aIdentifiantActeur"     => "pr1",
-  "aIdClinique"            => CAppUI::conf("dPsante400 group_id"),
-  "aTypeObjet"             => "SJ",
-);
-
-mbExport($requestParams, "Paramètres de la requête, 'ListerTypeDocument'");
-
 if (!url_exists($serviceURL)) {
   CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
   return;
 }
 
 $client = new SoapClient("$serviceURL?WSDL", array('exceptions' => 0));
-$results = $client->ListerTypeDocument($requestParams);
-$typesEcap = simplexml_load_string($results->ListerTypeDocumentResult->any);
-mbExport($typesEcap, "Retour requête");
 
-$typesEcap = array(
+$typesEcapByMbClass = array(
   "CPatient" => array (
-    "PA" => array(
-      "1.1.0" => "Libéllé long pour 1.1.0",
-      "1.1.1" => "Libéllé long pour 1.1.1",
-		),
+    "PA" => array(),
    ),
   "CSejour" => array(
-    "SJ" => array(
-      "1.2.0" => "Libéllé long pour 1.2.0",
-      "1.2.1" => "Libéllé long pour 1.2.1",
-		),
-    "AT" => array(
-      "2.1.0" => "Libéllé long pour 2.1.0",
-      "2.1.1" => "Libéllé long pour 2.1.1",
-      "2.1.2" => "Libéllé long pour 2.1.2",
-    ),
+    "SJ" => array(),
+    "AT" => array(),
 	),
   "COperation" => array(
-    "IN" => array(
-      "2.2.0" => "Libéllé long pour 2.2.0",
-    ),
+    "IN" => array(),
   ),
 );
+
+$requestParams = array (
+  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
+  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
+  "aTypeIdentifiantActeur" => 1,
+  "aIdentifiantActeur"     => "pr1",
+  "aIdClinique"            => CAppUI::conf("dPsante400 group_id"),
+  "aTypeObjet"             => "",
+);
+
+class CEcapTypeDocument {
+  var $level = 0;
+  var $id = null;
+  var $libelle = "";
+  var $cnCode = "";
+  var $cnType = "";
+
+	static function flattenTypes($listeTypeDocument, $level = 0) {
+	  $types = array();
+	  
+	  foreach ($listeTypeDocument->typeDocument as $typeDocument) {
+	    $type = new CEcapTypeDocument();
+	    $type->level = $level;
+	    $type->id      = utf8_decode($typeDocument->idTypeDocument);
+	    $type->libelle = utf8_decode($typeDocument->libelleTypeDocument);
+	    $type->cnCode  = utf8_decode($typeDocument->classificationNationaleCode);
+	    $type->cnType  = utf8_decode($typeDocument->classificationNationaleType);
+	    $types[] = $type;
+	    
+	    $types = array_merge($types, self::flattenTypes($typeDocument->listeTypeDocument, $level+1));
+	  }
+	  
+	  return $types;
+	}
+}
+
+
+foreach ($typesEcapByMbClass as $mbClass => &$typesEcapByEcObject) {
+  foreach ($typesEcapByEcObject as $ecObject => &$typesEcap) {
+    $requestParams["aTypeObjet"] = $ecObject;
+    $result = $client->ListerTypeDocument($requestParams);
+		$result = simplexml_load_string($result->ListerTypeDocumentResult->any);
+		if ($result->codeRetour != "0") {
+		  $warning = sprintf("Erreur d'appel au service web e-Cap avec les paramètres '%s' : [%s] %s ", 
+		    http_build_query($requestParams),
+		    $result->codeRetour,
+		    utf8_decode($result->descriptionRetour));
+		  trigger_error($warning, E_USER_WARNING);
+		  continue;
+		}
+		
+		$typesEcapByEcObject[$ecObject] = CEcapTypeDocument::flattenTypes($result->listeTypeDocument);
+  }
+}
 
 $categories = CFilesCategory::loadListByClass();
 foreach ($categories as &$_catsByClass) {
@@ -72,9 +100,9 @@ foreach ($categories as &$_catsByClass) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("typesEcap", $typesEcap);
-$smarty->assign("idsEcap"  , $idsEcap);
-$smarty->assign("categories", $categories);
+$smarty->assign("typesEcapByMbClass", $typesEcapByMbClass);
+$smarty->assign("idsEcap"           , $idsEcap);
+$smarty->assign("categories"        , $categories);
 
 $smarty->display("manage_categories.tpl");
 
