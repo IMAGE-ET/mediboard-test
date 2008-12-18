@@ -44,7 +44,16 @@ ul {
    {{/foreach}} 
   {{/foreach}}
   
-  
+
+  <!-- Affichage des injections -->
+  {{foreach from=$prescription->_ref_injections_for_plan item=_all_lines_unite_prise_cat_inj}}
+    {{foreach from=$_all_lines_unite_prise_cat_inj item=_all_lines_unite_prise_inj}}
+      {{foreach from=$_all_lines_unite_prise_inj key=unite_prise item=_line_inj}}
+        {{include file="../../dPprescription/templates/inc_vw_line_plan_soin.tpl" line=$_line_inj suffixe=med}}
+    {{/foreach}}
+   {{/foreach}} 
+  {{/foreach}}
+    
   <!-- Affichage des perfusions -->
   {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion}}
     {{include file="../../dPprescription/templates/inc_vw_perf_plan_soin.tpl"}}

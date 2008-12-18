@@ -14,7 +14,7 @@
  	<td class="text" style="font-size: 1em;">
  	  <ul>
  	   {{foreach from=$_perfusion->_ref_lines item=_line}}
- 	     <li><small>{{$_line->_view}}<small></li>
+ 	     <li><small>{{$_line->_view}}</small></li>
  	   {{/foreach}}
  	  </ul>
  	</td>	      

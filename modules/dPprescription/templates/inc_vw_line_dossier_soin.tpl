@@ -4,7 +4,7 @@
 {{assign var=administrations_line value=$line->_administrations}}
 
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-  {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.med}}
+  {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$type}}
 {{else}}
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
 {{/if}}
@@ -13,7 +13,7 @@
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
       <!-- Cas d'une ligne de medicament -->
-      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$_key_cat_ATC}}">
+      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}">
         {{$line->_ref_produit->_ref_ATC_2_libelle}}
       </th>
     {{else}}

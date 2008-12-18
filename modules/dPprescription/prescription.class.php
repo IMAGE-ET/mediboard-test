@@ -66,6 +66,7 @@ class CPrescription extends CMbObject {
   var $_ref_lines_med_for_plan = null;
   var $_ref_lines_elt_for_plan = null;
   var $_ref_perfusions_for_plan = null;
+  var $_ref_injections_for_plan = null;
   
   var $_scores = null; // Tableau de stockage des scores de la prescription 
   var $_score_prescription = null; // Score de la prescription, 0:ok, 1:alerte, 2:grave
@@ -1199,7 +1200,11 @@ class CPrescription extends CMbObject {
             $_line_med->_ref_produit->loadClasseATC();
             $code_ATC = $_line_med->_ref_produit->_ref_ATC_2_code;
 						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
- 	            $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+						  if($_line_med->_is_injectable){
+						    $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;  
+						  } else { 
+ 	              $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+						  }
  	            continue;
 						}
 						// Chargement des prises
@@ -1207,7 +1212,11 @@ class CPrescription extends CMbObject {
 						// Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 						if(!$mode_feuille_soin){
 						  if(isset($_line_med->_administrations['aucune_prise']) && count($_line_med->_ref_prises) >= 1){
-						    $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+						    if($_line_med->_is_injectable){
+						      $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+						    } else {
+						      $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;   
+						    }
 						  }
 						}
 				  }

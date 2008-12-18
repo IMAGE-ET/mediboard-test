@@ -28,8 +28,72 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $substitution_active = null; 
   var $voie = null;
                 
-  static $perfusables = array ("Voie intraveineuse","Voie intramusculaire");
+  //static $perfusables = array ("Voie intraveineuse","Voie intramusculaire");
   
+  static $voies = array("Voie systémique"                 => array("injectable" => false, "perfusable" => false), 
+                        "Voie endocervicale"              => array("injectable" => false, "perfusable" => false), 
+                        "Voie péridurale"                 => array("injectable" => false, "perfusable" => false),
+                        "Voie extra-amniotique"           => array("injectable" => false, "perfusable" => false),
+                        "Voie gastro-entérale"            => array("injectable" => false, "perfusable" => false),
+                        "Hémodialyse"                     => array("injectable" => false, "perfusable" => false),
+                        "Voie intra-amniotique"           => array("injectable" => false, "perfusable" => false), 
+                        "Voie intra-artérielle"           => array("injectable" => false, "perfusable" => false),
+                        "Voie intra-articulaire"          => array("injectable" => false, "perfusable" => false),
+                        "Voie intrabursale"               => array("injectable" => false, "perfusable" => false),
+                        "Voie intracardiaque"             => array("injectable" => false, "perfusable" => false),
+                        "Voie intracaverneuse"            => array("injectable" => false, "perfusable" => false),
+                        "Voie intracervicale"             => array("injectable" => false, "perfusable" => false),
+                        "Voie intracoronaire"             => array("injectable" => false, "perfusable" => false),
+                        "Voie intradermique"              => array("injectable" => false, "perfusable" => false),
+                        "Voie intradiscale"               => array("injectable" => false, "perfusable" => false),
+                        "Voie intralymphatique"           => array("injectable" => false, "perfusable" => false),
+                        "Voie intramusculaire"            => array("injectable" => true, "perfusable" => true),
+                        "Voie intra-oculaire"             => array("injectable" => false, "perfusable" => false),
+                        "Voie intrapéritonéale"           => array("injectable" => false, "perfusable" => false),
+                        "Voie intrapleurale"              => array("injectable" => false, "perfusable" => false),
+                        "Voie intrasternale"              => array("injectable" => false, "perfusable" => false),
+                        "Voie intrarachidienne"           => array("injectable" => false, "perfusable" => false),
+                        "Voie intraveineuse"              => array("injectable" => true, "perfusable" => true),
+                        "Voie intravésicale"              => array("injectable" => false, "perfusable" => false),
+                        "Voie nasale"                     => array("injectable" => false, "perfusable" => false),
+                        "Voie orale"                      => array("injectable" => false, "perfusable" => false),
+                        "Voie buccale"                    => array("injectable" => false, "perfusable" => false),
+                        "Voie péri-articulaire"           => array("injectable" => false, "perfusable" => false),
+                        "Voie périneurale"                => array("injectable" => false, "perfusable" => false),
+                        "Voie rectale"                    => array("injectable" => false, "perfusable" => false),
+                        "Voie sous-conjonctivale"         => array("injectable" => false, "perfusable" => false),
+                        "Voie sous-cutanée"               => array("injectable" => false, "perfusable" => false),
+                        "Voie transdermique"              => array("injectable" => false, "perfusable" => false),
+                        "Voie intravasculaire"            => array("injectable" => false, "perfusable" => false),
+                        "Voie parentérale"                => array("injectable" => false, "perfusable" => false),
+                        "Voie intrabuccale"               => array("injectable" => false, "perfusable" => false),
+                        "Voie intrapéricardique"          => array("injectable" => false, "perfusable" => false),
+                        "Voie inhalée"                    => array("injectable" => false, "perfusable" => false),
+                        "Voie sublinguale"                => array("injectable" => false, "perfusable" => false),
+                        "Voie endobuccale"                => array("injectable" => false, "perfusable" => false),
+                        "Voie sous-arachnoïdienne"        => array("injectable" => false, "perfusable" => false),
+                        "Voie endotrachéopulmonaire"      => array("injectable" => false, "perfusable" => false),
+                        "Voie endonasale"                 => array("injectable" => false, "perfusable" => false),
+                        "Voie intravitréenne"             => array("injectable" => false, "perfusable" => false),
+                        "Voie intra-artérielle hépatique" => array("injectable" => false, "perfusable" => false),
+                        "Voie topique"                    => array("injectable" => false, "perfusable" => false),
+                        "Voie auriculaire"                => array("injectable" => false, "perfusable" => false),
+                        "Voie intra-osseuse"              => array("injectable" => false, "perfusable" => false),
+                        "Voie cutanée"                    => array("injectable" => false, "perfusable" => false),
+                        "Voie dentaire"                   => array("injectable" => false, "perfusable" => false),
+                        "Voie endosinusale"               => array("injectable" => false, "perfusable" => false),
+                        "Voie endotrachéobronchique"      => array("injectable" => false, "perfusable" => false),
+                        "Voie gingivale"                  => array("injectable" => false, "perfusable" => false),
+                        "Voie intralésionelle"            => array("injectable" => false, "perfusable" => false),
+                        "Voie intra-utérine"              => array("injectable" => false, "perfusable" => false),
+                        "Voie respiratoire"               => array("injectable" => false, "perfusable" => false),
+                        "Voie urétrale"                   => array("injectable" => false, "perfusable" => false),
+                        "Voie vaginale"                   => array("injectable" => false, "perfusable" => false),
+                        "Voie ophtalmique"                => array("injectable" => false, "perfusable" => false),
+                        "Voie intrathécale"               => array("injectable" => false, "perfusable" => false),
+                        "Voie intraventriculaire"         => array("injectable" => false, "perfusable" => false),
+                        "Voie intracavitaire"             => array("injectable" => false, "perfusable" => false));
+	
   // Form Field
   var $_unites_prise    = null;
   var $_specif_prise    = null;
@@ -37,7 +101,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_count_substitution_lines = null;
   var $_ucd_view        = null;
   var $_is_perfusable   = null;
-    
+  var $_is_injectable   = null;
+  
   // Object References
   var $_ref_prescription = null;
   var $_ref_produit      = null;
@@ -158,6 +223,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->countSubstitionsLines();
     }
     $this->isPerfusable();
+    $this->isInjectable();
   }
   
   /*
@@ -343,13 +409,21 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function isPerfusable(){
     foreach($this->_ref_produit->voies as $_voie){
-      if(in_array($_voie, self::$perfusables)){
+      if(self::$voies[$_voie]["perfusable"]){
         $this->_is_perfusable = true;
-        break;
+        break;  
       }
     }
   }
 
+  
+  function isInjectable(){
+    if(self::$voies[$this->voie]["injectable"]){
+      $this->_is_injectable = true;  
+    }
+  }
+  
+  
   /*
    * Chargement du produit
    */

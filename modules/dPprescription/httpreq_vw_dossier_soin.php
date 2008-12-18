@@ -41,7 +41,6 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 $operation = new COperation();
 $operations = array();
 
-
 $matin = range(CAppUI::conf("dPprescription CPrisePosologie heures matin min"), CAppUI::conf("dPprescription CPrisePosologie heures matin max"));
 $soir = range(CAppUI::conf("dPprescription CPrisePosologie heures soir min"), CAppUI::conf("dPprescription CPrisePosologie heures soir max"));
 $nuit_soir = range(CAppUI::conf("dPprescription CPrisePosologie heures nuit min"), 23);
@@ -159,20 +158,24 @@ if($prescription->_id){
 }
 
 // Calcul du rowspan pour les medicaments
-if($prescription->_ref_lines_med_for_plan){
-	foreach($prescription->_ref_lines_med_for_plan as $_code_ATC => $_cat_ATC){
-	  if(!isset($prescription->_nb_produit_by_cat[$_code_ATC])){
-	    $prescription->_nb_produit_by_cat[$_code_ATC] = 0;
-	  }
-	  foreach($_cat_ATC as $_line) {
-	    foreach($_line as $line_med){
-	      if(!isset($prescription->_nb_produit_by_chap["med"])){
-				  $prescription->_nb_produit_by_chap["med"] = 0;
-				}
-				$prescription->_nb_produit_by_chap["med"]++;
-	      $prescription->_nb_produit_by_cat[$_code_ATC]++;
-	    }
-	  }
+$types = array("med","inj");
+foreach($types as $_type_med){
+  $produits = ($_type_med == "med") ? $prescription->_ref_lines_med_for_plan : $prescription->_ref_injections_for_plan;
+	if($produits){
+	  foreach($produits as $_code_ATC => $_cat_ATC){
+		  if(!isset($prescription->_nb_produit_by_cat[$_code_ATC])){
+		    $prescription->_nb_produit_by_cat[$_type_med][$_code_ATC] = 0;
+		  }
+		  foreach($_cat_ATC as $line_id => $_line) {
+		    foreach($_line as $unite_prise => $line_med){
+		      if(!isset($prescription->_nb_produit_by_chap[$_type_med])){
+					  $prescription->_nb_produit_by_chap[$_type_med] = 0;
+					}
+					$prescription->_nb_produit_by_chap[$_type_med]++;
+		      $prescription->_nb_produit_by_cat[$_type_med][$_code_ATC]++;
+		    }
+		  }
+		}
 	}
 }
 

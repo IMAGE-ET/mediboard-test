@@ -372,6 +372,11 @@ Main.add(function () {
 						    {{if $prescription->_ref_perfusions_for_plan|@count}}
 						      <li><a href="#_perf">Perfusions</a></li>
 						    {{/if}}
+								
+								{{if $prescription->_ref_injections_for_plan|@count}}
+								<li><a href="#_inj">Injections</a></li>
+						    {{/if}}
+						    
 						    {{if $prescription->_ref_lines_med_for_plan|@count}}
 						      <li><a href="#_med">Médicaments</a></li>
 						    {{/if}}
@@ -388,7 +393,8 @@ Main.add(function () {
 		 	 	</td>
 		 	 	<td>
 				<table class="tbl" id="plan_soin">
-				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || $prescription->_ref_perfusions_for_plan|@count}}
+				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
+				  		 $prescription->_ref_perfusions_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
 					  <tr>
 					    <th rowspan="2">Catégorie</th>
 					    <th rowspan="2">Cond.</th>
@@ -448,23 +454,50 @@ Main.add(function () {
 					  {{/foreach}}
 					</tbody>
 					
-				  <!-- Affichage des medicaments -->
-				  <tbody id="_med" style="display: none;">
-				    {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
-				      {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
-				        {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
-					        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-					            line=$line_med
-					            nodebug=true
-					            first_foreach=foreach_med
-					            last_foreach=foreach_line
-					            global_foreach=foreach_cat
-					            nb_line=$_line|@count
-					            dosql=do_prescription_line_medicament_aed}}
+					
+				  <!-- Affichage des injectables -->
+				  <tbody id="_inj" style="display: none;">
+				    {{foreach from=$prescription->_ref_injections_for_plan item=inj_cat_ATC key=_key_cat_ATC name="_foreach_cat"}}
+				      {{foreach from=$inj_cat_ATC item=inj_line name="_foreach_med"}}
+				        {{foreach from=$inj_line key=unite_prise item=inj_line_med name="_foreach_line"}} 
+						        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+						            line=$inj_line_med
+						            nodebug=true
+						            first_foreach=_foreach_med
+						            last_foreach=_foreach_line
+						            global_foreach=_foreach_cat
+						            nb_line=$inj_line|@count
+						            type="inj"
+						            dosql=do_prescription_line_medicament_aed}}
 					      {{/foreach}}
 					    {{/foreach}} 		 
 				    {{/foreach}}
 			    </tbody>
+			    
+			    
+				  
+					<!-- Affichage des medicaments -->
+				  <tbody id="_med" style="display: none;">
+				    {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
+				      {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
+				        {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
+				          {{if !$line_med->_is_injectable}}
+						        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+						            line=$line_med
+						            nodebug=true
+						            first_foreach=foreach_med
+						            last_foreach=foreach_line
+						            global_foreach=foreach_cat
+						            nb_line=$_line|@count
+						            type="med"
+						            dosql=do_prescription_line_medicament_aed}} 
+						        {{/if}}
+					      {{/foreach}}
+					    {{/foreach}} 		 
+				    {{/foreach}}
+			    </tbody>
+			    
+					
 					
 				  <!-- Affichage des elements -->
 				  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap name="foreach_element"}}

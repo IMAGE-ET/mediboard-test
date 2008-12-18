@@ -542,7 +542,11 @@ class CPrescriptionLine extends CMbObject {
   	 	} else {
   	 	  $this->_ref_produit->loadClasseATC();
 		 	  $code_ATC = $this->_ref_produit->_ref_ATC_2_code;
-		 	  $prescription->_ref_lines_med_for_plan[$code_ATC][$this->_id][$key_tab] = $this;
+		 	  if($this->_is_injectable){
+		 	    $prescription->_ref_injections_for_plan[$code_ATC][$this->_id][$key_tab] = $this;  
+		 	  } else {
+		 	    $prescription->_ref_lines_med_for_plan[$code_ATC][$this->_id][$key_tab] = $this;
+		 	  }
   	 	}
 			
 		 	// Stockage du libelle de l'unite de prise
