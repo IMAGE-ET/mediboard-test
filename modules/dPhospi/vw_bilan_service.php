@@ -233,7 +233,7 @@ if (mbGetValueFromGet("do")) {
 					      foreach($_line_elt->_administrations as $unite_prise => &$administrations_by_unite){
 					        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 					          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
-	                    if(is_numeric($hour)){
+	                    if(is_numeric($_hour)){
 						            if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
 							            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
 							            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
@@ -247,7 +247,7 @@ if (mbGetValueFromGet("do")) {
 						              $chambre = $affectation->_ref_lit->_ref_chambre;
 						            }
 		
-						            $quantite = $administrations_by_hour["quantite"];
+						            $quantite = @$administrations_by_hour["quantite"];
 						            if($quantite){
 						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
 						              $administrations_by_hour["quantite"] = 0;

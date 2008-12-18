@@ -150,7 +150,7 @@ selectPeriode = function(element) {
   </td>
 </tr>
 <tr>
-  <td colspan="2">
+  <td colspan="2" class="text">
     Catégorie(s) sélectionnée(s):
     {{foreach from=$cat_used item=_cat_view name=cat}}
       <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
