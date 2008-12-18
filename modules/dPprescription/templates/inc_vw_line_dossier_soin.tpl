@@ -277,7 +277,8 @@
 	       {{/if}}
 		   </td>
 	   {{else}}
-	      <td class="{{$_view_date}}-{{$moment_journee}} canDrop"
+	      <td class="{{$_view_date}}-{{$moment_journee}} {{if $mode_dossier == 'planification'}}canDrop{{/if}}"
+	          id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}"
 	          style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
 	          {{if $mode_dossier == "planification"}}background-color: #CAFFBA;{{/if}}'>
 		     <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
