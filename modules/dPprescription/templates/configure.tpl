@@ -8,6 +8,13 @@ checkValue = function(field1, field2){
   }
 }
 
+popupVoies = function(){
+  url = new Url;
+  url.setModuleAction("dPprescription", "vw_voies");
+  url.popup(300,700,"Voies");
+}
+
+
 </script>
 
 
@@ -264,6 +271,14 @@ checkValue = function(field1, field2){
       </select>
 	  </td>
 	</tr>
+  <tr>
+    <th class="category" colspan="10">Affichage des voies disponibles</th>
+  </tr>
+  <tr>
+    <td colspan="10" style="text-align: center;">
+      <button class="search" onclick="popupVoies()" type="button">Afficher les voies</button>
+    </td>
+  </tr>
   
   {{assign var="class" value="CCategoryPrescription"}}
   <tr>
@@ -513,13 +528,11 @@ checkValue = function(field1, field2){
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
   </tr>
-  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
-  
 </table>
 
 </form>
