@@ -7,8 +7,9 @@
 * @author Romain Ollivier
 */
 
-mbSetValueToSession("_conduction", $_POST["_conduction"]);
-mbSetValueToSession("_oreille", $_POST["_oreille"]);
+// Sets the values to the session too
+mbGetAbsValueFromPostOrSession("_conduction");
+mbGetAbsValueFromPostOrSession("_oreille");
 
 $do = new CDoObjectAddEdit("CExamAudio", "examaudio_id");
 $do->doIt();
