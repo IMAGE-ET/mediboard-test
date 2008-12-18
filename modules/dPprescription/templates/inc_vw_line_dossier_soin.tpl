@@ -198,7 +198,7 @@
 				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				    {{/if}}
-				    class="{{if $quantite && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
+				    class="{{if ($quantite && $quantite != "-") && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
 				      draggable
 				    {{/if}}  
 				      tooltip-trigger administration
@@ -277,7 +277,7 @@
 	       {{/if}}
 		   </td>
 	   {{else}}
-	      <td class="{{$_view_date}}-{{$moment_journee}}" 
+	      <td class="{{$_view_date}}-{{$moment_journee}} canDrop"
 	          style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
 	          {{if $mode_dossier == "planification"}}background-color: #CAFFBA;{{/if}}'>
 		     <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
