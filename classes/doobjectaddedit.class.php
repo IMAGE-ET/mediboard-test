@@ -101,13 +101,12 @@ class CDoObjectAddEdit {
       return;
     }
     
-    
     // Cas ajax
     if ($this->ajax) {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;
       $callBack = $this->callBack;
-      echo nl2br($AppUI->getMsg());
+      echo $AppUI->getMsg();
       if ($callBack) {
         echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
       }

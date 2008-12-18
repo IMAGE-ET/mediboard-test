@@ -2,7 +2,11 @@
  @param string $dsn
 *}}
 
-<form name="ConfigDSN-{{$dsn}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<table class="main"> 
+  <tr>
+    <td class="">
+
+<form name="ConfigDSN-{{$dsn}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
 
 <input type="hidden" name="dosql" value="do_configure" />
 <input type="hidden" name="m" value="system" />
@@ -13,7 +17,7 @@
 {{assign var="section" value="db"}}
 
 <tr>
-  <th class="category" colspan="100">
+  <th class="title" colspan="100">
     {{tr}}config-{{$section}}{{/tr}} '{{$dsn}}'
     {{assign var=dsnConfig value=0}}
     {{if $dsn|array_key_exists:$dPconfig.$section}}
@@ -100,6 +104,11 @@
 
 </table>
 
+</form>
+
+    </td>
+		<td class="greedyPane">
+
 <script type="text/javascript">
 
 var DSN = {
@@ -122,8 +131,6 @@ var DSN = {
 }
 
 </script>
-
-</form>
 
 <table class="tbl">
 
@@ -161,4 +168,8 @@ var DSN = {
   <td id="config-dsn-create-{{$dsn}}" />
 </tr>
 
+</table>
+
+		</td>
+	</tr>
 </table>
