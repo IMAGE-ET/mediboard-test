@@ -828,7 +828,7 @@ class CPatient extends CMbObject {
       $consult->loadExamsComp();
       $consult->getNumDocsAndFiles($permType);
       
-      $consult->loadRefsFwd();
+      $consult->loadRefsFwd(1);
       $consult->canRead();
       $consult->canEdit();
     }
@@ -841,13 +841,13 @@ class CPatient extends CMbObject {
       $sejour->loadRefsOperations();
       $sejour->getNumDocsAndFiles($permType);
       
-      $sejour->loadRefsFwd();
+      $sejour->loadRefsFwd(1);
       $sejour->canRead();
       $sejour->canEdit();
       $sejour->getNumDocsAndFiles($permType);
       foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
         $operation =& $sejour->_ref_operations[$keyOp];
-        $operation->loadRefsFwd();
+        $operation->loadRefsFwd(1);
         $operation->getNumDocsAndFiles($permType);
         $operation->canRead();
         $operation->canEdit();

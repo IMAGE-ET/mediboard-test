@@ -643,6 +643,7 @@ class CSejour extends CCodable {
     } else {
       $this->_ref_praticien->load($this->praticien_id);
     }
+    $this->_ref_praticien->loadRefFunction();
   }
   
   function loadExtDiagnostics() {
