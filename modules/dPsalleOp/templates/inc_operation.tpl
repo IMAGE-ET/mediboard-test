@@ -31,7 +31,7 @@ Main.add(function () {
 });
 
 
-function loadTraitement(sejour_id, date, mode_dossier) {
+function loadTraitement(sejour_id, date, nb_click, mode_dossier) {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
   url.addParam("sejour_id", sejour_id);

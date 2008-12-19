@@ -249,7 +249,9 @@ Main.add(function () {
 	{{/if}}
 
 	// Deplacement du dossier de soin
-  moveDossierSoin();
+	if($('plan_soin')){
+    moveDossierSoin();
+  }
 
   {{if !$mode_bloc}}
     new Control.Tabs('tab_dossier_soin');
