@@ -317,7 +317,7 @@ Main.add(function () {
         <tr>
           <td colspan="5">
             {{if $dPconfig.dPcabinet.CConsultAnesth.format_auto_rques}}
-              <div class="little-info">
+              <div class="small-info">
               Si vous laissez les champs <strong>Remarques</strong> ou <strong>Motif</strong> vides, <br />
               ils seront pré-remplis selon <a href="?m=dPcabinet&amp;tab=configure">la configuration du module</a>.
               </div>

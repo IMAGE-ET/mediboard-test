@@ -162,7 +162,7 @@ var filterForm = null;
     <tbody id="data" style="display: none;">
       <tr>
         <td colspan="20">
-          <div class="little-info">
+          <div class="small-info">
             Les cases à cocher vous permettent de choisir quels graphiques vous souhaitez afficher.
           </div>
         </td>

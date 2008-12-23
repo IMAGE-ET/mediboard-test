@@ -261,7 +261,7 @@ Main.add(function () {
   {{if $op->_count_actes}}
   <tr>
     <td class="" colspan="3">
-      <div class="little-info">
+      <div class="small-info">
       	L'intervention déjà codée.<br/>Impossible de modifier les champs ci-dessous 
       </div>
 		</td>

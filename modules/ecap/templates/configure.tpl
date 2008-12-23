@@ -21,7 +21,7 @@
     <td>
       <input class="str" size="60" name="{{$mod}}[{{$var}}]" value="{{$dPconfig.$mod.$var}}" />
 			<br/>
-      <div class="little-info">
+      <div class="small-info">
         Il s'agit de l'ancienne variable de configuration.
         <br/>
         Elle restera utilisée si la nouvelle variable (ci-desosus) n'est pas renseignée.
@@ -106,7 +106,7 @@
     <td>
       <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
       {{if $dPconfig.$mod.$class.$var != $tags.IPP}}
-			<div class="little-warning">
+			<div class="small-warning">
 				Le tag IPP pour l'utilisation du module e-Cap dans cet établissement devrait être :
 				'{{$tags.IPP}}'
 				<br />
@@ -115,7 +115,7 @@
 			  </button>
 			</div>
 			{{else}}	
-			<div class="little-success">
+			<div class="small-success">
 				Le tag IPP est compatible avec l'utilisation du module e-Cap dans cet établissement.
 			</div>
 			{{/if}}
@@ -134,7 +134,7 @@
     <td>
       <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
       {{if $dPconfig.$mod.$class.$var != $tags.DOS}}
-			<div class="little-warning">
+			<div class="small-warning">
 				Le tag 'Numéro de dossier' pour l'utilisation du module e-Cap dans cet établissement devrait être :
 				'{{$tags.DOS}}'
 				<br />
@@ -143,7 +143,7 @@
 			  </button>
 			</div>
 			{{else}}	
-			<div class="little-success">
+			<div class="small-success">
 				Le tag 'Numéro de dossier' est compatible avec l'utilisation du module e-Cap dans cet établissement.
 			</div>
 			{{/if}}

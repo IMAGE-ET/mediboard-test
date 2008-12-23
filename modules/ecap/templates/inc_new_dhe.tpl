@@ -15,7 +15,7 @@ newDHE = function() {
 </script>
 
 {{if count($noDHEReasons)}}
-<div class="little-warning" style="text-align: left">
+<div class="small-warning" style="text-align: left">
 	DHE non disponible pour la ou les raisons suivantes: 
 	<ul>
 	  {{foreach from=$noDHEReasons item=reason}}

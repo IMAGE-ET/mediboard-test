@@ -127,7 +127,7 @@ Main.add( function(){
 		                {{$unite_prise}}
 		              </form>
 		            {{else}}
-		              <div class="little-info">
+		              <div class="small-info">
 		                Attention, cette prise de {{mb_value object=$by_hour.prise field=quantite}} {{$unite_prise}} est pour le {{$date|date_format:"%d/%m/%Y"}} à {{$hour}}h, 
 		                or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
 		              </div>
@@ -190,7 +190,7 @@ Main.add( function(){
 		        {{if $planification->quantite}}
 		        <tr>
 		          <td>
-		            <div class="little-info">
+		            <div class="small-info">
 		              Il est impossible de planifier sur cette case car elle possède déjà une prise prévue.
 		            </div>
 		          </td>

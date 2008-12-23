@@ -137,7 +137,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	  <tr>
 	    <td>
         {{if $notToday}}
-          <div class="little-info">
+          <div class="small-info">
             {{if $mode_plan}}
               Attention, vous êtes sur le point d'administrer pour le {{$date|date_format:"%d/%m/%Y"}}, 
 	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
@@ -267,7 +267,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 		</table>
 	</form>
 	{{elseif !$planification->_id}}
-     <div class="little-info">
+     <div class="small-info">
        Il est impossible de planifier sur cette case car elle possède déjà une prise prévue.
      </div>
 	{{/if}}

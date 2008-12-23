@@ -18,7 +18,7 @@
 	  {{/foreach}}
 	</table>
 {{else}}
-  <div class="little-info">
+  <div class="small-info">
   Aucune prescription de séjour
   </div>
 {{/if}}

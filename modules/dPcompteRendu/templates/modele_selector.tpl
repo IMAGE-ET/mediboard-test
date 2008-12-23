@@ -67,7 +67,7 @@ function setClose(modele_id, object_id) {
 	  {{include file="inc_vw_list_models.tpl"}}
 	{{/foreach}}
 	
-	<div class="little-info">
+	<div class="small-info">
 	  Cliquez sur un modèle pour l'utiliser !
 	  <br />
 	  Les sections grisées contiennent des champs potentiellement incompatibles avec le contexte courant.

@@ -100,7 +100,7 @@
 	  <tr>
 	    <td />
 	    <td>
-	      <div class="little-info text">Ce <strong>produit est injectable</strong>, vous pouvez l'<em>associer à une perfusion</em> existante ou une nouvelle.</div>
+	      <div class="small-info text">Ce <strong>produit est injectable</strong>, vous pouvez l'<em>associer à une perfusion</em> existante ou une nouvelle.</div>
 	    </td>
 	    <td>
 	    		<form name="addPerfusionLine-{{$line->_id}}">

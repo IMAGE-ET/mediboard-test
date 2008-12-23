@@ -101,7 +101,7 @@
 	          </td>
 	        </tr>
 	      {{foreachelse}}
-	      	<div class="little-info">
+	      	<div class="small-info">
 		        Aucun produit n'est associé à la perfusion
 		      </div>
 	      {{/foreach}}

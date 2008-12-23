@@ -1121,10 +1121,10 @@ div.loading {
 }
 
 
-div.little-success ,
-div.little-info ,
-div.little-warning,
-div.little-error {
+div.small-success ,
+div.small-info ,
+div.small-warning,
+div.small-error {
 	text-align: left;
   margin: 10px 15px;
   min-height: 15px;
@@ -1136,26 +1136,26 @@ div.little-error {
   padding-left: 30px;
 }
 
-div.little-success {
-  background-image: url(images/icons/little-success.png);
+div.small-success {
+  background-image: url(images/icons/small-success.png);
  	background-color: #efe;
   border-color: #5a5;
 }
 
-div.little-info {
-  background-image: url(images/icons/little-info.png);
+div.small-info {
+  background-image: url(images/icons/small-info.png);
  	background-color: #eef;
   border-color: #55a;
 }
 
-div.little-warning {
-  background-image: url(images/icons/little-warning.png);
+div.small-warning {
+  background-image: url(images/icons/small-warning.png);
   background-color: #ffd;
   border-color: #da0;
 }
 
-div.little-error {
-  background-image: url(images/icons/little-error.png);
+div.small-error {
+  background-image: url(images/icons/small-error.png);
  	background-color: #fee;
   border-color: #a55;
 }

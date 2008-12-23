@@ -111,7 +111,7 @@ $dPconfig = $mbConfig->values;
 
   <tr>
     <td colspan="10" class="text">
-    	<div class="little-info">
+    	<div class="small-info">
     	  Ces paramètres sont désormais gérés dans la 
     	  <strong>configuration du module Administration</strong>,
     	  disponible après la fin de la première installation.

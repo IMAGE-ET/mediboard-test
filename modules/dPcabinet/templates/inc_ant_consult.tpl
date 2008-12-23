@@ -124,7 +124,7 @@ Main.add(function () {
     <td class="text">
       <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
       
-      <div class="little-info">
+      <div class="small-info">
       	Les addictions sont désormais gérées comme un type d'antécédent, à l'instar d'Habitus.<br />
         Merci d'utiliser le formulaire ci-dessous pour manipuler les addictions.
       </div>

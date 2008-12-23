@@ -128,7 +128,7 @@ function changeRemote(o) {
 
 					{{else}}
 					  <td colspan="10">
-					  	<div class="little-warning">
+					  	<div class="small-warning">
 					  	  Pas d'utilisateur <em>core</em> pour 
 					  	  <a class="action" href="{{$href}}">ce Mediuser</a>.
 					  	</div>
