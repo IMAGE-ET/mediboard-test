@@ -1121,8 +1121,10 @@ div.loading {
 }
 
 
+div.little-success ,
 div.little-info ,
-div.little-warning {
+div.little-warning,
+div.little-error {
 	text-align: left;
   margin: 10px 15px;
   min-height: 15px;
@@ -1132,6 +1134,12 @@ div.little-warning {
   border-style: solid;
   padding: 5px;
   padding-left: 30px;
+}
+
+div.little-success {
+  background-image: url(images/icons/little-success.png);
+ 	background-color: #efe;
+  border-color: #5a5;
 }
 
 div.little-info {
@@ -1146,10 +1154,16 @@ div.little-warning {
   border-color: #da0;
 }
 
+div.little-error {
+  background-image: url(images/icons/little-error.png);
+ 	background-color: #fee;
+  border-color: #a55;
+}
+
 div.big-success,
 div.big-info,
 div.big-warning,
-div.big-error{
+div.big-error {
 	text-align: left;
 	margin: 10px 50px;
   min-height: 50px;
