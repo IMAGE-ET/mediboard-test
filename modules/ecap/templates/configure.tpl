@@ -10,11 +10,6 @@
     <th class="category" colspan="10">DHE e-Cap</th>
   </tr>
 
-  <tr>
-    <td class="category" colspan="10">
-    </th>
-  </tr>
-
   {{assign var="mod" value="interop"}}
   {{assign var="var" value="base_url"}}
   <tr>
@@ -53,7 +48,6 @@
     </td>
   </tr> 
    
-  {{assign var="mod" value="ecap"}}
   {{assign var="class" value="soap"}}
   <tr>
     <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}{{/tr}}</th>
@@ -95,6 +89,67 @@
       <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
     </td>
   </tr> 
+
+	<tr>
+	  <th class="category" colspan="2">Tags d'identifications</th>
+	</tr>
+
+  {{assign var=mod value=dPpatients}}
+  {{assign var=class value=CPatient}}
+  {{assign var="var" value="tag_ipp"}}
+  <tr>
+    <th>
+      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
+      {{if $dPconfig.$mod.$class.$var != $tags.IPP}}
+			<div class="little-warning">
+				Le tag IPP pour l'utilisation du module e-Cap dans cet établissement devrait être :
+				'{{$tags.IPP}}'
+				<br />
+			  <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$tags.IPP}}'">
+			  	{{tr}}Restore{{/tr}} le bon tag
+			  </button>
+			</div>
+			{{else}}	
+			<div class="little-success">
+				Le tag IPP est compatible avec l'utilisation du module e-Cap dans cet établissement.
+			</div>
+			{{/if}}
+    </td>
+  </tr>
+  
+  {{assign var=mod value=dPplanningOp}}
+  {{assign var=class value=CSejour}}
+  {{assign var="var" value="tag_dossier"}}
+  <tr>
+    <th>
+      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
+      {{if $dPconfig.$mod.$class.$var != $tags.DOS}}
+			<div class="little-warning">
+				Le tag 'Numéro de dossier' pour l'utilisation du module e-Cap dans cet établissement devrait être :
+				'{{$tags.DOS}}'
+				<br />
+			  <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$tags.DOS}}'">
+			  	{{tr}}Restore{{/tr}} le bon tag
+			  </button>
+			</div>
+			{{else}}	
+			<div class="little-success">
+				Le tag 'Numéro de dossier' est compatible avec l'utilisation du module e-Cap dans cet établissement.
+			</div>
+			{{/if}}
+    </td>
+  </tr>
+  
 
   <tr>
     <td class="button" colspan="10">

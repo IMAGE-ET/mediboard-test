@@ -31,6 +31,20 @@ class CMedicap {
       ),    
     );
   }
+
+  static $tags = array();
+  
+  static function makeTags() {
+		$idExt = new CIdSante400;
+		$idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
+		$codeClinique = $idExt->id400;
+		
+		self::$tags = array(
+		  "IPP"  => "eCap CIDC:$codeClinique",
+			"DOS" => "eCap NDOS CIDC:$codeClinique",
+			"USR" => "eCap CIDC:$codeClinique",
+		);	    
+  }
 }
 
 ?>
