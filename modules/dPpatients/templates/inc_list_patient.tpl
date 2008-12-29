@@ -124,9 +124,7 @@ var Patient = {
 <table class="tbl">
   <tr>
     {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
-    <th>
-    <button type="submit" class="search">{{tr}}Merge{{/tr}}</button>
-    </th>
+    <th><button type="submit" class="search notext" title="{{tr}}Merge{{/tr}}">{{tr}}Merge{{/tr}}</button></th>
     {{/if}}
     <th>
       {{mb_title class=CPatient field=nom}}
@@ -143,7 +141,7 @@ var Patient = {
   {{foreach from=$patients item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
     {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-    <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
+    <td style="text-align: center;"><input type="checkbox" name="patients_id[]" value="{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
       {{if $curr_patient->_id == $patVitale->_id}}
@@ -185,7 +183,7 @@ var Patient = {
   {{foreach from=$patientsSoundex item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
     {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-    <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
+    <td style="text-align: center;"><input type="checkbox" name="patients_id[]" value="{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">

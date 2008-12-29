@@ -62,7 +62,7 @@ function setClose(selClass,keywords,key,val){
   {{foreach from=$list item=curr_list}}
     <tr>
       <td>{{$curr_list->_view}}</td>     
-      <td class="button"><button type="button" class="tick" onclick="setClose('{{$selClass}}', '{{$keywords|stripslashes|smarty:nodefaults|JSAttribute}}', {{$curr_list->$key}}, '{{$curr_list->_view|smarty:nodefaults|JSAttribute}}')">Sélectionner</button></td>
+      <td class="button"><button type="button" class="tick" onclick="setClose('{{$selClass}}', '{{$keywords|stripslashes|smarty:nodefaults|JSAttribute}}', {{$curr_list->_id}}, '{{$curr_list->_view|smarty:nodefaults|JSAttribute}}')">Sélectionner</button></td>
     </tr>
   {{/foreach}}
 </table>

@@ -36,8 +36,10 @@ function setField (field, value, form) {
 </div>
 {{/if}}
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return {{if 0 && $testMerge}}false{{else}}checkForm(this){{/if}}">
   <input type="hidden" name="dosql" value="do_patients_fusion" />
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_merging" value="1" />
   <input type="hidden" name="patient1_id" value="{{$patient1->_id}}" />

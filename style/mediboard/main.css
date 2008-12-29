@@ -857,6 +857,10 @@ table.tbl td.button {
   line-height: 140%;
 }
 
+table tr.unequal td, table tr.unequal th {
+  background-color: #FFA88C;
+}
+
 div.previewfile{
   white-space: normal;
   text-align:left;

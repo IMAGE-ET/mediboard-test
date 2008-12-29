@@ -22,19 +22,14 @@ var ObjectSelector = {
     url.popup(this.options.width, this.options.height, "Object Selector");
   },
   
-  
   set: function(oObject) {
     var oForm = document[this.sForm];
     
     if (oForm[this.sView]) {
-      oForm[this.sView].value = oObject.view;
+      $V(oForm[this.sView], oObject.view);
     }
     
-    oForm[this.sClass].value = oObject.objClass;
-     
+    $V(oForm[this.sClass], oObject.objClass);
     $V(oForm[this.sId], oObject.id);
-      
   }
-   
-  
 }

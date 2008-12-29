@@ -50,6 +50,8 @@ class CMbObject {
   var $_specs         = array(); // properties specifications as objects
   var $_backRefs      = array(); // Back reference specification as string
   var $_backSpecs     = array(); // Back reference specification as objects
+  var $_fwdRefs       = array(); // Forward reference specification as string
+  var $_fwdSpecs      = array(); // Forward reference specification as objects
   var $_enums         = array(); // enums fields elements
   var $_enumsTrans    = array(); // enums fields translated elements
   var $_seek          = array(); // seekable fields
@@ -61,6 +63,7 @@ class CMbObject {
    */
   var $_back           = null; // Back references collections
   var $_count          = null; // Back references counts
+  var $_fwd            = null; // Forward references
   var $_ref_module     = null; // Parent module
   var $_ref_logs       = null; // history of the object
   var $_ref_first_log  = null;
@@ -90,6 +93,8 @@ class CMbObject {
     static $props         = null;
     static $backRefs      = null;
     static $backSpecs     = array();
+    static $fwdRefs       = null;
+    static $fwdSpecs      = array();
     static $specsObj      = null;
     static $seeks         = null;
     static $enums         = null;
@@ -913,6 +918,48 @@ class CMbObject {
   }
   
   /**
+   * Merges an array of objects
+   * @param An array of CMbObject to merge
+   * @return CMbObject
+   */
+  function merge($objects = array()/*<CMbObject>*/) {
+    if (count($objects) < 2) return $this;
+    
+    if ($msg = $this->checkMerge($objects)) return $msg;
+    
+    if (!$this->_id && $msg = $this->store()) return $msg;
+    
+    foreach ($objects as &$object) {
+    	if ($msg = $this->transferBackRefsFrom($object)) return $msg;
+    	if ($msg = $object->delete()) return $msg;
+    }
+    
+    // Trigger event
+    $this->onMerge();
+    
+    return $this->store();
+  }
+  
+  function checkMerge($objects = array()/*<CMbObject>*/) {
+    $object_class = null;
+    foreach ($objects as &$object) {
+      if (!$object instanceof CMbObject) {
+        return 'mergeNotCMbObject';
+      }
+      if (!$object->_id) {
+        return 'mergeNoId';
+      }
+      if (!$object_class) {
+        $object_class = $object->_class_name;
+      }
+      else if ($object->_class_name !== $object_class) {
+        return 'mergeDifferentType';
+      }
+    }
+    return null;
+  }
+  
+  /**
    * Trigger merge event for handlers
    * @return void
    */
@@ -1041,10 +1088,10 @@ class CMbObject {
    */
   function transferBackRefsFrom(CMbObject &$object) {
     if (!$object->_id) {
-      return "transferNoId";
+      trigger_error("transferNoId");
     }
     if ($object->_class_name !== $this->_class_name) {
-      return "transferDifferentType";
+      trigger_error("An object from type '$object->_class_name' can't be merge with an object from type '$this->_class_name'", E_USER_ERROR);
     }
     
     $object->loadAllBackRefs();
@@ -1074,7 +1121,46 @@ class CMbObject {
         }
       }
     }
+  }
+  
+  /**
+   * Load named fwd reference
+   * @return array[CMbObject] the collection
+   */
+  function loadFwdRef($field, $updateFormFields = false) {
+    if (!isset($this->_fwdSpecs[$field])) return null;
     
+    $this->_fwd[$field] = new $this->_fwdSpecs[$field]->class;
+    $load = $this->_fwd[$field]->load($this->$field);
+    if ($load && $updateFormFields) {
+      $this->_fwd[$field]->updateFormFields();
+    }
+    return $load;
+  }
+  
+  /**
+   * Load named fwd reference
+   * @return array[CMbObject] the collection
+   */
+  function loadAllFwdRefs($updateFormFields = false) {
+    $this->getFwdRefs(); 
+    foreach ($this->_fwdSpecs as $field => $spec) {
+      $this->loadFwdRef($field, $updateFormFields);
+    }
+  }
+  
+  /**
+   * Load named fwd reference
+   * @return array[CMbObject] the collection
+   */
+  function getFwdRefs() {
+    $fwdSpecs = array();
+    foreach($this->_specs as $field => &$spec) {
+      if ($spec instanceof CRefSpec && $field !== $this->_spec->key) {
+        $fwdSpecs[$field] = $spec;
+      }
+    }
+    return $this->_fwdSpecs = $fwdSpecs;
   }
   
   /**

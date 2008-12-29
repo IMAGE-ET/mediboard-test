@@ -7,22 +7,19 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
 $selClass  = mbGetValueFromGet("selClass");
 $keywords  = mbGetValueFromGet("keywords");
 $onlyclass = mbGetValueFromGet("onlyclass");
 
-// Liste des Class
+// Liste des classes
 $listClass = getInstalledClasses();
 
-$keywords = trim($keywords);
-$keywords_search = explode(" ", $keywords);
+$keywords_search = explode(" ", trim($keywords));
 $keywords_search = array_filter($keywords_search);
 
 if ($selClass) {
   if (!is_subclass_of($selClass, "CMbObject")) {
-    trigger_error("Class '$selClass' is not an CMbObject", E_USER_ERROR);
+    trigger_error("Class '$selClass' is not a subclass of CMbObject", E_USER_ERROR);
     return;
   }
 
@@ -34,16 +31,12 @@ if ($selClass) {
       unset($list[$key]);
     }
   }
-  $key = $object->_spec->key;
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
 if($selClass){
-  $smarty->assign("key"        , $key);
   $smarty->assign("list"       , $list);
 }
 $smarty->assign("listClass"  , $listClass );

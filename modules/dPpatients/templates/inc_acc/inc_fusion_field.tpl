@@ -1,6 +1,6 @@
 {{assign var=specs value=$object1->_specs}}
 {{assign var=specType value=$specs.$field->getSpecType()}}
-<tr>
+<tr {{if $object1->$field != $object2->$field}}class="unequal"{{/if}}>
   <th>{{mb_label object=$object1 field=$field}}</th>
   <td class="{{$object1->_props.$field}}">
     <label>

@@ -1,6 +1,6 @@
 {{assign var=ref_field value="_ref_$field"}}
 
-<tr>
+<tr {{if $object1->$field != $object2->$field}}class="unequal"{{/if}}">
   <th>{{mb_label object=$object1 field=$field}}</th>
   <td class="{{$object1->_props.$field}}">
     <label>

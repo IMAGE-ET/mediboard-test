@@ -72,6 +72,8 @@ Main.add(function () {
       <form name="fusion" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="a" value="fusion_medecin" />
+      <input type="hidden" name="objects_class" value="CMedecin" />
+      <input type="hidden" name="readonly_class" value="true" />
       {{/if}}
       
       <table class="tbl">
@@ -98,7 +100,7 @@ Main.add(function () {
           {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
 
           {{if !$dialog}}
-          <td><input type="checkbox" name="fusion_{{$curr_medecin->_id}}" /></td>
+          <td><input type="checkbox" name="objects_id[]" value="{{$curr_medecin->_id}}" /></td>
           {{/if}}
 
           <td class="text">

@@ -344,4 +344,5 @@ $locales['config-types_antecedents-8'] = '';
 $locales['config-types_antecedents-8-desc'] = '';
 $locales['config-types_antecedents-9'] = '';
 $locales['config-types_antecedents-9-desc'] = '';
+$locales['mod-system-tab-object_merger'] = 'Fusion d\'objets';
 ?>

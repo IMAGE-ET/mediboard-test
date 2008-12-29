@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
+global $m;
 
 class CDoPatientMerge extends CDoObjectAddEdit {
   function CDoPatientMerge() {
@@ -23,7 +23,6 @@ class CDoPatientMerge extends CDoObjectAddEdit {
     }
     
     $this->redirectError = "";
-    
   }
   
   function doStore() {
@@ -33,60 +32,38 @@ class CDoPatientMerge extends CDoObjectAddEdit {
     $isNew = !dPgetParam($_POST, "patient_id");
     $patient_id = $this->_obj->patient_id;
     
-    if ($isNew) {
+    if ($isNew)
       $this->redirectStore .= "&patient_id=$patient_id&created=$patient_id";
-    } 
-    elseif($dialog) {
+    elseif($dialog)
       $this->redirectStore .= "&name=".$this->_obj->nom."&firstname=".$this->_obj->prenom;
-    }
   }
 }
 
 $do = new CDoPatientMerge;
 
+$patient1_id = mbGetValueFromPost("patient1_id");
+$patient2_id = mbGetValueFromPost("patient2_id");
+
 // Erreur sur les ID du patient
 $patient1 = new CPatient;
-if (!$patient1->load($_POST["patient1_id"])) {
+if (!$patient1->load($patient1_id)) {
   $do->errorRedirect("Patient 1 n'existe pas ou plus");
 }
 
 $patient2 = new CPatient;
-if (!$patient2->load($_POST["patient2_id"])) {
+if (!$patient2->load($patient2_id)) {
   $do->errorRedirect("Patient 2 n'existe pas ou plus");
 }
 
-if($testMerge = $patient1->checkMerge($patient1, $patient2)) {
-  $do->errorRedirect($testMerge);
-}
-
-$do->doBind();
-
-// Création du nouveau patient
 if (intval(dPgetParam($_POST, "del"))) {
   $do->errorRedirect("Fusion en mode suppression impossible");
 }
 
-$do->doStore();
+// Bind au nouveau patient
+$do->doBind();
 
-$newPatient =& $do->_obj;
-
-// Transfert de toutes les backrefs
-if ($msg = $newPatient->transferBackRefsFrom($patient1)) {
-  $do->errorRedirect($msg);
-}
-
-if ($msg = $newPatient->transferBackRefsFrom($patient2)) {
-  $do->errorRedirect($msg);
-}
-
-$newPatient->onMerge();
-
-// Suppression des anciens objets
-if ($msg = $patient1->delete()) {
-  $do->errorRedirect($msg);
-}
-  
-if ($msg = $patient2->delete()) {
+// Fusion effective
+if ($msg = $do->_obj->merge(array($patient1, $patient2))) {
   $do->errorRedirect($msg);
 }
   
