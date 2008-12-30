@@ -301,7 +301,7 @@ class CSejour extends CCodable {
     
     $where["annule"] = " = '0'";
     $where["type"] = " != 'urg'";
-    $where["group_id"] = " = 'urg'";
+    $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
     $patient->loadRefsSejours($where);
     
     // suppression de la liste des sejours le sejour courant
@@ -328,8 +328,8 @@ class CSejour extends CCodable {
       return false;
     } else {
       return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
-         or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
-         or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
+           or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
+           or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
     }
   }
   
