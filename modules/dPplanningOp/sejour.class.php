@@ -263,13 +263,13 @@ class CSejour extends CCodable {
 	          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
 	        }
 	        if (!$opInBounds) {
-	           $msg.= "Interventions en dehors des nouvelles dates du sejour";  
+	           $msg.= "Interventions en dehors des nouvelles dates du séjour";  
 	        }	
 	    	}
 	    }
 	
 	    foreach ($this->getCollisions() as $collision) {
-	      $msg .= "Collision avec le sejour du $collision->entree_prevue au $collision->sortie_prevue<br />"; 
+	      $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
 	    }
     }
     
@@ -301,15 +301,14 @@ class CSejour extends CCodable {
     
     $where["annule"] = " = '0'";
     $where["type"] = " != 'urg'";
-    $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
+    $where["group_id"] = " = '".$this->group_id."'";
     $patient->loadRefsSejours($where);
-    
+
     // suppression de la liste des sejours le sejour courant
     $sejours = $patient->_ref_sejours;
-    unset($sejours[$this->_id]);
-    
+
     foreach ($sejours as $sejour) {
-      if ($this->collides($sejour)) {
+      if ($sejour->_id != $this->_id && $this->collides($sejour)) {
         $collisions[$sejour->_id] = $sejour;
       }
     }
@@ -323,10 +322,10 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    $sameGroup = $this->group_id == $sejour->group_id;
-    if(!$sameGroup) {
+    if ($this->group_id != $sejour->group_id) {
       return false;
     } else {
+      $this->updateFormFields();
       return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
            or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
            or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
