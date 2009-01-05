@@ -111,7 +111,7 @@ class CHprim21Patient extends CHprim21Object {
       "nom_soundex2"              => "str",
       "prenom_soundex2"           => "str",
       "nomjf_soundex2"            => "str",
-      "naissance"                 => "birthDate",
+      "naissance"                 => "birthDate mask|99/99/9999 format|$3-$2-$1",
       "sexe"                      => "enum list|M|F|U",
       "adresse1"                  => "str",
       "adresse2"                  => "str",
