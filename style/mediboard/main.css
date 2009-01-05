@@ -3239,10 +3239,11 @@ ul.select-tree .highlight {
 	border: 1px dotted #aaa;
 	min-height: 15px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .a_administrer {
-background-color: #bbf;
+  background-color: #bbf;
 }
 
 .administration_partielle {
