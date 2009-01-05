@@ -19,6 +19,7 @@ $where = array();
 $where["entree_prevue"] = "< '$next'";
 $where["sortie_prevue"] = "> '$date'";
 $where["group_id"]      = "= '$g'";
+$where["annule"]        = "= '0'";
 $order = array();
 $order[] = "sortie_prevue";
 $order[] = "entree_prevue";

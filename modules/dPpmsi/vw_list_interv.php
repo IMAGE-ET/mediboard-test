@@ -27,15 +27,19 @@ $order = "debut";
 $plages = $plages->loadList($where, $order);
 foreach($plages as &$curr_plage) {
   $curr_plage->loadRefs(0);
-  $totalOp += count($curr_plage->_ref_operations);
-  foreach($curr_plage->_ref_operations as &$curr_op) {
-    $curr_op->loadRefsFwd();
-    $curr_op->_ref_sejour->loadNumDossier();
-    $curr_op->_ref_sejour->loadRefPatient();
-    $curr_op->_ref_sejour->_ref_patient->loadIPP();
-    $curr_op->loadExtCodesCCAM();
-    $curr_op->loadHprimFiles();
+  foreach($curr_plage->_ref_operations as $key_op => &$curr_op) {
+    if($curr_op->annulee) {
+      unset($curr_plage[$key_op]);
+    } else {
+      $curr_op->loadRefsFwd();
+      $curr_op->_ref_sejour->loadNumDossier();
+      $curr_op->_ref_sejour->loadRefPatient();
+      $curr_op->_ref_sejour->_ref_patient->loadIPP();
+      $curr_op->loadExtCodesCCAM();
+      $curr_op->loadHprimFiles();
+    }
   }
+  $totalOp += count($curr_plage->_ref_operations);
 }
 
 $urgences = new COperation;

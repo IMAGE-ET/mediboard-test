@@ -712,4 +712,17 @@ $locales['COperation-_pause_hour-desc'] = '';
 $locales['COperation-_pause_min'] = '';
 $locales['COperation-_pause_min-court'] = '';
 $locales['COperation-_pause_min-desc'] = '';
+$locales['CPrestation-back-sejour'] = '';
+$locales['CPrestation-back-sejours'] = '';
+$locales['CSejour-_coordonnees'] = '';
+$locales['CSejour-_coordonnees-court'] = '';
+$locales['CSejour-_coordonnees-desc'] = '';
+$locales['CSejour-_horodatage'] = '';
+$locales['CSejour-_horodatage-court'] = '';
+$locales['CSejour-_horodatage-desc'] = '';
+$locales['CSejour._horodatage.'] = '';
+$locales['CSejour._horodatage.entree_prevue'] = '';
+$locales['CSejour._horodatage.entree_reelle'] = '';
+$locales['CSejour._horodatage.sortie_prevue'] = '';
+$locales['CSejour._horodatage.sortie_reelle'] = '';
 ?>

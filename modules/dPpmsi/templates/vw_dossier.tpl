@@ -379,6 +379,14 @@ Main.add(function () {
           <td class="text" colspan="3">{{$curr_code->libelleLong}}</td>
         </tr>
         {{/foreach}}
+        <tr>
+          <th>{{mb_label object=$curr_op field=anapath}}</th>
+          <td colspan="3">{{mb_value object=$curr_op field=anapath}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$curr_op field=labo}}</th>
+          <td colspan="3">{{mb_value object=$curr_op field=labo}}</td>
+        </tr>
         {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
         <tr>
           <td class="button" colspan="4">Consultation de pré-anesthésie le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
