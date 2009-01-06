@@ -23,14 +23,17 @@ FCKConfig.ToolbarSets["Default"] = [
   {{/if}}
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
+
 	['Save','Preview'],
+{{if !$templateManager->simplifyMode}}
 	['Cut','Copy','Paste','PasteText','PasteWord','-',textForPrint,'-','mbHeader','mbFooter'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 	['Table','Rule','Image', 'Smiley','SpecialChar','mbPageBreak'],
 	['FitWindow','Source','About'],
 	'/',
-	['FontFormat','FontName','FontSize'],
-	['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+{{/if}}
+	['FontFormat',{{if !$templateManager->simplifyMode}}'FontName',{{/if}}'FontSize'],
+	['Bold','Italic','Underline',{{if !$templateManager->simplifyMode}}'StrikeThrough',{{/if}}'-','Subscript','Superscript'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['TextColor','BGColor']
@@ -113,7 +116,9 @@ aMbToolbar = new Array();
 for (var i = 0; i < aMbCombos.length; i++) {
   aMbToolbar.push(aMbCombos[i].commandName);
 }
-aToolbarSet.push(aMbToolbar);
+{{if !$templateManager->simplifyMode}}
+  aToolbarSet.push(aMbToolbar);
+{{/if}}
 
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );

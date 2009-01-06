@@ -22,6 +22,7 @@ class CTemplateManager {
   
   var $valueMode = true; // @todo : changer en applyMode
   var $printMode = false;
+  var $simplifyMode = false;
   
   function CTemplateManager() {
     $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
@@ -209,7 +210,7 @@ class CTemplateManager {
           $values[] = nl2br($property["valueHTML"]);
       }
     }
-    
+	
     if(count($fields)) {
       $this->document = str_replace($fields, $values, $source);
     }

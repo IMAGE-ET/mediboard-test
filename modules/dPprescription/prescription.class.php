@@ -1198,6 +1198,7 @@ class CPrescription extends CMbObject {
 						$_line_med->calculAdministrations($date, $mode_feuille_soin, $mode_dispensation);
 						// Si aucune prise
             $_line_med->_ref_produit->loadClasseATC();
+            $_line_med->_ref_produit->loadRefsFichesATC();
             $code_ATC = $_line_med->_ref_produit->_ref_ATC_2_code;
 						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
 						  if($_line_med->_is_injectable){

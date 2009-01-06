@@ -23,6 +23,7 @@ class CTemplateManager {
   // As wierd as it is, only this property seems mandatory in this redefinition
   var $valueMode = true;
   var $printMode = false;
+  var $simplifyMode = false;
 };
 
 // required includes for start-up

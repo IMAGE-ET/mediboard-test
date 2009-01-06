@@ -43,7 +43,16 @@ class CSetupdPmedicament extends CSetup {
             DROP `libelle`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    $sql = "CREATE TABLE `fiche_ATC` (
+							`fiche_ATC_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`code_ATC` CHAR (3) NOT NULL,
+              `libelle` VARCHAR (255),
+							`description` MEDIUMTEXT
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }  
 }
 

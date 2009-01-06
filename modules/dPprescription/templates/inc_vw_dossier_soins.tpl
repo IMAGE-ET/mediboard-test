@@ -1,5 +1,12 @@
 <script type="text/javascript">
 		     
+viewFicheATC = function(fiche_ATC_id){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "vw_fiche_ATC");
+  url.addParam("fiche_ATC_id", fiche_ATC_id);
+  url.popup(700, 550, "Fiche ATC");  
+}
+
 oDragOptions = {
   constraint: 'horizontal',
   revert: true,
@@ -15,7 +22,8 @@ oDragOptions = {
       y: -top_offset, 
       duration: 0
     } );
-
+   // Suppression des zones droppables sur le revert
+   Droppables.drops.clear(); 
    element.show();
   },
   endeffect: function(element) { 
@@ -48,7 +56,9 @@ addDroppablesDiv = function(draggable){
 				    date = _td[5];
 				    hour = _td[6];
 				  }
+				  // Ajout de la planification
 	        addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id);
+	        // Suppression des zones droppables
 	        Droppables.drops.clear(); 
 	        $("before").onmouseover = null;
 	        $("after").onmouseover = null;
@@ -98,7 +108,7 @@ addPlanification = function(date, time, unite_prise, object_id, object_class, el
   
 	if(original_date != dateTime){
 	  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-	    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value,'{{$mode_dossier}}');
+	    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification');
 	  } } ); 
   }
 }
@@ -138,7 +148,7 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.addParam("administrations", administrations);
   url.addParam("planification_id", planification_id);
   url.addParam("date_sel", "{{$date}}");
-  url.addParam("mode_dossier", "{{$mode_dossier}}");
+  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
   url.popup(500,400,"Administration");
 }
 
@@ -172,7 +182,7 @@ applyAdministrations = function () {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
   url.addObjectParam("adm", administrations);
-  url.addParam("mode_dossier", "{{$mode_dossier}}");
+  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
   url.popup(700, 600, "Administrations multiples");
 }
 
@@ -224,7 +234,6 @@ moveDossierSoin = function(){
   });
 }
 
-
 timeOutBefore = null;
 timeOutAfter = null;
 
@@ -243,6 +252,40 @@ showAfter = function(){
   }
 }
 
+viewDossierSoin = function(mode_dossier){
+  // Dossier en mode Administration
+  if(mode_dossier == "administration"){
+    $('button_administration').update("Appliquer les administrations sélectionnées");
+    $('plan_soin').select('.colorPlanif').each(function(element){
+       element.setStyle( { backgroundColor: '#FFD' } );
+    });
+    $('plan_soin').select('.draggablePlanif').each(function(element){
+       element.removeClassName("draggable");
+       element.onmousedown = null;
+    });
+    $('plan_soin').select('.canDropPlanif').each(function(element){
+       element.removeClassName("canDrop");
+    });
+  }
+  
+  // Dossier en mode planification
+  if(mode_dossier == "planification"){
+    $('button_administration').update("Appliquer les planifications sélectionnées");
+    $('plan_soin').select('.colorPlanif').each(function(element){
+       element.setStyle( { backgroundColor: '#CAFFBA' } );
+    });
+    $('plan_soin').select('.draggablePlanif').each(function(element){
+       element.addClassName("draggable");
+       element.onmousedown = function(){
+         addDroppablesDiv(element);
+       }
+    });
+    $('plan_soin').select('.canDropPlanif').each(function(element){
+       element.addClassName("canDrop");
+    });
+  }
+}
+
 Main.add(function () {
 	{{if $mode_bloc}}
 	  loadSuivi('{{$sejour->_id}}');
@@ -251,8 +294,9 @@ Main.add(function () {
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
     moveDossierSoin();
-  }
-
+	  viewDossierSoin('{{$mode_dossier}}');
+	}
+	
   {{if !$mode_bloc}}
     new Control.Tabs('tab_dossier_soin');
   {{/if}}
@@ -337,22 +381,18 @@ Main.add(function () {
 		      Imprimer la feuille de soins immédiate
 	      </button>
 	    {{/if}}
-        <button type="button" class="tick" onclick="applyAdministrations();">
-          {{if $mode_dossier == "administration"}}
-          Appliquer les administrations séléctionnées
-          {{/if}}
-          {{if $mode_dossier == "planification"}}
-          Appliquer les planifications séléctionnées
-          {{/if}}
+        <button type="button" class="tick" onclick="applyAdministrations();" id="button_administration">
         </button>
 	    </td>
 	    <td style="text-align: center">
 	      <form name="mode_dossier_soin">
 	        <label>
-	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration"}}checked="checked"{{/if}} onclick="refreshDossierSoin('administration')"/>Administration
+	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration"}}checked="checked"{{/if}} 
+	          			 onclick="viewDossierSoin('administration');"/>Administration
           </label>
           <label>
-            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} onclick="refreshDossierSoin('planification')" />Planification
+            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
+            			 onclick="viewDossierSoin('planification');" />Planification
           </label>
        </form>
 	    </td>

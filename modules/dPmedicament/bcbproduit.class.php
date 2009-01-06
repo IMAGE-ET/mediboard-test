@@ -52,7 +52,7 @@ class CBcbProduit extends CBcbObject {
   var $_ref_posologies       = null;
   var $_unite_dispensation   = null;
   var $_unite_administration = null;
-  
+  var $_ref_fiches_ATC       = null;
   var $_ref_ATC_2_libelle = null;
   var $_ref_ATC_2_code    = null;
   
@@ -377,6 +377,13 @@ class CBcbProduit extends CBcbObject {
     $this->_ref_classes_ATC   = $classeATC->searchATCProduit($this->code_cip);
     $this->_ref_ATC_2_code    = $this->_ref_classes_ATC[0]->classes[3]["code"];
     $this->_ref_ATC_2_libelle = strtolower($this->_ref_classes_ATC[0]->classes[3]["libelle"]);
+  }
+  
+  // Chargement des fiches ATC
+  function loadRefsFichesATC(){
+    $fiche_ATC = new CFicheATC();
+    $fiche_ATC->code_ATC = $this->_ref_ATC_2_code;
+    $this->_ref_fiches_ATC = $fiche_ATC->loadMatchingList();
   }
   
   // Recherche des classes Therapeutique d'un produit

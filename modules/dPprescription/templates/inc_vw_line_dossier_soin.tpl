@@ -14,8 +14,19 @@
     {{if $line_class == "CPrescriptionLineMedicament"}}
       <!-- Cas d'une ligne de medicament -->
       <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}">
-        {{$line->_ref_produit->_ref_ATC_2_libelle}}
+	      {{$line->_ref_produit->_ref_ATC_2_libelle}}
+	      {{if $line->_ref_produit->_ref_fiches_ATC}}
+	        <img src="images/icons/search.png" onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$_key_cat_ATC}}"} })' />
+	      {{/if}}
       </th>
+      <div id="tooltip-content-{{$_key_cat_ATC}}" style="display: none;">
+					<strong>Fiches disponibles</strong><br />
+          <ul>
+          {{foreach from=$line->_ref_produit->_ref_fiches_ATC item=_fiche_ATC}}
+	          <li><a href="#{{$_fiche_ATC->_id}}" onclick="viewFicheATC('{{$_fiche_ATC->_id}}')";>Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
+	        {{/foreach}}
+	        </ul>
+      </div>
     {{else}}
         <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
         {{assign var=categorie_id value=$categorie->_id}}
@@ -132,7 +143,7 @@
    <img src="images/icons/a_left.png" title="" alt="" />
   </th>
   {{/if}}
-  
+    
   <!-- Affichage des heures de prises des medicaments -->			 
   {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
     {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
@@ -177,15 +188,15 @@
 				  {{/if}}
 				  
 	      <td id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" 
-	      		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if $mode_dossier == 'planification' && ($quantite == '0' || $quantite == '-')}}canDrop{{/if}}" 
-	      		style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
-	      		{{if $mode_dossier == "planification"}}background-color: #CAFFBA;{{/if}}'>
+	      		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif" 
+	      		style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 		   
 					
 				  				  			   
-				  <div {{if $mode_dossier == "administration"}}onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'{{/if}}
+				  <div {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
+				  					onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
+				  		 {{/if}}
 				       id="drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
-				       {{if $mode_dossier == 'planification'}}onmousedown="addDroppablesDiv(this);"{{/if}}
 				       {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
 				      style="background-color: #aaa"
 				       
@@ -198,8 +209,8 @@
 				      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 			        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 				    {{/if}}
-				    class="{{if $quantite && $quantite!="-" && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
-				      draggable
+				    class="{{if $quantite && $quantite!="-" && @$prise_line.quantites.$_hour|@count < 4}}
+				      draggablePlanif
 				    {{/if}}  
 				      tooltip-trigger administration
 			      {{if $quantite > 0}}
@@ -243,14 +254,13 @@
 					</div>
 			    <script type="text/javascript">
 			      // $prise_line.quantites.$_hour|@count < 4 => pour empecher de deplacer une case ou il y a plusieurs prises
-            {{if $quantite && $mode_dossier == "planification" && @$prise_line.quantites.$_hour|@count < 4}}
+            {{if $quantite && @$prise_line.quantites.$_hour|@count < 4}}
 				      drag = new Draggable("drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
 				    {{/if}}
 				  </script>
           
-          {{if $mode_dossier == "administration"}}
 			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
-				   {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
+				     {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 				     <ul>
 						   {{foreach from=$line->_administrations.$unite_prise.$_date.$_hour.administrations item=_log_administration}}
 						     {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
@@ -266,23 +276,20 @@
 							   </ul>
 						   {{/foreach}}
 					   </ul>
-			     {{else}}
-				     {{if $line_class == "CPrescriptionLineMedicament"}}
-				       Aucune administration
-				     {{else}}
-				       Pas de {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
 				     {{/if}}
-			   {{/if}}
 	       </div>
-	       {{/if}}
 		   </td>
+		 
+
+		 
 	   {{else}}
-	      <td class="{{$_view_date}}-{{$moment_journee}} {{if $mode_dossier == 'planification'}}canDrop{{/if}}"
+	      <td class="{{$_view_date}}-{{$moment_journee}} canDrop colorPlanif"
 	          id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}"
-	          style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
-	          {{if $mode_dossier == "planification"}}background-color: #CAFFBA;{{/if}}'>
+	          style='text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 		     <div class="tooltip-trigger administration  {{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}"
-		          {{if $mode_dossier == "administration"}}onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'{{/if}}
+		            {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
+		          		onmouseover='ObjectTooltip.create(this, {mode: "dom", params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
+		            {{/if}}
 		            {{if ($line->_fin_reelle && $line->_fin_reelle <= $_date_hour) || $line->_debut_reel > $_date_hour || !$line->_active}}
                     style="background-color: #aaa"
                   {{else}}
@@ -294,7 +301,6 @@
 	                {{$line->_administrations.$unite_prise.$_date.$_hour.quantite}} / -
 	              {{/if}}
 	           </div>
-	           {{if $mode_dossier == "administration"}}
 	           <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 		         {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 			         <ul>
@@ -312,15 +318,8 @@
 						        </ul>
 						     {{/foreach}}
 				       </ul>
-			       {{else}}
-			         {{if $line_class == "CPrescriptionLineMedicament"}}
-			           Aucune administration
-			         {{else}}
-			           Pas de {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
-			         {{/if}}
 			       {{/if}}
 			    </div>
-			    {{/if}}
 		     </td>
 		   {{/if}}
 	     {{/foreach}}
