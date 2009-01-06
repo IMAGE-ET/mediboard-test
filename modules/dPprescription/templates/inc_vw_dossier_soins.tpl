@@ -254,7 +254,7 @@ showAfter = function(){
 
 viewDossierSoin = function(mode_dossier){
   // Dossier en mode Administration
-  if(mode_dossier == "administration"){
+  if(mode_dossier == "administration" || mode_dossier == ""){
     $('button_administration').update("Appliquer les administrations sélectionnées");
     $('plan_soin').select('.colorPlanif').each(function(element){
        element.setStyle( { backgroundColor: '#FFD' } );
@@ -387,7 +387,7 @@ Main.add(function () {
 	    <td style="text-align: center">
 	      <form name="mode_dossier_soin">
 	        <label>
-	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration"}}checked="checked"{{/if}} 
+	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
 	          			 onclick="viewDossierSoin('administration');"/>Administration
           </label>
           <label>
