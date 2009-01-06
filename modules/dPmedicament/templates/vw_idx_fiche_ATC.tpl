@@ -6,8 +6,17 @@
 	      <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="tab" value="vw_idx_fiche_ATC" />
 				<input type="hidden" name="fiche_ATC_id" value="0" />
+				<input type="hidden" name="del" value="0" />
 				<button type="button" class="new" onclick="this.form.submit();">Créer une nouvelle fiche</button>
 			</form>
+			
+			<form name="delFicheATC" method="post" action="">
+	      <input type="hidden" name="m" value="{{$m}}" />
+	      <input type="hidden" name="dosql" value="do_fiche_ATC_aed" />
+				<input type="hidden" name="fiche_ATC_id" value="" />
+				<input type="hidden" name="del" value="1" />
+			</form>
+			
 	    <table class="tbl">
 			  <tr>
 			    <th>Fiches ATC</th>
@@ -22,10 +31,13 @@
 			      {{foreach from=$_fiches_atc_2 item=_fiche}}
 			        <tr {{if $_fiche->_id == $fiche_ATC->_id}}class="selected"{{/if}}>
 			          <td>
+ 			            <button style="float: right" type="button" class="trash notext" 
+ 			                    onclick="$V(document.delFicheATC.fiche_ATC_id, '{{$_fiche->_id}}');
+   																 document.delFicheATC.submit();"></button>          																										
 			            <a href="?m={{$m}}&amp;tab=vw_idx_fiche_ATC&amp;fiche_ATC_id={{$_fiche->_id}}">
 			              {{$_fiche->code_ATC}} - {{$libelle_atc_2}} {{if $_fiche->libelle}}- {{$_fiche->libelle}}{{/if}}
 			            </a>
-			          </td>
+								</td>
 			        </tr>
 				  	{{/foreach}} 
 				  {{/foreach}}

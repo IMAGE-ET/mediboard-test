@@ -22,6 +22,7 @@ if($fiche_ATC_id){
 
 // Initialisation du tableau de conversion de Code ATC à libelle ATC
 $code_to_libelle = array();
+$fiches = array();
 
 // Chargement de l'arbre ATC de niveau 1 et 2
 $classes_ATC = array();
