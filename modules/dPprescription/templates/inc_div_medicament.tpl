@@ -121,7 +121,6 @@ Main.add( function(){
   </tr>
   <tr>
     <td>
-    {{*if $prescription->_can_add_line*}}
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 			    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
@@ -185,7 +184,6 @@ Main.add( function(){
 			      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
 			    </form>
 			 </div> 
-			{{*/if*}} 
     </td>
 
     <td style="text-align: center;">

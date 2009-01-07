@@ -51,7 +51,6 @@ class CPrescription extends CMbObject {
   var $_dates_dispo = null;
   var $_current_praticien_id = null;  // Praticien utilisé pour l'affichage des protocoles / favoris dans la prescription
   var $_praticiens = null;            // Tableau de praticiens prescripteur
-  var $_can_add_line = null;
   var $_dateTime_min = null;
   var $_dateTime_max = null;
   
@@ -124,17 +123,6 @@ class CPrescription extends CMbObject {
 	    }
     }
     $this->loadRefCurrentPraticien();
-  }
-  
-  /*
-   * Permet de savoir si l'utilisateur courant a le droit de créer des lignes dans la prescription
-   */
-  function getAdvancedPerms($is_praticien, $mode_pharma){
-    global $can;
-		// Si le user courant est un praticien
-		if ($is_praticien || !$this->object_id || $mode_pharma || $can->admin){
-			$this->_can_add_line = 1;
-		}
   }
   
   function check() {  	

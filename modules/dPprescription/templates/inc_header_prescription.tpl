@@ -74,8 +74,7 @@ submitProtocole = function(){
 	  </form>
 
       <!-- Selection du praticien prescripteur de la ligne -->
-      {{*if !$is_praticien && !$mode_protocole && $prescription->_can_add_line*}}
-			{{if !$is_praticien && !$mode_protocole}}
+      {{if !$is_praticien && !$mode_protocole}}
        <div style="float: right">
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
@@ -156,11 +155,9 @@ submitProtocole = function(){
   
   <tr>
     {{if !$mode_protocole && !$mode_pharma}}
-    {{*if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line*}}
     <th class="category">Protocoles</th>
     {{/if}}
     
-    {{*if $prescription->_can_add_line && !$mode_protocole*}}
     {{if !$mode_protocole}}
       <th class="category">Date d'ajout de lignes</th>
     {{/if}}
@@ -168,7 +165,6 @@ submitProtocole = function(){
   </tr>
   <tr>
   {{if !$mode_protocole && !$mode_pharma}}
-  {{*if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line*}}
    <td class="date" style="text-align: right;">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
@@ -237,7 +233,6 @@ submitProtocole = function(){
     </td>  
   {{/if}}
   
-  {{*if $prescription->_can_add_line*}}
   {{if !$mode_protocole}}
       <td class="date">
         <form name="selDateLine" action="?" method="get"> 
@@ -282,7 +277,6 @@ submitProtocole = function(){
 	    </form>
 	    </td>
 	  {{/if}} 
-	{{*/if*}}
  
     <td style="text-align: left;">
        {{if !$mode_protocole}}

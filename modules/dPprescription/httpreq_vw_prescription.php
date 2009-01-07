@@ -127,12 +127,8 @@ if($prescription->_id){
 		  }
 	  }
 	}
-	
-	
-  $prescription->getPraticiens();
 
-  // Calcul des droits de la prescription	
-	$prescription->getAdvancedPerms($is_praticien, $mode_pharma);
+  $prescription->getPraticiens();
   
 	// Chargement de l'historique
   $historique = $prescription->loadRefsLinesHistorique();
