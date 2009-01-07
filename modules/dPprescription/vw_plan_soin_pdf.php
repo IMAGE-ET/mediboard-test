@@ -9,7 +9,12 @@
 
 // Recuperation des variables
 $prescription_id = mbGetValueFromGet("prescription_id");
-$date            = mbDate();
+$chapitre        = mbGetValueFromGet("chapitre", "");
+$_date_plan_soin = mbGetValueFromGet("_date_plan_soin");
+
+if(!$_date_plan_soin){
+  $_date_plan_soin = mbdate();
+}
 
 $logs = array();
 $last_log = new CUserLog();
@@ -17,6 +22,8 @@ $last_log = new CUserLog();
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
+
+$prescription->_date_plan_soin = $_date_plan_soin;
 
 // Chargement du patient
 $prescription->loadRefPatient();
@@ -32,26 +39,30 @@ $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
 
 // Chargement des lignes
-$prescription->loadRefsLinesMed("1","1","service");
-$prescription->loadRefsLinesElementByCat("1","","service");
+if($chapitre == "" || $chapitre == "med" || $chapitre == "inj" || $chapitre == "all_med"){
+  $prescription->loadRefsLinesMed("1","1","service");
+}
+$prescription->loadRefsLinesElementByCat("1", $chapitre,"service");
 $prescription->_ref_object->loadRefPrescriptionTraitement();	  
 $prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 
 $pharmacien = new CMediusers();
 
 // Parcours et affichage des medicaments
-foreach($prescription->_ref_prescription_lines as $_line){
-	$_line->loadRefLogValidationPharma();
-	$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
+if($prescription->_ref_prescription_lines){
+	foreach($prescription->_ref_prescription_lines as $_line){
+		$_line->loadRefLogValidationPharma();
+		$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
+	}
 }
-
 // Chargement des lignes de perfusions
-$prescription->loadRefsPerfusions();
-foreach($prescription->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefsLines();  
-  $_perfusion->loadRefPraticien();
+if($chapitre == "perf" || $chapitre == "all_med"){
+	$prescription->loadRefsPerfusions();
+	foreach($prescription->_ref_perfusions as $_perfusion){
+	  $_perfusion->loadRefsLines();  
+	  $_perfusion->loadRefPraticien();
+	}
 }
-
 // Chargement du dernier pharmacien qui a validé une ligne
 if($logs){
   ksort($logs);
@@ -78,21 +89,25 @@ foreach($nuit_matin as &$_hour_nuit_matin){
 }
 
 // Recuperation de l'heure courante
-$time = mbTransformTime(null,null,"%H");
+if($_date_plan_soin == mbDate()){
+  $time = mbTransformTime(null,null,"%H");
+} else {
+  $time = "16";
+}
 
 // Construction de la structure de date à parcourir dans le tpl
 if(in_array($time, $matin)){
-  $dates = array(mbDate("- 1 DAY", $date) => array("nuit" => $nuit), 
-                 $date                    => array("matin" => $matin, "soir" => $soir));        
+  $dates = array(mbDate("- 1 DAY", $_date_plan_soin) => array("nuit" => $nuit), 
+                 $_date_plan_soin                    => array("matin" => $matin, "soir" => $soir));        
   $count_colspan = array(count($nuit),count($matin),count($soir)); 
 }
 if(in_array($time, $soir)){
-  $dates = array($date                    => array("matin" => $matin, "soir" => $soir, "nuit" => $nuit));
+  $dates = array($_date_plan_soin                    => array("matin" => $matin, "soir" => $soir, "nuit" => $nuit));
   $count_colspan = array(count($matin),count($soir),count($nuit)); 
 }
 if(in_array($time, $nuit)){
-  $dates = array($date                    => array("soir" => $soir, "nuit" => $nuit), 
-                 mbDate("+ 1 DAY", $date) => array("matin" => $matin));
+  $dates = array($_date_plan_soin                    => array("soir" => $soir, "nuit" => $nuit), 
+                 mbDate("+ 1 DAY", $_date_plan_soin) => array("matin" => $matin));
   $count_colspan = array(count($soir),count($nuit),count($matin)); 
 }
 
@@ -130,12 +145,14 @@ $smarty->assign("categories", $categories);
 $smarty->assign("patient", $patient);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("poids", $poids);
-$smarty->assign("date", $date);
 $smarty->assign("composition_dossier" , $composition_dossier);
 $smarty->assign("matin", $matin);
 $smarty->assign("soir", $soir);
 $smarty->assign("nuit", $nuit);
 $smarty->assign("count_colspan", $count_colspan);
+$smarty->assign("chapitre", $chapitre);
+$smarty->assign("_line_med", new CPrescriptionLineMedicament());
+$smarty->assign("_category", new CCategoryPrescription());
 $smarty->display("vw_plan_soin.tpl");
 
 ?>

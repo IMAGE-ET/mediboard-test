@@ -117,7 +117,7 @@ refreshDossierSoin = function(mode_dossier){
   loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier);
 }
 
-printDossierSoin = function(prescription_id, date){
+printDossierSoin = function(prescription_id){
   url = new Url;
   url.setModuleAction("dPprescription", "vw_plan_soin_pdf");
   url.addParam("prescription_id", prescription_id);
@@ -377,7 +377,7 @@ Main.add(function () {
 	  <tr>
 	    <td>
 	    {{if !$mode_bloc}}
-	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
+	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		      Imprimer la feuille de soins immédiate
 	      </button>
 	    {{/if}}

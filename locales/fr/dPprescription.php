@@ -1276,4 +1276,7 @@ $locales['CPrisePosologie.unite_tous_les.mercredi'] = 'mercredi';
 $locales['config-dPprescription-CPrisePosologie-semaine'] = '';
 $locales['config-dPprescription-CPrisePosologie-semaine-desc'] = '';
 $locales['CCategoryPrescription.chapitre.ds'] = 'DS';
+$locales['CPrescriptionLineMedicament._chapitre.med'] = 'Médicaments';
+$locales['CPrescriptionLineMedicament._chapitre.inj'] = 'Injections';
+$locales['CPrescriptionLineMedicament._chapitre.perf'] = 'Perfusions';
 ?>

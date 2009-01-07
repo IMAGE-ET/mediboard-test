@@ -13,7 +13,7 @@
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
       <!-- Cas d'une ligne de medicament -->
-      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}">
+      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" style="width: 100px;">
 	      {{$line->_ref_produit->_ref_ATC_2_libelle}}
 	      {{if $line->_ref_produit->_ref_fiches_ATC}}
 	        <img src="images/icons/search.png" onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$_key_cat_ATC}}"} })' />

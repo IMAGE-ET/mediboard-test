@@ -73,6 +73,8 @@ class CPrescription extends CMbObject {
   
   var $_nb_produit_by_cat = null;
   var $_nb_produit_by_chap = null;
+ 
+  var $_date_plan_soin = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -107,6 +109,7 @@ class CPrescription extends CMbObject {
     $specs["_dateTime_max"] = "dateTime";
     $specs["_owner"]        = "enum list|prat|func|group";
     $specs["_score_prescription"] = "enum list|0|1|2";
+    $specs["_date_plan_soin"] = "date";
     return $specs;
   }
   

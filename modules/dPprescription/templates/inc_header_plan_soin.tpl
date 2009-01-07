@@ -1,4 +1,4 @@
-<tbody style="page-break-before: always" {{if !$no_class}}class="header"{{/if}} style="border-top: 2px solid black;">
+<tbody {{if !$chapitre}}style="page-break-before: always"{{/if}} {{if !$no_class}}class="header"{{/if}}>
 {{if $patient->_id}}
 <tr>
   <td colspan="1000">
@@ -19,22 +19,27 @@
 	      {{/if}}
 	    </td>
 	    <td style="border:none;">
-	      Feuille de soin du {{$date|date_format:"%d/%m/%Y"}}
+	      Feuille de soin du {{$prescription->_date_plan_soin|date_format:"%d/%m/%Y"}}
 	    </td>
 	    </tr>
      </table>
   </td>
 </tr>
 {{/if}}
+
 <tr>
-  <th colspan="1000">
-    {{if $name != "Médicament"}}
-      {{tr}}{{$name}}{{/tr}}
-    {{else}}
-      {{$name}}
-    {{/if}}
-  </th>
+{{if $name != "Médicaments"}}
+  <th colspan="1000">{{tr}}{{$name}}{{/tr}}</th>
+{{/if}}
+{{if $chapitre == "inj" || $chapitre == "perf" || $chapitre == "med"}}
+  <th colspan="1000">{{tr}}CPrescriptionLineMedicament._chapitre.{{$chapitre}}{{/tr}}</th>
+{{/if}}
+{{if $chapitre == "all_med"}}
+  <th colspan="1000">Tous les médicaments</th>
+{{/if}}
 </tr>
+
+
 <tr>
   <th colspan="2" class="title" style="width: 7cm">Prescription</th>
   <th rowspan="2" class="title" style="width: 1cm">Prescripteur</th>
