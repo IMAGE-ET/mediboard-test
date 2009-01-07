@@ -1,7 +1,7 @@
 {{assign var=line value=$curr_line}}
 
   <!-- Header de la ligne -->
-  <tr id="line_medicament_{{$line->_id}}" class="hoverable 
+  <tr {{if !$mode_induction_perop}}id="line_medicament_{{$line->_id}}"{{/if}} class="hoverable 
   {{if $line->_traitement}}traitement{{else}}med{{/if}}
   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
     <td style="text-align: center; width: 5%;">
@@ -23,9 +23,9 @@
         class="text {{if $line->_traitement}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
-        {{if !$line->_protocole}}
+        {{if !$line->_protocole && !$mode_induction_perop}}
          Main.add( function(){
-           moveTbody($('line_medicament_{{$line->_id}}'));
+             moveTbody($('line_medicament_{{$line->_id}}'));
          });
          {{/if}}
       </script>

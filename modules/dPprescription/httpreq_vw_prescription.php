@@ -398,6 +398,10 @@ $prise->quantite = 1.0;
 
 // Création du template
 $smarty = new CSmartyDP();
+
+// Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
+$smarty->assign("mode_induction_perop", false);
+
 $smarty->assign("mode_anesth", $mode_anesth);
 $smarty->assign("historique", $historique);
 $smarty->assign("filter_line", $filter_line);
