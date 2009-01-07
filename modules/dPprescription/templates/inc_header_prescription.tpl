@@ -155,16 +155,20 @@ submitProtocole = function(){
   </tr>
   
   <tr>
-    {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
+    {{if !$mode_protocole && !$mode_pharma}}
+    {{*if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line*}}
     <th class="category">Protocoles</th>
     {{/if}}
-    {{if $prescription->_can_add_line && !$mode_protocole}}
+    
+    {{*if $prescription->_can_add_line && !$mode_protocole*}}
+    {{if !$mode_protocole}}
       <th class="category">Date d'ajout de lignes</th>
     {{/if}}
     <th class="category">Outils</th>
   </tr>
   <tr>
-  {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
+  {{if !$mode_protocole && !$mode_pharma}}
+  {{*if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line*}}
    <td class="date" style="text-align: right;">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
@@ -233,7 +237,7 @@ submitProtocole = function(){
     </td>  
   {{/if}}
   
-  {{if $prescription->_can_add_line}}
+  {{*if $prescription->_can_add_line*}}
   {{if !$mode_protocole}}
       <td class="date">
         <form name="selDateLine" action="?" method="get"> 
@@ -278,7 +282,7 @@ submitProtocole = function(){
 	    </form>
 	    </td>
 	  {{/if}} 
-	{{/if}}
+	{{*/if*}}
  
     <td style="text-align: left;">
        {{if !$mode_protocole}}
