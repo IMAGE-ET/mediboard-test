@@ -74,7 +74,8 @@ submitProtocole = function(){
 	  </form>
 
       <!-- Selection du praticien prescripteur de la ligne -->
-			{{if !$is_praticien && !$mode_protocole && $prescription->_can_add_line}}
+      {{*if !$is_praticien && !$mode_protocole && $prescription->_can_add_line*}}
+			{{if !$is_praticien && !$mode_protocole}}
        <div style="float: right">
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">

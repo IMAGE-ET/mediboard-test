@@ -52,17 +52,17 @@ Main.add( function(){
 
 <table class="form">
   <tr>
-    {{if $prescription->_can_add_line}}
+    {{*if $prescription->_can_add_line*}}
       <th class="category">Nouvelle ligne</th>
-    {{/if}}
+    {{*/if*}}
     <th class="category">Actions</th>
   </tr>
   <tr>
-    {{if $prescription->_can_add_line}}
+    {{*if $prescription->_can_add_line*}}
     <td>
       {{include file="inc_vw_form_addLine.tpl"}}
     </td>
-    {{/if}}
+    {{*/if*}}
     <td>
 		  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}}, {{if $readonly}}false{{else}}true{{/if}});">
