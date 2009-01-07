@@ -22,13 +22,15 @@ $listesClasses = array(
 
 $result = array();
 foreach ($listesClasses as $class){
-	$object = new $class;
-  $sql = "SHOW TABLE STATUS LIKE '{$object->_spec->table}'";
-  $statusTable = $ds->loadList($sql);
-  if ($statusTable) {
-    $result[$class] = $statusTable[0];
-    $result[$class]["Update_relative"] = CMbDate::relative($result[$class]["Update_time"]);
-  }
+	if (class_exists($class)) {
+		$object = new $class;
+	  $sql = "SHOW TABLE STATUS LIKE '{$object->_spec->table}'";
+	  $statusTable = $ds->loadList($sql);
+	  if ($statusTable) {
+	    $result[$class] = $statusTable[0];
+	    $result[$class]["Update_relative"] = CMbDate::relative($result[$class]["Update_time"]);
+	  }
+	}
 }
 
 // Création du template

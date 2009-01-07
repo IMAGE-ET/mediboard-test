@@ -305,8 +305,8 @@ $performance["cachableCounts"] = CMbObject::$cachableCounts;
 
 $performance["size"]    = mbConvertDecaBinary(ob_get_length());
 $performance["ccam"]    = array (
-  "cacheCount" => CCodeCCAM::$cacheCount,
-  "useCount"   => CCodeCCAM::$useCount
+  "cacheCount" => class_exists('CCodeCCAM') ? CCodeCCAM::$cacheCount : 0,
+  "useCount"   => class_exists('CCodeCCAM') ? CCodeCCAM::$useCount : 0
 );
 
 foreach (CSQLDataSource::$dataSources as $dsn => $dataSource) {
