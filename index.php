@@ -109,7 +109,7 @@ $g = "";
 
 // load locale settings
 require_once("./locales/core.php");
-setlocale(LC_TIME, "fr_FR");
+setlocale(LC_TIME, "fr_FR", "fr_FR.$locale_char_set", "fr_FR@euro", "fr_FR.utf8", "fra");
 
 if (!$suppressHeaders || $ajax) {
   // output the character set header
