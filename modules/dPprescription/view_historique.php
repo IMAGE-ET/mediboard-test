@@ -30,7 +30,9 @@ $lines = array();
 
 $med_lines = array();
 $med_lines["med"] = $prescription->_ref_prescription_lines;
-$med_lines["perf"] = $prescription->_ref_perfusions;
+if($type == "historique"){
+  $med_lines["perf"] = $prescription->_ref_perfusions;
+}
 $med_lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
 
 // Chargement de l'historique de chaque ligne
