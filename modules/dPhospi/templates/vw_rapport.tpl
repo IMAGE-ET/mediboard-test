@@ -2,6 +2,18 @@
   <tr>
     <th colspan="2">
       <a href="#" onclick="print()">Rapport du {{$date|date_format:"%d/%m/%Y"}}</a>
+      <br />
+      <form name="chgMode" action="?" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="a" value="{{$a}}" />
+      <input type="hidden" name="dialog" value="1" />
+      <input type="hidden" name="date" value="{{$date}}" />
+      Type d'affichage :
+      <select name="rapport_reel" onchange="this.form.submit();">
+        <option value="1" {{if $reel}}selected="selected"{{/if}}>Rapport réel</option>
+        <option value="0" {{if !$reel}}selected="selected"{{/if}}>Rapport prévisionnel</option>
+      </select>
+      </form>
     </th>
   </tr>
   <tr>
@@ -17,10 +29,10 @@
           <th>Service</th>
           <th>Nombre</th>
         </tr>
-        {{foreach from=$total_service item="nb_patient" key=nom_service}}
+        {{foreach from=$total_service item="service"}}
         <tr style="text-align: center">
-          <td>{{$nom_service}}</td>
-          <td>{{$nb_patient}}</td>
+          <td>{{$service.service->_view}}</td>
+          <td>{{$service.total}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -61,10 +73,10 @@
           <th>Ambulatoires</th>
           <th>Total par médecins</th>
         </tr>
-        {{foreach from=$totalPrat item="prat" key=nom_prat}}
+        {{foreach from=$totalPrat item="prat"}}
         {{if $prat.total}}
         <tr style="text-align: center">
-          <td>{{$nom_prat}}</td>
+          <td>{{$prat.prat->_view}}</td>
           <td>{{$prat.hospi}}</td>
           <td>{{$prat.ambu}}</td>
           <td>{{$prat.total}}</td>
