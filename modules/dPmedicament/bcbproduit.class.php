@@ -26,7 +26,7 @@ class CBcbProduit extends CBcbObject {
   var $numero_AMM            = null;
   var $date_AMM              = null;
   var $agrement              = null;
-    
+
   // Others Fields
   var $_referent             = null;
   var $_generique            = null;
@@ -264,7 +264,7 @@ class CBcbProduit extends CBcbObject {
   
   function loadRefsEquivalentsInLivret(){
   	$this->loadRefsEquivalents();
-    foreach($this->_ref_equivalents as $key => $produit_equivalent){
+  	foreach($this->_ref_equivalents as $key => $produit_equivalent){
       if(!$produit_equivalent->inLivret){
         unset($this->_ref_equivalents[$key]);
       }

@@ -15,45 +15,92 @@ function viewProduit(cip){
   url.popup(815, 620, "Descriptif produit");
 }
 
-</script>
+Main.add(function () {
+  // Initialisation des onglets du menu
+  Control.Tabs.create('tabs-equivalent', false);
+});
 
+</script>
 
 <table class="tbl">
   <tr>
-    <th>CIP</th>
-    <th>UCD</th>
-    <th>Produit</th>
-    <th>Laboratoire</th>
+    <th class="title">
+      Recherche d'équivalents {{if $inLivret}}dans le livret Thérapeutique{{/if}} pour {{$produit->libelle}}
+    </th>
   </tr>
-  {{foreach from=$equivalents item="produit"}}
+</table>
+
+<ul id="tabs-equivalent" class="control_tabs">
+  <li><a href="#equivalents_strictes_BCB">Equivalents BCB</a></li>
+  <li><a href="#equivalents_strictes_ATC">Equivalents ATC strictes</a></li>
+  {{if $inLivret}}
+  <li><a href="#equivalents_therapeutiques_ATC">Equivalents ATC Thérapeutiques</a></li>
+  {{/if}}
+</ul>
+<hr class="control_tabs" />
+
+
+
+<!-- Equivalents strictes BCB -->
+<table class="tbl" id="equivalents_strictes_BCB" style="display:none;">
   <tr>
-    <td>
-      <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->code_cip}}', '{{$line_id}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />    
-      {{$produit->code_cip}}
-      {{if $produit->hospitalier}}
-      <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
-      {{/if}}
-      {{if $produit->_generique}}
-      <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
-      {{/if}}
-      {{if $produit->_referent}}
-      <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
-      {{/if}}
-    </td>
-    <td>
-      {{$produit->code_ucd}}
-    </td>
-    <td>
-      <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
-    </td>
-    <td>
-      {{$produit->nom_laboratoire}}
-    </td>
+    <th colspan="4">
+      Equivalents strictes BCB<br />{{$libelle_stricte_BCB}} ({{$code_stricte_BCB}})
+    </th>
   </tr>
+  <tr>
+	  <th>CIP</th>
+	  <th>UCD</th>
+	  <th>Produit</th>
+	  <th>Laboratoire</th>
+  </tr>
+  {{foreach from=$equivalents_strictes_BCB item=produit}}
+    {{include file="../../dPmedicament/templates/inc_vw_produit.tpl" nodebug=true}}
   {{foreachelse}}
   <tr>
-    <td colspan="4">Aucun équivalent trouvé</td>
+    <td colspan="4">Aucun équivalent</td>
   </tr>
   {{/foreach}}
 </table>
-   
+
+<!-- Equivalents sctictes ATC -->
+<table class="tbl" id="equivalents_strictes_ATC" style="display: none;">
+	<tr>
+	  <th colspan="4">Equivalents strictes ATC<br />{{$libelle_stricte_ATC}} ({{$code_stricte_ATC}})</th>
+	</tr>  
+	<tr>
+	  <th>CIP</th>
+	  <th>UCD</th>
+	  <th>Produit</th>
+	  <th>Laboratoire</th>
+  </tr>
+  {{foreach from=$equivalents_strictes_ATC item=_produit}}
+    {{include file="../../dPmedicament/templates/inc_vw_produit.tpl" produit=$_produit->_ref_produit nodebug=true}}
+  {{foreachelse}}
+  <tr>
+    <td colspan="4">Aucun équivalent</td>
+  </tr>
+  {{/foreach}}
+</table>
+
+{{if $inLivret}}
+<!-- Equivalents Therapeutiques (niveau 2) ATC -->
+<table class="tbl" id="equivalents_therapeutiques_ATC" style="display: none;">
+	<tr>
+	  <th colspan="4">Equivalents thérapeutiques ATC<br />{{$libelle_thera_ATC}} ({{$code_thera_ATC}})</th>
+	</tr>  
+	<tr>
+	  <th>CIP</th>
+	  <th>UCD</th>
+	  <th>Produit</th>
+	  <th>Laboratoire</th>
+  </tr>
+  {{foreach from=$equivalents_thera_ATC item=_produit}}
+    {{include file="../../dPmedicament/templates/inc_vw_produit.tpl" produit=$_produit->_ref_produit nodebug=true}}
+  {{foreachelse}}
+  <tr>
+    <td colspan="4">Aucun équivalent</td>
+  </tr>
+  {{/foreach}}
+</table>
+{{/if}}
