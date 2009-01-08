@@ -1279,4 +1279,11 @@ $locales['CCategoryPrescription.chapitre.ds'] = 'DS';
 $locales['CPrescriptionLineMedicament._chapitre.med'] = 'Médicaments';
 $locales['CPrescriptionLineMedicament._chapitre.inj'] = 'Injections';
 $locales['CPrescriptionLineMedicament._chapitre.perf'] = 'Perfusions';
+$locales['CPrescription-_date_plan_soin'] = '';
+$locales['CPrescription-_date_plan_soin-court'] = '';
+$locales['CPrescription-_date_plan_soin-desc'] = '';
+$locales['CPrescriptionLine.emplacement.service_bloc'] = '';
+$locales['CPrescriptionLineComment.emplacement.service_bloc'] = '';
+$locales['CPrescriptionLineElement.emplacement.service_bloc'] = 'Bloc et Service';
+$locales['CPrescriptionLineMedicament.emplacement.service_bloc'] = 'Bloc et Service';
 ?>

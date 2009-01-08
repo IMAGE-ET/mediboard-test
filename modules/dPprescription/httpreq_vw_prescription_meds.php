@@ -26,6 +26,9 @@ $prescription->object_class = "CSejour";
 $prescription->type = "sejour";
 $prescription->loadMatchingObject();
 
+// Initialisation
+$prescription_traitement = new CPrescription();
+
 // Chargement des medicaments
 if ($prescription->_id) {
   $prescription->loadRefsLinesMed();

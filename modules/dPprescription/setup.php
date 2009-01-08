@@ -932,7 +932,20 @@ class CSetupdPprescription extends CSetup {
 						ADD `original_dateTime` DATETIME;";
     $this->addQuery($sql);
    
-    $this->mod_version = "0.69";
+    $this->makeRevision("0.69");
+    $sql = "ALTER TABLE `prescription_line_medicament`
+						CHANGE `emplacement` `emplacement` ENUM ('service','bloc','service_bloc') NOT NULL;";
+    $this->addQuery($sql);
+      
+    $sql = "ALTER TABLE `prescription_line_element`
+						CHANGE `emplacement` `emplacement` ENUM ('service','bloc','service_bloc') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment`
+						CHANGE `emplacement` `emplacement` ENUM ('service','bloc','service_bloc') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.70";
   }  
 }
 

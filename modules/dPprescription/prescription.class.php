@@ -836,7 +836,7 @@ class CPrescription extends CMbObject {
       $where["substitution_line_id"] = "IS NULL";
     }
     if($emplacement){
-      $where["emplacement"] = "= '$emplacement'";
+      $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
     }
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '1'";
@@ -909,8 +909,9 @@ class CPrescription extends CMbObject {
   	}
   	
     $where["prescription_id"] = " = '$this->_id'";
+    
     if($emplacement){
-      $where["emplacement"] = "= '$emplacement'";
+      $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
     }
     
     $order = "prescription_line_element_id DESC";
