@@ -690,7 +690,8 @@ var ObjectTooltip = Class.create({
     this.oOptions = Object.extend({
       mode: "objectView",
       popup: false,
-      duration: 0.3,
+      duration: 0.4,
+      durationHide: 0.6,
       params: {}
     }, oOptions);
     
@@ -707,7 +708,7 @@ var ObjectTooltip = Class.create({
   },
   
   launchHide: function() {
-    this.idTimeoutHide = this.hide.bind(this).delay(this.oOptions.duration);
+    this.idTimeoutHide = this.hide.bind(this).delay(this.oOptions.durationHide);
   },
   
   cancelHide: function() {
