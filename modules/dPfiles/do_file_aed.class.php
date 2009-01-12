@@ -47,8 +47,9 @@ class CFileAddEdit extends CDoObjectAddEdit {
                             "error"            => $upload["error"][$fileNumber],
                             "size"             => $upload["size"][$fileNumber],
                             "file_category_id" => $_file_category_id[$fileNumber],
-                            "object_id"   => $_POST["object_id"],
-                            "object_class"       => $_POST["object_class"],);
+                            "object_id"        => $_POST["object_id"],
+                            "object_class"     => $_POST["object_class"],
+                            "file_rename"      => $_POST["file_rename"],);
         }
       }
       else{
@@ -72,7 +73,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
         
         $this->_obj->bind($file);
-        $this->_obj->file_name = $file["name"];
+        $this->_obj->file_name = $file["file_rename"] ? $file["file_rename"] : $file["name"];
         $this->_obj->file_type = $file["type"];
         $this->_obj->file_size = $file["size"];
         $this->_obj->file_date = mbDateTime();

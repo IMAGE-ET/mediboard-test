@@ -20,6 +20,7 @@ $date = mbDate();
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsFwd();
+$patient->loadRefPhotoIdentite();
 
 // Chargement de l'ipp
 $patient->loadIPP();

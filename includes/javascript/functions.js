@@ -1217,12 +1217,13 @@ function guid_ids(guid) {
   view_idsante400(parts[0], parts[1]);
 }
 
-function uploadFile(classe, id, categorie_id){
+function uploadFile(classe, id, categorie_id, file_rename){
   url = new Url();
   url.setModuleAction("dPfiles", "upload_file");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.addParam("file_category_id", categorie_id);
+  url.addParam("file_rename", file_rename);
   url.popup(600, 200, "uploadfile");
 }
 

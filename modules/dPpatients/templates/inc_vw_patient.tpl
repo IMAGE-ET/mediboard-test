@@ -58,7 +58,7 @@ Document.refreshList = function(){
 
 <table class="form">
   <tr>
-    <th class="category" colspan="2">
+    <th class="category" colspan="3">
       
 			{{if $patient->_id_vitale}}
       <div style="float:right;">
@@ -84,6 +84,7 @@ Document.refreshList = function(){
   <tr>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
+    <td rowspan="5" style="width: 0.1%;">{{include file=inc_vw_photo_identite.tpl mode="read"}}</td>
     <th>{{mb_label object=$patient field="adresse"}}</th>
     <td class="text">{{mb_value object=$patient field="adresse"}}</td>
   </tr>
@@ -148,7 +149,7 @@ Document.refreshList = function(){
   {{/if}}
   
   <tr>
-    <td class="button" colspan="4">
+    <td class="button" colspan="10">
       <form name="actionPat" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_idx_patients" />

@@ -19,6 +19,7 @@ if (window.opener.File.refresh) {
 <input type="hidden" name="object_class" value="{{$object_class}}" />
 <input type="hidden" name="object_id" value="{{$object_id}}" />
 <input type="hidden" name="file_category_id" value="{{$file_category_id}}" />
+<input type="hidden" name="file_rename" value="{{$file_rename}}" />
 
 <table class="form">
   <tr>

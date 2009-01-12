@@ -818,6 +818,7 @@ class CPatient extends CMbObject {
     $this->canRead();
     $this->canEdit();
     $this->getNumDocsAndFiles($permType);
+    $this->loadRefPhotoIdentite();
     
     // Affectations courantes
     $affectation =& $this->_ref_curr_affectation;
@@ -977,6 +978,14 @@ class CPatient extends CMbObject {
     }
     
     return $siblings;
+  }
+  
+  function loadRefPhotoIdentite() {
+ 	  $file = new CFile();
+ 	  $file->setObject($this);
+ 	  $file->file_name = 'identite.jpg';
+ 	  $file->loadMatchingObject();
+ 	  $this->_ref_photo_identite = $file;
   }
   
   function fillLimitedTemplate(&$template) {

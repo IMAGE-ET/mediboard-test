@@ -64,6 +64,13 @@ Main.add(function () {
 
 </script>
 
+<form name="delete-photo-identite-form" method="post" action="?">
+  <input type="hidden" name="m" value="dPfiles" />
+  <input type="hidden" name="file_id" value="" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="dosql" value="do_file_aed" />
+</form>
+
 {{if $patient->_id}}
 <a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a>
 {{/if}}
