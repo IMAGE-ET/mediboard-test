@@ -35,9 +35,14 @@ Main.add(function () {
 {{/if}}
  
 </script>
-  
 
 <table class="form">
+
+<tr>
+  <td colspan="3" class="button">
+    {{include file=inc_vw_photo_identite.tpl mode="read"}}
+  </td>
+</tr>
 
 <tr>
   <th class="title" colspan="2">

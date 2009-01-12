@@ -24,9 +24,13 @@
 
 {{assign var=file value=$patient->_ref_photo_identite}}
 
+{{if !@$size}}
+{{assign var=size value=128}}
+{{/if}}
+
 {{if $file->_id}}
   {{assign var=id value=$file->_id}}
-  {{assign var=src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=128"}}
+  {{assign var=src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=$size"}}
 {{else}}
   {{if $patient->sexe == 'm'}}
     {{assign var=src value="images/pictures/identity_male.png"}}
@@ -38,7 +42,7 @@
     {{assign var=src value="images/pictures/identity_child.png"}}
   {{/if}}
 {{/if}}
-<img src="{{$src}}" alt="Identité" />
+<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777"" alt="Identité" />
 
 {{if @$mode == "edit"}}
   <br />

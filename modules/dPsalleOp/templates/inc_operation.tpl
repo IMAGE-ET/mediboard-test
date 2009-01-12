@@ -75,6 +75,7 @@ function reloadPrescription(prescription_id){
       <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
         {{tr}}Programme{{/tr}}
       </button>
+      <div style="float:left">{{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read" size="64"}}</div>
       <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" alt="modifier" />
  			</a>

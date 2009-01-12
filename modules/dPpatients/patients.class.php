@@ -807,6 +807,7 @@ class CPatient extends CMbObject {
   function loadComplete(){
     parent::loadComplete();
     $this->loadIPP();
+    $this->loadRefPhotoIdentite();
     $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_dossier_medical->loadRefsTraitements();  

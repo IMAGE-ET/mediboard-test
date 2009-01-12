@@ -64,6 +64,7 @@ if ($op) {
   // Chargement des consultation d'anesthésie pour les associations a posteriori
   $patient =& $sejour->_ref_patient;
   $patient->loadRefsConsultations();
+  $patient->loadRefPhotoIdentite();
   foreach ($patient->_ref_consultations as $consultation) {
     $consultation->loadRefConsultAnesth();
     $consult_anesth =& $consultation->_ref_consult_anesth;

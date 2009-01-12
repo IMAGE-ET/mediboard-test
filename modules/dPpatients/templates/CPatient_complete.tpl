@@ -32,6 +32,12 @@
     </th>
   </tr>
   <tr>
+    <td class="button" colspan="2">
+      {{assign var=patient value=$object}}
+      {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read"}}
+    </td>
+  </tr>
+  <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="nom"}}</strong>
       {{mb_value object=$object field="nom"}}

@@ -82,9 +82,9 @@ Document.refreshList = function(){
   </tr>
 
   <tr>
+    <td rowspan="3" style="width: 0.1%;">{{include file=inc_vw_photo_identite.tpl mode="read" size="64"}}</td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
-    <td rowspan="5" style="width: 0.1%;">{{include file=inc_vw_photo_identite.tpl mode="read"}}</td>
     <th>{{mb_label object=$patient field="adresse"}}</th>
     <td class="text">{{mb_value object=$patient field="adresse"}}</td>
   </tr>
@@ -97,33 +97,33 @@ Document.refreshList = function(){
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
-    <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
+    <th>{{mb_label object=$patient field="sexe"}}</th>
+    <td>{{mb_value object=$patient field="sexe"}}</td>
     <th>{{mb_label object=$patient field="ville"}}</th>
     <td>{{mb_value object=$patient field="ville"}}</td>
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="naissance"}}</th>
+    <th colspan="2">{{mb_label object=$patient field="naissance"}}</th>
     <td>{{mb_value object=$patient field="naissance"}}</td>
     <th>{{mb_label object=$patient field="tel"}}</th>
     <td>{{mb_value object=$patient field="tel"}}</td>
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="sexe"}}</th>
-    <td>{{mb_value object=$patient field="sexe"}}</td>
+    <th colspan="2">{{mb_label object=$patient field="nom_jeune_fille"}}</th>
+    <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
     <th>{{mb_label object=$patient field="tel2"}}</th>
     <td>{{mb_value object=$patient field="tel2"}}</td>
   </tr>
   
   {{if $patient->medecin_traitant || $patient->_ref_medecins_correspondants|@count}}
   <tr>
-    <th class="category" colspan="4">Correspondants médicaux</th>
+    <th class="category" colspan="5">Correspondants médicaux</th>
   </tr>
   
   <tr>
-    <td colspan="4" class="text">
+    <td colspan="5" class="text">
       {{if $patient->medecin_traitant}}
       <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin_traitant}} } });">
         <strong>{{$patient->_ref_medecin_traitant->_view}}</strong> ;
@@ -140,11 +140,11 @@ Document.refreshList = function(){
 
   {{if $patient->rques}}
   <tr>
-    <th class="category" colspan="4">{{mb_label object=$patient field="rques"}}</th>
+    <th class="category" colspan="5">{{mb_label object=$patient field="rques"}}</th>
   </tr>
   
   <tr>
-    <td colspan="4" class="text">{{mb_value object=$patient field="rques"}}</td>
+    <td colspan="5" class="text">{{mb_value object=$patient field="rques"}}</td>
   </tr>
   {{/if}}
   
