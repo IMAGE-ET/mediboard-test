@@ -748,7 +748,17 @@ class CSetupdPplanningOp extends CSetup {
     $sql = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM complet", "Opération - CCAM - codes");
     $this->addQuery($sql);
     
-    $this->mod_version = "0.88";
+    $this->makeRevision("0.88");
+    $sql = "ALTER TABLE `operations` 
+	          CHANGE `anapath` `anapath` ENUM ('1','0','?') DEFAULT '?',
+	          CHANGE `labo` `labo` ENUM ('1','0','?') DEFAULT '?';";
+    $this->addQuery($sql);
+    $sql = "UPDATE `operations` SET `anapath` = '?' WHERE `anapath` = '0'";
+    $this->addQuery($sql);
+    $sql = "UPDATE `operations` SET `labo` = '?' WHERE `labo` = '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.89";
   }
 }
 ?>

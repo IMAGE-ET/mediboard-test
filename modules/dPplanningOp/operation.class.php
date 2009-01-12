@@ -165,8 +165,8 @@ class COperation extends CCodable {
     $specs["induction_debut"]    = "time";
     $specs["induction_fin"]      = "time";
     $specs["entree_bloc"]        = "time";
-    $specs["anapath"]            = "bool";
-    $specs["labo"]               = "bool";
+    $specs["anapath"]            = "enum list|1|0|? default|?";
+    $specs["labo"]               = "enum list|1|0|? default|?";
     $specs["horaire_voulu"]      = "time";
 
     $specs["_date_min"]          = "date";

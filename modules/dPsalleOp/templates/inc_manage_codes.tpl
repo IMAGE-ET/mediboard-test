@@ -21,14 +21,14 @@
         {{mb_label object=$subject field=anapath}}
       </th>
       <td style="vertical-align:middle;">
-        {{mb_field object=$subject field=anapath onChange="submitFormAjax(this.form, 'systemMsg');"}}
+        {{mb_field object=$subject field=anapath typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
       </td>
      
       <th style="vertical-align:middle; text-align: right">
         {{mb_label object=$subject field=labo}}
       </th>
       <td style="vertical-align:middle;">     
-        {{mb_field object=$subject field=labo onChange="submitFormAjax(this.form, 'systemMsg');"}}
+        {{mb_field object=$subject field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
       </td>
      
     </tr>

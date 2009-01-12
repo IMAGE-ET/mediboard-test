@@ -725,4 +725,6 @@ $locales['CSejour._horodatage.entree_prevue'] = '';
 $locales['CSejour._horodatage.entree_reelle'] = '';
 $locales['CSejour._horodatage.sortie_prevue'] = '';
 $locales['CSejour._horodatage.sortie_reelle'] = '';
+$locales['COperation.anapath.?'] = '';
+$locales['COperation.labo.?'] = '';
 ?>
