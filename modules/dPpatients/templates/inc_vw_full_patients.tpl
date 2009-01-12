@@ -39,12 +39,6 @@ Main.add(function () {
 <table class="form">
 
 <tr>
-  <td colspan="3" class="button">
-    {{include file=inc_vw_photo_identite.tpl mode="read"}}
-  </td>
-</tr>
-
-<tr>
   <th class="title" colspan="2">
     <a href="#" onclick="viewCompleteItem('CPatient', {{$patient->_id}}); ViewFullPatient.select(this)">
       {{$patient->_view}} ({{$patient->_age}} ans)
