@@ -20,14 +20,12 @@ Main.add(function () {
         SejourHprimSelector.init{{$_sejour->_id}} = function(){
           this.sForm      = "editNumdos{{$_sejour->_id}}";
           this.sId        = "id400";
+          this.sIPPForm   = "editIPP";
+          this.sIPPId     = "id400";
           this.sIPP       = document.forms.editIPP.id400.value;
           this.sPatNom    = "{{$patient->nom}}";
           this.sPatPrenom = "{{$patient->prenom}}";
-          if(this.sIPP != "") {
-            this.pop();
-          } else {
-            alert("Vous devez indiquer l'IPP");
-          }
+          this.pop();
         };
       </script>
     </th>

@@ -11,13 +11,29 @@ global $AppUI, $can, $m, $dPconfig;
 
 $can->needsRead();
 
-$name          = mbGetValueFromGet("name"       );
-$firstName     = mbGetValueFromGet("firstName"  );
-$nomjf         = mbGetValueFromGet("nomjf"      );
-$patient_year  = mbGetValueFromGet("Date_Year"  );
-$patient_month = mbGetValueFromGet("Date_Month" );
-$patient_day   = mbGetValueFromGet("Date_Day"   );
-$IPP           = mbGetValueFromGet("IPP"        );
+$patient_id    = mbGetValueFromGet("patient_id" );
+$patient = new CPatient;
+if($patient_id) {
+  $patient->load($patient_id);
+}
+$patient->loadIPP();
+$findyear  = null;
+$findmonth = null;
+$findday   = null;
+
+if($patient->naissance) {
+  //$findyear  = mbTransformTime(null, $patient->naissance, "%Y");
+  //$findmonth = mbTransformTime(null, $patient->naissance, "%m");
+  //$findday   = mbTransformTime(null, $patient->naissance, "%d");
+}
+
+$name          = mbGetValueFromGet("name"      , $patient->nom);
+$firstName     = mbGetValueFromGet("firstName" , $patient->prenom);
+$nomjf         = mbGetValueFromGet("nomjf"     , $patient->nom_jeune_fille);
+$patient_year  = mbGetValueFromGet("Date_Year" , $findyear);
+$patient_month = mbGetValueFromGet("Date_Month", $findmonth);
+$patient_day   = mbGetValueFromGet("Date_Day"  , $findday);
+$IPP           = mbGetValueFromGet("IPP"       , $patient->_ref_IPP ? $patient->_ref_IPP->id400 : null);
 
 $showCount = 30;
 
@@ -96,6 +112,7 @@ $smarty->assign("nomjf"            , $nomjf           );
 $smarty->assign("patients"         , $patients        );
 $smarty->assign("patientsSoundex"  , $patientsSoundex );
 $smarty->assign("datePat"          , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("IPP"              , $IPP );
 
 $smarty->display("sejour_hprim_selector.tpl");
 

@@ -1,9 +1,8 @@
 <script type="text/javascript">
 
 var Sejour = {
-  
-  select: function(Numdos) {
-		window.opener.SejourHprimSelector.set(Numdos);
+  select: function(Numdos, IPP) {
+		window.opener.SejourHprimSelector.set(Numdos, IPP);
     window.close();
   }
 }
@@ -14,7 +13,7 @@ var Sejour = {
 <form action="?" name="patientSearch" method="get">
 
 <input type="hidden" name="m" value="hprim21" />
-<input type="hidden" name="a" value="pat_hprim_selector" />
+<input type="hidden" name="a" value="sejour_hprim_selector" />
 <input type="hidden" name="dialog" value="1" />
 
 <table class="form">
@@ -99,6 +98,40 @@ var Sejour = {
   {{/if}}
 
   {{foreach from=$patientsSoundex item=_patient}}
-    {{include file="inc_line_pat_hprim_selector.tpl"}}
+    {{include file="inc_line_sejour_hprim_selector.tpl"}}
   {{/foreach}}
 </table>
+
+{{if $IPP}}
+<form action="?" onsubmit="if(checkForm(this)) {Sejour.select(this.numdos.value, null);} return false;">
+{{else}}
+<form action="?" onsubmit="if(checkForm(this)) {Sejour.select(this.numdos.value, this.IPP.value);} return false;">
+{{/if}}
+<table class="form">  
+  <tr>
+    <th colspan="2" class="category">Saisie manuelle</th>
+  </tr>
+  {{if !$IPP}}
+  <tr>
+    <th><label for="IPP">IPP</label></th>
+    <td><input class="notNull" name="IPP" type="text" value="" /></td>
+  </tr>
+  {{else}}
+  <tr>
+    <th><label for="IPP">IPP</label></th>
+    <td><input class="notNull" name="IPP" type="hidden" value="{{$IPP}}" />{{$IPP}}</td>
+  </tr>
+  {{/if}}
+  <tr>
+    <th><label for="numdos">Numéro de dossier</label></th>
+    <td><input class="notNull" name="numdos" type="text" value="" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" class="button">
+      <button class="submit" type="submit">
+        {{tr}}Save{{/tr}}
+      </button>
+    </td>
+  </tr>
+</table>
+</form>

@@ -11,12 +11,26 @@ global $AppUI, $can, $m, $dPconfig;
 
 $can->needsRead();
 
-$name          = mbGetValueFromGet("name"       );
-$firstName     = mbGetValueFromGet("firstName"  );
-$nomjf         = mbGetValueFromGet("nomjf"      );
-$patient_year  = mbGetValueFromGet("Date_Year"  );
-$patient_month = mbGetValueFromGet("Date_Month" );
-$patient_day   = mbGetValueFromGet("Date_Day"   );
+$patient_id    = mbGetValueFromGet("patient_id");
+$patient = new CPatient;
+if($patient_id) {
+  $patient->load($patient_id);
+}
+$findyear  = null;
+$findmonth = null;
+$findday   = null;
+if($patient->naissance) {
+  $findyear  = mbTransformTime(null, $patient->naissance, "%Y");
+  //$findmonth = mbTransformTime(null, $patient->naissance, "%m");
+  //$findday   = mbTransformTime(null, $patient->naissance, "%d");
+}
+
+$name          = mbGetValueFromGet("name"      , $patient->nom);
+$firstName     = mbGetValueFromGet("firstName" , $patient->prenom);
+$nomjf         = mbGetValueFromGet("nomjf"     , $patient->nom_jeune_fille);
+$patient_year  = mbGetValueFromGet("Date_Year" , $findyear);
+$patient_month = mbGetValueFromGet("Date_Month", $findmonth);
+$patient_day   = mbGetValueFromGet("Date_Day"  , $findday);
 
 $showCount = 30;
 
@@ -45,9 +59,9 @@ if($nomjf){
 }
      
 if(($patient_year) || ($patient_month) || ($patient_day)){
-  $year =($patient_year)?"$patient_year-":"%-";
-  $month =($patient_month)?"$patient_month-":"%-";
-  $day =($patient_day)?"$patient_day":"%";
+  $year  = ($patient_year)  ? "$patient_year-":"%-";
+  $month = ($patient_month) ? "$patient_month-":"%-";
+  $day   = ($patient_day)   ? "$patient_day":"%";
   if($day!="%"){
     $day = str_pad($day,2,"0",STR_PAD_LEFT);
   }

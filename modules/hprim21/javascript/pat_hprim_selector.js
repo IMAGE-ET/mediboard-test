@@ -1,10 +1,11 @@
 // $Id: $
 
 var PatHprimSelector = {
-  sForm      : null,
-  sId        : null,
-  sPatNom    : null,
-  sPatPrenom : null,
+  sForm       : null,
+  sId         : null,
+  sPatient_id : null,
+  sPatNom     : null,
+  sPatPrenom  : null,
   options : {
     width : 750,
     height: 500
@@ -15,8 +16,12 @@ var PatHprimSelector = {
   pop: function() {
     var url = new Url();
     url.setModuleAction("hprim21", "pat_hprim_selector");
-    url.addParam("name", this.sPatNom);
-    url.addParam("firstName", this.sPatPrenom);
+    if(this.sPatient_id) {
+      url.addParam("patient_id", this.sPatient_id);
+    } else {
+      url.addParam("name", this.sPatNom);
+      url.addParam("firstName", this.sPatPrenom);
+    }
     url.popup(this.options.width, this.options.height, "PatientHprim");
   },
   

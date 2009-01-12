@@ -7,8 +7,10 @@
 {{assign var=background value="#ccc"}}
 {{/if}}
 
+{{assign var="patient" value=$curr_adm->_ref_patient}}
+
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_adm->_ref_patient->patient_id}}">
+  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}">
     <img src="images/icons/edit.png" alt="modifier" />
   </a>
   {{if $canPlanningOp->read}}
@@ -17,8 +19,57 @@
   </a>
   {{/if}}
   <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}} {{$curr_adm->_ref_patient->_view}}
+  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}} {{$patient->_view}}
   </a>
+  
+  {{if $patient->_ref_IPP}}
+  <script type="text/javascript">
+    PatHprimSelector.init{{$patient->_id}} = function(){
+      this.sForm      = "editIPP{{$patient->_id}}";
+      this.sId        = "id400";
+      this.sPatNom    = "{{$patient->nom}}";
+      this.sPatPrenom = "{{$patient->prenom}}";
+      this.pop();
+    };
+  </script>
+  <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post">
+    <input type="hidden" name="dosql" value="do_idsante400_aed" />
+    <input type="hidden" name="m" value="dPsante400" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="ajax" value="1" />
+    <input type="hidden" name="id_sante400_id" value="{{$patient->_ref_IPP->_id}}" />
+    <input type="hidden" class="notNull" name="id400" value="{{$patient->_ref_IPP->id400}}" />
+    <input type="hidden" class="notNull" name="tag" value="{{$patient->_ref_IPP->tag}}" />
+    <input type="hidden" class="notNull" name="object_id" value="{{$patient->_id}}" />
+    <input type="hidden" class="notNull" name="object_class" value="CPatient" />
+    <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
+  </form>
+  
+  <script type="text/javascript">
+    SejourHprimSelector.init{{$curr_adm->_id}} = function(){
+      this.sForm      = "editNumdos{{$curr_adm->_id}}";
+      this.sId        = "id400";
+      this.sIPPForm   = "editIPP{{$patient->_id}}";
+      this.sIPPId     = "id400";
+      this.sIPP       = document.forms.editIPP{{$patient->_id}}.id400.value;
+      this.sPatNom    = "{{$patient->nom}}";
+      this.sPatPrenom = "{{$patient->prenom}}";
+      this.pop();
+    };
+  </script>
+  <form name="editNumdos{{$curr_adm->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$curr_adm->_id}})">
+    <input type="hidden" name="dosql" value="do_idsante400_aed" />
+    <input type="hidden" name="m" value="dPsante400" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="ajax" value="1" />
+    <input type="hidden" name="id_sante400_id" value="{{$curr_adm->_ref_numdos->_id}}" />
+    <input type="hidden" class="notNull" name="id400" value="{{$curr_adm->_ref_numdos->id400}}" size="8" />
+    <input type="hidden" class="notNull" name="tag" value="{{$curr_adm->_ref_numdos->tag}}" />
+    <input type="hidden" class="notNull" name="object_id" value="{{$curr_adm->_id}}" />
+    <input type="hidden" class="notNull" name="object_class" value="CSejour" />
+    <input type="hidden" name="last_update" value="{{$curr_adm->_ref_numdos->last_update}}" />
+  </form>
+  {{/if}}
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
@@ -86,6 +137,7 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
+  <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
 
   {{if !$curr_adm->entree_reelle}}
 	  <input type="hidden" name="entree_reelle" value="now" />

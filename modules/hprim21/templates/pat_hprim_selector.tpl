@@ -101,4 +101,19 @@ var Patient = {
   {{foreach from=$patientsSoundex item=_patient}}
     {{include file="inc_line_pat_hprim_selector.tpl"}}
   {{/foreach}}
+  
+  <tr>
+    <th colspan="5">Saisie manuelle</th>
+  </tr>
+  <tr>
+    <td colspan="5" class="button">
+      <form onSubmit="if(checkForm(this)) {Patient.select(this.IPP.value);} return false;">
+        <label for="IPP">IPP</label>
+        <input class="notNull" name="IPP" type="text" value="" />
+        <button class="submit" type="submit">
+          {{tr}}Save{{/tr}}
+        </button>
+      </form>
+    </td>
+  </tr>
 </table>

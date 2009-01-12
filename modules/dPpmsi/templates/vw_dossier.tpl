@@ -143,9 +143,14 @@ function reloadListActes(operation_id) {
 }
 
 SejourHprimSelector.doSet = function(){
-  var oForm = document[SejourHprimSelector.sForm];
-  $V(oForm[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
-  ExtRefManager.submitNumdosForm(oForm.object_id.value);
+  var oFormSejour = document[SejourHprimSelector.sForm];
+  $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
+  ExtRefManager.submitNumdosForm(oFormSejour.object_id.value);
+  if(SejourHprimSelector.prepared.IPPid) {
+    var oFormIPP = document[SejourHprimSelector.sIPPForm];
+    $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
+    ExtRefManager.submitIPPForm();
+  }
 }
 
 Main.add(function () {

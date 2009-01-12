@@ -79,6 +79,7 @@ foreach ($today as $keySejour => $valueSejour) {
   $sejour =& $today[$keySejour];
 //  $sejour->loadRefs();
   $sejour->loadRefPatient();
+  $sejour->_ref_patient->loadIPP();
   $sejour->loadRefPraticien();
   $sejour->loadRefsOperations();
   $sejour->loadRefsAffectations();

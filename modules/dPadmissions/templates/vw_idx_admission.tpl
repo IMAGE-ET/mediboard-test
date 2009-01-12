@@ -1,5 +1,8 @@
 <!-- $Id$ -->
 
+{{mb_include_script module="hprim21" script="pat_hprim_selector"}}
+{{mb_include_script module="hprim21" script="sejour_hprim_selector"}}
+
 <script type="text/javascript">
 
 function showLegend() {
@@ -47,9 +50,65 @@ function confirmation(oForm){
    }
 }
 
+var ExtRefManager = {
+  sejour_id : null,
+  patient_id: null,
+  
+  submitIPPForm: function(patient_id) {
+    ExtRefManager.patient_id = patient_id;
+    var oForm = document.forms["editIPP" + patient_id];
+    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadIPPForm});
+  },
+  
+  reloadIPPForm: function() {
+    reloadAdmission();
+  },
+  
+  submitNumdosForm: function(sejour_id) {
+    ExtRefManager.sejour_id = sejour_id;
+    var oForm = document.forms["editNumdos" + this.sejour_id];
+    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadNumdosForm});
+  },
+
+  reloadNumdosForm: function() {
+    reloadAdmission();
+  }
+}
+
 
 function submitAdmission(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+  {{if $modules.hprim21}}
+    var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
+    var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
+    if(oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
+      setExternalIds(oForm);
+    } else {
+      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+    }
+  {{else}}
+    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+  {{/if}}
+}
+
+function setExternalIds(oForm) {
+  SejourHprimSelector["init"+oForm.sejour_id.value]();
+}
+
+PatHprimSelector.doSet = function(){
+  var oForm = document[PatHprimSelector.sForm];
+  $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
+  ExtRefManager.submitIPPForm(oForm.patient_id.value);
+}
+
+SejourHprimSelector.doSet = function(){
+  var oFormSejour = document[SejourHprimSelector.sForm];
+  $V(oFormSejour[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
+  ExtRefManager.submitNumdosForm(oFormSejour.object_id.value);
+  if(SejourHprimSelector.prepared.IPPid) {
+    var oFormIPP = document[SejourHprimSelector.sIPPForm];
+    $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
+    ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
+  }
 }
 
 Main.add(function () {

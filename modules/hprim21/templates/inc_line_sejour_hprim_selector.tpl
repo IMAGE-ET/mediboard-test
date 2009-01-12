@@ -19,9 +19,15 @@
     {{$_sejour->_view}}
   </td>
   <td class="button">
-    <button class="tick" type="button" onclick="Sejour.select('{{$_sejour->external_id}}')">
+    {{if $IPP}}
+    <button class="tick" type="button" onclick="Sejour.select('{{$_sejour->external_id}}', null)">
       {{tr}}Select{{/tr}}
     </button>
+    {{else}}
+    <button class="tick" type="button" onclick="Sejour.select('{{$_sejour->external_id}}', '{{$_patient->external_id}}')">
+      {{tr}}Select{{/tr}}
+    </button>
+    {{/if}}
   </td>
 </tr>
 {{/foreach}}
