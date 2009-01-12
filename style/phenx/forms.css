@@ -2,6 +2,25 @@ form {
   display: inline;
 }
 
+fieldset, legend {
+  border: 1px solid #ccc;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+
+fieldset {
+  margin: 4px;
+  margin-bottom: 1em;
+  padding: 2px;
+}
+
+legend {
+  padding: 2px 8px;
+  background: #eee;
+  margin: 0 4px;
+}
+
 input, select, textarea, button {
   font-size: 1em;
   margin: 1px;
