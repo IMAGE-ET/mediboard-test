@@ -26,7 +26,7 @@ function refreshListProtocolesPrescription(praticien_id, selected_id) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
   url.addParam("praticien_id", praticien_id);
-  
+  url.addParam("without_pack", true);
   //url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
   //url.requestUpdate(document.editFrm.protocole_prescription_anesth_id, { waitingText: null } );
 

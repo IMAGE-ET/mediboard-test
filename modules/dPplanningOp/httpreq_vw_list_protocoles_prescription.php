@@ -9,6 +9,7 @@
 
 $praticien_id = mbGetValueFromGetOrSession("praticien_id", 0);
 $selected_id = mbGetValueFromGetOrSession("selected_id", 0);
+$without_pack = mbGetValueFromGet("without_pack");
 
 // Chargement du praticien
 $praticien = new CMediusers;
@@ -50,6 +51,7 @@ $smarty->assign("protocoles_list_function", $protocoles_list_function);
 $smarty->assign("packs_praticien", $packs_praticien);
 $smarty->assign("packs_function", $packs_function);
 $smarty->assign("nodebug", true);
+$smarty->assign("without_pack", $without_pack);
 
 $smarty->display("inc_vw_list_protocoles_prescription.tpl");
 
