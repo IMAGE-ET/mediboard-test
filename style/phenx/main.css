@@ -2711,3 +2711,22 @@ span.date input.time {
 .flotr-tab:hover {
   background: #ccc;
 }
+
+.pagination {
+  text-align: center; 
+  font-weight: bold; 
+  margin: 2px; 
+  line-height: 1.8em;
+}
+
+.pagination .page {
+  display: inline; 
+  border: 1px solid #999; 
+  padding: 1px 3px;
+}
+
+.pagination .page.active {
+  border: 1px solid #ccc; 
+  color: #ccc;
+}
+
