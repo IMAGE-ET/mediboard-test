@@ -1,5 +1,5 @@
 {{if !$dialog}}
-{{include file=filter_history.tpl}}
+{{include file=../../system/templates/filter_history.tpl}}
 {{/if}}
 
 <table class="tbl">
@@ -27,5 +27,5 @@
     <th>{{mb_title class=CUserLog field=fields}}</th>
   </tr>
   
-  {{include file=inc_history_line.tpl logs=$list}}
+  {{include file=../../system/templates/inc_history_line.tpl logs=$list}}
 </table>
