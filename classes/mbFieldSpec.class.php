@@ -492,9 +492,35 @@ class CMbFieldSpec {
 
   function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
+    $autocomplete = CMbArray::extract($params, "autocomplete");
+    $form         = CMbArray::extract($params, "form");
     $extra        = CMbArray::makeXmlAttributes($params);
+    
     $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";
-    $sHtml       .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
+    $sHtml       .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" ". ($autocomplete ? 'autocomplete="off"' : null) ."$extra/>";
+    if ($autocomplete) {
+    	list($minChars, $limit, $wholeString) = explode(',', $autocomplete);
+    	if ($minChars === null) $minChars = 2;
+    	if ($limit === null) $limit = 15;
+    	if ($wholeString === null) $wholeString = false;
+    	
+    	$id = $form.'_'.$field;
+    	$sHtml .= '<script type="text/javascript">
+    	Main.add(function(){
+			  url = new Url();
+			  url.setModuleAction("system", "httpreq_field_autocomplete");
+			  url.addParam("class", "'.$object->_class_name.'");
+			  url.addParam("field", "'.$field.'");
+			  url.addParam("limit", '.$limit.');
+			  url.addParam("wholeString", '.$wholeString.');
+			  url.autoComplete($("'.$id.'"), "'.$id.'_autocomplete", {
+			    minChars: '.$minChars.',
+			    method: "get"
+			  });
+		  });
+		  </script>';
+      $sHtml .= '<div style="display:none; width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
+    }
     return $sHtml;
   }
 

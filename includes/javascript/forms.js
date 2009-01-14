@@ -328,8 +328,14 @@ function prepareForm(oForm, bForcePrepare) {
 		  if(oForm.hasClassName("watched")) {
 		    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
 		  }
-		  // Form preparation
-		  var sFormName = oForm.getAttribute("name");
+		  
+		// Form preparation
+		  
+		  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
+		  	var sFormName = oForm.cloneNode(false).getAttribute("name");
+		  else
+		  	var sFormName = oForm.getAttribute("name");
+
 		  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
 		
 		  // Build label targets

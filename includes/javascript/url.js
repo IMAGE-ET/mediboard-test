@@ -163,7 +163,7 @@ var Url = Class.create({
         if(!update.style.position || update.style.position=='absolute') {
           update.style.position = 'absolute';
           Position.clone(element, update, {
-            setWidth: false,
+            setWidth: !parseFloat(update.getStyle('width')), // In order to make the list as wide as the input if the style contains width:0
             setHeight: false, 
             offsetTop: element.offsetHeight
           });
