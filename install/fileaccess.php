@@ -94,7 +94,7 @@ foreach(glob($mbpath."style/*/templates_c") as $templates_c) {
   <br />
   Mediboard propose un script shell permettant d'établir ses permissions de façon 
   automatique. C'est le bon moment pour exécuter ce script si ce n'est pas déjà fait !
-  <pre>sh [racine/de/mediboard/]shell/setup.sh apache</pre>
+  <pre>sh [racine/de/mediboard/]shell/setup.sh www-data</pre>
 </div>
 
 <table class="tbl">

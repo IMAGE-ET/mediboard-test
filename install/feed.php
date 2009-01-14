@@ -17,7 +17,7 @@ unset($dbConfigs["ccam"]);
 
 <?php showHeader(); ?>
 
-<h2>Test et construction initiale de la base de données</h2>
+<h2>Test et construction initial de la base de données</h2>
 
 <h3>Construction de la base principale</h3>
 
@@ -92,11 +92,11 @@ if ($db->getOne("SELECT * FROM `users`")) {
 ?>
 
 <div class="big-warning">
-  Attention, la base de données principale actuellement déjà une structure. La 
+  Attention, la base de données principale possède déjà une structure. La 
   reconstruire endommagerait probablement les données. 
   <br />
   Si vous désirez re-créer une structure il est nécessaire de vider initialement 
-  la base avec un gestionnaire adapté.
+  la base avec un gestionnaire adapté (comme <a href="http://www.phpmyadmin.net/" target="_blank">PHPMyAdmin</a>).
 </div>
 
 <?php } ?>

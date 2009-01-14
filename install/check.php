@@ -99,7 +99,7 @@ $package->name = "phpUnit";
 $package->description = "Package de test unitaire";
 $package->mandatory = false;
 $package->reasons[] = "Tests unitaires et fonctionnels de Mediboard";
-$package->reasons[] = "cf. http://www.phpunit.de/pocket_guide/3.0/en/installation.html";
+$package->reasons[] = "cf. <a href='http://www.phpunit.de/wiki/Documentation' style='display: inline;'>http://www.phpunit.de/wiki/Documentation</a>";
 $packages[] = $package;
 
 $extensions = array();
