@@ -14,10 +14,17 @@ $limit = mbGetValueFromGet('limit', 15);
 $wholeString = mbGetValueFromGet('wholeString', 'false') == 'true';
 
 $search = $wholeString ? "%$input%" : "$input%";
-$where = "$field LIKE '$search'";
+$where = "`$field` LIKE '$search'";
 
 $object = new $class;
-$matches = $object->loadList($where, $field, $limit);
+$matches = $object->loadList($where, $field, $limit, $field);
+
+/*$sql = "SELECT `{$object->_spec->key}`, DISTINCT `$field` 
+        FROM `{$object->_spec->table}` 
+        WHERE `$field` LIKE '$search' 
+        ORDER BY `$field` ASC";
+mbtrace($sql);
+if ($limit) $sql .= "LIMIT $limit";*/
 
 // Création du template
 $smarty = new CSmartyDP();
