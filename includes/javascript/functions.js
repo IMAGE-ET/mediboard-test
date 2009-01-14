@@ -946,13 +946,13 @@ Object.extend(Calendar, {
     
 
     // Test element existence
-    var sInputId = sFormName + "_" + sFieldName;
-    if (!$(sInputId)) {
-      return;
-    }
+    var sInputId = sFormName + "_" + sFieldName, 
+        oInput = $(sInputId);
+    
+    if (!oInput) return;
     
     var field;
-    if ($(sInputId).disabled && (field = $(sInputId + "_trigger"))) {
+    if (oInput.disabled && (field = $(sInputId + "_trigger"))) {
       field.hide();
     }
   
