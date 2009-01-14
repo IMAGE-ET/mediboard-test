@@ -378,7 +378,7 @@ class CMbFieldSpec {
     return null;
   }
 
-  function randomString($array, $length) {
+  static function randomString($array, $length) {
     $key = "";
     $count = count($array) - 1;
     for($i = 0; $i < $length; $i++)  {
@@ -390,7 +390,7 @@ class CMbFieldSpec {
     return($key);
   }
 
-  function checkNumeric($value, $returnInteger = true){
+  static function checkNumeric($value, $returnInteger = true){
     if (!is_numeric($value)) {
       return null;
     }
@@ -400,8 +400,8 @@ class CMbFieldSpec {
     return $value;
   }
 
-  function checkLengthValue($length){
-    if(!$length = $this->checkNumeric($length)){
+  static function checkLengthValue($length){
+    if(!$length = CMbFieldSpec::checkNumeric($length)){
       return null;
     }
     if ($length < 1 or $length > 255) {
