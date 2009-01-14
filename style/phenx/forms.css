@@ -314,3 +314,30 @@ button.notext, a.notext {
 .numericField input {
   margin-right: 0;
 }
+
+.control {
+  border: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: inline; /* IE */
+  display: inline-block;
+  vertical-align: middle;
+  height: auto;
+}
+
+.control * {
+  position: relative;
+}
+
+.control .trigger {
+  cursor: pointer;
+  margin: 2px 1px;
+}
+
+.control input, 
+.control button, 
+.control select {
+  margin: 0;
+}

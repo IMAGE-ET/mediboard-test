@@ -508,12 +508,14 @@ table.tbl tr.clear td,table.tbl tr.clear th {
   border: none;
 }
 
-table.tbl td.date div {
+td.date div.dateTime,
+td.date div.date {
   font-size: 11px;
   border: 1px dotted;
-  padding: 0px 1px;
+  padding: 1px;
   margin: 1px;
   min-height: 15px;
+  /*display: inline;*/
   float: left;
 }
 
@@ -640,6 +642,7 @@ div.autocomplete {
   border: 1px solid #888;
   margin: 0px;
   padding: 0px;
+  z-index: 50;
 }
 
 div.autocomplete ul {
