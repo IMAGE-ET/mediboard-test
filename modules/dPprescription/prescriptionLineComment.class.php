@@ -98,7 +98,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   	  $this->_can_delete_line = 1;
   	}
   	// View signature praticien
-    if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole){
+    if(!$this->_protocole){
     	$this->_can_view_signature_praticien = 1;
     }
     // Affichage du formulaire de signature praticien

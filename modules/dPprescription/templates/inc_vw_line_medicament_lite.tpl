@@ -1,9 +1,9 @@
 {{assign var=line value=$curr_line}}
-
+<table class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}
+                  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" 
+      {{if !$mode_induction_perop}}id="line_medicament_{{$line->_id}}"{{/if}}>
   <!-- Header de la ligne -->
-  <tr {{if !$mode_induction_perop}}id="line_medicament_{{$line->_id}}"{{/if}} class="hoverable 
-  {{if $line->_traitement}}traitement{{else}}med{{/if}}
-  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
+  <tr  class="hoverable">
     <td style="text-align: center; width: 5%;">
       {{if $line->_can_vw_livret_therapeutique}}
       <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
@@ -17,7 +17,7 @@
       {{if $line->_ref_produit->_supprime}}
       <br /><img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
       {{/if}}
-      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
+      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}     
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->_traitement}}traitement{{/if}}
@@ -70,6 +70,8 @@
     </td>
 
     <td style="width: 25%;" class="text">   
+    <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+ 
 	    {{if $line->_ref_prises|@count}}
 	      {{foreach from=$line->_ref_prises item=_prise name=prises}}
 	        {{$_prise->_view}} {{if !$smarty.foreach.prises.last}}, {{/if}}
@@ -77,6 +79,8 @@
 	    {{else}}
 	      Aucune posologie
 	    {{/if}}
+	    
+ 
     </td>
-   
   </tr>
+</table>

@@ -42,8 +42,10 @@ if ($prescription_id) {
 // On applique le protocole ou le pack
 $prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id);
 
+$lite = $AppUI->user_prefs['mode_readonly'] ? 0 : 1;
+
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true)</script>";
+echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite)</script>";
 echo $AppUI->getMsg();
 CApp::rip();
 ?>

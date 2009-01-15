@@ -103,6 +103,19 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
   }
   
+  function store(){
+  	$get_guid = $this->_id ? false : true;
+    
+    if($msg = parent::store()){
+  		return $msg;
+  	}
+    
+  	// On met en session le dernier guid créé
+    if($get_guid){
+      $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
+    }
+  }
+  
   function loadView() {
     $this->loadRefsPrises();
     $this->loadRefsTransmissions();
@@ -176,7 +189,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_form_conditionnel = 1;
     }
     // View signature praticien
-    if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole){
+    if(!$this->_protocole){
     	$this->_can_view_signature_praticien = 1;
     }
     // Affichage du formulaire de signature praticien

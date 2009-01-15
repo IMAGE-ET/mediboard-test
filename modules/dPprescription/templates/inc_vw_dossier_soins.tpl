@@ -1,5 +1,5 @@
 <script type="text/javascript">
-		     
+
 viewFicheATC = function(fiche_ATC_id){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_fiche_ATC");
@@ -32,12 +32,16 @@ oDragOptions = {
 }
 
 addDroppablesDiv = function(draggable){
-  $("before").onmouseover = function(){ 
-    timeOutBefore = setTimeout(showBefore, 1000);
-  }
-  $("after").onmouseover = function(){ 
-    timeOutAfter = setTimeout(showAfter, 1000);
-  }
+  $('plan_soin').select('.before').each(function(td_before) {
+    td_before.onmouseover = function(){
+      timeOutBefore = setTimeout(showBefore, 1000);
+    }
+  });
+  $('plan_soin').select('.after').each(function(td_after) {
+    td_after.onmouseover = function(){
+      timeOutAfter = setTimeout(showAfter, 1000);
+    }
+  });
   
   $(draggable).up(1).select('td').each(function(td) {
 	  if(td.hasClassName("canDrop")){
@@ -60,8 +64,12 @@ addDroppablesDiv = function(draggable){
 	        addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id);
 	        // Suppression des zones droppables
 	        Droppables.drops.clear(); 
-	        $("before").onmouseover = null;
-	        $("after").onmouseover = null;
+				  $('plan_soin').select('.before').each(function(td_before) {
+				    td_before.onmouseover = null;
+				  });
+				  $('plan_soin').select('.after').each(function(td_after) {
+				    td_after.onmouseover = null;
+				  });
 	      },
 	      hoverclass:'soin-selected'
 	    } );
@@ -69,7 +77,7 @@ addDroppablesDiv = function(draggable){
   });
 }
 
-addPlanification = function(date, time, unite_prise, object_id, object_class, element_id){
+addPlanification = function(date, time, key_tab, object_id, object_class, element_id){
   // Split de l'element_id
   element = element_id.split("_");
   original_date = element[3]+" "+element[4]+":00:00";
@@ -89,8 +97,8 @@ addPlanification = function(date, time, unite_prise, object_id, object_class, el
   $V(oForm.object_id, object_id);
   $V(oForm.object_class, object_class);
   
-  prise_id = !isNaN(unite_prise) ? unite_prise : '';
-  unite_prise = isNaN(unite_prise) ? unite_prise : '';
+  prise_id = !isNaN(key_tab) ? unite_prise : '';
+  unite_prise = isNaN(key_tab) ? unite_prise : '';
 
   $V(oForm.unite_prise, unite_prise);
   $V(oForm.prise_id, prise_id);
@@ -103,12 +111,13 @@ addPlanification = function(date, time, unite_prise, object_id, object_class, el
     $V(oForm.administration_id, planification_id);
     oForm.original_dateTime.writeAttribute("disabled", "disabled");
   } else { 
+    oForm.original_dateTime.enable();
     $V(oForm.original_dateTime, original_date);
   }
   
 	if(original_date != dateTime){
 	  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-	    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification');
+	    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
 	  } } ); 
   }
 }
@@ -471,7 +480,7 @@ Main.add(function () {
 				          {{foreach from=$_dates key=_date_reelle item=_hours}}
 				            {{foreach from=$_hours key=_heure_reelle item=_hour}}
 				              <th class="{{$_date}}-{{$moment_journee}}" 
-				                  style='text-align: center; 
+				                  style='width: 30px; text-align: center; 
 			                  {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 			                  {{$_hour}}h
 				                {{if array_key_exists("$_date $_hour:00:00", $operations)}}
@@ -496,7 +505,6 @@ Main.add(function () {
 					  {{/foreach}}
 					</tbody>
 					
-					
 				  <!-- Affichage des injectables -->
 				  <tbody id="_inj" style="display: none;">
 				    {{foreach from=$prescription->_ref_injections_for_plan item=inj_cat_ATC key=_key_cat_ATC name="_foreach_cat"}}
@@ -516,8 +524,6 @@ Main.add(function () {
 				    {{/foreach}}
 			    </tbody>
 			    
-			    
-				  
 					<!-- Affichage des medicaments -->
 				  <tbody id="_med" style="display: none;">
 				    {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
@@ -538,8 +544,6 @@ Main.add(function () {
 					    {{/foreach}} 		 
 				    {{/foreach}}
 			    </tbody>
-			    
-					
 					
 				  <!-- Affichage des elements -->
 				  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap name="foreach_element"}}

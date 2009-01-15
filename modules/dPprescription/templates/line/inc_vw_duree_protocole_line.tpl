@@ -16,7 +16,7 @@ Main.add( function(){
 <tr>
   <td></td>
   <td colspan="5">
-    {{if $line->_perm_edit}}
+    {{if $line->_perm_edit || $typeDate == "mode_grille"}}
     <form name="editDuree-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="{{$dosql}}" />

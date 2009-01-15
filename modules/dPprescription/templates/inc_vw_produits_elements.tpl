@@ -134,7 +134,7 @@ submitSignaturePraticien = function(perfusion_id, prescription_id, signature_pra
   oForm.perfusion_id.value = perfusion_id;
   oForm.signature_prat.value = signature_praticien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
-  	Prescription.reloadPrescSejour(prescription_id);	
+  	Prescription.reload(prescription_id, '', 'medicament');	
   } } );
 }
 
@@ -144,11 +144,7 @@ submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_ph
   oForm.perfusion_id.value = perfusion_id;
   oForm.signature_pharma.value = signature_pharmacien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
-    {{if $mode_pharma}}
-  	  Prescription.reloadPrescPharma(prescription_id);
-  	{{else}}
-  	  Prescription.reloadPrescSejour(prescription_id);	
-  	{{/if}}
+    Prescription.reload(prescription_id, '', 'medicament','', '1');
   } } );
 }
 

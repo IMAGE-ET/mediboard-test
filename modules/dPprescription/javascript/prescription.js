@@ -31,7 +31,7 @@ var Prescription = {
       submitFormAjax(oForm, 'systemMsg', { 
 	      onComplete : 
 	        function(){
-	          Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma, null, false);
+	          Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma, null);
 	        }
 	    });
     }
@@ -66,7 +66,7 @@ var Prescription = {
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){ 
         if(!callback){
-          Prescription.reload(oForm.prescription_id.value, element_id, chapitre, null, null, null, false);
+          Prescription.reload(oForm.prescription_id.value, element_id, chapitre, null, null, null);
         }
       }
     });
@@ -134,7 +134,7 @@ var Prescription = {
     var mode_pharma = oForm.mode_pharma.value;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){ 
-        Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma, null, false);
+        Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma);
        } 
     });
   },
@@ -144,7 +144,7 @@ var Prescription = {
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){ 
-        Prescription.reload(oForm.prescription_id.value, null, chapitre, null, null, null, false);
+        Prescription.reload(oForm.prescription_id.value, null, chapitre, null, null, null, true);
       } 
     });
   },
@@ -177,7 +177,7 @@ var Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg", { waitingText : null });
   },
-  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly, lite) {
+  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly, lite, full_line_guid) {
       // Select de choix du praticien
       if(document.selPratForPresc){
         var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
@@ -195,10 +195,20 @@ var Prescription = {
       urlPrescription.addParam("mode_protocole", mode_protocole);
       urlPrescription.addParam("mode_pharma", mode_pharma);
       urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
-      urlPrescription.addParam("readonly", readonly?1:0);
-      urlPrescription.addParam("lite", lite?1:0);
       
-     
+      if(!Object.isUndefined(readonly)){
+        urlPrescription.addParam("readonly", readonly?1:0);
+      }
+      if(!Object.isUndefined(lite)){
+        if(lite == '0'){
+          lite = false;
+        }
+  			urlPrescription.addParam("lite", lite?1:0);
+      }
+      if(!Object.isUndefined(full_line_guid)){
+        urlPrescription.addParam("full_line_guid", full_line_guid);
+      }
+      
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { waitingText : null, onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {
@@ -229,7 +239,7 @@ var Prescription = {
 	    }
     }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id, readonly){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id, readonly, lite, full_line_guid){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
@@ -242,28 +252,23 @@ var Prescription = {
     url.addParam("mode_anesth", mode_anesth);
     url.addParam("mode_protocole", "0");
     url.addParam("readonly", readonly?1:0);
+    url.addParam("lite", lite?1:0);
+    url.addParam("full_line_guid", full_line_guid);
     url.requestUpdate("prescription_sejour", { waitingText: null } );
   },
-  reloadPrescPharma: function(prescription_id){
+  reloadPrescPharma: function(prescription_id, readonly, lite){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("mode_pharma", "1");
     url.addParam("refresh_pharma", "1");
     url.addParam("mode_protocole", "0");
-    url.addParam("readonly", 1);
+    url.addParam("readonly", readonly?1:0);
+    url.addParam("lite", lite?1:0);
     url.requestUpdate("prescription_pharma", { waitingText: null } );
   },
   reloadPrescPerf: function(prescription_id, mode_protocole, mode_pharma){
-    if(mode_pharma == '1'){
-      Prescription.reloadPrescPharma(prescription_id);
-    } else {
-	    if(mode_protocole == '1') {
-	      Prescription.reload(prescription_id,'','medicament','1','0');
-	    } else {
-	      Prescription.reloadPrescSejour(prescription_id);
-	    }
-    }
+	  Prescription.reload(prescription_id,'','medicament',mode_protocole,mode_pharma);
   },
   reloadAddProt: function(protocole_id) {
     Prescription.reload(protocole_id, '','', '1','0');

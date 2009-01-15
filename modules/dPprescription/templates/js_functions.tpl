@@ -82,10 +82,11 @@ onSubmitPrise = function(oForm, chapitre){
     function(){
       reloadPrises(oForm.object_id.value, chapitre);
       oForm.quantite.value = 1;
-      oForm.moment_unitaire_id.value = "";
+      if(oForm.moment_unitaire_id){
+        oForm.moment_unitaire_id.value = "";
+      }
   } });
 }
-
 
 
 // Calcul de la date de debut lors de la modification de la fin

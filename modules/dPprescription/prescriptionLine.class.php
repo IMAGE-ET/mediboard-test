@@ -406,6 +406,49 @@ class CPrescriptionLine extends CMbObject {
     }
   }
   
+  
+  /*
+   * Suppression à l'affichage des prises qui ont été déplacées (planification)
+   */
+  function removePrisesPlanif($mode_semainier = 0){
+	  // Suppression des prises prevues replanifiées
+		if($this->_quantity_by_date){
+		  foreach($this->_quantity_by_date as $_type => $quantity_by_date){
+		    foreach($quantity_by_date as $_date => $quantity_by_hour){
+		      if(!isset($this->_quantity_by_date[$_type][$_date]['total'])){
+		        $this->_quantity_by_date[$_type][$_date]['total'] = 0;
+		      }
+				  if(isset($quantity_by_hour['quantites'])){
+			      foreach($quantity_by_hour['quantites'] as $_hour => $quantity){
+			        $heure_reelle = @$quantity[0]["heure_reelle"];
+		          // Recherche d'une planification correspondant à cette prise prevue
+              $planification = new CAdministration();
+              if(is_numeric($_type)){
+                $planification->prise_id = $_type;
+              } else {
+                $planification->unite_prise = $_type;
+              }
+              $planification->original_dateTime = "$_date $heure_reelle:00:00";
+              $planification->object_id = $this->_id;
+              $planification->object_class = $this->_class_name;
+              $count_planifications = $planification->countMatchingList();
+              if($count_planifications){
+                $this->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
+                $this->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total_disp'] = 0;
+              }
+              if($mode_semainier){
+					      $this->_quantity_by_date[$_type][$_date]['total'] += $this->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
+					      $this->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
+              }
+			      }
+				  } 
+		    }
+		  }
+		}
+	}
+
+	  
+
   /*
    * Chargement des administrations et transmissions
    */
@@ -533,7 +576,7 @@ class CPrescriptionLine extends CMbObject {
 		 	
 		 	// Cle permettant de ranger les prises prevues, unite_prise si la prise est de type moment sinon prise->_id
 		 	$key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $_prise->unite_prise : $_prise->_id;
-      
+          
 		 	$line_plan_soin =& $this->_quantity_by_date[$key_tab][$date]['quantites'];
 		 	
 		 	// Stockage des lignes qui composent le plan de soin

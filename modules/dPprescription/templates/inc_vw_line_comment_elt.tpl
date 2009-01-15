@@ -25,7 +25,7 @@
 	       </form>
        {{/if}}
      </td>
-     <td>
+     <td colspan="2">
        {{if $line->category_prescription_id}}
 	       {{if $line->_can_vw_form_executant}}
 	         <div style="float: right">
@@ -49,6 +49,9 @@
        {{if $line->_can_view_form_signature_praticien}} 
 	       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	     {{/if}}
+	     {{if ($line->_guid == $full_line_guid) && $readonly}} 
+         <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
+       {{/if}}
 	   </td>
   </tr>
 </tbody>

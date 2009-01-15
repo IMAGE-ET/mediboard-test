@@ -1,8 +1,8 @@
 {{assign var=line value=$curr_line}}
-
-<tbody id="line_medicament_{{$line->_id}}" class="hoverable 
-  {{if $line->_traitement}}traitement{{else}}med{{/if}}
-  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
+<table class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}
+                  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" 
+       id="line_medicament_{{$line->_id}}">
+<tbody class="hoverable">
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
@@ -40,10 +40,12 @@
               {{/if}}
             {{else}}
               (Validé par le pharmacien)
-            {{/if}} 
+            {{/if}}
           {{/if}}
         {{/if}}
+        <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
       </div>
+            
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})" style="font-weight: bold;">
         {{$line->_ucd_view}}
       </a>
@@ -136,3 +138,4 @@
     </td>
   </tr>
 </tbody>
+</table>

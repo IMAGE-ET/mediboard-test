@@ -26,9 +26,11 @@ $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
-$readonly        = mbGetValueFromGet("readonly", true);
 
-$lite = mbGetValueFromGet("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
+// Gestion du mode d'affichage
+$readonly        = mbGetValueFromGetOrSession("readonly", 1);
+$lite            = mbGetValueFromGetOrSession("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
+$full_line_guid  = mbGetValueFromGetOrSession("full_line_guid"); 
 
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
 
@@ -398,6 +400,7 @@ $smarty = new CSmartyDP();
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
 $smarty->assign("mode_induction_perop", false);
 
+$smarty->assign("full_line_guid", $full_line_guid);
 $smarty->assign("mode_anesth", $mode_anesth);
 $smarty->assign("historique", $historique);
 $smarty->assign("filter_line", $filter_line);

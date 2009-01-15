@@ -179,7 +179,7 @@ class CPerfusion extends CMbObject {
     	$this->_can_vw_form_signature_praticien = 1;
     }
     // View signature praticien
-    if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole){
+    if(!$this->_protocole){
     	$this->_can_vw_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
@@ -248,8 +248,17 @@ class CPerfusion extends CMbObject {
       if($msg = $this->duplicatePerf()){
         return $msg;
       }
+    }  
+    
+    $get_guid = $this->_id ? false : true;
+    
+    if($msg = parent::store()){
+  		return $msg;
     }
-    return parent::store();
+  	// On met en session le dernier guid créé
+    if($get_guid){
+  	  $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
+    }
   }
   
   

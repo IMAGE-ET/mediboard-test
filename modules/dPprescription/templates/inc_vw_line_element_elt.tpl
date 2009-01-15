@@ -4,8 +4,8 @@
 {{assign var=div_refresh value=$element}}
 {{assign var=typeDate value=$element}}
 {{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
-<tbody id="line_element_{{$line->_id}}" class="hoverable elt
-    {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
+<table {{if ($full_line_guid == $line->_guid) && $readonly}}style="border: 2px solid #6688CC"{{/if}} class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}">
+<tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
@@ -39,6 +39,9 @@
           {{else}}
             <button type="button" class="tick" onclick="submitValidationInfirmiere('{{$line->_class_name}}','{{$line->_id}}','{{$prescription->_id}}','{{$div_refresh}}','{{$mode_pharma}}')">Validation infirmière</button>
           {{/if}}
+	      {{/if}}
+	      {{if ($full_line_guid == $line->_guid) && $readonly}}
+	        <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
 	      {{/if}}
 	    </div>
 	    <!-- View de l'element -->
@@ -78,10 +81,8 @@
 	        }
 	      </script>
     </td>
-
     {{/if}}
   </tr>
-  
   <!-- Affichage des pososlogies -->
   {{if $category->chapitre != "anapath" && $category->chapitre != "consult" && $category->chapitre != "imagerie"}}
   <tr>
@@ -122,7 +123,6 @@
   </tr>
   {{/if}}
   {{/if}}
-  
   <tr>
     {{if $category->chapitre == "dmi"}}
     <td style="width: 25px">
@@ -146,7 +146,6 @@
       {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
     </td>   
   </tr>
-  
   {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
   <tr>
   <td></td>
@@ -160,3 +159,4 @@
   </tr>
   {{/if}}
 </tbody>
+</table>

@@ -47,15 +47,11 @@
 	          <td>
 	            <button class="button tick" type="submit">Filtrer</button>
 	          </td>
-	          
-	          
 	        </tr>
 	      </table>
       </form>
     </td>
   </tr>
-  
-  
   <tr>
     <td style="width: 150px">
       <table class="tbl">
@@ -65,7 +61,7 @@
       {{foreach from=$prescriptions item=_prescription}}
         <tr>
           <td class="text">
-            <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescSejour('{{$_prescription->_id}}')">
+            <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescSejour('{{$_prescription->_id}}','','','','','','',true,{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}})">
             {{$_prescription->_ref_patient->_view}}
             </a>
           </td>

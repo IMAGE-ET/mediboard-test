@@ -37,11 +37,13 @@ $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 $smarty = new CSmartyDP();
 $smarty->assign("line", $line);
 $smarty->assign("prescription", $prescription);
+$smarty->assign("prescription_reelle", $prescription);
 $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", 0);
 $smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("moments", $moments);
 $smarty->assign("mode_pack", $mode_pack);
+$smarty->assign("full_line_guid", "");
 $smarty->display("../../dPprescription/templates/inc_vw_add_substitution_line.tpl");
 
 ?>

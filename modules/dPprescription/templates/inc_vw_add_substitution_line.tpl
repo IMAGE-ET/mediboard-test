@@ -17,6 +17,15 @@
 	  submitFormAjax(oForm, 'systemMsg');
 	}
 	
+	submitVoie = function(object_id, voie){
+	  var oForm = getForm("editVoie");
+	  prepareForm(oForm);
+	  oForm.dosql.value = "do_prescription_line_medicament_aed";
+	  oForm.prescription_line_medicament_id.value = object_id;
+	  oForm.voie.value = voie;
+	  submitFormAjax(oForm, 'systemMsg');
+	}
+	
 	modifFormDate = function(nb_prises, form_name, protocole,line_id){
   var oForm = document.forms[form_name];
   
@@ -89,6 +98,14 @@
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="emplacement" value="" />
+</form>
+
+<form name="editVoie" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="voie" value="" />
 </form>
 
 

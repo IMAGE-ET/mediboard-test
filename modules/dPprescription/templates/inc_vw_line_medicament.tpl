@@ -2,10 +2,9 @@
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
 {{assign var=typeDate value="Med"}}
-
-<tbody id="line_medicament_{{$line->_id}}" class="hoverable 
-  {{if $line->_traitement}}traitement{{else}}med{{/if}}
-  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
+<table {{if ($full_line_guid == $line->_guid) && $readonly}}style="border: 2px solid #6688CC"{{/if}} class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}{{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}"
+       id="line_medicament_{{$line->_id}}">
+<tbody  class="hoverable">
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
@@ -88,6 +87,9 @@
              Lignes de substitution
             ({{$line->_count_substitution_lines}})
             </button>
+        {{/if}}
+        {{if ($line->_guid == $full_line_guid) && $readonly}} 
+          <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
         {{/if}}
       </div>
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})">
@@ -264,8 +266,8 @@
 		  		{{/foreach}}
 	  		</select>
   		{{/if}}
-  				
-      </td>
+  	
+  	  </td>
   </tr>
  
     		
@@ -288,3 +290,4 @@
   </tr>
   {{/if}}
 </tbody>
+</table>

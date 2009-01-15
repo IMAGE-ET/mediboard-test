@@ -1,5 +1,14 @@
 {{assign var=line value=$_line_comment}}  
 
+{{if $line->category_prescription_id}}
+	<!-- Commentaire d'elements -->
+	{{assign var=category value=$line->_ref_category_prescription}}
+	{{assign var=div_refresh value=$element}}
+{{else}}
+  <!-- Commentaires de medicaments -->
+  {{assign var=div_refresh value="medicament"}}  
+{{/if}}	  
+
 <tbody class="hoverable">
    <tr>
      <td colspan="4">
@@ -17,6 +26,7 @@
        {{elseif !$line->_protocole}}
          {{$line->_ref_praticien->_view}}    
        {{/if}}
+       <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, true, {{$lite}},'{{$line->_guid}}');"></button>
      </td>
   </tr>
 </tbody>

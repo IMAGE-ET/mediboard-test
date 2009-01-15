@@ -1,7 +1,6 @@
 {{assign var=line value=$_line_element}}
-
-<tbody id="line_element_{{$line->_id}}" class="hoverable elt
-    {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
+<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}">
+<tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
@@ -26,6 +25,7 @@
         {{if $line->_can_view_form_signature_infirmiere && $line->valide_infirmiere}}
           (Validé par l'infirmière)
         {{/if}}
+        <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
       </div>
       {{$line->_ref_element_prescription->_view}}
     </th>
@@ -96,3 +96,4 @@
     </td>
   </tr>
 </tbody>
+</table>

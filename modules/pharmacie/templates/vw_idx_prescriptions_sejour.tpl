@@ -70,7 +70,7 @@ function markAsSelected(element) {
 				{{foreach from=$prescriptions item=_prescription}}
 				<tr>
 				  <td style="width: 100px">
-				    <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescPharma('{{$_prescription->_id}}'); markAsSelected(this);">
+				    <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescPharma('{{$_prescription->_id}}',true,{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); markAsSelected(this);">
 						  {{$_prescription->_ref_object->_view}}<br />
 				      {{$_prescription->_ref_patient->_view}}
 				    </a>

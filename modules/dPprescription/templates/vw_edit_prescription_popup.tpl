@@ -57,13 +57,13 @@ Main.add(function () {
           <!-- Pre-admission -->
           <td id="pre_admission" class="step {{if $prescription->type == 'pre_admission'}}selected{{/if}}">
           {{if $prescription_pre_admission->_id}}
-	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true);">
+	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
 	              {{tr}}CPrescription.type.pre_admission{{/tr}}
 	            </a>
           	 {{if $prescription->type == "pre_admission"}}
 	            <form name="selPratForPresc" method="get" action="">
 			          <select name="selPraticien" 
-			                  onchange="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true);">
+			                  onchange="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
 			              <option value="">Tous</option>
 				            {{foreach from=$prescription->_praticiens item=_praticien}}
 				              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
@@ -93,13 +93,13 @@ Main.add(function () {
           <td id="sejour" class="step {{if $prescription->type == 'sejour'}}selected{{/if}}">
 	          {{if $prescription_sejour->_id}}
 	            
-		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true);">
+		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '');">
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
 				      {{if $prescription->type == "sejour"}}
 				            <form name="selPratForPresc" method="get" action="">
 						          <select name="selPraticien" 
-						                  onchange="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true);">
+						                  onchange="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '');">
 						              <option value="">Tous</option>
 							            {{foreach from=$prescription->_praticiens item=_praticien}}
 							              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
@@ -125,13 +125,13 @@ Main.add(function () {
          
           <td id="sortie" class="step {{if $prescription->type == 'sortie'}}selected{{/if}}">
           {{if $prescriptions.sortie->_id}}
-              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true);">
+              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
 		            {{tr}}CPrescription.type.sortie{{/tr}}
 		          </a>
 		          {{if $prescription->type == "sortie"}}
 		            <form name="selPratForPresc" method="get" action="">
 				          <select name="selPraticien" 
-				                  onchange="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true);">
+				                  onchange="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}',this.value, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
 				              <option value="">Tous</option>
 					            {{foreach from=$prescription->_praticiens item=_praticien}}
 					              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>

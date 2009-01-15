@@ -37,14 +37,15 @@ $prescription->loadRefObject();
 $sejour =& $prescription->_ref_object;
 $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
+$sejour->loadRefPrescriptionTraitement();
 
 // Chargement des lignes
 if($chapitre == "" || $chapitre == "med" || $chapitre == "inj" || $chapitre == "all_med"){
   $prescription->loadRefsLinesMed("1","1","service");
+  $sejour->loadRefPrescriptionTraitement();
+  $sejour->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 }
 $prescription->loadRefsLinesElementByCat("1", $chapitre,"service");
-$prescription->_ref_object->loadRefPrescriptionTraitement();	  
-$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 
 $pharmacien = new CMediusers();
 

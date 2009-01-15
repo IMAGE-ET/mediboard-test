@@ -1,4 +1,5 @@
-<tbody id="perfusion-{{$_perfusion->_id}}" class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
+<table class="tbl" id="perfusion-{{$_perfusion->_id}}">
+<tbody class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
@@ -10,22 +11,23 @@
 					{{/if}}
 				</div>
 		  {{/if}}
-		  {{if $mode_pharma && $_perfusion->signature_pharma}}
+		  
 		  <div style="float: right">
-		    (Validé par le pharmacien)
-		  </div>
-		  {{/if}}
-      <!-- Siganture du praticien -->
-      {{if $_perfusion->_can_vw_signature_praticien}}
-        <div style="float: right">
+		    {{if $mode_pharma && $_perfusion->signature_pharma}}
+		      (Validé par le pharmacien)
+		    {{/if}}
+        <!-- Siganture du praticien -->
+        {{if $_perfusion->_can_vw_signature_praticien}}
           {{$_perfusion->_ref_praticien->_view}}
 					{{if $_perfusion->signature_prat}}
 					   <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" /> 
 					{{else}}
 					   <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" /> 
 					{{/if}}
-        </div>
-      {{/if}}
+        {{/if}} 
+       <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$_perfusion->_guid}}');"></button>
+      </div>
+        
       <strong>
 				Perfusion :
 				{{foreach from=$_perfusion->_ref_lines item=_line name=perf_line}}
@@ -109,3 +111,4 @@
     </td>
   </tr>
 </tbody>
+</table>

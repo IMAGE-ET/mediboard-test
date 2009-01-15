@@ -307,8 +307,9 @@ submitProtocole = function(){
         </optgroup>
       </select>
 
-      <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
-       
+			{{if !$mode_pharma}}
+        <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
+      {{/if}}
       <br />
       {{if $prescription->object_id}}
         <select name="advAction">

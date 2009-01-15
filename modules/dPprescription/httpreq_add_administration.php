@@ -90,6 +90,7 @@ $transmission = new CTransmissionMedicale();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("key_tab", $key_tab);
 $smarty->assign("date_sel", $date_sel);
 $smarty->assign("administrations", $administrations);
 $smarty->assign("planification", $planification);
