@@ -66,7 +66,7 @@ class CTimeSpec extends CMbFieldSpec {
     
     $html = array();
     $html[] = '<div class="control '.$class.'">';
-    $html[] = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
+    $html[] = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" autocomplete=\"off\" '.$extra.' />';
     if ($form) {
       $html[] = '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="trigger" />';
       if (!$this->notNull) {
