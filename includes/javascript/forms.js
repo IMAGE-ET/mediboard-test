@@ -412,6 +412,11 @@ function prepareForm(oForm, bForcePrepare) {
 		      oElement.mask(mask);
 		    }
 		    
+		    // Default autocomplete deactivation
+		    if (oElement.type == "text") {
+		    	oElement.writeAttribute("autocomplete", "off");
+		    }
+		    
 		    // Focus on first text input
 		    if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
 		      // Internet Explorer will not give focus to a not visible element but will raise an error

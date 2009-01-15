@@ -496,7 +496,7 @@ class CMbFieldSpec {
     $form         = CMbArray::extract($params, "form");
     $extra        = CMbArray::makeXmlAttributes($params);
     
-    $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\" autocomplete=\"off\"";
+    $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";
     $sHtml       .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
     if ($autocomplete) {
     	list($minChars, $limit, $wholeString) = explode(',', $autocomplete);
