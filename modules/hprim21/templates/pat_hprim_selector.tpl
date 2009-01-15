@@ -10,6 +10,11 @@ var Patient = {
 
 </script>
 
+<div class="big-info">
+  <strong>L'identifiant patient permanent (IPP)</strong> est manquant, veuillez l'indiquer en
+  choisissant un patient dans la liste proposée ou bien le rentrer manuellement dans le formulaire en bas.
+</div>
+
 <!-- Formulaire de recherche -->
 <form action="?" name="patientSearch" method="get">
 

@@ -50,6 +50,20 @@ function confirmation(oForm){
    }
 }
 
+function submitAdmission(oForm) {
+  {{if $modules.hprim21}}
+    var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
+    var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
+    if(oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
+      setExternalIds(oForm);
+    } else {
+      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+    }
+  {{else}}
+    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+  {{/if}}
+}
+
 var ExtRefManager = {
   sejour_id : null,
   patient_id: null,
@@ -75,21 +89,6 @@ var ExtRefManager = {
   }
 }
 
-
-function submitAdmission(oForm) {
-  {{if $modules.hprim21}}
-    var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
-    var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
-    if(oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
-      setExternalIds(oForm);
-    } else {
-      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
-    }
-  {{else}}
-    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
-  {{/if}}
-}
-
 function setExternalIds(oForm) {
   SejourHprimSelector["init"+oForm.sejour_id.value]();
 }
@@ -109,7 +108,8 @@ SejourHprimSelector.doSet = function(){
     $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
     ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
   }
-}
+  submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
+}  
 
 Main.add(function () {
   var totalUpdater = new Url;

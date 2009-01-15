@@ -9,6 +9,12 @@ var Sejour = {
 
 </script>
 
+<div class="big-info">
+  <strong>L'identifiant patient permanent (IPP)</strong> et/ou <strong>le numéro de dossier</strong>
+  sont manquant, veuillez les indiquer en choisissant un séjour parmi la liste proposée ou bien
+  le rentrer manuellement dans le formulaire en bas.
+</div>
+
 <!-- Formulaire de recherche -->
 <form action="?" name="patientSearch" method="get">
 
