@@ -5,5 +5,9 @@
     <td>{{mb_ditto name=date value=$log->date|date_format:$dPconfig.date}}</td>
 		<td>{{$log->date|date_format:$dPconfig.time}}</td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td>{{tr}}CUserLog.none{{/tr}}</td>
+  </tr>
   {{/foreach}}
 </table>

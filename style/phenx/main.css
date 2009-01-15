@@ -827,6 +827,7 @@ div.tooltip table.decoration td.bottom-right {
   width: 16px;
   height: 16px;
   background: url(images/pictures/bottom-right.png) top left no-repeat;
+  
 }
 
 div.tooltip table.decoration td.right {
@@ -836,7 +837,7 @@ div.tooltip table.decoration td.right {
 }
 
 div.tooltip table.decoration td.content {
-  border: 4px solid #fff;
+  border: 1px solid #999;
   white-space: nowrap;
   background: #fff;
 }
@@ -850,6 +851,10 @@ div.postit {
 div.postit table.decoration {
   border-spacing: 0px;
   border: none;
+}
+
+div.postit table.decoration td {
+  padding: 0;
 }
 
 div.postit table.decoration td {
