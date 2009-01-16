@@ -14,7 +14,7 @@ $can->needsRead();
 // Initialisation de variables
 
 // Type d'admission
-$type = mbGetValueFromGet("type");
+$type = mbGetValueFromGetOrSession("type");
 
 $selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");

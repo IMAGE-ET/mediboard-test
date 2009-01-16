@@ -57,7 +57,7 @@ Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
   </tr>
   {{foreach from=$today item=curr_adm}}
   <tr id="admission{{$curr_adm->sejour_id}}">
-  {{include file="inc_vw_admission_line.tpl"}}
+  {{include file="inc_vw_admission_line.tpl" nodebug=true}}
   </tr>
   {{/foreach}}
 </table>

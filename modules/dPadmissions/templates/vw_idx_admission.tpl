@@ -57,10 +57,10 @@ function submitAdmission(oForm) {
     if(oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
       setExternalIds(oForm);
     } else {
-      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
     }
   {{else}}
-    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
   {{/if}}
 }
 
@@ -75,7 +75,7 @@ var ExtRefManager = {
   },
   
   reloadIPPForm: function() {
-    reloadAdmission();
+    reloadAdmission($V(document.selType._type_admission));
   },
   
   submitNumdosForm: function(sejour_id) {
@@ -85,7 +85,7 @@ var ExtRefManager = {
   },
 
   reloadNumdosForm: function() {
-    reloadAdmission();
+    reloadAdmission($V(document.selType._type_admission));
   }
 }
 

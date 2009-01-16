@@ -90,6 +90,7 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
+  <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
   {{if $curr_adm->chambre_seule}}
   <input type="hidden" name="chambre_seule" value="0" />
   <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form);">
@@ -168,7 +169,7 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
-
+	<input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
   {{if !$curr_adm->saisi_SHS}}
   <input type="hidden" name="saisi_SHS" value="1" />
   <button class="tick" type="button" onclick="submitAdmission(this.form);">

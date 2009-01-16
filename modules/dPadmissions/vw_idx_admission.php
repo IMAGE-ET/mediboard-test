@@ -19,6 +19,7 @@ $selTri = mbGetValueFromGetOrSession("selTri", "nom");
 $order_way = mbGetValueFromGetOrSession("order_way", "ASC");
 $order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$type = mbGetValueFromGetOrSession("type");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
@@ -27,6 +28,8 @@ $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 $sejour = new CSejour();
+$sejour->_type_admission = $type;
+
 // Création du template
 $smarty = new CSmartyDP();
 
