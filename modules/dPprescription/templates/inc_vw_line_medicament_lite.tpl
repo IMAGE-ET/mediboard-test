@@ -69,9 +69,11 @@
       {{/if}}
     </td>
 
-    <td style="width: 25%;" class="text">   
-    <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
- 
+    <td style="width: 25%;" class="text">
+    {{if !$mode_induction_perop}}   
+      <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+    {{/if}}
+	  
 	    {{if $line->_ref_prises|@count}}
 	      {{foreach from=$line->_ref_prises item=_prise name=prises}}
 	        {{$_prise->_view}} {{if !$smarty.foreach.prises.last}}, {{/if}}
