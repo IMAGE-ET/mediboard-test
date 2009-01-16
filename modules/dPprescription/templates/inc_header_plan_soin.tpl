@@ -27,18 +27,19 @@
 </tr>
 {{/if}}
 
-<tr>
-{{if $name != "Médicaments"}}
-  <th colspan="1000">{{tr}}{{$name}}{{/tr}}</th>
+{{if $patient->_id}}
+	<tr>
+	{{if $name != "Médicaments"}}
+	  <th colspan="1000">{{tr}}{{$name}}{{/tr}}</th>
+	{{/if}}
+	{{if $chapitre == "inj" || $chapitre == "perf" || $chapitre == "med"}}
+	  <th colspan="1000">{{tr}}CPrescriptionLineMedicament._chapitre.{{$chapitre}}{{/tr}}</th>
+	{{/if}}
+	{{if $chapitre == "all_med"}}
+	  <th colspan="1000">Tous les médicaments</th>
+	{{/if}}
+	</tr>
 {{/if}}
-{{if $chapitre == "inj" || $chapitre == "perf" || $chapitre == "med"}}
-  <th colspan="1000">{{tr}}CPrescriptionLineMedicament._chapitre.{{$chapitre}}{{/tr}}</th>
-{{/if}}
-{{if $chapitre == "all_med"}}
-  <th colspan="1000">Tous les médicaments</th>
-{{/if}}
-</tr>
-
 
 <tr>
   <th colspan="2" class="title" style="width: 7cm">Prescription</th>
