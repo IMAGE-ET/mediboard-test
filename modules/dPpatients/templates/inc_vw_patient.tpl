@@ -82,7 +82,7 @@ Document.refreshList = function(){
   </tr>
 
   <tr>
-    <td rowspan="3" style="width: 0.1%;">{{include file=inc_vw_photo_identite.tpl mode="read" size="64"}}</td>
+    <td rowspan="3" style="width: 0.1%;">{{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="64"}}</td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
     <th>{{mb_label object=$patient field="adresse"}}</th>
