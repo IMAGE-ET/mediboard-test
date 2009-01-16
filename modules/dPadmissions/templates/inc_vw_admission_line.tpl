@@ -93,12 +93,12 @@
   <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
   {{if $curr_adm->chambre_seule}}
   <input type="hidden" name="chambre_seule" value="0" />
-  <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form);">
+  <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form, 1);">
     Chambre simple
   </button>
   {{else}}
   <input type="hidden" name="chambre_seule" value="1" />
-  <button class="change" type="button" onclick="submitAdmission(this.form);">
+  <button class="change" type="button" onclick="submitAdmission(this.form, 1);">
     Chambre double
   </button>
   {{/if}}
@@ -172,12 +172,12 @@
 	<input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
   {{if !$curr_adm->saisi_SHS}}
   <input type="hidden" name="saisi_SHS" value="1" />
-  <button class="tick" type="button" onclick="submitAdmission(this.form);">
+  <button class="tick" type="button" onclick="submitAdmission(this.form, 1);">
     {{tr}}CSejour-saisi_SHS{{/tr}}
   </button>
   {{else}}
   <input type="hidden" name="saisi_SHS" value="0" />
-  <button class="cancel" type="button" onclick="submitAdmission(this.form);">
+  <button class="cancel" type="button" onclick="submitAdmission(this.form, 1);">
     {{tr}}Cancel{{/tr}}
   </button>
   {{/if}}

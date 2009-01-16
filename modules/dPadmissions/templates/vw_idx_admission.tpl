@@ -50,11 +50,11 @@ function confirmation(oForm){
    }
 }
 
-function submitAdmission(oForm) {
+function submitAdmission(oForm, bPassCheck) {
   {{if $modules.hprim21}}
     var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
     var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
-    if(oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
+    if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
       setExternalIds(oForm);
     } else {
       submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
