@@ -24,6 +24,7 @@ $patient->load($pat_id);
 
 if ($patient->patient_id) {
 	$patient->loadRefsFwd();
+	$patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical();
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->_ref_dossier_medical->loadRefsAntecedents();
