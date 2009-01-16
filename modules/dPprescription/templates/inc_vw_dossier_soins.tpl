@@ -377,10 +377,24 @@ Main.add(function () {
 
 {{if $prescription_id}}
   {{if !$mode_bloc}}
-  <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
-	 <h2 style="text-align: center">
-	    Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-	 </h2>
+    <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
+
+	 <h1 style="text-align: center">
+	   <a href="#" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}','','administration');"{{/if}}>
+	     <img src="images/icons/prev.png" alt="" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
+	   </a>
+	   Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
+	   <a href="#" {{if $sejour->_sortie|date_format:"%Y-%m-%d" > $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}>
+	     <img src="images/icons/next.png" alt="" {{if $sejour->_sortie|date_format:"%Y-%m-%d" <= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
+	   </a>
+	 </h1>
+	 
+	 {{if $date != $today}}
+	 <div class="small-warning">
+	 Attention, le dossier de soin que vous êtes en train de visualiser n'est pas celui de la journée courante
+	 </div>
+	 {{/if}}
+	 
 	 {{/if}}
 	<table style="width: 100%">
 	  <tr>

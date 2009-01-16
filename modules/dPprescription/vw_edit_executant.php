@@ -24,7 +24,7 @@ $executants = $executant_prescription_line->loadMatchingList();
 
 // Chargement de la liste des categories
 $category = new CCategoryPrescription();
-$categories = $category->loadCategoriesByChap();
+$categories = $category->loadCategoriesByChap(null, "current");
 
 // Chargement de la categorie selectionnee
 $category->load($category_id);

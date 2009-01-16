@@ -19,6 +19,7 @@ class CCategoryPrescription extends CMbObject {
   var $nom         = null;
   var $description = null;
   var $header      = null;
+  var $group_id    = null;
   
   // BackRefs
   var $_ref_elements_prescription = null;
@@ -36,6 +37,7 @@ class CCategoryPrescription extends CMbObject {
     $specs["nom"]         = "notNull str";
     $specs["description"] = "text";
     $specs["header"]      = "text";
+    $specs["group_id"]    = "ref class|CGroups";
     return $specs;
   }
   
@@ -60,14 +62,42 @@ class CCategoryPrescription extends CMbObject {
   /**
    * Charge toutes les categories triées par chapitre
    * @param $chapitre string Permet de restreindre à un seul chapitre
+   * @param $group string 'no_group'     => non associées à une clinique
+   * 											'current_group => associées à la clinique courante
+   *                      'current'      => no_group OR current_group 
+   *                      'all'          => toutes les categories
+   * 								 int	 group_id => group selectionné
    * @return array[CCategoryPrescription] Les catégories
    */
-  static function loadCategoriesByChap($chapitre = null) {
+  static function loadCategoriesByChap($chapitre = null, $group="all") {
+    global $g;
+    
 		$categorie = new CCategoryPrescription;
-		$categorie->chapitre = $chapitre;
+		$where = array();
+
+		if($chapitre){
+		  $where["chapitre"] = " = '$chapitre'";
+		}
+    
+		// Permet de filtrer les categories
+    if($group != 'all'){
+      if(is_numeric($group)){
+        $where["group_id"] = " = '$group'";
+      }
+      if($group == 'no_group'){
+        $where["group_id"] = "IS NULL";
+      }
+      if($group == 'current_group'){
+        $where["group_id"] = " = '$g'";
+      }
+      if($group == 'current'){
+        $where[] = "group_id = '$g' OR group_id IS NULL"; 
+      }
+    }
 		
 		// Initialisation des chapitres
 		$chapitres = explode("|", $categorie->_specs["chapitre"]->list);
+		
 		$categories_par_chapitre = array();
 		foreach ($chapitres as $chapitre) {
 		  $categories_par_chapitre[$chapitre] = array();
@@ -75,11 +105,10 @@ class CCategoryPrescription extends CMbObject {
 		
 		// Chargement et classement par chapitre
     $order = "nom";
-    $categories = $categorie->loadMatchingList($order);
+    $categories = $categorie->loadList($where, $order);
     foreach ($categories as &$categorie) {
 		  $categories_par_chapitre[$categorie->chapitre]["$categorie->_id"] =& $categorie;
-		} 
-
+		}
   	ksort($categories_par_chapitre);
   	return $categories_par_chapitre;
   }

@@ -1286,4 +1286,7 @@ $locales['CPrescriptionLine.emplacement.service_bloc'] = '';
 $locales['CPrescriptionLineComment.emplacement.service_bloc'] = '';
 $locales['CPrescriptionLineElement.emplacement.service_bloc'] = 'Bloc et Service';
 $locales['CPrescriptionLineMedicament.emplacement.service_bloc'] = 'Bloc et Service';
+$locales['CCategoryPrescription-group_id'] = 'Etablissement';
+$locales['CCategoryPrescription-group_id-court'] = 'Etab.';
+$locales['CCategoryPrescription-group_id-desc'] = 'Etablissement';
 ?>

@@ -8,6 +8,14 @@
 <form action="" method="post" enctype="multipart/form-data">
   <input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
   <input type="file" name="docPath" size="40">
+
+  <select name="group_id">
+    <option value="no_group">Non associés</option>
+    {{foreach from=$groups item=_group}}
+      <option value="{{$_group->_id}}">de {{$_group->_view}}</option>
+    {{/foreach}}
+  </select>
+  
   <button type="submit" class="submit">Importer</button>
 </form>
 

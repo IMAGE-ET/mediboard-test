@@ -11,11 +11,13 @@ global $m, $can;
 $can->needsAdmin();
 
 $doc = new CMbXMLDocument();
+$group_id = mbGetValueFromGet("group_id");
 
 $domElementsPrescriptions = $doc->addElement($doc, "elementsPrescriptions");
 
 // Chargement des élements par chapitre et categories
-$categories_par_chapitre = CCategoryPrescription::loadCategoriesByChap();
+$categories_par_chapitre = CCategoryPrescription::loadCategoriesByChap(null, $group_id);
+
 foreach ($categories_par_chapitre as $chapitre => $categories) {
   $domChapitre = $doc->addElement($domElementsPrescriptions, "chapitre");
   $doc->addAttribute($domChapitre, "type", $chapitre);  

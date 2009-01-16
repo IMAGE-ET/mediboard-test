@@ -61,6 +61,17 @@
           <td>{{mb_field object=$category field="header"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$category field="group_id"}}</th>
+	        <td>
+	          <select name="group_id"
+	            <option value="">Tous</option>
+	          {{foreach from=$groups item=_group}}
+	            <option value="{{$_group->_id}}" {{if $category->group_id == $_group->_id}}selected="selected"{{/if}}>{{$_group->_view}}</option>
+	          {{/foreach}}
+	          </select>
+          </td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
           {{if $category->_id}}
             <button class="modify" type="submit" name="modify">

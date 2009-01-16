@@ -7,13 +7,16 @@
 * @author Alexis Granger
 */
 
+global $g;
+
 $category = mbGetValueFromGet("category");
 $libelle = mbGetValueFromPost($category, "aaa");
 
 // Chargement de la liste des categories
 $category_prescription = new CCategoryPrescription();
-$category_prescription->chapitre = $category;
-$categories = $category_prescription->loadMatchingList();
+$where["chapitre"] = "= '$category'";
+$where[] = "group_id = '$g' OR group_id IS NULL";
+$categories = $category_prescription->loadList($where);
 
 // Chargement des elements des categories precedements chargées
 $ds = CSQLDataSource::get("std");

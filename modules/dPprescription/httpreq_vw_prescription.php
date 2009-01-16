@@ -112,6 +112,9 @@ if(!$prescription_id && $object_class && $object_id && $type){
 }
  
 // Chargement des categories pour chaque chapitre
+/* Ici, chargement de toutes les categories pour permettre de visualiser correctement les prescriptions 
+ * qui ont ete faites avant que les categories soient associées à un group_id
+ */
 $categories = $full_mode || $chapitre != "medicament" ? CCategoryPrescription::loadCategoriesByChap() : null;
 
 // Chargement des lignes de la prescription et des droits sur chaque ligne

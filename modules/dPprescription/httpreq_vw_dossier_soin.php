@@ -290,6 +290,9 @@ $smarty->assign("count_soir"          , $count_soir);
 $smarty->assign("count_nuit"          , $count_nuit);
 $smarty->assign("composition_dossier" , $composition_dossier);
 
+$smarty->assign("prev_date", mbDate("- 1 DAY", $date));
+$smarty->assign("next_date", mbDate("+ 1 DAY", $date));
+$smarty->assign("today", mbDate());
 
 // Refresh de seulement 1 ligne du plan de soin
 

@@ -29,7 +29,7 @@ ul {
 
 <div class="plan_soin" {{if !$patient->_id}}style="overflow: auto; height: 500px;"{{/if}}>
 
-
+{{if $patient->_id}}
 <form name="selChapitre" method="get" action="" class="not-printable">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="a" value="vw_plan_soin_pdf" />
@@ -79,10 +79,11 @@ ul {
 		</tr>
 	</table>
 </form>
+{{/if}}
 
 <table style="border-collapse: collapse; border: 1px solid #ccc" class="tbl">
 
-	{{if $prescription->_ref_lines_med_for_plan || $prescription->_ref_injections_for_plan || $prescription->_ref_perfusions_for_plan}}
+	{{if $prescription->_ref_lines_med_for_plan || $prescription->_ref_injections_for_plan || $prescription->_ref_perfusions_for_plan || $chapitre == ""}}
     {{include file="../../dPprescription/templates/inc_header_plan_soin.tpl" name="Médicaments" no_class=true}}
   {{/if}}
   

@@ -7,7 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 $type = mbGetValueFromGet("type");
 $libelle = mbGetValueFromGet("libelle");
@@ -22,10 +22,11 @@ $elements = array();
 
 // Chargement de la liste des categories
 $category_prescription = new CCategoryPrescription();
-$category_prescription->chapitre = $type;
+$where["chapitre"] = "= '$type'";
+$where[] = "group_id = '$g' OR group_id IS NULL";
 
 if($libelle){
-  $categories = $category_prescription->loadMatchingList();
+  $categories = $category_prescription->loadList($where);
 }
 // Chargement des elements des categories precedements chargées
 if($libelle){

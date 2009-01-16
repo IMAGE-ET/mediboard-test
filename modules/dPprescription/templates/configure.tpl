@@ -552,6 +552,7 @@ function startAssociation(){
 function exportElementsPrescription(){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_export_elements_prescription");
+  url.addParam("group_id", $V(document.exportElements.group_id));
   url.requestUpdate("export_elements_prescription");
 }
 
@@ -585,12 +586,22 @@ function updateVoie(){
   </tr>
 
   <tr>
-    <td><button class="tick" onclick="exportElementsPrescription()" >Exporter les éléments de prescriptions</button></td>
+    <td>
+	    <button class="tick" onclick="exportElementsPrescription()" >Exporter les elements de prescriptions</button>
+	    <form name="exportElements">
+	      <select name="group_id">
+	        <option value="no_group">Non associées</option>
+	        {{foreach from=$groups item=_group}}
+	          <option value="{{$_group->_id}}">de {{$_group->_view}}</option>
+	        {{/foreach}}
+	      </select>
+      </form>
+    </td>
     <td id="export_elements_prescription"></td>
   </tr>
 
   <tr>
-    <td colspan="2"><button class="tick" onclick="importElementsPrescription()" >Importer les éléments de prescriptions</button></td>
+    <td colspan="2"><button class="tick" onclick="importElementsPrescription()" >Importer les elements de prescriptions</button></td>
   </tr>
   
   <tr>

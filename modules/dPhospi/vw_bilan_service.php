@@ -281,7 +281,7 @@ foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
 }
 
 // Chargement de toutes les categories
-$categories = CCategoryPrescription::loadCategoriesByChap();
+$categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
 
 // Initialisation des filtres
 $prescription = new CPrescription();

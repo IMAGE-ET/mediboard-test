@@ -945,7 +945,17 @@ class CSetupdPprescription extends CSetup {
 						CHANGE `emplacement` `emplacement` ENUM ('service','bloc','service_bloc') NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.70";
+    $this->makeRevision("0.70");
+    
+    $sql = "ALTER TABLE `category_prescription` 
+						ADD `group_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `category_prescription` 
+	          ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.71";
   }  
 }
 

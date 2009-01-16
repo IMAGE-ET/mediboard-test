@@ -160,6 +160,7 @@ $smarty->assign("protocole_id", $protocole_id);
 $smarty->assign("matin", $matin);
 $smarty->assign("soir", $soir);
 $smarty->assign("nuit", $nuit);
+$smarty->assign("chapitre", "");
 $smarty->display("inc_preview_protocole.tpl");
 
 ?>

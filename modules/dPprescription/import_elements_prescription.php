@@ -7,14 +7,20 @@
 * @author Thomas Despoix
 */
 
-global $m, $can;
+global $m, $can, $g;
 $can->needsAdmin();
 
 $schemaPath = "modules/$m/xml/elementsPrescription.xsd";
+$group_id = mbGetValueFromPost("group_id");
+
+// Chargement des etablissements
+$group = new CGroups();
+$groups = $group->loadList();
 
 // Affichage du template
 $smarty = new CSmartyDP;
 $smarty->assign("schemaPath", $schemaPath);
+$smarty->assign("groups", $groups);
 $smarty->display("import_elements_prescription.tpl");
 
 $doc = new CMbXMLDocument();
@@ -40,11 +46,29 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
   $chapitre = (string) $domChapitre["type"];
   foreach ($domChapitre->categorie as $domCategorie) {
     $categorie = new CCategoryPrescription();
-    $categorie->chapitre = $chapitre;
-    $categorie->nom = utf8_decode((string) $domCategorie->nom[0]);
+    $nom = utf8_decode((string) $domCategorie->nom[0]);
     
+    $where = array();
+    $where["chapitre"] = " = '$chapitre'";
+    $where["nom"] = "= '$nom'";
+    
+    if($group_id == "no_group"){
+		  $where["group_id"] = " IS NULL";
+		} else {
+		  $where["group_id"] = " = '$group_id'";
+		}
     $categorie->escapeDBFields();
-    $categorie->loadMatchingObject();
+    $categorie->loadObject($where);
+    
+    // si la categorie n'existe pas, on la crée
+    if(!$categorie->_id){
+      $categorie->chapitre = $chapitre;
+      $categorie->nom = $nom;
+      if($group_id != "no_group"){
+        $categorie->group_id = $group_id;
+      }
+    }
+    
     $categorie->unescapeDBFields();
         
     $categorie_id = $categorie->_id;
