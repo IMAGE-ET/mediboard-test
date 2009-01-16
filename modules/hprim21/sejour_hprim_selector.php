@@ -9,8 +9,6 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-$can->needsRead();
-
 $patient_id    = mbGetValueFromGet("patient_id" );
 $patient = new CPatient;
 if($patient_id) {
