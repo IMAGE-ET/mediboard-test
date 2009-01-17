@@ -672,6 +672,7 @@ function mbLoadScripts($modeReturn = 0) {
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/tooltip.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/controls.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/cookies.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
