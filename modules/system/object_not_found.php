@@ -7,12 +7,13 @@
 * @author Sébastien Fillonneau
 */
 
-$object_classname = mbGetValueFromGet("object_classname");
+list ($object_class, $object_id) = explode("-", mbGetValueFromGet("object_guid"));
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("object_classname" , $object_classname);
+$smarty->assign("object_class", $object_class);
+$smarty->assign("object_id"   , $object_id);
 
 $smarty->display("object_not_found.tpl");
 

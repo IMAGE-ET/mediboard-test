@@ -15,8 +15,8 @@
   <tr>
     <td>
       {{assign var=medecin value=$medecins.$medecin_id}}
-	    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$medecin->_class_name}}', object_id: {{$medecin->_id}} } })">
-	    {{$medecin->_view}}
+	    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}')">
+	    {{$medecin}}
 	    </span>
     </td>
     <td class="text">{{$medecin->adresse}}, {{$medecin->cp}} {{$medecin->ville}}</td>
@@ -25,7 +25,7 @@
   </tr>
 	{{foreachelse}}
 	<tr>
-		<td colspan="2"><em>Aucun</em></td>
+		<td colspan="2"><em>{{tr}}None{{/tr}}</em></td>
 	</tr>
 	
 	{{/foreach}}

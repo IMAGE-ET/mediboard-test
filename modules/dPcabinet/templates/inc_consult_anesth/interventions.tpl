@@ -38,7 +38,7 @@
 
   {{assign var=sejour value=$consult_anesth->_ref_sejour}}
   {{if $sejour->_id}}
-	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$sejour->_class_name}}', object_id: '{{$sejour->_id}}' } })">
+	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
   <strong>Séjour :</strong>
 	  {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) {{/if}}
 	  {{mb_value object=$sejour field=type}}
@@ -48,7 +48,7 @@
   
   {{assign var=operation value=$consult_anesth->_ref_operation}}
   {{if $operation->_id}}
-	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$operation->_class_name}}', object_id: '{{$operation->_id}}', view_tarif: true } })">
+	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
 	  <strong>Intervention :</strong>
 	  le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
 	  par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>

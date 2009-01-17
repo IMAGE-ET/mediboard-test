@@ -293,6 +293,7 @@ class CAppUI {
     $msg = call_user_func_array("sprintf", $args);
 
     // Ajout
+    global $AppUI;
     @$this->messages[$type][$msg]++;
   }
   

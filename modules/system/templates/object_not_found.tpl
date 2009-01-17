@@ -1,9 +1,7 @@
 {{* $Id: $ *}}
 
 <div class="big-warning">
-L'objet
-{{if $object_classname}}
-  de type '{{tr}}{{$object_classname}}{{/tr}}'
-{{/if}}
- n'a pas été trouvé ou a été supprimé.
+L'objet de type '{{tr}}{{$object_class}}{{/tr}}' 
+avec l'dentifiant '{{$object_id}}'
+n'a pas été trouvé ou a été supprimé.
 </div>

@@ -111,11 +111,11 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
  * @access public
  * @return any 
  **/
-function mbGetAbsValueFromPostOrSession($valName, $valDefault = null) {
-  if (isset($_POST[$valName])) {
-    $_SESSION[$valName] = $_POST[$valName];
+function mbGetAbsValueFromPostOrSession($key, $default = null) {
+  if (isset($_POST[$key])) {
+    $_SESSION[$key] = $_POST[$key];
   }
-  return dPgetParam($_SESSION, $valName, $valDefault);
+  return dPgetParam($_SESSION, $key, $default);
 }
 
 /**
@@ -123,19 +123,47 @@ function mbGetAbsValueFromPostOrSession($valName, $valDefault = null) {
  * @access public
  * @return any 
  **/
-function mbGetValueFromSession($valName, $valDefault = null) {
+function mbGetValueFromSession($key, $default = null) {
   global $m;
-  return dPgetParam($_SESSION[$m], $valName, $valDefault);
+  return dPgetParam($_SESSION[$m], $key, $default);
 }
+
+/**
+ * Returns the MbObject with given GET params keys
+ * @param string $class_key
+ * @param string $id_key
+ * @param string $guid_key
+ * @return CMbObject
+ **/
+function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
+ 	$object_class = mbGetValueFromGet($class_key);
+	$object_id    = mbGetValueFromGet($id_key);
+	$object_guid  = "$object_class-$object_id";
+
+	if ($guid_key) {
+	  $object_guid = mbGetValueFromGet($guid_key, $object_guid);
+	}
+
+	$object = CMbObject::loadGuid($object_guid);
+
+  // Redirection
+  if (!$object || !$object->_id) {
+	  global $AppUI, $ajax;
+	  $AppUI->redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
+	}
+	
+	return $object;
+}
+
 
 /**
  * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
  * @access public
  * @return void
  **/
-function mbSetValueToSession($valName, $value = null) {
+function mbSetValueToSession($key, $value = null) {
   global $m;
-  $_SESSION[$m][$valName] = $value;
+  $_SESSION[$m][$key] = $value;
 }
 
 /**
@@ -143,8 +171,8 @@ function mbSetValueToSession($valName, $value = null) {
  * @access public
  * @return void
  **/
-function mbSetAbsValueToSession($valName, $value = null) {
-  $_SESSION[$valName] = $value;
+function mbSetAbsValueToSession($key, $value = null) {
+  $_SESSION[$key] = $value;
 }
 
 /**

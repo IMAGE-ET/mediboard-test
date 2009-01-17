@@ -124,14 +124,16 @@ Document.refreshList = function(){
   
   <tr>
     <td colspan="5" class="text">
-      {{if $patient->medecin_traitant}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin_traitant}} } });">
-        <strong>{{$patient->_ref_medecin_traitant->_view}}</strong> ;
+      {{assign var=medecin value=$patient->_ref_medecin_traitant}}
+      {{if $medecin->_id}}
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+        <strong>{{$medecin}}</strong> ;
       </span>
       {{/if}}
       {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$curr_corresp->medecin_id}} } });">
-          {{$curr_corresp->_ref_medecin->_view}} ;
+	      {{assign var=medecin value=$curr_corresp->_ref_medecin}}
+	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+          {{$medecin}} ;
         </span>
       {{/foreach}}
     </td>
@@ -284,7 +286,7 @@ Document.refreshList = function(){
          {{else}}
          href="#nothing"
          {{/if}}
-         onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CSejour', object_id: {{$curr_sejour->_id}} } })"
+         onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}')"
       >
       {{else}}
       <a href="#nothing">
@@ -329,7 +331,7 @@ Document.refreshList = function(){
       <a class="tooltip-trigger"
          href="{{$curr_op->_link_editor}}"
          class="tooltip-trigger"
-         onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })"
+         onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
       >
       {{else}}
       <a class="tooltip-trigger" title="Modification d'intervention non autorisée" href="#nothing">
@@ -373,7 +375,7 @@ Document.refreshList = function(){
         {{if $curr_consult->_canEdit}}
           <a class="tooltip-trigger"
              href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}"
-             onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: {{$curr_consult->_id}} } })"
+             onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')"
            >
         {{else}}
           <a href="#nothing">

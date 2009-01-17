@@ -43,6 +43,7 @@ class CMedicap {
 		  "IPP"  => "eCap CIDC:$codeClinique",
 			"DOS" => "eCap NDOS CIDC:$codeClinique",
 			"USR" => "eCap CIDC:$codeClinique",
+			"DOC" => "eCap CIDC:$codeClinique"
 		);	    
   }
 }

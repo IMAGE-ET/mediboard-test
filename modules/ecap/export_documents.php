@@ -10,40 +10,34 @@
 global $can;
 $can->needsRead();
 
-// Filter sur les dossiers
-$filter = new CSejour();
-$filter->_num_dossier = mbGetValueFromGet("_num_dossier");
-$filter->_date_sortie = !$filter->_num_dossier ? mbGetValueFromGet("_date_sortie", mbDate()) : null;
+$do = mbGetValueFromGet("do");
+$max = mbGetValueFromGetOrSession("max", 20);
 
-// Chargement des séjours concernés
-$sejour = new CSejour();
-$sejours = array();
-if ($do = mbGetValueFromGet("do")) {
-	if ($filter->_num_dossier) {
-	  $sejour->loadFromNumDossier($filter->_num_dossier);
-	  if ($sejour->_id) {
-	    $sejours[$sejour->_id] = $sejour;
-	  }
-	}
-	else {
-		$where = array();
-		$where["type"] = "NOT IN ('exte')";
-		$where["sortie_reelle"] = "LIKE '$filter->_date_sortie%'";
-	  $order = "entree_reelle, sortie_reelle";
-	  $sejours = $sejour->loadGroupList($where, $order);
-	}
-}
+$classes = array("CPatient", "CSejour", "CIntervention");
+$file = new CFile();
+$ds =  $file->_spec->ds;
+$where["object_class"] = $ds->prepareIn($classes);
+$order = "file_date";
+$limit = "0, $max";
+$files = $file->loadList($where, $order, $limit);
+$files_count = $file->countList($where);
 
-foreach ($sejours as &$sejour) {
-  CEcDocsExporter::exportSejour($sejour);
+CMedicap::makeTags();
+foreach($files as $_file) {
+  $_file->loadTargetObject();
+  $idExt = new CIdSante400;
+	$idExt->loadLatestFor($_file, CMedicap::$tags["DOC"]);
+  $_file->_ref_id_ecap = $idExt;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("do", $do);
-$smarty->assign("filter", $filter);
-$smarty->assign("sejours", $sejours);
+$smarty->assign("max", $max);
+$smarty->assign("classes", $classes);
+$smarty->assign("files", $files);
+$smarty->assign("files_count", $files_count);
 
 $smarty->display("export_documents.tpl");
 ?>

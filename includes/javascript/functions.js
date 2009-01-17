@@ -726,6 +726,7 @@ var ObjectTooltip = Class.create({
     if (this.oOptions.popup || !eTarget.innerHTML) {
       this.load();
     }
+    
     if (!this.oOptions.popup) {
       this.reposition();
     }
@@ -845,7 +846,22 @@ Object.extend(ObjectTooltip, {
     }
 
     eTrigger.oTooltip.launchShow();    
+  },
+
+  createEx: function(eTrigger, guid, mode, params) {
+    if (!mode) mode = 'objectView';
+    if (!params) params = {};
+    
+    params.object_guid = guid;
+    
+    oOptions = {
+      mode: mode,
+      params: params
+    };
+    
+    this.create(eTrigger, oOptions);
   }
+
 } );
 
 

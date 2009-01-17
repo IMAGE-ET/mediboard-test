@@ -65,7 +65,7 @@ class CCanDo {
   function needsObject($object, $setValues = null){
     $this->setValues = $setValues;
     if(!$object->_id){
-      $params = "&object_classname=".$object->_class_name;
+      $params = "&object_guid=$object->_class_name-?";
       $this->redirect("object_not_found", $params);
     }
   }

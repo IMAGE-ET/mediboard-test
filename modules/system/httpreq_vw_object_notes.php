@@ -7,21 +7,14 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $can;
 
-$object_class = mbGetValueFromGet("object_class");
-$object_id    = mbGetValueFromGet("object_id");
+$object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
 
-if (!$object_class || !$object_id) {
-  return;
-}
-
-$object = new $object_class;
-$object->load($object_id);
 $object->loadRefsNotes(PERM_READ);
 
-foreach($object->_ref_notes as $key => $note) {
-  $object->_ref_notes[$key]->_ref_user->loadRefsFwd();
+foreach ($object->_ref_notes as $note) {
+  $note->_ref_user->loadRefsFwd();
 }
 
 // Création du template

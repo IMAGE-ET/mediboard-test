@@ -526,6 +526,7 @@ div#console {
   font-family: "Lucida Console";
   margin: 5px;
   max-height: 300px;
+  width: 50%;
   overflow: auto;
   background: #444;
   color: #aaf;

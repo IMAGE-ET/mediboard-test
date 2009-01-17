@@ -87,7 +87,7 @@ Main.add(function () {
     </a>
 
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CSejour', object_id: {{$curr_sejour->_id}} } })"
+      onmouseover="ObjectTooltip.createEx(this,'{{$curr_sejour->_guid}}');"
       onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}}); ViewFullPatient.select(this)">
       Du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
       au {{$curr_sejour->_sortie|date_format:$dPconfig.date}}
@@ -180,7 +180,7 @@ Main.add(function () {
     {{assign var="object_id" value=$curr_consult->_id}}    
     {{assign var="object_class" value="CConsultation"}}
     <a href="#"
-      onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$object_class}}', object_id: {{$object_id}} } })"
+      onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}');"
       onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </a>
@@ -223,7 +223,7 @@ Main.add(function () {
     </a>
   
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })"
+      onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
       onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
       Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
     </span>
@@ -277,7 +277,7 @@ Main.add(function () {
 
     <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultAnesth', object_id: {{$consult_anesth->_id}} } })"
+      onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
       onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </span>
@@ -337,18 +337,17 @@ Main.add(function () {
       <img src="images/icons/edit.png" alt="modifier" title="modifier" />
     </a>
     
-    {{if $curr_consult->_ref_consult_anesth->consultation_anesth_id}}
-      {{assign var="object_id" value=$curr_consult->_ref_consult_anesth->consultation_anesth_id}}
-      {{assign var="object_class" value="CConsultAnesth"}}
+    {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
+    {{if $consult_anesth->_id}}
+      {{assign var=object value=$consult_anesth}}
       <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
     {{else}}
-      {{assign var="object_id" value=$curr_consult->_id}}
-      {{assign var="object_class" value="CConsultation"}}
+      {{assign var=object value=$curr_consult}}
     {{/if}}
     
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$object_class}}', object_id: {{$object_id}} } })"
-      onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
+      onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')"
+      onclick="viewCompleteItem('{{$object->_class_name}}', {{$object->_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>

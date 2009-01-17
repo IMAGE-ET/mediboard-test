@@ -11,16 +11,6 @@
   </tr>
 
   <tr>
-    <th>{{mb_label object=$filter field=_num_dossier}}</th>
-    <td>{{mb_field object=$filter field=_num_dossier}}</td>
-  </tr>
-
-  <tr>
-    <th>{{mb_label object=$filter field=_date_sortie}}</th>
-    <td class="date">{{mb_field object=$filter field=_date_sortie form=Filter register=true}}</td>
-  </tr>
-
-  <tr>
     <td class="button" colspan="10">
       <button class="tick" type="submit" onclick="this.form.do.value = 'export';">
         Exporter les documents
@@ -50,4 +40,61 @@
   </dl>
 </div>
 {{/if}}
+
+
+<table class="tbl">
+  <tr>
+    <th class="title" colspan="10">
+    {{$files|@count}} Fichiers
+    {{if $files|@count != $files_count}}
+   	sur {{$files_count}} trouvés
+    {{/if}}
+    </th>
+  </tr>
+
+  <tr>
+    <th>{{mb_title class=CFile field=file_name}}</th>
+    <th>{{mb_title class=CFile field=object_id}}</th>
+    <th>Identifiant e-Cap</th>
+  </tr>
+  
+  {{foreach from=$files item=_file}}
+  <tr>
+    <td>
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_guid: '{{$_file->_guid}}' } })">
+	      {{mb_value object=$_file field=file_name}}
+      </span>
+    </td>
+
+    <td>
+      {{assign var=object value=$_file->_ref_object}}
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_guid: '{{$object->_guid}}' } })">
+	     {{$object}}
+      </span>
+    </td>
+
+    <td>
+      {{assign var=id_ecap value=$_file->_ref_id_ecap}}
+      {{if $id_ecap->_id}}
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_guid: '{{$id_ecap->_guid}}' } })">
+	     {{$id_ecap}}
+      </span>
+      
+			{{else}}
+			<form name="Export-{{$_file->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+			
+			<input type="hidden" name="m" value="{{$m}}" />
+			<input type="hidden" name="dialog" value="1" />
+			<input type="hidden" name="dosql" value="do_export_document" />
+			<input type="hidden" name="docitem_guid" value="{{$_file->_guid}}" />
+			
+			<button class="change">{{tr}}Export{{/tr}}</button>
+
+			</form>
+			{{/if}}
+    </td>
+  </tr>
+  {{/foreach}}
+
+</table>
 
