@@ -568,6 +568,10 @@ abstract class CSQLDataSource {
       return "IS NULL AND 0";
     }
     
+    foreach ($values as &$value) {
+      $value = "'$value'";
+    }
+    
     $str = implode(", ", $values);
     return "IN ($str)";
   }
