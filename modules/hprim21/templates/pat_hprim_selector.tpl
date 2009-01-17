@@ -114,7 +114,7 @@ var Patient = {
     <td colspan="5" class="button">
       <form onSubmit="if(checkForm(this)) {Patient.select(this.IPP.value);} return false;">
         <label for="IPP">IPP</label>
-        <input class="notNull" name="IPP" type="text" value="" />
+        <input class="notNull" name="IPP" type="text" value="{{$IPP}}" tabindex="7"/>
         <button class="submit" type="submit">
           {{tr}}Save{{/tr}}
         </button>

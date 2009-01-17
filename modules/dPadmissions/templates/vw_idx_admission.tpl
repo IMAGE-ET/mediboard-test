@@ -51,7 +51,7 @@ function confirmation(oForm){
 }
 
 function submitAdmission(oForm, bPassCheck) {
-  {{if $modules.hprim21}}
+  {{if @$modules.hprim21}}
     var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
     var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
     if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
@@ -108,7 +108,7 @@ SejourHprimSelector.doSet = function(){
     $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
     ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
   }
-  submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
+  //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
 }  
 
 Main.add(function () {

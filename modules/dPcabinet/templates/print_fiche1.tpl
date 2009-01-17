@@ -353,6 +353,20 @@
         </tr>
         <tr>
           <td>
+            Tension artérielle :
+            {{if $const_med->ta}}
+              {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
+            {{else}}
+            ?
+            {{/if}}
+            -
+            Pouls :
+            {{if $const_med->pouls}}
+            {{$const_med->pouls}} / min
+            {{else}}
+            ?
+            {{/if}}
+            <br />
             {{$consult_anesth->examenCardio}}
             {{if $dossier_medical->_ref_antecedents && array_key_exists('cardio', $dossier_medical->_ref_antecedents)}}
             <ul>

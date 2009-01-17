@@ -117,20 +117,13 @@ var Sejour = {
   <tr>
     <th colspan="2" class="category">Saisie manuelle</th>
   </tr>
-  {{if !$IPP}}
   <tr>
     <th><label for="IPP">IPP</label></th>
-    <td><input class="notNull" name="IPP" type="text" value="" /></td>
+    <td><input class="notNull" name="IPP" type="text" value="{{$IPP}}" tabindex="7" /></td>
   </tr>
-  {{else}}
-  <tr>
-    <th><label for="IPP">IPP</label></th>
-    <td><input class="notNull" name="IPP" type="hidden" value="{{$IPP}}" />{{$IPP}}</td>
-  </tr>
-  {{/if}}
   <tr>
     <th><label for="numdos">Numéro de dossier</label></th>
-    <td><input class="notNull" name="numdos" type="text" value="" /></td>
+    <td><input class="notNull" name="numdos" type="text" value="" tabindex="8" /></td>
   </tr>
   <tr>
     <td colspan="2" class="button">

@@ -18,9 +18,6 @@
     <img src="images/icons/planning.png" alt="modifier" />
   </a>
   {{/if}}
-  <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}} {{$patient->_view}}
-  </a>
   
   {{if $patient->_ref_IPP}}
   <script type="text/javascript">
@@ -67,9 +64,17 @@
     <input type="hidden" class="notNull" name="tag" value="{{$curr_adm->_ref_numdos->tag}}" />
     <input type="hidden" class="notNull" name="object_id" value="{{$curr_adm->_id}}" />
     <input type="hidden" class="notNull" name="object_class" value="CSejour" />
+    <input type="hidden" class="notNull" name="sejour_id" value="{{$curr_adm->_id}}" />
     <input type="hidden" name="last_update" value="{{$curr_adm->_ref_numdos->last_update}}" />
+    {{if @$modules.hprim21}}
+      <button type="button" class="edit notext" onclick="setExternalIds(this.form)">Edit external Ids</button>
+    {{/if}}
   </form>
   {{/if}}
+  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
+  <a class="action" name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
+    {{$patient->_view}}
+  </a>
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
