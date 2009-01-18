@@ -12,9 +12,12 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Chargement des banques
-$order = "nom ASC";
-$banque = new CBanque();
-$banques = $banque->loadList(null, $order);
+$banques = array();
+if (class_exists("CBanque")) {
+	$order = "nom ASC";
+	$banque = new CBanque();
+	$banques = $banque->loadList(null, $order);
+}
 
 // Récupération des fonctions
 $groups = new CGroups;
