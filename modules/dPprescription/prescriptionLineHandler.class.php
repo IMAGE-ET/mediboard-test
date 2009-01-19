@@ -11,6 +11,9 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
   static $handled = array ("CSejour","COperation");
   
   static function isHandled(CMbObject &$mbObject) {
+    if(!CModule::getActive("dPprescription")){
+      return;
+    }
     return in_array($mbObject->_class_name, self::$handled);
   }
 
