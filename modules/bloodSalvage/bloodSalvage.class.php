@@ -88,11 +88,11 @@ class CBloodSalvage extends CMbObject {
     $specs["transfused_volume"]   = "num";
     $specs["hgb_pocket"]					= "num";
     $specs["hgb_patient"]					= "num";
-    $specs["anticoagulant_cip"]		= "numchar|7";
-    $specs["wash_kit_ref"]	      = "varchar|32";
-    $specs["wash_kit_lot"]        = "varchar|32";
-    $specs["receive_kit_ref"]     = "varchar|32";
-    $specs["receive_kit_lot"]	    = "varchar|32";
+    $specs["anticoagulant_cip"]		= "numchar length|7";
+    $specs["wash_kit_ref"]	      = "str maxLength|32 autocomplete";
+    $specs["wash_kit_lot"]        = "str maxLength|32";
+    $specs["receive_kit_ref"]     = "str maxLength|32 autocomplete";
+    $specs["receive_kit_lot"]	    = "str maxLength|32";
     $specs["sample"]	       	    = "notNull enum list|non|prel|trans default|non";
     
     $specs["_datetime"]           = "dateTime";

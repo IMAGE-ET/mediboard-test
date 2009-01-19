@@ -1,3 +1,11 @@
+{{assign var=bs_id value=$blood_salvage->_id}}
+
+<script type="text/javascript">
+Main.add(function(){
+  prepareForm("cell-saver-id{{$bs_id}}");
+});
+</script>
+
 <form name="cell-saver-id{{$blood_salvage->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="bloodSalvage" />
   <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />
@@ -19,7 +27,7 @@
     	</td>
       <td>
         {{mb_label object=$blood_salvage field=wash_kit_ref}}
-        {{mb_field object=$blood_salvage field=wash_kit_ref style="text-transform:uppercase;" size=7}}
+        {{mb_field object=$blood_salvage field=wash_kit_ref style="text-transform:uppercase;" size=10 form="cell-saver-id$bs_id"}}
         
         {{mb_label object=$blood_salvage field=wash_kit_lot}}
         {{mb_field object=$blood_salvage field=wash_kit_lot style="text-transform:uppercase;" size=10}}
