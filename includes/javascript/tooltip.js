@@ -26,7 +26,7 @@ var ObjectTooltip = Class.create({
       mode: "objectView",
       popup: false,
       duration: 0.4,
-      durationHide: 0.6,
+      durationHide: 0.2,
       params: {}
     }, oOptions);
     
