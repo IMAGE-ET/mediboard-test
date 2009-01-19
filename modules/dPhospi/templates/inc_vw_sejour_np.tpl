@@ -36,7 +36,8 @@
       <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
     </div>
   </td>
-  <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
+  <td class="action">
+  <div class="mediuser" style="border-color:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
     {{$curr_sejour->_ref_praticien->_shortview}}
  
     {{if $isPrescriptionInstalled}}         
@@ -48,6 +49,7 @@
       <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
       {{/if}}               
     {{/if}}             
+    </div>
   </td>
 </tr>
 {{/if}}
