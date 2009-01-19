@@ -2,9 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
 <head>
-  <title>{{$dPconfig.page_title}} &mdash; {{tr}}module-{{$m}}-court{{/tr}}</title>
+  <title>
+    {{$dPconfig.page_title}} &mdash; 
+    {{tr}}module-{{$m}}-court{{/tr}} 
+    {{if $tab || $a}}
+      &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
+    {{/if}}
+  </title>
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={{$localeCharSet}}" />
-  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de SantÃ©" />
+  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{*$mediboardCommonStyle|smarty:nodefaults*}}
