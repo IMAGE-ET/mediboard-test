@@ -16,6 +16,7 @@ class CMbObjectSpec {
   public $dsn                 = 'std';
   public $table               = null;
   public $key                 = null;
+  public $measureable         = false;
   
   // Derivate fields
   public $ds = null;

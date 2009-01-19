@@ -12,18 +12,12 @@ $can->needsRead();
 
 $ds = CSQLDataSource::get("std");
 
-// Nom des classes à récupérer
-$listesClasses = array(
-  'CUser', 'CSalle', 'CPatient', 'CChambre', 'CLit', 
-  'CConsultation', 'CCompteRendu', 'CSejour', 'COperation', 
-  'CFile', 'CPrescription', 'CPrescriptionLineMedicament', 
-  'CNaissance', 'CRPU'
-);
+$listeClasses = getInstalledClasses();
 
 $result = array();
-foreach ($listesClasses as $class){
-	if (class_exists($class)) {
-		$object = new $class;
+foreach ($listeClasses as $class){
+  $object = new $class;
+  if ($object->_spec->measureable) {
 	  $sql = "SHOW TABLE STATUS LIKE '{$object->_spec->table}'";
 	  $statusTable = $ds->loadList($sql);
 	  if ($statusTable) {

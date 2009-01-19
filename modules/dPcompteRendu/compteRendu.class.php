@@ -42,6 +42,7 @@ class CCompteRendu extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = 'compte_rendu';
     $spec->key   = 'compte_rendu_id';
+    $spec->measureable = true;
     return $spec;
   }
   

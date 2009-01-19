@@ -80,6 +80,7 @@ class CPrescription extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'prescription';
     $spec->key   = 'prescription_id';
+    $spec->measureable = true;
     return $spec;
   }
   

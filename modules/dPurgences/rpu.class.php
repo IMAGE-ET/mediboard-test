@@ -73,6 +73,7 @@ class CRPU extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'rpu';
     $spec->key   = 'rpu_id';
+    $spec->measureable = true;
     return $spec;
   }
 

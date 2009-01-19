@@ -61,7 +61,7 @@ class CDMICategory extends CMbObject {
   }
   
   function countRefsDMI() {
-    $this->_count_dmis = $this->countBackRefs("dmis");
+    return $this->_count_dmis = $this->countBackRefs("dmis");
   }
 }
 

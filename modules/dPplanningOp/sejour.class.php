@@ -143,6 +143,7 @@ class CSejour extends CCodable {
     $spec = parent::getSpec();
     $spec->table = 'sejour';
     $spec->key   = 'sejour_id';
+    $spec->measureable = true;
     return $spec;
   }
   

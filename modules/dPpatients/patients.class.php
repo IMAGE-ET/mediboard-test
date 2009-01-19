@@ -135,6 +135,7 @@ class CPatient extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'patients';
     $spec->key   = 'patient_id';
+    $spec->measureable = true;
     return $spec;
   }
 

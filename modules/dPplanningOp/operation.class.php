@@ -124,6 +124,7 @@ class COperation extends CCodable {
     $spec = parent::getSpec();
     $spec->table = 'operations';
     $spec->key   = 'operation_id';
+    $spec->measureable = true;
     return $spec;
   }
   

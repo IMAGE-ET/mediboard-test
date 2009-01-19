@@ -42,6 +42,7 @@ class CChambre extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'chambre';
     $spec->key   = 'chambre_id';
+    $spec->measureable = true;
     return $spec;
   }
   

@@ -149,6 +149,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_medicament';
     $spec->key   = 'prescription_line_medicament_id';
+    $spec->measureable = true;
     return $spec;
   }
   

@@ -28,6 +28,7 @@ class CNaissance extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'naissance';
     $spec->key   = 'naissance_id';
+    $spec->measureable = true;
     return $spec;
   }
   

@@ -36,6 +36,7 @@ class CFile extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = 'files_mediboard';
     $spec->key   = 'file_id';
+    $spec->measureable = true;
     return $spec;
   }
   

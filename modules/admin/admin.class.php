@@ -59,6 +59,7 @@ class CUser extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'users';
     $spec->key   = 'user_id';
+    $spec->measureable = true;
     return $spec;
   }
 

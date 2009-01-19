@@ -123,6 +123,7 @@ class CConsultation extends CCodable {
     $spec = parent::getSpec();
     $spec->table = 'consultation';
     $spec->key   = 'consultation_id';
+    $spec->measureable = true;
     return $spec;
   }
   

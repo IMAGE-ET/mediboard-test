@@ -34,6 +34,7 @@ class CLit extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'lit';
     $spec->key   = 'lit_id';
+    $spec->measureable = true;
     return $spec;
   }
  

@@ -32,6 +32,7 @@ class CSalle extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'sallesbloc';
     $spec->key   = 'salle_id';
+    $spec->measureable = true;
     return $spec;
   }
   
