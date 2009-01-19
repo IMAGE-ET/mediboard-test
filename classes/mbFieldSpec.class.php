@@ -27,6 +27,7 @@ class CMbFieldSpec {
   var $xor            = null;
   var $mask           = null;
   var $format         = null;
+  var $autocomplete   = null;
 
   var $msgError       = null;
 
@@ -492,14 +493,15 @@ class CMbFieldSpec {
 
   function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
-    $autocomplete = CMbArray::extract($params, "autocomplete");
+    $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,15,false");
     $form         = CMbArray::extract($params, "form");
     $extra        = CMbArray::makeXmlAttributes($params);
     
     $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";
     $sHtml       .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
-    if ($autocomplete) {
-    	list($minChars, $limit, $wholeString) = explode(',', $autocomplete);
+    
+    list($activated, $minChars, $limit, $wholeString) = explode(',', $autocomplete);
+    if ($this->autocomplete && $form && $activated == 'true') {
     	if ($minChars === null) $minChars = 2;
     	if ($limit === null) $limit = 15;
     	if ($wholeString === null) $wholeString = false;
