@@ -16,14 +16,18 @@
          {{/if}}
       </script>
       <div style="float: left;">
-          {{if $line->_can_view_historique}}
-            <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
+          {{if $line->_ref_parent_line->_id}}
+            {{assign var=parent_line value=$line->_ref_parent_line}}
+            <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+                 class="tooltip-trigger" 
+                 onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_line->_class_name}}', object_id: '{{$parent_line->_id}}' } })"/>
           {{/if}}
           {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
           {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
           {{if $line->_traitement}}{{mb_label object=$line field="_traitement"}}&nbsp;{{/if}}
       </div>
       <div style="float: right;">
+        <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
         {{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
         {{else if !$line->_traitement && !$line->_protocole}}
@@ -44,6 +48,7 @@
           {{/if}}
         {{/if}}
         <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
+        </div>
       </div>
             
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})" style="font-weight: bold;">

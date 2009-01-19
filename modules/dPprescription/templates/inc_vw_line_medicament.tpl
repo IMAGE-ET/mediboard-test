@@ -20,9 +20,11 @@
       <div style="float:left;">
             <!-- Fomulaire de modification de l'emplacement -->
   		  {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
-  		
-        {{if $line->_can_view_historique}}
-          <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
+        {{if $line->_ref_parent_line->_id}}
+          {{assign var=parent_line value=$line->_ref_parent_line}}
+          <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+               class="tooltip-trigger" 
+               onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_line->_class_name}}', object_id: '{{$parent_line->_id}}' } })"/>
         {{/if}}
         {{if !$line->_traitement}}
 	        <!-- Selecteur equivalent -->
@@ -41,7 +43,7 @@
       </div>
       
       <!-- AFfichage de la signature du praticien -->
-      <div style="float: right">
+      <div class="mediuser" style="float: right; border-color: #{{$line->_ref_praticien->_ref_function->color}};">
         {{if $line->_can_view_signature_praticien}}
             {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
         {{else}}

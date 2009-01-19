@@ -21,7 +21,7 @@
         <!-- Formulaire conditionnel -->
 		{{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}} 
       </div>    
-      <div class="div_signature">
+      <div class="div_signature mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
         <!-- Affichage de la signature du praticien -->
         {{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}

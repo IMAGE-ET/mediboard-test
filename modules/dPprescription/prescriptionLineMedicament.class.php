@@ -123,7 +123,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   // Can fields
   var $_can_select_equivalent              = null;
-  var $_can_view_historique                = null;
   var $_can_view_form_ald                  = null;
   var $_can_view_form_conditionnel = null;
   var $_can_vw_form_traitement             = null;
@@ -276,10 +275,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($perm_edit && !$this->_protocole){
     	$this->_can_select_equivalent = 1;
     }
-		// Affichage de l'icone d'historique
-		if (!$this->_protocole && $this->_count_parent_line){
-			$this->_can_view_historique = 1;
-		}
     // View ALD
     if($perm_edit && !$this->_protocole){
     	$this->_can_view_form_ald = 1;

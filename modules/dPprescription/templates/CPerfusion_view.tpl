@@ -37,6 +37,15 @@
       {{/if}}
     </td>
   </tr>
+  {{if $perf->date_arret}}
+  <tr>
+    <td>
+      <strong>
+        {{mb_label object=$perf field=date_arret}}: {{mb_value object=$perf field=date_arret}} à {{mb_value object=$perf field=time_arret}}
+      </strong>
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <td>
       {{mb_label object=$perf field=duree}}

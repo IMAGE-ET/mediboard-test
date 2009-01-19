@@ -125,7 +125,7 @@ if($prescription->_id){
     $_perfusion->loadRefsLines();
 	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);
 	  $_perfusion->loadRefPraticien();
-	  $_perfusion->countParentLine();
+	  $_perfusion->loadRefParentLine();
 	  if($_perfusion->_ref_lines){
 		  foreach($_perfusion->_ref_lines as &$line_perf){
 		    $line_perf->loadRefsFwd();
@@ -164,6 +164,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
 		  	foreach($lines_by_type as $med_id => $_line_med){
 			    $_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+			    $_line_med->loadRefParentLine();
 		  	}
 		  }
 	  }
@@ -180,6 +181,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 					foreach($prescription_traitement->_ref_prescription_lines as &$line){
 						$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
 					  $line->loadRefsPrises();
+					  $line->loadRefParentLine();
 				  }
 				}
 		  }

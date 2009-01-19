@@ -87,7 +87,7 @@
         <option value="{{$cat->_id}}">{{$cat->_view}}</option>
         {{/foreach}}
       </select>
-      <input name="commentaire" type="text" size="98" />
+      <input name="commentaire" type="text" size="70" />
       <button class="submit notext" type="button" 
               onclick="if(document.selPraticienLine){
                          this.form.praticien_id.value = document.selPraticienLine.praticien_id.value;

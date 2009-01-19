@@ -26,6 +26,18 @@
     </td>
     {{/if}}
   </tr>
+  {{if $line->date_arret}}
+  <tr>
+    <td colspan="3">
+      <strong>
+        {{mb_label object=$line field=date_arret}}: {{mb_value object=$line field=date_arret}}
+        {{if $line->time_arret}}
+          à {{mb_value object=$line field=time_arret}}
+        {{/if}}
+      </strong>
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <td colspan="3">
     Posologie:<br />

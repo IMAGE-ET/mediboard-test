@@ -2,7 +2,7 @@
 <!-- Header de la ligne d'element -->
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}"> 
 <tr class="hoverable">    
-  <td style="width:25%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
+  <td style="width:22%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
       class="text {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
     <script type="text/javascript">
        Main.add( function(){
@@ -18,13 +18,15 @@
     {{$category->_view}}
   </td>
    -->
-  <td style="width:5%;" class="text">
-    <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-		{{if $line->signee}}
-		   <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
-		{{else}}
-		   <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
-		{{/if}}
+  <td style="width:8%;" class="text">
+    <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+	    <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
+			{{if $line->signee}}
+			   <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
+			{{else}}
+			   <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
+			{{/if}}
+		</div>
   </td>
 
 	<td style="width:15%;">

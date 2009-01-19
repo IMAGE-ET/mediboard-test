@@ -145,6 +145,7 @@ class CPrescriptionLine extends CMbObject {
 	    $user = new CMediusers();
 	    $this->_ref_praticien = $user->getCached($this->praticien_id);
     }
+    $this->_ref_praticien->loadRefFunction();
   }
   
   /*

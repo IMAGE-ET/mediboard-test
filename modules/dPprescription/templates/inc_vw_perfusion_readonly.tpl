@@ -3,19 +3,27 @@
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
+      
+			{{if $_perfusion->_ref_parent_line->_id}}
+      <div style="float: left">
+        {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
+        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+             class="tooltip-trigger" 
+             onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_perf->_class_name}}', object_id: '{{$parent_perf->_id}}' } })"/>
+      </div>
+      {{/if}}
+      
+      <div style="float: right">
       <!--  Validation infirmiere -->
 		  {{if $_perfusion->_can_vw_form_signature_infirmiere}}
-        <div style="float: right">
-					{{if $_perfusion->validation_infir}}
+      		{{if $_perfusion->validation_infir}}
 					  (Validée par l'infirmiere) 
 					{{/if}}
-				</div>
-		  {{/if}}
+			{{/if}}
 		  
-		  <div style="float: right">
-		    {{if $mode_pharma && $_perfusion->signature_pharma}}
-		      (Validé par le pharmacien)
-		    {{/if}}
+		  {{if $mode_pharma && $_perfusion->signature_pharma}}
+		    (Validé par le pharmacien)
+		  {{/if}}
         <!-- Siganture du praticien -->
         {{if $_perfusion->_can_vw_signature_praticien}}
           {{$_perfusion->_ref_praticien->_view}}

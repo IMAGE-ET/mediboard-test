@@ -86,8 +86,8 @@ Main.add( function(){
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
 {{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
  <table class="tbl">
-   <th style="width:25%;">Libellé</th>
-   <th style="width:5%;">Prat.</th>
+   <th style="width:22%;">Libellé</th>
+   <th style="width:8%;">Prat.</th>
    <th style="width:15%;">Début</th>
    <th style="width:10%;">Durée</th>
    <th style="width:25%;">Prises</th>

@@ -25,7 +25,10 @@
 	       </form>
        {{/if}}
      </td>
-     <td colspan="2">
+     <td style="width: 80%;" class="text">
+       {{$line->commentaire}}
+     </td>
+     <td>
        {{if $line->category_prescription_id}}
 	       {{if $line->_can_vw_form_executant}}
 	         <div style="float: right">
@@ -33,25 +36,28 @@
 	         </div>
 	       {{/if}}
        {{/if}}
-       {{$line->commentaire}}
      </td>
-     <td style="width: 25px">
-       {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
-     </td>
+     <td>
+        {{if $prescription_reelle->type != "sejour"}}
+         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
+       {{/if}}
+     </td>  
      <td style="text-align: right">
-       <!-- Affichage de la signature du praticien -->
-       {{if $line->_can_view_signature_praticien}}
-         {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
-       {{elseif !$line->_protocole}}
-         {{$line->_ref_praticien->_view}}    
-       {{/if}}
-       <!-- Affichage du formulaire de signature du praticien --> 
-       {{if $line->_can_view_form_signature_praticien}} 
-	       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
-	     {{/if}}
-	     {{if ($line->_guid == $full_line_guid) && $readonly}} 
-         <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
-       {{/if}}
+       <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+	       <!-- Affichage de la signature du praticien -->
+	       {{if $line->_can_view_signature_praticien}}
+	         {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+	       {{elseif !$line->_protocole}}
+	         {{$line->_ref_praticien->_view}}    
+	       {{/if}}
+	       <!-- Affichage du formulaire de signature du praticien --> 
+	       {{if $line->_can_view_form_signature_praticien}} 
+		       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+		     {{/if}}
+		     {{if ($line->_guid == $full_line_guid) && $readonly}} 
+	         <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
+	       {{/if}}
+       </div>
 	   </td>
   </tr>
 </tbody>

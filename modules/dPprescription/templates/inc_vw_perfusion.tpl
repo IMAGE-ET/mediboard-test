@@ -3,18 +3,19 @@
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
-      {{if $_perfusion->_count_parent_line}}
-	      <div style="float: left">
-	        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
-	      </div>
-      {{/if}}
-      
+      <div style="float: left">
+	      {{if $_perfusion->_ref_parent_line->_id}}
+	        {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
+	        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+	             class="tooltip-trigger" 
+	             onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_perf->_class_name}}', object_id: '{{$parent_perf->_id}}' } })"/>
+	      {{/if}}
+      </div>
       <div style="float: right">
         {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}
 		      <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{$readonly}}, {{$lite}},'');"></button>
 		    {{/if}}
       </div>
-      
       <!-- Formulaire de signature du praticien -->
       {{if $_perfusion->_can_vw_form_signature_praticien}}
 			  <div style="float: right">
@@ -25,7 +26,6 @@
 					{{/if}}
 				</div>
       {{/if}}
-      
       <div style="float: right">
         <!--  Validation infirmiere -->
 		    {{if $_perfusion->_can_vw_form_signature_infirmiere}}
@@ -43,9 +43,7 @@
 					  <button type="button" class="tick" onclick="submitSignaturePharmacien('{{$_perfusion->_id}}','{{$_perfusion->prescription_id}}','1')">Validation pharmacien</button>
 					{{/if}}
 			  {{/if}}
-			  
 		  </div>
-		  
 		  <!-- Accord du praticien -->
 			{{if $mode_pharma}}
 				<div style="float: right">
@@ -63,7 +61,6 @@
 					{{/if}}
 				</div>
 			{{/if}}
-			
       <!-- Siganture du praticien -->
       {{if $_perfusion->_can_vw_signature_praticien}}
         <div style="float: right">
@@ -75,7 +72,6 @@
 					{{/if}}
         </div>
       {{/if}}
-
 			<strong>
 				Perfusion :
 				{{foreach from=$_perfusion->_ref_lines item=_line name=perf_line}}
@@ -130,14 +126,12 @@
 				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
 				          } } );">Faire évoluer</button>
 				        <input type="hidden" name="_add_perf_contigue" value="" />
-				        
 				      {{/if}}
 							<input type="hidden" name="date_arret" value="{{$_perfusion->date_arret}}" />
 							<input type="hidden" name="time_arret" value="{{$_perfusion->time_arret}}" />
 						  <!-- Arret de ligne -->
 				      {{if $_perfusion->_can_vw_form_stop_perf}}
 				        {{if $_perfusion->date_arret}}
-				          
 				          <button type="button" class="cancel" onclick="this.form.date_arret.value=''; this.form.time_arret.value=''; return onSubmitFormAjax(this.form, { onComplete: function(){ 
 				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
 				          } } );">Annuler l'arrêt</button>
@@ -149,18 +143,15 @@
 				          } } );">Arrêter</button>
 				        {{/if}}
 				      {{/if}}
-				    </td> 
-				    
+				    </td>   
 					</tr>
 					<tr>
-	         
             {{if $_perfusion->_protocole}}
 						  <td style="border:none;">
 						  {{mb_label object=$_perfusion field="date_debut"}}
 						    à I {{mb_field object=$_perfusion field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} h
 						  </td>
-						{{else}}
-						  
+						{{else}}  
 	        		<td class="date"  style="border:none;">
 	        		{{mb_label object=$_perfusion field="date_debut"}}
 	        		  {{if $_perfusion->_can_modify_perfusion}}
@@ -178,7 +169,6 @@
 								</script>			
 						  </td>				
 						{{/if}}     
-						
 						<td style="border:none;">
 					   {{mb_label object=$_perfusion field=duree}}
 					   {{if $_perfusion->_can_modify_perfusion}}
@@ -187,7 +177,6 @@
 				       {{mb_value object=$_perfusion field=duree}}heures
 				     {{/if}}
 				    </td>
-				     
           </tr>
         </table>
       </form>
@@ -207,7 +196,6 @@
 	              <input type="hidden" name="del" value="0" />
 	              <table class="form">
 		              <tr>
-		                
 		                <td style="border:none; width:1%;">
 		                  {{if $_perfusion->_can_delete_perfusion_line}}
 			                  <button class="trash notext" type="button" onclick="$V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
@@ -217,7 +205,6 @@
 			                  } );"></button>
 		                  {{/if}}
 		                </td>
-					          	 
 					          <td style="width: 30%; border:none; vertical-align:middle;" class="text">
 					            {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 					            {{if $line->_can_vw_livret_therapeutique}}
