@@ -1,9 +1,9 @@
-/* $Id: $ */
+/* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage includes
- * @version $Revision: $
+ * @version $Revision$
  * @author OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -184,20 +184,19 @@ Object.extend(ObjectTooltip, {
   },
 
   createEx: function(eTrigger, guid, mode, params) {
-    if (!mode) mode = 'objectView';
-    if (!params) params = {};
+  	mode = mode || 'objectView';
+  	params = params || {};
     
     params.object_guid = guid;
     
-    oOptions = {
+    var oOptions = {
       mode: mode,
       params: params
     };
     
     this.create(eTrigger, oOptions);
   }
-
-} );
+});
 
 
 function initNotes(){
