@@ -149,23 +149,6 @@ class CMbObject {
       $this->_id =& $this->$key;
     }
   }
-  
-  /**
-   * Build and load en object with a given Guid
-   * @param guid $guid
-   * @return CMbObject Loaded object, null if inconsistent Guid 
-   */
-  static function loadGuid($guid) {
-    list ($object_class,$object_id) = explode("-", $guid);
-    
-		if (!$object_class || !$object_id) {
-		  return;
-		}
-		
-		$object = new $object_class;
-		$object->load($object_id);
-		return $object;
-  }
 
   /**
    * Staticly build object handlers array
@@ -665,7 +648,9 @@ class CMbObject {
   }
   
   /**
-   * Load an object from a GUID
+   * Build and load an object with a given GUID
+   * @param guid $guid
+   * @return CMbObject Loaded object, null if inconsistent Guid 
    */
   static function loadFromGuid($guid) {
     list($class, $id) = explode('-', $guid);
@@ -673,7 +658,7 @@ class CMbObject {
 	    $object = new $class;
 	    return $object->load($id);
     }
-    return false;
+    return null;
   }
   
   /**

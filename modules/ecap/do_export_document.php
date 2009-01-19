@@ -11,7 +11,7 @@ global $AppUI;
 
 mbExport($_POST);
 
-$docItem = CMbObject::loadGuid($_POST["docitem_guid"]);
+$docItem = CMbObject::loadFromGuid($_POST["docitem_guid"]);
 mbTrace($docItem->getProps(), "Doc Item");
 
 // Simulating Export

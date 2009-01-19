@@ -144,7 +144,7 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
 	  $object_guid = mbGetValueFromGet($guid_key, $object_guid);
 	}
 
-	$object = CMbObject::loadGuid($object_guid);
+	$object = CMbObject::loadFromGuid($object_guid);
 
   // Redirection
   if (!$object || !$object->_id) {
