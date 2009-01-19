@@ -72,6 +72,13 @@ if ($op) {
   }
 }
 
+
+/*
+ * Liste des cell saver.
+ */
+$cell_saver = new CCellSaver();
+$list_cell_saver = $cell_saver->loadList();
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("blood_salvage", $blood_salvage); 
@@ -83,6 +90,7 @@ $smarty->assign("isInDM", $isInDM);
 $smarty->assign("totaltime", $totaltime);
 $smarty->assign("anticoagulant_list", $anticoagulant_list);
 $smarty->assign("timing", $timing);
+$smarty->assign("list_cell_saver", $list_cell_saver);
 $smarty->assign("inLivretTherapeutique", $inLivretTherapeutique);
 
 $smarty->display("inc_bloodSalvage.tpl");

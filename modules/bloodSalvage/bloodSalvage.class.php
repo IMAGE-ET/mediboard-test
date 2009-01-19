@@ -28,8 +28,13 @@ class CBloodSalvage extends CMbObject {
 	var $hgb_patient = null;       // *Hémoglobine du patient post transfusion*
 	var $transfused_volume = null;
 	var $anticoagulant_cip = null; // *Code CIP de l'anticoagulant utilisé*
-	var $receive_kit = null;
-	var $wash_kit = null;
+	
+	var $receive_kit_ref = null;
+	var $receive_kit_lot = null;
+	
+	var $wash_kit_ref    = null;
+  var $wash_kit_lot    = null;
+  
 	var $sample = null;
 	
   // Form Fields
@@ -84,11 +89,13 @@ class CBloodSalvage extends CMbObject {
     $specs["hgb_pocket"]					= "num";
     $specs["hgb_patient"]					= "num";
     $specs["anticoagulant_cip"]		= "numchar|7";
-    $specs["wash_kit"]	        	= "varchar|32";
-    $specs["receive_kit"]	       	= "varchar|32";
+    $specs["wash_kit_ref"]	      = "varchar|32";
+    $specs["wash_kit_lot"]        = "varchar|32";
+    $specs["receive_kit_ref"]     = "varchar|32";
+    $specs["receive_kit_lot"]	    = "varchar|32";
     $specs["sample"]	       	    = "notNull enum list|non|prel|trans default|non";
     
-    $specs["_datetime"]            = "dateTime";
+    $specs["_datetime"]           = "dateTime";
     
     return $specs;
 	}

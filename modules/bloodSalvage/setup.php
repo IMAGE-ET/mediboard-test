@@ -82,10 +82,17 @@ class CSetupbloodSalvage extends CSetup {
     $this->makeRevision('0.03');
     $sql = " ALTER TABLE `blood_salvage` 
              ADD `sample` ENUM( 'non', 'prel', 'trans' ) NOT NULL DEFAULT 'non' ;";
-    
     $this->addQuery($sql);
     
-    $this->mod_version='0.1'; 
+    $this->makeRevision('0.1');
+    $sql = "ALTER TABLE `blood_salvage` 
+				    CHANGE `receive_kit` `receive_kit_ref` VARCHAR( 32 ) NULL DEFAULT NULL ,
+						CHANGE `wash_kit` `wash_kit_ref` VARCHAR( 32 ) NULL DEFAULT NULL ,
+						ADD `receive_kit_lot` VARCHAR( 32 ) NULL DEFAULT NULL AFTER `receive_kit_ref` ,
+						ADD `wash_kit_lot` VARCHAR( 32 ) NULL DEFAULT NULL AFTER `wash_kit_ref`";
+    $this->addQuery($sql);
+    
+    $this->mod_version='0.2'; 
     
   }
 }

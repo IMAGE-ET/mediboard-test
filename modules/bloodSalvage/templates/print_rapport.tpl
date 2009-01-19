@@ -134,8 +134,10 @@
         <tr>
           <td>
            {{tr}}CCellSaver.modele{{/tr}} : {{$blood_salvage->_ref_cell_saver->_view}} <br /> 
-           {{tr}}CBloodSalvage-receive_kit{{/tr}} :{{if $blood_salvage->receive_kit}} Lot n° {{$blood_salvage->receive_kit}} {{/if}} &nbsp;
-           {{tr}}CBloodSalvage-wash_kit{{/tr}} :{{if $blood_salvage->wash_kit}} Lot n° {{$blood_salvage->wash_kit}} {{/if}}<br />
+           {{tr}}CBloodSalvage-receive_kit_ref{{/tr}} :{{if $blood_salvage->receive_kit_ref}} Ref n° {{$blood_salvage->receive_kit_ref}} {{/if}}
+           {{tr}}CBloodSalvage-receive_kit_lot{{/tr}} :{{if $blood_salvage->receive_kit_lot}} Lot n° {{$blood_salvage->receive_kit_lot}} {{/if}} <br />
+           {{tr}}CBloodSalvage-wash_kit_ref{{/tr}} :{{if $blood_salvage->wash_kit_ref}} Ref n° {{$blood_salvage->wash_kit_ref}} {{/if}}
+           {{tr}}CBloodSalvage-wash_kit_lot{{/tr}} :{{if $blood_salvage->wash_kit_lot}} Lot n° {{$blood_salvage->wash_kit_lot}} {{/if}}<br />
            {{tr}}CBloodSalvage-anticoagulant_cip{{/tr}} : {{$anticoagulant}} <br /> <br />
            {{tr}}CBloodSalvage-nurse_sspi.report{{/tr}}{{if $tabAffected|@count>1}}s{{/if}}  : 
            {{foreach from=$tabAffected item=nurse name=affect}}
