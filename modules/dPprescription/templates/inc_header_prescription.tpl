@@ -317,6 +317,25 @@ submitProtocole = function(){
           <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arrêter</option>
           <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprendre</option>
         </select>
+        
+        {{if !$mode_pharma}}
+	        {{if $is_praticien}}
+	          <form name="signaturePrescription" method="post" action="">
+              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+              <input type="hidden" name="chapitre" value="all" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+              <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg');">Signer toutes les lignes</button>
+            </form>
+	        {{else}}
+		        <!-- Validation de la prescription -->
+			      <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');">
+			        Signer toutes les lignes
+			      </button>
+		      {{/if}}
+        {{/if}}
       {{/if}}
       
       {{if $mode_pharma && $prescription->_score_prescription == "2"}}

@@ -49,6 +49,7 @@ if ($prescription->_id) {
   foreach($lines as $type => $type_line){
     foreach($type_line as &$line) {
       $line->loadRefsPrises();
+      $line->loadRefParentLine();
       $line->getAdvancedPerms($is_praticien, "sejour");    
     }
   }

@@ -26,6 +26,7 @@ $line->loadRefPrescription();
 foreach($line->_ref_substitution_lines as &$_line_sub){
   $_line_sub->getAdvancedPerms($is_praticien,"0"); 
   $_line_sub->loadRefsPrises();
+  $_line_sub->loadRefParentLine();
 }
 
 $prescription =& $line->_ref_prescription;

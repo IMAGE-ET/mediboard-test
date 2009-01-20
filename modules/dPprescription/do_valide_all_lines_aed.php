@@ -70,7 +70,6 @@ function insertMedElts($lines, $prescription, $sejour){
 			}					
 			$line->_id = "";
 	    $line->prescription_id = $prescription->_id;
-	    //$line->praticien_id = $AppUI->user_id;
 	    $line->signee = 0;
 	    if($cat == "medicament"){
 	      $line->valide_pharma = 0;
@@ -99,6 +98,38 @@ $prescription_reelle_id = mbGetValueFromPost("prescription_reelle_id");
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 $chapitre = mbGetValueFromPost("chapitre", "medicament");
 
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+$mediuser->isPraticien();
+
+if($mediuser->_is_praticien){
+  // Si le user est un praticien
+  $praticien_id = $AppUI->user_id;  
+} else {
+  // Sinon, on controle son password
+  $praticien_id = mbGetValueFromPost("praticien_id");
+  $password = mbGetValueFromPost("password");
+  
+  $praticien = new CMediusers();
+  $praticien->load($praticien_id);
+  
+  // Test du password
+	$user = new CUser();
+	$user->user_username = $praticien->_user_username;
+	$user->_user_password = $password;
+
+	if(!$password){
+		if(!$user->_id){
+		  $AppUI->displayMsg("Veuillez saisir un password", "Signature des lignes");
+      return;
+	  }
+	}
+	$user->loadMatchingObject();
+	if(!$user->_id){
+	  $AppUI->displayMsg("login incorrect","Signature des lignes");
+    return;
+	}	
+}
 
 if($prescription_id){
 	$prescription = new CPrescription();
@@ -131,7 +162,8 @@ if($prescription_line_id){
 
 
 // Validation des traitements perso
-if($prescription_id && $chapitre == "medicament"){
+if($prescription_id && ($chapitre == "medicament" || $chapitre == "all")){
+  
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
 	$prescription_traitement =& $prescription->_ref_object->_ref_prescription_traitement;
 	$prescription_traitement->loadRefsLinesMed();
@@ -164,25 +196,25 @@ if($prescription->_id && $mode_pharma){
 }
 
 // Validation de tous les medicaments
-if($prescription_id && $chapitre=="medicament" && !$mode_pharma){
+if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode_pharma){
 	// Chargement de toutes les lignes du user_courant non validées
 	$prescriptionLineMedicament = new CPrescriptionLineMedicament();
 	$prescriptionLineMedicament->prescription_id = $prescription_id;
-  $prescriptionLineMedicament->praticien_id = $AppUI->user_id;
+  $prescriptionLineMedicament->praticien_id = $praticien_id;
 	$prescriptionLineMedicament->signee = "0";
 	$medicaments = $prescriptionLineMedicament->loadMatchingList();
 
 	// Chargement des perfusions
   $perfusion = new CPerfusion();
   $perfusion->prescription_id = $prescription_id;
-  $perfusion->praticien_id = $AppUI->user_id;
+  $perfusion->praticien_id = $praticien_id;
   $perfusion->signature_prat = "0";
   $perfusions = $perfusion->loadMatchingList();
 
   $prescriptionLineComment = new CPrescriptionLineComment();
   $where = array();
   $where["prescription_id"] = " = '$prescription_id'";
-  $where["praticien_id"] = " = '$AppUI->user_id'";
+  $where["praticien_id"] = " = '$praticien_id'";
   $where["category_prescription_id"] = "IS NULL";
   $where["signee"] = " = '0'";
   $where["child_id"] = "IS NULL";
@@ -194,7 +226,7 @@ if($prescription_id && $chapitre=="medicament" && !$mode_pharma){
 }
 
 
-if($prescription_id && $chapitre!="medicament" && !$mode_pharma){
+if($prescription_id && ($chapitre!="medicament" || $chapitre == "all") && !$mode_pharma){
 	// Elements
 	$ljoinElement["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
 	$ljoinElement["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
@@ -204,11 +236,12 @@ if($prescription_id && $chapitre!="medicament" && !$mode_pharma){
 	
 	$where = array();
 	$where["prescription_id"] = " = '$prescription_id'";
-	$where["praticien_id"] = " = '$AppUI->user_id'";
+	$where["praticien_id"] = " = '$praticien_id'";
 	$where["signee"] = " = '0'";
 	$where["child_id"] = "IS NULL";
-	$where["category_prescription.chapitre"] = " = '$chapitre'";
-	
+	if($chapitre != "all"){
+	  $where["category_prescription.chapitre"] = " = '$chapitre'";
+	}
 	$prescription_line_element = new CPrescriptionLineElement();
 	$elements = $prescription_line_element->loadList($where, null, null, null, $ljoinElement);
 	
@@ -276,7 +309,7 @@ if(!$mode_pharma){
   $prescription_sortie = new CPrescription();
   $prescription_sortie->object_id = $prescription->object_id;
   $prescription_sortie->object_class = $prescription->object_class;
-  $prescription_sortie->praticien_id = $AppUI->user_id;
+  $prescription_sortie->praticien_id = $praticien_id;
   $prescription_sortie->type = "sortie";
   $prescription_sortie->loadMatchingObject();
   
@@ -302,7 +335,22 @@ if(!$mode_pharma){
 
 $prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescription->_id;
 
-echo "<script type='text/javascript'>Prescription.reload($prescription_id,'', '$chapitre','','$mode_pharma');</script>";
-echo $AppUI->getMsg();
-CApp::rip();
+if($chapitre == "all"){
+  $lite = $AppUI->user_prefs['mode_readonly'] ? 0 : 1;
+  if($mediuser->_is_praticien){
+     // Dans le cas de la signature directement dans la prescription 
+     echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite);</script>";  
+     echo $AppUI->getMsg();
+     CApp::rip();
+  } else {
+    // Dans le cas de la signature dans la popup (le user courant n'est pas un praticien)
+    echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite);</script>";  
+  }
+} else {
+  // Dans le cas de la validation d'un chapitre ou d'une ligne de la prescription
+  echo "<script type='text/javascript'>Prescription.reload($prescription_id,'', '$chapitre','','$mode_pharma');</script>";
+  echo $AppUI->getMsg();
+  CApp::rip();
+}
+
 ?>

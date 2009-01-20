@@ -389,7 +389,11 @@ var Prescription = {
     url.addParam("prescription_line_medicament_id", prescription_line_medicament_id);
     url.addParam("mode_pack", mode_pack);
     url.popup(800,400, "Lignes de substitution");
+  },
+  valideAllLines: function(prescription_id){
+    var url = new Url;
+    url.setModuleAction("dPprescription", "vw_signature_prescription");
+    url.addParam("prescription_id", prescription_id);
+    url.popup(400,400,"Signatures des lignes de prescription");
   }
 };
-
-
