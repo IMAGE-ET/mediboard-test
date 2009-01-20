@@ -36,7 +36,7 @@
         <option value="0">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>
-          {{tr}}{{$curr_class}}{{/tr}}
+          {{$curr_class}} - {{tr}}{{$curr_class}}{{/tr}}
         </option>
         {{/foreach}}
       </select>
