@@ -102,33 +102,35 @@ $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
 $mediuser->isPraticien();
 
-if($mediuser->_is_praticien){
-  // Si le user est un praticien
-  $praticien_id = $AppUI->user_id;  
-} else {
-  // Sinon, on controle son password
-  $praticien_id = mbGetValueFromPost("praticien_id");
-  $password = mbGetValueFromPost("password");
-  
-  $praticien = new CMediusers();
-  $praticien->load($praticien_id);
-  
-  // Test du password
-	$user = new CUser();
-	$user->user_username = $praticien->_user_username;
-	$user->_user_password = $password;
-
-	if(!$password){
+if(!$mode_pharma){
+	if($mediuser->_is_praticien){
+	  // Si le user est un praticien
+	  $praticien_id = $AppUI->user_id;  
+	} else {
+	  // Sinon, on controle son password
+	  $praticien_id = mbGetValueFromPost("praticien_id");
+	  $password = mbGetValueFromPost("password");
+	  
+	  $praticien = new CMediusers();
+	  $praticien->load($praticien_id);
+	  
+	  // Test du password
+		$user = new CUser();
+		$user->user_username = $praticien->_user_username;
+		$user->_user_password = $password;
+	
+		if(!$password){
+			if(!$user->_id){
+			  $AppUI->displayMsg("Veuillez saisir un password", "Signature des lignes");
+	      return;
+		  }
+		}
+		$user->loadMatchingObject();
 		if(!$user->_id){
-		  $AppUI->displayMsg("Veuillez saisir un password", "Signature des lignes");
-      return;
-	  }
+		  $AppUI->displayMsg("login incorrect","Signature des lignes");
+	    return;
+		}	
 	}
-	$user->loadMatchingObject();
-	if(!$user->_id){
-	  $AppUI->displayMsg("login incorrect","Signature des lignes");
-    return;
-	}	
 }
 
 if($prescription_id){
