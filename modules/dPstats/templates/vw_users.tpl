@@ -21,10 +21,12 @@ Main.add(function () {
         <tr>
           <th><label for="debutlog" title="Date de début">Début:</label></th>
           <td class="date">
-            <div id="users_debutlog_da">{{$debutlog|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutlog" class="notNull date" value="{{$debutlog}}" />
-            <img id="users_debutlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-         </td>
+            <div class="control">
+              <div id="users_debutlog_da" class="date">{{$debutlog|date_format:"%d/%m/%Y"}}</div>
+              <input type="hidden" name="debutlog" class="notNull date" value="{{$debutlog}}" />
+              <img id="users_debutlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            </div>
+          </td>
           <th><label for="user_id" title="Utilisateur">Utilisateur</label></th>
           <td>
             <select name="user_id">
@@ -39,10 +41,12 @@ Main.add(function () {
         <tr>
           <th><label for="finlog" title="Date de fin">Fin:</label></th>
           <td class="date">
-            <div id="users_finlog_da">{{$finlog|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finlog" class="notNull date moreEquals|debutlog" value="{{$finlog}}" />
-            <img id="users_finlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-         </td>
+            <div class="control">
+              <div id="users_finlog_da" class="date">{{$finlog|date_format:"%d/%m/%Y"}}</div>
+              <input type="hidden" name="finlog" class="notNull date moreEquals|debutlog" value="{{$finlog}}" />
+              <img id="users_finlog_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            </div>
+          </td>
           <td colspan="2" />
         </tr>
         <tr>
@@ -66,17 +70,21 @@ Main.add(function () {
         <tr>
           <th><label for="debutact" title="Date de début">Début:</label></th>
           <td class="date">
-            <div id="Form1_debutact_da">{{$debutact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
-            <img id="Form1_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-         </td>
+            <div class="control">
+              <div id="Form1_debutact_da" class="date">{{$debutact|date_format:"%d/%m/%Y"}}</div>
+              <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
+              <img id="Form1_debutact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><label for="finact" title="Date de fin">Fin:</label></th>
           <td class="date">
-            <div id="Form1_finact_da">{{$finact|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
-            <img id="Form1_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <div class="control">
+              <div id="Form1_finact_da" class="date">{{$finact|date_format:"%d/%m/%Y"}}</div>
+              <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
+              <img id="Form1_finact_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            </div>
           </td>
         </tr>
         <tr>

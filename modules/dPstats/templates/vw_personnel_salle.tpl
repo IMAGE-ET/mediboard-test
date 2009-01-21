@@ -19,17 +19,21 @@ Main.add(function () {
         <tr>
           <th><label for="deb_personnel" title="Date de début">Début</label></th>
           <td class="date">
-            <div id="personnelSalle_deb_personnel_da">{{$deb_personnel|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="deb_personnel" class="notNull date" value="{{$deb_personnel}}" />
-            <img id="personnelSalle_deb_personnel_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            <div class="control">
+              <div id="personnelSalle_deb_personnel_da" class="date">{{$deb_personnel|date_format:"%d/%m/%Y"}}</div>
+              <input type="hidden" name="deb_personnel" class="notNull date" value="{{$deb_personnel}}" />
+              <img id="personnelSalle_deb_personnel_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
+            </div>
           </td>
         </tr>
         <tr>
           <th><label for="fin_personnel" title="Date de fin">Fin</label></th>
           <td class="date">
-            <div id="personnelSalle_fin_personnel_da">{{$fin_personnel|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="fin_personnel" class="notNull date" value="{{$fin_personnel}}" />
-            <img id="personnelSalle_fin_personnel_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
+            <div class="control">
+              <div id="personnelSalle_fin_personnel_da" class="date">{{$fin_personnel|date_format:"%d/%m/%Y"}}</div>
+              <input type="hidden" name="fin_personnel" class="notNull date" value="{{$fin_personnel}}" />
+              <img id="personnelSalle_fin_personnel_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
+            </div>
           </td>
         </tr>
         <tr>
