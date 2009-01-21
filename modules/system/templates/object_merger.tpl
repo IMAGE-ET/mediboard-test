@@ -137,7 +137,7 @@ Main.add(function() {
 </form>
 
 {{else}}
-<div class="big-warning">
+<div class="small-info">
   Veuillez choisir des objets existants à fusionner.
 </div>
 {{/if}}
