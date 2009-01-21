@@ -47,7 +47,7 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
 	$i = 0;
 	foreach($logs as $data) {
 	  $series[$i]["data"] = array(array(0, $data->$element));
-	  $series[$i]["label"] = $module == 'total' ? $data->action : $data->module;
+	  $series[$i]["label"] = $module != 'modules' ? $data->action : $data->module;
 	  $i++;
 	}
 	
