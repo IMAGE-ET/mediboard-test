@@ -44,7 +44,7 @@
       <th>Stock pharmacie</th>
     {{/if}}
     <th>Déjà effectuées</th>
-    <th>Dispensation</th>
+    <th style="width: 30%">Dispensation</th>
     <th>Stock du service</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
   </tr>
