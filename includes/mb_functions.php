@@ -60,6 +60,16 @@ function mbGetValueFromPost($valName, $valDefault = null) {
 }
 
 /**
+ * Returns the value of a variable retreived it from HTTP Post, with at least a
+ * default value
+ * @access public
+ * @return any 
+ **/
+function mbGetValueFromRequest($valName, $valDefault = null) {
+  return isset($_REQUEST[$valName]) ? $_REQUEST[$valName] : $valDefault;
+}
+
+/**
  * Returns the value of a variable retreived it from HTTP Get, then from the session
  * Stores it in _SESSION[$m] in all cases, with at least a default value
  * @access public
