@@ -71,18 +71,18 @@ if (!$AppUI->user_id) {
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
-$suppressHeaders = dPgetParam($_REQUEST, "suppressHeaders");
+$suppressHeaders = mbGetValueFromRequest("suppressHeaders");
 
 // Output the charset header in case of an ajax request
-$ajax = dPgetParam($_REQUEST, "ajax", false);
+$ajax = mbGetValueFromRequest("ajax", false);
 
 // Check if we are in the dialog mode
-$dialog = dPgetParam($_REQUEST, "dialog");
+$dialog = mbGetValueFromRequest("dialog");
 
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
   include_once("./locales/core.php");
-  $redirect = dPgetParam($_REQUEST, "redirect", "");
+  $redirect = mbGetValueFromRequest("redirect");
 
   $ok = $AppUI->login();
   if (!$ok) {
@@ -93,7 +93,9 @@ if (isset($_REQUEST["login"])) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
 
-  $AppUI->redirect($redirect);
+  if($redirect) {
+    $AppUI->redirect($redirect);
+  }
 }
 
 // Get the user preference
