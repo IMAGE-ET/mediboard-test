@@ -28,8 +28,7 @@ class CApp {
    */
   static function checkPeace() {
     if (!self::$inPeace) {
-      trigger_error("Application died unexpectedly", E_USER_ERROR);
-      
+      trigger_error("Application died unexpectedly", E_USER_ERROR);      
     }
   }
   
@@ -417,14 +416,10 @@ class CAppUI {
  */
   function login() {
   	$ds = CSQLDataSource::get("std");
+  	
     // Test login and password validity
     $user = new CUser;
-    $user->user_username  = trim(mbGetValueFromRequest("username"));
-    $user->_user_password = trim(mbGetValueFromRequest("password"));
-    
-    $specsObj = $user->getSpecsObj();
-    $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
-    
+        
     // Login as, for administators
     if ($loginas = mbGetValueFromRequest("loginas")) {
       if ($this->user_type != 1) {
@@ -435,94 +430,41 @@ class CAppUI {
       $user->user_username = trim($loginas);
       $user->_user_password = null;
     } 
-    // No password given
-    elseif (!$user->_user_password) {
-      $this->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
-      return false;
-    }
-    
-    $pwd = $user->_user_password; // Le mot de passe récupéré est avec un _
-    
-    if ($pwd) {
-	    $this->weak_password = false;
-	    // minLength
-	    if ($pwdSpecs->minLength > strlen($pwd)) {
-	      $this->weak_password = true;
-	    }
-	
-	    // notContaining
-	    if($pwdSpecs->notContaining) {
-	      $target = $pwdSpecs->notContaining;
-	        if ($field = $user->$target)
-	          if (stristr($pwd, $field))
-	            $this->weak_password = true;
-	    }
-	    
-	    // notNear
-	    if($pwdSpecs->notNear) {
-	      $target = $pwdSpecs->notNear;
-	        if ($field = $user->$target)
-	          if (levenshtein($pwd, $field) < 3)
-	            $this->weak_password = true;
-	    }
-	
-	    // alphaAndNum
-	    if($pwdSpecs->alphaAndNum) {
-	      if (!preg_match("/[A-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
-	        $this->weak_password = true;
-	      }
-	    }
+    // Standard login
+    else {
+      if (null == $user->user_username  = trim(mbGetValueFromRequest("username"))) {
+	      $this->setMsg("Auth-failed-nousername", UI_MSG_ERROR);
+	      return false;
+      }
+
+      if (null == $user->_user_password = trim(mbGetValueFromRequest("password"))) {
+	      $this->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
+	      return false;
+      }
+
+	    $this->weak_password = $this->checkPasswordWeakness($user);
     }
     
     // See CUser::updateDBFields
     $user->loadMatchingObject();
     
-    $userByName = new CUser;
-    $userByName->user_username = trim(mbGetValueFromRequest("username"));
-    $userByName->loadMatchingObject();
-    
-    if ($userByName->_login_locked) {
-      $this->setMsg("Auth-failed-user-locked", UI_MSG_ERROR);
+    if (!$this->checkPasswordAttempt($user)) {
       return false;
     }
-    
-    // Wrong login and/or password
-    $loginErrorsReady = $user->loginErrorsReady();
-    if (!$user->_id) {
-      $this->setMsg("Auth-failed-combination", UI_MSG_ERROR);
-
-      // If the user exists, but has given a wrong password let's increment his error count
-	    if ($loginErrorsReady && $userByName->_id && !$userByName->_login_locked) {
-	      $userByName->user_login_errors++;
-	      $userByName->store();
-	      $remainingAttempts = max(0, CAppUI::conf("admin CUser max_login_attempts")-$userByName->user_login_errors);
-	      $this->setMsg("Auth-failed-tried", UI_MSG_ERROR, $userByName->user_login_errors, $remainingAttempts);
-	    }
-      return false;
-      
-    } 
-    // User not locked and has given a good password
-    else {
-      if ($loginErrorsReady) {
-	      $user->user_login_errors = 0;
-	      $user->store();
-      }
-    }
-    
+        
     // Put user_group in AppUI
     $this->user_remote = 1;
     if ($ds->loadTable("users_mediboard") && $ds->loadTable("groups_mediboard")) {
-      $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
-      if ($cur = $ds->exec($sql)) {
-        if ($row = $ds->fetchRow($cur)) {
-          $this->user_remote = intval($row[0]);
-        }
-      }
-      $sql = "SELECT `groups_mediboard`.`group_id`" .
-          "\nFROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`" .
-          "\nWHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`" .
-          "\nAND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`" .
-          "\nAND `users_mediboard`.`user_id` = '$user->user_id'";
+      $sql = "SELECT `remote` 
+				FROM `users_mediboard` 
+				WHERE `user_id` = '$user->_id'";
+      $this->user_remote = $ds->loadResult($sql);
+
+      $sql = "SELECT `groups_mediboard`.`group_id`
+				FROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`
+				WHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`
+				AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`
+				AND `users_mediboard`.`user_id` = '$user->_id'";
       $this->user_group = $ds->loadResult($sql);
     }
     
@@ -554,6 +496,87 @@ class CAppUI {
 
     // load the user preferences
     $this->loadPrefs($this->user_id);
+    
+    
+    return true;
+  }
+  
+  /**
+   * Check password strength
+   * 
+   * @param CUser $user
+   * @return bool
+   */
+  function checkPasswordWeakness($user) {
+    if (null == $pwd = $user->_user_password) {
+      return false;
+    }
+
+    $pwdSpecs = $user->_specs['_user_password'];
+    
+    // minLength
+    if ($pwdSpecs->minLength > strlen($pwd)) {
+      return true;
+    }
+	
+    // notContaining
+    if ($pwdSpecs->notContaining) {
+      $target = $pwdSpecs->notContaining;
+        if ($field = $user->$target)
+          if (stristr($pwd, $field))
+             return true;
+    }
+    
+    // notNear
+    if ($pwdSpecs->notNear) {
+      $target = $pwdSpecs->notNear;
+        if ($field = $user->$target)
+          if (levenshtein($pwd, $field) < 3)
+            return true;
+    }
+
+    // alphaAndNum
+    if ($pwdSpecs->alphaAndNum) {
+      if (!preg_match("/[A-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+        return true;
+      }
+    }
+  }
+  
+  /**
+   * Check wether login/password is found
+   * Handler password attempts count
+   *
+   * @param CUser $user
+   * @return bool
+   */
+  function checkPasswordAttempt($user) {
+    $sibling = new CUser;
+    $sibling->user_username = $user->user_username;
+    $sibling->loadMatchingObject();
+    
+    if ($sibling->_login_locked) {
+      $this->setMsg("Auth-failed-user-locked", UI_MSG_ERROR);
+      return false;
+    }
+
+    // Wrong login and/or password
+    if (!$user->_id) {
+      $this->setMsg("Auth-failed-combination", UI_MSG_ERROR);
+
+      // If the user exists, but has given a wrong password let's increment his error count
+	    if ($user->loginErrorsReady() && $sibling->_id) {
+	      $sibling->user_login_errors++;
+	      $sibling->store();
+	      $remainingAttempts = max(0, CAppUI::conf("admin CUser max_login_attempts")-$sibling->user_login_errors);
+	      $this->setMsg("Auth-failed-tried", UI_MSG_ERROR, $sibling->user_login_errors, $remainingAttempts);
+	    }
+      return false;
+    } 
+
+    // Logging succesfull
+    $user->user_login_errors = 0;
+    $user->store();
     return true;
   }
 
