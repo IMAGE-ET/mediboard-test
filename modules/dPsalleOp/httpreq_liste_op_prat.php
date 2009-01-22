@@ -34,6 +34,7 @@ foreach($plagesJour as $curr_plage) {
 $opsJour = new COperation();
 $where = array();
 $where["date"] = "= '$date'";
+$where["annulee"] = "= '0'";
 $groupby = "chir_id";
 $opsJour = $opsJour->loadList($where, null, null, $groupby);
 foreach($opsJour as $curr_op) {

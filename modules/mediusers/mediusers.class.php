@@ -730,6 +730,7 @@ class CMediusers extends CMbObject {
 		$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 		$where = array();
 		$where["operations.plageop_id"] = "IS NOT NULL";
+		$where["operations.annulee"]    = "= '0'";
 		$where["plagesop.salle_id"]     = "!= operations.salle_id";
 		$where["plagesop.date"]         = "= '$date'";
 	  $where["plagesop.chir_id"]      = "= '$this->_id'";
@@ -745,7 +746,7 @@ class CMediusers extends CMbObject {
 	  $urgences = new COperation;
 	  $where = array();
 	  $where["plageop_id"] = "IS NULL";
-	  $where["date"]     = "= '$date'";
+	  $where["date"]       = "= '$date'";
 		$where["chir_id"]    = "= '$this->_id'";
 		$where["annulee"]    = "= '0'";
 	  $order = "chir_id";
