@@ -53,7 +53,7 @@ Main.add(function () {
       <table class="main tbl" id="antecedents_{{$curr_type}}" style="display: none;">
         {{foreach from=$curr_aides item=_curr_aides key=appareil}}
         <tr>
-          <th colspan="1000">{{if $appareil}}{{$appareil}}{{else}}Non spécifié{{/if}}</th>
+          <th colspan="1000">{{if $appareil}}{{$appareil}}{{else}}Tous{{/if}}</th>
         </tr>
         <tr>
         {{foreach from=$_curr_aides item=curr_aide name=aides}}

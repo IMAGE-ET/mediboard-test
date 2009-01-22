@@ -54,6 +54,11 @@ foreach ($antecedent->_helped_fields as $field => $props) {
   }
 }
 
+// Initialisation du tableau d'antecedents
+foreach($antecedent->_specs["type"]->_list as $_type){
+  $aides_antecedent[$_type] = array();
+}
+
 foreach($_aides_antecedent as $type => $_aides){
   foreach($_aides as $_aide_antecedent){
     $aides_antecedent[$type][$_aide_antecedent->depend_value_2][] = $_aide_antecedent;
