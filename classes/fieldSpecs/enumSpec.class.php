@@ -61,6 +61,10 @@ class CEnumSpec extends CMbFieldSpec {
     $defaultOption = CMbArray::extract($params, "defaultOption");
     $extra         = CMbArray::makeXmlAttributes($params);
     $enumsTrans    = $object->_enumsTrans[$field];
+    $alphabet      = CMbArray::extract($params, "alphabet", 0);
+    if($alphabet) {
+      asort($enumsTrans); 
+    }
     
     if ($typeEnum == "select") {
       $sHtml       = "<select name=\"$field\"";
