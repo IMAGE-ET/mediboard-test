@@ -496,17 +496,32 @@ class CMbFieldSpec {
     $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,15,false");
     $form         = CMbArray::extract($params, "form");
     $extra        = CMbArray::makeXmlAttributes($params);
-    
-    $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";
-    $sHtml       .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
-    
+    $spec         = $object->_specs[$field];
+    $ref = false;
+
     list($activated, $minChars, $limit, $wholeString) = explode(',', $autocomplete);
     if ($this->autocomplete && $form && $activated == 'true') {
     	if ($minChars === null) $minChars = 2;
     	if ($limit === null) $limit = 15;
     	if ($wholeString === null) $wholeString = false;
     	
-    	$id = $form.'_'.$field;
+      if ($spec instanceof CRefSpec && $this->autocomplete) {
+	      $view_field = $this->autocomplete;
+	      $ref_object = new $spec->class;
+	      $ref_object->load($value);
+	      $view = $ref_object->$view_field;
+	      
+	      $sHtml      = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
+	                     class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"$extra />";
+	      $sHtml     .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" onchange=\"if(!this.value){this.form.$field.value=''}\" $extra />";
+	      $ref = true;
+	    }
+	    else {
+	      $sHtml      = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+	                     class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra />";
+	    }
+    	
+    	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
     	$sHtml .= '<script type="text/javascript">
     	Main.add(function(){
 			  url = new Url();
@@ -514,14 +529,26 @@ class CMbFieldSpec {
 			  url.addParam("class", "'.$object->_class_name.'");
 			  url.addParam("field", "'.$field.'");
 			  url.addParam("limit", '.$limit.');
+			  url.addParam("view_field", "'.$this->autocomplete.'");
+			  url.addParam("input_field", "'.$field.($ref ? '_autocomplete_view' : '').'");
 			  url.addParam("wholeString", '.$wholeString.');
 			  url.autoComplete($("'.$id.'"), "'.$id.'_autocomplete", {
 			    minChars: '.$minChars.',
-			    method: "get"
-			  });
-		  });
-		  </script>';
+			    method: "get"';
+    	
+    	if ($ref) {
+			  $sHtml .= ',
+		      afterUpdateElement: function(field,selected){
+		        $V(field.form["'.$field.'"], selected.getAttribute("id"));
+          }';
+    	}
+    	
+    	$sHtml .= '});});</script>';
       $sHtml .= '<div style="display:none; width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
+    }
+    else {
+    	$sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+                class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
     }
     return $sHtml;
   }
