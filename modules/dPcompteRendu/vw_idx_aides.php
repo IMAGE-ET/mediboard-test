@@ -24,20 +24,23 @@ foreach($listClass as $sClassName){
     
     foreach($object->_helped_fields as $field =>$help_field){
       $classes[$sClassName][$field] = null;
-      
-      if($help_field){
-        $specType = $object->_specs[$help_field]->getSpecType();
-        if($specType == "enum"){
-          $entryEnums = array();
-          // Ecriture du tableau de traduction
-          foreach($object->_enumsTrans[$help_field] as $key => $sTraduction){
-            $listTraductions["$sClassName.$help_field.$key"] = $sTraduction;
-            $entryEnums[$key] = "$sClassName.$help_field.$key";
-          }
-          $classes[$sClassName][$field] = $entryEnums;
-        }
+      if(is_array($help_field)){
+      foreach($help_field as $num_depend => $_depend_value){
+	      
+	      if($_depend_value){
+	        $specType = $object->_specs[$_depend_value]->getSpecType();
+	        if($specType == "enum"){
+	          $entryEnums = array();
+	          // Ecriture du tableau de traduction
+	          foreach($object->_enumsTrans[$_depend_value] as $key => $sTraduction){
+	            $listTraductions["$sClassName.$_depend_value.$key"] = $sTraduction;
+	            $entryEnums[$key] = "$sClassName.$_depend_value.$key";
+	          }
+	          $classes[$sClassName][$field][$num_depend] = $entryEnums;
+	        }
+	      }
       }
-
+      }
     }
   }
 }
@@ -78,7 +81,7 @@ if ($filter_class) {
   $where["class"] = "= '$filter_class'";
 }
 
-$order = array("user_id", "class", "depend_value", "field", "name");
+$order = array("user_id", "class", "depend_value_1", "field", "name");
 
 // Liste des aides pour le praticien
 $aidesPrat = array();

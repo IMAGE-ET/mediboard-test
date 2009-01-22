@@ -77,7 +77,7 @@ class CCompteRendu extends CMbMetaObject {
 
   function getHelpedFields(){
     return array(
-      "source" => "object_class"
+      "source" => array("depend_value_1" => "object_class", "depend_value_2" => null),
     );
   }
   

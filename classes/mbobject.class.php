@@ -1598,17 +1598,9 @@ class CMbObject {
    * @param ref|CUser $user_id ID de l'utilisateur
    * @param string $needle Permet de filtrer les aides commançant par le filtre, si non null
    */
-  function loadAides($user_id, $needle = null) {
-    // Initialisation des aides
-  	foreach ($this->_helped_fields as $field => $prop) {
+  function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null) {
+    foreach($this->_helped_fields as $field => $depends){
       $this->_aides[$field] = array("no_enum" => null);
-      if ($prop) {
-      	// Création des entrées pour les enums
-        $this->_aides[$field][''] = null;
-        foreach($this->_enums[$prop] as $valueEnum) {
-          $this->_aides[$field][$valueEnum] = null;
-        }
-      }
     }
     
     // Chargement de l'utilisateur courant
@@ -1617,50 +1609,66 @@ class CMbObject {
     
     // Préparation du chargement des aides
     $ds =& $this->_spec->ds;
-    $where = array();
     
+    // Construction du Where
+    $where = array();
     $where["user_id"] = $ds->prepare("= %", $user_id);
     $where["class"]   = $ds->prepare("= %", $this->_class_name);
-    
+
+    if($depend_value_1){
+      $where["depend_value_1"] = " = '$depend_value_1'";
+    }
+    if($depend_value_2){
+      $where["depend_value_2"] = " = '$depend_value_2'";
+    }
     if ($needle) {
       $where[] = $ds->prepare("name LIKE %1 OR text LIKE %2", "%$needle%","%$needle%");
     }
-    
     $order = "name";
     
     // Chargement des Aides de l'utilisateur
     $aide = new CAideSaisie();
     $aides = $aide->loadList($where,$order); 
-    $this->orderAides($aides, "Aides du praticien");
+    $this->orderAides($aides, "Aides du praticien", $depend_value_1, $depend_value_2);
 
     // Chargement des Aides de la fonction de l'utilisateur
     unset($where["user_id"]);
     $where["function_id"] = $ds->prepare("= %", $user->function_id);
     $aides = $aide->loadList($where, $order);  
-    $this->orderAides($aides, "Aides du cabinet");
+    $this->orderAides($aides, "Aides du cabinet", $depend_value_1, $depend_value_2);
   }
   
-  function orderAides($aides, $title) {
-    foreach ($aides as $aide) {
-      $curr_aide =& $this->_aides[$aide->field];
+  function orderAides($aides, $title, $depend_value_1 = null, $depend_value_2 = null) {
+    foreach ($aides as $aide) { 
+      // si on filtre seulement sur depend_value_1, il faut afficher les resultats suivant depend_value_2
+      if($depend_value_1){
+        $depend_field_2 = $this->_helped_fields[$aide->field]['depend_value_2'];
+        $depend_2 = CAppUI::tr("$this->_class_name.$depend_field_2.$aide->depend_value_2");
+        if($aide->depend_value_2){
+          $this->_aides[$aide->field][$title][$depend_2][$aide->text] = $aide->name;
+        } else {
+          $depend_name_2 = CAppUI::tr("$this->_class_name-$depend_field_2");
+          $this->_aides[$aide->field][$title]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
+        }
+        continue;
+      }
+      
+      // on passe un appareil, on trie par type
+      if($depend_value_2){
+        $depend_field_1 = $this->_helped_fields[$aide->field]['depend_value_1'];
+        $depend_1 = CAppUI::tr("$this->_class_name.$depend_field_1.$aide->depend_value_1");
+        if($aide->depend_value_1){    
+          $this->_aides[$aide->field][$title][$depend_1][$aide->text] = $aide->name;
+        } else {
+          $depend_name_1 = CAppUI::tr("$this->_class_name-$depend_field_1");
+          $this->_aides[$aide->field][$title]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
+        }
+        continue;
+      }
+      $this->_aides_all_depends[$aide->field][$title][$aide->depend_value_1][$aide->depend_value_2][$aide->text] = $aide->name;
       
       // Ajout de l'aide à la liste générale
-      $curr_aide["no_enum"][$title][$aide->text] = $aide->name; 
-      
-      // Verification de l'existance des clé dans le tableaux
-      $linkField = @$this->_helped_fields[$aide->field];
-      if (!$aide->depend_value && $linkField) {
-        // depend de toutes les entrées
-        foreach ($this->_enums[$linkField] as $valueEnum){
-          $curr_aide[$valueEnum][$title][$aide->text] = $aide->name;
-        }
-        
-        $curr_aide[""][$title][$aide->text] = $aide->name;
-      }
-      
-      if ($aide->depend_value) {
-        $curr_aide[$aide->depend_value][$title][$aide->text] = $aide->name;
-      }
+      $this->_aides[$aide->field]["no_enum"][$title][$aide->text] = $aide->name;
     }
   }
   

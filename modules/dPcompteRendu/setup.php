@@ -304,8 +304,14 @@ class CSetupdPcompteRendu extends CSetup {
     // <br style="page-break-after: always;" />
     // Apres verification, c'est toujours comme ça quil a transformé, donc c'est OK.
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.41");
+    $sql = "ALTER TABLE `aide_saisie` 
+			      CHANGE `depend_value` `depend_value_1` VARCHAR (255),
+            ADD `depend_value_2` VARCHAR (255);";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.41";
+    $this->mod_version = "0.42";
   }
 }
 ?>

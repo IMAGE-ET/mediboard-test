@@ -8,16 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function addHelp(sClass, oField, sName, sDepend) {
+function addHelp(sClass, oField, sName, sDepend1, sDepend2) {
   url = new Url;
-  if(!sDepend) {
-    sDepend = null;
+  if(!sDepend1) {
+    sDepend1 = null;
+  }
+  if(!sDepend2) {
+    sDepend2 = null;
   }
   url.setModuleAction("dPcompteRendu", "edit_aide");
   url.addParam("class"       , sClass);
   url.addParam("field"       , sName || oField.name);
   url.addParam("text"        , oField.value);
-  url.addParam("depend_value", sDepend);
+  url.addParam("depend_value_1", sDepend1);
+  url.addParam("depend_value_2", sDepend2)
   url.popup(600, 300, "AidesSaisie");
 }
 

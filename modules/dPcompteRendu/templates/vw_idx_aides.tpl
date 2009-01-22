@@ -50,36 +50,56 @@ function loadFields(value) {
   loadDependances();
 }
 
-function loadDependances(value){
+function loadDependances(depend_value_1, depend_value_2){
+
   var form = document.editFrm;
-  var select = form.elements['depend_value'];
+  var select_depend_1 = form.elements['depend_value_1'];
+  var select_depend_2 = form.elements['depend_value_2'];
   var className  = form.elements['class'].value;
   var fieldName  = form.elements['field'].value;
   var options = classes[className];
 
   // delete all former options except first
-  while (select.length > 1) {
-    select.options[1] = null;
+  while (select_depend_1.length > 1) {
+    select_depend_1.options[1] = null;
+  }
+  while (select_depend_2.length > 1) {
+    select_depend_2.options[1] = null;
   }
   
   if(!options){
    return;
   }
-  options = classes[className][fieldName];
   
-  // insert new ones
-  for (var elm in options) {
-    var option = options[elm];
+  if(!classes[className][fieldName]){
+  return;
+  }
+  
+  options_depend_1 = classes[className][fieldName]['depend_value_1'];
+  options_depend_2 = classes[className][fieldName]['depend_value_2'];
+  
+  // Depend value 1
+  for (var elm in options_depend_1) {
+    var option = options_depend_1[elm];
     if (typeof(option) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(aTraduction[option], elm, elm == value);
+      select_depend_1.options[select_depend_1.length] = new Option(aTraduction[option], elm, elm == depend_value_1);
     }
   }
+  
+  // Depend value 2
+  for (var elm in options_depend_2) {
+    var option = options_depend_2[elm];
+    if (typeof(option) != "function") { // to filter prototype functions
+      select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
+    }
+  }
+  
 }
 
 Main.add(function () {
   loadClasses('{{$aide->class}}');
   loadFields('{{$aide->field}}');
-  loadDependances('{{$aide->depend_value}}');
+  loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
 });
 
 </script>
@@ -135,7 +155,8 @@ Main.add(function () {
     <tr>
       <th>Type d'objet</th>
       <th>Champ de l'objet</th>
-      <th>Dépendance</th>
+      <th>Dépendance 1</th>
+      <th>Dépendance 2</th>
       <th>Nom de l'aide</th>
       <th>Texte de remplacement</th>
     </tr>
@@ -153,12 +174,20 @@ Main.add(function () {
       <td><a href="{{$href}}">{{$field}}</a></td>
       <td>
         <a href="{{$href}}">
-        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field}}
-           <!-- 
-          {{$curr_aide->_ref_abstat_object->_helped_fields.$field}} :
-           -->
-          {{if $curr_aide->depend_value}}
-            {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field}}.{{$curr_aide->depend_value}}{{/tr}}
+        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}
+          {{if $curr_aide->depend_value_1}}
+            {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}.{{$curr_aide->depend_value_1}}{{/tr}}
+          {{else}}
+            Aucune
+          {{/if}}
+        {{else}}&mdash;{{/if}}
+        </a>
+      </td>
+      <td>
+        <a href="{{$href}}">
+        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}
+          {{if $curr_aide->depend_value_2}}
+            {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}.{{$curr_aide->depend_value_2}}{{/tr}}
           {{else}}
             Aucune
           {{/if}}
@@ -183,10 +212,18 @@ Main.add(function () {
       <td><a href="{{$href}}">{{$field}}</a></td>
       <td>
         <a href="{{$href}}">
-        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field}}
-          {{$curr_aide->_ref_abstat_object->_helped_fields.$field}}
-          {{if $curr_aide->depend_value}}
-          : {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field}}.{{$curr_aide->depend_value}}{{/tr}}
+        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}
+          {{if $curr_aide->depend_value_1}}
+           {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}.{{$curr_aide->depend_value_1}}{{/tr}}
+          {{/if}}
+        {{else}}&mdash;{{/if}}
+        </a>
+      </td>
+      <td>
+        <a href="{{$href}}">
+        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}
+          {{if $curr_aide->depend_value_2}}
+           {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}.{{$curr_aide->depend_value_2}}{{/tr}}
           {{/if}}
         {{else}}&mdash;{{/if}}
         </a>
@@ -267,13 +304,23 @@ Main.add(function () {
     </tr>
     
     <tr>
-      <th>{{mb_label object=$aide field="depend_value"}}</th>
+      <th>{{mb_label object=$aide field="depend_value_1"}}</th>
       <td>
-        <select name="depend_value" class="{{$aide->_props.depend_value}}">
+        <select name="depend_value_1" class="{{$aide->_props.depend_value_1}}">
           <option value="">&mdash; Tous</option>
         </select>
       </td>
     </tr>
+    
+    <tr>
+      <th>{{mb_label object=$aide field="depend_value_2"}}</th>
+      <td>
+        <select name="depend_value_2" class="{{$aide->_props.depend_value_2}}">
+          <option value="">&mdash; Tous</option>
+        </select>
+      </td>
+    </tr>
+    
 
     <tr>
       <th>{{mb_label object=$aide field="name"}}</th>

@@ -111,10 +111,22 @@ DossierMedical = {
     {{/if}}
 	}
 }
- 
+
+refreshAidesAntecedents = function(){
+  var url = new Url;
+  var oForm = document.editAntFrm;
+  url.setModuleAction("dPcompteRendu", "httpreq_vw_select_aides");
+  url.addParam("object_class", "CAntecedent");
+  url.addParam("depend_value_1", oForm.type.value);
+  url.addParam("depend_value_2", oForm.appareil.value);
+  url.addParam("user_id", "{{$userSel->_id}}")
+  url.addParam("field", "rques");
+  url.requestUpdate('div_helpers_rques', { waitingText: null } );
+}
  
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
+  refreshAidesAntecedents();
 });
 
 </script>
@@ -155,20 +167,10 @@ Main.add(function () {
           
           <td id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
-            {{foreach from=$antecedent->_aides.rques item=_helpers key=dependsOn}}
-            {{if $dependsOn != "no_enum"}} 
-            <select name="_helpers_rques-{{$dependsOn}}" style="width: 80px; display:none;" size="1" onchange="pasteHelperContent(this)">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
-                <optgroup label="{{$sTitleOpt}}">
-                  {{html_options options=$list_aides}}
-                </optgroup>
-              {{/foreach}}
-            </select>
-            {{/if}}
-            {{/foreach}}
+						<span id="div_helpers_rques">
+						</span>
             <input type="hidden" name="_hidden_rques" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value)">
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value)">
               Nouveau
             </button>
           </td>
@@ -183,7 +185,7 @@ Main.add(function () {
 			      <script type="text/javascript">
 			      	Main.add(function() {
 				        prepareForm(document.editAntFrm);
-				        new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "_search", "CAntecedent", "{{$userSel->_id}}");
+				        new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "appareil", "_search", "CAntecedent", "{{$userSel->_id}}");
 			      	} );
 			      </script>
 			    </td>
@@ -195,10 +197,17 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$antecedent field="type"}}</th>
           <td>
-            {{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" onchange="putHelperContent(this,'rques')"}}
+            {{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" onchange="refreshAidesAntecedents()"}}
           </td>
         </tr>
 
+        <tr>
+          <th>{{mb_label object=$antecedent field="appareil"}}</th>
+          <td>
+            {{mb_field object=$antecedent field="appareil" defaultOption="&mdash; Aucun" onchange="refreshAidesAntecedents()"}}
+          </td>
+        </tr>
+        
         <tr>
           <td class="button" colspan="2">
             <button class="tick" type="button">
@@ -264,7 +273,7 @@ Main.add(function () {
 			      <script type="text/javascript">
 			      	Main.add(function() {
 			      		prepareForm(document.editTrmtFrm);
-				        new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, "_search", "CTraitement", "{{$userSel->_id}}");
+				        new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, null, "_search", "CTraitement", "{{$userSel->_id}}");
 			      	} );
 			      </script>
 			    </td>

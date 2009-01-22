@@ -189,13 +189,13 @@ class CTemplateManager {
     
     $this->helpers["Aide de l'utilisateur"] = "";
     foreach($aidesUser as $aideUser){
-      if($aideUser->depend_value == $modeleType){
+      if($aideUser->depend_value_1 == $modeleType){
         $this->helpers[$aideUser->name] = $aideUser->text;
       }
     }
     $this->helpers["Aide de la fonction"] = "";
     foreach($aidesFunc as $aideFunc){
-      if($aideFunc->depend_value == $modeleType){
+      if($aideFunc->depend_value_1 == $modeleType){
         $this->helpers[$aideFunc->name] = $aideFunc->text;
       } 
    }

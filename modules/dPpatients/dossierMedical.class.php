@@ -121,6 +121,23 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
   
+  function loadRefsAntecedentsByAppareil(){
+    // Initialisation du classement
+    $ant = new CAntecedent();
+    foreach (explode("|", $ant->_specs["appareil"]->list) as $appareil) {
+      $this->_ref_antecedents_by_appareil[$appareil] = array();
+    }
+    $order = "type ASC";
+    if (null == $antecedents = $this->loadBackRefs("antecedents", $order)) {
+      return;
+    }
+    // Classements des antécédents
+    foreach ($antecedents as $_antecedent) {
+    	if ($_antecedent->annule == 0)
+        $this->_ref_antecedents_by_appareil[$_antecedent->appareil][$_antecedent->_id] = $_antecedent;
+    }
+  }
+  
   function loadRefsEtatsDents() {
     $etat_dent = new CEtatDent();
     if ($this->_id) {
@@ -168,6 +185,7 @@ class CDossierMedical extends CMbMetaObject {
     $this->loadRefsAntecedents();
     if (is_array($this->_ref_antecedents)){
       $sAntecedents = "";
+
       foreach ($this->_ref_antecedents as $keyAnt => $currTypeAnt) {
         $aAntecedentsParType = array();
         $sType =  CAppUI::tr("CAntecedent.type.".$keyAnt);
@@ -187,8 +205,33 @@ class CDossierMedical extends CMbMetaObject {
 	        $sAntecedents .="<br />{$sType}{$sAntecedentsParType}";
         }
       }
-      
       $template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
+    }
+    
+    $this->loadRefsAntecedentsByAppareil();
+      if (is_array($this->_ref_antecedents_by_appareil)){
+      $sAntecedentsApp = "";
+  
+      foreach ($this->_ref_antecedents_by_appareil as $keyAppAnt => $currAppAnt) {
+        $aAntecedentsParApp = array();
+        $sApp =  CAppUI::tr("CAntecedent.appareil.".$keyAppAnt);
+        foreach ($currAppAnt as $currAppAnt) {
+          $sAntecedentApp = "&bull; ";
+          if ($currAppAnt->date) { 
+            $sAntecedentApp .= mbDateToLocale($currAppAnt->date) . " : ";
+          }
+          $sAntecedentApp .= $currAppAnt->rques;
+          $aAntecedentsParApp[] = $sAntecedentApp;
+        }
+        $sAntecedentsParApp = join("<br />", $aAntecedentsParApp);
+
+        $template->addProperty("$champ - Antécédents - $sApp", $sAntecedentsParApp);
+        
+        if (count($currAppAnt)) {
+	        $sAntecedentsApp .="<br />{$sType}{$sAntecedentsParApp}";
+        }
+      }
+      //$template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
     }
     
     // Traitements

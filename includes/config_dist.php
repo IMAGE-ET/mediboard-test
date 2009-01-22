@@ -287,8 +287,9 @@ $dPconfig["dPpatients"] = array (
   
   "CAntecedent" => array (
     "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
+    "appareils" => "cardiovasculaire|digestif|endocrinien|neuro_psychiatrique|pulmonaire|uro_nephrologique"
   ),
-
+  
   "CTraitement" => array (
     "enabled" => "1",
   ),

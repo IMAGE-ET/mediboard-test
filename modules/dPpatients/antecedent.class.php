@@ -13,6 +13,7 @@ class CAntecedent extends CMbObject {
 
   // DB fields
   var $type               = null;
+  var $appareil           = null;
   var $date               = null;
   var $rques              = null;
   var $dossier_medical_id = null;
@@ -31,6 +32,11 @@ class CAntecedent extends CMbObject {
 	  'hemato', 'rhumato', 'neuropsy', 'infect',
 	  'endocrino', 'carcino', 'orl', 'addiction', 'habitus'
 	);
+	  
+	static $appareils = array(
+	  'cardiovasculaire', 'digestif', 'endocrinien', 'neuro_psychiatrique',
+	  'pulmonaire', 'uro_nephrologique'
+	);
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -42,11 +48,11 @@ class CAntecedent extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["type"]  = "enum list|".CAppUI::conf("dPpatients CAntecedent types");
+    $specs["appareil"] = "enum list|".CAppUI::conf("dPpatients CAntecedent appareils");
     $specs["date"]  = "date";
     $specs["rques"] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";
     $specs["annule"] = "bool";
-    
     $specs["_search"] = "str";
     return $specs;
   }
@@ -96,9 +102,11 @@ class CAntecedent extends CMbObject {
   }
   
   function getHelpedFields(){
+    //type => depend_value_1
+    //appareil => depend_value_2
     return array(
-      "rques" => "type"
-    );
+      "rques" => array("depend_value_1" => "type", "depend_value_2" => "appareil")
+    ); 
   }
 }
 

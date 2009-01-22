@@ -14,7 +14,8 @@ $ds = CSQLDataSource::get("std");
 $field        = mbGetValueFromGet("field");
 $text         = utf8_decode(mbGetValueFromGet("text" ));
 $class        = mbGetValueFromGet("class");
-$depend_value = mbGetValueFromGet("depend_value");
+$depend_value_1 = mbGetValueFromGet("depend_value_1");
+$depend_value_2 = mbGetValueFromGet("depend_value_2");
 
 // Liste des users accessibles
 $listPrat = new CMediusers();
@@ -27,8 +28,11 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 // Objet ciblé
 $object = new $class;
 $dependValues = null;
-if ($depend_field = $object->_helped_fields[$field]) {
-  $dependValues = @$object->_enumsTrans[$depend_field];
+
+if(count($object->_helped_fields[$field])){
+  foreach($object->_helped_fields[$field] as $key => $depend_field){
+    $dependValues[$key] = @$object->_enumsTrans[$depend_field];  
+  }
 }
 
 // Nouvelle Aide à la saisie
@@ -36,7 +40,8 @@ $aide = new CAideSaisie();
 $aide->class        = $class;
 $aide->field        = $field;
 $aide->text         = stripslashes($text);
-$aide->depend_value = $depend_value;
+$aide->depend_value_1 = $depend_value_1;
+$aide->depend_value_2 = $depend_value_2;
 $aide->user_id = $AppUI->user_id;
 
 // Création du template

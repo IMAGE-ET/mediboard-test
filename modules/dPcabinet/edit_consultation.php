@@ -153,7 +153,7 @@ if ($consult->_id){
 
 // Chargement des aides à la saisie
 $antecedent = new CAntecedent();
-$antecedent->loadAides($userSel->user_id);
+//$antecedent->loadAides($userSel->user_id);
 
 $traitement = new CTraitement();
 $traitement->loadAides($userSel->user_id);

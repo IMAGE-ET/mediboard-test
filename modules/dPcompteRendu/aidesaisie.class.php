@@ -20,7 +20,8 @@ class CAideSaisie extends CMbObject {
   var $field              = null;
   var $name               = null;
   var $text               = null;
-  var $depend_value       = null;
+  var $depend_value_1     = null;
+  var $depend_value_2     = null;
   
   // Referenced objects
   var $_ref_user          = null;
@@ -43,11 +44,12 @@ class CAideSaisie extends CMbObject {
     }else{
       $where["function_id"] = $this->_spec->ds->prepare("= %",$this->function_id);
     }
-    $where["class"]        = $this->_spec->ds->prepare("= %",$this->class);
-    $where["field"]        = $this->_spec->ds->prepare("= %",$this->field);
-    $where["depend_value"] = $this->_spec->ds->prepare("= %",$this->depend_value);
-    $where["text"]         = $this->_spec->ds->prepare("= %",$this->text);
-    $where["aide_id"]      = $this->_spec->ds->prepare("!= %",$this->aide_id);
+    $where["class"]          = $this->_spec->ds->prepare("= %",$this->class);
+    $where["field"]          = $this->_spec->ds->prepare("= %",$this->field);
+    $where["depend_value_1"] = $this->_spec->ds->prepare("= %",$this->depend_value_1);
+    $where["depend_value_2"] = $this->_spec->ds->prepare("= %",$this->depend_value_2);
+    $where["text"]           = $this->_spec->ds->prepare("= %",$this->text);
+    $where["aide_id"]        = $this->_spec->ds->prepare("!= %",$this->aide_id);
     
     $sql = new CRequest();
     $sql->addSelect("count(aide_id)");
@@ -71,7 +73,8 @@ class CAideSaisie extends CMbObject {
     $specs["field"]        = "notNull str";
     $specs["name"]         = "notNull str";
     $specs["text"]         = "notNull text";
-    $specs["depend_value"] = "str";
+    $specs["depend_value_1"] = "str";
+    $specs["depend_value_2"] = "str";
     return $specs;
   }
   

@@ -11,6 +11,9 @@ $locales['CAideSaisie-class-desc'] = 'Type d\'objet concerné, obligatoire.';
 $locales['CAideSaisie-depend_value'] = 'Dépendance';
 $locales['CAideSaisie-depend_value-court'] = 'Dépendance';
 $locales['CAideSaisie-depend_value-desc'] = 'Valeur liée a l\'aide';
+$locales['CAideSaisie-depend_value_1'] = 'Dépendance 1';
+$locales['CAideSaisie-depend_value_1-court'] = 'Dépendance 1';
+$locales['CAideSaisie-depend_value_1-desc'] = 'Valeur liée a l\'aide';
 $locales['CAideSaisie-field'] = 'Champ';
 $locales['CAideSaisie-field-court'] = 'Champ';
 $locales['CAideSaisie-field-desc'] = 'Champ de l\'objet concerné, obligatoire.';
@@ -208,4 +211,7 @@ $locales['pref-saveOnPrint'] = 'Demande de sauvegarde lors de l\'impression';
 $locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
 $locales['pref-saveOnPrint-0'] = 'Non';
 $locales['pref-saveOnPrint-1'] = 'Oui';
+$locales['CAideSaisie-depend_value_2'] = 'Dépendance 2';
+$locales['CAideSaisie-depend_value_2-court'] = 'Dépendance 2';
+$locales['CAideSaisie-depend_value_2-desc'] = 'Valeur liée a l\'aide';
 ?>

@@ -64,20 +64,34 @@ function submitFormAides(oForm){
     <td>{{tr}}{{$aide->class}}-{{$aide->field}}{{/tr}}</td>
   </tr>
 
-  {{if $dependValues}}
+  {{if $dependValues.depend_value_1}}
   <tr>
-    <th>{{mb_label object=$aide field="depend_value"}}</th>
+    <th>{{mb_label object=$aide field="depend_value_1"}}</th>
     <td>
-      <select name="depend_value" class="{{$aide->_props.depend_value}}">
+      <select name="depend_value_1" class="{{$aide->_props.depend_value_1}}">
         <option value="">&mdash; Tous</option>
-        {{foreach from=$dependValues key=_value item=_translation}}
-        <option value="{{$_value}}" {{if $_value == $aide->depend_value}}selected="selected"{{/if}}>{{$_translation}}</option>
+        {{foreach from=$dependValues.depend_value_1 key=_value item=_translation}}
+        <option value="{{$_value}}" {{if $_value == $aide->depend_value_1}}selected="selected"{{/if}}>{{$_translation}}</option>
         {{/foreach}}
       </select>
     </td>
   </tr>
   {{/if}}
 
+  {{if $dependValues.depend_value_2}}
+  <tr>
+    <th>{{mb_label object=$aide field="depend_value_2"}}</th>
+    <td>
+      <select name="depend_value_2" class="{{$aide->_props.depend_value_2}}">
+        <option value="">&mdash; Tous</option>
+        {{foreach from=$dependValues.depend_value_2 key=_value item=_translation}}
+        <option value="{{$_value}}" {{if $_value == $aide->depend_value_2}}selected="selected"{{/if}}>{{$_translation}}</option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  {{/if}}
+  
   <tr>
     <th>{{mb_label object=$aide field="name"}}</th>
     <td>{{mb_field object=$aide field="name"}}</td>

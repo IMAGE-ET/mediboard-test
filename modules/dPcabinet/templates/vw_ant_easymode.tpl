@@ -51,8 +51,12 @@ Main.add(function () {
     <td>
       {{foreach from=$aides_antecedent item=curr_aides key=curr_type}}
       <table class="main tbl" id="antecedents_{{$curr_type}}" style="display: none;">
+        {{foreach from=$curr_aides item=_curr_aides key=appareil}}
         <tr>
-        {{foreach from=$curr_aides item=curr_aide name=aides}}
+          <th colspan="1000">{{if $appareil}}{{$appareil}}{{else}}Non spécifié{{/if}}</th>
+        </tr>
+        <tr>
+        {{foreach from=$_curr_aides item=curr_aide name=aides}}
           {{assign var=i value=$smarty.foreach.aides.index}}
           <td class="text" style="cursor: pointer; width: {{$width}}%;" 
               title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
@@ -65,6 +69,7 @@ Main.add(function () {
           <td>{{tr}}CAideSaisie.none{{/tr}}</td>
         {{/foreach}}
         </tr>
+        {{/foreach}}
       </table>
       {{foreachelse}}
         {{tr}}CAideSaisie.none{{/tr}}
@@ -72,6 +77,9 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+
+
+
 
 {{assign var=numCols value=4}}
 <!-- Traitements -->

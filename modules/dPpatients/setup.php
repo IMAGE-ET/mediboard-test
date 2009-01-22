@@ -937,8 +937,13 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.78");
     $sql = "ALTER TABLE `medecin` ADD `portable` BIGINT(10) UNSIGNED ZEROFILL NULL";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.79");
+    $sql = "ALTER TABLE `antecedent` 
+	        	ADD `appareil` ENUM ('cardiovasculaire','endocrinien','neuro_psychiatrique','uro_nephrologique','digestif','pulmonaire');";
+    $this->addQuery($sql);
 		
-    $this->mod_version = "0.79";
+    $this->mod_version = "0.80";
   }
 }
 

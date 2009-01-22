@@ -11,15 +11,17 @@ Class.extend(AideSaisie.AutoComplete, {
   sForm: null,
   sTextField: null,
   sDependField: null,
+  sDependField2: null,
   sSearchField: null,
   
   // Constructor
-  initialize: function(sForm, sTextField, sDependField, sSearchField, object_class, user_id) {
+  initialize: function(sForm, sTextField, sDependField, sDependField2, sSearchField, object_class, user_id) {
     this.sForm = sForm;
     this.sTextField   = sTextField  ;
     this.sDependField = sDependField;
+    this.sDependField2 = sDependField2;
     this.sSearchField = sSearchField;
-    
+
     url = new Url();
     url.setModuleAction("dPcompteRendu", "httpreq_do_aide_autocomplete");
     url.addParam("property", sTextField);
@@ -57,6 +59,10 @@ Class.extend(AideSaisie.AutoComplete, {
   update: function(selected) {
     var oDepend = selected.select(".depend")[0];
     var sDepend = oDepend ? oDepend.textContent : "";
+    
+    var oDepend2 = selected.select(".depend2")[0];
+    var sDepend2 = oDepend2 ? oDepend2.textContent : "";
+    
     var sText   = selected.select(".text"  )[0].textContent;
     
     var oForm = document[this.sForm];
@@ -65,6 +71,10 @@ Class.extend(AideSaisie.AutoComplete, {
 	    $V(oForm[this.sDependField], sDepend);
     }
 
+		if (this.sDependField2) {
+	    $V(oForm[this.sDependField2], sDepend2);
+    }
+    
     $V(oForm[this.sTextField  ], sText);
     oForm[this.sTextField  ].focus();
     oForm[this.sSearchField].value = "";

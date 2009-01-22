@@ -30,26 +30,33 @@ $aides_antecedent = array();
 
 // Préparation du chargement des aides
 $where = array();
-$where[]        = "user_id = '$user_id' OR function_id = '$user->function_id'"; // We do not need it to be classified
+$where[] = "user_id = '$user_id' OR function_id = '$user->function_id'"; // We do not need it to be classified
 $where["class"] = "= '$antecedent->_class_name'";
 $order = "name";
 
 $aide = new CAideSaisie();
+
 // Initialisation des aides
-foreach ($antecedent->_helped_fields as $field => $prop) {
+foreach ($antecedent->_helped_fields as $field => $props) {
+ $prop = $props["depend_value_1"];
   if ($prop) {
     // Chargement des Aides de l'utilisateur
     foreach ($antecedent->_enums[$prop] as $type) {
-    	$where["depend_value"] = "= '$type'";
+    	$where["depend_value_1"] = "= '$type'";
       $aides = $aide->loadList($where, $order);
-		  $aides_antecedent[$type] = $aides;
+		  $_aides_antecedent[$type] = $aides;
     }
-    
-    $where["depend_value"] = 'IS NULL';
+    $where["depend_value_1"] = 'IS NULL';
     $aides = $aide->loadList($where, $order);
     if (count($aides)) {
-      $aides_antecedent[] = $aides;
+      $_aides_antecedent[] = $aides;
     }
+  }
+}
+
+foreach($_aides_antecedent as $type => $_aides){
+  foreach($_aides as $_aide_antecedent){
+    $aides_antecedent[$type][$_aide_antecedent->depend_value_2][] = $_aide_antecedent;
   }
 }
 
