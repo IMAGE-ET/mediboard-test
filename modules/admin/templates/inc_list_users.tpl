@@ -28,17 +28,17 @@
       </select>
     </td>
    </tr>
+
    <tr>
-   <th colspan="3"><label for="template" title="Statut">Statut</label></th>
-    <td class="text">
-    <select name="template">
-    <option value="">&mdash; Choisir le statut</option>
-    <option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
-    <option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
-    </select>
+	   <th colspan="3"><label for="template" title="Statut">Statut</label></th>
+
+	   <td class="text">
+			<select tabindex="4" name="template">
+				<option value="">&mdash; Choisir le statut</option>
+				<option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
+				<option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
+			</select>
     </td>
-    
-    
   </tr>
     
   <tr>

@@ -16,6 +16,7 @@ $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
 // Récuperation de l'utilisateur sélectionné
 $user = new CUser;
 $user->load($user_id);
+$user->loadRefMediuser();
 
 // Récuperation des utilisateurs recherchés
 $user_last_name  = mbGetValueFromGetOrSession("user_last_name" , "");
@@ -30,7 +31,6 @@ if ($user_first_name) $where["user_first_name"] = "LIKE '".addslashes($user_firs
 if ($user_username  ) $where["user_username"]   = "LIKE '".addslashes($user_username)."%'";
 if ($user_type      ) $where["user_type"]       = "= '".addslashes($user_type)."'";
 if ($template != null)$where["template"]        = "= '".addslashes($template)."'";
-
 
 $users = null;
 if ($where) {
