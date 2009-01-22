@@ -1486,21 +1486,6 @@ class CMbObject {
 
   /**
    * Converts string specifications to objet specifications
-   * @TODO Ref: should parse props instead of object_vars 
-   */
-  function getSpecsObjNew() {
-    $specs =& $this->_props;
-    $props = get_object_vars($this);
-    
-    $spec = array();
-    foreach ($props as $k => $v) {
-      $spec[$k] = CMbFieldSpecFact::getSpec($this, $k, array_key_exists($k, $specs) ? $specs[$k] : null);
-    }
-    return $spec;
-  }
-  
-  /**
-   * Converts string specifications to objet specifications
    * Optimized version
    */
     function getSpecsObj() {

@@ -34,6 +34,7 @@ class CUser extends CMbObject {
   var $_login_locked    = null;
 
   var $_ref_preferences = null;
+  var $_ref_mediuser    = null;
   
   static $types = array(
     // DEFAULT USER (nothing special)
@@ -136,6 +137,14 @@ class CUser extends CMbObject {
       $this->_props['_user_password_weak'];
   }
 
+  function loadRefMediuser() {
+    $user = new CMediusers();
+    if ($user->isInstalled()) {
+	    $user->load($this->_id);
+	    $this->_ref_mediuser = $user;
+    }
+  }
+  
   function getSeeks() {
     return array (
       "user_last_name"  => "likeBegin",
@@ -167,6 +176,15 @@ class CUser extends CMbObject {
   }
 
   function check() {
+    // username has to be unique
+    $this->completeField("user_username");
+    $where["user_id"]       = "!= '$this->_id'";
+    $where["user_username"] = "= '$this->user_username'";
+    $siblings = $this->loadList($where);
+    if (count($siblings)) {
+      return "Nom d'utilisateur déjà existant'"; 
+    }
+    
     // Chargement des specs des attributs du mediuser
     $this->updateSpecs();
     

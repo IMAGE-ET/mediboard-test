@@ -43,4 +43,31 @@
     
   </tr>
 </table>
+
 </form>
+
+
+<h2>Actions</h2>
+
+<script type="text/javascript">
+
+function checkSiblings() {
+  var CCAMUrl = new Url;
+  CCAMUrl.setModuleAction("admin", "check_siblings");
+  CCAMUrl.requestUpdate("check_siblings");
+}
+
+</script>
+
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="checkSiblings()">{{tr}}mod-admin-action-check_siblings{{/tr}}</button></td>
+    <td id="check_siblings"></td>
+  </tr>
+</table>
+
