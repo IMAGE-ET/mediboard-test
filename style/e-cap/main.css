@@ -393,7 +393,7 @@ a.buttondown,
 a.buttonup {
 	padding-left: 22px;
 	padding-right: 4px;
-	padding-top: 1px;
+	padding-top: 2px;
 }
 
 button:hover,
