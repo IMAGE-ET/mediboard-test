@@ -80,7 +80,7 @@ $ajax = dPgetParam($_REQUEST, "ajax", false);
 $dialog = dPgetParam($_REQUEST, "dialog");
 
 // check if the user is trying to log in
-if (isset($_POST["login"])) {
+if (isset($_REQUEST["login"])) {
   include_once("./locales/core.php");
   $redirect = dPgetParam($_REQUEST, "redirect", "");
 

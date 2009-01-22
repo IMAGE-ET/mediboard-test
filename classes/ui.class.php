@@ -419,14 +419,14 @@ class CAppUI {
   	$ds = CSQLDataSource::get("std");
     // Test login and password validity
     $user = new CUser;
-    $user->user_username  = trim(mbGetValueFromPost("username"));
-    $user->_user_password = trim(mbGetValueFromPost("password"));
+    $user->user_username  = trim($_REQUEST["username"]);
+    $user->_user_password = trim($_REQUEST["password"]);
     
     $specsObj = $user->getSpecsObj();
     $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
     
     // Login as, for administators
-    if ($loginas = mbGetValueFromPost("loginas")) {
+    if ($loginas = $_REQUEST["loginas"]) {
       if ($this->user_type != 1) {
         $this->setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
         return false;
@@ -478,7 +478,7 @@ class CAppUI {
     $user->loadMatchingObject();
     
     $userByName = new CUser;
-    $userByName->user_username = trim(mbGetValueFromPost("username"));
+    $userByName->user_username = trim($_REQUEST["username"]);
     $userByName->loadMatchingObject();
     
     if ($userByName->_login_locked) {
