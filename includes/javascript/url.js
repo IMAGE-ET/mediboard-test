@@ -169,20 +169,19 @@ var Url = Class.create({
           });
         }
         Effect.Appear(update,{duration:0.25});
-        element.removeClassName("throbbing");
-      },
-	    callback: function(element, queryString){
-      	element.addClassName("throbbing");
-      	return queryString;
-	    }
+      }
     };
+    
+    var input = $(idInput);
     Object.extend(oOptions, oUserOptions);
 
     // Autocomplete
     this.addParam("ajax", "1");
     this.addParam("suppressHeaders", "1");
     
-		new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
+		var autocompleter = new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
+		autocompleter.startIndicator = function(){input.addClassName("throbbing")};
+		autocompleter.stopIndicator = function(){input.removeClassName("throbbing")};
   },
   
   close: function() {
