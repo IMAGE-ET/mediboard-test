@@ -341,3 +341,13 @@ button.notext, a.notext {
 .control select {
   margin: 0;
 }
+
+input.autocomplete {
+  background-image: url(../../images/icons/throbber.gif);
+  background-position: 100% 1px;
+  background-repeat: no-repeat;
+}
+
+input.autocomplete.throbbing {
+  background-position: 100% -19px;
+}

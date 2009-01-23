@@ -17,9 +17,6 @@ $wholeString = mbGetValueFromGet('wholeString', 'false') == 'true';
 
 $search = $wholeString ? "%$input%" : "$input%";
 
-/*mbTrace($_GET);
-CApp::rip();*/
-
 $object = new $class;
 $spec = $object->_specs[$field];
 if ($spec instanceof CRefSpec) {

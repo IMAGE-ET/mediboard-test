@@ -169,8 +169,12 @@ var Url = Class.create({
           });
         }
         Effect.Appear(update,{duration:0.25});
-      }
-          
+        element.removeClassName("throbbing");
+      },
+	    callback: function(element, queryString){
+      	element.addClassName("throbbing");
+      	return queryString;
+	    }
     };
     Object.extend(oOptions, oUserOptions);
 

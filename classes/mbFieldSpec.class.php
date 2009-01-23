@@ -512,8 +512,9 @@ class CMbFieldSpec {
 	      $view = $ref_object->$view_field;
 	      
 	      $sHtml      = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
-	                     class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"$extra />";
-	      $sHtml     .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" onchange=\"if(!this.value){this.form.$field.value=''}\" $extra />";
+	                     class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra />";
+	      $sHtml     .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
+	                     class=\"autocomplete\" onchange=\"if(!this.value){this.form.$field.value=''}\" $extra />";
 	      $ref = true;
 	    }
 	    else {
