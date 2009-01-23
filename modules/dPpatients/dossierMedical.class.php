@@ -29,6 +29,7 @@ class CDossierMedical extends CMbMetaObject {
   
   // Derived back references
   var $_count_antecedents = null;
+  var $_count_canceleld_antecedents = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -160,15 +161,21 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
 
-  function countAntecedents($cancelled = false){
+  /**
+   * Compte les antécédents annulés et non-annulés
+   */
+  function countAntecedents(){
+    
   	$antedecent = new CAntecedent();
   	$where = array();
-  	$where["type"] = " != 'alle'";
-  	$where["dossier_medical_id"] = " = '$this->_id'";
-  	if (!$cancelled) {
-  	  $where["annule"] = " != '1'";
-  	}
-  	return $this->_count_antecedents = $antedecent->countList($where);
+    $where["dossier_medical_id"] = " = '$this->_id'";
+  	// [tom] ??    $where["type"] = " != 'alle'";
+
+	  $where["annule"] = " != '1'";
+  	$this->_count_antecedents = $antedecent->countList($where);
+
+	  $where["annule"] = " = '1'";
+  	$this->_count_cancelled_antecedents = $antedecent->countList($where);
   }
   
   function loadRefsTraitements() {

@@ -3,7 +3,6 @@
 <script type="text/javascript">
 
 Antecedent = {
-  cancelledVisible: true, // Pas anesth et anesth
   remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'cet antécédent',
@@ -31,13 +30,7 @@ Antecedent = {
   },
 
   toggleCancelled: function(list) {
-    var l = $(list).select('.cancelled');
-    
-    l.each(function(e){
-      e.setVisible(!Antecedent.cancelledVisible);
-    });
-    Antecedent.cancelledVisible = !Antecedent.cancelledVisible;
-    return l;
+    $(list).select('.cancelled').each(Element.show);
   }
 };
 
@@ -57,69 +50,58 @@ Traitement = {
   }
 };
 
-Main.add(function(){
-  var button = $('antecedents-dossier-{{$dossier_medical->_id}}-toggle-cancelled'),
-      list = Antecedent.toggleCancelled('antecedents-dossier-{{$dossier_medical->_id}}');
-  
-	if (list.length > 0) button.show().update('Afficher les '+list.length+' annulés');
-});
-
 </script>
+
+{{if $dossier_medical->_count_cancelled_antecedents}}
+<button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
+  Afficher les {{$dossier_medical->_count_cancelled_antecedents}} annulés
+</button>
+{{/if}}
 
 <strong>Antécédents du patient</strong>
 
-<button class="search" style="display: none;"
-        onclick="Antecedent.toggleCancelled('antecedents-dossier-{{$dossier_medical->_id}}')" 
-        id="antecedents-dossier-{{$dossier_medical->_id}}-toggle-cancelled"></button>
-
-<ul id="antecedents-dossier-{{$dossier_medical->_id}}">
-{{if $dossier_medical->_ref_antecedents}}
-  {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-  {{if $list_antecedent|@count}}
-  {{foreach from=$list_antecedent item=curr_antecedent}}
-  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
-    <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
-      <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
-      <input type="hidden" name="annule" value="" />
-      
-      <!-- 
-      <button title="{{tr}}Cancel{{/tr}}" class="cancel notext" type="button" onclick="Antecedent.cancel(this.form, DossierMedical.reloadDossierPatient)">
-        {{tr}}Cancel{{/tr}}
-      </button>
-       -->
-       
-      <!-- Seulement si l'utilisateur est le créateur -->
-      {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
-      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
-        {{tr}}Delete{{/tr}}
-      </button>
-      {{/if}}
-      
-      {{if $_is_anesth && $sejour->_id}}
-      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
-        {{tr}}Add{{/tr}}
-      </button>
-      {{/if}}         
-      {{if $curr_antecedent->date}}
-        {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
-      {{/if}}
-	  </form>
-
-    <strong>{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</strong> :
-    <!-- Ajout d'un affichage d'historique de la creation de l'antecedent -->
-    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CAntecedent', object_id: '{{$curr_antecedent->_id}}' } })">
-      {{$curr_antecedent->rques}}
-    </span>
-  </li>
-  {{/foreach}}
-  {{/if}}
-  {{/foreach}}
-{{else}}
-  <li><em>Pas d'antécédents</em></li>
-{{/if}}
+<ul id="antecedents-{{$dossier_medical->_guid}}">
+	{{if $dossier_medical->_count_antecedents}}
+	  {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+	  {{foreach from=$list_antecedent item=curr_antecedent}}
+	  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
+	    <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
+	      <input type="hidden" name="m" value="dPpatients" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="dosql" value="do_antecedent_aed" />
+	      <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+	      <input type="hidden" name="annule" value="" />
+	             
+	      <!-- Seulement si l'utilisateur est le créateur -->
+	      {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
+	      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
+	        {{tr}}Delete{{/tr}}
+	      </button>
+	      {{/if}}
+	      
+	      {{if $_is_anesth && $sejour->_id}}
+	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
+	        {{tr}}Add{{/tr}}
+	      </button>
+	      {{/if}}         
+		  </form>
+	
+	    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}')">
+		    <strong>
+		    	{{if $curr_antecedent->type    }} {{mb_value object=$curr_antecedent field=type    }} {{/if}}
+		    	{{if $curr_antecedent->appareil}} {{mb_value object=$curr_antecedent field=appareil}} {{/if}}
+		    </strong>
+	      {{if $curr_antecedent->date}}
+	        [{{$curr_antecedent->date|date_format:"%Y"}}] 
+	      {{/if}}
+	      : {{$curr_antecedent->rques}}
+	    </span>
+	  </li>
+	  {{/foreach}}
+	  {{/foreach}}
+	{{else}}
+		<li><em>{{tr}}CAntecedent.none{{/tr}}</em></li>
+	{{/if}}
 </ul>
 
 {{if is_array($dossier_medical->_ref_traitements)}}

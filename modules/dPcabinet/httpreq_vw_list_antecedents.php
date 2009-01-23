@@ -28,23 +28,22 @@ $dossier_medical =& $patient->_ref_dossier_medical;
 
 // Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
-	$dossier_medical->loadRefsAntecedents(true);
+	$dossier_medical->loadRefsAntecedents(true);  
+	$dossier_medical->loadRefsTraitements();
+	$dossier_medical->countAntecedents();
 	
   foreach ($dossier_medical->_ref_antecedents as $type) {
     foreach ($type as &$ant) {
       $ant->loadLogs();
     }
   }
-  
-	$dossier_medical->loadRefsTraitements();
-	$count_cancelled = $dossier_medical->countAntecedents(true) - $dossier_medical->countAntecedents(false);
+	
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejour" , $sejour);
-$smarty->assign("count_cancelled", $count_cancelled);
 $smarty->assign("patient"    , $patient);
 $smarty->assign("_is_anesth" , $_is_anesth);
 
