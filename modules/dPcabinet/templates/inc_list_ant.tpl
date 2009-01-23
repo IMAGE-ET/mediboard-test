@@ -56,10 +56,12 @@ Traitement = {
       <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
       <input type="hidden" name="annule" value="" />
       
+      <!-- 
       <button title="{{tr}}Cancel{{/tr}}" class="cancel notext" type="button" onclick="Antecedent.cancel(this.form, DossierMedical.reloadDossierPatient)">
         {{tr}}Cancel{{/tr}}
       </button>
-      
+       -->
+       
       <!-- Seulement si l'utilisateur est le créateur -->
       {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
       <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
@@ -79,7 +81,7 @@ Traitement = {
 
     <strong>{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</strong> :
     <!-- Ajout d'un affichage d'historique de la creation de l'antecedent -->
-    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">
+    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CAntecedent', object_id: '{{$curr_antecedent->_id}}' } })">
       {{$curr_antecedent->rques}}
     </span>
 

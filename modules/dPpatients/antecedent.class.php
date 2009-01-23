@@ -62,6 +62,11 @@ class CAntecedent extends CMbObject {
     $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
   
+  function loadView(){
+    $this->loadLogs();
+    $this->loadRefDossierMedical();
+  }
+  
   function store() {
     // Standard store
     if ($msg = parent::store()) {
