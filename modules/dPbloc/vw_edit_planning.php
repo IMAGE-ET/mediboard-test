@@ -9,25 +9,21 @@
 
 global $AppUI, $can, $m, $g;
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date       = mbGetValueFromGetOrSession("date", mbDate());
 $plageop_id = mbGetValueFromGetOrSession("plageop_id");
-$bloc_id = mbGetValueFromGetOrSession("bloc_id");
+$bloc_id    = mbGetValueFromGetOrSession("bloc_id");
 
-// Liste des Salles
-/*$salle = new CSalle();
-$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom")*/;
+$listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$listSalles = array();
 
-$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+foreach($listBlocs as &$curr_bloc) {
+  $curr_bloc->loadRefsSalles();
+}
 
 $bloc = new CBlocOperatoire();
 if (!$bloc->load($bloc_id) && count($listBlocs)) {
   $bloc = reset($listBlocs);
-}
-
-$bloc->loadRefsSalles();
-
-if (!$listSalles = $bloc->_ref_salles) {
-	$listSalles = array();
+  $listSalles = $bloc->_ref_salles;
 }
 
 // Informations sur la plage demandée
@@ -115,8 +111,9 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listPlages"     , $listPlages        );
 $smarty->assign("_temps_inter_op", $_temps_inter_op   );
-$smarty->assign("listSalles"     , $listSalles        );
+$smarty->assign("bloc"           , $bloc              );
 $smarty->assign("listBlocs"      , $listBlocs         );
+$smarty->assign("listSalles"     , $listSalles        );
 $smarty->assign("bloc"           , $bloc              );
 $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );

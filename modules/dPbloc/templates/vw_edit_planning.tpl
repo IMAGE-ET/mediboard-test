@@ -101,12 +101,15 @@ function popPlanning(debut) {
         <td>
           <select name="salle_id" class="{{$plagesel->_props.salle_id}}">
             <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
-            {{foreach from=$listSalles item=curr_salle}}
-              <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
-                {{$curr_salle->nom}}
-              </option>
-            {{foreachelse}}
-              <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+            {{foreach from=$listBlocs item=curr_bloc}}
+              <optgroup label="{{$curr_bloc->_view}}" />
+              {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+                <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
+                  {{$curr_salle->nom}}
+                </option>
+              {{foreachelse}}
+                <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+              {{/foreach}}
             {{/foreach}}
           </select>
         </td>
