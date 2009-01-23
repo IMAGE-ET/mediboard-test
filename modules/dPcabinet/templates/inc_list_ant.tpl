@@ -3,6 +3,7 @@
 <script type="text/javascript">
 
 Antecedent = {
+  cancelledVisible: true, // Pas anesth et anesth
   remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'cet antécédent',
@@ -21,8 +22,24 @@ Antecedent = {
     $V(oForm.annule, 1);
     onSubmitFormAjax(oForm, {onComplete: onComplete});
     $V(oForm.annule, '');
+  },
+  
+  restore: function(oForm, onComplete) {
+    $V(oForm.annule, '0');
+    onSubmitFormAjax(oForm, {onComplete: onComplete});
+    $V(oForm.annule, '');
+  },
+
+  toggleCancelled: function(list) {
+    var l = $(list).select('.cancelled');
+    
+    l.each(function(e){
+      e.setVisible(!Antecedent.cancelledVisible);
+    });
+    Antecedent.cancelledVisible = !Antecedent.cancelledVisible;
+    return l;
   }
-}
+};
 
 Traitement = {
   remove: function(oForm, onComplete) {
@@ -38,17 +55,29 @@ Traitement = {
     
     confirmDeletion(oForm, oOptions, oOptionsAjax);
   }
-}
+};
+
+Main.add(function(){
+  var button = $('antecedents-dossier-{{$dossier_medical->_id}}-toggle-cancelled'),
+      list = Antecedent.toggleCancelled('antecedents-dossier-{{$dossier_medical->_id}}');
+  
+	if (list.length > 0) button.show().update('Afficher les '+list.length+' annulés');
+});
 
 </script>
 
 <strong>Antécédents du patient</strong>
-<ul>
+
+<button class="search" style="display: none;"
+        onclick="Antecedent.toggleCancelled('antecedents-dossier-{{$dossier_medical->_id}}')" 
+        id="antecedents-dossier-{{$dossier_medical->_id}}-toggle-cancelled"></button>
+
+<ul id="antecedents-dossier-{{$dossier_medical->_id}}">
 {{if $dossier_medical->_ref_antecedents}}
   {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
   {{foreach from=$list_antecedent item=curr_antecedent}}
-  <li>
+  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
     <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -84,7 +113,6 @@ Traitement = {
     <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CAntecedent', object_id: '{{$curr_antecedent->_id}}' } })">
       {{$curr_antecedent->rques}}
     </span>
-
   </li>
   {{/foreach}}
   {{/if}}

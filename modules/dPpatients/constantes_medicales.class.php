@@ -156,6 +156,7 @@ class CConstantesMedicales extends CMbObject {
     }
     if (!$ok) return 'Au moins une des valeurs doit être renseignée';
   }
+  
   function store () {
     if (!$this->_id && !$this->_new_constantes_medicales) {
       $this->updateDBFields();

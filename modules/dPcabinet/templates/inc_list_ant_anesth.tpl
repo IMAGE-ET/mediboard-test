@@ -18,6 +18,7 @@
 </form>
 
 <script type="text/javascript">
+var cancelledAnesthVisible = true;
 
 onSubmitDossierMedical = function(oForm) {
 	return onSubmitFormAjax(oForm, { 
@@ -37,14 +38,34 @@ copyTraitement = function(traitement_id){
   onSubmitDossierMedical(oForm);
 }
 
+toggleCancelledAnesth = function(list){
+   var l = $(list).select('.cancelled');
+   l.each(function(e){
+     e.setVisible(!cancelledAnesthVisible);
+   });
+   cancelledAnesthVisible = !cancelledAnesthVisible;
+   return l;
+}
+
+Main.add(function(){
+  var listAnesth = toggleCancelledAnesth('antecedents-anesth-dossier-{{$dossier_medical->_id}}'),
+      buttonAnesth = $('antecedents-anesth-dossier-{{$dossier_medical->_id}}-toggle-cancelled'); 
+
+  if (listAnesth.length > 0) buttonAnesth.show().update('Afficher les '+listAnesth.length+' annulés');
+});
+
 </script>
 
 <strong>Antécédents significatifs</strong>
-<ul>
+<button class="search" style="display: none;"
+        onclick="toggleCancelledAnesth('antecedents-anesth-dossier-{{$dossier_medical->_id}}')" 
+        id="antecedents-anesth-dossier-{{$dossier_medical->_id}}-toggle-cancelled"></button>
+
+<ul id="antecedents-anesth-dossier-{{$dossier_medical->_id}}">
   {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
   {{foreach from=$list_antecedent item=curr_antecedent}}
-  <li>
+  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
     <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />

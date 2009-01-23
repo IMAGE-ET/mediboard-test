@@ -89,6 +89,12 @@ table.form th.category.cancelled {
 	text-align: center;
 }
 
+li.cancelled {
+  opacity: 0.4;
+  -moz-opacity: 0.4;
+  background-color: #eee;
+}
+
 tr.script {
   display: none;
 }

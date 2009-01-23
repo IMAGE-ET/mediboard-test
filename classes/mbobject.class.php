@@ -925,7 +925,7 @@ class CMbObject {
    * @return CMbObject
    */
   function merge($objects = array()/*<CMbObject>*/) {
-    if (count($objects) < 2) return $this;
+    if (count($objects) < 2) return;
     
     if ($msg = $this->checkMerge($objects)) return $msg;
     
@@ -959,6 +959,31 @@ class CMbObject {
       }
     }
     return null;
+  }
+  
+  /**
+   * Merges the fields of an array of objects to $this
+   * @param $objects An array of CMbObject
+   * @return $this or an error
+   */
+  function mergeDBFields ($objects = array()/*<CMbObject>*/) {
+		if ($msg = $this->checkMerge($objects)) return $msg;
+		
+    $db_fields = $this->getDBFields();
+    $diffs = $db_fields;
+    foreach ($diffs as &$diff) $diff = false;
+    
+    foreach ($objects as &$object) {
+	    foreach ($db_fields as $propName => $propValue) {
+	      if ($this->$propName === null && !$diffs[$propName]) {
+	        $this->$propName = $object->$propName;
+	      }
+	      else if ($this->$propName != $object->$propName) {
+	      	$diffs[$propName] = true;
+	      	$this->$propName = null;
+	      }
+	    }
+    }
   }
   
   /**
@@ -1573,8 +1598,7 @@ class CMbObject {
    * @return bool Result
    */
   function isInstalled() {
-    $ds =& $this->_spec->ds;
-    return $ds->loadTable($this->_spec->table);    
+    return $this->_spec->ds->loadTable($this->_spec->table);    
   }
 
   /**

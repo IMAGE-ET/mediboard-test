@@ -101,11 +101,24 @@ class CDossierMedical extends CMbMetaObject {
       $this->codes_cim = implode("|", $arrayCodesCim);
     }
   }
+  
+  function mergeDBFields ($objects = array()/*<CMbObject>*/) {
+    $codes_cim_array = CMbArray::pluck($objects, 'codes_cim');
+    $codes_cim_array[] = $this->codes_cim;
+    $codes_cim = implode('|', $codes_cim_array);
+    $codes_cim_array = array_unique(explode('|', $codes_cim));
+    CMbArray::removeValue('', $codes_cim_array);
     
-  function loadRefsAntecedents() {
+    if ($msg = parent::mergeDBFields($objects)) return $msg;
+    
+    $this->codes_cim = implode('|', $codes_cim_array);
+  }
+    
+  function loadRefsAntecedents($cancelled = false) {
     // Initialisation du classement
     $ant = new CAntecedent();
-    foreach (explode("|", $ant->_specs["type"]->list) as $type) {
+    $list_types = explode("|", $ant->_specs["type"]->list);
+    foreach ($list_types as $type) {
       $this->_ref_antecedents[$type] = array();
     }
 
@@ -116,15 +129,16 @@ class CDossierMedical extends CMbMetaObject {
 
     // Classements des antécédents
     foreach ($antecedents as $_antecedent) {
-    	if ($_antecedent->annule == 0)
+    	if ($_antecedent->annule == 0 || $cancelled)
         $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
     }
   }
   
-  function loadRefsAntecedentsByAppareil(){
+  function loadRefsAntecedentsByAppareil($cancelled = false){
     // Initialisation du classement
     $ant = new CAntecedent();
-    foreach (explode("|", $ant->_specs["appareil"]->list) as $appareil) {
+    $list_types = explode("|", $ant->_specs["type"]->list);
+    foreach ($list_types as $appareil) {
       $this->_ref_antecedents_by_appareil[$appareil] = array();
     }
     $order = "type ASC";
@@ -133,7 +147,7 @@ class CDossierMedical extends CMbMetaObject {
     }
     // Classements des antécédents
     foreach ($antecedents as $_antecedent) {
-    	if ($_antecedent->annule == 0)
+    	if ($_antecedent->annule == 0 || $cancelled)
         $this->_ref_antecedents_by_appareil[$_antecedent->appareil][$_antecedent->_id] = $_antecedent;
     }
   }
@@ -146,13 +160,15 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
 
-  function countAntecedents(){
+  function countAntecedents($cancelled = false){
   	$antedecent = new CAntecedent();
   	$where = array();
   	$where["type"] = " != 'alle'";
   	$where["dossier_medical_id"] = " = '$this->_id'";
-  	$where["annule"] = " != '1'";
-  	$this->_count_antecedents = $antedecent->countList($where);
+  	if (!$cancelled) {
+  	  $where["annule"] = " != '1'";
+  	}
+  	return $this->_count_antecedents = $antedecent->countList($where);
   }
   
   function loadRefsTraitements() {
