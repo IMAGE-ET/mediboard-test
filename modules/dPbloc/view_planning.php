@@ -17,6 +17,7 @@ $filter = new COperation;
 $filter->_date_min     = mbGetValueFromGet("_date_min", $now);
 $filter->_date_max     = mbGetValueFromGet("_date_max", $now);
 $filter->_prat_id      = mbGetValueFromGet("_prat_id");
+$filter->_bloc_id      = mbGetValueFromGet("_bloc_id");
 $filter->salle_id      = mbGetValueFromGet("salle_id");
 $filter->_plage        = mbGetValueFromGet("_plage");
 $filter->_intervention = mbGetValueFromGet("_intervention");
@@ -54,7 +55,7 @@ if ($filter->_specialite or $filter->_prat_id) {
 // En fonction de la salle
 $salle = new CSalle();
 $whereSalle = array();
-$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)), $filter->_bloc_id);
 if($filter->salle_id) {
   $whereSalle["salle_id"] = "= $filter->salle_id";
 }

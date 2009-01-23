@@ -25,6 +25,7 @@ function popPlanning() {
   url.addElement(form._intervention);
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
+  url.addElement(form._bloc_id);
   url.addElement(form.salle_id);
   url.addElement(form.type);
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
@@ -78,6 +79,25 @@ function changeDateCal(){
            <th>{{mb_label object=$filter field="_date_max"}}</th>
            <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
         </tr>
+        <tr>
+          <th class="category" colspan="3">Types d'intervention</th>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_intervention"}}</th>
+          <td colspan="2">
+            <select name="_intervention">
+              <option value="0">&mdash; Toutes les interventions &mdash;</option>
+              <option value="1">insérées dans le planning</option>
+              <option value="2">à insérer dans le planning</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filterSejour field="type"}}</th>
+          <td colspan="2">
+            {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
+          </td>
+        </tr>
       </table>
 
     </td>
@@ -85,15 +105,7 @@ function changeDateCal(){
 
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Choix des paramètres de tri</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_intervention"}}</th>
-          <td><select name="_intervention">
-            <option value="0">&mdash; Toutes les interventions &mdash;</option>
-            <option value="1">insérées dans le planning</option>
-            <option value="2">à insérer dans le planning</option>
-          </select></td>
+          <th class="category" colspan="2">Autres filtres</th>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
@@ -122,25 +134,35 @@ function changeDateCal(){
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$filter field="salle_id"}}</th>
+          <th>{{mb_label object=$filter field="_bloc_id"}}</th>
           <td>
-            <select name="salle_id">
-              <option value="0">&mdash; Toutes les salles &mdash;</option>
-              {{foreach from=$listSalles item=curr_salle}}
-                <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
-                  {{$curr_salle->nom}}
+            <select name="_bloc_id">
+              <option value="0">&mdash; Touts les blocs &mdash;</option>
+              {{foreach from=$listBlocs item=curr_bloc}}
+                <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $filter->_bloc_id}}selected="selected"{{/if}}>
+                  {{$curr_bloc->_view}}
                 </option>
               {{/foreach}}
             </select>
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$filterSejour field="type"}}</th>
+          <th>{{mb_label object=$filter field="salle_id"}}</th>
           <td>
-            {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
+            <select name="salle_id">
+              <option value="0">&mdash; Toutes les salles &mdash;</option>
+              {{foreach from=$listBlocs item=curr_bloc}}
+                <optgroup label="{{$curr_bloc->_view}}" />
+                {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+                  <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+                    {{$curr_salle->nom}}
+                  </option>
+              {{/foreach}}
+              {{/foreach}}
+            </select>
           </td>
         </tr>
-           <tr>
+        <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" size="10" value="" />
           <button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>

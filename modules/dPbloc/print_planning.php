@@ -43,10 +43,11 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
-$order = "nom";
-$salle = new CSalle();
-$listSalles = $salle->loadListWithPerms(PERM_READ, null, $order);
-
+$bloc = new CBlocOperatoire();
+$listBlocs = $bloc->loadListWithPerms(PERM_READ, null, "nom");
+foreach($listBlocs as &$bloc) {
+  $bloc->loadRefsSalles();
+}
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -61,7 +62,7 @@ $smarty->assign("month_deb"    , $month_deb);
 $smarty->assign("month_fin"    , $month_fin);
 $smarty->assign("listPrat"     , $listPrat);
 $smarty->assign("listSpec"     , $listSpec);
-$smarty->assign("listSalles"   , $listSalles);
+$smarty->assign("listBlocs"    , $listBlocs);
 
 $smarty->display("print_planning.tpl");
 
