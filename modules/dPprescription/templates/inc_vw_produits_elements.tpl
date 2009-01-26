@@ -360,7 +360,7 @@ toggleTypePerfusion = function(oForm){
     <script type="text/javascript">
     window['{{$_chapitre}}Loaded'] = false;
     Main.add( function(){
-      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}');
+      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$_chapitre}}{{else}}0{{/if}}');
     });
     </script>
     <div id="div_{{$_chapitre}}" style="display:none;">

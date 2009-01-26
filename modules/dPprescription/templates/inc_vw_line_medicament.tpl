@@ -46,6 +46,15 @@
       <div class="mediuser" style="float: right; {{if !$line->_protocole}}border-color: #{{$line->_ref_praticien->_ref_function->color}};{{/if}}">
         {{if $line->_can_view_signature_praticien}}
             {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+            {{if !$mode_pharma}}
+              {{if $prescription_reelle->type != "externe"}}
+		            {{if $line->valide_pharma}}
+								 <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+								{{else}}
+									 <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+								{{/if}}
+							{{/if}}
+						{{/if}}
         {{else}}
           {{if !$line->_traitement && !$line->_protocole}}
             {{$line->_ref_praticien->_view}}    
@@ -64,7 +73,7 @@
         {{elseif !$line->_protocole}}
         <!-- Vue normale  -->
           {{if $line->_traitement}}
-            Médecin traitant (Créé par {{$line->_ref_praticien->_view}})
+            Médecin traitant
             {{if $line->_can_view_form_signature_praticien}}
 							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 					  {{/if}}
@@ -72,15 +81,7 @@
 					  {{if !$line->valide_pharma}}
 						  {{if $line->_can_view_form_signature_praticien}}
 							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
-							{{elseif $line->_can_view_form_signature_infirmiere}}
-                {{if $line->valide_infirmiere}}
-                  (Validée par l'infirmière)
-                {{else}}
-                  <button type="button" class="tick" onclick="submitValidationInfirmiere('{{$line->_class_name}}','{{$line->_id}}','{{$prescription->_id}}','{{$div_refresh}}','{{$mode_pharma}}')">Validation infirmière</button>
-                {{/if}}
-  					  {{/if}}
-					  {{else}}
-						  (Validé par le pharmacien)
+							{{/if}}
 					  {{/if}}	
 			    {{/if}}
         {{/if}}

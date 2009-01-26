@@ -47,6 +47,7 @@ class CPrescription extends CMbObject {
   // Others Fields
   var $_type_sejour = null;
   var $_counts_by_chapitre = null;
+  var $_counts_by_chapitre_non_signee = null;
   var $_counts_no_valide = null;
   var $_dates_dispo = null;
   var $_current_praticien_id = null;  // Praticien utilisé pour l'affichage des protocoles / favoris dans la prescription
@@ -679,6 +680,7 @@ class CPrescription extends CMbObject {
 	 * Chargement du nombre des medicaments et d'elements
 	 */
   function countLinesMedsElements($praticien_sortie_id = null){
+    $this->_counts_by_chapitre_non_signee = array();
   	$this->_counts_by_chapitre = array();
   	
   	$line_comment_med = new CPrescriptionLineComment();
@@ -701,11 +703,20 @@ class CPrescription extends CMbObject {
   	$this->_counts_by_chapitre["med"] = $line_med->countList($whereMed);
   	$this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
   	
+  	$whereMed["signee"] = " = '0'";
+  	$where["signee"]  =" = '0'";
+  	$this->_counts_by_chapitre_non_signee["med"] = $line_med->countList($whereMed);
+  	$this->_counts_by_chapitre_non_signee["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
+  	
+  	
   	$perfusion_line  = new CPerfusionLine();
   	$ljoinPerf["perfusion"] = "perfusion_line.perfusion_id = perfusion.perfusion_id";
   	$wherePerf["perfusion.prescription_id"] = " = '$this->_id'";
   	$wherePerf["perfusion.next_perf_id"] = " IS NULL";
   	$this->_counts_by_chapitre["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
+  	$wherePerf["signature_prat"] = " = '0'";
+  	$this->_counts_by_chapitre_non_signee["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
+  	
   	
   	// Count sur les elements
   	$ljoin_element["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
@@ -734,6 +745,14 @@ class CPrescription extends CMbObject {
    	  $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
 			$nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
 			$this->_counts_by_chapitre[$chapitre] = $nb_element + $nb_comment;
+  	}
+  	
+  	$where["signee"] = " = '0'";
+  	foreach ($chapitres as $chapitre) {
+  	  $where["category_prescription.chapitre"] = " = '$chapitre'";
+   	  $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
+			$nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
+			$this->_counts_by_chapitre_non_signee[$chapitre] = $nb_element + $nb_comment;
   	}
   }
   

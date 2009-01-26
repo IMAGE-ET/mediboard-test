@@ -27,14 +27,6 @@
 				</div>
       {{/if}}
       <div style="float: right">
-        <!--  Validation infirmiere -->
-		    {{if $_perfusion->_can_vw_form_signature_infirmiere}}
-      		{{if $_perfusion->validation_infir}}
-					  (Validée par l'infirmiere)
-					{{else}}
-					  <button type="button" class="tick" onclick="submitValidationInfir('{{$_perfusion->_id}}','{{$_perfusion->prescription_id}}','1')">Validation infirmière</button>
-					{{/if}}
-			  {{/if}}
 		    <!-- Signature pharmacien -->
         {{if $_perfusion->_can_vw_form_signature_pharmacien}}
       		{{if $_perfusion->signature_pharma}}
@@ -63,13 +55,20 @@
 			{{/if}}
       <!-- Siganture du praticien -->
       {{if $_perfusion->_can_vw_signature_praticien}}
-        <div style="float: right">
+        <div class="mediuser" style="float: right; border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};">	
           {{$_perfusion->_ref_praticien->_view}}
 					{{if $_perfusion->signature_prat}}
 					   <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
 					{{else}}
 					   <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
 					{{/if}}
+          {{if $prescription_reelle->type != "externe"}}
+						{{if $_perfusion->signature_pharma}}
+					    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+					  {{else}}
+						  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+				  	{{/if}}
+			  	{{/if}}
         </div>
       {{/if}}
 			<strong>

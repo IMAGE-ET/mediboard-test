@@ -319,10 +319,19 @@ var Prescription = {
       } 
     } );
   },
-  refreshTabHeader: function(tabName, lineCount){
+  refreshTabHeader: function(tabName, lineCount, lineCountNonSignee){
     // On cible le bon a href
     tab = $('prescription_tab_group').select("a[href=#"+tabName+"]");
-    
+ 		link = $('prescription_tab_group').select("a[href=#"+tabName+"]")[0];
+
+    if(lineCountNonSignee > 0){
+      link.style.backgroundColor = '#FF6';
+      link.style.color = '#000';
+    } else {
+      link.style.backgroundColor = null;
+      link.style.color = null;
+    }
+
     if (tab = tab[0]) {
       // On recupere le nom de l'onglet
       tabSplit = tab.innerHTML.split(" ");

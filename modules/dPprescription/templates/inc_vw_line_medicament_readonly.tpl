@@ -30,21 +30,20 @@
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
         {{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+          {{if $prescription_reelle->type != "externe"}}
+          {{if $line->valide_pharma}}
+				    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+				  {{else}}
+					  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+			  	{{/if}}
+			  	{{/if}}
         {{else if !$line->_traitement && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
         {{/if}}
         {{if !$line->_protocole}}
         <!-- Vue normale  -->
           {{if $line->_traitement}}
-            Médecin traitant (Créé par {{$line->_ref_praticien->_view}})
-          {{else}}
-            {{if !$line->valide_pharma}}
-              {{if $line->valide_infirmiere}}
-                (Validé par l'infirmière)
-              {{/if}}
-            {{else}}
-              (Validé par le pharmacien)
-            {{/if}}
+            Médecin traitant
           {{/if}}
         {{/if}}
         <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>

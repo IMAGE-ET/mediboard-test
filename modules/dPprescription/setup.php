@@ -955,7 +955,23 @@ class CSetupdPprescription extends CSetup {
 	          ADD INDEX (`group_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.71";
+    $this->makeRevision("0.71");
+    $sql = "ALTER TABLE `perfusion`
+            CHANGE `signature_prat` `signature_prat` ENUM ('0','1') DEFAULT '0',
+            CHANGE `signature_pharma` `signature_pharma` ENUM ('0','1') DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `perfusion`
+            SET `signature_prat` = '0'
+						WHERE `signature_prat` IS NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `perfusion`
+            SET `signature_pharma` = '0'
+						WHERE `signature_pharma` IS NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.72";
   }  
 }
 

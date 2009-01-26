@@ -12,7 +12,7 @@ Main.add( function(){
 	  changePraticienElt(document.selPraticienLine.praticien_id.value, '{{$element}}');
   }
   
-  Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}');
+  Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$element}}{{else}}0{{/if}}');
   
   if(document.search{{$element}}){
     // Autocomplete

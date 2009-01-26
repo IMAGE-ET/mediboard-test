@@ -25,7 +25,7 @@ Main.add( function(){
     changePraticienMed(document.selPraticienLine.praticien_id.value);
   }
   
-  Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}");
+  Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}","{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.med}}{{else}}0{{/if}}");
   
   if(document.forms.addLine && document.forms.searchProd){
     var oFormProduit = document.forms.searchProd;
@@ -275,15 +275,16 @@ Main.add( function(){
   {{if $lite && $prescription->_ref_perfusions && $readonly}}
 	<table class="tbl">
 	  <tr>
-	    <th colspan="6">Perfusions</th>
+	    <th colspan="7">Perfusions</th>
 	  </tr>
 	  <tr>
-	    <th style="width: 10%;">Type</th>
-	    <th style="width: 10%;">Vitesse</th>
+	    <th style="width: 13%;">Type</th>
+	    <th style="width: 7%">Prat</th>
+	    <th style="width: 7%;">Vitesse</th>
 	    <th style="width: 15%;">Voie</th>
 	    <th style="width: 10%;">Début</th>
-	    <th style="width: 10%;">Durée</th>
-	    <th style="width: 55%;">Médicaments</th> 
+	    <th style="width: 8%;">Durée</th>
+	    <th style="width: 50%;">Médicaments</th> 
 	  </tr>
 	</table>
 	{{/if}}

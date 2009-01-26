@@ -44,7 +44,9 @@ $where[] = "(prescription_line_element.praticien_id = '$praticien_id' AND prescr
 						OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee != '1')
             OR (perfusion.praticien_id = '$praticien_id' AND perfusion.signature_prat != '1')";
 } else {
-  $where[] = "(prescription_line_element.praticien_id = '$praticien_id') OR (prescription_line_medicament.praticien_id = '$praticien_id')";
+  $where[] = "(prescription_line_element.praticien_id = '$praticien_id') 
+		       OR (prescription_line_medicament.praticien_id = '$praticien_id')
+		       OR (perfusion.praticien_id = '$praticien_id')";
 }
 
 $ljoin["prescription_line_element"] = "prescription_line_element.prescription_id = prescription.prescription_id";

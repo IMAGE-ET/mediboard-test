@@ -125,6 +125,7 @@ if($prescription->_id){
     $_perfusion->loadRefsLines();
 	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);
 	  $_perfusion->loadRefPraticien();
+	  $_perfusion->_ref_praticien->loadRefFunction();
 	  $_perfusion->loadRefParentLine();
 	  if($_perfusion->_ref_lines){
 		  foreach($_perfusion->_ref_lines as &$line_perf){

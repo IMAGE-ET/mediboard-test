@@ -13,17 +13,7 @@
       </div>
       {{/if}}
       
-      <div style="float: right">
-      <!--  Validation infirmiere -->
-		  {{if $_perfusion->_can_vw_form_signature_infirmiere}}
-      		{{if $_perfusion->validation_infir}}
-					  (Validée par l'infirmiere) 
-					{{/if}}
-			{{/if}}
-		  
-		  {{if $mode_pharma && $_perfusion->signature_pharma}}
-		    (Validé par le pharmacien)
-		  {{/if}}
+      <div class="mediuser" style="float: right; border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};">	  
         <!-- Siganture du praticien -->
         {{if $_perfusion->_can_vw_signature_praticien}}
           {{$_perfusion->_ref_praticien->_view}}
@@ -32,6 +22,13 @@
 					{{else}}
 					   <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" /> 
 					{{/if}}
+          {{if $prescription_reelle->type != "externe"}}
+						{{if $_perfusion->signature_pharma}}
+					    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+					  {{else}}
+						  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+				  	{{/if}}
+			  	{{/if}}
         {{/if}} 
        <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$_perfusion->_guid}}');"></button>
       </div>

@@ -1,7 +1,7 @@
 <script type="text/javascript">
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
-  Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}");
+  Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}","{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.med}}{{else}}0{{/if}}");
 } );
 
 

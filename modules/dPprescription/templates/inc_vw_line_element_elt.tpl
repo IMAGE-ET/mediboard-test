@@ -32,14 +32,6 @@
         {{if $line->_can_view_form_signature_praticien}} 
 	        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	      {{/if}}
-	      <!-- Affichage du formulaire de signature de l'infirmiere -->
-	      {{if $line->_can_view_form_signature_infirmiere}} 
-          {{if $line->valide_infirmiere}}
-            (Validée par l'infirmière)
-          {{else}}
-            <button type="button" class="tick" onclick="submitValidationInfirmiere('{{$line->_class_name}}','{{$line->_id}}','{{$prescription->_id}}','{{$div_refresh}}','{{$mode_pharma}}')">Validation infirmière</button>
-          {{/if}}
-	      {{/if}}
 	      {{if ($full_line_guid == $line->_guid) && $readonly}}
 	        <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
 	      {{/if}}

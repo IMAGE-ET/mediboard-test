@@ -21,10 +21,6 @@
         {{else if !$line->_traitement && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
         {{/if}}
-        <!-- Affichage du formulaire de signature de l'infirmiere -->
-        {{if $line->_can_view_form_signature_infirmiere && $line->valide_infirmiere}}
-          (Validé par l'infirmière)
-        {{/if}}
         <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
       </div>
       {{$line->_ref_element_prescription->_view}}
