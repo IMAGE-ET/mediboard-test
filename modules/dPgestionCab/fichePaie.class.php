@@ -93,7 +93,7 @@ class CFichePaie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_locked = ($this->final_file !== null);
-    $this->_view = "Fiche de paie du ".$this->debut." au ".$this->fin;
+    $this->_view = "Fiche de paie du ".mbTransformTime(null, $this->debut, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->fin, CAppUI::conf("date"));
     if($this->fiche_paie_id) {
       // On charge cette référence dès le load
       $this->_ref_params_paie = new CParamsPaie();
@@ -141,7 +141,7 @@ class CFichePaie extends CMbObject {
       $this->_app     = $this->_salaire_brut * $this->_ref_params_paie->app / 100;
       $this->_total_cot_patr += $this->_app;
       // On peut calculer ici la CSG/RDS
-      $this->_base_csgnis = ($this->_salaire_brut + $this->_app + $this->_ref_params_paie->mp) * 0.97;
+      $this->_base_csgnis = ($this->_salaire_base + $this->_app + $this->_ref_params_paie->mp) * 0.97;
       $this->_csgnis   = $this->_base_csgnis * $this->_ref_params_paie->csgnis / 100;
       $this->_total_retenues += $this->_csgnis;
       $this->_base_csgnds = ($this->_salaire_brut + $this->_app + $this->_ref_params_paie->mp) * 0.97;
