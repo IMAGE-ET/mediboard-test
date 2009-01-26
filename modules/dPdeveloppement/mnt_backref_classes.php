@@ -47,6 +47,7 @@ function getBackSpecs($c) {
   $backRefs = $o->getBackRefs();
 
   foreach ($backRefs as $key => $bref) {
+  	if (!isset($o->_backSpecs[$key])) continue;
     $o->makeBackSpec($key);
     $backSpec = $o->_backSpecs[$key];
     if ($backSpec->_initiator == $c) {
