@@ -15,14 +15,19 @@ class CMessage extends CMbObject {
   // DB Table key
   var $message_id = null; 
   
-  // DB Fields
+  // DB fields
+  var $module_id = null;
+  
   var $deb     = null;
   var $fin     = null;
   var $titre   = null;
   var $corps   = null;
   var $urgence = null;
-  var $module_id = null;
   
+  // Form fields
+  var $_status = null;
+  
+  // Object references
   var $_ref_module;
   
   static $status = array (
@@ -47,11 +52,13 @@ class CMessage extends CMbObject {
     $specs["module_id"] = "ref class|CModule";
     $specs["corps"]     = "text";
     $specs["urgence"]   = "notNull enum list|normal|urgent default|normal";
+
+    $specs["_status"]   = "enum list|past|present|future";
     return $specs;
   }
 
   // Loads messages from a publication date perspective : all, past, present, future
-  function loadPublications($status = "all") {
+  function loadPublications($status = null) {
     $now = mbDateTime();
     $where = array();
     
@@ -68,7 +75,9 @@ class CMessage extends CMbObject {
         break;
     }
     
-    return $this->loadList($where);
+    $order = "deb DESC";
+    
+    return $this->loadList($where, $order);
   }
   
   function updateFormFields() {

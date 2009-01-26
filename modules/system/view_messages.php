@@ -18,22 +18,20 @@ $message->load(mbGetValueFromGetOrSession("message_id"));
 $message->loadRefs();
 
 // Récupération de la liste des messages
-$filter_status = mbGetValueFromGetOrSession("filter_status");
-$messages = new CMessage;
-$messages = $messages->loadPublications($filter_status);
-foreach ($messages as &$curr_message) {
-	$curr_message->loadRefs();
+$filter = new CMessage;
+$filter->_status = mbGetValueFromGetOrSession("_status");
+$messages = $filter->loadPublications($filter->_status);
+foreach ($messages as $_message) {
+	$_message->loadRefs();
 }
-$modules = CModule::$installed;
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("message"      , $message      );
-$smarty->assign("messages"     , $messages     );
-$smarty->assign("modules"      , $modules      );
-$smarty->assign("mp_status"    , CMessage::$status);
-$smarty->assign("filter_status", $filter_status);
+$smarty->assign("message" , $message      );
+$smarty->assign("messages", $messages     );
+//$smarty->assign("modules" , CModule::$installed);
+$smarty->assign("filter"  , $filter);
 
 $smarty->display("view_messages.tpl");
 
