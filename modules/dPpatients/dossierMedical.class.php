@@ -29,7 +29,7 @@ class CDossierMedical extends CMbMetaObject {
   
   // Derived back references
   var $_count_antecedents = null;
-  var $_count_canceleld_antecedents = null;
+  var $_count_cancelled_antecedents = null;
   
   function getSpec() {
     $spec = parent::getSpec();
