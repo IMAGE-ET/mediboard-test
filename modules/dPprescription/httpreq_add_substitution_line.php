@@ -34,8 +34,14 @@ $prescription =& $line->_ref_prescription;
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
+// Chargement des aides
+$prescriptionLineMedicament = new CPrescriptionLineMedicament();
+$prescriptionLineMedicament->loadAides($AppUI->user_id);
+$aides_prescription[$AppUI->user_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
+ 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("aides_prescription", $aides_prescription);
 $smarty->assign("line", $line);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("prescription_reelle", $prescription);

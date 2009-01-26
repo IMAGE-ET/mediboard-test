@@ -255,9 +255,19 @@
    
     {{/if}}
     
-      <!-- Insérer un commentaire dans la ligne -->
-      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-
+      <!-- Insérer un commentaire dans la ligne --> 
+      <form name="commentaire-{{$line->_guid}}">
+	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
+		      {{assign var=_line_praticien_id value=$line->praticien_id}}
+		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
+		        <option value="">&mdash; Choisir une aide</option>
+		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMedicament}}
+		      </select>
+		      <input type="hidden" name="_hidden_commentaire" value="" />
+		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineMedicament', this.form._hidden_commentaire, 'commentaire');">
+		        Nouveau
+		      </button>
+	    </form>
   		
   		 <!-- Si seulement 1 voie possible ou affichage bloqué-->
   		{{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}

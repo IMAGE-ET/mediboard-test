@@ -400,12 +400,30 @@ $filter_line->debut = mbDate();
 $prise = new CPrisePosologie();
 $prise->quantite = 1.0;
 
+// Chargement des aides
+$prescriptionLineMedicament = new CPrescriptionLineMedicament();
+$prescriptionLineElement = new CPrescriptionLineElement();
+$aides_prescription = array();
+if($prescription->_id){
+  // Si protocole
+  if(!$prescription->object_id){
+    $prescription->_praticiens = array();
+    $prescription->_praticiens[$AppUI->user_id] = "";
+  }
+	foreach($prescription->_praticiens as $praticien_id => $praticien->_view){
+	  $prescriptionLineMedicament->loadAides($praticien_id);
+	  $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
+	  $prescriptionLineElement->loadAides($praticien_id);
+	  $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
+	}
+}
 // Création du template
 $smarty = new CSmartyDP();
 
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
 $smarty->assign("mode_induction_perop", false);
 
+$smarty->assign("aides_prescription", $aides_prescription);
 $smarty->assign("full_line_guid", $full_line_guid);
 $smarty->assign("mode_anesth", $mode_anesth);
 $smarty->assign("historique", $historique);

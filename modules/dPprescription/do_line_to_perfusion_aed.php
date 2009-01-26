@@ -33,6 +33,7 @@ if(!$perfusion_id){
   $AppUI->displayMsg($msg, "CPerfusion-msg-create");
   $perfusion_id = $perfusion->_id;
 } else {
+  // Chargement de la perfusion
   $perfusion = new CPerfusion();
   $perfusion->load($perfusion_id);
 }
@@ -42,6 +43,14 @@ if($perfusion->voie != $line_med->voie){
   $AppUI->setMsg("La voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_ERROR);
   echo $AppUI->getMsg();
   CApp::rip(); 
+}
+
+if($perfusion->signature_prat || $perfusion->signature_pharma){
+  // suppression des signatures de la perfusion
+  $perfusion->signature_prat = "0";
+  $perfusion->signature_pharma = "0";
+  $msg = $perfusion->store();
+  $AppUI->displayMsg($msg, "CPerfusion-msg-modify");
 }
 
 // Creation de la ligne de perfusion 

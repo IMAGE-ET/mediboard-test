@@ -133,7 +133,20 @@
 	      </div>
       {{/if}}
       <!-- Formulaire d'ajout de commentaire -->
-      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
+      <!-- Insérer un commentaire dans la ligne --> 
+      {{assign var=_line_praticien_id value=$line->praticien_id}}
+      <form name="commentaire-{{$line->_guid}}">
+	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
+		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
+		        <option value="">&mdash; Choisir une aide</option>
+		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineElement}}
+		      </select>
+		      <input type="hidden" name="_hidden_commentaire" value="" />
+		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineElement', this.form._hidden_commentaire, 'commentaire');">
+		        Nouveau
+		      </button>
+	    </form>
+	    
       <!-- Formulaire de modification de l'emplacement -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
     </td>   

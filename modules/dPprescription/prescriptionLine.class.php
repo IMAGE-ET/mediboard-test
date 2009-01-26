@@ -106,6 +106,12 @@ class CPrescriptionLine extends CMbObject {
     return $specs;
   }
   
+  function getHelpedFields(){
+    return array(
+      "commentaire"         => null,
+    );
+  }
+  
   /*
    * Forward Refs
    */
