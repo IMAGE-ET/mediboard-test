@@ -410,12 +410,14 @@ if($prescription->_id){
     $prescription->_praticiens = array();
     $prescription->_praticiens[$AppUI->user_id] = "";
   }
-	foreach($prescription->_praticiens as $praticien_id => $praticien->_view){
-	  $prescriptionLineMedicament->loadAides($praticien_id);
-	  $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
-	  $prescriptionLineElement->loadAides($praticien_id);
-	  $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
-	}
+  if($prescription->_praticiens){
+		foreach($prescription->_praticiens as $praticien_id => $praticien->_view){
+		  $prescriptionLineMedicament->loadAides($praticien_id);
+		  $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
+		  $prescriptionLineElement->loadAides($praticien_id);
+		  $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
+		}
+  }
 }
 // Création du template
 $smarty = new CSmartyDP();
