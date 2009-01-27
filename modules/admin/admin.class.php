@@ -232,7 +232,7 @@ class CUser extends CMbObject {
   
   function store() {
   	$this->updateSpecs();
-  	parent::store();
+  	return parent::store();
   }
 
   /**
