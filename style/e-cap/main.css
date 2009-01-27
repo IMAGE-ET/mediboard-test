@@ -175,6 +175,11 @@ table.form td.button {
   vertical-align: middle;
 }
 
+div.wizard {
+	background-color: #f8f8f8;
+	border-color: #888;
+}
+
 /* Navigation */
 
 td#mainHeader table {

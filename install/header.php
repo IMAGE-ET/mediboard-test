@@ -51,6 +51,7 @@ function showHeader() {
   <meta name="Description" content="Mediboard SIH Assistant d'installation" />
   <meta name="Version" content="<?php echo $version["string"]; ?>" />
   <link rel="stylesheet" type="text/css" href="../style/mediboard/main.css" />
+  <link rel="stylesheet" type="text/css" href="../style/e-cap/main.css" />
 </head>
 
 <body>

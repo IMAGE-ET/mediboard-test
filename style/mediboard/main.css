@@ -2420,8 +2420,8 @@ td.listeChoixCR select {
 /* Installation wizard */
 
 div.wizard {
-  padding: 20px; 
-  margin: 40px; 
+  padding: 40px; 
+  margin: 80px; 
   background: #eee; 
   border: 2px solid #8c8; 
   font-family: arial;
