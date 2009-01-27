@@ -23,9 +23,12 @@ foreach($listBlocs as &$curr_bloc) {
 $bloc = new CBlocOperatoire();
 if (!$bloc->load($bloc_id) && count($listBlocs)) {
   $bloc = reset($listBlocs);
-  $listSalles = $bloc->_ref_salles;
+} else {
+  $bloc->loadRefsSalles();
 }
 
+$listSalles = $bloc->_ref_salles;
+  
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
