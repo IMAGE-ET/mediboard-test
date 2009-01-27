@@ -23,8 +23,6 @@ foreach ($object_ids as $object_id) {
 
 // Empty object
 $object = reset($objects);
-unset($object->_back["logs"]);
-unset($object->_count["logs"]);
 
 // Création du template
 $smarty = new CSmartyDP();

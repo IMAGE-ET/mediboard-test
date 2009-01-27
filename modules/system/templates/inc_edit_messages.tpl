@@ -22,7 +22,7 @@
 </tr>
 
 <tr>
-  <th style="width:1%">{{mb_label object=$message field="deb"}}</th>
+  <th style="width: 1%">{{mb_label object=$message field="deb"}}</th>
   <td class="date">{{mb_field object=$message field="deb" form="editFrm" register=true}}</td>
 </tr>
 

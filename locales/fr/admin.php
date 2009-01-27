@@ -194,4 +194,5 @@ $locales['CUser.all'] = '';
 $locales['CUser.select'] = '';
 $locales['mod-admin-action-check_siblings'] = 'Vérifier les doublons d\'utilisateurs';
 $locales['mod-ecap-tab-vw_identifiants'] = '';
+$locales['massively'] = 'massivement';
 ?>

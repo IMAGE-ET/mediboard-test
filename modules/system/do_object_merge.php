@@ -13,6 +13,7 @@ $can->needsEdit();
 $objects_id    = mbGetValueFromPost('_objects_id'); // array
 $objects_class = mbGetValueFromPost('_objects_class');
 
+
 $objects = array();
 
 if (class_exists($objects_class)) {
@@ -39,7 +40,7 @@ if (class_exists($objects_class)) {
   $do->doBind();
 
   // the objects are merged with the result
-  if ($msg = $do->_obj->merge($objects)) {
+  if ($msg = $do->_obj->merge($objects,  mbGetValueFromPost("fast"))) {
     $do->errorRedirect($msg);
   }
 

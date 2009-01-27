@@ -194,4 +194,5 @@ $locales['CUser.all'] = '';
 $locales['CUser.select'] = '';
 $locales['mod-admin-action-check_siblings'] = '';
 $locales['Auth-failed-nousername'] = '';
+$locales['massively'] = '';
 ?>

@@ -922,9 +922,10 @@ class CMbObject {
   /**
    * Merges an array of objects
    * @param An array of CMbObject to merge
+   * @param bool $fast Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
    * @return CMbObject
    */
-  function merge($objects = array()/*<CMbObject>*/) {
+  function merge($objects = array()/*<CMbObject>*/ , $fast = false) {
     if (count($objects) < 2) return;
     
     if ($msg = $this->checkMerge($objects)) return $msg;
@@ -932,7 +933,11 @@ class CMbObject {
     if (!$this->_id && $msg = $this->store()) return $msg;
     
     foreach ($objects as &$object) {
-    	if ($msg = $this->transferBackRefsFrom($object)) return $msg;
+      $msg = $fast ? 
+        $this->fastTransferBackRefsFrom($object) :
+        $this->transferBackRefsFrom($object);
+        
+    	if ($msg) return $msg;
     	if ($msg = $object->delete()) return $msg;
     }
     
@@ -1108,6 +1113,47 @@ class CMbObject {
     }
   }
 
+  
+  /**
+   * Transfer all back refs from given object of same class using unchecked, unlogged SQL queries
+   * @param CMbObject $object
+   * @return string store-like error message if failed, null if successful
+   */
+  function fastTransferBackRefsFrom(CMbObject &$object) {
+    if (!$this->_id) {
+      return;
+    }
+
+    foreach ($this->_backRefs as $backName => $backRef) {
+	    list($backClass, $backField) = explode(" ", $backRef);
+	    $backObject = new $backClass;
+	
+	    // Cas du module non installé
+	    if (!$backObject->_ref_module) {
+	      continue;
+	    }
+	
+	    // Unstored object
+	    if (!$backObject->_spec->table || !$backObject->_spec->key) {
+	      continue;
+	    }
+	    
+	    $query = "UPDATE `{$backObject->_spec->table}`
+				SET `$backField` = '$this->_id'
+	      WHERE `$backField` = '$object->_id'";
+	
+	    // Cas des meta objects
+	    $backSpec =& $backObject->_specs[$backField];
+	    $backMeta = $backSpec->meta;
+	    if ($backMeta) {
+	      $query .= "\nAND `$backMeta` = '$object->_class_name'";
+	    }
+	    
+	    $this->_spec->ds->exec($query);
+    }    
+  }
+  
+  
   /**
    * Transfer all back refs from given object of same class
    * @param CMbObject $object

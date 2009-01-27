@@ -79,7 +79,7 @@ Main.add(function () {
       <table class="tbl">
         <tr>
           {{if !$dialog}}
-          <th><button type="submit" class="search notext" title="Fusion">Fusion</button></th>
+          <th><button type="submit" class="search notext" title="Fusion">{{tr}}Merge{{/tr}}</button></th>
           {{/if}}
           <th>{{mb_title class=CMedecin field=nom}}</th>
           <th>{{mb_title class=CMedecin field=adresse}}</th>

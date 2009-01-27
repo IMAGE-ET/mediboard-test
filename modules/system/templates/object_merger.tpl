@@ -67,7 +67,7 @@ Main.add(function() {
         {{else}}
           <select name="objects_class">
             {{foreach from=$list_classes item=class}}
-              <option value="{{$class}}" {{if $objects_class == $class}}selected="selected"{{/if}}">{{tr}}{{$class}}{{/tr}}</option>
+              <option value="{{$class}}" {{if $objects_class == $class}}selected="selected"{{/if}}>{{tr}}{{$class}}{{/tr}}</option>
             {{/foreach}}
           </select>
         {{/if}}
@@ -96,10 +96,11 @@ Main.add(function() {
 </div>
 {{/if}}
 
-<form name="form-merge" action="?m={{$m}}" method="post" onsubmit="{{if $testMerge}}false{{else}}checkForm(this){{/if}}">
+<form name="form-merge" action="?m={{$m}}" method="post" onsubmit="{{if $checkMerge}}false{{else}}checkForm(this){{/if}}">
   <input type="hidden" name="dosql" value="do_object_merge" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="fast" value="0" />
   <input type="hidden" name="_merging" value="1" />
   {{foreach from=$objects item=object name=object}}
   <input type="hidden" name="_objects_id[{{$smarty.foreach.object.index}}]" value="{{$object->_id}}" />
@@ -124,16 +125,71 @@ Main.add(function() {
         {{/if}}
       {{/if}}
     {{/foreach}}
+
+	  <tr>
+	  	<td colspan="100" class="text">
+	  	 <div class="big-warning">
+	  	   Vous êtes sur le point d'effectuer une fusion d'objet.
+	  	   <br />
+	  	   <strong>Cette opération est irréversible, il est dont impératif d'utiliser cette fonction avec une extrême prudence !</strong>
+	  	   <br />
+	  	   La procédure de fusion se passe en trois phases :
+	  	   <ol>
+	  	     <li>Création d'un nouvel objet, avec les propriétés choisies ci-dessus</li>
+	  	     <li>Transfert des relations depuis les anciens objets ver le nouveau</li>
+	  	     <li>Suppression des anciens objets</li>
+	  	   </ol>
+	  	   <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$result->_class_name}}', objectsList);">
+		       {{tr}}CMbObject-merge-moreinfo{{/tr}}
+		   	 </button>
+	   	 </div>
+
+    	 <div class="big-info">
+    	   Il existe deux options possible pour effectuer la fusion :
+    	   <ul>
+    	     <li><strong>La fusion standard qui automotise des sauvegardes normales</strong>. Ce processus
+    	       <ul>
+    	         <li>automatise des sauvegardes normales</li>
+    	         <li>effectue des vérifications d'intégrité, au risque d'échouer dans certaines circonstances</li>
+    	         <li>journalise tous les transferts d'objet</li>
+    	         <li>est très lent</li>
+    	       </ul>
+    	     </li>
+    	      
+    	     <li><strong>La fusion massive, qui modifie la base de données en direct</strong>. Ce processus
+    	       <ul>
+    	         <li>n'effectue aucune vérification d'intégrité</li>
+    	         <li>ne journalise que la création du nouvel objet et l'opération de fusion</li>
+    	         <li>est très rapide</li>
+    	       </ul>
+    	     </li>
+    	   </ul> 
+    	 </div>
+
+    	 </td>
+    	 
+    </tr>
+
+    <tr>
+	  	 <td colspan="100" class="button">
+	  	 <script type="text/javascript">
+	  	   function confirmMerge(button, fast) {
+	  	   	 $V(button.form.fast, fast);
+	  	   	 return confirm("Vous êtes sûr(e) de vouloir fusionner ces objets ?");
+	  	   }
+	  	 </script>
+
+		   <button type="submit" class="submit" onclick="return confirmMerge(this, '0')">
+		     {{tr}}Merge{{/tr}}
+		   </button>
+		   <button type="submit" class="submit" onclick="return confirmMerge(this, '1');">
+		     {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
+		   </button>
+	    </td>
+	  </tr>
+
   </table>
 
-  <div class="button">
-    <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$result->_class_name}}', objectsList);">
-      {{tr}}CMbObject-merge-moreinfo{{/tr}}
-    </button>
-    <button type="submit" class="submit">
-      {{tr}}Merge{{/tr}}
-    </button>
-  </div>
 </form>
 
 {{else}}
