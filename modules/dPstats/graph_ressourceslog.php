@@ -11,6 +11,7 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
 	if (!$date) $date = mbDate();
 	
 	switch($interval) {
+		default:
 	  case "day":
 	    $startx = "$date 00:00:00";
 	    $endx   = "$date 23:59:59";
