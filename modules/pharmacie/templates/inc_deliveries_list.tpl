@@ -12,7 +12,7 @@
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>Stock service</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
-    <th></th>
+    <th><button type="button" onclick="deliverAll('list-globales')" class="tick">Tout délivrer</button></th>
   </tr>
   {{foreach from=$deliveries_global item=curr_delivery_global}}
     {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$curr_delivery_global}}
@@ -40,7 +40,7 @@
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>Stock service</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
-    <th></th>
+    <th><button type="button" onclick="deliverAll('list-nominatives')" class="tick">Tout délivrer</button></th>
   </tr>
   {{foreach from=$deliveries_nominatif item=curr_delivery_nominatif}}
     {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$curr_delivery_nominatif}}

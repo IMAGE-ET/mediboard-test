@@ -22,6 +22,23 @@ function refreshLists() {
 
   return false;
 }
+
+function receiveLine(form, dontRefresh) {
+  return onSubmitFormAjax(form, {onComplete: dontRefresh ? Prototype.emptyFunction : refreshLists});
+}
+
+function receiveAll(container) {
+  var listForms = [];
+  $(container).select("form").each(function(f) {
+    if ((!f.del || $V(f.del) == "0") && $V(f.delivery_trace_id) && $V(f.date_reception) == 'now') {
+      listForms.push(f);
+    }
+  });
+
+  for (i = 0; i < listForms.length; i++) {
+    receiveLine(listForms[i], i != listForms.length-1);
+  }
+}
 </script>
 
 {{include file=inc_filter_delivrances.tpl}}

@@ -43,6 +43,23 @@ function printPreparePlan(nominatif) {
   
   url.pop(800, 600, 'Plan de cueillette');
 }
+
+function deliverLine(form, dontRefresh) {
+  return onSubmitFormAjax(form, {onComplete: dontRefresh ? Prototype.emptyFunction : refreshLists});
+}
+
+function deliverAll(container) {
+  var i, listForms = [];
+  $(container).select("form").each(function(f) {
+    if ((!f.del || $V(f.del) == "0") && $V(f.delivery_id) && $V(f.date_delivery) == 'now' && parseInt($V(f.quantity)) > 0) {
+    	listForms.push(f);
+    }
+  });
+
+  for (i = 0; i < listForms.length; i++) {
+	  deliverLine(listForms[i], i != listForms.length-1);
+  }
+}
 </script>
 
 {{include file=inc_filter_delivrances.tpl}}

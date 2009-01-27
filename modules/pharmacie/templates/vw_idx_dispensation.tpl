@@ -1,23 +1,27 @@
 <script type="text/javascript">
 function refreshLists(code_cip) {
   var form = getForm("filter");
+  var transmissionTab = $('li-transmissions');
+  var showTransmissions = false;
   
   url = new Url;
   if (form.patient_id && $V(form.patient_id)) {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_nominative_list");
     $('list-dispensations-title').update('Nominatif');
     $('list-stocks-title').update('Nominatif hors prescription');
-    $('li-tranmissions').show();
+    showTransmissions = true;
   }
   else {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
     $('list-dispensations-title').update('Nominatif reglobalisé');
     $('list-stocks-title').update('Global');
-    $('li-tranmissions').hide();
   }
-  
-  if(!($('li-tranmissions').visible())){
-    $('list-transmissions').hide();
+
+  transmissionTab.setVisible(showTransmissions);
+
+  $('list-transmissions').setVisible(showTransmissions && tabs.activeContainer.id == 'list-transmissions');
+  if (!showTransmissions && tabs.activeContainer.id == 'list-transmissions') {
+    tabs.setActiveTab("list-dispensations");
   }
   
   $$('a[href=#list-dispensations] small').first().update('(0)');
@@ -34,7 +38,7 @@ function refreshLists(code_cip) {
   } else {
     url.requestUpdate("list-dispensations", { waitingText: null } );
   }
-  refreshStocks();
+  refreshStocks.defer();
   return false;
 }
 
@@ -49,14 +53,12 @@ function refreshStocks() {
 function dispenseAll() {
   var submitted = false;
   $("list-dispensations").select("form").each(function(f) {
-    if ((!f.del || $V(f.del) == "0") &&  $V(f.patient_id) && $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
-      submitFormAjax(f, 'systemMsg');
-      submitted = false;
+    if ((!f.del || $V(f.del) == "0") && (f.patient_id && $V(f.patient_id) || f.service_id && $V(f.service_id)) && $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
+      onSubmitFormAjax(f);
+      submitted = true;
     }
   });
-  if (submitted) {
-    refreshLists.defer();
-  }
+  if (submitted) refreshLists.defer();
 }
 
 var oFormDispensation;
@@ -86,8 +88,6 @@ Main.add(function () {
         return queryString + "&inLivret=1";
       }
   });
-
-  refreshLists();
 });
 
 function updateDispensationUrgence(formUrgence) {
@@ -117,7 +117,7 @@ function updateDispensationUrgence(formUrgence) {
   </li>
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nomitatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
-  <li id="li-tranmissions"><a href="#list-transmissions">Transmissions</a></li>
+  <li id="li-transmissions"><a href="#list-transmissions">Transmissions</a></li>
 </ul>
 <hr class="control_tabs" />
 

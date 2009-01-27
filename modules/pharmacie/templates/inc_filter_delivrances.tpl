@@ -1,6 +1,7 @@
 <script type="text/javascript">
+var tabs;
 Main.add(function () {
-  var tabs = Control.Tabs.create('tab_delivrances', true);
+  tabs = Control.Tabs.create('tab_delivrances', true);
   refreshLists();
   refreshPatient();
 });
@@ -16,7 +17,7 @@ function refreshPatient(){
 }
 </script>
 
-<form name="filter" action="?" method="get" onsubmit="loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
+<form name="filter" action="?" method="get" onsubmit="if(window.loadSuivi) loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>

@@ -11,6 +11,7 @@ global $can;
 $can->needsRead();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
+$patient_id = mbGetValueFromGetOrSession('patient_id');
 $mode       = mbGetValueFromGetOrSession('mode');
 $delivered  = mbGetValueFromGetOrSession('delivered') == 'true';
 
@@ -22,8 +23,11 @@ mbSetValueToSession('_date_max', $date_max);
 
 $order_by = 'date_dispensation DESC';
 $where = array ();
-if ($service_id) {
+if ($service_id && $mode == "global") {
   $where['service_id'] = " = $service_id";
+}
+if ($patient_id && $mode == "nominatif") {
+  $where['patient_id'] = " = $patient_id";
 }
 $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
