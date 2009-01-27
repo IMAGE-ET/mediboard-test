@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function refreshLists() {
+function refreshLists(code_cip) {
   var form = getForm("filter");
   
   url = new Url;
@@ -25,8 +25,15 @@ function refreshLists() {
   $A(form.elements).each (function (e) {
     url.addParam(e.name, $V(e));
   });
-  url.requestUpdate("list-dispensations");
-
+  if(code_cip){
+    url.addParam("code_cip", code_cip);
+  }
+  
+  if(code_cip){
+    url.requestUpdate("dispensation_line_"+code_cip, { waitingText: null } );  
+  } else {
+    url.requestUpdate("list-dispensations", { waitingText: null } );
+  }
   refreshStocks();
   return false;
 }

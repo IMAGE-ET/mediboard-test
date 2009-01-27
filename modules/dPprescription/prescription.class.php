@@ -1189,7 +1189,7 @@ class CPrescription extends CMbObject {
   /*
    * Génération du Dossier/Feuille de soin
    */
-  function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0){  
+  function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = ""){  
     // Stockage du tableau de ligne de medicaments
   	$lines["medicament"] = $this->_ref_prescription_lines;
     if($this->object_id && !$mode_dispensation){
@@ -1200,6 +1200,13 @@ class CPrescription extends CMbObject {
     foreach($lines as $cat_name => $lines_cat){
 		  if(count($lines_cat)){
 		    foreach($lines_cat as &$_line_med){
+		      
+		      // Code Cip
+		      if($code_cip && ($code_cip != $_line_med->code_cip)){
+		        continue;
+		      }
+		      
+		      
 		    	// On met a jour la date de fin de la ligne de medicament si celle ci n'est pas indiquée
 				  if(!$_line_med->_fin_reelle){
 				    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;

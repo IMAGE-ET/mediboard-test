@@ -10,6 +10,7 @@
 global $g;
 
 $service_id = mbGetValueFromGetOrSession('service_id');
+$_code_cip   = mbGetValueFromGet("code_cip");
 
 // Calcul de date_max et date_min
 $date_min = mbGetValueFromGetOrSession('_date_min');
@@ -91,12 +92,15 @@ if($prescriptions) {
 	  
 	  // Calcul du plan de soin
     foreach($dates as $_date){
-      $_prescription->calculPlanSoin($_date, 0, 0, 1);
+      $_prescription->calculPlanSoin($_date, 0, 0, 1, $_code_cip);
     }
     
      // Parcours des prises prevues pour les medicaments
      foreach($lines as $lines_by_type){
        foreach($lines_by_type as $_line_med){
+          if($_code_cip && ($_line_med->code_cip != $_code_cip)){
+            continue;
+          }
           if($_line_med->_quantity_by_date){
 	          if(!isset($produits[$_line_med->code_cip])){
 	             $produits[$_line_med->code_cip] = $_line_med->_ref_produit;
@@ -149,6 +153,9 @@ if($prescriptions) {
 	    
 	    $_perfusion->loadRefsLines();
 	    foreach($_perfusion->_ref_lines as &$_perf_line){
+	      if($_code_cip && $_perf_line->code_cip != $_code_cip){
+	        continue;
+	      }
 	      $produit = $_perf_line->_ref_produit;
 	      $produit->loadLibellePresentation();
 	      
@@ -290,6 +297,7 @@ foreach($dispensations as $code_cip => &$_quantites){
   $deliv = new CProductDelivery();
   $list_done = $deliv->loadList($where, null, null, null, $ljoin);
   $done[$code_cip] = array();
+  $done_nominatif[$code_cip] = array();
   
   if (count($list_done)) {
     $done[$code_cip][0] = 0;
@@ -299,28 +307,52 @@ foreach($dispensations as $code_cip => &$_quantites){
       $done[$code_cip][0] += $d->quantity;
     }
   }
-  if(isset($delivrances[$code_cip])) {
-    $delivrances[$code_cip]->quantity = max($_quantites["quantite_dispensation"] - (isset($done[$code_cip][0]) ? $done[$code_cip][0] : 0), 0);
+
+  // Chargement des dispensation déjà effectuée en mode nominatif
+  $where['product_delivery.patient_id'] = "IS NOT NULL";
+  $list_done_nominatif = $deliv->loadList($where, null, null, null, $ljoin);
+  if (count($list_done_nominatif)) {
+    $done_nominatif[$code_cip][0] = 0;
+    foreach ($list_done_nominatif as $d_nomin) {
+    	$d_nomin->loadRefsBack();
+      $done_nominatif[$code_cip][] = $d_nomin;
+      $done_nominatif[$code_cip][0] += $d_nomin->quantity;
+    }
   }
+
+  $done_global = (isset($done[$code_cip][0]) ? $done[$code_cip][0] : 0) + (isset($done_nominatif[$code_cip][0]) ? $done_nominatif[$code_cip][0] : 0);
+  
+  if(isset($delivrances[$code_cip])) {
+    $delivrances[$code_cip]->quantity = max($_quantites["quantite_dispensation"] - $done_global, 0);
+  }
+
   $stocks_service[$code_cip] = CProductStockService::getFromCode($code_cip, $service_id);
-}
-
-
+}          
+          
 // Smarty template
 $smarty = new CSmartyDP();
 //$smarty->assign('warning', $warning);
 //$smarty->assign('patients', $patients);
+
 $smarty->assign("besoin_patient", $besoin_patient);
-$smarty->assign('dispensations', $dispensations);
 $smarty->assign('delivrances', $delivrances);
 $smarty->assign('produits'  , $produits);
 $smarty->assign('done'  , $done);
+$smarty->assign('done_nominatif', $done_nominatif);
 $smarty->assign('stocks_service'  , $stocks_service);
 $smarty->assign('service_id', $service_id);
 $smarty->assign("date_min", $date_min_orig);
 $smarty->assign("date_max", $date_max_orig);
 $smarty->assign("now", mbDate());
 $smarty->assign('mode_nominatif', "0");
-$smarty->display('inc_dispensations_list.tpl');
 
+if($_code_cip){
+  $smarty->assign("quantites", $dispensations[$_code_cip]);
+  $smarty->assign("code_cip", $_code_cip);
+  $smarty->assign("nodebug", true);
+  $smarty->display('inc_dispensation_line.tpl');
+} else {
+  $smarty->assign('dispensations', $dispensations);
+  $smarty->display('inc_dispensations_list.tpl');
+}
 ?>

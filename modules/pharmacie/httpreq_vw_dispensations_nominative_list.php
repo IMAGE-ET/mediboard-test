@@ -10,9 +10,13 @@
 $service_id =      mbGetValueFromGetOrSession('service_id');
 $patient_id =      mbGetValueFromGetOrSession('patient_id');
 $prescription_id = mbGetValueFromGetOrSession('prescription_id');
+$_code_cip       = mbGetValueFromGet("code_cip");
 
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
+
+$date_min_orig = $date_min;
+$date_max_orig = $date_max;
 
 $lines = array();
 
@@ -72,12 +76,15 @@ if($prescription->_id){
   
   // Calcul du plan de soin
    foreach($dates as $_date){
-     $prescription->calculPlanSoin($_date, 0, 0, 1);
+     $prescription->calculPlanSoin($_date, 0, 0, 1, $_code_cip);
    }
    
     // Parcours des prises prevues pour les medicaments
     foreach($lines_med as $lines_by_type){
       foreach($lines_by_type as $_line_med){
+         if($_code_cip && ($_line_med->code_cip != $_code_cip)){
+           continue;
+         }
          if($_line_med->_quantity_by_date){
           if(!isset($produits[$_line_med->code_cip])){
              $produits[$_line_med->code_cip] = $_line_med->_ref_produit;
@@ -125,6 +132,9 @@ if($prescription->_id){
 	    
 	    $_perfusion->loadRefsLines();
 	    foreach($_perfusion->_ref_lines as &$_perf_line){
+	    	if($_code_cip && $_perf_line->code_cip != $_code_cip){
+	        continue;
+	      }
 	      $produit = $_perf_line->_ref_produit;
 	      $produit->loadLibellePresentation();
 	      
@@ -232,10 +242,11 @@ if($prescription->_id){
 	  }
 	  // Chargement des dispensation déjé effectuée
 	  $where = array();
-	  $where['product_delivery.date_dispensation'] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'"; // entre les deux dates
+	  $where['product_delivery.date_dispensation'] = "BETWEEN '$date_min_orig 00:00:00' AND '$date_max_orig 23:59:59'"; // entre les deux dates
 	  $where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
 	  $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
-	  $where['product_delivery.patient_id'] = "IS NOT NULL";
+	  //$where['product_delivery.patient_id'] = "IS NOT NULL";
+	  $where['product_delivery.patient_id'] = "= '$patient_id'";
 	  $where['product_delivery.quantity'] = " > 0";
 	  // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement
 	  $ljoin = array();
@@ -244,7 +255,9 @@ if($prescription->_id){
 	  
 	  $deliv = new CProductDelivery();
 	  $list_done = $deliv->loadList($where, null, null, null, $ljoin);
+
 	  $done[$code_cip] = array();
+	  $done_global[$code_cip] = array();
 	  
 	  if (count($list_done)) {
 	    $done[$code_cip][0] = 0;
@@ -254,7 +267,20 @@ if($prescription->_id){
   	    $done[$code_cip][0] += $d->quantity;
   	  }
 	  }
-	  if(isset($delivrances[$code_cip])) {
+	  
+	  $where['product_delivery.patient_id'] = "IS NULL";
+    $list_done_global = $deliv->loadList($where, null, null, null, $ljoin);
+	  
+		if (count($list_done_global)) {
+	    $done_global[$code_cip][0] = 0;
+  	  foreach ($list_done_global as $d_glob) {
+  	  	$d_glob->loadRefsBack();
+  	    $done_global[$code_cip][] = $d_glob;
+  	    $done_global[$code_cip][0] += $d_glob->quantity;
+  	  }
+	  }
+	  
+    if(isset($delivrances[$code_cip])) {
 	    $delivrances[$code_cip]->quantity = max($_quantites["quantite_dispensation"] - (isset($done[$code_cip][0]) ? $done[$code_cip][0] : 0), 0);
 	  }
 	  $stocks_service[$code_cip] = CProductStockService::getFromCode($code_cip, $service_id);
@@ -265,9 +291,9 @@ if($prescription->_id){
 $smarty = new CSmartyDP();
 $smarty->assign("produits"           , $produits);
 $smarty->assign("lines"              , $lines);
-$smarty->assign('dispensations'      , $dispensations);
 $smarty->assign('delivrances'        , $delivrances);
 $smarty->assign('done'               , $done);
+$smarty->assign('done_global'        , $done_global);
 $smarty->assign('stocks_service'     , $stocks_service);
 $smarty->assign('service_id'         , $service_id);
 $smarty->assign('prescription'       , $prescription);
@@ -275,6 +301,18 @@ $smarty->assign('mode_nominatif'     , "1");
 $smarty->assign("date_min", mbDate(mbGetValueFromGetOrSession('_date_min')));
 $smarty->assign("date_max", mbDate(mbGetValueFromGetOrSession('_date_max')));
 $smarty->assign("now", mbDate());
-$smarty->display('inc_dispensations_list.tpl');
+
+if($_code_cip){
+  $smarty->assign("quantites", $dispensations[$_code_cip]);
+  $smarty->assign("code_cip", $_code_cip);
+  $smarty->assign("nodebug", true);
+  $smarty->display('inc_dispensation_line.tpl');
+} else {
+  $smarty->assign('dispensations'      , $dispensations);
+  $smarty->display('inc_dispensations_list.tpl');
+}
+
+
 
 ?>
+
