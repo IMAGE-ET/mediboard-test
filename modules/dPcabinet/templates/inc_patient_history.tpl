@@ -1,58 +1,76 @@
 <table class="form">
+
   {{if !$app->user_prefs.simpleCabinet}}
+  <!-- Séjour et interventions -->
   <tr id="sejours-trigger">
     <td>Séjours ({{$patient->_ref_sejours|@count}})</td>
   </tr>
+  
   <tbody id="sejours">
-    <tr class="script"><td><script type="text/javascript">new PairEffect("sejours");</script></td></tr>
-    {{foreach from=$patient->_ref_sejours item=curr_sejour}}
+    <tr class="script">
+    	<td>
+    		<script type="text/javascript">
+    		new PairEffect("sejours");
+    		</script>
+    	</td>
+    </tr>
+    {{foreach from=$patient->_ref_sejours item=_sejour}}
     <tr>
       <td>
-        <strong>Dr {{$curr_sejour->_ref_praticien->_view}}</strong>
-        Du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y"}}
-        au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}}
+        <strong>Dr {{$_sejour->_ref_praticien->_view}}</strong>
+        du {{$_sejour->entree_prevue|date_format:$dPconfig.date}}
+        au {{$_sejour->sortie_prevue|date_format:$dPconfig.date}}
         <ul>
-        {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+        {{foreach from=$_sejour->_ref_operations item=_op}}
           <li>
-            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}"
-              onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })"
-              >
-              <strong>Dr {{$curr_op->_ref_chir->_view}}</strong>
-              le {{$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}}
+            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}"
+              onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
+              <strong>Dr {{$_op->_ref_chir->_view}}</strong>
+              le {{$_op->_datetime|date_format:$dPconfig.date}}
             </a>
           </li>
         {{foreachelse}}
-          <li>Pas d'intevention</li>
+          <li>{{tr}}COperation.none{{/tr}}</li>
         {{/foreach}}
         </ul>
       </td>
     </tr>
     {{foreachelse}}
     <tr>
-      <td><em>Aucun séjour disponible</em></td>
+      <td><em>{{tr}}CSejour.none{{/tr}}</em></td>
     </tr>
     {{/foreach}}
   </tbody>
   {{/if}}
+  
+  <!-- Consultations -->
   <tr id="consultations-trigger">
     <td>Consultations ({{$patient->_ref_consultations|@count}})</td>
   </tr>
+  
   <tbody id="consultations">
-    <tr class="script"><td><script type="text/javascript">new PairEffect("consultations");</script></td></tr>
-    {{foreach from=$patient->_ref_consultations item=curr_consult}}
+    <tr class="script">
+    	<td>
+    		<script type="text/javascript">
+    		new PairEffect("consultations");
+    		</script>
+    	</td>
+    </tr>
+    
+    {{foreach from=$patient->_ref_consultations item=_consult}}
     <tr>
       <td>
-        <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}"
-          onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: {{$curr_consult->_id}} } })"
-        >
-          <strong>Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</strong>
-          {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}}
+        <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}"
+          onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+          <strong>Dr {{$_consult->_ref_plageconsult->_ref_chir->_view}}</strong>
+          {{$_consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
         </a>
       </td>
     </tr>
     {{foreachelse}}
+    
     <tr>
-      <td><em>Aucune consultation disponible</em></td>
+      <td><em>{{tr}}CConsultation.none{{/tr}}</em></td>
     </tr>
     {{/foreach}}
   </tbody>
