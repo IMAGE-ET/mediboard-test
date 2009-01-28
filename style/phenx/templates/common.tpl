@@ -4,8 +4,8 @@
 <head>
   <title>
     {{$dPconfig.page_title}} &mdash; 
-    {{tr}}module-{{$m}}-court{{/tr}} 
-    {{if $tab || $a}}
+    {{tr}}module-{{$m}}-court{{/tr}}
+    {{if ($a || $tab) && $tab != '1'}}
       &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
     {{/if}}
   </title>

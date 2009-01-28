@@ -626,7 +626,7 @@ table.form td.button {
 
 table.form td.date div {
   font-size: 11px;
-  border: 1px dotted;
+  /*border: 1px dotted;*/
   padding: 0px 1px;
   margin: 1px;
   min-height: 15px;
@@ -736,7 +736,49 @@ div.loading {
   white-space: nowrap;
 }
 
-div.big-success,div.big-info,div.big-warning,div.big-error {
+div.small-success,
+div.small-info,
+div.small-warning,
+div.small-error {
+  text-align: left;
+  margin: 10px 15px;
+  min-height: 15px;
+  background-repeat: no-repeat;
+  background-position: 5px center;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
+  padding-left: 30px;
+}
+
+div.small-success {
+  background-image: url(images/icons/small-success.png);
+  background-color: #efe;
+  border-color: #5a5;
+}
+
+div.small-info {
+  background-image: url(images/icons/small-info.png);
+  background-color: #eef;
+  border-color: #55a;
+}
+
+div.small-warning {
+  background-image: url(images/icons/small-warning.png);
+  background-color: #ffd;
+  border-color: #da0;
+}
+
+div.small-error {
+  background-image: url(images/icons/small-error.png);
+  background-color: #fee;
+  border-color: #a55;
+}
+
+div.big-success,
+div.big-info,
+div.big-warning,
+div.big-error {
   margin: 10px 50px;
   min-height: 50px;
   background-repeat: no-repeat;
@@ -782,6 +824,7 @@ div.big-error {
   right: 5px;
   bottom: 5px;
   z-index: 1000;
+  display: none;
 }
 
 #goUp :hover {
@@ -954,10 +997,10 @@ table.note th.low {
   border-radius: 8px;
   background: #ddd;
   padding: 4px;
-  width: 400px;
-  height: 170px;
-  margin-left: -200px;
-  margin-top: -85px;
+  width: 450px;
+  height: 260px;
+  margin-left: -225px;
+  margin-top: -130px;
   position: absolute;
   top: 40%;
   left: 50%;
@@ -2737,4 +2780,3 @@ span.date input.time {
   border: 1px solid #ccc; 
   color: #ccc;
 }
-
