@@ -138,6 +138,7 @@ Main.add( function(){
         {{/if}}
       {{/foreach}}
       </ul>
+      <button class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}');">Afficher le détail des alertes</button>
       </div>      
     </td>
   </tr>

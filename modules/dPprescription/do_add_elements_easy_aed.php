@@ -180,13 +180,15 @@ foreach($lines as $cat_name => $lines_by_cat){
 	}
 }
 
+$lite = $AppUI->user_prefs['mode_readonly'] ? 0 : 1;
+
 // Reload en full mode
 if($mode_protocole || $mode_pharma){
-echo "<script type='text/javascript'>window.opener.Prescription.reload('$prescription_id','','','$mode_protocole','$mode_pharma', null, false)</script>";
+  echo "<script type='text/javascript'>window.opener.Prescription.reload('$prescription_id','','','$mode_protocole','$mode_pharma', null, false)</script>";
 } else {
-echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejour('$prescription_id', null, null, null, null, null, null, false)</script>";
-	
+  echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejour('$prescription_id', null, null, null, null, null, null, true, '$lite')</script>";
 }
+    
 echo $AppUI->getMsg();
 CApp::rip();
 ?>

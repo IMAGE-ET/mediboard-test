@@ -28,10 +28,12 @@
     {{assign var=list_administrations value=$line->_administrations.$unite_prise.$_date.$_hour.list}}
   {{/if}}
   {{assign var=planification_id value=""}}
+    {{assign var=origine_date_planif value=""}}
   {{if @$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
     {{assign var=planification_id value=$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
+    {{assign var=origine_date_planif value=$line->_administrations.$unite_prise.$_date.$_hour.original_date_planif}}
   {{/if}}
-  
+      
   {{assign var=_date_hour value="$_date $_heure_reelle"}}						    
 
   <!-- S'il existe des prises prevues pour la date $_date -->
@@ -64,7 +66,7 @@
      		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif" 
      		style='display: none; text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
    			   
-		  <div {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
+		  <div {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations) || $origine_date_planif}}
 		  					onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}"} })'
 		  		 {{/if}}
 		       id="drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
@@ -131,7 +133,11 @@
 		  </script>
          
 		    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
+			     {{if $planification_id}}
+			       <strong>Date d'origine:</strong> {{$origine_date_planif|date_format:$dPconfig.datetime}}<br />
+			     {{/if}}
 			     {{if @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
+			       <strong>Administrations:</strong>
 			     <ul>
 					   {{foreach from=$line->_administrations.$unite_prise.$_date.$_hour.administrations item=_log_administration}}
 					     {{assign var=administration_id value=$_log_administration->_ref_object->_id}}

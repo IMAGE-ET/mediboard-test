@@ -478,9 +478,11 @@ class CPrescriptionLine extends CMbObject {
 			    }
 			    if(!isset($this->_administrations[$key_administration][$date][$heure_adm]['planification_id'])){
 				    $this->_administrations[$key_administration][$date][$heure_adm]['planification_id'] = "";
+				    $this->_administrations[$key_administration][$date][$heure_adm]['original_date_planif'] = "";
 				  }
 				  $this->_administrations[$key_administration][$date][$heure_adm]['planification_id'] = $_administration->_id;
-			  }
+				  $this->_administrations[$key_administration][$date][$heure_adm]['original_date_planif'] = $_administration->original_dateTime;
+				}
   	  }
   	}
   	
@@ -502,6 +504,7 @@ class CPrescriptionLine extends CMbObject {
 				    $administrations['planification_id'] = "";
 				  }
 				  $administrations['planification_id'] = $_administration->_id;
+		      $administrations['original_date_planif'] = $_administration->original_dateTime;
 			  }
 			  // Administrations effectuées
 			  else {
