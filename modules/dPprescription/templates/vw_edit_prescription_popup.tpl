@@ -58,7 +58,7 @@ Main.add(function () {
           <td id="pre_admission" class="step {{if $prescription->type == 'pre_admission'}}selected{{/if}}">
           {{if $prescription_pre_admission->_id}}
 	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
-	              {{tr}}CPrescription.type.pre_admission{{/tr}}
+	              Pré-adm. <!-- {{tr}}CPrescription.type.pre_admission{{/tr}}  -->
 	            </a>
           	 {{if $prescription->type == "pre_admission"}}
 	            <form name="selPratForPresc" method="get" action="">

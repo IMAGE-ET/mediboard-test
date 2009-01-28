@@ -104,8 +104,8 @@ function reloadConsultAnesth() {
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   infosAnesthUrl.requestUpdate('InfoAnesth', { waitingText: null } );
 
-  Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'','1');
-
+  //Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'','1');
+  Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
 /*
   var sejour_id = document.editAntFrm._sejour_id.value;
   Prescription.suffixes.push("exam");

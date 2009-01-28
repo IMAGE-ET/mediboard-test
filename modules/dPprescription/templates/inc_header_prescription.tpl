@@ -337,16 +337,6 @@ submitProtocole = function(){
 		      {{/if}}
         {{/if}}
       {{/if}}
-      
-      {{if $mode_pharma && $prescription->_score_prescription == "2"}}
-        <strong>Validation auto. impossible</strong>
-      {{/if}}
-      
-      {{if $mode_pharma}}
-        <strong>
-          {{mb_label object=$prescription field=_score_prescription}} {{mb_value object=$prescription field=_score_prescription}}
-        </strong>
-      {{/if}}
     </td>
   </tr>  
   {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}

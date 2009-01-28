@@ -261,7 +261,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	      $prescription->checkIPC($alertesIPC, $line->code_cip);
 	      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
 
-	      if(!$line->_ref_produit->inLivret){
+	      if(!$line->_ref_produit->inLivret && $prescription->type != "externe"){
 	        $prescription->_scores["hors_livret"]++;
 	      }
 	    }
@@ -275,7 +275,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		    $prescription->checkIPC($alertesIPC, $_perf_line->code_cip);
 		    $prescription->checkInteractions($alertesInteractions, $_perf_line->code_cip);
 
-		    if(!$_perf_line->_ref_produit->inLivret){
+		    if(!$_perf_line->_ref_produit->inLivret && $prescription->type != "externe"){
 		      $prescription->_scores["hors_livret"]++;
 		    }
 		  }
@@ -313,7 +313,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		}
 	}
 }
-	
+
 // Chargement des fovoris 
 if($prescription->_id){
 	if($prescription->object_id && $prescription->_current_praticien_id){
@@ -419,6 +419,7 @@ if($prescription->_id){
 		}
   }
 }
+
 // Création du template
 $smarty = new CSmartyDP();
 

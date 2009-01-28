@@ -1,3 +1,8 @@
+<table class="tbl">
+  <tr>
+    <th class="title">Alertes</th>
+  </tr>
+</table>
 {{if $alertesInteractions|@count}}
 <table class="tbl">
   <tr>
@@ -65,4 +70,9 @@
   </tr>
   {{/foreach}}
 </table>
+{{/if}}
+{{if !$alertesInteractions && !$alertesProfil && !$alertesIPC && !$alertesAllergies}}
+  <div class="small-info">
+    Aucune alerte dans cette prescription
+  </div>
 {{/if}}

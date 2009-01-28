@@ -108,6 +108,40 @@ Main.add( function(){
 </form>
 
 <table class="form">
+  {{if $prescription->_score_prescription >= 1}}
+  <tr>
+    <td colspan="2">
+      <div class="{{if $prescription->_score_prescription == '1'}}small-warning{{else}}small-error{{/if}}">
+        <strong>
+          <span onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-alertes-{{$prescription->_id}}"} })'>
+		        {{mb_label object=$prescription field=_score_prescription}} 
+		        {{mb_value object=$prescription field=_score_prescription}}
+	        <span>
+		      {{if $mode_pharma && $prescription->_score_prescription == "2"}}
+		      <br />
+		      Validation automatique impossible
+		      {{/if}}
+	      </strong>
+      </div>
+      
+      <div id="tooltip-content-alertes-{{$prescription->_id}}" style="display: none;">
+      <ul>
+      {{foreach from=$prescription->_scores key=type item=scores_by_type}}
+        {{if is_array($scores_by_type)}}
+          {{if $scores_by_type|@count}}
+            <li>{{$scores_by_type|@count}} {{tr}}CPrescription._type_alerte.{{$type}}{{/tr}}</li>
+          {{/if}}
+        {{else}}
+          {{if $scores_by_type}}
+            <li>{{$scores_by_type}} {{tr}}CPrescription._type_alerte.{{$type}}{{/tr}}</li>
+          {{/if}}
+        {{/if}}
+      {{/foreach}}
+      </ul>
+      </div>      
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <th class="category">Nouvelle ligne</th>
     <th class="category" style="width: 1%;">Actions</th>

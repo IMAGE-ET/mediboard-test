@@ -3361,3 +3361,20 @@ ul.select-tree .highlight {
 table.tbl td.soin-selected div{
   background: #666;
 }
+
+ul li a.chapitre_non_signe{
+  background-color: #FFED68;
+  color: #000;
+}
+
+ul li a.chapitre_non_signe:hover{
+  background-color: #FFED68;
+  color: #000;
+}
+
+
+ul li a.chapitre_non_signe.active{
+  background-color: #FFF2AA;
+  color: #000;
+}
+

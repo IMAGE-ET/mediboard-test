@@ -11,7 +11,8 @@
 <script type="text/javascript">
 
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '');
+  //Prescription.reloadPrescSejour(prescription_id, '');
+  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
 }
 
 Main.add(function () {
@@ -20,7 +21,8 @@ Main.add(function () {
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'','1');
+    //Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'','1');
+    Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
   }
 });
 </script>

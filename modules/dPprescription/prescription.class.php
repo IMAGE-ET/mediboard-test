@@ -76,6 +76,7 @@ class CPrescription extends CMbObject {
   var $_nb_produit_by_chap = null;
  
   var $_date_plan_soin = null;
+  var $_type_alerte = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -112,6 +113,7 @@ class CPrescription extends CMbObject {
     $specs["_owner"]        = "enum list|prat|func|group";
     $specs["_score_prescription"] = "enum list|0|1|2";
     $specs["_date_plan_soin"] = "date";
+    $specs["_type_alerte"] = "enum list|hors_livret|interaction|allergie|profil|IPC";
     return $specs;
   }
   
@@ -1141,8 +1143,10 @@ class CPrescription extends CMbObject {
     $niveau_max = 0;
     foreach($listInteractions as $key => $int) {
       if($int->CIP1 == $code_cip || $int->CIP2 == $code_cip) {
-        @$this->_alertes["interaction"][$int->CIP1][$key] = $int->Type;
-        @$this->_alertes["interaction"][$int->CIP2][$key] = $int->Type;
+        @$this->_alertes["interaction"][$int->CIP1][$key]["libelle"] = $int->Type;
+        @$this->_alertes["interaction"][$int->CIP1][$key]["niveau"] = $int->Niveau;
+        @$this->_alertes["interaction"][$int->CIP2][$key]["libelle"] = $int->Type;
+        @$this->_alertes["interaction"][$int->CIP2][$key]["niveau"] = $int->Niveau;
         @$this->_scores["interaction"]["niv$int->Niveau"]++;
       }
       $niveau_max = max($int->Niveau, $niveau_max);
@@ -1176,7 +1180,8 @@ class CPrescription extends CMbObject {
     $niveau_max = 0;
     foreach($listProfil as $key => $profil) {
       if($profil->CIP == $code_cip) {
-        @$this->_alertes["profil"][$code_cip][$key] = $profil->LibelleMot;    
+        @$this->_alertes["profil"][$code_cip][$key]["libelle"] = $profil->LibelleMot;   
+        @$this->_alertes["profil"][$code_cip][$key]["niveau"] = $profil->Niveau;   
         @$this->_scores["profil"]["niv$profil->Niveau"]++;
       }
       $niveau_max = max($profil->Niveau, $niveau_max);

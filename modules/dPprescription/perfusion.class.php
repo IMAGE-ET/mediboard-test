@@ -74,7 +74,7 @@ class CPerfusion extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-  	$specs["prescription_id"]  = "ref class|CPrescription";
+  	$specs["prescription_id"]  = "ref class|CPrescription cascade";
   	$specs["type"]             = "notNull enum list|classique|seringue|PCA";
     $specs["libelle"]          = "str";
     $specs["vitesse"]          = "num pos";

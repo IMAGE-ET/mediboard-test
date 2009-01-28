@@ -325,11 +325,9 @@ var Prescription = {
  		link = $('prescription_tab_group').select("a[href=#"+tabName+"]")[0];
 
     if(lineCountNonSignee > 0){
-      link.style.backgroundColor = '#FF6';
-      link.style.color = '#000';
+      link.addClassName("chapitre_non_signe");
     } else {
-      link.style.backgroundColor = null;
-      link.style.color = null;
+      link.removeClassName("chapitre_non_signe");
     }
 
     if (tab = tab[0]) {
