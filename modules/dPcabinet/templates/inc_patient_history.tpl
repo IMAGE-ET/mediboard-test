@@ -63,7 +63,7 @@
         <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}"
           onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
           <strong>Dr {{$_consult->_ref_plageconsult->_ref_chir->_view}}</strong>
-          {{$_consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
+          le {{$_consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
         </a>
       </td>
     </tr>

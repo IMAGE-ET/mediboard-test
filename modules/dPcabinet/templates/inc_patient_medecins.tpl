@@ -1,13 +1,17 @@
-{{if $patient->medecin_traitant}}
-  <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$patient->medecin_traitant}} } });">
-    <strong>{{$patient->_ref_medecin_traitant->_view}}</strong>
+{{assign var=medecin value=$patient->_ref_medecin_traitant}}
+{{if $medecin->_id}}
+  <div class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+    <strong>{{$medecin}}</strong>
   </div>
 {{/if}}
+
 {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
-  <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$curr_corresp->medecin_id}} } });">
-    {{$curr_corresp->_ref_medecin->_view}}
+{{assign var=medecin value=$curr_corresp->_ref_medecin}}
+  <div class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+    {{$medecin}}
   </div>
 {{/foreach}}
+
 {{if $consult->adresse}}
-  <i>(Patient adressé)</i>
+  <em>(Patient adressé)</em>
 {{/if}}

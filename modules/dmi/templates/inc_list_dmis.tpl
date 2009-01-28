@@ -79,15 +79,16 @@
                   </div>
 	    </td>-->
 	    <td >
-	       <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProduct', object_id: '{{$_dmi->_ref_product->_id}}' } })"> 
+	      
+	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_dmi->_ref_product->_guid}}')"> 
         {{if $_dmi->_produit_existant}}
-            <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_dmi->_ref_product->_id}}">
-            {{mb_value object=$_dmi field=_produit_existant}}
-            </a>
-         {{else}}
-           {{mb_value object=$_dmi field=_produit_existant}}
-         {{/if}}
-         </span>
+          <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_dmi->_ref_product->_id}}">
+          {{mb_value object=$_dmi field=_produit_existant}}
+          </a>
+        {{else}}
+          {{mb_value object=$_dmi field=_produit_existant}}
+        {{/if}}
+        </span>
       </td>
 	  </tr>
 	  {{foreachelse}}

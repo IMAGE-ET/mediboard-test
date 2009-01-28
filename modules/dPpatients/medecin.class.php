@@ -82,7 +82,7 @@ class CMedecin extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-
+    
     if ($this->type == 'medecin') {
     	$this->_view = "Dr. $this->nom $this->prenom";
     }
