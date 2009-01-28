@@ -49,7 +49,7 @@ Class.extend(AideSaisie.AutoComplete, {
 	  oDiv.addClassName("autocomplete");
 	  oDiv.setStyle( {
 	    display: "none",
-	    width: "400px"
+	    width: "600px"
 	  } );
 	  
 	  oSearchField.parentNode.appendChild(oDiv);
