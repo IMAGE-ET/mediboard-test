@@ -48,9 +48,6 @@ $listBlocs = CGroups::loadCurrent()->loadBlocs();
 
 $listBlocsForSalles = $listBlocs;
 
-$listSalles = new CSalle;
-$where["stats"] = "= '1'";
-
 if (!$bloc->load($bloc_id)) {
   $bloc = reset($listBlocs);
 }
@@ -65,6 +62,14 @@ else {
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
+// Statistiques de horaires
+$salle = new CSalle();
+$ds = $salle->_spec->ds;
+// Ce script ne fontionne pas pour une raison inconnue.
+// Fonctionne en direct dans PMA
+// $horaires = $ds->loadList(file_get_contents("modules/dPstats/sql/horaires_salles.sql"));
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -72,7 +77,6 @@ $smarty->assign("user_id"                 , $AppUI->user_id );
 $smarty->assign("filter"       			  		, $filter         );
 $smarty->assign("map_graph_interventions" , $map_graph_interventions);
 $smarty->assign("listPrats"      		  		, $listPrats      );
-$smarty->assign("listSalles"     		  		, $listSalles     );
 $smarty->assign("listBlocs"               , $listBlocs      );
 $smarty->assign("listBlocsForSalles"      , $listBlocsForSalles);
 $smarty->assign("bloc"                    , $bloc           );
