@@ -20,6 +20,16 @@ class CRefSpec extends CMbFieldSpec {
   function getSpecType() {
     return("ref");
   }
+  
+  function getValue($object, $smarty = null, $params = null) {
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    $ref = new $this->class;
+    if (($ref_object = $ref->load($propValue)) && ($fieldName != $object->_spec->key)) 
+      return $ref_object->_view;
+    else
+      return $propValue;
+  }
 
   function checkProperty($object){
     $fieldName = $this->fieldName;
