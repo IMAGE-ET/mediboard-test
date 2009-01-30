@@ -152,12 +152,13 @@ function changeDateCal(){
             <select name="salle_id">
               <option value="0">&mdash; Toutes les salles &mdash;</option>
               {{foreach from=$listBlocs item=curr_bloc}}
-                <optgroup label="{{$curr_bloc->_view}}" />
+                <optgroup label="{{$curr_bloc->_view}}">
                 {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
                   <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
                     {{$curr_salle->nom}}
                   </option>
-              {{/foreach}}
+                {{/foreach}}
+                </optgroup>
               {{/foreach}}
             </select>
           </td>
