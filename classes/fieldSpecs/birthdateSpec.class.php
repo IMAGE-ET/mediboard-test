@@ -22,7 +22,7 @@ class CBirthDateSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
-    if (!$propValue || $propValue == "0000-00-00") {
+    if (!$propValue || $propValue === "0000-00-00") {
       return "-";
     }
     return parent::getValue($object, $smarty, $params);

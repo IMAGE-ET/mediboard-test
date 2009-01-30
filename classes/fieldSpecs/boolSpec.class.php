@@ -56,7 +56,7 @@ class CBoolSpec extends CMbFieldSpec {
     $default      = CMbArray::extract($params, "default", $this->default);
     $extra        = CMbArray::makeXmlAttributes($params);
     
-    if ($typeEnum == "radio") {
+    if ($typeEnum === "radio") {
 	    // Attributes for all inputs
 	    $attributes = array(
 	      "type" => "radio",
@@ -88,7 +88,7 @@ class CBoolSpec extends CMbFieldSpec {
 	    return $sHtml;
     } 
     
-    if($typeEnum == "checkbox"){
+    if($typeEnum === "checkbox"){
     	if(($value !== null && $value === "1")){
         $checked = " checked=\"checked\""; 
       }else{
@@ -106,10 +106,10 @@ class CBoolSpec extends CMbFieldSpec {
   function getLabelForElement($object, &$params){
   	$typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
     
-  	if($typeEnum == "radio"){
+  	if($typeEnum === "radio"){
       return $this->fieldName."_1";
   	}
-  	if($typeEnum == "checkbox"){
+  	if($typeEnum === "checkbox"){
   		return "__".$this->fieldName;
   	}
   }

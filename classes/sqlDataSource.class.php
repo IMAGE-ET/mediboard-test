@@ -253,7 +253,7 @@ abstract class CSQLDataSource {
 		  }
 		  
 		  // Remove comment lines
-      if (substr($sqlLine, 0, 2) == "--" || substr($sqlLine, 0, 1) == "#") {
+      if (substr($sqlLine, 0, 2) === "--" || substr($sqlLine, 0, 1) === "#") {
         continue;
       }
 
@@ -424,14 +424,14 @@ abstract class CSQLDataSource {
       }
       
       // Skip underscored
-      if ($k[0] == "_") {
+      if ($k[0] === "_") {
         continue;
       }
       
       $v = trim($v);
       
       // Skip empty vars
-      if ($v === "" && $k != $keyName) {
+      if ($v === "" && $k !== $keyName) {
         continue;
       }
       
@@ -492,7 +492,7 @@ abstract class CSQLDataSource {
     $tmp = array();
     foreach (get_object_vars($object) as $k => $v) {
       // Where clause on key name
-      if ($k == $keyName) { 
+      if ($k === $keyName) { 
         $where = "`$keyName`='" . $this->escape($v) . "'";
         continue;
       }
@@ -503,7 +503,7 @@ abstract class CSQLDataSource {
       }
       
       // Skip underscored
-      if ($k[0] == "_") { // internal field
+      if ($k[0] === "_") { // internal field
         continue;
       }
 

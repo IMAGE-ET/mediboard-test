@@ -19,7 +19,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     $propValue = $object->$fieldName;
     
     $format = CMbArray::extract($params, "format", "%d/%m/%Y %H:%M");
-    if ($format == "relative") {
+    if ($format === "relative") {
       $relative = CMbDate::relative($propValue, mbDateTime());
       return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
       
@@ -39,7 +39,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     $propValue = $object->$fieldName;
     
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})[ \+]([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/", $propValue)) {
-      if($object->$fieldName == 'current'|| $object->$fieldName ==  'now') {
+      if($object->$fieldName === 'current'|| $object->$fieldName ===  'now') {
         $object->$fieldName = mbDateTime();
         return null;
       } 

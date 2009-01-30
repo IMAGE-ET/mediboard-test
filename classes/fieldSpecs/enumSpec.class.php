@@ -66,7 +66,7 @@ class CEnumSpec extends CMbFieldSpec {
       asort($enumsTrans); 
     }
     
-    if ($typeEnum == "select") {
+    if ($typeEnum === "select") {
       $sHtml       = "<select name=\"$field\"";
       $sHtml      .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>";
       
@@ -89,7 +89,7 @@ class CEnumSpec extends CMbFieldSpec {
       return $sHtml;
     }
 
-    if ($typeEnum == "radio"){
+    if ($typeEnum === "radio"){
       $compteur    = 0;
       $sHtml       = "";
       
@@ -121,10 +121,10 @@ class CEnumSpec extends CMbFieldSpec {
   function getLabelForElement($object, &$params){
     $typeEnum  = CMbArray::extract($params, "typeEnum", "select");
     
-    if($typeEnum == "select"){
+    if($typeEnum === "select"){
       return $this->fieldName;
     }
-    if($typeEnum == "radio"){
+    else if($typeEnum === "radio"){
       $enumsTrans = array_flip($object->_enumsTrans[$this->fieldName]);
       return $this->fieldName."_".current($enumsTrans);
     }
