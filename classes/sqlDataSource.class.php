@@ -415,6 +415,8 @@ abstract class CSQLDataSource {
       return false;
     }
     
+    $fields = array();
+    $values = array();
     foreach (get_object_vars($object) as $k => $v) {
       // Skip null, arrays and objects
       if ($v === null || is_array($v) || is_object($v)) {
