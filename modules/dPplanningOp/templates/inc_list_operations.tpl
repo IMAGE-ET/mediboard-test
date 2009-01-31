@@ -37,14 +37,17 @@
   <tbody class="hoverable">
   
   <tr>
+    {{assign var=patient value=$curr_op->_ref_sejour->_ref_patient}}
     <td class="text" {{if !$board}}rowspan="2"{{/if}}>
-      <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
+    
+      <a href="{{$patient->_dossier_cabinet_url}}"
         class="tooltip-trigger"
-        onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_op->_ref_sejour->_ref_patient->_id}} } })"
-      >
-        {{$curr_op->_ref_sejour->_ref_patient->_view}}
+        onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+        {{$patient->_view}}
       </a>
     </td>
+    
+    
     <td class="text">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
         {{if $curr_op->libelle}}
@@ -116,13 +119,12 @@
   <tbody class="hoverable">
 
   <tr>
-  
+    {{assign var=patient value=$curr_op->_ref_sejour->_ref_patient}}
     <td class="text" {{if !$board}}rowspan="2"{{/if}}>
-      <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
+      <a href="{{$patient->_dossier_cabinet_url}}"
         class="tooltip-trigger"
-        onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_op->_ref_sejour->_ref_patient->_id}} } })"
-      >
-        {{$curr_op->_ref_sejour->_ref_patient->_view}}
+        onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+        {{$patient->_view}}
       </a>
     </td>
     
@@ -141,7 +143,7 @@
         {{/foreach}}
       </a>
     </td>
-    <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled{{/if}}">
+    <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled"{{/if}}>
       {{if $curr_op->annulee}}
         [ANNULEE]
       {{else}}

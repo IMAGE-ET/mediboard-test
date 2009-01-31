@@ -71,7 +71,7 @@ function editIntervention(op_id) {
     		{{/if}}
     		<br/>
 	    	<span class="tooltip-trigger"
-	      	onmouseover="ObjectTooltip.create(this, { params: {object_class: 'CAffectation', object_id: {{$curr_aff->_id}} } })">
+	      	onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
 	      	Affecations du {{$curr_aff->entree|date_format:"%d/%m/%Y"}}
 	      				 			au {{$curr_aff->sortie|date_format:"%d/%m/%Y"}}
 	   	 	</span>
@@ -93,7 +93,7 @@ function editIntervention(op_id) {
 			<td class="space"> </td>
 			<td class="only done ray" colspan=3> AU BLOC <br/> 
 				<span class="tooltip-trigger"
-	      	onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$diagramme.bloc.id}} } })">
+	      	onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
 	      		{{$diagramme.bloc.vue}}
 	   	 	</span>
 			</td>
@@ -102,7 +102,7 @@ function editIntervention(op_id) {
 			<td class="space"> </td>
 			<td class="only current" colspan=3> AU BLOC <br/> 
 				<span class="tooltip-trigger"
-	      	onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$diagramme.bloc.id}} } })">
+	      	onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
 	      		{{$diagramme.bloc.vue}}
 	   	 	</span>
 	   	</td>
@@ -111,7 +111,7 @@ function editIntervention(op_id) {
 	  	<td class="space"> </td>
 			<td class="only expect ray" colspan=3> AU BLOC <br/> 
 				<span class="tooltip-trigger"
-	      	onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$diagramme.bloc.id}} } })">
+	      	onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
 	      		{{$diagramme.bloc.vue}}
 	   	 	</span>
 	   	</td>
@@ -134,7 +134,7 @@ function editIntervention(op_id) {
     			{{/if}}
     			<img src="images/icons/tick.png" alt="edit" title="Etat du Séjour" />
 	    		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
-	      			onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })">
+	      			onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
 	      			Intervention du {{$curr_op->_datetime|date_format:$dPconfig.datetime}}
 	   	 		</a>
 	   	 {{else}}
@@ -150,7 +150,7 @@ function editIntervention(op_id) {
 	    			</a>
     			{{/if}}
 	   	 		<a href="?m=dPhospi&amp;dialog=1&amp;a=vw_parcours&amp;operation_id={{$curr_op->_id}}" 
-	      		onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })">
+	      			onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
 	      		Intervention du {{$curr_op->_datetime|date_format:$dPconfig.datetime}}
 	   	 		</a>
 	   	 	{{/if}}

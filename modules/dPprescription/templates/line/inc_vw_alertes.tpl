@@ -82,7 +82,7 @@
 
 {{if $image && $color}}
 	<img src="images/icons/{{$image}}" title="" alt="" 
-			 onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-alertes-line-{{$line->_guid}}"} })' />
+			 onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-line-{{$line->_guid}}")' />
 	
 	<div id="tooltip-content-alertes-line-{{$line->_guid}}" style="display: none; background-color: {{$color}};">
 		{{foreach from=$prescription_reelle->_alertes key=type item=curr_type}}

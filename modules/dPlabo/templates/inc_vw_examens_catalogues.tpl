@@ -42,7 +42,7 @@
       </script>
       {{$curr_examen->_view}}
       </div>
-      <button type="button" class="search notext" onclick="ObjectTooltip.create(this, { popup: true, params: { object_class: 'CExamenLabo', object_id: {{$curr_examen->_id}} } })">
+      <button type="button" class="search notext" onclick="ObjectTooltip.createEx(this, '{{$curr_examen->_guid}}')">
         view
       </button>
     </td>

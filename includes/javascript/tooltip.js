@@ -195,6 +195,18 @@ Object.extend(ObjectTooltip, {
     };
     
     this.create(eTrigger, oOptions);
+  },
+  
+  createDOM: function(eTrigger, sTarget, params) {
+  	params = params || {};
+  	params.element = sTarget;
+    
+    var oOptions = {
+      mode: 'dom',
+      params: params
+    };
+    
+    this.create(eTrigger, oOptions);
   }
 });
 

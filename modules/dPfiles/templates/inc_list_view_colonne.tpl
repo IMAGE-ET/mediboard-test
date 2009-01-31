@@ -48,14 +48,14 @@ var File = {
 			    
 					<!-- Tooltip -->
 					<td class="text" style="height: 40px; overflow: auto">
-			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$curr_file->_class_name}}', object_id: {{$curr_file->_id}} } });">
+			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}');">
 			        {{$curr_file->_view|truncate:60}}
 			      </span>
 					</td>
 	
 					<!-- Historique -->
 			    <td class="text" style="vertical-align: middle; width: 1%">
-			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: '{{$curr_file->_class_name}}', object_id: {{$curr_file->_id}} } });">
+			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}', 'objectViewHistory');">
 							<img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
 			      </span>
 					</td>

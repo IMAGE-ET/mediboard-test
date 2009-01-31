@@ -164,6 +164,7 @@ Main.add( function(){
   </div>
   {{/if}}
   <br />
+  
   {{if $prescription->object_id}}
   <!-- Affichage de l'historique -->
   <table class="tbl">
@@ -184,10 +185,9 @@ Main.add( function(){
 			        {{else}}
 			          {{assign var=chapitre value=$_line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 			          <!-- Affichage d'une ligne d'element -->
-					      <td
-					      {{if $chapitre == "dmi"}}
-					       colspan="4"
-					      {{/if}}><a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_line->_class_name}}', object_id: {{$_line->_id}} } })">{{$_line->_view}}</a></td>
+					      <td {{if $chapitre == "dmi"}}colspan="4"{{/if}}>
+					      	<a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">{{$_line->_view}}</a>
+					      </td>
 					      
 					      {{if $chapitre != "dmi"}}
 						      {{if !$_line->fin}}

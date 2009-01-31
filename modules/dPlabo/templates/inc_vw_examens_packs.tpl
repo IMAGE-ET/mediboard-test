@@ -53,7 +53,7 @@ Object.extend(Droppables, {
         <input type="hidden" name="pack_item_examen_labo_id" value="{{$curr_item->_id}}" />
         <input type="hidden" name="del" value="1" />
         <button type="button" class="trash notext" onclick="Pack.delExamen(this.form)">{{tr}}Delete{{/tr}}</button>
-        <button type="button" class="search notext" onclick="ObjectTooltip.create(this, { popup: true, params: { object_class: 'CExamenLabo', object_id: {{$curr_examen->_id}} } })">
+        <button type="button" class="search notext" onclick="ObjectTooltip.createEx(this, '{{$curr_examen->_guid}}')">
           view
         </button>
       </form>

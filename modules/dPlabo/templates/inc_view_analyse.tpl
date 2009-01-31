@@ -14,7 +14,7 @@
           {{tr}}Delete{{/tr}}
         </button>
         {{/if}}
-        <button type="button" class="search notext" title="{{tr}}View{{/tr}}" onclick="ObjectTooltip.create(this, { mode: 'objectCompleteView', popup: true, params: {object_class: 'CExamenLabo', object_id: {{$curr_examen->_id}} } })">
+        <button type="button" class="search notext" title="{{tr}}View{{/tr}}" onclick="ObjectTooltip.createEx(this, '{{$curr_examen->_guid}}', 'objectCompleteView')">
           {{tr}}View{{/tr}}
         </button>
       </form>

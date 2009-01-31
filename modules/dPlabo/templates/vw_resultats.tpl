@@ -67,10 +67,10 @@ Main.add(function () {
             <label for="_view" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label>
           </th>
           <td class="readonly">
-            <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$patient->_id}} } })">
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
             </span>
-            <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
+            <button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
             <script type="text/javascript">
             PatSelector.init = function(){
               this.sForm = "Patient";
