@@ -106,8 +106,8 @@
 
 		    {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
 		    </form>
-		    <a href="#" class="tooltip-trigger" onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CCompteRendu', object_id: {{$document->_id}} } })">
-		      {{$document->nom}}
+		    <a href="#" class="tooltip-trigger" onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
+		      {{$document}}
 		    </a>
 		  </td>
 		  

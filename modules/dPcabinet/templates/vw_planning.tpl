@@ -292,7 +292,7 @@ Main.add(function () {
     </td>
     <td>
       {{if $plageSel->plageconsult_id}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->plageconsult_id}}">Planifier une consultation dans cette plage</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
       <table class="tbl">
         <tr>
@@ -315,14 +315,16 @@ Main.add(function () {
           <th>RDV</th>
           <th>Etat</th>
         </tr>
-        {{foreach from=$plageSel->_ref_consultations item=curr_consult}}
+        {{foreach from=$plageSel->_ref_consultations item=_consult}}
         <tr>
-          {{assign var="consult_id" value=$curr_consult->consultation_id}}
+          {{assign var="consult_id" value=$_consult->_id}}
+          {{assign var=patient value=$_consult->_ref_patient}}
           {{assign var="href_consult" value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
           {{assign var="href_planning" value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
-          {{if !$curr_consult->patient_id}}
+
+          {{if !$patient->_id}}
             {{assign var="style" value="style='background: #ffa;'"}}          
-          {{elseif $curr_consult->premiere}} 
+          {{elseif $_consult->premiere}} 
             {{assign var="style" value="style='background: #faa;'"}}
           {{else}} 
             {{assign var="style" value=""}}
@@ -330,77 +332,79 @@ Main.add(function () {
           
           <td {{$style|smarty:nodefaults}}>
             <div style="float: left">
-            {{if $curr_consult->patient_id!=0}}
-              <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:$dPconfig.time}}</a>
+            {{if $patient->_id}}
+              <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->heure|date_format:$dPconfig.time}}</a>
             {{else}}
-              {{$curr_consult->heure|date_format:$dPconfig.time}}
+              {{$_consult->heure|date_format:$dPconfig.time}}
             {{/if}}
             </div>
-            {{if $curr_consult->categorie_id}}
+            
+            {{assign var=categorie value=$_consult->_ref_categorie}}
+            {{if $categorie->_id}}
             <div style="float: right">
-              <img src="./modules/dPcabinet/images/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
+              <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
             </div>
             {{/if}}
           </td>
+
           <td class="text" {{$style|smarty:nodefaults}}>
-            {{if !$curr_consult->patient_id}}
+            {{if !$patient->_id}}
             [PAUSE]
             {{else}}
-            <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_consult->_ref_patient->patient_id}}">
+            <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
               <img src="images/icons/edit.png" alt="modifier" />
             </a>
             <a href="{{$href_consult}}"
               class="tooltip-trigger"
-              onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_consult->_ref_patient->_id}} } })"
-            >
-              {{$curr_consult->_ref_patient->_view}}
+              onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+              {{$patient}}
             </a>
             {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>
-            {{if $curr_consult->patient_id}}
-              <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->motif|truncate:35:"...":false|nl2br}}</a>
+            {{if $patient->_id}}
+              <a href="{{$href_consult}}"  title="Voir la consultation">{{$_consult->motif|truncate:35:"...":false|nl2br}}</a>
             {{else}}
-              {{$curr_consult->motif|truncate:35:"...":false|nl2br}}
+              {{$_consult->motif|truncate:35:"...":false|nl2br}}
             {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>
-            {{if $curr_consult->patient_id}}
-              <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->rques|truncate:35:"...":false|nl2br}}</a>
+            {{if $patient->_id}}
+              <a href="{{$href_consult}}"  title="Voir la consultation">{{$_consult->rques|truncate:35:"...":false|nl2br}}</a>
             {{else}}
-              {{$curr_consult->rques|truncate:35:"...":false|nl2br}}
+              {{$_consult->rques|truncate:35:"...":false|nl2br}}
             {{/if}}
           </td>
           <td {{$style|smarty:nodefaults}}>
-            <form name="etatFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
+            <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
-            <input type="hidden" name="chrono" value="{{$curr_consult|const:'PATIENT_ARRIVE'}}" />
+            {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
+            <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
             <input type="hidden" name="arrivee" value="" />
             </form>
             
-            <form name="cancelFrm{{$curr_consult->consultation_id}}" action="?m=dPcabinet" method="post">
+            <form name="cancelFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
-            <input type="hidden" name="chrono" value="{{$curr_consult|const:'TERMINE'}}" />
+            {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
+            <input type="hidden" name="chrono" value="{{$_consult|const:'TERMINE'}}" />
             <input type="hidden" name="annule" value="1" />
             </form>
             
             <a class="action" href="{{$href_planning}}">
               <img src="images/icons/planning.png" title="Modifier le rendez-vous" alt="modifier" />
             </a>
-			{{if $curr_consult->chrono == $curr_consult|const:'PLANIFIE' && $curr_consult->patient_id}}
-            <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$curr_consult->consultation_id}})">
+						{{if $_consult->chrono == $_consult|const:'PLANIFIE' && $patient->_id}}
+            <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">
               <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
             </a>
-            <a class="action" href="#" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$curr_consult->consultation_id}}.submit()}">
+            <a class="action" href="#" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$_consult->_id}}.submit()}">
               <img src="images/icons/cancel.png" title="Annuler ce rendez-vous" alt="annuler" />
             </a>
             {{/if}}
           </td>
-          <td {{$style|smarty:nodefaults}}>{{if $curr_consult->patient_id}}{{$curr_consult->_etat}}{{/if}}</td>
+          <td {{$style|smarty:nodefaults}}>{{if $patient->_id}}{{$_consult->_etat}}{{/if}}</td>
         </tr>
         {{/foreach}}
       </table>

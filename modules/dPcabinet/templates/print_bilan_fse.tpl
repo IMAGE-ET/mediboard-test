@@ -72,7 +72,7 @@ Consultation = {
         {{foreach from=$_fses item=_fse}}
         <tr>
           <td>
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_fse->_id}}' } })">
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_fse->_guid}}')">
 				  	  {{$_fse->_id}}
 				  	</span>
 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
@@ -86,7 +86,7 @@ Consultation = {
 			    <td>
 			      {{assign var=lot value=$_fse->_ref_lot}}
 			      {{if $lot->_id}}
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmLot', object_id: '{{$lot->_id}}' } })">
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$lot->_guid}}')">
 			      {{$lot->_id|pad:6:'0':'left'}}
 				  	</span>
 						{{/if}}
@@ -95,7 +95,7 @@ Consultation = {
 			    
 			    <td>
 			      {{if $lot->S_LOT_FIC}}
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFichier', object_id: '{{$lot->S_LOT_FIC}}' } })">
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, 'CLmFichier-{{$lot->S_LOT_FIC}}')">
 			      {{$lot->S_LOT_FIC|pad:6:'0':'left'}}
 				  	</span>
 						{{/if}}
@@ -103,7 +103,7 @@ Consultation = {
 			    
           <td>
             {{if $_fse->_consult_id}}
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: '{{$_fse->_consult_id}}' } })">
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, 'CConsultation-{{$_fse->_consult_id}}')">
 				  	  <a href="#CConsultation-{{$_fse->_consult_id}}" onclick="Consultation.show('{{$_fse->_consult_id}}')">
 				  	  	{{tr}}CConsultation{{/tr}} #{{$_fse->_consult_id}}
 				  	  </a>

@@ -138,27 +138,38 @@ Main.add(function () {
 <input type="hidden" name="_operation_id" value="" />
 
 <table class="form">
-  {{if $consult->consultation_id}}
   <tr>
-    <td><a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">Créer une nouvelle consultation</a></td>
+    <td>
+    	<a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
+    	{{tr}}CConsultation-title-create{{/tr}}
+    </a>
+    </td>
+    <td>
+		  {{if $consult->_id}}
+    	<a class="buttonsearch" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+    	  {{tr}}CConsultation-title-access{{/tr}}
+    	</a>
+		  {{/if}}
+    </td>
   </tr>
-  {{/if}}
+  
   <tr>
-    {{if $consult->consultation_id}}
+    {{if $consult->_id}}
       <th class="title modify" colspan="5">
-        <a style="float:right;" href="#" onclick="view_log('CConsultation',{{$consult->consultation_id}})">
+        <a style="float:right;" href="#" onclick="view_log('CConsultation',{{$consult->_id}})">
           <img src="images/icons/history.gif" alt="historique" />
         </a>
-        Modification de la consultation de {{$pat->_view}} pour le Dr. {{$chir->_view}}
+        {{tr}}CConsultation-title-access{{/tr}}
+        de {{$pat}} par le Dr. {{$chir}}
       </th>
     {{else}}
-      <th class="title" colspan="5">Création d'une consultation</th>
+      <th class="title" colspan="5">{{tr}}CConsultation-title-create{{/tr}}</th>
     {{/if}}
   </tr>
   {{if $consult->annule == 1}}
   <tr>
     <th class="category cancelled" colspan="3">
-    CONSULTATION ANNULEE
+    {{tr}}CConsultation-annule{{/tr}}
     </th>
   </tr>
   {{/if}}
@@ -182,12 +193,12 @@ Main.add(function () {
             </select>
           </td>
           <td>
-            <input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->consultation_id && $consult->patient_id==0}} checked="checked" {{/if}} />
+            <input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} />
             <label for="_pause" title="Planification d'une pause">Pause</label>
           </td>
         </tr>
 
-        <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
+        <tr id="viewPatient" {{if $consult->_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
             {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()" onchange="requestInfoPat()"}}
             {{mb_label object=$consult field="patient_id"}}
