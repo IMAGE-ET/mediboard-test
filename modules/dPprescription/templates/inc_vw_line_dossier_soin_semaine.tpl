@@ -15,7 +15,7 @@
         <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
             rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
             onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-          <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}'} })">
+          <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
             <a href="#">{{$categorie->nom}}</a>
           </div>
           <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
@@ -32,11 +32,12 @@
 	    </th>
     {{/if}}
   {{/if}}	
+  
    <!-- Affichage du libelle de la ligne -->
    <td style="width: 1%;" class="text">
        <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line_class}}', object_id: {{$line->_id}} } })">
+	    <a href="#{{$line->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 	        {{$line->_ucd_view}}
 	        {{if $line->_traitement}} (Traitement perso){{/if}}
@@ -50,6 +51,7 @@
 	    {{$line->voie}}
 	  {{/if}}
    </td>
+   
    <!-- Affichage de la prise -->
 	 <td class="text">
 	   <small>
@@ -112,7 +114,7 @@
 						          {{/if}}
 					          {{/if}}"
 					          onclick='addAdministrationPlan("{{$line->_id}}","{{$line->_class_name}}","{{$unite_prise}}","{{$date}}","{{$list_administrations}}");' 
-	                  onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$date}}"} })'>
+	                  onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$date}}")'>
 	        <!-- Affichage des administrations effectuée et des prises prevues -->
 		      {{$nb_administre}} / {{$nb_prevue}}
 	    </span>    

@@ -113,7 +113,7 @@ Main.add( function(){
     <td colspan="2">
       <div class="{{if $prescription->_score_prescription == '1'}}small-warning{{else}}small-error{{/if}}">
         <strong>
-          <span onmouseover='ObjectTooltip.create(this, {mode: "dom",  params: {element: "tooltip-content-alertes-{{$prescription->_id}}"} })'>
+          <span onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-{{$prescription->_id}}")'>
 		        {{mb_label object=$prescription field=_score_prescription}} 
 		        {{mb_value object=$prescription field=_score_prescription}}
 	        <span>
@@ -384,7 +384,7 @@ Main.add( function(){
     <tr>
       <!-- Affichage d'une ligne de medicament -->
       {{if $_hist_line->_class_name == "CPrescriptionLineMedicament"}}
-        <td><a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_hist_line->_class_name}}', object_id: {{$_hist_line->_id}} } })">{{$_hist_line->_view}}</a></td>
+        <td><a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$_hist_line->_guid}}')">{{$_hist_line->_view}}</a></td>
         {{if !$_hist_line->fin}}
           <td>
             {{mb_label object=$_hist_line field="debut"}}: {{mb_value object=$_hist_line field="debut"}}

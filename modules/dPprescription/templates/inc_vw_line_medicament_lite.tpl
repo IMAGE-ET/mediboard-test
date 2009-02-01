@@ -29,15 +29,15 @@
          });
          {{/if}}
       </script>
+      {{if $line->_ref_parent_line->_id}}
+        {{assign var=parent_line value=$line->_ref_parent_line}}
+        <img style="float: right" src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+             class="tooltip-trigger" 
+             onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
+      {{/if}}
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})" style="font-weight: bold;">
         {{$line->_ucd_view}}
       </a>
-      {{if $line->_ref_parent_line->_id}}
-        {{assign var=parent_line value=$line->_ref_parent_line}}
-        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
-             class="tooltip-trigger" 
-             onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_line->_class_name}}', object_id: '{{$parent_line->_id}}' } })"/>
-      {{/if}}
       {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
       {{if $line->_traitement}}Traitement personnel&nbsp;{{/if}}
