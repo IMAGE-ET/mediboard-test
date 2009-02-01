@@ -8,7 +8,7 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="7">
+    <th class="title" colspan="9">
       Liste des {{$totalOp}} intervention(s) du {{$date|date_format:$dPconfig.longdate}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
@@ -16,11 +16,13 @@ Main.add(function () {
   <tr>
     <th>Traité</th>
     <th>Dossier</th>
-    <th>Praticien</th>
+    <th>{{mb_label object=$operation field="chir_id"}}</th>
     <th>Patient</th>
     <th>Heure</th>
-    <th>Libelle</th>
+    <th>{{mb_label object=$operation field="libelle"}}</th>
     <th>Codes prévus</th>
+    <th>{{mb_label object=$operation field="labo"}}</th>
+    <th>{{mb_label object=$operation field="anapath"}}</th>
   </tr>
   {{foreach from=$plages item=curr_plage}}
   {{foreach from=$curr_plage->_ref_operations item=curr_op}}
@@ -38,14 +40,12 @@ Main.add(function () {
     <td class="text">
       Dr {{$curr_op->_ref_chir->_view}}
     </td>
-
     <td class="text">
       <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_op->_ref_sejour->patient_id}}">
         {{$curr_op->_ref_sejour->_ref_patient->_view}}
         [{{$curr_op->_ref_sejour->_ref_patient->_IPP}}]
       </a>
     </td>
-    
     <td>
       {{if $curr_op->rank}}
         {{$curr_op->time_operation|date_format:$dPconfig.time}}
@@ -53,17 +53,21 @@ Main.add(function () {
         NP
       {{/if}}
     </td>
-
     <td class="text">
       {{$curr_op->libelle}}
     </td>
-
     <td class="text">
       <ul>
       {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         <li>{{$curr_code->code}}</li>
       {{/foreach}}
       </ul>
+    </td>
+    <td class="text">
+      {{mb_value object=$curr_op field="labo"}}
+    </td>
+    <td class="text">
+      {{mb_value object=$curr_op field="anapath"}}
     </td>
   </tr>
   {{/foreach}}
@@ -84,25 +88,27 @@ Main.add(function () {
     <td class="text">
       Dr {{$curr_op->_ref_chir->_view}}
     </td>
-
     <td class="text">
       <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_op->_ref_sejour->patient_id}}">
         {{$curr_op->_ref_sejour->_ref_patient->_view}}
       </a>
     </td>
-    
     <td>Urgence</td>
-
     <td class="text">
       {{$curr_op->libelle}}
     </td>
-
     <td class="text">
       <ul>
       {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         <li>{{$curr_code->code}}</li>
       {{/foreach}}
       </ul>
+    </td>
+    <td class="text">
+      {{mb_value object=$curr_op field="labo"}}
+    </td>
+    <td class="text">
+      {{mb_value object=$curr_op field="anapath"}}
     </td>
   </tr>
   {{/foreach}}

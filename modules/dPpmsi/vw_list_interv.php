@@ -42,12 +42,12 @@ foreach($plages as &$curr_plage) {
   $totalOp += count($curr_plage->_ref_operations);
 }
 
-$urgences = new COperation;
+$operation = new COperation;
 $where = array();
 $where["date"]     = "= '$date'";
-$where["salle_id"] = $urgences->_spec->ds->prepareIn(array_keys($listSalles));
+$where["salle_id"] = $operation->_spec->ds->prepareIn(array_keys($listSalles));
 $order = "chir_id";
-$urgences = $urgences->loadList($where, $order);
+$urgences = $operation->loadList($where, $order);
 $totalOp += count($urgences);
 foreach($urgences as &$curr_op) {
   $curr_op->loadRefsFwd();
@@ -61,10 +61,11 @@ foreach($urgences as &$curr_op) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date"    , $date  );
-$smarty->assign("plages"  , $plages);
-$smarty->assign("urgences", $urgences);
-$smarty->assign("totalOp" , $totalOp);
+$smarty->assign("date"     , $date);
+$smarty->assign("operation", $operation);
+$smarty->assign("plages"   , $plages);
+$smarty->assign("urgences" , $urgences);
+$smarty->assign("totalOp"  , $totalOp);
 
 $smarty->display("vw_list_interv.tpl");
 
