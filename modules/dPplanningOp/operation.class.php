@@ -510,7 +510,7 @@ class COperation extends CCodable {
    * Nécessiste d'avoir chargé la plage opératoire au préalable
    */
   function updateSalle() {
-    if ($this->plageop_id) {
+    if ($this->plageop_id && $this->salle_id) {
       $this->_deplacee = $this->_ref_plageop->salle_id != $this->salle_id;
     }
     
