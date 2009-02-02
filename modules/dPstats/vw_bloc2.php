@@ -64,39 +64,39 @@ if($mode == "csv") {
     $csvName = "stats_bloc.csv";
     $csvPath = "tmp/$csvName";
     $csvFile = fopen($csvPath, "w") or die("can't open file");
-    $title  = '"Date","Bloc","Salle","Début vacation","Fin vacation","N° d\'ordre prévu","N° d\'ordre réel",';
-    $title .= '"Patient","Prise en charge","Chirurgien","Anesthésiste","Libellé","DP","CCAM","Type d\'anesthésie","Code ASA","Placement programme",';
-    $title .= '"Entrée salle","Début d\'induction","Fin d\'induction","Début d\'intervention","Fin d\'intervention","Sortie salle","Patient suivant",';
-    $title .= '"Entrée reveil","Sortie reveil"
+    $title  = '"Date";"Bloc";"Salle";"Début vacation";"Fin vacation";"N° d\'ordre prévu";"N° d\'ordre réel";';
+    $title .= '"Patient";"Prise en charge";"Chirurgien";"Anesthésiste";"Libellé";"DP";"CCAM";"Type d\'anesthésie";"Code ASA";"Placement programme";';
+    $title .= '"Entrée salle";"Début d\'induction";"Fin d\'induction";"Début d\'intervention";"Fin d\'intervention";"Sortie salle";"Patient suivant";';
+    $title .= '"Entrée reveil";"Sortie reveil"
 ';
     fwrite($csvFile, $title);
     foreach($listPlages as $curr_plage) {
       foreach($curr_plage->_ref_operations as $curr_op) {
-        $line  = '"'.$curr_plage->date.'",';
-        $line .= '"'.$curr_plage->_ref_salle->_ref_bloc->_view.'",';
-        $line .= '"'.$curr_plage->_ref_salle->_view.'",';
-        $line .= '"'.$curr_plage->debut.'",';
-        $line .= '"'.$curr_plage->fin.'",';
-        $line .= '"'.$curr_op->rank.'",';
-        $line .= '"'.$curr_op->_rank_reel.'",';
-        $line .= '"'.$curr_op->_ref_sejour->_ref_patient->_view.'",';
-        $line .= '"'.$curr_op->_ref_sejour->type.'",';
-        $line .= '"'.$curr_op->_ref_chir->_view.'",';
-        $line .= '"'.$curr_op->_ref_anesth->_view.'",';
-        $line .= '"'.$curr_op->libelle.'",';
-        $line .= '"'.$curr_op->_ref_sejour->DP.'",';
-        $line .= '"'.$curr_op->codes_ccam.'",';
-        $line .= '"'.$curr_op->_lu_type_anesth.'",';
-        $line .= '"'.$curr_op->_ref_consult_anesth->ASA.'",';
-        $line .= '"'.$curr_op->_ref_first_log->date.'",';
-        $line .= '"'.$curr_op->entree_salle.'",';
-        $line .= '"'.$curr_op->induction_debut.'",';
-        $line .= '"'.$curr_op->induction_fin.'",';
-        $line .= '"'.$curr_op->debut_op.'",';
-        $line .= '"'.$curr_op->fin_op.'",';
-        $line .= '"'.$curr_op->sortie_salle.'",';
-        $line .= '"'.$curr_op->_pat_next.'",';
-        $line .= '"'.$curr_op->entree_reveil.'",';
+        $line  = '"'.$curr_plage->date.'";';
+        $line .= '"'.$curr_plage->_ref_salle->_ref_bloc->_view.'";';
+        $line .= '"'.$curr_plage->_ref_salle->_view.'";';
+        $line .= '"'.$curr_plage->debut.'";';
+        $line .= '"'.$curr_plage->fin.'";';
+        $line .= '"'.$curr_op->rank.'";';
+        $line .= '"'.$curr_op->_rank_reel.'";';
+        $line .= '"'.$curr_op->_ref_sejour->_ref_patient->_view.'";';
+        $line .= '"'.$curr_op->_ref_sejour->type.'";';
+        $line .= '"'.$curr_op->_ref_chir->_view.'";';
+        $line .= '"'.$curr_op->_ref_anesth->_view.'";';
+        $line .= '"'.$curr_op->libelle.'";';
+        $line .= '"'.$curr_op->_ref_sejour->DP.'";';
+        $line .= '"'.$curr_op->codes_ccam.'";';
+        $line .= '"'.$curr_op->_lu_type_anesth.'";';
+        $line .= '"'.$curr_op->_ref_consult_anesth->ASA.'";';
+        $line .= '"'.$curr_op->_ref_first_log->date.'";';
+        $line .= '"'.$curr_op->entree_salle.'";';
+        $line .= '"'.$curr_op->induction_debut.'";';
+        $line .= '"'.$curr_op->induction_fin.'";';
+        $line .= '"'.$curr_op->debut_op.'";';
+        $line .= '"'.$curr_op->fin_op.'";';
+        $line .= '"'.$curr_op->sortie_salle.'";';
+        $line .= '"'.$curr_op->_pat_next.'";';
+        $line .= '"'.$curr_op->entree_reveil.'";';
         $line .= '"'.$curr_op->sortie_reveil.'"
 ';
         fwrite($csvFile, $line);
