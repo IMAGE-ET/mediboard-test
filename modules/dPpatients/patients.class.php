@@ -1007,7 +1007,8 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - téléphone"         , $this->tel        );
     $template->addProperty("Patient - mobile"            , $this->tel2       );
     $template->addProperty("Patient - profession"        , $this->profession );
-    if($this->sexe == "m"){
+    
+    if ($this->sexe == "m"){
       $template->addProperty("Patient - il/elle"         , "il"              );
       $template->addProperty("Patient - le/la"           , "le"              );
       $template->addProperty("Patient - accord genre"    , ""                );
@@ -1016,23 +1017,34 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - le/la"           , "la"              );
       $template->addProperty("Patient - accord genre"    , "e"               );
     }
-    if($this->medecin_traitant) {
+    
+    if ($this->medecin_traitant) {
       $template->addProperty("Patient - médecin traitant"          , "{$this->_ref_medecin_traitant->nom} {$this->_ref_medecin_traitant->prenom}");
       $template->addProperty("Patient - médecin traitant - adresse", "{$this->_ref_medecin_traitant->adresse}\n{$this->_ref_medecin_traitant->cp} {$this->_ref_medecin_traitant->ville}");
     } else {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
     }
+    
+    // Vider les anciens holders
+    if ($this->_id) {
+	    for ($i = 1; $i < 4; $i++) {
+	      $template->addProperty("Patient - médecin correspondant $i");
+	      $template->addProperty("Patient - médecin correspondant $i - adresse");
+	    }
+    }
+    
     $this->loadRefsCorrespondants();
     $i = 0;
     $noms = array();
     foreach ($this->_ref_medecins_correspondants as $corresp) {
       $i++;
       $corresp->loadRefsFwd();
-      $nom = "{$corresp->_ref_medecin->nom} {$corresp->_ref_medecin->prenom}";
+      $medecin = $corresp->_ref_medecin;
+      $nom = "{$medecin->nom} {$medecin->prenom}";
       $noms[] = $nom;
       $template->addProperty("Patient - médecin correspondant $i", $nom);
-      $template->addProperty("Patient - médecin correspondant $i - adresse", "{$corresp->_ref_medecin->adresse}\n{$corresp->_ref_medecin->cp} {$corresp->_ref_medecin->ville}");
+      $template->addProperty("Patient - médecin correspondant $i - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
     }
     
     $template->addProperty("Patient - médecin correspondants", join($noms, " - "));
