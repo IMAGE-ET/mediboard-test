@@ -59,9 +59,9 @@ class CEnumSpec extends CMbFieldSpec {
     $separator     = CMbArray::extract($params, "separator");
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $defaultOption = CMbArray::extract($params, "defaultOption");
+    $alphabet      = CMbArray::extract($params, "alphabet", 0);
     $extra         = CMbArray::makeXmlAttributes($params);
     $enumsTrans    = $object->_enumsTrans[$field];
-    $alphabet      = CMbArray::extract($params, "alphabet", 0);
     if($alphabet) {
       asort($enumsTrans); 
     }
