@@ -52,9 +52,29 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th class="category" colspan="2">
-      <a style="float:left;" href="?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$pmonth}}&amp;year={{$pyear}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&lt; &lt;</a>
-      <a style="float:right;" href="?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;month={{$nmonth}}&amp;year={{$nyear}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&gt; &gt;</a>
-      <div>{{$nameMonth}} {{$year}}</div>
+      {{assign var=prev    value=-1}}
+      {{assign var=next    value=1}}
+      {{assign var=current value=0}}
+      <a style="float:left;" href="?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;date={{$listMonthes.$prev.date}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&lt; &lt;</a>
+      <a style="float:right;" href="?m=dPplanningOp&amp;a=plage_selector&amp;dialog=1&amp;curr_op_hour={{$curr_op_hour}}&amp;curr_op_min={{$curr_op_min}}&amp;chir={{$chir}}&amp;date={{$listMonthes.$next.date}}&amp;group_id={{$group_id}}&amp;operation_id={{$operation_id}}">&gt; &gt;</a>
+      <div>
+        <form action="?" name="chgDate" method="get">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="a" value="plage_selector" />
+        <input type="hidden" name="dialog" value="1" />
+        <input type="hidden" name="curr_op_hour" value="{{$curr_op_hour}}" />
+        <input type="hidden" name="curr_op_min" value="{{$curr_op_min}}" />
+        <input type="hidden" name="chir" value="{{$chir}}" />
+        <input type="hidden" name="group_id" value="{{$group_id}}" />
+        <input type="hidden" name="operation_id" value="{{$operation_id}}" />
+        <select name="date" onchange="this.form.submit()">
+        {{foreach from=$listMonthes key=curr_key_month item=curr_month}}
+          <option value="{{$curr_month.date}}" {{if $curr_key_month == $current}}selected="selected"{{/if}}>
+            {{$curr_month.month}}
+          </option>  
+        {{/foreach}}
+        </select>
+      </div>
     </th>
   </tr>
   
