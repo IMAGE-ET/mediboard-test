@@ -259,7 +259,7 @@ function mbWorkDaysInMonth($date = null) {
  * @return string: the transformed time 
  **/
 function mbTransformTime($relative = null, $ref = null, $format) {
-  if ($relative == "last sunday") {
+  if ($relative === "last sunday") {
     $relative .= " 12:00:00";
   }
   

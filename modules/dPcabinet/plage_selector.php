@@ -11,16 +11,20 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
+
 // Initialisation des variables
 $plageconsult_id = mbGetValueFromGet("plageconsult_id");
+$hour    = mbGetValueFromGet("hour");
+$chir_id = mbGetValueFromGet("chir_id");
+$date    = mbGetValueFromGet("date", mbDate());
+$hide_finished = mbGetValueFromGet("hide_finished", true);
+$period = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
 if ($plageconsult_id) {
   $plage->load($plageconsult_id);
-  $date  = $plage->date;
-} else {
-  $date  = mbGetValueFromGet("date", mbDate());
+  $date = $plage->date;
 }
 
 // Récupération des plages de consultation disponibles
@@ -28,25 +32,23 @@ $listPlage = new CPlageconsult;
 $where = array();
 
 // Praticiens sélectionnés
-$chir_id = mbGetValueFromGet("chir_id");
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
 
 // Filtres
-if ($hour = mbGetValueFromGet("hour")) {
+if ($hour) {
   $where["debut"] = "<= '$hour:00'";
   $where["fin"] = "> '$hour:00'";
 }
 
-if ($hide_finished = mbGetValueFromGet("hide_finished", 1)) {
+if ($hide_finished) {
   $where[] = $ds->prepare("`date` >= %", mbDate());
 }
 
 // Filtre de la période
 $periods = array("day", "week", "month");
-$period = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
 switch ($period) {
   case "day":
     $minDate = mbDate(null, $date);
@@ -60,16 +62,21 @@ switch ($period) {
 
   case "month":
     $minDate = mbTransformTime(null, $date, "%Y-%m-01");
-    $maxDate = mbTransformTime("+1 month", $date, "%Y-%m-00");
+    $maxDate = mbTransformTime("+1 month", $minDate, "%Y-%m-01");
     break;
 
-	default:
+  default:
     trigger_error("Période '$period' inconnue");
-		break;
+    break;
 }
 
-$ndate = mbDate("+1 $period", $date);
-$pdate = mbDate("-1 $period", $date);
+$relDate = $date;
+if ($period == 'month') {
+	$relDate = $minDate;
+}
+
+$ndate = mbDate("+1 $period", $relDate);
+$pdate = mbDate("-1 $period", $relDate);
 
 $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
 
