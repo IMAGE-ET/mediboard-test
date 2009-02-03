@@ -27,11 +27,10 @@ class CDoObjectAddEdit {
   var $_objBefore          = null;
   var $_logIt              = null;
 
-  function CDoObjectAddEdit($className, $objectKeyGetVarName) {
+  function CDoObjectAddEdit($className, $objectKeyGetVarName = null) {
     global $m;
 
     $this->className           = $className;
-    $this->objectKeyGetVarName = $objectKeyGetVarName;
     $this->redirect            = "m={$m}";
     $this->redirectStore       = null;
     $this->redirectError       = null;
@@ -46,6 +45,8 @@ class CDoObjectAddEdit {
     $this->_logIt              = true;
     $this->_obj                = new $this->className();
     $this->_objBefore          = new $this->className();
+    
+    $this->objectKeyGetVarName = $objectKeyGetVarName ? $objectKeyGetVarName : $this->_obj->_spec->key;
   }
 
   function doBind() {
