@@ -42,16 +42,9 @@ Main.add(function () {
 });
 </script>
 
-<form action="?" name="frmSelector" method="get">
-<input type="hidden" name="m" value="dPplanningOp" />
-<input type="hidden" name="a" value="plage_selector" />
-<input type="hidden" name="dialog" value="1" />
-<input type="hidden" name="_salle_id" value="" />
-<input type="hidden" name="_date" value="" />
-
 <table class="main">
   <tr>
-    <th class="category" colspan="2">
+    <th class="category">
       {{assign var=prev    value=-1}}
       {{assign var=next    value=1}}
       {{assign var=current value=0}}
@@ -74,10 +67,20 @@ Main.add(function () {
           </option>  
         {{/foreach}}
         </select>
+        </form>
       </div>
     </th>
   </tr>
-  
+</table>
+
+<form action="?" name="frmSelector" method="get">
+<input type="hidden" name="m" value="dPplanningOp" />
+<input type="hidden" name="a" value="plage_selector" />
+<input type="hidden" name="dialog" value="1" />
+<input type="hidden" name="_salle_id" value="" />
+<input type="hidden" name="_date" value="" />
+
+<table class="main">  
   <tr>
     <td class="halfPane">
       <table class="tbl">
