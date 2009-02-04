@@ -106,6 +106,22 @@ selectPeriode = function(element) {
                <input type="checkbox" value="med" onclick="oCatField.toggle(this.value, this.checked);" />
              </td>
            </tr>
+           <tr>
+             <td>
+               <strong>Injections</strong>
+             </td>
+             <td>
+               <input type="checkbox" value="inj" onclick="oCatField.toggle(this.value, this.checked);" />
+             </td>
+           </tr>
+           <tr>
+             <td>
+               <strong>Perfusions</strong>
+             </td>
+             <td>
+               <input type="checkbox" value="perf" onclick="oCatField.toggle(this.value, this.checked);" />
+             </td>
+           </tr>
            {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
              {{if $categories_by_chap|@count}}
   	           <tr>
@@ -199,7 +215,8 @@ selectPeriode = function(element) {
 	  
 	  <!-- Affichage specifique aux perfusions -->
     {{if array_key_exists('perf', $prises_by_hour)}}
-	    {{assign var=perfusion value=$prises_by_hour.perf}}
+	    {{assign var=perfusions value=$prises_by_hour.perf}}
+	    {{foreach from=$perfusions item=perfusion}}
 	    <tr>
 	      <td>Perfusion</td>
 	      <td>
@@ -217,6 +234,7 @@ selectPeriode = function(element) {
 	        </ul>
 	      </td>
 	    </tr>
+	    {{/foreach}}
 	  {{/if}}
 	  
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
