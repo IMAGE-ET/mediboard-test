@@ -49,6 +49,9 @@ if(array_key_exists("observations", $sejour->_back)){
 if(array_key_exists("transmissions", $sejour->_back)){
 	foreach($sejour->_back["transmissions"] as $curr_trans) {
 	  $curr_trans->loadRefsFwd();
+	  if($curr_trans->object_class == "CAdministration"){
+	    $curr_trans->_ref_object->loadRefsFwd();
+	  }
 	  $sejour->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
 	}
 }

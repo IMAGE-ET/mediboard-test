@@ -149,7 +149,7 @@ delCibleTransmission = function() {
         {{$curr_suivi->date|date_format:$dPconfig.time}}
       </td>
     <td class="text" colspan="2">
-      
+     
       <div {{if $curr_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
 	      {{if $curr_suivi->object_id}}
 	      <em>Cible : {{$curr_suivi->_ref_object->_view}}</em><br />
