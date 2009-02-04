@@ -118,7 +118,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
     <select name="salle_id" onchange="this.form.submit();">
-      <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
+
       {{foreach from=$listBlocs item=curr_bloc}}
       <optgroup label="{{$curr_bloc->nom}}">
         {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
