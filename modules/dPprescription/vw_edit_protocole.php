@@ -9,7 +9,7 @@
 
 global $AppUI;
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id", $AppUI->user_id);
+$praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $function_id = mbGetValueFromGetOrSession("function_id");
 $group_id = mbGetValueFromGetOrSession("group_id");
 $protocole_id = mbGetValueFromGet("prescription_id");
@@ -22,7 +22,21 @@ $listFavoris = array();
 // Chargement de la liste des praticiens
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens(PERM_EDIT);
-$praticien->load($praticien_id);
+
+// Si aucun praticien_id de specifié, on verifie si le user courant est un praticien
+if(!$praticien_id){
+  $mediuser = new CMediusers();
+  $mediuser->load($AppUI->user_id);
+  $mediuser->isPraticien();
+  if($mediuser->_is_praticien){
+    $praticien_id = $mediuser->_id;
+  }
+} 
+
+// Chargement du praticien selectionné
+if($praticien_id){
+  $praticien->load($praticien_id);
+}
 
 // Chargement des functions
 $function = new CFunctions();

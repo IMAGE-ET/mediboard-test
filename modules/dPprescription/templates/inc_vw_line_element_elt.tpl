@@ -133,8 +133,11 @@
 	      </div>
       {{/if}}
       <!-- Formulaire d'ajout de commentaire -->
-      <!-- Insérer un commentaire dans la ligne --> 
-      {{assign var=_line_praticien_id value=$line->praticien_id}}
+      {{if $line->_protocole}}
+	      {{assign var=_line_praticien_id value=$app->user_id}}
+	    {{else}}
+	      {{assign var=_line_praticien_id value=$line->praticien_id}}
+	    {{/if}}
       <form name="commentaire-{{$line->_guid}}">
 	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">

@@ -70,7 +70,10 @@ Main.add(function () {
 		</form>
   {{else}}
     <div class="big-info">
-      Veuillez sélectionner un praticien, un cabinet ou un établissement pour créer un protocole.
+      <ul>
+	      <li>Pour <strong>créer un protocole</strong>, veuillez sélectionner un praticien, un cabinet ou un établissement puis cliquez sur "Créer un protocole".</li>
+	      <li>Pour <strong>visualiser un protocole</strong>, veuillez sélectionner un protocole dans la liste des protocoles.</li>
+      </ul>
     </div>
   {{/if}}
 {{/if}}

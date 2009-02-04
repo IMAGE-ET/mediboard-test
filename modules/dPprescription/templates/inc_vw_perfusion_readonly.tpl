@@ -76,6 +76,28 @@
 			{{mb_value object=$_perfusion field=duree}}heures
 	  </td>	    
   </tr>
+  {{if $_perfusion->type == "PCA"}}
+    <tr>
+      <td>
+				<strong>{{mb_label object=$_perfusion field=mode_bolus}}</strong>:
+				{{mb_value object=$_perfusion field=mode_bolus}}
+      </td>
+      {{if $_perfusion->mode_bolus != "sans_bolus"}}
+      <td>
+				<strong>{{mb_label object=$_perfusion field=dose_bolus}}</strong>:
+				{{mb_value object=$_perfusion field=dose_bolus}} mg
+      </td>
+      <td>
+				<strong>{{mb_label object=$_perfusion field=periode_interdite}}</strong>:
+				{{mb_value object=$_perfusion field=periode_interdite}} min
+      </td>
+      {{else}}
+      <td colspan="2" />
+      {{/if}}
+      <td />
+      <td />
+    </tr>
+  {{/if}}
   <tr>
     <td colspan="8">
       <table class="form">

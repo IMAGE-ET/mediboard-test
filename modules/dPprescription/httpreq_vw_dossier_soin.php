@@ -7,6 +7,9 @@
  *  @author Alexis Granger
  */
 
+global $can;
+$can->needsRead();
+
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $date         = mbGetValueFromGetOrSession("date");
 $nb_decalage  = mbGetValueFromGet("nb_decalage", 2);

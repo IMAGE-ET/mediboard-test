@@ -7,8 +7,10 @@
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
              class="tooltip-trigger" 
              onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_perf->_class_name}}', object_id: '{{$parent_perf->_id}}' } })"/>
-      {{/if}}   
-    {{mb_value object=$_perfusion field=type}}
+      {{/if}}
+      <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');">
+        {{mb_value object=$_perfusion field=type}}
+      </a>
   </td>
   <td style="width: 7%;">
      <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};">

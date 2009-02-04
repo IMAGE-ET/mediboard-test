@@ -971,7 +971,14 @@ class CSetupdPprescription extends CSetup {
 						WHERE `signature_pharma` IS NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.72";
+    $this->makeRevision("0.72");
+    $sql = "ALTER TABLE `perfusion` 
+						ADD `mode_bolus` ENUM ('sans_bolus','bolus','perfusion_bolus') DEFAULT 'sans_bolus',
+						ADD `dose_bolus` FLOAT,
+						ADD `periode_interdite` INT (10) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.73";
   }  
 }
 

@@ -10,6 +10,51 @@ if($('alertes')){
   Prescription.reloadAlertes({{$prescription->_id}});
 }
 
+// Si la perfusion n'est pas de type PCA, on vide toutes les catarteristiques specifiques
+resetBolus = function(oForm){
+  $V(oForm.mode_bolus, 'sans_bolus');
+  $V(oForm.dose_bolus, '');
+  $V(oForm.periode_interdite, '');
+}
+
+// Modification de la perfusion en fonction du mode bolus
+changeModeBolus = function(oForm){
+  $("img_"+oForm.name+"_vitesse").show();
+
+  // Reactivation de la vitesse
+  oForm.vitesse.writeAttribute("disabled",null);
+  oForm.vitesse.setOpacity(1);
+  
+  oForm.dose_bolus.writeAttribute("disabled",null);
+  oForm.dose_bolus.setOpacity(1);
+  
+  oForm.periode_interdite.writeAttribute("disabled",null);
+  oForm.periode_interdite.setOpacity(1);
+  
+  if(oForm.mode_bolus.value == 'sans_bolus'){
+    // Désactivation des 2 champs de gestion du bolus
+    $V(oForm.dose_bolus, '');
+    $V(oForm.periode_interdite, '');
+    
+    oForm.dose_bolus.writeAttribute("disabled","disabled");
+    oForm.dose_bolus.setOpacity(0.3);
+    
+    oForm.periode_interdite.writeAttribute("disabled","disabled");
+    oForm.periode_interdite.setOpacity(0.3);
+    
+    return;
+  }
+  if(oForm.mode_bolus.value == 'bolus'){
+    // Désactivation de la vitesse
+    $V(oForm.vitesse, '');
+    oForm.vitesse.writeAttribute("disabled","disabled");
+    oForm.vitesse.setOpacity(0.3);
+    
+    $("img_"+oForm.name+"_vitesse").hide();
+    return;
+  }
+}
+
 // Lancement du mode de saisie popup
 viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
   var url = new Url();

@@ -85,7 +85,7 @@ function reloadAntAllergie(sejour_id){
 function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   // Affichage de la prescription
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, true);
+    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
   }
   loadPatient(patient_id);
   loadSejour(sejour_id); 

@@ -1,3 +1,14 @@
+<script type="javascript">
+
+Main.add( function(){
+  {{if $_perfusion->type == "PCA"}}
+    $("bolus-{{$_perfusion->_id}}").show();
+    changeModeBolus(document.forms['editPerf-{{$_perfusion->_id}}']);
+  {{/if}}
+} );
+
+</script>
+
 <table {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}style="border: 2px solid #6688CC"{{/if}} class="tbl" id="perfusion-{{$_perfusion->_id}}"> 
 <tbody class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
 {{assign var=perfusion_id value=$_perfusion->_id}}
@@ -102,7 +113,7 @@
 			        {{if $_perfusion->_ref_lines|@count || !$_perfusion->_can_modify_perfusion}}
 				        {{mb_value object=$_perfusion field="type"}}
 				      {{else}}
-				        {{mb_field object=$_perfusion field="type" onchange="return onSubmitFormAjax(this.form);"}}
+				        {{mb_field object=$_perfusion field="type" onchange="if(this.value == 'PCA'){ $('bolus-$perfusion_id').show(); changeModeBolus(this.form);} else { resetBolus(this.form); $('bolus-$perfusion_id').hide(); }; return onSubmitFormAjax(this.form);"}}
 				      {{/if}}
 				    </td>
 				    <td style="border:none;">
@@ -177,6 +188,21 @@
 				     {{/if}}
 				    </td>
           </tr>
+				  <tr id="bolus-{{$_perfusion->_id}}" style="display: none;">
+				    <td style="border: none;" />
+				    <td style="border: none;">
+				    	{{mb_label object=$_perfusion field="mode_bolus"}}:
+							{{mb_field object=$_perfusion field="mode_bolus" onchange="changeModeBolus(this.form); return onSubmitFormAjax(this.form);"}}
+				    </td>
+				    <td style="border: none;">
+				    	{{mb_label object=$_perfusion field="dose_bolus"}}:
+							{{mb_field object=$_perfusion field="dose_bolus" onchange="return onSubmitFormAjax(this.form);" size="3"}} mg
+				    </td>
+				    <td style="border: none;">
+				    	{{mb_label object=$_perfusion field="periode_interdite"}}:
+							{{mb_field object=$_perfusion field="periode_interdite" onchange="return onSubmitFormAjax(this.form);" size="3"}} min
+						</td>
+				  </tr>
         </table>
       </form>
     </td>

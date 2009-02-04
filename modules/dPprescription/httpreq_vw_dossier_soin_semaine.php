@@ -7,6 +7,9 @@
  *  @author Alexis Granger
  */
 
+global $can;
+$can->needsRead();
+
 $date = mbGetValueFromGet("date");
 $prescription_id = mbGetValueFromGet("prescription_id");
 $sejour = new CSejour();

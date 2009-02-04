@@ -59,38 +59,44 @@
 	<!-- Affichage du pack -->
   {{include file="inc_vw_prescription.tpl" mode_protocole=0 mode_pharma=0}}
 {{else}}
-	<table class="form">
-	  <tr>
-	    <th class="category">Création d'un pack</th>
-	  </tr>
-	 <tr>
-	   <td>
-	  <form name="createPack" action="?" method="post" onsubmit="Protocole.addPack();">
-	    <input type="hidden" name="m" value="dPprescription" />
-	    <input type="hidden" name="dosql" value="do_prescription_protocole_pack_aed" />
-	    <input type="hidden" name="prescription_protocole_pack_id" value="" />
-	    <input type="hidden" name="praticien_id" value="" />
-	    <input type="hidden" name="function_id" value="" />	
-	    <input type="hidden" name="callback" value="Protocole.reloadAfterAddPack" />
-	    
-	    <table class="form">
-	      <tr>
-	        <th style="width: 50%">{{mb_label object=$pack field="libelle"}}</th>
-	        <td>{{mb_field object=$pack field="libelle"}}</td>
-	      </tr>
-	      <tr>
-	        <th>{{mb_label object=$pack field="object_class"}}</th>
-	        <td>{{mb_field object=$pack field="object_class"}}</td>  
-	      </tr>
-        <tr>
-          <td colspan="2" style="text-align: center"><button type="button" class="submit" onclick="this.form.onsubmit()">Créer</button></td>
-        </tr>
-	  </form>
-	  <script type="text/javascript">
-      prepareForm("createPack");
-     </script>
-	   </td>
-	  </tr>
-	</table>	       
+  {{if $praticien_id || $function_id}}
+		<table class="form">
+		  <tr>
+		    <th class="category">Création d'un pack</th>
+		  </tr>
+		 <tr>
+		   <td>
+		  <form name="createPack" action="?" method="post" onsubmit="Protocole.addPack();">
+		    <input type="hidden" name="m" value="dPprescription" />
+		    <input type="hidden" name="dosql" value="do_prescription_protocole_pack_aed" />
+		    <input type="hidden" name="prescription_protocole_pack_id" value="" />
+		    <input type="hidden" name="praticien_id" value="" />
+		    <input type="hidden" name="function_id" value="" />	
+		    <input type="hidden" name="callback" value="Protocole.reloadAfterAddPack" />
+		    
+		    <table class="form">
+		      <tr>
+		        <th style="width: 50%">{{mb_label object=$pack field="libelle"}}</th>
+		        <td>{{mb_field object=$pack field="libelle"}}</td>
+		      </tr>
+		      <tr>
+		        <th>{{mb_label object=$pack field="object_class"}}</th>
+		        <td>{{mb_field object=$pack field="object_class"}}</td>  
+		      </tr>
+	        <tr>
+	          <td colspan="2" style="text-align: center"><button type="button" class="submit" onclick="this.form.onsubmit()">Créer</button></td>
+	        </tr>
+		  </form>
+		  <script type="text/javascript">
+	      prepareForm("createPack");
+	     </script>
+		   </td>
+		  </tr>
+		</table>	 
+	{{else}}
+		<div class="big-info">
+		  Veuillez sélectionner un praticien ou cabinet pour créer un pack de protocole.
+		</div>
+	{{/if}}      
 {{/if}}
 

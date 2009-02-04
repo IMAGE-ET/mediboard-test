@@ -258,7 +258,11 @@
       <!-- Insérer un commentaire dans la ligne --> 
       <form name="commentaire-{{$line->_guid}}">
 	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-		      {{assign var=_line_praticien_id value=$line->praticien_id}}
+	      	{{if $line->_protocole}}
+	      	  {{assign var=_line_praticien_id value=$app->user_id}}
+		      {{else}}
+		        {{assign var=_line_praticien_id value=$line->praticien_id}}
+		      {{/if}}
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
 		        <option value="">&mdash; Choisir une aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMedicament}}

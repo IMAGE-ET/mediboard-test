@@ -57,7 +57,7 @@ if($prescription->_ref_prescription_lines){
 	}
 }
 // Chargement des lignes de perfusions
-if($chapitre == "perf" || $chapitre == "all_med"){
+if($chapitre == "perf" || $chapitre == "all_med" || $chapitre == ""){
 	$prescription->loadRefsPerfusions();
 	foreach($prescription->_ref_perfusions as $_perfusion){
 	  $_perfusion->loadRefsLines();  

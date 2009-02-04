@@ -66,6 +66,28 @@
       {{/if}}
     </td>
   </tr>
+  {{if $perf->type == "PCA"}}
+	  <tr>
+	    <td>
+	      {{mb_label object=$perf field=mode_bolus}}:
+	      {{mb_value object=$perf field=mode_bolus}}
+	    </td>
+	  </tr>
+	  {{if $perf->mode_bolus != "sans_bolus"}}
+		  <tr>
+		    <td>
+		      {{mb_label object=$perf field=dose_bolus}}:
+		      {{mb_value object=$perf field=dose_bolus}} mg
+		    </td>
+		  </tr>
+		  <tr>
+		    <td>
+		      {{mb_label object=$perf field=periode_interdite}}:
+		      {{mb_value object=$perf field=periode_interdite}} min
+		    </td>
+		  </tr>  
+	  {{/if}}
+  {{/if}}
   {{if $perf->_ref_transmissions|@count}}
 	  <tr>
 	    <th colspan="3">Transmissions</th>
