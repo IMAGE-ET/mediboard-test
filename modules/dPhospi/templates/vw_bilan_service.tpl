@@ -157,16 +157,16 @@ selectPeriode = function(element) {
 <table class="tbl">
 {{if $lines_by_patient|@count}}
 <tr>
-  <th colspan="2">Filtres</th>
+  <th colspan="6">Filtres</th>
 </tr>
 <tr>
-  <td colspan="2">
+  <td colspan="6">
     Horaires sélectionnées: 
     <strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong>
   </td>
 </tr>
 <tr>
-  <td colspan="2" class="text">
+  <td colspan="6" class="text">
     Catégorie(s) sélectionnée(s):
     {{foreach from=$cat_used item=_cat_view name=cat}}
       <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
@@ -180,7 +180,7 @@ selectPeriode = function(element) {
     {{assign var=sejour value=$sejours.$sejour_id}}
     {{assign var=patient value=$sejour->_ref_patient}}
     <tr>
-      <th colspan="2">
+      <th colspan="6">
         <span style="float: left">
           {{assign var=chambre value=$chambres.$chambre_id}}
           <strong>Chambre {{$chambre->_view}}</strong>
