@@ -100,8 +100,8 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day') {
   $subtitle = mbTransformTime(null, $date, "%A %d %b %Y");
 	
 	$options = array(
-    'title' => $title,
-    'subtitle' => $subtitle,
+    'title' => utf8_encode($title),
+    'subtitle' => utf8_encode($subtitle),
 	  'xaxis' => array(
 	    'labelsAngle' => 45,
 	    'ticks' => $datax,
