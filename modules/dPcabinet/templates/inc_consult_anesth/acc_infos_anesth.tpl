@@ -61,7 +61,7 @@ function reloadListTech() {
 		  {{mb_label object=$consult_anesth field="position"}}
 		  {{mb_field object=$consult_anesth field="position" defaultOption="&mdash; Veuillez Choisir" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       
-      {{if !$isPrescriptionInstalled}}
+      {{if !$isPrescriptionInstalled || !$dPconfig.dPcabinet.CPrescription.view_prescription}}
       <br />
       {{mb_label object=$consult_anesth field="premedication"}}
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
