@@ -101,7 +101,7 @@ class CHprim21Patient extends CHprim21Object {
     $specs = array (
       // Patient
       "patient_id"                => "ref class|CPatient",
-      "nom"                       => "notNull str",
+      "nom"                       => "str notNull",
       "prenom"                    => "str",
       "prenom2"                   => "str",
       "alias"                     => "str",

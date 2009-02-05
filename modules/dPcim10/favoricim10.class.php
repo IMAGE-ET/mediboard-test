@@ -24,8 +24,8 @@ class CFavoricim10 extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["favoris_user"] = "notNull ref class|CUser";
-    $specs["favoris_code"] = "notNull str maxLength|16";
+    $specs["favoris_user"] = "ref notNull class|CUser";
+    $specs["favoris_code"] = "str notNull maxLength|16";
     return $specs;
   }
   

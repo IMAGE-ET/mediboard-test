@@ -37,7 +37,7 @@ class CRubrique extends CMbObject {
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["function_id"] = "ref class|CFunctions";
-    $specs["nom"]         = "notNull str";
+    $specs["nom"]         = "str notNull";
     return $specs;
   }
   

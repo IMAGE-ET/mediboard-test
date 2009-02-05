@@ -34,7 +34,7 @@ class CCategory extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "category_name" => "notNull str maxLength|50"
+      "category_name" => "str notNull maxLength|50"
     );
     return array_merge($specsParent, $specs);
   }

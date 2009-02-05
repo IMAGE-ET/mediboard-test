@@ -76,19 +76,19 @@ class CFicheEi extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["user_id"]                    = "notNull ref class|CMediusers";    
-    $specs["date_fiche"]                 = "notNull dateTime";
-    $specs["date_incident"]              = "notNull dateTime";
-    $specs["evenements"]                 = "notNull str maxLength|255";
-    $specs["lieu"]                       = "notNull str maxLength|50";
-    $specs["type_incident"]              = "notNull enum list|inc|ris";
-    $specs["elem_concerne"]              = "notNull enum list|pat|vis|pers|med|mat";
-    $specs["elem_concerne_detail"]       = "notNull text";
+    $specs["user_id"]                    = "ref notNull class|CMediusers";    
+    $specs["date_fiche"]                 = "dateTime notNull";
+    $specs["date_incident"]              = "dateTime notNull";
+    $specs["evenements"]                 = "str notNull maxLength|255";
+    $specs["lieu"]                       = "str notNull maxLength|50";
+    $specs["type_incident"]              = "enum notNull list|inc|ris";
+    $specs["elem_concerne"]              = "enum notNull list|pat|vis|pers|med|mat";
+    $specs["elem_concerne_detail"]       = "text notNull";
     $specs["autre"]                      = "text";
-    $specs["descr_faits"]                = "notNull text";
-    $specs["mesures"]                    = "notNull text";
-    $specs["descr_consequences"]         = "notNull text";
-    $specs["suite_even"]                 = "notNull enum list|trans|plong|deces|autre";
+    $specs["descr_faits"]                = "text notNull";
+    $specs["mesures"]                    = "text notNull";
+    $specs["descr_consequences"]         = "text notNull";
+    $specs["suite_even"]                 = "enum notNull list|trans|plong|deces|autre";
     $specs["suite_even_descr"]           = "text";
     $specs["deja_survenu"]               = "enum list|non|oui";
     
@@ -118,8 +118,8 @@ class CFicheEi extends CMbObject {
     $specs["qualite_date_controle"]      = "date";
     
     // Form fields
-    $specs["_incident_heure"]            = "notNull time";
-    $specs["_incident_date"]             = "notNull date";
+    $specs["_incident_heure"]            = "time notNull";
+    $specs["_incident_date"]             = "date notNull";
     return $specs;
   }
   

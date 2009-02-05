@@ -75,17 +75,17 @@ class CFichePaie extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["params_paie_id"] = "notNull ref class|CParamsPaie";
-    $specs["debut"]          = "notNull date";
-    $specs["fin"]            = "notNull date moreEquals|debut";
-    $specs["salaire"]        = "notNull currency min|0";
-    $specs["heures"]         = "notNull num max|255";
-    $specs["heures_comp"]    = "notNull num max|255";
-    $specs["heures_sup"]     = "notNull num max|255";
-    $specs["anciennete"]     = "notNull pct";
-    $specs["precarite"]      = "notNull pct";
-    $specs["conges_payes"]   = "notNull pct";
-    $specs["prime_speciale"] = "notNull currency min|0";
+    $specs["params_paie_id"] = "ref notNull class|CParamsPaie";
+    $specs["debut"]          = "date notNull";
+    $specs["fin"]            = "date notNull moreEquals|debut";
+    $specs["salaire"]        = "currency notNull min|0";
+    $specs["heures"]         = "num notNull max|255";
+    $specs["heures_comp"]    = "num notNull max|255";
+    $specs["heures_sup"]     = "num notNull max|255";
+    $specs["anciennete"]     = "pct notNull";
+    $specs["precarite"]      = "pct notNull";
+    $specs["conges_payes"]   = "pct notNull";
+    $specs["prime_speciale"] = "currency notNull min|0";
     $specs["final_file"]     = "html";
     return $specs;
   }

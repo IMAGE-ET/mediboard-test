@@ -64,17 +64,17 @@ class CFunctions extends CMbObject {
 	
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["group_id"] = "notNull ref class|CGroups";
-    $specs["type"]     = "notNull enum list|administratif|cabinet";
-    $specs["text"]     = "notNull str confidential";
-    $specs["color"]    = "notNull str length|6";
+    $specs["group_id"] = "ref notNull class|CGroups";
+    $specs["type"]     = "enum notNull list|administratif|cabinet";
+    $specs["text"]     = "str notNull confidential";
+    $specs["color"]    = "str notNull length|6";
     $specs["adresse"]  = "text";
     $specs["cp"]       = "numchar length|5";
     $specs["ville"]    = "str maxLength|50";
     $specs["tel"]      = "numchar length|10 mask|99S99S99S99S99";
     $specs["fax"]      = "numchar length|10 mask|99S99S99S99S99";
     $specs["soustitre"]= "text";
-    $specs["compta_partagee"]= "notNull bool";
+    $specs["compta_partagee"]= "bool notNull";
     return $specs;
   }
   

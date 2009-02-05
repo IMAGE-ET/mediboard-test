@@ -49,8 +49,8 @@ class CMedecin extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["nom"]             = "notNull str confidential";
-    $specs["prenom"]          = "notNull str confidential";
+    $specs["nom"]             = "str notNull confidential";
+    $specs["prenom"]          = "str notNull confidential";
     $specs["jeunefille"]      = "str confidential";
     $specs["adresse"]         = "text confidential";
     $specs["ville"]           = "str confidential";

@@ -69,10 +69,10 @@ class CAideSaisie extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["user_id"]      = "ref xor|function_id class|CMediusers";
     $specs["function_id"]  = "ref xor|user_id class|CFunctions";
-    $specs["class"]        = "notNull str";
-    $specs["field"]        = "notNull str";
-    $specs["name"]         = "notNull str";
-    $specs["text"]         = "notNull text";
+    $specs["class"]        = "str notNull";
+    $specs["field"]        = "str notNull";
+    $specs["name"]         = "str notNull";
+    $specs["text"]         = "text notNull";
     $specs["depend_value_1"] = "str";
     $specs["depend_value_2"] = "str";
     return $specs;

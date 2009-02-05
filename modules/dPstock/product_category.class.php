@@ -34,7 +34,7 @@ class CProductCategory extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['name'] = 'notNull str maxLength|50';
+    $specs['name'] = 'str notNull maxLength|50';
     return $specs;
   }
 

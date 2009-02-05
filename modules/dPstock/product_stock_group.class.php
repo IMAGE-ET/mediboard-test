@@ -39,8 +39,8 @@ class CProductStockGroup extends CProductStock {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['group_id']       = 'notNull ref class|CGroups';
-    $specs['_ordered_count'] = 'num pos';
+    $specs['group_id']       = 'ref notNull class|CGroups';
+    $specs['_ordered_count'] = 'num notNull pos';
     $specs['_ordered_last']  = 'dateTime';
     $specs['_zone_future']   = 'num';
     return $specs;

@@ -86,9 +86,9 @@ class CActe extends CMbMetaObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["object_id"]           = "notNull ref class|CCodable meta|object_class";
-    $specs["object_class"]        = "notNull enum list|COperation|CSejour|CConsultation";
-    $specs["executant_id"]        = "notNull ref class|CMediusers";
+    $specs["object_id"]           = "ref notNull class|CCodable meta|object_class";
+    $specs["object_class"]        = "enum notNull list|COperation|CSejour|CConsultation";
+    $specs["executant_id"]        = "ref notNull class|CMediusers";
     $specs["montant_depassement"] = "currency";
     $specs["montant_base"]        = "currency";
     $specs["_montant_facture"]    = "currency";

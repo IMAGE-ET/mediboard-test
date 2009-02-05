@@ -40,9 +40,9 @@ class CProductOrderItem extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['reference_id']       = 'notNull ref class|CProductReference';
-    $specs['order_id']           = 'notNull ref class|CProductOrder';
-    $specs['quantity']           = 'notNull num pos';
+    $specs['reference_id']       = 'ref notNull class|CProductReference';
+    $specs['order_id']           = 'ref notNull class|CProductOrder';
+    $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';

@@ -51,8 +51,8 @@ class CPrisePosologie extends CMbMetaObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["object_id"]          = "notNull ref class|CMbObject meta|object_class cascade";
-    $specs["object_class"]       = "notNull enum list|CPrescriptionLineMedicament|CPrescriptionLineElement";
+    $specs["object_id"]          = "ref notNull class|CMbObject meta|object_class cascade";
+    $specs["object_class"]       = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement";
     $specs["moment_unitaire_id"] = "ref class|CMomentUnitaire";
     $specs["quantite"]           = "float";
     $specs["nb_fois"]            = "float";

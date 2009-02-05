@@ -34,8 +34,8 @@ class CNaissance extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["operation_id"]    = "notNull ref class|COperation";
-    $specs["nom_enfant"]      = "notNull str confidential";
+    $specs["operation_id"]    = "ref notNull class|COperation";
+    $specs["nom_enfant"]      = "str notNull confidential";
     $specs["prenom_enfant"]   = "str";
     $specs["date_prevue"]     = "date";
     $specs["date_reelle"]     = "dateTime";

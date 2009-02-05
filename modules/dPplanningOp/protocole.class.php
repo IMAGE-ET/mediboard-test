@@ -60,7 +60,7 @@ class CProtocole extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["chir_id"]         = "notNull ref class|CMediusers";
+    $specs["chir_id"]         = "ref notNull class|CMediusers";
     $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $specs["DP"]              = "code cim10";
     $specs["convalescence"]   = "text confidential";
@@ -68,7 +68,7 @@ class CProtocole extends CMbObject {
     $specs["libelle"]         = "str";
     $specs["examen"]          = "text confidential";
     $specs["materiel"]        = "text confidential";
-    $specs["duree_hospi"]     = "notNull num minMax|0|36500";
+    $specs["duree_hospi"]     = "num notNull minMax|0|36500";
     $specs["rques_operation"] = "text confidential";
     $specs["depassement"]     = "currency min|0 confidential";
     $specs["forfait"]         = "currency min|0 confidential";

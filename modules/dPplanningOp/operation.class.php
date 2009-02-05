@@ -131,8 +131,8 @@ class COperation extends CCodable {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["sejour_id"]          = "notNull ref class|CSejour";
-    $specs["chir_id"]            = "notNull ref class|CMediusers";
+    $specs["sejour_id"]          = "ref notNull class|CSejour";
+    $specs["chir_id"]            = "ref notNull class|CMediusers";
     $specs["anesth_id"]          = "ref class|CMediusers";
     $specs["plageop_id"]         = "ref class|CPlageOp";
     $specs["pause"]              = "time";
@@ -141,7 +141,7 @@ class COperation extends CCodable {
     $specs["code_uf"]            = "str length|3";
     $specs["libelle_uf"]         = "str maxLength|35";
     $specs["libelle"]            = "str";
-    $specs["cote"]               = "notNull enum list|droit|gauche|bilatéral|total|inconnu default|inconnu";
+    $specs["cote"]               = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
     $specs["temp_operation"]     = "time";
     $specs["entree_salle"]       = "time";
     $specs["sortie_salle"]       = "time";

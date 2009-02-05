@@ -313,7 +313,7 @@ function setToNow(element) {
         </strong>
 
         {{if $acte->code_association != $acte->_guess_association}}
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'association-{{$acte->_guid}}')">
           <strong>
             {{if $acte->_guess_association}}
               ({{$acte->_guess_association}}
@@ -323,6 +323,9 @@ function setToNow(element) {
             conseillé)
           </strong>
         </span>
+        <div id="association-{{$acte->_guid}}" style="display:none">
+          {{tr}}CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}{{/tr}}
+        </div>
         {{/if}}
         
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}

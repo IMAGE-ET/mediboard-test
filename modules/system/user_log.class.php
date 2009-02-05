@@ -38,10 +38,10 @@ class CUserLog extends CMbMetaObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-  	$specs["object_id"]    = "notNull ref class|CMbObject meta|object_class unlink";
-    $specs["user_id"]      = "notNull ref class|CUser";
-    $specs["date"]         = "notNull dateTime";
-    $specs["type"]         = "notNull enum list|create|store|merge|delete";
+  	$specs["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
+    $specs["user_id"]      = "ref notNull class|CUser";
+    $specs["date"]         = "dateTime notNull";
+    $specs["type"]         = "enum notNull list|create|store|merge|delete";
     $specs["fields"]       = "text";
 
     $specs["_date_min"]    = "dateTime";

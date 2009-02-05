@@ -71,7 +71,7 @@ class CGroups extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["text"]                = "notNull str confidential";
+    $specs["text"]                = "str notNull confidential";
     $specs["raison_sociale"]      = "str maxLength|50";
     $specs["adresse"]             = "text confidential";
     $specs["cp"]                  = "numchar length|5";

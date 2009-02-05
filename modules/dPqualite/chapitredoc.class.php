@@ -46,8 +46,8 @@ class CChapitreDoc extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["pere_id"]  = "ref class|CChapitreDoc";
     $specs["group_id"] = "ref class|CGroups";
-    $specs["nom"]      = "notNull str maxLength|50";
-    $specs["code"]     = "notNull str maxLength|10";
+    $specs["nom"]      = "str notNull maxLength|50";
+    $specs["code"]     = "str notNull maxLength|10";
     return $specs;
   }
   

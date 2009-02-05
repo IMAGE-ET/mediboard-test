@@ -30,8 +30,8 @@ class CCategorieDoc extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]  = "notNull str maxLength|50";
-    $specs["code"] = "notNull str maxLength|1";
+    $specs["nom"]  = "str notNull maxLength|50";
+    $specs["code"] = "str notNull maxLength|1";
     return $specs;
   }
   

@@ -46,7 +46,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["element_prescription_id"]        = "notNull ref class|CElementPrescription cascade";
+    $specs["element_prescription_id"]        = "ref notNull class|CElementPrescription cascade";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
     $specs["commentaire"]                    = "str";

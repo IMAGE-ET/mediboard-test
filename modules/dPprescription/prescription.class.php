@@ -104,10 +104,10 @@ class CPrescription extends CMbObject {
     $specs["function_id"]   = "ref class|CFunctions";  
     $specs["group_id"]      = "ref class|CGroups";
     $specs["object_id"]     = "ref class|CCodable meta|object_class";
-    $specs["object_class"]  = "notNull enum list|CSejour|CConsultation";
+    $specs["object_class"]  = "enum notNull list|CSejour|CConsultation";
     $specs["libelle"]       = "str";
-    $specs["type"]          = "notNull enum list|traitement|pre_admission|sejour|sortie|externe";
-    $specs["_type_sejour"]  = "notNull enum list|pre_admission|sejour|sortie";
+    $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";
+    $specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
     $specs["_dateTime_min"] = "dateTime";
     $specs["_dateTime_max"] = "dateTime";
     $specs["_owner"]        = "enum list|prat|func|group";

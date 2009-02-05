@@ -31,8 +31,8 @@ class CElementPrescription extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["category_prescription_id"] = "notNull ref class|CCategoryPrescription";
-    $specs["libelle"]      = "notNull str";
+    $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
+    $specs["libelle"]      = "str notNull";
     $specs["description"]  = "text";
     return $specs;
   }

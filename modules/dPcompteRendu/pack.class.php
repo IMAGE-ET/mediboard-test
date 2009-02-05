@@ -38,10 +38,10 @@ class CPack extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["chir_id"]      = "notNull ref class|CMediusers";
-    $specs["nom"]          = "notNull str confidential";
+    $specs["chir_id"]      = "ref notNull class|CMediusers";
+    $specs["nom"]          = "str notNull confidential";
     $specs["modeles"]      = "text";
-    $specs["object_class"] = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation";
+    $specs["object_class"] = "enum notNull list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation";
     return $specs;
   }
   

@@ -17,6 +17,10 @@ class CAccessLog extends CMbObject {
   var $hits     = null;
   var $duration = null;
   var $request  = null;
+  var $size     = null;
+  var $errors   = null;
+  var $warnings = null;
+  var $notices  = null;
   
   // Form fields
   var $_average_duration = null;
@@ -32,12 +36,16 @@ class CAccessLog extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["module"]   = "str";
-    $specs["action"]   = "str";
-    $specs["period"]   = "dateTime";
+    $specs["module"]   = "str notNull";
+    $specs["action"]   = "str notNull";
+    $specs["period"]   = "dateTime notNull";
     $specs["hits"]     = "num pos";
     $specs["duration"] = "float";
     $specs["request"]  = "float";
+    $specs["size"]     = "num min|0";
+    $specs["errors"]   = "num min|0";
+    $specs["warnings"] = "num min|0";
+    $specs["notices"]  = "num min|0";
     return $specs;
   }
   

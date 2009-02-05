@@ -87,7 +87,7 @@ class CExamAudio extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "consultation_id" => "notNull ref class|CConsultation",
+      "consultation_id" => "ref notNull class|CConsultation",
       "remarques"       => "text",
       "gauche_aerien"   => "str maxLength|64",
       "gauche_osseux"   => "str maxLength|64",

@@ -45,10 +45,10 @@ class CPlat extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "nom"       => "notNull str",
-      "group_id"  => "notNull ref class|CGroups",
-      "type"      => "notNull enum list|plat1|plat2|plat3|plat4|plat5|boisson|pain",
-      "typerepas" => "notNull ref class|CTypeRepas"
+      "nom"       => "str notNull",
+      "group_id"  => "ref notNull class|CGroups",
+      "type"      => "enum notNull list|plat1|plat2|plat3|plat4|plat5|boisson|pain",
+      "typerepas" => "ref notNull class|CTypeRepas"
     );
     return array_merge($specsParent, $specs);
   }

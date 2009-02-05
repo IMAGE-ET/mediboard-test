@@ -45,7 +45,7 @@ class CExamIgs extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["consultation_id"]     = "notNull ref class|CConsultation";
+    $specs["consultation_id"]     = "ref notNull class|CConsultation";
     $specs["age"]                 = "enum list|0|7|12|15|16|18";
     $specs["FC"]                  = "enum list|11|2|0|4|7";
     $specs["TA"]                  = "enum list|13|5|0|2";

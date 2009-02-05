@@ -42,10 +42,10 @@ class CTransmissionMedicale extends CMbMetaObject {
   	$specs = parent::getSpecs();
     $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
   	$specs["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPerfusion";
-    $specs["sejour_id"]    = "notNull ref class|CSejour";
-    $specs["user_id"]      = "notNull ref class|CMediusers";
-    $specs["degre"]        = "notNull enum list|low|high default|low";
-    $specs["date"]         = "notNull dateTime";
+    $specs["sejour_id"]    = "ref notNull class|CSejour";
+    $specs["user_id"]      = "ref notNull class|CMediusers";
+    $specs["degre"]        = "enum notNull list|low|high default|low";
+    $specs["date"]         = "dateTime notNull";
     $specs["text"]         = "text";
     return $specs;
   }

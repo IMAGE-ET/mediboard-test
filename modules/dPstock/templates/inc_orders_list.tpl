@@ -22,7 +22,7 @@
 	{{foreach from=$orders item=curr_order}}
 	  <tr>
 	    <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -72,7 +72,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -129,7 +129,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -174,7 +174,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -220,8 +220,8 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
-          {{$curr_order->order_number}}
+         <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+         {{$curr_order->order_number}}
         </span>
       </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>

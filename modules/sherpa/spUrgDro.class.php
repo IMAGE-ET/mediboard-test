@@ -126,7 +126,7 @@ class CSpUrgDro extends CSpObject {
     $specs["urgems"]  = "enum list|$urgems";
     
     /* Code CCMU                        */
-    $specs["urccmu"]  = "str enum list|1|2|3|4|5";
+    $specs["urccmu"]  = "enum list|1|2|3|4|5";
     
     /* Mode de transport (arrivee)      */
     $urmtra = array (

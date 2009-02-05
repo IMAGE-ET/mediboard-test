@@ -34,7 +34,7 @@ class CThemeDoc extends CMbObject {
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["group_id"] = "ref class|CGroups";
-    $specs["nom"]      = "notNull str maxLength|50";
+    $specs["nom"]      = "str notNull maxLength|50";
     return $specs;
   }
 

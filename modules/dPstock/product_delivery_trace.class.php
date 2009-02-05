@@ -40,13 +40,13 @@ class CProductDeliveryTrace extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['delivery_id']    = 'notNull ref class|CProductDelivery';
+    $specs['delivery_id']    = 'ref notNull class|CProductDelivery';
     $specs['code']           = 'str maxLength|32';
-    $specs['quantity']       = 'notNull num';
+    $specs['quantity']       = 'num notNull';
     $specs['date_delivery']  = 'dateTime';
     $specs['date_reception'] = 'dateTime';
-    $specs['_date_min']      = 'notNull dateTime';
-    $specs['_date_max']      = 'notNull dateTime moreThan|_date_min';
+    $specs['_date_min']      = 'dateTime notNull';
+    $specs['_date_max']      = 'dateTime notNull moreThan|_date_min';
     return $specs;
   }
 

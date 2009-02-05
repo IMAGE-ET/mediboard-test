@@ -24,7 +24,7 @@ class CBanque extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]         = "notNull str";
+    $specs["nom"]         = "str notNull";
     $specs["description"] = "str";
     return $specs;
   }

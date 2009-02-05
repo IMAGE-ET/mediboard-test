@@ -47,8 +47,8 @@ class CLit extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["chambre_id"] = "notNull ref class|CChambre";
-    $specs["nom"]        = "notNull str";
+    $specs["chambre_id"] = "ref notNull class|CChambre";
+    $specs["nom"]        = "str notNull";
     return $specs;
   }
   

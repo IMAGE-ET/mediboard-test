@@ -345,8 +345,8 @@ if ($ajax) {
   $tplAjax->display("ajax_errors.tpl");
 }
 
-ob_end_flush();
 require "./includes/access_log.php";
+ob_end_flush();
 
 CApp::rip();
 ?>

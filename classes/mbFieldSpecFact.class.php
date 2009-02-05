@@ -31,7 +31,7 @@ class CMbFieldSpecFact {
       "email"        => "CEmailSpec",
       "code"         => "CCodeSpec",
       "password"     => "CPasswordSpec"
-	);
+	  );
       
     $specObject     = null;
     $nameClass      = null;
@@ -62,7 +62,7 @@ class CMbFieldSpecFact {
     if($nameClass){
       $specObject = new $aClass[$nameClass]($object->_class_name, $field, $propSpec, $aProperties);
     } else {
-      $specObject = new CMbFieldSpec($object->_class_name, $field);
+      $specObject = new CMbFieldSpec($object->_class_name, $field, "");
     }
     return $specObject;
   }
@@ -95,22 +95,21 @@ class CMbFieldSpecFactEx {
     "password"     => "CPasswordSpec"
   );
    
-  static function getSpec($className, $fieldName, $strSpec = null) {
+  static function getSpec($object, $fieldName, $strSpec = null) {
+    $className = $object->_class_name;
+        
     $specFragments = explode(" ", $strSpec);
-    $specName = CMbArray::extract($specFragments, 0, true);
-    $specClassName = CMbArray::get(self::$classes, $specName, "CMbObjectSpec");
+    $specClassName = "CMbFieldSpec";
+    if ($specName = CMbArray::extract($specFragments, 0, true)) {
+	    if (null == $specClassName = CMbArray::get(self::$classes, $specName)) {
+	      trigger_error("No spec class name for '$className'::'$fieldName' = '$strSpec'", E_USER_ERROR);
+	    }
+    }    
     
     $specOptions = array();
     foreach ($specFragments as $specFragment) {
       $options = explode("|", $specFragment);
       $optionName = CMbArray::extract($options, 0, null, true);
-
-      // La class n'est pas forcément en premier
-      // @TODO A changer dans les specs
-      if (isset(self::$classes[$optionName])) {
-        $specClassName = self::$classes[$optionName];
-        continue;
-      }
 
       $specOptions[$optionName] = count($options) ? implode("|", $options) : true;
     }

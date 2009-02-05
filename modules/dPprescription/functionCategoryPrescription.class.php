@@ -27,8 +27,8 @@ class CFunctionCategoryPrescription extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["function_id"]  = "notNull ref class|CFunctions";
-    $specs["category_prescription_id"] = "notNull ref class|CCategoryPrescription";
+    $specs["function_id"]  = "ref notNull class|CFunctions";
+    $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
     return $specs;
   }
   

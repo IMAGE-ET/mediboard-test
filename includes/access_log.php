@@ -27,17 +27,27 @@ $where = array(
 $log = new CAccessLog();
 $log->loadObject($where);
 if (!$log->accesslog_id) {
-  $log->module = $module;
-  $log->action = $action;
-  $log->period = $period;
-  $log->hits = 0;
+  $log->module   = $module;
+  $log->action   = $action;
+  $log->period   = $period;
+  $log->hits     = 0;
   $log->duration = 0.0;
-  $log->request = 0.0;
+  $log->request  = 0.0;
+  $log->size     = 0;
+  $log->errors   = 0;
+  $log->warnings = 0;
+  $log->notices  = 0;
 }
 
 $log->hits++;
 $log->duration += $phpChrono->total;
-$log->request += $ds->chrono->total;
+$log->request  += $ds->chrono->total;
+$log->size     += ob_get_length();
+$log->errors   += $performance["error"];
+$log->warnings += $performance["warning"];
+$log->notices  += $performance["notice"];
 
-$log->store();
+if ($msg = $log->store()) {
+  trigger_error($msg, E_USER_WARNING);
+}
 ?>

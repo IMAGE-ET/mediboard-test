@@ -34,11 +34,11 @@ class CCommandeMateriel extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "reference_id" => "notNull ref class|CRefMateriel",
-      "quantite"    => "notNull num pos",
-      "prix"        => "notNull currency",
-      "date"        => "notNull date",
-      "recu"        => "notNull bool"
+      "reference_id" => "ref notNull class|CRefMateriel",
+      "quantite"    => "num notNull pos",
+      "prix"        => "currency notNull",
+      "date"        => "date notNull",
+      "recu"        => "bool notNull"
     );
     return array_merge($specsParent, $specs);
   }

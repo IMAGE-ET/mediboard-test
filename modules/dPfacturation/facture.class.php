@@ -41,9 +41,9 @@ class CFacture extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["date"]      = "notNull date";
+    $specs["date"]      = "date notNull";
     $specs["prix"]      = "currency";
-    $specs["sejour_id"] = "notNull ref class|CSejour";
+    $specs["sejour_id"] = "ref notNull class|CSejour";
     $specs["_total"]    = "currency";
     return $specs;
   }

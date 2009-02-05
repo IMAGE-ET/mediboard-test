@@ -33,8 +33,8 @@ class CCorrespondant extends CMbObject {
     
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["medecin_id"] = "notNull ref class|CMedecin";
-    $specs["patient_id"] = "notNull ref class|CPatient";
+    $specs["medecin_id"] = "ref notNull class|CMedecin";
+    $specs["patient_id"] = "ref notNull class|CPatient";
     return $specs;
   }
     

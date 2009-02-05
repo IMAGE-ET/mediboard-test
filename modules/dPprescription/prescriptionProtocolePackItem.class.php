@@ -27,8 +27,8 @@ class CPrescriptionProtocolePackItem extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["prescription_protocole_pack_id"] = "notNull ref class|CPrescriptionProtocolePack";
-    $specs["prescription_id"]                = "notNull ref class|CPrescription";
+    $specs["prescription_protocole_pack_id"] = "ref notNull class|CPrescriptionProtocolePack";
+    $specs["prescription_id"]                = "ref notNull class|CPrescription";
     return $specs;
   }
   

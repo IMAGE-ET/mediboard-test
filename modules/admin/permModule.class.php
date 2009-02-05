@@ -38,10 +38,10 @@ class CPermModule extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["user_id"]     = "notNull ref class|CUser cascade";
+    $specs["user_id"]     = "ref notNull class|CUser cascade";
     $specs["mod_id"]      = "ref class|CModule";
-    $specs["permission"]  = "notNull numchar maxLength|1";
-    $specs["view"]        = "notNull numchar maxLength|1";
+    $specs["permission"]  = "numchar notNull maxLength|1";
+    $specs["view"]        = "numchar notNull maxLength|1";
     return $specs;
   }
   

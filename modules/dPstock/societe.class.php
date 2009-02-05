@@ -46,7 +46,7 @@ class CSociete extends CMbObject {
 
 	function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['name']            = 'notNull str maxLength|50';
+    $specs['name']            = 'str notNull maxLength|50';
     $specs['address']         = 'str';
     $specs['postal_code']     = 'numchar minLength|4 maxLength|5';
     $specs['city']            = 'str';
@@ -54,7 +54,7 @@ class CSociete extends CMbObject {
     $specs['fax']             = 'numchar length|10 mask|99S99S99S99S99';
     $specs['siret']           = 'code siret';
     $specs['email']           = 'email';
-    $specs['contact_name']    ='str maxLength|50';
+    $specs['contact_name']    = 'str maxLength|50';
     $specs['contact_surname'] = 'str maxLength|50';
     return $specs;
   }

@@ -62,12 +62,12 @@ class CProduct extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['name']          = 'notNull str maxLength|50';
+    $specs['name']          = 'str notNull maxLength|50';
     $specs['description']   = 'text';
     $specs['code']          = 'str maxLength|32';
-    $specs['category_id']   = 'notNull ref class|CProductCategory';
+    $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete';
-    $specs['quantity']      = 'notNull num pos';
+    $specs['quantity']      = 'num notNull pos';
     $specs['item_title']    = 'str';
     $specs['unit_title']    = 'str';
     $specs['unit_quantity'] = 'float pos';

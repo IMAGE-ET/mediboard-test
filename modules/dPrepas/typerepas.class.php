@@ -42,12 +42,12 @@ class CTypeRepas extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]      = "notNull str";
-    $specs["group_id"] = "notNull ref class|CGroups";
-    $specs["debut"]    = "notNull time";
-    $specs["fin"]      = "notNull time moreThan|debut";
-    $specs["_debut"]   = "notNull time";
-    $specs["_fin"]     = "notNull time moreThan|_debut";
+    $specs["nom"]      = "str notNull";
+    $specs["group_id"] = "ref notNull class|CGroups";
+    $specs["debut"]    = "time notNull";
+    $specs["fin"]      = "time notNull moreThan|debut";
+    $specs["_debut"]   = "time notNull";
+    $specs["_fin"]     = "time notNull moreThan|_debut";
     return $specs;
   }
   

@@ -46,10 +46,10 @@ class CMbFieldSpec {
 
   var $_defaultLength = null;
 
-  function CMbFieldSpec(&$className, &$field, $prop = null, $aProperties = array()) {
-    $this->className =& $className;
-    $this->fieldName =& $field;
-    $this->prop      =& $prop;
+  function CMbFieldSpec($className, $field, $prop = null, $aProperties = array()) {
+    $this->className = $className;
+    $this->fieldName = $field;
+    $this->prop      = $prop;
 
     $aObjProperties = get_object_vars($this);
 

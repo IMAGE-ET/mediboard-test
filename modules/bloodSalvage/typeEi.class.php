@@ -34,11 +34,11 @@ class CTypeEi extends CMbObject {
    */
   function getSpecs() {
     $specs= parent::getSpecs();
-    $specs["name"]     = "notNull str maxLength|30";
-    $specs["concerne"] = "notNull enum list|pat|vis|pers|med|mat";
+    $specs["name"]     = "str notNull maxLength|30";
+    $specs["concerne"] = "enum notNull list|pat|vis|pers|med|mat";
     $specs["desc"]     = "text";
-    $specs["type_signalement"] = "notNull enum list|inc|ris";
-    $specs["evenements"] = "notNull str maxLength|255";
+    $specs["type_signalement"] = "enum notNull list|inc|ris";
+    $specs["evenements"] = "str notNull maxLength|255";
     return $specs;
   }
   

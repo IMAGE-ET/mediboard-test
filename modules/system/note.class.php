@@ -39,11 +39,11 @@ class CNote extends CMbMetaObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["user_id"]      = "notNull ref class|CMediusers";
-    $specs["public"]       = "notNull bool";
-    $specs["degre"]        = "notNull enum list|low|high default|low";
-    $specs["date"]         = "notNull dateTime";
-    $specs["libelle"]      = "notNull str";
+    $specs["user_id"]      = "ref notNull class|CMediusers";
+    $specs["public"]       = "bool notNull";
+    $specs["degre"]        = "enum notNull list|low|high default|low";
+    $specs["date"]         = "dateTime notNull";
+    $specs["libelle"]      = "str notNull";
     $specs["text"]         = "text";
     return $specs;
   }

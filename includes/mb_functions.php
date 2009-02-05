@@ -784,7 +784,12 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
   return $listClasses;
 }
 
-
+/**
+ * DEPRECATED SEE getMbClassesEx();
+ *
+ * @param array $properties
+ * @return array
+ */
 function getMbClasses($properties = array()) {
   global $AppUI;
   $AppUI->getAllClasses();
@@ -816,8 +821,33 @@ function getMbClasses($properties = array()) {
 }
 
 
+/**
+ * Returns all CMbObject child classes
+ *
+ * @param array $properties
+ * @return array
+ */
+function getMbClassesEx($properties = array()) {
+  global $AppUI;
+  $AppUI->getAllClasses();
+  $classes = getChildClasses("CMbObject", $properties);
+  foreach ($classes as $key => $class) {
+    // Instanciation escapée au cas où cela génère des erreurs liées au DSN
+    $object = @new $class;
+    
+    // On test si on a réussi à l'instancier
+    if (!$object->_class_name) {
+      unset($classes[$key]);
+    	continue;
+    }
+  }
+  
+  return $classes;
+}
+
+
 function getInstalledClasses($properties = array()) {
-  $classes = getMbClasses();
+  $classes = getMbClassesEx();
   foreach ($classes as $key => $class) {
     // Instanciation escapée au cas où cela génère des erreurs liées au DSN
     $object = @new $class;

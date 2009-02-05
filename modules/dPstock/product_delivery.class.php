@@ -38,13 +38,13 @@ class CProductDelivery extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['stock_id']          = 'notNull ref class|CProductStockGroup';
-    $specs['date_dispensation'] = 'notNull dateTime';
-    $specs['quantity']          = 'notNull num';
-    $specs['service_id']        = 'notNull ref class|CService';
+    $specs['stock_id']          = 'ref notNull class|CProductStockGroup';
+    $specs['date_dispensation'] = 'dateTime notNull';
+    $specs['quantity']          = 'num notNull';
+    $specs['service_id']        = 'ref notNull class|CService';
     $specs['patient_id']        = 'ref class|CPatient';
-    $specs['_date_min']         = 'notNull date';
-    $specs['_date_max']         = 'notNull date moreEquals|_date_min';
+    $specs['_date_min']         = 'date notNull';
+    $specs['_date_max']         = 'date notNull moreEquals|_date_min';
     return $specs;
   }
 

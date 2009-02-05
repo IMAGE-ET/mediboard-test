@@ -11,9 +11,9 @@
     <tr>
       <td>
         <a class="tooltip-trigger" 
-           onmouseover="ObjectTooltip.create(this, {mode: 'objectView',  params: {object_class: 'CProduct', object_id: '{{$stock->_ref_product->_id}}'} })"
+           onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}')"
            href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
-        {{$stock->_ref_product->_view}}
+        {{$stock->_ref_product}}
         </a>
       </td>
       <td>{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>

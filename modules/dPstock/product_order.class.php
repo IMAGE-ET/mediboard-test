@@ -59,8 +59,8 @@ class CProductOrder extends CMbObject {
 	function getSpecs() {
 		$specs = parent::getSpecs();
     $specs['date_ordered']    = 'dateTime';
-    $specs['societe_id']      = 'notNull ref class|CSociete';
-	  $specs['group_id']        = 'notNull ref class|CGroups';
+    $specs['societe_id']      = 'ref notNull class|CSociete';
+	  $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['locked']          = 'bool';
 	  $specs['cancelled']       = 'bool';
 	  $specs['deleted']         = 'bool';

@@ -54,8 +54,8 @@ class CChambre extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["service_id"]       = "notNull ref class|CService";
-    $specs["nom"]              = "notNull str";
+    $specs["service_id"]       = "ref notNull class|CService";
+    $specs["nom"]              = "str notNull";
     $specs["caracteristiques"] = "text confidential";
     $specs["annule"]           = "bool";
     return $specs;

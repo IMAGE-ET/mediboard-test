@@ -72,11 +72,11 @@ class CPlageOp extends CMbObject {
     $specs["chir_id"]          = "ref xor|spec_id class|CMediusers";
     $specs["anesth_id"]        = "ref class|CMediusers";
     $specs["spec_id"]          = "ref xor|chir_id class|CFunctions";
-    $specs["salle_id"]         = "notNull ref class|CSalle";
-    $specs["date"]             = "notNull date";
-    $specs["debut"]            = "notNull time";
-    $specs["fin"]              = "notNull time";
-    $specs["temps_inter_op"]   = "notNull time";
+    $specs["salle_id"]         = "ref notNull class|CSalle";
+    $specs["date"]             = "date notNull";
+    $specs["debut"]            = "time notNull";
+    $specs["fin"]              = "time notNull";
+    $specs["temps_inter_op"]   = "time notNull";
     $specs["max_intervention"] = "num";
 
     $specs["_heuredeb"]        = "num minMax|0|23";

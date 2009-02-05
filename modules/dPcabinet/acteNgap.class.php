@@ -35,9 +35,9 @@ class CActeNGAP extends CActe {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["code"]                = "notNull str maxLength|3";
-    $specs["quantite"]            = "notNull num maxLength|2";
-    $specs["coefficient"]         = "notNull float";
+    $specs["code"]                = "str notNull maxLength|3";
+    $specs["quantite"]            = "num notNull maxLength|2";
+    $specs["coefficient"]         = "float notNull";
     $specs["demi"]                = "enum list|0|1 default|0";
     $specs["complement"]          = "enum list|N|F|U";
 

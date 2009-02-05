@@ -46,12 +46,12 @@ class CMessage extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["deb"]       = "notNull dateTime";
-    $specs["fin"]       = "notNull dateTime";
-    $specs["titre"]     = "notNull str maxLength|40";
+    $specs["deb"]       = "dateTime notNull";
+    $specs["fin"]       = "dateTime notNull";
+    $specs["titre"]     = "str notNull maxLength|40";
     $specs["module_id"] = "ref class|CModule";
     $specs["corps"]     = "text";
-    $specs["urgence"]   = "notNull enum list|normal|urgent default|normal";
+    $specs["urgence"]   = "enum notNull list|normal|urgent default|normal";
 
     $specs["_status"]   = "enum list|past|present|future";
     return $specs;

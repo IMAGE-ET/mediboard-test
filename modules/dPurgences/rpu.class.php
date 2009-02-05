@@ -80,7 +80,7 @@ class CRPU extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "sejour_id"        => "notNull ref class|CSejour cascade",
+      "sejour_id"        => "ref notNull class|CSejour cascade",
       "diag_infirmier"   => "text",
       "mode_entree"      => "enum list|6|7|8 notNull",
       "provenance"       => "enum list|1|2|3|4|5|8",
@@ -99,8 +99,8 @@ class CRPU extends CMbObject {
       
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
-      "_patient_id"      => "notNull ref class|CPatient",
-      "_responsable_id"  => "notNull ref class|CMediusers",
+      "_patient_id"      => "ref notNull class|CPatient",
+      "_responsable_id"  => "ref notNull class|CMediusers",
       "_entree"          => "dateTime",
       "_etablissement_transfert_id" => "ref class|CEtabExterne",
       "_attente"         => "time",

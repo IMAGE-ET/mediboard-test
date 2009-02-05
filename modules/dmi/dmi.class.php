@@ -34,11 +34,11 @@ class CDMI extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]			= "notNull str";
+    $specs["nom"]	     		= "str notNull";
     $specs["description"]	= "text";
-    $specs["code"]		= "notNull str";
+    $specs["code"]		    = "str notNull";
     $specs["dans_livret"]	= "bool";
-    $specs["category_id"]= "notNull ref class|CDMICategory";
+    $specs["category_id"] = "ref notNull class|CDMICategory";
     $specs["_produit_existant"]= "bool";
     return $specs;
   }

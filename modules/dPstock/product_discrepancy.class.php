@@ -25,11 +25,11 @@ class CProductDiscrepancy extends CMbMetaObject { // Ecart d'inventaire
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['quantity']     = 'notNull num';
-    $specs['date']         = 'notNull dateTime';
+    $specs['quantity']     = 'num notNull';
+    $specs['date']         = 'dateTime notNull';
     $specs['description']  = 'text';
-    $specs['object_id']    = 'notNull ref class|CProductStock meta|object_class';
-    $specs['object_class'] = 'notNull enum list|CProductStockGroup|CProductStockService';
+    $specs['object_id']    = 'ref notNull class|CProductStock meta|object_class';
+    $specs['object_class'] = 'enum notNull list|CProductStockGroup|CProductStockService';
     return $specs;
   }
 

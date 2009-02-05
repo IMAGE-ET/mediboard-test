@@ -19,7 +19,7 @@ class CHprim21Object extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "emetteur_id" => "notNull str",
+      "emetteur_id" => "str notNull",
       "external_id" => "str",
     );
     return array_merge($specsParent, $specs);

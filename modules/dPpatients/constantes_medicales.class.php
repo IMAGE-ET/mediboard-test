@@ -53,8 +53,8 @@ class CConstantesMedicales extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['patient_id']            = 'notNull ref class|CPatient';
-    $specs['datetime']               = 'notNull dateTime';
+    $specs['patient_id']             = 'ref notNull class|CPatient';
+    $specs['datetime']               = 'dateTime notNull';
     $specs['context_class']          = 'str';
     $specs['context_id']             = 'ref class|CMbObject meta|context_class cascade';
     $specs['poids']                  = 'float pos';

@@ -36,8 +36,8 @@ class CSpecCPAM extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["text"]  = "notNull str";
-    $specs["actes"] = "notNull str";
+    $specs["text"]  = "str notNull";
+    $specs["actes"] = "str notNull";
     return $specs;
   }
   

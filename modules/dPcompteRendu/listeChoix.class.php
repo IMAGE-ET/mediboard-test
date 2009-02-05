@@ -41,7 +41,7 @@ class CListeChoix extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["chir_id"]         = "ref xor|function_id class|CMediusers";
     $specs["function_id"]     = "ref xor|chir_id class|CFunctions";
-    $specs["nom"]             = "notNull str";
+    $specs["nom"]             = "str notNull";
     $specs["valeurs"]         = "text confidential";
     $specs["compte_rendu_id"] = "ref class|CCompteRendu";
     return $specs;

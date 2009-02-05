@@ -29,8 +29,8 @@ class CForumThread extends CForumMessage {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['title']          = 'notNull str';
-    $specs['forum_theme_id'] = 'notNull ref class|CForumTheme';
+    $specs['title']          = 'str notNull';
+    $specs['forum_theme_id'] = 'ref notNull class|CForumTheme';
     return $specs;
   }
   

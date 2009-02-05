@@ -25,8 +25,8 @@ class CMbMetaObject extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["object_id"]    = "notNull ref class|CMbObject meta|object_class";
-    $specs["object_class"] = "notNull str";
+    $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";
+    $specs["object_class"] = "str notNull";
     return $specs;
   }
     

@@ -55,10 +55,10 @@ class CPlageressource extends CMbObject {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "prat_id" 		=> "ref class|CMediusers",
-      "date"    		=> "notNull date",
-      "debut"   		=> "notNull time",
-      "fin"     		=> "notNull time",
-      "tarif"   		=> "notNull currency min|0 confidential",
+      "date"    		=> "date notNull",
+      "debut"   		=> "time notNull",
+      "fin"     		=> "time notNull",
+      "tarif"   		=> "currency notNull min|0 confidential",
       "libelle" 		=> "str confidential",
       "paye"    		=> "bool",
       "_date_min" 	=> "date",

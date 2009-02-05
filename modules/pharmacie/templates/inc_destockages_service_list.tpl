@@ -18,7 +18,7 @@
       {{/foreach}}
       </div>
       <div class="tooltip-trigger" 
-           {{if $stock->_ref_logs|@count>0}}onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$stock->_id}}'} })"{{/if}}>
+           {{if $stock->_ref_logs|@count>0}}onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$stock->_id}}')"{{/if}}>
         {{$stock->_ref_product->_view}}
       </div>
     </td>

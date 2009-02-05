@@ -53,7 +53,7 @@ class CRepas extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "affectation_id" => "notNull ref class|CAffectation",
+      "affectation_id" => "ref notNull class|CAffectation",
       "menu_id"        => "ref class|CMenu",
       "plat1"          => "ref class|CPlat",
       "plat2"          => "ref class|CPlat",
@@ -63,7 +63,7 @@ class CRepas extends CMbObject {
       "boisson"        => "ref class|CPlat",
       "pain"           => "ref class|CPlat",
       "date"           => "date",
-      "typerepas_id"   => "notNull ref class|CTypeRepas",
+      "typerepas_id"   => "ref notNull class|CTypeRepas",
       "modif"          => "bool"
     );
     return array_merge($specsParent, $specs);

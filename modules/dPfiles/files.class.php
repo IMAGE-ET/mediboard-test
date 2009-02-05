@@ -49,12 +49,12 @@ class CFile extends CMbMetaObject {
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["file_category_id"]   = "ref class|CFilesCategory";
-    $specs["file_date"]          = "notNull dateTime";
+    $specs["file_date"]          = "dateTime notNull";
     $specs["file_size"]          = "num pos";
-    $specs["file_real_filename"] = "notNull str";
-    $specs["file_owner"]         = "notNull ref class|CMediusers";
+    $specs["file_real_filename"] = "str notNull";
+    $specs["file_owner"]         = "ref notNull class|CMediusers";
     $specs["file_type"]          = "str";
-    $specs["file_name"]          = "notNull str";
+    $specs["file_name"]          = "str notNull";
     return $specs;
   }
   

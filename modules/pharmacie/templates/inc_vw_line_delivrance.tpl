@@ -9,7 +9,7 @@
   <td>
     <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
     <div class="tooltip-trigger" 
-         onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_delivery->_id}}'} })">
+         onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
       {{$curr_delivery->_ref_stock->_view}}
     </div>
   </td>

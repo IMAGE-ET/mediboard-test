@@ -76,10 +76,10 @@ class CPrescriptionLine extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["prescription_id"]   = "notNull ref class|CPrescription cascade";
+    $specs["prescription_id"]   = "ref notNull class|CPrescription cascade";
     $specs["ald"]               = "bool";
-    $specs["praticien_id"]      = "notNull ref class|CMediusers";
-    $specs["creator_id"]        = "notNull ref class|CMediusers";
+    $specs["praticien_id"]      = "ref notNull class|CMediusers";
+    $specs["creator_id"]        = "ref notNull class|CMediusers";
     $specs["signee"]            = "bool";
     $specs["debut"]             = "date";
     $specs["time_debut"]        = "time";
@@ -99,7 +99,7 @@ class CPrescriptionLine extends CMbObject {
     $specs["condition_active"]  = "bool";
     $specs["unite_decalage"]    = "enum list|jour|heure default|jour";
     $specs["unite_decalage_fin"]= "enum list|jour|heure default|jour";
-    $specs["emplacement"]       = "notNull enum list|service|bloc|service_bloc default|service";
+    $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["operation_id"]      = "ref class|COperation";
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";

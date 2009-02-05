@@ -330,7 +330,7 @@ $library->versionString = '$Id: flotr.js 92';
 
 CLibrary::$all[$library->name] = $library;
 
-$install = $_POST['install'];
+$install = @$_POST['install'];
 
 ?>
 

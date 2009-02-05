@@ -20,7 +20,7 @@
             {{assign var=parent_line value=$line->_ref_parent_line}}
             <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
                  class="tooltip-trigger" 
-                 onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_line->_class_name}}', object_id: '{{$parent_line->_id}}' } })"/>
+                 onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
           {{/if}}
           {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
           {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}

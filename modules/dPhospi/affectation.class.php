@@ -55,10 +55,10 @@ class CAffectation extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["lit_id"]       = "notNull ref class|CLit";
+    $specs["lit_id"]       = "ref notNull class|CLit";
     $specs["sejour_id"]    = "ref class|CSejour cascade";
-    $specs["entree"]       = "notNull dateTime";
-    $specs["sortie"]       = "notNull dateTime";
+    $specs["entree"]       = "dateTime notNull";
+    $specs["sortie"]       = "dateTime notNull";
     $specs["confirme"]     = "bool";
     $specs["effectue"]     = "bool";
     $specs["rques"]        = "text";

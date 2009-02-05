@@ -46,10 +46,10 @@ class CMateriel extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "nom"         => "notNull str maxLength|50",
+      "nom"         => "str notNull maxLength|50",
       "code_barre"  => "num",
       "description" => "text",
-      "category_id" => "notNull ref class|CCategory",
+      "category_id" => "ref notNull class|CCategory",
       "_date_min" 	   => "date",
       "_date_max" 	   => "date moreEquals|_date_min",
     );

@@ -46,8 +46,8 @@ class CTarif extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["chir_id"]     = "ref class|CMediusers xor|function_id";
     $specs["function_id"] = "ref class|CFunctions";
-    $specs["description"] = "notNull str confidential";
-    $specs["secteur1"]    = "notNull currency min|0";
+    $specs["description"] = "str notNull confidential";
+    $specs["secteur1"]    = "currency notNull min|0";
     $specs["secteur2"]    = "currency";
     $specs["codes_ccam"]  = "str";
     $specs["codes_ngap"]  = "str";

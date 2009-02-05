@@ -32,9 +32,9 @@ class CDMICategory extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]         = "notNull str";
+    $specs["nom"]         = "str notNull";
     $specs["description"] = "text";
-    $specs["group_id"]    = "notNull ref class|CGroups";
+    $specs["group_id"]    = "ref notNull class|CGroups";
     return $specs;
   }
   

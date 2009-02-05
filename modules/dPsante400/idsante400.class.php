@@ -32,9 +32,9 @@
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["id400"]        = "notNull str maxLength|10";
+    $specs["id400"]        = "str notNull maxLength|10";
     $specs["tag"]          = "str maxLength|80";
-    $specs["last_update"]  = "notNull dateTime";
+    $specs["last_update"]  = "dateTime notNull";
     return $specs;
   }
   

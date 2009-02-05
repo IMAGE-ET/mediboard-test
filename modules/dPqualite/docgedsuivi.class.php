@@ -34,11 +34,11 @@ class CDocGedSuivi extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["user_id"]    = "notNull ref class|CMediusers";
-    $specs["doc_ged_id"] = "notNull ref class|CDocGed";
+    $specs["user_id"]    = "ref notNull class|CMediusers";
+    $specs["doc_ged_id"] = "ref notNull class|CDocGed";
     $specs["file_id"]    = "ref class|CFile";
-    $specs["remarques"]  = "notNull text";
-    $specs["etat"]       = "notNull enum list|0|16|32|48|64";
+    $specs["remarques"]  = "text notNull";
+    $specs["etat"]       = "enum notNull list|0|16|32|48|64";
     $specs["date"]       = "dateTime";
     $specs["actif"]      = "bool";
     return $specs;

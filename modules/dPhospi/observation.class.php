@@ -39,10 +39,10 @@ class CObservationMedicale extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["sejour_id"]    = "notNull ref class|CSejour";
-    $specs["user_id"]      = "notNull ref class|CMediusers";
-    $specs["degre"]        = "notNull enum list|low|high default|low";
-    $specs["date"]         = "notNull dateTime";
+    $specs["sejour_id"]    = "ref notNull class|CSejour";
+    $specs["user_id"]      = "ref notNull class|CMediusers";
+    $specs["degre"]        = "enum notNull list|low|high default|low";
+    $specs["date"]         = "dateTime notNull";
     $specs["text"]         = "text";
     return $specs;
   }

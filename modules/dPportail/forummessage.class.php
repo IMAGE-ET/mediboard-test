@@ -31,10 +31,10 @@ class CForumMessage extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['body']            = 'notNull html';
-    $specs['date']            = 'notNull dateTime';
-    $specs['user_id']         = 'notNull ref class|CMediusers';
-    $specs['forum_thread_id'] = 'notNull ref class|CForumThread';
+    $specs['body']            = 'html notNull';
+    $specs['date']            = 'dateTime notNull';
+    $specs['user_id']         = 'ref notNull class|CMediusers';
+    $specs['forum_thread_id'] = 'ref notNull class|CForumThread';
     return $specs;
   }
 

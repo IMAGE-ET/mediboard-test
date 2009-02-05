@@ -25,8 +25,8 @@ class CCellSaver extends CMbObject {
 
   function getSpecs() {
     $specs= parent::getSpecs();
-    $specs["marque"] = "notNull str maxLength|50";
-    $specs["modele"] = "notNull str maxLength|50";
+    $specs["marque"] = "str notNull maxLength|50";
+    $specs["modele"] = "str notNull maxLength|50";
     return $specs;
   }
   

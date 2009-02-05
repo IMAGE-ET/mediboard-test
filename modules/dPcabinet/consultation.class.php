@@ -142,13 +142,13 @@ class CConsultation extends CCodable {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["plageconsult_id"]   = "notNull ref class|CPlageconsult";
+    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult";
     $specs["patient_id"]        = "ref class|CPatient";
-    $specs["heure"]             = "notNull time";
+    $specs["heure"]             = "time notNull";
     $specs["duree"]             = "numchar maxLength|1";
     $specs["secteur1"]          = "currency min|0";
     $specs["secteur2"]          = "currency";
-    $specs["chrono"]            = "notNull enum list|16|32|48|64";
+    $specs["chrono"]            = "enum notNull list|16|32|48|64";
     $specs["annule"]            = "bool";
     
     $specs["motif"]             = "text";

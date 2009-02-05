@@ -154,8 +154,8 @@ class CPatient extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
-    $specs["nom"]               = "notNull str confidential";
-    $specs["prenom"]            = "notNull str";
+    $specs["nom"]               = "str notNull confidential";
+    $specs["prenom"]            = "str notNull";
     $specs["nom_jeune_fille"]   = "str confidential";
     $specs["nom_soundex2"]      = "str";
     $specs["prenom_soundex2"]   = "str";
@@ -178,7 +178,7 @@ class CPatient extends CMbObject {
     
     
     if(CAppUI::conf("dPpatients CPatient date_naissance")){
-      $specs["naissance"]       = "notNull birthDate mask|99/99/9999 format|$3-$2-$1";
+      $specs["naissance"]       = "birthDate notNull mask|99/99/9999 format|$3-$2-$1";
     } else {
       $specs["naissance"]       = "birthDate mask|99/99/9999 format|$3-$2-$1";  
     }
@@ -197,7 +197,7 @@ class CPatient extends CMbObject {
     $specs["regime_am"]         = "bool default|0";
     
     $specs["pays"]              = "str";
-    $specs["nationalite"]       = "notNull enum list|local|etranger default|local";
+    $specs["nationalite"]       = "enum notNull list|local|etranger default|local";
     $specs["lieu_naissance"]    = "str";
     $specs["profession"]        = "str";
       
@@ -227,7 +227,7 @@ class CPatient extends CMbObject {
     $specs["assure_tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["assure_tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["assure_pays"]              = "str";
-    $specs["assure_nationalite"]       = "notNull enum list|local|etranger default|local";
+    $specs["assure_nationalite"]       = "enum notNull list|local|etranger default|local";
     $specs["assure_lieu_naissance"]    = "str";
     $specs["assure_profession"]        = "str";
     $specs["assure_rques"]             = "text";

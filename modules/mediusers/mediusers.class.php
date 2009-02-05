@@ -88,7 +88,7 @@ class CMediusers extends CMbObject {
     $specs = parent::getSpecs();
     $specs["remote"]        = "bool";
     $specs["adeli"]         = "numchar length|9 confidential mask|99S9S99999S9";
-    $specs["function_id"]   = "notNull ref class|CFunctions";
+    $specs["function_id"]   = "ref notNull class|CFunctions";
     $specs["discipline_id"] = "ref class|CDiscipline";
     $specs["titres"]        = "text";
     $specs["commentaires"]  = "text";
@@ -98,10 +98,10 @@ class CMediusers extends CMbObject {
     $specs["spec_cpam_id"]  = "ref class|CSpecCPAM";
     $specs["compte"]        = "code rib confidential mask|99999S99999S99999999999S99";
     $specs["banque_id"]     = "ref class|CBanque";
-    $specs["_user_username"]   = "notNull str minLength|4";
+    $specs["_user_username"]   = "str notNull minLength|4";
     $specs["_user_password2"]  = "password sameAs|_user_password";
     $specs["_user_first_name"] = "str";
-    $specs["_user_last_name"]  = "notNull str confidential";
+    $specs["_user_last_name"]  = "str notNull confidential";
     $specs["_user_email"]      = "str confidential";
     $specs["_user_phone"]      = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["_user_adresse"]    = "str confidential";
@@ -109,8 +109,8 @@ class CMediusers extends CMbObject {
     $specs["_user_cp"]         = "num length|5 confidential";
     $specs["_user_ville"]      = "str confidential";
     $specs["_profile_id"]      = "num";
-    $specs["_user_type"]       = "notNull num minMax|0|20";
-    $specs["_group_id"]        = "notNull ref class|CGroups";
+    $specs["_user_type"]       = "num notNull minMax|0|20";
+    $specs["_group_id"]        = "ref notNull class|CGroups";
     
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";

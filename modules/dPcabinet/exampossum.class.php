@@ -74,7 +74,7 @@ class CExamPossum extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     return array_merge($specs, array (
-      "consultation_id"      => "notNull ref class|CConsultation",
+      "consultation_id"      => "ref notNull class|CConsultation",
       "age"                  => "enum list|inf60|61|sup71",
       "ouverture_yeux"       => "enum list|spontane|bruit|douleur|jamais",
       "rep_verbale"          => "enum list|oriente|confuse|inapproprie|incomprehensible|aucune",

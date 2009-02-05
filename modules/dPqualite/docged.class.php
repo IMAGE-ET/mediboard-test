@@ -65,7 +65,7 @@ class CDocGed extends CMbObject {
     $specs["doc_theme_id"]     = "ref class|CThemeDoc";
     $specs["doc_categorie_id"] = "ref class|CCategorieDoc";
     $specs["titre"]            = "str maxLength|50";
-    $specs["etat"]             = "notNull enum list|0|16|32|48|64";
+    $specs["etat"]             = "enum notNull list|0|16|32|48|64";
     $specs["version"]          = "currency min|0";
     $specs["annule"]           = "bool";
     $specs["num_ref"]          = "float";

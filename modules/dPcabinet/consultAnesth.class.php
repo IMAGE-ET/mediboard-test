@@ -86,7 +86,7 @@ class CConsultAnesth extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
 
-    $specs["consultation_id"]  = "notNull ref class|CConsultation cascade";
+    $specs["consultation_id"]  = "ref notNull class|CConsultation cascade";
     $specs["operation_id"]     = "ref class|COperation";
     $specs["sejour_id"]        = "ref class|CSejour";
 

@@ -40,8 +40,8 @@ class CBlocOperatoire extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["group_id"] = "notNull ref class|CGroups";
-    $specs["nom"]      = "notNull str";
+    $specs["group_id"] = "ref notNull class|CGroups";
+    $specs["nom"]      = "str notNull";
     return $specs;
   }
   

@@ -35,11 +35,11 @@ class CProductOrderItemReception extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['order_item_id'] = 'notNull ref class|CProductOrderItem';
-    $specs['quantity']      = 'notNull num';
+    $specs['order_item_id'] = 'ref notNull class|CProductOrderItem';
+    $specs['quantity']      = 'num notNull';
     $specs['code']          = 'str';
     $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
-    $specs['date']          = 'notNull dateTime';
+    $specs['date']          = 'dateTime notNull';
     $specs['barcode_printed'] = 'bool';
     return $specs;
   }

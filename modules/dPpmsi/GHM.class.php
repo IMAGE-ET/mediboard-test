@@ -82,7 +82,7 @@ class CGHM  extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "sejour_id" => "notNull ref class|CSejour",
+      "sejour_id" => "ref notNull class|CSejour",
       "DR"        => "str maxLength|10",
       "DASs"      => "text",
       "DADs"      => "text"

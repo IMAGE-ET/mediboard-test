@@ -43,7 +43,7 @@ class CFournisseur extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "societe"    => "notNull str maxLength|50",
+      "societe"    => "str notNull maxLength|50",
       "adresse"    => "str",
       "codepostal" => "num length|5",
       "ville"      => "str",

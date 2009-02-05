@@ -96,14 +96,14 @@ class CModule extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["mod_name"]      = "notNull str maxLength|20";
-    $specs["mod_type"]      = "notNull enum list|core|user";
-    $specs["mod_version"]   = "notNull str maxLength|6";
+    $specs["mod_name"]      = "str notNull maxLength|20";
+    $specs["mod_type"]      = "enum notNull list|core|user";
+    $specs["mod_version"]   = "str notNull maxLength|6";
     $specs["mod_active"]    = "bool";
     $specs["mod_ui_active"] = "bool";
     $specs["mod_ui_order"]  = "num";
 
-    $specs["_latest"]       = "notNull str maxLength|6";
+    $specs["_latest"]       = "str notNull maxLength|6";
     $specs["_upgradable"]   = "bool";
     $specs["_configable"]   = "bool";
     return $specs;

@@ -165,17 +165,17 @@ class CSejour extends CCodable {
 
   function getSpecs() {
    	$specs = parent::getSpecs();
-    $specs["patient_id"]          = "notNull ref class|CPatient";
-    $specs["praticien_id"]        = "notNull ref class|CMediusers";
-    $specs["group_id"]            = "notNull ref class|CGroups";
-    $specs["type"]                = "notNull enum list|comp|ambu|exte|seances|ssr|psy|urg default|ambu";
-    $specs["modalite"]            = "notNull enum list|office|libre|tiers default|libre";
+    $specs["patient_id"]          = "ref notNull class|CPatient";
+    $specs["praticien_id"]        = "ref notNull class|CMediusers";
+    $specs["group_id"]            = "ref notNull class|CGroups";
+    $specs["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg default|ambu";
+    $specs["modalite"]            = "enum notNull list|office|libre|tiers default|libre";
     $specs["annule"]              = "bool";
     $specs["chambre_seule"]       = "bool";
     $specs["reanimation"]         = "bool default|0";
     $specs["zt"]                  = "bool default|0";
-    $specs["entree_prevue"]       = "notNull dateTime";
-    $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
+    $specs["entree_prevue"]       = "dateTime notNull";
+    $specs["sortie_prevue"]       = "dateTime notNull moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";
     $specs["sortie_reelle"]       = "dateTime moreEquals|entree_reelle";
     $specs["saisi_SHS"]           = "bool";
@@ -209,7 +209,7 @@ class CSejour extends CCodable {
     $specs["_horodatage"]     = "enum list|entree_prevue|entree_reelle|sortie_prevue|sortie_reelle";
     $specs["_admission"] 		  = "text";
     $specs["_service"] 	      = "text";
-    $specs["_type_admission"] = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
+    $specs["_type_admission"] = "enum notNull list|comp|ambu|exte|seances|ssr|psy default|ambu";
     $specs["_specialite"]     = "text";
     $specs["_date_min_stat"]  = "date";
     $specs["_date_max_stat"]  = "date moreEquals|_date_min_stat";

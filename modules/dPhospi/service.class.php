@@ -47,8 +47,8 @@ class CService extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["group_id"]    = "notNull ref class|CGroups";
-    $specs["nom"]         = "notNull str";
+    $specs["group_id"]    = "ref notNull class|CGroups";
+    $specs["nom"]         = "str notNull";
     $specs["description"] = "text";
     $specs["urgence"]     = "bool";
     return $specs;

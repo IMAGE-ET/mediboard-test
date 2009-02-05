@@ -6,8 +6,8 @@
  	<td class="text">
  	<div onclick='addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");' 
 	       class="{{if @$transmissions.CPerfusion.$perfusion_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPerfusion', object_id: {{$_perfusion->_id}} } })">
-	      {{$_perfusion->_view}}
+	    <a href="#{{$_perfusion->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}')">
+	      {{$_perfusion}} 
 	    </a>
 	  </div>
 	</td>  

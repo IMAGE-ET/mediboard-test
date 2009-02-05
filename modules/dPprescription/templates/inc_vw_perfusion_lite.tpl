@@ -6,7 +6,7 @@
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
              class="tooltip-trigger" 
-             onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$parent_perf->_class_name}}', object_id: '{{$parent_perf->_id}}' } })"/>
+             onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')"/>
       {{/if}}
       <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');">
         {{mb_value object=$_perfusion field=type}}

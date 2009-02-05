@@ -155,7 +155,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["code_cip"]             = "notNull numchar length|7";
+    $specs["code_cip"]             = "numchar notNull length|7";
     $specs["no_poso"]              = "num max|128";
     $specs["commentaire"]          = "str";
     $specs["valide_pharma"]        = "bool";
@@ -165,7 +165,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["substitution_active"]  = "bool";
     $specs["_unite_prise"]         = "str";
     $specs["_traitement"]          = "bool";
-    $specs["voie"]                 = "notNull str";
+    $specs["voie"]                 = "str notNull";
     return $specs;
   }
   

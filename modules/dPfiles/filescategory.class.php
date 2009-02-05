@@ -38,7 +38,7 @@ class CFilesCategory extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]   = "notNull str";
+    $specs["nom"]   = "str notNull";
     $specs["class"] = "str";
     $specs["validation_auto"] = "bool";
     return $specs;

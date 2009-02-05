@@ -32,7 +32,7 @@ class CTraitement extends CMbObject {
     $specs["debut"       ] = "date";
     $specs["fin"         ] = "date moreEquals|debut";
     $specs["traitement"  ] = "text";
-    $specs["dossier_medical_id"] = "notNull ref class|CDossierMedical";
+    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     
     $specs["_search"] = "str";
     

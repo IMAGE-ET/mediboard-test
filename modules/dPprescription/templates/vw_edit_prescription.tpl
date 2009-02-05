@@ -65,7 +65,7 @@
                     {{if $curr_antecedent->date}}
                       {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
                     {{/if}}
-                    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">
+                    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}', 'objectViewHistory')">
                       {{$curr_antecedent->rques}}
                     </span>
                   </li>
@@ -87,7 +87,7 @@
                 {{elseif $curr_trmt->debut}}
                   Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
                 {{/if}}
-                <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CTraitement', object_id: {{$curr_trmt->_id}} } })">
+                <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
                   {{$curr_trmt->traitement}}
                 </span>
               </li>

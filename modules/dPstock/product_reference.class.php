@@ -36,12 +36,12 @@ class CProductReference extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['product_id']  = 'notNull ref class|CProduct';
-    $specs['societe_id']  = 'notNull ref class|CSociete';
-    $specs['quantity']    = 'notNull num pos';
-    $specs['price']       = 'notNull currency';
+    $specs['product_id']  = 'ref notNull class|CProduct';
+    $specs['societe_id']  = 'ref notNull class|CSociete';
+    $specs['quantity']    = 'num notNull pos';
+    $specs['price']       = 'currency notNull';
     $specs['code']        = 'str';
-    $specs['_unit_price'] = 'notNull currency';
+    $specs['_unit_price'] = 'currency notNull';
     return $specs;
   }
 

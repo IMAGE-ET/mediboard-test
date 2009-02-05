@@ -18,7 +18,7 @@
     <tr>
       <!-- Quantite à administrer -->
       <td>
-        <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })" class="tooltip-trigger">
+        <div onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$code_cip}}')" class="tooltip-trigger">
           <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
         </div>
         <table id="tooltip-content-{{$code_cip}}" style="display: none;" class="tbl">
@@ -66,7 +66,7 @@
            {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
              <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">{{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
              <div class="tooltip-trigger" 
-                  onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done->_id}}'} })">
+                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done->_id}}')">
                {{$curr_done->quantity}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
                <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
              </div>
@@ -96,7 +96,7 @@
 	           {{foreach from=$curr_done_nom->_ref_delivery_traces item=trace}}
 	             <div id="tooltip-content-{{$curr_done_nom->_id}}" style="display: none;">{{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
 	             <div class="tooltip-trigger" 
-	                  onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done_nom->_id}}'} })">
+	                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_nom->_id}}')">
 	               {{$curr_done_nom->quantity}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}}
 	               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
 	             </div>
@@ -115,7 +115,7 @@
 	           {{foreach from=$curr_done_glob->_ref_delivery_traces item=trace}}
 	             <div id="tooltip-content-{{$curr_done_glob->_id}}" style="display: none;">{{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
 	             <div class="tooltip-trigger" 
-	                  onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done_glob->_id}}'} })">
+	                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_glob->_id}}')">
 	               {{$curr_done_glob->quantity}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}}
 	               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
 	             </div>

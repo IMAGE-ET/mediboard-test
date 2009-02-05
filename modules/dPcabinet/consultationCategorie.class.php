@@ -28,9 +28,9 @@ class CConsultationCategorie extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["function_id"]   = "notNull ref class|CFunctions";
-    $specs["nom_categorie"] = "notNull str";
-    $specs["nom_icone"]     = "notNull str";
+    $specs["function_id"]   = "ref notNull class|CFunctions";
+    $specs["nom_categorie"] = "str notNull";
+    $specs["nom_icone"]     = "str notNull";
     return $specs;
   }
   

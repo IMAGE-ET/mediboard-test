@@ -31,7 +31,7 @@ class CForumTheme extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['title'] = 'notNull str';
+    $specs['title'] = 'str notNull';
     $specs['desc']  = 'text';
     return $specs;
   }

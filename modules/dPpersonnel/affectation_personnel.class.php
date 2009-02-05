@@ -39,8 +39,8 @@ class CAffectationPersonnel extends CMbMetaObject {
 	
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["personnel_id"] = "notNull ref class|CPersonnel";
-    $specs["realise"]  = "notNull bool";
+    $specs["personnel_id"] = "ref notNull class|CPersonnel";
+    $specs["realise"]  = "bool notNull";
     $specs["debut"]    = "dateTime";
     $specs["fin"]      = "dateTime moreThan|debut";
     

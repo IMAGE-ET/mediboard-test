@@ -115,7 +115,15 @@ class CSetupsystem extends CSetup {
 			ADD INDEX (`date`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.12";
+    $this->makeRevision("1.0.12");
+    $sql = "ALTER TABLE `access_log` 
+			ADD `size` INT (11) UNSIGNED,
+			ADD `errors` INT (11) UNSIGNED,
+			ADD `warnings` INT (11)  UNSIGNED,
+			ADD `notices` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.0.13";
   }
 }
 ?>

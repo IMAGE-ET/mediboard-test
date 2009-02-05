@@ -94,7 +94,7 @@ class CDiscipline extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["text"]      = "notNull str";
+    $specs["text"]      = "str notNull";
     $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST";
     return $specs;
   }

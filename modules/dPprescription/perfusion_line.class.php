@@ -48,8 +48,8 @@ class CPerfusionLine extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["perfusion_id"] = "notNull ref class|CPerfusion cascade";
-    $specs["code_cip"]     = "notNull numchar length|7";
+    $specs["perfusion_id"] = "ref notNull class|CPerfusion cascade";
+    $specs["code_cip"]     = "numchar notNull length|7";
     $specs["quantite"]     = "num";
     $specs["unite"]        = "str";
     $specs["date_debut"]   = "date";

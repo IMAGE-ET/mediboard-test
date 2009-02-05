@@ -57,7 +57,6 @@ class CMbObject {
   var $_seek          = array(); // seekable fields
   var $_nb_files_docs = null;
   
-  
   /**
    * References
    */
@@ -79,22 +78,82 @@ class CMbObject {
   var $_merging = null;
   
   function __construct() {
-    return $this->CMbObject();
+    return $this->CMbObjectEx();
   }
   
   function __toString() {
   	return $this->_view;
   }
   
+  static $spec          = array();
+  static $props         = array();
+  static $backRefs      = array();
+  static $backSpecs     = array();
+  static $fwdRefs       = array();
+  static $fwdSpecs      = array();
+  static $specsObj      = array();
+  static $seeks         = array();
+  static $enums         = array();
+  static $enumsTrans    = array();
+  static $helped_fields = array();
+  static $module_name   = array();
+  
+  function CMbObjectEx() {
+
+    $class = get_class($this);
+   
+    $initiated = array_key_exists($class, self::$spec);
+
+    if (!$initiated) {
+      self::$spec[$class] = $this->getSpec();
+      self::$spec[$class]->init();
+      
+      $reflection = new ReflectionClass($class);
+      self::$module_name[$class] = basename(dirname($reflection->getFileName()));
+    }
+    
+    $this->_class_name = $class;
+    $this->_spec       =& self::$spec[$class];
+    $this->loadRefModule(self::$module_name[$class]);
+    
+    if ($key = $this->_spec->key) {
+      $this->_id =& $this->$key;
+    }
+    
+    if (!$initiated) {
+      self::$props[$class] = $this->getSpecs();
+      $this->_props =& self::$props[$class];
+      self::$backRefs[$class] = $this->getBackRefs();
+      $this->_backRefs =& self::$backRefs[$class];
+      self::$specsObj[$class] = $this->getSpecsObj();
+      $this->_specs =& self::$specsObj[$class];
+      self::$seeks[$class] = $this->getSeeks();
+      $this->_seek =& self::$seeks[$class];
+      self::$enums[$class] = $this->getEnums();
+      $this->_enums =& self::$enums[$class];
+      self::$enumsTrans[$class] = $this->getEnumsTrans();
+      $this->_enumsTrans =& self::$enumsTrans[$class];
+      self::$helped_fields[$class] = $this->getHelpedFields();
+      $this->_helped_fields =& self::$helped_fields[$class];
+    }
+
+    $this->_props         =& self::$props[$class];
+    $this->_backRefs      =& self::$backRefs[$class];
+    $this->_backSpecs     =& self::$backSpecs[$class];
+    $this->_specs         =& self::$specsObj[$class];
+    $this->_seek          =& self::$seeks[$class];
+    $this->_enums         =& self::$enums[$class];
+    $this->_enumsTrans    =& self::$enumsTrans[$class];
+    $this->_helped_fields =& self::$helped_fields[$class];
+  }
+  
   function CMbObject() {    
     static $spec          = null;
     static $class         = null;
-    static $objectsTable  = array();
     static $props         = null;
     static $backRefs      = null;
     static $backSpecs     = array();
     static $fwdRefs       = null;
-    static $fwdSpecs      = array();
     static $specsObj      = null;
     static $seeks         = null;
     static $enums         = null;
@@ -107,6 +166,7 @@ class CMbObject {
     
     if (!$static) {
       $class = get_class($this);
+      mbTrace($class, "whole spec for");
       $spec = $this->getSpec();
       $spec->init();
       
@@ -1559,10 +1619,13 @@ class CMbObject {
    * Converts string specifications to objet specifications
    * Optimized version
    */
-    function getSpecsObj() {
+  static $ex = true;
+  function getSpecsObj() {
     $spec = array();
     foreach ($this->_props as $propName => $propSpec) {
-      $spec[$propName] = CMbFieldSpecFact::getSpec($this, $propName, $propSpec);
+      $spec[$propName] = CMbObject::$ex ? 
+        CMbFieldSpecFactEx::getSpec($this, $propName, $propSpec) : 
+        CMbFieldSpecFact::getSpec($this, $propName, $propSpec);
     }
     return $spec;
   }

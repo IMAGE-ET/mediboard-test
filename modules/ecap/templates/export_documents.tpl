@@ -61,14 +61,14 @@
   {{foreach from=$files item=_file}}
   <tr>
     <td>
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_guid: '{{$_file->_guid}}' } })">
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}')">
 	      {{mb_value object=$_file field=file_name}}
       </span>
     </td>
 
     <td>
       {{assign var=object value=$_file->_ref_object}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_guid: '{{$object->_guid}}' } })">
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
 	     {{$object}}
       </span>
     </td>
@@ -76,7 +76,7 @@
     <td>
       {{assign var=id_ecap value=$_file->_ref_id_ecap}}
       {{if $id_ecap->_id}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_guid: '{{$id_ecap->_guid}}' } })">
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$id_ecap->_guid}}')">
 	     {{$id_ecap}}
       </span>
       

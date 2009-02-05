@@ -14,7 +14,7 @@
 {{assign var=colors value=","|explode:"critical,min,optimum,max"}}
 {{assign var=zone value=$stock->_zone}}
 
-<div class="bargraph tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$stock->_class_name}}', object_id: '{{$stock->_id}}' } })">
+<div class="bargraph tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$stock->_guid}}')">
   <div class="value {{$colors.$zone}}">
     <div class="{{$colors.$zone}}" style="width: {{$stock->_quantity}}%;"></div>
   </div>

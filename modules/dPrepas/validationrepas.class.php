@@ -30,9 +30,9 @@ class CValidationRepas extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "service_id"   => "notNull ref class|CService",
+      "service_id"   => "ref notNull class|CService",
       "date"         => "date",
-      "typerepas_id" => "notNull ref class|CTypeRepas",
+      "typerepas_id" => "ref notNull class|CTypeRepas",
       "modif"        => "bool"
     );
     return array_merge($specsParent, $specs);

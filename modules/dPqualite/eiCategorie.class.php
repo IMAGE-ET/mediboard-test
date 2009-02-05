@@ -32,7 +32,7 @@ class CEiCategorie extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"] = "notNull str maxLength|50";
+    $specs["nom"] = "str notNull maxLength|50";
     return $specs;
   }
   

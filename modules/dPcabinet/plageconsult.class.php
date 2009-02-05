@@ -62,11 +62,11 @@ class CPlageconsult extends CMbObject {
   function getSpecs() {
     $parentSpecs = parent::getSpecs();
     $specs = array (
-      "chir_id" => "notNull ref class|CMediusers",
-      "date"    => "notNull date",
-      "freq"    => "notNull time",
-      "debut"   => "notNull time",
-      "fin"     => "notNull time",
+      "chir_id" => "ref notNull class|CMediusers",
+      "date"    => "date notNull",
+      "freq"    => "time notNull",
+      "debut"   => "time notNull",
+      "fin"     => "time notNull",
       "libelle" => "str",
 
       // Form fields

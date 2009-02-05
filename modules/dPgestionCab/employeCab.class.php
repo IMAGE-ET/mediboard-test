@@ -43,10 +43,10 @@ class CEmployeCab extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["function_id"] = "notNull ref class|CFunctions";
-    $specs["nom"]         = "notNull str";
-    $specs["prenom"]      = "notNull str";
-    $specs["function"]    = "notNull str";
+    $specs["function_id"] = "ref notNull class|CFunctions";
+    $specs["nom"]         = "str notNull";
+    $specs["prenom"]      = "str notNull";
+    $specs["function"]    = "str notNull";
     $specs["adresse"]     = "text confidential";
     $specs["ville"]       = "str";
     $specs["cp"]          = "numchar length|5 confidential";

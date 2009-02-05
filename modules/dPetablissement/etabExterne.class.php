@@ -41,7 +41,7 @@ class CEtabExterne extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["nom"]            = "notNull str confidential";
+    $specs["nom"]            = "str notNull confidential";
     $specs["raison_sociale"] = "str maxLength|50";
     $specs["adresse"]        = "text confidential";
     $specs["cp"]             = "numchar length|5";

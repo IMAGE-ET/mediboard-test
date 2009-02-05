@@ -69,8 +69,8 @@ class CBloodSalvage extends CMbObject {
 	 */
 	function getSpecs() {
 		$specs= parent::getSpecs();
-		$specs["operation_id"]				= "notNull ref class|COperation";
-		$specs["cell_saver_id"]				= "num ref class|CCellSaver";
+		$specs["operation_id"]				= "ref notNull class|COperation";
+		$specs["cell_saver_id"]				= "ref class|CCellSaver";
 	  $specs["type_ei_id"]		      = "ref class|CTypeEi";
 	  
     $specs["recuperation_start"]  = "dateTime";
@@ -93,7 +93,7 @@ class CBloodSalvage extends CMbObject {
     $specs["wash_kit_lot"]        = "str maxLength|32";
     $specs["receive_kit_ref"]     = "str maxLength|32 autocomplete";
     $specs["receive_kit_lot"]	    = "str maxLength|32";
-    $specs["sample"]	       	    = "notNull enum list|non|prel|trans default|non";
+    $specs["sample"]	       	    = "enum notNull list|non|prel|trans default|non";
     
     $specs["_datetime"]           = "dateTime";
     

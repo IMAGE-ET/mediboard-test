@@ -64,10 +64,10 @@ class CActeCCAM extends CActe {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["code_acte"]           = "notNull code ccam";
-    $specs["code_activite"]       = "notNull num minMax|0|99";
-    $specs["code_phase"]          = "notNull num minMax|0|99";
-    $specs["execution"]           = "notNull dateTime";
+    $specs["code_acte"]           = "code notNull ccam";
+    $specs["code_activite"]       = "num notNull minMax|0|99";
+    $specs["code_phase"]          = "num notNull minMax|0|99";
+    $specs["execution"]           = "dateTime notNull";
     $specs["modificateurs"]       = "str maxLength|4";
     $specs["commentaire"]         = "text";
     $specs["code_association"]    = "enum list|1|2|3|4|5";
