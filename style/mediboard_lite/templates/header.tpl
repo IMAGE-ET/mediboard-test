@@ -36,7 +36,7 @@
         <tr>
           <td id="userWelcome">
             <form name="ChangeGroup" action="" method="get">
-              <span title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %Hh%M"}}">
+              <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
                 {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
               </span>
               <input type="hidden" name="m" value="{{$m}}" />

@@ -135,4 +135,5 @@ $locales['years'] = 'years';
 $locales['year'] = 'year';
 $locales['Change'] = '';
 $locales['Associate'] = '';
+$locales['Last connection'] = '';
 ?>

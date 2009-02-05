@@ -47,7 +47,7 @@ var Menu = {
   </form>
   
   <!-- Welcome -->
-  <label title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %Hh%M"}}">
+  <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
   {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
   </label>
   {{/if}}
@@ -144,7 +144,7 @@ var Menu = {
             </form>
             {{/if}}
             <br />
-            <span title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %Hh%M"}}">
+            <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
             {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
 
