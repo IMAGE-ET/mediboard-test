@@ -2,6 +2,7 @@
 var graphs = {{$graphs|@json}};
 var options = {{$options|@json}};
 var categories = {{$list_categories_json|@json}};
+var titles = {};
 
 function refreshCount() {
   $("selected-categories-count").update(oEvenementField.getValues().length);
@@ -73,9 +74,12 @@ function refreshGraph(size) {
 
 var graph = [];
 function drawGraph(id) {
+	titles[id] = titles[id] || $('stats-'+id).innerHTML;
+	$('stats-'+id).innerHTML = '';
   graph[id] = Flotr.draw(
     $('stats-'+id),
     graphs[id], Object.extend({
+      title: titles[id],
       bars: {show:true, barWidth:0.5, stacked:true, fillOpacity: 0.6},
       mouse: {track: false},
       yaxis: {min: 0, tickFormatter: function(v) { return Math.round(v).toString() } },
@@ -246,8 +250,7 @@ var filterForm = null;
 
   {{foreach from=$graphs item=graph key=id}}
     <div style="text-align: center; clear: both;" id="graphs">
-      <h2>{{tr}}CFicheEi-{{$id}}{{/tr}}</h2>
-      <div id="stats-{{$id}}" style="width: 600px; height: 300px; margin: auto;"></div>
+      <div id="stats-{{$id}}" style="width: 600px; height: 300px; margin: auto;">{{tr}}CFicheEi-{{$id}}{{/tr}}</div>
       <button onclick="graph['{{$id}}'].saveImage()" type="button" class="submit">Enregistrer l'image</button>
     </div>
   {{/foreach}}

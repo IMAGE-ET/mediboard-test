@@ -198,7 +198,7 @@ foreach ($list_categories as $key => &$cat){
   }
 }
 
-$options['xaxis'] = array('ticks' => $ticks);
+$options['xaxis'] = array('ticks' => $ticks, 'labelsAngle' => $months_count > 12 ? 45 : 0);
 
 // Création du template
 $smarty = new CSmartyDP();
