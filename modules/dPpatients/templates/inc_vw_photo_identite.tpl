@@ -1,3 +1,4 @@
+{{if @$mode == "edit"}}
 <script type="text/javascript">
   reloadAfterUploadFile = function() {
     var url = new Url;
@@ -21,6 +22,7 @@
   	    } );
   }
 </script>
+{{/if}}
 
 {{assign var=file value=$patient->_ref_photo_identite}}
 
