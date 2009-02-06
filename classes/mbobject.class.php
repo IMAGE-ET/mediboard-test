@@ -1620,7 +1620,7 @@ class CMbObject {
    * Converts string specifications to objet specifications
    * Optimized version
    */
-  static $ex = false;
+  static $ex = true;
   function getSpecsObj() {
     $spec = array();
     foreach ($this->_props as $propName => $propSpec) {
