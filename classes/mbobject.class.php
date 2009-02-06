@@ -173,6 +173,8 @@ class CMbObject {
       
       $reflection = new ReflectionClass($class);
       $module = basename(dirname($reflection->getFileName()));
+      //global $classPaths;
+      //$module = basename(dirname($classPaths[$class]));
     }
     $this->_class_name =& $class;
     $this->_spec       =& $spec;
@@ -1070,15 +1072,15 @@ class CMbObject {
    * @return int the count null if back references module is not installed
    */
   function countBackRefs($backName) {
-    $backRef = $this->_backRefs[$backName];
-    $backRefParts = split(" ", $backRef);
-    $backClass = $backRefParts[0];
-    $backField = $backRefParts[1];
-    $backObject = new $backClass;
-
+    if (!$backSpec = $this->makeBackSpec($backName)) {
+    	return null;
+    }
+    $backObject = new $backSpec->class;
+    $backField = $backSpec->field;
+    
     // Cas du module non installé
     if (!$backObject->_ref_module) {
-      return;
+      return null;
     }
 
     // Empty object
@@ -1108,18 +1110,17 @@ class CMbObject {
    * @return array[CMbObject] the collection
    */
   function loadBackRefs($backName, $order = null, $limit = null) {
-    $this->makeBackSpec($backName);
-        
-    // Spécifications
-    $backSpec = $this->_backSpecs[$backName];
+    if (!$backSpec = $this->makeBackSpec($backName)) {
+      return null;
+    }
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
     $fwdSpec =& $backObject->_specs[$backField];
-    $backMeta = $fwdSpec->meta;      
+    $backMeta = $fwdSpec->meta;
 
     // Cas du module non installé
     if (!$backObject->_ref_module) {
-      return;
+      return null;
     }
     
     // Empty object
@@ -1307,16 +1308,15 @@ class CMbObject {
     if (!$this->_id) {
       return CAppUI::tr("noObjectToDelete") . " " . CAppUI::tr($this->_class_name);
     }
-    
-    // Counting backrefs
+
+    // Counting backSpecs
     $issues = array();
-    foreach ($this->_backRefs as $backName => $backRef) {
-      $backRefParts = split(" ", $backRef);
-      $backClass = $backRefParts[0];
-      $backField = $backRefParts[1];
-      $backObject = new $backClass;
-      $backSpec =& $backObject->_specs[$backField];
-      $backMeta = $backSpec->meta;      
+    $this->makeAllBackSpecs();
+    foreach ($this->_backSpecs as $backName => &$backSpec) {
+	    $backObject = new $backSpec->class;
+	    $backField = $backSpec->field;
+	    $fwdSpec =& $backObject->_specs[$backField];
+	    $backMeta = $fwdSpec->meta;
 
       // Cas du module non installé
       if (!$backObject->_ref_module) {
@@ -1324,7 +1324,7 @@ class CMbObject {
       }
       
       // Cas de la suppression en cascade
-      if ($backSpec->cascade) {
+      if ($fwdSpec->cascade) {
         
         // Vérification de la possibilité de supprimer chaque backref
         $backObject->$backField = $this->_id;
@@ -1346,17 +1346,17 @@ class CMbObject {
           $issues[] = CAppUI::tr("CMbObject-msg-cascade-issues")
             . " " . $cascadeIssuesCount 
             . "/" . count($cascadeObjects) 
-            . " " . CAppUI::tr("$backSpec->class-back-$backName");
+            . " " . CAppUI::tr("$fwdSpec->class-back-$backName");
         }
         
         continue;
       }
       
       // Vérification du nombre de backRefs
-      if (!$backSpec->unlink) {
+      if (!$fwdSpec->unlink) {
         if ($backCount = $this->countBackRefs($backName)) {
           $issues[] = $backCount 
-            . " " . CAppUI::tr("$backSpec->class-back-$backName");
+            . " " . CAppUI::tr("$fwdSpec->class-back-$backName");
         }
       }
     };
@@ -1379,19 +1379,18 @@ class CMbObject {
       return $msg;
     }
 
-    // Deleting backRefs
-    foreach ($this->_backRefs as $backName => $backRef) {
-      $backRefParts = explode(' ', $backRef);
-      $backClass = $backRefParts[0];
-      $backField = $backRefParts[1];
-      $backObject = new $backClass;
-      $backSpec =& $backObject->_specs[$backField];
-      $backMeta = $backSpec->meta;      
+    // Deleting backSpecs
+    //$this->makeAllBackSpecs(); // Already done by canDeleteEx
+    foreach ($this->_backSpecs as $backName => $backSpec) {
+      $backObject = new $backSpec->class;
+      $backField = $backSpec->field;
+      $fwdSpec =& $backObject->_specs[$backField];
+      $backMeta = $fwdSpec->meta;
       
       /* Cas du module non installé, 
        * Cas de l'interdiction de suppression, 
        * Cas de l'interdiction de la non liaison des backRefs */
-      if (!$backObject->_ref_module || !$backSpec->cascade|| $backSpec->unlink) {
+      if (!$backObject->_ref_module || !$fwdSpec->cascade || $fwdSpec->unlink) {
         continue; 
       }
       
@@ -1610,10 +1609,20 @@ class CMbObject {
    * @return CMbBackSpec The back reference specification, null if undefined
    */
   function makeBackSpec($backName) {
-    if (array_key_exists($backName, $this->_backSpecs)) {
-      return;
+    if (array_key_exists($backName, $this->_backSpecs)) return $this->_backSpecs[$backName];
+
+    if ($backSpec = CMbBackSpec::make($backName, $this->_backRefs[$backName]))
+      return $this->_backSpecs[$backName] = $backSpec;
+  }
+  
+  /**
+   * Makes all the back specs
+   * @return nothing
+   */
+  function makeAllBackSpecs() {
+    foreach($this->_backRefs as $backName => $ref) {
+    	$this->makeBackSpec($backName);
     }
-    return $this->_backSpecs[$backName] = new CMbBackSpec($backName, $this->_backRefs[$backName]);
   }
 
   /**
@@ -1668,14 +1677,7 @@ class CMbObject {
         );
       }
   	}
-  	
-    /*foreach ($this->_enums as $propName => $enumValues) {
-      $enumsTrans[$propName] = array_flip($enumValues);
-      foreach($enumsTrans[$propName] as $key => $item) {
-        $enumsTrans[$propName][$key] = CAppUI::tr("$this->_class_name.$propName.$key");
-      }
-      asort($enumsTrans[$propName]);
-    }*/
+
     return $enumsTrans;
   }
   

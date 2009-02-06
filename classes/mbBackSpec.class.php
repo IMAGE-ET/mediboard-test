@@ -12,19 +12,22 @@ class CMbBackSpec {
   public $name = null;
   public $class = null; 
   public $field = null;
-  
   public $_initiator = null; // The class actually pointed to by $class
 
-  function __construct($name, $backProp) {
-    $this->name = $name;
+  static function make($name, $backProp) {
+    list($class, $field) = explode(' ', $backProp);
+  	if (!class_exists($class)) return null;
 
-    list($this->class, $this->field) = explode(" ", $backProp);
+  	$backObject = new $class;
+  	
+  	$backSpec = new CMbBackSpec();
+    $backSpec->name = $name;
+    $backSpec->class = $class;
+    $backSpec->field = $field;
+    $backSpec->_initiator = $backObject->_specs[$field]->class;
     
-    $backObject = new $this->class;
-    $this->_initiator = $backObject->_specs[$this->field]->class;
+    return $backSpec;
   }
-  
 }
-
 
 ?>
