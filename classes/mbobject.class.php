@@ -125,6 +125,7 @@ class CMbObject {
       $this->_props =& self::$props[$class];
       self::$backRefs[$class] = $this->getBackRefs();
       $this->_backRefs =& self::$backRefs[$class];
+      self::$backSpecs[$class] = array();
       self::$specsObj[$class] = $this->getSpecsObj();
       $this->_specs =& self::$specsObj[$class];
       self::$seeks[$class] = $this->getSeeks();
@@ -1619,7 +1620,7 @@ class CMbObject {
    * Converts string specifications to objet specifications
    * Optimized version
    */
-  static $ex = true;
+  static $ex = false;
   function getSpecsObj() {
     $spec = array();
     foreach ($this->_props as $propName => $propSpec) {
