@@ -9,18 +9,16 @@ function view_history_patient(id){
   url.popup(600, 500, "patient history");
 }
 
-function viewPatient() {
-  var oForm = document.actionPat;
-  var oTabField = oForm.tab;
-  oTabField.value = "vw_full_patients";
-  oForm.submit();
+function viewPatient(form) {
+  form = form || document.forms.actionPat;
+  $V(form.tab, "vw_full_patients");
+  form.submit();
 }
 
-function editPatient() {
-  var oForm = document.actionPat;
-  var oTabField = oForm.tab;
-  oTabField.value = "vw_edit_patients";
-  oForm.submit();
+function editPatient(form) {
+	form = form || document.forms.actionPat;
+  $V(form.tab, "vw_edit_patients");
+  form.submit();
 }
 
 function printPatient(id) {

@@ -124,7 +124,7 @@ var Patient = {
 <table class="tbl">
   <tr>
     {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
-    <th><button type="submit" class="search notext" title="{{tr}}Merge{{/tr}}">{{tr}}Merge{{/tr}}</button></th>
+    <th style="width: 0.1%;"><button type="submit" class="search notext" title="{{tr}}Merge{{/tr}}">{{tr}}Merge{{/tr}}</button></th>
     {{/if}}
     <th>
       {{mb_title class=CPatient field=nom}}
@@ -132,6 +132,7 @@ var Patient = {
     </th>
     <th>{{mb_title class=CPatient field=naissance}}</th>
     <th>{{mb_title class=CPatient field=adresse}}</th>
+    <th style="width: 0.1%;"></th>
   </tr>
 
   {{mb_ternary var="tabPatient" test=$board 
@@ -165,6 +166,16 @@ var Patient = {
         {{mb_value object=$curr_patient field="ville"}}
       </a>
     </td>
+    <td>
+      <form name="actionPat-{{$curr_patient->_id}}" action="?" method="get">
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="tab" value="vw_idx_patients" />
+        <input type="hidden" name="patient_id" value="{{$curr_patient->_id}}" />
+        <button type="button" class="search notext" onclick="viewPatient(this.form)" title="Afficher">
+          Afficher
+        </button>
+      </form>
+    </td>
   </tr>
   {{foreachelse}}
   <tr>
@@ -173,7 +184,7 @@ var Patient = {
   {{/foreach}}
   {{if $patientsSoundex|@count}}
   <tr>
-    <th colspan="4">
+    <th colspan="5">
       Résultats proches
       ({{$patientsSoundexCount}} {{tr}}found{{/tr}})
       
@@ -201,6 +212,16 @@ var Patient = {
         {{mb_value object=$curr_patient field="cp"}}
         {{mb_value object=$curr_patient field="ville"}}
       </a>
+    </td>
+    <td>
+      <form name="actionPat-{{$curr_patient->_id}}" action="?" method="get">
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="tab" value="vw_idx_patients" />
+        <input type="hidden" name="patient_id" value="{{$curr_patient->_id}}" />
+        <button type="button" class="search notext" onclick="viewPatient(this.form)" title="Afficher">
+          Afficher
+        </button>
+      </form>
     </td>
   </tr>
   {{/foreach}}
