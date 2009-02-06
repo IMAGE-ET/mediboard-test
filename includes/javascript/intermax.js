@@ -92,7 +92,7 @@ var Intermax = {
   result: function(aAllowedFunctions) {
     this.aAllowedFunctions = aAllowedFunctions ? [aAllowedFunctions].flatten() : [];
     document.intermaxResult.performRead();
-    setTimeout(function() { Intermax.handleContent() }, 100);
+    setTimeout(function() { Intermax.handleContent() }, 200);
   },
   
   watchResult: function(aAllowedFunctions) {
