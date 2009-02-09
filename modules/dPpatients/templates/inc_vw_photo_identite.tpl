@@ -38,7 +38,7 @@
     {{assign var=src value="images/pictures/identity_child.png"}}
   {{elseif $patient->sexe == 'm' && $patient->_age < 60}}
     {{assign var=src value="images/pictures/identity_male.png"}}
-  {{elseif $patient->sexe == 'm' && $patient->_age > 60}}
+  {{elseif $patient->sexe == 'm' && $patient->_age >= 60}}
     {{assign var=src value="images/pictures/identity_male_old.png"}}
   {{elseif $patient->_age < 60}}
     {{assign var=src value="images/pictures/identity_female.png"}}
