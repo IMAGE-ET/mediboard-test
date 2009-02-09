@@ -64,7 +64,9 @@ require_once("addusers.sql.php");
   </tr>
 
   <tr>
-    <td class="button" colspan="2"><input type="submit" value="Création de la base et des utilisateurs" /></td>
+    <td class="button" colspan="2">
+    	<button type="submit" class="new">Création de la base et des utilisateurs</button>
+    </td>
   </tr>
 
 </table>
@@ -122,7 +124,9 @@ if (@$_POST["adminhost"]) {
   </tr>
 
   <tr>
-    <td class="button" colspan="2"><input type="submit" value="Générer le code de création des utilisateurs et des bases" /></td>
+    <td class="button" colspan="2">
+    	<button type="submit" class="edit">Générer le code de création des utilisateurs et des bases"</button>
+    </td>
   </tr>
   
 </table>
