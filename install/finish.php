@@ -71,7 +71,9 @@ function checkForm(oForm) {
 
 
   <tr>
-    <td class="button" colspan="2"><input type="submit" name="changePassword" value="Valider le mot de passe" /></td>
+    <td class="button" colspan="2">
+      <button class="modify" type="submit" name="changePassword">Valider le mot de passe</button>
+    </td>
   </tr>
 
 </table>
