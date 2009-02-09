@@ -46,7 +46,7 @@
     {{assign var=src value="images/pictures/identity_female_old.png"}}
   {{/if}}
 {{/if}}
-<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777"" alt="Identité" />
+<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777" alt="Identité" />
 
 {{if @$mode == "edit"}}
   <br />
