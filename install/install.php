@@ -369,7 +369,7 @@ $install = @$_POST['install'];
 	</tr>
 	
 	<?php foreach(CLibrary::$all as $library) { 
-		if ($install[$library->name]) {
+		if (isset($install[$library->name])) {
   	  $library->clearLibraries($library->name); ?>
   <tr>
     <th rowspan="2"><?php echo $library->name; ?></th>
@@ -416,7 +416,7 @@ $install = @$_POST['install'];
 	</tr>
   <?php } ?>
   <tr>
-    <?php if (!$install[$library->name]) { ?><th><?php echo $library->name; ?></th><?php } ?>
+    <?php if (!isset($install[$library->name])) { ?><th><?php echo $library->name; ?></th><?php } ?>
     <td class="text"><?php echo nl2br($library->description); ?></td>
     <td>
       <a href="<?php echo $library->url; ?>" title="Site web officiel de <?php echo $library->name; ?>" target="_blank">
