@@ -83,8 +83,8 @@
         
         <em>Pathologie:</em>
         <select name="pathologie">
-          <option value="">&mdash; Choisir &mdash;</option>
-          {{foreach from=$pathos->_enumsTrans.categorie|smarty:nodefaults item=curr_patho}}
+          <option value="">&mdash; Choisir</option>
+          {{foreach from=$pathos->_specs.categorie->_locales item=curr_patho}}
           <option {{if $curr_patho == $curr_sejour->pathologie}}selected="selected"{{/if}}>
           {{$curr_patho}}
           </option>

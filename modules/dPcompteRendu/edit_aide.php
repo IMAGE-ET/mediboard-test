@@ -31,9 +31,10 @@ $dependValues = null;
 
 if(count($object->_helped_fields[$field])){
   foreach($object->_helped_fields[$field] as $key => $depend_field){
-    $dependValues[$key] = @$object->_enumsTrans[$depend_field];  
+    $dependValues[$key] = @$object->_specs[$depend_field]->_locales;  
   }
 }
+
 
 // Nouvelle Aide à la saisie
 $aide = new CAideSaisie();

@@ -39,7 +39,7 @@ class CExamNyha extends CMbObject {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "consultation_id" => "ref notNull class|CConsultation",
-      "q1"              => "bool",
+      "q1"              => "bool default|none",
       "q2a"             => "bool",
       "q2b"             => "bool",
       "q3a"             => "bool",

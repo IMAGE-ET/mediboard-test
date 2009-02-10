@@ -19,43 +19,45 @@ function hideQuestion(question){
 function changeValue(sField,sRepYes,sRepNo){
   var oForm = document.editFrmNyha;
   var oField = oForm[sField];
-  if(oField[1].checked){
+
+  if ($V(oField) == "1"){
     showQuestion(sRepYes);
     hideQuestion(sRepNo);
-  }else if(oField[0].checked){
+  }
+  else {
     showQuestion(sRepNo);
     hideQuestion(sRepYes);
-  }else{
-    hideQuestion(sRepNo);
-    hideQuestion(sRepYes);
   }
+
   calculClasseNyha();
 }
 
 function calculClasseNyha(){
   var nyha = "";
   var oForm = document.editFrmNyha;
-  if(oForm.q1[1].checked){
-    if(oForm.q2a[0].checked){
+  if ($V(oForm.q1) == '1') {
+    if ($V(oForm.q2a) == '0') {
       nyha = "Classe III";
     }
-    if(oForm.q2a[1].checked && oForm.q2b[0].checked){
+    if ($V(oForm.q2a) == '1' && $V(oForm.q2b) == '0') {
       nyha = "Classe II";
     }
-    if(oForm.q2a[1].checked && oForm.q2b[1].checked){
+    if ($V(oForm.q2a) == '1' && $V(oForm.q2b) == '1') {
       nyha = "Classe I";
     }
   }
-  if(oForm.q1[0].checked){
-    if(oForm.q3a[0].checked){
+  
+  if ($V(oForm.q1) == '0') {
+    if ($V(oForm.q3a) == '0') {
       nyha = "Classe III";
     }
-    if(oForm.q3a[1].checked && oForm.q3b[0].checked){
+    if ($V(oForm.q3a) == '1' && $V(oForm.q3b) == '0') {
       nyha = "Classe IV";
     }
-    if(oForm.q3a[1].checked && oForm.q3b[1].checked){
+    if ($V(oForm.q3a) == '1' && $V(oForm.q3b) == '1') {
       nyha = "Classe III";
     }
   }
+  
   $('classeNyha').innerHTML = nyha;
 }

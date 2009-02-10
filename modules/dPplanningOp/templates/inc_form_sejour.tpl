@@ -422,10 +422,11 @@ Main.add( function(){
     {{$sejour->type}}
     {{/if}}
     <select name="type" onchange="changeTypeHospi()">
-    {{foreach from=$sejour->_enumsTrans.type item="curr_type" key="key"}}
+    {{assign var=specType value=$sejour->_specs.type}}
+    {{foreach from=$specType->_locales item="curr_type" key="key"}}
       {{if $key != 'urg' || $urgInstalled}}
       <option value="{{$key}}"
-        {{if $sejour->type == $key || (!$sejour->type && $key == $sejour->_specs.type->default)}}selected="selected"{{/if}}>
+        {{if $sejour->type == $key || (!$sejour->type && $key == $specType->default)}}selected="selected"{{/if}}>
         {{$curr_type}}
       </option>
       {{/if}}

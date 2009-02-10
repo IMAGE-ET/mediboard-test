@@ -87,7 +87,7 @@ class CMedecin extends CMbObject {
     	$this->_view = "Dr. $this->nom $this->prenom";
     }
     else {
-    	$this->_view = "$this->nom $this->prenom ({$this->_enumsTrans['type'][$this->type]})";
+    	$this->_view = "$this->nom $this->prenom ({$this->_specs['type']->_locales[$this->type]})";
     }
   }
 	 

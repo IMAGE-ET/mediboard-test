@@ -31,8 +31,9 @@ foreach($listClass as $sClassName){
 	        $specType = $object->_specs[$_depend_value]->getSpecType();
 	        if($specType == "enum"){
 	          $entryEnums = array();
+	          
 	          // Ecriture du tableau de traduction
-	          foreach($object->_enumsTrans[$_depend_value] as $key => $sTraduction){
+	          foreach($object->_specs[$_depend_value]->_locales as $key => $sTraduction){
 	            $listTraductions["$sClassName.$_depend_value.$key"] = $sTraduction;
 	            $entryEnums[$key] = "$sClassName.$_depend_value.$key";
 	          }

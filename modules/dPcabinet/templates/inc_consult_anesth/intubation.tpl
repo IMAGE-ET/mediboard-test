@@ -371,7 +371,7 @@ Main.add(function () {
     <td colspan="2">
       <table style="width: 100%">
         <tr>
-          {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
+          {{foreach from=$consult_anesth->_specs.mallampati->_locales key=curr_mallampati item=trans_mallampati}}
           <td class="button">
             <div id="mallampati_bg_{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
             <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">

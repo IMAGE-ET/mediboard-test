@@ -66,7 +66,7 @@ Main.add(function () {
     </tr>
 
     {{foreach from=$packs item=curr_pack}}
-    <tr>
+    <tr {{if $curr_pack->_id == $pack->_id}}class="selected"{{/if}}>
       {{assign var="pack_id" value=$curr_pack->pack_id}}
       {{assign var="href" value="?m=$m&tab=$tab&pack_id=$pack_id"}}
       <td><a href="{{$href}}">{{$curr_pack->_ref_chir->_view}}</a></td>
@@ -125,8 +125,10 @@ Main.add(function () {
       <td>
         <select name="object_class" {{if $pack->_id}}onchange="reloadListModele(this.value);"{{/if}}>
           <option value="">&mdash; Choix d'une classe</option>
-          {{foreach from=$pack->_enumsTrans.object_class item="curr_type" key="key"}}
-            <option value="{{$key}}" {{if $key == $pack->object_class}}selected = "selected"{{/if}}>{{$curr_type}}</option>
+          {{foreach from=$pack->_specs.object_class->_list item=object_class}}
+            <option value="{{$object_class}}" {{if $object_class == $pack->object_class}}selected = "selected"{{/if}}>
+              {{tr}}{{$object_class}}{{/tr}}	
+						</option>
           {{/foreach}}
         </select>
       </td>

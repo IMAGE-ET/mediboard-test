@@ -67,7 +67,7 @@ window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'q2a','q3a')" name="q1" options=$exam_nyha->_enumsTrans.q1 separator="<br />" class=$exam_nyha->_props.q1 checked=$exam_nyha->q1}}
+      {{mb_field object=$exam_nyha field=q1 separator="<br />" onchange="changeValue(this.name,'q2a','q3a')"}}
     </td>
   </tr>
   
@@ -87,7 +87,7 @@ window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'q2b','')" name="q2a" options=$exam_nyha->_enumsTrans.q2a separator="<br />" class=$exam_nyha->_props.q2a checked=$exam_nyha->q2a}}
+      {{mb_field object=$exam_nyha field=q2a separator="<br />" onchange="changeValue(this.name,'q2b','')"}}
     </td>
   </tr>
   </tbody>
@@ -109,8 +109,9 @@ window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
         S'adonner à des loisirs tels que le ski alpin, le vélo, le football, le tennis ?
       </label>
     </td>
+
     <td>
-      {{html_radios onchange="changeValue(this.name,'','')" name="q2b" options=$exam_nyha->_enumsTrans.q2b separator="<br />" class=$exam_nyha->_props.q2b checked=$exam_nyha->q2b}}
+      {{mb_field object=$exam_nyha field=q2b separator="<br />" onchange="changeValue(this.name,'','')"}}
     </td>
   </tr>
   </tbody>
@@ -132,7 +133,7 @@ window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'q3b','')" name="q3a" options=$exam_nyha->_enumsTrans.q3a separator="<br />" class=$exam_nyha->_props.q3a checked=$exam_nyha->q3a}}
+      {{mb_field object=$exam_nyha field=q3a separator="<br />" onchange="changeValue(this.name,'q3b','')"}}
     </td>
   </tr>
   </tbody>
@@ -153,17 +154,20 @@ window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
       </label>
     </td>
     <td>
-      {{html_radios onchange="changeValue(this.name,'','')" name="q3b" options=$exam_nyha->_enumsTrans.q3b separator="<br />" class=$exam_nyha->_props.q3b checked=$exam_nyha->q3b}}
+      {{mb_field object=$exam_nyha field=q3b separator="<br />" onchange="changeValue(this.name,'','')"}}
     </td>
   </tr>
   </tbody>
+
 </table>
+
 <div style="display:none;">
   <input type="radio" name="q2a" value="" {{if $exam_nyha->q2a==""}}checked="checked"{{/if}} />
   <input type="radio" name="q2b" value="" {{if $exam_nyha->q2b==""}}checked="checked"{{/if}} />
   <input type="radio" name="q3a" value="" {{if $exam_nyha->q3a==""}}checked="checked"{{/if}} />
   <input type="radio" name="q3b" value="" {{if $exam_nyha->q3b==""}}checked="checked"{{/if}} />
 </div>
+
 <table class="form">
   <tr>
     <th><strong>Classification NYHA</strong></th>

@@ -81,9 +81,9 @@ class CEnumSpec extends CMbFieldSpec {
       
       if($defaultOption){
         if($value === null) {
-          $sHtml    .= "<option value=\"\" selected=\"selected\">$defaultOption</option>";
+          $sHtml    .= "\n<option value=\"\" selected=\"selected\">$defaultOption</option>";
         } else {
-          $sHtml    .= "<option value=\"\">$defaultOption</option>";
+          $sHtml    .= "\n<option value=\"\">$defaultOption</option>";
         }
       }
       foreach ($locales as $key => $item){
@@ -92,9 +92,9 @@ class CEnumSpec extends CMbFieldSpec {
         }else{
           $selected = "";
         }
-        $sHtml    .= "<option value=\"$key\"$selected>$item</option>";
+        $sHtml    .= "\n<option value=\"$key\"$selected>$item</option>";
       }
-      $sHtml      .= "</select>";
+      $sHtml      .= "\n</select>";
       return $sHtml;
     }
 
@@ -108,7 +108,7 @@ class CEnumSpec extends CMbFieldSpec {
         }else{
           $selected = "";
         }
-        $sHtml    .= "<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
+        $sHtml    .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
         if($compteur == 0) {
           $sHtml  .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"";
         }elseif($className != ""){

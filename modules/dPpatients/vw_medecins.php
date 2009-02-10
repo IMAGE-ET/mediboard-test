@@ -47,7 +47,7 @@ if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
 $medecins = new CMedecin();
 $medecins = $medecins->loadList($where, "nom, prenom", "0, 50");
 
-$list_types = $medecin->_enumsTrans['type'];
+$list_types = $medecin->_specs['type']->_locales;
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -88,7 +88,7 @@ function reloadListExamComp() {
         </tr>
         <tr>
           <td>
-            {{html_options name="realisation" options=$examComp->_enumsTrans.realisation}}
+            {{mb_field object=$examComp field=realisation}}
           </td>
           <td>
             <input type="hidden" name="_hidden_examen" value="" />
@@ -97,7 +97,7 @@ function reloadListExamComp() {
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button">Ajouter</button>
+            <button class="submit" type="button">{{tr}}Add{{/tr}}</button>
           </td>
         </tr>
       </table>      
