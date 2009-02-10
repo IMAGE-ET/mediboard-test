@@ -167,14 +167,9 @@ var Patient = {
       </a>
     </td>
     <td>
-      <form name="actionPat-{{$curr_patient->_id}}" action="?" method="get">
-        <input type="hidden" name="m" value="dPpatients" />
-        <input type="hidden" name="tab" value="vw_idx_patients" />
-        <input type="hidden" name="patient_id" value="{{$curr_patient->_id}}" />
-        <button type="button" class="search notext" onclick="viewPatient(this.form)" title="Afficher">
-          Afficher
-        </button>
-      </form>
+      <a class="buttonsearch notext" href="?m=dPpatients&tab=vw_full_patient&patient_id={{$curr_patient->_id}}" title="Afficher" />
+        Afficher
+      </a>
     </td>
   </tr>
   {{foreachelse}}
@@ -214,14 +209,9 @@ var Patient = {
       </a>
     </td>
     <td>
-      <form name="actionPat-{{$curr_patient->_id}}" action="?" method="get">
-        <input type="hidden" name="m" value="dPpatients" />
-        <input type="hidden" name="tab" value="vw_idx_patients" />
-        <input type="hidden" name="patient_id" value="{{$curr_patient->_id}}" />
-        <button type="button" class="search notext" onclick="viewPatient(this.form)" title="Afficher">
-          Afficher
-        </button>
-      </form>
+      <a class="buttonsearch notext" href="?m=dPpatients&tab=vw_full_patient&patient_id={{$curr_patient->_id}}" title="Afficher">
+        Afficher
+      </a>
     </td>
   </tr>
   {{/foreach}}
