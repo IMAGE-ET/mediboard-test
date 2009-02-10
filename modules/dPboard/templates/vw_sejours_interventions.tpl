@@ -27,7 +27,7 @@
             <select name="type">
               <option value="">&mdash; Tous les types d'hospi</option>
               <option value="1" {{if $filterSejour->type == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
-              {{foreach from=$listHospis key=key_hospi item=curr_hospi}}
+              {{foreach from=$filterSejour->_specs.type->_locales key=key_hospi item=curr_hospi}}
               <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
                 {{$curr_hospi}}
               </option>

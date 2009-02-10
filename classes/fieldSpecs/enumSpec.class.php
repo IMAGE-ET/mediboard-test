@@ -18,7 +18,9 @@ class CEnumSpec extends CMbFieldSpec {
   
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
-    $this->_list = explode("|", $this->list);
+    foreach ($this->_list = explode("|", $this->list) as $value) {
+      $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
+    }
   }
   
   function getValue($object, $smarty, $params = null) {
@@ -67,9 +69,10 @@ class CEnumSpec extends CMbFieldSpec {
     $defaultOption = CMbArray::extract($params, "defaultOption");
     $alphabet      = CMbArray::extract($params, "alphabet", 0);
     $extra         = CMbArray::makeXmlAttributes($params);
-    $enumsTrans    = $object->_enumsTrans[$field];
-    if($alphabet) {
-      asort($enumsTrans); 
+    $locales       = $this->_locales;
+    
+    if ($alphabet) {
+      asort($locales); 
     }
     
     if ($typeEnum === "select") {
@@ -83,7 +86,7 @@ class CEnumSpec extends CMbFieldSpec {
           $sHtml    .= "<option value=\"\">$defaultOption</option>";
         }
       }
-      foreach($enumsTrans as $key => $item){
+      foreach ($locales as $key => $item){
         if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
           $selected = " selected=\"selected\""; 
         }else{
@@ -99,7 +102,7 @@ class CEnumSpec extends CMbFieldSpec {
       $compteur    = 0;
       $sHtml       = "";
       
-      foreach($enumsTrans as $key => $item){
+      foreach ($locales as $key => $item){
         if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
           $selected = " checked=\"checked\""; 
         }else{
@@ -126,14 +129,15 @@ class CEnumSpec extends CMbFieldSpec {
   
   function getLabelForElement($object, &$params){
     $typeEnum  = CMbArray::extract($params, "typeEnum", "select");
-    
-    if($typeEnum === "select"){
+       
+    if ($typeEnum === "select") {
       return $this->fieldName;
     }
-    else if($typeEnum === "radio"){
-      $enumsTrans = array_flip($object->_enumsTrans[$this->fieldName]);
-      return $this->fieldName."_".current($enumsTrans);
+    
+    if ($typeEnum === "radio") {
+      return $this->fieldName."_".reset($this->_list);
     }
+    
     trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
     return null;
   }

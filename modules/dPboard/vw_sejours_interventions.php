@@ -27,16 +27,12 @@ $filterSejour->praticien_id = $prat->_id;
 $filterSejour->type = mbGetValueFromGetOrSession("type", 1);
 $filterOperation->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 
-$sejour = new CSejour;
-$listHospis = $sejour->_enumsTrans["type"];
-
 // Variables de templates
 $smarty = new CSmartyDP();
 
 $smarty->assign("filterSejour",    $filterSejour);
 $smarty->assign("filterOperation", $filterOperation);
 $smarty->assign("prat",            $prat);
-$smarty->assign("listHospis",      $listHospis);
 
 $smarty->display("vw_sejours_interventions.tpl");
 

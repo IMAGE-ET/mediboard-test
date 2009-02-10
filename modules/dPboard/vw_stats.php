@@ -14,12 +14,12 @@ if (!$prat->_id) {
 }
 
 $stats = array(
-  "sejours_interventions",
-  "stats_consultations",
-  "prescripteurs",
+  "vw_sejours_interventions",
+  "vw_stats_consultations",
+  "vw_prescripteurs",
 );
 
-$stat = mbGetValueFromPostOrSession("stat", "sejours_interventions");
+$stat = mbGetValueFromPostOrSession("stat", "vw_sejours_interventions");
 
 if (!in_array($stat, $stats)) {
   trigger_error("Unknown stat view '$stat'", E_USER_WARNING);
@@ -34,6 +34,6 @@ $smarty->assign("stat" , $stat);
 
 $smarty->display("vw_stats.tpl");
 
-CAppUI::requireModuleFile("dPboard", "vw_$stat");
+CAppUI::requireModuleFile("dPboard", "$stat");
 
 ?>

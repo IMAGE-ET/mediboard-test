@@ -4,7 +4,7 @@
   <select name="stat" onchange="form.submit()">
   {{foreach from=$stats item=_stat}}
     <option value="{{$_stat}}" {{if $_stat == $stat}}selected="selected"{{/if}}> 
-    	{{tr}}mod-dPboard-tab-vw_{{$_stat}}{{/tr}}
+    	{{tr}}mod-dPboard-tab-{{$_stat}}{{/tr}}
     </option>
   {{/foreach}}
   </select>
