@@ -81,12 +81,13 @@ if ($compte_rendu->_id) {
 // Class and fields
 $listObjectClass     = array();
 $listObjectAffichage = array();
-foreach($compte_rendu->_enums["object_class"] as $valueClass){
+
+foreach ($compte_rendu->_specs["object_class"]->_list as $valueClass){
   $listObjectClass[$valueClass]     = array();
   $listObjectAffichage[$valueClass] = CAppUI::tr($valueClass);
 }
 
-foreach($listObjectClass as $keyClass=>$value){
+foreach ($listObjectClass as $keyClass=>$value){
   $listCategory = CFilesCategory::listCatClass($keyClass);
   foreach($listCategory as $keyCat=>$valueCat){
     $listObjectClass[$keyClass][$keyCat] = utf8_encode($listCategory[$keyCat]->nom);

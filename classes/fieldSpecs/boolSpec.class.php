@@ -12,6 +12,14 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CBoolSpec extends CMbFieldSpec {
   
+  var $_list = null;
+  var $_locales = null;
+    
+  function __construct($className, $field, $prop = null, $aProperties = array()) {
+    parent::__construct($className, $field, $prop, $aProperties);
+    $this->_list = array(0,1);
+  }
+  
   function checkValues(){
     parent::checkValues();
     if($this->default === null){

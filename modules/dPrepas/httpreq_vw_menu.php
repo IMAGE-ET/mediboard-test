@@ -30,7 +30,7 @@ $listPlats = array();
 $where              = array();
 $where["typerepas"] = $ds->prepare("= %",$menu->typerepas);
 $order              = "nom";
-foreach($plats->_enums["type"] as $key=>$value){
+foreach($plats->_specs["type"]->_list as $key => $value){
   $listPlats[$value] = array();
   
   if($menu->modif){

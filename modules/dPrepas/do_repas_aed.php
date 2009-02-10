@@ -87,7 +87,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
          $AppUI->setMsg("Le menu n'existe pas.", UI_MSG_ERROR );
          $error_ref = true;
        }
-       foreach($plats->_enums["type"] as $curr_typePlat){
+       foreach($plats->_specs["type"]->_list as $curr_typePlat){
          if($object->$curr_typePlat && !$object->{"_ref_".$curr_typePlat}){
            $AppUI->setMsg("Le Plat de remplacement ".$curr_typePlat." n'existe pas.", UI_MSG_ERROR );
            $error_ref = true;

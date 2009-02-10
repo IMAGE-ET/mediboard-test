@@ -221,7 +221,7 @@ class CSejour extends CCodable {
     $specs["_duree_prevue"]   = "num";
     $specs["_duree_reelle"]   = "num";
     $specs["_date_entree_prevue"] = "date";
-    $specs["_date_sortie_prevue"] = "date";
+    $specs["_date_sortie_prevue"] = "date moreEquals|_date_entree_prevue";
     $specs["_sortie_autorisee"]   = "bool";
     $specs["_protocole_prescription_anesth_id"] = "ref class|CPrescription";
     $specs["_protocole_prescription_chir_id"]   = "ref class|CPrescription";
@@ -242,7 +242,7 @@ class CSejour extends CCodable {
     $pathos = new CDiscipline();
     
     // Test de la pathologies
-    if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->_enums["categorie"]))) {
+    if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->_specs["categorie"]->_list))) {
       $msg.= "Pathologie non disponible<br />";
     }
     

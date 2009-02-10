@@ -422,7 +422,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                              "_min_sortie_prevue"  => $listMins,
                              "_date_entree_prevue" => mbDate($aType["entree_d"]." day", $date),
                              "rques"               => "[DEMO]",
-                             "pathologie"          => $pathos->_enums["categorie"]);
+                             "pathologie"          => $pathos->_specs["categorie"]->_list);
           $sejours->setManyFields($tabFields);
           if($aType["sortie_d"]){
             $sejours->setField("_date_sortie_prevue", mbDate($aType["sortie_d"]." day", $date));
@@ -439,7 +439,7 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
                                 "salle_id"       => $salle->_id,
                                 "date"           => $date,
                                 "rques"          => "[DEMO]",
-                                "cote"           => $operations->object->_enums["cote"],
+                                "cote"           => $operations->object->_specs["cote"]->_list,
                                 "rank"           => $i,
                                 "codes_ccam"     => array("HBGD038", "GAMA007", "BFGA004", "HHFE002", "MEMC003",
                                                            "NFFC004", "PAGA011", "BGLB001", "QZFA036", "AHPC001"),

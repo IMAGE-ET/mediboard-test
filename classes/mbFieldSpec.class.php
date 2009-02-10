@@ -46,7 +46,7 @@ class CMbFieldSpec {
 
   var $_defaultLength = null;
 
-  function CMbFieldSpec($className, $field, $prop = null, $aProperties = array()) {
+  function __construct($className, $field, $prop = null, $aProperties = array()) {
     $this->className = $className;
     $this->fieldName = $field;
     $this->prop      = $prop;

@@ -38,7 +38,7 @@
       <tbody class="effectChambre" id="affect{{$curr_affect->_id}}" style="display:none;">
       <tr>
         <td>
-          {{foreach from=$plat->_enums.type item=curr_typePlat}}
+          {{foreach from=$plat->_specs.type->_list item=curr_typePlat}}
             {{if $repas->$curr_typePlat}}
               {{assign var="ref" value=_ref_$curr_typePlat}}
               <em>{{$repas->$ref->nom}}</em><br />

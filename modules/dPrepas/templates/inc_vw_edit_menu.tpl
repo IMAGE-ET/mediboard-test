@@ -24,7 +24,7 @@
         <td class="text">
           <a href="?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
             {{assign var="premier" value=1}}
-            {{foreach from=$typePlats->_enums.type item=curr_typePlat}}
+            {{foreach from=$typePlats->_specs.type->_list item=curr_typePlat}}
               {{if $curr_menu->$curr_typePlat}}
                 {{if $premier}}
                   {{assign var="premier" value=0}}

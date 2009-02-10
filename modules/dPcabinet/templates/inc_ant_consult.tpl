@@ -159,15 +159,15 @@ Main.add(function () {
 						{{mb_field object=$antecedent field=date form=editAntFrm register=true}}
           </td>
           
-          <td id="listAides_Antecedent_rques">
+          <th id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
 						<span id="div_helpers_rques">
 						</span>
             <input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value)">
-              Nouveau
+              {{tr}}New{{/tr}}
             </button>
-          </td>
+          </th>
         </tr>
 
         <tr>
@@ -234,17 +234,17 @@ Main.add(function () {
           <td class="date">
 						{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}
           </td>
-          <td>
+          <th>
             {{mb_label object=$traitement field="traitement"}}
-            <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
-              <option value="">&mdash; Choisir une aide</option>
+            <select name="_helpers_traitement" size="1" style="width: 80px;" onchange="pasteHelperContent(this)">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{html_options options=$traitement->_aides.traitement.no_enum}}
             </select>
             <input type="hidden" name="_hidden_traitement" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement')">
-              Nouveau
+              {{tr}}New{{/tr}}
             </button>
-          </td>
+          </th>
         </tr>
         <tr>
           <th>

@@ -41,13 +41,15 @@ foreach ($antecedent->_helped_fields as $field => $props) {
  $prop = $props["depend_value_1"];
   if ($prop) {
     // Chargement des Aides de l'utilisateur
-    foreach ($antecedent->_enums[$prop] as $type) {
+    foreach ($antecedent->_specs[$prop]->_list as $type) {
     	$where["depend_value_1"] = "= '$type'";
       $aides = $aide->loadList($where, $order);
 		  $_aides_antecedent[$type] = $aides;
     }
+    
     $where["depend_value_1"] = 'IS NULL';
     $aides = $aide->loadList($where, $order);
+    
     if (count($aides)) {
       $_aides_antecedent[] = $aides;
     }

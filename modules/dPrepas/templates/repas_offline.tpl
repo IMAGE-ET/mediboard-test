@@ -116,7 +116,7 @@
     <tr>
       <th id="thPlatTitle" class="category" colspan="2"></th>
     </tr>
-    {{foreach from=$plats->_enums.type item=curr_typePlat}}
+    {{foreach from=$plats->_specs.type->_list item=curr_typePlat}}
     <tr>
       <th>
         <label for="{{$curr_typePlat}}">{{tr}}CPlat.type.{{$curr_typePlat}}{{/tr}}</label>
@@ -132,7 +132,7 @@
     <tr>
       <th id="thPlatTitle" class="category" colspan="2">
         Ne pas prévoir de repas
-        {{foreach from=$plats->_enums.type item=curr_typePlat}}
+        {{foreach from=$plats->_specs.type->_list item=curr_typePlat}}
         <input type="hidden" name="{{$curr_typePlat}}" value="" />
         {{/foreach}}
       </th>

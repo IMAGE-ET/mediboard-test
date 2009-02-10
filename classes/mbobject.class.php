@@ -78,7 +78,7 @@ class CMbObject {
   var $_merging = null;
   
   function __construct() {
-    return $this->CMbObjectEx();
+    return $this->CMbObject();
   }
   
   function __toString() {
@@ -98,7 +98,7 @@ class CMbObject {
   static $helped_fields = array();
   static $module_name   = array();
   
-  function CMbObjectEx() {
+  function CMbObject() {
 
     $class = get_class($this);
    
@@ -110,6 +110,8 @@ class CMbObject {
       
       $reflection = new ReflectionClass($class);
       self::$module_name[$class] = basename(dirname($reflection->getFileName()));
+      //global $classPaths;
+      //$module = basename(dirname($classPaths[$class]));
     }
     
     $this->_class_name = $class;
@@ -130,8 +132,6 @@ class CMbObject {
       $this->_specs =& self::$specsObj[$class];
       self::$seeks[$class] = $this->getSeeks();
       $this->_seek =& self::$seeks[$class];
-      self::$enums[$class] = $this->getEnums();
-      $this->_enums =& self::$enums[$class];
       self::$enumsTrans[$class] = $this->getEnumsTrans();
       $this->_enumsTrans =& self::$enumsTrans[$class];
       self::$helped_fields[$class] = $this->getHelpedFields();
@@ -143,76 +143,10 @@ class CMbObject {
     $this->_backSpecs     =& self::$backSpecs[$class];
     $this->_specs         =& self::$specsObj[$class];
     $this->_seek          =& self::$seeks[$class];
-    $this->_enums         =& self::$enums[$class];
     $this->_enumsTrans    =& self::$enumsTrans[$class];
     $this->_helped_fields =& self::$helped_fields[$class];
   }
   
-  function CMbObject() {    
-    static $spec          = null;
-    static $class         = null;
-    static $props         = null;
-    static $backRefs      = null;
-    static $backSpecs     = array();
-    static $fwdRefs       = null;
-    static $specsObj      = null;
-    static $seeks         = null;
-    static $enums         = null;
-    static $enumsTrans    = null;
-    static $helped_fields = null;
-    static $module        = null;
-
-    // To simulate static inheritance
-    static $static = false;
-    
-    if (!$static) {
-      $class = get_class($this);
-      mbTrace($class, "whole spec for");
-      $spec = $this->getSpec();
-      $spec->init();
-      
-      $reflection = new ReflectionClass($class);
-      $module = basename(dirname($reflection->getFileName()));
-      //global $classPaths;
-      //$module = basename(dirname($classPaths[$class]));
-    }
-    $this->_class_name =& $class;
-    $this->_spec       =& $spec;
-    $this->loadRefModule($module);
-
-    if (!$static) {
-      $props = $this->getSpecs();
-      $this->_props =& $props;
-      $backRefs = $this->getBackRefs();
-      $this->_backRefs =& $backRefs;
-      $specsObj = $this->getSpecsObj();
-      $this->_specs =& $specsObj;
-      $seeks = $this->getSeeks();
-      $this->_seek =& $seeks;
-      $enums = $this->getEnums();
-      $this->_enums =& $enums;
-      $enumsTrans = $this->getEnumsTrans();
-      $this->_enumsTrans =& $enumsTrans;
-      $helped_fields = $this->getHelpedFields();
-      $this->_helped_fields =& $helped_fields;
-      
-      $static = true;
-    }
-
-    $this->_props         =& $props;
-    $this->_backRefs      =& $backRefs;
-    $this->_backSpecs     =& $backSpecs;
-    $this->_specs         =& $specsObj;
-    $this->_seek          =& $seeks;
-    $this->_enums         =& $enums;
-    $this->_enumsTrans    =& $enumsTrans;
-    $this->_helped_fields =& $helped_fields;
-    
-    if ($key = $this->_spec->key) {
-      $this->_id =& $this->$key;
-    }
-  }
-
   /**
    * Staticly build object handlers array
    * @return void
@@ -1308,8 +1242,8 @@ class CMbObject {
     if (!$this->_id) {
       return CAppUI::tr("noObjectToDelete") . " " . CAppUI::tr($this->_class_name);
     }
-
-    // Counting backSpecs
+    
+    // Counting backrefs
     $issues = array();
     $this->makeAllBackSpecs();
     foreach ($this->_backSpecs as $backName => &$backSpec) {
@@ -1629,55 +1563,34 @@ class CMbObject {
    * Converts string specifications to objet specifications
    * Optimized version
    */
-  static $ex = true;
   function getSpecsObj() {
     $spec = array();
     foreach ($this->_props as $propName => $propSpec) {
-      $spec[$propName] = CMbObject::$ex ? 
-        CMbFieldSpecFactEx::getSpec($this, $propName, $propSpec) : 
-        CMbFieldSpecFact::getSpec($this, $propName, $propSpec);
+      $spec[$propName] = CMbFieldSpecFact::getSpec($this, $propName, $propSpec);
     }
     return $spec;
   }
-  
-  /**
-   * Build Enums variant returning values
-   */  
-  function getEnums() {
-    $enums = array();
-    foreach ($this->_specs as $propName => $spec) {
-      if ($spec instanceof CEnumSpec) {
-      	$spec->_list = $enums[$propName] = explode("|", $spec->list);
-      }
-      if ($spec instanceof CBoolSpec) {
-        $enums[$propName] = array(0,1);
-      }
-    }
     
-    return $enums;
-  }
-  
   /**
    * Build Enums variant returning values
    */
   function getEnumsTrans() {
-  	if (!$this->_enums) $this->_enums = $this->getEnums();
-  	
   	$enumsTrans = array();
-  	foreach ($this->_enums as $name => $enum) {
-  	  if ($this->_specs[$name] instanceof CEnumSpec) {
-        foreach ($enum as $val) {
+  	foreach ($this->_specs as $name => $spec) {
+  	  if ($spec instanceof CEnumSpec) {
+        foreach ($spec->_list as $val) {
           $enumsTrans[$name][$val] = CAppUI::tr("$this->_class_name.$name.$val");
         }
       }
-      elseif ($this->_specs[$name] instanceof CBoolSpec) {
+      
+      if ($spec instanceof CBoolSpec) {
         $enumsTrans[$name] = array(
           0 => CAppUI::tr("bool.0"),
           1 => CAppUI::tr("bool.1"),
         );
       }
   	}
-
+  	
     return $enumsTrans;
   }
   

@@ -25,12 +25,12 @@ $ljoin = array("menu" => "repas.menu_id = menu.menu_id");
 $listRepas = $listRepas->loadList($where, null, null, null, $ljoin);
 
 $plats = new CPlat;
-$typesPlats = $plats->_enums["type"];
+$typesPlats = $plats->_specs["type"]->_list;
 
 $listMenu = array();
 $listPlat = array();
 $listRemplacement = array();
-foreach($plats->_enums["type"] as $typePlat){
+foreach($typesPlats as $typePlat){
   $listPlat[$typePlat]         = array();
 }
 
@@ -40,7 +40,7 @@ foreach($listRepas as $keyRepas=>&$repas){
   if(!isset($listMenu[$repas->menu_id])){
     $menu["obj"]   =& $repas->_ref_menu;
     $menu["total"] = 1;
-    foreach($plats->_enums["type"] as $typePlat){
+    foreach($typesPlats as $typePlat){
       $menu["detail"][$typePlat] = 0;
     }
   }else{

@@ -11,7 +11,7 @@
     <th class="category" colspan="2">{{$menu->nom}}</th>
   </tr>
   
-  {{foreach from=$plats->_enums.type item=curr_typePlat}}
+  {{foreach from=$plats->_specs.type->_list item=curr_typePlat}}
   <tr>
     <th>
       <label for="{{$curr_typePlat}}">{{tr}}CPlat.type.{{$curr_typePlat}}{{/tr}}</label>

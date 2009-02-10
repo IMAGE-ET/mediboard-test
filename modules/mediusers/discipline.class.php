@@ -11,6 +11,7 @@
  * The CDiscipline Class
  */
 class CDiscipline extends CMbObject {
+  
   // DB Table key
   var $discipline_id = null;
 
@@ -138,8 +139,8 @@ class CDiscipline extends CMbObject {
   }
   
   function addCompat(&$compat, $patho1, $patho2, $septique1 = null, $septique2 = null) {
-    assert(in_array($patho1, $this->_enums["categorie"]));
-    assert(in_array($patho2, $this->_enums["categorie"]));
+    assert(in_array($patho1, $this->_specs["categorie"]->_list));
+    assert(in_array($patho2, $this->_specs["categorie"]->_list));
     assert($septique1 === null or is_bool($septique1));
     assert($septique2 === null or is_bool($septique2));
 

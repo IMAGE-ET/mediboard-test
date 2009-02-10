@@ -12,7 +12,7 @@ $can->needsRead();
 
 class CTestClass extends CMbObject {
   function __construct() {
-    foreach (CMbFieldSpecFactEx::$classes as $spec => $class) {
+    foreach (CMbFieldSpecFact::$classes as $spec => $class) {
       $this->$spec = null;
     }
     parent::__construct();
@@ -20,7 +20,7 @@ class CTestClass extends CMbObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    foreach (CMbFieldSpecFactEx::$classes as $spec => $class) {
+    foreach (CMbFieldSpecFact::$classes as $spec => $class) {
       $specs[$spec] = $spec;
     }
     $specs['enum'] = 'enum list|1|2|3|4';
@@ -31,7 +31,7 @@ class CTestClass extends CMbObject {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('object', new CTestClass());
-$smarty->assign('specs', CMbFieldSpecFactEx::$classes);
+$smarty->assign('specs', CMbFieldSpecFact::$classes);
 $smarty->display('form_tester.tpl');
 
 ?>

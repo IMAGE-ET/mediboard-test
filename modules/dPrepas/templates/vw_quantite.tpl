@@ -65,7 +65,7 @@ Main.add(function () {
         {{foreach from=$listMenu item=curr_repas}}
           {{assign var="nbrows" value=0}}
           
-          {{foreach from=$plats->_enums.type item=curr_typePlat}}
+          {{foreach from=$plats->_specs.type->_list item=curr_typePlat}}
             {{if $curr_repas.obj->$curr_typePlat}}
               {{assign var="nbrows" value=$nbrows+1}}
             {{/if}}
@@ -76,7 +76,7 @@ Main.add(function () {
             <td rowspan="{{$nbrows}}">{{$curr_repas.total}}</td>
             <td class="text" rowspan="{{$nbrows}}">{{$curr_repas.obj->_view}}</td>
             {{assign var="nbligne" value=0}}
-            {{foreach name="plat" from=$plats->_enums.type item=curr_typePlat}}
+            {{foreach name="plat" from=$plats->_specs.type->_list item=curr_typePlat}}
               {{if $curr_repas.obj->$curr_typePlat}}
                 {{if $nbligne!=0}}<tr>{{/if}}
                 <td class="text">{{$curr_repas.obj->$curr_typePlat}}</td>

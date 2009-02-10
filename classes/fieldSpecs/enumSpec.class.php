@@ -14,6 +14,12 @@ class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
   var $_list = null;
+  var $_locales = null;
+  
+  function __construct($className, $field, $prop = null, $aProperties = array()) {
+    parent::__construct($className, $field, $prop, $aProperties);
+    $this->_list = explode("|", $this->list);
+  }
   
   function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
