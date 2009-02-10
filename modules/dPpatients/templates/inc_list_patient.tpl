@@ -124,7 +124,11 @@ var Patient = {
 <table class="tbl">
   <tr>
     {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
-    <th style="width: 0.1%;"><button type="submit" class="search notext" title="{{tr}}Merge{{/tr}}">{{tr}}Merge{{/tr}}</button></th>
+    <th style="width: 0.1%;">
+    	<button type="submit" class="change notext" title="{{tr}}Merge{{/tr}}">
+    		{{tr}}Merge{{/tr}}
+    	</button>
+    </th>
     {{/if}}
     <th>
       {{mb_title class=CPatient field=nom}}
@@ -167,7 +171,7 @@ var Patient = {
       </a>
     </td>
     <td>
-      <a class="buttonsearch notext" href="?m=dPpatients&tab=vw_full_patient&patient_id={{$curr_patient->_id}}" title="Afficher" />
+      <a class="buttonsearch notext" href="?m=dPpatients&&mp;tab=vw_full_patients&amp;patient_id={{$curr_patient->_id}}" title="Afficher" />
         Afficher
       </a>
     </td>

@@ -410,12 +410,6 @@ input[type=button]:hover {
   background-position: left bottom;
 }
 
-button.notext,
-a.notext {
-  background-position: -1px bottom;
-  width: 20px;
-}
-
 button.trash, 
 a.buttontrash {
   background-image: url(../tonkin/images/buttons/trash.png);
@@ -594,11 +588,15 @@ button.stop:hover, a.buttonstop:hover {
 }
 
 button.notext, button.notext:hover{
+  background-position: -1px bottom;
   padding : 0px 0px 0px 14px;
+  width: 20px;
 }
 
 a.notext, a.notext:hover{
-  padding : 0px 0px 1px 18px;
+  background-position: -1px bottom;
+  padding : 0px 0px 1px 14px;
+  width: 5px;
 }
 
 select {

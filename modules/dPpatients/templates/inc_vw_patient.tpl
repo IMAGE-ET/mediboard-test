@@ -159,10 +159,10 @@ Document.refreshList = function(){
       {{/if}}
       
       <button type="button" class="search" onclick="viewPatient()">
-        Afficher
+        Dossier Complet
       </button>
       <button type="button" class="print" onclick="printPatient({{$patient->_id}})">
-        Imprimer
+        {{tr}}Print{{/tr}}
       </button>
       {{if $canPatients->edit}}
       <button type="button" class="edit" onclick="editPatient()">
