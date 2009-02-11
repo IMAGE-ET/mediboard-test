@@ -156,11 +156,12 @@ Main.add(function () {
   <tr>
     {{if $consult->_id}}
       <th class="title modify" colspan="5">
-        <a style="float:right;" href="#" onclick="view_log('CConsultation',{{$consult->_id}})">
+        <a style="float:right;" href="#" onclick="guid_log('{{$consult->_guid}}')">
           <img src="images/icons/history.gif" alt="historique" />
         </a>
-        {{tr}}CConsultation-title-access{{/tr}}
-        de {{$pat}} par le Dr. {{$chir}}
+        {{tr}}CConsultation-title-modify{{/tr}}
+        {{if $pat->_id}}de {{$pat->_view}}{{/if}}
+        par le Dr. {{$chir}}
       </th>
     {{else}}
       <th class="title" colspan="5">{{tr}}CConsultation-title-create{{/tr}}</th>
