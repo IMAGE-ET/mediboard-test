@@ -373,15 +373,22 @@ viewBilanService = function(service_id, date){
                 <td class="action">
                   <div class="mediuser" style="border-color:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
 	                  {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}          
-	                  {{if $isPrescriptionInstalled}}  
-			                <!-- Test des prescription de sortie -->
-												{{if !$prescription_sortie->_id}}
-			                      <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
-			                  {{/if}}
-			                  {{if $prescription_sejour->_counts_no_valide}}
-			                    <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
-			                  {{/if}}
-	                  {{/if}}
+                    {{if $isPrescriptionInstalled}}         
+                      {{if !$prescription_sortie->_id || $prescription_sejour->_counts_no_valide}}
+                        <img src="images/icons/warning.png" alt="" title="" 
+                           onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-{{$curr_affectation->_ref_sejour->_guid}}")'/>
+                      {{/if}}
+                      
+                      <div id="tooltip-content-alertes-{{$curr_affectation->_ref_sejour->_guid}}" style="display: none;">
+                        <ul>
+                         {{if !$prescription_sortie->_id}}
+                           <li>Ce séjour ne possède pas de prescription de sortie</li>
+                         {{/if}}
+                         {{if $prescription_sejour->_counts_no_valide}}
+                           <li>Lignes non validées dans la prescription de séjour</li>
+                         {{/if}}
+                      </div>
+                    {{/if}}
                   </div>
                 </td>
               </tr>
@@ -569,5 +576,3 @@ viewBilanService = function(service_id, date){
     </td>
   </tr>
 </table>
-
-
