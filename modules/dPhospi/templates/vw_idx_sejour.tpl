@@ -272,7 +272,7 @@ viewBilanService = function(service_id, date){
       <form name="form_prescription" action="">
         <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
       </form>
-      <table class="form" id="left-column" style="width:200px;">
+      <table class="form" id="left-column" style="min-width:200px;">
         <tr>
           <th class="category">
             {{$date|date_format:$dPconfig.longdate}}
@@ -351,7 +351,7 @@ viewBilanService = function(service_id, date){
                   {{assign var=prescription_sejour value=$prescriptions.sejour}}
                   {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
-                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
+                  <a class="text" href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
                   <script type="text/javascript">

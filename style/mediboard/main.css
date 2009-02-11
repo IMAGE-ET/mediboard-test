@@ -742,6 +742,10 @@ table.tbl a {
   margin: 0 1px;
 }
 
+a.text {
+	white-space: normal;
+}
+
 a.actionPat {
   display: inline;
   float: right;
