@@ -88,6 +88,12 @@
 		  </tr>  
 	  {{/if}}
   {{/if}}
+  <tr>
+    <td>
+      {{mb_label object=$perf field=praticien_id}}:
+      {{mb_value object=$perf field=praticien_id}}
+    </td>
+  </tr>
   {{if $perf->_ref_transmissions|@count}}
 	  <tr>
 	    <th colspan="3">Transmissions</th>

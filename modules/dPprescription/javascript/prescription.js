@@ -329,7 +329,13 @@ var Prescription = {
     } else {
       link.removeClassName("chapitre_non_signe");
     }
-
+    
+    if((lineCount > 0) && lineCountNonSignee == 0){
+      link.addClassName("chapitre_signe");
+    } else {
+      link.removeClassName("chapitre_signe");
+    }
+    
     if (tab = tab[0]) {
       // On recupere le nom de l'onglet
       tabSplit = tab.innerHTML.split(" ");

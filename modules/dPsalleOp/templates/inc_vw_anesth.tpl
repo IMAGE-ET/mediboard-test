@@ -121,7 +121,12 @@ reloadPrescriptionAnesth = function(prescription_id){
       <table class="form">
 			  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
 			  <tr>
-				  <td class="category" colspan="2"><strong>{{$_perfusion->_view}}</strong></td>
+				  <td class="category" colspan="2">
+				  <strong>{{$_perfusion->_view}}
+				  {{if $_perfusion->duree}}
+				  pendant {{$_perfusion->duree}} heures
+				  {{/if}}
+				  </strong></td>
 			  </tr>
 				<tr>		  
 			    <td>
