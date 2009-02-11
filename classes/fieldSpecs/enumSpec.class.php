@@ -36,7 +36,7 @@ class CEnumSpec extends CMbFieldSpec {
   function checkValues(){
     parent::checkValues();
     if(!$this->list){
-      trigger_error("Spécification 'list' manquante pour le champ '".$this->fieldName."' de la classe '".$this->className."'", E_USER_WARNING);
+      trigger_error("Spécification 'list' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
     }
   }
   
@@ -70,6 +70,10 @@ class CEnumSpec extends CMbFieldSpec {
     $alphabet      = CMbArray::extract($params, "alphabet", 0);
     $extra         = CMbArray::makeXmlAttributes($params);
     $locales       = $this->_locales;
+    
+    if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
+      $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);
+    }
     
     if ($alphabet) {
       asort($locales); 

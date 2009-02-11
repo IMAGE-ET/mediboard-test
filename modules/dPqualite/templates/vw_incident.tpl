@@ -108,32 +108,25 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$fiche field="type_incident"}}</th>
-          <td>
-            <select name="type_incident" class="{{$fiche->_props.type_incident}}">
-            <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-            {{html_options options=$fiche->_enumsTrans.type_incident selected=$fiche->type_incident}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="type_incident" emptyLabel="Choose"}}</td>
           <th>{{mb_label object=$fiche field="_incident_date"}}</th>
           <td class="date">{{mb_field object=$fiche field="_incident_date" form=FrmEI register=true}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$fiche field="elem_concerne"}}</th>
-          <td>
-            <select name="elem_concerne" class="{{$fiche->_props.elem_concerne}}">
-            <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-            {{html_options options=$fiche->_enumsTrans.elem_concerne selected=$fiche->elem_concerne}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="elem_concerne" emptyLabel="Choose"}}</td>
           <th>{{mb_label object=$fiche field="_incident_heure"}}</th>
           <td>{{mb_field object=$fiche field="_incident_heure" form=FrmEI}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$fiche field="elem_concerne_detail"}}</th>
           <td>{{mb_field object=$fiche field="elem_concerne_detail"}}</td>
           <th>{{mb_label object=$fiche field="lieu"}}</th>
           <td>{{mb_field object=$fiche field="lieu"}}</td>
         </tr>
+        
         <tr>
           <th colspan="4" class="category">{{mb_label object=$fiche field="evenements"}}</th>
         </tr>
