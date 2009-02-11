@@ -35,6 +35,13 @@ class CPerfusion extends CMbObject {
   var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de perfusions)
   var $operation_id     = null;
   
+  var $date_debut_adm   = null; // Date de debut de la perf
+  var $time_debut_adm   = null; // Heure de debut de la perf
+  
+  var $date_fin_adm     = null; // Date de fin de la perf
+  var $time_fin_adm     = null; // Heure de fin de la perf
+  var $emplacement      = null;
+  
   // Champs specifiques aux PCA
   var $mode_bolus          = null; // Mode de bolus 
   var $dose_bolus          = null; // Dose du bolus (en mg)
@@ -54,6 +61,8 @@ class CPerfusion extends CMbObject {
   var $_protocole         = null; // Perfusion de protocole ?
   var $_add_perf_contigue = null;
   var $_count_parent_line = null;
+  var $_debut_adm = null;
+  var $_fin_adm   = null;
   
   // Object references
   var $_ref_log_signature_prat = null;
@@ -80,30 +89,35 @@ class CPerfusion extends CMbObject {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-  	$specs["prescription_id"]  = "ref class|CPrescription cascade";
-  	$specs["type"]             = "enum notNull list|classique|seringue|PCA";
-    $specs["libelle"]          = "str";
-    $specs["vitesse"]          = "num pos";
-    $specs["voie"]             = "str";
-    $specs["date_debut"]       = "date";
-    $specs["time_debut"]       = "time";
-    $specs["duree"]            = "num pos";
-    $specs["next_perf_id"]     = "ref class|CPerfusion"; 
-    $specs["praticien_id"]     = "ref class|CMediusers";
-    $specs["creator_id"]       = "ref class|CMediusers";
-    $specs["signature_prat"]   = "bool default|0";
-    $specs["signature_pharma"] = "bool default|0";
-    $specs["validation_infir"] = "bool default|0";
-    $specs["date_arret"]       = "date";
-    $specs["time_arret"]       = "time";
-    $specs["accord_praticien"] = "bool";
-    $specs["_debut"]           = "dateTime";
-    $specs["_fin"]             = "dateTime";
-    $specs["decalage_interv"]  = "num";
-    $specs["operation_id"]     = "ref class|COperation";
+  	$specs["prescription_id"]   = "ref class|CPrescription cascade";
+  	$specs["type"]              = "enum notNull list|classique|seringue|PCA";
+    $specs["libelle"]           = "str";
+    $specs["vitesse"]           = "num pos";
+    $specs["voie"]              = "str";
+    $specs["date_debut"]        = "date";
+    $specs["time_debut"]        = "time";
+    $specs["duree"]             = "num pos";
+    $specs["next_perf_id"]      = "ref class|CPerfusion"; 
+    $specs["praticien_id"]      = "ref class|CMediusers";
+    $specs["creator_id"]        = "ref class|CMediusers";
+    $specs["signature_prat"]    = "bool default|0";
+    $specs["signature_pharma"]  = "bool default|0";
+    $specs["validation_infir"]  = "bool default|0";
+    $specs["date_arret"]        = "date";
+    $specs["time_arret"]        = "time";
+    $specs["accord_praticien"]  = "bool";
+    $specs["_debut"]            = "dateTime";
+    $specs["_fin"]              = "dateTime";
+    $specs["decalage_interv"]   = "num";
+    $specs["operation_id"]      = "ref class|COperation";
     $specs["mode_bolus"]        = "enum list|sans_bolus|bolus|perfusion_bolus default|sans_bolus";
     $specs["dose_bolus"]        = "float";
     $specs["periode_interdite"] = "num pos";
+    $specs["date_debut_adm"]    = "date";
+    $specs["time_debut_adm"]    = "time";
+    $specs["date_fin_adm"]      = "date";
+    $specs["time_fin_adm"]      = "time";
+    $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     return $specs;
   }
 
@@ -120,6 +134,13 @@ class CPerfusion extends CMbObject {
       $this->_view .= ($this->mode_bolus) ? ", mode PCA: ".CAppUI::tr("CPerfusion.mode_bolus.".$this->mode_bolus) : "";
       $this->_view .= ($this->dose_bolus) ? ", bolus de $this->dose_bolus mg" : "";
       $this->_view .= ($this->periode_interdite) ? ", période interdite de $this->periode_interdite min" : "";
+    }
+    
+    if($this->date_debut_adm){
+      $this->_debut_adm = "$this->date_debut_adm $this->time_debut_adm";
+    }
+    if($this->date_fin_adm){
+      $this->_fin_adm = "$this->date_fin_adm $this->time_fin_adm";
     }
     
     // Calcul du debut et de la fin de la ligne

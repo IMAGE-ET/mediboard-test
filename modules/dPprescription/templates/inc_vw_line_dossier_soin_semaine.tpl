@@ -35,6 +35,7 @@
   
    <!-- Affichage du libelle de la ligne -->
    <td style="width: 1%;" class="text">
+     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
        <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#{{$line->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
@@ -50,6 +51,7 @@
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
 	  {{/if}}
+	  </div>
    </td>
    
    <!-- Affichage de la prise -->

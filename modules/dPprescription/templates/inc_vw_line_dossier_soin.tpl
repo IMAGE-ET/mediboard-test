@@ -78,6 +78,7 @@
 		{{/if}}
     </td>
     <td class="text" rowspan="{{$nb_line}}">
+    <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
 	  <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
@@ -112,6 +113,7 @@
       </select>
     </form>
     {{/if}}
+    </div>
 	</td>
   {{/if}}
   

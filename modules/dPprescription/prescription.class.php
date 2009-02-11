@@ -606,13 +606,16 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des perfusions
    */
-  function loadRefsPerfusions($with_child = 0){
+  function loadRefsPerfusions($with_child = 0, $emplacement = ""){
     //$this->_ref_perfusions = $this->loadBackRefs("perfusion");
     $perfusion = new CPerfusion();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
     if($with_child != 1){
       $where["next_perf_id"] = "IS NULL";
+    }
+    if($emplacement){
+      $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
     }
     $this->_ref_perfusions = $perfusion->loadList($where);
   }
@@ -677,6 +680,7 @@ class CPrescription extends CMbObject {
       $this->_counts_no_valide = $line->countList($where);
     }
   }
+  
   
 	/*
 	 * Chargement du nombre des medicaments et d'elements

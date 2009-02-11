@@ -22,7 +22,6 @@ $object_id = mbGetValueFromGet("object_id");
 $object_class = mbGetValueFromGet("object_class");
 $unite_prise = mbGetValueFromGet("unite_prise");
 
-
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -106,7 +105,7 @@ foreach($dates as $curr_date => $_date){
 }
 
 // Calcul du dossier de soin pour une ligne
-if($object_id && $object_class && $unite_prise){
+if($object_id && $object_class){
   $line = new $object_class;
   $line->load($object_id);
   
@@ -126,20 +125,40 @@ if($object_id && $object_class && $unite_prise){
         $line->_ref_produit->loadRefsFichesATC();
 				$line->calculPrises($prescription, $curr_date);
 		  }
+		  // Suppression des prises replanifiées
+		  $line->removePrisesPlanif();
     } 
     // refresh d'une ligne d'element
-    else {
+    if($line->_class_name == "CPrescriptionLineElement") {
       $element = $line->_ref_element_prescription;
     	$name_cat = $element->category_prescription_id;
       $element->loadRefCategory();
       $name_chap = $element->_ref_category_prescription->chapitre;
-       if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
+      if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
      	  $line->calculAdministrations($curr_date);
 		    $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
       }
+      // Suppression des prises replanifiées
+		  $line->removePrisesPlanif();
     }
-    // Suppression des prises replanifiées
-		$line->removePrisesPlanif();
+  }
+    
+  if($line->_class_name == "CPerfusion"){
+    $line->loadRefsLines();
+    $line->loadRefPraticien();
+	  $line->_ref_praticien->loadRefFunction();
+	    
+    // Chargement des transmissions de la perfusion
+  	$transmission = new CTransmissionMedicale();
+  	$transmission->object_class = "CPerfusion";
+  	$transmission->object_id = $line->_id;
+  	$transmission->sejour_id = $sejour->_id;
+	  $transmissions = $transmission->loadMatchingList();
+	  
+	  foreach($transmissions as $_transmission){
+	    $_transmission->loadRefsFwd();
+		  $prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+	  }
   }
 } 
 
@@ -157,9 +176,11 @@ else {
 		}
 		  	  
 		// Chargement des perfusions
-	  $prescription->loadRefsPerfusions();
+	  $prescription->loadRefsPerfusions("1", $line_type);
 	  foreach($prescription->_ref_perfusions as &$_perfusion){
 	    $_perfusion->loadRefsLines();
+	    $_perfusion->loadRefPraticien();
+	    $_perfusion->_ref_praticien->loadRefFunction();
 	  }
 	
 		foreach($prescription->_ref_prescription_lines as &$_line_med){
@@ -299,21 +320,29 @@ $smarty->assign("today", mbDate());
 
 // Refresh de seulement 1 ligne du plan de soin
 
-if($object_id && $object_class && $unite_prise){
-  if($line->_class_name == "CPrescriptionLineElement"){
-    $smarty->assign("name_cat", $name_cat);
-    $smarty->assign("name_chap", $name_chap);  
-  }
-  $smarty->assign("line", $line);
-  $smarty->assign("line_id", $line->_id);
-  $smarty->assign("line_class", $line->_class_name);
-  $smarty->assign("transmissions_line", $line->_transmissions);
-  $smarty->assign("administrations_line", $line->_administrations);
-	$smarty->assign("unite_prise", $unite_prise);
-  $smarty->assign("move_dossier_soin", true);
-  $smarty->assign("nodebug", true);
+if($object_id && $object_class){
+   $smarty->assign("move_dossier_soin", true);
+  $smarty->assign("nodebug", true);	 
   
-  $smarty->display("inc_vw_content_line_dossier_soin.tpl");
+  if($line->_class_name == "CPerfusion"){
+    // refresh d'une perfusion
+    $smarty->assign("_perfusion", $line);
+    $smarty->display("inc_vw_perf_dossier_soin.tpl");
+    
+  } else {
+    // refresh d'un medicament ou d'un element
+	  if($line->_class_name == "CPrescriptionLineElement"){
+	    $smarty->assign("name_cat", $name_cat);
+	    $smarty->assign("name_chap", $name_chap);  
+	  }
+	  $smarty->assign("line", $line);
+	  $smarty->assign("line_id", $line->_id);
+	  $smarty->assign("line_class", $line->_class_name);
+	  $smarty->assign("transmissions_line", $line->_transmissions);
+	  $smarty->assign("administrations_line", $line->_administrations);
+		$smarty->assign("unite_prise", $unite_prise);
+	  $smarty->display("inc_vw_content_line_dossier_soin.tpl");
+  }
 } else {
   // Refresh du plan de soin complet
   $smarty->assign("move_dossier_soin"   , false);

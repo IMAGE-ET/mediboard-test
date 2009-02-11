@@ -46,29 +46,36 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
     
-    if(object_id && object_class && unite_prise){
-      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-		  last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
-		  
-		  // Suppression des td entre les 2 td bornes
-		  td = first_td;
-		  first_td.colSpan = 0;
-		  
-		  while(td.next().id != last_td.id){
-		    if(td.next().visible()){
-		  	  first_td.colSpan = first_td.colSpan + 1;
-		  	}
-		    td.next().remove();
-		    first_td.show();
-      }
-      
-			url.requestUpdate(first_td, {
-			                  waitingText: null, 
-												insertion: Insertion.After,
-												onComplete: function(){
-													first_td.hide().colSpan = 0;
-												}
-												} );
+    if(object_id && object_class){
+      if(object_class == 'CPerfusion'){
+			  url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
+			    $("line_"+object_class+"-"+object_id).hide();
+			  } } );
+			}
+			else {
+	      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+			  last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
+			  
+			  // Suppression des td entre les 2 td bornes
+			  td = first_td;
+			  first_td.colSpan = 0;
+			  
+			  while(td.next().id != last_td.id){
+			    if(td.next().visible()){
+			  	  first_td.colSpan = first_td.colSpan + 1;
+			  	}
+			    td.next().remove();
+			    first_td.show();
+	      }
+	      
+				url.requestUpdate(first_td, {
+				                  waitingText: null, 
+													insertion: Insertion.After,
+													onComplete: function(){
+														first_td.hide().colSpan = 0;
+													}
+													} );
+			}
     } else {
       url.requestUpdate("soins", { waitingText: null } );
     }

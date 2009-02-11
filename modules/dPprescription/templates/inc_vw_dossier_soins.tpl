@@ -161,6 +161,16 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.popup(500,400,"Administration");
 }
 
+editPerf = function(perfusion_id, date, mode_dossier, sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "edit_perf_dossier_soin");
+  url.addParam("perfusion_id", perfusion_id);
+  url.addParam("date", date);
+  url.addParam("mode_dossier", mode_dossier);
+  url.addParam("sejour_id", sejour_id);
+  url.popup(500,400,"Pefusion");
+}
+
 toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, date, heure, administrations) {
   element = $(element);
   if (element._administration) {
@@ -295,6 +305,7 @@ viewDossierSoin = function(mode_dossier){
   }
 }
 
+tabs = null;
 Main.add(function () {
 	{{if $mode_bloc}}
 	  loadSuivi('{{$sejour->_id}}');
@@ -309,7 +320,7 @@ Main.add(function () {
   {{if !$mode_bloc}}
     new Control.Tabs('tab_dossier_soin');
   {{/if}}
-  var tabs = Control.Tabs.create('tab_categories', true);
+  tabs = Control.Tabs.create('tab_categories', true);
 });
 
 </script>
@@ -458,6 +469,7 @@ Main.add(function () {
 		 	 	</td>
 		 	 	<td>
 				<table class="tbl" id="plan_soin">
+				<tbody>
 				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
 				  		 $prescription->_ref_perfusions_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
 					  <tr>
@@ -510,12 +522,15 @@ Main.add(function () {
 					    <th>Dr</th>
 					    <th>Ph</th>
 					  </tr>
+				
 			    {{/if}}
-			
+				  </tbody>
 			    <!-- Affichage des perfusions -->
-					<tbody id="_perf" style="display:none;">
+					<tbody id="_perf" style="display:none;" class="hoverable">
 					  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion name=foreach_perfusion}}
+					    <tr id="line_{{$_perfusion->_guid}}">
 					    {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
+					    </tr>
 					  {{/foreach}}
 					</tbody>
 					

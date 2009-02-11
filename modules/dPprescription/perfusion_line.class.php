@@ -21,6 +21,7 @@ class CPerfusionLine extends CMbObject {
   var $unite        = null;
   var $date_debut   = null; // Date de debut (si le debut est différé)
   var $time_debut   = null; // Heure de debut (si le debut est différé)
+  var $nb_tous_les  = null; // tous les x heures
   
   // Object references
   var $_ref_perfusion = null;
@@ -54,6 +55,7 @@ class CPerfusionLine extends CMbObject {
     $specs["unite"]        = "str";
     $specs["date_debut"]   = "date";
     $specs["time_debut"]   = "time";
+    $specs["nb_tous_les"]  = "num";
     return $specs;
   }
 
@@ -68,7 +70,11 @@ class CPerfusionLine extends CMbObject {
     $this->loadRefProduit();
     $this->_view = $this->_ref_produit->libelle;
     if($this->quantite){
-      $this->_view .= "($this->quantite $this->unite)";
+      $this->_view .= " ($this->quantite $this->unite";
+      if($this->nb_tous_les){
+        $this->_view .= " toutes les $this->nb_tous_les heures";  
+      }
+      $this->_view .= ")";
     }
     
     // Affichage de l'icone Livret Therapeutique

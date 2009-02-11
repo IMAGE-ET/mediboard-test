@@ -38,7 +38,13 @@
       
     {{foreach from=$_perfusion->_ref_lines item=_perf_line name=lines}}
       {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl" line=$_perf_line}}
-      {{$_perf_line->_ucd_view}} {{if !$smarty.foreach.lines.last}},{{/if}}
+      {{$_perf_line->_ucd_view}}
+      {{if $_perf_line->quantite}}
+      ({{mb_value object=$_perf_line field=quantite size=4}}{{mb_value object=$_perf_line field=unite size=4}}
+	     {{if $_perf_line->nb_tous_les}}
+	       toutes les {{$_perf_line->nb_tous_les}} heures
+	    {{/if}})
+	     {{/if}}{{if !$smarty.foreach.lines.last}},{{/if}}
     {{/foreach}}
   </td>    
 </tr>

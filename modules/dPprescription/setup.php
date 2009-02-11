@@ -978,7 +978,25 @@ class CSetupdPprescription extends CSetup {
 						ADD `periode_interdite` INT (10) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.73";
+    $this->makeRevision("0.73");
+    $sql = "ALTER TABLE `perfusion` 
+						ADD `date_debut_adm` DATE,
+						ADD `time_debut_adm` TIME,
+						ADD `date_fin_adm` DATE,
+						ADD `time_fin_adm` TIME;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.74");
+    $sql = "ALTER TABLE `perfusion` 
+	          ADD `emplacement` ENUM ('service','bloc','service_bloc') DEFAULT 'service' NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.75");
+    $sql = "ALTER TABLE `perfusion_line` 
+						ADD `nb_tous_les` INT (11);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.76";
   }  
 }
 

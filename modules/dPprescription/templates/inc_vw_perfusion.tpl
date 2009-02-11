@@ -15,7 +15,13 @@ Main.add( function(){
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       <div style="float: left">
-	      {{if $_perfusion->_ref_parent_line->_id}}
+        <form name="editEmplacement" method="post" action="?">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_perfusion_aed" />
+          <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
+          {{mb_field object=$_perfusion field=emplacement onchange="submitFormAjax(this.form, 'systemMsg');"}}
+        </form>
+        {{if $_perfusion->_ref_parent_line->_id}}
 	        {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
 	        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
 	             class="tooltip-trigger" 
@@ -230,7 +236,7 @@ Main.add( function(){
 			                  } );"></button>
 		                  {{/if}}
 		                </td>
-					          <td style="width: 30%; border:none; vertical-align:middle;" class="text">
+					          <td style="width: 20%; border:none; vertical-align:middle;" class="text">
 					            {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 					            {{if $line->_can_vw_livret_therapeutique}}
 									      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
@@ -243,8 +249,8 @@ Main.add( function(){
                       {{/if}}
 					            <strong>{{$line->_ucd_view}}</strong>
 					          </td>
-			              <td style="border:none; width: 20%;">
-					            {{mb_label object=$line field=quantite}}
+			              <td style="border:none; width: 30%;">
+					            {{mb_label object=$line field=quantite}}:
 					            {{if $_perfusion->_can_modify_perfusion_line}}
 					              {{mb_field object=$line field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
 						            <select name="unite" style="width: 75px;" onchange="return onSubmitFormAjax(this.form);">
@@ -252,9 +258,14 @@ Main.add( function(){
 											      <option value="{{$_unite}}" {{if $line->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
 											    {{/foreach}}
 											  </select>
+											  toutes les 
+											  {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}} heures
 					            {{else}}
 					              {{mb_value object=$line field=quantite}}
-					              {{mb_value object=$line field=unite}}					            
+					              {{mb_value object=$line field=unite}}			
+					              {{if $line->nb_tous_les}}
+					                toutes les {{$line->nb_tous_les}} heures
+					              {{/if}}		            
 										  {{/if}}
 					     		  </td>
 					     		  {{if !$line->_protocole}}

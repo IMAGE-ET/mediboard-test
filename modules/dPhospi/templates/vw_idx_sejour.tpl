@@ -151,29 +151,35 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
     
-    if(object_id && object_class && unite_prise){
-      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-		  last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
-		  
-		  // Suppression des td entre les 2 td bornes
-		  td = first_td;
-		  first_td.colSpan = 0;
-		  
-		  while(td.next().id != last_td.id){
-		    if(td.next().visible()){
-		  	  first_td.colSpan = first_td.colSpan + 1;
-		  	}
-		    td.next().remove();
-		    first_td.show();
-      }
-      
-			url.requestUpdate(first_td, {
-			                  waitingText: null, 
-												insertion: Insertion.After,
-												onComplete: function(){
-													first_td.hide().colSpan = 0;
-												}
-												} );
+    if(object_id && object_class){
+      if(object_class == 'CPerfusion'){
+				url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
+				  $("line_"+object_class+"-"+object_id).hide();
+				} } );
+      } else {
+	      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+			  last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
+			  
+			  // Suppression des td entre les 2 td bornes
+			  td = first_td;
+			  first_td.colSpan = 0;
+			  
+			  while(td.next().id != last_td.id){
+			    if(td.next().visible()){
+			  	  first_td.colSpan = first_td.colSpan + 1;
+			  	}
+			    td.next().remove();
+			    first_td.show();
+	      }
+	      
+				url.requestUpdate(first_td, {
+				                  waitingText: null, 
+													insertion: Insertion.After,
+													onComplete: function(){
+														first_td.hide().colSpan = 0;
+													}
+													} );
+			}
     } else {
       url.requestUpdate("dossier_traitement", { waitingText: null } );
     }
@@ -287,14 +293,14 @@ viewBilanService = function(service_id, date){
               <input type="hidden" name="sejour_id" value="" />
 
               <select name="service_id" onchange="this.form.submit()">
-                <option value="">&mdash; Choix d'un service</option>
+                <option value="">&mdash; Service</option>
                 {{foreach from=$services item=curr_service}}
                 <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
                 {{/foreach}}
                 <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
               </select>
               {{if $service_id && $isPrescriptionInstalled}}
-                <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan par service</button>
+                <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
         			{{/if}}
             </form>
             <br />
@@ -304,7 +310,7 @@ viewBilanService = function(service_id, date){
               <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="mode" value="0" />
 							<input type="hidden" name="sejour_id" value="" />
-              <select name="praticien_id" onchange="this.form.submit();">
+              <select name="praticien_id" onchange="this.form.submit();"  style="width: 130px;">
                 <option value="">&mdash; Choix du praticien</option>
                 {{foreach from=$praticiens item=_prat}}
                   <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>

@@ -30,9 +30,11 @@ if($prescription_id){
     $traitement_personnel->loadRefsLinesMed("1","1","service"); 
   }
   
-  $prescription->loadRefsPerfusions();
+  $prescription->loadRefsPerfusions("1","service");
   foreach($prescription->_ref_perfusions as &$_perfusion){
     $_perfusion->loadRefsLines();
+    $_perfusion->loadRefPraticien();
+	  $_perfusion->_ref_praticien->loadRefFunction();
   }
 
   // Chargement du poids et de la chambre du patient

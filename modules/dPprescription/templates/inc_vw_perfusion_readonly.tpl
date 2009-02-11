@@ -120,6 +120,9 @@
 	            <strong>{{mb_label object=$line field=quantite}}</strong>:
 	            {{mb_value object=$line field=quantite size=4}}
 	            {{mb_value object=$line field=unite size=4}}
+	            {{if $line->nb_tous_les}}
+	            toutes les {{$line->nb_tous_les}} heures
+	            {{/if}}
 	          </td>
 	          <td class="date" style="border: none; width:20%">
 	            <strong>{{mb_label object=$line field=date_debut}}</strong>:
