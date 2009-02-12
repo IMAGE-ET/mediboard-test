@@ -52,8 +52,6 @@ class CMbObject {
   var $_backSpecs     = array(); // Back reference specification as objects
   var $_fwdRefs       = array(); // Forward reference specification as string
   var $_fwdSpecs      = array(); // Forward reference specification as objects
-  var $_enums         = array(); // enums fields elements
-  var $_enumsTrans    = array(); // enums fields translated elements
   var $_seek          = array(); // seekable fields
   var $_nb_files_docs = null;
   
@@ -93,8 +91,6 @@ class CMbObject {
   static $fwdSpecs      = array();
   static $specsObj      = array();
   static $seeks         = array();
-  static $enums         = array();
-  static $enumsTrans    = array();
   static $helped_fields = array();
   static $module_name   = array();
   
@@ -132,8 +128,6 @@ class CMbObject {
       $this->_specs =& self::$specsObj[$class];
       self::$seeks[$class] = $this->getSeeks();
       $this->_seek =& self::$seeks[$class];
-      self::$enumsTrans[$class] = $this->getEnumsTrans();
-      $this->_enumsTrans =& self::$enumsTrans[$class];
       self::$helped_fields[$class] = $this->getHelpedFields();
       $this->_helped_fields =& self::$helped_fields[$class];
     }
@@ -143,7 +137,6 @@ class CMbObject {
     $this->_backSpecs     =& self::$backSpecs[$class];
     $this->_specs         =& self::$specsObj[$class];
     $this->_seek          =& self::$seeks[$class];
-    $this->_enumsTrans    =& self::$enumsTrans[$class];
     $this->_helped_fields =& self::$helped_fields[$class];
   }
   
@@ -1571,29 +1564,6 @@ class CMbObject {
     return $spec;
   }
     
-  /**
-   * Build Enums variant returning values
-   */
-  function getEnumsTrans() {
-  	$enumsTrans = array();
-  	foreach ($this->_specs as $name => $spec) {
-  	  if ($spec instanceof CEnumSpec) {
-        foreach ($spec->_list as $val) {
-          $enumsTrans[$name][$val] = CAppUI::tr("$this->_class_name.$name.$val");
-        }
-      }
-      
-      if ($spec instanceof CBoolSpec) {
-        $enumsTrans[$name] = array(
-          0 => CAppUI::tr("bool.0"),
-          1 => CAppUI::tr("bool.1"),
-        );
-      }
-  	}
-  	
-    return $enumsTrans;
-  }
-  
   /**
    * Check a property against its specification
    * @param $propName string Name of the property

@@ -123,56 +123,31 @@ Main.add(function() {
         {{if $can->admin && !$fiche->date_validation && !$fiche->annulee}}
         <tr>
           <th>{{mb_label object=$fiche field="degre_urgence"}}</th>
-          <td>
-            <select name="degre_urgence" class="notNull {{$fiche->_props.degre_urgence}}">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-            {{html_options options=$fiche->_enumsTrans.degre_urgence}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="degre_urgence" emptyLabel="Choose"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fiche field="gravite"}}</th>
-          <td>
-            <select name="gravite" class="notNull {{$fiche->_props.gravite}}">
-              <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.gravite selected=$fiche->gravite}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="gravite" emptyLabel="Choose"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fiche field="vraissemblance"}}</th>
-          <td>
-            <select name="vraissemblance" class="notNull {{$fiche->_props.vraissemblance}}">
-              <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.vraissemblance selected=$fiche->vraissemblance}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="vraissemblance" emptyLabel="Choose"}}</td>
         </tr>
         <tr>     
           <th>{{mb_label object=$fiche field="plainte"}}</th>
-          <td>
-            <select name="plainte" class="notNull {{$fiche->_props.plainte}}">
-              <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.plainte selected=$fiche->plainte}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="vraissemblance" emptyLabel="Choose"}}</td>
         </tr>
         <tr> 
           <th>{{mb_label object=$fiche field="commission"}}</th>
-          <td>
-            <select name="commission" class="notNull {{$fiche->_props.commission}}">
-              <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.commission selected=$fiche->commission}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="commission" emptyLabel="Choose"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fiche field="service_valid_user_id"}}</th>
           <td>
             <select name="service_valid_user_id" class="notNull {{$fiche->_props.service_valid_user_id}}">
-            <option value="">&mdash; {{tr}}Choose{{/tr}} &mdash;</option>
-            {{foreach from=$listUsersEdit item=currUser}}
-            <option value="{{$currUser->user_id}}">{{$currUser->_view}}</option>
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$listUsersEdit item=_user}}
+            <option value="{{$_user->_id}}">{{$_user}}</option>
             {{/foreach}}
             </select>
           </td>

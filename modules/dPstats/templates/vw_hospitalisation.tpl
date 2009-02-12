@@ -3,13 +3,16 @@
     <td>
       <form name="hospitalisation" action="?" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
+      
       <table class="form">
         <tr>
           <th colspan="4" class="category">Occupation des lits</th>
         </tr>
+
         <tr>
           <td>{{mb_label object=$filter field="_date_min_stat"}}</td>
           <td class="date">{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false" register=true}} </td>
+
           <td>{{mb_label object=$filter field="_service"}}</td>
           <td>
             <select name="service_id">
@@ -22,9 +25,11 @@
             </select>
           </td>
         </tr>
+
         <tr>
           <td>{{mb_label object=$filter field="_date_max_stat"}}</td>
           <td class="date">{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false" register=true}} </td>
+
           <td>{{mb_label object=$filter field="praticien_id"}}</td>
           <td>
             <select name="prat_id">
@@ -37,13 +42,14 @@
             </select>
           </td>
         </tr>
+
         <tr>
           <td>{{mb_label object=$filter field="type"}}</td>
           <td>
             <select name="type">
               <option value="">&mdash; Tous les types d'hospi</option>
               <option value="1" {{if $filter->type == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
-              {{foreach from=$listHospis key=key_hospi item=curr_hospi}}
+              {{foreach from=$filter->_specs.type->_locales key=key_hospi item=curr_hospi}}
               <option value="{{$key_hospi}}" {{if $key_hospi == $filter->type}}selected="selected"{{/if}}>
                 {{$curr_hospi}}
               </option>
@@ -63,16 +69,20 @@
             </select>
           </td>
         </tr>
+
         <tr>
           <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
         </tr>
+        
         <tr>
           <td colspan="4" class="button">
             <img alt="Patients par service" src='?m=dPstats&amp;a=graph_patparservice&amp;suppressHeaders=1&amp;debut={{$filter->_date_min_stat}}&amp;fin={{$filter->_date_max_stat}}&amp;service_id={{$filter->_service}}&amp;prat_id={{$filter->praticien_id}}&amp;type_adm={{$filter->type}}&amp;discipline_id={{$filter->_specialite}}' />
             <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$filter->_date_min_stat}}&amp;fin={{$filter->_date_max_stat}}&amp;service_id={{$filter->_service}}&amp;prat_id={{$filter->praticien_id}}&amp;type_adm={{$filter->type}}&amp;discipline_id={{$filter->_specialite}}' />
           </td>
         </tr>
+        
       </table>
+      
       </form>
     </td>
   </tr>

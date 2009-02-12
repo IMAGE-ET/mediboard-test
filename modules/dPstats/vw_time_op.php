@@ -20,14 +20,16 @@ $typeVue = mbGetValueFromGetOrSession("typeVue", 2);
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
-if($typeVue == 0){
-  // Stat des temps de préparation
+// Stat des temps de préparation
+if ($typeVue == 0){
   include("inc_vw_timeop_op.php");
-} elseif($typeVue == 1) {
-  // Stat des temps opératoires
+} 
+// Stat des temps opératoires
+elseif($typeVue == 1) {
   include("inc_vw_timeop_prepa.php");
-} else {
-  // Stat des temps d'hospitalisation
+} 
+// Stat des temps d'hospitalisation
+else {
   include("inc_vw_timehospi.php");
 }
 
@@ -35,15 +37,15 @@ if($typeVue == 0){
 // Création du template
 $smarty = new CSmartyDP();
 
-if($typeVue == 0 || $typeVue == 2) {
+if ($typeVue == 0 || $typeVue == 2) {
   $smarty->assign("prat_id"  , $prat_id  );
   $smarty->assign("codeCCAM" , $codeCCAM );
   $smarty->assign("listPrats", $listPrats);
 }
 
-if($typeVue == 2) {
+if ($typeVue == 2) {
   $sejour = new CSejour;
-  $listHospis = $sejour->_enumsTrans["type"];
+  $listHospis = $sejour->_specs["type"]->_locales;
   unset($listHospis["exte"]);
   $smarty->assign("listHospis", $listHospis);
   $smarty->assign("type"      , $type);

@@ -46,15 +46,15 @@
           <th class="title" colspan="2">Création d'un plat</th>
           {{/if}}
         </tr>
+        
         <tr>
           <th>{{mb_label object=$plat field="nom"}}</th>
           <td>{{mb_field object=$plat field="nom"}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$plat field="type"}}</th>
-          <td colspan="3">
-            {{html_options name="type" options=$plat->_enumsTrans.type class=$plat->_props.type selected=$plat->type}}
-          </td>
+          <td colspan="3">{{mb_field object=$plat field="type"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$plat field="typerepas"}}</th>

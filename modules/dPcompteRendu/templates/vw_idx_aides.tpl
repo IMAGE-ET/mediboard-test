@@ -146,95 +146,29 @@ Main.add(function () {
 
     </form>
     
-    <table class="tbl">
-    
-    <tr>
-      <th colspan="6" class="title"><strong>Liste des aides à la saisie</strong></th>
-    </tr>
-    
-    <tr>
-      <th>Type d'objet</th>
-      <th>Champ de l'objet</th>
-      <th>Dépendance 1</th>
-      <th>Dépendance 2</th>
-      <th>Nom de l'aide</th>
-      <th>Texte de remplacement</th>
-    </tr>
 
-    <tr>
-      <th colspan="6">Aides du praticien '{{$userSel->_view}}'</th>
-    </tr>
-    {{foreach from=$aidesPrat item=curr_aide}}
-    <tr {{if $curr_aide->_id == $aide->_id}}class="selected"{{/if}}>
-      {{assign var="aide_id" value=$curr_aide->aide_id}}
-      {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
-      {{assign var="className" value=$curr_aide->class}}
-      {{assign var="field" value=$curr_aide->field}}
-      <td><a href="{{$href}}">{{tr}}{{$className}}{{/tr}}</a></td>
-      <td><a href="{{$href}}">{{$field}}</a></td>
-      <td>
-        <a href="{{$href}}">
-        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}
-          {{if $curr_aide->depend_value_1}}
-            {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}.{{$curr_aide->depend_value_1}}{{/tr}}
-          {{else}}
-            Aucune
-          {{/if}}
-        {{else}}&mdash;{{/if}}
-        </a>
-      </td>
-      <td>
-        <a href="{{$href}}">
-        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}
-          {{if $curr_aide->depend_value_2}}
-            {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}.{{$curr_aide->depend_value_2}}{{/tr}}
-          {{else}}
-            Aucune
-          {{/if}}
-        {{else}}&mdash;{{/if}}
-        </a>
-      </td>
-      <td><a href="{{$href}}">{{$curr_aide->name}}</a></td>
-      <td class="text">{{$curr_aide->text|nl2br}}</td>
-    </tr>
-    {{/foreach}}
-    
-    <tr>
-      <th colspan="6">Aides du cabinet '{{$userSel->_ref_function->_view}}'</th>
-    </tr>
-    {{foreach from=$aidesFunc item=curr_aide}}
-    <tr {{if $curr_aide->_id == $aide->_id}}class="selected"{{/if}}>
-      {{assign var="aide_id" value=$curr_aide->aide_id}}
-      {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
-      {{assign var="className" value=$curr_aide->class}}
-      {{assign var="field" value=$curr_aide->field}}
-      <td><a href="{{$href}}">{{tr}}{{$className}}{{/tr}}</a></td>
-      <td><a href="{{$href}}">{{$field}}</a></td>
-      <td>
-        <a href="{{$href}}">
-        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}
-          {{if $curr_aide->depend_value_1}}
-           {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_1}}.{{$curr_aide->depend_value_1}}{{/tr}}
-          {{/if}}
-        {{else}}&mdash;{{/if}}
-        </a>
-      </td>
-      <td>
-        <a href="{{$href}}">
-        {{if $curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}
-          {{if $curr_aide->depend_value_2}}
-           {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field.depend_value_2}}.{{$curr_aide->depend_value_2}}{{/tr}}
-          {{/if}}
-        {{else}}&mdash;{{/if}}
-        </a>
-      </td>
-      <td><a href="{{$href}}">{{$curr_aide->name}}</a></td>
-      <td class="text">{{$curr_aide->text|nl2br}}</td>
-    </tr>
-    {{/foreach}}
-      
-    </table>
+<script type="text/javascript">
+Main.add(function () {
+  Control.Tabs.create('tabs-owner', true);
+});
+</script>
 
+<ul id="tabs-owner" class="control_tabs">
+  <li><a href="#user">Aides de '{{$userSel}}' <small>({{$aidesPrat|@count}})</small></a></li>
+  <li><a href="#func">Aides de '{{$userSel->_ref_function}}' <small>({{$aidesFunc|@count}})</small></a></li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="user" style="display: none;">
+  {{include file=inc_list_aides.tpl owner=$userSel aides=$aidesPrat}}
+</div>
+
+<div id="func" style="display: none;">
+  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aidesFunc}}
+</div>
+
+    
   </td>
   
   <td class="pane">

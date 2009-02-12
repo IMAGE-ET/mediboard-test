@@ -188,28 +188,28 @@ Main.add(function () {
            {{/foreach}}
          </td>
        </tr>
+       
         <tr>
           <th colspan="4" class="category">{{tr}}_CFicheEi-infoscompl{{/tr}}</th>
         </tr>
+       
         <tr>
           <th>{{mb_label object=$fiche field="descr_faits"}}</th>
           <td>{{mb_field object=$fiche field="descr_faits"}}</td>
           <th>{{mb_label object=$fiche field="mesures"}}</th>
           <td>{{mb_field object=$fiche field="mesures"}}</td>
         </tr>
+       
         <tr>
           <th>{{mb_label object=$fiche field="descr_consequences"}}</th>
           <td>{{mb_field object=$fiche field="descr_consequences"}}</td>
           <th>{{mb_label object=$fiche field="autre"}}</th>
           <td>{{mb_field object=$fiche field="autre"}}</td>
         </tr>
+       
         <tr>
           <th colspan="2">{{mb_label object=$fiche field="suite_even"}}</th> 
-          <td colspan="2">
-            <select name="suite_even" class="{{$fiche->_props.suite_even}}" onchange="choixSuiteEven();">
-              <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
-            </select>
+          <td colspan="2">{{mb_label object=$fiche field="suite_even" emptyLabel="Choose" onchange="choixSuiteEven();"}}
             <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
             <tr>
               <td>{{mb_label object=$fiche field="suite_even_descr"}}</td>
@@ -220,15 +220,12 @@ Main.add(function () {
             </table>
           </td>
         </tr>
+     
         <tr>
           <th colspan="2">{{mb_label object=$fiche field="deja_survenu"}}</th>
-          <td colspan="2">
-            <select name="deja_survenu" class="{{$fiche->_props.deja_survenu}}">
-              <option value="">{{tr}}CFicheEi.deja_survenu.{{/tr}}</option>
-              {{html_options options=$fiche->_enumsTrans.deja_survenu selected=$fiche->deja_survenu}}
-            </select>
-          </td>
+          <td colspan="2">{{mb_field object=$fiche field="deja_survenu" emptyLabel="CFicheEi.deja_survenu."}}</td>
         </tr>
+     
         <tr>
           <td colspan="4" class="button">
             <button class="submit" type="submit">
@@ -240,6 +237,7 @@ Main.add(function () {
             </button>
           </td>
         </tr>
+     
       </table>
       </form>
     </td>

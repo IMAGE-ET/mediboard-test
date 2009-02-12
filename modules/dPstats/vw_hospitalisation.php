@@ -37,10 +37,6 @@ $listServices = $listServices->loadGroupList();
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
-$sejour = new CSejour;
-$listHospis = array();
-$listHospis = array_merge($listHospis,$sejour->_enumsTrans["type"]);
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -48,7 +44,6 @@ $smarty->assign("filter"       	 , $filter);
 $smarty->assign("listPrats"      , $listPrats);
 $smarty->assign("listServices"   , $listServices);
 $smarty->assign("listDisciplines", $listDisciplines);
-$smarty->assign("listHospis"     , $listHospis);
 
 $smarty->display("vw_hospitalisation.tpl");
 

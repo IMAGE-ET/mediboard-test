@@ -33,7 +33,7 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 $sejour = new CSejour;
 $listHospis = array();
 
-foreach($sejour->_enumsTrans["type"] as $keyType=>$vType){
+foreach($sejour->_specs["type"]->_locales as $keyType=>$vType){
   $testAmbuOrComp = (($keyType=="comp" || $keyType=="ambu") && $type_adm == "1");
   $testCourant    = ($type_adm == $keyType);
   $testTous       = ($type_adm == null);

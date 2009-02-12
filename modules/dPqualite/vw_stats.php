@@ -25,7 +25,13 @@ $options = array();
 $list_evts = explode('|', $evts);
 
 $fiche = new CFicheEi();
-$enums = $fiche->_enumsTrans;
+$enums = array();
+foreach($fiche->_specs as $field => $spec) {
+  if ($spec instanceof CEnumSpec || $spec instanceof CBoolSpec) {
+  	$enumsNew[$field] = $spec->_locales;
+  }
+}
+
 for ($i = $months_count - 1; $i >= 0; --$i) {
 	$mr = $months_relative+$i;
 	$sample_end = mbTransformTime("-$mr MONTHS", mbDate(), "%Y-%m-31 23:59:59");
@@ -47,6 +53,8 @@ $range = range(1, 3);
 foreach($range as $n) {
   $enums['_criticite'][$n] = $n;
 }
+
+
 
 foreach ($enums as $key => &$enum) {
   if ((isset($fiche->_specs[$key]) && !$fiche->_specs[$key]->notNull) || $key == 'evenements') {

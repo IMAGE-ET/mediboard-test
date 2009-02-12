@@ -21,7 +21,7 @@ $discipline_id = mbGetValueFromGet("discipline_id", 0                );
 $sejour = new CSejour;
 $listHospis = array();
 $listHospis[1] = "Hospi complètes + ambu";
-$listHospis = $listHospis + $sejour->_enumsTrans["type"];
+$listHospis += $sejour->_specs["type"]->_locales;
 
 $total = 0;
 

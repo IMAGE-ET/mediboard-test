@@ -18,7 +18,7 @@ class CBoolSpec extends CMbFieldSpec {
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
     foreach ($this->_list = array(0,1) as $value) {
-      $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
+      $this->_locales[$value] = CAppUI::tr("bool.$value");
     }
   }
   
