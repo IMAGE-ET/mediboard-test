@@ -34,7 +34,7 @@ body {
 
 table.form {
   width: 100%;
-  border-spacing: 1px;
+  border-spacing: 0px;
 }
 
 table.form th {
@@ -645,7 +645,7 @@ textarea:focus {
 table.tbl {
   width: 100%;
   border: 0px;
-  border-spacing: 1px;
+  border-spacing: 0px;
   background-color: #fff;
 }
 

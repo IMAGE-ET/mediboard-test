@@ -154,17 +154,17 @@ Main.add(function () {
 </script>
 
 <ul id="tabs-owner" class="control_tabs">
-  <li><a href="#user">Aides de '{{$userSel}}' <small>({{$aidesPrat|@count}})</small></a></li>
-  <li><a href="#func">Aides de '{{$userSel->_ref_function}}' <small>({{$aidesFunc|@count}})</small></a></li>
+  <li><a href="#aides-user">Aides de '{{$userSel}}' <small>({{$aidesPrat|@count}})</small></a></li>
+  <li><a href="#aides-func">Aides de '{{$userSel->_ref_function}}' <small>({{$aidesFunc|@count}})</small></a></li>
 </ul>
 
 <hr class="control_tabs" />
 
-<div id="user" style="display: none;">
+<div id="aides-user" style="display: none;">
   {{include file=inc_list_aides.tpl owner=$userSel aides=$aidesPrat}}
 </div>
 
-<div id="func" style="display: none;">
+<div id="aides-func" style="display: none;">
   {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aidesFunc}}
 </div>
 
