@@ -493,27 +493,7 @@ popupVoies = function(){
     </td>             
   </tr>
   
-  
-  <!-- CSpObjectHandler --> 
-  {{assign var=col value="object_handlers"}}
-  {{assign var=class value="CPrescriptionLineHandler"}}
-  <tr>
-    <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    <th colspan="2">
-      <label for="{{$col}}[{{$class}}]" title="{{tr}}config-{{$col}}-{{$class}}{{/tr}}">
-        {{tr}}config-{{$col}}-{{$class}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="4">
-      <select class="bool" name="{{$col}}[{{$class}}]">
-        <option value="0" {{if 0 == @$dPconfig.$col.$class}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1" {{if 1 == @$dPconfig.$col.$class}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>  
+  {{include file="../../system/templates/configure_handler.tpl" class_handler=CPrescriptionLineHandler}}   
   
   {{assign var=class value="CAdministration"}}
   {{assign var=var value="hors_plage"}}

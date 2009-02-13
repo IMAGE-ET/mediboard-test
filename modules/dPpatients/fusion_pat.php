@@ -34,10 +34,12 @@ foreach ($patients_id as $patient_id) {
     $finalPatient = new CPatient;
     $finalPatient->load($patient_id);
     $finalPatient->loadRefsFwd();
+    $finalPatient->updateNomPaysInsee();
     $finalPatient->patient_id = null;
   }
   
   $patient->loadRefsFwd();
+  $patient->updateNomPaysInsee();
   $patients[] = $patient;
 }
   

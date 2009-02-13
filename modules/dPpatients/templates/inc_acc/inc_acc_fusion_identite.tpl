@@ -10,17 +10,22 @@
   <tr>
     <th class="title" colspan="4">Identité</th>
   </tr>
-  {{include field="nom"               file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="prenom"            file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="nom_jeune_fille"   file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="sexe"              file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="naissance"         file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="rang_naissance"    file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="lieu_naissance"    file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="nationalite"       file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="profession"        file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="matricule"         file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="rang_beneficiaire" file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="nom"                       file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="prenom"                    file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="prenom_2"                  file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="prenom_3"                  file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="prenom_4"                  file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="nom_jeune_fille"           file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="sexe"                      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="naissance"                 file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="rang_naissance"            file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="lieu_naissance"            file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="cp_naissance"              file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="_pays_naissance_insee"     file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="nationalite"               file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="profession"                file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="matricule"                 file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="rang_beneficiaire"         file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   
   <tr>
     <th class="title" colspan="4">Coordonnées</th>

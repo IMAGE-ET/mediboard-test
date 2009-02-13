@@ -15,6 +15,18 @@
     <td>{{mb_field object=$patient field="assure_prenom"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="assure_prenom_2"}}</th>
+    <td>{{mb_field object=$patient field="assure_prenom_2"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$patient field="assure_prenom_3"}}</th>
+    <td>{{mb_field object=$patient field="assure_prenom_3"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$patient field="assure_prenom_4"}}</th>
+    <td>{{mb_field object=$patient field="assure_prenom_4"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="assure_nom_jeune_fille"}}</th>
     <td>{{mb_field object=$patient field="assure_nom_jeune_fille"}}</td>
   </tr>
@@ -27,8 +39,25 @@
     <td>{{mb_field object=$patient field="assure_naissance"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="assure_cp_naissance"}}</th>
+    <td>
+      {{mb_field object=$patient field="assure_cp_naissance" maxlength="5"}}
+      <div style="display:none;" class="autocomplete" id="assure_cp_naissance_auto_complete"></div>
+    </td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="assure_lieu_naissance"}}</th>
-    <td>{{mb_field object=$patient field="assure_lieu_naissance"}}</td>
+    <td>
+      {{mb_field object=$patient field="assure_lieu_naissance"}}
+      <div style="display:none;" class="autocomplete" id="assure_lieu_naissance_auto_complete"></div>
+    </td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$patient field="_assure_pays_naissance_insee"}}</th>
+    <td> 
+      {{mb_field object=$patient field="_assure_pays_naissance_insee"}}
+      <div style="display:none;" class="autocomplete" id="_assure_pays_naissance_insee_auto_complete"></div>
+    </td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="assure_nationalite"}}</th>
@@ -73,9 +102,9 @@
     <th>{{mb_label object=$patient field="assure_pays"}}</th>
     <td>
       {{mb_field object=$patient field="assure_pays" size="31"}}
-      <div style="display:none" class="autocomplete" id="assure_pays_auto_complete"></div>
+      <div style="display:none;" class="autocomplete" id="assure_pays_auto_complete"></div>
     </td>
-	</tr>
+  </tr>
 	<tr>
     <th>{{mb_label object=$patient field="assure_tel"}}</th>
     <td>{{mb_field object=$patient field="assure_tel"}}</td>

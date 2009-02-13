@@ -25,57 +25,6 @@ if (md5($pass) != "aa450aff6d0f4974711ff4c5536ed4cb") {
   $AppUI->stepAjax("Mot de passe incorrect.\nAttention, fonctionnalité à utiliser avec une extrême prudence", UI_MSG_ERROR);
 }
 
-class CMbXPath extends DOMXPath {
-  function __construct(DOMDocument $doc) {
-    parent::__construct($doc);
-  }
-
-  function queryUniqueNode($query, DOMNode $contextNode) {
-    $nodeList = parent::query($query, $contextNode);
-    if ($nodeList->length > 1) {
-    	trigger_error("queried node is not unique, found $nodeList->length occurence(s) for '$query'", E_USER_WARNING);
-      return null;
-    }
-    
-    return $nodeList->item(0);
-  } 
-  
-  function queryNumcharNode($query, DOMNode $contextNode, $length) {
-    if (null == $text = $this->queryTextNode($query, $contextNode, " /-.")) {
-      return;
-    }
-    
-    $text = substr($text, 0, $length);
-    $text = str_pad($text, $length, "0", STR_PAD_LEFT);
-    $text = strtr($text, "O", "0"); // Usual trick
-    return $text;
-  }
-  
-  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "") {
-    $text = null;
-    if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $text = utf8_decode($node->textContent);
-      $text = str_replace(str_split($purgeChars), "", $text);
-      $text = trim($text);
-      $text = addslashes($text);
-    }
-
-    return $text;
-  } 
-
-  function queryMultilineTextNode($query, DOMNode $contextNode, $prefix = "") {
-    $text = null;
-    if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $text = utf8_decode($node->textContent);
-      if ($prefix) {
-				$text = str_replace($prefix, "", $text);
-      }
-    } 
-    
-    return $text;
-  }
-}
-
 // Chrono start
 $chrono = new Chronometer;
 $chrono->start();

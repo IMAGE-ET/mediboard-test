@@ -332,20 +332,20 @@ class CSetupdPpatients extends CSetup {
     
     $this->makeRevision("0.44");
     $sql = "ALTER TABLE `patients`
-						ADD `assure_nom` VARCHAR(255), 
-						ADD `assure_nom_jeune_fille` VARCHAR(255), 
-						ADD `assure_prenom` VARCHAR(255), 
-						ADD `assure_naissance` DATE, 
-						ADD `assure_sexe` ENUM('m','f','j'), 
-						ADD `assure_adresse` TEXT, 
-						ADD `assure_ville` VARCHAR(255), 
-						ADD `assure_cp` INT(5) UNSIGNED ZEROFILL, 
-						ADD `assure_tel` BIGINT(10) UNSIGNED ZEROFILL, 
-						ADD `assure_tel2` BIGINT(10) UNSIGNED ZEROFILL, 
-						ADD `assure_pays` VARCHAR(255), 
-						ADD `assure_nationalite` ENUM('local','etranger') NOT NULL, 
-						ADD `assure_lieu_naissance` VARCHAR(255), 
-						ADD `assure_profession` VARCHAR(255),
+            ADD `assure_nom` VARCHAR(255), 
+            ADD `assure_nom_jeune_fille` VARCHAR(255), 
+            ADD `assure_prenom` VARCHAR(255), 
+            ADD `assure_naissance` DATE, 
+            ADD `assure_sexe` ENUM('m','f','j'), 
+            ADD `assure_adresse` TEXT, 
+            ADD `assure_ville` VARCHAR(255), 
+            ADD `assure_cp` INT(5) UNSIGNED ZEROFILL, 
+            ADD `assure_tel` BIGINT(10) UNSIGNED ZEROFILL, 
+            ADD `assure_tel2` BIGINT(10) UNSIGNED ZEROFILL, 
+            ADD `assure_pays` VARCHAR(255), 
+            ADD `assure_nationalite` ENUM('local','etranger') NOT NULL, 
+            ADD `assure_lieu_naissance` VARCHAR(255), 
+            ADD `assure_profession` VARCHAR(255),
             ADD `assure_rques` TEXT;";
     $this->addQuery($sql);
     
@@ -366,15 +366,15 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("0.48");
     $sql = "ALTER TABLE `patients`
-						ADD `code_regime` TINYINT(2) UNSIGNED ZEROFILL, 
-						ADD `caisse_gest` MEDIUMINT(3) UNSIGNED ZEROFILL, 
-						ADD `centre_gest` MEDIUMINT(4) UNSIGNED ZEROFILL, 
-						ADD `fin_validite_vitale` DATE;";
+            ADD `code_regime` TINYINT(2) UNSIGNED ZEROFILL, 
+            ADD `caisse_gest` MEDIUMINT(3) UNSIGNED ZEROFILL, 
+            ADD `centre_gest` MEDIUMINT(4) UNSIGNED ZEROFILL, 
+            ADD `fin_validite_vitale` DATE;";
     $this->addQuery($sql);
 
     $this->makeRevision("0.49");
     $sql = "ALTER TABLE `patients`
-						CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','09','11','12','13','14','15','16','31');";
+            CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','09','11','12','13','14','15','16','31');";
     $this->addQuery($sql);
     
     
@@ -663,10 +663,10 @@ class CSetupdPpatients extends CSetup {
     
     $this->makeRevision("0.60");
     $sql = "ALTER TABLE `patients`
-						ADD `ald` ENUM('0','1'), 
-						ADD `code_exo` ENUM('0','5','9') DEFAULT '0', 
-						ADD `deb_amo` DATE, 
-						ADD `fin_amo` DATE;";
+            ADD `ald` ENUM('0','1'), 
+            ADD `code_exo` ENUM('0','5','9') DEFAULT '0', 
+            ADD `deb_amo` DATE, 
+            ADD `fin_amo` DATE;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.61");
@@ -705,10 +705,10 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.64");
     $this->addDependency("dPsante400", "0.1");
     $sql = "INSERT INTO `id_sante400` (id_sante400_id, object_class, object_id, tag, last_update, id400)
-						SELECT NULL, 'CPatient', `patient_id`, 'SHS group:1', NOW(), `SHS`
-						FROM `patients` 
-						WHERE `SHS` IS NOT NULL 
-						AND `SHS` != 0";
+            SELECT NULL, 'CPatient', `patient_id`, 'SHS group:1', NOW(), `SHS`
+            FROM `patients` 
+            WHERE `SHS` IS NOT NULL 
+            AND `SHS` != 0";
     $this->addQuery($sql);
     
     $this->makeRevision("0.65");
@@ -797,10 +797,10 @@ class CSetupdPpatients extends CSetup {
     
     $this->makeRevision("0.68");
     $sql = "ALTER TABLE `patients` 
-	  				ADD `code_sit` MEDIUMINT (4) UNSIGNED ZEROFILL,
-  					ADD `regime_am` ENUM ('0','1');";
+            ADD `code_sit` MEDIUMINT (4) UNSIGNED ZEROFILL,
+            ADD `regime_am` ENUM ('0','1');";
     $this->addQuery($sql);
-  	
+    
     $this->makeRevision("0.69");
     $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - antécédents", "Patient - Antécédents -- tous"));
     $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - traitements", "Patient - Traitements"));
@@ -818,12 +818,12 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("0.71");
     $sql = "CREATE TABLE IF NOT EXISTS `correspondant` (
-			`correspondant_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-			`medecin_id` INT (11) UNSIGNED NOT NULL,
-			`patient_id` INT (11) UNSIGNED NOT NULL,
-		  KEY (`medecin_id`),
-		  KEY (`patient_id`)
-			) TYPE=MYISAM;";
+      `correspondant_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `medecin_id` INT (11) UNSIGNED NOT NULL,
+      `patient_id` INT (11) UNSIGNED NOT NULL,
+      KEY (`medecin_id`),
+      KEY (`patient_id`)
+      ) TYPE=MYISAM;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.72");
@@ -883,26 +883,26 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("0.73");
     $sql = "ALTER TABLE `constantes_medicales` 
-						ADD `score_sensibilite` FLOAT,
-						ADD `score_motricite` FLOAT,
-						ADD `EVA` FLOAT,
-						ADD `score_sedation` FLOAT,
-						ADD `frequence_respiratoire` FLOAT;";
+            ADD `score_sensibilite` FLOAT,
+            ADD `score_motricite` FLOAT,
+            ADD `EVA` FLOAT,
+            ADD `score_sedation` FLOAT,
+            ADD `frequence_respiratoire` FLOAT;";
     $this->addQuery($sql);
     
     
     $this->makeRevision("0.74");
     for ($i = 1; $i <= 3; $i++) {
-	    $sql = "INSERT INTO `correspondant` (`medecin_id`, `patient_id`)
-	            SELECT `medecin$i`, `patient_id`
-	            FROM `patients`
-	            WHERE `medecin$i` IS NOT NULL";
-	    $this->addQuery($sql);
+      $sql = "INSERT INTO `correspondant` (`medecin_id`, `patient_id`)
+              SELECT `medecin$i`, `patient_id`
+              FROM `patients`
+              WHERE `medecin$i` IS NOT NULL";
+      $this->addQuery($sql);
     }
     $sql = "ALTER TABLE `patients`
-					  DROP `medecin1`,
-					  DROP `medecin2`,
-					  DROP `medecin3`";
+            DROP `medecin1`,
+            DROP `medecin2`,
+            DROP `medecin3`";
     $this->addQuery($sql);
     
     $this->makeRevision("0.75");
@@ -913,23 +913,23 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
     
     $sql = "DELETE FROM `constantes_medicales` WHERE 
-		        `poids` IS NULL AND
-		        `taille` IS NULL AND
-		        `ta` IS NULL AND
-		        `pouls` IS NULL AND
-		        `spo2` IS NULL AND
-		        `temperature` IS NULL AND
-		        `score_sensibilite` IS NULL AND
+            `poids` IS NULL AND
+            `taille` IS NULL AND
+            `ta` IS NULL AND
+            `pouls` IS NULL AND
+            `spo2` IS NULL AND
+            `temperature` IS NULL AND
+            `score_sensibilite` IS NULL AND
             `score_motricite` IS NULL AND
             `EVA` IS NULL AND
             `score_sedation` IS NULL AND
             `frequence_respiratoire` IS NULL";
-		$this->addQuery($sql);
+    $this->addQuery($sql);
     
-		$this->makeRevision("0.76");
-		$sql = "ALTER TABLE `medecin` ADD `type` ENUM ('medecin','kine','sagefemme','infirmier') NOT NULL DEFAULT 'medecin';";
-		$this->addQuery($sql);
-		
+    $this->makeRevision("0.76");
+    $sql = "ALTER TABLE `medecin` ADD `type` ENUM ('medecin','kine','sagefemme','infirmier') NOT NULL DEFAULT 'medecin';";
+    $this->addQuery($sql);
+    
     $this->makeRevision("0.77");
     $sql = "ALTER TABLE `antecedent` ADD `annule` ENUM('0','1') DEFAULT '0'";
     $this->addQuery($sql);
@@ -940,10 +940,27 @@ class CSetupdPpatients extends CSetup {
     
     $this->makeRevision("0.79");
     $sql = "ALTER TABLE `antecedent` 
-	        	ADD `appareil` ENUM ('cardiovasculaire','endocrinien','neuro_psychiatrique','uro_nephrologique','digestif','pulmonaire');";
+            ADD `appareil` ENUM ('cardiovasculaire','endocrinien','neuro_psychiatrique','uro_nephrologique','digestif','pulmonaire');";
     $this->addQuery($sql);
-		
-    $this->mod_version = "0.80";
+    
+    $this->makeRevision("0.80");
+     $sql = "ALTER TABLE patients
+            ADD pays_insee INT(11) AFTER pays ,
+            ADD prenom_2 VARCHAR(50) AFTER prenom ,
+            ADD prenom_3 VARCHAR(50) AFTER prenom_2 ,
+            ADD prenom_4 VARCHAR(50) AFTER prenom_3 ,
+            ADD cp_naissance VARCHAR(5) AFTER lieu_naissance ,
+            ADD pays_naissance_insee INT(11) AFTER cp_naissance, 
+            ADD assure_pays_insee INT(11) AFTER assure_pays ,
+            ADD assure_prenom_2 VARCHAR(50) AFTER assure_prenom ,
+            ADD assure_prenom_3 VARCHAR(50) AFTER assure_prenom_2 ,
+            ADD assure_prenom_4 VARCHAR(50) AFTER assure_prenom_3 ,
+            ADD assure_cp_naissance VARCHAR(5) AFTER assure_lieu_naissance,
+            ADD assure_pays_naissance_insee INT(11) AFTER assure_cp_naissance;";
+     
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.81";
   }
 }
 

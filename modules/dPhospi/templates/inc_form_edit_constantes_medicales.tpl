@@ -12,9 +12,6 @@ Main.add(function () {
 });
 </script>
 
-
-</script>
-
 <form name="edit-constantes-medicales" action="?" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />

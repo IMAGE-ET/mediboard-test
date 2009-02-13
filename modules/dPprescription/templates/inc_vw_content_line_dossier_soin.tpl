@@ -16,7 +16,6 @@
 
 </script>
 
-</script>
 <!-- Affichage des heures de prises des medicaments -->			 
 {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
   {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}

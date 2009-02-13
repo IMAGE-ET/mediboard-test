@@ -40,6 +40,9 @@ if (mbGetValueFromGet("useVitale")) {
   $patient->_bind_vitale = "1";
 }
 
+// Chargement du nom_fr du pays de naissance
+if($patient_id)
+  $patient->updateNomPaysInsee();
 
 // Création du template
 $smarty = new CSmartyDP();

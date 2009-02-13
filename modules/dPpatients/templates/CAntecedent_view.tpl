@@ -1,6 +1,6 @@
 <table class="tbl">
   <tr>
-    <th class="category">{{tr}}CAntecedent{{/tr}}</td>
+    <th class="category">{{tr}}CAntecedent{{/tr}}</th>
   </tr>
   
 	{{if $object->type}}

@@ -124,12 +124,26 @@
       <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>
-        
+  
+  {{assign var="var" value="mb_id"}}
+  <tr>
+    <th>
+      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
+    </td>
+  </tr>
+  
+      
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
+
 </table>
 
 </form>

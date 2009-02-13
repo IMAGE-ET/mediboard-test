@@ -15,6 +15,7 @@ $dPconfig["page_title"] = "Mediboard SIH";
 $dPconfig["base_url"] = "http://www.mediboard.org/demo";
 $dPconfig["site_domain"] = "mediboard.org";
 $dPconfig["offline"] = "0";
+$dPconfig["mb_id"] = "";
 
 $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 
@@ -528,5 +529,4 @@ $dPconfig["dmi"] = array (
     "product_category_id" => ""
   )
 );
-
 ?>

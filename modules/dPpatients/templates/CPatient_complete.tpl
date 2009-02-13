@@ -50,7 +50,10 @@
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="prenom"}}</strong>
-      {{mb_value object=$object field="prenom"}}
+      {{mb_value object=$object field="prenom"}}{{if $object->prenom_2}}, 
+      {{mb_value object=$object field="prenom_2"}}{{/if}}{{if $object->prenom_3}}, 
+      {{mb_value object=$object field="prenom_3"}}{{/if}}{{if $object->prenom_4}}, 
+      {{mb_value object=$object field="prenom_4"}} {{/if}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="cp"}}</strong>

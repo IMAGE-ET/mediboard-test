@@ -63,7 +63,7 @@
         <tr>
           <th>{{mb_label object=$category field="group_id"}}</th>
 	        <td>
-	          <select name="group_id"
+	          <select name="group_id">
 	            <option value="">Tous</option>
 	          {{foreach from=$groups item=_group}}
 	            <option value="{{$_group->_id}}" {{if $category->group_id == $_group->_id}}selected="selected"{{/if}}>{{$_group->_view}}</option>

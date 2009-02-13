@@ -21,7 +21,10 @@
         <tr>
           <td>
             <strong>{{mb_label object=$patient field="prenom"}} :</strong>
-            {{mb_value object=$patient field="prenom"}}
+            {{mb_value object=$patient field="prenom"}}{{if $patient->prenom_2}}, 
+            {{mb_value object=$patient field="prenom_2"}}{{/if}}{{if $patient->prenom_3}}, 
+            {{mb_value object=$patient field="prenom_3"}}{{/if}}{{if $patient->prenom_4}}, 
+            {{mb_value object=$patient field="prenom_4"}} {{/if}}
           </td>
         </tr>
         <tr>

@@ -23,6 +23,9 @@ class CPatient extends CMbObject {
   var $nom              = null;
   var $nom_jeune_fille  = null;
   var $prenom           = null;
+  var $prenom_2         = null;
+  var $prenom_3         = null;
+  var $prenom_4         = null;
   var $nom_soundex2     = null;
   var $nomjf_soundex2   = null;
   var $prenom_soundex2  = null;
@@ -57,10 +60,13 @@ class CPatient extends CMbObject {
   var $rang_naissance   = null;
   var $fin_validite_vitale = null;
   
-  var $pays             = null;
-  var $nationalite      = null;
-  var $lieu_naissance   = null;
-  var $profession       = null;
+  var $pays                 = null;
+  var $pays_insee           = null;
+  var $nationalite          = null;
+  var $lieu_naissance       = null;
+  var $cp_naissance         = null;
+  var $pays_naissance_insee = null;
+  var $profession           = null;
 
   var $employeur_nom     = null;
   var $employeur_adresse = null;
@@ -78,26 +84,34 @@ class CPatient extends CMbObject {
   var $prevenir_parente = null;
 
   // Assuré
-  var $assure_nom              = null;
-  var $assure_nom_jeune_fille  = null;
-  var $assure_prenom           = null;
-  var $assure_naissance        = null;
-  var $assure_sexe             = null;
-  var $assure_adresse          = null;
-  var $assure_ville            = null;
-  var $assure_cp               = null;
-  var $assure_tel              = null;
-  var $assure_tel2             = null;
-  var $assure_pays             = null;
-  var $assure_nationalite      = null;
-  var $assure_lieu_naissance   = null;
-  var $assure_profession       = null;
-  var $assure_rques            = null;
-  var $assure_matricule        = null;
+  var $assure_nom                   = null;
+  var $assure_nom_jeune_fille       = null;
+  var $assure_prenom                = null;
+  var $assure_prenom_2              = null;
+  var $assure_prenom_3              = null;
+  var $assure_prenom_4              = null;
+  var $assure_naissance             = null;
+  var $assure_sexe                  = null;
+  var $assure_adresse               = null;
+  var $assure_ville                 = null;
+  var $assure_cp                    = null;
+  var $assure_tel                   = null;
+  var $assure_tel2                  = null;
+  var $assure_pays                  = null;
+  var $assure_pays_insee            = null;
+  var $assure_nationalite           = null;
+  var $assure_cp_naissance          = null;
+  var $assure_lieu_naissance        = null;
+  var $assure_pays_naissance_insee  = null;
+  var $assure_profession            = null;
+  var $assure_rques                 = null;
+  var $assure_matricule             = null;
   
   // Other fields
-  var $_static_cim10 = null;
-
+  var $_static_cim10                = null;
+  var $_pays_naissance_insee        = null;
+  var $_assure_pays_naissance_insee = null;
+  
   // Form fields
   var $_age         = null;
   var $_article     = null;
@@ -156,6 +170,9 @@ class CPatient extends CMbObject {
     
     $specs["nom"]               = "str notNull confidential";
     $specs["prenom"]            = "str notNull";
+    $specs["prenom_2"]          = "str";
+    $specs["prenom_3"]          = "str";
+    $specs["prenom_4"]          = "str";
     $specs["nom_jeune_fille"]   = "str confidential";
     $specs["nom_soundex2"]      = "str";
     $specs["prenom_soundex2"]   = "str";
@@ -196,10 +213,13 @@ class CPatient extends CMbObject {
     $specs["code_sit"]          = "numchar length|4";
     $specs["regime_am"]         = "bool default|0";
     
-    $specs["pays"]              = "str";
-    $specs["nationalite"]       = "enum notNull list|local|etranger default|local";
-    $specs["lieu_naissance"]    = "str";
-    $specs["profession"]        = "str";
+    $specs["pays"]                 = "str";
+    $specs["pays_insee"]           = "str";
+    $specs["nationalite"]          = "enum notNull list|local|etranger default|local";
+    $specs["lieu_naissance"]       = "str";
+    $specs["cp_naissance"]         = "str";
+    $specs["pays_naissance_insee"] = "str";
+    $specs["profession"]           = "str";
       
     $specs["employeur_nom"]     = "str confidential";
     $specs["employeur_adresse"] = "text";
@@ -216,25 +236,33 @@ class CPatient extends CMbObject {
     $specs["prevenir_tel"]      = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["prevenir_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
     
-    $specs["assure_nom"]               = "str confidential";
-    $specs["assure_prenom"]            = "str";
-    $specs["assure_nom_jeune_fille"]   = "str confidential";
-    $specs["assure_sexe"]              = "enum list|m|f|j default|m";
-    $specs["assure_naissance"]         = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
-    $specs["assure_adresse"]           = "text confidential";
-    $specs["assure_ville"]             = "str confidential";
-    $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";
-    $specs["assure_tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
-    $specs["assure_tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
-    $specs["assure_pays"]              = "str";
-    $specs["assure_nationalite"]       = "enum notNull list|local|etranger default|local";
-    $specs["assure_lieu_naissance"]    = "str";
-    $specs["assure_profession"]        = "str";
-    $specs["assure_rques"]             = "text";
-    $specs["assure_matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
+    $specs["assure_nom"]                  = "str confidential";
+    $specs["assure_prenom"]               = "str";
+    $specs["assure_prenom_2"]             = "str";
+    $specs["assure_prenom_3"]             = "str";
+    $specs["assure_prenom_4"]             = "str";
+    $specs["assure_nom_jeune_fille"]      = "str confidential";
+    $specs["assure_sexe"]                 = "enum list|m|f|j default|m";
+    $specs["assure_naissance"]            = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
+    $specs["assure_adresse"]              = "text confidential";
+    $specs["assure_ville"]                = "str confidential";
+    $specs["assure_cp"]                   = "numchar minLength|4 maxLength|5 confidential";
+    $specs["assure_tel"]                  = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["assure_tel2"]                 = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["assure_pays"]                 = "str";
+    $specs["assure_pays_insee"]           = "str";
+    $specs["assure_lieu_naissance"]       = "str";
+    $specs["assure_nationalite"]          = "enum notNull list|local|etranger default|local";
+    $specs["assure_lieu_naissance"]       = "str";
+    $specs["assure_cp_naissance"]         = "str";
+    $specs["assure_pays_naissance_insee"] = "str";
+    $specs["assure_profession"]           = "str";
+    $specs["assure_rques"]                = "text";
+    $specs["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
     
-    $specs["_id_vitale"]               = "num";
-    
+    $specs["_id_vitale"]                  = "num";
+    $specs["_pays_naissance_insee"]       = "str";
+    $specs["_assure_pays_naissance_insee"]       = "str";
     return $specs;
   }
   
@@ -463,7 +491,7 @@ class CPatient extends CMbObject {
     $this->prenom = ucwords(strtolower($this->prenom));
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
-    $this->_prenoms = array($this->prenom);
+    $this->_prenoms = array($this->prenom, $this->prenom_2, $this->prenom_3, $this->prenom_4);
   
     $this->evalAge();
     
@@ -605,6 +633,22 @@ class CPatient extends CMbObject {
   	
     if ($this->assure_cp == "00000") {
       $this->assure_cp = "";
+    }
+    
+    if ($this->_pays_naissance_insee) {
+      $this->pays_naissance_insee = $this->updatePatNumPaysInsee($this->_pays_naissance_insee);
+    }
+    
+    if ($this->pays) {
+      $this->pays_insee = $this->updatePatNumPaysInsee($this->pays);
+    }
+    
+    if ($this->_assure_pays_naissance_insee) {
+      $this->assure_pays_naissance_insee = $this->updatePatNumPaysInsee($this->_assure_pays_naissance_insee);
+    }
+    
+    if ($this->assure_pays) {
+      $this->assure_pays_insee = $this->updatePatNumPaysInsee($this->assure_pays);
     }
   }
   
@@ -1063,6 +1107,27 @@ class CPatient extends CMbObject {
     $this->loadRefDossierMedical();
     // Dossier médical
     $this->_ref_dossier_medical->fillTemplate($template);
+  }
+  
+  function updateNomPaysInsee() {
+  	$pays = new CPaysInsee();
+  	if ($this->pays_naissance_insee) {
+	  	$pays->numerique = $this->pays_naissance_insee;
+	    $pays->loadMatchingObject();
+	    $this->_pays_naissance_insee = $pays->nom_fr;
+  	}
+  	if ($this->assure_pays_naissance_insee) {
+  		$pays->numerique = $this->assure_pays_naissance_insee;
+      $pays->loadMatchingObject();
+      $this->_assure_pays_naissance_insee = $pays->nom_fr;
+  	}
+  }
+  
+  function updatePatNumPaysInsee($nomPays) {
+    $pays = new CPaysInsee();
+    $pays->nom_fr = $nomPays;
+    $pays->loadMatchingObject();
+    return $pays->numerique;
   }
 }
 

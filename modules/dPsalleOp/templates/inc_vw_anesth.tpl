@@ -111,7 +111,7 @@ reloadPrescriptionAnesth = function(prescription_id){
     </td>
   </tr>
   <tr>
-    <th class="title" colspan="5">Perfusion</td>
+    <th class="title" colspan="5">Perfusion</th>
   </tr>
   <tr> 
     <td style="width: 1%">

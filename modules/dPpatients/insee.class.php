@@ -33,17 +33,5 @@ class CPaysInsee extends CMbObject {
     $specs["nom_ISO"  ] = "str";
     return $specs;
   }
-  
-  /**
-   * Informations sur un pays
-   * @param string $nom nom du pays
-   * @return string
-   */
-  function getPaysInfo($nom, $info) {
-    self::connect();
-    $query = "SELECT `$info` FROM pays WHERE nom_fr = %";
-    
-    return self::$ds->loadResult(self::$ds->prepare($query, $nom));
-  }
 }
 ?>

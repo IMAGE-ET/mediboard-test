@@ -6,7 +6,7 @@
 {{foreach from=$idGroups item=idGroup}}
   <tr>
     <th class="title">
-      {{tr}}CGroups{{/tr}} : {{$idGroup->_ref_object->_view}}</h2>
+      {{tr}}CGroups{{/tr}} : {{$idGroup->_ref_object->_view}}
     </th>
     <th>{{$idGroup->id400}}</th>
   </tr>

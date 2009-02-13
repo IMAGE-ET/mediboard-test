@@ -177,6 +177,7 @@ if ($patient->_id) {
 $patient->loadIPP();
 $patient->loadIdVitale();
 
+
 // Création du template
 $smarty = new CSmartyDP();
 
