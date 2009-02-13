@@ -944,7 +944,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.80");
-     $sql = "ALTER TABLE patients
+    $sql = "ALTER TABLE patients
             ADD pays_insee INT(11) AFTER pays ,
             ADD prenom_2 VARCHAR(50) AFTER prenom ,
             ADD prenom_3 VARCHAR(50) AFTER prenom_2 ,
@@ -960,7 +960,25 @@ class CSetupdPpatients extends CSetup {
      
     $this->addQuery($sql);
     
-    $this->mod_version = "0.81";
+    $this->makeRevision("0.81");
+    
+    $sql = "ALTER TABLE `patients` 
+					  CHANGE `prenom_2` `prenom_2` VARCHAR (255),
+					  CHANGE `prenom_3` `prenom_3` VARCHAR (255),
+					  CHANGE `prenom_4` `prenom_4` VARCHAR (255),
+					  CHANGE `sexe` `sexe` ENUM ('m','f','j'),
+					  CHANGE `adresse` `adresse` TEXT,
+					  CHANGE `ville` `ville` VARCHAR (255),
+					  CHANGE `incapable_majeur` `incapable_majeur` ENUM ('0','1'),
+					  CHANGE `ATNC` `ATNC` ENUM ('0','1'),
+					  CHANGE `matricule` `matricule` VARCHAR (15),
+					  CHANGE `assure_prenom_2` `assure_prenom_2` VARCHAR (255),
+					  CHANGE `assure_prenom_3` `assure_prenom_3` VARCHAR (255),
+					  CHANGE `assure_prenom_4` `assure_prenom_4` VARCHAR (255);";
+     
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.82";
   }
 }
 
