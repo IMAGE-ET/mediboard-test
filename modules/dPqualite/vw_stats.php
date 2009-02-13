@@ -28,7 +28,7 @@ $fiche = new CFicheEi();
 $enums = array();
 foreach($fiche->_specs as $field => $spec) {
   if ($spec instanceof CEnumSpec || $spec instanceof CBoolSpec) {
-  	$enumsNew[$field] = $spec->_locales;
+  	$enums[$field] = $spec->_locales;
   }
 }
 
