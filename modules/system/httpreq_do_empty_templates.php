@@ -7,17 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsEdit();
 
 $i = 0;
-
-foreach(glob("modules/*/templates_c/*.tpl.php") as $tplPath) {
+foreach(glob("modules/*/templates_c/*") as $tplPath) {
   $i++;
   CMbPath::remove($tplPath);
 }
-foreach(glob("style/*/templates_c/*.tpl.php") as $tplPath) {
+foreach(glob("style/*/templates_c/*") as $tplPath) {
   $i++;
   CMbPath::remove($tplPath);
 }
