@@ -1,17 +1,19 @@
 <script type="text/javascript">
 
 togglePrenomsList = function(element) {
-	var list = $(element).up(2).select('.prenoms_list').invoke('toggle');
+	var list = $("patient_identite").select('.prenoms_list').invoke('toggle');
 	Element.classNames(element).flip('up', 'down');
 }
 
 Main.add(function() {
-  var i, list = $("patient_identite").select(".prenoms_list input");
+  var i, 
+      list = $("patient_identite").select(".prenoms_list input"),
+      button = $("patient_identite").select("button.down.notext");
   for (i = 0; i < list.length; i++) {
 	  var input = list[i];
     if ($V(input)) {
-      togglePrenomsList(input.up(1));
-      return;
+    	togglePrenomsList(button[0]);
+      break;
     }
   }
 }); 
