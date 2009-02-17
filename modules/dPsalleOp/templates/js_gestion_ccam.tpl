@@ -51,7 +51,7 @@ ActesCCAM = {
         aListActes.each(function(elem) {
           oActeForm = document.forms['formActe-'+elem];
           oActeForm.del.value = 1;
-          submitFormAjax(oActeForm, 'systemMsg', oDefaultOptions);
+          submitFormAjax(oActeForm, 'systemMsg');
         });
       } else {
         return;
