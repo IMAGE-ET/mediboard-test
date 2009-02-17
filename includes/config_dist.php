@@ -476,6 +476,9 @@ $dPconfig["dPccam"] = array (
   "CCodeCCAM" => array(
     "use_cache" => "1",
   ),
+  "CCodable" => array(
+    "use_getMaxCodagesActes" => "1",
+  ),
 );
 
 $dPconfig["hprim21"] = array (

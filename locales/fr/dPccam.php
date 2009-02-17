@@ -98,4 +98,5 @@ $locales['CFavoriCCAM-title-modify'] = '';
 $locales['CFavoriCCAM.all'] = '';
 $locales['CFavoriCCAM.select'] = '';
 $locales['CMediusers-back-'] = '';
+$locales['config-dPccam-CCodable-use_getMaxCodagesActes'] = 'Utiliser le test sur le nombre d\'actes codés';
 ?>

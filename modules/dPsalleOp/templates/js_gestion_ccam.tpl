@@ -46,13 +46,12 @@ ActesCCAM = {
     var aListActes = null;
     var oActeForm = null;
     if(oForm._actes && oForm._actes.value != "") {
-      aListActes = oForm._actes.value.split("|");
-      aListeActes = aListActes.without("");
+      aListActes = oForm._actes.value.split("|").without("");
       if(confirm('Des actes ont été validés pour ce code\nÊtes-vous sur de vouloir le supprimer ?')) {
         aListActes.each(function(elem) {
-          oActeForm = document.forms['formActe-' + elem];
+          oActeForm = document.forms['formActe-'+elem];
           oActeForm.del.value = 1;
-          submitFormAjax(oActeForm, 'systemMsg');
+          submitFormAjax(oActeForm, 'systemMsg', oDefaultOptions);
         });
       } else {
         return;

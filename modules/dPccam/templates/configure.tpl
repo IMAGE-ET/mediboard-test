@@ -27,6 +27,23 @@
 	  </td>
 	</tr>
 	
+		{{assign var=class value=CCodable}}
+		<tr>
+	  {{assign var=var value=use_getMaxCodagesActes}}
+	  <th>
+	    <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+	      {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+	    </label>  
+	  </th>
+	  <td>
+	    <select class="bool" name="{{$m}}[{{$class}}][{{$var}}]">
+	      <option value="0" {{if "0" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
+	      <option value="1" {{if "1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
+	    </select>
+	  </td>
+	</tr>
+	
+	
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

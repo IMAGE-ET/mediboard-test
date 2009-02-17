@@ -248,11 +248,13 @@ class CCodable extends CMbObject {
       $oldObject->load($this->_id);
     }
     
-    if($this->codes_ccam != $oldObject->codes_ccam){
-      if ($msg = $this->getMaxCodagesActes()) {
-        return $msg;
-      }
-    }   
+    if(CAppUI::conf("dPccam CCodable use_getMaxCodagesActes")){
+	    if($this->codes_ccam != $oldObject->codes_ccam){
+	      if ($msg = $this->getMaxCodagesActes()) {
+	        return $msg;
+	      }
+	    }   
+    }
     return parent::check();
   }
   
