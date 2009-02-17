@@ -52,14 +52,14 @@ function printPatient(id) {
 var tabs;
 Main.add(function () {
   initInseeFields("editFrm", "cp", "ville","pays");
-  initInseeFields("editFrm", "cp_naissance", "lieu_naissance","pays_naissance_insee");
+  initInseeFields("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
   initInseeFields("editFrm", "prevenir_cp", "prevenir_ville");
   initInseeFields("editFrm", "employeur_cp", "employeur_ville");
   initPaysField("editFrm", "_pays_naissance_insee", "nationalite");
   initPaysField("editFrm", "pays", "tel");
   
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays_insee");
-  initInseeFields("editFrm", "assure_cp_naissance", "assure_lieu_naissance","assure_pays_naissance_insee");
+  initInseeFields("editFrm", "assure_cp_naissance", "assure_lieu_naissance","_assure_pays_naissance_insee");
   initPaysField("editFrm", "_assure_pays_naissance_insee", "assure_nationalite");
   initPaysField("editFrm", "assure_pays", "assure_tel");
   
