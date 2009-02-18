@@ -44,11 +44,10 @@ if($msg){
   CApp::rip();
 }
 
-
 // Parcours des lignes de medicaments
 foreach($lines as $cat => $lines_by_type){
 	foreach($lines_by_type as &$line){
-		if($cat == "element"){
+		if($line->_class_name == "CPrescriptionLineElement"){
 		  $line_chapter = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
 	    // Si element de type DMI, on ne le copie pas
 		  if($line_chapter == "dmi"){
@@ -59,45 +58,47 @@ foreach($lines as $cat => $lines_by_type){
 		// Chargements des prises
 	  $line->loadRefsPrises();
 
-		// Creation d'une prescription de sejour
-		if($type == "sejour"){
-			// On ne duplique pas les lignes qui seront finis avant la debut du séjour
-			if($line->_fin_reelle && $line->_fin_reelle < $sejour->_entree){
-				continue;
-			}
-			if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_entree))){
+	  // Ligne de pre_adm vers ligne de sejour
+	  if($type == "sejour"){
+	    // Si la fin n'est pas indiquée ou si la fin est avant l'entree du sejour
+	    if((!$line->_fin_reelle && (mbDate($line->_debut_reel) < mbDate($sejour->_entree))) || mbDate($line->_fin_reelle) <= mbDate($sejour->_entree)){
+	      continue;
+	    }
+	    // Modification des dates  
+	  	if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_entree))){
 				$diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_entree));
 				if( $line->duree - $diff_duree > 0){
 					$line->duree = $line->duree - $diff_duree;
 					$line->debut = mbDate($sejour->_entree);
 				}
 			}
-		}
-		
-		// Creation d'une prescription de sortie
-		if($type == "sortie"){
-			// On ne duplique pas les lignes qui seront finis avant la fin du sejour
-			if($line->_fin_reelle && $line->_fin_reelle < $sejour->_sortie){
-				continue;
-			}
-			if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_sortie))){
+	  }
+	  
+	  // Ligne de sejour vers ligne de sortie
+	  if($type == "sortie"){
+	  	if((!$line->_fin_reelle && (mbDate($line->_debut_reel) < mbDate($sejour->_sortie))) || mbDate($line->_fin_reelle) <= mbDate($sejour->_sortie)){
+	      continue;
+	  	}
+	  	// Modification des dates
+	  	if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_sortie))){
 	      $diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_sortie));
 	      if($line->duree - $diff_duree > 0){
 		      $line->duree = $line->duree - $diff_duree;
 		      $line->debut = mbDate($sejour->_sortie);
 	      }
 			}
-		}
-	
+	  }
+	  
 		// On modifie la ligne en supprimant les validations
 	  $line->_id = "";
 	  $line->prescription_id = $prescription->_id;
 	  $line->signee = 0;
 	  $line->valide_infirmiere = 0;
 	  $line->creator_id = $AppUI->user_id;
-	  if($cat == "medicament"){
+	  if($line->_class_name == "CPrescriptionLineMedicament"){
 	    $line->valide_pharma = 0;
 	  }
+	  
 	  // Dans le cas de la sortie, on supprime toutes les infos de durees et on ne stocke que la fin de la ligne
 	  if($type == "sortie"){
 	  	if($line->debut && $line->unite_duree && $line->duree){
