@@ -40,7 +40,9 @@ var MedSelector = {
   
   doSet: function(){
     var oForm = document[MedSelector.sForm];
+    $V(oForm[MedSelector.sView], MedSelector.prepared.nom);
     $V(oForm[MedSelector.sCode], MedSelector.prepared.code);
+    
   },
       
   // Peut être appelé sans contexte : ne pas utiliser this

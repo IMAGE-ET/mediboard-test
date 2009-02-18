@@ -15,12 +15,13 @@ $codeATC  = mbGetValueFromGet("codeATC");
 $code_cip = mbGetValueFromGet("code_cip");
 
 if($code_cip){
-  $mbProduitThera = new CBcbProduitLivretTherapeutique();
-  $mbProduitThera->load($code_cip);
-  $mbProduitThera->loadRefProduit();
-  $mbProduitThera->_ref_produit->loadClasseATC();
-  foreach($mbProduitThera->_ref_produit->_ref_classes_ATC as $key => $classeATC){
-    $codeATC = $classeATC->Code;
+  $produit = new CBcbProduit();
+  $produit->load($code_cip);
+  if($produit->code_cip){
+	  $produit->loadClasseATC();
+	  foreach($produit->_ref_classes_ATC as $key => $classeATC){
+	    $codeATC = $classeATC->Code;
+	  }
   }
 }
 

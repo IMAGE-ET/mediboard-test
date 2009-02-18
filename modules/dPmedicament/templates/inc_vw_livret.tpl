@@ -3,7 +3,7 @@
 	function updateFields(selected) {
 	  Element.cleanWhitespace(selected);
 	  dn = selected.childNodes;
-	  Livret.addProduit(dn[0].firstChild.nodeValue);
+	  Livret.addProduit(dn[0].firstChild.nodeValue, dn[1].firstChild.nodeValue);
 	  $('searchProd_produit').value = "";
 	}
 </script>

@@ -9,7 +9,7 @@
 
 // Cas d'ajout de produit, affichage de la bonne lettre
 $lettre = mbGetValueFromGet("lettre");
-$code_cip = mbGetValueFromGet("code_cip");
+$code_cip = mbGetValueFromGetOrSession("code_cip");
 $type = mbGetValueFromGet("type");
 
 // Chargement du produit ajouté

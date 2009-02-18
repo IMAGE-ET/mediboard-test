@@ -2,9 +2,36 @@
 
 <script type="text/javascript">
 
+// UpdateFields de l'autocomplete
+function updateFieldsProduitLivret(selected) {
+  Element.cleanWhitespace(selected);
+  dn = selected.childNodes;
+  code_cip = dn[0].firstChild.nodeValue;
+  Livret.reloadAlpha('', code_cip);
+  Livret.reloadATC('', code_cip);
+  $('searchProdLivret_produit').value = "";
+}
+
 Main.add(function () {
+
+  $('_list_produits').hide();
+  
   // Initialisation des onglets du menu
   Control.Tabs.create('tabs-livret', false);
+  
+  // Preparation du formulaire
+  prepareForm(document.searchProdLivret);
+  // Autocomplete
+  urlAuto = new Url();
+  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+  urlAuto.autoComplete("searchProdLivret_produit", "produit_livret_auto_complete", {
+    minChars: 3,
+    updateElement: updateFieldsProduitLivret,
+    callback: 
+      function(input, queryString){
+        return (queryString + "&inLivret=1"); 
+      }
+    } );
 });
 
 
@@ -20,14 +47,14 @@ function loadLivretArbreATC(codeATC){
 
 var Livret = {
   // Ajout d'un produit dans le livret
-  addProduit: function(code_cip) {
+  addProduit: function(code_cip, view_produit) {
     // Submit du formulaire d'ajout de produit
     var oForm = document.addProduit;
     oForm.code_cip.value = code_cip;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){
-        Livret.reloadAlpha('', code_cip);
-        Livret.reloadATC('',code_cip);
+        $('_list_produits').show();
+        $('list_produits').insert(code_cip+": "+view_produit+"<br />");
       }  
     });
   },
@@ -94,28 +121,41 @@ function printLivret(){
 
 </script>
 
+<div onclick="this.hide();" id="_list_produits" style="max-height: 100px; overflow: auto; position: fixed; top: 100px; right: 10px; background: #fff;
+                                border: 1px solid #666; padding: 5px; right: 5px;">
+	<strong>Produits récemment rajoutés</strong>
+	<div id="list_produits" ></div>
+</div>
+
 <!-- Ajout d'un produit dans le livret -->
 <table class="form">
    <tr>
-     <th class="title">
+     <th class="title" colspan="2">
        <button style="float: right" type="button" class="print" onclick="printLivret()">Imprimer le livret</button>
        Livret Thérapeutique
      </th>
    </tr>
    <tr>
+     <th class="category">Ajout d'un produit dans le livret</th>
+     <th class="category">Recherche d'un produit dans le livret</th>
+   </tr>
+   <tr>
      <td>
        <form action="?" method="get" name="searchProd" onsubmit="return false;">
+         <!-- Champ permettant d'effectuer une recherche par autocomplete-->
          <input type="text" name="produit" value=""/>
+         <!-- Champ permettant de stocker le libelle dans le cas d'une recherche par la popup -->
+         <input type="text" name="_produit" value="" style="display: none;"/>  
          <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
          <button type="button" class="search" onclick="MedSelector.init('produit');">Produits</button>
          <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
          <button type="button" class="search" onclick="MedSelector.init('composant');">Composants</button>
          <button type="button" class="search" onclick="MedSelector.init('DC_search');">DCI</button>
-         <input type="hidden" name="code_cip" onchange="Livret.addProduit(this.value);" />
+         <input type="hidden" name="code_cip" onchange="Livret.addProduit(this.value, this.form._produit.value);" />
          <script type="text/javascript">
           MedSelector.init = function(onglet){
             this.sForm = "searchProd";
-            this.sView = "produit";
+            this.sView = "_produit";
             this.sCode = "code_cip";
             this.sSearch = document.searchProd.produit.value;
             this.sOnglet = onglet;
@@ -130,6 +170,13 @@ function printLivret(){
           }*/
         </script>
       </form>
+    </td>
+    <td>
+      Libelle
+       <form action="?" method="get" name="searchProdLivret" onsubmit="return false;">
+         <input type="text" name="produit" value=""/>
+         <div style="display:none;" class="autocomplete" id="produit_livret_auto_complete"></div>
+       </form>
     </td>
   </tr>
 </table>
