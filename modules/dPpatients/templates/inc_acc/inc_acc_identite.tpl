@@ -31,7 +31,7 @@ Main.add(function() {
     <th style="width:30%">{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_field object=$patient field="nom" onchange="copyIdentiteAssureValues(this)"}}</td>
     {{if $patient->_id}}
-    <td rowspan="11" style="width: 0.1%; text-align: center;" id="{{$patient->_guid}}-identity">
+    <td rowspan="13" style="width: 0.1%; text-align: center;" id="{{$patient->_guid}}-identity">
       {{include file=inc_vw_photo_identite.tpl mode="edit"}}
     </td>
     {{/if}}
