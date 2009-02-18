@@ -18,36 +18,70 @@ $userSel->load($chirSel);
 $board = mbGetValueFromGet("board", 0);
 $boardItem = mbGetValueFromGet("boardItem", 0);
 
-$listUrgences = array();
 // Urgences du jour
 $listUrgences = new COperation;
-$where = array();
-$where["date"] = "= '$date'";
-$where["chir_id"] = "= '$userSel->user_id'";
-$order = "date";
-$listUrgences = $listUrgences->loadList($where, $order);
+$listUrgences->date = $date;
+$listUrgences->chir_id = $userSel->user_id;
+$listUrgences = $listUrgences->loadMatchingList("date");
 foreach($listUrgences as &$curr_urg) {
   $curr_urg->loadRefsFwd();
+	$curr_urg->loadRefsDocs();
   $curr_urg->_ref_sejour->loadRefsFwd();
+	$curr_urg->_ref_sejour->loadRefsDocs();
 }
+
 // Liste des opérations du jour sélectionné
 $listDay = new CPlageOp;
-$where = array();
-$where["date"] = "= '$date'";
-$where["chir_id"] = "= '$userSel->user_id'";
-$order = "debut";
-$listDay = $listDay->loadList($where, $order);
+$listDay->date = $date;
+$listDay->chir_id = $userSel->user_id;
+$listDay = $listDay->loadMatchingList("debut");
 foreach ($listDay as &$curr_plage) {
   $curr_plage->loadRefs();
   foreach ($curr_plage->_ref_operations as &$curr_op) {
     $curr_op->loadRefsFwd();
+		$curr_op->loadRefsDocs();
     $curr_op->_ref_sejour->loadRefsFwd();
+		$curr_op->_ref_sejour->loadRefsDocs();
   }
+}
+
+// Praticien concerné
+if ($AppUI->_ref_user->isPraticien()) {
+  $praticien = $AppUI->_ref_user;
+}
+else {
+  $praticien = new CMediusers();
+  $praticien->load(mbGetValueFromGetOrSession("chirSel", mbGetValueFromGetOrSession("praticien_id")));
+}
+
+$praticien->loadRefFunction();
+$praticien->_ref_function->loadRefGroup();
+$praticien->canDo();
+
+// Modèles du praticien
+$modelesByOwner = array(
+  'COperation' => array(),
+  'CSejour' => array()
+);
+$packs = array();
+if ($praticien->_can->edit) {
+	foreach($modelesByOwner as $object_class => &$modeles) {
+	  $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
+	  
+	  // Chargement des packs
+	  $pack = new CPack();
+	  $pack->object_class = $object_class;
+	  $pack->chir_id = $praticien->_id;
+	  $packs = $pack->loadMatchingList("nom");
+	}
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("modelesByOwner", $modelesByOwner);
+$smarty->assign("packs"         , $packs);
+$smarty->assign("praticien"     , $praticien);
 $smarty->assign("boardItem"   , $boardItem);
 $smarty->assign("date"        , $date);
 $smarty->assign("listUrgences", $listUrgences);

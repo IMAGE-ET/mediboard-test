@@ -1,4 +1,4 @@
-{{mb_include_script module="dPcompteRendu" script="document"}}
+{{*mb_include_script module="dPcompteRendu" script="document"*}}
 
 <input id="currDateJSAccess" name="currDateJSAccess" type="hidden" value="{{$date}}" />
 {{if !$board}}
