@@ -1175,10 +1175,12 @@ class CSetupdPcabinet extends CSetup {
         `acte_ngap`.`object_class` = 'CConsultation' AND 
         `acte_ngap`.`executant_id` = 0";
     $this->addQuery($sql);
-        
+
+    /* Buggy test
     $this->makeRevision("1.06");
     $sql = "SELECT 'Dummy Query'";
     $this->addQuery($sql);
+    */
     
     $this->makeRevision("1.07");
     $this->addPrefQuery("resumeCompta", "1");
