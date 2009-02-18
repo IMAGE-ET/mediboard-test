@@ -164,18 +164,18 @@
  <!-- Signature du praticien -->
  <td style="text-align: center">
    {{if $line->signee}}
-   <img src="images/icons/tick.png" alt="Signée par le praticien" title="Signée par le praticien" />
+   <img src="images/icons/tick.png" alt="" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
    {{else}}
-   <img src="images/icons/cross.png" alt="Non signée par le praticien" title="Non signée par le praticien" />
+   <img src="images/icons/cross.png" alt="" title="Non signée par le praticien" />
    {{/if}}
  </td>
  <!-- Signature du pharmacien -->
  <td style="text-align: center">
 	  {{if $line_class == "CPrescriptionLineMedicament"}}
 	    {{if $line->valide_pharma}}
-	    <img src="images/icons/tick.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+	    <img src="images/icons/tick.png" alt="" title="Signée par le pharmacien" />
 	    {{else}}
-	    <img src="images/icons/cross.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+	    <img src="images/icons/cross.png" alt="" title="Non signée par le pharmacien" />
 	    {{/if}}
 	  {{else}}
 	    - 

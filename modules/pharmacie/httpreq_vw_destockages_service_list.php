@@ -46,7 +46,9 @@ foreach($administrations as $_administration){
 // Calcul du nombre de boites correspondant aux administrations
 foreach($destockages as $code_cip => $_destockage){
   $medicament = $medicaments[$code_cip];
-  $presentation = $destockages[$code_cip]["quantite"]/$medicament->nb_unite_presentation/$medicament->nb_presentation;
+  //$presentation = $destockages[$code_cip]["quantite"]/$medicament->nb_unite_presentation/$medicament->nb_presentation;
+  $presentation = $destockages[$code_cip]["quantite"];
+  
   if (!isset($destockages[$code_cip]["nb_produit"])){
     $destockages[$code_cip]["nb_produit"] = 0;
   }

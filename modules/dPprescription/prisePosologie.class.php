@@ -117,7 +117,7 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_unite_temps = $this->unite_fois;
     }
     
-    if($this->unite_tous_les && !$this->unite_fois){
+    if($this->unite_tous_les && (!$this->unite_fois || ($this->unite_fois == "jour" && $this->nb_tous_les))){
     	$this->_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
     	$this->_short_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
     	if($this->decalage_prise){
@@ -126,10 +126,13 @@ class CPrisePosologie extends CMbMetaObject {
     	}
     	$this->_type = "tous_les";
     	$this->_unite_temps = $this->unite_tous_les;
-    	if(CAppUI::conf("dPprescription CPrisePosologie heures tous_les")){
-    	  $this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
-    	}
-    }   
+    
+	    if($this->unite_tous_les && (!$this->unite_fois || $this->unite_fois == "jour")){
+	    	if(CAppUI::conf("dPprescription CPrisePosologie heures tous_les")){
+	    	  $this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
+	    	}
+	    }   
+    }
     
     if($this->heure_prise){
       $this->_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
@@ -211,10 +214,11 @@ class CPrisePosologie extends CMbMetaObject {
     	$type_increment = "YEARS";  
     }
     
-    while((mbDate($date_temp."+ $increment $type_increment")) <= $this->_ref_object->_fin){
+    while((mbDate($date_temp."+ $increment $type_increment")) <= $this->_ref_object->_fin_reelle){
       $date_temp = mbDate($date_temp."+ $increment $type_increment");
   	  $tabDates[] = $date_temp;
     }
+    
     if(in_array($date, $tabDates)){
     	return true;
     } 

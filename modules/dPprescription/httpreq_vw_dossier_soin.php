@@ -119,12 +119,14 @@ if($object_id && $object_class){
        if(!$line->_fin_reelle){
 		    $line->_fin_reelle = $prescription->_ref_object->_sortie;
 		  }
-		  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     	
+		  //if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     	
 				$line->calculAdministrations($curr_date);
         $line->_ref_produit->loadClasseATC();
         $line->_ref_produit->loadRefsFichesATC();
-				$line->calculPrises($prescription, $curr_date);
-		  }
+        if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
+				  $line->calculPrises($prescription, $curr_date);
+        }
+		  //}
 		  // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();
     } 
@@ -134,10 +136,12 @@ if($object_id && $object_class){
     	$name_cat = $element->category_prescription_id;
       $element->loadRefCategory();
       $name_chap = $element->_ref_category_prescription->chapitre;
-      if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
+      //if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
      	  $line->calculAdministrations($curr_date);
-		    $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
-      }
+     	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
+		      $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
+     	  }
+      //}
       // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();
     }
@@ -147,8 +151,9 @@ if($object_id && $object_class){
     $line->loadRefsLines();
     $line->loadRefPraticien();
 	  $line->_ref_praticien->loadRefFunction();
-	    
-    // Chargement des transmissions de la perfusion
+	  $line->loadRefLogSignaturePrat();
+    
+	  // Chargement des transmissions de la perfusion
   	$transmission = new CTransmissionMedicale();
   	$transmission->object_class = "CPerfusion";
   	$transmission->object_id = $line->_id;
@@ -181,9 +186,11 @@ else {
 	    $_perfusion->loadRefsLines();
 	    $_perfusion->loadRefPraticien();
 	    $_perfusion->_ref_praticien->loadRefFunction();
+	    $_perfusion->loadRefLogSignaturePrat();
 	  }
 	
 		foreach($prescription->_ref_prescription_lines as &$_line_med){
+		  $_line_med->loadRefLogSignee();
 		  if(!$_line_med->countBackRefs("administration")){
 			  if(!$_line_med->substitute_for){
 			    $_line_med->loadRefsSubstitutionLines();   
@@ -258,6 +265,7 @@ else {
 		    }
 		    foreach($elements_cat as $_element){
 		      foreach($_element as $element){
+		        $element->loadRefLogSignee();
 		        if(!isset($prescription->_nb_produit_by_chap[$name_chap])){
 					    $prescription->_nb_produit_by_chap[$name_chap] = 0;  
 					  }
@@ -283,7 +291,6 @@ else {
 		$prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
 	}
 }
-
 
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 

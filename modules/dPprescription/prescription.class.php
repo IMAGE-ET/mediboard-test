@@ -1215,29 +1215,32 @@ class CPrescription extends CMbObject {
 		        continue;
 		      }
 		      
-		      
 		    	// On met a jour la date de fin de la ligne de medicament si celle ci n'est pas indiquée
 				  if(!$_line_med->_fin_reelle){
 				    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;
 				  }
 		  	  // Si la ligne est prescrite pour la date donnée
-				  if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     	
+				  //if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     	
 				    // Chargement des administrations
 						$_line_med->calculAdministrations($date, $mode_feuille_soin, $mode_dispensation);
 						// Si aucune prise
             $_line_med->_ref_produit->loadClasseATC();
             $_line_med->_ref_produit->loadRefsFichesATC();
             $code_ATC = $_line_med->_ref_produit->_ref_ATC_2_code;
-						if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
-						  if($_line_med->_is_injectable){
-						    $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;  
-						  } else { 
- 	              $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
-						  }
- 	            continue;
-						}
-						// Chargement des prises
-						$_line_med->calculPrises($this, $date, $mode_feuille_soin);
+						
+           if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     
+
+             if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
+							  if($_line_med->_is_injectable){
+							    $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;  
+							  } else { 
+	 	              $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+							  }
+	 	            continue;
+							}
+						  // Chargement des prises
+						  $_line_med->calculPrises($this, $date, $mode_feuille_soin);
+            }
 						// Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 						if(!$mode_feuille_soin){
 						  if(isset($_line_med->_administrations['aucune_prise']) && count($_line_med->_ref_prises) >= 1){
@@ -1248,7 +1251,7 @@ class CPrescription extends CMbObject {
 						    }
 						  }
 						}
-				  }
+				  //}
 				  
 				  // Suppression des prises prevues replanifiées
 				  if($_line_med->_quantity_by_date){
@@ -1286,8 +1289,6 @@ class CPrescription extends CMbObject {
 				      }
 				    }
 				  }
-				  
-				  
 		    }
 		  }
     }
@@ -1302,23 +1303,26 @@ class CPrescription extends CMbObject {
 				 	    foreach($_elements as &$_line_element){
 				 	      
 				 	    	// On met a jour la date de fin de la ligne de medicament si celle ci n'est pas indiquée
-				        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+				        //if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
 				      	  // Chargement des administrations et des transmissions
 				      	  $_line_element->calculAdministrations($date, $mode_feuille_soin);
 				      	  // Si aucune prise  
-					        if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
-					          $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-					          continue;
-							    }
-							    // Chargement des prises
-							    $_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat);
+				      	  if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+						        if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
+						          $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+						          continue;
+								    }
+							      // Chargement des prises
+							      
+							        $_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat);
+							      }
 							    // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 							    if(!$mode_feuille_soin){
 							      if(isset($_line_element->_administrations['aucune_prise']) && count($_line_element->_ref_prises) >= 1){
 								      $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 							      }
 							    }
-					      }
+					      //}
 	
 	 			 	      // Suppression des prises prevues replanifiées
 				 	    	if($_line_element->_quantity_by_date){
@@ -1356,8 +1360,6 @@ class CPrescription extends CMbObject {
 							    }
 							  }
 					    }
-					    
-					    
 					  }
 				  }
 		    }

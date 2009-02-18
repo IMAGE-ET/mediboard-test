@@ -671,8 +671,6 @@ class CPrescriptionLine extends CMbObject {
 		    $_prise->_quantite_dispensation = $_prise->quantite * $this->_ratio_administration_dispensation;       
 		  }
 
-		  
-		  
       // Intialisation des tableaux
       if(!isset($this->_quantity_by_date[$key_tab][$date]['quantites'])){
         $list_hours = range(0,24);
@@ -683,11 +681,10 @@ class CPrescriptionLine extends CMbObject {
       }
       
       $jours = array("lundi"=>"1", "mardi"=>"2", "mercredi"=>"3", "jeudi"=>"4", "vendredi"=>"5", "samedi"=>"6", "dimanche"=>"0");
-      
 			// Moment unitaire
 			if($_prise->moment_unitaire_id && !array_key_exists($_prise->unite_tous_les, $jours)){
 		    $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-		    if(($this->_fin_reelle > $dateTimePrise) && $poids_ok){
+		    if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
 				  if($_prise->_ref_moment->heure){
 				    $_heure = substr($_prise->_ref_moment->heure, 0, 2);
 				    $line_plan_soin[$_heure]["total"] += $_prise->quantite;
@@ -701,11 +698,11 @@ class CPrescriptionLine extends CMbObject {
 		 	  if($_prise->_heures){
 			 	  $heure = reset($_prise->_heures);
 			 	  $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
-			 	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
-			 	      $_heure = substr($heure, 0, 2);
-			        $line_plan_soin[$_heure]["total"] += $_prise->quantite;
-			        $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
-			        $line_plan_soin[$_heure][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_heure);
+			 	  if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
+			 	    $_heure = substr($heure, 0, 2);
+			      $line_plan_soin[$_heure]["total"] += $_prise->quantite;
+			      $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
+			      $line_plan_soin[$_heure][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_heure);
 				  }
 		 	  }
 		 	}
@@ -715,7 +712,7 @@ class CPrescriptionLine extends CMbObject {
         $date_time_temp = "$this->debut $time_debut";
         while($date_time_temp < "$date 23:59:59"){
           $_hour_tab = substr(mbTime($date_time_temp), 0, 2);
-          if($date == mbDate($date_time_temp) && $this->_fin_reelle > $date_time_temp && $poids_ok){
+          if($date == mbDate($date_time_temp) && (($this->_debut_reel <= $date_time_temp) && ($this->_fin_reelle >= $date_time_temp)) && $poids_ok){
 		          $line_plan_soin[$_hour_tab]["total"] += $_prise->quantite;
 		          $line_plan_soin[$_hour_tab]["total_disp"] += $_prise->_quantite_dispensation;
 		          $line_plan_soin[$_hour_tab][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_hour_tab);
@@ -726,10 +723,10 @@ class CPrescriptionLine extends CMbObject {
 		  // Fois par avec comme unite jour
 		  if(($_prise->nb_fois && $_prise->unite_fois === 'jour' && !$_prise->unite_tous_les) || ($_prise->quantite && !$_prise->moment_unitaire_id && 
 		      !$_prise->nb_fois && !$_prise->unite_fois && !$_prise->unite_tous_les && !$_prise->nb_tous_les && !$_prise->heure_prise)){
-		    if($_prise->_heures){
+		       if($_prise->_heures){
 		      foreach($_prise->_heures as $curr_heure){
 		        $dateTimePrise = mbAddDateTime($curr_heure, $date);
-		        if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+		        if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
 		            $_heure = substr($curr_heure,0,2);
 		            $line_plan_soin[$_heure]["total"] += $_prise->quantite;
 		            $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
@@ -738,6 +735,7 @@ class CPrescriptionLine extends CMbObject {
 		      }
 		    }
 		  }
+
 		  // Fois par avec comme unite semaine
       if($_prise->nb_fois && $_prise->unite_fois === 'semaine' && CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}")){
         $list_jours = explode('|',CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}"));
@@ -746,18 +744,24 @@ class CPrescriptionLine extends CMbObject {
           // Pour chaque jour, on regarde s'il correspond à la date courante
           if($jours[$_jour] == mbTransformTime(null, $date, "%w")){
             $heure = CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1");
-            $line_plan_soin[$heure]["total"] += $_prise->quantite;
-            $line_plan_soin[$heure]["total_disp"] += $_prise->_quantite_dispensation;
-            $line_plan_soin[$heure][] =  array("quantite" => $_prise->quantite, "heure_reelle" => $heure);
+            $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
+            if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
+	            $line_plan_soin[$heure]["total"] += $_prise->quantite;
+	            $line_plan_soin[$heure]["total_disp"] += $_prise->_quantite_dispensation;
+	            $line_plan_soin[$heure][] =  array("quantite" => $_prise->quantite, "heure_reelle" => $heure);
+            }
           }
         }
       }
 		  // Heure de prises specifié (I+x heures)
       if($_prise->heure_prise){
           $_heure = substr($_prise->heure_prise,0,2);
-          $line_plan_soin[$_heure]["total"] += $_prise->quantite;
-          $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
-          $line_plan_soin[$_heure][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_heure);
+          $dateTimePrise = mbAddDateTime(mbTime($_heure), $date);
+          if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
+	          $line_plan_soin[$_heure]["total"] += $_prise->quantite;
+	          $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
+	          $line_plan_soin[$_heure][] = array("quantite" => $_prise->quantite, "heure_reelle" => $_heure);
+          }
       }
       // Jour de prise
       if(array_key_exists($_prise->unite_tous_les, $jours)){
@@ -768,9 +772,12 @@ class CPrescriptionLine extends CMbObject {
             // On stocke l'heure de prise correspondant à 1 fois par jour
             $heure = ($conf = CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1")) ? $conf : "10";
           }
-          $line_plan_soin[$heure]["total"] += $_prise->quantite;
-          $line_plan_soin[$heure]["total_disp"] += $_prise->_quantite_dispensation;
-          $line_plan_soin[$heure][] = array("quantite" => $_prise->quantite, "heure_reelle" => substr($heure, 0, 2));
+          $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
+          if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
+            $line_plan_soin[$heure]["total"] += $_prise->quantite;
+            $line_plan_soin[$heure]["total_disp"] += $_prise->_quantite_dispensation;
+            $line_plan_soin[$heure][] = array("quantite" => $_prise->quantite, "heure_reelle" => substr($heure, 0, 2));
+          }
         }
       }
     }

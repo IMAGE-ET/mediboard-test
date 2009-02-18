@@ -74,15 +74,15 @@
  <th></th>
  <td style="text-align: center">
    {{if $_perfusion->signature_prat}}
-   <img src="images/icons/tick.png" alt="Signée par le praticien" title="Signée par le praticien" />
+   <img src="images/icons/tick.png" alt="" title="Signée le {{$_perfusion->_ref_log_signature_prat->date|date_format:$dPconfig.datetime}} par {{$_perfusion->_ref_praticien->_view}}" />
    {{else}}
-   <img src="images/icons/cross.png" alt="Non signée par le praticien" title="Non signée par le praticien" />
+   <img src="images/icons/cross.png" alt="" title="Non signée par le praticien" />
    {{/if}}
  </td>
  <td style="text-align: center">
    {{if $_perfusion->signature_pharma}}
-   <img src="images/icons/tick.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+   <img src="images/icons/tick.png" alt="" title="Signée par le pharmacien" />
    {{else}}
-   <img src="images/icons/cross.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+   <img src="images/icons/cross.png" alt="" title="Non signée par le pharmacien" />
    {{/if}}
  </td>
