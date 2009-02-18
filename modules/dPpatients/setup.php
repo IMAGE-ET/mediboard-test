@@ -978,7 +978,13 @@ class CSetupdPpatients extends CSetup {
      
     $this->addQuery($sql);
     
-    $this->mod_version = "0.82";
+    $this->makeRevision("0.82");
+    $sql = "ALTER TABLE `antecedent`
+            CHANGE `appareil` `appareil`
+            ENUM('cardiovasculaire','digestif','endocrinien','neuro_psychiatrique','pulmonaire','uro_nephrologique','orl','gyneco_obstetrique','orthopedique');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.83";
   }
 }
 

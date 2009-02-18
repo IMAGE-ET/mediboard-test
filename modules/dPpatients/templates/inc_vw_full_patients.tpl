@@ -15,7 +15,7 @@ var ViewFullPatient = {
   
   main: function() {
     PairEffect.initGroup("patientEffect", {
-      idStartVisible: true,
+      bStartAllVisible: true,
       bStoreInCookie: true
     } );
   }
