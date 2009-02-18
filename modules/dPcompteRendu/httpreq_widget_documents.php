@@ -30,7 +30,6 @@ $object->loadRefsDocs();
 // Praticien concerné
 if ($AppUI->_ref_user->isPraticien()) {
   $praticien = $AppUI->_ref_user;
-  $praticiens = null;
 }
 else {
 	$praticien = new CMediusers();

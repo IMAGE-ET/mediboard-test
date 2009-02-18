@@ -35,6 +35,7 @@ class CCompteRendu extends CMbMetaObject {
   var $_ref_chir         = null;
   var $_ref_category     = null;
   var $_ref_function     = null;
+  var $_ref_group        = null;
   var $_ref_header       = null;
   var $_ref_footer       = null;
 
@@ -158,6 +159,11 @@ class CCompteRendu extends CMbMetaObject {
     $this->_ref_function = new CFunctions;
     if($this->function_id)
       $this->_ref_function->load($this->function_id);
+      
+    // Etablissement
+    $this->_ref_group = new CGroups();
+    if($this->group_id)
+      $this->_ref_group->load($this->group_id);
   }
   
   static function loadModeleByCat($catName, $where1 = null, $order = "nom", $horsCat = null){
@@ -286,8 +292,10 @@ class CCompteRendu extends CMbMetaObject {
       $can = $this->_ref_object->getPerm($permType);
     }elseif($this->_ref_chir->_id) {
       $can = $this->_ref_chir->getPerm($permType);
-    } else {
+    } elseif($this->_ref_function->_id) {
       $can = $this->_ref_function->getPerm($permType);
+    } else {
+    	$can = $this->_ref_group->getPerm($permType);
     }
     return $can;
   }

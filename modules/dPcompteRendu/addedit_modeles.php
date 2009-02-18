@@ -61,7 +61,8 @@ $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 $droit = (!($compte_rendu->_id)||
            ($secretaire)||
            ($compte_rendu->chir_id == $mediuser->user_id)||
-           ($compte_rendu->function_id==$mediuser->function_id));
+           ($compte_rendu->function_id==$mediuser->function_id) ||
+           $compte_rendu->canEdit());
 
 $templateManager->printMode = !$droit;
 
