@@ -44,6 +44,7 @@ function loadLivretArbreATC(codeATC){
   url.requestUpdate("ATC", { waitingText: null } );
 }
 
+var nb_produits = 0;
 
 var Livret = {
   // Ajout d'un produit dans le livret
@@ -53,6 +54,10 @@ var Livret = {
     oForm.code_cip.value = code_cip;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){
+        nb_produits++;
+        if(nb_produits == 5){
+          $('list_produits').update("");
+        }
         $('_list_produits').show();
         $('list_produits').insert(code_cip+": "+view_produit+"<br />");
       }  
