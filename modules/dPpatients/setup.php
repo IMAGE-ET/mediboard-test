@@ -984,7 +984,15 @@ class CSetupdPpatients extends CSetup {
             ENUM('cardiovasculaire','digestif','endocrinien','neuro_psychiatrique','pulmonaire','uro_nephrologique','orl','gyneco_obstetrique','orthopedique');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.83";
+    $this->makeRevision("0.83");
+    $sql = "ALTER TABLE `patients`
+            CHANGE `pays_insee` `pays_insee` INT(3) UNSIGNED ZEROFILL,
+            CHANGE `pays_naissance_insee` `pays_naissance_insee` INT(3) UNSIGNED ZEROFILL,
+            CHANGE `assure_pays_insee` `assure_pays_insee` INT(3) UNSIGNED ZEROFILL,
+            CHANGE `assure_pays_naissance_insee` `assure_pays_naissance_insee` INT(3) UNSIGNED ZEROFILL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.84";
   }
 }
 
