@@ -252,7 +252,6 @@
   </tr>
   {{/if}}
 </table>
-  
 <table class="tbl">
   {{assign var="vue" value="complete"}}
   {{assign var="subject" value=$sejour}}
@@ -263,3 +262,12 @@
   {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
   {{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
 {{/if}}
+
+<table class="tbl">
+  <tr>
+    <th class="title" colspan="2">Suivi médical</th>
+  </tr>
+</table>
+
+{{include file="../../dPhospi/templates/inc_list_transmissions.tpl"}}
+

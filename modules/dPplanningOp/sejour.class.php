@@ -110,10 +110,11 @@ class CSejour extends CCodable {
   var $_ref_hprim_files          = null;
   
   // Distant fields
-  var $_dates_operations = null;
-  var $_num_dossier      = null;
+  var $_dates_operations          = null;
+  var $_num_dossier               = null;
   var $_list_constantes_medicales = null;
-  var $_cancel_alerts    = null;
+  var $_cancel_alerts             = null;
+  var $_ref_suivi_medical         = null;
   
   // Filter Fields
   var $_date_min	 			= null;
@@ -664,6 +665,30 @@ class CSejour extends CCodable {
     $this->_ref_transmissions = $this->loadBackRefs("transmissions");	
   }
   
+  function loadSuiviMedical() {
+    $this->loadBackRefs("observations");
+    $this->loadBackRefs("transmissions");
+
+    $this->_ref_suivi_medical = array();
+
+    if(array_key_exists("observations", $this->_back)){
+	    foreach($this->_back["observations"] as $curr_obs) {
+	      $curr_obs->loadRefsFwd();
+	      $curr_obs->_ref_user->loadRefFunction();
+	      $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
+	    }
+    }
+    if(array_key_exists("transmissions", $this->_back)){
+    	foreach($this->_back["transmissions"] as $curr_trans) {
+	      $curr_trans->loadRefsFwd();
+	      if($curr_trans->object_class == "CAdministration"){
+	        $curr_trans->_ref_object->loadRefsFwd();
+	      }
+	      $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
+	    }
+    }
+    krsort($this->_ref_suivi_medical);
+  }
   
   function loadRefEtablissement($cache = 0) {
     // Chargement de l'établissement correspondant
@@ -778,6 +803,8 @@ class CSejour extends CCodable {
     }
     
     $this->loadNumDossier();
+    
+    $this->loadSuiviMedical();
     
   }
 
