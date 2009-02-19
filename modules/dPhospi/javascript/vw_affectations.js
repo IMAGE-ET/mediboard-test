@@ -121,6 +121,7 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
         ifFormat    : "%Y-%m-%d %H:%M:%S",
         button      : form.name + "__trigger_entree",
         showsTime   : true,
+        firstDay    : 1,
         dateStatusFunc: Calendar.dateStatus.bind(Object.clone(dates)),
         onUpdate    : function() { 
           if (calendar.dateClicked) {
@@ -147,6 +148,7 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
         ifFormat    : "%Y-%m-%d %H:%M:%S",
         button      : form.name + "__trigger_sortie",
         showsTime   : true,
+        firstDay    : 1,
         dateStatusFunc: Calendar.dateStatus.bind(Object.clone(dates)),
         onUpdate    : function() { 
           if (calendar.dateClicked) {
@@ -172,6 +174,7 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
         ifFormat    : "%Y-%m-%d %H:%M:%S",
         button      : form.name + "__trigger_split",
         showsTime   : true,
+        firstDay    : 1,
         dateStatusFunc: Calendar.dateStatus.bind(dates),
         onUpdate    : function() { 
           if (calendar.dateClicked) {

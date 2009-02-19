@@ -751,6 +751,7 @@ Object.extend(Calendar, {
         daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
         button      : sInputId + "_trigger",
         showsTime   : bTime,
+				firstDay    : 1,
         dateStatusFunc: Calendar.dateStatus.bind(dates),
         onUpdate    : function () {$(sInputId).fire("ui:change")}
       }
@@ -765,6 +766,7 @@ Object.extend(Calendar, {
         button      : sContainerId,
         date        : Date.fromDATE(sInitDate),
         showsTime   : bTime,
+        firstDay    : 1,
         onUpdate    : function(calendar) { 
           if (calendar.dateClicked) {
             sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
@@ -784,6 +786,7 @@ Object.extend(Calendar, {
     Calendar.setup( {
         date         : dInit,
         showsTime    : bTime,
+        firstDay     : 1,
         flat         : sContainerId,
         flatCallback : function(calendar) { 
           if (calendar.dateClicked) {
