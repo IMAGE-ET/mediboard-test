@@ -50,9 +50,12 @@ foreach($listPrat as $key => $prat){
 $sejour = new CSejour;
 $whereSejour = array();
 $whereSejour[$champ_entree] = "<= '$dateEntree'";
-$whereSejour[$champ_sortie] = ">= '$dateSortie'";
+if($reel){
+  $whereSejour[] = "(sortie_reelle >= '$dateSortie') OR (sortie_reelle IS NULL && sortie_prevue >= '$dateSortie')";
+} else {
+  $whereSejour[$champ_sortie] = ">= '$dateSortie'";
+}
 $whereSejour["annule"]        = "= '0'";
-
 $listSejours = $sejour->loadList($whereSejour);
    
 // Stockage des informations liées au praticiens
