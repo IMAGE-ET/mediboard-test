@@ -17,6 +17,7 @@ class CMbObjectSpec {
   public $table               = null;
   public $key                 = null;
   public $measureable         = false;
+  public $uniques             = array();
   
   // Derivate fields
   public $ds = null;

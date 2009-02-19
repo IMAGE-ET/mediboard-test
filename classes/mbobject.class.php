@@ -104,10 +104,15 @@ class CMbObject {
       self::$spec[$class] = $this->getSpec();
       self::$spec[$class]->init();
       
-      $reflection = new ReflectionClass($class);
-      self::$module_name[$class] = basename(dirname($reflection->getFileName()));
-      //global $classPaths;
-      //$module = basename(dirname($classPaths[$class]));
+      global $classPaths;
+      if (isset($classPaths[$class])) {
+        $module = basename(dirname($classPaths[$class]));
+      }
+      else {
+	      $reflection = new ReflectionClass($class);
+	      $module = basename(dirname($reflection->getFileName()));
+      }
+      self::$module_name[$class] = $module;
     }
     
     $this->_class_name = $class;
@@ -1378,7 +1383,7 @@ class CMbObject {
     
     if ($where && count($where)) {
 	    foreach ($where as $col => $value) {
-	    	$sql .= " AND $col $value";
+	    	$sql .= " AND `$col` $value";
 	    }
     }
     
@@ -1404,7 +1409,7 @@ class CMbObject {
               $refObj = new $listSpec[1];
               $refObj = $refObj->seek($keywords);
               if(count($refObj)) {
-                $listIds = implode(",", array_keys($refObj));
+                $listIds = implode(',', array_keys($refObj));
                 $sql .= "\nOR `$keySeek` IN ($listIds)";
               }
               break;
@@ -1417,9 +1422,9 @@ class CMbObject {
     }
     $sql .= "\nORDER BY";
     foreach($this->_seek as $keySeek => $spec) {
-      $sql .= "\n$keySeek,";
+      $sql .= "\n`$keySeek`,";
     }
-    $sql .= "\n {$this->_spec->key}";
+    $sql .= "\n `{$this->_spec->key}`";
     $sql .=" LIMIT 0,".($limit?$limit:100);
     
     return $this->loadQueryList($sql);

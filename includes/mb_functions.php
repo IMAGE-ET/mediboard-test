@@ -1008,6 +1008,15 @@ function make_url($components) {
  * @return bool
  */
 function is_intranet_ip($ip) {
+  /*// Optimized version, must be tested
+  
+  $ip = explode('.', $ip);
+  return 
+    ($ip[0] == 127) ||
+    ($ip[0] == 10)  ||
+    ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] < 32) ||
+    ($ip[0] == 192 && $ip[1] == 168);*/
+    
   $browserIP = explode(".", $ip);
   $ip0 = intval($browserIP[0]);
   $ip1 = intval($browserIP[1]);
@@ -1018,6 +1027,19 @@ function is_intranet_ip($ip) {
   $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
   $is_local[4] = ($ip0 == 192 && $ip1 == 168);
   return $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
+}
+/**
+ * Checks recursively if a value exists in an array
+ * @return Returns TRUE if needle  is found in the array, FALSE otherwise. 
+ * @param mixed $needle The searched value.
+ * @param mixed $haystack The array.
+ */
+function in_array_recursive($needle, $haystack) {
+  if (in_array($needle, $haystack)) return true;
+  foreach ($haystack as $v) {
+    if (is_array($v) && in_array_recursive($needle, $v)) return true;
+  }
+  return false;
 }
 
 ?>

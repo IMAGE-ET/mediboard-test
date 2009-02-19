@@ -75,11 +75,7 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
-  	if (!$this->autocomplete) {
-	    $length = 8;
-	    CMbArray::defaultValue($params, "size", $length+2);
-	    CMbArray::defaultValue($params, "maxlength", $length);
-  	}
+    CMbArray::defaultValue($params, "size", 25);
     return $this->getFormElementText($object, $params, $value, $className);
   }
   

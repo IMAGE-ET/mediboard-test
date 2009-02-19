@@ -105,7 +105,7 @@ class CStrSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     $maxLength = mbGetValue($this->length, $this->maxLength, 255);
-    CMbArray::defaultValue($params, "size", min($maxLength, 20));
+    CMbArray::defaultValue($params, "size", min($maxLength, 25));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     return $this->getFormElementText($object, $params, $value, $className);
   }
