@@ -100,7 +100,7 @@
   {{if !$curr_op->annulee}}
 	<tr>
     <td colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$curr_op}}
+      {{include file=inc_documents_operation.tpl operation=$curr_op static_load=true}}
     </td>
   </tr>
   {{/if}}
@@ -162,7 +162,7 @@
   {{if !$board}}
 	<tr>
     <td colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$curr_op}}
+      {{include file=inc_documents_operation.tpl operation=$curr_op static_load=true}}
     </td>
   </tr>
   {{/if}}
