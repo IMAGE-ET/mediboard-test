@@ -1,5 +1,12 @@
 <script type="text/javascript">
 
+function printAmbu(date){
+  url = new Url;
+  url.setModuleAction("dPadmissions", "print_ambu");
+  url.addParam("date", "{{$date}}");
+  url.popup(800,600,"Ambu");
+}
+
 function printPlanning() {
   url = new Url;
   url.setModuleAction("dPadmissions", "print_sorties");

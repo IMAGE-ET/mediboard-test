@@ -1,6 +1,11 @@
 <table class="tbl">
   <tr>
-    <th class="title" colspan="5">Sortie {{tr}}CSejour.type.{{$mode}}{{/tr}}</th>
+    <th class="title" colspan="5">
+      {{if $mode == "ambu"}}
+      <span style="float: right"><button type="button" class="search" onclick="printAmbu();">Impression Ambu</button></span>
+      {{/if}}
+      Sortie {{tr}}CSejour.type.{{$mode}}{{/tr}}
+    </th>
   </tr>
   <tr>
     <th>Effectuer la sortie</th>
