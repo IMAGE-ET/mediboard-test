@@ -109,7 +109,11 @@ function smarty_modifier_static($object, $name) {
 }
 
 function JSAttribute($string){
-  return strtr($string, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'&quot;',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+	return str_replace(
+	  array('\\',   "'",   '"',      "\r",  "\n",  '</'), 
+		array('\\\\', "\\'", '&quot;', '\\r', '\\n', '<\/'), 
+		$string
+	);
 }
 
 
