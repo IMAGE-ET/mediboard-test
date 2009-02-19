@@ -42,24 +42,24 @@
       <table class="tbl" style="text-align: center">
         <tr>
           <th colspan="4">
-            Synthèse
+            Synthèse hospi
           </th>
         </tr>
         <tr>
           <th style:"width=50px">Présents la veille</th>
-          <td>{{$listPresentVeille|@count}}</td>
+          <td>{{$countPresentVeille}}</td>
         </tr>
         <tr>
           <th>Sorties du jour</th>
-          <td>{{$listSortieJour|@count}}</td>
+          <td>{{$countSortieJour}}</td>
         </tr>
         <tr>
           <th>Entrées du jour</th>
-          <td>{{$listEntreeJour|@count}}</td>
+          <td>{{$countEntreeJour}}</td>
         </tr>
         <tr>
           <th>Présents du jour</th>
-          <td>{{$list_affectations|@count}}</td>
+          <td>{{$countPresentJour}}</td>
         </tr>
       </table>
     </td>
