@@ -4,7 +4,7 @@
 	* @param $modelesByOwner array('COperation' => array(), 'CSejour' => array())
   *}}
 
-{{if @$static_load}}
+{{if @$preloaded}}
 	{{assign var=object value=$operation}}
 	<div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->chir_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
 	  {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.COperation}}
