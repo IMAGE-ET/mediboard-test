@@ -30,8 +30,8 @@ class CMbObject {
   var $_id            = null; // shortcut for the object id
   var $_guid          = null; // shortcut for the object class+id
   
-  var $_view          = null; // universal view of the object
-  var $_shortview     = null; // universal shortview for the object
+  var $_view          = ''; // universal view of the object
+  var $_shortview     = ''; // universal shortview for the object
   var $_canRead       = null; // read permission for the object
   var $_canEdit       = null; // write permission for the object
   var $_external      = null; // true if object is has remote ids
@@ -98,9 +98,9 @@ class CMbObject {
 
     $class = get_class($this);
    
-    $initiated = array_key_exists($class, self::$spec);
+    $in_cache = isset(self::$spec[$class]);
 
-    if (!$initiated) {
+    if (!$in_cache) {
       self::$spec[$class] = $this->getSpec();
       self::$spec[$class]->init();
       
@@ -123,7 +123,7 @@ class CMbObject {
       $this->_id =& $this->$key;
     }
     
-    if (!$initiated) {
+    if (!$in_cache) {
       self::$props[$class] = $this->getSpecs();
       $this->_props =& self::$props[$class];
       self::$backRefs[$class] = $this->getBackRefs();
@@ -187,9 +187,8 @@ class CMbObject {
     if($this->_id){
       $this->_ref_notes = $notes->loadNotesForObject($this, $perm);
       return count($this->_ref_notes);
-    }else {
-      return 0;
-    }
+    } 
+    return 0;
   }
 
   /**
