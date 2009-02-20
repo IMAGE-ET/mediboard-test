@@ -63,16 +63,19 @@ $modelesByOwner = array(
   'COperation' => array(),
   'CSejour' => array()
 );
-$packs = array();
+$packs = array(
+  'COperation' => array(),
+  'CSejour' => array()
+);
 if ($praticien->_can->edit) {
 	foreach($modelesByOwner as $object_class => &$modeles) {
 	  $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
-	  
+
 	  // Chargement des packs
 	  $pack = new CPack();
 	  $pack->object_class = $object_class;
 	  $pack->chir_id = $praticien->_id;
-	  $packs = $pack->loadMatchingList("nom");
+	  $packs[$object_class] = $pack->loadMatchingList("nom");
 	}
 }
 

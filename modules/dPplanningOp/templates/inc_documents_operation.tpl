@@ -7,12 +7,12 @@
 {{if @$preloaded}}
 	{{assign var=object value=$operation}}
 	<div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->chir_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
-	  {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.COperation}}
+	  {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.COperation packs=$packs.COperation}}
 	</div>
 	
 	{{assign var=object value=$operation->_ref_sejour}}
 	<div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->praticien_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
-	  {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.CSejour}}
+	  {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.CSejour packs=$packs.CSejour}}
 	</div>
 {{else}}
   {{assign var=object value=$operation}}
