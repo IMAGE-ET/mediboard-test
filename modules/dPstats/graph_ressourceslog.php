@@ -78,7 +78,7 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
 	if($module) $title .= " : ".CAppUI::tr($module);
 		
 	$options = array(
-	  'title' => $title,
+	  'title' => utf8_encode($title),
 	  'HtmlText' => false,
 	  'grid' => array(
 	    'verticalLines' => false,
