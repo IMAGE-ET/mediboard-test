@@ -269,5 +269,5 @@
   </tr>
 </table>
 
-{{include file="../../dPhospi/templates/inc_list_transmissions.tpl"}}
+{{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=true}}
 

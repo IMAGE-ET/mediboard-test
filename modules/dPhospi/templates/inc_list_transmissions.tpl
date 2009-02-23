@@ -43,7 +43,8 @@
       </div>
     </td>
     <td class="button">
-    {{if $curr_suivi->user_id == $app->user_id && $prescription}}
+    {{if !$without_del_form}}
+    {{if $curr_suivi->user_id == $app->user_id}}
       <form name="delObs{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_observation_aed" />
         <input type="hidden" name="del" value="1" />
@@ -52,6 +53,7 @@
         <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, '$prescription->_id')">{{tr}}Delete{{/tr}}</button>
       </form>
+      {{/if}}
       {{/if}}
     </td>
     </tr>
@@ -80,7 +82,8 @@
       </div>
     </td>
     <td class="button">
-    {{if $curr_suivi->user_id == $app->user_id && $prescription}}
+    {{if !$without_del_form}}
+    {{if $curr_suivi->user_id == $app->user_id}}
       <form name="delTrans{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_transmission_aed" />
         <input type="hidden" name="del" value="1" />
@@ -89,6 +92,7 @@
         <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Delete{{/tr}}</button>
       </form>
+      {{/if}}
       {{/if}}
     </td>
     </tr>
