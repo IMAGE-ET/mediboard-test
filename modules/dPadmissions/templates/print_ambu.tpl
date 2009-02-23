@@ -1,6 +1,6 @@
 <table class="tbl">
   <tr>
-    <th colspan="10">
+    <th colspan="9">
       <span style="float: right">
       Service
       <form name="selService" action="" method="get">
@@ -25,9 +25,8 @@
     <th>Chambre</th>
     <th>Entrée<br />ambu</th>
     <th>Entrée<br />au bloc</th>
-    <th>Sortie<br />de bloc</th>
     <th>Entrée<br />salle de réveil</th>
-    <th>Sortie<br />salle de réveil</th>
+    <th>Sortie<br />de bloc</th>
     <th>Sortie<br />établissement</th>
   </tr>
 	{{foreach from=$sejours item=_sejour}}
@@ -52,7 +51,6 @@
 		  </td>
 		  <td style="text-align: center;">{{$_sejour->entree_reelle|date_format:$dPconfig.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_salle|date_format:$dPconfig.time}}</td>
-		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_salle|date_format:$dPconfig.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$dPconfig.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_reveil|date_format:$dPconfig.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->sortie_reelle|date_format:$dPconfig.time}}</td>
