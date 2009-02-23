@@ -171,7 +171,7 @@ var Patient = {
       </a>
     </td>
     <td>
-      <a class="buttonsearch notext" href="?m=dPpatients&&mp;tab=vw_full_patients&amp;patient_id={{$curr_patient->_id}}" title="Afficher" />
+      <a class="buttonsearch notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_patient->_id}}" title="Afficher" />
         Afficher
       </a>
     </td>
@@ -213,7 +213,7 @@ var Patient = {
       </a>
     </td>
     <td>
-      <a class="buttonsearch notext" href="?m=dPpatients&tab=vw_full_patient&patient_id={{$curr_patient->_id}}" title="Afficher">
+      <a class="buttonsearch notext" href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_patient->_id}}" title="Afficher">
         Afficher
       </a>
     </td>
