@@ -122,8 +122,11 @@ addPlanification = function(date, time, key_tab, object_id, object_class, elemen
   }
 }
 
-refreshDossierSoin = function(mode_dossier){
-  loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier);
+refreshDossierSoin = function(mode_dossier, chapitre){
+  if(!window[chapitre+'SoinLoaded']) {
+    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
+    window[chapitre+'SoinLoaded'] = true;
+  }
 }
 
 printDossierSoin = function(prescription_id){
@@ -235,17 +238,17 @@ window.periodicalBefore = null;
 window.periodicalAfter = null;
 
 // Deplacement du dossier de soin
-moveDossierSoin = function(){
+moveDossierSoin = function(arg){
   periode_visible = composition_dossier[oFormClick.nb_decalage.value];
   composition_dossier.each(function(moment){
-    listToHide = $('plan_soin').select('.'+moment);
+    listToHide = arg.select('.'+moment);
     listToHide.each(function(elt) { 
       elt.show();
     });  
   });
   composition_dossier.each(function(moment){
     if(moment != periode_visible){
-	    listToHide = $('plan_soin').select('.'+moment);
+	    listToHide = arg.select('.'+moment);
 	    listToHide.each(function(elt) { 
 	      elt.hide();
 	    });  
@@ -260,14 +263,14 @@ timeOutAfter = null;
 showBefore = function(){
   if(oFormClick.nb_decalage.value >= 1){
     oFormClick.nb_decalage.value = parseInt(oFormClick.nb_decalage.value) - 1;
-    moveDossierSoin();
+    moveDossierSoin($('plan_soin'));
   }
 }
 // Deplacement du dossier de soin vers la droite
 showAfter = function(){
   if(oFormClick.nb_decalage.value <= 3){
     oFormClick.nb_decalage.value = parseInt(oFormClick.nb_decalage.value) + 1;
-    moveDossierSoin();
+    moveDossierSoin($('plan_soin'));
   }
 }
 
@@ -306,6 +309,21 @@ viewDossierSoin = function(mode_dossier){
 }
 
 tabs = null;
+
+refreshTabState = function(){
+  window['medSoinLoaded'] = false;
+  window['perfSoinLoaded'] = false;
+  window['injSoinLoaded'] = false;
+  {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
+	{{foreach from=$specs_chapitre->_list item=_chapitre}}
+    window['{{$_chapitre}}SoinLoaded'] = false;
+	{{/foreach}}
+	
+  // Lancement du onclick sur le premier onglet et affichage du premier onglet
+  $('tab_categories').down().onclick();
+  tabs.setActiveTab($('tab_categories').down().down().key);
+}
+
 Main.add(function () {
 	{{if $mode_bloc}}
 	  loadSuivi('{{$sejour->_id}}');
@@ -313,7 +331,7 @@ Main.add(function () {
 
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
-    moveDossierSoin();
+    moveDossierSoin($('tbody_date'));
 	  viewDossierSoin('{{$mode_dossier}}');
 	}
 	
@@ -321,6 +339,8 @@ Main.add(function () {
     new Control.Tabs('tab_dossier_soin');
   {{/if}}
   tabs = Control.Tabs.create('tab_categories', true);
+  
+  refreshTabState();
 });
 
 </script>
@@ -347,7 +367,11 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th colspan="10" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+    <th colspan="10" class="title">
+       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+       </a>
+	    {{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
   <tr>
     <td style="width: 25%;">
@@ -378,7 +402,7 @@ Main.add(function () {
 
 {{if !$mode_bloc}}
 	<ul id="tab_dossier_soin" class="control_tabs">
-	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#jour">Administration</a></li>
+	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Administration</a></li>
 	  <li onclick="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
 	</ul>
   <hr class="control_tabs" />
@@ -391,7 +415,7 @@ Main.add(function () {
     <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
 
 	 <h1 style="text-align: center">
-	   <a href="#" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}','','administration');"{{/if}}>
+	   <a href="#" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
 	     <img src="images/icons/prev.png" alt="" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
 	   </a>
 	   Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
@@ -446,20 +470,20 @@ Main.add(function () {
 					 <td>
 					   <ul id="tab_categories" class="control_tabs_vertical">
 						    {{if $prescription->_ref_perfusions_for_plan|@count}}
-						      <li><a href="#_perf">Perfusions</a></li>
+						      <li onclick="refreshDossierSoin(null, 'perf');"><a href="#_perf">Perfusions</a></li>
 						    {{/if}}
 								
 								{{if $prescription->_ref_injections_for_plan|@count}}
-								<li><a href="#_inj">Injections</a></li>
+								<li onclick="refreshDossierSoin(null, 'inj');"><a href="#_inj">Injections</a></li>
 						    {{/if}}
 						    
 						    {{if $prescription->_ref_lines_med_for_plan|@count}}
-						      <li><a href="#_med">Médicaments</a></li>
+						      <li onclick="refreshDossierSoin(null, 'med');"><a href="#_med">Médicaments</a></li>
 						    {{/if}}
 							  {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
 							  {{foreach from=$specs_chapitre->_list item=_chapitre}}
 							    {{if @is_array($prescription->_ref_lines_elt_for_plan.$_chapitre)}}
-							    <li><a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+							    <li onclick="refreshDossierSoin(null, '{{$_chapitre}}');"><a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
 							    {{/if}}
 							  {{/foreach}}
 							</ul>	
@@ -469,7 +493,7 @@ Main.add(function () {
 		 	 	</td>
 		 	 	<td>
 				<table class="tbl" id="plan_soin">
-				<tbody>
+				<tbody id="tbody_date">
 				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
 				  		 $prescription->_ref_perfusions_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
 					  <tr>
@@ -522,81 +546,25 @@ Main.add(function () {
 					    <th>Dr</th>
 					    <th>Ph</th>
 					  </tr>
-				
 			    {{/if}}
 				  </tbody>
+				  
 			    <!-- Affichage des perfusions -->
-					<tbody id="_perf" style="display:none;" class="hoverable">
-					  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion name=foreach_perfusion}}
-					    <tr id="line_{{$_perfusion->_guid}}">
-					    {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
-					    </tr>
-					  {{/foreach}}
-					</tbody>
-					
+					<tbody id="_perf" style="display:none;" class="hoverable"></tbody>	
 				  <!-- Affichage des injectables -->
-				  <tbody id="_inj" style="display: none;">
-				    {{foreach from=$prescription->_ref_injections_for_plan item=inj_cat_ATC key=_key_cat_ATC name="_foreach_cat"}}
-				      {{foreach from=$inj_cat_ATC item=inj_line name="_foreach_med"}}
-				        {{foreach from=$inj_line key=unite_prise item=inj_line_med name="_foreach_line"}} 
-						        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-						            line=$inj_line_med
-						            nodebug=true
-						            first_foreach=_foreach_med
-						            last_foreach=_foreach_line
-						            global_foreach=_foreach_cat
-						            nb_line=$inj_line|@count
-						            type="inj"
-						            dosql=do_prescription_line_medicament_aed}}
-					      {{/foreach}}
-					    {{/foreach}} 		 
-				    {{/foreach}}
-			    </tbody>
-			    
+				  <tbody id="_inj" style="display: none;"></tbody>
 					<!-- Affichage des medicaments -->
-				  <tbody id="_med" style="display: none;">
-				    {{foreach from=$prescription->_ref_lines_med_for_plan item=_cat_ATC key=_key_cat_ATC name="foreach_cat"}}
-				      {{foreach from=$_cat_ATC item=_line name="foreach_med"}}
-				        {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
-				          {{if !$line_med->_is_injectable}}
-						        {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-						            line=$line_med
-						            nodebug=true
-						            first_foreach=foreach_med
-						            last_foreach=foreach_line
-						            global_foreach=foreach_cat
-						            nb_line=$_line|@count
-						            type="med"
-						            dosql=do_prescription_line_medicament_aed}} 
-						        {{/if}}
-					      {{/foreach}}
-					    {{/foreach}} 		 
-				    {{/foreach}}
-			    </tbody>
-					
+				  <tbody id="_med" style="display: none;"></tbody>			
 				  <!-- Affichage des elements -->
 				  {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=elements_chap name="foreach_element"}}
-				       {{if !$smarty.foreach.foreach_element.first}}
-				         </tbody>
-				       {{/if}}
-					     <tbody id="_cat-{{$name_chap}}" style="display: none;">  
-							    {{foreach from=$elements_chap key=name_cat item=elements_cat name="foreach_chap"}}
-							      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
-							      {{foreach from=$elements_cat item=_element name="foreach_cat"}}
-							        {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 	          
-							          {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-							                    line=$element
-							                    nodebug=true
-							                    first_foreach=foreach_cat
-							                    last_foreach=foreach_elt
-							                    global_foreach=foreach_chap
-							                    nb_line=$_element|@count
-							                    dosql=do_prescription_line_element_aed}}
-							   {{/foreach}}
-							  {{/foreach}}
-							{{/foreach}}
-						{{/foreach}}
-					 </tbody>
+				    {{if !$smarty.foreach.foreach_element.first}}
+				      </tbody>
+				    {{/if}}
+					  <tbody id="_cat-{{$name_chap}}" style="display: none;">  
+
+				  {{/foreach}}
+					</tbody>
+					 
 				</table>
 	    </td>
 	  </tr>

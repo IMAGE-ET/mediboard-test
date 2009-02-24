@@ -1,9 +1,7 @@
 <script type="text/javascript">
 {{if $move_dossier_soin}}
 	Main.add(function () {
-	  moveDossierSoin();
     viewDossierSoin('{{$mode_dossier}}');
-  
   	// On vide les valeurs du formulaires d'ajout/modification de planification
     document.addPlanif.select('input').each(function(element){
       if(element.name != "dosql" && element.name != "m" && element.name != "del" && element.name != "planification"){

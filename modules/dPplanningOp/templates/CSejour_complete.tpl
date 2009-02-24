@@ -16,6 +16,11 @@
       <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
+      
+       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}
+       </a>
+	    
       {{$object->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
     </th>
   </tr>

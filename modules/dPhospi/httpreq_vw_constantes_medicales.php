@@ -23,6 +23,9 @@ $sejour->load($sejour_id);
 $sejour->loadRefs();
 $sejour->_ref_patient->loadRefConstantesMedicales();
 
+$patient =& $sejour->_ref_patient;
+$patient->loadRefPhotoIdentite();
+
 // Construction d'une constante médicale
 $constantes = new CConstantesMedicales();
 

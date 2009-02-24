@@ -95,7 +95,13 @@ submitProtocole = function(){
           <img alt="Ecrire une note" src="images/icons/note_grey.png" />
         </div>
       {{/if}}
-     
+      
+      {{if !$mode_protocole}}
+       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$prescription->_ref_patient->_id}}"'>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$prescription->_ref_patient size=42}}
+       </a>
+      {{/if}}
+
       {{if $mode_protocole}}
         <!-- Formulaire de modification du libelle de la prescription -->
         <form name="addLibelle-{{$prescription->_id}}" method="post">
@@ -147,7 +153,7 @@ submitProtocole = function(){
          <!-- Prescription du Dr {{$prescription->_ref_praticien->_view}}<br /> -->
         {{$prescription->_ref_object->_view}}
         {{if $prescription->_ref_patient->_age}}
-           ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
+           <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
       {{/if}}
     </th>

@@ -387,8 +387,10 @@ class CBcbProduit extends CBcbObject {
   function loadClasseATC(){
     $classeATC = new CBcbClasseATC();
     $this->_ref_classes_ATC   = $classeATC->searchATCProduit($this->code_cip);
-    $this->_ref_ATC_2_code    = $this->_ref_classes_ATC[0]->classes[3]["code"];
-    $this->_ref_ATC_2_libelle = strtolower($this->_ref_classes_ATC[0]->classes[3]["libelle"]);
+    if(isset($this->_ref_classes_ATC[0]->classes[3])){
+      $this->_ref_ATC_2_code    = $this->_ref_classes_ATC[0]->classes[3]["code"];
+      $this->_ref_ATC_2_libelle = strtolower($this->_ref_classes_ATC[0]->classes[3]["libelle"]);
+    }
   }
   
   // Chargement des fiches ATC

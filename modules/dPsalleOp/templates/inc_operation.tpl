@@ -31,7 +31,7 @@ Main.add(function () {
 });
 
 
-function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise) {
+function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
   url.addParam("sejour_id", sejour_id);
@@ -42,6 +42,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
   if(nb_decalage){
     url.addParam("nb_decalage", nb_decalage);
 	}
+	url.addParam("chapitre", chapitre);
   url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
@@ -50,6 +51,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
       if(object_class == 'CPerfusion'){
 			  url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
 			    $("line_"+object_class+"-"+object_id).hide();
+				  moveDossierSoin($("line_"+object_class+"-"+object_id));
 			  } } );
 			}
 			else {
@@ -72,12 +74,22 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 				                  waitingText: null, 
 													insertion: Insertion.After,
 													onComplete: function(){
+													  moveDossierSoin($("line_"+object_class+"_"+object_id));
 														first_td.hide().colSpan = 0;
 													}
 													} );
 			}
     } else {
-      url.requestUpdate("soins", { waitingText: null } );
+      if(chapitre){
+      	if(chapitre == "med" || chapitre == "perf" || chapitre == "inj"){
+      		chapitre = "_"+chapitre;
+      	} else {
+      		chapitre = "_cat-"+chapitre;
+      	}
+      	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); viewDossierSoin(mode_dossier); } } );
+      } else {
+        url.requestUpdate("soins", { waitingText: null } );
+      }
     }
 }
 
@@ -114,8 +126,8 @@ function reloadPrescription(prescription_id){
       <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
         {{tr}}Programme{{/tr}}
       </button>
-      <a href="?m=dPpatients&amp;tab=vw_full_patients&patient_id={{$patient->_id}}" style="float:left">
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read" size="64"}}
+      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
       </a>
       <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" alt="modifier" />

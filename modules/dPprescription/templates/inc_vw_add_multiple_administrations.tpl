@@ -55,7 +55,10 @@ function submitAllPlanifications(){
 function closeApplyAdministrations(dontClose) {
   {{if $administrations|@count && $sejour->_id && $date_sel}}
     if (anyFormSubmitted && window.opener) {
-      window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}');
+      // refresh des chapitres concernés
+      {{foreach from=$tabs_refresh key=chapitre item=_tab_refresh}}
+        window.opener.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}', null, null, null, '{{$chapitre}}');
+      {{/foreach}}
       window.opener.loadSuivi('{{$sejour->_id}}');
     }
   {{/if}}

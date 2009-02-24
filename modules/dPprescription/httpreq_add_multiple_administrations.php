@@ -49,7 +49,25 @@ if (count($adm) > 0) {
 		// Chargement de la ligne
 		$line = new $ad['object_class'];
 		$line->load($ad['line_id']);
-	
+		
+		// Recherche des chapitres a rafraichir apres la creation des administrations
+		switch($line->_class_name){
+		  case 'CPrescriptionLineMedicament':
+		    if($line->_is_injectable){
+		      $tabs_refresh["inj"] = "inj";
+		    } else {
+		      $tabs_refresh["med"] = "med";
+		    }
+		    break;
+		  case 'CPerfusion':
+		    $tabs_refresh["perf"] = "perf";
+		    break;
+		  case 'CPrescriptionLineElement':
+		    $chapitre = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
+		    $tabs_refresh[$chapitre] = $chapitre;
+		    break;
+		}
+		
 		if($line->_class_name == "CPrescriptionLineMedicament"){
 		  $line->_ref_produit->loadConditionnement();
 		}
@@ -80,6 +98,7 @@ $smarty->assign("date_sel", $date_sel);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("transmission", new CTransmissionMedicale());
 $smarty->assign("mode_dossier", $mode_dossier);
+$smarty->assign("tabs_refresh", $tabs_refresh);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

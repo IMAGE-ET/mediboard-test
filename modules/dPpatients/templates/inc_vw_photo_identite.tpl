@@ -33,6 +33,7 @@
 {{if $file->_id}}
   {{assign var=id value=$file->_id}}
   {{assign var=src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=$size"}}
+  {{assign var=_src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=128"}}
 {{else}}
   {{if $patient->_age < 15 && $patient->naissance && $patient->naissance != "0000-00-00"}}
     {{assign var=src value="images/pictures/identity_child.png"}}
@@ -46,7 +47,15 @@
     {{assign var=src value="images/pictures/identity_female_old.png"}}
   {{/if}}
 {{/if}}
-<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777" alt="Identité" />
+
+<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777" alt="Identité"
+     {{if ($size < 100) && $file->_id}}onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-patient-{{$patient->_id}}")'{{/if}} />
+     
+{{if ($size < 100) && $file->_id}}     
+<div id="tooltip-content-patient-{{$patient->_id}}" style="display: none;">
+  <img src="{{$_src}}" style="width: 128px; border: 2px solid #777" alt="Identité">
+</div>
+{{/if}}
 
 {{if @$mode == "edit"}}
   <br />

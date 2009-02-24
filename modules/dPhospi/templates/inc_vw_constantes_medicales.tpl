@@ -202,7 +202,11 @@ Main.add(function () {
 {{assign var=patient value=$sejour->_ref_patient}}
 <table class="tbl">
   <tr>
-    <th colspan="10" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+    <th colspan="10" class="title">
+       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+       </a>
+    {{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
   <tr>
     <td style="width: 25%;">

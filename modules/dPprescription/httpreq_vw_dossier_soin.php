@@ -17,6 +17,7 @@ $line_type    = mbGetValueFromGet("line_type", "service");  // Bloc en salle d'o
 $mode_bloc    = mbGetValueFromGet("mode_bloc", 0);
 $now          = mbDateTime();
 $mode_dossier = mbGetValueFromGet("mode_dossier", "administration");
+$chapitre     = mbGetValueFromGet("chapitre"); // Chapitre a rafraichir
 
 $object_id = mbGetValueFromGet("object_id");
 $object_class = mbGetValueFromGet("object_class");
@@ -33,6 +34,8 @@ $patient =& $sejour->_ref_patient;
 $patient->loadRefConstantesMedicales();
 $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
+
+$patient->loadRefPhotoIdentite();
 
 // Chargement de la prescription
 $prescription = new CPrescription();
@@ -171,49 +174,64 @@ if($object_id && $object_class){
 // Calcul du dossier de soin complet
 else {
 	if($prescription->_id){
-		// Chargement des lignes
-		$prescription->loadRefsLinesMedByCat("1","1",$line_type);
-		$prescription->loadRefsLinesElementByCat("1","",$line_type);
-		$prescription->_ref_object->loadRefPrescriptionTraitement();	 
-		$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
-		if($traitement_personnel->_id){
-		  $traitement_personnel->loadRefsLinesMedByCat("1","1",$line_type);
-		}
-		  	  
-		// Chargement des perfusions
-	  $prescription->loadRefsPerfusions("1", $line_type);
-	  foreach($prescription->_ref_perfusions as &$_perfusion){
-	    $_perfusion->loadRefsLines();
-	    $_perfusion->loadRefPraticien();
-	    $_perfusion->_ref_praticien->loadRefFunction();
-	    $_perfusion->loadRefLogSignaturePrat();
-	  }
-	
-		foreach($prescription->_ref_prescription_lines as &$_line_med){
-		  $_line_med->loadRefLogSignee();
-		  if(!$_line_med->countBackRefs("administration")){
-			  if(!$_line_med->substitute_for){
-			    $_line_med->loadRefsSubstitutionLines();   
-			  } else {
-			    $_base_line = new CPrescriptionLineMedicament();
-			    $_base_line->load($_line_med->substitute_for);
-			    $_base_line->loadRefsSubstitutionLines();
-			    $_line_med->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-			    // Ajout de la ligne d'origine dans le tableau
-			    $_line_med->_ref_substitution_lines[$_base_line->_id] = $_base_line;
-			    // Suppression de la ligne actuelle
-			    unset($_line_med->_ref_substitution_lines[$_line_med->_id]);
+		// Chargement des lignes de medicament
+    if($chapitre == "med" || $chapitre == "inj"){
+		  $prescription->loadRefsLinesMedByCat("1","1",$line_type);
+	    $prescription->_ref_object->loadRefPrescriptionTraitement();	 
+			$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
+			if($traitement_personnel->_id){
+			  $traitement_personnel->loadRefsLinesMedByCat("1","1",$line_type);
+			}
+      foreach($prescription->_ref_prescription_lines as &$_line_med){
+			  $_line_med->loadRefLogSignee();
+			  if(!$_line_med->countBackRefs("administration")){
+				  if(!$_line_med->substitute_for){
+				    $_line_med->loadRefsSubstitutionLines();   
+				  } else {
+				    $_base_line = new CPrescriptionLineMedicament();
+				    $_base_line->load($_line_med->substitute_for);
+				    $_base_line->loadRefsSubstitutionLines();
+				    $_line_med->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
+				    // Ajout de la ligne d'origine dans le tableau
+				    $_line_med->_ref_substitution_lines[$_base_line->_id] = $_base_line;
+				    // Suppression de la ligne actuelle
+				    unset($_line_med->_ref_substitution_lines[$_line_med->_id]);
+				  }
 			  }
+			}
+    } elseif($chapitre == "perf") {
+      // Chargement des perfusions
+	    $prescription->loadRefsPerfusions("1", $line_type);
+		  foreach($prescription->_ref_perfusions as &$_perfusion){
+		    $_perfusion->loadRefsLines();
+		    $_perfusion->loadRefPraticien();
+		    $_perfusion->_ref_praticien->loadRefFunction();
+		    $_perfusion->loadRefLogSignaturePrat();
 		  }
-		}
-	
-		// REF: Passer directement une date min et une date max au calculPlanSoin
+    } elseif (!$chapitre) {
+      // si pas de chapitre de specifie
+      $prescription->loadRefsPerfusions();
+      $prescription->loadRefsLinesMedByCat("1","1",$line_type);
+	    $prescription->_ref_object->loadRefPrescriptionTraitement();	 
+			$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
+			if($traitement_personnel->_id){
+			  $traitement_personnel->loadRefsLinesMedByCat("1","1",$line_type);
+			}
+      // Chargement des lignes d'elements  avec pour chapitre $chapitre
+		  $prescription->loadRefsLinesElementByCat("1",null,$line_type);
+    } else {
+      // Chargement des lignes d'elements  avec pour chapitre $chapitre
+		  $prescription->loadRefsLinesElementByCat("1",$chapitre,$line_type);
+    }
+		
+    $with_calcul = $chapitre ? true : false; 
+	  // REF: Passer directement une date min et une date max au calculPlanSoin
 	  if($line_type == "service"){
 		  foreach($_dates as $curr_date){
-		    $prescription->calculPlanSoin($curr_date, 0);
+		    $prescription->calculPlanSoin($curr_date, 0, null, null, null, $with_calcul);
 		  }
 	  } else {
-	    $prescription->calculPlanSoin($date, 0);
+	    $prescription->calculPlanSoin($date, 0, null, null, null, $with_calcul);
 	  }
 	  
 	  // Chargement des operations
@@ -235,29 +253,31 @@ else {
 	}
 	
 	// Calcul du rowspan pour les medicaments
-	$types = array("med","inj");
-	foreach($types as $_type_med){
-	  $produits = ($_type_med == "med") ? $prescription->_ref_lines_med_for_plan : $prescription->_ref_injections_for_plan;
-		if($produits){
-		  foreach($produits as $_code_ATC => $_cat_ATC){
-			  if(!isset($prescription->_nb_produit_by_cat[$_code_ATC])){
-			    $prescription->_nb_produit_by_cat[$_type_med][$_code_ATC] = 0;
-			  }
-			  foreach($_cat_ATC as $line_id => $_line) {
-			    foreach($_line as $unite_prise => $line_med){
-			      if(!isset($prescription->_nb_produit_by_chap[$_type_med])){
-						  $prescription->_nb_produit_by_chap[$_type_med] = 0;
-						}
-						$prescription->_nb_produit_by_chap[$_type_med]++;
-			      $prescription->_nb_produit_by_cat[$_type_med][$_code_ATC]++;
-			    }
-			  }
+  if($chapitre){
+		$types = array("med","inj");
+		foreach($types as $_type_med){
+		  $produits = ($_type_med == "med") ? $prescription->_ref_lines_med_for_plan : $prescription->_ref_injections_for_plan;
+			if($produits){
+			  foreach($produits as $_code_ATC => $_cat_ATC){
+				  if(!isset($prescription->_nb_produit_by_cat[$_code_ATC])){
+				    $prescription->_nb_produit_by_cat[$_type_med][$_code_ATC] = 0;
+				  }
+				  foreach($_cat_ATC as $line_id => $_line) {
+				    foreach($_line as $unite_prise => $line_med){
+				      if(!isset($prescription->_nb_produit_by_chap[$_type_med])){
+							  $prescription->_nb_produit_by_chap[$_type_med] = 0;
+							}
+							$prescription->_nb_produit_by_chap[$_type_med]++;
+				      $prescription->_nb_produit_by_cat[$_type_med][$_code_ATC]++;
+				    }
+				  }
+				}
 			}
 		}
-	}
-	
+  }
+  
 	// Calcul du rowspan pour les elements
-	if($prescription->_ref_lines_elt_for_plan){
+	if($prescription->_ref_lines_elt_for_plan && $chapitre){
 		foreach($prescription->_ref_lines_elt_for_plan as $name_chap => $elements_chap){
 		  foreach($elements_chap as $name_cat => $elements_cat){
 		    if(!isset($prescription->_nb_produit_by_cat[$name_cat])){
@@ -276,7 +296,7 @@ else {
 		  }
 		}     
 	}
-	
+
 	$transmission = new CTransmissionMedicale();
 	$where = array();
 	$where[] = "(object_class = 'CCategoryPrescription') OR 
@@ -324,11 +344,11 @@ $smarty->assign("composition_dossier" , $composition_dossier);
 $smarty->assign("prev_date", mbDate("- 1 DAY", $date));
 $smarty->assign("next_date", mbDate("+ 1 DAY", $date));
 $smarty->assign("today", mbDate());
-
+$smarty->assign("move_dossier_soin", false);
 // Refresh de seulement 1 ligne du plan de soin
 
 if($object_id && $object_class){
-   $smarty->assign("move_dossier_soin", true);
+  $smarty->assign("move_dossier_soin", true);
   $smarty->assign("nodebug", true);	 
   
   if($line->_class_name == "CPerfusion"){
@@ -351,9 +371,17 @@ if($object_id && $object_class){
 	  $smarty->display("inc_vw_content_line_dossier_soin.tpl");
   }
 } else {
-  // Refresh du plan de soin complet
-  $smarty->assign("move_dossier_soin"   , false);
-  $smarty->display("inc_vw_dossier_soins.tpl");
+  if($chapitre){
+      $smarty->assign("move_dossier_soin", false);
+      $smarty->assign("chapitre", $chapitre);
+      $smarty->assign("nodebug", true);	 
+     
+      $smarty->display("inc_chapitre_dossier_soin.tpl");
+  } else {
+	  // Refresh du plan de soin complet
+	  $smarty->assign("move_dossier_soin"   , false);
+	  $smarty->display("inc_vw_dossier_soins.tpl");
+  }
 }
 
 ?>

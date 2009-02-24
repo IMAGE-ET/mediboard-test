@@ -121,6 +121,9 @@ $categories = $full_mode || $chapitre != "medicament" ? CCategoryPrescription::l
 if($prescription->_id){
   $prescription->loadRefsPerfusions();
   
+  $patient =& $prescription->_ref_patient;
+  $patient->loadRefPhotoIdentite();
+  
 	foreach($prescription->_ref_perfusions as $_perfusion){
     $_perfusion->loadRefsLines();
 	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);

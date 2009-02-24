@@ -137,7 +137,7 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds', { waitingText : null });
 }
 
-function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise) {
+function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
   if(sejour_id) {
     var url = new Url();
     url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
@@ -151,10 +151,13 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
     
+    url.addParam("chapitre", chapitre);
+    
     if(object_id && object_class){
       if(object_class == 'CPerfusion'){
 				url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
 				  $("line_"+object_class+"-"+object_id).hide();
+				  moveDossierSoin($("line_"+object_class+"-"+object_id));
 				} } );
       } else {
 	      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
@@ -171,17 +174,26 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 			    td.next().remove();
 			    first_td.show();
 	      }
-	      
-				url.requestUpdate(first_td, {
+	      url.requestUpdate(first_td, {
 				                  waitingText: null, 
 													insertion: Insertion.After,
 													onComplete: function(){
+													  moveDossierSoin($("line_"+object_class+"_"+object_id));
 														first_td.hide().colSpan = 0;
 													}
 													} );
 			}
     } else {
-      url.requestUpdate("dossier_traitement", { waitingText: null } );
+      if(chapitre){
+      	if(chapitre == "med" || chapitre == "perf" || chapitre == "inj"){
+      		chapitre = "_"+chapitre;
+      	} else {
+      		chapitre = "_cat-"+chapitre;
+      	}
+      	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); viewDossierSoin(mode_dossier); } } );
+      } else {
+        url.requestUpdate("dossier_traitement", { waitingText: null } );
+      }
     }
   }
 }
@@ -404,9 +416,7 @@ viewBilanService = function(service_id, date){
             {{/foreach}}
             {{/if}}
            {{/foreach}}
-            
 
-            
             <!-- Cas de l'affichage par praticien -->
             {{if $praticien_id}}
             {{if array_key_exists('NP', $sejoursParService)}}
@@ -419,9 +429,6 @@ viewBilanService = function(service_id, date){
               {{/if}}
             {{/if}}
             
-            
-            
-
             <!-- Cas de l'affichage par service -->
             {{if $service_id}}
 	            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
@@ -435,44 +442,34 @@ viewBilanService = function(service_id, date){
 	              {{/foreach}}
 	            {{/foreach}}
             {{/if}}
-          
             </table>    
           </td>
         </tr>
       </table>
     </td>
     <td>
-    
       <!-- Tab titles -->
       <ul id="tab-sejour" class="control_tabs">
         <li><button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         <li><a href="#viewPatient">Patient</a></li>
         <li><a href="#viewSejourHospi">Séjour</a></li>
-        
         <li onclick="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
-        
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_soins">Soins</a></li>
         <li onclick="reloadAntAllergie(document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescription</a></li>
         {{/if}}
-        
         {{if $app->user_prefs.ccam_sejour == 1 }}
           <li><a href="#Actes">Cotation</a></li>
         {{/if}}
-    
         {{if $isImedsInstalled}}
           <li><a href="#Imeds">Labo</a></li>
         {{/if}}
-    
         <li><a href="#documents">Documents</a></li>
-        
         {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
         <li><a href="#antecedents">Antécédents</a></li>
-        {{/if}}
-        
+        {{/if}} 
       </ul>
       <hr class="control_tabs" />
-      
       
       <!-- Tabs -->
       <div id="viewPatient" style="display: none;">
@@ -578,7 +575,6 @@ viewBilanService = function(service_id, date){
         </div>
       </div>
       {{/if}}
-      
     </td>
   </tr>
 </table>

@@ -805,7 +805,7 @@ class CSejour extends CCodable {
     $this->loadNumDossier();
     
     $this->loadSuiviMedical();
-    
+    $this->_ref_patient->loadRefPhotoIdentite();
   }
 
   function loadNumDossier() {

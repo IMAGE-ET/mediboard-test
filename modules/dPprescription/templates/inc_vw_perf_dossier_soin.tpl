@@ -4,7 +4,7 @@
  		{{if $move_dossier_soin}}
 		<script type="text/javascript">
 			Main.add(function () {
-			  moveDossierSoin();
+			  //moveDossierSoin();
 		    viewDossierSoin('{{$mode_dossier}}');
 		    $("line_{{$_perfusion->_guid}}").show();
 		  });

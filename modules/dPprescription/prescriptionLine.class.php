@@ -570,10 +570,8 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des prises
    */
-  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = ""){
-                          
+  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true){
   	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
-  	
   	foreach($this->_ref_prises as &$_prise) {
   	  // Dans le cas d'un element, on affecte l'unite de prise prevu pour cet element
   	  if($_prise->_ref_object->_class_name === "CPrescriptionLineElement"){
@@ -601,7 +599,10 @@ class CPrescriptionLine extends CMbObject {
 		 	    $prescription->_ref_lines_med_for_plan[$code_ATC][$this->_id][$key_tab] = $this;
 		 	  }
   	 	}
-			
+  	 	// Mode permettant de calculer seulement les onglets visibles
+  	 	if(!$with_calcul){
+  	 	  continue;
+  	 	}
 		 	// Stockage du libelle de l'unite de prise
 		 	if($_prise->moment_unitaire_id || $_prise->heure_prise){
 		 	  $this->_prises_for_plan[$_prise->unite_prise][$_prise->_id] = $_prise;
@@ -634,7 +635,6 @@ class CPrescriptionLine extends CMbObject {
 			    $_prise->_unite_sans_kg = $_unite_prise;
         }
       }
-      
 		  if($this->_class_name === "CPrescriptionLineMedicament" && !$_prise->_quantite_with_coef){
 		    $unite_prise = ($_prise->_unite_sans_kg) ? $_prise->_unite_sans_kg : $_prise->unite_prise;
 
@@ -735,7 +735,6 @@ class CPrescriptionLine extends CMbObject {
 		      }
 		    }
 		  }
-
 		  // Fois par avec comme unite semaine
       if($_prise->nb_fois && $_prise->unite_fois === 'semaine' && CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}")){
         $list_jours = explode('|',CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}"));
