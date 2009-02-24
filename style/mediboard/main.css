@@ -1698,7 +1698,8 @@ span.hilite {
   height: 1.6em;
 }
 
-.dPsalleOp button.notext {
+.dPsalleOp button.notext,
+.dPsalleOp button.notext:hover {
   font-size: 0;
   width: 24px;
   height: 24px;
