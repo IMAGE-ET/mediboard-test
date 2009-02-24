@@ -300,19 +300,31 @@ class CBcbProduit extends CBcbObject {
     }
 
     $this->distObj->LivretTherapeutique = $livretTherapeutique;
-    $this->distObj->Specialite = $specialite;
-    $this->distObj->Supprime = $supprime;  
+    $this->distObj->Supprime = $supprime;
+        
+    // 1ere recherche 
+    $this->distObj->Specialite = 1;
     $this->distObj->Search($text, 0, $max, $type_recherche);
+    
+    $_produits_by_type = array();
+    $_produits_by_type[] = $this->distObj->TabProduit;
+    
+    // 2eme recherche (pour les DM possedant un code cip)
+    $this->distObj->Specialite = 2;
+    $this->distObj->Search($text, 0, $max, $type_recherche);
+    
+    $_produits_by_type[] = $this->distObj->TabProduit;
     
     $produits = array();
     // Parcours des produits
-    foreach($this->distObj->TabProduit as $key => $prod){
-      // Chargement du produit
-      $produit = new CBcbProduit();
-      $produit->load($prod->CodeCIP, $full_mode);
-      
-      $produits[$prod->CodeCIP] = $produit; 
-    }  
+    foreach($_produits_by_type as $_produits){
+	    foreach($_produits as $key => $prod){
+	      // Chargement du produit
+	      $produit = new CBcbProduit();
+	      $produit->load($prod->CodeCIP, $full_mode); 
+	      $produits[$prod->CodeCIP] = $produit; 
+	    }
+    }
     return $produits;
   }
   
