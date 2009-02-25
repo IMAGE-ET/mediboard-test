@@ -44,7 +44,7 @@ $done = array();
 $besoin_patients = array();
 $stocks_service = array();
 $besoin_patient = array();
-
+$done_nominatif = array();
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 
