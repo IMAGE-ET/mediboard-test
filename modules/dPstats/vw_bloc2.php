@@ -10,10 +10,14 @@
 global $can;
 $can->needsEdit();
 
+//set_time_limit(180);
+//ini_set("memory_limit", "512M");
+
 $mode = mbGetValueFromGet("mode", "html");
 
 $deblist = mbGetValueFromGetOrSession("deblistbloc", mbDate("-1 DAY"));
-$finlist = max(mbGetValueFromGetOrSession("finlistbloc", $deblist), $deblist);
+$finlist = $deblist;
+$finlist = max(mbGetValueFromGet("finlistbloc", $deblist), $deblist);
 $bloc_id = mbGetValueFromGetOrSession("bloc_id");
 
 $user = new CMediusers;
@@ -61,7 +65,7 @@ foreach($listPlages as &$curr_plage) {
 if($mode == "csv") {
     // A utiliser comme ça :
     // m=dPstats&dialog=1&a=vw_bloc2&mode=text&suppressHeaders=1
-    $csvName = "stats_bloc.csv";
+    $csvName = "stats_bloc_".$deblist."_".$finlist."_".$bloc_id.".csv";
     $csvPath = "tmp/$csvName";
     $csvFile = fopen($csvPath, "w") or die("can't open file");
     $title  = '"Date";"Bloc";"Salle";"Début vacation";"Fin vacation";"N° d\'ordre prévu";"N° d\'ordre réel";';
