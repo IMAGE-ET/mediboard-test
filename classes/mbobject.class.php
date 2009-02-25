@@ -1710,16 +1710,18 @@ class CMbObject {
   }
   
   function loadAffectationsPersonnel() {
+    // Initialisation
+    $personnel = new CPersonnel();
+    foreach ($personnel->_specs["emplacement"]->_list as $emplacement) {
+      $this->_ref_affectations_personnel[$emplacement] = array();
+    }
+    
     if (null == $affectations = $this->loadBackRefs("affectations_personnel")) {
       return;
     }
-    // Initialisation
-    $this->_ref_affectations_personnel["op"] = array();
-    $this->_ref_affectations_personnel["op_panseuse"] = array();
-    $this->_ref_affectations_personnel["reveil"] = array();
-    $this->_ref_affectations_personnel["service"] = array();
     
-    foreach($affectations as $key => $affectation){
+    
+    foreach ($affectations as $key => $affectation){
       $affectation->loadRefPersonnel();
       $affectation->_ref_personnel->loadRefUser();
       $this->_ref_affectations_personnel[$affectation->_ref_personnel->emplacement][$affectation->_id] = $affectation;

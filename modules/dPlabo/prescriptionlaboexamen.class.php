@@ -42,7 +42,7 @@ class CPrescriptionLaboExamen extends CMbObject {
       "pack_examens_labo_id" => "ref class|CPackExamensLabo",
       "resultat"             => "str",
       "date"                 => "date",
-      "commentaire"          => "text"
+      "commentaire"          => "text helped"
     );
     return array_merge($specsParent, $specs);
   }

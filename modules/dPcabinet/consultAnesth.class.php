@@ -94,8 +94,8 @@ class CConsultAnesth extends CMbObject {
     $specs["rhesus"]           = "enum list|?|NEG|POS default|?";
     $specs["antecedents"]      = "text confidential";
     $specs["traitements"]      = "text confidential";
-    $specs["tabac"]            = "text";
-    $specs["oenolisme"]        = "text";
+    $specs["tabac"]            = "text helped";
+    $specs["oenolisme"]        = "text helped";
     $specs["intubation"]       = "enum list|?|dents|bouche|cou";
     $specs["biologie"]         = "enum list|?|NF|COAG|IONO";
     $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue";
@@ -115,17 +115,17 @@ class CConsultAnesth extends CMbObject {
     $specs["ecbu"]             = "enum list|?|NEG|POS default|?";
     $specs["ht"]               = "float minMax|0|100";
     $specs["ht_final"]         = "float minMax|0|100";
-    $specs["premedication"]    = "text";
-    $specs["prepa_preop"]      = "text";
+    $specs["premedication"]    = "text helped";
+    $specs["prepa_preop"]      = "text helped";
 
     // Champs pour les conditions d'intubation
     $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
     $specs["bouche"]           = "enum list|m20|m35|p35";
     $specs["distThyro"]        = "enum list|m65|p65";
-    $specs["etatBucco"]        = "text";
-    $specs["examenCardio"]     = "text";
-    $specs["examenPulmo"]      = "text";
-    $specs["conclusion"]       = "text";
+    $specs["etatBucco"]        = "text helped";
+    $specs["examenCardio"]     = "text helped";
+    $specs["examenPulmo"]      = "text helped";
+    $specs["conclusion"]       = "text helped";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
 
     // Champs dérivés

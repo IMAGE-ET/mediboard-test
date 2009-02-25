@@ -43,6 +43,47 @@ class CMbArray {
     
     return $diff; 
   }
+
+  /**
+   * Compute recursively the associative difference between two arrays
+   * Function is not commutative, as first array is the reference
+   * @param array $array1
+   * @param array $array2
+   * @return array The difference
+   */
+  static function diffRecursive($array1, $array2) {
+	  foreach ($array1 as $key => $value) {
+	    // Array value
+	    if (is_array($value)) {
+	      if (!isset($array2[$key])) {
+	        $difference[$key] = $value;
+	      }
+	      elseif(!is_array($array2[$key])) {
+	        $difference[$key] = $value;
+	      } 
+	      else {
+	        if ($new_diff = self::diffRecursive($value, $array2[$key])) {
+	          $difference[$key] = $new_diff;
+	        }
+	      }
+	    }
+	    
+	    // scalar value
+	    elseif (isset($value)) {
+		    if (!isset($array2[$key]) || $array2[$key] != $value) {
+		      $difference[$key] = $value;
+		    }
+	    }
+
+	    else {
+	      if (!array_key_exists($key, $array2) || $array2[$key]) {
+		      $difference[$key] = $value;
+	      }
+	    }
+	  }
+	  
+	  return isset($difference) ? $difference : false;
+	}
   
 	/**
 	 * Remove all occurences of given value in array

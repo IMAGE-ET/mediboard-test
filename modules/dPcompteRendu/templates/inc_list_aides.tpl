@@ -46,6 +46,10 @@
   <td class="text"><a href="{{$href}}">{{mb_value object=$_aide field=name}}</a></td>
   <td class="text">{{mb_value object=$_aide field=text}}</td>
 </tr>
+{{foreachelse}}
+<tr>
+  <td colspan="10"><em>{{tr}}CAideSaisie.none{{/tr}}</em></td>
+</tr>
 {{/foreach}}
 
 </table>

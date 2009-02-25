@@ -146,12 +146,12 @@ class COperation extends CCodable {
     $specs["entree_salle"]       = "time";
     $specs["sortie_salle"]       = "time";
     $specs["time_operation"]     = "time";
-    $specs["examen"]             = "text confidential";
-    $specs["materiel"]           = "text confidential";
+    $specs["examen"]             = "text helped";
+    $specs["materiel"]           = "text helped";
     $specs["commande_mat"]       = "bool";
     $specs["info"]               = "bool";
     $specs["type_anesth"]        = "ref class|CTypeAnesth";
-    $specs["rques"]              = "text confidential";
+    $specs["rques"]              = "text helped";
     $specs["rank"]               = "num max|255";
     $specs["depassement"]        = "currency min|0 confidential";
     $specs["forfait"]            = "currency min|0 confidential";
@@ -220,7 +220,6 @@ class COperation extends CCodable {
     return array(
       "examen"        => null,
       "materiel"      => null,
-      "convalescence" => null,
       "rques"         => null
     );
   }
@@ -685,8 +684,6 @@ class COperation extends CCodable {
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd(1);
 
-    $dateFormat = "%d / %m / %Y";
-    $timeFormat = "%Hh%M";
     $this->loadRefPraticien();
     $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : '');
     $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
@@ -701,28 +698,40 @@ class COperation extends CCodable {
     $template->addProperty("Opération - CCAM3 - description"  , @$this->_ext_codes_ccam[2]->libelleLong);
     $template->addProperty("Opération - CCAM - codes"         , implode(" - ", $this->_codes_ccam));
     $template->addProperty("Opération - CCAM - descriptions"  , implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong")));
-    $template->addProperty("Opération - salle"                , @$this->_ref_plageop->_ref_salle->nom);
+    $template->addProperty("Opération - salle"                , @$this->_ref_salle->nom);
     $template->addProperty("Opération - côté"                 , $this->cote);
+    
     $template->addDateProperty("Opération - date"             , $this->_datetime);
     $template->addTimeProperty("Opération - heure"            , $this->time_operation);
-    $template->addTimeProperty("Opération - durée"            , $this->temp_operation);
-    if($this->debut_op && $this->fin_op) {
-      $duree_relle = mbTimeRelative($this->debut_op, $this->fin_op, '%02dh%02d');
-    } else {
-      $duree_relle = "?";
-    }
-    $template->addProperty("Opération - durée réelle"         , $duree_relle);
+    $template->addTimeProperty("Opération - durée"            , $this->temp_operation);    
+    $template->addTimeProperty("Opération - durée réelle"     , $this->_duree_interv);
     $template->addTimeProperty("Opération - entrée bloc"      , $this->entree_salle);
     $template->addTimeProperty("Opération - pose garrot"      , $this->pose_garrot);
     $template->addTimeProperty("Opération - début op"         , $this->debut_op);
     $template->addTimeProperty("Opération - fin op"           , $this->fin_op);
     $template->addTimeProperty("Opération - retrait garrot"   , $this->retrait_garrot);
     $template->addTimeProperty("Opération - sortie bloc"      , $this->sortie_salle);
+    
     $template->addProperty("Opération - depassement"          , $this->depassement);
     $template->addProperty("Opération - exams pre-op"         , $this->examen);
     $template->addProperty("Opération - matériel"             , $this->materiel);
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
+    
+    $this->loadAffectationsPersonnel();
+    foreach ($this->_ref_affectations_personnel as $emplacement => $affectations) {
+      $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
+      $template->addProperty("Opération - personnel réel - $locale", implode(" - ", CMbArray::pluck(CMbArray::pluck(CMbArray::pluck($affectations, "_ref_personnel"), "_ref_user"), "_view")));
+//      $template->addProperty("Opération - personnel - $emplacement", implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view")));
+    }
+    
+    $plageop = $this->_ref_plageop;
+    $plageop->loadAffectationsPersonnel();
+    foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
+      $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
+      $template->addProperty("Opération - personnel prévu - $locale", implode(" - ", CMbArray::pluck(CMbArray::pluck(CMbArray::pluck($affectations, "_ref_personnel"), "_ref_user"), "_view")));
+//      $template->addProperty("Opération - personnel - $emplacement", implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view")));
+    }
   }
 }
 

@@ -11,40 +11,40 @@ global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("std");
 $can->needsRead();
 
-// Liste des Class
-$listClass       = getInstalledClasses();
+$classes = array_flip(getInstalledClasses());
 $listTraductions = array();
-$classes         = array();
 
 // Chargement des champs d'aides a la saisie
-foreach($listClass as $sClassName){  
-  $object = new $sClassName;
-  if(count($object->_helped_fields)){
-    $listTraductions[$sClassName] = CAppUI::tr($sClassName);
-    
-    foreach($object->_helped_fields as $field =>$help_field){
-      $classes[$sClassName][$field] = null;
-      if(is_array($help_field)){
-      foreach($help_field as $num_depend => $_depend_value){
-	      
-	      if($_depend_value){
-	        $specType = $object->_specs[$_depend_value]->getSpecType();
-	        if($specType == "enum"){
-	          $entryEnums = array();
-	          
-	          // Ecriture du tableau de traduction
-	          foreach($object->_specs[$_depend_value]->_locales as $key => $sTraduction){
-	            $listTraductions["$sClassName.$_depend_value.$key"] = $sTraduction;
-	            $entryEnums[$key] = "$sClassName.$_depend_value.$key";
-	          }
-	          $classes[$sClassName][$field][$num_depend] = $entryEnums;
-	        }
-	      }
-      }
-      }
-    }
+foreach ($classes as $class => &$infos) {  
+  $listTraductions[$class] = CAppUI::tr($class);
+  $object = new $class;
+  $infos = array();
+  foreach ($object->_specs as $field => $spec) {
+   	if (isset($spec->helped)) {
+   	  $info =& $infos[$field];
+   	  $helped = $spec->helped;
+
+   	  if (!is_array($helped)) {
+   	    $info = null;
+   	    continue;
+   	  }
+   	  
+   	  foreach($helped as $i => $depend_field) {
+   	    $key = "depend_value_" . ($i+1);
+   	    $info[$key] = array();
+   	    $list = &$info[$key];
+   	    $list = array();
+   	    foreach ($object->_specs[$depend_field]->_list as $value) {
+   	      $locale = "$class.$depend_field.$value";
+   	      $list[$value] = $locale;
+   	      $listTraductions[$locale] = CAppUI::tr($locale);
+   	    }
+   	  }
+   	}
   }
 }
+
+CMbArray::removeValue(array(), $classes);
 
 // Liste des users accessibles
 $listPrat = new CMediusers();
@@ -107,7 +107,6 @@ if ($userSel->user_id) {
     $aidesFunc[$key]->loadRefsFwd();
   }
 }
-
 
 // Aide sélectionnée
 $aide = new CAideSaisie();

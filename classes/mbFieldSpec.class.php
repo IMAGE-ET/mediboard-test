@@ -28,7 +28,8 @@ class CMbFieldSpec {
   var $mask           = null;
   var $format         = null;
   var $autocomplete   = null;
-
+  var $helped         = null;
+  
   var $msgError       = null;
 
   static $chars  = array();
@@ -57,12 +58,17 @@ class CMbFieldSpec {
       if (array_key_exists($k ,$aObjProperties)){
         $this->$k = $aProperties[$k];
       } else {
-        trigger_error("La spécification '$k' trouvée dans '{$this->className}' est inexistante dans la classe '".get_class($this)."'", E_USER_WARNING);
+        trigger_error("La spécification '$k' trouvée dans '$className::$field' est inexistante dans la classe '".get_class($this)."'", E_USER_WARNING);
       }
     }
 
     $this->_defaultLength = 6;
-
+    
+    // Helped fields
+    if (is_string($this->helped)) {
+      $this->helped = explode("|", $this->helped);
+    }
+    
     $this->checkValues();
   }
 

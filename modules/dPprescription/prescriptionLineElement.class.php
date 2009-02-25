@@ -16,7 +16,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   // DB Fields
   var $element_prescription_id        = null;
-  var $commentaire                    = null;
   var $executant_prescription_line_id = null; 
   var $user_executant_id              = null;
   
@@ -49,7 +48,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $specs["element_prescription_id"]        = "ref notNull class|CElementPrescription cascade";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
-    $specs["commentaire"]                    = "str";
     return $specs;
   }
   

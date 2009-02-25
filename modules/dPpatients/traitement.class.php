@@ -31,7 +31,7 @@ class CTraitement extends CMbObject {
     $specs = parent::getSpecs();
     $specs["debut"       ] = "date";
     $specs["fin"         ] = "date moreEquals|debut";
-    $specs["traitement"  ] = "text";
+    $specs["traitement"  ] = "text helped";
     $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     
     $specs["_search"] = "str";

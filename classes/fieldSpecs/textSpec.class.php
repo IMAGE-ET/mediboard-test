@@ -22,7 +22,7 @@ class CTextSpec extends CMbFieldSpec {
     return("text");
   }
   
-  function checkProperty($object){
+  function checkProperty($object) {
     return null;
   }
   

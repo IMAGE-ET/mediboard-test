@@ -81,12 +81,12 @@ class CRPU extends CMbObject {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "sejour_id"        => "ref notNull class|CSejour cascade",
-      "diag_infirmier"   => "text",
+      "diag_infirmier"   => "text helped",
       "mode_entree"      => "enum list|6|7|8 notNull",
       "provenance"       => "enum list|1|2|3|4|5|8",
       "transport"        => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
       "pec_transport"    => "enum list|med|paramed|aucun",
-      "motif"            => "text",
+      "motif"            => "text helped",
       "ccmu"             => "enum list|1|P|2|3|4|5|D",
       "gemsa"            => "enum list|1|2|3|4|5|6",
       "type_pathologie"  => "enum list|C|E|M|P|T",

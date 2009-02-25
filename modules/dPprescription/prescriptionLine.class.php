@@ -38,6 +38,7 @@ class CPrescriptionLine extends CMbObject {
   var $unite_decalage_fin  = null;
   var $operation_id        = null;
   var $emplacement         = null;
+  var $commentaire         = null;
   
   // Form Fields
   var $_fin                = null;
@@ -99,6 +100,7 @@ class CPrescriptionLine extends CMbObject {
     $specs["condition_active"]  = "bool";
     $specs["unite_decalage"]    = "enum list|jour|heure default|jour";
     $specs["unite_decalage_fin"]= "enum list|jour|heure default|jour";
+    $specs["commentaire"]       = "str helped";
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["operation_id"]      = "ref class|COperation";
     $specs["_fin"]              = "date moreEquals|debut";

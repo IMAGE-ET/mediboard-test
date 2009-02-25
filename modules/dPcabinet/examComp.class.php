@@ -33,7 +33,7 @@ class CExamComp extends CMbObject {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "consultation_id" => "ref notNull class|CConsultation",
-      "examen"          => "text",
+      "examen"          => "text helped",
       "realisation"     => "enum notNull list|avant|pendant",
       "fait"            => "num minMax|0|1"
     );

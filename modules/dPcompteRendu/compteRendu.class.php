@@ -64,7 +64,7 @@ class CCompteRendu extends CMbMetaObject {
     $specs["object_class"]     = "enum notNull list|CPatient|CConsultation|CConsultAnesth|COperation|CSejour";
     $specs["nom"]              = "str notNull";
     $specs["type"]             = "enum list|header|body|footer default|body";
-    $specs["source"]           = "html";
+    $specs["source"]           = "html helped|object_class";
     $specs["file_category_id"] = "ref class|CFilesCategory";
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";

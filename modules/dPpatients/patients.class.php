@@ -276,7 +276,6 @@ class CPatient extends CMbObject {
 
   function getHelpedFields(){
     return array(
-      "remarques" => null
     );
   }
   

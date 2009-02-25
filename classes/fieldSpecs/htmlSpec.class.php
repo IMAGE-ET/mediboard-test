@@ -11,7 +11,7 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CHtmlSpec extends CMbFieldSpec {
-  
+
   function getSpecType() {
     return("html");
   }

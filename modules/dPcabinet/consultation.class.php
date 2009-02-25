@@ -151,10 +151,10 @@ class CConsultation extends CCodable {
     $specs["chrono"]            = "enum notNull list|16|32|48|64";
     $specs["annule"]            = "bool";
     
-    $specs["motif"]             = "text";
-    $specs["rques"]             = "text";
-    $specs["examen"]            = "text";
-    $specs["traitement"]        = "text";
+    $specs["motif"]             = "text helped";
+    $specs["rques"]             = "text helped";
+    $specs["examen"]            = "text helped";
+    $specs["traitement"]        = "text helped";
     $specs["premiere"]          = "bool";
     $specs["adresse"]           = "bool";
     $specs["tarif"]             = "str";
@@ -178,7 +178,7 @@ class CConsultation extends CCodable {
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
-    $specs["_prat_id"]          = "text";
+    $specs["_prat_id"]          = "";
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
     $specs["_somme"]            = "currency";
