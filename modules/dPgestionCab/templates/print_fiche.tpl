@@ -1,6 +1,6 @@
 <table align="center" cellspacing="0" cols="5" border="1">
   <colgroup>
-    <col width="86">
+    <col width="100">
     <col width="159">
     <col width="112">
     <col width="128">
