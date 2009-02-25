@@ -19,30 +19,35 @@ $board = mbGetValueFromGet("board", 0);
 $boardItem = mbGetValueFromGet("boardItem", 0);
 
 // Urgences du jour
-$listUrgences = new COperation;
-$listUrgences->date = $date;
-$listUrgences->chir_id = $userSel->user_id;
-$listUrgences = $listUrgences->loadMatchingList("date");
-foreach($listUrgences as &$curr_urg) {
-  $curr_urg->loadRefsFwd();
-	$curr_urg->loadRefsDocs();
-  $curr_urg->_ref_sejour->loadRefsFwd();
-	$curr_urg->_ref_sejour->loadRefsDocs();
+$listUrgences = array();
+$operation = new COperation();
+if($userSel->_id){
+	$operation->date = $date;
+	$operation->chir_id = $userSel->_id;
+  $listUrgences = $operation->loadMatchingList("date");
+	foreach($listUrgences as &$curr_urg) {
+	  $curr_urg->loadRefsFwd();
+		$curr_urg->loadRefsDocs();
+	  $curr_urg->_ref_sejour->loadRefsFwd();
+		$curr_urg->_ref_sejour->loadRefsDocs();
+	}
 }
-
 // Liste des opérations du jour sélectionné
-$listDay = new CPlageOp;
-$listDay->date = $date;
-$listDay->chir_id = $userSel->user_id;
-$listDay = $listDay->loadMatchingList("debut");
-foreach ($listDay as &$curr_plage) {
-  $curr_plage->loadRefs();
-  foreach ($curr_plage->_ref_operations as &$curr_op) {
-    $curr_op->loadRefsFwd();
-		$curr_op->loadRefsDocs();
-    $curr_op->_ref_sejour->loadRefsFwd();
-		$curr_op->_ref_sejour->loadRefsDocs();
-  }
+$listDay = array();
+$plageOp = new CPlageOp();
+if($userSel->_id){
+	$plageOp->date = $date;
+	$plageOp->chir_id = $userSel->_id;
+  $listDay = $plageOp->loadMatchingList("debut");
+	foreach ($listDay as &$curr_plage) {
+	  $curr_plage->loadRefs();
+	  foreach ($curr_plage->_ref_operations as &$curr_op) {
+	    $curr_op->loadRefsFwd();
+			$curr_op->loadRefsDocs();
+	    $curr_op->_ref_sejour->loadRefsFwd();
+			$curr_op->_ref_sejour->loadRefsDocs();
+	  }
+	}
 }
 
 // Praticien concerné
