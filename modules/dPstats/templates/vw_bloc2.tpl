@@ -1,10 +1,13 @@
 <script type="text/javascript">
 
 function getSpreadSheet() {
+  var oForm = document.bloc;
   var spreadSheet = new Url();
   spreadSheet.setModuleAction("dPstats", "vw_bloc2");
   spreadSheet.addParam("suppressHeaders", 1);
   spreadSheet.addParam("mode", "csv");
+  spreadSheet.addParam("bloc_id", $V(oForm.bloc_id));
+  spreadSheet.addParam("deblistbloc", $V(oForm.deblistbloc));
   spreadSheet.popup(550, 300, "statsBloc");
 }
 
@@ -22,13 +25,13 @@ Main.add(function () {
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>
-          <th colspan="4" class="category">Tableau d'activité du bloc sur une journée</th>
+          <th colspan="3" class="category">Tableau d'activité du bloc sur une journée</th>
         </tr>
         <tr>
-          <td class="button" rowspan="2">
+          <td class="button" rowspan="3">
             <img src="images/pictures/spreadsheet.png" onclick="getSpreadSheet()" />
           </td>
-          <th><label for="deblistbloc" title="Date de début">Début</label></th>
+          <th><label for="deblistbloc" title="Date de début">Date</label></th>
           <td class="date">
             <div class="control">
             <div class="date" id="bloc_deblistbloc_da">{{$deblist|date_format:"%d/%m/%Y"}}</div>
@@ -36,7 +39,10 @@ Main.add(function () {
             <img id="bloc_deblistbloc_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
             </div>
           </td>
-          <td>
+        </tr>
+        <tr>
+          <th><label for="bloc_id" title="Bloc opératoire">Bloc</label></th>
+          <td colspan="2">
             <select name="bloc_id">
               <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
               {{foreach from=$listBlocs item=curr_bloc}}
@@ -48,6 +54,7 @@ Main.add(function () {
           </td>
         </tr>
         <tr>
+          <!--
           <th><label for="finlistbloc" title="Date de fin">Fin</label></th>
           <td class="date">
             <div class="control">
@@ -56,7 +63,8 @@ Main.add(function () {
             <img id="bloc_finlistbloc_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
             </div>
           </td>
-          <td>
+          -->
+          <td class="button" colspan="2">
             <button class="search" type="submit">Afficher</button>
           </td>
         </tr>
@@ -74,7 +82,7 @@ Main.add(function () {
           <th rowspan="2">Chirurgien</th>
           <th rowspan="2">Anesthésiste</th>
           <th colspan="3">Nature</th>
-          <th rowspan="2">Type<br />d'anesthésie</th>
+          <th rowspan="2">Type<br />anesthésie</th>
           <th rowspan="2">Code<br />ASA</th>
           <th rowspan="2">Placement<br />programme</th>
           <th colspan="9">Timings intervention</th>
@@ -88,15 +96,15 @@ Main.add(function () {
           <th>libelle</th>
           <th>DP</th>
           <th>Actes</th>
-          <th>entrée salle</th>
-          <th>debut d'induction</th>
-          <th>fin d'induction</th>
-          <th>pose garrot</th>
-          <th>début intervention</th>
-          <th>fin intervention</th>
-          <th>retrait garrot</th>
-          <th>sortie salle</th>
-          <th>patient suivant</th>
+          <th>entrée<br />salle</th>
+          <th>debut<br />induction</th>
+          <th>fin<br />induction</th>
+          <th>pose<br />garrot</th>
+          <th>début<br />intervention</th>
+          <th>fin<br />intervention</th>
+          <th>retrait<br />garrot</th>
+          <th>sortie<br />salle</th>
+          <th>patient<br />suivant</th>
           <th>entrée</th>
           <th>sortie</th>
         </tr>
