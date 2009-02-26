@@ -209,7 +209,7 @@ Main.add(function () {
        
         <tr>
           <th colspan="2">{{mb_label object=$fiche field="suite_even"}}</th> 
-          <td colspan="2">{{mb_label object=$fiche field="suite_even" emptyLabel="Choose" onchange="choixSuiteEven();"}}
+          <td colspan="2">{{mb_field object=$fiche field="suite_even" emptyLabel="Choose" onchange="choixSuiteEven();"}}
             <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
             <tr>
               <td>{{mb_label object=$fiche field="suite_even_descr"}}</td>
