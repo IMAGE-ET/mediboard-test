@@ -63,7 +63,7 @@ class CSpObjectHandler extends CMbObjectHandler {
   }
       
   /**
-   * Generate a Sherpa DSN unique identifier for a given Mesiboard object
+   * Generate a Sherpa DSN unique identifier for a given Mediboard object
    * @param $mbObject CMbObject The Mediboard object
    * @return numchar The generated identifier
    */
@@ -227,18 +227,15 @@ class CSpObjectHandler extends CMbObjectHandler {
     
 
     // Propagate modifications to other IDs
-    foreach ($this->getIds400For($mbObject) as $id400) {
-      // Store id400;
-      $id400->last_update = mbDateTime();
-      
+    foreach ($this->getIds400For($mbObject) as $id400) {      
       // Check if id has to be rebuilt
       if (!$this->checkId($mbObject, $id400->id400)) {
         $id400->id400 = $this->makeId($mbObject);
-      }
-      
-      if ($msg = $id400->store()) {
-        trigger_error("Error updating id400 for object  '$mbObject->_view' : $msg", E_USER_WARNING);
-        continue;
+        $id400->last_update = mbDateTime();
+	      if ($msg = $id400->store()) {
+	        trigger_error("Error updating id400 for object  '$mbObject->_view' : $msg", E_USER_WARNING);
+	        continue;
+	      }
       }
             
       // Find group

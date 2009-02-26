@@ -54,7 +54,7 @@ function setClose(modele_id, object_id) {
 	  <li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>
 	{{/foreach}}
 	{{foreach from=$modelesNonCompat key=class item=modeles}}
-	  <li><a href="#{{$class}}" class="minor">{{tr}}{{$class}}{{/tr}}</a></li>
+	  <li><a href="#{{$class}}" class="wrong">{{tr}}{{$class}}{{/tr}}</a></li>
 	{{/foreach}}
 	</ul>
 	<hr class="control_tabs" />

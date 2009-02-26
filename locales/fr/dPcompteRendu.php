@@ -220,4 +220,10 @@ $locales['CAideSaisie-_depend_field_1-desc'] = 'Champ de la dépendance 1 liée à 
 $locales['CAideSaisie-_depend_field_2'] = 'Champ  2';
 $locales['CAideSaisie-_depend_field_2-court'] = 'Champ  2';
 $locales['CAideSaisie-_depend_field_2-desc'] = 'Champ de la dépendance 2 liée à l\'aide';
+$locales['CAideSaisie-_owner'] = 'Appartient à';
+$locales['CAideSaisie-_owner-court'] = 'Appart.';
+$locales['CAideSaisie-_owner-desc'] = 'L\'aide à la saisie appartient à';
+$locales['CAideSaisie._owner.'] = 'Indéfini';
+$locales['CAideSaisie._owner.func'] = 'Cabinet';
+$locales['CAideSaisie._owner.user'] = 'Utilisateur';
 ?>

@@ -22,6 +22,9 @@ class CAntecedent extends CMbObject {
   // Form Fields
   var $_search = null;
   
+  // Distant fields
+  var $_counts_rques_aides = null;
+  
   static $types = array(
 	  'med', 'alle', 'trans', 'obst', 
 	  'chir', 'fam', 'anesth', 'gyn', 
@@ -102,6 +105,30 @@ class CAntecedent extends CMbObject {
             $dossier_medical->store();
           }
         }
+      }
+    }
+  }
+  
+  /**
+   * Add a count behaviour to parent load
+   */
+  function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null) {
+    parent::loadAides($user_id, $needle, $depend_value_1, $depend_value_2);
+    
+    $this->_aides_all_depends["rques"];
+
+    $rques_aides = $this->_aides_all_depends["rques"];
+    
+    $depend_field_1 = $this->_specs["rques"]->helped[0];
+    $depend_values_1 = $this->_specs[$depend_field_1]->_list;
+    $depend_values_1[] = "";
+    foreach ($depend_values_1 as $depend_value_1) {
+      $count =& $this->_count_rques_aides;
+      $count[$depend_value_1] = 0;
+      if (isset($rques_aides[$depend_value_1])) {
+	      foreach ($rques_aides[$depend_value_1] as $aides_by_depend_field_2) {
+	        $count[$depend_value_1] += count($aides_by_depend_field_2);
+	      }
       }
     }
   }

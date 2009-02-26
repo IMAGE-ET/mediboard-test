@@ -26,6 +26,7 @@ class CAideSaisie extends CMbObject {
   // Form Fields
   var $_depend_field_1     = null;
   var $_depend_field_2     = null;
+  var $_owner              = null;
   
   // Referenced objects
   var $_ref_user          = null;
@@ -51,6 +52,7 @@ class CAideSaisie extends CMbObject {
     
     $specs["_depend_field_1"] = "str";
     $specs["_depend_field_2"] = "str";
+    $specs["_owner"]          = "enum list|user|func";
     
     return $specs;
   }
@@ -90,6 +92,13 @@ class CAideSaisie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
+    $this->_view = $this->text;
+    
+    // Owner
+    if ($this->user_id    ) $this->_owner = "user";
+    if ($this->function_id) $this->_owner = "func";
+
+    // Depend fields
     if ($this->class) {
       $object = new $this->class;
       $this->_depend_field_1 = $object->_helped_fields[$this->field]["depend_value_1"]; 

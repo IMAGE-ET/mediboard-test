@@ -1,11 +1,11 @@
 {{if @$object->_aides_all_depends.$property}}
 <ul>
-  {{foreach from=$object->_aides_all_depends.$property item=aidesByDepend1 key=owner}}
-  {{foreach from=$aidesByDepend1 item=aidesByDepend2 key=depend1}}
-  {{foreach from=$aidesByDepend2 item=aides key=depend2}}
-  {{foreach from=$aides item=name key=text}}
+  {{assign var=aidesByDepend1 value=$object->_aides_all_depends.$property}}
+  {{foreach from=$aidesByDepend1 key=depend1 item=aidesByDepend2 }}
+  {{foreach from=$aidesByDepend2 key=depend2 item=aides }}
+  {{foreach from=$aides item=_aide}}
     <li>
-      <span style="float:right">{{$owner}}</span>
+      <span style="float:right">{{mb_value object=$_aide field=_owner}}</span>
       <div class="depend" style="display:none">{{$depend1}}</div>
       <div class="depend2" style="display:none">{{$depend2}}</div>
       <strong>
@@ -13,11 +13,10 @@
         {{if $depend2}}{{tr}}{{$object->_class_name}}.{{$depend_field_2}}.{{$depend2}}{{/tr}}{{/if}}
       </strong>
 		
-      <span>{{$name|lower|replace:$needle:"<em>$needle</em>"}}</span>
+      <span>{{$_aide->name|lower|replace:$needle:"<em>$needle</em>"}}</span>
       <br/>
-      <small class="text">{{$text|lower|replace:$needle:"<em>$needle</em>"}}</small>
+      <small class="text">{{$_aide->text|lower|replace:$needle:"<em>$needle</em>"}}</small>
     </li>
-  {{/foreach}}
   {{/foreach}}
   {{/foreach}}
   {{/foreach}}
