@@ -408,7 +408,19 @@ class CSetupmediusers extends CSetup {
      $sql = "ALTER TABLE `functions_mediboard` ADD `compta_partagee` BOOL NOT NULL DEFAULT '0';";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.29";
+     $this->makeRevision("0.29");
+     $sql = "CREATE TABLE `secondary_function` (
+               `secondary_function_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+               `function_id` INT (11) UNSIGNED NOT NULL,
+               `user_id` INT (11) UNSIGNED NOT NULL
+             ) TYPE=MYISAM;";
+     $this->addQuery($sql);
+     $sql = "ALTER TABLE `secondary_function` 
+             ADD INDEX (`function_id`),
+             ADD INDEX (`user_id`);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.30";
   }
 }
 ?>

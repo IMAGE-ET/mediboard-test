@@ -42,6 +42,8 @@ class CFunctions extends CMbObject {
   
 	function getBackRefs() {
 	  $backRefs = parent::getBackRefs();
+	  $backRefs["users"]                          = "CMediusers function_id";
+	  $backRefs["secondary_functions"]            = "CSecondaryFunction user_id";
 	  $backRefs["aides"]                          = "CAideSaisie function_id";
 	  $backRefs["catalogues_labo"]                = "CCatalogueLabo function_id";
 	  $backRefs["compte_rendu"]                   = "CCompteRendu function_id";
@@ -51,7 +53,6 @@ class CFunctions extends CMbObject {
 	  $backRefs["fiches_compta"]                  = "CGestionCab function_id";
 	  $backRefs["services_urgence_pour"]          = "CGroups service_urgences_id";
 	  $backRefs["liste_choix"]                    = "CListeChoix function_id";
-	  $backRefs["users"]                          = "CMediusers function_id";
 	  $backRefs["paiements"]                      = "CModePaiement function_id";
 	  $backRefs["pack_examens"]                   = "CPackExamensLabo function_id";
 	  $backRefs["plages_op"]                      = "CPlageOp spec_id";
@@ -64,17 +65,17 @@ class CFunctions extends CMbObject {
 	
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["group_id"] = "ref notNull class|CGroups";
-    $specs["type"]     = "enum notNull list|administratif|cabinet";
-    $specs["text"]     = "str notNull confidential";
-    $specs["color"]    = "str notNull length|6";
-    $specs["adresse"]  = "text";
-    $specs["cp"]       = "numchar length|5";
-    $specs["ville"]    = "str maxLength|50";
-    $specs["tel"]      = "numchar length|10 mask|99S99S99S99S99";
-    $specs["fax"]      = "numchar length|10 mask|99S99S99S99S99";
-    $specs["soustitre"]= "text";
-    $specs["compta_partagee"]= "bool notNull";
+    $specs["group_id"]        = "ref notNull class|CGroups";
+    $specs["type"]            = "enum notNull list|administratif|cabinet";
+    $specs["text"]            = "str notNull confidential";
+    $specs["color"]           = "str notNull length|6";
+    $specs["adresse"]         = "text";
+    $specs["cp"]              = "numchar length|5";
+    $specs["ville"]           = "str maxLength|50";
+    $specs["tel"]             = "numchar length|10 mask|99S99S99S99S99";
+    $specs["fax"]             = "numchar length|10 mask|99S99S99S99S99";
+    $specs["soustitre"]       = "text";
+    $specs["compta_partagee"] = "bool notNull";
     return $specs;
   }
   

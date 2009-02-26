@@ -114,9 +114,7 @@ function changeRemote(o) {
 	          	{{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
 	          </td>
 	          
-	          <td>
-	          	{{$curr_user->_ref_profile->user_username}}
-	          </td>
+	          <td>{{$curr_user->_ref_profile->user_username}}</td>
 	          
 	          <td>
 	            {{if $curr_user->_user_last_login}}

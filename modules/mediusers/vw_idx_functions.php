@@ -26,7 +26,18 @@ foreach($listGroups as $key => $value) {
 // Récupération de la fonction selectionnée
 $userfunction = new CFunctions;
 $userfunction->load(mbGetValueFromGetOrSession("function_id", 0));
-$userfunction->loadRefsFwd();
+if($userfunction->_id) {
+  $userfunction->loadRefsFwd();
+  $userfunction->loadBackRefs("users");
+  foreach($userfunction->_back["users"] as &$curr_user) {
+    $curr_user->loadRefProfile();
+  }
+  $userfunction->loadBackRefs("secondary_functions");
+  foreach($userfunction->_back["secondary_functions"] as &$curr_sec_function) {
+    $curr_sec_function->loadRefUser();
+    $curr_sec_function->_ref_user->loadRefProfile();
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -35,6 +46,7 @@ $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 
 $smarty->assign("userfunction", $userfunction);
 $smarty->assign("listGroups"  , $listGroups  );
+$smarty->assign("utypes"      , CUser::$types );
 
 $smarty->display("vw_idx_functions.tpl");
 

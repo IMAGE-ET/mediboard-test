@@ -6,6 +6,10 @@ Main.add(function () {
   initInseeFields("editFrm", "cp", "ville");
 });
 
+Main.add(function () {
+  Control.Tabs.create('tab_user', true);
+});
+
 ColorSelector.init = function(){
   this.sForm  = "editFrm";
   this.sColor = "color";
@@ -15,7 +19,7 @@ ColorSelector.init = function(){
 
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" rowspan="2">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="buttonnew">
         Créer une fonction
       </a>
@@ -27,7 +31,7 @@ ColorSelector.init = function(){
           <th>Utilisateurs</th>
         </tr>
         {{foreach from=$curr_group->_ref_functions item=curr_function}}
-        <tr>
+        <tr {{if $curr_function->_id == $userfunction->_id}}class="selected"{{/if}}>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->_id}}">
               {{$curr_function->text}}
@@ -46,23 +50,28 @@ ColorSelector.init = function(){
       {{/foreach}}
       </table>
     </td>
-    <td class="halfPane">
+    <td class="halfPane" style="height: 1%">
     <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="function_id" value="{{$userfunction->function_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
           {{if $userfunction->function_id}}
+          <th class="title modify" colspan="2">
             <a style="float:right;" href="#" onclick="view_log('CFunctions',{{$userfunction->function_id}})">
               <img src="images/icons/history.gif" alt="historique" />
             </a>
             Modification de la fonction &lsquo;{{$userfunction->text}}&rsquo;
-          {{else}}
-            {{tr}}Création d'une fonction{{/tr}}
-          {{/if}}
           </th>
+          {{else}}
+          <th class="title" colspan="2">
+            <a style="float:right;" href="#" onclick="view_log('CFunctions',{{$userfunction->function_id}})">
+              <img src="images/icons/history.gif" alt="historique" />
+            </a>
+            {{tr}}Création d'une fonction{{/tr}}
+          </th>
+          {{/if}}
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="text"}}</th>
@@ -143,4 +152,89 @@ ColorSelector.init = function(){
       </form>
     </td>
   </tr>
+  {{if $userfunction->function_id}}
+  <tr>
+    <td>
+      <ul id="tab_user" class="control_tabs">
+        <li><a href="#list-primary-users" id="list-primary-users-title">Utilisateurs principaux</a></li>
+        <li><a href="#list-secondary-users" id="list-secondary-users-title">Utilisateurs secondaires</a></li>
+      </ul>
+      <hr class="control_tabs" />
+      <div id="list-primary-users" style="display: none;">
+        <table class="tbl">
+          <tr>
+            <th>{{mb_title class=CUser field=user_username}}</th>
+            <th>{{mb_title class=CUser field=user_last_name}}</th>
+            <th>{{mb_title class=CUser field=user_first_name}}</th>
+            <th>{{mb_title class=CUser field=user_type}}</th>
+            <th>{{mb_title class=CUser field=profile_id}}</th>
+            <th>{{mb_title class=CUser field=user_last_login}}</th>
+          </tr>
+          {{foreach from=$userfunction->_back.users item=curr_user}}
+          <tr>
+            {{assign var=user_id value=$curr_user->_id}}
+            {{assign var="href" value="?m=mediusers&tab=vw_idx_mediusers&user_id=$user_id"}}
+	          <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
+	          <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
+	          <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
+            <td>
+	          	{{assign var=type value=$curr_user->_user_type}}
+	          	{{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
+	          </td>
+	          <td>{{$curr_user->_ref_profile->user_username}}</td>
+	          <td>
+	            {{if $curr_user->_user_last_login}}
+	            <label title="{{mb_value object=$curr_user field=_user_last_login}}">
+	              {{mb_value object=$curr_user field=_user_last_login format=relative}}
+	            </label>
+	          	{{/if}}
+	          </td>
+          </tr>
+          {{foreachelse}}
+          <tr>
+            <td colspan="6">Aucun utilisateur principal</td>
+          </tr>
+          {{/foreach}}
+        </table>
+      </div>
+      <div id="list-secondary-users" style="display: none;">
+        <table class="tbl">
+          <tr>
+            <th>{{mb_title class=CUser field=user_username}}</th>
+            <th>{{mb_title class=CUser field=user_last_name}}</th>
+            <th>{{mb_title class=CUser field=user_first_name}}</th>
+            <th>{{mb_title class=CUser field=user_type}}</th>
+            <th>{{mb_title class=CUser field=profile_id}}</th>
+            <th>{{mb_title class=CUser field=user_last_login}}</th>
+          </tr>
+          {{foreach from=$userfunction->_back.secondary_functions item=curr_function}}
+          <tr>
+            {{assign var=user_id value=$curr_function->_ref_user->_id}}
+            {{assign var="href" value="?m=mediusers&tab=vw_idx_mediusers&user_id=$user_id"}}
+	          <td><a href="{{$href}}">{{$curr_function->_ref_user->_user_username}}</a></td>
+	          <td><a href="{{$href}}">{{$curr_function->_ref_user->_user_last_name}}</a></td>
+	          <td><a href="{{$href}}">{{$curr_function->_ref_user->_user_first_name}}</a></td>
+            <td>
+	          	{{assign var=type value=$curr_function->_ref_user->_user_type}}
+	          	{{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
+	          </td>
+	          <td>{{$curr_function->_ref_user->_ref_profile->user_username}}</td>
+	          <td>
+	            {{if $curr_function->_ref_user->_user_last_login}}
+	            <label title="{{mb_value object=$curr_function->_ref_user field=_user_last_login}}">
+	              {{mb_value object=$curr_function->_ref_user field=_user_last_login format=relative}}
+	            </label>
+	          	{{/if}}
+	          </td>
+          </tr>
+          {{foreachelse}}
+          <tr>
+            <td colspan="6">Aucun utilisateur secondaire</td>
+          </tr>
+          {{/foreach}}
+        </table>
+      </div>
+    </td>
+  </tr>
+  {{/if}}
 </table>

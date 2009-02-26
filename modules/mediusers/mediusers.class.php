@@ -64,13 +64,13 @@ class CMediusers extends CMbObject {
   var $_id_cps   = null;
 
   // Object references
-  var $_ref_banque     = null;
-  var $_ref_function   = null;
-  var $_ref_discipline = null;
-  var $_ref_profile    = null;
-  var $_ref_user       = null;
-  var $_ref_packs      = array();
-  var $_ref_protocoles = array();
+  var $_ref_banque              = null;
+  var $_ref_function            = null;
+  var $_ref_discipline          = null;
+  var $_ref_profile             = null;
+  var $_ref_user                = null;
+  var $_ref_packs               = array();
+  var $_ref_protocoles          = array();
   
   // Object references per day
   var $_ref_plages = null;
@@ -86,18 +86,18 @@ class CMediusers extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["remote"]        = "bool";
-    $specs["adeli"]         = "numchar length|9 confidential mask|99S9S99999S9";
-    $specs["function_id"]   = "ref notNull class|CFunctions";
-    $specs["discipline_id"] = "ref class|CDiscipline";
-    $specs["titres"]        = "text";
-    $specs["commentaires"]  = "text";
-    $specs["actif"]         = "bool default|1";
-    $specs["deb_activite"]  = "date";
-    $specs["fin_activite"]  = "date";
-    $specs["spec_cpam_id"]  = "ref class|CSpecCPAM";
-    $specs["compte"]        = "code rib confidential mask|99999S99999S99999999999S99";
-    $specs["banque_id"]     = "ref class|CBanque";
+    $specs["remote"]           = "bool";
+    $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9";
+    $specs["function_id"]      = "ref notNull class|CFunctions";
+    $specs["discipline_id"]    = "ref class|CDiscipline";
+    $specs["titres"]           = "text";
+    $specs["commentaires"]     = "text";
+    $specs["actif"]            = "bool default|1";
+    $specs["deb_activite"]     = "date";
+    $specs["fin_activite"]     = "date";
+    $specs["spec_cpam_id"]     = "ref class|CSpecCPAM";
+    $specs["compte"]           = "code rib confidential mask|99999S99999S99999999999S99";
+    $specs["banque_id"]        = "ref class|CBanque";
     $specs["_user_username"]   = "str notNull minLength|4";
     $specs["_user_password2"]  = "password sameAs|_user_password";
     $specs["_user_first_name"] = "str";
@@ -141,12 +141,14 @@ class CMediusers extends CMbObject {
 
   function getSeeks() {
     return array (
-      "user_id"  => "ref|CUser"
+      "user_id"     => "ref|CUser",
+      "function_id" => "ref|CFunctions"
       );
   }
 
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
+	  $backRefs["secondary_functions"]             = "CSecondaryFunction user_id";
 	  $backRefs["actes_ccam_executes"]             = "CActeCCAM executant_id";
 	  $backRefs["actes_ngap_executes"]             = "CActeNGAP executant_id";
 	  $backRefs["administrations"]                 = "CAdministration administrateur_id";
