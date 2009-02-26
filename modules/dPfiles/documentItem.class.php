@@ -28,8 +28,8 @@ class CDocumentItem extends CMbMetaObject {
   function updateFormFields() {
   	parent::updateFormFields();
   	$system_sender = CAppUI::conf("dPfiles system_sender");
-  	
-    if (!is_subclass_of($system_sender, "CDocumentSender")) {
+
+  	if ($system_sender && !is_subclass_of($system_sender, "CDocumentSender")) {
        trigger_error("Instanciation du Document Sender impossible.");
     }
     
@@ -71,7 +71,7 @@ class CDocumentItem extends CMbMetaObject {
     
     $system_sender = CAppUI::conf("dPfiles system_sender");
     
-    if (!is_subclass_of($system_sender, "CDocumentSender")) {
+    if ($system_sender && !is_subclass_of($system_sender, "CDocumentSender")) {
        trigger_error("Instanciation du Document Sender impossible.");
     }
     
