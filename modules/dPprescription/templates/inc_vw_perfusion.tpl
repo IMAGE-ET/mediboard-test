@@ -15,12 +15,14 @@ Main.add( function(){
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       <div style="float: left">
-        <form name="editEmplacement" method="post" action="?">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_perfusion_aed" />
-          <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
-          {{mb_field object=$_perfusion field=emplacement onchange="submitFormAjax(this.form, 'systemMsg');"}}
-        </form>
+        {{if $prescription->type != "externe"}}
+	        <form name="editEmplacement" method="post" action="?">
+	          <input type="hidden" name="m" value="dPprescription" />
+	          <input type="hidden" name="dosql" value="do_perfusion_aed" />
+	          <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
+	          {{mb_field object=$_perfusion field=emplacement onchange="submitFormAjax(this.form, 'systemMsg');"}}
+	        </form>
+	      {{/if}}
         {{if $_perfusion->_ref_parent_line->_id}}
 	        {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
 	        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
@@ -241,6 +243,9 @@ Main.add( function(){
 					            {{if $line->_can_vw_livret_therapeutique}}
 									      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
 									    {{/if}}  
+									    {{if !$line->_ref_produit->inT2A}}
+								        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+								      {{/if}}
 									    {{if $line->_can_vw_generique}}
 									      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
 									    {{/if}} 

@@ -134,6 +134,9 @@ Main.add(function () {
         {{if $produit->_supprime}}
         <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
         {{/if}}
+        {{if !$produit->inT2A}}
+          <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+        {{/if}}  
       </td>
       <td>
         {{$produit->code_ucd}}

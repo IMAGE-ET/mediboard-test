@@ -113,9 +113,9 @@ class CGroups extends CMbObject {
 	    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, $g, $full_mode);
 	    
 	    $this->_ref_produits_livret = array();
-	    foreach($produits as $key => $prod){
+	    foreach($produits as $code_cip => $prod){
 	      $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();
-	      $produitLivretTherapeutique->load($key);
+	      $produitLivretTherapeutique->load($code_cip);
 	      $produitLivretTherapeutique->_ref_produit = $prod;
 	      $this->_ref_produits_livret[] = $produitLivretTherapeutique;
 	    }

@@ -8,6 +8,9 @@
       {{if $line->_can_vw_livret_therapeutique}}
       <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
       {{/if}}  
+      {{if !$line->_ref_produit->inT2A}}
+        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+      {{/if}}
       {{if $line->_can_vw_hospi}}
       <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
       {{/if}}

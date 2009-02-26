@@ -15,6 +15,9 @@
     {{/if}}
     {{if !$produit->inLivret}}
     <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+    {{/if}}
+    {{if !$produit->inT2A}}
+    <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
     {{/if}}  
   </td>
   <td>

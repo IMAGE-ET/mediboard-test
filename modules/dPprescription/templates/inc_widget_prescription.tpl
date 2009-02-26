@@ -37,6 +37,7 @@ openPrescription = function(prescription_id){
           <th>{{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}</th>
   			{{/if}}
 			{{/foreach}}
+			<th></th>
     </tr>
     {{foreach from=$prescriptions item=_prescription}}
       <tr>
@@ -57,6 +58,20 @@ openPrescription = function(prescription_id){
     			  </td>
   			  {{/if}}
 			  {{/foreach}}
+			  <td>
+			  {{if $_prescription->type == "externe"}}
+			    <form name="addPrescriptionSejour{{$suffixe}}" action="?">
+				    <input type="hidden" name="m" value="dPprescription" />
+				    <input type="hidden" name="dosql" value="do_prescription_aed" />
+				    <input type="hidden" name="del" value="1" />
+				    <input type="hidden" name="prescription_id" value="{{$_prescription->_id}}" />
+				    <!-- Creation d'une prescription externe ou de type sejour (pre_admission/sejour/sortie) -->
+				    <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ PrescriptionEditor.refresh('{{$_prescription->object_id}}','{{$_prescription->object_class}}'); } } );">
+				    Suppression de la prescription
+				    </button>
+				  </form>
+			  {{/if}}
+			  </td>
 			</tr>
     {{/foreach}}
     </table>

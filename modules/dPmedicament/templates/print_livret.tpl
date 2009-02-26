@@ -31,13 +31,16 @@
 			    <td>   
 			      {{$produit->code_cip}}
 			      {{if $produit->hospitalier}}
-			      <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+			        <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+			      {{/if}}
+			      {{if !$produit->inT2A}}
+			        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
 			      {{/if}}
 			      {{if $produit->_generique}}
-			      <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
+			        <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
 			      {{/if}}
 			      {{if $produit->_referent}}
-			      <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
+			        <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
 			      {{/if}}
 			    </td>
 			    <td>{{$produit->code_ucd}}</td>

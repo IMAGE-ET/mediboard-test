@@ -27,6 +27,14 @@
     {{/if}}
   </a>
 {{/foreach}}
+  - 
+  <a href="#" onclick="Livret.reloadAlpha('hors_T2A')">
+    {{if $lettre == "hors_T2A"}}
+      <strong>[Hors T2A]</strong>
+    {{else}}
+      Hors T2A
+    {{/if}}
+  </a>
 </div>
 
 {{if $lettre}}	
@@ -60,6 +68,9 @@
 			<div style="float: right">
       {{if $produit_livret->_ref_produit->hospitalier}}
       <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+      {{/if}}
+      {{if !$produit_livret->_ref_produit->inT2A}}
+        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
       {{/if}}
       {{if $produit_livret->_ref_produit->_generique}}
       <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />

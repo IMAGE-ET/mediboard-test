@@ -40,6 +40,9 @@ class CBcbProduit extends CBcbObject {
   var $rapport_unite_prise        = null;
   var $dosages                    = null;
   
+  var $inLivret = null;
+  var $inT2A = true;
+  
   // Objects references
   var $_ref_DCI              = null;
   var $_ref_UCD              = null;
@@ -135,6 +138,9 @@ class CBcbProduit extends CBcbObject {
 
 	    // Permet de savoir si le produit appartient au livret therapeutique
 	    $this->isInLivret();
+	    
+	    // Produit dans la T2A
+	    $this->isInT2A();
 	    
 	  	// Produit générique ?
 	    $this->getGenerique();
@@ -277,6 +283,33 @@ class CBcbProduit extends CBcbObject {
   	$this->inLivret = $livretThera->distObj->isLivret($g, $this->code_cip);
   }
 
+  function isInT2A(){
+    $ds = CSQLDataSource::get("bcb");
+    $query = "SELECT `MEDICAMENT_T2A` FROM `PHARMACIE_ADD_ON` WHERE `CODE_CIP` = '$this->code_cip'";
+    $t2a = $ds->loadResult($query);
+    $this->inT2A = ($t2a == "-1") ? false : true; 
+  }
+  
+  static function getHorsT2ALivret(){
+    $produits = array();
+    $ds = CSQLDataSource::get("bcb");
+    $query = "SELECT `CODE_CIP` 
+							FROM `PHARMACIE_ADD_ON`
+							LEFT JOIN `LIVRETTHERAPEUTIQUE` ON `PHARMACIE_ADD_ON`.`CODE_CIP` = `LIVRETTHERAPEUTIQUE`.`CODECIP` 
+							WHERE `MEDICAMENT_T2A` = '-1' 
+							AND `LIVRETTHERAPEUTIQUE`.`CODECIP` IS NOT NULL;";
+    $codes_cip = $ds->loadColumn($query);
+
+    foreach($codes_cip as $code_cip){
+      $produit = new CBcbProduitLivretTherapeutique();
+      $produit->load($code_cip);
+      $produit->loadRefProduit();
+      $produits[$code_cip] = $produit;
+    }
+    return $produits;
+  }
+  
+  
   // $livretTherapeutique = 1 pour une recherche dans le livret Therapeutique
   function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true){   
     // Type_recherche

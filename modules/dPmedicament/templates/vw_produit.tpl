@@ -7,6 +7,7 @@ Main.add(function () {
 });
 </script>
 
+{{if $mbProduit->code_cip}}
 <table class="main">
   <tr>
     <th class="title" {{if $mbProduit->_ref_monographie->date_suppression}}style="background-color: red"{{/if}}>
@@ -16,7 +17,6 @@ Main.add(function () {
     Produit supprimé depuis le {{$mbProduit->_ref_monographie->date_suppression}}
     {{/if}}
     </th>
-    
   </tr>
   <!-- Menu de la monographie du medicament -->
   <tr>
@@ -197,7 +197,7 @@ Main.add(function () {
             <th>Incompatibilités</th>
           </tr>
           <tr>
-            <td>{{$mbProduit->_ref_monographie->incompatibilite|smarty:nodefaults}}</td>
+            <td class="text">{{$mbProduit->_ref_monographie->incompatibilite|smarty:nodefaults}}</td>
           </tr>
           <tr>
             <th>Durée et précautions particulières de conservation</th>
@@ -294,3 +294,8 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+{{else}}
+	<div class="big-info">
+		Monographie non disponible pour ce produit
+	</div>
+{{/if}}

@@ -144,6 +144,10 @@
       {{if $line->_can_vw_livret_therapeutique}}
       <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
       <br />
+      {{/if}}
+      {{if !$line->_ref_produit->inT2A}}
+        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+        <br />
       {{/if}}  
       {{if $line->_can_vw_hospi}}
       <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
@@ -274,17 +278,36 @@
 	    </form>
   		
   		 <!-- Si seulement 1 voie possible ou affichage bloqué-->
-  		{{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
-  		  {{$line->voie}}
+  		{{if $line->voie}}
+	  		{{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
+	  		  {{$line->voie}}
+	  		{{else}}
+		  		<select name="voie-{{$line->_id}}" 
+		  						onchange="{{if !in_array($line->voie, $line->_ref_produit->voies)}}
+		  												$('warning-voie-{{$line->_id}}').hide();
+		  												$('warning-voie-option-{{$line->_id}}').hide();
+		  		                  {{/if}}
+		  		                  return submitVoie('{{$line->_id}}',this.value);">
+			  		{{foreach from=$line->_ref_produit->voies item=libelle_voie}}
+			  		  <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
+			  		{{/foreach}}
+			  		{{if !in_array($line->voie, $line->_ref_produit->voies)}}
+			  		  <script type="text/javascript">
+			  		    $('warning-voie-{{$line->_id}}').show();
+			  		  </script>
+			  		  <option id="warning-voie-option-{{$line->_id}}" value="{{$line->voie}}" selected="selected" style="background-color: red">
+			  		    {{$line->voie}}
+			  		  </option>
+			  		{{/if}}
+		  		</select>
+	  		{{/if}}
+	  		<div id="warning-voie-{{$line->_id}}" class="small-warning" style="display:none;">
+  		    Attention, la voie <strong>"{{$line->voie}}"</strong> n'est plus proposée pour ce médicament
+  		  </div>
   		{{else}}
-	  		<select name="voie-{{$line->_id}}" onchange="return submitVoie('{{$line->_id}}',this.value);">
-		  		{{foreach from=$line->_ref_produit->voies item=libelle_voie}}
-		  		  <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
-		  		{{/foreach}}
-	  		</select>
+  		Aucune voie
   		{{/if}}
-  	
-  	  </td>
+ 	  </td>
   </tr>
  
     		

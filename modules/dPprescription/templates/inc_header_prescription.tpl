@@ -97,9 +97,15 @@ submitProtocole = function(){
       {{/if}}
       
       {{if !$mode_protocole}}
-       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$prescription->_ref_patient->_id}}"'>
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$prescription->_ref_patient size=42}}
-       </a>
+        {{if $prescription->type == "externe"}}
+         <span style="float: left">
+         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$prescription->_ref_patient size=42}}
+         </span>
+        {{else}}
+         <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$prescription->_ref_patient->_id}}"'>
+          {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$prescription->_ref_patient size=42}}
+         </a>
+       {{/if}}
       {{/if}}
 
       {{if $mode_protocole}}
@@ -150,8 +156,11 @@ submitProtocole = function(){
           <button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
         </form>
       {{else}}
-         <!-- Prescription du Dr {{$prescription->_ref_praticien->_view}}<br /> -->
-        {{$prescription->_ref_object->_view}}
+        {{if $prescription->type == "externe"}}
+          {{$prescription->_ref_patient->_view}}   
+        {{else}}
+          {{$prescription->_ref_object->_view}}
+        {{/if}}
         {{if $prescription->_ref_patient->_age}}
            <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
@@ -318,11 +327,13 @@ submitProtocole = function(){
       {{/if}}
       <br />
       {{if $prescription->object_id}}
-        <select name="advAction">
-          <option value="">&mdash; Traitements perso</option>
-          <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arrêter</option>
-          <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprendre</option>
-        </select>
+        {{if $prescription->type != "externe"}}
+	        <select name="advAction">
+	          <option value="">&mdash; Traitements perso</option>
+	          <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arrêter</option>
+	          <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprendre</option>
+	        </select>
+        {{/if}}
         
         {{if !$mode_pharma}}
 	        {{if $is_praticien}}
