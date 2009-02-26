@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="mesure.xsd"/>
+   <xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+   <xsd:include schemaLocation="typesDeBase.xsd"/>
+   <xsd:include schemaLocation="typesTemps.xsd"/>
+   <!--
+      "typeNatureResultatTest" :
+      le type du résultat obtenu ou attendu pour un test
+   -->
+   <xsd:complexType name="typeNatureResultatTest">
+      <xsd:choice>
+         <xsd:element name="numerique" type="typeMesure"/>
+         <xsd:element name="numeriqueCalcul" type="typeNumeriqueCalcul"/>
+         <xsd:element name="ligneTexte" type="typeMesure"/>
+         <xsd:element name="texteMultiLigne" type="typeMesure"/>
+         <xsd:element name="code" type="typeMesure"/>
+         <xsd:element name="multiMedia" type="typeMesure"/>
+         <xsd:element name="courbe" type="typeMesure"/>
+         <xsd:element name="dateHeure" type="typeMesure"/>
+         <xsd:element name="date" type="typeMesure"/>
+         <xsd:element name="heure" type="typeMesure"/>
+      </xsd:choice>
+   </xsd:complexType>
+   <!--
+      "typeResultatCourbe" :
+      résultat sous la forme d'une courbe : ensemble de points reliés, dans un repère orthonormé (non transmis)
+      nombre de points et liste des coordonnées des points
+      Exemple : électrophorèse des protides ou des lipides
+      Il  serait  préférable d'utiliser un langage XML déjà existant pour les graphiques : SVG, VML, PGML, ... ?
+   -->
+   <xsd:complexType name="typeResultatCourbe">
+      <xsd:sequence>
+         <xsd:element name="points" type="typePoints"/>
+      </xsd:sequence>
+      <xsd:attribute name="nombrePoints" type="xsd:unsignedShort" use="required"/>
+   </xsd:complexType>
+   <xsd:complexType name="typePoints">
+      <xsd:sequence>
+         <xsd:element name="point" type="typePoint" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="typePoint">
+      <xsd:attribute name="x" type="xsd:decimal" use="required"/>
+      <xsd:attribute name="y" type="xsd:decimal" use="required"/>
+   </xsd:complexType>
+   <!--
+      "typeResultatNumeriqueCalcul" :
+      Résultat numérique calculé. Intéressant lorsqu'on veut donner au destinataire la formule de calcul utilisée.
+      Ce type est dérivé de "typeResultatNumerique" par adjonction de l'élément obligatoire "formule"
+   -->
+   <xsd:complexType name="typeResultatNumeriqueCalcul">
+      <xsd:complexContent>
+         <xsd:extension base="typeResultatNumerique">
+            <xsd:sequence>
+               <xsd:element name="formule" type="texte400"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!--
+      "typeResultatNumerique" :
+      Résultat numérique issu d'une mesure
+      Ce type est dérivé de "typeResultatMesure" par adjonction de l'élément résultat :
+      - éléments obligatoires :
+         - resultat : le résultat numérique utilisant le type générique xsd:decimal
+   -->
+   <xsd:complexType name="typeResultatNumerique">
+      <xsd:complexContent>
+         <xsd:extension base="typeResultatMesure">
+            <xsd:sequence>
+               <xsd:element name="resultat" type="xsd:decimal"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!--
+      "typeResultatTexteMultiLigne" :
+      Résultat constitué de plusieurs lignes de texte
+      Ce type est dérivé de "typeResultatMesure" par adjonction de l'élément résultatLignes :
+      - éléments obligatoires :
+         - resultat : le résultat textuel d'une ligne
+   -->
+   <xsd:complexType name="typeResultatTexteMultiLigne">
+      <xsd:complexContent>
+         <xsd:extension base="typeResultatMesure">
+            <xsd:sequence>
+               <xsd:element name="lignes" type="typeResultatLignes"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:complexType name="typeResultatLignes">
+      <xsd:sequence>
+         <xsd:element name="ligne" type="texte80" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeResultatLigneTexte" :
+      Résultat constitué d'une ligne de texte issu d'une mesure
+      Ce type est dérivé de "typeResultatMesure" par adjonction de l'élément résultat :
+      - éléments obligatoires :
+         - resultat : le résultat textuel d'une ligne
+   -->
+   <xsd:complexType name="typeResultatLigneTexte">
+      <xsd:complexContent>
+         <xsd:extension base="typeResultatMesure">
+            <xsd:sequence>
+               <xsd:element name="resultat" type="texte80"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!--
+      "typeResultatCode" :
+      Résultat constitué d'un code, un libellé, une nomenclature
+      Ce type est dérivé de "typeResultatMesure" par adjonction de l'élément résultat :
+      - éléments obligatoires :
+         - resultat : le résultat textuel d'une ligne
+   -->
+   <xsd:complexType name="typeResultatCode">
+      <xsd:complexContent>
+         <xsd:extension base="typeResultatMesure">
+            <xsd:sequence>
+               <xsd:element name="resultat" type="typeCode10Libelle80"/>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!--
+      "typeCommentaireResultat" :
+      Commentaire de résultat produit par celui qui a obtenu ce résultat
+   -->
+   <xsd:complexType name="typeCommentaireResultat">
+      <xsd:sequence>
+         <xsd:element name="commentaire" type="commentaire"/>
+         <xsd:element name="dateHeure" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="destinataires" type="typeDestinatairesResultats" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="modeObtention" type="modeObtentionResultat" use="optional"/>
+   </xsd:complexType>
+   <!--
+      destinataires de résultats
+   -->
+   <xsd:complexType name="typeDestinatairesResultats">
+      <xsd:sequence>
+         <xsd:element name="destinataire" type="destinataireResultat" minOccurs="0" maxOccurs="5"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:simpleType name="destinataireResultat">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="patient"/>
+         <xsd:enumeration value="médecin_prescripteur"/>
+         <xsd:enumeration value="médecin_copie"/>
+         <xsd:enumeration value="médecins"/>
+         <xsd:enumeration value="établissement_transmetteur"/>
+         <xsd:enumeration value="unité_fonctionnelle_demandeuse"/>
+         <xsd:enumeration value="unité_fonctionnelle_copie"/>
+         <xsd:enumeration value="unités_fonctionnelles"/>
+         <xsd:enumeration value="tous"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      "modeObtentionResultat" :
+      Les modes manuels : 
+         - saisie             :  sur un clavier ou tout autre système informatique de saisie manuelle
+         - comptage        :  comptage d'éléments. Exemple : compteur de formule sanguine sur une lame analysée au microscope
+         - chronometrage   :  utilisation d'un chronomètre manuel
+         - lecture_optique :  résultat lu sur une feuille par un scanner, un lecteur optique, ou un dispositif semblable (crayon optique, douchette,...)
+      Les modes automatiques :
+         - automate        :  exemple : résultat mesuré et rendu par un analyseur ou un appareil médical connecté au système informatique
+         - calcul          :  résultat calculé automatiquement à partir d'autres résultats
+         - système         :  résultat fourni automatiquement par le système informatique de l'exécutant. exemple : date système
+   -->
+   <xsd:simpleType name="modeObtentionResultat">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="saisie"/>
+         <xsd:enumeration value="comptage"/>
+         <xsd:enumeration value="chronometrage"/>
+         <xsd:enumeration value="lecture_optique"/>
+         <xsd:enumeration value="appareil"/>
+         <xsd:enumeration value="calcul"/>
+         <xsd:enumeration value="système"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>

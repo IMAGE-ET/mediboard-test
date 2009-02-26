@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas des niveaux inférieurs utiles 
+	-->
+	<xsd:include schemaLocation="personnePhysique.xsd"/>
+	<xsd:include schemaLocation="identifiantAdministrationPatient.xsd"/>
+	<!-- 
+		"typeSujetAnimal" :
+			Décrit un sujet d'examens animal
+	-->
+	<xsd:complexType name="typeSujetAnimal">
+		<xsd:annotation>
+			<xsd:documentation>L'animal possède un sexe (attribut), un nom optionnel, peut être optionnellement identifié, et classé (espèce, catégorie), il est optionnellement lié à une personne responsable</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="identifiant" type="typeIdentifiantAdministrationPatient" minOccurs="0"/>
+			<xsd:element name="nom" type="texte35" minOccurs="0"/>
+			<xsd:element name="dateNaissance" type="typeDateRecueillie" minOccurs="0"/>
+			<xsd:element name="lieuNaissance" type="typeAdresseBase" minOccurs="0"/>
+			<xsd:element name="espece" type="typeCode10Libelle35" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>espèce de l'animal</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="categories" type="typeCategories" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Classification arborescente de l'animal (ordre, famille, espèce, race, ...) </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="personneResponsable" type="typePersonne" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>propriétaire ou personne responsable de l'animal, éventuellement destinataire des résultats selon l'attribut "remettreResultatResponsable"</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="sexe" type="sexe" use="optional"/>
+		<xsd:attribute name="remettreResultatResponsable" type="ouiNon" use="optional"/>
+	</xsd:complexType>
+	<!-- 
+		"typeSujetMatiere" :
+			Décrit un sujet d'examens ou d'analyses non humain : organisme vivant ou autre matière (eau, aliments, air, ...)
+	-->
+	<xsd:complexType name="typeSujetMatiere">
+		<xsd:annotation>
+			<xsd:documentation>Un sujet peut être un organisme ou une matière (eau, air, instrument médical ...)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="identifiant" type="typeIdentifiantAdministrationPatient" minOccurs="0"/>
+			<xsd:element name="nom" type="texte35" minOccurs="0"/>
+			<xsd:element name="categories" type="typeCategories" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Classification arborescente de l'organisme ou de la matière</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="situations" type="typeSituationsMatiere" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>renseignement géographique sur la matière objet de l'examen (air en sortie de ventilation, eau de canalisation centrale, ...)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="personneResponsable" type="typePersonne" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>propriétaire ou personne responsable du sujet non humain à étudier, éventuellement destinataire des résultats.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="remettreResultatResponsable" type="ouiNon" use="optional"/>
+	</xsd:complexType>
+	<!--
+		Catégories pour une classification arborescente de l'organisme ou de la matière étudié
+	-->
+	<xsd:complexType name="typeCategories">
+		<xsd:sequence>
+			<xsd:element name="categorie" type="typeCode10Libelle35" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>élément de classification caractérisant  l'animal ou l'organisme ou la matière (famille, sous-espèce, race, ...)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		Situations géographique de la matière étudiée
+	-->
+	<xsd:complexType name="typeSituationsMatiere">
+		<xsd:sequence>
+			<xsd:element name="situation" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="typeCode12Libelle80">
+							<xsd:attribute name="repere" type="repereGeographiqueGeneralHprim" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

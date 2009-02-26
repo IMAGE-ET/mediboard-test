@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<evenementsPatients xmlns="http://www.hprim.org/hprimXML">
+  <enteteMessage>
+    <identifiantMessage>ES1233757090</identifiantMessage>
+    <dateHeureProduction>2009-02-04T15:18:10</dateHeureProduction>
+    <emetteur>
+      <agents>
+        <agent categorie="application">
+          <code>MediBoard</code>
+          <libelle>Gestion des Etablissements de Santé</libelle>
+        </agent>
+        <agent categorie="acteur">
+          <code>user193</code>
+          <libelle> POIRON</libelle>
+        </agent>
+        <agent categorie="système">
+          <code>mb1</code>
+          <libelle>Clinique de Domont</libelle>
+        </agent>
+      </agents>
+    </emetteur>
+    <destinataire>
+      <agents>
+        <agent categorie="application">
+          <code>MediBoard</code>
+          <libelle>Gestion des Etablissements de Santé</libelle>
+        </agent>
+      </agents>
+    </destinataire>
+  </enteteMessage>
+  <evenementPatient>
+    <enregistrementPatient action="modification">
+      <patient>
+        <identifiant>
+          <emetteur etat="permanent" portee="local" referent="non">
+            <valeur>17034</valeur>
+          </emetteur>
+        </identifiant>
+        <personnePhysique sexe="M">
+          <nomUsuel>YOHANN</nomUsuel>
+          <nomNaissance>NOM NOM</nomNaissance>
+          <prenoms>
+            <prenom>Test 2</prenom>
+          </prenoms>
+          <adresses>
+            <adresse>
+              <ligne>6 rue georges Morvan</ligne>
+              <ville>La Rochelle</ville>
+              <codePostal>17000</codePostal>
+            </adresse>
+          </adresses>
+          <telephones>
+            <telephone>0546457890</telephone>
+            <telephone>0689501286</telephone>
+          </telephones>
+          <dateNaissance>
+            <date>1986-01-10</date>
+          </dateNaissance>
+          <lieuNaissance>
+            <ville>Thouars</ville>
+          </lieuNaissance>
+        </personnePhysique>
+      </patient>
+    </enregistrementPatient>
+  </evenementPatient>
+</evenementsPatients>

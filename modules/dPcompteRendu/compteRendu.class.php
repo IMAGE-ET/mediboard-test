@@ -6,8 +6,10 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
-  
-class CCompteRendu extends CMbMetaObject {
+
+CAppUI::requireModuleClass('dPfiles', 'documentItem');
+
+class CCompteRendu extends CDocumentItem {
   // DB Table key
   var $compte_rendu_id   = null;
   
@@ -108,6 +110,14 @@ class CCompteRendu extends CMbMetaObject {
     if ($this->group_id   ) $this->_owner = "etab";
   }
 
+  function updateDBFields() {
+  	parent::updateDBFields();
+  	$this->completeField("etat_envoi");
+  	
+    if($this->fieldModified("source") && ($this->etat_envoi == "oui"))
+        $this->etat_envoi = "obsolete";
+  }
+  
   function loadCategory(){
     // Categorie
     $this->_ref_category = new CFilesCategory;

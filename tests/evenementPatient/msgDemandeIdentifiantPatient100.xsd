@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas de niveaux 2 et 3 utiles 
+	-->
+	<xsd:include schemaLocation="enregistrementPatient.xsd"/>
+	<xsd:include schemaLocation="enteteMessage.xsd"/>
+	<!--
+		élément racine du message :
+	-->
+	<xsd:element name="demandeIdentifiantPatient">
+		<xsd:annotation>
+			<xsd:documentation>Ce message est une question au système qui administre les patients : "quel est l'ipp de ce patient nommé, le créer s'il n'existe pas ?" ou "quel est le patient correspondant à cet ipp ?"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="enteteMessage" type="typeEnteteMessage"/>
+				<xsd:element name="enregistrementPatient" type="typeEnregistrementPatient"/>
+			</xsd:sequence>
+			<xsd:attribute name="action" type="actionDemandee" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

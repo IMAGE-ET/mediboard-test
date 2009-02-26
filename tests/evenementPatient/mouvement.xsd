@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs utiles 
+   -->
+   <xsd:include schemaLocation="professionnelsSante.xsd"/>
+   <xsd:include schemaLocation="identifiantAdministrationPatient.xsd"/>
+   <xsd:include schemaLocation="modesEntreeSortiePatient.xsd"/>
+   <xsd:include schemaLocation="unitesFonctionnelles.xsd"/>
+   <xsd:include schemaLocation="emplacementPatient.xsd"/>
+   <xsd:include schemaLocation="typesTemps.xsd"/>
+   <!--
+      "typeMouvements" : 
+      Historique de tous les mouvements de la venue
+      ou bien un seul mouvement : le mouvement courant
+   -->
+   <xsd:complexType name="typeMouvements">
+      <xsd:sequence>
+         <xsd:element name="mouvement" type="typeMouvement" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeMouvement" : 
+      Un mouvement d'un patient en entrée ou en sortie 
+      dans une unité fonctionnelle ou médicale d'un établissement de soins
+      L'attribut "modeFacturation" est à compléter.
+   -->
+   <xsd:complexType name="typeMouvement">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiantMouvementPatient" minOccurs="0"/>
+         <xsd:element name="medecinResponsable" type="typeMedecin" minOccurs="0"/>
+         <xsd:element name="emplacement" type="typeEmplacementPatient" minOccurs="0"/>
+         <xsd:element name="debut" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="fin" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="unitesFonctionnellesResponsables" type="typeUnitesFonctionnellesResponsables"/>
+         <xsd:element name="provenance" minOccurs="0">
+            <xsd:complexType>
+               <xsd:choice>
+                  <xsd:element name="pool" type="typeCode12Libelle80"/>
+                  <xsd:element name="unitesFonctionnelles" type="typeUnitesFonctionnelles"/>
+               </xsd:choice>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="destination" minOccurs="0">
+            <xsd:complexType>
+               <xsd:choice>
+                  <xsd:element name="pool" type="typeCode12Libelle80"/>
+                  <xsd:element name="unitesFonctionnelles" type="typeUnitesFonctionnelles"/>
+               </xsd:choice>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="motifsAbsence" type="typeMotifsAbsence" minOccurs="0"/>
+
+         <xsd:element name="modeTransport" type="typeModeTransportHprim" minOccurs="0"/>
+
+      </xsd:sequence>
+      <xsd:attribute name="reservation" type="ouiNon" use="optional"/>
+      <xsd:attribute name="modeFacturation" type="xsd:string" use="optional"/>
+      <xsd:attribute name="statut" type="statutMouvement" use="optional"/>
+      <xsd:attribute name="transfertProvisoire" type="ouiNon" use="optional"/>
+      <xsd:attribute name="AjoutHebergement" type="ouiNon" use="optional"/>
+      <xsd:attribute name="liberal" type="ouiNon" use="optional"/>
+   </xsd:complexType>
+
+
+<!--
+
+
+-->
+   <xsd:complexType name="typeMotifsAbsence">
+      <xsd:sequence>
+         <xsd:element name="typeAbsence" type="typeTypeAbsence"/>
+         <xsd:element name="debutAbsence" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="finAbsence" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="retourPrevisionnel" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="debutDeSortieSansAutorisation" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="mouvementReference" type="typeUniteFonctionnelleResponsable"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="typeTypeAbsence">
+      <xsd:complexContent>
+         <xsd:extension base="typeCode12Libelle80">
+            <xsd:attribute name="modaliteAbsence" type="attrModaliteAbsenceHprim" use="optional"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   
+
+
+   <xsd:simpleType name="statutMouvement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="premier"/>
+         <xsd:enumeration value="dernier"/>
+         <xsd:enumeration value="unique"/>
+         <xsd:enumeration value="courant"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      typeProvenanceDestination
+      Si sens = "entree" c'est la provenance, sinon c'est la destination
+   -->
+   <xsd:complexType name="typeProvenanceDestination">
+      <xsd:choice>
+         <xsd:element name="unitesFonctionnelles" type="typeUnitesFonctionnellesResponsables"/>
+      </xsd:choice>
+   </xsd:complexType>
+   <!--
+      "sensMouvement" :
+      sens d'un mouvement : entrée ou sortie
+   -->
+   <xsd:simpleType name="sensMouvement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="entrée"/>
+         <xsd:enumeration value="sortie"/>
+         <xsd:enumeration value="entrée-sortie"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      "modeMouvementPMSI" :
+      mode d'un mouvement 
+      pour gérer le cas particulier d'une sortie de l'établissement qui n'interrompt pas pour autant la venue
+      0 : transfert provisoire
+      6 : mutation
+      7 : transfert
+      8 : domicile
+      9 : décés
+   -->
+   <xsd:simpleType name="modeMouvementPMSI">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="0"/>
+         <xsd:enumeration value="6"/>
+         <xsd:enumeration value="7"/>
+         <xsd:enumeration value="8"/>
+         <xsd:enumeration value="9"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   
+   <!--
+      "attrModaliteAbsenceHprim"  utilise en psychiatrie
+      se       sortie d'essai
+      ssa      sortie sans autorisation
+   -->
+   <xsd:simpleType name="attrModaliteAbsenceHprim">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="se"/>
+         <xsd:enumeration value="ssa"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+</xsd:schema>

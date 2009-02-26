@@ -201,8 +201,12 @@ class CSetupdPfiles extends CSetup {
 			ADD `validation_auto` ENUM ('0','1');";
     $this->addQuery($sql);
     
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `files_mediboard` 
+            ADD `etat_envoi` ENUM ('oui','non','obsolete') NOT NULL default 'non';";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.20";
+    $this->mod_version = "0.21";
   }
 }
 ?>

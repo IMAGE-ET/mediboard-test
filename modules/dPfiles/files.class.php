@@ -9,7 +9,7 @@
 global $filesDir;
 $filesDir = CAppUI::conf("root_dir") . "/files";
 
-class CFile extends CMbMetaObject {
+class CFile extends CDocumentItem {
   // DB Table key
   var $file_id = null;
   

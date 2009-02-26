@@ -75,7 +75,7 @@
 {{if $object->_ref_documents|@count && $mode != "hide"}}
 <table class="tbl">
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
-    <th class="category" colspan="2">
+    <th class="category" colspan="3">
     	{{tr}}{{$object->_class_name}}{{/tr}} :
     	{{$object->_ref_documents|@count}} document(s)
     </th>
@@ -115,7 +115,36 @@
 		    <button class="trash notext" onclick="Document.del(document.forms['DocumentEdit-{{$document->_id}}'], '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
 		    	{{tr}}Delete{{/tr}}
 		    </button>
-		  </td>  
+		    
+  	  </td> 
+  	  <td class="button" style="width: 1px">
+  	   <form name="editDoc{{$document->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+			   <input type="hidden" name="m" value="dPcompteRendu" />
+			   <input type="hidden" name="dosql" value="do_modele_aed" />
+			   <input type="hidden" name="compte_rendu_id" value="{{$document->_id}}" />
+			   <input type="hidden" name="del" value="0" />
+         
+         <!-- Send File -->
+          {{if $document->_is_sendable}}
+            <input type="hidden" name="_send" value="false" />
+            {{if $dPconfig.dPfiles.systeme_send_file != "null"}}
+              {{if $document->etat_envoi == "oui"}}
+                <button class="invalidefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
+                  {{tr}}Send File{{/tr}}
+                </button>
+              {{elseif $document->etat_envoi == "obsolete"}}  
+                <button class="obsoletefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
+                  {{tr}}Send File{{/tr}}
+                </button>
+              {{else}}
+                <button class="sendfile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
+                   {{tr}}Send File{{/tr}}
+                 </button>
+              {{/if}}
+            {{/if}}
+          {{/if}}
+        </form>
+  	  </td> 
 		</tr>
 	  {{foreachelse}}
 	  <tr>

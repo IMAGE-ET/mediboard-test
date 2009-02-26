@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types>
+
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+
+      <s:element name="saveNewDocument">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="0" maxOccurs="1" name="sej_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_nom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_prenom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_numOrdre" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_civilite" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_nomNaissance" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_nomUsuel" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_prenom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_sexe" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="pat_dateNaissance" type="s:dateTime" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_cpNaissance" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_villeNaissance" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="pat_cinseePaysNaissance" type="s:int" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_adresseVie" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_cpVie" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_villeVie" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="pat_cinseePaysVie" type="s:int" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_telephone1" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_telephone2" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_titre" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_commentaire" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="doc_type" type="s:int" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nomReel" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_chemin" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_typeMime" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="act_id" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_pathologie" type="s:int" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_dateActe" type="s:dateTime" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_dateCreationActe" type="s:dateTime" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_dateValidationActe" type="s:dateTime" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="etab_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="etab_nom" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="invalidation" type="s:boolean" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="saveNewDocumentResponse">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="1" maxOccurs="1" name="saveNewDocumentResult" type="s:int" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="saveNewDocument_withStringFile">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="0" maxOccurs="1" name="sej_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_nom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_prenom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="aut_numOrdre" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_civilite" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_nomNaissance" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_nomUsuel" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_prenom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_sexe" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="pat_dateNaissance" type="s:dateTime" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_cpNaissance" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_villeNaissance" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="pat_cinseePaysNaissance" type="s:int" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_adresseVie" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_cpVie" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_villeVie" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="pat_cinseePaysVie" type="s:int" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_telephone1" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="pat_telephone2" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nom" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_titre" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_commentaire" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="doc_type" type="s:int" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nomReel" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="doc_typeMime" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="act_id" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_pathologie" type="s:int" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_dateActe" type="s:dateTime" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_dateCreationActe" type="s:dateTime" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="act_dateValidationActe" type="s:dateTime" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="etab_id" type="s:string" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="etab_nom" type="s:string" />
+
+            <s:element minOccurs="1" maxOccurs="1" name="invalidation" type="s:boolean" />
+
+            <s:element minOccurs="0" maxOccurs="1" name="fichier" type="s:string" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="saveNewDocument_withStringFileResponse">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="1" maxOccurs="1" name="saveNewDocument_withStringFileResult" type="s:int" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="cancelDocument">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="1" maxOccurs="1" name="idTransaction" type="s:int" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="cancelDocumentResponse">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="1" maxOccurs="1" name="cancelDocumentResult" type="s:int" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="getStatus">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="1" maxOccurs="1" name="transactionId" type="s:int" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+      <s:element name="getStatusResponse">
+
+        <s:complexType>
+
+          <s:sequence>
+
+            <s:element minOccurs="1" maxOccurs="1" name="getStatusResult" type="s:int" />
+
+          </s:sequence>
+
+        </s:complexType>
+
+      </s:element>
+
+    </s:schema>
+
+  </wsdl:types>
+
+  <wsdl:message name="saveNewDocumentSoapIn">
+
+    <wsdl:part name="parameters" element="tns:saveNewDocument" />
+
+  </wsdl:message>
+
+  <wsdl:message name="saveNewDocumentSoapOut">
+
+    <wsdl:part name="parameters" element="tns:saveNewDocumentResponse" />
+
+  </wsdl:message>
+
+  <wsdl:message name="saveNewDocument_withStringFileSoapIn">
+
+    <wsdl:part name="parameters" element="tns:saveNewDocument_withStringFile" />
+
+  </wsdl:message>
+
+  <wsdl:message name="saveNewDocument_withStringFileSoapOut">
+
+    <wsdl:part name="parameters" element="tns:saveNewDocument_withStringFileResponse" />
+
+  </wsdl:message>
+
+  <wsdl:message name="cancelDocumentSoapIn">
+
+    <wsdl:part name="parameters" element="tns:cancelDocument" />
+
+  </wsdl:message>
+
+  <wsdl:message name="cancelDocumentSoapOut">
+
+    <wsdl:part name="parameters" element="tns:cancelDocumentResponse" />
+
+  </wsdl:message>
+
+  <wsdl:message name="getStatusSoapIn">
+
+    <wsdl:part name="parameters" element="tns:getStatus" />
+
+  </wsdl:message>
+
+  <wsdl:message name="getStatusSoapOut">
+
+    <wsdl:part name="parameters" element="tns:getStatusResponse" />
+
+  </wsdl:message>
+
+  <wsdl:portType name="medinetWebServicesSoap">
+
+    <wsdl:operation name="saveNewDocument">
+
+      <wsdl:input message="tns:saveNewDocumentSoapIn" />
+
+      <wsdl:output message="tns:saveNewDocumentSoapOut" />
+
+    </wsdl:operation>
+
+    <wsdl:operation name="saveNewDocument_withStringFile">
+
+      <wsdl:input message="tns:saveNewDocument_withStringFileSoapIn" />
+
+      <wsdl:output message="tns:saveNewDocument_withStringFileSoapOut" />
+
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelDocument">
+
+      <wsdl:input message="tns:cancelDocumentSoapIn" />
+
+      <wsdl:output message="tns:cancelDocumentSoapOut" />
+
+    </wsdl:operation>
+
+    <wsdl:operation name="getStatus">
+
+      <wsdl:input message="tns:getStatusSoapIn" />
+
+      <wsdl:output message="tns:getStatusSoapOut" />
+
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <wsdl:binding name="medinetWebServicesSoap" type="tns:medinetWebServicesSoap">
+
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+
+    <wsdl:operation name="saveNewDocument">
+
+      <soap:operation soapAction="http://tempuri.org/saveNewDocument" style="document" />
+
+      <wsdl:input>
+
+        <soap:body use="literal" />
+
+      </wsdl:input>
+
+      <wsdl:output>
+
+        <soap:body use="literal" />
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+    <wsdl:operation name="saveNewDocument_withStringFile">
+
+      <soap:operation soapAction="http://tempuri.org/saveNewDocument_withStringFile" style="document" />
+
+      <wsdl:input>
+
+        <soap:body use="literal" />
+
+      </wsdl:input>
+
+      <wsdl:output>
+
+        <soap:body use="literal" />
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelDocument">
+
+      <soap:operation soapAction="http://tempuri.org/cancelDocument" style="document" />
+
+      <wsdl:input>
+
+        <soap:body use="literal" />
+
+      </wsdl:input>
+
+      <wsdl:output>
+
+        <soap:body use="literal" />
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+    <wsdl:operation name="getStatus">
+
+      <soap:operation soapAction="http://tempuri.org/getStatus" style="document" />
+
+      <wsdl:input>
+
+        <soap:body use="literal" />
+
+      </wsdl:input>
+
+      <wsdl:output>
+
+        <soap:body use="literal" />
+
+      </wsdl:output>
+
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <wsdl:service name="medinetWebServices">
+
+    <wsdl:port name="medinetWebServicesSoap" binding="tns:medinetWebServicesSoap">
+
+      <soap:address location="http://192.168.0.101/~yohann/mediboard_yohann/tests/testSIP.php" />
+
+    </wsdl:port>
+
+  </wsdl:service>
+
+</wsdl:definitions>

@@ -34,7 +34,24 @@
     </th>
     <td><input type="text" class="str maxLength|4" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/></td>
   </tr>  
-    
+ <tr>
+    <th class="category" colspan="2">Choix du service d'envoi des fichiers</th>
+  </tr>
+  <tr>
+    {{assign var="var" value="system_sender"}}
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <select class="str" name="{{$m}}[{{$var}}]">
+        <option value="" {{if "null" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
+        <option value="CMedicapSender" {{if "CMedicapSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>e-Cap</option>
+        <option value="CMedinetSender" {{if "CMedinetSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Medinet</option>
+      </select>
+    </td>
+  </tr>  
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

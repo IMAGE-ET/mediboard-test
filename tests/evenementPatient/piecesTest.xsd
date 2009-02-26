@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="resultat.xsd"/>
+   <xsd:include schemaLocation="piecesEchantillon.xsd"/>
+   <xsd:include schemaLocation="validationResultat.xsd"/>
+   <xsd:include schemaLocation="pieceJointe.xsd"/>
+   <!--
+      "typeLienEchantillon" :
+      échantillon nécessaire pour l'exécution de l'examen ou du test : définit la nature obligatoirement, 
+       le temps et l'identifiant optionnellement
+   -->
+   <xsd:complexType name="typeLienEchantillon">
+      <xsd:sequence>
+         <xsd:element name="nature" type="typeNatureEchantillonHprim"/>
+         <xsd:element name="identifiantEchantillon" type="typeIdentifiantEchantillon" minOccurs="0"/>
+         <xsd:element name="temps" type="typeTempsIndice" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeResultatAnterieur" :
+      Hérité par extension de "typeResultatTest" :
+      Ajout des coordonnées de la demande antérieure
+   -->
+   <xsd:complexType name="typeResultatAnterieur">
+      <xsd:complexContent>
+         <xsd:extension base="typeResultatTest">
+            <xsd:sequence>
+               <xsd:element name="identifiantDemande" type="nom15" minOccurs="0">
+                  <xsd:annotation>
+                     <xsd:documentation>identifie la demande dans laquelle figurait  un résultat antérieur</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!--
+      "typeResultatTest" :
+      Question : L'attribut "rangResultat" placé ici permet :
+      - en bactério de rendre plusieurs germes identifiés, et de les référencer dans les antibiogrammes chainés
+      - de rendre pour un test, un résultat numérique suivi d'un code, suivi d'un graphe, ....Mais quelle application saura le gérer ?
+   -->
+   <xsd:complexType name="typeResultatTest">
+      <xsd:sequence>
+         <xsd:element name="obtention" type="typeObtentionResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>conditions techniques de production du résultat</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="validationTechnique" type="typeValidationResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>conditions de validation technique de ce résultat</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:choice>
+            <xsd:annotation>
+               <xsd:documentation>Le résultat appartient à l'un des types définis ci-contre</xsd:documentation>
+            </xsd:annotation>
+            <xsd:element name="resultatNumerique" type="typeResultatNumerique"/>
+            <xsd:element name="resultatNumeriqueCalcul" type="typeResultatNumeriqueCalcul"/>
+            <xsd:element name="resultatLigneTexte" type="typeResultatLigneTexte"/>
+            <xsd:element name="resultatTexteMultiLigne" type="typeResultatTexteMultiLigne"/>
+            <xsd:element name="resultatCode" type="typeResultatCode"/>
+            <xsd:element name="resultatMultiMedia" type="typePieceJointe"/>
+            <xsd:element name="resultatCourbe" type="typeResultatCourbe"/>
+            <xsd:element name="resultatDateHeure" type="xsd:dateTime"/>
+            <xsd:element name="resultatDate" type="xsd:date"/>
+            <xsd:element name="resultatHeure" type="xsd:time"/>
+         </xsd:choice>
+         <xsd:element name="commentaireExecutant" type="typeCommentaireResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Commentaire du résultat par l'exécutant, avec précision des destinataires de ce commentaire</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="traces" type="typeTracesResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>informations de traçabilité liées à ce résultat.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionExamenTestResultat" use="required"/>
+      <xsd:attribute name="origine" type="origineExamenHprim" use="required"/>
+      <xsd:attribute name="rangResultat" type="xsd:unsignedByte" use="required"/>
+   </xsd:complexType>
+   <!--
+      "typeObtentionResultat" :
+   -->
+   <xsd:complexType name="typeObtentionResultat">
+      <xsd:sequence>
+         <xsd:element name="date" type="xsd:dateTime"/>
+         <xsd:element name="operateur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="poste" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="appareil" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="reactif" type="typeReactif" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="mode" type="modeObtentionResultat" use="optional"/>
+   </xsd:complexType>
+   <!--
+      "typeReactif" :
+   -->
+   <xsd:complexType name="typeReactif">
+      <xsd:sequence>
+         <xsd:element name="denomination" type="texte35" minOccurs="0"/>
+         <xsd:element name="lot" type="nom21"/>
+         <xsd:element name="dateApprovisionnement" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="datePeremption" type="xsd:date" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeIdentifiantResultat" :
+      Identification d'un résultat : nom de l'examen + nom du test + rang du résultat (attribut)
+      + optionnellement la date d'obtention du résultat et sa date de validation.
+      Ce type est entre autres utilisé par l'élément "resultatParent" du type "typeExamen"
+   -->
+   <xsd:complexType name="typeIdentifiantResultat">
+      <xsd:sequence>
+         <xsd:element name="nomExamen" type="typeCode21Libelle80"/>
+         <xsd:element name="indiceRepetition" type="xsd:positiveInteger" minOccurs="0"/>
+         <xsd:element name="nomTest" type="typeCode21Libelle80"/>
+         <xsd:element name="dateObtentionResultat" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="dateValidationResultat" type="xsd:dateTime" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="rangResultat" type="xsd:unsignedByte" use="required"/>
+   </xsd:complexType>
+   <!--
+      "typeTracesResultat"
+      Traçabilité des actions de production (modification, contrôle, annulation, ...) et de communication du résultat d'un test
+   -->
+   <xsd:complexType name="typeTracesResultat">
+      <xsd:sequence>
+         <xsd:element name="traceResultat" type="typeTraceResultat" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>Une trace décrit un événement survenu dans le processus de production / diffusion de ce résultat</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeTraceResultat"
+      Traçabilité d'une action 
+         -  de production (modification, contrôle, annulation, validation...) 
+         -  ou de communication (transmission, téléphone, édition, ...) 
+      sur le  résultat d'un test
+   -->
+   <xsd:complexType name="typeTraceResultat">
+      <xsd:sequence>
+         <xsd:element name="action" type="typeCode10Libelle35"/>
+         <xsd:element name="date" type="xsd:date"/>
+         <xsd:element name="heure" type="xsd:time"/>
+         <xsd:element name="acteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="poste" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="planTravail" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="appareil" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="reactif" type="typeReactif" minOccurs="0"/>
+         <xsd:element name="dilution" type="decimalPositif" minOccurs="0"/>
+         <xsd:element name="referenceEchantillon" type="nom15" minOccurs="0"/>
+         <xsd:element name="rangPassage" type="nom17" minOccurs="0"/>
+         <xsd:element name="alarmes" type="typeAlarmes" minOccurs="0"/>
+         <xsd:element name="resultatAvant" type="xsd:string" minOccurs="0"/>
+         <xsd:element name="resultatApres" type="xsd:string" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

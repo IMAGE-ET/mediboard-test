@@ -511,6 +511,38 @@ button.stop:hover, a.buttonstop:hover {
   padding-left: 18px;
 }
 
+button.sendfile, a.buttonsendfile {
+  background-image: url(./images/buttons/sendfile.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.sendfile:hover, a.buttonsendfile:hover {
+  background-image: url(./images/buttons/sendfilehover.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.invalidefile, a.buttoninvalidefile {
+  background-image: url(./images/buttons/invalidefile.png);
+  padding-left: 18px;
+}
+
+button.invalidefile:hover, a.buttoninvalidefile:hover {
+  background-image: url(./images/buttons/invalidefilehover.png);
+  padding-left: 18px;
+}
+
+button.obsoletefile, a.buttonobsoletefile {
+  background-image: url(./images/buttons/obsoletefile.png);
+  padding-left: 18px;
+}
+
+button.obsoletefile:hover, a.buttonobsoletefile:hover {
+  background-image: url(./images/buttons/obsoletefilehover.png);
+  padding-left: 18px;
+}
+
 button.notext, button.notext:hover{
   padding : 0px 0px 0px 14px;
 }

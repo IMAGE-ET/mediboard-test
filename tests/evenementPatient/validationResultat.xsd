@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="professionnelsSante.xsd"/>
+   <xsd:include schemaLocation="typesDeBase.xsd"/>
+   <!--
+      "typeValidationResultat" :
+      Seul l'attribut "valide est obligatoire :
+         - "oui" implique que le résultat est validé par un intervenant habilité (médecin, radiologue, biologiste, système expert, ...). 
+                  Dans le cas de la biologie il s'agit d'une validation "biologique" et non simplement "technique"
+         - "non" implique que le résultat n'est pas validé. 
+                  Dans le cas de la biologie, le résultat est alors simplement "validé techniquement"
+   -->
+   <xsd:complexType name="typeValidationResultat">
+      <xsd:sequence>
+         <xsd:element name="date" type="xsd:dateTime" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Quand ?</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="valideur" type="typeProfessionnelSante" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Qui ?</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="assistant" type="typeProfessionnelSante" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Aidé par qui ?</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="poste" type="typeCode10Libelle35" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Où ?</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="systeme" type="typeCode10Libelle35" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Comment ?</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="complement" type="xsd:string" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Pourquoi ?</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="valide" type="ouiNon" use="required"/>
+      <xsd:attribute name="mode" type="modeValidationResultat" use="optional"/>
+   </xsd:complexType>
+   <xsd:simpleType name="modeValidationResultat">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="humain"/>
+         <xsd:enumeration value="système_expert"/>
+         <xsd:enumeration value="automatisme"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>

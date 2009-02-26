@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd='http://www.w3.org/2001/XMLSchema'> 
+  <xsd:include schemaLocation="message.xsd"/>
+  <xsd:element name="message">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="expediteur" maxOccurs="1"/>
+        <xsd:element ref="destinataire" maxOccurs="1"/>
+        <xsd:element ref="texte" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="expediteur">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="identite" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="destinataire">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="identite" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="texte">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:element name="identite">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="prenom" maxOccurs="1"/>
+        <xsd:element ref="nom" maxOccurs="1"/>
+        <xsd:element ref="email" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

@@ -267,7 +267,10 @@ a.buttonchange,
 a.buttonremove, 
 a.buttonadd, 
 a.buttondown, 
-a.buttonup {
+a.buttonup,
+a.buttonsendfile,
+a.buttoninvalidefile,
+a.buttonobsoletefile {
   color: #000;
   text-decoration: none;
   cursor: default;
@@ -301,7 +304,10 @@ a.buttonchange:hover,
 a.buttondown:hover, 
 a.buttonup:hover,
 a.buttonadd:hover, 
-a.buttonremove:hover {
+a.buttonremove:hover,
+a.buttonsendfile:hover,
+a.buttoninvalidefile:hover,
+a.buttonobsoletefile:hover {
   background-color: #bbb;
 }
 
@@ -428,6 +434,36 @@ button.remove, a.buttonremove {
 
 button.stop, a.buttonstop {
   background-image: url(images/buttons/stop.png);
+  padding-left: 18px;
+}
+
+button.sendfile, a.buttonsendfile {
+  background-image: url(images/buttons/sendfile.png);
+  padding-left: 18px;
+}
+
+button.sendfile:hover, a.buttonsendfile:hover {
+  background-image: url(images/buttons/sendfilehover.png);
+  padding-left: 18px;
+}
+
+button.invalidefile, a.buttoninvalidefile {
+  background-image: url(images/buttons/invalidefile.png);
+  padding-left: 18px;
+}
+
+button.invalidefile:hover, a.buttoninvalidefile:hover {
+  background-image: url(images/buttons/invalidefilehover.png);
+  padding-left: 18px;
+}
+
+button.obsoletefile, a.buttonobsoletefile {
+  background-image: url(images/buttons/obsoletefile.png);
+  padding-left: 18px;
+}
+
+button.obsoletefile:hover, a.buttonobsoletefile:hover {
+  background-image: url(images/buttons/obsoletefilehover.png);
   padding-left: 18px;
 }
 

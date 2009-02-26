@@ -296,7 +296,12 @@ class CMediusers extends CMbObject {
     $this->_ref_discipline = new CDiscipline;
     $this->_ref_discipline = $this->_ref_discipline->getCached($this->discipline_id);
   }
-
+  
+  function loadRefSpecCPAM(){
+    $this->_ref_spec_cpam = new CSpecCPAM();
+    $this->_ref_spec_cpam = $this->_ref_spec_cpam->getCached($this->spec_cpam_id);
+  }
+  
   function loadRefsFwd() {
     // Forward references
     $this->loadRefFunction();

@@ -311,7 +311,12 @@ class CSetupdPcompteRendu extends CSetup {
             ADD `depend_value_2` VARCHAR (255);";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.42";
+    $this->makeRevision("0.42");
+    $sql = "ALTER TABLE `compte_rendu` 
+            ADD `etat_envoi` ENUM ('oui','non','obsolete') NOT NULL default 'non';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.43";
   }
 }
 ?>

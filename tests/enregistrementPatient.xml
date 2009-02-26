@@ -1,0 +1,9 @@
+<evenementsPatients>
+  <evenementPatient>
+    <enregistrementPatient action="création">
+      <patient>
+      
+      </patient>
+    </enregistrementPatient>
+  </evenementPatient>
+</evenementsPatients>

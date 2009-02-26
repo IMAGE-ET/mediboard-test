@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas de niveaux inférieurs utiles 
+	-->
+	<xsd:include schemaLocation="personnePhysique.xsd"/>
+	<!-- 
+		"typeEnteteMessage" :
+		En-tête de tout message de type "notification d'événement" ou "question"
+	-->
+	<xsd:complexType name="typeEnteteMessage">
+		<xsd:annotation>
+			<xsd:documentation>Elément obligatoire et unique apparaissant en tête de tous les messages. Cet élément identifie et caractérise le message,  précise son émetteur et son destinataire</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="identifiantMessage" type="nom12"/>
+			<xsd:element name="dateHeureProduction" type="xsd:dateTime"/>
+			<xsd:element name="emetteur" type="typeEmetteurRecepteur"/>
+			<xsd:element name="destinataire" type="typeEmetteurRecepteur"/>
+			<xsd:element name="commentaireMessage" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="modeTraitement" type="modeTraitement" default="réel"/>
+	</xsd:complexType>
+	<!-- 
+		"typeEmetteurRecepteur" :
+		Décrit l'émetteur ou le récepteur d'un message.
+	-->
+	<xsd:complexType name="typeEmetteurRecepteur">
+		<xsd:sequence>
+			<xsd:element name="agents" type="typeAgents"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- 
+		"typeAgents" :
+		Décrit une collection de un à trois agents : un acteur, une application, un système
+	-->
+	<xsd:complexType name="typeAgents">
+		<xsd:sequence>
+			<xsd:element name="agent" type="typeAgent" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+	"typeAgent" : une personne, une organisation, une application ou un système
+	-->
+	<xsd:complexType name="typeAgent">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode10Libelle35">
+				<xsd:sequence>
+					<xsd:element name="numeroAdeli" type="numeroFiness" minOccurs="0"/>
+					<xsd:element name="acteur" type="typeActeur" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="categorie" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="acteur"/>
+							<xsd:enumeration value="application"/>
+							<xsd:enumeration value="système"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!--
+		"typeEnteteMessageAcquittement" :
+	-->
+	<xsd:complexType name="typeEnteteMessageAcquittement">
+		<xsd:annotation>
+			<xsd:documentation>Elément obligatoire et unique apparaissant en tête de tous les messages d'acquittement de traitement. Cet élément identifie et caractérise le message d'acquittement,  précise son émetteur et son destinataire, et référence le message de notifications d'événements objet de l'acquittement</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="typeEnteteMessage">
+				<xsd:sequence>
+					<xsd:element name="identifiantMessageAcquitte" type="nom12"/>
+					<xsd:element name="nomFichierMessageAcquitte" type="texte35" minOccurs="0"/>
+					<xsd:element name="observation" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="statut" type="statutAcquittement" use="required"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!--
+		 mode de traitement d'un message
+	-->
+	<xsd:simpleType name="modeTraitement">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="réel"/>
+			<xsd:enumeration value="test"/>
+			<xsd:enumeration value="trace"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
