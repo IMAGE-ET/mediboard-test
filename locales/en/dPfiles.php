@@ -85,4 +85,6 @@ $locales['CFilesCategory.all'] = '';
 $locales['CFilesCategory.select'] = '';
 $locales['CMbObject-back-files'] = '';
 $locales['CMediusers-back-files'] = '';
+$locales['config-dPfiles-system_sender'] = '';
+$locales['config-dPfiles-system_sender-desc'] = '';
 ?>
