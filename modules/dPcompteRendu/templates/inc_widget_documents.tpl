@@ -127,7 +127,7 @@
          <!-- Send File -->
           {{if $document->_is_sendable}}
             <input type="hidden" name="_send" value="false" />
-            {{if $dPconfig.dPfiles.systeme_send_file != "null"}}
+            {{if $dPconfig.dPfiles.system_sender != "null"}}
               {{if $document->etat_envoi == "oui"}}
                 <button class="invalidefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
                   {{tr}}Send File{{/tr}}
