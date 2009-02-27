@@ -115,12 +115,14 @@ class CAntecedent extends CMbObject {
   function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null) {
     parent::loadAides($user_id, $needle, $depend_value_1, $depend_value_2);
     
-    $this->_aides_all_depends["rques"];
+    $rques_aides =& $this->_aides_all_depends["rques"];
+    if (!isset($rques_aides)) {
+      return;
+    }
 
-    $rques_aides = $this->_aides_all_depends["rques"];
-    
     $depend_field_1 = $this->_specs["rques"]->helped[0];
     $depend_values_1 = $this->_specs[$depend_field_1]->_list;
+    asort($depend_values_1);
     $depend_values_1[] = "";
     foreach ($depend_values_1 as $depend_value_1) {
       $count =& $this->_count_rques_aides;
