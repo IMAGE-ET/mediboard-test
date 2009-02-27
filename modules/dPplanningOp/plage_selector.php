@@ -47,7 +47,7 @@ $listPlages = $listPlages->loadList($where, $order);
 
 $nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
 
-foreach($listPlages as $keyPlage=>&$plageop){
+foreach ($listPlages as $keyPlage=>&$plageop){
   $plageop->loadRefSalle();
   $plageop->getNbOperations($nb_secondes, false);
   $plageop->loadRefsBack(0);

@@ -92,10 +92,6 @@ Main.add(function () {
         {{foreach from=$listPlages item=curr_plage}}
         <tr>
           <td>
-            <img src="images/icons/search.png" style="float: left;"
-              onmouseover="$('plage-{{$curr_plage->_id}}').show();"
-              onmouseout="$('plage-{{$curr_plage->_id}}').hide();"
-            />
             {{assign var="pct" value=$curr_plage->_fill_rate}}
             {{if $pct > 100}}
               {{assign var="over" value=1}}
@@ -110,30 +106,35 @@ Main.add(function () {
             {{elseif $pct < 100}}
               {{assign var="backgroundClass" value="normal"}}
             {{elseif !$over}}
-              {{assign var="backgroundClass" value="booked"}}
+              {{assign var="backgrouxndClass" value="booked"}}
             {{else}}
               {{assign var="backgroundClass" value="full"}}
             {{/if}} 
             <div class="progressBar">
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-              <div class="text">
+              <div class="text" style="text-align: left">
                 <label 
-                  for="list_{{$curr_plage->_id}}" 
-                  title="Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}"
+                  for="list_{{$curr_plage->_id}}"
+                  onmouseover="ObjectTooltip.createDOM(this, 'plage-{{$curr_plage->_id}}')" 
                   {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"{{/if}}
                 >
                   {{$curr_plage->date|date_format:"%a %d"}} 
-                  en {{$curr_plage->_ref_salle->_view}}
+                  &mdash; {{$curr_plage->_ref_salle->_view}}
                 </label>
               </div>
             </div>
-            <div id="plage-{{$curr_plage->_id}}" class="tooltip" style="display: none; width: 200px;">
+            <div id="plage-{{$curr_plage->_id}}" style="display: none; width: 200px;">
               <table class="tbl">
+              	<tr>
+              		<th class="category">
+              			Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}
+              		</th>
+              	</tr>
                 {{foreach from=$curr_plage->_ref_operations item=curr_op}}
                 <tr>
                   <td class="text">
                     {{if $curr_op->libelle}}
-                      {{$curr_op->libelle}}
+                      <em>{{$curr_op->libelle}}</em>
                     {{else}}
                       {{$curr_op->_text_codes_ccam}}
                     {{/if}}
