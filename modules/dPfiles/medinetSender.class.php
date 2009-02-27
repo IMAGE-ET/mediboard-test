@@ -320,6 +320,9 @@ class CMedinetSender extends CDocumentSender {
   
   function isSendable(CDocumentItem $docItem) {
     $docItem->loadTargetObject();
+    
+    mbTrace($docItem->_ref_object, "Object", true);
+    return true;
     return($docItem->_ref_object instanceOf COperation || $docItem->_ref_object instanceOf CSejour);
   }
   

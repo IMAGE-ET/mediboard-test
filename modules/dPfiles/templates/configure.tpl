@@ -46,7 +46,7 @@
     </th>
     <td>
       <select class="str" name="{{$m}}[{{$var}}]">
-        <option value="" {{if "null" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
+        <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
         <option value="CMedicapSender" {{if "CMedicapSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>e-Cap</option>
         <option value="CMedinetSender" {{if "CMedinetSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Medinet</option>
       </select>

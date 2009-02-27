@@ -33,6 +33,8 @@ class CDocumentItem extends CMbMetaObject {
        trigger_error("Instanciation du Document Sender impossible.");
     }
     
+    mbTrace($system_sender, "Sender", true);
+    
   	if($system_sender) {
   		$sender = new $system_sender;
   		$this->_is_sendable = $sender->isSendable($this);
