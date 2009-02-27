@@ -52,6 +52,17 @@
       </select>
     </td>
   </tr>  
+  {{assign var="var" value="rooturl"}}
+   <tr>
+     <th>
+       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+       </label>  
+     </th>
+     <td>
+       <input class="str" size="30" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+     </td>
+   </tr>
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

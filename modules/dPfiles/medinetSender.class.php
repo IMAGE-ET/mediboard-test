@@ -71,7 +71,7 @@ class CMedinetSender extends CDocumentSender {
   		return;
   	}
     try {
-      $this->clientSOAP = new SoapClient("http://192.168.42.87:82/medinetWebServices.asmx?WSDL");
+      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles rooturl'));
     } catch (Exception $e) {
       trigger_error("Instanciation du SoapClient impossible : ".$e);
     }

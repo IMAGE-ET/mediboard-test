@@ -124,4 +124,6 @@ $locales['CFile.etat_envoi.oui'] = '';
 $locales['CMbObject-back-'] = '';
 $locales['config-dPfiles-system_sender'] = 'Système externe d\'envoi';
 $locales['config-dPfiles-system_sender-desc'] = '';
+$locales['config-dPfiles-rooturl'] = 'URL racine Services web';
+$locales['config-dPfiles-rooturl-desc'] = '';
 ?>

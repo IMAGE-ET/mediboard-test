@@ -277,7 +277,8 @@ $dPconfig["dPImeds"] = array (
 $dPconfig["dPfiles"] = array (
   "nb_upload_files" => "1",
   "upload_max_filesize" => "2M",
-  "system_sender" => ""
+  "system_sender" => "",
+  "rooturl" => ""
 );
 
 $dPconfig["dPpatients"] = array (
@@ -534,4 +535,11 @@ $dPconfig["dmi"] = array (
   )
 );
 
+$dPconfig["sip"] = array (
+  "soap" => array(
+    "rooturl" => "",
+    "user" => "",
+    "pass" => "",
+  )
+);
 ?>
