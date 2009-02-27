@@ -52,6 +52,7 @@ ColorSelector.init = function(){
     </td>
     <td class="halfPane" style="height: 1%">
     <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <input type="hidden" name="m" value="mediusers" />
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="function_id" value="{{$userfunction->function_id}}" />
       <input type="hidden" name="del" value="0" />
