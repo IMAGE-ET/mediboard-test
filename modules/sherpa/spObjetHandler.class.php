@@ -13,8 +13,16 @@
  */
 class CSpObjectHandler extends CMbObjectHandler {
   static $handled = array (
-    "CPatient" => array ("CSpMalade"),
-    "CSejour" => array ("CSpSejMed", "CSpDossier", "CSpOuvDro", "CSpUrgDos", "CSpUrgDro"),
+    "CPatient" => array (
+      "CSpMalade"
+		),
+    "CSejour" => array (
+      "CSpSejMed", 
+      "CSpDossier", 
+      "CSpOuvDro", 
+      "CSpUrgDos", 
+      "CSpUrgDro"
+		),
   );
   
   static $queriable = array (
@@ -23,6 +31,12 @@ class CSpObjectHandler extends CMbObjectHandler {
     "COperation",
     "CMediusers",
 	);
+	
+	static $mutex = null;
+
+	function __construct() {
+	  self::$mutex = new CMbSemaphore("makeid");
+	}
   
   
   static function isHandled(CMbObject &$mbObject) {
@@ -139,13 +153,16 @@ class CSpObjectHandler extends CMbObjectHandler {
     $id400 = self::getId400For($mbObject);
     if (!$id400->_id) {
       // May not create if id should not be built (e.g. when merging)
+      self::$mutex->acquire();
       if ($id400->id400 = self::makeId($mbObject)) {
         $id400->last_update = mbDateTime();
 	      if ($msg = $id400->store()) {
 	        trigger_error("Error updating '$mbObject->_class_name' '$mbObject->_id' : $msg", E_USER_WARNING);
+	        self::$mutex->release();
 	        return;
 	      }
       }
+      self::$mutex->release();
     }
       
     // Get all id400 for mediboard object
@@ -230,12 +247,15 @@ class CSpObjectHandler extends CMbObjectHandler {
     foreach ($this->getIds400For($mbObject) as $id400) {      
       // Check if id has to be rebuilt
       if (!$this->checkId($mbObject, $id400->id400)) {
+        self::$mutex->acquire();
         $id400->id400 = $this->makeId($mbObject);
         $id400->last_update = mbDateTime();
 	      if ($msg = $id400->store()) {
 	        trigger_error("Error updating id400 for object  '$mbObject->_view' : $msg", E_USER_WARNING);
+	        self::$mutex->release();
 	        continue;
 	      }
+	      self::$mutex->release();
       }
             
       // Find group
