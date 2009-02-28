@@ -106,7 +106,7 @@ Main.add(function () {
             {{elseif $pct < 100}}
               {{assign var="backgroundClass" value="normal"}}
             {{elseif !$over}}
-              {{assign var="backgrouxndClass" value="booked"}}
+              {{assign var="backgroundClass" value="booked"}}
             {{else}}
               {{assign var="backgroundClass" value="full"}}
             {{/if}} 
