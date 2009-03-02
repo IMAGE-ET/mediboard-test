@@ -11,8 +11,8 @@
  * The CMedinetSender class
  */
 class CMedinetSender extends CDocumentSender {
-	public static $tag = "medinet transaction";
-	public static $cpamConversion = array (
+  public static $tag = "medinet transaction";
+  public static $cpamConversion = array (
                         2 => 5,
                         3 => 2,
                         5 => 7,
@@ -67,50 +67,29 @@ class CMedinetSender extends CDocumentSender {
   var $clientSOAP = null;
   
   function initClientSOAP () {
-    // première étape : désactiver le cache lors de la phase de test
-    ini_set("soap.wsdl_cache_enabled", "0");
-    
-  	if ($this->clientSOAP instanceof SoapClient) {
-  		return;
-  	}
+    if ($this->clientSOAP instanceof SoapClient) {
+      return;
+    }
     try {
-      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles rooturl'), array('trace' => 1));
+      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles rooturl'));
     } catch (Exception $e) {
       trigger_error("Instanciation du SoapClient impossible : ".$e);
     }
   }
   
   function send($docItem) {
-  	global $AppUI;
-  	
-  	$this->initClientSOAP();
-  	
-  	mbTrace($this->clientSOAP->__getFunctions(), "Fonctions : ", true);
-  	
-  	$nom  = "yohann";
-  	$ddn = "1985/01/10";
-  	$num  = 23;
-  
-  	$parameters = array( "nom"  => "yohann",
-  	                     "ddn" => "1985-01-10",
-  	                     "num"  => 23 );
-  	$return = $this->clientSOAP->testWebService($parameters);
-  	mbTrace($return, "Retour de fonction", true);
-  	
-  	mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
-		mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
-		mbTrace("RESPONSE:\n" . $this->clientSOAP->__getLastResponse() . "\n", "getLastResponse" , true);
-		mbTrace("RESPONSE HEADER:\n" . $this->clientSOAP->__getLastResponseHeaders() . "\n", "getLastResponseHeaders" , true);
-
-  	return;
-    /*$docItem->loadTargetObject();
+    global $AppUI;
+    
+    $this->initClientSOAP();
+    
+    $docItem->loadTargetObject();
     $object = $docItem->_ref_object;
     $object->loadRefPraticien();
     $object->loadRefPatient();
     $object->_ref_praticien->loadRefSpecCPAM();
     
     if (!($object instanceof CSejour) && !($object instanceof COperation)) {
-      return;	
+      return; 
     }
 
     if ($object instanceof CSejour) {
@@ -124,20 +103,20 @@ class CMedinetSender extends CDocumentSender {
       $etab_id = $object->_ref_group->_id;
       $etab_nom = $object->_ref_group->text;
     }
-	  
-	  if ($object instanceof COperation) {
-	  	$object->_ref_sejour->loadRefEtablissement();
-	  	$object->loadRefPlageOp();
-	  	
-	  	$doc_type = 8;
+    
+    if ($object instanceof COperation) {
+      $object->_ref_sejour->loadRefEtablissement();
+      $object->loadRefPlageOp();
+      
+      $doc_type = 8;
         
       $act_dateActe = mbDate($object->_datetime);
       $act_dateValidationActe = mbDate($object->_datetime);
         
       $etab_id = $object->_ref_sejour->_ref_group->_id;
       $etab_nom = $object->_ref_sejour->_ref_group->text;
-	  }
-		  
+    }
+      
     $sej_id = $object->_id;
     
     $praticien = $object->_ref_praticien;
@@ -158,7 +137,7 @@ class CMedinetSender extends CDocumentSender {
     $pat_cpNaissance = $patient->cp_naissance;
     $pat_villeNaissance = ($patient->lieu_naissance) ? $patient->lieu_naissance : "";
     $pat_cinseePaysNaissance = $patient->pays_naissance_insee;
-    $pat_adresseVie = "test";
+    $pat_adresseVie = $patient->adresse;
     $pat_cpVie = $patient->cp;
     $pat_villeVie = $patient->ville;
     $pat_cinseePaysVie = $patient->pays_insee;
@@ -204,30 +183,68 @@ class CMedinetSender extends CDocumentSender {
     $doc_commentaire = "";
                         
     $invalidation = 0;
+
+    $parameters = array ( "sej_id" => $sej_id,
+                          "aut_id" => $aut_id,
+                          "aut_nom" => $aut_nom,
+                          "aut_prenom" => $aut_prenom,
+                          "aut_numOrdre" => $aut_numOrdre,
+                          "pat_id" => $pat_id,
+                          "pat_civilite" => $pat_civilite,
+                          "pat_nomNaissance" => $pat_nomNaissance,
+                          "pat_nomUsuel" => $pat_nomUsuel,
+                          "pat_prenom" => $pat_prenom,
+                          "pat_sexe" => $pat_sexe,
+                          "pat_dateNaissance" => $pat_dateNaissance,
+                          "pat_cpNaissance" => $pat_cpNaissance,
+                          "pat_villeNaissance" => $pat_villeNaissance,
+                          "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
+                          "pat_adresseVie" => $pat_adresseVie,
+                          "pat_cpVie" => $pat_cpVie,
+                          "pat_villeVie" => $pat_villeVie,
+                          "pat_cinseePaysVie" =>$pat_cinseePaysVie,
+                          "pat_telephone1" => $pat_telephone1,
+                          "pat_telephone2" => $pat_telephone2,
+                          "doc_id" => $doc_id,
+                          "doc_nom" => $doc_nom,
+                          "doc_titre" => $doc_titre,
+                          "doc_commentaire" => $doc_commentaire,
+                          "doc_type" => $doc_type,
+                          "doc_nomReel" => $doc_nomReel,
+                          "doc_typeMime" => $doc_typeMime,
+                          "act_id" => $act_id,
+                          "act_pathologie" => $act_pathologie,
+                          "act_dateActe" => $act_dateActe,
+                          "act_dateCreationActe" => $act_dateCreationActe,
+                          "act_dateValidationActe" => $act_dateValidationActe,
+                          "etab_id" => $etab_id,
+                          "etab_nom" => $etab_nom,
+                          "invalidation" => $invalidation,
+                          "fichier" => $fichier);
     
-     // Identifiant de la transaction
-    if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile("$sej_id", "$aut_id", "$aut_nom", "$aut_prenom", "$aut_numOrdre",
-																		    "$pat_id", "$pat_civilite", "$pat_nomNaissance", "$pat_nomUsuel", "$pat_prenom", "$pat_sexe", "$pat_dateNaissance", 
-																		    "$pat_cpNaissance", "$pat_villeNaissance", "$pat_cinseePaysNaissance", "$pat_adresseVie", "$pat_cpVie", 
-																		    "$pat_villeVie", "$pat_cinseePaysVie", "$pat_telephone1", "$pat_telephone2", "$doc_id, $doc_nom", "$doc_titre", 
-																		    "$doc_commentaire", "$doc_type", "$doc_nomReel", "$doc_typeMime", "$act_id", "$act_pathologie", "$act_dateActe", 
-																		    "$act_dateCreationActe",  "$act_dateValidationActe", "$etab_id", "$etab_nom", "$invalidation", "$fichier")) {
-    	return;
+    mbTrace($parameters, "parametres", true);
+    
+    // Identifiant de la transaction
+    if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
+      return;
     }
-mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
-mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
-mbTrace("RESPONSE:\n" . $this->clientSOAP->__getLastResponse() . "\n", "getLastResponse" , true);
-mbTrace("RESPONSE HEADER:\n" . $this->clientSOAP->__getLastResponseHeaders() . "\n", "getLastResponseHeaders" , true);
-die;
+    
+    mbTrace($transactionId, "Transaction id = ", true);
+    
+    mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
+    mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
+    mbTrace("RESPONSE:\n" . $this->clientSOAP->__getLastResponse() . "\n", "getLastResponse" , true);
+    mbTrace("RESPONSE HEADER:\n" . $this->clientSOAP->__getLastResponseHeaders() . "\n", "getLastResponseHeaders" , true);
+      
     // Statut de la transaction
     if (null == $status = $this->clientSOAP->getStatus($transactionId)) {
       return;
     }
     
     if(isset(CMedinetSender::$descriptifStatus[$status])) {
-    	$AppUI->setMsg(CMedinetSender::$descriptifStatus[$status]);
+      $AppUI->setMsg(CMedinetSender::$descriptifStatus[$status]);
     } else {
-    	$AppUI->setMsg("Aucun statut n'a été transmis", UI_MSG_ALERT);
+      $AppUI->setMsg("Aucun statut n'a été transmis", UI_MSG_ALERT);
     }
     
     // Création de l'identifiant externe 
@@ -248,23 +265,23 @@ die;
     // Change l'etat du document
     $docItem->etat_envoi = "oui";
                 
-    return true; */
+    return true; 
   }
   
   function cancel($docItem) {
-  	$this->initClientSOAP();
-  	
-  	// Identifiant de la dernière transaction concernant le document
-  	if (null == $transactionId = $this->getTransactionId($docItem)) {
-  		return;
-  	}
-  	
+    $this->initClientSOAP();
+    
+    // Identifiant de la dernière transaction concernant le document
+    if (null == $transactionId = $this->getTransactionId($docItem)) {
+      return;
+    }
+    
     // Annulation de la transaction
     if (null == $transactionAnnulationId = $this->clientSOAP->cancelDocument($transactionId)) {
       return;
     }
     
-  	// Création de l'identifiant externe 
+    // Création de l'identifiant externe 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
     $id400->object_class = $docItem->_class_name;
@@ -289,7 +306,7 @@ die;
       $docItem->group_id = "";
     }
     
-  	return true;
+    return true;
   }
   
   function resend($docItem) {
@@ -321,7 +338,7 @@ die;
     $transactionId = $id400->id400;
     
     if(!$transactionId) {
-    	return;
+      return;
     }
        
     return $transactionId;
