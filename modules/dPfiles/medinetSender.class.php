@@ -183,7 +183,12 @@ class CMedinetSender extends CDocumentSender {
     $doc_commentaire = "";
                         
     $invalidation = 0;
-
+mbTrace("this->clientSOAP->saveNewDocument_withStringFile($sej_id, $aut_id, $aut_nom, $aut_prenom, $aut_numOrdre,
+                                        $pat_id, $pat_civilite, $pat_nomNaissance, $pat_nomUsuel, $pat_prenom, $pat_sexe, $pat_dateNaissance, 
+                                        $pat_cpNaissance, $pat_villeNaissance, $pat_cinseePaysNaissance, $pat_adresseVie, $pat_cpVie, 
+                                        $pat_villeVie, $pat_cinseePaysVie, $pat_telephone1, $pat_telephone2, $doc_id, $doc_nom, $doc_titre, 
+                                        $doc_commentaire, $doc_type, $doc_nomReel, $doc_typeMime, $act_id, $act_pathologie, $act_dateActe, 
+                                        $act_dateCreationActe,  $act_dateValidationActe, $etab_id, $etab_nom, $invalidation, $fichier))", "fnc", true);
      // Identifiant de la transaction
     if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($sej_id, $aut_id, $aut_nom, $aut_prenom, $aut_numOrdre,
 																		    $pat_id, $pat_civilite, $pat_nomNaissance, $pat_nomUsuel, $pat_prenom, $pat_sexe, $pat_dateNaissance, 
