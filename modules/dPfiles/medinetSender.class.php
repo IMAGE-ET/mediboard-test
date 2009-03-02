@@ -221,7 +221,7 @@ class CMedinetSender extends CDocumentSender {
                           "etab_nom" => $etab_nom,
                           "invalidation" => $invalidation,
                           "fichier" => $fichier);
-
+mbTrace($parameters, "parametre", true);
     // Identifiant de la transaction
     if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
     	return;
