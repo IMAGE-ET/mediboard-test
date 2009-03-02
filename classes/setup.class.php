@@ -96,7 +96,7 @@ class CSetup {
    * @param string $default Default value of the preference
    */
   function addPrefQuery($name, $default) {
-    $sql = "SELECT FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$name' && `pref_value` = '$default'";
+    $sql = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$name' && `pref_value` = '$default'";
     $result = $this->ds->exec($sql);
     if(!$this->ds->numRows($result)) {
       $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
