@@ -154,7 +154,7 @@ class CMedinetSender extends CDocumentSender {
       $doc_nom = $docItem->nom;
       $doc_titre = $docItem->nom;
       $doc_nomReel = $docItem->nom;
-      $doc_typeMime = "text";
+      $doc_typeMime = "text/html";
       
       $log = new CUserLog();
       $log->type = "create";
@@ -163,7 +163,7 @@ class CMedinetSender extends CDocumentSender {
       $log->loadMatchingObject();
       
       $act_dateCreationActe = mbDate($log->date); 
-      $fichier = "monfichier";
+      $fichier = base64_encode($docItem->source);
       // Necessaire pour les xor
       $docItem->function_id = "";
       $docItem->chir_id = "";
@@ -198,11 +198,11 @@ class CMedinetSender extends CDocumentSender {
                           "pat_dateNaissance" => $pat_dateNaissance,
                           "pat_cpNaissance" => $pat_cpNaissance,
                           "pat_villeNaissance" => $pat_villeNaissance,
-                          "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
+                          "pat_cinseePaysNaissance" => -1,
                           "pat_adresseVie" => $pat_adresseVie,
                           "pat_cpVie" => $pat_cpVie,
                           "pat_villeVie" => $pat_villeVie,
-                          "pat_cinseePaysVie" =>$pat_cinseePaysVie,
+                          "pat_cinseePaysVie" => -1,
                           "pat_telephone1" => $pat_telephone1,
                           "pat_telephone2" => $pat_telephone2,
                           "doc_id" => $doc_id,
