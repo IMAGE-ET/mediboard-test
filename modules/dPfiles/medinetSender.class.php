@@ -71,7 +71,7 @@ class CMedinetSender extends CDocumentSender {
   		return;
   	}
     try {
-      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles rooturl'));
+      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles rooturl'), array('trace' => 1));
     } catch (Exception $e) {
       trigger_error("Instanciation du SoapClient impossible : ".$e);
     }
@@ -82,7 +82,19 @@ class CMedinetSender extends CDocumentSender {
   	
   	$this->initClientSOAP();
   	
-    $docItem->loadTargetObject();
+  	$nom  = "yohann";
+  	$ddn = "1985/01/10";
+  	$num  = 23;
+  	
+  	$return = $this->clientSOAP->testWebService($nom, $ddn, $num);
+  	
+  	mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
+		mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
+		mbTrace("RESPONSE:\n" . $this->clientSOAP->__getLastResponse() . "\n", "getLastResponse" , true);
+		mbTrace("RESPONSE HEADER:\n" . $this->clientSOAP->__getLastResponseHeaders() . "\n", "getLastResponseHeaders" , true);
+
+  	return;
+    /*$docItem->loadTargetObject();
     $object = $docItem->_ref_object;
     $object->loadRefPraticien();
     $object->loadRefPatient();
@@ -137,7 +149,7 @@ class CMedinetSender extends CDocumentSender {
     $pat_cpNaissance = $patient->cp_naissance;
     $pat_villeNaissance = ($patient->lieu_naissance) ? $patient->lieu_naissance : "";
     $pat_cinseePaysNaissance = $patient->pays_naissance_insee;
-    $pat_adresseVie = $patient->adresse;
+    $pat_adresseVie = "test";
     $pat_cpVie = $patient->cp;
     $pat_villeVie = $patient->ville;
     $pat_cinseePaysVie = $patient->pays_insee;
@@ -193,7 +205,11 @@ class CMedinetSender extends CDocumentSender {
 																		    "$act_dateCreationActe",  "$act_dateValidationActe", "$etab_id", "$etab_nom", "$invalidation", "$fichier")) {
     	return;
     }
-
+mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
+mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
+mbTrace("RESPONSE:\n" . $this->clientSOAP->__getLastResponse() . "\n", "getLastResponse" , true);
+mbTrace("RESPONSE HEADER:\n" . $this->clientSOAP->__getLastResponseHeaders() . "\n", "getLastResponseHeaders" , true);
+die;
     // Statut de la transaction
     if (null == $status = $this->clientSOAP->getStatus($transactionId)) {
       return;
@@ -223,7 +239,7 @@ class CMedinetSender extends CDocumentSender {
     // Change l'etat du document
     $docItem->etat_envoi = "oui";
                 
-    return true; 
+    return true; */
   }
   
   function cancel($docItem) {
