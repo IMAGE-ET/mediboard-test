@@ -45,6 +45,7 @@ class CDocumentItem extends CMbMetaObject {
   	
     if ($this instanceof CCompteRendu) {
     	$this->completeField("nom");
+    	$this->completeField("source");
     }
     
     if ($this instanceof CFile) {

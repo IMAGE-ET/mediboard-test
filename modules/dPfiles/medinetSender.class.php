@@ -163,9 +163,7 @@ class CMedinetSender extends CDocumentSender {
       $log->loadMatchingObject();
       
       $act_dateCreationActe = mbDate($log->date); 
-      
       $fichier = base64_encode($docItem->source);
-      
       // Necessaire pour les xor
       $docItem->function_id = "";
       $docItem->chir_id = "";
@@ -188,31 +186,31 @@ class CMedinetSender extends CDocumentSender {
 
     $parameters = array ( "sej_id" => $sej_id,
                           "aut_id" => $aut_id,
-                          "aut_nom" => utf8_encode($aut_nom),
-                          "aut_prenom" => utf8_encode($aut_prenom),
+                          "aut_nom" => $aut_nom,
+                          "aut_prenom" => $aut_prenom,
                           "aut_numOrdre" => $aut_numOrdre,
                           "pat_id" => $pat_id,
                           "pat_civilite" => $pat_civilite,
-                          "pat_nomNaissance" => utf8_encode($pat_nomNaissance),
-                          "pat_nomUsuel" => utf8_encode($pat_nomUsuel),
-                          "pat_prenom" => utf8_encode($pat_prenom),
+                          "pat_nomNaissance" => $pat_nomNaissance,
+                          "pat_nomUsuel" => $pat_nomUsuel,
+                          "pat_prenom" => $pat_prenom,
                           "pat_sexe" => $pat_sexe,
                           "pat_dateNaissance" => $pat_dateNaissance,
                           "pat_cpNaissance" => $pat_cpNaissance,
-                          "pat_villeNaissance" => utf8_encode($pat_villeNaissance),
+                          "pat_villeNaissance" => $pat_villeNaissance,
                           "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
-                          "pat_adresseVie" => utf8_encode($pat_adresseVie),
+                          "pat_adresseVie" => $pat_adresseVie,
                           "pat_cpVie" => $pat_cpVie,
-                          "pat_villeVie" => utf8_encode($pat_villeVie),
+                          "pat_villeVie" => $pat_villeVie,
                           "pat_cinseePaysVie" =>$pat_cinseePaysVie,
                           "pat_telephone1" => $pat_telephone1,
                           "pat_telephone2" => $pat_telephone2,
                           "doc_id" => $doc_id,
-                          "doc_nom" => utf8_encode($doc_nom),
-                          "doc_titre" => utf8_encode($doc_titre),
-                          "doc_commentaire" => utf8_encode($doc_commentaire),
+                          "doc_nom" => $doc_nom,
+                          "doc_titre" => $doc_titre,
+                          "doc_commentaire" => $doc_commentaire,
                           "doc_type" => $doc_type,
-                          "doc_nomReel" => utf8_encode($doc_nomReel),
+                          "doc_nomReel" => $doc_nomReel,
                           "doc_typeMime" => $doc_typeMime,
                           "act_id" => $act_id,
                           "act_pathologie" => $act_pathologie,
@@ -220,10 +218,10 @@ class CMedinetSender extends CDocumentSender {
                           "act_dateCreationActe" => $act_dateCreationActe,
                           "act_dateValidationActe" => $act_dateValidationActe,
                           "etab_id" => $etab_id,
-                          "etab_nom" => utf8_encode($etab_nom),
+                          "etab_nom" => $etab_nom,
                           "invalidation" => $invalidation,
                           "fichier" => $fichier);
-    
+
     // Identifiant de la transaction
     if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
     	return;
