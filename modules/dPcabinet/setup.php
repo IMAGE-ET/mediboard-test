@@ -895,6 +895,8 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.91");
+    $sql = "DELETE FROM `user_preferences` WHERE `pref_name` = 'ccam_consultation'";
+    $this->addQuery($sql);
     $sql = "UPDATE `user_preferences`
             SET `pref_name` = 'ccam_consultation'
             WHERE `pref_name` = 'ccam'";
