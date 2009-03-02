@@ -82,11 +82,15 @@ class CMedinetSender extends CDocumentSender {
   	
   	$this->initClientSOAP();
   	
+  	mbTrace($this->clientSOAP->__getFunctions(), "Fonctions : ", true);
+  	
   	$nom  = "yohann";
   	$ddn = "1985/01/10";
   	$num  = 23;
   	
   	$return = $this->clientSOAP->testWebService($nom, $ddn, $num);
+  	
+  	mbTrace($return, "Retour de la fonction", true);
   	
   	mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
 		mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
