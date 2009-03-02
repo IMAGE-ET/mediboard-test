@@ -739,6 +739,7 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.87");
+    $this->addDependency("dPcompteRendu", "0.1");
     $sql = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM - code",        "Opération - CCAM1 - code");
     $this->addQuery($sql);
     
