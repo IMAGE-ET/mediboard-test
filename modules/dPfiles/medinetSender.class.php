@@ -91,7 +91,7 @@ class CMedinetSender extends CDocumentSender {
   	$ddn = "1985/01/10";
   	$num  = 23;
   	
-  	$parameters = '<?xml version="1.1"><saveNewDocument><nom>yohann</nom><ddn>1985/01/10</ddn><num>23</num></saveNewDocument>'; 
+  	$parameters = '<?xml version="1.0" encoding="utf-8"?><saveNewDocument><nom>yohann</nom><ddn>1985/01/10</ddn><num>23</num></saveNewDocument>'; 
   	
   	$return = $this->clientSOAP->testWebService($parameters);
   	
