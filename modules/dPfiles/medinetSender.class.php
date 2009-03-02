@@ -136,11 +136,11 @@ class CMedinetSender extends CDocumentSender {
     $pat_dateNaissance = $patient->naissance;
     $pat_cpNaissance = $patient->cp_naissance;
     $pat_villeNaissance = ($patient->lieu_naissance) ? $patient->lieu_naissance : "";
-    $pat_cinseePaysNaissance = $patient->pays_naissance_insee;
+    $pat_cinseePaysNaissance = ($patient->pays_naissance_insee) ? $patient->pays_naissance_insee : -1 ;
     $pat_adresseVie = $patient->adresse;
     $pat_cpVie = $patient->cp;
     $pat_villeVie = $patient->ville;
-    $pat_cinseePaysVie = $patient->pays_insee;
+    $pat_cinseePaysVie = ($patient->pays_insee) ? $patient->pays_insee : -1 ;
     $pat_telephone1 = $patient->tel;
     $pat_telephone2 = $patient->tel2;
     
@@ -198,11 +198,11 @@ class CMedinetSender extends CDocumentSender {
                           "pat_dateNaissance" => $pat_dateNaissance,
                           "pat_cpNaissance" => $pat_cpNaissance,
                           "pat_villeNaissance" => $pat_villeNaissance,
-                          "pat_cinseePaysNaissance" => -1,
+                          "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
                           "pat_adresseVie" => $pat_adresseVie,
                           "pat_cpVie" => $pat_cpVie,
                           "pat_villeVie" => $pat_villeVie,
-                          "pat_cinseePaysVie" => -1,
+                          "pat_cinseePaysVie" =>$pat_cinseePaysVie,
                           "pat_telephone1" => $pat_telephone1,
                           "pat_telephone2" => $pat_telephone2,
                           "doc_id" => $doc_id,
@@ -229,15 +229,10 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
-    mbTrace($transactionId, "Transaction id = ", true);
+    $parameters = array ( "transactionId" => $transactionId);
     
-    mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
-    mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
-    mbTrace("RESPONSE:\n" . $this->clientSOAP->__getLastResponse() . "\n", "getLastResponse" , true);
-    mbTrace("RESPONSE HEADER:\n" . $this->clientSOAP->__getLastResponseHeaders() . "\n", "getLastResponseHeaders" , true);
-      
     // Statut de la transaction
-    if (null == $status = $this->clientSOAP->getStatus($transactionId)) {
+    if (null == $status = $this->clientSOAP->getStatus($parameters)) {
       return;
     }
     
@@ -276,8 +271,10 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
+    $parameters = array ( "idTransaction" => $transactionId);
+    
     // Annulation de la transaction
-    if (null == $transactionAnnulationId = $this->clientSOAP->cancelDocument($transactionId)) {
+    if (null == $transactionAnnulationId = $this->clientSOAP->cancelDocument($parameters)) {
       return;
     }
     
