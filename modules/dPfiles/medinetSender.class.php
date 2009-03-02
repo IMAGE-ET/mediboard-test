@@ -91,7 +91,9 @@ class CMedinetSender extends CDocumentSender {
   	$ddn = "1985/01/10";
   	$num  = 23;
   	
-  	$return = $this->clientSOAP->testWebService($nom, $ddn, $num);
+  	$parameters = '<?xml version="1.1"><saveNewDocument><nom>yohann</nom><ddn>1985/01/10</ddn><num>23</num></saveNewDocument>'; 
+  	
+  	$return = $this->clientSOAP->testWebService($parameters);
   	
   	mbTrace($return, "Retour de la fonction", true);
   	
