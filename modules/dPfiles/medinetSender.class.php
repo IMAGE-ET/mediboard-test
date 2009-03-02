@@ -227,6 +227,8 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
+    $transactionId = $transactionId->saveNewDocument_withStringFileResult;
+    
     $parameters = array ( "transactionId" => $transactionId);
     
     // Statut de la transaction
@@ -234,10 +236,8 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
-    mbTrace($transactionId, "Numero de la transaction", true);
-     
-    mbTrace($status, "Status", true);
-      
+    $status = $status->getStatusResult;
+    
     if(isset(CMedinetSender::$descriptifStatus[$status])) {
       $AppUI->setMsg(CMedinetSender::$descriptifStatus[$status]);
     } else {
@@ -282,8 +282,8 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
-    mbTrace($transactionAnnulationId, "Numero de la transaction d'annulation", true);
-    
+    $transactionAnnulationId = $transactionAnnulationId->cancelDocumentResult;
+        
     // Création de l'identifiant externe 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
