@@ -272,9 +272,7 @@ class CMedinetSender extends CDocumentSender {
     if (null == $transactionId = $this->getTransactionId($docItem)) {
       return;
     }
-    
-    mbTrace($transactionId, "Numero de la transaction a invalider", true);
-    
+        
     $parameters = array ( "idTransaction" => $transactionId);
     
     // Annulation de la transaction
