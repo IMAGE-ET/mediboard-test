@@ -67,6 +67,9 @@ class CMedinetSender extends CDocumentSender {
   var $clientSOAP = null;
   
   function initClientSOAP () {
+    // première étape : désactiver le cache lors de la phase de test
+    ini_set("soap.wsdl_cache_enabled", "0");
+    
   	if ($this->clientSOAP instanceof SoapClient) {
   		return;
   	}
