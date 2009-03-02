@@ -92,7 +92,7 @@ class CMedinetSender extends CDocumentSender {
   	$num  = 23;
   
   	$parameters = array( "nom"  => "yohann",
-  	                     "ddn" => "1985/01/10",
+  	                     "ddn" => "1985-01-10",
   	                     "num"  => 23 );
   	$return = $this->clientSOAP->testWebService($parameters);
   	mbTrace($return, "Retour de fonction", true);
