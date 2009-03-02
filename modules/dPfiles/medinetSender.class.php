@@ -221,9 +221,7 @@ class CMedinetSender extends CDocumentSender {
                           "etab_nom" => $etab_nom,
                           "invalidation" => $invalidation,
                           "fichier" => $fichier);
-    
-    mbTrace($parameters, "parametres", true);
-    
+       
     // Identifiant de la transaction
     if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
       return;
@@ -236,6 +234,10 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
+    mbTrace($transactionId, "Numero de la transaction", true);
+     
+    mbTrace($status, "Status", true);
+      
     if(isset(CMedinetSender::$descriptifStatus[$status])) {
       $AppUI->setMsg(CMedinetSender::$descriptifStatus[$status]);
     } else {
@@ -271,12 +273,16 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
+    mbTrace($transactionId, "Numero de la transaction a invalider", true);
+    
     $parameters = array ( "idTransaction" => $transactionId);
     
     // Annulation de la transaction
     if (null == $transactionAnnulationId = $this->clientSOAP->cancelDocument($parameters)) {
       return;
     }
+    
+    mbTrace($transactionAnnulationId, "Numero de la transaction d'annulation", true);
     
     // Création de l'identifiant externe 
     $id400 = new CIdSante400();
