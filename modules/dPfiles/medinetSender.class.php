@@ -84,7 +84,7 @@ class CMedinetSender extends CDocumentSender {
   	
   	mbTrace($this->clientSOAP, "Trace client SOAP", true);
   	
-    $result = $client->getStatus(28);
+    $result = $this->clientSOAP->getStatus(28);
     if (is_soap_fault($result)) {
       trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
     }
