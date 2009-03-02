@@ -82,7 +82,14 @@ class CMedinetSender extends CDocumentSender {
   	
   	$this->initClientSOAP();
   	
-    $docItem->loadTargetObject();
+  	mbTrace($this->clientSOAP, "Trace client SOAP", true);
+  	
+    $result = $client->getStatus(28);
+    if (is_soap_fault($result)) {
+      trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
+    }
+      
+    /*$docItem->loadTargetObject();
     $object = $docItem->_ref_object;
     $object->loadRefPraticien();
     $object->loadRefPatient();
@@ -312,7 +319,7 @@ mbTrace($parameters, "parametre", true);
     if (null == $this->send($docItem)) {
       return;
     }
-    
+    */
     return true;
   }
   
