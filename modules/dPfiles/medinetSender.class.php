@@ -82,14 +82,7 @@ class CMedinetSender extends CDocumentSender {
   	
   	$this->initClientSOAP();
   	
-  	mbTrace($this->clientSOAP, "Trace client SOAP", true);
-  	
-    $result = $this->clientSOAP->getStatus(28);
-    if (is_soap_fault($result)) {
-      trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
-    }
-      
-    /*$docItem->loadTargetObject();
+    $docItem->loadTargetObject();
     $object = $docItem->_ref_object;
     $object->loadRefPraticien();
     $object->loadRefPatient();
@@ -191,46 +184,13 @@ class CMedinetSender extends CDocumentSender {
                         
     $invalidation = 0;
 
-    $parameters = array ( "sej_id" => $sej_id,
-                          "aut_id" => $aut_id,
-                          "aut_nom" => $aut_nom,
-                          "aut_prenom" => $aut_prenom,
-                          "aut_numOrdre" => $aut_numOrdre,
-                          "pat_id" => $pat_id,
-                          "pat_civilite" => $pat_civilite,
-                          "pat_nomNaissance" => $pat_nomNaissance,
-                          "pat_nomUsuel" => $pat_nomUsuel,
-                          "pat_prenom" => $pat_prenom,
-                          "pat_sexe" => $pat_sexe,
-                          "pat_dateNaissance" => $pat_dateNaissance,
-                          "pat_cpNaissance" => $pat_cpNaissance,
-                          "pat_villeNaissance" => $pat_villeNaissance,
-                          "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
-                          "pat_adresseVie" => $pat_adresseVie,
-                          "pat_cpVie" => $pat_cpVie,
-                          "pat_villeVie" => $pat_villeVie,
-                          "pat_cinseePaysVie" =>$pat_cinseePaysVie,
-                          "pat_telephone1" => $pat_telephone1,
-                          "pat_telephone2" => $pat_telephone2,
-                          "doc_id" => $doc_id,
-                          "doc_nom" => $doc_nom,
-                          "doc_titre" => $doc_titre,
-                          "doc_commentaire" => $doc_commentaire,
-                          "doc_type" => $doc_type,
-                          "doc_nomReel" => $doc_nomReel,
-                          "doc_typeMime" => $doc_typeMime,
-                          "act_id" => $act_id,
-                          "act_pathologie" => $act_pathologie,
-                          "act_dateActe" => $act_dateActe,
-                          "act_dateCreationActe" => $act_dateCreationActe,
-                          "act_dateValidationActe" => $act_dateValidationActe,
-                          "etab_id" => $etab_id,
-                          "etab_nom" => $etab_nom,
-                          "invalidation" => $invalidation,
-                          "fichier" => $fichier);
-mbTrace($parameters, "parametre", true);
-    // Identifiant de la transaction
-    if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
+     // Identifiant de la transaction
+    if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($sej_id, $aut_id, $aut_nom, $aut_prenom, $aut_numOrdre,
+																		    $pat_id, $pat_civilite, $pat_nomNaissance, $pat_nomUsuel, $pat_prenom, $pat_sexe, $pat_dateNaissance, 
+																		    $pat_cpNaissance, $pat_villeNaissance, $pat_cinseePaysNaissance, $pat_adresseVie, $pat_cpVie, 
+																		    $pat_villeVie, $pat_cinseePaysVie, $pat_telephone1, $pat_telephone2, $doc_id, $doc_nom, $doc_titre, 
+																		    $doc_commentaire, $doc_type, $doc_nomReel, $doc_typeMime, $act_id, $act_pathologie, $act_dateActe, 
+																		    $act_dateCreationActe,  $act_dateValidationActe, $etab_id, $etab_nom, $invalidation, $fichier)) {
     	return;
     }
 
@@ -319,7 +279,7 @@ mbTrace($parameters, "parametre", true);
     if (null == $this->send($docItem)) {
       return;
     }
-    */
+    
     return true;
   }
   
