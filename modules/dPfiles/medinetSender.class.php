@@ -90,12 +90,9 @@ class CMedinetSender extends CDocumentSender {
   	$nom  = "yohann";
   	$ddn = "1985/01/10";
   	$num  = 23;
-  	
-  	$parameters = '<?xml version="1.0" encoding="utf-8"?><saveNewDocument><nom>yohann</nom><ddn>1985/01/10</ddn><num>23</num></saveNewDocument>'; 
-  	
-  	$return = $this->clientSOAP->testWebService($parameters);
-  	
-  	mbTrace($return, "Retour de la fonction", true);
+  
+  	$return = CMedinetSender::$descriptifStatus[$this->clientSOAP->getStatus(28)];
+  	mbTrace($return, "Retour du statut", true);
   	
   	mbTrace("REQUEST:\n" . $this->clientSOAP->__getLastRequest() . "\n", "getLastRequest" , true);
 		mbTrace("REQUEST HEADERS:\n" . $this->clientSOAP->__getLastRequestHeaders() . "\n", "getLastRequestHeaders" , true);
