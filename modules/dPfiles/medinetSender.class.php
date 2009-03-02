@@ -154,7 +154,7 @@ class CMedinetSender extends CDocumentSender {
       $doc_nom = $docItem->nom;
       $doc_titre = $docItem->nom;
       $doc_nomReel = $docItem->nom;
-      $doc_typeMime = "text/html";
+      $doc_typeMime = "text";
       
       $log = new CUserLog();
       $log->type = "create";
@@ -163,7 +163,7 @@ class CMedinetSender extends CDocumentSender {
       $log->loadMatchingObject();
       
       $act_dateCreationActe = mbDate($log->date); 
-      $fichier = base64_encode($docItem->source);
+      $fichier = "monfichier";
       // Necessaire pour les xor
       $docItem->function_id = "";
       $docItem->chir_id = "";
