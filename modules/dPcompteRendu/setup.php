@@ -307,6 +307,7 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.41");
     $this->addDependency("dPcabinet", "0.79");
+    $this->addDependency("dPpatients", "0.73");
     $sql = "ALTER TABLE `aide_saisie` 
 			      CHANGE `depend_value` `depend_value_1` VARCHAR (255),
             ADD `depend_value_2` VARCHAR (255);";
