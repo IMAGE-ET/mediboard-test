@@ -141,13 +141,16 @@ class CFichePaie extends CMbObject {
       $this->_app                 = $this->_salaire_brut * $this->_ref_params_paie->app / 100;
       $this->_total_cot_patr     += $this->_app;
       // On peut calculer ici la CSG/RDS
-      $this->_base_csgnis     = ($this->_salaire_brut - $this->_salaire_heures_sup + $this->_app + $this->_ref_params_paie->mp) * 0.97;
+      $this->_base_csgnis     = ($this->_salaire_brut
+                                 - $this->_salaire_heures_sup
+                                 - $this->_salaire_heures_comp
+                                 + $this->_app + $this->_ref_params_paie->mp) * 0.97;
       $this->_csgnis          = $this->_base_csgnis * $this->_ref_params_paie->csgnis / 100;
       $this->_total_retenues += $this->_csgnis;
       $this->_base_csgnds     = $this->_base_csgnis;
       $this->_csgnds          = $this->_base_csgnds * $this->_ref_params_paie->csgnds / 100;
       $this->_total_retenues += $this->_csgnds;
-      $this->_base_csgds      = $this->_total_heures_sup * 0.97;
+      $this->_base_csgds      = ($this->_total_heures_sup + $this->_total_heures_comp) * 0.97;
       $this->_csgds           = $this->_base_csgds * $this->_ref_params_paie->csgds / 100;
       $this->_total_retenues += $this->_csgds;
       // On reviens à nos cotisations classiques
