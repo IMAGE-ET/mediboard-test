@@ -44,9 +44,10 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 
-$smarty->assign("userfunction", $userfunction);
-$smarty->assign("listGroups"  , $listGroups  );
-$smarty->assign("utypes"      , CUser::$types );
+$smarty->assign("userfunction"        , $userfunction);
+$smarty->assign("listGroups"          , $listGroups  );
+$smarty->assign("secondary_function"  , new CSecondaryFunction());
+$smarty->assign("utypes"              , CUser::$types );
 
 $smarty->display("vw_idx_functions.tpl");
 

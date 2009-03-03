@@ -1,5 +1,6 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 {{mb_include_script module="mediusers" script="color_selector"}}
+{{mb_include_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
 Main.add(function () {
@@ -157,8 +158,16 @@ ColorSelector.init = function(){
   <tr>
     <td>
       <ul id="tab_user" class="control_tabs">
-        <li><a href="#list-primary-users" id="list-primary-users-title">Utilisateurs principaux</a></li>
-        <li><a href="#list-secondary-users" id="list-secondary-users-title">Utilisateurs secondaires</a></li>
+        <li>
+          <a href="#list-primary-users" id="list-primary-users-title">
+            Utilisateurs principaux ({{$userfunction->_back.users|@count}})
+          </a>
+        </li>
+        <li>
+          <a href="#list-secondary-users" id="list-secondary-users-title">
+            Utilisateurs secondaires({{$userfunction->_back.secondary_functions|@count}})
+          </a>
+        </li>
       </ul>
       <hr class="control_tabs" />
       <div id="list-primary-users" style="display: none;">
@@ -199,6 +208,44 @@ ColorSelector.init = function(){
         </table>
       </div>
       <div id="list-secondary-users" style="display: none;">
+        
+	      <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="dosql" value="do_secondary_function_aed" />
+	    	<input type="hidden" name="secondary_function_id" value="" />
+	    	<input type="hidden" name="function_id" value="{{$userfunction->_id}}" />
+		    <input type="hidden" name="del" value="0" />
+    		<table class="form">
+		      <tr>
+		        <th class="title" colspan="2">
+		          Ajout d'un utilisateur
+		        </th>
+		      </tr>
+		  
+	    	  <tr>
+		        <th>{{mb_label object=$secondary_function field="user_id"}}</th>
+            <td>
+              <input type="text" name="user_id" class="notNull" value=""/>
+              <input type="hidden" name="object_class" value="CMediusers" />
+              <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
+              <script type="text/javascript">
+               ObjectSelector.initEdit = function(){
+                  this.sForm     = "addSecUser";
+                  this.sId       = "user_id";
+                  this.sClass    = "object_class";  
+                  this.onlyclass = "true";
+                  this.pop();
+                }
+              </script>
+            </td>
+		      </tr>
+    		  <tr>
+		        <td class="button" colspan="2">
+		          <button class="submit" name="btnFuseAction" type="submit">Créer</button>
+		        </td>
+		      </tr>
+		    </table>
+        </form>
+        
         <table class="tbl">
           <tr>
             <th>{{mb_title class=CUser field=user_username}}</th>

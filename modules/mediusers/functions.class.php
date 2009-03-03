@@ -43,7 +43,7 @@ class CFunctions extends CMbObject {
 	function getBackRefs() {
 	  $backRefs = parent::getBackRefs();
 	  $backRefs["users"]                          = "CMediusers function_id";
-	  $backRefs["secondary_functions"]            = "CSecondaryFunction user_id";
+	  $backRefs["secondary_functions"]            = "CSecondaryFunction function_id";
 	  $backRefs["aides"]                          = "CAideSaisie function_id";
 	  $backRefs["catalogues_labo"]                = "CCatalogueLabo function_id";
 	  $backRefs["compte_rendu"]                   = "CCompteRendu function_id";
