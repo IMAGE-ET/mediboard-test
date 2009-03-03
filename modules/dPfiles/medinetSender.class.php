@@ -147,7 +147,6 @@ class CMedinetSender extends CDocumentSender {
     $pat_telephone2 = $patient->tel2;
     
     $act_id = $object->_id;
-    mbTrace($act_id, "sejour", true);
     
     $doc_id = $docItem->_id;
      
