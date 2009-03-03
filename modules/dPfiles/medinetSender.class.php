@@ -91,12 +91,14 @@ class CMedinetSender extends CDocumentSender {
     if (!($object instanceof CSejour) && !($object instanceof COperation)) {
       return; 
     }
-
+    
     if ($object instanceof CSejour) {
       $object->loadRefEtablissement();  
       
+      $sej_id = $object->_id;
+      
       $doc_type = 29;
-        
+      
       $act_dateActe = mbDate($object->entree_reelle);
       $act_dateValidationActe = mbDate($object->entree_reelle);
         
@@ -108,16 +110,16 @@ class CMedinetSender extends CDocumentSender {
       $object->_ref_sejour->loadRefEtablissement();
       $object->loadRefPlageOp();
       
+      $sej_id = $object->sejour_id;
+      
       $doc_type = 8;
-        
+      
       $act_dateActe = mbDate($object->_datetime);
       $act_dateValidationActe = mbDate($object->_datetime);
         
       $etab_id = $object->_ref_sejour->_ref_group->_id;
       $etab_nom = $object->_ref_sejour->_ref_group->text;
     }
-      
-    $sej_id = $object->_id;
     
     $praticien = $object->_ref_praticien;
         
@@ -144,8 +146,10 @@ class CMedinetSender extends CDocumentSender {
     $pat_telephone1 = $patient->tel;
     $pat_telephone2 = $patient->tel2;
     
-    $doc_id = $docItem->_id;
     $act_id = $object->_id;
+    mbTrace($act_id, "sejour", true);
+    
+    $doc_id = $docItem->_id;
      
     $spec_cpam_id = $praticien->_ref_spec_cpam->spec_cpam_id;
     $act_pathologie = isset(CMedinetSender::$cpamConversion[$spec_cpam_id]) ? CMedinetSender::$cpamConversion[$spec_cpam_id] : 0;
@@ -221,7 +225,9 @@ class CMedinetSender extends CDocumentSender {
                           "etab_nom" => $etab_nom,
                           "invalidation" => $invalidation,
                           "fichier" => $fichier);
-       
+    
+    $parameters = array_map("utf8_encode", $parameters);
+
     // Identifiant de la transaction
     if (null == $transactionId = $this->clientSOAP->saveNewDocument_withStringFile($parameters)) {
       return;
