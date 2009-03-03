@@ -21,10 +21,11 @@ class CPlageOp extends CMbObject {
   var $plageop_id = null;
   
   // DB References
-  var $chir_id   = null;
-  var $anesth_id = null;
-  var $spec_id   = null;
-  var $salle_id  = null;
+  var $chir_id      = null;
+  var $anesth_id    = null;
+  var $spec_id      = null;
+  var $salle_id     = null;
+  var $spec_repl_id = null;
 
   // DB fields
   var $date             = null;
@@ -32,6 +33,7 @@ class CPlageOp extends CMbObject {
   var $fin              = null;
   var $temps_inter_op   = null;
   var $max_intervention = null;
+  var $delay_repl       = null;
     
   // Form Fields
   var $_day          = null;
@@ -73,11 +75,13 @@ class CPlageOp extends CMbObject {
     $specs["anesth_id"]        = "ref class|CMediusers";
     $specs["spec_id"]          = "ref xor|chir_id class|CFunctions";
     $specs["salle_id"]         = "ref notNull class|CSalle";
+    $specs["spec_repl_id"]     = "ref class|CFunctions";
     $specs["date"]             = "date notNull";
     $specs["debut"]            = "time notNull";
     $specs["fin"]              = "time notNull";
     $specs["temps_inter_op"]   = "time notNull";
-    $specs["max_intervention"] = "num";
+    $specs["max_intervention"] = "num min|0";
+    $specs["delay_repl"]       = "num min|0";
 
     $specs["_heuredeb"]        = "num minMax|0|23";
     $specs["_minutedeb"]       = "num minMax|0|59";
@@ -299,6 +303,8 @@ class CPlageOp extends CMbObject {
     $temps_inter_op   = $this->temps_inter_op;
     $max_intervention = $this->max_intervention;
     $anesth_id        = $this->anesth_id;
+    $delay_repl       = $this->delay_repl;
+    $spec_repl_id     = $this->spec_repl_id;
     $msg = null;
     if(count($plages) > 0) {
       $msg = $this->load(reset($plages)->plageop_id);
@@ -313,6 +319,8 @@ class CPlageOp extends CMbObject {
     $this->temps_inter_op   = $temps_inter_op;
     $this->max_intervention = $max_intervention;
     $this->anesth_id        = $anesth_id;
+    $this->delay_repl       = $delay_repl;
+    $this->spec_repl_id     = $spec_repl_id;
     $this->updateFormFields();
     return $msg;
   }

@@ -218,4 +218,12 @@ $locales['CSpecCPAM-title-create'] = '';
 $locales['CSpecCPAM-title-modify'] = '';
 $locales['CSpecCPAM.all'] = '';
 $locales['CSpecCPAM.select'] = '';
+$locales['CSecondaryFunction-user_id'] = '';
+$locales['CBanque-back-'] = '';
+$locales['CMediusers-_user_last_login'] = '';
+$locales['CMediusers-_user_last_login-court'] = '';
+$locales['CMediusers-_user_last_login-desc'] = '';
+$locales['CSecondaryFunction-user_id-desc'] = '';
+$locales['CSecondaryFunction-function_id'] = '';
+$locales['CSecondaryFunction-function_id-desc'] = '';
 ?>

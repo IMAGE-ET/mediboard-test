@@ -83,7 +83,7 @@ function popPlanning(debut) {
         <tr>
          <th>{{mb_label object=$plagesel field="chir_id"}}</th>
          <td>
-          <select name="chir_id" class="{{$plagesel->_props.chir_id}}">
+          <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="max-width: 170px;">
             <option value="">&mdash; Choisir un chirurgien</option>
             {{foreach from=$specs item=currFct key=keyFct}}
             <optgroup label="{{$currFct->_view}}">
@@ -99,7 +99,7 @@ function popPlanning(debut) {
         </td>
         <th>{{mb_label object=$plagesel field="salle_id"}}</th>
         <td>
-          <select name="salle_id" class="{{$plagesel->_props.salle_id}}">
+          <select name="salle_id" class="{{$plagesel->_props.salle_id}}" style="max-width: 170px;">
             <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
             {{foreach from=$listBlocs item=curr_bloc}}
               <optgroup label="{{$curr_bloc->_view}}">
@@ -118,7 +118,7 @@ function popPlanning(debut) {
       <tr>
         <th>{{mb_label object=$plagesel field="spec_id"}}</th>
         <td>
-          <select name="spec_id" class="{{$plagesel->_props.spec_id}}">
+          <select name="spec_id" class="{{$plagesel->_props.spec_id}}" style="max-width: 170px;">
             <option value="">&mdash; Choisir une spécialité</option>
             {{foreach from=$specs item=spec}}
               <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
@@ -145,7 +145,7 @@ function popPlanning(debut) {
       <tr>
         <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
         <td>
-          <select name="anesth_id">
+          <select name="anesth_id" style="max-width: 170px;">
             <option value="">&mdash; Choisir un anesthésiste</option>
             {{foreach from=$anesths item=anesth}}
             <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
@@ -220,6 +220,24 @@ function popPlanning(debut) {
       <tr>
         <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
         <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
+        <th>{{mb_label object=$plagesel field="delay_repl"}}</th>
+        <td>{{mb_field object=$plagesel field="delay_repl" size=1 increment=true form="editFrm" min=0}} jours</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="2" />
+        <th>{{mb_label object=$plagesel field="spec_repl_id"}}</th>
+        <td>
+          <select name="spec_repl_id" class="{{$plagesel->_props.spec_repl_id}}" style="max-width: 170px;">
+            <option value="">&mdash; Spécialité de remplacement</option>
+            {{foreach from=$specs item=spec}}
+              <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
+              {{if $spec->function_id == $plagesel->spec_repl_id}}selected="selected"{{/if}}>
+                {{$spec->text}}
+              </option>
+            {{/foreach}}
+          </select>
+        </td>
       </tr>
       <tr>
         <td class="button" colspan="4">

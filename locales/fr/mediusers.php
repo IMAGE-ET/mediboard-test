@@ -222,4 +222,8 @@ $locales['CSpecCPAM.select'] = '';
 $locales['CMediusers-_user_last_login'] = '';
 $locales['CMediusers-_user_last_login-court'] = '';
 $locales['CMediusers-_user_last_login-desc'] = '';
+$locales['CSecondaryFunction-user_id'] = 'Utilisateur';
+$locales['CSecondaryFunction-user_id-desc'] = 'Utilisateur secondaire';
+$locales['CSecondaryFunction-function_id'] = 'Fonction';
+$locales['CSecondaryFunction-function_id-desc'] = 'Fonction secondaire';
 ?>

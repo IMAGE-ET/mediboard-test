@@ -140,4 +140,8 @@ $locales['mod-dPstats-tab-vw_bloc2'] = '';
 $locales['mod-dPstats-tab-vw_time_op'] = '';
 $locales['mod-dPstats-tab-vw_personnel_salle'] = '';
 $locales['mod-dPstats-tab-vw_users'] = '';
+$locales['CPlageOp-delay_repl'] = '';
+$locales['CPlageOp-delay_repl-desc'] = '';
+$locales['CPlageOp-spec_repl_id'] = '';
+$locales['CPlageOp-spec_repl_id-desc'] = '';
 ?>

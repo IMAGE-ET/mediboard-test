@@ -199,8 +199,18 @@ class CSetupdPbloc extends CSetup {
               LIMIT 1
             );";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.23");
+    $sql = "ALTER TABLE `plagesop` 
+            ADD `spec_repl_id` INT (11) UNSIGNED,
+            ADD `delay_repl` INT (11);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `plagesop`
+            ADD INDEX (`spec_repl_id`),
+            ADD INDEX (`delay_repl`)";
+    $this->addQuery($sql);
    
-    $this->mod_version = "0.23";
+    $this->mod_version = "0.24";
   }  
 }
 ?>

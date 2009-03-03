@@ -140,4 +140,8 @@ $locales['mod-dPstats-tab-vw_bloc2'] = 'Journée opératoire';
 $locales['mod-dPstats-tab-vw_time_op'] = 'Durée opératoire';
 $locales['mod-dPstats-tab-vw_personnel_salle'] = 'Personnel en salle';
 $locales['mod-dPstats-tab-vw_users'] = 'Présence utilisateur';
+$locales['CPlageOp-delay_repl'] = 'Réatribution à J -';
+$locales['CPlageOp-delay_repl-desc'] = 'Délai de réatribution de la plage pour la fonction selectionnée';
+$locales['CPlageOp-spec_repl_id'] = 'Spécialité de remplacement';
+$locales['CPlageOp-spec_repl_id-desc'] = 'Spécialité de remplacement lors du dépassement du délai de réatribution';
 ?>

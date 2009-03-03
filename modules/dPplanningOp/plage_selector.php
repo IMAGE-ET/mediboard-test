@@ -34,13 +34,19 @@ for($i = -6; $i <= 12; $i++) {
  // Chargement du chirurgien
 $mediChir = new CMediusers();
 $mediChir->load($chir);
+$mediChir->loadBackRefs("secondary_functions");
+$secondary_functions = array();
+foreach($mediChir->_back["secondary_functions"] as $curr_sec_func) {
+  $secondary_functions[] = $curr_sec_func->function_id;
+}
 
 // Chargement des plages pour le chir ou sa spécialité
 
 $listPlages = new CPlageOp;
 $where = array();
-$where[]           = $ds->prepare("(plagesop.chir_id = %1 OR plagesop.spec_id = %2)",$mediChir->user_id,$mediChir->function_id);
-$where["date"]     = "LIKE '".mbTransformTime(null, $date, "%Y-%m-__")."'";
+$selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".$ds->prepareIn($secondary_functions).")";
+$where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
+$where["date"] = "LIKE '".mbTransformTime(null, $date, "%Y-%m-__")."'";
 $order = "date, debut";
 $listPlages = $listPlages->loadList($where, $order);
 
