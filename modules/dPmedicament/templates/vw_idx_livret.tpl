@@ -29,7 +29,7 @@ Main.add(function () {
     updateElement: updateFieldsProduitLivret,
     callback: 
       function(input, queryString){
-        return (queryString + "&inLivret=1"); 
+        return (queryString + "&inLivret=1&search_libelle_long=true"); 
       }
     } );
 });

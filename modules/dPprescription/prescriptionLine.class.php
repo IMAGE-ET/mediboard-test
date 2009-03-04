@@ -456,8 +456,6 @@ class CPrescriptionLine extends CMbObject {
 		}
 	}
 
-	  
-
   /*
    * Chargement des administrations et transmissions
    */
@@ -574,6 +572,7 @@ class CPrescriptionLine extends CMbObject {
    */
   function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true){
   	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
+  	
   	foreach($this->_ref_prises as &$_prise) {
   	  // Dans le cas d'un element, on affecte l'unite de prise prevu pour cet element
   	  if($_prise->_ref_object->_class_name === "CPrescriptionLineElement"){
@@ -659,7 +658,7 @@ class CPrescriptionLine extends CMbObject {
 		    $_prise->quantite *= $coef;
 		    $_prise->quantite = round($_prise->quantite, 2);
 		    
-		    $this->_unite_administration = $produit->_unite_administration =  $produit->libelle_unite_presentation;
+		    $this->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
 		    $this->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
 
 		    

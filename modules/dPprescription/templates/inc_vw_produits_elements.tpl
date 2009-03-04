@@ -410,7 +410,7 @@ toggleTypePerfusion = function(oForm){
     </script>
     <div id="div_{{$_chapitre}}" style="display:none;">
     {{if $mode_pack}}
-      {{include file="inc_div_element_short.tpl" element=$_chapitre}}
+      {{include file="../../dPprescription/templates/inc_div_element_short.tpl" element=$_chapitre}}
     {{/if}}
     </div>
   {{/foreach}}

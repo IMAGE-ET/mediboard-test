@@ -10,7 +10,7 @@
 	   <th class="title" colspan="9">{{$category->_view}}</th>
 	  </tr>
 	  {{foreach from=$lines_cat.element item=line_element}}
-       {{include file="inc_vw_line_pack.tpl" line=$line_element}}			
+       {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$line_element}}			
 	  {{/foreach}}
 	  
 	  </table>
@@ -23,7 +23,7 @@
   	  </tr>
   	  {{/if}}
   	  {{foreach from=$lines_cat.comment item=line_comment}}
-        {{include file="inc_vw_line_pack.tpl" line=$line_comment}}
+        {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$line_comment}}
   	  {{/foreach}}
 	  </table>
 	  {{/if}}

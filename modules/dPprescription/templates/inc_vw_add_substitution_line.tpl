@@ -177,7 +177,7 @@
 <table class="tbl">
   {{foreach from=$line->_ref_substitution_lines item=curr_line}}
     {{if $mode_pack}}
-      {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
+      {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
     {{else}}
       {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" mode_pharma=0}}
     {{/if}}

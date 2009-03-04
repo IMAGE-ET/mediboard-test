@@ -141,9 +141,18 @@ if($object_id && $object_class){
       $name_chap = $element->_ref_category_prescription->chapitre;
       //if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
      	  $line->calculAdministrations($curr_date);
-     	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-		      $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
-     	  }
+     	  
+     	  if($name_chap == "imagerie" || $name_chap == "consult"){
+          if(($line->debut == $curr_date) && $line->time_debut){
+			  	  $time_debut = substr($line->time_debut, 0, 2);
+			  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut]['total'] = 1;
+			  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
+ 	    	  }
+ 	    	} else {
+	     	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
+			      $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
+	     	  }
+ 	    	}
       //}
       // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();

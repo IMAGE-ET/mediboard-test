@@ -70,15 +70,16 @@ $produits = array();
 
 // Recherche de produits dans la BCB
 $mbProduit = new CBcbProduit();
-if(!$rechercheLivret){
-  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche);
-}
 
-// Recherche de produits dans le livret Therapeutique
-if($rechercheLivret){
-  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $specialite = 0, $max = 50, $livretTherapeutique = $g);  
+if($produit){
+	if(!$rechercheLivret){
+	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, 1, 200);
+	}
+	// Recherche de produits dans le livret Therapeutique
+	if($rechercheLivret){
+	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $specialite = 0, $max = 100, $livretTherapeutique = $g);  
+	}
 }
-
 
 // --- RECHERCHE PAR CLASSES ---
 $classeATC = new CBcbClasseATC();

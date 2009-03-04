@@ -82,6 +82,12 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
     }
+    
+    $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+    if($chapitre == "imagerie" || $chapitre == "consult"){
+      $this->_debut_reel = "$this->debut 00:00:00";
+      $this->_fin_reelle = "$this->debut 23:59:59";
+    }
   }
   
   function updateDBFields(){

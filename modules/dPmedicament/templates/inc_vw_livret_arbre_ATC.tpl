@@ -71,7 +71,7 @@ if(Livret.urlEditProd) {
     </td>  
     <td>
       <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})">
-        {{$produit->_ref_produit->libelle}}
+        {{$produit->_ref_produit->libelle_long}}
       </a>
     </td>
     <td>{{$produit->code_cip}}</td>

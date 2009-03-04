@@ -74,7 +74,9 @@
 					        {{assign var=quantite value=$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
 					     {{else}}
 				           {{assign var=prise_line value=$line->_quantity_by_date.$unite_prise.$_date}}
-					         {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
+				           {{if @$prise_line.quantites.$_hour.total}}
+					           {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
+					         {{/if}}
 				      {{/if}}
 				    {{/if}}
 				    

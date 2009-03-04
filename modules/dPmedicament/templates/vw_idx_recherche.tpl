@@ -112,7 +112,7 @@ Main.add(function () {
     <tr>
       <td>
         {{if $dialog && !$produit->_supprime}}
-        <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />
+        <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')" alt="Sélectionner" title="Sélectionner" />
         {{/if}}
        
         {{$produit->code_cip}}
@@ -141,8 +141,8 @@ Main.add(function () {
       <td>
         {{$produit->code_ucd}}
       </td>
-      <td>
-        <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
+      <td class="text">
+        <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle_long}}</a>
       </td>
       <td>
         {{$produit->nom_laboratoire}}

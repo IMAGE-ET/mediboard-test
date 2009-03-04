@@ -17,7 +17,7 @@ $produits_livret = array();
 if($code_cip){	
   $mbProduit = new CBcbProduit();
 	$mbProduit->load($code_cip);
-	$lettre = substr($mbProduit->libelle, 0, 1); 	
+	$lettre = substr($mbProduit->libelle_long, 0, 1); 	
 }
 
 if($lettre == "hors_T2A"){

@@ -56,14 +56,21 @@ class CTransmissionMedicale extends CMbMetaObject {
     );
   }
   
+  function loadRefSejour(){
+  	$this->_ref_sejour = new CSejour;
+    $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+  }
+  
+  function loadRefUser(){
+    $this->_ref_user = new CMediusers;
+    $this->_ref_user = $this->_ref_user->getCached($this->user_id);
+  }
   
   function loadRefsFwd() {
   	parent::loadRefsFwd();
-  	$this->_ref_sejour = new CSejour;
-    $this->_ref_sejour->load($this->sejour_id);
-    $this->_ref_user = new CMediusers;
-    $this->_ref_user->load($this->user_id);
-    $this->_view = "Transmission de ".$this->_ref_user->_view;
+    $this->loadRefSejour();
+    $this->loadRefUser();
+  	$this->_view = "Transmission de ".$this->_ref_user->_view;
   }
   
   function getPerm($perm) {

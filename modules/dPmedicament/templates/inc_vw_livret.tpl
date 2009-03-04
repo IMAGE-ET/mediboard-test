@@ -81,7 +81,7 @@
       </div>
       <a href="#produit{{$produit_livret->code_cip}}" 
       {{if $produit_livret->_ref_produit->_supprime}}style="color:red"{{/if}}onclick="viewProduit({{$produit_livret->code_cip}})">
-        {{$produit_livret->_ref_produit->libelle}}
+        {{$produit_livret->_ref_produit->libelle_long}}
       </a>
     </td>
     <td>{{$produit_livret->_ref_produit->code_cip}}</td>

@@ -102,7 +102,8 @@ class CBcbProduit extends CBcbObject {
   
   // Chargement d'un produit
   function load($code_cip, $full_mode = true){
-    $this->distObj->SearchInfo($code_cip);
+    //$this->distObj->SearchInfo($code_cip);
+    $this->SearchInfoEx($code_cip);
     
     $infoProduit = $this->distObj->DataInfo;
 
@@ -112,6 +113,7 @@ class CBcbProduit extends CBcbObject {
         $this->code_ucd        = $infoProduit->Code_Ucd;
       }
       $this->libelle         = $infoProduit->Libelle;
+      $this->libelle_long    = $infoProduit->LibelleLong;
       $this->nom_commercial  = $infoProduit->NomCommercial;
       $this->forme           = $infoProduit->Forme;
       $this->formes          = $infoProduit->Formes;
@@ -157,6 +159,133 @@ class CBcbProduit extends CBcbObject {
   }
   
   
+	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche) {
+		$lngLexico = $TypeRecherche & 256;
+		$TypeRecherche = $TypeRecherche & 255;
+		$query = "SELECT PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier";
+		$query .= " FROM PRODUITS_IFP ";
+		if ($this->distObj->LivretTherapeutique > 0){ 
+		  $query .= ", LivretTherapeutique ";
+		}
+		if ($TypeRecherche == 2){ 
+		  $query .= ", IDENT_PRODUITS ";
+	  }
+		$query .= "WHERE PRODUITS_IFP.Code_Marge <> '40' ";
+		if ($this->distObj->LivretTherapeutique > 0){
+			$query .= " AND PRODUITS_IFP.Code_CIP=LivretTherapeutique.CodeCIP ";
+			$query .= " AND LivretTherapeutique.CodeEtablissement=".$this->distObj->LivretTherapeutique." ";
+		}
+		if ($TypeRecherche == 2) {
+			$query .= " AND PRODUITS_IFP.Code_CIP = IDENT_PRODUITS.Code_CIP ";
+		}
+		switch ($TypeRecherche)	{
+			case 0:
+				$query .= " AND PRODUITS_IFP.LIBELLELONG Like '";
+				break;
+			case 1:
+				$query .= " AND PRODUITS_IFP.Code_CIP Like '";
+				break;
+			case 2:
+				$query .= " AND IDENT_PRODUITS.Code_UCD Like '";
+				break;
+		}
+		if ($lngLexico == 256){ 
+		  $query .= "%";
+	  }
+		$query .= $Chaine."%'";
+		if ($this->distObj->Specialite == 1){ 
+		  $query .= " AND (PRODUITS_IFP.Code_CIP Like '0%' OR PRODUITS_IFP.Code_CIP Like '1%' OR PRODUITS_IFP.Code_CIP Like '3%' OR PRODUITS_IFP.Code_CIP Like '5%')  ";
+		}
+		if ($this->distObj->Specialite == 2){ 
+		  $query .= " AND (PRODUITS_IFP.Code_CIP Like '4%' OR PRODUITS_IFP.Code_CIP Like '6%' OR PRODUITS_IFP.Code_CIP Like '7%')";
+		}
+		if ($this->distObj->Supprime == 1){ 
+		  $query .= " AND PRODUITS_IFP.Produit_supprime is NULL ";
+	  }
+		$query .= " GROUP BY PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier";
+		$query .= " ORDER BY PRODUITS_IFP.Libelle_Produit";
+		$query = strtoupper($query);
+		
+		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB: ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+		$cpt=0;
+		
+		while($Posit>0){
+			$row = $this->distObj->ClasseSQL->sql_fetch_row($result);
+			$Posit--;
+		}
+		while($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+			if($nbr >= 0) {
+				$Temp=new Type_Produit();
+				$Temp->CodeCIP=$row[0];
+				$Temp->Libelle=$row[1];
+				$Temp->LibelleLong=$row[2];
+				$Temp->DateSupp=$row[3];
+				$Temp->Hospitalier=$row[4];
+				$Temp->CodeUCD="";
+				
+				$this->distObj->TabProduit[$cpt] = $Temp;
+				$nbr--;
+				$cpt++;
+			}
+		}
+		$this->distObj->NbTotalLigne=count($this->distObj->TabProduit);
+		return count($this->distObj->TabProduit);
+	}
+
+	function SearchInfoEx($CodeCIP)	{
+		$code_labo = "";
+		$code_forme = "";
+		$this->distObj->DataInfo = new Type_Info();
+		$this->distObj->DataInfo->Charge = 0;
+	
+		$query = "SELECT PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, PRODUITS_IFP.Code_Labo_RESIP, PRODUITS_IFP.Hospitalier ";
+		$query .= "FROM PRODUITS_IFP ";
+		$query .= "WHERE PRODUITS_IFP.Code_CIP ='".$CodeCIP."'";
+		$query = strtoupper($query);
+		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+	
+		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+			$this->distObj->DataInfo->Charge = 1;
+			$this->distObj->DataInfo->Code_CIP = $CodeCIP;
+			$this->distObj->DataInfo->Libelle = $row[0];
+			$this->distObj->DataInfo->LibelleLong = $row[1];
+			$code_labo = $row[2];
+			$this->distObj->DataInfo->Hospitalier = $row[3];
+		}
+		
+		$query = "SELECT IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.Libelle_Abrege, ";
+		$query .= "IDENT_PRODUITS.Code_Forme_Galenique, IDENT_PRODUITS.Nb_UP2 ";
+		$query .= "FROM IDENT_PRODUITS ";
+		$query .= "WHERE IDENT_PRODUITS.Code_CIP=".$CodeCIP; 
+		$query = strtoupper($query);
+		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+	
+		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+			$this->distObj->DataInfo->Code_Ucd = $row[0];
+			$this->distObj->DataInfo->NomCommercial = $row[1];
+			$code_forme = $row[2];
+			$this->distObj->DataInfo->Nb_UCD = $row[3];
+		}
+		
+		$query = "SELECT IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique,  IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique_Pluriel ";
+		$query .= "FROM IDENT_FORMES_GALENIQUES WHERE IDENT_FORMES_GALENIQUES.Code_Forme_Galenique='".$code_forme."'";
+		
+		$query = strtoupper($query);
+		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+			$this->distObj->DataInfo->Forme = $row[0];
+			$this->distObj->DataInfo->Formes = $row[1];
+		}
+		
+		$query = "SELECT LABORATOIRES.Nom_du_Laboratoire FROM LABORATOIRES WHERE LABORATOIRES.Code_Laboratoire='".$code_labo."'";
+		$query = strtoupper($query);
+		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+			$this->distObj->DataInfo->Laboratoire = $row[0];
+		}
+		return 1;
+	}
+
   function loadVoies(){
     $ds = CSQLDataSource::get("bcb");
     $query = "SELECT IDENT_VOIES.LIBELLEVOIE FROM `IDENT_VOIES`
@@ -309,8 +438,6 @@ class CBcbProduit extends CBcbObject {
     return $produits;
   }
   
-  
-  // $livretTherapeutique = 1 pour une recherche dans le livret Therapeutique
   function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true){   
     // Type_recherche
     // 0 ou 256 => recherche par nom
@@ -337,14 +464,17 @@ class CBcbProduit extends CBcbObject {
         
     // 1ere recherche 
     $this->distObj->Specialite = 1;
-    $this->distObj->Search($text, 0, $max, $type_recherche);
+    //$this->distObj->Search($text, 0, $max, $type_recherche);
+    $this->SearchEx($text, 0, $max, $type_recherche);
     
     $_produits_by_type = array();
     $_produits_by_type[] = $this->distObj->TabProduit;
     
     // 2eme recherche (pour les DM possedant un code cip)
     $this->distObj->Specialite = 2;
-    $this->distObj->Search($text, 0, $max, $type_recherche);
+    //$this->distObj->Search($text, 0, $max, $type_recherche);
+    $this->SearchEx($text, 0, $max, $type_recherche);
+    
     
     $_produits_by_type[] = $this->distObj->TabProduit;
     
@@ -362,7 +492,7 @@ class CBcbProduit extends CBcbObject {
   }
   
   
-  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0){   
+  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false){   
     global $g;
     
   	$this->distObj->Specialite = 1;
@@ -370,8 +500,12 @@ class CBcbProduit extends CBcbObject {
     if($livretTherapeutique){
       $this->distObj->LivretTherapeutique = $g;  
     }
-    $this->distObj->Search($text, 0, $nb_max, 0);
     
+    if($search_libelle_long){
+      $this->SearchEx($text, 0, $nb_max, 0);
+    } else {
+      $this->distObj->Search($text, 0, $nb_max, 0);
+    }
     return $this->distObj->TabProduit;
   }
   

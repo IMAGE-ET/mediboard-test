@@ -366,10 +366,9 @@ class CPrisePosologie extends CMbMetaObject {
         $this->_quantite_with_coef = 1;
 		    $this->quantite *= $coef;
 		    
-		    $this->_ref_object->_unite_administration = $produit->libelle_unite_presentation;
+		    $produit->_unite_administration = $this->_ref_object->_unite_administration = $produit->libelle_unite_presentation;
 		    $this->_ref_object->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
 		    $produit->_unite_dispensation = $this->_ref_object->_unite_dispensation;
-		    $produit->_unite_administration = $this->_ref_object->_unite_administration;
 		    
 		    if($this->_ref_object->_unite_dispensation == $produit->libelle_unite_presentation){
 		      $this->_ref_object->_ratio_administration_dispensation = 1;

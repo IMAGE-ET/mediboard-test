@@ -108,6 +108,8 @@ class CPerfusion extends CMbObject {
     $specs["accord_praticien"]  = "bool";
     $specs["_debut"]            = "dateTime";
     $specs["_fin"]              = "dateTime";
+    $specs["_debut_adm"]        = "dateTime";
+    $specs["_fin_adm"]          = "dateTime";
     $specs["decalage_interv"]   = "num";
     $specs["operation_id"]      = "ref class|COperation";
     $specs["mode_bolus"]        = "enum list|sans_bolus|bolus|perfusion_bolus default|sans_bolus";

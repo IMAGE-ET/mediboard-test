@@ -7,6 +7,6 @@
 * @author Alexis Granger
 */
 
-CAppUI::requireModuleFile('dPhospi', 'vw_bilan_prescription');
+CAppUI::requireModuleFile('soins', 'vw_bilan_prescription');
 
 ?>

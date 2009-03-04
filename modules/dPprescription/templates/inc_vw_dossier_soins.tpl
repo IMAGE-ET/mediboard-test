@@ -320,8 +320,15 @@ refreshTabState = function(){
 	{{/foreach}}
 	
   // Lancement du onclick sur le premier onglet et affichage du premier onglet
-  $('tab_categories').down().onclick();
-  tabs.setActiveTab($('tab_categories').down().down().key);
+  if($('tab_categories')){
+	  $('tab_categories').down().onclick();
+	  tabs.setActiveTab($('tab_categories').down().down().key);
+  }
+  
+  if(document.mode_dossier_soin){
+    var oForm = document.mode_dossier_soin;
+    oForm.mode_dossier[0].checked = true;
+  }
 }
 
 Main.add(function () {
@@ -550,7 +557,7 @@ Main.add(function () {
 				  </tbody>
 				  
 			    <!-- Affichage des perfusions -->
-					<tbody id="_perf" style="display:none;" class="hoverable"></tbody>	
+					<tbody id="_perf" style="display:none;"></tbody>	
 				  <!-- Affichage des injectables -->
 				  <tbody id="_inj" style="display: none;"></tbody>
 					<!-- Affichage des medicaments -->

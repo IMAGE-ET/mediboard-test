@@ -77,7 +77,20 @@ class CPrescription extends CMbObject {
  
   var $_date_plan_soin = null;
   var $_type_alerte = null;
+  var $_chapitre = null;
   
+  static $images = array("med"      => "modules/soins/images/medicaments.png",
+											   "inj"      => "images/icons/anesth.png",
+											   "perf"     => "modules/soins/images/perfusion.png",
+                         "anapath"  => "modules//soins/images/microscope.png",
+                         "biologie" => "images/icons/labo.png",
+                         "imagerie" => "modules/soins/images/radio.png",
+                         "consult"  => "modules/soins/images/stethoscope.png",
+                         "kine"     => "modules/soins/images/bequille.png",
+                         "soin"     => "modules/soins/images/infirmiere.png",
+                         "dm"       => "modules/soins/images/dmi.png",
+                         "dmi"      => "modules/soins/images/dmi.png");
+                          
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription';
@@ -114,6 +127,7 @@ class CPrescription extends CMbObject {
     $specs["_score_prescription"] = "enum list|0|1|2";
     $specs["_date_plan_soin"] = "date";
     $specs["_type_alerte"] = "enum list|hors_livret|interaction|allergie|profil|IPC";
+    $specs["_chapitres"] = "enum list|med|inj|perf|anapath|biologie|consult|dmi|imagerie|kine|soin|DM";
     return $specs;
   }
   
@@ -1222,7 +1236,6 @@ class CPrescription extends CMbObject {
 				    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;
 				  }
 		  	    	
-
 			    if($with_calcul){
 			      // Chargement des administrations
 			      $_line_med->calculAdministrations($date, $mode_feuille_soin, $mode_dispensation);
@@ -1254,8 +1267,7 @@ class CPrescription extends CMbObject {
 					    }
 					  }
 					}
-			
-				  
+
 				  // Suppression des prises prevues replanifiées
 				  if($_line_med->_quantity_by_date && $with_calcul){
 				    foreach($_line_med->_quantity_by_date as $_type => $quantity_by_date){
@@ -1308,11 +1320,24 @@ class CPrescription extends CMbObject {
 				      	  if($with_calcul){
 				      	    $_line_element->calculAdministrations($date, $mode_feuille_soin);
 				      	  }
+				      	  
+		      	    	if($name_chap == "imagerie" || $name_chap == "consult"){
+		                if(($_line_element->debut == $date) && $_line_element->time_debut){
+								  	  $time_debut = substr($_line_element->time_debut, 0, 2);
+								  	  @$_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut]['total'] = 1;
+								  	  @$_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut]['total_disp'] = 1;
+								  	  
+								  	  @$_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
+		      	    	  }
+		      	    	}
+				 	    	  
 				      	  // Si aucune prise  
 				      	  if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
 						        if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
 						          $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-						          continue;
+						          if($name_chap != "imagerie" && $name_chap != "consult"){
+						            continue;
+						          }
 								    }
 							        // Chargement des prises
 							        $_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat, $with_calcul);
@@ -1323,7 +1348,7 @@ class CPrescription extends CMbObject {
 								      $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 							      }
 							    }
-	
+				 	    
 	 			 	      // Suppression des prises prevues replanifiées
 				 	    	if($_line_element->_quantity_by_date && $with_calcul){
 							    foreach($_line_element->_quantity_by_date as $_type => $_quantity_by_date){
@@ -1346,7 +1371,7 @@ class CPrescription extends CMbObject {
 					                $planification->object_id = $_line_element->_id;
 					                $planification->object_class = "CPrescriptionLineElement";
 					                $count_planifications = $planification->countMatchingList();
-					                
+
 					                if($count_planifications){
 					                  $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
 					                }

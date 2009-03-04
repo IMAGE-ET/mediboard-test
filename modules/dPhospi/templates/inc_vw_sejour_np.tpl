@@ -1,5 +1,5 @@
 {{if $curr_sejour->_id != ""}}
-<tr>
+<tr {{if $object->_id == $curr_sejour->_id}}class="selected"{{/if}}>
   <td>
   <a href="#1" onclick="popEtatSejour({{$curr_sejour->_id}});">
     <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
@@ -11,7 +11,7 @@
   {{assign var=prescription_sortie value=$prescriptions.sortie}}
   
 
-  <a class="text" href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
+  <a class="text" href="#1" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
     {{$curr_sejour->_ref_patient->_view}}
   </a>
   <script type="text/javascript">

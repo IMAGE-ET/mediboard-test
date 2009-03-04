@@ -10,16 +10,18 @@
 $produit = mbGetValueFromPost("produit", "aaa");
 $inLivret = mbGetValueFromPost("inLivret", 0);
 $produit_max = mbGetValueFromGet("produit_max", 10);
+$search_libelle_long = mbGetValueFromPost("search_libelle_long", false);
 
 $mbProduit = new CBcbProduit();
 
 // Recherche dans la bcb
-$produits = $mbProduit->searchProduitAutocomplete($produit, $produit_max, $inLivret);
+$produits = $mbProduit->searchProduitAutocomplete($produit, $produit_max, $inLivret, $search_libelle_long);
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("produits", $produits);
 $smarty->assign("nodebug", true);
+$smarty->assign("search_libelle_long", $search_libelle_long);
 $smarty->display("httpreq_do_medicament_autocomplete.tpl");
 
 ?>

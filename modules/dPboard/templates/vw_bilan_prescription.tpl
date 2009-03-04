@@ -1,1 +1,1 @@
-{{include file="../../dPhospi/templates/vw_bilan_prescription.tpl"}}
+{{include file="../../soins/templates/vw_bilan_prescription.tpl"}}

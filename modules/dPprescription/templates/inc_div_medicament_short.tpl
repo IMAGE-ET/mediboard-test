@@ -10,7 +10,7 @@ Main.add( function(){
 <table class="tbl">
   <!-- Affichage des lignes de medicaments -->
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-    {{include file="inc_vw_line_pack.tpl" line=$curr_line}}
+    {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
   {{/foreach}}
   
   <!-- Affichage des lignes de perfusions -->
@@ -26,7 +26,7 @@ Main.add( function(){
   {{/if}}
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
-    {{include file="inc_vw_line_pack.tpl" line=$_line_comment}}
+    {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$_line_comment}}
   {{/foreach}}
 </table> 
 {{else}}
