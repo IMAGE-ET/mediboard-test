@@ -320,7 +320,7 @@ refreshTabState = function(){
 	{{/foreach}}
 	
   // Lancement du onclick sur le premier onglet et affichage du premier onglet
-  if($('tab_categories')){
+  if($('tab_categories') && $('tab_categories').down()){
 	  $('tab_categories').down().onclick();
 	  tabs.setActiveTab($('tab_categories').down().down().key);
   }
