@@ -1032,12 +1032,13 @@ function is_intranet_ip($ip) {
  * Checks recursively if a value exists in an array
  * @return Returns TRUE if needle  is found in the array, FALSE otherwise. 
  * @param mixed $needle The searched value.
- * @param mixed $haystack The array.
+ * @param array $haystack The array.
+ * @param bool $strict If the third parameter strict is set to TRUE then the in_array_recursive() function will also check the types of the needle in the haystack.
  */
-function in_array_recursive($needle, $haystack) {
-  if (in_array($needle, $haystack)) return true;
+function in_array_recursive($needle, $haystack, $strict = false) {
+  if (in_array($needle, $haystack, $strict)) return true;
   foreach ($haystack as $v) {
-    if (is_array($v) && in_array_recursive($needle, $v)) return true;
+    if (is_array($v) && in_array_recursive($needle, $v, $strict)) return true;
   }
   return false;
 }
