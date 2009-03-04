@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+function doReaffectation() {
+  var url = new Url;
+  url.setModuleAction("dPbloc", "httpreq_reaffect_plagesop");
+  url.requestUpdate("resultReaffectation");
+}
+
+</script>
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
@@ -44,16 +54,16 @@
       {{/foreach}}
       </select>
     </td>
- </tr>
- <tr>
-   <th class="category" colspan="4">Paramètres d'affichage de l'impression de plannings</th>
- </tr>
- <tr>
-   <th class="category">Plages vides</th>
-   <th class="category" colspan="2">Ordre des colones</th>
-   <th class="category">Libellés ccam</th>
- </tr>
- <tr>
+  </tr>
+  <tr>
+    <th class="category" colspan="4">Paramètres d'affichage de l'impression de plannings</th>
+  </tr>
+  <tr>
+    <th class="category">Plages vides</th>
+    <th class="category" colspan="2">Ordre des colones</th>
+    <th class="category">Libellés ccam</th>
+  </tr>
+  <tr>
     {{assign var="var" value="plage_vide"}}
     <td style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
@@ -73,7 +83,7 @@
       	<option value="interv" {{if $value=="interv"}} selected="selected"{{/if}}>Intervention</option>
       </select>
       <br />
-	{{/foreach}}
+    {{/foreach}}
     </td>
     {{assign var="var" value="libelle_ccam"}}
     <td style="text-align: center">
@@ -82,12 +92,12 @@
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>      
- </tr>
+  </tr>
 
- <tr>
-   <th class="category" colspan="4">Dépassement de plage opératoire bloquant</th>
- </tr>
- <tr>
+  <tr>
+    <th class="category" colspan="4">Dépassement de plage opératoire bloquant</th>
+  </tr>
+  <tr>
     {{assign var="var" value="locked"}}
     <td colspan="4" style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
@@ -95,25 +105,36 @@
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>          
- </tr>
+  </tr>
 
   {{assign var="var" value="chambre_operation"}} 
   <tr>
-   <th class="category" colspan="4">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
- </tr>
- <tr>
+    <th class="category" colspan="4">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
+  </tr>
+  <tr>
     <td colspan="4" style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>          
- </tr>
+  </tr>
  
- <tr>
+  <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
 </table>
 </form>
+<table class="tbl">
+  <tr>
+    <th colspan="2" class="title">Réaffectation des plages opératoires</th>
+  </tr>
+  <tr>
+    <td class="button" style="width: 1%;"><button class="modify" onclick="doReaffectation()">Réatribuer</button></td>
+    <td>
+      <div id="resultReaffectation"></div>
+    </td>
+  </tr>
+</table>
