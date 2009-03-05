@@ -3,6 +3,8 @@
 {{assign var=transmissions_line value=$line->_transmissions}}
 {{assign var=administrations_line value=$line->_administrations}}
 
+{{assign var=transmissions value=$prescription->_transmissions}}
+
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$type}}
 {{else}}
