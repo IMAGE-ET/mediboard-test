@@ -64,7 +64,7 @@ function setToNow(element) {
   <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
   <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
   <input type="hidden" name="code_association" class="{{$acte->_props.code_association}}" value="{{$acte->code_association}}" />
-  {{if !$dPconfig.dPsalleOp.CActeCCAM.tarif}}
+  {{if !$dPconfig.dPsalleOp.CActeCCAM.tarif && $subject->_class_name != "CConsultation"}}
   <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
   {{/if}}
 
@@ -195,7 +195,7 @@ function setToNow(element) {
         {{/if}}
       </td>
       <td>
-        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
         {{mb_label object=$acte field=montant_depassement}}
         {{if $can->edit || $modif_operation}}
           {{mb_field object=$acte field=montant_depassement}}
@@ -230,7 +230,7 @@ function setToNow(element) {
         {{/if}}
       </td>
 
-      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
       <th>{{mb_label object=$acte field=montant_depassement}}</th>
       <td>
         {{if $can->edit || $modif_operation}}
@@ -307,7 +307,7 @@ function setToNow(element) {
         Association pour le Dr {{$acte->_ref_executant->_view}}
         
         <strong>
-        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
           &mdash; {{$acte->_tarif|string_format:"%.2f"}} &euro;
         {{/if}}
         </strong>
@@ -328,7 +328,7 @@ function setToNow(element) {
         </div>
         {{/if}}
         
-        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
         &mdash;  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
         {{/if}}
         {{/if}}
