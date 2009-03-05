@@ -65,6 +65,7 @@ Main.add(function () {
 	      <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="tab" value="vw_pancarte_service" />
 		    <select name="service_id" onchange="this.form.submit();">
+		      <option value="">&mdash; Choix d'un service</option>
 		      {{foreach from=$services item=_service}}
 		        <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
 		      {{/foreach}}

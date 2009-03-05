@@ -13,6 +13,7 @@ $mode_dossier = mbGetValueFromGet("mode_dossier");
 
 $sejour = new CSejour();
 $date_sel = null;
+$tabs_refresh = array();
 
 if (count($adm) > 0) {
 	foreach ($adm as $ad) {

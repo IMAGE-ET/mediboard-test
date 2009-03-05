@@ -238,22 +238,23 @@ window.periodicalBefore = null;
 window.periodicalAfter = null;
 
 // Deplacement du dossier de soin
-moveDossierSoin = function(arg){
+moveDossierSoin = function(element){
   periode_visible = composition_dossier[oFormClick.nb_decalage.value];
   composition_dossier.each(function(moment){
-    listToHide = arg.select('.'+moment);
+    listToHide = element.select('.'+moment);
     listToHide.each(function(elt) { 
       elt.show();
     });  
   });
   composition_dossier.each(function(moment){
     if(moment != periode_visible){
-	    listToHide = arg.select('.'+moment);
+	    listToHide = element.select('.'+moment);
 	    listToHide.each(function(elt) { 
 	      elt.hide();
 	    });  
     }
   });
+  viewDossierSoin(element);
 }
 
 timeOutBefore = null;
@@ -274,36 +275,39 @@ showAfter = function(){
   }
 }
 
-viewDossierSoin = function(mode_dossier){
+viewDossierSoin = function(element){
+  // recuperation du mode d'affichage du dossier (administration ou planification)
+  mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
+  
   // Dossier en mode Administration
   if(mode_dossier == "administration" || mode_dossier == ""){
     $('button_administration').update("Appliquer les administrations sélectionnées");
-    $('plan_soin').select('.colorPlanif').each(function(element){
-       element.setStyle( { backgroundColor: '#FFD' } );
+    element.select('.colorPlanif').each(function(elt){
+       elt.setStyle( { backgroundColor: '#FFD' } );
     });
-    $('plan_soin').select('.draggablePlanif').each(function(element){
-       element.removeClassName("draggable");
-       element.onmousedown = null;
+    element.select('.draggablePlanif').each(function(elt){
+       elt.removeClassName("draggable");
+       elt.onmousedown = null;
     });
-    $('plan_soin').select('.canDropPlanif').each(function(element){
-       element.removeClassName("canDrop");
+    element.select('.canDropPlanif').each(function(elt){
+       elt.removeClassName("canDrop");
     });
   }
   
   // Dossier en mode planification
   if(mode_dossier == "planification"){
     $('button_administration').update("Appliquer les planifications sélectionnées");
-    $('plan_soin').select('.colorPlanif').each(function(element){
-       element.setStyle( { backgroundColor: '#CAFFBA' } );
+    element.select('.colorPlanif').each(function(elt){
+       elt.setStyle( { backgroundColor: '#CAFFBA' } );
     });
-    $('plan_soin').select('.draggablePlanif').each(function(element){
-       element.addClassName("draggable");
-       element.onmousedown = function(){
+    element.select('.draggablePlanif').each(function(elt){
+       elt.addClassName("draggable");
+       elt.onmousedown = function(){
          addDroppablesDiv(element);
        }
     });
-    $('plan_soin').select('.canDropPlanif').each(function(element){
-       element.addClassName("canDrop");
+    element.select('.canDropPlanif').each(function(elt){
+       elt.addClassName("canDrop");
     });
   }
 }
@@ -324,11 +328,6 @@ refreshTabState = function(){
 	  $('tab_categories').down().onclick();
 	  tabs.setActiveTab($('tab_categories').down().down().key);
   }
-  
-  if(document.mode_dossier_soin){
-    var oForm = document.mode_dossier_soin;
-    oForm.mode_dossier[0].checked = true;
-  }
 }
 
 Main.add(function () {
@@ -339,7 +338,6 @@ Main.add(function () {
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
     moveDossierSoin($('tbody_date'));
-	  viewDossierSoin('{{$mode_dossier}}');
 	}
 	
   {{if !$mode_bloc}}
@@ -453,11 +451,11 @@ Main.add(function () {
 	      <form name="mode_dossier_soin">
 	        <label>
 	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
-	          			 onclick="viewDossierSoin('administration');"/>Administration
+	          			 onclick="viewDossierSoin($('plan_soin'));"/>Administration
           </label>
           <label>
             <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
-            			 onclick="viewDossierSoin('planification');" />Planification
+            			 onclick="viewDossierSoin($('plan_soin'));" />Planification
           </label>
        </form>
 	    </td>

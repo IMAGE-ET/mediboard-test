@@ -199,7 +199,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
       	} else {
       		chapitre = "_cat-"+chapitre;
       	}
-      	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); viewDossierSoin(mode_dossier); } } );
+      	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
       } else {
         url.requestUpdate("dossier_traitement", { waitingText: null } );
       }
