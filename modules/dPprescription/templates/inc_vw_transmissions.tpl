@@ -1,5 +1,5 @@
 <table class="tbl">
-  {{if $ajax}}
+  {{if $ajax || $dialog}}
   <tr>
     <th class="title" colspan="6">Transmissions et observations</th>
   </tr>

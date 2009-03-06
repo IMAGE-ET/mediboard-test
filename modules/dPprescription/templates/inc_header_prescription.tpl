@@ -49,6 +49,12 @@ submitProtocole = function(){
   //$V(oForm.debut, '');
 }
 
+popupTransmission = function(sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
+  url.addParam("sejour_id", sejour_id);
+  url.popup(700, 500, "Transmissions et Observations");
+}
 </script>
 
 {{assign var=praticien value=$prescription->_ref_praticien}}
@@ -89,7 +95,13 @@ submitProtocole = function(){
 				</form>
        </div>
 			{{/if}}
-			 
+			
+			{{if $prescription->type == "sejour"}}
+			<div style="float: right">
+			  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
+			</div>
+			{{/if}}
+			
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
         <div style="float:left; padding-right: 5px; " class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
           <img alt="Ecrire une note" src="images/icons/note_grey.png" />
