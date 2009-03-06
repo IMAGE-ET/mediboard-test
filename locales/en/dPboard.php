@@ -10,4 +10,5 @@ $locales['mod-dPboard-tab-vw_bilan_prescription'] = '';
 $locales['mod-dPboard-tab-vw_sejours_interventions'] = '';
 $locales['mod-dPboard-tab-vw_prescripteurs'] = '';
 $locales['mod-dPboard-tab-vw_stats_consultations'] = '';
+$locales['mod-dPboard-tab-vw_bilan_transmissions'] = '';
 ?>

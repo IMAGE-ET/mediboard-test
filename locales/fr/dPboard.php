@@ -10,4 +10,5 @@ $locales['mod-dPboard-tab-vw_bilan_prescription'] = 'Bilan des prescriptions';
 $locales['mod-dPboard-tab-vw_sejours_interventions'] = 'Séjours et interventions';
 $locales['mod-dPboard-tab-vw_prescripteurs'] = 'Médecins traitants';
 $locales['mod-dPboard-tab-vw_stats_consultations'] = 'Consultations';
+$locales['mod-dPboard-tab-vw_bilan_transmissions'] = 'Bilan des transmissions';
 ?>
