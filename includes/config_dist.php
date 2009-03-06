@@ -537,9 +537,11 @@ $dPconfig["dmi"] = array (
 
 $dPconfig["sip"] = array (
   "soap" => array(
-    "rooturl" => "",
+    "rooturl" => "%u%p",
     "user" => "",
     "pass" => "",
-  )
+    "wsdl_mode" => 1
+  ),
+  "server" => 0,
 );
 ?>
