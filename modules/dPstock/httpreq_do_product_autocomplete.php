@@ -11,7 +11,7 @@ global $can, $AppUI;
 
 $keywords = mbGetValueFromPost("_view");
 
-if($can->read && $keywords) {
+if($keywords) {
 	 $product = new CProduct();
 	 $where[] = "name LIKE '$keywords%' OR code LIKE '$keywords%'";
 	 $matches = $product->loadList($where,'name',10);
