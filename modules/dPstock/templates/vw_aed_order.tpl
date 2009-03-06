@@ -35,6 +35,15 @@ function cancelReception(reception_id, on_complete) {
   return onSubmitFormAjax(form, {onComplete: on_complete});
 }
 
+function makeReception(form, order_id) {
+	form.getElements().each(
+	  function(element) {
+			if (element.name == 'barcode_printed') element.disabled = true;
+		}
+	);
+  return onSubmitFormAjax(form, {onComplete: function() {refreshOrder(order_id)} });
+}
+
 function barcodePrintedReception(reception_id, value) {
   var form = getForm("barcode_printed-reception");
   $V(form.order_item_reception_id, reception_id);

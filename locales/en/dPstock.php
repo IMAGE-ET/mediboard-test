@@ -720,4 +720,7 @@ $locales['CProductDeliveryTrace.quantity_delivered'] = '';
 $locales['CProductDeliveryTrace-quantity-delivered'] = '';
 $locales['CProductDeliveryTrace-delivered_quantity'] = '';
 $locales['CProductOrderItemReception-received_quantity'] = '';
+$locales['CProductOrderItemReception-barcode_printed-court'] = '';
+$locales['CProductOrderItemReception-barcode_printed'] = '';
+$locales['CProductOrderItemReception-barcode_printed-desc'] = '';
 ?>

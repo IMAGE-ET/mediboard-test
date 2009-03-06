@@ -720,7 +720,7 @@ $locales['CProductDeliveryTrace.quantity_delivered'] = 'Quantité déjà delivrée';
 $locales['CProductDeliveryTrace-quantity-delivered'] = 'Quantité déjà delivrée';
 $locales['CProductDeliveryTrace-delivered_quantity'] = 'Quantité déjà delivrée';
 $locales['CProductOrderItemReception-received_quantity'] = 'Quantité reçue';
-$locales['CProductOrderItemReception-barcode_printed'] = '';
-$locales['CProductOrderItemReception-barcode_printed-court'] = '';
-$locales['CProductOrderItemReception-barcode_printed-desc'] = '';
+$locales['CProductOrderItemReception-barcode_printed'] = 'Code barre imprimé';
+$locales['CProductOrderItemReception-barcode_printed-court'] = 'Code barre imprimé';
+$locales['CProductOrderItemReception-barcode_printed-desc'] = 'Le code barre est déjà imprimé';
 ?>
