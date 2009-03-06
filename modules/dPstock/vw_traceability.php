@@ -31,6 +31,7 @@ if (strlen($code) > 2) {
 	  if (!isset($codes[$trace->code])) {
 	    $codes[$trace->code] = array();
 	  }
+    $trace->loadRefsFwd();
 	  
 	  if (!isset($products[$trace->code])) {
       $trace->loadRefOrderItem();
@@ -43,12 +44,13 @@ if (strlen($code) > 2) {
 		if ($trace->date) {
 		  if (!isset($codes[$trace->code][$trace->date])) {
 		    $codes[$trace->code][$trace->date] = array(
-		      'date_reception' => null,
-			    'date_delivery' => null,
-			    'date_delivery_reception' => null,
+          'reception' => null,
+          'delivery' => null,
+          'delivery_reception' => null,
+          'administration' => null
 		    );
 		  }
-		  $codes[$trace->code][$trace->date]['date_reception'] = $trace->date;//$trace;
+		  $codes[$trace->code][$trace->date]['reception'] = $trace;
 		}
 	}
 	
@@ -56,6 +58,8 @@ if (strlen($code) > 2) {
 		if (!isset($codes[$trace->code])) {
 			$codes[$trace->code] = array();
 		}
+		$trace->loadRefsFwd();
+    $trace->_ref_delivery->loadRefsFwd();
 		
 	  if (!isset($products[$trace->code])) {
 	  	$stock = $trace->getStock();
@@ -67,24 +71,27 @@ if (strlen($code) > 2) {
 		if ($trace->date_delivery) {
 		  if (!isset($codes[$trace->code][$trace->date_delivery])) {
 		    $codes[$trace->code][$trace->date_delivery] = array(
-          'date_reception' => null,
-          'date_delivery' => null,
-          'date_delivery_reception' => null,
+          'reception' => null,
+          'delivery' => null,
+          'delivery_reception' => null,
+          'administration' => null
 	      );
 		  }
-		  $codes[$trace->code][$trace->date_delivery]['date_delivery'] = $trace->date_delivery;//$trace;
+		  $codes[$trace->code][$trace->date_delivery]['delivery'] = $trace;
 		}
+		
 	  
 	  // date_delivery_reception
 		if ($trace->date_reception) {
 		  if (!isset($codes[$trace->code][$trace->date_reception])) {
 		    $codes[$trace->code][$trace->date_reception] = array(
-          'date_reception' => null,
-          'date_delivery' => null,
-          'date_delivery_reception' => null,
+          'reception' => null,
+          'delivery' => null,
+          'delivery_reception' => null,
+					'administration' => null
 	      );
 		  }
-		  $codes[$trace->code][$trace->date_reception]['date_delivery_reception'] = $trace->date_reception;//$trace;
+		  $codes[$trace->code][$trace->date_reception]['delivery_reception'] = $trace;
 		}
 	}
 }
