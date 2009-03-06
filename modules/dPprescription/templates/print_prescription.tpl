@@ -262,8 +262,11 @@ Main.add(window.print);
     <h1>DMI</h1>
     <ul>
     {{foreach from=$linesDMI item=_line_dmi}}
-      <li>{{$_line_dmi->_ref_product->_view}}</li>
+      <li><strong>{{$_line_dmi->_ref_product->name}}</strong> (Code Produit: {{$_line_dmi->_ref_product->code}} / 
+      Code lot:{{$_line_dmi->_ref_product_order_item_reception->code}})
+      </li>
     {{/foreach}}
+    
     </ul>
   </div>
 {{/if}}
