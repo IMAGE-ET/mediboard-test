@@ -13,6 +13,7 @@ $ds = CSQLDataSource::get("std");
 $datetime = mbDateTime();
 $date_max = $datetime;
 $date_min = mbDateTime("-1 DAY", $date_max);
+$addTrans = mbGetValueFromGet("addTrans", false);
 
 $sejour_id = mbGetValueFromGet("sejour_id");
 $praticien_id = mbGetValueFromGet("praticien_id", "14");
@@ -65,6 +66,9 @@ krsort($trans_and_obs);
 // Variables de templates
 $smarty = new CSmartyDP();
 $smarty->assign("trans_and_obs", $trans_and_obs);
+$smarty->assign("addTrans", $addTrans);
+$smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("transmission", new CTransmissionMedicale());
 $smarty->display("inc_vw_transmissions.tpl");
 
 ?>

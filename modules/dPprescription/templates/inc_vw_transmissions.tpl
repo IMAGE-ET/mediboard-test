@@ -1,4 +1,47 @@
+<div id="transmissions">
+ 
+{{if @$addTrans}}
+<script type="text/javascript">
+
+refreshTransmission = function(){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
+  url.addParam("sejour_id", '{{$sejour_id}}');
+  url.addParam("addTrans", true);
+  url.requestUpdate("transmissions", { waitingText: null } );
+}
+
+</script>
+{{/if}}
+
 <table class="tbl">
+  {{if @$addTrans}}
+  <tr>
+    <th colspan="6" class="title">
+    Ajout d'une transmission
+    </th>
+  </tr>
+  <tr>
+   <td colspan="6">
+      <form name="editTrans" action="?" method="post">
+      <input type="hidden" name="dosql" value="do_transmission_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="m" value="dPhospi" />
+      <input type="hidden" name="object_class" value="" />
+      <input type="hidden" name="object_id" value="" />
+      <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
+      <input type="hidden" name="user_id" value="{{$app->user_id}}" />
+      <input type="hidden" name="date" value="now" />
+      {{mb_label object=$transmission field="text"}}
+      {{mb_field object=$transmission field="degre"}}
+      <br />
+      {{mb_field object=$transmission field="text"}}
+      <br />
+      <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: refreshTransmission } );">{{tr}}Add{{/tr}}</button>
+      </form>
+    </td>
+    </tr>
+  {{/if}}
   {{if $ajax || $dialog}}
   <tr>
     <th class="title" colspan="6">Transmissions et observations</th>
@@ -78,3 +121,5 @@
 </tr>
 {{/foreach}}
 </table>
+
+</div>
