@@ -108,7 +108,7 @@ class CDMI extends CMbObject {
       $product->description = $this->description;
       $product->category_id = CAppUI::conf("dmi CDMI product_category_id");
       $product->quantity = 1;
-      $product->store();
+      if ($msg = $product->store()) return $msg;
       
       $stock = new CProductStockGroup();
       $stock->group_id = CGroups::loadCurrent()->_id;
@@ -116,7 +116,7 @@ class CDMI extends CMbObject {
       $stock->quantity = 1;
       $stock->order_threshold_min = 1;
       $stock->order_threshold_max = 2;
-      $stock->store();
+      if ($msg = $stock->store()) return $msg;
     }
    	
   	parent::store();

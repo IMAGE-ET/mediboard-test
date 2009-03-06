@@ -1,5 +1,3 @@
-<h2>Configuration générale</h2>
-
 <script type="text/javascript">
 
 function startSyncProducts(category_id){
@@ -13,7 +11,38 @@ function startSyncProducts(category_id){
 
 </script>
 
-<table class="tbl">
+<!-- Variables de configuration -->
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+	<input type="hidden" name="dosql" value="do_configure" />
+	<input type="hidden" name="m" value="system" />
+	<table class="form">
+	  {{assign var="class" value="CDMI"}}
+	  {{assign var="var" value="active"}}
+	  <tr>
+	    <th class="category">Activation de la gestion des DMI dans la prescription</th>
+	  </tr>
+	  <tr>  
+	    <td colspan="6" style="text-align: center">
+	      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+	      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+	    </td>             
+	  </tr>
+	  <tr>
+	    <td class="button" colspan="100">
+	      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+	    </td>
+	  </tr>
+  </table>
+</form>
+
+<table class="form">  
+  <tr>
+    <th class="category" colspan="2">
+      Synchronisation
+    </th>
+  </tr>
   <tr>
     <td>
       <form name="sync-products" action="" onsubmit="return false">

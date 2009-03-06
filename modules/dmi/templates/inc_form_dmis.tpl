@@ -2,11 +2,13 @@
 
 <script type="text/javascript">
   var modifOk = false;
-  function codeModified() {
+  function codeModified(element) {
+    /*
     if (!modifOk) {
       return modifOk = confirm('Voulez vous réélement modifier le code ?\n Ceci peut impliquer des incohérences.');
     }
     else return true;
+    */
   }
 </script>
 
@@ -49,7 +51,7 @@
   	</tr>
   	<tr>
   		<th>{{mb_label object=$dmi field=code}}</th>
-  		<td>{{mb_field object=$dmi field=code onkeypress="return codeModified()"}}</td>
+  		<td>{{mb_field object=$dmi field=code onkeypress="return codeModified(this)"}}</td>
   	</tr>
   	<tr>
   		<th>{{mb_label object=$dmi field=dans_livret}}</th>

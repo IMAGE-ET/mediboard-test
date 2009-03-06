@@ -996,7 +996,24 @@ class CSetupdPprescription extends CSetup {
 						ADD `nb_tous_les` INT (11);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.76";
+    $this->makeRevision("0.76");
+    $sql = "CREATE TABLE `prescription_line_dmi` (
+							`prescription_line_dmi_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`prescription_id` INT (11) UNSIGNED NOT NULL,
+							`praticien_id` INT (11) UNSIGNED NOT NULL,
+							`product_id` INT (11) UNSIGNED NOT NULL,
+							`order_item_reception_id` INT (11) UNSIGNED NOT NULL
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_dmi` 
+							ADD INDEX (`prescription_id`),
+							ADD INDEX (`praticien_id`),
+							ADD INDEX (`product_id`),
+							ADD INDEX (`order_item_reception_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.77";
   }  
 }
 

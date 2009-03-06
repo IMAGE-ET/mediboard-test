@@ -43,6 +43,7 @@ class CPrescription extends CMbObject {
   var $_ref_prescription_lines_element_by_cat = null;
   var $_ref_prescription_lines_comment        = null;
   var $_ref_perfusions                        = null;
+  var $_ref_lines_dmi                         = null;
   
   // Others Fields
   var $_type_sejour = null;
@@ -1070,6 +1071,15 @@ class CPrescription extends CMbObject {
 		}
   }
   
+  /*
+   * Chargement des lignes de DMI
+   */
+  function loadRefsLinesDMI(){
+    $line_dmi = new CPrescriptionLineDMI();
+    $line_dmi->prescription_id = $this->_id;
+    $this->_ref_lines_dmi = $line_dmi->loadMatchingList();
+  }
+ 
   /*
    * Chargement des medicaments favoris d'un praticien
    */

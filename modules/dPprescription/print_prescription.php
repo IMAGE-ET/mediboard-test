@@ -14,6 +14,8 @@ $can->needsRead();
 $ordonnance = mbGetValueFromGet("ordonnance");
 $praticien_sortie_id = mbGetValueFromGet("praticien_sortie_id");
 $print = mbGetValueFromGet("print", 0);
+$linesDMI = array();
+
 // Mode ordonnance
 if($ordonnance){
   $now = mbDateTime();
@@ -86,6 +88,10 @@ if($prescription->_ref_object->_ref_prescription_traitement->_id){
 $prescription->loadRefsPerfusions();
 foreach($prescription->_ref_perfusions as &$_perfusion){
   $_perfusion->loadRefsLines();
+}
+
+if (CAppUI::conf("dmi CDMI active") && CModule::$active['dmi']) {
+  $prescription->loadRefsLinesDMI();
 }
 
 
@@ -248,6 +254,13 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 }
 }
 
+if(count($prescription->_ref_lines_dmi)){
+  foreach($prescription->_ref_lines_dmi as $_line_dmi){
+    $_line_dmi->loadRefsFwd();
+    $linesDMI[$_line_dmi->_id] = $_line_dmi;
+  }
+}
+
 
 $traduction = array();
 $traduction["E"] = "l'entrée";
@@ -266,6 +279,7 @@ $smarty->assign("etablissement"       , $etablissement);
 $smarty->assign("prescription"        , $prescription);
 $smarty->assign("lines"               , $lines);
 $smarty->assign("linesElt"            , $linesElt);
+$smarty->assign("linesDMI"            , $linesDMI);
 $smarty->assign("categories"          , $categories);
 $smarty->assign("executants"          , $executants);
 $smarty->display("print_prescription.tpl");

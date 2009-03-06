@@ -257,6 +257,16 @@ Main.add(window.print);
   {{/foreach}}
 {{/foreach}}
 
+{{if $linesDMI|@count}}
+  <div class="body">
+    <h1>DMI</h1>
+    <ul>
+    {{foreach from=$linesDMI item=_line_dmi}}
+      <li>{{$_line_dmi->_ref_product->_view}}</li>
+    {{/foreach}}
+    </ul>
+  </div>
+{{/if}}
 <!-- Re-ouverture des tableaux -->
 <table>
   <tr>

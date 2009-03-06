@@ -384,7 +384,11 @@ toggleTypePerfusion = function(oForm){
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
+  
+  {{if !($mode_protocole && $_chapitre == "dmi")}}
   <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+  {{/if}}
+  
   {{/foreach}}
 {{/if}}
 </ul>
@@ -402,17 +406,19 @@ toggleTypePerfusion = function(oForm){
 
 {{if !$mode_pharma}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-    <script type="text/javascript">
-    window['{{$_chapitre}}Loaded'] = false;
-    Main.add( function(){
-      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$_chapitre}}{{else}}0{{/if}}');
-    });
-    </script>
-    <div id="div_{{$_chapitre}}" style="display:none;">
-    {{if $mode_pack}}
-      {{include file="../../dPprescription/templates/inc_div_element_short.tpl" element=$_chapitre}}
+    {{if !($mode_protocole && $_chapitre == "dmi")}}
+	    <script type="text/javascript">
+	    window['{{$_chapitre}}Loaded'] = false;
+	    Main.add( function(){
+	      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$_chapitre}}{{else}}0{{/if}}');
+	    });
+	    </script>
+	    <div id="div_{{$_chapitre}}" style="display:none;">
+	    {{if $mode_pack}}
+	      {{include file="../../dPprescription/templates/inc_div_element_short.tpl" element=$_chapitre}}
+	    {{/if}}
+	    </div>
     {{/if}}
-    </div>
   {{/foreach}}
 {{/if}}
 

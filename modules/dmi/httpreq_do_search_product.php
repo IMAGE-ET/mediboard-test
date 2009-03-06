@@ -38,6 +38,8 @@ else
   if(!$product_order_item_reception->_id)
     CAppUI::stepAjax("Produit de code".$product_code." trouvé; lot ".$product_code_lot."non trouvé",UI_MSG_ERROR);
   else{
+    
+    /*
   	//chargement de la delivrance et de sa dispensation si elles existent
   	$deliveryTrace = new CProductDeliveryTrace();
   	$deliveryTrace->_ref_delivery_ref_stock->product_id = $product_code;
@@ -45,21 +47,24 @@ else
   	
   	//vérification des quantité encore disponibles en fonction du type de produit (usage unique, renouvelable)
   	$quantite_suffisante = ((count($list_delivery)+1) <= $product_order_item_reception->quantity);
-  	
+		
   	if($product->_unique_usage && !$quantite_suffisante)//produit à usage unique déjà consommé; on bloque
   	{
   		CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] à usage unique déjà dispensé.",UI_MSG_ERROR);
   		return false;
   	}
-  	elseif(!$product->_unique_usage && $product->renewable==0)//produit consammable en quantité insuffisante
+    
+  	if(!$product->_unique_usage && $product->renewable==0)//produit consammable en quantité insuffisante
   	  CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] entièrement consommé.",UI_MSG_ERROR);
     elseif($product->renewable==2) //produit renouvelable déjà consommé
       CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] renouvelable déjà consommé.",UI_MSG_ERROR);
+    */
     
     $smarty = new CSmartyDP();
     $smarty->assign('product',$product);
+    $smarty->assign('product_order_item_reception', $product_order_item_reception);
     $smarty->assign('quantite_delivrable',$product_order_item_reception->quantity);
-    $smarty->assign('quantite_delivree',count($list_delivery));
+    //$smarty->assign('quantite_delivree',count($list_delivery));
     $smarty->display('inc_search_product.tpl');}
 
 
