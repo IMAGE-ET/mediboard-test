@@ -50,12 +50,14 @@ $observations = $observation->loadList($whereTrans);
 foreach($transmissions as $_transmission){
   $_transmission->loadRefsFwd();
   $_transmission->_ref_sejour->loadRefPatient();
+  $_transmission->_ref_sejour->loadRefPraticien();
   $trans_and_obs[$_transmission->date][$_transmission->_id] = $_transmission;
 }
 
 foreach($observations as $_observation){
   $_observation->loadRefsFwd();
   $_observation->_ref_sejour->loadRefPatient();
+  $_observation->_ref_sejour->loadRefPraticien();
   $trans_and_obs[$_observation->date][$_observation->_id] = $_observation;
 }
 

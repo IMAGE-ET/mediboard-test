@@ -80,8 +80,8 @@ popupTransmission = function(sejour_id){
 	  </form>
 
       <!-- Selection du praticien prescripteur de la ligne -->
-      {{if !$is_praticien && !$mode_protocole}}
        <div style="float: right">
+        {{if !$is_praticien && !$mode_protocole}}     
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
 				    {{foreach from=$listPrats item=_praticien}}
@@ -93,14 +93,14 @@ popupTransmission = function(sejour_id){
 				    {{/foreach}}
 				  </select>
 				</form>
+				{{/if}}
+				{{if !$mode_protocole && $prescription->type == "sejour"}}
+					<br />
+					<span style="float: right">
+					  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
+					</span>
+			  {{/if}}
        </div>
-			{{/if}}
-			
-			{{if $prescription->type == "sejour"}}
-			<div style="float: right">
-			  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
-			</div>
-			{{/if}}
 			
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
         <div style="float:left; padding-right: 5px; " class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
