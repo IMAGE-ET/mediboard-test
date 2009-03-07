@@ -44,6 +44,7 @@
 			  {{/foreach}}
 			</table>
 		</td>
+
 		<!-- Modification de la fiche ATC sélectionnée -->
 		<td>
 		  {{if $fiche_ATC->_id}}
@@ -81,6 +82,7 @@
 						</tr>
 				  </table>
 			  </form>
+			  
 		  {{else}}
 			  <!-- Formulaire de création de fiche ATC -->
 			  <form name="createFicheATC" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -125,6 +127,7 @@
 				  </table>
 			  </form>
 		  {{/if}}
+		  
 		</td>
 	</tr>
 </table>

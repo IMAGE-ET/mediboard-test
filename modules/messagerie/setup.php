@@ -24,7 +24,7 @@ class CSetupmessagerie extends CSetup {
                   `date_sent` DATETIME,
                   `date_read` DATETIME,
                   `date_archived` DATETIME,
-                  `marked_read` ENUM ('0','1') NOT NULL DEFAULT '0'
+                  `starred` ENUM ('0','1') NOT NULL DEFAULT '0'
                 ) TYPE=MYISAM;";
         $this->addQuery($sql);
         

@@ -48,57 +48,65 @@ Main.add(function () {
     <td>
 	    <table class="main tbl" id="inbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="3">{{tr}}CMbMail-inbox{{/tr}}</th>
+	        <th class="title" colspan="4">{{tr}}CMbMail-inbox{{/tr}}</th>
 	      </tr>
+
 	      <tr>
-	        <th>From</th>
-	        <th>Subject</th>
-	        <th>Date</th>
-	        <th>Action</th>
+	        <th>{{mb_title class=CMbMail field=from}}</th>
+	        <th>{{mb_title class=CMbMail field=subject}}</th>
+	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
-	      {{foreach from=$listInbox item=curr_mail}}
+	      {{foreach from=$listInbox item=_mail}}
+
 	      <tr>
-	        <td>{{$curr_mail->_ref_user_from->_view}}</td>
-	        <td class="text">{{$curr_mail->subject}}</td>
-	        <td>{{$curr_mail->date_sent}}</td>
+	        <td>{{$_mail->_ref_user_from}}</td>
+	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>Archive / Reply / Forward</td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
+
 	    <table class="main tbl" id="archive" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="3">{{tr}}CMbMail-archive{{/tr}}</th>
+	        <th class="title" colspan="4">{{tr}}CMbMail-archive{{/tr}}</th>
 	      </tr>
+
 	      <tr>
-	        <th>From</th>
-	        <th>Subject</th>
-	        <th>Date</th>
-	        <th>Action</th>
+	        <th>{{mb_title class=CMbMail field=from}}</th>
+	        <th>{{mb_title class=CMbMail field=subject}}</th>
+	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
-	      {{foreach from=$listArchived item=curr_mail}}
+
+	      {{foreach from=$listArchived item=_mail}}
 	      <tr>
-	        <td>{{$curr_mail->_ref_user_from->_view}}</td>
-	        <td class="text">{{$curr_mail->subject}}</td>
-	        <td>{{$curr_mail->date_sent}}</td>
+	        <td>{{$_mail->_ref_user_from}}</td>
+	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>Reply / Forward</td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
+
 	    <table class="main tbl" id="sentbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="3">{{tr}}CMbMail-sentbox{{/tr}}</th>
+	        <th class="title" colspan="4">{{tr}}CMbMail-sentbox{{/tr}}</th>
 	      </tr>
+
 	      <tr>
-	        <th>From</th>
-	        <th>Subject</th>
-	        <th>Date</th>
-	        <th>Action</th>
+	        <th>{{mb_title class=CMbMail field=from}}</th>
+	        <th>{{mb_title class=CMbMail field=subject}}</th>
+	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
-	      {{foreach from=$listSent item=curr_mail}}
+
+	      {{foreach from=$listSent item=_mail}}
 	      <tr>
-	        <td>{{$curr_mail->_ref_user_from->_view}}</td>
-	        <td class="text">{{$curr_mail->subject}}</td>
-	        <td>{{$curr_mail->date_sent}}</td>
+	        <td>{{$_mail->_ref_user_from}}</td>
+	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>Forward</td>
 	      </tr>
 	      {{/foreach}}

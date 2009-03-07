@@ -166,6 +166,8 @@ class CMediusers extends CMbObject {
 	  $backRefs["forum_threads"]                   = "CForumThread user_id";
 	  $backRefs["hprim21_medecins"]                = "CHprim21Medecin user_id";
 	  $backRefs["listes_choix"]                    = "CListeChoix chir_id";
+	  $backRefs["mails_sent"]                      = "CMbMail from";
+	  $backRefs["mails_received"]                  = "CMbMail to";
 	  $backRefs["notes"]                           = "CNote user_id";
 	  $backRefs["observations"]                    = "CObservationMedicale user_id";
 	  $backRefs["operations_chir"]                 = "COperation chir_id";
