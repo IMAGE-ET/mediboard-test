@@ -867,4 +867,5 @@ $locales['CPaysInsee.all'] = '';
 $locales['CPaysInsee.select'] = '';
 $locales['CAntecedent.appareil.gyneco_obstetrique'] = '';
 $locales['CAntecedent.appareil.orthopedique'] = '';
+$locales['CAntecedent.appareil.ophtalmologique'] = '';
 ?>

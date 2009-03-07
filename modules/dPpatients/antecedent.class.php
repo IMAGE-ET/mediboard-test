@@ -38,7 +38,8 @@ class CAntecedent extends CMbObject {
 	  
 	static $appareils = array(
 	  'cardiovasculaire', 'digestif', 'endocrinien', 'neuro_psychiatrique',
-	  'pulmonaire', 'uro_nephrologique', 'orl', 'gyneco_obstetrique', 'orthopedique'
+	  'pulmonaire', 'uro_nephrologique', 'orl', 'gyneco_obstetrique', 'orthopedique',
+	  'ophtalmologique'
 	);
   
   function getSpec() {

@@ -867,4 +867,5 @@ $locales['CPatient-_pays_naissance_insee-desc'] = 'Pays de naissance du patient'
 $locales['CAntecedent.appareil.orl'] = 'ORL';
 $locales['CAntecedent.appareil.gyneco_obstetrique'] = 'Gynéco/obstétrique';
 $locales['CAntecedent.appareil.orthopedique'] = 'Orthopédique';
+$locales['CAntecedent.appareil.ophtalmologique'] = 'Ophtalmologique ';
 ?>
