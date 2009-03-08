@@ -1,16 +1,4 @@
 <script type="text/javascript">
-function writeMbMail(to, subject) {
-  var url = new Url();
-  url.setModuleAction("messagerie", "write_mbmail");
-  url.addParam("mbmail_id", 0);
-  if(to) {
-    url.addParam("to", to);
-  }
-  if (subject) {
-    url.addParam("subject", subject);
-  }
-  url.popup(500, 500, "MbMail");
-}
 
 Main.add(function () {
   Control.Tabs.create("tab-mbmails", false);
@@ -19,6 +7,13 @@ Main.add(function () {
 </script>
 
 <table class="main">
+  <tr>
+    <td colspan="2">
+      <a class="buttonnew" href="#nothing" onclick="MbMail.create()">
+        {{tr}}CMbMail-title-create{{/tr}}
+      </a>
+    </td>
+  </tr>
   <tr>
     <td style="width: 0.1%; vertical-align: top;">
       <ul id="tab-mbmails" class="control_tabs_vertical">
@@ -67,17 +62,17 @@ Main.add(function () {
 	      </tr>
 	      {{foreach from=$listInbox item=_mail}}
 
-	      <tr>
+	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}<a/></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>
 	          <div style="float: right">
-	            <a href="#nothing" onclick="writeMbMail({{$_mail->_ref_user_from->_id}}, 'Reponse')">
+	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
                 <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
-	          Forward / Archive
+	          <!-- Forward / Archive -->
 	        </td>
 	      </tr>
 	      {{/foreach}}
@@ -96,17 +91,18 @@ Main.add(function () {
 	      </tr>
 
 	      {{foreach from=$listArchived item=_mail}}
-	      <tr>
+	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}<a/></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>
 	          <div style="float: right">
-	            <a href="#nothing" onclick="writeMbMail({{$_mail->_ref_user_from->_id}}, 'Reponse')">
+	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
                 <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
-	          Forward</td>
+	          <!-- Forward -->
+	        </td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
@@ -126,9 +122,9 @@ Main.add(function () {
 	      {{foreach from=$listSent item=_mail}}
 	      <tr>
 	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}<a/></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
-	        <td>Forward</td>
+	        <td><!-- Forward --></td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
@@ -148,9 +144,9 @@ Main.add(function () {
 	      {{foreach from=$listDraft item=_mail}}
 	      <tr>
 	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})"">{{$_mail->subject}}<a/></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
-	        <td>Edit / Send / Delete</td>
+	        <td><!-- Edit / Send / Delete --></td>
 	      </tr>
 	      {{/foreach}}
 	    </table>

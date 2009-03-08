@@ -31,6 +31,7 @@ class CDoObjectAddEdit {
     global $m;
 
     $this->className           = $className;
+    $this->postRedirect        = null;
     $this->redirect            = "m={$m}";
     $this->redirectStore       = null;
     $this->redirectError       = null;
@@ -53,6 +54,10 @@ class CDoObjectAddEdit {
     $this->ajax            = CMbArray::extract($this->refTab, "ajax");
     $this->suppressHeaders = CMbArray::extract($this->refTab, "suppressHeaders");
     $this->callBack        = CMbArray::extract($this->refTab, "callback");
+    $this->postRedirect    = CMbArray::extract($this->refTab, "postRedirect");
+    if($this->postRedirect) {
+      $this->redirect = $this->postRedirect;
+    }
     
     // Object binding
     $this->_obj->bind($this->refTab);

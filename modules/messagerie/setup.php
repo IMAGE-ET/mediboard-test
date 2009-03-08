@@ -4,7 +4,7 @@
  * @package Mediboard
  * @subpackage dPportail
  * @version $Revision: $
- * @author Fabien
+ * @author Romain Ollvier
  */
 
 class CSetupmessagerie extends CSetup {

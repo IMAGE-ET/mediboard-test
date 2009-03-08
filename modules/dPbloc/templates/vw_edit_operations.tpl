@@ -9,7 +9,13 @@
         <input type="hidden" name="temps_inter_op" value="{{$plage->temps_inter_op}}" />
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="1" />
-        Dr {{$plage->_ref_chir->_view}}<br />
+        Dr {{$plage->_ref_chir->_view}}
+        {{if @$modules.messagerie}}
+        <a class="action" href="#nothing" onclick="MbMail.create({{$plage->chir_id}})">
+          <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+        </a>
+        {{/if}}
+        <br />
         {{$plage->date|date_format:$dPconfig.longdate}}<br />
         {{$plage->_ref_salle->nom}} :
         <select name="_heuredeb" class="notNull num">

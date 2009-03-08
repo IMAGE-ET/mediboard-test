@@ -1,6 +1,8 @@
-<a class="buttonnew" href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id=0">
-  {{tr}}CMbMail-title-create{{/tr}}
-</a>
+{{if $dialog}}
+{{assign var=destform value="m=$m&dialog=1&a=$action"}}
+{{else}}
+{{assign var=destform value="m=$m&tab=$tab"}}
+{{/if}}
 
 <form name="EditMbMail" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -8,6 +10,7 @@
 <input type="hidden" name="dosql" value="do_mbmail_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="mbmail_id" value="{{$mbmail->_id}}" />
+<input type="hidden" name="postRedirect" value="{{$destform}}"
 
 {{if !$mbmail->date_sent}}
 {{mb_field object=$mbmail field=date_sent hidden=true}}

@@ -691,6 +691,7 @@ function mbLoadScripts($modeReturn = 0) {
   
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/mbmail.js",$modeReturn);
   
   if (CAppUI::conf('debug')) {
     //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2.1/firebug-lite-compressed.js", $modeReturn, 'IE');

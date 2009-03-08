@@ -8,7 +8,7 @@
 */
 
 $service_id = mbGetValueFromGetOrSession("service_id");
-$date = mbDate();
+$date = mbGetValueFromGetOrSession("date_pancarte", mbDate());
 $lines = array();
 $tab = array();
 

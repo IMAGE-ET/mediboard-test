@@ -22,6 +22,7 @@ class CMbMail extends CMbObject {
   var $date_read     = null;
   var $date_archived = null;
   var $starred       = null;
+  var $starred       = null;
   
   // Form Fields
   var $_state        = null;
