@@ -45,7 +45,7 @@
 	    {{if $mbmail->date_sent}}
 	  	<div class="mediusers">{{$mbmail->_ref_user_to}}</div>
 			{{else}}
-      <select name="to" class="{{$mbmail->_props.to}}">
+      <select name="to" class="{{$mbmail->_props.to}} select-tree">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$users item=_user}}
           <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" 

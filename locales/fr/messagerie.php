@@ -51,4 +51,12 @@ $locales['CMbMail._state.archived'] = 'Archivé';
 $locales['CMbMail._state.read'] = 'Lu';
 $locales['CMbMail._state.saved'] = 'Brouillon';
 $locales['CMbMail._state.sent'] = 'Envoyé';
+$locales['mod-messagerie-tab-vw_list_mbmails '] = 'Listes des messages';
+$locales['module-messagerie-court'] = 'Messagerie';
+$locales['mod-messagerie-tab-write_mbmail'] = 'Rédaction de messages';
+$locales['mod-messagerie-tab-vw_list_mbmails'] = 'Listes des messages';
+$locales['CMbMail-inbox'] = 'Messages reçus';
+$locales['CMbMail-archive'] = 'Messages archivés';
+$locales['CMbMail-sentbox'] = 'Messages envoyés';
+$locales['CMbMail-draft'] = 'Brouillons';
 ?>

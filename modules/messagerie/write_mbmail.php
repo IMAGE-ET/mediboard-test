@@ -12,6 +12,7 @@ $can->needsRead();
 
 $mbmail = new CMbMail();
 $mbmail->from = $AppUI->user_id;
+$mbmail->to = mbGetValueFromGet("to");
 $mbmail->load(mbGetValueFromGetOrSession("mbmail_id"));
 $mbmail->loadRefsFwd();
 
