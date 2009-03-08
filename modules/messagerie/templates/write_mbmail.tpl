@@ -47,11 +47,15 @@
 			{{else}}
       <select name="to" class="{{$mbmail->_props.to}} select-tree">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$users item=_user}}
-          <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" 
+        {{foreach from=$functions item=_function}}
+        <optgroup label="{{$_function->_view}} ({{$_function->_ref_users|@count}})">
+        {{foreach from=$_function->_ref_users item=_user}}
+          <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_user->_id}}" 
             {{if $mbmail->to == $_user->_id}} selected="selected"{{/if}}>
             {{$_user}}
           </option>
+        {{/foreach}}
+        </optgroup>
         {{/foreach}}
       </select>
 			{{/if}}
@@ -85,7 +89,7 @@
 
   <tr>
 	  <th>{{mb_label object=$mbmail field=source}}</th>
-	  <td style="height: 500px">{{mb_field object=$mbmail field=source id="htmlarea"}}</td>	  
+	  <td style="height: 300px">{{mb_field object=$mbmail field=source id="htmlarea"}}</td>	  
 	</tr>
 
 	{{if !$mbmail->date_sent}}

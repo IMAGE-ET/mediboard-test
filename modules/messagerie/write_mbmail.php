@@ -11,12 +11,16 @@ global $AppUI, $can;
 $can->needsRead();
 
 $mbmail = new CMbMail();
-$mbmail->from = $AppUI->user_id;
-$mbmail->to = mbGetValueFromGet("to");
+$mbmail->from    = $AppUI->user_id;
+$mbmail->to      = mbGetValueFromGet("to");
+$mbmail->subject = mbGetValueFromGet("subject");
 $mbmail->load(mbGetValueFromGetOrSession("mbmail_id"));
 $mbmail->loadRefsFwd();
 
-$users = $AppUI->_ref_user->loadUsers();
+$functions = CMediusers::loadFonctions();
+foreach($functions as &$curr_func) {
+  $curr_func->loadRefsUsers();
+}
 
 // Initialisation de FCKEditor
 $templateManager = new CTemplateManager();
@@ -33,7 +37,7 @@ $templateManager->initHTMLArea();
 $smarty = new CSmartyDP();
 
 $smarty->assign("mbmail", $mbmail);
-$smarty->assign("users" , $users);
+$smarty->assign("functions" , $functions);
 
 $smarty->display("write_mbmail.tpl");
 

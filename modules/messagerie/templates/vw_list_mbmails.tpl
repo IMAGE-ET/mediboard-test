@@ -1,18 +1,19 @@
 <script type="text/javascript">
-function addAntecedent(rques, type, element) {
-  if (window.opener) {
-    var oForm = window.opener.document.forms['editAntFrm'];
-    if (oForm) {
-      oForm.rques.value = rques;
-      oForm.type.value = type;
-      window.opener.onSubmitAnt(oForm);
-      $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
-    }
+function writeMbMail(to, subject) {
+  var url = new Url();
+  url.setModuleAction("messagerie", "write_mbmail");
+  url.addParam("mbmail_id", 0);
+  if(to) {
+    url.addParam("to", to);
   }
+  if (subject) {
+    url.addParam("subject", subject);
+  }
+  url.popup(500, 500, "MbMail");
 }
 
 Main.add(function () {
-  Control.Tabs.create('tab-mbmails', false);
+  Control.Tabs.create("tab-mbmails", false);
 });
 
 </script>
@@ -67,17 +68,17 @@ Main.add(function () {
 	      {{foreach from=$listInbox item=_mail}}
 
 	      <tr>
+	        <td>{{$_mail->_ref_user_from}}</td>
+	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
+	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>
 	          <div style="float: right">
-	            <a href="?m=messagerie&amp;tab=write_mbmail&amp;to={{$_mail->_ref_user_from->_id}}&amp;mbmail_id=0">
+	            <a href="#nothing" onclick="writeMbMail({{$_mail->_ref_user_from->_id}}, 'Reponse')">
                 <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
-	          {{$_mail->_ref_user_from}}
+	          Forward / Archive
 	        </td>
-	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
-	        <td>{{mb_value object=$_mail field=date_sent}}</td>
-	        <td>Archive / Reply / Forward</td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
@@ -99,7 +100,13 @@ Main.add(function () {
 	        <td>{{$_mail->_ref_user_from}}</td>
 	        <td class="text"><a href="?m=messagerie&amp;tab=write_mbmail&amp;mbmail_id={{$_mail->_id}}">{{$_mail->subject}}<a/></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
-	        <td>Reply / Forward</td>
+	        <td>
+	          <div style="float: right">
+	            <a href="#nothing" onclick="writeMbMail({{$_mail->_ref_user_from->_id}}, 'Reponse')">
+                <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+              </a>
+	          </div>
+	          Forward</td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
