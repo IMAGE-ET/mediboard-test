@@ -95,7 +95,7 @@ Main.add(function () {
 <!-- Up button -->
 <div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>
 
-{{if count($mails)}}
+{{if @count($mails)}}
 <div class="mail-alert" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
 	{{tr}}CMbMail{{/tr}} :
 	{{$mails.sent|@count}} {{tr}}CMbMail._state.sent{{/tr}},
