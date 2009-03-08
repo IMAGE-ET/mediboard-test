@@ -59,4 +59,5 @@ $locales['CMbMail-inbox'] = 'Messages reçus';
 $locales['CMbMail-archive'] = 'Messages archivés';
 $locales['CMbMail-sentbox'] = 'Messages envoyés';
 $locales['CMbMail-draft'] = 'Brouillons';
+$locales['CMbMail._state.starred'] = 'Marqué';
 ?>

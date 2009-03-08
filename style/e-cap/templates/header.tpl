@@ -20,10 +20,10 @@ var Menu = {
   
 {{if !$dialog}}
 
-{{foreach from=$messages item=currMsg}}
-  <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
-    <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
-  </div>
+{{foreach from=$messages item=_message}}
+<div style='{{if $_message->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
+  <strong>{{$_message->titre}}</strong> : {{$_message->corps}}
+</div>
 {{/foreach}}
 
 {{if @$app->user_prefs.MenuPosition == "left"}}

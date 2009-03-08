@@ -57,8 +57,12 @@ class CMessage extends CMbObject {
     return $specs;
   }
 
-  // Loads messages from a publication date perspective : all, past, present, future
-  function loadPublications($status = null) {
+  /**
+   * Loads messages from a publication date perspective : 
+   * @param string status Wanted status, null for all
+   * @param string module Module name restriction, null for all
+   */ 
+  function loadPublications($status = null, $module = null) {
     $now = mbDateTime();
     $where = array();
     
@@ -77,7 +81,20 @@ class CMessage extends CMbObject {
     
     $order = "deb DESC";
     
-    return $this->loadList($where, $order);
+    $messages = $this->loadList($where, $order);
+    
+    // Module name restriction
+    if ($module) {
+			foreach ($messages as $message_id => $_message) {
+			  if ($_message->module_id) {
+					if ($_message->_ref_module->mod_name != $module) {
+						unset($messages[$message_id]);
+					}
+			  }
+			}
+    }
+    
+    return $messages;
   }
   
   function updateFormFields() {

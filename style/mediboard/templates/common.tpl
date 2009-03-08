@@ -95,12 +95,28 @@ Main.add(function () {
 <!-- Up button -->
 <div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>
 
-{{if !$offline}}
-<script type="text/javascript">
-function popChgPwd() {
-  var url = new Url;
-  url.setModuleAction("admin", "chpwd");
-  url.popup(400, 300, "ChangePassword");
-}
-</script>
+{{if count($mails)}}
+<div class="mail-alert" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
+	{{tr}}CMbMail{{/tr}} :
+	{{$mails.sent|@count}} {{tr}}CMbMail._state.sent{{/tr}},
+	{{$mails.starred|@count}} {{tr}}CMbMail._state.starred{{/tr}}
+</div>
+
+<div id="mail-details" style="display: none">
+
+<table class="tbl">
+{{foreach from=$mails key=state item=_mails}}
+	<tr>
+	  <th class="category" colspan="2">{{tr}}CMbMail._state.{{$state}}{{/tr}}</th>
+	</tr>
+	{{foreach from=$_mails item=_mail}}
+		<tr>
+		  <td><div class="mediuser" style="border-color: #{{$_mail->_ref_user_from->_ref_function->color}};">{{$_mail->_ref_user_from}}</td>
+		  <td>{{$_mail->subject}}</td>
+		</tr>
+	{{/foreach}}
+{{/foreach}}
+</table>
+
+</div>
 {{/if}}

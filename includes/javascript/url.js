@@ -274,3 +274,9 @@ var Url = Class.create({
     this.popup(750, 550, "Fichier");
   }
 } );
+
+function popChgPwd() {
+  var url = new Url;
+  url.setModuleAction("admin", "chpwd");
+  url.popup(400, 300, "ChangePassword");
+}

@@ -235,24 +235,16 @@ if (!$suppressHeaders) {
   if (!isset($locale_char_set)){
     $locale_char_set = "UTF-8";
   }
-  //Liste des Etablissements
+  // Liste des Etablissements
   $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 
-  // Message
+  // Messages
   $messages = new CMessage();
-  $messages = $messages->loadPublications("present");
-
-  foreach($messages as $message_id => $curr_message) {
-  	if ($curr_message->module_id) {
-  		$curr_message->loadRefsFwd();
-
-  		if ($curr_message->_ref_module->mod_name != $m) {
-  			unset($messages[$message_id]);
-  		}
-  	}
-  }
-
+  $messages = $messages->loadPublications("present", $m);
   
+  // Mails
+  $mail = new CMbMail();
+  $mails = $mail->loadVisibleList();
   
   // Creation du Template
   $smartyHeader = new CSmartyDP();
@@ -271,6 +263,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("mediboardScript"      , mbLoadScripts(1));
   $smartyHeader->assign("dialog"               , $dialog);
   $smartyHeader->assign("messages"             , $messages);
+  $smartyHeader->assign("mails"                , $mails);
   $smartyHeader->assign("uistyle"              , $uistyle);
   $smartyHeader->assign("errorMessage"         , $AppUI->getMsg());
   $smartyHeader->assign("Etablissements"       , $etablissements);
