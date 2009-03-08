@@ -58,17 +58,20 @@ class CMbMail extends CMbObject {
    * @return array
    */
   function loadVisibleList() {
-    if (!$this->_ref_module) {
-      return null;
-    }
+    if (!$this->_ref_module) return null;
     
     global $AppUI;
     $where["to"] = "= '$AppUI->user_id'";
     $where["date_sent"] = "IS NOT NULL";
     $where[] = "date_read IS NULL OR starred = '1'";
     $order = "date_sent";
+		
     $mails = array();
-    foreach ($this->loadList($where, $order) as $mail) {
+    $list = $this->loadList($where, $order);
+    foreach ($list as $mail) {
+      if (!isset($mails[$mail->_state])) {
+      	$mails[$mail->_state] = array();
+			}
       $mail->loadRefUserFrom();
       $mails[$mail->_state][$mail->_id] = $mail;
     }

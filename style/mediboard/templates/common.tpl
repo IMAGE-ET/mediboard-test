@@ -95,14 +95,14 @@ Main.add(function () {
 <!-- Up button -->
 <div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>
 
-{{if @count($mails)}}
-<div class="mail-alert" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
+{{if $mails|@count}}
+<div class="mail-alert tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
 	{{tr}}CMbMail{{/tr}} :
 	{{$mails.sent|@count}} {{tr}}CMbMail._state.sent{{/tr}},
 	{{$mails.starred|@count}} {{tr}}CMbMail._state.starred{{/tr}}
 </div>
 
-<div id="mail-details" style="display: none">
+<div id="mail-details" style="display: none;">
 
 <table class="tbl">
 {{foreach from=$mails key=state item=_mails}}
