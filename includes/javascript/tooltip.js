@@ -166,11 +166,6 @@ Object.extend(ObjectTooltip, {
       action: "httpreq_vw_object_notes",
       sClass: "postit"
     },
-    translate: {
-      module: "system",
-      action: "httpreq_vw_translation",
-      sClass: "tooltip"
-    },
     dom: {
       sClass: "tooltip"
     }
