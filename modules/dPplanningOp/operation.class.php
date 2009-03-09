@@ -216,14 +216,6 @@ class COperation extends CCodable {
 	  return $backRefs;
 	}
 
-  function getHelpedFields(){
-    return array(
-      "examen"        => null,
-      "materiel"      => null,
-      "rques"         => null
-    );
-  }
-
   function getTemplateClasses(){
     $this->loadRefsFwd();
     

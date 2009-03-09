@@ -46,13 +46,7 @@ class CObservationMedicale extends CMbObject {
     $specs["text"]         = "text helped";
     return $specs;
   }
-  
-  function getHelpedFields(){
-    return array(
-      "text" => null
-    );
-  }
-  
+    
   function loadRefSejour(){
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);

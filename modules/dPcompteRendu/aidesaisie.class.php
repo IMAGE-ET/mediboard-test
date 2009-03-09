@@ -101,8 +101,9 @@ class CAideSaisie extends CMbObject {
     // Depend fields
     if ($this->class) {
       $object = new $this->class;
-      $this->_depend_field_1 = $object->_helped_fields[$this->field]["depend_value_1"]; 
-      $this->_depend_field_2 = $object->_helped_fields[$this->field]["depend_value_2"]; 
+      $helped = $object->_specs[$this->field]->helped;
+      $this->_depend_field_1 = $helped[0]; 
+      $this->_depend_field_2 = $helped[1];
     }
   }
   

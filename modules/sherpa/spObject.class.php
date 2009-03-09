@@ -105,10 +105,6 @@ class CSpObject extends CMbObject {
     return array();
   }
 
-  function getHelpedFields(){
-    return array();
-  }
-  
   /**
    * Load Id400 fo current group
    * @return CIdSante400

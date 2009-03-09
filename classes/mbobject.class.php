@@ -44,7 +44,6 @@ class CMbObject {
    * Properties  specification
    */
   var $_spec          = null;    // Spécifications unifiées
-  var $_helped_fields = array(); // Champs concerné par les aides a la saisie
   var $_aides         = array(); // aides à la saisie
   var $_props         = array(); // properties specifications as string
   var $_specs         = array(); // properties specifications as objects
@@ -91,7 +90,6 @@ class CMbObject {
   static $fwdSpecs      = array();
   static $specsObj      = array();
   static $seeks         = array();
-  static $helped_fields = array();
   static $module_name   = array();
   
   function CMbObject() {
@@ -133,8 +131,6 @@ class CMbObject {
       $this->_specs =& self::$specsObj[$class];
       self::$seeks[$class] = $this->getSeeks();
       $this->_seek =& self::$seeks[$class];
-      self::$helped_fields[$class] = $this->getHelpedFields();
-      $this->_helped_fields =& self::$helped_fields[$class];
     }
 
     $this->_props         =& self::$props[$class];
@@ -142,7 +138,6 @@ class CMbObject {
     $this->_backSpecs     =& self::$backSpecs[$class];
     $this->_specs         =& self::$specsObj[$class];
     $this->_seek          =& self::$seeks[$class];
-    $this->_helped_fields =& self::$helped_fields[$class];
   }
   
   /**
@@ -1521,18 +1516,9 @@ class CMbObject {
     );
   }
   
-  /**
-   * Liste des champs d'aides à la saisie
-   * @return array
-   */
-  function getHelpedFields() {
-    return array();
-  }
-  
   function getTemplateClasses(){
     return array($this->_class_name => $this->_id);
   }
-  
   
   /**
    * Convert string back specifications to objet specifications
@@ -1649,11 +1635,12 @@ class CMbObject {
     foreach ($aides as $aide) { 
       // si on filtre seulement sur depend_value_1, il faut afficher les resultats suivant depend_value_2
       if ($depend_value_1) {
-        $depend_field_2 = $this->_helped_fields[$aide->field]['depend_value_2'];
-        $depend_2 = CAppUI::tr("$this->_class_name.$depend_field_2.$aide->depend_value_2");
-        if($aide->depend_value_2){
+        $depend_field_2 = $aide->_depend_field_2;
+        $depend_2 = CAppUI::tr("$this->_class_name.$aide->_depend_field_2.$aide->depend_value_2");
+        if ($aide->depend_value_2){
           $this->_aides[$aide->field][$aide->_owner][$depend_2][$aide->text] = $aide->name;
-        } else {
+        } 
+        else {
           $depend_name_2 = CAppUI::tr("$this->_class_name-$depend_field_2");
           $this->_aides[$aide->field][$aide->_owner]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
         }
@@ -1661,12 +1648,13 @@ class CMbObject {
       }
       
       // on passe un appareil, on trie par type
-      if($depend_value_2){
-        $depend_field_1 = $this->_helped_fields[$aide->field]['depend_value_1'];
-        $depend_1 = CAppUI::tr("$this->_class_name.$depend_field_1.$aide->depend_value_1");
-        if($aide->depend_value_1){    
+      if ($depend_value_2){
+        $depend_field_1 = $aide->_depend_field_1;
+        $depend_1 = CAppUI::tr("$this->_class_name.$aide->_depend_field_1.$aide->depend_value_1");
+        if ($aide->depend_value_1){    
           $this->_aides[$aide->field][$aide->_owner][$depend_1][$aide->text] = $aide->name;
-        } else {
+        } 
+        else {
           $depend_name_1 = CAppUI::tr("$this->_class_name-$depend_field_1");
           $this->_aides[$aide->field][$aide->_owner]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
         }

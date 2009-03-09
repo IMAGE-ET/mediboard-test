@@ -47,12 +47,6 @@ class CPrescriptionLaboExamen extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
-  function getHelpedFields() {
-    return array ( 
-      "commentaire"   => null,
-    );
-  }  
-  
   function check() {
     if ($msg = parent::check()) {
       return $msg;

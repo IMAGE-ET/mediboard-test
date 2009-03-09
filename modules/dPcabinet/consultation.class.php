@@ -203,15 +203,6 @@ class CConsultation extends CCodable {
     ); 
   }
   
-  function getHelpedFields(){
-    return array(
-      "motif"         => null,
-      "rques"         => null,
-      "examen"        => null,
-      "traitement"    => null,
-    );
-  }
-  
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";

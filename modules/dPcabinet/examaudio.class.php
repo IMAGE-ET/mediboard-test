@@ -107,12 +107,6 @@ class CExamAudio extends CMbObject {
     return array_merge($specsParent, $specs);
   }
 
-  function getHelpedFields(){
-    return array(
-      "remarques" => null
-    );
-  }
-  
   function checkAbscisse($vocal_points) {
     $dBs = array();
     foreach($vocal_points as $point) {

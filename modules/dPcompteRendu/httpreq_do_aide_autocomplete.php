@@ -16,20 +16,15 @@ $object = new $object_class;
 $object->loadAides($user_id, $needle);
 
 // Tableau de depend value
-$depend_field_1 = "";
-$depend_field_2 = "";
-$dependFields = $object->_helped_fields[$property];
-if(count($dependFields)){
-	$depend_field_1 = $dependFields['depend_value_1'];
-  $depend_field_2 = $dependFields['depend_value_2'];
-}
+$helped = $object->_specs[$property]->helped;
+$depend_field_1 = @$helped[0];
+$depend_field_2 = @$helped[1];
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("object", $object);
 $smarty->assign("property", $property);
-$smarty->assign("dependFields", $dependFields);
 $smarty->assign("needle", $needle);
 $smarty->assign("nodebug", true);
 $smarty->assign("depend_field_1", $depend_field_1);

@@ -77,12 +77,6 @@ class CCompteRendu extends CDocumentItem {
 
     return $specs;
   }
-
-  function getHelpedFields(){
-    return array(
-      "source" => array("depend_value_1" => "object_class", "depend_value_2" => null),
-    );
-  }
   
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {

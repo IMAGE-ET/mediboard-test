@@ -121,9 +121,10 @@ class CMbFieldSpec {
       }
     }
 
-    if($propValue === null || $propValue === ""){
+    if ($propValue === null || $propValue === ""){
       return null;
     }
+    
     // moreThan
     if($field = $this->moreThan){
       if($msg = $this->checkTargetPropValue($object, $field)){

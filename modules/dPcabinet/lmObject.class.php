@@ -46,10 +46,6 @@ class CLmObject extends CMbObject {
   function getSeeks() {
     return array();
   }
-
-  function getHelpedFields(){
-    return array();
-  }
 }
 
 ?>

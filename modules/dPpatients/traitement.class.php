@@ -88,12 +88,6 @@ class CTraitement extends CMbObject {
       "traitement" => "like"
     );
   }
-
-  function getHelpedFields(){
-    return array (
-      "traitement" => null
-    );
-  }
 }
 
 ?>

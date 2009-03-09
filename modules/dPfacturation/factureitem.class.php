@@ -41,12 +41,6 @@ class CFactureItem extends CMbObject {
     $specs["_ttc"]		   = "currency";
     return $specs;
   }
-
-  function getHelpedFields() {
-    return array ( 
-      "libelle"   => null,
-    );
-  } 
     
   function updateFormFields() {
     parent::updateFormFields();

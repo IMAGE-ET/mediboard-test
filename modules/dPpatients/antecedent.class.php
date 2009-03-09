@@ -135,14 +135,6 @@ class CAntecedent extends CMbObject {
       }
     }
   }
-  
-  function getHelpedFields(){
-    //type => depend_value_1
-    //appareil => depend_value_2
-    return array(
-      "rques" => array("depend_value_1" => "type", "depend_value_2" => "appareil")
-    ); 
-  }
 }
 
 ?>

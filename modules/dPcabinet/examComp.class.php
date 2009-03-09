@@ -39,12 +39,6 @@ class CExamComp extends CMbObject {
     );
     return array_merge($specsParent, $specs);
   }
-
-  function getHelpedFields(){
-    return array(
-      "examen" => null
-    );
-  }
   
   function loadRefsFwd() {
     $this->_ref_consult = new CConsultation;

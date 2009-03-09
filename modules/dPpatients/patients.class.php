@@ -273,11 +273,6 @@ class CPatient extends CMbObject {
       "ville"  => "like"
     );
   }
-
-  function getHelpedFields(){
-    return array(
-    );
-  }
   
   function checkMerge($patients = array()/*<CPatient>*/) {
     if ($msg = parent::checkMerge($patients)) {
