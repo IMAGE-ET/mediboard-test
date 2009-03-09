@@ -11,8 +11,8 @@ FCKConfig.Debug = false;
 
 {{if $templateManager->printMode}}
 FCKConfig.ToolbarSets["Default"] = [
-	['Preview', 'Print', '-','Find','About'],
-	['FitWindow','Source',]
+	['Preview', 'Print', '-','Find'],
+	['About']
 ] ;
 
 {{else}}
@@ -116,6 +116,7 @@ aMbToolbar = new Array();
 for (var i = 0; i < aMbCombos.length; i++) {
   aMbToolbar.push(aMbCombos[i].commandName);
 }
+
 {{if !$templateManager->simplifyMode}}
   aToolbarSet.push(aMbToolbar);
 {{/if}}

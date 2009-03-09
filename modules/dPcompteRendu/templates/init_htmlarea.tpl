@@ -12,11 +12,27 @@ function initFCKEditor() {
 	oFCKeditor.BasePath	= 'lib/fckeditor/';
 	
 	oFCKeditor.Config['CustomConfigurationsPath'] = '../../../modules/dPcompteRendu/mb_fckeditor.php' ;
-	
+
 	oFCKeditor.ReplaceTextarea() ;
 }
 
 Main.add(initFCKEditor);
+
+// Readonly mode
+{{if $templateManager->simplifyMode}}
+function readonlyFCKEditor() {
+	oFCKinstance = FCKeditorAPI.GetInstance('source');
+	if (document.all) {
+		oFCKinstance.EditorDocument.body.disabled = true;
+	}
+	else 	{
+		oFCKinstance.EditorDocument.designMode = "off";
+	}
+};
+
+// Ugly Hack : wait for FCKeditorAPI to be available
+setTimeout(readonlyFCKEditor, 2000);
+{{/if}}
 
 // Surveillance de modification de l'éditeur de texte
 function FCKeditor_OnComplete(editorInstance) {
