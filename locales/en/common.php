@@ -136,4 +136,9 @@ $locales['year'] = 'year';
 $locales['Change'] = '';
 $locales['Associate'] = '';
 $locales['Last connection'] = '';
+$locales['Archive'] = '';
+$locales['Unarchiver'] = '';
+$locales['Star'] = '';
+$locales['Unstar'] = '';
+$locales['Unarchive'] = '';
 ?>

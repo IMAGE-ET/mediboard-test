@@ -17,10 +17,8 @@ $mbmail->subject = mbGetValueFromGet("subject");
 $mbmail->load(mbGetValueFromGetOrSession("mbmail_id"));
 $mbmail->loadRefsFwd();
 
-// Vérifiction de la première lecture
-// par le destinataire
-
-if($mbmail->to == $AppUI->user_id && $mbmail->date_sent && ! $mbmail->date_read) {
+// Vérifiction de la première lecture par le destinataire
+if ($mbmail->to == $AppUI->user_id && $mbmail->date_sent && ! $mbmail->date_read) {
   $mbmail->date_read = mbDateTime();
   $mbmail->store();
 }
@@ -30,7 +28,7 @@ foreach($functions as &$curr_func) {
   $curr_func->loadRefsUsers();
 }
 
-if($mbmail->to) {
+if ($mbmail->to) {
   $user_to = new CMediusers();
   $user_to->load($mbmail->to); 
   $user_to->loadRefFunction();

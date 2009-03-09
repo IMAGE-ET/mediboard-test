@@ -45,9 +45,11 @@ class CMbMail extends CMbObject {
     $specs["source"]        = "html";
     $specs["date_sent"]     = "dateTime";
     $specs["date_read"]     = "dateTime";
+    $specs["date_archived"] = "dateTime";
     $specs["starred"]       = "bool";
 
-    $specs["_state"]        = "enum list|saved|sent|read|archived|starred";
+    $specs["_from_state"]   = "enum list|saved|sent|read";
+    $specs["_to_state"]     = "enum list|pending|received|read|archived|starred";
     
     return $specs;
   }
@@ -69,11 +71,8 @@ class CMbMail extends CMbObject {
     $mails = array();
     $list = $this->loadList($where, $order);
     foreach ($list as $mail) {
-      if (!isset($mails[$mail->_state])) {
-      	$mails[$mail->_state] = array();
-			}
       $mail->loadRefUserFrom();
-      $mails[$mail->_state][$mail->_id] = $mail;
+      $mails[$mail->_to_state][$mail->_id] = $mail;
     }
     
     return $mails;
@@ -83,11 +82,15 @@ class CMbMail extends CMbObject {
     parent::updateFormFields();
     $this->_view = substr($this->subject, 0, 30);
     
-    $this->_state = "saved";
-    if ($this->date_sent    ) $this->_state = "sent";
-    if ($this->date_read    ) $this->_state = "read";
-    if ($this->date_archived) $this->_state = "archived";
-    if ($this->starred      ) $this->_state = "starred";    
+    $this->_from_state = "saved";
+    if ($this->date_sent    ) $this->_from_state = "sent";
+    if ($this->date_read    ) $this->_from_state = "read";
+
+    $this->_to_state = "pending";
+    if ($this->date_sent    ) $this->_to_state = "received";
+    if ($this->date_read    ) $this->_to_state = "read";
+    if ($this->date_archived) $this->_to_state = "archived";
+    if ($this->starred      ) $this->_to_state = "starred";    
   }
   
   function loadRefUserFrom() {

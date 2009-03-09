@@ -64,7 +64,7 @@ Main.add(function () {
 
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>
 	          <div style="float: right">
@@ -93,7 +93,7 @@ Main.add(function () {
 	      {{foreach from=$listArchived item=_mail}}
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>
 	          <div style="float: right">
@@ -122,7 +122,7 @@ Main.add(function () {
 	      {{foreach from=$listSent item=_mail}}
 	      <tr>
 	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td><!-- Forward --></td>
 	      </tr>
@@ -144,7 +144,7 @@ Main.add(function () {
 	      {{foreach from=$listDraft item=_mail}}
 	      <tr>
 	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})"">{{$_mail->subject}}<a/></td>
+	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})"">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td><!-- Edit / Send / Delete --></td>
 	      </tr>

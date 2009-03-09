@@ -1175,7 +1175,8 @@ div.loading {
 div.small-success ,
 div.small-info ,
 div.small-warning,
-div.small-error {
+div.small-error,
+div.small-mail {
 	text-align: left;
   margin: 10px 15px;
   min-height: 15px;
@@ -1187,6 +1188,11 @@ div.small-error {
   padding-left: 30px;
 }
 
+div.small-mail {
+  background-image: url(images/icons/small-mail.png);
+ 	background-color: #ffe;
+  border-color: #dd0;
+}
 div.small-success {
   background-image: url(images/icons/small-success.png);
  	background-color: #efe;
