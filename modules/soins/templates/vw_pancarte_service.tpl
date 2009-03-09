@@ -55,13 +55,16 @@ Main.add(function () {
   <input type="hidden" name="_active_tab" value="dossier_soins" /> 
 </form>
 
+
+<button type="button" class="search" onclick="viewLegendPancarte();" style="float: right;">Légende</button>
+
 <ul id="tab-pancarte" class="control_tabs">
   <li><a href="#viewPancarte">Pancarte {{$service->_view}}</a></li>
   <li><a href="#viewTransmissions">Transmissions (<span id="nb_trans">{{$nb_trans.total}}</span>) et Observations (<span id="nb_observ">{{$nb_observ.total}}</span>)</a></li>
 </ul>
 <hr class="control_tabs" />
 
-<button type="button" class="search" onclick="viewLegendPancarte();" style="float: right;">Légende</button>
+
       
 {{assign var=images value="CPrescription"|static:"images"}}
 <div id="viewPancarte" style="display: none;">
