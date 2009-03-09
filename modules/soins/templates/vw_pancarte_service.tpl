@@ -5,7 +5,13 @@ function viewDossierSoin(sejour_id){
   oForm.sejour_id.value = sejour_id;
   oForm.submit();
 }
-              
+       
+function viewLegendPancarte(){
+  var url = new Url;
+  url.setModuleAction("soins", "vw_legende_pancarte");
+  url.popup(300, 400, "Légende de la pancarte");
+}
+       
 function showHidePatients(patient_id){
   $('viewTransmissions').select('tr.trans_or_obs').each(function(tr){
     if(!patient_id){
@@ -54,6 +60,8 @@ Main.add(function () {
   <li><a href="#viewTransmissions">Transmissions (<span id="nb_trans">{{$nb_trans.total}}</span>) et Observations (<span id="nb_observ">{{$nb_observ.total}}</span>)</a></li>
 </ul>
 <hr class="control_tabs" />
+
+<button type="button" class="search" onclick="viewLegendPancarte();" style="float: right;">Légende</button>
       
 {{assign var=images value="CPrescription"|static:"images"}}
 <div id="viewPancarte" style="display: none;">

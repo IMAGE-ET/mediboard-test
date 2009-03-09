@@ -1344,6 +1344,7 @@ $locales['CPrescription._chapitres.anapath'] = 'Anapath';
 $locales['CPrescription._chapitres.biologie'] = 'Biologie';
 $locales['CPrescription._chapitres.consult'] = 'Consulation';
 $locales['CPrescription._chapitres.dmi'] = 'DMI';
+$locales['CPrescription._chapitres.dm'] = 'DM';
 $locales['CPrescription._chapitres.imagerie'] = 'Imagerie';
 $locales['CPrescription._chapitres.inj'] = 'Injections';
 $locales['CPrescription._chapitres.kine'] = 'Kiné';
