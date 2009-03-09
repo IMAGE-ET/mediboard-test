@@ -19,7 +19,7 @@ function initFCKEditor() {
 Main.add(initFCKEditor);
 
 // Readonly mode
-{{if $templateManager->simplifyMode}}
+{{if $templateManager->printMode}}
 function readonlyFCKEditor() {
 	oFCKinstance = FCKeditorAPI.GetInstance('source');
 	if (document.all) {
