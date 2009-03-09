@@ -122,8 +122,8 @@ addPlanification = function(date, time, key_tab, object_id, object_class, elemen
   }
 }
 
-refreshDossierSoin = function(mode_dossier, chapitre){
-  if(!window[chapitre+'SoinLoaded']) {
+refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
+  if(!window[chapitre+'SoinLoaded'] || force_refresh) {
     loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
     window[chapitre+'SoinLoaded'] = true;
   }

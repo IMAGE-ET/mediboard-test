@@ -66,13 +66,13 @@
         {{if !$line->condition_active}}
 	      <!-- Activation -->
 	      <input type="hidden" name="condition_active" value="1" />
-	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin(); } });">
+	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
 	        Activer
 	      </button>
 	      {{else}}
  				<!-- Activation -->
 	      <input type="hidden" name="condition_active" value="0" />
-	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin(); } });">
+	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
 	        Désactiver
 	      </button>
 	       {{/if}}
@@ -106,7 +106,7 @@
     <form action="?" method="post" name="changeLine-{{$line_id}}">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-      <select name="prescription_line_medicament_id" style="width: 75px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshDossierSoin(); } } )">
+      <select name="prescription_line_medicament_id" style="width: 75px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshDossierSoin('','{{$chapitre}}', true); } } )">
         <option value="">Conserver</option>
       {{foreach from=$line->_ref_substitution_lines item=_line_subst}}
         <option value="{{$_line_subst->_id}}">{{$_line_subst->_view}}

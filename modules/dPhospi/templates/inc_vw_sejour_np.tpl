@@ -41,7 +41,7 @@
     {{$curr_sejour->_ref_praticien->_shortview}}
  
     {{if $isPrescriptionInstalled}}         
-    	 {{if !$prescription_sortie->_id || $prescription_sejour->_counts_no_valide}}
+    	 {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
     	   <img src="images/icons/warning.png" alt="" title="" 
     	   			onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-{{$curr_sejour->_guid}}")'/>
     	 {{/if}}
