@@ -24,7 +24,8 @@ class CMbMail extends CMbObject {
   var $starred       = null;
   
   // Form Fields
-  var $_state        = null;
+  var $_from_state   = null;
+  var $_to_state     = null;
   
   // References
   var $_ref_user_from = null;
