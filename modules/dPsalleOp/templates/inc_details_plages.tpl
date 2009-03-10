@@ -28,8 +28,8 @@
     </th>
   </tr>
   
+  {{if $vueReduite}}
   <tr>
-    {{if $vueReduite}}
     <th class="category" colspan="2">
       {{if $_plage->anesth_id}}
         Anesth : Dr {{$_plage->_ref_anesth->_view}}
@@ -37,10 +37,12 @@
         -
       {{/if}}
     </th>
-    {{else}}
+  </tr>
+  {{else}}
+  <tr>
     <th><label for="anesth_id" title="Anesthésiste associé à la plage d'opération">Anesthésiste</label></th>
     <td>
-      <select name="anesth_id" onchange="submit()">
+      <select name="anesth_id" onchange="this.form.submit()">
         <option value="">&mdash; Choisir un anesthésiste</option>
         {{foreach from=$listAnesths item=curr_anesth}}
         <option value="{{$curr_anesth->user_id}}" {{if $_plage->anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
@@ -49,8 +51,20 @@
         {{/foreach}}
       </select>
     </td>
-    {{/if}}
   </tr>
+  {{if $dPconfig.dPsalleOp.COperation.modif_actes == "button" && !$_plage->actes_locked}}
+  <tr>
+    <td class="button" colspan="2">
+      <input type="hidden" name="actes_locked" value="{{$_plage->actes_locked}}" />
+      <button class="submit" type="button" onclick="$V(this.form.actes_locked, 1); if(confirmeCloture()) {this.form.submit()};">Cloturer le codage</button>
+    </td>
+  </tr>
+  {{elseif $_plage->actes_locked}}
+  <tr>
+    <th class="category" colspan="2">Codage cloturé</th>
+  </tr>
+  {{/if}}
+  {{/if}}
   
 </table>
 

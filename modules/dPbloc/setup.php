@@ -209,8 +209,13 @@ class CSetupdPbloc extends CSetup {
             ADD INDEX (`spec_repl_id`),
             ADD INDEX (`delay_repl`)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `plagesop` 
+            ADD `actes_locked` ENUM('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
    
-    $this->mod_version = "0.24";
+    $this->mod_version = "0.25";
   }  
 }
 ?>

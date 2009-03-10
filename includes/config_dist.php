@@ -203,6 +203,7 @@ $dPconfig["dPsalleOp"] = array(
   "COperation" => array(
     "mode"        => "0",
     "modif_salle" => "0",
+    "modif_actes" => "oneday",
   ),
   "CActeCCAM" => array(
     "contraste"       => "0",

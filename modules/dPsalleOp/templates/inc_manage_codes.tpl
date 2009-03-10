@@ -35,6 +35,8 @@
   </table>
   {{/if}}
   {{/if}}
+  
+  {{if $can->edit || $modif_operation}}
   <table class="form">
     <tr>
       <th class="category">Ajout et suppression de codes</th>
@@ -50,15 +52,12 @@
           </option>
           {{/foreach}}
         </select>
-        {{if $can->edit || $modif_operation}}
         <button class="trash" type="button" onclick="ActesCCAM.remove({{$subject->_id}})">
           Supprimer
         </button>
-        {{/if}}
       </td>
     </tr>
     <tr>
-      {{if $can->edit || $modif_operation}}
       <td colspan="2" style="vertical-align:middle;">
         <button class="search" type="button" onclick="CCAMSelector.init()">
           Rechercher un code à ajouter
@@ -83,10 +82,10 @@
           {{tr}}Ajouter{{/tr}}
         </button>        
       </td>
-      {{/if}}
     </tr>
   </table>
 </form>
+{{/if}}
 
 {{if $ajax}}
 <script type="text/javascript">

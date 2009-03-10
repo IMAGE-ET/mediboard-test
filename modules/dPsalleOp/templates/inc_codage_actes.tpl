@@ -294,6 +294,7 @@ function setToNow(element) {
         {{/if}}
         {{/if}}
         
+        {{if $can->edit || $modif_operation}}
         <select name="{{$view}}"
           onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
           <option value="" {{if !$acte->code_association}}selected="selected"{{/if}}>Aucun (100%)</option>
@@ -303,7 +304,9 @@ function setToNow(element) {
           <option value="4" {{if $acte->code_association == 4}}selected="selected"{{/if}}>4 (100%)</option>
           <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
         </select>
-        
+        {{else}}
+        {{$acte->code_association}}
+        {{/if}} 
         Association pour le Dr {{$acte->_ref_executant->_view}}
         
         <strong>

@@ -68,6 +68,25 @@
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
   </tr>
+  
+  {{assign var="var" value="modif_actes"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td colspan="3">
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="never" {{if $dPconfig.$m.$class.$var == "never"}}checked="checked"{{/if}}/>
+      <label for="{{$m}}[{{$class}}][{{$var}}]_never">Jamais</label>
+      <br />
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="oneday" {{if $dPconfig.$m.$class.$var == "oneday"}}checked="checked"{{/if}}/>
+      <label for="{{$m}}[{{$class}}][{{$var}}]_oneday">Le lendemain</label>
+      <br />
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="button" {{if $dPconfig.$m.$class.$var == "button"}}checked="checked"{{/if}}/>
+      <label for="{{$m}}[{{$class}}][{{$var}}]_button">Par bouton</label>
+    </td>             
+  </tr>
 
   {{assign var="class" value="CActeCCAM"}}
   

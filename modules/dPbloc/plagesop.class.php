@@ -34,6 +34,7 @@ class CPlageOp extends CMbObject {
   var $temps_inter_op   = null;
   var $max_intervention = null;
   var $delay_repl       = null;
+  var $actes_locked     = null;
     
   // Form Fields
   var $_day          = null;
@@ -82,6 +83,7 @@ class CPlageOp extends CMbObject {
     $specs["temps_inter_op"]   = "time notNull";
     $specs["max_intervention"] = "num min|0";
     $specs["delay_repl"]       = "num min|0";
+    $specs["actes_locked"]     = "bool";
 
     $specs["_heuredeb"]        = "num minMax|0|23";
     $specs["_minutedeb"]       = "num minMax|0|59";

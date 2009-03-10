@@ -64,6 +64,10 @@ function reloadPersonnel(operation_id){
   } );
 }
 
+function confirmeCloture() {
+  return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
+}
+
 Main.add(function () {
   var url = new Url;
   {{if $dPconfig.dPsalleOp.COperation.mode}}

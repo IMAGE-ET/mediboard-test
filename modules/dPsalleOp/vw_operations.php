@@ -17,12 +17,13 @@ $listPersAideOp = array();
 $listPersPanseuse = array();
 
 // Ne pas supprimer, utilisé pour mettre le particien en session
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$salle        = mbGetValueFromGetOrSession("salle");
-$op           = mbGetValueFromGetOrSession("op");
-$date         = mbGetValueFromGetOrSession("date", mbDate());
-$date_now     = mbDate();
-$modif_operation = $date>=$date_now;
+$praticien_id    = mbGetValueFromGetOrSession("praticien_id");
+$salle           = mbGetValueFromGetOrSession("salle");
+$op              = mbGetValueFromGetOrSession("op");
+$date            = mbGetValueFromGetOrSession("date", mbDate());
+$date_now        = mbDate();
+$modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
+                   ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
 
 // Tableau d'affectations
 $tabPersonnel = array();
@@ -51,6 +52,7 @@ if ($op) {
   $selOp->load($op);
   
   $selOp->loadRefs();
+  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$selOp->_ref_plageop->actes_locked);
 //  $actesup = $selOp->_ref_actes_ccam->_ref_exec
 
   $sejour =& $selOp->_ref_sejour;
