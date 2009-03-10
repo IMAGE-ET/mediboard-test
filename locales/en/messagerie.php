@@ -2,9 +2,9 @@
 $locales[''] = '';
 $locales['mod-messagerie-tab-vw_list_mbmails '] = '';
 $locales['CMbMail'] = '';
-$locales['CMbMail-date_archived'] = '';
-$locales['CMbMail-date_archived-court'] = '';
-$locales['CMbMail-date_archived-desc'] = '';
+$locales['CMbMail-archived'] = '';
+$locales['CMbMail-archived-court'] = '';
+$locales['CMbMail-archived-desc'] = '';
 $locales['CMbMail-date_read'] = '';
 $locales['CMbMail-date_read-court'] = '';
 $locales['CMbMail-date_read-desc'] = '';

@@ -1,9 +1,9 @@
 <?php
 $locales[''] = '';
 $locales['CMbMail'] = 'Message utilisateur';
-$locales['CMbMail-date_archived'] = 'Date d\'archivage';
-$locales['CMbMail-date_archived-court'] = 'Archivage';
-$locales['CMbMail-date_archived-desc'] = 'Date d\'archivage du message';
+$locales['CMbMail-archived'] = 'Archivé';
+$locales['CMbMail-archived-court'] = 'Archivé';
+$locales['CMbMail-archived-desc'] = 'Message archivé';
 $locales['CMbMail-date_read'] = 'Date de lecture';
 $locales['CMbMail-date_read-court'] = 'Lecture';
 $locales['CMbMail-date_read-desc'] = 'Date de lecture de message';

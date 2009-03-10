@@ -14,9 +14,9 @@ $mbmail = new CMbMail();
 
 // Liste des messages reçus
 $where = array();
-$where["to"]            = "= '$AppUI->user_id'";
-$where["date_sent"]     = "IS NOT NULL";
-$where["date_archived"] = "IS NULL";
+$where["to"]        = "= '$AppUI->user_id'";
+$where["date_sent"] = "IS NOT NULL";
+$where["archived"]  = "!= '1'";
 $order = "date_sent DESC";
 $listInbox = $mbmail->loadList($where, $order);
 foreach($listInbox as &$mail) {
@@ -27,7 +27,7 @@ foreach($listInbox as &$mail) {
 $where = array();
 $where["to"]            = "= '$AppUI->user_id'";
 $where["date_sent"]     = "IS NOT NULL";
-$where["date_archived"] = "IS NOT NULL";
+$where["archived"] = "= '1'";
 $order = "date_sent DESC";
 $listArchived = $mbmail->loadList($where, $order);
 foreach($listArchived as &$mail) {

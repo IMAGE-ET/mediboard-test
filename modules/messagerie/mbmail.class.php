@@ -20,7 +20,7 @@ class CMbMail extends CMbObject {
   var $source        = null;
   var $date_sent     = null;
   var $date_read     = null;
-  var $date_archived = null;
+  var $archived      = null;
   var $starred       = null;
   
   // Form Fields
@@ -40,17 +40,17 @@ class CMbMail extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["from"]          = "ref notNull class|CMediusers";
-    $specs["to"]            = "ref notNull class|CMediusers";
-    $specs["subject"]       = "str notNull";
-    $specs["source"]        = "html";
-    $specs["date_sent"]     = "dateTime";
-    $specs["date_read"]     = "dateTime";
-    $specs["date_archived"] = "dateTime";
-    $specs["starred"]       = "bool";
+    $specs["from"]        = "ref notNull class|CMediusers";
+    $specs["to"]          = "ref notNull class|CMediusers";
+    $specs["subject"]     = "str notNull";
+    $specs["source"]      = "html";
+    $specs["date_sent"]   = "dateTime";
+    $specs["date_read"]   = "dateTime";
+    $specs["archived"]    = "bool default|0";
+    $specs["starred"]     = "bool default|0";
 
-    $specs["_from_state"]   = "enum list|saved|sent|read";
-    $specs["_to_state"]     = "enum list|pending|received|read|archived|starred";
+    $specs["_from_state"] = "enum list|saved|sent|read";
+    $specs["_to_state"]   = "enum list|pending|received|read|archived|starred";
     
     return $specs;
   }
@@ -84,14 +84,14 @@ class CMbMail extends CMbObject {
     $this->_view = substr($this->subject, 0, 30);
     
     $this->_from_state = "saved";
-    if ($this->date_sent    ) $this->_from_state = "sent";
-    if ($this->date_read    ) $this->_from_state = "read";
+    if ($this->date_sent) $this->_from_state = "sent";
+    if ($this->date_read) $this->_from_state = "read";
 
     $this->_to_state = "pending";
-    if ($this->date_sent    ) $this->_to_state = "received";
-    if ($this->date_read    ) $this->_to_state = "read";
-    if ($this->date_archived) $this->_to_state = "archived";
-    if ($this->starred      ) $this->_to_state = "starred";    
+    if ($this->date_sent) $this->_to_state = "received";
+    if ($this->date_read) $this->_to_state = "read";
+    if ($this->archived ) $this->_to_state = "archived";
+    if ($this->starred  ) $this->_to_state = "starred";    
   }
   
   function loadRefUserFrom() {

@@ -15,7 +15,7 @@
 {{if !$mbmail->date_sent}}
 {{mb_field object=$mbmail field=date_sent hidden=true}}
 {{else}}
-{{mb_field object=$mbmail field=date_archived hidden=true}}
+{{mb_field object=$mbmail field=archived hidden=true}}
 {{mb_field object=$mbmail field=starred hidden=true}}
 {{/if}}
 
@@ -79,10 +79,10 @@
 	</tr>
 	{{/if}}
 
-	{{if $mbmail->date_archived}}
+	{{if $mbmail->archived}}
   <tr>
-	  <th>{{mb_label object=$mbmail field=date_archived}}</th>
-	  <td class="date">{{mb_value object=$mbmail field=date_archived}} ({{mb_value object=$mbmail field=date_archived format=relative}})</td>
+	  <th>{{mb_label object=$mbmail field=archived}}</th>
+	  <td><strong>{{mb_value object=$mbmail field=archived}}</strong></td>
 	</tr>
 	{{/if}}
 
@@ -119,16 +119,20 @@
 	{{elseif $mbmail->to == $app->user_id}}
 	<tr>
 	  <td colspan="2" style="text-align: center;">
-	  	{{if $mbmail->date_archived}}
-	    <button type="submit" class="cancel" onclick="$V(this.form.date_archived, '');">{{tr}}Unarchive{{/tr}}</button>
-			{{else}}
-	    <button type="submit" class="change" onclick="$V(this.form.date_archived, 'now');">{{tr}}Archive{{/tr}}</button>
+	  	{{if !$mbmail->starred}}
+		  	{{if $mbmail->archived}}
+		    <button type="submit" class="cancel" onclick="$V(this.form.archived, '0');">{{tr}}Unarchive{{/tr}}</button>
+				{{else}}
+		    <button type="submit" class="change" onclick="$V(this.form.archived, '1');">{{tr}}Archive{{/tr}}</button>
+				{{/if}}
 			{{/if}}
-			
-	  	{{if $mbmail->starred}}
-	    <button type="submit" class="cancel" onclick="$V(this.form.starred, '0');">{{tr}}Unstar{{/tr}}</button>
-			{{else}}
-	    <button type="submit" class="new" onclick="$V(this.form.starred, '1');">{{tr}}Star{{/tr}}</button>
+						
+	  	{{if !$mbmail->archived}}
+		  	{{if $mbmail->starred}}
+		    <button type="submit" class="cancel" onclick="$V(this.form.starred, '0');">{{tr}}Unstar{{/tr}}</button>
+				{{else}}
+		    <button type="submit" class="new" onclick="$V(this.form.starred, '1');">{{tr}}Star{{/tr}}</button>
+				{{/if}}
 			{{/if}}
 	  </td>
 	</tr>
