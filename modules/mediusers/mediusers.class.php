@@ -410,10 +410,10 @@ class CMediusers extends CMbObject {
     // Chargement des specs des attributs du mediuser	
     $this->updateSpecs();
     
-    $specsObj = $this->getSpecsObj();
+    $specs = $this->getSpecsObj();
 
     // On se concentre dur le mot de passe (_user_password)
-    $pwdSpecs = $specsObj['_user_password'];
+    $pwdSpecs = $specs['_user_password'];
 
     $pwd = $this->_user_password;
 

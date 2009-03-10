@@ -43,15 +43,23 @@ class CMbObject {
   /**
    * Properties  specification
    */
-  var $_spec          = null;    // Spécifications unifiées
-  var $_aides         = array(); // aides à la saisie
-  var $_props         = array(); // properties specifications as string
-  var $_specs         = array(); // properties specifications as objects
+  var $_spec          = null;    // Class specification
+  var $_props         = array(); // Properties specifications as string
+  var $_specs         = array(); // Properties specifications as objects
   var $_backRefs      = array(); // Back reference specification as string
   var $_backSpecs     = array(); // Back reference specification as objects
-  var $_fwdRefs       = array(); // Forward reference specification as string
-  var $_fwdSpecs      = array(); // Forward reference specification as objects
   var $_seek          = array(); // seekable fields
+
+  static $spec          = array();
+  static $props         = array();
+  static $specs         = array();
+  static $backRefs      = array();
+  static $backSpecs     = array();
+  static $seeks         = array();
+  
+  static $module_name   = array();
+  
+  var $_aides         = array(); // aides à la saisie
   var $_nb_files_docs = null;
   
   /**
@@ -82,15 +90,6 @@ class CMbObject {
   	return $this->_view;
   }
   
-  static $spec          = array();
-  static $props         = array();
-  static $backRefs      = array();
-  static $backSpecs     = array();
-  static $fwdRefs       = array();
-  static $fwdSpecs      = array();
-  static $specsObj      = array();
-  static $seeks         = array();
-  static $module_name   = array();
   
   function CMbObject() {
 
@@ -124,19 +123,25 @@ class CMbObject {
     if (!$in_cache) {
       self::$props[$class] = $this->getSpecs();
       $this->_props =& self::$props[$class];
+
+      self::$specs[$class] = $this->getSpecsObj();
+      $this->_specs =& self::$specs[$class];
+      
       self::$backRefs[$class] = $this->getBackRefs();
       $this->_backRefs =& self::$backRefs[$class];
-      self::$backSpecs[$class] = array();
-      self::$specsObj[$class] = $this->getSpecsObj();
-      $this->_specs =& self::$specsObj[$class];
+
+      // Not prepared since it depends on many other classes
+      // Has to be done as a second pass
+      self::$backSpecs[$class] = array(); 
+
       self::$seeks[$class] = $this->getSeeks();
       $this->_seek =& self::$seeks[$class];
     }
 
     $this->_props         =& self::$props[$class];
+    $this->_specs         =& self::$specs[$class];
     $this->_backRefs      =& self::$backRefs[$class];
     $this->_backSpecs     =& self::$backSpecs[$class];
-    $this->_specs         =& self::$specsObj[$class];
     $this->_seek          =& self::$seeks[$class];
   }
   
@@ -732,7 +737,7 @@ class CMbObject {
   function repair() {
     $repaired = array();
     $properties = get_object_vars($this);
-    foreach ($this->getProps() as $name => $value) {
+    foreach ($this->getValues() as $name => $value) {
       if ($value !== null) {
         if ($msg = $this->checkProperty($name)) {
           $repaired[$name] = $msg;
@@ -1188,42 +1193,25 @@ class CMbObject {
    * Load named fwd reference
    * @return array[CMbObject] the collection
    */
-  function loadFwdRef($field, $updateFormFields = false) {
-    if (!isset($this->_fwdSpecs[$field])) return null;
+  function loadFwdRef($field) {
+    $spec = $this->_specs[$field];
+    if ($spec instanceof CRefSpec) {
+	    $this->_fwd[$field] = new $spec->class;
+	    return $this->_fwd[$field]->load($this->$field);
+    }
+
+  }
     
-    $this->_fwd[$field] = new $this->_fwdSpecs[$field]->class;
-    $load = $this->_fwd[$field]->load($this->$field);
-    if ($load && $updateFormFields) {
-      $this->_fwd[$field]->updateFormFields();
-    }
-    return $load;
-  }
-  
   /**
    * Load named fwd reference
    * @return array[CMbObject] the collection
    */
-  function loadAllFwdRefs($updateFormFields = false) {
-    $this->getFwdRefs(); 
-    foreach ($this->_fwdSpecs as $field => $spec) {
-      $this->loadFwdRef($field, $updateFormFields);
+  function loadAllFwdRefs() {
+    foreach ($this->_specs as $field => $spec) {
+      $this->loadFwdRef($field);
     }
   }
-  
-  /**
-   * Load named fwd reference
-   * @return array[CMbObject] the collection
-   */
-  function getFwdRefs() {
-    $fwdSpecs = array();
-    foreach($this->_specs as $field => &$spec) {
-      if ($spec instanceof CRefSpec && $field !== $this->_spec->key) {
-        $fwdSpecs[$field] = $spec;
-      }
-    }
-    return $this->_fwdSpecs = $fwdSpecs;
-  }
-  
+    
   /**
    * Check whether the object can be deleted.
    * Default behaviour counts for back reference without cascade 
@@ -1470,7 +1458,7 @@ class CMbObject {
    * Get object properties, i.e. having specs
    * @return array Associative array
    */
-  function getProps() {
+  function getValues() {
     $result = array();
     
     foreach ($this->_specs as $key => $value) {

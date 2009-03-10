@@ -12,7 +12,7 @@ global $AppUI;
 mbExport($_POST);
 
 $docItem = CMbObject::loadFromGuid($_POST["docitem_guid"]);
-mbTrace($docItem->getProps(), "Doc Item");
+mbTrace($docItem->getValues(), "Doc Item");
 
 // Simulating Export
 $doc_ecap_id = rand(time());
@@ -29,7 +29,7 @@ else {
   $AppUI->setMsg("Identifiant externe sauvegardé", UI_MSG_ERROR);
 }
 
-mbTrace($idExt->getProps(), "Id e-Cap");
+mbTrace($idExt->getValues(), "Id e-Cap");
 
 if (null == $ajax = mbGetValueFromPost("ajax")) {
 //  $AppUI->redirect();
