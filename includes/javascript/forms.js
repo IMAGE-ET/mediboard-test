@@ -835,9 +835,9 @@ var TimePicker = Class.create({
   
   toggleShortLong: function (e) {
     var picker = $(this.pickerId);
-    var short = picker.select('.short')[0].toggle();
+    var shortView = picker.select('.short')[0].toggle();
     picker.select('.long')[0].toggle();
-    e.element().update(short.visible()?'&gt;&gt;':'&lt;&lt;');
+    e.element().update(shortView.visible()?'&gt;&gt;':'&lt;&lt;');
   }
 });
 
@@ -1088,7 +1088,7 @@ Element.addMethods('select', {
       else if (keycode == 13) { // Enter
         var focused = list.select('.focused');
         if (focused && (focused = focused[0])) {
-          focused.onclick();
+          focused.onclick(e.stop());
         }
         search.value = null;
       }
@@ -1110,9 +1110,9 @@ Element.addMethods('select', {
     select.insert({after: search});
     
     // The search input to blur the select control and catch keys
-    search.observe('keydown', search.display);
-    search.observe('keydown', list.navigate);
-    search.observe('keyup',   search.catchKey);
+    search.observe('keydown', search.display)
+          .observe('keydown', list.navigate)
+          .observe('keydown', search.catchKey);
 
     // Select
     select.writeAttribute('size', 1);
