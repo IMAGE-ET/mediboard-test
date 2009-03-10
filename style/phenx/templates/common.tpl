@@ -3,10 +3,10 @@
 
 <head>
   <title>
-    {{$dPconfig.page_title}} &mdash; 
+    {{$dPconfig.page_title}} &gt; 
     {{tr}}module-{{$m}}-court{{/tr}}
     {{if ($a || $tab) && $tab != '1'}}
-      &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
+      &gt; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
     {{/if}}
   </title>
   <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={{$localeCharSet}}" />
@@ -70,13 +70,3 @@
 
 <!-- Up button -->
 <div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>
-
-{{if !$offline}}
-<script type="text/javascript">
-function popChgPwd() {
-  var url = new Url;
-  url.setModuleAction("admin", "chpwd");
-  url.popup(400, 300, "ChangePassword");
-}
-</script>
-{{/if}}
