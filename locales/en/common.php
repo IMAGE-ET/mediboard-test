@@ -141,4 +141,6 @@ $locales['Unarchiver'] = '';
 $locales['Star'] = '';
 $locales['Unstar'] = '';
 $locales['Unarchive'] = '';
+$locales['Send'] = '';
+$locales['Draft'] = '';
 ?>

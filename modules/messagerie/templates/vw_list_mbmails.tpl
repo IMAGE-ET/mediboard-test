@@ -51,13 +51,14 @@ Main.add(function () {
     <td>
 	    <table class="main tbl" id="inbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="4">{{tr}}CMbMail-inbox{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CMbMail-inbox{{/tr}}</th>
 	      </tr>
 
 	      <tr>
 	        <th>{{mb_title class=CMbMail field=from}}</th>
 	        <th>{{mb_title class=CMbMail field=subject}}</th>
 	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{mb_title class=CMbMail field=date_read}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 	      {{foreach from=$listInbox item=_mail}}
@@ -65,7 +66,8 @@ Main.add(function () {
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
 	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
-	        <td>{{mb_value object=$_mail field=date_sent}}</td>
+	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
 	        <td>
 	          <div style="float: right">
 	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
@@ -80,13 +82,13 @@ Main.add(function () {
 
 	    <table class="main tbl" id="archive" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="4">{{tr}}CMbMail-archive{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CMbMail-archive{{/tr}}</th>
 	      </tr>
 
 	      <tr>
 	        <th>{{mb_title class=CMbMail field=from}}</th>
 	        <th>{{mb_title class=CMbMail field=subject}}</th>
-	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{mb_title class=CMbMail field=date_sent format=relative}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 
@@ -109,21 +111,23 @@ Main.add(function () {
 
 	    <table class="main tbl" id="sentbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="4">{{tr}}CMbMail-sentbox{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CMbMail-sentbox{{/tr}}</th>
 	      </tr>
 
 	      <tr>
 	        <th>{{mb_title class=CMbMail field=to}}</th>
 	        <th>{{mb_title class=CMbMail field=subject}}</th>
-	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{mb_title class=CMbMail field=date_sent format=relative}}</th>
+	        <th>{{mb_title class=CMbMail field=date_read format=relative}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 
 	      {{foreach from=$listSent item=_mail}}
-	      <tr>
+	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_to}}</td>
 	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
-	        <td>{{mb_value object=$_mail field=date_sent}}</td>
+	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
 	        <td><!-- Forward --></td>
 	      </tr>
 	      {{/foreach}}
@@ -131,7 +135,7 @@ Main.add(function () {
 
 	    <table class="main tbl" id="draft" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="4">{{tr}}CMbMail-draft{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CMbMail-draft{{/tr}}</th>
 	      </tr>
 
 	      <tr>
@@ -145,7 +149,7 @@ Main.add(function () {
 	      <tr>
 	        <td>{{$_mail->_ref_user_to}}</td>
 	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})"">{{$_mail->subject}}</a></td>
-	        <td>{{mb_value object=$_mail field=date_sent}}</td>
+	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td><!-- Edit / Send / Delete --></td>
 	      </tr>
 	      {{/foreach}}
