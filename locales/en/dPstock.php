@@ -723,4 +723,6 @@ $locales['CProductOrderItemReception-received_quantity'] = '';
 $locales['CProductOrderItemReception-barcode_printed-court'] = '';
 $locales['CProductOrderItemReception-barcode_printed'] = '';
 $locales['CProductOrderItemReception-barcode_printed-desc'] = '';
+$locales['CProduct-code_lpp'] = '';
+$locales['CProduct-code_lpp-desc'] = '';
 ?>

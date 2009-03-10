@@ -1,5 +1,4 @@
 <?php
-$locales[''] = '';
 $locales['CMbMail'] = 'Message utilisateur';
 $locales['CMbMail-archived'] = 'Archivé';
 $locales['CMbMail-archived-court'] = 'Archivé';
@@ -69,4 +68,5 @@ $locales['CMbMail._to_state.pending'] = 'En cours de rédaction';
 $locales['CMbMail._to_state.read'] = 'Lu';
 $locales['CMbMail._to_state.received'] = 'Reçu';
 $locales['CMbMail._to_state.starred'] = 'Marqué';
+$locales['module-messagerie-long'] = 'Messagerie interne';
 ?>

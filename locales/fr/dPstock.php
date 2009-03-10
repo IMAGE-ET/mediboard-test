@@ -723,4 +723,6 @@ $locales['CProductOrderItemReception-received_quantity'] = 'Quantité reçue';
 $locales['CProductOrderItemReception-barcode_printed'] = 'Code barre imprimé';
 $locales['CProductOrderItemReception-barcode_printed-court'] = 'Code barre imprimé';
 $locales['CProductOrderItemReception-barcode_printed-desc'] = 'Le code barre est déjà imprimé';
+$locales['CProduct-code_lpp'] = 'Code LPP';
+$locales['CProduct-code_lpp-desc'] = 'Code LPP du produit';
 ?>

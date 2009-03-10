@@ -24,6 +24,7 @@ class CProduct extends CMbObject {
   var $unit_title        = null;
   var $packaging         = null;
   var $renewable         = null;
+  var $code_lpp          = null;
 
   // Object References
   //    Single
@@ -73,6 +74,8 @@ class CProduct extends CMbObject {
     $specs['unit_quantity'] = 'float pos';
     $specs['packaging']     = 'str';
     $specs['renewable']     = 'enum list|0|1|2';
+    $specs['code_lpp']      = 'numchar length|7';
+    
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';
     $specs['_unit_quantity']= 'float pos';

@@ -1,5 +1,4 @@
 <?php
-$locales[''] = '';
 $locales['mod-messagerie-tab-vw_list_mbmails '] = '';
 $locales['CMbMail'] = '';
 $locales['CMbMail-archived'] = '';
@@ -37,9 +36,6 @@ $locales['CMbMail-title-modify'] = '';
 $locales['CMbMail-to'] = '';
 $locales['CMbMail-to-court'] = '';
 $locales['CMbMail-to-desc'] = '';
-$locales['CMbMail-_state'] = '';
-$locales['CMbMail-_state-court'] = '';
-$locales['CMbMail-_state-desc'] = '';
 $locales['CMbMail.all'] = '';
 $locales['CMbMail.none'] = '';
 $locales['CMbMail.one'] = '';
@@ -56,4 +52,21 @@ $locales['CMbMail-sentbox'] = '';
 $locales['CMbMail-draft'] = '';
 $locales['CMbMail-msg-read'] = '';
 $locales['CMbMail._state.starred'] = '';
+$locales['module-messagerie-long'] = '';
+$locales['CMbMail-_from_state'] = '';
+$locales['CMbMail-_from_state-court'] = '';
+$locales['CMbMail-_from_state-desc'] = '';
+$locales['CMbMail-_to_state'] = '';
+$locales['CMbMail-_to_state-court'] = '';
+$locales['CMbMail-_to_state-desc'] = '';
+$locales['CMbMail._from_state.'] = '';
+$locales['CMbMail._from_state.read'] = '';
+$locales['CMbMail._from_state.saved'] = '';
+$locales['CMbMail._from_state.sent'] = '';
+$locales['CMbMail._to_state.'] = '';
+$locales['CMbMail._to_state.archived'] = '';
+$locales['CMbMail._to_state.pending'] = '';
+$locales['CMbMail._to_state.read'] = '';
+$locales['CMbMail._to_state.received'] = '';
+$locales['CMbMail._to_state.starred'] = '';
 ?>

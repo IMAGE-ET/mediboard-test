@@ -321,7 +321,11 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_order_item_reception` ADD `barcode_printed` ENUM( '0', '1' ) NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = '0.96';
+    $this->makeRevision("0.96");
+    $sql = "ALTER TABLE `product` ADD `code_lpp` INT (7) UNSIGNED ZEROFILL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.97";
   }
 }
 
