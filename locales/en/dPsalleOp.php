@@ -131,4 +131,6 @@ $locales['CActeCCAM.select'] = '';
 $locales['SSPI.RSPO'] = '';
 $locales['config-dPsalleOp-CReveil-multi_tabs_reveil'] = '';
 $locales['SSPI.Responsable'] = '';
+$locales['config-dPsalleOp-COperation-modif_actes'] = '';
+$locales['CMediusers-back-actes_ccam'] = '';
 ?>

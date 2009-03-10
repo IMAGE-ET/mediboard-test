@@ -131,4 +131,6 @@ $locales['CActeCCAM.select'] = '';
 $locales['config-dPsalleOp-CReveil'] = 'Affichage de la salle de réveil';
 $locales['config-dPsalleOp-CReveil-multi_tabs_reveil'] = 'Affichage de \'Attente / Réveil / Sortie\' en';
 $locales['SSPI.Responsable'] = 'Responsables';
+$locales['config-dPsalleOp-COperation-modif_actes'] = 'Bloquage du codage des actes';
+$locales['CMediusers-back-actes_CCAM'] = '';
 ?>
