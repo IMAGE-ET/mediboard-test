@@ -43,6 +43,13 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
     return $ds->loadResult($query);
   }
   
+  static function countProduitsBCBGES(){
+    global $g;
+    $query = "SELECT COUNT(*) FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
+    $ds = CSQLDataSource::get("bcbges");
+    return $ds->loadResult($query);
+  }
+  
   static function purgeProduits() {
     global $g;
     $query = "DELETE FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
@@ -105,6 +112,10 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
     if($this->code_cip){
       $this->_ref_produit->load($this->code_cip, $full_mode);
     }
+  }
+  
+  function synchronize(){
+    $this->distObj->synchronize();
   }
 } 
 

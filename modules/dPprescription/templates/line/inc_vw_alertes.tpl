@@ -91,7 +91,7 @@
 		    {{foreach from=$curr_type.$code_cip item=_alerte}}
 		      <li>
 		        <strong>{{tr}}CPrescriptionLineMedicament-alerte-{{$type}}-court{{/tr}} :</strong>
-		        {{$_alerte.libelle}}
+ 		        {{$_alerte.libelle}}
 		      </li>
 		    {{/foreach}}
 		    </ul>

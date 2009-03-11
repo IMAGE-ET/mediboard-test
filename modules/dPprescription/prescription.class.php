@@ -1142,7 +1142,7 @@ class CPrescription extends CMbObject {
    */
   function checkAllergies($listAllergies, $code_cip) {
     if(!isset($this->_scores["allergie"])){
-      $this->_scores["allergie"] = 0;
+      $this->_scores["allergie"] = array();
     }
     if(!isset($this->_alertes["allergie"])){
       $this->_alertes["allergie"] = array();
@@ -1150,10 +1150,9 @@ class CPrescription extends CMbObject {
     $niveau_max = 0;
     foreach($listAllergies as $key => $all) {
       if($all->CIP == $code_cip) {
-        $this->_alertes["allergie"][$code_cip][$key] = $all->LibelleAllergie;
-        $this->_scores["allergies"]++;
+        $this->_alertes["allergie"][$code_cip][$key]["libelle"] = $all->LibelleAllergie;
       }
-      $this->_scores["allergie"][] = $all;
+      $this->_scores["allergie"][$all->CIP] = $all;
     }
   }
   

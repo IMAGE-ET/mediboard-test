@@ -1,5 +1,3 @@
-<h2>Configuration générale</h2>
-
 <script type="text/javascript">
 
 var BCBScripts = {
@@ -173,13 +171,17 @@ var Livret = {
 	  url.setModuleAction("dPmedicament", "vw_bcb_import");
 	  url.pop(400, 400, "Import de fichier CSV");
 	},
-	
 	purge: function () {
 	  if (confirm("Vous êtes sur le point de vider le Livret Thérapeutique\n\nVoulez-vous poursuivre ?")) {
 		  var url = new Url;
 		  url.setModuleAction("dPmedicament", "httpreq_purge_livret");
 		  url.requestUpdate("livret-purge");
 	  }
+	},
+	synchronize: function(){
+	  var url = new Url;
+	  url.setModuleAction("dPmedicament", "httpreq_synchronize_livret");
+	  url.requestUpdate("livret-synchro");
 	}
 }
 
@@ -224,6 +226,22 @@ var Livret = {
   <tr>
     <td><button class="trash" onclick="Livret.purge()" >Vider le livret thérapeutique</button></td>
     <td id="livret-purge"></td>
+  </tr>
+  <tr>
+    <td>
+      <button type="button" class="tick" onclick="Livret.synchronize()">Synchroniser le livret Therapeutique</button>
+		</td>
+		<td id="livret-synchro">
+		  {{if $nb_produit_livret != $nb_produit_livret_bcbges}}
+		    <div class="small-warning">
+		    Attention, les livrets Thérapeutiques ne sont pas synchronisés
+		    </div>
+		  {{else}}
+		    <div class="small-info">
+		    Livrets Thérapeutiques synchronisés
+		    </div>
+		  {{/if}}
+		</td>
   </tr>
   <tr>
     <td>

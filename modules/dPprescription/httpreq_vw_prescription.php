@@ -300,13 +300,16 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		      if(array_key_exists("niveau_max", $_score)){
 		        $niveau_max = "niv".$_score["niveau_max"];
 		        $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score $niveau_max"));
+		      } elseif ($type_score == "allergie") {
+		        // allergies
+            $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score"));
 		      }
 		    } elseif($_score > 0) {
 		      $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score"));
 		    }
 		  }
 		  $prescription->_score_prescription = $score_prescription;
-		  
+
 			// Chargement du poids du patient
 			$patient->loadRefConstantesMedicales();
 		  $constantes_medicales = $patient->_ref_constantes_medicales;
