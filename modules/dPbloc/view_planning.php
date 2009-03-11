@@ -46,12 +46,16 @@ $chir_id = mbGetValueFromGet("chir");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
+// Liste des praticiens accessibles
+
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($user->loadPraticiens()));
+
 // Filtre par specialite
 if ($filter->_specialite or $filter->_prat_id) {
   $chir = new CMediusers;
   // Chargement de la liste des chirs qui ont la specialite selectionnee
   $chirs = $chir->loadList(array ("function_id" => "= '$filter->_specialite '"));
-  $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($chirs), $filter->_prat_id);
+  $where[] = "chir_id ".CSQLDataSource::prepareIn(array_keys($chirs), $filter->_prat_id);
 }
 
 // En fonction de la salle
