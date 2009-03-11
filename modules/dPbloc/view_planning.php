@@ -73,6 +73,8 @@ $plagesop = $plagesop->loadList($where, $order);
 foreach($plagesop as &$plage) {
   $plage->loadRefsFwd(1);
   
+  $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
+  
   $where = array();
   $where["plageop_id"] = "= '$plage->_id'";
   switch ($filter->_intervention) {
@@ -84,10 +86,9 @@ foreach($plagesop as &$plage) {
     $where["codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
   }
   
-  $order = "operations.rank";
-
+  $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
   $listOp = new COperation;
-  $listOp = $listOp->loadList($where, $order);
+  $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
 
   foreach($listOp as $keyOp => &$operation) {
     $operation->loadRefsFwd(1);
