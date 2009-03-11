@@ -29,6 +29,7 @@ function popPlanning() {
   url.addElement(form.salle_id);
   url.addElement(form.type);
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
+  url.addParam("_coordonnees", $V(form._coordonnees));
   url.popup(900, 550, 'Planning');
 }
 
@@ -192,23 +193,34 @@ function changeDateCal(){
         {{assign var="class" value="CPlageOp"}}
             
         <tr>
+          <th>
+            <label for="_coordonnees_1" title="Afficher ou cacher le numéro de tel du patient">Afficher les coordonnées du patient</label>
+          </th>
+          <td>  
+            <label for="_coordonnees_1">Oui</label>
+            <input type="radio" name="_coordonnees" value="1" /> 
+            <label for="_coordonnees_0">Non</label>
+            <input type="radio" name="_coordonnees" value="0" checked="checked"/> 
+          </td>
+        </tr>
+        <tr>
           <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
           <td>  
             {{assign var="var" value="plage_vide"}}
-      <label for="_plage">Oui</label>
-      <input type="radio" name="_plage" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="_plage">Non</label>
-      <input type="radio" name="_plage" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <label for="_plage">Oui</label>
+            <input type="radio" name="_plage_1" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <label for="_plage">Non</label>
+            <input type="radio" name="_plage_0" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
-         <tr>
+        <tr>
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
           <td>  
             {{assign var="var" value="libelle_ccam"}}
-      <label for="_ccam_libelle">Oui</label>
-      <input type="radio" name="_ccam_libelle" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="_ccam_libelle">Non</label>
-      <input type="radio" name="_ccam_libelle" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <label for="_ccam_libelle">Oui</label>
+            <input type="radio" name="_ccam_libelle" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <label for="_ccam_libelle">Non</label>
+            <input type="radio" name="_ccam_libelle" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
       </table>

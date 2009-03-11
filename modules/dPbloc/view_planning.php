@@ -25,6 +25,8 @@ $filter->_specialite   = mbGetValueFromGet("_specialite");
 $filter->_codes_ccam   = mbGetValueFromGet("_codes_ccam");
 $filter->_ccam_libelle = mbGetValueFromGet("_ccam_libelle", 1);
 
+$_coordonnees  = mbGetValueFromGet("_coordonnees");
+
 $filterSejour = new CSejour;
 $filterSejour->type = mbGetValueFromGet("type");
 
@@ -121,8 +123,9 @@ foreach($plagesop as &$plage) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("affectations_plage", $affectations_plage);
-$smarty->assign("filter"  , $filter);
-$smarty->assign("plagesop", $plagesop);
+$smarty->assign("filter"            , $filter);
+$smarty->assign("_coordonnees"      , $_coordonnees);
+$smarty->assign("plagesop"          , $plagesop);
 
 $smarty->display("view_planning.tpl");
 

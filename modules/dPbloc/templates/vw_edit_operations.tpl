@@ -294,10 +294,11 @@
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
           <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
-            {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
-          </a><br />
+            {{$curr_op->rank}} - {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
+          </a>
+          <br />
           Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
-            <br />
+          <br />
           Horaire : {{$curr_op->time_operation|date_format:$dPconfig.time}} - Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
           {{if $curr_op->horaire_voulu}}
           <br />
