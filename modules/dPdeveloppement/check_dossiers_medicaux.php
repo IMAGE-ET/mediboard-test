@@ -43,8 +43,8 @@ foreach($dossiers as &$_dossier){
   $log_delete_patient->object_class = $_dossier->object_class;
   $log_delete_patient->loadMatchingObject();
   
-  $min_datetime = mbDateTime("- 3 seconds", $log_delete_patient->date);
-  $max_datetime = mbDateTime("+ 3 seconds", $log_delete_patient->date);
+  $min_datetime = mbDateTime("- 5 seconds", $log_delete_patient->date);
+  $max_datetime = $log_delete_patient->date;
 
   // Chargement des logs +/- 3 secondes par le meme user_id sur un patient
   $logs = array();
@@ -53,13 +53,15 @@ foreach($dossiers as &$_dossier){
   $where["object_class"] = " = 'CPatient'";
   $where["user_id"] = " = '$log_delete_patient->user_id'";
   $where["date"] = "BETWEEN '$min_datetime' AND '$max_datetime'";
-  $where["type"] = " = 'create'";
+  $where[] = "type = 'create' OR type = 'merge'";
   $log->loadObject($where);
   
   $test[$_dossier->_id] = $log->object_id;
+  if($log->object_id){
+    $nb_patient_ok++;
+  }
   
-  
-  
+ 
   // 1er methode
   $antecedents = $_dossier->loadBackRefs("antecedents", "antecedent_id ASC");
   $traitements = $_dossier->loadBackRefs("traitements", "traitement_id ASC");
@@ -147,10 +149,12 @@ foreach($dossiers as &$_dossier){
 	    }
 	  }
   }
-  
+
+  /*
   if(count(@$patients[$_dossier->_id]) == 1){
     $nb_patient_ok++; 
   }
+*/
 }
 
 $smarty = new CSmartyDP();
