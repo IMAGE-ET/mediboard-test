@@ -19,5 +19,6 @@ $module->registerTab("launch_tests"        		, null, TAB_READ);
 $module->registerTab("form_tester"            , null, TAB_READ);
 $module->registerTab("mutex_tester"           , null, TAB_READ);
 $module->registerTab("check_dossiers_medicaux", null, TAB_READ);
+$module->registerTab("check_zombie_objects"   , null, TAB_READ);
 
 ?>
