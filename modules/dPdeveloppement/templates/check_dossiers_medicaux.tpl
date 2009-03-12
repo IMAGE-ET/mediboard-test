@@ -46,6 +46,10 @@
       {{/foreach}}
       </ul>
       {{/if}}
+      
+       {{if @$test.$dossier_id}}
+         <strong>{{$test.$dossier_id}}</strong>
+       {{/if}}
     </td>
   </tr>
   {{/foreach}}
