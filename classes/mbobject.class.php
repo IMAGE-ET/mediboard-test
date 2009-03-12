@@ -1664,9 +1664,10 @@ class CMbObject {
     foreach($this->_ref_logs as &$_log) {
       $_log->loadRefsFwd();
     }
-     
-    $this->_ref_first_log = reset($this->_ref_logs);
-    $this->_ref_last_log  = end($this->_ref_logs);
+    
+		// the first is at the end because of the date order !
+    $this->_ref_first_log = end($this->_ref_logs);
+    $this->_ref_last_log  = reset($this->_ref_logs);
   }
 
   
