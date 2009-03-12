@@ -7,8 +7,6 @@
  * @author Alexis Granger
  */
 
-ini_set("memory_limit", "128M");
-
 $dossier_medical = new CDossierMedical();
 $ljoin["patients"] = "patients.patient_id = dossier_medical.object_id";
 $where = array();
