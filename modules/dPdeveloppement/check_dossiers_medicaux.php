@@ -15,14 +15,17 @@ $where["patients.patient_id"] = " IS NULL";
 $where["dossier_medical.object_class"] = " = 'CPatient'";
 $dossiers = $dossier_medical->loadList($where, null, null, null, $ljoin);
 
+
+
 // Nombre total de dossiers zombies
 $nb_zombies = count($dossiers);
 
 foreach($dossiers as &$_dossier){
+//mbTrace($_dossier->getDBFields());
   $_dossier->countBackRefs("antecedents");
   $_dossier->countBackRefs("traitements");
   
-  if($_dossier->_count["antecedents"] == 0 && $_dossier->_count["traitements"] == 0){
+  if($_dossier->_count["antecedents"] == 0 && $_dossier->_count["traitements"] == 0 && $_dossier->codes_cim == ''){
     unset($dossiers[$_dossier->_id]);
   }
 }
