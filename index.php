@@ -19,7 +19,7 @@ if (!is_file("./includes/config.php")) {
 }
 
 // PHP Configuration
-ini_set("memory_limit", "64M");
+ini_set("memory_limit", "128M");
 if(function_exists("date_default_timezone_set")) {
   date_default_timezone_set("Europe/Paris");
 }
