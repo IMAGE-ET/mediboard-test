@@ -63,9 +63,11 @@ function repair(patient_id, dossier_medical_id) {
      {{/if}}
    </td>
    <td class="button">
+     {{if $test.$dossier_id.patient_id}}
      <div id="repair{{$dossier_id}}">
        <button type="button" onclick="repair({{$test.$dossier_id.patient_id}}, '{{$dossier_id}}');">Réparer</button>
      </div>
+     {{/if}}
    </td>
   </tr>
   {{/foreach}}
