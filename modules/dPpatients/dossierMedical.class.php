@@ -114,6 +114,10 @@ class CDossierMedical extends CMbMetaObject {
     
     $this->codes_cim = implode('|', $codes_cim_array);
   }
+  
+  function loadView() {
+    $this->loadComplete();
+  }
     
   function loadRefsAntecedents($cancelled = false) {
     // Initialisation du classement

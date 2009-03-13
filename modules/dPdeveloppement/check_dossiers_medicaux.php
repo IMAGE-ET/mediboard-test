@@ -58,6 +58,11 @@ foreach($dossiers as &$_dossier){
   if($log->object_id){
     $nb_patient_ok++;
   }
+  
+  // Réparation
+  // Vérification de l'existence d'un dossier médical chez le patient
+  // Si non : on associe directement
+  // Si oui : on merge les deux dossiers avec comme référence le patient (attention au champs de la cim10
 }
 
 $smarty = new CSmartyDP();
