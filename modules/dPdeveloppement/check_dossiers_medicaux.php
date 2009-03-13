@@ -52,7 +52,9 @@ foreach($dossiers as &$_dossier){
   $where[] = "type = 'create' OR type = 'merge'";
   $log->loadObject($where);
   
-  $test[$_dossier->_id] = $log->object_id;
+  $test[$_dossier->_id]["patient_id"] = $log->object_id;
+  $test[$_dossier->_id]["merge_date"] = $log->date;
+  
   if($log->object_id){
     $nb_patient_ok++;
   }

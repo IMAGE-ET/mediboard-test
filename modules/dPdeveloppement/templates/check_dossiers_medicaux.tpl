@@ -19,6 +19,9 @@
     <th>Nb traitements</th>
     <th>Codes CIM</th>
     <th>Patient (avec log merge)</th>
+    <th>Date du merge</th>
+    
+    
   </tr>
   {{foreach from=$dossiers item=_dossier}}
   {{assign var=dossier_id value=$_dossier->_id}}
@@ -33,9 +36,14 @@
     <td>{{$_dossier->_count.traitements}}</td>
     <td>{{$_dossier->codes_cim}}</td>
     <td>
-      {{if @$test.$dossier_id}}
-        <strong>{{$test.$dossier_id}}</strong>
+      {{if @$test.$dossier_id.patient_id}}
+        <strong>{{$test.$dossier_id.patient_id}}</strong>
       {{/if}}
+   </td>
+   <td>
+      {{if @$test.$dossier_id.merge_date}}
+       <strong>{{$test.$dossier_id.merge_date|date_format:$dPconfig.datetime}}</strong>
+     {{/if}}
    </td>
   </tr>
   {{/foreach}}
