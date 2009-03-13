@@ -162,6 +162,7 @@ class CPatient extends CMbObject {
 	  $backRefs["prescriptions_labo"]    = "CPrescriptionLabo patient_id";
 	  $backRefs["product_deliveries"]    = "CProductDelivery patient_id";
 	  $backRefs["sejours"]               = "CSejour patient_id";
+	  $backRefs["dossiers_medicaux"]     = "CDossierMedical object_id";
 	  return $backRefs;
 	}  
   
