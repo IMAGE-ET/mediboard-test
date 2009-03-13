@@ -47,8 +47,9 @@ $user = new CMediusers();
 $user->load($AppUI->user_id);
 
 // Liste des praticiens accessibles
-
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($user->loadPraticiens()));
+if(!$user->isFromType("Anesthésiste")) {
+  $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($user->loadPraticiens()));
+}
 
 // Filtre par specialite
 if ($filter->_specialite or $filter->_prat_id) {
