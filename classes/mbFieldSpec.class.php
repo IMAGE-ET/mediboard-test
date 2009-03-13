@@ -512,8 +512,11 @@ class CMbFieldSpec {
     	if ($limit === null) $limit = 15;
     	if ($wholeString === null) $wholeString = false;
     	
+      $options = explode('|', $this->autocomplete);
+      $view_field = reset($options);
+      $show_view = isset($options[1]);
+			
       if ($spec instanceof CRefSpec && $this->autocomplete) {
-	      $view_field = $this->autocomplete;
 	      $ref_object = new $spec->class;
 	      $ref_object->load($value);
 	      $view = $ref_object->$view_field;
@@ -538,7 +541,8 @@ class CMbFieldSpec {
 			  url.addParam("class", "'.$object->_class_name.'");
 			  url.addParam("field", "'.$field.'");
 			  url.addParam("limit", '.$limit.');
-			  url.addParam("view_field", "'.$this->autocomplete.'");
+			  url.addParam("view_field", "'.$view_field.'");
+			  url.addParam("show_view", '.($show_view ? 'true' : 'false').');
 			  url.addParam("input_field", "'.$field.($ref ? '_autocomplete_view' : '').'");
 			  url.addParam("wholeString", '.$wholeString.');
 			  url.autoComplete($("'.$id.'"), "'.$id.'_autocomplete", {

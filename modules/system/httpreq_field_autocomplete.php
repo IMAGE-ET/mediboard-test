@@ -7,12 +7,13 @@
 * @author Fabien Ménager
 */
 
-$class = mbGetValueFromGet('class');
-$field = mbGetValueFromGet('field');
-$view_field = mbGetValueFromGet('view_field', $field);
+$class       = mbGetValueFromGet('class');
+$field       = mbGetValueFromGet('field');
+$view_field  = mbGetValueFromGet('view_field', $field);
+$show_view   = mbGetValueFromGet('show_view', 'false') == 'true';
 $input_field = mbGetValueFromGet('input_field', $view_field);
-$input = mbGetValueFromGet($input_field);
-$limit = mbGetValueFromGet('limit', 15);
+$input       = mbGetValueFromGet($input_field);
+$limit       = mbGetValueFromGet('limit', 15);
 $wholeString = mbGetValueFromGet('wholeString', 'false') == 'true';
 
 $search = $wholeString ? "%$input%" : "$input%";
@@ -36,6 +37,7 @@ $smarty->assign('matches', $matches);
 $smarty->assign('input',   $input);
 $smarty->assign('field',   $field);
 $smarty->assign('view_field', $view_field);
+$smarty->assign('show_view',  $show_view);
 $smarty->assign('nodebug', true);
 
 $smarty->display('inc_field_autocomplete.tpl');
