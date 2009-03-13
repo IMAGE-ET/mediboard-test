@@ -18,7 +18,6 @@
     <th>Nb antecedents</th>
     <th>Nb traitements</th>
     <th>Codes CIM</th>
-    <th>Consultations</th>
     <th>Patient (avec log merge)</th>
   </tr>
   {{foreach from=$dossiers item=_dossier}}
@@ -34,29 +33,10 @@
     <td>{{$_dossier->_count.traitements}}</td>
     <td>{{$_dossier->codes_cim}}</td>
     <td>
-    
-    {{if @is_array($consultations.$dossier_id)}}
-      <ul>
-      {{foreach from=$consultations.$dossier_id item=_consult}}
-        <li>consultation_id: {{$_consult->_id}} / patient_id: {{$_consult->patient_id}}</li>
-      {{/foreach}}
-      </ul>
+      {{if @$test.$dossier_id}}
+        <strong>{{$test.$dossier_id}}</strong>
       {{/if}}
-    
-    </td>
-    <td>
-      {{if @is_array($patients.$dossier_id)}}
-      <ul>
-      {{foreach from=$patients.$dossier_id item=_patient_id}}
-        <li>{{$_patient_id}}</li>
-      {{/foreach}}
-      </ul>
-      {{/if}}
-      
-       {{if @$test.$dossier_id}}
-         <strong>{{$test.$dossier_id}}</strong>
-       {{/if}}
-    </td>
+   </td>
   </tr>
   {{/foreach}}
 </table>
