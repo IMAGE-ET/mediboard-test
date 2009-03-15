@@ -51,6 +51,7 @@ class CPlageOp extends CMbObject {
   var $_ref_chir       = null;
   var $_ref_anesth     = null;
   var $_ref_spec       = null;
+  var $_ref_spec_repl  = null;
   var $_ref_salle      = null;
   var $_ref_operations = null;
   var $_nb_operations  = null;
@@ -122,6 +123,15 @@ class CPlageOp extends CMbObject {
       $this->_ref_spec = $this->_ref_spec->getCached($this->spec_id);
     } else {
       $this->_ref_spec->load($this->spec_id);
+    }
+  }
+    
+  function loadRefSpecRepl($cache = 0) {
+    $this->_ref_spec_repl = new CFunctions;
+    if($cache) {
+      $this->_ref_spec_repl = $this->_ref_spec->getCached($this->spec_repl_id);
+    } else {
+      $this->_ref_spec_repl->load($this->spec_repl_id);
     }
   }
   

@@ -3,6 +3,8 @@
 // Script à lancer entre minuit et 6h du matin
 // pour que les dates limites soient respectées
 
+$mode_real = mbGetValueFromGet("mode_real", 1);
+
 $plageop = new CPlageOp();
 $where = array();
 $where["plagesop.spec_repl_id"] = "IS NOT NULL";
@@ -16,17 +18,32 @@ $group = null;
 $ljoin = array();
 $ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id";
 $listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
-CAppUI::setMsg("Lancement à : ".mbDateTime());
+if($mode_real) {
+  CAppUI::setMsg("Lancement à : ".mbDateTime()." en mode réel");
+} else {
+  CAppUI::setMsg("Lancement à : ".mbDateTime()." en mode test");
+}
 foreach($listPlages as $curr_plage) {
   //mbTrace($curr_plage->date, $curr_plage->_view." : date initiale");
   //mbTrace($curr_plage->spec_repl_id, $curr_plage->_view);
   //mbTrace($curr_plage->delay_repl, $curr_plage->_view);
   //mbTrace(mbDate("-$curr_plage->delay_repl days", $curr_plage->date)." (-".$curr_plage->delay_repl." jours)", $curr_plage->_view." : date de remplacement");
-  $curr_plage->spec_id      = $curr_plage->spec_repl_id;
-  $curr_plage->spec_repl_id = "";
-  $curr_plage->delay_repl   = "";
-  $curr_plage->chir_id   = "";
-  CAppUI::setMsg($curr_plage->store());
+  if($mode_real) {
+    $curr_plage->spec_id      = $curr_plage->spec_repl_id;
+    $curr_plage->spec_repl_id = "";
+    $curr_plage->delay_repl   = "";
+    $curr_plage->chir_id   = "";
+    if($msg = $curr_plage->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    } else {
+      CAppUI::setMsg("Plage $curr_plage->_id mise à jour", UI_MSG_OK);
+    }
+  } else {
+    $curr_plage->loadRefsFwd(1);
+    $curr_plage->loadRefSpecRepl(1);
+    $msg = "plage du $curr_plage->date de $curr_plage->debut à $curr_plage->fin : Dr ".$curr_plage->_ref_chir->_view." vers ".$curr_plage->_ref_spec_repl->_view;
+    CAppUI::setMsg($msg, UI_MSG_OK);
+  }
 }
 
 echo CAppUI::getMsg();
