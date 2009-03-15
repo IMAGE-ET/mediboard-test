@@ -17,6 +17,7 @@ $debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
 $fin      = mbGetValueFromGet("fin"     , mbDate()         );
 $prat_id  = mbGetValueFromGet("prat_id" , 0                );
 $salle_id = mbGetValueFromGet("salle_id", 0                );
+$bloc_id  = mbGetValueFromGet("bloc_id" , 0                );
 $codeCCAM = mbGetValueFromGet("codeCCAM", ""               );
 
 $pratSel = new CMediusers;
@@ -46,8 +47,11 @@ $sql = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS t
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND plagesop.chir_id = '$prat_id'";
-  if($salle_id)
-    $sql .= "\nAND plagesop.salle_id = '$salle_id'";
+  if($salle_id) {
+    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
+  } elseif($bloc_id) {
+    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+  }
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
 $result = $ds->loadlist($sql);
@@ -78,8 +82,11 @@ $sql = "SELECT SUM(TIME_TO_SEC(operations.sortie_salle) - TIME_TO_SEC(operations
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";
-  if($salle_id)
-    $sql .= "\nAND plagesop.salle_id = '$salle_id'";
+  if($salle_id) {
+    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
+  } elseif($bloc_id) {
+    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+  }
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
 $result = $ds->loadlist($sql);

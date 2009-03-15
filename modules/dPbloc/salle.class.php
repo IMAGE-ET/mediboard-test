@@ -79,7 +79,7 @@ class CSalle extends CMbObject {
   	$list_blocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, false);
   	
     // Filtre sur l'établissement
-		$where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($list_blocs));
+		$where[] = "bloc_id ".CSQLDataSource::prepareIn(array_keys($list_blocs));
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }

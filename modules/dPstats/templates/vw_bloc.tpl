@@ -107,14 +107,14 @@ function zoomGraphIntervention(date){
         <tr>
           <td colspan="6" class="button">
             {{$map_graph_interventions|smarty:nodefaults}}
-            <img usemap="#graph_interventions" alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codes_ccam={{$filter->codes_ccam}}&amp;discipline_id={{$filter->_specialite}}' />
+            <img usemap="#graph_interventions" alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;bloc_id={{$bloc->_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codes_ccam={{$filter->codes_ccam}}&amp;discipline_id={{$filter->_specialite}}' />
             <br /><br />
             {{if $filter->_prat_id}}
-              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codes_ccam={{$filter->codes_ccam}}' />
+              <img alt="Occupation des plages" src='?m=dPstats&amp;a=graph_praticienbloc&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;bloc_id={{$bloc->_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codes_ccam={{$filter->codes_ccam}}' />
             {{elseif $filter->_specialite}}
-              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;discipline_id={{$filter->_specialite}}&amp;codes_ccam={{$filter->codes_ccam}}' />
+              <img alt="Répartition par praticiens" src='?m=dPstats&amp;a=graph_pratdiscipline&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;bloc_id={{$bloc->_id}}&amp;discipline_id={{$filter->_specialite}}&amp;codes_ccam={{$filter->codes_ccam}}' />
             {{else}}
-              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codes_ccam={{$filter->codes_ccam}}' />
+              <img alt="Patients par jour par salle" src='?m=dPstats&amp;a=graph_patjoursalle&amp;suppressHeaders=1&amp;debut={{$filter->_date_min}}&amp;fin={{$filter->_date_max}}&amp;salle_id={{$filter->salle_id}}&amp;bloc_id={{$bloc->_id}}&amp;prat_id={{$filter->_prat_id}}&amp;codes_ccam={{$filter->codes_ccam}}' />
             {{/if}}
           </td>
         </tr>

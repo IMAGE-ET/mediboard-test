@@ -15,6 +15,7 @@ CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
 $debut         = mbGetValueFromGet("debut"        , mbDate("-1 YEAR"));
 $fin           = mbGetValueFromGet("fin"          , mbDate()         );
 $salle_id      = mbGetValueFromGet("salle_id"     , 0                );
+$bloc_id       = mbGetValueFromGet("bloc_id"      , 0                );
 $discipline_id = mbGetValueFromGet("discipline_id", 0                );
 $codeCCAM      = mbGetValueFromGet("codeCCAM"     , ""               );
 
@@ -45,6 +46,8 @@ foreach($users as $user) {
     "\nDATE_FORMAT(plagesop.date, '%Y%m') AS orderitem," .
     "\nusers_mediboard.user_id" .
     "\nFROM plagesop" .
+    "\nINNER JOIN sallesbloc" .
+    "\nON plagesop.salle_id = sallesbloc.salle_id" .
     "\nINNER JOIN operations" .
     "\nON operations.plageop_id = plagesop.plageop_id" .
     "\nAND operations.annulee = '0'" .
@@ -56,6 +59,11 @@ foreach($users as $user) {
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($salle_id) {
+    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
+  } elseif($bloc_id) {
+    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+  }
   $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
   $ds = CSQLDataSource::get("std");

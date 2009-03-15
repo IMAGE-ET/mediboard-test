@@ -15,6 +15,7 @@ $size          = mbGetValueFromGet("size" , 1);
 $date          = mbGetValueFromGetOrSession("date", mbTransformTime("+0 DAY", mbDate(), "%m/%Y"));
 $prat_id       = mbGetValueFromGetOrSession("prat_id", 0);
 $salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
+$bloc_id       = mbGetValueFromGetOrSession("bloc_id");
 $discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
 $codes_ccam    = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 
@@ -44,17 +45,25 @@ for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
 }
 
 // Chargement des salles
-$sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
-if($salle_id)
-  $sql .= "\nAND salle_id = '$salle_id'";
 
 $ds = CSQLDataSource::get("std");
-$salles = $ds->loadlist($sql);
+
+$salles = new CSalle();
+
+$where = array();
+$where['stats'] = " = '1'";
+if($salle_id) {
+  $where['salle_id'] = " = '$salle_id'";
+} elseif($bloc_id) {
+  $where['bloc_id'] = "= '$bloc_id'";
+}
+
+$salles = $salles->loadList($where);
 
 $opbysalle = array();
 foreach($salles as $salle) {
-  $curr_salle_id = $salle["salle_id"];
-  $opbysalle[$curr_salle_id]["legend"] = $salle["nom"];
+  $curr_salle_id = $salle->salle_id;
+  $opbysalle[$curr_salle_id]["legend"] = $salle->nom;
   
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
     "\nDATE_FORMAT(plagesop.date, '$date_format') AS jour," .

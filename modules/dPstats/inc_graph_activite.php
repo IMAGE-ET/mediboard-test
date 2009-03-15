@@ -7,9 +7,12 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g, $prat_id, $salle_id, $discipline_id, $debutact, $finact, $codes_ccam, $graph;
+global $AppUI, $can, $m, $g, $prat_id, $salle_id, $bloc_id;
+global $discipline_id, $debutact, $finact, $codes_ccam, $graph;
 
 CAppUI::requireSystemClass("mbGraph");
+
+$ds = CSQLDataSource::get("std");
 
 $total = 0;
 
@@ -32,20 +35,22 @@ for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
   $jscalls[] = "javascript:zoomGraphIntervention('$nameMonth');";
 }
 
+$salles = new CSalle();
+
 $where = array();
 $where['stats'] = " = '1'";
 if($salle_id) {
   $where['salle_id'] = " = '$salle_id'";
+} elseif($bloc_id) {
+  $where['bloc_id'] = "= '$bloc_id'";
 }
 
-$salles = new CSalle();
-$ds = $salles->_spec->ds;
-
-$salles = $salles->loadGroupList($where, false);
+$salles = $salles->loadList($where);
 
 $opbysalle = array();
 $i=0;
 foreach($salles as $salle) {
+  //mbTrace($salle);
   $curr_salle_id = $salle->salle_id;
   $opbysalle[$curr_salle_id]["legend"] = $salle->_view;
   $opbysalle[$curr_salle_id]["total"] = 0;
@@ -96,6 +101,10 @@ foreach($salles as $salle) {
   if(!$opbysalle[$curr_salle_id]["total"] && count($opbysalle) > 1) {
     unset($opbysalle[$curr_salle_id]);
   }
+}
+
+if(!count($opbysalle)) {
+  return;
 }
 
 // Set up the title for the graph

@@ -15,6 +15,7 @@ $debut      = mbGetValueFromGet("debut"     , mbDate("-1 YEAR"));
 $fin        = mbGetValueFromGet("fin"       , mbDate()         );
 $prat_id    = mbGetValueFromGet("prat_id"   , 0                );
 $salle_id   = mbGetValueFromGet("salle_id"  , 0                );
+$bloc_id    = mbGetValueFromGet("bloc_id"   , 0                );
 $codes_ccam = mbGetValueFromGet("codes_ccam", ""               );
 
 $pratSel = new CMediusers;
@@ -27,12 +28,19 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
 }
 
-$sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
-if($salle_id)
-  $sql .= "\nAND salle_id = '$salle_id'";
-
 $ds = CSQLDataSource::get("std");
-$salles = $ds->loadlist($sql);
+
+$salles = new CSalle();
+
+$where = array();
+$where['stats'] = " = '1'";
+if($salle_id) {
+  $where['salle_id'] = " = '$salle_id'";
+} elseif($bloc_id) {
+  $where['bloc_id'] = "= '$bloc_id'";
+}
+
+$salles = $salles->loadList($where);
 
 $op = array();
 $sql = "SELECT COUNT(operations.operation_id) AS total," .
@@ -46,12 +54,17 @@ $sql = "SELECT COUNT(operations.operation_id) AS total," .
   "\nWHERE sallesbloc.stats = '1'" .
   "\nAND plagesop.date BETWEEN '$debut' AND '$fin'" .
   "\nAND operations.annulee = '0'";
-  if($prat_id)
+  if($prat_id) {
     $sql .= "\nAND operations.chir_id = '$prat_id'";
-  if($codes_ccam)
+  }
+  if($codes_ccam) {
     $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
-  if($salle_id)
+  }
+  if($salle_id) {
     $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
+  } elseif($bloc_id) {
+    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+  }
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
 $result = $ds->loadlist($sql);

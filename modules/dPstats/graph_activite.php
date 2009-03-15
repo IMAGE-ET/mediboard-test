@@ -7,7 +7,8 @@
  * @author Romain Ollivier
  */
 
-global $m, $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
+global $m, $debutact, $finact, $prat_id, $salle_id, $bloc_id;
+global $discipline_id, $codes_ccam;
 
 $debutact      = mbGetValueFromGet("debut", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $debutact, "%d")-1;
@@ -21,6 +22,7 @@ $finact        = mbDate("-1 DAY", $finact);
 
 $prat_id       = mbGetValueFromGet("prat_id");
 $salle_id      = mbGetValueFromGet("salle_id");
+$bloc_id       = mbGetValueFromGet("bloc_id");
 $discipline_id = mbGetValueFromGet("discipline_id");
 $codes_ccam    = strtoupper(mbGetValueFromGet("codes_ccam", ""));
 

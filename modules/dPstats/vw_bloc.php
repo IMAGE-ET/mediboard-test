@@ -13,7 +13,8 @@ $can->needsEdit();
 
 $filter = new COperation();
 
-global $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
+global $debutact, $finact, $prat_id, $salle_id, $bloc_id;
+global $discipline_id, $codes_ccam;
 
 $debutact      = $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
@@ -27,7 +28,7 @@ $finact        = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
 
 $prat_id       = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
 $salle_id      = $filter->salle_id = mbGetValueFromGetOrSession("salle_id", 0);
-$bloc_id       = mbGetValueFromGet("bloc_id");
+$bloc_id       = mbGetValueFromGetOrSession("bloc_id");
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 $codes_ccam    = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
@@ -36,10 +37,12 @@ $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_i
 CAppUI::requireModuleFile($m, "inc_graph_activite");
 
 global $graph, $options;
-$graph->render("in",$options);
-$map_graph_interventions = $graph->getHTMLImageMap();
-$map_graph_interventions = preg_replace("/javascript:/", "#nothing\" onclick=\"", $map_graph_interventions);
-
+$map_graph_interventions = "";
+if($graph) {
+  $graph->render("in",$options);
+  $map_graph_interventions = $graph->getHTMLImageMap();
+  $map_graph_interventions = preg_replace("/javascript:/", "#nothing\" onclick=\"", $map_graph_interventions);
+}
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
@@ -50,6 +53,8 @@ $listBlocsForSalles = $listBlocs;
 
 if (!$bloc->load($bloc_id)) {
   $bloc = reset($listBlocs);
+  $bloc_id = $bloc->_id;
+  mbSetValueToSession("bloc_id", $bloc_id);
 }
 else {
 	foreach ($listBlocsForSalles as $key => &$curr_bloc) {
