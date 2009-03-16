@@ -102,8 +102,8 @@ class CAideSaisie extends CMbObject {
     if ($this->class) {
       $object = new $this->class;
       $helped = $object->_specs[$this->field]->helped;
-      $this->_depend_field_1 = $helped[0]; 
-      $this->_depend_field_2 = $helped[1];
+      $this->_depend_field_1 = isset($helped[0]) ? $helped[0] : null; 
+      $this->_depend_field_2 = isset($helped[1]) ? $helped[1] : null;
     }
   }
   
