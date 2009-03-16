@@ -135,7 +135,7 @@ Main.add(function() {
         </tr>
         <tr>     
           <th>{{mb_label object=$fiche field="plainte"}}</th>
-          <td>{{mb_field object=$fiche field="vraissemblance" emptyLabel="Choose"}}</td>
+          <td>{{mb_field object=$fiche field="plainte" emptyLabel="Choose"}}</td>
         </tr>
         <tr> 
           <th>{{mb_label object=$fiche field="commission"}}</th>
