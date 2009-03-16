@@ -366,7 +366,11 @@ class CCodeCCAM {
   
   function getActesAsso() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % GROUP BY ACTEASSO LIMIT 0, 15", $this->code);
+    $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
+    $resultEffet = $ds->exec($queryEffet);
+    $rowEffet = $ds->fetchArray($resultEffet);
+    $lastDate = $rowEffet["LASTDATE"];
+    $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO LIMIT 0, 15", $this->code);
     $result = $ds->exec($query);
     $i = 0;
     while($row = $ds->fetchArray($result)) {
@@ -381,7 +385,11 @@ class CCodeCCAM {
   
   function getActesIncomp() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % GROUP BY INCOMPATIBLE LIMIT 0, 15", $this->code);
+    $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM incompatibilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
+    $resultEffet = $ds->exec($queryEffet);
+    $rowEffet = $ds->fetchArray($resultEffet);
+    $lastDate = $rowEffet["LASTDATE"];
+    $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY INCOMPATIBLE LIMIT 0, 15", $this->code);
     $result = $ds->exec($query);
     $i = 0;
     while($row = $ds->fetchArray($result)) {
