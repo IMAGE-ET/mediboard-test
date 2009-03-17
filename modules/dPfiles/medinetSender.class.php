@@ -88,10 +88,6 @@ class CMedinetSender extends CDocumentSender {
     $object->loadRefPatient();
     $object->_ref_praticien->loadRefSpecCPAM();
     
-    if (!($object instanceof CSejour) && !($object instanceof COperation)) {
-      return; 
-    }
-    
     if ($object instanceof CSejour) {
       $object->loadRefEtablissement();  
       
@@ -121,6 +117,42 @@ class CMedinetSender extends CDocumentSender {
       $etab_nom = $object->_ref_sejour->_ref_group->text;
     }
     
+    if ($object instanceof CConsultation) {
+    	$object->loadRefConsultAnesth();
+    	
+    	$act_dateActe = mbDate($object->_ref_plageconsult->date);
+      $act_dateValidationActe = mbDate($object->_ref_plageconsult->date);
+      
+    	if ($object->_ref_consult_anesth instanceof CConsultAnesth) {
+    		$object->_ref_consult_anesth->loadRefSejour();
+    		$sejour = $object->_ref_consult_anesth->_ref_sejour;
+    		
+	      $doc_type = 67;	      
+	    } else { 
+	    	$object->loadRefSejour();   
+	    	$sejour = $object->_ref_sejour;
+	    	  
+	      $doc_type = 7;
+	    }
+	    
+      if ($sejour->sejour_id) {
+        $sej_id = $sejour->sejour_id;
+        
+        $sejour->loadRefEtablissement();
+          
+        $etab_id = $sejour->_ref_group->_id;
+        $etab_nom = $sejour->_ref_group->text;
+      } else {
+        $sej_id = -1;
+        
+        $object->_ref_praticien->loadRefFunction();
+        $object->_ref_praticien->_ref_function->loadRefGroup();
+      
+        $etab_id = $object->_ref_praticien->_ref_function->_ref_group->_id;
+        $etab_nom = $object->_ref_praticien->_ref_function->_ref_group->text;
+      }
+    }
+       
     $praticien = $object->_ref_praticien;
         
     $aut_id = $praticien->_id;
@@ -334,7 +366,8 @@ class CMedinetSender extends CDocumentSender {
   function isSendable(CDocumentItem $docItem) {
     $docItem->loadTargetObject();
     
-    return($docItem->_ref_object instanceOf COperation || $docItem->_ref_object instanceOf CSejour);
+    return($docItem->_ref_object instanceOf COperation || $docItem->_ref_object instanceOf CSejour 
+            || $docItem->_ref_object instanceOf CConsultation || $docItem->_ref_object instanceOf CConsultAnesth);
   }
   
   function getTransactionId($docItem) {
