@@ -78,7 +78,7 @@
           </div>
           <div style="float:right">
           {{foreach from=$_place.consultations item=_consultation}}
-					  {{if $_consultation->category_id}}
+					  {{if $_consultation->categorie_id}}
               <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
 						{{/if}}
           {{/foreach}}
