@@ -21,7 +21,7 @@ $filter->_date_max    = mbGetValueFromGetOrSession("_date_max");
 $filter->user_id      = mbGetValueFromGetOrSession("user_id");
 $filter->object_id    = mbGetValueFromGetOrSession("object_id");
 $filter->object_class = mbGetValueFromGetOrSession("object_class");
-$filter->type         = mbGetValueFromGetOrSession("type"        );
+$filter->type         = mbGetValueFromGetOrSession("type");
 
 // Récupération de la liste des classes disponibles
 $AppUI->getAllClasses();
@@ -47,6 +47,7 @@ if ($filter->_date_min && $filter->_date_max) {
 $log = new CUserLog;
 $order = "date DESC";
 $list = $log->loadList($where, $order, "0, 100");
+$list_count = $log->countList($where);
 $item = "";
 foreach($list as $key => $value) {
   $list[$key]->loadRefsFwd();
@@ -63,6 +64,7 @@ $smarty->assign("listClasses" , $listClasses );
 $smarty->assign("listUsers"   , $listUsers   );
 $smarty->assign("item"        , $item        );
 $smarty->assign("list"        , $list        );
+$smarty->assign("list_count"  , $list_count);
 
 $smarty->display("view_history.tpl");
 

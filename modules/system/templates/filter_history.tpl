@@ -9,11 +9,7 @@
 <table class="form">
   <tr>
     <th class="category" colspan="10">
-      {{if $list|@count == 100}}
-      Plus de 100 historiques, seuls les 100 plus récents sont affichés
-      {{else}}
-      {{$list|@count}} historiques trouvés
-      {{/if}}
+      {{$list_count}} historiques trouvés{{if $list_count > $list|@count }}, seuls les 100 plus récents sont affichés{{/if}}
     </th>
   </tr>
   
@@ -48,15 +44,12 @@
   </tr>
   <tr>
     <th>{{mb_label object=$filter field=type}}</th>
-    <td>
-			{{mb_field object=$filter field=type canNull=true defaultOption="&mdash; Choisir un type"}}
-    </td>
+    <td>{{mb_field object=$filter field=type canNull=true defaultOption="&mdash; Choisir un type"}}</td>
 
     <th>{{mb_label object=$filter field=object_id}}</th>
-    <td>{{mb_field object=$filter field=object_id canNull=true}}
-    <button type="button" class="search" onclick="ObjectSelector.init()">
-        Chercher un objet
-      </button>
+    <td>
+    	{{mb_field object=$filter field=object_id canNull=true}}
+      <button type="button" class="search" onclick="ObjectSelector.init()">Chercher un objet</button>
       <script type="text/javascript">
         ObjectSelector.init = function(){  
           this.sForm     = "filterFrm";
@@ -67,13 +60,10 @@
           this.pop();
         } 
        </script>
-   
-   </td>
-
+    </td>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
     <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}} </td>
   </tr>
-
   <tr>
     <td class="button" colspan="10">
       <button class="search">{{tr}}Search{{/tr}}</button>
