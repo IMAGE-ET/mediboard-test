@@ -15,7 +15,7 @@ class CFTP {
   var $connexion = null;
   var $port      = 21;
   var $timeout   = 90;
-  var $logs      = null;
+  var $logs      = array();
   
   
   function logError($log) {
@@ -32,6 +32,7 @@ class CFTP {
       $this->logError("hote : $this->hostname, port : $this->port > $errstr ($errno)");
       return false;
     }
+    $this->logStep("Connecté au serveur $this->hostname sur le port $this->port");
     return true;
   }
   

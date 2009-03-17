@@ -10,6 +10,7 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("send_mail"          , "Envoie de mails"    , TAB_READ);
+$module->registerTab("test_ftp"           , "Test d'accès ftp"  , TAB_READ);
 $module->registerTab("export_hprim"       , "Export HPRIM"       , TAB_READ);
 $module->registerTab("export_egate"       , "Export EGATE"       , TAB_READ);
 $module->registerTab("export_prescription", "Export Prescription", TAB_READ);
