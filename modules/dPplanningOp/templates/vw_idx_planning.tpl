@@ -75,9 +75,9 @@ Main.add(function () {
             {{/if}}
           </td>
           <td align="center">{{$curr_plage.total}}</td>
-          <td align="center text">
+          <td align="center" {{if $curr_plage.plageop_id && $curr_plage.spec_id}} style="background-color: #{{$curr_plage.color_function}}"{{/if}}>
             {{if $curr_plage.plageop_id && $curr_plage.spec_id}}
-              Plage de Spécialité
+              <label title="{{$curr_plage.nom_function}}">plage dispo</label>
             {{else}}
               {{$curr_plage.duree|date_format:$dPconfig.time}}
             {{/if}}
