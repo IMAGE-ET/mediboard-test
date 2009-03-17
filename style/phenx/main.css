@@ -2024,10 +2024,6 @@ div.about div.nav {
   border: 1px solid #000;
 }
 
-.calendar .nav {
-  background: transparent url(menuarrow.gif) no-repeat 100% 100%;
-}
-
 .calendar thead .title { /* This holds the current "month, year" */
   font-weight: bold;
   padding: 1px;

@@ -74,11 +74,13 @@
       <tr>
         <td>
           <div style="float:left">
-          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
+            <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
           </div>
           <div style="float:right">
           {{foreach from=$_place.consultations item=_consultation}}
-            <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+					  {{if $_consultation->category_id}}
+              <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+						{{/if}}
           {{/foreach}}
           </div>
         </td>
