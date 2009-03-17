@@ -84,10 +84,16 @@ class CMedinetSender extends CDocumentSender {
     
     $docItem->loadTargetObject();
     $object = $docItem->_ref_object;
+    
+    if ($object instanceof CConsultAnesth) {
+      $object->loadRefConsultation();
+      $object = $object->_ref_consultation;
+    }
+    
     $object->loadRefPraticien();
     $object->loadRefPatient();
     $object->_ref_praticien->loadRefSpecCPAM();
-    
+
     if ($object instanceof CSejour) {
       $object->loadRefEtablissement();  
       
@@ -116,7 +122,7 @@ class CMedinetSender extends CDocumentSender {
       $etab_id = $object->_ref_sejour->_ref_group->_id;
       $etab_nom = $object->_ref_sejour->_ref_group->text;
     }
-    
+       
     if ($object instanceof CConsultation) {
     	$object->loadRefConsultAnesth();
     	
@@ -151,7 +157,7 @@ class CMedinetSender extends CDocumentSender {
         $etab_id = $object->_ref_praticien->_ref_function->_ref_group->_id;
         $etab_nom = $object->_ref_praticien->_ref_function->_ref_group->text;
       }
-    }
+    }    
        
     $praticien = $object->_ref_praticien;
         
@@ -161,6 +167,7 @@ class CMedinetSender extends CDocumentSender {
     $aut_numOrdre = "";
     
     $patient = $object->_ref_patient;
+    
     $pat_id = $patient->_id;
     $pat_civilite = CMedinetSender::$civiliteConversion[$patient->sexe];
     $pat_nomNaissance = ($patient->nom_jeune_fille) ? $patient->nom_jeune_fille : $patient->nom; 
