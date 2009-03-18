@@ -3,7 +3,6 @@
 function addFtpParams() {
   oForm = document.paramsFtp;
   url = new Url();
-  url = new Url();
   url.setModuleAction("dPinterop", "do_test_ftp");
   url.addElement(oForm.hostname);
   url.addElement(oForm.username);
@@ -11,6 +10,8 @@ function addFtpParams() {
   url.addElement(oForm.port);
   url.addElement(oForm.timeout);
   url.addElement(oForm.passif_mode);
+  url.addElement(oForm.root_dir);
+  url.addElement(oForm.file);
   return url;
 }
 
@@ -21,9 +22,15 @@ function testSocket() {
 }
 
 function testFtp() {
-  addFtpParams(url);
+	url = addFtpParams();
   url.addParam("testType", "ftp");
   url.requestUpdate("test_ftp");
+}
+
+function testSendFile() {
+  url = addFtpParams();
+  url.addParam("testType", "sendfile");
+  url.requestUpdate("test_send_file");
 }
 
 </script>
@@ -63,6 +70,14 @@ function testFtp() {
       <input name="passif_mode" type="radio" value="true" /> passif
     </td>
   </tr>
+  <tr>
+    <th><label for="root_dir">root dir</label></th>
+    <td><input name="root_dir" type="text" size="60" value="{{$root_dir}}/files/hprim/serveurActes/" /></td>
+  </tr>
+  <tr>
+    <th><label for="file">file</label></th>
+    <td><input name="file" type="text" size="25" value="" /></td>
+  </tr>
 </table>
 </form>
 
@@ -86,6 +101,15 @@ function testFtp() {
     </td>
     <td>
       <div id="test_ftp">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <button type="button" onclick="testSendFile()">Test envoi fichier</button>
+    </td>
+    <td>
+      <div id="test_send_file">
       </div>
     </td>
   </tr>
