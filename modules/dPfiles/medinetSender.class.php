@@ -93,7 +93,7 @@ class CMedinetSender extends CDocumentSender {
     $object->loadRefPraticien();
     $object->loadRefPatient();
     $object->_ref_praticien->loadRefSpecCPAM();
-
+    
     if ($object instanceof CSejour) {
       $object->loadRefEtablissement();  
       
@@ -164,7 +164,7 @@ class CMedinetSender extends CDocumentSender {
     $aut_id = $praticien->_id;
     $aut_nom = $praticien->_user_last_name;
     $aut_prenom = $praticien->_user_first_name;
-    $aut_numOrdre = "";
+    $aut_numOrdre = ($praticien->adeli) ? $praticien->adeli : "";
     
     $patient = $object->_ref_patient;
     
@@ -206,7 +206,8 @@ class CMedinetSender extends CDocumentSender {
       
       $act_dateCreationActe = mbDate($log->date); 
       $fichier = base64_encode($docItem->source);
-      // Necessaire pour les xor
+      
+      // Xor
       $docItem->function_id = "";
       $docItem->chir_id = "";
       $docItem->group_id = "";
@@ -226,6 +227,11 @@ class CMedinetSender extends CDocumentSender {
                         
     $invalidation = 0;
 
+    if ($messages = $this->checkParameters($object)) {
+      $AppUI->setMsg($messages, UI_MSG_ERROR);
+      return;
+    }
+    
     $parameters = array ( "sej_id" => $sej_id,
                           "aut_id" => $aut_id,
                           "aut_nom" => $aut_nom,
@@ -388,6 +394,25 @@ class CMedinetSender extends CDocumentSender {
     }
        
     return $transactionId;
+  }
+  
+  function checkParameters($object) {
+  	global $AppUI;
+  	
+  	$messages = null;
+  	
+    $patient = $object->_ref_patient;
+    if (!$patient->naissance) {
+    	$messages = "Date de naissance du patient manquante, ";
+    }
+    if (!$patient->sexe) {
+      $messages .= "Sexe du patient manquant, ";
+    }
+    if (!$patient->lieu_naissance) {
+      $messages .= "Lieu de naissance du patient manquant, ";
+    }
+    
+    return $messages;
   }
 }
 ?>
