@@ -18,9 +18,13 @@ function drawGraph() {
       legend: {show: false, position: 'nw'},
       yaxis: {min: 0},
       HtmlText: false,
-      showDataGrid: true,
-      tabGraphLabel: 'Graphique',
-      tabDataLabel: 'Données'
+      spreadsheet: {
+		  	show: true,
+		  	tabGraphLabel: 'Graphique',
+		  	tabDataLabel: 'Données',
+        toolbarDownload: 'Télécharger le fichier CSV',
+        toolbarSelectAll: 'Séléctionner le tableau'
+		  }
     }, options)
   );
 }
@@ -120,8 +124,6 @@ function updateTokenCcam(v) {
 
   <div style="text-align: center;">
     <div id="stats" style="width: 600px; height: 300px; margin: auto;"></div>
-    <button onclick="graph.downloadCSV()" type="button" class="submit">Fichier CSV</button>
-    <button onclick="graph.selectAllData()" type="button" class="tick">Sélectionner le tableau des données</button>
   </div>
 </form>
 
