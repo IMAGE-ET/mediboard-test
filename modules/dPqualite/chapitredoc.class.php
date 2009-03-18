@@ -25,8 +25,9 @@ class CChapitreDoc extends CMbObject {
   var $_ref_chapitres_doc = null;
   
   // Other fields
-  var $_level = null;
-  var $_path = null;
+  var $_level              = null;
+  var $_path               = null;
+  var $_chaps_and_subchaps = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -99,14 +100,16 @@ class CChapitreDoc extends CMbObject {
   }
   
   function loadChapsDeep($n = 0) {
+    $this->_chaps_and_subchaps = array($this->_id);
     $this->_level = $n;
     if(CAppUI::conf("dPqualite CChapitreDoc profondeur") > ($this->_level + 1)) {
       $this->loadSections();
       foreach ($this->_ref_chapitres_doc as &$_chapitre) {
         $_chapitre->_ref_pere =& $this;
-        $_chapitre->loadChapsDeep($this->_level + 1);
+        $this->_chaps_and_subchaps = array_merge($this->_chaps_and_subchaps, $_chapitre->loadChapsDeep($this->_level + 1));
       }
     }
+    return $this->_chaps_and_subchaps;
   }
 }
 ?>

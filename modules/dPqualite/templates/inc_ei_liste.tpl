@@ -23,6 +23,7 @@
 
 <table class="tbl" style="clear: both;">
   <tr>
+    <th class="category">#</th>
     <th class="category">{{tr}}Date{{/tr}}</th>
     <th class="category">
       {{if $type=="ALL_TERM" && $can->admin}}
@@ -59,6 +60,7 @@
   </tr>
   {{foreach from=$listeFiches item=currFiche}}
   <tr {{if $currFiche->_id == $selected_fiche_id}}class="selected"{{/if}}>
+    <td>{{$currFiche->_id}}</td>
     <td class="text">
       <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
         {{$currFiche->date_incident|date_format:"%d/%m/%Y %Hh%M"}}
