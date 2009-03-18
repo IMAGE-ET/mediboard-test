@@ -9,14 +9,14 @@ $plageop = new CPlageOp();
 $where = array();
 $where["plagesop.spec_repl_id"] = "IS NOT NULL";
 $where["plagesop.delay_repl"]   = "IS NOT NULL";
-$where[]               = "`plagesop`.`date` < DATE_ADD('".mbDate()."', INTERVAL `plagesop`.`delay_repl` DAY)";
-$where[]               = "`plagesop`.`date` >= '".mbDate()."'";
+$where[] = "`plagesop`.`date` < DATE_ADD('".mbDate()."', INTERVAL `plagesop`.`delay_repl` DAY)";
+$where[] = "`plagesop`.`date` >= '".mbDate()."'";
 $where["operations.operation_id"] = "IS NULL";
 $order = "`plagesop`.`date`, `plagesop`.`debut`";
 $limit = null;
 $group = null;
 $ljoin = array();
-$ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id";
+$ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id AND operations.annulee = '0'";
 $listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
 if($mode_real) {
   CAppUI::setMsg("Lancement à : ".mbDateTime()." en mode réel");
@@ -24,11 +24,15 @@ if($mode_real) {
   CAppUI::setMsg("Lancement à : ".mbDateTime()." en mode test");
 }
 foreach($listPlages as $curr_plage) {
-  //mbTrace($curr_plage->date, $curr_plage->_view." : date initiale");
-  //mbTrace($curr_plage->spec_repl_id, $curr_plage->_view);
-  //mbTrace($curr_plage->delay_repl, $curr_plage->_view);
-  //mbTrace(mbDate("-$curr_plage->delay_repl days", $curr_plage->date)." (-".$curr_plage->delay_repl." jours)", $curr_plage->_view." : date de remplacement");
   if($mode_real) {
+    // Suppression des interventions annulées de cette plage pour les mettre en hors plannifié
+    $curr_plage->loadRefsBack();
+    foreach($curr_plage->_ref_operations as $curr_op) {
+      $curr_op->plageop_id = "";
+      $curr_op->date       = $curr_plage->date;
+      $curr_op->store();
+    }
+    // Réaffectation de la plage
     $curr_plage->spec_id      = $curr_plage->spec_repl_id;
     $curr_plage->spec_repl_id = "";
     $curr_plage->delay_repl   = "";
