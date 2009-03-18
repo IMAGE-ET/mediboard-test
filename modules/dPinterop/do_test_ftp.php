@@ -21,6 +21,27 @@ $root_dir      = mbGetValueFromGet("root_dir" , CAppUI::conf('root_dir')."/files
 $file          = mbGetValueFromGet("file");
 $passif_mode   = mbGetValueFromGet("passive" , false);
 
+// HPRIM export FTP settings
+$HPrimConfig   = CAppUI::conf("dPinterop hprim_export");
+$fileprefix    = $HPrimConfig["fileprefix"];
+$filenbroll    = $HPrimConfig["filenbroll"];
+$fileextension = $HPrimConfig["fileextension"];
+
+$doc = new CHPrimXMLServeurActes();
+// Compte le nombre de fichiers déjà générés
+CMbPath::forceDir($doc->finalpath);
+$count = 0;
+$dir = dir($doc->finalpath);
+while (false !== ($entry = $dir->read())) {
+  $count++;
+}
+$dir->close();
+$count -= 2; // Exclure . et ..
+$counter = $count % pow(10, $filenbroll);
+
+// Transfert réel
+$destination_basename = sprintf("%s%0".$filenbroll."d", $fileprefix, $counter);
+  
 if($testType == "ftp") {
   $ftp->connect($passif_mode);
 } else if($testType == "sendfile") { 
@@ -29,7 +50,7 @@ if($testType == "ftp") {
 		return;
 	}
 	$ftp->connect($passif_mode);
-  $ftp->sendFile($root_dir.$file, $file, FTP_ASCII);
+  $ftp->sendFile($root_dir.$file, "$destination_basename.$fileextension", FTP_ASCII);
 } else {
   $ftp->testSocket();
 }

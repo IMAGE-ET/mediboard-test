@@ -60,7 +60,7 @@ function testSendFile() {
   </tr>
   <tr>
     <th><label for="timeout">timeout</label></th>
-    <td><input name="timeout" type="text" value="90" /></td>
+    <td><input name="timeout" type="text" value="5" /></td>
   </tr>
   <tr>
     <th>Mode</th>
