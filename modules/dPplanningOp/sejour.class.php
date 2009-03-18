@@ -324,7 +324,10 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    if ($this->group_id != $sejour->group_id) {
+    if($this->annule || $sejour->annule) {
+      return false;
+    }
+    if($this->group_id != $sejour->group_id) {
       return false;
     } else {
       $this->updateFormFields();
