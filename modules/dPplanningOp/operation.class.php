@@ -314,6 +314,7 @@ class COperation extends CCodable {
       $this->codes_ccam = strtoupper($this->codes_ccam);
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;
+			// @TODO: change it to use removeValue
       while($XPosition !== false) {
         $XPosition = array_search("-", $codes_ccam);
         if ($XPosition !== false) {

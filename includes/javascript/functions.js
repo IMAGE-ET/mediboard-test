@@ -496,7 +496,7 @@ var PairEffect = Class.create({
     if (this.oOptions.bStoreInCookie) {
       aCNs.load(this.oOptions.sCookieName);
     }
-    Element[aCNs.include("triggerShow") ? "hide" : "show"](oTarget);   
+    oTarget.setVisible(aCNs.include("triggerShow"));   
   },
   
   // Flipper callback
@@ -506,7 +506,7 @@ var PairEffect = Class.create({
     if (this.oOptions.sEffect && !Prototype.Browser.IE) {
       new Effect.toggle(oTarget, this.oOptions.sEffect);
     } else {
-      Element.toggle(oTarget);
+      oTarget.toggle();
     }
   
     var aCNs = Element.classNames(oTrigger);
@@ -535,7 +535,7 @@ Object.extend(PairEffect, {
     
     Object.extend(oDefaultOptions, oOptions);
     
-    $A(document.getElementsByClassName(sTargetsClass)).each( 
+    $$('.'+sTargetsClass).each( 
       function(oElement) {
         oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
         new PairEffect(oElement.id, oDefaultOptions);
@@ -640,7 +640,7 @@ var ViewPort = {
     // Position Top de la div, hauteur de la fenetre,
     // puis calcul de la taille de la div
     fYDivPos   = Position.cumulativeOffset(oDiv)[1];
-    fNavHeight = window.getInnerDimensions().y;
+    fNavHeight = window.getInnerDimensions().height;
     fDivHeight = fNavHeight - fYDivPos;
     oDiv.style.overflow = "auto";
     oDiv.style.height = (fDivHeight * iPct - 10) +"px";
@@ -660,7 +660,7 @@ var ViewPort = {
     fYFramePos = Position.cumulativeOffset(oFrame)[1];  
     
     // hauteur de la fenetre
-    fNavHeight = window.getInnerDimensions().y;
+    fNavHeight = window.getInnerDimensions().height;
     
     // Calcul de la hauteur de la div
     fFrameHeight = fNavHeight - fYFramePos;
@@ -1169,15 +1169,6 @@ function luhn (code) {
   return ((sum % 10) == 0);
 }
 
-Element.addMethods(['input', 'textarea'], {
-  emptyValue: function (element) {
-    var notWhiteSpace = /\S/;
-    return Object.isUndefined(element.value) ?
-      element.empty() : 
-      !notWhiteSpace.test(element.value);
-  }
-});
-
 
 /* Control tabs creation. It saves selected tab into a cookie name TabState */
 Object.extend (Control.Tabs, {
@@ -1216,18 +1207,9 @@ Class.extend (Control.Tabs, {
   }
 } );
 
-/** Gets the elements properties (specs) thanks to its className */
-Element.addMethods({
-  getProperties: function (element) {
-    var props = {};
-
-    $w(element.className).each(function (value) {
-      var params = value.split("|");
-      props[params.shift()] = (params.length == 0) ? true : params.reduce();
-    });
-    return props;
-  }
-});
+window.getInnerDimensions = function() {
+  return {width: document.documentElement.clientWidth, height: document.documentElement.clientHeight};
+}
 
 /** DOM element creator for Prototype by Fabien Ménager
  *  Inspired from Michael Geary 

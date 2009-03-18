@@ -690,7 +690,6 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("includes/javascript/checkForms.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/mbmail.js",$modeReturn);
   
   if (CAppUI::conf('debug')) {

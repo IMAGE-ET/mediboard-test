@@ -158,13 +158,13 @@ var Prescription = {
     
     select: function(iPrescriptionItem) {
       if (this.eSelected) {
-        Element.classNames(this.eSelected).remove("selected");
+        $(this.eSelected.removeClassName("selected");
       }
       
-      this.eSelected = $(["PrescriptionItem", iPrescriptionItem].join("-"));
+      this.eSelected = $("PrescriptionItem-"+iPrescriptionItem);
       
       if (this.eSelected) {
-        Element.classNames(this.eSelected).add("selected");
+        this.eSelected.addClassName("selected");
       }
     },
 
@@ -218,7 +218,7 @@ var oDragOptions = {
   revert: true,
   ghosting: true,
   starteffect : function(element) { 
-    Element.classNames(element).add("dragged");
+    $(element).addClassName("dragged");
     new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
   },
   reverteffect: function(element, top_offset, left_offset) {
@@ -227,8 +227,8 @@ var oDragOptions = {
       x: -left_offset, 
       y: -top_offset, 
       duration: dur,
-      afterFinish : function (effect) { 
-        Element.classNames(effect.element.id).remove("dragged");
+      afterFinish : function (effect) {
+        $(effect.element).removeClassName("dragged");
       }
     } );
   },

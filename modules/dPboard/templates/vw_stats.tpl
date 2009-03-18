@@ -1,7 +1,7 @@
 <br />
 <form name="ChoixStat" method="post" action="#">
-  <label for="stat" title="Statistique à afficher">Statistique</label>
-  <select name="stat" onchange="form.submit()">
+  <label for="stat" title="Statistiques à afficher">Statistiques</label>
+  <select name="stat" onchange="this.form.submit()">
   {{foreach from=$stats item=_stat}}
     <option value="{{$_stat}}" {{if $_stat == $stat}}selected="selected"{{/if}}> 
     	{{tr}}mod-dPboard-tab-{{$_stat}}{{/tr}}

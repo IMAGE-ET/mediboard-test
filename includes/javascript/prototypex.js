@@ -91,5 +91,37 @@ Element.addMethods({
   
   setVisible: function(element, condition) {
     return element[condition ? "show" : "hide"]();
+  },
+	
+  getInnerWidth: function(element){
+    var aBorderLeft = parseInt(element.getStyle("border-left-width")),
+        aBorderRight = parseInt(element.getStyle("border-right-width"));
+    return element.offsetWidth - aBorderLeft - aBorderRight;
+  },
+	
+  getInnerHeight: function(element){
+    var aBorderTop = parseInt(element.getStyle("border-top-width")),
+        aBorderBottom = parseInt(element.getStyle("border-bottom-width"));
+    return element.offsetHeight - aBorderTop - aBorderBottom;
+  },
+	
+	/** Gets the elements properties (specs) thanks to its className */
+	getProperties: function (element) {
+    var props = {};
+
+    $w(element.className).each(function (value) {
+      var params = value.split("|");
+      props[params.shift()] = (params.length == 0) ? true : params.reduce();
+    });
+    return props;
+  }
+});
+
+Element.addMethods(['input', 'textarea'], {
+  emptyValue: function (element) {
+    var notWhiteSpace = /\S/;
+    return Object.isUndefined(element.value) ?
+      element.empty() : 
+      !notWhiteSpace.test(element.value);
   }
 });

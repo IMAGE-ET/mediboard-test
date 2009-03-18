@@ -3,7 +3,7 @@ var oDragOptions = {
   revert: true,
   ghosting: true,
   starteffect : function(element) { 
-    Element.classNames(element).add("dragged");
+    $(element).addClassName("dragged");
     new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
   },
   reverteffect: function(element, top_offset, left_offset) {
@@ -13,7 +13,7 @@ var oDragOptions = {
       y: -top_offset, 
       duration: dur,
       afterFinish : function (effect) { 
-        Element.classNames(effect.element.id).remove("dragged");
+        $(effect.element).removeClassName("dragged");
       }
     } );
   },

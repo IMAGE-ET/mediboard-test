@@ -9,8 +9,8 @@
 
 global $AppUI, $can, $m;
 
-//require_once("../dPccam/acteccam.class.php")
 CAppUI::requireModuleClass("dPsalleOp", "acteccam");
+
 $ds = CSQLDataSource::get("std");
 
 $type         = mbGetValueFromGet("type");

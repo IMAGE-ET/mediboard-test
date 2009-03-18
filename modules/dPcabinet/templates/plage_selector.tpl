@@ -11,10 +11,10 @@ var PlageConsult = {
     },
   changePlage: function(plage_id) {
       if(this.currPlage) {
-        Element.classNames($("plage-"+this.currPlage)).remove("selected");
+        $("plage-"+this.currPlage).removeClassName("selected");
       }
       this.currPlage = plage_id;
-      Element.classNames($("plage-"+this.currPlage)).add("selected");
+      $("plage-"+this.currPlage).addClassName("selected");
       this.refreshPlage();
     },
   refreshPlage: function() {

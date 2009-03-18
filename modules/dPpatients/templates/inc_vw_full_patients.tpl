@@ -7,10 +7,9 @@ var ViewFullPatient = {
   select: function(eLink) {
     // Select current row
     if (this.eCurrent) {
-      Element.classNames(this.eCurrent).remove("selected");
+      this.eCurrent.removeClassName("selected");
     }
-    this.eCurrent = eLink.parentNode.parentNode;
-    Element.classNames(this.eCurrent).add("selected");
+    this.eCurrent = $(eLink).up(2).addClassName("selected");
   },
   
   main: function() {
@@ -29,9 +28,7 @@ function popEtatSejour(sejour_id) {
 }
 
 {{if $isImedsInstalled}}
-Main.add(function () {
-  ImedsResultsWatcher.loadResults();
-});
+Main.add(ImedsResultsWatcher.loadResults);
 {{/if}}
  
 </script>
