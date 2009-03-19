@@ -15,7 +15,7 @@ if (!class_exists("CHPrimXMLDocument")) {
 
 class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
   function __construct() {
-    parent::__construct("evenementPmsi");
+    parent::__construct("evenementPmsi", "msgEvenementsPmsi101", "dPinterop");
     global $AppUI, $g;
         
     $evenementsPMSI = $this->addElement($this, "evenementsPMSI", null, "http://www.hprim.org/hprimXML");
@@ -52,43 +52,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
 
     // Ajout du patient
     $mbPatient =& $mbSej->_ref_patient;
-    
-    $patient = $this->addElement($evenementPMSI, "patient");
-    $identifiant = $this->addElement($patient, "identifiant");
-    $this->addIdentifiantPart($identifiant, "emetteur", "pat$mbPatient->_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP);
-    
-    $personnePhysique = $this->addElement($patient, "personnePhysique");
-    
-    $sexeConversion = array (
-      "m" => "M",
-      "f" => "F",
-      "j" => "F"
-    );
-    
-    $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
-    $this->addTexte($personnePhysique, "nomUsuel", $mbPatient->nom);
-    $this->addTexte($personnePhysique, "nomNaissance", $mbPatient->_nom_naissance);
-    
-    $prenoms = $this->addElement($personnePhysique, "prenoms");
-    foreach ($mbPatient->_prenoms as $mbKey => $mbPrenom) {
-      if ($mbKey < 4) {
-        $this->addTexte($prenoms, "prenom", $mbPrenom);
-      }
-    }
-    
-    $adresses = $this->addElement($personnePhysique, "adresses");
-    $adresse = $this->addElement($adresses, "adresse");
-    $this->addTexte($adresse, "ligne", $mbPatient->adresse);
-    $this->addTexte($adresse, "ville", $mbPatient->ville);
-    $this->addElement($adresse, "codePostal", $mbPatient->cp);
-    
-    $telephones = $this->addElement($personnePhysique, "telephones");
-    $this->addElement($telephones, "telephone", $mbPatient->tel);
-    $this->addElement($telephones, "telephone", $mbPatient->tel2);
-    
-    $dateNaissance = $this->addElement($personnePhysique, "dateNaissance");
-    $this->addElement($dateNaissance, "date", $mbPatient->naissance);
+    $this->addPatient($evenementPMSI, $mbPatient, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementPMSI, "venue");

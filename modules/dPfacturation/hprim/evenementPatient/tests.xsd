@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="piecesTest.xsd"/>
+   <!--
+      "typeTestsExecutant" :
+      Les tests qui composent un examen dans un message transmis par l'exécutant (message "resultatsExamens")
+   -->
+   <xsd:complexType name="typeTestsExecutant">
+      <xsd:sequence>
+         <xsd:element name="test" type="typeTestExecutant" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeTestExecutant" : 
+      Un test dans un message de résultats ou de réponse transmis par l'exécutant. ("resultatsExamens")
+      Ce type dérive de "typeTestDemandeur" par ajout de : 
+      - élément optionnel "commentaireExecutant"
+      - Attribut "statutExecutant" obligatoire donnant le statut d'avancement technique du test
+   -->
+   <xsd:complexType name="typeTestExecutant">
+      <xsd:complexContent>
+         <xsd:extension base="typeTestDemandeur">
+            <xsd:sequence>
+               <xsd:element name="commentaireExecutant" type="commentaire" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attribute name="statutExecutant" type="statutExecutantDemandeExamenTest" use="required"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!--
+      "typeTestsDemandeur" :
+      Les tests qui composent un examen dans un message transmis par le demandeur ("demandesExamens")
+   -->
+   <xsd:complexType name="typeTestsDemandeur">
+      <xsd:sequence>
+         <xsd:element name="test" type="typeTestDemandeur" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeTestDemandeur" : 
+      Un test dans un message transmis par le demandeur : 
+      - Attributs obligatoires :
+         - action
+         - origine
+      - attributs optionnels
+         - priorité
+         - confidentialité
+         - statutExecutant
+      - éléments obligatoires : 
+         - nom du test (code, libellé, nomenclature)
+      - éléments optionnels : 
+         - dateAction
+         - acteurAction
+         - classement du test à l'intérieur de l'examen qui le contient
+         - lien échantillon (nature, temps)
+         - commentaire demandeur
+         - résultat courant : un ou plusieurs, identifiés chacun par leur rang, l'ensemble constitue le résultat du test
+         - résultat antérieur : un ou plusieurs, identifiés chacun par : l'identification de la demande, la date et heure de cette demande, 
+            et à l'intérieur le rang du résultat : une antériorité est représentée par l'ensemble des résultats du test pour la même
+            demande.
+         - nature du résultat attendu
+   -->
+   <xsd:complexType name="typeTestDemandeur">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="nom" type="typeCode21Libelle80"/>
+         <xsd:element name="classementDansExamen" type="xsd:unsignedByte"/>
+         <xsd:element name="lienEchantillon" type="typeLienEchantillon" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Pour les examens multi-échantillons,  précise l'échantillon unique requis par ce test de l'examen.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="commentaireDemandeur" type="commentaire" minOccurs="0"/>
+         <xsd:element name="resultatCourant" type="typeResultatTest" minOccurs="0" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>Le résultat d'un test peut être multiple.  L'attribut "rangResultat" identifie dans les échanges, les différents résultats élémentaires qui composent le résultat global du test. Exemple : Test = culture bactériologique sur un échantillon. Résultat = 2 germes trouvés : Ech.Coli (rangResultat=1) Sta.Aureus (rangResultat=2).</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="resultatAnterieur" type="typeResultatAnterieur" minOccurs="0" maxOccurs="unbounded"/>
+         <xsd:element name="natureResultatAttendu" type="typeNatureResultatTest" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Précise le type de résultat paramétré pour ce test, ainsi que ses caractéristiques.  Il peut se faire que le résultat rendu soit finalement d'un autre type. 
+Exemple : Dosage de la CRP. 
+natureResultatAttendu : numerique. 
+résultat rendu : inférieur à 6.0</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="validation" type="typeValidationResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Dans le message de demande, permet d'indiquer la validation du résultat antérieur. Dans le message de résultats, donne la validation du test et de ses résultats</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionExamenTestResultat" use="required"/>
+      <xsd:attribute name="origine" type="origineExamenHprim" use="required"/>
+      <xsd:attribute name="priorite" type="priorite" use="optional"/>
+      <xsd:attribute name="confidentialite" type="ouiNon" use="optional"/>
+   </xsd:complexType>
+   <!--
+      "typeTestsControler" :
+      Les tests à contrôler (repassage demandé sur un appareil, avec dilution éventuelle)
+   -->
+   <xsd:complexType name="typeTestsControler">
+      <xsd:sequence>
+         <xsd:element name="testControler" type="typeTestControler" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeTestControler" : 
+      Un test dans une demande à contrôler dans message "demandesExamens" transmis par le demandeur : 
+      - éléments obligatoires : 
+         - nom du test (code, libellé, nomenclature)
+      - éléments optionnels : 
+         - dateAction
+         - acteurAction
+         - appareil
+         - dilution
+         - nature du résultat attendu
+   -->
+   <xsd:complexType name="typeTestControler">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="nom" type="typeCode21Libelle80"/>
+         <xsd:element name="natureResultatAttendu" type="typeNatureResultatTest" minOccurs="0"/>
+         <xsd:element name="appareil" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="dilution" type="decimalPositif" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

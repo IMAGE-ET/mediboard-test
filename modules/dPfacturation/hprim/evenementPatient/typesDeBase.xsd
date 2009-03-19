@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <xsd:annotation>
+      <xsd:documentation>contient les items de base : lignes, chaines, numéros formatés...
+      </xsd:documentation>
+   </xsd:annotation>
+
+   <!--
+      type identifiant
+
+    -->
+   <xsd:complexType name="typeIdentifiant">
+      <xsd:sequence>
+         <xsd:element name="emetteur" type="typeIdentifiantPortee" minOccurs="0"/>
+         <xsd:element name="recepteur" type="typeIdentifiantPortee" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="typeIdentifiantPortee">
+      <xsd:simpleContent>
+         <xsd:extension base="nom17">
+            <xsd:attribute name="portee" type="attrPorteeIdentifiant" default="local" />
+       </xsd:extension>
+      </xsd:simpleContent>
+   </xsd:complexType>
+
+   <!--
+       action de mise à jour notifiée sur une demande d'examens dans le message "demandesExamens" envoyé par le demandeur :
+      - création : nouvelle demande
+      - remplacement : cette nouvelle version de la demande remplace complètement la version précédente
+      - corrections : seuls les éléments à modifier sont mis, ainsi que les échantillons ajoutés ou supprimés, 
+                     les examens ajoutés ou supprimés, les tests  supprimés.
+      - suppression : la demande est supprimée totalement 
+      - suspension : le demandeur demande la suspension de l'exécution de cette demande
+      - reprise : le demandeur demande la reprise (= levée de la suspension) de l'exécution de cette demande
+      - terminaison : le demandeur demande de terminer la demande quel que soit le stade d'exécution atteint.
+   -->
+   <xsd:simpleType name="actionDemandeDemandeur">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="corrections"/>
+         <xsd:enumeration value="suppression"/>
+         <xsd:enumeration value="suspension"/>
+         <xsd:enumeration value="reprise"/>
+         <xsd:enumeration value="terminaison"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       action  notifiée sur une demande d'examens dans le message "resultatsExamens" envoyé par l'exécutant :
+      - récapitulatif : cette nouvelle version des examens,  tests, résultats remplace complètement la version précédente
+      - différentiel : seuls figurent les différences : examens,  tests, résultats : ajoutés, modifiés ou supprimés
+      - statuts: le message ne donne que les statuts d'avancement et d'avancement technique pour cette demande
+   -->
+   <xsd:simpleType name="actionDemandeExecutant">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="récapitulatif"/>
+         <xsd:enumeration value="differentiel"/>
+         <xsd:enumeration value="statuts"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       action de mise à jour notifiée sur un examen, un test, ou le résultat d'un test  :
+      - création : nouveau
+      - remplacement : cette nouvelle version  (avec ses résultats) remplace complètement la version précédente
+      - corrections : seuls les éléments à modifier sont mis, ainsi que, dans le cas de l'examen, les éventuels tests supprimés.
+      - suppression :  l'examen ou le test, ou le résultat est supprimé totalement 
+      - contrôle : refaire une mesure pour ce test, ou refairecet examen
+   -->
+   <xsd:simpleType name="actionExamenTestResultat">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="corrections"/>
+         <xsd:enumeration value="suppression"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       action notifiée sur un échantillon par le demandeur qui fournit et identifie cet échantillon, pour l'exécutant qui va l'utiliser :
+      - création : nouvel échantillon
+      - remplacement : cet échantillon, avec toutes les informations qu'il contient  remplace complètement l'échantillon précédent.
+      - corrections : seuls les éléments fils à modifier sont renseignés
+      - suppression :  l'échantillon est supprimé totalement 
+      - rappel : les informations de cet échantillon sont fournies sans changement par rapport à un envoi précédent
+   -->
+   <xsd:simpleType name="actionEchantillon">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="corrections"/>
+         <xsd:enumeration value="suppression"/>
+         <xsd:enumeration value="rappel"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       action de fusion notifiée sur un événement "fusionPatient"
+   -->
+   <xsd:simpleType name="actionFusion">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="fusion"/>
+         <xsd:enumeration value="défusion"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       action demande dans un message question "demandePatient" ou, 
+   -->
+   <xsd:simpleType name="actionDemandee">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="demandeIdentifiant"/>
+         <xsd:enumeration value="demandeInformation"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       action notifiée sur un événement patient, ou demandée dans une question, ou acquittée dans une réponse
+      Distinction entre :
+      remplacement : Les valeurs transmises dans cette entité  annulent et remplacent les valeurs précédentes
+      modification : Les nouvelles valeurs doivent être mémorisées. Les valeurs précédentes devraient être historisées, si le système récepteur en a la capacité.
+   -->
+   <xsd:simpleType name="actionMiseAJour">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="création"/>
+         <xsd:enumeration value="remplacement"/>
+         <xsd:enumeration value="modification"/>
+         <xsd:enumeration value="suppression"/>
+         <xsd:enumeration value="information"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      commentaire générique
+   -->
+   <xsd:simpleType name="commentaire">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="4000"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      décimal positif
+   -->
+   <xsd:simpleType name="decimalPositif">
+      <xsd:restriction base="xsd:decimal">
+         <xsd:minExclusive value="0"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      staut erreur ou avertissement
+   -->
+   <xsd:simpleType name="erreurOuAvertissement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="erreur"/>
+         <xsd:enumeration value="avertissement"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      choix entre minimum et maximum
+   -->
+   <xsd:simpleType name="minOuMax">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="min"/>
+         <xsd:enumeration value="max"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      nom d'au plus 3 caractères : lettres non accentuees majuscules et minuscules, chiffres, souligné, tiret 
+   -->
+   <xsd:simpleType name="nom3">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[-_]){1,3}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      nom d'au plus 10 caractères : lettres non accentuees majuscules et minuscules, chiffres, souligné, tiret
+   -->
+   <xsd:simpleType name="nom10">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[-_]){1,10}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      nom d'au plus 12 caractères : lettres non accentuees majuscules et minuscules, chiffres, souligné, tiret
+   -->
+   <xsd:simpleType name="nom12">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[-_]){1,12}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      nom d'au plus 15 caractères : lettres non accentuees majuscules et minuscules, chiffres, souligné, tiret
+   -->
+   <xsd:simpleType name="nom15">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[-_]){1,15}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      nom d'au plus 17 caractères : lettres non accentuees majuscules et minuscules, chiffres, souligné, tiret
+   -->
+   <xsd:simpleType name="nom17">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[-_]){1,17}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      nom d'au plus 21 caractères : lettres non accentuees majuscules et minuscules, chiffres, souligné, tiret
+   -->
+   <xsd:simpleType name="nom21">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="([A-Z]|[a-z]|[0-9]|[-_]){1,21}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+       numero de 1 à 20 chiffres (pour les numéros de téléphone)
+   -->
+   <xsd:simpleType name="numero20">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{1,20}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+       numero FINESS ou ADELI : 9 chiffres exactement
+   -->
+   <xsd:simpleType name="numeroFiness">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{9}"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      Numero de version : décimal, partie entière, 1 à 2 chiffres, 
+   -->
+   <xsd:simpleType name="numeroVersion">
+      <xsd:restriction base="xsd:string">
+         <xsd:pattern value="\d{1,2}(\.\d{0,2})?"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       booléen ouiNon : valeurs "oui" ou "non"
+   -->
+   <xsd:simpleType name="ouiNon">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="oui"/>
+         <xsd:enumeration value="non"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       priorité : valeurs : routine, urgent, immédiat
+   -->
+   <xsd:simpleType name="priorite">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="routine"/>
+         <xsd:enumeration value="urgent"/>
+         <xsd:enumeration value="immédiat"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+       statutAcquittement :
+      statut d'acquittement d'un message de notifications d'événements
+   -->
+   <xsd:simpleType name="statutAcquittement">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="OK"/>
+         <xsd:enumeration value="avertissement"/>
+         <xsd:enumeration value="erreur"/>
+         <xsd:enumeration value="rejet"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      "statutExecutantDemandeExamenTest" : 
+      Statut d'avancement technique d'une demande, d'un examen ou d'un test dans un message transmis par l'exécutant
+      - synthèse de OBX 10.12 et OBR 9.26 pour les statuts mis par l'exécutant. 
+         (les statuts demandeurs sont traduits sous forme d'attribut "action" dans la demande, l'échantillon,  l'examen et le test)
+         (de même la notion de correction ou celle de suppression sont indiquées dans l'attribut "action")
+         (les statuts de validation sont indiqués à part, dissociés de l'avancement technique)
+      - la progression logique de l'avancement est la suivante : attenteEchantillon -> initial -> partiel -> complet -> final
+      - toutes les étapes ne sont pas nécessairement mises en oeuvre
+      - il peut y avoir régression à une étape précédente
+      - à toute étape l'opération peut être suspendue, puis reprise (à l'initiative du demandeur ou de l'exécutant)
+      - à toute étape l'opération peut être annulée. 
+         Par exemple un test annulé par l'exécutant, annule en même temps le résultat qui avait pu être déjà transmis pour ce test.
+         De même un examen annulé par l'exécutant annule en même temps tous les tests de cet examen et leurs résultats
+   -->
+   <xsd:simpleType name="statutExecutantDemandeExamenTest">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="attenteEchantillon"/>
+         <xsd:enumeration value="attenteInformation"/>
+         <xsd:enumeration value="initial"/>
+         <xsd:enumeration value="partiel"/>
+         <xsd:enumeration value="complet"/>
+         <xsd:enumeration value="suspendu"/>
+         <xsd:enumeration value="repris"/>
+         <xsd:enumeration value="annulé"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      chaine d'au plus 35 caractères multi-usages
+   -->
+   <xsd:simpleType name="texte35">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="35"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      chaine d'au plus 80 caractères multi-usages
+   -->
+   <xsd:simpleType name="texte80">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="80"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!-- 
+      chaine d'au plus 400 caractères multi-usages
+   -->
+   <xsd:simpleType name="texte400">
+      <xsd:restriction base="xsd:string">
+         <xsd:maxLength value="400"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      code sur au plus 10 caractères et libellé facultatif sur au plus 35, 
+      + référence facultative de la nomenclature utilisée (nom sur au plus 12 caractères)
+   -->
+   <xsd:complexType name="typeCode10Libelle35">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom10"/>
+         <xsd:element name="libelle" type="texte35" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      code sur au plus 10 caractères et libellé facultatif sur au plus 80, 
+      + référence facultative de la nomenclature utilisée (nom sur au plus 12 caractères)
+   -->
+   <xsd:complexType name="typeCode10Libelle80">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom10"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      code sur au plus 12 caractères et libellé  sur au plus 80, 
+      + référence de la nomenclature utilisée (nom sur au plus 12 caractères)
+      les trois ocmposants (y compris le code) sont facultatifs
+   -->
+   <xsd:complexType name="typeCode12Libelle80">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom12" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      code sur au plus 17 caractères et libellé  sur au plus 80, commentaire sur 400
+      + référence de la nomenclature utilisée (nom sur au plus 12 caractères)
+      tout est optionnel
+   -->
+   <xsd:complexType name="typeCode17Libelle80Commentaire">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom17" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      code sur au plus 21 caractères et libellé facultatif sur au plus 80, 
+      + référence facultative de la nomenclature utilisée (nom sur au plus 12 caractères)
+   -->
+   <xsd:complexType name="typeCode21Libelle80">
+      <xsd:sequence>
+         <xsd:element name="code" type="nom21"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="dictionnaire" type="nom12" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeContainer" :
+      Description du container (poche, boite, valise, ...) 
+      dans lequel est rangé un lot d'échantillons 
+    -->
+   <xsd:complexType name="typeContainer">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="nom17"/>
+         <xsd:element name="dateFermeture" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="heureFermeture" type="xsd:time" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!-- 
+      "typeEntiteJuridique"
+      3 éléments optionnels : N° FINESS + libellé + nom d'établissement 
+   -->
+   <xsd:complexType name="typeEntiteJuridique">
+      <xsd:sequence>
+         <xsd:element name="finess" type="numeroFiness" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+         <xsd:element name="etablissement" type="typeEtablissement" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeEtablissement"
+      2 éléments optionnels : N° FINESS + libellé
+   -->
+   <xsd:complexType name="typeEtablissement">
+      <xsd:sequence>
+         <xsd:element name="finess" type="numeroFiness" minOccurs="0"/>
+         <xsd:element name="libelle" type="texte80" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeVide" : Ce type est vide
+   -->
+   <xsd:complexType name="typeVide"/>
+   
+
+   <!-- ==========================
+     Attributs
+   ============================= -->
+
+
+  
+   <xsd:simpleType name="attrPorteeIdentifiant">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="local"/>
+         <xsd:enumeration value="sih"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+  
+  <!--
+      nombre a 2 chiffres
+   -->
+   <xsd:simpleType name="nombre2">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="0"/>
+         <xsd:maxInclusive value="99"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      nombre a 5 chiffres
+   -->
+   <xsd:simpleType name="nombre5">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="1"/>
+         <xsd:maxInclusive value="99999"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      nombre a 9 chiffres
+   -->
+   <xsd:simpleType name="nombre9">
+      <xsd:restriction base="xsd:integer">
+         <xsd:minInclusive value="1"/>
+         <xsd:maxInclusive value="999999999"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      nombre a 14 chiffres
+   -->
+   <xsd:simpleType name="nombre14">
+                  <xsd:restriction base="xsd:integer">
+                  <xsd:minInclusive value="1"/>
+                  <xsd:maxInclusive value="99999999999999"/>
+               </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      code acte ccam
+   -->
+   <xsd:simpleType name="ccam">
+                  <xsd:restriction base="xsd:string">
+         <xsd:pattern value="[A-Z]{4}[0-9]{3}"/>
+               </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>

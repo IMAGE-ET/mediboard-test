@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="professionnelsSante.xsd"/>
+   <xsd:include schemaLocation="nonConformites.xsd"/>
+   <xsd:include schemaLocation="typesDeBase.xsd"/>
+   <xsd:include schemaLocation="typesTemps.xsd"/>
+   <xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+   <!-- 
+      "typeRepriseBiotheque" :
+      identification d'un échantillon repris ou à reprendre dans une biothèque (sérothèque, lamothèque, ...)
+   -->
+   <xsd:complexType name="typeRepriseBiotheque">
+      <xsd:sequence>
+         <xsd:element name="biotheque" type="nom15"/>
+         <xsd:element name="position" type="nom15"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeIdentifiantEchantillon" :
+      Un identifiant d'échantillon : 15 caractères maximum.
+      L'attribut précise si l'identifiant est apposé physiquement sur le support de l'échantillon et sous quelle forme
+   -->
+   <xsd:complexType name="typeIdentifiantEchantillon">
+      <xsd:simpleContent>
+         <xsd:extension base="nom15">
+            <xsd:attribute name="physique" type="formePhysiqueIdentifiantHprim" use="optional"/>
+         </xsd:extension>
+      </xsd:simpleContent>
+   </xsd:complexType>
+   <!--
+      "typeNatureEchantillonHprim" : 
+      Type comportant  un attribut optionne "valeur" contenant l'une des natures définies dans le dictionnaire Hprim
+       et/ou un [code, libelle] exprimés dans un autre dictionnaire
+   -->
+   <xsd:complexType name="typeNatureEchantillonHprim">
+      <xsd:complexContent>
+         <xsd:extension base="typeCode12Libelle80">
+            <xsd:attribute name="valeur" type="natureEchantillonHprim" use="optional"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <!-- 
+      "typeVolumeEchantillon" :
+      Vomule recueilli ou prélevé pour un échantillon
+   -->
+   <xsd:complexType name="typeVolumeEchantillon">
+      <xsd:sequence>
+         <xsd:element name="valeur" type="decimalPositif"/>
+         <xsd:element name="tempsRecueil" type="typeDuree" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="unite" type="uniteHprim" use="required"/>
+   </xsd:complexType>
+</xsd:schema>

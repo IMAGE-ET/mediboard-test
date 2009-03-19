@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+   <xsd:include schemaLocation="patient.xsd"/>
+   <xsd:include schemaLocation="venue.xsd"/>
+   <xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+   
+   <xsd:complexType name="typeDossierResumePatient">
+      <xsd:sequence>
+         <xsd:element name="patient" type="typePatientLight"/>
+         <xsd:element name="dossierResume" type="typeDossierResume"/>
+         <xsd:element name="priseEnChargeFinancieres" type="typePriseEnChargeFinancieres"  />
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="typeDossierResume">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant"/>
+         <xsd:element name="natureDossierResumeHprim" type="typeNatureDossierResumeHprim" minOccurs="0"/>
+         <xsd:element name="dateHeureDebut" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="medecins" type="typeMedecins" minOccurs="0"/>
+         <xsd:element name="dateHeureFin" type="typeDateHeureOptionnelle" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="confidentiel" type="ouiNon" default="non"/>
+      <xsd:attribute name="anonyme" type="ouiNon" use="optional"/>
+      <xsd:attribute name="etat" type="etatVenue" use="optional"/>
+      <xsd:attribute name="facturable" type="ouiNon" use="optional"/>
+      <xsd:attribute name="secteurActivite" type="attrSecteurActivite" use="required"/>
+      <xsd:attribute name="indicateurParcoursSoinsResume" type="attrIndicateurParcoursSoinsPatient" use="optional"/>
+      <xsd:attribute name="declarationMedecinTraitant" type="ouiNon" default="oui"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="typePriseEnChargeFinancieres">
+      <xsd:sequence>
+         <xsd:element name="priseEnChargeFinanciere" type="typePriseEnChargeFinanciere" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="typePriseEnChargeFinanciere">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiantVenue"/>
+         <xsd:element name="dateDebut" type="xsd:date"/>
+         <xsd:element name="dateFin" type="xsd:date" minOccurs="0" />
+         <xsd:element name="employeurs" type="typeEmployeurs" minOccurs="0"/>
+         <xsd:element name="assurancesObligatoires" type="typeAssurancesObligatoires" minOccurs="0"/>
+         <xsd:element name="complementaires" type="typeComplementaires" minOccurs="0"/>
+         <xsd:element name="paiementParticuliers" type="typePaiementParticuliers" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+
+   <xsd:complexType name="typeDossierResumeLight">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant"/>
+         <xsd:element name="dateHeureDebut" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="dateHeureFin" type="typeDateHeureOptionnelle" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   
+
+   <xsd:complexType name="typeNatureDossierResumeHprim">
+      <xsd:complexContent>
+         <xsd:extension base="typeCode12Libelle80">
+            <xsd:attribute name="natureDossierResume" type="attrNatureDossierResumeHprim" use="optional"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+
+
+   <!--
+   
+   -->
+   <xsd:simpleType name="attrSecteurActivite">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="medecineChirurgieObstetrie"/>
+         <xsd:enumeration value="soinSuiteReadaptation"/>
+         <xsd:enumeration value="psychiatrie"/>
+         <xsd:enumeration value="hospitalisationDomicile"/>
+         <xsd:enumeration value="maisonRetraite"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   
+
+</xsd:schema>
+   

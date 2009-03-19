@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="enteteMessage.xsd"/>
+   <xsd:include schemaLocation="piecesDemandeExamen.xsd"/>
+   <xsd:include schemaLocation="examens.xsd"/>
+   <!--
+      élément racine du message :
+   -->
+   <xsd:element name="demandesExamens">
+      <xsd:annotation>
+         <xsd:documentation>Le message demandesExamens contient une collection de demandes d'examens à effectuer sur des patients ou sur d'autres organismes (animaux, végétaux) ou matériaux (air, eau, aliments...). Ce message est émis par le système "demandeur", le destinataire représente le système "exécutant". Si l'attribut acquittementAttendu vaut "oui" le système destinataire devra renvoyer un message d'acquittement positif ou négatif après intégration, à l'aide du message "acquittementDemandes".</xsd:documentation>
+      </xsd:annotation>
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="enteteMessage" type="typeEnteteMessage">
+               <xsd:annotation>
+                  <xsd:documentation>Identifie le message, l'émetteur et le récepteur</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="container" type="typeContainer" minOccurs="0">
+               <xsd:annotation>
+                  <xsd:documentation>Cet élément optionnel référence le container du lot d'échantillons correspondant à ce message.</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:choice>
+               <xsd:element name="demandeExamen" type="typeDemandeExamenDemandeur" maxOccurs="unbounded">
+                  <xsd:annotation>
+                     <xsd:documentation>Une collection de demandes d'examens.  Evenement déclencheur sur chaque demande = action effectuée par le demandeur  : création, remplacement, suppression, terminaison, suspension, reprise, .... </xsd:documentation>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="demandeControler" type="typeDemandeControler">
+                  <xsd:annotation>
+                     <xsd:documentation>Ou une  demande à contrôler  Evénement déclencheur : Le demandeur demande le contrôle des  résultats de certains tests d'une demande déjà connue de l'exécutant. Ce dernier devra refaire la mesure et  fournir les nouveaux résultats pour les tests concernés.</xsd:documentation>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:choice>
+         </xsd:sequence>
+         <xsd:attribute name="acquittementAttendu" type="ouiNon" default="non"/>
+      </xsd:complexType>
+   </xsd:element>
+   <!--  ====================================================================================== 
+   "typeDemandeExamen" :
+   - identifiantDemandeDeclenchante : identifiant par le demandeur d'une demande qui est à l'origine de cette demande
+   La demande d'examens est identifiée par les éléments "identifiantDemandeur", "demandeurs" et "dateDemande"
+   fils de l'élément "identificationDemande"
+    ======================================================================================   -->
+   <xsd:complexType name="typeDemandeExamenDemandeur">
+      <xsd:annotation>
+         <xsd:documentation>Une demande d'examens concernant  patient,  animal ou matière. Elle contient une liste de bilans et/ou d'examens. Elle contient optionnellement une liste d'échantillons (biologie, ana-path), dans ce cas chaque examen référence les échantillons dont il a besoin pour son exécution. Pour les examens sur le patient lui-même (radio, scanner, IRM, exploration fonctionnelle,...) il reste à enrichir la demande avec des éléments précisant les conditions de rendez-vous (disponibilité du patient), et de lieu de l'examen.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="identifiantPourDemandeur" type="nom15"/>
+         <xsd:element name="identifiantPourExecutant" type="nom15" minOccurs="0"/>
+         <xsd:element name="entete" type="typeEnteteDemande"/>
+         <xsd:sequence>
+            <xsd:element name="bilans" type="typeBilans" minOccurs="0"/>
+            <xsd:element name="examens" type="typeExamensDemandeur" minOccurs="0"/>
+         </xsd:sequence>
+         <xsd:element name="echantillons" type="typeEchantillonsDemandeur" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionDemandeDemandeur" use="required"/>
+      <xsd:attributeGroup ref="attributsDemandeExamens"/>
+   </xsd:complexType>
+   <!--  ====================================================================================== 
+      "typeDemandeControler" :
+      La demande d'examens est identifiée par les éléments "identifiantDemandeur", "demandeurs" et "dateDemande"
+      fils de l'élément "identificationDemande"
+    ======================================================================================   -->
+   <xsd:complexType name="typeDemandeControler">
+      <xsd:annotation>
+         <xsd:documentation>Une demande d'examens déjà traitée préalablement par l'exécutant, pour laquelle le demandeur demande le contrôle des résultats de certains examens ou tests. Contexte typique : Echange entre un système de gestion de laboratoire de biologie médicale et le système de production de son plateau technique.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="identifiantPourDemandeur" type="nom15"/>
+         <xsd:element name="identifiantPourExecutant" type="nom15" minOccurs="0"/>
+         <xsd:element name="entete" type="typeEnteteDemande"/>
+         <xsd:element name="examensControler" type="typeExamensControler"/>
+      </xsd:sequence>
+      <xsd:attributeGroup ref="attributsDemandeExamens"/>
+   </xsd:complexType>
+   <!--     ==================================================================================== 
+      "typeBilans" :
+      Une liste de bilans. Chaque bilan est identifié par un code, 
+      et son contenu peut être optionnellement décrit sous la forme d'une liste d'examens
+    ======================================================================================   -->
+   <xsd:complexType name="typeBilans">
+      <xsd:sequence>
+         <xsd:element name="bilan" type="typeBilan" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="typeBilan">
+      <xsd:complexContent>
+         <xsd:extension base="typeCode21Libelle80">
+            <xsd:sequence>
+               <xsd:element name="examens" type="typeExamensDemandeur" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="attributsExamen"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+</xsd:schema>

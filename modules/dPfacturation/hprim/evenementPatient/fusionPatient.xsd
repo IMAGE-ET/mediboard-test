@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas de niveaux 2 et 3 utiles 
+	-->
+	<xsd:include schemaLocation="patient.xsd"/>
+	<!--  -->
+	<xsd:complexType name="typeFusionPatient">
+		<xsd:annotation>
+			<xsd:documentation>Evénement déclencheur : Fusion ou défusion des ipp de deux patients dans un établissement de soins. L'événement "défusion" suppose une historisation des événements "fusion" par les systèmes destinataires. Ce fonctionnement étant supposé difficile à obtenir, on privilégiera pour annuler une fusion précédemment effectuée par erreur, l'utilisation de l'événement "lienVenue" qui permet de détacher les venues d'un ipp et de les rattacher à un autre.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="dateAction" type="typeDateHeureOptionnelle" minOccurs="0"/>
+			<xsd:element name="patient" type="typePatient"/>
+			<xsd:element name="patientElimine" type="typePatient"/>
+		</xsd:sequence>
+		<xsd:attribute name="action" type="actionFusion" use="required"/>
+	</xsd:complexType>
+</xsd:schema>

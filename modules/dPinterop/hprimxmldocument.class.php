@@ -13,21 +13,24 @@ if (!class_exists("CMbXMLDocument")) {
   return;
 }
 
+global $filesDir;
+$filesDir = CAppUI::conf("root_dir") . "/files";
+
 class CHPrimXMLDocument extends CMbXMLDocument {
-  var $pmsipath = "modules/dPinterop/hprim";
   var $finalpath = "files/hprim";
   var $documentfinalprefix = null;
   var $documentfinalfilename = null;
   var $sentFiles = array();
    
-  function __construct($schemaname) {
+  function __construct($schemaname, $schemafilename = null, $module = null) {
     parent::__construct();
-
-    $this->schemapath = "$this->pmsipath/$schemaname";
-    $this->schemafilename   = "$this->schemapath/schema.xml"  ;
+    
+    $this->patharchiveschema = $module ? "modules/".$module."/hprim" : "modules/dPinterop/hprim";
+    $this->schemapath = "$this->patharchiveschema/$schemaname";
+    $this->schemafilename = ($schemafilename) ? "$this->schemapath/$schemafilename.xsd" : "$this->schemapath/schema.xml";
     $this->documentfilename = "$this->schemapath/document.xml";
     $this->finalpath .= "/$schemaname";
-
+    
     $this->now = time();
   }
   
@@ -51,7 +54,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
-	}
+  }
   
   function addNameSpaces() {
     // Ajout des namespace pour XML Spy
@@ -60,7 +63,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function saveTempFile() {
-    parent::save($this->documentfilename);
+    parent::save(utf8_encode($this->documentfilename));
   }
   
   function saveFinalFile() {
@@ -108,18 +111,18 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
   }
   
-  function addIdentifiantPart($elParent, $partName, $partValue) {
+  function addIdentifiantPart($elParent, $partName, $partValue, $referent = null) {
     $part = $this->addElement($elParent, $partName);
     $this->addTexte($part, "valeur", $partValue, 17);
     $this->addAttribute($part, "etat", "permanent");
     $this->addAttribute($part, "portee", "local");
-    $this->addAttribute($part, "referent", "non");
+    $ref = ($referent) ? "oui" : "non";
+    $this->addAttribute($part, "referent", $ref);
   }
     
   function addUniteFonctionnelle($elParent, $mbOp) {
     $this->addCodeLibelle($elParent, "uniteFonctionnelle", $mbOp->code_uf, $mbOp->libelle_uf);
   }
-  
   
   function addProfessionnelSante($elParent, $mbMediuser) {
     $medecin = $this->addElement($elParent, "medecin");
@@ -183,7 +186,82 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     return $acteCCAM;
   }
+  
+  function addPatient($elParent, $mbPatient, $addPat = null, $referent = null) {
+    $patient = $this->addElement($elParent, "patient");
+    $identifiant = $this->addElement($patient, "identifiant");
+    $pat = $addPat ? "pat" : "";
+    
+    if(!$referent) {
+      $this->addIdentifiantPart($identifiant, "emetteur",  $pat.$mbPatient->patient_id, $referent);
+      if($mbPatient->_IPP)
+        $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP, $referent);
+    } else {
+      $this->addIdentifiantPart($identifiant, "emetteur",  $mbPatient->_IPP, $referent);
+      
+      if(isset($mbPatient->_id400))
+        $this->addIdentifiantPart($identifiant, "recepteur", $pat.$mbPatient->_id400, $referent);
+    }  
+    
+    $personnePhysique = $this->addElement($patient, "personnePhysique");
+    
+    $sexeConversion = array (
+      "m" => "M",
+      "f" => "F",
+      "j" => "F"
+    );
+    
+    $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
+    $this->addTexte($personnePhysique, "nomUsuel", $mbPatient->nom);
+    $this->addTexte($personnePhysique, "nomNaissance", $mbPatient->_nom_naissance);
+    
+    $prenoms = $this->addElement($personnePhysique, "prenoms");
+    foreach ($mbPatient->_prenoms as $mbKey => $mbPrenom) {
+      if ($mbKey < 3) {
+        $this->addTexte($prenoms, "prenom", $mbPrenom);
+      }
+    }
+    
+    $adresses = $this->addElement($personnePhysique, "adresses");
+    $adresse = $this->addElement($adresses, "adresse");
+    $this->addTexte($adresse, "ligne", $mbPatient->adresse);
+    $this->addTexte($adresse, "ville", $mbPatient->ville);
+    $this->addElement($adresse, "pays", str_pad($mbPatient->pays_insee, 3, '0', STR_PAD_LEFT));
+    $this->addElement($adresse, "codePostal", $mbPatient->cp);
+    
+    $telephones = $this->addElement($personnePhysique, "telephones");
+    $this->addElement($telephones, "telephone", $mbPatient->tel);
+    $this->addElement($telephones, "telephone", $mbPatient->tel2);
+    
+    $emails = $this->addElement($personnePhysique, "emails");
+    $this->addElement($emails, "email", $mbPatient->email);
+    
+    $dateNaissance = $this->addElement($personnePhysique, "dateNaissance");
+    $this->addElement($dateNaissance, "date", $mbPatient->naissance);
+    
+    $lieuNaissance = $this->addElement($personnePhysique, "lieuNaissance");
+    $this->addElement($lieuNaissance, "ville", $mbPatient->lieu_naissance);
+    $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
+    $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
+  }
+  
+  function saveMessageFile($emetteur, $filename, $data) {
+    global $filesDir;
+    
+    // Check global directory
+    if (!CMbPath::forceDir($filesDir)) {
+      trigger_error("Files directory '$filesDir' is not writable", E_USER_WARNING);
+      return false;
+    }
+    
+    // Checks complete file directory
+    $fileDirComp = $filesDir."/".$emetteur."/".date("Y")."/".date("M");
+    CMbPath::forceDir($fileDirComp);
 
+    // Moves temp file to specific directory
+    $file_path = "$fileDirComp/$filename";
+    return file_put_contents($file_path, $data);
+  }
 }
 
 ?>

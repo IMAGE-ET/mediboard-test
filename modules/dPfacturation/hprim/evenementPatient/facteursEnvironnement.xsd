@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas des niveaux inférieurs utiles 
+	-->
+	<xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+	<xsd:include schemaLocation="typesDeBase.xsd"/>
+	<xsd:include schemaLocation="typesTemps.xsd"/>
+	<!--
+		"typeFacteursEnvironnement" :
+	-->
+	<xsd:complexType name="typeFacteursEnvironnement">
+		<xsd:annotation>
+			<xsd:documentation>type d'un élément du volet médical. Décrit les habitudes alimentaires, le tabac, l'environnement professionnel, sportif, ...etc</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="fumeur" type="typeFumeur" minOccurs="0"/>
+			<xsd:element name="regime" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+			<xsd:element name="consommationAlcool" type="typeConsommation" minOccurs="0"/>
+			<xsd:element name="exercicesPhysiques" type="typeExercicesPhysiques" minOccurs="0"/>
+			<xsd:element name="commentaire" type="commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- 
+		"typeFumeur" :
+		précise si le patient est fumeur ou non,  dans quelles proportions, depuis combien de temps il a commencé ou arrêté.
+		Un patient qui ne fume pas est caractérisé par l'attribut "actuel" = "non", 
+		S'il n'a jamais fumé, par l'élément "periodesFumeurs" avec l'attribut "xsi:null" = "true".
+	-->
+	<xsd:complexType name="typeFumeur">
+		<xsd:sequence>
+			<xsd:element name="periodesFumeurs" type="typePeriodesFumeurs" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="actuel" type="ouiNon" use="required"/>
+	</xsd:complexType>
+	<!--
+		"typePeriodesFumeurs" :
+		 contient une ou plusieurs périodes pendant lesquelles le patient était (ou est) fumeur
+	-->
+	<xsd:complexType name="typePeriodesFumeurs">
+		<xsd:sequence>
+			<xsd:element name="periodeFumeur" type="typeConsommation" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeConsommation" :
+		Consommation d'un produit (tabac, alcool, ...) sur une période
+		Une période est délimitée par deux dates. Si la seconde est nulle ("xsi:null") c'est que la période n'est pas terminée
+	-->
+	<xsd:complexType name="typeConsommation">
+		<xsd:sequence>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+			<xsd:element name="volumeQuotidienEstime" type="xsd:unsignedByte" minOccurs="0"/>
+			<xsd:element name="uniteVolumeQuotidienEstime" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeExercicesPhysiques" :
+		Activités physiques ou sportives du patient, actuelles ou passées
+	-->
+	<xsd:complexType name="typeExercicesPhysiques">
+		<xsd:sequence>
+			<xsd:element name="exercicePhysique" type="typeExercicePhysique" maxOccurs="3"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeExercicePhysique" :
+		Décrit une activité physique ou sportive du patient, actuelle (si dateFinEstimee = "xsi:null") ou passée
+	-->
+	<xsd:complexType name="typeExercicePhysique">
+		<xsd:sequence>
+			<xsd:element name="nomActivite" type="texte35"/>
+			<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="dateFinEstimee" type="xsd:date" nillable="true" minOccurs="0"/>
+			<xsd:element name="dureeFrequence" type="typeDureeFrequence" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="competition" type="ouiNon" use="optional"/>
+	</xsd:complexType>
+	<!--
+		"typeEnvironnementProfessionnel" :
+		Décrit les facteurs de l'environnement professionnel : horaires, conditions, exposition à des nuisances
+					<xsd:complexType name="typeEnvironnementProfessionnel">
+						<xsd:sequence>
+							<xsd:element name="dateDebutEstimee" type="xsd:date" minOccurs="0"/>
+							<xsd:element name="dateFinEstimee" type="xsd:date" nullable="true" minOccurs="0"/>
+							<xsd:element name="dureeFrequenceTravail" type="typeDureeFrequence" minOccurs="0"/>
+							<xsd:element name="dureeFrequenceTrajet" type="typeDureeFrequence" minOccurs="0"/>
+							<xsd:element name="distanceTrajetKm" type="xsd:unsignedShort" minOccurs="0"/>
+							<xsd:element name="vehiculeTrajet" type="texte35" minOccurs="0"/>
+							<xsd:element name="dureeFrequenceDeplacement" type="typeDureeFrequence" minOccurs="0"/>
+							<xsd:element name="distanceDeplacementKm" type="xsd:unsignedShort" minOccurs="0"/>
+							<xsd:element name="vehiculeDeplacement" type="texte35" minOccurs="0"/>
+						</xsd:sequence>
+						<xsd:attribute name="travailNuit" type="ouiNon" use="optional"/>
+						<xsd:attribute name="decalageHoraire" type="ouiNon" use="optional"/>
+						<xsd:attribute name="stationAssise" type="ouiNon" use="optional"/>
+						<xsd:attribute name="nuisanceSonore" type="ouiNon" use="optional"/>
+						<xsd:attribute name="sedentaire" type="ouiNon" use="optional"/>
+						<xsd:attribute name="horaireVariable" type="ouiNon" use="optional"/>
+					</xsd:complexType>
+		==============================
+		Ce type n'est pas utilisé pour l'instant.
+		==============================
+	-->
+</xsd:schema>

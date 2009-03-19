@@ -15,7 +15,7 @@ if (!class_exists("CHPrimXMLDocument")) {
 
 class CHPrimXMLServeurActes extends CHPrimXMLDocument {
   function __construct() {
-    parent::__construct("serveurActes");
+    parent::__construct("serveurActes", "msgEvenementsServeurActes101", "dPinterop");
     global $AppUI, $g;
         
     $evenementsServeurActes = $this->addElement($this, "evenementsServeurActes", null, "http://www.hprim.org/hprimXML");
@@ -53,43 +53,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
 
     // Ajout du patient
     $mbPatient =& $mbOp->_ref_sejour->_ref_patient;
-    
-    $patient = $this->addElement($evenementServeurActe, "patient");
-    $identifiant = $this->addElement($patient, "identifiant");
-    $this->addIdentifiantPart($identifiant, "emetteur", "pat$mbPatient->patient_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP);
-    
-    $personnePhysique = $this->addElement($patient, "personnePhysique");
-    
-    $sexeConversion = array (
-      "m" => "M",
-      "f" => "F",
-      "j" => "F"
-    );
-    
-    $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
-    $this->addTexte($personnePhysique, "nomUsuel", $mbPatient->nom);
-    $this->addTexte($personnePhysique, "nomNaissance", $mbPatient->_nom_naissance);
-    
-    $prenoms = $this->addElement($personnePhysique, "prenoms");
-    foreach ($mbPatient->_prenoms as $mbKey => $mbPrenom) {
-      if ($mbKey < 4) {
-        $this->addTexte($prenoms, "prenom", $mbPrenom);
-      }
-    }
-    
-    $adresses = $this->addElement($personnePhysique, "adresses");
-    $adresse = $this->addElement($adresses, "adresse");
-    $this->addTexte($adresse, "ligne", $mbPatient->adresse);
-    $this->addTexte($adresse, "ville", $mbPatient->ville);
-    $this->addElement($adresse, "codePostal", $mbPatient->cp);
-    
-    $telephones = $this->addElement($personnePhysique, "telephones");
-    $this->addElement($telephones, "telephone", $mbPatient->tel);
-    $this->addElement($telephones, "telephone", $mbPatient->tel2);
-    
-    $dateNaissance = $this->addElement($personnePhysique, "dateNaissance");
-    $this->addElement($dateNaissance, "date", $mbPatient->naissance);
+    $this->addPatient($evenementServeurActe, $mbPatient, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $mbSejour =& $mbOp->_ref_sejour;
@@ -175,7 +139,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     foreach ($mbOp->_ref_actes_ccam as $mbActe) {
       $this->addActeCCAM($actesCCAM, $mbActe, $mbOp);
     }
-    
+
     // Traitement final
     $this->purgeEmptyElements();
   }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="exempleMessage" type="typeComplexeExempleMessage"/>
+	<xsd:complexType name="typeComplexeExempleMessage">
+		<xsd:annotation>
+			<xsd:documentation>Ce symbole représente un type complexe</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="elementDeTypeSimple" type="xsd:string"/>
+			<xsd:choice>
+				<xsd:annotation>
+					<xsd:documentation>Ce symbole introduit un groupe "alternative" : Un seul élément à choisir dans la liste à droite</xsd:documentation>
+				</xsd:annotation>
+				<xsd:element name="elementAlternatif1" type="xsd:string"/>
+				<xsd:element name="elementAlternatif2" type="xsd:byte"/>
+				<xsd:element name="elementAlternatif3" type="xsd:date"/>
+			</xsd:choice>
+			<xsd:element name="elementTypeSimpleCardinalites_1_n" type="xsd:string" maxOccurs="unbounded"/>
+			<xsd:element name="elementTypeComplexe1" type="unTypeComplexe" minOccurs="0" maxOccurs="5">
+				<xsd:annotation>
+					<xsd:documentation>Cet élément de type complexe  a pour cardinalités (0, 5)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="elementTypeComplexe2" type="unTypeComplexe">
+				<xsd:annotation>
+					<xsd:documentation>Cet élément de type complexe a pour cardinalités (1, 1)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="unTypeComplexe">
+		<xsd:choice>
+			<xsd:element name="item1" type="autreTypeComplexe"/>
+			<xsd:element name="item2" type="xsd:string"/>
+			<xsd:element name="item3" type="xsd:string" maxOccurs="3"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="autreTypeComplexe">
+		<xsd:sequence>
+			<xsd:element name="elementMultiple" type="xsd:string" maxOccurs="unbounded"/>
+			<xsd:element name="toto"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

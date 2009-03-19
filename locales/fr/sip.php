@@ -42,4 +42,7 @@ $locales['config-sip-soap-user'] = 'Identifiant de l\'utilisateur ';
 $locales['config-sip-soap-user-desc'] = 'Identifiant de l\'utilisateur sur le SIP';
 $locales['config-sip-soap-wsdl_mode'] = 'Mode de contrôle';
 $locales['config-sip-soap-wsdl_mode-desc'] = 'Mode de contrôle pour l\'analyse du WSDL';
+$locales['config-sip'] = 'Configuration mode SIP';
+$locales['config-sip-soap'] = 'Configuration du Service Web du SIP';
+$locales['config-object_handlers-CSipObjectHandler'] = 'Activer le gestionnaire SIP';
 ?>

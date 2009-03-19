@@ -115,7 +115,7 @@ class CMbXMLDocument extends DOMDocument {
     if (!$filename) {
       $filename = $this->schemafilename;
     }
-    
+
     // PHP < 5.1.x
     if (!function_exists("libxml_use_internal_errors")) {
       return parent::schemaValidate($filename);

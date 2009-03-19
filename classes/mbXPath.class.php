@@ -120,7 +120,7 @@ class CMbXPath extends DOMXPath {
     );
     $mbPatient->sexe = $sexeConversion[$sexe];
     $mbPatient->nom = $this->queryTextNode("hprim:nomUsuel", $personnePhysique);
-    $mbPatient->nom_jeune_fille = $this->queryTextNode("hprim:nomNaissance", $personnePhysique);
+    $mbPatient->_nom_naissance = $this->queryTextNode("hprim:nomNaissance", $personnePhysique);
     $prenoms = $this->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
     $mbPatient->prenom = $prenoms[0];
     $mbPatient->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
@@ -160,18 +160,18 @@ class CMbXPath extends DOMXPath {
   function getPersonnesPrevenir($node, $mbPatient) {
     $personnesPrevenir = $this->query("hprim:personnesPrevenir/*", $node);
     foreach ($personnesPrevenir as $personnePrevenir) {
-    	$mbPatient->prevenir_nom = $this->queryTextNode("hprim:nomUsuel", $personnePrevenir);
-	    $prenoms = $this->getMultipleTextNodes("hprim:prenoms/*", $personnePrevenir);
-	    $mbPatient->prevenir_prenom = $prenoms[0];
-	    
-	    $adresses = $this->queryUniqueNode("hprim:adresses", $personnePrevenir);
-	    $adresse = $this->queryUniqueNode("hprim:adresse", $adresses);
-	    $mbPatient->prevenir_adresse = $this->queryTextNode("hprim:ligne", $adresse);
-	    $mbPatient->prevenir_ville = $this->queryTextNode("hprim:ville", $adresse);
-	    $mbPatient->prevenir_cp = $this->queryTextNode("hprim:codePostal", $adresse);
-	    
-	    $telephones = $this->getMultipleTextNodes("hprim:telephones/*", $personnePrevenir);
-	    $mbPatient->prevenir_tel = isset($telephones[0]) ? $telephones[0] : "";
+      $mbPatient->prevenir_nom = $this->queryTextNode("hprim:nomUsuel", $personnePrevenir);
+      $prenoms = $this->getMultipleTextNodes("hprim:prenoms/*", $personnePrevenir);
+      $mbPatient->prevenir_prenom = $prenoms[0];
+      
+      $adresses = $this->queryUniqueNode("hprim:adresses", $personnePrevenir);
+      $adresse = $this->queryUniqueNode("hprim:adresse", $adresses);
+      $mbPatient->prevenir_adresse = $this->queryTextNode("hprim:ligne", $adresse);
+      $mbPatient->prevenir_ville = $this->queryTextNode("hprim:ville", $adresse);
+      $mbPatient->prevenir_cp = $this->queryTextNode("hprim:codePostal", $adresse);
+      
+      $telephones = $this->getMultipleTextNodes("hprim:telephones/*", $personnePrevenir);
+      $mbPatient->prevenir_tel = isset($telephones[0]) ? $telephones[0] : "";
     }
         
     return $mbPatient;
