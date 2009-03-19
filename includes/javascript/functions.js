@@ -496,7 +496,7 @@ var PairEffect = Class.create({
     if (this.oOptions.bStoreInCookie) {
       aCNs.load(this.oOptions.sCookieName);
     }
-    oTarget.setVisible(aCNs.include("triggerShow"));   
+    oTarget.setVisible(!aCNs.include("triggerShow"));   
   },
   
   // Flipper callback
