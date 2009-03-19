@@ -448,7 +448,7 @@ Object.extend(ElementChecker, {
     },
     
     // float
-    float: function() {
+    'float': function() {
       this.sValue = this.sValue.toString().replace(',', '.');
       this.isNumeric();
       
@@ -458,7 +458,7 @@ Object.extend(ElementChecker, {
     
     // currency
     currency: function() {
-      this.float();
+      this['float']();
     },
     
     // pct
