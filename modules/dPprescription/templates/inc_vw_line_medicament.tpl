@@ -113,7 +113,7 @@
 		  		  <input type="hidden" name="m" value="dPprescription" />
 		  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
 		  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
-		  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);">
+		  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
 		  		    <option value="">Nouvelle perfusion</option>
 		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
 		  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
