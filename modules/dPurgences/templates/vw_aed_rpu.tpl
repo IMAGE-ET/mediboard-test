@@ -28,6 +28,23 @@ function submitSuivi(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
 }
 
+function refreshConstantesMedicales(sejour_id) {
+  if(sejour_id) {
+    var url = new Url;
+    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("constantes", { waitingText: null } );
+  }
+}
+
+var constantesMedicalesDrawn = false;
+function refreshConstantesHack(sejour_id) {
+  if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
+    refreshConstantesMedicales(sejour_id);
+    constantesMedicalesDrawn = true;
+  }
+}
+
 function cancelRPU() {
   var oForm = document.editRPU;
   var oElement = oForm._annule;
@@ -54,6 +71,7 @@ Main.add(function () {
     DossierMedical.reloadDossierPatient();
     var tab_sejour = Control.Tabs.create('tab-dossier');
     loadSuivi({{$rpu->sejour_id}});
+    refreshConstantesHack('{{$rpu->sejour_id}}');
   {{/if}}
   
   if (document.editAntFrm){
@@ -250,6 +268,7 @@ Main.add(function () {
 <ul id="tab-dossier" class="control_tabs">
   <li><a href="#antecedents">Antécédents / Traitements</a></li>
   <li><a href="#suivisoins">Suivi soins</a></li>
+  <li onclick="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -262,8 +281,8 @@ Main.add(function () {
   {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
 </div>
 
-<div id="suivisoins" style="display:none">
-</div>
+<div id="suivisoins" style="display:none"></div>
+<div id="constantes" style="display:none"></div>
 
 {{/if}}
 

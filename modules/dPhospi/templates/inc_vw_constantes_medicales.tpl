@@ -234,7 +234,7 @@ Main.add(function () {
   </tr>
 </table>
 
-<table>
+<table class="form">
   <tr>
     <td colspan="2">
      <button class="hslip" title="Afficher/cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
