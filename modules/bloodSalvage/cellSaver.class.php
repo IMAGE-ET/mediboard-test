@@ -16,7 +16,7 @@ class CCellSaver extends CMbObject {
 	var $marque = null;
 	var $modele = null;
 	
- function getSpec() {
+  function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'cell_saver';
     $spec->key   = 'cell_saver_id';

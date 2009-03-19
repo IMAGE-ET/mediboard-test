@@ -4,19 +4,23 @@
 var series = {{$series|@json}};
 var options = {{$options|@json}};
 
-var oCcamField = null;
-var graph;
-var filterForm;
+var oCcamField = null,
+    graph,
+		filterForm;
+
+function yTickFormatter(y) {
+	return parseInt(y).toString();
+}
 
 function drawGraph() {
   // Let's draw the graph
   graph = Flotr.draw(
     $('stats'),
     series, Object.extend({
-      bars: {show:true, barWidth:0.5, fillOpacity: 0.6},
+      bars: {show:true, barWidth:0.5, fillOpacity: 0.6, stacked:true},
       mouse: {track: false},
-      legend: {show: false, position: 'nw'},
-      yaxis: {min: 0},
+      legend: {show: true},
+      yaxis: {min: 0, tickFormatter: yTickFormatter},
       HtmlText: false,
       spreadsheet: {
 		  	show: true,

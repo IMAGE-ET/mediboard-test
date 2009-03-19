@@ -105,8 +105,7 @@ class CBloodSalvage extends CMbObject {
     $this->loadRefPatient();
     $this->loadRefCellSaver(); 
     $this->loadRefTypeEi();
-    $nom = $this->_ref_patient->_view;
-    $this->_view = "RSPO de $nom";
+    $this->_view = "RSPO de {$this->_ref_patient->_view}";
   }
   
   function loadRefPatient() {

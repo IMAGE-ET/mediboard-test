@@ -1,9 +1,9 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage bloodSalvage
- *	@version $Revision: $
+ *  @package Mediboard
+ *  @subpackage bloodSalvage
+ *  @version $Revision: $
  *  @author Fabien Ménager
  */
 
@@ -16,14 +16,16 @@ $months_relative = mbGetValueFromGetOrSession('months_relative', 0);
 
 $possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa');
 foreach ($possible_filters as $n) {
-	if (!isset($filters[$n])) $filters[$n] = null;
+  if (!isset($filters[$n])) $filters[$n] = null;
 }
 
 $data = array();
-
 $dates = array();
 $ticks = array();
 $options = array();
+$series = array();
+
+$age_areas = array(0, 20, 40, 50, 60, 70, 80);
 
 // Dates
 for ($i = $months_count - 1; $i >= 0; --$i) {
@@ -43,9 +45,11 @@ $ljoin['consultation_anesth'] = 'operations.operation_id = consultation_anesth.o
 /*$ljoin['consultation'] = 'consultation_anesth.operation_id = consultation.consultation_id';
 $ljoin['plageconsult'] = 'consultation.plageconsult_id = plageconsult.plageconsult_id';*/
 $ljoin['plagesop'] = 'operations.plageop_id = plagesop.plageop_id';
+$ljoin['sejour'] = 'operations.sejour_id = sejour.sejour_id';
+$ljoin['patients'] = 'sejour.patient_id = patients.patient_id';
 
 if ($filters['anesth_id']) {
-	$where['operations.anesth_id'] = " = '{$filters['anesth_id']}'";
+  $where['operations.anesth_id'] = " = '{$filters['anesth_id']}'";
 }
 
 if ($filters['chir_id']) {
@@ -53,12 +57,12 @@ if ($filters['chir_id']) {
 }
 
 if ($filters['codes_ccam']) {
-	$list_codes_ccam = explode('|', $filters['codes_ccam']);
-	$whereCode = array();
-	foreach ($list_codes_ccam as $code) {
-		$whereCode[] = "operations.codes_ccam LIKE '%$code%'";
-	}
-	$where[] = implode(' OR ', $whereCode);
+  $list_codes_ccam = explode('|', $filters['codes_ccam']);
+  $whereCode = array();
+  foreach ($list_codes_ccam as $code) {
+    $whereCode[] = "operations.codes_ccam LIKE '%$code%'";
+  }
+  $where[] = implode(' OR ', $whereCode);
 }
 
 if ($filters['code_asa']) {
@@ -66,19 +70,36 @@ if ($filters['code_asa']) {
 }
 
 $bs = new CBloodSalvage();
-$i = 0;
-foreach ($dates as $month => $date) {
-	$where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+foreach($age_areas as $key => $age) {
+	$limits = array($age, (isset($age_areas[$key+1]) ? $age_areas[$key+1] : null));
+	$label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
 	
-	$count = $bs->countList($where, null, null, null, $ljoin);
+	// Age calculation
+  $where[] = "DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(patients.naissance)), '%Y') > ".$limits[0].
+	           ($limits[1] != null ? (" AND DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(patients.naissance)), '%Y') <= ".$limits[1]) : '');
+						 
+	$pos = end(array_keys($where));
+	$series[$key] = array('data' => null, 'label' => $label);
+	$data = &$series[$key]['data'];
 	
-	$ticks[$i] = array($i, mbTransformTime(null, $month, '%m/%y'));
-	$data[$i] = array($i, $count);
-	$i++;
+	$i = 0;
+	foreach ($dates as $month => $date) {
+	  $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+
+		$count = $bs->countList($where, null, null, null, $ljoin);
+		$data[$i] = array($i, $count);
+	  $i++;
+	}
+	unset($where[$pos]);
 }
 
-$options['xaxis'] = array('ticks' => $ticks);
-$series = array(array('data' => $data, 'label' => utf8_encode(CAppUI::tr('CBloodSalvage'))));
+$i = 0;
+foreach ($dates as $month => $date) {
+  $ticks[$i] = array($i, mbTransformTime(null, $month, '%m/%y'));
+  $i++;
+}
+
+$options['xaxis'] = array('ticks' => $ticks, 'labelsAngle' => 45);
 
 $smarty = new CSmartyDP();
 
