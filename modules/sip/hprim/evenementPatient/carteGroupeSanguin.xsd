@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas des niveaux inférieurs utiles 
+	-->
+	<xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+	<xsd:include schemaLocation="typesDeBase.xsd"/>
+	<xsd:include schemaLocation="typesTemps.xsd"/>
+	<!-- -->
+	<xsd:annotation>
+		<xsd:documentation>Définit la structure d'une carte de groupe sanguin</xsd:documentation>
+	</xsd:annotation>
+	<!-- 
+		"typeCarteGroupeSanguin" :
+	-->
+	<xsd:complexType name="typeCarteGroupeSanguin">
+		<xsd:sequence>
+			<xsd:element name="premiereDetermination" type="typeDeterminationGroupe" minOccurs="0"/>
+			<xsd:element name="deuxiemeDetermination" type="typeDeterminationGroupe" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="groupe" type="groupeABOHprim" use="required"/>
+		<xsd:attribute name="rhesus" type="rhesusHprim" use="required"/>
+	</xsd:complexType>
+	<!-- 
+		"typeDeterminationGroupe" :
+	-->
+	<xsd:complexType name="typeDeterminationGroupe">
+		<xsd:sequence>
+			<xsd:element name="date" type="typeDateHeureOptionnelle" minOccurs="0"/>
+			<xsd:element name="laboratoireExecutant" type="texte80" minOccurs="0"/>
+			<xsd:element name="phenotype" type="nom10" minOccurs="0"/>
+			<xsd:element name="agglutininesIrregulieres" type="texte35" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

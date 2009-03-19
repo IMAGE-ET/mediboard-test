@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- inclusions des schémas des niveaux inferieurs -->
+   <xsd:include schemaLocation="enteteMessage.xsd"/>
+   <xsd:include schemaLocation="enregistrementPatient.xsd"/>
+   <xsd:include schemaLocation="venue.xsd"/>
+   <xsd:include schemaLocation="dossierResume.xsd"/>
+   <xsd:include schemaLocation="lienVenue.xsd"/>
+   <xsd:include schemaLocation="mouvementPatient.xsd"/>
+   <xsd:include schemaLocation="fusionPatient.xsd"/>
+   <xsd:include schemaLocation="fusionVenue.xsd"/>
+   <xsd:include schemaLocation="debiteurVenue.xsd"/>
+   <!--
+      élément racine du message :
+   -->
+   <xsd:element name="evenementsPatients">
+      <xsd:annotation>
+         <xsd:documentation>Le message evenementsPatients contient une collection de notifications d'événements administratifs survenus à des patients dans un établissement de soins. Il est produit par le système de l'agent ayant constaté ou produit ces événements. Si l'attribut acquittementAttendu vaut "oui" le système destinataire devra renvoyer un message d'acquittement positif ou négatif après intégration.</xsd:documentation>
+      </xsd:annotation>
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="enteteMessage" type="typeEnteteMessage"/>
+            <xsd:element name="evenementPatient" type="typeEvenementPatient" maxOccurs="unbounded">
+               <xsd:annotation>
+                  <xsd:documentation>Un événement concernant un patient  Cet événement comporte en attribut un code action qui peut valoir "création", "modification", "remplacement" ou "suppression", sauf pour les événements "fusion" qui admettent seulement deux actions : "fusion" ou "défusion"</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+         </xsd:sequence>
+         <xsd:attribute name="acquittementAttendu" type="ouiNon" default="non"/>
+      </xsd:complexType>
+   </xsd:element>
+   <!-- -->
+   <xsd:complexType name="typeEvenementPatient">
+      <xsd:annotation>
+         <xsd:documentation>Un événement concernant un patient appartient à l'une des six catégories suivantes</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="acteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:choice>
+            <xsd:element name="enregistrementPatient" type="typeEnregistrementPatient">
+               <xsd:annotation>
+                  <xsd:documentation>Enregistrement d'un patient avec son identifiant (ipp) dans le système</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="venuePatient" type="typeVenuePatient">
+               <xsd:annotation>
+                  <xsd:documentation>Venue d'un patient dans l'établissement avec son numéro de venue</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="dossierResumePatient" type="typeDossierResumePatient"/>
+            <xsd:element name="lienVenue" type="typeLienVenue">
+               <xsd:annotation>
+                  <xsd:documentation>Lien de rattachement d'un numéro de venue à un ipp</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fusionPatient" type="typeFusionPatient">
+               <xsd:annotation>
+                  <xsd:documentation>Fusion de deux ipp</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fusionVenue" type="typeFusionVenue">
+               <xsd:annotation>
+                  <xsd:documentation>Fusion de deux venues</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="mouvementPatient" type="typeMouvementPatient">
+               <xsd:annotation>
+                  <xsd:documentation>Mouvement du patient dans une unité fonctionnelle ou médicale</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="debiteursVenue" type="typeDebiteursVenue">
+               <xsd:annotation>
+                  <xsd:documentation>Gestion des débiteurs d'une venue de patient</xsd:documentation>
+               </xsd:annotation>
+            </xsd:element>
+         </xsd:choice>
+         <xsd:element name="commentaire" type="commentaire" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>commente l'événement</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>lettre, image, photo, ...</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

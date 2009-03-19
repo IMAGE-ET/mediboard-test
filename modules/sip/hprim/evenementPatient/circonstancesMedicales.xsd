@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		inclusions des schémas des niveaux inferieurs utiles 
+	-->
+	<xsd:include schemaLocation="typesDeBase.xsd"/>
+	<xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+	<!--
+		"typeCirconstancesMedicales" :
+		Les circonstances médicales qui motivent une prescription
+	-->
+	<xsd:complexType name="typeCirconstancesMedicales">
+		<xsd:sequence>
+			<xsd:element name="circonstanceMedicale" type="typeCirconstanceMedicale" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Une circonstance médicale enrichit le contexte de la demande d'examens. Cette circonstance peut soit être codée dans la nomenclature Hprim soit dans une autre nomenclature.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--
+		"typeCirconstanceMedicale" :
+		Une circonstance médicale : codée Hprim ou bien selon un autre système de codage
+	-->
+	<xsd:complexType name="typeCirconstanceMedicale">
+		<xsd:complexContent>
+			<xsd:extension base="typeCode12Libelle80">
+				<xsd:attribute name="valeur" type="circonstanceMedicaleHprim" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

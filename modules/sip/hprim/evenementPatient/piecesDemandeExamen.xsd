@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="sujetHumain.xsd"/>
+   <xsd:include schemaLocation="patient.xsd"/>
+   <xsd:include schemaLocation="venue.xsd"/>
+   <xsd:include schemaLocation="mouvement.xsd"/>
+   <xsd:include schemaLocation="priseEnCharge.xsd"/>
+   <xsd:include schemaLocation="sujetNonHumain.xsd"/>
+   <xsd:include schemaLocation="circonstancesMedicales.xsd"/>
+   <xsd:include schemaLocation="examens.xsd"/>
+   <xsd:include schemaLocation="echantillons.xsd"/>
+   <xsd:include schemaLocation="facturation.xsd"/>
+   <xsd:include schemaLocation="pieceJointe.xsd"/>
+   <xsd:include schemaLocation="destinatairesResultats.xsd"/>
+   <!--
+      Les morceaux d'une demande d'examens,  communs au message "demandesExamens" et au message "resultatsExamens"
+   -->
+   <!--
+      "typeEnteteDemande" :
+      Le groupe des éléments d'entete d'une demande
+   -->
+   <xsd:complexType name="typeEnteteDemande">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime" minOccurs="0"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:choice>
+            <xsd:element name="sujetHumain" type="typeSujetHumain"/>
+            <xsd:element name="sujetAnimal" type="typeSujetAnimal"/>
+            <xsd:element name="sujetMatiere" type="typeSujetMatiere"/>
+         </xsd:choice>
+         <xsd:element name="datePrescription" type="typeDateHeureOptionnelle"/>
+         <xsd:element name="dateDemande" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="demandeurs" type="typeDemandeurs">
+            <xsd:annotation>
+               <xsd:documentation>Le médecin prescripteur et optionnellement l'organisation de santé à l'origine de la demande. Ce type prend en compte aussi l'intermédiaire : Exemple un laboratoire demandant l'exécution d'analyses à un plateau technique ou à un laboratoire spécialisé.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="executant" type="typeExecutant">
+            <xsd:annotation>
+               <xsd:documentation>l'organisation de santé à qui est adressée la demande et qui devra rendre ses résultats au demandeur, même si l'exécution est partiellement ou totalement sous-traitée à un tiers.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="demandeDeclenchante" type="nom15" minOccurs="0"/>
+         <xsd:element name="acteursEnCopies" type="typeActeursEnCopies" minOccurs="0"/>
+         <xsd:element name="circonstancesMedicales" type="typeCirconstancesMedicales" minOccurs="0"/>
+         <xsd:element name="commentaireDemandeur" type="commentaire" minOccurs="0"/>
+         <xsd:element name="piecesJointes" type="typePiecesJointes" minOccurs="0"/>
+         <xsd:element name="nonConformites" type="typeNonConformites" minOccurs="0"/>
+         <xsd:element name="facturabilite" type="typeFacturabiliteDemande" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "attributsDemandeExamens"
+      groupe d'attributs d'une demande d'examens (dans tous les messages référençant une demande d'examens
+   -->
+   <xsd:attributeGroup name="attributsDemandeExamens">
+      <xsd:attribute name="origine" type="origineExamenHprim" use="required"/>
+      <xsd:attribute name="priorite" type="priorite" use="optional"/>
+      <xsd:attribute name="confidentialite" type="ouiNon" use="optional"/>
+   </xsd:attributeGroup>
+   <!--
+      "typeExecutant"
+      l'organisation de santé a qui est adressée la demande et qui devra rendre ses résultats au demandeur, 
+      même si l'exécution est partiellement ou totalement sous-traitée à un tiers.
+      Ce type prend en compte aussi l'intermédiaire qui renvoie les résultats au demandeur initial
+   -->
+   <xsd:complexType name="typeExecutant">
+      <xsd:sequence>
+         <xsd:element name="uniteFonctionnelleExecutante" type="typeCode10Libelle35" minOccurs="0"/>
+         <xsd:element name="etablissementExecutant" type="typeEtablissementSante" minOccurs="0"/>
+         <xsd:element name="etablissementIntermediaire" type="typeEtablissementSante" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

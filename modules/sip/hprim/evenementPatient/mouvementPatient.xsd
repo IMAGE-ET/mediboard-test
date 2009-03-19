@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas de niveaux inférieurs utiles 
+   -->
+   <xsd:include schemaLocation="dossierResume.xsd"/>
+   <xsd:include schemaLocation="patient.xsd"/>
+   <xsd:include schemaLocation="venue.xsd"/>
+   <xsd:include schemaLocation="mouvement.xsd"/>
+   <xsd:include schemaLocation="priseEnCharge.xsd"/>
+   <xsd:include schemaLocation="voletMedical.xsd"/>
+   <!--  -->
+   <xsd:complexType name="typeMouvementPatient">
+      <xsd:annotation>
+         <xsd:documentation>Evénement déclencheur : Mouvement d'un patient en entrée ou en sortie d'une UF d'un établissement de soins. </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="patient" type="typePatient"/>
+         <xsd:element name="venue" type="typeVenue" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Le dossier de résumé est prioritaire à la venue pour la gestion du parcours de soins.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="priseEnCharge" type="typePriseEnCharge" minOccurs="0"/>
+         <xsd:element name="mouvements" type="typeMouvements">
+            <xsd:annotation>
+               <xsd:documentation>Historique ordonné des mouvements de la venue, ou bien un seul mouvement : le mouvement courant.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="voletMedical" type="typeVoletMedical" minOccurs="0"/>
+         <xsd:element name="dossierResume" type="typeDossierResumeLight"  minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="action" type="actionMiseAJour" use="required"/>
+   </xsd:complexType>
+</xsd:schema>

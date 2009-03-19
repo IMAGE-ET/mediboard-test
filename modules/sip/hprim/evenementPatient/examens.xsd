@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!--
+      FM 23/06/01
+      Pour faciliter la lecture de la documentation de définition, le groupe nommé "hautExamen" a été supprimé
+      du schéma "piecesExamens.xsd" et son contenu dupliqué dans les trois types d'examen 
+      (executant, demandeur, controler)
+   -->
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="piecesExamen.xsd"/>
+   <xsd:include schemaLocation="tests.xsd"/>
+   <!--
+      "typeExamensExecutant" :
+      Les examens référencés dans un message "resultatsExamens"
+   -->
+   <xsd:complexType name="typeExamensExecutant">
+      <xsd:sequence>
+         <xsd:element name="examen" type="typeExamenExecutant" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeExamensDemandeur" :
+      Les examens référencés dans l'élément "demandeExamen" d'un message "demandesExamens"
+   -->
+   <xsd:complexType name="typeExamensDemandeur">
+      <xsd:sequence>
+         <xsd:element name="examen" type="typeExamenDemandeur" maxOccurs="unbounded">
+            <xsd:annotation>
+               <xsd:documentation>examens demandés </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeExamensControler" :
+      Les examens référencés dans dans l'élément "demandeControler" d'un message "demandesExamens"
+   -->
+   <xsd:complexType name="typeExamensControler">
+      <xsd:sequence>
+         <xsd:element name="examenControler" type="typeExamenControler" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeExamenExecutant" :
+      un examen dans un message transmis par l'exécutant ("resultatsExamens")
+      - l'exécutant doit obligatoirement indiquer le classement de l'examen dans la présentation des résultats
+      - ajout de l'élément obligatoire "validation"
+      - ajout de l'élément optionnel "commentaireExecutant"
+      - ajout de l'attribut obligatoire "statutExecutant"
+   -->
+   <xsd:complexType name="typeExamenExecutant">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="nom" type="typeCode21Libelle80">
+            <xsd:annotation>
+               <xsd:documentation>identifiant de l'examen dans une nomenclature </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="indiceRepetition" type="xsd:positiveInteger" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Un examen peut être prescrit plusieurs fois dans la même demande. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="resultatDeclenchant" type="typeIdentifiantResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation> l'examen non prescrit au départ, a été induit par le résultat d'un test d'un autre examen de la même demande. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="liensEchantillons" type="typeLiensEchantillons" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>échantillons requis pour l'exécution de l'examen.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="commentaireDemandeur" type="commentaire" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Commentaire apporté par le demandeur à cet examen</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="classement" type="typeClassementExamen">
+            <xsd:annotation>
+               <xsd:documentation>Classement de l'examen  pour la présentation des résultats</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="validation" type="typeValidationResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>statut et conditions de validation de l'examen</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="commentaireExecutant" type="typeCommentaireResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Commentaire de fin d'examen apporté par l'exécutant.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="tests" type="typeTestsExecutant" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Liste des tests qui composent l'examern</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+      </xsd:sequence>
+      <xsd:attributeGroup ref="attributsExamen"/>
+      <xsd:attribute name="statutExecutant" type="statutExecutantDemandeExamenTest" use="required"/>
+   </xsd:complexType>
+   <!--
+      "typeExamenDemandeur" :
+      Un examen référencé dans une demande d'examens dans un message envoyé par le demandeur ("demandesExamens")
+      - le demandeur peut donner la liste de tests composant  l'examen, éventuellement des tests à supprimer de l'examen.
+        Ces tests peuvent être accompagnés ou non de leurs résultats (courants et/ou antérieurs).
+      - le demandeur  peut optionnellement indiquer le classement de l'examen dans la présentation des résultats
+   -->
+   <xsd:complexType name="typeExamenDemandeur">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="nom" type="typeCode21Libelle80">
+            <xsd:annotation>
+               <xsd:documentation>identifiant de l'examen dans une nomenclature </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="indiceRepetition" type="xsd:positiveInteger" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Un examen peut être prescrit plusieurs fois dans la même demande : 
+Sur des échantillons de même nature, mais de localisations différentes  (ex: prélèvement oeil droit,  oeil gauche. 
+Sur des échantillons prélevés à des temps successifs. 
+Dans ces  deux cas, on indice la répétition de cet examen dans la demande.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="resultatDeclenchant" type="typeIdentifiantResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>L'examen non prescrit au départ, a été induit par le résultat d'un test d'un autre examen de la même demande. L'attribut "rangResultat" de cet élément identifie le résultat élémentaire déclenchant lorsqu'il y avait plusieurs résultats pour le test. Ex : rangResultat=1 ==> Ech.Coli,  rangResultat=2 ==> Sta.Aureus</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="liensEchantillons" type="typeLiensEchantillons" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>liste des échantillons requis pour l'exécution de l'examen. </xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="commentaireDemandeur" type="commentaire" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Commentaire apporté par le demandeur à cet examen</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="classement" type="typeClassementExamen" minOccurs="0"/>
+         <xsd:element name="facturabilite" type="typeFacturabiliteExamen" minOccurs="0"/>
+         <xsd:element name="renouvelable" type="typeRenouvelable" minOccurs="0"/>
+         <xsd:element name="tests" type="typeTestsDemandeur" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attributeGroup ref="attributsExamen"/>
+   </xsd:complexType>
+   <!--
+      "typeExamenDemandeur" :
+      Un examen référencé dans une demande à contrôler dans un message envoyé par le demandeur ("demandesExamens")
+      Le demandeur donne optionnellement la liste des tests à contrôler sur cet examen, 
+      et pour chaque test un éventuel appareil sur lequel doit être effectué le contrôle, et une éventuelle dilution à effectuer.
+   -->
+   <xsd:complexType name="typeExamenControler">
+      <xsd:sequence>
+         <xsd:element name="dateAction" type="xsd:dateTime"/>
+         <xsd:element name="acteurAction" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="nom" type="typeCode21Libelle80">
+            <xsd:annotation>
+               <xsd:documentation>identifiant de l'examen dans une nomenclature (Names-LAB, CDAM, NABM, locale....)</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="indiceRepetition" type="xsd:positiveInteger" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Un examen peut être prescrit plusieurs fois dans la même demande : 
+sur des échantillons de même nature, mais de localisations différentes, notamment en bactériologie (ex: prélèvement oeil droit, prélèvement oeil gauche, PV endocol, PV exocol....). 
+sur des échantillons prélevés à des temps successifs (ex : épreuve fonctionnelle). 
+Dans ces  deux cas, l'élément "indiceRepetition"  donne l'indice de répétition de cet examen dans la demande.</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="resultatDeclenchant" type="typeIdentifiantResultat" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Cet élément indique que l'examen non prescrit au départ, a été induit par le résultat d'un test d'un autre examen de la même demande. L'attribut "rangResultat" de cet élément permet d'identifier, le résultat élémentaire déclenchant lorsqu'il y avait plusieurs résultats pour le test. Ex : rangResultat=1 ==> Ech.Coli,  rangResultat=2 ==> Sta.Aureus</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="liensEchantillons" type="typeLiensEchantillons" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Cet élément référence la liste des échantillons requis pour l'exécution de l'examen.  Pour chaque échantillon on peut trouver : sa nature, sa localisation, son identifiant s'il est fourni par le demandeur, ...</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="commentaireDemandeur" type="commentaire" minOccurs="0">
+            <xsd:annotation>
+               <xsd:documentation>Commentaire apporté par le demandeur à cet examen</xsd:documentation>
+            </xsd:annotation>
+         </xsd:element>
+         <xsd:element name="testsControler" type="typeTestsControler" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

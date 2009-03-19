@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.3 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" xmlns:insee="http://www.hprim.org/inseeXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+    importations des schémas des autres domaines de noms 
+  -->
+  <xsd:import namespace="http://www.hprim.org/inseeXML" schemaLocation="nomenclaturesInsee.xsd"/>
+  <!-- 
+    inclusions des schémas des niveaux inférieurs utiles 
+  -->
+   <xsd:include schemaLocation="personnePhysique.xsd"/>
+   <xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+   <xsd:include schemaLocation="assurances.xsd"/>
+   <!-- 
+      Prise en charge d'un patient dans le cadre d'une venue ou d'une prestation d'acte 
+   -->
+   <xsd:complexType name="typePriseEnCharge">
+      <xsd:sequence>
+         <xsd:element name="employeurs" type="typeEmployeurs" minOccurs="0"/>
+         <xsd:element name="assurancesObligatoires" type="typeAssurancesObligatoires" minOccurs="0"/>
+         <xsd:element name="complementaires" type="typeComplementaires" minOccurs="0"/>
+         <xsd:element name="paiementParticuliers" type="typePaiementParticuliers" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!-- 
+      Couverture maladie obligatoire 
+   -->
+   <xsd:complexType name="typeAssurancesObligatoires">
+      <xsd:sequence>
+         <xsd:element name="assuranceObligatoire" type="typeAssuranceObligatoire" maxOccurs="2"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      Un organisme d'assurance obligatoire.
+      Eléments obligatoires : assuranceExoneration, origineDroits, grandRegime
+   -->
+   <xsd:complexType name="typeAssuranceObligatoire">
+      <xsd:sequence>
+         <xsd:element name="assure" type="typeAssure"/>
+         <xsd:element name="assuranceExoneration" type="typeAssuranceExoneration"/>
+         <xsd:choice>
+            <xsd:element name="pieceDroit" type="pieceDroitHprim"/>
+            <xsd:element name="presomptionDroit" type="presomptionDroitHprim"/>
+         </xsd:choice>
+         <xsd:element name="codeGestion" type="typeCodeGestion"/>
+         <xsd:element name="dateDebutDroit" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="dateFinDroit" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="tauxRemboursementPrincipal" type="tauxRemboursement" minOccurs="0"/>
+         <xsd:element name="grandRegime" type="codeGrandRegime"/>
+         <xsd:element name="caisseAffiliation" type="caisseAffiliation" minOccurs="0"/>
+         <xsd:element name="centrePaiement" type="centrePaiement" minOccurs="0"/>
+         <xsd:element name="nomOrganisme" type="texte35" minOccurs="0"/>
+         <xsd:element name="adresseOrganisme" type="typeAdresseBase" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="rangPriseEnCharge" type="xsd:positiveInteger" use="optional"/>
+   </xsd:complexType>
+   <!-- 
+      Couverture maladie complémentaire 
+   -->
+   <xsd:complexType name="typeComplementaires">
+      <xsd:sequence>
+         <xsd:element name="complementaire" type="typeComplementaire" maxOccurs="3"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      Un organisme d'assurance complémentaire.
+      Eléments obligatoires : codePrefectoralMutuelle (vérifier si les compagnies d'assurances en ont un aussi ?)
+   -->
+   <xsd:complexType name="typeComplementaire">
+      <xsd:sequence>
+         <xsd:element name="assure" type="typeAssure" minOccurs="0"/>
+         <xsd:element name="dateDebutDroits" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="dateFinDroits" type="xsd:date" minOccurs="0"/>
+         <xsd:element name="contrat" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+         <xsd:element name="tauxRemboursementPrincipal" type="tauxRemboursement" minOccurs="0"/>
+         <xsd:element name="code" type="codePrefectoralMutuelle"/>
+         <xsd:element name="nom" type="texte35" minOccurs="0"/>
+         <xsd:element name="adresse" type="typeAdresseBase" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="categorie" type="categorieComplementaireHprim" use="required"/>
+      <xsd:attribute name="rangPriseEnCharge" type="xsd:positiveInteger" use="optional"/>
+   </xsd:complexType>
+   <!-- 
+      paiement par des particuliers 
+   -->
+   <xsd:complexType name="typePaiementParticuliers">
+      <xsd:sequence>
+         <xsd:element name="paiementParticulier" type="typePaimentParticulier" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!-- 
+      paiement par un particulier 
+   -->
+   <xsd:complexType name="typePaimentParticulier">
+      <xsd:sequence>
+         <xsd:element name="personne" type="typePersonne"/>
+         <xsd:element name="tauxRemboursementPrincipal" type="tauxRemboursement" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="rangPriseEnCharge" type="xsd:positiveInteger" use="optional"/>
+   </xsd:complexType>
+   <!--
+      L'assuré.
+      Eléments obligatoires : numéro d'immatriculation Insee (sécurité sociale), personne
+   -->
+   <xsd:complexType name="typeAssure">
+      <xsd:sequence>
+         <xsd:element name="immatriculation" type="insee:numeroImmatriculationInsee"/>
+         <xsd:element name="personne" type="typePersonnePhysique" minOccurs="0"/>
+         <xsd:element name="lienAssure" type="rangBeneficiaire"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!-- 
+      Les employeurs du bénéficiaire ou de l'assuré
+   -->
+   <xsd:complexType name="typeEmployeurs">
+      <xsd:sequence>
+         <xsd:element name="employeur" type="typeEmployeur" maxOccurs="3"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="typeEmployeur">
+      <xsd:sequence>
+         <xsd:element name="identifiant" type="typeIdentifiant" minOccurs="0"/>
+         <xsd:element name="nom" type="texte35"/>
+         <xsd:element name="adresses" type="typeAdresses" minOccurs="0"/>
+         <xsd:element name="nomCram" type="texte35" minOccurs="0"/>
+         <xsd:element name="departementCram" type="departementFrancais" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="employeurPatient" type="ouiNon" default="oui"/>
+   </xsd:complexType>
+   <!--
+      "typeCodeGestion"
+      origine : carte d'assuré social
+      définition : permet de distinguer la catégorie de patients  
+      Source : Dictionnaire des données 1994 de la CNAMTS
+      Exemples :  10    régime général 
+                  11    régime général assuré retraité
+                  12    régime général assuré non cotisant
+                  04    SNCF
+   -->
+   <xsd:simpleType name="typeCodeGestion">
+      <xsd:restriction base="xsd:string">
+         <xsd:length value="2"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XML Spy v4.0 beta 2 build Jul 26 2001 (http://www.xmlspy.com) by Macary François (private) -->
+<xsd:schema targetNamespace="http://www.hprim.org/hprimXML" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.hprim.org/hprimXML" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <!-- 
+      inclusions des schémas des niveaux inferieurs 
+   -->
+   <xsd:include schemaLocation="professionnelsSante.xsd"/>
+   <xsd:include schemaLocation="typesDeBase.xsd"/>
+   <xsd:include schemaLocation="typesTemps.xsd"/>
+   <xsd:include schemaLocation="nomenclaturesHprim.xsd"/>
+   <!-- 
+      "typeNonConformites" :
+      non conformités 
+      -  liées au prélèvement : patient pas strictement  à jeun, condition de prélèvement ou procédure ou mode opératoire
+         non respecté, ...
+      -  liées à l'échantillon :    condition de transport, de conservation, non respectée, volume insuffisant,  ....
+      -  liées à la prescription : renseignements médicaux fournis insuffisants, traitement incompatible, régime incompatible, ...
+   -->
+   <xsd:complexType name="typeNonConformites">
+      <xsd:sequence>
+         <xsd:element name="nonConformite" type="typeNonConformite" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeNonConformite"
+   -->
+   <xsd:complexType name="typeNonConformite">
+      <xsd:annotation>
+         <xsd:documentation>non conformité : 
+- liée au prélèvement : patient pas strictement  à jeun, condition de prélèvement ou procédure ou mode opératoire non respecté, ...
+- liée à l'échantillon :  condition de transport, de conservation, non respectée, volume insuffisant,  ....
+- liée à la prescription : renseignements médicaux fournis insuffisants, traitement incompatible, régime incompatible, ...</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="description" type="typeCode17Libelle80Commentaire"/>
+         <xsd:element name="identification" type="texte35" minOccurs="0"/>
+         <xsd:element name="detection" type="typeDetection" minOccurs="0"/>
+         <xsd:element name="decisionExecutant" type="typeDecisionExecutant" minOccurs="0"/>
+         <xsd:element name="actionCorrective" type="typeActionCorrective" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeDetection"
+      Signalement de la non conformité par le demandeur : qui ? quand ?
+   -->
+   <xsd:complexType name="typeDetection">
+      <xsd:annotation>
+         <xsd:documentation>Détection et signalement de la non conformité : par qui ? quand ?</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="detecteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="dateHeureDetection" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="informationPrescripteur" type="typeInformationPrescripteur" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeDecisionExecutant"
+      Décision prise par l'exécutant concernant une non conformité
+   -->
+   <xsd:complexType name="typeDecisionExecutant">
+      <xsd:annotation>
+         <xsd:documentation>Décision prise par l'exécutant concernant une non conformité</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="decideur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="dateHeureDecision" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="derogationAccordee" type="typeCode17Libelle80Commentaire" minOccurs="0"/>
+         <xsd:element name="informationPrescripteur" type="typeInformationPrescripteur" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="execution" type="decisionExecutionExamens" use="required"/>
+   </xsd:complexType>
+   <!--
+      "typeActionCorrective"
+      Action corrective prise vis à vis d'une non conformité
+   -->
+   <xsd:complexType name="typeActionCorrective">
+      <xsd:annotation>
+         <xsd:documentation>Action corrective prise vis à vis d'une non conformité </xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="acteur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="dateHeureAction" type="typeDateHeureOptionnelle" minOccurs="0"/>
+         <xsd:element name="informationPrescripteur" type="typeInformationPrescripteur" minOccurs="0"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <!--
+      "typeInformationPrescripteur"
+      Information du prescripteur :
+         - de la non conformité
+         - de ses conséquences
+         - de l'action corrective
+   -->
+   <xsd:complexType name="typeInformationPrescripteur">
+      <xsd:annotation>
+         <xsd:documentation>Information du prescripteur :   
+- de la non conformité, 
+- de ses conséquences, 
+- de l'action corrective</xsd:documentation>
+      </xsd:annotation>
+      <xsd:sequence>
+         <xsd:element name="informateur" type="typeProfessionnelSante" minOccurs="0"/>
+         <xsd:element name="dateHeureDelivrance" type="typeDateHeureOptionnelle" minOccurs="0"/>
+      </xsd:sequence>
+      <xsd:attribute name="faite" type="informationDonnee" use="optional"/>
+   </xsd:complexType>
+   <!--
+      informationDonnee:   information délivrée à un interlocuteur : non, oralement, par écrit, par un autre moyen
+   -->
+   <xsd:simpleType name="informationDonnee">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="non"/>
+         <xsd:enumeration value="oral"/>
+         <xsd:enumeration value="écrit"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+   <!--
+      decisionExecutionExamens:  décision vis à vis de l'exécution des examens prescrits, en présence d'une non conformité
+   -->
+   <xsd:simpleType name="decisionExecutionExamens">
+      <xsd:restriction base="xsd:string">
+         <xsd:enumeration value="non"/>
+         <xsd:enumeration value="partielle"/>
+         <xsd:enumeration value="avec_réserve"/>
+         <xsd:enumeration value="complète"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+</xsd:schema>
