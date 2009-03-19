@@ -118,8 +118,10 @@ Main.add(function () {
                   onmouseover="ObjectTooltip.createDOM(this, 'plage-{{$curr_plage->_id}}')" 
                   {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"{{/if}}
                 >
-                  {{$curr_plage->date|date_format:"%a %d"}} 
-                  &mdash; {{$curr_plage->_ref_salle->_view}}
+                  {{$curr_plage->date|date_format:"%a %d"}} -
+                  {{$curr_plage->debut|date_format:"%Hh%M"}} -
+                  {{$curr_plage->fin|date_format:"%Hh%M"}} 
+                  &mdash; {{$curr_plage->_ref_salle->_view}} 
                 </label>
               </div>
             </div>
