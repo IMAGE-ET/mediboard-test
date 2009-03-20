@@ -248,6 +248,7 @@ $dPconfig["dPcabinet"] = array(
 	   */
     "format_auto_motif" => "Pré-anésth. %I %L %S",
     "format_auto_rques" => "%T %E %e",
+    "view_premedication" => "0"
 	),
 	"CPrescription" => array (
     "view_prescription" => "0"
@@ -532,6 +533,10 @@ $dPconfig["pharmacie"] = array (
 
 $dPconfig["dmi"] = array (
   "CDMI" => array(
+    "product_category_id" => "",
+    "active" => 0
+  ),
+  "CDM" => array(
     "product_category_id" => "",
     "active" => 0
   )

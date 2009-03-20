@@ -143,7 +143,7 @@ if($prescription->_id){
   $historique = $prescription->loadRefsLinesHistorique();
 	
   // Chargement des lignes de DMI
-  if (CAppUI::conf("dmi CDMI active") && CModule::$active['dmi'] && $chapitre == 'dmi') {
+  if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
     $prescription->loadRefsLinesDMI();
     foreach($prescription->_ref_lines_dmi as $_line_dmi){
       $_line_dmi->loadRefsFwd();
@@ -544,7 +544,7 @@ if(!$refresh_pharma && !$mode_protocole){
       // refresh Element
       else {
         $smarty->assign("element", $chapitre);
-        if (CAppUI::conf("dmi CDMI active") && CModule::$active['dmi'] && $chapitre == 'dmi') {
+        if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
         	$smarty->display("../../dmi/templates/inc_div_dmi.tpl");
         }
         else {

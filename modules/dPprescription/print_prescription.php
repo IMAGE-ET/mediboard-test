@@ -90,7 +90,7 @@ foreach($prescription->_ref_perfusions as &$_perfusion){
   $_perfusion->loadRefsLines();
 }
 
-if (CAppUI::conf("dmi CDMI active") && CModule::$active['dmi']) {
+if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
   $prescription->loadRefsLinesDMI();
 }
 
