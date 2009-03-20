@@ -8,7 +8,7 @@
  */
 
 global  $can;
-$can->needsAdmin();
+$can->needsRead();
 
 $filters         = mbGetValueFromGetOrSession('filters', array());
 $months_count    = mbGetValueFromGetOrSession('months_count', 12);
