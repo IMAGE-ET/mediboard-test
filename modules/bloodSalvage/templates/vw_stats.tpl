@@ -1,8 +1,9 @@
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
-var series = {{$series|@json}};
-var options = {{$options|@json}};
+var graphs = {{$graphs|@json}},
+    options = {{$options|@json}},
+		titles = {{$titles|@json}};
 
 var oCcamField = null,
     graph,
@@ -12,11 +13,13 @@ function yTickFormatter(y) {
 	return parseInt(y).toString();
 }
 
-function drawGraph() {
+function drawGraph(key) {
   // Let's draw the graph
+	console.debug('stats-'+key);
   graph = Flotr.draw(
-    $('stats'),
-    series, Object.extend({
+    $('stats-'+key),
+    graphs[key], Object.extend({
+			title: titles[key],
       bars: {show:true, barWidth:0.5, fillOpacity: 0.6, stacked:true},
       mouse: {track: false},
       legend: {show: true},
@@ -36,7 +39,9 @@ function drawGraph() {
 Main.add(function () {
   filterForm = getForm('stats-filter');
 
-  drawGraph(series, options);
+  $H(graphs).each(function(pair){
+	  drawGraph(pair.key);
+	});
   
   oCcamField = new TokenField(filterForm["filters[codes_ccam]"], { 
     onChange : updateTokenCcam
@@ -104,6 +109,7 @@ function updateTokenCcam(v) {
         <input type="hidden" name="filters[codes_ccam]" value="{{$filters.codes_ccam}}" />
         <input type="hidden" name="_class_name" value="COperation" />
         <input type="text" name="_code_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
+				<button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>
         <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_code_ccam']))">{{tr}}Add{{/tr}}</button>
       </td>
     </tr>
@@ -127,7 +133,9 @@ function updateTokenCcam(v) {
   </table>
 
   <div style="text-align: center;">
-    <div id="stats" style="width: 600px; height: 300px; margin: auto;"></div>
+	  {{foreach from=$graphs key=key item=graph}}
+      <div id="stats-{{$key}}" style="width: 600px; height: 300px; margin: auto;"></div>
+		{{/foreach}}
   </div>
 </form>
 
