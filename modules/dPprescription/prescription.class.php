@@ -253,10 +253,12 @@ class CPrescription extends CMbObject {
         $date_time_debut = mbDateTime("$signe $_line->decalage_line HOURS", "$date_debut $time_debut");
 	  	  $_line->debut = mbDate($date_time_debut);
 	  	  $_line->time_debut = mbTime($date_time_debut);
-	  	  
 		  }
     } else {
 	    $_line->debut = mbDate($date_debut);
+    	if($time_debut){
+	      $_line->time_debut = $time_debut;
+	    }
     }
 
 
