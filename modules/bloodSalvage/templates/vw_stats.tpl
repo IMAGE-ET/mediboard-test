@@ -24,6 +24,7 @@ function drawGraph(key) {
       mouse: {track: false},
       legend: {show: true},
       yaxis: {min: 0, tickFormatter: yTickFormatter},
+			grid: {verticalLines: false},
       HtmlText: false,
       spreadsheet: {
 		  	show: true,
