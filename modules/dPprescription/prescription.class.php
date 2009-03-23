@@ -83,13 +83,13 @@ class CPrescription extends CMbObject {
   static $images = array("med"      => "modules/soins/images/medicaments.png",
 											   "inj"      => "images/icons/anesth.png",
 											   "perf"     => "modules/soins/images/perfusion.png",
-                         "anapath"  => "modules//soins/images/microscope.png",
+                         "anapath"  => "modules/soins/images/microscope.png",
                          "biologie" => "images/icons/labo.png",
                          "imagerie" => "modules/soins/images/radio.png",
                          "consult"  => "modules/soins/images/stethoscope.png",
                          "kine"     => "modules/soins/images/bequille.png",
                          "soin"     => "modules/soins/images/infirmiere.png",
-                         "dm"       => "modules/soins/images/dmi.png",
+                         "dm"       => "modules/soins/images/pansement.png",
                          "dmi"      => "modules/soins/images/dmi.png");
                           
   function getSpec() {
