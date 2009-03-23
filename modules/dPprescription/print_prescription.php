@@ -86,8 +86,8 @@ if($prescription->_ref_object->_ref_prescription_traitement->_id){
 
 // Chargement des perfusions
 $prescription->loadRefsPerfusions();
-foreach($prescription->_ref_perfusions as &$_perfusion){
-  $_perfusion->loadRefsLines();
+foreach($prescription->_ref_perfusions as $curr_perfusion){
+  $curr_perfusion->loadRefsLines();
 }
 
 if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
