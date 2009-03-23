@@ -49,8 +49,8 @@ class CAntecedent extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["type"]  = "enum list|".CAppUI::conf("dPpatients CAntecedent types");
     $specs["appareil"] = "enum list|".CAppUI::conf("dPpatients CAntecedent appareils");
     $specs["date"]  = "date";

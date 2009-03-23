@@ -18,7 +18,7 @@ class CLmLot extends CLmObject {
   
   var $_annule = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
 
   // Filter Fields
   var $_date_min = null;
@@ -43,8 +43,8 @@ class CLmLot extends CLmObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     // DB Fields
     $specs["S_LOT_NUMERO"]            = "ref class|CLmLot";
@@ -63,10 +63,10 @@ class CLmLot extends CLmObject {
     return $specs;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["fses"] = "CLmFSE S_FSE_NUM_LOT";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["fses"] = "CLmFSE S_FSE_NUM_LOT";
+    return $backProps;
   }
 }
 

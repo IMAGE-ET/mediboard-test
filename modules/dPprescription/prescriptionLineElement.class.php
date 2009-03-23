@@ -43,12 +43,18 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["element_prescription_id"]        = "ref notNull class|CElementPrescription cascade";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
     return $specs;
+  }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["parent_line"]     = "CPrescriptionLineElement child_id";  
+    return $backProps;
   }
   
   function updateFormFields(){

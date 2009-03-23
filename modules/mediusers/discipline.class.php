@@ -87,14 +87,14 @@ class CDiscipline extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["users"] = "CMediusers discipline_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["users"] = "CMediusers discipline_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["text"]      = "str notNull";
     $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST";
     return $specs;

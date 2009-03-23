@@ -87,15 +87,15 @@ class CModule extends CMbObject {
     return $spec;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["messages"]    = "CMessage module_id";
-	  $backRefs["permissions"] = "CPermModule mod_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["messages"]            = "CMessage module_id";
+	  $backProps["permissions_modules"] = "CPermModule mod_id";
+	  return $backProps;
 	}
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["mod_name"]      = "str notNull maxLength|20";
     $specs["mod_type"]      = "enum notNull list|core|user";
     $specs["mod_version"]   = "str notNull maxLength|6";

@@ -27,8 +27,8 @@ class CPrescriptionLineDMI extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["prescription_id"]         = "ref notNull class|CPrescription";
     $specs["praticien_id"]            = "ref notNull class|CMediusers";
     $specs["product_id"]              = "ref notNull class|CProduct";

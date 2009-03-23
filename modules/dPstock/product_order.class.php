@@ -50,14 +50,14 @@ class CProductOrder extends CMbObject {
     return $spec;
   }
 
-	function getBackRefs() {
-		$backRefs = parent::getBackRefs();
-		$backRefs['order_items'] = 'CProductOrderItem order_id';
-		return $backRefs;
+	function getBackProps() {
+		$backProps = parent::getBackProps();
+		$backProps['order_items'] = 'CProductOrderItem order_id';
+		return $backProps;
 	}
 
-	function getSpecs() {
-		$specs = parent::getSpecs();
+	function getProps() {
+		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime';
     $specs['societe_id']      = 'ref notNull class|CSociete';
 	  $specs['group_id']        = 'ref notNull class|CGroups';

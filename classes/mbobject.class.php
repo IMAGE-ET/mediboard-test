@@ -46,14 +46,14 @@ class CMbObject {
   var $_spec          = null;    // Class specification
   var $_props         = array(); // Properties specifications as string
   var $_specs         = array(); // Properties specifications as objects
-  var $_backRefs      = array(); // Back reference specification as string
+  var $_backProps     = array(); // Back reference specification as string
   var $_backSpecs     = array(); // Back reference specification as objects
   var $_seek          = array(); // seekable fields
 
   static $spec          = array();
   static $props         = array();
   static $specs         = array();
-  static $backRefs      = array();
+  static $backProps     = array();
   static $backSpecs     = array();
   static $seeks         = array();
   
@@ -121,14 +121,14 @@ class CMbObject {
     }
     
     if (!$in_cache) {
-      self::$props[$class] = $this->getSpecs();
+      self::$props[$class] = $this->getProps();
       $this->_props =& self::$props[$class];
 
-      self::$specs[$class] = $this->getSpecsObj();
+      self::$specs[$class] = $this->getSpecs();
       $this->_specs =& self::$specs[$class];
       
-      self::$backRefs[$class] = $this->getBackRefs();
-      $this->_backRefs =& self::$backRefs[$class];
+      self::$backProps[$class] = $this->getBackProps();
+      $this->_backProps =& self::$backProps[$class];
 
       // Not prepared since it depends on many other classes
       // Has to be done as a second pass
@@ -138,11 +138,11 @@ class CMbObject {
       $this->_seek =& self::$seeks[$class];
     }
 
-    $this->_props         =& self::$props[$class];
-    $this->_specs         =& self::$specs[$class];
-    $this->_backRefs      =& self::$backRefs[$class];
-    $this->_backSpecs     =& self::$backSpecs[$class];
-    $this->_seek          =& self::$seeks[$class];
+    $this->_props     =& self::$props[$class];
+    $this->_specs     =& self::$specs[$class];
+    $this->_backProps =& self::$backProps[$class];
+    $this->_backSpecs =& self::$backSpecs[$class];
+    $this->_seek      =& self::$seeks[$class];
   }
   
   /**
@@ -1100,7 +1100,7 @@ class CMbObject {
    * @return void
    */
   function loadAllBackRefs($limit = null) {
-    foreach ($this->_backRefs as $backName => $backRef) {
+    foreach ($this->_backProps as $backName => $backProp) {
       $this->loadBackRefs($backName, null, $limit);
       $this->countBackRefs($backName);
     }
@@ -1117,8 +1117,8 @@ class CMbObject {
       return;
     }
 
-    foreach ($this->_backRefs as $backName => $backRef) {
-	    list($backClass, $backField) = explode(" ", $backRef);
+    foreach ($this->_backProps as $backName => $backProp) {
+	    list($backClass, $backField) = explode(" ", $backProp);
 	    $backObject = new $backClass;
 	
 	    // Cas du module non installé
@@ -1480,7 +1480,7 @@ class CMbObject {
    * Get seek specifications
    * @return array
    */
-  function getSpecs() {
+  function getProps() {
     return array (
       "_shortview" => "str",
       "_view" => "str",
@@ -1492,7 +1492,7 @@ class CMbObject {
    * Get backward reference specifications
    * @return array Array of form "collection-name" => "class join-field"
    */
-  function getBackRefs() {
+  function getBackProps() {
     return array (
       "identifiants"           => "CIdSante400 object_id",
       "notes"                  => "CNote object_id",
@@ -1501,7 +1501,8 @@ class CMbObject {
       "permissions"            => "CPermObject object_id",
       "logs"                   => "CUserLog object_id",
       "affectations_personnel" => "CAffectationPersonnel object_id",
-    );
+      "contextes_constante"    => "CConstantesMedicales context_id",
+      );
   }
   
   function getTemplateClasses(){
@@ -1514,10 +1515,13 @@ class CMbObject {
    * @return CMbBackSpec The back reference specification, null if undefined
    */
   function makeBackSpec($backName) {
-    if (array_key_exists($backName, $this->_backSpecs)) return $this->_backSpecs[$backName];
+    if (array_key_exists($backName, $this->_backSpecs)) {
+      return $this->_backSpecs[$backName];
+    }
 
-    if ($backSpec = CMbBackSpec::make($backName, $this->_backRefs[$backName]))
+    if ($backSpec = CMbBackSpec::make($this->_class_name, $backName, $this->_backProps[$backName])) {
       return $this->_backSpecs[$backName] = $backSpec;
+    }
   }
   
   /**
@@ -1525,7 +1529,7 @@ class CMbObject {
    * @return nothing
    */
   function makeAllBackSpecs() {
-    foreach($this->_backRefs as $backName => $ref) {
+    foreach($this->_backProps as $backName => $backProp) {
     	$this->makeBackSpec($backName);
     }
   }
@@ -1534,7 +1538,7 @@ class CMbObject {
    * Converts string specifications to objet specifications
    * Optimized version
    */
-  function getSpecsObj() {
+  function getSpecs() {
     $spec = array();
     foreach ($this->_props as $propName => $propSpec) {
       $spec[$propName] = CMbFieldSpecFact::getSpec($this, $propName, $propSpec);

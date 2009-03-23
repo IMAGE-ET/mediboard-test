@@ -18,7 +18,7 @@ class CLmFSE extends CLmObject {
   
   var $_annulee = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
 
   // Filter Fields
   var $_date_min = null;
@@ -44,8 +44,8 @@ class CLmFSE extends CLmObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     // DB Fields
     $specs["S_FSE_NUMERO_FSE"]        = "ref class|CLmFSE";

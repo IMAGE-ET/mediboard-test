@@ -33,14 +33,14 @@ class CEtabExterne extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["transferts"] = "CSejour etablissement_transfert_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["transferts"] = "CSejour etablissement_transfert_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]            = "str notNull confidential";
     $specs["raison_sociale"] = "str maxLength|50";
     $specs["adresse"]        = "text confidential";

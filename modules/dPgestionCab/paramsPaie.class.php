@@ -60,14 +60,14 @@ class CParamsPaie extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["fiches"] = "CFichePaie params_paie_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["fiches"] = "CFichePaie params_paie_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["employecab_id"] = "ref notNull class|CEmployeCab";
     $specs["smic"]          = "currency notNull|min|0";
     $specs["csgnis"]        = "pct notNull";

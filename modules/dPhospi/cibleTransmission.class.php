@@ -35,8 +35,8 @@ class CCibleTransmission extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
   	$specs["categorie_cible_transmission_id"] = "ref notNull class|CCategorieCibleTransmission";
     $specs["libelle"]     = "str notNull";
     $specs["description"] = "text";

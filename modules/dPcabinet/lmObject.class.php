@@ -15,7 +15,7 @@ class CLmObject extends CMbObject {
   public $_ref_id400 = null;
   
   function CLmObject() {
-    $spec_keys = array_keys($this->getSpecs());
+    $spec_keys = array_keys($this->getProps());
     foreach ($spec_keys as $prop) {
       $this->$prop = null;
     }
@@ -35,11 +35,11 @@ class CLmObject extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
+  function getBackProps() {
     return array();
   }
  
-  function getSpecs() {
+  function getProps() {
     return array();
   }
    

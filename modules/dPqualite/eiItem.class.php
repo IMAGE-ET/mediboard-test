@@ -25,8 +25,8 @@ class CEiItem extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["ei_categorie_id"] = "ref notNull class|CEiCategorie";
     $specs["nom"]             = "str notNull maxLength|50";
     return $specs;

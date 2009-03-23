@@ -27,8 +27,8 @@ class CValidationRepas extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "service_id"   => "ref notNull class|CService",
       "date"         => "date",

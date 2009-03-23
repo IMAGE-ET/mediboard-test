@@ -29,18 +29,18 @@ class CElementPrescription extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
     $specs["libelle"]      = "str notNull";
     $specs["description"]  = "text";
     return $specs;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prescription_lines"] = "CPrescriptionLineElement element_prescription_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prescription_lines"] = "CPrescriptionLineElement element_prescription_id";
+    return $backProps;
   }
   
   function updateFormFields(){

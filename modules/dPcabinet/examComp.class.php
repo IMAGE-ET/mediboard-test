@@ -29,8 +29,8 @@ class CExamComp extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "consultation_id" => "ref notNull class|CConsultation",
       "examen"          => "text helped",

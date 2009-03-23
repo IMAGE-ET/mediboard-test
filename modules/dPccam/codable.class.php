@@ -62,12 +62,12 @@ class CCodable extends CMbObject {
       array();
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["actes_ngap"]    = "CActeNGAP object_id";
-    $backRefs["actes_ccam"]    = "CActeCCAM object_id";
-    $backRefs["prescriptions"] = "CPrescription object_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["actes_ngap"]    = "CActeNGAP object_id";
+    $backProps["actes_ccam"]    = "CActeCCAM object_id";
+    $backProps["prescriptions"] = "CPrescription object_id";
+    return $backProps;
   }
 
   /*
@@ -127,8 +127,8 @@ class CCodable extends CMbObject {
     // $this->updateDBCodesCCAMField();
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
   	$specs["codes_ccam"] = "str";
   	$specs["_codes_ccam"] = "";
   	$specs["_count_actes"] = "num min|0";

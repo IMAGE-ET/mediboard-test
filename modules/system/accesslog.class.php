@@ -34,8 +34,8 @@ class CAccessLog extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["module"]   = "str notNull";
     $specs["action"]   = "str notNull";
     $specs["period"]   = "dateTime notNull";

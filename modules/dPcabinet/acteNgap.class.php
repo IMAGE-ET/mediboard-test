@@ -33,8 +33,8 @@ class CActeNGAP extends CActe {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["code"]                = "str notNull maxLength|3";
     $specs["quantite"]            = "num notNull maxLength|2";
     $specs["coefficient"]         = "float notNull";

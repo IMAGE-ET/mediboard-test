@@ -45,32 +45,33 @@ class CGroups extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["documents_ged"]           = "CDocGed group_id";
-    $backRefs["functions"]               = "CFunctions group_id";
-    $backRefs["menus"]                   = "CMenu group_id";
-    $backRefs["plats"]                   = "CPlat group_id";
-    $backRefs["blocs"]                   = "CBlocOperatoire group_id";
-    $backRefs["sejours"]                 = "CSejour group_id";
-    $backRefs["services"]                = "CService group_id";
-    $backRefs["stocks"]                  = "CStock group_id";
-    $backRefs["types_repas"]             = "CTypeRepas group_id";
-    $backRefs["modeles"]                 = "CCompteRendu group_id";
-	  $backRefs["chapitres_qualite"]       = "CChapitreDoc group_id";
-	  $backRefs["themes_qualite"]          = "CThemeDoc group_id";
-	  $backRefs["prestations"]             = "CPrestation group_id";
-	  $backRefs["product_orders"]          = "CProductOrder group_id";
-	  $backRefs["product_stocks"]          = "CProductStockGroup group_id";
-	  $backRefs["protocoles_prescription"] = "CPrescription group_id";
-	  $backRefs["etablissements_sherpa"]   = "CSpEtablissement group_id";
-    $backRefs["dmi_categories"]          = "CDMICategory group_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["documents_ged"]           = "CDocGed group_id";
+    $backProps["functions"]               = "CFunctions group_id";
+    $backProps["menus"]                   = "CMenu group_id";
+    $backProps["plats"]                   = "CPlat group_id";
+    $backProps["blocs"]                   = "CBlocOperatoire group_id";
+    $backProps["sejours"]                 = "CSejour group_id";
+    $backProps["services"]                = "CService group_id";
+    $backProps["stocks"]                  = "CStock group_id";
+    $backProps["types_repas"]             = "CTypeRepas group_id";
+    $backProps["modeles"]                 = "CCompteRendu group_id";
+	  $backProps["chapitres_qualite"]       = "CChapitreDoc group_id";
+	  $backProps["themes_qualite"]          = "CThemeDoc group_id";
+	  $backProps["prestations"]             = "CPrestation group_id";
+	  $backProps["product_orders"]          = "CProductOrder group_id";
+	  $backProps["product_stocks"]          = "CProductStockGroup group_id";
+	  $backProps["protocoles_prescription"] = "CPrescription group_id";
+	  $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
+    $backProps["dmi_categories"]          = "CDMICategory group_id";
+    $backProps["categories_prescription"] = "CCategoryPrescription group_id";
 	  
-    return $backRefs;
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["text"]                = "str notNull confidential";
     $specs["raison_sociale"]      = "str maxLength|50";
     $specs["adresse"]             = "text confidential";

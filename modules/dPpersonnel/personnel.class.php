@@ -32,8 +32,8 @@ class CPersonnel extends CMbObject {
     return $spec;
   }
 	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["user_id"]     = "ref notNull class|CMediusers";
     $specs["emplacement"] = "enum notNull list|op|op_panseuse|reveil|service default|op";
     $specs["actif"]       = "bool notNull";
@@ -43,10 +43,10 @@ class CPersonnel extends CMbObject {
     return $specs;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs['affectations'] = 'CAffectationPersonnel personnel_id';
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps['affectations'] = 'CAffectationPersonnel personnel_id';
+	  return $backProps;
 	}
 
   function loadRefsFwd() {

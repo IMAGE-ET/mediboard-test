@@ -31,14 +31,14 @@ class CProductStockGroup extends CProductStock {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs['deliveries'] = 'CProductDelivery stock_id';
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['deliveries'] = 'CProductDelivery stock_id';
+    return $backProps;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['group_id']       = 'ref notNull class|CGroups';
     $specs['_ordered_count'] = 'num notNull pos';
     $specs['_ordered_last']  = 'dateTime';

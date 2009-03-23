@@ -36,15 +36,15 @@ class CChapitreDoc extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["chapitres_doc"] = "CChapitreDoc pere_id";
-    $backRefs["chapitres_ged"] = "CDocGed doc_chapitre_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["chapitres_doc"] = "CChapitreDoc pere_id";
+    $backProps["chapitres_ged"] = "CDocGed doc_chapitre_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["pere_id"]  = "ref class|CChapitreDoc";
     $specs["group_id"] = "ref class|CGroups";
     $specs["nom"]      = "str notNull maxLength|50";

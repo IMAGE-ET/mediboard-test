@@ -37,8 +37,8 @@ class CHprim21Medecin extends CHprim21Object {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "user_id"     => "ref class|CMediusers",
       "nom"         => "str",
@@ -52,10 +52,10 @@ class CHprim21Medecin extends CHprim21Object {
     return array_merge($specsParent, $specs);
   }
 
-  function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["hprim21_sejours"] = "CHprim21Sejour hprim21_medecin_id";
-	  return $backRefs;
+  function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["hprim21_sejours"] = "CHprim21Sejour hprim21_medecin_id";
+	  return $backProps;
 	}  
   
 	function bindToLine($line, &$reader) {

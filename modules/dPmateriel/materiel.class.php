@@ -36,15 +36,15 @@ class CMateriel extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["refMateriel"] = "CRefMateriel materiel_id";
-      $backRefs["stock"] = "CStock materiel_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["refMateriel"] = "CRefMateriel materiel_id";
+      $backProps["stock"] = "CStock materiel_id";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "nom"         => "str notNull maxLength|50",
       "code_barre"  => "num",

@@ -34,8 +34,8 @@ class CStock extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "materiel_id" => "ref notNull class|CMateriel",
       "group_id"    => "ref notNull class|CGroups",

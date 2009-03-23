@@ -49,16 +49,16 @@ class CCompteRendu extends CDocumentItem {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["listes_choix"] = "CListeChoix compte_rendu_id";
-    $backRefs["modeles_headed"] = "CCompteRendu header_id";
-    $backRefs["modeles_footed"] = "CCompteRendu footer_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["listes_choix"] = "CListeChoix compte_rendu_id";
+    $backProps["modeles_headed"] = "CCompteRendu header_id";
+    $backProps["modeles_footed"] = "CCompteRendu footer_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["chir_id"]          = "ref class|CMediusers xor|function_id|group_id|object_id";
     $specs["function_id"]      = "ref class|CFunctions xor|chir_id|group_id|object_id";
     $specs["group_id"]         = "ref class|CGroups xor|chir_id|function_id|object_id";

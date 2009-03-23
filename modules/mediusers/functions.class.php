@@ -40,31 +40,32 @@ class CFunctions extends CMbObject {
     return $spec;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["users"]                          = "CMediusers function_id";
-	  $backRefs["secondary_functions"]            = "CSecondaryFunction function_id";
-	  $backRefs["aides"]                          = "CAideSaisie function_id";
-	  $backRefs["catalogues_labo"]                = "CCatalogueLabo function_id";
-	  $backRefs["compte_rendu"]                   = "CCompteRendu function_id";
-	  $backRefs["consultation_cats"]              = "CConsultationCategorie function_id";
-	  $backRefs["employes"]                       = "CEmployeCab function_id";
-	  $backRefs["executants_prescription"]        = "CFunctionCategoryPrescription function_id";
-	  $backRefs["fiches_compta"]                  = "CGestionCab function_id";
-	  $backRefs["services_urgence_pour"]          = "CGroups service_urgences_id";
-	  $backRefs["liste_choix"]                    = "CListeChoix function_id";
-	  $backRefs["paiements"]                      = "CModePaiement function_id";
-	  $backRefs["pack_examens"]                   = "CPackExamensLabo function_id";
-	  $backRefs["plages_op"]                      = "CPlageOp spec_id";
-	  $backRefs["prescriptions"]                  = "CPrescription function_id";
-	  $backRefs["packs_prescription_protocole"]   = "CPrescriptionProtocolePack function_id";
-	  $backRefs["rubriques"]                      = "CRubrique function_id";
-	  $backRefs["tarifs"]                         = "CTarif function_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["users"]                          = "CMediusers function_id";
+	  $backProps["secondary_functions"]            = "CSecondaryFunction function_id";
+	  $backProps["aides"]                          = "CAideSaisie function_id";
+	  $backProps["catalogues_labo"]                = "CCatalogueLabo function_id";
+	  $backProps["compte_rendu"]                   = "CCompteRendu function_id";
+	  $backProps["consultation_cats"]              = "CConsultationCategorie function_id";
+	  $backProps["employes"]                       = "CEmployeCab function_id";
+	  $backProps["executants_prescription"]        = "CFunctionCategoryPrescription function_id";
+	  $backProps["fiches_compta"]                  = "CGestionCab function_id";
+	  $backProps["services_urgence_pour"]          = "CGroups service_urgences_id";
+	  $backProps["liste_choix"]                    = "CListeChoix function_id";
+	  $backProps["paiements"]                      = "CModePaiement function_id";
+	  $backProps["pack_examens"]                   = "CPackExamensLabo function_id";
+	  $backProps["plages_op"]                      = "CPlageOp spec_id";
+	  $backProps["plages_op_repl"]                 = "CPlageOp spec_repl_id";
+	  $backProps["prescriptions"]                  = "CPrescription function_id";
+	  $backProps["packs_prescription_protocole"]   = "CPrescriptionProtocolePack function_id";
+	  $backProps["rubriques"]                      = "CRubrique function_id";
+	  $backProps["tarifs"]                         = "CTarif function_id";
+	  return $backProps;
 	}
 	
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["group_id"]        = "ref notNull class|CGroups";
     $specs["type"]            = "enum notNull list|administratif|cabinet";
     $specs["text"]            = "str notNull confidential";

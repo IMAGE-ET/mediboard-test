@@ -21,6 +21,10 @@ class CBcbObject {
   var $distClass = null;
   var $_view     = null;
   
+  static function getDataSource() {
+    return CSQLDataSource::get(CAppUI::conf("dPmedicament CBcbObject dsn"));    
+  }
+  
   function initBCBConnection() {
     
     include_once("lib/bcb/PackageBCB.php");
@@ -28,8 +32,10 @@ class CBcbObject {
     // Connexion a la base BCB
     if (!self::$objDatabase) {  
       $objDatabase = new BCBConnexion();
-      $TypeDatabase=2;
-      $db = CAppUI::conf("db bcb");
+      $TypeDatabase = 2;
+      $dbConf = CAppUI::conf("db");
+      $db = $dbConf[CAppUI::conf("dPmedicament CBcbObject dsn")];
+      
       $Result = $objDatabase->ConnectDatabase("org.gjt.mm.mysql.Driver", 
         $db["dbhost"], 
         $db["dbname"], 

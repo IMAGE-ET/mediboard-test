@@ -40,14 +40,14 @@ class CFile extends CDocumentItem {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["documents_ged_suivi"] = "CDocGedSuivi file_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["documents_ged_suivi"] = "CDocGedSuivi file_id";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["file_category_id"]   = "ref class|CFilesCategory";
     $specs["file_date"]          = "dateTime notNull";
     $specs["file_size"]          = "num pos";

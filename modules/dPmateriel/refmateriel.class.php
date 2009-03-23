@@ -34,14 +34,14 @@ class CRefMateriel extends CMbObject {
     return $spec;
   }
  
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["commandes_materiel"] = "CCommandeMateriel reference_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["commandes_materiel"] = "CCommandeMateriel reference_id";
+     return $backProps;
  }
  
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "fournisseur_id" => "ref notNull class|CFournisseur",
       "materiel_id"    => "ref notNull class|CMateriel",

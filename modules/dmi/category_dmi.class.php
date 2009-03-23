@@ -30,8 +30,8 @@ class CDMICategory extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]         = "str notNull";
     $specs["description"] = "text";
     $specs["group_id"]    = "ref notNull class|CGroups";
@@ -45,10 +45,10 @@ class CDMICategory extends CMbObject {
     );
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["dmis"] = "CDMI category_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["dmis"] = "CDMI category_id";
+	  return $backProps;
 	}
 	
   function updateFormFields() {

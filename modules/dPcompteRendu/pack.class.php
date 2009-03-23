@@ -36,8 +36,8 @@ class CPack extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["chir_id"]      = "ref notNull class|CMediusers";
     $specs["nom"]          = "str notNull confidential";
     $specs["modeles"]      = "text";

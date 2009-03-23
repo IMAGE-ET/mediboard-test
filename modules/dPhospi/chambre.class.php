@@ -46,14 +46,14 @@ class CChambre extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["lits"] = "CLit chambre_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["lits"] = "CLit chambre_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["service_id"]       = "ref notNull class|CService";
     $specs["nom"]              = "str notNull";
     $specs["caracteristiques"] = "text confidential";

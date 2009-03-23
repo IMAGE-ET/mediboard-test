@@ -18,8 +18,8 @@ class CTestClass extends CMbObject {
     parent::__construct();
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     foreach (CMbFieldSpecFact::$classes as $spec => $class) {
       $specs[$spec] = $spec;
     }

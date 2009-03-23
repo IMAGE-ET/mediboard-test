@@ -30,20 +30,20 @@ class CPlat extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["repas1"] = "CRepas plat1";
-      $backRefs["repas2"] = "CRepas plat2";
-      $backRefs["repas3"] = "CRepas plat3";
-      $backRefs["repas4"] = "CRepas plat4";
-      $backRefs["repas5"] = "CRepas plat5";
-      $backRefs["repas_boisson"] = "CRepas boisson";
-      $backRefs["repas_pain"] = "CRepas pain";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["repas1"] = "CRepas plat1";
+      $backProps["repas2"] = "CRepas plat2";
+      $backProps["repas3"] = "CRepas plat3";
+      $backProps["repas4"] = "CRepas plat4";
+      $backProps["repas5"] = "CRepas plat5";
+      $backProps["repas_boisson"] = "CRepas boisson";
+      $backProps["repas_pain"] = "CRepas pain";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "nom"       => "str notNull",
       "group_id"  => "ref notNull class|CGroups",

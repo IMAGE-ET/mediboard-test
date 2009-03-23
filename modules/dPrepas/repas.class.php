@@ -50,8 +50,8 @@ class CRepas extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "affectation_id" => "ref notNull class|CAffectation",
       "menu_id"        => "ref class|CMenu",

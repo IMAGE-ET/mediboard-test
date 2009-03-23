@@ -22,8 +22,8 @@ class CBanque extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]         = "str notNull";
     $specs["description"] = "str";
     return $specs;
@@ -35,11 +35,11 @@ class CBanque extends CMbObject {
     );
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs['users']      = 'CMediusers banque_id';
-	  $backRefs['reglements'] = 'CReglement banque_id';
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps['users']      = 'CMediusers banque_id';
+	  $backProps['reglements'] = 'CReglement banque_id';
+	  return $backProps;
 	}
 
   function updateFormFields() {

@@ -129,8 +129,8 @@ class COperation extends CCodable {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["sejour_id"]          = "ref notNull class|CSejour";
     $specs["chir_id"]            = "ref notNull class|CMediusers";
     $specs["anesth_id"]          = "ref class|CMediusers";
@@ -204,16 +204,16 @@ class COperation extends CCodable {
     );
   }
 
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["blood_salvages"]           = "CBloodSalvage operation_id";
-	  $backRefs["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
-	  $backRefs["naissances"]               = "CNaissance operation_id";
-	  //$backRefs["prescription_comments"]    = "CPrescriptionLineComment operation_id";
-	  $backRefs["prescription_elements"]    = "CPrescriptionLineElement operation_id";
-	  $backRefs["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
-	  $backRefs["perfusion"]                = "CPerfusion operation_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
+	  $backProps["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
+	  $backProps["naissances"]               = "CNaissance operation_id";
+	  $backProps["prescription_comments"]    = "CPrescriptionLineComment operation_id";
+	  $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
+	  $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
+	  $backProps["perfusion"]                = "CPerfusion operation_id";
+	  return $backProps;
 	}
 
   function getTemplateClasses(){

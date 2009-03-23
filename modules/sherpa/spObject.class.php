@@ -17,7 +17,7 @@ class CSpObject extends CMbObject {
   public $_current_group_id = null;
   
   function CSpObject() {
-    foreach (array_keys($this->getSpecs()) as $prop) {
+    foreach (array_keys($this->getProps()) as $prop) {
       $this->$prop = null;
     }
     parent::__construct();
@@ -93,11 +93,11 @@ class CSpObject extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
+  function getBackProps() {
     return array();
   }
  
-  function getspecs() {
+  function getProps() {
     return array();
   }
    

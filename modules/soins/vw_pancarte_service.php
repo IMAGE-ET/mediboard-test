@@ -119,7 +119,7 @@ foreach($prescriptions as $_prescription){
 	}
   $_prescription->loadRefsLinesElementByCat("1",null,"service");
 			
-  foreach($tabHours as $curr_date => $curr_hours){
+  foreach($tabHours as $curr_date => $curr_hours) {
     $_prescription->calculPlanSoin($curr_date);
   }
 

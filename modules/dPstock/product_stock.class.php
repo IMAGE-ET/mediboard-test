@@ -36,8 +36,8 @@ class CProductStock extends CMbObject {
   //    Single
   var $_ref_product             = null;
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['product_id']               = 'ref notNull class|CProduct';
     $specs['quantity']                 = 'num notNull';
     $specs['order_threshold_critical'] = 'num min|0';
@@ -55,10 +55,10 @@ class CProductStock extends CMbObject {
     return $specs;
   }
 
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["discrepancies"] = "CProductDiscrepancy object_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["discrepancies"] = "CProductDiscrepancy object_id";
+	  return $backProps;
 	}
 
 	function updateFormFields() {

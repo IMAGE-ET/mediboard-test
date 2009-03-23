@@ -26,18 +26,18 @@ class CConsultationCategorie extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["function_id"]   = "ref notNull class|CFunctions";
     $specs["nom_categorie"] = "str notNull";
     $specs["nom_icone"]     = "str notNull";
     return $specs;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["consultations"] = "CConsultation categorie_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["consultations"] = "CConsultation categorie_id";
+	  return $backProps;
 	}
 
   function updateFormFields() {

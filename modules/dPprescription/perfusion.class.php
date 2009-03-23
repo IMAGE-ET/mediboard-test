@@ -87,8 +87,8 @@ class CPerfusion extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
   	$specs["prescription_id"]   = "ref class|CPrescription cascade";
   	$specs["type"]              = "enum notNull list|classique|seringue|PCA";
     $specs["libelle"]           = "str";
@@ -166,12 +166,12 @@ class CPerfusion extends CMbObject {
     }
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["lines_perfusion"]  = "CPerfusionLine perfusion_id";
-    $backRefs["prev_line"]     = "CPerfusion next_perf_id";  
-    $backRefs["transmissions"] = "CTransmissionMedicale object_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["lines_perfusion"]  = "CPerfusionLine perfusion_id";
+    $backProps["prev_line"]     = "CPerfusion next_perf_id";
+    $backProps["transmissions"] = "CTransmissionMedicale object_id";
+    return $backProps;
   }
   
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0) {

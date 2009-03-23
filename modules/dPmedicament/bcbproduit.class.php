@@ -287,7 +287,7 @@ class CBcbProduit extends CBcbObject {
 	}
 
   function loadVoies(){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT IDENT_VOIES.LIBELLEVOIE FROM `IDENT_VOIES`
 							LEFT JOIN `IDENT_PRODUITS_VOIES` ON `IDENT_PRODUITS_VOIES`.`CODEVOIE` = `IDENT_VOIES`.`CODEVOIE`
 							WHERE `IDENT_PRODUITS_VOIES`.`CODECIP` = '$this->code_cip';";
@@ -296,7 +296,7 @@ class CBcbProduit extends CBcbObject {
   
   function loadLibellePresentation(){
   	// Chargement du nombre de produit dans la presentation
-  	$ds = CSQLDataSource::get("bcb");
+  	$ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
     $_presentation = $ds->loadHash($query);
     $code_presentation_id = $_presentation['CODE_PRESENTATION'];
@@ -308,7 +308,7 @@ class CBcbProduit extends CBcbObject {
   
   function loadUnitePresentation(){
   	// Chargement du nombre de produit dans la presentation
-  	$ds = CSQLDataSource::get("bcb");
+  	$ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
   	$conditionnement = $ds->loadHash($query);
    	$this->nb_unite_presentation = $conditionnement["NB_UNITE_DE_PRESENTATION"];
@@ -339,13 +339,13 @@ class CBcbProduit extends CBcbObject {
   }
  
   function loadLibelleConditionnement($code_conditionnement){
-  	$ds = CSQLDataSource::get("bcb");
+  	$ds = CBcbObject::getDataSource();
   	$query = "SELECT LIBELLE_CONDITIONNEMENT_PLURIEL FROM `IDENT_CONDITIONNEMENTS` WHERE `CODE_CONDITIONNEMENT` = '$code_conditionnement';";
     $this->libelle_conditionnement = $ds->loadResult($query);
   }
   
   function loadRapportUnitePrise($code_unite_prise, $code_unite_contenance, $nb_up){
-  	$ds = CSQLDataSource::get("bcb");
+  	$ds = CBcbObject::getDataSource();
     $query = "SELECT LIBELLE_UNITE_DE_PRISE_PLURIEL FROM `POSO_UNITES_PRISE` WHERE `CODE_UNITE_DE_PRISE` = '$code_unite_prise';";
     $unite_prise = $ds->loadResult($query);
     $query = "SELECT LIBELLE_UNITE_DE_CONTENANCE FROM `IDENT_UNITES_DE_CONTENANCE` WHERE `CODE_UNITE_DE_CONTENANCE` = '$code_unite_contenance';";
@@ -354,7 +354,7 @@ class CBcbProduit extends CBcbObject {
   }
   
   function loadDosage($dosage_unite, $dosage_nb){
-   $ds = CSQLDataSource::get("bcb");
+   $ds = CBcbObject::getDataSource();
    if($dosage_unite){
 	  	$query = "SELECT UNITE FROM `IDENT_UNITES_DE_DOSAGE` WHERE `CODE_UNITE` = '$dosage_unite';";
 	  	$unite = $ds->loadResult($query);
@@ -413,7 +413,7 @@ class CBcbProduit extends CBcbObject {
   }
 
   function isInT2A(){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT `MEDICAMENT_T2A` FROM `PHARMACIE_ADD_ON` WHERE `CODE_CIP` = '$this->code_cip'";
     $t2a = $ds->loadResult($query);
     $this->inT2A = ($t2a == "-1") ? false : true; 
@@ -421,7 +421,7 @@ class CBcbProduit extends CBcbObject {
   
   static function getHorsT2ALivret(){
     $produits = array();
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT `CODE_CIP` 
 							FROM `PHARMACIE_ADD_ON`
 							LEFT JOIN `LIVRETTHERAPEUTIQUE` ON `PHARMACIE_ADD_ON`.`CODE_CIP` = `LIVRETTHERAPEUTIQUE`.`CODECIP` 
@@ -512,7 +512,7 @@ class CBcbProduit extends CBcbObject {
   
   // Chargement de toutes les posologies d'un produit
   function loadRefPosologies(){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
     $posologies = $ds->loadList($query);
     

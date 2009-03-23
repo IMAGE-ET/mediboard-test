@@ -40,15 +40,15 @@ class CMedecin extends CMbObject {
     return $spec;
   }
 	
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["patients_traites"] = "CPatient medecin_traitant";
-    $backRefs["patients_correspondants"] = "CCorrespondant medecin_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["patients_traites"] = "CPatient medecin_traitant";
+    $backProps["patients_correspondants"] = "CCorrespondant medecin_id";
+    return $backProps;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["nom"]             = "str notNull confidential";
     $specs["prenom"]          = "str notNull confidential";
     $specs["jeunefille"]      = "str confidential";

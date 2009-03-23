@@ -40,8 +40,8 @@ class CGestionCab extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["function_id"]      = "ref notNull class|CFunctions";
     $specs["libelle"]          = "str notNull";
     $specs["date"]             = "date notNull";

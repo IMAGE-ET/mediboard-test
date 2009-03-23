@@ -53,16 +53,16 @@ class CProduct extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs['references']     = 'CProductReference product_id';
-    $backRefs['stocks_group']   = 'CProductStockGroup product_id';
-    $backRefs['stocks_service'] = 'CProductStockService product_id';
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['references']     = 'CProductReference product_id';
+    $backProps['stocks_group']   = 'CProductStockGroup product_id';
+    $backProps['stocks_service'] = 'CProductStockService product_id';
+    return $backProps;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['name']          = 'str notNull maxLength|50';
     $specs['description']   = 'text';
     $specs['code']          = 'str maxLength|32';

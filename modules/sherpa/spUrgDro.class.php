@@ -46,7 +46,7 @@ class CSpUrgDro extends CSpObject {
   // DB Table key
   var $numdos = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -56,8 +56,8 @@ class CSpUrgDro extends CSpObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
         
     $specs["urgfla"]  = "str length|1"    ; /* Flag                             */
     $specs["numdos"]  = "numchar length|6"; /* No de dossier (Annnnn)           */

@@ -33,17 +33,21 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
   }
   
   /**
-   * Compte le nombre de produit du livret courant
+   * Compte le nombre de produit du livret courant dans la base médicament
    * @return int Le nombre de produit
    */
-  static function countProduits() {
+  static function countProduitsMed() {
     global $g;
     $query = "SELECT COUNT(*) FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     return $ds->loadResult($query);
   }
   
-  static function countProduitsBCBGES(){
+  /**
+   * Compte le nombre de produit du livret courant dans la base de gestion
+   * @return int Le nombre de produit
+   */
+  static function countProduitsGes(){
     global $g;
     $query = "SELECT COUNT(*) FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
     $ds = CSQLDataSource::get("bcbges");
@@ -55,14 +59,14 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
     $query = "DELETE FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
     $ds = CSQLDataSource::get("bcbges");
     $ds->exec($query);
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $ds->exec($query);
     return $ds->affectedRows();
   }
   
   static function getProduits($order = 'CODECIP', $limit = null, $full_mode = true) {
   	global $g;
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT `CODECIP` FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
     if ($order) $query .= " ORDER BY $order";
     if ($limit) $query .= " LIMIT $limit";
@@ -79,7 +83,7 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
   
   function load($code_cip) {
     global $g;
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g' AND `CODECIP` = '$code_cip';";
     if($result = $ds->loadHash($query)){
       $this->group_id          = $result["CODEETABLISSEMENT"];

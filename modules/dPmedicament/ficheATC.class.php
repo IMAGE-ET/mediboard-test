@@ -27,8 +27,8 @@ class CFicheATC extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["code_ATC"]         = "str notNull length|3";
     $specs["libelle"]          = "str";
     $specs["description"]      = "html";

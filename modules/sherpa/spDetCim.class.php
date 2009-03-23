@@ -16,7 +16,7 @@ class CSpDetCIM extends CSpObject {
   // DB Table key
   var $iddiag = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,8 +33,8 @@ class CSpDetCIM extends CSpObject {
     $this->_id = $latestId+1;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     $specs["iddiag"]   = "num";            /* Numéro de diagnostic         */
     $specs["idinterv"] = "num";            /* Numéro d'intervention        */

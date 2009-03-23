@@ -33,8 +33,8 @@ class CHprim21Complementaire extends CHprim21Object {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "hprim21_patient_id" => "ref class|CHprim21Patient",
       "code_organisme"     => "str",

@@ -16,8 +16,8 @@ class CHprim21Object extends CMbObject {
   var $emetteur_id          = null;
   var $external_id          = null;
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "emetteur_id" => "str notNull",
       "external_id" => "str",

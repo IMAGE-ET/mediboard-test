@@ -29,18 +29,18 @@ class CTypeAnesth extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["operations"] = "COperation type_anesth";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["operations"] = "COperation type_anesth";
+    return $backProps;
   }
   
   function countOperations() {
     $this->_count_operations = $this->countBackRefs("operations");
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["name"]    = "str notNull";
     $specs["ext_doc"] = "enum list|1|2|3|4|5|6";
     return $specs;

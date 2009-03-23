@@ -34,14 +34,14 @@ class CFournisseur extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["materiels"] = "CRefMateriel fournisseur_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["materiels"] = "CRefMateriel fournisseur_id";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "societe"    => "str notNull maxLength|50",
       "adresse"    => "str",

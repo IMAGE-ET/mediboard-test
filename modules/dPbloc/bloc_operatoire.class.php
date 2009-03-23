@@ -32,14 +32,14 @@ class CBlocOperatoire extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["salles"] = "CSalle bloc_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["salles"] = "CSalle bloc_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["group_id"] = "ref notNull class|CGroups";
     $specs["nom"]      = "str notNull";
     return $specs;

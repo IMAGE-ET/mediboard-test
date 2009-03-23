@@ -43,14 +43,14 @@ class CMenu extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["repas"] = "CRepas menu_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["repas"] = "CRepas menu_id";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "nom"         => "str notNull",
       "group_id"    => "ref notNull class|CGroups",

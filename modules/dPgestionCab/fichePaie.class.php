@@ -73,8 +73,8 @@ class CFichePaie extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["params_paie_id"] = "ref notNull class|CParamsPaie";
     $specs["debut"]          = "date notNull";
     $specs["fin"]            = "date notNull moreEquals|debut";

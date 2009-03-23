@@ -32,8 +32,8 @@ class CReglement extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['consultation_id'] = 'ref notNull class|CConsultation';
     $specs['banque_id']       = 'ref class|CBanque';
     $specs['date']            = 'dateTime notNull';

@@ -31,17 +31,17 @@ class CTypeRepas extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["menus"] = "CMenu typerepas";
-    $backRefs["plats"] = "CPlat typerepas";
-    $backRefs["repas"] = "CRepas typerepas_id";
-    $backRefs["valid_repas"] = "CValidationRepas typerepas_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["menus"] = "CMenu typerepas";
+    $backProps["plats"] = "CPlat typerepas";
+    $backProps["repas"] = "CRepas typerepas_id";
+    $backProps["valid_repas"] = "CValidationRepas typerepas_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]      = "str notNull";
     $specs["group_id"] = "ref notNull class|CGroups";
     $specs["debut"]    = "time notNull";

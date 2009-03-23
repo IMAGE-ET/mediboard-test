@@ -36,15 +36,15 @@ class CSalle extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["operations"] = "COperation salle_id";
-    $backRefs["plages_op"] = "CPlageOp salle_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["operations"] = "COperation salle_id";
+    $backProps["plages_op"] = "CPlageOp salle_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["bloc_id"] = "ref notNull class|CBlocOperatoire";
     $specs["nom"]     = "str notNull";
     $specs["stats"]   = "bool notNull";

@@ -64,19 +64,19 @@ class CUser extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["favoris_CCAM"]       = "CFavoriCCAM favoris_user";
-    $backRefs["favoris_CIM10"]      = "CFavoricim10 favoris_user";
-    $backRefs["permissions_module"] = "CPermModule user_id";
-    $backRefs["permissions_objet"]  = "CPermObject user_id";
-    $backRefs["logs"]               = "CUserLog user_id";
-    $backRefs["profiled_users"]     = "CUser profile_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["favoris_CCAM"]       = "CFavoriCCAM favoris_user";
+    $backProps["favoris_CIM10"]      = "CFavoricim10 favoris_user";
+    $backProps["permissions_module"] = "CPermModule user_id";
+    $backProps["permissions_objet"]  = "CPermObject user_id";
+    $backProps["owned_logs"]         = "CUserLog user_id";
+    $backProps["profiled_users"]     = "CUser profile_id";
+    return $backProps;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["user_username"]   = "str notNull maxLength|20";
     $specs["user_password"]   = "str";
     $specs["user_type"]       = "num notNull minMax|0|20";
@@ -188,7 +188,7 @@ class CUser extends CMbObject {
     // Chargement des specs des attributs du mediuser
     $this->updateSpecs();
     
-    $specs = $this->getSpecsObj();
+    $specs = $this->getSpecs();
 
     // On se concentre dur le mot de passe (_user_password)
     $pwdSpecs = $specs['_user_password'];

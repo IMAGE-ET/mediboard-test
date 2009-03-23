@@ -25,14 +25,14 @@ class CCategory extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["materiel"] = "CMateriel category_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["materiel"] = "CMateriel category_id";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "category_name" => "str notNull maxLength|50"
     );

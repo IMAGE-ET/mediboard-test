@@ -96,8 +96,8 @@ class CHprim21Patient extends CHprim21Object {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       // Patient
       "patient_id"                => "ref class|CPatient",
@@ -169,11 +169,11 @@ class CHprim21Patient extends CHprim21Object {
     return array_merge($specsParent, $specs);
   }
     
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["hprim21_complementaires"] = "CHprim21Complementaire hprim21_patient_id";
-	  $backRefs["hprim21_sejours"]         = "CHprim21Sejour hprim21_patient_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["hprim21_complementaires"] = "CHprim21Complementaire hprim21_patient_id";
+	  $backProps["hprim21_sejours"]         = "CHprim21Sejour hprim21_patient_id";
+	  return $backProps;
 	}
 
   function updateDBFields() {

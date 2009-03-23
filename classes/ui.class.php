@@ -293,7 +293,7 @@ class CAppUI {
 
     // Ajout
     global $AppUI;
-    @$this->messages[$type][$msg]++;
+    @$AppUI->messages[$type][$msg]++;
   }
   
   function isMsgOK() {
@@ -353,9 +353,9 @@ class CAppUI {
   */
   static function stepMessage($msgType, $msg) {
     switch ($msgType) {
-      case UI_MSG_OK      : $class = "big-message"; break;
-      case UI_MSG_WARNING : $class = "big-warning"; break;
-      case UI_MSG_ERROR   : $class = "big-error" ; break;
+      case UI_MSG_OK      : $class = "small-message"; break;
+      case UI_MSG_WARNING : $class = "small-warning"; break;
+      case UI_MSG_ERROR   : $class = "small-error" ; break;
       default: $class = "big-message"; break;
     }
     

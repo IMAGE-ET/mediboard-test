@@ -27,19 +27,19 @@ class CExecutantPrescriptionLine extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["category_prescription_id"] = "ref class|CCategoryPrescription notNull";
     $specs["nom"]         = "str notNull";
     $specs["description"] = "text";
     return $specs;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prescription_line_element"]   = "CPrescriptionLineElement executant_prescription_line_id";
-    $backRefs["prescription_line_comment"]   = "CPrescriptionLineComment executant_prescription_line_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prescription_line_element"]   = "CPrescriptionLineElement executant_prescription_line_id";
+    $backProps["prescription_line_comment"]   = "CPrescriptionLineComment executant_prescription_line_id";
+    return $backProps;
   }
   
   function updateFormFields(){

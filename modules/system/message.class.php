@@ -44,8 +44,8 @@ class CMessage extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["deb"]       = "dateTime notNull";
     $specs["fin"]       = "dateTime notNull";
     $specs["titre"]     = "str notNull maxLength|40";

@@ -16,7 +16,7 @@ class CSpDossier extends CSpObject {
   // DB Table key
   var $numdos = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,8 +26,8 @@ class CSpDossier extends CSpObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["topfac"] = "str length|1"    ; /* Date de derniere mise a jour */
     $specs["numdos"] = "numchar length|6"; /* Numero de dossier            */
     $specs["malnum"] = "numchar length|6"; /* Numero de malade             */

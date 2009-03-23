@@ -75,8 +75,8 @@ class CPrescriptionLine extends CMbObject {
   var $_perm_edit = null;
   
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["prescription_id"]   = "ref notNull class|CPrescription cascade";
     $specs["ald"]               = "bool";
     $specs["praticien_id"]      = "ref notNull class|CMediusers";
@@ -181,13 +181,12 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Déclaration des backRefs
    */
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prise_posologie"] = "CPrisePosologie object_id";
-    $backRefs["administration"]  = "CAdministration object_id";
-    $backRefs["parent_line"]     = "$this->_class_name child_id";  
-    $backRefs["transmissions"]   = "CTransmissionMedicale object_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prise_posologie"] = "CPrisePosologie object_id";
+    $backProps["administration"]  = "CAdministration object_id";
+    $backProps["transmissions"]   = "CTransmissionMedicale object_id";
+    return $backProps;
   }
   
   function loadRefsTransmissions(){
@@ -564,7 +563,7 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des prises
    */
-  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true){
+  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true) {
   	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
   	
   	foreach($this->_ref_prises as &$_prise) {

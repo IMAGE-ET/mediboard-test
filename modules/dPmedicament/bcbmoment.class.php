@@ -26,7 +26,7 @@ class CBcbMoment extends CBcbObject {
   // Chargement d'une posologie a partir d'un code CIP
   function load($code_moment_id){
     // Chargement des posologies du produit
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `POSO_MOMENTS` WHERE `CODE_MOMENT` = '$code_moment_id';";  
     $ds->loadObject($query, $moment);
     
@@ -54,7 +54,7 @@ class CBcbMoment extends CBcbObject {
   
   // Chargement de tous les moments
   static function loadAllMoments(){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM POSO_MOMENTS";
     $moments = $ds->loadList($query);
     return $moments;

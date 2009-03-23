@@ -39,14 +39,14 @@ class CAdministration extends CMbMetaObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["transmissions"] = "CTransmissionMedicale object_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["transmissions"] = "CTransmissionMedicale object_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["object_id"]         = "ref notNull class|CMbObject meta|object_class";
     $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement";
     $specs["administrateur_id"] = "ref notNull class|CMediusers";

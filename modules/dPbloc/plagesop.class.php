@@ -65,14 +65,14 @@ class CPlageOp extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["operations"] = "COperation plageop_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["operations"] = "COperation plageop_id";
+     return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["chir_id"]          = "ref xor|spec_id class|CMediusers";
     $specs["anesth_id"]        = "ref class|CMediusers";
     $specs["spec_id"]          = "ref xor|chir_id class|CFunctions";

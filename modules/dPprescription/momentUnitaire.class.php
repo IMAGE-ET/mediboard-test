@@ -29,8 +29,8 @@ class CMomentUnitaire extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["libelle"]     = "str notNull";
     $specs["heure"]       = "time";
     $specs["type_moment"] = "enum list|matin|midi|soir|apres_midi|horaire|autre";
@@ -40,11 +40,11 @@ class CMomentUnitaire extends CMbObject {
     return $specs;
   }
 
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["associations"] = "CAssociationMoment moment_unitaire_id";
-	  $backRefs["prises"]       = "CPrisePosologie moment_unitaire_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["associations"] = "CAssociationMoment moment_unitaire_id";
+	  $backProps["prises"]       = "CPrisePosologie moment_unitaire_id";
+	  return $backProps;
 	}
 	
   // Chargement des moments

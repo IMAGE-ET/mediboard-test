@@ -30,7 +30,7 @@ class CBcbDCI extends CBcbObject {
  
   // Chargement d'un DCI a partir de son code
   function load($code){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `CLASSES_THERAPEUTIQUES_DCI` WHERE `CODE_CLASSE` = '$code';";
     $result = reset($ds->loadList($query));
     if($result){
@@ -60,7 +60,7 @@ class CBcbDCI extends CBcbObject {
   
   // Chargement des produits de la DCI
   function loadRefsProduits(){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `CLASSES_THERAPEUTIQUES_PRODUITS` WHERE `CODE_CLASSE` = '$this->code_classe';";
     $result = $ds->loadList($query);
     foreach($result as $key => $produit){

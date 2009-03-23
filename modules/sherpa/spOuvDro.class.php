@@ -16,7 +16,7 @@ class CSpOuvDro extends CSpObject {
   // DB Table key
   var $numdos = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,8 +26,8 @@ class CSpOuvDro extends CSpObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
 
     $specs["drofla"]  = "str length|1"       ; /* Flag                         */
     $specs["referan"] = "str length|9"      ; /* Annee de Reference (AAA Annnnn)  */

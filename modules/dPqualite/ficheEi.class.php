@@ -74,8 +74,8 @@ class CFicheEi extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["user_id"]                    = "ref notNull class|CMediusers";    
     $specs["date_fiche"]                 = "dateTime notNull";
     $specs["date_incident"]              = "dateTime notNull";

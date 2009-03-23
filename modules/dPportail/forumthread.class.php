@@ -27,8 +27,8 @@ class CForumThread extends CForumMessage {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['title']          = 'str notNull';
     $specs['forum_theme_id'] = 'ref notNull class|CForumTheme';
     return $specs;
@@ -39,10 +39,10 @@ class CForumThread extends CForumMessage {
     $this->_view = $this->title;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs['messages'] = 'CForumMessage forum_thread_id';
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['messages'] = 'CForumMessage forum_thread_id';
+    return $backProps;
   }
 
   function loadRefsBack() {

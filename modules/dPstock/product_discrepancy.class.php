@@ -23,13 +23,12 @@ class CProductDiscrepancy extends CMbMetaObject { // Ecart d'inventaire
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['quantity']     = 'num notNull';
     $specs['date']         = 'dateTime notNull';
     $specs['description']  = 'text';
     $specs['object_id']    = 'ref notNull class|CProductStock meta|object_class';
-    $specs['object_class'] = 'enum notNull list|CProductStockGroup|CProductStockService';
     return $specs;
   }
 

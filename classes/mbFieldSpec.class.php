@@ -11,8 +11,8 @@
 class CMbFieldSpec {
   var $object         = null;
   var $spec           = null;
-  var $className      = null;
-  var $fieldName      = null;
+  var $className      = null; // @TODO: rename to $owner
+  var $fieldName      = null; // @TODO: rename to $field
   var $prop           = null;
   var $default        = null;
 
@@ -72,6 +72,20 @@ class CMbFieldSpec {
     $this->checkValues();
   }
 
+  /**
+   * Check whether prop has been declared in parent class
+   * @return bool true if prop is inherited, false otherwise
+   */
+  function isInherited() {
+    if ($parentClass = get_parent_class($this->className)) {
+      if ($parent = @new $parentClass) {
+        return isset($parent->_prop[$this->fieldName]);
+	    }
+    }
+    
+    return false;
+  }
+  
   function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

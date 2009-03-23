@@ -28,16 +28,15 @@ class CFilesCategory extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["documents"] = "CCompteRendu file_category_id";
-    $backRefs["files"]     = "CFile file_category_id";
-    $backRefs["employes"]  = "CEmployeCab function_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["categorized_documents"] = "CCompteRendu file_category_id";
+    $backProps["categorized_files"]     = "CFile file_category_id";
+    return $backProps;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]   = "str notNull";
     $specs["class"] = "str";
     $specs["validation_auto"] = "bool";

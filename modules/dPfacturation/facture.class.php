@@ -33,14 +33,14 @@ class CFacture extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["items"] = "CFactureItem facture_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["items"] = "CFactureItem facture_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["date"]      = "date notNull";
     $specs["prix"]      = "currency";
     $specs["sejour_id"] = "ref notNull class|CSejour";

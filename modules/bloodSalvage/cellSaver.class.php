@@ -23,17 +23,17 @@ class CCellSaver extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs= parent::getSpecs();
+  function getProps() {
+    $specs= parent::getProps();
     $specs["marque"] = "str notNull maxLength|50";
     $specs["modele"] = "str notNull maxLength|50";
     return $specs;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["blood_salvages"] = "CBloodSalvage cell_saver_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["blood_salvages"] = "CBloodSalvage cell_saver_id";
+	  return $backProps;
 	}	
 	
   function updateFormFields() {

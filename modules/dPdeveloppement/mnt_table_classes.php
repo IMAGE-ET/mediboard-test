@@ -104,14 +104,14 @@ foreach ($list_selected_classes as $curr_class_name) {
     
     $class['fields'][$k]['db'] = null;
     
-    $object->getSpecsObj();
+    $object->getSpecs();
     $is_key = $k == $class['key'];
     // db fields
     if ($spec = @$object->_specs[$k]) {
       //mbTrace($spec);
       $class['fields'][$k]['object']['db_spec'] = extract_props($spec->getDBSpec());
       
-      $specs_obj = $object->getSpecsObj();
+      $specs_obj = $object->getSpecs();
       $db_spec = &$class['fields'][$k]['object']['db_spec'];
       $db_spec['index'] = (isset($spec->class) || 
                            $spec instanceof CDateTimeSpec || 

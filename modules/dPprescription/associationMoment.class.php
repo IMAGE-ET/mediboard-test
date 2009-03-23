@@ -29,8 +29,8 @@ class CAssociationMoment extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["code_moment_id"]     = "num notNull";
     $specs["moment_unitaire_id"] = "ref class|CMomentUnitaire notNull";
     $specs["OR"]                 = "bool";

@@ -153,21 +153,21 @@ class CPatient extends CMbObject {
     return $spec;
   }
 
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["constantes"]            = "CConstantesMedicales patient_id";
-	  $backRefs["consultations"]         = "CConsultation patient_id";
-	  $backRefs["correspondants"]        = "CCorrespondant patient_id";
-	  $backRefs["hprim21_patients"]      = "CHprim21Patient patient_id";
-	  $backRefs["prescriptions_labo"]    = "CPrescriptionLabo patient_id";
-	  $backRefs["product_deliveries"]    = "CProductDelivery patient_id";
-	  $backRefs["sejours"]               = "CSejour patient_id";
-	  $backRefs["dossiers_medicaux"]     = "CDossierMedical object_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["constantes"]            = "CConstantesMedicales patient_id";
+	  $backProps["consultations"]         = "CConsultation patient_id";
+	  $backProps["correspondants"]        = "CCorrespondant patient_id";
+	  $backProps["hprim21_patients"]      = "CHprim21Patient patient_id";
+	  $backProps["prescriptions_labo"]    = "CPrescriptionLabo patient_id";
+	  $backProps["product_deliveries"]    = "CProductDelivery patient_id";
+	  $backProps["sejours"]               = "CSejour patient_id";
+	  $backProps["dossier_medical"]       = "CDossierMedical object_id";
+	  return $backProps;
 	}  
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     $specs["nom"]               = "str notNull confidential";
     $specs["prenom"]            = "str notNull";

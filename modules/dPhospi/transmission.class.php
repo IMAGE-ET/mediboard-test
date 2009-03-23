@@ -38,8 +38,8 @@ class CTransmissionMedicale extends CMbMetaObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
   	$specs["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPerfusion";
     $specs["sejour_id"]    = "ref notNull class|CSejour";

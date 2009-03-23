@@ -16,7 +16,7 @@ class CSpEntCCAM extends CSpObject {
   // DB Table key
   var $idinterv = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,8 +26,8 @@ class CSpEntCCAM extends CSpObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     $specs["idinterv"] = "num";            /* Numéro d'intervention        */
     $specs["numdos"] = "numchar length|6"; /* Numéro de dossier            */

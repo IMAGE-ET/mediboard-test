@@ -140,7 +140,82 @@ var BCBScripts = {
 
 <h2>Base de données BCB</h2>
 
-{{include file="../../system/templates/configure_dsn.tpl" dsn=bcb}}
+<script type="text/javascript">
+Main.add(function () {
+  Control.Tabs.create('tabs-bcbdsn', true);
+});
+</script>
+
+<ul id="tabs-bcbdsn" class="control_tabs">
+  <li><a href="#conf">Configuration des DSN Muliples</a></li>
+  <li><a href="#bcb1">Source de données 1</a></li>
+  <li><a href="#bcb2">Source de données 2</a></li>
+  <li><a  class="wrong" href="#bcb">Ancienne source de données</a></li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="conf" style="display: none;">
+
+<form name="Config2" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="dosql" value="do_configure" />
+
+<table class="form">
+  {{assign var=class value=CBcbObject}}
+  {{assign var=var value=dsn}}
+
+  <tr>
+    <td class="text" rowspan="4" style="width: 70%">
+		  <div class="big-info">
+		    L'utilisation de la BCB possède désormais 2 sources de données,
+		    pour permettre la mise à jour de la base <strong>sans interruption de service</strong>.
+		    <br/>
+		    Il suffit pour cela de mettre à jour tous les mois la BCB de la façon suivante :
+		    <ol>
+		    	<li>Déclencher la mise à jour de la source non utilisée</li>
+		    	<li>Positionner Mediboard sur cette source de données</li>
+		    	<li>Resynchroniser le livret thérapeutique</li>
+		    </ol>
+		  </div>
+    </td>
+
+    <td colspan="2">
+    	{{if $dPconfig.$m.$class.$var == "bcb"}}
+    	<div class="small-warning">
+	    	Ancienne source de données sélectionnée !
+    	</div>
+    	{{/if}}
+    </td>
+  </tr>
+
+  {{include file=inc_config_bcb_state.tpl dsn=bcb1}}
+  {{include file=inc_config_bcb_state.tpl dsn=bcb2}}
+  
+</table>
+
+</form>
+
+</div>
+
+<div id="bcb1" style="display: none;">
+	{{include file="../../system/templates/configure_dsn.tpl" dsn=bcb1}}
+</div>
+
+<div id="bcb2" style="display: none;">
+	{{include file="../../system/templates/configure_dsn.tpl" dsn=bcb2}}
+</div>
+
+<div id="bcb" style="display: none;">
+	<div class="big-warning">
+	  Cette source de données ne doit plus être utilisée !
+	  <br />
+	  Merci de <strong>configurer les deux sources de données alternées</strong> 
+	  et de <strong>choisir la plus à jour</strong>.
+	</div>
+	{{include file="../../system/templates/configure_dsn.tpl" dsn=bcb}}
+</div>
 
 <script type="text/javascript">
 
@@ -195,7 +270,7 @@ var Livret = {
   
   <tr>
     <td><button class="tick" onclick="startUncaseBCBTables()">Mettre les tables BCB en majuscules</button></td>
-    <td id="uncase_bcb_tables">
+    <td class="text" id="uncase_bcb_tables">
       <div class="big-info">
       	Cette action n'est pas nécessaire (et ne fonctionnera pas) sur les serveurs MS Windows.
       	<br />
@@ -232,13 +307,17 @@ var Livret = {
       <button type="button" class="tick" onclick="Livret.synchronize()">Synchroniser le livret Therapeutique</button>
 		</td>
 		<td id="livret-synchro">
-		  {{if $nb_produit_livret != $nb_produit_livret_bcbges}}
+		  {{if $nb_produit_livret_med != $nb_produit_livret_med}}
 		    <div class="small-warning">
-		    Attention, les livrets Thérapeutiques ne sont pas synchronisés
+		    Attention, les livrets Thérapeutiques 
+		    médicaux ({{$nb_produit_livret_med}} produits) 
+		    et de gestion ({{$nb_produit_livret_ges}} produits) 
+		    ne sont pas synchronisés
 		    </div>
 		  {{else}}
 		    <div class="small-info">
-		    Livrets Thérapeutiques synchronisés
+		    Livrets Thérapeutiques médicaux et de gestion synchronisés
+		    et contiennent {{$nb_produit_livret_ges}} produits.
 		    </div>
 		  {{/if}}
 		</td>

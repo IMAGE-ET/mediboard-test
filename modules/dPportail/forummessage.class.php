@@ -29,8 +29,8 @@ class CForumMessage extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['body']            = 'html notNull';
     $specs['date']            = 'dateTime notNull';
     $specs['user_id']         = 'ref notNull class|CMediusers';

@@ -16,7 +16,7 @@ class CSpMalade extends CSpObject {
   // DB Table key
   var $malnum = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,8 +26,8 @@ class CSpMalade extends CSpObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["malfla"] = "str length|1"    ; /* Flag                         */
     $specs["malnum"] = "numchar length|6"; /* No de client                 */
     $specs["malnom"] = "str maxLength|50"; /* Nom                          */

@@ -36,8 +36,8 @@ class CUserLog extends CMbMetaObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
   	$specs["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
     $specs["user_id"]      = "ref notNull class|CUser";
     $specs["date"]         = "dateTime notNull";

@@ -24,8 +24,8 @@ class CPaysInsee extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["numerique"] = "numchar length|3";
     $specs["alpha_2"  ] = "str length|2";
     $specs["alpha_3"  ] = "str length|3";

@@ -29,17 +29,17 @@ class CForumTheme extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['title'] = 'str notNull';
     $specs['desc']  = 'text';
     return $specs;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs['threads'] = 'CForumThread forum_theme_id';
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['threads'] = 'CForumThread forum_theme_id';
+    return $backProps;
   }
 
   function updateFormFields() {

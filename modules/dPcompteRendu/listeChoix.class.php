@@ -37,8 +37,8 @@ class CListeChoix extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["chir_id"]         = "ref xor|function_id class|CMediusers";
     $specs["function_id"]     = "ref xor|chir_id class|CFunctions";
     $specs["nom"]             = "str notNull";

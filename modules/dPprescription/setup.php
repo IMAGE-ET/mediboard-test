@@ -575,7 +575,7 @@ class CSetupdPprescription extends CSetup {
     function updateUnitePrise(){
 
      $ds_std = CSQLDataSource::get("std");
-     $ds_bcb = CSQLDataSource::get("bcb");
+     $ds_bcb = CBcbObject::getDataSource();
              
      // Recuperation de toutes les lignes de posologies ayant unite_prise à NULL et aucun numero de poso indiqué 
      $sql = "SELECT prise_posologie.prise_posologie_id, prescription_line_medicament.code_cip 

@@ -38,8 +38,8 @@ class CMbMail extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["from"]        = "ref notNull class|CMediusers";
     $specs["to"]          = "ref notNull class|CMediusers";
     $specs["subject"]     = "str notNull";

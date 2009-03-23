@@ -32,8 +32,8 @@ class CDocGedSuivi extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["user_id"]    = "ref notNull class|CMediusers";
     $specs["doc_ged_id"] = "ref notNull class|CDocGed";
     $specs["file_id"]    = "ref class|CFile";

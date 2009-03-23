@@ -67,8 +67,8 @@ class CBloodSalvage extends CMbObject {
 	/*
 	 * Spécifications. Indique les formats des différents éléments et références de la classe.
 	 */
-	function getSpecs() {
-		$specs= parent::getSpecs();
+	function getProps() {
+		$specs= parent::getProps();
 		$specs["operation_id"]				= "ref notNull class|COperation";
 		$specs["cell_saver_id"]				= "ref class|CCellSaver";
 	  $specs["type_ei_id"]		      = "ref class|CTypeEi";

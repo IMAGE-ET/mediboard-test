@@ -84,8 +84,8 @@ class CMediusers extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["remote"]           = "bool";
     $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9";
     $specs["function_id"]      = "ref notNull class|CFunctions";
@@ -146,60 +146,61 @@ class CMediusers extends CMbObject {
       );
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-	  $backRefs["secondary_functions"]             = "CSecondaryFunction user_id";
-	  $backRefs["actes_ccam_executes"]             = "CActeCCAM executant_id";
-	  $backRefs["actes_ngap_executes"]             = "CActeNGAP executant_id";
-	  $backRefs["administrations"]                 = "CAdministration administrateur_id";
-	  $backRefs["aides_saisie"]                    = "CAideSaisie user_id";
-	  $backRefs["modeles"]                         = "CCompteRendu chir_id";
-	  $backRefs["documents_ged"]                   = "CDocGed user_id";
-	  $backRefs["suivis__ged"]                     = "CDocGedSuivi user_id";
-	  $backRefs["examens"]                         = "CExamenLabo realisateur";
-	  $backRefs["users"]                           = "CFicheEi user_id";
-	  $backRefs["valid_users"]                     = "CFicheEi valid_user_id";
-	  $backRefs["service_valid_users"]             = "CFicheEi service_valid_user_id";
-	  $backRefs["qualite_users"]                   = "CFicheEi qualite_user_id";
-	  $backRefs["files"]                           = "CFile file_owner";
-	  $backRefs["forum_messages"]                  = "CForumMessage user_id";
-	  $backRefs["forum_threads"]                   = "CForumThread user_id";
-	  $backRefs["hprim21_medecins"]                = "CHprim21Medecin user_id";
-	  $backRefs["listes_choix"]                    = "CListeChoix chir_id";
-	  $backRefs["mails_sent"]                      = "CMbMail from";
-	  $backRefs["mails_received"]                  = "CMbMail to";
-	  $backRefs["notes"]                           = "CNote user_id";
-	  $backRefs["observations"]                    = "CObservationMedicale user_id";
-	  $backRefs["operations_chir"]                 = "COperation chir_id";
-	  $backRefs["operations_anesth"]               = "COperation anesth_id";
-	  $backRefs["packs"]                           = "CPack chir_id";
-	  $backRefs["perfusions"]                      = "CPerfusion praticien_id";
-	  $backRefs["perfusions_0"]                    = "CPerfusion creator_id";
-	  $backRefs["personnels"]                      = "CPersonnel user_id";
-	  $backRefs["plages_op_chir"]                  = "CPlageOp chir_id";
-	  $backRefs["plages_op_anesth"]                = "CPlageOp anesth_id";
-	  $backRefs["plages_consult"]                  = "CPlageconsult chir_id";
-	  $backRefs["plages_ressource"]                = "CPlageressource prat_id";
-	  $backRefs["prescriptions"]                   = "CPrescription praticien_id";
-	  $backRefs["prescriptions_labo"]              = "CPrescriptionLabo praticien_id";
-	  $backRefs["prescription_comments"]           = "CPrescriptionLineComment praticien_id";
-	  $backRefs["prescription_comments_crees"]     = "CPrescriptionLineComment creator_id";
-	  $backRefs["prescription_comments_executes"]  = "CPrescriptionLineComment user_executant_id";
-	  $backRefs["prescription_elements"]           = "CPrescriptionLineElement praticien_id";
-	  $backRefs["prescription_elements_crees"]     = "CPrescriptionLineElement creator_id";
-	  $backRefs["prescription_elements_executes"]  = "CPrescriptionLineElement user_executant_id";
-	  $backRefs["prescription_medicaments"]        = "CPrescriptionLineMedicament praticien_id";
-	  $backRefs["prescription_medicaments_crees"]  = "CPrescriptionLineMedicament creator_id";
-	  $backRefs["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
-	  $backRefs["protocoles"]                      = "CProtocole chir_id";
-	  $backRefs["sejours"]                         = "CSejour praticien_id";
-	  $backRefs["tarifs"]                          = "CTarif chir_id";
-	  $backRefs["temps_hospi"]                     = "CTempsHospi praticien_id";
-	  $backRefs["temps_chir"]                      = "CTempsOp chir_id";
-	  $backRefs["temps_prepa"]                     = "CTempsPrepa chir_id";
-	  $backRefs["transmissions"]                   = "CTransmissionMedicale user_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+	  $backProps["secondary_functions"]             = "CSecondaryFunction user_id";
+	  $backProps["actes_ccam_executes"]             = "CActeCCAM executant_id";
+	  $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
+	  $backProps["administrations"]                 = "CAdministration administrateur_id";
+	  $backProps["aides_saisie"]                    = "CAideSaisie user_id";
+	  $backProps["modeles"]                         = "CCompteRendu chir_id";
+	  $backProps["documents_ged"]                   = "CDocGed user_id";
+	  $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";
+	  $backProps["examens"]                         = "CExamenLabo realisateur";
+	  $backProps["users"]                           = "CFicheEi user_id";
+	  $backProps["valid_users"]                     = "CFicheEi valid_user_id";
+	  $backProps["service_valid_users"]             = "CFicheEi service_valid_user_id";
+	  $backProps["qualite_users"]                   = "CFicheEi qualite_user_id";
+	  $backProps["owned_files"]                     = "CFile file_owner";
+	  $backProps["forum_messages"]                  = "CForumMessage user_id";
+	  $backProps["forum_threads"]                   = "CForumThread user_id";
+	  $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
+	  $backProps["listes_choix"]                    = "CListeChoix chir_id";
+	  $backProps["mails_sent"]                      = "CMbMail from";
+	  $backProps["mails_received"]                  = "CMbMail to";
+	  $backProps["owned_notes"]                     = "CNote user_id";
+	  $backProps["observations"]                    = "CObservationMedicale user_id";
+	  $backProps["operations_chir"]                 = "COperation chir_id";
+	  $backProps["operations_anesth"]               = "COperation anesth_id";
+	  $backProps["packs"]                           = "CPack chir_id";
+	  $backProps["perfusions"]                      = "CPerfusion praticien_id";
+	  $backProps["perfusions_0"]                    = "CPerfusion creator_id";
+	  $backProps["personnels"]                      = "CPersonnel user_id";
+	  $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
+	  $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
+	  $backProps["plages_consult"]                  = "CPlageconsult chir_id";
+	  $backProps["plages_ressource"]                = "CPlageressource prat_id";
+	  $backProps["prescriptions"]                   = "CPrescription praticien_id";
+	  $backProps["prescriptions_labo"]              = "CPrescriptionLabo praticien_id";
+	  $backProps["prescription_comments"]           = "CPrescriptionLineComment praticien_id";
+	  $backProps["prescription_comments_crees"]     = "CPrescriptionLineComment creator_id";
+	  $backProps["prescription_comments_executes"]  = "CPrescriptionLineComment user_executant_id";
+	  $backProps["prescription_elements"]           = "CPrescriptionLineElement praticien_id";
+	  $backProps["prescription_elements_crees"]     = "CPrescriptionLineElement creator_id";
+	  $backProps["prescription_elements_executes"]  = "CPrescriptionLineElement user_executant_id";
+	  $backProps["prescription_medicaments"]        = "CPrescriptionLineMedicament praticien_id";
+	  $backProps["prescription_medicaments_crees"]  = "CPrescriptionLineMedicament creator_id";
+	  $backProps["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
+	  $backProps["prescription_dmis"]               = "CPrescriptionLineDMI praticien_id";
+	  $backProps["protocoles"]                      = "CProtocole chir_id";
+	  $backProps["sejours"]                         = "CSejour praticien_id";
+	  $backProps["tarifs"]                          = "CTarif chir_id";
+	  $backProps["temps_hospi"]                     = "CTempsHospi praticien_id";
+	  $backProps["temps_chir"]                      = "CTempsOp chir_id";
+	  $backProps["temps_prepa"]                     = "CTempsPrepa chir_id";
+	  $backProps["transmissions"]                   = "CTransmissionMedicale user_id";
 	  
-    return $backRefs;
+    return $backProps;
   }
    
   function createUser() {
@@ -410,7 +411,7 @@ class CMediusers extends CMbObject {
     // Chargement des specs des attributs du mediuser	
     $this->updateSpecs();
     
-    $specs = $this->getSpecsObj();
+    $specs = $this->getSpecs();
 
     // On se concentre dur le mot de passe (_user_password)
     $pwdSpecs = $specs['_user_password'];

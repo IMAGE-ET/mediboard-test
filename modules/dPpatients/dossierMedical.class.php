@@ -38,17 +38,19 @@ class CDossierMedical extends CMbMetaObject {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
+    $specs["object_class"] = "enum list|CPatient|CSejour";
     $specs["codes_cim"] = "text";
     return $specs;
   }  
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["antecedents"] = "CAntecedent dossier_medical_id";
-    $backRefs["traitements"] = "CTraitement dossier_medical_id";
-    $backRefs["etats_dent"]  = "CEtatDent dossier_medical_id";
-    return $backRefs;
+
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["antecedents"] = "CAntecedent dossier_medical_id";
+    $backProps["traitements"] = "CTraitement dossier_medical_id";
+    $backProps["etats_dent"]  = "CEtatDent dossier_medical_id";
+    return $backProps;
   }
 
   function loadRefsBack() {

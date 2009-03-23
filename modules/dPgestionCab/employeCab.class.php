@@ -35,14 +35,14 @@ class CEmployeCab extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["params_paie"] = "CParamsPaie employecab_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["params_paie"] = "CParamsPaie employecab_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["function_id"] = "ref notNull class|CFunctions";
     $specs["nom"]         = "str notNull";
     $specs["prenom"]      = "str notNull";

@@ -25,14 +25,14 @@ class CPrestation extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["sejours"]  = "CSejour prestation_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["sejours"]  = "CSejour prestation_id";
+    return $backProps;
   }
     
-  function getSpecs(){
-  	$specs = parent::getSpecs();
+  function getProps(){
+  	$specs = parent::getProps();
     $specs["group_id"] = "ref notNull class|CGroups";
     $specs["nom"] = "str notNull";
     $specs["description"] = "text confidential";

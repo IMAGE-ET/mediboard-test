@@ -125,8 +125,8 @@ class CPermission extends CMbObject {
  */
 
 class CPermModuleLegacy extends CPermModule {
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["user_id"]     = "ref notNull class|CUser";
     $specs["mod_id"]      = "num min|0";
     $specs["permission"]  = "numchar notNull maxLength|1";
@@ -135,8 +135,8 @@ class CPermModuleLegacy extends CPermModule {
   }
 }
 class CPermObjectLegacy extends CPermObject {
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["user_id"]      = "num notNull min|0";
     $specs["object_id"]    = "num min|0";
     $specs["object_class"] = "str notNull";

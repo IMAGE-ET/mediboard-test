@@ -47,14 +47,14 @@ class CAffectation extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["repas"] = "CRepas affectation_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["repas"] = "CRepas affectation_id";
+    return $backProps;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["lit_id"]       = "ref notNull class|CLit";
     $specs["sejour_id"]    = "ref class|CSejour cascade";
     $specs["entree"]       = "dateTime notNull";

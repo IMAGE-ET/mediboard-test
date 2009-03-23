@@ -30,8 +30,8 @@
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["id400"]        = "str notNull maxLength|10";
     $specs["tag"]          = "str maxLength|80";
     $specs["last_update"]  = "dateTime notNull";

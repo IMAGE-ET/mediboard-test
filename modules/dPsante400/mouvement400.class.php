@@ -167,7 +167,7 @@ class CMouvement400 extends CRecordSante400 {
  * Mark the mouvement row
  * ======== : checked out
  * OKOKOKOK : processed
- * 124--*-- : steps are done :
+ * 124--*-- : each of 8 steps are done :
  *      n : times
  *      - : undone due to errors 
  *      * : skipped 

@@ -136,7 +136,7 @@ foreach ($classes as $class) {
       $fwdObject = new $fwdClass;
       
       // Find corresponding back name
-      $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backRefs);
+      $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backProps);
 	    addLocale($classname, $prop, "$spec->class-back-$backName");
     }
   }

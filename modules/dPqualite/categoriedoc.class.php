@@ -22,14 +22,14 @@ class CCategorieDoc extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["documents_ged"] = "CDocGed doc_categorie_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["documents_ged"] = "CDocGed doc_categorie_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]  = "str notNull maxLength|50";
     $specs["code"] = "str notNull maxLength|1";
     return $specs;

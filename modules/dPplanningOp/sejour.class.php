@@ -148,24 +148,25 @@ class CSejour extends CCodable {
     return $spec;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["affectations"]         = "CAffectation sejour_id";
-	  $backRefs["consultations_anesths"] = "CConsultAnesth sejour_id";
-	  $backRefs["consultations"]        = "CConsultation sejour_id";
-	  $backRefs["factures"]             = "CFacture sejour_id";
-	  $backRefs["GHM"]                  = "CGHM sejour_id";
-	  $backRefs["hprim21_sejours"]      = "CHprim21Sejour sejour_id";
-	  $backRefs["observations"]         = "CObservationMedicale sejour_id";
-	  $backRefs["operations"]           = "COperation sejour_id";
-	  $backRefs["rpu"]                  = "CRPU sejour_id";
-	  $backRefs["rpu_mute"]             = "CRPU mutation_sejour_id";
-	  $backRefs["transmissions"]        = "CTransmissionMedicale sejour_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["affectations"]         = "CAffectation sejour_id";
+	  $backProps["consultations_anesths"] = "CConsultAnesth sejour_id";
+	  $backProps["consultations"]        = "CConsultation sejour_id";
+	  $backProps["factures"]             = "CFacture sejour_id";
+	  $backProps["GHM"]                  = "CGHM sejour_id";
+	  $backProps["hprim21_sejours"]      = "CHprim21Sejour sejour_id";
+	  $backProps["observations"]         = "CObservationMedicale sejour_id";
+	  $backProps["operations"]           = "COperation sejour_id";
+	  $backProps["rpu"]                  = "CRPU sejour_id";
+	  $backProps["rpu_mute"]             = "CRPU mutation_sejour_id";
+	  $backProps["transmissions"]        = "CTransmissionMedicale sejour_id";
+	  $backProps["dossier_medical"]      = "CDossierMedical object_id";
+	  return $backProps;
 	}
 
-  function getSpecs() {
-   	$specs = parent::getSpecs();
+  function getProps() {
+   	$specs = parent::getProps();
     $specs["patient_id"]          = "ref notNull class|CPatient";
     $specs["praticien_id"]        = "ref notNull class|CMediusers";
     $specs["group_id"]            = "ref notNull class|CGroups";

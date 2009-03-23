@@ -32,8 +32,8 @@ class CTypeEi extends CMbObject {
   /*
    * Spécifications. Indique les formats des différents éléments et références de la classe.
    */
-  function getSpecs() {
-    $specs= parent::getSpecs();
+  function getProps() {
+    $specs= parent::getProps();
     $specs["name"]     = "str notNull maxLength|30";
     $specs["concerne"] = "enum notNull list|pat|vis|pers|med|mat";
     $specs["desc"]     = "text";
@@ -42,10 +42,10 @@ class CTypeEi extends CMbObject {
     return $specs;
   }
   
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["blood_salvages"] = "CBloodSalvage type_ei_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["blood_salvages"] = "CBloodSalvage type_ei_id";
+	  return $backProps;
 	}
 
   function updateFormFields() {

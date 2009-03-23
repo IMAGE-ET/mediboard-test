@@ -19,8 +19,8 @@ class CDocumentItem extends CMbMetaObject {
   var $_send = null; 
   var $_is_sendable = null;
 	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["etat_envoi"] = "enum notNull list|oui|non|obsolete default|non";
     return $specs;
   }

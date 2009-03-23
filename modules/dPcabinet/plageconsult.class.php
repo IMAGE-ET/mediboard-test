@@ -53,14 +53,14 @@ class CPlageconsult extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["consulations"] = "CConsultation plageconsult_id";
-     return $backRefs;
+  function getBackProps() {
+      $backProps = parent::getBackProps();
+      $backProps["consulations"] = "CConsultation plageconsult_id";
+     return $backProps;
   }
 
-  function getSpecs() {
-    $parentSpecs = parent::getSpecs();
+  function getProps() {
+    $parentSpecs = parent::getProps();
     $specs = array (
       "chir_id" => "ref notNull class|CMediusers",
       "date"    => "date notNull",

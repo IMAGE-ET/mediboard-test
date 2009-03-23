@@ -32,17 +32,17 @@ class CCategorieCibleTransmission extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["libelle"]     = "str notNull";
     $specs["description"] = "text";
     return $specs;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["cibles"]  = "CCibleTransmission categorie_cible_transmission_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["cibles"]  = "CCibleTransmission categorie_cible_transmission_id";
+    return $backProps;
   }
   
   function updateFormFields() {

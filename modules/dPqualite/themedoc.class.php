@@ -25,14 +25,14 @@ class CThemeDoc extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["documents_ged"] = "CDocGed doc_theme_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["documents_ged"] = "CDocGed doc_theme_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["group_id"] = "ref class|CGroups";
     $specs["nom"]      = "str notNull maxLength|50";
     return $specs;

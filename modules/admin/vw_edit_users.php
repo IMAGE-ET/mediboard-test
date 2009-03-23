@@ -48,7 +48,7 @@ $smarty->assign("user_type"      , $user_type      );
 $smarty->assign("utypes"         , CUser::$types   );
 $smarty->assign("users"          , $users          );
 $smarty->assign("user"           , $user           );
-$smarty->assign("specs"          , $user->getSpecs());
+$smarty->assign("specs"          , $user->getProps());
 
 $smarty->display("vw_edit_users.tpl");
 ?>

@@ -16,7 +16,7 @@ class CSpSejMed extends CSpObject {
   // DB Table key
   var $numdos = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,8 +26,8 @@ class CSpSejMed extends CSpObject {
     return $spec;
   }
  	
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
 
     $specs["sejfla"]  = "str length|1"    ; /* Flag                        */
     $specs["numdos"] = "numchar length|6" ; /* Numero de dossier           */

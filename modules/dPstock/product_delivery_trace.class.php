@@ -38,8 +38,8 @@ class CProductDeliveryTrace extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['delivery_id']    = 'ref notNull class|CProductDelivery';
     $specs['code']           = 'str maxLength|32';
     $specs['quantity']       = 'num notNull';

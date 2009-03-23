@@ -34,8 +34,8 @@ class CPrescriptionLaboExamen extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "prescription_labo_id" => "ref class|CPrescriptionLabo notNull",
       "examen_labo_id"       => "ref class|CExamenLabo notNull",

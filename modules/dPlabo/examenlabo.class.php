@@ -76,8 +76,8 @@ class CExamenLabo extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "catalogue_labo_id"    => "ref class|CCatalogueLabo notNull",
       "identifiant"          => "str maxLength|10 notNull",
@@ -130,11 +130,11 @@ class CExamenLabo extends CMbObject {
     
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["items_pack_labo"] = "CPackItemExamenLabo examen_labo_id";
-    $backRefs["prescriptions"] = "CPrescriptionLaboExamen examen_labo_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["items_pack_labo"] = "CPackItemExamenLabo examen_labo_id";
+    $backProps["prescriptions"] = "CPrescriptionLaboExamen examen_labo_id";
+    return $backProps;
   }
 
   function updateFormFields() {

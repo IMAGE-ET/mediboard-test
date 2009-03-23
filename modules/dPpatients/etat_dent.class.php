@@ -29,8 +29,8 @@ class CEtatDent extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     $specs["dent"]               = "num notNull pos";

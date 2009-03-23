@@ -106,8 +106,8 @@ class CCatalogueLabo extends CMbObject {
     return $this->_ref_pere->hasAncestor($catalogue);
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "pere_id"     => "ref class|CCatalogueLabo",
       "function_id" => "ref class|CFunctions",
@@ -118,11 +118,11 @@ class CCatalogueLabo extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["catalogues_labo"] = "CCatalogueLabo pere_id";
-    $backRefs["examens_labo"   ] = "CExamenLabo catalogue_labo_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["catalogues_labo"] = "CCatalogueLabo pere_id";
+    $backProps["examens_labo"   ] = "CExamenLabo catalogue_labo_id";
+    return $backProps;
   }
   
   function updateFormFields() {

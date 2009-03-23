@@ -12,7 +12,7 @@ global $AppUI, $can;
 $can->needsAdmin();
 
 $ds_std = CSQLDataSource::get("std");
-$ds_bcb = CSQLDataSource::get("bcb");
+$ds_bcb = CBcbObject::getDataSource();
         
 // Recuperation des tous les codes cip
 $sql = "SELECT DISTINCT code_cip 

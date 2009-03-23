@@ -31,8 +31,8 @@ class CCategoryPrescription extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["chapitre"]    = "enum notNull list|anapath|biologie|imagerie|consult|kine|soin|dm|dmi";
     $specs["nom"]         = "str notNull";
     $specs["description"] = "text";
@@ -41,13 +41,14 @@ class CCategoryPrescription extends CMbObject {
     return $specs;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["elements_prescription"]   = "CElementPrescription category_prescription_id";
-    $backRefs["executants_prescription"] = "CExecutantPrescriptionLine category_prescription_id";
-    $backRefs["functions_category"]      = "CFunctionCategoryPrescription category_prescription_id";
-    $backRefs["comments_prescription"]   = "CPrescriptionLineComment category_prescription_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["elements_prescription"]   = "CElementPrescription category_prescription_id";
+    $backProps["executants_prescription"] = "CExecutantPrescriptionLine category_prescription_id";
+    $backProps["functions_category"]      = "CFunctionCategoryPrescription category_prescription_id";
+    $backProps["comments_prescription"]   = "CPrescriptionLineComment category_prescription_id";
+    $backProps["transmissions"]           = "CTransmissionMedicale object_id";
+    return $backProps;
   }     
   
   function updateFormFields(){

@@ -16,7 +16,7 @@ class CSpDetCCAM extends CSpObject {
   // DB Table key
   var $idacte = null;
 
-  // DB Fields : see getSpecs();
+  // DB Fields : see getProps();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,8 +33,8 @@ class CSpDetCCAM extends CSpObject {
     $this->_id = $latestId+1;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     
     $specs["idacte"]   = "num";                /* Numéro d'acte                */
     $specs["idinterv"] = "num";                /* Numéro d'intervention        */

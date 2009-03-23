@@ -32,8 +32,8 @@ class CDMI extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"]	     		= "str notNull";
     $specs["description"]	= "text";
     $specs["code"]		    = "str notNull";

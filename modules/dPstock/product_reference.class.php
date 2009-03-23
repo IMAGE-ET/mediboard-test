@@ -34,8 +34,8 @@ class CProductReference extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['product_id']  = 'ref notNull class|CProduct';
     $specs['societe_id']  = 'ref notNull class|CSociete';
     $specs['quantity']    = 'num notNull pos';
@@ -45,10 +45,10 @@ class CProductReference extends CMbObject {
     return $specs;
   }
 
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
- 	  $backRefs["order_items"] = "CProductOrderItem reference_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+ 	  $backProps["order_items"] = "CProductOrderItem reference_id";
+	  return $backProps;
 	}
 
 	function updateFormFields() {

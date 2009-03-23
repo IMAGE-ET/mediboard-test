@@ -100,20 +100,20 @@ class CPrescription extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prescription_line_medicament"]     = "CPrescriptionLineMedicament prescription_id";
-    $backRefs["prescription_line_element"]        = "CPrescriptionLineElement prescription_id";
-    $backRefs["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
-    $backRefs["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
-    $backRefs["perfusion"]                        = "CPerfusion prescription_id";
-		$backRefs["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
-		$backRefs["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prescription_line_medicament"]     = "CPrescriptionLineMedicament prescription_id";
+    $backProps["prescription_line_element"]        = "CPrescriptionLineElement prescription_id";
+    $backProps["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
+    $backProps["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
+    $backProps["perfusion"]                        = "CPerfusion prescription_id";
+		$backProps["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
+		$backProps["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["praticien_id"]  = "ref class|CMediusers";
     $specs["function_id"]   = "ref class|CFunctions";  
     $specs["group_id"]      = "ref class|CGroups";
@@ -1314,6 +1314,7 @@ class CPrescription extends CMbObject {
 				      }
 				    }
 				  }
+				  
 		    }
 		  }
     }

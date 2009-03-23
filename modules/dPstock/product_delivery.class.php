@@ -36,8 +36,8 @@ class CProductDelivery extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['stock_id']          = 'ref notNull class|CProductStockGroup';
     $specs['date_dispensation'] = 'dateTime notNull';
     $specs['quantity']          = 'num notNull';
@@ -54,10 +54,10 @@ class CProductDelivery extends CMbObject {
     $this->_view = $this->quantity.'x '.$this->_ref_stock->_view.($this->service_id?" pour le service '{$this->_ref_service->_view}'":'');
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs['delivery_traces'] = 'CProductDeliveryTrace delivery_id';
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['delivery_traces'] = 'CProductDeliveryTrace delivery_id';
+    return $backProps;
   }
   
   function countDelivered() {

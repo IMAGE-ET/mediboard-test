@@ -15,7 +15,7 @@ ini_set("memory_limit", "128M");
 
 $errors = 0;
 $success = 0;
-$ds = CSQLDataSource::get("bcb");
+$ds = CBcbObject::getDataSource();
 foreach ($ds->loadTables() as $table) {
   if (!$ds->renameTable($table, strtoupper($table))) {
     CAppUI::stepAjax("Failed to uppercase table '$table'", UI_MSG_WARNING);

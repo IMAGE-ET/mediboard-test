@@ -33,8 +33,8 @@ class CProductOrderItemReception extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['order_item_id'] = 'ref notNull class|CProductOrderItem';
     $specs['quantity']      = 'num notNull';
     $specs['code']          = 'str';

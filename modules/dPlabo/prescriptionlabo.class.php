@@ -52,8 +52,8 @@ class CPrescriptionLabo extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "patient_id"   => "ref class|CPatient notNull",
       "praticien_id" => "ref class|CMediusers notNull",
@@ -65,10 +65,10 @@ class CPrescriptionLabo extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prescription_labo_examen"] = "CPrescriptionLaboExamen prescription_labo_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prescription_labo_examen"] = "CPrescriptionLaboExamen prescription_labo_id";
+    return $backProps;
   }
   
   function getSeeks() {

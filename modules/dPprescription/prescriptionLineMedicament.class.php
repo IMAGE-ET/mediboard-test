@@ -153,8 +153,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["code_cip"]             = "numchar notNull length|7";
     $specs["no_poso"]              = "num max|128";
     $specs["valide_pharma"]        = "bool";
@@ -176,11 +176,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Déclaration des backRefs
    */
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prev_hist_line"] = "CPrescriptionLineMedicament substitution_line_id";
-    $backRefs["substitutions"]  = "CPrescriptionLineMedicament substitute_for";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prev_hist_line"] = "CPrescriptionLineMedicament substitution_line_id";
+    $backProps["substitutions"]  = "CPrescriptionLineMedicament substitute_for";
+    $backProps["parent_line"]    = "CPrescriptionLineMedicament child_id";  
+    return $backProps;
   }
   
   function updateFormFields() {

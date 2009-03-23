@@ -31,8 +31,8 @@ class CPrescriptionProtocolePack extends CMbObject {
     return $spec;
   }
     
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["praticien_id"]  = "ref xor|function_id class|CMediusers";
     $specs["function_id"]   = "ref xor|praticien_id class|CFunctions";  
     $specs["libelle"]       = "str notNull";
@@ -40,10 +40,10 @@ class CPrescriptionProtocolePack extends CMbObject {
     return $specs;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prescription_protocole_pack_items"] = "CPrescriptionProtocolePackItem prescription_protocole_pack_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["prescription_protocole_pack_items"] = "CPrescriptionProtocolePackItem prescription_protocole_pack_id";
+    return $backProps;
   }
   
   function updateFormFields(){

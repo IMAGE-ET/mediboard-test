@@ -11,7 +11,7 @@ global $can;
 $can->needsAdmin();
 
 // Comptage
-$count = CBcbProduitLivretTherapeutique::countProduits();
+$count = CBcbProduitLivretTherapeutique::countProduitsMed();
 CAppUI::stepAjax("Il y a $count produits dans le livret");
 
 // Purge

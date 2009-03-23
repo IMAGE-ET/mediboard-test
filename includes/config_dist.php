@@ -93,10 +93,18 @@ $dPconfig["db"]["sherpa"] = array(
 );
   
 // BCB
-$dPconfig["db"]["bcb"] = array(
+$dPconfig["db"]["bcb1"] = array(
   "dbtype" => "mysql",
   "dbhost" => "localhost",
-  "dbname" => "bcb",
+  "dbname" => "bcb1",
+  "dbuser" => "",
+  "dbpass" => "",
+);
+
+$dPconfig["db"]["bcb2"] = array(
+  "dbtype" => "mysql",
+  "dbhost" => "localhost",
+  "dbname" => "bcb2",
   "dbuser" => "",
   "dbpass" => "",
 );
@@ -336,6 +344,9 @@ $dPconfig["dPlabo"] = array (
 );
 
 $dPconfig["dPmedicament"] = array (
+  "CBcbObject" =>  array (
+    "dsn" => "bcb",
+  ),
   "CBcbProduit" => array (
     "use_cache" => "0",
   ),

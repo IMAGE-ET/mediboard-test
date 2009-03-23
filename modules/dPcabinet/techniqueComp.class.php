@@ -28,8 +28,8 @@ class CTechniqueComp extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["consultation_anesth_id"] = "ref notNull class|CConsultAnesth";
     $specs["technique"]              = "text helped";
     return $specs;

@@ -36,16 +36,16 @@ class CSociete extends CMbObject {
     return $spec;
   }
 
-	function getBackRefs() {
-	  $backRefs = parent::getBackRefs();
-	  $backRefs["products"]           = "CProduct societe_id";
-	  $backRefs["product_orders"]     = "CProductOrder societe_id";
-	  $backRefs["product_references"] = "CProductReference societe_id";
-	  return $backRefs;
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["products"]           = "CProduct societe_id";
+	  $backProps["product_orders"]     = "CProductOrder societe_id";
+	  $backProps["product_references"] = "CProductReference societe_id";
+	  return $backProps;
 	}
 
-	function getSpecs() {
-    $specs = parent::getSpecs();
+	function getProps() {
+    $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50';
     $specs['address']         = 'str';
     $specs['postal_code']     = 'numchar minLength|4 maxLength|5';

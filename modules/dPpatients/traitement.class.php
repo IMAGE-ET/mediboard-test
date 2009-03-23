@@ -27,8 +27,8 @@ class CTraitement extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs["debut"       ] = "date";
     $specs["fin"         ] = "date moreEquals|debut";
     $specs["traitement"  ] = "text helped";

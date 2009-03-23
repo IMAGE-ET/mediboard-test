@@ -129,7 +129,7 @@ class CBcbPosologie extends CBcbObject {
 - Au cours des traitements prolongés, contrôler la formule sanguin, les fonctions hépatiques et rénales.");*/
     
     // Chargement des posologies du produit
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     if($numPoso){
       $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$cip' AND `NO_POSO` = '$numPoso';";
     } else {
@@ -213,7 +213,7 @@ class CBcbPosologie extends CBcbObject {
  
   // Recupere la valeur d'un code
   function getValeur($champ, $_champ, $champs, $nom_champ_base2, $table){
-    $ds = CSQLDataSource::get("bcb");
+    $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `$table` WHERE `$nom_champ_base2` = '$champ';";
     $object = null;
  

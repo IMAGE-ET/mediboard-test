@@ -51,8 +51,8 @@ class CPlageressource extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "prat_id" 		=> "ref class|CMediusers",
       "date"    		=> "date notNull",

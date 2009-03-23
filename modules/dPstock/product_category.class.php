@@ -26,14 +26,14 @@ class CProductCategory extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs['products'] = 'CProduct category_id';
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['products'] = 'CProduct category_id';
+    return $backProps;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
     $specs['name'] = 'str notNull maxLength|50';
     return $specs;
   }

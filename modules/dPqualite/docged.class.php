@@ -51,14 +51,14 @@ class CDocGed extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["documents_ged_suivi"] = "CDocGedSuivi doc_ged_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["documents_ged_suivi"] = "CDocGedSuivi doc_ged_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["group_id"]         = "ref class|CGroups";
     $specs["user_id"]          = "ref class|CMediusers";
     $specs["doc_chapitre_id"]  = "ref class|CChapitreDoc";

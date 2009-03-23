@@ -127,21 +127,21 @@ class CConsultation extends CCodable {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
-    $backRefs["examaudio"]      = "CExamAudio consultation_id";
-    $backRefs["examcomp"]       = "CExamComp consultation_id";
-    $backRefs["examnyha"]       = "CExamNyha consultation_id";
-    $backRefs["exampossum"]     = "CExamPossum consultation_id";
-    $backRefs["examigs"]        = "CExamIgs consultation_id";
-    $backRefs["prescriptions"]  = "CPrescription object_id";
-    $backRefs["reglements"]     = "CReglement consultation_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["consult_anesth"] = "CConsultAnesth consultation_id";
+    $backProps["examaudio"]      = "CExamAudio consultation_id";
+    $backProps["examcomp"]       = "CExamComp consultation_id";
+    $backProps["examnyha"]       = "CExamNyha consultation_id";
+    $backProps["exampossum"]     = "CExamPossum consultation_id";
+    $backProps["examigs"]        = "CExamIgs consultation_id";
+    $backProps["prescriptions"]  = "CPrescription object_id";
+    $backProps["reglements"]     = "CReglement consultation_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult";
     $specs["patient_id"]        = "ref class|CPatient";
     $specs["heure"]             = "time notNull";

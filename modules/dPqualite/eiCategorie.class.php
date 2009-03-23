@@ -24,14 +24,14 @@ class CEiCategorie extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["items"] = "CEiItem ei_categorie_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["items"] = "CEiItem ei_categorie_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["nom"] = "str notNull maxLength|50";
     return $specs;
   }

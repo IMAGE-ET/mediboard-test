@@ -35,8 +35,8 @@ class CExamNyha extends CMbObject {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "consultation_id" => "ref notNull class|CConsultation",
       "q1"              => "bool default|none",

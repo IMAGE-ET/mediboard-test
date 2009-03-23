@@ -43,8 +43,8 @@ class CHprim21Sejour extends CHprim21Object {
     return $spec;
   }
   
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "hprim21_patient_id"   => "ref notNull class|CHprim21Patient",
       "hprim21_medecin_id"   => "ref class|CHprim21Medecin",

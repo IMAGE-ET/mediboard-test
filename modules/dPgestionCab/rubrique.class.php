@@ -28,14 +28,14 @@ class CRubrique extends CMbObject {
     return $spec;
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["fiches_compta"] = "CGestionCab rubrique_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["fiches_compta"] = "CGestionCab rubrique_id";
+    return $backProps;
   }
   
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["function_id"] = "ref class|CFunctions";
     $specs["nom"]         = "str notNull";
     return $specs;

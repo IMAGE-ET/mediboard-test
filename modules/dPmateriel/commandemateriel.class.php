@@ -31,8 +31,8 @@ class CCommandeMateriel extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specsParent = parent::getSpecs();
+  function getProps() {
+  	$specsParent = parent::getProps();
     $specs = array (
       "reference_id" => "ref notNull class|CRefMateriel",
       "quantite"    => "num notNull pos",

@@ -38,15 +38,15 @@ class CLit extends CMbObject {
     return $spec;
   }
  
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["affectations"]     = "CAffectation lit_id";
-    $backRefs["affectations_rpu"] = "CRPU box_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["affectations"]     = "CAffectation lit_id";
+    $backProps["affectations_rpu"] = "CRPU box_id";
+    return $backProps;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["chambre_id"] = "ref notNull class|CChambre";
     $specs["nom"]        = "str notNull";
     return $specs;

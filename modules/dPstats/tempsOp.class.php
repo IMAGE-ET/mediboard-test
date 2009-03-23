@@ -34,8 +34,8 @@ class CTempsOp extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["chir_id"]         = "ref class|CMediusers";
     $specs["nb_intervention"] = "num pos";
     $specs["estimation"]      = "time";

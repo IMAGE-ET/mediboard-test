@@ -32,8 +32,8 @@ class CFactureItem extends CMbObject {
     return $spec;
   }
 
-  function getSpecs() {
-  	$specs = parent::getSpecs();
+  function getProps() {
+  	$specs = parent::getProps();
     $specs["facture_id"] = "ref notNull class|CFacture";
     $specs["libelle"]    = "text notNull";
     $specs["prix_ht"]    = "currency notNull";

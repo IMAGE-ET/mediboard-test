@@ -77,14 +77,14 @@ class CConsultAnesth extends CMbObject {
     return $spec;
   }
 
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["techniques"] = "CTechniqueComp consultation_anesth_id";
-    return $backRefs;
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["techniques"] = "CTechniqueComp consultation_anesth_id";
+    return $backProps;
   }
 
-  function getSpecs() {
-    $specs = parent::getSpecs();
+  function getProps() {
+    $specs = parent::getProps();
 
     $specs["consultation_id"]  = "ref notNull class|CConsultation cascade";
     $specs["operation_id"]     = "ref class|COperation";
