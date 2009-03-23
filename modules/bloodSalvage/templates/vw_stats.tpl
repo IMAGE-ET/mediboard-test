@@ -15,7 +15,6 @@ function yTickFormatter(y) {
 
 function drawGraph(key) {
   // Let's draw the graph
-	console.debug('stats-'+key);
   graph = Flotr.draw(
     $('stats-'+key),
     graphs[key], Object.extend({
