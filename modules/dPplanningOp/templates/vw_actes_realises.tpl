@@ -65,7 +65,7 @@ var viewCCAM = function(codeacte) {
         <tr>
           <th>Total</th>
           <td>
-            {{$montantTotalActes|string_format:"%.2f"}} &euro;
+            {{$montantTotalActes|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
           </td>
         </tr>
       </table>
@@ -108,7 +108,7 @@ var viewCCAM = function(codeacte) {
    <tr>
     <td rowspan="{{$nbActes.$sejour_id}}">{{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}} ans){{/if}}</td>
     <td rowspan="{{$nbActes.$sejour_id}}">
-      {{$montantSejour.$sejour_id|string_format:"%.2f"}} &euro;
+      {{$montantSejour.$sejour_id|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
     </td>
     
     {{include file=inc_acte_realise.tpl codable=$sejour}}

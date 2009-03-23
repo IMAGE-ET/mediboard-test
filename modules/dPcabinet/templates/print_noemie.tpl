@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <th class="category">Valeur</th>
-          <td>{{$total.value|string_format:"%.2f"}} &euro;</td>
+          <td>{{$total.value|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tr>
           <th class="category">Tout valider</th>

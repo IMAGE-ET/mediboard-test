@@ -311,7 +311,7 @@ function setToNow(element) {
         
         <strong>
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
-          &mdash; {{$acte->_tarif|string_format:"%.2f"}} &euro;
+          &mdash; {{$acte->_tarif|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
         {{/if}}
         </strong>
 

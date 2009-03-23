@@ -31,7 +31,7 @@ Main.add(function() {
         Prix Hopital
       </td>
       <td>
-        <input type="text" size="5" name="prix_hopital" value="{{$produit_livret->prix_hopital}}" /> &euro;
+        <input type="text" size="5" name="prix_hopital" value="{{$produit_livret->prix_hopital}}" /> {{$dPconfig.currency_symbol}}
       </td>
     </tr>
     <tr>
@@ -39,7 +39,7 @@ Main.add(function() {
         Prix Ville
       </td>
       <td>
-        <input type="text" size="5" name="prix_ville" value="{{$produit_livret->prix_ville}}" /> &euro;
+        <input type="text" size="5" name="prix_ville" value="{{$produit_livret->prix_ville}}" /> {{$dPconfig.currency_symbol}}
       </td>
     </tr>
     <tr>

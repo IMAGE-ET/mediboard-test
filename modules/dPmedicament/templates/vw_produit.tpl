@@ -243,7 +243,7 @@ Main.add(function () {
             <th>Prix de vente TTC</th>
             <td>
             {{if $mbProduit->_ref_economique->prix_vente != "0000000"}}
-              {{$mbProduit->_ref_economique->prix_vente}} &euro;
+              {{$mbProduit->_ref_economique->prix_vente}} {{$dPconfig.currency_symbol}}
             {{/if}}
             </td>
           </tr>

@@ -200,7 +200,7 @@ Main.add( function(){
         	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
         	          {{mb_label object=$consult field="secteur2"}}
         	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
-       			        <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
+       			        <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> {{$dPconfig.currency_symbol}}
                   {{/if}}
                   {{if $consult->patient_date_reglement}}
                     {{mb_field object=$consult field="du_patient" hidden=1 prop=""}}

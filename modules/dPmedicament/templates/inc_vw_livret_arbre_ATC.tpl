@@ -78,12 +78,12 @@ if(Livret.urlEditProd) {
     <td>{{$produit->_ref_produit->code_ucd}}</td>
     <td>
       {{if $produit->prix_hopital}}
-        {{$produit->prix_hopital}}&euro;
+        {{$produit->prix_hopital}}{{$dPconfig.currency_symbol}}
       {{/if}}
     </td>
     <td>
       {{if $produit->prix_ville}}
-        {{$produit->prix_ville}}&euro;
+        {{$produit->prix_ville}}{{$dPconfig.currency_symbol}}
       {{/if}}
     </td>
     <td>{{$produit->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>

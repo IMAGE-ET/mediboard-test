@@ -57,12 +57,12 @@
         </tr>
         <tr>
           <th class="category">Total réglement patient</th>
-          <td>{{$recapReglement.total.du_patient|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.cheque.du_patient|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.CB.du_patient|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.especes.du_patient|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.virement.du_patient|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.autre.du_patient|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapReglement.total.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.cheque.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.CB.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.especes.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.virement.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.autre.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tr>
           <th class="category" colspan="7">Réglement Tiers</th>
@@ -87,12 +87,12 @@
         </tr>
         <tr>
           <th class="category">Total réglement Tiers</th>
-          <td>{{$recapReglement.total.du_tiers|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.cheque.du_tiers|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.CB.du_tiers|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.especes.du_tiers|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.virement.du_tiers|string_format:"%.2f"}} &euro;</td>
-          <td>{{$recapReglement.autre.du_tiers|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapReglement.total.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.cheque.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.CB.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.especes.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.virement.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.autre.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tr>
           <th class="category" colspan="7">Récapitulatif des consultations concernées</th>
@@ -103,19 +103,19 @@
         </tr>
         <tr>
           <th class="category">Total secteur 1</th>
-          <td colspan="6">{{$recapReglement.total.secteur1|string_format:"%.2f"}} &euro;</td>
+          <td colspan="6">{{$recapReglement.total.secteur1|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tr>
           <th class="category">Total secteur 2</th>
-          <td colspan="6">{{$recapReglement.total.secteur2|string_format:"%.2f"}} &euro;</td>
+          <td colspan="6">{{$recapReglement.total.secteur2|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tr>
           <th class="category">Total facturé</th>
-          <td colspan="6">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|string_format:"%.2f"}} &euro;</td>
+          <td colspan="6">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tr>
           <th class="category">Total réglé</th>
-          <td colspan="6">{{$recapReglement.total.du_patient+$recapReglement.total.du_tiers|string_format:"%.2f"}} &euro;</td>
+          <td colspan="6">{{$recapReglement.total.du_patient+$recapReglement.total.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
         </tr>
       </table>
     </td>
@@ -145,21 +145,21 @@
           <td class="text">{{$curr_reglement->_ref_consultation->_ref_patient->_view}}</td>
           <td>{{$curr_reglement->mode}}</td>
           <td class="text">{{$curr_reglement->_ref_consultation->tarif}}</td>
-          <td>{{$curr_reglement->_ref_consultation->secteur1}} &euro;</td>
-          <td>{{$curr_reglement->_ref_consultation->secteur2}} &euro;</td>
-          <td>{{$curr_reglement->_ref_consultation->secteur1+$curr_reglement->_ref_consultation->secteur2}} &euro;</td>
+          <td>{{$curr_reglement->_ref_consultation->secteur1}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$curr_reglement->_ref_consultation->secteur2}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$curr_reglement->_ref_consultation->secteur1+$curr_reglement->_ref_consultation->secteur2}} {{$dPconfig.currency_symbol}}</td>
           <td>
             {{if $curr_reglement->emetteur == "patient"}}
-              {{$curr_reglement->montant}} &euro;
+              {{$curr_reglement->montant}} {{$dPconfig.currency_symbol}}
             {{else}}
-              0  &euro;
+              0  {{$dPconfig.currency_symbol}}
             {{/if}}
           </td>
           <td>
             {{if $curr_reglement->emetteur == "tiers"}}
               {{$curr_reglement->montant}}
             {{else}}
-              0  &euro;
+              0  {{$dPconfig.currency_symbol}}
             {{/if}}
           </td>
         </tr>
@@ -167,8 +167,8 @@
         <tr>
           <td colspan="6" />
           <th>Total</th>
-          <td><strong>{{$curr_date.total.patient}} &euro;</strong></td>
-          <td><strong>{{$curr_date.total.tiers}} &euro;</strong></td>
+          <td><strong>{{$curr_date.total.patient}} {{$dPconfig.currency_symbol}}</strong></td>
+          <td><strong>{{$curr_date.total.tiers}} {{$dPconfig.currency_symbol}}</strong></td>
         </tr>
       </table>
     </td>

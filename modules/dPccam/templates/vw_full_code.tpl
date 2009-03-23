@@ -130,7 +130,7 @@ Main.add(function () {
                   <li>Phase(s) :
                     <ul>
                       {{foreach from=$curr_act->phases item=curr_phase}}
-                      <li>Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}} : {{$curr_phase->tarif}}&euro;</li>
+                      <li>Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}} : {{$curr_phase->tarif}}{{$dPconfig.currency_symbol}}</li>
                       {{/foreach}}
                     </ul>
                   </li>

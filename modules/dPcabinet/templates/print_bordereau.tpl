@@ -36,7 +36,7 @@
   <tr>
     <td colspan="3">{{$reglement->_ref_consultation->_ref_patient->_view}}</td>
     <td colspan="3">{{$reglement->_ref_banque->_view}}</td>
-    <td>{{$reglement->montant}} &euro;</td>
+    <td>{{$reglement->montant}} {{$dPconfig.currency_symbol}}</td>
   </tr>
   {{/foreach}}
   
@@ -45,7 +45,7 @@
     <th>Nombre de remises</th>
     <td>{{$nbRemise}}</td>
     <th>Montant total</th>
-    <td>{{$montantTotal}} &euro;</td>
+    <td>{{$montantTotal}} {{$dPconfig.currency_symbol}}</td>
   </tr>
 </table>
 
