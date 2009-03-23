@@ -63,7 +63,7 @@
 			 J
 			{{/if}}
 			
-			{{if ($elt->unite_decalage == "jour" && $elt->decalage_line > 0) || ($elt->unite_decalage == "heure")}}
+			{{if ($elt->unite_decalage == "jour" && $elt->decalage_line != 0) || ($elt->unite_decalage == "heure")}}
 			{{if $elt->decalage_line >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line size="3"}}
 			{{if $prescription->object_class == "CSejour"}}
 			  {{mb_value object=$elt field=unite_decalage}}
@@ -83,7 +83,7 @@
 			 <!-- Date de fin -->
 			 jusqu'à {{$traduction.$line_jour_decalage_fin}}
 			 
-			 {{if ($elt->unite_decalage_fin == "jour" && $elt->decalage_line_fin > 0) || ($elt->unite_decalage_fin == "heure")}}
+			 {{if ($elt->unite_decalage_fin == "jour" && $elt->decalage_line_fin != 0) || ($elt->unite_decalage_fin == "heure")}}
 				 {{if $elt->decalage_line_fin >= 0}}+{{/if}} {{mb_value object=$elt field=decalage_line_fin increment=1 }}
 				 {{mb_value object=$elt field=unite_decalage_fin }}
 			 {{/if}}
