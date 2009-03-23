@@ -14,4 +14,8 @@
     {{/foreach}}
   </td>
 </tr>
+{{foreachelse}}
+<tr>
+  <td colspan="20">{{tr}}CAccessLog.none{{/tr}}</td>
+</tr>
 {{/foreach}}

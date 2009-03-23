@@ -3,16 +3,9 @@
 {{/if}}
 
 <table class="tbl">
-
   {{if $dialog}}
   <tr>
-    <th colspan="5" class="title">
-      {{if $list|@count > 0}}
-      Historique de {{$item}}
-      {{else}}
-      Pas d'historique
-      {{/if}}
-    </th>
+    <th colspan="5" class="title">Historique de {{$item}}</th>
   </tr>
   {{/if}}
   
