@@ -8,7 +8,7 @@
 	* @author Stéphanie subilia
 	*/
 
-CAppUI::requireModuleClass('DMI', 'produit_prescriptible');
+CAppUI::requireModuleClass('dmi', 'produit_prescriptible');
 class CDMI extends CProduitPrescriptible {
   // DB Table key
   var $dmi_id  = null;

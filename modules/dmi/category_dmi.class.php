@@ -8,7 +8,7 @@
 	* @author Thomas Despoix
 	*/
 
-CAppUI::requireModuleClass('DMI', 'category_produit_prescriptible');
+CAppUI::requireModuleClass('dmi', 'category_produit_prescriptible');
 class CDMICategory extends CCategoryProduitPrescriptible {
   // DB Table key
   var $category_id = null;
