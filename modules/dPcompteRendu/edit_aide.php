@@ -29,11 +29,17 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 $object = new $class;
 $dependValues = null;
 
-if (count($helped = $object->_specs[$field]->helped)) {
-  foreach ($helped as $i => $depend_field) {
-    $key = "depend_value_" . ($i+1);
-    $dependValues[$key] = @$object->_specs[$depend_field]->_locales;
-  }
+// To set the depend values always as an array (empty or not)
+$helped = array();
+if ($object->_specs[$field]->helped && !is_bool($object->_specs[$field]->helped)) {
+	if (!is_array($object->_specs[$field]->helped)) 
+	  $helped = array($object->_specs[$field]->helped);
+	else 
+	  $helped = $object->_specs[$field]->helped;
+}
+foreach ($helped as $i => $depend_field) {
+  $key = "depend_value_" . ($i+1);
+  $dependValues[$key] = @$object->_specs[$depend_field]->_locales;
 }
 
 // Nouvelle Aide à la saisie
