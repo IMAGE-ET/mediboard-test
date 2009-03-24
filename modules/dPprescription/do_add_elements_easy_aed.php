@@ -30,29 +30,15 @@ $decalage_line_fin  = mbGetValueFromPost("decalage_line_fin");
 $time_fin           = mbGetValueFromPost("time_fin"); 
 $decalage_prise     = mbGetValueFromPost("decalage_prise");
 $praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
-
+$commentaire = mbGetValueFromPost("commentaire");
 
 // Initialisation des tableaux
 $lines = array();
-$medicaments = array();
 $elements = array();
 
 // Explode des listes d'elements et de medicaments
 if($token_elt){
   $elements    = explode("|",$token_elt);
-}
-
-// Ajout des medicaments dans la prescription
-foreach($medicaments as $code_cip){
-	$line_medicament = new CPrescriptionLineMedicament();
-	$line_medicament->code_cip = $code_cip;
-	$line_medicament->prescription_id = $prescription_id;
-	$line_medicament->praticien_id = $praticien_id;
-	$line_medicament->creator_id = $AppUI->user_id;
-
-	$msg = $line_medicament->store();
-	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
-  $lines["medicament"][$line_medicament->_id] = $line_medicament;
 }
 
 // Ajout des elements dans la prescription
@@ -62,7 +48,7 @@ foreach($elements as $element_id){
 	$line_element->prescription_id = $prescription_id;
 	$line_element->praticien_id = $praticien_id;
 	$line_element->creator_id = $AppUI->user_id;
-
+  $line_element->commentaire = $commentaire;
 	$msg = $line_element->store();
 	$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-create");
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;

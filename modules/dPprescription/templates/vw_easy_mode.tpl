@@ -112,10 +112,10 @@ function submitAllElements(){
   if (!oForm.token_elt.value) {
     return false;
   }
+  $V(oForm.commentaire, $V(document.addCommentaire.commentaire));
   
   onSubmitFormAjax(oForm);
   resetModeEasy();
-  
   return false;
 }
 
@@ -136,7 +136,6 @@ Main.add( function(){
   }
   
   // Elements deja dans la prescription
-  
 	var elements = {{$elements|@json}};
 	$$('input').each( function(oCheckbox) {
 	  if(!oCheckbox.hasClassName("cat")){
@@ -156,11 +155,10 @@ Main.add( function(){
 
 <table class="form">
   <tr>
-    <th class="category">Dates</th>
-    <th class="category">Fréquence</th>
+    <th class="category" colspan="2">Dates</th>
   </tr>
   <tr>
-    <td>
+    <td colspan="2">
 	    {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl" 
 	              perm_edit=1
 	              dosql=CPrescriptionLineElement}}	      
@@ -176,11 +174,21 @@ Main.add( function(){
 	       {{/if}}
 	     }
 	     </script>
-	  
 	  </td>
+	</tr>
+	<tr>
+	  <th class="category">Fréquence</th>
+	  <th class="category">Commentaire</th>
+	</tr>
+	<tr>
 	  <td>
 	    {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl"}}
 	  </td>
+	  <td style="text-align: center">
+      <form name="addCommentaire" action="?" method="get">
+        {{mb_field object=$line field="commentaire" size="50"}}
+      </form>
+    </td>
   </tr>
   <tr>
     <td colspan="2" style="text-align: center">
@@ -201,6 +209,7 @@ Main.add( function(){
 			  <input type="hidden" name="jour_decalage_fin" value="" />
 			  <input type="hidden" name="decalage_line_fin" value="" />
 			  <input type="hidden" name="time_fin" value="" />
+			  <input type="hidden" name="commentaire" value="" />
 			  <input class="valeur" type="hidden" name="quantite" value="" />
 			  <input class="valeur" type="hidden" name="nb_fois" value="" />
 			  <input class="valeur" type="hidden" name="unite_fois" value="" />
@@ -210,11 +219,13 @@ Main.add( function(){
 			  <input class="valeur" type="hidden" name="decalage_prise" value="" />
 			  <button type="button" 
 			          class="submit" 
-			          onclick="this.form.onsubmit()">Ajouter les éléments à la prescription</button>
+			          onclick="this.form.onsubmit()">Ajouter les éléments sélectionnés à la prescription</button>
 			</form>
     </td>
   </tr>
 </table>
+
+
 
 
 <!-- Tabulations -->
