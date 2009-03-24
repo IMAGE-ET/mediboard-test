@@ -20,6 +20,7 @@ $service->load($service_id);
 $services = $service->loadGroupList();
 $patients = array();
 $alertes = array();
+$perfs = array();
 
 // Chargement des prescriptions qui sont dans le service selectionné
 $prescription = new CPrescription();
@@ -87,26 +88,9 @@ foreach($dates as $curr_date => $_date){
   }
 }
 
-$transmissions = array();
-$observations = array();
-$perfs = array();
-
 // Calcul du plan de soin pour chaque prescription
 foreach($prescriptions as $_prescription){
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
-  $nb_trans[$_prescription->_ref_patient->_id] = 0;
-  $nb_observ[$_prescription->_ref_patient->_id] = 0;
-  
-  $where = array();
-  $where["sejour_id"] = " = '$_prescription->object_id'";
-	$where["date"] = " >= '$date_min'";
-	
-	$transmission = new CTransmissionMedicale();
-	@$transmissions[$_prescription->_id] = $transmission->loadList($where);
-
-	$observation = new CObservationMedicale();
-	@$observations[$_prescription->_id] = $observation->loadList($where);
-	
   $_prescription->loadRefPraticien();
   $_prescription->_ref_praticien->loadRefFunction();
   $_prescription->_ref_patient->loadRefPhotoIdentite();
@@ -145,11 +129,13 @@ foreach($prescriptions as $_prescription){
 					        }
 					        if($quantite_prevue){
                     @$tab[$_prescription->_id][$dateTime]["med"][$_line_med->_id]["prevue"] = $quantite_prevue;
-							      $lines["med"][$_line_med->_id] = $_line_med;
 						      }
 					      	if(isset($_line_med->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"])){
 						        $quantite_adm = $_line_med->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"];
 						        @$tab[$_prescription->_id][$dateTime]["med"][$_line_med->_id]["adm"] = $quantite_adm;
+							    }
+							    if($quantite_prevue || $quantite_adm){
+							      $lines["med"][$_line_med->_id] = $_line_med;
 							    }
 						      if($quantite_prevue != $quantite_adm){
 						        $alertes[$_prescription->_id][$dateTime]["med"] = 1;
@@ -173,12 +159,14 @@ foreach($prescriptions as $_prescription){
                   }
                   if($quantite_prevue){
 					          @$tab[$_prescription->_id][$dateTime]["inj"][$_line_inj->_id]["prevue"] = $quantite_prevue;
-					          $lines["inj"][$_line_inj->_id] = $_line_inj;
-				          }
+					        }
 					        if(isset($_line_inj->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"])){
 						        $quantite_adm = $_line_inj->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"];
 						        @$tab[$_prescription->_id][$dateTime]["inj"][$_line_inj->_id]["adm"] = $quantite_adm;
 							    }
+							    if($quantite_prevue || $quantite_adm){
+							      $lines["inj"][$_line_inj->_id] = $_line_inj;
+				          }
 						      if($quantite_prevue != $quantite_adm){
 						        $alertes[$_prescription->_id][$dateTime]["inj"] = 1;
 						      }
@@ -203,11 +191,13 @@ foreach($prescriptions as $_prescription){
                     }
                     if(@$quantite_prevue){
 							        @$tab[$_prescription->_id][$dateTime][$chapitre][$_line_element->_id]["prevue"] = $quantite_prevue;
-							        $lines[$chapitre][$_line_element->_id] = $_line_element;
 						        }
 	                  if(isset($_line_element->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"])){
 						          $quantite_adm = $_line_element->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"];
 						          @$tab[$_prescription->_id][$dateTime][$chapitre][$_line_element->_id]["adm"] = $quantite_adm;
+							      }
+							      if($quantite_prevue || $quantite_adm){
+							        $lines[$chapitre][$_line_element->_id] = $_line_element;
 							      }
 							      if($quantite_prevue != $quantite_adm){
 							        $alertes[$_prescription->_id][$dateTime][$chapitre] = 1;
@@ -248,32 +238,6 @@ foreach($prescriptions as $_prescription){
 	}
 }
 
-$nb_observ["total"] = 0;
-$nb_trans["total"] = 0;
-
-$trans_and_obs = array();
-foreach($transmissions as $_transmissions_by_prescription){
-  foreach($_transmissions_by_prescription as $_transmission){
-    $_transmission->loadRefsFwd();
-    $_transmission->_ref_sejour->loadRefPatient();
-    $trans_and_obs[$_transmission->date][$_transmission->_id] = $_transmission;
-    $nb_trans["total"]++;
-    $nb_trans[$_transmission->_ref_sejour->_ref_patient->_id]++;
-  }
-}
-
-foreach($observations as $_observations_by_prescription){
-  foreach($_observations_by_prescription as $_observation){
-    $_observation->loadRefsFwd();
-    $_observation->_ref_sejour->loadRefPatient();
-    $trans_and_obs[$_observation->date][$_observation->_id] = $_observation;
-    $nb_observ["total"]++;
-    $nb_observ[$_observation->_ref_sejour->_ref_patient->_id]++;
-  }
-}
-
-krsort($trans_and_obs);
-
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("tab", $tab);
@@ -286,10 +250,7 @@ $smarty->assign("service_id", $service_id);
 $smarty->assign("services", $services);
 $smarty->assign("prescriptions", $prescriptions);
 $smarty->assign("date"     , $date);
-$smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("date_min", $date_min);
-$smarty->assign("nb_trans", $nb_trans);
-$smarty->assign("nb_observ", $nb_observ);
 $smarty->assign("service", $service);
 $smarty->assign("patients", $patients);
 $smarty->assign("alertes", $alertes);

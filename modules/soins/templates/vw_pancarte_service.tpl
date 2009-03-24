@@ -12,36 +12,24 @@ function viewLegendPancarte(){
   url.popup(300, 400, "Légende de la pancarte");
 }
        
-function showHidePatients(patient_id){
-  $('viewTransmissions').select('tr.trans_or_obs').each(function(tr){
-    if(!patient_id){
-      tr.show();
-    } else {
-      if(tr.hasClassName(patient_id)){
-	      tr.show();
-	    } else {
-	      tr.hide();
-	    }
-    }
-  });
-  
-  key_trans = patient_id ? (nb_trans[patient_id] || 0) : nb_trans['total'];
-	key_observ = patient_id ? (nb_observ[patient_id] || 0) : nb_observ['total'];
-	
-	$('nb_trans').update(key_trans);
-	$('nb_observ').update(key_observ);  
-}
-
-var nb_trans;
-var nb_observ;
-
-nb_trans = {{$nb_trans|@json}};
-nb_observ = {{$nb_observ|@json}};
+function viewTransmissions(service_id, user_id, degre){
+  var url = new Url;
+  url.setModuleAction("soins", "httpreq_vw_transmissions_pancarte");
+  url.addParam("service_id", service_id);
+  url.addParam("user_id", user_id);
+  url.addParam("degre", degre);
+  url.addParam("date", "{{$date}}");
+  url.addParam("date_min", "{{$date_min}}");
+  if(user_id || degre){
+    url.requestUpdate("_transmissions", { waitingText: null } );
+  } else {
+    url.requestUpdate("viewTransmissions", { waitingText: null } );
+  }
+}       
 
 Main.add(function () {
   var tab_sejour = Control.Tabs.create('tab-pancarte', false);
-  
-  
+  viewTransmissions($V(document.selService.service_id));
 });
                  
 </script>
@@ -60,7 +48,7 @@ Main.add(function () {
 
 <ul id="tab-pancarte" class="control_tabs">
   <li><a href="#viewPancarte">Pancarte {{$service->_view}}</a></li>
-  <li><a href="#viewTransmissions">Transmissions (<span id="nb_trans">{{$nb_trans.total}}</span>) et Observations (<span id="nb_observ">{{$nb_observ.total}}</span>)</a></li>
+  <li><a href="#viewTransmissions">Transmissions</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -238,7 +226,7 @@ Main.add(function () {
 				          		        <td style="text-align: center;">{{$quantite_prevue}}</td>
 				          		        <td style="text-align: center;">{{$quantite_adm}}</td>
 				          		        <td>
-				          		        {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+				          		          {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 			          		              {{$line->_unite_administration}}
 			          		             {{/if}}
 			          		             {{if $line->_class_name == "CPrescriptionLineElement"}}
@@ -250,8 +238,7 @@ Main.add(function () {
 				          		    {{/foreach}}
 			          		     {{/if}}
 		          		    {{/foreach}}
-		          		   
-		          		    </table>
+		          		  </table>
           		    </div>  
           		  {{/if}}
 		          </td>
@@ -265,19 +252,4 @@ Main.add(function () {
 </div>
 
 <div id="viewTransmissions" style="display: none;">
-	<table class="tbl">
-	  <tr>
-	    <th colspan="6" class="title">
-	    	<select name="selPatient" onchange="showHidePatients(this.value);" style="float: right;">
-		      <option value="">&mdash; Tous les patients ({{$nb_trans.total}} - {{$nb_observ.total}})</option>
-		      {{foreach from=$patients item=_patient}}
-		        {{assign var=patient_id value=$_patient->_id}}
-		        <option value="{{$_patient->_id}}">{{$_patient->_view}} ({{$nb_trans.$patient_id}} - {{$nb_observ.$patient_id}})</option>
-		      {{/foreach}}
-		    </select>
-		    Transmissions à partir du {{$date_min|date_format:$dPconfig.datetime}}
-	    </th>
-	  </tr>
-	</table>
-  {{include file="../../dPprescription/templates/inc_vw_transmissions.tpl"}}
 </div>
