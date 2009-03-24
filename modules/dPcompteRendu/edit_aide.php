@@ -7,10 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
-
+global $AppUI, $can;
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
+
 $field        = mbGetValueFromGet("field");
 $text         = utf8_decode(mbGetValueFromGet("text" ));
 $class        = mbGetValueFromGet("class");
@@ -27,7 +26,7 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
 // Objet ciblé
 $object = new $class;
-$dependValues = null;
+$dependValues = array();
 
 // To set the depend values always as an array (empty or not)
 $helped = array();

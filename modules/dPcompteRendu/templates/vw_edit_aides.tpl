@@ -64,7 +64,7 @@ function submitFormAides(oForm){
     <td>{{tr}}{{$aide->class}}-{{$aide->field}}{{/tr}}</td>
   </tr>
 
-  {{if $dependValues.depend_value_1}}
+  {{if array_key_exists('depend_value_1', $dependValues)}}
   <tr>
     <th>{{mb_label object=$aide field="depend_value_1"}}</th>
     <td>
@@ -78,7 +78,7 @@ function submitFormAides(oForm){
   </tr>
   {{/if}}
 
-  {{if $dependValues.depend_value_2}}
+  {{if array_key_exists('depend_value_2', $dependValues)}}
   <tr>
     <th>{{mb_label object=$aide field="depend_value_2"}}</th>
     <td>
