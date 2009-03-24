@@ -10,18 +10,19 @@ function setField(oField, sValue) {
   oField.value = sValue;
 }
 
-function refreshConstantesMedicales () {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "httpreq_vw_constantes_medicales");
-  url.addParam("patient_id", {{$consult->_ref_patient->_id}});
-  url.addParam("context_class", "{{$consult->_class_name}}");
-  url.addParam("context_id", {{$consult->consultation_id}});
-  url.requestUpdate("Constantes", { waitingText: null } );
+var constantesMedicalesDrawn = false;
+function refreshConstantesMedicales (force) {
+	if (!constantesMedicalesDrawn || force) {
+	  var url = new Url();
+	  url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+	  url.addParam("patient_id", {{$consult->_ref_patient->_id}});
+	  url.addParam("context_guid", "{{$consult->_guid}}");
+	  url.requestUpdate("Constantes");
+		constantesMedicalesDrawn = true;
+	}
 };
 
 Main.add(function () {
-  refreshConstantesMedicales();
-  
   var tabsConsult = Control.Tabs.create('tab-consult', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
@@ -40,7 +41,7 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
-  <li><a href="#Constantes">Constantes</a></li>
+  <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Examens">Examens</a></li>
   
   {{if $app->user_prefs.ccam_consultation == 1}}

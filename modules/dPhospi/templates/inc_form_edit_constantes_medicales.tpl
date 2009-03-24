@@ -114,6 +114,12 @@ Main.add(function () {
         <td class="date" colspan="3">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
       {{/if}}
     </tr>
+		{{if $constantes->context_id}}
+		<tr>
+			<th>Contexte</th>
+			<td colspan="3" class="text">{{$constantes->_ref_context}}</td>
+		</tr>
+		{{/if}}
     <tr>      
       <th>Action</th>
       <td colspan="3">

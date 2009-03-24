@@ -7,20 +7,30 @@
 * @author Fabien Ménager
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $const_id = mbGetValueFromGet('const_id', 0);
 
 $constantes = new CConstantesMedicales();
 $constantes->load($const_id);
+$constantes->loadRefContext();
 
 $latest_constantes = CConstantesMedicales::getLatestFor($constantes->patient_id);
 
 // Tableau contenant le nom de tous les graphs
-$graphs = array("constantes-medicales-ta","constantes-medicales-poids","constantes-medicales-taille","constantes-medicales-pouls",
-                 "constantes-medicales-temperature","constantes-medicales-spo2","constantes-medicales-score_sensibilite",
-                 "constantes-medicales-score_motricite","constantes-medicales-score_sedation","constantes-medicales-frequence_respiratoire",
-                 "constantes-medicales-EVA");
+$graphs = array(
+	"constantes-medicales-ta",
+	"constantes-medicales-poids",
+	"constantes-medicales-taille",
+	"constantes-medicales-pouls",
+	"constantes-medicales-temperature",
+	"constantes-medicales-spo2",
+	"constantes-medicales-score_sensibilite",
+	"constantes-medicales-score_motricite",
+	"constantes-medicales-score_sedation",
+	"constantes-medicales-frequence_respiratoire",
+	"constantes-medicales-EVA"
+);
                  
 // Création du template
 $smarty = new CSmartyDP();

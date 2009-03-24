@@ -42,13 +42,15 @@ $patient->loadRefPhotoIdentite();
 // Construction d'une constante médicale
 $constantes = new CConstantesMedicales();
 $constantes->patient_id = $patient->_id;
-if ($context) {
-  $constantes->context_class = $context->_class_name;
-  $constantes->context_id = $context->_id;
-}
 
 // Les constantes qui correspondent (dans le contexte ou non)
 $list_constantes = $constantes->loadMatchingList('datetime');
+
+if ($context) {
+  $constantes->context_class = $context->_class_name;
+  $constantes->context_id = $context->_id;
+	$constantes->loadRefContext();
+}
 
 // La liste des derniers mesures
 $latest_constantes = CConstantesMedicales::getLatestFor($patient->_id);
