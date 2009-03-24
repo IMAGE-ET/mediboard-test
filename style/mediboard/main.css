@@ -3460,3 +3460,17 @@ ul li a.chapitre_signe.active{
   background-color: #C5FFC1;
   color: #000;
 }
+
+#control_overlay {
+	background-color: #000;
+}
+
+.modal {
+	min-width: 200px;
+	padding: 1.0em;
+	border: 1px solid #999;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+  border-radius: 6px;
+	background: #eee;
+}

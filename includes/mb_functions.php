@@ -669,9 +669,14 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/jscalendar/lang/calendar-fr.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
   
+	// Prototype JS & Scriptaculous
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
+	
+	// Livepipe UI
+  $affichageScript .= mbLoadScript("lib/livepipe/livepipe.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/livepipe/tabs.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/livepipe/window.js",$modeReturn);
   
   // Flotr
   $affichageScript .= mbLoadScript("lib/flotr/flotr.js", $modeReturn);

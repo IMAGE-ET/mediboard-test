@@ -306,15 +306,15 @@ $library->versionString = "bootstrap1.js 6824";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-$library->name = "Livepipe control suite";
-$library->url = "http://livepipe.net/projects/control_suite/";
-$library->fileName = "control_suite.zip";
-$library->description = "Six widgets de controle, utilisant le framework prototype.js";
-$library->extraDir = "control_suite";
-$library->sourceDir = "control_suite";
-$library->targetDir = "control_suite";
-$library->versionFile = "control.tabs.js";
-$library->versionString = "@version 2.1.1";
+$library->name = "Livepipe UI";
+$library->url = "http://livepipe.net/";
+$library->fileName = "livepipe.tar.gz";
+$library->description = "High Quality Controls & Widgets for Prototype";
+$library->extraDir = "livepipe";
+$library->sourceDir = "livepipe";
+$library->targetDir = "livepipe";
+$library->versionFile = "livepipe.js";
+$library->versionString = "@copyright 2008 PersonalGrid";
 
 CLibrary::$all[$library->name] = $library;
 

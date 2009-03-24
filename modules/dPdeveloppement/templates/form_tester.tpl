@@ -23,6 +23,13 @@ Main.add(function () {
 
 <div id="dom-creator"></div>
 
+<div id="modal" style="display: none;">test blah blah</div>
+
+<button type="button" onclick="modal($('modal'))">Modal window</button>
+<button type="button" onclick="alert('I\'m an alert', {okLabel: 'Close', onValidate: function(){console.debug('Ok')} })">Alert !</button>
+<button type="button" onclick="confirm('I\'m a confirm window', {onValidate: function(v){console.debug('Vous avez dit '+(v?'oui :)':'non :('))} })">Confirm ?</button>
+<a href="http://www.google.fr" onclick="return window.open(this)">Popup</a>
+
 <form name="test" action="?" method="get" onsubmit="if (checkForm(this)) {Console.trace('form.submit()');} return false;" id="form-test-id">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />

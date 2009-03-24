@@ -2798,3 +2798,17 @@ select.perennity {
 .perennity.level-4 {
   border-left-color: #E40000;
 }
+
+#control_overlay {
+  background-color: #000;
+}
+
+.modal {
+  min-width: 200px;
+  padding: 1.0em;
+  border: 1px solid #999;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  background: #eee;
+}

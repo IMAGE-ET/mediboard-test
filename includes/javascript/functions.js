@@ -1266,3 +1266,57 @@ var l10n = {
 locales = {};
 
 var $T = l10n.tr;
+
+// Replacements for the javascript alert() and confirm()
+/*
+window.alert = function(message, options) {
+  options = Object.extend({
+    className: 'modal alert big-warning',
+    okLabel: 'OK',
+    onValidate: Prototype.emptyFunction,
+    closeOnClick: null
+  }, options || {});
+  
+  var html = '<div style="min-height: 3em;">'+message+'</div><div style="text-align: center; margin-left: -3em;"><button class="tick" type="button">'+options.okLabel+'</button></div>';
+  var modal = Control.Modal.open(html, options);
+  modal.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate();}).bind(modal));
+}
+
+window.confirm = function(message, options) {
+  options = Object.extend({
+    className: 'modal confirm big-info',
+    yesLabel: 'Oui',
+    noLabel: 'Non',
+    onValidate: Prototype.emptyFunction,
+    closeOnClick: null
+  }, options || {});
+  
+  var html = '<div style="min-height: 3em;">'+message+'</div><div style="text-align: center; margin-left: -3em;">'+
+    '<button class="tick" type="button">'+options.yesLabel+'</button>'+
+    '<button class="cancel" type="button">'+options.noLabel+'</button>'+
+  '</div>';
+  var modal = Control.Modal.open(html, options);
+  modal.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate(true);}).bind(modal));
+  modal.container.select('button.cancel').first().observe('click', (function(){this.close(); options.onValidate(false);}).bind(modal));
+}
+
+window.open = function(element, title, options) {
+  options = Object.extend({
+    className: 'modal popup',
+    width: 800,
+    height: 500,
+    iframe: true
+  }, options || {});
+  
+  Control.Modal.open(element, options);
+  return false;
+}
+*/
+
+window.modal = function(container, options) {
+  options = Object.extend({
+    className: 'modal',
+    closeOnClick: null
+  }, options || {});
+  return Control.Modal.open(container, options);
+}
