@@ -113,7 +113,7 @@ Main.add(function () {
 	  <tr>
 	    <td style="width: 10%;" class="text">
        	<span style="float: left; padding-right: 5px;">
-        {{*include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=20 nodebug=true*}} 
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=20 nodebug=true}} 
          </span>
          <a href="#1" onclick="viewDossierSoin('{{$_prescription->_ref_object->_id}}')">
          {{$_prescription->_ref_patient->_view}}
