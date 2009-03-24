@@ -16,29 +16,42 @@ if(!$user->isPraticien()) {
   $can->needsRead();
 }
 
-// Chargement du séjour
-$sejour_id = mbGetValueFromGet('sejour_id', 0);
-$sejour = new CSejour;
-$sejour->load($sejour_id);
-$sejour->loadRefs();
-$sejour->_ref_patient->loadRefConstantesMedicales();
+$context_guid = mbGetValueFromGet('context_guid');
+$patient_id = mbGetValueFromGet('patient_id');
 
-$patient =& $sejour->_ref_patient;
+$context = null;
+$patient = null;
+
+if ($context_guid) {
+  $context = mbGetObjectFromGet(null, null, 'context_guid');
+	$context->loadRefs();
+}
+
+if ($context) {
+  $patient =& $context->_ref_patient;
+}
+
+if ($patient_id) {
+  $patient = new CPatient;
+  $patient->load($patient_id);
+}
+
+$patient->loadRefConstantesMedicales();
 $patient->loadRefPhotoIdentite();
 
 // Construction d'une constante médicale
 $constantes = new CConstantesMedicales();
-
-if ($sejour->_id) {
-  $sejour->loadRefPatient();
-  $constantes->patient_id = $sejour->_ref_patient->_id;
-  $sejour->loadListConstantesMedicales();
+$constantes->patient_id = $patient->_id;
+if ($context) {
+  $constantes->context_class = $context->_class_name;
+  $constantes->context_id = $context->_id;
 }
 
-$latest_constantes = CConstantesMedicales::getLatestFor($constantes->patient_id);
+// Les constantes qui correspondent (dans le contexte ou non)
+$list_constantes = $constantes->loadMatchingList('datetime');
 
-$constantes->context_class = $sejour->_class_name;
-$constantes->context_id = $sejour->_id;
+// La liste des derniers mesures
+$latest_constantes = CConstantesMedicales::getLatestFor($patient->_id);
 
 $standard_struct = array(
   'series' => array(
@@ -83,8 +96,8 @@ $const_ids = array();
 $i = 0;
 
 // Si le séjour a des constantes médicales
-if ($sejour->_list_constantes_medicales) {
-  foreach ($sejour->_list_constantes_medicales as $cst) {
+if ($list_constantes) {
+  foreach ($list_constantes as $cst) {
     $dates[$i] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
     $hours[$i] = mbTransformTime($cst->datetime, null, '%Hh%M');
     $const_ids[$i] = $cst->_id;
@@ -210,12 +223,12 @@ foreach ($data as $name => &$field) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('constantes', $constantes);
-$smarty->assign('sejour',     $sejour);
+$smarty->assign('context',    $context);
+$smarty->assign('patient',    $patient);
 $smarty->assign('data',       $data);
 $smarty->assign('dates',      $dates);
 $smarty->assign('hours',      $hours);
 $smarty->assign('const_ids',  $const_ids);
-$smarty->assign('token',      time());
 $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('graphs', $graphs);
 $smarty->display('inc_vw_constantes_medicales.tpl');

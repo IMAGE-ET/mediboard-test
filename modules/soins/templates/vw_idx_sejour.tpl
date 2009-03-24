@@ -236,16 +236,16 @@ function submitSuivi(oForm, prescription_id) {
 var constantesMedicalesDrawn = false;
 function refreshConstantesHack(sejour_id) {
   if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-    refreshConstantesMedicales(sejour_id);
+    refreshConstantesMedicales('CSejour-'+sejour_id);
     constantesMedicalesDrawn = true;
   }
 }
 
-function refreshConstantesMedicales(sejour_id) {
-  if(sejour_id) {
+function refreshConstantesMedicales(context_guid) {
+  if(context_guid) {
     var url = new Url;
     url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
-    url.addParam("sejour_id", sejour_id);
+    url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes-medicales", { waitingText: null } );
   }
 }

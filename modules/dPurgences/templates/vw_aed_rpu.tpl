@@ -28,11 +28,11 @@ function submitSuivi(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
 }
 
-function refreshConstantesMedicales(sejour_id) {
-  if(sejour_id) {
+function refreshConstantesMedicales(context_guid) {
+  if(context_guid) {
     var url = new Url;
     url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
-    url.addParam("sejour_id", sejour_id);
+    url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes", { waitingText: null } );
   }
 }
@@ -40,7 +40,7 @@ function refreshConstantesMedicales(sejour_id) {
 var constantesMedicalesDrawn = false;
 function refreshConstantesHack(sejour_id) {
   if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
-    refreshConstantesMedicales(sejour_id);
+    refreshConstantesMedicales('CSejour-'+sejour_id);
     constantesMedicalesDrawn = true;
   }
 }
