@@ -84,7 +84,7 @@ foreach($plagesop as &$plage) {
   }
   
   if ($filter->_codes_ccam) {
-    $where["codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
+    $where["operations.codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
   }
   
   $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
