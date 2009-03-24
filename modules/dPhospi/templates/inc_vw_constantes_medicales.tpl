@@ -9,7 +9,6 @@ var last_date = null;
 submitConstantesMedicales = function(oForm) {
   submitFormAjax(oForm, 'systemMsg', {
     onComplete: function () {
-			console.debug($V(oForm.context_class)+'-'+$V(oForm.context_id));
       refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id));
     }
   });
@@ -206,7 +205,7 @@ Main.add(function () {
        <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
        </a>
-    {{$context->_view}} (Dr {{$context->_ref_praticien->_view}})</th>
+    {{$context->_view}}</th>
   </tr>
   <tr>
     <td style="width: 25%;">
