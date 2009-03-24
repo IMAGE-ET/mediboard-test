@@ -16,7 +16,7 @@ $date_min = mbDateTime("-1 DAY", $date_max);
 $addTrans = mbGetValueFromGet("addTrans", false);
 
 $sejour_id = mbGetValueFromGet("sejour_id");
-$praticien_id = mbGetValueFromGet("praticien_id", "14");
+$praticien_id = mbGetValueFromGet("praticien_id");
 
 // Initialisation
 $transmissions = array();
