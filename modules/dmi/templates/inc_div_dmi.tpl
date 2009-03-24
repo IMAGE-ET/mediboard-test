@@ -37,6 +37,9 @@ Main.add(function () {
       $V(formDmiDelivery.product_id, element.id.split('-')[1]);
       $V(formDmiDelivery._view, element.select(".view")[0].innerHTML);
       search_product_order_item_reception();
+    },
+    callback: function(input, queryString){
+      return (queryString + "&category_id={{$dPconfig.dmi.CDMI.product_category_id}}"); 
     }
   });
 });

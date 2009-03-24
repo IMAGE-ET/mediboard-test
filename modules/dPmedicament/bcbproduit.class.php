@@ -463,44 +463,28 @@ class CBcbProduit extends CBcbObject {
     $this->distObj->Supprime = $supprime;
         
     // 1ere recherche 
-    $this->distObj->Specialite = 1;
+    $this->distObj->Specialite = $specialite;
     //$this->distObj->Search($text, 0, $max, $type_recherche);
     $this->SearchEx($text, 0, $max, $type_recherche);
-    
-    $_produits_by_type = array();
-    $_produits_by_type[] = $this->distObj->TabProduit;
-    
-    // 2eme recherche (pour les DM possedant un code cip)
-    $this->distObj->Specialite = 2;
-    //$this->distObj->Search($text, 0, $max, $type_recherche);
-    $this->SearchEx($text, 0, $max, $type_recherche);
-    
-    
-    $_produits_by_type[] = $this->distObj->TabProduit;
     
     $produits = array();
     // Parcours des produits
-    foreach($_produits_by_type as $_produits){
-	    foreach($_produits as $key => $prod){
-	      // Chargement du produit
-	      $produit = new CBcbProduit();
-	      $produit->load($prod->CodeCIP, $full_mode); 
-	      $produits[$prod->CodeCIP] = $produit; 
-	    }
+    foreach($this->distObj->TabProduit as $key => $prod){
+      $produit = new CBcbProduit();
+      $produit->load($prod->CodeCIP, $full_mode); 
+      $produits[$prod->CodeCIP] = $produit; 
     }
     return $produits;
   }
   
   
-  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false){   
+  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false, $specialite = 1){   
     global $g;
-    
-  	$this->distObj->Specialite = 1;
+  	$this->distObj->Specialite = $specialite;
     $this->distObj->Supprime = 1;
     if($livretTherapeutique){
       $this->distObj->LivretTherapeutique = $g;  
     }
-    
     if($search_libelle_long){
       $this->SearchEx($text, 0, $nb_max, 0);
     } else {

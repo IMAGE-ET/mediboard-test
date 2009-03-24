@@ -10,13 +10,17 @@
 global $can, $AppUI;
 
 $keywords = mbGetValueFromPost("_view");
+$category_id = mbGetValueFromPost("category_id");
 
 if($keywords) {
-	 $product = new CProduct();
-	 $where[] = "name LIKE '$keywords%' OR code LIKE '$keywords%'";
-	 $matches = $product->loadList($where,'name',10);
+	$product = new CProduct();
+	$where[] = "name LIKE '$keywords%' OR code LIKE '$keywords%'";
+	if($category_id){
+	  $where["category_id"] = " = '$category_id'";
+	}
+	$matches = $product->loadList($where,'name',10);
 	 
-	 // Création du template
+	// Création du template
   $smarty = new CSmartyDP();
 
   $smarty->assign("keywords", $keywords);

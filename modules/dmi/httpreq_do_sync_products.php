@@ -13,7 +13,8 @@ $can->needsAdmin();
 set_time_limit(360);
 ini_set('memory_limit', '128M');
 
-$category_id     = mbGetValueFromGet('category_id');
+$category_id  = mbGetValueFromGet('category_id');
+$object_class = mbGetValueFromGet('object_class');
 
 $category = new CProductCategory();
 if (!$category->load($category_id)) {
@@ -24,17 +25,20 @@ if (!$category->load($category_id)) {
 $messages = array();
 
 // Chargement de la liste des dmi de l'etablissement
-$dmi_list = new CDMI();
-$dmi_list = $dmi_list->loadGroupList();
+$object_list = new $object_class;
+$object_list = $object_list->loadGroupList();
 
-// Chargement des produits du livret thérapeutique
-foreach ($dmi_list as $dmi) {
-	$dmi->loadRefProduit();
-	if (!$dmi->_produit_existant) {
+foreach ($object_list as $object) {
+  // On ne synchronise que les produits qui sont dans le livret Therapeutique
+  if(!$object->in_livret){
+    continue;
+  }
+	$object->loadExtProduct();
+	if (!$object->_produit_existant) {
 	  $product = new CProduct();
-	  $product->code = $dmi->code;
-	  $product->name = $dmi->nom;
-	  $product->description = $dmi->description;
+	  $product->code = $object->code;
+	  $product->name = $object->nom;
+	  $product->description = $object->description;
 	  $product->category_id = $category_id;
 	  $product->quantity = 1;
 	  if($msg = $product->store()) {
@@ -64,7 +68,7 @@ CAppUI::stepAjax('Synchronisation des produits terminée', UI_MSG_OK);
 // Sauvegarde de la catégorie en variable de config
 $conf = new CMbConfig();
 $data = array();
-$data['dmi']['CDMI']['product_category_id'] = $category_id;
+$data['dmi'][$object_class]['product_category_id'] = $category_id;
 if ($conf->update($data, true)) {
   CAppUI::stepAjax('Enregistrement de la catégorie de produits effectuée', UI_MSG_OK);
 }

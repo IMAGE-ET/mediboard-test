@@ -179,7 +179,8 @@ class CPrescription extends CMbObject {
 		}
     $_line->unite_duree = "jour";
     $_line->debut = "";
-		
+		$time_debut = "";
+				  	
     // Calcul de la date d'entree
 	  switch($_line->jour_decalage){
 	  	case 'E': 
@@ -187,7 +188,6 @@ class CPrescription extends CMbObject {
 	  	  break;
 	  	case 'I': 
 	  	  $date_debut = "";
-		  	$time_debut = "";
 	  	  if($date_operation){
 	  	    $date_debut = mbDate($date_operation);
 	  	    $time_debut = mbTime($date_operation); 

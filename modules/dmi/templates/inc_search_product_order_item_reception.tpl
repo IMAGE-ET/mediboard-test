@@ -1,7 +1,5 @@
-{{* $Id: $ *}}
 <script type="text/javascript">
-search_product = function(code, code_lot)
-{
+search_product = function(code, code_lot) {
   var url = new Url;
   url.setModuleAction("dmi", "httpreq_do_search_product");
   url.addParam("code", code);

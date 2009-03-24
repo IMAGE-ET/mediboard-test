@@ -44,6 +44,12 @@ class CProductOrderItemReception extends CMbObject {
     return $specs;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['lines_dmi'] = 'CPrescriptionLineDMI order_item_reception_id';
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefOrderItem();

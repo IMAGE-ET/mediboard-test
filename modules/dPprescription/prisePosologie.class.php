@@ -388,9 +388,26 @@ class CPrisePosologie extends CMbMetaObject {
  	  $where["object_class"] = " = '$this->object_class'";
     $where["unite_prise"] = " = '$this->unite_prise'";
     $where["prise_id"] = "IS NULL";
+    $where["planification"] = " = '0'";
  	  $this->_ref_administrations = $administration->loadList($where);
   }
   
+  // countRefAdminByUnite
+  function countRefsAdministrationsByUnite(){
+   	$administration = new CAdministration();
+  	$where = array();
+  	$where["object_id"] = " = '$this->object_id'";
+  	$where["object_class"] = " = '$this->object_class'";
+
+  	// Pas d'unite de prise de stockée dans le cas d'un element
+  	$this->completeField("unite_prise");
+  	if($this->unite_prise){
+  	  $where["unite_prise"] = " = '$this->unite_prise'";
+  	}
+  	$where["prise_id"] = "IS NULL";
+  	$where["planification"] = " = '0'";
+  	return $administration->countList($where);
+  }
   
   /*
    * CanDelete
@@ -399,21 +416,7 @@ class CPrisePosologie extends CMbMetaObject {
     if($msg = parent::canDeleteEx()) {
       return $msg;
     }
-  	
-  	$this->completeField("unite_prise");
-  	
-  	$administration = new CAdministration();
-  	$where = array();
-  	$where["object_id"] = " = '$this->object_id'";
-  	$where["object_class"] = " = '$this->object_class'";
-  	// Pas d'unite de prise de stockée dans le cas d'un element
-  	if($this->unite_prise){
-  	  $where["unite_prise"] = " = '$this->unite_prise'";
-  	}
-  	$where["prise_id"] = "IS NULL";
-  	$nb_administrations = $administration->countList($where);
-  	
-  	if($nb_administrations){
+  	if($nb_administrations = $this->countRefsAdministrationsByUnite()){
   		return "$nb_administrations administration(s) liée(s) à cette prise";
   	}
   }

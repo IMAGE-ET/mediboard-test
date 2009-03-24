@@ -60,7 +60,38 @@ class CSetupdmi extends CSetup {
     DROP `lot`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.05";
+    $this->makeRevision("0.05");
+    $sql = "CREATE TABLE `dm` (
+							`dm_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`category_dm_id` INT (11) UNSIGNED NOT NULL,
+							`nom` VARCHAR (255) NOT NULL,
+							`description` TEXT,
+							`code` VARCHAR (255) NOT NULL,
+							`in_livret` ENUM ('0','1')
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `category_dm` (
+							`category_dm_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`nom` VARCHAR (255) NOT NULL,
+							`description` TEXT,
+							`group_id` INT (11) UNSIGNED NOT NULL
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `dm` 
+						ADD INDEX (`category_dm_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `category_dm` 
+			      ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `dmi` 
+	          CHANGE `dans_livret` `in_livret` ENUM ('0','1');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.06";
   }
 }
 ?>

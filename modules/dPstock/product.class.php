@@ -58,6 +58,7 @@ class CProduct extends CMbObject {
     $backProps['references']     = 'CProductReference product_id';
     $backProps['stocks_group']   = 'CProductStockGroup product_id';
     $backProps['stocks_service'] = 'CProductStockService product_id';
+    $backProps['lines_dmi']      = 'CPrescriptionLineDMI product_id';    
     return $backProps;
   }
 

@@ -9,36 +9,30 @@
 	*/
 
 CAppUI::requireModuleClass('DMI', 'category_produit_prescriptible');
-class CDMICategory extends CCategoryProduitPrescriptible {
+class CCategoryDM extends CCategoryProduitPrescriptible {
   // DB Table key
-  var $category_id = null;
-
-  // Form Fields
-  var $_count_dmis = null;
-  
-  // Collections
-  var $_ref_dmis = null;
+  var $category_dm_id = null;
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'dmi_category';
-    $spec->key   = 'category_id';
+    $spec->table = 'category_dm';
+    $spec->key   = 'category_dm_id';
     return $spec;
   }
-  
+ 
 	function getBackProps() {
 	  $backProps = parent::getBackProps();
-	  $backProps["dmis"] = "CDMI category_id";
+	  $backProps["dms"] = "CDM category_dm_id";
 	  return $backProps;
 	}
 	
-	function countElements(){
-	  $this->_count_elements = $this->countBackRefs("dmis");
-	}
-	
   function loadRefsElements() {
-    $this->_ref_elements = $this->loadBackRefs("dmis", "nom");
+    $this->_ref_elements = $this->loadBackRefs("dms", "nom");
   }
+  
+	function countElements(){
+	  $this->_count_elements = $this->countBackRefs("dms");
+	}
 }
 
 ?>

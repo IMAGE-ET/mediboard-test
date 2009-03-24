@@ -8,23 +8,14 @@
 	* @author Stéphanie subilia
 	*/
 
-class CDMI extends CMbObject {
-// DB Table key
+CAppUI::requireModuleClass('DMI', 'produit_prescriptible');
+class CDMI extends CProduitPrescriptible {
+  // DB Table key
   var $dmi_id  = null;
 
-  // DB fields
-  var $nom         	= null;
-  var $description	= null;
-  var $code	= null;
-  var $dans_livret	= null;
+  // DB Fields
+  var $category_id = null;
   
-  var $category_id	= null;
-  
-  //Object reference
-  var $_ref_product = null;
-  
-  var $_produit_existant = null;
-    
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dmi';
@@ -34,41 +25,10 @@ class CDMI extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["nom"]	     		= "str notNull";
-    $specs["description"]	= "text";
-    $specs["code"]		    = "str notNull";
-    $specs["dans_livret"]	= "bool";
     $specs["category_id"] = "ref notNull class|CDMICategory";
-    $specs["_produit_existant"]= "bool";
     return $specs;
   }
-  
-  function getSeeks() {
-    return array (
-      "nom" => "like",
-      "description" => "like"
-    );
-  }
-
-  function updateFormFields() {
-    parent::updateFormFields();
-    $this->_view = $this->nom;
-    $this->_produit_existant = 0;
-  }
-  
-  function loadRefProduit() {
-    $this->_ref_product = new CProduct;
-    $this->_ref_product->code = $this->code;
-    
-    if(!$this->_ref_product->loadMatchingObject()) {
-      $this->_ref_product  = new CProduct;
-      $this->_produit_existant = 0;
-    }
-    else {
-    	 $this->_produit_existant = 1;
-    }
-  }
-   
+       
   function loadGroupList() {
     $group = CGroups::loadCurrent();
     $dmi_category = new CDMICategory();
@@ -76,50 +36,25 @@ class CDMI extends CMbObject {
    	$dmi_categories_list = $dmi_category->loadMatchingList('nom');
    	$dmi_list = array();
    	foreach ($dmi_categories_list as &$cat) {
-   	  $cat->loadRefsDMI();
-   	  $dmi_list = array_merge($dmi_list, $cat->_ref_dmis);
+   	  $cat->loadRefsElements();
+   	  $dmi_list = array_merge($dmi_list, $cat->_ref_elements);
    	}
     return $dmi_list;
   }
   
-  function store() {
-    $is_new_object = !$this->_id;
-   	parent::store();
-   	
-    $dmi = new CDMI();
-   	$dmi->code = $this->code;
-    if($dmi->countMatchingList() > 1) {
-      $dmi->code = str_pad($this->_id, 10, '0', STR_PAD_LEFT);
+  function check(){
+    if(!$this->_id){
+      $group_id = CGroups::loadCurrent()->_id;
+      $dmi = new CDMI();
+      $ljoin["dmi_category"] = "dmi_category.category_id = dmi.category_id";
+      $where["code"] = " = '$this->code'";
+      $where["dmi_category.group_id"] = " = '$group_id'";
+      $dmi->loadObject($where, null, null, $ljoin);
+      if($dmi->_id){
+        return "Un DMI possède déjà le code produit suivant: $this->code";
+      }
     }
-     
-     
-   	/*while($dmi->countMatchingList() > 1) {
-	    $dmi->code = $this->code;
-	    if($dmi->loadMatchingObject()) {
-	      $dmi->code = str_pad(rand(0, ), 10, '0', STR_PAD_LEFT);
-	    }
-   	}*/
-   	$this->code = $dmi->code;
-   	 
-    if ($is_new_object && CModule::getActive('dPstock')) {
-      $product = new CProduct();
-      $product->code = $this->code;
-      $product->name = $this->nom;
-      $product->description = $this->description;
-      $product->category_id = CAppUI::conf("dmi CDMI product_category_id");
-      $product->quantity = 1;
-      if ($msg = $product->store()) return $msg;
-      
-      $stock = new CProductStockGroup();
-      $stock->group_id = CGroups::loadCurrent()->_id;
-      $stock->product_id = $product->_id;
-      $stock->quantity = 1;
-      $stock->order_threshold_min = 1;
-      $stock->order_threshold_max = 2;
-      if ($msg = $stock->store()) return $msg;
-    }
-   	
-  	parent::store();
+    return parent::check();
   }
 }
 
