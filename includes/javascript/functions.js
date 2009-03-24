@@ -1185,7 +1185,10 @@ Object.extend (Control.Tabs, {
         tab.options.afterChange = function (tab, tabName) {
           Control.Tabs.storeTab(name, tab.id);
         }
-        tab.setActiveTab(Control.Tabs.loadTab(name));
+				var tabName = Control.Tabs.loadTab(name);
+				if (tabName) {
+					tab.setActiveTab(tabName);
+				}
       }
       return tab;
     }
