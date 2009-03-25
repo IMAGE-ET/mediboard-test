@@ -33,6 +33,7 @@ var SchemaDentaire = {
   fAlpha: 0.5,
   iSelectedDent: null,
   aDentsId: null,
+	sPaint: null,
   aDentsNumbers: [
     // Adulte
     10,
@@ -57,12 +58,13 @@ var SchemaDentaire = {
     this.aStates = states;
     
     // Elements
-    var oSchema = $(this.sId);
-    var oMap = $(this.sId+"-map");
-    var oImage = $(this.sId+"-image");
+    var oSchema = $(this.sId),
+		    oMap = $(this.sId+"-map"),
+				oImage = $(this.sId+"-image");
+				
     oSchema.addClassName('schema-dentaire');
     
-    if (Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
+    if (true || Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
     // Clone the image's size to the container
     var img = new Image();
     img.src = oImage.src;
@@ -74,158 +76,148 @@ var SchemaDentaire = {
     }
     
     // Menu initialization
-    var oMenu = new Element('div');
-    oMenu.id = this.sId+'-menu';
-    oMenu.addClassName('dent-menu');
-    
-    var oLegend = new Element('div');
-    oLegend.id = this.sId+'-legend';
-    oLegend.addClassName('dent-legend');
+    var oMenu = new Element('div', {id: this.sId+'-menu', className: 'dent-menu'}),
+		    oLegend = new Element('div', {id: this.sId+'-legend', className: 'dent-legend'});
     
     // Buttons initialization
-    var oActions = new Element('div');
-    oActions.addClassName('dent-buttons');
-    var oButton = new Element('a');
-    oButton.innerHTML = "Réinitialiser";
-    oButton.addClassName('buttoncancel');
-    oButton.href = '#1';
-    oButton.observe('click', SchemaDentaire.reset);
+    var oActions = new Element('div', {className: 'dent-buttons'}),
+		    oButton = new Element('a', {className: 'buttoncancel', href: '#1'}).update("Réinitialiser").observe('click', this.reset.bind(this));
     oActions.insert({top: oButton});
     
     // For each possible state, we add a link in the menu and an item in the legend
-    var oClose = new Element('a');
-    oClose.innerHTML = 'x';
-    oClose.addClassName('cancel');
-    oClose.observe('click', SchemaDentaire.closeMenu);
+    var oClose = new Element('a', {className: 'cancel'}).update('x').observe('click', this.closeMenu.bind(this));
     oMenu.insert({bottom: oClose});
     
+    // Options and legend items
     states.each (function (o) {
-      // Options and legend items
       var oOption = new Element('a');
       
-      if (o) {
-        oOption.innerHTML = o.capitalize();
-        oOption.addClassName(o);
-        
-        var oItem = new Element('div');
-        oItem.innerHTML = o.capitalize();
-        oItem.addClassName(o);
-        oLegend.insert({bottom: oItem});
-      } else {
-        oOption.innerHTML = 'Aucun';
-      }
-      oOption.observe('click', SchemaDentaire.onSelectState);
+			var className = o ? o : 'none',
+			    label = o ? o.capitalize() : 'Aucun';
+			var oItem = new Element('a', {className: className, href: '#1', style: 'display: block;'}).update(label).observe('click', (function(){this.setPaint(className)}).bind(this));
+      oLegend.insert({bottom: oItem});
+
+      oOption.addClassName(className).update(label);
+				
+      oOption.observe('click', this.onSelectState.bind(this));
       oMenu.insert({bottom: oOption});
-    });
+    }, this);
     
-    oSchema.insert({bottom: oMenu});
-    oMenu.hide();
+    oSchema.insert({bottom: oMenu.hide()})
+		       .insert({top: oLegend})
+		       .insert({top: oActions});
     
-    oSchema.insert({top: oLegend});
-    oSchema.insert({top: oActions});
-    
-    SchemaDentaire.aDentsId = [];
+    this.aDentsId = [];
     
     /* For each area in the map */
     oMap.childElements().each(
       function (o) {
         // We parse the coords attribute to get coordinates and radius of the circle area
-        var area = o.coords.split(',');
-        var x = parseInt(area[0]);
-        var y = parseInt(area[1]);
-        var r = parseInt(area[2]);
+        var area = o.coords.split(','),
+				    x = parseInt(area[0]),
+						y = parseInt(area[1]),
+						r = parseInt(area[2]);
         
         // New div for the tooth
         var oDent = new Element('div');
         oDent.addClassName('dent');
         oDent.setStyle({
-          marginTop: y-r+'px',
-          marginLeft: x-r+'px',
+          top: y-r+'px',
+          left: x-r+'px',
           width: r*2+'px',
           height: r*2+'px'
         });
         oSchema.insert({top: oDent});
         
         var id = parseInt(o.id.substr(5));
-        oDent.id = SchemaDentaire.sId+'-dent-'+id;
+        oDent.id = this.sId+'-dent-'+id;
         oDent.dentId = id;
-        SchemaDentaire.aDentsId[id] = oDent.id;
+        this.aDentsId[id] = oDent.id;
         
-        if (etat = SchemaDentaire.oListEtats[oDent.dentId]) {
-          SchemaDentaire.setState(oDent.dentId, etat, true);
+        if (etat = this.oListEtats[oDent.dentId]) {
+          this.setState(oDent.dentId, etat, true);
         }
         
         // Callbacks on the tooth
-        oDent.observe('mouseover', SchemaDentaire.onMouseOver);
-        oDent.observe('mouseout', SchemaDentaire.onMouseOut);
-        oDent.observe('click', SchemaDentaire.onClick);
+        oDent.observe('mouseover', this.onMouseOver.bind(this))
+				     .observe('mouseout', this.onMouseOut.bind(this))
+						 .observe('click', this.onClick.bind(this));
       }
-    );
+    , this);
     } else {
       oSchema.innerHTML = '' + oSchema.innerHTML;
     }
   },
+	
+	setPaint: function(state) {
+		$('dents-schema-legend').childElements().each(function(e){e.removeClassName('active')});
+		if (this.sPaint != state) {
+			this.sPaint = state;
+			$('dents-schema-legend').select('.'+state).first().addClassName('active');
+		}
+		else {
+			this.sPaint = null;
+		}
+	},
   
   getDent: function (id) {
-    return $(SchemaDentaire.sId+'-dent-'+id);
+    return $(this.sId+'-dent-'+id);
   },
   
   // Change the state of a tooth
   setState: function (id, state, displayOnly) {
-    var dent = SchemaDentaire.getDent(id);
+    var dent = this.getDent(id);
     if (dent) {
-      dent.setOpacity(SchemaDentaire.fAlpha);
+      dent.setOpacity(this.fAlpha);
       dent.className = 'dent';
       
-      if (state) {
+      if (state)
         dent.addClassName(state);
-      }
-      else {
+      else
         dent.setOpacity(1);
-      }
       
       if (!displayOnly) {
         var oForm = document.forms['etat-dent-edit'];
         if (oForm) {
-        $V(oForm.dent, id);
-        $V(oForm.etat, state ? state : '');
-        submitFormAjax(oForm, 'systemMsg');
+	        $V(oForm.dent, id);
+	        $V(oForm.etat, (((state != 'none') && state) ? state : ''));
+	        submitFormAjax(oForm, 'systemMsg');
         }
       }
     }
   },
   
   onMouseOver: function (e) {
-    var el = e.element();
-    el.addClassName('hover');
-    var style = {
-      top: parseInt(el.getStyle('marginTop')), 
-      left: parseInt(el.getStyle('marginLeft')), 
+    var el = e.element(), 
+		style = {
+      top: parseInt(el.getStyle('top')), 
+      left: parseInt(el.getStyle('teft')), 
       width: parseInt(el.getStyle('width')), 
       height: parseInt(el.getStyle('height'))
     };
 
-    el.setStyle({
-      marginTop: style.top-1+'px',
-      marginLeft: style.left-1+'px',
+    el.addClassName('hover')
+		  .setStyle({
+      top: style.top-1+'px',
+      left: style.left-1+'px',
       width: style.width-1+'px',
       height: style.height-1+'px'
     });
   },
   
   onMouseOut: function (e) {
-    var el = e.element();
-    var style = {
-      top: parseInt(el.getStyle('marginTop')), 
-      left: parseInt(el.getStyle('marginLeft')), 
+    var el = e.element(),
+		style = {
+      top: parseInt(el.getStyle('top')), 
+      left: parseInt(el.getStyle('left')), 
       width: parseInt(el.getStyle('width')), 
       height: parseInt(el.getStyle('height'))
     };
     
-    el.removeClassName('hover');
-    el.setStyle({
-      marginTop: style.top+1+'px',
-      marginLeft: style.left+1+'px',
+    el.removeClassName('hover')
+		  .setStyle({
+      top: style.top+1+'px',
+      left: style.left+'px',
       width: style.width+1+'px',
       height: style.height+1+'px'
     });
@@ -233,48 +225,52 @@ var SchemaDentaire = {
   
   // Show the menu
   onClick: function (e) {
-    var dent = e.element();
-    var menu = $(SchemaDentaire.sId+'-menu');
-    
-    if (SchemaDentaire.iSelectedDent) {
-      SchemaDentaire.getDent(SchemaDentaire.iSelectedDent).removeClassName('focus');
-    }
-    
-    dent.addClassName('focus');
-    menu.setStyle({
-     top: dent.cumulativeOffset().top + 'px',
-     left: dent.cumulativeOffset().left + dent.getWidth() + 4 + 'px'
-    });
-    menu.show();
-    
-    SchemaDentaire.iSelectedDent = dent.dentId;
+    var dent = e.element(),
+		    menu = $(this.sId+'-menu');
+
+		if (!this.sPaint) {
+			if (this.iSelectedDent) {
+	      this.getDent(this.iSelectedDent).removeClassName('focus');
+	    }
+	    dent.addClassName('focus');
+	    menu.setStyle({
+	     top: dent.getStyle('top'),
+	     left: (parseInt(dent.getStyle('left')) + dent.getWidth() + 4) + 'px'
+	    });
+	    menu.show();
+	    
+	    this.iSelectedDent = dent.dentId;
+		}
+		else {
+			this.setState(dent.dentId, this.sPaint);
+		}
   },
   
   // Selection of a new state in the menu
   onSelectState: function (e) {
-    SchemaDentaire.setState(SchemaDentaire.iSelectedDent, Event.element(e).className);
-    SchemaDentaire.closeMenu();
+    this.setState(this.iSelectedDent, Event.element(e).className);
+    this.closeMenu();
   },
   
     // Close the menu
   closeMenu: function (e) {
-    $(SchemaDentaire.sId+'-menu').hide();
-    SchemaDentaire.getDent(SchemaDentaire.iSelectedDent).removeClassName('focus');
-    SchemaDentaire.iSelectedDent = null;
+    $(this.sId+'-menu').hide();
+    this.getDent(this.iSelectedDent).removeClassName('focus');
+    this.iSelectedDent = null;
   },
   
   // Reset the teeth state
   reset: function () {
-    SchemaDentaire.aDentsId.each(function (name, key) {
-      key = SchemaDentaire.aDentsNumbers[key];
+    this.aDentsId.each(function (name, key) {
+      key = this.aDentsNumbers[key];
       var oDent = $(name);
-      SchemaDentaire.aStates.each(function (state) {
+      this.aStates.each(function (state) {
         if (oDent.hasClassName(state)) {
-          SchemaDentaire.setState(key, null);
+          this.setState(key, null);
           return;
         }
-      });
-    });
+      }, this);
+    }, this);
     return false;
   }
 };
@@ -305,7 +301,7 @@ Main.add(function () {
   
   <tr>
     <td class="button" rowspan="20" style="width: 1%;">
-      <div id="dents-schema">
+      <div id="dents-schema" style="position: relative;">
         <img id="dents-schema-image" src="images/pictures/dents.png?build={{$version.build}}" border="0" usemap="#dents-schema-map" alt="" /> 
         <map id="dents-schema-map" name="dents-schema-map">
           <area shape="circle" coords="127,112, 30" href="#1" alt="" id="dent-10" /><!-- Central haut adulte -->

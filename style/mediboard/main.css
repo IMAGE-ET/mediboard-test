@@ -3158,25 +3158,31 @@ table.main td.step.selected {
   color: #fff;
 }
 
-.dent-legend {
-  float: right;
+.dent-legend, .dent-buttons {
+  position: absolute;
+	top: 0px;
   margin: 0.5em;
 }
 
-.dent-legend div {
+.dent-legend {
+  right: 0px;
+}
+
+.dent-buttons {
+  left: 0px;
+}
+
+.dent-legend a {
   padding: 2px;
   margin: 2px;
 }
 
-.dent-buttons {
-  position: absolute;
-  float: left;
-  display: block;
-  margin: 0.5em;
+.dent-legend a.none {
+  background-color: #fff;
 }
 
-.dent-legend button {
-  margin: 2px;
+.dent-legend a.active {
+  outline: 2px solid #f00;
 }
 
 .mallampati-selected {
