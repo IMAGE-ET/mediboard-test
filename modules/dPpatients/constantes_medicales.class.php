@@ -41,8 +41,19 @@ class CConstantesMedicales extends CMbObject {
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
   
-  static $list_constantes = array('poids', 'taille', 'ta', 'pouls', 'spo2', 'temperature', 'score_sensibilite',
-                                  'score_motricite','EVA','score_sedation','frequence_respiratoire');
+  static $list_constantes = array (
+    'poids', 
+    'taille', 
+    'ta', 
+    'pouls', 
+    'spo2', 
+    'temperature', 
+    'score_sensibilite',
+    'score_motricite',
+    'EVA',
+    'score_sedation',
+    'frequence_respiratoire',
+	);
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -88,8 +99,8 @@ class CConstantesMedicales extends CMbObject {
     // Détermination valeur IMC
     if ($this->poids && $this->taille) {
       $seuils = ($this->_ref_patient->sexe != 'm') ? 
-                  array(19, 24): 
-                  array(20, 25);
+        array(19, 24): 
+        array(20, 25);
       
       if ($this->_imc < $seuils[0]) {
         $this->_imc_valeur = 'Maigreur';
