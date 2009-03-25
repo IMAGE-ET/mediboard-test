@@ -1103,6 +1103,7 @@ table.Offline select,table.Offline option,table.Offline input,table.Offline butt
 
 #nav a {
   display: block;
+	position: relative;
   font-weight: bold;
   font-size: 1em;
   background: #FFF;
@@ -1119,12 +1120,14 @@ table.Offline select,table.Offline option,table.Offline input,table.Offline butt
   vertical-align: middle;
   white-space: nowrap;
   color: #666;
+	z-index: 40;
 }
 
 #nav a:hover {
   text-decoration: none;
   border: 1px #FFBA8C solid;
   border-right: 0;
+	z-index: 41;
 }
 
 #nav a img {
@@ -1135,8 +1138,12 @@ table.Offline select,table.Offline option,table.Offline input,table.Offline butt
 }
 
 #nav a:hover img {
+	position: absolute;
   display: block;
   border: 1px #FF6600 solid;
+	left: 0;
+	top: 0;
+	margin: 2px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -1172,7 +1179,7 @@ table.Offline select,table.Offline option,table.Offline input,table.Offline butt
 }
 
 #nav .selected a:hover img {
-  margin-top: 0px;
+  margin: 0px;
   padding: 0px;
   border: 0;
 }

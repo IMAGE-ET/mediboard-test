@@ -123,36 +123,32 @@ var WaitingMessage = {
     }).show();
   },
   
-  cover: function(element) {
-    // Problems under Explorer : don't want to waste time
-    // - ugly rendering with no transparancy
-    // - triggers errors when used in popup callbacks
-    if (Prototype.Browser.IE) {
-      return;
-    }
-    
+  cover: function(element) {    
     element = $(element);
     
     var eDiv = new Element("div").
-                   absolutize().
+		               clonePosition(element).
+		               hide().
                    setStyle({
+									 	 opacity: 0.1,
+									 	 position: 'absolute',
                      backgroundColor: "#000",
-                     border: "none",
-                     opacity: 0.1
+                     border: "none"
                    });
-    Position.clone(element, eDiv);
     
-    var descendant = $(element).firstDescendant();
+    var descendant = $(element).down();
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     if (descendant) {
       if (descendant.tagName.match(/^tr$/i)) {
         descendant.insert({bottom: eDiv});
+				eDiv.show();
         return;
       }
     }
 
     element.insert({bottom: eDiv});
+		eDiv.show();
   }
 }
 
