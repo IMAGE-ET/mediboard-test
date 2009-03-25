@@ -126,14 +126,12 @@ var WaitingMessage = {
   cover: function(element) {    
     element = $(element);
     
-    var eDiv = new Element("div").
+    var eDiv = new Element("div", {className: 'ajax-loading'}).
 		               clonePosition(element).
 		               hide().
                    setStyle({
-									 	 opacity: 0.1,
-									 	 position: 'absolute',
-                     backgroundColor: "#000",
-                     border: "none"
+									 	 opacity: 0.3,
+									 	 position: 'absolute'
                    });
     
     var descendant = $(element).down();

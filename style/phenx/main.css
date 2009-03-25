@@ -736,6 +736,11 @@ div.loading {
   white-space: nowrap;
 }
 
+.ajax-loading {
+  background: #999 url(images/icons/loading.gif) no-repeat center;
+  border: none;
+}
+
 div.small-success,
 div.small-info,
 div.small-warning,
@@ -1470,15 +1475,17 @@ hr.control_tabs {
   border-top: 1px solid #F60;
 }
 
-ul.control_tabs, ul.control_tabs_vertical {
+ul.control_tabs, 
+ul.control_tabs_vertical {
   list-style: none;
-  clear: both;
+  clear: right;
   border-bottom: 1px solid #F60;
   display: block;
   padding: 0;
 }
 
-ul.control_tabs li, ul.control_tabs_vertical li { /*float: left;*/
+ul.control_tabs li, ul.control_tabs_vertical li {
+	/*float: left;*/
   display: inline-block;
   text-align: center;
   margin-left: 2px;

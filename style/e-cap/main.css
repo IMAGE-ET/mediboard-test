@@ -779,7 +779,7 @@ table.dialog #systemMsg {
   float: right;
 }
 
-div.loading {
+div.loading, .ajax-loading {
   background-image: url(images/icons/loading.gif);
 }
 

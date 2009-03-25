@@ -13,7 +13,7 @@ html, body {
 body {
   font-family: arial, sans-serif;
   font-size: 11px;  
-  background: #ddf; /* url(./images/pictures/bodyGradient.jpg) no-repeat fixed top center; */
+  background: #ddf;
   margin: 0px;
 }
 
@@ -1171,6 +1171,10 @@ div.loading {
   white-space: nowrap;
 }
 
+.ajax-loading {
+  background: #999 url(images/icons/loading.gif) no-repeat center;
+  border: none;
+}
 
 div.small-success ,
 div.small-info ,
