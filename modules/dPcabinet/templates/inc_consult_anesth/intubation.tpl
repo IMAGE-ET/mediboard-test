@@ -64,7 +64,7 @@ var SchemaDentaire = {
 				
     oSchema.addClassName('schema-dentaire');
     
-    if (true || Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
+    if (Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
     // Clone the image's size to the container
     var img = new Image();
     img.src = oImage.src;
