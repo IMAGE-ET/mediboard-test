@@ -34,8 +34,6 @@ foreach($listPlages as $curr_plage) {
     }
     // Réaffectation de la plage
     $curr_plage->spec_id      = $curr_plage->spec_repl_id;
-    $curr_plage->spec_repl_id = "";
-    $curr_plage->delay_repl   = "";
     $curr_plage->chir_id   = "";
     if($msg = $curr_plage->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
