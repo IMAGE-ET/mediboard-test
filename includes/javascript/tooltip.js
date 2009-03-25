@@ -40,6 +40,7 @@ var ObjectTooltip = Class.create({
   
   launchShow: function() {
     this.idTimeout = this.show.bind(this).delay(this.oOptions.duration);
+		this.dontShow = false;
   },
   
   launchHide: function() {
@@ -52,6 +53,7 @@ var ObjectTooltip = Class.create({
   
   cancelShow: function() {
     window.clearTimeout(this.idTimeout);
+		this.dontShow = true;
   },
   
   show: function() {
@@ -72,13 +74,14 @@ var ObjectTooltip = Class.create({
   },
   
   reposition: function() {
-    eTrigger = $(this.sTrigger);
-    if (!eTrigger) return; // necessary, unless it throws an error some times (why => ?)
-    
+    var eTrigger = $(this.sTrigger),
+        eDiv = $(this.sDiv);
+				
+    if (!eTrigger || this.dontShow) return; // necessary, unless it throws an error some times (why => ?)
+
     var dim = eTrigger.getDimensions();
     
-    $(this.sDiv)
-        .show()
+    eDiv.show()
         .setStyle({marginTop: '0', marginLeft: '0'})
         .clonePosition(eTrigger, {offsetTop: dim.height, offsetLeft: Math.min(dim.width, 20), setWidth: false, setHeight: false})
         .unoverflow();
