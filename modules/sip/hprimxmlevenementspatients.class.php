@@ -17,18 +17,20 @@ if (!class_exists("CHPrimXMLDocument")) {
 }
 
 class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument { 
-  function __construct() {    
-    global $AppUI, $g;
-        
+  function __construct() {            
     parent::__construct("evenementPatient", "msgEvenementsPatients105", "sip");
+  }
+  
+  function generateEnteteMessageEvenementsPatients() {
+    global $AppUI, $g, $m;
 
     $evenementsPatients = $this->addElement($this, "evenementsPatients", null, "http://www.hprim.org/hprimXML");
     // Retourne un message d'acquittement par le récepteur
     $this->addAttribute($evenementsPatients, "acquittementAttendu", "oui");
     
     $enteteMessage = $this->addElement($evenementsPatients, "enteteMessage");
-    $this->addElement($enteteMessage, "identifiantMessage", "ES{$this->now}");
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction");
+    $this->addElement($enteteMessage, "identifiantMessage", $this->_identifiant);
+    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->_date_production);
     
     $emetteur = $this->addElement($enteteMessage, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
@@ -36,11 +38,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
+    $this->addAgent($agents, "système", $this->_emetteur, $group->text);
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
+    $this->destinataire = "MediBoard";
+    $this->addAgent($agents, "application", $this->_destinataire, "Gestion des Etablissements de Santé");
   }
   
   function generateFromOperation($mbPatient, $referent) {  
@@ -62,18 +65,66 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->purgeEmptyElements();
   }
   
-  function generateEvenementsPatients($mbObject, $referent = null, $cip = null) {
+  function generateEvenementsPatients($mbObject, $referent = null) {
+  	$msg_hprim = new CMessageHprim();
+    $this->_date_production = $msg_hprim->date_production = mbDateTime();
+    $msg_hprim->emetteur = $this->_emetteur;
+    $msg_hprim->destinataire = $this->_destinataire;
+    $msg_hprim->type = "evenementsPatients";
+    $msg_hprim->sous_type = "enregistrementPatient";
+    $msg_hprim->message = utf8_encode($this->saveXML());
+    
+    $msg_hprim->store();
+    
+    $this->_identifiant = str_pad($msg_hprim->_id, 6, '0', STR_PAD_LEFT);
+            
+    $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);
+    
     $doc_valid = $this->schemaValidate();
     $this->saveTempFile();
-    $messageEvtPatient = utf8_encode($this->saveXML());
+    $messageEvtPatient = utf8_encode($this->saveXML()); 
     
-    if($cip)
-      $this->saveMessageFile(CAppUI::conf('mb_id')."/$cip/evt", "$this->now.xml", $messageEvtPatient);
-    else
-      $this->saveMessageFile(CAppUI::conf('mb_id')."/evt", "$this->now.xml", $messageEvtPatient);
+    $msg_hprim->message = $messageEvtPatient;
+    $msg_hprim->store();
     
     return $messageEvtPatient;
+  }
+  
+  function getEvenementPatientXML() {
+    global $m;
+
+    $xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+
+    $data['xpath'] = $xpath;
+
+    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
+
+    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
+
+    $entete = $xpath->queryUniqueNode($query);
+
+    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
+    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
+    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
+    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
+
+    $query = "/hprim:evenementsPatients/hprim:evenementPatient";
+
+    $evenementPatient = $xpath->queryUniqueNode($query);
+    $enregistrementPatient = $xpath->queryUniqueNode("hprim:enregistrementPatient", $evenementPatient);
+
+    $data['action'] = $xpath->getActionEvenement($evenementPatient);
+
+    $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $enregistrementPatient);
+    $data['voletMedical'] = $xpath->queryUniqueNode("hprim:voletMedical", $enregistrementPatient);
+
+    $data['idSource'] = $xpath->getIdSource($data['patient']);
+    $data['idCible'] = $xpath->getIdCible($data['patient']);
+
+    return $data;
   }
 }
 ?>

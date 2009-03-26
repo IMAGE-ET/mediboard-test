@@ -27,10 +27,14 @@ class CHprimSoapHandler extends CSoapHandler {
     global $m;
 
     $newPatient = new CPatient();
+     
+    $domGetEvenement = new CHPrimXMLEvenementsPatients();
+    $domGetEvenement->loadXML(utf8_decode($messagePatient));    
+    $doc_valid = $domGetEvenement->schemaValidate();
+    
+    $data = $domGetEvenement->getEvenementPatientXML();
 
-    $data = $this->getEvenementPatientXML($messagePatient);
-
-    $cip = new CCip();
+    $cip = new CDestinataireHprim();
     $cip->client_id = $data['idClient'];
     $cip->loadMatchingObject();
     $tagCip = $cip->tag;
@@ -45,11 +49,8 @@ class CHprimSoapHandler extends CSoapHandler {
     $msgID400   = "";
     $msgIPP     = "";
     $msgPatient = "";
-
-    $msgCIP = array();
-    $msgCIP['identifiantMessage'] = $data['identifiantMessage'];
-    $msgCIP['codeAgent'] = $data['idClient'];
-    $msgCIP['libelleAgent'] = $data['libelleClient'];
+    
+    $messageAcquittement = "";
 
     // Cas 1 : Patient existe sur le SIP
     if($id400->loadMatchingObject()) {
@@ -150,34 +151,29 @@ class CHprimSoapHandler extends CSoapHandler {
     $newPatient->_IPP = $IPP->id400;
     
     $erreur = $msgPatient.$msgID400.$msgIPP;
-    
-    // Gestion de l'acquittement
-    $domAcquittement = new CHPrimXMLAcquittementsPatients();
+        
     if ($data['acquittement'] == "oui") {
-    	// Dans le cas d'une erreur on retourne l'acquittement d'erreur au CIP sans notifier les 
-      // autres CIPs
-	    if ($erreur) {
-	    	$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", $msgCIP, $erreur, $data['idSource']);
-	    	return $messageAcquittement;
-	    } else {
-	    	$messageAcquittement = $domAcquittement->generateAcquittementsPatients("OK", $msgCIP, null, $data['idSource']);
-	    }
+    	// Gestion de l'acquittement
+	    $domAcquittement = new CHPrimXMLAcquittementsPatients();
+	    $domAcquittement->_identifiant = $data['identifiantMessage'];
+	    $domAcquittement->_destinataire = $data['idClient'];
+	    $domAcquittement->_destinataire_libelle = $data['libelleClient'];
+    
+    	$messageAcquittement = ($erreur) ? $domAcquittement->generateAcquittementsPatients("erreur", $erreur): $domAcquittement->generateAcquittementsPatients("OK", null);
+    }
+    
+    // Dans le cas d'une erreur on retourne l'acquittement d'erreur au CIP sans notifier les autres CIPs
+    if ($erreur) {
+      return $messageAcquittement;
     }
       
     // Gestion des notifications
-    $cip = new CCip();
+    $cip = new CDestinataireHprim();
     $listCip = $cip->loadList();
 
     // Liste des CIPs connus par le SIP
     foreach ($listCip as $_cip) {
-      $rooturl = $_cip->url;
-            
-      if (!$clientSOAP = $this->initClientSOAP($_cip->url, $_cip->login, $_cip->password)) {
-        trigger_error("Impossible de joindre le CIP : ".$_cip->url);
-        continue;
-      }
-
-      // Recherche si le patient est connu par le CIP
+      // Recherche si le patient possède un identifiant externe sur le SIP
       $id400 = new CIdSante400();
       //Paramétrage de l'id 400
       $id400->object_id = $newPatient->_id;
@@ -189,20 +185,15 @@ class CHprimSoapHandler extends CSoapHandler {
        else     
         $newPatient->_id400 = null;
         
-      $domEvenement       = new CHPrimXMLEvenementsPatients();
-      $messageEvtPatient  = $domEvenement->generateEvenementsPatients($newPatient, true, null, $_cip->client_id);
+      $domEvenement = new CHPrimXMLEvenementsPatients();
+      $domEvenement->_emetteur = CAppUI::conf('mb_id');
+      $domEvenement->_destinataire = $data['idClient'];
+      $domEvenement->_destinataire_libelle = $data['libelleClient'];
       
-      mbTrace($messageEvtPatient, "Evt : ".$_cip->tag, true);
-              
-      // Récupère le message d'acquittement après l'execution la methode evenementPatient
-      if (null == $acquittement = $clientSOAP->notificationEvenementPatient($messageEvtPatient)) {
-        trigger_error("Notification d'evenement patient impossible sure le CIP : ".$_cip->url);
-        continue;
-      }
-      
-      mbTrace($acquittement, "Acquittement pour le CIP : ".$_cip->tag, true);
+      $domEvenement->generateEvenementsPatients($newPatient, true);      
     }
-    return true;
+    
+    return $messageAcquittement;
   }
 
   function notificationEvenementPatient($messagePatient) {
@@ -210,7 +201,11 @@ class CHprimSoapHandler extends CSoapHandler {
 
     $newPatient = new CPatient();
 
-    $data = $this->getEvenementPatientXML($messagePatient);
+    $domGetEvenement = new CHPrimXMLEvenementsPatients();
+    $domGetEvenement->loadXML(utf8_decode($messagePatient));    
+    $doc_valid = $domGetEvenement->schemaValidate();
+    
+    $data = $domGetEvenement->getEvenementPatientXML();
     
     $IPP = new CIdSante400();
     //Paramétrage de l'id 400
@@ -223,11 +218,7 @@ class CHprimSoapHandler extends CSoapHandler {
     $msgIPP     = "";
     $msgPatient = "";
     
-    mbTrace($data, "Data", true);
-    $msgSIP = array();
-    $msgSIP['identifiantMessage'] = $data['identifiantMessage'];
-    $msgSIP['codeAgent']          = $data['idClient'];
-    $msgSIP['libelleAgent']       = $data['libelleClient'];
+    $messageAcquittement = "";
     
     // Mapping du patient
     $newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
@@ -263,19 +254,16 @@ class CHprimSoapHandler extends CSoapHandler {
          
     $erreur = $msgPatient.$msgIPP;
     
-    // Gestion de l'acquittement
-    $domAcquittement = new CHPrimXMLAcquittementsPatients();
     if ($data['acquittement'] == "oui") {
-      // Dans le cas d'une erreur on retourne l'acquittement d'erreur au CIP sans notifier les 
-      // autres CIPs
-      if ($erreur) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", $msgSIP, $erreur);
-        return $messageAcquittement;
-      } else {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("OK", $msgSIP);
-      }
+      // Gestion de l'acquittement
+      $domAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domAcquittement->_identifiant = $data['identifiantMessage'];
+      $domAcquittement->_destinataire = $data['idClient'];
+      $domAcquittement->_destinataire_libelle = $data['libelleClient'];
+    
+      $messageAcquittement = ($erreur) ? $domAcquittement->generateAcquittementsPatients("erreur", $erreur): $domAcquittement->generateAcquittementsPatients("OK", null);
     }
-         
+   
     return $messageAcquittement;
   }
 }

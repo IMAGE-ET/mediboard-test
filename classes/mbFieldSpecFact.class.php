@@ -32,7 +32,8 @@ class CMbFieldSpecFact {
     "html"         => "CHtmlSpec",
     "email"        => "CEmailSpec",
     "code"         => "CCodeSpec",
-    "password"     => "CPasswordSpec"
+    "password"     => "CPasswordSpec",
+    "xml"          => "CXmlSpec",
   );
    
   /**

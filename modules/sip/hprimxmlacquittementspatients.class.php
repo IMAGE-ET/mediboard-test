@@ -16,12 +16,12 @@ if (!class_exists("CHPrimXMLDocument")) {
   return;
 }
 
-class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument { 
+class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument { 	
   function __construct() {        
     parent::__construct("evenementPatient", "msgAcquittementsPatients105", "sip");
   }
   
-  function generateEnteteMessageAcquittement($statut, $msg, $erreur = null) {
+  function generateEnteteMessageAcquittement($statut, $erreur = null) {
     global $AppUI, $g, $m;
     
     $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
@@ -29,7 +29,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
     
-    $this->addElement($enteteMessageAcquittement, "identifiantMessage", "ES{$this->now}");
+    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->_identifiant);
     $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
     
     $emetteur = $this->addElement($enteteMessageAcquittement, "emetteur");
@@ -37,13 +37,13 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
+    $this->addAgent($agents, "système", $this->_emetteur, $group->text);
     
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $msg['codeAgent'], $msg['libelleAgent']);  
+    $this->addAgent($agents, "application", $this->_destinataire, $this->_destinataire_libelle);  
     
-    $identifiantMessageAcquitte = $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $msg['identifiantMessage']);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
     
     $this->addObservation($enteteMessageAcquittement, $statut, "INF001");
   }
@@ -59,18 +59,32 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
       $commentaire = $this->addElement($observation, "commentaire", $erreur); 
   }
   
-  function generateAcquittementsPatients($statut, $msgCIP, $erreur = null, $cip = null) {
-    $this->generateEnteteMessageAcquittement($statut, $msgCIP, $erreur = null);
+  function generateAcquittementsPatients($statut, $msgCIP, $erreur = null) {
+  	$this->_emetteur = CAppUI::conf('mb_id');
+    $this->_date_production = mbDateTime();
+      	
+    $this->generateEnteteMessageAcquittement($statut, $erreur);
     $doc_valid = $this->schemaValidate();
     $this->saveTempFile();
     $messageAcquittementPatient = utf8_encode($this->saveXML());
-    
-    if($cip)
-      $this->saveMessageFile(CAppUI::conf('mb_id')."/$cip/acq", "$this->now.xml", $messageAcquittementPatient);
-    else
-      $this->saveMessageFile(CAppUI::conf('mb_id')."/acq", "$this->now.xml", $messageAcquittementPatient);
-    
+        
     return $messageAcquittementPatient;
+  }
+  
+  function getAcquittementEvenementPatient($msgCIP, $erreur) {
+    $domAcquittement = new CHPrimXMLAcquittementsPatients();
+    // Erreur
+    if ($erreur) {
+      $domAcquittement->generateEnteteMessageAcquittement("erreur", $msgCIP, $erreur);
+    } else {
+      $domAcquittement->generateEnteteMessageAcquittement("OK", $msgCIP);
+    }
+    
+    $doc_valid = $domAcquittement->schemaValidate();
+    $domAcquittement->saveTempFile();
+    $messageAcquittement = utf8_encode($domAcquittement->saveXML());
+    
+    return $messageAcquittement;
   }
 }
 

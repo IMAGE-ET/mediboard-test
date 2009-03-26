@@ -77,7 +77,7 @@ mbTrace($newPatient);die;
 $idSource = $xpath->getIdSource($patient);
 $idCible = $xpath->getIdCible($patient);
 
-$cip = new CCip();
+$cip = new CDestinataireHprim();
 $cip->client_id = $idClient;
 $cip->loadMatchingObject();
 $tagCip = $cip->tag;

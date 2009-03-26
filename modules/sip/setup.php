@@ -17,17 +17,32 @@ class CSetupsip extends CSetup {
       
       $this->makeRevision("0.11");
       
-      $sql = "CREATE TABLE `cip` (
-                `cip_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-                `client_id` VARCHAR (255) NOT NULL,
-                `tag` VARCHAR (255) NOT NULL,
-                `url` VARCHAR (255) NOT NULL,
-                `login` VARCHAR (255) NOT NULL,
-                `password` VARCHAR (255) NOT NULL
+      $sql = "CREATE TABLE `destinataire_hprim` (
+                `dest_hprim_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `destinataire` VARCHAR (255) NOT NULL,
+                `type` ENUM ('cip','sip') NOT NULL DEFAULT 'cip',
+                `url` TEXT NOT NULL,
+                `username` VARCHAR (255) NOT NULL,
+                `password` VARCHAR (50) NOT NULL,
+                `actif` ENUM ('0','1') NOT NULL DEFAULT 0
               ) TYPE=MYISAM;";
      $this->addQuery($sql);
      
-      $this->mod_version = "0.12";
+     $sql = "CREATE TABLE `message_hprim` (
+                `message_hprim_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `date_production` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `emetteur` VARCHAR (255) NOT NULL,
+                `destinataire` VARCHAR (255) NOT NULL,
+                `type` VARCHAR (255) NOT NULL,
+                `sous_type` VARCHAR (255),
+                `date_echange` DATETIME,
+                `message` mediumtext NOT NULL,
+                `acquittement` mediumtext NOT NULL,
+                `initiateur_id` INT (11) UNSIGNED
+              ) TYPE=MYISAM;";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.12";
   }
 }
 ?>

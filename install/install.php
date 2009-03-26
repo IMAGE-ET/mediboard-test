@@ -330,6 +330,18 @@ $library->versionString = '$Id: flotr.js 100';
 
 CLibrary::$all[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "GeSHi";
+$library->url = "http://qbnz.com/highlighter/";
+$library->fileName = "GeSHi-1.0.8.3.tar.gz";
+$library->description = "Generic Syntax Highlighter";
+$library->sourceDir = "geshi";
+$library->targetDir = "geshi";
+$library->versionFile = "geshi.php";
+$library->versionString = "define('GESHI_VERSION', '1.0.8.3')";
+
+CLibrary::$all[$library->name] = $library;
+
 $install = @$_POST['install'];
 
 ?>

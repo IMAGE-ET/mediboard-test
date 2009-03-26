@@ -3484,3 +3484,29 @@ ul li a.chapitre_signe.active{
   border-radius: 6px;
 	background: #eee;
 }
+
+/**
+ * Geshi xml
+ */
+.re0 {
+color:#000066;	
+} 
+
+.re1, .re2 {
+color:#000000;
+font-weight: bold; 
+}
+
+.st0 {
+color:#FF0000; 
+}
+
+.sc3 {
+color:#009900;
+}
+
+.de1 {
+font-family: monospace; 
+font-size: 1em; 
+line-height: 1.2em; 
+}

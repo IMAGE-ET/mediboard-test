@@ -13,6 +13,7 @@
  */
 class CMbSOAPClient extends SoapClient {
   function __construct($rooturl) {
+  	
     if (!$html = file_get_contents($rooturl)) {
     	trigger_error("Impossible d'analyser l'url : ".$rooturl, E_USER_ERROR);
     	return;
@@ -24,6 +25,19 @@ class CMbSOAPClient extends SoapClient {
     }
     
     parent::__construct($rooturl);
+  }
+  
+  static public function make($rooturl, $login, $password) {
+    if (preg_match('#\%u#', $rooturl)) 
+      $rooturl = str_replace('%u', $login, $rooturl);
+    
+    if (preg_match('#\%p#', $rooturl)) 
+      $rooturl = str_replace('%p', $password, $rooturl);
+
+    if (!$client = new CMbSOAPClient($rooturl)) {
+      trigger_error("Instanciation du SoapClient impossible.");
+    }
+    return $client;
   }
 }
 

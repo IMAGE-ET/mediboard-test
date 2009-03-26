@@ -158,7 +158,7 @@ var Prescription = {
     
     select: function(iPrescriptionItem) {
       if (this.eSelected) {
-        $(this.eSelected.removeClassName("selected");
+        $(this.eSelected).removeClassName("selected");
       }
       
       this.eSelected = $("PrescriptionItem-"+iPrescriptionItem);

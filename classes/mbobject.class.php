@@ -559,7 +559,7 @@ class CMbObject {
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
-    
+
     $result = $this->loadQueryList($request->getRequest($this));
     
     return $result;

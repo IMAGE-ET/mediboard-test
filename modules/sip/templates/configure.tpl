@@ -56,61 +56,21 @@ function doAction(sAction) {
         <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
       </td>
     </tr>
-      
-    {{assign var="mod" value="sip"}}
-    {{assign var="class" value="soap"}}
-	  <tr>
-	    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}{{/tr}}</th>
-	  </tr>
-	  {{assign var="var" value="rooturl"}}
-	  <tr>
-	    <th>
-	      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-	      </label>  
-	    </th>
-	    <td>
-	      <input class="str" size="50" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-	    </td>
-	  </tr> 
-	   
-	  {{assign var="var" value="user"}}
-	  <tr>
-	    <th>
-	      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-	      </label>  
-	    </th>
-	    <td>
-	      <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-	    </td>
-	  </tr> 
-	
-	  {{assign var="var" value="pass"}}
-	  <tr>
-	    <th>
-	      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-	      </label>  
-	    </th>
-	    <td>
-	      <input type="password" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-	    </td>
-	  </tr>
+    
 	  {{assign var="var" value="wsdl_mode"}}
 	  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Safe</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Brute</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <label for="{{$m}}[{{$var}}]">Safe</label>
+	      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
+	      <label for="{{$m}}[{{$var}}]">Brute</label>
+	      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
+	    </td>             
+    </tr>
 	  <tr>
 	    <td class="button" colspan="10">
 	      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
@@ -118,11 +78,4 @@ function doAction(sAction) {
 	  </tr>
   </table>
 </form>
-<div class="big-info">
-Les caractères suivants sont utilisés pour spécifier l'authentification dans l'url :
-<ul>
-  <li>%u - Utilisateur service web </li>
-  <li>%p - Mot de passe service web</li>
-</ul>
-</div>
  

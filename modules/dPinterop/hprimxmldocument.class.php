@@ -21,6 +21,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $documentfinalprefix = null;
   var $documentfinalfilename = null;
   var $sentFiles = array();
+  
+  var $_identifiant           = null;
+  var $_date_production       = null;
+  var $_emetteur              = null;
+  var $_destinataire          = null;
+  var $_destinataire_libelle  = null;
    
   function __construct($schemaname, $schemafilename = null, $module = null) {
     parent::__construct();

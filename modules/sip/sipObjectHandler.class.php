@@ -14,9 +14,7 @@
 
 class CSipObjectHandler extends CMbObjectHandler {
   static $handled = array ("CPatient");
-  
-  var $clientSOAP = null;
-  
+    
   static function isHandled(CMbObject &$mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
@@ -30,19 +28,35 @@ class CSipObjectHandler extends CMbObjectHandler {
     	return;
     }
     
+    // Passe pas dans le handler lors d'une notification 
     if (isset($mbObject->_coms_from_sip) && ($mbObject->_coms_from_sip == 1)) {
     	return;
     }
+
+    $dest_hprim = new CDestinataireHprim();
+    $dest_hprim->type = "sip";
+    $dest_hprim->loadMatchingObject();
     
-    $this->initClientSOAP();
-    
-    $domEvenement      = new CHPrimXMLEvenementsPatients();
+    $domEvenement = new CHPrimXMLEvenementsPatients();
+    $domEvenement->_emetteur = CAppUI::conf('mb_id');
+    $domEvenement->_destinataire = $dest_hprim->destinataire;
     $messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
 
-    // Récupère le message d'acquittement après l'execution la methode evenementPatient
-    if (null == $acquittement = $this->clientSOAP->evenementPatient($messageEvtPatient)) {
-      return;
+    if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
+      trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
     }
+    
+    // Récupère le message d'acquittement après l'execution la methode evenementPatient
+    if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
+    	trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
+    }
+
+    $msg_hprim = new CMessageHprim();
+    $msg_hprim->load($domEvenement->_identifiant);
+    $msg_hprim->date_echange = mbDateTime();
+    $msg_hprim->acquittement = $acquittement;
+    
+    $msg_hprim->store();
   }
 
   function onMerge(CMbObject &$mbObject) {
