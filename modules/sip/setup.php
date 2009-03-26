@@ -28,8 +28,8 @@ class CSetupsip extends CSetup {
               ) TYPE=MYISAM;";
      $this->addQuery($sql);
      
-     $sql = "CREATE TABLE `message_hprim` (
-                `message_hprim_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+     $sql = "CREATE TABLE `echange_hprim` (
+                `echange_hprim_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                 `date_production` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `emetteur` VARCHAR (255) NOT NULL,
                 `destinataire` VARCHAR (255) NOT NULL,

@@ -8,18 +8,18 @@
  */
 global $AppUI;
 
-$message_hprim_id         = mbGetValueFromGet("message_hprim_id");
-$message_hprim_classname  = mbGetValueFromGet("message_hprim_classname");
+$echange_hprim_id         = mbGetValueFromGet("echange_hprim_id");
+$echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
 
 // Chargement de l'objet
-$message_hprim = new $message_hprim_classname;
-$message_hprim->load($message_hprim_id);
+$echange_hprim = new $echange_hprim_classname;
+$echange_hprim->load($echange_hprim_id);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("object", $message_hprim);
+$smarty->assign("object", $echange_hprim);
 
-$smarty->display("inc_message_hprim.tpl");
+$smarty->display("inc_echange_hprim.tpl");
 
 ?>

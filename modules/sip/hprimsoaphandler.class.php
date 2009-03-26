@@ -35,7 +35,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
     $data = $domGetEvenement->getEvenementPatientXML();
     
-    $echange_hprim = new CMessageHprim();
+    $echange_hprim = new CEchangeHprim();
     $echange_hprim->date_production = mbDateTime();
     $echange_hprim->emetteur = $data['idClient'];
     $echange_hprim->destinataire = CAppUI::conf('mb_id');
@@ -221,7 +221,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
     $data = $domGetEvenement->getEvenementPatientXML();
     
-    $echange_hprim = new CMessageHprim();
+    $echange_hprim = new CEchangeHprim();
     $echange_hprim->date_production = mbDateTime();
     $echange_hprim->emetteur = $data['idClient'];
     $echange_hprim->destinataire = CAppUI::conf('mb_id');

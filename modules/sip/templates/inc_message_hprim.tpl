@@ -8,8 +8,8 @@
 	</td>
 	<td>
 	  {{if $object->initiateur_id}} Not : {{/if}}
-	  <button onclick="location.href='?m=sip&amp;tab=vw_idx_message_hprim&amp;message_hprim_id={{$object->_id}}'" class="search" type="button">
-	   {{$object->message_hprim_id|str_pad:6:'0':STR_PAD_LEFT}}
+	  <button onclick="location.href='?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}'" class="search" type="button">
+	   {{$object->echange_hprim_id|str_pad:6:'0':STR_PAD_LEFT}}
 	  </button>
 	</td>
 	<td>{{mb_value object=$object field="date_production"}}</td>

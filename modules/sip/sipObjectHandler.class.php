@@ -51,12 +51,12 @@ class CSipObjectHandler extends CMbObjectHandler {
     	trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
     }
 
-    $msg_hprim = new CMessageHprim();
-    $msg_hprim->load($domEvenement->_identifiant);
-    $msg_hprim->date_echange = mbDateTime();
-    $msg_hprim->acquittement = $acquittement;
+    $echange_hprim = new CEchangeHprim();
+    $echange_hprim->load($domEvenement->_identifiant);
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->acquittement = $acquittement;
     
-    $msg_hprim->store();
+    $echange_hprim->store();
   }
 
   function onMerge(CMbObject &$mbObject) {
@@ -65,22 +65,5 @@ class CSipObjectHandler extends CMbObjectHandler {
   
   function onDelete(CMbObject &$mbObject) {
   } 
-  
-  function initClientSOAP () {
-    $rooturl = CAppUI::conf('sip soap rooturl');
-
-		if (preg_match('#\%u#', $rooturl)) 
-		  $rooturl = str_replace('%u', CAppUI::conf('sip soap user'), $rooturl);
-		
-		if (preg_match('#\%p#', $rooturl)) 
-		  $rooturl = str_replace('%p', CAppUI::conf('sip soap pass'), $rooturl);
-
-    if ($this->clientSOAP instanceof SoapClient) 
-      return;
- 
-    if (!$this->clientSOAP = new CMbSOAPClient($rooturl)) {
-      trigger_error("Instanciation du SoapClient impossible.");
-    }
-  }  
 }
 ?>

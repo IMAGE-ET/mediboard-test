@@ -11,25 +11,25 @@ global $can;
 
 $can->needsRead();
 
-$message_hprim_id = mbGetValueFromGet("message_hprim_id");
+$echange_hprim_id = mbGetValueFromGet("echange_hprim_id");
 
 // Chargement du message HPRIM demandé
-$msg_hprim = new CMessageHprim();
-$msg_hprim->load($message_hprim_id);
-if($msg_hprim->load($message_hprim_id))
-  $msg_hprim->loadRefs();
+$echange_hprim = new CEchangeHprim();
+$echange_hprim->load($echange_hprim_id);
+if($echange_hprim->load($echange_hprim_id))
+  $echange_hprim->loadRefs();
 
 // Récupération de la liste des messages HPRIM
-$itemMessageHprim = new CMessageHprim;
+$itemMessageHprim = new CEchangeHprim;
 $where["initiateur_id"] = "IS NULL";
 $listMessageHprim = $itemMessageHprim->loadList($where);
-foreach($listMessageHprim as &$curr_msg_hprim) 
-  $curr_msg_hprim->loadRefNotifications();
+foreach($listMessageHprim as &$curr_echange_hprim) 
+  $curr_echange_hprim->loadRefNotifications();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("msg_hprim"        , $msg_hprim);
+$smarty->assign("echange_hprim"    , $echange_hprim);
 $smarty->assign("listMessageHprim" , $listMessageHprim);
-$smarty->display("vw_idx_message_hprim.tpl");
+$smarty->display("vw_idx_echange_hprim.tpl");
 ?>

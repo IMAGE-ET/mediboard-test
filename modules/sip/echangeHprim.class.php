@@ -8,11 +8,11 @@
  */
 
 /**
- * The MessageHprim class
+ * The CEchangeHprim class
  */
-class CMessageHprim extends CMbObject {
+class CEchangeHprim extends CMbObject {
   // DB Table key
-  var $message_hprim_id   = null;
+  var $echange_hprim_id   = null;
   
   // DB Fields
   var $date_production    = null;
@@ -29,8 +29,8 @@ class CMessageHprim extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'message_hprim';
-    $spec->key   = 'message_hprim_id';
+    $spec->table = 'echange_hprim';
+    $spec->key   = 'echange_hprim_id';
     return $spec;
   }
   
@@ -44,13 +44,13 @@ class CMessageHprim extends CMbObject {
     $specs["date_echange"]        = "dateTime";
     $specs["message"]             = "xml notNull";
     $specs["acquittement"]        = "xml";
-    $specs["initiateur_id"]       = "ref class|CMessageHprim";
+    $specs["initiateur_id"]       = "ref class|CEchangeHprim";
     return $specs;
   }
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['notifications'] = "CMessageHprim initiateur_id";
+    $backProps['notifications'] = "CEchangeHprim initiateur_id";
     
     return $backProps;
   }
