@@ -36,7 +36,8 @@ class CPlageconsult extends CMbObject {
   var $_affected  = null;
   var $_total     = null;
   var $_fill_rate = null;
-
+  var $_nb_patients = null;
+  
   // Filter fields
   var $_date_min = null;
   var $_date_max = null;
@@ -114,6 +115,14 @@ class CPlageconsult extends CMbObject {
     $order = "heure";
     $consult = new CConsultation();
     $this->_ref_consultations = $consult->loadList($where, $order);
+  }
+  
+  function countPatients(){
+    $consultation = new CConsultation();
+    $consultation->plageconsult_id = $this->_id;
+    $where["plageconsult_id"] = "= '$this->_id'";
+    $where["patient_id"] = " IS NOT NULL";
+    $this->_nb_patients = $consultation->countList($where);
   }
   
   

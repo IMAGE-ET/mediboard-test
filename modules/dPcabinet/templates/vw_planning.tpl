@@ -129,7 +129,7 @@ Main.add(function () {
               <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
                 <div class="progressBar">
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                  <div class="text">{{$plage->_affected}} / {{$plage->_total|string_format:"%.0f"}}</div>
+                  <div class="text">{{$plage->_affected}} ({{$plage->_nb_patients}}) / {{$plage->_total|string_format:"%.0f"}}</div>
                 </div>
               </a>
               </td>
