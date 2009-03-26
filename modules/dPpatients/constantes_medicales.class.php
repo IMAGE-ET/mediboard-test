@@ -42,18 +42,18 @@ class CConstantesMedicales extends CMbObject {
   var $_new_constantes_medicales = null;
   
   static $list_constantes = array (
+    'ta', 
     'poids', 
     'taille', 
-    'ta', 
     'pouls', 
-    'spo2', 
     'temperature', 
+    'spo2', 
     'score_sensibilite',
     'score_motricite',
-    'EVA',
     'score_sedation',
     'frequence_respiratoire',
-	);
+    'EVA',
+  );
 
   function getSpec() {
     $spec = parent::getSpec();

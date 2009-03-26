@@ -62,29 +62,22 @@ $standard_struct = array(
 );
 
 // Initialisation de la structure des données
-$data = array(
-  'ta' => array(
-    'series' => array(
-      array(
-        'data' => array(),
-        'label' => 'Systole',
-      ),
-      array(
-        'data' => array(),
-        'label' => 'Diastole',
-      ),
+$data = array();
+foreach(CConstantesMedicales::$list_constantes as $cst) {
+  $data[$cst] = $standard_struct;
+}
+
+$data['ta'] = array(
+  'series' => array(
+    array(
+      'data' => array(),
+      'label' => 'Systole',
+    ),
+    array(
+      'data' => array(),
+      'label' => 'Diastole',
     ),
   ),
-  'poids' => $standard_struct,
-  'taille' => $standard_struct,
-  'temperature' => $standard_struct,
-  'pouls' => $standard_struct,
-  'spo2' => $standard_struct,
-  'score_sensibilite' => $standard_struct,
-  'score_motricite' => $standard_struct,
-  'score_sedation' => $standard_struct,
-  'EVA' => $standard_struct,
-  'frequence_respiratoire' => $standard_struct,
 );
 
 // Petite fonction utilitaire de récupération des valeurs

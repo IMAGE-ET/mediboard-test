@@ -137,17 +137,9 @@ data.temperature.options.colors = ['silver', 'orange'];
 drawGraph = function() {
   var c = $('constantes-medicales-graph');
   if (c) {
-    g[0] = insertGraph(c, data.ta, 'constantes-medicales-ta', '500px', '120px');
-    g[1] = insertGraph(c, data.poids, 'constantes-medicales-poids', '500px', '120px');
-    g[2] = insertGraph(c, data.taille, 'constantes-medicales-taille', '500px', '120px');
-    g[3] = insertGraph(c, data.pouls, 'constantes-medicales-pouls', '500px', '120px');
-    g[4] = insertGraph(c, data.temperature, 'constantes-medicales-temperature', '500px', '120px');
-    g[5] = insertGraph(c, data.spo2, 'constantes-medicales-spo2', '500px', '120px');
-    g[6] = insertGraph(c, data.score_sensibilite, 'constantes-medicales-score_sensibilite', '500px', '120px');
-    g[7] = insertGraph(c, data.score_motricite, 'constantes-medicales-score_motricite', '500px', '120px');
-    g[8] = insertGraph(c, data.score_sedation, 'constantes-medicales-score_sedation', '500px', '120px');
-    g[9] = insertGraph(c, data.frequence_respiratoire, 'constantes-medicales-frequence_respiratoire', '500px', '120px');
-    g[10] = insertGraph(c, data.EVA, 'constantes-medicales-EVA', '500px', '120px');
+		$H(data).each(function(pair){
+			g.push(insertGraph(c, pair.value, 'constantes-medicales-'+pair.key, '500px', '120px'));
+		});
   }
 };
 
