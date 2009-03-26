@@ -23,6 +23,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("produits", $produits);
 $smarty->assign("nodebug", true);
 $smarty->assign("search_libelle_long", $search_libelle_long);
+$smarty->assign("needle", strtoupper($produit));
 $smarty->display("httpreq_do_medicament_autocomplete.tpl");
 
 ?>

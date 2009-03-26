@@ -202,12 +202,12 @@ class CPrescription extends CMbObject {
 	  	case 'N': $date_debut = mbDate(); break;
 	  }
 	  
-	  
+	  $date_fin = "";
+	  $time_fin = "";
+	  	  	  
     // Calcul de la date de sortie
 	  switch($_line->jour_decalage_fin){
 	  	case 'I': 
-	  	  $date_fin = "";
-	  	  $time_fin = "";
 	  	  if($date_operation){
 	  	    $date_fin = mbDate($date_operation);
 	  	    $time_fin = mbTime($date_operation); 

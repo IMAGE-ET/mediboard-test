@@ -162,11 +162,11 @@ class CBcbProduit extends CBcbObject {
 	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche) {
 		$lngLexico = $TypeRecherche & 256;
 		$TypeRecherche = $TypeRecherche & 255;
-		$query = "SELECT PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier";
+		$query = "SELECT PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, LivretTherapeutique.Commentaire, PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier";
 		$query .= " FROM PRODUITS_IFP ";
-		if ($this->distObj->LivretTherapeutique > 0){ 
+		//if ($this->distObj->LivretTherapeutique > 0){ 
 		  $query .= ", LivretTherapeutique ";
-		}
+		//}
 		if ($TypeRecherche == 2){ 
 		  $query .= ", IDENT_PRODUITS ";
 	  }
@@ -178,21 +178,28 @@ class CBcbProduit extends CBcbObject {
 		if ($TypeRecherche == 2) {
 			$query .= " AND PRODUITS_IFP.Code_CIP = IDENT_PRODUITS.Code_CIP ";
 		}
-		switch ($TypeRecherche)	{
-			case 0:
-				$query .= " AND PRODUITS_IFP.LIBELLELONG Like '";
-				break;
-			case 1:
-				$query .= " AND PRODUITS_IFP.Code_CIP Like '";
-				break;
-			case 2:
-				$query .= " AND IDENT_PRODUITS.Code_UCD Like '";
-				break;
+		
+		if (($this->distObj->LivretTherapeutique > 0) && (strlen($Chaine) > 1) && $TypeRecherche == 0){
+		  $query .= " AND (PRODUITS_IFP.LIBELLELONG Like '$Chaine%' OR LivretTherapeutique.Commentaire LIKE '$Chaine%')";	  
+		} else {
+			switch ($TypeRecherche)	{
+				case 0:
+					$query .= " AND PRODUITS_IFP.LIBELLELONG Like '";
+					break;
+				case 1:
+					$query .= " AND PRODUITS_IFP.Code_CIP Like '";
+					break;
+				case 2:
+					$query .= " AND IDENT_PRODUITS.Code_UCD Like '";
+					break;
+			}
+			if ($lngLexico == 256){ 
+			  $query .= "%";
+		  }
+			$query .= $Chaine."%'";
 		}
-		if ($lngLexico == 256){ 
-		  $query .= "%";
-	  }
-		$query .= $Chaine."%'";
+		
+		
 		if ($this->distObj->Specialite == 1){ 
 		  $query .= " AND (PRODUITS_IFP.Code_CIP Like '0%' OR PRODUITS_IFP.Code_CIP Like '1%' OR PRODUITS_IFP.Code_CIP Like '3%' OR PRODUITS_IFP.Code_CIP Like '5%')  ";
 		}
@@ -219,8 +226,9 @@ class CBcbProduit extends CBcbObject {
 				$Temp->CodeCIP=$row[0];
 				$Temp->Libelle=$row[1];
 				$Temp->LibelleLong=$row[2];
-				$Temp->DateSupp=$row[3];
-				$Temp->Hospitalier=$row[4];
+				$Temp->Commentaire=strtoupper($row[3]);
+				$Temp->DateSupp=$row[4];
+				$Temp->Hospitalier=$row[5];
 				$Temp->CodeUCD="";
 				
 				$this->distObj->TabProduit[$cpt] = $Temp;
@@ -485,11 +493,11 @@ class CBcbProduit extends CBcbObject {
     if($livretTherapeutique){
       $this->distObj->LivretTherapeutique = $g;  
     }
-    if($search_libelle_long){
+    //if($search_libelle_long){
       $this->SearchEx($text, 0, $nb_max, 0);
-    } else {
-      $this->distObj->Search($text, 0, $nb_max, 0);
-    }
+    //} else {
+    //  $this->distObj->Search($text, 0, $nb_max, 0);
+    //}
     return $this->distObj->TabProduit;
   }
   
