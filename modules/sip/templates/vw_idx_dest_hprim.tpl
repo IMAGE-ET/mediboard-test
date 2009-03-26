@@ -43,7 +43,7 @@
         <tr>
           {{if $dest_hprim->_id}}
           <th class="title modify" colspan="2">
-            Modification du destinataire HPRIM {{$dest_hprim->_view}}
+            Modification du {{$dest_hprim->_view}}
           </th>
           {{else}}
           <th class="title" colspan="2">

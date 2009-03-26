@@ -18,9 +18,10 @@ class CHprimSoapHandler extends CSoapHandler {
 
   static $paramSpecs = array(
     "evenementPatient" => array ( 
-      "acquittement" => "string"),
+      "messagePatient" => "string"),
     "notificationEvenementPatient" => array ( 
-      "acquittement" => "string"),
+      "messagePatient" => "string",
+      "initiateur"     => "string"),
   );
 
   function evenementPatient($messagePatient) {
@@ -33,17 +34,25 @@ class CHprimSoapHandler extends CSoapHandler {
     $doc_valid = $domGetEvenement->schemaValidate();
     
     $data = $domGetEvenement->getEvenementPatientXML();
-
-    $cip = new CDestinataireHprim();
-    $cip->client_id = $data['idClient'];
-    $cip->loadMatchingObject();
-    $tagCip = $cip->tag;
+    
+    $echange_hprim = new CMessageHprim();
+    $echange_hprim->date_production = mbDateTime();
+    $echange_hprim->emetteur = $data['idClient'];
+    $echange_hprim->destinataire = CAppUI::conf('mb_id');
+    $echange_hprim->type = "evenementsPatients";
+    $echange_hprim->sous_type = "enregistrementPatient";
+    $echange_hprim->message = $messagePatient;
+    $echange_hprim->store();    
+    
+    $dest_hprim = new CDestinataireHprim();
+    $dest_hprim->destinataire = $data['idClient'];
+    $dest_hprim->loadMatchingObject();
 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
     $id400->id400 = $data['idSource'];
     $id400->object_class = "CPatient";
-    $id400->tag = $tagCip;
+    $id400->tag = $dest_hprim->destinataire;
 
     // Variable en cas d'erreur de la sauvegarde des objets
     $msgID400   = "";
@@ -117,7 +126,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $id400Patient = new CIdSante400();
       //Paramétrage de l'id 400
       $id400Patient->object_class = "CPatient";
-      $id400Patient->tag = $tagCip;
+      $id400Patient->tag = $dest_hprim->destinataire;
 
       // Incrementation de l'id400
       $id400Patient->id400 = $data['idSource'];
@@ -153,13 +162,13 @@ class CHprimSoapHandler extends CSoapHandler {
     $erreur = $msgPatient.$msgID400.$msgIPP;
         
     if ($data['acquittement'] == "oui") {
-    	// Gestion de l'acquittement
-	    $domAcquittement = new CHPrimXMLAcquittementsPatients();
-	    $domAcquittement->_identifiant = $data['identifiantMessage'];
-	    $domAcquittement->_destinataire = $data['idClient'];
-	    $domAcquittement->_destinataire_libelle = $data['libelleClient'];
+      // Gestion de l'acquittement
+      $domAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domAcquittement->_identifiant = $data['identifiantMessage'];
+      $domAcquittement->_destinataire = $data['idClient'];
+      $domAcquittement->_destinataire_libelle = $data['libelleClient'];
     
-    	$messageAcquittement = ($erreur) ? $domAcquittement->generateAcquittementsPatients("erreur", $erreur): $domAcquittement->generateAcquittementsPatients("OK", null);
+      $messageAcquittement = ($erreur) ? $domAcquittement->generateAcquittementsPatients("erreur", $erreur): $domAcquittement->generateAcquittementsPatients("OK", null);
     }
     
     // Dans le cas d'une erreur on retourne l'acquittement d'erreur au CIP sans notifier les autres CIPs
@@ -168,17 +177,17 @@ class CHprimSoapHandler extends CSoapHandler {
     }
       
     // Gestion des notifications
-    $cip = new CDestinataireHprim();
-    $listCip = $cip->loadList();
+    $dest_hprim = new CDestinataireHprim();
+    $listDestHprim = $dest_hprim->loadList();
 
-    // Liste des CIPs connus par le SIP
-    foreach ($listCip as $_cip) {
+    // Liste des destinataires connu par l'emetteur
+    foreach ($listDestHprim as $_dest_hprim) {
       // Recherche si le patient possède un identifiant externe sur le SIP
       $id400 = new CIdSante400();
       //Paramétrage de l'id 400
       $id400->object_id = $newPatient->_id;
       $id400->object_class = "CPatient";
-      $id400->tag = $_cip->tag;
+      $id400->tag = $_dest_hprim->destinataire;
     
       if($id400->loadMatchingObject()) 
         $newPatient->_id400 = $id400->id400;
@@ -187,18 +196,23 @@ class CHprimSoapHandler extends CSoapHandler {
         
       $domEvenement = new CHPrimXMLEvenementsPatients();
       $domEvenement->_emetteur = CAppUI::conf('mb_id');
-      $domEvenement->_destinataire = $data['idClient'];
-      $domEvenement->_destinataire_libelle = $data['libelleClient'];
+      $domEvenement->_destinataire = $_dest_hprim->destinataire;
+      $domEvenement->_destinataire_libelle = " ";
       
-      $domEvenement->generateEvenementsPatients($newPatient, true);      
+      $initiateur = ($_dest_hprim->destinataire == $data['idClient']) ? $echange_hprim->_id : null;
+      
+      $domEvenement->generateEvenementsPatients($newPatient, true, $initiateur);      
     }
+    
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->store();
     
     return $messageAcquittement;
   }
 
-  function notificationEvenementPatient($messagePatient) {
+  function notificationEvenementPatient($messagePatient, $initiateur) {
     global $m;
-
     $newPatient = new CPatient();
 
     $domGetEvenement = new CHPrimXMLEvenementsPatients();
@@ -207,6 +221,15 @@ class CHprimSoapHandler extends CSoapHandler {
     
     $data = $domGetEvenement->getEvenementPatientXML();
     
+    $echange_hprim = new CMessageHprim();
+    $echange_hprim->date_production = mbDateTime();
+    $echange_hprim->emetteur = $data['idClient'];
+    $echange_hprim->destinataire = CAppUI::conf('mb_id');
+    $echange_hprim->type = "evenementsPatients";
+    $echange_hprim->sous_type = "enregistrementPatient";
+    $echange_hprim->message = $messagePatient;
+    $echange_hprim->initiateur_id = $initiateur;
+        
     $IPP = new CIdSante400();
     //Paramétrage de l'id 400
     $IPP->object_class = "CPatient";
@@ -227,7 +250,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
    // Le SIP renvoi l'identifiant local du patient
     if($data['idCible']) {
-    	$tmpPatient = new CPatient();
+      $tmpPatient = new CPatient();
       $tmpPatient->_id = $data['idCible'];
       $tmpPatient->load();
       
@@ -239,7 +262,7 @@ class CHprimSoapHandler extends CSoapHandler {
       }        
     } 
     if(!$IPP->loadMatchingObject()) {
-    	$msgPatient = $newPatient->store();
+      $msgPatient = $newPatient->store();
       
         $IPP->object_id = $newPatient->_id;
         $IPP->last_update = mbDateTime();
@@ -263,7 +286,11 @@ class CHprimSoapHandler extends CSoapHandler {
     
       $messageAcquittement = ($erreur) ? $domAcquittement->generateAcquittementsPatients("erreur", $erreur): $domAcquittement->generateAcquittementsPatients("OK", null);
     }
-   
+    
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->store();
+    
     return $messageAcquittement;
   }
 }

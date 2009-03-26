@@ -65,14 +65,17 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->purgeEmptyElements();
   }
   
-  function generateEvenementsPatients($mbObject, $referent = null) {
-  	$msg_hprim = new CMessageHprim();
+  function generateEvenementsPatients($mbObject, $referent = null, $initiateur = null) {
+    $msg_hprim = new CMessageHprim();
     $this->_date_production = $msg_hprim->date_production = mbDateTime();
     $msg_hprim->emetteur = $this->_emetteur;
     $msg_hprim->destinataire = $this->_destinataire;
     $msg_hprim->type = "evenementsPatients";
     $msg_hprim->sous_type = "enregistrementPatient";
     $msg_hprim->message = utf8_encode($this->saveXML());
+    if ($initiateur) {
+      $msg_hprim->initiateur_id = $initiateur;
+    }
     
     $msg_hprim->store();
     
@@ -123,7 +126,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
 
     $data['idSource'] = $xpath->getIdSource($data['patient']);
     $data['idCible'] = $xpath->getIdCible($data['patient']);
-
+    
     return $data;
   }
 }
