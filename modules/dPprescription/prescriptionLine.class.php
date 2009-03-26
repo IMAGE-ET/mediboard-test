@@ -48,6 +48,7 @@ class CPrescriptionLine extends CMbObject {
   var $_fin_reelle         = null;
   var $_debut_reel         = null;
   var $_active             = null;
+  var $_recent_modification = false;
   
   // Object References
   var $_ref_prescription   = null;
@@ -328,6 +329,7 @@ class CPrescriptionLine extends CMbObject {
     $this->_debut_reel = "$this->debut $time_debut";
     
     $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
+    $this->getRecentModification();
   }
   
   /*
@@ -448,7 +450,21 @@ class CPrescriptionLine extends CMbObject {
 		  }
 		}
 	}
-
+	
+	/*
+	 * Permet de savoir si la ligne a ete recemment modifiée
+	 */
+	function getRecentModification(){
+	  // modification recente si moins de 2 heures
+    $nb_hours = CAppUI::conf("dPprescription CPrescription time_alerte_modification");
+    $min_datetime = mbDateTime("- $nb_hours HOURS");
+    $last_modif_date = $this->loadLastLogForField()->date;
+    
+    if($last_modif_date && $last_modif_date >= $min_datetime){
+      $this->_recent_modification = true;
+    }
+	}
+	
   /*
    * Chargement des administrations et transmissions
    */

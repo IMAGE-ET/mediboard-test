@@ -121,15 +121,13 @@ if($object_id && $object_class){
     if($line->_class_name == "CPrescriptionLineMedicament"){
        if(!$line->_fin_reelle){
 		    $line->_fin_reelle = $prescription->_ref_object->_sortie;
-		  }
-		  //if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     	
-				$line->calculAdministrations($curr_date);
-        $line->_ref_produit->loadClasseATC();
-        $line->_ref_produit->loadRefsFichesATC();
-        if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
-				  $line->calculPrises($prescription, $curr_date);
-        }
-		  //}
+		  }   	
+		  $line->calculAdministrations($curr_date);
+      $line->_ref_produit->loadClasseATC();
+      $line->_ref_produit->loadRefsFichesATC();
+      if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
+			  $line->calculPrises($prescription, $curr_date);
+      }
 		  // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();
     } 
@@ -139,21 +137,18 @@ if($object_id && $object_class){
     	$name_cat = $element->category_prescription_id;
       $element->loadRefCategory();
       $name_chap = $element->_ref_category_prescription->chapitre;
-      //if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-     	  $line->calculAdministrations($curr_date);
-     	  
-     	  if($name_chap == "imagerie" || $name_chap == "consult"){
-          if(($line->debut == $curr_date) && $line->time_debut){
-			  	  $time_debut = substr($line->time_debut, 0, 2);
-			  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut]['total'] = 1;
-			  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
- 	    	  }
- 	    	} else {
-	     	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-			      $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
-	     	  }
- 	    	}
-      //}
+     	$line->calculAdministrations($curr_date);  
+   	  if($name_chap == "imagerie" || $name_chap == "consult"){
+        if(($line->debut == $curr_date) && $line->time_debut){
+	  	  $time_debut = substr($line->time_debut, 0, 2);
+	  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut]['total'] = 1;
+	  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
+    	  }
+    	} else {
+    	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
+	      $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
+    	  }
+    	}
       // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();
     }
@@ -212,13 +207,14 @@ else {
       // Chargement des perfusions
 	    $prescription->loadRefsPerfusions("1", $line_type);
 		  foreach($prescription->_ref_perfusions as &$_perfusion){
+		    $_perfusion->getRecentModification();
 		    $_perfusion->loadRefsLines();
 		    $_perfusion->loadRefPraticien();
 		    $_perfusion->_ref_praticien->loadRefFunction();
 		    $_perfusion->loadRefLogSignaturePrat();
 		  }
     } elseif (!$chapitre) {
-      // si pas de chapitre de specifie
+      // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
       $prescription->loadRefsPerfusions();
       $prescription->loadRefsLinesMedByCat("1","1",$line_type);
 	    $prescription->_ref_object->loadRefPrescriptionTraitement();	 
@@ -228,6 +224,8 @@ else {
 			}
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
 		  $prescription->loadRefsLinesElementByCat("1",null,$line_type);
+		  // Calcul des modifications recentes par chapitre
+		  $prescription->countRecentModif();
     } else {
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
 		  $prescription->loadRefsLinesElementByCat("1",$chapitre,$line_type);

@@ -466,29 +466,51 @@ Main.add(function () {
 	</table>
 
 	{{assign var=transmissions value=$prescription->_transmissions}}	  
-
+  {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
   <table style="width: 100%">
 	  <tr>
-	    <td style="width: 1%">
+	    <td style="width: 1%; white-space: nowrap;">
 		 	 <table>
 			 	 <tr>
 					 <td>
 					   <ul id="tab_categories" class="control_tabs_vertical">
 						    {{if $prescription->_ref_perfusions_for_plan|@count}}
-						      <li onclick="refreshDossierSoin(null, 'perf');"><a href="#_perf">Perfusions</a></li>
+						      <li onclick="refreshDossierSoin(null, 'perf');">
+						        <a href="#_perf">Perfusions
+						          {{if $count_recent_modif.perf}}
+						            <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+						          {{/if}} 
+						        </a>
+						      </li>
 						    {{/if}}
 								
 								{{if $prescription->_ref_injections_for_plan|@count}}
-								<li onclick="refreshDossierSoin(null, 'inj');"><a href="#_inj">Injections</a></li>
+								<li onclick="refreshDossierSoin(null, 'inj');">
+								  <a href="#_inj">Injections
+						        {{if $count_recent_modif.inj}}
+						          <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+						        {{/if}}
+						      </a></li>
 						    {{/if}}
 						    
 						    {{if $prescription->_ref_lines_med_for_plan|@count}}
-						      <li onclick="refreshDossierSoin(null, 'med');"><a href="#_med">Médicaments</a></li>
+						      <li onclick="refreshDossierSoin(null, 'med');">
+							      <a href="#_med">Médicaments 
+							        {{if $count_recent_modif.med}}
+							        <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+							        {{/if}}
+							      </a>
+						      </li>
 						    {{/if}}
 							  {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
 							  {{foreach from=$specs_chapitre->_list item=_chapitre}}
 							    {{if @is_array($prescription->_ref_lines_elt_for_plan.$_chapitre)}}
-							    <li onclick="refreshDossierSoin(null, '{{$_chapitre}}');"><a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+							    <li onclick="refreshDossierSoin(null, '{{$_chapitre}}');">
+							      <a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}
+							      	{{if $count_recent_modif.$_chapitre}}
+							        <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+							        {{/if}}
+							      </a></li>
 							    {{/if}}
 							  {{/foreach}}
 							</ul>	
@@ -565,8 +587,7 @@ Main.add(function () {
 				    {{if !$smarty.foreach.foreach_element.first}}
 				      </tbody>
 				    {{/if}}
-					  <tbody id="_cat-{{$name_chap}}" style="display: none;">  
-
+					  <tbody id="_cat-{{$name_chap}}" style="display: none;">
 				  {{/foreach}}
 					</tbody>
 					 

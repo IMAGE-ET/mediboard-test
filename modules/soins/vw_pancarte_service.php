@@ -21,6 +21,7 @@ $services = $service->loadGroupList();
 $patients = array();
 $alertes = array();
 $perfs = array();
+$new = array();
 
 // Chargement des prescriptions qui sont dans le service selectionné
 $prescription = new CPrescription();
@@ -119,7 +120,7 @@ foreach($prescriptions as $_prescription){
 	          foreach($_prescription->_ref_lines_med_for_plan as $_cat_ATC){
 					    foreach($_cat_ATC as $_line){
 					      foreach($_line as $unite_prise => $_line_med){
-                  $quantite_prevue = $quantite_adm = 0;
+					        $quantite_prevue = $quantite_adm = 0;
                   if(isset($_line_med->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'])){
 		                $quantite_prevue = $_line_med->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'];
                   } else {
@@ -136,6 +137,10 @@ foreach($prescriptions as $_prescription){
 							    }
 							    if($quantite_prevue || $quantite_adm){
 							      $lines["med"][$_line_med->_id] = $_line_med;
+								    if($_line_med->_recent_modification){
+						          $new[$_prescription->_id][$dateTime] = 1;
+						          @$tab[$_prescription->_id][$dateTime]["med"][$_line_med->_id]["new"] = 1;
+						        }
 							    }
 						      if($quantite_prevue != $quantite_adm){
 						        $alertes[$_prescription->_id][$dateTime]["med"] = 1;
@@ -166,6 +171,10 @@ foreach($prescriptions as $_prescription){
 							    }
 							    if($quantite_prevue || $quantite_adm){
 							      $lines["inj"][$_line_inj->_id] = $_line_inj;
+							      if($_line_inj->_recent_modification){
+						          $new[$_prescription->_id][$dateTime] = 1;
+						          @$tab[$_prescription->_id][$dateTime]["inj"][$_line_inj->_id]["new"] = 1;
+						        }
 				          }
 						      if($quantite_prevue != $quantite_adm){
 						        $alertes[$_prescription->_id][$dateTime]["inj"] = 1;
@@ -198,6 +207,10 @@ foreach($prescriptions as $_prescription){
 							      }
 							      if($quantite_prevue || $quantite_adm){
 							        $lines[$chapitre][$_line_element->_id] = $_line_element;
+							      	if($_line_element->_recent_modification){
+							          $new[$_prescription->_id][$dateTime] = 1;
+							          @$tab[$_prescription->_id][$dateTime][$chapitre][$_line_element->_id]["new"] = 1;
+							        }
 							      }
 							      if($quantite_prevue != $quantite_adm){
 							        $alertes[$_prescription->_id][$dateTime][$chapitre] = 1;
@@ -215,10 +228,11 @@ foreach($prescriptions as $_prescription){
               $fin_perf = $_perfusion->_fin ? mbTransformTime(null, $_perfusion->_fin, "%Y-%m-%d %H:00:00") : '';
               $debut_perf_adm = $_perfusion->_debut_adm ? mbTransformTime(null, $_perfusion->_debut_adm, "%Y-%m-%d %H:00:00") : '';
               $fin_perf_adm = $_perfusion->_fin_adm ? mbTransformTime(null, $_perfusion->_fin_adm, "%Y-%m-%d %H:00:00") : '';
-             
               if(($debut_perf == $dateTime) || ($fin_perf == $dateTime)){
                 @$tab[$_prescription->_id][$dateTime]["perf"][$_perfusion->_id] = $_perfusion;
-              
+              	if($_perfusion->_recent_modification){
+							    $new[$_prescription->_id][$dateTime] = 1;
+							  }
                 if($debut_perf == $dateTime){
                   if($debut_perf != $debut_perf_adm){
                     $alertes[$_prescription->_id][$dateTime]["perf"] = 1;    
@@ -254,6 +268,7 @@ $smarty->assign("date_min", $date_min);
 $smarty->assign("service", $service);
 $smarty->assign("patients", $patients);
 $smarty->assign("alertes", $alertes);
+$smarty->assign("new", $new);
 $smarty->display('vw_pancarte_service.tpl');
 
 ?>

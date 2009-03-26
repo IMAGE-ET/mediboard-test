@@ -14,7 +14,6 @@ popupVoies = function(){
   url.popup(300,700,"Voies");
 }
 
-
 </script>
 
 
@@ -45,6 +44,26 @@ popupVoies = function(){
   </tr>
   
   {{assign var="var" value="time_print_ordonnance"}}
+  <tr>
+    <th class="category" colspan="6">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+  </tr>
+  <tr>  
+    <td colspan="6" style="text-align: center">
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+      heures
+    </td>             
+  </tr>
+  {{assign var="var" value="time_alerte_modification"}}
   <tr>
     <th class="category" colspan="6">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">

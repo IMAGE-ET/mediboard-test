@@ -14,14 +14,16 @@
  	<td class="text">
  	  <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
  		<div onclick='addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");' 
-	       class="mediuser {{if @$transmissions.CPerfusion.$perfusion_id|@count}}transmission{{else}}transmission_possible{{/if}}"
-	       >
+	       class="mediuser {{if @$transmissions.CPerfusion.$perfusion_id|@count}}transmission{{else}}transmission_possible{{/if}}">
+	    {{if $_perfusion->_recent_modification}}
+        <img style="float: right" src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+      {{/if}}
 	    <a href="#{{$_perfusion->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}')">
-	      {{$_perfusion}} 
+	      {{$_perfusion->_view}} 
 	    </a>
 	  </div>
 	  </div>
-	</td>  
+	</td>
  	<td class="text" style="font-size: 1em;">
  	  <ul>
  	   {{foreach from=$_perfusion->_ref_lines item=_line}}

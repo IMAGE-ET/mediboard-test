@@ -366,6 +366,7 @@ $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
+    "time_alerte_modification" => "2",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",

@@ -864,6 +864,60 @@ class CPrescription extends CMbObject {
   	return $historique;
   }
   
+  
+  /*
+   * Calcul des chapitres modifiés récemments
+   */
+  function countRecentModif(){
+    $this->_count_recent_modif["med"] = false;
+    $this->_count_recent_modif["inj"] = false;
+    
+    // Parcours des lignes de medicaments
+    foreach($this->_ref_prescription_lines_by_cat as $cat_atc => $_lines_med){
+      foreach($_lines_med as $_line_med){
+        $chapitre = $_line_med->_is_injectable ? "inj" : "med";
+        if($_line_med->_recent_modification){
+          $this->_count_recent_modif[$chapitre] = true;
+        }
+      }
+    }
+    
+    // Parcours des lignes de TP
+    if($this->_ref_object->_ref_prescription_traitement->_id){
+      $prescription_tp =& $this->_ref_object->_ref_prescription_traitement;
+	    foreach($prescription_traitement->_ref_prescription_lines_by_cat as $cat_atc_tp => $_lines_med_tp){
+	      foreach($_lines_med_tp as $_line_med_tp){
+	        $chapitre = $_line_med_tp->_is_injectable ? "inj" : "med";
+	        if($_line_med_tp->_recent_modification){
+	          $this->_count_recent_modif[$chapitre] = true;
+	        }
+	      }
+	    }  
+    }
+    
+    // Parcours des lignes de perfusions
+    $this->_count_recent_modif["perf"] = false;
+    foreach($this->_ref_perfusions as $_perfusion){
+  	  if($_perfusion->_recent_modification){
+        $this->_count_recent_modif["perf"] = true;
+      }
+    }
+    
+    // Parcours des lignes d'elements
+    foreach($this->_ref_prescription_lines_element_by_cat as $_chapitre_elt => $lines_by_cat){
+      $this->_count_recent_modif[$_chapitre_elt] = false;
+      foreach($lines_by_cat as $cat => $lines_by_type){
+        foreach($lines_by_type as $lines_elt){
+          foreach($lines_elt as $_line_elt){
+		        if($_line_elt->_recent_modification){
+		          $this->_count_recent_modif[$_chapitre_elt] = true;
+		        }
+          }
+        }
+      }
+    }
+  }
+  
   /*
    * Chargement des lignes de prescription de médicament
    */
@@ -892,17 +946,13 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de prescription de médicament par catégorie ATC
    */
-  
   function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0, $emplacement = "") {
     $this->loadRefsLinesMed($with_child, $with_subst, $emplacement);
   	$this->_ref_prescription_lines_by_cat = array();
     foreach($this->_ref_prescription_lines as &$_line){
-    	$_line->_ref_produit->loadClasseATC();
-    	$this->_ref_prescription_lines_by_cat[$_line->_ref_produit->_ref_ATC_2_code][$_line->_id] = $_line;
-    }
-    foreach($this->_ref_prescription_lines as &$_line){
-    	$_line->_ref_produit->loadClasseATC();
-    	$this->_ref_prescription_lines_by_cat[$_line->_ref_produit->_ref_ATC_2_code][$_line->_id] = $_line;
+      $produit =& $_line->_ref_produit;
+    	$produit->loadClasseATC();
+    	$this->_ref_prescription_lines_by_cat[$produit->_ref_ATC_2_code][$_line->_id] = $_line;
     }
   }
   
@@ -922,16 +972,11 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines as &$line_med){
   		if($withRefs){
   			$line_med->loadRefsPrises();
-  		  //$this->_praticiens[$line_med->praticien_id] = $line_med->_ref_praticien->_view;
   		}
   		$this->_ref_lines_med_comments["med"][] = $line_med;
   	}
-  	
   	if(isset($this->_ref_prescription_lines_comment["medicament"][""]["comment"])){
       foreach($this->_ref_prescription_lines_comment["medicament"][""]["comment"] as &$comment_med){
-  	  	if($withRefs){
-  	  	  //$this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
-  	  	}
   	  	$this->_ref_lines_med_comments["comment"][] = $comment_med;
       }
   	}
@@ -950,9 +995,7 @@ class CPrescription extends CMbObject {
 	    $ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
       $where["category_prescription.chapitre"] = " = '$chapitre'";
   	}
-  	
     $where["prescription_id"] = " = '$this->_id'";
-    
     if($emplacement){
       $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
     }
@@ -966,7 +1009,6 @@ class CPrescription extends CMbObject {
 	    	$line_element->loadRefsPrises();
 	    	$line_element->loadRefExecutant();
 	    }
-	    //$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
     	$line_element->_ref_element_prescription->loadRefCategory();
     	
     }
@@ -1036,7 +1078,6 @@ class CPrescription extends CMbObject {
   	  }
       $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
       $this->_ref_lines_elements_comments[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
-      //$this->_praticiens[$_line_comment->praticien_id] = $_line_comment->_ref_praticien->_view;
     }
   }
   

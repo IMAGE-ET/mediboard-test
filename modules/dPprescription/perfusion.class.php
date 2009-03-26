@@ -63,6 +63,7 @@ class CPerfusion extends CMbObject {
   var $_count_parent_line = null;
   var $_debut_adm = null;
   var $_fin_adm   = null;
+  var $_recent_modification = null;
   
   // Object references
   var $_ref_log_signature_prat = null;
@@ -154,6 +155,7 @@ class CPerfusion extends CMbObject {
 
     $this->loadRefPrescription();
     $this->_protocole = $this->_ref_prescription->object_id ? '0' : '1';
+    $this->getRecentModification();    
   }
   
   function updateDBFielfs(){
@@ -236,6 +238,17 @@ class CPerfusion extends CMbObject {
   	}
 	}
   
+	function getRecentModification(){
+		// modification recente si moins de 2 heures
+    $nb_hours = CAppUI::conf("dPprescription CPrescription time_alerte_modification");
+    $min_datetime = mbDateTime("- $nb_hours HOURS");
+    $last_modif_date = $this->loadLastLogForField()->date;
+    
+    if($last_modif_date && $last_modif_date >= $min_datetime){
+      $this->_recent_modification = true;
+    }
+	}
+	
 	/*
 	 * Duplication d'une perfusion
 	 */

@@ -80,6 +80,9 @@
 		{{/if}}
     </td>
     <td class="text" rowspan="{{$nb_line}}">
+    {{if $line->_recent_modification}}
+      <img style="float: right" src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+    {{/if}}
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
 	  <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
@@ -92,6 +95,7 @@
 	        {{$line->_view}}
 	      {{/if}} 
 	    </a>
+	   
 	  </div>
 	  <small>
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
