@@ -176,7 +176,7 @@ Main.add( function(){
 			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
 			    Livret Thérap.
 			    
-			    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
 			    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
 			    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 			

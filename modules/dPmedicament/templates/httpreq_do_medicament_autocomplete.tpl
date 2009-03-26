@@ -2,14 +2,19 @@
   {{foreach from=$produits item=produit}}
     <li>
       <small style="display: none;">{{$produit->CodeCIP}}</small>
+			Produit:
+			<strong> 
 			{{if $search_libelle_long}}
-			  {{$produit->LibelleLong|replace:$needle:"<strong>$needle</strong>"}}
+				{{$produit->LibelleLong|replace:$needle:"<em>$needle</em>"}}
 			{{else}}
-			  {{$produit->Libelle|replace:$needle:"<strong>$needle</strong>"}}
+			  {{$produit->Libelle|replace:$needle:"<em>$needle</em>"}}
 			{{/if}}
+			</strong>
+			
 			{{if $produit->Commentaire}}
-				<br />
-			  ({{$produit->Commentaire|replace:$needle:"<strong>$needle</strong>"}})
+			<div style="padding-left: 1em">
+			  ({{$produit->Commentaire|replace:$needle:"<em>$needle</em>"}})
+			</div>
 			{{/if}}
     </li>
   {{/foreach}}
