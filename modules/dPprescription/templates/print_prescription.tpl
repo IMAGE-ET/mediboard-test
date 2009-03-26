@@ -44,6 +44,9 @@ Main.add(window.print);
 				A l'attention de 
 				<br />		      
 	      <strong>{{$prescription->_ref_patient->_view}}</strong>
+	      <br />
+	      Age: {{$prescription->_ref_patient->_age}} ans<br />
+	      Poids: {{$poids}} kg
 	      {{else}}
 	      Protocole: {{$prescription->libelle}}
 	      {{/if}}

@@ -31,6 +31,15 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsFwd();
 
+// Chargement du poids du patient
+$poids = "-";
+if($prescription->object_id){
+	$patient =& $prescription->_ref_patient;
+	$patient->loadRefConstantesMedicales();
+	$constantes_medicales = $patient->_ref_constantes_medicales;
+	$poids = $constantes_medicales->poids;
+}
+
 // L'impression de la prescription par praticien n'est effectuée que dans le cadre de la prescription de sortie
 if($prescription->type != "sortie"){
   $praticien_sortie_id = "";
@@ -282,6 +291,7 @@ $smarty->assign("linesElt"            , $linesElt);
 $smarty->assign("linesDMI"            , $linesDMI);
 $smarty->assign("categories"          , $categories);
 $smarty->assign("executants"          , $executants);
+$smarty->assign("poids"               , $poids);
 $smarty->display("print_prescription.tpl");
 
 ?>
