@@ -11,8 +11,6 @@ $list_sejours = explode("-", mbGetValueFromGet("list_sejours"));
 $date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
 $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
 
-return true;
-
 // Chargement de l'etablissement courant
 $etab = CGroups::loadCurrent();
 

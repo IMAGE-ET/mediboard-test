@@ -11,7 +11,7 @@ Main.add(function() {
 
 </script>
 
-<form target="Imeds-patient" name="Imeds_patient_form" action="{{$url}}?nameframe=Imeds-patient&amp;ctyp=p&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;dpat={{$patient->_IPP}}" method="get">
+<form target="Imeds-patient" name="Imeds_patient_form" action="{{$url}}?nameframe=Imeds-patient&amp;ctyp=p&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;dpat={{$patient->_IPP}}" method="post">
   <input type="hidden" name="login" value="{{$idImeds.login}}" />
   <input type="hidden" name="password" value="{{$idImeds.password}}" />
 </form>
