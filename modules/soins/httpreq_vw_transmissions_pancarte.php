@@ -12,6 +12,9 @@ $date       = mbGetValueFromGet("date");
 $date_min   = mbGetValueFromGet("date_min");
 $user_id    = mbGetValueFromGet("user_id");
 $degre      = mbGetValueFromGet("degre");
+$load_transmissions = mbGetValueFromGet("transmissions");
+$load_observations = mbGetValueFromGet("observations");
+$refresh = mbGetValueFromGet("refresh");
 
 // Chargement du service
 $service = new CService();
@@ -51,34 +54,39 @@ foreach($prescriptions as $_prescription){
 	if($degre){
 	  $where["degre"] = " = '$degre'";
 	}
-	$transmission = new CTransmissionMedicale();
-	@$transmissions[$_prescription->_id] = $transmission->loadList($where);
-
-	$observation = new CObservationMedicale();
-	@$observations[$_prescription->_id] = $observation->loadList($where);
+	if($load_transmissions == "1"){
+	  $transmission = new CTransmissionMedicale();
+	  @$transmissions[$_prescription->_id] = $transmission->loadList($where);
+	}
+	if($load_observations == "1"){
+	  $observation = new CObservationMedicale();
+	  @$observations[$_prescription->_id] = $observation->loadList($where);
+	}
 }
 
 $trans_and_obs = array();
-foreach($transmissions as $_transmissions_by_prescription){
-  foreach($_transmissions_by_prescription as $_transmission){
-    $_transmission->loadRefsFwd();
-    $_transmission->_ref_sejour->loadRefPatient();
-    $trans_and_obs[$_transmission->date][$_transmission->_id] = $_transmission;
-    $_transmission->_ref_user->loadRefFunction();
-    $users[$_transmission->user_id] = $_transmission->_ref_user; 
-  }
+if($transmissions){
+	foreach($transmissions as $_transmissions_by_prescription){
+	  foreach($_transmissions_by_prescription as $_transmission){
+	    $_transmission->loadRefsFwd();
+	    $_transmission->_ref_sejour->loadRefPatient();
+	    $trans_and_obs[$_transmission->date][$_transmission->_id] = $_transmission;
+	    $_transmission->_ref_user->loadRefFunction();
+	    $users[$_transmission->user_id] = $_transmission->_ref_user; 
+	  }
+	}
 }
-
-foreach($observations as $_observations_by_prescription){
-  foreach($_observations_by_prescription as $_observation){
-    $_observation->loadRefsFwd();
-    $_observation->_ref_sejour->loadRefPatient();
-    $trans_and_obs[$_observation->date][$_observation->_id] = $_observation;
-    $_observation->_ref_user->loadRefFunction();
-    $users[$_observation->user_id] = $_observation->_ref_user; 
-  }
+if($observations){
+	foreach($observations as $_observations_by_prescription){
+	  foreach($_observations_by_prescription as $_observation){
+	    $_observation->loadRefsFwd();
+	    $_observation->_ref_sejour->loadRefPatient();
+	    $trans_and_obs[$_observation->date][$_observation->_id] = $_observation;
+	    $_observation->_ref_user->loadRefFunction();
+	    $users[$_observation->user_id] = $_observation->_ref_user; 
+	  }
+	}
 }
-
 $filter_trans = new CTransmissionMedicale();
 $filter_trans->degre = $degre;
 $filter_trans->user_id = $user_id;
@@ -92,7 +100,7 @@ $smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("filter_trans", $filter_trans);
 $smarty->assign("users", $users);
 
-if($user_id || $degre){
+if($user_id || $degre || $refresh){
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 
 } else {
   $smarty->display('inc_vw_transmissions_pancarte.tpl'); 

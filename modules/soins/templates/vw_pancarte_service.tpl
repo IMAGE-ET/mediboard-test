@@ -12,7 +12,7 @@ function viewLegendPancarte(){
   url.popup(300, 400, "Légende de la pancarte");
 }
        
-function viewTransmissions(service_id, user_id, degre){
+function viewTransmissions(service_id, user_id, degre, observations, transmissions, refresh){
   var url = new Url;
   url.setModuleAction("soins", "httpreq_vw_transmissions_pancarte");
   url.addParam("service_id", service_id);
@@ -20,7 +20,10 @@ function viewTransmissions(service_id, user_id, degre){
   url.addParam("degre", degre);
   url.addParam("date", "{{$date}}");
   url.addParam("date_min", "{{$date_min}}");
-  if(user_id || degre){
+  url.addParam("observations", observations?1:0);
+  url.addParam("transmissions", transmissions?1:0);
+  url.addParam("refresh", refresh);
+  if(user_id || degre || refresh){
     url.requestUpdate("_transmissions", { waitingText: null } );
   } else {
     url.requestUpdate("viewTransmissions", { waitingText: null } );
@@ -29,7 +32,7 @@ function viewTransmissions(service_id, user_id, degre){
 
 Main.add(function () {
   var tab_sejour = Control.Tabs.create('tab-pancarte', false);
-  viewTransmissions($V(document.selService.service_id));
+  viewTransmissions($V(document.selService.service_id), null, null, '1', '1');
 });
                  
 </script>
