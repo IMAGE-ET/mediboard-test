@@ -43,7 +43,7 @@ class CMbFieldSpecFact {
         
     $specFragments = explode(" ", $strSpec);
     $specClassName = "CMbFieldSpec";
-    if ($specName = CMbArray::extract($specFragments, 0, true)) {
+    if ($specName = array_shift($specFragments)) {
 	    if (null == $specClassName = CMbArray::get(self::$classes, $specName)) {
 	      trigger_error("No spec class name for '$className'::'$fieldName' = '$strSpec'", E_USER_ERROR);
 	    }
@@ -52,7 +52,7 @@ class CMbFieldSpecFact {
     $specOptions = array();
     foreach ($specFragments as $specFragment) {
       $options = explode("|", $specFragment);
-      $optionName = CMbArray::extract($options, 0, null, true);
+      $optionName = array_shift($options);
 
       $specOptions[$optionName] = count($options) ? implode("|", $options) : true;
     }
