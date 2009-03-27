@@ -28,7 +28,7 @@ var Menu = {
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
-  {{thumb src="images/pictures/logo.png" w="140" f="png"}}
+  <img src="images/pictures/logo.png" width="140" height="49" />
 <!--  {{thumb src="style/$uistyle/images/pictures/e-cap.jpg" w="140" f="png"}} -->
   
   {{if !$offline}}

@@ -642,8 +642,8 @@ Element.addMethods('input', {
         var map  = new Element('map', {name: 'arrow_'+element.id});
         container.insert(map);
         
-        map.insert(new Element('area', {coords:'0,0,10,8',   href:'#1', tabIndex:10000, title:'+'}).observe('click', element.spinner.inc));
-        map.insert(new Element('area', {coords:'0,10,10,18', href:'#1', tabIndex:10000, title:'-'}).observe('click', element.spinner.dec));
+        map.insert(new Element('area', {coords:'0,0,10,8',   tabIndex:10000, title:'+', style:'cursor: pointer;'}).observe('click', element.spinner.inc));
+        map.insert(new Element('area', {coords:'0,10,10,18', tabIndex:10000, title:'-', style:'cursor: pointer;'}).observe('click', element.spinner.dec));
       }
     
       if (element.disabled && options.spinnerElement) {

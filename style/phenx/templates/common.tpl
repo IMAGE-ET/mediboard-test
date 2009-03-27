@@ -20,7 +20,8 @@
     {{if $offline}}
     var config = {{$configOffline|@json}};
     {{/if}}
-    var Preferences = {{$app->user_prefs|@json}};
+    var Preferences = {{$app->user_prefs|@json}},
+        userId = parseInt({{$app->user_id}});
     
     {{if $dialog}}
     Event.observe(document, 'keydown', closeWindowByEscape);

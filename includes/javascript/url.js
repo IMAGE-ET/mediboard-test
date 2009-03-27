@@ -13,6 +13,8 @@
  * Lazy poping and ajaxing
  */
 
+window.children = {};
+
 var Url = Class.create({
   // Constructor
   initialize: function() {
@@ -108,7 +110,8 @@ var Url = Class.create({
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
     var sTargetUrl = sBaseUrl || "";
     this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, aFeatures.join(", "));  
-    
+    window.children[sWindowName] = this.oWindow;
+		
     // Prefixed window collection
     if (sPrefix) {
       if (!this.oPrefixed[sPrefix]) {
@@ -131,7 +134,8 @@ var Url = Class.create({
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
     
-    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, aFeatures.join(", ")); 
+    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, aFeatures.join(", "));
+    window.children[sWindowName] = this.oWindow;
   },
   
   popunder: function(iWidth, iHeight, sWindowName) {
@@ -274,6 +278,17 @@ var Url = Class.create({
     this.popup(750, 550, "Fichier");
   }
 } );
+
+/** General purpose ping
+ *  @return {Boolean} true if user is connected, false otherwise
+ */
+Url.ping = function(options) {
+  var url = new Url;
+  url.setModuleAction("system", "ajax_ping");
+  url.addParam("suppressHeaders", "1");
+  url.addParam("ajax", "1");
+  url.requestUpdate("systemMsg", options);
+}
 
 function popChgPwd() {
   var url = new Url;

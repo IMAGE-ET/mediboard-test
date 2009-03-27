@@ -126,27 +126,21 @@ var WaitingMessage = {
   cover: function(element) {    
     element = $(element);
     
-    var eDiv = new Element("div", {className: 'ajax-loading'}).
-		               clonePosition(element).
-		               hide().
-                   setStyle({
-									 	 opacity: 0.3,
-									 	 position: 'absolute'
-                   });
-    
-    var descendant = $(element).down();
+    var eDiv = new Element("div", {className: 'ajax-loading'}).hide(),
+		    descendant = $(element).down();
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
-    if (descendant) {
-      if (descendant.tagName.match(/^tr$/i)) {
-        descendant.insert({bottom: eDiv});
-				eDiv.show();
-        return;
-      }
-    }
-
-    element.insert({bottom: eDiv});
-		eDiv.show();
+    if (descendant && descendant.tagName.match(/^tr$/i)) {
+			descendant.insert({bottom: eDiv});
+		}
+	  else {
+	    element.insert({bottom: eDiv});
+	  }
+		
+		eDiv.setStyle({
+      opacity: 0.3,
+      position: 'absolute'
+    }).clonePosition(element).show();
   }
 }
 
@@ -172,13 +166,15 @@ function closeWindowByEscape(e) {
   }
 }
 
-var djConfig = { isDebug: false };
-
 var AjaxResponse = {
   onDisconnected: function() {
-    loginUrl = new Url;
-    loginUrl.addParam("dialog", 1);
-    loginUrl.pop(610, 300, "login");
+    if (window.children['login'] && window.children['login'].closed) window.children['login'] = null;
+
+    if (!window.children['login']) {
+      loginUrl = new Url;
+      loginUrl.addParam("dialog", 1);
+      loginUrl.pop(610, 300, "login");
+    }
   },
   
   onPerformances: Prototype.emptyFunction

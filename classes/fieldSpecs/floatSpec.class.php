@@ -155,8 +155,8 @@ class CFloatSpec extends CMbFieldSpec {
     </script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" id="img_'.$fieldId.'" />
     <map name="arrow_'.$fieldId.'" >
-      <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.inc()" title="+" />
-      <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.dec()" title="-" />
+      <area coords="0,0,10,8"   tabIndex="10000" style="cursor: pointer;" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.inc()" title="+" />
+      <area coords="0,10,10,18" tabIndex="10000" style="cursor: pointer;" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.dec()" title="-" />
     </map>
     </div>';
     }
