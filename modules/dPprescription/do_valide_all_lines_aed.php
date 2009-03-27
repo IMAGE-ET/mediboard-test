@@ -121,13 +121,13 @@ if(!$mode_pharma){
 	
 		if(!$password){
 			if(!$user->_id){
-			  $AppUI->displayMsg("Veuillez saisir un password", "Signature des lignes");
+			  $AppUI->displayMsg("Veuillez saisir un mot de passe", "Signature des lignes");
 	      return;
 		  }
 		}
 		$user->loadMatchingObject();
 		if(!$user->_id){
-		  $AppUI->displayMsg("login incorrect","Signature des lignes");
+		  $AppUI->displayMsg("Login incorrect","Signature des lignes");
 	    return;
 		}	
 	}
