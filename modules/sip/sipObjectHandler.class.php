@@ -32,31 +32,43 @@ class CSipObjectHandler extends CMbObjectHandler {
     if (isset($mbObject->_coms_from_sip) && ($mbObject->_coms_from_sip == 1)) {
     	return;
     }
-
+    
     $dest_hprim = new CDestinataireHprim();
-    $dest_hprim->type = "sip";
-    $dest_hprim->loadMatchingObject();
     
-    $domEvenement = new CHPrimXMLEvenementsPatients();
-    $domEvenement->_emetteur = CAppUI::conf('mb_id');
-    $domEvenement->_destinataire = $dest_hprim->destinataire;
-    $messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
-
-    if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
-      trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+    // Si SIP
+    if (CAppUI::conf('sip server') == 1) {
+    	$listDest = $dest_hprim->loadList();
+    	foreach ($listDest as $_curr_dest) {
+	    	$domEvenement = new CHPrimXMLEvenementsPatients();
+	      $domEvenement->_emetteur = CAppUI::conf('mb_id');
+	      $domEvenement->_destinataire = $_curr_dest->destinataire;
+	      $messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
+    	}
+    } else {
+	    $dest_hprim->type = "sip";
+	    $dest_hprim->loadMatchingObject();
+	    
+	    $domEvenement = new CHPrimXMLEvenementsPatients();
+	    $domEvenement->_emetteur = CAppUI::conf('mb_id');
+	    $domEvenement->_destinataire = $dest_hprim->destinataire;
+	    $messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
+	
+	    if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
+	      trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+	    }
+	    
+	    // Récupère le message d'acquittement après l'execution la methode evenementPatient
+	    if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
+	      trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
+	    }
+	
+	    $echange_hprim = new CEchangeHprim();
+	    $echange_hprim->load($domEvenement->_identifiant);
+	    $echange_hprim->date_echange = mbDateTime();
+	    $echange_hprim->acquittement = $acquittement;
+	    
+	    $echange_hprim->store();
     }
-    
-    // Récupère le message d'acquittement après l'execution la methode evenementPatient
-    if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
-    	trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
-    }
-
-    $echange_hprim = new CEchangeHprim();
-    $echange_hprim->load($domEvenement->_identifiant);
-    $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->acquittement = $acquittement;
-    
-    $echange_hprim->store();
   }
 
   function onMerge(CMbObject &$mbObject) {

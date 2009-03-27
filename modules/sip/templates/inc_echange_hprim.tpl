@@ -1,6 +1,6 @@
 <tr>
 	<td>
-	 {{if $object->initiateur_id}}
+	 {{if $object->_self_emetteur}}
 	   <img src="images/icons/prev.png" alt="&lt;" />
 	 {{else}}
 	   <img src="images/icons/next.png" alt="&gt;" />
@@ -18,7 +18,11 @@
 	    </button>
     {{/if}}
 	</td>
-	<td>{{mb_value object=$object field="date_production"}}</td>
+	<td>
+	  <label title='{{mb_value object=$object field="date_production"}}'>
+      {{mb_value object=$object field="date_production" format=relative}}
+    </label>
+	</td>
 	<td>
 	   {{if $object->_self_emetteur}}
 	   <label title='{{mb_value object=$object field="emetteur"}}' style="font-weight:bold">
@@ -52,7 +56,11 @@
         <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'initiateur')" type="button" style="float:right">Envoyer</button>
       {{/if}}
     {{/if}}
-	  <span>{{mb_value object=$object field="date_echange"}}</span>
+	  <span>
+	    <label title='{{mb_value object=$object field="date_echange"}}'>
+        {{mb_value object=$object field="date_echange" format=relative}}
+      </label>
+	  </span>
 	</td>
 	<td class="{{if ($object->date_echange && !$object->acquittement)}}error{{/if}}">
 	  {{if $object->acquittement}}Oui{{else}}Non{{/if}}

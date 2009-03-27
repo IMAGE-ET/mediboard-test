@@ -19,6 +19,8 @@ $dest_hprim = new CDestinataireHprim();
 $dest_hprim->destinataire = $echange_hprim->destinataire;
 $dest_hprim->loadMatchingObject();
 
+mbTrace($echange_hprim);
+/*
 if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
   trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
   $AppUI->setMsg("Impossible de joindre le destinataire", UI_MSG_ERROR);
@@ -45,7 +47,7 @@ if ($echange_hprim->initiateur_id) {
 $echange_hprim->date_echange = mbDateTime();
 $echange_hprim->acquittement = $acquittement;
 $echange_hprim->store();
-
+*/
 $AppUI->setMsg("Message HPRIM envoyé", UI_MSG_OK);
 
 echo $AppUI->getMsg();
