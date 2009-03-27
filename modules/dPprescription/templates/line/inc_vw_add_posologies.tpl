@@ -2,7 +2,6 @@
 
 Main.add( function(){
   prepareForm('addPrise{{$type}}{{$line->_id}}');
-  prepareForm('ChoixPrise-{{$line->_id}}');
 } );
 
 </script>
@@ -10,9 +9,9 @@ Main.add( function(){
 {{assign var=line_id value=$line->_id}}
 <div style="margin-top: 5px; margin-bottom: -14px;">
   <form name="ChoixPrise-{{$line->_id}}" action="" method="post" onsubmit="return false">
-	  <input name="typePrise" type="radio" value="moment{{$type}}"   onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_moment{{$type}}"> Moment</label>
-	  <input name="typePrise" type="radio" value="foisPar{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}"> x fois par y</label>
-	  <input name="typePrise" type="radio" value="tousLes{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}"> Tous les x y</label>
+	  <input name="typePrise" type="radio" value="moment{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" checked="checked" /><label for="typePrise_moment{{$type}}"> Moment</label>
+	  <input name="typePrise" type="radio" value="foisPar{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}"> x fois par y</label>
+	  <input name="typePrise" type="radio" value="tousLes{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}"> Tous les x y</label>
 	  {{if $line->_protocole}}
 	  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_decalage_intervention{{$type}}"> I + x heures</label>
 	  {{/if}}
@@ -83,6 +82,12 @@ Main.add( function(){
   {{/if}}
   
   <span id="moment_{{$type}}_{{$line->_id}}"></span>
-  
-  
 </form>
+
+<script type="text/javascript">
+  var oFormChoixPrise = document.forms['ChoixPrise-{{$line->_id}}']
+  prepareForm(oFormChoixPrise);
+  
+  // Affichage du type de posologie Moment par defaut
+  $('ChoixPrise-{{$line->_id}}_typePrise_moment{{$type}}').onclick();
+</script>
