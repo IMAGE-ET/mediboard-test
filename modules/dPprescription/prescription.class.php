@@ -885,7 +885,7 @@ class CPrescription extends CMbObject {
     // Parcours des lignes de TP
     if($this->_ref_object->_ref_prescription_traitement->_id){
       $prescription_tp =& $this->_ref_object->_ref_prescription_traitement;
-	    foreach($prescription_traitement->_ref_prescription_lines_by_cat as $cat_atc_tp => $_lines_med_tp){
+	    foreach($prescription_tp->_ref_prescription_lines_by_cat as $cat_atc_tp => $_lines_med_tp){
 	      foreach($_lines_med_tp as $_line_med_tp){
 	        $chapitre = $_line_med_tp->_is_injectable ? "inj" : "med";
 	        if($_line_med_tp->_recent_modification){

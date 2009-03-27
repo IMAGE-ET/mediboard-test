@@ -11,13 +11,39 @@ global $AppUI;
 
 $del = mbGetValueFromPost("del");
 $moment_unitaire_id = mbGetValueFromPost("moment_unitaire_id");
+$mode_checkbox = false;
+
+//Traitement specifique pour la gestion des checkBox
+$list_checkbox = array("matin", "midi", "soir");
+foreach($list_checkbox as $_checkbox){
+  if(isset($_POST[$_checkbox])){
+	  $moment_unitaire = new CMomentUnitaire();
+	  $moment_unitaire->libelle = "le $_checkbox";
+	  $moment_unitaire->loadMatchingObject();
+	  
+	  $prise_poso = new CPrisePosologie();
+	  $prise_poso->object_id = mbGetValueFromPost("object_id");
+	  $prise_poso->object_class = mbGetValueFromPost("object_class");
+	  $prise_poso->unite_prise = mbGetValueFromPost("unite_prise");
+	  $prise_poso->quantite = mbGetValueFromPost("quantite");
+	  $prise_poso->moment_unitaire_id = $moment_unitaire->_id;
+	  $msg = $prise_poso->store();
+	  $mode_checkbox = true;
+  }
+}
+
+if($mode_checkbox){
+  CApp::rip();
+}
+
+
 
 if($del || !$moment_unitaire_id){
 	$do = new CDoObjectAddEdit("CPrisePosologie", "prise_posologie_id");
 	$do->doIt();
 }
 
-$moment_unitaire_id = mbGetValueFromPost("moment_unitaire_id");
+
 $_moment_explode = explode("-",$moment_unitaire_id);
 
 // Si moment unitaire, on reprend un traitement normal

@@ -29,6 +29,8 @@ Main.add( function(){
   <input type="hidden" name="object_id" value="{{$line->_id}}" />
   <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 
+
+  
   {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPrise$type$line_id}}
   {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
   <select name="unite_prise" style="width: 75px;">
@@ -41,7 +43,22 @@ Main.add( function(){
     {{$line->_unite_prise}}
   {{/if}}
   
-  <select name="moment_unitaire_id" style="width: 150px;"></select>
+  <!-- Emplacement du formulaire de prises pour l'affichage dans le mode Tous Les -->
+  <span id="tous_les_{{$type}}_{{$line->_id}}"></span>
+  
+  <span id="moment{{$type}}{{$line->_id}}" style="display: none; clear: both;">
+    {{if $type != "mode_grille"}}
+	  <input type="checkbox" name="matin" /><label for="matin"> Matin</label>
+	  <input type="checkbox" name="midi" /><label for="midi"> Midi</label>
+	  <input type="checkbox" name="soir" /><label for="soir"> Soir</label>
+	  {{/if}}
+  </span>
+  
+  
+  
+	<select name="moment_unitaire_id" style="width: 75px;" onclick="completeSelect(this,'{{$line->_id}}','{{$type}}');">
+	  <option value="">&mdash; Moment</option>
+	</select>
   
   <span id="foisPar{{$type}}{{$line->_id}}" style="display: none;">
     {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 min=1 form=addPrise$type$line_id}} fois par 
@@ -52,7 +69,7 @@ Main.add( function(){
     <br />tous les
     {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 min=1 form=addPrise$type$line_id}}          
     {{mb_field object=$prise_posologie field=unite_tous_les}}
- (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPrise$type$line_id}})
+    (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPrise$type$line_id}})
   </span>
   
   {{if $line->_protocole}}
@@ -62,6 +79,10 @@ Main.add( function(){
   {{/if}}
   
   {{if $line->_id}}
-    <button type="button" class="add notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
+    <button type="button" class="add notext" onclick="this.form.onsubmit(); refreshCheckbox(this.form);">{{tr}}Save{{/tr}}</button>
   {{/if}}
+  
+  <span id="moment_{{$type}}_{{$line->_id}}"></span>
+  
+  
 </form>

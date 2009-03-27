@@ -96,7 +96,7 @@
         {{/if}}
       </div>
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})">
-        <strong>{{$line->_ucd_view}}</strong>
+        <strong style="font-size: 1.5em;">{{$line->_ucd_view}}</strong>
       </a>
     </th>
   </tr>

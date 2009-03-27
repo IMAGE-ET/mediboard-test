@@ -1,10 +1,32 @@
 <script type="text/javascript">
+
+completeSelect = function(oSelect, line_id, type_elt){
+  var selectMoments = (type_elt == "mode_grille") ? 
+                        window.opener.document.moment_unitaire.moment_unitaire_id :
+                        document.moment_unitaire.moment_unitaire_id;
+  
+  oFormPrise = document.forms['addPrise'+type_elt+line_id].show();          
+  if(oSelect.length == '1'){
+    oSelect.down().remove();
+    $A(selectMoments.childNodes).each(function (optgroup) {
+      oSelect.appendChild(optgroup.cloneNode(true));
+    } );
+  }
+}
+
+refreshCheckbox = function(oForm){
+  $V(oForm.matin, false);
+  $V(oForm.midi, false);
+  $V(oForm.soir, false);
+}
+
 // Affichage des div d'ajout de posologies
 selDivPoso = function(type, line_id, type_elt){
   if(!type){
     type = "foisPar"+type_elt;
   }
   
+  oDivMoment = $('moment'+type_elt+line_id);
   oDivFoisPar = $('foisPar'+type_elt+line_id);
   oDivTousLes = $('tousLes'+type_elt+line_id);
   oDivDecalageIntervention = $('decalage_intervention'+type_elt+line_id);
@@ -22,36 +44,52 @@ selDivPoso = function(type, line_id, type_elt){
     }
   });
   switch (type) {
-    case  "tousLes"+type_elt: 
+    case "tousLes"+type_elt: 
       oFormPrise.nb_tous_les.enable().show();
       oFormPrise.unite_tous_les.enable().show();
       oFormPrise.decalage_prise.enable().show();
+      oDivMoment.hide();
       oDivFoisPar.hide();
       oDivTousLes.show();
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.hide();
       }
-    case  "moment"+type_elt: 
-      if (oFormPrise.moment_unitaire_id.empty()) {
-        $A(selectMoments.childNodes).each(function (optgroup) {
-          oFormPrise.moment_unitaire_id.appendChild(optgroup.cloneNode(true));
-        } );
+      oFormPrise.moment_unitaire_id.setStyle( { float: null } );
+      $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
+      oFormPrise.moment_unitaire_id.onchange = null;
+      oFormPrise.moment_unitaire_id.enable().show();
+      break;
+      
+    case "moment"+type_elt: 
+      oDivMoment.show();
+      if(type_elt != "mode_grille"){
+        oFormPrise.matin.enable().show();
+        oFormPrise.midi.enable().show();
+        oFormPrise.soir.enable().show();
+        $("moment_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
+        //oFormPrise.moment_unitaire_id.setStyle( { 'float': 'right' } );
+      } else {
+        $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
+        oFormPrise.moment_unitaire_id.setStyle( { float: null } );
       }
       oFormPrise.moment_unitaire_id.enable().show();
+      oFormPrise.moment_unitaire_id.onchange = oFormPrise.onsubmit.bind(oFormPrise);
     break;
-    case  "foisPar"+type_elt: 
+    case "foisPar"+type_elt: 
       oFormPrise.nb_fois.enable().show();
       oFormPrise.unite_fois.enable().show();
       oDivFoisPar.show();
       oDivTousLes.hide();
+      oDivMoment.hide();
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.hide();
       }
     break;
-    case  "decalage_intervention"+type_elt: 
+    case "decalage_intervention"+type_elt: 
       oFormPrise.decalage_intervention.enable().show();
       oDivFoisPar.hide();
       oDivTousLes.hide();
+      oDivMoment.hide();
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.show();
       }

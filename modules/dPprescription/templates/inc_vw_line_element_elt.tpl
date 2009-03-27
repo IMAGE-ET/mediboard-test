@@ -37,7 +37,9 @@
 	      {{/if}}
 	    </div>
 	    <!-- View de l'element -->
-	    {{$line->_ref_element_prescription->_view}}
+	    <strong style="font-size: 1.5em;">
+	      {{$line->_ref_element_prescription->_view}}
+	    </strong>
 	  </th>
 	</tr>
   {{if $category->chapitre != "dmi"}}
