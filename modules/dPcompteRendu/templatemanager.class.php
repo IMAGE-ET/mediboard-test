@@ -62,11 +62,11 @@ class CTemplateManager {
   		$this->sections[$section] = array();
   	}
   	$this->sections[$section][$field] = array (
-  	  "view"      => $item,
+  	  "view"      => htmlentities($item),
       "field"     => $field,
       "value"     => $value,
       "fieldHTML" => htmlentities("[{$field}]"),
-      "valueHTML" => $value
+      "valueHTML" => htmlentities($value)
     );
   }
   
@@ -120,7 +120,7 @@ class CTemplateManager {
   
   function initHTMLArea () {
     // Don't use mbSetValue which uses $m
-    $_SESSION["dPcompteRendu"]["templateManager"] = $this;
+    $_SESSION["dPcompteRendu"]["templateManager"] = serialize($this);
    
     $smarty = new CSmartyDP("modules/dPcompteRendu");
     $smarty->assign("templateManager", $this);

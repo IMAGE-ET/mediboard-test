@@ -1,35 +1,11 @@
-<script type="text/javascript">
-
-/**
- * @TODO Nettoyer ces deux fonctions qui semblent ne pas être appelées
- * @TODO Vérifier également les http_req qui ne sont pas appelées non plus
- */
-
-function submitCR() {
-  return true;
-}
-
-function refreshCR() {
-  oForm = document.editFrm;
-  var listUrl = new Url;
-  listUrl.setModuleAction("dPcompteRendu", "httpreq_liste_choix_cr");
-  listUrl.addParam("compte_rendu_id", oForm.compte_rendu_id.value);
-  listUrl.requestUpdate('liste');
-
-  var sourceUrl = new Url;
-  sourceUrl.setModuleAction("dPcompteRendu", "httpreq_source_cr");
-  sourceUrl.addParam("compte_rendu_id", oForm.compte_rendu_id.value);
-  sourceUrl.requestUpdate('htmlarea');
-}
-
 {{if $compte_rendu->_id}}
+<script type="text/javascript">
 window.opener.Document.refreshList(
   '{{$compte_rendu->object_class}}',
 	'{{$compte_rendu->object_id}}'	
 );
-{{/if}}
-
 </script>
+{{/if}}
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 
@@ -99,7 +75,7 @@ window.opener.Document.refreshList(
         function toggleOptions() {
           $$("#liste select").each(function(select) {
             select.size = select.size != 4 ? 4 : 1;
-            select.multiple = select.multiple != true ? true : false;
+            select.multiple = !select.multiple;
             select.options[0].selected = false;
           } );
           $("multiple-info").toggle();

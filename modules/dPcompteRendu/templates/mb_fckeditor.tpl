@@ -53,10 +53,10 @@ aMbCombos.push(oMbCombo);
   aOptions.push({view: "<b>{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}</b>" ,item: ""});
 {{foreach from=$section item=property}}
   aOptions.push( {
-    view: '<span style="padding-left: 1em;">{{$property.view|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}' ,
+    view: '<span style="padding-left: 1em;">{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
     item: 
       {{if $templateManager->valueMode}}
-        "{{$property.value|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 
+        "{{$property.valueHTML|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 
       {{else}} 
         "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]" 
       {{/if}}
@@ -126,6 +126,5 @@ FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbheader', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbfooter', 'en,fr', sMbPluginsPath );
-FCKConfig.Debug = false;
 
 {{/if}}

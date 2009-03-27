@@ -162,6 +162,7 @@ $destinataires = array();
 if($isCourrier) {
   CDestinataire::makeAllFor($object);
   $destinataires = CDestinataire::$destByClass;
+	mbTrace($destinataires);
 }
 
 $templateManager->initHTMLArea();

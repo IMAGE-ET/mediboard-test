@@ -92,6 +92,15 @@ function loadCategory(value){
   }
 }
 
+function submitCompteRendu(){
+	(function(){
+		var form = getForm("editFrm");
+		if(checkForm(form) && window.userId) {
+			form.submit();
+	  }
+	}).defer();
+}
+
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
@@ -99,7 +108,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;">
 
 <table class="main">
   <tr>
