@@ -39,6 +39,7 @@ class CHprimSoapHandler extends CSoapHandler {
     $echange_hprim->date_production = mbDateTime();
     $echange_hprim->emetteur = $data['idClient'];
     $echange_hprim->destinataire = CAppUI::conf('mb_id');
+    $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
     $echange_hprim->type = "evenementsPatients";
     $echange_hprim->sous_type = "enregistrementPatient";
     $echange_hprim->message = $messagePatient;

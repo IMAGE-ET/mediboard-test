@@ -32,14 +32,21 @@ class CSetupsip extends CSetup {
                 `echange_hprim_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                 `date_production` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `emetteur` VARCHAR (255) NOT NULL,
+                `identifiant_emetteur` INT (11) UNSIGNED,
                 `destinataire` VARCHAR (255) NOT NULL,
                 `type` VARCHAR (255) NOT NULL,
                 `sous_type` VARCHAR (255),
                 `date_echange` DATETIME,
-                `message` mediumtext NOT NULL,
-                `acquittement` mediumtext NOT NULL,
+                `message` MEDIUMTEXT NOT NULL,
+                `acquittement` MEDIUMTEXT,
                 `initiateur_id` INT (11) UNSIGNED
               ) TYPE=MYISAM;";
+     $this->addQuery($sql);
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+							  ADD INDEX (`date_production`),
+							  ADD INDEX (`date_echange`),
+							  ADD INDEX (`initiateur_id`);";
      $this->addQuery($sql);
      
      $this->mod_version = "0.12";

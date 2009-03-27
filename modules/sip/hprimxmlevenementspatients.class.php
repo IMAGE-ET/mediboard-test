@@ -66,20 +66,20 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function generateEvenementsPatients($mbObject, $referent = null, $initiateur = null) {
-    $echange_hprim = new CEchangeHprim();
-    $this->_date_production = $echange_hprim->date_production = mbDateTime();
-    $echange_hprim->emetteur = $this->_emetteur;
-    $echange_hprim->destinataire = $this->_destinataire;
-    $echange_hprim->type = "evenementsPatients";
-    $echange_hprim->sous_type = "enregistrementPatient";
-    $echange_hprim->message = utf8_encode($this->saveXML());
+    $echg_hprim = new CEchangeHprim();
+    $this->_date_production = $echg_hprim->date_production = mbDateTime();
+    $echg_hprim->emetteur = $this->_emetteur;
+    $echg_hprim->destinataire = $this->_destinataire;
+    $echg_hprim->type = "evenementsPatients";
+    $echg_hprim->sous_type = "enregistrementPatient";
+    $echg_hprim->message = utf8_encode($this->saveXML());
     if ($initiateur) {
-      $echange_hprim->initiateur_id = $initiateur;
+      $echg_hprim->initiateur_id = $initiateur;
     }
     
-    $echange_hprim->store();
+    $echg_hprim->store();
     
-    $this->_identifiant = str_pad($echange_hprim->_id, 6, '0', STR_PAD_LEFT);
+    $this->_identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
             
     $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);
@@ -88,8 +88,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->saveTempFile();
     $messageEvtPatient = utf8_encode($this->saveXML()); 
     
-    $echange_hprim->message = $messageEvtPatient;
-    $echange_hprim->store();
+    $echg_hprim->message = $messageEvtPatient;
+    $echg_hprim->store();
     
     return $messageEvtPatient;
   }

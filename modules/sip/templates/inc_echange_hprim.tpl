@@ -14,6 +14,7 @@
 	</td>
 	<td>{{mb_value object=$object field="date_production"}}</td>
 	<td>{{mb_value object=$object field="emetteur"}}</td>
+	<td>{{mb_value object=$object field="identifiant_emetteur"}}</td>
 	<td>{{mb_value object=$object field="destinataire"}}</td>
 	<td>{{mb_value object=$object field="type"}}</td>
 	<td>{{mb_value object=$object field="sous_type"}}</td>
@@ -23,7 +24,9 @@
 	      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'notification')" type="button" style="float:right">Envoyer</button>
 	    {{/if}}
 	  {{else}}
-      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'initiateur')" type="button" style="float:right">Envoyer</button>
+	    {{if $dPconfig.mb_id == $object->emetteur}}
+        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'initiateur')" type="button" style="float:right">Envoyer</button>
+      {{/if}}
     {{/if}}
 	  <span>{{mb_value object=$object field="date_echange"}}</span>
 	</td>

@@ -14,7 +14,8 @@ $echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
 // Chargement de l'objet
 $echange_hprim = new $echange_hprim_classname;
 $echange_hprim->load($echange_hprim_id);
-
+mbTrace($echange_hprim, "echange", true);
+/*
 $dest_hprim = new CDestinataireHprim();
 $dest_hprim->destinataire = $echange_hprim->destinataire;
 $dest_hprim->loadMatchingObject();
@@ -42,7 +43,7 @@ if ($echange_hprim->initiateur_id) {
 $echange_hprim->date_echange = mbDateTime();
 $echange_hprim->acquittement = $acquittement;
 $echange_hprim->store();
-
+*/
 $AppUI->setMsg("Message HPRIM envoyé", UI_MSG_OK);
 
 echo $AppUI->getMsg();

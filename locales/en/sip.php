@@ -88,4 +88,10 @@ $locales['CSipObjectHandler'] = '';
 $locales['mod-sip-tab-vw_idx_dest_hprim'] = '';
 $locales['mod-sip-tab-vw_idx_echange_hprim'] = '';
 $locales['mod-sip-tab-vw_soapclient'] = '';
+$locales['CDestinataireHprim-username'] = '';
+$locales['CDestinataireHprim-username-court'] = '';
+$locales['CDestinataireHprim-username-desc'] = '';
+$locales['CDestinataireHprim.type.cip'] = '';
+$locales['CDestinataireHprim.type.sip'] = '';
+$locales['module-sip-long'] = '';
 ?>

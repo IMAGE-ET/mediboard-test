@@ -13,18 +13,16 @@ if (!class_exists("CMbXMLDocument")) {
   return;
 }
 
-global $filesDir;
-$filesDir = CAppUI::conf("root_dir") . "/files";
-
 class CHPrimXMLDocument extends CMbXMLDocument {
   var $finalpath = "files/hprim";
-  var $documentfinalprefix = null;
-  var $documentfinalfilename = null;
+  var $documentfinalprefix    = null;
+  var $documentfinalfilename  = null;
   var $sentFiles = array();
   
   var $_identifiant           = null;
   var $_date_production       = null;
   var $_emetteur              = null;
+  var $_identifiant_emetteur  = null;
   var $_destinataire          = null;
   var $_destinataire_libelle  = null;
    
@@ -249,24 +247,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "ville", $mbPatient->lieu_naissance);
     $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
-  }
-  
-  function saveMessageFile($emetteur, $filename, $data) {
-    global $filesDir;
-    
-    // Check global directory
-    if (!CMbPath::forceDir($filesDir)) {
-      trigger_error("Files directory '$filesDir' is not writable", E_USER_WARNING);
-      return false;
-    }
-    
-    // Checks complete file directory
-    $fileDirComp = $filesDir."/".$emetteur."/".date("Y")."/".date("M");
-    CMbPath::forceDir($fileDirComp);
-
-    // Moves temp file to specific directory
-    $file_path = "$fileDirComp/$filename";
-    return file_put_contents($file_path, $data);
   }
 }
 
