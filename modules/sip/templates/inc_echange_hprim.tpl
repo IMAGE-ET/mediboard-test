@@ -7,15 +7,39 @@
 	 {{/if}}
 	</td>
 	<td>
-	  {{if $object->initiateur_id}} Not : {{/if}}
 	  <button onclick="location.href='?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}'" class="search" type="button">
 	   {{$object->echange_hprim_id|str_pad:6:'0':STR_PAD_LEFT}}
 	  </button>
 	</td>
+	<td>
+	  {{if $object->initiateur_id}}
+		  <button onclick="location.href='?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}'" class="search" type="button">
+	     {{$object->initiateur_id|str_pad:6:'0':STR_PAD_LEFT}}
+	    </button>
+    {{/if}}
+	</td>
 	<td>{{mb_value object=$object field="date_production"}}</td>
-	<td>{{mb_value object=$object field="emetteur"}}</td>
-	<td>{{mb_value object=$object field="identifiant_emetteur"}}</td>
-	<td>{{mb_value object=$object field="destinataire"}}</td>
+	<td>
+	   {{if $object->_self_emetteur}}
+	   <label title='{{mb_value object=$object field="emetteur"}}' style="font-weight:bold">
+	     [SELF]
+	   </label>
+	   {{else}}
+	     {{mb_value object=$object field="emetteur"}}
+	   {{/if}}
+	   {{if $object->identifiant_emetteur}}
+	    : {{$object->identifiant_emetteur|str_pad:6:'0':STR_PAD_LEFT}}
+	   {{/if}}
+	</td>
+	<td>
+    {{if $object->_self_destinataire}}
+     <label title='{{mb_value object=$object field="destinataire"}}' style="font-weight:bold">
+       [SELF]
+     </label>
+     {{else}}
+       {{mb_value object=$object field="destinataire"}}
+     {{/if}}
+  </td>
 	<td>{{mb_value object=$object field="type"}}</td>
 	<td>{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">

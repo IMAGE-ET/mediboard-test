@@ -34,16 +34,18 @@ class CHprimSoapHandler extends CSoapHandler {
     $doc_valid = $domGetEvenement->schemaValidate();
     
     $data = $domGetEvenement->getEvenementPatientXML();
-    
     $echange_hprim = new CEchangeHprim();
+    $where["identifiant_emetteur"] = " = '".intval($data['identifiantMessage'])."'";
+    if (!$echange_hprim->loadObject($where)) {
+      $echange_hprim->emetteur = $data['idClient'];
+      $echange_hprim->destinataire = CAppUI::conf('mb_id');
+      $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
+      $echange_hprim->type = "evenementsPatients";
+      $echange_hprim->sous_type = "enregistrementPatient";
+      $echange_hprim->message = $messagePatient;
+    }    
     $echange_hprim->date_production = mbDateTime();
-    $echange_hprim->emetteur = $data['idClient'];
-    $echange_hprim->destinataire = CAppUI::conf('mb_id');
-    $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
-    $echange_hprim->type = "evenementsPatients";
-    $echange_hprim->sous_type = "enregistrementPatient";
-    $echange_hprim->message = $messagePatient;
-    $echange_hprim->store();    
+    $echange_hprim->store(); 
     
     $dest_hprim = new CDestinataireHprim();
     $dest_hprim->destinataire = $data['idClient'];

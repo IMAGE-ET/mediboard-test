@@ -28,6 +28,10 @@ class CEchangeHprim extends CMbObject {
   
   var $_ref_notifications   = null;
   
+  // Form fields
+  var $_self_emetteur             = null;
+  var $_self_destinataire         = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'echange_hprim';
@@ -47,6 +51,8 @@ class CEchangeHprim extends CMbObject {
     $specs["message"]               = "xml notNull";
     $specs["acquittement"]          = "xml";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
+    $specs["_self_emetteur"]        = "bool notNull";
+    $specs["_self_destinataire"]    = "bool notNull";
     return $specs;
   }
   
@@ -59,6 +65,14 @@ class CEchangeHprim extends CMbObject {
   
   function loadRefNotifications(){
     $this->_ref_notifications = $this->loadBackRefs("notifications");
+  }
+  
+  function updateFormFields() {
+  	parent::updateFormFields();
+  	
+  	$this->_self_emetteur = $this->emetteur == CAppUI::conf('mb_id');
+    $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
+    
   }
 
 }
