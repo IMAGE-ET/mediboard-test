@@ -28,14 +28,14 @@ unset($dbConfigs["ccam"]);
 </p>
 
 <form action="feed.php" name="feedBase" method="post">  
-
+<input type="hidden" name="do" value="true" />
 <table class="form">
   <tr>
     <th class="category">Construction de la base</th>
   </tr>
   <tr>
     <td class="button">
-      <button class="modify" type="submit" name="do">Construire la base</button>
+      <button class="modify" type="submit">Construire la base</button>
     </td>
   </tr>
 </table>
@@ -50,7 +50,7 @@ if (@$_POST["do"]) {
     $dbConfig["dbpass"], 
     $dbConfig["dbname"]);
   if ($dbConnection->connect()) {
-    $dbConnection->queryDump("mediboard.sql");
+    echo $dbConnection->queryDump("mediboard.sql");
   }
 ?>
 
