@@ -52,7 +52,7 @@ function checkForm(oForm) {
 </div>
 
 <form name="changePassword" action="finish.php" method="post" onsubmit="return checkForm(this)">
-
+<input type="hidden" name="changePassword" value="true" />
 <table class="form">
 
   <tr>
@@ -72,7 +72,7 @@ function checkForm(oForm) {
 
   <tr>
     <td class="button" colspan="2">
-      <button class="modify" type="submit" name="changePassword">Valider le mot de passe</button>
+      <button class="modify" type="submit">Valider le mot de passe</button>
     </td>
   </tr>
 
