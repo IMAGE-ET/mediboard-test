@@ -11,6 +11,7 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("view_metrique"       		, null, TAB_READ);
 $module->registerTab("view_logs"           		, null, TAB_READ);
+$module->registerTab("mnt_module_actions"  		, null, TAB_READ);
 $module->registerTab("mnt_table_classes"   		, null, TAB_READ);
 $module->registerTab("mnt_backref_classes" 		, null, TAB_READ);
 $module->registerTab("mnt_traduction_classes" , null, TAB_READ);

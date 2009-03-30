@@ -173,6 +173,12 @@ if ($module == "system") {
   }
 }
 
+// Ajout des onglets
+CAppUI::requireModuleFile($module, "index");
+foreach (CModule::getInstalled($module)->_tabs as $_tab) {
+  addLocale("Tabs", "tabs", "mod-$module-tab-" . $_tab[0]);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
