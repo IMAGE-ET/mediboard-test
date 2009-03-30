@@ -131,7 +131,7 @@ Main.add(function () {
           		         onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}");'>
         		       
         		         {{if @$new.$_prescription_id.$_date_hour}}
-          		         <img src="images/icons/new.png" />
+          		         <img src="images/icons/ampoule.png" />
           		       {{/if}}
           		      
           		      
@@ -171,7 +171,7 @@ Main.add(function () {
 		          		      	<tr>
 		          		      	  <td>
 		          		      	  {{if $_perfusion->_recent_modification}}
-		          		      	    <img src="images/icons/new.png" />
+		          		      	    <img src="images/icons/ampoule.png" />
 		          		      	  {{/if}}
 		          		      	   {{if $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00' == $_date_hour}}
 				          		      	 {{if $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00' == $_perfusion->_debut_adm|date_format:'%Y-%m-%d %H:00:00'}}
@@ -228,7 +228,7 @@ Main.add(function () {
 			          		              <img src="images/icons/tick.png" alt="" title="" />
 			          		            {{/if}}
 			          		            {{if array_key_exists('new', $_quantite)}}
-			          		              <img src="images/icons/new.png" alt="" title="" />
+			          		              <img src="images/icons/ampoule.png" alt="" title="" />
 			          		            {{/if}}
 			          		          </td>
 			          		          <td>

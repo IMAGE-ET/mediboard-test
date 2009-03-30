@@ -16,7 +16,7 @@
  		<div onclick='addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");' 
 	       class="mediuser {{if @$transmissions.CPerfusion.$perfusion_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    {{if $_perfusion->_recent_modification}}
-        <img style="float: right" src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+        <img style="float: right" src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
       {{/if}}
 	    <a href="#{{$_perfusion->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}')">
 	      {{$_perfusion->_view}} 

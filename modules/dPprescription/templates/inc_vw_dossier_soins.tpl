@@ -478,7 +478,7 @@ Main.add(function () {
 						      <li onclick="refreshDossierSoin(null, 'perf');">
 						        <a href="#_perf">Perfusions
 						          {{if $count_recent_modif.perf}}
-						            <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+						            <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 						          {{/if}} 
 						        </a>
 						      </li>
@@ -488,7 +488,7 @@ Main.add(function () {
 								<li onclick="refreshDossierSoin(null, 'inj');">
 								  <a href="#_inj">Injections
 						        {{if $count_recent_modif.inj}}
-						          <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+						          <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 						        {{/if}}
 						      </a></li>
 						    {{/if}}
@@ -497,7 +497,7 @@ Main.add(function () {
 						      <li onclick="refreshDossierSoin(null, 'med');">
 							      <a href="#_med">Médicaments 
 							        {{if $count_recent_modif.med}}
-							        <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+							        <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 							        {{/if}}
 							      </a>
 						      </li>
@@ -508,7 +508,7 @@ Main.add(function () {
 							    <li onclick="refreshDossierSoin(null, '{{$_chapitre}}');">
 							      <a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}
 							      	{{if $count_recent_modif.$_chapitre}}
-							        <img src="images/icons/new.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+							        <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 							        {{/if}}
 							      </a></li>
 							    {{/if}}
