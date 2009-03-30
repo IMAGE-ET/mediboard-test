@@ -17,10 +17,11 @@ window.children = {};
 
 var Url = Class.create({
   // Constructor
-  initialize: function() {
+  initialize: function(sModule, sAction) {
     this.oParams = {};
     this.oWindow = null,
   	this.oPrefixed = {};
+  	this.setModuleAction(sModule, sAction);
   },
   
   setModuleAction: function(sModule, sAction) {
