@@ -49,13 +49,17 @@ Main.add( function(){
 
 <table class="form">
   <tr>
-    <th class="category">Nouvelle ligne</th>
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
+      <th class="category">Nouvelle ligne</th>
+    {{/if}}
     <th class="category">Actions</th>
   </tr>
   <tr>
-    <td>
-      {{include file="inc_vw_form_addLine.tpl"}}
-    </td>
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
+	    <td>
+	      {{include file="inc_vw_form_addLine.tpl"}}
+	    </td>
+    {{/if}}
     <td>
 		  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}}, {{if $readonly}}false{{else}}{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}{{/if}},'');");">

@@ -97,6 +97,9 @@ $prescription_id = mbGetValueFromPost("prescription_id");
 $prescription_reelle_id = mbGetValueFromPost("prescription_reelle_id");
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 $chapitre = mbGetValueFromPost("chapitre", "medicament");
+$annulation = mbGetValueFromGet("annulation", "0");
+$search_value = $annulation ? 1 : 0;
+$new_value = $annulation ? 0 : 1;
 
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
@@ -173,7 +176,7 @@ if($prescription_id && ($chapitre == "medicament" || $chapitre == "all")){
 		if($mode_pharma){
 	  	$_line_traitement->valide_pharma = 1;		
 		} else {
-		  $_line_traitement->signee = 1;
+		  $_line_traitement->signee = $search_value;
 		}
 		$msg = $_line_traitement->store();
 	  $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
@@ -203,14 +206,14 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
 	$prescriptionLineMedicament = new CPrescriptionLineMedicament();
 	$prescriptionLineMedicament->prescription_id = $prescription_id;
   $prescriptionLineMedicament->praticien_id = $praticien_id;
-	$prescriptionLineMedicament->signee = "0";
+	$prescriptionLineMedicament->signee = $search_value;
 	$medicaments = $prescriptionLineMedicament->loadMatchingList();
 
 	// Chargement des perfusions
   $perfusion = new CPerfusion();
   $perfusion->prescription_id = $prescription_id;
   $perfusion->praticien_id = $praticien_id;
-  $perfusion->signature_prat = "0";
+  $perfusion->signature_prat = $search_value;
   $perfusions = $perfusion->loadMatchingList();
 
   $prescriptionLineComment = new CPrescriptionLineComment();
@@ -218,7 +221,7 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
   $where["prescription_id"] = " = '$prescription_id'";
   $where["praticien_id"] = " = '$praticien_id'";
   $where["category_prescription_id"] = "IS NULL";
-  $where["signee"] = " = '0'";
+  $where["signee"] = " = '$search_value'";
   $where["child_id"] = "IS NULL";
   $comments = $prescriptionLineComment->loadList($where);
 	
@@ -239,7 +242,7 @@ if($prescription_id && ($chapitre!="medicament" || $chapitre == "all") && !$mode
 	$where = array();
 	$where["prescription_id"] = " = '$prescription_id'";
 	$where["praticien_id"] = " = '$praticien_id'";
-	$where["signee"] = " = '0'";
+	$where["signee"] = " = '$search_value'";
 	$where["child_id"] = "IS NULL";
 	if($chapitre != "all"){
 	  $where["category_prescription.chapitre"] = " = '$chapitre'";
@@ -256,7 +259,7 @@ foreach($medicaments as $key => $lineMedicament){
 	if($mode_pharma){
 		$lineMedicament->valide_pharma = 1;
 	} else {
-	  $lineMedicament->signee = 1;
+	  $lineMedicament->signee = $new_value;
 	}
 	$msg = $lineMedicament->store();
 	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
@@ -267,7 +270,7 @@ foreach($perfusions as &$_perfusion){
   if($mode_pharma){
     $_perfusion->signature_pharma = 1;
   } else {
-    $_perfusion->signature_prat = 1;
+    $_perfusion->signature_prat = $new_value;
   }
   $msg = $_perfusion->store();
   $AppUI->displayMsg($msg, "CPerfusion-msg-store");
@@ -276,7 +279,7 @@ foreach($perfusions as &$_perfusion){
 // Parcours des medicaments et passage de valide à 1
 if(!$mode_pharma){
 	foreach($elements as $key => $lineElement){
-		$lineElement->signee = 1;
+		$lineElement->signee = $new_value;
 		$msg = $lineElement->store();
 		$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-modify");	
 	}
@@ -285,7 +288,7 @@ if(!$mode_pharma){
 // Parcours des medicaments et passage de valide à 1
 if(!$mode_pharma){
 	foreach($comments as $key => $lineComment){
-		$lineComment->signee = 1;
+		$lineComment->signee = $new_value;
 		$msg = $lineComment->store();
 		$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-modify");	
 	}

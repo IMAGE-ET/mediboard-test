@@ -12,6 +12,7 @@
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="prescription_id" value="{{$prescription_id}}" />
               <input type="hidden" name="chapitre" value="all" />
+              <input type="hidden" name="annulation" value="{{$annulation}}" />
               <input type="hidden" name="del" value="0" />
               <table>
                 <tr>
@@ -38,7 +39,11 @@
 	              </tr>
 	              <tr>
 	                <td colspan="2" style="text-align: center;">
-	                  <button type="button" class="submit" onclick="this.form.submit();">Signer toutes les lignes</button>
+	                  {{if $annulation}}
+	                    <button type="button" class="cancel" onclick="this.form.submit();">Annuler les signatures</button>
+	                  {{else}}
+	                    <button type="button" class="submit" onclick="this.form.submit();">Signer toutes les lignes</button>
+	                  {{/if}}
 	                </td>
 	              </tr>
 	            </table>

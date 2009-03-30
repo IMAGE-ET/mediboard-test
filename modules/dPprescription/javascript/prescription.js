@@ -403,10 +403,11 @@ var Prescription = {
     url.addParam("mode_pack", mode_pack);
     url.popup(800,400, "Lignes de substitution");
   },
-  valideAllLines: function(prescription_id){
+  valideAllLines: function(prescription_id, annulation){
     var url = new Url;
     url.setModuleAction("dPprescription", "vw_signature_prescription");
     url.addParam("prescription_id", prescription_id);
+    url.addParam("annulation", annulation);
     url.popup(400,400,"Signatures des lignes de prescription");
   }
 };

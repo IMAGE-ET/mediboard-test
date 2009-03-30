@@ -1,18 +1,3 @@
-<script type="text/javascript">
-Main.add( function(){
-	var oFormAddLineCont = document.forms['addLineCont-{{$line->_id}}'];
-	var oFormStopLine = document.forms['form-stop-{{$line->_class_name}}-{{$line->_id}}'];
-	
-	{{if $line->signee}}
-	  if(oFormAddLineCont) oFormAddLineCont.show();
-	  if(oFormStopLine)    oFormStopLine.show();
-	{{else}}
-	  if(oFormAddLineCont) oFormAddLineCont.hide();
-	  if(oFormStopLine)    oFormStopLine.hide();
-	{{/if}}
-} );
-</script>
-
 {{if $line->_class_name == "CPrescriptionLineElement" || $line->_class_name == "CPrescriptionLineComment"}}
   <!-- Signature d'un element -->
   <form name="validation-{{$line->_class_name}}-{{$line->_id}}" action="" method="post">

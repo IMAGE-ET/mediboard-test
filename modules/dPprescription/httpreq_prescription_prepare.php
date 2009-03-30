@@ -59,12 +59,11 @@ if($posologie->code_moment && $code_cip && $no_poso){
 		$prise_posologie->object_class = "CPrescriptionLineMedicament";
 		$prise_posologie->quantite = $posologie->quantite1;
 		
-		
 		// Cas: x fois par y
 		if($posologie->code_moment == 0 && $posologie->tous_les <= 1){
+		  $prise_posologie->nb_fois = $posologie->quantite1;        
 		  if(!$prise_posologie->nb_fois && $posologie->_code_duree1 == "jour" && $posologie->quantite1 <= 6){
 		    // Traitement specifique pour les moments de type 4 gelules 1 fois par jour => 1 gelule 4 fois par jour
-        $prise_posologie->nb_fois = $posologie->quantite1;
         $prise_posologie->unite_fois = $posologie->_code_duree1;
         $prise_posologie->quantite = 1;
 		  } else {

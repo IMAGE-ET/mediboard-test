@@ -124,7 +124,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   // Can fields
   var $_can_select_equivalent              = null;
   var $_can_view_form_ald                  = null;
-  var $_can_view_form_conditionnel = null;
+  var $_can_view_form_conditionnel         = null;
   var $_can_vw_form_traitement             = null;
   var $_can_view_signature_praticien       = null;
   var $_can_view_form_signature_praticien  = null;
@@ -142,8 +142,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_unite_administration               = null;
   var $_unite_dispensation                 = null;
   var $_ratio_administration_dispensation  = null;
-  var $_quantite_administration = null;
-  var $_quantite_dispensation = null;
+  var $_quantite_administration            = null;
+  var $_quantite_dispensation              = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -229,7 +229,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Calcul des droits
    */
-  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {
+  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
   	
   	/*
   	 * Une infirmiere peut remplir entierement une ligne si elle l'a créée.
@@ -237,14 +237,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	 */
   	
 		global $AppUI, $can;
-		
-		$perm_infirmiere = $this->creator_id == $AppUI->user_id && 
-                       !$this->signee && 
-                       !$this->valide_infirmiere && 
-                       !$this->valide_pharma;
-    
-		
- 
+	
     // Cas d'une ligne de protocole  
     if($this->_protocole){
       $protocole =& $this->_ref_prescription;
@@ -261,7 +254,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     } else {
       $perm_edit = ($can->admin && !$mode_pharma) || ((!$this->signee || $mode_pharma) && 
                    !$this->valide_pharma && 
-                   ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma));
+                   ($this->praticien_id == $AppUI->user_id || $is_praticien || $mode_pharma || $operation_id));
     }
     
     $this->_perm_edit = $perm_edit;
@@ -315,10 +308,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     // Modification de la posologie
     if($perm_edit){
     	$this->_can_modify_poso = 1;
-    	// On ne peut modifier une ligne de traitement personnel seulement en pre_admission
-      if($this->_traitement && ($prescription_type !== "pre_admission")){
-      	$this->_can_modify_poso = 0;
-      }
     }
     // Suppression de la ligne
     if ($perm_edit || $this->_protocole){

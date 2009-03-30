@@ -82,11 +82,10 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   /*
    * Calcul des droits
    */
-  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {
+  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
 		global $AppUI, $can;
-		
-	  $perm_infirmiere = $this->creator_id == $AppUI->user_id;                
-		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien));             
+		               
+		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id));             
                  
     // Executant
     if($perm_edit){

@@ -8,7 +8,7 @@
 */
 
 $prescription_id = mbGetValueFromGet("prescription_id");
-
+$annulation = mbGetValueFromGet("annulation", "0");
 // Chargement des praticiens
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
@@ -17,6 +17,7 @@ $praticiens = $praticien->loadPraticiens();
 $smarty = new CSmartyDP();
 $smarty->assign("praticiens"    , $praticiens);
 $smarty->assign("prescription_id", $prescription_id);
+$smarty->assign("annulation", $annulation);
 $smarty->display("vw_signature_prescription.tpl");
 
 ?>

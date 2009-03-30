@@ -144,10 +144,13 @@ Main.add( function(){
   </tr>
   {{/if}}
   <tr>
-    <th class="category">Nouvelle ligne</th>
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma)}}  
+      <th class="category">Nouvelle ligne</th>
+    {{/if}}
     <th class="category" style="width: 1%;">Actions</th>
   </tr>
   <tr>
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma)}} 
     <td>
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
@@ -210,6 +213,7 @@ Main.add( function(){
 			    </form>
 			 </div> 
     </td>
+    {{/if}}
     <td style="text-align: center;">
 			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements || $prescription->_ref_perfusions)}}
 			  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" 

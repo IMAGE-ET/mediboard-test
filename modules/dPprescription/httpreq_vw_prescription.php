@@ -27,6 +27,12 @@ $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 
+// Recuperation de l'operation_id stocké en session en salle d'op
+if(!$operation_id){
+  $operation_id = @$_SESSION["dPsalleOp"]["operation_id"];
+  mbSetValueToSession("operation_id", $operation_id);
+}
+
 // Gestion du mode d'affichage
 $readonly        = mbGetValueFromGetOrSession("readonly", 1);
 $lite            = mbGetValueFromGetOrSession("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
@@ -126,7 +132,7 @@ if($prescription->_id){
   
 	foreach($prescription->_ref_perfusions as $_perfusion){
     $_perfusion->loadRefsLines();
-	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma);
+	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 	  $_perfusion->loadRefPraticien();
 	  $_perfusion->_ref_praticien->loadRefFunction();
 	  $_perfusion->loadRefParentLine();
@@ -157,7 +163,7 @@ if($prescription->_id){
 	  	foreach($cat_by_chap as $name_cat => $lines_by_cat){
 	  		foreach($lines_by_cat as $type_elt => $lines_by_type){
 	  			foreach($lines_by_type as $key => $_line){
-	  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+	  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
 	  			  $_line->loadRefsPrises();
 	  			}
 	  		}
@@ -175,7 +181,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 			$prescription->loadRefsLinesMedComments();
 		  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
 		  	foreach($lines_by_type as $med_id => $_line_med){
-			    $_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+			    $_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
 			    $_line_med->loadRefParentLine();
 		  	}
 		  }
@@ -191,7 +197,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 				 if($prescription_traitement->_id){
 					$prescription_traitement->loadRefsLinesMed();
 					foreach($prescription_traitement->_ref_prescription_lines as &$line){
-						$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+						$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
 					  $line->loadRefsPrises();
 					  $line->loadRefParentLine();
 				  }
@@ -362,37 +368,6 @@ if($mode_protocole){
   $groups = CGroups::loadGroups(PERM_EDIT);
 }
 
-
-if($full_mode && $prescription->_id){
-  // Chargement des protocoles du praticiens
-  $protocole = new CPrescription();
-  $where = array();
-  $where["praticien_id"] = " = '$prescription->_current_praticien_id'";
-  $where["object_id"] = "IS NULL";
-  $where["object_class"] = " = '$prescription->object_class'";
-  $protocoles_praticien = $protocole->loadList($where);
-  
-  // Chargement des packs du praticien
-  $pack_praticien = new CPrescriptionProtocolePack();
-  $pack_praticien->praticien_id = $prescription->_current_praticien_id;
-  $pack_praticien->object_class = $prescription->object_class;
-  $packs_praticien = $pack_praticien->loadMatchingList();
-  
-  // Chargement des protocoles de la fonction
-  $function_id = $prescription->_ref_current_praticien->function_id;
-  $where = array();
-  $where["function_id"] = " = '$function_id'";
-  $where["object_id"] = "IS NULL";
-  $where["object_class"] = " = '$prescription->object_class'";
-  $protocoles_function = $protocole->loadList($where);
-  
-  // Chargement des packs de la fonction
-  $pack_function = new CPrescriptionProtocolePack(); 
-  $pack_function->function_id = $prescription->_ref_current_praticien->function_id;
-  $pack_function->object_class = $prescription->object_class;
-  $packs_function = $pack_function->loadMatchingList();
-}
-
 $protocole_line = new CPrescriptionLineMedicament();
 $protocole_line->debut = mbDate();
 
@@ -437,6 +412,29 @@ if($prescription->_id){
   }
 }
 
+
+$_sejour = new CSejour();
+$_sejour->load($sejour_id);
+
+$operation = new COperation();
+if($operation->load($operation_id)) {
+ $operation->loadRefPlageOp();
+ $operation->_ref_anesth->loadRefFunction();
+}
+
+$_chir_id   = $chir_id   ? $chir_id : ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id);
+$_anesth_id = $anesth_id ? $anesth_id : ($AppUI->_ref_user->isFromType(array("Anesthésiste")) ? 
+                                            $AppUI->user_id : 
+                                            ($operation->_id ? $operation->_ref_plageop->anesth_id : null));
+                                            
+
+if($_chir_id){
+  unset($listPrats[$_chir_id]);
+}
+if($_anesth_id){
+  unset($listPrats[$_anesth_id]);
+}
+                                            
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -485,28 +483,13 @@ $smarty->assign("mode_pack", "0");
 $smarty->assign("readonly",            $readonly && $prescription->object_id);
 $smarty->assign("lite", $lite);
 $smarty->assign("perfusion", new CPerfusion());
+$smarty->assign("operation_id", $operation_id);
+  
 if($full_mode){
-  $_sejour = new CSejour();
-  $_sejour->load($sejour_id);
-  
-  $_operation = new COperation();
-  if($_operation->load($operation_id)) {
-	  $_operation->loadRefPlageOp();
-  }
-  
-  $_chir_id   = $chir_id   ? $chir_id : ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id);
-  $_anesth_id = $anesth_id ? $anesth_id : ($AppUI->_ref_user->isFromType(array("Anesthésiste")) ? 
-                                              $AppUI->user_id : 
-                                              ($_operation->_id ? $_operation->_ref_plageop->anesth_id : null));
-  
-  $smarty->assign("protocoles_praticien", $protocoles_praticien);
-  $smarty->assign("protocoles_function" , $protocoles_function);
-  $smarty->assign("packs_praticien"     , $packs_praticien);
-  $smarty->assign("packs_function"      , $packs_function);
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
   $smarty->assign("chir_id", $_chir_id);
   $smarty->assign("anesth_id", $_anesth_id);
-  $smarty->assign("operation_id", $operation_id);
+  $smarty->assign("operation", $operation);
   $smarty->display("vw_edit_prescription_popup.tpl");
   return;
 }

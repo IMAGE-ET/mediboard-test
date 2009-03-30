@@ -142,6 +142,7 @@
 	    {{/if}}
       <form name="commentaire-{{$line->_guid}}">
 	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
+	        {{if $line->_perm_edit}}
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
 		        <option value="">&mdash; Choisir une aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineElement}}
@@ -150,6 +151,7 @@
 		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineElement', this.form._hidden_commentaire, 'commentaire');">
 		        Nouveau
 		      </button>
+		      {{/if}}
 	    </form>
 	    
       <!-- Formulaire de modification de l'emplacement -->
@@ -160,7 +162,7 @@
   <tr>
   <td></td>
     <td>
-     {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole}}
+     {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole && $line->signee && ($is_praticien || @$operation_id || $can->admin)}}
         <div id="stop-CPrescriptionLineElement-{{$line->_id}}"> 
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
         </div>

@@ -15,13 +15,15 @@ Main.add( function(){
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       <div style="float: left">
-        {{if $prescription->type != "externe"}}
+        {{if $prescription->type != "externe" && $_perfusion->_perm_edit}}
 	        <form name="editEmplacement" method="post" action="?">
 	          <input type="hidden" name="m" value="dPprescription" />
 	          <input type="hidden" name="dosql" value="do_perfusion_aed" />
 	          <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
 	          {{mb_field object=$_perfusion field=emplacement onchange="submitFormAjax(this.form, 'systemMsg');"}}
 	        </form>
+	      {{else}}
+	        {{mb_value object=$_perfusion field=emplacement}}
 	      {{/if}}
         {{if $_perfusion->_ref_parent_line->_id}}
 	        {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
@@ -135,31 +137,32 @@ Main.add( function(){
 				    <td style="border:none;">
 	            <strong>{{mb_value object=$_perfusion field="voie"}}</strong>
             </td>
-           
 				    <td style="border:none;">
-				      <!-- Modification de la ligne -->
-				      {{if $_perfusion->_can_vw_form_add_perf_contigue}}
-				        <button type="button" class="new" onclick="$V(this.form._add_perf_contigue, '1');
-				                                                      return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
-				          } } );">Faire évoluer</button>
-				        <input type="hidden" name="_add_perf_contigue" value="" />
-				      {{/if}}
-							<input type="hidden" name="date_arret" value="{{$_perfusion->date_arret}}" />
-							<input type="hidden" name="time_arret" value="{{$_perfusion->time_arret}}" />
-						  <!-- Arret de ligne -->
-				      {{if $_perfusion->_can_vw_form_stop_perf}}
-				        {{if $_perfusion->date_arret}}
-				          <button type="button" class="cancel" onclick="this.form.date_arret.value=''; this.form.time_arret.value=''; return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
-				          } } );">Annuler l'arrêt</button>
-				          <br />
-				          {{mb_value object=$_perfusion field=date_arret}} à {{mb_value object=$_perfusion field=time_arret}}
-				        {{else}}
-				          <button type="button" class="stop" onclick="this.form.date_arret.value='current';this.form.time_arret.value='current'; return onSubmitFormAjax(this.form, { onComplete: function(){ 
-				            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
-				          } } );">Arrêter</button>
-				        {{/if}}
+				      {{if !$_perfusion->_protocole && $_perfusion->signature_prat && ($is_praticien || @$operation_id || $can->admin)}}
+					      <!-- Modification de la ligne -->
+					      {{if $_perfusion->_can_vw_form_add_perf_contigue}}
+					        <button type="button" class="new" onclick="$V(this.form._add_perf_contigue, '1');
+					                                                      return onSubmitFormAjax(this.form, { onComplete: function(){ 
+					            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+					          } } );">Faire évoluer</button>
+					        <input type="hidden" name="_add_perf_contigue" value="" />
+					      {{/if}}
+								<input type="hidden" name="date_arret" value="{{$_perfusion->date_arret}}" />
+								<input type="hidden" name="time_arret" value="{{$_perfusion->time_arret}}" />
+							  <!-- Arret de ligne -->
+					      {{if $_perfusion->_can_vw_form_stop_perf}}
+					        {{if $_perfusion->date_arret}}
+					          <button type="button" class="cancel" onclick="this.form.date_arret.value=''; this.form.time_arret.value=''; return onSubmitFormAjax(this.form, { onComplete: function(){ 
+					            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+					          } } );">Annuler l'arrêt</button>
+					          <br />
+					          {{mb_value object=$_perfusion field=date_arret}} à {{mb_value object=$_perfusion field=time_arret}}
+					        {{else}}
+					          <button type="button" class="stop" onclick="this.form.date_arret.value='current';this.form.time_arret.value='current'; return onSubmitFormAjax(this.form, { onComplete: function(){ 
+					            Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+					          } } );">Arrêter</button>
+					        {{/if}}
+					      {{/if}}
 				      {{/if}}
 				    </td>   
 					</tr>

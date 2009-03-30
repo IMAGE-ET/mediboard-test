@@ -101,7 +101,7 @@
     </th>
   </tr>
   
-  {{if $line->_is_perfusable && !$line->_traitement && !$line->substitute_for}}
+  {{if $line->_is_perfusable && !$line->_traitement && !$line->substitute_for && $line->_perm_edit}}
 	  <tr>
 	    <td />
 	    <td>
@@ -267,6 +267,7 @@
 		      {{else}}
 		        {{assign var=_line_praticien_id value=$line->praticien_id}}
 		      {{/if}}
+		      {{if $line->_perm_edit}}
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
 		        <option value="">&mdash; Choisir une aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMedicament}}
@@ -275,6 +276,7 @@
 		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineMedicament', this.form._hidden_commentaire, 'commentaire');">
 		        Nouveau
 		      </button>
+		      {{/if}}
 	    </form>
   		
   		 <!-- Si seulement 1 voie possible ou affichage bloqué-->
@@ -309,9 +311,7 @@
   		{{/if}}
  	  </td>
   </tr>
- 
-    		
-  {{if $prescription->type != "sortie" && !$line->_protocole}}
+  {{if ($prescription->type != "sortie") && !$line->_protocole && $line->signee && ($is_praticien || @$operation_id || $can->admin)}}
   <tr>
   <td></td>
     <td style="text-align:center;">

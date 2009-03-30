@@ -176,16 +176,10 @@ class CPerfusion extends CMbObject {
     return $backProps;
   }
   
-  function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0) {
+  function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
 		global $AppUI, $can;
-		
-		$perm_infirmiere = $this->creator_id == $AppUI->user_id && 
-                       !$this->signature_prat && 
-                       !$this->validation_infir && 
-                       !$this->signature_pharma;
-    
+
     // Cas d'une ligne de protocole  
-   
     if($this->_protocole){
       $protocole =& $this->_ref_prescription;
       if($protocole->praticien_id){
@@ -201,7 +195,7 @@ class CPerfusion extends CMbObject {
     } else {
       $perm_edit = ($can->admin && !$mode_pharma) || ((!$this->signature_prat || $mode_pharma) && 
                    !$this->signature_pharma && 
-                   ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma));
+                   ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id || $mode_pharma));
     }
     $this->_perm_edit = $perm_edit;
     
@@ -209,6 +203,10 @@ class CPerfusion extends CMbObject {
     if($perm_edit){
     	$this->_can_modify_perfusion = 1;
     	$this->_can_modify_perfusion_line = 1;
+    }
+    if($this->signature_prat){
+      $this->_can_vw_form_add_perf_contigue = 1;
+  		$this->_can_vw_form_stop_perf = 1;
     }
     // Affichage du formulaire de signature pharmacien
     if($mode_pharma){
@@ -230,11 +228,6 @@ class CPerfusion extends CMbObject {
     if ($perm_edit || $this->_protocole){
       $this->_can_delete_perfusion = 1;
       $this->_can_delete_perfusion_line = 1;
-  	}
-  	// Affichage du bouton "Modifier une ligne"
-  	if(!$this->_protocole){
-  		$this->_can_vw_form_add_perf_contigue = 1;
-  		$this->_can_vw_form_stop_perf = 1;
   	}
 	}
   

@@ -1,19 +1,31 @@
 <script type="text/javascript">
 
+// refresh de la liste des protocoles dans le cas des protocoles
 refreshListProtocole = function(oForm){
   var oFormFilter = document.selPrat;
   oFormFilter.praticien_id.value = oForm.praticien_id.value;
   oFormFilter.function_id.value = oForm.function_id.value;
   oFormFilter.group_id.value = oForm.group_id.value;
-  
   if(oFormFilter.praticien_id.value || oFormFilter.function_id.value || oFormFilter.group_id.value){
 	  submitFormAjax(oForm, 'systemMsg', { 
-	        onComplete : function() { 
-	           Protocole.refreshList(oForm.prescription_id.value) 
-	        } 
+	    onComplete : function() { 
+	       Protocole.refreshList(oForm.prescription_id.value) 
+	    } 
 	  });
   }
 }
+
+// refresh du select de protocole en fonction du praticien selectionne
+refreshSelectProtocoles = function(praticien_id, prescription_id){
+	if($('select_protocole')){
+	  var url = new Url;
+	  url.setModuleAction("dPprescription", "httpreq_vw_select_protocole");
+	  url.addParam("praticien_id", praticien_id);
+	  url.addParam("prescription_id", prescription_id);
+	  url.requestUpdate("select_protocole", { waitingText: null } );
+	}
+}
+
 
 changePraticien = function(praticien_id){
   var oFormAddLine = document.addLine;
@@ -31,6 +43,7 @@ Main.add( function(){
 	  changePraticien(document.selPraticienLine.praticien_id.value);
   }
   initPuces();
+  refreshSelectProtocoles('{{$prescription->_ref_current_praticien->_id}}', '{{$prescription->_id}}');
 } );
 
 submitProtocole = function(){
@@ -82,16 +95,27 @@ popupTransmission = function(sejour_id){
 
       <!-- Selection du praticien prescripteur de la ligne -->
        <div style="float: right">
-        {{if !$is_praticien && !$mode_protocole}}     
+        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma)}}  
+        Praticien:    
 				<form name="selPraticienLine" action="?" method="get">
-				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
-				    {{foreach from=$listPrats item=_praticien}}
-					    <option class="mediuser" 
-					            style="border-color: #{{$_praticien->_ref_function->color}};" 
-					            value="{{$_praticien->_id}}"
-					            {{if $_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
-					    </option>
-				    {{/foreach}}
+				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} refreshSelectProtocoles(this.value, '{{$prescription->_id}}')">
+						<optgroup label="Responsables">
+				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
+						          value="{{$prescription->_ref_current_praticien->_id}}">{{$prescription->_ref_current_praticien->_view}}</option>
+				      {{if $operation->_ref_anesth->_id}}
+				        <option  class="mediuser" style="border-color: #{{$operation->_ref_anesth->_ref_function->color}};" 
+				                 value="{{$operation->_ref_anesth->_id}}">{{$operation->_ref_anesth->_view}}</option>
+				      {{/if}}
+				    </optgroup>
+				    <optgroup label="Tous les praticiens">
+				      {{foreach from=$listPrats item=_praticien}}
+                <option class="mediuser" 
+						            style="border-color: #{{$_praticien->_ref_function->color}};" 
+						            value="{{$_praticien->_id}}"
+						            {{if $_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
+						    </option>
+              {{/foreach}}
+				    </optgroup>
 				  </select>
 				</form>
 				{{/if}}
@@ -182,52 +206,30 @@ popupTransmission = function(sejour_id){
   </tr>
   
   <tr>
-    {{if !$mode_protocole && !$mode_pharma}}
-    <th class="category">Protocoles</th>
+    {{if !$mode_protocole && !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+        <th class="category">Protocoles</th>
     {{/if}}
-    
-    {{if !$mode_protocole}}
+    {{if !$mode_protocole && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
       <th class="category">Date d'ajout de lignes</th>
     {{/if}}
     <th class="category">Outils</th>
   </tr>
   <tr>
-  {{if !$mode_protocole && !$mode_pharma}}
+  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
    <td class="date" style="text-align: right;">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
 	      <table class="form">
 	        <tr>
 		        <td>
-			        Protocoles de {{$prescription->_ref_current_praticien->_view}}
 			        <input type="hidden" name="m" value="dPprescription" />
 			        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
 			        <input type="hidden" name="del" value="0" />
 			        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			        <select name="pack_protocole_id" style="width: 100px;">
-			          <option value="">&mdash; Sélection</option>
-			          {{if $protocoles_praticien|@count || $packs_praticien|@count}}
-				          <optgroup label="Praticien">
-					          {{foreach from=$protocoles_praticien item=_protocole_praticien}}
-					          <option value="prot-{{$_protocole_praticien->_id}}">{{$_protocole_praticien->_view}}</option>
-					          {{/foreach}}
-						        {{foreach from=$packs_praticien item=_pack_praticien}}
-						        <option value="pack-{{$_pack_praticien->_id}}" style="font-weight: bold">{{$_pack_praticien->_view}}</option>
-						        {{/foreach}}
-				          </optgroup>
-			          {{/if}}
-			          {{if $protocoles_function|@count || $packs_function|@count}}
-			            <optgroup label="Cabinet">
-			              {{foreach from=$protocoles_function item=_protocole_function}}
-			              <option value="prot-{{$_protocole_function->_id}}">{{$_protocole_function->_view}}</option>
-			              {{/foreach}}
-			              {{foreach from=$packs_function item=_pack_function}}
-				            <option value="pack-{{$_pack_function->_id}}" style="font-weight: bold">{{$_pack_function->_view}}</option>
-				            {{/foreach}}
-			            </optgroup>
-			          {{/if}}
-			        </select>
+			        
+							<span id="select_protocole"></span>
+							
 							<br />
 				 				{{if $prescription->type != "externe"}}
 				 				Intervention
@@ -261,7 +263,7 @@ popupTransmission = function(sejour_id){
     </td>  
   {{/if}}
   
-  {{if !$mode_protocole}}
+  {{if !$mode_protocole && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
       <td class="date">
         <form name="selDateLine" action="?" method="get"> 
       
@@ -335,11 +337,11 @@ popupTransmission = function(sejour_id){
         </optgroup>
       </select>
 
-			{{if !$mode_pharma}}
+			{{if !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
         <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
       {{/if}}
       <br />
-      {{if $prescription->object_id}}
+      {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
         {{if $prescription->type != "externe"}}
 	        <select name="advAction">
 	          <option value="">&mdash; Traitements perso</option>
@@ -364,6 +366,10 @@ popupTransmission = function(sejour_id){
 			      <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');">
 			        Signer toutes les lignes
 			      </button>
+			      {{if $operation_id}}
+              <br />
+              <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')">Annuler les signatures</button>
+            {{/if}}
 		      {{/if}}
         {{/if}}
       {{/if}}
