@@ -10,7 +10,7 @@ function initFCKEditor() {
 	
 	// Be carefull: after that all Js code is executed in lib/fckeditor/
 	oFCKeditor.BasePath	= 'lib/fckeditor/';
-	oFCKeditor.Config['CustomConfigurationsPath'] = '{{$dPconfig.base_url}}/?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1';
+	oFCKeditor.Config['CustomConfigurationsPath'] = '?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1';
 	oFCKeditor.ReplaceTextarea();
 }
 
