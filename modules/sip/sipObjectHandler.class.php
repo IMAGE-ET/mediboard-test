@@ -66,7 +66,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         $echange_hprim->load($mbObject->_hprim_initiator_id);
         
         $initiateur = ($_curr_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
-        
+        mbTrace("la", "la", true);
         $domEvenement->generateEvenementsPatients($mbObject, true, $initiateur);
       }
     } 

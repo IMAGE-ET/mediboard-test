@@ -19,7 +19,7 @@
     {{/if}}
 	</td>
 	<td>
-	  {{if $object->_self_emetteur}}
+	  {{if @$object->_patient_ipp}}
 	    <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$object->_patient_id}}" class="buttonsearch">
 	      {{$object->_patient_ipp|str_pad:6:'0':STR_PAD_LEFT}}
 	    </a>
@@ -54,14 +54,16 @@
 	<td>{{mb_value object=$object field="type"}}</td>
 	<td>{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
-	  {{if $object->initiateur_id}}
-	    {{if $dPconfig.sip.server == "1"}}
-	      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'notification')" type="button" style="float:right">Envoyer</button>
+	  {{if !$object->date_echange}}
+		  {{if $object->initiateur_id}}
+		    {{if $dPconfig.sip.server == "1"}}
+		      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'notification')" type="button" style="float:right">Envoyer</button>
+		    {{/if}}
+		  {{else}}
+		    {{if $dPconfig.mb_id == $object->emetteur}}
+	        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'initiateur')" type="button" style="float:right">Envoyer</button>
+	      {{/if}}
 	    {{/if}}
-	  {{else}}
-	    {{if $dPconfig.mb_id == $object->emetteur}}
-        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'initiateur')" type="button" style="float:right">Envoyer</button>
-      {{/if}}
     {{/if}}
 	  <span>
 	    <label title='{{mb_value object=$object field="date_echange"}}'>
