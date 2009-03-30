@@ -7,15 +7,22 @@
 	 {{/if}}
 	</td>
 	<td>
-	  <button onclick="location.href='?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}'" class="search" type="button">
+	  <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}'" class="buttonsearch">
 	   {{$object->echange_hprim_id|str_pad:6:'0':STR_PAD_LEFT}}
-	  </button>
+	  </a>
 	</td>
 	<td>
 	  {{if $object->initiateur_id}}
-		  <button onclick="location.href='?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}'" class="search" type="button">
-	     {{$object->initiateur_id|str_pad:6:'0':STR_PAD_LEFT}}
-	    </button>
+	    <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}'" class="buttonsearch">
+        {{$object->initiateur_id|str_pad:6:'0':STR_PAD_LEFT}}
+	    </a>
+    {{/if}}
+	</td>
+	<td>
+	  {{if $object->_self_emetteur}}
+	    <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$object->_patient_id}}" class="buttonsearch">
+	      {{$object->_patient_ipp|str_pad:6:'0':STR_PAD_LEFT}}
+	    </a>
     {{/if}}
 	</td>
 	<td>

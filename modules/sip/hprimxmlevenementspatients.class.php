@@ -129,5 +129,21 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     return $data;
   }
+  
+  function getIPPPatient() {
+  	global $m;
+
+    $xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
+    $query = "/hprim:evenementsPatients/hprim:evenementPatient";
+
+    $evenementPatient = $xpath->queryUniqueNode($query);
+    $enregistrementPatient = $xpath->queryUniqueNode("hprim:enregistrementPatient", $evenementPatient);
+    
+    $patient = $xpath->queryUniqueNode("hprim:patient", $enregistrementPatient);
+
+    return $xpath->getIdSource($patient);
+  }
 }
 ?>

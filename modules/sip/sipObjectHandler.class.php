@@ -25,11 +25,16 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     
     if (!$mbObject->_ref_last_log) {
-    	return;
+      return;
     }
     
     // Si client et traitement HPRIM
     if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
+      return;
+    }
+    
+    // Si serveur et pas d'IPP sur le patient
+    if (isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1) && CAppUI::conf('sip server')) {
       return;
     }
       
@@ -37,9 +42,10 @@ class CSipObjectHandler extends CMbObjectHandler {
     
     // Si Serveur
     if (CAppUI::conf('sip server')) {
-    	$listDest = $dest_hprim->loadList();
-    	foreach ($listDest as $_curr_dest) {
-	      // Recherche si le patient possède un identifiant externe sur le SIP
+      $listDest = $dest_hprim->loadList();
+            
+      foreach ($listDest as $_curr_dest) {
+        // Recherche si le patient possède un identifiant externe sur le SIP
         $id400 = new CIdSante400();
         //Paramétrage de l'id 400
         $id400->object_id = $mbObject->_id;
@@ -53,39 +59,42 @@ class CSipObjectHandler extends CMbObjectHandler {
   
         $domEvenement = new CHPrimXMLEvenementsPatients();
         $domEvenement->_emetteur = CAppUI::conf('mb_id');
-        $domEvenement->_destinataire = $_dest_hprim->destinataire;
+        $domEvenement->_destinataire = $_curr_dest->destinataire;
         $domEvenement->_destinataire_libelle = " ";
-  
-        $initiateur = ($_dest_hprim->destinataire == $data['idClient']) ? $echange_hprim->_id : null;
         
-        $domEvenement->generateEvenementsPatients($newPatient, true, $initiateur);
-    	}
+        $echange_hprim = new CEchangeHprim();
+        $echange_hprim->load($mbObject->_hprim_initiator_id);
+        
+        $initiateur = ($_curr_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
+        
+        $domEvenement->generateEvenementsPatients($mbObject, true, $initiateur);
+      }
     } 
     // Si Client
     else {
-	    $dest_hprim->type = "sip";
-	    $dest_hprim->loadMatchingObject();
-	    
-	    $domEvenement = new CHPrimXMLEvenementsPatients();
-	    $domEvenement->_emetteur = CAppUI::conf('mb_id');
-	    $domEvenement->_destinataire = $dest_hprim->destinataire;
-	    $messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
-	
-	    if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
-	      trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-	    }
-	    
-	    // Récupère le message d'acquittement après l'execution la methode evenementPatient
-	    if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
-	      trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
-	    }
-	
-	    $echange_hprim = new CEchangeHprim();
-	    $echange_hprim->load($domEvenement->_identifiant);
-	    $echange_hprim->date_echange = mbDateTime();
-	    $echange_hprim->acquittement = $acquittement;
-	    
-	    $echange_hprim->store();
+      $dest_hprim->type = "sip";
+      $dest_hprim->loadMatchingObject();
+      
+      $domEvenement = new CHPrimXMLEvenementsPatients();
+      $domEvenement->_emetteur = CAppUI::conf('mb_id');
+      $domEvenement->_destinataire = $dest_hprim->destinataire;
+      $messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
+  
+      if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
+        trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+      }
+      
+      // Récupère le message d'acquittement après l'execution la methode evenementPatient
+      if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
+        trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
+      }
+  
+      $echange_hprim = new CEchangeHprim();
+      $echange_hprim->load($domEvenement->_identifiant);
+      $echange_hprim->date_echange = mbDateTime();
+      $echange_hprim->acquittement = $acquittement;
+      
+      $echange_hprim->store();
     }
   }
 

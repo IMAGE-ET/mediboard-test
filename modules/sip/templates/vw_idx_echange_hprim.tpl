@@ -25,12 +25,13 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname, type_echang
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="10">ECHANGES HPRIM</th>
+          <th class="title" colspan="11">ECHANGES HPRIM</th>
         </tr>
         <tr>
           <th></th>
           <th>{{mb_title object=$echange_hprim field="echange_hprim_id"}}</th>
           <th>{{mb_title object=$echange_hprim field="initiateur_id"}}</th>
+          <th>Patient</th>
           <th>{{mb_title object=$echange_hprim field="date_production"}}</th>
           <th>{{mb_title object=$echange_hprim field="identifiant_emetteur"}}</th>
           <th>{{mb_title object=$echange_hprim field="destinataire"}}</th>
