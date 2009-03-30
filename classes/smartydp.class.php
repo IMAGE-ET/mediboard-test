@@ -243,12 +243,17 @@ function smarty_function_mb_title($params, &$smarty) {
  * - other : Value if test is false
  */
 function smarty_function_mb_ternary($params, &$smarty) {
-  $var   = CMbArray::extract($params, "var"   , null, true);
   $test  = CMbArray::extract($params, "test"  , null, true);
   $value = CMbArray::extract($params, "value" , null, true);
   $other = CMbArray::extract($params, "other" , null, true);
   
-  $smarty->assign($var, $test ? $value : $other);
+  $result =  $test ? $value : $other;
+  if ($var = CMbArray::extract($params, "var", null)) {
+    $smarty->assign($var, $result);
+  }
+  else {
+    return $result;
+  }
 }
 
 function smarty_function_mb_colonne($params, &$smarty) {
