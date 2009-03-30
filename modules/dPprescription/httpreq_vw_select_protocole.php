@@ -29,7 +29,7 @@ $where = array();
 $where["praticien_id"] = " = '$praticien_id'";
 $where["object_id"] = "IS NULL";
 $where["object_class"] = " = '$prescription->object_class'";
-$protocoles_praticien = $protocole->loadList($where);
+$protocoles_praticien = $protocole->loadList($where, "libelle");
 
 // Chargement des packs du praticien
 $pack_praticien = new CPrescriptionProtocolePack();
@@ -43,7 +43,7 @@ $where = array();
 $where["function_id"] = " = '$function_id'";
 $where["object_id"] = "IS NULL";
 $where["object_class"] = " = '$prescription->object_class'";
-$protocoles_function = $protocole->loadList($where);
+$protocoles_function = $protocole->loadList($where, "libelle");
 
 // Chargement des packs de la fonction
 $pack_function = new CPrescriptionProtocolePack(); 

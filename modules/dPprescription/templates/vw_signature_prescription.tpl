@@ -23,7 +23,7 @@
 				            <select name="praticien_id">
 				              <option value="">&mdash; Choix d'un praticien</option>
 				              {{foreach from=$praticiens item=_praticien}}
-				              <option value="{{$_praticien->_id}}" class="mediuser" 
+				              <option {{if $_praticien->_id == $praticien_id}}selected="selected"{{/if}}value="{{$_praticien->_id}}" class="mediuser" 
 					                    style="border-color: #{{$_praticien->_ref_function->color}};" >{{$_praticien->_view}}</option>
 				              {{/foreach}}
 				            </select>

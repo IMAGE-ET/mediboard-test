@@ -102,7 +102,7 @@ popupTransmission = function(sejour_id){
 						<optgroup label="Responsables">
 				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
 						          value="{{$prescription->_ref_current_praticien->_id}}">{{$prescription->_ref_current_praticien->_view}}</option>
-				      {{if $operation->_ref_anesth->_id}}
+				      {{if @$operation->_ref_anesth->_id}}
 				        <option  class="mediuser" style="border-color: #{{$operation->_ref_anesth->_ref_function->color}};" 
 				                 value="{{$operation->_ref_anesth->_id}}">{{$operation->_ref_anesth->_view}}</option>
 				      {{/if}}
