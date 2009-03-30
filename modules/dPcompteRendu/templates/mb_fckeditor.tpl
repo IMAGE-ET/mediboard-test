@@ -56,7 +56,7 @@ aMbCombos.push(oMbCombo);
     view: '<span style="padding-left: 1em;">{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
     item: 
       {{if $templateManager->valueMode}}
-        "{{$property.valueHTML|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 
+        "{{$property.value|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 
       {{else}} 
         "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]" 
       {{/if}}
