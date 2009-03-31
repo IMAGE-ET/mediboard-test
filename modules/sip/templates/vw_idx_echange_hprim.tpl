@@ -1,20 +1,20 @@
 <script type="text/javascript">
 
-sendMessage = function(echange_hprim_id, echange_hprim_classname, type_echange){
+sendMessage = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
   url.setModuleAction("sip", "httpreq_send_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
 	url.requestUpdate("systemMsg", { onComplete:function() { 
-		 refreshEchange(echange_hprim_id, echange_hprim_classname, type_echange) }});
+		 refreshEchange(echange_hprim_id, echange_hprim_classname) }});
 }
 
-refreshEchange = function(echange_hprim_id, echange_hprim_classname, type_echange){
+refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
   url.setModuleAction("sip", "httpreq_refresh_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
-  url.requestUpdate("echange_"+type_echange+"_"+echange_hprim_id , { waitingText: null });
+  url.requestUpdate("echange_"+echange_hprim_id , { waitingText: null });
 }
 
 </script>
@@ -41,11 +41,11 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname, type_echang
           <th>{{mb_title object=$echange_hprim field="acquittement"}}</th>
         </tr>
         {{foreach from=$listEchangeHprim item=curr_echange_hprim}}
-          <tbody id="echange_initiateur_{{$curr_echange_hprim->_id}}">
+          <tbody id="echange_{{$curr_echange_hprim->_id}}">
             {{include file="inc_echange_hprim.tpl" object=$curr_echange_hprim}}
           </tbody>
           {{foreach from=$curr_echange_hprim->_ref_notifications item=curr_ref_notification}}
-            <tbody id="echange_notification_{{$curr_ref_notification->_id}}">
+            <tbody id="echange_{{$curr_ref_notification->_id}}">
               {{include file="inc_echange_hprim.tpl" object=$curr_ref_notification}}
             </tbody>
           {{/foreach}}

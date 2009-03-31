@@ -54,16 +54,16 @@
 	<td>{{mb_value object=$object field="type"}}</td>
 	<td>{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
-	  {{if !$object->date_echange}}
-		  {{if $object->initiateur_id}}
-		    {{if $dPconfig.sip.server == "1"}}
-		      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'notification')" type="button" style="float:right">Envoyer</button>
-		    {{/if}}
-		  {{else}}
-		    {{if $dPconfig.mb_id == $object->emetteur}}
-	        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}', 'initiateur')" type="button" style="float:right">Envoyer</button>
-	      {{/if}}
+	  {{if $object->initiateur_id}}
+	    {{if $dPconfig.sip.server == "1"}}
+	      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
 	    {{/if}}
+	  {{else}}
+	    {{if !$object->date_echange || ($dPconfig.sip.server == "1")}}
+		    {{if $dPconfig.mb_id == $object->emetteur}}
+	        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
+	      {{/if}}
+      {{/if}}
     {{/if}}
 	  <span>
 	    <label title='{{mb_value object=$object field="date_echange"}}'>
