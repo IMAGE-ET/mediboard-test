@@ -31,10 +31,10 @@ Documentation = {
 
 	{{foreach from=$modules item=module}}
   <tr>
-    <th class="category" colspan="2">{{$module->mod_name}}</th>
-	  <td class="page" id="{{$module->mod_name}}" />
+    <th class="category" colspan="2">mod-{{$module->mod_name}}</th>
+	  <td class="page" id="mod-{{$module->mod_name}}" />
 	  <td style="width: 1%">
-	  	<a class="buttonsearch notext" href="http://www.mediboard.org/public/{{$module->mod_name}}">
+	  	<a class="buttonsearch notext" href="http://www.mediboard.org/public/mod-{{$module->mod_name}}">
 	  		{{tr}}Link{{/tr}}
 	  	</a>
 	  </td>
