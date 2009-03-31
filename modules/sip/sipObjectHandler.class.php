@@ -67,6 +67,8 @@ class CSipObjectHandler extends CMbObjectHandler {
 
 					$mbObject->_IPP = $IPP->id400;
 				}
+				
+				mbTrace($mbObject, "Patient ".$_curr_dest->destinataire, true);
 
 				$domEvenement = new CHPrimXMLEvenementsPatients();
 				$domEvenement->_emetteur = CAppUI::conf('mb_id');
