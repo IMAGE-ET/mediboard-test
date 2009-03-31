@@ -231,7 +231,7 @@ $dPconfig["dPsalleOp"] = array(
   	"multi_tabs_reveil"	  => "1",
   ),
   "CDailyCheckList" => array(
-    "active" => "1"
+    "active" => "0"
   )
 );
    
