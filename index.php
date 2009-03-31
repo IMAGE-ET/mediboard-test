@@ -268,7 +268,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("errorMessage"         , $AppUI->getMsg());
   $smartyHeader->assign("Etablissements"       , $etablissements);
   $smartyHeader->assign("portal"               , array (
-    "help" => mbPortalURL($m),
+    "help" => mbPortalURL($m, $tab),
     "tracker" => mbPortalURL("tracker"),
   ));
   

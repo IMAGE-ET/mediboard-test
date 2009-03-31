@@ -93,12 +93,12 @@ class CSipObjectHandler extends CMbObjectHandler {
 				//Paramétrage de l'id 400
 				$IPP->object_class = "CPatient";
 				$IPP->object_id = $mbObject->_id;
-				$IPP->tag = CAppUI::conf("mb_id");
+				$IPP->tag = $dest_hprim->destinataire;
 				$IPP->loadMatchingObject();
 
 				$mbObject->_IPP = $IPP->id400;
 			}
-
+mbTrace($mbObject, "Patient", true);
 			$domEvenement = new CHPrimXMLEvenementsPatients();
 			$domEvenement->_emetteur = CAppUI::conf('mb_id');
 			$domEvenement->_destinataire = $dest_hprim->destinataire;

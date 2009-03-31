@@ -644,13 +644,14 @@ function mbLinkShortcutIcon($filepath, $modeReturn = 0) {
 /**
  * URL to the mediboard.org documentation page 
  * @return string: the link to mediboard.org  */
-function mbPortalURL( $page="Accueil") {
+function mbPortalURL( $page="Accueil", $tab = null) {
   $url = "http://www.mediboard.org/public/";
   
   $url .= $page == "tracker" ?
     "/tiki-view_tracker.php?trackerId=4" :
-    "tiki-index.php?page=$page";
-    
+    "tiki-index.php?page=mod-$page";
+	
+  $url .= ($tab) ? "-tab-$tab" : "";
   return $url;
 }
 /**

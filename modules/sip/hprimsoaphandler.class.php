@@ -106,10 +106,11 @@ class CHprimSoapHandler extends CSoapHandler {
 
           $newPatient->_id = $IPP->object_id;
           $newPatient->loadMatchingObject();
-mbTrace($newPatient, "Patient", true);
           // Mapping du patient
           $newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
-          $newPatient->_IPP = $IPP->_id;
+          $newPatient->_IPP = $IPP->id400;
+          mbTrace($newPatient, "Patient", true);
+          
           $msgPatient = $newPatient->store();
         }
       }
