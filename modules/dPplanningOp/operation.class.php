@@ -209,7 +209,6 @@ class COperation extends CCodable {
 	  $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
 	  $backProps["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
 	  $backProps["naissances"]               = "CNaissance operation_id";
-	  $backProps["prescription_comments"]    = "CPrescriptionLineComment operation_id";
 	  $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
 	  $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
 	  $backProps["perfusion"]                = "CPerfusion operation_id";
