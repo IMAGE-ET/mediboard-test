@@ -173,16 +173,11 @@ class CHprimSoapHandler extends CSoapHandler {
   
       // Le SIP renvoi l'identifiant local du patient
       if($data['idCible']) {
-        $tmpPatient = new CPatient();
-        $tmpPatient->_id = $data['idCible'];
-        $tmpPatient->load();
-  
-        if(($tmpPatient->nom == $newPatient->nom) && 
-           ($tmpPatient->prenom == $newPatient->prenom) && 
-           ($tmpPatient->naissance == $newPatient->naissance)) {
-          $newPatient->_id = $data['idCible'];
-        }
+        $newPatient->load($data['idCible']);
       }
+      
+      // Test si le patient existe déjà 
+      $newPatient->loadMatchingPatient();
       
       if(!$IPP->loadMatchingObject()) {
         $msgPatient = $newPatient->store();
