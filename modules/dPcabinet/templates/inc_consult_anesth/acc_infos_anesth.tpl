@@ -57,7 +57,7 @@ function reloadListTech() {
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
       {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
       {{mb_label object=$consult_anesth field="ASA"}}
-      {{mb_field object=$consult_anesth field="ASA" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      {{mb_field object=$consult_anesth field="ASA" defaultOption="&mdash; Veuillez Choisir" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 		  {{mb_label object=$consult_anesth field="position"}}
 		  {{mb_field object=$consult_anesth field="position" defaultOption="&mdash; Veuillez Choisir" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       
