@@ -379,7 +379,10 @@ CREATE TABLE IF NOT EXISTS `user_preferences` (
 INSERT INTO `user_preferences` (`pref_user`, `pref_name`, `pref_value`) VALUES
 ('0', 'LOCALE', 'fr'),
 ('0', 'UISTYLE', 'e-cap'),
-('0', 'MenuPosition', 'top'),
+('0', 'MenuPosition', 'left'),
+('0', 'DEFMODULE', 'system'),
+('0', 'INFOSYSTEM', '0'),
+
 ('1', 'LOCALE', 'fr'),
 ('1', 'UISTYLE', 'e-cap'),
 ('1', 'MenuPosition', 'left'),
