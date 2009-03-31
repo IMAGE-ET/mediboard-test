@@ -339,18 +339,16 @@ function setToNow(element) {
     </tr>    
   </table>
 </form>
-{{/foreach}}
 
 {{if $ajax}}
-
 <script type="text/javascript">
   oElement = $('acte{{$key}}');
   oForm = getSurroundingForm(oElement);
   prepareForm(oForm);
 </script>
-
 {{/if}}
 
+{{/foreach}}
 {{/foreach}}
 </td>
 </tr>

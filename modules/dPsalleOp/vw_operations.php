@@ -165,6 +165,11 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
+// Vérification de la check list journalière
+$check_list = CDailyCheckList::getTodaysList($salle);
+$check_list->loadItemTypes();
+$check_list->loadBackRefs('items');
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -196,6 +201,7 @@ $smarty->assign("timingAffect"    , $timingAffect            );
 $smarty->assign("prescription"    , $prescription            );
 $smarty->assign("protocoles"      , $protocoles              );
 $smarty->assign("anesth_id"       , $anesth_id               );
+$smarty->assign("check_list"      , $check_list              );
 $smarty->display("vw_operations.tpl");
 
 ?>

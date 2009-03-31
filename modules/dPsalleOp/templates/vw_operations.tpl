@@ -59,9 +59,7 @@ function reloadPersonnel(operation_id){
   var url = new Url;
   url.setModuleAction("dPsalleOp", "httpreq_vw_personnel");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("listPersonnel", {
-    waitingText: null
-  } );
+  url.requestUpdate("listPersonnel", {waitingText: null} );
 }
 
 function confirmeCloture() {
@@ -81,9 +79,13 @@ Main.add(function () {
   
   {{if $selOp->_id}}
   // Initialisation des onglets
-  new Control.Tabs('main_tab_group');
+	if ($('main_tab_group')){
+    new Control.Tabs('main_tab_group');
+	}
   // Effet sur le programme
-  new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
+	if ($('listplages') && $('listplages-trigger')){
+    new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
+	}
   {{/if}}
 });
 
@@ -93,9 +95,13 @@ Main.add(function () {
   <tr>
     <td style="width: 220px;" id="listplages"></td>
     <td>
-      {{if $selOp->_id}}
-      {{include file=inc_operation.tpl}}
-      {{else}}
+    {{if $selOp->_id}}
+		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || $check_list->_id && $check_list->validator_id}}
+        {{include file=inc_operation.tpl}}
+			{{else}}
+        {{include file=inc_edit_check_list.tpl}}
+      {{/if}}
+    {{else}}
       <div class="big-info">
       	Veuillez sélectionner une intervention dans la liste pour pouvoir :
       	<ul>
@@ -106,8 +112,7 @@ Main.add(function () {
       	  <li>consulter le dossier</li>
       	</ul>
       </div>
-      {{/if}}
+    {{/if}}
     </td>
   </tr>
 </table>
-  

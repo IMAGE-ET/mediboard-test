@@ -230,6 +230,9 @@ $dPconfig["dPsalleOp"] = array(
   "CReveil"			=> array (
   	"multi_tabs_reveil"	  => "1",
   ),
+  "CDailyCheckList" => array(
+    "active" => "1"
+  )
 );
    
 $dPconfig["dPhospi"]["pathologies"] = 1;

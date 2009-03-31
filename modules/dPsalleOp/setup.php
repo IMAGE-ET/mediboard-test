@@ -117,8 +117,45 @@ class CSetupdPsalleOp extends CSetup {
 						ADD `rembourse` ENUM('0','1'), 
 						CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation') NOT NULL;";
     $this->addQuery($sql);
+		
+		$this->makeRevision("0.25");
+		$sql = "CREATE TABLE `daily_check_item` (
+						  `daily_check_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						  `list_id` INT (11) UNSIGNED NOT NULL,
+						  `item_type_id` INT (11) UNSIGNED NOT NULL,
+						  `checked` ENUM ('0','1') NOT NULL
+						) TYPE=MYISAM;";
+		$this->addQuery($sql);
+		$sql = "ALTER TABLE `daily_check_item` 
+						  ADD INDEX (`list_id`),
+						  ADD INDEX (`item_type_id`);";
+		$this->addQuery($sql);
+		
+		$sql = "CREATE TABLE `daily_check_item_type` (
+						  `daily_check_item_type_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						  `title` VARCHAR (255) NOT NULL,
+						  `desc` TEXT,
+						  `active` ENUM ('0','1') NOT NULL,
+						  `group_id` INT (11) UNSIGNED NOT NULL
+						) TYPE=MYISAM;";
+		$this->addQuery($sql);
+    $sql = "ALTER TABLE `daily_check_item_type` ADD INDEX (`group_id`)";
+		$this->addQuery($sql);
+
+    $sql = "CREATE TABLE `daily_check_list` (
+						  `daily_check_list_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						  `date` DATE NOT NULL,
+						  `room_id` INT (11) UNSIGNED NOT NULL,
+						  `validator_id` INT (11) UNSIGNED
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+		$sql = "ALTER TABLE `daily_check_list` 
+						  ADD INDEX (`date`),
+						  ADD INDEX (`room_id`),
+						  ADD INDEX (`validator_id`);";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.25";
+    $this->mod_version = "0.26";
   }
 }
 ?>

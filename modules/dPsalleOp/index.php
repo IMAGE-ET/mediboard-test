@@ -23,4 +23,7 @@ if(CAppUI::conf('dPsalleOp CActeCCAM signature')){
   $module->registerTab("vw_signature_actes", null, TAB_READ);
 }
 
+$module->registerTab("vw_daily_check_item_type", null , TAB_ADMIN);
+$module->registerTab("vw_daily_check_traceability", null, TAB_READ);
+
 ?>
