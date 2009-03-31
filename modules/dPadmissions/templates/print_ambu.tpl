@@ -24,9 +24,11 @@
     <th>Service</th>
     <th>Chambre</th>
     <th>Entrée<br />ambu</th>
-    <th>Entrée<br />au bloc</th>
-    <th>Entrée<br />salle de réveil</th>
-    <th>Sortie<br />de bloc</th>
+    <!-- <th>Entrée<br />au bloc</th>         -->
+    <th>Départ<br />bloc</th>
+    <!-- <th>Entrée<br />salle de réveil</th> -->
+    <!-- <th>Sortie<br />de bloc</th>         -->
+    <th>Retour<br />de bloc</th>
     <th>Sortie<br />établissement</th>
   </tr>
 	{{foreach from=$sejours item=_sejour}}
@@ -51,7 +53,7 @@
 		  </td>
 		  <td style="text-align: center;">{{$_sejour->entree_reelle|date_format:$dPconfig.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_salle|date_format:$dPconfig.time}}</td>
-		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$dPconfig.time}}</td>
+		  <!-- <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$dPconfig.time}}</td> -->
 		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_reveil|date_format:$dPconfig.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->sortie_reelle|date_format:$dPconfig.time}}</td>
 		</tr>
