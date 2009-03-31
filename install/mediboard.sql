@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `access_log` (
   UNIQUE KEY `triplet` (`module`,`action`,`period`),
   KEY `module` (`module`),
   KEY `action` (`action`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
