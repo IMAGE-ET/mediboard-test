@@ -48,7 +48,16 @@
     <td class="text" style="width: 20%" >
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
         {{if $line->_can_view_signature_praticien}}
-          {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+					{{if @$modules.messagerie}}
+					<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+					  <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+					</a>
+					{{/if}}
+					{{if $line->signee}}
+					 <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
+					{{else}}
+						 <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
+					{{/if}}
           {{if $prescription_reelle->type != "externe"}}
 	          {{if $line->valide_pharma}}
 					    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
@@ -56,6 +65,7 @@
 						  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
 				  	{{/if}}
 			  	{{/if}}
+			  	{{$line->_ref_praticien->_view}}
         {{else if !$line->_traitement && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
         {{/if}}
