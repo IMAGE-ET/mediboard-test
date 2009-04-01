@@ -21,7 +21,7 @@ $ljoin = array();
 $ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id AND operations.annulee = '0'";
 $listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
 if($mode_real) {
-  $AppUI->getMsg();setMsg("Lancement à : ".mbDateTime()." en mode réel");
+  $AppUI->getMsg("Lancement à : ".mbDateTime()." en mode réel");
 } else {
   $AppUI->setMsg("Lancement à : ".mbDateTime()." en mode test");
 }
