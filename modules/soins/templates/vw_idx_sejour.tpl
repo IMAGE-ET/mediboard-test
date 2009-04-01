@@ -330,7 +330,7 @@ viewBilanService = function(service_id, date){
                 {{/foreach}}
                 <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
               </select>
-              {{if $service_id && $isPrescriptionInstalled}}
+              {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
                 <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
         			{{/if}}
             </form>

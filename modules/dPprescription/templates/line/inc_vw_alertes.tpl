@@ -7,8 +7,8 @@
 {{assign var=image value=""}}
 {{assign var=color value=""}}
   
-{{if (array_key_exists($code_cip, $allergie) || array_key_exists($code_cip, $interaction) ||
-      array_key_exists($code_cip, $profil)   ||  array_key_exists($code_cip, $IPC))}}
+{{if (@array_key_exists($code_cip, $allergie) || @array_key_exists($code_cip, $interaction) ||
+      @array_key_exists($code_cip, $profil)   ||  @array_key_exists($code_cip, $IPC))}}
      
   {{assign var=puce_orange value=false}}
   {{assign var=puce_rouge value=false}}
@@ -40,7 +40,7 @@
   
   <!-- Interactions -->
   {{if array_key_exists($code_cip, $interaction)}}
-	  {{foreach from=$interaction.$code_cip key=toto item=_interaction}}
+	  {{foreach from=$interaction.$code_cip item=_interaction}}
 	    {{assign var=_niveau value=$_interaction.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}
 	    {{if $dPconfig.dPprescription.CPrescription.scores.interaction.$niveau == '1'}}

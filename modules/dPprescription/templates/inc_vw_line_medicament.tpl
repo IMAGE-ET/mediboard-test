@@ -85,8 +85,8 @@
 					  {{/if}}	
 			    {{/if}}
         {{/if}}
-        {{if $line->_protocole && !$line->substitute_for && !$mode_pack}}
-          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}')">
+        {{if $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
+          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
              Lignes de substitution
             ({{$line->_count_substitution_lines}})
             </button>
@@ -101,7 +101,7 @@
     </th>
   </tr>
   
-  {{if $line->_is_perfusable && !$line->_traitement && !$line->substitute_for && $line->_perm_edit}}
+  {{if $line->_is_perfusable && !$line->_traitement && $line->_perm_edit}}
 	  <tr>
 	    <td />
 	    <td>
@@ -113,17 +113,35 @@
 		  		  <input type="hidden" name="m" value="dPprescription" />
 		  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
 		  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
+
+		  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
+		  		  <input type="hidden" name="substitute_for_class" value="{{$line->substitute_for_class}}" />
+
 		  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
 		  		    <option value="">Nouvelle perfusion</option>
-		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-		  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
-		  		  {{/foreach}}
+		  		  
+		  		  {{if $line->substitute_for_id}}
+			  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+			  		    {{if ($line->substitute_for_id == $_perfusion->substitute_for_id) && ($line->substitute_for_class == $_perfusion->substitute_for_class)}}
+			  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
+			  		    {{/if}}
+			  		  {{/foreach}}
+		  		  {{else}}
+			  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+			  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
+			  		  {{/foreach}}
+		  		  {{/if}}
+		  		  
 		  		  </select>
 		  		  {{mb_field object=$perfusion field="type" defaultOption="&mdash; Type"}}
 		  		  
 			  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
 			  		  onComplete: function() { 
-			  			  Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$line->_protocole}}','{{$mode_pharma}}')  
+			  		    {{if @$mode_substitution}}
+			  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+			  		    {{else}}
+			  			    Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
+			  			  {{/if}}
 			  		  } } );">
 			  		  Ajouter à la perfusion
 			  		</button>
@@ -196,7 +214,7 @@
   <tr>  
 	  <td style="text-align: left">
 	    <!-- Affichage des alertes -->
-	    {{if !($line->_protocole && $line->substitute_for)}}
+	    {{if !($line->_protocole && $line->substitute_for_id)}}
 	      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 	    {{/if}}
 	  </td>

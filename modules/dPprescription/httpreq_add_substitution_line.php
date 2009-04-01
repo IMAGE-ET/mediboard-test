@@ -9,27 +9,42 @@
 
 global $AppUI;
 
-$prescription_line_medicament_id = mbGetValueFromGetOrSession("prescription_line_medicament_id");
+$object_id    = mbGetValueFromGet("object_id");
+$object_class = mbGetValueFromGet("object_class");
+
 $mode_pack = mbGetValueFromGet("mode_pack", "0");
-$line = new CPrescriptionLineMedicament();
-$line->load($prescription_line_medicament_id);
+
+$object = new $object_class;
+$object->load($object_id);
 
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 $is_praticien = $user->isPraticien();
 
 // Chargement des lignes de substitutions de la ligne
-$line->loadRefsSubstitutionLines();
-$line->loadRefPrescription();
+$object->loadRefsSubstitutionLines();
+$object->loadRefPrescription();
 
 // Chargement des droits sur les lignes
-foreach($line->_ref_substitution_lines as &$_line_sub){
-  $_line_sub->getAdvancedPerms($is_praticien,"0"); 
-  $_line_sub->loadRefsPrises();
-  $_line_sub->loadRefParentLine();
+foreach($object->_ref_substitution_lines as $_lines){
+	foreach($_lines as $_line_sub){
+	  if($_line_sub->_class_name == "CPrescriptionLineMedicament"){
+	    $_line_sub->loadRefsPrises();
+	  } else {
+	    $_line_sub->loadRefsLines();
+	    foreach($_line_sub->_ref_lines as $_line_perf){
+	      $_line_perf->loadRefsFwd();
+	    }
+	  }
+	  
+	  $_line_sub->getAdvancedPerms($is_praticien,"0"); 
+    $_line_sub->loadRefParentLine();  
+	}
 }
+$prescription =& $object->_ref_prescription;
 
-$prescription =& $line->_ref_prescription;
+// Chargement de toutes les perfusions qui ne sont pas actives
+$prescription->loadRefsPerfusions(0,null,0);
 
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
@@ -42,15 +57,17 @@ $aides_prescription[$AppUI->user_id]["CPrescriptionLineMedicament"] = $prescript
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("aides_prescription", $aides_prescription);
-$smarty->assign("line", $line);
+$smarty->assign("line", $object);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("prescription_reelle", $prescription);
 $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", 0);
 $smarty->assign("prise_posologie", new CPrisePosologie());
+$smarty->assign("perfusion", new CPerfusion());
 $smarty->assign("moments", $moments);
 $smarty->assign("mode_pack", $mode_pack);
 $smarty->assign("full_line_guid", "");
+$smarty->assign("now", mbDateTime());
 $smarty->display("../../dPprescription/templates/inc_vw_add_substitution_line.tpl");
 
 ?>

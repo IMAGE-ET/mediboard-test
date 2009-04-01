@@ -14,8 +14,12 @@ $line_id     = mbGetValueFromGet("line_id");
 $mode_pharma = mbGetValueFromGet("mode_pharma"); 
 $mode_protocole = mbGetValueFromGet("mode_protocole");
 
+// Chargement de la ligne à substituer
 $line = new CPrescriptionLineMedicament();
 $line->load($line_id);
+
+// Chargement des substitutions possibles de la ligne
+$line->loadRefsSubstitutionLines();
 
 // Creation de la nouvelle ligne
 $line->_id = "";
@@ -25,6 +29,15 @@ $line->accord_praticien = "";
 $line->debut = mbDate();
 $line->time_debut = mbTime();
 $msg = $line->store();
+
+// Réaffectation des lignes de substitutions à l'equivalent
+foreach($line->_ref_substitution_lines as $subst_lines){
+  foreach($subst_lines as $_subst_line){
+    $_subst_line->substitute_for_id = $line->_id;
+    $msg = $_subst_line->store();
+    $AppUI->displayMsg($msg, "$_subst_line->_class_name-msg-store");
+  }
+}
 
 $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
     

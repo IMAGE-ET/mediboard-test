@@ -40,7 +40,7 @@ if($pack->_id){
       foreach($_prescription->_ref_lines_med_comments as $type => $lines_by_type){
 	      foreach($lines_by_type as $_line){
 	        if($_line->_class_name == "CPrescriptionLineMedicament"){
-	          $_line->countSubstitionsLines();
+	          $_line->countSubstitutionsLines();
 	        }
 	        $prescription->_ref_lines_med_comments[$type][] = $_line;
 	      }
@@ -63,6 +63,7 @@ if($pack->_id){
     $_prescription->loadRefsPerfusions();
     if($_prescription->_ref_perfusions){
       foreach($_prescription->_ref_perfusions as $_perfusion){
+        $_perfusion->countSubstitutionsLines();
         $_perfusion->loadRefsLines();
         $prescription->_ref_perfusions[$_perfusion->_id] = $_perfusion;
       }

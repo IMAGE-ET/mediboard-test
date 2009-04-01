@@ -47,7 +47,12 @@ class CPerfusion extends CMbObject {
   var $dose_bolus          = null; // Dose du bolus (en mg)
   var $periode_interdite   = null; // Periode interdite en minutes
   //var $dose_limite_horaire = null; // Dose maxi pour une heure
+
   
+  var $substitute_for_id    = null;
+  var $substitute_for_class = null;
+  var $substitution_active = null;
+    
   // Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;
@@ -64,6 +69,7 @@ class CPerfusion extends CMbObject {
   var $_debut_adm = null;
   var $_fin_adm   = null;
   var $_recent_modification = null;
+  var $_count_substitution_lines = null;
   
   // Object references
   var $_ref_log_signature_prat = null;
@@ -121,6 +127,9 @@ class CPerfusion extends CMbObject {
     $specs["date_fin_adm"]      = "date";
     $specs["time_fin_adm"]      = "time";
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
+    $specs["substitute_for_id"]    = "ref meta|substitute_for_class cascade";
+    $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPerfusion";
+    $specs["substitution_active"]  = "bool";
     return $specs;
   }
 
@@ -156,6 +165,10 @@ class CPerfusion extends CMbObject {
     $this->loadRefPrescription();
     $this->_protocole = $this->_ref_prescription->object_id ? '0' : '1';
     $this->getRecentModification();    
+    
+    if($this->_protocole){
+      $this->countSubstitutionsLines();
+    }
   }
   
   function updateDBFielfs(){
@@ -173,6 +186,8 @@ class CPerfusion extends CMbObject {
     $backProps["lines_perfusion"]  = "CPerfusionLine perfusion_id";
     $backProps["prev_line"]     = "CPerfusion next_perf_id";
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
+    $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
+    $backProps["substitutions_perfusion"]  = "CPerfusion substitute_for_id";
     return $backProps;
   }
   
@@ -328,6 +343,30 @@ class CPerfusion extends CMbObject {
   function loadRefParentLine(){
   	$this->_ref_parent_line = $this->loadUniqueBackRef("prev_line");
   }
+  
+  
+  /*
+   * Chargement des lignes de substitution possibles
+   */
+  function loadRefsSubstitutionLines(){
+    $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
+    $this->_ref_substitution_lines["CPerfusion"] = $this->loadBackRefs("substitutions_perfusion");  
+  }
+  
+  /*
+   * Permet de connaitre le nombre de lignes de substitutions possibles
+   */
+  function countSubstitutionsLines(){
+    if(!$this->substitute_for_id){
+      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_perfusion");
+    } else {
+      $object = new $this->substitute_for_class;
+      $object->load($this->substitute_for_id);
+      $object->countSubstitutionsLines();    
+      $this->_count_substitution_lines = $object->_count_substitution_lines;
+    }
+  }
+  
   
   /*
    * Chargement récursif des parents d'une perfusion

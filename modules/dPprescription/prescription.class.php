@@ -109,6 +109,7 @@ class CPrescription extends CMbObject {
     $backProps["perfusion"]                        = "CPerfusion prescription_id";
 		$backProps["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
 		$backProps["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
+		$backProps["prescription_line_dmi"]            = "CPrescriptionLineDMI prescription_id";
     return $backProps;
   }
   
@@ -173,149 +174,193 @@ class CPrescription extends CMbObject {
   function applyDateProtocole(&$_line, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
                               $hour_operation, $operation, $sejour, $mode_preview){
     global $AppUI;
-		$_line->loadRefsPrises();
-		if(!$mode_preview){
-		  $_line->_id = "";
-		}
-    $_line->unite_duree = "jour";
-    $_line->debut = "";
-		$time_debut = "";
-				  	
-    // Calcul de la date d'entree
-	  switch($_line->jour_decalage){
-	  	case 'E': 
-	  	  $date_debut = ($debut_sejour) ? $debut_sejour : $sejour->_entree;
-	  	  break;
-	  	case 'I': 
-	  	  $date_debut = "";
-	  	  if($date_operation){
-	  	    $date_debut = mbDate($date_operation);
-	  	    $time_debut = mbTime($date_operation); 
-	  	  } else {
-		  	  if($operation->_id){
-		  	    $date_debut = $operation->_ref_plageop->date; 
-	  	      $time_debut = $hour_operation;
-		  	  }
-	  	  }
-	  	  break;
-	  	case 'S': $date_debut = ($debut_sejour) ? $debut_sejour : $sejour->_sortie; break;
-	  	case 'N': $date_debut = mbDate(); break;
-	  }
-	  
-	  $date_fin = "";
-	  $time_fin = "";
-	  	  	  
-    // Calcul de la date de sortie
-	  switch($_line->jour_decalage_fin){
-	  	case 'I': 
-	  	  if($date_operation){
-	  	    $date_fin = mbDate($date_operation);
-	  	    $time_fin = mbTime($date_operation); 
-	  	  } else {
-		  	  if($operation->_id){
-		  	    $date_fin = $operation->_ref_plageop->date;
-		  	    $time_fin = $hour_operation;
-		  	  }
-	  	  }
-	  	  break;
-	  	case 'S': $date_fin = ($fin_sejour) ? $fin_sejour : $sejour->_sortie; break;
-	  }
-	  
-	  $unite_decalage_debut = $_line->unite_decalage === "heure" ? "HOURS" : "DAYS";
-	  $unite_decalage_fin   = $_line->unite_decalage_fin === "heure" ? "HOURS" : "DAYS";
-
-	  if(!$_line->jour_decalage){
-	    $date_debut = $date_sel;  
-	  }
-	  
-	  // Decalage de la fin
-	  if($_line->decalage_line_fin){
-	    $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
-	  	if($unite_decalage_fin === "DAYS"){
-	      $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin);	
-	  	} else {
-	  	  //$_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $time_fin);   
-	  	  $date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
-	  	  $date_fin = mbDate($date_time_fin);
-	  	  $time_fin = mbTime($date_time_fin);
-	  	  $_line->time_fin = $time_fin;
-	  	}
-	  }
-
-	  // Decalage du debut
-    if($_line->decalage_line){
-      $signe = ($_line->decalage_line >= 0) ? "+" : "";
-		  if($unite_decalage_debut === "DAYS"){ 
-	      $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);	
-		  } else {
-		    //$_line->debut = $date_debut;
-		    //$_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);	  
-        $date_time_debut = mbDateTime("$signe $_line->decalage_line HOURS", "$date_debut $time_debut");
-	  	  $_line->debut = mbDate($date_time_debut);
-	  	  $_line->time_debut = mbTime($date_time_debut);
-		  }
-    } else {
-	    $_line->debut = mbDate($date_debut);
-    	if($time_debut){
-	      $_line->time_debut = $time_debut;
+		
+    if($_line->_class_name == "CPerfusion"){
+      $_line->loadRefsLines();
+    // Gestion des perfusions
+	    $_line->loadRefPraticien();
+	    $_line->_id = "";
+	    $_line->prescription_id = $this->_id;
+	    $_line->praticien_id = $praticien_id;
+	    $_line->creator_id = $AppUI->user_id;
+	    
+	    if(!$_line->decalage_interv){
+	      $_line->decalage_interv = 0;
 	    }
-    }
-
-
-	  // Calcul de la duree
-	  if($_line->jour_decalage_fin){
-	  	$_line->duree = mbDaysRelative($_line->debut, $date_fin);
-	  	if($_line->jour_decalage_fin !== "S"){
-	  	  $_line->duree++;
-	  	}
-	  }	  
-	  
-	  // Permet d'eviter les durees negatives lors de l'application d'un protocole
-	  if($_line->duree < 0){
-	    $_line->duree = 0;
-	  }
-	  
-
-	  $_line->prescription_id = $this->_id;
-	  $_line->praticien_id = $praticien_id;
-	  $_line->creator_id = $AppUI->user_id;
-	  
-	  if(!$mode_preview){
-		  if($_line->jour_decalage === "I" || $_line->jour_decalage_fin === "I"){
-		    if($operation_id){
-		      $_line->operation_id = $operation_id;
-		    } else {
-		      $_line->debut = "";
-		      $_line->duree = "";
-		      $_line->time_debut = "";
-		      $_line->time_fin = "";
-		    }
-		  }
-
-	    $msg = $_line->store();
-	    $AppUI->displayMsg($msg, "{$_line->_class_name}-msg-create");  
-	  }
-	 	
-		// Parcours des prises
-    if(!$mode_preview){
-			foreach($_line->_ref_prises as $prise){
-			  $prise->_id = "";
-				$prise->object_id = $_line->_id;
-				$prise->object_class = $_line->_class_name;
-				if($prise->decalage_intervention != null){
-					if($date_operation){
-	  	      $time_operation = mbTime($date_operation); 
-	  	    } elseif ($operation->_id) {
-		  	    $time_operation = $hour_operation;
+	    
+      if(!$mode_preview){
+			  if($operation_id){
+			    $_line->operation_id = $operation_id;
+			  } else {
+			    $_line->date_debut = "";
+			    $_line->time_debut = "";
+			  }
+			}
+      if($date_operation){
+  	    $date_debut = mbDate($date_operation);
+  	    $time_debut = mbTime($date_operation); 
+  	  } else {
+	  	  if($operation->_id){
+	  	    $date_debut = $operation->_ref_plageop->date; 
+  	      $time_debut = $hour_operation;
+	  	  }
+  	  }
+  	  $signe = ($_line->decalage_interv >= 0) ? "+" : "";
+      $date_time_debut = mbDateTime("$signe $_line->decalage_interv HOURS", "$date_debut $time_debut");
+  	  $_line->date_debut = mbDate($date_time_debut);
+  	  $_line->time_debut = mbTime($date_time_debut);
+    
+	    if(!$mode_preview){
+	      $msg = $_line->store();
+	      $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+	    }
+	    foreach($_line->_ref_lines as $_line_perf){
+	      $_line_perf->_id = "";
+	      $_line_perf->perfusion_id = $_line->_id;
+	      if(!$mode_preview){
+	        $msg = $_line_perf->store();
+			    $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+	      }
+	    } 
+    } else {
+	    $_line->loadRefsPrises();
+			if(!$mode_preview){
+			  $_line->_id = "";
+			}
+	    $_line->unite_duree = "jour";
+	    $_line->debut = "";
+			$time_debut = "";
+					  	
+	    // Calcul de la date d'entree
+		  switch($_line->jour_decalage){
+		  	case 'E': 
+		  	  $date_debut = ($debut_sejour) ? $debut_sejour : $sejour->_entree;
+		  	  break;
+		  	case 'I': 
+		  	  $date_debut = "";
+		  	  if($date_operation){
+		  	    $date_debut = mbDate($date_operation);
+		  	    $time_debut = mbTime($date_operation); 
+		  	  } else {
+			  	  if($operation->_id){
+			  	    $date_debut = $operation->_ref_plageop->date; 
+		  	      $time_debut = $hour_operation;
+			  	  }
 		  	  }
-	  	    $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
-				  $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention HOURS", $time_operation);	  
-				}
-			  if(!$mode_preview){
-				  $msg = $prise->store();
-			    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  
-			  }	
-			}	  
+		  	  break;
+		  	case 'S': $date_debut = ($debut_sejour) ? $debut_sejour : $sejour->_sortie; break;
+		  	case 'N': $date_debut = mbDate(); break;
+		  }
+		  
+		  $date_fin = "";
+		  $time_fin = "";
+		  	  	  
+	    // Calcul de la date de sortie
+		  switch($_line->jour_decalage_fin){
+		  	case 'I': 
+		  	  if($date_operation){
+		  	    $date_fin = mbDate($date_operation);
+		  	    $time_fin = mbTime($date_operation); 
+		  	  } else {
+			  	  if($operation->_id){
+			  	    $date_fin = $operation->_ref_plageop->date;
+			  	    $time_fin = $hour_operation;
+			  	  }
+		  	  }
+		  	  break;
+		  	case 'S': $date_fin = ($fin_sejour) ? $fin_sejour : $sejour->_sortie; break;
+		  }
+		  
+		  $unite_decalage_debut = $_line->unite_decalage === "heure" ? "HOURS" : "DAYS";
+		  $unite_decalage_fin   = $_line->unite_decalage_fin === "heure" ? "HOURS" : "DAYS";
+	
+		  if(!$_line->jour_decalage){
+		    $date_debut = $date_sel;  
+		  }
+		  // Decalage de la fin
+		  if($_line->decalage_line_fin){
+		    $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
+		  	if($unite_decalage_fin === "DAYS"){
+		      $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin);	
+		  	} else {
+		  	  //$_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $time_fin);   
+		  	  $date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
+		  	  $date_fin = mbDate($date_time_fin);
+		  	  $time_fin = mbTime($date_time_fin);
+		  	  $_line->time_fin = $time_fin;
+		  	}
+		  }
+		  // Decalage du debut
+	    if($_line->decalage_line){
+	      $signe = ($_line->decalage_line >= 0) ? "+" : "";
+			  if($unite_decalage_debut === "DAYS"){ 
+		      $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);	
+			  } else {
+			    //$_line->debut = $date_debut;
+			    //$_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);	  
+	        $date_time_debut = mbDateTime("$signe $_line->decalage_line HOURS", "$date_debut $time_debut");
+		  	  $_line->debut = mbDate($date_time_debut);
+		  	  $_line->time_debut = mbTime($date_time_debut);
+			  }
+	    } else {
+		    $_line->debut = mbDate($date_debut);
+	    	if($time_debut){
+		      $_line->time_debut = $time_debut;
+		    }
+	    }
+		  // Calcul de la duree
+		  if($_line->jour_decalage_fin){
+		  	$_line->duree = mbDaysRelative($_line->debut, $date_fin);
+		  	if($_line->jour_decalage_fin !== "S"){
+		  	  $_line->duree++;
+		  	}
+		  }	  
+		  
+		  // Permet d'eviter les durees negatives lors de l'application d'un protocole
+		  if($_line->duree < 0){
+		    $_line->duree = 0;
+		  }
+		  $_line->prescription_id = $this->_id;
+		  $_line->praticien_id = $praticien_id;
+		  $_line->creator_id = $AppUI->user_id;
+		  
+		  if(!$mode_preview){
+			  if($_line->jour_decalage === "I" || $_line->jour_decalage_fin === "I"){
+			    if($operation_id){
+			      $_line->operation_id = $operation_id;
+			    } else {
+			      $_line->debut = "";
+			      $_line->duree = "";
+			      $_line->time_debut = "";
+			      $_line->time_fin = "";
+			    }
+			  }
+	
+		    $msg = $_line->store();
+		    $AppUI->displayMsg($msg, "{$_line->_class_name}-msg-create");  
+		  }
+		 	
+			// Parcours des prises
+	    if(!$mode_preview){
+				foreach($_line->_ref_prises as $prise){
+				  $prise->_id = "";
+					$prise->object_id = $_line->_id;
+					$prise->object_class = $_line->_class_name;
+					if($prise->decalage_intervention != null){
+						if($date_operation){
+		  	      $time_operation = mbTime($date_operation); 
+		  	    } elseif ($operation->_id) {
+			  	    $time_operation = $hour_operation;
+			  	  }
+		  	    $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
+					  $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention HOURS", $time_operation);	  
+					}
+				  if(!$mode_preview){
+					  $msg = $prise->store();
+				    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  
+				  }	
+				}	  
+	    }
     }
   }
   
@@ -384,10 +429,13 @@ class CPrescription extends CMbObject {
 		                            
 		  if(!$mode_preview){
 			  // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
-			  foreach($_substitutions as &$_line_subst){
-			    $_line_subst->substitute_for = $_line_med->_id;
-			    $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-		                                $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+			  foreach($_substitutions as $_line_subst_by_chap){
+			    foreach($_line_subst_by_chap as $_line_subst){
+				    $_line_subst->substitute_for_id = $_line_med->_id;
+				    $_line_subst->substitute_for_class = $_line_med->_class_name;
+				    $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+			                                $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+			    }
 		    }
 		  }  
 		}
@@ -406,54 +454,25 @@ class CPrescription extends CMbObject {
 	
 		// Parcours des perfusions
 	  foreach($protocole->_ref_perfusions as &$_perfusion){
-	    $_perfusion->loadRefPraticien();
-	    $_perfusion->_id = "";
-	    $_perfusion->prescription_id = $this->_id;
-	    $_perfusion->praticien_id = $praticien_id;
-	    $_perfusion->creator_id = $AppUI->user_id;
-	    
-	    if($_perfusion->decalage_interv != null){
-	      if(!$mode_preview){
-				  if($operation_id){
-				    $_perfusion->operation_id = $operation_id;
-				  } else {
-				    $_perfusion->date_debut = "";
-				    $_perfusion->time_debut = "";
-				  }
-				}
-			 	
-	      if($date_operation){
-	  	    $date_debut = mbDate($date_operation);
-	  	    $time_debut = mbTime($date_operation); 
-	  	  } else {
-		  	  if($operation->_id){
-		  	    $date_debut = $operation->_ref_plageop->date; 
-	  	      $time_debut = $hour_operation;
-		  	  }
-	  	  }
-	  	  if($_perfusion->decalage_interv == ""){
-	  	    $_perfusion->decalage_interv = 0;
-	  	  }
-	  	  $signe = ($_perfusion->decalage_interv >= 0) ? "+" : "";
-	      $date_time_debut = mbDateTime("$signe $_perfusion->decalage_interv HOURS", "$date_debut $time_debut");
-	  	  $_perfusion->date_debut = mbDate($date_time_debut);
-	  	  $_perfusion->time_debut = mbTime($date_time_debut);
-	    }
-	    
 	    if(!$mode_preview){
-	      $msg = $_perfusion->store();
-	      $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+	      $_perfusion->loadRefsSubstitutionLines();
+			  $_substitutions_perf = $_perfusion->_ref_substitution_lines;
 	    }
-	    foreach($_perfusion->_ref_lines as $_line){
-	      $_line->_id = "";
-	      $_line->perfusion_id = $_perfusion->_id;
-	      if(!$mode_preview){
-	        $msg = $_line->store();
-			    $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
-	      }
-	    }
+
+	    $this->applyDateProtocole($_perfusion, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+		                            $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+	    
+		  if(!$mode_preview){
+			  foreach($_substitutions_perf as $_line_subst_by_chap){
+			    foreach($_line_subst_by_chap as $_line_subst){
+				    $_line_subst->substitute_for_id = $_perfusion->_id;
+				    $_line_subst->substitute_for_class = $_perfusion->_class_name;
+				    $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+			                                $date_operation, $hour_operation, $operation, $sejour, $mode_preview);
+			    }
+		    }                  
+		  }
 	  }
-  
   
 		// Parcours des lignes de commentaires
 		foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
@@ -623,7 +642,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des perfusions
    */
-  function loadRefsPerfusions($with_child = 0, $emplacement = ""){
+  function loadRefsPerfusions($with_child = 0, $emplacement = "", $with_subst_active = 1){
     //$this->_ref_perfusions = $this->loadBackRefs("perfusion");
     $perfusion = new CPerfusion();
     $where = array();
@@ -634,6 +653,9 @@ class CPrescription extends CMbObject {
     if($emplacement){
       $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
     }
+    // Permet de ne pas afficher les lignes de substitutions
+    $where["substitution_active"] = " = '$with_subst_active'";
+    
     $this->_ref_perfusions = $perfusion->loadList($where);
   }
   
@@ -736,6 +758,7 @@ class CPrescription extends CMbObject {
   	$ljoinPerf["perfusion"] = "perfusion_line.perfusion_id = perfusion.perfusion_id";
   	$wherePerf["perfusion.prescription_id"] = " = '$this->_id'";
   	$wherePerf["perfusion.next_perf_id"] = " IS NULL";
+  	$wherePerf["perfusion.substitution_active"] = " = '1'";
   	$this->_counts_by_chapitre["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
   	$wherePerf["signature_prat"] = " = '0'";
   	$this->_counts_by_chapitre_non_signee["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);

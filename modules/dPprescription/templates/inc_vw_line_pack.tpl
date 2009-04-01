@@ -16,7 +16,7 @@
 	      {{/if}}
     </div>
     <div style="float: right">
-    {{if ($line->_class_name == "CPrescriptionLineMedicament" && !$line->substitute_for) || ($line->_class_name != "CPrescriptionLineMedicament")}}
+    {{if ($line->_class_name == "CPrescriptionLineMedicament" && !$line->substitute_for_id) || ($line->_class_name != "CPrescriptionLineMedicament")}}
 	    <form name="modifProtocole" method="get" action="?">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />

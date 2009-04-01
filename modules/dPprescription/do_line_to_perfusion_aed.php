@@ -15,6 +15,9 @@ $prescription_line_medicament_id = mbGetValueFromPost("prescription_line_medicam
 $perfusion_id = mbGetValueFromPost("perfusion_id");
 $type = mbGetValueFromPost("type");
 
+$substitute_for_id = mbGetValueFromPost("substitute_for_id");
+$substitute_for_class = mbGetValueFromPost("substitute_for_class");
+
 // Chargement de la ligne de medicament
 $line_med = new CPrescriptionLineMedicament();
 $line_med->load($prescription_line_medicament_id);
@@ -29,6 +32,11 @@ if(!$perfusion_id){
   $perfusion->praticien_id = $line_med->praticien_id;
   $perfusion->date_debut = $line_med->debut;
   $perfusion->time_debut = $line_med->time_debut;
+  $perfusion->substitute_for_id = $substitute_for_id;
+  $perfusion->substitute_for_class = $substitute_for_class;
+  if($perfusion->substitute_for_id){
+    $perfusion->substitution_active = 0;
+  }
   $msg = $perfusion->store();
   $AppUI->displayMsg($msg, "CPerfusion-msg-create");
   $perfusion_id = $perfusion->_id;

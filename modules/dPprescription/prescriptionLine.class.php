@@ -179,17 +179,6 @@ class CPrescriptionLine extends CMbObject {
     }  
   }
   
-  /*
-   * Déclaration des backRefs
-   */
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["prise_posologie"] = "CPrisePosologie object_id";
-    $backProps["administration"]  = "CAdministration object_id";
-    $backProps["transmissions"]   = "CTransmissionMedicale object_id";
-    return $backProps;
-  }
-  
   function loadRefsTransmissions(){
   	$this->_ref_transmissions = $this->loadBackRefs("transmissions");
 		foreach($this->_ref_transmissions as &$_trans){

@@ -46,7 +46,7 @@ foreach($protocole->_ref_prescription_lines as $line){
   foreach($line->_ref_substitution_lines as $_line_subst){
     $_line_subst->loadRefsPrises();
     $_line_subst->prescription_id = $protocole->_id;
-    $_line_subst->substitute_for = $line->_id;
+    $_line_subst->substitute_for_id = $line->_id;
     $_line_subst->_id = "";
 	  $msg = $_line_subst->store();
   	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");

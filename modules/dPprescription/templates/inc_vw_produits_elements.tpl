@@ -245,7 +245,7 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
 }
 
 changeColorPerf = function(perf_id, oForm){
-  if(oForm.date_arret.value != ''){
+  if(oForm.date_arret && oForm.date_arret.value != ''){
     var _fin = oForm.date_arret.value; 
   } else {
     var _fin = oForm.date_debut.value;

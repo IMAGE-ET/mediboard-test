@@ -1013,7 +1013,19 @@ class CSetupdPprescription extends CSetup {
 							ADD INDEX (`order_item_reception_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.77";
+    $this->makeRevision("0.77");
+    $sql = "ALTER TABLE `prescription_line_medicament`
+					  ADD `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPerfusion') DEFAULT 'CPrescriptionLineMedicament',
+						CHANGE `substitute_for` `substitute_for_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `perfusion` 
+						ADD `substitute_for_id` INT (11) UNSIGNED,
+						ADD `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPerfusion') DEFAULT 'CPerfusion',
+						ADD `substitution_active` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.78";
   }  
 }
 

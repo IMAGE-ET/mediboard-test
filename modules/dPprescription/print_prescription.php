@@ -118,8 +118,10 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  if(!$prescription->object_id){
 	    if($line_medicament->_class_name == "CPrescriptionLineMedicament"){
 		    $line_medicament->loadRefsSubstitutionLines();
-		    foreach($line_medicament->_ref_substitution_lines as &$_subst_line){
-		      $_subst_line->loadRefsPrises();
+		    foreach($line_medicament->_ref_substitution_lines as $_subst_by_chap){
+		      foreach($_subst_by_chap as $_subst_line){
+		        $_subst_line->loadRefsPrises();
+		      }
 		    }
 	    }
 	  }
@@ -154,7 +156,13 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 
 // Parcours des perfusions
 foreach($prescription->_ref_perfusions as $_perfusion){
-	if($praticien_sortie_id && $_perfusion->praticien_id != $praticien_sortie_id){
+  $_perfusion->loadRefsSubstitutionLines();
+  foreach($_perfusion->_ref_substitution_lines as $_subst_by_chap){
+    foreach($_subst_by_chap as &$_subst_perf){
+      $_subst_perf->loadRefsLines();
+    }
+  }	   
+  if($praticien_sortie_id && $_perfusion->praticien_id != $praticien_sortie_id){
 		continue;
 	}	
 	if($_perfusion->next_perf_id){

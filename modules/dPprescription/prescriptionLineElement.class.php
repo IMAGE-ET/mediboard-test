@@ -54,6 +54,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["parent_line"]     = "CPrescriptionLineElement child_id";  
+    $backProps["transmissions"]   = "CTransmissionMedicale object_id";
+    $backProps["administration"]  = "CAdministration object_id";
+    $backProps["prise_posologie"] = "CPrisePosologie object_id";
     return $backProps;
   }
   

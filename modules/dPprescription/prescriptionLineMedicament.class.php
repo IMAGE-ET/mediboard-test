@@ -20,14 +20,16 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
   var $valide_pharma    = null; 
   var $accord_praticien = null;
+  var $voie             = null;
+  
   // Substitution sous forme d'historique
   var $substitution_line_id = null;
+  
   // Alternative entre plusieurs lignes
-  var $substitute_for      = null; 
-  var $substitution_active = null; 
-  var $voie = null;
-                
-  //static $perfusables = array ("Voie intraveineuse","Voie intramusculaire");
+  var $substitute_for_id    = null; //$substitute_for_id => id de la ligne substituée
+  var $substitute_for_class = null;
+  
+  var $substitution_active  = null;    
   
   static $voies = array("Voie systémique"                 => array("injectable" => false, "perfusable" => false), 
                         "Voie endocervicale"              => array("injectable" => false, "perfusable" => false), 
@@ -160,7 +162,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["valide_pharma"]        = "bool";
     $specs["accord_praticien"]     = "bool";
     $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
-    $specs["substitute_for"]       = "ref class|CPrescriptionLineMedicament cascade";
+    $specs["substitute_for_id"]    = "ref meta|substitute_for_class cascade";
+    $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPrescriptionLineMedicament";
     $specs["substitution_active"]  = "bool";
     $specs["_unite_prise"]         = "str";
     $specs["_traitement"]          = "bool";
@@ -179,8 +182,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["prev_hist_line"] = "CPrescriptionLineMedicament substitution_line_id";
-    $backProps["substitutions"]  = "CPrescriptionLineMedicament substitute_for";
+    $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
+    $backProps["substitutions_perfusion"]  = "CPerfusion substitute_for_id";
     $backProps["parent_line"]    = "CPrescriptionLineMedicament child_id";  
+    $backProps["transmissions"]   = "CTransmissionMedicale object_id";
+    $backProps["administration"]  = "CAdministration object_id";
+    $backProps["prise_posologie"] = "CPrisePosologie object_id";
     return $backProps;
   }
   
@@ -220,7 +227,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
     
     if($this->_protocole){
-      $this->countSubstitionsLines();
+      $this->countSubstitutionsLines();
     }
     $this->isPerfusable();
     $this->isInjectable();
@@ -274,7 +281,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_ald = 1;
     }
     // View Conditionnel
-    if($perm_edit && !($this->_protocole && $this->substitute_for)){
+    if($perm_edit && !($this->_protocole && $this->substitute_for_id)){
     	$this->_can_view_form_conditionnel = 1;
     }
     // View formulaire traitement
@@ -492,14 +499,22 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Chargement des lignes de substitution possibles
    */
   function loadRefsSubstitutionLines(){
-    $this->_ref_substitution_lines = $this->loadBackRefs("substitutions"); 
+    $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
+    $this->_ref_substitution_lines["CPerfusion"] = $this->loadBackRefs("substitutions_perfusion");  
   }
   
   /*
    * Permet de connaitre le nombre de lignes de substitutions possibles
    */
-  function countSubstitionsLines(){
-    $this->_count_substitution_lines = $this->countBackRefs("substitutions");
+  function countSubstitutionsLines(){
+    if(!$this->substitute_for_id){
+      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_perfusion");
+    } else {
+      $object = new $this->substitute_for_class;
+      $object->load($this->substitute_for_id);
+      $object->countSubstitutionsLines();
+      $this->_count_substitution_lines = $object->_count_substitution_lines;    
+    }
   }
   
   function delete(){

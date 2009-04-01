@@ -106,18 +106,25 @@
       ({{$line->_unite_administration}})<br />
     {{/if}}
     </small>
-	  {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_ref_substitution_lines|@count}}
-    <form action="?" method="post" name="changeLine-{{$line_id}}">
+	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+    {{if $line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count}}
+    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-      <select name="prescription_line_medicament_id" style="width: 75px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshDossierSoin('','{{$chapitre}}', true); } } )">
+      <select name="object_guid" style="width: 75px;" 
+              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+                           loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')
+                         } } )">
         <option value="">Conserver</option>
-      {{foreach from=$line->_ref_substitution_lines item=_line_subst}}
-        <option value="{{$_line_subst->_id}}">{{$_line_subst->_view}}
-        {{if !$_line_subst->substitute_for}}(originale){{/if}}</option>
-      {{/foreach}}
+	      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+	          {{foreach from=$lines_subst_by_chap item=_line_subst}}
+	          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
+	          {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+	        {{/foreach}}
+	      {{/foreach}}
       </select>
     </form>
+    {{/if}}
     {{/if}}
     </div>
 	</td>

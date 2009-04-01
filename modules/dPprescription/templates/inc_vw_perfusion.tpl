@@ -33,6 +33,13 @@ Main.add( function(){
 	      {{/if}}
       </div>
       <div style="float: right">
+        {{if $_perfusion->_protocole && !$_perfusion->substitute_for_id && !$mode_pack}}
+          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$_perfusion->_id}}','{{$_perfusion->_class_name}}')">
+             Lignes de substitution
+            ({{$_perfusion->_count_substitution_lines}})
+            </button>
+        {{/if}}
+        
         {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}
 		      <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{$readonly}}, {{$lite}},'');"></button>
 		    {{/if}}
@@ -113,7 +120,11 @@ Main.add( function(){
               {{if $_perfusion->_can_delete_perfusion}}
 	              <button type="button" class="trash notext" onclick="$V(this.form.del,'1'); return onSubmitFormAjax(this.form, { 
 	                onComplete: function(){
-			              Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+             		    {{if @$mode_substitution}}
+					  		      Prescription.viewSubstitutionLines('{{$_perfusion->substitute_for_id}}','{{$_perfusion->substitute_for_class}}');
+					  		    {{else}}
+					  			    Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+                    {{/if}}
 			            }        
 	              } );"></button>
               {{/if}}
@@ -236,8 +247,12 @@ Main.add( function(){
 		                  {{if $_perfusion->_can_delete_perfusion_line}}
 			                  <button class="trash notext" type="button" onclick="$V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
 			                    onComplete: function(){
-			                      Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
-			                    }
+			                    	{{if @$mode_substitution}}
+									  		      Prescription.viewSubstitutionLines('{{$_perfusion->substitute_for_id}}','{{$_perfusion->substitute_for_class}}');
+									  		    {{else}}
+									  			    Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
+			                      {{/if}}
+									  			}
 			                  } );"></button>
 		                  {{/if}}
 		                </td>
