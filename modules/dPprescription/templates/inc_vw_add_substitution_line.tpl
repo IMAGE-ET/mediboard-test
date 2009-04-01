@@ -240,7 +240,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 	    	{{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
 	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
 	      {{else}}
-	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_perf_pack.tpl" line=$curr_line}}
+	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_perf_pack.tpl" _perfusion=$curr_line}}
 	      {{/if}}
 	    {{else}}
 	      {{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}

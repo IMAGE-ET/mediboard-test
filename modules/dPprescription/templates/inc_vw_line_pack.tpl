@@ -24,7 +24,7 @@
 	      <button class="edit">{{$line->_ref_prescription->_view}}</button>
 	    </form>
 	    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','1')">
+	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}','1')">
 	         Substitution
 	         ({{$line->_count_substitution_lines}})
 	      </button>

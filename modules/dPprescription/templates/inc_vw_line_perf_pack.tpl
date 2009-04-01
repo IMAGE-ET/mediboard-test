@@ -1,12 +1,14 @@
 <tr>
   <th colspan="8">
   <div style="float: right">
+    {{if !$_perfusion->substitute_for_id}}
 	  <form name="modifProtocole" method="get" action="?">
 	    <input type="hidden" name="m" value="dPprescription" />
 	    <input type="hidden" name="tab" value="vw_edit_protocole" />
 	    <input type="hidden" name="prescription_id" value="{{$_perfusion->_ref_prescription->_id}}" />
 	     <button class="edit">{{$_perfusion->_ref_prescription->_view}}</button>
 	  </form>
+	  {{/if}}
 	  </div>
     {{$_perfusion->_view}}
     </th>
