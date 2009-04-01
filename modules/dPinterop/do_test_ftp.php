@@ -46,7 +46,7 @@ if($testType == "ftp") {
   $ftp->connect($passif_mode);
 } else if($testType == "sendfile") { 
 	if (!$file) {
-		CAppUI::setMsg("Un nom de fichier doit etre fourni.");
+		$AppUI->setMsg("Un nom de fichier doit etre fourni.");
 		return;
 	}
 	$ftp->connect($passif_mode);
@@ -56,9 +56,9 @@ if($testType == "ftp") {
 }
 
 foreach($ftp->logs as $log) {
-  CAppUI::setMsg($log);
+  $AppUI->setMsg($log);
 }
 
-echo CAppUI::getMsg();
+echo $AppUI->getMsg();
 
 ?>

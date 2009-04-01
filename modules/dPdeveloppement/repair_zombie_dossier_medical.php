@@ -7,6 +7,8 @@
  * @author Romain Ollivier
  */
 
+global $AppUI;
+
 $patient_id         = mbGetValueFromGet("patient_id");
 $dossier_medical_id = mbGetValueFromGet("dossier_medical_id");
 
@@ -22,20 +24,20 @@ if($patient->_ref_dossier_medical->_id) {
   $mergedDossier->object_id    = $patient->_id;
   $result = $mergedDossier->merge(array($dossierZombie, $patient->_ref_dossier_medical));
   if($result) {
-    CAppUI::setMsg($result, UI_MSG_ERROR);
+    $AppUI->setMsg($result, UI_MSG_ERROR);
   } else {
-    CAppUI::setMsg("Fusion du zombie", UI_MSG_OK);
+    $AppUI->setMsg("Fusion du zombie", UI_MSG_OK);
   }
 } else {
   $dossierZombie->object_id = $patient->_id;
   $result = $dossierZombie->store();
   if($result) {
-    CAppUI::setMsg($result, UI_MSG_ERROR);
+    $AppUI->setMsg($result, UI_MSG_ERROR);
   } else {
-    CAppUI::setMsg("Réparation du lien", UI_MSG_OK);
+    $AppUI->setMsg("Réparation du lien", UI_MSG_OK);
   }
 }
 
-echo CAppUI::getMsg();
+echo $AppUI->getMsg();
 
 ?>
