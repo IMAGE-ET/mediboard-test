@@ -324,8 +324,24 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision("0.96");
     $sql = "ALTER TABLE `product` ADD `code_lpp` INT (7) UNSIGNED ZEROFILL";
     $this->addQuery($sql);
+		
+		$this->makeRevision("0.97");
+		$sql = "ALTER TABLE `product_stock_group` ADD `location_id` INT (11) UNSIGNED;";
+		$this->addQuery($sql);
+		$sql = "ALTER TABLE `product_stock_group` ADD INDEX (`location_id`);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `product_stock_location` (
+					  `stock_location_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+					  `name` VARCHAR (255) NOT NULL,
+					  `desc` TEXT,
+					  `position` INT (11),
+					  `group_id` INT (11) UNSIGNED NOT NULL
+					) TYPE=MYISAM;";
+		$this->addQuery($sql);
+    $sql = "ALTER TABLE `product_stock_location` ADD INDEX (`group_id`);";
+		$this->addQuery($sql);
     
-    $this->mod_version = "0.97";
+    $this->mod_version = "0.98";
   }
 }
 

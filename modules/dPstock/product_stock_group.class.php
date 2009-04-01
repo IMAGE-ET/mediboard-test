@@ -11,10 +11,12 @@
 class CProductStockGroup extends CProductStock {
   // DB Fields
   var $group_id                 = null;
+	var $location_id              = null;
 
   // Object References
   //    Single
   var $_ref_group               = null;
+	var $_ref_location            = null;
 
   //    Multiple
   var $_ref_deliveries          = null;
@@ -40,6 +42,7 @@ class CProductStockGroup extends CProductStock {
   function getProps() {
     $specs = parent::getProps();
     $specs['group_id']       = 'ref notNull class|CGroups';
+		$specs['location_id']    = 'ref class|CProductStockLocation autocomplete|name|true';
     $specs['_ordered_count'] = 'num notNull pos';
     $specs['_ordered_last']  = 'dateTime';
     $specs['_zone_future']   = 'num';
@@ -108,6 +111,9 @@ class CProductStockGroup extends CProductStock {
     parent::loadRefsFwd();
     $this->_ref_group = new CGroups;
     $this->_ref_group = $this->_ref_group->getCached($this->group_id);
+		
+		$this->_ref_location = new CProductStockLocation;
+    $this->_ref_location = $this->_ref_location->getCached($this->location_id);
   }
 
   function loadRefsBack(){

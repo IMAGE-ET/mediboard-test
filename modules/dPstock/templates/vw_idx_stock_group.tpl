@@ -82,6 +82,10 @@ ProductSelector.init = function(){
             </td>
           </tr>
           <tr>
+            <th>{{mb_label object=$stock field="location_id"}}</th>
+            <td>{{mb_field object=$stock field="location_id" form="edit_stock"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$stock field="order_threshold_critical"}}</th>
             <td>{{mb_field object=$stock field="order_threshold_critical" form="edit_stock" size=4 increment=true min=0}}</td>
           </tr>
