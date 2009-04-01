@@ -40,12 +40,12 @@ class CSpOuvDro extends CSpObject {
 //    $specs["acctra"]  = "bool"            ; /*          Du Travail        O/N   */
 //    $specs["datacc"]  = "str length|10"   ; /* Date de l'accident               */
 //    $specs["numacc"]  = "str maxLength|9" ; /* No de l'accident                 */
-//    $specs["oridro"]  = "bool"            ; /* Origine des Droits               */
-//    $specs["datval"]  = "str length|10"   ; /* Date Validite CAS ou etabl. PEC  */
+//    $specs["oridro"]  = "str length|1"      ; /* Origine des Droits               */
+//    $specs["datval"]  = "str length|10"     ; /* Date Validite CAS ou etabl. PEC  */
 //    $specs["codorg"]  = "str maxLength|3" ; /* Code organ. delivr. CAS ou PEC   */
-//    $specs["grdreg"]  = "str maxLength|2" ; /* Grand regime                     */
-//    $specs["caisse"]  = "str maxLength|3" ; /* Organisme gestionnaire           */
-//    $specs["centre"]  = "str maxLength|3" ; /* centre gestionnaire              */
+//    $specs["grdreg"]  = "str maxLength|2"   ; /* Grand regime                     */
+//    $specs["caisse"]  = "str maxLength|3"   ; /* Organisme gestionnaire           */
+//    $specs["centre"]  = "str maxLength|4"   ; /* centre gestionnaire              */
 //    $specs["cleorg"]  = "bool"            ; /* Cle organisme                    */
 //    $specs["regime"]  = "str maxLength|3" ; /* Regime                           */
 //    $specs["risque"]  = "str maxLength|2" ; /* Nature d'assurance               */
@@ -55,9 +55,9 @@ class CSpOuvDro extends CSpObject {
 //    $specs["vilemp"]  = "str maxLength|30"; /* Code postal et ville employeur   */
 //    $specs["matemp"]  = "str maxLength|9" ; /* No matricule employeur           */
 //    $specs["forgou"]  = "bool"            ; /* Forfait gouvernemental  O/N      */
-//    $specs["art115"]  = "bool"            ; /* Article 115 (pension guerre) O/N */
+//    $specs["art115"]  = "str length|1"      ; /* Article 115 (pension guerre) O/N */
 //    $specs["num115"]  = "str maxLength|5" ; /* No pensionne de guerre           */
-//    $specs["exoner"]  = "bool"            ; /* Justification exoneration        */
+//    $specs["exoner"]  = "str length|1"      ; /* Justification exoneration        */
 //    $specs["pfjamo"]  = "bool"            ; /* FJ Prise en charge AMO           */
 //    $specs["exof18"]  = "bool"            ; /* Exo de la PAT (18 Euros)         */
 //    $specs["mutuel"]  = "str length|12"   ; /* Code mutuelle                    */
@@ -133,5 +133,4 @@ class CSpOuvDro extends CSpObject {
     $this->datmaj = mbDateToLocale(mbDateTime());
   }
 }
-
 ?>

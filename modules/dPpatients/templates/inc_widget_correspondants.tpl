@@ -136,7 +136,7 @@ Main.add(function () {
  	{{else}}
  	<tr>
  	  <td colspan="2" class="text">
-		  <div class="big-info">
+		  <div class="small-info">
 		    Veuillez créer la fiche patient avant de pouvoir ajoute ou supprimer ses médecins correspondants.
 		  </div>
  	  </td>

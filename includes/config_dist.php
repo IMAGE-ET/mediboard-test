@@ -279,6 +279,8 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
 		"col3" => "patient"
   ),
   "chambre_operation" => "0",
+  "impression_suivi"  => "0",
+  "id_salles_impression" => "",
 );
 
 $dPconfig["dPImeds"] = array (

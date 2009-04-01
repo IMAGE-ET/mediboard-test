@@ -992,7 +992,18 @@ class CSetupdPpatients extends CSetup {
             CHANGE `assure_pays_naissance_insee` `assure_pays_naissance_insee` INT(3) UNSIGNED ZEROFILL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.84";
+    $this->makeRevision("0.84");
+    
+    $sql = "ALTER TABLE `patients` 
+    		ADD `libelle_exo` TEXT AFTER `rques`,
+    		ADD `medecin_traitant_declare` ENUM('0', '1') AFTER `email`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `patients` 
+    		CHANGE `code_exo` `code_exo` ENUM('0', '4', '5', '9') NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.85";
   }
 }
 

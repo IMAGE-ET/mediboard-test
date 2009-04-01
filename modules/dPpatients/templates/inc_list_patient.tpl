@@ -96,13 +96,13 @@ var Patient = {
       <button class="search" type="submit">
         {{tr}}Search{{/tr}}
       </button>
-      {{if $app->user_prefs.GestionFSE}}
-      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-        Lire Vitale
-      </button>
-      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire Vitale');">
-        Résultat Vitale
-      </button>
+      {{if $app->user_prefs.GestionFSE && !$app->user_prefs.VitaleVision}}
+	      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+	        Lire Vitale
+	      </button>
+	      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire Vitale');">
+	        Résultat Vitale
+	      </button>
       {{/if}}
       
       {{if $can->edit}}

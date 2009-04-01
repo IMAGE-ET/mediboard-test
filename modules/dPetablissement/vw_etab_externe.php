@@ -7,7 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $can->needsRead();
 
@@ -16,7 +16,7 @@ $etab_id = mbGetValueFromGetOrSession("etab_id");
 
 // Récupération des etablissements externes
 $etabExterne = new CEtabExterne();
-$listEtabExternes = $etabExterne->loadList();
+$listEtabExternes = $etabExterne->loadList(null, "nom");
 
 if($etab_id){
   $etabExterne->load($etab_id);

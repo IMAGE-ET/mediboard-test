@@ -3,20 +3,34 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 {{mb_include_script module="dPpatients" script="siblings_checker"}}
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
+{{if $app->user_prefs.VitaleVision}}
+  {{include file="../../dPpatients/templates/inc_vitalevision.tpl"}}
+
+	<script type="text/javascript">
+		var lireVitale = VitaleVision.read;
+	</script>
+{{else}}
+  {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
+	
+	<script type="text/javascript">
+		Intermax.ResultHandler["Consulter Vitale"] =
+		Intermax.ResultHandler["Lire Vitale"] = function() {
+		  var url = new Url;
+		//  url.setModuleTab("dPpatients", "vw_edit_patients");
+		  url.addParam("m", "dPpatients");
+		  url.addParam("{{$actionType}}",  "vw_edit_patients");
+		  url.addParam("dialog",  "{{$dialog}}");
+		  url.addParam("useVitale", 1);
+		  url.redirect();
+		}
+		
+		var lireVitale = function(){
+      Intermax.trigger('Lire Vitale');
+    }
+	</script>
+{{/if}}
 
 <script type="text/javascript">
-
-Intermax.ResultHandler["Consulter Vitale"] =
-Intermax.ResultHandler["Lire Vitale"] = function() {
-  var url = new Url;
-//  url.setModuleTab("dPpatients", "vw_edit_patients");
-  url.addParam("m", "dPpatients");
-  url.addParam("{{$actionType}}",  "vw_edit_patients");
-  url.addParam("dialog",  "{{$dialog}}");
-  url.addParam("useVitale", 1);
-  url.redirect();
-}
 
 function copyAssureValues(element) {
 	// Hack pour gérer les form fields
@@ -78,22 +92,36 @@ Main.add(function () {
 {{if $patient->_id}}
 <a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a>
 {{/if}}
+
+<div id="modal-beneficiaire" style="display:none; text-align:center;">
+  <p>Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :</p>
+	<p>
+		<select id="modal-beneficiaire-select"></select>
+	</p>
+  <div>
+  	<button type="button" class="tick" onclick="VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
+	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
+  </div>
+</div>
+
 <table class="main">
   <tr>
   {{if $patient->_id}}
     <th class="title modify" colspan="5">
       {{if $app->user_prefs.GestionFSE}}
-	      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
+	      <button class="search" type="button" onclick="lireVitale();" style="float: left;">
 	        Lire Vitale
 	      </button>
-	      {{if $patient->_id_vitale}}
-	      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});" style="float: left;">
-	        Consulter Vitale
-	      </button>
+	      {{if !$app->user_prefs.VitaleVision}}
+		      {{if $patient->_id_vitale}}
+			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});" style="float: left;">
+			        Consulter Vitale
+			      </button>
+		      {{/if}}
+		      <button class="change intermax-result" type="button" onclick="Intermax.result();" style="float: left;">
+		        Résultat Vitale
+		      </button>
 	      {{/if}}
-	      <button class="change intermax-result" type="button" onclick="Intermax.result();" style="float: left;">
-	        Résultat Vitale
-	      </button>
 			{{/if}}
     
 			{{if $patient->_id_vitale}}
@@ -114,12 +142,14 @@ Main.add(function () {
   {{else}}
     <th class="title" colspan="5">
       {{if $app->user_prefs.GestionFSE}}
-	      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
-	        Lire Vitale
-	      </button>
-	      <button class="change intermax-result" type="button" onclick="Intermax.result();" style="float: left;">
-	        Résultat Vitale
-	      </button>
+        <button class="search" type="button" onclick="lireVitale();" style="float: left;">
+          Lire Vitale
+        </button>
+				{{if !$app->user_prefs.VitaleVision}}
+		      <button class="change intermax-result" type="button" onclick="Intermax.result();" style="float: left;">
+		        Résultat Vitale
+		      </button>
+				{{/if}}
 			{{/if}}
 			{{tr}}Create{{/tr}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}

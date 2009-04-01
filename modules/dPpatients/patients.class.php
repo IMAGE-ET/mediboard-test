@@ -37,6 +37,7 @@ class CPatient extends CMbObject {
   var $tel              = null;
   var $tel2             = null;
   var $email            = null;
+  var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
   var $incapable_majeur = null;
   var $ATNC             = null;
@@ -50,6 +51,7 @@ class CPatient extends CMbObject {
   var $cmu              = null;
   var $ald              = null;
   var $code_exo         = null;
+  var $libelle_exo		= null;
   var $notes_amo        = null;
   var $deb_amo          = null;
   var $fin_amo          = null;
@@ -116,6 +118,8 @@ class CPatient extends CMbObject {
   var $_age         = null;
   var $_article     = null;
   var $_longview    = null;
+  var $_art115      = null;
+	var $_exoneration = null;
   
   // Vitale
   var $_bind_vitale = null;
@@ -178,6 +182,7 @@ class CPatient extends CMbObject {
     $specs["nom_soundex2"]      = "str";
     $specs["prenom_soundex2"]   = "str";
     $specs["nomjf_soundex2"]    = "str";
+    $specs["medecin_traitant_declare"] = "bool";
     $specs["medecin_traitant"]  = "ref class|CMedecin";
     $specs["matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
     $specs["code_regime"]       = "numchar length|2";
@@ -204,7 +209,8 @@ class CPatient extends CMbObject {
     $specs["rques"]             = "text";
     $specs["cmu"]               = "bool";
     $specs["ald"]               = "bool";
-    $specs["code_exo"]          = "enum list|0|5|9 default|0";
+    $specs["code_exo"]          = "enum list|0|4|5|9 default|0";
+    $specs["libelle_exo"]		= "text";
     $specs["deb_amo"]           = "date";
     $specs["fin_amo"]           = "date";
     $specs["notes_amo"]         = "text";
@@ -263,7 +269,8 @@ class CPatient extends CMbObject {
     
     $specs["_id_vitale"]                  = "num";
     $specs["_pays_naissance_insee"]       = "str";
-    $specs["_assure_pays_naissance_insee"]       = "str";
+    $specs["_assure_pays_naissance_insee"]= "str";
+    $specs["_art115"]                     = "bool";
     return $specs;
   }
   
@@ -506,6 +513,10 @@ class CPatient extends CMbObject {
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
     $this->_prenoms = array($this->prenom, $this->prenom_2, $this->prenom_3, $this->prenom_4);
+  
+    if($this->libelle_exo) {
+      $this->_art115 = preg_match("/pension militaire/i", $this->libelle_exo);
+    }
   
     $this->evalAge();
     

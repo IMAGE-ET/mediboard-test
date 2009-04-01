@@ -39,6 +39,10 @@
     <th>{{mb_label object=$patient field="regime_am"}}</th>
     <td>{{mb_field object=$patient field="regime_am"}}</td>
   </tr>
+  <tr>
+  	<th>{{mb_label object=$patient field="medecin_traitant_declare"}}</th>
+  	<td>{{mb_field object=$patient field="medecin_traitant_declare"}}</td>
+  </tr>
 </table>
 
     </td>
@@ -67,7 +71,11 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="notes_amo"}}</th>
-    <td>{{mb_field object=$patient field="notes_amo" onblur="tabs.changeTabAndFocus('correspondance', this.form.prevenir_nom)"}}</td>
+    <td>{{mb_field object=$patient field="notes_amo"}}</td>
+  </tr>
+  <tr>
+  	<th>{{mb_label object=$patient field="libelle_exo"}}</th>
+  	<td>{{mb_field object=$patient field="libelle_exo" onblur="tabs.changeTabAndFocus('correspondance', this.form.prevenir_nom)"}}</td>
   </tr>
 </table>
 
