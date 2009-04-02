@@ -50,10 +50,10 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		if (!$statut) {
 			if (is_array($codes)) {
 	      foreach ($codes as $code) {
-	        $this->addObservation($enteteMessageAcquittement, $code, CHprimSoapHandler::$codesAvertissementInformation[$code]);
+	        $this->addObservation($enteteMessageAcquittement, $code, CHprimSoapHandler::$codesAvertissementInformation[$code], $commentaires);
 	      }
 	    } else {
-	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codesAvertissementInformation[$codes]);
+	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codesAvertissementInformation[$codes], $commentaires);
 	    }
 		}
 	}

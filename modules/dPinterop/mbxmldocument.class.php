@@ -102,7 +102,7 @@ class CMbXMLDocument extends DOMDocument {
        trigger_error($this->libxml_display_error($error), E_USER_WARNING);
      }
      libxml_clear_errors();
-     mbTrace($chain_errors, "Chaine erreurs", true);
+
      return $chain_errors;
   }
   

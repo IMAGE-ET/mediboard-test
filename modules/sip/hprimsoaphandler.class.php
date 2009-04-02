@@ -68,7 +68,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->type = "evenementsPatients";
 			$echange_hprim->message = $messagePatient;
 			$echange_hprim->acquittement = $messageAcquittement;
-			$echange_hprim->store(); 
+			mbTrace($echange_hprim->store(), "Echange", true); 
 			
 			return $messageAcquittement;
 		}
