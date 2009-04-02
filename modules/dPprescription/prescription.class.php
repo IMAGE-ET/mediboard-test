@@ -1300,7 +1300,9 @@ class CPrescription extends CMbObject {
     foreach($lines as $cat_name => $lines_cat){
 		  if(count($lines_cat)){
 		    foreach($lines_cat as &$_line_med){
-		      
+		      if(!$_line_med->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+		        continue;  
+		      }
 		      // Code Cip
 		      if($code_cip && ($code_cip != $_line_med->code_cip)){
 		        continue;
@@ -1391,8 +1393,10 @@ class CPrescription extends CMbObject {
 				    // Initialisation du compteur de lignes
 				    foreach($elements_cat as &$_elements){
 				 	    foreach($_elements as &$_line_element){
-				 	      
-				      	  // Chargement des administrations et des transmissions
+				 	    		if(!$_line_element->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+		                continue;  
+		              }
+		              // Chargement des administrations et des transmissions
 				      	  if($with_calcul){
 				      	    $_line_element->calculAdministrations($date, $mode_feuille_soin);
 				      	  }
@@ -1470,6 +1474,9 @@ class CPrescription extends CMbObject {
 	    // Parcours des perfusions
 	    if($this->_ref_perfusions){
 	      foreach($this->_ref_perfusions as &$_perfusion){
+ 				 	if(!$_perfusion->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+            continue;  
+          }
 	        if(($date >= mbDate($_perfusion->_debut)) && ($date <= mbDate($_perfusion->_fin))){
 	          $this->_ref_perfusions_for_plan[$_perfusion->_id] = $_perfusion;
 	        }

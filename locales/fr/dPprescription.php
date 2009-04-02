@@ -1357,4 +1357,5 @@ $locales['CPrescription._chapitres.soin'] = 'Soins';
 $locales['CPrescriptionLine-commentaire'] = '';
 $locales['CPrescriptionLine-commentaire-court'] = '';
 $locales['CPrescriptionLine-commentaire-desc'] = '';
+$locales['config-dPprescription-CPrescription-show_unsigned_lines'] = 'Affichage des lignes non signées';
 ?>

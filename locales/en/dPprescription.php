@@ -1000,4 +1000,5 @@ $locales['CPrescription-_score_prescription-desc'] = '';
 $locales['CPrescription._score_prescription.0'] = '';
 $locales['CPrescription._score_prescription.1'] = '';
 $locales['CPrescription._score_prescription.2'] = '';
+$locales['config-dPprescription-CPrescription-show_unsigned_lines'] = '';
 ?>

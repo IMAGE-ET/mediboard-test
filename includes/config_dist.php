@@ -369,6 +369,7 @@ $dPconfig["dPmedicament"] = array (
 
 $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
+    "show_unsigned_lines" => "1",
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
     "time_alerte_modification" => "2",
