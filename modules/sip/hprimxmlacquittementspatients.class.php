@@ -47,14 +47,15 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
 		$this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
     
-	  if (is_array($codes)) {
-      foreach ($codes as $code) {
-      	$this->addObservation($enteteMessageAcquittement, $code, CHprimSoapHandler::$codesAvertissementInformation[$code]);
-      }
-    } else {
-      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codesAvertissementInformation[$codes]);
-    }
-		
+		if (!$statut) {
+			if (is_array($codes)) {
+	      foreach ($codes as $code) {
+	        $this->addObservation($enteteMessageAcquittement, $code, CHprimSoapHandler::$codesAvertissementInformation[$code]);
+	      }
+	    } else {
+	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codesAvertissementInformation[$codes]);
+	    }
+		}
 	}
 
 	function addErreursAvertissements($codes, $commentaires, $mbObject = null) {

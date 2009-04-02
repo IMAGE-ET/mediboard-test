@@ -95,12 +95,14 @@ class CMbXMLDocument extends DOMDocument {
   
   function libxml_display_errors() {
      $errors = libxml_get_errors();
+     $chain_errors = "";
+     
      foreach ($errors as $error) {
      	 $chain_errors .= $this->libxml_display_error($error)."\n";
        trigger_error($this->libxml_display_error($error), E_USER_WARNING);
      }
      libxml_clear_errors();
-     
+     mbTrace($chain_errors, "Chaine erreurs", true);
      return $chain_errors;
   }
   
@@ -129,11 +131,7 @@ class CMbXMLDocument extends DOMDocument {
     
     if (!parent::schemaValidate($filename)) {
        $errors = $this->libxml_display_errors();
-       if ($returnErrors) {
-       	 return $errors;
-       } else {
-       	 return false;
-       }
+       	 return $returnErrors ? $errors : false;
     }
     
     return true;
