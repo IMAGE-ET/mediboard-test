@@ -98,7 +98,7 @@ class CMbXMLDocument extends DOMDocument {
      $chain_errors = "";
      
      foreach ($errors as $error) {
-     	 $chain_errors .= strip_tags($this->libxml_display_error($error))."\n";
+     	 $chain_errors .= strip_tags(preg_replace('/( in\ \/(.*))/', '', $this->libxml_display_error($error)))."\n";
        trigger_error($this->libxml_display_error($error), E_USER_WARNING);
      }
      libxml_clear_errors();

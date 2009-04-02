@@ -19,43 +19,43 @@ class CHprimSoapHandler extends CSoapHandler {
     "evenementPatient" => array ( 
       "messagePatient" => "string")
 	);
-	
+
 	static $codesErreur = array(
 	  "ERR000" => "Erreur inattendue",
     "ERR001" => "L'émetteur du message n'est pas conforme avec l'établissement enregistré dans le SIP.",
 	  "ERR002" => "La grammaire du message XML n'est pas respectée.",
-	  "ERR003" => "Les identifiants fournis sont incohérents dans le SIP. L'IPP renvoyé ne correspond pas à celui associé à l'identifiant source",
-	  "ERR004" => "Disconcordance entre l'identifiant source et l'identifiant cible",
+	  "ERR003" => "Les identifiants fournis sont incohérents dans le SIP. L'IPP renvoyé ne correspond pas à celui associé à l'identifiant source.",
+	  "ERR004" => "Disconcordance entre l'identifiant source et l'identifiant cible.",
 	);
-  
-  static $codesAvertissementInformation = array(
-    "AVT001" => "IPP envoyé non existant sur le SIP, attribution IPP forcée",
-    "AVT002" => "L'enregistrement du patient a échoué",
-    "AVT003" => "Modification du patient a échoué",
-    "AVT004" => "Création de l'id externe a échoué",
-    "AVT005" => "Création de l'IPP a échoué",
-    "AVT006" => "Modification de l'id externe a échoué",
-  
+
+	static $codesAvertissementInformation = array(
+    "AVT001" => "IPP envoyé non existant sur le SIP, attribution IPP forcée.",
+    "AVT002" => "L'enregistrement du patient a échoué.",
+    "AVT003" => "Modification du patient a échoué.",
+    "AVT004" => "Création de l'id externe a échoué.",
+    "AVT005" => "Création de l'IPP a échoué.",
+    "AVT006" => "Modification de l'id externe a échoué.",
+
     "INF001" => "L'enregistrement du patient est terminé.",
     "INF002" => "Modification du patient terminée.",
     "INF003" => "Identifiant source non fourni.",
     "INF004" => "Identifiant source non connu.",
     "INF005" => "Identifiant cible non connu.",
     "INF006" => "Identifiant source mis à jour.",
-  );
+	);
 
 	function evenementPatient($messagePatient) {
 		global $m;
-    
+
 		// Traitement du message des erreurs
-    $erreur = "";
-    
-    // Création de l'échange
-    $echange_hprim = new CEchangeHprim();
-    
-    // Gestion de l'acquittement
-    $domAcquittement = new CHPrimXMLAcquittementsPatients();
-      
+		$erreur = "";
+
+		// Création de l'échange
+		$echange_hprim = new CEchangeHprim();
+
+		// Gestion de l'acquittement
+		$domAcquittement = new CHPrimXMLAcquittementsPatients();
+
 		// Récupération des informations du message XML
 		$domGetEvenement = new CHPrimXMLEvenementsPatients();
 		$domGetEvenement->loadXML(utf8_decode($messagePatient));
@@ -63,29 +63,29 @@ class CHprimSoapHandler extends CSoapHandler {
 
 		// Acquittement d'erreur d'un document XML recu non valide
 		if ($doc_errors !== true) {
-      $domAcquittement->_identifiant = "inconnu";
-      $domAcquittement->_destinataire = "inconnu";
-      $domAcquittement->_destinataire_libelle = "inconnu document xml non valide";
+			$domAcquittement->_identifiant = "inconnu";
+			$domAcquittement->_destinataire = "inconnu";
+			$domAcquittement->_destinataire_libelle = "inconnu document xml non valide";
 
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients(false, "ERR002", $doc_errors);
-      
-      $echange_hprim->date_production = mbDateTime();
-      $echange_hprim->emetteur = "inconnu";
+			$messageAcquittement = $domAcquittement->generateAcquittementsPatients(false, "ERR002", $doc_errors);
+
+			$echange_hprim->date_production = mbDateTime();
+			$echange_hprim->emetteur = "inconnu";
 			$echange_hprim->destinataire = CAppUI::conf('mb_id');
 			$echange_hprim->type = "evenementsPatients";
 			$echange_hprim->message = $messagePatient;
 			$echange_hprim->acquittement = utf8_decode($messageAcquittement);
-			$echange_hprim->store(); 
-			
+			$echange_hprim->store();
+				
 			return $messageAcquittement;
 		}
-    		
-		$data = $domGetEvenement->getEvenementPatientXML();		
-		
+
+		$data = $domGetEvenement->getEvenementPatientXML();
+
 		$domAcquittement->_identifiant = $data['identifiantMessage'];
-    $domAcquittement->_destinataire = $data['idClient'];
-    $domAcquittement->_destinataire_libelle = $data['libelleClient'];
-    
+		$domAcquittement->_destinataire = $data['idClient'];
+		$domAcquittement->_destinataire_libelle = $data['libelleClient'];
+
 		if (CAppUI::conf('sip server')) {
 			$echange_hprim->identifiant_emetteur = intval($data['identifiantMessage']);
 			$echange_hprim->loadMatchingObject();
@@ -99,7 +99,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->message = $messagePatient;
 		}
 		$echange_hprim->date_production = mbDateTime();
-		$echange_hprim->store();		
+		$echange_hprim->store();
 
 		$newPatient = new CPatient();
 		$newPatient->_hprim_initiator_id = $echange_hprim->_id;
@@ -113,7 +113,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$id400->id400 = $data['idSource'];
 			$id400->object_class = "CPatient";
 			$id400->tag = $data['idClient'];
-     			
+
 			// Cas 1 : Patient existe sur le SIP
 			if($id400->loadMatchingObject()) {
 				// Identifiant du patient sur le SIP
@@ -145,9 +145,9 @@ class CHprimSoapHandler extends CSoapHandler {
 						$mutex->release();
 
 						$newPatient->_IPP = $IPP->_id;
-						
+
 						// Acquittement d'erreur lors du store du patient
-					  $erreur .= $newPatient->store();
+						$erreur .= $newPatient->store();
 					}
 				}
 				// Cas 1.2 : Identifiant cible envoyé
@@ -158,27 +158,27 @@ class CHprimSoapHandler extends CSoapHandler {
 					$IPP->tag = CAppUI::conf("mb_id");
 
 					$IPP->id400 = $data['idCible'];
-					
+						
 					if ($IPP->loadMatchingObject()) {
 						// Acquittement d'erreur idSource et idCible incohérent
 						if ($idPatientSIP != $IPP->object_id) {
 							$commentaire = "L'identifiant source est fait référence au patient : $idPatientSIP et l'identifiant cible au paient : $IPP->object_id.";
-					    $messageAcquittement = $domAcquittement->generateAcquittementsPatients(false, "ERR003", $commentaire);
-					    
-					    $echange_hprim->acquittement = $messageAcquittement;
-					    $echange_hprim->store();
-					    
-					    return $messageAcquittement;
+							$messageAcquittement = $domAcquittement->generateAcquittementsPatients(false, "ERR003", $commentaire);
+								
+							$echange_hprim->acquittement = $messageAcquittement;
+							$echange_hprim->store();
+								
+							return $messageAcquittement;
 						} else {
 							$newPatient->_id = $IPP->object_id;
-	            $newPatient->loadMatchingObject();
-	            // Mapping du patient
-	            $newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
-	            $newPatient->_IPP = $IPP->id400;
-	  
-	            // Acquittement d'erreur lors du store du patient
-	            $erreur .= $newPatient->store();
-						}						
+							$newPatient->loadMatchingObject();
+							// Mapping du patient
+							$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
+							$newPatient->_IPP = $IPP->id400;
+							 
+							// Acquittement d'erreur lors du store du patient
+							$erreur .= $newPatient->store();
+						}
 					}
 				}
 			}
@@ -225,12 +225,14 @@ class CHprimSoapHandler extends CSoapHandler {
 				$newPatient->_IPP = $IPP->id400;
 				$newPatient->_no_ipp = 0;
 				$msgPatient = $newPatient->store();
-				
-        $codes = array ($msgPatient ? "AVT002" : "INF001", $msgID400 ? "AVT004" : "INF004", $msgIPP ? "AVT005" : "INF005");	
-        if ($msgPatient || $msgID400 || $msgIPP) {
-        	$commentaire = $msgPatient."\n".$msgID400."\n".$msgIPP."\n";
-        }        
-				$messageAcquittement = $domAcquittement->generateAcquittementsPatients($commentaire ? false : true, $codes, $commentaire ? $commentaire : null);
+
+				$codes = array ($msgPatient ? "AVT002" : "INF001", $msgID400 ? "AVT004" : "INF004", $msgIPP ? "AVT005" : "INF005");
+				if ($msgPatient || $msgID400 || $msgIPP) {
+					$avertissement = $msgPatient."\n".$msgID400."\n".$msgIPP;
+				} else {
+					$commentaire = "Patient crée. Identifiant externe crée. IPP crée.";
+				}
+				$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? false : true, $codes, $avertissement ? $avertissement : $commentaire);
 			}
 		} else {
 			$IPP = new CIdSante400();
@@ -252,8 +254,8 @@ class CHprimSoapHandler extends CSoapHandler {
 				$tmpPatient->load();
 
 				if(($tmpPatient->nom == $newPatient->nom) &&
-				    ($tmpPatient->prenom == $newPatient->prenom) &&
-				    ($tmpPatient->naissance == $newPatient->naissance)) {
+				($tmpPatient->prenom == $newPatient->prenom) &&
+				($tmpPatient->naissance == $newPatient->naissance)) {
 					$newPatient->_id = $data['idCible'];
 				}
 			}
@@ -267,8 +269,16 @@ class CHprimSoapHandler extends CSoapHandler {
 			}
 			$IPP->last_update = mbDateTime();
 			$msgIPP = $IPP->store();
+				
+			$codes = array ($msgPatient ? "AVT002" : "INF001", $msgIPP ? "AVT005" : "INF005");
+			if ($msgPatient || $msgIPP) {
+				$avertissement = $msgPatient."\n".$msgIPP;
+			} else {
+				$commentaire = "Patient crée : $newPatient->_id. IPP crée : $IPP->id400.";
+			}
+			$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? false : true, $codes, $avertissement ? $avertissement : $commentaire);
 		}
-		
+
 		$echange_hprim->acquittement = $messageAcquittement;
 		$echange_hprim->date_echange = mbDateTime();
 		$echange_hprim->store();
