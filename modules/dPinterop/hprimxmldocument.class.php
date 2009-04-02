@@ -269,7 +269,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->addElement($observation, "code", $code);
     $this->addElement($observation, "libelle", $libelle);
-    $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
+    $this->addElement($observation, "commentaire", html_entity_decode(substr($commentaires, 0, 4000))); 
   }
 }
 

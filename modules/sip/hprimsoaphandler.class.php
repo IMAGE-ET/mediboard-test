@@ -63,12 +63,13 @@ class CHprimSoapHandler extends CSoapHandler {
 
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients(false, "ERR002", $doc_errors);
       
+      $echange_hprim->date_production = mbDateTime();
       $echange_hprim->emetteur = "inconnu";
 			$echange_hprim->destinataire = CAppUI::conf('mb_id');
 			$echange_hprim->type = "evenementsPatients";
 			$echange_hprim->message = $messagePatient;
 			$echange_hprim->acquittement = $messageAcquittement;
-			mbTrace($echange_hprim->store(), "Echange", true); 
+			$echange_hprim->store(); 
 			
 			return $messageAcquittement;
 		}
