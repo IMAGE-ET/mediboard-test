@@ -53,9 +53,9 @@ class CSipObjectHandler extends CMbObjectHandler {
 				$id400->tag = $_curr_dest->destinataire;
 
 				if($id400->loadMatchingObject())
-				$mbObject->_id400 = $id400->id400;
+				  $mbObject->_id400 = $id400->id400;
 				else
-				$mbObject->_id400 = null;
+				  $mbObject->_id400 = null;
 
 				if (!$mbObject->_IPP) {
 					$IPP = new CIdSante400();
@@ -68,7 +68,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 					$mbObject->_IPP = $IPP->id400;
 				}
 				
-				mbTrace($mbObject, "Patient ".$_curr_dest->destinataire, true);
+				//mbTrace($mbObject, "Patient ".$_curr_dest->destinataire, true);
 
 				$domEvenement = new CHPrimXMLEvenementsPatients();
 				$domEvenement->_emetteur = CAppUI::conf('mb_id');
