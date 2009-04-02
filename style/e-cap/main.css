@@ -653,7 +653,7 @@ table.tbl {
 
 table.tbl td, 
 table.tbl th {
-  border: 1px solid #ddd;
+  border: 1px solid #eee;
 	background-color: #ffd;
   padding: 2px;
   white-space: nowrap;
