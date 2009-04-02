@@ -29,7 +29,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		$acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
 		$enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
-		$this->addAttribute($enteteMessageAcquittement, "statut", ($statut === false) ? "OK" : "erreur");
+		$this->addAttribute($enteteMessageAcquittement, "statut", ($statut == false) ? "OK" : "erreur");
 
 		$this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->_identifiant);
 		$this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
@@ -47,7 +47,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
 		$this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
     
-		if ($statut === false) {
+		if ($statut == false) {
 			if (is_array($codes)) {
 	      foreach ($codes as $code) {
 	        $this->addObservation($enteteMessageAcquittement, $code, CHprimSoapHandler::$codesAvertissementInformation[$code], $commentaires);
@@ -75,8 +75,8 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 	function generateAcquittementsPatients($statut, $codes, $commentaires, $mbObject = null) {
 		$this->_emetteur = CAppUI::conf('mb_id');
 		$this->_date_production = mbDateTime();
-
-		if ($statut === false) {
+mbExport($statut, "Statut", true);
+		if ($statut == false) {
 			$this->generateEnteteMessageAcquittement($statut);
 		  $this->addErreursAvertissements($codes, $commentaires, $mbObject);
 		} else {
