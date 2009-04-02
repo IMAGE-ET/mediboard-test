@@ -114,7 +114,7 @@ Main.add( function(){
       <div class="{{if $prescription->_score_prescription == '1'}}small-warning{{else}}small-error{{/if}}">
         <strong>
           <span onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-{{$prescription->_id}}")'>
-		        {{mb_label object=$prescription field=_score_prescription}} 
+		        Niveau
 		        {{mb_value object=$prescription field=_score_prescription}}
 	        <span>
 		      {{if $mode_pharma && $prescription->_score_prescription == "2"}}

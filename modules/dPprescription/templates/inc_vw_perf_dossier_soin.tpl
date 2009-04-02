@@ -23,15 +23,15 @@
 	    </a>
 	  </div>
 	  
-	   	  
-    {{if $_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $_perfusion->_ref_substitution_lines.CPerfusion|@count}}
+	  {{if !$_perfusion->date_debut_adm}}
+    {{if ($_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $_perfusion->_ref_substitution_lines.CPerfusion|@count) &&
+          $_perfusion->_ref_substitute_for->substitution_plan_soin}}
     <form action="?" method="post" name="changeLine-{{$perfusion_id}}">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_substitution_line_aed" />
       <select name="object_guid" style="width: 75px;" 
               onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-      										loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')
-      				} } )">
+      										loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration');} } )">
         <option value="">Conserver</option>
         {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
           {{foreach from=$lines_subst_by_chap item=_line_subst}}
@@ -42,7 +42,7 @@
       </select>
     </form>
     {{/if}}
-    
+    {{/if}}
 	  </div>
 	</td>
  	<td class="text" style="font-size: 1em;">
@@ -51,9 +51,6 @@
  	     <li><small>{{$_line->_view}}</small></li>
  	   {{/foreach}}
  	  </ul>
- 	  
-
-    
  	</td>	      
   <th></th>
   {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}

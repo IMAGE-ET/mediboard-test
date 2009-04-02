@@ -199,6 +199,12 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="substitution_active" value="0" />
 </form>
 
+{{if $line->_class_name == "CPrescriptionLineMedicament"}}
+  {{assign var=dosql value="do_prescription_line_medicament_aed"}}
+{{else}}
+  {{assign var=dosql value="do_perfusion_aed"}}
+{{/if}}
+
 {{if !$mode_pack}}
 <table class="tbl">
   <tr>
@@ -226,6 +232,17 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 			      }
 			  </script>
 			  </form>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Substitution possible dans le plan de soin
+      <form name="editLine" action="?" method="post">
+			  <input type="hidden" name="m" value="dPprescription" />
+			  <input type="hidden" name="dosql" value="{{$dosql}}" />
+				<input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
+				{{mb_field object=$line field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+			</form>
     </td>
   </tr>
   <tr>

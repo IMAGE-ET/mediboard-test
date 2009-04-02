@@ -111,7 +111,11 @@ foreach($dates as $curr_date => $_date){
 if($object_id && $object_class){
   $line = new $object_class;
   $line->load($object_id);
-  
+  if($line->_class_name == "CPrescriptionLineMedicament"){
+  	$line->countSubstitutionsLines();
+	  $line->countBackRefs("administration");
+		$line->loadRefsSubstitutionLines();
+  }
   if($line_type != "service"){
     $_dates = array();
     $_dates[] = $date;
@@ -155,6 +159,8 @@ if($object_id && $object_class){
   }
     
   if($line->_class_name == "CPerfusion"){
+	 	$line->countSubstitutionsLines();
+		$line->loadRefsSubstitutionLines();
     $line->loadRefsLines();
     $line->loadRefPraticien();
 	  $line->_ref_praticien->loadRefFunction();
@@ -189,35 +195,15 @@ else {
       foreach($prescription->_ref_prescription_lines as &$_line_med){
 			  $_line_med->loadRefLogSignee();
 			  $_line_med->countSubstitutionsLines();
-			  if(!$_line_med->countBackRefs("administration")){
-				  if(!$_line_med->substitute_for_id){
-				    $_line_med->loadRefsSubstitutionLines();   
-				  } else {
-	          $_base_line = new $_line_med->substitute_for_class;
-					  $_base_line->load($_line_med->substitute_for_id);
-					  $_base_line->loadRefsSubstitutionLines();
-	          $_line_med->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-	          $_line_med->_ref_substitution_lines[$_base_line->_class_name][$_base_line->_id] = $_base_line;
-					  unset($_line_med->_ref_substitution_lines[$_line_med->_class_name][$_line_med->_id]);					  
-				  }
-			  }
+			  $_line_med->countBackRefs("administration");
+				$_line_med->loadRefsSubstitutionLines();
 			}
     } elseif($chapitre == "perf") {
       // Chargement des perfusions
 	    $prescription->loadRefsPerfusions("1", $line_type);
 		  foreach($prescription->_ref_perfusions as &$_perfusion){
 		    $_perfusion->countSubstitutionsLines();
-
-		    if(!$_perfusion->substitute_for_id){
-		      $_perfusion->loadRefsSubstitutionLines();
-		    } else {
-		      $_base_line = new $_perfusion->substitute_for_class;
-				  $_base_line->load($_perfusion->substitute_for_id);
-				  $_base_line->loadRefsSubstitutionLines();
-          $_perfusion->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-          $_perfusion->_ref_substitution_lines[$_base_line->_class_name][$_base_line->_id] = $_base_line;
-				  unset($_perfusion->_ref_substitution_lines[$_perfusion->_class_name][$_perfusion->_id]);
-		    }
+		    $_perfusion->loadRefsSubstitutionLines();
 		    $_perfusion->getRecentModification();
 		    $_perfusion->loadRefsLines();
 		    $_perfusion->loadRefPraticien();

@@ -47,11 +47,11 @@ class CPerfusion extends CMbObject {
   var $dose_bolus          = null; // Dose du bolus (en mg)
   var $periode_interdite   = null; // Periode interdite en minutes
   //var $dose_limite_horaire = null; // Dose maxi pour une heure
-
   
   var $substitute_for_id    = null;
   var $substitute_for_class = null;
   var $substitution_active = null;
+  var $substitution_plan_soin = null;
     
   // Fwd Refs
   var $_ref_prescription = null;
@@ -73,7 +73,8 @@ class CPerfusion extends CMbObject {
   
   // Object references
   var $_ref_log_signature_prat = null;
-  
+  var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
+
   // Can fields
   var $_perm_edit                        = null;
   var $_can_modify_perfusion             = null;
@@ -130,6 +131,7 @@ class CPerfusion extends CMbObject {
     $specs["substitute_for_id"]    = "ref meta|substitute_for_class cascade";
     $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPerfusion";
     $specs["substitution_active"]  = "bool";
+    $specs["substitution_plan_soin"] = "bool";
     return $specs;
   }
 
@@ -344,13 +346,23 @@ class CPerfusion extends CMbObject {
   	$this->_ref_parent_line = $this->loadUniqueBackRef("prev_line");
   }
   
-  
   /*
    * Chargement des lignes de substitution possibles
    */
   function loadRefsSubstitutionLines(){
-    $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
-    $this->_ref_substitution_lines["CPerfusion"] = $this->loadBackRefs("substitutions_perfusion");  
+    if(!$this->substitute_for_id){
+		  $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
+      $this->_ref_substitution_lines["CPerfusion"] = $this->loadBackRefs("substitutions_perfusion");  
+      $this->_ref_substitute_for = $this;
+    } else {
+	    $_base_line = new $this->substitute_for_class;
+		  $_base_line->load($this->substitute_for_id);
+		  $_base_line->loadRefsSubstitutionLines();
+	    $this->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
+	    $this->_ref_substitution_lines[$_base_line->_class_name][$_base_line->_id] = $_base_line;
+			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
+		  $this->_ref_substitute_for = $_base_line;			  
+	  }
   }
   
   /*

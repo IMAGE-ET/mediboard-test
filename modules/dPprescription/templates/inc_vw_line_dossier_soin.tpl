@@ -107,29 +107,32 @@
     {{/if}}
     </small>
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-    {{if $line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count}}
-    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
-      <input type="hidden" name="m" value="dPprescription" />
-      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-      <select name="object_guid" style="width: 75px;" 
-              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-                           loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')
-                         } } )">
-        <option value="">Conserver</option>
-	      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
-	          {{foreach from=$lines_subst_by_chap item=_line_subst}}
-	          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
-	          {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
-	        {{/foreach}}
-	      {{/foreach}}
-      </select>
-    </form>
-    {{/if}}
-    {{/if}}
-    </div>
-	</td>
+	  
+	  {{if !$line->_count.administration}}
+	    {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count) &&
+	    			$line->_ref_substitute_for->substitution_plan_soin}}
+	    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
+	      <input type="hidden" name="m" value="dPprescription" />
+	      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+	      <select name="object_guid" style="width: 75px;" 
+	              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+	                           loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')
+	                         } } )">
+	        <option value="">Conserver</option>
+		      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
+		          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
+		          {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+		        {{/foreach}}
+		      {{/foreach}}
+	      </select>
+	    </form>
+	    {{/if}}
+	    {{/if}}
+	    </div>
+		</td>
+	  {{/if}}
   {{/if}}
-  
   
   <!-- Affichage des posologies de la ligne -->
   <td class="text">

@@ -329,6 +329,42 @@
   		{{else}}
   		Aucune voie
   		{{/if}}
+  		
+  		{{if !$line->_count.administration && $line->_ref_prescription->object_id}}
+  		{{if $line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count}}
+		    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
+		      <input type="hidden" name="m" value="dPprescription" />
+		      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+		      <select name="object_guid" style="width: 75px;" 
+		              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+		                           Prescription.reload('{{$line->_ref_prescription->_id}}', '', 'medicament');	
+		                         } } )">
+		        <option value="">Conserver</option>
+			      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+			          {{foreach from=$lines_subst_by_chap item=_line_subst}}
+			          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
+			          {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+			        {{/foreach}}
+			      {{/foreach}}
+		      </select>
+		    </form>
+		  
+			  {{if $line->_ref_substitute_for->_class_name == "CPrescriptionLineMedicament"}}
+				  {{assign var=dosql value="do_prescription_line_medicament_aed"}}
+				{{else}}
+				  {{assign var=dosql value="do_perfusion_aed"}}
+				{{/if}}
+
+	        Modif. infirmière
+		      <form name="editLine" action="?" method="post">
+					  <input type="hidden" name="m" value="dPprescription" />
+					  <input type="hidden" name="dosql" value="{{$dosql}}" />
+						<input type="hidden" name="{{$line->_ref_substitute_for->_spec->key}}" value="{{$line->_ref_substitute_for->_id}}" />
+						{{mb_field object=$line->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+					</form>
+		  {{/if}}
+      {{/if}}
+    
  	  </td>
   </tr>
   {{if ($prescription->type != "sortie") && !$line->_protocole && $line->signee && ($is_praticien || @$operation_id || $can->admin)}}

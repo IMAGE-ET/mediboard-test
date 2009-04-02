@@ -1024,8 +1024,27 @@ class CSetupdPprescription extends CSetup {
 						ADD `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPerfusion') DEFAULT 'CPerfusion',
 						ADD `substitution_active` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.78");
+    $sql = "ALTER TABLE `prescription_line_medicament`
+						ADD `substitution_plan_soin` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.78";
+    $sql = "ALTER TABLE `perfusion`
+						ADD `substitution_plan_soin` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `prescription_line_medicament`
+						SET `substitution_plan_soin` = '1'
+						WHERE `substitute_for_id` IS NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `perfusion`
+						SET `substitution_plan_soin` = '1'
+						WHERE `substitute_for_id` IS NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.79";
   }  
 }
 
