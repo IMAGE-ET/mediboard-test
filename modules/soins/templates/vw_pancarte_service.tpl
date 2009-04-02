@@ -78,7 +78,8 @@ Main.add(function () {
 </table>
 <table class="tbl">
   <tr>
-    <th rowspan="2">Patient</th>
+    <th rowspan="2" style="width: 1%;">Patient</th>
+    <th rowspan="2" style="width: 1%;">Lit</th>
     <th rowspan="2" style="width: 1%;">Praticien</th>
       {{foreach from=$tabHours key=_date item=_hours_by_moment}}
         {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
@@ -109,6 +110,9 @@ Main.add(function () {
          <a href="#1" onclick="viewDossierSoin('{{$_prescription->_ref_object->_id}}')">
          {{$_prescription->_ref_patient->_view}}
 				 </a>
+	    </td>
+	    <td>
+	      {{$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view}}
 	    </td>
 	    <td>
 	      <div class="mediuser" style="border-color: #{{$_prescription->_ref_praticien->_ref_function->color}};">

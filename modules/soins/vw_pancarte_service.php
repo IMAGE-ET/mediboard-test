@@ -89,8 +89,13 @@ foreach($dates as $curr_date => $_date){
   }
 }
 
+$lits = array();
+
 // Calcul du plan de soin pour chaque prescription
 foreach($prescriptions as $_prescription){
+  $_prescription->_ref_object->loadRefsAffectations();
+  $lits[$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
+  
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
   $_prescription->loadRefPraticien();
   $_prescription->_ref_praticien->loadRefFunction();
@@ -252,6 +257,14 @@ foreach($prescriptions as $_prescription){
 	}
 }
 
+// Classement par lit
+ksort($lits);
+$_prescriptions = array();
+foreach($lits as $prescription_id){
+  $_prescriptions[$prescription_id] = $prescriptions[$prescription_id];
+}
+
+
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("tab", $tab);
@@ -262,7 +275,7 @@ $smarty->assign("count_nuit", count($nuit));
 $smarty->assign("tabHours", $tabHours);
 $smarty->assign("service_id", $service_id);
 $smarty->assign("services", $services);
-$smarty->assign("prescriptions", $prescriptions);
+$smarty->assign("prescriptions", $_prescriptions);
 $smarty->assign("date"     , $date);
 $smarty->assign("date_min", $date_min);
 $smarty->assign("service", $service);

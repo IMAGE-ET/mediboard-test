@@ -12,6 +12,14 @@
   </tr>
   {{/foreach}}
   <tr>
+    <td style="width: 1%;"><img src="images/icons/ampoule.png" /></td>
+    <td>Ligne modifiée récemment</td>
+  </tr>
+  <tr>
+    <td style="width: 1%;"><img src="images/icons/ampoule_urgence.png" /></td>
+    <td>Ligne urgente</td>
+  </tr>
+  <tr>
     <th colspan="2">
       Couleurs possibles
     </th>
