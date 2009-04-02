@@ -546,13 +546,13 @@ option[value=""] {
 input,
 select,
 textarea {
-  background: #efe;
+  background-color: #efe;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  background: #fff;
+  background-color: #fff;
 }
 
 label:hover {
@@ -1083,12 +1083,27 @@ div.autocomplete ul li {
   list-style-type: none;
   display: block;
   margin: 0;
-  padding:2px;
+  padding:2px;  
   cursor:pointer;
 }
 
 div.autocomplete ul li small {
   white-space: normal;
+}
+
+input.autocomplete {
+  background-image: url(../../images/icons/throbber.gif);
+  background-position: 100% 2px;
+  background-repeat: no-repeat;
+  padding-right: 17px;
+}
+
+input.autocomplete:focus {
+  padding-right: 17px;
+}
+
+input.autocomplete.throbbing {
+  background-position: 100% -19px;
 }
 
 /* links in header blocks */
