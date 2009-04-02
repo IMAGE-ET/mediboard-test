@@ -30,6 +30,12 @@ class CHprimSoapHandler extends CSoapHandler {
   
   static $codesAvertissementInformation = array(
     "AVT001" => "IPP envoyé non existant sur le SIP, attribution IPP forcée",
+    "AVT002" => "L'enregistrement du patient a échoué",
+    "AVT003" => "Modification du patient a échoué",
+    "AVT004" => "Création de l'id externe a échoué",
+    "AVT005" => "Création de l'IPP a échoué",
+    "AVT006" => "Modification de l'id externe a échoué",
+  
     "INF001" => "L'enregistrement du patient est terminé.",
     "INF002" => "Modification du patient terminée.",
     "INF003" => "Identifiant source non fourni.",
@@ -224,7 +230,7 @@ class CHprimSoapHandler extends CSoapHandler {
         if ($msgPatient || $msgID400 || $msgIPP) {
         	$commentaire = $msgPatient."\n".$msgID400."\n".$msgIPP."\n";
         }        
-				$messageAcquittement = $domAcquittement->generateAcquittementsPatients($commentaire ? false : true, $codes, $commentaire);
+				$messageAcquittement = $domAcquittement->generateAcquittementsPatients($commentaire ? false : true, $codes, $commentaire ? $commentaire : null);
 			}
 		} else {
 			$IPP = new CIdSante400();

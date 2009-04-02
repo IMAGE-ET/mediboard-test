@@ -56,10 +56,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       "store" => "modification",
       "delete" => "suppression"
     );
-    //$this->addAttribute($enregistrementPatient, "action", $actionConversion[$mbPatient->_ref_last_log->type]);
+    $this->addAttribute($enregistrementPatient, "action", $actionConversion[$mbPatient->_ref_last_log->type]);
 
     // Ajout du patient   
-    //$this->addPatient($enregistrementPatient, $mbPatient, null, $referent);
+    $this->addPatient($enregistrementPatient, $mbPatient, null, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();
@@ -84,7 +84,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);
     
-   // $doc_valid = $this->schemaValidate();
+    $doc_valid = $this->schemaValidate();
     $this->saveTempFile();
     $messageEvtPatient = utf8_encode($this->saveXML()); 
     

@@ -249,7 +249,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
   }
   
-  function addErreurAvertissement($elParent, $code, $libelle, $commentaires, $mbObject = null) {
+  function addErreurAvertissement($elParent, $code, $libelle, $commentaires = null, $mbObject = null) {
     $erreurAvertissement = $this->addElement($elParent, "erreurAvertissement");
     $this->addAttribute($erreurAvertissement, "statut", "erreur");
      
@@ -264,7 +264,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $observation = $this->addObservation($observations, $code, $libelle, $commentaires);   
   }
   
-  function addObservation($elParent, $code, $libelle, $commentaires) {
+  function addObservation($elParent, $code, $libelle, $commentaires = null) {
     $observation = $this->addElement($elParent, "observation");
     
     $this->addElement($observation, "code", $code);

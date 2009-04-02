@@ -58,7 +58,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		}
 	}
 
-	function addErreursAvertissements($codes, $commentaires, $mbObject = null) {
+	function addErreursAvertissements($codes, $commentaires = null, $mbObject = null) {
 		$acquittementsPatients = $this->documentElement;
 		 
 		$erreursAvertissements = $this->addElement($acquittementsPatients, "erreursAvertissements");
@@ -72,7 +72,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		}		
 	}
 
-	function generateAcquittementsPatients($statut, $codes, $commentaires, $mbObject = null) {
+	function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
 		$this->_emetteur = CAppUI::conf('mb_id');
 		$this->_date_production = mbDateTime();
 
