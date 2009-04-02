@@ -49,7 +49,15 @@ class CSetupsip extends CSetup {
 							  ADD INDEX (`initiateur_id`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.12";
+     $this->makeRevision("0.12");
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+							  CHANGE `emetteur` `emetteur` VARCHAR (255),
+							  CHANGE `identifiant_emetteur` `identifiant_emetteur` VARCHAR (255),
+							  CHANGE `type` `type` VARCHAR (255);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.13";
   }
 }
 ?>

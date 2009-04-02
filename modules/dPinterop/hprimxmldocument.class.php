@@ -248,6 +248,29 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
   }
+  
+  function addErreurAvertissement($elParent, $code, $libelle, $commentaires, $mbObject = null) {
+    $erreurAvertissement = $this->addElement($elParent, "erreurAvertissement");
+    $this->addAttribute($erreurAvertissement, "statut", "erreur");
+     
+    if ($mbObject) {
+      $enregistrementPatient = $this->addElement($erreurAvertissement, "enregistrementPatient");
+
+      $identifiantPatient = $this->addElement($enregistrementPatient, "identifiantPatient");
+      $this->addIdentifiantPart($identifiantPatient, "emetteur",  $mbObject->_id);
+    }
+     
+    $observations = $this->addElement($erreurAvertissement, "observations");
+    $observation = $this->addObservation($observations, $code, $libelle, $commentaires);   
+  }
+  
+  function addObservation($elParent, $code, $libelle, $commentaires) {
+    $observation = $this->addElement($elParent, "observation");
+    
+    $code = $this->addElement($observation, "code", $code);
+    $libelle = $this->addElement($observation, "libelle", $libelle);
+    $commentaire = $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
+  }
 }
 
 ?>

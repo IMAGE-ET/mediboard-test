@@ -42,16 +42,16 @@ class CEchangeHprim extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["date_production"]       = "dateTime notNull";
-    $specs["emetteur"]              = "str notNull";
-    $specs["identifiant_emetteur"]  = "num pos";
+    $specs["emetteur"]              = "str";
+    $specs["identifiant_emetteur"]  = "str";
     $specs["destinataire"]          = "str notNull";
-    $specs["type"]                  = "str notNull";
+    $specs["type"]                  = "str";
     $specs["sous_type"]             = "str";
     $specs["date_echange"]          = "dateTime";
     $specs["message"]               = "xml notNull";
     $specs["acquittement"]          = "xml";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
-    $specs["_self_emetteur"]        = "bool notNull";
+    $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool notNull";
     return $specs;
   }
