@@ -641,12 +641,23 @@ textarea:focus {
 }
 
 /* Standard table */
-
+table {
+	border-collapse: collapse;
+}
 table.tbl {
   width: 100%;
   border: 0px;
   border-spacing: 0px;
   background-color: #fff;
+}
+
+table.tbl td, 
+table.tbl th {
+  border: 1px solid #eee;
+	border-style: solid dotted;
+	background-color: #ffd;
+  padding: 2px;
+  white-space: nowrap;
 }
 
 table.tbl a {
@@ -671,7 +682,7 @@ table.tbl th {
   background-color: #68c;
   padding: 2px;
   color: #fff;
-  border: outset #ccc 1px;
+  border-color: #ccc;
   font-weight: normal;
   text-align: center;
   font-style: italic;
@@ -688,7 +699,7 @@ table.tbl th.title {
   font-weight: bold;  
   text-align: center;
   background: #68c;
-  border: #aaa 1px outset;
+  border-color: #aaa;
 }
 
 tbody.hoverable:hover tr td,
@@ -697,24 +708,13 @@ div.tree-header:hover {
   background-color: #fdd;
 }
 
-table.tbl td,
-div.tree-header {
-  background-color: #ffd;
-  padding: 2px;
-  white-space: nowrap;
-  border-bottom: 1px solid #ddd;
-}
-
 div.selected,
 table.tbl tr.selected td,
 table.form tr.selected td {
   background-color: #edb;
 }
 
-table.tbl th.text {
-  white-space: normal;
-}
-
+table.tbl th.text ,
 table.tbl td.text {
   white-space: normal;
 }
