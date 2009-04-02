@@ -2,7 +2,9 @@
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
 {{assign var=typeDate value="Med"}}
-<table {{if ($full_line_guid == $line->_guid) && $readonly}}style="border: 2px solid #6688CC"{{/if}} class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}{{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}"
+<table class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}
+             {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}
+             {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}"
        id="line_medicament_{{$line->_id}}">
 <tbody  class="hoverable">
   <!-- Header de la ligne -->
@@ -10,13 +12,13 @@
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="element {{if $line->_traitement}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
+      
+      {{if !$line->_protocole}}
       <script type="text/javascript">
-        {{if !$line->_protocole}}
-         Main.add( function(){
-           moveTbody($('line_medicament_{{$line->_id}}'));
-         });
-         {{/if}}
+         Main.add( function(){moveTbody($('line_medicament_{{$line->_id}}'));});
       </script>
+      {{/if}}
+      
       <div style="float:left;">
             <!-- Fomulaire de modification de l'emplacement -->
   		  {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}

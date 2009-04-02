@@ -1,15 +1,13 @@
-<script type="javascript">
-
+{{if $_perfusion->type == "PCA"}}
+<script type="text/javascript">
 Main.add( function(){
-  {{if $_perfusion->type == "PCA"}}
-    $("bolus-{{$_perfusion->_id}}").show();
-    changeModeBolus(document.forms['editPerf-{{$_perfusion->_id}}']);
-  {{/if}}
+  $("bolus-{{$_perfusion->_id}}").show();
+  changeModeBolus(document.forms['editPerf-{{$_perfusion->_id}}']);
 } );
-
 </script>
+{{/if}}
 
-<table {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}style="border: 2px solid #6688CC"{{/if}} class="tbl" id="perfusion-{{$_perfusion->_id}}"> 
+<table class="tbl {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}active{{/if}}" id="perfusion-{{$_perfusion->_id}}"> 
 <tbody class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
@@ -317,9 +315,9 @@ Main.add( function(){
 	          </td>
 	        </tr>
 	      {{foreachelse}}
-		      <div class="small-info">
-		        Aucun produit n'est associé à la perfusion
-		      </div>
+          <tr>
+            <td colspan="20"><div class="small-info">Aucun produit n'est associé à la perfusion</div></td>
+          </tr>
 	      {{/foreach}}
       </table>
     </td>

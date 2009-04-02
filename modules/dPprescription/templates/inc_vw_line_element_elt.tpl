@@ -4,7 +4,7 @@
 {{assign var=div_refresh value=$element}}
 {{assign var=typeDate value=$element}}
 {{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
-<table {{if ($full_line_guid == $line->_guid) && $readonly}}style="border: 2px solid #6688CC"{{/if}} class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}">
+<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}} {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}" id="line_element_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
