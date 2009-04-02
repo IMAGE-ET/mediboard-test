@@ -76,6 +76,10 @@ function markAsSelected(element) {
 				    </a>
 				  </td>
 				</tr>
+				{{foreachelse}}
+				<tr>
+					<td colspan="3">{{tr}}CPrescription.none{{/tr}}</td>
+				</tr>
 				{{/foreach}}
       </table>
     </td>

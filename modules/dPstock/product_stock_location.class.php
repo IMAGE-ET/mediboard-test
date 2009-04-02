@@ -58,8 +58,8 @@ class CProductStockLocation extends CMbObject {
 		if ($this->_before && $this->_before != $this->_id) {
 			$next_object = new self;
 			$next_object->load($this->_before);
+			
 			if ($next_object->_id) {
-				
 				$query = '';
 				if ($this->position)
 					$query = ' AND `position` BETWEEN '.$next_object->position.' AND '.$this->position;

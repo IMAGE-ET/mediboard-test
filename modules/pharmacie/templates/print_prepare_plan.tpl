@@ -10,7 +10,7 @@ Main.add(window.print);
 <h2>Délivrances globales</h2>
 <table class="main tbl">
   <colgroup>
-    <col span="4" style="width: 0.1%;" />
+    <col span="5" style="width: 0.1%;" />
   </colgroup>
   
   <tr>
@@ -18,6 +18,7 @@ Main.add(window.print);
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDeliveryTrace-quantity{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
+    <th>{{tr}}CProductStockGroup-location_id{{/tr}}</th>
     <th>{{tr}}CProductDeliveryTrace-code{{/tr}}</th>
   </tr>
 {{foreach from=$deliveries item=curr_list key=id}}
@@ -30,6 +31,7 @@ Main.add(window.print);
     <td>{{$disp->_ref_stock->_ref_product->name}}</td>
     <td>{{$disp->quantity}}</td>
     <td>{{$disp->_ref_stock->_ref_product->_unit_title}}</td>
+		<td>{{$disp->_ref_stock->_ref_location->name}}</td>
     <td></td>
   </tr>
   {{/foreach}}

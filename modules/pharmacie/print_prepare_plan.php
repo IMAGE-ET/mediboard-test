@@ -19,11 +19,18 @@ mbSetValueToSession('_date_max', $date_max);
 $date_min = "$date_min 00:00:00";
 $date_max = "$date_max 23:59:59";
 
-$order_by = 'date_dispensation DESC';
-$where = array ();
-$where[] = "date_dispensation BETWEEN '$date_min' AND '$date_max'";
-$where['quantity'] = " > 0";
-$where['patient_id'] = "IS NULL";
+$order_by = 'product_stock_location.position ASC';
+
+$where = array (
+  "product_delivery.date_dispensation BETWEEN '$date_min' AND '$date_max'",
+  'product_delivery.quantity' => " > 0",
+  'product_delivery.patient_id' => "IS NULL",
+);
+
+$ljoin = array(
+  'product_stock_group' => 'product_stock_group.stock_id = product_delivery.stock_id',
+  'product_stock_location' => 'product_stock_location.stock_location_id = product_stock_group.location_id',
+);
 
 $list_services = new CService();
 $list_services = $list_services->loadGroupList();
@@ -32,7 +39,14 @@ $deliveries = array();
 foreach ($list_services as $service) {
   $where['service_id'] = " = $service->_id";
   $delivery = new CProductDelivery();
-  $all_deliveries = $delivery->loadList($where, $order_by);
+	
+	$where['product_stock_location.position'] = "IS NOT NULL";
+	$all_deliveries_located = $delivery->loadList($where, $order_by, null, null, $ljoin);
+	
+	$where['product_stock_location.position'] = "IS NULL";
+  $all_deliveries_not_located = $delivery->loadList($where, $order_by, null, null, $ljoin);
+	
+  $all_deliveries = array_merge($all_deliveries_located, $all_deliveries_not_located);
   
   foreach($all_deliveries as $_delivery){
     if (!$_delivery->isDelivered()) {
