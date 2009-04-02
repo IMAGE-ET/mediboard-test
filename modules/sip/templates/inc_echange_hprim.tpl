@@ -1,4 +1,4 @@
-<tr>
+<tr {{if $object->emetteur == "inconnu"}}class="error"{{/if}}">
 	<td>
 	 {{if $object->_self_emetteur}}
 	   <img src="images/icons/prev.png" alt="&lt;" />
