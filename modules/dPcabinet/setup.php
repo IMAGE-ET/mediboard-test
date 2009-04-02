@@ -1187,7 +1187,11 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.07");
     $this->addPrefQuery("resumeCompta", "1");
     
-    $this->mod_version = "1.08";
+    $this->makeRevision("1.08");
+    $this->addPrefQuery("VitaleVisionDir", "");
+    $this->addPrefQuery("VitaleVision", "0");
+    
+    $this->mod_version = "1.09";
   }
 }
 ?>
