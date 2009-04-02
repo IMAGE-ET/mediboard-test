@@ -3,15 +3,11 @@
 {{assign var=debug value="false"}}
 {{if $app->user_prefs.GestionFSE}}
 
-{{if !$app->user_prefs.InterMaxDir}}
-<div class="big-warning">
-  {{tr}}pref-InterMaxDir-undef{{/tr}}
-  <br />
-  Voir <strong>Preferences</strong> 
-  &gt; <strong>{{tr}}module-dPcabinet-long{{/tr}}</strong>
-  &gt; <strong>{{tr}}pref-InterMaxDir{{/tr}}</strong>.
- 
-</div>
+{{if !$app->user_prefs.InterMaxDir && !$app->user_prefs.VitaleVision}}
+  <div class="small-warning">
+    {{tr}}pref-InterMaxDir-undef{{/tr}}<br />
+    Voir <strong>Preferences &gt; {{tr}}module-dPcabinet-long{{/tr}} &gt; {{tr}}pref-InterMaxDir{{/tr}}</strong>.
+  </div>
 {{/if}}
 <script type="text/javascript">
 
