@@ -66,7 +66,7 @@ class CTemplateManager {
       "field"     => $field,
       "value"     => $value,
       "fieldHTML" => htmlentities("[{$field}]"),
-      "valueHTML" => htmlentities($value)
+      "valueHTML" => $value
     );
   }
   

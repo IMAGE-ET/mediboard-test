@@ -231,7 +231,7 @@ class CDossierMedical extends CMbMetaObject {
         $template->addProperty("$champ - Antécédents - $sType", $sAntecedentsParType);
         
         if (count($currTypeAnt)) {
-	        $sAntecedents .="<br />{$sType}{$sAntecedentsParType}";
+	        $sAntecedents .="<br />{$sType}<br />{$sAntecedentsParType}";
         }
       }
       $template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
