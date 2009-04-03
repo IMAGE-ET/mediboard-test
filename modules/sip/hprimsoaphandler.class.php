@@ -151,8 +151,9 @@ class CHprimSoapHandler extends CSoapHandler {
 						
 						$newPatient->loadLogs();
             
+						mbTrace($newPatient, "Patient Log", true);
             $modified_fields = "";
-            if ($newPatient->_ref_logs->_fields) {
+            if ($newPatient->_ref_logs) {
             	foreach ($newPatient->_ref_logs->_fields as $field) {
             		$modified_fields .= $field."/n";
             	}
