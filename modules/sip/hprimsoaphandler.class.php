@@ -49,7 +49,7 @@ class CHprimSoapHandler extends CSoapHandler {
 		global $m;
 
 		// Traitement du message des erreurs
-		$avertissement = "";
+		$avertissement = $msgID400 = $msgIPP = "";
 
 		// Création de l'échange
 		$echange_hprim = new CEchangeHprim();
@@ -137,7 +137,6 @@ class CHprimSoapHandler extends CSoapHandler {
 						$mutex->acquire();
 						// Chargement du dernier IPP s'il existe
 						if (!$IPP->loadMatchingObject("id400 DESC")) {
-							mbTrace($IPP, "Création IPP", true);
 							// Incrementation de l'id400
 							$IPP->id400++;
 							$IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
@@ -152,9 +151,9 @@ class CHprimSoapHandler extends CSoapHandler {
 						$msgPatient = $newPatient->store();
 						
 						$newPatient->loadLogs();
-            mbTrace($newPatient);
+            mbTrace($newPatient, "Mon Patient log", true);
             
-						$codes = array ($msgPatient ? "A02" : "I01", $msgIPP ? "A05" : "I05");
+						$codes = array ($msgPatient ? "A02" : "I02", $msgIPP ? "A05" : "I07");
 		        if ($msgPatient || $msgIPP) {
 		          $avertissement = $msgPatient."\n".$msgIPP;
 		        } else {
@@ -189,8 +188,17 @@ class CHprimSoapHandler extends CSoapHandler {
 							$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
 							$newPatient->_IPP = $IPP->id400;
 							 
-							// Acquittement d'erreur lors du store du patient
-							$erreur .= $newPatient->store();
+							$msgPatient = $newPatient->store();
+            
+	            $newPatient->loadLogs();
+	            mbTrace($newPatient, "Mon Patient avec IPP log", true);
+	            
+	            if ($msgPatient) {
+	              $avertissement = $msgPatient."\n";
+	            } else {
+	              $commentaire = "Patient modifiée : $newPatient->_id";
+	            }
+	            $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A02" : "I02", $avertissement ? $avertissement : $commentaire);
 						}
 					}
 				}
