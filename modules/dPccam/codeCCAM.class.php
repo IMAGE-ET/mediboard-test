@@ -171,7 +171,6 @@ class CCodeCCAM {
     // recherche de la dernière date d'effet
     $query1 = "SELECT MAX(DATEEFFET) as LASTDATE FROM modificateuracte WHERE ";
     $query1 .= $ds->prepare("CODEACTE = %", $this->code);
-    $query1 .= " AND CODEACTIVITE = '4'";
     $query1 .= " GROUP BY CODEACTE";
     $result1 = $ds->exec($query1);
     // Chargement des modificateurs
@@ -303,7 +302,6 @@ class CCodeCCAM {
     $query = "SELECT MAX(DATEEFFET) AS LASTDATE
 			        FROM modificateuracte
 			        WHERE CODEACTE = %1
-			        AND CODEACTIVITE = %2
 			        GROUP BY CODEACTE";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
