@@ -737,7 +737,7 @@ div.loading {
 }
 
 .ajax-loading {
-  background: #666 url(images/icons/loading.gif) no-repeat center;
+  background: #666 url(images/icons/ajax-loading.gif) no-repeat center;
   border: none;
 }
 
