@@ -94,10 +94,14 @@ Main.add(function () {
 {{/if}}
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
-  <p>Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :</p>
-	<p>
-		<select id="modal-beneficiaire-select"></select>
-	</p>
+  <p id="msg-multiple-benef">
+    Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :
+  </p>
+  <p id="msg-confirm-benef" style="display: none;">
+    Vous êtes sur le point de remplacer les données du formulaire par les données de la carte. <br />
+    Veuillez vérifier le nom du bénéficiaire :
+  </p>
+	<p id="benef-nom"><select id="modal-beneficiaire-select"></select></p>
   <div>
   	<button type="button" class="tick" onclick="VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
 	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
