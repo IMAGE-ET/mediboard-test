@@ -117,7 +117,6 @@ class CHprimSoapHandler extends CSoapHandler {
 
 			// Cas 1 : Patient existe sur le SIP
 			if($id400->loadMatchingObject()) {
-				mbTrace($id400, "ID400", true);
 				// Identifiant du patient sur le SIP
 				$idPatientSIP = $id400->object_id;
 				// Cas 1.1 : Pas d'identifiant cible
@@ -151,13 +150,19 @@ class CHprimSoapHandler extends CSoapHandler {
 						$msgPatient = $newPatient->store();
 						
 						$newPatient->loadLogs();
-            mbTrace($newPatient, "Mon Patient log", true);
             
+            $modified_fields = "";
+            if ($newPatient->_ref_logs->_fields) {
+            	foreach ($newPatient->_ref_logs->_fields as $field) {
+            		$modified_fields .= $field."/n";
+            	}
+            }
+                       
 						$codes = array ($msgPatient ? "A02" : "I02", $msgIPP ? "A05" : "I07");
 		        if ($msgPatient || $msgIPP) {
 		          $avertissement = $msgPatient."\n".$msgIPP;
 		        } else {
-		          $commentaire = "Patient modifiée : $newPatient->_id.\nIPP crée : $IPP->id400.";
+		          $commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields. IPP crée : $IPP->id400.", 0, 4000);
 		        }
 		        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
  					} 
@@ -190,13 +195,19 @@ class CHprimSoapHandler extends CSoapHandler {
 							 
 							$msgPatient = $newPatient->store();
             
-	            $newPatient->loadLogs();
-	            mbTrace($newPatient, "Mon Patient avec IPP log", true);
+							$newPatient->loadLogs();
+	            
+	            $modified_fields = "";
+	            if ($newPatient->_ref_logs->_fields) {
+	              foreach ($newPatient->_ref_logs->_fields as $field) {
+	                $modified_fields .= $field."/n";
+	              }
+	            }
 	            
 	            if ($msgPatient) {
 	              $avertissement = $msgPatient."\n";
 	            } else {
-	              $commentaire = "Patient modifiée : $newPatient->_id";
+	              $commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
 	            }
 	            $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A02" : "I02", $avertissement ? $avertissement : $commentaire);
 						}
