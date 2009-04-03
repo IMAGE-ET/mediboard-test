@@ -112,7 +112,7 @@ mbTrace($mbObject, "Patient", true);
 
 			// Récupère le message d'acquittement après l'execution la methode evenementPatient
 			if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
-				trigger_error("Notification d'evenement patient impossible sur le CIP : ".$dest_hprim->url);
+				trigger_error("Evenement patient impossible sur le SIP : ".$dest_hprim->url);
 			}
 
 			$echange_hprim = new CEchangeHprim();

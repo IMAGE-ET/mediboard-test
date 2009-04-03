@@ -42,6 +42,7 @@ class CHprimSoapHandler extends CSoapHandler {
     "I04" => "Identifiant source non connu.",
     "I05" => "Identifiant cible non connu.",
     "I06" => "Identifiant source mis à jour.",
+	  "I07" => "Identifiant cible non fourni.",
 	);
 
 	function evenementPatient($messagePatient) {
@@ -116,6 +117,7 @@ class CHprimSoapHandler extends CSoapHandler {
 
 			// Cas 1 : Patient existe sur le SIP
 			if($id400->loadMatchingObject()) {
+				mbTrace($id400, "ID400", true);
 				// Identifiant du patient sur le SIP
 				$idPatientSIP = $id400->object_id;
 				// Cas 1.1 : Pas d'identifiant cible
@@ -135,6 +137,7 @@ class CHprimSoapHandler extends CSoapHandler {
 						$mutex->acquire();
 						// Chargement du dernier IPP s'il existe
 						if (!$IPP->loadMatchingObject("id400 DESC")) {
+							mbTrace($IPP, "Création IPP", true);
 							// Incrementation de l'id400
 							$IPP->id400++;
 							$IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
@@ -280,7 +283,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$IPP->last_update = mbDateTime();
 			$msgIPP = $IPP->store();
 				
-			$codes = array ($msgPatient ? "A02" : "I01", $msgIPP ? "A05" : "I05");
+			$codes = array ($msgPatient ? "A02" : "I01", $msgIPP ? "A05" : "I07");
 			if ($msgPatient || $msgIPP) {
 				$avertissement = $msgPatient."\n".$msgIPP;
 			} else {
