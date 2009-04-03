@@ -29,7 +29,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		$acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
 		$enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
-		$this->addAttribute($enteteMessageAcquittement, "statut", $statut ? "OK" : "erreur");
+		$this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
 		$this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->_identifiant);
 		$this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
@@ -47,14 +47,17 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
 		$this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
     
-		if ($statut) {
+		if ($statut == "OK") {
 			if (is_array($codes)) {
-	      foreach ($codes as $code) {
-	        $this->addObservation($enteteMessageAcquittement, $code, CHprimSoapHandler::$codesAvertissementInformation[$code], $commentaires);
-	      }
-	    } else {
+				$_codes = $_libelle_codes = "";
+        foreach ($codes as $code) {
+        	$_codes .= $code;
+        	$_libelle_codes .= CHprimSoapHandler::$codesAvertissementInformation[$code]."\n";
+        }
+        $this->addObservation($enteteMessageAcquittement, substr($_codes, 0, 17), substr($_libelle_codes, 0, 80), $commentaires);
+			} else {
 	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codesAvertissementInformation[$codes], $commentaires);
-	    }
+			}
 		}
 	}
 
@@ -76,7 +79,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		$this->_emetteur = CAppUI::conf('mb_id');
 		$this->_date_production = mbDateTime();
 
-		if (!$statut) {
+		if ($statut != "OK") {
 			$this->generateEnteteMessageAcquittement($statut);
 		  $this->addErreursAvertissements($codes, $commentaires, $mbObject);
 		} else {
