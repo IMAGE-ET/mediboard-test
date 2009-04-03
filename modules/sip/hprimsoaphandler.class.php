@@ -43,6 +43,9 @@ class CHprimSoapHandler extends CSoapHandler {
     "I05" => "Identifiant cible non connu.",
     "I06" => "Identifiant source mis à jour.",
 	  "I07" => "Identifiant cible non fourni.",
+	  "I08" => "Identifiant cible non fourni mais retrouvé.",
+	  "I09" => "Identifiant cible fourni mais déjà utilisé.",
+	  "I10" => "Identifiant source non fourni mais retrouvé.",
 	);
 
 	function evenementPatient($messagePatient) {
@@ -77,7 +80,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->message = $messagePatient;
 			$echange_hprim->acquittement = utf8_decode($messageAcquittement);
 			$echange_hprim->store();
-				
+
 			return $messageAcquittement;
 		}
 
@@ -109,6 +112,63 @@ class CHprimSoapHandler extends CSoapHandler {
 
 		// Si SIP
 		if (CAppUI::conf('sip server')) {
+			// Acquittement d'erreur : identifiants source et cible non fournis
+			if (!$data['idSource'] && !$data['idCible']) {
+				$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E02", "Identifiants source et cible non fournis");
+
+				$echange_hprim->message = $messagePatient;
+				$echange_hprim->acquittement = utf8_decode($messageAcquittement);
+				$echange_hprim->store();
+	    
+				return $messageAcquittement;
+			}
+				
+			// Identifiant source non fourni et identifiant cible non connu
+			if (!$data['idSource']) {
+				$IPP = new CIdSante400();
+				//Paramétrage de l'id 400
+				$IPP->object_class = "CPatient";
+				$IPP->tag = CAppUI::conf("mb_id");
+
+				$IPP->id400 = $data['idCible'];
+
+				// idCible connu
+				if ($IPP->loadMatchingObject()) {
+					$newPatient->load($IPP->object_id);
+					// Mapping du patient
+					$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
+					$newPatient->_IPP = $IPP->id400;
+					$msgPatient = $newPatient->store();
+					$newPatient->loadLogs();
+
+					$modified_fields = "";
+					if ($newPatient->_ref_last_log) {
+						foreach ($newPatient->_ref_last_log->_fields as $field) {
+							$modified_fields .= "$field \n";
+						}
+					}		
+
+					$_code_IPP = "I09";
+				}
+				// idCible non connu
+				else {
+					// RESTE A GERER CREATION PATIENT CLASSIQUE
+				}
+				$codes = array ($msgPatient ? "A02" : "I02", $msgIPP ? "A05" : $_code_IPP);
+        if ($msgPatient) {
+          $avertissement = $msgPatient."\n";
+        } else {
+          $commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
+        }
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+          
+				$echange_hprim->acquittement = $messageAcquittement;
+		    $echange_hprim->date_echange = mbDateTime();
+		    $echange_hprim->store();
+		
+		    return $messageAcquittement;
+			}
+				
 			$id400 = new CIdSante400();
 			//Paramétrage de l'id 400
 			$id400->id400 = $data['idSource'];
@@ -125,7 +185,7 @@ class CHprimSoapHandler extends CSoapHandler {
 					if ($newPatient->load($idPatientSIP)) {
 						// Mapping du patient
 						$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
-						
+
 						// Création de l'IPP
 						$IPP = new CIdSante400();
 						//Paramétrage de l'id 400
@@ -140,32 +200,33 @@ class CHprimSoapHandler extends CSoapHandler {
 							$IPP->id400++;
 							$IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
 
+							$IPP->_id = null;
 							$IPP->last_update = mbDateTime();
 							$msgIPP = $IPP->store();
+								
+							$_IPP_create = true;
 						}
 						$mutex->release();
 
 						$newPatient->_IPP = $IPP->_id;
-
 						$msgPatient = $newPatient->store();
-						
 						$newPatient->loadLogs();
-            
-            $modified_fields = "";
-            if ($newPatient->_ref_last_log) {
-            	foreach ($newPatient->_ref_last_log->_fields as $field) {
-            		$modified_fields .= "$field \n";
-            	}
-            }
-                       
-						$codes = array ($msgPatient ? "A02" : "I02", $msgIPP ? "A05" : "I07");
-		        if ($msgPatient || $msgIPP) {
-		          $avertissement = $msgPatient."\n".$msgIPP;
-		        } else {
-		          $commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields. IPP crée : $IPP->id400.", 0, 4000);
-		        }
-		        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
- 					} 
+
+						$modified_fields = "";
+						if ($newPatient->_ref_last_log) {
+							foreach ($newPatient->_ref_last_log->_fields as $field) {
+								$modified_fields .= "$field \n";
+							}
+						}
+						 
+						$codes = array ($msgPatient ? "A02" : "I02", $msgIPP ? "A05" : $_IPP_create ? "I07" : "I08");
+						if ($msgPatient || $msgIPP) {
+							$avertissement = $msgPatient."\n".$msgIPP;
+						} else {
+							$commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields. IPP crée : $IPP->id400.", 0, 4000);
+						}
+						$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+					}
 				}
 				// Cas 1.2 : Identifiant cible envoyé
 				else {
@@ -175,42 +236,39 @@ class CHprimSoapHandler extends CSoapHandler {
 					$IPP->tag = CAppUI::conf("mb_id");
 
 					$IPP->id400 = $data['idCible'];
-						
+
 					if ($IPP->loadMatchingObject()) {
 						// Acquittement d'erreur idSource et idCible incohérent
 						if ($idPatientSIP != $IPP->object_id) {
 							$commentaire = "L'identifiant source est fait référence au patient : $idPatientSIP et l'identifiant cible au paient : $IPP->object_id.";
 							$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E03", $commentaire);
-								
+
 							$echange_hprim->acquittement = $messageAcquittement;
 							$echange_hprim->store();
-								
+
 							return $messageAcquittement;
 						} else {
 							$newPatient->load($IPP->object_id);
-							mbTrace($newPatient, "Patient avant mapping", true);
+
 							// Mapping du patient
 							$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
-							mbTrace($newPatient, "Patient après mapping", true);
 							$newPatient->_IPP = $IPP->id400;
-							 
 							$msgPatient = $newPatient->store();
-            
 							$newPatient->loadLogs();
-	            
+							 
 							$modified_fields = "";
-	            if ($newPatient->_ref_last_log) {
-	              foreach ($newPatient->_ref_last_log->_fields as $field) {
-	                $modified_fields .= "$field \n";
-	              }
-	            }
-	            
-	            if ($msgPatient) {
-	              $avertissement = $msgPatient."\n";
-	            } else {
-	              $commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
-	            }
-	            $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A02" : "I02", $avertissement ? $avertissement : $commentaire);
+							if ($newPatient->_ref_last_log) {
+								foreach ($newPatient->_ref_last_log->_fields as $field) {
+									$modified_fields .= "$field \n";
+								}
+							}
+							 
+							if ($msgPatient) {
+								$avertissement = $msgPatient."\n";
+							} else {
+								$commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
+							}
+							$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A02" : "I02", $avertissement ? $avertissement : $commentaire);
 						}
 					}
 				}
@@ -229,37 +287,68 @@ class CHprimSoapHandler extends CSoapHandler {
 				$id400Patient->object_class = "CPatient";
 				$id400Patient->tag = $data['idClient'];
 
-				// Incrementation de l'id400
 				$id400Patient->id400 = $data['idSource'];
-
+        
 				$id400Patient->object_id = $newPatient->_id;
 				$id400Patient->_id = null;
 				$id400Patient->last_update = mbDateTime();
 				$msgID400 = $id400Patient->store();
-
+				
 				// Création de l'IPP
 				$IPP = new CIdSante400();
 				//Paramétrage de l'id 400
 				$IPP->object_class = "CPatient";
 				$IPP->tag = CAppUI::conf("mb_id");
 
-				// Chargement du dernier id externe de prescription du praticien s'il existe
-				$IPP->loadMatchingObject("id400 DESC");
+				// Cas idCible fourni
+				if ($data['idCible']) {
+					$IPP->id400 = str_pad($data['idCible'], 6, '0', STR_PAD_LEFT);
 
-				// Incrementation de l'id400
-				$IPP->id400++;
-				$IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
+					$mutex->acquire();
+					 
+					// idCible fourni non connu
+					if (!$IPP->loadMatchingObject() && is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
+						$_code_IPP = "A01";
+					}
+					// idCible fourni connu
+					else {
+						$IPP->id400 = null;
+						$IPP->loadMatchingObject("id400 DESC");
+
+						// Incrementation de l'id400
+						$IPP->id400++;
+						$IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
+						$IPP->_id = null;
+						 
+						$_code_IPP = "I09";
+					}
+				} else {
+					$mutex->acquire();
+					 
+					// Chargement du dernier id externe de prescription du praticien s'il existe
+					$IPP->loadMatchingObject("id400 DESC");
+
+					// Incrementation de l'id400
+					$IPP->id400++;
+					$IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
+
+					$IPP->_id = null;
+					 
+					$_code_IPP = "I07";
+				}
 
 				$IPP->object_id = $newPatient->_id;
-				$IPP->_id = null;
+
 				$IPP->last_update = mbDateTime();
 				$msgIPP = $IPP->store();
+
+				$mutex->release();
 
 				$newPatient->_IPP = $IPP->id400;
 				$newPatient->_no_ipp = 0;
 				$msgPatient = $newPatient->store();
 
-				$codes = array ($msgPatient ? "A02" : "I01", $msgID400 ? "AVT004" : "I04", $msgIPP ? "A05" : "I05");
+				$codes = array ($msgPatient ? "A02" : "I01", $msgID400 ? "AVT004" : "I04", $msgIPP ? "A05" : $_code_IPP);
 				if ($msgPatient || $msgID400 || $msgIPP) {
 					$avertissement = $msgPatient."\n".$msgID400."\n".$msgIPP;
 				} else {
@@ -302,7 +391,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			}
 			$IPP->last_update = mbDateTime();
 			$msgIPP = $IPP->store();
-				
+
 			$codes = array ($msgPatient ? "A02" : "I01", $msgIPP ? "A05" : "I07");
 			if ($msgPatient || $msgIPP) {
 				$avertissement = $msgPatient."\n".$msgIPP;
