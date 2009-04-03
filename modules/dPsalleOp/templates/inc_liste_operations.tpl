@@ -74,19 +74,19 @@
     {{else}}
       <table style="border: none; width: 100%;">
         <tr>
-          <td>
+          <td style="border: none;">
           	<a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
           	 {{$_operation->_ref_patient->_view}}
           	</a>
           </td>
           {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id}}
-            <td style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap;">
+            <td style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap; border: none;">
               {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
               {{$_operation->_ref_affectation->_ref_lit->_view}}
             </td>
           {{/if}}
           {{if $vueReduite}}
-            <td style="width: 1%;"><button class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button></td>
+            <td style="width: 1%; border: none;"><button class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button></td>
           {{/if}}
   	  	</tr>
       </table>

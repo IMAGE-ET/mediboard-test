@@ -169,6 +169,8 @@ $acte_ngap->loadListExecutants();
 $check_list = CDailyCheckList::getTodaysList($salle);
 $check_list->loadItemTypes();
 $check_list->loadBackRefs('items');
+$check_item_category = new CDailyCheckItemCategory;
+$check_item_categories = $check_item_category->loadList(null);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -202,6 +204,7 @@ $smarty->assign("prescription"    , $prescription            );
 $smarty->assign("protocoles"      , $protocoles              );
 $smarty->assign("anesth_id"       , $anesth_id               );
 $smarty->assign("check_list"      , $check_list              );
+$smarty->assign("check_item_categories", $check_item_categories);
 $smarty->display("vw_operations.tpl");
 
 ?>

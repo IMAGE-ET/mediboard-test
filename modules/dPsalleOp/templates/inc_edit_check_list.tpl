@@ -21,10 +21,17 @@
 	
 	<table class="main tbl">
 		<tr>
-      <th style="width: 0.1%;">{{mb_title class=CDailyCheckItem field=checked}}</th>
-			<th>{{tr}}CDailyCheckItem{{/tr}}</th>
+      <th style="width: 0.1%;" class="title">{{mb_title class=CDailyCheckItem field=checked}}</th>
+			<th class="title">{{tr}}CDailyCheckItem{{/tr}}</th>
 		</tr>
+    {{assign var=category_id value=0}}
 		{{foreach from=$check_list->_ref_item_types item=curr_type}}
+      {{if $curr_type->category_id != $category_id}}
+        {{assign var=curr_cat value=$curr_type->category_id}}
+        <tr>
+          <th colspan="3" class="category">{{$check_item_categories.$curr_cat}}</th>
+        </tr>
+      {{/if}}
 		  <tr>
 		  	<td style="text-align: center;">
 				  <input type="checkbox" name="_items[]" value="{{$curr_type->_id}}" {{if @$curr_type->_checked}}checked="checked"{{/if}} />
@@ -34,6 +41,7 @@
 					<small>{{mb_value object=$curr_type field=desc}}</small>
 	      </td>
 		  </tr>
+      {{assign var=category_id value=$curr_type->category_id}}
 		{{foreachelse}}
 		  <tr>
 		  	<td colspan="3">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
