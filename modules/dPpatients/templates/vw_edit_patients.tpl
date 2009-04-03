@@ -101,7 +101,10 @@ Main.add(function () {
     Vous êtes sur le point de remplacer les données du formulaire par les données de la carte. <br />
     Veuillez vérifier le nom du bénéficiaire :
   </p>
-	<p id="benef-nom"><select id="modal-beneficiaire-select"></select></p>
+	<p id="benef-nom">
+	  <select id="modal-beneficiaire-select"></select>
+    <span></span>
+  </p>
   <div>
   	<button type="button" class="tick" onclick="VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
 	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>

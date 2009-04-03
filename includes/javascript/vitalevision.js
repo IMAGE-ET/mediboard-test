@@ -81,6 +81,12 @@ var VitaleVision = {
 						value: i
 					}).update(nom + " " + prenom));
 				}
+        if (listBeneficiaires.length == 1) {
+          $('msg-multiple-benef').hide();
+          beneficiaireSelect.hide();
+          $('msg-confirm-benef').show();
+          $$('#benef-nom span')[0].update(beneficiaireSelect.options[0].innerHTML);
+        }
 				VitaleVision.modalWindow = modal($('modal-beneficiaire'), {
 					overlayOpacity: 0.75,
 					className: 'modal'
