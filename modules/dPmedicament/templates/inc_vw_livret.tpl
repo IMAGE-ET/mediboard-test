@@ -2,8 +2,10 @@
 	// UpdateFields de l'autocomplete
 	function updateFields(selected) {
 	  Element.cleanWhitespace(selected);
-	  dn = selected.childNodes;
-	  Livret.addProduit(dn[0].firstChild.nodeValue, dn[1].firstChild.nodeValue);
+	  dn = selected.childElements();
+    if (dn[1]) {
+	    Livret.addProduit(dn[0].innerHTML, dn[1].innerHTML);
+    }
 	  $('searchProd_produit').value = "";
 	}
 </script>

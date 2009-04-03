@@ -66,10 +66,12 @@ var oFormDispensation;
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicament = function(selected) {
   Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
-  $V(oFormDispensation._code, dn[0].firstChild.nodeValue);
-  $("produit_view").update(dn[1].firstChild.nodeValue);
-  $V(oFormDispensation.produit, "");
+  var dn = selected.childElements();
+  if (dn[1]) {
+    $V(oFormDispensation._code, dn[0].innerHTML);
+    $("produit_view").update(dn[1].innerHTML);
+    $V(oFormDispensation.produit, "");
+  }
 }
 
 // Autocomplete des medicaments
@@ -108,14 +110,17 @@ function updateDispensationUrgence(formUrgence) {
       {{mb_field object=$delivrance field=patient_id hidden=true}}
       <input type="hidden" name="date_dispensation" value="now" />
       <input type="hidden" name="_code" value="" class="notNull" />
-      Quantité: {{mb_field object=$delivrance field=quantity size="4" increment=true form="dispensation-urgence"}}
+      
       Produit: <input type="text" name="produit" value="" autocomplete="off" />
       <span id="produit_view"></span>
-      <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+      <div style="display: none; text-align: left;" class="autocomplete" id="produit_auto_complete"></div>
+      
+      Quantité: {{mb_field object=$delivrance field=quantity size="4" increment=true form="dispensation-urgence"}}
+      
       <button class="tick">Dispenser</button>
     </form>
   </li>
-  <li><a href="#list-dispensations"><span id="list-dispensations-title">Nomitatif reglobalisé</span> <small>(0)</small></a></li>
+  <li><a href="#list-dispensations"><span id="list-dispensations-title">Nominatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
   <li id="li-transmissions"><a href="#list-transmissions">Transmissions</a></li>
 </ul>

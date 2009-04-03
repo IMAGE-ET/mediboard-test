@@ -1,6 +1,6 @@
 <ul>
   {{foreach from=$produits item=produit}}
-    <li>
+    <li style="text-align: left;">
       <small style="display: none;">{{$produit->CodeCIP}}</small>
 			Produit:
 			<strong> 
@@ -17,5 +17,7 @@
 			</div>
 			{{/if}}
     </li>
+  {{foreachelse}}
+    <li style="text-align: left;"><span class="informal">Aucun résultat</span></li>
   {{/foreach}}
 </ul>
