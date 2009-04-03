@@ -125,7 +125,7 @@ class CHprimSoapHandler extends CSoapHandler {
 					if ($newPatient->load($idPatientSIP)) {
 						// Mapping du patient
 						$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
-            
+						
 						// Création de l'IPP
 						$IPP = new CIdSante400();
 						//Paramétrage de l'id 400
@@ -154,7 +154,7 @@ class CHprimSoapHandler extends CSoapHandler {
             $modified_fields = "";
             if ($newPatient->_ref_last_log) {
             	foreach ($newPatient->_ref_last_log->_fields as $field) {
-            		$modified_fields .= $field."/n";
+            		$modified_fields .= "$field \n";
             	}
             }
                        
@@ -187,10 +187,11 @@ class CHprimSoapHandler extends CSoapHandler {
 								
 							return $messageAcquittement;
 						} else {
-							$newPatient->_id = $IPP->object_id;
-							$newPatient->loadMatchingObject();
+							$newPatient->load($IPP->object_id);
+							mbTrace($newPatient, "Patient avant mapping", true);
 							// Mapping du patient
 							$newPatient = $data['xpath']->createPatient($data['patient'], $newPatient);
+							mbTrace($newPatient, "Patient après mapping", true);
 							$newPatient->_IPP = $IPP->id400;
 							 
 							$msgPatient = $newPatient->store();
@@ -200,7 +201,7 @@ class CHprimSoapHandler extends CSoapHandler {
 							$modified_fields = "";
 	            if ($newPatient->_ref_last_log) {
 	              foreach ($newPatient->_ref_last_log->_fields as $field) {
-	                $modified_fields .= $field."/n";
+	                $modified_fields .= "$field \n";
 	              }
 	            }
 	            

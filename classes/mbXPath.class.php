@@ -132,7 +132,7 @@ class CMbXPath extends DOMXPath {
     $mbPatient->ville = $this->queryTextNode("hprim:ville", $adresse);
     $mbPatient->pays_insee = $this->queryTextNode("hprim:pays", $adresse);
     $pays = new CPaysInsee();
-    $pays->numerique = $this->pays_insee;
+    $pays->numerique = $mbPatient->pays_insee;
     $pays->loadMatchingObject();
     $mbPatient->pays = $pays->nom_fr;
     $mbPatient->cp = $this->queryTextNode("hprim:codePostal", $adresse);

@@ -228,7 +228,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $adresses = $this->addElement($personnePhysique, "adresses");
     $adresse = $this->addElement($adresses, "adresse");
-    $this->addTexte($adresse, "ligne", $mbPatient->adresse);
+    $this->addTexte($adresse, "ligne", substr($mbPatient->adresse, 0, 35));
     $this->addTexte($adresse, "ville", $mbPatient->ville);
     $this->addElement($adresse, "pays", str_pad($mbPatient->pays_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($adresse, "codePostal", $mbPatient->cp);
