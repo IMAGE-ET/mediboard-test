@@ -105,8 +105,6 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day') {
 	  'xaxis' => array(
 	    'labelsAngle' => 45,
 	    'ticks' => $datax,
-	    'min' => 0,
-	    'max' => $max
 	  ),
 	  'yaxis' => array(
 	    'min' => 0,
@@ -116,6 +114,9 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day') {
       'min' => 0,
 	    'title' => 'Hits',
       'autoscaleMargin' => 1
+    ),
+    'grid' => array(
+      'verticalLines' => false
     ),
 	  'HtmlText' => false
 	);

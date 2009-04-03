@@ -7,6 +7,10 @@ var graphSizes = [
   {width: '700px', height: '500px', yaxisNoTicks: 10}
 ];
 
+function yAxisTickFormatter(val) {
+  return Flotr.convertToBytes(val, 2, 1000);
+}
+
 function drawGraphs(size) {
   var container;
   size = size || graphSizes[0];
@@ -15,6 +19,7 @@ function drawGraphs(size) {
     container.setStyle(size);
     g.options.y2axis.noTicks = size.yaxisNoTicks;
     g.options.yaxis.noTicks = size.yaxisNoTicks;
+    g.options.y2axis.tickFormatter = yAxisTickFormatter;
     Flotr.draw(container, g.series, g.options);
   });
 }
