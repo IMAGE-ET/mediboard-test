@@ -16,6 +16,7 @@ class CDailyCheckItemType extends CMbObject {
 	var $desc     = null;
   var $active   = null;
 	var $group_id = null;
+	var $category_id = null;
 	
 	// Refs
   var $_ref_group = null;
@@ -33,6 +34,7 @@ class CDailyCheckItemType extends CMbObject {
     $specs['desc']     = 'text';
     $specs['active']   = 'bool notNull';
     $specs['group_id'] = 'ref notNull class|CGroups';
+    $specs['category_id'] = 'ref notNull class|CDailyCheckItemCategory autocomplete|title';
     return $specs;
   }
 	
@@ -54,6 +56,9 @@ class CDailyCheckItemType extends CMbObject {
   function loadRefsFwd() {
     $this->_ref_group = new CGroups();
     $this->_ref_group = $this->_ref_group->getCached($this->group_id);
+		
+    $this->_ref_category = new CDailyCheckItemCategory();
+    $this->_ref_category = $this->_ref_category->getCached($this->category_id);
   }
 	
   static function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {

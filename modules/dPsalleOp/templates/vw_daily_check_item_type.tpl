@@ -1,3 +1,10 @@
+<script type="text/javascript">
+  function popupEditDailyCheckItemCategory() {
+    var url = new Url('dPsalleOp', 'vw_daily_check_item_category');
+    url.popup(800, 500, '{{tr}}CDailyCheckItemCategory{{/tr}}');
+  }
+</script>
+
 <table class="main">
   <tr>
   	<td>
@@ -7,21 +14,28 @@
           <th>{{mb_title class=CDailyCheckItemType field=desc}}</th>
           <th>{{mb_title class=CDailyCheckItemType field=active}}</th>
   			</tr>
-				{{foreach from=$item_types_list item=curr_item}}
-        <tr>
-          <td><a href="?m={{$m}}&amp;tab=vw_daily_check_item_type&amp;item_type_id={{$curr_item->_id}}">{{mb_value object=$curr_item field=title}}</a></td>
-          <td>{{mb_value object=$curr_item field=desc}}</td>
-          <td>{{mb_value object=$curr_item field=active}}</td>
-        </tr>
-				{{foreachelse}}
-				<tr>
-          <td colspan="10">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
-        </tr>
-				{{/foreach}}
+        {{foreach from=$item_categories_list item=curr_cat}}
+          {{if $curr_cat->_back.item_types|@count}}
+            <tr>
+              <th class="category" colspan="10">{{$curr_cat}}</th>
+            </tr>
+    				{{foreach from=$curr_cat->_back.item_types item=curr_item}}
+            <tr>
+              <td><a href="?m={{$m}}&amp;tab=vw_daily_check_item_type&amp;item_type_id={{$curr_item->_id}}">{{mb_value object=$curr_item field=title}}</a></td>
+              <td>{{mb_value object=$curr_item field=desc}}</td>
+              <td>{{mb_value object=$curr_item field=active}}</td>
+            </tr>
+    				{{foreachelse}}
+    				<tr>
+              <td colspan="10">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+            </tr>
+    				{{/foreach}}
+          {{/if}}
+        {{/foreach}}
   		</table>
   	</td>
 		<td>
-      <button type="button" class="new" onclick="location.href='?m={{$m}}&amp;tab=vw_daily_check_item_type&amp;check_item_type_id=0'">
+      <button type="button" class="new" onclick="location.href='?m={{$m}}&amp;tab=vw_daily_check_item_type&amp;item_type_id=0'">
       	{{tr}}CDailyCheckItemType-title-create{{/tr}}
 			</button>
       <form name="edit-CDailyCheckItemType" action="?m={{$m}}&amp;tab=vw_daily_check_item_type" method="post" onsubmit="return checkForm(this)">
@@ -46,6 +60,13 @@
 	          <th>{{mb_label object=$item_type field="desc"}}</th>
 	          <td>{{mb_field object=$item_type field="desc"}}</td>
 	        </tr>
+          <tr>
+            <th>{{mb_label object=$item_type field="category_id"}}</th>
+            <td>
+              {{mb_field object=$item_type field="category_id" form="edit-CDailyCheckItemType"}}
+              <button type="button" class="new notext" onclick="popupEditDailyCheckItemCategory()">{{tr}}New{{/tr}}</button>
+            </td>
+          </tr>
 	        <tr>
 	          <th>{{mb_label object=$item_type field="active"}}</th>
 	          <td>{{mb_field object=$item_type field="active"}}</td>
