@@ -21,7 +21,9 @@ var Url = Class.create({
     this.oParams = {};
     this.oWindow = null,
   	this.oPrefixed = {};
-  	this.setModuleAction(sModule, sAction);
+  	if(sModule && sAction) {
+  	  this.setModuleAction(sModule, sAction);
+  	}
   },
   
   setModuleAction: function(sModule, sAction) {
