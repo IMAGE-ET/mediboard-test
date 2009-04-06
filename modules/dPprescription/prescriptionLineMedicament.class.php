@@ -164,7 +164,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["valide_pharma"]        = "bool";
     $specs["accord_praticien"]     = "bool";
     $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
-    $specs["substitute_for_id"]    = "ref meta|substitute_for_class cascade";
+    $specs["substitute_for_id"]    = "ref class|CMbObject meta|substitute_for_class cascade";
     $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPrescriptionLineMedicament";
     $specs["substitution_active"]  = "bool";
     $specs["_unite_prise"]         = "str";

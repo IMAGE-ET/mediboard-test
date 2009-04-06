@@ -128,7 +128,7 @@ class CPerfusion extends CMbObject {
     $specs["date_fin_adm"]      = "date";
     $specs["time_fin_adm"]      = "time";
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
-    $specs["substitute_for_id"]    = "ref meta|substitute_for_class cascade";
+    $specs["substitute_for_id"]    = "ref class|CMbObject meta|substitute_for_class cascade";
     $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPerfusion";
     $specs["substitution_active"]  = "bool";
     $specs["substitution_plan_soin"] = "bool";
