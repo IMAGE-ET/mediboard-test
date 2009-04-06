@@ -1133,7 +1133,7 @@ Element.addMethods('select', {
 // Form getter
 function getForm (form, prepare) {
   prepare = prepare || true;
-  if (Object.isString(form) && document.forms[form]) {
+  if (Object.isString(form)) {
     form = $(document.forms[form]);
   }
   if (prepare) prepareForm(form);

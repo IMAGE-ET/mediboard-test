@@ -114,6 +114,12 @@ Element.addMethods({
       props[params.shift()] = (params.length == 0) ? true : params.reduce();
     });
     return props;
+  },
+  
+  /** Add a class name to an element, and removing this class name to all of it's siblings */
+  addUniqueClassName: function(element, className) {
+    element.siblings().each(function(e){e.removeClassName(className)});
+    return element.addClassName(className);
   }
 });
 
