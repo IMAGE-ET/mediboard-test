@@ -41,6 +41,7 @@ class CPrisePosologie extends CMbMetaObject {
   var $_quantite_with_coef   = null;  // Permet d'eviter de recalculer plusieurs fois la quantite en fonction du coef
   var $_unite_sans_kg        = null;  // Unite sans le kg
   var $_quantite_dispensation = null;
+  var $_quantite_administrable = null; // Quantité de produit en unité d'administration
   
   function getSpec() {
     $spec = parent::getSpec();

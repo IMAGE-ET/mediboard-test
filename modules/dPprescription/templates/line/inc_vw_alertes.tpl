@@ -2,13 +2,16 @@
 {{assign var=IPC value=$prescription_reelle->_alertes.IPC}}
 {{assign var=interaction value=$prescription_reelle->_alertes.interaction}}
 {{assign var=profil value=$prescription_reelle->_alertes.profil}}
+{{assign var=posoduree value=$prescription_reelle->_alertes.posoduree}}
+{{assign var=posoqte value=$prescription_reelle->_alertes.posoqte}}
 {{assign var=code_cip value=$line->code_cip}}
 
 {{assign var=image value=""}}
 {{assign var=color value=""}}
   
 {{if (@array_key_exists($code_cip, $allergie) || @array_key_exists($code_cip, $interaction) ||
-      @array_key_exists($code_cip, $profil)   ||  @array_key_exists($code_cip, $IPC))}}
+      @array_key_exists($code_cip, $profil)   || @array_key_exists($code_cip, $IPC) ||
+      @array_key_exists($code_cip, $posoduree)      || @array_key_exists($code_cip, $posoqte) )}}   
      
   {{assign var=puce_orange value=false}}
   {{assign var=puce_rouge value=false}}
@@ -62,6 +65,34 @@
 	      {{assign var=puce_orange value=true}}
 	    {{/if}}
 	    {{if $dPconfig.dPprescription.CPrescription.scores.profil.$niveau == '2'}}
+	      {{assign var=puce_rouge value=true}}
+	    {{/if}}
+	  {{/foreach}}
+  {{/if}}
+  
+  <!-- Posologie -->
+  {{if array_key_exists($code_cip, $posoduree)}}
+	  {{foreach from=$posoduree.$code_cip item=_posoduree}}
+	    {{assign var=_niveau value=$_posoduree.niveau}}
+	    {{assign var=niveau value=niv$_niveau}}
+	     
+	    {{if $dPconfig.dPprescription.CPrescription.scores.posoduree.$niveau == '1'}}
+	      {{assign var=puce_orange value=true}}
+	    {{/if}}
+	    {{if $dPconfig.dPprescription.CPrescription.scores.posoduree.$niveau == '2'}}
+	      {{assign var=puce_rouge value=true}}
+	    {{/if}}
+	  {{/foreach}}
+  {{/if}}
+  {{if array_key_exists($code_cip, $posoqte)}}
+	  {{foreach from=$posoqte.$code_cip item=_posoqte}}
+	    {{assign var=_niveau value=$_posoqte.niveau}}
+	    {{assign var=niveau value=niv$_niveau}}
+	     
+	    {{if $dPconfig.dPprescription.CPrescription.scores.posoqte.$niveau == '1'}}
+	      {{assign var=puce_orange value=true}}
+	    {{/if}}
+	    {{if $dPconfig.dPprescription.CPrescription.scores.posoqte.$niveau == '2'}}
 	      {{assign var=puce_rouge value=true}}
 	    {{/if}}
 	  {{/foreach}}

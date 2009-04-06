@@ -380,6 +380,16 @@ $dPconfig["dPprescription"] = array (
         "niv3" => "2",
         "niv4" => "2"
       ),
+      "posoqte" => array(
+        "niv10" => "0",
+        "niv11" => "1",
+        "niv12" => "2",
+      ),
+      "posoduree" => array(
+        "niv20" => "0",
+        "niv21" => "1",
+        "niv22" => "2",
+      ),
       "profil" => array( 
         "niv0" => "1",
         "niv1" => "1",

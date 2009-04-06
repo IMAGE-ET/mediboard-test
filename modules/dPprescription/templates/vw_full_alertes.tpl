@@ -6,10 +6,9 @@
 {{if $alertesInteractions|@count}}
 <table class="tbl">
   <tr>
-    <th colspan="6">{{$alertesInteractions|@count}} interaction(s)</th>
+    <th colspan="5">{{$alertesInteractions|@count}} interaction(s)</th>
   </tr>
   <tr>
-    <th>Niveau</th>
     <th>Gravité</th>
     <th>Produit</th>
     <th>Interéagit avec</th>
@@ -18,7 +17,6 @@
   </tr>
   {{foreach from=$alertesInteractions item=curr_alerte}}
   <tr>
-    <td class="text">{{$curr_alerte->Niveau}}</td>
     <td class="text">{{$curr_alerte->Gravite}}</td>
     <td class="text">{{$curr_alerte->Nom1}} ({{$curr_alerte->strClasse1}})</td>
     <td class="text">{{$curr_alerte->Nom2}} ({{$curr_alerte->strClasse2}})</td>
@@ -28,19 +26,42 @@
   {{/foreach}}
 </table>
 {{/if}}
+{{if $alertesPosologie|@count}}
+<table class="tbl">
+  <tr>
+    <th colspan="3">{{$alertesPosologie|@count}} problème(s) de posologie</th>
+  </tr>
+  <tr>
+    <th>Type</th>
+    <th>Produit</th>
+    <th>Problème</th>
+  </tr>
+  {{foreach from=$alertesPosologie item=curr_alerte}}
+  <tr>
+    <td class="text">
+      {{if $curr_alerte->Type == "Qte"}}
+        Quantité journalière
+      {{else}}
+        Durée de traitement
+      {{/if}}
+    </td>
+    <td class="text">{{$curr_alerte->Produit}}</td>
+    <td class="text">{{$curr_alerte->LibellePb}}</td>
+  </tr>
+  {{/foreach}}
+</table>
+{{/if}}
 {{if $alertesProfil|@count}}
 <table class="tbl">
   <tr>
-    <th colspan="3">{{$alertesProfil|@count}} contre-indication(s) / précaution(s) d'emploi</th>
+    <th colspan="2">{{$alertesProfil|@count}} contre-indication(s) / précaution(s) d'emploi</th>
   </tr>
   <tr>
-    <th>Niveau</th>
     <th>Produit</th>
     <th>CI/PE</th>
   </tr>
   {{foreach from=$alertesProfil item=curr_alerte}}
   <tr>
-    <td class="text">{{$curr_alerte->Niveau}}</td>
     <td class="text">{{$curr_alerte->Libelle}}</td>
     <td class="text">{{$curr_alerte->LibelleMot}}</td>
   </tr>

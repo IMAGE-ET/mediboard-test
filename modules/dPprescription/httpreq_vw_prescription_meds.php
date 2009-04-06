@@ -5,7 +5,7 @@
  *	@subpackage dPprescription
  *	@version $Revision: $
  *  @author Romain Ollivier
- */	      
+ */	   
 
 global $AppUI, $can, $m;
 
@@ -73,6 +73,8 @@ if ($prescription->_id) {
 	$profil->setPatient($patient);
 	$interactions = new CBcbControleInteraction();
 	$IPC          = new CBcbControleIPC();
+	$surdosage    = new CBcbControleSurdosage();
+	$surdosage->setPrescription($prescription);
 	
 	// Parcours des perfusions
 	$prescription->loadRefsPerfusions();
@@ -105,6 +107,7 @@ if ($prescription->_id) {
 	$alertesProfil       = $profil->getProfil();	  
 	$alertesInteractions = $interactions->getInteractions();
 	$alertesIPC          = $IPC->getIPC();
+	$alertesPosologie    = $surdosage->getSurdosage();
 		  
 	$prescription->_scores["hors_livret"] = 0;
 	foreach($lines as $type_line){
@@ -113,6 +116,7 @@ if ($prescription->_id) {
 	    $prescription->checkProfil($alertesProfil, $line->code_cip);      
 	    $prescription->checkIPC($alertesIPC, $line->code_cip);
 	    $prescription->checkInteractions($alertesInteractions, $line->code_cip);
+	    $prescription->checkPoso($alertesPosologies, $line->code_cip);
 	    if(!$line->_ref_produit->inLivret){
 	      $prescription->_scores["hors_livret"]++;
 	    }

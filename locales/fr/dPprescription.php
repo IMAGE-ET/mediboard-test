@@ -1358,4 +1358,16 @@ $locales['CPrescriptionLine-commentaire'] = '';
 $locales['CPrescriptionLine-commentaire-court'] = '';
 $locales['CPrescriptionLine-commentaire-desc'] = '';
 $locales['config-dPprescription-CPrescription-show_unsigned_lines'] = 'Affichage des lignes non signées';
+$locales['config-dPprescription-CPrescription-scores-posologie'] = 'Posologie';
+$locales['CPrisePosologie.unite_tous_les. 																				mercredi'] = 'mercredi';
+$locales['config-dPprescription-CPrescription-scores-posoqte-niv10'] = 'Quantité inférieure au seuil journalier usuel';
+$locales['config-dPprescription-CPrescription-scores-posoqte-niv11'] = 'Quantité supérieure au seuil journalier usuel';
+$locales['config-dPprescription-CPrescription-scores-posoqte-niv12'] = 'Quantité supérieure au seuil journalier toxique';
+$locales['config-dPprescription-CPrescription-scores-posoduree-niv20'] = 'Durée de traitement inférieure au seuil journalier usuel';
+$locales['config-dPprescription-CPrescription-scores-posoduree-niv21'] = 'Durée de traitement supérieure au seuil journalier usuel';
+$locales['config-dPprescription-CPrescription-scores-posoduree-niv22'] = 'Durée de traitement supérieure au seuil journalier toxique';
+$locales['CPrescription._type_alerte.posoqte'] = 'Quantités journalières de médicaments';
+$locales['CPrescription._type_alerte.posoduree'] = 'Durée de traitement';
+$locales['CPrescriptionLineMedicament-alerte-posoduree-court'] = 'Durée Traitement';
+$locales['CPrescriptionLineMedicament-alerte-posoqte-court'] = 'Qté. journalière';
 ?>

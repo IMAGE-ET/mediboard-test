@@ -1285,6 +1285,50 @@ class CPrescription extends CMbObject {
   }
   
   /*
+   * Controle des problèmes de posologie
+   */
+  function checkPoso($listPoso, $code_cip) {
+    if(!isset($this->_scores["posoqte"])){
+      $this->_scores["posoqte"]   = array();
+    }
+    if(!isset($this->_scores["posoduree"])){
+      $this->_scores["posoduree"] = array();
+    }
+    if(!isset($this->_alertes["posoqte"])){
+      $this->_alertes["posoqte"] = array();
+    }
+    if(!isset($this->_alertes["posoduree"])){
+      $this->_alertes["posoduree"] = array();
+    }
+
+    $niveau_duree_max = 0;
+    $niveau_qte_max   = 0;
+    foreach($listPoso as $key => $poso) {
+      if($poso->Type == "Duree") {
+        $tab = "posoduree";
+      } else {
+        $tab = "posoqte";
+      }
+      if($poso->CIP == $code_cip) {
+        @$this->_alertes[$tab][$code_cip][$key]["libelle"] = $poso->LibellePb;   
+        @$this->_alertes[$tab][$code_cip][$key]["niveau"]  = $poso->Niveau;   
+        @$this->_scores[$tab]["niv$poso->Niveau"]++;
+      }
+      if($poso->Type == "Duree") {
+        $niveau_duree_max = max($poso->Niveau, $niveau_duree_max);
+      } else {
+        $niveau_qte_max   = max($poso->Niveau, $niveau_qte_max);
+      }
+    }
+    if(count($this->_scores["posoduree"])){
+      $this->_scores["posoduree"]["niveau_max"] = $niveau_duree_max;
+    }
+    if(count($this->_scores["posoqte"])){
+      $this->_scores["posoqte"]["niveau_max"]   = $niveau_qte_max;
+    }
+  }
+  
+  /*
    * Génération du Dossier/Feuille de soin
    */
   function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true){  

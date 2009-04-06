@@ -31,6 +31,7 @@ $allergies    = new CBcbControleAllergie();
 $profil       = new CBcbControleProfil();
 $interactions = new CBcbControleInteraction();
 $IPC          = new CBcbControleIPC();
+$posologie    = new CBcbControleSurdosage();
 
 $prescription_traitement = new CPrescription();
 
@@ -52,11 +53,10 @@ if($prescription->object_id) {
   $dossier_medical->updateFormFields();
   $dossier_medical->loadRefsAntecedents();
   $dossier_medical->loadRefsTraitements();
-}  
   
-if($prescription->object_id){
   $allergies->setPatient($prescription->_ref_object->_ref_patient);
   $profil->setPatient($prescription->_ref_object->_ref_patient);
+	$posologie->setPrescription($prescription);
 }
 
 $lines = array();
@@ -67,6 +67,7 @@ if($prescription_traitement->_id){
 	  
 foreach($lines as &$lines_by_type) {
   foreach($lines_by_type as &$line){
+    $line->loadRefsPrises();
 	  // Ajout des produits pour les alertes
 	  if($prescription->object_id){
 	    $allergies->addProduit($line->code_cip);
@@ -96,6 +97,7 @@ if($prescription->object_id){
 }
 $alertesInteractions = $interactions->getInteractions();
 $alertesIPC          = $IPC->getIPC();
+$alertesPosologie    = $posologie->getSurdosage();
 
 
 
@@ -106,6 +108,7 @@ $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);
 $smarty->assign("alertesIPC"         , $alertesIPC);
 $smarty->assign("alertesProfil"      , $alertesProfil);
+$smarty->assign("alertesPosologie"   , $alertesPosologie);
 
 $smarty->display("vw_full_alertes.tpl");
 

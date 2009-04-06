@@ -52,6 +52,7 @@ $alertesAllergies     = array();
 $alertesInteractions  = array();
 $alertesIPC           = array();
 $alertesProfil        = array();
+$alertesPosologie     = array();
 $favoris              = array();
 $listProduits         = array();
 $dossier_medical = new CDossierMedical();
@@ -237,6 +238,8 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 
 	  $interactions = new CBcbControleInteraction();
 		$IPC          = new CBcbControleIPC();
+	  $surdosage    = new CBcbControleSurdosage();
+	  $surdosage->setPrescription($prescription);
 	  
 	  $lines = array();
 	  $lines["prescription"] = $prescription->_ref_prescription_lines;
@@ -269,6 +272,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	  }		  
 	  $alertesInteractions = $interactions->getInteractions();
 	  $alertesIPC          = $IPC->getIPC();
+	  $alertesPosologie    = $surdosage->getSurdosage();
 	  
 	  if(!$prescription->object_id){
 	    $prescription->_alertes["allergie"] = array();
@@ -284,6 +288,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	      }		      
 	      $prescription->checkIPC($alertesIPC, $line->code_cip);
 	      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
+	      $prescription->checkPoso($alertesPosologie, $line->code_cip);
 
 	      if(!$line->_ref_produit->inLivret && $prescription->type == "sejour"){
 	        $prescription->_scores["hors_livret"]++;
@@ -308,7 +313,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		if($prescription->object_id){
 		  $score_prescription = 0;
 		  foreach($prescription->_scores as $type_score => $_score){
-		    // Si _score est un array (interaction ou profil)
+		    // Si _score est un array (interaction, profil ou posologie)
 		    if(is_array($_score)){
 		      if(array_key_exists("niveau_max", $_score)){
 		        $niveau_max = "niv".$_score["niveau_max"];
@@ -441,7 +446,7 @@ if($_chir_id){
 if($_anesth_id){
   unset($listPrats[$_anesth_id]);
 }
-                                            
+
 // Création du template
 $smarty = new CSmartyDP();
 

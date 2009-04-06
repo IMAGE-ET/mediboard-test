@@ -174,6 +174,95 @@ popupVoies = function(){
 	</tr>
 	<tr>
     <th colspan="6" class="category">
+       {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posologie{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][posoqte][niv10]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv10{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv10{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][posoqte][niv10]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoqte.niv10}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoqte.niv10}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoqte.niv10}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][posoqte][niv11]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv11{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv11{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][posoqte][niv11]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoqte.niv11}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoqte.niv11}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoqte.niv11}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][posoqte][niv12]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv12{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv12{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][posoqte][niv12]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoqte.niv12}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoqte.niv12}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoqte.niv12}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][posoduree][niv20]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv20{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv20{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][posoduree][niv20]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoduree.niv20}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoduree.niv20}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoduree.niv20}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][posoduree][niv21]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv21{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv21{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][posoduree][niv21]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoduree.niv21}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoduree.niv21}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoduree.niv21}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][posoduree][niv22]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv22{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv22{{/tr}}
+      </label>  
+    </th>
+	  <td colspan="3" style="text-align: center">
+	    <select name="{{$m}}[{{$class}}][{{$var}}][posoduree][niv22]">
+        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoduree.niv22}} selected="selected" {{/if}}>0</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoduree.niv22}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoduree.niv22}} selected="selected" {{/if}}>2</option>
+      </select>
+	  </td>
+	</tr>
+	<tr>
+    <th colspan="6" class="category">
        {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil{{/tr}}
     </th>
   </tr>
