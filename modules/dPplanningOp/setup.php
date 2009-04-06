@@ -45,9 +45,6 @@ class CSetupdPplanningOp extends CSetup {
           ", UNIQUE KEY operation_id (operation_id)" .
           ") TYPE=MyISAM;";
     $this->addQuery($sql);
-    $sql = "INSERT INTO sysvals" .
-          "\nVALUES ('', '1', 'AnesthType', '1|Rachi\n2|Rachi + bloc\n3|Anesthésie loco-régionnale\n4|Anesthésie locale\n5|Neurolept\n6|Anesthésie générale\n7|Anesthesie generale + bloc\n8|Anesthesie peribulbaire\n0|Non définie')";
-    $this->addQuery($sql);
     
     $this->makeRevision("0.1");
     $sql = "ALTER TABLE operations " .
@@ -443,8 +440,6 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "UPDATE `operations` SET `type_anesth`=`type_anesth`+1;";
     $this->addQuery($sql);
-    $sql = "DROP TABLE sysvals;";
-    $this->addQuery($sql);
     
     $this->makeRevision("0.54");
     $sql = "ALTER TABLE `operations`" .
@@ -734,8 +729,7 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.86");
-    $sql = "ALTER TABLE `operations`" .
-               "\nADD `depassement_anesth` FLOAT NULL AFTER `fournitures`;";
+    $sql = "ALTER TABLE `operations` ADD `depassement_anesth` FLOAT NULL AFTER `fournitures`;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.87");
