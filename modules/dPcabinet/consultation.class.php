@@ -142,8 +142,8 @@ class CConsultation extends CCodable {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult";
-    $specs["patient_id"]        = "ref class|CPatient";
+    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable";
+    $specs["patient_id"]        = "ref class|CPatient seekable";
     $specs["heure"]             = "time notNull";
     $specs["duree"]             = "numchar maxLength|1";
     $specs["secteur1"]          = "currency min|0";
@@ -151,10 +151,10 @@ class CConsultation extends CCodable {
     $specs["chrono"]            = "enum notNull list|16|32|48|64";
     $specs["annule"]            = "bool";
     
-    $specs["motif"]             = "text helped";
-    $specs["rques"]             = "text helped";
-    $specs["examen"]            = "text helped";
-    $specs["traitement"]        = "text helped";
+    $specs["motif"]             = "text helped seekable";
+    $specs["rques"]             = "text helped seekable";
+    $specs["examen"]            = "text helped seekable";
+    $specs["traitement"]        = "text helped seekable";
     $specs["premiere"]          = "bool";
     $specs["adresse"]           = "bool";
     $specs["tarif"]             = "str";
@@ -584,13 +584,16 @@ class CConsultation extends CCodable {
     $consult->accident_travail = mbDateFromLocale($fse["FSE_DATE_AT"]);
     
     $consult->du_patient = $consult->total_assure;
-
+    $consult->du_tiers   = $consult->total_amo + $consult->total_amc;
+    
     if (!in_array($fse["FSE_TIERS_PAYANT"], array("2", "3"))) {
       $consult->du_patient += $consult->total_amo;
+      $consult->du_tiers   -= $consult->total_amo;
     }
     
     if (!in_array($fse["FSE_TIERS_PAYANT"], array("3", "4"))) {
       $consult->du_patient += $consult->total_amc;
+      $consult->du_tiers   -= $consult->total_amc;
     }
     
     $consult->valide = '1';

@@ -1177,12 +1177,6 @@ class CSetupdPcabinet extends CSetup {
         `acte_ngap`.`object_class` = 'CConsultation' AND 
         `acte_ngap`.`executant_id` = 0";
     $this->addQuery($sql);
-
-    /* Buggy test
-    $this->makeRevision("1.06");
-    $sql = "SELECT 'Dummy Query'";
-    $this->addQuery($sql);
-    */
     
     $this->makeRevision("1.07");
     $this->addPrefQuery("resumeCompta", "1");
@@ -1191,7 +1185,15 @@ class CSetupdPcabinet extends CSetup {
     $this->addPrefQuery("VitaleVisionDir", "");
     $this->addPrefQuery("VitaleVision", "0");
     
-    $this->mod_version = "1.09";
+    $this->makeRevision("1.09");
+    $sql = "UPDATE `consultation` 
+			SET du_tiers = ROUND(secteur1 + secteur2 - du_patient, 2)
+			WHERE ROUND(secteur1 + secteur2 - du_tiers - du_patient, 2) != 0
+			AND ABS(ROUND(secteur1 + secteur2 - du_tiers - du_patient, 2)) > 1
+			AND valide = '1'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.10";
   }
 }
 ?>
