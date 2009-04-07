@@ -37,7 +37,9 @@ class CHprimSoapHandler extends CSoapHandler {
     "A04" => "Création de l'IC a échoué.",
     "A05" => "Création de l'IPP a échoué.",
     "A06" => "Modification de l'IC a échoué.",
-	  "A020" => "IPP connu, IC non connu. Mauvais IC sur le SIP.",
+	  "A20" => "IPP connu, IC non connu. Mauvais IC sur le SIP.",
+	  "A21" => "IPP non connu, IC non fourni. Patient retrouvé. Association IPP.",
+	  "A22" => "IPP non connu, IC non connu. Patient retrouvé. Association IPP.",
 
     "I01" => "L'enregistrement du patient est terminé.",
     "I02" => "Modification du patient terminée.",
