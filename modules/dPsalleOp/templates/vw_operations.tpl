@@ -75,6 +75,7 @@ Main.add(function () {
   {{/if}}
   url.addParam("date", "{{$date}}");
   url.addParam("operation_id", "{{$selOp->_id}}");
+  url.addParam("hide_finished", "{{$hide_finished}}");
   url.periodicalUpdate('listplages', { frequency: 90 });
   
   {{if $selOp->_id}}

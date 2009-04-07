@@ -13,6 +13,7 @@ $can->needsRead();
 $salle_id     = mbGetValueFromGetOrSession("salle");
 $date         = mbGetValueFromGetOrSession("date", mbDate());
 $operation_id = mbGetValueFromGetOrSession("operation_id");
+$hide_finished = mbGetValueFromGetOrSession("hide_finished", 0);
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -27,11 +28,20 @@ if ($salle->load($salle_id)) {
   $salle->loadRefsForDay($date); 
 }
 
+if ($hide_finished == 1) {
+  foreach($salle->_ref_plages as &$plage) {
+    foreach($plage->_ref_operations as $key => $op){
+      if ($op->fin_op) unset($plage->_ref_operations[$key]);
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("vueReduite"    , false        );
 $smarty->assign("salle"         , $salle       );
+$smarty->assign("hide_finished" , $hide_finished);
 $smarty->assign("praticien_id"  , null         );
 $smarty->assign("listBlocs"     , $listBlocs   );
 $smarty->assign("listAnesths"   , $listAnesths );

@@ -18,6 +18,7 @@ $listPersPanseuse = array();
 
 // Ne pas supprimer, utilisé pour mettre le particien en session
 $praticien_id    = mbGetValueFromGetOrSession("praticien_id");
+$hide_finished   = mbGetValueFromGetOrSession("hide_finished", 0);
 $salle           = mbGetValueFromGetOrSession("salle");
 $op              = mbGetValueFromGetOrSession("op");
 $date            = mbGetValueFromGetOrSession("date", mbDate());
@@ -205,6 +206,7 @@ $smarty->assign("protocoles"      , $protocoles              );
 $smarty->assign("anesth_id"       , $anesth_id               );
 $smarty->assign("check_list"      , $check_list              );
 $smarty->assign("check_item_categories", $check_item_categories);
+$smarty->assign("hide_finished"   , $hide_finished);
 $smarty->display("vw_operations.tpl");
 
 ?>
