@@ -444,6 +444,10 @@ class CHprimSoapHandler extends CSoapHandler {
 				// Mapping du patient
         $newPatient = $domGetEvenement->createPatient($data['patient'], $newPatient);
 				
+        if ($newPatient->loadMatchingPatient()) {
+        	$_code_IPP = "A21";  
+        }
+        
 				// Evite de passer dans le sip handler
         $newPatient->_coms_from_hprim = 1;
         $msgPatient = $newPatient->store();
@@ -475,7 +479,7 @@ class CHprimSoapHandler extends CSoapHandler {
           
           $_code_IPP = "I23"; 
         } else {
-        	$tmpPatient = new Patient();
+        	$tmpPatient = new CPatient();
         	// idCible connu
         	if ($tmpPatient->load($data['idCible'])) {
         		if ($tmpPatient->_id != $IPP->object_id) {
