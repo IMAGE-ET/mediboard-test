@@ -56,9 +56,12 @@
           <th>Intervention</th>
           <td>
             {{if $operation->_id}}
-            Dr {{$operation->_ref_chir->_view}} - le {{$operation->_datetime|date_format:"%d/%m/%Y"}}
+              Dr {{$operation->_ref_chir->_view}} - le {{$operation->_datetime|date_format:"%d/%m/%Y"}}
+              {{if $operation->libelle}}
+                <em>[{{$operation->libelle}}]</em>
+              {{/if}}
             {{else}}
-            -
+              -
             {{/if}}
           </td>
         </tr>
@@ -185,6 +188,9 @@
             <strong>Etat bucco-dentaire :</strong>
             {{$consult_anesth->etatBucco|nl2br}}
             <br />
+            {{if $etatDents}}
+              {{$etatDents|nl2br}}
+            {{/if}}
             <strong>Conclusion :</strong>
             {{$consult_anesth->conclusion|nl2br}}
             <br />
@@ -330,7 +336,7 @@
                     TCA&nbsp:&nbsp;{{$consult->_ref_consult_anesth->tca_temoin}}&nbsp;s&nbsp;/&nbsp;{{$consult->_ref_consult_anesth->tca}}&nbsp;s
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->tsivy}}
+                  {{if $consult->_ref_consult_anesth->tsivy && $consult->_ref_consult_anesth->tsivy != "00:00:00"}}
                     TS Ivy&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->tsivy|date_format:"%M min %S s"}}
                     <br />
                   {{/if}}

@@ -37,6 +37,30 @@ if ($consultation_id) {
   $patient->loadRefDossierMedical();
   $patient->_ref_dossier_medical->loadRefsAntecedents();
   $patient->_ref_dossier_medical->loadRefsTraitements();
+  $patient->_ref_dossier_medical->loadRefsEtatsDents();
+  $etats = array();
+  if (is_array($patient->_ref_dossier_medical->_ref_etats_dents)) {
+    foreach($patient->_ref_dossier_medical->_ref_etats_dents as $etat) {
+      if ($etat->etat != null) {
+        switch ($etat->dent) {
+          case 10: 
+          case 30: $position = "Central haut"; break;
+          case 50: 
+          case 70: $position = "Central bas"; break;
+          default: $position = $etat->dent;
+        }
+        if (!isset ($etats[$etat->etat])) {
+          $etats[$etat->etat] = array();
+        }
+        $etats[$etat->etat][] = $position;
+      }
+    }
+  }
+  $sEtatsDents = "";
+  foreach ($etats as $key => $list) {
+    sort($list);
+    $sEtatsDents .= "- ".ucfirst($key)." : ".implode(", ", $list)."\n";
+  }
 }
 
 // Affichage des données
@@ -84,6 +108,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
+$smarty->assign("etatDents" , $sEtatsDents);
 
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 
