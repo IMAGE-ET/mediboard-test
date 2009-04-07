@@ -1480,6 +1480,7 @@ table.note th.low {
   background: #eef;
   margin: auto;
   padding: 5px;
+  border-collapse: separate;
 }
 
 #login table td.logo {
