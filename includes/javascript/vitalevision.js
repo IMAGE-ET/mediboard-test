@@ -16,11 +16,11 @@ var VitaleVision = {
 	
 	// Lecture du contenu de la carte et lancement d'une fonction après la lecture terminée
 	getContent: function(callback){
-		if (VitaleVision.applet.performRead() == "OK") {
+		if (VitaleVision.applet && VitaleVision.applet.performRead() == "OK") {
 			setTimeout(function(){
 				VitaleVision.xmlText = VitaleVision.applet.getContent() + '';
 				if (callback) callback();
-			}, 100);
+			}, 500);
 		}
 	},
 	
@@ -96,7 +96,7 @@ var VitaleVision = {
 		catch (e) {
 			alert('Erreur lors de la lecture de la carte vitale, veuillez la ré-insérer.');
 			return;
-		}}, 500);
+		}}, 700);
 	},
 	
 	// Remplissage du formulaire en fonction du bénéficiaire sélectionné dans la fenetre modale
