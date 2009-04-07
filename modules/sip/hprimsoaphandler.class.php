@@ -24,29 +24,35 @@ class CHprimSoapHandler extends CSoapHandler {
 	  "E00" => "Erreur inattendue",
     "E01" => "L'émetteur du message n'est pas conforme avec l'établissement enregistré dans le SIP.",
 	  "E02" => "La grammaire du message XML n'est pas respectée.",
-	  "E03" => "Les identifiants fournis sont incohérents dans le SIP. L'IPP renvoyé ne correspond pas à celui associé à l'identifiant source.",
+	  "E03" => "Les identifiants fournis sont incohérents. L'IPP renvoyé ne correspond pas à celui associé à l'identifiant source.",
 	  "E04" => "Disconcordance entre l'identifiant source et l'identifiant cible.",
-	  "E05" => "IPP non fourni."
+	  "E05" => "Identifiants source et cible non fournis.",
+	  "E06" => "IPP non fourni."
 	);
 
 	static $codesAvertissementInformation = array(
     "A01" => "IPP envoyé non existant sur le SIP, attribution IPP forcée.",
     "A02" => "L'enregistrement du patient a échoué.",
     "A03" => "Modification du patient a échoué.",
-    "A04" => "Création de l'id externe a échoué.",
+    "A04" => "Création de l'IC a échoué.",
     "A05" => "Création de l'IPP a échoué.",
-    "A06" => "Modification de l'id externe a échoué.",
+    "A06" => "Modification de l'IC a échoué.",
+	  "A020" => "IPP connu, IC non connu. Mauvais IC sur le SIP.",
 
     "I01" => "L'enregistrement du patient est terminé.",
     "I02" => "Modification du patient terminée.",
-    "I03" => "Identifiant source non fourni.",
-    "I04" => "Identifiant source non connu.",
-    "I05" => "Identifiant cible non connu.",
-    "I06" => "Identifiant source mis à jour.",
-	  "I07" => "Identifiant cible non fourni.",
-	  "I08" => "Identifiant cible non fourni mais retrouvé.",
-	  "I09" => "Identifiant cible fourni mais déjà utilisé.",
-	  "I10" => "Identifiant source non fourni mais retrouvé.",
+    "I03" => "IC non fourni.",
+    "I04" => "IC non connu. Association IC.",
+    "I05" => "IC mis à jour. Modification IC.",
+    "I06" => "IPP non fourni. Association IPP.",
+	  "I07" => "IPP non connu. Association IPP.",
+	  "I08" => "IPP non fourni mais retrouvé.",
+	  "I09" => "IPP fourni mais déjà utilisé. Association IPP.",
+	  "I20" => "IPP non connu, IC non connu. Association IPP.",
+	  "I21" => "IPP non connu, IC connu. Association IPP.",
+	  "I22" => "IPP non connu, IC non fourni. Association IPP.",
+	  "I23" => "IPP connu, IC non fourni.",
+	  "I24" => "IPP connu, IC connu.",
 	);
 
 	function evenementPatient($messagePatient) {
