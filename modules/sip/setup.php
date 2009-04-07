@@ -57,7 +57,13 @@ class CSetupsip extends CSetup {
 							  CHANGE `type` `type` VARCHAR (255);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.13";
+     $this->makeRevision("0.13");
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+                ADD `statut_acquittement` VARCHAR (255);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.14";
   }
 }
 ?>
