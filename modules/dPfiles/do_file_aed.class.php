@@ -73,7 +73,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
         
         $this->_obj->bind($file);
-        $this->_obj->file_name = isset($file["file_rename"]) ? $file["file_rename"] : $file["name"];
+        $this->_obj->file_name = $file["file_rename"] ? $file["file_rename"] : $file["name"];
         $this->_obj->file_type = $file["type"];
         $this->_obj->file_size = $file["size"];
         $this->_obj->file_date = mbDateTime();
