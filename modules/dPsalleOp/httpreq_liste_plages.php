@@ -31,7 +31,7 @@ if ($salle->load($salle_id)) {
 if ($hide_finished == 1) {
   foreach($salle->_ref_plages as &$plage) {
     foreach($plage->_ref_operations as $key => $op){
-      if ($op->fin_op) unset($plage->_ref_operations[$key]);
+      if ($op->sortie_salle) unset($plage->_ref_operations[$key]);
     }
   }
 }
