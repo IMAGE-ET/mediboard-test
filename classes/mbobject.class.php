@@ -26,7 +26,6 @@ class CMbObject {
    * Global properties
    */
   var $_class_name    = null; // class name of the object
-  var $_error         = null; // error message
   var $_id            = null; // shortcut for the object id
   var $_guid          = null; // shortcut for the object class+id
   
