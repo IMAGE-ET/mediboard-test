@@ -28,7 +28,7 @@ function popEtatSejour(sejour_id) {
 }
 
 {{if $isImedsInstalled}}
-Main.add(ImedsResultsWatcher.loadResults);
+//Main.add(ImedsResultsWatcher.loadResults);
 {{/if}}
  
 </script>
