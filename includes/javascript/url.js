@@ -19,7 +19,8 @@ var Url = Class.create({
   // Constructor
   initialize: function(sModule, sAction) {
     this.oParams = {};
-    this.oWindow = null,
+    this.oWindow = null;
+    this.sFragment = null;
   	this.oPrefixed = {};
   	if(sModule && sAction) {
   	  this.setModuleAction(sModule, sAction);
@@ -39,6 +40,10 @@ var Url = Class.create({
   setModuleDosql: function(sModule, sDosql) {
     this.addParam("m", sModule);
     this.addParam("dosql", sDosql);
+  },
+  
+  setFragment: function(sFragment) {
+     this.sFragment = sFragment;
   },
   
   addParam: function(sName, sValue) {
@@ -71,6 +76,7 @@ var Url = Class.create({
   
   make: function() {
     var sUrl = "?" + $H(this.oParams).toQueryString();
+    if (this.sFragment) sUrl += "#"+this.sFragment;
     return sUrl;
   },
   
