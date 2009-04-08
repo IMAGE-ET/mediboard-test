@@ -101,10 +101,6 @@ class CSpObject extends CMbObject {
     return array();
   }
    
-  function getSeeks() {
-    return array();
-  }
-
   /**
    * Load Id400 fo current group
    * @return CIdSante400

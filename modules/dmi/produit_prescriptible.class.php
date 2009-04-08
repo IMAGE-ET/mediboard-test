@@ -23,21 +23,14 @@ class CProduitPrescriptible extends CMbObject {
   
   function getProps() {
   	$props = parent::getProps();
-    $props["nom"]	     	      	= "str notNull";
-    $props["description"]	      = "text";
+    $props["nom"]	     	      	= "str notNull seekable";
+    $props["description"]	      = "text seekable";
     $props["code"]		          = "str notNull";
     $props["in_livret"]	        = "bool";
     $props["_produit_existant"] = "bool";
     return $props;
   }
   
-  function getSeeks() {
-    return array (
-      "nom" => "like",
-      "description" => "like"
-    );
-  }
-
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;

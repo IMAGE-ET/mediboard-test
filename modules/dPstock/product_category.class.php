@@ -34,14 +34,8 @@ class CProductCategory extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['name'] = 'str notNull maxLength|50';
+    $specs['name'] = 'str notNull maxLength|50 seekable';
     return $specs;
-  }
-
-  function getSeeks() {
-    return array (
-      'name' => 'like',
-    );
   }
 
   function updateFormFields() {

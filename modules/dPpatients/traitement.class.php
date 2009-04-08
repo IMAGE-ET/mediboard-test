@@ -31,7 +31,7 @@ class CTraitement extends CMbObject {
     $specs = parent::getProps();
     $specs["debut"       ] = "date";
     $specs["fin"         ] = "date moreEquals|debut";
-    $specs["traitement"  ] = "text helped";
+    $specs["traitement"  ] = "text helped seekable";
     $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     
     $specs["_search"] = "str";
@@ -81,12 +81,6 @@ class CTraitement extends CMbObject {
   function loadRefDossierMedical(){ 
     $this->_ref_dossier_medical = new CDossierMedical();
     $this->_ref_dossier_medical->load($this->dossier_medical_id);
-  }
-
-  function getSeeks() {
-    return array (
-      "traitement" => "like"
-    );
   }
 }
 

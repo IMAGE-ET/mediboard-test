@@ -58,13 +58,13 @@ class CProductOrder extends CMbObject {
 
 	function getProps() {
 		$specs = parent::getProps();
-    $specs['date_ordered']    = 'dateTime';
+    $specs['date_ordered']    = 'dateTime seekable';
     $specs['societe_id']      = 'ref notNull class|CSociete';
 	  $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['locked']          = 'bool';
 	  $specs['cancelled']       = 'bool';
 	  $specs['deleted']         = 'bool';
-    $specs['order_number']    = 'str maxLength|64';
+    $specs['order_number']    = 'str maxLength|64 seekable';
     $specs['_total']          = 'currency';
     $specs['_count_received'] = 'num pos';
 	  $specs['_date_received']  = 'dateTime';
@@ -76,13 +76,6 @@ class CProductOrder extends CMbObject {
 		$specs['_redo']           = 'bool';
 	  $specs['_reset']          = 'bool';
 		return $specs;
-	}
-
-	function getSeeks() {
-		return array (
-      'date_ordered' => 'like',
-      'order_number' => 'like',
-		);
 	}
 
 	/** Counts this received product's items */

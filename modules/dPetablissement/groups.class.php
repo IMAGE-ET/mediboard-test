@@ -72,7 +72,7 @@ class CGroups extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["text"]                = "str notNull confidential";
+    $specs["text"]                = "str notNull confidential seekable";
     $specs["raison_sociale"]      = "str maxLength|50";
     $specs["adresse"]             = "text confidential";
     $specs["cp"]                  = "numchar length|5";
@@ -90,12 +90,6 @@ class CGroups extends CMbObject {
     return $specs;
   }
   
-  function getSeeks() {
-    return array (
-      "text" => "like"
-    );
-  }
- 
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->text;

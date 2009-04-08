@@ -43,7 +43,7 @@ class CGestionCab extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["function_id"]      = "ref notNull class|CFunctions";
-    $specs["libelle"]          = "str notNull";
+    $specs["libelle"]          = "str notNull seekable";
     $specs["date"]             = "date notNull";
     $specs["rubrique_id"]      = "ref notNull class|CRubrique";
     $specs["montant"]          = "currency notNull min|0";
@@ -53,12 +53,6 @@ class CGestionCab extends CMbObject {
     $specs["_date_min"] 		   = "date";
     $specs["_date_max"] 		   = "date moreThan|_date_min";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "libelle" => "like"
-    );
   }
   
   function updateFormFields() {

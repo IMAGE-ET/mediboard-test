@@ -64,7 +64,7 @@ class CActeCCAM extends CActe {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["code_acte"]           = "code notNull ccam";
+    $specs["code_acte"]           = "code notNull ccam seekable";
     $specs["code_activite"]       = "num notNull minMax|0|99";
     $specs["code_phase"]          = "num notNull minMax|0|99";
     $specs["execution"]           = "dateTime notNull";
@@ -79,12 +79,6 @@ class CActeCCAM extends CActe {
     $specs["_rembex"]             = "bool";
     
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "code_acte" => "equal"
-    );
   }
   
   /**

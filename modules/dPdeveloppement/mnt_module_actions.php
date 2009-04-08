@@ -10,8 +10,6 @@
 global $can;
 $can->needsRead();
 
-set_time_limit(90);
-
 foreach ($modules = CModule::getInstalled() as $module) {
   CAppUI::requireModuleFile($module->mod_name, "index");
   foreach ($module->_tabs as &$tab) {

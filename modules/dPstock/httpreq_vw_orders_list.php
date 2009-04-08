@@ -28,15 +28,14 @@ if ($keywords) {
 	$where_or = array();
 	
 	// we seek among the societes
-  foreach($societe->_seek as $col => $comp) {
-    $where_societe_or[] = "societe.$col $comp '%$keywords%'";
+  foreach ($societe->getSeekables as $field => $spec) {
+    $where_societe_or[] = "societe.$field LIKE '%$keywords%'";
   }
   $where_societe[] = implode(' OR ', $where_societe_or);
 	
 	// we seek among the orders
-	$seeks = $order->getSeeks();
-	foreach($seeks as $col => $comp) {
-	  $where_or[] = "product_order.$col $comp '%$keywords%'";
+	foreach($order->getSeekables() as $field => $spec) {
+	  $where_or[] = "product_order.$field LIKE '%$keywords%'";
 	}
 	$where_or[] = 'product_order.societe_id ' . $ds->prepareIn(array_keys($societe->loadList($where_societe)));
 	$where[] = implode(' OR ', $where_or);

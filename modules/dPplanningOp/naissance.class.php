@@ -43,13 +43,6 @@ class CNaissance extends CMbObject {
     return $specs;
   }
   
-  function getSeeks() {
-    return array (
-      "nom"    => "likeBegin",
-      "prenom" => "likeBegin",
-    );
-  }
-  
   function loadRefsFwd() {
     $this->_ref_operation = new COperation;
     $this->_ref_operation->load($this->operation_id);

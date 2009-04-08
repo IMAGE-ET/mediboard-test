@@ -49,30 +49,21 @@ class CMedecin extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["nom"]             = "str notNull confidential";
-    $specs["prenom"]          = "str notNull confidential";
+    $specs["nom"]             = "str notNull confidential seekable|begin";
+    $specs["prenom"]          = "str notNull confidential seekable|begin";
     $specs["jeunefille"]      = "str confidential";
     $specs["adresse"]         = "text confidential";
-    $specs["ville"]           = "str confidential";
+    $specs["ville"]           = "str confidential seekable";
     $specs["cp"]              = "numchar maxLength|5 confidential";
     $specs["tel"]             = "numchar length|10 confidential mask|99S99S99S99S99";
     $specs["fax"]             = "numchar length|10 confidential mask|99S99S99S99S99";
     $specs["portable"]        = "numchar length|10 confidential mask|99S99S99S99S99";
     $specs["email"]           = "str confidential";
-    $specs["disciplines"]     = "text confidential";
+    $specs["disciplines"]     = "text confidential seekable";
     $specs["orientations"]    = "text confidential";
     $specs["complementaires"] = "text confidential";
     $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier default|medecin";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom"         => "likeBegin",
-      "prenom"      => "likeBegin",
-      "ville"       => "like",
-      "disciplines" => "like"
-    );
   }
   
   function countPatients() {

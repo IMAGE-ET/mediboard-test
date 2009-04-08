@@ -34,15 +34,9 @@ class CCategory extends CMbObject {
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
-      "category_name" => "str notNull maxLength|50"
+      "category_name" => "str notNull maxLength|50 seekable"
     );
     return array_merge($specsParent, $specs);
-  }
-  
-  function getSeeks() {
-    return array (
-      "category_name" => "like"
-    );
   }
   
   function updateFormFields() {

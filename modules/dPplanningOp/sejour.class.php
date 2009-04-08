@@ -167,8 +167,8 @@ class CSejour extends CCodable {
 
   function getProps() {
    	$specs = parent::getProps();
-    $specs["patient_id"]          = "ref notNull class|CPatient";
-    $specs["praticien_id"]        = "ref notNull class|CMediusers";
+    $specs["patient_id"]          = "ref notNull class|CPatient seekable";
+    $specs["praticien_id"]        = "ref notNull class|CMediusers seekable";
     $specs["group_id"]            = "ref notNull class|CGroups";
     $specs["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg default|ambu";
     $specs["modalite"]            = "enum notNull list|office|libre|tiers default|libre";
@@ -186,7 +186,7 @@ class CSejour extends CCodable {
     $specs["DR"]                  = "code cim10";
     $specs["pathologie"]          = "str length|3";
     $specs["septique"]            = "bool";
-    $specs["convalescence"]       = "text confidential";
+    $specs["convalescence"]       = "text confidential seekable";
     $specs["rques"]               = "text";
     $specs["ATNC"]                = "bool";
     $specs["hormone_croissance"]  = "bool";
@@ -231,14 +231,6 @@ class CSejour extends CCodable {
     return $specs;
   }
   
-  function getSeeks() {
-    return array (
-      "patient_id"    => "ref|CPatient",
-      "praticien_id"  => "ref|CMediusers",
-      "convalescence" => "like"
-    );
-  }
-
   function check() {
     $msg    = null;
     $pathos = new CDiscipline();

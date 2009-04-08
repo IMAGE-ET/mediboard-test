@@ -44,20 +44,13 @@ class CEmployeCab extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["function_id"] = "ref notNull class|CFunctions";
-    $specs["nom"]         = "str notNull";
-    $specs["prenom"]      = "str notNull";
+    $specs["nom"]         = "str notNull seekable|begin";
+    $specs["prenom"]      = "str notNull seekable|begin";
     $specs["function"]    = "str notNull";
     $specs["adresse"]     = "text confidential";
     $specs["ville"]       = "str";
     $specs["cp"]          = "numchar length|5 confidential";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom"    => "likeBegin",
-      "prenom" => "likeBegin"
-    );
   }
   
   function updateFormFields() {

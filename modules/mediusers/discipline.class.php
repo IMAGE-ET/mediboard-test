@@ -95,17 +95,11 @@ class CDiscipline extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["text"]      = "str notNull";
+    $specs["text"]      = "str notNull seekable";
     $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST";
     return $specs;
   }
-  
-  function getSeeks() {
-    return array (
-      "text" => "like"
-    );
-  }
-  
+    
   function loadUsedDisciplines($where = array(), $order = null) {
     $ljoin["users_mediboard"] = "`users_mediboard`.`discipline_id` = `discipline`.`discipline_id`";
     $where["users_mediboard.discipline_id"] = "IS NOT NULL";

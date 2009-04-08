@@ -54,12 +54,12 @@ class CPlageressource extends CMbObject {
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
-      "prat_id" 		=> "ref class|CMediusers",
+      "prat_id" 		=> "ref class|CMediusers seekable",
       "date"    		=> "date notNull",
       "debut"   		=> "time notNull",
       "fin"     		=> "time notNull",
       "tarif"   		=> "currency notNull min|0 confidential",
-      "libelle" 		=> "str confidential",
+      "libelle" 		=> "str confidential seekable",
       "paye"    		=> "bool",
       "_date_min" 	=> "date",
       "_date_max" 	=> "date moreEquals|_date_min",
@@ -67,13 +67,6 @@ class CPlageressource extends CMbObject {
       "_hour_fin"   => "time",
     );
     return array_merge($specsParent, $specs);
-  }
-  
-  function getSeeks() {
-    return array (
-      "prat_id" => "ref|CMediusers",
-      "libelle" => "like"
-    );
   }
   
   function loadRefsFwd() {

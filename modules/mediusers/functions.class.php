@@ -68,7 +68,7 @@ class CFunctions extends CMbObject {
   	$specs = parent::getProps();
     $specs["group_id"]        = "ref notNull class|CGroups";
     $specs["type"]            = "enum notNull list|administratif|cabinet";
-    $specs["text"]            = "str notNull confidential";
+    $specs["text"]            = "str notNull confidential seekable";
     $specs["color"]           = "str notNull length|6";
     $specs["adresse"]         = "text";
     $specs["cp"]              = "numchar length|5";
@@ -79,13 +79,7 @@ class CFunctions extends CMbObject {
     $specs["compta_partagee"] = "bool notNull";
     return $specs;
   }
-  
-  function getSeeks() {
-    return array (
-      "text" => "like"
-    );
-  }
-  
+    
   function updateFormFields() {
 		parent::updateFormFields();
 

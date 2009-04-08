@@ -132,22 +132,22 @@ class COperation extends CCodable {
   function getProps() {
     $specs = parent::getProps();
     $specs["sejour_id"]          = "ref notNull class|CSejour";
-    $specs["chir_id"]            = "ref notNull class|CMediusers";
+    $specs["chir_id"]            = "ref notNull class|CMediusers seekable";
     $specs["anesth_id"]          = "ref class|CMediusers";
-    $specs["plageop_id"]         = "ref class|CPlageOp";
+    $specs["plageop_id"]         = "ref class|CPlageOp seekable";
     $specs["pause"]              = "time";
     $specs["salle_id"]           = "ref class|CSalle";
     $specs["date"]               = "date";
     $specs["code_uf"]            = "str length|3";
     $specs["libelle_uf"]         = "str maxLength|35";
-    $specs["libelle"]            = "str";
+    $specs["libelle"]            = "str seekable";
     $specs["cote"]               = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
     $specs["temp_operation"]     = "time";
     $specs["entree_salle"]       = "time";
     $specs["sortie_salle"]       = "time";
     $specs["time_operation"]     = "time";
     $specs["examen"]             = "text helped";
-    $specs["materiel"]           = "text helped";
+    $specs["materiel"]           = "text helped seekable";
     $specs["commande_mat"]       = "bool";
     $specs["info"]               = "bool";
     $specs["type_anesth"]        = "ref class|CTypeAnesth";
@@ -195,15 +195,6 @@ class COperation extends CCodable {
     return ($code_activite == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
   }
   
-  function getSeeks() {
-    return array (
-      "chir_id"    => "ref|CMediusers",
-      "plageop_id" => "ref|CPlageOp",
-      "libelle"    => "like",
-      "materiel"   => "like",
-    );
-  }
-
 	function getBackProps() {
 	  $backProps = parent::getBackProps();
 	  $backProps["blood_salvages"]           = "CBloodSalvage operation_id";

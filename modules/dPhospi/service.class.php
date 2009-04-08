@@ -48,17 +48,10 @@ class CService extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["group_id"]    = "ref notNull class|CGroups";
-    $specs["nom"]         = "str notNull";
-    $specs["description"] = "text";
+    $specs["nom"]         = "str notNull seekable";
+    $specs["description"] = "text seekable";
     $specs["urgence"]     = "bool";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom"         => "like",
-      "description" => "like"
-    );
   }
   
   function updateFormFields(){

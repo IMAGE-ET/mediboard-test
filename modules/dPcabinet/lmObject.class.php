@@ -42,10 +42,6 @@ class CLmObject extends CMbObject {
   function getProps() {
     return array();
   }
-   
-  function getSeeks() {
-    return array();
-  }
 }
 
 ?>

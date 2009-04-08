@@ -19,8 +19,8 @@ $count = null;
 $where_or = array();
 
 if ($keywords) {
-	foreach ($product->_seek as $col => $comp) {
-	  $where_or[] = "`$col` $comp '%$keywords%'";
+	foreach ($product->getSeekables as $field => $spec) {
+	  $where_or[] = "`$field` LIKE '%$keywords%'";
 	}
 	$where = array();
 	$where[] = implode(' OR ', $where_or);

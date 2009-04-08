@@ -64,9 +64,9 @@ class CProduct extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['name']          = 'str notNull maxLength|50';
-    $specs['description']   = 'text';
-    $specs['code']          = 'str maxLength|32';
+    $specs['name']          = 'str notNull maxLength|50 seekable';
+    $specs['description']   = 'text seekable';
+    $specs['code']          = 'str maxLength|32 seekable';
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete';
     $specs['quantity']      = 'num notNull pos';
@@ -82,14 +82,6 @@ class CProduct extends CMbObject {
     $specs['_unit_quantity']= 'float pos';
     $specs['_quantity']     = 'str';
     return $specs;
-  }
-
-  function getSeeks() {
-    return array (
-      'name'        => 'like',
-      'description' => 'like',
-      'code'        => 'like',
-    );
   }
 
   function updateFormFields() {

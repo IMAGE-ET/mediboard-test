@@ -34,18 +34,11 @@ class CPrestation extends CMbObject {
   function getProps(){
   	$specs = parent::getProps();
     $specs["group_id"] = "ref notNull class|CGroups";
-    $specs["nom"] = "str notNull";
-    $specs["description"] = "text confidential";
+    $specs["nom"] = "str notNull seekable";
+    $specs["description"] = "text confidential seekable";
     return $specs;
   }
 
-  function getSeeks() {
-    return array (
-      "nom"         => "like",
-      "description" => "like"
-    );
-  }
-  
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = $this->nom;

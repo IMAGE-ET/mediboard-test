@@ -101,8 +101,8 @@ class CHprim21Patient extends CHprim21Object {
     $specs = array (
       // Patient
       "patient_id"                => "ref class|CPatient",
-      "nom"                       => "str notNull",
-      "prenom"                    => "str",
+      "nom"                       => "str notNull seekable",
+      "prenom"                    => "str seekable",
       "prenom2"                   => "str",
       "alias"                     => "str",
       "civilite"                  => "enum list|M|Mme|Mlle",
@@ -294,13 +294,6 @@ class CHprim21Patient extends CHprim21Object {
     $this->date_debut_grossesse   = $this->getDateFromHprim($elements[22]);
     
     return true;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom"    => "like",
-      "prenom" => "like",
-    );
   }
   
   function updateFormFields() {

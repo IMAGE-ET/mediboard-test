@@ -713,8 +713,9 @@ function mbLoadScriptsStorage($modeReturn){
 }
 
 /**
- * Converts an bytes number to the deca-binary equivalent
- * @return string Mediboard version */
+ * Convert a byte number to the deca-binary equivalent
+ * @return string Mediboard version 
+ */
 function mbConvertDecaBinary($number) {
   $bytes = $number;
   $value = $number;
@@ -766,6 +767,11 @@ function set_min_memory_limit($min) {
   }
 }
 
+/**
+ * Return all child classe of a given class havin given properties
+ * @param array $properties No property checking if empty
+ * @return array
+ */
 function getChildClasses($parent = "CMbObject", $properties = array()) {
   $listClasses = get_declared_classes();
   foreach ($listClasses as $key => $class) {
@@ -785,8 +791,7 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
 }
 
 /**
- * DEPRECATED SEE getMbClassesEx();
- *
+ * Return all CMbObject child classes
  * @param array $properties
  * @return array
  */
@@ -795,23 +800,11 @@ function getMbClasses($properties = array()) {
   $AppUI->getAllClasses();
   $classes = getChildClasses("CMbObject", $properties);
   foreach ($classes as $key => $class) {
-    // La classes est-elle instanciable ?
-    if (!has_default_constructor($class)){
-      unset($classes[$key]);
-    	continue;
-    }
-
-    // Instanciation escapée au cas où cela génère des erreurs liées au DSN
+    // Escaped instanciation in case of DSN errors
     $object = @new $class;
     
-    // On test si on a réussi à l'instancier
+    // Classe instanciée ?
     if (!$object->_class_name) {
-      unset($classes[$key]);
-    	continue;
-    }
-    
-    // On teste si son dns est standard
-    if ($object->_spec->dsn != "std") {
       unset($classes[$key]);
     	continue;
     }
@@ -820,42 +813,28 @@ function getMbClasses($properties = array()) {
   return $classes;
 }
 
-
 /**
- * Returns all CMbObject child classes
- *
+ * Return all storable classes which module is installed
  * @param array $properties
  * @return array
  */
-function getMbClassesEx($properties = array()) {
-  global $AppUI;
-  $AppUI->getAllClasses();
-  $classes = getChildClasses("CMbObject", $properties);
+function getInstalledClasses($properties = array()) {
+  $classes = getMbClasses();
   foreach ($classes as $key => $class) {
-    // Instanciation escapée au cas où cela génère des erreurs liées au DSN
+    // Escaped instanciation in case of DSN errors
     $object = @new $class;
     
-    // On test si on a réussi à l'instancier
-    if (!$object->_class_name) {
+    // Installed module ?
+    if ($object->_ref_module === null) {
       unset($classes[$key]);
     	continue;
     }
-  }
-  
-  return $classes;
-}
 
-
-function getInstalledClasses($properties = array()) {
-  $classes = getMbClassesEx();
-  foreach ($classes as $key => $class) {
-    // Instanciation escapée au cas où cela génère des erreurs liées au DSN
-    $object = @new $class;
-    
-    // On test si l'objet a bin un module de référence
-    if ($object->_ref_module === null) {
+    // Storable class ?
+	  if (!$object->_spec->table) {
       unset($classes[$key]);
-    }
+    	continue;
+	  }
   }
   
   return $classes;
@@ -1028,6 +1007,7 @@ function is_intranet_ip($ip) {
   $is_local[4] = ($ip0 == 192 && $ip1 == 168);
   return $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
 }
+
 /**
  * Checks recursively if a value exists in an array
  * @return Returns TRUE if needle  is found in the array, FALSE otherwise. 

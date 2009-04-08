@@ -37,16 +37,10 @@ class CFilesCategory extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["nom"]   = "str notNull";
+    $specs["nom"]   = "str notNull seekable";
     $specs["class"] = "str";
     $specs["validation_auto"] = "bool";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom" => "like"
-    );
   }
   
   function countDocItems() {

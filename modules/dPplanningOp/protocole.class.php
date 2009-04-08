@@ -60,14 +60,14 @@ class CProtocole extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chir_id"]         = "ref notNull class|CMediusers";
+    $specs["chir_id"]         = "ref notNull class|CMediusers seekable";
     $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $specs["DP"]              = "code cim10";
     $specs["convalescence"]   = "text confidential";
     $specs["rques_sejour"]    = "text confidential";
-    $specs["libelle"]         = "str";
-    $specs["examen"]          = "text confidential";
-    $specs["materiel"]        = "text confidential";
+    $specs["libelle"]         = "str seekable";
+    $specs["examen"]          = "text confidential seekable";
+    $specs["materiel"]        = "text confidential seekable";
     $specs["duree_hospi"]     = "num notNull minMax|0|36500";
     $specs["rques_operation"] = "text confidential";
     $specs["depassement"]     = "currency min|0 confidential";
@@ -83,15 +83,6 @@ class CProtocole extends CMbObject {
     $specs["_hour_op"]        = "";
     $specs["_min_op"]         = "";
     return $specs;
-  }
-
-  function getSeeks() {
-    return array (
-      "chir_id"  => "ref|CMediusers",
-      "libelle"  => "like",
-      "examen"   => "like",
-      "materiel" => "like"
-    );
   }
 
   function updateFormFields() {

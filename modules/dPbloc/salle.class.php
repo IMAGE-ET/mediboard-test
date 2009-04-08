@@ -46,15 +46,9 @@ class CSalle extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["bloc_id"] = "ref notNull class|CBlocOperatoire";
-    $specs["nom"]     = "str notNull";
+    $specs["nom"]     = "str notNull seekable";
     $specs["stats"]   = "bool notNull";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom" => "like"
-    );
   }
   
   function updateFormFields() {

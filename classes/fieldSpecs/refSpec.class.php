@@ -12,10 +12,10 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CRefSpec extends CMbFieldSpec {
   
-  var $class   = null;
-  var $cascade = null;
-  var $unlink  = null;
-  var $meta    = null;
+  var $class     = null;
+  var $cascade   = null;
+  var $unlink    = null;
+  var $meta      = null;
   
   function getSpecType() {
     return("ref");

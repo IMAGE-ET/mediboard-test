@@ -86,9 +86,9 @@ class CConsultAnesth extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
 
-    $specs["consultation_id"]  = "ref notNull class|CConsultation cascade";
-    $specs["operation_id"]     = "ref class|COperation";
-    $specs["sejour_id"]        = "ref class|CSejour";
+    $specs["consultation_id"]  = "ref notNull class|CConsultation cascade seekable";
+    $specs["operation_id"]     = "ref class|COperation seekable";
+    $specs["sejour_id"]        = "ref class|CSejour seekable";
 
     $specs["groupe"]           = "enum list|?|O|A|B|AB default|?";
     $specs["rhesus"]           = "enum list|?|NEG|POS default|?";
@@ -125,7 +125,7 @@ class CConsultAnesth extends CMbObject {
     $specs["etatBucco"]        = "text helped";
     $specs["examenCardio"]     = "text helped";
     $specs["examenPulmo"]      = "text helped";
-    $specs["conclusion"]       = "text helped";
+    $specs["conclusion"]       = "text helped seekable";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
 
     // Champs dérivés
@@ -134,16 +134,6 @@ class CConsultAnesth extends CMbObject {
     $specs["_psa"]             = "";
 
     return $specs;
-  }
-
-  function getSeeks() {
-    return array (
-    //"chir_id"         => "ref|CMediusers",
-      "consultation_id" => "ref|CConsultation",
-      "operation_id"    => "ref|COperation",
-      "sejour_id"       => "ref|CSejour",
-      "conclusion"      => "like"
-      );
   }
 
   function updateFormFields() {

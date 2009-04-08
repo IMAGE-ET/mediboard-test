@@ -46,7 +46,7 @@ class CTarif extends CMbObject {
   	$specs = parent::getProps();
     $specs["chir_id"]     = "ref class|CMediusers xor|function_id";
     $specs["function_id"] = "ref class|CFunctions";
-    $specs["description"] = "str notNull confidential";
+    $specs["description"] = "str notNull confidential seekable";
     $specs["secteur1"]    = "currency notNull min|0";
     $specs["secteur2"]    = "currency";
     $specs["codes_ccam"]  = "str";
@@ -55,13 +55,7 @@ class CTarif extends CMbObject {
     $specs["_type"]       = "";
     return $specs;
   }
-  
-  function getSeeks() {
-    return array (
-      "description" => "like"
-    );
-  }
-  
+    
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->description; 	 

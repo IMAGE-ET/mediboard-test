@@ -86,9 +86,14 @@ class CMediusers extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+
+    // Note: notamment utile pour les seeks
+    // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
+    $specs["user_id"]          = "ref class|CUser seekable";
+    
     $specs["remote"]           = "bool";
     $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9";
-    $specs["function_id"]      = "ref notNull class|CFunctions";
+    $specs["function_id"]      = "ref notNull class|CFunctions seekable";
     $specs["discipline_id"]    = "ref class|CDiscipline";
     $specs["titres"]           = "text";
     $specs["commentaires"]     = "text";
@@ -137,13 +142,6 @@ class CMediusers extends CMbObject {
     $this->_props['_user_password'] = $strongPassword?
       $this->_props['_user_password_strong']:
       $this->_props['_user_password_weak'];
-  }
-
-  function getSeeks() {
-    return array (
-      "user_id"     => "ref|CUser",
-      "function_id" => "ref|CFunctions"
-      );
   }
 
   function getBackProps() {

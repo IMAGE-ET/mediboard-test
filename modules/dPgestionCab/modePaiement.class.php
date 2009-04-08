@@ -37,14 +37,8 @@ class CModePaiement extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["function_id"] = "ref class|CFunctions";
-    $specs["nom"]         = "str notNull";
+    $specs["nom"]         = "str notNull seekable";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom" => "like"
-    );
   }
   
   function updateFormFields() {

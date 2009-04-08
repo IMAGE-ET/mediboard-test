@@ -46,26 +46,17 @@ class CSociete extends CMbObject {
 
 	function getProps() {
     $specs = parent::getProps();
-    $specs['name']            = 'str notNull maxLength|50';
+    $specs['name']            = 'str notNull maxLength|50 seekable';
     $specs['address']         = 'str';
     $specs['postal_code']     = 'numchar minLength|4 maxLength|5';
-    $specs['city']            = 'str';
+    $specs['city']            = 'str seekable';
     $specs['phone']           = 'numchar length|10 mask|99S99S99S99S99';
     $specs['fax']             = 'numchar length|10 mask|99S99S99S99S99';
     $specs['siret']           = 'code siret';
     $specs['email']           = 'email';
-    $specs['contact_name']    = 'str maxLength|50';
-    $specs['contact_surname'] = 'str maxLength|50';
+    $specs['contact_name']    = 'str maxLength|50 seekable';
+    $specs['contact_surname'] = 'str maxLength|50 seekable';
     return $specs;
-  }
-
-  function getSeeks() {
-    return array (
-      'name'            => 'like',
-      'city'            => 'like',
-      'contact_name'    => 'like',
-      'contact_surname' => 'like',
-    );
   }
 
   function updateFormFields() {

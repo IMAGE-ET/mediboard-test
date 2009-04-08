@@ -17,7 +17,8 @@ $header = $headers[0];
 preg_match("|\d\d\d|", $header, $matches);
 
 switch ($http_code = $matches[0]) {
-	case "200": case "302":
+	case "200": 
+	case "302":
 	  CAppUI::stepAjax("Page %s found (HTTP %s)", UI_MSG_OK, $page, $http_code);
   	break;
 	

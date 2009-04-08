@@ -19,17 +19,10 @@ class CCategoryProduitPrescriptible extends CMbObject {
   
   function getProps() {
   	$props = parent::getProps();
-    $props["nom"]         = "str notNull";
-    $props["description"] = "text";
+    $props["nom"]         = "str notNull seekable";
+    $props["description"] = "text seekable";
     $props["group_id"]    = "ref notNull class|CGroups";
     return $props;
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom" => "like",
-      "description" => "like"
-    );
   }
   
   function updateFormFields() {

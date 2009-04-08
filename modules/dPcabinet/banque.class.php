@@ -1,11 +1,11 @@
 <?php
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPcabinet
+ * @version $Revision: $
+ * @author Alexis Granger
+ */
 
 class CBanque extends CMbObject {
   // DB Table key
@@ -24,15 +24,9 @@ class CBanque extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["nom"]         = "str notNull";
-    $specs["description"] = "str";
+    $specs["nom"]         = "str notNull seekable";
+    $specs["description"] = "str seekable";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "description" => "like"
-    );
   }
   
 	function getBackProps() {

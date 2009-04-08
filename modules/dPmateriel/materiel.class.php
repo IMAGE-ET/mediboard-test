@@ -46,21 +46,14 @@ class CMateriel extends CMbObject {
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
-      "nom"         => "str notNull maxLength|50",
+      "nom"         => "str notNull maxLength|50 seekable",
       "code_barre"  => "num",
-      "description" => "text",
+      "description" => "text seekable",
       "category_id" => "ref notNull class|CCategory",
       "_date_min" 	   => "date",
       "_date_max" 	   => "date moreEquals|_date_min",
     );
     return array_merge($specsParent, $specs);
-  }
-  
-  function getSeeks() {
-    return array (
-      "nom"         => "like",
-      "description" => "like"
-    );
   }
   
   function updateFormFields() {

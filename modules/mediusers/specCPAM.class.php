@@ -36,15 +36,9 @@ class CSpecCPAM extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["text"]  = "str notNull";
+    $specs["text"]  = "str notNull seekable";
     $specs["actes"] = "str notNull";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array (
-      "text" => "like"
-    );
   }
   
   function updateFormFields () {

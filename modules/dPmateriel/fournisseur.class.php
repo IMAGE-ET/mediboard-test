@@ -43,25 +43,16 @@ class CFournisseur extends CMbObject {
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
-      "societe"    => "str notNull maxLength|50",
+      "societe"    => "str notNull maxLength|50 seekable",
       "adresse"    => "str",
       "codepostal" => "num length|5",
-      "ville"      => "str",
+      "ville"      => "str seekable",
       "telephone"  => "num",
       "mail"       => "email",
-      "nom"        => "str maxLength|50",
-      "prenom"     => "str maxLength|50"
+      "nom"        => "str maxLength|50 seekable",
+      "prenom"     => "str maxLength|50 seekable"
     );
     return array_merge($specsParent, $specs);
-  }
-  
-  function getSeeks() {
-    return array (
-      "societe" => "like",
-      "ville"   => "like",
-      "nom"     => "like",
-      "prenom"  => "like"
-    );
   }
   
   function updateFormFields() {

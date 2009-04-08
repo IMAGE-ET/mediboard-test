@@ -101,6 +101,7 @@ class CAffectationPersonnel extends CMbMetaObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_view = "Affectation de $this->personnel_id";
     $this->loadRefs();  
     if($this->object_class == "CPlageOp"){

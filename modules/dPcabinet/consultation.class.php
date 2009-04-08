@@ -192,17 +192,6 @@ class CConsultation extends CCodable {
     return $specs;
   }
   
-  function getSeeks() {
-    return array(
-      "plageconsult_id" => "ref|CPlageconsult",
-      "patient_id"      => "ref|CPatient",
-      "motif"           => "like",
-      "rques"           => "like",
-      "examen"          => "like",
-      "traitement"      => "like"
-    ); 
-  }
-  
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";

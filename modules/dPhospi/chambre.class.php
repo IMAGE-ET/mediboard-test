@@ -54,20 +54,13 @@ class CChambre extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["service_id"]       = "ref notNull class|CService";
-    $specs["nom"]              = "str notNull";
+    $specs["service_id"]       = "ref notNull class|CService seekable";
+    $specs["nom"]              = "str notNull seekable";
     $specs["caracteristiques"] = "text confidential";
     $specs["annule"]           = "bool";
     return $specs;
   }
   
-  function getSeeks() {
-    return array (
-      "nom"        => "like",
-      "service_id" => "ref|CService"
-    );
-  }
-
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;

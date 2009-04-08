@@ -55,7 +55,7 @@ class CPrescriptionLabo extends CMbObject {
   function getProps() {
   	$specsParent = parent::getProps();
     $specs = array (
-      "patient_id"   => "ref class|CPatient notNull",
+      "patient_id"   => "ref class|CPatient notNull seekable",
       "praticien_id" => "ref class|CMediusers notNull",
       "date"         => "dateTime",
       "verouillee"   => "bool",
@@ -71,10 +71,6 @@ class CPrescriptionLabo extends CMbObject {
     return $backProps;
   }
   
-  function getSeeks() {
-    return array( "patient_id" => "ref|CPatient" );
-  }
-
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->date;

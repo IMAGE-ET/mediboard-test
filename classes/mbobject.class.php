@@ -48,14 +48,12 @@ class CMbObject {
   var $_specs         = array(); // Properties specifications as objects
   var $_backProps     = array(); // Back reference specification as string
   var $_backSpecs     = array(); // Back reference specification as objects
-  var $_seek          = array(); // seekable fields
 
   static $spec          = array();
   static $props         = array();
   static $specs         = array();
   static $backProps     = array();
   static $backSpecs     = array();
-  static $seeks         = array();
   
   static $module_name   = array();
   
@@ -134,15 +132,12 @@ class CMbObject {
       // Has to be done as a second pass
       self::$backSpecs[$class] = array(); 
 
-      self::$seeks[$class] = $this->getSeeks();
-      $this->_seek =& self::$seeks[$class];
     }
 
     $this->_props     =& self::$props[$class];
     $this->_specs     =& self::$specs[$class];
     $this->_backProps =& self::$backProps[$class];
     $this->_backSpecs =& self::$backSpecs[$class];
-    $this->_seek      =& self::$seeks[$class];
   }
   
   /**
@@ -1355,61 +1350,81 @@ class CMbObject {
     }
   }
   
+  /**
+   * Retrieve seekable specs from object
+   *
+   */
+  function getSeekables() {
+    $seekables = array();
+    foreach ($this->_specs as $field => $spec) {
+      if (isset($spec->seekable)) {
+        $seekables[$field] = $spec;
+      }
+    }
+    return $seekables;
+  }
 
   /**
    *  Generic seek method
    *  @return the first 100 records which fits the keywords
    */
   function seek($keywords, $where = array(), $limit = 100) {
-    $sql = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
+    $query = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
     
+    $seekables = $this->getSeekables();
+    
+    // Add specific where clauses
     if ($where && count($where)) {
 	    foreach ($where as $col => $value) {
-	    	$sql .= " AND `$col` $value";
+	    	$query .= " AND `$col` $value";
 	    }
     }
     
-    if(count($keywords) and count($this->_seek)) {
-      foreach($keywords as $key) {
-        $sql .= "\nAND (0";
-        foreach($this->_seek as $keySeek => $spec) {
-          $listSpec = explode('|', $spec);
-          switch($listSpec[0]) {
-            case "equal":
-              $sql .= "\nOR `$keySeek` = '$key'";
-              break;
-            case "like":
-              $sql .= "\nOR `$keySeek` LIKE '%$key%'";
-              break;
-            case "likeBegin":
-              $sql .= "\nOR `$keySeek` LIKE '$key%'";
-              break;
-            case "likeEnd":
-              $sql .= "\nOR `$keySeek` LIKE '%$key'";
-              break;
-            case "ref":
-              $refObj = new $listSpec[1];
-              $refObj = $refObj->seek($keywords);
-              if(count($refObj)) {
-                $listIds = implode(',', array_keys($refObj));
-                $sql .= "\nOR `$keySeek` IN ($listIds)";
-              }
-              break;
+    // Add seek clauses
+    if (count($keywords) && count($seekables)) {
+      foreach($keywords as $keyword) {
+        $query .= "\nAND (0";
+        foreach($seekables as $field => $spec) {
+          // Note: a swith won't work du to boolean trus value
+          if ($spec->seekable === "equal") {
+            $query .= "\nOR `$field` = '$keyword'";
+          }
+          if ($spec->seekable === "begin") {
+            $query .= "\nOR `$field` LIKE '$keyword%'";
+          }
+          if ($spec->seekable === "end") {
+            $query .= "\nOR `$field` LIKE '%$keyword'";
+          }
+          if ($spec->seekable === true) {
+            if ($spec instanceof CRefSpec) {
+            	$object = new $spec->class;
+            	$objects = $object->seek($keywords);
+            	if (count($objects)) {
+            	  $ids = implode(',', array_keys($objects));
+                $query .= "\nOR `$field` IN ($ids)";
+            	}
+            }
+            else {
+              $query .= "\nOR `$field` LIKE '%$keyword%'";
+            }
           }
         }
-        $sql .= "\n)";
+        
+        
+        $query .= "\n)";
       }
-    } else {
-      $sql .= "\nAND 0";
+    } 
+    else {
+      $query .= "\nAND 0";
     }
-    $sql .= "\nORDER BY";
-    foreach($this->_seek as $keySeek => $spec) {
-      $sql .= "\n`$keySeek`,";
-    }
-    $sql .= "\n `{$this->_spec->key}`";
-    $sql .=" LIMIT 0,".($limit?$limit:100);
     
-    return $this->loadQueryList($sql);
+    $query .= "\nORDER BY";
+    foreach($seekables as $field => $spec) {
+      $query .= "\n`$field`,";
+    }
+    $query .= "\n `{$this->_spec->key}`";
+    $query .=" LIMIT 0, $limit";
+    return $this->loadQueryList($query);
   }
   
   /**
@@ -1469,15 +1484,7 @@ class CMbObject {
   }
   
   /**
-   * Get properties specifications
-   * @return array
-   */
-  function getSeeks() {
-    return array();
-  }
-
-  /**
-   * Get seek specifications
+   * Get properties specifications as strings
    * @return array
    */
   function getProps() {

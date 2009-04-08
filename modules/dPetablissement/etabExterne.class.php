@@ -41,7 +41,7 @@ class CEtabExterne extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["nom"]            = "str notNull confidential";
+    $specs["nom"]            = "str notNull confidential seekable";
     $specs["raison_sociale"] = "str maxLength|50";
     $specs["adresse"]        = "text confidential";
     $specs["cp"]             = "numchar length|5";
@@ -54,12 +54,6 @@ class CEtabExterne extends CMbObject {
     return $specs;
   }
   
-  function getSeeks() {
-    return array (
-      "text" => "like"
-    );
-  }
- 
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->nom; 

@@ -35,20 +35,68 @@ function setClose(selClass,keywords,key,val){
   </tr>
   <tr>
     <th><label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label></th>
-    <td>
+    <td colspan="2">
       <select class="notNull str" name="selClass" {{if $onlyclass=='true'}}disabled="disabled"{{/if}}>
-        <option value="">&mdash; Choisissez un type</option>
-        {{foreach from=$listClass|smarty:nodefaults item=curr_listClass}}
-        <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$classes key=_class item=_fields}}
+        <option value="{{$_class}}" 
+        	{{if $selClass == $_class}} selected="selected" {{/if}}
+        	{{if !$_fields|@count}} style="opacity: .6" {{/if}}
+        >	
+        	{{tr}}{{$_class}}{{/tr}}
+        </option>
         {{/foreach}}
-      </select>
+       </select>
     </td>
-    <td></td>
   </tr>
+
   <tr>
-    <th><label for="keywords" title="Veuillez saisir un ou plusieurs mot clé">Mots Clés</label></th>
-    <td><input class="notNull str" type="text" name="keywords" value="{{$keywords|stripslashes}}" /></td>
-    <td><button class="search" type="submit">Rechercher</button></td>
+    <th>
+    	<label for="keywords" title="Veuillez saisir un ou plusieurs mot clé">Mots Clés</label>
+    </th>
+    <td>
+    	<input class="str" type="text" name="keywords" value="{{$keywords|stripslashes}}" />
+    </td>
+  </tr>
+
+	{{if $selClass}}
+  {{assign var=fields value=$classes.$selClass}}
+  <tr>
+    <td colspan="10">
+      {{if $fields|@count}}
+	      <div class="small-info">
+	        Mots clés recherchés dans les champs suivants :
+	        {{foreach from=$fields item=_field name=field}}
+					{{mb_label class=$selClass field=$_field}}
+					{{mb_ternary test=$smarty.foreach.field.last value='.' other=','}}
+
+					{{/foreach}}
+	      </div>
+			{{else}}
+	      <div class="small-warning">
+	        <strong>Recherche par mot clés impossible</strong> : 
+	        aucun champ de recherche pour ce type d'objet.
+	        <br/>
+	        Utilisez l'identifiant interne ci-dessous.
+	      </div>
+			{{/if}}
+    </td>
+  </tr>
+	{{/if}}
+  
+  <tr>
+    <th>
+    	<label for="object_id" title="Identifiant interne de l'objet">Identifiant</label>
+    </th>
+    <td>
+    	<input class="ref" type="text" name="object_id" value="{{$object_id}}" />
+    </td>
+  </tr>
+
+  <tr>
+    <td class="button" colspan="2">
+    	<button class="search" type="submit">{{tr}}Search{{/tr}}</button>
+    </td>
   </tr>
 </table>
 </form>
@@ -56,13 +104,19 @@ function setClose(selClass,keywords,key,val){
 {{if $selClass}}
 <table class="tbl">
   <tr>
-    <th align="center" colspan="2">Résultat de la recherche</th>
+    <th align="center" colspan="2">{{tr}}Results{{/tr}}</th>
   </tr>
   
-  {{foreach from=$list item=curr_list}}
+  {{foreach from=$list item=_object}}
     <tr>
-      <td>{{$curr_list->_view}}</td>     
-      <td class="button"><button type="button" class="tick" onclick="setClose('{{$selClass}}', '{{$keywords|stripslashes|smarty:nodefaults|JSAttribute}}', {{$curr_list->_id}}, '{{$curr_list->_view|smarty:nodefaults|JSAttribute}}')">Sélectionner</button></td>
+      <td>
+      	<label onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');">{{$_object}}</label>
+      </td>     
+      <td class="button" style="width: 1%">
+      	<button type="button" class="tick" onclick="setClose('{{$selClass}}', '{{$keywords|stripslashes|smarty:nodefaults|JSAttribute}}', {{$_object->_id}}, '{{$_object->_view|smarty:nodefaults|JSAttribute}}')">
+      	  {{tr}}Select{{/tr}}
+      	</button>
+      </td>
     </tr>
   {{/foreach}}
 </table>

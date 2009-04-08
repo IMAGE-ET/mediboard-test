@@ -9,7 +9,7 @@ var ObjectSelector = {
 
   options : {
     width : 600,
-    height: 300
+    height: 500
   },
    
   pop: function() {

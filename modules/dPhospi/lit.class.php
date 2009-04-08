@@ -47,18 +47,11 @@ class CLit extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chambre_id"] = "ref notNull class|CChambre";
-    $specs["nom"]        = "str notNull";
+    $specs["chambre_id"] = "ref notNull class|CChambre seekable";
+    $specs["nom"]        = "str notNull seekable";
     return $specs;
   }
   
-  function getSeeks() {
-    return array (
-      "nom"        => "like",
-      "chambre_id" => "ref|CChambre"
-    );
-  }
-
   function loadAffectations($date) {
     $where = array (
       "lit_id" => "= '$this->lit_id'",

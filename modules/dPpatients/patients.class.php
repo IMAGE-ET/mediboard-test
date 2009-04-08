@@ -173,8 +173,8 @@ class CPatient extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     
-    $specs["nom"]               = "str notNull confidential";
-    $specs["prenom"]            = "str notNull";
+    $specs["nom"]               = "str notNull confidential seekable|begin";
+    $specs["prenom"]            = "str notNull seekable|begin";
     $specs["prenom_2"]          = "str";
     $specs["prenom_3"]          = "str";
     $specs["prenom_4"]          = "str";
@@ -191,7 +191,7 @@ class CPatient extends CMbObject {
     $specs["regime_sante"]      = "str";
     $specs["sexe"]              = "enum list|m|f|j default|m";
     $specs["adresse"]           = "text confidential";
-    $specs["ville"]             = "str confidential";
+    $specs["ville"]             = "str confidential seekable";
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
     $specs["tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
@@ -272,14 +272,6 @@ class CPatient extends CMbObject {
     $specs["_assure_pays_naissance_insee"]= "str";
     $specs["_art115"]                     = "bool";
     return $specs;
-  }
-  
-  function getSeeks() {
-    return array(
-      "nom"    => "likeBegin",
-      "prenom" => "likeBegin",
-      "ville"  => "like"
-    );
   }
   
   function checkMerge($patients = array()/*<CPatient>*/) {

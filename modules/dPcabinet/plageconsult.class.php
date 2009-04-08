@@ -63,12 +63,12 @@ class CPlageconsult extends CMbObject {
   function getProps() {
     $parentSpecs = parent::getProps();
     $specs = array (
-      "chir_id" => "ref notNull class|CMediusers",
+      "chir_id" => "ref notNull class|CMediusers seekable",
       "date"    => "date notNull",
       "freq"    => "time notNull",
       "debut"   => "time notNull",
       "fin"     => "time notNull",
-      "libelle" => "str",
+      "libelle" => "str seekable",
 
       // Form fields
       "_hour_deb"  => "",
@@ -87,13 +87,6 @@ class CPlageconsult extends CMbObject {
       );
 
     return array_merge($parentSpecs, $specs);
-  }
-  
-  function getSeeks() {
-    return array (
-      "chir_id" => "ref|CMediusers",
-      "libelle" => "like"
-    );
   }
   
   /**
