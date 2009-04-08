@@ -137,6 +137,17 @@
     </td>
   </tr>
   
+  {{assign var="var" value="page_title"}}
+  <tr>
+    <th>
+      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
+    </td>
+  </tr>
       
   <tr>
     <td class="button" colspan="2">
