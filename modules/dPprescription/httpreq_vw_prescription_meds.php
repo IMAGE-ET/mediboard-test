@@ -107,7 +107,7 @@ if ($prescription->_id) {
 	$alertesProfil       = $profil->getProfil();	  
 	$alertesInteractions = $interactions->getInteractions();
 	$alertesIPC          = $IPC->getIPC();
-	$alertesPosologie    = $surdosage->getSurdosage();
+	$alertesPosologies   = $surdosage->getSurdosage();
 		  
 	$prescription->_scores["hors_livret"] = 0;
 	foreach($lines as $type_line){
