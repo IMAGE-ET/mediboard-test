@@ -4,7 +4,7 @@
  *  @package Mediboard
  *  @subpackage classes
  *  @version $Revision: $
- *  @author Yohann  
+ *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
@@ -37,13 +37,14 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
-  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "") {
+  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "", $addslashes = true) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
-      $text = addslashes($text);
+      if ($addslashes)
+        $text = addslashes($text);
     }
 
     return $text;

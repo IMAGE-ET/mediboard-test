@@ -1,3 +1,11 @@
+{{*  
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision: 
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 <tr>
 	<td>
 	 {{if $object->_self_emetteur}}
@@ -7,13 +15,13 @@
 	 {{/if}}
 	</td>
 	<td>
-	  <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}'" class="buttonsearch">
+	  <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}" class="buttonsearch">
 	   {{$object->echange_hprim_id|str_pad:6:'0':STR_PAD_LEFT}}
 	  </a>
 	</td>
 	<td>
 	  {{if $object->initiateur_id}}
-	    <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}'" class="buttonsearch">
+	    <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}" class="buttonsearch">
         {{$object->initiateur_id|str_pad:6:'0':STR_PAD_LEFT}}
 	    </a>
     {{/if}}
@@ -74,4 +82,7 @@
 	<td class="{{if ($object->date_echange && !$object->acquittement)}}error{{/if}}">
 	  {{if $object->acquittement}}Oui{{else}}Non{{/if}}
 	</td>
+	<td class="{{if ($object->statut_acquittement == 'erreur')}}error{{elseif ($object->statut_acquittement == 'avertissement')}}warning{{/if}}">
+	 {{mb_value object=$object field="statut_acquittement"}}
+  </td>
 </tr>

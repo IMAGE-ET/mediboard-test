@@ -3,7 +3,7 @@
  *  @package Mediboard
  *  @subpackage sip
  *  @version $Revision: $
- *  @author Yohann Poiron
+ *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
@@ -13,11 +13,18 @@ $can->needsRead();
 
 $echange_hprim_id = mbGetValueFromGet("echange_hprim_id");
 
+$observations = array();
+
 // Chargement de l'échange HPRIM demandé
 $echange_hprim = new CEchangeHprim();
 $echange_hprim->load($echange_hprim_id);
 if($echange_hprim->load($echange_hprim_id)) {
-	$echange_hprim->loadRefs();
+	$echange_hprim->loadRefs();	
+	
+	$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+	$domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
+  
+	$observations = $domGetAcquittement->getAcquittementObservation();
 }
 
 // Récupération de la liste des echanges HPRIM
@@ -67,6 +74,7 @@ foreach($listEchangeHprim as &$curr_echange_hprim) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("echange_hprim"    , $echange_hprim);
+$smarty->assign("observations"     , $observations);
 $smarty->assign("listEchangeHprim" , $listEchangeHprim);
 $smarty->display("vw_idx_echange_hprim.tpl");
 ?>

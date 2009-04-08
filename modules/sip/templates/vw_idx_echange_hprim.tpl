@@ -1,3 +1,11 @@
+{{*  
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision: 
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+*}}
+
 <script type="text/javascript">
 
 sendMessage = function(echange_hprim_id, echange_hprim_classname){
@@ -25,7 +33,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="11">ECHANGES HPRIM</th>
+          <th class="title" colspan="12">ECHANGES HPRIM</th>
         </tr>
         <tr>
           <th></th>
@@ -39,6 +47,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
           <th>{{mb_title object=$echange_hprim field="sous_type"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_echange"}}</th>
           <th>{{mb_title object=$echange_hprim field="acquittement"}}</th>
+          <th>{{mb_title object=$echange_hprim field="statut_acquittement"}}</th>
         </tr>
         {{foreach from=$listEchangeHprim item=curr_echange_hprim}}
           <tbody id="echange_{{$curr_echange_hprim->_id}}">
@@ -63,6 +72,14 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
     <td style="height:730px;">
       {{if $echange_hprim->acquittement}}
         {{mb_value object=$echange_hprim field="acquittement"}}
+        
+        <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error{{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning{{else}}info{{/if}}">
+          {{foreach from=$observations item=observation}}
+            <strong>Code :</strong> {{$observation.code}} <br />
+            <strong>Libelle :</strong> {{$observation.libelle}} <br />
+            <strong>Commentaire :</strong> {{$observation.commentaire}} <br />
+          {{/foreach}}
+        </div>
       {{else}}
         <div class="big-info">Aucun acquittement n'a été reçu.</div>
       {{/if}}

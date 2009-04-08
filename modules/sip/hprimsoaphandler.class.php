@@ -4,7 +4,7 @@
  *  @package Mediboard
  *  @subpackage sip
  *  @version $Revision: $
- *  @author Yohann Poiron
+ *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
@@ -100,6 +100,7 @@ class CHprimSoapHandler extends CSoapHandler {
 		$domAcquittement->_destinataire = $data['idClient'];
 		$domAcquittement->_destinataire_libelle = $data['libelleClient'];
 
+		// Récupère l'initiateur du message s'il existe
 		if (CAppUI::conf('sip server')) {
 			$echange_hprim->identifiant_emetteur = intval($data['identifiantMessage']);
 			$echange_hprim->loadMatchingObject();
@@ -148,7 +149,7 @@ class CHprimSoapHandler extends CSoapHandler {
 					$newPatient->load($IPP->object_id);
 					
 					if (!$domGetEvenement->checkSimilarPatient($newPatient, $data['patient'])) {
-						$commentaire = "Le nom et/ou le prénom sont très différents. \n"; 
+						$commentaire = "Le nom et/ou le prénom sont très différents. "; 
 					}
 					
 					// Mapping du patient
@@ -166,9 +167,9 @@ class CHprimSoapHandler extends CSoapHandler {
           
           $codes = array ($msgPatient ? "A03" : "I02", "I03");
 					if ($msgPatient) {
-            $avertissement = $msgPatient."\n";
+            $avertissement = $msgPatient." ";
           } else {
-            $commentaire .= "Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
+            $commentaire .= "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
           }
      	  }
 				// idCible non connu
@@ -190,9 +191,9 @@ class CHprimSoapHandler extends CSoapHandler {
                       
 					  $codes = array ($msgPatient ? "A02" : "I01", $msgIPP ? "A05" : "A01");
 		        if ($msgPatient) {
-		          $avertissement = $msgPatient."\n";
+		          $avertissement = $msgPatient." ";
 		        } else {
-		          $commentaire = substr("Patient créé : $newPatient->_id.\n IPP créé : $IPP->id400.", 0, 4000);
+		          $commentaire = substr("Patient créé : $newPatient->_id. IPP créé : $IPP->id400.", 0, 4000);
 		        }
           }
 				}
@@ -257,9 +258,9 @@ class CHprimSoapHandler extends CSoapHandler {
 						 
 						$codes = array ($msgPatient ? "A03" : "I02", $msgIPP ? "A05" : $_IPP_create ? "I06" : "I08");
 						if ($msgPatient || $msgIPP) {
-							$avertissement = $msgPatient."\n".$msgIPP;
+							$avertissement = $msgPatient." ".$msgIPP;
 						} else {
-							$commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields. IPP créé : $IPP->id400.", 0, 4000);
+							$commentaire = substr("Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP créé : $IPP->id400.", 0, 4000);
 						}
 						$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
 						
@@ -304,9 +305,9 @@ class CHprimSoapHandler extends CSoapHandler {
 							}
 							 
 							if ($msgPatient) {
-								$avertissement = $msgPatient."\n";
+								$avertissement = $msgPatient." ";
 							} else {
-								$commentaire = substr("Patient modifiée : $newPatient->_id.\n Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
+								$commentaire = substr("Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
 							}
 							$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A03" : "I02", $avertissement ? $avertissement : $commentaire);
 							
@@ -404,9 +405,9 @@ class CHprimSoapHandler extends CSoapHandler {
 
 				$codes = array ($msgPatient ? "A02" : "I01", $msgID400 ? "A04" : "I04", $msgIPP ? "A05" : $_code_IPP);
 				if ($msgPatient || $msgID400 || $msgIPP) {
-					$avertissement = $msgPatient."\n".$msgID400."\n".$msgIPP;
+					$avertissement = $msgPatient." ".$msgID400." ".$msgIPP;
 				} else {
-					$commentaire = "Patient créé : $newPatient->_id.\nIdentifiant externe créé : $id400Patient->id400.\nIPP créé : $IPP->id400.";
+					$commentaire = "Patient créé : $newPatient->_id. Identifiant externe créé : $id400Patient->id400. IPP créé : $IPP->id400.";
 				}
 				$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
 				
@@ -437,37 +438,73 @@ class CHprimSoapHandler extends CSoapHandler {
 			if(!$IPP->loadMatchingObject()) {
 				// idCible fourni
 				if ($data['idCible']) {
-			    $newPatient->load($data['idCible']);
-			    $_code_IPP = $newPatient->_id ? "I21" : "I20";
+			    if ($newPatient->load($data['idCible'])) {
+			    	// Mapping du patient
+            $newPatient = $domGetEvenement->createPatient($data['patient'], $newPatient);
+        
+			    	// Evite de passer dans le sip handler
+		        $newPatient->_coms_from_hprim = 1;
+		        $msgPatient = $newPatient->store();
+        
+			    	$newPatient->loadLogs();
+			      $modified_fields = "";
+            if ($newPatient->_ref_last_log) {
+              foreach ($newPatient->_ref_last_log->_fields as $field) {
+                $modified_fields .= "$field \n";
+              }
+            }
+            $_code_IPP = "I21";
+            $_code_Patient = true; 
+            $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+			    } else {
+			    	$_code_IPP = "I20";
+			    }
 				} else {
 					$_code_IPP = "I22";  
 				}
 				
-				// Mapping du patient
-        $newPatient = $domGetEvenement->createPatient($data['patient'], $newPatient);
-				
-        mbTrace($newPatient, "Patient avant matching", true);
+        if (!$newPatient->_id) {
+	        if ($newPatient->loadMatchingPatient()) {
+	        	// Mapping du patient
+            $newPatient = $domGetEvenement->createPatient($data['patient'], $newPatient);
         
-        if ($newPatient->loadMatchingPatient() && !$newPatient->_id) {
-        	$_code_IPP = "A21";  
+            // Evite de passer dans le sip handler
+            $newPatient->_coms_from_hprim = 1;
+            $msgPatient = $newPatient->store();
+        
+            $newPatient->loadLogs();
+            $modified_fields = "";
+            if ($newPatient->_ref_last_log) {
+              foreach ($newPatient->_ref_last_log->_fields as $field) {
+                $modified_fields .= "$field \n";
+              }
+            }
+            $_code_IPP = "A21";
+            $_code_Patient = true; 
+            $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";	          
+	        }
         }
+                
+        if (!$newPatient->_id) {
+        	// Mapping du patient
+          $newPatient = $domGetEvenement->createPatient($data['patient'], $newPatient);
         
-        mbTrace($newPatient, "Patient après matching", true);
-        
-				// Evite de passer dans le sip handler
-        $newPatient->_coms_from_hprim = 1;
-        $msgPatient = $newPatient->store();
+          // Evite de passer dans le sip handler
+          $newPatient->_coms_from_hprim = 1;
+          $msgPatient = $newPatient->store();
+          
+          $commentaire = "Patient créé : $newPatient->_id. ";
+        }
           
 				$IPP->object_id = $newPatient->_id;
         $IPP->last_update = mbDateTime();
         $msgIPP = $IPP->store();
         
-        $codes = array ($msgPatient ? ($newPatient->_id ? "A03" : "A02") : ($newPatient->_id ? "I02" : "I01"), $msgIPP ? "A05" : $_code_IPP);
+        $codes = array ($msgPatient ? ($_code_Patient ? "A03" : "A02") : ($_code_Patient ? "I02" : "I01"), $msgIPP ? "A05" : $_code_IPP);
         
         if ($msgPatient || $msgIPP) {
-          $avertissement = $msgPatient."\n".$msgIPP;
+          $avertissement = $msgPatient." ".$msgIPP;
 	      } else {
-	        $commentaire = $newPatient->_id ? "Patient modifié : $newPatient->_id.\n" : "Patient créé : $newPatient->_id.\n";
 	        $commentaire .= "IPP créé : $IPP->id400.";
 	      }
 			} 
@@ -479,10 +516,6 @@ class CHprimSoapHandler extends CSoapHandler {
                         
         // idCible non fourni
         if (!$data['idCible']) {
-        	// Evite de passer dans le sip handler
-          $newPatient->_coms_from_hprim = 1;
-          $msgPatient = $newPatient->store();
-          
           $_code_IPP = "I23"; 
         } else {
         	$tmpPatient = new CPatient();
@@ -498,7 +531,6 @@ class CHprimSoapHandler extends CSoapHandler {
               
               return $messageAcquittement;
         		}
-        		
         		$_code_IPP = "I24"; 
         	}
         	// idCible non connu
@@ -506,15 +538,26 @@ class CHprimSoapHandler extends CSoapHandler {
         		$_code_IPP = "A20";
         	}
         }
+        // Evite de passer dans le sip handler
+        $newPatient->_coms_from_hprim = 1;
+        $msgPatient = $newPatient->store();
+        
+        $newPatient->loadLogs();
+        $modified_fields = "";
+        if ($newPatient->_ref_last_log) {
+          foreach ($newPatient->_ref_last_log->_fields as $field) {
+            $modified_fields .= "$field \n";
+          }
+        }
         $codes = array ($msgPatient ? "A03" : "I02", $_code_IPP);
         
-			 if ($msgPatient) {
-          $avertissement = $msgPatient."\n";
+			  if ($msgPatient) {
+          $avertissement = $msgPatient." ";
         } else {
-          $commentaire = "Patient modifié : $newPatient->_id.\n IPP associé : $IPP->id400.";
+          $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
         }
 			}
-			$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);	
+			$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000));	
 
 			$echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
 		}

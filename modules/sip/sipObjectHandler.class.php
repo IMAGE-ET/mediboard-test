@@ -3,7 +3,7 @@
  *  @package Mediboard
  *  @subpackage sip
  *  @version $Revision: $
- *  @author Yohann Poiron
+ *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
@@ -100,7 +100,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 
 				$mbObject->_IPP = $IPP->id400;
 			}
-mbTrace($mbObject, "Patient", true);
+
 			$domEvenement = new CHPrimXMLEvenementsPatients();
 			$domEvenement->_emetteur = CAppUI::conf('mb_id');
 			$domEvenement->_destinataire = $dest_hprim->destinataire;
@@ -112,12 +112,20 @@ mbTrace($mbObject, "Patient", true);
 
 			// Récupère le message d'acquittement après l'execution la methode evenementPatient
 			if (null == $acquittement = $client->evenementPatient($messageEvtPatient)) {
-				trigger_error("Evenement patient impossible sur le SIP : ".$dest_hprim->url);
+				trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
 			}
-
+			
 			$echange_hprim = new CEchangeHprim();
 			$echange_hprim->load($domEvenement->_identifiant);
 			$echange_hprim->date_echange = mbDateTime();
+			
+		  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domGetAcquittement->loadXML(utf8_decode($acquittement));
+      $doc_errors = $domGetAcquittement->schemaValidate();
+      if (!$doc_errors) {
+        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+      }
+      
 			$echange_hprim->acquittement = $acquittement;
 
 			$echange_hprim->store();

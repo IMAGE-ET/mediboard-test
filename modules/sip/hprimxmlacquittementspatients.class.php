@@ -4,7 +4,7 @@
  *  @package Mediboard
  *  @subpackage sip
  *  @version $Revision: $
- *  @author Yohann Poiron
+ *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
@@ -52,7 +52,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 				$_codes = $_libelle_codes = "";
         foreach ($codes as $code) {
         	$_codes .= $code;
-        	$_libelle_codes .= CHprimSoapHandler::$codesAvertissementInformation[$code]."\n";
+        	$_libelle_codes .= CHprimSoapHandler::$codesAvertissementInformation[$code]." ";
         }
         $this->addObservation($enteteMessageAcquittement, substr($_codes, 0, 17), substr($_libelle_codes, 0, 80), $commentaires);
 			} else {
@@ -92,21 +92,67 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
 		return $messageAcquittementPatient;
 	}
-
-	function getAcquittementEvenementPatient($msgCIP, $erreur) {
-		$domAcquittement = new CHPrimXMLAcquittementsPatients();
-		// Erreur
-		if ($erreur) {
-			$domAcquittement->generateEnteteMessageAcquittement("erreur", $msgCIP, $erreur);
-		} else {
-			$domAcquittement->generateEnteteMessageAcquittement("OK", $msgCIP);
-		}
-
-		$doc_valid = $domAcquittement->schemaValidate();
-		$domAcquittement->saveTempFile();
-		$messageAcquittement = utf8_encode($domAcquittement->saveXML());
-
-		return $messageAcquittement;
+  
+	function getStatutAcquittementPatient() {
+	  $xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+        
+    return $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+	}
+	
+	function getAcquittementsPatients() {
+		$xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
+    $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+    
+    $query = "/hprim:acquittementsPatients/hprim:enteteMessageAcquittement";
+    $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
+    
+    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $enteteMessageAcquittement);
+    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $enteteMessageAcquittement);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
+    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
+    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
+    
+    $data['identifiantMessageAcquitte'] = $xpath->queryTextNode("hprim:identifiantMessageAcquitte", $enteteMessageAcquittement);
+    
+    return $data;
+	}
+	
+	function getAcquittementObservation() {
+		$xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
+    $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+    
+    $query = "/hprim:acquittementsPatients/hprim:enteteMessageAcquittement";
+    $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
+    
+	  if ($statut == "OK") {
+	  	$d = array();
+      $observations[] = &$d;
+        
+      $observation = $xpath->queryUniqueNode("hprim:observation", $enteteMessageAcquittement);
+      $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 3, ' ');
+      $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
+      $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
+    } else {
+      $query = "/hprim:acquittementsPatients/hprim:erreursAvertissements/*";
+      $erreursAvertissements = $xpath->query($query);   
+      
+      foreach ($erreursAvertissements as $erreurAvertissement) {
+        $d = array();
+        $observations[] = &$d;
+      
+        $observation = $xpath->queryUniqueNode("hprim:observations/hprim:observation", $erreurAvertissement);
+        $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 3, ' ');
+        $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
+        $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
+      }
+    }  
+    
+    return $observations;
 	}
 }
 

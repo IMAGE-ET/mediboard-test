@@ -103,4 +103,7 @@ $locales['CEchangeHprim-_self_destinataire-desc'] = '';
 $locales['CEchangeHprim-_self_emetteur'] = '';
 $locales['CEchangeHprim-_self_emetteur-court'] = '';
 $locales['CEchangeHprim-_self_emetteur-desc'] = '';
+$locales['CEchangeHprim-statut_acquittement'] = 'Statut Acquittement';
+$locales['CEchangeHprim-statut_acquittement-court'] = 'Statut Acquittement';
+$locales['CEchangeHprim-statut_acquittement-desc'] = 'Statut Acquittement de l\'événement patient';
 ?>
