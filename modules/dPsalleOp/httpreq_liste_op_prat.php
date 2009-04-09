@@ -52,7 +52,7 @@ if ($praticien->load(mbGetValueFromGetOrSession("praticien_id"))) {
   $praticien->loadRefsForDay($date); 
 }
 
-if ($hide_finished == 1) {
+if ($hide_finished == 1 && $praticien->_ref_plages) {
   foreach($praticien->_ref_plages as &$plage) {
     foreach($plage->_ref_operations as $key => $op){
       if ($op->sortie_salle) unset($plage->_ref_operations[$key]);

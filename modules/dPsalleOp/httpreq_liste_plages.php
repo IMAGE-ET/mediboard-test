@@ -28,7 +28,7 @@ if ($salle->load($salle_id)) {
   $salle->loadRefsForDay($date); 
 }
 
-if ($hide_finished == 1) {
+if ($hide_finished == 1 && $salle->_ref_plages) {
   foreach($salle->_ref_plages as &$plage) {
     foreach($plage->_ref_operations as $key => $op){
       if ($op->sortie_salle) unset($plage->_ref_operations[$key]);
