@@ -1,13 +1,15 @@
-<?php
-/**
-* CLASS soundex2
-* soundex2 French version
-* based on the algorithm described here : http://sqlpro.developpez.com/cours/soundex/ by Frédéric BROUARD
-*
-* author Johan Barbier <barbier_johan@hotmail.com>
-*/
-class soundex2 {
+<?php /* $Id$ */
 
+/**
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author Johan Barbier <barbier_johan@hotmail.com>
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Soundex2 French version based on the algorithm described here : http://sqlpro.developpez.com/cours/soundex/ by Frédéric BROUARD
+ */
+
+class soundex2 {
   /**
   * public sString
   * main string we work on

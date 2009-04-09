@@ -4,9 +4,9 @@
  * @package Mediboard
  * @subpackage classes
  * @version $Revision$
- * @author Thomas Despoix (based on work of Andrew Eddie)
- * @license BSD License, see http://opensource.org/licenses/bsd-license.php
- **/
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 // Message No Constants
 define("UI_MSG_OK"     , 1);
