@@ -2,7 +2,7 @@
 /**
  *  @package Mediboard
  *  @subpackage sip
- *  @version $Revision: $
+ *  @version $Revision$
  *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -74,8 +74,6 @@ class CEchangeHprim extends CMbObject {
   	
   	$this->_self_emetteur = $this->emetteur == CAppUI::conf('mb_id');
     $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
-    
   }
-
 }
 ?>
