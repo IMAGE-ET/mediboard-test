@@ -297,7 +297,27 @@ Url.ping = function(options) {
   url.addParam("suppressHeaders", "1");
   url.addParam("ajax", "1");
   url.requestUpdate("systemMsg", options);
-}
+};
+
+/** Parses the URL to extracts its components
+ * Based on the work of Steven Levithan <http://blog.stevenlevithan.com/archives/parseuri>
+ * @param {String} url - The URL to parse
+ * @return {Object} The URL components
+ */
+Url.parse = function(url) {
+  url = url || location.href;
+
+  var keys = ["source","scheme","authority","userInfo","user","pass","host","port","relative","path","directory","file","query","fragment"],
+      regex = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
+      m = regex.exec(url),
+      c = {},
+      i = keys.length;
+
+  while (i--) c[keys[i]] = m[i] || "";
+
+  return c;
+};
+
 
 function popChgPwd() {
   var url = new Url;
