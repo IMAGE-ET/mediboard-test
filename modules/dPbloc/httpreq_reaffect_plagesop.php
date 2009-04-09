@@ -3,9 +3,11 @@
 // Script à lancer entre minuit et 6h du matin
 // pour que les dates limites soient respectées
 
-global $AppUI;
+global $AppUI, $can;
 
 $mode_real = mbGetValueFromGet("mode_real", 1);
+
+$can->needsAdmin();
 
 $plageop = new CPlageOp();
 $where = array();
@@ -45,7 +47,12 @@ foreach($listPlages as $curr_plage) {
   } else {
     $curr_plage->loadRefsFwd(1);
     $curr_plage->loadRefSpecRepl(1);
-    $msg = "plage du $curr_plage->date de $curr_plage->debut à $curr_plage->fin : Dr ".$curr_plage->_ref_chir->_view." vers ".$curr_plage->_ref_spec_repl->_view;
+    if($curr_plage->chir_id) {
+      $from = "Dr ".$curr_plage->_ref_chir->_view;
+    } else {
+      $from = $curr_plage->_ref_spec->_view;
+    }
+    $msg = "plage du $curr_plage->date de $curr_plage->debut à $curr_plage->fin : $from vers ".$curr_plage->_ref_spec_repl->_view;
     $AppUI->setMsg($msg, UI_MSG_OK);
   }
 }
