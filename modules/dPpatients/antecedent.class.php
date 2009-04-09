@@ -23,7 +23,7 @@ class CAntecedent extends CMbObject {
   var $_search = null;
   
   // Distant fields
-  var $_counts_rques_aides = null;
+  var $_count_rques_aides = null;
   
   static $types = array(
 	  'med', 'alle', 'trans', 'obst', 
