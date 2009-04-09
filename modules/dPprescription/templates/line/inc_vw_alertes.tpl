@@ -2,8 +2,12 @@
 {{assign var=IPC value=$prescription_reelle->_alertes.IPC}}
 {{assign var=interaction value=$prescription_reelle->_alertes.interaction}}
 {{assign var=profil value=$prescription_reelle->_alertes.profil}}
-{{assign var=posoduree value=$prescription_reelle->_alertes.posoduree}}
-{{assign var=posoqte value=$prescription_reelle->_alertes.posoqte}}
+{{if array_key_exists('posoduree', $prescription_reelle->_alertes)}}
+  {{assign var=posoduree value=$prescription_reelle->_alertes.posoduree}}
+{{/if}}
+{{if array_key_exists('posoqte', $prescription_reelle->_alertes)}}
+  {{assign var=posoqte value=$prescription_reelle->_alertes.posoqte}}
+{{/if}}
 {{assign var=code_cip value=$line->code_cip}}
 
 {{assign var=image value=""}}
