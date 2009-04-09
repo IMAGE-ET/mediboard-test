@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $can;
@@ -187,11 +188,6 @@ else {
 		// Chargement des lignes de medicament
     if($chapitre == "med" || $chapitre == "inj"){
 		  $prescription->loadRefsLinesMedByCat("1","1",$line_type);
-	    $prescription->_ref_object->loadRefPrescriptionTraitement();	 
-			$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
-			if($traitement_personnel->_id){
-			  $traitement_personnel->loadRefsLinesMedByCat("1","1",$line_type);
-			}
       foreach($prescription->_ref_prescription_lines as &$_line_med){
 			  $_line_med->loadRefLogSignee();
 			  $_line_med->countSubstitutionsLines();
@@ -214,11 +210,7 @@ else {
       // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
       $prescription->loadRefsPerfusions();
       $prescription->loadRefsLinesMedByCat("1","1",$line_type);
-	    $prescription->_ref_object->loadRefPrescriptionTraitement();	 
-			$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
-			if($traitement_personnel->_id){
-			  $traitement_personnel->loadRefsLinesMedByCat("1","1",$line_type);
-			}
+	    
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
 		  $prescription->loadRefsLinesElementByCat("1",null,$line_type);
 		  // Calcul des modifications recentes par chapitre

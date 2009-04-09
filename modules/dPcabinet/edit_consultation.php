@@ -262,7 +262,7 @@ $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
-
+$smarty->assign("line", new CPrescriptionLineMedicament());
 
 
 if($consult->_is_anesth) {

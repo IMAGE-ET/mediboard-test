@@ -137,8 +137,6 @@
         </tr>  
         <!-- Affichage des prescription du sejour -->
         {{foreach from=$object->_ref_prescriptions item=_prescription key=type}}
-          <!-- Ne pas afficher les prescriptions de traitements -->
-          {{if $type != "traitement"}}
             {{if $_prescription->_id}}
             <tr {{if $_prescription->_id == $prescription->_id}}class="selected"{{/if}}>
                 <td class="text">
@@ -147,7 +145,6 @@
                   </a>
                 </td>
               </tr>
-              {{/if}}
            {{/if}}
          {{/foreach}}
       </table>

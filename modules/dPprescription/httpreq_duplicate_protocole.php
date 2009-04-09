@@ -1,11 +1,13 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 
 global $AppUI;
 
@@ -43,20 +45,40 @@ foreach($protocole->_ref_prescription_lines as $line){
 	}
 	
   //Parcours des lignes de substitution
-  foreach($line->_ref_substitution_lines as $_line_subst){
-    $_line_subst->loadRefsPrises();
-    $_line_subst->prescription_id = $protocole->_id;
-    $_line_subst->substitute_for_id = $line->_id;
-    $_line_subst->_id = "";
-	  $msg = $_line_subst->store();
-  	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
-  
-  	// Parcours des prises des lignes de substitutions
-    foreach($_line_subst->_ref_prises as $_prise_line_subst){
-      $_prise_line_subst->_id = "";
-		  $_prise_line_subst->object_id = $_line_subst->_id;
-		  $msg = $_prise_line_subst->store();
-	    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+  foreach($line->_ref_substitution_lines as $_lines_subst_by_type){
+    foreach($_lines_subst_by_type as $_line_subst){
+      $_line_subst->substitute_for_id = $line->_id;
+      $_line_subst->prescription_id = $protocole->_id;	    
+	    
+      // Medicaments
+      if($_line_subst->_class_name == "CPrescriptionLineMedicament"){
+	      $_line_subst->loadRefsPrises();
+	
+		    $_line_subst->_id = "";
+			  $msg = $_line_subst->store();
+		  	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+		  
+		  	// Parcours des prises des lignes de substitutions
+		    foreach($_line_subst->_ref_prises as $_prise_line_subst){
+		      $_prise_line_subst->_id = "";
+				  $_prise_line_subst->object_id = $_line_subst->_id;
+				  $msg = $_prise_line_subst->store();
+			    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+		    }
+      } 
+      // Perfusions
+      else {
+        $_line_subst->loadRefsLines();
+        $_line_subst->_id = "";
+			  $msg = $_line_subst->store();
+			  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+        foreach($_line_subst->_ref_lines as $_perf_subst_line){
+          $_perf_subst_line->_id = "";
+          $_perf_subst_line->perfusion_id = $_line_subst->_id;
+          $msg = $_perf_subst_line->store();
+          $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+        }
+      }
     }
   }
 }
@@ -64,10 +86,49 @@ foreach($protocole->_ref_prescription_lines as $line){
 // Parcours des perfusions
 foreach($protocole->_ref_perfusions as $_perfusion){
   $_perfusion->loadRefsLines();
+  $_perfusion->loadRefsSubstitutionLines();
   $_perfusion->prescription_id = $protocole->_id;
   $_perfusion->_id = "";
   $msg = $_perfusion->store();
   $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+  
+  //Parcours des lignes de substitution
+  foreach($_perfusion->_ref_substitution_lines as $_lines_subst_by_type){
+    foreach($_lines_subst_by_type as $_line_subst){
+      $_line_subst->substitute_for_id = $_perfusion->_id;
+      $_line_subst->prescription_id = $protocole->_id;	    
+	    
+      // Medicaments
+      if($_line_subst->_class_name == "CPrescriptionLineMedicament"){
+	      $_line_subst->loadRefsPrises();
+	
+		    $_line_subst->_id = "";
+			  $msg = $_line_subst->store();
+		  	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+		  
+		  	// Parcours des prises des lignes de substitutions
+		    foreach($_line_subst->_ref_prises as $_prise_line_subst){
+		      $_prise_line_subst->_id = "";
+				  $_prise_line_subst->object_id = $_line_subst->_id;
+				  $msg = $_prise_line_subst->store();
+			    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+		    }
+      } 
+      // Perfusions
+      else {
+        $_line_subst->loadRefsLines();
+        $_line_subst->_id = "";
+			  $msg = $_line_subst->store();
+			  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+        foreach($_line_subst->_ref_lines as $_perf_subst_line){
+          $_perf_subst_line->_id = "";
+          $_perf_subst_line->perfusion_id = $_line_subst->_id;
+          $msg = $_perf_subst_line->store();
+          $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+        }
+      }
+    }
+  }
   
   // Parcours des lignes de perfusions
   foreach($_perfusion->_ref_lines as $_perf_line){

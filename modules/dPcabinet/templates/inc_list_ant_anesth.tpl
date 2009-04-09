@@ -124,6 +124,31 @@ toggleCancelledAnesth = function(list) {
 </ul>
 {{/if}}
 
+<!-- Traitements -->
+{{if is_array($lines_tp)}}
+<strong>Traitements personnels de la prescription de séjour</strong>
+<ul>
+  {{foreach from=$lines_tp item=_line}}
+  <li>
+    <form name="delTraitementDossierMedPat-{{$_line->_id}}">
+      <input type="hidden" name="m" value="dPprescription" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+      <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
+      <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierSejour)">
+        {{tr}}delete{{/tr}}
+      </button>
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
+		    {{$_line->_ucd_view}}
+		  </span>
+	  </form>
+  </li>
+  {{foreachelse}}
+  <li><em>Pas de traitements personnels</em></li>
+  {{/foreach}}
+</ul>
+{{/if}}
+
 <strong>Diagnostics significatifs de l'intervention</strong>
 <ul>
   {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}

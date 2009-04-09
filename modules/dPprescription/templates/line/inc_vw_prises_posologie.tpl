@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 {{if $type == "Med"}}
-{{if !$line->_traitement && $line->_ref_prescription->object_id}}
+{{if $line->_ref_prescription->object_id}}
 {{if !$line->signee && !$line->fin}}
 	var oForm = document.forms["editDates-Med-{{$line->_id}}"];
 	$V(oForm.debut,'{{$line->debut}}');

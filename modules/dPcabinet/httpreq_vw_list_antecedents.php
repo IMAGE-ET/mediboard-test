@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can;
+global $can, $AppUI;
 
 $canPatient = CModule::getCanDo("dPpatients");
 $canPatient->needsEdit();
@@ -37,8 +37,12 @@ if ($dossier_medical->_id) {
       $ant->loadLogs();
     }
   }
-	
+  $dossier_medical->loadRefPrescription();
 }
+
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+$user->isPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -46,6 +50,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("patient"    , $patient);
 $smarty->assign("_is_anesth" , $_is_anesth);
+$smarty->assign("user", $user);
 
 $smarty->display("inc_list_ant.tpl");
 

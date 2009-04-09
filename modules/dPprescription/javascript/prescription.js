@@ -24,17 +24,13 @@ var Prescription = {
     oForm.code_cip.value = code;
     
     var mode_pharma = oForm.mode_pharma.value;
-    var oFormTraitement = document.transfertToTraitement;
-    if(oForm.del.value == 0 && oFormTraitement._type.value == "pre_admission" && oFormTraitement.object_id.value != ""){
-      submitFormAjax(oForm, 'systemMsg');
-    } else {
-      submitFormAjax(oForm, 'systemMsg', { 
-	      onComplete : 
-	        function(){
-	          Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma, null);
-	        }
-	    });
-    }
+
+    submitFormAjax(oForm, 'systemMsg', { 
+     onComplete : 
+       function(){
+         Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma, null);
+       }
+    });
   },
   addLineElement: function(element_id, chapitre, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante

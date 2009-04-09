@@ -1,5 +1,5 @@
 {{assign var=line value=$curr_line}}
-<table class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}
+<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" 
       {{if !$mode_induction_perop}}id="line_medicament_{{$line->_id}}"{{/if}}>
   <!-- Header de la ligne -->
@@ -23,7 +23,7 @@
       {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}     
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="text {{if $line->_traitement}}traitement{{/if}}
+        class="text {{if $line->traitement_personnel}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
         {{if !$line->_protocole && !$mode_induction_perop}}
@@ -43,7 +43,7 @@
       </a>
       {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
-      {{if $line->_traitement}}Traitement personnel&nbsp;{{/if}}
+      {{if $line->traitement_personnel}}Traitement personnel&nbsp;{{/if}}
     </td>
     <td class="text" style="width: 20%" >
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
@@ -66,14 +66,8 @@
 				  	{{/if}}
 			  	{{/if}}
 			  	{{$line->_ref_praticien->_view}}
-        {{else if !$line->_traitement && !$line->_protocole}}
+        {{else if !$line->traitement_personnel && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
-        {{/if}}
-        {{if !$line->_protocole}}
-        <!-- Vue normale  -->
-          {{if $line->_traitement}}
-            Médecin traitant
-          {{/if}}
         {{/if}}
        </div>
     </td>

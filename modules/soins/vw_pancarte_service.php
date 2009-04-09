@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage soins
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage soins
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $service_id = mbGetValueFromGetOrSession("service_id");
 $date = mbGetValueFromGetOrSession("date_pancarte", mbDate());
@@ -102,11 +103,6 @@ foreach($prescriptions as $_prescription){
   $_prescription->_ref_patient->loadRefPhotoIdentite();
   $_prescription->loadRefsLinesMedByCat("1","1","service"); 
   $_prescription->loadRefsPerfusions();
-  $_prescription->_ref_object->loadRefPrescriptionTraitement();	 
-	$traitement_personnel = $_prescription->_ref_object->_ref_prescription_traitement;
-	if($traitement_personnel->_id){
-	  $traitement_personnel->loadRefsLinesMedByCat("1","1","service");
-	}
   $_prescription->loadRefsLinesElementByCat("1",null,"service");
 			
   foreach($tabHours as $curr_date => $curr_hours) {

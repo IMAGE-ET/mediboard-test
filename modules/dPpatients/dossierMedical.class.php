@@ -26,6 +26,7 @@ class CDossierMedical extends CMbMetaObject {
   var $_ref_antecedents = null;
   var $_ref_traitements = null;
   var $_ref_etats_dents = null;
+  var $_ref_prescription = null;
   
   // Derived back references
   var $_count_antecedents = null;
@@ -50,6 +51,7 @@ class CDossierMedical extends CMbMetaObject {
     $backProps["antecedents"] = "CAntecedent dossier_medical_id";
     $backProps["traitements"] = "CTraitement dossier_medical_id";
     $backProps["etats_dent"]  = "CEtatDent dossier_medical_id";
+    $backProps["prescription"] = "CPrescription object_id";
     return $backProps;
   }
 
@@ -57,6 +59,13 @@ class CDossierMedical extends CMbMetaObject {
     parent::loadRefsBack();
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
+  }
+  
+  function loadRefPrescription(){
+    $this->_ref_prescription = $this->loadUniqueBackRef("prescription");  
+    if($this->_ref_prescription && $this->_ref_prescription->_id){
+      $this->_ref_prescription->loadRefsLinesMed();
+    }
   }
   
   function loadRefObject(){  

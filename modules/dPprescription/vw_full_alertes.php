@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $AppUI, $can, $m;
@@ -33,17 +34,10 @@ $interactions = new CBcbControleInteraction();
 $IPC          = new CBcbControleIPC();
 $posologie    = new CBcbControleSurdosage();
 
-$prescription_traitement = new CPrescription();
-
 if($prescription->object_id) {
   $prescription->loadRefsFwd();
   $object =& $prescription->_ref_object;
   
-  // Chargement de la prescription de traitement personnel
-  $object->loadRefPrescriptionTraitement();
-	$prescription_traitement =& $object->_ref_prescription_traitement;
-	$prescription_traitement->loadRefsLinesMed();
-	
   $object->loadRefSejour();
   $object->loadRefPatient();
   $patient =& $object->_ref_patient;
@@ -61,9 +55,6 @@ if($prescription->object_id) {
 
 $lines = array();
 $lines["prescription"] = $prescription->_ref_prescription_lines;
-if($prescription_traitement->_id){
-  $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
-}
 	  
 foreach($lines as &$lines_by_type) {
   foreach($lines_by_type as &$line){

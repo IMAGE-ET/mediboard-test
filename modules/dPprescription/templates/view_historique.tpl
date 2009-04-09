@@ -19,7 +19,7 @@
 	  <tr>
 	    <!-- Affichage du libelle du medicament -->
 	    <th {{if $type=="historique"}}colspan="3"{{else}}colspan="4"{{/if}}>{{$line->_view}}
-	    {{if $line->_traitement}}(Traitement Personnel){{/if}}
+	    {{if $line->traitement_personnel}}(Traitement Personnel){{/if}}
 	    </th>
 	  </tr>
 	  {{foreach from=$_hist_lines item=_line name="foreach_line"}}

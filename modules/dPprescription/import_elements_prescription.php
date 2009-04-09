@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @package Mediboard
-* @subpackage dPmedicament
-* @version $Revision: $
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $m, $can, $g;
 $can->needsAdmin();

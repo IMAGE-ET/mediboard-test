@@ -124,6 +124,12 @@ refreshAidesAntecedents = function(){
   url.requestUpdate('div_helpers_rques', { waitingText: null } );
 }
  
+refreshAddPoso = function(code_cip){
+  url.setModuleAction("dPprescription", "httpreq_vw_select_poso");
+  url.addParam("code_cip", code_cip);
+  url.requestUpdate("addPosoLine", { waitingText: null } );
+}
+
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
   refreshAidesAntecedents();
@@ -212,6 +218,62 @@ Main.add(function () {
       </table>
       </form>
       
+      {{if $isPrescriptionInstalled}}
+      <hr />
+      <!-- Formulaire d'ajout de traitements -->
+      <form name="editLineTP" action="?m=dPcabinet" method="post">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_add_line_tp_aed" />
+        <input type="hidden" name="code_cip" value="" onchange="refreshAddPoso(this.value);"/>
+        <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
+				<input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
+        <table class="form">
+          <tr>
+            <th style="width: 1%">Recherche</th>
+            <td>
+		          <input type="text" name="produit" value="" size="12" />
+					    <div style="display:none;" class="autocomplete" id="_produit_auto_complete"></div>
+			      </td>
+			      <td>
+			        <strong>
+			        <div id="_libelle"></div>
+			        </strong>
+			      </td>
+          </tr>
+	        <tr>
+	          <th>{{mb_label object=$line field="debut"}}</th>
+	          <td class="date">{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
+	          <td rowspan="3" id="addPosoLine">
+	     
+	          </td>
+	        </tr>  
+	        <tr>
+	          <th>{{mb_label object=$line field="fin"}}</th>
+	          <td class="date">{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
+	        </tr>
+	        <tr> 	
+	        	<th>{{mb_label object=$line field="commentaire"}}</th>
+	          <td>{{mb_field object=$line field="commentaire"}}</td>
+	        </tr>
+	        <tr>
+	          <td colspan="2">
+	            <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+	              onComplete: function(){ 
+	                DossierMedical.reloadDossiersMedicaux();
+	                resetEditLineTP();
+	                $('addPosoLine').update('');
+	                this.form.token_poso.value = '';
+	              }
+	             } )">
+	              {{tr}}Add{{/tr}} un traitement
+	            </button>
+	          </td>
+          </tr>
+	      </table>
+      </form>
+      {{/if}}
+      
+      
 			<!-- Traitements -->
 			{{if $dPconfig.dPpatients.CTraitement.enabled}}
       <hr />
@@ -257,7 +319,6 @@ Main.add(function () {
             <textarea name="traitement" onblur="this.form.onsubmit()"></textarea>
           </td>
         </tr>
-        
         <tr>
 			    <!-- Auto-completion -->
 			    <th style="width: 70px;">{{mb_label object=$traitement field=_search}}</th>
@@ -368,3 +429,35 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+
+<script type="text/javascript">
+
+{{if $isPrescriptionInstalled}}
+  var oFormTP = document.editLineTP;
+  prepareForm(oFormTP);
+  
+  // UpdateFields de l'autocomplete de medicaments
+  updateFieldsMedicament = function(selected) {
+    resetEditLineTP();
+    Element.cleanWhitespace(selected);
+    dn = selected.childElements();
+    $V(oFormTP.code_cip, dn[0].innerHTML);
+    $("_libelle").insert(dn[1].innerHTML.stripTags());
+    $V(oFormTP.produit, '');
+  }
+  
+  // Autocomplete des medicaments
+  urlAuto = new Url();
+  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+  urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
+    minChars: 3,
+    updateElement: updateFieldsMedicament
+  } );
+  
+  resetEditLineTP = function(){
+    $("_libelle").update("");
+    oFormTP.code_cip.value = '';
+    oFormTP.commentaire.value = '';
+  }
+{{/if}}
+</script>

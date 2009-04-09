@@ -1,12 +1,13 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
- */	      
-
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+     
 global $AppUI, $can, $m;
 
 $can->needsRead();
@@ -195,26 +196,9 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  }
 	  }
 	  
-	  $prescription_traitement = new CPrescription();
-	  // Chargement de la prescription de traitement
-    if($prescription->object_id){
-		  $object =& $prescription->_ref_object;
-		  $object->loadRefPrescriptionTraitement();
-		  $prescription_traitement =& $object->_ref_prescription_traitement;
-		  if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
-				 if($prescription_traitement->_id){
-					$prescription_traitement->loadRefsLinesMed();
-					foreach($prescription_traitement->_ref_prescription_lines as &$line){
-						$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
-					  $line->loadRefsPrises();
-					  $line->loadRefParentLine();
-				  }
-				}
-		  }
-    }
-    
 	  // Pour une prescription non protocole
 	  if ($prescription->object_id) {
+	    $object =& $prescription->_ref_object;
 			// Chargement du patient
 		  $object->loadRefPatient();
 			$patient =& $object->_ref_patient;
@@ -243,9 +227,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	  
 	  $lines = array();
 	  $lines["prescription"] = $prescription->_ref_prescription_lines;
-	  if($prescription_traitement->_id){
-	    $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
-	  }
+	  
 	  foreach($prescription->_ref_perfusions as $_perfusion){
 	    foreach($_perfusion->_ref_lines as $_perf_line){
 	      if($prescription->object_id){

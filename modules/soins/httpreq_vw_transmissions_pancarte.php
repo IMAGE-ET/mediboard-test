@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage soins
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage soins
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $service_id = mbGetValueFromGet("service_id");
 $date       = mbGetValueFromGet("date");

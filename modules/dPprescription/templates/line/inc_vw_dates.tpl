@@ -67,7 +67,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 								 </optgroup>					   
 							 </select>
 							 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
-							   {{if $typeDate != "mode_grille" && ($line->_traitement || $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+							   {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 							   {{else}}
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
@@ -76,7 +76,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 				        
 				       </div>	       
 		       {{else}}
-		           {{if $typeDate != "mode_grille" && ($line->_traitement || $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+		           {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
 				         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
 		           {{else}}
 		             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
@@ -97,7 +97,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       </td>
 	       {{/if}}
 
-	       {{if !$line->_traitement && $chapitre != "consult" && $chapitre != "anapath" && $chapitre != "imagerie"}}
+	       {{if $chapitre != "consult" && $chapitre != "anapath" && $chapitre != "imagerie"}}
 	       <td style="border:none;">
 	         {{mb_label object=$line field=duree}}
 	       </td>

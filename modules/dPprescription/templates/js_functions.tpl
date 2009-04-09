@@ -278,22 +278,9 @@ submitPoso = function(oForm, curr_line_id){
   );
 }
 
-// Permet de mettre la ligne en traitement
-transfertTraitement = function(line_id){
-  if(!line_id){
-    return;
-  }
-  var oForm = document.transfertToTraitement;
-  oForm.prescription_line_id.value = line_id;
-  submitFormAjax(oForm, "systemMsg");
-}
-
-
 moveTbody = function(oTbody){
   var oTableMed = $('med');
-  var oTableTrt = $('traitement');
   var oTableMedArt = $('med_art');
-  var oTableTrtArt = $('traitement_art');
   
   if(oTbody.hasClassName('med')){
     if(oTbody.hasClassName('line_stopped')){
@@ -301,13 +288,6 @@ moveTbody = function(oTbody){
     } else {
       oTableMed.insert(oTbody);     
     } 
-  }
-  if (oTbody.hasClassName('traitement')){
-    if(oTbody.hasClassName('line_stopped')){
-      oTableTrtArt.insert(oTbody);      
-    } else {
-      oTableTrt.insert(oTbody);     
-    }       
   }
 }
 

@@ -1,15 +1,15 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-//$module->registerTab("vw_edit_prescription", null, TAB_READ);
 $module->registerTab("vw_edit_protocole"           , null, TAB_EDIT);
 $module->registerTab("vw_edit_pack_protocole"      , null, TAB_EDIT);
 $module->registerTab("vw_edit_liaison_admission"   , null, TAB_EDIT);

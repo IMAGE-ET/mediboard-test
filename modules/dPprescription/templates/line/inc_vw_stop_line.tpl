@@ -2,15 +2,6 @@
 
 // Si ligne de traitement perso finie, on empeche le passage en ligne de prescription normale
 Main.add( function(){
-  var oDiv = $('editLineTraitement-{{$line->_id}}');
-  if(oDiv){  
-    {{if $line->_traitement && $line->date_arret && $line->date_arret <= $today}}
-      oDiv.hide();
-    {{else}}
-      oDiv.show();
-    {{/if}}
-  }
-  
   // Preparation du formulaire
   prepareForm('form-stop-{{$line->_class_name}}-{{$line->_id}}');
   
@@ -54,7 +45,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
     <input type="hidden" name="time_arret" value="" />
 	  <button type="button"
 	          class="cancel" 
-	          onclick="changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->_traitement}}','{{$category_id}}'); 
+	          onclick="changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->traitement_personnel}}','{{$category_id}}'); 
 	                   Prescription.submitFormStop(this.form,'{{$line->_id}}','{{$line->_class_name}}');">
 	    Annuler l'arrêt
 	  </button>
@@ -73,7 +64,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 	        {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
 	        <button type="button" 
 	                class="stop" 
-	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}','{{$category_id}}');">  
+	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->traitement_personnel}}','{{$category_id}}');">  
 	          Arrêter
 	        </button>
 	      </td>

@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPprescription
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $prescription_id = mbGetValueFromGet("prescription_id");
 $type = mbGetValueFromGet("type");
@@ -16,14 +17,6 @@ $prescription->load($prescription_id);
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsPerfusions();
 
-// Chargement de la prescription traitement
-$prescription->loadRefObject();
-$object =& $prescription->_ref_object;
-$object->loadRefPrescriptionTraitement();
-$prescription_traitement =& $object->_ref_prescription_traitement;
-if($prescription_traitement->_id){
-  $prescription_traitement->loadRefsLinesMed('','1');
-}
 // Tableau d'historique des lignes
 $hist = array();
 $lines = array();
@@ -33,7 +26,6 @@ $med_lines["med"] = $prescription->_ref_prescription_lines;
 if($type == "historique"){
   $med_lines["perf"] = $prescription->_ref_perfusions;
 }
-$med_lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
 
 // Chargement de l'historique de chaque ligne
 foreach($med_lines as $_type_line => $meds_by_cat){

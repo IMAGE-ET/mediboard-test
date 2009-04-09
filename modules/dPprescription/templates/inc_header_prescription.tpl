@@ -69,6 +69,17 @@ popupTransmission = function(sejour_id){
   url.addParam("addTrans", true);
   url.popup(700, 500, "Transmissions et Observations");
 }
+
+popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_dossier_medical_patient");
+  url.addParam("patient_id", patient_id);
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("prescription_sejour_id", prescription_sejour_id);
+  url.popup(700, 500, "Traitements du patient");
+}
+
+
 </script>
 
 {{assign var=praticien value=$prescription->_ref_praticien}}
@@ -123,7 +134,12 @@ popupTransmission = function(sejour_id){
 					<br />
 					<span style="float: right">
 					  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
+					  {{if !$mode_pharma}}
+						  <br />
+						  <button type="button" class="search" onclick="popupDossierMedPatient('{{$prescription->_ref_patient->_id}}','{{$prescription->object_id}}','{{$prescription->_id}}');">Traitements du patient</button>
+					  {{/if}}
 					</span>
+					
 			  {{/if}}
        </div>
 			
@@ -207,7 +223,7 @@ popupTransmission = function(sejour_id){
   
   <tr>
     {{if !$mode_protocole && !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
-        <th class="category">Protocoles</th>
+      <th class="category">Protocoles</th>
     {{/if}}
     {{if !$mode_protocole && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
       <th class="category">Date d'ajout de lignes</th>

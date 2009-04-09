@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $can;
@@ -24,12 +25,6 @@ if($prescription_id){
   $prescription->load($prescription_id);
   $prescription->loadRefsLinesMed("1","1","service");
   $prescription->loadRefsLinesElementByCat("1","","service");
-  $prescription->_ref_object->loadRefPrescriptionTraitement();	 
-  $traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
-  if($traitement_personnel->_id){
-    $traitement_personnel->loadRefsLinesMed("1","1","service"); 
-  }
-  
   $prescription->loadRefsPerfusions("1","service");
   foreach($prescription->_ref_perfusions as &$_perfusion){
     $_perfusion->loadRefsLines();

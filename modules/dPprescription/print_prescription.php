@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $AppUI, $can;
@@ -80,18 +81,6 @@ foreach($mediusers as $_mediuser){
 // Chargement des lignes de prescriptions
 $prescription->loadRefsLinesMedComments();
 $prescription->loadRefsLinesElementsComments();
-
-$traitements_arretes = array();
-
-$prescription->_ref_object->loadRefPrescriptionTraitement();
-if($prescription->_ref_object->_ref_prescription_traitement->_id){
-	$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed();
-	foreach($prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as $line_med){
-		if($line_med->date_arret){
-			$traitements_arretes[] = $line_med;
-		}
-	}
-}
 
 // Chargement des perfusions
 $prescription->loadRefsPerfusions();
@@ -289,7 +278,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("traduction"          , $traduction);
 $smarty->assign("print"               , $print);
 $smarty->assign("praticien"           , $praticien);
-$smarty->assign("traitements_arretes" , $traitements_arretes);
 $smarty->assign("ordonnance"          , $ordonnance);
 $smarty->assign("date"                , mbDate());
 $smarty->assign("etablissement"       , $etablissement);

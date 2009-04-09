@@ -2,10 +2,10 @@
 {{assign var=IPC value=$prescription_reelle->_alertes.IPC}}
 {{assign var=interaction value=$prescription_reelle->_alertes.interaction}}
 {{assign var=profil value=$prescription_reelle->_alertes.profil}}
-{{if array_key_exists('posoduree', $prescription_reelle->_alertes)}}
+{{if @array_key_exists('posoduree', $prescription_reelle->_alertes)}}
   {{assign var=posoduree value=$prescription_reelle->_alertes.posoduree}}
 {{/if}}
-{{if array_key_exists('posoqte', $prescription_reelle->_alertes)}}
+{{if @array_key_exists('posoqte', $prescription_reelle->_alertes)}}
   {{assign var=posoqte value=$prescription_reelle->_alertes.posoqte}}
 {{/if}}
 {{assign var=code_cip value=$line->code_cip}}
@@ -15,7 +15,7 @@
   
 {{if (@array_key_exists($code_cip, $allergie) || @array_key_exists($code_cip, $interaction) ||
       @array_key_exists($code_cip, $profil)   || @array_key_exists($code_cip, $IPC) ||
-      @array_key_exists($code_cip, $posoduree)      || @array_key_exists($code_cip, $posoqte) )}}   
+      @array_key_exists($code_cip, $posoduree)|| @array_key_exists($code_cip, $posoqte) )}}   
      
   {{assign var=puce_orange value=false}}
   {{assign var=puce_rouge value=false}}

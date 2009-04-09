@@ -42,13 +42,9 @@ openPrescription = function(prescription_id){
     {{foreach from=$prescriptions item=_prescription}}
       <tr>
 			  <td>
-			   {{if $_prescription->type != "traitement"}}
   			   <a href="#{{$_prescription->_id}}" onclick="PrescriptionEditor.popup('{{$_prescription->_id}}');">
   			     {{tr}}CPrescription.type.{{$_prescription->type}}{{/tr}}
   			   </a>
-			   {{else}}
-			     {{tr}}CPrescription.type.{{$_prescription->type}}{{/tr}}
-			   {{/if}}
 			  </td>
 			  <td>{{$_prescription->_ref_praticien->_view}}</td>
 			  {{foreach from=$_prescription->_counts_by_chapitre key=chapitre item=count}}

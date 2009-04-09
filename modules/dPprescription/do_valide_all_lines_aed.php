@@ -1,11 +1,13 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPprescription
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
 
 /*
  * Permet de valider une ou toutes les lignes
@@ -163,26 +165,6 @@ if($prescription_line_id){
 	  $prescription->load($prescription_line->prescription_id);
 	}
 }
-
-
-
-// Validation des traitements perso
-if($prescription_id && ($chapitre == "medicament" || $chapitre == "all")){
-  
-	$prescription->_ref_object->loadRefPrescriptionTraitement();
-	$prescription_traitement =& $prescription->_ref_object->_ref_prescription_traitement;
-	$prescription_traitement->loadRefsLinesMed();
-	foreach($prescription_traitement->_ref_prescription_lines as $_line_traitement){
-		if($mode_pharma){
-	  	$_line_traitement->valide_pharma = 1;		
-		} else {
-		  $_line_traitement->signee = $search_value;
-		}
-		$msg = $_line_traitement->store();
-	  $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
-	}
-}
-
 
 // Si mode pharma en validation globale, chargement de tous les medicaments de la prescription
 if($prescription->_id && $mode_pharma){

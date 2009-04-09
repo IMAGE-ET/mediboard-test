@@ -42,10 +42,11 @@
   </td>
   <!-- Affichage du praticien responsable de la ligne -->
   <td class="text" style="text-align: center">
-    {{if $line_class == "CPrescriptionLineMedicament" && $line->_traitement}}
+    {{if $line_class == "CPrescriptionLineMedicament" && $line->traitement_personnel}}
       Traitement Personnel
+    {{else}}
+      {{$line->_ref_praticien->_view}}
     {{/if}}
-    {{if !$line->_traitement}}{{$line->_ref_praticien->_view}}{{/if}}
   </td>
   <!-- Affichage des signatures de la ligne -->
   <td style="border-left: 1px solid #ccc; text-align: center">
@@ -56,7 +57,6 @@
 	  {{if $line_class == "CPrescriptionLineMedicament" && !$line->valide_pharma}}P{{/if}}
     {{/if}}
   </td>
-
   <!-- Affichage des heures de prises des medicaments -->			 
   {{foreach from=$tabHours item=_hours_by_moment}}
     {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
@@ -78,12 +78,10 @@
 					           {{assign var=quantite value=$prise_line.quantites.$_hour.total}}
 					         {{/if}}
 				      {{/if}}
-				    {{/if}}
-				    
+				    {{/if}}  
 				    {{if $quantite == 0}}
 				      {{assign var=quantite value=""}}
 				    {{/if}}
-				    
 				    {{if $line_class == "CPrescriptionLineMedicament"}}
 						  {{if $line->_debut_reel > $_date_hour || ($line->_fin_reelle && $line->_fin_reelle < $_date_hour) || !$line->_active}}
 						    <img src="images/icons/gris.gif" />

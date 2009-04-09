@@ -93,7 +93,7 @@ function addSejourIdToSession(sejour_id){
 function loadViewSejour(sejour_id, praticien_id, patient_id, date){
 
   // Affichage de la prescription
-  if($('prescription_sejour')){
+  if($('prescription_sejour') && $('prescription_sejour').visible()){
     Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
   }
   loadPatient(patient_id);
@@ -474,7 +474,9 @@ viewBilanService = function(service_id, date){
         <li onclick="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_soins">Soins</a></li>
-        <li onclick="reloadAntAllergie(document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescription</a></li>
+        <li onclick="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});">
+          <a href="#prescription_sejour">Prescription</a>
+        </li>
         {{/if}}
         {{if $app->user_prefs.ccam_sejour == 1 }}
           <li><a href="#Actes">Cotation</a></li>
@@ -484,7 +486,7 @@ viewBilanService = function(service_id, date){
         {{/if}}
         <li><a href="#documents">Documents</a></li>
         {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
-        <li><a href="#antecedents">Antécédents</a></li>
+        <li onclick="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
         {{/if}} 
       </ul>
       <hr class="control_tabs" />

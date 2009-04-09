@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPprescription
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI;
 
@@ -16,15 +17,13 @@ $time            = mbGetValueFromGet("time_debut");
 $actionType      = mbGetValueFromGet("actionType", "stop");
 $mode_pharma     = mbGetValueFromGet("mode_pharma");
 
-// Chargement de la prescription 
-$prescription = new CPrescription();
-$prescription->load($prescription_id);
-$prescription->loadRefObject();
-$prescription->_ref_object->loadRefPrescriptionTraitement();
-$prescription_traitement =& $prescription->_ref_object->_ref_prescription_traitement;
-$prescription_traitement->loadRefsLinesMed();
+// Chargement des traitements perso
+$traitement_perso = new CPrescriptionLineMedicament();
+$traitement_perso->prescription_id = $prescription_id;
+$traitement_perso->traitement_personnel = "1";
+$traitements = $traitement_perso->loadMatchingList();
 
-foreach($prescription_traitement->_ref_prescription_lines as &$line) {
+foreach($traitements as &$line) {
 	if($actionType == "stop" && !$line->date_arret) {
 		$line->date_arret = $date;
 		$line->time_arret = $time;
@@ -32,11 +31,10 @@ foreach($prescription_traitement->_ref_prescription_lines as &$line) {
 	}
 	if($actionType == "go" && $line->date_arret) {
 		$line->duplicateLine($praticien_id, $prescription_id, $date, $time);
-		
 	}
 }
 
-echo "<script type='text/javascript'>Prescription.reload($prescription->_id, '', 'medicament', '0', $mode_pharma)</script>";
+echo "<script type='text/javascript'>Prescription.reload($prescription_id, '', 'medicament', '0', $mode_pharma)</script>";
 echo $AppUI->getMsg();
 CApp::rip();
 ?>

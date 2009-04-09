@@ -79,7 +79,10 @@
        </form>
 		{{/if}}
     </td>
-    <td class="text" rowspan="{{$nb_line}}">
+    <td class="text" rowspan="{{$nb_line}}"
+         {{if $line->_class_name == 'CPrescriptionLineMedicament' && $line->traitement_personnel}}
+	       style="background-color: #BDB"
+	       {{/if}}>
     {{if $line->_recent_modification}}
       <img style="float: right" src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
     {{/if}}
@@ -89,7 +92,7 @@
 	    <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 	        {{$line->_ucd_view}}
-	        {{if $line->_traitement}} (Traitement perso){{/if}}
+	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}
 	        {{$line->_view}}

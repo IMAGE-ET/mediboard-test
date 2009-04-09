@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPprescription
-* @version $Revision: $
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 // Recuperation des variables
 $prescription_id = mbGetValueFromGet("prescription_id");
@@ -37,13 +38,10 @@ $prescription->loadRefObject();
 $sejour =& $prescription->_ref_object;
 $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
-$sejour->loadRefPrescriptionTraitement();
 
 // Chargement des lignes
 if($chapitre == "" || $chapitre == "med" || $chapitre == "inj" || $chapitre == "all_med"){
   $prescription->loadRefsLinesMed("1","1","service");
-  $sejour->loadRefPrescriptionTraitement();
-  $sejour->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
 }
 $prescription->loadRefsLinesElementByCat("1", $chapitre,"service");
 

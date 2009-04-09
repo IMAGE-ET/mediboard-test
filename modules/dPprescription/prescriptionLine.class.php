@@ -1,11 +1,13 @@
 <?php /* $Id: $ */
 
 /**
- *  @package Mediboard
- *  @subpackage dPprescription
- *  @version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 
 /**
  * The CPrescriptionLine class
@@ -369,9 +371,9 @@ class CPrescriptionLine extends CMbObject {
     
     
     // Si prescription de sortie, on duplique la ligne en ligne de prescription
-    if($prescription->type === "sortie" && $new_line->_traitement && !$date_arret_tp){
-      $new_line->prescription_id = $prescription_id;
-    }
+    //if($prescription->type === "sortie" && $new_line->traitement_personnel && !$date_arret_tp){
+    //  $new_line->prescription_id = $prescription_id;
+    //}
     $new_line->creator_id = $AppUI->user_id;
     $msg = $new_line->store();
     
@@ -389,14 +391,14 @@ class CPrescriptionLine extends CMbObject {
     $old_line = new CPrescriptionLineMedicament();
     $old_line->load($this->_id);
     
-    if(!($prescription->type === "sortie" && $old_line->_traitement && !$date_arret_tp)){
+    //if(!($prescription->type === "sortie" && $old_line->traitement_personnel && !$date_arret_tp)){
       $old_line->child_id = $new_line->_id;
       if($prescription->type !== "sortie" && !$old_line->date_arret){
         $old_line->date_arret = mbDate();
         $old_line->time_arret = mbTime();
       }
       $old_line->store();
-    }
+    //}
   }
   
   

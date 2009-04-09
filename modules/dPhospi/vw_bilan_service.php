@@ -73,9 +73,6 @@ if (mbGetValueFromGet("do")) {
 	foreach($prescriptions as $_prescription){
 	  // Chargement des lignes
 	  $_prescription->loadRefsLinesMed("1","1","service");
-	  $_prescription->_ref_object->loadRefPrescriptionTraitement();	  
-	  $_prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1","service");
-
 
 		if ($do_elements) {
 	    $_prescription->loadRefsLinesElementByCat("1","","service");

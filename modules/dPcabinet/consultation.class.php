@@ -96,7 +96,6 @@ class CConsultation extends CCodable {
   var $_ref_reglements_tiers   = null;
 
   var $_ref_prescription            = null; 
-  var $_ref_prescription_traitement = null;
   var $_ref_categorie               = null;
   
   // Distant fields
@@ -935,17 +934,6 @@ class CConsultation extends CCodable {
     $this->_du_tiers_restant       = round($this->_du_tiers_restant, 2);
     $this->_reglements_total_tiers = round($this->_reglements_total_tiers, 2);
   }
-  
-  function loadRefPrescriptionTraitement(){
-    $prescription = new CPrescription();
-    $prescription->type = "traitement";
-    $prescription->object_id = $this->_id;
-    $prescription->object_class = $this->_class_name;
-    $prescription->loadMatchingObject();
-  	$this->_ref_prescription_traitement = $prescription;
-  }
-  
- 
   
   function loadRefsBack() {
     // Backward references

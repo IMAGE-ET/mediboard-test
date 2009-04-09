@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
- */	   
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 
@@ -26,24 +27,13 @@ $prescription->object_class = "CSejour";
 $prescription->type = "sejour";
 $prescription->loadMatchingObject();
 
-// Initialisation
-$prescription_traitement = new CPrescription();
 
 // Chargement des medicaments
 if ($prescription->_id) {
   $prescription->loadRefsLinesMed();
   
-  $sejour = new CSejour();
-  $sejour->load($sejour_id);
-  $sejour->loadRefPrescriptionTraitement();
-  $prescription_traitement =& $sejour->_ref_prescription_traitement;
-  $prescription_traitement->loadRefsLinesMed();
-
   $lines = array();
 	$lines["prescription"] = $prescription->_ref_prescription_lines;
-	if($prescription_traitement->_id){
-	  $lines["traitement"] = $prescription_traitement->_ref_prescription_lines;
-  }
   
   // Chargement des droits et des prises
   foreach($lines as $type => $type_line){
@@ -139,7 +129,6 @@ if ($prescription->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("prescription", $prescription);
-$smarty->assign("prescription_traitement", $prescription_traitement);
 $smarty->assign("now", mbDateTime());
 $smarty->display("inc_vw_prescription_meds.tpl");
 

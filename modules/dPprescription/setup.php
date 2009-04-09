@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CSetupdPprescription extends CSetup {
@@ -1044,7 +1045,97 @@ class CSetupdPprescription extends CSetup {
 						WHERE `substitute_for_id` IS NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.79";
+    $this->makeRevision("0.79");
+    
+    // Existence du dossier medical
+    $this->addDependency("dPpatients", "0.51");
+
+    $sql = "ALTER TABLE `prescription` 
+	          CHANGE `object_class` `object_class` ENUM ('CSejour','CConsultation','CDossierMedical') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+	          ADD `traitement_personnel` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    // Creation du dossier medical s'il n'existe pas deja
+    $sql = "INSERT INTO `dossier_medical`
+            SELECT '',NULL,patients.patient_id,'CPatient'
+		 			  FROM prescription 
+		 			  LEFT JOIN sejour ON prescription.object_id = sejour.sejour_id
+		 		  	LEFT JOIN patients ON sejour.patient_id = patients.patient_id
+				  	LEFT JOIN dossier_medical ON (dossier_medical.object_id = patients.patient_id AND dossier_medical.object_class = 'CPatient')
+			      WHERE prescription.type = 'traitement'
+			      AND dossier_medical.dossier_medical_id IS NULL;";
+    $this->addQuery($sql);
+    
+    // Changement du prescription_id des lignes de tp actuel pour cibler leur prescription de sejour
+    // Si la prescription de sejour n'existe pas, on ne la crée pas
+    $sql = "CREATE TEMPORARY TABLE traitements_personnel (
+						    line_tp_id INT(11), sejour_id INT(11), prescription_sejour_id INT(11), dossier_medical_patient_id INT(11), praticien_id INT(11), code_cip VARCHAR(7)
+						  ) AS 
+						    SELECT prescription_line_medicament_id as line_tp_id, 
+						           prescription.object_id as sejour_id, 
+						           prescription_sejour.prescription_id as prescription_sejour_id,
+						           dossier_medical.dossier_medical_id as dossier_medical_patient_id,
+											 prescription_sejour.praticien_id as praticien_id,
+											 prescription_line_medicament.code_cip as code_cip
+						    FROM prescription_line_medicament, prescription
+						    LEFT JOIN prescription AS prescription_sejour ON (prescription_sejour.object_id = prescription.object_id AND prescription_sejour.object_class = 'CSejour' AND prescription_sejour.type = 'sejour')
+						    LEFT JOIN sejour ON prescription.object_id = sejour.sejour_id
+						    LEFT JOIN patients ON sejour.patient_id = patients.patient_id
+						    LEFT JOIN dossier_medical ON (dossier_medical.object_id = patients.patient_id AND dossier_medical.object_class = 'CPatient')
+						    WHERE prescription_line_medicament.prescription_id = prescription.prescription_id    
+						    AND prescription.type = 'traitement'
+						    AND prescription.object_id IS NOT NULL;";
+		$this->addQuery($sql);
+		
+		// Transfert des tp dans la prescription de sejour
+		$sql = "UPDATE `prescription_line_medicament`, `traitements_personnel`
+	          SET `prescription_line_medicament`.`traitement_personnel` = '1', `prescription_line_medicament`.`prescription_id` = `traitements_personnel`.`prescription_sejour_id`
+	          WHERE `prescription_line_medicament`.`prescription_line_medicament_id` = `traitements_personnel`.`line_tp_id`
+						AND traitements_personnel.prescription_sejour_id IS NOT NULL;";
+		$this->addQuery($sql);
+		
+		// Rajout de la date de debut de sejour si elle n'existe pas deja dans la ligne de traitement personnel
+    $sql = "UPDATE prescription_line_medicament
+						LEFT JOIN prescription ON prescription_line_medicament.prescription_id = prescription.prescription_id
+						LEFT JOIN sejour ON (prescription.object_id = sejour.sejour_id AND prescription.object_class = 'CSejour')
+						SET prescription_line_medicament.debut = DATE(sejour.entree_prevue)
+						WHERE prescription_line_medicament.debut IS NULL
+				    AND prescription_line_medicament.traitement_personnel = '1'";
+    $this->addQuery($sql);
+    
+    // Creation des prescription de DossierMedicalPatient
+    $sql = "INSERT INTO `prescription`
+						SELECT '', traitements_personnel.praticien_id, 'CDossierMedical', traitements_personnel.dossier_medical_patient_id, NULL,  'traitement', NULL, NULL
+						FROM traitements_personnel
+						GROUP BY dossier_medical_patient_id";
+    $this->addQuery($sql);
+    
+    // Copie des lignes de prescription vers la prescription de tp
+    $sql = "INSERT INTO prescription_line_medicament (prescription_line_medicament_id, prescription_id, code_cip, commentaire, ald, debut, duree, unite_duree, praticien_id, 
+																											creator_id, emplacement, voie)
+						SELECT '', prescription.prescription_id, prescription_line_medicament.code_cip, prescription_line_medicament.commentaire, prescription_line_medicament.ald, prescription_line_medicament.debut, prescription_line_medicament.duree, prescription_line_medicament.unite_duree, 
+									 prescription_line_medicament.praticien_id, prescription_line_medicament.creator_id, prescription_line_medicament.emplacement, prescription_line_medicament.voie 
+						FROM traitements_personnel
+						LEFT JOIN prescription ON (prescription.object_id = traitements_personnel.dossier_medical_patient_id AND prescription.object_class = 'CDossierMedical')
+						LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = traitements_personnel.line_tp_id
+						GROUP BY dossier_medical_patient_id, code_cip";
+    $this->addQuery($sql);
+    
+    $sql = "DELETE FROM prescription
+						WHERE prescription.object_class != 'CDossierMedical'
+						AND prescription.type = 'traitement';";
+    $this->addQuery($sql);
+    
+    // Suppression des lignes de medicaments dont la prescription a été supprimée
+    $sql = "DELETE prescription_line_medicament.* FROM prescription_line_medicament
+						LEFT JOIN prescription ON prescription_line_medicament.prescription_id = prescription.prescription_id
+						WHERE prescription.prescription_id IS NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.80";
   }  
 }
 

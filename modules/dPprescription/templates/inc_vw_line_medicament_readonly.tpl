@@ -1,12 +1,12 @@
 {{assign var=line value=$curr_line}}
-<table class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}
+<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" 
        id="line_medicament_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="element {{if $line->_traitement}}traitement{{/if}}
+        class="element {{if $line->traitement_personnel}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
         {{if !$line->_protocole}}
@@ -24,7 +24,7 @@
           {{/if}}
           {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
           {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
-          {{if $line->_traitement}}{{mb_label object=$line field="_traitement"}}&nbsp;{{/if}}
+          {{if $line->traitement_personnel}}{{mb_label object=$line field="traitement_personnel"}}&nbsp;{{/if}}
       </div>
       <div style="float: right;">
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
@@ -37,14 +37,8 @@
 					  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
 			  	{{/if}}
 			  	{{/if}}
-        {{else if !$line->_traitement && !$line->_protocole}}
+        {{else if !$line->traitement_personnel && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
-        {{/if}}
-        {{if !$line->_protocole}}
-        <!-- Vue normale  -->
-          {{if $line->_traitement}}
-            Médecin traitant
-          {{/if}}
         {{/if}}
         <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
         </div>

@@ -2,7 +2,7 @@
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
 {{assign var=typeDate value="Med"}}
-<table class="tbl {{if $line->_traitement}}traitement{{else}}med{{/if}}
+<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
              {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}
              {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}"
        id="line_medicament_{{$line->_id}}">
@@ -10,7 +10,7 @@
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="element {{if $line->_traitement}}traitement{{/if}}
+        class="element {{if $line->traitement_personnel}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       
       {{if !$line->_protocole}}
@@ -28,16 +28,15 @@
                class="tooltip-trigger" 
                onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
         {{/if}}
-        {{if !$line->_traitement}}
-	        <!-- Selecteur equivalent -->
-	        {{if $line->_can_select_equivalent}}
-	          {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
-	        {{/if}}	        
-	        <!-- Formulaire ALD -->
-	        {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
-	        <!-- Formulaire Conditionnel -->
+        <!-- Selecteur equivalent -->
+        {{if $line->_can_select_equivalent}}
+          {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
+        {{/if}}	       
+        <!-- Formulaire ALD -->
+        {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
+        <!-- Formulaire Conditionnel -->
 		    {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}}
-		    {{/if}}  
+
 	      <!-- Formulaire Traitement -->
         {{if $line->_can_vw_form_traitement}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
@@ -58,7 +57,7 @@
 							{{/if}}
 						{{/if}}
         {{else}}
-          {{if !$line->_traitement && !$line->_protocole}}
+          {{if !$line->traitement_personnel && !$line->_protocole}}
             {{$line->_ref_praticien->_view}}    
           {{/if}}
         {{/if}}
@@ -74,8 +73,7 @@
           {{/if}}
         {{elseif !$line->_protocole}}
         <!-- Vue normale  -->
-          {{if $line->_traitement}}
-            Médecin traitant
+          {{if $line->traitement_personnel}}
             {{if $line->_can_view_form_signature_praticien}}
 							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 					  {{/if}}
@@ -103,7 +101,7 @@
     </th>
   </tr>
   
-  {{if $line->_is_perfusable && !$line->_traitement && $line->_perm_edit}}
+  {{if $line->_is_perfusable && $line->_perm_edit}}
 	  <tr>
 	    <td />
 	    <td>

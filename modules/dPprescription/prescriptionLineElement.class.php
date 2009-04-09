@@ -1,11 +1,13 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 
 /**
  * The CPrescription class
@@ -45,7 +47,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["element_prescription_id"]        = "ref notNull class|CElementPrescription cascade";
+    $specs["element_prescription_id"]        = "ref notNull class|CElementPrescription";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
     return $specs;
@@ -69,7 +71,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
     
     // Un element ne peut jamais être un traitement
-    $this->_traitement = 0;	
     $this->_unite_prise = CAppUI::conf("dPprescription CCategoryPrescription $chapitre unite_prise");
     $this->_duree_prise = "";
     

@@ -1,9 +1,3 @@
-{{if $prescription->object_id}}
-  {{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
-{{else}}
-  {{assign var=traitements value=""}}
-{{/if}}
-
 <script type="text/javascript">
 
 // Initialisation des dates pour les calendars
@@ -71,17 +65,6 @@ Main.add( function(){
 
 </script>
 
-<form name="transfertToTraitement" action="?" method="post">
-  <input type="hidden" name="dosql" value="do_prescription_traitement_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="prescription_line_id" value="" />
-  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-  <input type="hidden" name="object_id" value="{{$prescription->object_id}}" />
-  
-  <input type="hidden" name="_traitement" value="1" />
-  <input type="hidden" name="_type" value="{{$prescription->type}}" />
-</form>
-
 <!-- Cas normal -->
 <!-- Formulaire d'ajout de ligne dans la prescription -->
 <form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">  
@@ -100,9 +83,6 @@ Main.add( function(){
   <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
-  {{if $prescription->type=="pre_admission" && $prescription->object_id}}
-  <input type="hidden" name="callback" value="transfertTraitement" />
-  {{/if}}  
   <input type="hidden" name="substitute_for_id" value="" />
   <input type="hidden" name="substitution_active" value="1" />
 </form>
@@ -215,7 +195,7 @@ Main.add( function(){
     </td>
     {{/if}}
     <td style="text-align: center;">
-			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements || $prescription->_ref_perfusions)}}
+			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions)}}
 			  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" 
 			  				onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}},{{if $readonly}}false{{else}}{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}{{/if}},'');">
 			    {{if $readonly}}Modification
@@ -247,7 +227,7 @@ Main.add( function(){
   </tr>
 </table>
 
-{{if $lite && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements) && $readonly}}
+{{if $lite && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment) && $readonly}}
 <table class="tbl">
   <tr>
     <th colspan="6">Médicaments</th>
@@ -266,10 +246,8 @@ Main.add( function(){
 <!--  div permettant de ranger les lignes -->
 <div id="med"></div>
 <div id="med_art"></div>
-<div id="traitement"></div>
-<div id="traitement_art"></div>
 
-{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements || $prescription->_ref_perfusions}}
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions}}
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $curr_line->praticien_id)}}
@@ -292,25 +270,6 @@ Main.add( function(){
     {{/if}}
   {{/foreach}}
    
-  <!-- Affichage des traitements -->
-  {{if $prescription->object_id && $traitements}}
-    {{foreach from=$traitements item=traitement}}
-      {{if $readonly}}
-        {{if $full_line_guid == $traitement->_guid}}
-          {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
-        {{else}}
-	        {{if $lite}}
-	           {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
-	        {{else}}
-	          {{include file="../../dPprescription/templates/inc_vw_line_medicament_readonly.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
-	        {{/if}}
-        {{/if}}
-      {{else}}
-        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
-      {{/if}}
-    {{/foreach}}
-  {{/if}}
-  
   {{if $lite && $prescription->_ref_perfusions && $readonly}}
 	<table class="tbl">
 	  <tr>

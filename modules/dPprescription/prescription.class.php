@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 /**
@@ -119,7 +120,7 @@ class CPrescription extends CMbObject {
     $specs["function_id"]   = "ref class|CFunctions";  
     $specs["group_id"]      = "ref class|CGroups";
     $specs["object_id"]     = "ref class|CCodable meta|object_class";
-    $specs["object_class"]  = "enum notNull list|CSejour|CConsultation";
+    $specs["object_class"]  = "enum notNull list|CSejour|CConsultation|CDossierMedical";
     $specs["libelle"]       = "str";
     $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";
     $specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
@@ -137,15 +138,19 @@ class CPrescription extends CMbObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     
-    if(!$this->object_id){
-      $this->_view = "Protocole: ".$this->libelle;
-    } else {
-	    $this->_view = "Prescription du Dr ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
-	    if($this->libelle){
-	    	$this->_view .= "($this->libelle)";
-	    }
+    if($this->object_class != "CDossierMedical"){
+	    if(!$this->object_id){
+	      $this->_view = "Protocole: ".$this->libelle;
+	    } else {
+	      
+			    $this->_view = "Prescription du Dr ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
+			    if($this->libelle){
+			    	$this->_view .= "($this->libelle)";
+			    }
+	      }
+	    
+	    $this->loadRefCurrentPraticien();
     }
-    $this->loadRefCurrentPraticien();
   }
   
   function check() {  	
@@ -530,10 +535,12 @@ class CPrescription extends CMbObject {
   	  $object->loadRefsFwd();
   		
   		if($this->type !== "sejour"){
-  		  $this->praticien_id = $AppUI->_ref_user->isPraticien() ? $AppUI->_ref_user->_id : $object->_praticien_id;
+  		  if($this->type != 'traitement'){
+  		    $this->praticien_id = $AppUI->_ref_user->isPraticien() ? $AppUI->_ref_user->_id : $object->_praticien_id;
+  		  }
   		}
   		else {
-  			$this->praticien_id = $object->_praticien_id;
+  		   $this->praticien_id = $object->_praticien_id;
   		}
   	}
   }
@@ -699,9 +706,13 @@ class CPrescription extends CMbObject {
    * Forward Refs
    */
   function loadRefsFwd() {
-    $this->loadRefPraticien();
+    if($this->object_class != 'CDossierMedical'){
+      $this->loadRefPraticien();
+    }
     $this->loadRefObject();
-    $this->loadRefPatient();
+    if($this->object_class != 'CDossierMedical'){
+      $this->loadRefPatient();
+    }
   }
   
   /*
@@ -903,19 +914,6 @@ class CPrescription extends CMbObject {
           $this->_count_recent_modif[$chapitre] = true;
         }
       }
-    }
-    
-    // Parcours des lignes de TP
-    if($this->_ref_object->_ref_prescription_traitement->_id){
-      $prescription_tp =& $this->_ref_object->_ref_prescription_traitement;
-	    foreach($prescription_tp->_ref_prescription_lines_by_cat as $cat_atc_tp => $_lines_med_tp){
-	      foreach($_lines_med_tp as $_line_med_tp){
-	        $chapitre = $_line_med_tp->_is_injectable ? "inj" : "med";
-	        if($_line_med_tp->_recent_modification){
-	          $this->_count_recent_modif[$chapitre] = true;
-	        }
-	      }
-	    }  
     }
     
     // Parcours des lignes de perfusions
@@ -1334,11 +1332,6 @@ class CPrescription extends CMbObject {
   function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true){  
     // Stockage du tableau de ligne de medicaments
   	$lines["medicament"] = $this->_ref_prescription_lines;
-    if($this->object_id && !$mode_dispensation){
-      if(isset($this->_ref_object->_ref_prescription_traitement)){
-  	    $lines["traitement"] = $this->_ref_object->_ref_prescription_traitement->_ref_prescription_lines;
-      }
-    }
     
   	// Parcours des lignes
     foreach($lines as $cat_name => $lines_cat){

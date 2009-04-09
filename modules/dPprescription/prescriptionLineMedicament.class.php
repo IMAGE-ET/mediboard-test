@@ -1,10 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPprescription
- *	@version $Revision: $
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 /**
@@ -31,6 +32,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   var $substitution_active  = null;    
   var $substitution_plan_soin = null;
+  var $traitement_personnel = null;
   
   static $voies = array("Voie systémique"                 => array("injectable" => false, "perfusable" => false), 
                         "Voie endocervicale"              => array("injectable" => false, "perfusable" => false), 
@@ -100,7 +102,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   // Form Field
   var $_unites_prise    = null;
   var $_specif_prise    = null;
-  var $_traitement      = null;
   var $_count_substitution_lines = null;
   var $_ucd_view        = null;
   var $_is_perfusable   = null;
@@ -110,7 +111,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_prescription = null;
   var $_ref_produit      = null;
   var $_ref_posologie    = null;
-  var $_ref_prescription_traitement = null;
   var $_ref_substitution_lines = null;
   var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
   
@@ -168,9 +168,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPrescriptionLineMedicament";
     $specs["substitution_active"]  = "bool";
     $specs["_unite_prise"]         = "str";
-    $specs["_traitement"]          = "bool";
     $specs["voie"]                 = "str";
     $specs["substitution_plan_soin"] = "bool";
+    $specs["traitement_personnel"] = "bool";
     return $specs;
   }
   
@@ -215,15 +215,11 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	    	$this->_duree_prise .= " pendant ".$this->duree." ".CAppUI::tr("CPrescriptionLineMedicament.unite_duree.".$this->unite_duree);
 	    }
     }
-    if($this->_ref_prescription->type === "traitement"){
-    	$this->_traitement = "1";
-    }
 
     // Calcul de la fin reelle de la ligne
     $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
-    if(!$this->_traitement){
-      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";    	
-    }
+    $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";    	
+
     if($this->date_arret){
     	$this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";

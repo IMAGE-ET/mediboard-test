@@ -41,7 +41,7 @@
 	    <a href="#{{$line->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 	        {{$line->_ucd_view}}
-	        {{if $line->_traitement}} (Traitement perso){{/if}}
+	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}
 	        {{$line->_view}}

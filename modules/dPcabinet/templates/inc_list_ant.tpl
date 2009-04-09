@@ -50,7 +50,24 @@ Traitement = {
   }
 };
 
+// Transfert de la ligne du dossier medical vers la prescription de sejour
+transfertLineTP = function(line_id, sejour_id){
+  var oForm = document.transfert_line_TP;
+  $V(oForm.prescription_line_medicament_id, line_id);
+  $V(oForm.sejour_id, sejour_id);
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+    DossierMedical.reloadDossierSejour();
+  } } );
+}
+
 </script>
+
+<form name="transfert_line_TP" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="sejour_id" value="" />
+</form>
 
 {{if $dossier_medical->_count_cancelled_antecedents}}
 <button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
@@ -104,9 +121,48 @@ Traitement = {
 	{{/if}}
 </ul>
 
+{{if $dossier_medical->_ref_prescription}}
+	<strong>Traitements du patient</strong>
+	<ul>
+	{{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}
+	  <li>
+	    <form name="delTraitementDossierMedPat-{{$_line->_id}}">
+	      <input type="hidden" name="m" value="dPprescription" />
+	      <input type="hidden" name="del" value="1" />
+	      <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+	      <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
+	      <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
+	        {{tr}}delete{{/tr}}
+	      </button>
+	      {{if $_is_anesth && $sejour->_id && ($user->_is_praticien || $can->admin)}}
+	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="transfertLineTP('{{$_line->_id}}','{{$sejour->_id}}');">
+	        {{tr}}Add{{/tr}}
+	      </button>
+	      {{/if}}       
+	      
+	      {{if $_line->fin}}
+		      Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
+		    {{elseif $_line->debut}}
+		      Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
+		    {{/if}}
+	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
+			    {{$_line->_ucd_view}}
+			  </span>
+		  </form>
+		</li>
+	{{/foreach}}
+	</ul>
+	{{if $dossier_medical->_ref_traitements|@count && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}
+  <hr style="width: 50%;" />
+  {{/if}}
+{{/if}}
+
+
 {{if is_array($dossier_medical->_ref_traitements)}}
 <!-- Traitements -->
+{{if !$dossier_medical->_ref_prescription}}
 <strong>Traitements du patient</strong>
+{{/if}}
 <ul>
   {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
   <li>
@@ -136,7 +192,9 @@ Traitement = {
     </form>
   </li>
   {{foreachelse}}
+  {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
   <li><em>Pas de traitements</em></li>
+  {{/if}}
   {{/foreach}}
 </ul>
 {{/if}}

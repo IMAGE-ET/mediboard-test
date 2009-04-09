@@ -1,11 +1,12 @@
 <?php
 
 /**
-* @package Mediboard
-* @subpackage dPboard
-* @version $Revision:
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $ds = CSQLDataSource::get("std");
 // Charge toutes les transmissions liées a un sejour si un sejour_id est passé

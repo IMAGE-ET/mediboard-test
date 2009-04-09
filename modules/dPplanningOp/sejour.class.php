@@ -732,7 +732,6 @@ class CSejour extends CCodable {
     }
     $this->_count_prescriptions = count($prescriptions);
   	$this->_ref_prescriptions["pre_admission"] = new CPrescription();
-  	$this->_ref_prescriptions["traitement"] = new CPrescription();
   	$this->_ref_prescriptions["sejour"] = new CPrescription();
   	$this->_ref_prescriptions["sortie"] = new CPrescription();
   	
@@ -740,16 +739,6 @@ class CSejour extends CCodable {
   	foreach($prescriptions as $_prescription){
 	    $this->_ref_prescriptions[$_prescription->type] = $_prescription;
   	}
-  }
-  
-  
-  function loadRefPrescriptionTraitement(){
-    $prescription = new CPrescription();
-    $prescription->type = "traitement";
-    $prescription->object_id = $this->_id;
-    $prescription->object_class = $this->_class_name;
-    $prescription->loadMatchingObject();
-  	$this->_ref_prescription_traitement = $prescription;
   }
   
   function loadListConstantesMedicales() {
@@ -965,29 +954,6 @@ class CSejour extends CCodable {
     $template->addProperty("Sejour - Diagnostic Principal"    , $diag);
     $diag = $this->DR ? "$this->DR: {$this->_ext_diagnostic_relie->libelle}" : null;
     $template->addProperty("Sejour - Diagnostic Relié"        , $diag);
-    
-    $str = '';
-    $this->loadRefPrescriptionTraitement();
-    if ($this->_ref_prescription_traitement->_id) {
-      $this->_ref_prescription_traitement->loadRefsLinesMed();
-      if ($this->_ref_prescription_traitement->_ref_prescription_lines) {
-        foreach ($this->_ref_prescription_traitement->_ref_prescription_lines as $line) {
-          $str .= "&bull; {$line->_ref_produit->libelle}<br />";
-        }
-      }
-    }
-    
-    $str = '';
-    $this->loadRefPrescriptionTraitement();
-    if ($this->_ref_prescription_traitement->_id) {
-      $this->_ref_prescription_traitement->loadRefsLinesMed();
-      if ($this->_ref_prescription_traitement->_ref_prescription_lines) {
-        foreach ($this->_ref_prescription_traitement->_ref_prescription_lines as $line) {
-          $str .= "&bull; {$line->_ref_produit->libelle}<br />";
-        }
-      }
-    }
-    $template->addProperty("Sejour - Prescriptions", $str);
     $template->addProperty("Sejour - Remarques", $this->rques);
   }
   

@@ -1,4 +1,4 @@
-{{if $prescription->object_class == "CSejour" && $prescription->type != "sortie" && !$line->_traitement}}
+{{if $prescription->object_class == "CSejour" && $prescription->type != "sortie"}}
 	{{if $line->_perm_edit}}
 	  {{assign var=line_class value=$line->_class_name}}
 	  {{assign var=line_id value=$line->_id}}
