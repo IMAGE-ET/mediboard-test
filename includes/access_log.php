@@ -11,7 +11,7 @@
 global $m, $action;
 
 $ds = CSQLDataSource::get("std");
-if (!$ds->loadTable("access_log")) {
+if (!$ds->loadTable("access_log") || !$action) { // $sction is not defined when the module is inactive
   return;
 }
 
