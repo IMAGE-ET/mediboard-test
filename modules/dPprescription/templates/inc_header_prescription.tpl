@@ -248,12 +248,14 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 							
 							<br />
 				 				{{if $prescription->type != "externe"}}
-				 				Intervention
-				 				  <select name="operation_id">
-				 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
-				 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
-				 				    {{/foreach}}
- 									</select>
+				 				  {{if $prescription->_dates_dispo}}
+					 				  Intervention
+					 				  <select name="operation_id">
+					 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
+					 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
+					 				    {{/foreach}}
+	 									</select>
+ 									{{/if}}
 				 				{{else}}
 				 				  <!-- Prescription externe -->
 									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
