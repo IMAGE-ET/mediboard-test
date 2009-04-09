@@ -1,10 +1,10 @@
-/* $Id$ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage includes
  * @version $Revision$
- * @author OpenXtrem
+ * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
