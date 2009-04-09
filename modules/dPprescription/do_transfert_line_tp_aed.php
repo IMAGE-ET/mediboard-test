@@ -20,9 +20,10 @@ $sejour->load($sejour_id);
 // Chargement des prescriptions du sejour
 $prescription = new CPrescription();
 $sejour->loadRefsPrescriptions();
-if(!array_key_exists("sejour", $sejour->_ref_prescriptions)){
+
+if(!$sejour->_ref_prescriptions["sejour"]->_id){
   // Si la prescription de pre-admission n'existe pas, on la crée
-  if(!array_key_exists("pre_admission", $sejour->_ref_prescriptions)){
+  if(!$sejour->_ref_prescriptions["pre_admission"]->_id){
     $prescription_preadm = new CPrescription();
 	  $prescription_preadm->object_id = $sejour->_id;
 	  $prescription_preadm->object_class = $sejour->_class_name;
@@ -35,10 +36,12 @@ if(!array_key_exists("sejour", $sejour->_ref_prescriptions)){
   $prescription_sejour->object_class = $sejour->_class_name;
   $prescription_sejour->type = "sejour";
   $msg = $prescription_sejour->store();
+  
   $AppUI->displayMsg($msg, "CPrescription-msg-create");
 } else {
   $prescription_sejour = $sejour->_ref_prescriptions["sejour"];
 }
+
 
 $line = new CPrescriptionLineMedicament();
 $line->load($prescription_line_medicament_id);
