@@ -11,6 +11,7 @@ global $AppUI;
 $echange_hprim_id         = mbGetValueFromGet("echange_hprim_id");
 $echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
 
+$where = '';
 if (!$echange_hprim_id) {
 	$echange_hprim = new CEchangeHprim();
 	$where['date_echange'] = "IS NULL";

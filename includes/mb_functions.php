@@ -146,23 +146,23 @@ function mbGetValueFromSession($key, $default = null) {
  * @return CMbObject
  **/
 function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
- 	$object_class = mbGetValueFromGet($class_key);
-	$object_id    = mbGetValueFromGet($id_key);
-	$object_guid  = "$object_class-$object_id";
+  $object_class = mbGetValueFromGet($class_key);
+  $object_id    = mbGetValueFromGet($id_key);
+  $object_guid  = "$object_class-$object_id";
 
-	if ($guid_key) {
-	  $object_guid = mbGetValueFromGet($guid_key, $object_guid);
-	}
+  if ($guid_key) {
+    $object_guid = mbGetValueFromGet($guid_key, $object_guid);
+  }
 
-	$object = CMbObject::loadFromGuid($object_guid);
+  $object = CMbObject::loadFromGuid($object_guid);
 
   // Redirection
   if (!$object || !$object->_id) {
-	  global $AppUI, $ajax;
-	  $AppUI->redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
-	}
-	
-	return $object;
+    global $AppUI, $ajax;
+    $AppUI->redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
+  }
+  
+  return $object;
 }
 
 
@@ -265,7 +265,7 @@ function mbTransformTime($relative = null, $ref = null, $format) {
   
   $timestamp = $ref ? strtotime($ref) : time();
   if ($relative) {
-  	$timestamp = strtotime($relative, $timestamp);
+    $timestamp = strtotime($relative, $timestamp);
   } 
   return strftime($format, $timestamp);
 }
@@ -318,7 +318,7 @@ function mbTime($relative = null, $ref = null) {
  * @return int: number of intervals
  **/
 function mbTimeCountIntervals($reference, $relative, $interval) {
-	$zero = strtotime("0:00:00");
+  $zero = strtotime("0:00:00");
   $refStamp = strtotime($reference) - $zero;
   $relStamp = strtotime($relative ) - $zero;
   $intStamp = strtotime($interval ) - $zero;
@@ -441,28 +441,28 @@ class CMbDate {
    * @return array("unit" => string, "count" => int)
    */
   static function relative($from, $to = null, $min_count = 2) {
-	  if (!$from) {
-	    return null;
-	  }
+    if (!$from) {
+      return null;
+    }
     
-	  if (!$to) {
-	    $to = mbDateTime();
-	  }
-	  
-	  // Compute diff in seconds
-	  $diff = strtotime($to) - strtotime($from);
-	  
-	  // Find the best unit
-	  foreach (self::$secs_per as $unit => $secs) {
-	    if (abs($diff / $secs) > $min_count) {
-	    	break;
-	    }
-	  }
+    if (!$to) {
+      $to = mbDateTime();
+    }
+    
+    // Compute diff in seconds
+    $diff = strtotime($to) - strtotime($from);
+    
+    // Find the best unit
+    foreach (self::$secs_per as $unit => $secs) {
+      if (abs($diff / $secs) > $min_count) {
+        break;
+      }
+    }
 
-	  return array (
-	    "unit" => $unit, 
-	    "count" => intval($diff / $secs)
-	  );
+    return array (
+      "unit" => $unit, 
+      "count" => intval($diff / $secs)
+    );
   }
 }
 
@@ -650,7 +650,7 @@ function mbPortalURL( $page="Accueil", $tab = null) {
   $url .= $page == "tracker" ?
     "/tiki-view_tracker.php?trackerId=4" :
     "tiki-index.php?page=mod-$page";
-	
+  
   $url .= ($tab) ? "-tab-$tab" : "";
   return $url;
 }
@@ -658,17 +658,17 @@ function mbPortalURL( $page="Accueil", $tab = null) {
  * Loads all scripts
  */
 function mbLoadScripts($modeReturn = 0) {
-	$affichageScript = null;
+  $affichageScript = null;
     
   $affichageScript .= mbLoadScript("lib/jscalendar/calendar.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/jscalendar/lang/calendar-fr.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
   
-	// Prototype JS & Scriptaculous
+  // Prototype JS & Scriptaculous
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
-	
-	// Livepipe UI
+  
+  // Livepipe UI
   $affichageScript .= mbLoadScript("lib/livepipe/livepipe.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/livepipe/tabs.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/livepipe/window.js",$modeReturn);
@@ -806,7 +806,7 @@ function getMbClasses($properties = array()) {
     // Classe instanciée ?
     if (!$object->_class_name) {
       unset($classes[$key]);
-    	continue;
+      continue;
     }
   }
   
@@ -827,14 +827,14 @@ function getInstalledClasses($properties = array()) {
     // Installed module ?
     if ($object->_ref_module === null) {
       unset($classes[$key]);
-    	continue;
+      continue;
     }
 
     // Storable class ?
-	  if (!$object->_spec->table) {
+    if (!$object->_spec->table) {
       unset($classes[$key]);
-    	continue;
-	  }
+      continue;
+    }
   }
   
   return $classes;
@@ -845,9 +845,9 @@ function getInstalledClasses($properties = array()) {
  * @return bool
  */
 function has_default_constructor($classname) {
-	$class = new ReflectionClass($classname);
-	$constructor = $class->getConstructor();
-	return ($constructor->getNumberOfParameters() == 0);
+  $class = new ReflectionClass($classname);
+  $constructor = $class->getConstructor();
+  return ($constructor->getNumberOfParameters() == 0);
 }
 
 /**
@@ -995,6 +995,11 @@ function is_intranet_ip($ip) {
     ($ip[0] == 10)  ||
     ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] < 32) ||
     ($ip[0] == 192 && $ip[1] == 168);*/
+  
+  // ipv6 en local
+  if ($ip == "::1"){
+    return true;
+  }
     
   $browserIP = explode(".", $ip);
   $ip0 = intval($browserIP[0]);
