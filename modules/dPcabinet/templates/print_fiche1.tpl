@@ -122,12 +122,32 @@
                 <i>{{$curr_trmt->traitement}}</i>
               </li>
               {{foreachelse}}
+              {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
               <li>Pas de traitements</li>
+              {{/if}}
               {{/foreach}}
             </ul>
           </td>
         </tr>
         <tr>
+          <td>
+            <ul>
+			        {{if $dossier_medical->_ref_prescription}}
+					      {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
+					        <li>
+					          {{$_line_med->_view}}
+					          {{if $_line_med->_ref_prises|@count}}
+						          ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
+						            {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+						          {{/foreach}})
+					          {{/if}}
+					        </li>
+					      {{/foreach}}
+					    {{/if}}
+		        </ul>
+		      </td>
+		    </tr>
+		    <tr>
           <th class="category">Allergies</th>
         </tr>
         <tr>

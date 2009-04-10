@@ -35,12 +35,21 @@ if ($consultation_id) {
   $praticien =& $consult->_ref_chir;
   $patient =& $consult->_ref_patient;
   $patient->loadRefDossierMedical();
-  $patient->_ref_dossier_medical->loadRefsAntecedents();
-  $patient->_ref_dossier_medical->loadRefsTraitements();
-  $patient->_ref_dossier_medical->loadRefsEtatsDents();
+  $dossier_medical =& $patient->_ref_dossier_medical;
+  
+  // Chargement des elements du dossier medical
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->loadRefsTraitements();
+  $dossier_medical->loadRefsEtatsDents();
+  $dossier_medical->loadRefPrescription();
+  if($dossier_medical->_ref_prescription){
+	  foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line){
+	    $_line->loadRefsPrises();
+	  }
+  }
   $etats = array();
-  if (is_array($patient->_ref_dossier_medical->_ref_etats_dents)) {
-    foreach($patient->_ref_dossier_medical->_ref_etats_dents as $etat) {
+  if (is_array($dossier_medical->_ref_etats_dents)) {
+    foreach($dossier_medical->_ref_etats_dents as $etat) {
       if ($etat->etat != null) {
         switch ($etat->dent) {
           case 10: 

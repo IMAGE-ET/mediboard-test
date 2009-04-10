@@ -237,13 +237,14 @@
       </table>
     </td>
   	
-    {{if is_array($dossier_medical->_ref_traitements)}}
+    {{if is_array($dossier_medical->_ref_traitements) || $dossier_medical->_ref_prescription}}
     <!-- Traitements -->
     <td class="halfPane">
       <table width="100%">
         <tr>
           <th class="category">Traitements</th>
         </tr>
+        {{if is_array($dossier_medical->_ref_traitements)}}
         <tr>
           <td>
             <ul>
@@ -257,15 +258,35 @@
                 <i>{{$curr_trmt->traitement}}</i>
               </li>
               {{foreachelse}}
-              <li>Pas de traitements</li>
+	              {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
+	              <li>Pas de traitements</li>
+	              {{/if}}
               {{/foreach}}
             </ul>
           </td>
         </tr>
+        {{/if}}
+        <tr>
+          <td>
+            <ul>
+			        {{if $dossier_medical->_ref_prescription}}
+					      {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line_med}}
+					        <li>
+					          {{$_line_med->_view}}
+					          {{if $_line_med->_ref_prises|@count}}
+						          ({{foreach from=$_line_med->_ref_prises item=_prise name=foreach_prise}}
+						            {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+						          {{/foreach}})
+					          {{/if}}
+					        </li>
+					      {{/foreach}}
+					    {{/if}}
+		        </ul>
+		      </td>
+		    </tr>
       </table>
     </td>
     {{/if}}
-    
     </tr>
     <tr>
     
