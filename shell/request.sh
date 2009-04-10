@@ -23,8 +23,8 @@ fi
    
 url="$1"
 login=login=1
-user=&username=$2
-pass=&password=$3
+user="&username=$2"
+pass="&password=$3"
 params="&$4"
 times=$5
 delay=$6

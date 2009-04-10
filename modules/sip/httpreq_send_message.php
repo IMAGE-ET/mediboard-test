@@ -11,12 +11,29 @@ global $AppUI;
 $echange_hprim_id         = mbGetValueFromGet("echange_hprim_id");
 $echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
 
-if ($echange_hprim_id) {
+if (!$echange_hprim_id) {
 	$echange_hprim = new CEchangeHprim();
 	$where['date_echange'] = "IS NULL";
-  $echanges = $echange_hprim->loadList($where);
+  $notifications = $echange_hprim->loadList($where);
   
-  mbTrace($echanges);
+  foreach ($notifications as $notification) {
+    $dest_hprim = new CDestinataireHprim();
+	  $dest_hprim->destinataire = $notification->destinataire;
+	  $dest_hprim->loadMatchingObject();
+	  
+	  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
+	    trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+	  }
+	  
+	  // Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
+	  if (null == $acquittement = $client->evenementPatient($notification->message)) {
+	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
+	  }
+	  
+	  $notification->date_echange = mbDateTime();
+	  $notification->acquittement = $acquittement;
+	  $notification->store();
+  }
 } else {
 	// Chargement de l'objet
 	$echange_hprim = new $echange_hprim_classname;
