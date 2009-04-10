@@ -1,14 +1,15 @@
-<?php /* $Id: plageressource.class.php 703 2006-09-01 16:21:47Z maskas $ */
+<?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPressources
-* @version $Revision: 703 $
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 /**
- * Stores id linkage between Mediboard and Sante400 records
+ * @abstract Stores id linkage between Mediboard and other system records
  */
  class CIdSante400 extends CMbMetaObject {
   // DB Table key

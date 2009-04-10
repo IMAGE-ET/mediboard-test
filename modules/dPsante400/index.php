@@ -1,16 +1,19 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPressources
-* @version $Revision: $
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("view_identifiants", "Identifiants Externes", TAB_READ);
-$module->registerTab("stats_identifiants", "Statistiques identifiants", TAB_READ);
-$module->registerTab("synchro_sante400", "Synchronisation ID Externes", TAB_EDIT);
+$module->registerTab("view_identifiants" , null, TAB_READ);
+$module->registerTab("stats_identifiants", null, TAB_READ);
+$module->registerTab("synchro_sante400"  , null, TAB_EDIT);
+$module->registerTab("easycom"  , null, TAB_EDIT);
 
 ?>

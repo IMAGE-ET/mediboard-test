@@ -713,7 +713,7 @@ class CMbObject {
       return;
     }
     
-    foreach ($mbObject->getDBFields() as $propName => $propValue) {
+    foreach ($mbObject->getValues() as $propName => $propValue) {
       if ($propValue !== null) {
         $this->$propName = $propValue;
       }

@@ -3,8 +3,9 @@
 /**
  * @package Mediboard
  * @subpackage ecap
- * @version $Revision: 2321 $
- * @author Thomas Despoix
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 $patient = new CPatient();

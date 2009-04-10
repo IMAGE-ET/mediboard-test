@@ -1,11 +1,12 @@
-<?php /* $Id: view_compta.php 331 2006-07-13 14:26:26Z Rhum1 $ */
+<?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPressources
-* @version $Revision: 331 $
-* @author Romain OLLIVIER
-*/
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $can;
 $can->needsRead();

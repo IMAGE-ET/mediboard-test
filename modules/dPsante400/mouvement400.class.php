@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id: $ */
+
+/**
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireModuleClass("dPsante400", "recordsante400");
 
@@ -9,7 +17,6 @@ class CMouvement400 extends CRecordSante400 {
   protected $prodField = null;
   protected $idField = null;
   protected $typeField = null;
-  protected $groupField = null;
   
   public $statuses = array(null, null, null, null, null, null, null, null);
   public $cached   = array(null, null, null, null, null, null, null, null);
@@ -24,7 +31,7 @@ class CMouvement400 extends CRecordSante400 {
   function initialize() {
     // Consume metadata
     $this->when = $this->consumeDateTimeFlat("TRDATE", "TRHEURE");
-    $this->rec = $this->consume($this->idField);
+    $this->rec  = $this->consume($this->idField);
     $this->prod = $this->consume($this->prodField);
     $this->type = $this->consume($this->typeField);
     
@@ -53,9 +60,6 @@ class CMouvement400 extends CRecordSante400 {
    * @return array|CMouvement400
    */
   function loadList($marked = false, $max = 100) {
-    global $dPconfig;
-    $idConfig = $dPconfig["dPsante400"];
-
     $query = "SELECT * FROM $this->base.$this->table";
     $query.= $this->getMarkedClause($marked);
     $query.= $this->getFilterClause();
@@ -70,7 +74,7 @@ class CMouvement400 extends CRecordSante400 {
     }
     
     if (count($mouvs)) {
-      if ($idConfig["mark_row"]) {
+      if (CAppUI::conf("dPsante400 mark_row")) {
         $recs = join($recs, ",");
         
         $query = "UPDATE $mouv->base.$mouv->table " .
@@ -87,20 +91,7 @@ class CMouvement400 extends CRecordSante400 {
   }
   
   function getFilterClause() {
-    if (!$this->groupField) {
-      return;
-    }
-
-    global $dPconfig;
-    $idConfig = $dPconfig["dPsante400"];
-    
-    $group_id = $idConfig["group_id"];
-    $beforeField = "B_$this->groupField";
-    $afterField  = "A_$this->groupField";
-
-    return  $group_id ? 
-      "\n AND ($beforeField = '$group_id' OR $afterField = '$group_id')" : 
-      "";
+    return;
   }
 
   function getMarkedClause($marked) {
@@ -114,13 +105,13 @@ class CMouvement400 extends CRecordSante400 {
   }
 
   function count($marked = false) {
-    $req = new CRecordSante400();
+    $record = new CRecordSante400();
     $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
     $query.= $this->getMarkedClause($marked);
     $query.= $this->getFilterClause();
-    $req->query($query);
+    $record->query($query);
 
-    return $req->consume("TOTAL");
+    return $record->consume("TOTAL");
   }
   
   /**
@@ -128,19 +119,14 @@ class CMouvement400 extends CRecordSante400 {
    * @return int the number of deleted mouvements
    */
   function purge($marked = false) {
-    $req = new CRecordSante400();
+    $record = new CRecordSante400();
     $query = "DELETE  FROM $this->base.$this->table";
     $query.= $this->getMarkedClause($marked);
     $query.= $this->getFilterClause();
-    return $req->query($query);
-
-//    return $req->consume("TOTAL");
+    return $record->query($query);
   }
   
   function load($rec) {
-    global $dPconfig;
-    $idConfig = $dPconfig["dPsante400"];
-
     $query = "SELECT * FROM $this->base.$this->table" .
         "\n WHERE $this->idField = ?";
 
@@ -152,7 +138,7 @@ class CMouvement400 extends CRecordSante400 {
     $this->initialize();
 
     // Checkout
-    if ($idConfig["mark_row"]) {
+    if (CAppUI::conf("dPsante400 mark_row")) {
       $query = "UPDATE $this->base.$this->table " .
           "\n SET $this->prodField = '========' " .
           "\n WHERE $this->idField = ?";

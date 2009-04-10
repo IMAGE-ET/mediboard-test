@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id: $ */
+
+/**
+ * @package Mediboard
+ * @subpackage ecap
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireModuleClass("dPsante400", "mouvsejourecap");
 
@@ -6,12 +14,7 @@ class CMouvAttendueECap extends CMouvSejourEcap {
   
   function __construct() {
     parent::__construct();
-    $this->base = "ECAPFILE";
     $this->table = "TRATT";
-    $this->prodField = "ETAT";
-    $this->idField = "INDEX";
-    $this->typeField = "TRACTION";
-    $this->groupField = "CIDC";
   }
 
   function synchronize() {

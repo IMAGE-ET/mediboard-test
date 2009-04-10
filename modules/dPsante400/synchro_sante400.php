@@ -1,24 +1,14 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPsante4OO
-* @version $Revision: 331 $
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-global $can, $dPconfig;
-
-//CRecordSante400::connect();
-//CRecordSante400::$verbose = true;
-//$record = new CRecordSante400();
-//$query = "UPDATE ECAPFILE.TRSJ0 
-//	 SET ETAT = 'TOTOTOTO' 
-//	 WHERE INDEX = ?";
-//$values = array("801817636");
-//$record->query($query, $values);
-//return;
-
+global $can;
 $can->needsEdit();
 
 set_time_limit(90);
@@ -29,7 +19,7 @@ $types = CMouvFactory::getTypes();
 $type = mbGetValueFromGetOrSession("type", reset($types));
 
 $marked = mbGetValueFromGetOrSession("marked", "1");
-$max = mbGetValueFromGet("max", $dPconfig["dPsante400"]["nb_rows"]);
+$max = mbGetValueFromGet("max", CAppUI::conf("dPsante400 nb_rows"));
 
 // Load mouvements
 $mouv = CMouvFactory::create($type);

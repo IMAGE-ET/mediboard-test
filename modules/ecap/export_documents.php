@@ -1,11 +1,12 @@
-<?php
+<?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage ecap
-* @version $Revision: 2165 $
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage ecap
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $can;
 $can->needsRead();

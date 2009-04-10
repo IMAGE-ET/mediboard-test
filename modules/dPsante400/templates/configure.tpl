@@ -51,7 +51,6 @@ var Moves = {
       <select name="{{$mod}}[{{$var}}]">
         <option value="default" {{if $dPconfig.$mod.$var == "default"}}selected="selected"{{/if}}>Par défaut</option>
         <option value="medicap" {{if $dPconfig.$mod.$var == "medicap"}}selected="selected"{{/if}}>Medicap</option>
-        <option value="tonkin"  {{if $dPconfig.$mod.$var == "tonkin"}}selected="selected"{{/if}}>Tonkin</option>
       </select>
     </td>
   </tr> 
@@ -171,7 +170,8 @@ var Moves = {
     <td>
       <label for="PurgeType" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
       <select id="PurgeType" name="type">
-        {{foreach from=$types item=_type}}        
+        <option value="all">&mdash; {{tr}}All{{/tr}}</option>
+        {{foreach from=$types item=_type}}
         <option value="{{$_type}}">{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
         {{foreachelse}}
         <option value="">Pas de type disponible</option>
@@ -182,6 +182,7 @@ var Moves = {
       
 	    <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
 	    <select id="PurgeMarked" name="marked">
+        <option value="all">&mdash; {{tr}}All{{/tr}}</option>
 	      <option value="0">{{tr}}CMouvement400-marked-0{{/tr}}</option>
 	      <option value="1">{{tr}}CMouvement400-marked-1{{/tr}}</option>
 	    </select>

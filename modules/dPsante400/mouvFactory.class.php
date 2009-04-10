@@ -1,11 +1,12 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPsante400
-* @version $Revision: $
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 // Mouvement factory
 
@@ -17,9 +18,6 @@ class CMouvFactory {
       "intervention" => "CMouvInterventionECap",
 //      "attendue" => "CMouvAttendueECap",
     ),
-    "tonkin" => array (
-      "sejour" => "CMouvSejourTonkin"
-    ),
   );
 
   /**
@@ -27,8 +25,7 @@ class CMouvFactory {
    * @return array the types, null for invalid compat
    */
   static function getTypes() {
-    global $dPconfig;
-		if (null == $mode_compat = $dPconfig["interop"]["mode_compat"]) {
+		if (null == $mode_compat = CAppUI::conf("interop mode_compat")) {
 		  trigger_error("Mode de compatibilité non initalisé", E_USER_ERROR);
 		  return;
 		}
@@ -48,8 +45,7 @@ class CMouvFactory {
    * @return CMouvement400 concrete instance, null for unhandled type
    */
   static function create($type) {
-    global $dPconfig;
-    $mode_compat = $dPconfig["interop"]["mode_compat"];
+    $mode_compat = CAppUI::conf("interop mode_compat");
     if (null == $class = @self::$matrix[$mode_compat][$type]) {
       trigger_error("Pas de gestionnaire en mode de compatibilité '$mode_compat' et type de mouvement '$type'", E_USER_ERROR);
     }

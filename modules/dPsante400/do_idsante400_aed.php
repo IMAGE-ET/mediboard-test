@@ -1,11 +1,12 @@
-<?php /* $Id: do_plageressource_aed.php 23 2006-05-04 15:05:35Z MyttO $ */
+<?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPsante400
-* @version $Revision: 23 $
-* @author Thomas Despoix
-**/
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $do = new CDoObjectAddEdit("CIdSante400", "id_sante400_id");
 

@@ -1,10 +1,11 @@
-<?php /* $Id: print_rapport.php 2321 2007-07-19 08:14:45Z alexis_granger $ */
+<?php /* $Id: $ */
 
 /**
  * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision: 2321 $
- * @author Romain Ollivier
+ * @subpackage ecap
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $can;

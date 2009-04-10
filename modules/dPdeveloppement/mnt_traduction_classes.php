@@ -173,10 +173,12 @@ if ($module == "system") {
   }
 }
 
-// Ajout des onglets
+// Ajout du module et des onglets
 CAppUI::requireModuleFile($module, "index");
+addLocale("Module", "Module", "module-$module-court");
+addLocale("Module", "Module", "module-$module-long");
 foreach (CModule::getInstalled($module)->_tabs as $_tab) {
-  addLocale("Tabs", "tabs", "mod-$module-tab-" . $_tab[0]);
+  addLocale("Module", "Tabs", "mod-$module-tab-" . $_tab[0]);
 }
 
 // Création du template

@@ -2,10 +2,12 @@
 
 /**
  * @package Mediboard
- * @subpackage dPsante400
+ * @subpackage sante400
  * @version $Revision: $
- * @author Thomas Despoix
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 
 class CSetupdPsante400 extends CSetup {
   

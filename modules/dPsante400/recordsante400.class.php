@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id: $ */
+
+/**
+ * @package Mediboard
+ * @subpackage sante400
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 class CRecordSante400 {
   static $dbh = null;
@@ -22,10 +30,9 @@ class CRecordSante400 {
       return;
     }
 
-    global $dPconfig;
-    $dsnConfig = $dPconfig["dPsante400"];
+    $dsConfig = CAppUI::conf("dPsante400");
     
-    if (null == $dsn = $dsnConfig["dsn"]) {
+    if (null == $dsn = $dsConfig["dsn"]) {
       trigger_error("Data Source Name not defined, please configure module", E_USER_ERROR);
       CApp::rip();
     }
@@ -37,7 +44,7 @@ class CRecordSante400 {
     self::$chrono =& CSQLDataSource::$dataSources[$dsn]->chrono;
     
     self::$chrono->start();
-    self::$dbh = new PDO("odbc:$dsn", $dsnConfig["user"], $dsnConfig["pass"]);
+    self::$dbh = new PDO("odbc:$dsn", $dsConfig["user"], $dsConfig["pass"]);
     self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     self::$chrono->stop("connection");

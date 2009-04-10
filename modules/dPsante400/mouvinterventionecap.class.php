@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id: $ */
+
+/**
+ * @package Mediboard
+ * @subpackage ecap
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireModuleClass("dPsante400", "mouvsejourecap");
 
@@ -6,12 +14,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
   
   function __construct() {
     parent::__construct();
-    $this->base = "ECAPFILE";
     $this->table = "TRINT";
-    $this->prodField = "ETAT";
-    $this->idField = "INDEX";
-    $this->typeField = "TRACTION";
-    $this->groupField = "CIDC";
   }
 
   function synchronize() {
@@ -261,7 +264,8 @@ class CMouvInterventionECap extends CMouvSejourEcap {
 
   function syncActes($CINT) {
     // Ne synchroniser ler actes qu'après validation
-    if (!in_array("CBLQ", $this->changedFields) || $this->consume("CBLQ") !== "03") {
+    if ($this->consume("CBLQ") !== "03") {
+//    if (!in_array("CBLQ", $this->changedFields) || $this->consume("CBLQ") !== "03") {
       $this->starStatus(self::STATUS_ACTES);
       return;
     }

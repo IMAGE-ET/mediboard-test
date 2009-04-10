@@ -1,8 +1,16 @@
-<?php
+<?php /* $Id: $ */
 
-CAppUI::requireModuleClass("dPsante400", "mouvement400");
+/**
+ * @package Mediboard
+ * @subpackage ecap
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-class CMouvSejourEcap extends CMouvement400 {  
+CAppUI::requireModuleClass("ecap", "mouvementecap");
+
+class CMouvSejourEcap extends CMouvementEcap {  
   const STATUS_ETABLISSEMENT = 0;
   const STATUS_FONCSALL      = 1;
   const STATUS_PRATICIEN     = 2;
@@ -39,12 +47,8 @@ class CMouvSejourEcap extends CMouvement400 {
   protected $dheCINT = null;
   
   function __construct() {
-    $this->base = "ECAPFILE";
+    parent::__construct();
     $this->table = "TRSJ0";
-    $this->prodField = "ETAT";
-    $this->idField = "INDEX";
-    $this->typeField = "TRACTION";
-    $this->groupField = "CIDC";
   }
 
   function synchronize() {
@@ -305,8 +309,8 @@ class CMouvSejourEcap extends CMouvement400 {
 	    if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
 	    if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
     }
-    
-    $this->trace($praticien->getDBFields(), "Praticien à enregistrer");
+
+    $this->trace($praticien->getValues(), "Praticien à enregistrer");
     
     $id400Prat->bindObject($praticien, $pratDefault);
 
