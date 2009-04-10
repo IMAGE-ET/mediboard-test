@@ -163,6 +163,10 @@ class CIngresDataSource extends CSQLDataSource {
     return "";
   }
   
+  function prepareLike($value) {
+    return "LIKE '$value'";
+  }
+  
   function queriesForDSN($user, $pass, $base) {
     return array(); 
   }
