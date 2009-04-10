@@ -43,7 +43,11 @@ Main.add( function(){
 	  changePraticien(document.selPraticienLine.praticien_id.value);
   }
   initPuces();
-  refreshSelectProtocoles('{{$prescription->_ref_current_praticien->_id}}', '{{$prescription->_id}}');
+  if(document.selPraticienLine){
+    refreshSelectProtocoles(document.selPraticienLine.praticien_id.value, '{{$prescription->_id}}');
+  } else {
+    refreshSelectProtocoles('{{$prescription->_ref_current_praticien->_id}}', '{{$prescription->_id}}');
+  }
 } );
 
 submitProtocole = function(){
@@ -106,16 +110,28 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 
       <!-- Selection du praticien prescripteur de la ligne -->
        <div style="float: right">
+       	{{if !$mode_protocole && $prescription->type == "sejour"}}
+					<span style="float: right;">
+					  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
+					  {{if !$mode_pharma}}
+						  <button type="button" class="search" onclick="popupDossierMedPatient('{{$prescription->_ref_patient->_id}}','{{$prescription->object_id}}','{{$prescription->_id}}');">Traitements du patient</button>
+					  {{/if}}
+					</span>
+			  {{/if}}
+			  
         {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma)}}  
+        <br />
         Praticien:    
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} refreshSelectProtocoles(this.value, '{{$prescription->_id}}')">
 						<optgroup label="Responsables">
 				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
-						          value="{{$prescription->_ref_current_praticien->_id}}">{{$prescription->_ref_current_praticien->_view}}</option>
+						          value="{{$prescription->_ref_current_praticien->_id}}"
+						          {{if $prescription->_ref_current_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$prescription->_ref_current_praticien->_view}}</option>
 				      {{if @$operation->_ref_anesth->_id}}
 				        <option  class="mediuser" style="border-color: #{{$operation->_ref_anesth->_ref_function->color}};" 
-				                 value="{{$operation->_ref_anesth->_id}}">{{$operation->_ref_anesth->_view}}</option>
+				                 value="{{$operation->_ref_anesth->_id}}"
+				                 {{if $operation->_ref_anesth->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$operation->_ref_anesth->_view}}</option>
 				      {{/if}}
 				    </optgroup>
 				    <optgroup label="Tous les praticiens">
@@ -130,17 +146,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 				  </select>
 				</form>
 				{{/if}}
-				{{if !$mode_protocole && $prescription->type == "sejour"}}
-					<br />
-					<span style="float: right">
-					  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
-					  {{if !$mode_pharma}}
-						  <br />
-						  <button type="button" class="search" onclick="popupDossierMedPatient('{{$prescription->_ref_patient->_id}}','{{$prescription->object_id}}','{{$prescription->_id}}');">Traitements du patient</button>
-					  {{/if}}
-					</span>
-					
-			  {{/if}}
        </div>
 			
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
@@ -243,7 +248,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 			        <input type="hidden" name="del" value="0" />
 			        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			        
+			        <input type="hidden" name="pratSel_id" value="" />
 							<span id="select_protocole"></span>
 							
 							<br />
@@ -273,7 +278,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 					 				</script>				 				
 				 				{{/if}}
 			 				
-			          <button type="button" class="submit" onclick="submitProtocole(this.form);">Appliquer</button>
+			          <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
 		        </td>
 	        </tr>
 	      </table>

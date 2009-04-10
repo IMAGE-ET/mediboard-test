@@ -19,22 +19,27 @@ Main.add(window.print);
 	<table class="main">
 	  <tr>
 	    <td class="left">
-	      {{assign var=function value=$praticien->_ref_function}}
-	      
-	      <strong>Dr {{$praticien->_view}}</strong>
-	      <br />
-	      {{mb_title object=$praticien field=adeli}}
-	      {{mb_value object=$praticien field=adeli}}
-	      <br />
-	      {{$praticien->_ref_discipline->_view}}
-	      <br />
-	      {{mb_value object=$praticien field=titres}}
-	      <br />
+	      {{if $praticien->_id}}
+	        {{assign var=function value=$praticien->_ref_function}}
+		      <strong>Dr {{$praticien->_view}}</strong>
+		      <br />
+		      {{mb_title object=$praticien field=adeli}}
+		      {{mb_value object=$praticien field=adeli}}
+		      <br />
+		      {{$praticien->_ref_discipline->_view}}
+		      <br />
+		      {{mb_value object=$praticien field=titres}}
+		      <br />
+	      {{else}}
+	        Prescription globale
+	      {{/if}}
 	    </td>
 	    
 	    <td class="center">
 	      <h1>{{$etablissement->_view}}</h1>
-	      {{mb_value object=$function field=soustitre}}
+	      {{if @$function}}
+	        {{mb_value object=$function field=soustitre}}
+	      {{/if}}
 	    </td>
 	  
 	    <td class="right">

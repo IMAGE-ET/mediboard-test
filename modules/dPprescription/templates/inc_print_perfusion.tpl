@@ -1,4 +1,4 @@
-<li>
+<li>{{if !$praticien->_id}}({{$perf->_ref_praticien->_view}}){{/if}}
 	<strong>{{$perf->_view}}
 	{{if $perf->duree}}
 	  pendant {{$perf->duree}} heures

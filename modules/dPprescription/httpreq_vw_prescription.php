@@ -10,6 +10,8 @@
      
 global $AppUI, $can, $m;
 
+
+
 $can->needsRead();
 
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
@@ -27,6 +29,7 @@ $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
+$pratSel_id      = mbGetValueFromGetOrSession("pratSel_id");
 
 // Recuperation de l'operation_id stocké en session en salle d'op
 if(!$operation_id){
@@ -333,6 +336,9 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 
 // Chargement des fovoris 
 if($prescription->_id){
+  if($pratSel_id){
+    $prescription->_current_praticien_id = $pratSel_id;
+  }
 	if($prescription->object_id && $prescription->_current_praticien_id){
     $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
 	} else {
@@ -421,13 +427,13 @@ $_anesth_id = $anesth_id ? $anesth_id : ($AppUI->_ref_user->isFromType(array("An
                                             $AppUI->user_id : 
                                             ($operation->_id ? $operation->_ref_plageop->anesth_id : null));
                                             
+if(isset($operation->_ref_anesth->_id)){
+  unset($listPrats[$operation->_ref_anesth->_id]);
+}
+if(isset($prescription->_ref_current_praticien->_id)){
+  unset($listPrats[$prescription->_ref_current_praticien->_id]);
+}
 
-if($_chir_id){
-  unset($listPrats[$_chir_id]);
-}
-if($_anesth_id){
-  unset($listPrats[$_anesth_id]);
-}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -478,6 +484,7 @@ $smarty->assign("readonly",            $readonly && $prescription->object_id);
 $smarty->assign("lite", $lite);
 $smarty->assign("perfusion", new CPerfusion());
 $smarty->assign("operation_id", $operation_id);
+$smarty->assign("pratSel_id", $pratSel_id);
   
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);

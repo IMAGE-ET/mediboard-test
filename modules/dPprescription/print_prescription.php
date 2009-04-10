@@ -42,25 +42,26 @@ if($prescription->object_id){
 }
 
 // L'impression de la prescription par praticien n'est effectuée que dans le cadre de la prescription de sortie
-if($prescription->type != "sortie"){
-  $praticien_sortie_id = "";
-}
+//if($prescription->type != "sortie"){
+  //$praticien_sortie_id = "";
+//}
 
 // Chargement du praticien
+$praticien = new CMediusers();
 if($praticien_sortie_id){
-  $praticien = new CMediusers();
   $praticien->load($praticien_sortie_id);	
-} else {
-	$praticien =& $prescription->_ref_praticien;
 }
 
+// si le user courant est un praticien, on affiche ces lignes
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
 if($mediuser->isPraticien()){
 	$praticien = $mediuser;
 }
-$praticien->loadRefsFwd();
 
+if($praticien->_id){
+  $praticien->loadRefsFwd();
+}
 
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
