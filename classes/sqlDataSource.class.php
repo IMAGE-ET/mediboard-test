@@ -180,6 +180,13 @@ abstract class CSQLDataSource {
   abstract function version();  
   
   /**
+   * Prepares a LIKE clause with a given value to search
+   * @param string $value
+   * @return string The prepared like clause
+   **/
+  abstract function prepareLike($value);
+  
+  /**
    * Get queries for creation of a base on the server and a user with access to it
    * @param string $user user name
    * @param string $pass user password

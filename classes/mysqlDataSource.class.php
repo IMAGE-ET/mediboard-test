@@ -99,6 +99,11 @@ class CMySQLDataSource extends CSQLDataSource {
   function escape($value) {
     return mysql_escape_string($value);
   }
+  
+  function prepareLike($value) {
+    $value = preg_replace('`\\\\`', '\\\\\\', $value);
+    return "LIKE '$value'";
+  }
 
   function version() {
     return $this->loadResult("SELECT VERSION()");
@@ -112,15 +117,17 @@ class CMySQLDataSource extends CSQLDataSource {
     $queries["create-db"] = "CREATE DATABASE `$base` ;";
 
     // Create user with global permissions
-    $queries["global-privileges"] = "GRANT USAGE" .
-      "\nON * . * " .
-      "\nTO '$user'@'$host'" .
-      "\nIDENTIFIED BY '$pass';";
+    $queries["global-privileges"] = 
+      "GRANT USAGE
+        ON * . * 
+        TO '$user'@'$host'
+        IDENTIFIED BY '$pass';";
       
     // Grant user with database permissions
-    $queries["base-privileges"] = "GRANT ALL PRIVILEGES" .
-      "\nON `$base` . *" .
-      "\nTO '$user'@'$host';";
+    $queries["base-privileges"] = 
+      "GRANT ALL PRIVILEGES
+        ON `$base` . *
+        TO '$user'@'$host';";
     
     return $queries;
   }
