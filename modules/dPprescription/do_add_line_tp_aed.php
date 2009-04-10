@@ -52,29 +52,30 @@ $line->commentaire = $commentaire;
 $line->emplacement = "service";
 $msg = $line->store();
 
-$posos = explode("|", $token_poso);
-foreach($posos as $poso){
-  $explode_poso = explode("_", $poso);
-  $quantite    = @$explode_poso[0];
-  $unite_prise = @$explode_poso[1];
-  $moment      = @$explode_poso[2];
-  
-  if($moment){
-	  $moment_unitaire = new CMomentUnitaire();
-	  $moment_unitaire->libelle = "le $moment";
-	  $moment_unitaire->loadMatchingObject();
-  }
-	$prise_poso = new CPrisePosologie();
-	$prise_poso->object_id = $line->_id;
-	$prise_poso->object_class = $line->_class_name;
-	$prise_poso->unite_prise = $unite_prise;
-	$prise_poso->quantite = $quantite;
-	if($moment && $moment_unitaire->_id){
-	  $prise_poso->moment_unitaire_id = $moment_unitaire->_id;
+if($token_poso){
+	$posos = explode("|", $token_poso);
+	foreach($posos as $poso){
+	  $explode_poso = explode("_", $poso);
+	  $quantite    = @$explode_poso[0];
+	  $unite_prise = @$explode_poso[1];
+	  $moment      = @$explode_poso[2];
+	  
+	  if($moment){
+		  $moment_unitaire = new CMomentUnitaire();
+		  $moment_unitaire->libelle = "le $moment";
+		  $moment_unitaire->loadMatchingObject();
+	  }
+		$prise_poso = new CPrisePosologie();
+		$prise_poso->object_id = $line->_id;
+		$prise_poso->object_class = $line->_class_name;
+		$prise_poso->unite_prise = $unite_prise;
+		$prise_poso->quantite = $quantite;
+		if($moment && $moment_unitaire->_id){
+		  $prise_poso->moment_unitaire_id = $moment_unitaire->_id;
+		}
+		$msg = $prise_poso->store();
 	}
-	$msg = $prise_poso->store();
 }
-
  CApp::rip();
 
 ?>
