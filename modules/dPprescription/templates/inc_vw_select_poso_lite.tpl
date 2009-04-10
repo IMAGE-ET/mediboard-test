@@ -52,6 +52,7 @@ Main.add(function () {
   <option value="{{$_prise}}">{{$_prise}}</option>
 {{/foreach}}
 </select>
+<br />
 
 <span id="checkboxPoso">
 	<input type="checkbox" name="matin" /><label for="matin"> Matin</label>
