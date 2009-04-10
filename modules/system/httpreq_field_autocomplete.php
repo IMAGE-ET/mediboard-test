@@ -20,13 +20,14 @@ $search = $wholeString ? "%$input%" : "$input%";
 
 $object = new $class;
 $spec = $object->_specs[$field];
+$ds = $object->_spec->ds;
 if ($spec instanceof CRefSpec) {
 	$target_object = new $spec->class;
-	$where = "`$view_field` LIKE '$search'";
+	$where = "`$view_field` ".$ds->prepareLike($search);
 	$matches = $target_object->loadList($where, $view_field, $limit);
 }
 else {
-	$where = "`$field` LIKE '$search'";
+	$where = "`$field` ".$ds->prepareLike($search);
 	$matches = $object->loadList($where, $field, $limit, $field);
 }
 
