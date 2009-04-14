@@ -25,7 +25,6 @@ $locales['test_mutex-dummy'] = 'Ne fait rien';
 $locales['mutex_teste-desc'] = '';
 $locales['mutex_tester-desc'] = '';
 $locales['mutex_tester-info3'] = 'Attention : Apache n\'alloue d\'ordinaire qu\'un seul processus à la fois par navigateur. Pour tester cette page il faut donc utiliser deux navigateurs de nature différente !';
-$locales['mod-dPdeveloppement-tab-check_dossiers_medicaux'] = 'Dossier médicaux orphelins';
 $locales['mod-dPdeveloppement-tab-check_zombie_objects'] = 'Objet Zombies';
 $locales['mod-dPdeveloppement-tab-mnt_module_actions'] = 'Maintenance documentation';
 ?>
