@@ -31,7 +31,12 @@ delay=$6
 
 url="$root_url/index.php?$login&$user&$pass&$params"
 
-log=/var/log/mediboard/jobs.log
+# Make mediboard path
+MEDIBOARDPATH=/var/log/mediboard
+force_dir $MEDIBOARDPATH
+
+log=$MEDIBOARDPATH/jobs.log
+check_file_exist $log
 
 mediboard_request() 
 {

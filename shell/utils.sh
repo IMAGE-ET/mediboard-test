@@ -36,3 +36,11 @@ announce_script()
   echo 
   echo "--- $SCRIPTNAME ($(date)) ---"
 }
+
+check_file_exist()
+{
+  FILE=$1
+  if [ ! -e $FILE ]
+  then touch $FILE
+  fi
+}
