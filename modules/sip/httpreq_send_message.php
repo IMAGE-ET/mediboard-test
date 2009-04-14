@@ -20,7 +20,10 @@ if (!$echange_hprim_id) {
   foreach ($notifications as $notification) {
     $dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->destinataire = $notification->destinataire;
+	  $dest_hprim->actif = 1;
+	  
 	  $dest_hprim->loadMatchingObject();
+	  
 	  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
 	    trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
 	  }
@@ -41,8 +44,9 @@ if (!$echange_hprim_id) {
 	
 	$dest_hprim = new CDestinataireHprim();
 	$dest_hprim->destinataire = $echange_hprim->destinataire;
+	$dest_hprim->actif = 1;
 	$dest_hprim->loadMatchingObject();
-	mbTrace($dest_hprim, "Destinataire", true);
+	
 	if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
 	  trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
 	  $AppUI->setMsg("Impossible de joindre le destinataire", UI_MSG_ERROR);

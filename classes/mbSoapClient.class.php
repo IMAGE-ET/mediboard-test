@@ -18,7 +18,7 @@ class CMbSOAPClient extends SoapClient {
     	trigger_error("Impossible d'analyser l'url : ".$rooturl, E_USER_ERROR);
     	return;
     }
-mbTrace($html, "XML", true);
+
     if (strpos($html, "<?xml") === false) {
       trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
       return;
@@ -33,7 +33,7 @@ mbTrace($html, "XML", true);
     
     if (preg_match('#\%p#', $rooturl)) 
       $rooturl = str_replace('%p', $password, $rooturl);
-mbTrace($rooturl, "URL", true);
+
     if (!$client = new CMbSOAPClient($rooturl)) {
       trigger_error("Instanciation du SoapClient impossible.");
     }
