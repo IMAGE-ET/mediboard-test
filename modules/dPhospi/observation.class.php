@@ -65,13 +65,15 @@ class CObservationMedicale extends CMbObject {
   }
   
   function check(){
-    if (!$this->_id && $this->countSiblings()) {
-      return "Notification deja effectuée";
+    if (!$this->_id && $this->degre == "info" && $this->text == "Visite effectuée"){
+      if($this->countNotifSiblings()) {
+        return "Notification deja effectuée";
+      }
     }
     return parent::check();
   }
   
-  function countSiblings() {
+  function countNotifSiblings() {
     $date = mbDate($this->date);
     $observation = new CObservationMedicale();
     $where = array();
@@ -79,7 +81,7 @@ class CObservationMedicale extends CMbObject {
     $where["user_id"]  = " = '$this->user_id'";
     $where["degre"]  = " = 'info'";
     $where["date"]  = " LIKE '$date%'";
-    
+    $where["text"] = " = 'Visite effectuée'";
     return $observation->countList($where);
   }
   
