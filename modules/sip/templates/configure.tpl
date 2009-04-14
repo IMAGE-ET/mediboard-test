@@ -38,6 +38,42 @@ function doAction(sAction) {
   <table class="form">
     {{include file="../../system/templates/configure_handler.tpl" class_handler=CSipObjectHandler}}
     
+    <tr>
+	    {{assign var="var" value="export_segment"}}
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <input class="num" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	    </td>
+	  </tr>
+	  
+	  <tr>
+	    {{assign var="var" value="export_id_min"}}
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	    </td>
+	  </tr>
+	
+	  <tr>
+	    {{assign var="var" value="export_id_max"}}
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	    </td>
+	  </tr>
+  
     {{assign var="mod" value="sip"}}
     <tr>
       <th class="category" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
@@ -78,4 +114,48 @@ function doAction(sAction) {
 	  </tr>
   </table>
 </form>
- 
+
+<hr />
+
+<!-- Import des tables -->
+<script type="text/javascript">
+
+var Action = {
+  module: "sip",
+  action: "httpreq_export_patient",
+  
+  import: function (sAction) {
+    var url = new Url;
+    url.setModuleAction(this.module, this.action);
+    url.addParam("action", sAction);
+    url.requestUpdate("import-patient");
+  },
+}
+
+</script>
+
+<table class="tbl">
+
+<tr>
+  <th class="title" colspan="100">{{tr}}sip-export-classes{{/tr}}</th>
+</tr>
+
+<tr>
+  <td>
+    {{tr}}sip-export-class{{/tr}} '{{tr}}CPatient{{/tr}}'
+  </td>
+  <td>
+    <button class="new" onclick="Action.import('start')">
+      {{tr}}Start{{/tr}}      
+    </button>
+    <button class="change" onclick="Action.import('retry')">
+      {{tr}}Retry{{/tr}}      
+    </button>
+    <button class="tick" onclick="Action.import('continue')">
+      {{tr}}Continue{{/tr}}      
+    </button>
+  </td>
+  <td id="import-patient"></td>
+</tr>
+
+</table>

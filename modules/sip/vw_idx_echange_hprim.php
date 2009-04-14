@@ -21,10 +21,12 @@ $echange_hprim->load($echange_hprim_id);
 if($echange_hprim->load($echange_hprim_id)) {
 	$echange_hprim->loadRefs();	
 	
-	$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-	$domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
+	if ($echange_hprim->acquittement) {
+		$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
   
-	$observations = $domGetAcquittement->getAcquittementObservation();
+    $observations = $domGetAcquittement->getAcquittementObservation();
+	}
 }
 
 // Récupération de la liste des echanges HPRIM
