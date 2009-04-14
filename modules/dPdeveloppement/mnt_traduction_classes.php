@@ -94,7 +94,7 @@ foreach ($classes as $class) {
   addLocale($classname, $classname, "$classname.none");
   addLocale($classname, $classname, "$classname.one");
   addLocale($classname, $classname, "$classname.all");
-  addLocale($classname, $classname, "$classname.select");
+  //addLocale($classname, $classname, "$classname.select");
   addLocale($classname, $classname, "$classname-msg-create");
   addLocale($classname, $classname, "$classname-msg-modify");
   addLocale($classname, $classname, "$classname-msg-delete");
