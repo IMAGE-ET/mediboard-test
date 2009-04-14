@@ -1,10 +1,11 @@
-<?php /* $Id:$ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
- * @subpackage classes
- * @version $Revision: 31 $
- * @author Thomas Despoix
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CAccessLog extends CMbObject {

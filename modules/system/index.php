@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPcim10
+* @subpackage system
 * @version $Revision$
 * @author Romain Ollivier
 */
@@ -17,5 +17,6 @@ $module->registerTab("view_history"        , null, TAB_READ);
 $module->registerTab("view_access_logs"    , null, TAB_READ);
 $module->registerTab("view_ressources_logs", null, TAB_READ);
 $module->registerTab("view_install"        , null, TAB_READ);
+$module->registerTab("about"               , null, TAB_READ);
 
 ?>

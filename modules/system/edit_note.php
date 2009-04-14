@@ -1,12 +1,12 @@
-<?php /* $Id: mbobject.class.php 1702 2007-03-08 16:20:59Z maskas $ */
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage classes
- *  @version $Revision: 1702 $
- *  @author Romain Ollivier
-*/
-
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 
@@ -36,7 +36,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("note", $note);
 
 $smarty->display("edit_note.tpl");
-
-
 
 ?>

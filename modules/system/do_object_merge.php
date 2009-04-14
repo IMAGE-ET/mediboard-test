@@ -1,11 +1,12 @@
-<?php /* $Id: do_patients_fusion.php 5425 2008-12-15 15:18:18Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage system
-* @version $Revision: 5425 $
-* @author Fabien Ménager
-*/
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $can, $m;
 $can->needsEdit();

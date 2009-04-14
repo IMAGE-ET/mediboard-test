@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <tr {{if array_key_exists($field, $unequal)}}class="unequal"{{/if}}>
   <th>{{mb_label object=$result field=$field}}</th>
   {{assign var=result_ref value=$result->_fwd.$field}}

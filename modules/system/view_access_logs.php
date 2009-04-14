@@ -1,10 +1,11 @@
-<?php /* $Id: view_history.php 23 2006-05-04 15:05:35Z MyttO $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage system
- * @version $Revision: 23 $
- * @author Romain Ollivier
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $AppUI, $can, $m;

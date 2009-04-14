@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{mb_include_script module="system" script="object_selector"}}
 
 <form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">

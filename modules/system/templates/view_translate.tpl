@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <form action="?m={{$m}}" name="modlang" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />

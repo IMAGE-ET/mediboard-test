@@ -1,11 +1,12 @@
-<?php /* $Id: $*/
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage sytem
-* @version $Revision: $
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 

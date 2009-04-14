@@ -1,4 +1,12 @@
-// $Id: $
+/* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 var MbObject = {
   viewBackRefs : function(object_class, object_ids) {

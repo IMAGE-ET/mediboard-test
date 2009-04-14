@@ -1,10 +1,10 @@
-<?php 
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage system
- * @version $Revision: 5037 $
- * @author Yohann Poiron
+ * @version $Revision$
+ * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  

@@ -1,11 +1,12 @@
-<?php /* $Id: do_message_aed.php 23 2006-05-04 15:05:35Z MyttO $ */
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage system
-* @version $Revision: $
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage system
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 
