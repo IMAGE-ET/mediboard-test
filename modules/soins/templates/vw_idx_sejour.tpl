@@ -257,17 +257,6 @@ function printPatient(patient_id) {
   url.popup(700, 550, "Patient");
 }
 
-function createNotifications(){
-var sejours = {{$notifications.non_effectuee|@json}};
-console.debug(sejours);
-  var url = new Url();
-  url.setModuleAction("soins", "httpreq_notifications_visite");
-  url.addParam("sejours[]", sejours);
-  url.requestUpdate("systemMsg", { waitingText: null , onComplete: function(){ 
-    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update("Visites effectuées");
-  } } );
-}
-
 Main.add(function () {
   Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
@@ -367,23 +356,52 @@ viewBilanService = function(service_id, date){
         {{if $praticien && ($current_date == $date)}}
         <tr>
           <td class="button">
-            <a href="#" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
-            Mes visites
+            <script type="text/javascript">
+            function createNotifications(){
+							var sejours = {{$visites.non_effectuee|@json}};
+						  var url = new Url("soins", "httpreq_notifications_visite");
+						  url.addParam("sejours[]", sejours);
+						  url.requestUpdate("systemMsg", { waitingText: null , onComplete: function() { 
+						    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
+						  } } );
+						}
+            </script>
+            
+            <a href="#Create-Notifications" class="buttonsearch" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
+            	Mes visites
             </a>
-            <div id="tooltip-visite-{{$app->user_id}}-{{$date}}" style="display: none;">
-              {{if $notifications.effectuee|@count || $notifications.non_effectuee|@count}}
-              <ul>
-              {{if $notifications.effectuee|@count}}
-                <li>{{$notifications.effectuee|@count}} visite effectuée(s)</li>
+            
+            <table class="form" id="tooltip-visite-{{$app->user_id}}-{{$date}}" style="display: none;">
+
+              {{if $visites.effectuee|@count}}
+              <tr>
+                <th>Visites effctuée(s)</th>
+                <td>{{$visites.effectuee|@count}}</td>
+              </tr>
               {{/if}}
-              {{if $notifications.non_effectuee|@count}}
-                <li>{{$notifications.non_effectuee|@count}} visite à effectuer <button type="button" class="tick" onclick="createNotifications();" /></button></li>
+              
+              {{if $visites.non_effectuee|@count}}
+              <tr>
+                <th>Visites à effectuer</th>
+                <td>{{$visites.non_effectuee|@count}}</td>
+              </tr>
+              
+							<tr>
+							  <td colspan="2" class="button">
+									<button type="button tick" class="tick" onclick="createNotifications();" />
+									  Valider les visites
+									</button>
+							  </td>
+							</tr>
               {{/if}} 
-							</ul>
-							{{else}}
-							Aucune visite
+              
+							{{if !$visites.effectuee|@count && !$visites.non_effectuee|@count}}
+							<tr>
+							  <td colspan="2"><em>Aucune visite dans la sélection courante</em></td>
+							</tr>
 							{{/if}}
-            </div>          
+							
+            </table>          
           </td>
         </tr>
         {{/if}}

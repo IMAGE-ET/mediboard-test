@@ -273,13 +273,18 @@ if($service_id){
 	$sejoursParService[$service->_id] = $service;
 }
 
-$notifications = array("effectuee" => array(), "non_effectuee" => array());
+// Chargement des visites pour les séjours courants
+$visites = array(
+  "effectuee" => array(), 
+  "non_effectuee" => array()
+);
+
 if(count($tab_sejour)){
 	foreach($tab_sejour as $sejour_id => $sejour){
 	  if($sejour->countNotificationVisite($date)){
-	    $notifications["effectuee"][] = $sejour->_id;
+	    $visites["effectuee"][] = $sejour->_id;
 	  } else {
-	    $notifications["non_effectuee"][] = $sejour->_id; 
+	    $visites["non_effectuee"][] = $sejour->_id; 
 	  }
 	}
 }
@@ -311,7 +316,7 @@ $smarty->assign("prescription_sejour"    , $prescription_sejour);
 $smarty->assign("service_id"             , $service_id);
 $smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
 $smarty->assign("tab_sejour"             , $tab_sejour);
-$smarty->assign("notifications"          , $notifications);
+$smarty->assign("visites"                , $visites);
 $smarty->assign("current_date"           , mbDate());
 $smarty->display("vw_idx_sejour.tpl");
 
