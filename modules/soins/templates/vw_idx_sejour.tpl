@@ -257,6 +257,17 @@ function printPatient(patient_id) {
   url.popup(700, 550, "Patient");
 }
 
+function createNotifications(){
+var sejours = {{$notifications.non_effectuee|@json}};
+console.debug(sejours);
+  var url = new Url();
+  url.setModuleAction("soins", "httpreq_notifications_visite");
+  url.addParam("sejours[]", sejours);
+  url.requestUpdate("systemMsg", { waitingText: null , onComplete: function(){ 
+    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update("Visites effectuées");
+  } } );
+}
+
 Main.add(function () {
   Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
@@ -349,6 +360,30 @@ viewBilanService = function(service_id, date){
                 {{/foreach}}
               </select>
             </form>
+          </td>
+        </tr>
+        {{/if}}
+        
+        {{if $praticien && ($current_date == $date)}}
+        <tr>
+          <td class="button">
+            <a href="#" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
+            Mes visites
+            </a>
+            <div id="tooltip-visite-{{$app->user_id}}-{{$date}}" style="display: none;">
+              {{if $notifications.effectuee|@count || $notifications.non_effectuee|@count}}
+              <ul>
+              {{if $notifications.effectuee|@count}}
+                <li>{{$notifications.effectuee|@count}} visite effectuée(s)</li>
+              {{/if}}
+              {{if $notifications.non_effectuee|@count}}
+                <li>{{$notifications.non_effectuee|@count}} visite à effectuer <button type="button" class="tick" onclick="createNotifications();" /></button></li>
+              {{/if}} 
+							</ul>
+							{{else}}
+							Aucune visite
+							{{/if}}
+            </div>          
           </td>
         </tr>
         {{/if}}

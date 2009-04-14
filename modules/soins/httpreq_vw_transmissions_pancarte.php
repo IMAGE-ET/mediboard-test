@@ -88,9 +88,9 @@ if($observations){
 	  }
 	}
 }
-$filter_trans = new CTransmissionMedicale();
-$filter_trans->degre = $degre;
-$filter_trans->user_id = $user_id;
+$filter_obs = new CObservationMedicale();
+$filter_obs->degre = $degre;
+$filter_obs->user_id = $user_id;
 
 // Smarty template
 $smarty = new CSmartyDP();
@@ -98,7 +98,7 @@ $smarty->assign("service", $service);
 $smarty->assign("transmissions", $transmissions);
 $smarty->assign("observations", $observations);
 $smarty->assign("trans_and_obs", $trans_and_obs);
-$smarty->assign("filter_trans", $filter_trans);
+$smarty->assign("filter_obs", $filter_obs);
 $smarty->assign("users", $users);
 
 if($user_id || $degre || $refresh){

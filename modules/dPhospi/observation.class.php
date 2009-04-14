@@ -41,7 +41,7 @@ class CObservationMedicale extends CMbObject {
   	$specs = parent::getProps();
     $specs["sejour_id"]    = "ref notNull class|CSejour";
     $specs["user_id"]      = "ref notNull class|CMediusers";
-    $specs["degre"]        = "enum notNull list|low|high default|low";
+    $specs["degre"]        = "enum notNull list|low|high|info default|low";
     $specs["date"]         = "dateTime notNull";
     $specs["text"]         = "text helped";
     return $specs;
@@ -62,6 +62,25 @@ class CObservationMedicale extends CMbObject {
     $this->loadRefSejour();
     $this->loadRefUser();
   	$this->_view = "Observation du Dr ".$this->_ref_user->_view;
+  }
+  
+  function check(){
+    if (!$this->_id && $this->countSiblings()) {
+      return "Notification deja effectuée";
+    }
+    return parent::check();
+  }
+  
+  function countSiblings() {
+    $date = mbDate($this->date);
+    $observation = new CObservationMedicale();
+    $where = array();
+    $where["sejour_id"]  = " = '$this->sejour_id'";
+    $where["user_id"]  = " = '$this->user_id'";
+    $where["degre"]  = " = 'info'";
+    $where["date"]  = " LIKE '$date%'";
+    
+    return $observation->countList($where);
   }
   
   function getPerm($perm) {

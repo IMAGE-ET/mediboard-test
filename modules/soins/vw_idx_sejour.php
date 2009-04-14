@@ -20,7 +20,7 @@ $mode = mbGetValueFromGetOrSession("mode", 0);
 $service_id   = mbGetValueFromGetOrSession("service_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $_active_tab  = mbGetValueFromGet("_active_tab");
-
+$tab_sejour = array();
 
 // Chargement de l'utilisateur courant
 $userCourant = new CMediusers;
@@ -124,6 +124,9 @@ if($praticien_id && !$service_id){
 	
 	$sejours = $sejour->loadList($where);
 	foreach($sejours as &$_sejour){
+	  if($praticien && $_sejour->praticien_id == $AppUI->user_id){
+	    $tab_sejour[$_sejour->_id]= $_sejour;
+	  }
 		$affectations = array();
 		$affectation = new CAffectation();
 		$where = array();
@@ -156,6 +159,9 @@ foreach ($sejoursParService as $key => $_service) {
 	      foreach ($_lit->_ref_affectations as $_affectation) {
 	        $_affectation->loadRefSejour();
 	        $_sejour =& $_affectation->_ref_sejour;
+	        if($praticien && $_sejour->praticien_id == $AppUI->user_id){
+	          $tab_sejour[$_sejour->_id]= $_sejour;
+	        }
 	      	$_sejour->loadRefsPrescriptions();
 	    		$_sejour->loadRefPatient();
 			    $_sejour->loadRefPraticien();
@@ -231,7 +237,15 @@ if($service_id){
 	  );
 		  
 		$groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
-	  
+	  if($praticien){
+			foreach($groupSejourNonAffectes as $sejours_by_moment){
+		    foreach($sejours_by_moment as $sejour){
+		      if($sejour->praticien_id == $AppUI->user_id){
+		        $tab_sejour[$sejour->_id] = $sejour;
+		      }
+		    }
+		  }
+	  }
 	} else {
 	  $service->load($service_id);
 	  loadServiceComplet($service, $date, $mode, $praticien_id);
@@ -241,6 +255,9 @@ if($service_id){
 		foreach($service->_ref_chambres as &$_chambre){
 			foreach($_chambre->_ref_lits as &$_lits){
 				foreach($_lits->_ref_affectations as &$_affectation){
+				  if($praticien && $_affectation->_ref_sejour->praticien_id == $AppUI->user_id){
+				    $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
+				  }
 					$_affectation->_ref_sejour->loadRefsPrescriptions();
 					$_affectation->_ref_sejour->_ref_praticien->loadRefFunction();
 					if($_affectation->_ref_sejour->_ref_prescriptions){
@@ -254,6 +271,17 @@ if($service_id){
 		}
 	}
 	$sejoursParService[$service->_id] = $service;
+}
+
+$notifications = array("effectuee" => array(), "non_effectuee" => array());
+if(count($tab_sejour)){
+	foreach($tab_sejour as $sejour_id => $sejour){
+	  if($sejour->countNotificationVisite($date)){
+	    $notifications["effectuee"][] = $sejour->_id;
+	  } else {
+	    $notifications["non_effectuee"][] = $sejour->_id; 
+	  }
+	}
 }
 
 $can_view_dossier_medical = 
@@ -282,6 +310,9 @@ $smarty->assign("sejoursParService"      , $sejoursParService);
 $smarty->assign("prescription_sejour"    , $prescription_sejour);
 $smarty->assign("service_id"             , $service_id);
 $smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
+$smarty->assign("tab_sejour"             , $tab_sejour);
+$smarty->assign("notifications"          , $notifications);
+$smarty->assign("current_date"           , mbDate());
 $smarty->display("vw_idx_sejour.tpl");
 
 

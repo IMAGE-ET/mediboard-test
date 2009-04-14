@@ -321,4 +321,5 @@ $locales['CMediusers-back-transmissions'] = '';
 $locales['CTransmissionMedicale.object_class.CPerfusion'] = '';
 $locales['config-dPhospi-pathologies'] = '';
 $locales['config-dPhospi-pathologies-desc'] = '';
+$locales['CObservationMedicale.degre.info'] = 'information';
 ?>

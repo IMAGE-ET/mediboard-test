@@ -611,6 +611,20 @@ class CSejour extends CCodable {
     }
   }
   
+  function countNotificationVisite($date = ''){
+    $this->completeField("praticien_id");
+    if(!$date){
+      $date = mbDate();
+    }
+    $observation = new CObservationMedicale();
+    $where = array();
+    $where["sejour_id"]  = " = '$this->_id'";
+    $where["user_id"]  = " = '$this->praticien_id'";
+    $where["degre"]  = " = 'info'";
+    $where["date"]  = " LIKE '$date%'";
+    return $observation->countList($where);
+  }
+  
   function loadRefPatient($cache = 0) {
     if ($this->_ref_patient) {
       return;

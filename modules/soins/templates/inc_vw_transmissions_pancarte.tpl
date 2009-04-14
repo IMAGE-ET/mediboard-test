@@ -13,11 +13,11 @@ refreshtransmissions = function(){
 	        <input type="checkbox" name="observations" onclick="refreshtransmissions();" checked="checked" /> Observations         
           <input type="checkbox" name="transmissions" onclick="refreshtransmissions();" checked="checked" /> Transmissions
         
-					{{mb_field object=$filter_trans field=degre defaultOption="&mdash; Tous" onchange="refreshtransmissions();"}}
+					{{mb_field object=$filter_obs field=degre defaultOption="&mdash; Tous" onchange="refreshtransmissions();"}}
 		      <select name="user_id" onchange="refreshtransmissions();">
 		        <option value="">&mdash; Tous les utilisateurs</option>
 					  {{foreach from=$users item=_user}}
-					  <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $filter_trans->user_id}}selected="selected"{{/if}}>{{$_user->_view}}</option>
+					  <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $filter_obs->user_id}}selected="selected"{{/if}}>{{$_user->_view}}</option>
 					  {{/foreach}}
 		      </select>
 	      </span>
