@@ -1,7 +1,7 @@
 <script type="text/javascript">
 refreshtransmissions = function(){
   var oForm = document.filter_trans;
-  viewTransmissions($V(document.selService.service_id), $V(oForm.user_id), $V(oForm.degre), $V(oForm.observations), $V(oForm.transmissions), true);
+  viewTransmissions($V(document.selService.service_id), $V(oForm.user_id), $V(oForm._degre), $V(oForm.observations), $V(oForm.transmissions), true);
 }
 </script>
 
@@ -12,8 +12,11 @@ refreshtransmissions = function(){
 	      <span style="float: right">
 	        <input type="checkbox" name="observations" onclick="refreshtransmissions();" checked="checked" /> Observations         
           <input type="checkbox" name="transmissions" onclick="refreshtransmissions();" checked="checked" /> Transmissions
-        
-					{{mb_field object=$filter_obs field=degre defaultOption="&mdash; Tous" onchange="refreshtransmissions();"}}
+          <select name="_degre" onchange="refreshtransmissions();">
+            <option value="">Toutes</option>
+            <option value="urg_normal">Urgentes + normales</option>
+            <option value="urg">Urgentes</option>
+          </select>
 		      <select name="user_id" onchange="refreshtransmissions();">
 		        <option value="">&mdash; Tous les utilisateurs</option>
 					  {{foreach from=$users item=_user}}

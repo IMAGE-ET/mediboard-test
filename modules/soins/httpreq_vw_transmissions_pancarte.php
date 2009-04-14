@@ -53,7 +53,12 @@ foreach($prescriptions as $_prescription){
 	  $where["user_id"] = " = '$user_id'";
 	}
 	if($degre){
-	  $where["degre"] = " = '$degre'";
+	  if($degre == "urg_normal"){
+	    $where[] = "degre = 'low' OR degre = 'high'";
+	  }
+	  if($degre == "urg"){
+	    $where[] = "degre = 'high'";
+	  }
 	}
 	if($load_transmissions == "1"){
 	  $transmission = new CTransmissionMedicale();
