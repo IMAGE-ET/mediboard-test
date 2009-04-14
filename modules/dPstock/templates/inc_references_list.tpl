@@ -1,11 +1,11 @@
 {{* $Id$ *}}
 
-{{*  
+{{*
  * @package Mediboard
  * @subpackage dPstock
  * @version $Revision$
- * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
 <div id="list-references-total-count" style="display: none;">{{$list_references_count}}</div>

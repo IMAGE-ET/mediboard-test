@@ -1,10 +1,10 @@
-<?php /* $Id: product_order_item_reception.class.php 5037 2008-10-20 10:38:21Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPstock
- * @version $Revision: 5037 $
- * @author Fabien Ménager
+ * @version $Revision$
+ * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
