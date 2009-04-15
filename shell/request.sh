@@ -11,7 +11,7 @@ announce_script "Mediboard request launcher"
 
 if [ "$#" -lt 4 ]
 then 
-  echo "Usage: $0 <root_url> <username> <password> \"<param>\"" \[times\] \[delay\]
+  echo "Usage: $0 <root_url> <username> <password> \"<param>\" \[times\] \[delay\]"
   echo "  <root_url> is root url for mediboard, ie https://localhost/mediboard"
   echo "  <username> is the name of the user requesting, ie cron"
   echo "  <password is the password of the user requesting, ie ****"
@@ -22,7 +22,7 @@ then
 fi
    
 root_url=$1
-login=login=1
+login="login=1"
 user=username=$2
 pass=password=$3
 params=$4
@@ -40,12 +40,12 @@ check_file_exist $log
 
 mediboard_request() 
 {
-   time -p --output="$log" --append wget $url\
+   wget $url\
         --append-output="$log"\
         --force-directories\
         --no-check-certificate
-   echo "wget URL : $url."
    check_errs $? "Failed to request to Mediboard" "Mediboard requested!"   
+   echo "wget URL : $url."
 }
 
 if [ "$#" -ne 6 ]
