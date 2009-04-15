@@ -22,7 +22,6 @@ $graphs = array();
 foreach(CConstantesMedicales::$list_constantes as $cst) {
   $graphs[] = "constantes-medicales-$cst";
 }
-mbTrace($graphs);
                  
 // Création du template
 $smarty = new CSmartyDP();
