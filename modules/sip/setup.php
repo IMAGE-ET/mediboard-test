@@ -63,7 +63,14 @@ class CSetupsip extends CSetup {
                 ADD `statut_acquittement` VARCHAR (255);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.14";
+     $this->makeRevision("0.14");
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+							  ADD `message_valide` ENUM ('0','1'),
+							  ADD `acquittement_valide` ENUM ('0','1');";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.15";
   }
 }
 ?>

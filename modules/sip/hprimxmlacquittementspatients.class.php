@@ -86,7 +86,6 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 			$this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
 		}
 
-		$doc_valid = $this->schemaValidate();
 		$this->saveTempFile();
 		$messageAcquittementPatient = utf8_encode($this->saveXML());
 

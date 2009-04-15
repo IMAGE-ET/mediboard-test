@@ -81,7 +81,8 @@ class CHprimSoapHandler extends CSoapHandler {
 			$domAcquittement->_destinataire_libelle = "inconnu document xml non valide";
 
 			$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E02", $doc_errors);
-
+      $doc_valid = $domAcquittement->schemaValidate();
+			
 			$echange_hprim->date_production = mbDateTime();
 			$echange_hprim->emetteur = "inconnu";
 			$echange_hprim->destinataire = CAppUI::conf('mb_id');
@@ -89,6 +90,8 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->message = $messagePatient;
 			$echange_hprim->acquittement = utf8_decode($messageAcquittement);
 			$echange_hprim->statut_acquittement = "erreur";
+			$echange_hprim->message_valide = (!$doc_errors) ? true : false;
+			$echange_hprim->acquittement_valide = $doc_valid ? true : false;
 			$echange_hprim->store();
 
 			return $messageAcquittement;
@@ -112,6 +115,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->type = "evenementsPatients";
 			$echange_hprim->sous_type = "enregistrementPatient";
 			$echange_hprim->message = $messagePatient;
+		  $echange_hprim->message_valide = (!$doc_errors) ? true : false;
 		}
 		$echange_hprim->date_production = mbDateTime();
 		$echange_hprim->store();
@@ -126,7 +130,9 @@ class CHprimSoapHandler extends CSoapHandler {
 			// Acquittement d'erreur : identifiants source et cible non fournis
 			if (!$data['idSource'] && !$data['idCible']) {
 				$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
-
+				$doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+				
 				$echange_hprim->message = $messagePatient;
 				$echange_hprim->acquittement = utf8_decode($messageAcquittement);
 				$echange_hprim->statut_acquittement = "erreur";
@@ -199,6 +205,8 @@ class CHprimSoapHandler extends CSoapHandler {
 				}
 				
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000));
+        $doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? true : false;
           
         $echange_hprim->acquittement = utf8_decode($messageAcquittement);
         $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
@@ -282,7 +290,9 @@ class CHprimSoapHandler extends CSoapHandler {
 						if ($idPatientSIP != $IPP->object_id) {
 							$commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible au patient : $IPP->object_id.";
 							$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E04", $commentaire);
-
+              $doc_valid = $domAcquittement->schemaValidate();
+              $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+        
 							$echange_hprim->acquittement = utf8_decode($messageAcquittement);
 			        $echange_hprim->statut_acquittement = "erreur";
 			        $echange_hprim->store();
@@ -318,7 +328,9 @@ class CHprimSoapHandler extends CSoapHandler {
 					else {
 						$commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible n'est pas connu.";
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E03", $commentaire);
-
+            $doc_valid = $domAcquittement->schemaValidate();
+            $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+        
             $echange_hprim->statut_acquittement = "erreur";
             $echange_hprim->acquittement = $messageAcquittement;
 				    $echange_hprim->date_echange = mbDateTime();
@@ -410,16 +422,20 @@ class CHprimSoapHandler extends CSoapHandler {
 					$commentaire = "Patient créé : $newPatient->_id. Identifiant externe créé : $id400Patient->id400. IPP créé : $IPP->id400.";
 				}
 				$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
-				
+				$doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+        
 				$echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
 			}
 		} 
 		// Si CIP
 		else {
 		  // Acquittement d'erreur : identifiants source et cible non fournis
-      if (!$data['idSource']) {
+      if (!$data['idCible'] && !$data['idSource']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
-
+        $doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+        
         $echange_hprim->acquittement = utf8_decode($messageAcquittement);
         $echange_hprim->statut_acquittement = "erreur";
         $echange_hprim->date_echange = mbDateTime();
@@ -523,11 +539,12 @@ class CHprimSoapHandler extends CSoapHandler {
         		if ($tmpPatient->_id != $IPP->object_id) {
         			$commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E04", $commentaire);
-
+              $doc_valid = $domAcquittement->schemaValidate();
+              $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+        
               $echange_hprim->acquittement = utf8_decode($messageAcquittement);
               $echange_hprim->statut_acquittement = "erreur";
               $echange_hprim->store();
-              
               return $messageAcquittement;
         		}
         		$_code_IPP = "I24"; 
@@ -557,7 +574,9 @@ class CHprimSoapHandler extends CSoapHandler {
         }
 			}
 			$messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000));	
-
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+        
 			$echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
 		}
 		$echange_hprim->acquittement = $messageAcquittement;

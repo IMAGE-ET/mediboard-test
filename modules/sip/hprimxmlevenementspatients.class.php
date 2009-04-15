@@ -85,10 +85,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->generateFromOperation($mbObject, $referent);
     
     $doc_valid = $this->schemaValidate();
+    $echg_hprim->message_valide = $doc_valid ? true : false;
+    
     $this->saveTempFile();
     $messageEvtPatient = utf8_encode($this->saveXML()); 
     
     $echg_hprim->message = $messageEvtPatient;
+    
     $echg_hprim->store();
     
     return $messageEvtPatient;

@@ -26,6 +26,8 @@ class CEchangeHprim extends CMbObject {
   var $acquittement         = null;
   var $statut_acquittement  = null;
   var $initiateur_id        = null;
+  var $message_valide       = null;
+  var $acquittement_valide  = null;
   
   var $_ref_notifications   = null;
   
@@ -51,8 +53,10 @@ class CEchangeHprim extends CMbObject {
     $specs["date_echange"]          = "dateTime";
     $specs["message"]               = "xml notNull";
     $specs["acquittement"]          = "xml";
-    $specs["statut_acquittement"]   = "str";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
+    $specs["statut_acquittement"]   = "str";
+    $specs["message_valide"]        = "bool";
+    $specs["acquittement_valide"]   = "bool";
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool notNull";
     return $specs;
