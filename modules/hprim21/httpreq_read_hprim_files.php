@@ -13,11 +13,10 @@ $extension = mbGetValueFromGet("fileextension", $dPconfig["hprim21"]["CHprim21Re
 
 $list = array();
 $ftp = new CFTP();
-$ftp->hostname = mbGetValueFromGet("hostname", $dPconfig["hprim21"]["CHprim21Reader"]["hostname"]);
-$ftp->username = mbGetValueFromGet("username", $dPconfig["hprim21"]["CHprim21Reader"]["username"]);
-$ftp->userpass = mbGetValueFromGet("userpass", $dPconfig["hprim21"]["CHprim21Reader"]["userpass"]);
+$ftp->hostname = $dPconfig["hprim21"]["CHprim21Reader"]["hostname"];
+$ftp->username = $dPconfig["hprim21"]["CHprim21Reader"]["username"];
+$ftp->userpass = $dPconfig["hprim21"]["CHprim21Reader"]["userpass"];
 $ftp->connect();
-mbTrace($ftp->logs);
 $list = $ftp->getListFiles("./");
 
 if(!$list) {
