@@ -576,5 +576,6 @@ $dPconfig["sip"] = array (
   "export_segment" => "100",
   "export_id_min" => "",
   "export_id_max" => "",
+  "batch_count" => "10",
 );
 ?>

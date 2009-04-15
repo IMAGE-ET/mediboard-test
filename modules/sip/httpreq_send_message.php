@@ -15,9 +15,13 @@ $where = '';
 if (!$echange_hprim_id) {
 	$echange_hprim = new CEchangeHprim();
 	$where['date_echange'] = "IS NULL";
-  $notifications = $echange_hprim->loadList($where);
+	$limit = CAppUI::conf('sip batch_count');
+  $notifications = $echange_hprim->loadList($where, null, $limit);
   
   foreach ($notifications as $notification) {
+  	$notification->date_echange = mbDateTime();
+    $notification->store();
+    
     $dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->destinataire = $notification->destinataire;
 	  

@@ -114,4 +114,6 @@ $locales['config-sip-export_id_min'] = 'Identifiant minimum';
 $locales['config-sip-export_id_min-desc'] = 'Identifiant minimum';
 $locales['config-sip-export_segment'] = 'Longueur du segment d\'export';
 $locales['config-sip-export_segment-desc'] = 'Longueur du segment d\'export';
+$locales['config-sip-batch_count'] = 'Nombre de traitement';
+$locales['config-sip-batch_count-desc'] = 'Nombre de traitement par lot du cron';
 ?>

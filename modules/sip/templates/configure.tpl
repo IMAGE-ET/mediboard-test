@@ -73,6 +73,18 @@ function doAction(sAction) {
 	      <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
 	    </td>
 	  </tr>
+	  
+	  <tr>
+      {{assign var="var" value="batch_count"}}
+      <th>
+        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+        </label>  
+      </th>
+      <td>
+        <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+      </td>
+    </tr>
   
     {{assign var="mod" value="sip"}}
     <tr>
