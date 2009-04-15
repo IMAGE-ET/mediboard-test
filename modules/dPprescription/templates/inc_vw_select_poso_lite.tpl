@@ -23,7 +23,6 @@ addToTokenPoso = function(){
 Main.add(function () {
   updateTokenPoso = function(v){
   	if(v){
-	    console.debug(v);
 	    var i, codes = v.split("|");
 		  for (i = 0; i < codes.length; i++) {
 		  	codes_without_underscore = codes[i].gsub("_"," ");
