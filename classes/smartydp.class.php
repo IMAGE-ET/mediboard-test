@@ -303,6 +303,21 @@ function smarty_function_mb_include_script($params, &$smarty) {
   return "<script type='text/javascript' src='$path'></script>";
 }
 
+function smarty_function_mb_include($params, &$smarty) {
+  // Dans le cas ou le path est fourni
+  $module   = CMbArray::extract($params, "module");
+  $template = CMbArray::extract($params, "template");
+  
+  $path = $module ? "../../$module/templates/$template.tpl" : "$template.tpl";
+  
+	$tpl_vars = $smarty->_tpl_vars;
+	$smarty->_smarty_include(array(
+	  'smarty_include_tpl_file' => $path,
+	  'smarty_include_vars' => $params
+	));
+	$smarty->_tpl_vars = $tpl_vars;
+}
+
 /**
  * dotProject integration of Smarty engine main class
  *
@@ -353,6 +368,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_title"          , "smarty_function_mb_title");
     $this->register_function("mb_ternary"        , "smarty_function_mb_ternary");
     $this->register_function("mb_colonne"        , "smarty_function_mb_colonne");
+    $this->register_function("mb_include"        , "smarty_function_mb_include");
     $this->register_function("mb_include_script" , "smarty_function_mb_include_script");
     $this->register_modifier("pad"               , "smarty_modifier_pad");
     $this->register_modifier("json"              , "smarty_modifier_json");

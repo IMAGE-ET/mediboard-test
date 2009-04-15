@@ -10,7 +10,7 @@
   </tr>
   
   {{foreach from=$sejour->_ref_suivi_medical item=_suivi}}
- 	{{include file=inc_line_suivi.tpl _suivi=$_suivi show_patient=false}}
+ 	{{mb_include module=dPhospi template=inc_line_suivi _suivi=$_suivi show_patient=false}}
   {{/foreach}}
 </table>
 
