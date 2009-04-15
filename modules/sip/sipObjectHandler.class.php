@@ -125,7 +125,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (!$doc_errors) {
         $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
       }
-      $echange_hprim->acquittement_valide = $doc_valid ? true : false;
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
 			$echange_hprim->acquittement = $acquittement;
 
 			$echange_hprim->store();
