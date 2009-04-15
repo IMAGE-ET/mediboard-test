@@ -13,7 +13,17 @@ $can->needsRead();
 
 $echange_hprim_id = mbGetValueFromGet("echange_hprim_id");
 
+$t = mbGetValueFromGetOrSession('types');
+
 $observations = array();
+
+// Types filtres qu'on peut prendre en compte
+$filtre_types = array('emetteur', 'destinataire');
+
+$types = array();
+foreach ($filtre_types as $type) {
+  $types[$type] = !isset($t) || in_array($type, $t);
+}
 
 // Chargement de l'échange HPRIM demandé
 $echange_hprim = new CEchangeHprim();
@@ -32,6 +42,13 @@ if($echange_hprim->load($echange_hprim_id)) {
 // Récupération de la liste des echanges HPRIM
 $itemEchangeHprim = new CEchangeHprim;
 $where["initiateur_id"] = "IS NULL";
+if (isset($t) && count($t) > 1) {
+	foreach($t as $filter) {
+		if ($filter == "emetteur" || $filter == "destinataire") {
+			$where[$filter] = " = '".CAppUI::conf('mb_id')."'";
+		}
+	}
+}
 $listEchangeHprim = $itemEchangeHprim->loadList($where);
 foreach($listEchangeHprim as &$curr_echange_hprim) {
 	$curr_echange_hprim->loadRefNotifications();
@@ -78,5 +95,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("echange_hprim"    , $echange_hprim);
 $smarty->assign("observations"     , $observations);
 $smarty->assign("listEchangeHprim" , $listEchangeHprim);
+$smarty->assign("types"            , $types);
 $smarty->display("vw_idx_echange_hprim.tpl");
 ?>

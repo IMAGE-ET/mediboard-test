@@ -20,7 +20,6 @@ if (!$echange_hprim_id) {
   foreach ($notifications as $notification) {
     $dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->destinataire = $notification->destinataire;
-	  $dest_hprim->actif = 1;
 	  
 	  $dest_hprim->loadMatchingObject();
 	  
@@ -44,7 +43,6 @@ if (!$echange_hprim_id) {
 	
 	$dest_hprim = new CDestinataireHprim();
 	$dest_hprim->destinataire = $echange_hprim->destinataire;
-	$dest_hprim->actif = 1;
 	$dest_hprim->loadMatchingObject();
 	
 	if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {

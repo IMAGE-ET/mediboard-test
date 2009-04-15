@@ -29,6 +29,24 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
 
 <table class="main">
   {{if !$echange_hprim->_id}}
+  
+  <!-- Filtres -->
+  <tr>
+    <td style="text-align: center;">
+      <form action="?" name="filterEchange" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="types[]" />
+        
+        {{foreach from=$types key=type item=value}}
+          <input type="checkbox" name="types[]" value="{{$type}}" {{if $value}}checked="checked"{{/if}} />{{$type}}
+        {{/foreach}}
+        <br />
+        <button name="submit" class="search">Filtrer</button>
+      </form>
+    </td>
+  </tr>
+  
   <tr>
     <td class="halfPane" rowspan="3">
       <table class="tbl">
