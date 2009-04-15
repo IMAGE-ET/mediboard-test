@@ -299,7 +299,7 @@ Url.ping = function(options) {
   url.requestUpdate("systemMsg", options);
 };
 
-/** Parses the URL to extracts its components
+/** Parses the URL to extract its components
  * Based on the work of Steven Levithan <http://blog.stevenlevithan.com/archives/parseuri>
  * @param {String} url - The URL to parse
  * @return {Object} The URL components

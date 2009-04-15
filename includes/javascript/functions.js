@@ -431,8 +431,13 @@ var Console = {
     this.debug(dStop - this.dStart, "Duration in milliseconds");
     this.dStart = null;
   }
-  
-}
+};
+
+// If there is no console object, it uses the Mediboard Console
+window.console = window.console || {
+  debug: Console.debug,
+  log: Console.trace
+};
 
 /**
  * Assert utility object
