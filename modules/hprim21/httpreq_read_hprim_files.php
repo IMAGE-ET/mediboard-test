@@ -11,6 +11,10 @@ global $AppUI, $can, $m, $dPconfig;
 
 $extension = mbGetValueFromGet("fileextension", $dPconfig["hprim21"]["CHprim21Reader"]["fileextension"]);
 
+mbTrace($dPconfig["hprim21"]["CHprim21Reader"]["hostname"], "hostname");
+mbTrace($dPconfig["hprim21"]["CHprim21Reader"]["username"], "username");
+mbTrace($dPconfig["hprim21"]["CHprim21Reader"]["userpass"], "userpass");
+
 $list = array();
 $ftp = new CFTP();
 $ftp->hostname = mbGetValueFromGet("hostname", $dPconfig["hprim21"]["CHprim21Reader"]["hostname"]);
