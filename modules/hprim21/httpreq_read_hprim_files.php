@@ -11,16 +11,13 @@ global $AppUI, $can, $m, $dPconfig;
 
 $extension = mbGetValueFromGet("fileextension", $dPconfig["hprim21"]["CHprim21Reader"]["fileextension"]);
 
-mbTrace($dPconfig["hprim21"]["CHprim21Reader"]["hostname"], "hostname");
-mbTrace($dPconfig["hprim21"]["CHprim21Reader"]["username"], "username");
-mbTrace($dPconfig["hprim21"]["CHprim21Reader"]["userpass"], "userpass");
-
 $list = array();
 $ftp = new CFTP();
 $ftp->hostname = mbGetValueFromGet("hostname", $dPconfig["hprim21"]["CHprim21Reader"]["hostname"]);
 $ftp->username = mbGetValueFromGet("username", $dPconfig["hprim21"]["CHprim21Reader"]["username"]);
 $ftp->userpass = mbGetValueFromGet("userpass", $dPconfig["hprim21"]["CHprim21Reader"]["userpass"]);
 $ftp->connect();
+mbTrace($ftp->logs);
 $list = $ftp->getListFiles("./");
 
 if(!$list) {
