@@ -193,6 +193,12 @@ Main.add(function () {
   {{include file=inc_config_bcb_state.tpl dsn=bcb1}}
   {{include file=inc_config_bcb_state.tpl dsn=bcb2}}
   
+  <tr>
+    <td class="button" colspan="6">
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+    </td>
+  </tr>
+  
 </table>
 
 </form>

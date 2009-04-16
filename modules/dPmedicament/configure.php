@@ -35,14 +35,25 @@ foreach ($states as $dsn => &$state) {
     "Unavailable";
 }
 
-mbTrace($states);
-
 // Analyse des livrets thérapeutiques
 if (null == $dsBCBmed = @CBcbObject::getDataSource()) {
   CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb_med-ko");
 }
+else {
+	if (!$dsBCBmed->loadTable('livrettherapeutique')) {
+	  $dsBCBmed = null;
+	  CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb_med-empty");
+	}
+}
+
 if (null == $dsBCBges = @CSQLDataSource::get("bcbges")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb-ges-ko");
+}
+else {
+	if (!$dsBCBges->loadTable('livrettherapeutique')) {
+	  $dsBCBges = null;
+	  CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb_ges-empty");
+	}
 }
 
 $nb_produit_livret_med = $dsBCBmed ? CBcbProduitLivretTherapeutique::countProduitsMed() : null;
