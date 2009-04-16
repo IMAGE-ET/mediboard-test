@@ -284,7 +284,6 @@ abstract class CSQLDataSource {
   /**
    * Loads the first field of the first row returned by the query.
    * @param string The SQL query
-   * @param strong The db identifier
    * @return The value returned in the query or null if the query failed.
    */
   function loadResult($sql) {

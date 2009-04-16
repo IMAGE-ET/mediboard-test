@@ -284,7 +284,7 @@ class CAppUI {
   * @param int $type type of message (cf UI constants)
   * @param any number of printf-like parameters to be applied 
   */
-  function setMsg($msg, $type = UI_MSG_OK) {
+  static function setMsg($msg, $type = UI_MSG_OK) {
     // Formatage
     $args = func_get_args();
     $args[0] = CAppUI::tr($msg);
