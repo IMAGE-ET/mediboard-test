@@ -3530,3 +3530,13 @@ font-family: monospace;
 font-size: 1em; 
 line-height: 1.2em; 
 }
+
+/**
+ * Pagination
+ */
+.pagination {
+text-align: center;
+font-weight: bold;
+font-size: 14px;
+line-height: 1.8em;
+}

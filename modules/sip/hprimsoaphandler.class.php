@@ -20,17 +20,15 @@ class CHprimSoapHandler extends CSoapHandler {
       "messagePatient" => "string")
 	);
 
-	static $codesErreur = array(
+	static $codes = array(
 	  "E00" => "Erreur inattendue",
     "E01" => "L'émetteur du message n'est pas conforme avec l'établissement enregistré dans le SIP.",
 	  "E02" => "La grammaire du message XML n'est pas respectée.",
 	  "E03" => "Les identifiants fournis sont incohérents. L'IPP renvoyé ne correspond pas à celui associé à l'identifiant source.",
 	  "E04" => "Disconcordance entre l'identifiant source et l'identifiant cible.",
 	  "E05" => "Identifiants source et cible non fournis.",
-	  "E06" => "IPP non fourni."
-	);
-
-	static $codesAvertissementInformation = array(
+	  "E06" => "IPP non fourni.",
+	
     "A01" => "IPP envoyé non existant sur le SIP, attribution IPP forcée.",
     "A02" => "L'enregistrement du patient a échoué.",
     "A03" => "Modification du patient a échoué.",

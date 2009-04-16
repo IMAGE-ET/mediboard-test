@@ -52,11 +52,11 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 				$_codes = $_libelle_codes = "";
         foreach ($codes as $code) {
         	$_codes .= $code;
-        	$_libelle_codes .= CHprimSoapHandler::$codesAvertissementInformation[$code]." ";
+        	$_libelle_codes .= CHprimSoapHandler::$codes[$code]." ";
         }
         $this->addObservation($enteteMessageAcquittement, substr($_codes, 0, 17), substr($_libelle_codes, 0, 80), $commentaires);
 			} else {
-	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codesAvertissementInformation[$codes], $commentaires);
+	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
 			}
 		}
 	}
@@ -68,10 +68,10 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		 
 		if (is_array($codes)) {
 			foreach ($codes as $code) {
-				$this->addErreurAvertissement($erreursAvertissements, $code, CHprimSoapHandler::$codesErreur[$code], $commentaires);
+				$this->addErreurAvertissement($erreursAvertissements, $code, CHprimSoapHandler::$codes[$code], $commentaires);
 			}
 		} else {
-			$this->addErreurAvertissement($erreursAvertissements, $codes, CHprimSoapHandler::$codesErreur[$codes], $commentaires);
+			$this->addErreurAvertissement($erreursAvertissements, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
 		}		
 	}
 
