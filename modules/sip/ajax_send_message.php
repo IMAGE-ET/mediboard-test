@@ -15,6 +15,7 @@ $where = '';
 if (!$echange_hprim_id) {
 	$echange_hprim = new CEchangeHprim();
 	$where['date_echange'] = "IS NULL";
+	$where['message_valide'] = " = '1'";
 	$limit = CAppUI::conf('sip batch_count');
   $notifications = $echange_hprim->loadList($where, null, $limit);
   
