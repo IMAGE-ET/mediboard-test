@@ -21,7 +21,10 @@ foreach ($states as $dsn => &$state) {
     continue;
   }
   
-  $state["last_modif"] = $ds->loadResult("SELECT MAX( `DATE_`) FROM `historiques`");
+  $state["last_modif"] = $ds->loadTable('historiques') ? 
+    $ds->loadResult("SELECT MAX( `DATE_`) FROM `historiques`") :
+    "Unavailable";
+    
   $state["rows_count"] = 0;
   foreach ($ds->loadList("SHOW TABLE STATUS") as $table) {
     $state["rows_count"] += $table["Rows"];
