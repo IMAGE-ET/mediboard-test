@@ -59,7 +59,6 @@
        {{mb_value object=$object field="destinataire"}}
      {{/if}}
   </td>
-	<td>{{mb_value object=$object field="type"}}</td>
 	<td>{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
 	  {{if $object->initiateur_id}}
@@ -84,5 +83,11 @@
 	</td>
 	<td class="{{if ($object->statut_acquittement == 'erreur')}}error{{elseif ($object->statut_acquittement == 'avertissement')}}warning{{/if}}">
 	 {{mb_value object=$object field="statut_acquittement"}}
+  </td>
+  <td class="{{if !$object->message_valide}}error{{/if}}">
+   {{mb_value object=$object field="message_valide"}}
+  </td>
+  <td class="{{if !$object->acquittement_valide}}error{{/if}}">
+   {{mb_value object=$object field="acquittement_valide"}}
   </td>
 </tr>

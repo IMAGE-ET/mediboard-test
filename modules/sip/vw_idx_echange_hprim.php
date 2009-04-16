@@ -12,13 +12,13 @@ global $can;
 $can->needsRead();
 
 $echange_hprim_id = mbGetValueFromGet("echange_hprim_id");
-
-$t = mbGetValueFromGetOrSession('types');
+$t                = mbGetValueFromGetOrSession('types');
+$page             = mbGetValueFromGet('page', 1);
 
 $observations = array();
 
 // Types filtres qu'on peut prendre en compte
-$filtre_types = array('emetteur', 'destinataire');
+$filtre_types = array('emetteur', 'destinataire', 'message_valide', 'acquittement_valide');
 
 $types = array();
 foreach ($filtre_types as $type) {
@@ -47,9 +47,23 @@ if (isset($t) && count($t) > 1) {
 		if ($filter == "emetteur" || $filter == "destinataire") {
 			$where[$filter] = " = '".CAppUI::conf('mb_id')."'";
 		}
+		if ($filter == "message_valide" || $filter == "acquittement_valide") {
+      $where[$filter] = " = '0'";
+    }
 	}
 }
-$listEchangeHprim = $itemEchangeHprim->loadList($where);
+
+$total_echange_hprim = $itemEchangeHprim->countList($where);
+
+//Pagination
+$total_pages = ceil($total_echange_hprim / 20);
+$prev_page = $page-1;
+$next_page = $page+1;
+
+$limit = ($page == 1) ? 0 : $page * 10;
+
+$listEchangeHprim    = $itemEchangeHprim->loadList($where, null, intval($limit).',20');
+  
 foreach($listEchangeHprim as &$curr_echange_hprim) {
 	$curr_echange_hprim->loadRefNotifications();
 	if (!empty($curr_echange_hprim->_ref_notifications)) {
@@ -92,9 +106,14 @@ foreach($listEchangeHprim as &$curr_echange_hprim) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("echange_hprim"    , $echange_hprim);
-$smarty->assign("observations"     , $observations);
-$smarty->assign("listEchangeHprim" , $listEchangeHprim);
-$smarty->assign("types"            , $types);
+$smarty->assign("echange_hprim"       , $echange_hprim);
+$smarty->assign("observations"        , $observations);
+$smarty->assign("listEchangeHprim"    , $listEchangeHprim);
+$smarty->assign("total_echange_hprim" , intval($total_echange_hprim));
+$smarty->assign("total_pages"         , $total_pages);
+$smarty->assign("page"                , $page);
+$smarty->assign("prev_page"           , $prev_page);
+$smarty->assign("next_page"           , $next_page);
+$smarty->assign("types"               , $types);
 $smarty->display("vw_idx_echange_hprim.tpl");
 ?>

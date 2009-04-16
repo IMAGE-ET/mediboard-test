@@ -10,7 +10,7 @@
 
 sendMessage = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
-  url.setModuleAction("sip", "httpreq_send_message");
+  url.setModuleAction("sip", "ajax_send_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
 	url.requestUpdate("systemMsg", { onComplete:function() { 
@@ -19,7 +19,7 @@ sendMessage = function(echange_hprim_id, echange_hprim_classname){
 
 refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
-  url.setModuleAction("sip", "httpreq_refresh_message");
+  url.setModuleAction("sip", "ajax_refresh_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
   url.requestUpdate("echange_"+echange_hprim_id , { waitingText: null });
@@ -37,21 +37,48 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="types[]" />
+        <input type="hidden" name="page" value="1" onchange="this.form.submit()"/>
         
         {{foreach from=$types key=type item=value}}
           <input type="checkbox" name="types[]" value="{{$type}}" {{if $value}}checked="checked"{{/if}} />{{$type}}
         {{/foreach}}
         <br />
-        <button name="submit" class="search">Filtrer</button>
+        <button type="submit" class="search">Filtrer</button>
+        
+        {{if $total_echange_hprim != 0}}
+	        <div style="font-weight:bold;padding-top:10px"> 
+	          {{$total_echange_hprim}} {{tr}}results{{/tr}}
+	        </div>
+	        <div class="pagination">
+	          {{if ($page == 1)}}
+	            {{$page}}
+			      {{else}}
+			        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$prev_page}})"> < Précédent </a> |
+	            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, 1)"> 1 </a> | 
+	            {{$page}} 
+			      {{/if}}
+			      {{if $page != $total_pages}}
+			        | <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$total_pages}})"> {{$total_pages}} </a> | 
+			        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$next_page}})"> Suivant > </a>
+	          {{/if}}
+	        </div>
+	        <div>
+		        <select name="listpageechangehprim" onchange="$V(document.forms.filterEchange.elements.page, $V(this))">
+		          <option value="">&mdash; Page &mdash;</option>
+	            {{foreach from=1|range:$total_pages:4 item=curr_page}}
+	              <option value="{{$curr_page}}" {{if $curr_page == $page}}selected="selected"{{/if}}>{{$curr_page}}</option>
+	            {{/foreach}}
+		        </select>
+	        </div>
+        {{/if}}
       </form>
     </td>
   </tr>
-  
   <tr>
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="12">ECHANGES HPRIM</th>
+          <th class="title" colspan="14">ECHANGES HPRIM</th>
         </tr>
         <tr>
           <th></th>
@@ -61,11 +88,12 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
           <th>{{mb_title object=$echange_hprim field="date_production"}}</th>
           <th>{{mb_title object=$echange_hprim field="identifiant_emetteur"}}</th>
           <th>{{mb_title object=$echange_hprim field="destinataire"}}</th>
-          <th>{{mb_title object=$echange_hprim field="type"}}</th>
           <th>{{mb_title object=$echange_hprim field="sous_type"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_echange"}}</th>
           <th>{{mb_title object=$echange_hprim field="acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="statut_acquittement"}}</th>
+          <th>{{mb_title object=$echange_hprim field="message_valide"}}</th>
+          <th>{{mb_title object=$echange_hprim field="acquittement_valide"}}</th>
         </tr>
         {{foreach from=$listEchangeHprim item=curr_echange_hprim}}
           <tbody id="echange_{{$curr_echange_hprim->_id}}">
@@ -91,7 +119,9 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
       {{if $echange_hprim->acquittement}}
         {{mb_value object=$echange_hprim field="acquittement"}}
         
-        <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error{{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning{{else}}info{{/if}}">
+        <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error
+                        {{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning
+                        {{else}}info{{/if}}">
           {{foreach from=$observations item=observation}}
             <strong>Code :</strong> {{$observation.code}} <br />
             <strong>Libelle :</strong> {{$observation.libelle}} <br />

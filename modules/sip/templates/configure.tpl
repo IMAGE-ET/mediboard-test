@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function doAction(sAction) {
   var url = new Url;
-  url.setModuleAction("sip", "httpreq_do_cfg_action");
+  url.setModuleAction("sip", "ajax_do_cfg_action");
   url.addParam("action", sAction);
   url.requestUpdate(sAction);
 }
@@ -134,7 +134,7 @@ function doAction(sAction) {
 
 var Action = {
   module: "sip",
-  action: "httpreq_export_patient",
+  action: "ajax_export_patient",
   
   import: function (sAction) {
     var url = new Url;

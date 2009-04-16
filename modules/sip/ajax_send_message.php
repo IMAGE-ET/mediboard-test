@@ -35,7 +35,14 @@ if (!$echange_hprim_id) {
 	  if (null == $acquittement = $client->evenementPatient($notification->message)) {
 	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  }
-	  
+	  $domGetAcquittement = CHPrimXMLAcquittementsPatients();
+	  $domGetAcquittement->loadXML(utf8_decode($acquittement));
+    $doc_valid = $domGetAcquittement->schemaValidate();
+    if ($doc_valid) {
+    	$notification->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+    }
+    $notification->acquittement_valide = $doc_valid ? 1 : 0;
+    
 	  $notification->date_echange = mbDateTime();
 	  $notification->acquittement = $acquittement;
 	  $notification->store();
@@ -59,7 +66,14 @@ if (!$echange_hprim_id) {
 	  trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  $AppUI->setMsg("Evenement patient impossible", UI_MSG_ERROR);
 	}
-	
+	$domGetAcquittement = CHPrimXMLAcquittementsPatients();
+  $domGetAcquittement->loadXML(utf8_decode($acquittement));
+  $doc_valid = $domGetAcquittement->schemaValidate();
+  if ($doc_valid) {
+    $notification->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+  }
+  $notification->acquittement_valide = $doc_valid ? 1 : 0;
+    
 	$echange_hprim->date_echange = mbDateTime();
 	$echange_hprim->acquittement = $acquittement;
 	$echange_hprim->store();
