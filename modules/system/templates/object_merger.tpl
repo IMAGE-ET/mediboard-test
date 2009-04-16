@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 function setField (field, value, form) {
-  field = $(document.forms[form].elements[field]);
+  field = $(form.elements[field]);
 
   var dateView = $(field.id+'_da');
   if (dateView) {
