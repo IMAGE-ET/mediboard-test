@@ -26,7 +26,10 @@ $code_ccam = mbGetValueFromGetOrSession("code_ccam");
 // Praticiens et protocoles disponibles
 $listPrat   = new CMediusers();
 $listPrat   = $listPrat->loadPraticiens(PERM_READ);
-$protocoles = array();
+$protocoles = array(
+  'sejour' => array(),
+  'interv' => array(),
+);
 $listCodes  = array();
 
 foreach($listPrat as $keyPrat => $valuePrat) {
@@ -43,7 +46,7 @@ foreach($listPrat as $keyPrat => $valuePrat) {
 
     if ((!$code_ccam or in_array($code_ccam, $protocole->_codes_ccam)) and (!$chir_id or $prat->user_id == $chir_id)) {
       $protocole->loadRefsFwd();
-      $protocoles[] =& $protocole;
+      $protocoles[$protocole->for_sejour == 1 ? 'sejour' : 'interv'][] =& $protocole;
     	
     }    
   }

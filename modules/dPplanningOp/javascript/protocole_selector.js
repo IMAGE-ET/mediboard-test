@@ -1,7 +1,8 @@
 // $Id: $
 
 var ProtocoleSelector = {
-  sForm            : null,  // Ici, on ne se sert pas de ce formulaire
+  sForm            : null,
+  sForSejour       : null,
   sChir_id         : null,
   sChir_id_easy    : null,
   sLibelle         : null,
@@ -28,12 +29,13 @@ var ProtocoleSelector = {
   },
 
   pop: function() {
-    var oOpForm     = document.editOp;
-    var oOpFormEasy = document.editOpEasy;
+    var oForm     = (this.sForm && getForm(this.sForm)) || document.editOp;
+    var oFormEasy = document.editOpEasy;
     var oSejourForm = document.editSejour;
     var url = new Url();
     url.setModuleAction("dPplanningOp", "vw_protocoles");
-    url.addParam("chir_id", oOpForm[this.sChir_id].value);
+    url.addParam("chir_id", oForm[this.sChir_id].value);
+    url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
     url.popup(this.options.width, this.options.height, "Protocole");
   },
   
@@ -43,30 +45,34 @@ var ProtocoleSelector = {
     var oOpFormEasy = document.editOpEasy;
     
     // Champs de l'intervention
-    $V(oOpForm[this.sChir_id], protocole.chir_id, true);
-    if(oOpFormEasy) {
-      $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
-      $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
-      $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
+    if (oOpForm) {
+      $V(oOpForm[this.sChir_id], protocole.chir_id, true);
+      if(oOpFormEasy) {
+        $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
+        $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
+        $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
+      }
+      
+      $V(oOpForm[this.sCodes_ccam],        protocole.codes_ccam);
+      $V(oOpForm[this.sLibelle],           protocole.libelle);
+      $V(oOpForm[this.sHour_op],           protocole._hour_op);
+      $V(oOpForm[this.sMin_op],            protocole._min_op);
+      $V(oOpForm[this.sMateriel],          protocole.materiel);
+      $V(oOpForm[this.sExamen],            protocole.examen);
+      
+      if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
+        $V(oOpForm[this.sDepassement],       protocole.depassement, false);
+        $V(oOpForm[this.sForfait],           protocole.forfait, false);
+        $V(oOpForm[this.sFournitures],       protocole.fournitures, false);
+      }
+      
+      $V(oOpForm[this.sRques_op], protocole.rques_operation);
     }
-    
-    $V(oOpForm[this.sCodes_ccam],        protocole.codes_ccam);
-    $V(oOpForm[this.sLibelle],           protocole.libelle);
-    $V(oOpForm[this.sHour_op],           protocole._hour_op);
-    $V(oOpForm[this.sMin_op],            protocole._min_op);
-    $V(oOpForm[this.sMateriel],          protocole.materiel);
-    $V(oOpForm[this.sExamen],            protocole.examen);
-    
-    if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
-      $V(oOpForm[this.sDepassement],       protocole.depassement, false);
-      $V(oOpForm[this.sForfait],           protocole.forfait, false);
-      $V(oOpForm[this.sFournitures],       protocole.fournitures, false);
+    else {
+      $V(oSejourForm[this.sChir_id], protocole.chir_id, true);
     }
-    
-    $V(oOpForm[this.sRques_op], protocole.rques_operation);
     
     // Champs du séjour
-    
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       oSejourForm[this.sType].value = protocole.type;
@@ -85,8 +91,11 @@ var ProtocoleSelector = {
       $V(oSejourForm[this.sRques_sej], protocole.rques_sejour);
     }
     
-    refreshListCCAM("expert");
-    refreshListCCAM("easy");
+    if (window.refreshListCCAM) {
+      refreshListCCAM("expert");
+      refreshListCCAM("easy");
+    }
+    
     if (oSejourForm[this.sProtoPrescAnesth]) {
       if(protocole.protocole_prescription_anesth_id){
         $V(oSejourForm[this.sProtoPrescAnesth], "prot-"+protocole.protocole_prescription_anesth_id);

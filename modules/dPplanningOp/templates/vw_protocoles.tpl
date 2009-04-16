@@ -3,7 +3,6 @@
 <script type="text/javascript">
 
 function copieProt(){
-
   var oForm = document.copieProtocole;
   
   // Formulaire de selection du chir
@@ -21,47 +20,56 @@ function copieProt(){
     oForm.chir_id.value = "{{$mediuser->user_id}}";
   }
   
-  
-  if(oForm.libelle.value){
-    oForm.libelle.value = "Copie de "+oForm.libelle.value;
-  } else {
-    oForm.libelle.value = "Copie de "+ oForm.codes_ccam.value;
-  }
+  oForm.libelle.value = "Copie de "+(oForm.libelle.value ? oForm.libelle.value : oForm.codes_ccam.value);
   oForm.submit();
 }
 
-
 {{if $dialog}}
-var aProtocoles = new Array();
-{{foreach from=$protocoles item=curr_protocole}}
-aProtocoles[{{$curr_protocole->protocole_id}}] = {
-  protocole_id     : {{$curr_protocole->protocole_id}},
-  chir_id          : {{$curr_protocole->chir_id}},
-  codes_ccam       : "{{$curr_protocole->codes_ccam}}",
-  DP               : "{{$curr_protocole->DP}}",
-  libelle          : "{{$curr_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
-  _hour_op         : "{{$curr_protocole->_hour_op}}",
-  _min_op          : "{{$curr_protocole->_min_op}}",
-  examen           : "{{$curr_protocole->examen|smarty:nodefaults|escape:"javascript"}}",
-  materiel         : "{{$curr_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
-  convalescence    : "{{$curr_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
-  depassement      : "{{$curr_protocole->depassement}}",
-  forfait          : "{{$curr_protocole->forfait}}",
-  fournitures      : "{{$curr_protocole->fournitures}}",
-  type             : "{{$curr_protocole->type}}",
-  duree_hospi      : {{$curr_protocole->duree_hospi}},
-  rques_sejour     : "{{$curr_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
-  rques_operation  : "{{$curr_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
-  protocole_prescription_anesth_id: "{{$curr_protocole->protocole_prescription_anesth_id}}",
-  protocole_prescription_chir_id:   "{{$curr_protocole->protocole_prescription_chir_id}}"
-}
-{{/foreach}}
+  var aProtocoles = {
+    sejour: {},
+    interv: {}
+  };
+  {{foreach from=$protocoles key=key_type item=curr_type}}
+    {{foreach from=$curr_type item=curr_protocole}}
+    aProtocoles['{{$key_type}}'][{{$curr_protocole->protocole_id}}] = {
+      protocole_id     : {{$curr_protocole->protocole_id}},
+      chir_id          : {{$curr_protocole->chir_id}},
+      codes_ccam       : "{{$curr_protocole->codes_ccam}}",
+      DP               : "{{$curr_protocole->DP}}",
+      libelle          : "{{$curr_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
+      _hour_op         : "{{$curr_protocole->_hour_op}}",
+      _min_op          : "{{$curr_protocole->_min_op}}",
+      examen           : "{{$curr_protocole->examen|smarty:nodefaults|escape:"javascript"}}",
+      materiel         : "{{$curr_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
+      convalescence    : "{{$curr_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
+      depassement      : "{{$curr_protocole->depassement}}",
+      forfait          : "{{$curr_protocole->forfait}}",
+      fournitures      : "{{$curr_protocole->fournitures}}",
+      type             : "{{$curr_protocole->type}}",
+      duree_hospi      : {{$curr_protocole->duree_hospi}},
+      rques_sejour     : "{{$curr_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
+      rques_operation  : "{{$curr_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
+      protocole_prescription_anesth_id: "{{$curr_protocole->protocole_prescription_anesth_id}}",
+      protocole_prescription_chir_id:   "{{$curr_protocole->protocole_prescription_chir_id}}"
+    };
+    {{/foreach}}
+  {{/foreach}}
+  
+  Main.add(function(){
+    var urlComponents = Url.parse();
+    $(urlComponents.fragment || 'interv').show();
+  });
+{{else}}
+  Main.add(function(){
+    // Don't use .create()
+    new Control.Tabs('tabs-protocoles');
+  });
+{{/if}}
 
-function setClose(protocole_id) {
-  window.opener.ProtocoleSelector.set(aProtocoles[protocole_id]);
+function setClose(type, protocole_id) {
+  window.opener.ProtocoleSelector.set(aProtocoles[type][protocole_id]);
   window.close();
 }
-{{/if}}
 
 </script>
 
@@ -106,55 +114,81 @@ function setClose(protocole_id) {
       </table>
       </form>    
       
+      {{if !$dialog}}
+      <ul id="tabs-protocoles" class="control_tabs">
+        <li><a href="#interv">Chirurgicaux</a></li>
+        <li><a href="#sejour">Médicaux</a></li>
+      </ul>
+      <hr class="control_tabs" />
+      {{/if}}
     </td>
   </tr>
 
   <tr>
-    {{if $dialog}}
-    <td class="greedyPane">
-    {{else}}
-    <td class="halfPane">
-    {{/if}}
-
+    <td>
       <table class="tbl">
-        <tr>
-          <th>Chirurgien &mdash; Acte CCAM</th>
-        </tr>
-        
-        {{foreach from=$protocoles item=curr_protocole}}
-        <tr>    
-          <td class="text">
-            {{if $dialog}}
-            <a href="#" onclick="setClose({{$curr_protocole->protocole_id}})">
-            {{else}}
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;protocole_id={{$curr_protocole->protocole_id}}">
-            {{/if}}
-              <strong>
-                {{$curr_protocole->_ref_chir->_view}} 
-                {{foreach from=$curr_protocole->_ext_codes_ccam item=curr_code}}
-                &mdash; {{$curr_code->code}}
-                {{/foreach}}
-                {{if $curr_protocole->DP}}
-                &mdash; {{$curr_protocole->DP}}
+      {{foreach from=$protocoles key=key_type item=curr_type}}
+        <tbody id="{{$key_type}}" style="display: none;">
+          <tr>
+            <th>
+              {{if $key_type == 'interv'}}
+                Chirurgien &mdash; Actes CCAM
+              {{else}}
+                Praticien &mdash; Durée 
+              {{/if}}
+              &mdash; Diagnostic principal
+            </th>
+          </tr>
+          {{foreach from=$curr_type item=curr_protocole}}
+          <tr>    
+            <td class="text">
+              {{if $dialog}}
+              <a href="#1" onclick="setClose('{{$key_type}}', {{$curr_protocole->protocole_id}})">
+              {{else}}
+              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;protocole_id={{$curr_protocole->protocole_id}}">
+              {{/if}}
+                <strong>
+                  {{$curr_protocole->_ref_chir->_view}} 
+                  
+                  {{if $key_type == 'interv'}}
+                    {{foreach from=$curr_protocole->_ext_codes_ccam item=curr_code}}
+                    &mdash; {{$curr_code->code}}
+                    {{/foreach}}
+                  {{else}}
+                    &mdash; {{$curr_protocole->duree_hospi}} nuits
+                  {{/if}}
+                  
+                  {{if $curr_protocole->DP}}
+                    &mdash; {{$curr_protocole->DP}}
+                  {{/if}}
+                </strong>
+              </a>
+              
+              {{if $key_type == 'interv'}}
+                {{if $curr_protocole->libelle}}
+                  <em>[{{$curr_protocole->libelle}}]</em>
+                  <br />
                 {{/if}}
-              </strong>
-            </a>
-            {{if $curr_protocole->libelle}}
-              <em>[{{$curr_protocole->libelle}}]</em>
-              <br />
-            {{/if}}
-            {{foreach from=$curr_protocole->_ext_codes_ccam item=curr_code}}
-            {{$curr_code->libelleLong}} <br />
-            {{/foreach}}
-          </td>
-        </tr>
-        {{/foreach}}
-
+                {{foreach from=$curr_protocole->_ext_codes_ccam item=curr_code}}
+                {{$curr_code->libelleLong}} <br />
+                {{/foreach}}
+              {{else}}
+                {{* afficher des champs de séjour *}}
+              {{/if}}
+            </td>
+          </tr>
+          {{foreachelse}}
+          <tr>
+            <td colspan="5">{{tr}}CProtocole.none{{/tr}}</td>
+          </tr>
+          {{/foreach}}
+        </tbody>
+      {{/foreach}}
       </table>
 
     </td>
+    {{if $protSel->protocole_id && !$dialog}}
     <td class="halfPane">
-      {{if $protSel->protocole_id && !$dialog}}
         <table class="form">
           <tr>
             <th class="category" colspan="2">Détails du protocole</th>
@@ -162,7 +196,12 @@ function setClose(protocole_id) {
 
           <tr>
             <th>Chirurgien :</th>
-            <td colspan="3"><strong>{{$protSel->_ref_chir->_view}}</strong></td>
+            <td><strong>{{$protSel->_ref_chir->_view}}</strong></td>
+          </tr>
+          
+          <tr>
+            <th>{{mb_label object=$protSel field=for_sejour}}</th>
+            <td>{{mb_value object=$protSel field=for_sejour}}</td>
           </tr>
 
           {{if $protSel->libelle}}
@@ -176,10 +215,8 @@ function setClose(protocole_id) {
             <th>Acte Médical :</th>
             <td class="text">
             {{foreach from=$protSel->_ext_codes_ccam item=curr_code}}
-              <strong>{{$curr_code->code}}</strong>
-              <br />
-              {{$curr_code->libelleLong}}
-              <br />
+              <strong>{{$curr_code->code}}</strong><br />
+              {{$curr_code->libelleLong}}<br />
             {{/foreach}}
             </td>
           </tr>
@@ -306,7 +343,7 @@ function setClose(protocole_id) {
 	        </tr>
         {{/if}}
       </table>
-      {{/if}} 
-   </td>
+    </td>
+    {{/if}} 
   </tr>
 </table>

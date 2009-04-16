@@ -50,11 +50,10 @@ function refreshListCCAM() {
   
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = sCode;
-      sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
-      sCodeNode += "<\/button>";
+      sCodeNode += '<button class="cancel notext" type="button" onclick="oCcamField.remove(\'' + sCode + '\')"></button>';
     aCodeNodes.push(sCodeNode);
   }
-  oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
+  oCcamNode.innerHTML = aCodeNodes.join(", ");
 }
 
 function checkFormSejour() {
@@ -64,6 +63,8 @@ function checkFormSejour() {
 
 function checkCCAM() {
   var oForm = document.editFrm;
+  if ($V(oForm.for_sejour) == 1) return true;
+  
   var sCcam = oForm._codeCCAM.value;
   if(sCcam != "") {
     if(!oCcamField.add(sCcam,true)) {
@@ -83,6 +84,8 @@ function checkCCAM() {
 
 function checkDureeHospi() {
   var form = document.editFrm;
+  if ($V(form.for_sejour) == 1) return true;
+  
   field1 = form.type;
   field2 = form.duree_hospi;
   if (field1 && field2) {
@@ -119,6 +122,9 @@ function checkDuree() {
   var form = document.editFrm;
   field1 = form._hour_op;
   field2 = form._min_op;
+  
+  if ($V(form.for_sejour) == 1) return true; // Si mode séjour
+  
   if (field1 && field2) {
     if (field1.value == 0 && field2.value == 0) {
       alert("Temps opératoire invalide");
@@ -129,11 +135,20 @@ function checkDuree() {
   return true;
 }
 
+function setOperationActive(active) {
+  var op = $('operation'),
+      form = getForm('editFrm');
+  op.setOpacity(active ? 1 : 0.4);
+  op.select('input, button, select, textarea').each(Form.Element[active ? 'enable' : 'disable']);
+}
+
 Main.add(function () {
   refreshListCCAM();
 
   refreshListProtocolesPrescription($V(document.editFrm.chir_id));
-
+  
+  setOperationActive($V(getForm('editFrm').for_sejour) == 0);
+  
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,
     sProps : "notNull code ccam"
@@ -173,33 +188,30 @@ Main.add(function () {
     </th>
     {{/if}}
   </tr>
-  
   <tr>
-    <td>
-  
+    <td colspan="2" style="padding: 2px; text-align: center;">
+      {{mb_label object=$protocole field="chir_id"}}
+      <select name="chir_id" class="{{$protocole->_props.chir_id}}" onchange="refreshListProtocolesPrescription($V(this));">
+        <option value="">&mdash; Choisir un praticien</option>
+        {{foreach from=$listPraticiens item=curr_praticien}}
+        <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+        {{$curr_praticien->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+      
+      {{mb_label object=$protocole field="for_sejour"}}
+      {{mb_field object=$protocole field="for_sejour" onchange="setOperationActive(\$V(this.form.elements[this.name]) != 1)"}}
+    </td>
+  </tr>
+  <tr>
+    <td id="operation">
       <table class="form">
         <tr>
           <th class="category" colspan="3">
             Informations concernant l'intervention
           </th>
         </tr>
-        
-        <tr>
-          <th>
-            {{mb_label object=$protocole field="chir_id"}}
-          </th>
-          <td colspan="2">
-            <select name="chir_id" class="{{$protocole->_props.chir_id}}" onchange="refreshListProtocolesPrescription($V(this));">
-              <option value="">&mdash; Choisir un praticien</option>
-              {{foreach from=$listPraticiens item=curr_praticien}}
-              <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-              {{$curr_praticien->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-
         <tr>
           <th>
             {{mb_label object=$protocole field="_hour_op"}}
@@ -254,9 +266,9 @@ Main.add(function () {
           <td colspan="2">{{mb_field object=$protocole field="libelle" size="50"}}</td>
         </tr>
         <tr>
-          <td class="text">{{mb_label object=$protocole field="examen"}}</td>
-          <td class="text">{{mb_label object=$protocole field="materiel"}}</td>
-          <td class="text">{{mb_label object=$protocole field="rques_operation"}}</td>
+          <td class="text" style="width: 33%;">{{mb_label object=$protocole field="examen"}}</td>
+          <td class="text" style="width: 33%;">{{mb_label object=$protocole field="materiel"}}</td>
+          <td class="text" style="width: 33%;">{{mb_label object=$protocole field="rques_operation"}}</td>
         </tr>
 
         <tr>
@@ -279,7 +291,7 @@ Main.add(function () {
       </table>
     </td>
     
-    <td>
+    <td id="sejour">
       <table class="form">
         <tr>
          <th class="category" colspan="3">Informations concernant le séjour</th>
@@ -330,27 +342,18 @@ Main.add(function () {
     </td>
   </tr>
   <tr>
-    <td colspan="2">
-
-      <table class="form">
-        <tr>
-          <td class="button">
-          {{if $protocole->protocole_id}}
-            <button class="submit" type="button" onclick="copier()">Dupliquer</button>
-            <button class="modify" type="submit">Modifier</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
-            </button>
-          {{else}}
-            <button class="submit" type="submit">Créer</button>
-          {{/if}}
-          </td>
-        </tr>
-      </table>
-    
+    <td colspan="2" style="text-align: center;">
+    {{if $protocole->protocole_id}}
+      <button class="submit" type="button" onclick="copier()">Dupliquer</button>
+      <button class="modify" type="submit">Modifier</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
+        Supprimer
+      </button>
+    {{else}}
+      <button class="submit" type="submit">Créer</button>
+    {{/if}}
     </td>
   </tr>
-
 </table>
 
 </form>

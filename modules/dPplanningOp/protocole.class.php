@@ -14,6 +14,9 @@ class CProtocole extends CMbObject {
   // DB References
   var $chir_id = null; // Sejour / Operation
 
+  // For sejour/intervention
+  var $for_sejour = null;
+  
   // DB Fields Sejour
   var $type          = null;
   var $DP            = null;
@@ -61,6 +64,7 @@ class CProtocole extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["chir_id"]         = "ref notNull class|CMediusers seekable";
+    $specs["for_sejour"]      = "bool notNull default|0";
     $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $specs["DP"]              = "code cim10";
     $specs["convalescence"]   = "text confidential";

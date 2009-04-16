@@ -1,14 +1,41 @@
 <!-- $Id: $ -->
 
-<script type="text/javascript">
-Main.add(function () {
-   Document.refreshList('{{$op->_id}}');
-} );
-
-</script>
-
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 {{mb_include_script module="dPplanningOp" script="plage_selector"}}
+
+<script type="text/javascript">
+Main.add(function(){
+   Document.refreshList('{{$op->_id}}');
+});
+
+PlageOpSelector.init = function(){
+  if(!(checkChir() && checkDuree())) return;
+
+  var oOpForm     = document.editOp;
+  var oSejourForm = document.editSejour;
+  
+  this.sPlage_id = "plageop_id";
+  this.sSalle_id = "salle_id";
+  this.sDate     = "_date";
+  this.sType     = "type";
+  
+  this.s_hour_entree_prevue = "_hour_entree_prevue";
+  this.s_min_entree_prevue  = "_min_entree_prevue";
+  this.s_date_entree_prevue = "_date_entree_prevue";
+  
+  this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
+           oOpForm._min_op.value, oSejourForm.group_id.value,
+           oOpForm.operation_id.value);
+}
+
+CCAMSelector.init = function(){
+  this.sForm  = "editOp";
+  this.sView  = "_codeCCAM";
+  this.sChir  = "chir_id";
+  this.sClass = "_class_name";
+  this.pop();
+}
+</script>
 
 <form name="editOp" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 
@@ -71,24 +98,13 @@ Main.add(function () {
   </tr>
   
   <tr>
-    <th>
-      {{mb_label object=$op field="codes_ccam" defaultFor="_codeCCAM"}}
-    </th>
+    <th>{{mb_label object=$op field="codes_ccam" defaultFor="_codeCCAM"}}</th>
     <td>
       <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
       <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
     </td>
     <td class="button">
       <button type="button" class="search" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
-      <script type="text/javascript">
-        CCAMSelector.init = function(){
-        this.sForm  = "editOp";
-        this.sView  = "_codeCCAM";
-        this.sChir  = "chir_id";
-        this.sClass = "_class_name";
-        this.pop();
-      }
-      </script>
     </td>
   </tr>
   <tr>
@@ -98,12 +114,12 @@ Main.add(function () {
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>
-  </tr>
+  </tr>
   
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
     <td colspan="2">{{mb_field object=$op field="libelle"}}</td>
-  </tr>
+  </tr>
   
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
@@ -113,9 +129,7 @@ Main.add(function () {
   </tr> 
 
   <tr>
-    <th>
-      {{mb_label object=$op field="_hour_op"}}
-    </th>
+    <th>{{mb_label object=$op field="_hour_op"}}</th>
     <td>
       <select name="_hour_op" class="notNull num">
       {{foreach from=$hours_duree|smarty:nodefaults item=hour}}
@@ -126,7 +140,7 @@ Main.add(function () {
       {{foreach from=$mins_duree|smarty:nodefaults item=min}}
         <option value="{{$min}}" {{if (!$op && $min == 0) || $op->_min_op == $min}} selected="selected" {{/if}}>{{$min}}</option>
       {{/foreach}}
-      </select> mn
+      </select> min
     </td>
     <td id="timeEst">
     </td>
@@ -134,9 +148,7 @@ Main.add(function () {
 
   <tr>
     {{if $modurgence}}
-    <th>
-      {{mb_label object=$op field="date"}}
-    </th>
+    <th>{{mb_label object=$op field="date"}}</th>
     <td>
       <input type="hidden" name="plageop_id" value="" />
       <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime}}{{else}}{{$today}}{{/if}}" />
@@ -170,7 +182,7 @@ Main.add(function () {
       {{foreach from=$mins_duree|smarty:nodefaults item=min}}
         <option value="{{$min}}" {{if $op->_min_urgence == $min}}selected="selected"{{/if}}>{{$min}}</option>
       {{/foreach}}
-      </select> mn
+      </select> min
     </td>
     {{else}}
     <th>
@@ -194,33 +206,6 @@ Main.add(function () {
     </td>
     <td class="button">
       <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
- 
-      <script type="text/javascript">
-      
-      PlageOpSelector.init = function(){
-        if(!(checkChir() && checkDuree())) {
-          return;
-        }
-
-        var oOpForm     = document.editOp;
-        var oSejourForm = document.editSejour;
-        
-        this.sPlage_id = "plageop_id";
-        this.sSalle_id = "salle_id";
-        this.sDate     = "_date";
-        this.sType     = "type";
-        
-        this.s_hour_entree_prevue = "_hour_entree_prevue";
-        this.s_min_entree_prevue  = "_min_entree_prevue";
-        this.s_date_entree_prevue = "_date_entree_prevue";
-        
-        this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
-                 oOpForm._min_op.value, oSejourForm.group_id.value,
-                 oOpForm.operation_id.value);
-      } 
-      
-      </script>
-      
     </td>
     {{/if}}
   </tr>
@@ -240,11 +225,10 @@ Main.add(function () {
       {{foreach from=$list_minutes_voulu|smarty:nodefaults item=min}}
         <option value="{{$min}}" {{if $min == $op->_min_voulu}} selected="selected" {{/if}}>{{$min}}</option>
       {{/foreach}}
-      </select> mn
+      </select> min
     </td>
   </tr>
-   {{/if}}
-   
+  {{/if}}
 
   <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>
@@ -253,16 +237,17 @@ Main.add(function () {
   </tr>
 
   <tr>
-    <td>{{mb_field object=$op field="examen" rows="3"}}</td>
-    <td>{{mb_field object=$op field="materiel" rows="3"}}</td>
-    <td>{{mb_field object=$op field="rques" rows="3"}}</td>
+    <td style="width: 33%;">{{mb_field object=$op field="examen"}}</td>
+    <td style="width: 33%;">{{mb_field object=$op field="materiel"}}</td>
+    <td style="width: 33%;">{{mb_field object=$op field="rques"}}</td>
   </tr>
   
   {{if $op->_count_actes}}
   <tr>
-    <td class="" colspan="3">
+    <td colspan="3">
       <div class="small-info">
-      	L'intervention déjà codée.<br/>Impossible de modifier les champs ci-dessous 
+      	L'intervention déjà codée.<br/>
+        Impossible de modifier les champs ci-dessous 
       </div>
 		</td>
   </tr>

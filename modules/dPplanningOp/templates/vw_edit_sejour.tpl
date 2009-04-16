@@ -1,3 +1,38 @@
+{{mb_include_script module="dPplanningOp" script="protocole_selector"}}
+
+<script type="text/javascript">
+ProtocoleSelector.init = function(){
+  this.sForSejour     = true;
+  this.sForm          = "editSejour";
+  this.sChir_id       = "praticien_id";
+  this.sDepassement   = "depassement";
+  
+  this.sType          = "type";
+  this.sDuree_prevu   = "_duree_prevue";
+  this.sConvalescence = "convalescence";
+  this.sDP            = "DP";
+  this.sRques_sej     = "rques";
+
+  this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";
+  this.sProtoPrescChir   = "_protocole_prescription_chir_id";
+  
+  this.pop();
+}
+
+function toggleMode() {
+  var trigger = $("modeExpert-trigger"),
+      hiddenElement = $("modeExpert"),
+      expert = !hiddenElement.visible();
+  
+  trigger.update(expert ? '{{tr}}button-COperation-modeExpert{{/tr}}' : '{{tr}}button-COperation-modeEasy{{/tr}}');
+  hiddenElement.setVisible(expert);
+}
+
+{{if $app->user_prefs.mode_dhe == 0}}
+  Main.add(toggleMode);
+{{/if}}
+</script> 
+
 <table class="main">
 
   {{if $sejour->_id}}
@@ -18,20 +53,33 @@
   <tr>
     {{if $sejour->_id}}
     <th colspan="2" class="title modify">
-    
-    <div class="idsante400" id="CSejour-{{$sejour->sejour_id}}"></div>
-    
-    <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->_id}})">
-      <img src="images/icons/history.gif" alt="historique" />
-    </a>
-    <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
-      <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-    </div>
-      Modification du séjour {{$sejour->_view}} 
-      {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+      <div class="idsante400" id="CSejour-{{$sejour->sejour_id}}"></div>
+      <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->_id}})">
+        <img src="images/icons/history.gif" alt="historique" />
+      </a>
+      <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
+      
+      <button type="button" class="search" style="float: left;" onclick="ProtocoleSelector.init()">
+        {{tr}}button-COperation-choixProtocole{{/tr}}
+      </button>
+      
+      <button type="button" class="hslip" style="float: right;" onclick="toggleMode(this)" id="modeExpert-trigger">
+        {{tr}}button-COperation-modeExpert{{/tr}}
+      </button>
+      
+      Modification du séjour {{$sejour->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
     </th>
     {{else}}
-    <th colspan="2" class="title">      
+    <th colspan="2" class="title">
+      <button type="button" class="search" style="float: left;" onclick="ProtocoleSelector.init()">
+        {{tr}}button-COperation-choixProtocole{{/tr}}
+      </button>
+      
+      <button type="button" class="hslip" style="float: right;" onclick="toggleMode(this)" id="modeExpert-trigger">
+        {{tr}}button-COperation-modeExpert{{/tr}}
+      </button>
       Création d'un nouveau séjour
     </th>
     {{/if}}
@@ -49,4 +97,3 @@
   </tr>
 
 </table>
-

@@ -47,7 +47,7 @@
 </table>
  
 {{else}}
-<div class="big-info">Vous n'avez pas accès au détail des interventions.</div>
+<div class="small-info">Vous n'avez pas accès au détail des interventions.</div>
 {{/if}}
 
 

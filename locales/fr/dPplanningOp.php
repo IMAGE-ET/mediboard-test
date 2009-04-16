@@ -770,4 +770,7 @@ $locales['config-dPplanningOp-CSejour-min_intervalle-desc'] = '';
 $locales['config-dPplanningOp-CSejour-modif_SHS-desc'] = '';
 $locales['config-dPplanningOp-CSejour-patient_id-desc'] = '';
 $locales['config-dPplanningOp-CSejour-tag_dossier-desc'] = '';
+$locales['CProtocole-for_sejour'] = 'Protocole de séjour';
+$locales['CProtocole-for_sejour-court'] = 'Protocole de séjour';
+$locales['CProtocole-for_sejour-desc'] = 'Ce protocole est spécialisé pour les séjours';
 ?>

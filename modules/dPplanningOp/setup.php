@@ -753,7 +753,11 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "UPDATE `operations` SET `labo` = '?' WHERE `labo` = '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.89";
+    $this->makeRevision("0.89");
+    $sql = "ALTER TABLE `protocole` ADD `for_sejour` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.90";
   }
 }
 ?>

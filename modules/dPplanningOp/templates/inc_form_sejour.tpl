@@ -1,5 +1,8 @@
-<script type="text/javascript">
+<!-- $Id: $ -->
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
+<script type="text/javascript">
 function checkHeureSortie(){
   var oForm = document.editSejour;
   var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
@@ -57,23 +60,48 @@ function checkChambreSejour(){
   var oForm = document.editSejour;
   var oFormEasy = document.editOpEasy;
   var valeur_chambre = $V(oForm.chambre_seule);
-  $V(oFormEasy.chambre_seule, valeur_chambre, false);
   
-  if(valeur_chambre == "0"){
+  if (oFormEasy)
+    $V(oFormEasy.chambre_seule, valeur_chambre, false);
+  
+  if(valeur_chambre == "0")
     $V(oForm.prestation_id, "", false);
-  }
 }
 
 
 function checkChambreSejourEasy(){
   var oForm = document.editSejour;
   var oFormEasy = document.editOpEasy;
-  var valeur_chambre = $V(oFormEasy.chambre_seule);
-  $V(oForm.chambre_seule, valeur_chambre);
   
-  if(valeur_chambre == "0"){
-    $V(oForm.prestation_id, "", false);
+  if (oFormEasy){
+    var valeur_chambre = $V(oFormEasy.chambre_seule);
+    $V(oForm.chambre_seule, valeur_chambre);
+    
+    if(valeur_chambre == "0"){
+      $V(oForm.prestation_id, "", false);
+    }
   }
+}
+
+PatSelector.init = function(){
+  bOldPat = document.editSejour.patient_id.value;
+  
+  this.sForm     = "editSejour";
+  this.sFormEasy = "editOpEasy";
+
+  this.sView_easy = "_patient_view"; 
+  this.sId_easy   = "patient_id";
+
+  this.sId   = "patient_id";
+  this.sView = "_patient_view";
+  this.pop();
+}
+
+CIM10Selector.init = function(){
+  this.sForm = "editSejour";
+  this.sView = "DP";
+  this.sChir = "praticien_id";
+  this.pop();
 }
 
 {{if $mode_operation}}
@@ -155,10 +183,6 @@ Main.add( function(){
   removePlageOp(false);
 });
 </script>
-
-<!-- $Id: $ -->
-{{mb_include_script module="dPpatients" script="pat_selector"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkSejour()">
 
@@ -284,21 +308,6 @@ Main.add( function(){
     {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
   	{{/if}}
-    <script type="text/javascript">
-      PatSelector.init = function(){
-        bOldPat = document.editSejour.patient_id.value;
-        
-        this.sForm     = "editSejour";
-        this.sFormEasy = "editOpEasy";
-      
-        this.sView_easy = "_patient_view"; 
-        this.sId_easy   = "patient_id";
-      
-        this.sId   = "patient_id";
-        this.sView = "_patient_view";
-        this.pop();
-      }
-    </script>
   </td>
   
   
@@ -308,14 +317,6 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
   <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
-  <script type="text/javascript">
-  CIM10Selector.init = function(){
-    this.sForm = "editSejour";
-    this.sView = "DP";
-    this.sChir = "praticien_id";
-    this.pop();
-  }
-  </script>
   </td>
 </tr>
 <tr>
@@ -338,7 +339,7 @@ Main.add( function(){
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
-    </select> mn
+    </select> min
   </td>
 </tr>
 
@@ -368,10 +369,11 @@ Main.add( function(){
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_sortie_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
-    </select> mn
+    </select> min
   </td>
 </tr>
 
+<tbody id="modeExpert">
 {{if !$mode_operation}}
 <tr>
   <th>{{mb_label object=$sejour field=entree_reelle}}</th>
@@ -544,7 +546,6 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="repas_sans_residu"}}</th>
   <td>{{mb_field object=$sejour field="repas_sans_residu"}}</td>
 </tr>
-
 {{/if}}
 
 <tr>
@@ -570,6 +571,7 @@ Main.add( function(){
   <td colspan="3"><select name="_protocole_prescription_chir_id"></select></td>
 </tr>
 {{/if}}
+</tbody>
 
 
 {{if !$mode_operation}}

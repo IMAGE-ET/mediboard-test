@@ -21,6 +21,10 @@
     <td>{{mb_value object=$_affectation field=sortie}}</td>
     <td>{{mb_value object=$_affectation field=effectue}}</td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="10">{{tr}}CAffectation.none{{/tr}}</td>
+  </tr>
   {{/foreach}}
   
 </table> 
