@@ -6,7 +6,7 @@
    <td style="width: 30%">
 		{{assign var=state value=$states.$dsn}}
 		{{if $state}}
-		<div class="small-success">
+		<div class="small-{{mb_ternary test=$state.rows_count value=success other=warning}}">
 		  version <strong>{{$state.version}}</strong>, 
 		  <br>comptant <strong>{{$state.rows_count}}</strong> enregistrements,
 		  <br>dernièrement modifiée le <strong>{{$state.last_modif}}</strong>.
