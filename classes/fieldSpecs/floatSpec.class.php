@@ -96,6 +96,7 @@ class CFloatSpec extends CMbFieldSpec {
     $form      = CMbArray::extract($params, "form");
     $increment = CMbArray::extract($params, "increment");
     $showPlus  = CMbArray::extract($params, "showPlus");
+    $fraction  = CMbArray::extract($params, "fraction");
     $field     = htmlspecialchars($this->fieldName);
     $maxLength = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
@@ -149,6 +150,7 @@ class CFloatSpec extends CMbFieldSpec {
           if (isset($max)) $sHtml .= "max: $max,";
           if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
           if ($decimals)   $sHtml .= "decimals: $decimals,";
+          if ($fraction)   $sHtml .= "fraction: $fraction,";
           $sHtml .= 'spinnerElement: $("img_'.$fieldId.'")
         });
       });

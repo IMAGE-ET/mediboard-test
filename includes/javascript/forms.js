@@ -572,6 +572,7 @@ Element.addMethods('input', {
       step: null,
       decimals: null,
       showPlus: false,
+      fraction: false,
       spinnerElement: null
     }, options);
     
@@ -582,9 +583,10 @@ Element.addMethods('input', {
        *  Set it to -1 when decrementing, 0 when incrementing
        */
       getStep: function (ref) {
-        ref |= 0;
+        ref = ref || 0;
         if (options.step == null) {
           var value = Math.abs(element.value) + ref;
+          if (options.fraction && (value < 1))  return 0.25;
           if (value < 10)  return 1;
           if (value < 50)  return 5;
           if (value < 100) return 10;
@@ -599,7 +601,7 @@ Element.addMethods('input', {
      
       // Increment function
       inc: function () {
-        var step = Number(element.spinner.getStep());
+        var step = Number(element.spinner.getStep(0.1));
         var result = (parseInt(Number(element.value) / step) + 1) * step;
         if (options.max != null) {
           result = (result <= options.max) ? result : options.max;
@@ -615,7 +617,7 @@ Element.addMethods('input', {
     
       // Decrement function
       dec: function () {
-        var step = Number(element.spinner.getStep(-1));
+        var step = Number(element.spinner.getStep(-0.1));
         var result = (parseInt(Number(element.value) / step) - 1) * step;
         if (options.min != null) {
           result = (result >= options.min) ? result : options.min;
