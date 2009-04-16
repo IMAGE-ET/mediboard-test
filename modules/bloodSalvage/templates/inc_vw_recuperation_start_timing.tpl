@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 <form name="timing{{$blood_salvage->_id}}" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="bloodSalvage" />

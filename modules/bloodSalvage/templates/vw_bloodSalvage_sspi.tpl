@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var="module" value="bloodSalvage"}}
 {{assign var="object" value=$blood_salvage}}
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}

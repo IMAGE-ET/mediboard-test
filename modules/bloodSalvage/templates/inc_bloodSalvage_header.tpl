@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <!-- Haut de page, informations patient et intervention (idem Salle d'op) -->
 <table class="tbl">
   {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}

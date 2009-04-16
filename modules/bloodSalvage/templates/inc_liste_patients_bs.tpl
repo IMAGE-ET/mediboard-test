@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <form action="?" name="selection" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <script type="text/javascript">

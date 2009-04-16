@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var=operation value=$blood_salvage->_ref_operation}}
 {{assign var=patient value=$blood_salvage->_ref_operation->_ref_patient}}
 {{assign var=consult_anesth value=$blood_salvage->_ref_operation->_ref_consult_anesth}}

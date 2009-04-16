@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage bloodSalvage
- *  @version $Revision: $
- *  @author Alexandre Germonneau
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 $blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");

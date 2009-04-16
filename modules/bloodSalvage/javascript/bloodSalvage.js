@@ -1,3 +1,12 @@
+/* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage bloodSalvage
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 function submitStartTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
