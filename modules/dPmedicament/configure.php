@@ -26,12 +26,12 @@ foreach ($states as $dsn => &$state) {
     $state["rows_count"] += $table["Rows"];
   }
   
-  $state["last_modif"] = $ds->loadTable('historiques') ? 
-    $ds->loadResult("SELECT MAX( `DATE_`) FROM `historiques`") :
+  $state["last_modif"] = $ds->loadTable('HISTORIQUES') ? 
+    $ds->loadResult("SELECT MAX( `DATE_`) FROM `HISTORIQUES`") :
     "Unavailable";
     
-  $state["version"] = $ds->loadTable('historique_produits_modifies') ? 
-    $ds->loadResult("SELECT MAX( `DATE_`) FROM `historique_produits_modifies`") :
+  $state["version"] = $ds->loadTable('HISTORIQUE_PRODUITS_MODIFIES') ? 
+    $ds->loadResult("SELECT MAX( `DATE_`) FROM `HISTORIQUE_PRODUITS_MODIFIES`") :
     "Unavailable";
 }
 
