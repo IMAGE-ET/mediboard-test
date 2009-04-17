@@ -58,7 +58,7 @@ if (isset($t["destinataire"])) {
   $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
 }
 
-$where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0' message_valide";
+$where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0' OR message_valide IS NULL";
 
 $where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0' OR acquittement_valide IS NULL";
 
