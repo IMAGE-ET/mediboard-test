@@ -11,8 +11,10 @@
 $code_cip = mbGetValueFromGet("code_cip");
 
 $produit = new CBcbProduit();
-if($code_cip){
+if($code_cip && is_numeric($code_cip)){
   $produit->load($code_cip);
+} else {
+  return;
 }
 
 // Construction du tableau de prises disponibles
