@@ -39,16 +39,18 @@ if (class_exists($objects_class) && count($objects_id)) {
     }
   }
   
-  // checkMerge
-  $checkMerge = $result->checkMerge($objects);
-  
-  // find unequal fields
-  $db_fields = $result->getDBFields();
-  foreach ($db_fields as $field => $value) {
-    foreach ($objects as $key1 => $object1) {
-      foreach ($objects as $key2 => $object2) {
-        if ($object1->$field != $object2->$field) {
-          $unequal[$field] = true;
+  if ($result && $result->_id) {
+    // checkMerge
+    $checkMerge = $result->checkMerge($objects);
+    
+    // find unequal fields
+    $db_fields = $result->getDBFields();
+    foreach ($db_fields as $field => $value) {
+      foreach ($objects as $key1 => $object1) {
+        foreach ($objects as $key2 => $object2) {
+          if ($object1->$field != $object2->$field) {
+            $unequal[$field] = true;
+          }
         }
       }
     }
@@ -66,7 +68,7 @@ $smarty->assign("checkMerge", $checkMerge);
 $smarty->assign("list_classes", getInstalledClasses());
 $smarty->assign("readonly_class", $readonly_class);
 
-$merger_template = $result ? CAppUI::conf('root_dir')."/modules/{$result->_ref_module->mod_name}/templates/{$result->_class_name}_merger.tpl" : '';
+$merger_template = $result ? "../../{$result->_ref_module->mod_name}/templates/{$result->_class_name}_merger.tpl" : '';
 $merger_template = is_readable($merger_template) ? $merger_template : "../../system/templates/object_merger.tpl";
 
 $smarty->display($merger_template);
