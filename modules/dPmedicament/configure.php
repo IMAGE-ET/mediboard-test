@@ -40,7 +40,7 @@ if (null == $dsBCBmed = @CBcbObject::getDataSource()) {
   CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb_med-ko");
 }
 else {
-	if (!$dsBCBmed->loadTable('livrettherapeutique')) {
+	if (!$dsBCBmed->loadTable('LIVRETTHERAPEUTIQUE')) {
 	  $dsBCBmed = null;
 	  CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb_med-empty");
 	}
@@ -50,7 +50,7 @@ if (null == $dsBCBges = @CSQLDataSource::get("bcbges")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb-ges-ko");
 }
 else {
-	if (!$dsBCBges->loadTable('livrettherapeutique')) {
+	if (!$dsBCBges->loadTable('LIVRETTHERAPEUTIQUE')) {
 	  $dsBCBges = null;
 	  CAppUI::stepMessage(UI_MSG_WARNING, "DataSource-bcb_ges-empty");
 	}
