@@ -18,11 +18,14 @@ if (!$echange_hprim_id) {
 	$where['message_valide'] = " = '1'";
 	$limit = CAppUI::conf('sip batch_count');
   $notifications = $echange_hprim->loadList($where, null, $limit);
-  
+  // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
+  // ce qui permet la gestion des doublons
   foreach ($notifications as $notification) {
   	$notification->date_echange = mbDateTime();
     $notification->store();
-    
+  }
+  
+  foreach ($notifications as $notification) {    
     $dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->destinataire = $notification->destinataire;
 	  
