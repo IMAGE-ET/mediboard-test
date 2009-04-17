@@ -58,9 +58,9 @@ if (isset($t["destinataire"])) {
   $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
 }
 
-$where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0'";
+$where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0' message_valide";
 
-$where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0'";
+$where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0' OR acquittement_valide IS NULL";
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);
 

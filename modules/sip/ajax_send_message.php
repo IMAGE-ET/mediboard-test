@@ -13,10 +13,13 @@ $echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
 
 $where = '';
 if (!$echange_hprim_id) {
+	if ($limit = CAppUI::conf('sip batch_count') == 0) {
+		return;
+	}
 	$echange_hprim = new CEchangeHprim();
 	$where['date_echange'] = "IS NULL";
 	$where['message_valide'] = " = '1'";
-	$limit = CAppUI::conf('sip batch_count');
+	
   $notifications = $echange_hprim->loadList($where, null, $limit);
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
   // ce qui permet la gestion des doublons
