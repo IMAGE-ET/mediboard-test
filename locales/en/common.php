@@ -143,4 +143,5 @@ $locales['Unstar'] = '';
 $locales['Unarchive'] = '';
 $locales['Send'] = '';
 $locales['Draft'] = '';
+$locales['User preferences'] = '';
 ?>

@@ -1,25 +1,17 @@
-{{if !$tab}}
-<form name="changeuser" action="?m=admin&amp;a={{$a}}" method="post" onsubmit="return checkForm(this)">
-{{else}}
-<form name="changeuser" action="?m=admin&amp;tab={{$tab}}" method="post" onsubmit="return checkForm(this)">
-{{/if}}
+<form name="changeuser" action="?m=admin&amp;{{$actionType}}={{$action}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
 <input type="hidden" name="del" value="0" />
 
 {{if $tab && $can->edit && $user_id}}
 <a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="buttonedit">
-  Editer les Préférences par Défaut
+  Editer les préférences par défaut
 </a>
 {{/if}}
 <table class="form">
   <tr>
     <th colspan="2" class="title">
-      {{if $user_id}}
-      {{tr}}User Preferences{{/tr}} : {{$user->_view}}
-      {{else}}
-      {{tr}}User Preferences{{/tr}} : {{tr}}Default{{/tr}}
-      {{/if}}
+      {{tr}}User preferences{{/tr}} : {{if $user_id}}{{$user->_view}}{{else}}{{tr}}Default{{/tr}}{{/if}}
     </th>
   </tr>
 

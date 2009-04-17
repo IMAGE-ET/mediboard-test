@@ -143,4 +143,5 @@ $locales['Unstar'] = 'Démarquer';
 $locales['Unarchive'] = 'Désarchiver';
 $locales['Send'] = 'Envoyer';
 $locales['Draft'] = 'Brouillon';
+$locales['User preferences'] = 'Préferences utilisateur';
 ?>
