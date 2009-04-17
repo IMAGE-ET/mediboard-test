@@ -28,6 +28,10 @@ if (!$echange_hprim_id) {
 	  
 	  $dest_hprim->loadMatchingObject();
 	  
+	  // Chrono stop
+		$chrono = new Chronometer;
+		$chrono->stop();
+
 	  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
 	    trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
 	  }
@@ -36,6 +40,10 @@ if (!$echange_hprim_id) {
 	  if (null == $acquittement = $client->evenementPatient($notification->message)) {
 	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  }
+	  
+	  // Chrono start
+	  $chrono->start();
+	  
 	  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
 	  $domGetAcquittement->loadXML(utf8_decode($acquittement));
     $doc_valid = $domGetAcquittement->schemaValidate();
