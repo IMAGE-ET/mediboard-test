@@ -40,7 +40,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
         <input type="hidden" name="page" value="1" onchange="this.form.submit()"/>
         
         {{foreach from=$types key=type item=value}}
-          <input type="checkbox" name="types[]" value="{{$type}}" {{if $value}}checked="checked"{{/if}} />{{$type}}
+          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{$type}}
         {{/foreach}}
         <br />
         <button type="submit" class="search">Filtrer</button>
@@ -104,6 +104,12 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
               {{include file="inc_echange_hprim.tpl" object=$curr_ref_notification}}
             </tbody>
           {{/foreach}}
+        {{foreachelse}}
+          <tr>
+            <td colspan="14">
+              {{tr}}CEchangeHprim.none{{/tr}}
+            </td>
+          </tr>
         {{/foreach}}
       </table>
     </td>
@@ -111,25 +117,40 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   {{else}}
   <tr>
     <th class="title" style="text-transform: uppercase;">{{mb_title object=$echange_hprim field="message"}}</th>
-    <th class="title" style="text-transform: uppercase;">{{mb_title object=$echange_hprim field="acquittement"}}</th>
+    {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
+      <th class="title" style="text-transform: uppercase;">{{mb_title object=$echange_hprim field="acquittement"}}</th>
+    {{/if}}
   </tr>
   <tr>
     <td style="height:730px; width:50%">{{mb_value object=$echange_hprim field="message"}}</td>
     <td style="height:730px;">
-      {{if $echange_hprim->acquittement}}
-        {{mb_value object=$echange_hprim field="acquittement"}}
-        
-        <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error
-                        {{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning
-                        {{else}}info{{/if}}">
-          {{foreach from=$observations item=observation}}
-            <strong>Code :</strong> {{$observation.code}} <br />
-            <strong>Libelle :</strong> {{$observation.libelle}} <br />
-            <strong>Commentaire :</strong> {{$observation.commentaire}} <br />
-          {{/foreach}}
-        </div>
+      {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
+	      {{if $echange_hprim->acquittement}}
+	        {{mb_value object=$echange_hprim field="acquittement"}}
+	        
+	        <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error
+	                        {{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning
+	                        {{else}}info{{/if}}">
+	          {{foreach from=$observations item=observation}}
+	            <strong>Code :</strong> {{$observation.code}} <br />
+	            <strong>Libelle :</strong> {{$observation.libelle}} <br />
+	            <strong>Commentaire :</strong> {{$observation.commentaire}} <br />
+	          {{/foreach}}
+	        </div>
+	      {{else}}
+	        <div class="big-info">Aucun acquittement n'a été reçu.</div>
+	      {{/if}}
       {{else}}
-        <div class="big-info">Aucun acquittement n'a été reçu.</div>
+        <div class="big-error">
+          {{if $doc_errors_msg}}
+            <strong>Erreur validation schéma du message</strong> <br />
+            {{$doc_errors_msg}}
+          {{/if}}
+          {{if $doc_errors_ack}}
+            <strong>Erreur validation schéma de l'acquittement</strong> <br />
+            {{$doc_errors_ack}}
+          {{/if}}
+        </div>
       {{/if}}
     </td>
   </tr>

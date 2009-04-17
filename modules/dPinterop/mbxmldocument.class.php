@@ -130,8 +130,8 @@ class CMbXMLDocument extends DOMDocument {
     libxml_use_internal_errors(true);
     
     if (!parent::schemaValidate($filename)) {
-       $errors = $this->libxml_display_errors();
-       	 return $returnErrors ? $errors : false;
+      $errors = $this->libxml_display_errors();
+      return $returnErrors ? $errors : false;
     }
     
     return true;

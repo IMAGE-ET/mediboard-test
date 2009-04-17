@@ -25,33 +25,42 @@ foreach ($filtre_types as $type) {
   $types[$type] = !isset($t) || in_array($type, $t);
 }
 
+$doc_errors_msg = $doc_errors_ack = "";
+
 // Chargement de l'échange HPRIM demandé
 $echange_hprim = new CEchangeHprim();
 $echange_hprim->load($echange_hprim_id);
 if($echange_hprim->load($echange_hprim_id)) {
 	$echange_hprim->loadRefs();	
 	
+	$domGetEvenement = new CHPrimXMLEvenementsPatients();
+  $domGetEvenement->loadXML(utf8_decode($echange_hprim->message));
+  $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true);
+	
 	if ($echange_hprim->acquittement) {
 		$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
   
     $observations = $domGetAcquittement->getAcquittementObservation();
+    
+    $doc_errors_ack = @$domGetEvenement->schemaValidate(null, true);
 	}
 }
 
 // Récupération de la liste des echanges HPRIM
 $itemEchangeHprim = new CEchangeHprim;
-$where["initiateur_id"] = "IS NULL";
-if (isset($t) && count($t) > 1) {
-	foreach($t as $filter) {
-		if ($filter == "emetteur" || $filter == "destinataire") {
-			$where[$filter] = " = '".CAppUI::conf('mb_id')."'";
-		}
-		if ($filter == "message_valide" || $filter == "acquittement_valide") {
-      $where[$filter] = " = '0'";
-    }
-	}
+
+$where = array();
+if (isset($t["emetteur"])) {
+  $where["emetteur"] = " = '".CAppUI::conf('mb_id')."'";
 }
+if (isset($t["destinataire"])) {
+  $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
+}
+
+$where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0'";
+
+$where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0'";
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);
 
@@ -114,6 +123,9 @@ $smarty->assign("total_pages"         , $total_pages);
 $smarty->assign("page"                , $page);
 $smarty->assign("prev_page"           , $prev_page);
 $smarty->assign("next_page"           , $next_page);
+$smarty->assign("selected_types"      , $t);
 $smarty->assign("types"               , $types);
+$smarty->assign("doc_errors_msg"      , $doc_errors_msg);
+$smarty->assign("doc_errors_ack"      , $doc_errors_ack);
 $smarty->display("vw_idx_echange_hprim.tpl");
 ?>

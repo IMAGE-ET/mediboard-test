@@ -36,7 +36,7 @@ MEDIBOARDPATH=/var/log/mediboard
 force_dir $MEDIBOARDPATH
 
 log=$MEDIBOARDPATH/jobs.log
-check_file_exist $log
+force_file $log
 
 mediboard_request() 
 {

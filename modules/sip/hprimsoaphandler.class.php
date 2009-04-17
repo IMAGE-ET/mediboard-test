@@ -88,7 +88,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->message = $messagePatient;
 			$echange_hprim->acquittement = utf8_decode($messageAcquittement);
 			$echange_hprim->statut_acquittement = "erreur";
-			$echange_hprim->message_valide = (!$doc_errors) ? 1 : 0;
+			$echange_hprim->message_valide = 0;
 			$echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
 			$echange_hprim->store();
 
@@ -113,7 +113,7 @@ class CHprimSoapHandler extends CSoapHandler {
 			$echange_hprim->type = "evenementsPatients";
 			$echange_hprim->sous_type = "enregistrementPatient";
 			$echange_hprim->message = $messagePatient;
-		  $echange_hprim->message_valide = (!$doc_errors) ? 1 : 0;
+		  $echange_hprim->message_valide = 1;
 		}
 		$echange_hprim->date_production = mbDateTime();
 		$echange_hprim->store();

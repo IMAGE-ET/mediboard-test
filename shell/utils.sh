@@ -37,7 +37,7 @@ announce_script()
   echo "--- $SCRIPTNAME ($(date)) ---"
 }
 
-check_file_exist()
+force_file()
 {
   FILE=$1
   if [ ! -e $FILE ]
