@@ -48,7 +48,7 @@ $max = min($max, $count);
 $AppUI->stepAjax("Export de $max sur $count objets de type 'CPatient' à partir de l'ID '$idMin'", UI_MSG_OK);
 
 // Time limit
-$seconds = max($max / 20, 60);
+$seconds = max($max / 20, 120);
 $AppUI->stepAjax("Limite de temps du script positionné à '$seconds' secondes", UI_MSG_OK);
 set_time_limit($seconds);
 
