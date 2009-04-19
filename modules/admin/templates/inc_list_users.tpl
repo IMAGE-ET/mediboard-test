@@ -22,8 +22,8 @@
     
     <td>
       <select tabindex="4" name="user_type">
-        {{foreach from=$utypes key=curr_key item=type}}
-        <option value="{{$curr_key}}" {{if $curr_key == $user_type}}selected="selected"{{/if}}>{{$type}}</option>
+        {{foreach from=$utypes key=_key item=type}}
+        <option value="{{$_key}}" {{if $_key == $user_type}}selected="selected"{{/if}}>{{$type}}</option>
         {{/foreach}}
       </select>
     </td>
@@ -42,7 +42,7 @@
   </tr>
     
   <tr>
-    <td class="button" colspan="4"><button class="search" type="submit">Rechercher</button></td>
+    <td class="button" colspan="4"><button class="search" type="submit">{{tr}}Search{{/tr}}</button></td>
   </tr>
 </table>
 
@@ -56,34 +56,37 @@
     <th colspan="3">Administration</th>
   </tr>
 
-  {{foreach from=$users item=curr_user}}
-  <tr {{if $curr_user->_id == $user->_id}}class="selected"{{/if}}>
+  {{foreach from=$users item=_user}}
+  <tr {{if $_user->_id == $user->_id}}class="selected"{{/if}} {{if $_user->template}}style="font-weight: bold"{{/if}}>
     <td>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$curr_user->_id}}">
-        {{$curr_user->user_username}}
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
+        {{$_user->user_username}}
       </a>
        
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$curr_user->_id}}">
-        {{$curr_user->_view}}
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
+        {{$_user->_view}}
       </a>
     </td>
     <td class="text">
-      {{assign var="type" value=$curr_user->user_type}}
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$curr_user->_id}}">
+      {{assign var="type" value=$_user->user_type}}
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id={{$_user->_id}}">
+      	{{if $_user->template}}
+				{{mb_label object=$_user field=template}} : 
+				{{/if}}
         {{$utypes.$type}}
       </a>
     </td>
     
     <td class="button" style="white-space: nowrap; text-align: left;">
-      <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$curr_user->_id}}'">
+      <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
       	Droits
       </button>
-      <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$curr_user->_id}}'">
+      <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}'">
       	Préférences
       </button>
-      {{assign var="loginas_user" value=$curr_user}}
+      {{assign var="loginas_user" value=$_user}}
       {{include file="loginas.tpl"}}
       {{include file="unlock.tpl"}}
     </td>
