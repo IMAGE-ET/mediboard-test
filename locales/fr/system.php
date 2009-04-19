@@ -389,4 +389,5 @@ $locales['CAccessLog-warnings-court'] = '';
 $locales['CAccessLog-warnings-desc'] = '';
 $locales['CMediusers-back-owned_notes'] = '';
 $locales['CUser-back-owned_logs'] = '';
+$locales['mod-system-tab-about'] = 'A propos...';
 ?>

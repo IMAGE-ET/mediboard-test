@@ -107,7 +107,7 @@ ColorSelector.init = function(){
         <tr>
           <th>{{mb_label object=$userfunction field="color"}}</th>
           <td>
-            <a href="#1" id="select_color" style="background: #{{$userfunction->color}};" onclick="ColorSelector.init()">cliquez ici</a>
+            <a href="#1" id="select_color" style="background: #{{$userfunction->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init()">Cliquer pour changer</a>
             {{mb_field object=$userfunction field="color" hidden=1}}
           </td>
         </tr>
@@ -160,12 +160,12 @@ ColorSelector.init = function(){
       <ul id="tab_user" class="control_tabs">
         <li>
           <a href="#list-primary-users" id="list-primary-users-title">
-            Utilisateurs principaux ({{$userfunction->_back.users|@count}})
+            Utilisateurs principaux <small>({{$userfunction->_back.users|@count}})</small>
           </a>
         </li>
         <li>
           <a href="#list-secondary-users" id="list-secondary-users-title">
-            Utilisateurs secondaires({{$userfunction->_back.secondary_functions|@count}})
+            Utilisateurs secondaires <small>({{$userfunction->_back.secondary_functions|@count}})</small>
           </a>
         </li>
       </ul>
