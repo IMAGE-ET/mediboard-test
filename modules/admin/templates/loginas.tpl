@@ -1,6 +1,6 @@
 <!-- $Id: -->
 
-{{if $app->user_type == 1 && $app->user_id != $loginas_user->_id}}
+{{if $app->user_type == 1 && $app->user_id != $loginas_user->_id && !$loginas_user->template}}
 <form name="loginas-{{$loginas_user->_id}}" action="?" method="post">
     
 <input type="hidden" name="redirect" value="?"/>
