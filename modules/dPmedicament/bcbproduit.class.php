@@ -574,7 +574,7 @@ class CBcbProduit extends CBcbObject {
             AND prescription.object_id IS NOT NULL
             GROUP BY prescription_line_medicament.code_cip
             ORDER BY total DESC
-            LIMIT 0, 20";
+            LIMIT 0, 10";
     return $ds->loadlist($sql);
   }
   
@@ -588,7 +588,7 @@ class CBcbProduit extends CBcbObject {
             AND prescription.object_id IS NOT NULL
             GROUP BY perfusion_line.code_cip
             ORDER BY total DESC
-            LIMIT 0, 20";
+            LIMIT 0, 10";
     return $ds->loadlist($sql);
   }
 }
