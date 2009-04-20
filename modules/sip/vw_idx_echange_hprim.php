@@ -12,7 +12,7 @@ global $can;
 $can->needsRead();
 
 $echange_hprim_id = mbGetValueFromGet("echange_hprim_id");
-$t                = mbGetValueFromGetOrSession('types');
+$t                = mbGetValueFromGetOrSession('types', array());
 $page             = mbGetValueFromGet('page', 1);
 
 $observations = array();
