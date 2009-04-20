@@ -13,9 +13,9 @@ $echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
 
 $where = '';
 if (!$echange_hprim_id) {
-	if ($limit = CAppUI::conf('sip batch_count') == 0) {
-		return;
-	}
+  if (!($limit = CAppUI::conf('sip batch_count'))) {
+    return;
+  }
 	$echange_hprim = new CEchangeHprim();
 	$where['date_echange'] = "IS NULL";
 	$where['message_valide'] = " = '1'";
@@ -38,12 +38,12 @@ if (!$echange_hprim_id) {
 		$chrono = new Chronometer;
 		$chrono->stop();
 
-	  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
+	  if (!($client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password))) {
 	    trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
 	  }
 	  
 	  // Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
-	  if (null == $acquittement = $client->evenementPatient($notification->message)) {
+	  if (!($acquittement = $client->evenementPatient($notification->message))) {
 	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  }
 	  
