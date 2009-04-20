@@ -13,12 +13,10 @@
  */
 class CMbSOAPClient extends SoapClient {
   function __construct($rooturl) {
-  	mbTrace($rooturl, "URL", true);
     if (!$html = file_get_contents($rooturl)) {
     	trigger_error("Impossible d'analyser l'url : ".$rooturl, E_USER_ERROR);
     	return;
     }
-    mbTrace($html, "Resultat", true);
     if (strpos($html, "<?xml") === false) {
       trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
       return;
