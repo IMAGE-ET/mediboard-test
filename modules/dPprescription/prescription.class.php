@@ -1330,6 +1330,16 @@ class CPrescription extends CMbObject {
    * Génération du Dossier/Feuille de soin
    */
   function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true){  
+    // Calcul de l'affectation courante pour connaitre le service_id
+    $this->_ref_object->loadRefCurrAffectation($date);
+    if($this->_ref_object->_ref_curr_affectation->_id){
+      $service_id = $this->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
+    } else {
+      $service_id = "none";
+    }
+    $config_service = new CConfigService();
+    $configs = $config_service->getConfigForService($service_id);
+    
     // Stockage du tableau de ligne de medicaments
   	$lines["medicament"] = $this->_ref_prescription_lines;
     
@@ -1352,7 +1362,7 @@ class CPrescription extends CMbObject {
 		  	    	
 			    if($with_calcul){
 			      // Chargement des administrations
-			      $_line_med->calculAdministrations($date, $mode_feuille_soin, $mode_dispensation);
+			      $_line_med->calculAdministrations($date, $mode_feuille_soin, $mode_dispensation, $service_id);
 			    }
 					// Si aucune prise
            $_line_med->_ref_produit->loadClasseATC();
@@ -1369,7 +1379,7 @@ class CPrescription extends CMbObject {
  	            continue;
 						}
 					  // Chargement des prises
-					  $_line_med->calculPrises($this, $date, $mode_feuille_soin, null, null, $with_calcul);
+					  $_line_med->calculPrises($this, $date, $mode_feuille_soin, null, null, $with_calcul, $configs);
            }
 					// Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 					if(!$mode_feuille_soin){
@@ -1435,7 +1445,7 @@ class CPrescription extends CMbObject {
 		              }
 		              // Chargement des administrations et des transmissions
 				      	  if($with_calcul){
-				      	    $_line_element->calculAdministrations($date, $mode_feuille_soin);
+				      	    $_line_element->calculAdministrations($date, $mode_feuille_soin, null, $service_id);
 				      	  }
 				      	  
 		      	    	if($name_chap == "imagerie" || $name_chap == "consult"){
@@ -1457,7 +1467,7 @@ class CPrescription extends CMbObject {
 						          }
 								    }
 							        // Chargement des prises
-							        $_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat, $with_calcul);
+							        $_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat, $with_calcul, $configs);
 							      }
 							    // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
 							    if(!$mode_feuille_soin){

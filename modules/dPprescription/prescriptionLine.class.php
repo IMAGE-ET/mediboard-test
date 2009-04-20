@@ -203,13 +203,14 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des prises de la ligne
    */
-  function loadRefsPrises(){
+  function loadRefsPrises($service_id = ""){
     $this->_ref_prises = $this->loadBackRefs("prise_posologie");
     foreach ($this->_ref_prises as &$prise) {
       if($prise->decalage_intervention != NULL){
         $this->_nb_prises_interv++;
       }
       $prise->_ref_object =& $this;
+      $prise->loadRefMoment($service_id);
       $prise->loadRefsFwd();
     }
   }
@@ -459,7 +460,7 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des administrations et transmissions
    */
-  function calculAdministrations($date, $mode_feuille_soin = 0, $mode_dispensation=0){
+  function calculAdministrations($date, $mode_feuille_soin = 0, $mode_dispensation=0, $service_id = null){
   	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
   	$this->loadRefsAdministrations($date);
   	
@@ -562,15 +563,22 @@ class CPrescriptionLine extends CMbObject {
 			  } 
       }
     }
+    
     if(!$this->_ref_prises){
-      $this->loadRefsPrises();
+      $this->loadRefsPrises($service_id);
     }
   }
   
   /*
    * Chargement des prises
    */
-  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true) {
+  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true, $configs = null) {
+    if(!$configs){
+      // Chargement des valeurs par defaut
+      $config_service = new CConfigService();  
+      $configs = $config_service->getConfigForService(); 
+    }
+
   	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
   	$total_day = 0;
   	foreach($this->_ref_prises as &$_prise) {
@@ -744,13 +752,13 @@ class CPrescriptionLine extends CMbObject {
 		    }
 		  }
 		  // Fois par avec comme unite semaine
-      if($_prise->nb_fois && $_prise->unite_fois === 'semaine' && CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}")){
-        $list_jours = explode('|',CAppUI::conf("dPprescription CPrisePosologie semaine {$_prise->nb_fois}"));
+      if($_prise->nb_fois && $_prise->unite_fois === 'semaine' && $configs["$_prise->nb_fois fois par semaine"]){
+        $list_jours = explode('|',$configs["$_prise->nb_fois fois par semaine"]);
         // Parcours des jours concernés
         foreach($list_jours as $_jour){
           // Pour chaque jour, on regarde s'il correspond à la date courante
           if($jours[$_jour] == mbTransformTime(null, $date, "%w")){
-            $heure = CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1");
+            $heure = $configs["1 fois par jour"];
             $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
             if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){
 	            $line_plan_soin[$heure]["total"] += $_prise->_quantite_administrable;
@@ -779,7 +787,7 @@ class CPrescriptionLine extends CMbObject {
             $heure = substr($_prise->_ref_moment->heure,0,2);
           } else {
             // On stocke l'heure de prise correspondant à 1 fois par jour
-            $heure = ($conf = CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1")) ? $conf : "10";
+            $heure = ($conf = $configs["1 fois par jour"]) ? $conf : "10";
           }
           $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
           if((($this->_debut_reel <= $dateTimePrise) && ($this->_fin_reelle >= $dateTimePrise)) && $poids_ok){

@@ -76,7 +76,7 @@ class CPrisePosologie extends CMbMetaObject {
  
   function loadRefsFwd() {
     parent::loadRefsFwd();
-    $this->loadRefMoment();
+    //$this->loadRefMoment();
     $this->_view = $this->quantite;
 
     if($this->object_class == "CPrescriptionLineElement"){
@@ -103,9 +103,18 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_type = "fois_par";
    }
    
+   if(isset($this->_ref_object->_ref_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id)){
+     $service_id = $this->_ref_object->_ref_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;      
+   } else {
+     $service_id = "none";
+   }
+
+   $config_service = new CConfigService();
+   $configs = $config_service->getConfigForService($service_id);
+    
     if($this->nb_fois && $this->nb_fois <= 6 && $this->unite_fois == "jour"){  
-      if(CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois")){
-	      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois"));
+      if($configs["$this->nb_fois fois par jour"]){
+	      $this->_heures = explode("|",$configs["$this->nb_fois fois par jour"]);
 	      foreach($this->_heures as &$_heure){
 	      	$_heure .= ":00:00";
 	      }
@@ -130,8 +139,8 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_unite_temps = $this->unite_tous_les;
     
 	    if($this->unite_tous_les && (!$this->unite_fois || $this->unite_fois == "jour")){
-	    	if(CAppUI::conf("dPprescription CPrisePosologie heures tous_les")){
-	    	  $this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
+	    	if($configs["Tous les jours"]){
+	    	  $this->_heures[] = $configs["Tous les jours"].":00:00";
 	    	}
 	    }   
     }
@@ -142,8 +151,8 @@ class CPrisePosologie extends CMbMetaObject {
     }
     
     if($this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
-      if(CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1")){
-	      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par 1"));
+      if($configs["1 fois par jour"]){
+	      $this->_heures = explode("|",$configs["1 fois par jour"]);
 	      foreach($this->_heures as &$_heure){
 	      	$_heure .= ":00:00";
 	      }
@@ -154,11 +163,20 @@ class CPrisePosologie extends CMbMetaObject {
   /*
    * Chargement du moment unitaire
    */
-  function loadRefMoment(){
+  function loadRefMoment($service_id = ""){
     $moment = new CMomentUnitaire();
     $this->_ref_moment = $moment->getCached($this->moment_unitaire_id);
-    if($this->_ref_moment->heure){
-      $this->_heure = $this->_ref_moment->heure;
+
+    if(!$service_id){
+      $service_id = "none";
+    }
+    if($this->_ref_moment->_id){
+	    $configMoment = new CConfigMomentUnitaire();
+	    $configs = $configMoment->getConfigMomentForService($service_id);
+	    $this->_ref_moment->heure = $configs[$this->moment_unitaire_id];
+	    if($this->_ref_moment->heure){
+	      $this->_heure = $this->_ref_moment->heure;
+	    }
     }
   }
   

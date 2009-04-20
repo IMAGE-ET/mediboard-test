@@ -1135,7 +1135,69 @@ class CSetupdPprescription extends CSetup {
 						WHERE prescription.prescription_id IS NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.80";
+    $this->makeRevision("0.80");
+    $sql = "CREATE TABLE `config_moment_unitaire` (
+							`config_moment_unitaire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`moment_unitaire_id` INT (11) UNSIGNED NOT NULL,
+							`heure` TIME,
+							`service_id` INT (11) UNSIGNED,
+							`group_id` INT (11) UNSIGNED
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `config_moment_unitaire` 
+						ADD INDEX (`moment_unitaire_id`),
+						ADD INDEX (`heure`),
+						ADD INDEX (`service_id`),
+						ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `config_service` (
+						`config_service_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						`name` VARCHAR (255) NOT NULL,
+						`value` VARCHAR (255),
+						`service_id` INT (11) UNSIGNED,
+						`group_id` INT (11) UNSIGNED
+					) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `config_service` 
+						ADD INDEX (`service_id`),
+						ADD INDEX (`group_id`);";
+		$this->addQuery($sql);
+		
+		$sql = "INSERT INTO `config_moment_unitaire`
+						SELECT '', moment_unitaire.moment_unitaire_id, moment_unitaire.heure, NULL, NULL
+						FROM `moment_unitaire`";
+		$this->addQuery($sql);
+		
+		/*
+		$sql = "ALTER TABLE `moment_unitaire`
+						DROP heure;";
+		$this->addQuery($sql);
+		*/
+
+		$sql = "INSERT INTO `config_service` (`config_service_id`,`name`,`value`,`service_id`,`group_id`) VALUES
+						('','Tous les jours','08',NULL,NULL),
+						('','1 fois par jour','08',NULL,NULL),
+						('','2 fois par jour','08|14',NULL,NULL),
+						('','3 fois par jour','08|14|18',NULL,NULL),
+						('','4 fois par jour','08|10|12|14',NULL,NULL),
+						('','5 fois par jour','08|10|12|14|16',NULL,NULL),
+						('','6 fois par jour','08|10|12|14|16|18',NULL,NULL),
+						('','Borne matin min','06',NULL,NULL),
+						('','Borne matin max','13',NULL,NULL),
+						('','Borne soir min','14',NULL,NULL),
+						('','Borne soir max','21',NULL,NULL),
+						('','Borne nuit min','22',NULL,NULL),
+						('','Borne nuit max','05',NULL,NULL),
+						('','1 fois par semaine','lundi',NULL,NULL),
+						('','2 fois par semaine','lundi|mercredi',NULL,NULL),
+						('','3 fois par semaine','lundi|mercredi|vendredi',NULL,NULL),
+						('','4 fois par semaine','lundi|mercredi|vendredi|samedi',NULL,NULL);";
+	  $this->addQuery($sql);
+	  
+		$this->mod_version = "0.81";
   }  
 }
 

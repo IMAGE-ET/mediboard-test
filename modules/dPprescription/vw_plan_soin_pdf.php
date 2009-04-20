@@ -69,10 +69,19 @@ if($logs){
   $pharmacien->load($last_log->user_id);
 }
 
-$matin = range(CAppUI::conf("dPprescription CPrisePosologie heures matin min"), CAppUI::conf("dPprescription CPrisePosologie heures matin max"));
-$soir = range(CAppUI::conf("dPprescription CPrisePosologie heures soir min"), CAppUI::conf("dPprescription CPrisePosologie heures soir max"));
-$nuit_soir = range(CAppUI::conf("dPprescription CPrisePosologie heures nuit min"), 23);
-$nuit_matin = range(00, CAppUI::conf("dPprescription CPrisePosologie heures nuit max"));
+if($sejour->_ref_curr_affectation->_id){
+  $service_id = $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
+} else {
+  $service_id = "none";
+}
+
+$config_service = new CConfigService();
+$configs = $config_service->getConfigForService($service_id);
+
+$matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
+$soir = range($configs["Borne soir min"], $configs["Borne soir max"]);
+$nuit_soir = range($configs["Borne nuit min"], 23);
+$nuit_matin = range(00, $configs["Borne nuit max"]);
 
 foreach($matin as &$_hour_matin){
   $_hour_matin = str_pad($_hour_matin, 2, "0", STR_PAD_LEFT);  

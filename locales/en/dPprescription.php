@@ -1351,7 +1351,6 @@ $locales['CPrisePosologie.unite_tous_les.jeudi'] = '';
 $locales['CPrisePosologie.unite_tous_les.lundi'] = '';
 $locales['CPrisePosologie.unite_tous_les.mardi'] = '';
 $locales['CPrisePosologie.unite_tous_les.mercredi'] = '';
-$locales['CPrisePosologie.unite_tous_les. 																				mercredi'] = '';
 $locales['CPrisePosologie.unite_tous_les.samedi'] = '';
 $locales['CPrisePosologie.unite_tous_les.vendredi'] = '';
 $locales['pref-mode_readonly'] = '';
@@ -1368,4 +1367,5 @@ $locales['CPrescription._type_alerte.posoqte'] = '';
 $locales['CPrescription._type_alerte.posoduree'] = '';
 $locales['CPrescriptionLineMedicament-alerte-posoduree-court'] = '';
 $locales['CPrescriptionLineMedicament-alerte-posoqte-court'] = '';
+$locales['mod-dPprescription-tab-vw_edit_config_service'] = '';
 ?>

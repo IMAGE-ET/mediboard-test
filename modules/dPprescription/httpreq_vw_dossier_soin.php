@@ -52,10 +52,22 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 $operation = new COperation();
 $operations = array();
 
-$matin = range(CAppUI::conf("dPprescription CPrisePosologie heures matin min"), CAppUI::conf("dPprescription CPrisePosologie heures matin max"));
-$soir = range(CAppUI::conf("dPprescription CPrisePosologie heures soir min"), CAppUI::conf("dPprescription CPrisePosologie heures soir max"));
-$nuit_soir = range(CAppUI::conf("dPprescription CPrisePosologie heures nuit min"), 23);
-$nuit_matin = range(00, CAppUI::conf("dPprescription CPrisePosologie heures nuit max"));
+// Chargement des configs de service
+$sejour->loadRefCurrAffectation($date);
+
+if($sejour->_ref_curr_affectation->_id){
+  $service_id = $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
+} else {
+  $service_id = "none";
+}
+
+$config_service = new CConfigService();
+$configs = $config_service->getConfigForService($service_id);
+
+$matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
+$soir = range($configs["Borne soir min"], $configs["Borne soir max"]);
+$nuit_soir = range($configs["Borne nuit min"], 23);
+$nuit_matin = range(00, $configs["Borne nuit max"]);
 
 foreach($matin as &$_hour_matin){
   $_hour_matin = str_pad($_hour_matin, 2, "0", STR_PAD_LEFT);  
@@ -126,12 +138,12 @@ if($object_id && $object_class){
     if($line->_class_name == "CPrescriptionLineMedicament"){
        if(!$line->_fin_reelle){
 		    $line->_fin_reelle = $prescription->_ref_object->_sortie;
-		  }   	
-		  $line->calculAdministrations($curr_date);
+		  }
+		  $line->calculAdministrations($curr_date, null, null, $service_id);
       $line->_ref_produit->loadClasseATC();
       $line->_ref_produit->loadRefsFichesATC();
       if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
-			  $line->calculPrises($prescription, $curr_date);
+			  $line->calculPrises($prescription, $curr_date, null, null, null, true, $configs);
       }
 		  // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();
@@ -142,16 +154,16 @@ if($object_id && $object_class){
     	$name_cat = $element->category_prescription_id;
       $element->loadRefCategory();
       $name_chap = $element->_ref_category_prescription->chapitre;
-     	$line->calculAdministrations($curr_date);  
+     	$line->calculAdministrations($curr_date, null, null, $service_id);  
    	  if($name_chap == "imagerie" || $name_chap == "consult"){
         if(($line->debut == $curr_date) && $line->time_debut){
-	  	  $time_debut = substr($line->time_debut, 0, 2);
-	  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut]['total'] = 1;
-	  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
+		  	  $time_debut = substr($line->time_debut, 0, 2);
+		  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut]['total'] = 1;
+		  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
     	  }
     	} else {
     	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-	      $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat);
+	        $line->calculPrises($prescription, $curr_date, 0, $name_chap, $name_cat, true, $configs);
     	  }
     	}
       // Suppression des prises replanifiées

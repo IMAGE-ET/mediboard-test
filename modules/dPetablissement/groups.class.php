@@ -37,6 +37,7 @@ class CGroups extends CMbObject {
   var $_ref_produits_livret = null;
   static $_ref_current = null;
   var $_ref_dmi_categories = null;
+  var $_ref_services = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -146,6 +147,9 @@ class CGroups extends CMbObject {
     $this->loadFunctions();
   }
 
+  function loadRefsService(){
+    $this->_ref_services = $this->loadBackRefs("services");
+  }
   
   /**
    * Load groups with given permission
