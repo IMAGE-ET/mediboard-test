@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
  Protocoles de <strong>{{$praticien->_view}}</strong>
  <select name="pack_protocole_id" style="width: 100px;">
   <option value="">&mdash; Sélection</option>

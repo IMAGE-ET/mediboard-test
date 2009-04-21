@@ -10,8 +10,6 @@
      
 global $AppUI, $can, $m;
 
-
-
 $can->needsRead();
 
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");

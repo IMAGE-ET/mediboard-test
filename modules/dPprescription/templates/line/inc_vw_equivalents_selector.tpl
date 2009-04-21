@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <button type="button" class="change notext" onclick="EquivSelector.init('{{$line->_id}}','{{$line->_ref_produit->code_cip}}');">
   Equivalents
 </button>

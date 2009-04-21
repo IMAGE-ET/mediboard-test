@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPmedicament
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <form action="?m=dPmedicament&amp;a=vw_bcb_import&amp;dialog=1" enctype="multipart/form-data" method="post">
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_bcb_import" />

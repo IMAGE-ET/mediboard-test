@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var=allergie value=$prescription_reelle->_alertes.allergie}}
 {{assign var=IPC value=$prescription_reelle->_alertes.IPC}}
 {{assign var=interaction value=$prescription_reelle->_alertes.interaction}}

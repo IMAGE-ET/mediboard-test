@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CPrescription class
- */
 class CPrescriptionLineMedicament extends CPrescriptionLine {
   // DB Table key
   var $prescription_line_medicament_id = null;

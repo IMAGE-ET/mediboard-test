@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <!-- Creation d'une ligne avec des dates contiguës -->
 <form name="addLineCont-{{$line->_id}}" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />

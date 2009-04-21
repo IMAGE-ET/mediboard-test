@@ -1,11 +1,12 @@
-<?php
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPmedicament
-* @version $Revision$
-* @author Alexis Granger
-*/
+ *	@package Mediboard
+ *	@subpackage dPmedicament
+ *	@version $Revision$
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $code_cip = mbGetValueFromGet("code_cip");
 $line_id  = mbGetValueFromGet("line_id");

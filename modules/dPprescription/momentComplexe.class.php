@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CMomentUnitaire class
- */
 class CMomentComplexe extends CMbObject {
   // DB Table key
   var $moment_complexe_id = null;

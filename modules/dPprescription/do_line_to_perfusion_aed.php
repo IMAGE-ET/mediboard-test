@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-
 global $AppUI;
 
 $prescription_id = mbGetValueFromPost("prescription_id");

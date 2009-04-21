@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <tbody {{if !$chapitre}}style="page-break-before: always"{{/if}} {{if !$no_class}}class="header"{{/if}}>
 {{if $patient->_id}}
 <tr>

@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <table class="tbl">
   <tr>
     <th {{if $type=="historique"}}colspan="3"{{else}}colspan="4"{{/if}} class="title">Historique {{if $type=="substitutions"}} - Substitutions{{/if}}</th>

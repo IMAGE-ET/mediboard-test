@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $line->_can_select_executant}}
   {{assign var=category_id value=$category->_id}}
   {{if @$executants.externes.$category_id || @$executants.users.$category_id}}

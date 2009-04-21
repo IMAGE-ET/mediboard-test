@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Alexis Granger
-*/
+ *	@package Mediboard
+ *	@subpackage dPmedicament
+ *	@version $Revision$
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $produit = mbGetValueFromPost("produit", "aaa");
 $inLivret = mbGetValueFromPost("inLivret", 0);

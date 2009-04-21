@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}

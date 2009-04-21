@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var="line" value=$object}}
 {{assign var=chapitre value=$line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 <table class="tbl">

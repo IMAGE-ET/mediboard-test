@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <li>{{if !$praticien->_id}}({{$perf->_ref_praticien->_view}}){{/if}}
 	<strong>{{$perf->_view}}
 	{{if $perf->duree}}

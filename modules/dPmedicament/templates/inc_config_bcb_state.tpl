@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPmedicament
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <tr>
  	<th style="vertical-align: middle">
      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dsn}}" {{if $dPconfig.$m.$class.$var == $dsn}}checked="checked"{{/if}}/>

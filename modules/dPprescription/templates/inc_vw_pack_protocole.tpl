@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $pack->_id}}
   <form name="addDelProtocoleToPack" action="?" method="post">
 	  <input type="hidden" name="dosql" value="do_prescription_protocole_pack_item_aed" />

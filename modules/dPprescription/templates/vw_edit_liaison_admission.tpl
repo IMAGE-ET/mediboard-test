@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $is_anesth || $is_chir || $is_admin}}
 <form name="filtre-protocole" method="get" action="?">
   <input type="hidden" name="m" value="{{$m}}" />

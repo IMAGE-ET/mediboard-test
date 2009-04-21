@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/**
- * The CFunctionCategoryPrescription class
- */
 class CFunctionCategoryPrescription extends CMbObject {
   // DB Table key
   var $function_category_prescription_id = null;

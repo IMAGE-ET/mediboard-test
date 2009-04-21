@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <form name="preview_protocole" method="get" action="?">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="a" value="{{$a}}" />

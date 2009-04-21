@@ -1,3 +1,13 @@
+/* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
+ 
 var Prescription = {
 	// Multiples occurences de la même widget
   suffixes: [],

@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var=transmissions value=$prescription->_transmissions}}
 {{assign var=perfusion_id value=$_perfusion->_id}}
  	<td style="text-align: center;">

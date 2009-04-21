@@ -4,12 +4,10 @@
  *	@package Mediboard
  *	@subpackage dPmedicament
  *	@version $Revision$
- *  @author Alexis Granger
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CFicheATC class
- */
 class CFicheATC extends CMbObject {
   // DB Field
   var $fiche_ATC_id = null;

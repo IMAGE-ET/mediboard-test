@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $prescription->object_class == "CSejour" && $prescription->type != "sortie"}}
 	{{if $line->_perm_edit}}
 	  {{assign var=line_class value=$line->_class_name}}

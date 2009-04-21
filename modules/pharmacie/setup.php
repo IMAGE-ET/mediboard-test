@@ -4,7 +4,8 @@
  *	@package Mediboard
  *	@subpackage pharmacie
  *	@version $Revision$
- *  @author Fabien Ménager
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CSetuppharmacie extends CSetup {

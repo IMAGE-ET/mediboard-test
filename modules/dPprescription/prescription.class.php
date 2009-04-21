@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CPrescription class
- */
 class CPrescription extends CMbObject {
 	
   // DB Table key

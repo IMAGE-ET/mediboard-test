@@ -4,7 +4,8 @@
  *	@package Mediboard
  *	@subpackage dPmedicament
  *	@version $Revision$
- *  @author Alexis Granger
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));

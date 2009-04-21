@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/**
- * The CPrescriptionLineDMI class
- */
 class CPrescriptionLineDMI extends CMbObject {
   // DB Table key
   var $prescription_line_dmi_id = null;

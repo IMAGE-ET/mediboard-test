@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $patient->_id}}
 <!-- Footer du tableau -->
 <tbody class="hoverable {{if !$no_class}}footer{{/if}} {{if $last_screen_footer}}last_footer{{/if}}">

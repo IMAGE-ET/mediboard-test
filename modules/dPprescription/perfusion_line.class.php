@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/**
- * The CPerfusionLine class
- */
 class CPerfusionLine extends CMbObject {
 	// DB Table key
   var $perfusion_line_id = null;

@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/**
- * The CAdministration class
- */
 class CAdministration extends CMbMetaObject {
   // DB Field
   var $administration_id = null;

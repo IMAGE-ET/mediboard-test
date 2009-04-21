@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var=line_id value=$line->_id}}
 {{assign var=line_class value=$line->_class_name}}
 {{assign var=transmissions_line value=$line->_transmissions}}

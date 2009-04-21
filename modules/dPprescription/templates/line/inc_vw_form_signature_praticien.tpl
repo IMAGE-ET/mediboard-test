@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $line->_class_name == "CPrescriptionLineElement" || $line->_class_name == "CPrescriptionLineComment"}}
   <!-- Signature d'un element -->
   <form name="validation-{{$line->_class_name}}-{{$line->_id}}" action="" method="post">

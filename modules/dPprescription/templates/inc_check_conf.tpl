@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $etat == "vide" || $etat == "ko"}}
   <div class='small-warning'>
   {{if $etat == "vide"}}Configurations absentes de la mémoire partagé.{{/if}}

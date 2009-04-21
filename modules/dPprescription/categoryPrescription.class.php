@@ -8,9 +8,6 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CPrescription class
- */
 class CCategoryPrescription extends CMbObject {
   // DB Table key
   var $category_prescription_id = null;

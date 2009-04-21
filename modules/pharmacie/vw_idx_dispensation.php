@@ -1,10 +1,11 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage pharmacie
- *  @version $Revision$
- *  @author Alexis Granger
+ *	@package Mediboard
+ *	@subpackage pharmacie
+ *	@version $Revision$
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $can, $g;

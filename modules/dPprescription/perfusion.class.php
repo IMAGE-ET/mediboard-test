@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/**
- * The CPerfusion class
- */
 class CPerfusion extends CMbObject {
 	// DB Table key
   var $perfusion_id = null;

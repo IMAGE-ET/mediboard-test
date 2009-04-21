@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
 $line_id              = mbGetValueFromGet("line_id");
 $object_class         = mbGetValueFromGet("object_class");
 $quantite             = mbGetValueFromGet("quantite");

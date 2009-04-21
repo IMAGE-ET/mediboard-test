@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $prescription->type != "externe"}}
 	{{if $line->_can_view_form_conditionnel}}
 	  <input name="conditionnel" type="checkbox" {{if $line->conditionnel}}checked="checked"{{/if}} onchange="submitConditionnel('{{$line->_class_name}}','{{$line->_id}}',this.checked)"  />

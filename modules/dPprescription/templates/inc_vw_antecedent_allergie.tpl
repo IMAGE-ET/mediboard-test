@@ -1,5 +1,14 @@
+{{* $Id$ *}}
 
-  <!-- Affichage des allergies -->
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
+<!-- Affichage des allergies -->
 {{if array_key_exists('alle', $antecedents)}}
   {{assign var=allergies value=$antecedents.alle}}
   {{if $allergies|@count}}
