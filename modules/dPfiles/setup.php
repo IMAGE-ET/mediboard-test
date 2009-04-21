@@ -1,9 +1,9 @@
-<?php /* $Id: setup.php 356 2006-07-17 16:28:06Z MyttO $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPcabinet
- * @version $Revision: 356 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

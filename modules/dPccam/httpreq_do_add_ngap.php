@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_add_ccam.php 2818 2007-10-16 09:16:17Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: $
+* @version $Revision$
 * @author Alexis Granger
 */
 

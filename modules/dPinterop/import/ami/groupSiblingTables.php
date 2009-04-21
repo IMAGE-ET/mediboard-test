@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

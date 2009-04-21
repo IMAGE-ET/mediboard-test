@@ -1,4 +1,4 @@
-{{* $Id: $
+{{* $Id$
   * Manipulation des documents d'un séjour et des interventions associées
   * @param $sejour CSejour
   *}}

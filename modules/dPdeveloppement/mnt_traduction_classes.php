@@ -3,7 +3,7 @@
 /**
  * @package Mediboard
  * @subpackage system
- * @version $Revision:  $
+ * @version $Revision$
  * @author Poiron Yohann
  */
 

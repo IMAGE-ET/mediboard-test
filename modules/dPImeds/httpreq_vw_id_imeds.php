@@ -1,9 +1,9 @@
-<?php /* $Id:  $*/
+<?php /* $Id$*/
 
 /**
 * @package Mediboard
 * @subpackage dPImeds
-* @version $Revision:  $
+* @version $Revision$
 * @author Alexis Granger
 */
 

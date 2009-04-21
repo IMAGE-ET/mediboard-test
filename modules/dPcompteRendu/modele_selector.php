@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision:  $
+* @version $Revision$
 * @author Alexis Granger
 * @author Fabien Menager
 **/

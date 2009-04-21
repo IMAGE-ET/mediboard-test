@@ -1,9 +1,9 @@
-<?php /* $Id: import_orl.php 783 2006-09-14 12:44:01Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 783 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: export_hprim.php 1738 2007-03-19 16:33:47Z maskas $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 1738 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

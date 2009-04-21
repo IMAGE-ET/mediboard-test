@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage system
-* @version $Revision: $
+* @version $Revision$
 * @author Sébastien Fillonneau
 */
 set_time_limit(1800);

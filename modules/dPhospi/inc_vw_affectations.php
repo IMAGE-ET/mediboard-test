@@ -1,9 +1,9 @@
-<?php /* $Id: vw_affectations.php 1124 2006-10-18 15:18:12Z MyttO $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1124 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

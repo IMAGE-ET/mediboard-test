@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_vw_fdr_consult.php 3403 2008-02-11 12:43:48Z alexis_granger $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 3403 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

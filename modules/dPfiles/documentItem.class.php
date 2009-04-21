@@ -2,7 +2,7 @@
 /**
  *  @package Mediboard
  *  @subpackage dPfiles
- *  @version $Revision: $
+ *  @version $Revision$
  *  @author Yohann Poiron
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */

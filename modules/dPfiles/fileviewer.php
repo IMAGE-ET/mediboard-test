@@ -1,8 +1,8 @@
-<?php /* $Id: mbfileviewer.php 587 2006-08-10 07:46:47Z maskas $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
-* @version $Revision: 587 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

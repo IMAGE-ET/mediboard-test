@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_add_cim10.php 2318 2007-07-18 20:57:18Z mytto $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPccam
-* @version $Revision: 2318 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

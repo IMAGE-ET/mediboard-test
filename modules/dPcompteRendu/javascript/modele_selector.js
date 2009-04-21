@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 
 /* Modele selector
    Allows to choose a modele from a praticien or a function

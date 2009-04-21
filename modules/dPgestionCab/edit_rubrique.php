@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPgestionCab
-* @version $Revision: 2012 $
+* @version $Revision$
 * @author Poiron Yohann
 */
 

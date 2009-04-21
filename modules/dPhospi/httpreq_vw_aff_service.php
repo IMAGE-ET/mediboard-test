@@ -1,9 +1,9 @@
-<?php /* $Id: vw_affectations.php 1059 2006-10-09 08:28:41Z maskas $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPhospi
-* @version $Revision: 1059 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

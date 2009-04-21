@@ -1,9 +1,9 @@
-<?php /* $Id: configure.php 23 2006-05-04 15:05:35Z MyttO $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 23 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

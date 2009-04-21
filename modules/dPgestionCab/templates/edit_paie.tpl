@@ -1,4 +1,4 @@
-<!-- $Id: form_print_planning.tpl 23 2006-05-04 15:05:35Z MyttO $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 function printFiche(iFiche_id) {

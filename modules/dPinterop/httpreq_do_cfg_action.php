@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_do_ghs_action.php 28 2006-05-05 08:34:11Z Rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpmsi
-* @version $Revision: 28 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

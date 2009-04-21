@@ -3,7 +3,7 @@
 /**
  * @package Mediboard
  * @subpackage dPdeveloppement
- * @version $Revision: $
+ * @version $Revision$
  * @author openXtrem
  */
 

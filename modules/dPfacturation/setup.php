@@ -3,7 +3,7 @@
 /**
  * @package Mediboard
  * @subpackage dPfacturation
- * @version $Revision: $
+ * @version $Revision$
  * @author Alexis / Yohann
  */
 

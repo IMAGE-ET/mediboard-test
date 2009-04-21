@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPgestionCab
-* @version $Revision: $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

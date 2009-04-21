@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcompteRendu
-* @version $Revision:  $
+* @version $Revision$
 * @author Alexis Granger
 * @abstract Permet de choisir des modèles pour constituer des packs
 */
