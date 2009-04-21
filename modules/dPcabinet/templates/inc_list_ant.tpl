@@ -146,7 +146,7 @@ transfertLineTP = function(line_id, sejour_id){
 		      Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
 		    {{/if}}
 	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-			    {{$_line->_ucd_view}}
+			    <a href=#1 onclick="Prescription.viewProduit('{{$_line->code_cip}}');">{{$_line->_ucd_view}}</a>
 			  </span>
 		  </form>
 		</li>

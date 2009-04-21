@@ -1,4 +1,5 @@
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
 
 <script type="text/javascript">
 
@@ -227,12 +228,31 @@ Main.add(function () {
         <input type="hidden" name="code_cip" value="" onchange="refreshAddPoso(this.value);"/>
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
 				<input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
+				
         <table class="form">
           <tr>
             <th style="width: 1%">Recherche</th>
             <td>
 		          <input type="text" name="produit" value="" size="12" />
+		          <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
 					    <div style="display:none;" class="autocomplete" id="_produit_auto_complete"></div>
+			        <script type="text/javascript">
+						      MedSelector.init = function(onglet){
+						        this.sForm = "editLineTP";
+						        this.sView = "produit";
+						        this.sCode = "code_cip";
+						        this.sSearch = document.editLineTP.produit.value;
+						        this.selfClose = true;
+						        this.sOnglet = onglet;
+						        this.pop();
+						      }
+									MedSelector.doSet = function(){
+				            var oForm = document[MedSelector.sForm];
+				            $('_libelle').update(MedSelector.prepared.nom);
+				            $V(oForm.code_cip, MedSelector.prepared.code);
+				            $('button_submit_traitement').focus();
+				          }
+						  </script>
 			      </td>
 			      <td>
 			        <strong>
@@ -257,14 +277,15 @@ Main.add(function () {
 	        </tr>
 	        <tr>
 	          <td colspan="2">
-	            <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+	            <button id='button_submit_traitement' class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
 	              onComplete: function(){ 
 	                DossierMedical.reloadDossiersMedicaux();
 	                resetEditLineTP();
 	                $('addPosoLine').update('');
 	                this.form.token_poso.value = '';
+	                this.form.commentaire.value = '';
 	              }
-	             } )">
+	             } ); this.form.produit.focus();">
 	              {{tr}}Add{{/tr}} un traitement
 	            </button>
 	          </td>
@@ -442,8 +463,9 @@ Main.add(function () {
     Element.cleanWhitespace(selected);
     dn = selected.childElements();
     $V(oFormTP.code_cip, dn[0].innerHTML);
-    $("_libelle").insert(dn[1].innerHTML.stripTags());
+    $("_libelle").insert("<a href=#1 onclick=Prescription.viewProduit("+dn[0].innerHTML+")>"+dn[1].innerHTML.stripTags()+"</a>");
     $V(oFormTP.produit, '');
+    $('button_submit_traitement').focus();
   }
   
   // Autocomplete des medicaments
@@ -457,7 +479,6 @@ Main.add(function () {
   resetEditLineTP = function(){
     $("_libelle").update("");
     oFormTP.code_cip.value = '';
-    oFormTP.commentaire.value = '';
   }
 {{/if}}
 </script>

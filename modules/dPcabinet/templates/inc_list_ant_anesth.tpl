@@ -139,7 +139,7 @@ toggleCancelledAnesth = function(list) {
         {{tr}}delete{{/tr}}
       </button>
       <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-		    {{$_line->_ucd_view}}
+		    <a href=#1 onclick="Prescription.viewProduit('{{$_line->code_cip}}');">{{$_line->_ucd_view}}</a>
 		  </span>
 	  </form>
   </li>
