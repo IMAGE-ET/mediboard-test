@@ -11,7 +11,7 @@
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
 {{/if}}
 
-<tr id="line_{{$line_class}}_{{$line_id}}">
+<tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise}}">
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
       <!-- Cas d'une ligne de medicament -->

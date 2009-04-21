@@ -11,50 +11,54 @@
 {{/if}}
 </script>
 
-<!-- Parcours du tableau de dates -->
+{{* Parcours du tableau de dates *}}
 {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
   {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
     {{foreach from=$_dates key=_date item=_hours}}
       {{foreach from=$_hours key=_heure_reelle item=_hour}}
       
-					<!-- Stockage de la liste des administrations -->
+					{{*Stockage de la liste des administrations *}}
 				  {{assign var=list_administrations value=""}}
 				  {{if @$line->_administrations.$unite_prise.$_date.$_hour.list}}
 				    {{assign var=list_administrations value=$line->_administrations.$unite_prise.$_date.$_hour.list}}
-				  {{/if}}		  
-				  <!-- Information sur une eventuelle planification -->
+				  {{/if}}		
+				    
+				  {{*Information sur une eventuelle planification *}}
 				  {{assign var=planification_id value=""}}
 				  {{assign var=origine_date_planif value=""}}
 				  {{if @$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
 				    {{assign var=planification_id value=$line->_administrations.$unite_prise.$_date.$_hour.planification_id}}
 				    {{assign var=origine_date_planif value=$line->_administrations.$unite_prise.$_date.$_hour.original_date_planif}}
-				  {{/if}}		  
-				  <!-- Construction du dateTime courant -->
+				  {{/if}}
+				  		  
+				  {{*Construction du dateTime courant *}}
 				  {{assign var=_date_hour value="$_date $_heure_reelle"}}						    				
 					
-					<!-- Initialisations -->
+					{{* Initialisations *}}
 					{{assign var=quantite value="-"}}
 					{{assign var=quantite_depart value="-"}}
 					{{assign var=heure_reelle value=""}}				
-					<!-- Quantite planifiée -->          
+					
+					{{* Quantite planifiée *}}          
 		      {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
 		        {{assign var=quantite value=$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}
 		      {{else}}
 			      {{if @array_key_exists($_hour, @$line->_quantity_by_date.$unite_prise.$_date.quantites)}}
 					    {{assign var=quantite value=$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour.total}}
-					    <!-- Heure reelle de la prise prevue -->
+					    {{*  Heure reelle de la prise prevue *}}
 					    {{if @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour.0.heure_reelle}}
 					      {{assign var=heure_reelle value=$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour.0.heure_reelle}}
 					    {{/if}}
 				    {{/if}}
 				  {{/if}}
 				  
-				  <!-- Sauvegarde de la quantite -->
+				  {{* Sauvegarde de la quantite *}}
 				  {{assign var=_quantite value=$quantite}}
 					{{if !$heure_reelle}}
 					  {{assign var=heure_reelle value=$_hour}}
 					{{/if}}					
-					<!-- Affichage de la case --> 
+					
+					{{* Affichage de la case *}} 
 				  <td id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" 
 				   		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif" 
 				   		style='display: none; text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
@@ -87,9 +91,9 @@
 							 					{{if @$line->_transmissions.$unite_prise.$_date.$_hour.nb}}transmission{{/if}}
 							 					{{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite_planifiee}}planification{{/if}}">
 							 					 						 
-							 <!-- Affichage du contenu de la case (quantite administree / quantite prevue) -->
+							 {{* Affichage du contenu de la case (quantite administree / quantite prevue) *}}
 				       {{if $quantite!="-" || @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date)}}
-								 <!-- Initialisation de la quantite -->
+								 {{* Initialisation de la quantite *}}
 								 {{if !$quantite}}
 								   {{assign var=quantite value="0"}}
 								 {{/if}}
@@ -111,14 +115,14 @@
 						   {{/if}}   
 					  </div>	
 
+					{{if $quantite && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 4}}
 			    <script type="text/javascript">
 			      // Pour empecher de deplacer une case ou il y a plusieurs prises
-		        {{if $quantite && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 4}}
-				      drag = new Draggable("drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
-				    {{/if}}
-				  </script>
+		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
+          </script>
+				  {{/if}}
 			      
-			    <!-- Tooltip d'affichage de la date d'origine, des administrations et des transmissions -->  
+			    {{* Tooltip d'affichage de la date d'origine, des administrations et des transmissions *}}  
 			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 				     {{if $origine_date_planif}}
 				       <strong>Date d'origine:</strong> {{$origine_date_planif|date_format:$dPconfig.datetime}}<br />

@@ -74,7 +74,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 				                  waitingText: null, 
 													insertion: Insertion.After,
 													onComplete: function(){
-													  moveDossierSoin($("line_"+object_class+"_"+object_id));
+													  moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
 														first_td.hide().colSpan = 0;
 													}
 													} );
