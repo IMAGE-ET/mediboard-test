@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPadmissions
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $curr_adm->annule == 1}} {{assign var=background value="#f33"}}
 {{elseif $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}

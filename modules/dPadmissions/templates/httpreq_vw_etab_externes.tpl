@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPadmissions
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $listEtab|@count}}
 <select name="etablissement_transfert_id">
 <option value="">&mdash; Etab. de transfert</option>

@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPadmissions
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <script type="text/javascript">
 
 Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");

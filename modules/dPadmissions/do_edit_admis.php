@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
- * @TODO REMPLACER PAR UN DO_MULTI_SEJOUR_AED CAR ON PERD LES LOGS
  * @package Mediboard
  * @subpackage dPadmissions
  * @version $Revision$
- * @author Romain Ollivier
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @todo REMPLACER PAR UN DO_MULTI_SEJOUR_AED CAR ON PERD LES LOGS
  */
 
 global $AppUI, $m;
