@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 
 var PrescriptionEditor = {
   sForm     : null,
