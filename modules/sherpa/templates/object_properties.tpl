@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage sherpa
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if !$suppressHeaders}}
 <!-- Filter -->
 <form name="Filter" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">

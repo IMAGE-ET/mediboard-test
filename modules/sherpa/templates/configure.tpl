@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage sherpa
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <h1>Configuration du module {{tr}}{{$m}}{{/tr}}</h1>
 
 {{include file="../../system/templates/configure_dsn.tpl" dsn=sherpa-$g}}
