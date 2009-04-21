@@ -1,4 +1,4 @@
-<!-- $Id: vw_resume.tpl 1748 2007-03-20 18:58:41Z MyttO $ -->
+<!-- $Id$ -->
 
 {{mb_include_script module="dpPatients" script="pat_selector"}}
 {{include file="../../dPpatients/templates/inc_intermax.tpl"}}

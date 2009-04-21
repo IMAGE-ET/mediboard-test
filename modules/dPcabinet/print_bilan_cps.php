@@ -1,9 +1,9 @@
-<?php /* $Id: print_compta.php 2321 2007-07-19 08:14:45Z alexis_granger $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 2321 $
+* @version $Revision$
 * @author Thomas Despoix 
 */
 

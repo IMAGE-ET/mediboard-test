@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dmi
-* @version $Revision:  $
+* @version $Revision$
 * @author Stéphanie Subilia
 */
 

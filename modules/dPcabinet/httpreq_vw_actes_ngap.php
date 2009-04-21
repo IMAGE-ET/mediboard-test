@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 23 $
+* @version $Revision$
 * @author Alexis Granger
 */
 

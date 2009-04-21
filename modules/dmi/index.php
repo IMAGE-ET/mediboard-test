@@ -1,9 +1,9 @@
-<?php /* $Id: index.php 4929 2008-10-06 11:03:21Z mytto $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 4929 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

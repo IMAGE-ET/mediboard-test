@@ -1,4 +1,4 @@
-<!-- $Id: print_compta.tpl 2031 2007-06-08 09:13:23Z lryo $ -->
+<!-- $Id$ -->
 
 {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 <script type="text/javascript">

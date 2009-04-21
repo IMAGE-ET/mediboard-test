@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dmi
- * @version $Revision: $
+ * @version $Revision$
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @author Stéphanie Subilia
  */

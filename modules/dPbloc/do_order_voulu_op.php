@@ -1,9 +1,9 @@
-<?php /* $Id: do_order_op.php 2328 2007-07-19 08:53:16Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc
-* @version $Revision: 2328 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

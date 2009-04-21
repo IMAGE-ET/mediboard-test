@@ -1,9 +1,9 @@
-<?php /* $Id: httpreq_vw_list_antecedents.php 1476 2007-01-19 16:40:49Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1476 $
+* @version $Revision$
 * @author Sébastien Fillonneau
 */
 

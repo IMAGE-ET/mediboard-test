@@ -1,9 +1,9 @@
-<?php /* $Id: vw_compta.php 3483 2008-02-19 13:22:12Z alexis_granger $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 3483 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

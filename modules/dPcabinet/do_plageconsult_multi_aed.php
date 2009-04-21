@@ -1,9 +1,9 @@
-<?php /* $Id: do_plageconsult_aed.php 2083 2007-06-18 15:27:36Z MyttO $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 2083 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

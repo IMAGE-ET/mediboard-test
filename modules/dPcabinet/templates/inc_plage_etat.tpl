@@ -1,5 +1,5 @@
 {{*
-  * $Id: $
+  * $Id$
   * @param $_plage CPlageconsult
   *}}
 

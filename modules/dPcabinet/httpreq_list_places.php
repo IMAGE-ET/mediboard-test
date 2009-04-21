@@ -1,9 +1,9 @@
-<?php /* $Id: plage_selector.php 2719 2007-09-27 15:16:24Z alexis_granger $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 2719 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,4 +1,4 @@
-<!-- $Id: vw_idx_patients.tpl 699 2006-09-01 10:37:10Z rhum1 $ -->
+<!-- $Id$ -->
 
 <table class="main">
   <tr>

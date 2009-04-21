@@ -1,9 +1,9 @@
-<?php /* $Id: vw_compta.php 1738 2007-03-19 16:33:47Z maskas $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 1738 $
+* @version $Revision$
 * @author Thomas Despoix
 */
 

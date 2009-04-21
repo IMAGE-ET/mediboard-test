@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPbloc 
-* @version $Revision: $
+* @version $Revision$
 * @author Sébastien Fillonneau
 */
 

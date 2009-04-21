@@ -1,9 +1,9 @@
-<?php /* $Id: configure.php 4725 2008-09-01 21:00:19Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPmedicament
- * @version $Revision: 4725 $
+ * @version $Revision$
  * @author Alexis Granger
  */
 
