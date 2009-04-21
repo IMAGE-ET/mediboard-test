@@ -1,5 +1,6 @@
 {{mb_include_script module=dPpatients script=pat_selector}}
 {{mb_include_script module=dPurgences script=contraintes_rpu}}
+{{mb_include_script module="dPprescription" script="prescription"}}
 
 <script type="text/javascript">
 
