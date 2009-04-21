@@ -4,8 +4,8 @@
  * @package Mediboard
  * @subpackage dmi
  * @version $Revision$
+ * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @author Alexis Granger
  */
 
 global $can, $g;

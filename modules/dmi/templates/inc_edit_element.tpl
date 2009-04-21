@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dmi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $element->_class_name == "CDMI"}}
   {{assign var=dosql value="do_dmi_aed"}}
   {{assign var=category_class value="CDMICategory"}}

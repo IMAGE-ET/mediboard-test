@@ -1,14 +1,15 @@
-<?php
+<?php /* $Id$ */
 
 /**
-	* @package Mediboard
-	* @subpackage dmi
-	* @version $Revision$
- 	* @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
-	* @author Thomas Despoix
-	*/
+ * @package Mediboard
+ * @subpackage dmi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireModuleClass('dmi', 'category_produit_prescriptible');
+
 class CCategoryDM extends CCategoryProduitPrescriptible {
   // DB Table key
   var $category_dm_id = null;

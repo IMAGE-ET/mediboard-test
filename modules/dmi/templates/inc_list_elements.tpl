@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dmi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <button type="button" class="new" onclick="removeSelectedTr(); viewElement('{{$object_class}}', '0')">
   {{tr}}{{$object_class}}-title-create{{/tr}}
 </button>

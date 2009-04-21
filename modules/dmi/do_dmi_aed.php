@@ -4,7 +4,8 @@
  * @package Mediboard
  * @subpackage dmi
  * @version $Revision$
- * @author Stéphanie Subilia
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 $do = new CDoObjectAddEdit("CDMI", "dmi_id");

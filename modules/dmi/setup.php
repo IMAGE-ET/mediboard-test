@@ -2,9 +2,10 @@
 
 /**
  * @package Mediboard
- * @subpackage dPcabinet
+ * @subpackage dmi
  * @version $Revision$
- * @author Romain Ollivier
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CSetupdmi extends CSetup {
