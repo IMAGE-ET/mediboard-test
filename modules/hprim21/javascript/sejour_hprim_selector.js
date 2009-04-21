@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 var SejourHprimSelector = {
   sForm       : null,
   sId         : null,

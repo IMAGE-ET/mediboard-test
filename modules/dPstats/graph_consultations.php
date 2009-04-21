@@ -1,9 +1,9 @@
-<?php /* $Id: graph_activite.php 4401 2008-07-01 16:52:01Z mytto $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPstats
- * @version $Revision: 4401 $
+ * @version $Revision$
  * @author Romain Ollivier
  */
 

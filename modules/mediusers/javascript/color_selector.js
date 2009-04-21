@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 
 var ColorSelector = {
   sForm : null,

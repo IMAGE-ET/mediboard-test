@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 
 <tbody class="hoverable">
 {{assign var="trClass" value=""}}

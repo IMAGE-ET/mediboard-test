@@ -1,9 +1,9 @@
-<?php /* $Id: vw_bloc.php 783 2006-09-14 12:44:01Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 783 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

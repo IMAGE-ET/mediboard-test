@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage hprim21
-* @version $Revision:  $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

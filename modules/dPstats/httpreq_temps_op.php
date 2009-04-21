@@ -1,9 +1,9 @@
-n<?php /* $Id: $ */
+n<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: $
+* @version $Revision$
 * @author Sébastien Fillonneau
 */
 

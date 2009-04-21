@@ -1,4 +1,4 @@
-<!-- $Id: inc_vw_patient.tpl 3519 2008-02-26 11:44:04Z mytto $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 function view_history_patient(id){
