@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage pharmacie
- *	@version $Revision: $
+ *	@version $Revision$
  *  @author Fabien Ménager
  */
 
