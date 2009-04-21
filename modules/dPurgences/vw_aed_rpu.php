@@ -75,6 +75,8 @@ $listServicesUrgence = CService::loadServicesUrgence();
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
+$smarty->assign("line", new CPrescriptionLineMedicament());
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $userSel);
