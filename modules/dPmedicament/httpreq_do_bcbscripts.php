@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPmedicament
-* @version $Revision: $
+* @version $Revision$
 * @author Thomas Despoixr
 */
 

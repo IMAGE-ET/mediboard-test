@@ -1,4 +1,4 @@
-{{* $Id:$ *}}
+{{* $Id$ *}}
 
 {{assign var="examen" value=$object}}
 

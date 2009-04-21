@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 
 {{if $sejour->_canRead}}
 <table class="tbl">

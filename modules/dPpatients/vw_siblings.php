@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: $
+* @version $Revision$
 * @author Romain Ollivier
 */
 global $AppUI, $can, $m;

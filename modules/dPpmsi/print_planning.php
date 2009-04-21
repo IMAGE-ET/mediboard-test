@@ -1,9 +1,9 @@
-<?php /* $Id: view_planning.php 2798 2007-10-11 15:55:13Z alexis_granger $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpmsi
-* @version $Revision: $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

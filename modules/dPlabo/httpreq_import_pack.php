@@ -3,7 +3,7 @@
 /**
  *	@package Mediboard
  *	@subpackage dPlabo
- *	@version $Revision: $
+ *	@version $Revision$
  *  @author Alexis Granger
  */
  

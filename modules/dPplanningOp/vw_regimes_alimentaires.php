@@ -1,9 +1,9 @@
-<?php /* $Id: vw_protocoles.php 3033 2007-12-06 10:40:17Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 3033 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,9 +1,9 @@
-<?php /* $Id: vw_edit_planning.php 66 2006-05-14 21:06:12Z Rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 66 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

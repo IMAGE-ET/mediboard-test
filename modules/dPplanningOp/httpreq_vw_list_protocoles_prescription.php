@@ -1,9 +1,9 @@
-<?php /* $Id: vw_edit_protocole.php 3902 2008-04-15 21:12:15Z mytto $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 3902 $
+* @version $Revision$
 * @author Fabien Ménager
 */
 

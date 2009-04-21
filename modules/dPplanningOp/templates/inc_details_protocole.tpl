@@ -1,4 +1,4 @@
-<!-- $Id: vw_protocoles.tpl 6101 2009-04-16 13:20:04Z phenxdesign $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 function copieProt(){

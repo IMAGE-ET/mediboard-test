@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPpmsi
-* @version $Revision: $
+* @version $Revision$
 * @author Romain Ollivier
 */
  

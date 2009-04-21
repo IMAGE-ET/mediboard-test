@@ -1,4 +1,4 @@
-<!-- $Id: view_planning.tpl 2798 2007-10-11 15:55:13Z alexis_granger $ -->
+<!-- $Id$ -->
 
 <script type="text/javascript">
 

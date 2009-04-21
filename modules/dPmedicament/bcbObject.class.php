@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPmedicament
-* @version $Revision: 2249 $
+* @version $Revision$
 * @author Sherpa
 */
 

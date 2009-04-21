@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 
 var CIM10Selector = {
   sForm     : null,

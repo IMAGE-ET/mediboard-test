@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 
 function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
   Element.cleanWhitespace(selected);

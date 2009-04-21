@@ -1,4 +1,4 @@
-{{* $Id: $
+{{* $Id$
   * Manipulation des documents d'une intervention et de son séjour associé
   * @param $operation COperation
 	* @param $modelesByOwner array('COperation' => array(), 'CSejour' => array())

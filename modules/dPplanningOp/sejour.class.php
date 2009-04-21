@@ -3,7 +3,7 @@
 /**
  *	@package Mediboard
  *	@subpackage dPhospi
- *	@version $Revision: $
+ *	@version $Revision$
  *  @author Thomas Despoix
  */
 

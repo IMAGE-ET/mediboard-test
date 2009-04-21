@@ -4,7 +4,7 @@
  *  @package Mediboard
  *  @subpackage dPlabo
  *  @author  Alexis Granger
- *  @version $Revision: $
+ *  @version $Revision$
  */
 
 

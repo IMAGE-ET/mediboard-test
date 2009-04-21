@@ -1,4 +1,4 @@
-{{* $Id: inc_edit_resultat.tpl 1879 2007-04-25 10:58:05Z MyttO $ *}}
+{{* $Id$ *}}
 
 <script type="text/javascript">
   // Explicit form preparation for Ajax loading

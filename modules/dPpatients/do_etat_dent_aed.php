@@ -3,7 +3,7 @@
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: $
+* @version $Revision$
 * @author Fabien Ménager
 */
 

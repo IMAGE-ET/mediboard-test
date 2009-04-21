@@ -1,9 +1,9 @@
-<?php /* $Id: inc_graph_audio_tonal.php 1738 2007-03-19 16:33:47Z maskas $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPstats
-* @version $Revision: 1738 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

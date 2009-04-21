@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 
 {{mb_include_script module="dPcompteRendu" script="document"}}
 

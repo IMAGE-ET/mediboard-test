@@ -1,9 +1,9 @@
-<?php /* $Id: salle.class.php 2229 2007-07-10 16:12:37Z alexis_granger $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPpersonnel
- *	@version $Revision: $
+ *	@version $Revision$
  *  @author Alexis Granger
  */
 

@@ -1,4 +1,4 @@
-{{* $Id: tree_catalogues.tpl 1792 2007-04-10 16:16:47Z MyttO $
+{{* $Id$
   -- Parameters
   $_catalogue : catalog to display hierarchically
   $selected_id : selected catalog 

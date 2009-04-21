@@ -1,9 +1,9 @@
-<?php /* $Id: do_planning_aed.php 110 2006-06-11 20:19:38Z Rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: 110 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

@@ -1,4 +1,4 @@
-// $Id: $
+// $Id$
 
 var PlageOpSelector = {
   sForm               : null,  // Ici, on ne se sert pas de ce formulaire

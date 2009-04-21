@@ -1,4 +1,4 @@
-<!-- $Id: $ -->
+<!-- $Id$ -->
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 

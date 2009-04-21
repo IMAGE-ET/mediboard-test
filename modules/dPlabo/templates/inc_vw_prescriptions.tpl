@@ -1,4 +1,4 @@
-{{* $Id: $ *}}
+{{* $Id$ *}}
 
 <form name="dropPrescriptionItem" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPlabo" />

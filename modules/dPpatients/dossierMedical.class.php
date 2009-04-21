@@ -1,9 +1,9 @@
-<?php /* $Id: patients.class.php 2242 2007-07-11 10:21:19Z mytto $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: 2242 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

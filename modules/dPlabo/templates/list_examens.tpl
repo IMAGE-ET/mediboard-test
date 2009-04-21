@@ -1,4 +1,4 @@
-{{* $Id: list_examens.tpl 1792 2007-04-10 16:16:47Z MyttO $
+{{* $Id$
   -- Parameters
   $examens : List of exams to display
   $examen_id : Selected exam

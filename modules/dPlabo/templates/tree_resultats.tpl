@@ -1,4 +1,4 @@
-{{* $Id: tree_catalogues.tpl 1806 2007-04-11 16:28:47Z MyttO $
+{{* $Id$
   $_catalogue : catalog which results to display hierarchically
 *}}
 
