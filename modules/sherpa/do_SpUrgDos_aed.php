@@ -3,7 +3,7 @@
 /**
  *  @package Mediboard
  *  @subpackage sherpa
- *  @version $Revision: $
+ *  @version $Revision$
  *  @author 
  */
 

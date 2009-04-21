@@ -1,9 +1,9 @@
-<?php /* $Id: mbobject.class.php 2252 2007-07-12 10:00:15Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
  *  @package Mediboard
  *  @subpackage classes
- *  @version $Revision: 1793 $
+ *  @version $Revision$
  *  @author Thomas Despoix
 */
 

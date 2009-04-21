@@ -3,7 +3,7 @@
 /**
  * @package Mediboard
  * @subpackage dPpatients
- * @version $Revision: 2165 $
+ * @version $Revision$
  * @author Sherpa
  * @abstract Retrieve complete properties for a Sherpa MbObject 
  * as an XML file

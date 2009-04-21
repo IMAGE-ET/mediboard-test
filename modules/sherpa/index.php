@@ -1,9 +1,9 @@
-<?php /* $Id: index.php 1201 2006-10-26 18:33:50Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage sherpa
-* @version $Revision: 1201 $
+* @version $Revision$
 * @author Sherpa
 */
 

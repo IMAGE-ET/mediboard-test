@@ -1,9 +1,9 @@
-<?php /* $Id: setup.php 1390 2006-12-13 09:55:29Z maskas $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage sherpa
- * @version $Revision: 1390 $
+ * @version $Revision$
  * @author sherpa
  */
 
