@@ -75,7 +75,7 @@ class CMedecin extends CMbObject {
     parent::updateFormFields();
     
     if ($this->type == 'medecin') {
-    	$this->_view = "Dr. $this->nom $this->prenom";
+    	$this->_view = "Dr $this->nom $this->prenom";
     }
     else {
     	$this->_view = "$this->nom $this->prenom ({$this->_specs['type']->_locales[$this->type]})";

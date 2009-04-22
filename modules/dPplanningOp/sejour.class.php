@@ -1043,7 +1043,7 @@ class CSejour extends CCodable {
 		    if ($_operation->annulee == 0) {
 		      $operation_view = " le " 
 						. mbDateToLocale(mbDate($_operation->_datetime)) 
-		        . " par le Dr. " 
+		        . " par le Dr " 
 						. $_operation->_ref_chir->_view;
 		      $_operation->countActes();
 		      if ($_operation->_count_actes) {
