@@ -1,5 +1,5 @@
 {{if $categorie->ei_categorie_id}}
-<a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
+<a class="button new" href="?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
   {{tr}}CEiCategorie.create{{/tr}}
 </a>
 {{/if}}

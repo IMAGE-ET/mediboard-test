@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;bloc_id=0">{{tr}}CBlocOperatoire-title-create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;bloc_id=0">{{tr}}CBlocOperatoire-title-create{{/tr}}</a>
       <table class="tbl">
         <tr>
           <th>{{tr}}CBlocOperatoire-nom{{/tr}}</th>

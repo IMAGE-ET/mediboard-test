@@ -64,7 +64,7 @@ Main.add(function () {
         {{if $plage->plageressource_id}}
         <tr>
           <td colspan="4">
-            <a class="buttonnew" href="?m={{$m}}&amp;plage_id=0">Créer de nouvelles plages</a>
+            <a class="button new" href="?m={{$m}}&amp;plage_id=0">Créer de nouvelles plages</a>
           </td>
         </tr>
         <tr>

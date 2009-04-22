@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td colspan="2">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_protocole&amp;protocole_id=0">Créer un nouveau protocole</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_protocole&amp;protocole_id=0">Créer un nouveau protocole</a>
           
       <form name="selectFrm" action="?" method="get">
       

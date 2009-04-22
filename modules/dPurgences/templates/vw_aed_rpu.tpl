@@ -92,7 +92,7 @@ Main.add(function () {
 <input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
 
 <input type="hidden" name="_bind_sejour" value="1" />
-<a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+<a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
   Ajouter un patient
 </a>
 <table class="form">

@@ -90,7 +90,7 @@ Main.add(function () {
 </form>
 
 {{if $patient->_id}}
-<a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a>
+<a class="button new" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a>
 {{/if}}
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">

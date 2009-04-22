@@ -26,7 +26,7 @@
               </a><br /><span class="small">{{$currThread->body}}</span>
               </td>
               <td>{{$currThread->_ref_forum_messages|@count}} réponse{{if $currThread->_ref_forum_messages|@count > 1}}s{{/if}}</td>
-              <td><a class="buttonedit" href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_thread_id={{$currThread->_id}}" title="Modifier le thread">Modifier</a>
+              <td><a class="button edit" href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_thread_id={{$currThread->_id}}" title="Modifier le thread">Modifier</a>
             </tr>
             {{/foreach}}
           {{else}}
@@ -40,7 +40,7 @@
       {{/foreach}}
         
       </table>
-      <a class="buttonnew" href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_thread_id=0&amp;forum_theme_id={{$forum_theme->_id}}">Nouveau thread</a>
+      <a class="button new" href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_thread_id=0&amp;forum_theme_id={{$forum_theme->_id}}">Nouveau thread</a>
     </td>
     <td class="halfPane">
       <form name="editthread" action="?m=dPportail&amp;tab=vw_forumthread&amp;forum_theme_id={{$forum_theme->_id}}" method="post" onsubmit="return checkForm(this)">

@@ -1,7 +1,7 @@
 <table class="form">
   <tr>
     <td class="halfPane">
-			<a href="?m={{$m}}&amp;tab={{$tab}}&amp;banque_id=0" class="buttonnew">
+			<a href="?m={{$m}}&amp;tab={{$tab}}&amp;banque_id=0" class="button new">
 			  Créer une banque
 			</a>
 			

@@ -38,7 +38,7 @@ Main.add(function () {
 <table style="width:100%">
   <tr>
     <td>
-      <a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+      <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
         Ajouter un patient
       </a> 
     </td>
@@ -56,8 +56,8 @@ Main.add(function () {
 	        <option value="prendre_en_charge" {{if $selAffichage == "prendre_en_charge"}} selected = "selected" {{/if}}>A prendre en charge</option>
 	      </select>
 	    </form>
-      <a href="#" onclick="printMainCourante()" class="buttonprint">Main courante</a>
-      <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
+      <a href="#" onclick="printMainCourante()" class="button print">Main courante</a>
+      <a href="#" onclick="showLegend()" class="button search">Légende</a>
     </td>
   </tr>
 </table>

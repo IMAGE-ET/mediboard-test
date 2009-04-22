@@ -250,27 +250,7 @@ span.smarty-include:hover {
 }
 
 button,
-a.button,  
-a.buttonstop,
-a.buttonedit, 
-a.buttonhslip, 
-a.buttontrash, 
-a.buttonsubmit, 
-a.buttonnew, 
-a.buttonprint, 
-a.buttoncancel, 
-a.buttonmodify, 
-a.buttonsearch, 
-a.buttonlock, 
-a.buttontick, 
-a.buttonchange, 
-a.buttonremove, 
-a.buttonadd, 
-a.buttondown, 
-a.buttonup,
-a.buttonsendfile,
-a.buttoninvalidefile,
-a.buttonobsoletefile {
+a.button {
   color: #000;
   text-decoration: none;
   cursor: default;
@@ -288,26 +268,7 @@ a.buttonobsoletefile {
 }
 
 button:hover, 
-a.button:hover,
-a.buttonstop:hover,
-a.buttonedit:hover, 
-a.buttontrash:hover, 
-a.buttonsubmit:hover,
-a.buttonnew:hover, 
-a.buttonprint:hover, 
-a.buttoncancel:hover, 
-a.buttonmodify:hover, 
-a.buttonsearch:hover, 
-a.buttonlock:hover 
-a.buttontick:hover, 
-a.buttonchange:hover, 
-a.buttondown:hover, 
-a.buttonup:hover,
-a.buttonadd:hover, 
-a.buttonremove:hover,
-a.buttonsendfile:hover,
-a.buttoninvalidefile:hover,
-a.buttonobsoletefile:hover {
+a.button:hover {
   background-color: #bbb;
 }
 
@@ -355,114 +316,114 @@ a.DESC:hover{
 }
 
 
-button.edit, a.buttonedit {
+button.edit, a.button.edit {
   background-image: url(images/buttons/edit.png);
   padding-left: 18px;
 }
 
-button.hslip, a.buttonhslip {
+button.hslip, a.button.hslip {
   background-image: url(images/buttons/hslip.png);
   padding-left: 18px;
 }
 
-button.trash, a.buttontrash {
+button.trash, a.button.trash {
   background-image: url(images/buttons/trash.png);
   padding-left: 18px; 
 }
 
-button.submit, a.buttonsubmit {
+button.submit, a.button.submit {
   background-image: url(images/buttons/save.png);
   padding-left: 18px;
 }
-button.new, a.buttonnew {
+button.new, a.button.new {
   background-image: url(images/buttons/new.png);
   padding-left: 18px;
 }
-button.print, a.buttonprint {
+button.print, a.button.print {
   background-image: url(images/buttons/print.png);
   padding-left: 18px;
 }
-button.cancel, a.buttoncancel {
+button.cancel, a.button.cancel {
   background-image: url(images/buttons/cancel.png);
   padding-left: 18px;
 }
 
-button.modify, a.buttonmodify {
+button.modify, a.button.modify {
   background-image: url(images/buttons/save.png);
   padding-left: 18px;
 }
 
-button.search, a.buttonsearch {
+button.search, a.button.search {
   background-image: url(images/buttons/search.png);
   padding-left: 18px;
 }
 
-button.lock, a.buttonlock {
+button.lock, a.button.lock {
   background-image: url(images/buttons/lock.png);
   padding-left: 18px;
 }
 
-button.tick, a.buttontick {
+button.tick, a.button.tick {
   background-image: url(images/buttons/tick.png);
   padding-left: 18px;
 }
 
-button.down, a.buttondown {
+button.down, a.button.down {
   background-image: url(images/buttons/down.png);
   padding-left: 18px;
 }
 
-button.up, a.buttonup {
+button.up, a.button.up {
   background-image: url(images/buttons/up.png);
   padding-left: 18px;
 }
 
-button.change, a.buttonchange {
+button.change, a.button.change {
   background-image: url(images/buttons/change.png);
   padding-left: 18px;
 }
 
-button.add, a.buttonadd {
+button.add, a.button.add {
   background-image: url(images/buttons/add.png);
   padding-left: 18px;
 }
 
-button.remove, a.buttonremove {
+button.remove, a.button.remove {
   background-image: url(images/buttons/remove.png);
   padding-left: 18px;
 }
 
-button.stop, a.buttonstop {
+button.stop, a.button.stop {
   background-image: url(images/buttons/stop.png);
   padding-left: 18px;
 }
 
-button.sendfile, a.buttonsendfile {
+button.sendfile, a.button.sendfile {
   background-image: url(images/buttons/sendfile.png);
   padding-left: 18px;
 }
 
-button.sendfile:hover, a.buttonsendfile:hover {
+button.sendfile:hover, a.button.sendfile:hover {
   background-image: url(images/buttons/sendfilehover.png);
   padding-left: 18px;
 }
 
-button.invalidefile, a.buttoninvalidefile {
+button.invalidefile, a.button.invalidefile {
   background-image: url(images/buttons/invalidefile.png);
   padding-left: 18px;
 }
 
-button.invalidefile:hover, a.buttoninvalidefile:hover {
+button.invalidefile:hover, a.button.invalidefile:hover {
   background-image: url(images/buttons/invalidefilehover.png);
   padding-left: 18px;
 }
 
-button.obsoletefile, a.buttonobsoletefile {
+button.obsoletefile, a.button.obsoletefile {
   background-image: url(images/buttons/obsoletefile.png);
   padding-left: 18px;
 }
 
-button.obsoletefile:hover, a.buttonobsoletefile:hover {
+button.obsoletefile:hover, a.button.obsoletefile:hover {
   background-image: url(images/buttons/obsoletefilehover.png);
   padding-left: 18px;
 }
@@ -3509,34 +3470,31 @@ table.active {
  * Geshi xml
  */
 .re0 {
-color:#000066;	
+  color:#000066;	
 } 
 
 .re1, .re2 {
-color:#000000;
-font-weight: bold; 
+  color:#000000;
+  font-weight: bold; 
 }
 
 .st0 {
-color:#FF0000; 
+  color:#FF0000; 
 }
 
 .sc3 {
-color:#009900;
+  color:#009900;
 }
 
 .de1 {
-font-family: monospace; 
-font-size: 1em; 
-line-height: 1.2em; 
+  font-family: monospace; 
+  font-size: 1em; 
+  line-height: 1.2em; 
 }
 
-/**
- * Pagination
- */
 .pagination {
-text-align: center;
-font-weight: bold;
-font-size: 14px;
-line-height: 1.8em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.8em;
 }

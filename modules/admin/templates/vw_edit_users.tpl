@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;user_id=0">
+      <a class="button new" href="?m={{$m}}&amp;user_id=0">
         Créer un nouvel utilisateur
       </a>
       {{include file="inc_list_users.tpl"}}

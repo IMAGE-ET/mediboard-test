@@ -64,7 +64,7 @@ function printAllDocs() {
               par le <strong>Dr {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
             </td>
             <td class="button">
-              <a class="buttonsearch" href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult->consultation_id}}">
+              <a class="button search" href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult->consultation_id}}">
                 Voir la consultation
               </a><br />
               <button class="print" type="button" onclick="printFiche()">

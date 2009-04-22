@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
+      <a class="button new" href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
         Ajouter une nouvelle spécialité médicale
       </a>
       <table class="tbl">

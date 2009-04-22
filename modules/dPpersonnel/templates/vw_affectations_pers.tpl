@@ -97,7 +97,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;affect_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;affect_id=0" class="button new">
 		Créer une affectation
 	  </a>
       <table class="form">

@@ -35,10 +35,10 @@
   {{if $category_id}}
   <tr>
     <td>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0" class="button new">
 			  Créer un élément
 			</a>
-			<a href="?m={{$m}}&amp;tab={{$tab}}&amp;mode_duplication=1" class="buttonnew">
+			<a href="?m={{$m}}&amp;tab={{$tab}}&amp;mode_duplication=1" class="button new">
 			  Dupliquer des elements
 			</a>
     </td>

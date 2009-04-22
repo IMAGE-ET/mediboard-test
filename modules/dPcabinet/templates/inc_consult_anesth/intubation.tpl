@@ -81,7 +81,7 @@ var SchemaDentaire = {
     
     // Buttons initialization
     var oActions = new Element('div', {className: 'dent-buttons'}),
-		    oButton = new Element('a', {className: 'buttoncancel', href: '#1'}).update("Réinitialiser").observe('click', this.reset.bind(this));
+		    oButton = new Element('a', {className: 'button cancel', href: '#1'}).update("Réinitialiser").observe('click', this.reset.bind(this));
     oActions.insert({top: oButton});
     
     // For each possible state, we add a link in the menu and an item in the legend

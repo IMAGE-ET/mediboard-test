@@ -9,7 +9,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
-      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id=0">
+      <a class="button new" href="?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id=0">
         Ajouter un nouveau fournisseur
       </a>
       <table class="tbl">

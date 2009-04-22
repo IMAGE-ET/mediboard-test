@@ -92,7 +92,7 @@ Main.add(function () {
     </table>
   </td>
   <td class="halfPane">
-    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_typeEi_manager&amp;type_ei_id=0">{{tr}}CTypeEi.create{{/tr}}</a>
+    <a class="button new" href="?m={{$m}}&amp;tab=vw_typeEi_manager&amp;type_ei_id=0">{{tr}}CTypeEi.create{{/tr}}</a>
     <form name="edit_type_ei" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_typeEi_aed" />
       <input type="hidden" name="type_ei_id" value="{{$type_ei->_id}}" />

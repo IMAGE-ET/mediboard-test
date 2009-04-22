@@ -93,7 +93,13 @@ function loadDependances(depend_value_1, depend_value_2){
       select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
     }
   }
-  
+}
+
+function popupImport(owner_guid){
+  var url = new Url("dPcompteRendu", "aides_import_csv");
+  url.addParam("owner_guid", owner_guid);
+  url.pop(500, 400, "Import d'aides à la saisie");
+  return false;
 }
 
 Main.add(function () {
@@ -112,7 +118,7 @@ Main.add(function () {
     <form name="filterFrm" action="?" method="get">
     
     <input type="hidden" name="m" value="{{$m}}" />
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="buttonnew"><strong>Créer une aide à la saisie</strong></a>
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="button new"><strong>Créer une aide à la saisie</strong></a>
     <table class="form">
       <tr>
         <th class="category" colspan="10">Filtrer les aides</th>

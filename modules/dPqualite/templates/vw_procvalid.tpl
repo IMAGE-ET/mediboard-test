@@ -170,11 +170,11 @@ function redactionDoc(oForm){
       {{if $procTermine|@count}}
         <br />
         {{if !$procAnnuleVisible}}
-        <a class="buttonedit" href="?m={{$m}}&amp;procAnnuleVisible=1">
+        <a class="button edit" href="?m={{$m}}&amp;procAnnuleVisible=1">
         {{tr}}button-CDocGed-viewcancel{{/tr}}
         </a>
         {{else}}
-        <a class="buttoncancel" href="?m={{$m}}&amp;procAnnuleVisible=0">
+        <a class="button cancel" href="?m={{$m}}&amp;procAnnuleVisible=0">
         {{tr}}button-CDocGed-notviewcancel{{/tr}}
         </a>
         <table class="form">

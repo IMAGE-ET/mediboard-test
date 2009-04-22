@@ -279,65 +279,62 @@ table.tabmenu td.selectedRight {
 
 /* Inputs */
 
-a.button, button, a.buttonedit, a.buttontrash, a.buttonsubmit, a.buttonnew, a.buttonprint, 
-a.buttoncancel, a.buttonmodify, a.buttonsearch, a.buttontick, a.buttonchange, a.buttondown {
+a.button, button {
   color: #fff;
   height: 18px;
   background-color: #638cc9;
 }
 
-a.button:hover, button:hover, a.buttonedit:hover, a.buttontrash:hover, a.buttonsubmit:hover, 
-a.buttonnew:hover, a.buttonprint:hover, a.buttoncancel:hover, a.buttonmodify:hover, 
-a.buttonsearch:hover, a.buttontick:hover, a.buttonchange:hover, a.buttondown:hover {
+a.button:hover, button:hover {
   background-color: #8ae;
 }
 
-button.edit, a.buttonedit {
+button.edit, a.button.edit {
   background-image: url(images/buttons/edit.gif);
   padding-left: 16px;
 }
 
-button.trash, a.buttontrash {
+button.trash, a.button.trash {
   background-image: url(images/buttons/trash.gif);
   padding-left: 18px; 
 }
 
-button.submit, a.buttonsubmit {
+button.submit, a.button.submit {
   background-image: url(images/buttons/save.gif);
   padding-left: 18px;
 }
-button.new, a.buttonnew {
+button.new, a.button.new {
   background-image: url(images/buttons/new.gif);
   padding-left: 18px;
 }
-button.print, a.buttonprint {
+button.print, a.button.print {
   background-image: url(images/buttons/print.gif);
   padding-left: 18px;
 }
-button.cancel, a.buttoncancel {
+button.cancel, a.button.cancel {
   background-image: url(images/buttons/cancel.gif);
   padding-left: 18px;
 }
 
-button.modify, a.buttonmodify {
+button.modify, a.button.modify {
   background-image: url(images/buttons/save.gif);
   padding-left: 18px;
 }
-button.search, a.buttonsearch {
+button.search, a.button.search {
   background-image: url(images/buttons/search.gif);
   padding-left: 18px;
 }
-button.tick, a.buttontick {
+button.tick, a.button.tick {
   background-image: url(images/buttons/tick.gif);
   padding-left: 18px;
 }
 
-button.down, a.buttondown {
+button.down, a.button.down {
   background-image: url(images/buttons/down.gif);
   padding-left: 18px;
 }
 
-button.change, a.buttonchange {
+button.change, a.button.change {
   background-image: url(images/buttons/change.gif);
   padding-left: 18px;
 }

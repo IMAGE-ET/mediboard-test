@@ -6,9 +6,9 @@
       <table class="form">
       	<tr>
       		<td>
- 				<a class="buttonnew" href="?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$facture->facture_id}}&amp;factureitem_id=0">
+ 				<a class="button new" href="?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$facture->facture_id}}&amp;factureitem_id=0">
         	Créer un nouvel élément
-      			</a>     		
+      			</a>
       		</td>
       	</tr>
         <tr>

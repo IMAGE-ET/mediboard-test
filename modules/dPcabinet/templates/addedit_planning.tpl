@@ -135,13 +135,13 @@ Main.add(function () {
 <table class="form">
   <tr>
     <td style="width: 50%;">
-    	<a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
+    	<a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
     	  {{tr}}CConsultation-title-create{{/tr}}
       </a>
     </td>
     <td style="width: 50%;">
 		  {{if $consult->_id}}
-    	<a class="buttonsearch" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+    	<a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
     	  {{tr}}CConsultation-title-access{{/tr}}
     	</a>
 		  {{/if}}

@@ -109,7 +109,7 @@ Main.add(function () {
       </form>
     </td>
     <td class="halfPane" style="text-align: center">
-      <a style="float: right;" href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
+      <a style="float: right;" href="#" onclick="printPlanning()" class="button print">Imprimer</a>
       <strong>
         <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
         {{$date|date_format:$dPconfig.longdate}}

@@ -57,7 +57,7 @@ function changeRemote(o) {
 <table class="main">
   <tr>
     <td class="greedyPane">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="button new">
         {{tr}}CMediusers-title-create{{/tr}}
       </a>
       
@@ -143,7 +143,7 @@ function changeRemote(o) {
     <td class="pane">
     
       {{if $mediuserSel->_id}}
-      <a class="buttonsearch" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$mediuserSel->_user_username}}&amp;user_id={{$mediuserSel->_id}}">
+      <a class="button search" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$mediuserSel->_user_username}}&amp;user_id={{$mediuserSel->_id}}">
         Administrer cet utilisateur
       </a>
       {{/if}}

@@ -57,7 +57,7 @@ function removeFunction(function_category_id){
   {{if $category_id}}
   <tr>
     <td>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;executant_prescription_line_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;executant_prescription_line_id=0" class="button new">
 			  Créer un exécutant
 			</a>
     </td>

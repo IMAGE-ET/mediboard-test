@@ -25,7 +25,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   <tr>
     <td class="halfPane">
       {{if $can->admin && $docGed->doc_ged_id}}
-        <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id=0">
+        <a class="button new" href="?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id=0">
         {{tr}}CDocGed.create_modele{{/tr}}
         </a>
       {{/if}}

@@ -38,7 +38,7 @@ Main.add(function () {
     <!-- Edition des catalogues --> 
     <td class="halfPane">
       {{if $can->edit}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;catalogue_labo_id=0">
         Ajouter un nouveau catalogue
       </a>
       <form name="editCatalogue" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

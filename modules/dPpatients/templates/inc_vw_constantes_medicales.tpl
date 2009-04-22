@@ -71,7 +71,7 @@ calculImcVst = function (oForm) {
       </td>
       <td>
         {{if $constantes->poids}}
-          <a class="buttontick notext" onclick="$V(document.forms['edit-constantes-medicales'].poids, {{$constantes->poids}}); return false;"> </a>
+          <a class="button tick notext" onclick="$V(document.forms['edit-constantes-medicales'].poids, {{$constantes->poids}}); return false;"> </a>
           {{mb_value object=$constantes field=poids}}kg
         {{/if}}
       </td>
@@ -84,7 +84,7 @@ calculImcVst = function (oForm) {
       </td>
       <td>
         {{if $constantes->taille}}
-          <a class="buttontick notext" onclick="$V(document.forms['edit-constantes-medicales'].taille, {{$constantes->taille}}); return false;"> </a>
+          <a class="button tick notext" onclick="$V(document.forms['edit-constantes-medicales'].taille, {{$constantes->taille}}); return false;"> </a>
           {{mb_value object=$constantes field=taille}}cm
         {{/if}}
       </td>
@@ -110,7 +110,7 @@ calculImcVst = function (oForm) {
       </td>
       <td>
         {{if $constantes->ta}}
-          <a class="buttontick notext" 
+          <a class="button tick notext" 
           onclick="$V(document.forms['edit-constantes-medicales']._ta_systole, {{$constantes->_ta_systole}}); 
                    $V(document.forms['edit-constantes-medicales']._ta_diastole, {{$constantes->_ta_diastole}}); return false;"> </a>
           {{mb_value object=$constantes field=_ta_systole}} / {{mb_value object=$constantes field=_ta_diastole}} cm Hg
@@ -125,7 +125,7 @@ calculImcVst = function (oForm) {
       </td>
       <td>
         {{if $constantes->pouls}}
-          <a class="buttontick notext" onclick="$V(document.forms['edit-constantes-medicales'].pouls, {{$constantes->pouls}}); return false;"> </a>
+          <a class="button tick notext" onclick="$V(document.forms['edit-constantes-medicales'].pouls, {{$constantes->pouls}}); return false;"> </a>
           {{mb_value object=$constantes field=pouls}}/min
         {{/if}}
       </td>
@@ -138,7 +138,7 @@ calculImcVst = function (oForm) {
       </td>
       <td>
         {{if $constantes->spo2}}
-          <a class="buttontick notext" onclick="$V(document.forms['edit-constantes-medicales'].spo2, {{$constantes->spo2}}); return false;"> </a>
+          <a class="button tick notext" onclick="$V(document.forms['edit-constantes-medicales'].spo2, {{$constantes->spo2}}); return false;"> </a>
           {{mb_value object=$constantes field=spo2}} %
         {{/if}}
       </td>

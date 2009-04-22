@@ -11,7 +11,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_id=0" class="button new">
         Créer une catégorie
       </a>
       <table class="tbl">

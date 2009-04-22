@@ -40,7 +40,7 @@
     </table>
   </td>
   <td class="halfPane">
-	  <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_cellSaver&amp;cell_saver_id=0">{{tr}}CCellSaver.create{{/tr}}</a>
+	  <a class="button new" href="?m={{$m}}&amp;tab=vw_cellSaver&amp;cell_saver_id=0">{{tr}}CCellSaver.create{{/tr}}</a>
 	  <form name="edit_cellSaver" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 		  <input type="hidden" name="dosql" value="do_cellSaver_aed" />
 		  <input type="hidden" name="cell_saver_id" value="{{$cell_saver->_id}}" />

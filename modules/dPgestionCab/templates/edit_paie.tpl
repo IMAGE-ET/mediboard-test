@@ -31,7 +31,7 @@ function saveFiche() {
       </form>
       {{if $fichePaie->fiche_paie_id}}
       <br />
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_paie&amp;fiche_paie_id=0" title="Créer une nouvelle fiche de paie">
+      <a class="button new" href="?m={{$m}}&amp;tab=edit_paie&amp;fiche_paie_id=0" title="Créer une nouvelle fiche de paie">
         Créer une nouvelle fiche de paie
       </a>
       {{/if}}

@@ -9,7 +9,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id=0">
+      <a class="button new" href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id=0">
         {{tr}}CDocGed.create{{/tr}}
       </a>
       

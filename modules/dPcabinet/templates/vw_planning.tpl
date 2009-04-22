@@ -140,7 +140,7 @@ Main.add(function () {
       </table>
       
     {{if $plageSel->plageconsult_id}}
-    <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
+    <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
     {{/if}}
     <table class="form">
       <tr id="editplage-trigger">
@@ -292,7 +292,7 @@ Main.add(function () {
     </td>
     <td>
       {{if $plageSel->plageconsult_id}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
       <table class="tbl">
         <tr>

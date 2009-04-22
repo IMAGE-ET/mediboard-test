@@ -48,7 +48,7 @@ Main.add(function () {
       <div id="list-products"></div>
     </td>
     <td class="halfPane" style="width: 1%;">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	  <input type="hidden" name="product_id" value="{{$product->_id}}" />

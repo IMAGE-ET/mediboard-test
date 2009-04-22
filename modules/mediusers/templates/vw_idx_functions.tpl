@@ -21,7 +21,7 @@ ColorSelector.init = function(){
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="button new">
         Créer une fonction
       </a>
       <table class="tbl">

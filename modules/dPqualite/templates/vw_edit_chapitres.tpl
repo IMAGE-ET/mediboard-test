@@ -23,7 +23,7 @@
       </select>
       </form>
       <br />
-      <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id=0">
+      <a class="button new" href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id=0">
         {{tr}}CChapitreDoc.create{{/tr}}
       </a>
       <table class="tbl">

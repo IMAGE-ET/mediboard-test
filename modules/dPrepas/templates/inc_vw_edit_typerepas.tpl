@@ -1,6 +1,6 @@
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id=0">
         Créer un nouveau type de repas
       </a>
       <table class="tbl">

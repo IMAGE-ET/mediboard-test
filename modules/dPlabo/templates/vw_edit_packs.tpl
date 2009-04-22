@@ -27,7 +27,7 @@
 
       <!-- Edition du pack sélectionné -->
       {{if $can->edit}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_examens_labo_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_examens_labo_id=0">
         Ajouter un nouveau pack
       </a>
       

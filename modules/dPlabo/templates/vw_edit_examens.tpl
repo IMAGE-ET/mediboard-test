@@ -57,7 +57,7 @@ Main.add(function () {
       
       <!-- Edition de l'analyse sélectionné -->
       {{if $can->edit}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;examen_labo_id=0">
         Ajouter une nouvelle analyse
       </a>
       

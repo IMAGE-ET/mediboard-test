@@ -169,7 +169,7 @@ Main.add(function () {
   {{if $protocole->protocole_id}}
   <tr>
     <td colspan="2">
-       <a class="buttonnew" href="?m={{$m}}&amp;protocole_id=0">Créer un nouveau protocole</a>
+       <a class="button new" href="?m={{$m}}&amp;protocole_id=0">Créer un nouveau protocole</a>
     </td>
   </tr>
   {{/if}}

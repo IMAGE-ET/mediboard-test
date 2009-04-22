@@ -183,19 +183,19 @@ Document.refreshList = function(){
     {{if !$app->user_prefs.simpleCabinet}}
     {{if $canPlanningOp->edit}}
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
       </a>
     </td>
     {{/if}}
     {{if $canPlanningOp->read}}
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
         Urgence
       </a>
     </td>
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
+      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
         Séjour
       </a>
     </td>
@@ -205,7 +205,7 @@ Document.refreshList = function(){
     <td colspan="4" class="button">
     {{/if}}
       {{if $canCabinet->edit}}
-      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
+      <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
         Consultation
       </a>
       {{/if}}

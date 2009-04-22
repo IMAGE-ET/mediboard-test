@@ -31,7 +31,7 @@ Main.add(function () {
     
     <input type="hidden" name="m" value="{{$m}}" />
 
-	<a href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_id=0" class="buttonnew"><strong>Créer un pack</strong></a>
+	<a href="?m={{$m}}&amp;tab={{$tab}}&amp;pack_id=0" class="button new"><strong>Créer un pack</strong></a>
         
     <table class="form">
 

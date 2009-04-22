@@ -38,12 +38,12 @@ function toggleMode() {
   {{if $sejour->_id}}
   <tr>
     <td>
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
         {{tr}}CSejour.create{{/tr}}
       </a>
     </td>
     <td>
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}">
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}">
         Programmer une nouvelle intervention dans ce séjour
       </a>
     </td>

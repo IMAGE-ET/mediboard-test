@@ -397,7 +397,7 @@ function popEtatSejour(sejour_id) {
   {{if $app->user_prefs.simpleCabinet}}
   <tr>
     <td class="button" colspan="2">
-      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+      <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>
     </td>
@@ -405,7 +405,7 @@ function popEtatSejour(sejour_id) {
   {{else}}
   <tr>
     <td class="button">
-      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+      <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>
     </td>
@@ -417,12 +417,12 @@ function popEtatSejour(sejour_id) {
 	    <div id="dhe"></div>
 	    <script type="text/javascript">DHE.register({{$patient->patient_id}}, null, "dhe");</script>
 	  {{else}}
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
+      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Séjour
       </a>
     </td>
     <td class="button">
-      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Urgence
       </a>
     {{/if}}

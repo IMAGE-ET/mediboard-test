@@ -376,7 +376,7 @@ viewBilanService = function(service_id, date){
 						}
             </script>
             
-            <a href="#Create-Notifications" class="buttonsearch" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
+            <a href="#Create-Notifications" class="button search" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
             	Mes visites
             </a>
             

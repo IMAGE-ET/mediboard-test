@@ -2,7 +2,7 @@
   <tr>
     <!-- Liste des types d'anesthésie -->
     <td class="halfPane" colspan="2">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
         {{tr}}CTypeAnesth.create{{/tr}}
       </a>
       <table class="tbl">

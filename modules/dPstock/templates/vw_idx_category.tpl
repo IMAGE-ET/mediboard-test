@@ -11,7 +11,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">{{tr}}CProductCategory.create{{/tr}}</a>
+      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">{{tr}}CProductCategory.create{{/tr}}</a>
       <table class="tbl">
         <tr>
           <th>{{tr}}CProductCategory{{/tr}}</th>

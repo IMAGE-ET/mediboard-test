@@ -141,13 +141,13 @@ Main.add(function () {
 <table class="main">
 <tr>
   <td>
-    <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
+    <a href="#" onclick="showLegend()" class="button search">Légende</a>
   </td>
   <td style="float: right">
     <form action="?" name="selType">
       {{mb_field object=$sejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="reloadAdmission(this.value)"}}
     </form>
-    <a href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
+    <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
   </td>
 </tr>
   <tr>

@@ -92,7 +92,7 @@
         <div class="big-success">
 	        Cet utilisateur est bien intégré à l'organigramme.
 	        <br /><br />
-	        <a class="buttonedit" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$user->_id}}">
+	        <a class="button edit" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$user->_id}}">
 	          Gérer cet utilisateur dans l'organigramme
 	        </a>
         </div>

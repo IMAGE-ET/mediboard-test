@@ -11,7 +11,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <a class="buttonnew" href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id=0">
+      <a class="button new" href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id=0">
         Créer un nouveau destinataire HPRIM
       </a>
       <table class="tbl">

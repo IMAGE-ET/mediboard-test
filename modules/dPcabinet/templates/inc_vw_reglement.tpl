@@ -321,7 +321,7 @@ Main.add( function(){
                       </td>
                       <td><label title="{{mb_value object=$curr_reglement field=date}}">{{$curr_reglement->date|date_format:"%d/%m/%Y"}}</td>
                       <td>
-                        <a class="buttonremove notext" href="" onclick="return Reglement.cancel({{$curr_reglement->_id}});"></a>
+                        <a class="button remove notext" href="" onclick="return Reglement.cancel({{$curr_reglement->_id}});"></a>
                       </td>
                     </tr>
                     {{/foreach}}

@@ -24,7 +24,7 @@ function printRapport() {
       <input type="hidden" name="gestioncab_id" value="{{$gestioncab->gestioncab_id}}" />
       <input type="hidden" name="function_id" value="{{$gestioncab->function_id}}" />
       {{if $gestioncab->gestioncab_id}}
-      <a class="buttonnew" href="?m={{$m}}&gestioncab_id=0">Créer une nouvelle fiche</a>
+      <a class="button new" href="?m={{$m}}&gestioncab_id=0">Créer une nouvelle fiche</a>
       {{/if}}
       <table class="form">
         <tr>

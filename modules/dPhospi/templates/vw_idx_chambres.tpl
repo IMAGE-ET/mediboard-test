@@ -16,7 +16,7 @@ Main.add(function () {
 <table class="main">
 <tr>
   <td class="halfPane">
-    <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id=0">
+    <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id=0">
       Créer un chambre
     </a>
     <table class="tbl">   
@@ -116,7 +116,7 @@ Main.add(function () {
     </table>
 	</form>
   {{if $chambreSel->chambre_id}}
-  <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$chambreSel->_id}}&amp;lit_id=0">
+  <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$chambreSel->_id}}&amp;lit_id=0">
     Ajouter un lit
   </a>
   <form name="editLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

@@ -5,7 +5,7 @@
 <br />
 Age : {{$patient->_age}} ans
 <br />
-<a class="buttonsearch" href="{{$patient->_dossier_cabinet_url}}">
+<a class="button search" href="{{$patient->_dossier_cabinet_url}}">
   Dossier complet
 </a>
 <br />

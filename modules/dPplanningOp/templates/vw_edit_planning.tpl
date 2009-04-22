@@ -135,7 +135,7 @@ ProtocoleSelector.init = function(){
   {{if $op->operation_id}}
   <tr>
     <td colspan="2">
-       <a class="buttonnew" href="?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
+       <a class="button new" href="?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
          {{tr}}COperation.create{{if $modurgence}}_urgence{{/if}}{{/tr}}
        </a>
     </td>

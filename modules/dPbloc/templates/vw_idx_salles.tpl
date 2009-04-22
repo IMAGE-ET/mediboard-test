@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;salle_id=0">{{tr}}CSalle-title-create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;salle_id=0">{{tr}}CSalle-title-create{{/tr}}</a>
       <table class="tbl">
         {{foreach from=$blocs_list item=curr_bloc}}
           <tr>

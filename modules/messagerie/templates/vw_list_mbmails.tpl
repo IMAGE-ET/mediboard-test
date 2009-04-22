@@ -9,7 +9,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td colspan="2">
-      <a class="buttonnew" href="#nothing" onclick="MbMail.create()">
+      <a class="button new" href="#nothing" onclick="MbMail.create()">
         {{tr}}CMbMail-title-create{{/tr}}
       </a>
     </td>

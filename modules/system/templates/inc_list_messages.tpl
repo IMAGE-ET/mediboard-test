@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;message_id=0">
+<a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;message_id=0">
   Créer un message
 </a>
 

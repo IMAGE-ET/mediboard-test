@@ -2,7 +2,7 @@
   <tr>
     <!-- Mode de paiement --> 
     <td class="halfPane" rowspan="3">
-      <a class="buttonnew" href="?m=dPgestionCab&amp;tab=configure&amp;facture_id=0">
+      <a class="button new" href="?m=dPgestionCab&amp;tab=configure&amp;facture_id=0">
         Créer un nouveau mode de paiement
       </a>
       <table class="tbl">

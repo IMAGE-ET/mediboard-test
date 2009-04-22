@@ -14,12 +14,12 @@
           <td><a href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_theme_id={{$currTheme->_id}}" style="font-weight:bold;">{{$currTheme->title}}</a><br />{{$currTheme->desc}}</td>
           <td>{{$currTheme->_ref_forum_threads|@count}} thread{{if $currTheme->_ref_forum_threads|@count > 1}}s{{/if}}</td>
           <td>
-            <a class="buttonedit" href="?m=dPportail&amp;tab=vw_forumtheme&amp;forum_theme_id={{$currTheme->_id}}">Modifier</a>
+            <a class="button edit" href="?m=dPportail&amp;tab=vw_forumtheme&amp;forum_theme_id={{$currTheme->_id}}">Modifier</a>
           </td>
         </tr>
         {{/foreach}}
       </table>
-      <a class="buttonnew" href="?m=dPportail&amp;tab=vw_forumtheme&amp;forum_theme_id=0">Creer un nouveau theme</a>
+      <a class="button new" href="?m=dPportail&amp;tab=vw_forumtheme&amp;forum_theme_id=0">Creer un nouveau theme</a>
     </td>
     <td class="halfPane">
       <form name="edittheme" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

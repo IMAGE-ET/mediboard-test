@@ -19,7 +19,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
-      <a class="buttonnew" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">{{tr}}CSociete.create{{/tr}}</a>
+      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">{{tr}}CSociete.create{{/tr}}</a>
       <table class="tbl">
         <tr>
           <th>{{tr}}CSociete-name{{/tr}}</th>

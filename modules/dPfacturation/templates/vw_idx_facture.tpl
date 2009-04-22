@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <a class="buttonnew" href="?m=dPfacturation&amp;tab=vw_idx_facture&amp;facture_id=0">
+      <a class="button new" href="?m=dPfacturation&amp;tab=vw_idx_facture&amp;facture_id=0">
         Créer une nouvelle facture
       </a>
       <table class="tbl">

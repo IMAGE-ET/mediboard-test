@@ -4,7 +4,7 @@
 <input type="hidden" name="del" value="0" />
 
 {{if $tab && $can->edit && $user_id}}
-<a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="buttonedit">
+<a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="button edit">
   Editer les préférences par défaut
 </a>
 {{/if}}

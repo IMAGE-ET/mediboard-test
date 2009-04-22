@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td>
-	  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;personnel_id=0" class="buttonnew">
+	  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;personnel_id=0" class="button new">
 		Créer un personnel
 	  </a>
 	  <table class="form">

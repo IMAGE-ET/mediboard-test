@@ -57,7 +57,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td colspan="2" class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id=0">
+      <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id=0">
       	{{tr}}CTarif-title-create{{/tr}}
       </a>
     </td>

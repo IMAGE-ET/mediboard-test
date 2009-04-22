@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0">
+      <a class="button new" href="?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0">
         Créer une nouvelle référence
       </a>
       <table class="tbl">

@@ -1,7 +1,7 @@
 <table class="main">
 <tr>
   <td class="halfPane">
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="buttonnew">
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="button new">
       Créer un service
     </a>
     

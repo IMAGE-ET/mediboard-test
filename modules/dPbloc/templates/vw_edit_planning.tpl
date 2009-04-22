@@ -56,7 +56,7 @@ function popPlanning(debut) {
       {{include file="inc_planning_day.tpl"}}
       </table>
       {{if $plagesel->plageop_id}}
-      <a class="buttonnew" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
+      <a class="button new" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
         {{tr}}CPlageOp-title-create{{/tr}}
       </a>
       {{/if}}

@@ -1,4 +1,4 @@
-<a class="buttonnew" href="?m={{$m}}&amp;tab=vw_category&amp;file_category_id=0">
+<a class="button new" href="?m={{$m}}&amp;tab=vw_category&amp;file_category_id=0">
   {{tr}}CFilesCategory-title-create{{/tr}}
 </a>
 

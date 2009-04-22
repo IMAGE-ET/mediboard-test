@@ -87,7 +87,7 @@ Main.add(function () {
 
     <td colspan="10">
       {{if $can->edit}}
-      <a class="buttonnew action" href="{{$cmd}}=install">
+      <a class="button new action" href="{{$cmd}}=install">
         {{tr}}Install{{/tr}} &gt;
         {{mb_value object=$mbmodule field=_latest}}
       </a>
@@ -115,12 +115,12 @@ Main.add(function () {
     <!-- Actions -->
     <td>
       {{if $mbmodule->_upgradable}}
-      <a class="buttonchange action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
+      <a class="button change action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
         {{tr}}Upgrade{{/tr}} &gt; {{$mbmodule->_latest}}
       </a>
 
       {{elseif $mbmodule->mod_type != "core" && $can->edit}}
-      <a class="buttoncancel action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
+      <a class="button cancel action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
         {{tr}}Remove{{/tr}}
       </a>
       {{/if}}
@@ -128,7 +128,7 @@ Main.add(function () {
     
     <td>
       {{if $mbmodule->_configable}}
-      <a class="buttonsearch action" href="{{$cmd}}=configure">
+      <a class="button search action" href="{{$cmd}}=configure">
         {{tr}}Configure{{/tr}}
       </a>
       {{/if}}

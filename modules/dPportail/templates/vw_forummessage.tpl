@@ -19,7 +19,7 @@
           {{if $forum_thread->_ref_user->discipline_id}}
             {{$forum_thread->_ref_user->_ref_discipline->text}}<br />
           {{/if}}
-          <a class="buttonedit" href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_thread_id={{$forum_thread->_id}}" title="Modifier le thread">Modifier</a>
+          <a class="button edit" href="?m=dPportail&amp;tab=vw_forumthread&amp;forum_thread_id={{$forum_thread->_id}}" title="Modifier le thread">Modifier</a>
           </td>
           <td style="vertical-align: top;">
             {{$forum_thread->date|date_format:"le %d/%m/%Y à %Hh%M"}}
@@ -38,7 +38,7 @@
           {{if $currMessage->_ref_user->discipline_id}}
             {{$currMessage->_ref_user->_ref_discipline->text}}<br />
           {{/if}}
-          <a class="buttonedit" href="?m=dPportail&amp;tab=vw_forummessage&amp;forum_message_id={{$currMessage->_id}}" title="Modifier le message">Modifier</a>
+          <a class="button edit" href="?m=dPportail&amp;tab=vw_forummessage&amp;forum_message_id={{$currMessage->_id}}" title="Modifier le message">Modifier</a>
           </td>
           <td style="vertical-align: top;">
             {{$currMessage->date|date_format:"le %d/%m/%Y à %Hh%M"}}
@@ -49,7 +49,7 @@
             
       </table>
       
-      <a class="buttonnew" href="?m=dPportail&amp;tab=vw_forummessage&amp;forum_thread_id={{$forum_thread->_id}}&amp;forum_theme_id={{$forum_theme->_id}}&amp;forum_message_id=0">Répondre</a><br />
+      <a class="button new" href="?m=dPportail&amp;tab=vw_forummessage&amp;forum_thread_id={{$forum_thread->_id}}&amp;forum_theme_id={{$forum_theme->_id}}&amp;forum_message_id=0">Répondre</a><br />
     </td>
   </tr>
   <tr>

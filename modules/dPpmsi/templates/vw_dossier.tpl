@@ -418,7 +418,7 @@ Main.add(function () {
               Imprimer la feuille de bloc
             </button>
             <br />
-            <a class="buttonedit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
+            <a class="button edit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
               Modifier les actes
             </a>
           </td>

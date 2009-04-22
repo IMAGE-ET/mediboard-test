@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
+      <a class="button new" href="?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
         Créer une nouvelle fiche
       </a>
       <table class="tbl">

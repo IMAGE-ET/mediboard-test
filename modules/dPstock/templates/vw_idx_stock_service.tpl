@@ -54,7 +54,7 @@ ProductSelector.init = function(){
     </td>
 
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_stock_service_aed" />
         <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
