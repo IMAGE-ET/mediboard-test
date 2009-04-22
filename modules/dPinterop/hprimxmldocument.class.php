@@ -249,9 +249,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
   }
   
-  function addErreurAvertissement($elParent, $code, $libelle, $commentaires = null, $mbObject = null) {
+  function addErreurAvertissement($elParent, $statut, $code, $libelle, $commentaires = null, $mbObject = null) {
     $erreurAvertissement = $this->addElement($elParent, "erreurAvertissement");
-    $this->addAttribute($erreurAvertissement, "statut", "erreur");
+    $this->addAttribute($erreurAvertissement, "statut", $statut);
     
     $enregistrementPatient = $this->addElement($erreurAvertissement, "enregistrementPatient");
     $identifiantPatient = $this->addElement($enregistrementPatient, "identifiantPatient");

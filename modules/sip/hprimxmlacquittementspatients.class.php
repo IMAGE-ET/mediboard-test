@@ -60,17 +60,17 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 		}
 	}
 
-	function addErreursAvertissements($codes, $commentaires = null, $mbObject = null) {
+	function addErreursAvertissements($statut, $codes, $commentaires = null, $mbObject = null) {
 		$acquittementsPatients = $this->documentElement;
 		 
 		$erreursAvertissements = $this->addElement($acquittementsPatients, "erreursAvertissements");
 		 
 		if (is_array($codes)) {
 			foreach ($codes as $code) {
-				$this->addErreurAvertissement($erreursAvertissements, $code, CHprimSoapHandler::$codes[$code], $commentaires);
+				$this->addErreurAvertissement($erreursAvertissements, $statut, $code, CHprimSoapHandler::$codes[$code], $commentaires);
 			}
 		} else {
-			$this->addErreurAvertissement($erreursAvertissements, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
+			$this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
 		}		
 	}
 
@@ -80,7 +80,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
 		if ($statut != "OK") {
 			$this->generateEnteteMessageAcquittement($statut);
-		  $this->addErreursAvertissements($codes, $commentaires, $mbObject);
+		  $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
 		} else {
 			$this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
 		}
@@ -127,6 +127,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $query = "/hprim:acquittementsPatients/hprim:enteteMessageAcquittement";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
     
+    $observations = array();
 	  if ($statut == "OK") {
 	  	$d = array();
       $observations[] = &$d;
@@ -138,7 +139,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     } else {
       $query = "/hprim:acquittementsPatients/hprim:erreursAvertissements/*";
       $erreursAvertissements = $xpath->query($query);   
-      
+
       foreach ($erreursAvertissements as $erreurAvertissement) {
         $d = array();
 
@@ -146,13 +147,12 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
         $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 3, ' ');
         $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
         $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
-        
         $observations[] = $d;
       }
     }  
     
     return $observations;
-	}
+	}	
 }
 
 ?>

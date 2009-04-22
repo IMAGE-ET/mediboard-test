@@ -64,9 +64,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 					$mbObject->_IPP = $IPP->id400;
 				}
 				
-				//mbTrace($mbObject, "Patient ".$_curr_dest->destinataire, true);
-
-				$domEvenement = new CHPrimXMLEvenementsPatients();
+				$domEvenement = new CHPrimXMLEnregistrementPatient();
 				$domEvenement->_emetteur = CAppUI::conf('mb_id');
 				$domEvenement->_destinataire = $_curr_dest->destinataire;
 				$domEvenement->_destinataire_libelle = " ";
@@ -97,7 +95,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 				$mbObject->_IPP = $IPP->id400;
 			}
 
-			$domEvenement = new CHPrimXMLEvenementsPatients();
+			$domEvenement = new CHPrimXMLEnregistrementPatient();
 			$domEvenement->_emetteur = CAppUI::conf('mb_id');
 			$domEvenement->_destinataire = $dest_hprim->destinataire;
 			$messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);

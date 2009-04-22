@@ -64,10 +64,9 @@ if (isset($t["emetteur"])) {
 if (isset($t["destinataire"])) {
   $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
 }
-if (isset($_date_min) && isset($_date_max)) {
-	$where['date_echange'] = "BETWEEN '".$_date_min."' AND '".$_date_max."'";
-}
-$where["statut_acquittement"] = isset($statut_acquittement) ? " = '".$statut_acquittement."'" : "IS NULL";
+
+$where['date_echange'] = (($_date_min) && ($_date_max)) ? "BETWEEN '".$_date_min."' AND '".$_date_max."'" : "IS NULL";
+$where["statut_acquittement"] = $statut_acquittement ? " = '".$statut_acquittement."'" : "IS NULL";
 $where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0' OR message_valide IS NULL";
 $where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0' OR acquittement_valide IS NULL";
 

@@ -74,7 +74,7 @@ foreach ($patients as $patient) {
     $patient->_IPP = $IPP->id400;
   }
 	
-  $domEvenement = new CHPrimXMLEvenementsPatients();
+  $domEvenement = new CHPrimXMLEnregistrementPatient();
   $domEvenement->_emetteur = CAppUI::conf('mb_id');
   $domEvenement->_destinataire = $dest_hprim->destinataire;
   $messageEvtPatient = $domEvenement->generateEvenementsPatients($patient);
