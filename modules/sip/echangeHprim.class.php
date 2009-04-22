@@ -1,15 +1,13 @@
-<?php
-/**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */
+<?php /* $Id $ */
 
 /**
- * The CEchangeHprim class
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 class CEchangeHprim extends CMbObject {
   // DB Table key
   var $echange_hprim_id     = null;
@@ -32,8 +30,12 @@ class CEchangeHprim extends CMbObject {
   var $_ref_notifications   = null;
   
   // Form fields
-  var $_self_emetteur             = null;
-  var $_self_destinataire         = null;
+  var $_self_emetteur       = null;
+  var $_self_destinataire   = null;
+  
+  // Filter fields
+  var $_date_min            = null;
+  var $_date_max            = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -59,6 +61,8 @@ class CEchangeHprim extends CMbObject {
     $specs["acquittement_valide"]   = "bool";
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool notNull";
+    $specs["_date_min"]             = "dateTime";
+    $specs["_date_max"]             = "dateTime";
     return $specs;
   }
   

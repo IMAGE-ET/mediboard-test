@@ -1,11 +1,13 @@
-<?php
+<?php /* $Id $ */
+
 /**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 global $AppUI;
 
 $echange_hprim_id         = mbGetValueFromGet("echange_hprim_id");
@@ -33,10 +35,6 @@ if (!$echange_hprim_id) {
 	  $dest_hprim->destinataire = $notification->destinataire;
 	  
 	  $dest_hprim->loadMatchingObject();
-	  
-	  // Chrono stop
-		$chrono = new Chronometer;
-		$chrono->stop();
 
 	  if (!($client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password))) {
 	    trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
@@ -46,9 +44,6 @@ if (!$echange_hprim_id) {
 	  if (!($acquittement = $client->evenementPatient($notification->message))) {
 	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  }
-	  
-	  // Chrono start
-	  $chrono->start();
 	  
 	  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
 	  $domGetAcquittement->loadXML(utf8_decode($acquittement));

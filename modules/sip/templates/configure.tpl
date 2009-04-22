@@ -1,9 +1,11 @@
-{{*  
+{{* $Id$ *}}
+
+{{*
  * @package Mediboard
  * @subpackage sip
- * @version $Revision: 
+ * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
 <h1>Configuration du module {{tr}}{{$m}}{{/tr}}</h1>

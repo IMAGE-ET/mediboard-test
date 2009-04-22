@@ -1,15 +1,13 @@
-<?php
-/**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */
+<?php /* $Id $ */
 
 /**
- * The CDestinataireHprim class
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 class CDestinataireHprim extends CMbObject {
   // DB Table key
   var $dest_hprim_id  = null;

@@ -1,19 +1,24 @@
-<?php /* $Id$ */
+<?php /* $Id $ */
+
 /**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 global $can;
 
 $can->needsRead();
 
-$echange_hprim_id = mbGetValueFromGet("echange_hprim_id");
-$t                = mbGetValueFromGetOrSession('types', array());
-$page             = mbGetValueFromGet('page', 1);
+$echange_hprim_id    = mbGetValueFromGet("echange_hprim_id");
+$t                   = mbGetValueFromGetOrSession('types', array());
+$statut_acquittement = mbGetValueFromGetOrSession("statut_acquittement");
+$page                = mbGetValueFromGet('page', 1);
+$now                 = mbDate();
+$_date_min           = mbGetValueFromGetOrSession('_date_min');
+$_date_max           = mbGetValueFromGetOrSession('_date_max');
 
 $observations = array();
 
@@ -29,6 +34,9 @@ $doc_errors_msg = $doc_errors_ack = "";
 
 // Chargement de l'échange HPRIM demandé
 $echange_hprim = new CEchangeHprim();
+$echange_hprim->_date_min = $_date_min ? $_date_min : $now;
+$echange_hprim->_date_max = $_date_max ? $_date_max : $now;
+
 $echange_hprim->load($echange_hprim_id);
 if($echange_hprim->load($echange_hprim_id)) {
 	$echange_hprim->loadRefs();	
@@ -36,14 +44,13 @@ if($echange_hprim->load($echange_hprim_id)) {
 	$domGetEvenement = new CHPrimXMLEvenementsPatients();
   $domGetEvenement->loadXML(utf8_decode($echange_hprim->message));
   $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true);
-	
-	if ($echange_hprim->acquittement) {
+
+  if ($echange_hprim->acquittement) {
 		$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
   
     $observations = $domGetAcquittement->getAcquittementObservation();
-    
-    $doc_errors_ack = @$domGetEvenement->schemaValidate(null, true);
+    $doc_errors_ack[] = @$domGetEvenement->schemaValidate(null, true);
 	}
 }
 
@@ -57,20 +64,19 @@ if (isset($t["emetteur"])) {
 if (isset($t["destinataire"])) {
   $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
 }
-
+if (isset($_date_min) && isset($_date_max)) {
+	$where['date_echange'] = "BETWEEN '".$_date_min."' AND '".$_date_max."'";
+}
+$where["statut_acquittement"] = isset($statut_acquittement) ? " = '".$statut_acquittement."'" : "IS NULL";
 $where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0' OR message_valide IS NULL";
-
 $where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0' OR acquittement_valide IS NULL";
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);
 
 //Pagination
 $total_pages = ceil($total_echange_hprim / 20);
-$prev_page = $page-1;
-$next_page = $page+1;
 
 $limit = ($page == 1) ? 0 : $page * 10;
-
 $listEchangeHprim    = $itemEchangeHprim->loadList($where, null, intval($limit).',20');
   
 foreach($listEchangeHprim as &$curr_echange_hprim) {
@@ -121,10 +127,9 @@ $smarty->assign("listEchangeHprim"    , $listEchangeHprim);
 $smarty->assign("total_echange_hprim" , intval($total_echange_hprim));
 $smarty->assign("total_pages"         , $total_pages);
 $smarty->assign("page"                , $page);
-$smarty->assign("prev_page"           , $prev_page);
-$smarty->assign("next_page"           , $next_page);
 $smarty->assign("selected_types"      , $t);
 $smarty->assign("types"               , $types);
+$smarty->assign("statut_acquittement" , $statut_acquittement);
 $smarty->assign("doc_errors_msg"      , $doc_errors_msg);
 $smarty->assign("doc_errors_ack"      , $doc_errors_ack);
 $smarty->display("vw_idx_echange_hprim.tpl");

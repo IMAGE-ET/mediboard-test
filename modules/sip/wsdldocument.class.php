@@ -1,16 +1,13 @@
-<?php 
-/**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */
-
+<?php /* $Id $ */
 
 /**
- * The CWsdlDocument class
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
 
 class CWsdlDocument extends CMbXMLDocument {

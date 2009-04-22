@@ -1,9 +1,11 @@
-{{*  
+{{* $Id$ *}}
+
+{{*
  * @package Mediboard
  * @subpackage sip
- * @version $Revision: 
+ * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
 <script type="text/javascript">
@@ -39,38 +41,71 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
         <input type="hidden" name="types[]" />
         <input type="hidden" name="page" value="1" onchange="this.form.submit()"/>
         
-        {{foreach from=$types key=type item=value}}
-          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{$type}}
-        {{/foreach}}
-        <br />
-        <button type="submit" class="search">Filtrer</button>
-        
-        {{if $total_echange_hprim != 0}}
-	        <div style="font-weight:bold;padding-top:10px"> 
-	          {{$total_echange_hprim}} {{tr}}results{{/tr}}
-	        </div>
-	        <div class="pagination">
-	          {{if ($page == 1)}}
-	            {{$page}}
-			      {{else}}
-			        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$prev_page}})"> < Précédent </a> |
-	            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, 1)"> 1 </a> | 
-	            {{$page}} 
-			      {{/if}}
-			      {{if $page != $total_pages}}
-			        | <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$total_pages}})"> {{$total_pages}} </a> | 
-			        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$next_page}})"> Suivant > </a>
-	          {{/if}}
-	        </div>
-	        <div>
-		        <select name="listpageechangehprim" onchange="$V(document.forms.filterEchange.elements.page, $V(this))">
-		          <option value="">&mdash; Page &mdash;</option>
-	            {{foreach from=1|range:$total_pages:4 item=curr_page}}
-	              <option value="{{$curr_page}}" {{if $curr_page == $page}}selected="selected"{{/if}}>{{$curr_page}}</option>
-	            {{/foreach}}
-		        </select>
-	        </div>
-        {{/if}}
+        <table class="form">
+	        <tr>
+	          <th class="category" colspan="2">Choix de la période</th>
+	        </tr>
+	        <tr>
+	          <th>{{mb_label object=$echange_hprim field="_date_min"}}</th>
+	          <td class="date">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" canNull="false" register=true}} </td>
+	        </tr>
+	        <tr>
+	           <th>{{mb_label object=$echange_hprim field="_date_max"}}</th>
+	           <td class="date">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" canNull="false" register=true}} </td>
+	        </tr>
+	        <tr>
+	          <th class="category" colspan="2">Critères de filtres</th>
+	        </tr>
+	        <tr>
+	          <th>Choix du statut d'acquittement</th>
+	          <td>
+	            <select class="str" name="statut_acquittement">
+			          <option value="">&mdash; Liste des status </option>
+			          <option value="OK" {{if $statut_acquittement == "OK"}}selected="selected"{{/if}}>Ok</option>
+			          <option value="avertissement" {{if $statut_acquittement == "avertissement"}}selected="selected"{{/if}}>Avertissement </option>
+			          <option value="erreur" {{if $statut_acquittement == "erreur"}}selected="selected"{{/if}}>Erreur</option>
+			        </select>
+	          </td>
+	        </tr>
+          <tr>
+            <td colspan="2" style="text-align: center">
+              {{foreach from=$types key=type item=value}}
+			          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{$type}}
+			        {{/foreach}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: center">
+              <button type="submit" class="search">Filtrer</button>
+            </td>
+          </tr>
+        </table>
+          {{if $total_echange_hprim != 0}}
+		        <div style="font-weight:bold;padding-top:10px"> 
+		          {{$total_echange_hprim}} {{tr}}results{{/tr}}
+		        </div>
+		        <div class="pagination">
+		          {{if ($page == 1)}}
+		            {{$page}}
+				      {{else}}
+				        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$page-1}})"> < Précédent </a> |
+		            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, 1)"> 1 </a> | 
+		            {{$page}} 
+				      {{/if}}
+				      {{if $page != $total_pages}}
+				        | <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$total_pages}})"> {{$total_pages}} </a> | 
+				        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$page+1}})"> Suivant > </a>
+		          {{/if}}
+		        </div>
+		        <div>
+			        <select name="listpageechangehprim" onchange="$V(document.forms.filterEchange.elements.page, $V(this))">
+			          <option value="">&mdash; Page &mdash;</option>
+		            {{foreach from=1|range:$total_pages:4 item=curr_page}}
+		              <option value="{{$curr_page}}" {{if $curr_page == $page}}selected="selected"{{/if}}>{{$curr_page}}</option>
+		            {{/foreach}}
+			        </select>
+		        </div>
+	        {{/if}}
       </form>
     </td>
   </tr>

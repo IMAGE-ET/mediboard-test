@@ -1,13 +1,12 @@
-<?php
+<?php /* $Id $ */
 
 /**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
-
 
 CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
 CAppUI::requireModuleClass("dPinterop", "hprimxmldocument");
@@ -142,12 +141,13 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
       
       foreach ($erreursAvertissements as $erreurAvertissement) {
         $d = array();
-        $observations[] = &$d;
-      
+
         $observation = $xpath->queryUniqueNode("hprim:observations/hprim:observation", $erreurAvertissement);
         $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 3, ' ');
         $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
         $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
+        
+        $observations[] = $d;
       }
     }  
     

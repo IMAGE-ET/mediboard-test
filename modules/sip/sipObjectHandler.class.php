@@ -1,15 +1,11 @@
-<?php
-/**
- *  @package Mediboard
- *  @subpackage sip
- *  @version $Revision$
- *  @author SARL OpenXtrem
- *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- */
+<?php /* $Id $ */
 
 /**
- * Class CSipObjectHandler
- * @abstract Event handler class for CMbObject
+ * @package Mediboard
+ * @subpackage sip
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 class CSipObjectHandler extends CMbObjectHandler {
