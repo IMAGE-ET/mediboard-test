@@ -19,7 +19,8 @@ $listPersPanseuse = array();
 // Ne pas supprimer, utilisé pour mettre le particien en session
 $praticien_id    = mbGetValueFromGetOrSession("praticien_id");
 $hide_finished   = mbGetValueFromGetOrSession("hide_finished", 0);
-$salle           = mbGetValueFromGetOrSession("salle");
+$salle_id        = mbGetValueFromGetOrSession("salle");
+$bloc_id         = mbGetValueFromGetOrSession("bloc_id");
 $op              = mbGetValueFromGetOrSession("op");
 $date            = mbGetValueFromGetOrSession("date", mbDate());
 $date_now        = mbDate();
@@ -41,7 +42,12 @@ $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
 // Creation du tableau de timing pour les affectations  
 $timingAffect = array();
-  
+
+// Sauvegarde en session du bloc (pour preselectionner dans la salle de reveil)
+$salle = new CSalle;
+$salle->load($salle_id);
+mbSetValueToSession("bloc_id", $salle->bloc_id);
+
 // Opération selectionnée
 $selOp = new COperation;
 $timing = array();
@@ -167,7 +173,7 @@ $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
 // Vérification de la check list journalière
-$check_list = CDailyCheckList::getTodaysList($salle);
+$check_list = CDailyCheckList::getTodaysList($salle_id);
 $check_list->loadItemTypes();
 $check_list->loadBackRefs('items');
 $check_item_category = new CDailyCheckItemCategory;
@@ -185,7 +191,7 @@ if ($selOp->_id){
 
 $smarty->assign("acte_ngap"       , $acte_ngap               );
 $smarty->assign("op"              , $op                      );
-$smarty->assign("salle"           , $salle                   );
+$smarty->assign("salle"           , $salle_id                );
 $smarty->assign("listAnesthType"  , $listAnesthType          );
 $smarty->assign("listAnesths"     , $listAnesths             );
 $smarty->assign("listChirs"       , $listChirs               );

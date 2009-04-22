@@ -11,6 +11,7 @@ global $can, $g;
 $can->needsRead();
 
 $salle_id     = mbGetValueFromGetOrSession("salle");
+$bloc_id      = mbGetValueFromGetOrSession("bloc_id");
 $date         = mbGetValueFromGetOrSession("date", mbDate());
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $hide_finished = mbGetValueFromGetOrSession("hide_finished", 0);
