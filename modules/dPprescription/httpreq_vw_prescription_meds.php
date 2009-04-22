@@ -14,6 +14,10 @@ $can->needsRead();
 
 $sejour_id = mbGetValueFromGetOrSession("sejour_id");
 
+// Chargement du séjour
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+
 // Chargement de l'utilisateur courant
 $user = new CMediusers();
 $user->load($AppUI->user_id);

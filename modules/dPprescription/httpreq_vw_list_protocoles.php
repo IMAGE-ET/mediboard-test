@@ -22,7 +22,7 @@ if(!$function_id && !$praticien_id && $protocoleSel_id){
   $function_id = $protocole->function_id;
 }
 
-$protocoles = CPrescription::loadAllProtocolesFor($praticien_id, $function_id, $group_id);
+$protocoles = CPrescription::getAllProtocolesFor($praticien_id, $function_id, $group_id);
 
 // Création du template
 $smarty = new CSmartyDP();

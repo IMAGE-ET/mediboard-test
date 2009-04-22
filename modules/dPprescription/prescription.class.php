@@ -550,7 +550,7 @@ class CPrescription extends CMbObject {
     return parent::store();
   }
   
-  static function loadAllProtocolesFor($praticien_id = null, $function_id = null, $group_id = null, $object_class = null, $type = null) {
+  static function getAllProtocolesFor($praticien_id = null, $function_id = null, $group_id = null, $object_class = null, $type = null) {
     $_protocoles = array();
     $protocoles = array(
       "prat"  => array(), 
@@ -609,17 +609,17 @@ class CPrescription extends CMbObject {
     
     if ($object_class) {
       // Classement de tous les protocoles de classe object_class
-      foreach($_protocoles as $type => $protocoles_by_type){
+      foreach($_protocoles as $owner => $protocoles_by_type){
         foreach($protocoles_by_type as $protocole_id => $_protocole){
-          $protocoles[$type][$_protocole->_id] = $_protocole;
+          $protocoles[$owner][$_protocole->type][$_protocole->_id] = $_protocole;
         }
       }
     }
     else {
       // Classement de tous les protocoles par object_class
-      foreach($_protocoles as $type => $protocoles_by_type){
+      foreach($_protocoles as $owner => $protocoles_by_type){
         foreach($protocoles_by_type as $protocole_id => $_protocole){
-          $protocoles[$type][$_protocole->object_class][$_protocole->_id] = $_protocole;
+          $protocoles[$owner][$_protocole->object_class][$_protocole->type][$_protocole->_id] = $_protocole;
         }
       }
     }

@@ -363,6 +363,7 @@
 				  {{assign var=dosql value="do_perfusion_aed"}}
 				{{/if}}
 
+				{{if $prescription->type == "sejour"}}
 	        Modif. infirmière
 		      <form name="editLine" action="?" method="post">
 					  <input type="hidden" name="m" value="dPprescription" />
@@ -370,6 +371,7 @@
 						<input type="hidden" name="{{$line->_ref_substitute_for->_spec->key}}" value="{{$line->_ref_substitute_for->_id}}" />
 						{{mb_field object=$line->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 					</form>
+				{{/if}}
 		  {{/if}}
       {{/if}}
     

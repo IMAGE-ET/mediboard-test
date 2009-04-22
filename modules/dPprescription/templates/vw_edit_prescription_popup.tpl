@@ -61,6 +61,10 @@ Main.add(function () {
   
   <tr>
     <td>
+      <form name="mode_affichage">
+        <!-- Permet de rester en mode lecture (et de ne pas recuperer l'operation_id en session) -->
+        <input type="hidden" name="mode_sejour" value="{{$mode_sejour}}" />
+      </form>
       <table style="width: 100%;">
         <tr>
           
@@ -213,7 +217,6 @@ Main.add(function () {
         </form>
         <br />
         {{/if}}
-        
         {{if $chir_id}}
         <form name="editProtoPrescriptionChir" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this)">
           <input type="hidden" name="m" value="dPprescription" />

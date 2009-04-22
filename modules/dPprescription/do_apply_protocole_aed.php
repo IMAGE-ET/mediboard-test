@@ -35,9 +35,11 @@ if ($prescription_id) {
   $prescription->object_class = 'CSejour';
   $prescription->object_id = $operation->sejour_id;
   $prescription->type = 'sejour';
+
   if ($msg = $prescription->store()) {
-    $AppUI->setMsg($msg, UI_MSG_ERROR);
-  }
+	  $AppUI->setMsg($msg, UI_MSG_ERROR);
+	}
+
 }
 
 // On applique le protocole ou le pack

@@ -76,11 +76,11 @@ if($is_chir){
 }
 
 if($chir->_id){
-	$protocoles_list["chir"] = CPrescription::loadAllProtocolesFor($chir->_id, null, null, 'CSejour');
+	$protocoles_list["chir"] = CPrescription::getAllProtocolesFor($chir->_id, null, null, 'CSejour');
 }
 
 if($anesth->_id){
-  $protocoles_list["anesth"] = CPrescription::loadAllProtocolesFor($anesth->_id, null, null, 'CSejour');
+  $protocoles_list["anesth"] = CPrescription::getAllProtocolesFor($anesth->_id, null, null, 'CSejour');
 }
 
 // Création du template

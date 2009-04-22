@@ -245,7 +245,8 @@ var Prescription = {
 	    }
     }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id, readonly, lite, full_line_guid, pratSel_id){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, 
+                              operation_id, chir_id, anesth_id, readonly, lite, full_line_guid, pratSel_id, mode_sejour){
    // pre-selection du praticien
     if(document.selPratForPresc){
       if(document.selPratForPresc.selPraticien.value){
@@ -254,6 +255,11 @@ var Prescription = {
       }
     }
     
+    if(!mode_sejour){
+      if(document.mode_affichage){
+        mode_sejour = document.mode_affichage.mode_sejour.value;
+      }
+    }
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
@@ -268,7 +274,7 @@ var Prescription = {
     url.addParam("readonly", readonly?1:0);
     url.addParam("lite", lite?1:0);
     url.addParam("full_line_guid", full_line_guid);
- 
+    url.addParam("mode_sejour", mode_sejour);
     url.addParam("pratSel_id", pratSel_id);
     url.requestUpdate("prescription_sejour", { waitingText: null } );
   },

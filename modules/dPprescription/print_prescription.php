@@ -41,11 +41,6 @@ if($prescription->object_id){
 	$poids = $constantes_medicales->poids;
 }
 
-// L'impression de la prescription par praticien n'est effectuée que dans le cadre de la prescription de sortie
-//if($prescription->type != "sortie"){
-  //$praticien_sortie_id = "";
-//}
-
 // Chargement du praticien
 $praticien = new CMediusers();
 if($praticien_sortie_id){
@@ -57,6 +52,12 @@ $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
 if($mediuser->isPraticien()){
 	$praticien = $mediuser;
+}
+
+if($prescription->type == "externe"){
+  $consultation =& $prescription->_ref_object;
+  $consultation->loadRefPlageConsult();
+  $praticien->load($consultation->_praticien_id);
 }
 
 if($praticien->_id){
@@ -93,10 +94,8 @@ if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
   $prescription->loadRefsLinesDMI();
 }
 
-
 $medicament = 0;
 $comment = 0;
-
 
 // Parcours des medicaments, pas de gestion d'executant pour les medicaments
 $lines["medicaments"]["med"]["ald"] = array();

@@ -14,9 +14,13 @@
   <tr>
     <th class="title">Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}</th>
   </tr>
-  {{foreach from=$_protocoles_by_owner item=_protocoles key=type_protocole}}
+  {{foreach from=$_protocoles_by_owner item=_protocoles_by_type key=class_protocole}}
   <tr>
-    <th>{{tr}}CPrescription.object_class.{{$type_protocole}}{{/tr}}</th>
+    <th class="title">Contexte: {{tr}}CPrescription.object_class.{{$class_protocole}}{{/tr}}</th>
+  </tr>
+  {{foreach from=$_protocoles_by_type item=_protocoles key=type_protocole}}
+  <tr>
+    <th>Type: {{tr}}CPrescription.type.{{$type_protocole}}{{/tr}}</th>
   </tr>
   {{foreach from=$_protocoles item=protocole}}
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
@@ -36,6 +40,7 @@
       </a>
     </td>
   </tr>
+  {{/foreach}}
   {{/foreach}}
   {{/foreach}}
   {{/if}}

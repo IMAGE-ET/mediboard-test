@@ -261,6 +261,7 @@ Main.add( function(){
 								{{else}}
 								  {{assign var=dosql value="do_perfusion_aed"}}
 								{{/if}}
+								{{if $prescription->type == "sejour"}}
 					        Modif. infirmière
 						      <form name="editLine" action="?" method="post">
 									  <input type="hidden" name="m" value="dPprescription" />
@@ -268,6 +269,7 @@ Main.add( function(){
 										<input type="hidden" name="{{$_perfusion->_ref_substitute_for->_spec->key}}" value="{{$_perfusion->_ref_substitute_for->_id}}" />
 										{{mb_field object=$_perfusion->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 									</form>
+								{{/if}}
 						  {{/if}}
 						  {{/if}}
     

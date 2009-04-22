@@ -92,9 +92,11 @@ reloadPrescriptionAnesth = function(prescription_id){
   	      {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
   				  {{if $_protocoles_by_owner|@count}}
   				    <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
-    				  {{foreach from=$_protocoles_by_owner item=protocole}}
+    				  {{foreach from=$_protocoles_by_owner item=_protocoles_by_type}}
+    				  {{foreach from=$_protocoles_by_type item=protocole}}
       				  <option value="prot-{{$protocole->_id}}">{{$protocole->libelle}}</option>
     				  {{/foreach}}
+              {{/foreach}}
               </optgroup>
   				  {{/if}}
   			  {{/foreach}}

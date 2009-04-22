@@ -58,7 +58,16 @@ Main.add(function () {
 		    </tr>
 		    <tr>
 		      <th>{{mb_label object=$protocole field="object_class"}}</th>
-					<td>{{mb_field object=$protocole field="object_class" onchange="preselectType(this.value, this.form)"}}</td>
+					<td>
+				    <select name="object_class" onchange="preselectType(this.value, this.form);">
+				     {{assign var=specs_object_class value=$protocole->_specs.object_class}}
+             {{foreach from=$specs_object_class->_locales item="curr_class" key="key"}}
+               {{if $key != "CDossierMedical"}}
+                 <option value="{{$key}}">{{$curr_class}}</option>
+               {{/if}}
+             {{/foreach}}
+				    </select>	
+				  </td>
 			  </tr>
 			  <tr>
 			    <th>{{mb_label object=$protocole field="type"}}</th>
