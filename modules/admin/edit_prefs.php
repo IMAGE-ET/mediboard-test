@@ -76,6 +76,7 @@ $array_list_module_pref = array (
     "view_traitement",
     "autoCloseConsult",
     "resumeCompta",
+    "showDatesAntecedents",
   ),
   "dPplanningOp" => array (
     "mode_dhe",

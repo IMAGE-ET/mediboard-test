@@ -1715,4 +1715,6 @@ $locales['CLmLot.S_LOT_ETAT.10'] = '';
 $locales['config-dPcabinet-CConsultAnesth-view_premedication'] = '';
 $locales['config-dPcabinet-CConsultAnesth-view_premedication-desc'] = '';
 $locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
+$locales['pref-showDatesAntecedents'] = 'Afficher les champs dates dans l\'édition des antécédents et traitements';
+$locales['pref-showDatesAntecedents-desc'] = 'Afficher les champs dates dans l\'édition des antécédents et traitements';
 ?>

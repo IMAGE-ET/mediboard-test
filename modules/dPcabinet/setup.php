@@ -1193,7 +1193,10 @@ class CSetupdPcabinet extends CSetup {
 			AND valide = '1'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.10";
+    $this->makeRevision("1.10");
+    $this->addPrefQuery("showDatesAntecedents", "1");
+        
+    $this->mod_version = "1.11";
   }
 }
 ?>

@@ -1708,4 +1708,6 @@ $locales['CPlageconsult-_function_id'] = '';
 $locales['CPlageconsult-_function_id-court'] = '';
 $locales['CPlageconsult-_function_id-desc'] = '';
 $locales['CSejour-back-consultations_anesths'] = '';
+$locales['pref-showDatesAntecedents'] = '';
+$locales['pref-showDatesAntecedents-desc'] = '';
 ?>

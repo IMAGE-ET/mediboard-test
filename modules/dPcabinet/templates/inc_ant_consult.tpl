@@ -159,13 +159,16 @@ Main.add(function () {
 
       <table class="form">
         <tr>
+          {{if $app->user_prefs.showDatesAntecedents}}
           <th>
             {{mb_label object=$antecedent field=date}}
           </th>
           <td class="date">
 						{{mb_field object=$antecedent field=date form=editAntFrm register=true}}
           </td>
-          
+          {{else}}
+          <td colspan="2" />
+          {{/if}}
           <th id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
 						<span id="div_helpers_rques">
@@ -254,29 +257,38 @@ Main.add(function () {
 				          }
 						  </script>
 			      </td>
-			      <td>
+			      <td style="width: 50%">
 			        <strong>
 			        <div id="_libelle"></div>
 			        </strong>
 			      </td>
           </tr>
+          
 	        <tr>
+	          {{if $app->user_prefs.showDatesAntecedents}}
 	          <th>{{mb_label object=$line field="debut"}}</th>
 	          <td class="date">{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
+	          {{else}}
+	          <td colspan="2" />
+	          {{/if}}
 	          <td rowspan="3" id="addPosoLine">
 	     
 	          </td>
 	        </tr>  
+	        
+	        {{if $app->user_prefs.showDatesAntecedents}}
 	        <tr>
 	          <th>{{mb_label object=$line field="fin"}}</th>
 	          <td class="date">{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
 	        </tr>
+	        {{/if}}
+	        
 	        <tr> 	
 	        	<th>{{mb_label object=$line field="commentaire"}}</th>
-	          <td>{{mb_field object=$line field="commentaire"}}</td>
+	          <td>{{mb_field object=$line field="commentaire" size=20}}</td>
 	        </tr>
 	        <tr>
-	          <td colspan="2">
+	          <td colspan="2" class="button">
 	            <button id='button_submit_traitement' class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
 	              onComplete: function(){ 
 	                DossierMedical.reloadDossiersMedicaux();
@@ -311,12 +323,16 @@ Main.add(function () {
       
       <table class="form">
         <tr>
+          {{if $app->user_prefs.showDatesAntecedents}}
           <th>
             {{mb_label object=$traitement field=debut}}
           </th>
           <td class="date">
 						{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}
           </td>
+          {{else}}
+          <td colspan="2" />
+          {{/if}}
           <th>
             {{mb_label object=$traitement field="traitement"}}
             <select name="_helpers_traitement" size="1" style="width: 80px;" onchange="pasteHelperContent(this)">
@@ -330,12 +346,16 @@ Main.add(function () {
           </th>
         </tr>
         <tr>
+          {{if $app->user_prefs.showDatesAntecedents}}
           <th>
             {{mb_label object=$traitement field=fin}}
           </th>
           <td class="date">
 						{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}
           </td>
+          {{else}}
+          <td colspan="2" />
+          {{/if}}
           <td rowspan="3">
             <textarea name="traitement" onblur="this.form.onsubmit()"></textarea>
           </td>

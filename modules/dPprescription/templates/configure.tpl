@@ -697,7 +697,7 @@ function updateVoie(){
   </tr>
   
   <tr>
-    <td><button class="tick" onclick="startAssociation()" >Importer la table de gestion de donnees</button></td>
+    <td><button class="tick" onclick="startAssociation()" >Importer la table d'association</button></td>
     <td id="do_add_association"></td>
   </tr>
 
