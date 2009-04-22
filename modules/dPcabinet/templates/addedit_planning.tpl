@@ -156,7 +156,7 @@ Main.add(function () {
         </a>
         {{tr}}CConsultation-title-modify{{/tr}}
         {{if $pat->_id}}de {{$pat->_view}}{{/if}}
-        par le Dr. {{$chir}}
+        par le Dr {{$chir}}
       </th>
     {{else}}
       <th class="title" colspan="5">{{tr}}CConsultation-title-create{{/tr}}</th>

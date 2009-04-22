@@ -27,7 +27,7 @@
   <tr>
     <th class="category{{if $vueReduite}} text{{/if}}" colspan="2">
       <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$_plage->_id}}" title="Administrer la plage">
-        Chir : Dr. {{$_plage->_ref_chir->_view}}
+        Chir : Dr {{$_plage->_ref_chir->_view}}
         {{if $vueReduite}}
           <br />
         {{else}}
@@ -43,7 +43,7 @@
     {{if $vueReduite}}
     <th class="category" colspan="2">
       {{if $_plage->anesth_id}}
-        Anesth : Dr. {{$_plage->_ref_anesth->_view}}
+        Anesth : Dr {{$_plage->_ref_anesth->_view}}
       {{else}}
         -
       {{/if}}

@@ -385,7 +385,7 @@ Document.refreshList = function(){
     {{if $curr_consult->annule}}
     <td class="cancelled">[Consult annulée]</td>
     {{else}}
-    <td>Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</td>
+    <td>Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</td>
     {{/if}}
   </tr>
 
