@@ -163,7 +163,7 @@ Main.add( function(){
 			      {{/foreach}}
 			      {{/if}}
 			    </select>
-			    <button class="new" onclick="$('add_line_comment_med').show();">Ajouter un commentaire</button>
+			    <button class="new" onclick="$('add_line_comment_med').show();" type="button">Ajouter un commentaire</button>
 			    <br />
 			    <input type="text" name="produit" value="" size="20" />
 			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
