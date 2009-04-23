@@ -76,7 +76,8 @@ $total_echange_hprim = $itemEchangeHprim->countList($where);
 $total_pages = ceil($total_echange_hprim / 20);
 
 $limit = ($page == 1) ? 0 : $page * 10;
-$listEchangeHprim    = $itemEchangeHprim->loadList($where, null, intval($limit).',20');
+$order = "date_echange = DESC";
+$listEchangeHprim    = $itemEchangeHprim->loadList($where, $order, intval($limit).',20');
   
 foreach($listEchangeHprim as &$curr_echange_hprim) {
 	$curr_echange_hprim->loadRefNotifications();

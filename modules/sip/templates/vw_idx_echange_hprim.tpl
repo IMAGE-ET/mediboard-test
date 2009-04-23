@@ -39,7 +39,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="types[]" />
-        <input type="hidden" name="page" value="1" onchange="this.form.submit()"/>
+        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
         
         <table class="form">
 	        <tr>
@@ -60,7 +60,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
 	          <th>Choix du statut d'acquittement</th>
 	          <td>
 	            <select class="str" name="statut_acquittement">
-			          <option value="">&mdash; Liste des status </option>
+			          <option value="">&mdash; Liste des statuts </option>
 			          <option value="OK" {{if $statut_acquittement == "OK"}}selected="selected"{{/if}}>Ok</option>
 			          <option value="avertissement" {{if $statut_acquittement == "avertissement"}}selected="selected"{{/if}}>Avertissement </option>
 			          <option value="erreur" {{if $statut_acquittement == "erreur"}}selected="selected"{{/if}}>Erreur</option>
@@ -98,9 +98,14 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
 		          {{/if}}
 		        </div>
 		        <div>
-			        <select name="listpageechangehprim" onchange="$V(document.forms.filterEchange.elements.page, $V(this))">
-			          <option value="">&mdash; Page &mdash;</option>
-		            {{foreach from=1|range:$total_pages:4 item=curr_page}}
+			        <select name="listpageechangehprim" onchange="$V(this.form.elements.page, $V(this))">
+			          <option value="">&mdash; Page</option>
+			          {{if $total_pages < 4}}
+			            {{assign var="step" value=1}}
+			          {{else}}
+			            {{assign var="step" value=4}}
+			          {{/if}}
+		            {{foreach from=1|range:$total_pages:$step item=curr_page}}
 		              <option value="{{$curr_page}}" {{if $curr_page == $page}}selected="selected"{{/if}}>{{$curr_page}}</option>
 		            {{/foreach}}
 			        </select>

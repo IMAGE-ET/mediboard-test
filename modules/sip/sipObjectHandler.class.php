@@ -116,7 +116,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 		  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
       $domGetAcquittement->loadXML(utf8_decode($acquittement));        
       $doc_valid = $domGetAcquittement->schemaValidate();
-      if (!$doc_errors) {
+      if (!$doc_valid) {
         $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
       }
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
