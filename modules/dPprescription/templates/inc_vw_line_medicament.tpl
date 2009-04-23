@@ -28,7 +28,7 @@
          Main.add( function(){moveTbody($('line_medicament_{{$line->_id}}'));});
       </script>
       {{/if}}
-      
+      {{$line->date_arret}}
       <div style="float:left;">
             <!-- Fomulaire de modification de l'emplacement -->
   		  {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}

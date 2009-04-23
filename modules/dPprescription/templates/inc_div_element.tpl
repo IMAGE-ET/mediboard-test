@@ -62,7 +62,7 @@ Main.add( function(){
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
       <th class="category">Nouvelle ligne</th>
     {{/if}}
-    <th class="category">Actions</th>
+    <th class="category">Affichage</th>
   </tr>
   <tr>
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 

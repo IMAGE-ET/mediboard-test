@@ -12,11 +12,9 @@
 {{if array_key_exists('alle', $antecedents)}}
   {{assign var=allergies value=$antecedents.alle}}
   {{if $allergies|@count}}
-   <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
-        onmouseover="$('allergies{{$sejour_id}}').show();"
-        onmouseout="$('allergies{{$sejour_id}}').hide();" />
+   <img src="images/icons/warning.png" title="" alt="Allergies" onmouseover="ObjectTooltip.createDOM(this, 'allergies{{$sejour_id}}')" />
  
-   <div id="allergies{{$sejour_id}}" class="tooltip" style="text-align:left; display: none; background-color: #ddd; border-style: ridge; padding:3px;">
+   <div id="allergies{{$sejour_id}}" style="text-align:left; display: none;">
      <strong>Allergies</strong>
      <ul>
       {{foreach from=$allergies item=allergie}}
@@ -34,11 +32,9 @@
 
 <!-- Affichage des autres antecedents -->
  {{if $dossier_medical->_count_antecedents}}
-  <img src="images/icons/antecedents.gif" title="Antécédents" alt="Antécédents" 
-        onmouseover="$('antecedents{{$sejour_id}}').show();"
-        onmouseout="$('antecedents{{$sejour_id}}').hide();" />
+  <img src="images/icons/antecedents.gif" title="" alt="Antécédents" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')" />
   
-   <div id="antecedents{{$sejour_id}}" class="tooltip" style="text-align:left;  display: none; background-color: #ddd; border-style: ridge; padding:3px;">
+   <div id="antecedents{{$sejour_id}}" style="text-align:left;  display: none;">
      <ul>
       {{foreach from=$antecedents key=name item=cat}}
       {{if $name != "alle" && $cat|@count}}

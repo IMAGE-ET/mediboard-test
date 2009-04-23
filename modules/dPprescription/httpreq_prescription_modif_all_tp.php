@@ -24,7 +24,7 @@ $traitement_perso->traitement_personnel = "1";
 $traitements = $traitement_perso->loadMatchingList();
 
 foreach($traitements as &$line) {
-	if($actionType == "stop" && !$line->date_arret) {
+	if($actionType == "stop" && !$line->date_arret && $line->signee) {
 		$line->date_arret = $date;
 		$line->time_arret = $time;
     $AppUI->displayMsg($line->store(), "CPrescriptionLineMedicament-msg-store");

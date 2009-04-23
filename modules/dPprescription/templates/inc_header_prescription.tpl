@@ -233,6 +233,13 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
            <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
       {{/if}}
+      {{if !$mode_protocole}}
+	       <div id="antecedent_allergie">
+			     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+			     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+			     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+				 </div>   
+	    {{/if}}
     </th>
   </tr>
   
@@ -342,15 +349,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	  {{/if}} 
  
     <td style="text-align: left;">
-       {{if !$mode_protocole}}
-       <div id="antecedent_allergie">
-				     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-				     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-			 </div>   
-      {{/if}}
-
-      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
+      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';" style="width: 65px;">
         <option value="">&mdash; Action</option>
 	 		  <!-- Impression de la prescription -->
 	 		  <optgroup label="Imprimer">
@@ -368,6 +367,12 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
       		<option value="viewSubstitutions">Substitutions</option>
       	  {{/if}}
         </optgroup>
+        {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin) && $prescription->type != "externe"}}
+	         <optgroup label="Traitements perso">
+	          <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arrêter</option>
+	          <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprendre</option>
+	        </optgroup>
+        {{/if}}
       </select>
 
 			{{if !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
@@ -375,14 +380,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
       {{/if}}
       <br />
       {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
-        {{if $prescription->type != "externe"}}
-	        <select name="advAction">
-	          <option value="">&mdash; Traitements perso</option>
-	          <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arrêter</option>
-	          <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprendre</option>
-	        </select>
-        {{/if}}
-        
         {{if !$mode_pharma}}
 	        {{if $is_praticien}}
 	          <form name="signaturePrescription" method="post" action="">
@@ -397,11 +394,10 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	        {{else}}
 		        <!-- Validation de la prescription -->
 			      <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');">
-			        Signer toutes les lignes
+			        Tout signer
 			      </button>
 			      {{if $operation_id}}
-              <br />
-              <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')">Annuler les signatures</button>
+              <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')">Annuler signatures</button>
             {{/if}}
 		      {{/if}}
         {{/if}}
@@ -414,3 +410,4 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
   </tr>
   {{/if}}
 </table>
+<hr />

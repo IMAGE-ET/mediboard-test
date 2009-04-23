@@ -137,7 +137,7 @@ Main.add( function(){
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma)}}  
       <th class="category">Nouvelle ligne</th>
     {{/if}}
-    <th class="category" style="width: 1%;">Actions</th>
+    <th class="category" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma)}} 
