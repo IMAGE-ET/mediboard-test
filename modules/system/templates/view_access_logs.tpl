@@ -68,7 +68,7 @@ Main.add(function () {
         <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper tout</option>
         <optgroup label="Détail du module">
           {{foreach from=$listModules item=curr_module}}
-          <option value="{{$curr_module->mod_name}}" {{if $curr_module->mod_name == $groupmod}} selected="selected" {{/if}}>
+          <option value="{{$curr_module->mod_name}}" {{if $curr_module->mod_name == $module}} selected="selected" {{/if}}>
             {{tr}}module-{{$curr_module->mod_name}}-court{{/tr}}
           </option>
           {{/foreach}}
@@ -81,7 +81,14 @@ Main.add(function () {
 <tr>
   <td>
     {{foreach from=$graphs item=graph name=graphs}}
-        <div id="graph-{{$smarty.foreach.graphs.index}}" style="width: 350px; height: 250px; float: left; margin: 1em;"></div>
+        <div id="graph-{{$smarty.foreach.graphs.index}}" 
+             {{if $groupmod==1}}
+             style="width: 350px; height: 250px; float: left; margin: 1em; cursor: pointer;" 
+             onclick="$V(getForm('typevue').elements.groupmod, '{{$graph.module}}')"
+             {{else}}
+             style="width: 350px; height: 250px; float: left; margin: 1em;" 
+             {{/if}}
+             ></div>
     {{/foreach}}
   </td>
 </tr>

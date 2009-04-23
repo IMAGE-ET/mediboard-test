@@ -137,9 +137,9 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day') {
      'label' => 'DB (s)',
      'data' => $request,
      'lines' => array('show' => true),
-    ),
+    )
 	);
 	
-	return array('series' => $series, 'options' => $options);
+	return array('series' => $series, 'options' => $options, 'module' => $module);
 }
 ?>
