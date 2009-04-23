@@ -45,17 +45,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->addAgent($agents, "application", $this->_destinataire, "Gestion des Etablissements de Santé");
   }
   
-  function getTypeEvenementPatient() {
-  	$xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    
-    $query = "/hprim:evenementsPatients/hprim:evenementPatient/*";
-    
-    $evenementPatient = $xpath->queryUniqueNode($query);
-    
-   return $evenementPatient->tagName;
-  }
-  
   function getIdSource($node) {
   	$xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );

@@ -271,6 +271,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($observation, "libelle", $libelle);
     $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
   }
+  
+  function getTypeEvenementPatient() {
+    $xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
+    $query = "/hprim:evenementsPatients/hprim:evenementPatient/*";
+    
+    $evenementPatient = $xpath->queryUniqueNode($query);
+    
+    return $evenementPatient->tagName;
+  }
 }
 
 ?>
