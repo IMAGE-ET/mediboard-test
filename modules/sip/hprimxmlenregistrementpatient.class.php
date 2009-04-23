@@ -134,7 +134,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $avertissement = $msgID400 = $msgIPP = "";
     
     $mutex = new CMbSemaphore("sip-ipp");
-     mbTrace($data, "Tableau", true);
+
     // Si SIP
     if (CAppUI::conf('sip server')) {
       // Acquittement d'erreur : identifiants source et cible non fournis
@@ -233,6 +233,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
       // Cas 1 : Patient existe sur le SIP
       if($id400->loadMatchingObject()) {
+      	$_IPP_create = false;
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
         // Cas 1.1 : Pas d'identifiant cible

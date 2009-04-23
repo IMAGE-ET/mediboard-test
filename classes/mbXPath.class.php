@@ -37,7 +37,7 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
-  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "", $addslashes = true) {
+  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "", $addslashes = false) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
