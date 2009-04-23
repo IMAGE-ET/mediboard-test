@@ -65,21 +65,8 @@ class CHprimSoapHandler extends CSoapHandler {
 		// Gestion de l'acquittement
 		$domAcquittement = new CHPrimXMLAcquittementsPatients();
     
-		$hprimxmldoc = new CHPrimXMLDocument();
-	  // Récupère le type de l'événement
-    $type = $hprimxmldoc->getTypeEvenementPatient();
-    // Un événement concernant un patient appartient à l'une des six catégories suivantes
-    switch ($type) {
-      case "enregistrementPatient" :
-      	$domGetEvenement = new CHPrimXMLEnregistrementPatient();
-        break;
-      case "fusionPatient" :
-      	$domGetEvenement = new CHPrimXMLFusionPatient();
-        break;
-      default;
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E07"); 
-    }
-    
+		$domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenementsPatients($messagePatient);
+
 		// Récupération des informations du message XML
 		$domGetEvenement->loadXML(utf8_decode($messagePatient));
 		$doc_errors = $domGetEvenement->schemaValidate(null, true);
@@ -106,7 +93,7 @@ class CHprimSoapHandler extends CSoapHandler {
 
 			return $messageAcquittement;
 		}
-
+    
 		$data = $domGetEvenement->getEvenementPatientXML();
     
 		$domAcquittement->_identifiant = $data['identifiantMessage'];
@@ -132,20 +119,14 @@ class CHprimSoapHandler extends CSoapHandler {
 
     $newPatient = new CPatient();
     $newPatient->_hprim_initiator_id = $echange_hprim->_id;
+
+    // Un événement concernant un patient appartient à l'une des six catégories suivantes
+    if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
+    	$messageAcquittement = $domGetEvenement->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    } else {
+    	$messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E07"); 
+    }
     
-    mbTrace($domGetEvenement, "DOM Evenement", true);
-		// Un événement concernant un patient appartient à l'une des six catégories suivantes
-		switch ($type) {
-			case "enregistrementPatient" :
-				$messageAcquittement = $domGetEvenement->enregistrementPatient($domGetEvenement, $domAcquittement, $echange_hprim, $newPatient, $data);
-			  break;
-			case "fusionPatient" :
-				$messageAcquittement = $this->fusionPatient();
-				break;
-			default;
-			  $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E07"); 
-		}
-		
 		return $messageAcquittement;
 	}
 }

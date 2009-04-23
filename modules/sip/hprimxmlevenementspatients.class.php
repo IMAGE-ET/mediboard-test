@@ -16,6 +16,25 @@ if (!class_exists("CHPrimXMLDocument")) {
 }
 
 class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument { 
+  static function getHPrimXMLEvenementsPatients($messagePatient) {
+    $hprimxmldoc = new CHPrimXMLDocument("evenementPatient", "msgEvenementsPatients105", "sip");
+    // Récupération des informations du message XML
+    $hprimxmldoc->loadXML(utf8_decode($messagePatient));
+    
+    $type = $hprimxmldoc->getTypeEvenementPatient();
+    // Un événement concernant un patient appartient à l'une des six catégories suivantes
+    switch ($type) {
+      case "enregistrementPatient" :
+        return new CHPrimXMLEnregistrementPatient();
+        break;
+      case "fusionPatient" :
+        return new CHPrimXMLFusionPatient();
+        break;
+      default;
+        return new CHPrimXMLEvenementsPatients();
+    }
+  }
+  
   function __construct() {            
     parent::__construct("evenementPatient", "msgEvenementsPatients105", "sip");
   }
