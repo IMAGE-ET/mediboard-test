@@ -12,8 +12,13 @@ global $AppUI, $can, $m;
 
 $date     = mbGetValueFromGetOrSession("date"    , mbDate());
 $groupmod = mbGetValueFromGetOrSession("groupmod", 2);
-$module   = mbGetValueFromGetOrSession("module"  , "system");
 $interval = mbGetValueFromGetOrSession("interval", "day");
+
+$module = null;
+if (!is_numeric($groupmod)) {
+  $module = $groupmod;
+  $groupmod = 0;
+}
 
 CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
 

@@ -64,22 +64,16 @@ Main.add(function () {
       
       <label for="groupmod" title="Type de vue des graphiques">Type de vue</label>
       <select name="groupmod" onchange="this.form.submit()">
-        <option value="0"{{if $groupmod == 0}}selected="selected"{{/if}}>Pas de regroupement</option>
         <option value="1"{{if $groupmod == 1}}selected="selected"{{/if}}>Regrouper par module</option>
         <option value="2"{{if $groupmod == 2}}selected="selected"{{/if}}>Regrouper tout</option>
+        <optgroup label="Détail du module">
+          {{foreach from=$listModules item=curr_module}}
+          <option value="{{$curr_module->mod_name}}" {{if $curr_module->mod_name == $groupmod}} selected="selected" {{/if}}>
+            {{tr}}module-{{$curr_module->mod_name}}-court{{/tr}}
+          </option>
+          {{/foreach}}
+        </optgroup>
       </select>
-
-      {{if $groupmod == 0}}
-      &gt;
-      <label for="module" title="Type de vue des graphiques">Module</label>
-      <select name="module" onchange="this.form.submit()">
-        {{foreach from=$listModules item=curr_module}}
-        <option value="{{$curr_module->mod_name}}" {{if $curr_module->mod_name == $module}} selected="selected" {{/if}}>
-          {{tr}}module-{{$curr_module->mod_name}}-court{{/tr}}
-        </option>
-        {{/foreach}}
-      </select>
-      {{/if}}
     </form>
   </th>
 </tr>
