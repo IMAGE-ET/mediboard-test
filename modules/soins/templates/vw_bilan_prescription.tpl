@@ -22,7 +22,7 @@
          
 	      <table class="form">
 	        <tr>
-	          <th class="category" colspan="5">Critères de recherche</th>
+	          <th class="category" colspan="6">Critères de recherche</th>
 	        </tr>
 	        <tr>
 	          <td>
@@ -52,8 +52,14 @@
 				      </select>
 	          </td>
 	          <td class="date">
-	            {{mb_field object=$plageconsult field="date" form="bilanPrescriptions" register="true"}}
+	            A partir du
+	            {{mb_field object=$sejour field="_date_min" form="bilanPrescriptions" register="true" canNull=false}}
 	          </td>
+	          <td class="date">
+	            jusqu'au
+	            {{mb_field object=$sejour field="_date_max" form="bilanPrescriptions" register="true" canNull=false}}
+	          </td>
+	          
 	          <td>
 	            <button class="button tick" type="submit">Filtrer</button>
 	          </td>
@@ -66,7 +72,7 @@
     <td style="width: 150px">
       <table class="tbl">
         <tr>
-          <th>Prescriptions</th>
+          <th>Prescriptions ({{$prescriptions|@count}})</th>
         </tr>
       {{foreach from=$prescriptions item=_prescription}}
         <tr>

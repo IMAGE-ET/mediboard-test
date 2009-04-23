@@ -676,10 +676,13 @@ class CPrescription extends CMbObject {
   	  $this->_ref_current_praticien = $AppUI->_ref_user;
   	}
     else {
-    	$this->_ref_object->loadRefPraticien();
+      if($this->_ref_object->_class_name == "CSejour"){
+        $this->_ref_object->loadRefPraticien(1);
+      } else {
+    	  $this->_ref_object->loadRefPraticien();
+      }
     	$this->_ref_current_praticien = $this->_ref_object->_ref_praticien;
     }
-
     $this->_current_praticien_id = $this->_ref_current_praticien->_id;
   }
   
