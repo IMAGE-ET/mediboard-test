@@ -92,7 +92,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     }
    
     // View ALD
-    if($perm_edit && !$this->_protocole){
+    if($perm_edit){
       $this->_can_view_form_ald = 1;
     }
     // Suppression de la ligne

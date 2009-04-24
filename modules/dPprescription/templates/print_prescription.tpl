@@ -40,7 +40,7 @@ Main.add(window.print);
 		      <br />
 		      {{mb_value object=$praticien field=titres}}
 		      <br />
-	      {{else}}
+	      {{elseif $prescription->object_id}}
 	        Prescription globale
 	      {{/if}}
 	    </td>
@@ -72,7 +72,6 @@ Main.add(window.print);
 
 <!-- Affichage du pieds de page -->
 <div class="footer">
-  {{if $prescription->type == "externe"}}
   <table>
   	<tr>
   	  <td class="left">
@@ -90,7 +89,6 @@ Main.add(window.print);
 	  	</td>
 		</tr>
   </table>
-	{{/if}}
 </div>
 
 
