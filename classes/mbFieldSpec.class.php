@@ -549,7 +549,6 @@ class CMbFieldSpec {
     	
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
     	$sHtml .= '<script type="text/javascript">
-    	var input = $("'.$id.'");
     	Main.add(function(){
 			  url = new Url();
 			  url.setModuleAction("system", "httpreq_field_autocomplete");
