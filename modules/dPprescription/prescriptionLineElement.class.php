@@ -185,7 +185,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_modify_dates = 1;
     }
     // View ALD
-    if($perm_edit && !$this->_protocole){
+    if($perm_edit){
     	$this->_can_view_form_ald = 1;
     }
     // View Conditionnel

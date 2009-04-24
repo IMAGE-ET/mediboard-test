@@ -94,6 +94,16 @@ changeModeBolus = function(oForm){
 	  submitFormAjax(oForm, 'systemMsg');
 	}
 	
+	submitALD = function(object_class, object_id, ald){
+	  var oForm = getForm("editALD");
+	  prepareForm(oForm);
+	  oForm.dosql.value = "do_prescription_line_medicament_aed";
+	  oForm.prescription_line_medicament_id.value = object_id;
+	  oForm.ald.value = ald ? "1" : "0";
+	  submitFormAjax(oForm, 'systemMsg');
+  }
+
+	
 
 modifFormDate = function(nb_prises, form_name, protocole,line_id){
   var oForm = document.forms[form_name];
@@ -175,6 +185,14 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="voie" value="" />
+</form>
+
+<form name="editALD" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="ald" value="" />
 </form>
 
 <!-- Select de moments unitaire -->

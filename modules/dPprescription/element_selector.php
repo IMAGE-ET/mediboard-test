@@ -37,10 +37,10 @@ if($libelle){
 	$where = array();
 	$where["category_prescription_id"] = $ds->prepareIn(array_keys($categories));
 	$where["libelle"] = "LIKE '$libelle%'";
-	$elements = $element_prescription->loadList($where);
+	$order = "libelle";
+	$elements = $element_prescription->loadList($where, $order);
 }
 // Rangement des elements trouvés par categorie
-
 foreach($elements as $element){
 	$tabElements[$element->category_prescription_id][] = $element;
 }
