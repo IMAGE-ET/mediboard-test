@@ -192,8 +192,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addPatient($elParent, $mbPatient, $addPat = null, $referent = null) {
-    $patient = $this->addElement($elParent, "patient");
-    $identifiant = $this->addElement($patient, "identifiant");
+    $identifiant = $this->addElement($elParent, "identifiant");
     $pat = $addPat ? "pat" : "";
     
     if(!$referent) {
@@ -207,7 +206,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $this->addIdentifiantPart($identifiant, "recepteur", $pat.$mbPatient->_id400, $referent);
     }  
     
-    $personnePhysique = $this->addElement($patient, "personnePhysique");
+    $personnePhysique = $this->addElement($elParent, "personnePhysique");
     
     $sexeConversion = array (
       "m" => "M",

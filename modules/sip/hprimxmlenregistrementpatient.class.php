@@ -26,15 +26,16 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       "delete" => "suppression"
     );
     $this->addAttribute($enregistrementPatient, "action", $actionConversion[$mbPatient->_ref_last_log->type]);
-
+    
+    $patient = $this->addElement($enregistrementPatient, "patient");
     // Ajout du patient   
-    $this->addPatient($enregistrementPatient, $mbPatient, null, $referent);
+    $this->addPatient($patient, $mbPatient, null, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();
   }
   
-  function generateEvenementsPatients($mbObject, $referent = null, $initiateur = null) {
+  function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
     $echg_hprim = new CEchangeHprim();
     $this->_date_production = $echg_hprim->date_production = mbDateTime();
     $echg_hprim->emetteur = $this->_emetteur;
@@ -57,39 +58,25 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();
-    $messageEvtPatient = utf8_encode($this->saveXML()); 
+    $msgEnregistrementPatient = utf8_encode($this->saveXML()); 
     
-    $echg_hprim->message = $messageEvtPatient;
+    $echg_hprim->message = $msgEnregistrementPatient;
     
     $echg_hprim->store();
     
-    return $messageEvtPatient;
+    return $msgEnregistrementPatient;
   }
   
-  function getEvenementPatientXML() {
-    global $m;
-
+  function getEnregistrementPatientXML() {
     $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-
-    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
-
-    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
-
-    $entete = $xpath->queryUniqueNode($query);
-
-    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
-    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
-    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
     $evenementPatient = $xpath->queryUniqueNode($query);
     $enregistrementPatient = $xpath->queryUniqueNode("hprim:enregistrementPatient", $evenementPatient);
 
-    $data['action'] = $this->getActionEvenement($evenementPatient);
+    $data['action'] = $this->getActionEvenement("hprim:enregistrementPatient", $evenementPatient);
 
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $enregistrementPatient);
     $data['voletMedical'] = $xpath->queryUniqueNode("hprim:voletMedical", $enregistrementPatient);
@@ -98,27 +85,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $data['idCible'] = $this->getIdCible($data['patient']);
     
     return $data;
-  }
-  
-  function getIPPPatient() {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    
-    $query = "/hprim:evenementsPatients/hprim:evenementPatient";
-
-    $evenementPatient = $xpath->queryUniqueNode($query);
-    $enregistrementPatient = $xpath->queryUniqueNode("hprim:enregistrementPatient", $evenementPatient);
-    
-    $patient = $xpath->queryUniqueNode("hprim:patient", $enregistrementPatient);
-
-    return $this->getIdSource($patient);
-  }
-  
-  function getActionEvenement($node) {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    
-    return $xpath->queryAttributNode("hprim:enregistrementPatient", $node, "action");    
   }
   
   /**
@@ -233,7 +199,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
       // Cas 1 : Patient existe sur le SIP
       if($id400->loadMatchingObject()) {
-      	$_IPP_create = false;
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
         // Cas 1.1 : Pas d'identifiant cible

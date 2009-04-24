@@ -20,17 +20,25 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
     $fusionPatient = $this->addElement($evenementPatient, "fusionPatient");
-    
     $this->addAttribute($fusionPatient, "action", "fusion");
-
-    // Ajout du patient   
-    $this->addPatient($fusionPatient, $mbPatient, null, $referent);
+      
+    $patient = $this->addElement($fusionPatient, "patient");
+    mbTrace($mbPatient, "Patient", true);
+    // Ajout du nouveau patient   
+    $this->addPatient($patient, $mbPatient, null, $referent);
+      
+    $patientElimine = $this->addElement($fusionPatient, "patientElimine");
+    $mbPatientElimine = new CPatient();
+    $mbPatientElimine->load($mbPatient->_merging);
+    mbTrace($mbPatientElimine, "Patient Elimine", true);
+    // Ajout du patient a eliminer
+    $this->addPatient($patientElimine, $mbPatientElimine, null, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();
   }
   
-  function generateFusionPatient($mbObject, $referent = null, $initiateur = null) {
+  function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
     $echg_hprim = new CEchangeHprim();
     $this->_date_production = $echg_hprim->date_production = mbDateTime();
     $echg_hprim->emetteur = $this->_emetteur;
@@ -53,42 +61,30 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();
-    $messageEvtPatient = utf8_encode($this->saveXML()); 
+    $msgFusionPatient = utf8_encode($this->saveXML()); 
     
-    $echg_hprim->message = $messageEvtPatient;
+    $echg_hprim->message = $msgFusionPatient;
     
     $echg_hprim->store();
     
-    return $messageEvtPatient;
+    return $msgFusionPatient;
   }
   
-  function getEvenementPatientXML() {
+  function getFusionPatientXML() {
     global $m;
 
     $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-
-    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
-
-    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
-
-    $entete = $xpath->queryUniqueNode($query);
-
-    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
-    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
-    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
     $evenementPatient = $xpath->queryUniqueNode($query);
     $fusionPatient = $xpath->queryUniqueNode("hprim:fusionPatient", $evenementPatient);
 
-    $data['action'] = $this->getActionEvenement($evenementPatient);
+    $data['action'] = $this->getActionEvenement("hprim:fusionPatient", $evenementPatient);
 
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $fusionPatient);
-    $data['voletMedical'] = $xpath->queryUniqueNode("hprim:voletMedical", $fusionPatient);
+    $data['patientElimine'] = $xpath->queryUniqueNode("hprim:patientElimine", $fusionPatient);
 
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible'] = $this->getIdCible($data['patient']);
@@ -96,25 +92,16 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     return $data;
   }
   
-  function getIPPPatient() {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    
-    $query = "/hprim:evenementsPatients/hprim:evenementPatient";
-
-    $evenementPatient = $xpath->queryUniqueNode($query);
-    $fusionPatient = $xpath->queryUniqueNode("hprim:fusionPatient", $evenementPatient);
-    
-    $patient = $xpath->queryUniqueNode("hprim:patient", $fusionPatient);
-
-    return $this->getIdSource($patient);
-  }
-  
-  function getActionEvenement($node) {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    
-    return $xpath->queryAttributNode("hprim:fusionPatient", $node, "action");    
+  /**
+   * Fusion and recording a patient with an IPP in the system
+   * @param CHPrimXMLAcquittementsPatients $domAcquittement
+   * @param CEchangeHprim $echange_hprim
+   * @param CPatient $newPatient
+   * @param array $data
+   * @return string acquittement 
+   **/
+  function fusionPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
+  	
   }
 }
 ?>

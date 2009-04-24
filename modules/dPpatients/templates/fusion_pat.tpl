@@ -41,7 +41,8 @@ function setField (field, value, form) {
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="_merging" value="1" />
+  <input type="hidden" name="_merging[]" value="{{$patient1->_id}}" />
+  <input type="hidden" name="_merging[]" value="{{$patient2->_id}}" />
   <input type="hidden" name="patient1_id" value="{{$patient1->_id}}" />
   <input type="hidden" name="patient2_id" value="{{$patient2->_id}}" />
   

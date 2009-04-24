@@ -21,7 +21,7 @@ if (CAppUI::conf('sip server')) {
 	$domGetIPPPatient = new CHPrimXMLEvenementsPatients();
 	$domGetIPPPatient->loadXML(utf8_decode($echange_hprim->message));
 	      
-	$echange_hprim->_patient_ipp = $domGetIPPPatient->getIPPPatient();
+	$echange_hprim->_patient_ipp = $domGetIPPPatient->getIPPPatient("hprim:enregistrementPatient");
 	
 	$id400 = new CIdSante400();
 	//Paramétrage de l'id 400

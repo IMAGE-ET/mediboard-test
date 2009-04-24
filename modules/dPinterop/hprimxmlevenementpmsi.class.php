@@ -52,7 +52,9 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
 
     // Ajout du patient
     $mbPatient =& $mbSej->_ref_patient;
-    $this->addPatient($evenementPMSI, $mbPatient, true);
+    
+    $patient = $this->addElement($evenementPMSI, "patient");
+    $this->addPatient($patient, $mbPatient, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementPMSI, "venue");

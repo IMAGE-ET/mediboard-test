@@ -111,8 +111,8 @@ Main.add(function() {
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="fast" value="0" />
-  <input type="hidden" name="_merging" value="1" />
   {{foreach from=$objects item=object name=object}}
+  <input type="hidden" name="_merging" value="{{$object->_id}}" />
   <input type="hidden" name="_objects_id[{{$smarty.foreach.object.index}}]" value="{{$object->_id}}" />
   {{/foreach}}
   <input type="hidden" name="_objects_class" value="{{$result->_class_name}}" />

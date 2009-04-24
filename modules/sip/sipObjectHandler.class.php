@@ -33,7 +33,12 @@ class CSipObjectHandler extends CMbObjectHandler {
 		if (isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1) && CAppUI::conf('sip server')) {
 			return;
 		}
-
+    
+		// Cas d'une fusion 
+		if (is_array($mbObject->_merging)) {
+			return;
+		}
+		
 		$dest_hprim = new CDestinataireHprim();
 
 		// Si Serveur
@@ -76,7 +81,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 
 				$initiateur = ($_curr_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
 
-				$domEvenement->generateEvenementsPatients($mbObject, true, $initiateur);
+				$domEvenement->generateEnregistrementPatient($mbObject, true, $initiateur);
 			}
 		}
 		// Si Client
@@ -95,12 +100,13 @@ class CSipObjectHandler extends CMbObjectHandler {
 				$mbObject->_IPP = $IPP->id400;
 			}
 
-			$domEvenement = new CHPrimXMLEnregistrementPatient();
+			$domEvenement = (!$mbObject->_merging) ? new CHPrimXMLEnregistrementPatient() : new CHPrimXMLFusionPatient();
 			$domEvenement->_emetteur = CAppUI::conf('mb_id');
 			$domEvenement->_destinataire = $dest_hprim->destinataire;
-			$messageEvtPatient = $domEvenement->generateEvenementsPatients($mbObject);
-
-			if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
+			
+			$messageEvtPatient = $domEvenement->generateTypeEvenement($mbObject);
+mbTrace($messageEvtPatient, "Evenement Patient", true);
+			/*if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
 				trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
 			}
 
@@ -122,13 +128,48 @@ class CSipObjectHandler extends CMbObjectHandler {
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
 			$echange_hprim->acquittement = $acquittement;
 
-			$echange_hprim->store();
+			$echange_hprim->store();*/
 		}
 	}
 
 	function onMerge(CMbObject &$mbObject) {
-		$this->onStore($mbObject);
-	}
+		if (!$mbObject->_merging) {
+			return;
+		}
+		
+		$patient1_id = $mbObject->_merging[0]; 
+    $patient2_id = $mbObject->_merging[1]; 
+
+    // Si Serveur
+    if (CAppUI::conf('sip server')) {
+    	
+    }
+    // Si CIP
+    else {
+      $dest_hprim = new CDestinataireHprim();
+	    $dest_hprim->type = "sip";
+	    $dest_hprim->loadMatchingObject();
+	
+	    $IPP = new CIdSante400();
+	    //Paramétrage de l'id 400
+	    $IPP->object_class = "CPatient";
+	    $IPP->object_id = $patient1_id;
+	    $IPP->tag = $dest_hprim->destinataire;
+	    $IPP->loadMatchingObject();
+	    $patient1_ipp = $IPP->id400;
+	    
+	    $IPP->object_id = $patient2_id;
+	    $IPP->loadMatchingObject();
+	    $patient2_ipp = $IPP->id400;
+	    
+	    $min_ipp = "";
+	    if ($patient1_ipp || $patient2_ipp) {
+	      $min_ipp = min($patient1_ipp, $patient2_ipp);
+      }
+
+      $mbObject->_merging = $min_ipp ? ($patient1_ipp ? $patient1_id : $patient2_id) : (min($patient1_id,$patient2_id));
+    }
+ 	}
 
 	function onDelete(CMbObject &$mbObject) {
 	}

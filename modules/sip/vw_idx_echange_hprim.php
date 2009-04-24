@@ -86,7 +86,7 @@ foreach($listEchangeHprim as &$curr_echange_hprim) {
 	    $domGetIPPPatient = new CHPrimXMLEvenementsPatients();
 	    $domGetIPPPatient->loadXML(utf8_decode($_curr_ref_notification->message));
 	
-	    $_curr_ref_notification->_patient_ipp = $domGetIPPPatient->getIPPPatient();
+	    $_curr_ref_notification->_patient_ipp = $domGetIPPPatient->getIPPPatient("hprim:enregistrementPatient");
 	   
 	    $id400 = new CIdSante400();
 	    //Paramétrage de l'id 400
@@ -102,7 +102,7 @@ foreach($listEchangeHprim as &$curr_echange_hprim) {
 	$domGetIPPPatient = new CHPrimXMLEvenementsPatients();
 	$domGetIPPPatient->loadXML(utf8_decode($curr_echange_hprim->message));
 
-	$curr_echange_hprim->_patient_ipp = $domGetIPPPatient->getIPPPatient();
+	$curr_echange_hprim->_patient_ipp = $domGetIPPPatient->getIPPPatient("hprim:enregistrementPatient");
 	
 	$id400 = new CIdSante400();
 	//Paramétrage de l'id 400

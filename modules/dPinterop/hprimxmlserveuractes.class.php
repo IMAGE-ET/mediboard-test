@@ -53,7 +53,8 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
 
     // Ajout du patient
     $mbPatient =& $mbOp->_ref_sejour->_ref_patient;
-    $this->addPatient($evenementServeurActe, $mbPatient, true);
+    $patient = $this->addElement($evenementServeurActe, "patient");
+    $this->addPatient($patient, $mbPatient, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $mbSejour =& $mbOp->_ref_sejour;

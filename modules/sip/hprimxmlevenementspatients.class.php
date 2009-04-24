@@ -188,14 +188,45 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbPatient->checkSimilar($nom, $prenom);
   }
   
+  function getIPPPatient($query) { 
+  	$xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
+    $query_evt = "/hprim:evenementsPatients/hprim:evenementPatient";
+
+    $evenementPatient = $xpath->queryUniqueNode($query_evt);
+    $typeEvenement = $xpath->queryUniqueNode($query, $evenementPatient);
+    
+    $patient = $xpath->queryUniqueNode("hprim:patient", $typeEvenement);
+
+    return $this->getIdSource($patient);
+  }
+  
+  function getEvenementPatientXML($xpath) { 
+  	$data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
+
+    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
+
+    $entete = $xpath->queryUniqueNode($query);
+
+    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
+    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
+    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
+    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
+    
+    return $data;
+  }
+  
+  function getActionEvenement($query, $node) {
+    $xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
+    return $xpath->queryAttributNode($query, $node, "action");    
+  }
+  
   function generateFromOperation($mbPatient, $referent) {}
   
   function generateEvenementsPatients($mbObject, $referent = null, $initiateur = null) {}
-  
-  function getEvenementPatientXML() { }
-  
-  function getIPPPatient() { }
-  
-  function getActionEvenement($node) { }
 }
 ?>
