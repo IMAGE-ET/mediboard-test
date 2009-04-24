@@ -93,7 +93,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
   url.popup(700, 500, "Traitements du patient");
 }
 
-
 </script>
 
 {{assign var=praticien value=$prescription->_ref_praticien}}
@@ -377,6 +376,19 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 
 			{{if !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
         <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
+        {{if $prescription->object_id}}
+          {{if $is_praticien}}
+            <form name="removeLines" method="post" action="">
+              <input type="hidden" name="dosql" value="do_remove_lines" />
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+              <button type="button" class="trash" onclick="if(confirm('Etes vous sur de vouloir supprimer vos lignes non signées ?')){
+                submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}',null, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); } } )
+              }">Supprimer</button>
+             </form>
+          {{/if}}
+        {{/if}}
       {{/if}}
       <br />
       {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
