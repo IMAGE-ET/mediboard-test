@@ -1184,8 +1184,8 @@ class CMbObject {
   }
   
   /**
-   * Load named fwd reference
-   * @return array[CMbObject] the collection
+   * Load named forward reference
+   * @return CMbObject concrete loaded object 
    */
   function loadFwdRef($field) {
     $spec = $this->_specs[$field];
@@ -1193,11 +1193,10 @@ class CMbObject {
 	    $this->_fwd[$field] = new $spec->class;
 	    return $this->_fwd[$field]->load($this->$field);
     }
-
   }
     
   /**
-   * Load named fwd reference
+   * Load named forward reference
    * @return array[CMbObject] the collection
    */
   function loadAllFwdRefs() {

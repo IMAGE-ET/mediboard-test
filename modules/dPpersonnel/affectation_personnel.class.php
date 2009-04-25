@@ -70,12 +70,6 @@ class CAffectationPersonnel extends CMbMetaObject {
     if ($msg = parent::check()) {
       return $msg;
     }  
-    /*
-    if (count($this->getSiblings())) {
-      return "Personnel déjà affecté";
-    }
-    */
-
   }
   
   /**
@@ -102,14 +96,13 @@ class CAffectationPersonnel extends CMbMetaObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "Affectation de $this->personnel_id";
     $this->loadRefs();  
-    if($this->object_class == "CPlageOp"){
+    if ($this->object_class == "CPlageOp"){
       $this->_debut = mbAddDateTime($this->_ref_object->debut, $this->_ref_object->date);
     	$this->_fin = mbAddDateTime($this->_ref_object->fin, $this->_ref_object->date);
     }
     
-    if($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
+    if ($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
       if($this->debut){
         $this->_debut = mbTime($this->debut);
       }

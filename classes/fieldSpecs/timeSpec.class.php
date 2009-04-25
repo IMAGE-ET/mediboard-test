@@ -12,7 +12,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CTimeSpec extends CMbFieldSpec {
   
-  function getValue($object, $smarty, $params = null) {
+  function getValue($object, $smarty = null, $params = null) {
     require_once $smarty->_get_plugin_filepath('modifier','date_format');
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;

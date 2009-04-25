@@ -20,7 +20,9 @@ $_user_first_name = mbGetValueFromGetOrSession("_user_first_name");
 $personnel_id = mbGetValueFromGetOrSession("personnel_id");
 $personnel = new CPersonnel();
 $personnel->load($personnel_id);
-
+$personnel->loadRefs($personnel_id);
+$personnel->loadBackRefs("affectations", "affect_id DESC", "0,20");
+$personnel->countBackRefs("affectations");
 
 // Chargement de la liste des affectations pour le filtre
 $filter = new CPersonnel();
@@ -46,6 +48,7 @@ $filter->nullifyEmptyFields();
 $personnels = $filter->loadGroupList($where, $order, null, null, $ljoin);
 foreach ($personnels as $key => $_personnel){
   $_personnel->loadRefUser();
+  $_personnel->countBackRefs("affectations");
 }
 
 // Création du template

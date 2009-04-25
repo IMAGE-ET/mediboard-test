@@ -54,15 +54,17 @@ class CPersonnel extends CMbObject {
     $this->loadRefUser();
   }
   
-  function loadRefUser(){
-  	$this->_ref_user = new CMediusers();
-  	$this->_ref_user->load($this->user_id);
+  function loadRefUser() {
+    $this->_ref_user = $this->loadFwdRef("user_id");
+  	$this->_view = $this->getFormattedValue("emplacement") . ": " . $this->_ref_user->_view;
+  	
   }
  
   function updateFormFields() {
-    $this->_view = "Personnel $this->user_id";
+    parent::updateFormFields();
+    $this->_view = $this->getFormattedValue("emplacement") . ": " . $this->user_id;
   }
-  
+    
   /**
    * Load list overlay for current group
    */
@@ -76,6 +78,12 @@ class CPersonnel extends CMbObject {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
+  /**
+   * Charge le personnel pour l'établissement courant
+   * @param string $emplacement filter
+   * @param bool $actif
+   * @return array[CPersonnel] 
+   */
   static function loadListPers($emplacement, $actif = true){
     $personnel = new CPersonnel();
     $where["emplacement"] = "= '$emplacement'";

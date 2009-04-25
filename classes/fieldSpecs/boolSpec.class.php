@@ -29,7 +29,7 @@ class CBoolSpec extends CMbFieldSpec {
     }
   }
   
-  function getValue($object, $smarty, $params = null) {
+  function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return CAppUI::tr("bool.".$propValue);

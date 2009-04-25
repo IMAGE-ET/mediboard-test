@@ -87,7 +87,7 @@ class CMbFieldSpec {
     return false;
   }
   
-  function getValue($object, $smarty, $params = null) {
+  function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -449,7 +449,7 @@ class CMbFieldSpec {
       $params["readonly"] = "readonly";
     }
     if ($this->mask) {
-      $value = $this->getValue($object, null);
+      $value = $this->getValue($object);
     }
     else {
       $value = $object->{$this->fieldName};

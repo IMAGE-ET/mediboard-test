@@ -183,35 +183,35 @@ Main.add(function () {
           </td>
         </tr> 
        </table>
+
        <table class="tbl">
          <tr>
-           <th colspan="1" class="title">Personnel</th>
-           <th colspan="3" class="title">Objet</th>
-         </tr>
-         <tr>
-           <th>Nom</th>
-           <th>Classe</th>
-           <th>Id Mb</th>
-           <th>Vue</th>
+           <th>{{mb_title class=CAffectationPersonnel field=personnel_id}}</th>
+           <th>{{mb_title class=CAffectationPersonnel field=object_class}}</th>
+           <th>{{mb_title class=CAffectationPersonnel field=object_id}}</th>
          </tr>
          {{foreach from=$listAffectations key=key item=_affectation}}
          <tr>
            <th class="category" colspan="4">{{tr}}CPersonnel.emplacement.{{$key}}{{/tr}}</th>
          </tr>
            {{foreach from=$_affectation item=affect}}
-          <tr>
+          <tr {{if $affect->_id == $affectation->_id}}class="selected"{{/if}}>
             <td>
               <a href="?m={{$m}}&amp;tab={{$tab}}&amp;affect_id={{$affect->_id}}">
-                {{$affect->_ref_personnel->_ref_user->_view}}
+                {{$affect->_ref_personnel->_ref_user}}
               </a>
             </td>
-            <td>{{$affect->object_class}}</td>
-            <td>{{$affect->object_id}}</td>
-            <td>{{$affect->_ref_object->_view}}</td>
+            <td>{{tr}}{{$affect->object_class}}{{/tr}}</td>
+            <td> 
+            	<label onmouseover="ObjectTooltip.createEx(this, '{{$affect->_ref_object->_guid}}')">
+            		{{$affect->_ref_object}}
+            	</label>
+            </td>
           </tr>
            {{/foreach}}
          {{/foreach}}
        </table>
+
     </td>
     <td>
       <form name="editAffectation" action="?m={{$m}}" method="post">
@@ -223,8 +223,8 @@ Main.add(function () {
       <tr>
         {{if $affectation->_id}}
 	    <th class="title modify" colspan="2">
-	      <div class="idsante400" id="{{$affectation->_class_name}}-{{$affectation->_id}}"></div>
-	      <a style="float:right;" href="#nothing" onclick="view_log('{{$affectation->_class_name}}',{{$affectation->_id}})">
+	      <div class="idsante400" id="{{$affectation->_guid}}"></div>
+	      <a style="float:right;" href="#nothing" onclick="guid_log('{{$affectation->_guid}}')">
 		    <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
 		  </a>
           Modification de l'affectation {{$affectation->_id}}
@@ -251,7 +251,7 @@ Main.add(function () {
       </tr>
       {{if $affectation->object_id}}
       <tr>
-        <td></td><td>{{$affectation->_ref_object->_view}}</td>
+        <td></td><td>{{$affectation->_ref_object}}</td>
       </tr>
       {{/if}}
       <tr>  
@@ -261,7 +261,7 @@ Main.add(function () {
             <option value="">&mdash; Choisir une classe</option>
             {{foreach from=$classes item=curr_class}}
             <option value="{{$curr_class}}" {{if $affectation->object_class == $curr_class}}selected="selected"{{/if}}>
-              {{$curr_class}}
+              {{tr}}{{$curr_class}}{{/tr}}
             </option>
             {{/foreach}}
           </select>
