@@ -11,12 +11,17 @@
 {{foreach from=$logs item=_log}}
 <tr {{if $_log->type != "store"}}style="font-weight: bold"{{/if}}>
   {{if !$dialog}}
-  <td>{{$_log->object_class}}</td>
-  <td>{{$_log->_ref_object->_view}} ({{$_log->object_id}})</td>
+  <td>
+  	<label title="{{$_log->object_class}}">
+  		{{tr}}{{$_log->object_class}}{{/tr}}
+  	</label>
+  	({{$_log->object_id}})
+  </td>
+  <td><label onmouseover="ObjectTooltip.createEx(this, '{{$_log->_ref_object->_guid}}');">{{$_log->_ref_object}}</td>
   {{/if}}
   <td style="text-align: center;">{{mb_ditto name=user value=$_log->_ref_user->_view}}</td>
   <td style="text-align: center;">{{mb_ditto name=date value=$_log->date|date_format:$dPconfig.date}}</td>
-  <td style="text-align: center;">{{$_log->date|date_format:$dPconfig.time}}</td>
+  <td style="text-align: center;">{{mb_ditto name=time value=$_log->date|date_format:$dPconfig.time}}</td>
   <td>{{mb_value object=$_log field=type}}</td>
   <td>
     {{foreach from=$_log->_fields item=curr_field}}

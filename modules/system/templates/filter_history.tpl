@@ -30,7 +30,7 @@
         <option value="">&mdash; Tous les utilisateurs</option>
         {{foreach from=$listUsers item=curr_user}}
         <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter->user_id}}selected="selected"{{/if}}>
-          {{$curr_user->_view}}
+          {{$curr_user}}
         </option>
         {{/foreach}}
       </select>
@@ -42,7 +42,7 @@
         <option value="0">&mdash; Toutes les classes</option>
         {{foreach from=$listClasses item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>
-          {{$curr_class}} - {{tr}}{{$curr_class}}{{/tr}}
+          {{tr}}{{$curr_class}}{{/tr}} - {{$curr_class}} 
         </option>
         {{/foreach}}
       </select>
