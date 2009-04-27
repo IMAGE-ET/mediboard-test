@@ -401,6 +401,18 @@ function prepareForm(oForm, bForcePrepare) {
                   .observe("keyup",  canNullOK)
                   .observe("ui:change", canNullOK);
         }
+
+        // XOR
+        if (props.xor) {
+          oElement.xorElement = oElement.form.elements[props.xor];
+          var checkXOR = (function(){
+            if ($V(this)) $V(this.xorElement, '');
+          }).bindAsEventListener(oElement);
+          
+          oElement.observe("change", checkXOR)
+                  .observe("keyup", checkXOR)
+                  .observe("ui:change", checkXOR);
+        }
         
         // ui:change is a custom event fired on the native onchange throwed by $V, 
         // because fire doesn't work with native events 

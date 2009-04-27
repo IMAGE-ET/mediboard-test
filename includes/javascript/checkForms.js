@@ -101,13 +101,11 @@ var ElementChecker = {
   },
   
   checkElement : function() {
-    var that = this;
-    
     if (this.oProperties.notNull || (this.sValue && !this.oProperties.notNull)) {
       $H(this.oProperties).each(function (prop) {
-        if (that.check[prop.key])
-          that.addError(prop.key, that.check[prop.key]());
-      });
+        if (this.check[prop.key])
+          this.addError(prop.key, this.check[prop.key]());
+      }, this);
     }
 
     // Free DOM element references
@@ -143,9 +141,8 @@ Object.extend(ElementChecker, {
       var sListElements = this.sLabel;
       var message = "";
   
-      var that = this;
       this.oProperties["xor"].each(function(sTargetElement) {
-        var oTargetElement = that.oForm.elements[sTargetElement];
+        var oTargetElement = this.oForm.elements[sTargetElement];
         if (!oTargetElement) {
           message += printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
         }
@@ -155,7 +152,7 @@ Object.extend(ElementChecker, {
           iNbElements += (oTargetElement.value != "");
           sListElements += ", " + sTargetLabel;
         }
-      });
+      }, this);
       this.addError("xor", message);
       if (iNbElements != 1) 
         this.addError("xor", printf("Vous devez choisir une et une seule valeur parmi '%s", sListElements));  
