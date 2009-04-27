@@ -1,5 +1,5 @@
 <?php
-$locales['module-dPplanningOp-court'] = 'Planification';
+$locales['module-dPplanningOp-court'] = 'Planif. séjour';
 $locales['module-dPplanningOp-long'] = 'Planification des hospitalisations et chirurgies';
 $locales['config-dPplanningOp-CSejour-patient_id'] = 'Possibilité de modifier le patient d\'un séjour';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
