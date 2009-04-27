@@ -208,14 +208,14 @@ function putHelperContent(oElem, sFieldSelect) {
 function notNullOK(oEvent) {
   var oElement = oEvent.element();
   if (oLabel = oElement.getLabel()) {
-    oLabel.className = ($V(oElement) ? "notNullOK" : "notNull");
+    oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "notNull");
   }
 }
 
 function canNullOK(oEvent) {
   var oElement = oEvent.element();
   if (oLabel = oElement.getLabel()) {
-    oLabel.className = ($V(oElement) ? "notNullOK" : "canNull");
+    oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "canNull");
   } 
 }
 

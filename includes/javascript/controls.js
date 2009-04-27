@@ -237,8 +237,7 @@ Element.addMethods('input', {
     }
     
     function writeBuffer() {
-      $V(element, buffer.join(''));
-      return element.value;
+      return element.value = buffer.join('');
     }
     
     function checkVal() {
@@ -262,7 +261,7 @@ Element.addMethods('input', {
       
       var s = writeBuffer();
       if (!s.match(re)) {
-        element.value = "";
+        $V(element, "");
         clearBuffer(0, mask.length);
         valid = false;
       }
