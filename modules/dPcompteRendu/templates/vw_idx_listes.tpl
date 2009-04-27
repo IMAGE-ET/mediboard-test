@@ -113,7 +113,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$liste field="function_id"}}</th>
       <td>
-        <select name="function_id" class="{{$liste->_props.function_id}}" onchange="this.form.chir_id.value = ''">
+        <select name="function_id" class="{{$liste->_props.function_id}}">
           <option value="">&mdash; Associer à une fonction &mdash;</option>
           {{foreach from=$listFunc item=curr_func}}
             <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $liste->function_id}} selected="selected" {{/if}}>
@@ -127,7 +127,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$liste field="chir_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$liste->_props.chir_id}}" onchange="this.form.function_id.value = ''">
+        <select name="chir_id" class="{{$liste->_props.chir_id}}">
           <option value="">&mdash; Associer à un praticien &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>

@@ -404,9 +404,13 @@ function prepareForm(oForm, bForcePrepare) {
 
         // XOR
         if (props.xor) {
-          oElement.xorElement = oElement.form.elements[props.xor];
+          oElement.xorElementNames = [props.xor].flatten();
           var checkXOR = (function(){
-            if ($V(this)) $V(this.xorElement, '');
+            if ($V(this)) {
+              this.xorElementNames.each(function(e){
+                $V(this.form.elements[e], '');
+              }, this);
+            }
           }).bindAsEventListener(oElement);
           
           oElement.observe("change", checkXOR)

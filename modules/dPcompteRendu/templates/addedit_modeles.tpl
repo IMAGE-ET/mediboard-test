@@ -152,7 +152,7 @@ Main.add(function () {
             {{if !$droit}}
                <input type="hidden" name="group_id" />
             {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="group_id" class="{{$compte_rendu->_props.group_id}}" onchange="this.form.chir_id.value = this.form.function_id.value = ''">
+            <select {{if !$droit}}disabled='disabled'{{/if}} name="group_id" class="{{$compte_rendu->_props.group_id}}">
               <option value="">&mdash; Associer à un établissement</option>
               {{foreach from=$listEtab item=curr_etab}}
               <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $compte_rendu->group_id}} selected="selected" {{/if}}>
@@ -169,7 +169,7 @@ Main.add(function () {
             {{if !$droit}}
                <input type="hidden" name="function_id" />
             {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="function_id" class="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = this.form.group_id.value = ''">
+            <select {{if !$droit}}disabled='disabled'{{/if}} name="function_id" class="{{$compte_rendu->_props.function_id}}">
               <option value="">&mdash; Associer à une fonction</option>
               {{foreach from=$listFunc item=curr_func}}
               <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->_id}}" {{if $curr_func->_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
@@ -186,7 +186,7 @@ Main.add(function () {
             {{if !$droit}}
               <input type="hidden" name="chir_id" value="{{$mediuser->_id}}" />
             {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = this.form.group_id.value =''; ">
+            <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}">
               <option value="">&mdash; Associer à un praticien</option>
               {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->chir_id}} selected="selected" {{/if}}>
