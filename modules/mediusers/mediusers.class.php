@@ -91,7 +91,7 @@ class CMediusers extends CMbObject {
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
     $specs["user_id"]          = "ref class|CUser seekable";
     
-    $specs["remote"]           = "bool";
+    $specs["remote"]           = "bool default|1";
     $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9";
     $specs["function_id"]      = "ref notNull class|CFunctions seekable";
     $specs["discipline_id"]    = "ref class|CDiscipline";
