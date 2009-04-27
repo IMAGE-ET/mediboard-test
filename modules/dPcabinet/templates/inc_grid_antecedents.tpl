@@ -1,10 +1,11 @@
 <script type="text/javascript">
-function addAntecedent(rques, type, element) {
+function addAntecedent(rques, type, appareil, element) {
   if (window.opener) {
     var oForm = window.opener.document.forms['editAntFrm'];
     if (oForm) {
       oForm.rques.value = rques;
       oForm.type.value = type;
+      oForm.appareil.value = appareil;
       window.opener.onSubmitAnt(oForm);
       $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
     }
@@ -50,7 +51,7 @@ Main.add(function () {
 	          {{assign var=i value=$smarty.foreach.aides.index}}
 	          <td class="text" style="cursor: pointer; width: {{$width}}%;" 
 	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
-	              onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', this)">
+	              onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
 	            <button class="tick notext">{{$curr_aide->name}}</button>
 	            {{$curr_aide->name}}
 	          </td>
