@@ -68,6 +68,7 @@ easyMode = function() {
   var url = new Url();
   url.setModuleAction("dPcabinet", "vw_ant_easymode");
   url.addParam("user_id", "{{$userSel->_id}}");
+  url.addParam("patient_id", "{{$patient->_id}}");
   url.pop(width, height, "Mode grille");
 }
 

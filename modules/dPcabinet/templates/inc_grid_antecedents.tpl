@@ -7,10 +7,15 @@ function addAntecedent(rques, type, appareil, element) {
       oForm.type.value = type;
       oForm.appareil.value = appareil;
       window.opener.onSubmitAnt(oForm);
+      
+      var input = element.select('input').first();
+      input.checked = true;
+      input.onclick = function(){return false};
+      
       $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
-      element.select('input').first().checked = "checked";
     }
   }
+  return false;
 }
 
 Main.add(function () {
@@ -43,17 +48,23 @@ Main.add(function () {
       {{foreach from=$antecedent->_count_rques_aides item=count key=type}}
       {{if $count}}
 	      <table class="main tbl" id="antecedents_{{$type}}" style="display: none;">
-	        {{foreach from=$antecedent->_aides_all_depends.rques.$type item=_aides key=appareil}}
+	        {{foreach from=$aides_antecedent.$type item=_aides key=appareil}}
 	        <tr>
 	          <th colspan="1000">{{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}}</th>
 	        </tr>
 	        <tr>
 	        {{foreach from=$_aides item=curr_aide name=aides}}
 	          {{assign var=i value=$smarty.foreach.aides.index}}
-	          <td class="text" style="cursor: pointer; width: {{$width}}%;" 
+            {{assign var=text value=$curr_aide->text}}
+            {{if isset($applied_antecedents.$type.$text|smarty:nodefaults)}}
+              {{assign var=checked value=1}}
+            {{else}}
+              {{assign var=checked value=0}}
+            {{/if}}
+	          <td class="text" style="cursor: pointer; width: {{$width}}%; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
 	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
-	              onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
-	            <input type="checkbox" onclick="return false;" /> {{$curr_aide->name}}
+	              onclick="return addAntecedent('{{$text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
+	            <input type="checkbox" {{if $checked}}checked="checked"{{/if}} /> {{$curr_aide->name}}
 	          </td>
 	          {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
 	        {{/foreach}}

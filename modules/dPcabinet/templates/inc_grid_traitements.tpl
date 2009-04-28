@@ -24,14 +24,20 @@ function addTraitement(rques, type, element) {
   {{assign var=n value=0}}
   {{foreach from=$type item=curr_helper_for key=curr_helper_for_key}}
     {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
-    {{assign var=i value=$smarty.foreach.helpers.index}}
-    {{assign var=n value=$n+1}}
-    <td class="text" style="cursor: pointer;" 
-        title="{{$curr_helper_key|smarty:nodefaults|JSAttribute}}"
-        onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}', this)">
-      <input type="checkbox" onclick="return false;" /> {{$curr_helper}}
-    </td>
-    {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.helpers.last}}</tr><tr>{{/if}}
+      {{assign var=i value=$smarty.foreach.helpers.index}}
+      {{assign var=n value=$n+1}}
+      {{assign var=text value=$curr_helper_key|smarty:nodefaults|JSAttribute}}
+      {{if isset($applied_traitements.$text|smarty:nodefaults)}}
+        {{assign var=checked value=1}}
+      {{else}}
+        {{assign var=checked value=0}}
+      {{/if}}
+      <td class="text" style="cursor: pointer;" 
+          title="{{$curr_helper_key|smarty:nodefaults|JSAttribute}}"
+          onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}', this)">
+        <input type="checkbox" {{if $checked}}checked="checked"{{/if}} /> {{$curr_helper}}
+      </td>
+      {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.helpers.last}}</tr><tr>{{/if}}
     {{/foreach}}
   {{/foreach}}
   {{if $n == 0}}<td>{{tr}}CAideSaisie.none{{/tr}}</td>{{/if}}
