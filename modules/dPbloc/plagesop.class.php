@@ -303,6 +303,7 @@ class CPlageOp extends CMbObject {
     $this->date = mbDate("+7 DAYS", $this->date);
     $where = array();
     $where["date"] = "= '$this->date'";
+    $where[] = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
     $where["salle_id"] = "= '$this->salle_id'";
     if($this->chir_id) {
       $where["chir_id"] = "= '$this->chir_id'";
