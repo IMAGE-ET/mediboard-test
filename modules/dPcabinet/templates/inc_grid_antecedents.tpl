@@ -50,7 +50,7 @@ Main.add(function () {
 	        <tr>
 	        {{foreach from=$_aides item=curr_aide name=aides}}
 	          {{assign var=i value=$smarty.foreach.aides.index}}
-	          <td class="text" style="cursor: pointer; width: {{$width}}%; line-height: 0.7em; vertical-align: top;" 
+	          <td class="text" style="cursor: pointer; width: {{$width}}%;" 
 	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
 	              onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
 	            <input type="checkbox" onclick="return false;" /> {{$curr_aide->name}}
