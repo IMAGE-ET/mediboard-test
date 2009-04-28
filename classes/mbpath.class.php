@@ -168,6 +168,18 @@ class CMbPath {
 	  return unlink($path);
 	}
   
+  
+  /**
+   * Reduces a path, removing "folder/.." occurences
+   * @param $path The path to reduces
+   * @return The reduced path
+   */ 
+  static function reduce($path) {
+    while(preg_match('/([A-z0-9-_])+\/\.\.\//', $path)) {
+      $path = preg_replace('/([A-z0-9-_])+\/\.\.\//', '', $path);
+    }
+    return $path;
+  }
 }
 
 ?>
