@@ -755,6 +755,23 @@ class CSejour extends CCodable {
   	}
   }
   
+  function getPrescripteurs(){
+    $prescripteurs = array();
+    $prescription_sejour = new CPrescription();
+    $this->loadRefsPrescriptions();
+    foreach($this->_ref_prescriptions as $_prescription){
+      $_prescription->getPraticiens();
+      if(is_array($_prescription->_praticiens)){
+	      foreach($_prescription->_praticiens as $_praticien_id => $_praticien_view){
+          if(!array_key_exists($_praticien_id, $prescripteurs)){
+            $praticien = new CMediusers(); 
+	          $prescripteurs[$_praticien_id] = $praticien->load($_praticien_id);
+	        } 
+	      }
+      }
+    }
+  }
+  
   function loadListConstantesMedicales() {
     if ($this->_list_constantes_medicales) return;
     
