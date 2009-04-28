@@ -1,15 +1,13 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPbloc
- *	@version $Revision$
- *  @author Fabien Ménager
+ * @package Mediboard
+ * @subpackage dPbloc
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CBlocOperatoire class
- */
 class CBlocOperatoire extends CMbObject {
   // DB Table key
 	var $bloc_operatoire_id = null;

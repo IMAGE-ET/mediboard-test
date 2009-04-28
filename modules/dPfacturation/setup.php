@@ -1,10 +1,11 @@
-<?php /* $Id: */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage dPfacturation
  * @version $Revision$
- * @author Alexis / Yohann
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CSetupdPfacturation extends CSetup {

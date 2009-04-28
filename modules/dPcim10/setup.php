@@ -4,7 +4,8 @@
  * @package Mediboard
  * @subpackage dPcim10
  * @version $Revision$
- * @author Romain Ollivier
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CSetupdPcim10 extends CSetup {

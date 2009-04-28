@@ -1,4 +1,12 @@
-<?php
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage dPbloc
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 // Script à lancer entre minuit et 6h du matin
 // pour que les dates limites soient respectées

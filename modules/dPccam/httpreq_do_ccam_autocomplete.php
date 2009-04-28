@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPmateriel
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage dPccam
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $can;
 $ds = CSQLDataSource::get("ccamV2");

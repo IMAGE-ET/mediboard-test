@@ -1,15 +1,13 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPetablissement
- *	@version $Revision$
- *  @author Romain Ollivier
-*/
-
-/**
- * The CGroups class
+ * @package Mediboard
+ * @subpackage dPetablissement
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 class CGroups extends CMbObject {
   // DB Table key
 	var $group_id       = null;	

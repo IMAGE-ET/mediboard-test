@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPbloc
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
         <tr>
           <th>
             <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}">

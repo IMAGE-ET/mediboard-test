@@ -4,12 +4,10 @@
  * @package Mediboard
  * @subpackage dPbloc
  * @version $Revision$
- * @author Romain Ollivier
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The plagesop Class
- */
 class CPlageOp extends CMbObject {
   static $minutes = array();
   static $hours = array();

@@ -1,15 +1,13 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage dPfacturation
- *  @version $Revision$
- *  @author Alexis / Yohann	
+ * @package Mediboard
+ * @subpackage dPfacturation
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CFactureItem class
- */
 class CFactureItem extends CMbObject {
   // DB Table key
   var $factureitem_id = null;

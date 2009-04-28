@@ -1,15 +1,13 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPetablissement
- *	@version $Revision$
- *  @author Thomas Despoix
-*/
-
-/**
- * The CEtabExterne class
+ * @package Mediboard
+ * @subpackage dPetablissement
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+
 class CEtabExterne extends CMbObject {
   // DB Table key
 	var $etab_id       = null;	

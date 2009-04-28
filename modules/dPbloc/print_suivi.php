@@ -1,43 +1,53 @@
-<?php
-	global $can, $g;
-	$can->needsRead();
-	
-	$date_suivi = mbGetValueFromGetOrSession("date");
-	$bloc_id	= mbGetValueFromGetOrSession("vue");
-	
-	// Chargement des AnesthÈsistes
-	$listAnesths = new CMediusers;
-	$listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+<?php /* $Id$ */
 
-	// Chargement des Chirurgiens
-	$listChirs = new CMediusers;
-	$listChirs = $listChirs->loadPraticiens(PERM_READ);
+/**
+ * @package Mediboard
+ * @subpackage dPbloc
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-	$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+global $can, $g;
+$can->needsRead();
 
-	$bloc = new CBlocOperatoire();
-	if (!$bloc->load($bloc_id)) {
-  		$bloc = reset($listBlocs);
-	}
-	$bloc->loadRefs();
+$date_suivi = mbGetValueFromGetOrSession("date");
+$bloc_id	= mbGetValueFromGetOrSession("vue");
 
-	$salle = new CSalle;
-	$where = array("bloc_id" => "='$bloc->_id'");
-	$bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
+// Chargement des AnesthÈsistes
+$listAnesths = new CMediusers;
+$listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 
-	foreach ($bloc->_ref_salles as &$salle) {
-  		$salle->loadRefsForDay($date_suivi);
-	}
+// Chargement des Chirurgiens
+$listChirs = new CMediusers;
+$listChirs = $listChirs->loadPraticiens(PERM_READ);
 
-	// CrÈation du template
-	$smarty = new CSmartyDP();
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
-	$smarty->assign("vueReduite"	 , true);
-	$smarty->assign("listAnesths"    , $listAnesths);
-	$smarty->assign("listBlocs"      , $listBlocs);
-	$smarty->assign("bloc"           , $bloc);
-	$smarty->assign("date_suivi"     , $date_suivi);
-	$smarty->assign("operation_id"   , 0);
+$bloc = new CBlocOperatoire();
+if (!$bloc->load($bloc_id)) {
+		$bloc = reset($listBlocs);
+}
+$bloc->loadRefs();
 
-	$smarty->display("print_suivi.tpl");
+$salle = new CSalle;
+$where = array("bloc_id" => "='$bloc->_id'");
+$bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
+
+foreach ($bloc->_ref_salles as &$salle) {
+		$salle->loadRefsForDay($date_suivi);
+}
+
+// CrÈation du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("vueReduite"	 , true);
+$smarty->assign("listAnesths"    , $listAnesths);
+$smarty->assign("listBlocs"      , $listBlocs);
+$smarty->assign("bloc"           , $bloc);
+$smarty->assign("date_suivi"     , $date_suivi);
+$smarty->assign("operation_id"   , 0);
+
+$smarty->display("print_suivi.tpl");
+
 ?>

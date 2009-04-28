@@ -1,11 +1,12 @@
-<?php /* $Id$*/
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPboard
-* @version $Revision$
-* @author Romain OLLIVIER
-*/
+ * @package Mediboard
+ * @subpackage dPboard
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
 
