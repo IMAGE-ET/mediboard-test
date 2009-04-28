@@ -1,17 +1,19 @@
 <script type="text/javascript">
-
 function addTraitement(rques, type, element) {
   if (window.opener) {
     var oForm = window.opener.document.forms['editTrmtFrm'];
     if (oForm) {
       oForm.traitement.value = rques;
       window.opener.onSubmitTraitement(oForm);
+      
+      var input = element.select('input').first();
+      input.checked = true;
+      input.onclick = function(){return false};
+      
       $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
-      element.select('input').first().checked = "checked";
     }
   }
 }
-
 </script>
 
 <!-- Traitements -->
