@@ -2,7 +2,7 @@
 {{assign var="object" value=$consult}}
 {{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
-{{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+{{mb_include module=dPsalleOp template=js_codage_ccam}}
 {{assign var=sejour_id value=""}}
 
 <script type="text/javascript">
@@ -75,13 +75,13 @@ Main.add(function () {
   <div id="ccam" style="display: none;">
     {{assign var="module" value="dPcabinet"}}
     {{assign var="subject" value=$consult}}
-    {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+    {{mb_include module=dPsalleOp template=inc_codage_ccam}}
   </div>
   
   <div id="ngap" style="display: none;">
     <div id="listActesNGAP">
       {{assign var="_object_class" value="CConsultation"}}
-      {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
+	    {{mb_include module=dPcabinet template=inc_codage_ngap}}
     </div>
   </div>
   

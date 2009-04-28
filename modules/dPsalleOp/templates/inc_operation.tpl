@@ -256,7 +256,7 @@ function reloadPrescription(prescription_id){
 <div id="three" style="display:none">
   <div id="ccam">
     {{assign var="subject" value=$selOp}}
-    {{include file="inc_gestion_ccam.tpl"}}
+    {{mb_include module=dPsalleOp template=inc_codage_ccam}}
   </div>
 </div>
 <!-- Fin du troisieme onglet -->
@@ -265,7 +265,7 @@ function reloadPrescription(prescription_id){
 <div id="four" style="display:none">
   <div id="listActesNGAP">
     {{assign var="object" value=$selOp}}
-    {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
+    {{mb_include module=dPcabinet template=inc_codage_ngap}}
   </div>
 </div>
 

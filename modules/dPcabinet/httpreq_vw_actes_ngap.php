@@ -26,5 +26,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("acte_ngap",       $acte_ngap);
 $smarty->assign("object",          $object);
 
-$smarty->display("inc_acte_ngap.tpl");
+$smarty->display("inc_codage_ngap.tpl");
 ?>

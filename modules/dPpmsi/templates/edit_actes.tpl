@@ -2,7 +2,7 @@
 {{assign var="do_subject_aed" value="do_planning_aed"}}
 {{assign var="module" value="dPpsmi"}}
 {{assign var="object" value=$selOp}}
-{{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+{{mb_include module=dPsalleOp template=js_codage_ccam}}
 <script type="text/javascript">
 Main.add (function () {
   Control.Tabs.create('tab-actes', false);
@@ -46,7 +46,7 @@ Main.add (function () {
       <div id="ccam">
         {{assign var="module" value="dPpmsi"}}
         {{assign var="subject" value=$selOp}}
-        {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+		    {{mb_include module=dPsalleOp template=inc_codage_ccam}}
       </div>
     </td> 
   </tr>
@@ -56,7 +56,7 @@ Main.add (function () {
     </th>
     <td id="listActesNGAP">
       {{assign var="object" value=$selOp}}
-      {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
+	    {{mb_include module=dPcabinet template=inc_codage_ngap}}
     </td>
   </tr>
 </table>

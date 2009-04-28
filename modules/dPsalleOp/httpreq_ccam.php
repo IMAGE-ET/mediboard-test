@@ -38,6 +38,6 @@ $smarty->assign("module"           , $module);
 $smarty->assign("do_subject_aed"   , $do_subject_aed);
 $smarty->assign("chir_id"          , $chir_id); 
 $smarty->assign("modif_operation"  , $modif_operation);
-$smarty->display("inc_gestion_ccam.tpl");
+$smarty->display("inc_codage_ccam.tpl");
 
 ?>
