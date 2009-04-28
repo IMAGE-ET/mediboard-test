@@ -63,7 +63,7 @@ Main.add(function () {
             {{/if}}
 	          <td class="text" style="cursor: pointer; width: {{$width}}%; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
 	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
-	              onclick="return addAntecedent('{{$text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
+	              onclick="return addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
 	            <input type="checkbox" {{if $checked}}checked="checked"{{/if}} /> {{$curr_aide->name}}
 	          </td>
 	          {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}

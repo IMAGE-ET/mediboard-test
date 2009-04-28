@@ -32,7 +32,7 @@ function addTraitement(rques, type, element) {
       {{else}}
         {{assign var=checked value=0}}
       {{/if}}
-      <td class="text" style="cursor: pointer;" 
+      <td class="text" style="cursor: pointer; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
           title="{{$curr_helper_key|smarty:nodefaults|JSAttribute}}"
           onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}', this)">
         <input type="checkbox" {{if $checked}}checked="checked"{{/if}} /> {{$curr_helper}}
