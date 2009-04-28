@@ -8,6 +8,7 @@ function addAntecedent(rques, type, appareil, element) {
       oForm.appareil.value = appareil;
       window.opener.onSubmitAnt(oForm);
       $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
+      element.select('input').first().checked = "checked";
     }
   }
 }
@@ -49,11 +50,10 @@ Main.add(function () {
 	        <tr>
 	        {{foreach from=$_aides item=curr_aide name=aides}}
 	          {{assign var=i value=$smarty.foreach.aides.index}}
-	          <td class="text" style="cursor: pointer; width: {{$width}}%;" 
+	          <td class="text" style="cursor: pointer; width: {{$width}}%; line-height: 0.7em; vertical-align: top;" 
 	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
 	              onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
-	            <button class="tick notext">{{$curr_aide->name}}</button>
-	            {{$curr_aide->name}}
+	            <input type="checkbox" onclick="return false;" /> {{$curr_aide->name}}
 	          </td>
 	          {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
 	        {{/foreach}}

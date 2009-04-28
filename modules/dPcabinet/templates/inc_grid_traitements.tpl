@@ -7,6 +7,7 @@ function addTraitement(rques, type, element) {
       oForm.traitement.value = rques;
       window.opener.onSubmitTraitement(oForm);
       $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
+      element.select('input').first().checked = "checked";
     }
   }
 }
@@ -28,8 +29,7 @@ function addTraitement(rques, type, element) {
     <td class="text" style="cursor: pointer;" 
         title="{{$curr_helper_key|smarty:nodefaults|JSAttribute}}"
         onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}', this)">
-      <button class="tick notext">{{$curr_helper}}</button>
-      {{$curr_helper}}
+      <input type="checkbox" onclick="return false;" /> {{$curr_helper}}
     </td>
     {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.helpers.last}}</tr><tr>{{/if}}
     {{/foreach}}
