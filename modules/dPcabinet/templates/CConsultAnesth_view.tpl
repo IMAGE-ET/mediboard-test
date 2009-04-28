@@ -38,9 +38,8 @@
         <strong>Remarques:</strong>
         <i>{{$object->_ref_consultation->rques|nl2br|truncate:50}}</i>
       {{/if}}
-      {{assign var="vue" value="view"}}
-      {{assign var="subject" value=$object->_ref_consultation}}
-      {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+      
+			{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=view}}
     </td>
   
   </tr>

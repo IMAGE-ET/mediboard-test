@@ -257,10 +257,9 @@
   </tr>
   {{/if}}
 </table>
+
 <table class="tbl">
-  {{assign var="vue" value="complete"}}
-  {{assign var="subject" value=$sejour}}
-  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+  {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$sejour vue=complete}}
 </table>
 
 {{if !$rpu || !$rpu->_id}}

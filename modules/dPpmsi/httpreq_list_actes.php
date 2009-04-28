@@ -25,6 +25,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("curr_op", $operation);
 
-$smarty->display("inc_list_actes.tpl");
+$smarty->display("inc_confirm_actes_ccam.tpl");
 
 ?>

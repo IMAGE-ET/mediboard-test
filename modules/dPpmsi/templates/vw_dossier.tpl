@@ -425,7 +425,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="4" id="modifActes-{{$curr_op->_id}}">
-            {{include file="inc_list_actes.tpl"}}
+            {{include file="inc_confirm_actes_ccam.tpl"}}
           </td>
         </tr>
         <tr>

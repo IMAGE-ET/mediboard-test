@@ -346,9 +346,7 @@ newExam = function(sAction, consultation_id) {
 </table>
 
 <table class="tbl">
-  {{assign var="vue" value="complete"}}
-  {{assign var="subject" value=$object->_ref_consultation}}
-  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+	{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=complete}}
 </table>
   
 <!-- Dossier Médical -->

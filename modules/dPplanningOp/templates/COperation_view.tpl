@@ -46,10 +46,9 @@
         <strong>{{tr}}COperation-rques-court{{/tr}}:</strong>
         <i>{{$object->rques|nl2br|truncate:50}}</i>
       {{/if}}
+
       <table width="100%" style="border-spacing: 0px;font-size: 100%;">
-        {{assign var="vue" value="view"}}
-        {{assign var="subject" value=$object}}
-        {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+			{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object vue=view}}
       </table>
     </td>
   </tr>

@@ -71,6 +71,10 @@ $op = new COperation;
 $op->load($operation_id);
 if ($op->_id){
   $op->loadRefs();
+  foreach($op->_ref_actes_ccam as $acte) {
+    $acte->loadRefExecutant();
+  }
+
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
   $sejour->makeCancelAlerts($op->_id);

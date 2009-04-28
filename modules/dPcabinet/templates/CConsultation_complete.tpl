@@ -74,9 +74,7 @@ newExam = function(sAction, consultation_id) {
 </table>
 
 <table class="tbl">
-  {{assign var="vue" value="complete"}}
-  {{assign var="subject" value=$object}}
-  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+	{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object vue=complete}}
 </table>
 
 <table class="form">

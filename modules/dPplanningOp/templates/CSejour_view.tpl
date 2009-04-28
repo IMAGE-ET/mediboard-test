@@ -45,7 +45,5 @@
   </tr>
 </table>
 <table class="tbl tooltip">
-  {{assign var="vue" value="view"}}
-  {{assign var="subject" value=$sejour}}
-  {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
+	{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$sejour vue=view}}
 </table>

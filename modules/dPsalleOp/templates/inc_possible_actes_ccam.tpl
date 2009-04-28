@@ -1,13 +1,25 @@
+{{**
+  * Affiche les actes CCAM potentiels et ceux réellement codés
+  * A ne pas confondre avec inc_list_actes_ccam.
+  *}}
+
 <table class="tbl">
 	<tr>
-	  <th>Code Activite Phase</th>
-	  <th>Executant</th>
-	  <th>Modificateurs</th>
-	  <th>Association</th>
-	  <th>Montant de base</th>
-	  <th>Dépassement</th>
-	  <th>Montant total</th>
+	  <th>
+	  	{{mb_title class=CActeCCAM field=code_acte    }}
+	  	{{mb_title class=CActeCCAM field=code_activite}}
+	    {{mb_title class=CActeCCAM field=code_phase   }}
+	  </th>
+	  
+	  <th>{{mb_title class=CActeCCAM field=executant_id       }}</th>
+	  <th>{{mb_title class=CActeCCAM field=modificateurs      }}</th>
+	  <th>{{mb_title class=CActeCCAM field=code_association   }}</th>
+	  <th>{{mb_title class=CActeCCAM field=execution          }}</th>
+    <th>{{mb_title class=CActeCCAM field=montant_base       }}</th>
+    <th>{{mb_title class=CActeCCAM field=montant_depassement}}</th>
+    <th>{{mb_title class=CActeCCAM field=_montant_facture   }}</th>
 	</tr>
+
 	{{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
 	  {{foreach from=$curr_code->activites item=curr_activite}}
 	    {{foreach from=$curr_activite->phases item=curr_phase}}
@@ -22,7 +34,7 @@
 	        {{assign var="executant" value=$listExecutants.$executant_id}}
 	      <td> 
 	        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
-          {{$executant->_view}}
+          {{$executant}}
 	        </div>
 	      </td>
 	      {{else}}
@@ -30,9 +42,10 @@
 	      {{/if}}
 	      <td>{{$acte->modificateurs}}</td>
 	      <td>{{$acte->code_association}}</td>
-	      <td>{{mb_value object=$acte field="montant_base"}}</td>
-	      <td>{{mb_value object=$acte field="montant_depassement"}}</td>
-	      <td>{{mb_value object=$acte field="_montant_facture"}}</td>
+	      <td>{{mb_value object=$acte field=execution          }}</td>
+	      <td style="text-align: right">{{mb_value object=$acte field=montant_base       }}</td>
+	      <td style="text-align: right">{{mb_value object=$acte field=montant_depassement}}</td>
+	      <td style="text-align: right">{{mb_value object=$acte field=_montant_facture   }}</td>
 	    </tr> 
 	    {{/foreach}}
 	  {{/foreach}}

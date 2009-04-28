@@ -38,9 +38,9 @@ signerActes = function(object_id, object_class){
     <td class="text">
       <!-- Codage des actes -->
       {{if $subject->_coded == "1"}}
-        {{include file="../../dPsalleOp/templates/inc_vw_actes.tpl"}}
+        {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
       {{else}}
-        {{include file="../../dPsalleOp/templates/inc_codage_actes.tpl"}}
+        {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
       {{/if}}
     </td>
   </tr>

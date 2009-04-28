@@ -211,10 +211,10 @@ ProtocoleSelector.init = function(){
 {{include file=inc_documents_operation.tpl operation=$op}}
 {{/if}}
     
-
 <!-- Actes -->
 {{if $op->_ref_actes|@count}}
 <hr />
-{{include file="../../dPsalleOp/templates/inc_vw_actes.tpl" subject=$op}}
+<table class="tbl">
+  {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$op vue=complete}}
+</table>
 {{/if}}
-
