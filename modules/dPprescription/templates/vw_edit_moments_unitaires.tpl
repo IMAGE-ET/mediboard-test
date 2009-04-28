@@ -65,19 +65,36 @@ Main.add(function () {
           <th>Heure par defaut</th>
           <th>Etablissement</th>
           {{if $service->_id}}
-          <th>Service {{$service->_view}}</th>
+          <th>Service {{$service}}</th>
           {{/if}}
         </tr>
-        {{foreach from=$moments item=momentsChap key=chap}}
+        
         <tr>
-          <th colspan="5">
-            {{$chap}}
-          </th>
+          <td colspan="10">
+						<script type="text/javascript">
+						Main.add(function () {
+						  Control.Tabs.create('tabs-chaps', true);
+						});
+						</script>
+          
+						<ul id="tabs-chaps" class="control_tabs">
+			        {{foreach from=$moments item=momentsChap key=chap}}
+						  <li><a href="#{{$chap}}">{{tr}}CMomentUnitaire.type_moment.{{$chap}}{{/tr}}</a></li>
+							{{/foreach}}
+  					</ul>
+	
+						<hr class="control_tabs" />
+	        </td>
         </tr>
+
+        {{foreach from=$moments item=momentsChap key=chap}}
+        <tbody id="{{$chap}}" style="display: none;">
         {{foreach from=$momentsChap item=moment}}
+        
         {{assign var=moment_id value=$moment->_id}}
         {{assign var=config_group value=$all_configs.$moment_id.group}}
         {{assign var=config_service value=$all_configs.$moment_id.service}}
+        
         <tr>
           <td>{{$moment->libelle}}</td>
           <td>
@@ -125,6 +142,7 @@ Main.add(function () {
 			  	{{/if}}
         </tr>
         {{/foreach}}
+        </tbody>
         {{/foreach}}
       </table>
     </td>

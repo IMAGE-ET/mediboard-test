@@ -43,7 +43,7 @@
 <ul id="tab-classes" class="control_tabs">
   {{foreach from=$items key=class item=_item}}
   <li>
-  	<a href="#class-{{$class}}">
+  	<a href="#class-{{$class}}" {{if $completions.$class.percent < 100}}class="wrong"{{/if}}>
   	  {{tr}}{{$class}}{{/tr}}
   	  <small>({{$completions.$class.percent}}%)</small>
   	</a>

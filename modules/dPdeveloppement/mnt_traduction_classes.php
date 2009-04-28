@@ -117,6 +117,10 @@ foreach ($classes as $class) {
       continue;
     }
     
+    if ($prop[0] == "_") {
+      continue;
+    }
+    
 	  addLocale($classname, $prop, "$classname-$prop");
 	  addLocale($classname, $prop, "$classname-$prop-desc");
 	  addLocale($classname, $prop, "$classname-$prop-court");

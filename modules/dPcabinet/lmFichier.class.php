@@ -48,7 +48,7 @@ class CLmFichier extends CLmObject {
     
     // DB Fields
     $specs["S_FIC_NUMERO"]        = "ref class|CLmFichier";
-    $specs["S_FIC_ETAT"]          = "enum list|4|5";
+    $specs["S_FIC_ETAT"]          = "enum list|2|3|4|5|6|7";
     $specs["S_FIC_CPS"]           = "num";
     $specs["S_FIC_DATE"]          = "date";
     $specs["S_FIC_DATE_EMISSION"] = "date";

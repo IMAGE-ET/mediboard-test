@@ -48,7 +48,7 @@ class CLmLot extends CLmObject {
     
     // DB Fields
     $specs["S_LOT_NUMERO"]            = "ref class|CLmLot";
-    $specs["S_LOT_ETAT"]              = "enum list|4|6|8|9|10|12";
+    $specs["S_LOT_ETAT"]              = "enum list|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16";
     $specs["S_LOT_CPS"]               = "num";
     $specs["S_LOT_DATE"]              = "date";
     $specs["S_LOT_FIC"]               = "ref class|CLmFichier";

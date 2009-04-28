@@ -136,6 +136,7 @@ class CConsultation extends CCodable {
     $backProps["examigs"]        = "CExamIgs consultation_id";
     $backProps["prescriptions"]  = "CPrescription object_id";
     $backProps["reglements"]     = "CReglement consultation_id";
+    
     return $backProps;
   }
   
