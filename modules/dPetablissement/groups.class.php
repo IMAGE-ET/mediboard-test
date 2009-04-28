@@ -67,9 +67,11 @@ class CGroups extends CMbObject {
 	  $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
     $backProps["dmi_categories"]          = "CDMICategory group_id";
     $backProps["categories_prescription"] = "CCategoryPrescription group_id";
+	  $backProps["category_DM"]             = "CCategoryDM group_id";
+	  $backProps["config_moment"]           = "CConfigMomentUnitaire group_id";
+	  $backProps["config_service"]          = "CConfigService group_id";
     $backProps["check_item_types"]        = "CDailyCheckItemType group_id";
     $backProps["product_stock_locations"] = "CProductStockLocation group_id";
-	  
     return $backProps;
   }
   

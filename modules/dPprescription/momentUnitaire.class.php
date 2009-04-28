@@ -42,6 +42,7 @@ class CMomentUnitaire extends CMbObject {
 	  $backProps = parent::getBackProps();
 	  $backProps["associations"] = "CAssociationMoment moment_unitaire_id";
 	  $backProps["prises"]       = "CPrisePosologie moment_unitaire_id";
+	  $backProps["config_moment"] = "CConfigMomentUnitaire moment_unitaire_id";
 	  return $backProps;
 	}
 	
