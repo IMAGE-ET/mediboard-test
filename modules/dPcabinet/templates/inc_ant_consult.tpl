@@ -63,8 +63,8 @@ onSubmitTraitement = function (oForm) {
 }
 
 easyMode = function() {
-  var width = 800;
-  var height = 500;
+  var width = 900;
+  var height = 600;
   var url = new Url();
   url.setModuleAction("dPcabinet", "vw_ant_easymode");
   url.addParam("user_id", "{{$userSel->_id}}");
