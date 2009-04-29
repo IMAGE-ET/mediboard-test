@@ -12,17 +12,9 @@ global $AppUI, $can;
 
 $can->needsRead();
 
-$ordonnance = mbGetValueFromGet("ordonnance");
 $praticien_sortie_id = mbGetValueFromGet("praticien_sortie_id");
 $print = mbGetValueFromGet("print", 0);
 $linesDMI = array();
-
-// Mode ordonnance
-if($ordonnance){
-  $now = mbDateTime();
-  $user_id = $AppUI->user_id;
-  $time_print_ordonnance = CAppUI::conf("dPprescription CPrescription time_print_ordonnance"); 
-}
 
 // Chargement de l'etablissement
 $etablissement = CGroups::loadCurrent();
@@ -120,21 +112,9 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		if($line_medicament->child_id){
 			continue;
 		}
-	  // mode ordonnnance
-		if($ordonnance){
-			if($line_medicament->_fin_reelle && $line_medicament->_fin_reelle < mbDate()){
-				continue;
-			}
-			// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
-			if(!$line_medicament->signee || $line_medicament->praticien_id != $AppUI->user_id){
-		  	continue;
-		  }
-		  $line_medicament->loadRefLogSignee();
-		  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
-		  if($now > mbDateTime($line_medicament->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
-		  	continue;
-		  }
-	  }
+		if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$line_medicament->signee){
+		  continue;
+		}
 	  if($line_medicament->ald){
 	    $lines["medicaments"][$key]["ald"][] = $line_medicament;
 	  } else {
@@ -158,20 +138,8 @@ foreach($prescription->_ref_perfusions as $_perfusion){
 	if($_perfusion->next_perf_id){
 		continue;
 	}
-	// Mode ordonnance
-	if($ordonnance){
-		if($_perfusion->_fin < mbDate()){
-			continue;
-		}
-		// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
-		if(!$_perfusion->signature_prat || $_perfusion->praticien_id != $AppUI->user_id){
-	  	continue;
-	  }
-	  $line_medicament->loadRefLogSignaturePrat();
-	  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
-	  if($now > mbDateTime($_praticien->_ref_log_signature_prat->date. "+ $time_print_ordonnance hours")){
-	  	continue;
-	  }
+  if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$_perfusion->signature_prat){
+	  continue;
   }
   $lines["medicaments"]["med"]["no_ald"][] = $_perfusion;
 }
@@ -185,28 +153,17 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
-				if($element->_class_name == "CPrescriptionLineElement"){
+				if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
+				  continue;
+			  }
+			  if($element->_class_name == "CPrescriptionLineElement"){
 				  $element->loadCompleteView();
 				}
-			if($ordonnance){
-				  if($element->_fin_reelle && $element->_fin_reelle < mbDate()){
-				  	continue;
-				  }
-				  
-					// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
-				  if(!$element->signee || $element->praticien_id != $AppUI->user_id){
-				  	continue;
-				  }
-				  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
-				  if($now > mbDateTime($element->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
-            continue;
-				  }
-			  }
-			  
 				$executant = "aucun";
 		    if($element->_ref_executant){
 		      $executant = $element->_ref_executant->_guid;
 		    }
+		    
 	      $linesElt[$name_chap][$executant]["ald"] = array();
 		    $linesElt[$name_chap][$executant]["no_ald"] = array();	
 			}
@@ -227,25 +184,9 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 				if($element->child_id){
 					continue;
 				}
-			  // mode ordonnnance
-				if($ordonnance){
-          if($element->date_arret){
-				  	$element->_fin = $element->date_arret;
-				  }
-				  if($element->_fin && $element->_fin < mbDate()){
-				  	continue;
-				  }
-				  
-					// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
-				  if(!$element->signee || $element->praticien_id != $AppUI->user_id){
-				  	continue;
-				  }
-				  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
-				  if($now > mbDateTime($element->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
-            continue;
-				  }
+				if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
+				  continue;
 			  }
-			  
 			  $executant = "aucun";
 		    if($element->_ref_executant){
 		      $executant = $element->_ref_executant->_guid;
@@ -279,7 +220,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("traduction"          , $traduction);
 $smarty->assign("print"               , $print);
 $smarty->assign("praticien"           , $praticien);
-$smarty->assign("ordonnance"          , $ordonnance);
+$smarty->assign("function"            , $praticien->_id ? $praticien->_ref_function : new CFunctions());
 $smarty->assign("date"                , mbDate());
 $smarty->assign("etablissement"       , $etablissement);
 $smarty->assign("prescription"        , $prescription);

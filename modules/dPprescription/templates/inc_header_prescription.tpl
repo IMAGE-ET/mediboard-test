@@ -350,15 +350,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
     <td style="text-align: left;">
       <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';" style="width: 65px;">
         <option value="">&mdash; Action</option>
-	 		  <!-- Impression de la prescription -->
-	 		  <optgroup label="Imprimer">
-			  {{if $prescription->type != "sortie"}}
-			  <option value="printPrescription">Prescription</option>
-			  {{/if}}
-        {{if ($prescription->type != "externe") && $prescription->object_id}}
-          <option value="printOrdonnance">Ordonnance</option>
-        {{/if}}
-        </optgroup>
         <optgroup label="Afficher">
       	  <option value="viewAlertes">Alertes</option>
       		{{if $prescription->object_id}}
@@ -390,6 +381,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
           {{/if}}
         {{/if}}
       {{/if}}
+      <button type="button" class="print notext" onclick="Prescription.printPrescription('{{$prescription->_id}}');"/></button>
       <br />
       {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
         {{if !$mode_pharma}}

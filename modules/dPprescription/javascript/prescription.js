@@ -309,7 +309,7 @@ var Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  printPrescription: function(prescription_id, ordonnance,print) {
+  printPrescription: function(prescription_id, print) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
     if(document.selPratForPresc){
@@ -321,9 +321,6 @@ var Prescription = {
       url.addParam("prescription_id", prescription_id);
       url.addParam("praticien_sortie_id", praticien_sortie_id);
       url.addParam("print", print);
-      if(ordonnance){
-        url.addParam("ordonnance", ordonnance);
-      }
       url.popup(800, 600, "print_prescription");
     }
   },

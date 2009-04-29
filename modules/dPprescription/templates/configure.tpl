@@ -71,6 +71,7 @@ popupVoies = function(){
     </td>             
   </tr>
   
+  <!-- 
   {{assign var="var" value="time_print_ordonnance"}}
   <tr>
     <th class="category" colspan="6">
@@ -91,6 +92,7 @@ popupVoies = function(){
       heures
     </td>             
   </tr>
+ -->
   {{assign var="var" value="time_alerte_modification"}}
   <tr>
     <th class="category" colspan="6">

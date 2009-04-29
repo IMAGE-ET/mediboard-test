@@ -30,7 +30,6 @@ Main.add(window.print);
 	  <tr>
 	    <td class="left">
 	      {{if $praticien->_id}}
-	        {{assign var=function value=$praticien->_ref_function}}
 		      <strong>Dr {{$praticien->_view}}</strong>
 		      <br />
 		      {{mb_title object=$praticien field=adeli}}
@@ -47,7 +46,7 @@ Main.add(window.print);
 	    
 	    <td class="center">
 	      <h1>{{$etablissement->_view}}</h1>
-	      {{if @$function}}
+	      {{if $function}}
 	        {{mb_value object=$function field=soustitre}}
 	      {{/if}}
 	    </td>
