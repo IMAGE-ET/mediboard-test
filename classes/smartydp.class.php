@@ -170,6 +170,16 @@ function smarty_function_mb_field($params, &$smarty) {
   return $spec->getFormElement($object, $params);
 }
 
+/**
+ * @param array params tableau des parametres
+ * Cette fonction prend les mêmes paramètres que smarty_function_mb_field, mais seul object est requis.
+ */
+function smarty_function_mb_key($params, &$smarty) {
+	$params['field'] = $params["object"]->_spec->key;
+	$params['prop'] = 'ref';
+	$params['hidden'] = true;
+  return smarty_function_mb_field($params, &$smarty);
+}
 
 /**
  * Show a value if different from previous cached one
@@ -363,6 +373,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("thumb"             , "thumb");
     $this->register_function("mb_ditto"          , "smarty_function_mb_ditto");
     $this->register_function("mb_field"          , "smarty_function_mb_field");
+    $this->register_function("mb_key"            , "smarty_function_mb_key");
     $this->register_function("mb_value"          , "smarty_function_mb_value");
     $this->register_function("mb_label"          , "smarty_function_mb_label");
     $this->register_function("mb_title"          , "smarty_function_mb_title");
