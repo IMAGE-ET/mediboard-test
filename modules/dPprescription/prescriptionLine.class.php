@@ -200,7 +200,7 @@ class CPrescriptionLine extends CMbObject {
    * Chargement des prises de la ligne
    */
   function loadRefsPrises($service_id = ""){
-    $this->_ref_prises = $this->loadBackRefs("prise_posologie");
+    $this->_ref_prises = $this->loadBackRefs("prise_posologie","moment_unitaire_id");
     foreach ($this->_ref_prises as &$prise) {
       if($prise->decalage_intervention != NULL){
         $this->_nb_prises_interv++;

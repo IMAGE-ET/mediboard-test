@@ -432,5 +432,12 @@ var Prescription = {
     url.addParam("annulation", annulation);
     url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));
     url.popup(400,400,"Signatures des lignes de prescription");
+  },
+  viewStatPoso: function(code_cip, praticien_id){
+    var url = new Url;
+    url.setModuleAction("dPprescription", "vw_stat_posologie");
+    url.addParam("code_cip", code_cip);
+    url.addParam("praticien_id", praticien_id);
+    url.popup(800,400, "statistiques d'utilisation des posologies");
   }
 };

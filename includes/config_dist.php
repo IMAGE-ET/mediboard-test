@@ -442,6 +442,7 @@ $dPconfig["dPprescription"] = array (
   ),
   "CPrisePosologie" => array(
     "select_poso_bcb" => "1",
+    "show_poso_bcb" => "0",
     "heures" => array(
       "tous_les" => "14",
       "fois_par" => array(

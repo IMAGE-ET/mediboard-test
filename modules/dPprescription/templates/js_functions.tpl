@@ -274,14 +274,17 @@ addLineContigue = function(oForm){
 submitPoso = function(oForm, curr_line_id){
   // Suppression des prises de la ligne de prescription
   oForm._delete_prises.value = "1";
-  submitFormAjax(oForm, 'systemMsg', { onComplete: 
-    function(){
-      // Preparation des prises pour la nouvelle posologie selectionnée
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){
       var url = new Url;
       url.setModuleAction("dPprescription", "httpreq_prescription_prepare");
       url.addParam("prescription_line_id", curr_line_id);
-      url.addParam("no_poso", oForm.no_poso.value);
+      if(oForm.no_poso){
+        url.addParam("no_poso", oForm.no_poso.value);
+      }
       url.addParam("code_cip", oForm._code_cip.value);
+      if(oForm._line_id_for_poso){
+        url.addParam("line_id_for_poso", oForm._line_id_for_poso.value);
+      }
       url.requestUpdate('prises-Med'+curr_line_id, { waitingText: null });
     } 
    }

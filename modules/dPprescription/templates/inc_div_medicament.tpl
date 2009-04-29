@@ -95,6 +95,9 @@ Main.add( function(){
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
   <input type="hidden" name="substitute_for_id" value="" />
   <input type="hidden" name="substitution_active" value="1" />
+  {{if $prescription->object_id}}
+  <input type="hidden" name="_most_used_poso" value="1" />
+  {{/if}}
 </form>
 
 <table class="form">

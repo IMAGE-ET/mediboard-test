@@ -31,6 +31,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $substitution_plan_soin = null;
   var $traitement_personnel = null;
   
+  var $_most_used_poso = null;
+  
   static $voies = array("Voie systémique"                 => array("injectable" => false, "perfusable" => false), 
                         "Voie endocervicale"              => array("injectable" => false, "perfusable" => false), 
                         "Voie péridurale"                 => array("injectable" => false, "perfusable" => false),
@@ -337,6 +339,109 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
   
+  /*
+   * Chargement des 5 posos les plus utilisées
+   */
+  function loadMostUsedPoso($code_cip = "", $praticien_id = "", $type = ""){
+    $temp_view = array();
+    $this->_most_used_poso = array();
+    $most_used_lines = $this->getMostUsedPoso($code_cip, $praticien_id, $type);
+    foreach($most_used_lines as $_key => $_line){
+      if(is_array($_line)){
+	      $view = "";
+	      $line = new CPrescriptionLineMedicament();
+	      $line->load($_line['prescription_line_medicament_id']);
+	      $line->loadRefsPrises();
+	      $last_prise = end($line->_ref_prises);
+	      foreach($line->_ref_prises as $_prise){
+	        $view .= $_prise->_view;
+	        if($_prise->_id != $last_prise->_id){
+	          $view .= ", ";
+	        }
+	      }
+	      if(!isset($temp_view[$view])){
+	        $temp_view[$view] = array("occ" => "", "line_id" => "");
+	      }
+	      $temp_view[$view]["occ"] += $_line["count_signature"];
+	      $temp_view[$view]["line_id"] = $_line['prescription_line_medicament_id'];
+      }
+    }
+
+    foreach($temp_view as $curr_view => $_tab){
+      $this->_most_used_poso[$_tab["line_id"]]["view"] = $curr_view;
+	    $this->_most_used_poso[$_tab["line_id"]]["occ"] = $_tab["occ"];
+	    $pourcentage = $_tab["occ"] ? (100 * $_tab["occ"] / $most_used_lines['total']) : "0"; 
+      $this->_most_used_poso[$_tab["line_id"]]["pourcentage"] = round($pourcentage, 2);
+    }
+  }
+  
+
+  /*
+   * Recuperation des posologies les plus utilisées
+   */
+  function getMostUsedPoso($code_cip = "", $praticien_id = "", $type = ""){
+    $ds = CSQLDataSource::get("std");
+   
+    $_code_cip = $code_cip ? $code_cip : $this->code_cip;
+    $_praticien_id = $praticien_id ? $praticien_id : $this->praticien_id;
+    $_type = $type ? $type : $this->_ref_prescription->type;
+    
+    $sql = "CREATE TEMPORARY TABLE posos AS
+							SELECT prescription_line_medicament.prescription_line_medicament_id, prise_posologie.*
+							FROM prise_posologie
+							LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = prise_posologie.object_id AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
+							LEFT JOIN prescription ON prescription.prescription_id = prescription_line_medicament.prescription_id
+							WHERE prescription_line_medicament.code_cip = '$_code_cip'";
+    
+              if($_praticien_id != 'global'){
+               $sql .= "AND prescription_line_medicament.praticien_id = '$_praticien_id'";
+              }
+              
+              $sql .= "AND prescription.type = '$_type'
+							AND prise_posologie.decalage_intervention IS NULL
+							ORDER BY moment_unitaire_id;";
+    $ds->exec($sql);
+
+		$sql = "CREATE TEMPORARY TABLE signatures AS
+							SELECT prescription_line_medicament_id, CONVERT(GROUP_CONCAT(CONCAT_WS('-', quantite, nb_fois, unite_fois, nb_tous_les, unite_tous_les, decalage_prise, unite_prise, decalage_intervention, heure_prise, moment_unitaire_id ) SEPARATOR '|') USING latin1) as signature
+	          	FROM posos
+							GROUP BY prescription_line_medicament_id";
+	  $ds->exec($sql);
+   
+	  
+	  // GROUP_CONCAT(prescription_line_medicament_id SEPARATOR '|')
+	  $sql = "SELECT signature, prescription_line_medicament_id, count(*) as count_signature 
+					  FROM signatures
+						GROUP BY signature
+						ORDER BY count_signature DESC
+						LIMIT 5;";
+	  $signatures = $ds->loadList($sql);
+    
+	  $sql = "SELECT count(*) FROM signatures";
+	  $signatures["total"] = $ds->loadResult($sql);
+	  
+	  $sql = "DROP TABLE posos";
+	  $ds->exec($sql);
+	  
+	  $sql = "DROP TABLE signatures";
+	  $ds->exec($sql);
+
+	  return $signatures;
+  }
+  
+  
+  function applyPoso($poso){ 
+    $line_medicament = new CPrescriptionLineMedicament();
+    $line_medicament->load($poso['prescription_line_medicament_id']);
+    $line_medicament->loadRefsPrises();
+    foreach($line_medicament->_ref_prises as $_prise){
+      $_prise->_id = '';
+      $_prise->object_id = $this->_id;
+      $_prise->object_class = $this->_class_name;
+      $_prise->store();
+    }
+  }
+  
   function store(){
     // Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
@@ -346,14 +451,22 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
     
-    $get_guid = $this->_id ? false : true;
+    $mode_creation = !$this->_id;
     
   	if($msg = parent::store()){
   		return $msg;
   	}
+
+    // Pre-remplissage de la posologie la plus utilisée
+    if($mode_creation && $this->_most_used_poso){
+      $posos = $this->getMostUsedPoso();
+      if(count($posos)){
+        $this->applyPoso(reset($posos));
+      }
+    }
     
   	// On met en session le dernier guid créé
-    if($get_guid){
+    if($mode_creation){
       $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
     }
     
