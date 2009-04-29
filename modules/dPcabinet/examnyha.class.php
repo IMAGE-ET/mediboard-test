@@ -54,7 +54,7 @@ class CExamNyha extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_classNyha = "";
+    $this->_classeNyha = "";
     if($this->q1 == 1){
       if($this->q2a !== null && $this->q2a == 0){
         $this->_classeNyha = "Classe III";
@@ -66,7 +66,7 @@ class CExamNyha extends CMbObject {
         $this->_classeNyha = "Classe II";
       }
     }
-    if($this->q1 == 0){
+    elseif($this->q1 == 0){
       if($this->q3a !== null && $this->q3a == 0){
         $this->_classeNyha = "Classe III";
       }
