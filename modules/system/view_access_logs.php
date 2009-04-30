@@ -14,6 +14,12 @@ $date     = mbGetValueFromGetOrSession("date"    , mbDate());
 $groupmod = mbGetValueFromGetOrSession("groupmod", 2);
 $interval = mbGetValueFromGetOrSession("interval", "day");
 
+$left_mode      = mbGetValueFromGetOrSession("left_mode", "request_time"); // request_time, errors
+$left_sampling  = mbGetValueFromGetOrSession("left_sampling", "total"); // total, mean
+
+$right_mode     = mbGetValueFromGetOrSession("right_mode", "hits"); // hits, size
+$right_sampling = mbGetValueFromGetOrSession("right_sampling", "total"); // total, mean
+
 $module = null;
 if (!is_numeric($groupmod)) {
   $module = $groupmod;
@@ -24,6 +30,7 @@ CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
 
 $next     = mbDate("+1 DAY", $date);
 switch($interval) {
+  default:
   case "day":
     $from = mbDate("-1 DAY", $next);
     break;
@@ -39,19 +46,19 @@ switch($interval) {
   case "twentyyears":
     $from = mbDate("-20 YEARS", $next);
     break;
-  default:
-    $from = mbDate("-1 DAY", $next);
 }
 
 $logs = new CAccessLog;
 $logs = $logs->loadAgregation($from, $next, $groupmod, $module);
 
 $graphs = array();
+$left = array($left_mode, $left_sampling);
+$right = array($right_mode, $right_sampling);
 foreach($logs as $log) {
 	switch($groupmod) {
-		case 0: $graphs[] = graphAccessLog($log->module, $log->action, $date, $interval); break;
-	  case 1: $graphs[] = graphAccessLog($log->module, null, $date, $interval); break;
-	  case 2: $graphs[] = graphAccessLog(null, null, $date, $interval); break;
+		case 0: $graphs[] = graphAccessLog($log->module, $log->action, $date, $interval, $left, $right); break;
+	  case 1: $graphs[] = graphAccessLog($log->module, null, $date, $interval, $left, $right); break;
+	  case 2: $graphs[] = graphAccessLog(null, null, $date, $interval, $left, $right); break;
 	}
 }
 
@@ -61,6 +68,13 @@ $smarty = new CSmartyDP();
 $smarty->assign("graphs"     , $graphs);
 $smarty->assign("date"       , $date);
 $smarty->assign("groupmod"   , $groupmod);
+
+$smarty->assign("left_mode"    , $left_mode);
+$smarty->assign("left_sampling", $left_sampling);
+
+$smarty->assign("right_mode"    , $right_mode);
+$smarty->assign("right_sampling", $right_sampling);
+
 $smarty->assign("module"     , $module);
 $smarty->assign("interval"   , $interval);
 $smarty->assign("listModules", CModule::getInstalled());

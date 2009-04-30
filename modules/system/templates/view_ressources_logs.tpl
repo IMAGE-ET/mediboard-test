@@ -60,11 +60,11 @@ Main.add(function () {
 <tr>
   <td>
     {{if $groupres == 1}}
-    <div id="graph-0" style="float: left; width: 500px; height: 350px;"></div>
-    <div id="graph-1" style="float: left; width: 500px; height: 350px;"></div>
+    <div id="graph-0" style="float: left; width: 450px; height: 450px;"></div>
+    <div id="graph-1" style="float: left; width: 450px; height: 450px;"></div>
     {{else}}
       {{foreach from=$graphs item=graph name=graphs}}
-        <div id="graph-{{$smarty.foreach.graphs.index}}" style="float: left; width: 500px; height: 350px;"></div>
+        <div id="graph-{{$smarty.foreach.graphs.index}}" style="float: left; width: 450px; height: 450px;"></div>
       {{/foreach}}
     {{/if}}
   </td>

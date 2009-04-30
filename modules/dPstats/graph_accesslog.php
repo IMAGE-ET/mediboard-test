@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-function graphAccessLog($module, $actionName, $date, $interval = 'day') {
+function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $right) {
   if (!$date) $date = mbDate();
 
 	switch($interval) {
@@ -58,33 +58,56 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day') {
 	$logs = new CAccessLog();
 	
 	$sql = "SELECT `accesslog_id`, `module`, `action`, `period`,
-	      SUM(`hits`) AS `hits`, SUM(`duration`) AS `duration`, SUM(`request`) AS `request`,
-	      DATE_FORMAT(`period`, '$date_format') AS `gperiod`
-	      FROM `access_log`
-	      WHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
-	if($module) {
-	  $sql .= "\nAND `module` = '$module'";
-	}
-	if($actionName) {
-	  $sql .= "\nAND `action` = '$actionName'";
-	}
-	$sql .= "\nGROUP BY `gperiod` ORDER BY `period`";
+            SUM(hits)     AS hits, 
+            SUM(size)     AS size, 
+            SUM(duration) AS duration, 
+            SUM(request)  AS request, 
+            SUM(errors)   AS errors, 
+            SUM(warnings) AS warnings, 
+            SUM(notices)  AS notices,
+  	      DATE_FORMAT(`period`, '$date_format') AS `gperiod`
+  	      FROM `access_log`
+  	      WHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
+        
+	if($module)     $sql .= "AND `module` = '$module'";
+	if($actionName) $sql .= "AND `action` = '$actionName'";
+
+	$sql .= "GROUP BY `gperiod` ORDER BY `period`";
 	
 	$logs = $logs->loadQueryList($sql);
-	
-	$nbHits = array();
+  
 	$duration = array();
 	$request = array();
+  $errors = array();
+  $warnings = array();
+  $notices = array();
+  
+  $hits = array();
+  $size = array();
+  
+  $errors_total = 0;
 	foreach($datax as $x) {
-    $nbHits[$x[0]] = array($x[0], 0);
+	  // Needed
     $duration[$x[0]] = array($x[0], 0);
-    $request[$x[0]] = array($x[0], 0);
+    $request[$x[0]]  = array($x[0], 0);
+    $errors[$x[0]]   = array($x[0], 0);
+    $warnings[$x[0]] = array($x[0], 0);
+    $notices[$x[0]]  = array($x[0], 0);
+    
+    $hits[$x[0]] = array($x[0], 0);
+    $size[$x[0]] = array($x[0], 0);
     
 	  foreach($logs as $log) {
 	    if($x[1] == mbTransformTime(null, $log->period, $date_format)) {
-	      $nbHits[$x[0]] = array($x[0], $log->hits);
-	      $duration[$x[0]] = array($x[0], $log->_average_duration);
-	      $request[$x[0]] = array($x[0], $log->_average_request);
+	      $duration[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
+	      $request[$x[0]]  = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'request'});
+        $errors[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'errors'});
+        $warnings[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'warnings'});
+        $notices[$x[0]]  = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'notices'});
+        $errors_total += $log->_average_errors + $log->_average_warnings + $log->_average_notices;
+        
+        $hits[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'hits'});
+        $size[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'size'});
 	    }
 	  }
 	}
@@ -108,37 +131,87 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day') {
 	  ),
 	  'yaxis' => array(
 	    'min' => 0,
+      'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' : 'Erreurs') . ($left[1] == 'mean' ? ' (par hit)' : '')),
 	    'autoscaleMargin' => 1
 	  ),
 	  'y2axis' => array(
       'min' => 0,
-	    'title' => 'Hits',
+	    'title' => utf8_encode(($right[0] == 'hits' ? 'Hits' : 'Bande passante') . ($right[1] == 'mean' ? (($right[0] == 'hits' ? ' (par minute)' : ' (octets/s)')) : '')),
       'autoscaleMargin' => 1
     ),
     'grid' => array(
       'verticalLines' => false
     ),
-	  'HtmlText' => false
+    /*'mouse' => array(
+      'track' => true,
+      'relative' => true
+    ),*/
+	  'HtmlText' => false,
+    'spreadsheet' => array('show' => true)
 	);
 	
-	$series = array(
-    array(
-     'label' => 'Hits',
-     'data' => $nbHits,
-     'bars' => array('show' => true),
-     'yaxis' => 2
-    ),
-	  array(
-	   'label' => 'Page (s)',
-	   'data' => $duration,
-	   'lines' => array('show' => true),
-	  ),
-    array(
+	$series = array();
+  
+  // Left axis
+  if ($left[0] == 'request_time') {
+  	$series[] = array(
+     'label' => 'Page (s)',
+     'data' => $duration,
+     'lines' => array('show' => true),
+    );
+      
+    $series[] = array(
      'label' => 'DB (s)',
      'data' => $request,
      'lines' => array('show' => true),
-    )
-	);
+    );
+  }
+  
+  else {
+    if ($errors_total == 0) {
+      $options['yaxis']['max'] = 1;
+    }
+    
+    $series[] = array(
+     'label' => 'Errors',
+     'data' => $errors,
+     'color' => 'red',
+     'lines' => array('show' => true),
+    );
+    
+    $series[] = array(
+     'label' => 'Warnings',
+     'data' => $warnings,
+     'color' => 'orange',
+     'lines' => array('show' => true),
+    );
+      
+    $series[] = array(
+     'label' => 'Notices',
+     'data' => $notices,
+     'color' => 'yellow',
+     'lines' => array('show' => true),
+    );
+  }
+    
+  // Right axis
+  if ($right[0] == 'hits') {
+    $series[] = array(
+     'label' => 'Hits',
+     'data' => $hits,
+     'bars' => array('show' => true),
+     'yaxis' => 2
+    );
+  }
+  
+  else {
+    $series[] = array(
+     'label' => 'Bande passante',
+     'data' => $size,
+     'bars' => array('show' => true),
+     'yaxis' => 2
+    );
+  }
 	
 	return array('series' => $series, 'options' => $options, 'module' => $module);
 }

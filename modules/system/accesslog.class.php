@@ -53,27 +53,40 @@ class CAccessLog extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {
-      $this->_average_duration = $this->duration / $this->hits;
-      $this->_average_request = $this->request / $this->hits;
+      $this->_average_duration = $this->duration / $this->hits; // Response time
+      $this->_average_request  = $this->request  / $this->hits; // DB time
+      $this->_average_errors   = $this->errors   / $this->hits;
+      $this->_average_warnings = $this->warnings / $this->hits;
+      $this->_average_notices  = $this->notices  / $this->hits;
     }
+    // If time period == 1 hour
+    $this->_average_hits = $this->hits / 60;
+    $this->_average_size = $this->size / 3600;
   }
   
   function loadAgregation($start, $end, $groupmod = 0, $module = 0) {
-    $sql = "SELECT accesslog_id, module, action," .
-        "\nSUM(hits) AS hits, SUM(duration) AS duration, SUM(request) AS request," .
-        "\n0 AS grouping" .
-        "\nFROM access_log" .
-        "\nWHERE period BETWEEN '$start' AND '$end'";
+    $sql = "SELECT accesslog_id, module, action,
+              SUM(hits)     AS hits, 
+              SUM(size)     AS size, 
+              SUM(duration) AS duration, 
+              SUM(request)  AS request, 
+              SUM(errors)   AS errors, 
+              SUM(warnings) AS warnings, 
+              SUM(notices)  AS notices, 
+              0 AS grouping
+            FROM access_log
+            WHERE period BETWEEN '$start' AND '$end' ";
+            
     if($module && !$groupmod) {
-      $sql .= "\nAND module = '$module'";
+      $sql .= "AND module = '$module' ";
     }
     if($groupmod == 2) {
-      $sql .= "\nGROUP BY grouping";
+      $sql .= "GROUP BY grouping ";
     }
     else if($groupmod == 1) {
-      $sql .= "\nGROUP BY module ORDER BY module";
+      $sql .= "GROUP BY module ORDER BY module ";
     } else {
-      $sql .= "\nGROUP BY module, action ORDER BY module, action";
+      $sql .= "GROUP BY module, action ORDER BY module, action ";
     }
     return $this->loadQueryList($sql);
   }
