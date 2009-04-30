@@ -10,7 +10,6 @@
 
 CAppUI::requireLibraryFile("smarty/libs/Smarty.class");
 CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.escape");
-CAppUI::requireLibraryFile("json/JSON");
 
 /**
  * Delegates the actual translation to $AppUI framework object
@@ -49,7 +48,6 @@ function thumb($params, &$smarty) {
       $finUrl .= ("&amp;$_key=$_val");
     }
   }
-  
   
   return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" alt=\"thumb\" />";
 }
@@ -116,14 +114,12 @@ function JSAttribute($string){
 	);
 }
 
-
 function smarty_modifier_cleanField($string){
   if (!is_scalar($string)) {
     return $string;
   }
 
   return htmlspecialchars($string,ENT_QUOTES);
-
 }
 
 function smarty_modifier_stripslashes($string){
@@ -178,7 +174,7 @@ function smarty_function_mb_key($params, &$smarty) {
 	$params['field'] = $params["object"]->_spec->key;
 	$params['prop'] = 'ref';
 	$params['hidden'] = true;
-  return smarty_function_mb_field($params, &$smarty);
+  return smarty_function_mb_field($params, $smarty);
 }
 
 /**
@@ -217,7 +213,7 @@ function smarty_function_mb_label($params, &$smarty) {
     $object = new $class;
   }
   
-  $field      = CMbArray::extract($params, "field" , null, true);
+  $field = CMbArray::extract($params, "field" , null, true);
   
   if (!array_key_exists($field, $object->_specs)) {
      $object->_specs[$field] = CMbFieldSpecFact::getSpec($object, $field, "");
@@ -298,7 +294,6 @@ function smarty_function_mb_include_script($params, &$smarty) {
   $module = CMbArray::extract($params, "module");
   $script = CMbArray::extract($params, "script");
     
-    
   if($path){
     $path = "$path?build=$version_build";
   }
@@ -308,7 +303,6 @@ function smarty_function_mb_include_script($params, &$smarty) {
   if($module && $script){
     $path = "modules/$module/javascript/$script.js?build=$version_build";  
   }
-  
   
   return "<script type='text/javascript' src='$path'></script>";
 }
@@ -335,7 +329,6 @@ function smarty_function_mb_include($params, &$smarty) {
  * integrated to dotProject framework as well as standard data assignment
  */
 class CSmartyDP extends Smarty {
-
   /**
    * Construction
    *
