@@ -8,7 +8,9 @@
 */
 
 global $AppUI, $can;
+
 $ds = CSQLDataSource::get("std");
+
 // Utilisateur demandé
 $user_id = mbGetValueFromGet("user_id" , 0);
 
@@ -16,23 +18,26 @@ $user_id = mbGetValueFromGet("user_id" , 0);
 if ($can->edit){
   $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
   $user_id = intval($user_id);
-}else{
+}
+else{
   $user_id = $AppUI->user_id;
-}  
+}
 
 // Chargement User demandé
 $user = null;
-if($user_id!==null){
+if($user_id !== null){
   $user = new CUser;
   $user->load($user_id);
   
+  $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = 0";
+  $global_prefs = $ds->loadHashList($sql);
+
   if($user_id == $AppUI->user_id){
-    $prefs = $AppUI->user_prefs;
-  }else{
-    $sql = "SELECT pref_name, pref_value
-          FROM user_preferences
-          WHERE pref_user = $user_id";
-    $prefs = $ds->loadHashList( $sql );
+    $prefs = array_merge($global_prefs, $AppUI->user_prefs);
+  }
+  else{
+    $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = $user_id";
+    $prefs = array_merge($global_prefs, $ds->loadHashList($sql));
   }
 }
 
@@ -46,6 +51,7 @@ $array_list_pref_generale = array (
   "UISTYLE",
   "MenuPosition",
   "DEFMODULE",
+  //"touchscreen",
 );
 
 foreach ($array_list_pref_generale as $namePref){
@@ -54,7 +60,6 @@ foreach ($array_list_pref_generale as $namePref){
   }
   $prefsUser["GENERALE"][$namePref] = $prefs[$namePref];
 }
-
 
 // Préférences par Module
 $array_list_module_pref = array (
@@ -98,13 +103,13 @@ $array_list_module_pref = array (
 foreach($array_list_module_pref as $modulename => $listPrefs){
   $prefsUser[$modulename] = array();	
   $prefModule = CModule::getInstalled($modulename);
-  if (($user_id!==0 && $prefModule && CPermModule::getInfoModule("view", $prefModule->mod_id, PERM_READ, $user_id)) || $user_id===0){
+  if (($user_id !== 0 && $prefModule && CPermModule::getInfoModule("view", $prefModule->mod_id, PERM_READ, $user_id)) || $user_id === 0){
     foreach ($listPrefs as $namePref){
     	if(!array_key_exists($namePref,$prefs)){
     	  $prefs[$namePref] = null;
     	}
       $prefsUser[$modulename][$namePref] = $prefs[$namePref];
-    }    
+    }
   }
 }
 
@@ -119,7 +124,6 @@ CMbArray::removeValue(".svn", $locales);
 $styles = $AppUI->readDirs("style");
 CMbArray::removeValue(".svn", $styles);
 
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user"     , $user);
@@ -128,6 +132,6 @@ $smarty->assign("locales"  , $locales);
 $smarty->assign("styles"   , $styles);
 $smarty->assign("modules"  , $modules);
 $smarty->assign("prefsUser", $prefsUser);
-
 $smarty->display("edit_prefs.tpl");
+
 ?>

@@ -30,13 +30,13 @@ require_once("./includes/version.php");
 require_once("./classes/sharedmemory.class.php");
 
 if ($dPconfig["offline"]) {
-  header("location: offline.php");
+  header("Location: offline.php");
   die("Le système est actuellement en cours de maintenance");
 }
 
 // Check that the user has correctly set the root directory
 is_file ($dPconfig["root_dir"]."/includes/config.php") 
-  or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
+  or die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
 
 require_once("./includes/mb_functions.php");
 require_once("./includes/compat.php");
@@ -285,21 +285,14 @@ if ($tab !== null) {
 
 $phpChrono->stop();
 
-// Calcul des performances
-if( !function_exists("memory_get_usage") ) {
-  function memory_get_usage() {
-    return "-";
-  }
-}
-
 $performance["genere"]         = number_format($phpChrono->total, 3);
 $performance["memoire"]        = mbConvertDecaBinary(memory_get_usage());
 $performance["objets"]         = CMbObject::$objectCount;
 $performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
 $performance["cachableCounts"] = CMbObject::$cachableCounts;
 
-$performance["size"]    = mbConvertDecaBinary(ob_get_length());
-$performance["ccam"]    = array (
+$performance["size"] = mbConvertDecaBinary(ob_get_length());
+$performance["ccam"] = array (
   "cacheCount" => class_exists('CCodeCCAM') ? CCodeCCAM::$cacheCount : 0,
   "useCount"   => class_exists('CCodeCCAM') ? CCodeCCAM::$useCount : 0
 );
@@ -342,4 +335,5 @@ require "./includes/access_log.php";
 ob_end_flush();
 
 CApp::rip();
+
 ?>
