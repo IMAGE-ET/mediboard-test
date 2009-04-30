@@ -56,7 +56,9 @@
   {{if $_operation->_deplacee}}
   <td class="text" colspan="5">
     <div class="warning">
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
     	{{$_operation->_ref_patient->_view}}
+    	</span>
     	<br />
 	    Intervention déplacée vers {{$_operation->_ref_salle->_view}}
     </div>
@@ -69,14 +71,18 @@
   	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
   	  {{/if}}
       <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-      {{$_operation->_ref_patient->_view}}
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
+    	{{$_operation->_ref_patient->_view}}
+    	</span>
       </a>
     {{else}}
       <table style="border: none; width: 100%;">
         <tr>
           <td style="border: none;">
           	<a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-          	 {{$_operation->_ref_patient->_view}}
+			      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
+			    	{{$_operation->_ref_patient->_view}}
+			    	</span>
           	</a>
           </td>
           {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id}}

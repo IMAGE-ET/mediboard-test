@@ -31,11 +31,11 @@
     <td class="text">Patient en ambulatoire</td>
   </tr>
   <tr>
-    <td style="text-align: right; color: #a33; font-weight: bold;">M. X y 27/03 17h00</td>
+    <td style="text-align: right; font-weight: bold;" class="patient-not-arrived">M. X y 27/03 17h00</td>
     <td class="text">Patient qui doit arriver dans cette chambre à 17h00 le 27/03</td>
   </tr>
   <tr>
-    <td style="text-align: right; color: #a33; font-weight: bold;">M. X y</td>
+    <td style="text-align: right; font-weight: bold;" class="septique">M. X y</td>
     <td class="text">Patient septique</td>
   </tr>
   <tr>

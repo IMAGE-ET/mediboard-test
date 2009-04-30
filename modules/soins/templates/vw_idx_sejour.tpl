@@ -444,7 +444,9 @@ viewBilanService = function(service_id, date){
                   {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
                   <a class="text" href="#1" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_affectation->_ref_sejour->_id}}'); loadViewSejour('{{$curr_affectation->_ref_sejour->_id}}', {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
-                    {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
+                    <span class="{{if !$curr_affectation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_affectation->_ref_sejour->septique}}septique{{/if}}">
+                      {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
+                    </span>
                   </a>
                   <script type="text/javascript">
                     ImedsResultsWatcher.addSejour('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->_num_dossier}}');

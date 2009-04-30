@@ -3498,3 +3498,11 @@ table.active {
   font-size: 14px;
   line-height: 1.8em;
 }
+
+.septique{
+  color: #3A3;
+}
+
+.patient-not-arrived {
+  color: #A33;
+}

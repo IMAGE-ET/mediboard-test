@@ -12,7 +12,7 @@
   
 
   <a class="text" href="#1" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
-    {{$curr_sejour->_ref_patient->_view}}
+    <span class="{{if !$curr_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_sejour->septique}}septique{{/if}}">{{$curr_sejour->_ref_patient->_view}}</span>
   </a>
   <script type="text/javascript">
     ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');

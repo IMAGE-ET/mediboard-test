@@ -26,7 +26,7 @@
           {{/if}}
         </td>
         <td class="patient" onclick="flipSejour({{$curr_sejour->_id}})">
-          <strong><a name="sejour{{$curr_sejour->_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
+          <strong {{if !$curr_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $curr_sejour->septique}}class="septique"{{/if}}><a name="sejour{{$curr_sejour->_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
           {{if $curr_sejour->type != "ambu" && $curr_sejour->type != "exte"}}
           ({{$curr_sejour->_duree_prevue}}j - {{$curr_sejour->_ref_praticien->_shortview}})
           {{else}}

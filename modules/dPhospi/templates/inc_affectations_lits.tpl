@@ -38,10 +38,10 @@
     {{/if}}
           
     {{if !$sejour->entree_reelle || ($aff_prev->_id && $aff_prev->effectue == 0)}}
-      <font style="color:#a33">
+      <font class="patient-not-arrived">
     {{else}}
-      {{if $sejour->septique == 1}}
-        <font style="color:#3a3">
+      {{if $sejour->septique}}
+        <font class="septique">
       {{else}}
         <font>
      {{/if}}
