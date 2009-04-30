@@ -3,10 +3,8 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="2">
-
-	  <div class="idsante400" id="{{$object->_class_name}}-{{$object->_id}}"></div>
-
-      <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
+	  <div class="idsante400" id="{{$object->_guid}}"></div>
+      <a style="float:right;" href="#nothing" onclick="guid_log('{{$object->_guid}}')">
         <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
       </a>
       <a class="action" style="float: right"  title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
@@ -22,6 +20,18 @@
        </a>
 	    
       {{$object->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+      
+      {{if $sejour->entree_reelle}}
+      <form name="viewSoin" method="get" action="?" style="float: right">
+			  <input type="hidden" name="m" value="soins" />
+			  <input type="hidden" name="tab" value="vw_idx_sejour" />
+			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+			  <input type="hidden" name="date" value="{{$sejour->entree_reelle|date_format:'%Y-%m-%d'}}" />
+			  <input type="hidden" name="mode" value="1" />
+			  <input type="hidden" name="_active_tab" value="dossier_soins" /> 
+			  <button type="button" class="search" onclick="this.form.submit();">Dossier de soin</button>
+		  </form>
+		  {{/if}}
     </th>
   </tr>
 
