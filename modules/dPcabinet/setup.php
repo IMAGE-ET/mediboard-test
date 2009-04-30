@@ -1195,8 +1195,20 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("1.10");
     $this->addPrefQuery("showDatesAntecedents", "1");
+    
+    $this->makeRevision("1.11");
+    $sql = "ALTER TABLE `consultation_anesth` 
+              ADD `chir_id` INT (11) UNSIGNED AFTER `sejour_id`,
+              ADD `date_interv` DATE AFTER `chir_id`,
+              ADD `libelle_interv` VARCHAR (255) AFTER `date_interv`;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `consultation_anesth` 
+              ADD INDEX (`sejour_id`),
+              ADD INDEX (`chir_id`),
+              ADD INDEX (`date_interv`);";
+    $this->addQuery($sql);
         
-    $this->mod_version = "1.11";
+    $this->mod_version = "1.12";
   }
 }
 ?>

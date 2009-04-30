@@ -50,8 +50,7 @@ if ($selConsult) {
     $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
     $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
   }
-
- 
+  
   $patient =& $consult->_ref_patient;
   $patient->loadRefsSejours();
   foreach ($patient->_ref_sejours as $key => $sejour) {
@@ -65,13 +64,19 @@ if ($selConsult) {
 }
 
 $consult_anesth =& $consult->_ref_consult_anesth;
+$nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
+
+$listChirs = new CMediusers;
+$listChirs = $listChirs->loadPraticiens();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("consult"       , $consult);
-$smarty->assign("consult_anesth", $consult_anesth);
-$smarty->assign("patient"       , $patient);
+$smarty->assign("consult"               , $consult);
+$smarty->assign("consult_anesth"        , $consult_anesth);
+$smarty->assign("patient"               , $patient);
+$smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
+$smarty->assign("listChirs"      , $listChirs);
 
 $smarty->display("inc_consult_anesth/interventions.tpl");
 

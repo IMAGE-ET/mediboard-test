@@ -242,7 +242,6 @@ $smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("listEtab"           , $listEtab           );
 $smarty->assign("listServicesUrgence", $listServicesUrgence);
 
-
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
@@ -266,12 +265,14 @@ $smarty->assign("line", new CPrescriptionLineMedicament());
 
 
 if($consult->_is_anesth) {
+  $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
 	$secs = range(0, 60-1, 1);
 	$mins = range(0, 15-1, 1);
 	  
-	$smarty->assign("secs"          , $secs);
-	$smarty->assign("mins"          , $mins);
-	$smarty->assign("consult_anesth", $consultAnesth);
+	$smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
+	$smarty->assign("secs"                  , $secs);
+	$smarty->assign("mins"                  , $mins);
+	$smarty->assign("consult_anesth"        , $consultAnesth);
 	$smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
 } else {
     $vue_accord = isset($AppUI->user_prefs["MODCONSULT"]) ? $AppUI->user_prefs["MODCONSULT"] : 0 ;

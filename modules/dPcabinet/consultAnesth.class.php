@@ -15,55 +15,60 @@ class CConsultAnesth extends CMbObject {
   var $consultation_id = null;
   var $operation_id    = null;
   var $sejour_id       = null;
+  var $chir_id         = null;
 
   // DB fields
-  var $groupe        = null;
-  var $rhesus        = null;
-  var $antecedents   = null;
-  var $traitements   = null;
-  var $tabac         = null;
-  var $oenolisme     = null;
-  var $intubation    = null;
-  var $biologie      = null;
-  var $commande_sang = null;
-  var $ASA           = null;
-  var $mallampati    = null;
-  var $bouche        = null;
-  var $distThyro     = null;
-  var $etatBucco     = null;
-  var $examenCardio  = null;
-  var $examenPulmo   = null;
-  var $conclusion    = null;
-  var $position      = null;
-  var $rai           = null;
-  var $hb            = null;
-  var $tp            = null;
-  var $tca           = null;
-  var $tca_temoin    = null;
-  var $creatinine    = null;
-  var $na            = null;
-  var $k             = null;
-  var $tsivy         = null;
-  var $plaquettes    = null;
-  var $ecbu          = null;
-  var $ht            = null;
-  var $ht_final      = null;
-  var $premedication = null;
-  var $prepa_preop   = null;
+  var $date_interv    = null;
+  var $libelle_interv = null;
+
+  var $groupe         = null;
+  var $rhesus         = null;
+  var $antecedents    = null;
+  var $traitements    = null;
+  var $tabac          = null;
+  var $oenolisme      = null;
+  var $intubation     = null;
+  var $biologie       = null;
+  var $commande_sang  = null;
+  var $ASA            = null;
+  var $mallampati     = null;
+  var $bouche         = null;
+  var $distThyro      = null;
+  var $etatBucco      = null;
+  var $examenCardio   = null;
+  var $examenPulmo    = null;
+  var $conclusion     = null;
+  var $position       = null;
+  var $rai            = null;
+  var $hb             = null;
+  var $tp             = null;
+  var $tca            = null;
+  var $tca_temoin     = null;
+  var $creatinine     = null;
+  var $na             = null;
+  var $k              = null;
+  var $tsivy          = null;
+  var $plaquettes     = null;
+  var $ecbu           = null;
+  var $ht             = null;
+  var $ht_final       = null;
+  var $premedication  = null;
+  var $prepa_preop    = null;
 
   // Form fields
-  var $_date_consult = null;
-  var $_date_op      = null;
-  var $_sec_tsivy    = null;
-  var $_min_tsivy    = null;
-  var $_sec_tca      = null;
-  var $_min_tca      = null;
+  var $_date_consult    = null;
+  var $_date_op         = null;
+  var $_sec_tsivy       = null;
+  var $_min_tsivy       = null;
+  var $_sec_tca         = null;
+  var $_min_tca         = null;
   var $_intub_difficile = null;
   var $_clairance       = null;
   var $_psa             = null;
 
   // Object References
   var $_ref_consultation       = null;
+  var $_ref_chir               = null;
   var $_ref_techniques         = null;
   var $_ref_last_consultanesth = null;
   var $_ref_operation          = null;
@@ -89,7 +94,10 @@ class CConsultAnesth extends CMbObject {
     $specs["consultation_id"]  = "ref notNull class|CConsultation cascade seekable";
     $specs["operation_id"]     = "ref class|COperation seekable";
     $specs["sejour_id"]        = "ref class|CSejour seekable";
+    $specs["chir_id"]          = "ref class|CMediusers";
 
+    $specs["date_interv"]      = "date";
+    $specs["libelle_interv"]   = "str";
     $specs["groupe"]           = "enum list|?|O|A|B|AB default|?";
     $specs["rhesus"]           = "enum list|?|NEG|POS default|?";
     $specs["antecedents"]      = "text confidential";
@@ -166,6 +174,11 @@ class CConsultAnesth extends CMbObject {
     $this->_view = $this->_ref_consultation->_view;
     $this->_ref_consultation->loadRefsActesCCAM();
   }
+  
+  function loadRefChir() {
+    $this->_ref_chir = new CMediusers();
+    $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
+  }
 
   function loadRefOperation() {
     $this->_ref_operation = new COperation;
@@ -185,7 +198,8 @@ class CConsultAnesth extends CMbObject {
 
   function loadRefSejour() {
     $this->_ref_sejour = new CSejour;
-    $this->_ref_sejour->load($this->sejour_id);
+    $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+    $this->_ref_sejour->loadRefsFwd(1);
   }
 
   function loadRefsFiles(){
@@ -221,6 +235,7 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefsFwd() {
+    $this->loadRefChir();
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
     $this->_ref_consultation->_ref_patient->loadRefConstantesMedicales();

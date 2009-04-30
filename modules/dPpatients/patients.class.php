@@ -682,6 +682,47 @@ class CPatient extends CMbObject {
     }
   }
   
+  /*
+   * Get the next sejour from today or from a given date
+   * @return array(CSejour, COperation);
+   */ 
+  function getNextSejourAndOperation($date = null) {
+    $sejour = new CSejour;
+    $op     = new COperation;
+    if(!$date) {
+      $date = mbDate();
+    }
+    if(!$this->_ref_sejours) {
+      $this->loadRefsSejours();
+    }
+    foreach($this->_ref_sejours as $curr_sejour) {
+      if(!$curr_sejour->annule && $curr_sejour->entree_prevue >= $date) {
+        if(!$sejour->_id) {
+          $sejour = $curr_sejour;
+        } else {
+          if($curr_sejour->entree_prevue < $sejour->entree_prevue) {
+            $sejour = $curr_sejour;
+          }
+        }
+        if(!$curr_sejour->_ref_operations) {
+          $curr_sejour->loadRefsOperations(array("annulee" => "= '0'"));
+        }
+        foreach($curr_sejour->_ref_operations as $curr_op) {
+          if($curr_op->_datetime >= $date) {
+            if(!$op->_id) {
+              $op = $curr_op;
+            } else {
+              if($curr_op->_datetime < $op->_datetime) {
+                $op = $curr_op;
+              }
+            }
+          }
+        }
+      }
+    }
+    return array("CSejour" => $sejour, "COperation" => $op);
+  }
+  
   /**
    * Get an associative array of uncancelled sejours and their dates
    * @return array Sejour ID => array("entree_prevue" => DATE, "sortie_prevue" => DATE)

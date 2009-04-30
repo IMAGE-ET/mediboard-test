@@ -61,7 +61,15 @@
                 <em>[{{$operation->libelle}}]</em>
               {{/if}}
             {{else}}
-              -
+              {{if $consult_anesth->chir_id}}
+                Dr {{$consult_anesth->_ref_chir->_view}} -
+              {{/if}}
+              {{if $consult_anesth->date_interv}}
+                le {{$consult_anesth->date_interv|date_format:"%d/%m/%Y"}}
+              {{/if}}
+              {{if $consult_anesth->libelle_interv}}
+                <em>[{{$consult_anesth->libelle_interv}}]</em>
+              {{/if}}
             {{/if}}
           </td>
         </tr>

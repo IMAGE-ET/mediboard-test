@@ -35,8 +35,8 @@
         </tr>
         <tr>
           <td colspan="2">
+          {{$patient->_view}}<br />
           {{if $consult_anesth->operation_id}}
-            {{$patient->_view}}<br />
             {{if $consult_anesth->_ref_operation->_ref_sejour}}
             Admission en {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
             le <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_entree|date_format:"%A %d/%m/%Y à %Hh%M"}}</strong>
@@ -55,7 +55,10 @@
               {{/foreach}}
             </ul>
           {{else}}
-            Aucun séjour
+            Intervention le <strong>{{$consult_anesth->date_interv->date|date_format:"%A %d/%m/%Y"}}</strong>
+            par le <strong>Dr {{$consult_anesth->_ref_chir->_view}}</strong>
+            <br />
+            {{$consult_anesth->libelle_interv}}
           {{/if}}
           </td>
         </tr>

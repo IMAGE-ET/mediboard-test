@@ -1,10 +1,56 @@
+<script type="text/javascript">
+  function selectOperation(operation_id) {
+    oForm = document.addOpFrm;
+    $V(oForm.operation_id, operation_id);
+    submitOpConsult();
+  }
+  function selectSejour(sejour_id) {
+    oForm = document.addOpFrm;
+    $V(oForm.sejour_id, sejour_id);
+    submitOpConsult();
+  }
+  {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
+  modalWindow = null;
+  Main.add(function () {
+    modalWindow = modal($('evenement-chooser-modal'), {
+      overlayOpacity: 0.75,
+      className: 'modal'
+    });
+  });
+  {{/if}}
+</script>
+
+<div style="display: none; text-align: center;" id="evenement-chooser-modal">
+  {{if $nextSejourAndOperation.COperation->_id}}
+    {{$nextSejourAndOperation.COperation->_view}} -
+    {{$nextSejourAndOperation.COperation->_datetime|date_format:"%d/%m/%Y"}}
+    <br />
+    Ce patient vient-il pour cette intervention ?
+    <br />
+    <button class="tick" onclick="selectOperation('{{$nextSejourAndOperation.COperation->_id}}'); modalWindow.close();">Oui</button>
+    <br />
+  {{/if}}
+  {{if $nextSejourAndOperation.CSejour->_id && $nextSejourAndOperation.COperation->_ref_sejour->_id != $nextSejourAndOperation.CSejour->_id}}
+    {{$nextSejourAndOperation.CSejour->_view}}
+    <br />
+    Ce patient vient-il pour ce séjour ?
+    <br />
+    <button class="tick" onclick="selectSejour('{{$nextSejourAndOperation.CSejour->_id}}'); modalWindow.close();">Oui</button>
+    <br />
+  {{/if}}
+  <button class="cancel" onclick="modalWindow.close();">Annuler</button>
+</div>
+
+{{assign var=operation value=$consult_anesth->_ref_operation}}
+
+{{if $patient->_ref_sejours|@count}}
+
 <form name="addOpFrm" action="?m={{$m}}" method="post">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPcabinet" />
-  {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
-  
-  
+  {{mb_key object=$consult_anesth}}
+
   {{if !$consult_anesth->operation_id}}
   <!-- Choix du séjour -->
   <select name="sejour_id" style="max-width: 250px;" onchange="submitOpConsult()">
@@ -40,13 +86,13 @@
   {{if $sejour->_id}}
 	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
   <strong>Séjour :</strong>
-	  {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) {{/if}}
+	  Dr {{$sejour->_ref_praticien->_view}} -
+	  {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) -{{/if}}
 	  {{mb_value object=$sejour field=type}}
 	</span>
   <br />
   {{/if}}
   
-  {{assign var=operation value=$consult_anesth->_ref_operation}}
   {{if $operation->_id}}
 	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
 	  <strong>Intervention :</strong>
@@ -58,15 +104,47 @@
 	</span>
   {{/if}}
 </form>
-<br />
+{{/if}}
+
 {{if $operation->_id}}
 <form name="editOpFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
   {{mb_field object=$operation field="operation_id" hidden=1 prop=""}}
+  <br />
   {{mb_label object=$operation field="depassement_anesth"}}
   {{mb_field object=$operation field="depassement_anesth" onchange="this.form.onsubmit()"}}
   <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
+</form>
+{{else}}
+<form name="opInfoFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="m" value="dPcabinet" />
+  {{mb_key object=$consult_anesth}}
+  <table class="form">
+    <tr>
+      <th>{{mb_label object=$consult_anesth field="date_interv"}}</th>
+      <td class="date"> {{mb_field object=$consult_anesth form="opInfoFrm" field="date_interv" register=true onchange="this.form.onsubmit()"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$consult_anesth field="chir_id"}}</th>
+      <td>
+        <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" onchange="this.form.onsubmit();">
+          <option value="">&mdash; Choisir un chirurgien</option>
+          {{foreach from=$listChirs item=curr_prat}}
+          <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $consult_anesth->chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>
+          {{$curr_prat->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$consult_anesth field="libelle_interv"}}</th>
+      <td>{{mb_field object=$consult_anesth field="libelle_interv" onchange="this.form.onsubmit()"}}</td>
+    </tr>
+  </table>
 </form>
 {{/if}}
