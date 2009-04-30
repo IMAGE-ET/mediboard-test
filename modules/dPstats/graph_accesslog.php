@@ -152,6 +152,25 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	
 	$series = array();
   
+  // Right axis (before in order the lines to be on top)
+  if ($right[0] == 'hits') {
+    $series[] = array(
+     'label' => 'Hits',
+     'data' => $hits,
+     'bars' => array('show' => true),
+     'yaxis' => 2
+    );
+  }
+  
+  else {
+    $series[] = array(
+     'label' => 'Bande passante',
+     'data' => $size,
+     'bars' => array('show' => true),
+     'yaxis' => 2
+    );
+  }
+  
   // Left axis
   if ($left[0] == 'request_time') {
   	$series[] = array(
@@ -191,25 +210,6 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
      'data' => $notices,
      'color' => 'yellow',
      'lines' => array('show' => true),
-    );
-  }
-    
-  // Right axis
-  if ($right[0] == 'hits') {
-    $series[] = array(
-     'label' => 'Hits',
-     'data' => $hits,
-     'bars' => array('show' => true),
-     'yaxis' => 2
-    );
-  }
-  
-  else {
-    $series[] = array(
-     'label' => 'Bande passante',
-     'data' => $size,
-     'bars' => array('show' => true),
-     'yaxis' => 2
     );
   }
 	
