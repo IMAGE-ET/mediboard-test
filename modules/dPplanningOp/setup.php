@@ -757,7 +757,14 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `protocole` ADD `for_sejour` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.90";
+    $this->makeRevision("0.90");
+    $sql = "ALTER TABLE `sejour` 
+            ADD `adresse_par_prat_id` INT (11),
+            ADD `adresse_par_etab_id` INT (11),
+            ADD `libelle` VARCHAR (255)";
+    $this->addQuery($sql);
+  
+    $this->mod_version = "0.91";
   }
 }
 ?>

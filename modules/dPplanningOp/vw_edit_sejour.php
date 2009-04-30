@@ -1,11 +1,12 @@
-<?php /* $Id$ */
+<?php /* $Id $ */
 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPlanningOp
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 global $AppUI, $can, $m, $tab, $dPconfig;
 
@@ -85,6 +86,24 @@ $sejour->makeDatesOperations();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 $patient->loadRefsSejours();
+
+$patient->loadRefsFwd();
+$patient->loadRefsCorrespondants();
+
+$correspondantsMedicaux = array();
+if ($patient->_ref_medecin_traitant->_id) {
+	$correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
+}
+foreach($patient->_ref_medecins_correspondants as $correspondant) {
+  $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
+}
+
+$medecin_adresse_par = "";
+if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_ref_medecin_traitant->_id)) {
+  $medecin_adresse_par = new CMedecin();
+  $medecin_adresse_par->load($sejour->adresse_par_prat_id);
+}
+
 $sejours =& $patient->_ref_sejours;
 
 // Heures & minutes
@@ -98,6 +117,11 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 
 $sejour->makeCancelAlerts();
 $sejour->loadNumDossier();
+
+// Chargement des etablissements externes
+$order = "nom";
+$etab = new CEtabExterne();
+$listEtab = $etab->loadList(null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -116,6 +140,10 @@ $smarty->assign("op"            , new COperation);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);
+
+$smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
+$smarty->assign("listEtab", $listEtab);
+$smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);

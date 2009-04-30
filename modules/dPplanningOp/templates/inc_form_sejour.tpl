@@ -1,4 +1,13 @@
-<!-- $Id$ -->
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage [subpackage]
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+ 
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
@@ -85,7 +94,6 @@ function checkChambreSejourEasy(){
 
 PatSelector.init = function(){
   bOldPat = document.editSejour.patient_id.value;
-  
   this.sForm     = "editSejour";
   this.sFormEasy = "editOpEasy";
 
@@ -94,7 +102,16 @@ PatSelector.init = function(){
 
   this.sId   = "patient_id";
   this.sView = "_patient_view";
+
   this.pop();
+}
+
+checkCorrespondantMedical = function(form){
+	var url = new Url;
+  url.setModuleAction("dPplanningOp", "ajax_check_correspondant_medical");
+  url.addParam("patient_id", $V(form.patient_id));
+  url.addParam("sejour_id" , $V(form.sejour_id));
+  url.requestUpdate("correspondant_medical" , { waitingText: null });
 }
 
 CIM10Selector.init = function(){
@@ -103,6 +120,22 @@ CIM10Selector.init = function(){
   this.sChir = "praticien_id";
   this.pop();
 }
+
+Medecin = {
+  form: null,
+  edit : function() {
+    this.form = document.forms.editSejour;
+    var url = new Url();
+    url.setModuleAction("dPpatients", "vw_medecins");
+    url.popup(700, 450, "Medecin");
+  },
+  
+  set: function(id, view) {
+	  $('_adresse_par_prat').show().update('Autres : '+view);
+	  $V(this.form.adresse_par_prat_id, id);
+	  $V(this.form._correspondants_medicaux, '', false);
+  }
+};
 
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
@@ -207,6 +240,9 @@ Main.add( function(){
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
 <input type="hidden" name="septique" value="{{$sejour->septique|default:"0"}}" />
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
+
+<input type="hidden" name="adresse_par_prat_id" value="{{$sejour->adresse_par_prat_id}}" />
+<input type="hidden" name="adresse_par_etab_id" value="{{$sejour->adresse_par_etab_id}}" />
 {{if !$mode_operation}}
   {{mb_field object=$sejour field="sejour_id" hidden=1 prop=""}}
 {{/if}}
@@ -294,7 +330,7 @@ Main.add( function(){
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload();" />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); " />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
@@ -319,6 +355,12 @@ Main.add( function(){
   <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
   </td>
 </tr>
+
+<tr>
+  <th>{{mb_label object=$sejour field="libelle"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="libelle"}}</td>
+</tr>
+
 <tr>
   <th class="category" colspan="4">Admission</th>
 </tr>
@@ -375,6 +417,7 @@ Main.add( function(){
 
 <tbody id="modeExpert">
 {{if !$mode_operation}}
+
 <tr>
   <th>{{mb_label object=$sejour field=entree_reelle}}</th>
   <td class="date" colspan="3">
@@ -416,6 +459,29 @@ Main.add( function(){
 </tr>
 {{/if}}
 
+<tr id="correspondant_medical">
+  {{include file="inc_check_correspondant_medical.tpl"}}
+</tr>
+<tr>
+  <td></td>
+  <td colspan="3">
+    <div id="_adresse_par_prat" style="{{if !$medecin_adresse_par}}display:none{{/if}}; width: 300px;">{{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}</div>
+  </td>
+</tr>
+
+{{if $listEtab|@count}}
+<tr>
+  <th>{{mb_label object=$sejour field=adresse_par_etab_id}}</th>
+  <td colspan="3">
+     <select name="etablissement_transfert_id" onchange="$V(this.form.adresse_par_etab_id, $V(this))">
+       <option value="">&mdash;{{tr}}Choose{{/tr}}</option>
+       {{foreach from=$listEtab item="etab"}}
+         <option value="{{$etab->_id}}" {{if $etab->_id == $sejour->adresse_par_etab_id}}selected="selected"{{/if}}>{{$etab->_view}}</option>
+        {{/foreach}}
+    </select>
+  </td>
+</tr>
+{{/if}}
 
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>

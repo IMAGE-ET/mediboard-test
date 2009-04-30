@@ -202,7 +202,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $this->getIdSource($patient);
   }
   
-  function getEvenementPatientXML($xpath) { 
+  function getEvenementPatientXML() { 
+  	$xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    
   	$data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
 
     $query = "/hprim:evenementsPatients/hprim:enteteMessage";
@@ -224,9 +227,5 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     return $xpath->queryAttributNode($query, $node, "action");    
   }
-  
-  function generateFromOperation($mbPatient, $referent) {}
-  
-  function generateEvenementsPatients($mbObject, $referent = null, $initiateur = null) {}
 }
 ?>

@@ -191,6 +191,14 @@ $sejour->loadRefs();
 $sejour->loadRefsPrescriptions();
 $sejour->loadRefsDocs();
 
+$medecin_adresse_par = new CMedecin();
+$medecin_adresse_par->load($sejour->adresse_par_prat_id);
+$sejour->_adresse_par_prat = $medecin_adresse_par->_view;
+
+$etab = new CEtabExterne();
+$etab->load($sejour->adresse_par_etab_id);
+$sejour->_adresse_par_etab = $etab->_view;
+
 if($service_id){
 	// Chargement des séjours à afficher
 	if($service_id == "NP") {
@@ -294,7 +302,7 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
   $AppUI->_ref_user->isFromType(array("Infirmière"));
-
+  
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("_active_tab", $_active_tab);

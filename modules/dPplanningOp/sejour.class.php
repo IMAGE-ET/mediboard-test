@@ -59,6 +59,9 @@ class CSejour extends CCodable {
   var $mode_sortie        = null;
   var $prestation_id      = null;
   var $facturable         = null; 
+  var $adresse_par_prat_id = null;
+  var $adresse_par_etab_id = null;
+  var $libelle            = null;  
   
   // Form Fields
   var $_entree             = null;
@@ -80,6 +83,9 @@ class CSejour extends CCodable {
   var $_curr_op_date       = null;
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
+  var $_adresse_par        = null;
+  var $_adresse_par_prat   = null;
+  var $_adresse_par_etab   = null;
   
   // Behaviour fields
   var $_check_bounds = true;
@@ -201,6 +207,9 @@ class CSejour extends CCodable {
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
     $specs["etablissement_transfert_id"] = "ref class|CEtabExterne";
+    $specs["adresse_par_prat_id"] = "num";
+    $specs["adresse_par_etab_id"] = "num";
+    $specs["libelle"]             = "str seekable";
     
     $specs["_entree"]         = "dateTime";
     $specs["_sortie"] 		    = "dateTime";
@@ -219,6 +228,9 @@ class CSejour extends CCodable {
     $specs["_num_dossier"]    = "str";
     $specs["_ccam_libelle"]   = "bool default|0";
     $specs["_coordonnees"]    = "bool default|0";
+    $specs["_adresse_par"]    = "bool";
+    $specs["_adresse_par_prat"] = "str";
+    $specs["_adresse_par_etab"] = "str";
     
     $specs["_duree_prevue"]   = "num";
     $specs["_duree_reelle"]   = "num";
@@ -472,6 +484,18 @@ class CSejour extends CCodable {
     }
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
     $this->_praticien_id = $this->praticien_id;
+        
+    $this->_adresse_par = ($this->adresse_par_etab_id || $this->adresse_par_prat_id);
+    
+    if ($this->_adresse_par) {
+    	$medecin_adresse_par = new CMedecin();
+	    $medecin_adresse_par->load($this->adresse_par_prat_id);
+	    $this->_adresse_par_prat = $medecin_adresse_par->_view;
+	    
+	    $etab = new CEtabExterne();
+	    $etab->load($this->adresse_par_etab_id);
+	    $this->_adresse_par_etab = $etab->_view;
+    }
   }
   
   function updateDBFields() {

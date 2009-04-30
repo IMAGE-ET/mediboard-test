@@ -281,6 +281,33 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     return $evenementPatient->tagName;
   }
+  
+  function addVenue($elParent, $mbVenue, $referent = null) {
+    $identifiant = $this->addElement($elParent, "identifiant");
+    
+    $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
+    
+    $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
+    $attrNatureVenueHprim = array (
+      "CSejour" => "hsp",
+      "CConsultation" => "cslt",
+    );
+    $this->addAttribute($natureVenueHprim, "valeur", $attrNatureVenueHprim[$mbVenue->_class_name]);
+    
+    $entree = $this->addElement($elParent, "entree");
+    
+    $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
+  	$this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->_entree));
+  	$this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_entree));
+  	
+  	$modeEntree = $this->addElement($entree, "modeEntree");
+  	$this->addAttribute($modeEntree, "valeur", $attrNatureVenueHprim[$mbVenue->_class_name]);
+  	
+  	$medecins = $this->addElement($elParent, "medecins");
+  	$medecin = $this->addElement($medecins, "medecin");
+  	$this->addAttribute($medecin, "lien", "");
+  	
+  }
 }
 
 ?>

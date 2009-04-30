@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPlanningOp
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+ 
 {{assign var="sejour" value=$object}}
 
 <table class="tbl">
@@ -55,6 +65,13 @@
   </tr>
   
   <tr>
+    <td colspan="2" class="text">
+	    <strong>{{mb_label object=$object field="libelle"}}</strong>
+	    {{$object->libelle}}
+	  </td>
+  </tr>
+
+  <tr>
     <td>
       <strong>{{mb_label object=$object field="group_id"}}</strong>
       {{$object->_ref_group->_view}}
@@ -98,7 +115,21 @@
       {{/if}}
     </td>
   </tr>
-  {{if $sejour->mode_sortie != null}}
+  
+  {{if $object->_adresse_par}}
+  <tr>
+    <td>
+      <strong>{{mb_label object=$object field="adresse_par_prat_id"}}</strong>
+      {{mb_value object=$object field="_adresse_par_prat"}}
+    </td>
+    <td>
+      <strong>{{mb_label object=$object field="adresse_par_etab_id"}}</strong>
+      {{mb_value object=$object field="_adresse_par_etab"}}
+    </td>
+  </tr>
+  {{/if}}
+  
+  {{if $object->mode_sortie != null}}
   <tr>
     <td>
       <strong>{{mb_label object=$object field="mode_sortie"}}</strong>

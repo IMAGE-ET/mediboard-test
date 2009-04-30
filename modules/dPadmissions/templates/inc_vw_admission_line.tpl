@@ -64,6 +64,7 @@
       this.pop();
     };
   </script>
+  {{if $curr_adm->_ref_numdos}}
   <form name="editNumdos{{$curr_adm->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$curr_adm->_id}})">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
     <input type="hidden" name="m" value="dPsante400" />
@@ -80,6 +81,7 @@
       <button type="button" class="edit notext" onclick="setExternalIds(this.form)">Edit external Ids</button>
     {{/if}}
   </form>
+  {{/if}}
   {{/if}}
   {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
   <a class="action" name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">

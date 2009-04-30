@@ -310,7 +310,12 @@ Main.add(function () {
           </script>
           </td>
         </tr>
-
+        
+        <tr>
+          <th>{{mb_label object=$protocole field="libelle"}}</th>
+          <td colspan="3">{{mb_field object=$protocole field="libelle"}}</td>
+        </tr>
+        
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} nuits</td>

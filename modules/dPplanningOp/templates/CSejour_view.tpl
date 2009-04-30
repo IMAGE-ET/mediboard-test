@@ -34,6 +34,11 @@
       <strong>{{tr}}CSejour-praticien_id{{/tr}}:</strong>
       <i>{{$sejour->_ref_praticien->_view}}</i>
       <br />
+      {{if $sejour->libelle}}
+      <strong>{{mb_label object=$sejour field=libelle}}:</strong>
+      <i>{{mb_value object=$sejour field=libelle}}</i>
+      <br />
+      {{/if}}
       <strong>{{tr}}CSejour-group_id{{/tr}}:</strong>
       <i>{{$sejour->_ref_group->_view}}</i>
       {{if $sejour->rques}}
