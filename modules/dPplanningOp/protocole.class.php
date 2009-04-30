@@ -36,6 +36,7 @@ class CProtocole extends CMbObject {
   var $depassement     = null;
   var $forfait         = null;
   var $fournitures     = null;
+  var $libelle_sejour  = null;
 
   // DB fields linked protocols
   var $protocole_prescription_chir_id   = null;
@@ -70,6 +71,7 @@ class CProtocole extends CMbObject {
     $specs["convalescence"]   = "text confidential";
     $specs["rques_sejour"]    = "text confidential";
     $specs["libelle"]         = "str seekable";
+    $specs["libelle_sejour"]  = "str seekable";
     $specs["examen"]          = "text confidential seekable";
     $specs["materiel"]        = "text confidential seekable";
     $specs["duree_hospi"]     = "num notNull minMax|0|36500";

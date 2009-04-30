@@ -312,8 +312,8 @@ Main.add(function () {
         </tr>
         
         <tr>
-          <th>{{mb_label object=$protocole field="libelle"}}</th>
-          <td colspan="3">{{mb_field object=$protocole field="libelle"}}</td>
+          <th>{{mb_label object=$protocole field="libelle_sejour"}}</th>
+          <td colspan="3">{{mb_field object=$protocole field="libelle_sejour"}}</td>
         </tr>
         
         <tr>

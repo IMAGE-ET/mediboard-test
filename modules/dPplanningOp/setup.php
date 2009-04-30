@@ -763,8 +763,13 @@ class CSetupdPplanningOp extends CSetup {
             ADD `adresse_par_etab_id` INT (11),
             ADD `libelle` VARCHAR (255)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.91");
+    $sql = "ALTER TABLE `protocole` 
+            ADD `libelle_sejour` VARCHAR (255)";
+    $this->addQuery($sql);
   
-    $this->mod_version = "0.91";
+    $this->mod_version = "0.92";
   }
 }
 ?>
