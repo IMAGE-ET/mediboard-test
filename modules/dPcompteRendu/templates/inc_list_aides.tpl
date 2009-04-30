@@ -1,5 +1,12 @@
-<table class="tbl">
+{{if $can->admin}}
+  <a href="?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}{{foreach from=$aides item=_aide}}&amp;id[]={{$_aide->_id}}{{/foreach}}" 
+     target="_blank"
+     class="button hslip">Exporter au format CSV</a>
+  
+  <a href="#1" onclick="return popupImport('{{$owner->_guid}}');" class="button hslip">Importer un fichier CSV</a>
+{{/if}}
 
+<table class="tbl">
 <tr>
   <th>{{mb_title class=CAideSaisie field=class}}</th>
   <th>{{mb_title class=CAideSaisie field=field}}</th>
