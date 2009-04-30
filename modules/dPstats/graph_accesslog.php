@@ -17,6 +17,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	    $step = "+1 HOUR";
 	    $date_format = "%Hh";
 	    $max = 24;
+      $hours = 1;
 	    break;
 	  case "month":
 	    $startx = mbDateTime("-1 MONTH", "$date 00:00:00");
@@ -24,6 +25,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	    $step = "+1 DAY";
 	    $date_format = "%d/%m";
 	    $max = 32;
+      $hours = 24;
 	    break;
 	  case "hyear":
 	    $startx = mbDateTime("-6 MONTHS", "$date 00:00:00");
@@ -31,6 +33,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	    $step = "+1 WEEK";
 	    $date_format = "%U";
 	    $max = 27;
+      $hours = 24 * 7;
 	    break;
 	  case "twoyears":
       $startx = mbDateTime("-2 YEARS", "$date 00:00:00");
@@ -38,6 +41,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
       $step = "+1 MONTH";
       $date_format = "%m/%Y";
       $max = 25;
+      $hours = 24 * 30;
       break;
     case "twentyyears":
       $startx = mbDateTime("-20 YEARS", "$date 00:00:00");
@@ -45,6 +49,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
       $step = "+1 YEAR";
       $date_format = "%Y";
       $max = 21;
+      $hours = 24 * 30 * 12;
       break;
 	}
 	
@@ -67,10 +72,10 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
             SUM(notices)  AS notices,
   	      DATE_FORMAT(`period`, '$date_format') AS `gperiod`
   	      FROM `access_log`
-  	      WHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
+  	      WHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."' ";
         
-	if($module)     $sql .= "AND `module` = '$module'";
-	if($actionName) $sql .= "AND `action` = '$actionName'";
+	if($module)     $sql .= "AND `module` = '$module' ";
+	if($actionName) $sql .= "AND `action` = '$actionName' ";
 
 	$sql .= "GROUP BY `gperiod` ORDER BY `period`";
 	
@@ -106,8 +111,8 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
         $notices[$x[0]]  = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'notices'});
         $errors_total += $log->_average_errors + $log->_average_warnings + $log->_average_notices;
         
-        $hits[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'hits'});
-        $size[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'size'});
+        $hits[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'hits'} / ($right[1] == 'mean' ? $hours : 1));
+        $size[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'size'} / ($right[1] == 'mean' ? $hours : 1));
 	    }
 	  }
 	}
