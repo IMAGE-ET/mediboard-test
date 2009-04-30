@@ -1,9 +1,21 @@
 <!-- $Id$ -->
 
+<script type="text/javascript">
+printFiche = function(consultation_id) {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_fiche"); 
+  url.addParam("consultation_id", consultation_id);
+  url.popup(700, 500, "printFiche");
+}
+</script>
+
 {{if $sejour->_canRead}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="3">
+    <th class="title" colspan="4">
+      {{if $sejour->_ref_consult_anesth->_id && !$sejour->_ref_consult_anesth->operation_id}}
+        <button style="float: right" class="print" type="button" onclick="printFiche('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche</button>
+      {{/if}}
       {{tr}}CSejour-msg-infoOper{{/tr}}
     </th>
   </tr>
@@ -12,6 +24,7 @@
     <th>{{tr}}COperation-chir_id{{/tr}}</th>
     <th>{{tr}}Date{{/tr}}</th>
     <th>{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
+    <th></th>
   </tr>
 
   {{foreach from=$sejour->_ref_operations item=_operation name=operation}}
@@ -38,6 +51,11 @@
       {{$curr_ext_code->libelleLong}}
        <br />
       {{/foreach}}
+    </td>
+    <td style="width: 1%;">
+      {{if $_operation->_ref_consult_anesth->_id}}
+        <button class="print" type="button" onclick="printFiche('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche</button>
+      {{/if}}
     </td>
     {{/if}}
     {{/if}}

@@ -820,6 +820,10 @@ class CSejour extends CCodable {
     
     $this->loadNumDossier();
     
+    // Chargement de la consultation anesth pour l'affichage de la fiche d'anesthesie
+    $this->loadRefsConsultAnesth();
+    $this->_ref_consult_anesth->loadRefConsultation();
+    
     $this->loadSuiviMedical();
     $this->_ref_patient->loadRefPhotoIdentite();
   }
