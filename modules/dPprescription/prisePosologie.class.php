@@ -100,7 +100,7 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_type = "fois_par";
    }
    
-   if(isset($this->_ref_object->_ref_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id)){
+   if(@isset($this->_ref_object->_ref_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id)){
      $service_id = $this->_ref_object->_ref_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;      
    } else {
      $service_id = "none";
