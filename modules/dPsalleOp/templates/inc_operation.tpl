@@ -144,6 +144,27 @@ function reloadPrescription(prescription_id){
     </th>
   </tr>
   
+  {{if $dPconfig.dPplanningOp.COperation.verif_cote && $selOp->cote_bloc && ($selOp->cote == "droit" || $selOp->cote == "gauche")}}
+  <!-- Vérification du côté -->
+  <tr>
+    <td>
+      <strong>Côté DHE : {{mb_value object=$selOp field="cote"}}</strong> -
+      <span class="{{if !$selOp->cote_admission}}warning{{elseif $selOp->cote_admission != $selOp->cote}}error{{else}}ok{{/if}}">
+        Admission : {{mb_value object=$selOp field="cote_admission"}}
+      </span> -
+      <span class="{{if !$selOp->cote_consult_anesth}}warning{{elseif $selOp->cote_consult_anesth != $selOp->cote}}error{{else}}ok{{/if}}">
+        Consult Anesth : {{mb_value object=$selOp field="cote_consult_anesth"}}
+      </span> -
+      <span class="{{if !$selOp->cote_hospi}}warning{{elseif $selOp->cote_hospi != $selOp->cote}}error{{else}}ok{{/if}}">
+        Service : {{mb_value object=$selOp field="cote_hospi"}}
+      </span> -
+      <span class="{{if !$selOp->cote_bloc}}warning{{elseif $selOp->cote_bloc != $selOp->cote}}error{{else}}ok{{/if}}">
+        Bloc : {{mb_value object=$selOp field="cote_bloc"}}
+      </span>
+    </td>
+  </tr>
+  {{/if}}
+  
   {{if $selOp->_ref_sejour->rques || $selOp->rques || $selOp->materiel}}
   <!-- Mise en avant du matériel et remarques -->
   <tr>

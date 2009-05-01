@@ -109,7 +109,18 @@
       {{/foreach}}
     </a>
   </td>
-  <td>{{tr}}COperation.cote.{{$_operation->cote}}{{/tr}}</td>
+  <td>
+    {{if $dPconfig.dPplanningOp.COperation.verif_cote && ($_operation->cote == "droit" || $_operation->cote == "gauche")}}
+      <form name="editCoteOp{{$_operation->_id}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        {{mb_key object=$_operation}}
+        {{mb_field defaultOption="&mdash; côté" object=$_operation field="cote_bloc" onchange="this.form.submit();"}}
+      </form>
+    {{else}}
+    {{mb_value object=$_operation field="cote"}}
+  {{/if}}
+  </td>
   <td>{{$_operation->temp_operation|date_format:$dPconfig.time}}</td>
   {{/if}}
   {{/if}}

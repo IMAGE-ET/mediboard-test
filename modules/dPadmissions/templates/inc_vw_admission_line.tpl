@@ -151,7 +151,21 @@
   <strong>ANNULE</strong></td>
 {{else}}
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <form name="editAdmFrm{{$curr_adm->sejour_id}}" action="?" method="post">
+  {{if $dPconfig.dPplanningOp.COperation.verif_cote}}
+  {{foreach from=$curr_adm->_ref_operations item=curr_op}}
+    {{if $curr_op->cote == "droit" || $curr_op->cote == "gauche"}}
+      <form name="editCoteOp{{$curr_op->_id}}" action="?" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        {{mb_key object=$curr_op}}
+        {{mb_label object=$curr_op field="cote_admission"}} :
+        {{mb_field defaultOption="&mdash; choisir" object=$curr_op field="cote_admission" onchange="submitCote(this.form);"}}
+      </form>
+      <br />
+    {{/if}}
+  {{/foreach}}
+  {{/if}}
+  <form name="editAdmFrm{{$curr_adm->_id}}" action="?" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
@@ -181,7 +195,7 @@
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <form name="editSaisFrm{{$curr_adm->sejour_id}}" action="?" method="post">
+  <form name="editSaisFrm{{$curr_adm->_id}}" action="?" method="post">
 
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -226,7 +240,7 @@
   {{if $curr_op->depassement}}
   <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
   <!-- <a href="#" onclick="printDepassement({{$curr_adm->sejour_id}})"></a> -->
-  {{$curr_op->depassement}} €
+  {{mb_value object=$curr_op field="depassement"}}
   <br />
   {{/if}}
   {{foreachelse}}

@@ -190,7 +190,8 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
   "hour_urgence_fin" => "23",
   "min_intervalle"   => "15",
   "locked"           => "0",
-  "horaire_voulu"    => "0"
+  "horaire_voulu"    => "0",
+  "verif_cote"       => "0",
 );
   
 $dPconfig["dPplanningOp"]["CSejour"] = array (

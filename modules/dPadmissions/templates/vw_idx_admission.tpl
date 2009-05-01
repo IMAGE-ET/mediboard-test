@@ -53,9 +53,13 @@ function reloadAdmission(type) {
 }
 
 function confirmation(oForm){
-   if(confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
-     submitAdmission(oForm);
-   }
+  if(confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
+    submitAdmission(oForm);
+  }
+}
+
+function submitCote(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
 }
 
 function submitAdmission(oForm, bPassCheck) {

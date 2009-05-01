@@ -62,6 +62,12 @@ class COperation extends CCodable {
   var $induction_fin   = null;
   var $horaire_voulu   = null;
   
+  // Vérification du côté
+  var $cote_admission      = null;
+  var $cote_consult_anesth = null;
+  var $cote_hospi          = null;
+  var $cote_bloc           = null;
+  
   // Form fields
   var $_hour_op        = null;
   var $_min_op         = null;
@@ -105,9 +111,9 @@ class COperation extends CCodable {
   var $_ext_codes_ccam = null;
 
  //Filter Fields
-  var $_date_min	 	= null;
-  var $_date_max 		= null;
-  var $_plage 			= null;
+  var $_date_min	 	 = null;
+  var $_date_max 		 = null;
+  var $_plage 			 = null;
   var $_service 		 = null;
   var $_intervention = null;
   var $_specialite 	 = null;
@@ -170,6 +176,11 @@ class COperation extends CCodable {
     $specs["anapath"]            = "enum list|1|0|? default|?";
     $specs["labo"]               = "enum list|1|0|? default|?";
     $specs["horaire_voulu"]      = "time";
+    
+    $specs["cote_admission"]     = "enum list|droit|gauche";
+    $specs["cote_consult_anesth"]= "enum list|droit|gauche";
+    $specs["cote_hospi"]         = "enum list|droit|gauche";
+    $specs["cote_bloc"]          = "enum list|droit|gauche";
 
     $specs["_date_min"]          = "date";
     $specs["_date_max"]          = "date moreEquals|_date_min";

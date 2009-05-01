@@ -768,8 +768,16 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `protocole` 
             ADD `libelle_sejour` VARCHAR (255)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.92");
+    $sql = "ALTER TABLE `operations` 
+	          ADD `cote_admission` ENUM ('droit','gauche') AFTER `horaire_voulu`,
+            ADD `cote_consult_anesth` ENUM ('droit','gauche') AFTER `cote_admission`,
+            ADD `cote_hospi` ENUM ('droit','gauche') AFTER `cote_consult_anesth`,
+            ADD `cote_bloc` ENUM ('droit','gauche') AFTER `cote_hospi`;";
+    $this->addQuery($sql);
   
-    $this->mod_version = "0.92";
+    $this->mod_version = "0.93";
   }
 }
 ?>
