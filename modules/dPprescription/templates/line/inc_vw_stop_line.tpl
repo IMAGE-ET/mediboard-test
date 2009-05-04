@@ -35,16 +35,14 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
   {{assign var=dosql value="do_prescription_line_medicament_aed"}}
+  {{assign var=category_id value=""}}
+  {{assign var=_traitement_personnel value=$line->traitement_personnel}}
 {{else}}
   {{assign var=dosql value="do_prescription_line_element_aed"}}
-{{/if}}
-
-
-{{if $line->_class_name == "CPrescriptionLineElement"}}
   {{assign var=category_id value=$category->_id}}
-{{else}}
-  {{assign var=category_id value=""}}
+  {{assign var=_traitement_personnel value=0}}
 {{/if}}
+
 <form name="form-stop-{{$object_class}}-{{$line->_id}}" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -55,7 +53,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
     <input type="hidden" name="time_arret" value="" />
 	  <button type="button"
 	          class="cancel" 
-	          onclick="changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->traitement_personnel}}','{{$category_id}}'); 
+	          onclick="changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$_traitement_personnel}}','{{$category_id}}'); 
 	                   Prescription.submitFormStop(this.form,'{{$line->_id}}','{{$line->_class_name}}');">
 	    Annuler l'arrêt
 	  </button>
@@ -74,7 +72,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 	        {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
 	        <button type="button" 
 	                class="stop" 
-	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->traitement_personnel}}','{{$category_id}}');">  
+	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$_traitement_personnel}}','{{$category_id}}');">  
 	          Arrêter
 	        </button>
 	      </td>
