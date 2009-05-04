@@ -271,7 +271,6 @@ Element.addMethods('input', {
       if (fire) {
         if (element.oldValue != s && element.onchange) {
           element.onchange(element);
-          console.debug('change');
         }
         element.oldValue = element.value;
       }
