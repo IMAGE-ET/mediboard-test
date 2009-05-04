@@ -265,7 +265,12 @@ Element.addMethods('input', {
         clearBuffer(0, mask.length);
         valid = false;
       }
-      else valid = true;
+      else {
+        if (element.onchange) {
+          element.onchange(element);
+        }
+        valid = true;
+      }
     }
     
     function seekNext(pos) {
@@ -288,7 +293,7 @@ Element.addMethods('input', {
     else if (Prototype.Browser.Gecko)
       element.addEventListener("input", checkVal, false);
       
-    checkVal();//Perform initial check for existing values
+    checkVal(); //Perform initial check for existing values
   }/*,
   
   unmask: function(element) {
