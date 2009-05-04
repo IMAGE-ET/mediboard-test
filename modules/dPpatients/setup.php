@@ -1003,7 +1003,46 @@ class CSetupdPpatients extends CSetup {
     		CHANGE `code_exo` `code_exo` ENUM('0', '4', '5', '9') NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.85";
+    $this->makeRevision("0.85");
+    
+    $sql = "ALTER TABLE `patients` 
+            ADD `civilite` ENUM ('m','mme','melle','enf','dr','pr','me','vve') AFTER `sexe`,
+            ADD `assure_civilite` ENUM ('m','mme','melle','enf','dr','pr','me','vve') AFTER `assure_sexe`";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `civilite` = 'm' WHERE `sexe` = 'm'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `civilite` = 'mme' WHERE `sexe` = 'f'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `civilite` = 'melle' WHERE `sexe` = 'j'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `civilite` = 'enf' WHERE `naissance` >= ".(date('Y')-15);
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `assure_civilite` = 'm' WHERE `assure_sexe` = 'm'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `assure_civilite` = 'mme' WHERE `assure_sexe` = 'f'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `assure_civilite` = 'melle' WHERE `assure_sexe` = 'j'";
+    $this->addQuery($sql);
+
+    $sql = "UPDATE `patients` SET `assure_civilite` = 'enf' WHERE `assure_naissance` >= ".(date('Y')-15);
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `sexe` = 'f' WHERE `sexe` = 'j'";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `patients` 
+            CHANGE `sexe` `sexe` ENUM ('m','f'),
+            CHANGE `assure_sexe` `assure_sexe` ENUM ('m','f')";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.86";
   }
 }
 

@@ -211,7 +211,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $sexeConversion = array (
       "m" => "M",
       "f" => "F",
-      "j" => "F"
     );
     
     $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
@@ -224,6 +223,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $this->addTexte($prenoms, "prenom", $mbPrenom);
       }
     }
+    
+    $civiliteHprim = $this->addElement($personnePhysique, "civiliteHprim");
+    $civiliteHprimConversion = array (
+      "mme"   => "mme",
+      "melle" => "mlle",
+      "m"     => "mr",
+      "dr"    => "dr",
+      "pr"    => "pr",
+      "enf"   => "enf",
+    );
+    $this->addAttribute($civiliteHprim, "valeur", $civiliteHprimConversion[$mbPatient->civilite]);
     
     $adresses = $this->addElement($personnePhysique, "adresses");
     $adresse = $this->addElement($adresses, "adresse");

@@ -31,6 +31,7 @@ class CPatient extends CMbObject {
   var $prenom_soundex2  = null;
   var $naissance        = null;
   var $sexe             = null;
+  var $civilite         = null;
   var $adresse          = null;
   var $ville            = null;
   var $cp               = null;
@@ -94,6 +95,7 @@ class CPatient extends CMbObject {
   var $assure_prenom_4              = null;
   var $assure_naissance             = null;
   var $assure_sexe                  = null;
+  var $assure_civilite              = null;
   var $assure_adresse               = null;
   var $assure_ville                 = null;
   var $assure_cp                    = null;
@@ -116,7 +118,7 @@ class CPatient extends CMbObject {
   
   // Form fields
   var $_age         = null;
-  var $_article     = null;
+  var $_civilite    = null;
   var $_longview    = null;
   var $_art115      = null;
 	var $_exoneration = null;
@@ -189,7 +191,8 @@ class CPatient extends CMbObject {
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
     $specs["regime_sante"]      = "str";
-    $specs["sexe"]              = "enum list|m|f|j default|m";
+    $specs["sexe"]              = "enum list|m|f default|m";
+    $specs["civilite"]          = "enum list|m|mme|melle|enf|dr|pr|me|vve default|m";
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential seekable";
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
@@ -249,7 +252,8 @@ class CPatient extends CMbObject {
     $specs["assure_prenom_3"]             = "str";
     $specs["assure_prenom_4"]             = "str";
     $specs["assure_nom_jeune_fille"]      = "str confidential";
-    $specs["assure_sexe"]                 = "enum list|m|f|j default|m";
+    $specs["assure_sexe"]                 = "enum list|m|f default|m";
+    $specs["assure_civilite"]             = "enum list|m|mme|melle|enf|dr|pr|me|vve default|m";
     $specs["assure_naissance"]            = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
     $specs["assure_adresse"]              = "text confidential";
     $specs["assure_ville"]                = "str confidential";
@@ -511,32 +515,9 @@ class CPatient extends CMbObject {
     }
   
     $this->evalAge();
-    
-    // Attention 0 != "??" est faux !
-    if ($this->_age !== "??" && $this->_age <= 15) {
-      $this->_shortview = "Enf.";
-      if($this->sexe == "m"){
-        $this->_article = "le jeune";
-      }
-      if($this->sexe == "j"){
-        $this->_article = "la jeune";
-      }
-    } 
-    elseif($this->sexe == "m"){
-      $this->_shortview = "M.";
-      $this->_article = "Monsieur";
-    } 
-    elseif($this->sexe == "f"){
-      $this->_shortview = "Mme.";
-      $this->_article = "Madame";
-    } 
-    else { 
-      $this->_shortview = "Mlle.";
-      $this->_article = "Mademoiselle";
-    }  
-      
-    $this->_view     = "$this->_shortview $this->nom $this->prenom";
-    $this->_longview = "$this->_article $this->nom $this->prenom";
+
+    $this->_view     = CAppUI::tr("CPatient.civilite.$this->civilite")." $this->nom $this->prenom";
+    $this->_longview = CAppUI::tr("CPatient.civilite.$this->civilite-long")." $this->nom $this->prenom";
         
     // Navigation fields
     global $AppUI;
@@ -1097,7 +1078,7 @@ class CPatient extends CMbObject {
     $this->loadRefConstantesMedicales();
     
     $template->addProperty("Patient - article"           , $this->_shortview );
-    $template->addProperty("Patient - article long"      , $this->_article   );
+    $template->addProperty("Patient - article long"      , $this->_civilite  );
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - prénom"            , $this->prenom     );
     $template->addProperty("Patient - adresse"           , $this->adresse    );

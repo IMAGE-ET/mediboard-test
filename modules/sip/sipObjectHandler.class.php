@@ -107,7 +107,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 				$domEvenement->_destinataire = $dest_hprim->destinataire;
 				
 				$messageEvtPatient = $domEvenement->generateTypeEvenement($mbObject);
-	
+	/*
 			  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password)) {
 					trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
 				}
@@ -130,7 +130,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 	      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
 				$echange_hprim->acquittement = $acquittement;
 	
-				$echange_hprim->store();
+				$echange_hprim->store();*/
 			}
 		// Traitement Sejour
 		} else if ($mbObject instanceof CSejour) {

@@ -195,4 +195,8 @@ $locales['CUser.select'] = '';
 $locales['mod-admin-action-check_siblings'] = '';
 $locales['Auth-failed-nousername'] = '';
 $locales['massively'] = '';
+$locales['CModule-back-permissions_modules'] = '';
+$locales['config-admin-CUser-max_login_attempts-desc'] = '';
+$locales['config-admin-CUser-strong_password-desc'] = '';
+$locales['CUser-back-profiled_users'] = '';
 ?>

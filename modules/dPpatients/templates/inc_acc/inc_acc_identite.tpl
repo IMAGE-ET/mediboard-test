@@ -1,8 +1,32 @@
 <script type="text/javascript">
 
+var noChangeCivilite = false;
+
 togglePrenomsList = function(element) {
 	var list = $("patient_identite").select('.prenoms_list').invoke('toggle');
 	Element.classNames(element).flip('up', 'down');
+}
+
+changeCiviliteForSexe = function(element) {
+	if (!noChangeCivilite) {
+		var valueCivilite = ($V(element) == 'm') ? $V(element) : 'mme';
+    $V("editFrm_civilite", valueCivilite);
+    noChangeCivilite = false;
+	}
+}
+
+changeCiviliteForDate = function(element) {
+  if (!noChangeCivilite && $V(element)) {
+	  var date = new Date();
+	  var naissance = $V(element).split('/')[2];
+	  if (((date.getFullYear()-15) <= naissance) && (naissance <= (date.getFullYear()))) {
+		  $V("editFrm_civilite", "enf");
+	  } else {
+		  noChangeCivilite = false;
+		  changeCiviliteForSexe(element.form.sexe);
+	  }
+	  noChangeCivilite = false;
+  }
 }
 
 Main.add(function() {
@@ -65,12 +89,23 @@ Main.add(function() {
 	</tr>
   <tr>
     <th>{{mb_label object=$patient field="sexe"}}</th>
-    <td>{{mb_field object=$patient field="sexe" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="sexe" onchange="copyIdentiteAssureValues(this);changeCiviliteForSexe(this);"}}</td>
 	</tr>
   <tr>
     <th>{{mb_label object=$patient field="naissance"}}</th>
-    <td>{{mb_field object=$patient field="naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="naissance" onchange="copyIdentiteAssureValues(this);changeCiviliteForDate(this);"}}</td>
 	</tr>
+	<tr>
+    <th>{{mb_label object=$patient field="civilite"}}</th>
+    <td>
+      {{assign var=civilite_locales value=$patient->_specs.civilite}} 
+      <select name="civilite" onchange="copyIdentiteAssureValues(this); noChangeCivilite=true">
+        {{foreach from=$civilite_locales->_locales key=key item=curr_civilite}} 
+        <option value="{{$key}}" {{if $key == $patient->civilite}}selected="selected"{{/if}}>{{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}})</option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
   <tr>
     <th>{{mb_label object=$patient field="rang_naissance"}}</th>
     <td>{{mb_field object=$patient field="rang_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>

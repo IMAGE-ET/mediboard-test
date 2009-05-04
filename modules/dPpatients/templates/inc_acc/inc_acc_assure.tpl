@@ -39,6 +39,17 @@
     <td>{{mb_field object=$patient field="assure_naissance"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="assure_civilite"}}</th>
+    <td>
+      {{assign var=civilite_locales value=$patient->_specs.assure_civilite}} 
+      <select name="assure_civilite">
+        {{foreach from=$civilite_locales->_locales key=key item=curr_civilite}} 
+        <option value="{{$key}}" {{if $key == $patient->assure_civilite}}selected="selected"{{/if}}>{{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}})</option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="assure_cp_naissance"}}</th>
     <td>
       {{mb_field object=$patient field="assure_cp_naissance" maxlength="5"}}
