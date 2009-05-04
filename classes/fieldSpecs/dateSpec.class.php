@@ -13,10 +13,10 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CDateSpec extends CMbFieldSpec {
   
   function getValue($object, $smarty = null, $params = null) {
-    if ($smarty) require_once $smarty->_get_plugin_filepath('modifier','date_format');
+    if ($smarty) require_once $smarty->_get_plugin_filepath('modifier', 'date_format');
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    $format = mbGetValue(@$params["format"], "%d/%m/%Y");
+    $format = mbGetValue(@$params["format"], CAppUI::conf("date"));
     return ($propValue && $propValue != "0000-00-00") ? 
       smarty_modifier_date_format($propValue, $format) :
       "";
@@ -70,8 +70,8 @@ class CDateSpec extends CMbFieldSpec {
     return "DATE";
   }
   
-  function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementDateTime($object, $params, $value, $className, "%d/%m/%Y");
+  function getFormHtmlElement($object, $params, $value, $className) {
+    return $this->getFormElementDateTime($object, $params, $value, $className,  CAppUI::conf("datetime"));
   }
 }
 

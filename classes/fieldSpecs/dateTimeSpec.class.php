@@ -18,7 +18,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
-    $format = CMbArray::extract($params, "format", "%d/%m/%Y %H:%M");
+    $format = CMbArray::extract($params, "format", CAppUI::conf("datetime"));
     if ($format === "relative") {
       $relative = CMbDate::relative($propValue, mbDateTime());
       return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
@@ -66,7 +66,7 @@ class CDateTimeSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementDateTime($object, $params, $value, $className, "%d/%m/%Y %H:%M");
+    return $this->getFormElementDateTime($object, $params, $value, $className,  CAppUI::conf("datetime"));
   }
 }
 
