@@ -65,42 +65,37 @@ $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
 // Chargement de la valeur de l'id externe de la prescription ==> retourne uniquement l'id400
 $id400Presc = $mbPrescription->loadIdPresc();
 
-
 // Gestion du sexe du patient
 $transSexe["m"] = "1";
 $transSexe["f"] = "2";
-$transSexe["j"] = "2";
-
-
 
 $mbPatient =& $mbPrescription->_ref_patient;
 
 // Gestion du titre du patient
 if($mbPatient->sexe == "m"){
   if($mbPatient->_age >= 0 && $mbPatient->_age <= 3){
-	$titre_ = "Bébé garçon";
+	  $titre_ = "Bébé garçon";
   }
-  if($mbPatient->_age > 3 && $mbPatient->_age < 18){
-	$titre_ = "Enfant garçon";
+  if($mbPatient->civilite == "enf") {
+  	$titre_ = "Enfant garçon";
   }
-  if($mbPatient->_age >= 18){
-	$titre_ = "Monsieur";
+  if($mbPatient->civilite == "m") {
+	  $titre_ = "Monsieur";
   }
-  
 }
 
-if($mbPatient->sexe == "f" || $mbPatient->sexe == "j"){
+if($mbPatient->sexe == "f"){
   if($mbPatient->_age >= 0 && $mbPatient->_age <= 3){
-	$titre_ = "Bébé fille";
+	  $titre_ = "Bébé fille";
   }
-  if($mbPatient->_age > 3 && $mbPatient->_age < 18){
-	$titre_ = "Enfant fille";
+  if($mbPatient->civilite == "enf") {
+    $titre_ = "Enfant fille";
   }
-  if($mbPatient->_age >= 18 && $mbPatient->nom_jeune_fille){
-	$titre_ = "Madame";
+  if($mbPatient->civilite == "melle") {
+    $titre_ = "Mademoiselle";
   }
-  if($mbPatient->_age >= 18 && !$mbPatient->nom_jeune_fille){
-	$titre_ = "Mademoiselle";
+  if($mbPatient->civilite == "mme") {
+    $titre_ = "Madame";
   }
 }
 

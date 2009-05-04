@@ -166,7 +166,6 @@ class CSpMalade extends CSpObject {
     static $sexesMatrix = array(
       "m" => "M",
       "f" => "F",
-      "j" => "F"
     );
     
     $patient = $mbObject;
