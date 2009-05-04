@@ -130,6 +130,13 @@ $extension->reasons[] = "Accelération substancielle de l'application via une com
 $extensions[] = $extension;
 
 $extension = new CPHPExtension;
+$extension->name = "JSON";
+$extension->description = "Extension de manipulation de données au format JSON. Inclus par défaut avec PHP 5.2+";
+$extension->mandatory = true;
+$extension->reasons[] = "Passage de données de PHP vers Javascript.";
+$extensions[] = $extension;
+
+$extension = new CPHPExtension;
 $extension->name = "DOM";
 $extension->description = "Extension de manipulation de fichier XML avec l'API DOM";
 $extension->reasons[] = "Import de base de données médecin";
