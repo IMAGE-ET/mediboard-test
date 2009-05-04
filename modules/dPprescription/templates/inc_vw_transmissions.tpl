@@ -21,10 +21,14 @@ refreshTransmission = function(){
   url.requestUpdate("transmissions", { waitingText: null } );
 }
 
+Main.add(function () {
+  prepareForm("editTrans");
+});
+
 </script>
 {{/if}}
 
-<table class="tbl">
+<table class="form">
   {{if @$addTrans}}
   <tr>
     <th colspan="6" class="title">
@@ -42,8 +46,8 @@ refreshTransmission = function(){
       <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
       <input type="hidden" name="user_id" value="{{$app->user_id}}" />
       <input type="hidden" name="date" value="now" />
-      {{mb_label object=$transmission field="text"}}
       {{mb_field object=$transmission field="degre"}}
+      {{mb_field object=$transmission field="type" typeEnum=radio}}
       <br />
       {{mb_field object=$transmission field="text"}}
       <br />
@@ -62,11 +66,12 @@ refreshTransmission = function(){
 <table class="tbl">
   <tr>
     <th>Patient</th>
-    <th>Type</th>
-    <th>Utilisateur</th>
-    <th>Date</th>
-    <th>Heure</th>
-    <th>Texte</th>
+    <th>{{tr}}Type{{/tr}}</th>
+    <th>{{tr}}User{{/tr}}</th>
+    <th>{{tr}}Date{{/tr}}</th>
+    <th>{{tr}}Hour{{/tr}}</th>
+    <th>Cible</th>
+    <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
   </tr>
   
   {{assign var=date value=""}}

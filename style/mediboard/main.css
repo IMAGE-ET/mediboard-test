@@ -3506,3 +3506,14 @@ table.active {
 .patient-not-arrived {
   color: #A33;
 }
+
+table.tbl td.type-trans-selected {
+  border: 1px solid black;
+  background-color: #7F7; 
+  color: black;
+}
+
+table.tbl td.type-trans-not-selected {
+  border:1px solid black;
+  opacity: 0.3;
+}

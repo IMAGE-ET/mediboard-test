@@ -8,12 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/*
- * Permet d'avancer dans l'ordre des prescriptions :
- * Pré-admission / Séjour / Sortie
- */
-
 global $AppUI;
 
 $prescription_id = mbGetValueFromPost("prescription_id");

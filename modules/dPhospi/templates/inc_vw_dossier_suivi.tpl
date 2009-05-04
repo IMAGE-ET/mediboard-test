@@ -11,6 +11,11 @@ delCibleTransmission = function() {
   oDiv.innerHTML = "";
 }
 
+Main.add(function () {
+  prepareForm("editObs");
+  prepareForm("editTrans");
+});
+
 </script>
 
 <table class="form">
@@ -39,7 +44,6 @@ delCibleTransmission = function() {
 		      </select>
 		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CObservationMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
 	      </div>
-	      {{mb_label object=$observation field="text"}}
 	      {{mb_field object=$observation field="degre"}}
 	      <br />
 	      {{mb_field object=$observation field="text"}}
@@ -67,8 +71,8 @@ delCibleTransmission = function() {
 		    </select>
 		    <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
 	    </div>
-      {{mb_label object=$transmission field="text"}}
       {{mb_field object=$transmission field="degre"}}
+      {{mb_field object=$transmission field="type" typeEnum=radio}}
       <br />
       {{mb_field object=$transmission field="text"}}
       <br />

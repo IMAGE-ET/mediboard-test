@@ -230,7 +230,12 @@ class CSetupdPhospi extends CSetup {
 					  CHANGE `degre` `degre` ENUM ('low','high','info') NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $sql = "ALTER TABLE `transmission_medicale` 
+						ADD `type` ENUM ('data','action','result');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.32";
   }
 }
 ?>

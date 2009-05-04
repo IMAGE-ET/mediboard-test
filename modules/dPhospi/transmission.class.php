@@ -1,30 +1,25 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision$
- *  @author Romain Ollivier
-*/
-
-/**
- * 
- * Classe CTransmissionMedicale. 
- * @abstract Permet d'ajouter des transmissions médicales à un séjour
+ * @package Mediboard
+ * @subpackage dPhospi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @abstract Permet d'ajouter des transmissions médicales à un séjour 
  */
 
 class CTransmissionMedicale extends CMbMetaObject {
-
   // DB Table key
   var $transmission_medicale_id = null;	
   
   // DB Fields
   var $sejour_id = null;
   var $user_id   = null;
-  
-  var $degre = null;
-  var $date  = null;
-  var $text  = null;
+  var $degre     = null;
+  var $date      = null;
+  var $text      = null;
+  var $type      = null;
   
   // References
   var $_ref_sejour = null;
@@ -47,6 +42,7 @@ class CTransmissionMedicale extends CMbMetaObject {
     $specs["degre"]        = "enum notNull list|low|high default|low";
     $specs["date"]         = "dateTime notNull";
     $specs["text"]         = "text helped";
+    $specs["type"]         = "enum list|data|action|result";
     return $specs;
   }
     
@@ -73,7 +69,6 @@ class CTransmissionMedicale extends CMbMetaObject {
     }
     return $this->_ref_sejour->getPerm($perm);
   }
-  
 }
 
 ?>
