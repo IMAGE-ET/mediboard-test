@@ -134,6 +134,7 @@ Element.addMethods('input', {
           Prototype.emptyFunction :///element.caret(0, mask.length):
           element.caret(firstNonMaskPos);
       };
+      element.oldValue = element.value;
       f.defer();
     }
     focusEvent = focusEvent.bindAsEventListener(element);
@@ -240,7 +241,7 @@ Element.addMethods('input', {
       return element.value = buffer.join('');
     }
     
-    function checkVal() {
+    function checkVal(fire) {
       var test = element.value;
       var pos = 0;
       
@@ -261,15 +262,18 @@ Element.addMethods('input', {
       
       var s = writeBuffer();
       if (!s.match(re)) {
-        $V(element, "");
+        s = element.value = "";
         clearBuffer(0, mask.length);
         valid = false;
       }
-      else {
-        if (element.onchange) {
+      else valid = true;
+      
+      if (fire) {
+        if (element.oldValue != s && element.onchange) {
           element.onchange(element);
+          console.debug('change');
         }
-        valid = true;
+        element.oldValue = element.value;
       }
     }
     
@@ -281,7 +285,7 @@ Element.addMethods('input', {
     }
     
     element.observe("focus", focusEvent);
-    element.observe("blur",  checkVal);
+    element.observe("blur",  (function(){checkVal(true)}).bind(this));
     element.observe("mask:check", checkVal);
     element.onkeydown  = keydownEvent;
     element.onkeypress = keypressEvent;
