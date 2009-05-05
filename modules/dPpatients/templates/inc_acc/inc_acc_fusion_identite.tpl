@@ -17,6 +17,7 @@
   {{include field="prenom_4"                  file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="nom_jeune_fille"           file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="sexe"                      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="civilite"                  file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="naissance"                 file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="rang_naissance"            file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="lieu_naissance"            file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}

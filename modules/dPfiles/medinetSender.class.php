@@ -45,13 +45,11 @@ class CMedinetSender extends CDocumentSender {
   public static $civiliteConversion = array (
                         "m" => "monsieur",
                         "f" => "madame",
-                        "j" => "mademoiselle"
                       );
 
   public static $sexeConversion = array (
                         "m" => "M",
                         "f" => "F",
-                        "j" => "F"
                       );  
                        
   public static $descriptifStatus = array (

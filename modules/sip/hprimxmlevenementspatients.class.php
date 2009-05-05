@@ -65,7 +65,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getIdSource($node) {
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
@@ -75,7 +75,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getIdCible($node) {
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
@@ -85,7 +85,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function createPatient($node, $mbPatient) {
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $mbPatient = $this->getPersonnePhysique($node, $mbPatient);
@@ -96,7 +96,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getPersonnePhysique($node, $mbPatient) {
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     // Création de l'element personnePhysique
@@ -107,6 +107,18 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
         "F" => "f",
     );
     $mbPatient->sexe = $sexeConversion[$sexe];
+    
+    $civiliteHprim = $xpath->queryAttributNode("hprim:personnePhysique", $node, "civiliteHprim");
+    $civiliteHprimConversion = array (
+      "mme"   => "mme",
+      "melle" => "mlle",
+      "m"     => "mr",
+      "dr"    => "dr",
+      "pr"    => "pr",
+      "enf"   => "enf",
+    );
+    $mbPatient->civilite = $civiliteHprimConversion[$civiliteHprim];
+    
     $mbPatient->nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
     $mbPatient->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $personnePhysique);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
@@ -144,7 +156,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getActiviteSocioProfessionnelle($node, $mbPatient) {
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $mbPatient->profession = $xpath->queryTextNode("hprim:activiteSocioProfessionnelle", $node); 
@@ -153,7 +165,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getPersonnesPrevenir($node, $mbPatient) {
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $personnesPrevenir = $xpath->query("hprim:personnesPrevenir/*", $node);
@@ -189,7 +201,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getIPPPatient($query) { 
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $query_evt = "/hprim:evenementsPatients/hprim:evenementPatient";
@@ -203,10 +215,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getEvenementPatientXML() { 
-  	$xpath = new CMbXPath($this);
+    $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
-  	$data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
+    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
 
     $query = "/hprim:evenementsPatients/hprim:enteteMessage";
 

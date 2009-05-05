@@ -17,6 +17,7 @@
   {{include field="assure_prenom_4"                 file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_nom_jeune_fille"          file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_sexe"                     file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="assure_civilite"                 file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_naissance"                file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_lieu_naissance"           file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_cp_naissance"             file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
