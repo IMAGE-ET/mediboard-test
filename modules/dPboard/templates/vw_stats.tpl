@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<br />
 <form name="ChoixStat" method="post" action="#">
   <label for="stat" title="Statistiques à afficher">Statistiques</label>
   <select name="stat" onchange="this.form.submit()">

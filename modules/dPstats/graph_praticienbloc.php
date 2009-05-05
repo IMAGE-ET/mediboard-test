@@ -7,142 +7,132 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0) {
+	if (!$debut) $debut = mbDate("-1 YEAR");
+	if (!$fin) $fin = mbDate();
+	
+	$prat = new CMediusers;
+	$prat->load($prat_id);
+	
+	$salle = new CSalle;
+	$salle->load($salle_id);
+	
+	$ticks = array();
+	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+	}
 
-CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
-CAppUI::requireLibraryFile("jpgraph/src/jpgraph_line");
-CAppUI::requireLibraryFile("jpgraph/src/jpgraph_regstat");
+	$where = array();
+	$where['stats'] = " = '1'";
+	if($salle_id) {
+	  $where['salle_id'] = " = '$salle_id'";
+	}
+	$salles = $salle->loadlist($where);
 
-$debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
-$fin      = mbGetValueFromGet("fin"     , mbDate()         );
-$prat_id  = mbGetValueFromGet("prat_id" , 0                );
-$salle_id = mbGetValueFromGet("salle_id", 0                );
-$bloc_id  = mbGetValueFromGet("bloc_id" , 0                );
-$codeCCAM = mbGetValueFromGet("codeCCAM", ""               );
-
-$pratSel = new CMediusers;
-$pratSel->load($prat_id);
-
-$salleSel = new CSalle;
-$salleSel->load($salle_id);
-
-for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
-}
-
-$sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
-if($salle_id)
-  $sql .= "\nAND salle_id = '$salle_id'";
-$ds = CSQLDataSource::get("std");
-$salles = $ds->loadlist($sql);
-
-$nbHours = array();
-$sql = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total," .
-  "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
-  "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
-  "\nFROM plagesop" .
-  "\nINNER JOIN sallesbloc" .
-  "\nON plagesop.salle_id = sallesbloc.salle_id" .
-  "\nWHERE sallesbloc.stats = '1'" .
-  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
-  if($prat_id)
-    $sql .= "\nAND plagesop.chir_id = '$prat_id'";
-  if($salle_id) {
-    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
-  } elseif($bloc_id) {
-    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-  }
-$sql .= "\nGROUP BY mois" .
-    "\nORDER BY orderitem";
-$result = $ds->loadlist($sql);
-foreach($datax as $x) {
-  $f = true;
-  foreach($result as $total) {
-    if($x == $total["mois"]) {
-      $nbHours[] = $total["total"]/(60*60);
-      $f = false;
-    }
-  }
-  if($f) {
-    $nbHours[] = 0;
-  }
-}
-
-$doneHours = array();
-$sql = "SELECT SUM(TIME_TO_SEC(operations.sortie_salle) - TIME_TO_SEC(operations.entree_salle)) AS total," .
-  "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
-  "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
-  "\nFROM plagesop" .
-  "\nINNER JOIN sallesbloc" .
-  "\nON plagesop.salle_id = sallesbloc.salle_id" .
-  "\nLEFT JOIN operations" .
-  "\nON operations.plageop_id = plagesop.plageop_id" .
-  "\nAND operations.annulee = '0'" .
-  "\nWHERE sallesbloc.stats = '1'" .
-  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
-  if($prat_id)
-    $sql .= "\nAND operations.chir_id = '$prat_id'";
-  if($salle_id) {
-    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
-  } elseif($bloc_id) {
-    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-  }
-$sql .= "\nGROUP BY mois" .
-    "\nORDER BY orderitem";
-$result = $ds->loadlist($sql);
-foreach($datax as $x) {
-  $f = true;
-  foreach($result as $total) {
-    if($x == $total["mois"]) {
-      $doneHours[] = $total["total"]/(60*60);
-      $f = false;
-    }
-  }
-  if($f) {
-    $doneHours[] = 0;
-  }
-}
-
-// Set up the title for the graph
-$title = "Heures réservées / occupées par mois";
-$subtitle = "";
-if($prat_id) {
-  $subtitle .= "- Dr $pratSel->_view ";
-}
-if($salle_id) {
-  $subtitle .= "- $salleSel->nom ";
-}
-if($subtitle) {
-  $subtitle .= "-";
-}
-
-$hours1Sorted = $nbHours;
-rsort($hours1Sorted);
-$hours2Sorted = $doneHours;
-rsort($hours2Sorted);
-$scale = max(intval($hours1Sorted[0]), intval($hours2Sorted[0]));
-
-$options = array( "width" => 480,
-									"height" => 300,				
-									"title" => $title,
-									"subtitle" => $subtitle,
-									"margin" => array(50,40,50,70),
-									"posLegend" => array(0.02,0.02, "right", "top"), 
-									"sizeFontAxis" => 8,
-									"labelAngle" => 50,
-									"textTickInterval" => 1,
-									"posXAbsDelta" => 15,
-									"posYAbsDelta" => -15,
-									"datax" => $datax,
-									"dataLine" => array($nbHours, $doneHours),
-									"graphSplineLegend" => array("Réservé","Occupé"),
-									"scale" => array(0, $scale + $scale/10),
-								);
+	$series = array();
+	
+  // First serie
+	$serie = array(
+	  'data' => array(),
+		'label' => utf8_encode('Réservé')
+	);
+	$query = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total,
+	  DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+	  DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
+	  FROM plagesop
+	  INNER JOIN sallesbloc ON plagesop.salle_id = sallesbloc.salle_id
+	  WHERE 
+		  sallesbloc.stats = '1' AND 
+			plagesop.date BETWEEN '$debut' AND '$fin'";
 		
-$graph = new CMbGraph();
-$graph->selectType("Graph",$options);
-$graph->selectPalette($options);
-$graph->setupAxis($options);
-$graph->addDataLinePlot($options);
-$graph->addSplinePlot($options);
-$graph->render("out",$options);
+  if($prat_id) $query .= "\nAND plagesop.chir_id = '$prat_id'";
+	
+  if($salle_id) {
+    $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
+  } elseif($bloc_id) {
+    $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+  }
+	$query .= "\nGROUP BY mois ORDER BY orderitem";
+	
+	$result = $prat->_spec->ds->loadlist($query);
+	foreach($ticks as $i => $tick) {
+	  $f = true;
+	  foreach($result as $total) {
+	    if($tick[1] == $total["mois"]) {
+	      $serie['data'][] = array($i, $total["total"]/(60*60));
+	      $f = false;
+	    }
+	  }
+	  if($f) $serie["data"][] = array(count($serie["data"]), 0);
+	}
+	
+	$series[] = $serie;
+	
+  // Second serie
+	$serie = array(
+	  'data' => array(),
+		'label' => utf8_encode('Occupé')
+	);
+	
+	$query = "SELECT SUM(TIME_TO_SEC(operations.sortie_salle) - TIME_TO_SEC(operations.entree_salle)) AS total,
+	  DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+	  DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
+	  FROM plagesop
+	  INNER JOIN sallesbloc ON plagesop.salle_id = sallesbloc.salle_id
+	  LEFT JOIN operations ON operations.plageop_id = plagesop.plageop_id
+	  WHERE 
+		  sallesbloc.stats = '1' AND 
+			operations.annulee = '0' AND 
+			plagesop.date BETWEEN '$debut' AND '$fin'";
+	
+  if($prat_id) $query .= "\nAND operations.chir_id = '$prat_id'";
+	
+  if($salle_id) {
+    $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
+  } elseif($bloc_id) {
+    $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+  }
+	$query .= "\nGROUP BY mois ORDER BY orderitem";
+
+	$result = $prat->_spec->ds->loadlist($query);
+	foreach($ticks as $i => $tick) {
+	  $f = true;
+	  foreach($result as $total) {
+	    if($tick[1] == $total["mois"]) {
+	      $serie['data'][] = array($i, $total["total"]/(60*60));
+	      $f = false;
+	    }
+	  }
+	  if($f) $serie["data"][] = array(count($serie["data"]), 0);
+	}
+	
+	$series[] = $serie;
+
+	// Set up the title for the graph
+	$title = "Heures réservées / occupées par mois";
+	$subtitle = "";
+	if($prat_id)  $subtitle .= " - Dr $prat->_view";
+	if($salle_id) $subtitle .= " - $salle->nom";
+
+	$options = array(
+		'title' => utf8_encode($title),
+		'subtitle' => utf8_encode($subtitle),
+		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
+		'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
+		'lines' => array('show' => true),
+		'points' => array('show' => true),
+		'HtmlText' => false,
+		'mouse' => array('track' => true, 'relative' => true, 'position' => 'ne'),
+		'legend' => array('show' => true, 'position' => 'nw'),
+		'grid' => array('verticalLines' => true),
+		'spreadsheet' => array(
+		  'show' => true,
+			'tabGraphLabel' => utf8_encode('Graphique'),
+      'tabDataLabel' => utf8_encode('Données'),
+      'toolbarDownload' => utf8_encode('Fichier CSV'),
+      'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
+	  )
+	);
+	
+	return array('series' => $series, 'options' => $options);
+}

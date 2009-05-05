@@ -7,160 +7,97 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codeCCAM = '') {
+	if (!$debut) $debut = mbDate("-1 YEAR");
+	if (!$fin) $fin = mbDate();
+	
+	$salle = new CSalle;
+	$salle->load($salle_id);
+	
+	$discipline = new CDiscipline;
+	$discipline->load($discipline_id);
+	
+	$ticks = array();
+	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+	}
+	
+	$user = new CMediusers;
+	$where = array();
+	if($discipline_id)
+	  $where["discipline_id"] = " = '$discipline_id'";
+		
+	$users = $user->loadList($where);
+	
+	$total = 0;
+	$series = array();
+	foreach($users as $user) {
+		$serie = array(
+			'data' => array(),
+		  'label' => utf8_encode($user->_view)
+	  );
+			
+	  $query = "SELECT COUNT(operations.operation_id) AS total,
+	    DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+	    DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem,
+	    users_mediboard.user_id
+	    FROM plagesop
+	    INNER JOIN sallesbloc ON plagesop.salle_id = sallesbloc.salle_id
+	    INNER JOIN operations ON operations.plageop_id = plagesop.plageop_id
+	    INNER JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id
+	    WHERE 
+			  plagesop.date BETWEEN '$debut' AND '$fin' AND 
+			  operations.annulee = '0' AND 
+				users_mediboard.user_id = '$user->_id'";
+				
+	  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+	  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+		
+	  if($salle_id) {
+	    $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
+	  } elseif($bloc_id) {
+	    $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+	  }
+		
+	  $query .= "\nGROUP BY mois ORDER BY orderitem";
+	
+		$result = $user->_spec->ds->loadlist($query);
+		foreach($ticks as $i => $tick) {
+		  $f = true;
+		  foreach($result as $r) {
+		    if($tick[1] == $r["mois"]) {
+		      $serie['data'][] = array($i, $r["total"]);
+		      $f = false;
+		    }
+		  }
+		  if($f) $serie["data"][] = array(count($serie["data"]), 0);
+		}
+		
+		$series[] = $serie;
+	}
 
-CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
-CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
-
-$debut         = mbGetValueFromGet("debut"        , mbDate("-1 YEAR"));
-$fin           = mbGetValueFromGet("fin"          , mbDate()         );
-$salle_id      = mbGetValueFromGet("salle_id"     , 0                );
-$bloc_id       = mbGetValueFromGet("bloc_id"      , 0                );
-$discipline_id = mbGetValueFromGet("discipline_id", 0                );
-$codeCCAM      = mbGetValueFromGet("codeCCAM"     , ""               );
-
-$total = 0;
-
-$salleSel = new CSalle;
-$salleSel->load($salle_id);
-
-$disciplineSel = new CDiscipline;
-$disciplineSel->load($discipline_id);
-
-for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
+	$title = "Nombre d'interventions par praticien";
+	$subtitle = "$total opérations";
+	if($discipline_id) $subtitle .= " - $discipline->_view";
+	if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+	
+	$options = array(
+		'title' => utf8_encode($title),
+		'subtitle' => utf8_encode($subtitle),
+		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
+		'yaxis' => array('autoscaleMargin' => 1),
+		'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
+		'HtmlText' => false,
+		'legend' => array('show' => true, 'position' => 'nw'),
+		'grid' => array('verticalLines' => false),
+		'spreadsheet' => array(
+		  'show' => true,
+			'tabGraphLabel' => utf8_encode('Graphique'),
+      'tabDataLabel' => utf8_encode('Données'),
+      'toolbarDownload' => utf8_encode('Fichier CSV'),
+      'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
+	  )
+	);
+	
+	return array('series' => $series, 'options' => $options);
 }
-
-$users= new CMediusers;
-$where = array();
-if($discipline_id)
-  $where["discipline_id"] = " = '$discipline_id'";
-$users = $users->loadList($where);
-
-$opbyprat = array();
-foreach($users as $user) {
-  $id = $user->user_id;
-  $opbyprat[$id]["nom"] = $user->_view;
-  $sql = "SELECT COUNT(operations.operation_id) AS total," .
-    "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
-    "\nDATE_FORMAT(plagesop.date, '%Y%m') AS orderitem," .
-    "\nusers_mediboard.user_id" .
-    "\nFROM plagesop" .
-    "\nINNER JOIN sallesbloc" .
-    "\nON plagesop.salle_id = sallesbloc.salle_id" .
-    "\nINNER JOIN operations" .
-    "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nAND operations.annulee = '0'" .
-    "\nINNER JOIN users_mediboard" .
-    "\nON plagesop.chir_id = users_mediboard.user_id" .
-    "\nAND users_mediboard.user_id = '$id'" .
-    "\nWHERE plagesop.date BETWEEN '$debut' AND '$fin'";
-  if($discipline_id)
-    $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)
-    $sql .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  if($salle_id) {
-    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
-  } elseif($bloc_id) {
-    $sql .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-  }
-  $sql .= "\nGROUP BY mois" .
-    "\nORDER BY orderitem";
-  $ds = CSQLDataSource::get("std");
-  $result = $ds->loadlist($sql);
-  foreach($datax as $x) {
-    $f = true;
-    foreach($result as $totaux) {
-      if($x == $totaux["mois"]) {
-        $opbyprat[$id]["op"][] = $totaux["total"];
-        $total += $totaux["total"];
-        $f = false;
-      }
-    }
-    if($f) {
-      $opbyprat[$id]["op"][] = 0;
-    }
-  }
-}
-
-// Setup the graph.
-$graph = new Graph(480,300,"auto");    
-$graph->img->SetMargin(50,150,50,70);
-$graph->SetScale("textlin");
-$graph->SetMarginColor("lightblue");
-
-// Set up the title for the graph
-$title = "Nombre d'interventions par praticien";
-$subtitle = "- $total opérations -";
-if($discipline_id) {
-  $subtitle .= " $disciplineSel->_view -";
-}
-if($codeCCAM) {
-  $subtitle .= " CCAM : $codeCCAM -";
-}
-$graph->title->Set($title);
-$graph->title->SetFont(FF_ARIAL,FS_NORMAL,10);
-$graph->title->SetColor("darkred");
-$graph->subtitle->Set($subtitle);
-$graph->subtitle->SetFont(FF_ARIAL,FS_NORMAL,7);
-$graph->subtitle->SetColor("black");
-//$graph->img->SetAntiAliasing();
-$graph->SetScale("textint");
-
-// Setup font for axis
-$graph->xaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-$graph->yaxis->SetFont(FF_ARIAL,FS_NORMAL,8);
-
-// Show 0 label on Y-axis (default is not to show)
-$graph->yscale->ticks->SupressZeroLabel(false);
-
-// Setup X-axis labels
-$graph->xaxis->SetTickLabels($datax);
-$graph->xaxis->SetPosAbsDelta(15);
-$graph->yaxis->SetPosAbsDelta(-15);
-$graph->xaxis->SetLabelAngle(50);
-
-// Legend
-$graph->legend->SetMarkAbsSize(5);
-$graph->legend->SetFont(FF_ARIAL,FS_NORMAL, 7);
-$graph->legend->Pos(0.02,0.5, "right", "center");
-
-// Create the bar pot
-$colors = array("#aa5500",
-                "#55aa00",
-                "#0055aa",
-                "#aa0055",
-                "#5500aa",
-                "#00aa55",
-                "#ff0000",
-                "#00ff00",
-                "#0000ff",
-                "#ffff00",
-                "#ff00ff",
-                "#00ffff",);
-$listPlots = array();
-//mbTrace($opbyprat, "", true);
-foreach($opbyprat as $key => $value) {
-  $bplot = new BarPlot($value["op"]);
-  $from = $colors[($key % 12)];
-  $to = "#EEEEEE";
-  $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
-  $bplot->SetColor("white");
-  $bplot->setLegend(wordwrap($users[$key]->_view, 18));
-  $bplot->value->SetFormat("%01.0f");
-  $bplot->value->SetColor($colors[($key % 12)]);
-  $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 
-  //$bplot->value->show();
-  $listPlots[] = $bplot;
-}
-
-$gbplot = new AccBarPlot($listPlots);
-$gbplot->SetWidth(0.6);
-$gbplot->value->SetFormat("%01.0f"); 
-$gbplot->value->show();
-
-// Set color for the frame of each bar
-$graph->Add($gbplot);
-
-// Finally send the graph to the browser
-$graph->Stroke();

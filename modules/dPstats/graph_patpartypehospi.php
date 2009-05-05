@@ -7,109 +7,98 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-CAppUI::requireSystemClass("mbGraph");
-
-$debut         = mbGetValueFromGet("debut"        , mbDate("-1 YEAR"));
-$fin           = mbGetValueFromGet("fin"          , mbDate()         );
-$prat_id       = mbGetValueFromGet("prat_id"      , 0                );
-$service_id    = mbGetValueFromGet("service_id"   , 0                );
-$type_adm      = mbGetValueFromGet("type_adm"     , 0                );
-$discipline_id = mbGetValueFromGet("discipline_id", 0                );
-
-$total = 0;
-
-$pratSel = new CMediusers;
-$pratSel->load($prat_id);
-
-$disciplineSel = new CDiscipline;
-$disciplineSel->load($discipline_id);
-
-for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
-}
-
-$sejour = new CSejour;
-$listHospis = array();
-
-foreach($sejour->_specs["type"]->_locales as $keyType=>$vType){
-  $testAmbuOrComp = (($keyType=="comp" || $keyType=="ambu") && $type_adm == "1");
-  $testCourant    = ($type_adm == $keyType);
-  $testTous       = ($type_adm == null);
-  if( $testTous || $testCourant || $testAmbuOrComp){
-    $listHospis[$keyType] = wordwrap($vType, 10);
-  }
-}
-
-$patbyhospi = array();
-$i = 0;
-foreach($listHospis as $type=>$vType) {
-  $patbyhospi[$i]["legend"] = $vType;
-  $sql = "SELECT COUNT(sejour.sejour_id) AS total," .
-    "\nsejour.type," .
-    "\nDATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois," .
-    "\nDATE_FORMAT(sejour.entree_prevue, '%Y%m') AS orderitem" .
-    "\nFROM sejour" .
-    "\nINNER JOIN users_mediboard" .
-    "\nON sejour.praticien_id = users_mediboard.user_id" .
-    "\nWHERE sejour.entree_prevue BETWEEN '$debut 00:00:00' AND '$fin 23:59:59'" .
-    "\nAND sejour.group_id = '".CGroups::loadCurrent()->_id."'" .
-    "\nAND sejour.type = '$type'" .
-    "\nAND sejour.annule = '0'";
-  if($prat_id)
-    $sql .= "\nAND sejour.praticien_id = '$prat_id'";
-  if($discipline_id)
-    $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  $sql .= "\nGROUP BY mois" .
-    "\nORDER BY orderitem";
-  $ds = CSQLDataSource::get("std");
-  $result = $ds->loadlist($sql);
-  foreach($datax as $x) {
-    $f = true;
-    foreach($result as $totaux) {
-      if($x == $totaux["mois"]) {
-        $patbyhospi[$i]["data"][] = $totaux["total"];
-        $total += $totaux["total"];
-        $f = false;
-      }
-    }
-    if($f) {
-      $patbyhospi[$i]["data"][] = 0;
-    }
-  }
-  $i++;
-}
-
-// Set up the title for the graph
-$title = "Nombre d'admissions par type d'hospitalisation";
-$subtitle = "- $total patients -";
-if($prat_id) {
-  $subtitle .= " Dr $pratSel->_view -";
-}
-if($discipline_id) {
-  $subtitle .= " $disciplineSel->_view -";
-}
-
-$options = array( "width" => 480,
-									"height" => 300,
-									"title" => $title,
-									"subtitle" => $subtitle,
-									"sizeFontTitle" => 10,
-									"margin" => array(50,100,50,70),
-									"posLegend" => array(0.02, 0.06, "right", "top"), 
-									"sizeFontAxis" => 8,
-									"labelAngle" => 50,
-									"textTickInterval" => 2,
-									"posXAbsDelta" => 15,
-									"posYAbsDelta" => -15,
-									"dataAccBar" => $patbyhospi,
-									"datax" => $datax,
-									"graphAccLegend" => $patbyhospi,);
+function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0) {
+	if (!$debut) $debut = mbDate("-1 YEAR");
+	if (!$fin) $fin = mbDate();
+	
+	$prat = new CMediusers;
+	$prat->load($prat_id);
+  
+	$discipline = new CDiscipline;
+	$discipline->load($discipline_id);
+	
+	$ticks = array();
+	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+	}
+	
+	$where = array();
+	if($service_id) {
+	  $where["service_id"] = "= '$service_id'";
+	}
+	$service = new CService;
+	$services = $service->loadGroupList($where);
+	
+	$sejour = new CSejour;
+	$listHospis = array();
+	foreach($sejour->_specs["type"]->_locales as $key => $type){
+	  if((($key == "comp" || $key == "ambu") && $type_adm == 1) || 
+		   ($type_adm == $key) || 
+			 ($type_adm == null)){
+	    $listHospis[$key] = utf8_encode($type);
+	  }
+	}
+	
+	$total = 0;
+	$series = array();
+	foreach($listHospis as $key => $type) {
+	  $serie = array(
+		  'label' => $type,
+			'data' => array()
+		);
+		
+	  $query = "SELECT COUNT(sejour.sejour_id) AS total, sejour.type,
+	    DATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois,
+	    DATE_FORMAT(sejour.entree_prevue, '%Y%m') AS orderitem
+	    FROM sejour
+	    INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+	    WHERE 
+			  sejour.entree_prevue BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND 
+				sejour.group_id = '".CGroups::loadCurrent()->_id."' AND 
+				sejour.type = '$key' AND 
+				sejour.annule = '0'";
 				
-$graph = new CMbGraph();
-$graph->selectType("Graph",$options);
-$graph->selectPalette($options);
-$graph->setupAxis($options);
-$graph->addAccBarPlot($options);
-$graph->render("out",$options);
+	  if($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
+	  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+		
+	  $query .= "\nGROUP BY mois ORDER BY orderitem";
+	
+	  $result = $sejour->_spec->ds->loadlist($query);
+	  foreach($ticks as $i => $tick) {
+	    $f = true;
+	    foreach($result as $totaux) {
+	      if($tick[1] == $totaux["mois"]) {
+	        $serie["data"][] = array($i, $totaux["total"]);
+	        $total += $totaux["total"];
+	        $f = false;
+	      }
+	    }
+	    if($f) $serie["data"][] = array(count($serie["data"]), 0);
+	  }
+		$series[] = $serie;
+	}
+	
+	$subtitle = "$total patients";
+	if($prat_id)       $subtitle .= " - Dr $prat->_view";
+	if($discipline_id) $subtitle .= " - $discipline->_view";
+	
+	$options = array(
+		'title' => utf8_encode("Nombre d'admissions par type d'hospitalisation"),
+		'subtitle' => utf8_encode($subtitle),
+		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
+		'yaxis' => array('autoscaleMargin' => 1),
+		'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
+		'HtmlText' => false,
+		'legend' => array('show' => true, 'position' => 'nw'),
+		'grid' => array('verticalLines' => false),
+		'spreadsheet' => array(
+		  'show' => true,
+			'tabGraphLabel' => utf8_encode('Graphique'),
+      'tabDataLabel' => utf8_encode('Données'),
+      'toolbarDownload' => utf8_encode('Fichier CSV'),
+      'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
+	  )
+	);
+	
+	return array('series' => $series, 'options' => $options);
+}

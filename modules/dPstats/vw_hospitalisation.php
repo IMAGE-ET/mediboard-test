@@ -11,6 +11,9 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
+CAppUI::requireModuleFile('dPstats', 'graph_patparservice');
+CAppUI::requireModuleFile('dPstats', 'graph_patpartypehospi');
+
 $filter = new CSejour();
 
 $filter->_date_min_stat = mbGetValueFromGetOrSession("_date_min_stat", mbDate("-1 YEAR"));
@@ -37,6 +40,11 @@ $listServices = $listServices->loadGroupList();
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
+$graphs = array(
+  graphPatParService($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite),
+	graphPatParTypeHospi($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite)
+);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -44,6 +52,7 @@ $smarty->assign("filter"       	 , $filter);
 $smarty->assign("listPrats"      , $listPrats);
 $smarty->assign("listServices"   , $listServices);
 $smarty->assign("listDisciplines", $listDisciplines);
+$smarty->assign("graphs", $graphs);
 
 $smarty->display("vw_hospitalisation.tpl");
 

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
 $can->needsEdit();
 
@@ -34,15 +34,11 @@ $codes_ccam    = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("co
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
 // map Graph Interventions
-CAppUI::requireModuleFile($m, "inc_graph_activite");
+CAppUI::requireModuleFile("dPstats", "inc_graph_activite");
+CAppUI::requireModuleFile("dPstats", "graph_praticienbloc");
+CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
+CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
 
-global $graph, $options;
-$map_graph_interventions = "";
-if($graph) {
-  $graph->render("in",$options);
-  $map_graph_interventions = $graph->getHTMLImageMap();
-  $map_graph_interventions = preg_replace("/javascript:/", "#nothing\" onclick=\"", $map_graph_interventions);
-}
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
@@ -68,24 +64,33 @@ $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
 // Statistiques de horaires
-$salle = new CSalle();
-$ds = $salle->_spec->ds;
+// $salle = new CSalle();
+// $ds = $salle->_spec->ds;
 // Ce script ne fontionne pas pour une raison inconnue.
 // Fonctionne en direct dans PMA
 // $horaires = $ds->loadList(file_get_contents("modules/dPstats/sql/horaires_salles.sql"));
 
+$graphs = array(
+  graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam),
+);
+
+if ($filter->_prat_id)
+	$graphs[] = graphPraticienBloc($debutact, $finact, $prat_id, $salle_id, $bloc_id);
+else if($filter->_specialite)
+  $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
+else
+  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user_id"                 , $AppUI->user_id );
 $smarty->assign("filter"       			  		, $filter         );
-$smarty->assign("map_graph_interventions" , $map_graph_interventions);
 $smarty->assign("listPrats"      		  		, $listPrats      );
 $smarty->assign("listBlocs"               , $listBlocs      );
 $smarty->assign("listBlocsForSalles"      , $listBlocsForSalles);
 $smarty->assign("bloc"                    , $bloc           );
 $smarty->assign("listDisciplines"		  		, $listDisciplines);
+$smarty->assign("graphs"		  	        	, $graphs);
 
 $smarty->display("vw_bloc.tpl");
 
