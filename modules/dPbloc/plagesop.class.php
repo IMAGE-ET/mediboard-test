@@ -388,8 +388,7 @@ class CPlageOp extends CMbObject {
   }
 }
 
-global $dPconfig;
-$pcConfig =& $dPconfig["dPbloc"]["CPlageOp"];
+$pcConfig = CAppUI::conf("dPbloc CPlageOp");
 
 CPlageOp::$hours_start = str_pad(mbGetValue($pcConfig["hours_start"], "08"),2,"0",STR_PAD_LEFT);
 CPlageOp::$hours_stop  = str_pad(mbGetValue($pcConfig["hours_stop"], "20"),2,"0",STR_PAD_LEFT);
