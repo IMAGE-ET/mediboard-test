@@ -85,6 +85,7 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
 		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
 		'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
 		'lines' => array('show' => true, 'filled' => true, 'fillColor' => '#999'),
+    'markers' => array('show' => true),
 		'points' => array('show' => true),
 		'HtmlText' => false,
 		'legend' => array('show' => true, 'position' => 'nw'),

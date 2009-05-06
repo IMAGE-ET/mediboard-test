@@ -125,6 +125,7 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 		'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
 		'lines' => array('show' => true),
 		'points' => array('show' => true),
+		'markers' => array('show' => true),
 		'HtmlText' => false,
 		'mouse' => array('track' => true, 'relative' => true, 'position' => 'ne'),
 		'legend' => array('show' => true, 'position' => 'nw'),
