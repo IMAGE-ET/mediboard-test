@@ -1,143 +1,118 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-global $AppUI, $can, $m;
+function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '') {
+  if (!$date) $date = mbTransformTime("+0 DAY", mbDate(), "%m/%Y");
 
-CAppUI::requireSystemClass("mbGraph");
-
-$size          = mbGetValueFromGet("size" , 1);
-$date          = mbGetValueFromGetOrSession("date", mbTransformTime("+0 DAY", mbDate(), "%m/%Y"));
-$prat_id       = mbGetValueFromGetOrSession("prat_id", 0);
-$salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
-$bloc_id       = mbGetValueFromGetOrSession("bloc_id");
-$discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
-$codes_ccam    = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
-
-$total = 0;
-
-$pratSel = new CMediusers;
-$pratSel->load($prat_id);
-
-$salleSel = new CSalle;
-$salleSel->load($salle_id);
-
-$disciplineSel = new CDiscipline;
-$disciplineSel->load($discipline_id);
-
-// Gestion de la date
-$date = substr($date,3,7) ."-" .substr($date,0,2). "-01";
-$startx   = "$date 00:00:00";
-$endx = mbDateTime("+1 MONTH", "$date 00:00:00");
-$endx = mbDateTime("-1 DAY", "$endx");
-$step = "+1 DAY";
-$date_format = "%d";
-
-// Tableaux des jours
-for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
-  $datax[] = mbTransformTime(null, $i, $date_format);
-  $datax2[] = mbTransformTime(null, $i, "%a %d");
-}
-
-// Chargement des salles
-
-$ds = CSQLDataSource::get("std");
-
-$salles = new CSalle();
-
-$where = array();
-$where['stats'] = " = '1'";
-if($salle_id) {
-  $where['salle_id'] = " = '$salle_id'";
-} elseif($bloc_id) {
-  $where['bloc_id'] = "= '$bloc_id'";
-}
-
-$salles = $salles->loadList($where);
-
-$opbysalle = array();
-foreach($salles as $salle) {
-  $curr_salle_id = $salle->salle_id;
-  $opbysalle[$curr_salle_id]["legend"] = $salle->nom;
+  $prat = new CMediusers;
+  $prat->load($prat_id);
   
-  $sql = "SELECT COUNT(operations.operation_id) AS total," .
-    "\nDATE_FORMAT(plagesop.date, '$date_format') AS jour," .
-    "\nDATE_FORMAT(plagesop.date, '%d') AS orderitem," .
-    "\nsallesbloc.nom AS nom" .
-    "\nFROM operations" .
-    "\nINNER JOIN sallesbloc" .
-    "\nON operations.salle_id = sallesbloc.salle_id" .
-    "\nINNER JOIN plagesop" .
-    "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nINNER JOIN users_mediboard" .
-    "\nON operations.chir_id = users_mediboard.user_id" .
-    "\nWHERE plagesop.date BETWEEN '$startx' AND '$endx'" .
-    "\nAND operations.annulee = '0'";
-  if($prat_id)
-    $sql .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id)
-    $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codes_ccam)
-    $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
-  $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'" .
-    "\nGROUP BY jour" .
-    "\nORDER BY orderitem";
-  $result = $ds->loadlist($sql);
-  foreach($datax as $x) {
-    $f = true;
-    foreach($result as $totaux) {
-      if($x == $totaux["jour"]) {        
-        $opbysalle[$curr_salle_id]["data"][] = $totaux["total"];
-        $total += $totaux["total"];
-        $f = false;
-      }
-    }
-    if($f) {
-      $opbysalle[$curr_salle_id]["data"][] = 0;
-    }
+  $salle = new CSalle;
+  $salle->load($salle_id);
+  
+  $discipline = new CDiscipline;
+  $discipline->load($discipline_id);
+  
+  // Gestion de la date
+  $debut = substr($date,3,7)."-".substr($date,0,2)."-01";
+  $fin = mbDate("+1 MONTH", $debut);
+  $fin = mbDate("-1 DAY", $fin);
+  $step = "+1 DAY";
+  
+  // Tableaux des jours
+  $ticks = array();
+  $ticks2 = array();
+  for($i = $debut; $i <= $fin; $i = mbDate($step, $i)) {
+    $ticks[] = array(count($ticks), mbTransformTime(null, $i, "%a %d"));
+    $ticks2[] = array(count($ticks), mbTransformTime(null, $i, "%d"));
   }
-}
+  
+  // Chargement des salles
+  $where = array();
+  $where['stats'] = " = '1'";
+  if($salle_id) {
+    $where['salle_id'] = " = '$salle_id'";
+  } elseif($bloc_id) {
+    $where['bloc_id'] = "= '$bloc_id'";
+  }
+  $salles = $salle->loadList($where);
+  
+  $series = array();
+  $total = 0;
+  foreach($salles as $salle) {
+    $serie = array(
+      'data' => array(),
+      'label' => utf8_encode($salle->nom)
+    );
+    
+    $query = "SELECT COUNT(operations.operation_id) AS total,
+      DATE_FORMAT(plagesop.date, '%d') AS jour,
+      sallesbloc.nom AS nom
+      FROM operations
+      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+      INNER JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+      WHERE 
+        plagesop.date BETWEEN '$debut' AND '$fin' AND 
+        operations.annulee = '0' AND 
+        sallesbloc.salle_id = '$salle->_id'";
+        
+    if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+    
+    $query .= "\nGROUP BY jour ORDER BY jour";
+    
+    $result = $salle->_spec->ds->loadlist($query);
+    
+    foreach($ticks2 as $i => $tick) {
+      $f = true;
+      foreach($result as $r) {
+        if($tick[1] == $r["jour"]) {
+          $serie["data"][] = array($i, $r["total"]);
+          $total += $r["total"];
+          $f = false;
+        }
+      }
+      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+    }
+    
+    $series[] = $serie;
+  }
+  
+  // Set up the title for the graph
+  $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $debut, "%m/%Y");
+  $subtitle = "$total opérations";
+  if($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if($discipline_id) $subtitle .= " - $discipline->_view";
+  if($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
 
-// Set up the title for the graph
-$title = "Nombre d'interventions par salle - ".mbTransformTime(null, $startx, "%m/%Y");;
-$subtitle = "- $total opérations -";
-if($prat_id) {
-  $subtitle .= " Dr $pratSel->_view -";
+  $options = array(
+    'title' => utf8_encode($title),
+    'subtitle' => utf8_encode($subtitle),
+    'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
+    'yaxis' => array('autoscaleMargin' => 1),
+    'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
+    'HtmlText' => false,
+    'legend' => array('show' => true, 'position' => 'nw'),
+    'grid' => array('verticalLines' => false),
+    'spreadsheet' => array(
+      'show' => true,
+      'tabGraphLabel' => utf8_encode('Graphique'),
+      'tabDataLabel' => utf8_encode('Données'),
+      'toolbarDownload' => utf8_encode('Fichier CSV'),
+      'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
+    )
+  );
+  
+  return array('series' => $series, 'options' => $options);
 }
-if($discipline_id) {
-  $subtitle .= " $disciplineSel->_view -";
-}
-if($codes_ccam) {
-  $subtitle .= " CCAM : $codes_ccam -";
-}
-
-$options = array( "width" => 370,
-									"height" => 180,
-									"size" => $size,
-									"title" => $title,
-									"subtitle" => $subtitle,
-									"sizeFontTitle" => 10,
-									"margin" => array(20+$size*10,75+$size*10,30+$size*10,50+$size*10),
-									"posLegend" => array(0.02, 0.02, "right", "top"), 
-									"sizeFontAxis" => 7,
-									"labelAngle" => 50,
-									"textTickInterval" => 2,
-									"posXAbsDelta" => 15,
-									"posYAbsDelta" => -15,
-									"dataAccBar" => $opbysalle,
-									"datax" => $datax2,
-									"graphAccLegend" => $opbysalle,);
-				
-$graph = new CMbGraph();
-$graph->selectType("Graph",$options);
-$graph->selectPalette($options);
-$graph->setupAxis($options);
-$graph->addAccBarPlot($options);
-$graph->render("out",$options);
 
 ?>

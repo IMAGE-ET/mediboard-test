@@ -1,10 +1,18 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
 function zoomGraphIntervention(date){
-  url = new Url();
-  url.setModuleAction("dPstats", "graph_activite_zoom");
-  url.addParam("suppressHeaders", 1);
+  url = new Url("dPstats", "vw_graph_activite_zoom");
   url.addParam("date"         , date);
   url.addParam("salle_id"     , "{{$filter->salle_id}}");
   url.addParam("prat_id"      , "{{$filter->_prat_id}}");
@@ -19,6 +27,12 @@ Main.add(function(){
 	graphs.each(function(g, i){
 		Flotr.draw($('graph-'+i), g.series, g.options);
 	});
+  
+  graphs.first().options.xaxis.ticks.each(function(tick){
+    $("graph-activite-zoom-date").insert(new Element('option', {value: tick[1]}).update(tick[1]));
+  });
+  
+  $('graph-0').select('.flotr-tabs-group').first().insert($("graph-activite-zoom-date").show());
 });
 </script>
 
@@ -110,6 +124,8 @@ Main.add(function(){
   </tr>
 </table>
 </form>
+
+<select id="graph-activite-zoom-date" onchange="zoomGraphIntervention($V(this))" style="display: none;"></select>
 
 {{foreach from=$graphs item=graph key=key}}
 	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>

@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0) {
 	if (!$debut) $debut = mbDate("-1 YEAR");
@@ -30,6 +31,7 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 	$salles = $salle->loadlist($where);
 
 	$series = array();
+  $total = 0;
 	
   // First serie
 	$serie = array(
@@ -57,9 +59,10 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 	$result = $prat->_spec->ds->loadlist($query);
 	foreach($ticks as $i => $tick) {
 	  $f = true;
-	  foreach($result as $total) {
-	    if($tick[1] == $total["mois"]) {
-	      $serie['data'][] = array($i, $total["total"]/(60*60));
+	  foreach($result as $r) {
+	    if($tick[1] == $r["mois"]) {
+	      $serie['data'][] = array($i, $r["total"]/(60*60));
+        $total += $r["total"]/(60*60);
 	      $f = false;
 	    }
 	  }
@@ -97,9 +100,10 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 	$result = $prat->_spec->ds->loadlist($query);
 	foreach($ticks as $i => $tick) {
 	  $f = true;
-	  foreach($result as $total) {
-	    if($tick[1] == $total["mois"]) {
-	      $serie['data'][] = array($i, $total["total"]/(60*60));
+	  foreach($result as $r) {
+	    if($tick[1] == $r["mois"]) {
+	      $serie['data'][] = array($i, $r["total"]/(60*60));
+        $total += $r["total"]/(60*60);
 	      $f = false;
 	    }
 	  }
@@ -133,6 +137,7 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
       'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
 	  )
 	);
+  if ($total == 0) $options['yaxis']['max'] = 1;
 	
 	return array('series' => $series, 'options' => $options);
 }

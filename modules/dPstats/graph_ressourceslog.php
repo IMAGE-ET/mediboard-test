@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 function graphRessourceLog($module, $date, $element = 'duration', $interval = 'day', $numelem = 4) {
 	if (!$date) $date = mbDate();

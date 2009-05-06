@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $right) {
   if (!$date) $date = mbDate();

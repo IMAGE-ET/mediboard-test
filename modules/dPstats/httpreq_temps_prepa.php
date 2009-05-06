@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 if(function_exists("date_default_timezone_set")) {
   date_default_timezone_set("UTC");

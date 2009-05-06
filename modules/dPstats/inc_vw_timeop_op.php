@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 $codeCCAM   = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
 $prat_id    = mbGetValueFromGetOrSession("prat_id", 0);

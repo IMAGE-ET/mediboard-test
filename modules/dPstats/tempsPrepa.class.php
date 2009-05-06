@@ -1,15 +1,13 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPStats
- *	@version $Revision$
- *  @author Sébastien Fillonneau
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CTempsPrepa class
- */
 class CTempsPrepa extends CMbObject {
   // DB Table key
   var $temps_prepa_id = null;

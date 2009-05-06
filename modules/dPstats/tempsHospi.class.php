@@ -1,15 +1,13 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage dPStats
- *  @version $Revision$
- *  @author Romain OLLIVIER
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CTempsHospi class
- */
 class CTempsHospi extends CMbObject {
   // DB Table key
   var $temps_hospi_id = null;

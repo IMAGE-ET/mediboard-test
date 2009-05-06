@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $can, $m;
 
@@ -34,7 +35,7 @@ $codes_ccam    = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("co
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
 // map Graph Interventions
-CAppUI::requireModuleFile("dPstats", "inc_graph_activite");
+CAppUI::requireModuleFile("dPstats", "graph_activite");
 CAppUI::requireModuleFile("dPstats", "graph_praticienbloc");
 CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
 CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
