@@ -222,7 +222,7 @@ else {
 		  }
     } elseif (!$chapitre) {
       // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
-      $prescription->loadRefsPerfusions();
+      $prescription->loadRefsPerfusions("1", $line_type);
       $prescription->loadRefsLinesMedByCat("1","1",$line_type);
 	    
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
