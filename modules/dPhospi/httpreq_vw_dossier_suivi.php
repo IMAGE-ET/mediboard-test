@@ -36,15 +36,23 @@ $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
 
+$cibles = array();
+foreach($sejour->_ref_suivi_medical as $_trans_or_obs){
+  if($_trans_or_obs instanceof CTransmissionMedicale){
+    $trans = $_trans_or_obs;
+    $trans->calculCibles($cibles);
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("observation"         , $observation);
 $smarty->assign("transmission"        , $transmission);
 $smarty->assign("user"                , $user);
 $smarty->assign("isPraticien"         , $user->isPraticien());
 $smarty->assign("sejour"              , $sejour);
 $smarty->assign("prescription"        , $prescription);
+$smarty->assign("cibles", $cibles);
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>

@@ -45,6 +45,12 @@ class CBcbClasseATC extends CBcbObject {
   }
   
 
+  function searchClassesATC($libelle_ATC = ""){
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT * FROM `CLASSES_ATC` WHERE Libelle_Classe LIKE '%$libelle_ATC%' AND CHAR_LENGTH(Code_Classe) = 3";
+    return $ds->loadList($query);
+  }
+  
   // Fonction qui retourne les produits du livret en fonction d'un code ATC
   function loadRefProduitsLivret($codeATC = ""){
     global $g;

@@ -12,7 +12,6 @@
 {{assign var=line_class value=$line->_class_name}}
 {{assign var=transmissions_line value=$line->_transmissions}}
 {{assign var=administrations_line value=$line->_administrations}}
-
 {{assign var=transmissions value=$prescription->_transmissions}}
 
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
@@ -24,9 +23,25 @@
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise}}">
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
+      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
       <!-- Cas d'une ligne de medicament -->
-      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" style="width: 100px;">
-	      {{$line->_ref_produit->_ref_ATC_2_libelle}}
+      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
+          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
+	      <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
+            <a href="#">{{$libelle_ATC}}</a>
+          </div>
+          <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
+       		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
+  		      <ul>
+  			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
+  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+  			  {{/foreach}}
+  		      </ul>
+  			{{else}}
+  			  Aucune transmission
+  			{{/if}}
+		  </div>
+		  
 	      {{if $line->_ref_produit->_ref_fiches_ATC}}
 	        <img src="images/icons/search.png" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$_key_cat_ATC}}")' />
 	      {{/if}}
@@ -62,6 +77,10 @@
 	    </th>
     {{/if}}
   {{/if}}
+  
+  
+  
+  
   {{if $smarty.foreach.$last_foreach.first}}
     <td class="text" rowspan="{{$nb_line}}" style="text-align: center;">
     {{if !$line->conditionnel}}

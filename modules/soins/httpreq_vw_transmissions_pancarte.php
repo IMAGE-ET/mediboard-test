@@ -17,6 +17,9 @@ $load_transmissions = mbGetValueFromGet("transmissions");
 $load_observations = mbGetValueFromGet("observations");
 $refresh = mbGetValueFromGet("refresh");
 
+$order_col = mbGetValueFromGet("order_col", "date");
+$order_way = mbGetValueFromGet("order_way", "DESC");
+
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
@@ -70,13 +73,31 @@ foreach($prescriptions as $_prescription){
 	}
 }
 
+$cibles = array();
 $trans_and_obs = array();
 if($transmissions){
 	foreach($transmissions as $_transmissions_by_prescription){
 	  foreach($_transmissions_by_prescription as $_transmission){
 	    $_transmission->loadRefsFwd();
 	    $_transmission->_ref_sejour->loadRefPatient();
-	    $trans_and_obs[$_transmission->date][$_transmission->_id] = $_transmission;
+	    $_transmission->_ref_sejour->loadRefsAffectations();
+		  $_transmission->_ref_sejour->_ref_last_affectation->loadRefLit();
+		        
+		  $patient = $_transmission->_ref_sejour->_ref_patient;
+		  $lit = $_transmission->_ref_sejour->_ref_last_affectation->_ref_lit;
+		  
+		  if($order_col == "patient_id"){
+			  $key = $patient->nom.$patient->prenom.$patient->_id.$_transmission->date;
+		  }
+		  if($order_col == "date") {
+			  $key= $_transmission->date;
+			}
+	  	if($order_col == "lit_id"){
+	      $key = $lit->_view.$lit->_id.$_transmission->date;
+	    }
+			
+	    $_transmission->calculCibles($cibles);
+	    $trans_and_obs[$key][$_transmission->_id] = $_transmission;
 	    $_transmission->_ref_user->loadRefFunction();
 	    $users[$_transmission->user_id] = $_transmission->_ref_user; 
 	  }
@@ -87,25 +108,51 @@ if($observations){
 	  foreach($_observations_by_prescription as $_observation){
 	    $_observation->loadRefsFwd();
 	    $_observation->_ref_sejour->loadRefPatient();
-	    $trans_and_obs[$_observation->date][$_observation->_id] = $_observation;
+			$_observation->_ref_sejour->loadRefsAffectations();
+		  $_observation->_ref_sejour->_ref_last_affectation->loadRefLit();
+		  
+		  $patient = $_observation->_ref_sejour->_ref_patient;
+			$lit = $_observation->_ref_sejour->_ref_last_affectation->_ref_lit;
+			
+			if($order_col == "patient_id"){
+			  $key = $patient->nom.$patient->prenom.$patient->_id.$_observation->date;
+			}
+			if($order_col == "date") {
+			  $key= $_observation->date;
+			}
+	  	if($order_col == "lit_id"){
+			  $key = $lit->_view.$lit->_id.$_observation->date;
+			}
+	    $trans_and_obs[$key][$_observation->_id] = $_observation;
 	    $_observation->_ref_user->loadRefFunction();
 	    $users[$_observation->user_id] = $_observation->_ref_user; 
 	  }
 	}
 }
+
+// Tri du tableau
+if($order_way == "ASC"){
+  ksort($trans_and_obs);
+} else {
+  krsort($trans_and_obs);
+}
+
 $filter_obs = new CObservationMedicale();
 $filter_obs->degre = $degre;
 $filter_obs->user_id = $user_id;
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign("order_way", $order_way);
+$smarty->assign("order_col", $order_col);
+$smarty->assign("cibles", $cibles);
 $smarty->assign("service", $service);
 $smarty->assign("transmissions", $transmissions);
 $smarty->assign("observations", $observations);
 $smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("filter_obs", $filter_obs);
 $smarty->assign("users", $users);
-
+$smarty->assign("with_filter", "1");
 if($user_id || $degre || $refresh){
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 
 } else {

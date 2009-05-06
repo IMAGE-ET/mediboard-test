@@ -13,6 +13,13 @@ refreshtransmissions = function(){
   var oForm = document.filter_trans;
   viewTransmissions($V(document.selService.service_id), $V(oForm.user_id), $V(oForm._degre), $V(oForm.observations), $V(oForm.transmissions), true);
 }
+
+tri_transmissions = function(order_col, order_way){
+  var oForm = document.filter_trans;
+  viewTransmissions($V(document.selService.service_id), $V(oForm.user_id), $V(oForm._degre), 
+  									$V(oForm.observations), $V(oForm.transmissions), true, order_col, order_way);
+}
+
 </script>
 
 <table class="form">

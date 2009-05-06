@@ -106,7 +106,7 @@ function submitSuivi(oForm, prescription_id) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
     loadSuivi(sejour_id); 
-    if(oForm.object_class.value != ""){
+    if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
       // Refresh de la partie administration
       loadTraitement(sejour_id,'{{$date}}','','administration');
     }  

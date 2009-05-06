@@ -18,6 +18,15 @@ viewTransmissions = function(sejour_id, praticien_id){
   url.requestUpdate("view_transmissions", { waitingText: null } );
 }
 
+tri_transmissions = function(order_col, order_way){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
+  url.addParam("praticien_id", document.selPraticien.praticien_id.value);
+  url.addParam("order_col", order_col);
+  url.addParam("order_way", order_way);
+  url.requestUpdate("view_transmissions", { waitingText: null } );
+}
+
 function markAsSelected(element) {
   $('list_patients').select('.selected').each(function (e) {e.removeClassName('selected')});
   $(element).up(1).addClassName('selected');

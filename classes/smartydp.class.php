@@ -269,7 +269,8 @@ function smarty_function_mb_colonne($params, &$smarty) {
   $field     = CMbArray::extract($params, "field"     , null, true);
   $order_col = CMbArray::extract($params, "order_col" , null, true);
   $order_way = CMbArray::extract($params, "order_way" , null, true);
-  $url       = CMbArray::extract($params, "url"       , null, true);
+  $url       = CMbArray::extract($params, "url"       , null, false);
+  $function  = CMbArray::extract($params, "function"  , null, false);
   
   $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr($class."-".$field."-desc")."\">";
   $sHtml .= CAppUI::tr($class."-".$field);
@@ -277,12 +278,23 @@ function smarty_function_mb_colonne($params, &$smarty) {
     
   $css_class = ($order_col == $field) ? "sorted" : "sortable";
   $order_way_inv = ($order_way == "ASC") ? "DESC" : "ASC";
-   
-  if($css_class == "sorted"){
-  	return "<a class='$css_class $order_way' href='$url&amp;order_col=$order_col&amp;order_way=$order_way_inv'>$sHtml</a>";
+  
+  if($url){
+	  if($css_class == "sorted"){
+	  	return "<a class='$css_class $order_way' href='$url&amp;order_col=$order_col&amp;order_way=$order_way_inv'>$sHtml</a>";
+	  }
+	  if($css_class == "sortable"){
+	  	return "<a class='$css_class' href='$url&amp;order_col=$field&amp;order_way=ASC'>$sHtml</a>";
+	  }
   }
-  if($css_class == "sortable"){
-  	return "<a class='$css_class' href='$url&amp;order_col=$field&amp;order_way=ASC'>$sHtml</a>";
+  
+  if($function){
+    if($css_class == "sorted"){
+	  	return "<a class='$css_class $order_way' onclick=$function('$order_col','$order_way_inv');>$sHtml</a>";
+	  }
+	  if($css_class == "sortable"){
+	  	return "<a class='$css_class' onclick=$function('$field','ASC');>$sHtml</a>";
+	  }    
   }
 }
 

@@ -81,6 +81,7 @@ popupTransmission = function(sejour_id){
   url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
   url.addParam("sejour_id", sejour_id);
   url.addParam("addTrans", true);
+  url.addParam("with_filter", '0');
   url.popup(700, 500, "Transmissions et Observations");
 }
 

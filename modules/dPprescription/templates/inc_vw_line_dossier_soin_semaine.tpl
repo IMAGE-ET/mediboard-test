@@ -15,9 +15,26 @@
 <tr>
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
+      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
       <!-- Cas d'une ligne de medicament -->
-      <th class="text" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}">
-        {{$line->_ref_produit->_ref_ATC_2_libelle}}
+      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" 
+          rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}"
+          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
+
+	      <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
+            <a href="#">{{$libelle_ATC}}</a>
+          </div>
+          <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
+       		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
+  		      <ul>
+  			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
+  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+  			  {{/foreach}}
+  		      </ul>
+  			{{else}}
+  			  Aucune transmission
+  			{{/if}}
+		  </div>
       </th>
     {{else}}
         <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->

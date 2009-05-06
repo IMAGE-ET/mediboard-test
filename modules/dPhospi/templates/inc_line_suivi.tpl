@@ -1,8 +1,9 @@
-<tr>
 {{if $_suivi->_class_name == "CObservationMedicale"}}
+<tr>
   {{if @$show_patient}}
   <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
-{{/if}}
+  <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
+  {{/if}}
   <td><strong>{{tr}}{{$_suivi->_class_name}}{{/tr}}</strong></td>
   <td>
     <strong>
@@ -42,9 +43,10 @@
 {{/if}}
 
 {{if $_suivi->_class_name == "CTransmissionMedicale"}}
-<tr>
+<tr class="{{$_suivi->_cible}}">
   {{if @$show_patient}}
     <td>{{$_suivi->_ref_sejour->_ref_patient}}</td>
+    <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
   <td style="width: 1%;">{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
   <td style="width: 1%;">{{$_suivi->_ref_user}}</td>
@@ -53,9 +55,39 @@
   </td>
   <td style="width: 1%;">{{$_suivi->date|date_format:$dPconfig.time}}</td>
   <td class="text">
-  {{if $_suivi->object_id}}
-    {{$_suivi->_ref_object}}
-  {{/if}}
+	  {{if $_suivi->object_id && $_suivi->object_class}}
+	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->_ref_object}}'); $V(document.forms.editTrans.object_id, '{{$_suivi->object_id}}'); 
+	    											$V(document.forms.editTrans.object_class, '{{$_suivi->object_class}}'); }">
+	    	{{$_suivi->_ref_object->_view}}
+
+	    	{{if $_suivi->object_class == "CPrescriptionLineMedicament"}}
+	    	<br />
+	    	[{{$_suivi->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
+	    	{{/if}}
+	    	
+	    	{{if $_suivi->object_class == "CPrescriptionLineElement"}}
+	    	<br />
+	    	[{{$_suivi->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
+	    	{{/if}}
+	    	
+	    	{{if $_suivi->object_class == "CAdministration"}}
+	    	  {{if $_suivi->_ref_object->object_class == "CPrescriptionLineMedicament"}}
+	    	    <br />
+	    	    [{{$_suivi->_ref_object->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
+	    	  {{/if}}
+	    	  
+	    	  {{if $_suivi->_ref_object->object_class == "CPrescriptionLineElement"}}
+	    	    <br />
+	    	    [{{$_suivi->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
+	    	  {{/if}}
+	    	  
+	    	{{/if}}
+	    	
+	    </a>
+	  {{/if}}
+	  {{if $_suivi->libelle_ATC}}
+	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->libelle_ATC}}'); $V(document.forms.editTrans.libelle_ATC, '{{$_suivi->libelle_ATC}}'); }">{{$_suivi->libelle_ATC}}</a>
+	  {{/if}}
   </td>
   <td class="text" {{if $_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
     <strong>

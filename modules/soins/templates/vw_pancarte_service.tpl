@@ -22,7 +22,7 @@ function viewLegendPancarte(){
   url.popup(300, 400, "Légende de la pancarte");
 }
        
-function viewTransmissions(service_id, user_id, degre, observations, transmissions, refresh){
+function viewTransmissions(service_id, user_id, degre, observations, transmissions, refresh, order_col, order_way){
   var url = new Url;
   url.setModuleAction("soins", "httpreq_vw_transmissions_pancarte");
   url.addParam("service_id", service_id);
@@ -33,6 +33,10 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
   url.addParam("observations", observations?1:0);
   url.addParam("transmissions", transmissions?1:0);
   url.addParam("refresh", refresh);
+  if(order_col && order_way){
+	  url.addParam("order_col", order_col);
+	  url.addParam("order_way", order_way);
+  }
   if(user_id || degre || refresh){
     url.requestUpdate("_transmissions", { waitingText: null } );
   } else {

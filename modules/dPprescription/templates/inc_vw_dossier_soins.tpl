@@ -146,14 +146,19 @@ printDossierSoin = function(prescription_id){
   url.popup(900, 600, "Plan de soin");
 }
 
-addCibleTransmission = function(object_class, object_id, view) {
+addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
   oDiv = $('cibleTrans');
   if(!oDiv) {
     return;
   }
   oForm = document.forms['editTrans'];
-  $V(oForm.object_class, object_class);
-  $V(oForm.object_id, object_id);
+  if(object_id && object_class){
+	  $V(oForm.object_class, object_class);
+	  $V(oForm.object_id, object_id);
+  }
+  if(libelle_ATC){
+    $V(oForm.libelle_ATC, libelle_ATC);
+  }
   oDiv.innerHTML = view;
   oForm.text.focus();
 }

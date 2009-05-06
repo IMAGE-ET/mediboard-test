@@ -235,7 +235,12 @@ class CSetupdPhospi extends CSetup {
 						ADD `type` ENUM ('data','action','result');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $sql = "ALTER TABLE `transmission_medicale` 
+						ADD `libelle_ATC` TEXT;";
+    $this->addQuery($sql);
+ 
+    $this->mod_version = "0.33";
   }
 }
 ?>

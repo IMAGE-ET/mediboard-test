@@ -702,7 +702,7 @@ class CSejour extends CCodable {
   function loadSuiviMedical() {
     $this->loadBackRefs("observations");
     $this->loadBackRefs("transmissions");
-
+    
     $this->_ref_suivi_medical = array();
 
     if(array_key_exists("observations", $this->_back)){
@@ -714,9 +714,15 @@ class CSejour extends CCodable {
     }
     if(array_key_exists("transmissions", $this->_back)){
     	foreach($this->_back["transmissions"] as $curr_trans) {
-	      $curr_trans->loadRefsFwd();
-	      if($curr_trans->object_class == "CAdministration"){
+	      $curr_trans->loadRefsFwd();    
+	      if($curr_trans->_ref_object instanceof CAdministration){
 	        $curr_trans->_ref_object->loadRefsFwd();
+	        if($curr_trans->_ref_object->_ref_object instanceof CPrescriptionLineMedicament){
+	          $curr_trans->_ref_object->_ref_object->_ref_produit->loadClasseATC();
+	        }
+	      }
+	      if($curr_trans->_ref_object instanceof CPrescriptionLineMedicament){
+	        $curr_trans->_ref_object->_ref_produit->loadClasseATC();
 	      }
 	      $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
 	    }

@@ -188,7 +188,9 @@ if($object_id && $object_class){
 	  
 	  foreach($transmissions as $_transmission){
 	    $_transmission->loadRefsFwd();
-		  $prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+	    if($_transmission->object_id && $_transmission->object_class){
+		    $prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+	    }
 	  }
   }
 } 
@@ -310,13 +312,18 @@ else {
 	$where[] = "(object_class = 'CCategoryPrescription') OR 
 	            (object_class = 'CPrescriptionLineElement') OR 
 	            (object_class = 'CPrescriptionLineMedicament') OR 
-							(object_class = 'CPerfusion')";
+							(object_class = 'CPerfusion') OR libelle_ATC IS NOT NULL";
 	$where["sejour_id"] = " = '$sejour->_id'";
 	$transmissions_by_class = $transmission->loadList($where);
 	
 	foreach($transmissions_by_class as $_transmission){
 	  $_transmission->loadRefsFwd();
-		$prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+		if($_transmission->object_class && $_transmission->object_id){
+	    $prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+		}
+		if($_transmission->libelle_ATC){
+	    $prescription->_transmissions["ATC"][$_transmission->libelle_ATC][$_transmission->_id] = $_transmission;
+	  }
 	}
 }
 
