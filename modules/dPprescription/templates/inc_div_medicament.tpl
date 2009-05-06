@@ -248,10 +248,10 @@ Main.add( function(){
   <tr>
     <th style="width: 5%;">Alertes</th> 
     <th style="width: 25%">Produit</th>
-    <th style="width: 20%">Praticien</th>
+    <th style="width: 37%;">Posologie</th>
+    <th style="width: 8%">Praticien</th>
     <th style="width: 15%">Début</th>
     <th style="width: 10%">Durée</th>
-    <th style="width: 25%;">Posologie</th>
   </tr>
 </table>
 {{/if}}
@@ -289,13 +289,13 @@ Main.add( function(){
 	    <th colspan="7">Perfusions</th>
 	  </tr>
 	  <tr>
-	    <th style="width: 13%;">Type</th>
-	    <th style="width: 7%">Prat</th>
-	    <th style="width: 7%;">Vitesse</th>
+	    <th style="width: 8%;">Type</th>
+	    <th style="width: 44%;">Médicaments</th> 
+	    <th style="width: 8%">Prat</th>
+	    <th style="width: 5%;">Vitesse</th>
 	    <th style="width: 15%;">Voie</th>
 	    <th style="width: 10%;">Début</th>
-	    <th style="width: 8%;">Durée</th>
-	    <th style="width: 50%;">Médicaments</th> 
+	    <th style="width: 10%;">Durée</th>
 	  </tr>
 	</table>
 	{{/if}}

@@ -23,11 +23,13 @@
     {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
     {{$line->_ref_element_prescription->_view}}
   </td>
-  <!--
-  <td style="width:10%;" class="text">
-    {{$category->_view}}
+  <td class="text" style="width:25%;">
+    {{if $line->_ref_prises|@count}}
+      {{foreach from=$line->_ref_prises item=_prise name=prises}}
+        {{$_prise->_view}}{{if !$smarty.foreach.prises.last}}, {{/if}}
+      {{/foreach}}
+    {{/if}}
   </td>
-   -->
   <td style="width:8%;" class="text">
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
 				{{if @$modules.messagerie}}
@@ -58,13 +60,6 @@
     <!-- Duree de la ligne -->
     {{if $line->duree}}
       {{mb_value object=$line field=duree}} {{mb_value object=$line field=unite_duree}} 
-    {{/if}}
-  </td>
-  <td class="text" style="width:25%;">
-    {{if $line->_ref_prises|@count}}
-      {{foreach from=$line->_ref_prises item=_prise name=prises}}
-        {{$_prise->_view}}{{if !$smarty.foreach.prises.last}}, {{/if}}
-      {{/foreach}}
     {{/if}}
   </td>
   <td style="width:10%;">

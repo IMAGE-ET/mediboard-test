@@ -55,7 +55,16 @@
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
       {{if $line->traitement_personnel}}Traitement personnel&nbsp;{{/if}}
     </td>
-    <td class="text" style="width: 20%" >
+    <td style="width: 37%;" class="text">
+	    {{if $line->_ref_prises|@count}}
+	      {{foreach from=$line->_ref_prises item=_prise name=prises}}
+	        {{$_prise->_view}} {{if !$smarty.foreach.prises.last}}, {{/if}}
+	      {{/foreach}}
+	    {{else}}
+	      Aucune posologie
+	    {{/if}}
+    </td>
+    <td class="text" style="width: 8%" >
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
         {{if $line->_can_view_signature_praticien}}
 					{{if @$modules.messagerie}}
@@ -75,9 +84,9 @@
 						  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
 				  	{{/if}}
 			  	{{/if}}
-			  	{{$line->_ref_praticien->_view}}
+			  	<label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
         {{else if !$line->traitement_personnel && !$line->_protocole}}
-          {{$line->_ref_praticien->_view}}
+			  	<label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
         {{/if}}
        </div>
     </td>
@@ -91,27 +100,14 @@
       {{/if}}
     </td>
     <td style="width: 10%">
+      {{if !$mode_induction_perop}}   
+        <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+      {{/if}}
       <!-- Duree de la ligne -->
       {{if $line->duree && $line->unite_duree}}
         {{mb_value object=$line field=duree}}  
         {{mb_value object=$line field=unite_duree}}
       {{/if}}
-    </td>
-
-    <td style="width: 25%;" class="text">
-    {{if !$mode_induction_perop}}   
-      <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
-    {{/if}}
-	  
-	    {{if $line->_ref_prises|@count}}
-	      {{foreach from=$line->_ref_prises item=_prise name=prises}}
-	        {{$_prise->_view}} {{if !$smarty.foreach.prises.last}}, {{/if}}
-	      {{/foreach}}
-	    {{else}}
-	      Aucune posologie
-	    {{/if}}
-	    
- 
     </td>
   </tr>
 </table>
