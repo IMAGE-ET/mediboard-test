@@ -154,6 +154,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="3" /></td>
   
   <td>
+  {{if !$app->user_prefs.VitaleVision}}
     {{if $app->user_prefs.GestionFSE}}
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
@@ -162,6 +163,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
         Résultat Vitale
       </button>
     {{/if}}
+  {{/if}}
   </td>
 </tr>
 
