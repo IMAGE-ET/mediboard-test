@@ -19,8 +19,15 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
 	$discipline->load($discipline_id);
 	
 	$ticks = array();
+  $serie_total = array(
+    'label' => 'Total',
+    'data' => array(),
+    'markers' => array('show' => true),
+    'bars' => array('show' => false)
+  );
 	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+    $serie_total['data'][] = array(count($serie_total['data']), 0);
 	}
 	
 	$user = new CMediusers;
@@ -68,6 +75,7 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
 		  foreach($result as $r) {
 		    if($tick[1] == $r["mois"]) {
 		      $serie['data'][] = array($i, $r["total"]);
+          $serie_total["data"][$i][1] += $r["total"];
 		      $f = false;
 		    }
 		  }
@@ -76,6 +84,8 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
 		
 		$series[] = $serie;
 	}
+  
+  $series[] = $serie_total;
 
 	$title = "Nombre d'interventions par praticien";
 	$subtitle = "$total opérations";

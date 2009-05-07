@@ -22,8 +22,15 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
 	$salle->load($salle_id);
 	
 	$ticks = array();
+  $serie_total = array(
+    'label' => 'Total',
+    'data' => array(),
+    'markers' => array('show' => true),
+    'bars' => array('show' => false)
+  );
 	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+    $serie_total['data'][] = array(count($serie_total['data']), 0);
 	}
 	
 	$where = array();
@@ -41,9 +48,8 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
 	$series = array();
 	foreach($salles as $salle) {
 	  $serie = array(
-		  'label' => utf8_encode($salle->_view),
-		  'data' => array(),
-			'total' => 0
+		  'label' => utf8_encode($salle->nom),
+		  'data' => array()
 		);
 	  
 	  $query = "SELECT COUNT(operations.operation_id) AS total,
@@ -76,20 +82,22 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
 	  $result = $ds->loadlist($query);
 	  foreach($ticks as $i => $tick) {
 	    $f = true;
-	    foreach($result as $totaux) {
-	      if($tick[1] == $totaux["mois"]) {        
-	        $serie["data"][] = array($i, $totaux["total"]);
-	        $serie["total"] += $totaux["total"];
-	        $total += $totaux["total"];
+	    foreach($result as $r) {
+	      if($tick[1] == $r["mois"]) {        
+	        $serie["data"][] = array($i, $r["total"]);
+	        $serie_total["data"][$i][1] += $r["total"];
+	        $total += $r["total"];
 	        $f = false;
+          break;
 	      }
 	    }
 	    if($f) $serie["data"][] = array(count($serie["data"]), 0);
 	  }
-	  //if($serie["total"]) 
 		$series[] = $serie;
 	}
-	
+  
+  $series[] = $serie_total;
+  
 	// Set up the title for the graph
 	if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
 	  $title = "Nombre d'anesthésie par salle";

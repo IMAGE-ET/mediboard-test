@@ -19,8 +19,15 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	$discipline->load($discipline_id);
 	
 	$ticks = array();
+  $serie_total = array(
+    'label' => 'Total',
+    'data' => array(),
+    'markers' => array('show' => true),
+    'bars' => array('show' => false)
+  );
 	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+    $serie_total['data'][] = array(count($serie_total['data']), 0);
 	}
 	
 	$where = array();
@@ -67,10 +74,11 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	  $result = $sejour->_spec->ds->loadlist($query);
 	  foreach($ticks as $i => $tick) {
 	    $f = true;
-	    foreach($result as $totaux) {
-	      if($tick[1] == $totaux["mois"]) {
-	        $serie["data"][] = array($i, $totaux["total"]);
-	        $total += $totaux["total"];
+	    foreach($result as $r) {
+	      if($tick[1] == $r["mois"]) {
+	        $serie["data"][] = array($i, $r["total"]);
+          $serie_total["data"][$i][1] += $r["total"];
+	        $total += $r["total"];
 	        $f = false;
 	      }
 	    }
@@ -78,6 +86,8 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	  }
 		$series[] = $serie;
 	}
+  
+  $series[] = $serie_total;
 	
 	$subtitle = "$total patients";
 	if($prat_id)       $subtitle .= " - Dr $prat->_view";

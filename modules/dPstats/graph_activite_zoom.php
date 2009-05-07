@@ -29,9 +29,16 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   // Tableaux des jours
   $ticks = array();
   $ticks2 = array();
+  $serie_total = array(
+    'label' => 'Total',
+    'data' => array(),
+    'markers' => array('show' => true),
+    'bars' => array('show' => false)
+  );
   for($i = $debut; $i <= $fin; $i = mbDate($step, $i)) {
     $ticks[] = array(count($ticks), mbTransformTime(null, $i, "%a %d"));
     $ticks2[] = array(count($ticks), mbTransformTime(null, $i, "%d"));
+    $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
   
   // Chargement des salles
@@ -77,6 +84,7 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
       foreach($result as $r) {
         if($tick[1] == $r["jour"]) {
           $serie["data"][] = array($i, $r["total"]);
+          $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];
           $f = false;
         }
@@ -86,6 +94,8 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     
     $series[] = $serie;
   }
+  
+  $series[] = $serie_total;
   
   // Set up the title for the graph
   $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $debut, "%m/%Y");
