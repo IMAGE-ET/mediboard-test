@@ -23,7 +23,7 @@ password=$1
 archive="$TMP_PATH/bcbdump_latest.zip"
 dump="$TMP_PATH/mysqldump.sql"
 
-if [ $2 = "--skip-download" ]
+if [ "$2" = "--skip-download" ]
 then 
   echo "BCB latest dump download skipped!"
 else
@@ -46,7 +46,7 @@ config_path="$ROOT_PATH/includes/config.php"
 # Retrieve a config in Mediboard config file
 find_property() 
 {
-  property_pattern=$(echo $1 | sed "s/[a-z0-9]*/'&'/g" | sed "s/ /.*/g")
+  property_pattern=$(echo $1 | sed "s/[a-z0-9]*/'&'/gi" | sed "s/ /.*/g")
   value_pattern=".*= [']\([a-z0-9]*\)['];"
   replacement="\1"
   grep "$property_pattern" $config_path | sed "s/$value_pattern/$replacement/"
@@ -79,6 +79,7 @@ pass=$(find_property "db $update_dsn dbpass");
 echo "BCB data source detail is: name '$name', user '$user', pass '$pass'"
 
 # Empty the BCB data source
+
 mysql -u $user -p$pass $name -e "show tables" \
  | grep -v Tables_in  \
  | grep -v "+" \
