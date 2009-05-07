@@ -14,7 +14,7 @@
 
 <table class="main"> 
   <tr>
-    <td class="">
+    <td>
 
 <form name="ConfigDSN-{{$dsn}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
 
@@ -45,7 +45,7 @@
   </th>
   <td>
     {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
-    <select class="str" name="{{$section}}[{{$dsn}}][{{$var}}]">
+    <select name="{{$section}}[{{$dsn}}][{{$var}}]">
       <option value="mysql"  {{if "mysql"  == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-mysql{{/tr}}</option>
       <option value="ingres" {{if "ingres" == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-ingres{{/tr}}</option>
     </select>
@@ -61,7 +61,7 @@
   </th>
   <td>
     {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
-    <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
+    <input type="text" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
 
@@ -74,7 +74,7 @@
   </th>
   <td>
     {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
-    <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
+    <input type="text" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
 
@@ -87,7 +87,7 @@
   </th>
   <td>
     {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
-    <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
+    <input type="text" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
 
@@ -100,7 +100,7 @@
   </th>
   <td>
     {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
-    <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
+    <input type="password" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
 
