@@ -9,15 +9,15 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Database daily backup"
 
-if [ "$#" -lt 6 ]
+if [ "$#" -lt 5 ]
 then 
-  echo "Usage: $0 <method> <username> <password> <database> \"<backup_path>\" <time>"
-  echo "  <method> is hotcopy or dump method, ie hotcopy"
-  echo "  <username> is username for mysql, ie admindb"
-  echo "  <password> is password for mysql, ie dbadmin"
-  echo "  <database> is database, ie mediboard"
-  echo "  <backup_path> is the backup path, ie /var/backup"
-  echo "  <time> is time of removal of files (day), ie 7"
+  echo "Usage: $0 <method> <username> <password> <database> <backup_path> \[<time>\]"
+  echo "  <method> is hotcopy or dump method, eg hotcopy"
+  echo "  <username> is username for mysql, eg admindb"
+  echo "  <password> is password for mysql, eg dbadmin"
+  echo "  <database> is database, eg mediboard"
+  echo "  <backup_path> is the backup path, eg /var/backup"
+  echo "  [<time>] is time of removal of files (day), default 7"
   exit 1
 fi
 
@@ -26,7 +26,12 @@ username=$2
 password=$3
 database=$4
 backup_path=$5
-time=$6
+if [ $6 ]
+then
+  time=$6
+else
+  time=7
+fi
 
 ## Make complete path
 

@@ -11,9 +11,9 @@ announce_script "AMMAX daily backup"
 
 if [ "$#" -lt 2 ]
 then
-  sh $BASH_PATH/baseBackup.sh dump ammaxuser userammax AMMAX /var/backup 7
+  sh $BASH_PATH/baseBackup.sh dump ammaxuser userammax AMMAX /var/backup
 else
   user=$1
   pass=$2
-  sh $BASH_PATH/baseBackup.sh dump $user $pass AMMAX /var/backup 7
+  sh $BASH_PATH/baseBackup.sh dump $user $pass AMMAX /var/backup
 fi
