@@ -11,46 +11,9 @@ announce_script "AMMAX daily backup"
 
 if [ "$#" -lt 2 ]
 then
-  user=ammaxuser
-  pass=userammax
+  sh $BASH_PATH/baseBackup.sh dump ammaxuser userammax AMMAX /var/backup 7
 else
   user=$1
   pass=$2
+  sh $BASH_PATH/baseBackup.sh dump $user $pass AMMAX /var/backup 7
 fi
-
-## Make complete path
-
-# Make backup path
-BACKUPPATH=/var/backup
-force_dir $BACKUPPATH
-
-# Make ammax path
-AMMAXPATH=${BACKUPPATH}/AMMAX
-force_dir $AMMAXPATH
-
-# Make weekday path
-WEEKDAY=$(date +%a)
-WEEKDAYPATH=${AMMAXPATH}/${WEEKDAY}
-force_dir $WEEKDAYPATH
-cd ${WEEKDAYPATH}
-
-## Make MySQL safe copy
-
-# removes previous hotcopy if something went wrong
-rm -Rvf AMMAX 
-mysqldump --opt -u ${user} -p${pass} AMMAX > AMMAX.sql
-check_errs $? "Failed to create MySQL dump" "MySQL dump done!"
-
-## Compress archive and remove files
-DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
-
-# Make the tarball
-rm -f AMMAX*.tar.gz
-tar cvfz AMMAX-${DATETIME}.tar.gz AMMAX.sql
-check_errs $? "Failed to create backup tarball" "Tarball packaged!"
-
-# Remove temporary files
-rm -Rvf AMMAX.sql
-check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
-
-
