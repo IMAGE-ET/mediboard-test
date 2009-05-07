@@ -48,7 +48,7 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
 	$series = array();
 	foreach($salles as $salle) {
 	  $serie = array(
-		  'label' => utf8_encode($salle->nom),
+		  'label' => utf8_encode($bloc_id ? $salle->nom : $salle->_view),
 		  'data' => array()
 		);
 	  

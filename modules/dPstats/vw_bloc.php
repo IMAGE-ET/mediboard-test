@@ -45,15 +45,10 @@ $listPrats = $user->loadPraticiens(PERM_READ);
 
 $bloc = new CBlocOperatoire();
 $listBlocs = CGroups::loadCurrent()->loadBlocs();
-
 $listBlocsForSalles = $listBlocs;
 
-if (!$bloc->load($bloc_id)) {
-  $bloc = reset($listBlocs);
-  $bloc_id = $bloc->_id;
-  mbSetValueToSession("bloc_id", $bloc_id);
-}
-else {
+$bloc->load($bloc_id);
+if ($bloc->_id) {
 	foreach ($listBlocsForSalles as $key => &$curr_bloc) {
 		if ($curr_bloc->_id != $bloc->_id) {
 			unset ($listBlocsForSalles[$key]);
