@@ -11,7 +11,7 @@
 <script type="text/javascript">
 var graphs = {{$graphs|@json}};
 var graphSizes = [
-  {width: '350px', height: '250px', yaxisNoTicks: 5},
+  {width: '400px', height: '250px', yaxisNoTicks: 5},
   {width: '700px', height: '500px', yaxisNoTicks: 10}
 ];
 
@@ -42,7 +42,7 @@ Main.add(function () {
 
 <tr>
   <th>
-  	Logs d'accès du  {{$date|date_format:"%A %d %b %Y"}}
+  	Logs d'accès du  {{$date|date_format:$dPconfig.longdate}}
     <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     
     <form action="?" name="typevue" method="get">

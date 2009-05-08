@@ -119,7 +119,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	}
 	
   foreach($datax as $i => &$x) {
-    if ($i % 2) $x[1] = '';
+    //if ($i % 2) $x[1] = '';
   }
 	
 	$title = '';
