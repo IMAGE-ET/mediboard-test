@@ -118,15 +118,17 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	  }
 	}
 	
-  foreach($datax as $i => &$x) {
-    //if ($i % 2) $x[1] = '';
-  }
+	if ($interval == 'month') {
+	  foreach($datax as $i => &$x) {
+	    if ($i % 2) $x[1] = '';
+	  }
+	}
 	
 	$title = '';
-  if($module) $title .= CAppUI::tr($module);
+  if($module) $title .= CAppUI::tr("module-$module-court");
   if($actionName) $title .= " - $actionName";
   
-  $subtitle = mbTransformTime(null, $date, "%A %d %b %Y");
+  $subtitle = mbTransformTime(null, $date, CAppUI::conf("longdate"));
 	
 	$options = array(
     'title' => utf8_encode($title),
