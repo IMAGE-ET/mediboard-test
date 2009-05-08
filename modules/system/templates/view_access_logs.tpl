@@ -27,6 +27,7 @@ function drawGraphs(size) {
     container.setStyle(size);
     g.options.y2axis.noTicks = size.yaxisNoTicks;
     g.options.yaxis.noTicks = size.yaxisNoTicks;
+    g.options.yaxis.tickFormatter = yAxisTickFormatter;
     g.options.y2axis.tickFormatter = yAxisTickFormatter;
     Flotr.draw(container, g.series, g.options);
   });
@@ -105,10 +106,10 @@ Main.add(function () {
   {{foreach from=$graphs item=graph name=graphs}}
     <div id="graph-{{$smarty.foreach.graphs.index}}" 
          {{if $groupmod==1}}
-         style="width: 350px; height: 250px; float: left; margin: 1em; cursor: pointer;" 
+         style="width: 400px; height: 250px; float: left; margin: 1em; cursor: pointer;" 
          onclick="$V(getForm('typevue').elements.groupmod, '{{$graph.module}}')"
          {{else}}
-         style="width: 350px; height: 250px; float: left; margin: 1em;" 
+         style="width: 400px; height: 250px; float: left; margin: 1em;" 
          {{/if}}
          ></div>
   {{/foreach}}
