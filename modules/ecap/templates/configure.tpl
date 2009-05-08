@@ -149,7 +149,6 @@
 			{{/if}}
     </td>
   </tr>
-  
 
   <tr>
     <td class="button" colspan="10">
@@ -159,3 +158,5 @@
 </table>
 
 </form>
+
+{{include file=inc_configure_actions.tpl}}

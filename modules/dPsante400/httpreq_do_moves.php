@@ -33,14 +33,6 @@ foreach ($types as $_type) {
 			  $count);
 			break;
 			
-			case "purge":
-			$count = $mouv->purge($_marked);
-			CAppUI::stepAjax("%s - %s : %s supprimés ", UI_MSG_OK, 
-			  CAppUI::tr("CMouvement400-type-$_type"),
-			  CAppUI::tr("CMouvement400-marked-$_marked"), 
-			  $count);
-			break;
-			
 			default:
 		  CAppUI::stepAjax("Action '$action' non prise en charge", UI_MSG_ERROR);
 			break;

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass("dPsante400", "mouvsejourecap");
+CAppUI::requireModuleClass("ecap", "mouvsejourecap");
 
 class CMouvAttendueECap extends CMouvSejourEcap {  
   

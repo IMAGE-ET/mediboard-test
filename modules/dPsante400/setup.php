@@ -56,7 +56,10 @@ class CSetupdPsante400 extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.14");
-    $sql = "UPDATE `id_sante400` SET `tag`='labo code4' WHERE `tag`='LABO' AND `object_class`='CMediusers' ;";
+    $sql = "UPDATE `id_sante400` 
+			SET `tag`='labo code4' 
+			WHERE `tag`='LABO' 
+			AND `object_class`='CMediusers' ;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.15");
@@ -64,8 +67,28 @@ class CSetupdPsante400 extends CSetup {
 			SET `tag` = CONCAT('NDOS ', LEFT(`tag`, 8))
 			WHERE `object_class` = 'CSejour'
 			AND `tag` LIKE 'CIDC:___ DMED:________'";
-  
-    $this->mod_version = "0.16";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.16");
+    $sql = "CREATE TABLE `trigger_mark` (
+			`mark_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+			`trigger_number` VARCHAR (10) NOT NULL,
+			`trigger_class` VARCHAR (255),
+			`mark` VARCHAR (255),
+			`done` ENUM ('0','1')
+		) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.17");
+    $sql = "ALTER TABLE `trigger_mark` ADD UNIQUE `trigger_unique` (
+			`trigger_class` ,
+			`trigger_number`
+		);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `trigger_mark` ADD INDEX ( `mark` );";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.18";
   } 
 }
 ?>

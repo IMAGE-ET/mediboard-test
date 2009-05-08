@@ -124,11 +124,11 @@ class CRecordSante400 {
     }
   }
   
-  function loadOne($sql, $values = array()) {
-    $this->query($sql, $values);
+  function loadOne($query, $values = array()) {
+    $this->query($query, $values);
     if (!$this->data) {
       $values = join($values, ",");
-      throw new Exception("Couldn't find row for query '$sql' with values [$values]");
+      throw new Exception("Couldn't find row for query '$query' with values [$values]");
     }
   }
     
@@ -192,18 +192,7 @@ class CRecordSante400 {
     if ($time === "0") {
       return null;
     }
-    
-//    // Cas
-//    if (false !== strpos($time, "h")) {
-//      $frags = split("h", $time);
-//      mnTrace($frags, "Fragments for '$time'");
-//      return join(":", $frags) . ":00";
-//    }
-    
-//    if (strlen($time) <= 2) {
-//      $time = "00" . $time;
-//    }
-    
+        
     $time = str_pad($time, 4, "0", STR_PAD_LEFT);
 
     $reg = "/(\d{2})h?(\d{2})/i";

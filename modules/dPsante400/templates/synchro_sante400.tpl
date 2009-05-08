@@ -110,7 +110,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
     {{else}}
     {{$curr_mouv->type}}
     {{/if}}</td>
-  <td>{{$curr_mouv->prod}}</td>
+  <td>{{$curr_mouv->mark}}</td>
   {{foreach from=$curr_mouv->statuses key="index" item="status"}}
   {{assign var="cache" value=$curr_mouv->cached[$index]}}
   <td>

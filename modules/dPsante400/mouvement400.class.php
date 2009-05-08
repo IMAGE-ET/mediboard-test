@@ -11,12 +11,12 @@
 CAppUI::requireModuleClass("dPsante400", "recordsante400");
 
 class CMouvement400 extends CRecordSante400 {
-  protected $base = null;
-  protected $table = null;
+  public $base = null;
+  public $table = null;
   
-  protected $prodField = null;
-  protected $idField = null;
-  protected $typeField = null;
+  public $markField = null;
+  public $idField = null;
+  public $typeField = null;
   
   public $statuses = array(null, null, null, null, null, null, null, null);
   public $cached   = array(null, null, null, null, null, null, null, null);
@@ -32,7 +32,7 @@ class CMouvement400 extends CRecordSante400 {
     // Consume metadata
     $this->when = $this->consumeDateTimeFlat("TRDATE", "TRHEURE");
     $this->rec  = $this->consume($this->idField);
-    $this->prod = $this->consume($this->prodField);
+    $this->mark = $this->consume($this->markField);
     $this->type = $this->consume($this->typeField);
     
     // Analyse changed fields
@@ -78,7 +78,7 @@ class CMouvement400 extends CRecordSante400 {
         $recs = join($recs, ",");
         
         $query = "UPDATE $mouv->base.$mouv->table " .
-            "\n SET $mouv->prodField = '========' " .
+            "\n SET $mouv->markField = '========' " .
             "\n WHERE $mouv->idField IN ($recs)";
         
         $rec = new CRecordSante400;
@@ -95,13 +95,13 @@ class CMouvement400 extends CRecordSante400 {
   }
 
   function getMarkedClause($marked) {
-    if (!$this->prodField) {
+    if (!$this->markField) {
       return;
     }
     
     return $marked ? 
-      "\n WHERE $this->prodField NOT IN ('', 'OKOKOKOK')" : 
-      "\n WHERE $this->prodField = ''";
+      "\n WHERE $this->markField NOT IN ('', 'OKOKOKOK')" : 
+      "\n WHERE $this->markField = ''";
   }
 
   function count($marked = false) {
@@ -110,22 +110,40 @@ class CMouvement400 extends CRecordSante400 {
     $query.= $this->getMarkedClause($marked);
     $query.= $this->getFilterClause();
     $record->query($query);
-
     return $record->consume("TOTAL");
   }
   
   /**
-   * Purge all mouvements
-   * @return int the number of deleted mouvements
+   * Load latest with former marks
+   * @param int $max Max rows
+   * @return array
    */
-  function purge($marked = false) {
-    $record = new CRecordSante400();
-    $query = "DELETE  FROM $this->base.$this->table";
-    $query.= $this->getMarkedClause($marked);
+  function loadListWithFormerMark($max)  {
+    $query = "SELECT * FROM $this->base.$this->table
+    	WHERE $this->markField NOT IN ('', 'OKOKOKOK')";
     $query.= $this->getFilterClause();
-    return $record->query($query);
+    $query.= "\n ORDER BY $this->idField DESC";
+    $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
+    foreach ($mouvs as &$mouv) {
+      $mouv->initialize();
+    }
+        
+    return $mouvs;
   }
   
+  /**
+   * Load latest succeded with former marks
+   * @return array
+   */
+  function loadLatestSuccessWithFormerMark() {
+    $query = "SELECT * FROM $this->base.$this->table
+    	WHERE $this->markField = 'OKOKOKOK'";
+    $query.= $this->getFilterClause();
+    $query.= "\n ORDER BY $this->idField DESC";
+    $this->loadOne($query);
+    $this->initialize();
+  }
+    
   function load($rec) {
     $query = "SELECT * FROM $this->base.$this->table" .
         "\n WHERE $this->idField = ?";
@@ -140,7 +158,7 @@ class CMouvement400 extends CRecordSante400 {
     // Checkout
     if (CAppUI::conf("dPsante400 mark_row")) {
       $query = "UPDATE $this->base.$this->table " .
-          "\n SET $this->prodField = '========' " .
+          "\n SET $this->markField = '========' " .
           "\n WHERE $this->idField = ?";
       $values = array($this->rec);
       
@@ -159,30 +177,44 @@ class CMouvement400 extends CRecordSante400 {
  *      * : skipped 
  */  
   function markRow() {
-    if (!CAppUI::conf("dPsante400 mark_row")) {
-      return;
-    }
-    
-    if (!$this->prodField) {
-      return null;
-    }
-    
+    // Get the final mark
     $this->status = "";
     foreach ($this->statuses as $status) {
       $char = "?";
       if (null === $status) $char = "-";
       if ("*"  === $status) $char = "*";
       if (is_int($status))  $char = chr($status + ord("0"));
-      
       $this->status .= $status;
     }
+    
+    $mark = new CTriggerMark();
+    $mark->trigger_number = $this->rec;
+    $mark->type = get_class($this);
+    $mark->loadMatchingObject();
+    $mark->mark = $this->status;
+    if (!CAppUI::conf("dPsante400 mark_row")) {
+      $mark->done = in_array(null, $this->statuses, true);
+    }
+    
+    mbTrace($mark->getValues());
 
+    if (!CAppUI::conf("dPsante400 mark_row")) {
+      return;
+    }
+    
+    if (!$this->markField) {
+      return null;
+    }
+    
+    // DB Fields
+    
+    
     $query = 
       !in_array(null, $this->statuses, true) ?
 // NEVER DELETE
 //      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
-      "UPDATE $this->base.$this->table SET $this->prodField = 'OKOKOKOK' WHERE $this->idField = ?" :
-      "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
+      "UPDATE $this->base.$this->table SET $this->markField = 'OKOKOKOK' WHERE $this->idField = ?" :
+      "UPDATE $this->base.$this->table SET $this->markField = '$this->status' WHERE $this->idField = ?";
     $values = array (
       $this->rec,
     );
@@ -219,6 +251,29 @@ class CMouvement400 extends CRecordSante400 {
     function markCache($rank, $value = null) {
     $this->markStatus($rank, $value);
     $this->cached[$rank] = null === $value ? @$this->cached[$rank] + 1 : $value;
+  }
+  
+  /**
+   * Cherche la mark pour ce mouvement et la complète
+   * @return CTriggerMark
+   */
+  function loadTriggerMark() {
+    $mark = new CTriggerMark();
+    $mark->trigger_class = get_class($this);    
+    $mark->trigger_number = $this->rec;
+    
+    // Recherche 
+    if ($mark->trigger_number) {
+      $mark->loadMatchingObject();
+    }
+    
+    // Complète les valeurs
+    $mark->mark = $this->mark;
+    if ($mark->mark == "OKOKOKOK") {
+      $mark->done = '1';
+    }
+    
+    return $mark;
   }
 
   /**
