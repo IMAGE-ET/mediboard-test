@@ -13,30 +13,32 @@
   modalWindow = null;
   Main.add(function () {
     modalWindow = modal($('evenement-chooser-modal'), {
-      overlayOpacity: 0.75,
       className: 'modal'
     });
   });
   {{/if}}
 </script>
 
-<div style="display: none; text-align: center;" id="evenement-chooser-modal">
+<div class="big-info"  style="display: none; text-align: center;" id="evenement-chooser-modal">
+  Cette consultation de pré-anesthésiologie n'est pas associée à une intervention.
   {{if $nextSejourAndOperation.COperation->_id}}
-    {{$nextSejourAndOperation.COperation->_view}} -
-    {{$nextSejourAndOperation.COperation->_datetime|date_format:"%d/%m/%Y"}}
+    Mediboard a détécté une interrvention qui pourrait probablement convenir :
+    <br />
+    <strong>{{$nextSejourAndOperation.COperation->_view}} -
+    {{$nextSejourAndOperation.COperation->_datetime|date_format:"%d/%m/%Y"}}</strong>
     <br />
     Ce patient vient-il pour cette intervention ?
     <br />
     <button class="tick" onclick="selectOperation('{{$nextSejourAndOperation.COperation->_id}}'); modalWindow.close();">Oui</button>
-    <br />
   {{/if}}
   {{if $nextSejourAndOperation.CSejour->_id && $nextSejourAndOperation.COperation->_ref_sejour->_id != $nextSejourAndOperation.CSejour->_id}}
-    {{$nextSejourAndOperation.CSejour->_view}}
+    Mediboard a détécté une interrvention qui pourrait probablement convenir :
+    <br />
+    <strong>{{$nextSejourAndOperation.CSejour->_view}}</strong>
     <br />
     Ce patient vient-il pour ce séjour ?
     <br />
     <button class="tick" onclick="selectSejour('{{$nextSejourAndOperation.CSejour->_id}}'); modalWindow.close();">Oui</button>
-    <br />
   {{/if}}
   <button class="cancel" onclick="modalWindow.close();">Annuler</button>
 </div>

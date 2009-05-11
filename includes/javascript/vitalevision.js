@@ -88,7 +88,6 @@ var VitaleVision = {
           $$('#benef-nom span')[0].update(beneficiaireSelect.options[0].innerHTML);
         }
         VitaleVision.modalWindow = modal($('modal-beneficiaire'), {
-          overlayOpacity: 0.75,
           className: 'modal'
         });
       }

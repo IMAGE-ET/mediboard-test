@@ -1314,7 +1314,8 @@ window.open = function(element, title, options) {
 window.modal = function(container, options) {
   options = Object.extend({
     className: 'modal',
-    closeOnClick: null
+    closeOnClick: null,
+    overlayOpacity: 0.5
   }, options || {});
   return Control.Modal.open(container, options);
 }
