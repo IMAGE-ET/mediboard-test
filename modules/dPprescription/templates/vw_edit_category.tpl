@@ -18,16 +18,23 @@
         {{foreach from=$categories key=chapitre item=_categories}}
           {{if $_categories}}
           <tr>
-            <th colspan="1">
+            <th colspan="2">
               {{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}
             </th>
           </tr>
           {{foreach from=$_categories item=_cat}}
-          <tr>
+          <tr {{if $category->_id == $_cat->_id}}class="selected"{{/if}}>
             <td>
               <a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_id={{$_cat->_id}}">
                 {{$_cat->nom}}
               </a>
+            </td>
+            <td>
+              {{if $_cat->group_id}}
+                {{$_cat->_ref_group->_view}}
+              {{else}}
+                Tous
+              {{/if}}
             </td>
           </tr>
           {{/foreach}}

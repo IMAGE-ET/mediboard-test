@@ -9,14 +9,18 @@
  */
 
 global $AppUI, $can, $m;
-
 $can->needsRead();
 
 $category = new CCategoryPrescription();
+$_categories = $category->loadList(null, "nom");
 
-// Chargement de la liste des categories
-$categories = $category->loadCategoriesByChap(null, "current");
-
+// Chargement et classement par chapitre
+foreach ($_categories as $categorie) {
+  $categorie->loadRefGroup();
+  $categories[$categorie->chapitre]["$categorie->_id"] = $categorie;
+}
+ksort($categories);
+  	
 // Chargement des etablissement
 $group = new CGroups();
 $groups = $group->loadList();
@@ -24,7 +28,6 @@ $groups = $group->loadList();
 // Chargement de la category
 $category_id = mbGetValueFromGetOrSession("category_id");
 $category->load($category_id);
-
 
 // Création du template
 $smarty = new CSmartyDP();
