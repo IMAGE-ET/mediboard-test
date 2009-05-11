@@ -125,7 +125,9 @@ Main.add(function(){
 </table>
 </form>
 
-<select id="graph-activite-zoom-date" onchange="zoomGraphIntervention($V(this))" style="display: none;"></select>
+<select id="graph-activite-zoom-date" onchange="zoomGraphIntervention($V(this))" style="display: none;">
+  <option selected="selected" disabled="disabled">&ndash; Vue sur un mois &ndash;</option>
+</select>
 
 {{foreach from=$graphs item=graph key=key}}
 	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>

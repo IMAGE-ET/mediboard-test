@@ -75,8 +75,8 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
 	// Set up the title for the graph
 	$title = "Patients / jour / salle";
 	$subtitle = "";
-	if($prat_id)  $subtitle .= " - Dr $pratSel->_view";
-	if($salle_id) $subtitle .= " - $salleSel->nom";
+	if($prat_id)  $subtitle .= " - Dr $prat->_view";
+	if($salle_id) $subtitle .= " - $salle->nom";
 	if($codeCCAM) $subtitle .= " - CCAM : $codeCCAM";
 
 	$options = array(
