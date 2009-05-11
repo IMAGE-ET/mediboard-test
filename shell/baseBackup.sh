@@ -48,21 +48,24 @@ cd ${BASEPATH}
 
 # removes previous hotcopy/dump if something went wrong
 rm -Rvf $database
- 
-if [ $1 = hotcopy ]
-then
-  mysqlhotcopy -u $username -p $password $database $BASEPATH
-  check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
-  
-elif [ $1 = dump ]
-then
-  mysqldump --opt -u ${username} -p${password} $database > $database.sql
-  check_errs $? "Failed to create MySQL dump" "MySQL dump done!"
-  
-else
-  echo "Choose hotcopy or dump method" 
-  exit 1
-fi
+
+case $1 in
+  hotcopy)
+    result=$database/
+    mysqlhotcopy -u $username -p $password $database $BASEPATH
+    check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
+    ;;
+  dump)
+    result=$database.sql
+    mysqldump --opt -u ${username} -p${password} $database > $database.sql
+    check_errs $? "Failed to create MySQL dump" "MySQL dump done!"
+    ;;
+  *)
+    result=$database/
+    echo "Choose hotcopy or dump method" 
+    exit 1
+    ;;
+esac
 
 # deleting file whose date is greater than 7 days
 find ${BASEPATH} -ctime +$time -exec /bin/rm '{}' ';'
@@ -73,7 +76,7 @@ DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
 # Make the tarball
 tarball=$database-${DATETIME}.tar.gz
-tar cvfz $tarball $database/
+tar cvfz $tarball $result
 check_errs $? "Failed to create backup tarball" "Tarball packaged!"
 
 # create a symlink
@@ -81,5 +84,5 @@ cp -s -f $tarball latest
 check_errs $? "Failed to create symlink" "Symlink created!"
 
 # Remove temporary files
-rm -Rvf $database
+rm -Rvf $result
 check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
