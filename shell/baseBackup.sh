@@ -80,7 +80,7 @@ tar cvfz $tarball $result
 check_errs $? "Failed to create backup tarball" "Tarball packaged!"
 
 # create a symlink
-cp -s -f $tarball latest
+cp -s -f $tarball $database-latest.tar.gz
 check_errs $? "Failed to create symlink" "Symlink created!"
 
 # Remove temporary files
