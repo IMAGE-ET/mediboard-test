@@ -19,8 +19,8 @@ then
   exit 1
 fi
    
-log=tmp/svnlog.txt
-tmp=tmp/svnlog.tmp
+log=$BASH_PATH/../tmp/svnlog.txt
+tmp=$BASH_PATH/../tmp/svnlog.tmp
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
 
