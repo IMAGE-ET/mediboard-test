@@ -16,7 +16,7 @@ var graphSizes = [
 ];
 
 function yAxisTickFormatter(val) {
-  return Flotr.convertToBytes(val, 2, 1000);
+  return Flotr.engineeringNotation(val, 2, 1000);
 }
 
 function drawGraphs(size) {
