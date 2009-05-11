@@ -323,7 +323,7 @@ var Livret = {
       <button type="button" class="tick" onclick="Livret.synchronize()">Synchroniser le livret Therapeutique</button>
 		</td>
 		<td id="livret-synchro">
-		  {{if $nb_produit_livret_med != $nb_produit_livret_med}}
+		  {{if $nb_produit_livret_med != $nb_produit_livret_ges}}
 		    <div class="small-warning">
 		    Attention, les livrets Thérapeutiques 
 		    médicaux ({{$nb_produit_livret_med}} produits) 
