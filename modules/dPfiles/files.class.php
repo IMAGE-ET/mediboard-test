@@ -361,5 +361,15 @@ class CFile extends CDocumentItem {
 
     return $affichageFile;
   }
+  
+  function handleSend() {
+  	$this->completeField("file_name");
+    $this->completeField("file_real_filename");
+    $this->completeField("file_type");
+    $this->completeField("file_date");
+    $this->updateFormFields();
+    
+    parent::handleSend();
+  }
 }
 ?>

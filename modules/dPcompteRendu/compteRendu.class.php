@@ -303,6 +303,13 @@ class CCompteRendu extends CDocumentItem {
     }
     return $can;
   }
+  
+  function handleSend() {
+    $this->completeField("nom");
+    $this->completeField("source");
+    
+    parent::handleSend();
+  }
 }
 
 ?>

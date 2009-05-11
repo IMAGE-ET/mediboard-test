@@ -42,19 +42,6 @@ class CDocumentItem extends CMbMetaObject {
   	$this->completeField("etat_envoi");
     $this->completeField("object_class");
     $this->completeField("object_id");
-  	
-    if ($this instanceof CCompteRendu) {
-    	$this->completeField("nom");
-    	$this->completeField("source");
-    }
-    
-    if ($this instanceof CFile) {
-    	$this->completeField("file_name");
-    	$this->completeField("file_real_filename");
-    	$this->completeField("file_type");
-    	$this->completeField("file_date");
-    	$this->completeField("_file_path");
-    }   
 
     $this->handleSend();
 
