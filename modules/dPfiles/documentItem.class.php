@@ -32,7 +32,7 @@ class CDocumentItem extends CMbMetaObject {
   	if ($system_sender && !is_subclass_of($system_sender, "CDocumentSender")) {
        trigger_error("Instanciation du Document Sender impossible.");
     }    
-  	if($system_sender) {
+  	if ($system_sender) {
   		$sender = new $system_sender;
   		$this->_is_sendable = $sender->isSendable($this);
   	}

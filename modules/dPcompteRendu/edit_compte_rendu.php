@@ -11,9 +11,6 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$target_id = mbGetValueFromGet("target_id");
-$target_class = mbGetValueFromGet("target_class");
-
 $compte_rendu_id = mbGetValueFromGet("compte_rendu_id"   , 0);
 $modele_id       = mbGetValueFromGet("modele_id"         , 0);
 $praticien_id    = mbGetValueFromGet("praticien_id"      , 0);
@@ -40,7 +37,8 @@ else {
   $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
-    
+  $compte_rendu->_ref_object = null;
+  
   // Utilisation des headers/footers
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {
     $compte_rendu->loadComponents();
@@ -50,6 +48,8 @@ else {
   }
   
   // On fournit la cible
+  $target_id = mbGetValueFromGet("target_id");
+  $target_class = mbGetValueFromGet("target_class");
   if ($target_id && $target_class){
     $compte_rendu->object_id = $target_id;
     $compte_rendu->object_class = $target_class;

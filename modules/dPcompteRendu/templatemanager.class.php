@@ -132,7 +132,7 @@ class CTemplateManager {
       $object = new $modeleType;
     }
     
-    if(isset($object)) {
+    if (isset($object)) {
       $object->fillTemplate($this);
     }
   }
