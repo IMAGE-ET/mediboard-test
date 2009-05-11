@@ -10,18 +10,25 @@
 
 <table class="main">
   <tr>
+    <td class="button not-printable">
+      {{foreach from=$bloc->_ref_salles item=_salle}}
+        <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
+      {{/foreach}}
+    </td>
+  </tr>
+  <tr>
     {{foreach from=$bloc->_ref_salles item=_salle}}
-		    <td>
-		      <table class="form">
-		        <tr>
-		          <th class="category">{{$_salle->nom}}</th>
-		        </tr>
-		      </table>
-		      {{assign var="salle" value=$_salle}}     
-		      {{include file="./inc_planning/print_suivi_plages.tpl"}}
-		    </td>
+	    <td id="salle-{{$_salle->_id}}">
+	      <table class="form">
+	        <tr>
+	          <th class="category">{{$_salle->nom}}</th>
+	        </tr>
+	      </table>
+	      {{assign var="salle" value=$_salle}}     
+	      {{include file="./inc_planning/print_suivi_plages.tpl"}}
+	    </td>
     {{foreachelse}}
-    <td>{{tr}}CSalle.none{{/tr}}</td>
+      <td>{{tr}}CSalle.none{{/tr}}</td>
     {{/foreach}}
   </tr>
 </table>
