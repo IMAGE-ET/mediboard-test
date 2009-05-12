@@ -27,32 +27,23 @@
   {{/if}}
   
     <td>
-    <strong>
-        {{if $curr_code->occ==0}}
-      <span style="float:right">Favoris</span>
-      {{else}}
-      <span style="float:right">{{$curr_code->occ}} acte(s)</span>
-      {{/if}}
-      
-        <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_code->code}}">{{$curr_code->code}}</a>
-      </strong>
-      <br />
+      <strong>
+        <span style="float:right">{{if $curr_code->occ==0}}Favoris{{else}}{{$curr_code->occ}} acte(s){{/if}}</span>
+        <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_code->code|escape:'url'}}">{{$curr_code->code}}</a>
+      </strong><br />
 
       {{$curr_code->libelle}}
+      
       {{if $can->edit}}
       <br />
-
       <form name="delFavoris-{{$curr_key}}" action="?m={{$m}}" method="post">
-      
-      <input type="hidden" name="dosql" value="do_favoris_aed" />
-      <input type="hidden" name="del" value="1" />
-      <input type="hidden" name="favoris_id" value="{{$curr_code->_favoris_id}}" />
-    {{if $curr_code->_favoris_id}}
-	  <button class="trash" type="submit" name="btnFuseAction">
-	  	Retirer de mes favoris
-	  </button>
-	  {{/if}}
-	  </form>
+        <input type="hidden" name="dosql" value="do_favoris_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="favoris_id" value="{{$curr_code->_favoris_id}}" />
+        {{if $curr_code->_favoris_id}}
+      	  <button class="trash" type="submit" name="btnFuseAction">Retirer de mes favoris</button>
+    	  {{/if}}
+  	  </form>
 	  {{/if}}
     </td>
   {{if $smarty.foreach.fusion.index % 3 == 4}}

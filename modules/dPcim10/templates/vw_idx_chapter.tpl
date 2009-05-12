@@ -16,7 +16,7 @@
 
       <input type="hidden" name="m" value="dPcim10" />
       <input type="hidden" name="tab" value="vw_idx_chapter" />
-      <input type="hidden" name="code" value="$cim10->code" />
+      <input type="hidden" name="code" value="{{$cim10->code}}" />
 
       <h1>Liste des chapitres de la CIM10</h1>
       </form>
@@ -31,7 +31,7 @@
             <b>{{$curr_chapter.rom}}</b>
           </td>
           <td valign="top" align="left">
-            <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_chapter.code}}"><b>{{$curr_chapter.text}}</b></a>
+            <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_chapter.code|escape:'url'}}"><b>{{$curr_chapter.text}}</b></a>
           </td>
         </tr>
         {{/foreach}}

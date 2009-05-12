@@ -40,7 +40,7 @@ class CCodeSpec extends CMbFieldSpec {
     
     // cim10
     elseif ($this->cim10) {
-      if (!preg_match ("/^([a-z0-9]){0,5}$/i", $propValue)) {
+      if (!preg_match ("/^[a-z][0-9]{2,4}$/i", $propValue)) {
 //        $codeCim = new CCodeCIM10($propValue);
 //        if ($codeCim->loadLite()) {
 //          return "Code CIM inconnu";
@@ -50,12 +50,11 @@ class CCodeSpec extends CMbFieldSpec {
       }
     }
     
-    // cim10
+    // adeli
     elseif($this->adeli) {
       if (!preg_match ("/^([0-9]){9}$/i", $propValue)) {
         return "Code Adeli incorrect, doit contenir exactement 9 chiffres";
       }
-
     }
 
     // RIB
@@ -107,7 +106,6 @@ class CCodeSpec extends CMbFieldSpec {
           return "Matricule incorrect, la clé n'est pas valide";
         }
       }
-      
     }
     
     // siret

@@ -69,22 +69,19 @@ class CCodeCIM10 {
     $this->_lang = $lang;
 
     // Vérification de l'existence du code
-    $query = "SELECT COUNT(abbrev) AS total
+    $query = "SELECT SID, COUNT(abbrev) AS total
               FROM master
               WHERE abbrev = '$this->code'";
+              
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
+    
     if ($row["total"] == 0) {
       $this->libelle = "Code CIM inexistant";
       $this->exist = false;
       return false;
     }
-    // sid
-    $query = "SELECT SID
-              FROM master
-              WHERE abbrev = '$this->code'";
-    $result = $ds->exec($query);
-    $row = $ds->fetchArray($result);
+
     $this->sid = $row["SID"];
     
     // code et level
@@ -96,7 +93,7 @@ class CCodeCIM10 {
     $this->code = $row["abbrev"];
     $this->level = $row["level"];
     
-    //libelle
+    // libelle
     $query = "SELECT $this->_lang
               FROM libelle
               WHERE SID = '$this->sid'
@@ -126,11 +123,12 @@ class CCodeCIM10 {
       $result2 = $ds->exec($query);
       if ($row2 = $ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
-        if ($found != "" and array_search($found, $this->descr) === false) {
+        if ($found && !in_array($found, $this->descr)) {
           $this->descr[] = $found;
         }
       }
     }
+    
     
     // glossaire
     $this->glossaire = array();
@@ -146,7 +144,7 @@ class CCodeCIM10 {
       $result2 = $ds->exec($query);
       if ($row2 = $ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
-        if ($found != "" and array_search($found, $this->glossaire) === false) {
+        if ($found && !in_array($found, $this->glossaire)) {
           $this->glossaire[] = $found;
         }
       }
@@ -165,7 +163,7 @@ class CCodeCIM10 {
       $result2 = $ds->exec($query);
       if ($row2 = $ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
-        if ($found != "" and array_search($found, $this->include) === false) {
+        if ($found && !in_array($found, $this->include)) {
           $this->include[] = $found;
         }
       }
@@ -184,7 +182,7 @@ class CCodeCIM10 {
       $result2 = $ds->exec($query);
       if ($row2 = $ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
-        if ($found != "" and array_search($found, $this->indir) === false) {
+        if ($found && !in_array($found, $this->indir)) {
           $this->indir[] = $found;
         }
       }
@@ -204,23 +202,18 @@ class CCodeCIM10 {
       $result2 = $ds->exec($query);
       if ($row2 = $ds->fetchArray($result2)) {
         $found = $row2[$this->_lang];
-        if ($found != "" and array_search($found, $this->notes) === false) {
+        if ($found && !in_array($found, $this->notes)) {
           $this->notes[] = $found;
         }
       }
     }
     
     // Is info ?
-    $this->_isInfo  = count($this->descr);
-    $this->_isInfo += count($this->glossaire);
-    $this->_isInfo += count($this->include);
-    $this->_isInfo += count($this->indir);
-    $this->_isInfo += count($this->notes);
+    $this->_isInfo = ($this->descr || $this->glossaire || $this->include || $this->indir || $this->notes);
     return true;
   }
   
   function loadRefs() {
-    
     if (!$this->loadLite($this->_lang, 0)){
       return false;
     }
@@ -376,7 +369,6 @@ class CCodeCIM10 {
     }
     return $code;
   }
-
 }
 
 ?>

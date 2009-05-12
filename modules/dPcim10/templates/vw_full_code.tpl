@@ -100,7 +100,7 @@ function selectCode() {
           Exclusions:
           <ul>
             {{foreach from=$cim10->_exclude item=curr_exclude}}
-            <li><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_exclude->code}}"><strong>{{$curr_exclude->code}}</strong></a>: {{$curr_exclude->libelle}}</li>
+            <li><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_exclude->code|escape:'url'}}"><strong>{{$curr_exclude->code}}</strong></a>: {{$curr_exclude->libelle}}</li>
             {{/foreach}}
           </ul>
         </li>
@@ -157,7 +157,7 @@ function selectCode() {
       <ul>
         {{foreach from=$cim10->_levelsSup item=curr_level}}
         {{if $curr_level->sid != 0}}
-        <li><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_level->code}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
+        <li><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_level->code|escape:'url'}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
         {{/if}}
         {{/foreach}}
       </ul>
@@ -169,7 +169,7 @@ function selectCode() {
       <ul>
         {{foreach from=$cim10->_levelsInf item=curr_level}}
         {{if $curr_level->sid != 0}}
-        <li><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_level->code}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
+        <li><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_level->code|escape:'url'}}"><strong>{{$curr_level->code}}</strong></a>: {{$curr_level->libelle}}</li>
         {{/if}}
         {{/foreach}}
       </ul>

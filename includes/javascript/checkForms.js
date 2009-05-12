@@ -302,14 +302,14 @@ Object.extend(ElementChecker, {
     // cim10
     cim10: function () {
       this.assertNoArg("cim10");
-      if (!this.sValue.match(/^([a-z0-9]){0,5}$/i))
+      if (!this.sValue.match(/^[a-z][0-9]{2,4}$/i))
         this.addError("cim10", "Code CIM incorrect, doit contenir 5 lettres maximum");
     },
     
     // adeli
     adeli: function() {
       this.assertNoArg("adeli");
-      if (!this.sValue.match("/^([0-9]){9}$/i"))
+      if (!this.sValue.match(/^([0-9]){9}$/i))
         this.addError("adeli", "Code Adeli incorrect, doit contenir exactement 9 chiffres");
     },
     

@@ -13,7 +13,6 @@ global $AppUI, $can;
 $can->needsAdmin();
 
 set_time_limit(360);
-ini_set("memory_limit", "64M");
 
 $sourcePath = "modules/dPcim10/base/cim10.tar.gz";
 $targetDir = "tmp/cim10";
@@ -32,6 +31,6 @@ if (null == $lineCount = $ds->queryDump($targetPath)) {
   $AppUI->stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("import effectué avec succès de $lineCount lignes", UI_MSG_OK);
+$AppUI->stepAjax("Import effectué avec succès de $lineCount lignes", UI_MSG_OK);
 
 ?>

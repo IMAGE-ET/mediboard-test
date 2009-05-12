@@ -14,16 +14,15 @@ function setClose(code) {
 }
 
 function goToCode(code){
-  window.location.href = "?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code=" + code;
+  window.location.href = "?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code=" + (code || '').replace('+', '%2B');
 }
-
 </script>
 
 <table class="tbl">
   {{if $up}}
   <tr>
     <th class="category" colspan="2">
-      <a href="?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$up->code}}">
+      <a href="?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$up->code|escape:'url'}}">
         <img src="images/icons/uparrow.png" alt="" />
         {{$up->code}}: {{$up->libelle}}
         <img src="images/icons/uparrow.png" alt="" />
@@ -110,7 +109,7 @@ function goToCode(code){
           {{foreach from=$cim10->_levelsInf item=curr_code}}
           <li>
             <button class="tick notext" type="button" onclick="setClose('{{$curr_code->code}}')">{{tr}}Select{{/tr}}</button>
-            <a class="action" href="?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code}}">
+            <a class="action" href="?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code|escape:'url'}}">
               <button class="down notext" type="button" onclick="goToCode('{{$curr_code->code}}');">{{tr}}More{{/tr}}</button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </a>
@@ -125,7 +124,7 @@ function goToCode(code){
           {{foreach from=$cim10->_exclude item=curr_code}}
           <li>
             <button class="tick notext" type="button" onclick="setClose('{{$curr_code->code}}')">{{tr}}Select{{/tr}}</button>
-            <a class="action" href="?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code}}">
+            <a class="action" href="?m=dPcim10&amp;a=code_finder&amp;dialog=1&amp;code={{$curr_code->code|escape:'url'}}">
               <button class="down notext" type="button" onclick="goToCode('{{$curr_code->code}}');">{{tr}}More{{/tr}}</button>
               {{$curr_code->code}}: {{$curr_code->libelle}}
             </a>

@@ -104,7 +104,7 @@
   {{/if}}
     <td>
       <strong>
-        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_master.code}}">{{$curr_master.code}}</a>
+        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;code={{$curr_master.code|escape:'url'}}">{{$curr_master.code}}</a>
       </strong>
       <br />
       {{$curr_master.text}}

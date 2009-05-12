@@ -41,7 +41,7 @@ function diffCIM10Atih() {
 </tr>
 
 <tr>
-  <td><button class="tick" onclick="diffCIM10Atih()">Différenciel entre la CIM10 et les modifications de l'ATIH</button></td>
+  <td><button class="tick" onclick="diffCIM10Atih()">Ajouter les modifications de l'ATIH</button></td>
   <td id="cim10_diff" />
 </tr>
 
