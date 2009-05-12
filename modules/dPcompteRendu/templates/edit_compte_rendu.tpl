@@ -27,6 +27,9 @@ function updateDocumentCallback(id) {
 }
 
 function submitForm(form){
+  // On recupere le contenu de l'editeur pour le mettre dans le textarea caché (sic!)
+  $V(form.source, FCKeditorAPI.GetInstance('source').GetXHTML());
+  
   if (!checkForm(form)) return false;
   submitting = true;
   return onSubmitFormAjax(form, {onComplete: function(){submitting = false} });
