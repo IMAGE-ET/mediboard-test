@@ -69,19 +69,22 @@ class CCodeCIM10 {
     $this->_lang = $lang;
 
     // Vérification de l'existence du code
-    $query = "SELECT SID, COUNT(abbrev) AS total
+    $query = "SELECT COUNT(abbrev) AS total
               FROM master
               WHERE abbrev = '$this->code'";
-              
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
-    
     if ($row["total"] == 0) {
       $this->libelle = "Code CIM inexistant";
       $this->exist = false;
       return false;
     }
-
+    // sid
+    $query = "SELECT SID
+              FROM master
+              WHERE abbrev = '$this->code'";
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
     $this->sid = $row["SID"];
     
     // code et level
