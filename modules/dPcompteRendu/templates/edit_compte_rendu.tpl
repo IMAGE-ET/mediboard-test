@@ -23,6 +23,12 @@ window.opener.Document.refreshList(
 <table class="form">
   <tr>
     <th class="category">
+      <div class="idsante400" id="{{$compte_rendu->_guid}}"></div>
+    
+	    <a style="float:right;" href="#" onclick="guid_log('{{$compte_rendu->_guid}}')">
+	      <img src="images/icons/history.gif" alt="historique" />
+	    </a>
+
       <strong>Nom du document :</strong>
       <input name="nom" size="50" value="{{$compte_rendu->nom}}" />
       &mdash;
@@ -37,7 +43,7 @@ window.opener.Document.refreshList(
   </tr>
   {{if $destinataires|@count}}
   <tr>
-    <td class="destinataireCR text" id="destinataire">
+    <td colspan="2" class="destinataireCR text" id="destinataire">
       {{foreach from=$destinataires key=curr_class_name item=curr_class}}
         &bull; <strong>{{tr}}{{$curr_class_name}}{{/tr}}</strong> :
         {{foreach from=$curr_class key=curr_index item=curr_dest}}
@@ -65,6 +71,7 @@ window.opener.Document.refreshList(
         {{/foreach}}
     </td>
   </tr>
+  
   <tr>
     <td class="button text">
       <div id="multiple-info" class="small-info" style="display: none;">
