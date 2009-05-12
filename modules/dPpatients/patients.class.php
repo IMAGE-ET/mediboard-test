@@ -119,6 +119,7 @@ class CPatient extends CMbObject {
   // Form fields
   var $_age         = null;
   var $_civilite    = null;
+  var $_civilite_long = null;
   var $_longview    = null;
   var $_art115      = null;
 	var $_exoneration = null;
@@ -515,11 +516,15 @@ class CPatient extends CMbObject {
     }
   
     $this->evalAge();
-
-    $this->_view     = CAppUI::tr("CPatient.civilite.$this->civilite")." $this->nom $this->prenom";
-    $this->_longview = CAppUI::tr("CPatient.civilite.$this->civilite-long")." $this->nom $this->prenom";
-        
-    // Navigation fields
+		
+    $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
+    $this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
+    
+    
+    $this->_view     = $this->_civilite." $this->nom $this->prenom";
+    $this->_longview = $this->_civilite_long." $this->nom $this->prenom";
+		
+   // Navigation fields
     global $AppUI;
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[$AppUI->user_prefs["DossierCabinet"]] . $this->_id;
   }
@@ -1077,8 +1082,8 @@ class CPatient extends CMbObject {
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales();
     
-    $template->addProperty("Patient - article"           , $this->_shortview );
-    $template->addProperty("Patient - article long"      , $this->_civilite  );
+    $template->addProperty("Patient - article"           , $this->_civilite );
+    $template->addProperty("Patient - article long"      , $this->_civilite_long  );
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - prénom"            , $this->prenom     );
     $template->addProperty("Patient - adresse"           , $this->adresse    );
