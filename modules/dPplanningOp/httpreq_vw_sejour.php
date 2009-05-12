@@ -39,6 +39,23 @@ if($sejour_id) {
 $sejour->makeDatesOperations();
 $sejour->loadNumDossier();
 
+$patient->loadRefsFwd();
+$patient->loadRefsCorrespondants();
+
+$correspondantsMedicaux = array();
+if ($patient->_ref_medecin_traitant->_id) {
+  $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
+}
+foreach($patient->_ref_medecins_correspondants as $correspondant) {
+  $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
+}
+
+$medecin_adresse_par = "";
+if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_ref_medecin_traitant->_id)) {
+  $medecin_adresse_par = new CMedecin();
+  $medecin_adresse_par->load($sejour->adresse_par_prat_id);
+}
+
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
@@ -59,6 +76,11 @@ $config =& $dPconfig["dPplanningOp"]["COperation"];
 $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
 $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
 $mins_duree = range(0, 59, $config["min_intervalle"]);
+
+// Chargement des etablissements externes
+$order = "nom";
+$etab = new CEtabExterne();
+$listEtab = $etab->loadList(null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -82,6 +104,10 @@ $smarty->assign("op"       , new COperation);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("patient"  , $patient);
 $smarty->assign("sejours"  , $sejours);
+
+$smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
+$smarty->assign("listEtab", $listEtab);
+$smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("mode_operation", $mode_operation);
