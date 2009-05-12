@@ -71,7 +71,12 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
         operations.annulee = '0' AND 
         sallesbloc.salle_id = '$salle->_id'";
         
-    if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+    if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+      $query .= "\nAND operations.chir_id = '$prat_id'";
+    }
+    if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+      $query .= "\nAND operations.anesth_id = '$prat_id'";
+    }
     if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     if($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
     
@@ -98,8 +103,14 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   $series[] = $serie_total;
   
   // Set up the title for the graph
-  $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $debut, "%m/%Y");
-  $subtitle = "$total opérations";
+  if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+    $title = "Nombre d'anesthésie par salle - ".mbTransformTime(null, $debut, "%m/%Y");
+    $subtitle = "$total anesthésies";
+  } else {
+    $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $debut, "%m/%Y");
+    $subtitle = "$total interventions";
+  }
+
   if($prat_id)       $subtitle .= " - Dr $prat->_view";
   if($discipline_id) $subtitle .= " - $discipline->_view";
   if($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
