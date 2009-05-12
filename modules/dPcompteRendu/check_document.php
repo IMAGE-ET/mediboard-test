@@ -23,16 +23,20 @@ $MSO_replacements = array (
   "o:smarttagtype" => "smarttagtype"
 );
 
+ini_set("memory_limit", "1G");
+
 $loops = mbGetValueFromGet("loops", 100);
 $trunk = mbGetValueFromGet("trunk", 100);
 
 mbTrace($loops, "loops");
 mbTrace($trunk, "trunk");
 
+$problems = array();
 for ($loop = 0; $loop < $loops; $loop++) {
   $starting = $loop*$trunk;
- 
-  foreach ($doc->loadList($where, "compte_rendu_id DESC", "$starting, $trunk") as $_doc) {
+  
+  $docs = $doc->loadList($where, "compte_rendu_id DESC", "$starting, $trunk");
+  foreach ($docs as $_doc) {
 	  $source = utf8_encode("<div>$_doc->source</div>");
 	  
 	  $source = preg_replace("/&\w+;/i", "", $source);
@@ -43,11 +47,19 @@ for ($loop = 0; $loop < $loops; $loop++) {
 	  
 	  if (false == $validation = @DOMDocument::loadXML($source, LIBXML_NSCLEAN)) {
 	//    DOMDocument::loadXML($source, LIBXML_NSCLEAN);
-	    mbTrace($_doc->nom, $_doc->_id);  
+	    $problems[$_doc->_id] = $_doc;
 	  }
-	}
-	  
+	}  
 }
+
+mbTrace(count($problems), "Problems count");
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("problems", $problems);
+
+$smarty->display("check_document.tpl");
 
 
 ?>
