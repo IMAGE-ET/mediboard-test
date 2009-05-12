@@ -9,7 +9,10 @@
 
 global $AppUI, $can, $m;
 
-$can->needsEdit();
+if(!CModule::getCanDo('dPcabinet')->edit && !CModule::getCanDo('soins')->read){
+  CModule::getCanDo('dPcabinet')->redirect();
+}
+//$can->needsEdit();
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $today = mbDate();
