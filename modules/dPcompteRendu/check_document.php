@@ -22,20 +22,31 @@ $MSO_replacements = array (
   "st1:metricconverter" => "metricconverter",
   "o:smarttagtype" => "smarttagtype"
 );
-  
-foreach ($doc->loadList($where, "compte_rendu_id DESC", 10000) as $_doc) {
-  $source = utf8_encode("<div>$_doc->source</div>");
-  
-  $source = preg_replace("/&\w+;/i", "", $source);
-//  $source = strtr($source, $MSO_replacements);
-//  mbTrace($source);
-//  $source = preg_replace("/\w+:(\w+)/i", "$1", $source);
-//  mbTrace($source);
-  
-  if (false == $validation = @DOMDocument::loadXML($source, LIBXML_NSCLEAN)) {
-//    DOMDocument::loadXML($source, LIBXML_NSCLEAN);
-    mbTrace($_doc->nom, $_doc->_id);  
-  }
+
+$loops = mbGetValueFromGet("loops", 100);
+$trunk = mbGetValueFromGet("trunk", 100);
+
+mbTrace($loops, "loops");
+mbTrace($trunk, "trunk");
+
+for ($loop = 0; $loop < $loops; $loop++) {
+  $starting = $loop*$trunk;
+ 
+  foreach ($doc->loadList($where, "compte_rendu_id DESC", "$starting, $trunk") as $_doc) {
+	  $source = utf8_encode("<div>$_doc->source</div>");
+	  
+	  $source = preg_replace("/&\w+;/i", "", $source);
+	//  $source = strtr($source, $MSO_replacements);
+	//  mbTrace($source);
+	//  $source = preg_replace("/\w+:(\w+)/i", "$1", $source);
+	//  mbTrace($source);
+	  
+	  if (false == $validation = @DOMDocument::loadXML($source, LIBXML_NSCLEAN)) {
+	//    DOMDocument::loadXML($source, LIBXML_NSCLEAN);
+	    mbTrace($_doc->nom, $_doc->_id);  
+	  }
+	}
+	  
 }
 
 
