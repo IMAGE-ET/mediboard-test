@@ -1,13 +1,39 @@
-{{if $compte_rendu->_id}}
 <script type="text/javascript">
-window.opener.Document.refreshList(
-  '{{$compte_rendu->object_class}}',
-	'{{$compte_rendu->object_id}}'	
-);
-</script>
-{{/if}}
+var submitting = false, 
+    form;
+    
+Main.add(function(){
+  form = getForm('editFrm');
+  
+  window.onbeforeunload = function() {
+    // Si en train de soumettre, on affiche le message
+    if (submitting) {
+      window.opener.Document.refreshList($V(form.object_class), $V(form.object_id));
+      return "La sauvegarde du document est en cours, voulez-vous continuer ?";
+    }
+  }
+});
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+function updateDocumentCallback(id) {
+  // Si création du compte rendu
+  if (!$V(form.compte_rendu_id)) {
+    $V(form.compte_rendu_id, id);
+    window.opener.Document.refreshList($V(form.object_class), $V(form.object_id));
+  }
+  
+  // Rechargement du compte rendu, en ajoutant l'ID du compte rendu à l'URL si pas deja present
+  var query = Url.parse().query.toQueryParams();
+  location.href = location.href+(query.compte_rendu_id ? '' : '&compte_rendu_id='+id);
+}
+
+function submitForm(form){
+  if (!checkForm(form)) return false;
+  submitting = true;
+  return onSubmitFormAjax(form, {onComplete: function(){submitting = false} });
+}
+</script>
+
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return submitForm(this)">
 
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="del" value="0" />
@@ -15,6 +41,7 @@ window.opener.Document.refreshList(
 <input type="hidden" name="function_id" value="" />
 <input type="hidden" name="chir_id" value="" />
 <input type="hidden" name="group_id" value="" />
+<input type="hidden" name="callback" value="updateDocumentCallback" />
 
 {{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
 {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
