@@ -31,23 +31,42 @@ $trunk = mbGetValueFromGet("trunk", 100);
 mbTrace($loops, "loops");
 mbTrace($trunk, "trunk");
 
-$problems = array();
+//$problems = array();
+//for ($loop = 0; $loop < $loops; $loop++) {
+//  $starting = $loop*$trunk;
+//  CSQLDataSource::$trace= true;
+//  $docs = $doc->loadList($where, "compte_rendu_id DESC", "$starting, $trunk");
+//  CSQLDataSource::$trace= false;
+//  foreach ($docs as $_doc) {
+//	  $source = utf8_encode("<div>$_doc->source</div>");
+//	  
+//	  $source = preg_replace("/&\w+;/i", "", $source);
+//	  
+//	  if (false == $validation = @DOMDocument::loadXML($source)) {
+//	    $problems[$_doc->_id] = $_doc;
+//	  }
+//	}  
+//}
+
+
+
 for ($loop = 0; $loop < $loops; $loop++) {
   $starting = $loop*$trunk;
+  $ds = $doc->_spec->ds;
   
-  $docs = $doc->loadList($where, "compte_rendu_id DESC", "$starting, $trunk");
-  foreach ($docs as $_doc) {
-	  $source = utf8_encode("<div>$_doc->source</div>");
-	  
+	$query = "SELECT `compte_rendu`.`compte_rendu_id`, `compte_rendu`.`source` 
+		FROM compte_rendu 
+		ORDER BY compte_rendu_id DESC
+		LIMIT $starting, $trunk";
+  $docs = $ds->loadHashList($query);
+  foreach ($docs as $doc_id => $doc_source) {
+	  $source = utf8_encode("<div>$doc_source</div>");
 	  $source = preg_replace("/&\w+;/i", "", $source);
-	//  $source = strtr($source, $MSO_replacements);
-	//  mbTrace($source);
-	//  $source = preg_replace("/\w+:(\w+)/i", "$1", $source);
-	//  mbTrace($source);
 	  
-	  if (false == $validation = @DOMDocument::loadXML($source, LIBXML_NSCLEAN)) {
-	//    DOMDocument::loadXML($source, LIBXML_NSCLEAN);
-	    $problems[$_doc->_id] = $_doc;
+	  if (false == $validation = @DOMDocument::loadXML($source)) {
+	    $doc = new CCompteRendu;
+	    $doc->load($doc_id);
+	    $problems[$doc_id] = $doc;
 	  }
 	}  
 }
