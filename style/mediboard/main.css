@@ -34,7 +34,7 @@ pre {
   border: 1px solid #aaa;
   line-height: 10px;
   padding: 2px 10px;
-  font-family: lucida console;
+  font-family: "lucida console", "courier new", courier, monospace;
   font-size: 10px;
   margin: 2px 10px;
   max-height: 250px;
@@ -526,7 +526,7 @@ label:hover {
  */
 
 div#console {
-  font-family: "Lucida Console";
+  font-family: "lucida console", "courier new", courier, monospace;
   margin: 5px;
   max-height: 300px;
   width: 50%;
