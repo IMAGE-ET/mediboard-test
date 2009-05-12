@@ -24,6 +24,7 @@ $MSO_replacements = array (
 );
 
 ini_set("memory_limit", "1G");
+set_time_limit(300);
 
 $loops = mbGetValueFromGet("loops", 100);
 $trunk = mbGetValueFromGet("trunk", 100);
