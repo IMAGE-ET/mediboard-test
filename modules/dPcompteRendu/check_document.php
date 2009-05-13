@@ -15,15 +15,6 @@ $where = array(
 //  "compte_rendu_id" => "= '47325'"
 );
   
-$MSO_replacements = array (
-  "o:p" => "p",
-  "w:st" => "st",
-  "st1:personname" => "personname",
-  "st1:metricconverter" => "metricconverter",
-  "o:smarttagtype" => "smarttagtype"
-);
-
-ini_set("memory_limit", "1G");
 set_time_limit(300);
 
 $loops = mbGetValueFromGet("loops", 100);
@@ -32,25 +23,7 @@ $trunk = mbGetValueFromGet("trunk", 100);
 mbTrace($loops, "loops");
 mbTrace($trunk, "trunk");
 
-//$problems = array();
-//for ($loop = 0; $loop < $loops; $loop++) {
-//  $starting = $loop*$trunk;
-//  CSQLDataSource::$trace= true;
-//  $docs = $doc->loadList($where, "compte_rendu_id DESC", "$starting, $trunk");
-//  CSQLDataSource::$trace= false;
-//  foreach ($docs as $_doc) {
-//	  $source = utf8_encode("<div>$_doc->source</div>");
-//	  
-//	  $source = preg_replace("/&\w+;/i", "", $source);
-//	  
-//	  if (false == $validation = @DOMDocument::loadXML($source)) {
-//	    $problems[$_doc->_id] = $_doc;
-//	  }
-//	}  
-//}
-
-
-
+$problems = array();
 for ($loop = 0; $loop < $loops; $loop++) {
   $starting = $loop*$trunk;
   $ds = $doc->_spec->ds;
@@ -61,9 +34,13 @@ for ($loop = 0; $loop < $loops; $loop++) {
 		LIMIT $starting, $trunk";
   $docs = $ds->loadHashList($query);
   foreach ($docs as $doc_id => $doc_source) {
+    // Root node surrounding
 	  $source = utf8_encode("<div>$doc_source</div>");
+	  
+	  // Entity purge
 	  $source = preg_replace("/&\w+;/i", "", $source);
 	  
+	  // Escape warnings, returns false if really invalid
 	  if (false == $validation = @DOMDocument::loadXML($source)) {
 	    $doc = new CCompteRendu;
 	    $doc->load($doc_id);
