@@ -25,7 +25,6 @@ class CRecordSante400 {
   }
 
   static function connect() {
-    
     if (self::$dbh) {
       return;
     }
