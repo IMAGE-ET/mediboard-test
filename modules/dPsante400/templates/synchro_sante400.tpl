@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function explain(iRec) {
+function retry(iRec) {
   url = new Url();
   url.setModuleAction("{{$m}}", "{{$action}}");
   url.addParam("rec", iRec);
@@ -132,8 +132,8 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
   {{if !$dialog}}
   <td>
-    <button class="search" onclick="explain({{$curr_mouv->rec}})">
-      Explications
+    <button class="search" onclick="retry({{$curr_mouv->rec}})">
+      {{tr}}Retry{{/tr}}
     </button>
   </td>
   {{/if}}

@@ -22,7 +22,8 @@ $marked = mbGetValueFromGetOrSession("marked", "1");
 $max = mbGetValueFromGet("max", CAppUI::conf("dPsante400 nb_rows"));
 
 // Load mouvements
-$mouv = CMouvFactory::create($type);
+$class = mbGetValueFromGet("class");
+$mouv =  $class ? new $class : CMouvFactory::create($type);
 $count = $mouv->count($marked);
 $mouvs = array();
 if ($rec = mbGetValueFromGet("rec")) {

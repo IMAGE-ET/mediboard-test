@@ -13,8 +13,8 @@ class CTriggerMark extends CMbObject {
   var $mark_id        = null;
   
   // DB Fields
+  var $trigger_class   = null;
   var $trigger_number = null;
-  var $trigger_class  = null;
   var $mark           = null;
   var $done           = null;
   
@@ -28,10 +28,10 @@ class CTriggerMark extends CMbObject {
 
   function getProps() {
   	$props = parent::getProps();
-    $props["trigger_number"] = "str notNull maxLength|10";
-    $props["trigger_class"]  = "str";
-    $props["done"]           = "bool";
-    $props["mark"]           = "str";
+    $props["trigger_class"]  = "str notNull";
+  	$props["trigger_number"] = "str notNull maxLength|10";
+    $props["done"]           = "bool notNull";
+    $props["mark"]           = "str notNull";
     
     return $props;
   }
@@ -39,7 +39,7 @@ class CTriggerMark extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-   $this->_view = "Mark for trigger $this->trigger_class #$this->trigger_number";
+    $this->_view = "Mark for trigger $this->trigger_class #$this->trigger_number";
   }
 }
 ?>

@@ -39,6 +39,24 @@ class CMouvFactory {
   }
   
   /**
+   * Get available types for current compat config
+   * @return array the types, null for invalid compat
+   */
+  static function getClasses() {
+		if (null == $mode_compat = CAppUI::conf("interop mode_compat")) {
+		  trigger_error("Mode de compatibilité non initalisé", E_USER_ERROR);
+		  return;
+		}
+		
+		if (!array_key_exists($mode_compat, self::$matrix)) {
+		  trigger_error("Mode de compatibilité '$mode_compat' non géré", E_USER_ERROR);
+		  return;  
+		}
+
+		return array_values(self::$matrix[$mode_compat]);
+  }
+  
+  /**
    * Create a mouvement instance from given type
    *
    * @param string $type

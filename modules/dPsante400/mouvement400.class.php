@@ -53,6 +53,28 @@ class CMouvement400 extends CRecordSante400 {
     $this->valuePrefix = $this->type == "S" ? "B_": "A_";
   }
   
+  
+  /**
+   * Try and store trigger mark according to module config
+   */
+  static function storeMark($mark) {
+    if (CAppUI::conf("dPsante400 mark_row")) {
+	    if ($msg = $mark->store()) {
+	       trigger_error("Enable to store CTriggerMark: $msg", E_USER_WARNING);
+	    }
+    }
+  }
+  
+  /**
+   * Mark mouvement as being handled
+   */
+  function checkOut() {
+    $mark = $this->loadTriggerMark();
+    $mark->mark = "========";
+    $mark->done = "0";
+    self::storeMark($mark);;
+  }
+  
   /**
    * Load List of mouvements
    * @param $marked bool Will load only marked (already processed)
@@ -61,56 +83,64 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadList($marked = false, $max = 100) {
     $query = "SELECT * FROM $this->base.$this->table";
-    $query.= $this->getMarkedClause($marked);
+    $query.= $this->getNewMarkedClause($marked);
     $query.= $this->getFilterClause();
  
     $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
 
     // Multiple checkout
-    $recs = array();
     foreach ($mouvs as &$mouv) {
-      $mouv->initialize();
-      $recs[] = "'$mouv->rec'";
+      $mouv->initialize(); 
+      $mouv->checkOut();     
     }
-    
-    if (count($mouvs)) {
-      if (CAppUI::conf("dPsante400 mark_row")) {
-        $recs = join($recs, ",");
-        
-        $query = "UPDATE $mouv->base.$mouv->table " .
-            "\n SET $mouv->markField = '========' " .
-            "\n WHERE $mouv->idField IN ($recs)";
-        
-        $rec = new CRecordSante400;
-        $this->trace($query, "Tracing opened mouvements");
-        $rec->query($query);
-      }
-    }
-    
+            
     return $mouvs;
   }
   
   function getFilterClause() {
     return;
   }
+  
+  function getNewMarkedClause($marked, $max = 100) {
+	  $mark = new CTriggerMark();
+	  $mark->trigger_class = get_class($this);
 
-  function getMarkedClause($marked) {
-    if (!$this->markField) {
-      return;
+	  if ($marked) {
+      $where["trigger_class"] = "= '$mark->trigger_class'";
+	    $where["done"] = "= '0'";
+      $where["mark"] = "!= '========'";
+      $marks = $mark->loadList($where);
+      $clause = "\n WHERE $this->idField " . $mark->_spec->ds->prepareIn(CMbArray::pluck($marks, "trigger_number"));
+    }
+    else {
+	    $mark->loadMatchingObject("trigger_number DESC");
+	    $last_number = $mark->trigger_number ? $mark->trigger_number : 0;
+	    $clause = "\n WHERE $this->idField > '$last_number'";
+    }
+    return $clause;
+  }
+  
+  function count($marked = false) {
+
+    if ($marked) {
+	    $mark = new CTriggerMark();
+	    $mark->trigger_class = get_class($this);
+      $where = array();
+      $where["trigger_class"] = "= '$mark->trigger_class'";
+      $where["done"] = "= '0'";
+      $where["mark"] = "!= '========'";
+      $total = $mark->countList($where);
+    }
+    else {
+	    $record = new CRecordSante400();
+	    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
+	    $query.= $this->getNewMarkedClause($marked);
+	    $query.= $this->getFilterClause();
+	    $record->query($query);
+	    $total = $record->consume("TOTAL");
     }
     
-    return $marked ? 
-      "\n WHERE $this->markField NOT IN ('', 'OKOKOKOK')" : 
-      "\n WHERE $this->markField = ''";
-  }
-
-  function count($marked = false) {
-    $record = new CRecordSante400();
-    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
-    $query.= $this->getMarkedClause($marked);
-    $query.= $this->getFilterClause();
-    $record->query($query);
-    return $record->consume("TOTAL");
+    return $total;
   }
   
   /**
@@ -154,17 +184,7 @@ class CMouvement400 extends CRecordSante400 {
 
     $this->loadOne($query, $values);
     $this->initialize();
-
-    // Checkout
-    if (CAppUI::conf("dPsante400 mark_row")) {
-      $query = "UPDATE $this->base.$this->table " .
-          "\n SET $this->markField = '========' " .
-          "\n WHERE $this->idField = ?";
-      $values = array($this->rec);
-      
-      $rec = new CRecordSante400;
-      $rec->query($query, $values);
-    }
+    $this->checkOut();     
   }
   
 /**
@@ -187,40 +207,10 @@ class CMouvement400 extends CRecordSante400 {
       $this->status .= $status;
     }
     
-    $mark = new CTriggerMark();
-    $mark->trigger_number = $this->rec;
-    $mark->type = get_class($this);
-    $mark->loadMatchingObject();
+    $mark = $this->loadTriggerMark();
     $mark->mark = $this->status;
-    if (!CAppUI::conf("dPsante400 mark_row")) {
-      $mark->done = in_array(null, $this->statuses, true);
-    }
-    
-    mbTrace($mark->getValues());
-
-    if (!CAppUI::conf("dPsante400 mark_row")) {
-      return;
-    }
-    
-    if (!$this->markField) {
-      return null;
-    }
-    
-    // DB Fields
-    
-    
-    $query = 
-      !in_array(null, $this->statuses, true) ?
-// NEVER DELETE
-//      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
-      "UPDATE $this->base.$this->table SET $this->markField = 'OKOKOKOK' WHERE $this->idField = ?" :
-      "UPDATE $this->base.$this->table SET $this->markField = '$this->status' WHERE $this->idField = ?";
-    $values = array (
-      $this->rec,
-    );
-    
-    $rec = new CRecordSante400;
-    $rec->query($query, $values);
+    $mark->done = in_array(null, $this->statuses, true) ? "0" : "1";
+    self::storeMark($mark);;
   }
   
   /**
@@ -269,9 +259,7 @@ class CMouvement400 extends CRecordSante400 {
     
     // Complète les valeurs
     $mark->mark = $this->mark;
-    if ($mark->mark == "OKOKOKOK") {
-      $mark->done = '1';
-    }
+    $mark->done = $mark->mark == "OKOKOKOK" ? '1' : '0';
     
     return $mark;
   }

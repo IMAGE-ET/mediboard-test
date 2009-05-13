@@ -72,11 +72,12 @@ class CSetupdPsante400 extends CSetup {
     $this->makeRevision("0.16");
     $sql = "CREATE TABLE `trigger_mark` (
 			`mark_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+			`trigger_class` VARCHAR (255) NOT NULL,
 			`trigger_number` VARCHAR (10) NOT NULL,
-			`trigger_class` VARCHAR (255),
-			`mark` VARCHAR (255),
-			`done` ENUM ('0','1')
+			`mark` VARCHAR (255) NOT NULL,
+			`done` ENUM ('0','1') NOT NULL
 		) TYPE=MYISAM;";
+        
     $this->addQuery($sql);
     
     $this->makeRevision("0.17");
