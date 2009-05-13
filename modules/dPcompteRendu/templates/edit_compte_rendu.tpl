@@ -7,10 +7,19 @@ window.opener.Document.refreshList(
 );
 {{/if}}
 
+function submitCompteRendu(){
+  (function(){
+    var form = getForm("editFrm");
+    if(checkForm(form) && window.userId) {
+      form.submit();
+    }
+  }).defer();
+}
+
 document.stopObserving('keydown', closeWindowByEscape);
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;">
 
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="del" value="0" />
