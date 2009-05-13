@@ -16,6 +16,23 @@ class CHtmlSpec extends CMbFieldSpec {
     return("html");
   }
   
+  function checkProperty($object){
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    
+    // Root node surrounding
+    $source = utf8_encode("<div>$propValue</div>");
+    
+    // Entity purge
+    $source = preg_replace("/&\w+;/i", "", $source);
+    
+    // Escape warnings, returns false if really invalid
+    if (!@DOMDocument::loadXML($source)) {
+      return "Le document HTML est mal formé, ou la requête n'a pas pu se terminer.";
+    }
+    return null;
+  }
+  
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $fieldName = $this->fieldName;

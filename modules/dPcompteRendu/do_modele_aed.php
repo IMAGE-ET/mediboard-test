@@ -45,11 +45,13 @@ if (isset($_POST["source"])) {
     $object->load($_POST["object_id"]);
     CDestinataire::makeAllFor($object);
     $allDest = CDestinataire::$destByClass;
+    $bodyTag = '<div id=\"body\">';
+    
     // On sort l'en-tête et le pied de page
-    $posBody      = strpos($_POST["source"], '<div id=\"body\">');
+    $posBody      = strpos($_POST["source"], $bodyTag);
     if($posBody) {
       $headerfooter = substr($_POST["source"], 0, $posBody);
-      $body         = substr($_POST["source"], $posBody+strlen('<div id=\"body\">'), -strlen("</div>"));
+      $body         = substr($_POST["source"], $posBody+strlen($bodyTag), -strlen("</div>"));
     } else {
       $headerfooter = "";
       $body         = $_POST["source"];
@@ -97,30 +99,25 @@ if (intval(dPgetParam($_POST, "del"))) {
 
 
 if($do->ajax){
- $idName   = $do->objectKeyGetVarName;
- $callBack = $do->callBack;
- $idValue  = $do->_obj->$idName;
- echo $AppUI->getMsg();
- if ($callBack) {
-   echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
- }
- CApp::rip();
- 
-}else{
-
-  if($do->_obj->object_id && !intval(dPgetParam($_POST, "del"))) {
-    $do->redirectStore = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
-  ?>
-    <script type="text/javascript">
-      var url = 'index.php?m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=';
-      url += '<?php echo $do->_obj->_id ?>';
-      window.location.href = url;
-    </script>
-  <?php
-  } else { 
-    $do->redirectStore = "m=$m&compte_rendu_id=".$do->_obj->_id;
-    $do->doRedirect();
+  $idName   = $do->objectKeyGetVarName;
+  $callBack = $do->callBack;
+  $idValue  = $do->_obj->$idName;
+  echo $AppUI->getMsg();
+  if ($callBack) {
+    echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
   }
+  CApp::rip();
+}
 
+else {
+  // Si c'est un compte rendu
+  if($do->_obj->object_id && !intval(dPgetParam($_POST, "del"))) {
+    $do->redirect = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
+  } 
+  // Si c'est un modèle de compte rendu
+  else { 
+    $do->redirect = "m=$m&compte_rendu_id=".$do->_obj->_id;
+  }
+  $do->doRedirect();
 }
 ?>
