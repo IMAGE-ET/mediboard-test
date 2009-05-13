@@ -72,7 +72,7 @@ class CMouvement400 extends CRecordSante400 {
     $mark = $this->loadTriggerMark();
     $mark->mark = "========";
     $mark->done = "0";
-    self::storeMark($mark);;
+    self::storeMark($mark);
   }
   
   /**

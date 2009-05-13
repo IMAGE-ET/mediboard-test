@@ -64,6 +64,7 @@ class CBoolSpec extends CMbFieldSpec {
     $separator    = CMbArray::extract($params, "separator");
     $disabled     = CMbArray::extract($params, "disabled");
     $default      = CMbArray::extract($params, "default", $this->default);
+    $defaultOption = CMbArray::extract($params, "defaultOption");
     $extra        = CMbArray::makeXmlAttributes($params);
     
     if ($typeEnum === "radio") {
@@ -98,7 +99,7 @@ class CBoolSpec extends CMbFieldSpec {
 	    return $sHtml;
     } 
     
-    if($typeEnum === "checkbox"){
+    if ($typeEnum === "checkbox"){
     	if(($value !== null && $value === "1")){
         $checked = " checked=\"checked\""; 
       }else{
@@ -111,6 +112,30 @@ class CBoolSpec extends CMbFieldSpec {
     
     	return $sHtml;
     } 
+
+    if ($typeEnum === "select") {
+      $sHtml       = "<select name=\"$field\"";
+      $sHtml      .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>";
+      
+      if ($defaultOption){
+        if($value === null) {
+          $sHtml    .= "\n<option value=\"\" selected=\"selected\">&mdash; $defaultOption</option>";
+        } else {
+          $sHtml    .= "\n<option value=\"\">&mdash; $defaultOption</option>";
+        }
+      }
+      
+      foreach ($this->_locales as $key => $item){
+        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
+          $selected = " selected=\"selected\""; 
+        }else{
+          $selected = "";
+        }
+        $sHtml    .= "\n<option value=\"$key\"$selected>$item</option>";
+      }
+      $sHtml      .= "\n</select>";
+      return $sHtml;
+    }    
   }
   
   function getLabelForElement($object, &$params){

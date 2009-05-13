@@ -572,8 +572,9 @@ abstract class CSQLDataSource {
       return "= '$alternate'";
     }
     
+    // '0' = '1' is multi base compatible
     if (!count($values)) {
-      return "IS NULL AND 0";
+      return "IS NULL AND '0' = '1'";
     }
     
     foreach ($values as &$value) {
