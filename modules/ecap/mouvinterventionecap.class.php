@@ -119,10 +119,10 @@ class CMouvInterventionECap extends CMouvSejourEcap {
       $this->id400DHE->id400,
     );
     
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECATPF " .
-        "\nWHERE ATCIDC = ? " .
-        "\nAND ATIDAT = ? ";
+    $query = "SELECT * 
+			FROM $this->base.ECATPF
+			WHERE ATCIDC = ? AND ATCDIV = '01' AND ATCSDV = '01' 
+			AND ATIDAT = ? ";
 
     // Recherche de la DHE
     $dheECap = new CRecordSante400();
@@ -161,10 +161,10 @@ class CMouvInterventionECap extends CMouvSejourEcap {
       $this->id400Sej->id400,
     );
     
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECSJ00 " .
-        "\nWHERE SJCIDC = ? " .
-        "\nAND SJNDOS = ? ";
+    $query = "SELECT * 
+			FROM $this->base.ECSJ00
+			WHERE SJCIDC = ? AND SJCDIV = '01' AND SJCSDV = '01' 
+			AND SJNDOS = ? ";
 
     // Recherche du séjour
     $sejECap = new CRecordSante400();
@@ -272,10 +272,10 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     
     $operation = $this->operations[$CINT];
     
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECACPF " .
-        "\nWHERE ACCIDC = ? " .
-        "\nAND ACCINT = ? ";
+    $query = "SELECT *
+			FROM $this->base.ECACPF
+			WHERE ACCIDC = ?  AND ACCDIV = '01' AND ACCSDV = '01'
+			AND ACCINT = ? ";
 
     $values = array (
       $this->id400Etab->id400,

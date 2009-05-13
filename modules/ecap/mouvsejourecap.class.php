@@ -89,12 +89,12 @@ class CMouvSejourEcap extends CMouvementEcap {
       $id
     );
     
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECTXPF " .
-        "\nWHERE TXCIDC = ? " .
-        "\nAND TXTABL = ? " .
-        "\nAND TXZONE = ?" .
-        "\nAND TXCL = ?";
+    $query = "SELECT * 
+			FROM $this->base.ECTXPF
+      WHERE TXCIDC = ?  AND TXCDIV = '01' AND TXCSDV = '01'
+      AND TXTABL = ?
+      AND TXZONE = ?
+      AND TXCL = ?";
     
     $tx400 = new CRecordSante400;
     $tx400->query($query, $values);
@@ -241,9 +241,9 @@ class CMouvSejourEcap extends CMouvementEcap {
       // At least one true mediuser property or update won't work
       $praticien->actif = "0";
     } else {
-      $query = "SELECT * FROM $this->base.ECPRPF " .
-          "\nWHERE PRCIDC = ? " .
-          "\nAND PRCPRT = ?";
+      $query = "SELECT * FROM $this->base.ECPRPF 
+				WHERE PRCIDC = ? AND PRCDIV = '01' AND PRCSDV = '01' 
+				AND PRCPRT = ?";
       $values = array (
         $this->id400Etab->id400, 
         $CPRT,
@@ -276,8 +276,8 @@ class CMouvSejourEcap extends CMouvementEcap {
       // Import de la spécialité eCap
       $CSPE = $prat400->consume("CSPE");
       
-      $query = "SELECT * FROM $this->base.ECSPPF " .
-          "\nWHERE SPCSPE = ?";
+      $query = "SELECT * FROM $this->base.ECSPPF
+				WHERE SPCSPE = ?";
       $values = array (
         $CSPE,
       );
@@ -360,9 +360,9 @@ class CMouvSejourEcap extends CMouvementEcap {
     }
     
     $pat400 = new CRecordSante400();
-    $query = "SELECT * FROM $this->base.ECPAPF " .
-        "\nWHERE PACIDC = ? " .
-        "\nAND PADMED = ?";
+    $query = "SELECT * FROM $this->base.ECPAPF 
+			WHERE PACIDC = ? AND PACDIV = '01' AND PACSDV = '01'
+			AND PADMED = ?";
     $values = array (
       $this->id400Etab->id400,
       $DMED,
@@ -437,8 +437,8 @@ class CMouvSejourEcap extends CMouvementEcap {
 
     // Motifs d'hospitalisations
     if ("0" != $CMOT = $dheECap->consume("CMOT")) {
-      $query = "SELECT * FROM $this->base.ECMOPF " .
-          "\nWHERE MOCMOT = ?";
+      $query = "SELECT * FROM $this->base.ECMOPF 
+				WHERE MOCMOT = ?";
           
       $values = array (
         $CMOT
@@ -514,11 +514,11 @@ class CMouvSejourEcap extends CMouvementEcap {
         
     $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
 
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECATPF " .
-        "\nWHERE ATCIDC = ? " .
-        "\nAND ATNDOS = ? " .
-        "\nAND ATDMED = ?";
+    $query = "SELECT * 
+			FROM $this->base.ECATPF
+			WHERE ATCIDC = ? AND ATCDIV = '01' AND ATCSDV = '01'
+		  AND ATNDOS = ?
+			AND ATDMED = ?";
 
     // Recherche de la DHE
     $dheECap = new CRecordSante400();
@@ -545,37 +545,6 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->starStatus(self::STATUS_OPERATION);
     $this->starStatus(self::STATUS_ACTES);
   }
-  
-  function syncOperationsOld() {
-    // On ne mappe plus les interventions
-    return;
-
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECINPF " .
-        "\nWHERE INCIDC = ? " .
-        "\nAND ((INNDOS = ? AND INDMED = ?) OR INCINT = ?)";
-
-    $values = array (
-      $this->id400Etab->id400,
-      $this->id400Sej->id400,
-      $this->id400Pat->id400,
-      $this->dheCINT,
-    );
-    
-    // Recherche des opérations
-    $opersECap = CRecordSante400::multipleLoad($query, $values);
-    foreach ($opersECap as $operECap) {
-      $operECap->valuePrefix = "IN";
-      $this->mapBindOperation($operECap);
-    }
-
-    // Status
-    $this->markStatus(self::STATUS_OPERATION, count($opersECap));
-    if (!count($opersECap)) {
-      $this->markStatus(self::STATUS_ACTES, 0);
-    }
-  }
-
 
   /**
    * Map un séjour eCap en séjour Mediboard
