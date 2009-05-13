@@ -55,7 +55,12 @@ class CHprimSoapHandler extends CSoapHandler {
     "I23" => "IPP connu, IC non fourni.",
     "I24" => "IPP connu, IC connu.",
   );
-
+  
+  /**
+   * The message contains a collection of administrative notifications of events occurring to patients in a healthcare facility.
+   * @param CHPrimXMLEvenementsPatients messagePatient
+   * @return CHPrimXMLAcquittementsPatients messageAcquittement 
+   **/
   function evenementPatient($messagePatient) {
     global $m;
     

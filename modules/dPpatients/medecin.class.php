@@ -29,6 +29,7 @@ class CMedecin extends CMbObject {
   var $orientations    = null;
   var $complementaires = null;
   var $type            = null;
+  var $adeli           = null;
 
   // Object References
   var $_ref_patients = null;
@@ -63,6 +64,7 @@ class CMedecin extends CMbObject {
     $specs["orientations"]    = "text confidential";
     $specs["complementaires"] = "text confidential";
     $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier default|medecin";
+    $specs["adeli"]           = "numchar length|9 confidential mask|99S9S99999S9";
     return $specs;
   }
   

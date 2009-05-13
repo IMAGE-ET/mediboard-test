@@ -222,6 +222,9 @@ Main.add( function(){
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
+
+{{mb_field object=$sejour field="codes_ccam" hidden=1}}
+
 {{if $mode_operation}}
   <input type="hidden" name="callback" value="submitFormOperation" />
 {{/if}}

@@ -22,7 +22,7 @@
 <div class="big-info"  style="display: none; text-align: center;" id="evenement-chooser-modal">
   Cette consultation de pré-anesthésiologie n'est pas associée à une intervention.
   {{if $nextSejourAndOperation.COperation->_id}}
-    Mediboard a détécté une interrvention qui pourrait probablement convenir :
+    Mediboard a détécté une intervention qui pourrait probablement convenir :
     <br />
     <strong>{{$nextSejourAndOperation.COperation->_view}} -
     {{$nextSejourAndOperation.COperation->_datetime|date_format:"%d/%m/%Y"}}</strong>
@@ -31,8 +31,8 @@
     <br />
     <button class="tick" onclick="selectOperation('{{$nextSejourAndOperation.COperation->_id}}'); modalWindow.close();">Oui</button>
   {{/if}}
-  {{if $nextSejourAndOperation.CSejour->_id && $nextSejourAndOperation.COperation->_ref_sejour->_id != $nextSejourAndOperation.CSejour->_id}}
-    Mediboard a détécté une interrvention qui pourrait probablement convenir :
+  {{if $nextSejourAndOperation.CSejour->_id && $nextSejourAndOperation.COperation->_id && ($nextSejourAndOperation.COperation->_ref_sejour->_id != $nextSejourAndOperation.CSejour->_id)}}
+    Mediboard a détécté une intervention qui pourrait probablement convenir :
     <br />
     <strong>{{$nextSejourAndOperation.CSejour->_view}}</strong>
     <br />

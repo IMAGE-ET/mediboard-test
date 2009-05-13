@@ -109,6 +109,8 @@ class CSejour extends CCodable {
   var $_ref_prescriptions     = null;
   var $_ref_last_prescription = null;
   var $_ref_numdos            = null;
+  var $_ref_prescripteurs     = null;
+  var $_ref_adresse_par_prat  = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -744,6 +746,11 @@ class CSejour extends CCodable {
     $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }
   
+  function loadRefAdresseParPraticien() {
+    $this->_ref_adresse_par_prat = new CMedecin();
+    $this->_ref_adresse_par_prat->load($this->adresse_par_prat_id);
+  }
+  
   function loadRefsConsultAnesth() {
     if ($this->_ref_consult_anesth) {
       return;
@@ -785,17 +792,16 @@ class CSejour extends CCodable {
   	}
   }
   
-  function getPrescripteurs(){
-    $prescripteurs = array();
+  function loadRefsPrescripteurs(){
     $prescription_sejour = new CPrescription();
     $this->loadRefsPrescriptions();
     foreach($this->_ref_prescriptions as $_prescription){
       $_prescription->getPraticiens();
       if(is_array($_prescription->_praticiens)){
 	      foreach($_prescription->_praticiens as $_praticien_id => $_praticien_view){
-          if(!array_key_exists($_praticien_id, $prescripteurs)){
+          if(!is_array($this->_ref_prescripteurs) || !array_key_exists($_praticien_id, $this->_ref_prescripteurs)){
             $praticien = new CMediusers(); 
-	          $prescripteurs[$_praticien_id] = $praticien->load($_praticien_id);
+	          $this->_ref_prescripteurs[$_praticien_id] = $praticien->load($_praticien_id);
 	        } 
 	      }
       }

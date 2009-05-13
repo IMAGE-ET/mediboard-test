@@ -79,7 +79,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $data['action'] = $this->getActionEvenement("hprim:enregistrementPatient", $evenementPatient);
 
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $enregistrementPatient);
-    $data['voletMedical'] = $xpath->queryUniqueNode("hprim:voletMedical", $enregistrementPatient);
 
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible'] = $this->getIdCible($data['patient']);

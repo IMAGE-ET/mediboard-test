@@ -7,10 +7,22 @@ togglePrenomsList = function(element) {
 	Element.classNames(element).flip('up', 'down');
 }
 
+disableOptions = function (select, list) {
+	$A(select.options).each(function (o) {
+		o.disabled = (list.indexOf(o.value) != -1);
+	});
+}
+
 changeCiviliteForSexe = function(element) {
 	if (!noChangeCivilite) {
-		var valueCivilite = ($V(element) == 'm') ? $V(element) : 'mme';
-    $V("editFrm_civilite", valueCivilite);
+		var valueSexe = $V(element);
+		if(valueSexe == 'm') {
+			$V("editFrm_civilite", 'm');
+			disableOptions($('editFrm_civilite'), ['mme', 'melle', 'vve']);
+		} else {
+			$V("editFrm_civilite", 'mme');
+			disableOptions($('editFrm_civilite'), ['m']);
+		} 
     noChangeCivilite = false;
 	}
 }
@@ -40,6 +52,9 @@ Main.add(function() {
       break;
     }
   }
+  var oForm = document.editFrm;
+  var oElement = oForm.civilite;
+  changeCiviliteForSexe(oElement);
 }); 
 </script>
 
@@ -101,7 +116,7 @@ Main.add(function() {
       {{assign var=civilite_locales value=$patient->_specs.civilite}} 
       <select name="civilite" onchange="copyIdentiteAssureValues(this); noChangeCivilite=true">
         {{foreach from=$civilite_locales->_locales key=key item=curr_civilite}} 
-        <option value="{{$key}}" {{if $key == $patient->civilite}}selected="selected"{{/if}}>{{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}})</option>
+        <option value="{{$key}}" {{if $key == $patient->civilite}}selected="selected"{{/if}}> {{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}}) </option>
         {{/foreach}}
       </select>
     </td>

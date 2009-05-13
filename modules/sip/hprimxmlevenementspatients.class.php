@@ -101,12 +101,31 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     // Création de l'element personnePhysique
     $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
+    
     $sexe = $xpath->queryAttributNode("hprim:personnePhysique", $node, "sexe");
     $sexeConversion = array (
         "M" => "m",
         "F" => "f",
     );
     $mbPatient->sexe = $sexeConversion[$sexe];
+    
+    // Récupération du typePersonne
+    $mbPatient = $this->getPersonne($personnePhysique,$mbPatient);
+    
+    $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
+    $mbPatient->naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
+    
+    $lieuNaissance = $xpath->queryUniqueNode("hprim:lieuNaissance", $personnePhysique);
+    $mbPatient->lieu_naissance = $xpath->queryTextNode("hprim:ville", $lieuNaissance);
+    $mbPatient->pays_naissance_insee = $xpath->queryTextNode("hprim:pays", $lieuNaissance);
+    $mbPatient->cp_naissance = $xpath->queryTextNode("hprim:codePostal", $lieuNaissance);
+    
+    return $mbPatient;
+  }
+  
+  function getPersonne($node, $mbPatient) {
+  	$xpath = new CMbXPath($this);
+    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     
     $civiliteHprim = $xpath->queryAttributNode("hprim:personnePhysique", $node, "civiliteHprim");
     $civiliteHprimConversion = array (
@@ -117,7 +136,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       "pr"    => "pr",
       "enf"   => "enf",
     );
-    $mbPatient->civilite = $civiliteHprimConversion[$civiliteHprim];
+    $mbPatient->civilite = $civiliteHprimConversion[$civiliteHprim];    
     
     $mbPatient->nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
     $mbPatient->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $personnePhysique);
@@ -143,14 +162,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $personnePhysique);
     $mbPatient->email = isset($emails[0]) ? $emails[0] : "";
-    
-    $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
-    $mbPatient->naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
-    
-    $lieuNaissance = $xpath->queryUniqueNode("hprim:lieuNaissance", $personnePhysique);
-    $mbPatient->lieu_naissance = $xpath->queryTextNode("hprim:ville", $lieuNaissance);
-    $mbPatient->pays_naissance_insee = $xpath->queryTextNode("hprim:pays", $lieuNaissance);
-    $mbPatient->cp_naissance = $xpath->queryTextNode("hprim:codePostal", $lieuNaissance);
     
     return $mbPatient;
   }

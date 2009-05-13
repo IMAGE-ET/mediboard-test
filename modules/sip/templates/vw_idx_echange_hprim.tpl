@@ -57,6 +57,23 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
 	          <th class="category" colspan="2">Critères de filtres</th>
 	        </tr>
 	        <tr>
+            <th>Types d'événements patients</th>
+            <td>
+              <select class="str" name="type_evenement">
+                <option value="">&mdash; Liste des événements </option>
+                <option value="enregistrementPatient" {{if $type_evenement == "enregistrementPatient"}}selected="selected"{{/if}}>
+                  Enregistrement Patient
+                </option>
+                <option value="fusionPatient" {{if $type_evenement == "fusionPatient"}}selected="selected"{{/if}}>
+                  Fusion Patient
+                </option>
+                <option value="venuePatient" {{if $type_evenement == "venuePatient"}}selected="selected"{{/if}}>
+                  Venue Patient
+                </option>
+              </select>
+            </td>
+          </tr>
+	        <tr>
 	          <th>Choix du statut d'acquittement</th>
 	          <td>
 	            <select class="str" name="statut_acquittement">

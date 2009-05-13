@@ -206,7 +206,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $this->addIdentifiantPart($identifiant, "recepteur", $pat.$mbPatient->_id400, $referent);
     }  
     
-    $personnePhysique = $this->addElement($elParent, "personnePhysique");
+    // Ajout typePersonnePhysique
+    $this->addPersonnePhysique($elParent, $mbPatient);
+  }
+  
+  function addPersonnePhysique($elParent, $mbPatient) {
+  	$personnePhysique = $this->addElement($elParent, "personnePhysique");
     
     $sexeConversion = array (
       "m" => "M",
@@ -214,40 +219,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     );
     
     $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
-    $this->addTexte($personnePhysique, "nomUsuel", $mbPatient->nom);
-    $this->addTexte($personnePhysique, "nomNaissance", $mbPatient->_nom_naissance);
     
-    $prenoms = $this->addElement($personnePhysique, "prenoms");
-    foreach ($mbPatient->_prenoms as $mbKey => $mbPrenom) {
-      if ($mbKey < 3) {
-        $this->addTexte($prenoms, "prenom", $mbPrenom);
-      }
-    }
-    
-    $civiliteHprim = $this->addElement($personnePhysique, "civiliteHprim");
-    $civiliteHprimConversion = array (
-      "mme"   => "mme",
-      "melle" => "mlle",
-      "m"     => "mr",
-      "dr"    => "dr",
-      "pr"    => "pr",
-      "enf"   => "enf",
-    );
-    $this->addAttribute($civiliteHprim, "valeur", $civiliteHprimConversion[$mbPatient->civilite]);
-    
-    $adresses = $this->addElement($personnePhysique, "adresses");
-    $adresse = $this->addElement($adresses, "adresse");
-    $this->addTexte($adresse, "ligne", substr($mbPatient->adresse, 0, 35));
-    $this->addTexte($adresse, "ville", $mbPatient->ville);
-    $this->addElement($adresse, "pays", str_pad($mbPatient->pays_insee, 3, '0', STR_PAD_LEFT));
-    $this->addElement($adresse, "codePostal", $mbPatient->cp);
-    
-    $telephones = $this->addElement($personnePhysique, "telephones");
-    $this->addElement($telephones, "telephone", $mbPatient->tel);
-    $this->addElement($telephones, "telephone", $mbPatient->tel2);
-    
-    $emails = $this->addElement($personnePhysique, "emails");
-    $this->addElement($emails, "email", $mbPatient->email);
+    // Ajout typePersonne
+    $this->addPersonne($personnePhysique, $mbPatient);
     
     $dateNaissance = $this->addElement($personnePhysique, "dateNaissance");
     $this->addElement($dateNaissance, "date", $mbPatient->naissance);
@@ -256,6 +230,86 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "ville", $mbPatient->lieu_naissance);
     $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
+  }
+  
+  function addPersonne($elParent, $mbPersonne) {
+  	$personne = array();
+  	$civiliteHprimConversion = array (
+      "mme"   => "mme",
+      "melle" => "mlle",
+      "m"     => "mr",
+      "dr"    => "dr",
+      "pr"    => "pr",
+      "enf"   => "enf",
+    );
+      
+  	if ($mbPersonne instanceof CPatient) {
+  		$personne['nom'] = $mbPersonne->nom;
+  		$personne['nomNaissance'] = $mbPersonne->_nom_naissance;
+	  	if (isset($mbPersonne->_prenoms)) {
+	      foreach ($mbPersonne->_prenoms as $mbKey => $mbPrenom) {
+	        if ($mbKey < 3) {
+	          $personne['prenoms'][] = $mbPrenom; 
+	        }
+	      }
+	    }
+  		$personne['civilite'] = $mbPersonne->civilite;
+  		$personne['ligne'] = $mbPersonne->adresse;
+  		$personne['ville'] = $mbPersonne->ville;
+  		$personne['pays'] = $mbPersonne->pays_insee;
+  		$personne['codePostal'] = $mbPersonne->cp;
+  		$personne['tel'] = $mbPersonne->tel;
+  		$personne['tel2'] = $mbPersonne->tel2;
+  		$personne['email'] = $mbPersonne->email;
+  	} else if ($mbPersonne instanceof CMedecin) {
+  		$personne['nom'] = $mbPersonne->nom;
+      $personne['nomNaissance'] = $mbPersonne->jeunefille;
+      $personne['civilite'] = "";
+      $personne['prenoms'][] = $mbPersonne->prenom;
+      $personne['ligne'] = $mbPersonne->adresse;
+      $personne['ville'] = $mbPersonne->ville;
+      $personne['codePostal'] = $mbPersonne->cp;
+      $personne['pays'] = "";
+      $personne['tel'] = $mbPersonne->tel;
+      $personne['tel2'] = $mbPersonne->portable;
+      $personne['email'] = $mbPersonne->email;
+  	} else if ($mbPersonne instanceof CMediusers) {
+  		$personne['nom'] = $mbPersonne->_user_last_name;
+  		$personne['nomNaissance'] = "";
+  		$personne['civilite'] = "";
+  		$personne['prenoms'][] = $mbPersonne->_user_first_name;
+      $personne['ligne'] = $mbPersonne->_user_adresse;
+      $personne['ville'] = $mbPersonne->_user_ville;
+      $personne['codePostal'] = $mbPersonne->_user_cp;
+      $personne['pays'] = "";
+      $personne['tel'] = $mbPersonne->_user_phone;
+      $personne['tel2'] = "";
+      $personne['email'] = $mbPersonne->_user_email;
+  	}
+  	
+  	$this->addTexte($elParent, "nomUsuel", $personne['nom']);
+  	$this->addTexte($elParent, "nomNaissance", $personne['nomNaissance']);
+    $prenoms = $this->addElement($elParent, "prenoms");
+    foreach ($personne['prenoms'] as $prenom) {
+    	$this->addTexte($prenoms, "prenom", $prenom);
+    }
+    if ($personne['civilite']) {
+    	$civiliteHprim = $this->addElement($elParent, "civiliteHprim");
+      $this->addAttribute($civiliteHprim, "valeur", $civiliteHprimConversion[$personne['civilite']]);    
+    }
+    $adresses = $this->addElement($elParent, "adresses");
+    $adresse = $this->addElement($adresses, "adresse");
+    $this->addTexte($adresse, "ligne", substr($personne['ligne'], 0, 35));
+    $this->addTexte($adresse, "ville", $personne['ville']);
+    $this->addElement($adresse, "pays", str_pad($personne['pays'], 3, '0', STR_PAD_LEFT));
+    $this->addElement($adresse, "codePostal", $personne['codePostal']);
+
+    $telephones = $this->addElement($elParent, "telephones");
+    $this->addElement($telephones, "telephone", $personne['tel']);
+    $this->addElement($telephones, "telephone", $personne['tel2']);
+    
+    $emails = $this->addElement($elParent, "emails");
+    $this->addElement($emails, "email", $personne['email']);
   }
   
   function addErreurAvertissement($elParent, $statut, $code, $libelle, $commentaires = null, $mbObject = null) {
@@ -292,31 +346,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $evenementPatient->tagName;
   }
   
-  function addVenue($elParent, $mbVenue, $referent = null) {
-    $identifiant = $this->addElement($elParent, "identifiant");
-    
-    $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
-    
-    $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
-    $attrNatureVenueHprim = array (
-      "CSejour" => "hsp",
-      "CConsultation" => "cslt",
-    );
-    $this->addAttribute($natureVenueHprim, "valeur", $attrNatureVenueHprim[$mbVenue->_class_name]);
-    
-    $entree = $this->addElement($elParent, "entree");
-    
-    $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
-  	$this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->_entree));
-  	$this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_entree));
-  	
-  	$modeEntree = $this->addElement($entree, "modeEntree");
-  	$this->addAttribute($modeEntree, "valeur", $attrNatureVenueHprim[$mbVenue->_class_name]);
-  	
-  	$medecins = $this->addElement($elParent, "medecins");
+  function addMedecin($elParent, $praticien, $lien) {
   	$medecin = $this->addElement($medecins, "medecin");
-  	$this->addAttribute($medecin, "lien", "");
-  	
+    $this->addAttribute($medecin, "lien", $lien);
+    $this->addElement($medecin, "numeroAdeli", $praticien->adeli);
+    $personne = $this->addElement($medecin, "personne");
+    $this->addPersonne($personne, $praticien);
   }
 }
 

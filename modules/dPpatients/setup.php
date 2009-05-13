@@ -1042,7 +1042,12 @@ class CSetupdPpatients extends CSetup {
             CHANGE `assure_sexe` `assure_sexe` ENUM ('m','f')";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.86";
+    $this->makeRevision("0.86");
+    
+    $sql = "ALTER TABLE `medecin` 
+					  ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
+
+    $this->mod_version = "0.87";
   }
 }
 

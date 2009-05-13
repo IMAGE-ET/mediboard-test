@@ -15,6 +15,7 @@ $can->needsRead();
 $echange_hprim_id    = mbGetValueFromGet("echange_hprim_id");
 $t                   = mbGetValueFromGetOrSession('types', array());
 $statut_acquittement = mbGetValueFromGetOrSession("statut_acquittement");
+$type_evenement      = mbGetValueFromGetOrSession("type_evenement");
 $page                = mbGetValueFromGet('page', 1);
 $now                 = mbDate();
 $_date_min           = mbGetValueFromGetOrSession('_date_min');
@@ -67,6 +68,7 @@ if (isset($t["destinataire"])) {
 
 $where['date_echange'] = (($_date_min) && ($_date_max)) ? "BETWEEN '".$_date_min."' AND '".$_date_max."'" : "IS NULL";
 $where["statut_acquittement"] = $statut_acquittement ? " = '".$statut_acquittement."'" : "IS NULL";
+$where["sous_type"] = $type_evenement ? " = '".$type_evenement."'" : "IS NULL";
 $where["message_valide"] = isset($t["message_valide"]) ? " = '1'" : " = '0' OR message_valide IS NULL";
 $where["acquittement_valide"] = isset($t["acquittement_valide"]) ? " = '1'" : " = '0' OR acquittement_valide IS NULL";
 
@@ -130,6 +132,7 @@ $smarty->assign("page"                , $page);
 $smarty->assign("selected_types"      , $t);
 $smarty->assign("types"               , $types);
 $smarty->assign("statut_acquittement" , $statut_acquittement);
+$smarty->assign("type_evenement"      , $type_evenement);
 $smarty->assign("doc_errors_msg"      , $doc_errors_msg);
 $smarty->assign("doc_errors_ack"      , $doc_errors_ack);
 $smarty->display("vw_idx_echange_hprim.tpl");
