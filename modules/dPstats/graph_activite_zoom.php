@@ -75,7 +75,7 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
       $query .= "\nAND operations.chir_id = '$prat_id'";
     }
     if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
-      $query .= "\nAND operations.anesth_id = '$prat_id'";
+      $query .= "\nAND (operations.anesth_id = '$prat_id' OR plagesop.anesth_id = '$prat_id')";
     }
     if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     if($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
