@@ -138,14 +138,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     );
     $mbPatient->civilite = $civiliteHprimConversion[$civiliteHprim];    
     
-    $mbPatient->nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
-    $mbPatient->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $personnePhysique);
-    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
+    $mbPatient->nom = $xpath->queryTextNode("hprim:nomUsuel", $node);
+    $mbPatient->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
+    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $node);
     $mbPatient->prenom = $prenoms[0];
     $mbPatient->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
     $mbPatient->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
     
-    $adresses = $xpath->queryUniqueNode("hprim:adresses", $personnePhysique);
+    $adresses = $xpath->queryUniqueNode("hprim:adresses", $node);
     $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
     $mbPatient->adresse = $xpath->queryTextNode("hprim:ligne", $adresse);
     $mbPatient->ville = $xpath->queryTextNode("hprim:ville", $adresse);
@@ -156,11 +156,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $mbPatient->pays = $pays->nom_fr;
     $mbPatient->cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     
-    $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $personnePhysique);
+    $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
     $mbPatient->tel = isset($telephones[0]) ? $telephones[0] : "";
     $mbPatient->tel2 = isset($telephones[1]) ? $telephones[1] : "";
     
-    $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $personnePhysique);
+    $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);
     $mbPatient->email = isset($emails[0]) ? $emails[0] : "";
     
     return $mbPatient;
