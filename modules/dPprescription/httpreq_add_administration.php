@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+global $AppUI;
+
 $line_id              = mbGetValueFromGet("line_id");
 $object_class         = mbGetValueFromGet("object_class");
 $quantite             = mbGetValueFromGet("quantite");
@@ -88,7 +90,7 @@ foreach($hours as &$_hour){
 
 // Transmission
 $transmission = new CTransmissionMedicale();
-
+$transmission->loadAides($AppUI->user_id);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("key_tab", $key_tab);

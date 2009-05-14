@@ -233,7 +233,7 @@ viewDossier = function(prescription_id){
   var url = new Url;
   url.setModuleAction("dPprescription", "vw_dossier_cloture");
   url.addParam("prescription_id", prescription_id);
-  url.popup(500,500,"Dossier cloturé");
+  url.popup(800,600,"Dossier cloturé");
 }
 
 calculSoinSemaine = function(date, prescription_id){

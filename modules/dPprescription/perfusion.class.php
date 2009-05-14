@@ -138,7 +138,7 @@ class CPerfusion extends CMbObject {
     
     // Calcul de la view
     $this->_view = ($this->libelle) ? "$this->libelle " : "";
-    $this->_view .= ($this->type) ? " $this->type, " : "";
+    $this->_view .= ($this->type) ? " ".CAppUI::tr("CPerfusion.type.$this->type").", " : "";
     $this->_view .= $this->voie;
     $this->_view .= ($this->vitesse) ? " à $this->vitesse ml/h" : "";
     

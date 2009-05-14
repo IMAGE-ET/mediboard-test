@@ -17,7 +17,7 @@ $prescription->load($prescription_id);
 
 $sejour =& $prescription->_ref_object;
 $sejour->loadRefPatient();
-
+$sejour->_ref_patient->loadRefConstantesMedicales();
 $dossier = array();
 $lines_med = array();
 $lines_elt = array();
@@ -34,10 +34,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
 }
 
 // Chargement de toutes les transmissions du sejour
-$sejour->loadRefsTransmissions();
-foreach($sejour->_ref_transmissions as &$_transmission){
-	$_transmission->loadRefsFwd();
-}
+$sejour->loadSuiviMedical();
 
 // Parcours des lignes de medicament et stockage du dossier cloturé
 foreach($prescription->_ref_prescription_lines as $_line_med){

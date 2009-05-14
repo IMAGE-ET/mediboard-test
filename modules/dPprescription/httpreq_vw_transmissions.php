@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+global $AppUI;
 $ds = CSQLDataSource::get("std");
 // Charge toutes les transmissions liées a un sejour si un sejour_id est passé
 // Sinon, charge les transmissions des dernieres 24 heures pour le praticien_id
@@ -59,6 +60,9 @@ $key = "";
 
 foreach($transmissions as $_transmission){
 	$_transmission->loadRefsFwd();
+  if($_transmission->object_id){
+    $_transmission->_ref_object->loadRefsFwd();
+  }
 	$sejour =& $_transmission->_ref_sejour;
   $sejour->loadRefPatient();
   $sejour->loadRefPraticien();
@@ -78,6 +82,8 @@ foreach($transmissions as $_transmission){
 	  $key = $lit->_view.$lit->_id.$_transmission->date;
 	}
   $_transmission->calculCibles($cibles);
+  
+
   $trans_and_obs[$key][$_transmission->_id] = $_transmission;
 }
 
@@ -112,6 +118,9 @@ if($order_way == "ASC"){
   krsort($trans_and_obs);
 }
 
+$_transmission_medicale = new CTransmissionMedicale();
+$_transmission_medicale->loadAides($AppUI->user_id);
+
 // Variables de templates
 $smarty = new CSmartyDP();
 $smarty->assign("with_filter", $with_filter);
@@ -121,7 +130,7 @@ $smarty->assign("order_col", $order_col);
 $smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("addTrans", $addTrans);
 $smarty->assign("sejour_id", $sejour_id);
-$smarty->assign("transmission", new CTransmissionMedicale());
+$smarty->assign("transmission", $_transmission_medicale);
 $smarty->assign("cibles", $cibles);
 $smarty->display("inc_vw_transmissions.tpl");
 

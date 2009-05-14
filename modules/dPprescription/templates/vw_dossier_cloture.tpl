@@ -10,19 +10,31 @@
 
 <table class="tbl">
 <tr>
-
-  <th class="title" colspan="2">
-  <div style="float: right">{{$dateTime|date_format:"%d/%m/%Y %Hh%M"}}</div>
-  Dossier de soin (Bilan des administrations et transmissions)
+  <th class="title" colspan="3">
+    <div style="float: right">{{$dateTime|date_format:"%d/%m/%Y %Hh%M"}}</div>
+    <a href="#" onclick="window.print();">
+      Dossier cloturé (Bilan des administrations et transmissions)
+    </a>
   </th>
 </tr>
 <tr>
   <td>
-    {{$sejour->_ref_patient->_view}}
+    {{assign var=patient value=$sejour->_ref_patient}}
+    {{$patient->_view}}
+  </td>
+  <td> 
+    {{mb_title object=$patient field=naissance}}: 
+    {{mb_value object=$patient field=naissance}} ({{$patient->_age}} ans)
   </td>
   <td>
+   {{mb_title object=$patient->_ref_constantes_medicales field=poids}}:
+   {{if $patient->_ref_constantes_medicales->poids}}
+     {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
+   {{else}}??{{/if}}
   </td>
 </tr>
+</table>
+<table class="tbl">
 <tr>
   <th>Libelle</th>
   <th>Quantite: administration</th>
@@ -57,7 +69,15 @@
           <td>
           <ul>
           {{foreach from=$_perfusion->_ref_lines item=_line_med}}
-            <li>{{$_line_med->_view}}</li>
+            <li>
+              {{$_line_med->_ucd_view}}: {{$_line_med->quantite}} {{$_line_med->unite}}
+              {{if $_line_med->nb_tous_les}}
+              toutes les {{$_line_med->nb_tous_les}} heures
+              {{/if}}
+	            <span style="opacity: 0.7; font-size: 0.8em;">
+	              ({{$_line_med->_forme_galenique}})
+	            </span>
+            </li>
           {{/foreach}}
           </ul>
           </td>
@@ -70,7 +90,14 @@
 	      {{/if}}
 	      <tr>
 	        <td>
-	          {{$line->_view}}
+	          {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	            {{$line->_ucd_view}} 
+	            <span style="opacity: 0.7; font-size: 0.8em;">
+	            ({{$line->_forme_galenique}})
+	            </span>
+	          {{else}}
+	            {{$line->_view}}
+	          {{/if}}
 	        </td>
 	        <td>  
 	          {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
@@ -94,20 +121,17 @@
 </table>
 <table class="tbl">
   <tr>
-    <th colspan="4">Transmissions</th>
+    <th colspan="6">Observations et Transmissions</th>
   </tr>
   <tr>
-    <th>Date</th>
-    <th>Utilisateur</th>
-    <th>Cible</th>
-    <th>Transmission</th>
+    <th>{{mb_label class=CTransmissionMedicale field="type"}}</th>
+    <th>{{mb_label class=CTransmissionMedicale field="user_id"}}</th>
+    <th>{{mb_label class=CTransmissionMedicale field="date"}}</th>
+    <th>{{tr}}Hour{{/tr}}</th>
+    <th>{{mb_label class=CTransmissionMedicale field="object_id"}}</th>
+    <th>{{mb_label class=CTransmissionMedicale field="text"}}</th>
   </tr>
-    {{foreach from=$sejour->_ref_transmissions item=_transmission}}
-  <tr>
-    <td>{{$_transmission->date|date_format:"%d/%m/%Y %Hh%M"}}</td>
-    <td>{{$_transmission->_ref_user->_view}}</td>
-    <td class="text">{{if $_transmission->object_id}}{{$_transmission->_ref_object->_view}}{{/if}}</td>
-    <td class="text">{{$_transmission->text}}</td>
-  </tr>
+  {{foreach from=$sejour->_ref_suivi_medical item=_suivi}}
+ 	  {{mb_include module=dPhospi template=inc_line_suivi _suivi=$_suivi show_patient=false nodebug=true without_del_form=true}}
   {{/foreach}}
 </table>
