@@ -226,11 +226,11 @@ Main.add(function () {
    {{else}}
 		  <tr>
 		    <td>
-		      <div class="big-info">
+		      <div class="small-info">
 		        {{if $full_mode}}
-		          Veuillez selectionner un séjour ou une intervention pour pouvoir créer une prescription
+		          Veuillez sélectionner un séjour ou une intervention pour pouvoir créer une prescription.
 		        {{else}}
-		          Veuillez choisir un contexte (séjour ou consultation) pour la prescription
+		          Veuillez choisir un contexte (séjour ou consultation) pour la prescription.
 		        {{/if}}
 		      </div>
 		    </td>

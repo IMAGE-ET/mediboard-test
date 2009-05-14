@@ -557,22 +557,22 @@ viewBilanService = function(service_id, date){
       
       <!-- Tabs -->
       <div id="viewPatient" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
           ici toutes les informations sur le patient.
         </div>
       </div>
       
       <div id="viewSejourHospi" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
           ici toutes les informations le concernant.
         </div>
       </div>
       
       <div id="constantes-medicales" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
           les constantes du patient concerné.
         </div>
       </div>
@@ -580,8 +580,8 @@ viewBilanService = function(service_id, date){
       {{if $isPrescriptionInstalled}}
       <div id="dossier_soins" style="display: none;">
         <div id="dossier_traitement">
-          <div class="big-info">
-            Veuillez selectionner un séjour dans la liste de gauche pour afficher
+          <div class="small-info">
+            Veuillez sélectionner un séjour dans la liste de gauche pour afficher
             le dossier de soin du patient concerné.
           </div>
         </div>
@@ -590,8 +590,8 @@ viewBilanService = function(service_id, date){
       </div>
       
       <div id="prescription_sejour" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
           la prescription du patient concerné.
         </div>
       </div>
@@ -609,24 +609,24 @@ viewBilanService = function(service_id, date){
         <table class="form">
           <tr id="one" style="display: none;">
             <td id="ccam">
-              <div class="big-info text">
-                Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+              <div class="small-info">
+                Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
                 ajouter des actes CCAM au patient concerné.
               </div>
             </td>
           </tr>
           <tr id="two" style="display: none;">
             <td id="listActesNGAP">
-              <div class="big-info text">
-                Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+              <div class="small-info">
+                Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
                 ajouter des actes NGAP au patient concerné.
               </div>
             </td>
           </tr>
           <tr id="three" style="display: none;">
             <td id="cim">
-              <div class="big-info text">
-                Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+              <div class="small-info">
+                Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
                 ajouter des actes diagnostics CIM au patient concerné.
               </div>
             </td>
@@ -637,25 +637,25 @@ viewBilanService = function(service_id, date){
     
       {{if $isImedsInstalled}}
       <div id="Imeds" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
           consulter les résultats de laboratoire disponibles pour le patient concerné.
         </div>
       </div>
       {{/if}}
       
       <div id="documents" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
           consulter et ajouter des documents pour le patient concerné.
         </div>
       </div>
 
       {{if $can_view_dossier_medical}}
       <div id="antecedents" style="display: none;">
-        <div class="big-info">
-          Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
-          consulter et modifier les antécédents du le patient concerné.
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+          consulter et modifier les antécédents du patient concerné.
         </div>
       </div>
       {{/if}}
