@@ -84,9 +84,7 @@ Main.add(function () {
 			          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
 			          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			          <input type="hidden" name="type" value="sejour" />
-			          <button type="button" 
-			                  class="add createPresc" 
-			                  onclick="submitFormAjax(this.form, 'systemMsg');">
+			          <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">
 			            Séjour
 			          </button> 
 		          </form>   
@@ -119,9 +117,7 @@ Main.add(function () {
 				          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
 				          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 				          <input type="hidden" name="type" value="sortie" />
-						      <button type="button" 
-						              class="add createPresc" 
-						              onclick="submitFormAjax(this.form, 'systemMsg');">			       
+						      <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">			       
 						       Sortie
 						      </button>
 			          </form>
