@@ -108,7 +108,8 @@ Main.add(function() {
 
 <form name="form-merge" action="?m={{$m}}" method="post" onsubmit="{{if $checkMerge}}false{{else}}checkForm(this){{/if}}">
   <input type="hidden" name="dosql" value="do_object_merge" />
-  <input type="hidden" name="tab" value="{{$tab}}" />
+  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+  <input type="hidden" name="m" value="system" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="fast" value="0" />
   {{foreach from=$objects item=object name=object}}
