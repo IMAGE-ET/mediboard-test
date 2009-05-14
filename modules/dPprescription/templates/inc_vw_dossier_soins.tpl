@@ -10,6 +10,14 @@
 
 <script type="text/javascript">
 
+selColonne = function(hour){
+	$('plan_soin').select('div.non_administre, div.a_administrer').each(function(oDiv){
+	  if(oDiv.up(2).visible() && oDiv.up().hasClassName(hour)){
+	    oDiv.onclick();
+	  }
+	});
+}
+
 viewFicheATC = function(fiche_ATC_id){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_fiche_ATC");
@@ -559,7 +567,11 @@ Main.add(function () {
 					          <a href="#1" onclick="showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
 								      <img src="images/icons/next.png" alt="&gt;" />
 							      </a>		 
-					          <strong>{{$moment_journee}} du {{$_date|date_format:"%d/%m"}}</strong>
+					          <strong>
+					            <a href="#" onclick="selColonne('{{$_date}}-{{$moment_journee}}')">
+					              {{$moment_journee}} du {{$_date|date_format:"%d/%m"}}
+					            </a>
+					          </strong>
 									</th>
 						    {{/foreach}} 
 					    {{/foreach}}
@@ -574,7 +586,7 @@ Main.add(function () {
 				              <th class="{{$_date}}-{{$moment_journee}}" 
 				                  style='width: 30px; text-align: center; 
 			                  {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-			                  {{$_hour}}h
+			                  <a href="#1" onclick="selColonne('{{$_hour}}');">{{$_hour}}h</a>
 				                {{if array_key_exists("$_date $_hour:00:00", $operations)}}
 				                  {{assign var=_hour_op value="$_date $_hour:00:00"}}
 				                  <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>

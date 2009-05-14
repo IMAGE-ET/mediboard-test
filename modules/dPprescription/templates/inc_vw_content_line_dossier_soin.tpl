@@ -70,7 +70,7 @@
 					
 					{{* Affichage de la case *}} 
 				  <td id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" 
-				   		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif" 
+				   		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif {{$_hour}}" 
 				   		style='display: none; text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 				   			   
 					  <div id="drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
