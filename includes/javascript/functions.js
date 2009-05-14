@@ -10,6 +10,7 @@
 
 function main() {
   try {
+  	//Session.lock();
     prepareForms();
     SystemMessage.init();
     WaitingMessage.init();
@@ -157,11 +158,8 @@ function createDocument(oSelect, consultation_id) {
 }
 
 function closeWindowByEscape(e) {
-  var keycode;
-  if (window.event) keycode = window.event.keyCode;
-  else if (e) keycode = e.which;
-
-  if(keycode == 27){
+  if(getKeycode(e) == 27){
+  	e.stop();
     window.close();
   }
 }
@@ -1318,4 +1316,33 @@ window.modal = function(container, options) {
     overlayOpacity: 0.5
   }, options || {});
   return Control.Modal.open(container, options);
+};
+
+var Session = {
+  lock: function(){
+    $('main').hide();
+    
+    var mask = $('sessionLockMask').setStyle({
+        opacity: 1,
+        backgroundColor: '#000',
+        zIndex: 10000,
+        position: 'fixed'
+      }).show().clonePosition(document.body);
+      
+    var vpd = document.viewport.getDimensions(),
+        win = mask.select('div.window').first(),
+        dim = win.getDimensions();
+        
+    win.setStyle({
+      top: (vpd.height - dim.height)/2 + 'px',
+      left: (vpd.width - dim.width) /2 + 'px'
+    });
+  },
+  unlock: function(){
+    $('sessionLockMask').hide(); 
+    $('main').show();
+  },
+  close: function(){
+    document.location.href = '?logout=-1';
+  }
 }

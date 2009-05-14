@@ -16,7 +16,16 @@ function submitCompteRendu(){
   }).defer();
 }
 
+// Don't close the window with escape
 document.stopObserving('keydown', closeWindowByEscape);
+
+// Don't allow escape or alt+f4 to cancel the request
+document.observe('keydown', function(e){
+  var keycode = getKeycode(e);
+  if(keycode == 27 || keycode == 115 && e.altKey){
+    e.stop();
+  }
+});
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;">
