@@ -1046,8 +1046,14 @@ class CSetupdPpatients extends CSetup {
     
     $sql = "ALTER TABLE `medecin` 
 					  ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
-
-    $this->mod_version = "0.87";
+        
+    $this->makeRevision("0.87");
+    
+    $sql = "ALTER TABLE `medecin` 
+            ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.88";
   }
 }
 
