@@ -54,9 +54,10 @@
         </div>
       </div>
             
-      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})" style="font-weight: bold;">
-        {{$line->_ucd_view}}
+      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">
+        <span style="font-weight: bold; font-size: 1.5em;">{{$line->_ucd_view}}</span> ({{$line->_forme_galenique}})
       </a>
+      
     </th>
   </tr>
   <tr>

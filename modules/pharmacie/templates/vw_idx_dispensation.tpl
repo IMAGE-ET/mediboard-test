@@ -79,7 +79,7 @@ updateFieldsMedicament = function(selected) {
   var dn = selected.childElements();
   if (dn[1]) {
     $V(oFormDispensation._code, dn[0].innerHTML);
-    $("produit_view").update(dn[1].innerHTML);
+    $("produit_view").update(dn[3].innerHTML.strip());
     $V(oFormDispensation.produit, "");
   }
 }
@@ -97,7 +97,7 @@ Main.add(function () {
     updateElement: updateFieldsMedicament,
     callback: 
       function(input, queryString){
-        return queryString + "&inLivret=1";
+        return queryString + "&inLivret=1&search_by_cis=0";
       }
   });
 });

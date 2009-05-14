@@ -43,10 +43,9 @@ Main.add(function () {
   var oForm = document.forms["editElement-{{$element->_class_name}}"];
   prepareForm(oForm);
   updateFieldsDM = function(selected) {
-    Element.cleanWhitespace(selected);
-    dn = selected.childNodes;
-    $V(oForm.code, dn[0].firstChild.nodeValue);
-    $V(oForm.nom, dn[1].firstChild.nodeValue);
+    dn = selected.childElements();
+    $V(oForm.code, dn[0].innerHTML);
+    $V(oForm.nom, dn[3].innerHTML.stripTags().strip());
   }
   if($('produit_auto_complete')){
 	  urlAuto = new Url();

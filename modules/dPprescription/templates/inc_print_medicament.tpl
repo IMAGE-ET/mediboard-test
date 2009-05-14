@@ -11,7 +11,7 @@
 {{if !$med->_protocole}}
 <!-- Affichage normal -->
 <li>{{if !$praticien->_id}}({{$med->_ref_praticien->_view}}){{/if}}
-  <strong>{{$med->_ucd_view}} ({{$med->voie}}) {{if $med->conditionnel}}(Conditionnel){{/if}}</strong>
+  <strong>{{$med->_ucd_view}} - {{$med->_forme_galenique}} ({{$med->voie}}) {{if $med->conditionnel}}(Conditionnel){{/if}}</strong>
   <ul>
     {{if $med->_ref_prises|@count || $med->_duree_prise || $med->date_arret || $med->_specif_prise}}
     <li>
@@ -48,7 +48,7 @@
 {{else}}
 <!-- Affichage dans le cas d'un protocole -->
 <li>
-  <strong>{{$med->_ucd_view}} {{if $med->conditionnel}}(Conditionnel){{/if}}</strong>
+  <strong>{{$med->_ucd_view}} - {{$med->_forme_galenique}} {{if $med->conditionnel}}(Conditionnel){{/if}}</strong>
   <ul>
     <li>
 		  <!-- Affichage des prises s'il y en a -->

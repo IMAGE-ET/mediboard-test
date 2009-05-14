@@ -51,7 +51,7 @@ transfertLineTP = function(line_id, sejour_id){
 			      Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
 			    {{/if}}
 		      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
-				    {{$_line->_ucd_view}}
+				    {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})
 				  </span>
 				</li>
 			{{foreachelse}}

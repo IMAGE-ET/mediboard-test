@@ -54,6 +54,12 @@ class CCategoryPrescription extends CMbObject {
   	$this->_view = $this->nom;
   }
   
+  
+  function loadRefGroup(){
+    $group = new CGroups();
+    $this->_ref_group = $group->getCached($this->group_id);
+  }
+  
   function loadElementsPrescription() {
     $this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription","libelle");
   }

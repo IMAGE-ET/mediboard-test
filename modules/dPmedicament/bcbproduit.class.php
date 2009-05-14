@@ -14,6 +14,7 @@ class CBcbProduit extends CBcbObject {
   
   var $code_cip              = null;
   var $code_ucd              = null;
+  var $code_cis              = null;
   var $libelle               = null;
   var $nom_commercial        = null;
   var $forme                 = null;
@@ -43,6 +44,7 @@ class CBcbProduit extends CBcbObject {
   
   var $inLivret = null;
   var $inT2A = true;
+  var $ucd_view = null;
   
   // Objects references
   var $_ref_DCI              = null;
@@ -59,7 +61,7 @@ class CBcbProduit extends CBcbObject {
   var $_ref_fiches_ATC       = null;
   var $_ref_ATC_2_libelle = null;
   var $_ref_ATC_2_code    = null;
-  
+
 	static $loaded = array();
 	static $useCount = 0;
     
@@ -138,10 +140,7 @@ class CBcbProduit extends CBcbObject {
 	
 	    // Chargement de la composition du produit
 	    $this->loadRefComposition();
-
-	    // Permet de savoir si le produit appartient au livret therapeutique
-	    $this->isInLivret();
-	    
+	    	    
 	    // Produit dans la T2A
 	    $this->isInT2A();
 	    
@@ -155,31 +154,38 @@ class CBcbProduit extends CBcbObject {
 	    $this->loadLibellePresentation();
       $this->loadUnitePresentation();
     }
-     
+    $this->isInLivret();
     $this->loadVoies();
   }
   
   
-	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche) {
+	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche, $search_by_cis = 1) {
 		$lngLexico = $TypeRecherche & 256;
 		$TypeRecherche = $TypeRecherche & 255;
-		$query = "SELECT PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, LivretTherapeutique.Commentaire, PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier";
-		$query .= " FROM PRODUITS_IFP ";
-		//if ($this->distObj->LivretTherapeutique > 0){ 
+		
+		$query = "SELECT PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG";
+	  if($this->distObj->LivretTherapeutique > 0){
+		  $query .= ", LivretTherapeutique.Commentaire";
+		} else {
+		  $query .= ", ''";
+		}
+		$query .= ", PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier, 
+										 IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_FORMES_GALENIQUES.LIBELLE_FORME_GALENIQUE, IDENT_PRODUITS.CODECIS";
+		$query .= " FROM PRODUITS_IFP, IDENT_PRODUITS, IDENT_FORMES_GALENIQUES ";
+		
+		if ($this->distObj->LivretTherapeutique > 0){
 		  $query .= ", LivretTherapeutique ";
-		//}
-		if ($TypeRecherche == 2){ 
-		  $query .= ", IDENT_PRODUITS ";
-	  }
+		}
 		$query .= "WHERE PRODUITS_IFP.Code_Marge <> '40' ";
+		$query .= "AND IDENT_FORMES_GALENIQUES.CODE_FORME_GALENIQUE = IDENT_PRODUITS.CODE_FORME_GALENIQUE ";
 		if ($this->distObj->LivretTherapeutique > 0){
 			$query .= " AND PRODUITS_IFP.Code_CIP=LivretTherapeutique.CodeCIP ";
 			$query .= " AND LivretTherapeutique.CodeEtablissement=".$this->distObj->LivretTherapeutique." ";
 		}
-		if ($TypeRecherche == 2) {
+		//if ($TypeRecherche == 2) {
 			$query .= " AND PRODUITS_IFP.Code_CIP = IDENT_PRODUITS.Code_CIP ";
-		}
-		
+		//}
+
 		if (($this->distObj->LivretTherapeutique > 0) && (strlen($Chaine) > 1) && $TypeRecherche == 0){
 		  $query .= " AND (PRODUITS_IFP.LIBELLELONG Like '$Chaine%' OR LivretTherapeutique.Commentaire LIKE '$Chaine%')";	  
 		} else {
@@ -200,7 +206,6 @@ class CBcbProduit extends CBcbObject {
 			$query .= $Chaine."%'";
 		}
 		
-		
 		if ($this->distObj->Specialite == 1){ 
 		  $query .= " AND (PRODUITS_IFP.Code_CIP Like '0%' OR PRODUITS_IFP.Code_CIP Like '1%' OR PRODUITS_IFP.Code_CIP Like '3%' OR PRODUITS_IFP.Code_CIP Like '5%')  ";
 		}
@@ -213,7 +218,7 @@ class CBcbProduit extends CBcbObject {
 		$query .= " GROUP BY PRODUITS_IFP.Code_CIP, PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier";
 		$query .= " ORDER BY PRODUITS_IFP.Libelle_Produit";
 		$query = strtoupper($query);
-		
+
 		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB: ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
 		$cpt=0;
 		
@@ -230,9 +235,14 @@ class CBcbProduit extends CBcbObject {
 				$Temp->Commentaire=strtoupper($row[3]);
 				$Temp->DateSupp=$row[4];
 				$Temp->Hospitalier=$row[5];
-				$Temp->CodeUCD="";
+				$Temp->CodeUCD=$row[6];
+				$Temp->ucd_view = "$row[7] $row[8]";
+				$Temp->forme_galenique = $row[9];
+				$Temp->code_cis = $row[10];
 				
-				$this->distObj->TabProduit[$cpt] = $Temp;
+				$key = ($search_by_cis == 1) ? ($Temp->code_cis ? $Temp->code_cis : "_$Temp->CodeUCD") : $Temp->CodeCIP;
+				$this->distObj->TabProduit[$key] = $Temp;
+				
 				$nbr--;
 				$cpt++;
 			}
@@ -263,7 +273,7 @@ class CBcbProduit extends CBcbObject {
 		}
 		
 		$query = "SELECT IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.Libelle_Abrege, ";
-		$query .= "IDENT_PRODUITS.Code_Forme_Galenique, IDENT_PRODUITS.Nb_UP2 ";
+		$query .= "IDENT_PRODUITS.Code_Forme_Galenique, IDENT_PRODUITS.Nb_UP2, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_PRODUITS.CODECIS ";
 		$query .= "FROM IDENT_PRODUITS ";
 		$query .= "WHERE IDENT_PRODUITS.Code_CIP=".$CodeCIP; 
 		$query = strtoupper($query);
@@ -274,6 +284,9 @@ class CBcbProduit extends CBcbObject {
 			$this->distObj->DataInfo->NomCommercial = $row[1];
 			$code_forme = $row[2];
 			$this->distObj->DataInfo->Nb_UCD = $row[3];
+			$this->libelle_abrege = $row[4];
+			$this->dosage = $row[5];
+			$this->code_cis = $row[6];
 		}
 		
 		$query = "SELECT IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique,  IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique_Pluriel ";
@@ -414,11 +427,15 @@ class CBcbProduit extends CBcbObject {
       }
     }
   }
-  
+
   function isInLivret(){
-  	global $g;
-  	$livretThera = new CBcbProduitLivretTherapeutique();
-  	$this->inLivret = $livretThera->distObj->isLivret($g, $this->code_cip);
+    $ds = CBcbObject::getDataSource();
+	  $query = "SELECT count(*) 
+							FROM LIVRETTHERAPEUTIQUE
+							LEFT JOIN IDENT_PRODUITS ON IDENT_PRODUITS.CODE_CIP = LIVRETTHERAPEUTIQUE.CODECIP 
+							WHERE IDENT_PRODUITS.CODE_UCD = '$this->code_ucd'	OR IDENT_PRODUITS.CODECIS = '$this->code_cis';";
+	  $countInLivret = $ds->loadResult($query);
+    $this->inLivret = ($countInLivret > 0) ? 1 : 0;
   }
 
   function isInT2A(){
@@ -447,7 +464,7 @@ class CBcbProduit extends CBcbObject {
     return $produits;
   }
   
-  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true){   
+  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true, $search_by_cis = 1){   
     // Type_recherche
     // 0 ou 256 => recherche par nom
     // 1: recherche par CIP
@@ -474,7 +491,7 @@ class CBcbProduit extends CBcbObject {
     // 1ere recherche 
     $this->distObj->Specialite = $specialite;
     //$this->distObj->Search($text, 0, $max, $type_recherche);
-    $this->SearchEx($text, 0, $max, $type_recherche);
+    $this->SearchEx($text, 0, $max, $type_recherche, $search_by_cis);
     
     $produits = array();
     // Parcours des produits
@@ -486,8 +503,19 @@ class CBcbProduit extends CBcbObject {
     return $produits;
   }
   
+  static function getProduitsFromCIS($code_cis){
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODECIS` = '$code_cis'";
+    return $ds->loadList($query);
+  }
   
-  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false, $specialite = 1){   
+  static function getProduitsFromUCD($code_ucd){
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_UCD` = '$code_ucd'";
+    return $ds->loadList($query);
+  }
+  
+  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false, $specialite = 1, $search_by_cis = 1){   
     global $g;
   	$this->distObj->Specialite = $specialite;
     $this->distObj->Supprime = 1;
@@ -495,7 +523,7 @@ class CBcbProduit extends CBcbObject {
       $this->distObj->LivretTherapeutique = $g;  
     }
     //if($search_libelle_long){
-      $this->SearchEx($text, 0, $nb_max, 0);
+      $this->SearchEx($text, 0, $nb_max, 0, $search_by_cis);
     //} else {
     //  $this->distObj->Search($text, 0, $nb_max, 0);
     //}
@@ -568,12 +596,12 @@ class CBcbProduit extends CBcbObject {
   
   static function getFavoris($praticien_id) {
     $ds = CSQLDataSource::get("std");
-    $sql = "SELECT prescription_line_medicament.code_cip, COUNT(*) AS total
+    $sql = "SELECT *, COUNT(*) AS total
             FROM prescription_line_medicament, prescription
             WHERE prescription_line_medicament.prescription_id = prescription.prescription_id
             AND prescription.praticien_id = $praticien_id
             AND prescription.object_id IS NOT NULL
-            GROUP BY prescription_line_medicament.code_cip
+            GROUP BY prescription_line_medicament.code_cis
             ORDER BY total DESC
             LIMIT 0, 10";
     return $ds->loadlist($sql);
@@ -581,13 +609,13 @@ class CBcbProduit extends CBcbObject {
   
   static function getFavorisInjectable($praticien_id) {
     $ds = CSQLDataSource::get("std");
-    $sql = "SELECT perfusion_line.code_cip, COUNT(*) AS total
+    $sql = "SELECT *, COUNT(*) AS total
             FROM perfusion, perfusion_line, prescription
             WHERE perfusion_line.perfusion_id = perfusion.perfusion_id
             AND perfusion.prescription_id = prescription.prescription_id
             AND perfusion.praticien_id = $praticien_id
             AND prescription.object_id IS NOT NULL
-            GROUP BY perfusion_line.code_cip
+            GROUP BY perfusion_line.code_cis
             ORDER BY total DESC
             LIMIT 0, 10";
     return $ds->loadlist($sql);

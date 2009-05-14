@@ -133,7 +133,7 @@
           {{assign var=prescription_externe value=$object->_ref_prescriptions.externe}}
           <tr class="selected">
             <td class="text">
-              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_externe->_id}}')" >
+              <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_externe->_id}}')" >
                 {{$prescription_externe->_view}} {{tr}}CPrescription.type.{{$prescription_externe->type}}{{/tr}}
               </a>
             </td>
@@ -150,7 +150,7 @@
             {{if $_prescription->_id}}
             <tr {{if $_prescription->_id == $prescription->_id}}class="selected"{{/if}}>
                 <td class="text">
-                  <a href="#" onclick="Prescription.reloadPrescSejour('{{$_prescription->_id}}')" >
+                  <a href="#1" onclick="Prescription.reloadPrescSejour('{{$_prescription->_id}}')" >
                     {{$_prescription->_view}} {{tr}}CPrescription.type.{{$_prescription->type}}{{/tr}}
                   </a>
                 </td>

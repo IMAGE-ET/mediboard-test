@@ -46,10 +46,10 @@
 			  <tr>
 			    <td>
 			    {{if $dialog}}
-           <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->Libelle}}', '{{$produit->CodeCIP}}')" alt="Ajouter à la prescription" title="Ajouter à la prescription" />
+			      <button type="button" class="add notext" onclick="setClose('{{$produit->Libelle}}', '{{$produit->CodeCIP}}')"></button>
           {{/if}}
           {{$produit->CodeClasse}}</td>
-			    <td class="text"><a href="" onclick="viewProduit({{$produit->CodeCIP}}); return false;">{{$produit->Libelle}}</a></td>
+			    <td class="text"><a href="" onclick="Prescription.viewProduit('{{$produit->CodeCIP}}'); return false;">{{$produit->Libelle}}</a></td>
 			  </tr>
 			  {{/foreach}}
 			  {{/if}}

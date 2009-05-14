@@ -9,6 +9,7 @@
 *}}
 
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPprescription" script="prescription"}}
 
 <script type="text/javascript">
 
@@ -39,7 +40,7 @@ Main.add(function () {
     updateElement: updateFieldsProduitLivret,
     callback: 
       function(input, queryString){
-        return (queryString + "&inLivret=1&search_libelle_long=true"); 
+        return (queryString + "&inLivret=1&search_libelle_long=true&search_by_cis=0"); 
       }
     } );
 });
@@ -119,15 +120,6 @@ var Livret = {
   }
 };
 
-
-// Visualisation du produit
-function viewProduit(cip){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_produit");
-  url.addParam("CIP", cip);
-  url.popup(815, 620, "Descriptif produit");
-}
-
 function printLivret(){
   var url = new Url;
   url.setModuleAction("dPmedicament", "print_livret");
@@ -173,6 +165,7 @@ function printLivret(){
             this.sView = "_produit";
             this.sCode = "code_cip";
             this.sSearch = document.searchProd.produit.value;
+            this.sSearchByCIS = "0";
             this.sOnglet = onglet;
             this.selfClose = false;
             this.pop();

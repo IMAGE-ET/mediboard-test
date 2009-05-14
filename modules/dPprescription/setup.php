@@ -1197,7 +1197,18 @@ class CSetupdPprescription extends CSetup {
 						('','4 fois par semaine','lundi|mercredi|vendredi|samedi',NULL,NULL);";
 	  $this->addQuery($sql);
 	  
-		$this->mod_version = "0.81";
+	  $this->makeRevision("0.81");
+	  $sql = "ALTER TABLE `prescription_line_medicament`
+	          ADD `code_ucd` VARCHAR(7) NOT NULL,
+	          ADD `code_cis` VARCHAR(8) NOT NULL;";
+	  $this->addQuery($sql);
+	  
+	  $sql = "ALTER TABLE `perfusion_line`
+	          ADD `code_ucd` VARCHAR(7) NOT NULL,
+	          ADD `code_cis` VARCHAR(8) NOT NULL;";
+	  $this->addQuery($sql);
+	  
+		$this->mod_version = "0.82";
   }  
 }
 

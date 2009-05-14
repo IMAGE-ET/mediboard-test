@@ -38,7 +38,7 @@
 	      {{/if}}
 		    </select>
 	  </form>
-	  <a href="#" style="display:inline" 
+	  <a href="#1" style="display:inline" 
 	     onclick="preselectExecutant(document.forms['addExecutant-'+{{$line->_id}}]._executant.value,'{{$category_id}}');">
 	  <img src="images/icons/updown.gif" alt="Préselectionner" border="0" />
 	  </a>

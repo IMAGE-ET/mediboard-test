@@ -704,6 +704,12 @@ function updateVoie(){
   url.requestUpdate("update_voie");
 }
 
+function updateUCD(){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_update_ucd");
+  url.requestUpdate("update_ucd");
+}
+
 </script>
 
 <table class="tbl">
@@ -735,13 +741,15 @@ function updateVoie(){
     </td>
     <td id="export_elements_prescription"></td>
   </tr>
-
   <tr>
     <td colspan="2"><button class="tick" onclick="importElementsPrescription()" >Importer les elements de prescriptions</button></td>
   </tr>
-  
   <tr>
     <td><button class="tick" onclick="updateVoie()">Mettre à jour la voie pour les lignes de medicaments</button></td>
     <td id="update_voie"></td>
+  </tr>
+  <tr>
+    <td><button class="tick" onclick="updateUCD()">Mettre à jour les code UCD et CIS</button></td>
+    <td id="update_ucd"></td>
   </tr>
 </table>

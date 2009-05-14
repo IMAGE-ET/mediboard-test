@@ -14,7 +14,7 @@
   <!-- Affichage du libelle -->
   <td class="text"  style="border: 1px solid #ccc;">
     {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-      {{$line->_ucd_view}}
+      {{$line->_ucd_view}} - {{$line->_forme_galenique}}
       - {{$line->voie}}
 	  {{else}}
       {{$line->_view}}
@@ -33,7 +33,7 @@
         <ul>
           <li>{{$prise->_short_view}}</li>
         </ul>
-        {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+        {{if $line->_class_name == "CPrescriptionLineMedicament" && ($prise->_ref_object->_unite_administration != $line->_forme_galenique)}}
           ({{$prise->_ref_object->_unite_administration}})<br />
         {{/if}}
       {{else}}
@@ -43,7 +43,7 @@
           <li>{{$_prise->_short_view}}</li>
         {{/foreach}}
         </ul>
-        {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+        {{if $line->_class_name == "CPrescriptionLineMedicament" && ($_prise->_ref_object->_unite_administration != $line->_forme_galenique)}}
           ({{$_prise->_ref_object->_unite_administration}})<br />
         {{/if}}
       {{/if}}

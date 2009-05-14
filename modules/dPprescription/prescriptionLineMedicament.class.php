@@ -13,7 +13,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $prescription_line_medicament_id = null;
   
   // DB Fields
-  var $code_cip         = null;
+  var $code_cip         = null;  // Code d'Identification de Présentation
+  var $code_ucd         = null;  // Unité Commune de Dispensation
+  var $code_cis         = null;  // Code d'Identication de Specialite
+  
   var $no_poso          = null;
 
   var $valide_pharma    = null; 
@@ -38,7 +41,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
                         "Voie péridurale"                 => array("injectable" => false, "perfusable" => false),
                         "Voie extra-amniotique"           => array("injectable" => false, "perfusable" => false),
                         "Voie gastro-entérale"            => array("injectable" => false, "perfusable" => false),
-                        "Voie intravasculaire en hémodialyse"  => array("injectable" => false, "perfusable" => false),
+                        "Voie intravasculaire en hémodialyse" => array("injectable" => false, "perfusable" => false),
                         "Hémodialyse"                     => array("injectable" => false, "perfusable" => false),
                         "Voie intra-amniotique"           => array("injectable" => false, "perfusable" => false), 
                         "Voie intra-artérielle"           => array("injectable" => false, "perfusable" => false),
@@ -105,6 +108,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ucd_view        = null;
   var $_is_perfusable   = null;
   var $_is_injectable   = null;
+  var $_forme_galenique = null;
   
   // Object References
   var $_ref_prescription = null;
@@ -158,18 +162,20 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["code_cip"]             = "numchar notNull length|7";
-    $specs["no_poso"]              = "num max|128";
-    $specs["valide_pharma"]        = "bool";
-    $specs["accord_praticien"]     = "bool";
-    $specs["substitution_line_id"] = "ref class|CPrescriptionLineMedicament";
-    $specs["substitute_for_id"]    = "ref class|CMbObject meta|substitute_for_class cascade";
-    $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPrescriptionLineMedicament";
-    $specs["substitution_active"]  = "bool";
-    $specs["_unite_prise"]         = "str";
-    $specs["voie"]                 = "str";
+    $specs["code_cip"]               = "numchar notNull length|7";
+    $specs["code_ucd"]               = "numchar length|7";
+    $specs["code_cis"]               = "numchar length|8";
+    $specs["no_poso"]                = "num max|128";
+    $specs["valide_pharma"]          = "bool";
+    $specs["accord_praticien"]       = "bool";
+    $specs["substitution_line_id"]   = "ref class|CPrescriptionLineMedicament";
+    $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade";
+    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPrescriptionLineMedicament";
+    $specs["substitution_active"]    = "bool";
+    $specs["_unite_prise"]           = "str";
+    $specs["voie"]                   = "str";
     $specs["substitution_plan_soin"] = "bool";
-    $specs["traitement_personnel"] = "bool";
+    $specs["traitement_personnel"]   = "bool";
     return $specs;
   }
   
@@ -199,8 +205,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
-    $this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
-    
+    //$this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
+    $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
+    $this->_forme_galenique = $this->_ref_produit->forme;
     $this->_duree_prise = "";
     
     if ($this->fin){
@@ -342,10 +349,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Chargement des 5 posos les plus utilisées
    */
-  function loadMostUsedPoso($code_cip = "", $praticien_id = "", $type = ""){
+  function loadMostUsedPoso($code_cis = "", $praticien_id = "", $type = ""){
     $temp_view = array();
     $this->_most_used_poso = array();
-    $most_used_lines = $this->getMostUsedPoso($code_cip, $praticien_id, $type);
+    $most_used_lines = $this->getMostUsedPoso($code_cis, $praticien_id, $type);
     foreach($most_used_lines as $_key => $_line){
       if(is_array($_line)){
 	      $view = "";
@@ -379,10 +386,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Recuperation des posologies les plus utilisées
    */
-  function getMostUsedPoso($code_cip = "", $praticien_id = "", $type = ""){
+  function getMostUsedPoso($code_cis = "", $praticien_id = "", $type = ""){
     $ds = CSQLDataSource::get("std");
    
-    $_code_cip = $code_cip ? $code_cip : $this->code_cip;
+    $_code_cis = $code_cis ? $code_cis : $this->code_cis;
     $_praticien_id = $praticien_id ? $praticien_id : $this->praticien_id;
     $_type = $type ? $type : $this->_ref_prescription->type;
     
@@ -391,7 +398,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 							FROM prise_posologie
 							LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = prise_posologie.object_id AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
 							LEFT JOIN prescription ON prescription.prescription_id = prescription_line_medicament.prescription_id
-							WHERE prescription_line_medicament.code_cip = '$_code_cip'";
+							WHERE prescription_line_medicament.code_cis = '$_code_cis'";
     
               if($_praticien_id != 'global'){
                $sql .= "AND prescription_line_medicament.praticien_id = '$_praticien_id'";
@@ -439,6 +446,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $_prise->object_id = $this->_id;
       $_prise->object_class = $this->_class_name;
       $_prise->store();
+    }
+  }
+  
+  function updateDBFields(){
+    parent::updateDBFields();
+    
+    if(!$this->_id && $this->code_cip && !$this->code_ucd){
+      $produit = new CBcbProduit();
+      $produit->load($this->code_cip);
+      $this->code_ucd = $produit->code_ucd;
+      $this->code_cis = $produit->code_cis;
     }
   }
   

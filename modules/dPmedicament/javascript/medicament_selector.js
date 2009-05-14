@@ -15,6 +15,7 @@ var MedSelector = {
   sSearch   : null,
   sRechercheLivret : null,
   sOnglet   : null,
+  sSearchByCIS : null,
   oUrl      : null,
   selfClose : true,
   options : {
@@ -34,6 +35,9 @@ var MedSelector = {
     }
     this.oUrl.addParam("onglet_recherche", this.sOnglet);
     this.oUrl.addParam("_recherche_livret", this.sRechercheLivret);
+    if(this.sSearchByCIS){
+      this.oUrl.addParam("search_by_cis", this.sSearchByCIS);
+    }
     this.oUrl.setModuleAction("dPmedicament", "vw_idx_recherche");
     
     this.oUrl.popup(this.options.width, this.options.height, "Medicament Selector");

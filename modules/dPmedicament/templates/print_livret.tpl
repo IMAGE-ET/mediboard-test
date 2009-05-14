@@ -12,7 +12,7 @@
   <tr>
     <th>
       <a href="#" onclick="window.print()">
-        Livret Thérapeutique ({{$date|date_format:"%d %b %Y"}})
+        Livret Thérapeutique ({{$date|date_format:"%d %b %Y"}}) - {{$produits_livret|@count}} produits
       </a>
     </th>
   </tr>
@@ -22,6 +22,7 @@
 			  <tr>
 			    <th rowspan="2">Code CIP</th>
 			    <th rowspan="2">Code UCD</th>
+			    <th rowspan="2">Code CIS</th>
 			    <th rowspan="2">Libelle produit</th>
 			    <th rowspan="2">Laboratoire</th>
 			    <th colspan="2">Hôpital</th>
@@ -54,6 +55,7 @@
 			      {{/if}}
 			    </td>
 			    <td>{{$produit->code_ucd}}</td>
+			    <td>{{$produit->code_cis}}</td>
 			    <td>{{$produit->libelle}}</td>
 			    <td>{{$produit->nom_laboratoire}}</td>
           <td>{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>

@@ -18,14 +18,6 @@
 
 <script type="text/javascript">
 
-// Visualisation du produit
-function viewProduit(cip){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_produit");
-  url.addParam("CIP", cip);
-  url.popup(900, 640, "Descriptif produit");
-}
-
 function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
   if (list) {
     var url = new Url;
@@ -71,7 +63,7 @@ Main.add(function () {
           <!-- Pre-admission -->
           <td id="pre_admission" class="step {{if $prescription->type == 'pre_admission'}}selected{{/if}}">
           {{if $prescription_pre_admission->_id}}
-	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
+	            <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
 	              Pré-adm. <!-- {{tr}}CPrescription.type.pre_admission{{/tr}}  -->
 	            </a>
           	 {{if $prescription->type == "pre_admission"}}
@@ -107,7 +99,7 @@ Main.add(function () {
           <td id="sejour" class="step {{if $prescription->type == 'sejour'}}selected{{/if}}">
 	          {{if $prescription_sejour->_id}}
 	            
-		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '');">
+		          <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '');">
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
 				      {{if $prescription->type == "sejour"}}
@@ -139,7 +131,7 @@ Main.add(function () {
          
           <td id="sortie" class="step {{if $prescription->type == 'sortie'}}selected{{/if}}">
           {{if $prescriptions.sortie->_id}}
-              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
+              <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
 		            {{tr}}CPrescription.type.sortie{{/tr}}
 		          </a>
 		          {{if $prescription->type == "sortie"}}

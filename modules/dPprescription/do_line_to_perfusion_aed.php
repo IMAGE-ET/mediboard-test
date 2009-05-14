@@ -65,6 +65,8 @@ if($perfusion->signature_prat || $perfusion->signature_pharma){
 $perfusion_line = new CPerfusionLine();
 $perfusion_line->perfusion_id = $perfusion_id;
 $perfusion_line->code_cip = $line_med->code_cip;
+$perfusion_line->code_ucd = $line_med->code_ucd;
+$perfusion_line->code_cis = $line_med->code_cis;
 if($line_med->unite_duree == "heure"){
   $perfusion_line->duree = $line_med->duree;
 }

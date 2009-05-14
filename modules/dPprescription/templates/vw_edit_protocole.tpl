@@ -16,13 +16,6 @@
 
 <script type="text/javascript">
 
-function viewProduit(cip){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_produit");
-  url.addParam("CIP", cip);
-  url.popup(900, 640, "Descriptif produit");
-}
-
 Main.add( function(){
   // Refesh de la liste des protocoles
   Protocole.refreshList('{{$protocole_id}}');

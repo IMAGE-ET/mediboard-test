@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $mbProduit->code_cip}}
 <script type="text/javascript">
 Main.add(function () {
   // Initialisation des onglets du menu
@@ -16,6 +17,33 @@ Main.add(function () {
   var tabsPharmaco = Control.Tabs.create('tab-pharmaco', false);
 });
 </script>
+{{/if}}
+
+{{if $produits|@count}}
+    <form name="viewMonographie" method="get">
+      <input type="hidden" name="m" value="dPmedicament" />
+      <input type="hidden" name="a" value="vw_produit" />
+      <input type="hidden" name="dialog" value="1" />
+      <input type="hidden" name="code_cip" value="" />
+      <input type="hidden" name="code_ucd" value="{{$code_ucd}}" />
+      <input type="hidden" name="code_cis" value="{{$code_cis}}" />
+    </form>
+    <table class="main tbl">
+    <tr>
+      <th class="title" colspan="{{$produits|@count}}">
+	      Produits disponibles pour le code
+	      {{if $code_cis}}CIS {{$code_cis}}{{/if}}
+	      {{if $code_ucd && !$code_cis}}UCD {{$code_ucd}}{{/if}}
+      </th> 
+    </tr>
+    <tr>
+	    <!-- Affichage des produits disponibles pour le code CIS/UCD selectionné -->
+	    {{foreach from=$produits item=_produit}}
+	      <td class="text" {{if $_produit->code_cip == $mbProduit->code_cip}}style="font-weight: bold;"{{/if}}><a href="#{{$_produit->code_cip}}" onclick="document.viewMonographie.code_cip.value = '{{$_produit->code_cip}}'; document.viewMonographie.submit();">{{$_produit->libelle}}</a></td>
+	    {{/foreach}}
+    </tr>
+    </table>    
+{{/if}}
 
 {{if $mbProduit->code_cip}}
 <table class="main">
@@ -304,8 +332,12 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+{{elseif $produits|@count}}
+  <div class="small-info">
+    Veuillez sélectionner un médicament ci-dessus pour voir sa monographie.
+  </div>
 {{else}}
-	<div class="big-info">
-		Monographie non disponible pour ce produit
+  <div class="small-info">
+	  Monographie non disponible pour ce produit
 	</div>
 {{/if}}

@@ -18,13 +18,6 @@ function setClose(code, line_id) {
   }
 }
 
-function viewProduit(cip){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_produit");
-  url.addParam("CIP", cip);
-  url.popup(815, 620, "Descriptif produit");
-}
-
 Main.add(function () {
   // Initialisation des onglets du menu
   Control.Tabs.create('tabs-equivalent', false);

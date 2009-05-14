@@ -435,11 +435,11 @@ Main.add(function () {
     <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
 
 	 <h1 style="text-align: center">
-	   <a href="#" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
+	   <a href="#1" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
 	     <img src="images/icons/prev.png" alt="" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
 	   </a>
 	   Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-	   <a href="#" {{if $sejour->_sortie|date_format:"%Y-%m-%d" > $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}>
+	   <a href="#1" {{if $sejour->_sortie|date_format:"%Y-%m-%d" > $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}>
 	     <img src="images/icons/next.png" alt="" {{if $sejour->_sortie|date_format:"%Y-%m-%d" <= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
 	   </a>
 	 </h1>

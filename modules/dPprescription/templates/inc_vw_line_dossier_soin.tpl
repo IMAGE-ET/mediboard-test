@@ -28,7 +28,7 @@
       <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
           onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
 	      <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
-            <a href="#">{{$libelle_ATC}}</a>
+            <a href="#1">{{$libelle_ATC}}</a>
           </div>
           <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
@@ -61,7 +61,7 @@
             rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
             onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
           <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
-            <a href="#">{{$categorie->nom}}</a>
+            <a href="#1">{{$categorie->nom}}</a>
           </div>
           <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
@@ -77,8 +77,6 @@
 	    </th>
     {{/if}}
   {{/if}}
-  
-  
   
   
   {{if $smarty.foreach.$last_foreach.first}}
@@ -118,9 +116,9 @@
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
 	  <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
+	    <a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
-	        {{$line->_ucd_view}}
+	        {{$line->_ucd_view}}  - <span style="font-size: 0.8em">{{$line->_forme_galenique}}</span>
 	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}
@@ -134,7 +132,7 @@
 	    {{$line->voie}}
 	  {{/if}}
     <br />
-    {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_unite_administration}}
+    {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
       ({{$line->_unite_administration}})<br />
     {{/if}}
     </small>

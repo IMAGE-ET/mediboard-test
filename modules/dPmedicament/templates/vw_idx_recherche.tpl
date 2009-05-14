@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module="dPprescription" script="prescription"}}
+
 <script type="text/javascript">
 
 function loadArbreATC(codeATC, dialog){
@@ -36,18 +38,10 @@ function viewBCB(){
   $('ATC').hide();
 }
 
-
 function setClose(libelle, code_cip) {
   var oSelector = window.opener.MedSelector;
   oSelector.set(libelle, code_cip);
   window.close();
-}
-
-function viewProduit(cip){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_produit");
-  url.addParam("CIP", cip);
-  url.popup(900, 620, "Descriptif produit");
 }
 
 function changeFormSearch(){
@@ -82,6 +76,7 @@ Main.add(function () {
 <div id="produits" style="display: none;">
   Recherche par
   <form name="formSearch" action="?" method="get">
+    <input type="hidden" name="search_by_cis" value="{{$search_by_cis}}" />
     {{if $dialog}}
     <input type="hidden" name="dialog" value="1" />
     <input type="hidden" name="m" value="dPmedicament" />
@@ -112,21 +107,22 @@ Main.add(function () {
   </form>
   <table class="tbl">
     <tr>
+      <th></th>
       <th style="width: 0.1%;">CIP</th>
       <th style="width: 0.1%;"></th>
       <th>UCD</th>
+      <th>CIS</th>
       <th>Produit</th>
       <th>Laboratoire</th>
     </tr>
     {{foreach from=$produits item="produit"}}
     <tr>
-      <td>
+      <td style="width: 1%">
         {{if $dialog && !$produit->_supprime}}
-        <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')" alt="Sélectionner" title="Sélectionner" />
+          <button type="button" class="add notext" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')"></button>
         {{/if}}
-       
-        {{$produit->code_cip}}
       </td>
+      <td>{{$produit->code_cip}}</td>
       <td>
         {{if !$produit->inLivret}}
         <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret thérapeutique" title="Produit non présent dans le livret thérapeutique" />
@@ -148,11 +144,16 @@ Main.add(function () {
           <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
         {{/if}}  
       </td>
-      <td>
-        {{$produit->code_ucd}}
-      </td>
+      <td>{{$produit->code_ucd}}</td>
+      <td>{{$produit->code_cis}}</td>
       <td class="text">
-        <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle_long}}</a>
+        <a href="#produit{{$produit->code_cip}}" onclick="Prescription.viewProduit('{{$produit->code_cip}}')" {{if $produit->_supprime}}style="color: red"{{/if}}>
+	        {{if $search_by_cis}}
+	          {{$produit->libelle_abrege}} {{$produit->dosage}} ({{$produit->forme}})
+	        {{else}}
+	          {{$produit->libelle_long}}
+	        {{/if}}
+        </a>
       </td>
       <td>
         {{$produit->nom_laboratoire}}

@@ -14,7 +14,7 @@
 	  Element.cleanWhitespace(selected);
 	  dn = selected.childElements();
     if (dn[1]) {
-	    Livret.addProduit(dn[0].innerHTML, dn[1].innerHTML);
+	    Livret.addProduit(dn[0].innerHTML, dn[3].innerHTML.strip());
     }
 	  $('searchProd_produit').value = "";
 	}
@@ -92,7 +92,7 @@
       {{/if}}
       </div>
       <a href="#produit{{$produit_livret->code_cip}}" 
-      {{if $produit_livret->_ref_produit->_supprime}}style="color:red"{{/if}}onclick="viewProduit({{$produit_livret->code_cip}})">
+      {{if $produit_livret->_ref_produit->_supprime}}style="color:red"{{/if}}onclick="Prescription.viewProduit('{{$produit_livret->code_cip}}')">
         {{$produit_livret->_ref_produit->libelle_long}}
       </a>
     </td>
@@ -131,6 +131,10 @@
   urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
   urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
       minChars: 3,
-      updateElement: updateFields
+      updateElement: updateFields,
+      callback: 
+	      function(input, queryString){
+	        return (queryString + "&search_by_cis=0"); 
+	      }
   } );
 </script>

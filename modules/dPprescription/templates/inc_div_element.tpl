@@ -200,7 +200,7 @@ Main.add( function(){
 			          {{assign var=chapitre value=$_line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 			          <!-- Affichage d'une ligne d'element -->
 					      <td {{if $chapitre == "dmi"}}colspan="4"{{/if}}>
-					      	<a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">{{$_line->_view}}</a>
+					      	<a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">{{$_line->_view}}</a>
 					      </td>
 					      
 					      {{if $chapitre != "dmi"}}

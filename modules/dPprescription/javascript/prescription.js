@@ -382,10 +382,12 @@ var Prescription = {
     url.addParam("prescription_id", prescription_id);
     url.popup(500, 300, "Allergies");
   },
-  viewProduit: function(cip){
+  viewProduit: function(code_cip, code_ucd, code_cis){
     var url = new Url;
     url.setModuleAction("dPmedicament", "vw_produit");
-    url.addParam("CIP", cip);
+    url.addParam("code_cip", code_cip);
+    url.addParam("code_ucd", code_ucd);
+    url.addParam("code_cis", code_cis);
     url.popup(900, 640, "Descriptif produit");
   },
   viewHistorique: function(prescription_id, type){

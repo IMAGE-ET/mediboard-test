@@ -60,17 +60,15 @@ loadComposants = function(composant, code, libelle, dialog){
   {{foreach from=$composition->_ref_produits item="_produit"}}
     <tr>
       {{if $dialog}}
-      <td>
-        <img src="./images/icons/plus.gif" onclick="setClose('{{$_produit->Libelle}}', '{{$_produit->CodeCIP}}')" alt="Ajouter à la prescription" title="Ajouter à la prescription" />
+      <td style="width: 1%;">
+        <button type="button" class="add notext" onclick="setClose('{{$_produit->Libelle}}', '{{$_produit->CodeCIP}}')"></button>
       </td>
       {{/if}}
       <td>
-        <a href="#produit{{$_produit->CodeCIP}}" onclick="viewProduit({{$_produit->CodeCIP}})">
+        <a href="#produit{{$_produit->CodeCIP}}" onclick="Prescription.viewProduit('{{$_produit->CodeCIP}}')">
         {{$_produit->Libelle}}
         </a>
-        
       </td>
-      
     </tr>
   {{/foreach}}
 </table>

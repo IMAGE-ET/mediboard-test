@@ -24,11 +24,11 @@ $prescription = new CPrescription();
 foreach($prescription->_specs['type']->_list as $_presc){
   // Chargement des poso pour le praticien
   if($praticien->_id){
-	  $line->loadMostUsedPoso($code_cip, $praticien_id, $_presc);
+	  $line->loadMostUsedPoso($produit->code_cis, $praticien_id, $_presc);
 	  $stats["praticien"][$_presc] = $line->_most_used_poso;
   }
   // Chargement des poso global de l'etalissement
-	$line->loadMostUsedPoso($code_cip, "global", $_presc);
+	$line->loadMostUsedPoso($produit->code_cis, "global", $_presc);
 	$stats["global"][$_presc] = $line->_most_used_poso;
 }
 

@@ -20,7 +20,7 @@
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="element {{if $line->traitement_personnel}}traitement{{/if}}
+        class="text element {{if $line->traitement_personnel}}traitement{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       
       {{if !$line->_protocole}}
@@ -104,8 +104,11 @@
           <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
         {{/if}}
       </div>
-      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})">
-        <strong style="font-size: 1.5em;">{{$line->_ucd_view}}</strong>
+      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">
+        <strong style="font-size: 1.5em;">
+          {{$line->_ucd_view}}
+        </strong>
+        ({{$line->_forme_galenique}})
       </a>
     </th>
   </tr>

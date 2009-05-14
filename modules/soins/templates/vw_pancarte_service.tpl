@@ -255,7 +255,10 @@ Main.add(function () {
 			          		          <td>
 			          		            {{assign var=line value=$lines.$chapitre.$line_id}}
 			          		             {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-			          		               {{$line->_ucd_view}}
+			          		               {{$line->_ucd_view}}<br />
+			          		               <span style="opacity: 0.5; font-size:0.8em;">
+			          		                 {{$line->_forme_galenique}}
+			          		               </span>
 			          		             {{/if}}
 			          		             {{if $line->_class_name == "CPrescriptionLineElement"}}
 				          		             {{$line->_view}}

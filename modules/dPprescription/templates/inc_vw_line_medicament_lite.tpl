@@ -48,8 +48,12 @@
              class="tooltip-trigger" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
       {{/if}}
-      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit({{$line->_ref_produit->code_cip}})" style="font-weight: bold;">
+      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');" style="font-weight: bold;">
         {{$line->_ucd_view}}
+        <br /> 
+        <span style="font-size: 0.8em; opacity: 0.7">
+         {{$line->_forme_galenique}}
+        </span>
       </a>
       {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}

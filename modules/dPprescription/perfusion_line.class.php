@@ -15,6 +15,8 @@ class CPerfusionLine extends CMbObject {
   // DB Fields
   var $perfusion_id = null;
   var $code_cip     = null; 
+  var $code_ucd     = null;
+  var $code_cis     = null;
   var $quantite     = null; // Quantite de produit
   var $unite        = null;
   var $date_debut   = null; // Date de debut (si le debut est différé)
@@ -33,6 +35,7 @@ class CPerfusionLine extends CMbObject {
   var $_ratio_administration_dispensation = null;
   var $_quantite_dispensation = null;
   var $_ucd_view = null;
+  var $_forme_galenique = null;
   
   // Can fields
   var $_can_vw_livret_therapeutique = null;
@@ -49,6 +52,8 @@ class CPerfusionLine extends CMbObject {
   	$specs = parent::getProps();
     $specs["perfusion_id"] = "ref notNull class|CPerfusion cascade";
     $specs["code_cip"]     = "numchar notNull length|7";
+    $specs["code_ucd"]     = "numchar length|7";
+    $specs["code_cis"]     = "numchar length|8";
     $specs["quantite"]     = "num";
     $specs["unite"]        = "str";
     $specs["date_debut"]   = "date";
@@ -66,7 +71,9 @@ class CPerfusionLine extends CMbObject {
     $this->_fin = $this->_ref_perfusion->_fin;
     
     $this->loadRefProduit();
-    $this->_view = $this->_ref_produit->libelle;
+    $this->_forme_galenique = $this->_ref_produit->forme;
+    $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
+    $this->_view = "$this->_ucd_view $this->_forme_galenique";
     if($this->quantite){
       $this->_view .= " ($this->quantite $this->unite";
       if($this->nb_tous_les){
@@ -83,8 +90,6 @@ class CPerfusionLine extends CMbObject {
     if($this->_ref_produit->_generique){
       $this->_can_vw_generique = 1;
     }
-    
-    $this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);   
     $this->_protocole = $this->_ref_perfusion->_protocole;
   }
   

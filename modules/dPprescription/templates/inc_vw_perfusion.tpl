@@ -110,7 +110,8 @@ Main.add( function(){
 			<strong>
 				Perfusion :
 				{{foreach from=$_perfusion->_ref_lines item=_line name=perf_line}}
-				 {{$_line->_ucd_view}}{{if !$smarty.foreach.perf_line.last}},{{/if}}
+				 {{$_line->_ucd_view}} 
+				  {{if !$smarty.foreach.perf_line.last}},{{/if}}
 				{{/foreach}}         
       </strong>
     </th>
@@ -316,7 +317,9 @@ Main.add( function(){
                       {{if $line->_ref_produit->_supprime}}
                         <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
                       {{/if}}
-					            <strong>{{$line->_ucd_view}}</strong>
+					            <strong>{{$line->_ucd_view}}
+					                <span style="font-size: 0.8em; opacity: 0.7">({{$_line->_forme_galenique}})</span>
+					             </strong>
 					          </td>
 			              <td style="border:none; width: 30%;">
 					            {{mb_label object=$line field=quantite}}:

@@ -11,7 +11,7 @@
 <tr>
   <td>
     {{if !$produit->_supprime}}
-      <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->code_cip}}', '{{$line_id}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />    
+      <button type="button" class="add notext" onclick="setClose('{{$produit->code_cip}}', '{{$line_id}}')"></button>    
     {{/if}}
     {{$produit->code_cip}}
     {{if $produit->hospitalier}}
@@ -34,7 +34,7 @@
     {{$produit->code_ucd}}
   </td>
   <td>
-    <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
+    <a href="#produit{{$produit->code_cip}}" onclick="Prescription.viewProduit('{{$produit->code_cip}}')" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
   </td>
   <td>
     {{$produit->nom_laboratoire}}

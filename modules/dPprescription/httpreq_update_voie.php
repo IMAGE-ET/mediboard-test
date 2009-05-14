@@ -42,6 +42,3 @@ foreach($codeCip_voie as $code_cip => $libelle_voie){
 $AppUI->stepAjax("$nb_lines lignes modifiées", UI_MSG_OK);
 
 ?>
-
-
-
