@@ -107,8 +107,10 @@ Main.add(function () {
   </form>
   <table class="tbl">
     <tr>
-      <th></th>
+      <th style="width: 0.1%;"></th>
+      {{if !$search_by_cis}}
       <th style="width: 0.1%;">CIP</th>
+      {{/if}}
       <th style="width: 0.1%;"></th>
       <th>UCD</th>
       <th>CIS</th>
@@ -117,12 +119,14 @@ Main.add(function () {
     </tr>
     {{foreach from=$produits item="produit"}}
     <tr>
-      <td style="width: 1%">
+      <td>
         {{if $dialog && !$produit->_supprime}}
           <button type="button" class="add notext" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')"></button>
         {{/if}}
       </td>
+      {{if !$search_by_cis}}
       <td>{{$produit->code_cip}}</td>
+      {{/if}}
       <td>
         {{if !$produit->inLivret}}
         <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret thérapeutique" title="Produit non présent dans le livret thérapeutique" />
@@ -147,7 +151,7 @@ Main.add(function () {
       <td>{{$produit->code_ucd}}</td>
       <td>{{$produit->code_cis}}</td>
       <td class="text">
-        <a href="#produit{{$produit->code_cip}}" onclick="Prescription.viewProduit('{{$produit->code_cip}}')" {{if $produit->_supprime}}style="color: red"{{/if}}>
+        <a href="#produit{{$produit->code_cip}}" onclick="Prescription.viewProduit('','{{$produit->code_ucd}}','{{$produit->code_cis}}')" {{if $produit->_supprime}}style="color: red"{{/if}}>
 	        {{if $search_by_cis}}
 	          {{$produit->libelle_abrege}} {{$produit->dosage}} ({{$produit->forme}})
 	        {{else}}
