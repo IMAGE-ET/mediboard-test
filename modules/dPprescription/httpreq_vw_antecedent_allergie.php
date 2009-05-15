@@ -18,7 +18,7 @@ $patient->loadRefDossierMedical();
 $dossier_medical =& $patient->_ref_dossier_medical;
 $dossier_medical->loadRefsAntecedents();
 $dossier_medical->countAntecedents();
-
+$dossier_medical->countAllergies();
 
 // Création du template
 $smarty = new CSmartyDP();

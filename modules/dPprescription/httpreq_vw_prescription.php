@@ -218,6 +218,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $dossier_medical->loadRefsAntecedents();
 		  $dossier_medical->loadRefsTraitements();
 		  $dossier_medical->countAntecedents();
+		  $dossier_medical->countAllergies();
 		  
 		  // Calcul des alertes de la prescription
 		  $allergies    = new CBcbControleAllergie();

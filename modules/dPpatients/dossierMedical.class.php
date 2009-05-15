@@ -31,6 +31,7 @@ class CDossierMedical extends CMbMetaObject {
   // Derived back references
   var $_count_antecedents = null;
   var $_count_cancelled_antecedents = null;
+  var $_count_allergies = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -191,6 +192,17 @@ class CDossierMedical extends CMbMetaObject {
 
 	  $where["annule"] = " = '1'";
   	$this->_count_cancelled_antecedents = $antedecent->countList($where);
+  }
+  
+  /*
+   * Compte les antecedents de type allergies
+   */
+  function countAllergies(){
+    $antecedent = new CAntecedent();
+    $antecedent->type = "alle";
+    $antecedent->annule = "0";
+    $antecedent->dossier_medical_id = $this->_id;
+    $this->_count_allergies = $antecedent->countMatchingList();
   }
   
   function loadRefsTraitements() {

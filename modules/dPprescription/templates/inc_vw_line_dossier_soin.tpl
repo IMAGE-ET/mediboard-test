@@ -80,32 +80,6 @@
   
   
   {{if $smarty.foreach.$last_foreach.first}}
-    <td class="text" rowspan="{{$nb_line}}" style="text-align: center;">
-    {{if !$line->conditionnel}}
-     -
-    {{else}}
-      <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="{{$dosql}}" />
-        <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
-        <input type="hidden" name="del" value="0" />
-        
-        {{if !$line->condition_active}}
-	      <!-- Activation -->
-	      <input type="hidden" name="condition_active" value="1" />
-	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
-	        Activer
-	      </button>
-	      {{else}}
- 				<!-- Activation -->
-	      <input type="hidden" name="condition_active" value="0" />
-	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
-	        Désactiver
-	      </button>
-	       {{/if}}
-       </form>
-		{{/if}}
-    </td>
     <td class="text" rowspan="{{$nb_line}}"
          {{if $line->_class_name == 'CPrescriptionLineMedicament' && $line->traitement_personnel}}
 	       style="background-color: #BDB"
@@ -131,11 +105,36 @@
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
 	  {{/if}}
-    <br />
     {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
+      <br />
       ({{$line->_unite_administration}})<br />
     {{/if}}
     </small>
+    
+    {{if $line->conditionnel}}
+      <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="{{$dosql}}" />
+        <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
+        <input type="hidden" name="del" value="0" />
+        
+        {{if !$line->condition_active}}
+	      <!-- Activation -->
+	      <input type="hidden" name="condition_active" value="1" />
+	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
+	        Activer
+	      </button>
+	      {{else}}
+ 				<!-- Activation -->
+	      <input type="hidden" name="condition_active" value="0" />
+	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
+	        Désactiver
+	      </button>
+	       {{/if}}
+       </form>
+		{{/if}}
+		
+				
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	  
 	  {{if !$line->_count.administration}}

@@ -31,7 +31,7 @@
 {{/if}}
 
 <!-- Affichage des autres antecedents -->
- {{if $dossier_medical->_count_antecedents}}
+ {{if $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
   <img src="images/icons/antecedents.gif" title="" alt="Antécédents" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')" />
   
    <div id="antecedents{{$sejour_id}}" style="text-align:left;  display: none;">

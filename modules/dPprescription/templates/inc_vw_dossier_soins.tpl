@@ -548,7 +548,6 @@ Main.add(function () {
 				  		 $prescription->_ref_perfusions_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
 					  <tr>
 					    <th rowspan="2">Catégorie</th>
-					    <th rowspan="2">Cond.</th>
 					    <th rowspan="2">Libellé</th>
 					    <th rowspan="2">Posologie</th>
 					    	    
