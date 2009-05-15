@@ -98,26 +98,97 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 
 {{assign var=praticien value=$prescription->_ref_praticien}}
 
+{{if $mode_protocole}}
+<form name="addLibelle-{{$prescription->_id}}" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+
+	<table class="form">
+	  <tr>
+	    <th class="title" colspan="2">
+		    <span style="float: right">
+		    	<button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
+		      <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
+		    </span>
+		    Modification du protocole
+		  </th>
+	  </tr>
+	  <tr>
+	    <th>{{mb_title object=$prescription field=libelle}}</th>
+	    <td>
+        <input type="text" name="libelle" value="{{$prescription->libelle}}" onchange="refreshListProtocole(this.form);" />
+        <button class="tick notext" type="button"></button>
+	    </td>
+	  </tr>
+	   <tr>
+	    <th>{{mb_title object=$prescription field=libelle}}</th>
+	     <td>
+         <!-- Modification du pratcien_id / user_id -->
+         <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">
+           <option value="">&mdash; Choix d'un praticien</option>
+ 	        {{foreach from=$praticiens item=praticien}}
+ 	        <option class="mediuser" 
+ 	                style="border-color: #{{$praticien->_ref_function->color}};" 
+ 	                value="{{$praticien->_id}}"
+ 	                {{if $praticien->_id == $prescription->praticien_id}}selected="selected"{{/if}}>{{$praticien->_view}}
+ 	        </option>
+ 	        {{/foreach}}
+ 	      </select>
+ 	      <select name="function_id" onchange="this.form.praticien_id.value='';this.form.group_id.value=''; refreshListProtocole(this.form)">
+           <option value="">&mdash; Choix du cabinet</option>
+           {{foreach from=$functions item=_function}}
+           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" 
+           {{if $_function->_id == $prescription->function_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
+           {{/foreach}}
+         </select>
+         <select name="group_id" onchange="this.form.praticien_id.value='';this.form.function_id.value=''; refreshListProtocole(this.form)">
+           <option value="">&mdash; Choix d'un etablissement</option>
+           {{foreach from=$groups item=_group}}
+           <option value="{{$_group->_id}}" 
+           {{if $_group->_id == $prescription->group_id}}selected=selected{{/if}}>{{$_group->_view}}</option>
+           {{/foreach}}
+         </select>
+	     </td>
+		 </tr>
+		 {{if $prescription->type != "externe"}}
+		 <tr>
+			 <th>{{mb_label object=$protocole field="type"}}</th>
+			 <td>
+		      <select name="type" onchange="refreshListProtocole(this.form);">
+		        <option value="pre_admission" {{if $prescription->type == "pre_admission"}}selected="selected"{{/if}}>Pré-admission</option>
+		        <option value="sejour" {{if $prescription->type == "sejour"}}selected="selected"{{/if}}>Séjour</option>
+		        <option value="sortie" {{if $prescription->type == "sortie"}}selected="selected"{{/if}}>Sortie</option>
+		      </select>  
+			  </td>
+		  </tr>
+	   {{/if}}
+  </table>
+</form>
+{{/if}}
+      
+<form name="moment_unitaire">
+  <select name="moment_unitaire_id" style="width: 150px; display: none;">  
+    <option value="">&mdash; Sélection du moment</option>
+   {{foreach from=$moments key=type_moment item=_moments}}
+   <optgroup label="{{$type_moment}}">
+   {{foreach from=$_moments item=moment}}
+   {{if $type_moment == "Complexes"}}
+     <option value="complexe-{{$moment->code_moment_id}}">{{$moment->_view}}</option>
+   {{else}}
+     <option value="unitaire-{{$moment->_id}}">{{$moment->_view}}</option>
+   {{/if}}
+   {{/foreach}}
+   </optgroup>
+   {{/foreach}}
+  </select>
+</form>
+       
 <table class="form">
+  {{if !$mode_protocole}}
   <tr>
     <th class="title text" colspan="3">
-    <form name="moment_unitaire">
-	    <select name="moment_unitaire_id" style="width: 150px; display: none;">  
-	      <option value="">&mdash; Sélection du moment</option>
-		    {{foreach from=$moments key=type_moment item=_moments}}
-		    <optgroup label="{{$type_moment}}">
-		    {{foreach from=$_moments item=moment}}
-		    {{if $type_moment == "Complexes"}}
-		      <option value="complexe-{{$moment->code_moment_id}}">{{$moment->_view}}</option>
-		    {{else}}
-		      <option value="unitaire-{{$moment->_id}}">{{$moment->_view}}</option>
-		    {{/if}}
-		    {{/foreach}}
-		    </optgroup>
-		    {{/foreach}}
-	    </select>
-	  </form>
-
       <!-- Selection du praticien prescripteur de la ligne -->
        <div style="float: right">
        	{{if !$mode_protocole && $prescription->type == "sejour"}}
@@ -175,55 +246,8 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
          </a>
        {{/if}}
       {{/if}}
-
-      {{if $mode_protocole}}
-        <!-- Formulaire de modification du libelle de la prescription -->
-        <form name="addLibelle-{{$prescription->_id}}" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_aed" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-          Libelle: 
-          <input type="text" name="libelle" value="{{$prescription->libelle}}" 
-                 onchange="refreshListProtocole(this.form);" />
-        
-          <button class="tick notext" type="button"></button>
-          <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
-           
-          <br />
-          <!-- Modification du pratcien_id / user_id -->
-          <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">
-            <option value="">&mdash; Choix d'un praticien</option>
-  	        {{foreach from=$praticiens item=praticien}}
-  	        <option class="mediuser" 
-  	                style="border-color: #{{$praticien->_ref_function->color}};" 
-  	                value="{{$praticien->_id}}"
-  	                {{if $praticien->_id == $prescription->praticien_id}}selected="selected"{{/if}}>{{$praticien->_view}}
-  	        </option>
-  	        {{/foreach}}
-  	      </select>
-  	      
-  	      <select name="function_id" onchange="this.form.praticien_id.value='';this.form.group_id.value=''; refreshListProtocole(this.form)">
-            <option value="">&mdash; Choix du cabinet</option>
-            {{foreach from=$functions item=_function}}
-            <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" 
-            {{if $_function->_id == $prescription->function_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
-            {{/foreach}}
-          </select>
-          
-          <select name="group_id" onchange="this.form.praticien_id.value='';this.form.function_id.value=''; refreshListProtocole(this.form)">
-            <option value="">&mdash; Choix d'un etablissement</option>
-            {{foreach from=$groups item=_group}}
-            <option value="{{$_group->_id}}" 
-            {{if $_group->_id == $prescription->group_id}}selected=selected{{/if}}>{{$_group->_view}}</option>
-            {{/foreach}}
-          </select>
-        </form>
-          
-        <form name="duplicate">
-          <button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
-        </form>
-      {{else}}
+      
+      {{if !$mode_protocole}}
         {{if $prescription->type == "externe"}}
           {{$prescription->_ref_patient->_view}}   
         {{else}}
@@ -232,8 +256,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
         {{if $prescription->_ref_patient->_age}}
            <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
-      {{/if}}
-      {{if !$mode_protocole}}
 	       <div id="antecedent_allergie">
 			     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
 			     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
@@ -242,18 +264,19 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	    {{/if}}
     </th>
   </tr>
+  {{/if}}
   
   <tr>
-    {{if !$mode_protocole && !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+    {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
       <th class="category">Protocoles</th>
     {{/if}}
-    {{if !$mode_protocole && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+    {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
       <th class="category">Date d'ajout de lignes</th>
     {{/if}}
     <th class="category">Outils</th>
   </tr>
   <tr>
-  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
    <td class="date" style="text-align: right;">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
@@ -267,7 +290,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 			        <input type="hidden" name="pratSel_id" value="" />
 							<span id="select_protocole"></span>
-							
 							<br />
 				 				{{if $prescription->type != "externe"}}
 				 				  {{if $prescription->_dates_dispo}}
@@ -294,7 +316,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 					          } );
 					 				</script>				 				
 				 				{{/if}}
-			 				
 			          <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
 		        </td>
 	        </tr>
@@ -303,7 +324,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
     </td>  
   {{/if}}
   
-  {{if !$mode_protocole && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+  {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
       <td class="date">
         <form name="selDateLine" action="?" method="get"> 
       
@@ -311,13 +332,8 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	        <select name="debut_date" 
 					        onchange="$('selDateLine_debut_da').innerHTML = new String;
 	 				                    this.form.debut.value = '';
-	 				          				  if(this.value == 'other') { 
-	 				          					  $('calendarProt').show();
-	 				          				  } else { 			    
-	 				          				    this.form.debut.value = this.value;
-	 				          				    $('calendarProt').hide();
-	 				          				  }">
-	     				  
+	 				          				  if(this.value == 'other') { $('calendarProt').show(); } 
+	 				          				  else { this.form.debut.value = this.value; $('calendarProt').hide();}">
 				    <option value="other">Autre date</option>
 				    <optgroup label="Séjour">
 				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
