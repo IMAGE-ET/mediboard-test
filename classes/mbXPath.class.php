@@ -16,7 +16,7 @@ class CMbXPath extends DOMXPath {
     parent::__construct($doc);
     
     if ($namespace) {
-    	$xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    	$this->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
     }
   }
 
