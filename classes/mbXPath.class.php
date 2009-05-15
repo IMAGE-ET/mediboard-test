@@ -12,8 +12,12 @@
  * The CMbXPath class
  */
 class CMbXPath extends DOMXPath {
-  function __construct(DOMDocument $doc) {
+  function __construct(DOMDocument $doc, $namespace = false) {
     parent::__construct($doc);
+    
+    if ($namespace) {
+    	$xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    }
   }
 
   function queryUniqueNode($query, DOMNode $contextNode = null) {
