@@ -40,7 +40,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     // Etat d'une venue : encours, clôturée ou préadmission
     if (!$mbSejour->entree_reelle && !$mbSejour->sortie_reelle) {
-    	$etat = "préadmission";
+      $etat = "préadmission";
     }
     else if ($mbSejour->entree_reelle && !$mbSejour->sortie_reelle) {
       $etat = "encours";
@@ -90,8 +90,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   }
   
   function getVenuePatientXML() {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
@@ -106,6 +105,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible'] = $this->getIdCible($data['patient']);
     
+    $data['idSourceVenue'] = $this->getIdSource($data['venue']);
+    $data['idCibleVenue'] = $this->getIdCible($data['venue']);
+    
     return $data;
   }
   
@@ -113,14 +115,16 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
-    $this->addIdentifiantPart($identifiant, "recepteur",  $mbVenue->_num_dossier, $referent);
+    if ($mbVenue->_num_dossier != "-") {
+      $this->addIdentifiantPart($identifiant, "recepteur",  $mbVenue->_num_dossier, $referent);
+    }
     
     $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
     $attrNatureVenueHprim = array (
       "CSejour" => "hsp",
       "CConsultation" => "cslt",
     );
-    $this->addAttribute($natureVenueHprim, "valeur", $attrNatureVenueHprim[$mbVenue->_class_name]);
+    $this->addAttribute($natureVenueHprim, "valeur", (($mbVenue->_class_name == "CSejour") && ($mbVenue->type == "seances")) ? "sc" : $attrNatureVenueHprim[$mbVenue->_class_name]);
     
     $entree = $this->addElement($elParent, "entree");
     
@@ -133,10 +137,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $mode = "09";
     // admission après consultation d'un médecin de l'établissement
     if ($mbVenue->_ref_consult_anesth->_id) {
-    	$mode = "01";
+      $mode = "01";
     }
     // malade envoyé par un médecin extérieur
-    if ($mbVenue->_ref_adresse_par_prat) {
+    if ($mbVenue->_ref_adresse_par_prat->_id) {
       $mode = "02";
     }
     $this->addAttribute($modeEntree, "valeur", $mode);
@@ -155,7 +159,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
     if ($mbVenue->_adresse_par_prat) {
       if ($_ref_adresse_par_prat->adeli) {
-      	$this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
+        $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
       }
     }
     
@@ -166,7 +170,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
     if (is_array($_ref_prescripteurs)) {
       foreach ($_ref_prescripteurs as $prescripteur) {
-      	$this->addMedecin($medecins, $prescripteur, "prsc");
+        $this->addMedecin($medecins, $prescripteur, "prsc");
       }
     }
     
@@ -174,8 +178,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
     if (is_array($_ref_actes_ccam)) {
       foreach ($_ref_actes_ccam as $acte_ccam) {
-      	$intervenant = $acte_ccam->_ref_praticien;
-      	$this->addMedecin($medecins, $intervenant, "intv");
+        $intervenant = $acte_ccam->_ref_praticien;
+        $this->addMedecin($medecins, $intervenant, "intv");
       }
     }
     
@@ -185,24 +189,24 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_sortie)); 
     
     if ($mbVenue->mode_sortie) {
-    	$typeModeSortieEtablissementHprim = $this->addElement($elParent, "typeModeSortieEtablissementHprim");
-	    //retour au domicile
-	    if ($mbVenue->mode_sortie == "normal") {
-	    	$modeSortieEtablissementHprim = "04";
-	    } 
-	    // décès
+      $typeModeSortieEtablissementHprim = $this->addElement($elParent, "typeModeSortieEtablissementHprim");
+      //retour au domicile
+      if ($mbVenue->mode_sortie == "normal") {
+        $modeSortieEtablissementHprim = "04";
+      } 
+      // décès
       else if ($mbVenue->mode_sortie == "deces") {
-	   	  $modeSortieEtablissementHprim = "05";
-	    } 
+        $modeSortieEtablissementHprim = "05";
+      } 
       // autre transfert dans un autre CH
-	    else if ($mbVenue->mode_sortie == "transfert") {
+      else if ($mbVenue->mode_sortie == "transfert") {
         $modeSortieEtablissementHprim = "02";
         if ($mbVenue->etablissement_transfert_id) {
-        	$destination = $this->addElement($elParent, "destination");
+          $destination = $this->addElement($elParent, "destination");
           $this->addElement($destination, "libelle", $mbVenue->etablissement_transfert_id);
         }
       }
-	    $this->addAttribute($typeModeSortieEtablissementHprim, "valeur", $modeSortieEtablissementHprim);
+      $this->addAttribute($typeModeSortieEtablissementHprim, "valeur", $modeSortieEtablissementHprim);
     }
     
     $placement = $this->addElement($elParent, "Placement");
@@ -219,28 +223,38 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @param CHPrimXMLAcquittementsPatients $domAcquittement
    * @param CEchangeHprim $echange_hprim
    * @param CPatient $newPatient
+   * @param CSejour $newSejour
    * @param array $data
-   * @return string acquittement 
+   * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {
+  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $newSejour, $data) {
     $mutex = new CMbSemaphore("sip-ipp");
-
-    // Si CIP
-    if (!CAppUI::conf('sip server')) {
-      // Acquittement d'erreur : identifiants source et cible non fournis
-      if (!$data['idCible'] && !$data['idSource']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
-        $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+    
+    // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
+    if (!$data['idSource'] && !$data['idCible'] && !$data['idSourceVenue'] && !$data['idCibleVenue']) {
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->date_echange = mbDateTime();
-        $echange_hprim->store();
+      $echange_hprim->message = $messagePatient;
+      $echange_hprim->acquittement = $messageAcquittement;
+      $echange_hprim->statut_acquittement = "erreur";
+      $echange_hprim->store();
       
-        return $messageAcquittement;
-      }
+      return $messageAcquittement;
     }
+    // Traitement du patient
+    
+    // Mapping du patient
+    $newPatient = $this->mappingPatient($data['patient'], $newPatient);
+    mbTrace($newPatient, "Patient", true);
+    //$msgPatient = $newPatient->store();
+    //$newPatient->loadLogs();
+    
+    // Traitement de la venue
+    // Mapping du patient
+    $newSejour = $this->mappingVenue($data['venue'], $newSejour);
+    mbTrace($newSejour, "Sejour", true);
   }
 }
 

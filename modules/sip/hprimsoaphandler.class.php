@@ -128,14 +128,18 @@ class CHprimSoapHandler extends CSoapHandler {
     // Un événement concernant un patient appartient à l'une des six catégories suivantes
     // Enregistrement d'un patient
     if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
-    	$data = array_merge($data, $domGetEvenement->getEnregistrementPatientXML());
+      $data = array_merge($data, $domGetEvenement->getEnregistrementPatientXML());
       $messageAcquittement = $domGetEvenement->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
     } 
     // Fusion d'un patient
     else if($domGetEvenement instanceof CHPrimXMLFusionPatient) {
-    	$data = array_merge($data, $domGetEvenement->getFusionPatientXML());
+      $data = array_merge($data, $domGetEvenement->getFusionPatientXML());
       $messageAcquittement = $domGetEvenement->fusionPatient();
-    } 
+    } // Venue d'un patient
+    else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
+      $data = array_merge($data, $domGetEvenement->getVenuePatientXML());
+      $messageAcquittement = $domGetEvenement->venuePatient($domAcquittement, $echange_hprim, $newPatient, $newSejour, $data);
+    }
     // Aucun des six événements retour d'erreur
     else {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E07"); 

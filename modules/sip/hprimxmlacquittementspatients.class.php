@@ -12,95 +12,93 @@ CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
 CAppUI::requireModuleClass("dPinterop", "hprimxmldocument");
 
 if (!class_exists("CHPrimXMLDocument")) {
-	return;
+  return;
 }
 
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
-	var $_codes_erreurs = null;
+  var $_codes_erreurs = null;
 
-	function __construct() {
-		parent::__construct("evenementPatient", "msgAcquittementsPatients105", "sip");
-	}
+  function __construct() {
+    parent::__construct("evenementPatient", "msgAcquittementsPatients105", "sip");
+  }
 
-	function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
-		global $AppUI, $g, $m;
+  function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
+    global $AppUI, $g, $m;
 
-		$acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
+    $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
-		$enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
-		$this->addAttribute($enteteMessageAcquittement, "statut", $statut);
+    $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
+    $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
-		$this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->_identifiant);
-		$this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
+    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->_identifiant);
+    $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
 
-		$emetteur = $this->addElement($enteteMessageAcquittement, "emetteur");
-		$agents = $this->addElement($emetteur, "agents");
-		$this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
-		$group = CGroups::loadCurrent();
-		$group->loadLastId400();
-		$this->addAgent($agents, "système", $this->_emetteur, $group->text);
+    $emetteur = $this->addElement($enteteMessageAcquittement, "emetteur");
+    $agents = $this->addElement($emetteur, "agents");
+    $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
+    $group = CGroups::loadCurrent();
+    $group->loadLastId400();
+    $this->addAgent($agents, "système", $this->_emetteur, $group->text);
 
-		$destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
-		$agents = $this->addElement($destinataire, "agents");
-		$this->addAgent($agents, "application", $this->_destinataire, $this->_destinataire_libelle);
+    $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
+    $agents = $this->addElement($destinataire, "agents");
+    $this->addAgent($agents, "application", $this->_destinataire, $this->_destinataire_libelle);
 
-		$this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
     
-		if ($statut == "OK") {
-			if (is_array($codes)) {
-				$_codes = $_libelle_codes = "";
+    if ($statut == "OK") {
+      if (is_array($codes)) {
+        $_codes = $_libelle_codes = "";
         foreach ($codes as $code) {
-        	$_codes .= $code;
-        	$_libelle_codes .= CHprimSoapHandler::$codes[$code]." ";
+          $_codes .= $code;
+          $_libelle_codes .= CHprimSoapHandler::$codes[$code]." ";
         }
         $this->addObservation($enteteMessageAcquittement, substr($_codes, 0, 17), substr($_libelle_codes, 0, 80), $commentaires);
-			} else {
-	      $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
-			}
-		}
-	}
+      } else {
+        $this->addObservation($enteteMessageAcquittement, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
+      }
+    }
+  }
 
-	function addErreursAvertissements($statut, $codes, $commentaires = null, $mbObject = null) {
-		$acquittementsPatients = $this->documentElement;
-		 
-		$erreursAvertissements = $this->addElement($acquittementsPatients, "erreursAvertissements");
-		 
-		if (is_array($codes)) {
-			foreach ($codes as $code) {
-				$this->addErreurAvertissement($erreursAvertissements, $statut, $code, CHprimSoapHandler::$codes[$code], $commentaires);
-			}
-		} else {
-			$this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
-		}		
-	}
+  function addErreursAvertissements($statut, $codes, $commentaires = null, $mbObject = null) {
+    $acquittementsPatients = $this->documentElement;
+     
+    $erreursAvertissements = $this->addElement($acquittementsPatients, "erreursAvertissements");
+     
+    if (is_array($codes)) {
+      foreach ($codes as $code) {
+        $this->addErreurAvertissement($erreursAvertissements, $statut, $code, CHprimSoapHandler::$codes[$code], $commentaires);
+      }
+    } else {
+      $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CHprimSoapHandler::$codes[$codes], $commentaires);
+    }   
+  }
 
-	function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
-		$this->_emetteur = CAppUI::conf('mb_id');
-		$this->_date_production = mbDateTime();
+  function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
+    $this->_emetteur = CAppUI::conf('mb_id');
+    $this->_date_production = mbDateTime();
 
-		if ($statut != "OK") {
-			$this->generateEnteteMessageAcquittement($statut);
-		  $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
-		} else {
-			$this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
-		}
+    if ($statut != "OK") {
+      $this->generateEnteteMessageAcquittement($statut);
+      $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
+    } else {
+      $this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
+    }
 
-		$this->saveTempFile();
-		$messageAcquittementPatient = utf8_encode($this->saveXML());
+    $this->saveTempFile();
+    $messageAcquittementPatient = utf8_encode($this->saveXML());
 
-		return $messageAcquittementPatient;
-	}
+    return $messageAcquittementPatient;
+  }
   
-	function getStatutAcquittementPatient() {
-	  $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+  function getStatutAcquittementPatient() {
+    $xpath = new CMbXPath($this, true);
         
     return $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
-	}
-	
-	function getAcquittementsPatients() {
-		$xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+  }
+  
+  function getAcquittementsPatients() {
+    $xpath = new CMbXPath($this, true);
     
     $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
     
@@ -116,11 +114,10 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $data['identifiantMessageAcquitte'] = $xpath->queryTextNode("hprim:identifiantMessageAcquitte", $enteteMessageAcquittement);
     
     return $data;
-	}
-	
-	function getAcquittementObservation() {
-		$xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+  }
+  
+  function getAcquittementObservation() {
+    $xpath = new CMbXPath($this, true);
     
     $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
     
@@ -128,8 +125,8 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
     
     $observations = array();
-	  if ($statut == "OK") {
-	  	$d = array();
+    if ($statut == "OK") {
+      $d = array();
       $observations[] = &$d;
         
       $observation = $xpath->queryUniqueNode("hprim:observation", $enteteMessageAcquittement);
@@ -152,7 +149,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     }  
     
     return $observations;
-	}	
+  } 
 }
 
 ?>

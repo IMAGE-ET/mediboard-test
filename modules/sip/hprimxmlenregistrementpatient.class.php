@@ -68,8 +68,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
   }
   
   function getEnregistrementPatientXML() {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
@@ -92,7 +91,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
    * @param CEchangeHprim $echange_hprim
    * @param CPatient $newPatient
    * @param array $data
-   * @return string acquittement 
+   * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
   function enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
     // Traitement du message des erreurs
@@ -134,7 +133,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           }
           
           // Mapping du patient
-          $newPatient = $this->createPatient($data['patient'], $newPatient);
+          $newPatient = $this->mappingPatient($data['patient'], $newPatient);
           $newPatient->_IPP = $IPP->id400;
           $msgPatient = $newPatient->store();
           $newPatient->loadLogs();
@@ -157,7 +156,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         else {          
           if (is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
             // Mapping du patient
-            $newPatient = $this->createPatient($data['patient'], $newPatient);
+            $newPatient = $this->mappingPatient($data['patient'], $newPatient);
             $newPatient->_no_ipp = 1;
             $msgPatient = $newPatient->store();
             
@@ -204,7 +203,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         if(!$data['idCible']) {
           if ($newPatient->load($idPatientSIP)) {
             // Mapping du patient
-            $newPatient = $this->createPatient($data['patient'], $newPatient);
+            $newPatient = $this->mappingPatient($data['patient'], $newPatient);
 
             // Création de l'IPP
             $IPP = new CIdSante400();
@@ -279,7 +278,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $newPatient->load($IPP->object_id);
 
               // Mapping du patient
-              $newPatient = $this->createPatient($data['patient'], $newPatient);
+              $newPatient = $this->mappingPatient($data['patient'], $newPatient);
               $newPatient->_IPP = $IPP->id400;
               $msgPatient = $newPatient->store();
               $newPatient->loadLogs();
@@ -320,7 +319,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       // Cas 2 : Patient n'existe pas sur le SIP
       else {
         // Mapping du patient
-        $newPatient = $this->createPatient($data['patient'], $newPatient);
+        $newPatient = $this->mappingPatient($data['patient'], $newPatient);
 
         $newPatient->_no_ipp = 1;
         $msgPatient = $newPatient->store();
@@ -433,7 +432,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         if ($data['idCible']) {
           if ($newPatient->load($data['idCible'])) {
             // Mapping du patient
-            $newPatient = $this->createPatient($data['patient'], $newPatient);
+            $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         
             // Evite de passer dans le sip handler
             $newPatient->_coms_from_hprim = 1;
@@ -456,7 +455,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $_code_IPP = "I22";  
         }
         // Mapping du patient
-        $newPatient = $this->createPatient($data['patient'], $newPatient);
+        $newPatient = $this->mappingPatient($data['patient'], $newPatient);
            
         if (!$newPatient->_id) {
           if ($newPatient->loadMatchingPatient()) {
@@ -479,7 +478,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
                 
         if (!$newPatient->_id) {
           // Mapping du patient
-          $newPatient = $this->createPatient($data['patient'], $newPatient);
+          $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         
           // Evite de passer dans le sip handler
           $newPatient->_coms_from_hprim = 1;
@@ -504,7 +503,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       else {
         $newPatient->load($IPP->object_id);
         // Mapping du patient
-        $newPatient = $this->createPatient($data['patient'], $newPatient);
+        $newPatient = $this->mappingPatient($data['patient'], $newPatient);
                         
         // idCible non fourni
         if (!$data['idCible']) {

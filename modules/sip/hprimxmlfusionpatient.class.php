@@ -73,8 +73,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
   function getFusionPatientXML() {
     global $m;
 
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
@@ -101,7 +100,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function fusionPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-  	
+    
   }
 }
 ?>

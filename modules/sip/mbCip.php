@@ -49,8 +49,7 @@ $domEvenement->load(CAppui::conf("base_url")."/modules/sip/hprim/evenementPatien
 
 $newPatient = new CPatient();
 
-$xpath = new CMbXPath($domEvenement);
-$xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+$xpath = new CMbXPath($domEvenement, true);
 
 $query = "/hprim:evenementsPatients/hprim:enteteMessage";
 

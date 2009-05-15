@@ -211,7 +211,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addPersonnePhysique($elParent, $mbPatient) {
-  	$personnePhysique = $this->addElement($elParent, "personnePhysique");
+    $personnePhysique = $this->addElement($elParent, "personnePhysique");
     
     $sexeConversion = array (
       "m" => "M",
@@ -233,8 +233,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addPersonne($elParent, $mbPersonne) {
-  	$personne = array();
-  	$civiliteHprimConversion = array (
+    $personne = array();
+    $civiliteHprimConversion = array (
       "mme"   => "mme",
       "melle" => "mlle",
       "m"     => "mr",
@@ -243,26 +243,26 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       "enf"   => "enf",
     );
       
-  	if ($mbPersonne instanceof CPatient) {
-  		$personne['nom'] = $mbPersonne->nom;
-  		$personne['nomNaissance'] = $mbPersonne->_nom_naissance;
-	  	if (isset($mbPersonne->_prenoms)) {
-	      foreach ($mbPersonne->_prenoms as $mbKey => $mbPrenom) {
-	        if ($mbKey < 3) {
-	          $personne['prenoms'][] = $mbPrenom; 
-	        }
-	      }
-	    }
-  		$personne['civilite'] = $mbPersonne->civilite;
-  		$personne['ligne'] = $mbPersonne->adresse;
-  		$personne['ville'] = $mbPersonne->ville;
-  		$personne['pays'] = $mbPersonne->pays_insee;
-  		$personne['codePostal'] = $mbPersonne->cp;
-  		$personne['tel'] = $mbPersonne->tel;
-  		$personne['tel2'] = $mbPersonne->tel2;
-  		$personne['email'] = $mbPersonne->email;
-  	} else if ($mbPersonne instanceof CMedecin) {
-  		$personne['nom'] = $mbPersonne->nom;
+    if ($mbPersonne instanceof CPatient) {
+      $personne['nom'] = $mbPersonne->nom;
+      $personne['nomNaissance'] = $mbPersonne->_nom_naissance;
+      if (isset($mbPersonne->_prenoms)) {
+        foreach ($mbPersonne->_prenoms as $mbKey => $mbPrenom) {
+          if ($mbKey < 3) {
+            $personne['prenoms'][] = $mbPrenom; 
+          }
+        }
+      }
+      $personne['civilite'] = $mbPersonne->civilite;
+      $personne['ligne'] = $mbPersonne->adresse;
+      $personne['ville'] = $mbPersonne->ville;
+      $personne['pays'] = $mbPersonne->pays_insee;
+      $personne['codePostal'] = $mbPersonne->cp;
+      $personne['tel'] = $mbPersonne->tel;
+      $personne['tel2'] = $mbPersonne->tel2;
+      $personne['email'] = $mbPersonne->email;
+    } else if ($mbPersonne instanceof CMedecin) {
+      $personne['nom'] = $mbPersonne->nom;
       $personne['nomNaissance'] = $mbPersonne->jeunefille;
       $personne['civilite'] = "";
       $personne['prenoms'][] = $mbPersonne->prenom;
@@ -273,11 +273,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $personne['tel'] = $mbPersonne->tel;
       $personne['tel2'] = $mbPersonne->portable;
       $personne['email'] = $mbPersonne->email;
-  	} else if ($mbPersonne instanceof CMediusers) {
-  		$personne['nom'] = $mbPersonne->_user_last_name;
-  		$personne['nomNaissance'] = "";
-  		$personne['civilite'] = "";
-  		$personne['prenoms'][] = $mbPersonne->_user_first_name;
+    } else if ($mbPersonne instanceof CMediusers) {
+      $personne['nom'] = $mbPersonne->_user_last_name;
+      $personne['nomNaissance'] = "";
+      $personne['civilite'] = "";
+      $personne['prenoms'][] = $mbPersonne->_user_first_name;
       $personne['ligne'] = $mbPersonne->_user_adresse;
       $personne['ville'] = $mbPersonne->_user_ville;
       $personne['codePostal'] = $mbPersonne->_user_cp;
@@ -285,16 +285,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $personne['tel'] = $mbPersonne->_user_phone;
       $personne['tel2'] = "";
       $personne['email'] = $mbPersonne->_user_email;
-  	}
-  	
-  	$this->addTexte($elParent, "nomUsuel", $personne['nom']);
-  	$this->addTexte($elParent, "nomNaissance", $personne['nomNaissance']);
+    }
+    
+    $this->addTexte($elParent, "nomUsuel", $personne['nom']);
+    $this->addTexte($elParent, "nomNaissance", $personne['nomNaissance']);
     $prenoms = $this->addElement($elParent, "prenoms");
     foreach ($personne['prenoms'] as $prenom) {
-    	$this->addTexte($prenoms, "prenom", $prenom);
+      $this->addTexte($prenoms, "prenom", $prenom);
     }
     if ($personne['civilite']) {
-    	$civiliteHprim = $this->addElement($elParent, "civiliteHprim");
+      $civiliteHprim = $this->addElement($elParent, "civiliteHprim");
       $this->addAttribute($civiliteHprim, "valeur", $civiliteHprimConversion[$personne['civilite']]);    
     }
     $adresses = $this->addElement($elParent, "adresses");
@@ -347,7 +347,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addMedecin($elParent, $praticien, $lien) {
-  	$medecin = $this->addElement($medecins, "medecin");
+    $medecin = $this->addElement($elParent, "medecin");
     $this->addAttribute($medecin, "lien", $lien);
     $this->addElement($medecin, "numeroAdeli", $praticien->adeli);
     $personne = $this->addElement($medecin, "personne");
