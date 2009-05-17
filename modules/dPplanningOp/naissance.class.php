@@ -7,6 +7,14 @@
 * @author Thomas Despoix
 */
 
+
+/**
+ * Table SJ00
+ * SJTYPE = 
+ * '' hors maternité
+ * 'MR' Mère
+ * 'nn' Rang du bébé
+ */
 class CNaissance extends CMbObject {
   // DB Table key
   var $naissance_id = null;

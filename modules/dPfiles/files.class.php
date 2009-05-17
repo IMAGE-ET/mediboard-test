@@ -17,7 +17,6 @@ class CFile extends CDocumentItem {
   var $file_real_filename = null;
   var $file_name          = null;
   var $file_type          = null;
-  var $file_category_id   = null;
   var $file_owner         = null;
   var $file_date          = null;
   var $file_size          = null;
@@ -48,7 +47,6 @@ class CFile extends CDocumentItem {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["file_category_id"]   = "ref class|CFilesCategory";
     $specs["file_date"]          = "dateTime notNull";
     $specs["file_size"]          = "num pos";
     $specs["file_real_filename"] = "str notNull";

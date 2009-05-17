@@ -13,15 +13,20 @@
 class CDocumentItem extends CMbMetaObject {
   
 	// DB Fields
+  var $file_category_id  = null;
   var $etat_envoi = null;
   
   // Behavior Field
   var $_send = null; 
   var $_is_sendable = null;
+  
+  // References
+  var $_ref_category = null;
 	
   function getProps() {
     $specs = parent::getProps();
-    $specs["etat_envoi"] = "enum notNull list|oui|non|obsolete default|non";
+    $specs["file_category_id"] = "ref class|CFilesCategory";
+    $specs["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
     return $specs;
   }
   
@@ -96,7 +101,14 @@ class CDocumentItem extends CMbMetaObject {
     }
   }  
   
+  function loadRefsFwd() {
+	  parent::loadRefsFwd();
+    $this->loadRefCategory();
+  }
   
+  function loadRefCategory() {
+    $this->_ref_category = $this->loadFwdRef("file_category_id");
+  }
 }
 
 ?>

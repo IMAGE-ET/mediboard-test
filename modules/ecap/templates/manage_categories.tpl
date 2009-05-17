@@ -88,10 +88,12 @@
 			  <select name="id400" > 
 			    <option value="0">&mdash; Choisir un type e-Cap</option>
 					{{assign var=category_class value=$_category->class}}
-			    {{foreach from=$typesEcapByMbClass.$category_class key=EcObject item=typesEcap}}
-			    <optgroup label="{{$EcObject}}">
+			    {{foreach from=$typesEcapByMbClass.$category_class key=ecObject item=typesEcap}}
+			    <optgroup label="{{$ecObject}}">
 				  {{foreach from=$typesEcap item=type}}
-				  <option value="{{$type->id}}" style="padding-left: {{$type->level}}cm;" {{if $idEcap->id400 == $type->id}}selected="selected"{{/if}}>
+				  {{assign var=type_id value=$type->id}}
+				  {{assign var=ecCat value="$ecObject-$type_id"}}
+				  <option value="{{$ecCat}}" style="padding-left: {{$type->level}}cm;" {{if $idEcap->id400 == $ecCat}}selected="selected"{{/if}}>
 				  	[CN: {{$type->cnCode|string_format:"%02s"}} / {{$type->cnType|string_format:"%03s"}}] 
 				  	{{$type->libelle}}
 				  </option>

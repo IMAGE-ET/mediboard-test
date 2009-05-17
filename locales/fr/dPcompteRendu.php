@@ -226,4 +226,16 @@ $locales['CAideSaisie-_owner-desc'] = 'L\'aide à la saisie appartient à';
 $locales['CAideSaisie._owner.'] = 'Indéfini';
 $locales['CAideSaisie._owner.func'] = 'Cabinet';
 $locales['CAideSaisie._owner.user'] = 'Utilisateur';
+$locales['CCompteRendu-etat_envoi'] = 'Envoyé';
+$locales['CCompteRendu-etat_envoi-court'] = 'Envoi';
+$locales['CCompteRendu-etat_envoi-desc'] = 'Informations concernant l\'état d\'envoi vers une plateforme tierce';
+$locales['CCompteRendu.etat_envoi.non'] = 'Non';
+$locales['CCompteRendu.etat_envoi.obsolete'] = 'Obsolète';
+$locales['CCompteRendu.etat_envoi.oui'] = 'Oui';
+$locales['CFilesCategory-back-categorized_documents'] = 'Documents';
+$locales['mod-dPcompteRendu-tab-addedit_modeles'] = '';
+$locales['mod-dPcompteRendu-tab-vw_idx_aides'] = '';
+$locales['mod-dPcompteRendu-tab-vw_idx_listes'] = '';
+$locales['mod-dPcompteRendu-tab-vw_idx_packs'] = '';
+$locales['mod-dPcompteRendu-tab-vw_modeles'] = '';
 ?>

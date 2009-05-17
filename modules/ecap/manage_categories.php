@@ -21,25 +21,12 @@ if (!url_exists($serviceURL)) {
 
 $client = new SoapClient("$serviceURL?WSDL", array('exceptions' => 0));
 
-$typesEcapByMbClass = array(
-  "CPatient" => array (
-    "PA" => array(),
-   ),
-  "CSejour" => array(
-    "SJ" => array(),
-    "AT" => array(),
-	),
-  "COperation" => array(
-    "IN" => array(),
-  ),
-);
-
 $requestParams = array (
   "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
   "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
   "aTypeIdentifiantActeur" => 1,
   "aIdentifiantActeur"     => "pr1",
-  "aIdClinique"            => CAppUI::conf("dPsante400 group_id"),
+  "aIdClinique"            => "021", //CAppUI::conf("dPsante400 group_id"),
   "aTypeObjet"             => "",
 );
 
@@ -69,9 +56,9 @@ class CEcapTypeDocument {
 	}
 }
 
-
-foreach ($typesEcapByMbClass as $mbClass => &$typesEcapByEcObject) {
-  foreach ($typesEcapByEcObject as $ecObject => &$typesEcap) {
+$typesEcapByMbClass= array();
+foreach (CEcDocumentSender::$sendables as $mbClass => $typesEcapByEcObject) {
+  foreach ($typesEcapByEcObject as $ecObject) {
     $requestParams["aTypeObjet"] = $ecObject;
     $result = $client->ListerTypeDocument($requestParams);
 		$result = simplexml_load_string($result->ListerTypeDocumentResult->any);
@@ -84,7 +71,7 @@ foreach ($typesEcapByMbClass as $mbClass => &$typesEcapByEcObject) {
 		  continue;
 		}
 		
-		$typesEcapByEcObject[$ecObject] = CEcapTypeDocument::flattenTypes($result->listeTypeDocument);
+		$typesEcapByMbClass[$mbClass][$ecObject] = CEcapTypeDocument::flattenTypes($result->listeTypeDocument);
   }
 }
 

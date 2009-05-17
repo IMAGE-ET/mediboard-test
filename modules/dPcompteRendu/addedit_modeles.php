@@ -45,7 +45,7 @@ if ($compte_rendu->object_id) {
   $compte_rendu = new CCompteRendu();
 }
 else{
-  $compte_rendu->loadCategory();
+  $compte_rendu->loadRefCategory();
 }
 // Gestion du modèle
 $templateManager = new CTemplateManager;

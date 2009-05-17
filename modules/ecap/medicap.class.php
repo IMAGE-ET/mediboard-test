@@ -21,6 +21,9 @@ class CMedicap {
   
   static $urls = array();
   
+  /**
+   * Computes URLs from module config
+   */
   static function makeURLs() {
     $soap = CAppUI::conf("ecap soap");
     $dhe = CAppUI::conf("ecap dhe");
@@ -35,18 +38,21 @@ class CMedicap {
 
   static $tags = array();
   
+  /**
+   * Produce tags for current group
+   */
   static function makeTags() {
 		$idExt = new CIdSante400;
 		$idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
 		$codeClinique = $idExt->id400;
 		
 		self::$tags = array(
-		  "IPP"  => "eCap CIDC:$codeClinique",
+		  "IPP" => "eCap CIDC:$codeClinique",
 			"DOS" => "eCap NDOS CIDC:$codeClinique",
 			"USR" => "eCap CIDC:$codeClinique",
 			"DOC" => "eCap CIDC:$codeClinique"
 		);	    
-  }
+  }  
 }
 
 ?>

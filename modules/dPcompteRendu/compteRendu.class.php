@@ -23,7 +23,6 @@ class CCompteRendu extends CDocumentItem {
   var $type              = null;
   var $source            = null;
   var $valide            = null;
-  var $file_category_id  = null;
   var $header_id         = null;
   var $footer_id         = null;
   var $height            = null;
@@ -67,7 +66,6 @@ class CCompteRendu extends CDocumentItem {
     $specs["nom"]              = "str notNull";
     $specs["type"]             = "enum list|header|body|footer default|body";
     $specs["source"]           = "html helped|object_class";
-    $specs["file_category_id"] = "ref class|CFilesCategory";
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float";
@@ -112,14 +110,6 @@ class CCompteRendu extends CDocumentItem {
         $this->etat_envoi = "obsolete";
   }
   
-  function loadCategory(){
-    // Categorie
-    $this->_ref_category = new CFilesCategory;
-    if($this->file_category_id){
-      $this->_ref_category->load($this->file_category_id);
-    }
-  }
-  
   function loadComponents() {
     if (!$this->_ref_header) {
 	    $this->_ref_header = new CCompteRendu();
@@ -136,8 +126,6 @@ class CCompteRendu extends CDocumentItem {
 	  parent::loadRefsFwd();
 
     $this->_ref_object->loadRefsFwd();
-    
-    $this->loadCategory();
     
     // Chirurgien
     $this->_ref_chir = new CMediusers;
@@ -305,10 +293,21 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function handleSend() {
+    if (!$this->_send) {
+      return;
+    }
+
     $this->completeField("nom");
     $this->completeField("source");
     
-    parent::handleSend();
+    if ($msg = parent::handleSend()) {
+      return $msg;
+    }
+    
+    // Xor check...
+		$this->function_id = "";
+		$this->chir_id = "";
+		$this->group_id = "";
   }
 }
 
