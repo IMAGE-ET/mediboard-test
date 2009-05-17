@@ -369,7 +369,7 @@ class CFile extends CDocumentItem {
     $this->completeField("file_date");
     $this->updateFormFields();
     
-    parent::handleSend();
+    return parent::handleSend();
   }
 }
 ?>

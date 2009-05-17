@@ -204,11 +204,6 @@ class CMedinetSender extends CDocumentSender {
       
       $act_dateCreationActe = mbDate($log->date); 
       $fichier = base64_encode($docItem->source);
-      
-      // Xor
-      $docItem->function_id = "";
-      $docItem->chir_id = "";
-      $docItem->group_id = "";
     }
     
     if ($docItem instanceof CFile) {
@@ -347,14 +342,7 @@ class CMedinetSender extends CDocumentSender {
     
     // Change l'etat du document
     $docItem->etat_envoi = "non"; 
-    
-    // Necessaire pour les xor
-    if ($docItem instanceof CCompteRendu) {
-      $docItem->function_id = "";
-      $docItem->chir_id = "";
-      $docItem->group_id = "";
-    }
-    
+        
     return true;
   }
   

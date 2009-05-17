@@ -47,8 +47,8 @@
     <td>
       <select class="str" name="{{$m}}[{{$var}}]">
         <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
-        <option value="CMedicapSender" {{if "CMedicapSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>e-Cap</option>
-        <option value="CMedinetSender" {{if "CMedinetSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Medinet</option>
+        <option value="CEcDocumentSender" {{if "CEcDocumentSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}CEcDocumentSender{{/tr}}</option>
+        <option value="CMedinetSender"    {{if "CMedinetSender"    == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}CMedinetSender{{/tr}}</option>
       </select>
     </td>
   </tr>  

@@ -17,8 +17,13 @@ var File = {
 </script>
 
 <ul id="tab-{{if $accordDossier}}{{$selClass}}{{$selKey}}{{else}}consult{{/if}}" class="control_tabs">
-{{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-  <li><a href="#Category-{{$keyCat}}">{{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})</a></li>
+{{foreach from=$affichageFile item=_cat key=_cat_id}}
+  <li>
+  	<a href="#Category-{{$_cat_id}}" {{if !$_cat.DocsAndFiles|@count}}class="empty"{{/if}}>
+  		{{$_cat.name}} 
+  		<small>({{$_cat.DocsAndFiles|@count}})</small>
+  	</a>
+  </li>
 {{/foreach}}
 </ul>
 
@@ -26,9 +31,9 @@ var File = {
 
 {{include file=inc_files_add_toolbar.tpl}}
 
-{{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-<div id="Category-{{$keyCat}}" style="display: none; clear: both;">  
-  {{foreach from=$curr_listCat.DocsAndFiles item=curr_file}}
+{{foreach from=$affichageFile item=_cat key=_cat_id}}
+<div id="Category-{{$_cat_id}}" style="display: none; clear: both;">  
+  {{foreach from=$_cat.DocsAndFiles item=curr_file}}
   <div style="float: left; width: 280px;">
   	 <table class="tbl">
   	   <tbody class="hoverable">
@@ -53,8 +58,10 @@ var File = {
 			      </span>
 					</td>
 	
-					<!-- Historique -->
+					<!-- Historique & identifiants externes-->
 			    <td class="text" style="vertical-align: middle; width: 1%">
+			      {{mb_include module=system template=vw_object_idsante400 object=$curr_file}}
+			      <div class="idsante400" id="{{$curr_file->_guid}}"></div>
 			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}', 'objectViewHistory');">
 							<img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
 			      </span>

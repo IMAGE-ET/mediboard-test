@@ -35,4 +35,13 @@
 	    {{$file->_ref_object}}
     </td>
   </tr>
+
+	{{if $file->etat_envoi}}
+	<tr>
+	  <td class="text">
+      <strong>{{mb_label object=$file field=etat_envoi}}</strong> :
+	    {{mb_value object=$file field=etat_envoi}}
+    </td>
+  </tr>
+	{{/if}}
 </table>

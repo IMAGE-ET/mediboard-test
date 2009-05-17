@@ -25,17 +25,30 @@ class CDocumentItem extends CMbMetaObject {
     return $specs;
   }
   
+  /**
+   * Try and instanciate document sender according to module configuration
+   * @return CDocumentSender sender or null on error
+   */
+  static function getDocumentSender() {
+  	if (null == $system_sender = CAppUI::conf("dPfiles system_sender")) {
+  	  return;
+  	}
+  	
+  	if (!is_subclass_of($system_sender, "CDocumentSender")) {
+      trigger_error("Instanciation du Document Sender impossible.");
+      return;
+    }
+    
+    return new $system_sender;
+  }
+  
+  
   function updateFormFields() {
   	parent::updateFormFields();
-  	$system_sender = CAppUI::conf("dPfiles system_sender");
 
-  	if ($system_sender && !is_subclass_of($system_sender, "CDocumentSender")) {
-       trigger_error("Instanciation du Document Sender impossible.");
-    }    
-  	if ($system_sender) {
-  		$sender = new $system_sender;
-  		$this->_is_sendable = $sender->isSendable($this);
-  	}
+  	if ($sender = self::getDocumentSender()) {
+   		$this->_is_sendable = $sender->isSendable($this);
+ 		}
   }
   
   function store() {
@@ -43,39 +56,43 @@ class CDocumentItem extends CMbMetaObject {
     $this->completeField("object_class");
     $this->completeField("object_id");
 
-    $this->handleSend();
+    if ($msg = $this->handleSend()) {
+      return $msg;
+    }
 
     return parent::store();
   }
   
+  /**
+   * Handle document sending store behaviour
+   * @return string Store-like error message 
+   */
   function handleSend() {
-  	global $AppUI;
     if (!$this->_send) {
       return;
     }
     
     $this->_send = false;
     
-    $system_sender = CAppUI::conf("dPfiles system_sender");
-    
-    if ($system_sender && !is_subclass_of($system_sender, "CDocumentSender")) {
-       trigger_error("Instanciation du Document Sender impossible.");
+    if (null == $sender = self::getDocumentSender()) {
+      return "Document Sender not available";
     }
     
-    $sender = new $system_sender;
-    
-    switch($this->etat_envoi) {
+    switch ($this->etat_envoi) {
     	case "non" :
-    	  ($sender->send($this)) ? $AppUI->setMsg("Document transmis.") : $AppUI->setMsg("Erreur lors de l'envoi.", UI_MSG_ERROR);
+    	  if (!$sender->send($this)) return "Erreur lors de l'envoi.";
+    	  CAppUI::setMsg("Document transmis.");
         break;
       case "oui" :
-      	($sender->cancel($this)) ? $AppUI->setMsg("Document annulé.") : $AppUI->setMsg("Erreur lors de l'invalidation.", UI_MSG_ERROR);
+      	if (!$sender->cancel($this)) return "Erreur lors de l'invalidation."; 
+      	CAppUI::setMsg("Document annulé."); 
         break;
       case "obsolete" :
-      	($sender->resend($this)) ? $AppUI->setMsg("Document annulé/transmis.") : $AppUI->setMsg("Erreur lors de l'invalidation / envoi.", UI_MSG_ERROR);
+        if (!$sender->resend($this)) return "Erreur lors de l'invalidation / envoi."; 
+        CAppUI::setMsg("Document annulé/transmis.");
         break;
       default:
-      	$AppUI->setMsg("Fonction non reconnue.", UI_MSG_ERROR);
+      	return "Fonction d'envoi '$this->etat_envoi' non reconnue.";
     }
   }  
   
