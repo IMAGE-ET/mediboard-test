@@ -51,7 +51,6 @@ class CEcDocumentSender extends CDocumentSender {
   
   /**
    * Get Target Id for object anf target ecap category
-   * 
    */
   static function getTargetIdFor(CMbObject $object, $ecCat) {
     if ($object instanceof CPatient) {
