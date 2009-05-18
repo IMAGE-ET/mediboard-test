@@ -13,6 +13,18 @@ $can->needsAdmin();
 
 set_time_limit(360);
 
+$do_delete = mbGetValueFromget('do_delete');
+
+$cim = new CCodeCIM10();
+$ds = $cim->_spec->ds;
+
+if ($do_delete) {
+  $ds->exec("DELETE FROM `master` WHERE `author` = 'atih'");
+  $ds->exec("DELETE FROM `libelle` WHERE `author` = 'atih';");
+  $AppUI->stepAjax("Code supplémentaires de l'ATIH supprimés", UI_MSG_OK);
+  CApp::rip();
+}
+
 // Extraction des codes supplémentaires de l'ATIH
 $targetDir = "tmp/cim10";
 $sourcePath = "modules/dPcim10/base/cim_atih.tar.gz";
@@ -36,11 +48,6 @@ while($line = fgetcsv($fp, null, '|')) {
   }
 }
 
-/*
-DELETE FROM `master` WHERE `author` = 'atih';
-DELETE FROM `libelle` WHERE `author` = 'atih';
-*/
-
 fclose($fp);
 
 if (count($list_diff))
@@ -48,8 +55,6 @@ if (count($list_diff))
 else
   $AppUI->stepAjax("Il n'y a pas de code supplémentaires dans la CIM v.11", UI_MSG_OK);
 
-$cim = new CCodeCIM10();
-$ds = $cim->_spec->ds;
 foreach($list_diff as $diff) {
   $abbrev = $diff[0];
   $full_code = CCodeCIM10::addPoint($abbrev);
@@ -87,7 +92,7 @@ foreach($list_diff as $diff) {
     else $offset++; 
   }
   
-  $label = str_replace("'", "\\'", $diff[3]);
+  $label = str_replace("'", "\\'", removeDiacritics($diff[3], true));
   
   // Insertion des libellés dans toutes les langues
   $query = "INSERT into libelle (

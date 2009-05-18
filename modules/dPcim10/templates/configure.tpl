@@ -18,10 +18,13 @@ function startCIM10() {
   url.requestUpdate("cim10");
 }
 
-function diffCIM10Atih() {
+function diffCIM10Atih(del) {
   var url = new Url;
   url.setModuleAction("dPcim10", "httpreq_diff_cim10_atih");
-  url.requestUpdate("cim10_diff");
+  if (del) {
+    url.addParam('do_delete', true);
+  }
+  url.requestUpdate(del ? "cim10_remove" : "cim10_add");
 }
 
 </script>
@@ -42,7 +45,12 @@ function diffCIM10Atih() {
 
 <tr>
   <td><button class="tick" onclick="diffCIM10Atih()">Ajouter les modifications de l'ATIH</button></td>
-  <td id="cim10_diff" />
+  <td id="cim10_add" />
+</tr>
+
+<tr>
+  <td><button class="tick" onclick="diffCIM10Atih(true)">Supprimer les modifications de l'ATIH</button></td>
+  <td id="cim10_remove" />
 </tr>
 
 </table>

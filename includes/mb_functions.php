@@ -510,6 +510,20 @@ function removeAccent($string) {
   return $string;
 }
 
+/** Extended function to be able to remove diacritics only on upper case letters */
+function removeDiacritics($str, $only_upper_case = false) {
+  if ($only_upper_case) {
+    $find = "ÀÁÂÃÄÅÒÓÔÕÖØÈÉÊËÇÌÍÎÏÙÚÛÜÑ";
+    $repl = "AAAAAAOOOOOOEEEECIIIIUUUUN";
+  }
+  else {
+    $find = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ";
+    $repl = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
+  }
+  
+  return strtr($str, $find, $repl);
+}
+
 /**
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
