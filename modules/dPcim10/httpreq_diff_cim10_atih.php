@@ -29,10 +29,10 @@ if ($do_delete) {
 $targetDir = "tmp/cim10";
 $sourcePath = "modules/dPcim10/base/cim_atih.tar.gz";
 $targetPath = "tmp/cim10/cim_atih.csv";
-if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
+/*if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
   $AppUI->stepAjax("Erreur, impossible d'extraire l'archive CIM_ATIH.csv", UI_MSG_ERROR);
 } 
-$AppUI->stepAjax("Extraction de $nbFiles fichier(s) [CIM10 ATIH]", UI_MSG_OK);
+$AppUI->stepAjax("Extraction de $nbFiles fichier(s) [CIM10 ATIH]", UI_MSG_OK);*/
 
 // Vérification des différences entre la norme internationale et les ajouts de l'ATIH
 $list_diff = array();
@@ -92,7 +92,7 @@ foreach($list_diff as $diff) {
     else $offset++; 
   }
   
-  $label = str_replace("'", "\\'", removeDiacritics($diff[3], true));
+  $label = str_replace("'", "\\'", removeAccent($diff[3], true));
   
   // Insertion des libellés dans toutes les langues
   $query = "INSERT into libelle (

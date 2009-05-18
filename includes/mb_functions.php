@@ -503,25 +503,11 @@ function mbEcartType($array) {
  * Remove accents from a string
  **/
 
-function removeAccent($string) {
+function removeAccent($string, $only_upper_case = false) {
   $string = htmlentities($string);
-  $string = preg_replace("/&(.)(acute|cedil|circ|ring|tilde|uml|grave);/", "$1", $string);
+  $string = preg_replace("/&([A-Z])(acute|cedil|circ|ring|tilde|uml|grave);/".($only_upper_case?'':'i'), "$1", $string);
   $string = html_entity_decode($string);
   return $string;
-}
-
-/** Extended function to be able to remove diacritics only on upper case letters */
-function removeDiacritics($str, $only_upper_case = false) {
-  if ($only_upper_case) {
-    $find = "ÀÁÂÃÄÅÒÓÔÕÖØÈÉÊËÇÌÍÎÏÙÚÛÜÑ";
-    $repl = "AAAAAAOOOOOOEEEECIIIIUUUUN";
-  }
-  else {
-    $find = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ";
-    $repl = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
-  }
-  
-  return utf8_encode(strtr(utf8_decode($str), utf8_decode($find), $repl));
 }
 
 /**
