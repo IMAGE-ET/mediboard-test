@@ -1,10 +1,10 @@
 <script type="text/javascript">
-var g = [];
-var data = {{$data|@json}};
-var dates = {{$dates|@json}};
-var hours = {{$hours|@json}};
-var const_ids = {{$const_ids|@json}};
-var last_date = null;
+g = [];
+data = {{$data|@json}};
+dates = {{$dates|@json}};
+hours = {{$hours|@json}};
+const_ids = {{$const_ids|@json}};
+last_date = null;
 
 submitConstantesMedicales = function(oForm) {
   submitFormAjax(oForm, 'systemMsg', {
@@ -15,10 +15,11 @@ submitConstantesMedicales = function(oForm) {
   return false;
 }
 
-editConstantes = function (const_id){
+editConstantes = function (const_id, context_guid){
   var url = new Url;
   url.setModuleAction('dPhospi', 'httpreq_vw_form_constantes_medicales');
   url.addParam('const_id', const_id);
+  url.addParam('context_guid', context_guid);
   url.requestUpdate('constantes-medicales-form', { 
     waitingText: null,
     onComplete: function () {
@@ -28,8 +29,7 @@ editConstantes = function (const_id){
 }
 
 insertGraph = function (container, data, id, width, height) {
-  container.insert('<b id="title-'+id+'"><br />'+data.title+(data.unit?(' ('+data.unit+')'):'')+'</b>');
-  container.insert('<div id="'+id+'" style="width: '+width+'; height: '+height+';"></div>');
+  container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto;"></div>');
   last_date = null;
   return Flotr.draw($(id), data.series, data.options);
 }
@@ -37,7 +37,7 @@ insertGraph = function (container, data, id, width, height) {
 tickFormatter = function (n) {
   n = parseInt(n);
   
-  var s = '<a href="#1" onclick="editConstantes('+const_ids[n]+')">';
+  var s = '<a href="javascript:;" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
   if (dates[n] && dates[n] == last_date) {
     s += hours[n];
   } else if (dates[n] && hours[n]) {
@@ -51,8 +51,9 @@ trackFormatter = function (obj) {
   return dates[parseInt(obj.x)] + ' : ' + obj.y;
 };
 
-function initializeGraph(src, data) {
+initializeGraph = function (src, data) {
   src.options = {
+    title: src.options.title || '',
     xaxis: src.options.xaxis || {},
     yaxis: src.options.yaxis || {},
     mouse: src.options.mouse || {},
@@ -96,6 +97,7 @@ options = {
     track: true,
     trackFormatter: trackFormatter,
     trackDecimals: 1,
+    position: 'nw',
     relative: true
   },
   xaxis: {
@@ -143,28 +145,12 @@ drawGraph = function() {
   }
 };
 
-
-hideGraph = function(id) {
-  $(id).hide();
-  $('title-'+id).hide();
-}
-
-showGraph = function(id){
-  $(id).show();
-  $('title-'+id).show();
-}
-
 toggleGraph = function(id){
-  if($(id).visible()){
-    hideGraph(id);
-  } else {
-    showGraph(id);
-  }
+  $(id).toggle();
   checkbox = document.forms['edit-constantes-medicales'].elements['checkbox-'+id];
   var cookie = new CookieJar();
   cookie.setValue('graphsToShow', id, checkbox.checked);
 }
-
 
 Main.add(function () {
   var oForm = document.forms['edit-constantes-medicales'];
@@ -183,21 +169,42 @@ Main.add(function () {
   }
   
   // Recuperation de la valeur du cookie, on masque les graphs qui ne sont pas selectionnés
-  {{foreach from=$graphs item=graph_name}}
-    oForm["checkbox-{{$graph_name}}"].checked = cookie.getValue('graphsToShow', '{{$graph_name}}');
-    if(oForm["checkbox-{{$graph_name}}"].checked == false){ hideGraph('{{$graph_name}}'); }
+  {{foreach from=$data item=curr_data key=key}}
+    oForm["checkbox-constantes-medicales-{{$key}}"].checked = 
+      cookie.getValue('graphsToShow', 'constantes-medicales-{{$key}}') ||
+      data.{{$key}}.series.first().data.length;
+      
+    $('constantes-medicales-{{$key}}').setVisible(oForm["checkbox-constantes-medicales-{{$key}}"].checked);
   {{/foreach}}
 
 });
+
+loadConstantesMedicales  = function(context_guid) {
+  var url = new Url("dPhospi", "httpreq_vw_constantes_medicales"),
+      container = $("constantes-medicales") || $("Constantes");
+
+  url.addParam("context_guid", '{{$context_guid}}');
+  url.addParam("selected_context_guid", context_guid);
+  url.requestUpdate(container, { waitingText: null } );
+};
 </script>
 
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">
-       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
-       </a>
-    {{$context->_view}}</th>
+      </a>
+      Constantes médicales dans le cadre de: 
+      <select name="context" onchange="loadConstantesMedicales($V(this));">
+        {{foreach from=$list_contexts item=curr_context}}
+          <option value="{{$curr_context->_guid}}" 
+          {{if $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
+          {{if $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
+          >{{$curr_context}}</option>
+        {{/foreach}}
+      </select>
+    </th>
   </tr>
   <tr>
     <td style="width: 25%;">
@@ -225,21 +232,22 @@ Main.add(function () {
   </tr>
 </table>
 
-<table class="form">
+<table class="main">
   <tr>
     <td colspan="2">
-     <button class="hslip" title="Afficher/cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
-     Formulaire
-    </button>
+      <button class="hslip" title="Afficher/Cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
+        Formulaire
+      </button>
+    </td>
   </tr>
   <tr>
-    <td>
+    <td style="width: 0.1%;">
       <div id="constantes-medicales-form">
-			  {{include file="inc_form_edit_constantes_medicales.tpl"}}
+			  {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
 			</div>
     </td>
     <td>
-      <div id="constantes-medicales-graph" style="margin-left: 5px; margin-top: -15px;"></div>
+      <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
     </td>
   </tr>
 </table>

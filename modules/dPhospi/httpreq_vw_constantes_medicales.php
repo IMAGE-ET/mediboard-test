@@ -17,18 +17,19 @@ if(!$user->isPraticien()) {
 }
 
 $context_guid = mbGetValueFromGet('context_guid');
+$selected_context_guid = mbGetValueFromGet('selected_context_guid', $context_guid);
 $patient_id = mbGetValueFromGet('patient_id');
 
 $context = null;
 $patient = null;
 
-if ($context_guid) {
-  $context = mbGetObjectFromGet(null, null, 'context_guid');
+if ($selected_context_guid) {
+  $context = CMbObject::loadFromGuid($selected_context_guid);
 	$context->loadRefs();
 }
 
 if ($context) {
-  $patient =& $context->_ref_patient;
+  $patient = $context->_ref_patient;
 }
 
 if ($patient_id) {
@@ -46,11 +47,24 @@ $constantes->patient_id = $patient->_id;
 // Les constantes qui correspondent (dans le contexte ou non)
 $list_constantes = $constantes->loadMatchingList('datetime');
 
+$list_contexts = array();
+foreach($list_constantes as $const) {
+  if ($const->context_class && $const->context_id) {
+    $c = new $const->context_class;
+    $c->load($const->context_id);
+    $c->loadRefsFwd();
+    $list_contexts[$c->_id] = $c;
+  }
+}
+
 if ($context) {
   $constantes->context_class = $context->_class_name;
   $constantes->context_id = $context->_id;
 	$constantes->loadRefContext();
 }
+
+// Les constantes qui correspondent (dans le contexte cette fois)
+$list_constantes = $constantes->loadMatchingList('datetime');
 
 // La liste des derniers mesures
 $latest_constantes = CConstantesMedicales::getLatestFor($patient->_id);
@@ -134,76 +148,70 @@ function getMin($n, $array) {
 }
 
 // Mise en place de la ligne de niveau normal pour chaque constante et de l'unité
-$data['ta']['title'] = htmlentities('Tension artérielle');
-$data['ta']['unit'] = 'cmHg';
 $data['ta']['standard'] = 12;
+$data['ta']['options']['title'] = utf8_encode('Tension artérielle (cmHg)');
 $data['ta']['options']['yaxis'] = array(
   'min' => getMin(0,  $data['ta']['series'][0]['data']), // min
   'max' => getMax(30, $data['ta']['series'][0]['data']), // max
 );
 
-$data['pouls']['title'] = 'Pouls';
-$data['pouls']['unit'] = 'puls./min';
 $data['pouls']['standard'] = 60;
+$data['pouls']['options']['title'] = utf8_encode('Pouls (puls./min)');
 $data['pouls']['options']['yaxis'] = array(
   'min' => getMin(50,  $data['pouls']['series'][0]['data']), // min
   'max' => getMax(120, $data['pouls']['series'][0]['data']), // max
 );
 
-$data['poids']['title'] = 'Poids';
-$data['poids']['unit'] = 'Kg';
+$data['poids']['options']['title'] = utf8_encode('Poids (Kg)');
 $data['poids']['options']['yaxis'] = array(
   'min' => getMin(0,   $data['poids']['series'][0]['data']), // min
   'max' => getMax(150, $data['poids']['series'][0]['data']), // max
 );
 
-$data['taille']['title'] = 'Taille';
-$data['taille']['unit'] = 'cm';
+$data['taille']['options']['title'] = utf8_encode('Taille (cm)');
 $data['taille']['options']['yaxis'] = array(
   'min' => getMin(0,   $data['taille']['series'][0]['data']), // min
   'max' => getMax(220, $data['taille']['series'][0]['data']), // max
 );
 
-$data['temperature']['title'] = htmlentities('Température');
-$data['temperature']['unit'] = htmlentities('°C');
 $data['temperature']['standard'] = 37.5;
+$data['temperature']['options']['title'] = utf8_encode('Température (°C)');
 $data['temperature']['options']['yaxis'] = array(
   'min' => getMin(36, $data['temperature']['series'][0]['data']), // min
   'max' => getMax(41, $data['temperature']['series'][0]['data']), // max
 );
 
-$data['spo2']['title'] = htmlentities('Spo2');
-$data['spo2']['unit'] = htmlentities('%');
+$data['spo2']['options']['title'] = utf8_encode('Spo2 (%)');
 $data['spo2']['options']['yaxis'] = array(
   'min' => getMin(70,  $data['spo2']['series'][0]['data']), // min
   'max' => getMax(100, $data['spo2']['series'][0]['data']), // max
 );
 
-$data['score_sensibilite']['title'] = htmlentities('Score de sensibilité');
+$data['score_sensibilite']['options']['title'] = utf8_encode('Score de sensibilité');
 $data['score_sensibilite']['options']['yaxis'] = array(
   'min' => getMin(0, $data['score_sensibilite']['series'][0]['data']), // min
   'max' => getMax(5, $data['score_sensibilite']['series'][0]['data']), // max
 );
 
-$data['score_motricite']['title'] = htmlentities('Score de motricité');
+$data['score_motricite']['options']['title'] = utf8_encode('Score de motricité');
 $data['score_motricite']['options']['yaxis'] = array(
   'min' => getMin(0, $data['score_motricite']['series'][0]['data']), // min
   'max' => getMax(5, $data['score_motricite']['series'][0]['data']), // max
 );
 
-$data['EVA']['title'] = htmlentities('EVA');
+$data['EVA']['options']['title'] = utf8_encode('EVA');
 $data['EVA']['options']['yaxis'] = array(
   'min' => getMin(0,  $data['EVA']['series'][0]['data']), // min
   'max' => getMax(10, $data['EVA']['series'][0]['data']), // max
 );
 
-$data['score_sedation']['title'] = htmlentities('Score de sédation');
+$data['score_sedation']['options']['title'] = utf8_encode('Score de sédation');
 $data['score_sedation']['options']['yaxis'] = array(
   'min' => getMin(70,  $data['score_sedation']['series'][0]['data']), // min
   'max' => getMax(100, $data['score_sedation']['series'][0]['data']), // max
 );
 
-$data['frequence_respiratoire']['title'] = htmlentities('Fréquence respiratoire');
+$data['frequence_respiratoire']['options']['title'] = utf8_encode('Fréquence respiratoire');
 $data['frequence_respiratoire']['options']['yaxis'] = array(
   'min' => getMin(70,  $data['frequence_respiratoire']['series'][0]['data']), // min
   'max' => getMax(100, $data['frequence_respiratoire']['series'][0]['data']), // max
@@ -219,6 +227,8 @@ foreach ($data as $name => &$field) {
 $smarty = new CSmartyDP();
 $smarty->assign('constantes', $constantes);
 $smarty->assign('context',    $context);
+$smarty->assign('context_guid', $context_guid);
+$smarty->assign('list_contexts', $list_contexts);
 $smarty->assign('patient',    $patient);
 $smarty->assign('data',       $data);
 $smarty->assign('dates',      $dates);
