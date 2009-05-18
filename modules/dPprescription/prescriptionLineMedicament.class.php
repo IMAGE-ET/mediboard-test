@@ -206,7 +206,11 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
     //$this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
-    $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
+    if($this->code_ucd){
+      $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
+    } else {
+      $this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
+    }
     $this->_forme_galenique = $this->_ref_produit->forme;
     $this->_duree_prise = "";
     
