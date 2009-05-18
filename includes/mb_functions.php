@@ -513,43 +513,15 @@ function removeAccent($string) {
 /** Extended function to be able to remove diacritics only on upper case letters */
 function removeDiacritics($str, $only_upper_case = false) {
   if ($only_upper_case) {
-    $match = array(
-      'ю'=>'A',
-      'а'=>'A',
-      'б'=>'A',
-      'ц'=>'A',
-      'д'=>'A',
-      'е'=>'A',
-      'р'=>'O',
-      'с'=>'O',
-      'т'=>'O',
-      'у'=>'O',
-      'ж'=>'O',
-      'ь'=>'O',
-      'х'=>'E',
-      'и'=>'E',
-      'й'=>'E',
-      'к'=>'E',
-      'г'=>'C',
-      'л'=>'I',
-      'м'=>'I',
-      'н'=>'I',
-      'о'=>'I',
-      'ы'=>'U',
-      'з'=>'U',
-      'ш'=>'U',
-      'э'=>'U',
-      'я'=>'N',
-    );
-    /*$find = "юабцдерстужьхийкглмноызшэя";
-    $repl = "AAAAAAOOOOOOEEEECIIIIUUUUN";*/
+    $find = "юабцдерстужьхийкглмноызшэя";
+    $repl = "AAAAAAOOOOOOEEEECIIIIUUUUN";
   }
   else {
     $find = "юабцдеЮАБЦДЕрстужьРСТУЖЬхийкХИЙКгГлмноЛМНОызшэЫЗШЭЪяЯ";
     $repl = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
   }
   
-  return str_replace(array_keys($match), $match, $str);
+  return strtr($str, $find, $repl);
 }
 
 /**
