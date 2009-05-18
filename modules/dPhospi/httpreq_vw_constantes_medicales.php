@@ -53,8 +53,16 @@ foreach($list_constantes as $const) {
     $c = new $const->context_class;
     $c->load($const->context_id);
     $c->loadRefsFwd();
-    $list_contexts[$c->_id] = $c;
+    $list_contexts[$c->_guid] = $c;
   }
+}
+$current_context = CMbObject::loadFromGuid($context_guid);
+$current_context->loadRefsFwd();
+if (!isset($list_contexts[$current_context->_guid])){
+  $list_contexts[$current_context->_guid] = $current_context;
+}
+if (!count($list_contexts)) {
+  $list_contexts[] = $current_context;
 }
 
 if ($context) {
