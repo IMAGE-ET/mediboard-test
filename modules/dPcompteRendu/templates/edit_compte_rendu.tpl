@@ -44,12 +44,13 @@ document.observe('keydown', function(e){
 <table class="form">
   <tr>
     <th class="category">
+      {{if $compte_rendu->_id}}
       <div class="idsante400" id="{{$compte_rendu->_guid}}"></div>
     
 	    <a style="float:right;" href="#" onclick="guid_log('{{$compte_rendu->_guid}}')">
 	      <img src="images/icons/history.gif" alt="historique" />
 	    </a>
-
+	    {{/if}}
       <strong>Nom du document :</strong>
       <input name="nom" size="50" value="{{$compte_rendu->nom}}" />
       &mdash;
