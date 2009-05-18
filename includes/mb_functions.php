@@ -521,7 +521,7 @@ function removeDiacritics($str, $only_upper_case = false) {
     $repl = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
   }
   
-  return strtr($str, $find, $repl);
+  return utf8_encode(strtr(utf8_decode($str), utf8_decode($find), $repl));
 }
 
 /**
