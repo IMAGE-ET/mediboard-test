@@ -46,8 +46,34 @@ if(!$perfusion_id){
   $perfusion->load($perfusion_id);
 }
 
-// On empeche qu'une ligne soit rajoutée dans la perf si la voie selectionnée est mauvaise
-if($perfusion->voie != $line_med->voie){
+
+/*
+ * Comportement souhaité
+ * --> Si la perfusion est parenterale, la premiere ligne non parenterale transforme la voie de la prise
+ * --> On permet d'ajouter à une perf IV et IM une ligne parenterale
+ */
+$error = false;
+if(($perfusion->voie == "Voie parentérale" || $line_med->voie == "Voie parentérale") && ($perfusion->voie != $line_med->voie)){
+  if($perfusion->voie == "Voie parentérale"){
+    if(in_array($line_med->voie, CPrescriptionLineMedicament::$corresp_voies["Voie parentérale"])){
+      $perfusion->voie = $line_med->voie;
+      $perfusion->store();
+    } else {
+      $error = true;  
+    }
+  }
+  if($line_med->voie == "Voie parentérale"){
+    if(!in_array($perfusion->voie, CPrescriptionLineMedicament::$corresp_voies["Voie parentérale"])){
+      $error = true;
+    }
+  }
+} else {
+	if($perfusion->voie != $line_med->voie){
+	  $error = true;
+	}
+}
+
+if($error){
   $AppUI->setMsg("La voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_ERROR);
   echo $AppUI->getMsg();
   CApp::rip(); 

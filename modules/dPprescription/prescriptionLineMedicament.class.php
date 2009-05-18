@@ -36,6 +36,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   var $_most_used_poso = null;
   
+  static $corresp_voies = array("Voie parentérale" => array("Voie intraveineuse", "Voie intramusculaire"));
+                                                            
   static $voies = array("Voie systémique"                 => array("injectable" => false, "perfusable" => false), 
                         "Voie endocervicale"              => array("injectable" => false, "perfusable" => false), 
                         "Voie péridurale"                 => array("injectable" => false, "perfusable" => false),
@@ -72,7 +74,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
                         "Voie sous-cutanée"               => array("injectable" => false, "perfusable" => false),
                         "Voie transdermique"              => array("injectable" => false, "perfusable" => false),
                         "Voie intravasculaire"            => array("injectable" => false, "perfusable" => false),
-                        "Voie parentérale"                => array("injectable" => false, "perfusable" => false),
+                        "Voie parentérale"                => array("injectable" => true, "perfusable" => true),
                         "Voie intrabuccale"               => array("injectable" => false, "perfusable" => false),
                         "Voie intrapéricardique"          => array("injectable" => false, "perfusable" => false),
                         "Voie inhalée"                    => array("injectable" => false, "perfusable" => false),
