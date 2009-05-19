@@ -143,7 +143,6 @@ $locales['install'] = 'Installer';
 $locales['Menu Icon'] = 'Menu icones';
 $locales['Menu Status'] = 'Menu Etat';
 $locales['Menu Text'] = 'Menu Texte';
-$locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
 $locales['mod-system-tab-view_access_logs'] = 'Logs d\'accès';
 $locales['mod-system-tab-view_history'] = 'Historique';
 $locales['mod-system-tab-view_install'] = 'Installation';

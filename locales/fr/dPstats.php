@@ -117,4 +117,10 @@ $locales['CTempsPrepa-title-create'] = '';
 $locales['CTempsPrepa-title-modify'] = '';
 $locales['CTempsPrepa.all'] = '';
 $locales['CTempsPrepa.select'] = '';
+$locales['mod-dPstats-tab-vw_hospitalisation'] = 'Hospitalisation';
+$locales['mod-dPstats-tab-vw_bloc'] = 'Bloc opératoire';
+$locales['mod-dPstats-tab-vw_bloc2'] = 'Journée opératoire';
+$locales['mod-dPstats-tab-vw_time_op'] = 'Durée opératoire';
+$locales['mod-dPstats-tab-vw_personnel_salle'] = 'Personnel en salle';
+$locales['mod-dPstats-tab-vw_users'] = 'Présence utilisateur';
 ?>

@@ -170,7 +170,6 @@ $locales['CUser-_view-court'] = '';
 $locales['CUser-_view-desc'] = '';
 $locales['config-dPpatients-CAntecedent-types'] = '';
 $locales['config-dPpatients-CTraitement-enabled'] = '';
-$locales['mod-ecap-tab-vw_identifiants'] = 'Identifiers';
 $locales['CPermModule-title-create'] = '';
 $locales['CPermModule-title-modify'] = '';
 $locales['CPermObject-title-create'] = '';

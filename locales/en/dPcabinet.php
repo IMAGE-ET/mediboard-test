@@ -1430,7 +1430,6 @@ $locales['CTechniqueComp-msg-create'] = '';
 $locales['CTechniqueComp-msg-delete'] = '';
 $locales['CTechniqueComp-msg-modify'] = '';
 $locales['CLmFSE-_consult_id-desc'] = '';
-$locales['mod-sherpa-tab-view_detngap'] = '';
 $locales['det'] = '';
 $locales['CReglement-banque_id'] = '';
 $locales['CReglement-banque_id-court'] = '';

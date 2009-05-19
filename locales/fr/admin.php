@@ -193,7 +193,6 @@ $locales['CPermObject.select'] = '';
 $locales['CUser.all'] = 'Tous les utilisteurs';
 $locales['CUser.select'] = '';
 $locales['mod-admin-action-check_siblings'] = 'Vérifier les doublons d\'utilisateurs';
-$locales['mod-ecap-tab-vw_identifiants'] = '';
 $locales['massively'] = 'massivement';
 $locales['CModule-back-permissions_modules'] = 'Permissions modules';
 $locales['CUser-back-profiled_users'] = 'Utilisateurs';

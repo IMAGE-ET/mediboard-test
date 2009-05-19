@@ -1430,7 +1430,6 @@ $locales['CTechniqueComp-_view-desc'] = '';
 $locales['CTechniqueComp-back-'] = '';
 $locales['CLmFSE-_consult_id'] = 'Consultation';
 $locales['CLmFSE-_consult_id-desc'] = 'Consultation associée à la FSE';
-$locales['mod-sherpa-tab-view_detngap'] = 'Détails NGAP';
 $locales['det'] = '';
 $locales['CReglement-banque_id'] = 'Banque';
 $locales['CReglement-banque_id-court'] = 'Bq.';

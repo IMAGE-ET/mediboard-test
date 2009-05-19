@@ -2,7 +2,7 @@
 $locales['module-ecap-court'] = 'e-Cap';
 $locales['module-ecap-long'] = '';
 $locales['DHE-Reason-codeClinique'] = '';
-$locales['mod-ecap-tab-vw_identifiants'] = '';
+$locales['mod-ecap-tab-vw_identifiants'] = 'Identifiers';
 $locales['DHE-Reason-codePraticienEc'] = '';
 $locales['DHE-Reason-patDateNaiss'] = '';
 $locales['config-ecap-dhe-rooturl'] = '';

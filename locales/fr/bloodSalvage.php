@@ -175,7 +175,6 @@ $locales['CCellSaver.select'] = 'Choisissez un Cell Saver';
 $locales['CTypeEi.all'] = 'Tous les modèles de fiche';
 $locales['CTypeEi.select'] = 'Choisissez un modèle de fiche';
 $locales['config-bloodSalvage-CBloodSalvage-inLivretTherapeutique'] = '';
-$locales['mod-dPportail-tab-vw_blood_salvage'] = '';
 $locales['BloodSalvage.quality-protocole'] = 'Protocole qualité';
 $locales['mod-bloodSalvage-tab-vw_stats'] = 'Statistiques';
 ?>

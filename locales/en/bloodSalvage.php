@@ -1,6 +1,5 @@
 <?php
 $locales['CBloodSalvage-desc'] = 'Description';
-$locales['mod-dPportail-tab-vw_blood_salvage'] = 'Blood salvage';
 $locales['module-bloodSalvage-court'] = 'Blood salvage';
 $locales['module-bloodSalvage-long'] = 'intraoperative blood salvage';
 $locales['CBloodSalvage-_recuperation_start'] = 'start recuperation';

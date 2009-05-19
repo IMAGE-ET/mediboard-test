@@ -139,7 +139,6 @@ $locales['CUserLog.type.store'] = 'store';
 $locales['Menu Icon'] = '';
 $locales['Menu Status'] = '';
 $locales['Menu Text'] = '';
-$locales['mod-dPcabinet-tab-vw_banques'] = '';
 $locales['mod-system-tab-view_access_logs'] = '';
 $locales['mod-system-tab-view_history'] = '';
 $locales['mod-system-tab-view_install'] = '';
