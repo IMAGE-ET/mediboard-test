@@ -233,9 +233,9 @@ $locales['CCompteRendu.etat_envoi.non'] = 'Non';
 $locales['CCompteRendu.etat_envoi.obsolete'] = 'Obsolète';
 $locales['CCompteRendu.etat_envoi.oui'] = 'Oui';
 $locales['CFilesCategory-back-categorized_documents'] = 'Documents';
-$locales['mod-dPcompteRendu-tab-addedit_modeles'] = '';
-$locales['mod-dPcompteRendu-tab-vw_idx_aides'] = '';
-$locales['mod-dPcompteRendu-tab-vw_idx_listes'] = '';
-$locales['mod-dPcompteRendu-tab-vw_idx_packs'] = '';
-$locales['mod-dPcompteRendu-tab-vw_modeles'] = '';
+$locales['mod-dPcompteRendu-tab-addedit_modeles'] = 'Edition des modèles';
+$locales['mod-dPcompteRendu-tab-vw_idx_aides'] = 'Aides à la saisie';
+$locales['mod-dPcompteRendu-tab-vw_idx_listes'] = 'Listes de choix';
+$locales['mod-dPcompteRendu-tab-vw_modeles'] = 'Liste des modèles';
+$locales['mod-dPcompteRendu-tab-vw_idx_packs'] = 'Packs de modèles';
 ?>

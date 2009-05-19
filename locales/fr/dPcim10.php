@@ -1,7 +1,6 @@
 <?php
 $locales['module-dPcim10-court'] = 'CIM10';
 $locales['module-dPcim10-long'] = 'Aide au codage CIM10';
-$locales['mod-dPcompteRendu-tab-vw_idx_packs'] = 'Packs de modèles';
 $locales['CCodeCIM10'] = 'Code CIM10';
 $locales['CFavoricim10'] = 'Favori CIM';
 $locales['CFavoricim10-back-favoris_user'] = '';
@@ -20,10 +19,6 @@ $locales['mod-dPcim10-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPcim10-tab-vw_full_code'] = 'Afficher un code';
 $locales['mod-dPcim10-tab-vw_idx_chapter'] = 'Sommaire de la CIM10';
 $locales['mod-dPcim10-tab-vw_idx_favoris'] = 'Mes favoris';
-$locales['mod-dPcompteRendu-tab-addedit_modeles'] = 'Edition des modèles';
-$locales['mod-dPcompteRendu-tab-vw_idx_aides'] = 'Aides à la saisie';
-$locales['mod-dPcompteRendu-tab-vw_idx_listes'] = 'Listes de choix';
-$locales['mod-dPcompteRendu-tab-vw_modeles'] = 'Liste des modèles';
 $locales['CFavoricim10-favoris_id'] = 'ID favori CIM';
 $locales['CFavoricim10-favoris_id-court'] = '';
 $locales['CFavoricim10-favoris_id-desc'] = '';
