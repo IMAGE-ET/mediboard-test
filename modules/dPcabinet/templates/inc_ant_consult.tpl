@@ -494,7 +494,11 @@ Main.add(function () {
   urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
   urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
     minChars: 3,
-    updateElement: updateFieldsMedicament
+    updateElement: updateFieldsMedicament, 
+    callback: 
+      function(input, queryString){
+        return (queryString + "&produit_max=25"); 
+      }
   } );
   
   resetEditLineTP = function(){
