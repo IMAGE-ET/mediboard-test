@@ -301,6 +301,7 @@ $dPconfig["dPpatients"] = array (
   "CPatient" => array (
     "tag_ipp" => "",
     "date_naissance" => "0",
+    "doublons" => "0",
     "merge_only_admin" => "0",
   ),
   

@@ -335,6 +335,11 @@ class CPatient extends CMbObject {
       return $msg;
     }
     
+    if ($this->nom == "ANONYME" && $this->prenom == "Anonyme") {
+    	$this->nom = $this->_id;
+    	$this->store();
+    }
+    
     // Bind vitale
     if ($this->_bind_vitale && $this->_id) {
       return $this->bindVitale();
@@ -519,7 +524,7 @@ class CPatient extends CMbObject {
 		
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
     if ($this->civilite == "enf") {
-      $this->_civilite_long = $this->sexe == "m" ? "le jeune" : "la jeune";
+      $this->_civilite_long = $this->sexe == "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
     } else {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }

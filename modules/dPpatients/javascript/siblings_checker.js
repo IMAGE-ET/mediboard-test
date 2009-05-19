@@ -14,10 +14,10 @@ SiblingsChecker = {
 	  if (this.running) {
 	    return;
 	  }
-	  
+		  
 	  this.running = true;
-  	this.formName = oForm.name;
-
+	  this.formName = oForm.name;
+	
 	  var url = new Url;
 	  url.setModuleAction("dPpatients", "httpreq_get_siblings");
 	  
@@ -32,10 +32,22 @@ SiblingsChecker = {
   },
   
   // Ask confirmation before sending, when necessary
+  alert: function() {
+    confirmed = !this.textDifferent && !this.textMatching;
+
+    if (confirmed) {
+      document.forms[this.formName].submit();
+    } else {
+    	alert(this.textDifferent+"\n"+this.textMatching);
+    }
+    
+    this.running = false;
+  },
+  
   confirm: function() {
     confirmed = true;
     confirmed &= !this.textDifferent || confirm(this.textDifferent);
-    confirmed &= !this.textSiblings  || confirm(this.textSiblings);
+    confirmed &= !this.textMatching  || confirm(this.textMatching);
     if (confirmed) {
       document.forms[this.formName].submit();
     }

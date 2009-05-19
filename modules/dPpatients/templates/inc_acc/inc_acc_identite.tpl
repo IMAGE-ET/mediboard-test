@@ -41,6 +41,11 @@ changeCiviliteForDate = function(element) {
   }
 }
 
+anonymous = function() {
+	$V("editFrm_nom"   , "anonyme");   
+  $V("editFrm_prenom", "anonyme"); 	
+}
+
 Main.add(function() {
   var i, 
       list = $("patient_identite").select(".prenoms_list input"),
@@ -68,7 +73,12 @@ Main.add(function() {
 	</tr>
   <tr>
     <th style="width:30%">{{mb_label object=$patient field="nom"}}</th>
-    <td>{{mb_field object=$patient field="nom" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>
+      {{mb_field object=$patient field="nom" onchange="copyIdentiteAssureValues(this)"}}
+      {{if !$patient->_id}}
+        <button type="button" style="padding: 0px" onclick="anonymous()"><img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" /></button>
+	    {{/if}}
+    </td>
     {{if $patient->_id}}
     <td rowspan="13" style="width: 0.1%; text-align: center;" id="{{$patient->_guid}}-identity">
       {{include file=inc_vw_photo_identite.tpl mode="edit"}}
