@@ -409,6 +409,13 @@ function popEtatSejour(sejour_id) {
         Consultation
       </a>
     </td>
+    <td class="button">
+      {{if !@$modules.ecap->mod_active}}
+      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+        Intervention
+      </a>
+      {{/if}}
+    </td>
   </tr>
   <tr>
     <td class="button">
