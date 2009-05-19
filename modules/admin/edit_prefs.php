@@ -51,7 +51,7 @@ $array_list_pref_generale = array (
   "UISTYLE",
   "MenuPosition",
   "DEFMODULE",
-  //"touchscreen",
+  "touchscreen",
 );
 
 foreach ($array_list_pref_generale as $namePref){

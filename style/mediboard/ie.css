@@ -2,8 +2,8 @@
   display: inline;
 }
 
-.dPsalleOp button.notext,
-.dPsalleOp button.notext:hover {
+.touchscreen button.notext,
+.touchscreen button.notext:hover {
   font-size: 0;
   width: 24px;
   height: 24px;

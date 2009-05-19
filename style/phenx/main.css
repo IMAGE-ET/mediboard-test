@@ -1273,35 +1273,35 @@ span.hilite {
 }
 
 /* Module specific CSS*/ /* @import "./modules.css";   */
-table.dPsalleOp select,
-table.dPsalleOp option,
-table.dPsalleOp optgroup,
-table.dPsalleOp input,
-table.dPsalleOp button  {
+table.touchscreen select,
+table.touchscreen option,
+table.touchscreen optgroup,
+table.touchscreen input,
+table.touchscreen button  {
   font-size: 14px;
   font-weight: normal;
 }
 
-table.dPsalleOp select,
-table.dPsalleOp input,
-table.dPsalleOp button  {
+table.touchscreen select,
+table.touchscreen input,
+table.touchscreen button  {
   height: 24px;
 }
 
-table.dPsalleOp option,
-table.dPsalleOp optgroup  {
+table.touchscreen option,
+table.touchscreen optgroup  {
   padding: 2px;
 }
 
-table.dPsalleOp optgroup option {
+table.touchscreen optgroup option {
   padding-left: 1em;
 }
 
-table.dPsalleOp optgroup {
+table.touchscreen optgroup {
   font-weight: bold;
 }
 
-table.dPsalleOp .notext {
+table.touchscreen .notext {
   font-size: 0px;
 }
 

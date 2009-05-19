@@ -123,8 +123,11 @@ class CSetupsystem extends CSetup {
 			ADD `warnings` INT (11)  UNSIGNED,
 			ADD `notices` INT (11) UNSIGNED;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.0.13");
+    $this->addPrefQuery("touchscreen", "0");
 
-    $this->mod_version = "1.0.13";
+    $this->mod_version = "1.0.14";
   }
 }
 ?>

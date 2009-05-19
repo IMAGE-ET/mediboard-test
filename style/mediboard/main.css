@@ -1247,6 +1247,7 @@ div.big-error {
 	right: 5px;
 	bottom: 5px;
 	z-index: 1000;
+	display: none;
 }
 
 #goUp:hover {
@@ -1640,115 +1641,109 @@ span.hilite {
   background: #f5f;
 }
 
-/* Module specific CSS*/
-  /* @import "./modules.css";   */
-
-.dPsalleOp select,
-.dPsalleOp option,
-.dPsalleOp optgroup {
+/* Touchscreen mode */
+.touchscreen select,
+.touchscreen option,
+.touchscreen optgroup {
   padding: 0;
   font-size: 16px;
   vertical-align: middle;
 }
 
-.dPsalleOp select {
+.touchscreen select {
   margin-bottom: 1px;
 }
 
-.dPsalleOp input:focus,
-.dPsalleOp select:focus,
-.dPsalleOp option:focus,
-.dPsalleOp optgroup:focus {
+.touchscreen input:focus,
+.touchscreen select:focus,
+.touchscreen option:focus,
+.touchscreen optgroup:focus {
   border-style: solid;
   border-width: 1px;
 }
 
-.dPsalleOp option,
-.dPsalleOp optgroup {
+.touchscreen option,
+.touchscreen optgroup {
   padding-left: 3px;
 }
 
-.dPsalleOp input,
-.dPsalleOp button {
-  font-size: 1.4em;
-  height: 1.6em;
+.touchscreen input,
+.touchscreen button,
+.touchscreen a.button {
+  margin-top: -1px;
+  font-size: 16px;
+  height: 24px;
   font-weight: normal;
   vertical-align: middle;
 }
 
-.dPsalleOp input[type=text] {
+.touchscreen input[type=text] {
   padding: 2px;
   padding-bottom: 0px;
   padding-left: 1px;
-  height: 1.4em;
-  font-size: 1.3em;
+  height: 20px;
+  font-size: 15px;
 }
 
-.dPsalleOp button, 
-.dPsalleOp button:hover {
-  padding-left: 1.4em;
+.touchscreen button, 
+.touchscreen button:hover,
+.touchscreen a.button,
+.touchscreen a:hover.button {
+  padding-left: 22px;
   padding-right: 3px;
   background-position: 3px center;
   background-color: #A9C8CD;
   background-repeat: no-repeat;
 }
 
-.dPsalleOp .createPresc, .dPsalleOp .createPresc:hover {
-	padding-left: 0.8em;
-  background-position:1px 140%;
-  background-color: #A9C8CD;
-  background-repeat: no-repeat;
-  height: 25px;
-  width: 70px;
-  font-size: 0.8em;
-}
-
-.dPsalleOp label,
-.dPsalleOp td.date div.date {
+.touchscreen label,
+.touchscreen td.date div.date {
   padding: 4px;
 }
 
-.dPsalleOp td.date div.date {
-  font-size: 1.15em;
+.touchscreen td.date div.date {
+  font-size: 12px;
 }
 
-.dPsalleOp optgroup option {
-  padding-left: 1em;
+.touchscreen optgroup option {
+  padding-left: 16px;
 }
 
-.dPsalleOp .control .trigger {
-  width: 1.6em;
-  height: 1.6em;
+.touchscreen .control .trigger {
+  width: 22px;
+  height: 22px;
 }
 
-.dPsalleOp button.notext,
-.dPsalleOp button.notext:hover {
+.touchscreen button.notext,
+.touchscreen button.notext:hover {
   font-size: 0;
   width: 24px;
   height: 24px;
 }
 
 /** @todo : needed to repeat */
-.dPsalleOp button.notext,
-.dPsalleOp button.notext:hover {
+.touchscreen button.notext,
+.touchscreen button.notext:hover,
+.touchscreen a.button.notext,
+.touchscreen a:hover.button.notext {
   background-position: 3px center;
   background-color: #A9C8CD;
   background-repeat: no-repeat;
 }
 
-.dPsalleOp .control .trigger {
+.touchscreen .control .trigger {
   margin: 1px;
   top: 3px;
 }
 
-.dPsalleOp .control button,
-.dPsalleOp .control input {
+.touchscreen .control button,
+.touchscreen .control input {
   top: -4px;
 }
 
-.dPsalleOp ul.control_tabs li a, 
-.dPsalleOp ul.control_tabs_vertical li a {
-  font-size: 1.3em;
+.touchscreen ul.control_tabs li a, 
+.touchscreen ul.control_tabs_vertical li a {
+  font-size: 15px;
 }
 
 /* contacts table */

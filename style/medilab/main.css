@@ -892,15 +892,15 @@ table.form th.title {
   text-align: left;
 }
 
-.dPsalleOp button, 
-.dPsalleOp button:hover,
-.dPsalleOp button.notext,
-.dPsalleOp button.notext:hover {
+.touchscreen button, 
+.touchscreen button:hover,
+.touchscreen button.notext,
+.touchscreen button.notext:hover {
   background-position: 3px 140%;
   background-repeat: repeat-x;
 }
 
-.dPsalleOp button.notext,
-.dPsalleOp button.notext:hover {
+.touchscreen button.notext,
+.touchscreen button.notext:hover {
   background-position: 1px 140%;
 }

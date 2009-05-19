@@ -81,7 +81,20 @@
         {{/foreach}}
       </select>
     </td>
-  </tr>  
+  </tr>
+  
+  {{assign var="var" value="touchscreen"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
   
   {{assign var="module" value="dPpatients"}}
   <!-- Préférences pour le module {{$module}} -->
@@ -307,8 +320,8 @@
     </th>
     <td>
       <select name="pref_name[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
       </select>
     </td>
   </tr>
@@ -365,8 +378,8 @@
     </th>
   	<td>
       <select name="pref_name[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
       </select>
     </td>
   </tr>

@@ -29,7 +29,7 @@
   </script>
 </head>
 
-<body>
+<body class="{{if @$app->user_prefs.touchscreen == 1}}touchscreen{{/if}}">
 
 <!-- Loading divs -->
 

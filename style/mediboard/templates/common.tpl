@@ -35,7 +35,7 @@
   {{/if}}
 </head>
 
-<body>
+<body class="{{if @$app->user_prefs.touchscreen == 1}}touchscreen{{/if}}">
 
 <!--[if lte IE 6]>
 <div style="background-color: #ffc; padding: 0.5em; border-bottom: 1px solid #333; font-size: 1.2em;"><img src="images/icons/warning.png" />Votre navigateur web est trop ancien, Mediboard ne peut pas fonctionner correctement, <a href="http://mediboard.org/public/Firefox" target="_blank">cliquez ici</a> pour installer Firefox et profiter d'une meilleure expérience.</div>
@@ -61,6 +61,22 @@ Main.add(function () {
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
 <div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
   <div class="loading">Chargement en cours</div>
+</div>
+<div id="sessionLockMask" style="display: none;">
+  <div class="window" style="position: absolute; text-align: center; -moz-border-radius: 10px; background: #eee;">
+    <div style="background: #ccc; -moz-border-radius: 5px 5px 0 0; font-weight: bold; margin: 0; padding: 5px 1em;">
+      Session verrouillée ({{$app->_ref_user}})
+    </div>
+    <form name="unlockSession" method="post" action="?" onsubmit="return false" 
+     style="display: block; margin: 1em;">
+      <input type="hidden" name="login" value="{{$app->_ref_user->_user_username}}" />
+      <label style="margin: 0.7em; display: block;">
+        Mote de passe: <input type="password" name="password" autocomplete="off" />
+      </label>
+      <button class="tick" onclick="Session.unlock()">Déverouiller</button>
+      <button class="cancel" onclick="Session.close()">Déconnecter</button>
+    </form>
+  </div>
 </div>
 
 <!-- Tooltip div used for dom clonage -->
