@@ -1,8 +1,18 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPpersonnel
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{mb_include_script module="system" script="object_selector"}}
 
- <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
-  <input type="hidden" name="dosql" value="do_personnel_aed" />
+<input type="hidden" name="dosql" value="do_personnel_aed" />
 <input type="hidden" name="personnel_id" value="{{$personnel->_id}}" />
 <input type="hidden" name="del" value="0" />
 

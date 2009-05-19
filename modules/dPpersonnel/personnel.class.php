@@ -1,21 +1,20 @@
-<?php
+<?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPpersonnel
- *	@version $Revision$
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPpersonnel
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CPersonnel class
- */
 class CPersonnel extends CMbObject {
   // DB Table key
   var $personnel_id = null;
   
   // DB references
   var $user_id = null;
+  var $_ref_user = null;
   
   // DB fields
   var $emplacement = null;
@@ -57,7 +56,6 @@ class CPersonnel extends CMbObject {
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id");
   	$this->_view = $this->getFormattedValue("emplacement") . ": " . $this->_ref_user->_view;
-  	
   }
  
   function updateFormFields() {
@@ -101,6 +99,5 @@ class CPersonnel extends CMbObject {
     }
     return $listPers;
   }
-  
 }
 ?>
