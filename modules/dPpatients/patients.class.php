@@ -187,7 +187,7 @@ class CPatient extends CMbObject {
     $specs["nomjf_soundex2"]    = "str";
     $specs["medecin_traitant_declare"] = "bool";
     $specs["medecin_traitant"]  = "ref class|CMedecin";
-    $specs["matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
+    $specs["matricule"]         = "code insee confidential mask|9S99S99S9xS999S999S99";
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";

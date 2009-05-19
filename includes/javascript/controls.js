@@ -90,6 +90,7 @@ Element.addMethods('input', {
         '9':"[0-9]",
         'a':"[A-Za-z]",
         '*':"[A-Za-z0-9]",
+        'x':"[A-Fa-f0-9]",
         '~':"[+-]"
       },
       completed: Prototype.emptyFunction,
@@ -335,7 +336,7 @@ Element.addMethods('input', {
 
       if (!charmap[c]) {
         if (charmap[prevChar]) {
-          reMask += "("+charmap[prevChar]+"{"+count+"})";
+          reMask += "("+charmap[prevChar]+"{"+Math.max(1,count)+"})";
         }
         reMask += (((/[A-Za-z0-9]/.match(c) || c == null)) ? "" : "\\" )+c;
         prevChar = c;

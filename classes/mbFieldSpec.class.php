@@ -43,6 +43,7 @@ class CMbFieldSpec {
     '9' => '[0-9]',
     'a' => '[A-Za-z]',
     '*' => '[A-Za-z0-9]',
+    'x' => '[A-Fa-f0-9]',
     '~' => '[+-]',
   );
 
@@ -279,7 +280,7 @@ class CMbFieldSpec {
     
     foreach ($lexemes as $lex) {
       $regex .= is_array($lex) ? 
-                  ('('.$lex[0].'{'.$lex[1].'})') : 
+                  ('('.$lex[0].'{'.max(1, $lex[1]).'})') : 
                   (preg_match('`[A-Za-z0-9]`', $lex) ? '' : '\\').$lex;
     }
     $regex .= '$/';
