@@ -11,21 +11,21 @@ class CEcDocumentSender extends CDocumentSender {
   // Non dépendant de la clinique courante ????
 	// Envisager d'utiliser CMedicap::$tags
   public static $docTag = "ecap document";
-  public static $catTag = "ecap category";
+  public static $catTag = "ecap type";
   
   public static $sendables = array(
-	  "CPatient"      => array ("PA"),
-	  "CSejour"       => array ("SJ", "AT"),
-	  "COperation"    => array ("IN"),
-	  "CConsultation" => array ("PA"),
-	  "CConsultation" => array ("PA"),
+	  "CPatient"            => array ("PA"),
+	  "CSejour"             => array ("SJ", "AT"),
+	  "COperation"          => array ("IN"),
+	  "CConsultation"       => array ("PA"),
+	  "CConsultationAnesth" => array ("PA"),
   );
 
   var $clientSOAP = null;
   
   /**
    * Instanciate Soap Client
-   * return bool Job-done value
+   * @return bool Job-done value
    */
   function initClientSOAP () {
     if ($this->clientSOAP instanceof SoapClient) {
@@ -51,8 +51,11 @@ class CEcDocumentSender extends CDocumentSender {
   
   /**
    * Get Target Id for object anf target ecap category
+   * @param CMbObject $object Mediboard Object
+   * @param string $ecType ecap Type : [PA|SJ|AT|IN]
+   * @return string ecap identifier
    */
-  static function getTargetIdFor(CMbObject $object, $ecCat) {
+  static function getTargetIdFor(CMbObject $object, $ecType) {
     if ($object instanceof CPatient) {
     	;
     }
@@ -70,7 +73,7 @@ class CEcDocumentSender extends CDocumentSender {
     mbTrace($idDocItem->getDBFields(), "Identifiant externe du document");
     
     // identifiant externe de la catégorie
-    $idDocItem->loadRefCategory();
+    $docItem->loadRefCategory();
     $idCategory = new CIdSante400();
     $idCategory->loadLatestFor($docItem->_ref_category, CEcDocumentSender::$catTag);
     mbTrace($idCategory->getDBFields(), "Identifiant externe de la categorie");

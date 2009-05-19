@@ -15,7 +15,7 @@ class CEcDocsExporter {
   /**
    * Export du séjour complet
    * @param void
-   *    */
+   **/
   static function exportSejour(CSejour &$sejour) {
 	  // Suppression des actes
 	  $sejour->loadNumDossier();

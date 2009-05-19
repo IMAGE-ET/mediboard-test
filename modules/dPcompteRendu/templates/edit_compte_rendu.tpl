@@ -50,7 +50,8 @@ document.observe('keydown', function(e){
 	    <a style="float:right;" href="#" onclick="guid_log('{{$compte_rendu->_guid}}')">
 	      <img src="images/icons/history.gif" alt="historique" />
 	    </a>
-	    {{/if}}
+			{{/if}}
+
       <strong>Nom du document :</strong>
       <input name="nom" size="50" value="{{$compte_rendu->nom}}" />
       &mdash;
@@ -63,6 +64,7 @@ document.observe('keydown', function(e){
       </select>
     </th>
   </tr>
+  
   {{if $destinataires|@count}}
   <tr>
     <td colspan="2" class="destinataireCR text" id="destinataire">

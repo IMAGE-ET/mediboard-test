@@ -80,7 +80,7 @@ foreach ($categories as &$_catsByClass) {
   foreach ($_catsByClass as &$_category) {
     $idEcap = new CIdSante400();
 
-    $idEcap->loadLatestFor($_category, "ecap type");
+    $idEcap->loadLatestFor($_category, CEcDocumentSender::$catTag);
     $idsEcap[$_category->_id] = $idEcap;
   }
 }

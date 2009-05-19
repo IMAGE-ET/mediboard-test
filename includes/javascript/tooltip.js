@@ -22,7 +22,7 @@ var ObjectTooltip = Class.create({
     this.sTarget = null;
     this.idTimeout = null;
 
-    this.oOptions = Object.extend({
+    this.oOptions = Object.extend( {
       mode: "objectView",
       popup: false,
       duration: 0.6,
@@ -131,6 +131,10 @@ var ObjectTooltip = Class.create({
 
     var eTarget = eDiv.select(".content")[0];
     eTarget.removeAttribute("_extended");
+    eTarget.setStyle( {
+      minWidth : this.mode.width+"px",
+      minHeight: this.mode.height+"px"
+    } );
     
     this.sTarget = eTarget.identify();
   }
@@ -154,15 +158,22 @@ Object.extend(ObjectTooltip, {
       module: "system",
       action: "httpreq_vw_object_history",
       sClass: "tooltip",
-      width: 300,
-      height: 150
+      width: 200,
+      height: 0
     },
     objectView: {
       module: "system",
       action: "httpreq_vw_object",
       sClass: "tooltip",
       width: 300,
-      height: 250
+      height: 100
+    },
+    identifiers: {
+      module: "dPsante400",
+      action: "ajax_tooltip_identifiers",
+      sClass: "tooltip",
+      width: 150,
+      height: 0
     },
     objectNotes: {
       module: "system",

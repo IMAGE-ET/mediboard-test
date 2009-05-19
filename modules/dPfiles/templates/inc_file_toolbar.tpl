@@ -47,7 +47,7 @@
   
   <!-- Send File -->
   {{if $curr_file->_is_sendable}}
-    <input type="hidden" name="_send" value="false" />
+    <input type="hidden" name="_send" value="" />
     {{if $dPconfig.dPfiles.system_sender != "null"}}
       {{if $curr_file->etat_envoi == "oui"}}
         <button class="invalidefile {{$notext}}" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$curr_file->_class_name}}','{{$curr_file->_id}}'); } });">
@@ -69,8 +69,8 @@
 	<button type="button" class="hslip  {{$notext}}" onclick="this.form.file_category_id.show()">
 	  {{tr}}Move{{/tr}}
 	</button>
-  <select style="display: none; width: 100px;" name="file_category_id" onchange="submitFileChangt(this.form)">
-    <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>Aucune catégorie</option>
+  <select style="display: none; width: 90px;" name="file_category_id" onchange="submitFileChangt(this.form)">
+    <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
     {{foreach from=$listCategory item=curr_cat}}
     <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
       {{$curr_cat->nom}}

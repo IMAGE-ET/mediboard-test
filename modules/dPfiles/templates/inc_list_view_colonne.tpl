@@ -38,7 +38,7 @@ var File = {
   	 <table class="tbl">
   	   <tbody class="hoverable">
 	  	   <tr>
-	  	     <td rowspan="2" style="width: 80px; height: 70px; text-align: center">
+	  	     <td rowspan="2" style="width: 70px; height: 70px; text-align: center">
 			      {{assign var="elementId" value=$curr_file->_id}}
 			      {{if $curr_file->_class_name=="CCompteRendu"}}
 			        {{assign var="srcImg" value="images/pictures/medifile.png"}}
@@ -52,7 +52,7 @@ var File = {
 			    </td>
 			    
 					<!-- Tooltip -->
-					<td class="text" style="height: 40px; overflow: auto">
+					<td class="text" style="height: 35px; overflow: auto">
 			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}');">
 			        {{$curr_file->_view|truncate:60}}
 			      </span>
@@ -61,7 +61,6 @@ var File = {
 					<!-- Historique & identifiants externes-->
 			    <td class="text" style="vertical-align: middle; width: 1%">
 			      {{mb_include module=system template=vw_object_idsante400 object=$curr_file}}
-			      <div class="idsante400" id="{{$curr_file->_guid}}"></div>
 			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}', 'objectViewHistory');">
 							<img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
 			      </span>

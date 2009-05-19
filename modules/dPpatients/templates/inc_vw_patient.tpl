@@ -250,7 +250,7 @@ Document.refreshList = function(){
   </tr>
   <tr>
     <td colspan="3">
-      {{$affectation->_ref_lit->_view}}
+      {{$affectation->_ref_lit}}
       depuis le {{mb_value object=$affectation field=entree}}
     </td>
   </tr>
@@ -261,7 +261,7 @@ Document.refreshList = function(){
   </tr>
   <tr>
     <td colspan="3">
-      {{$affectation->_ref_lit->_view}}
+      {{$affectation->_ref_lit}}
       depuis le {{mb_value object=$affectation field=entree}}
     </td>
   </tr>
