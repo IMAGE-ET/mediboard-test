@@ -319,7 +319,7 @@ Object.extend(ElementChecker, {
       if (this.sValue.match(/^([0-9]{7,8}[A-Z])$/i))
         return;
       
-      if (aMatches = this.sValue.match(/^([1278][0-9]{2}[0-9]{2}[0-9][ab][0-9]{3}[0-9]{3})([0-9]{2})$/i)) {
+      if (aMatches = this.sValue.match(/^([1278][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i)) {
         
         nCode = parseInt(aMatches[1].replace(/2A/i, '19').replace(/2B/i, '18'), 10);
         nCle  = parseInt(aMatches[2], 10);
