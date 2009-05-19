@@ -203,8 +203,8 @@ class CPatient extends CMbObject {
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
     
-    
-    if(CAppUI::conf("dPpatients CPatient date_naissance")){
+    $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
+    if($conf == "date" || $conf == "doublons"){
       $specs["naissance"]       = "birthDate notNull mask|99/99/9999 format|$3-$2-$1";
     } else {
       $specs["naissance"]       = "birthDate mask|99/99/9999 format|$3-$2-$1";  

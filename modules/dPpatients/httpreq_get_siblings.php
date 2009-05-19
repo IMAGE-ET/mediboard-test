@@ -35,7 +35,7 @@ $patientMatch->naissance  = $naissance;
 
 $textMatching = null;
 
-if (CAppUI::conf('dPpatients CPatient doublons')) {
+if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons") {
   $matching = $patientMatch->loadMatchingPatient();
 	
 	if($matching != 0) {

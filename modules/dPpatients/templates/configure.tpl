@@ -40,35 +40,21 @@ Main.add(function () {
       <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>
-
-  {{assign var="var" value="date_naissance"}}
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
   
-  {{assign var="var" value="doublons"}}
+  {{assign var="var" value="identitovigilence"}}
   <tr>
     <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>    
     </th>
-    <td colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
+    <td class="text" colspan="3">
+      <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
+        <option value="nodate" {{if "$dPconfig.$m.$class.$var == nodate"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-nodate{{/tr}}</option>
+        <option value="date" {{if $dPconfig.$m.$class.$var == "date"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-date{{/tr}}</option>
+        <option value="doublons" {{if $dPconfig.$m.$class.$var == "doublons"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-doublons{{/tr}}</option>
+      </select> 
+    </td>            
   </tr>
   
   <!-- Merge only for admin -->

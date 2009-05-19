@@ -300,8 +300,7 @@ $dPconfig["dPfiles"] = array (
 $dPconfig["dPpatients"] = array (
   "CPatient" => array (
     "tag_ipp" => "",
-    "date_naissance" => "0",
-    "doublons" => "0",
+    "identitovigilence" => "nodate",
     "merge_only_admin" => "0",
   ),
   
