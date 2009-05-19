@@ -76,7 +76,7 @@ Main.add(function() {
     <td>
       {{mb_field object=$patient field="nom" onchange="copyIdentiteAssureValues(this)"}}
       {{if !$patient->_id}}
-        <button type="button" style="padding: 0px" onclick="anonymous()"><img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" /></button>
+        <button type="button" style="padding: 0px" onclick="anonymous()" tabIndex="1000"><img src="modules/dPpatients/images/anonyme.png" alt="Anonyme" /></button>
 	    {{/if}}
     </td>
     {{if $patient->_id}}
@@ -89,7 +89,7 @@ Main.add(function() {
     <th>{{mb_label object=$patient field="prenom"}}</th>
     <td>
 	    {{mb_field object=$patient field="prenom" onchange="copyIdentiteAssureValues(this)"}} 
-	    <button type="button" class="down notext" onclick="togglePrenomsList(this)">{{tr}}Add{{/tr}}</button> 
+	    <button type="button" class="down notext" onclick="togglePrenomsList(this)" tabIndex="1000">{{tr}}Add{{/tr}}</button> 
     </td>
 	</tr>
 	
@@ -133,7 +133,7 @@ Main.add(function() {
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="rang_naissance"}}</th>
-    <td>{{mb_field object=$patient field="rang_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="rang_naissance"}}</td>
 	</tr>
 	<tr>
     <th>{{mb_label object=$patient field="cp_naissance"}}</th>
