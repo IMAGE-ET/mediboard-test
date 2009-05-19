@@ -418,6 +418,45 @@ Main.add( function(){
   </td>
 </tr>
 
+<tr>
+  <th>{{mb_label object=$sejour field="type"}}</th>
+  <td>
+    {{if !$sejour->type}}
+    {{$sejour->type}}
+    {{/if}}
+    <select name="type" onchange="changeTypeHospi()">
+    {{assign var=specType value=$sejour->_specs.type}}
+    {{foreach from=$specType->_locales item="curr_type" key="key"}}
+      {{if $key != 'urg' || $urgInstalled}}
+      <option value="{{$key}}"
+        {{if $sejour->type == $key || (!$sejour->type && $key == $specType->default)}}selected="selected"{{/if}}>
+        {{$curr_type}}
+      </option>
+      {{/if}}
+    {{/foreach}}
+    </select>
+  </td>
+  
+  <th class="reanimation">{{mb_label object=$sejour field="reanimation"}}</th>
+  <td class="reanimation">
+    {{mb_field object=$sejour field="reanimation"}}
+    <script type="text/javascript">
+
+    function changeTypeHospi() {
+      var oForm = document.editSejour;
+      var sValue = $V(oForm.type);
+      if (sValue != "comp") {
+        $V(oForm.reanimation, '0');
+      }
+      
+      $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
+    }
+    
+    changeTypeHospi();
+    </script>
+  </td>
+</tr>
+
 <tbody id="modeExpert">
 {{if !$mode_operation}}
 
@@ -460,6 +499,8 @@ Main.add( function(){
   <th><strong>{{mb_label object=$sejour field=_sortie_autorisee}}</strong></th>
   <td><strong>{{mb_value object=$sejour field=_sortie_autorisee}}</strong></td>
 </tr>
+
+
 {{/if}}
 
 <tr id="correspondant_medical">
@@ -485,45 +526,6 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-
-<tr>
-  <th>{{mb_label object=$sejour field="type"}}</th>
-  <td>
-    {{if !$sejour->type}}
-    {{$sejour->type}}
-    {{/if}}
-    <select name="type" onchange="changeTypeHospi()">
-    {{assign var=specType value=$sejour->_specs.type}}
-    {{foreach from=$specType->_locales item="curr_type" key="key"}}
-      {{if $key != 'urg' || $urgInstalled}}
-      <option value="{{$key}}"
-        {{if $sejour->type == $key || (!$sejour->type && $key == $specType->default)}}selected="selected"{{/if}}>
-        {{$curr_type}}
-      </option>
-      {{/if}}
-    {{/foreach}}
-    </select>
-  </td>
-  
-  <th class="reanimation">{{mb_label object=$sejour field="reanimation"}}</th>
-  <td class="reanimation">
-  	{{mb_field object=$sejour field="reanimation"}}
-    <script type="text/javascript">
-
-		function changeTypeHospi() {
-		  var oForm = document.editSejour;
-		  var sValue = $V(oForm.type);
-		  if (sValue != "comp") {
-		    $V(oForm.reanimation, '0');
-		  }
-		  
-	    $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
-		}
-		
-		changeTypeHospi();
-    </script>
-  </td>
-</tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="zt"}}</th>
