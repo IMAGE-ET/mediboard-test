@@ -518,8 +518,8 @@ class CPatient extends CMbObject {
     $this->evalAge();
 		
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
-    if ($this->civilite == "Enf.") {
-    	$this->_civilite_long = "le jeune";
+    if ($this->civilite == "enf") {
+      $this->_civilite_long = $this->sexe == "m" ? "le jeune" : "la jeune";
     } else {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }
