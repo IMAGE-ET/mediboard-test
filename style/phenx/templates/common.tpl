@@ -37,6 +37,24 @@
 <div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
   <div class="loading">Chargement en cours</div>
 </div>
+<div id="sessionLockMask" style="display: none;">
+  {{if $app->user_id}}
+  <div class="window" style="position: absolute; text-align: center; -moz-border-radius: 10px; background: #eee;">
+    <div style="background: #ccc; -moz-border-radius: 5px 5px 0 0; font-weight: bold; margin: 0; padding: 5px 1em;">
+      Session verrouillée ({{$app->_ref_user}})
+    </div>
+    <form name="unlockSession" method="post" action="?" onsubmit="return false" 
+     style="display: block; margin: 1em;">
+      <input type="hidden" name="login" value="{{$app->_ref_user->_user_username}}" />
+      <label style="margin: 0.7em; display: block;">
+        Mote de passe: <input type="password" name="password" autocomplete="off" />
+      </label>
+      <button class="tick" onclick="Session.unlock()">Déverouiller</button>
+      <button class="cancel" onclick="Session.close()">Déconnecter</button>
+    </form>
+  </div>
+  {{/if}}
+</div>
 
 <!-- Tooltip div used for dom clonage -->
 
