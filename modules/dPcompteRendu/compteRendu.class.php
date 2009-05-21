@@ -76,6 +76,10 @@ class CCompteRendu extends CDocumentItem {
     return $specs;
   }
   
+  function getContent() {
+    return $this->source;
+  }
+  
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NULL";
@@ -94,6 +98,7 @@ class CCompteRendu extends CDocumentItem {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_extensioned = "$this->nom.htm";
     $this->_view = $this->object_id ? "" : "Modèle : ";
     $this->_view.= $this->nom;
     

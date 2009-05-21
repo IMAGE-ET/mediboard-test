@@ -7,25 +7,20 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CEcDocumentSender extends CDocumentSender {
-  // Non dépendant de la clinique courante ????
-	// Envisager d'utiliser CMedicap::$tags
-  public static $docTag = "ecap document";
-  public static $catTag = "ecap type";
-  
+class CEcDocumentSender extends CDocumentSender { 
   public static $sendables = array(
-	  "CPatient"            => array ("PA"),
-	  "CSejour"             => array ("SJ", "AT"),
-	  "COperation"          => array ("IN"),
-	  "CConsultation"       => array ("PA"),
-	  "CConsultationAnesth" => array ("PA"),
+	  "CPatient"       => array ("PA"),
+	  "CSejour"        => array ("SJ", "AT"),
+	  "COperation"     => array ("IN"),
+	  "CConsultation"  => array ("PA"),
+	  "CConsultAnesth" => array ("PA"),
   );
 
   var $clientSOAP = null;
   
   /**
    * Instanciate Soap Client
-   * @return bool Job-done value
+   * @return array Base SOAP params array, null on error
    */
   function initClientSOAP () {
     if ($this->clientSOAP instanceof SoapClient) {
@@ -34,7 +29,6 @@ class CEcDocumentSender extends CDocumentSender {
     
     try {
       CMedicap::makeUrls();
-      
 			$serviceURL = CMedicap::$urls["soap"]["documents"];
 			
 			if (!url_exists($serviceURL)) {
@@ -46,51 +40,141 @@ class CEcDocumentSender extends CDocumentSender {
     } 
     catch (Exception $e) {
       trigger_error("Instanciation du SoapClient impossible : ".$e);
+      return;
     }
+    
+    return array (
+		  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
+		  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
+		  "aTypeIdentifiantActeur" => 1,
+		  "aIdentifiantActeur"     => "pr1",
+		  "aIdClinique"            => CAppUI::conf("dPsante400 group_id"),
+	  );
   }
   
   /**
-   * Get Target Id for object anf target ecap category
+   * Instanciate Soap Client
+   * @param string $method
+   * @param array $params
+   * @return object Parsed from XML response
+   */
+  function sendSOAP($method, $params)  {
+    $result = $this->clientSOAP->__soapCall($method, $params);
+    $resultField = $method."Result";
+		$result = simplexml_load_string($result->$resultField->any);
+		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
+    return $result;
+  }
+  
+  /**
+   * Get Target Id for object and target ecap category
    * @param CMbObject $object Mediboard Object
    * @param string $ecType ecap Type : [PA|SJ|AT|IN]
-   * @return string ecap identifier
+   * @return string ecap identifier, null on error
    */
-  static function getTargetIdFor(CMbObject $object, $ecType) {
-    if ($object instanceof CPatient) {
-    	;
+  static function getIdFor(CMbObject $object, $ecType) {
+    if (!in_array($ecType, self::$sendables[$object->_class_name])) {
+      trigger_error("Mauvaise association de la classe Mediboard '$object->_class_name' avec le type eCap '$ecType'");
+      return;
     }
     
+    $ident = new CIdSante400();
+    if ($object instanceof CSejour) {
+   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
+   	  return $ident->id400;
+   	}
+    
+
+    if ($object instanceof CPatient) {
+   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
+   	  return $ident->id400;
+   	}
   }
     
-  function send(CDocumentItem $docItem) {
-    global $AppUI;
+  /**
+   * Get Patient Id for object
+   * @param CMbObject $object Mediboard Object
+   * @return string ecap identifier, null on error
+   */
+  static function getPatientIdFor(CMbObject $object) {
+    if ($object instanceof CPatient) {
+    	return self::getIdFor($object, "PA");
+    }
     
+    if ($object instanceof CCodable) {
+      $object->loadRefPatient();
+    	return self::getIdFor($object->_ref_patient, "PA");
+    }
+
+    return null;
+  }
+  
+  function send(CDocumentItem $docItem) {
+    $docItem->updateFormFields();
     // identifiant externe du document 
     $idDocItem = new CIdSante400();
-    $idDocItem->loadLatestFor($docItem, self::$docTag);
+    $idDocItem->loadLatestFor($docItem, CMedicap::getTag("DO"));
     $idDocItem->last_update = mbDateTime(); 
-    $idDocItem->id400 = "123";
-    mbTrace($idDocItem->getDBFields(), "Identifiant externe du document");
+    @list($ecDocument, $ecVersion) = explode("-", $idDocItem->id400); 
+    $ecDocument = $ecDocument ? $ecDocument : "0";
+    $ecVersion  = $ecVersion  ? $ecVersion  : "0";
     
     // identifiant externe de la catégorie
     $docItem->loadRefCategory();
     $idCategory = new CIdSante400();
-    $idCategory->loadLatestFor($docItem->_ref_category, CEcDocumentSender::$catTag);
-    mbTrace($idCategory->getDBFields(), "Identifiant externe de la categorie");
-    
+    $idCategory->loadLatestFor($docItem->_ref_category, CMedicap::getTag("DT"));
+    list($ecTypeObjet, $ecTypeDocument) = explode("-", $idCategory->id400);
     
     // Chargement de la cible
     $docItem->loadTargetObject();
-    $target = $docItem->_ref_object;    
+    $ecObject = self::getIdFor($docItem->_ref_object, $ecTypeObjet);
+
+    // identifiant externe du patient, quelle que soit la cible
+    $ecPatient = self::getPatientIdFor($docItem->_ref_object);
     
-
-    // Change l'etat du document
-    $docItem->etat_envoi = "oui";
-
-    if (!$this->initClientSOAP()) {
+    if (null == $params = $this->initClientSOAP()) {
       return false;
     }
     
+    // Paramètres SOAP
+    $params["aIPMachine"      ] = $_SERVER["REMOTE_ADDR"];
+    $params["aIdDocument"     ] = (int) $ecDocument;
+    $params["aIdVersion"      ] = (int) $ecVersion;
+    $params["aIdPatient"      ] = $ecPatient;
+    $params["aTypeObjet"      ] = $ecTypeObjet;
+    $params["aIdTypeDocument" ] = $ecTypeDocument;
+    $params["aCommentaire"    ] = "Commentaire pas si facultatif ?";
+    $params["aIdObjet"        ] = $ecObject;
+    $params["aLibelleDocument"] = $docItem->_extensioned;
+    $params["aNomFichier"     ] = $docItem->_extensioned;
+    $params["aFichierByte"    ] = $docItem->getContent();
+    
+    mbDump($params, "Final SOAP params");
+    
+    // Appel SOAP
+//    mbTrace($this->sendSOAP("DeposerDocument", $params));
+    $result = $this->clientSOAP->DeposerDocument($params);
+		$result = simplexml_load_string($result->DeposerDocumentResult->any);
+		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
+		mbTrace($result, "SOAP response");
+		if ($result->codeRetour != "0") {
+	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);
+	    return false;
+		}
+
+		// Assocation des identifiant 
+		$ecDocument = $result->document;
+		if (is_array($ecDocument)) $ecDocument = $ecDocument[0];
+		$idDocItem->id400 = "$ecDocument->id-$ecDocument->numeroVersion";
+		if ($msg = $idDocItem->store()) {
+	    trigger_error("ecDocumentSender Identifier store error for '$docItem->_guid': $msg",E_USER_WARNING);
+	    return false;
+		}
+
+		mbTrace($idDocItem->getDBFields());
+		
+    // Change l'etat du document
+    $docItem->etat_envoi = "oui";
     
     return true; 
   }
@@ -105,17 +189,7 @@ class CEcDocumentSender extends CDocumentSender {
   }
   
   function resend($docItem) {
-    // Annulation de la transaction
-    if (null == $this->cancel($docItem)) {
-      return;
-    }
-    
-    // Renvoi du document
-    if (null == $this->send($docItem)) {
-      return;
-    }
-    
-    return true;
+    return $this->send($docItem);
   }
   
   function isSendable(CDocumentItem $docItem) {

@@ -11,7 +11,7 @@
 global $can;
 $can->needsAdmin();
 
-CMedicap::makeTags();
+CMedicap::getTag();
 
 // Création du template
 $smarty = new CSmartyDP();

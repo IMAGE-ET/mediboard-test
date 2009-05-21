@@ -18,9 +18,8 @@ mbTrace($docItem->getValues(), "Doc Item");
 $doc_ecap_id = rand(time());
 $AppUI->setMsg("Simulating export with returned id : '$doc_ecap_id'");
 
-CMedicap::makeTags();
 $idExt = new CIdSante400;
-$idExt->loadLatestFor($docItem, CMedicap::$tags["DOC"]);
+$idExt->loadLatestFor($docItem, CMedicap::getTag("DO"));
 $idExt->id400 = $doc_ecap_id;
 if ($msg = $idExt->store()) {
   $AppUI->setMsg("Erreur sauvegarde de l'identifiant externe : '$msg'", UI_MSG_ERROR);

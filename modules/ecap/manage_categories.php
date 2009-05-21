@@ -11,24 +11,10 @@
 global $can;
 $can->needsEdit();
 
+$sender = new CEcDocumentSender;
+$params = $sender->initClientSOAP();
+
 CMedicap::makeURLs();
-$serviceURL = CMedicap::$urls["soap"]["documents"];
-
-if (!url_exists($serviceURL)) {
-  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
-  return;
-}
-
-$client = new SoapClient("$serviceURL?WSDL", array('exceptions' => 0));
-
-$requestParams = array (
-  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
-  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
-  "aTypeIdentifiantActeur" => 1,
-  "aIdentifiantActeur"     => "pr1",
-  "aIdClinique"            => "021", //CAppUI::conf("dPsante400 group_id"),
-  "aTypeObjet"             => "",
-);
 
 class CEcapTypeDocument {
   var $level = 0;
@@ -59,12 +45,12 @@ class CEcapTypeDocument {
 $typesEcapByMbClass= array();
 foreach (CEcDocumentSender::$sendables as $mbClass => $typesEcapByEcObject) {
   foreach ($typesEcapByEcObject as $ecObject) {
-    $requestParams["aTypeObjet"] = $ecObject;
-    $result = $client->ListerTypeDocument($requestParams);
+    $params["aTypeObjet"] = $ecObject;
+    $result = $sender->clientSOAP->ListerTypeDocument($params);
 		$result = simplexml_load_string($result->ListerTypeDocumentResult->any);
 		if ($result->codeRetour != "0") {
 		  $warning = sprintf("Erreur d'appel au service web e-Cap avec les paramètres '%s' : [%s] %s ", 
-		    http_build_query($requestParams),
+		    http_build_query($params),
 		    $result->codeRetour,
 		    utf8_decode($result->descriptionRetour));
 		  trigger_error($warning, E_USER_WARNING);
@@ -80,7 +66,7 @@ foreach ($categories as &$_catsByClass) {
   foreach ($_catsByClass as &$_category) {
     $idEcap = new CIdSante400();
 
-    $idEcap->loadLatestFor($_category, CEcDocumentSender::$catTag);
+    $idEcap->loadLatestFor($_category, CMedicap::getTag("DT"));
     $idsEcap[$_category->_id] = $idEcap;
   }
 }

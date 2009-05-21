@@ -23,11 +23,10 @@ $limit = "0, $max";
 $files = $file->loadList($where, $order, $limit);
 $files_count = $file->countList($where);
 
-CMedicap::makeTags();
 foreach($files as $_file) {
   $_file->loadTargetObject();
   $idExt = new CIdSante400;
-	$idExt->loadLatestFor($_file, CMedicap::$tags["DOC"]);
+	$idExt->loadLatestFor($_file, CMedicap::getTag("DO"));
   $_file->_ref_id_ecap = $idExt;
 }
 

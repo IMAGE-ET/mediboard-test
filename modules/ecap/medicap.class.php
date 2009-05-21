@@ -36,22 +36,34 @@ class CMedicap {
     );
   }
 
-  static $tags = array();
+  static $tags = null;
   
   /**
-   * Produce tags for current group
+   * Get tags for current group
+   * $param string $which Tag you want [IPP|DOS|USR|DOC|CAR], 
+   *   null if you just want to build them
    */
-  static function makeTags() {
-		$idExt = new CIdSante400;
-		$idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
-		$codeClinique = $idExt->id400;
-		
-		self::$tags = array(
-		  "IPP" => "eCap CIDC:$codeClinique",
-			"DOS" => "eCap NDOS CIDC:$codeClinique",
-			"USR" => "eCap CIDC:$codeClinique",
-			"DOC" => "eCap CIDC:$codeClinique"
-		);	    
+  static function getTag($which = null) {
+    static $init = true; 
+    if ($init) {
+			$idExt = new CIdSante400;
+			$idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
+			$codeClinique = $idExt->id400;
+			
+			self::$tags = array(
+			  "PA" => "eCap CIDC:$codeClinique",
+				"SJ" => "eCap NDOS CIDC:$codeClinique",
+				"AT" => "eCap DHE CIDC:$codeClinique",
+				"IN" => "eCap CINT CIDC:$codeClinique",
+				"US" => "eCap CIDC:$codeClinique",
+				"DO" => "eCap document",
+				"DT" => "eCap type-category",
+			);
+      
+      $init = false;
+    }
+    
+    return $which ? self::$tags[$which] : null;
   }  
 }
 

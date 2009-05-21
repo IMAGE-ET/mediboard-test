@@ -203,7 +203,7 @@ class CMedinetSender extends CDocumentSender {
       $log->loadMatchingObject();
       
       $act_dateCreationActe = mbDate($log->date); 
-      $fichier = base64_encode($docItem->source);
+      $fichier = base64_encode($docItem->getContent);
     }
     
     if ($docItem instanceof CFile) {
@@ -213,8 +213,7 @@ class CMedinetSender extends CDocumentSender {
       $doc_typeMime = $docItem->file_type;
       
       $act_dateCreationActe = mbDate($docItem->file_date);
-      
-      $fichier = base64_encode(file_get_contents($docItem->_file_path));
+      $fichier = base64_encode($docItem->getContent);
     }
     $doc_commentaire = "";
                         

@@ -40,9 +40,9 @@ class CFile extends CDocumentItem {
   }
   
   function getBackProps() {
-      $backProps = parent::getBackProps();
-      $backProps["documents_ged_suivi"] = "CDocGedSuivi file_id";
-     return $backProps;
+    $backProps = parent::getBackProps();
+    $backProps["documents_ged_suivi"] = "CDocGedSuivi file_id";
+    return $backProps;
   }
   
   function getProps() {
@@ -54,6 +54,10 @@ class CFile extends CDocumentItem {
     $specs["file_type"]          = "str";
     $specs["file_name"]          = "str notNull";
     return $specs;
+  }
+  
+  function getContent() {
+    return file_get_contents($this->_file_path);
   }
   
   function loadRefsFwd() {
@@ -68,6 +72,9 @@ class CFile extends CDocumentItem {
 
   function updateFormFields() {
     parent::updateFormFields();
+    
+    $this->_extensioned = $this->file_name;
+    
     global $filesDir;
     $this->_file_size = mbConvertDecaBinary($this->file_size);    
 

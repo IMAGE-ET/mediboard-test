@@ -105,12 +105,12 @@
     </th>
     <td>
       <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-      {{if $dPconfig.$mod.$class.$var != $tags.IPP}}
+      {{if $dPconfig.$mod.$class.$var != $tags.PA}}
 			<div class="small-warning">
 				Le tag IPP pour l'utilisation du module e-Cap dans cet établissement devrait être :
-				'{{$tags.IPP}}'
+				'{{$tags.PA}}'
 				<br />
-			  <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$tags.IPP}}'">
+			  <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$tags.PA}}'">
 			  	{{tr}}Restore{{/tr}} le bon tag
 			  </button>
 			</div>
@@ -133,12 +133,12 @@
     </th>
     <td>
       <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-      {{if $dPconfig.$mod.$class.$var != $tags.DOS}}
+      {{if $dPconfig.$mod.$class.$var != $tags.SJ}}
 			<div class="small-warning">
 				Le tag 'Numéro de dossier' pour l'utilisation du module e-Cap dans cet établissement devrait être :
-				'{{$tags.DOS}}'
+				'{{$tags.SJ}}'
 				<br />
-			  <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$tags.DOS}}'">
+			  <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$tags.SJ}}'">
 			  	{{tr}}Restore{{/tr}} le bon tag
 			  </button>
 			</div>

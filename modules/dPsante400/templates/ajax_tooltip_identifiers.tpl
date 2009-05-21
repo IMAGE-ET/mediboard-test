@@ -6,7 +6,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td><em>{{tr}}CIdSante400-none{{/tr}}</em></td>
+    <td><em>{{tr}}CIdSante400.none{{/tr}}</em></td>
   </tr>
   {{/foreach}}
 </table>

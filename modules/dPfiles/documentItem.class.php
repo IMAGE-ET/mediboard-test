@@ -16,9 +16,14 @@ class CDocumentItem extends CMbMetaObject {
   var $file_category_id  = null;
   var $etat_envoi = null;
   
+  // Derivated fields
+  var $_extensioned = null;
+
+  // Distant field
+  var $_is_sendable = null;
+  
   // Behavior Field
   var $_send = null; 
-  var $_is_sendable = null;
   
   // References
   var $_ref_category = null;
@@ -27,9 +32,18 @@ class CDocumentItem extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["file_category_id"] = "ref class|CFilesCategory";
     $specs["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
+
+    $specs["_extensioned"]     = "str notNull";
     return $specs;
   }
   
+  /**
+   * Retrieve content as binary data
+   * @return binary Content
+   */
+  function getContent() {
+  }
+
   /**
    * Try and instanciate document sender according to module configuration
    * @return CDocumentSender sender or null on error

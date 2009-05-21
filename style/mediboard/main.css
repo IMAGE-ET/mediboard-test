@@ -1099,6 +1099,7 @@ td.tabox {
 table.dialog #systemMsg,
 #leftMenu #systemMsg {
 	max-height: 50%;
+	max-width: 50%;
 	overflow: auto;
   position: fixed;
   top: 5px;
