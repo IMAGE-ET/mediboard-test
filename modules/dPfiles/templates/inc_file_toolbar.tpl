@@ -1,5 +1,5 @@
 {{**
-  * Show a file/document edit/delete/move toolbar
+  * Show a file/document edit/delete/move/send toolbar
   *}}
 
 {{if $canFile->edit && !$accordDossier}}
@@ -47,20 +47,31 @@
   
   <!-- Send File -->
   {{if $_doc_item->_is_sendable}}
+  	<script type="text/javascript">
+  	onSubmitSendAjax = function(button) {
+			$V(button.form._send, true);
+			return onSubmitFormAjax(button.form, { 
+				onComplete : function () { 
+					Document.refreshList('{{$_doc_item->_class_name}}','{{$_doc_item->_id}}'); 
+				} 
+			} );  	  
+  	}
+  	</script>
+
     <input type="hidden" name="_send" value="" />
     {{if $dPconfig.dPfiles.system_sender != "null"}}
       {{if $_doc_item->etat_envoi == "oui"}}
-        <button class="invalidefile {{$notext}}" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$_doc_item->_class_name}}','{{$_doc_item->_id}}'); } });">
+        <button class="invalidefile {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
           {{tr}}Send File{{/tr}}
         </button>
       {{elseif $_doc_item->etat_envoi == "obsolete"}}  
-        <button class="obsoletefile {{$notext}}" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$_doc_item->_class_name}}','{{$_doc_item->_id}}'); } });">
+        <button class="obsoletefile {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
           {{tr}}Send File{{/tr}}
         </button>
       {{else}}
-        <button class="sendfile {{$notext}}" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$_doc_item->_class_name}}','{{$_doc_item->_id}}'); } });">
+        <button class="sendfile {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
            {{tr}}Send File{{/tr}}
-         </button>
+        </button>
       {{/if}}
     {{/if}}
   {{/if}}

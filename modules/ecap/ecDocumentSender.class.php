@@ -59,11 +59,13 @@ class CEcDocumentSender extends CDocumentSender {
    * @return object Parsed from XML response
    */
   function sendSOAP($method, $params)  {
-    $result = $this->clientSOAP->__soapCall($method, $params);
+    mbDump($params, "Final SOAP params");
+    $result = $this->clientSOAP->__call($method, $params);
     $resultField = $method."Result";
 		$result = simplexml_load_string($result->$resultField->any);
 		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
-    return $result;
+		mbTrace($result, "SOAP response");
+		return $result;
   }
   
   /**
@@ -108,9 +110,10 @@ class CEcDocumentSender extends CDocumentSender {
 
     return null;
   }
-  
+    
   function send(CDocumentItem $docItem) {
-    $docItem->updateFormFields();
+    $docItem->load();
+    
     // identifiant externe du document 
     $idDocItem = new CIdSante400();
     $idDocItem->loadLatestFor($docItem, CMedicap::getTag("DO"));
@@ -119,7 +122,7 @@ class CEcDocumentSender extends CDocumentSender {
     $ecDocument = $ecDocument ? $ecDocument : "0";
     $ecVersion  = $ecVersion  ? $ecVersion  : "0";
     
-    // identifiant externe de la catégorie
+    // Identifiant externe de la catégorie
     $docItem->loadRefCategory();
     $idCategory = new CIdSante400();
     $idCategory->loadLatestFor($docItem->_ref_category, CMedicap::getTag("DT"));
@@ -128,7 +131,7 @@ class CEcDocumentSender extends CDocumentSender {
     // Chargement de la cible
     $docItem->loadTargetObject();
     $ecObject = self::getIdFor($docItem->_ref_object, $ecTypeObjet);
-
+    
     // identifiant externe du patient, quelle que soit la cible
     $ecPatient = self::getPatientIdFor($docItem->_ref_object);
     
@@ -152,11 +155,12 @@ class CEcDocumentSender extends CDocumentSender {
     mbDump($params, "Final SOAP params");
     
     // Appel SOAP
-//    mbTrace($this->sendSOAP("DeposerDocument", $params));
+//    $this->sendSOAP("DeposerDocument", $params));
+//    return false;
+    
     $result = $this->clientSOAP->DeposerDocument($params);
 		$result = simplexml_load_string($result->DeposerDocumentResult->any);
 		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
-		mbTrace($result, "SOAP response");
 		if ($result->codeRetour != "0") {
 	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);
 	    return false;
@@ -170,8 +174,6 @@ class CEcDocumentSender extends CDocumentSender {
 	    trigger_error("ecDocumentSender Identifier store error for '$docItem->_guid': $msg",E_USER_WARNING);
 	    return false;
 		}
-
-		mbTrace($idDocItem->getDBFields());
 		
     // Change l'etat du document
     $docItem->etat_envoi = "oui";
@@ -180,12 +182,43 @@ class CEcDocumentSender extends CDocumentSender {
   }
   
   function cancel($docItem) {
-    $this->initClientSOAP();
-
-    // Change l'etat du document
-    $docItem->etat_envoi = "non"; 
+    $docItem->load();
     
-    return true;
+    // identifiant externe du document 
+    $idDocItem = new CIdSante400();
+    $idDocItem->loadLatestFor($docItem, CMedicap::getTag("DO"));
+    $idDocItem->last_update = mbDateTime(); 
+    @list($ecDocument, $ecVersion) = explode("-", $idDocItem->id400); 
+    $ecDocument = $ecDocument ? $ecDocument : "0";
+    $ecVersion  = $ecVersion  ? $ecVersion  : "0";
+    
+    // Identifiant externe du patient, quelle que soit la cible
+    $docItem->loadTargetObject();
+    $ecPatient = self::getPatientIdFor($docItem->_ref_object);
+    
+    if (null == $params = $this->initClientSOAP()) {
+      return false;
+    }
+    
+    // Paramètres SOAP
+    $params["aIPMachine"        ] = $_SERVER["REMOTE_ADDR"];
+    $params["aIdDocument"       ] = (int) $ecDocument;
+    $params["aIdVersion"        ] = (int) $ecVersion;
+    $params["aIdPatient"        ] = $ecPatient;
+    $params["aMotifInvalidation"] = "Mediboard user request";
+    
+    $result = $this->clientSOAP->InvaliderDocument($params);
+		$result = simplexml_load_string($result->InvaliderDocumentResult->any);
+		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
+		if ($result->codeRetour != "0") {
+	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);
+	    return false;
+		}
+		
+    // Change l'etat du document
+    $docItem->etat_envoi = "non";
+    
+    return true; 
   }
   
   function resend($docItem) {

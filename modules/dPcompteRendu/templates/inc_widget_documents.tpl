@@ -73,6 +73,17 @@
 </form>
 
 {{if $object->_ref_documents|@count && $mode != "hide"}}
+<script type="text/javascript">
+onSubmitSendAjax = function(button) {
+	$V(button.form._send, true);
+	return onSubmitFormAjax(button.form, { 
+		onComplete : function () { 
+			Document.refreshList('{{$object_class}}','{{$object_id}}'); 
+		} 
+	} );  	  
+}
+</script>
+
 <table class="tbl">
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="3">
@@ -125,19 +136,20 @@
 			   <input type="hidden" name="del" value="0" />
          
          <!-- Send File -->
+         
           {{if $document->_is_sendable}}
             <input type="hidden" name="_send" value="false" />
             {{if $dPconfig.dPfiles.system_sender != "null"}}
               {{if $document->etat_envoi == "oui"}}
-                <button class="invalidefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
+                <button class="invalidefile notext" type="button" onclick="onSubmitSendAjax(this)">
                   {{tr}}Send File{{/tr}}
                 </button>
-              {{elseif $document->etat_envoi == "obsolete"}}  
-                <button class="obsoletefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
+              {{elseif $document->etat_envoi == "obsolete"}}
+                <button class="obsoletefile notext" type="button" onclick="onSubmitSendAjax(this)">
                   {{tr}}Send File{{/tr}}
                 </button>
               {{else}}
-                <button class="sendfile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { Document.refreshList('{{$object_class}}','{{$object_id}}'); } });">
+                <button class="sendfile notext" type="button" onclick="onSubmitSendAjax(this)">
                    {{tr}}Send File{{/tr}}
                  </button>
               {{/if}}
