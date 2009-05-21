@@ -9,20 +9,18 @@ Main.add(function () {
   {{/if}}
 });
 
-var File = {
-  add: function() {
-    
-  }
-};
 </script>
 
 <ul id="tab-{{if $accordDossier}}{{$selClass}}{{$selKey}}{{else}}consult{{/if}}" class="control_tabs">
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   <li>
-  	<a href="#Category-{{$_cat_id}}" {{if !$_cat.DocsAndFiles|@count}}class="empty"{{/if}}>
+    {{assign var=docCount value=$_cat.DocsAndFiles|@count}}
+    {{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+  	<a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}}>
   		{{$_cat.name}} 
-  		<small>({{$_cat.DocsAndFiles|@count}})</small>
+  		<small>({{$docCount}})</small>
   	</a>
+		{{/if}}
   </li>
 {{/foreach}}
 </ul>
@@ -32,36 +30,38 @@ var File = {
 {{include file=inc_files_add_toolbar.tpl}}
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
+{{assign var=docCount value=$_cat.DocsAndFiles|@count}}
+{{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
 <div id="Category-{{$_cat_id}}" style="display: none; clear: both;">  
-  {{foreach from=$_cat.DocsAndFiles item=curr_file}}
+  {{foreach from=$_cat.DocsAndFiles item=_doc_item}}
   <div style="float: left; width: 280px;">
   	 <table class="tbl">
   	   <tbody class="hoverable">
 	  	   <tr>
 	  	     <td rowspan="2" style="width: 70px; height: 70px; text-align: center">
-			      {{assign var="elementId" value=$curr_file->_id}}
-			      {{if $curr_file->_class_name=="CCompteRendu"}}
+			      {{assign var="elementId" value=$_doc_item->_id}}
+			      {{if $_doc_item->_class_name=="CCompteRendu"}}
 			        {{assign var="srcImg" value="images/pictures/medifile.png"}}
 			      {{else}}
 			        {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
 			      {{/if}}
 	
-			      <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');">
+			      <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class_name}}', '{{$elementId}}', '0');">
 			        <img src="{{$srcImg}}" alt="Petit aperçu" title="Afficher le grand aperçu" />
 			      </a>
 			    </td>
 			    
 					<!-- Tooltip -->
 					<td class="text" style="height: 35px; overflow: auto">
-			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}');">
-			        {{$curr_file->_view|truncate:60}}
+			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}');">
+			        {{$_doc_item->_view|truncate:60}}
 			      </span>
 					</td>
 	
 					<!-- Historique & identifiants externes-->
 			    <td class="text" style="vertical-align: middle; width: 1%">
-			      {{mb_include module=system template=vw_object_idsante400 object=$curr_file}}
-			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_file->_guid}}', 'objectViewHistory');">
+			      {{mb_include module=system template=vw_object_idsante400 object=$_doc_item}}
+			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}', 'objectViewHistory');">
 							<img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
 			      </span>
 					</td>
@@ -82,5 +82,6 @@ var File = {
 	<em>Pas de documents</em>
 	{{/foreach}}
 </div>
+{{/if}}
 {{/foreach}}
 <hr style="clear: both;" />

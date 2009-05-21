@@ -11,23 +11,6 @@
   <!-- Prise de rendez-vous -->  
   <tr>
     <th class="category" colspan="2">Prise de rendez-vous</th>
-    <th class="category">Aide</th>
-  </tr>
-  
-  <tr>
-    {{assign var="var" value="keepchir"}}
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/>
-    </td>
-    
     <td rowspan="100">
       <div class="big-info">
         <b>Format des champs auto :</b>
@@ -45,6 +28,8 @@
       </div>
     </td>
   </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=keepchir}}
 
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
@@ -62,7 +47,7 @@
     </th>
     <td>
       <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="print_fiche" {{if "print_fiche" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche{{/tr}}</option>
+        <option value="print_fiche"  {{if "print_fiche" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche{{/tr}}</option>
         <option value="print_fiche1" {{if "print_fiche1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche1{{/tr}}</option>
       </select>
     </td>
@@ -91,20 +76,7 @@
     </td>
   </tr>
   
-  {{assign var="var" value="view_premedication"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
-    </td>
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=view_premedication}}
   
   <!-- CPlageconsult -->  
   {{assign var="class" value="CPlageconsult"}}
@@ -173,20 +145,9 @@
   <tr>
     <th class="category" colspan="2">Prescriptions</th>
   </tr>
-  <tr>
-    {{assign var="var" value="view_prescription"}}
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
-    </td>
-  </tr>
+
+  {{mb_include module=system template=inc_config_bool var=view_prescription}}
+
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

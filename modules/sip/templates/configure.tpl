@@ -38,7 +38,7 @@ function doAction(sAction) {
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    {{include file="../../system/templates/configure_handler.tpl" class_handler=CSipObjectHandler}}
+    {{mb_include module=system template=configure_handler class_handler=CSipObjectHandler}}
     
     <tr>
 	    {{assign var="var" value="export_segment"}}
@@ -92,35 +92,10 @@ function doAction(sAction) {
     <tr>
       <th class="category" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
     </tr>
-    {{assign var="var" value="server"}}
-    <tr>
-      <th>
-        <label for="{{$mod}}[{{$var}}]" title="{{tr}}config-{{$mod}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$mod}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <label for="{{$m}}[{{$var}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-        <label for="{{$m}}[{{$var}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      </td>
-    </tr>
     
-	  {{assign var="var" value="wsdl_mode"}}
-	  <tr>
-	    <th>
-	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-	      </label>  
-	    </th>
-	    <td>
-	      <label for="{{$m}}[{{$var}}]">Safe</label>
-	      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-	      <label for="{{$m}}[{{$var}}]">Brute</label>
-	      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-	    </td>             
-    </tr>
+    {{mb_include module=system template=inc_config_bool var=server}}
+		{{mb_include module=system template=inc_config_bool var=wsdl_mode}}
+		    
 	  <tr>
 	    <td class="button" colspan="10">
 	      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

@@ -294,7 +294,10 @@ $dPconfig["dPfiles"] = array (
   "nb_upload_files" => "1",
   "upload_max_filesize" => "2M",
   "system_sender" => "",
-  "rooturl" => ""
+  "rooturl" => "",
+  "CFilesCategory" => array(
+    "show_empty" => "1",
+  ),
 );
 
 $dPconfig["dPpatients"] = array (
@@ -337,9 +340,11 @@ $dPconfig["dPlabo"] = array (
     "remote_name" => "LABO",
     "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
   ),
+  
   "CPackExamensLabo" => array (
     "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/pack.xml",
-  ),
+  )
+  ,
   "CPrescriptionLabo" => array (
     "url_ftp_prescription" => "",
     "url_ws_id_prescription" => "",
@@ -353,15 +358,19 @@ $dPconfig["dPmedicament"] = array (
   "CBcbObject" =>  array (
     "dsn" => "bcb",
   ),
+  
   "CBcbProduit" => array (
     "use_cache" => "0",
   ),
+  
   "CBcbClasseATC" => array (
     "niveauATC" => "2",
   ),
+  
   "CBcbClasseTherapeutique" => array (
     "niveauBCB" => "2",
   ),
+  
   "CBcbProduitLivretTherapeutique" => array(
     "product_category_id" => "",
   ),
@@ -404,6 +413,7 @@ $dPconfig["dPprescription"] = array (
       "hors_livret" => "1"
     ),
   ),
+  
   "CCategoryPrescription" => array (
     "dmi" => array(
       "phrase" => "Bon pour",
@@ -438,9 +448,11 @@ $dPconfig["dPprescription"] = array (
       "unite_prise" => "dispositif(s)"
     )
   ),
+  
   "CMomentUnitaire" => array(
     "principaux" => "0"
   ),
+    
   "CPrisePosologie" => array(
     "select_poso_bcb" => "1",
     "show_poso_bcb" => "0",
@@ -474,6 +486,7 @@ $dPconfig["dPprescription"] = array (
       "4" => "lundi|mercredi|vendredi|samedi"
     )
   ),
+  
   "CAdministration" => array(
     "hors_plage" => "0"
   )

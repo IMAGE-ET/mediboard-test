@@ -5,14 +5,14 @@
 
 <table class="form">
 
-  <!-- CCatalogueLabo -->  
-  {{assign var="class" value="CCatalogueLabo"}}
+  <!-- CFile -->  
+  {{assign var=class value=CFile}}
   <tr>
-    <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>
-    {{assign var="var" value="nb_upload_files"}}
+    {{assign var=var value=nb_upload_files}}
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
@@ -26,7 +26,7 @@
   </tr>  
     
   <tr>
-    {{assign var="var" value="upload_max_filesize"}}
+    {{assign var=var value=upload_max_filesize}}
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
@@ -34,9 +34,22 @@
     </th>
     <td><input type="text" class="str maxLength|4" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/></td>
   </tr>  
- <tr>
-    <th class="category" colspan="2">Choix du service d'envoi des fichiers</th>
+
+  <!-- CFileCategory -->  
+  {{assign var=class value=CFilesCategory}}
+  <tr>
+    <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=show_empty}}
+
+  <!-- CDocumentSender -->  
+  {{assign var=class value=CDocumentSender}}
+
+	<tr>
+    <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}}</th>
+  </tr>
+  
   <tr>
     {{assign var="var" value="system_sender"}}
     <th>
@@ -52,6 +65,7 @@
       </select>
     </td>
   </tr>  
+
   {{assign var="var" value="rooturl"}}
    <tr>
      <th>
@@ -63,10 +77,12 @@
        <input class="str" size="30" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
      </td>
    </tr>
+   
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
   </tr>
+
 </table>
 </form>
