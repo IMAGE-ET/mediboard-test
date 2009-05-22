@@ -258,18 +258,20 @@ a.button {
   font-size: 11px;
   background-color: #ddd;
   font-family: tahoma;
-  margin: 0 2px;
+  margin: 0px 2px;
   padding: 0px 2px;
   background-repeat: no-repeat;
   background-position: center left;
   height: 18px;
   white-space: nowrap;
   vertical-align: text-bottom;
+  cursor: pointer;
 }
 
 button:hover, 
 a.button:hover {
   background-color: #bbb;
+  outline: 1px solid #666;
 }
 
 a.selected{
@@ -284,7 +286,6 @@ a.selectable:hover{
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
   padding-bottom: 8px;		
 }	
-
 
 a.sortable{
   background: url(../../images/icons/a_sortable.png) no-repeat bottom center;
@@ -315,7 +316,6 @@ a.DESC:hover{
   padding-bottom: 8px;
 }
 
-
 button.edit, a.button.edit {
   background-image: url(images/buttons/edit.png);
   padding-left: 18px;
@@ -328,6 +328,7 @@ button.hslip, a.button.hslip {
 
 button.trash, a.button.trash {
   background-image: url(images/buttons/trash.png);
+  outline-color: #f66;
   padding-left: 18px; 
 }
 
