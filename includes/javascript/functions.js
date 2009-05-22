@@ -53,14 +53,6 @@ var Main = {
   }
 };
 
-/** To prevent flickering, the body is hidden 
- * and showed only after every Main.add is finished.
- * Doing so, the page is also displayed faster */
-/*function showBody() {
-  $('body').show();
-}
-Main.add(function() { showBody.defer(); });*/
-
 /**
  * References manipulation
  */
@@ -127,7 +119,7 @@ var WaitingMessage = {
   cover: function(element) {    
     element = $(element);
     
-    var eDiv = new Element("div", {className: 'ajax-loading'}).hide(),
+    var eDiv = new Element("div").addClassName('ajax-loading').hide(),
 		    descendant = $(element).down();
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
@@ -147,8 +139,7 @@ var WaitingMessage = {
 
 function createDocument(oSelect, consultation_id) {
   if (modele_id = oSelect.value) {
-    var url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("modele_id", modele_id);
     url.addParam("object_id", consultation_id);
     url.popup(700, 700, "Document");
@@ -809,57 +800,41 @@ var Duration = {
   year: 365 * 24 * 60 * 60 * 1000
 }
 
-Object.extend(Date, { 
+Object.extend(Date, {
+  isDATE: function(sDate) {
+    return sDate.match(/^\d{4}-\d{2}-\d{2}$/);
+  },
   isDATETIME: function(sDateTime) {
-    return sDateTime.match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/);
+    return sDateTime.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
   },
   
+  // sDate must be: YYYY-MM-DD
   fromDATE: function(sDate) {
-    // sDate must be: YYYY-MM-DD
-    var aParts = sDate.split("-");
-    Assert.that(aParts.length == 3, "'%s' is not a valid DATE", sDate);
-  
-    var year  = parseInt(aParts[0], 10);
-    var month = parseInt(aParts[1], 10);
-    var day   = parseInt(aParts[2], 10);
-    
-    return new Date(year, month - 1, day); // Js months are 0-11!!
+    var match, re = /^(\d{4})-(\d{2})-(\d{2})$/;
+    if (!(match = re.exec(sDate)))
+      Assert.that(match, "'%s' is not a valid DATE", sDate);
+
+    return new Date(match[1], match[2] - 1, match[3]); // Js months are 0-11!!
   },
 
+  // sDateTime must be: YYYY-MM-DD HH:MM:SS
   fromDATETIME : function(sDateTime) {
-    // sDateTime must be: YYYY-MM-DD HH:MM:SS
-    var aHalves = sDateTime.split(" ");
-    Assert.that(aHalves.length == 2, "'%s' is not a valid DATETIME", sDateTime);
-  
-    var sDate = aHalves[0];
-    var date = Date.fromDATE(sDate);
-  
-    var sTime = aHalves[1];
-    var aParts = sTime.split(":");
-    Assert.that(aParts.length == 3, "'%s' is not a valid TIME", sTime);
-  
-    date.setHours  (parseInt(aParts[0], 10));
-    date.setMinutes(parseInt(aParts[1], 10));
-    date.setSeconds(parseInt(aParts[2], 10));
-    
-    return date;
+    var match, re = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+    if (!(match = re.exec(sDateTime)))
+      Assert.that(match, "'%s' is not a valid DATETIME", sDateTime);
+
+    return new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6]); // Js months are 0-11!!
   },
 
   fromLocaleDate : function(sDate) {
-    // sDate must be: dd/mm/yyyy
-    var aParts = sDate.split("/");
-    Assert.that(aParts.length == 3, "'%s' is not a valid display date", sDate);
-  
-    var year  = parseInt(aParts[2], 10);
-    var month = parseInt(aParts[1], 10);
-    var day   = parseInt(aParts[0], 10);
-    
-    return new Date(year, month - 1, day); // Js months are 0-11!!
+    var match, re = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+    if (!(match = re.exec(sDate)))
+      Assert.that(match, "'%s' is not a valid display date", sDate);
+
+    return new Date(match[3], match[2] - 1, match[1]); // Js months are 0-11!!
   },
 
   fromLocaleDateTime : null
-  
-  
 } );
 
 Class.extend(Date, {
@@ -974,8 +949,7 @@ var TokenField = Class.create({
 });
 
 function view_log(classe, id) {
-  url = new Url();
-  url.setModuleAction("system", "view_history");
+  url = new Url("system", "view_history");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.addParam("user_id", "");
@@ -989,8 +963,7 @@ function guid_log(guid) {
 }
 
 function view_idsante400(classe, id) {
-  url = new Url();
-  url.setModuleAction("dPsante400", "view_identifiants");
+  url = new Url("dPsante400", "view_identifiants");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.popup(750, 400, "sante400");
@@ -1002,8 +975,7 @@ function guid_ids(guid) {
 }
 
 function uploadFile(classe, id, categorie_id, file_rename){
-  url = new Url();
-  url.setModuleAction("dPfiles", "upload_file");
+  url = new Url("dPfiles", "upload_file");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.addParam("file_category_id", categorie_id);
@@ -1013,8 +985,7 @@ function uploadFile(classe, id, categorie_id, file_rename){
 
 var Note = Class.create({
   initialize: function() {
-    this.url = new Url();
-    this.url.setModuleAction("system", "edit_note");
+    this.url = new Url("system", "edit_note");
   },
   create: function (classe, object_id) {
     this.url.addParam("object_class", classe);
@@ -1147,7 +1118,6 @@ function luhn (code) {
   for (var i = code_length - 1; i >= 0; i--) {
     var digit = code.charAt(i);
     
-    
     if (i % 2 == parity) {
       digit *= 2;
       
@@ -1264,38 +1234,41 @@ locales = {};
 var $T = l10n.tr;
 
 // Replacements for the javascript alert() and confirm()
+var Modal = {
+  alert: function(message, options) {
+    options = Object.extend({
+      className: 'modal alert big-warning',
+      okLabel: 'OK',
+      onValidate: Prototype.emptyFunction,
+      closeOnClick: null
+    }, options || {});
+    
+    var html = '<div style="min-height: 3em;"></div><div style="text-align: center; margin-left: -3em;"><button class="tick" type="button">'+options.okLabel+'</button></div>';
+    var m = Control.Modal.open(html, options);
+    m.container.select('div').first().update(message);
+    m.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate();}).bind(m));
+  },
+  
+  confirm: function(message, options) {
+    options = Object.extend({
+      className: 'modal confirm big-info',
+      yesLabel: 'Oui',
+      noLabel: 'Non',
+      onValidate: Prototype.emptyFunction,
+      closeOnClick: null
+    }, options || {});
+    
+    var html = '<div style="min-height: 3em;"></div><div style="text-align: center; margin-left: -3em;">'+
+      '<button class="tick" type="button">'+options.yesLabel+'</button>'+
+      '<button class="cancel" type="button">'+options.noLabel+'</button>'+
+    '</div>';
+    var m = Control.Modal.open(html, options);
+    m.container.select('div').first().update(message);
+    m.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate(true);}).bind(m));
+    m.container.select('button.cancel').first().observe('click', (function(){this.close(); options.onValidate(false);}).bind(m));
+  }
+};
 /*
-window.alert = function(message, options) {
-  options = Object.extend({
-    className: 'modal alert big-warning',
-    okLabel: 'OK',
-    onValidate: Prototype.emptyFunction,
-    closeOnClick: null
-  }, options || {});
-  
-  var html = '<div style="min-height: 3em;">'+message+'</div><div style="text-align: center; margin-left: -3em;"><button class="tick" type="button">'+options.okLabel+'</button></div>';
-  var modal = Control.Modal.open(html, options);
-  modal.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate();}).bind(modal));
-}
-
-window.confirm = function(message, options) {
-  options = Object.extend({
-    className: 'modal confirm big-info',
-    yesLabel: 'Oui',
-    noLabel: 'Non',
-    onValidate: Prototype.emptyFunction,
-    closeOnClick: null
-  }, options || {});
-  
-  var html = '<div style="min-height: 3em;">'+message+'</div><div style="text-align: center; margin-left: -3em;">'+
-    '<button class="tick" type="button">'+options.yesLabel+'</button>'+
-    '<button class="cancel" type="button">'+options.noLabel+'</button>'+
-  '</div>';
-  var modal = Control.Modal.open(html, options);
-  modal.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate(true);}).bind(modal));
-  modal.container.select('button.cancel').first().observe('click', (function(){this.close(); options.onValidate(false);}).bind(modal));
-}
-
 window.open = function(element, title, options) {
   options = Object.extend({
     className: 'modal popup',
@@ -1306,8 +1279,8 @@ window.open = function(element, title, options) {
   
   Control.Modal.open(element, options);
   return false;
-}
-*/
+}*/
+
 
 window.modal = function(container, options) {
   options = Object.extend({

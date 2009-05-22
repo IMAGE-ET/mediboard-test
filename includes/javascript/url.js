@@ -292,8 +292,7 @@ var Url = Class.create({
  *  @return {Boolean} true if user is connected, false otherwise
  */
 Url.ping = function(options) {
-  var url = new Url;
-  url.setModuleAction("system", "ajax_ping");
+  var url = new Url("system", "ajax_ping");
   url.addParam("suppressHeaders", "1");
   url.addParam("ajax", "1");
   url.requestUpdate("systemMsg", options);
@@ -320,7 +319,6 @@ Url.parse = function(url) {
 
 
 function popChgPwd() {
-  var url = new Url;
-  url.setModuleAction("admin", "chpwd");
+  var url = new Url("admin", "chpwd");
   url.popup(400, 300, "ChangePassword");
 }

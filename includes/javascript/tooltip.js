@@ -90,8 +90,7 @@ var ObjectTooltip = Class.create({
   load: function() {
     var eTarget = $(this.sTarget);
     if (this.oOptions.mode != 'dom') {
-      var url = new Url;
-      url.setModuleAction(this.mode.module, this.mode.action);
+      var url = new Url(this.mode.module, this.mode.action);
       $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
       
       if(!this.oOptions.popup) {
@@ -224,8 +223,7 @@ function initNotes(){
   $$("div.noteDiv").each(function(pair) {
     var aInfos = pair.className.split(" ")[1].split("-");
 
-    url = new Url;
-    url.setModuleAction("system", "httpreq_get_notes_image");
+    url = new Url("system", "httpreq_get_notes_image");
     url.addParam("object_class" , aInfos[0]);
     url.addParam("object_id"    , aInfos[1]);
     url.requestUpdate(pair, { waitingText : null });
@@ -237,8 +235,7 @@ function initSante400(){
   $$("div.idsante400").each(function(element) {
     var aInfos = element.id.split("-");
   
-    url = new Url;
-    url.setModuleAction("system", "httpreq_vw_object_idsante400");
+    url = new Url("system", "httpreq_vw_object_idsante400");
     url.addParam("object_class" , aInfos[0]);
     url.addParam("object_id"    , aInfos[1]);
     url.requestUpdate(element, { waitingText : null });

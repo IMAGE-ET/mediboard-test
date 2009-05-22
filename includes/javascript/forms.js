@@ -9,14 +9,13 @@
  */
 
 function addHelp(sClass, oField, sName, sDepend1, sDepend2) {
-  url = new Url;
   if(!sDepend1) {
     sDepend1 = null;
   }
   if(!sDepend2) {
     sDepend2 = null;
   }
-  url.setModuleAction("dPcompteRendu", "edit_aide");
+  url = new Url("dPcompteRendu", "edit_aide");
   url.addParam("class"       , sClass);
   url.addParam("field"       , sName || oField.name);
   url.addParam("text"        , oField.value);
@@ -201,7 +200,7 @@ function putHelperContent(oElem, sFieldSelect) {
     	sHelperDependsOn = "";
     }
     
-    $(element)[sHelperDependsOn == sDependsOn ? "show" : "hide"]();
+    $(element).setVisible(sHelperDependsOn == sDependsOn);
   }
 }
 

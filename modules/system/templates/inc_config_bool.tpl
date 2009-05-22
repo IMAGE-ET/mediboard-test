@@ -1,9 +1,9 @@
-{{* $Id: inc_config_date_format.tpl 6069 2009-04-14 10:17:11Z phenxdesign $ *}}
+{{* $Id$ *}}
 
 {{*
  * @package Mediboard
  * @subpackage system
- * @version $Revision: 6069 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
