@@ -73,17 +73,6 @@
 </form>
 
 {{if $object->_ref_documents|@count && $mode != "hide"}}
-<script type="text/javascript">
-onSubmitSendAjax = function(button) {
-	$V(button.form._send, true);
-	return onSubmitFormAjax(button.form, { 
-		onComplete : function () { 
-			Document.refreshList('{{$object_class}}','{{$object_id}}'); 
-		} 
-	} );  	  
-}
-</script>
-
 <table class="tbl">
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="3">
@@ -136,25 +125,10 @@ onSubmitSendAjax = function(button) {
 			   <input type="hidden" name="del" value="0" />
          
          <!-- Send File -->
-         
-          {{if $document->_is_sendable}}
-            <input type="hidden" name="_send" value="false" />
-            {{if $dPconfig.dPfiles.system_sender}}
-              {{if $document->etat_envoi == "oui"}}
-                <button class="send-cancel notext" type="button" onclick="onSubmitSendAjax(this)">
-                  {{tr}}Send File{{/tr}}
-                </button>
-              {{elseif $document->etat_envoi == "obsolete"}}
-                <button class="send-again notext" type="button" onclick="onSubmitSendAjax(this)">
-                  {{tr}}Send File{{/tr}}
-                </button>
-              {{else}}
-                <button class="send notext" type="button" onclick="onSubmitSendAjax(this)">
-                   {{tr}}Send File{{/tr}}
-                 </button>
-              {{/if}}
-            {{/if}}
-          {{/if}}
+				 {{mb_include module=dPfiles template=inc_file_send_button 
+				 		_doc_item=$document
+				 		onComplete="Document.refreshList('$object_class','$object_id')"
+				 }}
         </form>
   	  </td> 
 		</tr>

@@ -83,8 +83,8 @@ function popEtatSejour(sejour_id) {
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
 
+<!--  onmouseover="ObjectTooltip.createEx(this,'{{$curr_sejour->_guid}}');"  -->
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.createEx(this,'{{$curr_sejour->_guid}}');"
       onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}}); ViewFullPatient.select(this)">
       Du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
       au {{$curr_sejour->_sortie|date_format:$dPconfig.date}}
@@ -219,8 +219,8 @@ function popEtatSejour(sejour_id) {
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
   
+<!--  onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')" -->
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
       onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
       Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
     </span>
@@ -273,8 +273,8 @@ function popEtatSejour(sejour_id) {
     </a>
 
     <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
+<!--  onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')" -->
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
       onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </span>
@@ -342,8 +342,8 @@ function popEtatSejour(sejour_id) {
       {{assign var=object value=$curr_consult}}
     {{/if}}
     
+<!--  onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')" -->
     <span class="tooltip-trigger"
-      onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')"
       onclick="viewCompleteItem('{{$object->_class_name}}', {{$object->_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </span>

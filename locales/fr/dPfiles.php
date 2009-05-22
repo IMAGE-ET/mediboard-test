@@ -129,4 +129,6 @@ $locales['CFilesCategory-back-categorized_files'] = 'Fichiers';
 $locales['CMediusers-back-owned_files'] = 'FIchiers ajoutés';
 $locales['config-dPfiles-CFilesCategory-show_empty'] = 'Afficher les catégories vides';
 $locales['config-dPfiles-CFilesCategory-show_empty-desc'] = 'Afficher les catégories qui ne contiennent ni document ni fichers joints';
+$locales['CDocumentSender-confirm_auto'] = 'Les fichiers de cette catégories sont envoyés automatiquement sans votre intervention. Si toutefois vous désirez l\'envoyer instamment, merci de le confirmer.';
+$locales['CDocumentSender-alert_problem'] = 'L\'envoi de ce fichier n\'est pas possible pour le raison suivante : \\n\\t-';
 ?>

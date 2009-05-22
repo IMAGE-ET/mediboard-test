@@ -44,8 +44,8 @@ class CFilesCategory extends CMbObject {
   }
   
   function countDocItems() {
-    $this->_count_documents = $this->countBackRefs("documents");
-    $this->_count_files     = $this->countBackRefs("files"    );
+    $this->_count_documents = $this->countBackRefs("categorized_documents");
+    $this->_count_files     = $this->countBackRefs("categorized_files"    );
     
     $this->_count_doc_items = $this->_count_documents + $this->_count_files;
   }

@@ -24,24 +24,13 @@
 	   <input type="hidden" name="del" value="0" />
 	   
 	   <!-- Send File -->
-		  {{if $curr_file->_is_sendable}}
-		    <input type="hidden" name="_send" value="false" />
-		    {{if $dPconfig.dPfiles.system_sender}}
-		      {{if $curr_file->etat_envoi == "oui"}}
-		        <button class="send-cancel notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
-		          {{tr}}Send{{/tr}}
-		        </button>
-		      {{elseif $curr_file->etat_envoi == "obsolete"}}  
-		        <button class="send-again notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
-		          {{tr}}Send{{/tr}}
-		        </button>
-		      {{else}}
-		        <button class="send notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
-		           {{tr}}Send{{/tr}}
-		         </button>
-		      {{/if}}
-		    {{/if}}
-		  {{/if}}
+	   {{assign var=object_class value=$object->_class_name}}
+	   {{assign var=object_id    value=$object->_id        }}
+		 {{mb_include module=dPfiles template=inc_file_send_button 
+		 		_doc_item=$curr_file
+		 		onComplete="File.refresh('$object_id','$object_class')"
+		 }}
+	   
     </form>
     <a href="#" onclick="File.popup('{{$object->_class_name}}','{{$object->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}');">{{$curr_file->file_name}}</a>
     <small>({{$curr_file->_file_size}})</small>

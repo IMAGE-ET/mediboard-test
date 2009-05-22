@@ -12,8 +12,8 @@ class CEcDocumentSender extends CDocumentSender {
 	  "CPatient"       => array ("PA"),
 	  "CSejour"        => array ("SJ", "AT"),
 	  "COperation"     => array ("IN"),
-//	  "CConsultation"  => array ("PA"),
-//	  "CConsultAnesth" => array ("PA"),
+	  "CConsultation"  => array ("PA"),
+	  "CConsultAnesth" => array ("PA"),
   );
 
   var $clientSOAP = null;
@@ -96,6 +96,12 @@ class CEcDocumentSender extends CDocumentSender {
    	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
    	  return $ident->id400;
    	}
+
+   	if ($object instanceof CConsultation) {
+      $object->loadRefPatient();
+   	  $ident->loadLatestFor($object->_ref_patient, CMedicap::getTag($ecType));
+   	  return $ident->id400;
+   	}
   }
     
   /**
@@ -153,8 +159,8 @@ class CEcDocumentSender extends CDocumentSender {
     $params["aIdTypeDocument" ] = $ecTypeDocument;
     $params["aCommentaire"    ] = "Commentaire pas si facultatif ?";
     $params["aIdObjet"        ] = $ecObject;
-    $params["aLibelleDocument"] = $docItem->_extensioned;
-    $params["aNomFichier"     ] = $docItem->_extensioned;
+    $params["aLibelleDocument"] = utf8_encode($docItem->_extensioned);
+    $params["aNomFichier"     ] = utf8_encode($docItem->_extensioned);
     $params["aFichierByte"    ] = $docItem->getContent();
     
     // Appel SOAP

@@ -107,6 +107,10 @@ class CFile extends CDocumentItem {
   }
   
   function delete() {
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+
     // Actually remove the file
     @unlink($this->_file_path);
 
@@ -115,14 +119,6 @@ class CFile extends CDocumentItem {
     if (!$this->_spec->ds->exec($sql)) {
       return $this->_spec->ds->error();
     }
-    
-    // Delete the main table reference
-    $sql = "DELETE FROM files_mediboard WHERE file_id = $this->file_id";
-    
-    if (!$this->_spec->ds->exec($sql)) {
-      return $this->_spec->ds->error();
-    }
-    return null;
   }
 
   /**
