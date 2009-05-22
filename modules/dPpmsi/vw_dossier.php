@@ -71,7 +71,7 @@ if ($patient->patient_id) {
     foreach ($sejour->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
       
-      $operation->getNumDocsAndFiles();
+      $operation->countDocItems();
       $operation->loadRefsActesCCAM();
       $operation->canRead();
       $operation->canEdit();

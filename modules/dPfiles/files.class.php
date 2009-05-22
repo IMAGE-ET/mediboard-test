@@ -317,7 +317,7 @@ class CFile extends CDocumentItem {
     }
   }
   
-  static function loadFilesAndDocsByObject($object) {
+  static function loadDocItemsByObject($object) {
     $listCategory = CFilesCategory::listCatClass($object->_class_name);
     
     if(!$object->_ref_files){
@@ -331,37 +331,35 @@ class CFile extends CDocumentItem {
     $affichageFile = array();
     $affichageFile[0] = array();
     $affichageFile[0]["name"] = "Aucune Catégorie";
-    $affichageFile[0]["DocsAndFiles"] = array();
+    $affichageFile[0]["items"] = array();
     foreach($listCategory as $keyCat => $curr_Cat){
       $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
-      $affichageFile[$keyCat]["DocsAndFiles"] = array();
+      $affichageFile[$keyCat]["items"] = array();
     }
     
     //Ajout des fichiers dans le tableau
-    foreach($object->_ref_files as $keyFile=>$FileData) {
-      $object->_ref_files[$keyFile]->canRead();
-      if($object->_ref_files[$keyFile]->_canRead) {
-      	$id = $FileData->file_category_id ? $FileData->file_category_id : 0;
-        $affichageFile[$id]["DocsAndFiles"][$FileData->file_name."_CFile_".$FileData->file_id] =& $object->_ref_files[$keyFile];
-        if (!isset($affichageFile[$id]["name"]))
-          $affichageFile[$id]["name"] = '';
+    foreach ($object->_ref_files as &$_file) {
+      if ($_file->canRead()) {
+      	$cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
+        $affichageFile[$cat_id]["items"]["$_file->file_name-$_file->_guid"] =& $_file;
+        if (!isset($affichageFile[$cat_id]["name"]))
+          $affichageFile[$cat_id]["name"] = '';
       }
     }
     
     //Ajout des document dans le tableau
-    foreach($object->_ref_documents as $keyDoc=>$DocData) {
-      $object->_ref_documents[$keyDoc]->canRead();
-      if($object->_ref_documents[$keyDoc]->_canRead) {
-      	$id = $DocData->file_category_id ? $DocData->file_category_id : 0;
-        $affichageFile[$id]["DocsAndFiles"][$DocData->nom."_CCompteRendu_".$DocData->compte_rendu_id] =& $object->_ref_documents[$keyDoc];
-        if (!isset($affichageFile[$id]["name"]))
-          $affichageFile[$id]["name"] = '';
+    foreach($object->_ref_documents as &$_doc) {
+      if ($_doc->canRead()) {
+      	$cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
+        $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
+        if (!isset($affichageFile[$cat_id]["name"]))
+          $affichageFile[$cat_id]["name"] = '';
       }
     }
     
     // Classement des Fichiers et des document par Ordre alphabétique
     foreach($affichageFile as $keyFile => $currFile){
-      ksort($affichageFile[$keyFile]["DocsAndFiles"]);
+      ksort($affichageFile[$keyFile]["items"]);
     }
 
     return $affichageFile;

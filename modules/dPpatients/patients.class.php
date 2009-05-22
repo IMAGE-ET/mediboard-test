@@ -915,7 +915,7 @@ class CPatient extends CMbObject {
     
     $this->canRead();
     $this->canEdit();
-    $this->getNumDocsAndFiles($permType);
+    $this->countDocItems($permType);
     $this->loadRefPhotoIdentite();
     
     // Affectations courantes
@@ -943,7 +943,7 @@ class CPatient extends CMbObject {
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
       $consult->loadExamsComp();
-      $consult->getNumDocsAndFiles($permType);
+      $consult->countDocItems($permType);
       
       $consult->loadRefsFwd(1);
       $consult->canRead();
@@ -956,22 +956,22 @@ class CPatient extends CMbObject {
       $sejour->loadNumDossier();
       $sejour->loadRefsAffectations();
       $sejour->loadRefsOperations();
-      $sejour->getNumDocsAndFiles($permType);
+      $sejour->countDocItems($permType);
       
       $sejour->loadRefsFwd(1);
       $sejour->canRead();
       $sejour->canEdit();
-      $sejour->getNumDocsAndFiles($permType);
+      $sejour->countDocItems($permType);
       foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd(1);
-        $operation->getNumDocsAndFiles($permType);
+        $operation->countDocItems($permType);
         $operation->canRead();
         $operation->canEdit();
       }
       $sejour->loadRefRPU();
       if($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
-        $sejour->_ref_rpu->getNumDocsAndFiles($permType);
+        $sejour->_ref_rpu->countDocItems($permType);
       }
     }
   }

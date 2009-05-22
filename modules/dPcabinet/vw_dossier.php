@@ -45,7 +45,7 @@ if ($pat_id) {
           //$patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
           $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefPlageOp();
           $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefChir();
-          $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->getNumDocsAndFiles();
+          $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->countDocItems();
         }
       }
     }

@@ -17,6 +17,6 @@ abstract class CDocumentSender {
   
   function resend(CDocumentItem $docItem) {}
   
-  function isSendable(CDocumentItem $docItem) {}
+  function getSendProblem(CDocumentItem $docItem) {}
 }
 ?>

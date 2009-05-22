@@ -182,7 +182,7 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function checkStatus() {
-    $numFiles = $this->getNumFiles();
+    $numFiles = $this->countFiles();
     
     // Vérification de l'état validée
     if($this->validee) {

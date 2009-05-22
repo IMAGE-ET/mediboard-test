@@ -611,7 +611,7 @@ class COperation extends CCodable {
   function loadRefsFwd($cache = 0) {
     $this->loadRefsConsultAnesth();
     $this->_ref_consult_anesth->loadRefConsultation();
-    $this->_ref_consult_anesth->_ref_consultation->getNumDocsAndFiles();
+    $this->_ref_consult_anesth->_ref_consultation->countDocItems();
     $this->_ref_consult_anesth->_ref_consultation->canRead();
     $this->_ref_consult_anesth->_ref_consultation->canEdit();
     $this->loadRefChir($cache);

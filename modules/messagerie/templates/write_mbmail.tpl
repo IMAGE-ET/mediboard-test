@@ -112,7 +112,7 @@
 	{{if !$mbmail->date_sent}}
 	<tr>
 	  <td colspan="2" style="text-align: center;">
-	    <button type="submit" class="sendfile" onclick="$V(this.form.date_sent, 'now');">{{tr}}Send{{/tr}}</button>
+	    <button type="submit" class="send" onclick="$V(this.form.date_sent, 'now');">{{tr}}Send{{/tr}}</button>
 	    <button type="submit" class="submit">{{tr}}Save{{/tr}} {{tr}}Draft{{/tr}}</button>
 	  </td>
 	</tr>

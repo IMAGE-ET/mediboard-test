@@ -16,6 +16,7 @@
       {{mb_field object=$curr_file field="file_id" hidden=1 prop=""}}
       {{mb_field object=$curr_file field="_view" hidden=1 prop=""}}
     </form>
+    
     <form name="editFile{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 	   <input type="hidden" name="m" value="dPfiles" />
 	   <input type="hidden" name="dosql" value="do_file_aed" />
@@ -25,18 +26,18 @@
 	   <!-- Send File -->
 		  {{if $curr_file->_is_sendable}}
 		    <input type="hidden" name="_send" value="false" />
-		    {{if $dPconfig.dPfiles.system_sender != "null"}}
+		    {{if $dPconfig.dPfiles.system_sender}}
 		      {{if $curr_file->etat_envoi == "oui"}}
-		        <button class="invalidefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
-		          {{tr}}Send File{{/tr}}
+		        <button class="send-cancel notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
+		          {{tr}}Send{{/tr}}
 		        </button>
 		      {{elseif $curr_file->etat_envoi == "obsolete"}}  
-		        <button class="obsoletefile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
-		          {{tr}}Send File{{/tr}}
+		        <button class="send-again notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
+		          {{tr}}Send{{/tr}}
 		        </button>
 		      {{else}}
-		        <button class="sendfile notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
-		           {{tr}}Send File{{/tr}}
+		        <button class="send notext" type="button" onclick="$V(this.form._send, true);submitFormAjax(this.form, 'systemMsg', { onComplete : function () { File.refresh('{{$object->_id}}','{{$object->_class_name}}'); } });">
+		           {{tr}}Send{{/tr}}
 		         </button>
 		      {{/if}}
 		    {{/if}}

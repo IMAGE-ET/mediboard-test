@@ -73,7 +73,7 @@ if($selClass && $selKey){
   }
   /////
   
-  $affichageFile = CFile::loadFilesAndDocsByObject($object);
+  $affichageFile = CFile::loadDocItemsByObject($object);
   
   $smarty->assign("affichageFile",$affichageFile);
 }

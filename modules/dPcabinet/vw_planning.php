@@ -76,7 +76,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   }
   $consultation->loadRefPatient(1);
   $consultation->loadRefCategorie(1);
-  $consultation->getNumDocsAndFiles();    
+  $consultation->countDocItems();    
 }
 
 if ($plageSel->chir_id != $chirSel) {

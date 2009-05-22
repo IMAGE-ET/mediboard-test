@@ -81,7 +81,7 @@ foreach ($listPlage as &$plage) {
   foreach ($plage->_ref_consultations as &$consultation) {
     $consultation->loadRefPatient(1);
     $consultation->loadRefCategorie(1);
-    $consultation->getNumDocsAndFiles();
+    $consultation->countDocItems();
   }
 }
 

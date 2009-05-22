@@ -12,8 +12,8 @@ class CEcDocumentSender extends CDocumentSender {
 	  "CPatient"       => array ("PA"),
 	  "CSejour"        => array ("SJ", "AT"),
 	  "COperation"     => array ("IN"),
-	  "CConsultation"  => array ("PA"),
-	  "CConsultAnesth" => array ("PA"),
+//	  "CConsultation"  => array ("PA"),
+//	  "CConsultAnesth" => array ("PA"),
   );
 
   var $clientSOAP = null;
@@ -81,13 +81,18 @@ class CEcDocumentSender extends CDocumentSender {
     }
     
     $ident = new CIdSante400();
-    if ($object instanceof CSejour) {
+    
+    if ($object instanceof CPatient) {
    	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
    	  return $ident->id400;
    	}
     
-
-    if ($object instanceof CPatient) {
+   	if ($object instanceof CSejour) {
+   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
+   	  return $ident->id400;
+   	}
+    
+   	if ($object instanceof COperation) {
    	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
    	  return $ident->id400;
    	}
@@ -151,8 +156,6 @@ class CEcDocumentSender extends CDocumentSender {
     $params["aLibelleDocument"] = $docItem->_extensioned;
     $params["aNomFichier"     ] = $docItem->_extensioned;
     $params["aFichierByte"    ] = $docItem->getContent();
-    
-    mbDump($params, "Final SOAP params");
     
     // Appel SOAP
 //    $this->sendSOAP("DeposerDocument", $params));
@@ -225,16 +228,19 @@ class CEcDocumentSender extends CDocumentSender {
     return $this->send($docItem);
   }
   
-  function isSendable(CDocumentItem $docItem) {
+  function getSendProblem(CDocumentItem $docItem) {
     $docItem->loadTargetObject();
-    foreach (array_keys(self::$sendables) as $_sendable) {
-      if ($docItem->_ref_object instanceOf $_sendable) {
-        return true;
-      }
+    if (!array_key_exists($docItem->_ref_object->_class_name, self::$sendables)) {
+      return sprintf("Type d'objet '%s' non pris en charge", 
+        CAppUI::tr($docItem->_ref_object->_class_name));
     }
     
-    return false;
-    
+    $docItem->loadRefCategory();
+    $category = $docItem->_ref_category;
+    if (!$category->_id) {
+      return "Pas de categorie";
+    }
+    // FAIRE LA SUITE DES TESTS
   }
 }
 

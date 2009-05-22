@@ -49,7 +49,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
       $nameFile = "file_name";
     }
     
-    if($elementClass == "CCompteRendu") {
+    if ($elementClass == "CCompteRendu") {
       $type = "_ref_documents";
       $nameFile = "nom";
     }
@@ -62,7 +62,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
         $fileSel = $listFile[$elementId];
         $keyTable = $listFile[$elementId]->_spec->key;
         $keyFileSel = $listFile[$elementId]->$nameFile;
-        $keyFileSel .= "_" . $elementClass . "_";
+        $keyFileSel .= "-" . $elementClass . "-";
         $keyFileSel .= $listFile[$elementId]->$keyTable;
         // Récupération de la catégorie
         $catFileSel = new CFilesCategory;
@@ -131,12 +131,12 @@ if($popup==1){
   $fileprev = null;
   $filenext = null;
   if($object){	
-    $affichageFile = CFile::loadFilesAndDocsByObject($object);
+    $affichageFile = CFile::loadDocItemsByObject($object);
     
     // Récupération du fichier/doc préc et suivant
     $aAllFilesDocs = array();
     foreach($affichageFile as $keyCat => $currCat){
-      $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["DocsAndFiles"]);
+      $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["items"]);
     }
         
     $aFilePrevNext = CMbArray::getPrevNextKeys($aAllFilesDocs, $keyFileSel);

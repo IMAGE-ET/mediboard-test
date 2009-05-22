@@ -361,11 +361,17 @@ class CMedinetSender extends CDocumentSender {
     return true;
   }
   
-  function isSendable(CDocumentItem $docItem) {
+  function getSendProblem(CDocumentItem $docItem) {
     $docItem->loadTargetObject();
     
-    return($docItem->_ref_object instanceOf COperation || $docItem->_ref_object instanceOf CSejour 
-            || $docItem->_ref_object instanceOf CConsultation || $docItem->_ref_object instanceOf CConsultAnesth);
+    if ($docItem->_ref_object instanceOf COperation 
+     || $docItem->_ref_object instanceOf CSejour 
+     || $docItem->_ref_object instanceOf CConsultation 
+     || $docItem->_ref_object instanceOf CConsultAnesth)
+     return;
+     
+     return sprintf("Type d'objet '%s' non pris en charge", 
+       CAppUI::tr($docItem->ref_object->_class_name));
   }
   
   function getTransactionId($docItem) {

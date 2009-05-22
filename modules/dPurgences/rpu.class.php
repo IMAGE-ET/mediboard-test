@@ -179,7 +179,7 @@ class CRPU extends CMbObject {
     if ($this->_ref_consult->_id) {
       $this->_ref_consult->loadRefPraticien();      
       $this->_ref_consult->_ref_praticien->loadRefFunction();
-      $this->_ref_consult->getNumDocsAndFiles();
+      $this->_ref_consult->countDocItems();
     }
     
 	  // Calcul des temps d'attente et présence

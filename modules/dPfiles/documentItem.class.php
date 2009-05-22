@@ -20,7 +20,7 @@ class CDocumentItem extends CMbMetaObject {
   var $_extensioned = null;
 
   // Distant field
-  var $_is_sendable = null;
+  var $_send_problem = null;
   
   // Behavior Field
   var $_send = null; 
@@ -64,9 +64,16 @@ class CDocumentItem extends CMbMetaObject {
   
   function updateFormFields() {
   	parent::updateFormFields();
-
+  	$this->getSendProblem();
+  }
+  
+  /**
+   * Retrieve send problem user friendly message
+   * @return string message Store-like problem message
+   */
+  function getSendProblem() {
   	if ($sender = self::getDocumentSender()) {
-   		$this->_is_sendable = $sender->isSendable($this);
+   		$this->_send_problem = $sender->getSendProblem($this);
  		}
   }
   

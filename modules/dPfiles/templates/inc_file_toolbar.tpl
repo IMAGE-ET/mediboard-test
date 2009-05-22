@@ -46,7 +46,19 @@
   </button>
   
   <!-- Send File -->
-  {{if $_doc_item->_is_sendable}}
+  {{if $dPconfig.dPfiles.system_sender}}
+    {{if $_doc_item->_send_problem}}
+	    <button class="send-problem {{$notext}}" type="button" 
+	    	onclick="alert('L\'envoi de ce fichier n\'est pas possible pour le raison suivante : \n\t- ' + '{{$_doc_item->_send_problem|smarty:nodefaults|JSAttribute}}' );">
+	      {{tr}}Send{{/tr}}
+	    </button>
+	    <div class="big-info" id="SendProblem-{{$_doc_item->_guid}}" style="display: none">
+	      L'envoi de ce fichier n'est pas possible pour le raison suivante :
+	      <ul>
+	      	<li>{{$_doc_item->_send_problem}}</li>
+	      </ul>
+	    </div>
+    {{else}}
   	<script type="text/javascript">
   	onSubmitSendAjax = function(button) {
 			$V(button.form._send, true);
@@ -59,21 +71,21 @@
   	</script>
 
     <input type="hidden" name="_send" value="" />
-    {{if $dPconfig.dPfiles.system_sender != "null"}}
-      {{if $_doc_item->etat_envoi == "oui"}}
-        <button class="invalidefile {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
-          {{tr}}Send File{{/tr}}
-        </button>
-      {{elseif $_doc_item->etat_envoi == "obsolete"}}  
-        <button class="obsoletefile {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
-          {{tr}}Send File{{/tr}}
-        </button>
-      {{else}}
-        <button class="sendfile {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
-           {{tr}}Send File{{/tr}}
-        </button>
-      {{/if}}
+    {{if $_doc_item->etat_envoi == "oui"}}
+      <button class="send-cancel {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
+        {{tr}}Send{{/tr}}
+      </button>
+    {{elseif $_doc_item->etat_envoi == "obsolete"}}  
+      <button class="send-again {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
+        {{tr}}Send{{/tr}}
+      </button>
+    {{else}}
+      <button class="send {{$notext}}" type="button" onclick="onSubmitSendAjax(this)">
+         {{tr}}Send{{/tr}}
+      </button>
     {{/if}}
+
+  	{{/if}}
   {{/if}}
   
 	<!-- Move -->

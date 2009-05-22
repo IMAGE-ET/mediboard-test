@@ -36,7 +36,7 @@ if($selClass && $selKey){
   $object = new $selClass;
   $object->load($selKey);
   $canFile = $object->canDo();
-  $affichageFile = CFile::loadFilesAndDocsByObject($object);
+  $affichageFile = CFile::loadDocItemsByObject($object);
 
   $smarty->assign("affichageFile",$affichageFile);
 }

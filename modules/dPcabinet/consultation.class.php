@@ -817,9 +817,9 @@ class CConsultation extends CCodable {
     return $this->_praticien_id;
   }
   
-  function getNumDocsAndFiles($permType = null){
+  function countDocItems($permType = null){
   	if (!$this->_nb_files_docs) {
-      parent::getNumDocsAndFiles($permType);
+      parent::countDocItems($permType);
     }
     
     if ($this->_nb_files_docs) {
@@ -828,7 +828,7 @@ class CConsultation extends CCodable {
     }
   }
   
-  function getNumDocs(){
+  function countDocs(){
   	$this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
       $select = "count(`compte_rendu_id`) AS `total`";  
@@ -842,7 +842,7 @@ class CConsultation extends CCodable {
       $sql->addWhere($where);
       $nbDocs = $this->_spec->ds->loadResult($sql->getRequest());
     }else{
-      $nbDocs = parent::getNumDocs();
+      $nbDocs = parent::countDocs();
     }
     return $nbDocs;
   }
@@ -938,8 +938,8 @@ class CConsultation extends CCodable {
   
   function loadRefsBack() {
     // Backward references
-    $this->loadRefsFilesAndDocs();
-    $this->getNumDocsAndFiles();
+    $this->loadRefsDocItems();
+    $this->countDocItems();
     $this->loadRefConsultAnesth();
     
     $this->loadExamsComp();

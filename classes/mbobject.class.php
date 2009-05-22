@@ -216,28 +216,28 @@ class CMbObject {
    * Load documents and files for object
    * @return int document + files count
    */
-  function loadRefsFilesAndDocs() {
+  function loadRefsDocItems() {
   	$nb_files = $this->loadRefsFiles();
     $nb_docs  = $this->loadRefsDocs();
     $this->_nb_files_docs = $nb_docs + $nb_files;
   }
   
-  function getNumDocs() {
+  function countDocs() {
     return $this->countBackRefs("documents");
   }
   
-  function getNumFiles(){
+  function countFiles(){
     return $this->countBackRefs("files");
   }
   
-  function getNumDocsAndFiles($permType = null) {
+  function countDocItems($permType = null) {
     $this->_nb_files_docs = $permType ? 
-      $this->getNumDocsAndFilesWithPerm($permType) : 
-      $this->getNumFiles() + $this->getNumDocs();
+      $this->countDocItemsWithPerm($permType) : 
+      $this->countFiles() + $this->countDocs();
     return $this->_nb_files_docs;
   }
   
-  function getNumDocsAndFilesWithPerm($permType = PERM_READ){
+  function countDocItemsWithPerm($permType = PERM_READ){
     $this->loadRefsFiles();
     if ($this->_ref_files) {
       foreach ($this->_ref_files as $file_id => &$file){
@@ -1191,7 +1191,8 @@ class CMbObject {
     $spec = $this->_specs[$field];
     if ($spec instanceof CRefSpec) {
 	    $this->_fwd[$field] = new $spec->class;
-	    return $this->_fwd[$field]->load($this->$field);
+	    $this->_fwd[$field]->load($this->$field);
+	    return $this->_fwd[$field];
     }
   }
     

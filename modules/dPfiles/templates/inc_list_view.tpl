@@ -11,40 +11,50 @@ Main.add(function () {
 </script>
 
 <ul id="tab-{{if $accordDossier}}{{$selClass}}{{$selKey}}{{else}}consult{{/if}}" class="control_tabs">
-{{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-  <li><a href="#Category-{{$keyCat}}">{{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})</a></li>
+{{foreach from=$affichageFile item=_cat key=_cat_id}}
+  <li>
+    {{assign var=docCount value=$_cat.items|@count}}
+    {{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+  	<a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}}>
+  		{{$_cat.name}} 
+  		<small>({{$docCount}})</small>
+  	</a>
+		{{/if}}
+  </li>
 {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 
-{{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-<table class="tbl" id="Category-{{$keyCat}}" style="display: none;">
+{{foreach from=$affichageFile item=_cat key=_cat_id}}
+{{assign var=docCount value=$_cat.items|@count}}
+{{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+<table class="tbl" id="Category-{{$_cat_id}}" style="display: none;">
   {{if $canFile->edit && !$accordDossier}}
   <tr>
     <td colspan="2" class="text">
-      <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
+      <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$_cat_id}}')">
         Ajouter un fichier
       </button>
     </td>
   </tr>
   {{/if}}
-  {{foreach from=$curr_listCat.DocsAndFiles item=curr_file}}
+  {{foreach from=$_cat.items item=_doc_item}}
   <tr>
     <td class="{{cycle name=cellicon values="dark, light"}}">
-      {{assign var="elementId" value=$curr_file->_id}}
-      {{if $curr_file->_class_name=="CCompteRendu"}}
+      {{assign var="elementId" value=$_doc_item->_id}}
+      {{if $_doc_item->_class_name=="CCompteRendu"}}
         {{assign var="srcImg" value="images/pictures/medifile.png"}}
       {{else}}
         {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
       {{/if}}
       
-      <a href="#" onclick="ZoomAjax('{{$selClass}}', '{{$selKey}}', '{{$curr_file->_class_name}}', '{{$elementId}}', '0');" title="Afficher l'aperçu">
+      <a href="#" onclick="ZoomAjax('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class_name}}', '{{$elementId}}', '0');" title="Afficher l'aperçu">
         <img src="{{$srcImg}}" alt="-" />
       </a>
 
     </td>
     <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
-      <strong>{{$curr_file->_view}}</strong>
+      <strong>{{$_doc_item}}</strong>
       <hr />
       {{include file=inc_file_toolbar.tpl notext=notext}}
     </td>
@@ -57,4 +67,5 @@ Main.add(function () {
 </tr>
 {{/foreach}}
 </table>
+{{/if}}
 {{/foreach}}

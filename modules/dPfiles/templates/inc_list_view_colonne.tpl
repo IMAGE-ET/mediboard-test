@@ -14,10 +14,10 @@ Main.add(function () {
 <ul id="tab-{{if $accordDossier}}{{$selClass}}{{$selKey}}{{else}}consult{{/if}}" class="control_tabs">
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   <li>
-    {{assign var=docCount value=$_cat.DocsAndFiles|@count}}
+    {{assign var=docCount value=$_cat.items|@count}}
     {{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
   	<a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}}>
-  		{{$_cat.name}} 
+  		{{$_cat.name}}
   		<small>({{$docCount}})</small>
   	</a>
 		{{/if}}
@@ -30,10 +30,10 @@ Main.add(function () {
 {{include file=inc_files_add_toolbar.tpl}}
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
-{{assign var=docCount value=$_cat.DocsAndFiles|@count}}
+{{assign var=docCount value=$_cat.items|@count}}
 {{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
 <div id="Category-{{$_cat_id}}" style="display: none; clear: both;">  
-  {{foreach from=$_cat.DocsAndFiles item=_doc_item}}
+  {{foreach from=$_cat.items item=_doc_item}}
   <div style="float: left; width: 280px;">
   	 <table class="tbl">
   	   <tbody class="hoverable">

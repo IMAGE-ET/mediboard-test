@@ -60,7 +60,7 @@ foreach($listPlages as &$element) {
       }
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
-      $consultation->getNumDocsAndFiles();
+      $consultation->countDocItems();
     }
   }
 }

@@ -29,7 +29,7 @@ if($op) {
     $consult->_ref_consult_anesth = $consultAnesth;
     
     $consult->loadRefPlageConsult();
-    $consult->loadRefsFilesAndDocs();
+    $consult->loadRefsDocItems();
     $consult->loadRefPatient();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     $consult->loadAides($prat_id);

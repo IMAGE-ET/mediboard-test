@@ -139,17 +139,17 @@ onSubmitSendAjax = function(button) {
          
           {{if $document->_is_sendable}}
             <input type="hidden" name="_send" value="false" />
-            {{if $dPconfig.dPfiles.system_sender != "null"}}
+            {{if $dPconfig.dPfiles.system_sender}}
               {{if $document->etat_envoi == "oui"}}
-                <button class="invalidefile notext" type="button" onclick="onSubmitSendAjax(this)">
+                <button class="send-cancel notext" type="button" onclick="onSubmitSendAjax(this)">
                   {{tr}}Send File{{/tr}}
                 </button>
               {{elseif $document->etat_envoi == "obsolete"}}
-                <button class="obsoletefile notext" type="button" onclick="onSubmitSendAjax(this)">
+                <button class="send-again notext" type="button" onclick="onSubmitSendAjax(this)">
                   {{tr}}Send File{{/tr}}
                 </button>
               {{else}}
-                <button class="sendfile notext" type="button" onclick="onSubmitSendAjax(this)">
+                <button class="send notext" type="button" onclick="onSubmitSendAjax(this)">
                    {{tr}}Send File{{/tr}}
                  </button>
               {{/if}}

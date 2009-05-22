@@ -63,7 +63,7 @@ foreach ($listPlages as &$element) {
     foreach ($plage->_ref_consultations as &$consultation) {
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
-      $consultation->getNumDocsAndFiles();
+      $consultation->countDocItems();
     }
   }
 }
