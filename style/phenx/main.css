@@ -2826,3 +2826,28 @@ select.perennity {
   border-radius: 6px;
   background: #eee;
 }
+
+button.send, a.button.send {
+  background-image: url(../tonkin/images/buttons/send.png);
+  padding-left: 18px;
+}
+
+button.send-cancel, a.button.send-cancel {
+  background-image: url(../tonkin/images/buttons/send-cancel.png);
+  padding-left: 18px;
+}
+
+button.send-again, a.button.send-again {
+  background-image: url(../tonkin/images/buttons/send-again.png);
+  padding-left: 18px;
+}
+
+button.send-problem, a.button.send-problem {
+  background-image: url(../tonkin/images/buttons/send-problem.png);
+  padding-left: 18px;
+}
+
+button.send-auto, a.button.send-auto {
+  background-image: url(../tonkin/images/buttons/send-auto.png);
+  padding-left: 18px;
+}

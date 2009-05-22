@@ -497,35 +497,28 @@ button.stop:hover, a.button.stop:hover {
   padding-left: 18px;
 }
 
-button.sendfile, a.button.sendfile {
-  background-image: url(./images/buttons/sendfile.png);
-  background-position: left bottom;
+button.send, a.button.send {
+  background-image: url(images/buttons/send.png);
   padding-left: 18px;
 }
 
-button.sendfile:hover, a.button.sendfile:hover {
-  background-image: url(./images/buttons/sendfilehover.png);
-  background-position: left bottom;
+button.send-cancel, a.button.send-cancel {
+  background-image: url(images/buttons/send-cancel.png);
   padding-left: 18px;
 }
 
-button.invalidefile, a.button.invalidefile {
-  background-image: url(./images/buttons/invalidefile.png);
+button.send-again, a.button.send-again {
+  background-image: url(images/buttons/send-again.png);
   padding-left: 18px;
 }
 
-button.invalidefile:hover, a.button.invalidefile:hover {
-  background-image: url(./images/buttons/invalidefilehover.png);
+button.send-problem, a.button.send-problem {
+  background-image: url(images/buttons/send-problem.png);
   padding-left: 18px;
 }
 
-button.obsoletefile, a.button.obsoletefile {
-  background-image: url(./images/buttons/obsoletefile.png);
-  padding-left: 18px;
-}
-
-button.obsoletefile:hover, a.button.obsoletefile:hover {
-  background-image: url(./images/buttons/obsoletefilehover.png);
+button.send-auto, a.button.send-auto {
+  background-image: url(images/buttons/send-auto.png);
   padding-left: 18px;
 }
 
