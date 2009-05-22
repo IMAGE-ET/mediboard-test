@@ -499,26 +499,61 @@ button.stop:hover, a.button.stop:hover {
 
 button.send, a.button.send {
   background-image: url(images/buttons/send.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.send:hover, a.button.send:hover {
+  background-image: url(images/buttons/send.png);
+  background-position: left bottom;
   padding-left: 18px;
 }
 
 button.send-cancel, a.button.send-cancel {
   background-image: url(images/buttons/send-cancel.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.send-cancel:hover, a.button.send-cancel:hover {
+  background-image: url(images/buttons/send-cancel.png);
+  background-position: left bottom;
   padding-left: 18px;
 }
 
 button.send-again, a.button.send-again {
   background-image: url(images/buttons/send-again.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.send-again:hover, a.button.send-again:hover {
+  background-image: url(images/buttons/send-again.png);
+  background-position: left bottom;
   padding-left: 18px;
 }
 
 button.send-problem, a.button.send-problem {
   background-image: url(images/buttons/send-problem.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.send-problem:hover, a.button.send-problem:hover {
+  background-image: url(images/buttons/send-problem.png);
+  background-position: left bottom;
   padding-left: 18px;
 }
 
 button.send-auto, a.button.send-auto {
   background-image: url(images/buttons/send-auto.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.send-auto:hover, a.button.send-auto:hover {
+  background-image: url(images/buttons/send-auto.png);
+  background-position: left bottom;
   padding-left: 18px;
 }
 
