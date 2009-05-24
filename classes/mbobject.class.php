@@ -1187,12 +1187,17 @@ class CMbObject {
    * Load named forward reference
    * @return CMbObject concrete loaded object 
    */
-  function loadFwdRef($field) {
+  function loadFwdRef($field, $cached = false) {
     $spec = $this->_specs[$field];
     if ($spec instanceof CRefSpec) {
-	    $this->_fwd[$field] = new $spec->class;
-	    $this->_fwd[$field]->load($this->$field);
-	    return $this->_fwd[$field];
+      $fwd = new $spec->class;
+      if ($cached) {
+        $fwd = $fwd->getCached($this->$field);
+      }
+      else {
+  	    $fwd->load($this->$field);
+      }
+	    return $this->_fwd[$field] = $fwd;
     }
   }
     

@@ -206,7 +206,12 @@ class CSetupdPfiles extends CSetup {
             ADD `etat_envoi` ENUM ('oui','non','obsolete') NOT NULL default 'non';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+    $sql = "ALTER TABLE `files_category` 
+			CHANGE `validation_auto` `send_auto` ENUM( '0', '1' ) NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.22";
   }
 }
 ?>

@@ -6,7 +6,7 @@
   <tr>
     <th>{{mb_title class=CFilesCategory field=nom}}</th>
     <th>{{mb_title class=CFilesCategory field=class}}</th>
-    <th>{{mb_title class=CFilesCategory field=validation_auto}}</th>
+    <th>{{mb_title class=CFilesCategory field=send_auto}}</th>
   </tr>
 
   {{foreach from=$categories item=_category}}
@@ -18,7 +18,7 @@
     </td>
 
     <td>{{tr}}{{$_category->class|default:'All'}}{{/tr}}</td>
-    <td>{{mb_value object=$_category field=validation_auto}}</td>
+    <td>{{mb_value object=$_category field=send_auto}}</td>
 
   </tr>
   {{/foreach}}        

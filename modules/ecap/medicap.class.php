@@ -12,6 +12,8 @@
  * @abstract Utility class for eCap modules
  */
 class CMedicap {
+  static $cidc = null;
+  
   static $paths = array (
     "dhe" => "/InterfaceCabinets/Generique/AppelDHE.aspx",
     "soap" => array (
@@ -48,14 +50,14 @@ class CMedicap {
     if ($init) {
 			$idExt = new CIdSante400;
 			$idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
-			$codeClinique = $idExt->id400;
+			self::$cidc = $cidc = $idExt->id400;
 			
 			self::$tags = array(
-			  "PA" => "eCap CIDC:$codeClinique",
-				"SJ" => "eCap NDOS CIDC:$codeClinique",
-				"AT" => "eCap DHE CIDC:$codeClinique",
-				"IN" => "eCap CINT CIDC:$codeClinique",
-				"US" => "eCap CIDC:$codeClinique",
+			  "PA" => "eCap CIDC:$cidc",
+				"SJ" => "eCap NDOS CIDC:$cidc",
+				"AT" => "eCap DHE CIDC:$cidc",
+				"IN" => "eCap CINT CIDC:$cidc",
+				"US" => "eCap CIDC:$cidc",
 				"DO" => "eCap document",
 				"DT" => "eCap type-category",
 			);

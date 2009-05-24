@@ -115,7 +115,7 @@ class CFile extends CDocumentItem {
     @unlink($this->_file_path);
 
     // Delete any index entries
-    $sql = "DELETE FROM files_index_mediboard WHERE file_id = $this->file_id";
+    $sql = "DELETE FROM files_index_mediboard WHERE file_id = '$this->_id'";
     if (!$this->_spec->ds->exec($sql)) {
       return $this->_spec->ds->error();
     }

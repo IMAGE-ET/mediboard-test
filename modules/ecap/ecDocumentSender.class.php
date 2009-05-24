@@ -68,8 +68,10 @@ class CEcDocumentSender extends CDocumentSender {
 		return $result;
   }
   
+  static $ids = array();
+  
   /**
-   * Get Target Id for object and target ecap category
+   * Get cached target Id for object and target ecap type
    * @param CMbObject $object Mediboard Object
    * @param string $ecType ecap Type : [PA|SJ|AT|IN]
    * @return string ecap identifier, null on error
@@ -80,28 +82,30 @@ class CEcDocumentSender extends CDocumentSender {
       return;
     }
     
-    $ident = new CIdSante400();
+    if (!@array_key_exists($object->_guid, self::$ids[$ecType])) {
+	    $ident = new CIdSante400();
+	    
+	    if ($object instanceof CPatient) {
+	   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
+	   	}
+	    
+	   	if ($object instanceof CSejour) {
+	   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
+	   	}
+	    
+	   	if ($object instanceof COperation) {
+	   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
+	   	}
+	
+	   	if ($object instanceof CConsultation) {
+	      $object->loadRefPatient();
+	   	  $ident->loadLatestFor($object->_ref_patient, CMedicap::getTag($ecType));
+	   	}
+	
+	    self::$ids[$ecType][$object->_guid] = $ident->id400;
+    }
     
-    if ($object instanceof CPatient) {
-   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
-   	  return $ident->id400;
-   	}
-    
-   	if ($object instanceof CSejour) {
-   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
-   	  return $ident->id400;
-   	}
-    
-   	if ($object instanceof COperation) {
-   	  $ident->loadLatestFor($object, CMedicap::getTag($ecType));
-   	  return $ident->id400;
-   	}
-
-   	if ($object instanceof CConsultation) {
-      $object->loadRefPatient();
-   	  $ident->loadLatestFor($object->_ref_patient, CMedicap::getTag($ecType));
-   	  return $ident->id400;
-   	}
+    return self::$ids[$ecType][$object->_guid];  
   }
     
   /**
@@ -124,6 +128,7 @@ class CEcDocumentSender extends CDocumentSender {
     
   function send(CDocumentItem $docItem) {
     $docItem->load();
+    $docItem->loadTargetObject();
     
     // identifiant externe du document 
     $idDocItem = new CIdSante400();
@@ -139,12 +144,11 @@ class CEcDocumentSender extends CDocumentSender {
     $idCategory->loadLatestFor($docItem->_ref_category, CMedicap::getTag("DT"));
     list($ecTypeObjet, $ecTypeDocument) = explode("-", $idCategory->id400);
     
-    // Chargement de la cible
-    $docItem->loadTargetObject();
-    $ecObject = self::getIdFor($docItem->_ref_object, $ecTypeObjet);
-    
-    // identifiant externe du patient, quelle que soit la cible
+    // Identifiant externe du patient, quelle que soit la cible
     $ecPatient = self::getPatientIdFor($docItem->_ref_object);
+    
+    // Chargement de la cible
+    $ecObject = self::getIdFor($docItem->_ref_object, $ecTypeObjet);
     
     if (null == $params = $this->initClientSOAP()) {
       return false;
@@ -192,6 +196,7 @@ class CEcDocumentSender extends CDocumentSender {
   
   function cancel($docItem) {
     $docItem->load();
+    $docItem->loadTargetObject();
     
     // identifiant externe du document 
     $idDocItem = new CIdSante400();
@@ -202,7 +207,6 @@ class CEcDocumentSender extends CDocumentSender {
     $ecVersion  = $ecVersion  ? $ecVersion  : "0";
     
     // Identifiant externe du patient, quelle que soit la cible
-    $docItem->loadTargetObject();
     $ecPatient = self::getPatientIdFor($docItem->_ref_object);
     
     if (null == $params = $this->initClientSOAP()) {
@@ -233,20 +237,41 @@ class CEcDocumentSender extends CDocumentSender {
   function resend($docItem) {
     return $this->send($docItem);
   }
-  
+    
   function getSendProblem(CDocumentItem $docItem) {
-    $docItem->loadTargetObject();
+    // Type de la cible
+	  $docItem->loadTargetObject();
     if (!array_key_exists($docItem->_ref_object->_class_name, self::$sendables)) {
       return sprintf("Type d'objet '%s' non pris en charge", 
         CAppUI::tr($docItem->_ref_object->_class_name));
     }
     
+    // Catégorie obligatoire
+    if (!$docItem->file_category_id) {
+      return "Ce document n'a pas de catégorie";
+    }
+    
+    // Type de document Medicap
     $docItem->loadRefCategory();
     $category = $docItem->_ref_category;
-    if (!$category->_id) {
-      return "Pas de categorie";
+    
+    $idCategory = new CIdSante400();
+    $idCategory->loadLatestFor($docItem->_ref_category, CMedicap::getTag("DT"));
+    list($ecTypeObjet, $ecTypeDocument) = explode("-", $idCategory->id400);
+    if (!$idCategory->id400) {
+      return "La catégorie de documents n'est pas lié à un type de document e-Cap'";
     }
-    // FAIRE LA SUITE DES TESTS
+    
+    // Identifiant externe du patient, quelle que soit la cible
+    if (null == $ecPatient = self::getPatientIdFor($docItem->_ref_object)) {
+      return "Patient inconnu par e-Cap pour l'établissement " . CMedicap::$cidc;
+    }
+    
+    // Identifiant de la cible
+    $ecObject = self::getIdFor($docItem->_ref_object, $ecTypeObjet);
+    if (null == $ecObject = self::getPatientIdFor($docItem->_ref_object)) {
+      return "Contexte de l'objet inconnu par e-Cap pour 'établissement " . CMedicap::$cidc;
+    }
   }
 }
 

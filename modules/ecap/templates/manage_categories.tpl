@@ -41,7 +41,7 @@
 	
   <tr>
 	  <th>{{mb_title class=CFilesCategory field=nom}}</th>
-	  <th colspan="2">{{mb_title class=CFilesCategory field=validation_auto}}</th>
+	  <th colspan="2">{{mb_title class=CFilesCategory field=send_auto}}</th>
 	  <th colspan="2">Identifiant e-Cap</th>
 	</tr>
 
@@ -56,7 +56,7 @@
       <input type="hidden" name="dosql" value="do_filescategory_aed" />
 	  	<input type="hidden" name="file_category_id" value="{{$_category->_id}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="validation_auto" {{if $_category->validation_auto}}value="0"{{else}}value="1"{{/if}} />
+      <input type="hidden" name="send_auto" {{if $_category->send_auto}}value="0"{{else}}value="1"{{/if}} />
       
       <button class="tick">{{tr}}Change{{/tr}}</button>
       
@@ -65,7 +65,7 @@
 
 		{{assign var=category_id value=$_category->_id}}
 		{{assign var=idEcap value=$idsEcap.$category_id}}
-	 	<td>{{mb_value object=$_category field=validation_auto}}</td>
+	 	<td>{{mb_value object=$_category field=send_auto}}</td>
 	 	<td>
 	 		<script type="text/javascript">
 	 		  function UpdateId{{$_category->_id}}(id) {

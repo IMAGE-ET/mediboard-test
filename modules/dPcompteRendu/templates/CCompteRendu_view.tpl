@@ -3,7 +3,10 @@
 <table class="tbl tooltip">
   <tr>
     <th>
-      {{$document->_view}}
+      {{if !$document->object_id}}
+			Modèle : 
+			{{/if}}
+      {{$document}}
     </th>
   </tr>
   <tr>
@@ -15,7 +18,7 @@
 	<tr>
     <td class="text">
       <strong>Associé à :</strong>
-	    {{$document->_ref_object->_view}}
+	    {{$document->_ref_object}}
 	  </td>
 	</tr>
 	<tr>

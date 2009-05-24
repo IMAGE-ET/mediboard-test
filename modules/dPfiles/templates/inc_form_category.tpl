@@ -28,8 +28,8 @@
   </tr>
 
   <tr>
-    <th>{{mb_label object=$category field=validation_auto}}</th>
-    <td>{{mb_field object=$category field=validation_auto}}</td>
+    <th>{{mb_label object=$category field=send_auto}}</th>
+    <td>{{mb_field object=$category field=send_auto}}</td>
   </tr>
 
   <tr>

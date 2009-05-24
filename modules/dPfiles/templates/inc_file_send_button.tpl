@@ -34,7 +34,7 @@ submitSendAjax = function(button, confirm_auto, onComplte) {
     {{tr}}Send{{/tr}}
   </button>
 {{else}}
-  {{if $_doc_item->_ref_category->validation_auto}}
+  {{if $_doc_item->_ref_category->send_auto}}
   <button class="send-auto {{$notext}}" type="button" onclick="submitSendAjax(this, true, function () { {{$onComplete}} } )">
     {{tr}}Send{{/tr}}
   </button>

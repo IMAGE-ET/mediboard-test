@@ -15,11 +15,15 @@ class CFilesCategory extends CMbObject {
   var $file_category_id = null;	
   var $nom = null;
   var $class = null;
-  var $validation_auto = null;
+  var $send_auto = null;
   
   var $_count_documents = null;
   var $_count_files     = null;
   var $_count_doc_items = null;
+  
+  var $_count_unsent_documents = null;
+  var $_count_unsent_files     = null;
+  var $_count_unsent_doc_items = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,15 +43,28 @@ class CFilesCategory extends CMbObject {
   	$specs = parent::getProps();
     $specs["nom"]   = "str notNull seekable";
     $specs["class"] = "str";
-    $specs["validation_auto"] = "bool";
+    $specs["send_auto"] = "bool";
     return $specs;
   }
   
   function countDocItems() {
     $this->_count_documents = $this->countBackRefs("categorized_documents");
     $this->_count_files     = $this->countBackRefs("categorized_files"    );
-    
     $this->_count_doc_items = $this->_count_documents + $this->_count_files;
+  }
+  
+  function countUnsentDocItems() {
+    $where["file_category_id"] = "= '$this->_id'";
+    $where["etat_envoi"      ] = "!= 'oui'";
+    $where["object_id"       ] = "IS NOT NULL";
+    
+    $file = new CFile();
+    $this->_count_unsent_files = $file->countList($where);;
+    
+    $document = new CCompteRendu();
+    $this->_count_unsent_documents = $document->countList($where);
+    
+    $this->_count_unsent_doc_items = $this->_count_unsent_documents + $this->_count_unsent_files;
   }
   
   static function loadListByClass() {

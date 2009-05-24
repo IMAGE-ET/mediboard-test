@@ -34,6 +34,7 @@ class CDocumentItem extends CMbMetaObject {
     $specs["etat_envoi"]       = "enum notNull list|oui|non|obsolete default|non";
 
     $specs["_extensioned"]     = "str notNull";
+    $specs["_send_problem"]    = "text";
     return $specs;
   }
   
@@ -128,7 +129,7 @@ class CDocumentItem extends CMbMetaObject {
   }
   
   function loadRefCategory() {
-    $this->_ref_category = $this->loadFwdRef("file_category_id");
+    $this->_ref_category = $this->loadFwdRef("file_category_id", true);
   }
 }
 
