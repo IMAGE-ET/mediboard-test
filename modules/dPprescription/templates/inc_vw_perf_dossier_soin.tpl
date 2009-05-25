@@ -20,7 +20,6 @@
 		{{/if}}
 		-
 	</td>
- 	<td style="text-align: center;">-</td>
  	<td class="text">
  	  <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
  		<div onclick='addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");' 
