@@ -940,6 +940,38 @@ class CPrescription extends CMbObject {
   }
   
   /*
+   * Calcul des chapitres qui possedent des prises urgentes 
+   */
+  function countUrgence($date){
+    $this->_count_urgence["med"] = false;
+    $this->_count_urgence["inj"] = false;
+     
+    // Parcours des lignes de medicaments
+    foreach($this->_ref_prescription_lines_by_cat as $cat_atc => $_lines_med){
+      foreach($_lines_med as $_line_med){
+        $chapitre = $_line_med->_is_injectable ? "inj" : "med";
+        if(is_array($_line_med->_dates_urgences) && array_key_exists($date, $_line_med->_dates_urgences)){
+          $this->_count_urgence[$chapitre] = true;
+        }
+      }
+    }
+    
+    // Parcours des lignes d'elements
+    foreach($this->_ref_prescription_lines_element_by_cat as $_chapitre_elt => $lines_by_cat){
+      $this->_count_urgence[$_chapitre_elt] = false;
+      foreach($lines_by_cat as $cat => $lines_by_type){
+        foreach($lines_by_type as $lines_elt){
+          foreach($lines_elt as $_line_elt){
+           if(is_array($_line_elt->_dates_urgences) && array_key_exists($date, $_line_elt->_dates_urgences)){
+              $this->_count_urgence[$_chapitre_elt] = true;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /*
    * Chargement des lignes de prescription de médicament
    */
   function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="") {

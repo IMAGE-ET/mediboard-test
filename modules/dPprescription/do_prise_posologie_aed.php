@@ -33,17 +33,25 @@ foreach($list_checkbox as $_checkbox){
   }
 }
 
+if(isset($_POST["_urgent"])){
+  $prise_poso = new CPrisePosologie();
+	$prise_poso->object_id = mbGetValueFromPost("object_id");
+	$prise_poso->object_class = mbGetValueFromPost("object_class");
+	$prise_poso->quantite = mbGetValueFromPost("quantite");
+	$prise_poso->unite_prise = mbGetValueFromPost("unite_prise");
+	$prise_poso->urgence_datetime = mbDateTime();
+	$msg = $prise_poso->store();
+  $mode_checkbox = true;
+}
+
 if($mode_checkbox){
   CApp::rip();
 }
-
-
 
 if($del || !$moment_unitaire_id){
 	$do = new CDoObjectAddEdit("CPrisePosologie", "prise_posologie_id");
 	$do->doIt();
 }
-
 
 $_moment_explode = explode("-",$moment_unitaire_id);
 

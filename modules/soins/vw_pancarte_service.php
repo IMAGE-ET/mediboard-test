@@ -23,6 +23,8 @@ $patients = array();
 $alertes = array();
 $perfs = array();
 $new = array();
+$urgences = array();
+
 
 // Chargement des prescriptions qui sont dans le service selectionné
 $prescription = new CPrescription();
@@ -148,6 +150,13 @@ foreach($prescriptions as $_prescription){
 						          $new[$_prescription->_id][$dateTime] = 1;
 						          @$tab[$_prescription->_id][$dateTime]["med"][$_line_med->_id]["new"] = 1;
 						        }
+						        
+						        // Creation du tableau d'urgences
+                    if(is_array($_line_med->_dates_urgences) && array_key_exists($date_reelle, $_line_med->_dates_urgences) 
+						           && in_array($dateTime, $_line_med->_dates_urgences[$date_reelle])){
+						          $urgences[$_prescription->_id][$dateTime] = 1;
+						          @$tab[$_prescription->_id][$dateTime]["med"][$_line_med->_id]["urgence"] = 1;
+						        }
 							    }
 						      if($quantite_prevue != $quantite_adm){
 						        $alertes[$_prescription->_id][$dateTime]["med"] = 1;
@@ -182,6 +191,12 @@ foreach($prescriptions as $_prescription){
 						          $new[$_prescription->_id][$dateTime] = 1;
 						          @$tab[$_prescription->_id][$dateTime]["inj"][$_line_inj->_id]["new"] = 1;
 						        }
+							    	if(is_array($_line_inj->_dates_urgences) && array_key_exists($date_reelle, $_line_inj->_dates_urgences)
+							    	&& in_array($dateTime, $_line_inj->_dates_urgences[$date_reelle])){
+						          @$urgences[$_prescription->_id][$dateTime] = 1;
+						          @$tab[$_prescription->_id][$dateTime]["inj"][$_line_inj->_id]["urgence"] = 1;
+						        }
+						        
 				          }
 						      if($quantite_prevue != $quantite_adm){
 						        $alertes[$_prescription->_id][$dateTime]["inj"] = 1;
@@ -219,6 +234,12 @@ foreach($prescriptions as $_prescription){
 							          @$tab[$_prescription->_id][$dateTime][$chapitre][$_line_element->_id]["new"] = 1;
 							        }
 							      }
+	                	if(is_array($_line_element->_dates_urgences) && array_key_exists($date_reelle, $_line_element->_dates_urgences)
+	                	&& in_array($dateTime, $_line_element->_dates_urgences[$date_reelle])){
+						          @$urgences[$_prescription->_id][$dateTime] = 1;
+						          @$tab[$_prescription->_id][$dateTime][$chapitre][$_line_element->_id]["urgence"] = 1;
+						        }
+						        
 							      if($quantite_prevue != $quantite_adm){
 							        $alertes[$_prescription->_id][$dateTime][$chapitre] = 1;
 							      }
@@ -284,6 +305,7 @@ $smarty->assign("service", $service);
 $smarty->assign("patients", $patients);
 $smarty->assign("alertes", $alertes);
 $smarty->assign("new", $new);
+$smarty->assign("urgences", $urgences);
 $smarty->display('vw_pancarte_service.tpl');
 
 ?>

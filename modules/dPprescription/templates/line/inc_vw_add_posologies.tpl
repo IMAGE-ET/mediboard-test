@@ -27,7 +27,6 @@ Main.add( function(){
 	  {{/if}}
 	</form>
 </div>
-
 <br />
 
 <form name="addPrise{{$type}}{{$line->_id}}" action="?" method="post" style="display: none;" onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$typeDate}}');">
@@ -37,8 +36,6 @@ Main.add( function(){
   <input type="hidden" name="prise_posologie_id" value="" />
   <input type="hidden" name="object_id" value="{{$line->_id}}" />
   <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
-
-
   
   {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPrise$type$line_id}}
   {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
@@ -60,6 +57,11 @@ Main.add( function(){
 	  <input type="checkbox" name="matin" /><label for="matin"> Matin</label>
 	  <input type="checkbox" name="midi" /><label for="midi"> Midi</label>
 	  <input type="checkbox" name="soir" /><label for="soir"> Soir</label>
+	  
+    <input type="checkbox" name="_urgent" onchange="changeUrgence(this.form, this.checked);" /><label for="_urgent"> Urg.</label>
+    
+	  
+	  
 	  {{/if}}
   </span>
   

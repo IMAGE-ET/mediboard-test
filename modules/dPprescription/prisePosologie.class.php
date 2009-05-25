@@ -16,6 +16,7 @@ class CPrisePosologie extends CMbMetaObject {
   // DB Fields
   var $moment_unitaire_id    = null;
   var $quantite              = null;
+  var $urgence_datetime      = null;
   
   // Fois par
   var $nb_fois               = null;
@@ -40,6 +41,7 @@ class CPrisePosologie extends CMbMetaObject {
   var $_unite_sans_kg        = null;  // Unite sans le kg
   var $_quantite_dispensation = null;
   var $_quantite_administrable = null; // Quantité de produit en unité d'administration
+  var $_urgent = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -62,6 +64,8 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["unite_prise"]        = "text";
     $specs["decalage_intervention"] = "num";
     $specs["heure_prise"]           = "time";
+    $specs["urgence_datetime"]   = "dateTime";            
+    $specs["_urgent"] = "bool";
     return $specs;
   }
   
@@ -80,6 +84,10 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_view .= " ".$this->_ref_object->_unite_prise;
     } else {
       $this->_view .= " ".$this->unite_prise;	
+    }
+    
+    if($this->urgence_datetime){
+      $this->_view .= " le ".mbTransformTime(null, $this->urgence_datetime, "%d/%m/%Y à %Hh%M")." (Urgence)";
     }
     
     if($this->moment_unitaire_id){
@@ -147,13 +155,13 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_short_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
     }
     
-    if($this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
-      if($configs["1 fois par jour"]){
-	      $this->_heures = explode("|",$configs["1 fois par jour"]);
-	      foreach($this->_heures as &$_heure){
-	      	$_heure .= ":00:00";
+    if(!$this->urgence_datetime && $this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
+	      if($configs["1 fois par jour"]){
+		      $this->_heures = explode("|",$configs["1 fois par jour"]);
+		      foreach($this->_heures as &$_heure){
+		      	$_heure .= ":00:00";
+		      }
 	      }
-      }
     }    
   }
   

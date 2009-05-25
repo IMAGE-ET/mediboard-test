@@ -1208,7 +1208,12 @@ class CSetupdPprescription extends CSetup {
 	          ADD `code_cis` VARCHAR(8) NOT NULL;";
 	  $this->addQuery($sql);
 	  
-		$this->mod_version = "0.82";
+	  $this->makeRevision("0.82");
+	  $sql = "ALTER TABLE `prise_posologie` 
+					  ADD `urgence_datetime` DATETIME;";
+	  $this->addQuery($sql);
+	  
+		$this->mod_version = "0.83";
   }  
 }
 

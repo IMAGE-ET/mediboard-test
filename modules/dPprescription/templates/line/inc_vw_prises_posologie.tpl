@@ -76,7 +76,11 @@ Main.add(function () {
 	  {{if $line->_class_name == "CPrescriptionLineElement"}}
 		  {{$line->_unite_prise}}
 		{{/if}}
-		  
+		
+		{{if $prise->urgence_datetime}}
+		  le {{$prise->urgence_datetime|date_format:$dPconfig.datetime}} (Urgence)
+		{{/if}}
+		
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}
 		  {{$prise->_ref_moment->_view}}

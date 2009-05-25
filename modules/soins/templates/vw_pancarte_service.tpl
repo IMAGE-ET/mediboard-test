@@ -146,13 +146,15 @@ Main.add(function () {
               <td style="text-align: center; width: 1%;">
               
           		  {{if @$tab.$_prescription_id.$_date_hour}}
-          		    
-          		    
           		    <div style="border: 1px solid #BBB; height: 16px;"
           		         onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}");'>
         		       
         		         {{if @$new.$_prescription_id.$_date_hour}}
           		         <img src="images/icons/ampoule.png" />
+          		       {{/if}}
+          		       
+          		       {{if @$urgences.$_prescription_id.$_date_hour}}
+          		         <img src="images/icons/ampoule_urgence.png" />
           		       {{/if}}
           		      
           		      
@@ -250,6 +252,9 @@ Main.add(function () {
 			          		            {{/if}}
 			          		            {{if array_key_exists('new', $_quantite)}}
 			          		              <img src="images/icons/ampoule.png" alt="" title="" />
+			          		            {{/if}}
+			          		            {{if array_key_exists('urgence', $_quantite)}}
+			          		              <img src="images/icons/ampoule_urgence.png" alt="" title="" />
 			          		            {{/if}}
 			          		          </td>
 			          		          <td>

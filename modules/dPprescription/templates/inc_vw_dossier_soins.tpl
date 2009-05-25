@@ -490,6 +490,7 @@ Main.add(function () {
 
 	{{assign var=transmissions value=$prescription->_transmissions}}	  
   {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
+  {{assign var=count_urgence value=$prescription->_count_urgence}}
   <table style="width: 100%">
 	  <tr>
 	    <td style="width: 1%; white-space: nowrap;">
@@ -513,6 +514,9 @@ Main.add(function () {
 						        {{if $count_recent_modif.inj}}
 						          <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 						        {{/if}}
+						        {{if $count_urgence.inj}}
+								      <img src="images/icons/ampoule_urgence.png" title="Urgence" />
+								    {{/if}}
 						      </a></li>
 						    {{/if}}
 						    
@@ -522,6 +526,9 @@ Main.add(function () {
 							        {{if $count_recent_modif.med}}
 							        <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 							        {{/if}}
+							        {{if $count_urgence.med}}
+								        <img src="images/icons/ampoule_urgence.png" title="Urgence" />
+								      {{/if}}    
 							      </a>
 						      </li>
 						    {{/if}}
@@ -533,6 +540,9 @@ Main.add(function () {
 							      	{{if $count_recent_modif.$_chapitre}}
 							        <img src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
 							        {{/if}}
+							        {{if $count_urgence.$_chapitre}}
+								        <img src="images/icons/ampoule_urgence.png" title="Urgence" />
+								      {{/if}}
 							      </a></li>
 							    {{/if}}
 							  {{/foreach}}

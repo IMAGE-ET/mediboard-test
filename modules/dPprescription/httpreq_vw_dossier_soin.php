@@ -229,13 +229,14 @@ else {
 		  $prescription->loadRefsLinesElementByCat("1",null,$line_type);
 		  // Calcul des modifications recentes par chapitre
 		  $prescription->countRecentModif();
+		  $prescription->countUrgence($date);
     } else {
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
 		  $prescription->loadRefsLinesElementByCat("1",$chapitre,$line_type);
     }
 		
     $with_calcul = $chapitre ? true : false; 
-	  // REF: Passer directement une date min et une date max au calculPlanSoin
+
 	  if($line_type == "service"){
 		  foreach($_dates as $curr_date){
 		    $prescription->calculPlanSoin($curr_date, 0, null, null, null, $with_calcul);

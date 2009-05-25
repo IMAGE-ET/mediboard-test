@@ -72,8 +72,8 @@ class CPrescriptionLine extends CMbObject {
 
   // Can fields
   var $_perm_edit = null;
+  var $_dates_urgences = null;
   
-
   function getProps() {
     $specs = parent::getProps();
     $specs["prescription_id"]   = "ref notNull class|CPrescription cascade";
@@ -318,6 +318,7 @@ class CPrescriptionLine extends CMbObject {
     
     $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
     $this->getRecentModification();
+    $this->calculDatesUrgences();
   }
   
   /*
@@ -452,6 +453,21 @@ class CPrescriptionLine extends CMbObject {
       $this->_recent_modification = true;
     }
 	}
+	
+	/*
+	 * Permet de savoir si la ligne contient des prises urgentes
+	 */
+  function calculDatesUrgences(){
+    $prise = new CPrisePosologie();
+    $where = array();
+    $where["object_id"] = " = '$this->_id'";
+    $where["object_class"] = " = '$this->_class_name'";
+    $where["urgence_datetime"] = "IS NOT NULL";
+    $prises_urgentes = $prise->loadList($where);
+    foreach($prises_urgentes as $_prise_urg){
+      $this->_dates_urgences[mbDate($_prise_urg->urgence_datetime)][$_prise_urg->_id] = mbTransformTime(null, $_prise_urg->urgence_datetime, "%Y-%m-%d %H:00:00");  
+    }
+  }
 	
   /*
    * Chargement des administrations et transmissions
@@ -793,6 +809,14 @@ class CPrescriptionLine extends CMbObject {
             $total_day += $_prise->_quantite_administrable;
           }
         }
+      }
+      // Prise en urgence
+      if($_prise->urgence_datetime && (mbDate($_prise->urgence_datetime) == $date)){
+        $hour_urgence = mbTransformTime(null, $_prise->urgence_datetime, "%H");
+        $line_plan_soin[$hour_urgence]["total"] += $_prise->_quantite_administrable;
+        $line_plan_soin[$hour_urgence]["total_disp"] += $_prise->_quantite_dispensation;
+        $line_plan_soin[$hour_urgence][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => substr($hour_urgence, 0, 2));
+        $total_day += $_prise->_quantite_administrable;
       }
     }
     return $total_day;
