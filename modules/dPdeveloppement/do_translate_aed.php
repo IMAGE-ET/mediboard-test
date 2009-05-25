@@ -41,6 +41,11 @@ if (is_file("locales/$language/$module.php")) {
   $translateModule->targetPath = "modules/$module/locales/$language.php";
 }
 
+if (!is_file($translateModule->targetPath)) {
+	CMbPath::forceDir(dirname($translateModule->targetPath));
+	file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module.'-court"] = ""; ?>');
+}
+
 $error = $translateModule->update($tableau, true);
 
 if ($error instanceof PEAR_Error) {
