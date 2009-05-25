@@ -23,26 +23,24 @@ class CEcDocumentSender extends CDocumentSender {
    * @return array Base SOAP params array, null on error
    */
   function initClientSOAP () {
-    if ($this->clientSOAP instanceof SoapClient) {
-      return;
+    if (!$this->clientSOAP instanceof SoapClient) {
+	    try {
+	      CMedicap::makeUrls();
+				$serviceURL = CMedicap::$urls["soap"]["documents"];
+				
+				if (!url_exists($serviceURL)) {
+				  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
+				  return;
+				}
+				
+				$this->clientSOAP = new SoapClient("$serviceURL?WSDL");
+	    } 
+	    catch (Exception $e) {
+	      trigger_error("Instanciation du SoapClient impossible : ".$e);
+	      return;
+	    }
     }
-    
-    try {
-      CMedicap::makeUrls();
-			$serviceURL = CMedicap::$urls["soap"]["documents"];
-			
-			if (!url_exists($serviceURL)) {
-			  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
-			  return;
-			}
-			
-			$this->clientSOAP = new SoapClient("$serviceURL?WSDL");
-    } 
-    catch (Exception $e) {
-      trigger_error("Instanciation du SoapClient impossible : ".$e);
-      return;
-    }
-    
+	    
     return array (
 		  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
 		  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),

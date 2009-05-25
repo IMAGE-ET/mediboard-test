@@ -111,11 +111,11 @@ class CDocumentItem extends CMbMetaObject {
     	  CAppUI::setMsg("Document transmis.");
         break;
       case "oui" :
-      	if (!$sender->cancel($this)) return "Erreur lors de l'invalidation."; 
+      	if (!$sender->cancel($this)) return "Erreur lors de l'invalidation de l'envoi."; 
       	CAppUI::setMsg("Document annulé."); 
         break;
       case "obsolete" :
-        if (!$sender->resend($this)) return "Erreur lors de l'invalidation / envoi."; 
+        if (!$sender->resend($this)) return "Erreur lors du renvoi."; 
         CAppUI::setMsg("Document annulé/transmis.");
         break;
       default:

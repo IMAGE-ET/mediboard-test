@@ -10,6 +10,13 @@
   
   <tr>
     <td>
+      <strong>{{mb_label object=$file field=file_id}}:</strong>
+	    {{mb_value object=$file field=file_id}}
+    </td>
+	</tr>
+
+  <tr>
+    <td>
       <strong>{{mb_label object=$file field=file_date}}</strong> :
       {{mb_value object=$file field=file_date}}
 	  </td>

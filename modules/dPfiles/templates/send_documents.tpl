@@ -60,7 +60,20 @@
     	{{mb_value object=$_item field=_extensioned}}
     </td>
     <td>{{mb_value object=$_item field=etat_envoi}}</td>
-    <td>{{mb_value object=$_item field=_send_problem}}</td>
+    <td>
+      {{if $_item->_send_problem}}
+      <div class="{{mb_ternary test=$_item->_send value=error other=warning}}">
+    	{{mb_value object=$_item field=_send_problem}}
+      </div>
+			{{else}}
+				{{if $do}}
+	      <div class="message">
+		      {{tr}}Sent{{/tr}} !
+	      </div>
+				{{/if}}
+			{{/if}}
+    	
+    </td>
   </tr>
 	{{/foreach}}
 {{/foreach}}

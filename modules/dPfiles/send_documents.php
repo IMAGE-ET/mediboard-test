@@ -30,25 +30,27 @@ $where["object_id"       ] = "IS NOT NULL";
 
 $file = new CFile();
 $items["CFile"] = $file->loadList($where, "file_id DESC", $max_sent);
-foreach ($items["CFile"] as $_file) {
-  $_file->loadTargetObject();
-  if ($do && !$_file->_send_problem) {
-    $_file->_send = "1";
-    if ($_file->_send_problem = $_file->store()) {
-      continue;
-    }
-  }
-}
 
 $document = new CCompteRendu();
 $items["CCompteRendu"] = $document->loadList($where, "compte_rendu_id DESC", $max_sent);
-foreach ($items["CCompteRendu"] as $_document) {
-  $_file->loadTargetObject();
+
+// Envoi
+foreach ($items as $_items) {
+  foreach ($_items as $_item) {
+	  $_item->loadTargetObject();
+	  if ($do && !$_item->_send_problem) {
+	    $_item->_send = "1";
+	    $_item->_send_problem = $_item->store();
+	    // To track wether sending has been tried
+	    $_item->_send = "1";
+	  }
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("do", $do);
 $smarty->assign("categories", $categories);
 $smarty->assign("items", $items);
 
