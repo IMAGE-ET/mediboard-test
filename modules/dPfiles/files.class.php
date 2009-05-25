@@ -314,12 +314,10 @@ class CFile extends CDocumentItem {
   }
   
   static function loadDocItemsByObject($object) {
-    $listCategory = CFilesCategory::listCatClass($object->_class_name);
-    
-    if(!$object->_ref_files){
+    if (!$object->_ref_files){
       $object->loadRefsFiles();
     }
-    if(!$object->_ref_documents){
+    if (!$object->_ref_documents){
       $object->loadRefsDocs();
     }
     
@@ -328,9 +326,9 @@ class CFile extends CDocumentItem {
     $affichageFile[0] = array();
     $affichageFile[0]["name"] = "Aucune Catégorie";
     $affichageFile[0]["items"] = array();
-    foreach($listCategory as $keyCat => $curr_Cat){
-      $affichageFile[$keyCat]["name"] = $curr_Cat->nom;
-      $affichageFile[$keyCat]["items"] = array();
+    foreach (CFilesCategory::listCatClass($object->_class_name) as $keyCat => $_cat) {
+      $affichageFile[$_cat->_id]["name"] = $_cat->nom;
+      $affichageFile[$_cat->_id]["items"] = array();
     }
     
     //Ajout des fichiers dans le tableau
@@ -344,7 +342,7 @@ class CFile extends CDocumentItem {
     }
     
     //Ajout des document dans le tableau
-    foreach($object->_ref_documents as &$_doc) {
+    foreach ($object->_ref_documents as &$_doc) {
       if ($_doc->canRead()) {
       	$cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
         $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;

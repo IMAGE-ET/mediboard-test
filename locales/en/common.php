@@ -142,4 +142,9 @@ $locales['Unarchive'] = '';
 $locales['Send'] = '';
 $locales['Draft'] = '';
 $locales['User preferences'] = '';
+$locales['Hour'] = '';
+$locales['User'] = '';
+$locales['Unsend'] = '';
+$locales['Resend'] = '';
+$locales['Impossible'] = '';
 ?>

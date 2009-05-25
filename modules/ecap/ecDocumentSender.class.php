@@ -257,10 +257,10 @@ class CEcDocumentSender extends CDocumentSender {
     
     $idCategory = new CIdSante400();
     $idCategory->loadLatestFor($docItem->_ref_category, CMedicap::getTag("DT"));
-    list($ecTypeObjet, $ecTypeDocument) = explode("-", $idCategory->id400);
     if (!$idCategory->id400) {
       return "La catégorie de documents n'est pas lié à un type de document e-Cap'";
     }
+    list($ecTypeObjet, $ecTypeDocument) = explode("-", $idCategory->id400);
     
     // Identifiant externe du patient, quelle que soit la cible
     if (null == $ecPatient = self::getPatientIdFor($docItem->_ref_object)) {

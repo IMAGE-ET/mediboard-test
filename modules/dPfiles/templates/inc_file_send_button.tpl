@@ -6,11 +6,12 @@
 	onclick="alert('{{tr escape=JSAttribute}}CDocumentSender-alert_problem{{/tr}}' 
 		+ '\n\t- ' + '{{$_doc_item->_send_problem|smarty:nodefaults|JSAttribute}}' );">
   {{tr}}Send{{/tr}}
+  {{tr}}Impossible{{/tr}}
 </button>
 
 {{else}}
 <script type="text/javascript">
-submitSendAjax = function(button, confirm_auto, onComplte) {
+submitSendAjax = function(button, confirm_auto, onComplete) {
 	if (confirm_auto) {
 	  if (!confirm('{{tr escape=JSAttribute}}CDocumentSender-confirm_auto{{/tr}}')) {
 	  	return;
@@ -19,7 +20,7 @@ submitSendAjax = function(button, confirm_auto, onComplte) {
 	$V(button.form._send, true);
 	
 	return onSubmitFormAjax(button.form, { 
-		onComplete : onComplte
+		onComplete : onComplete
 	} );  	  
 }
 </script>
@@ -27,11 +28,11 @@ submitSendAjax = function(button, confirm_auto, onComplte) {
 <input type="hidden" name="_send" value="" />
 {{if $_doc_item->etat_envoi == "oui"}}
   <button class="send-cancel {{$notext}}" type="button" onclick="submitSendAjax(this, false, function () { {{$onComplete}} } )">
-    {{tr}}Send{{/tr}}
+    {{tr}}Unsend{{/tr}}
   </button>
 {{elseif $_doc_item->etat_envoi == "obsolete"}}  
   <button class="send-again {{$notext}}" type="button" onclick="submitSendAjax(this, false, function () { {{$onComplete}} } )">
-    {{tr}}Send{{/tr}}
+    {{tr}}Resend{{/tr}}
   </button>
 {{else}}
   {{if $_doc_item->_ref_category->send_auto}}

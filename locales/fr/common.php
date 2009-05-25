@@ -72,7 +72,7 @@ $locales['pref-MenuPosition'] = 'Position du menu';
 $locales['pref-MenuPosition-desc'] = 'La position du menu principal dans la fenêtre d\'application';
 $locales['pref-MenuPosition-left'] = 'A gauche';
 $locales['pref-MenuPosition-top'] = 'En haut';
-$locales['pref-UISTYLE'] = 'Thème de l\interface';
+$locales['pref-UISTYLE'] = 'Thème de l\\interface';
 $locales['pref-UISTYLE-desc'] = 'Veuillez choisir l\'apparence que vous souhaitez utiliser';
 $locales['pref-touchscreen'] = 'Ecran tactile';
 $locales['pref-touchscreen-desc'] = 'Choisissez Oui si vous utilisez l\'application sur un écran tactile';
@@ -144,4 +144,7 @@ $locales['Unarchive'] = 'Désarchiver';
 $locales['Send'] = 'Envoyer';
 $locales['Draft'] = 'Brouillon';
 $locales['User preferences'] = 'Préferences utilisateur';
+$locales['Unsend'] = 'Annuler envoi';
+$locales['Resend'] = 'Renvoyer';
+$locales['Impossible'] = 'Impossible';
 ?>

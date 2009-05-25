@@ -121,7 +121,7 @@ $locales['CFile-etat_envoi-desc'] = 'Informations concernant l\'état d\'envoi ve
 $locales['CFile.etat_envoi.non'] = 'Non';
 $locales['CFile.etat_envoi.obsolete'] = 'Obsolète';
 $locales['CFile.etat_envoi.oui'] = 'Oui';
-$locales['config-dPfiles-system_sender'] = 'Transmission de fichier';
+$locales['config-dPfiles-system_sender'] = 'Transmission de documents';
 $locales['config-dPfiles-system_sender-desc'] = 'Système de transmission de fichiers vers de plateformes tierces';
 $locales['config-dPfiles-rooturl'] = 'URL racine Services web';
 $locales['config-dPfiles-rooturl-desc'] = 'URL racine des services web';
@@ -130,5 +130,6 @@ $locales['CMediusers-back-owned_files'] = 'FIchiers ajoutés';
 $locales['config-dPfiles-CFilesCategory-show_empty'] = 'Afficher les catégories vides';
 $locales['config-dPfiles-CFilesCategory-show_empty-desc'] = 'Afficher les catégories qui ne contiennent ni document ni fichers joints';
 $locales['CDocumentSender-confirm_auto'] = 'Les fichiers de cette catégories sont envoyés automatiquement sans votre intervention. Si toutefois vous désirez l\'envoyer instamment, merci de le confirmer.';
-$locales['CDocumentSender-alert_problem'] = 'L\'envoi de ce fichier n\'est pas possible pour le raison suivante : \\n\\t-';
+$locales['CDocumentSender-alert_problem'] = 'L\'envoi de ce fichier n\'est pas possible pour le raison suivante : ';
+$locales['mod-dPfiles-tab-send_documents'] = '';
 ?>

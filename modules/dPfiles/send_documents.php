@@ -34,7 +34,9 @@ foreach ($items["CFile"] as $_file) {
   $_file->loadTargetObject();
   if ($do && !$_file->_send_problem) {
     $_file->_send = "1";
-    $_file->_send_problem = $_file->store();
+    if ($_file->_send_problem = $_file->store()) {
+      continue;
+    }
   }
 }
 

@@ -14,4 +14,6 @@ $locales['config-ecap-dhe'] = 'DHE e-Cap';
 $locales['mod-ecap-tab-vw_soap_services'] = 'Services Web';
 $locales['mod-ecap-tab-export_documents'] = 'Envoi de documents';
 $locales['mod-ecap-tab-manage_categories'] = 'Catégories de documents';
+$locales['CEcDocumentSender'] = 'Base e-Cap';
+$locales['CMedinetSender'] = 'Base SISRA';
 ?>

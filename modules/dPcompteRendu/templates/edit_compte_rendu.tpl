@@ -1,10 +1,11 @@
 <script type="text/javascript">
-  
 {{if $compte_rendu->_id}}
-window.opener.Document.refreshList(
-  '{{$compte_rendu->object_class}}',
-	'{{$compte_rendu->object_id}}'	
-);
+function refreshList()  {
+	window.opener.Document.refreshList(
+	  '{{$compte_rendu->object_class}}',
+		'{{$compte_rendu->object_id}}'	
+	);
+}
 {{/if}}
 
 function submitCompteRendu(){
@@ -124,8 +125,39 @@ document.observe('keydown', function(e){
         {{$templateManager->document}}
       </textarea>
     </td>
-  </tr>
-
+  </tr>  
 </table>
+
+{{if $compte_rendu->_id &&  $dPconfig.dPfiles.system_sender}}
+<table class="form">
+	<tr>
+		<th style="width: 50%">
+	  	<script type="text/javascript">
+	  	refreshSendButton = function() {
+	  	  var url = new Url("dPfiles", "ajax_send_button");
+	  	  url.addParam("item_guid", "{{$compte_rendu->_guid}}");
+	  	  url.addParam("onComplete", "refreshSendButton()");
+	  	  url.requestUpdate("sendbutton", { waitingText: null } );
+	  	  refreshList();
+	  	}
+	  	</script>
+
+			<label title="{{tr}}config-dPfiles-system_sender{{/tr}}">
+				{{tr}}config-dPfiles-system_sender{{/tr}}
+				<em>({{tr}}{{$dPconfig.dPfiles.system_sender}}{{/tr}})</em>
+			</label>
+		</th>
+		
+	  <td id="sendbutton">
+	    
+	    {{mb_include module=dPfiles template=inc_file_send_button 
+	    	_doc_item=$compte_rendu
+	    	onComplete="refreshSendButton()"
+	    	notext=""
+	    	}}
+	  </td>
+	</tr>  
+</table>
+{{/if}} 
 
 </form>
