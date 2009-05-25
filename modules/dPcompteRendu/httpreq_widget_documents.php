@@ -26,6 +26,9 @@ if (!$object->_id) {
 }
 
 $object->loadRefsDocs();
+foreach($object->_ref_documents as $_document){
+  $_document->loadRefCategory();
+}
 
 // Praticien concerné
 if ($AppUI->_ref_user->isPraticien()) {
@@ -61,7 +64,7 @@ $smarty->assign("packs"         , $packs);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("object"        , $object);
 $smarty->assign("mode"          , mbGetValueFromGet("mode"));
-
+$smarty->assign("notext"        , "");
 $smarty->display("inc_widget_documents.tpl");
 
 ?>

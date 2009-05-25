@@ -127,6 +127,7 @@
          <!-- Send File -->
 				 {{mb_include module=dPfiles template=inc_file_send_button 
 				 		_doc_item=$document
+				 		notext=""
 				 		onComplete="Document.refreshList('$object_class','$object_id')"
 				 }}
         </form>
