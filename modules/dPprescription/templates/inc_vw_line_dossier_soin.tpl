@@ -89,7 +89,7 @@
     {{/if}}
     
     {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
-          <img style="float: right" src="images/icons/ampoule_urgence.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+          <img style="float: right" src="images/icons/ampoule_urgence.png" alt="Urgence" title="Urgence"/>
     {{/if}}
     
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
