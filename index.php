@@ -111,13 +111,19 @@ $g = "";
 
 // load locale settings
 require_once("./locales/core.php");
-setlocale(LC_TIME, "fr_FR", "fr_FR.$locale_char_set", "fr_FR@euro", "fr_FR.utf8", "fra");
+if (!isset($locale_names)){
+  $locale_names = array();
+}
 
+setlocale(LC_TIME, $locale_names);
+
+if (!isset($locale_char_set)){
+  $locale_char_set = "UTF-8";
+}
+
+// output the character set header
 if (!$suppressHeaders || $ajax) {
-  // output the character set header
-  if (isset($locale_char_set)) {
-    header("Content-type: text/html;charset=$locale_char_set");
-  }
+  header("Content-type: text/html;charset=$locale_char_set");
 }
 
 // check if we are logged in
@@ -231,10 +237,6 @@ if (!$suppressHeaders) {
   
   // -- Code pour le HEADER --
   
-  // Définition du CharSet
-  if (!isset($locale_char_set)){
-    $locale_char_set = "UTF-8";
-  }
   // Liste des Etablissements
   $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 
