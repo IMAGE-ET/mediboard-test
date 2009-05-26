@@ -5,23 +5,32 @@ togglePrenomsList = function(element) {
 	Element.classNames(element).flip('up', 'down');
 }
 
+selectFirstEnabled = function(select){
+  var found = false;
+  $A(select.options).each(function (o,i) {
+    if (!found && !o.disabled) {
+      $V(select, o.value);
+      found = true;
+    }
+  });
+}
+
 disableOptions = function (select, list) {
 	$A(select.options).each(function (o) {
-		o.disabled = (list.indexOf(o.value) != -1);
+    o.disabled = (list.indexOf(o.value) != -1);
 	});
+  if (select.options[select.selectedIndex].disabled) {
+    selectFirstEnabled(select);
+  }
 }
 
 changeCiviliteForSexe = function(element) {
-	var oForm = document.editFrm;
+	var oForm = document.editFrm.elements;
 	var valueSexe = $V(element);
 	if(valueSexe == 'm') {
-		if (!$V(oForm.patient_id))
-		  $V("editFrm_civilite", 'm', false);
-		disableOptions($('editFrm_civilite'), ['mme', 'melle', 'vve']);
+		disableOptions($(oForm.civilite), ['mme', 'melle', 'vve']);
 	} else {
-		if (!$V(oForm.patient_id))
-		  $V("editFrm_civilite", 'mme', false);
-		disableOptions($('editFrm_civilite'), ['m']);
+		disableOptions($(oForm.civilite), ['m']);
 	} 
 }
 
@@ -30,7 +39,7 @@ changeCiviliteForDate = function(element) {
 	  var date = new Date();
 	  var naissance = $V(element).split('/')[2];
 	  if (((date.getFullYear()-15) <= naissance) && (naissance <= (date.getFullYear()))) {
-		  $V("editFrm_civilite", "enf");
+		  $V(element.form.civilite, "enf");
 	  } else {
 		  changeCiviliteForSexe(element.form.sexe);
 	  }
@@ -47,15 +56,12 @@ Main.add(function() {
       list = $("patient_identite").select(".prenoms_list input"),
       button = $("patient_identite").select("button.down.notext");
   for (i = 0; i < list.length; i++) {
-	  var input = list[i];
-    if ($V(input)) {
+    if ($V(list[i])) {
     	togglePrenomsList(button[0]);
       break;
     }
   }
-  var oForm = document.editFrm;
-  var oElement = oForm.sexe;
-  changeCiviliteForSexe(oElement);
+  changeCiviliteForSexe(document.forms.editFrm.elements.sexe);
 }); 
 </script>
 
@@ -232,7 +238,7 @@ Main.add(function() {
     	</div>
       <script type="text/javascript">
         function showCopieIdentite() {
-        	$("copie-identite")[document.editFrm.rang_beneficiaire.value == "01" ? "show" : "hide"]();
+        	$("copie-identite").setVisible(document.editFrm.rang_beneficiaire.value == "01");
         }
         
         showCopieIdentite();
