@@ -1,7 +1,5 @@
 <script type="text/javascript">
 
-var noChangeCivilite = false;
-
 togglePrenomsList = function(element) {
 	var list = $("patient_identite").select('.prenoms_list').invoke('toggle');
 	Element.classNames(element).flip('up', 'down');
@@ -14,30 +12,28 @@ disableOptions = function (select, list) {
 }
 
 changeCiviliteForSexe = function(element) {
-	if (!noChangeCivilite) {
-		var valueSexe = $V(element);
-		if(valueSexe == 'm') {
-			$V("editFrm_civilite", 'm');
-			disableOptions($('editFrm_civilite'), ['mme', 'melle', 'vve']);
-		} else {
-			$V("editFrm_civilite", 'mme');
-			disableOptions($('editFrm_civilite'), ['m']);
-		} 
-    noChangeCivilite = false;
-	}
+	var oForm = document.editFrm;
+	var valueSexe = $V(element);
+	if(valueSexe == 'm') {
+		if (!$V(oForm.patient_id))
+		  $V("editFrm_civilite", 'm', false);
+		disableOptions($('editFrm_civilite'), ['mme', 'melle', 'vve']);
+	} else {
+		if (!$V(oForm.patient_id))
+		  $V("editFrm_civilite", 'mme', false);
+		disableOptions($('editFrm_civilite'), ['m']);
+	} 
 }
 
 changeCiviliteForDate = function(element) {
-  if (!noChangeCivilite && $V(element)) {
+  if ($V(element)) {
 	  var date = new Date();
 	  var naissance = $V(element).split('/')[2];
 	  if (((date.getFullYear()-15) <= naissance) && (naissance <= (date.getFullYear()))) {
 		  $V("editFrm_civilite", "enf");
 	  } else {
-		  noChangeCivilite = false;
 		  changeCiviliteForSexe(element.form.sexe);
 	  }
-	  noChangeCivilite = false;
   }
 }
 
@@ -58,7 +54,7 @@ Main.add(function() {
     }
   }
   var oForm = document.editFrm;
-  var oElement = oForm.civilite;
+  var oElement = oForm.sexe;
   changeCiviliteForSexe(oElement);
 }); 
 </script>
@@ -124,7 +120,7 @@ Main.add(function() {
     <th>{{mb_label object=$patient field="civilite"}}</th>
     <td>
       {{assign var=civilite_locales value=$patient->_specs.civilite}} 
-      <select name="civilite" onchange="copyIdentiteAssureValues(this); noChangeCivilite=true">
+      <select name="civilite" onchange="copyIdentiteAssureValues(this);">
         {{foreach from=$civilite_locales->_locales key=key item=curr_civilite}} 
         <option value="{{$key}}" {{if $key == $patient->civilite}}selected="selected"{{/if}}> {{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$curr_civilite}}) </option>
         {{/foreach}}

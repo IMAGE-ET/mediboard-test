@@ -35,25 +35,27 @@ $patientMatch->naissance  = $naissance;
 
 $textMatching = null;
 
-if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons") {
-  $matching = $patientMatch->loadMatchingPatient();
-	
-	if($matching != 0) {
-	  $textMatching = "Doublons détectés:";
-	  $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
-	}
-} else {
-	$siblings = $patientMatch->getSiblings();
-	
-	if(count($siblings) != 0) {
-	  $textMatching = "Risque de doublons :";
-	  foreach($siblings as $key => $value) {
-	    $textMatching .= "\n\t $value->nom $value->prenom" .
-	      " né(e) le ". mbDateToLocale($value->naissance) .
-	      "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
-	      "- $value->cp $value->ville";
-	  }
-	  $textMatching .= "\nVoulez-vous tout de même sauvegarder ?";
+if (!$patient_id) {
+	if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons" ) {
+	  $matching = $patientMatch->loadMatchingPatient();
+
+	  if($matching > 0) {
+		  $textMatching = "Doublons détectés:";
+		  $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
+		}
+	} else {
+		$siblings = $patientMatch->getSiblings();
+		
+		if(count($siblings) != 0) {
+		  $textMatching = "Risque de doublons :";
+		  foreach($siblings as $key => $value) {
+		    $textMatching .= "\n\t $value->nom $value->prenom" .
+		      " né(e) le ". mbDateToLocale($value->naissance) .
+		      "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
+		      "- $value->cp $value->ville";
+		  }
+		  $textMatching .= "\nVoulez-vous tout de même sauvegarder ?";
+		}
 	}
 }
 
