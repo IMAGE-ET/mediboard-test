@@ -23,23 +23,23 @@ $where = array();
 $where["praticien_id"] = "= '$praticien->_id'";
 $where["object_class"] = " = 'CSejour'";
 $where["object_id"] = "IS NULL";
-$protocoles_list_praticien = $prescription->loadList($where);
+$protocoles_list_praticien = $prescription->loadList($where, "libelle");
 
 // Chargement des packs du praticien
 $pack_praticien = new CPrescriptionProtocolePack();
 $pack_praticien->praticien_id = $praticien_id;
 $pack_praticien->object_class = 'CSejour';
-$packs_praticien = $pack_praticien->loadMatchingList();
+$packs_praticien = $pack_praticien->loadMatchingList("libelle");
   
 $where["function_id"] = "= '$praticien->function_id'";
 $where["praticien_id"] = null;
-$protocoles_list_function = $prescription->loadList($where);
+$protocoles_list_function = $prescription->loadList($where, "libelle");
 
  // Chargement des packs de la fonction
 $pack_function = new CPrescriptionProtocolePack(); 
 $pack_function->function_id = $praticien->function_id;
 $pack_function->object_class = 'CSejour';
-$packs_function = $pack_function->loadMatchingList();
+$packs_function = $pack_function->loadMatchingList("libelle");
 
   
 // Création du template

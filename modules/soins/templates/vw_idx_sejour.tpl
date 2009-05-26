@@ -472,7 +472,9 @@ viewBilanService = function(service_id, date){
                 </td>
                 <td class="action">
                   <div class="mediuser" style="border-color:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
+	                  <label title="{{$curr_affectation->_ref_sejour->_ref_praticien->_view}}">
 	                  {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}          
+                    </label>
                     {{if $isPrescriptionInstalled}}         
                       {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
                         <img src="images/icons/warning.png" alt="" title="" 

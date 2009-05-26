@@ -38,8 +38,9 @@
   </td>
   <td class="action">
   <div class="mediuser" style="border-color:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
+    <label title="{{$curr_sejour->_ref_praticien->_view}}">
     {{$curr_sejour->_ref_praticien->_shortview}}
- 
+    </label>
     {{if $isPrescriptionInstalled}}         
     	 {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
     	   <img src="images/icons/warning.png" alt="" title="" 
