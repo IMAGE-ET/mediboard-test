@@ -28,6 +28,8 @@ class CUserLog extends CMbMetaObject {
   // Object References
   var $_fields = null;
   var $_ref_user = null;
+  
+  var $_merged_ids = null; // Tableau d'identifiants des objets fusionnés
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -68,6 +70,22 @@ class CUserLog extends CMbMetaObject {
   	parent::loadRefsFwd();
   	$user = new CUser;
     $this->_ref_user = $user->getCached($this->user_id);
+  }
+  
+  function loadMergedIds(){
+    if($this->type == "merge"){
+      $date_max = mbDateTime("+3 seconds", $this->date);
+      $log = new CUserLog();
+      $where = array();
+      $where["user_id"] = "= '$this->user_id'";
+      $where["type"] = " = 'delete'";
+      $where["date"] = "BETWEEN '$this->date' AND '$date_max'";
+      $logs = $log->loadList($where);
+      
+      foreach($logs as $_log){
+        $this->_merged_ids[] = $_log->object_id;
+      }
+    }
   }
 }
 ?>
