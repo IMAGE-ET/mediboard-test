@@ -412,6 +412,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
               
               $sql .= "AND prescription.type = '$_type'
 							AND prise_posologie.decalage_intervention IS NULL
+              AND prise_posologie.urgence_datetime IS NULL
 							ORDER BY moment_unitaire_id;";
     $ds->exec($sql);
 
@@ -448,10 +449,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $line_medicament->load($poso['prescription_line_medicament_id']);
     $line_medicament->loadRefsPrises();
     foreach($line_medicament->_ref_prises as $_prise){
-      $_prise->_id = '';
-      $_prise->object_id = $this->_id;
-      $_prise->object_class = $this->_class_name;
-      $_prise->store();
+      if(!$_prise->urgence_datetime){
+	      $_prise->_id = '';
+	      $_prise->object_id = $this->_id;
+	      $_prise->object_class = $this->_class_name;
+	      $_prise->store();
+      }
     }
   }
   
@@ -522,18 +525,33 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	parent::loadRefsFwd();
     $this->loadRefProduit();
     $this->loadPosologie();
-
-    if ($this->_ref_produit->libelle_presentation){
-      $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
-    }
-
+   
+    $this->_unites_prise = array();
+    
     foreach($this->_ref_produit->_ref_posologies as $_poso){
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
-      if($_poso->p_kg) {
-        // On ajoute la poso avec les /kg
-        $this->_unites_prise[] = "$unite/kg";
+      if($unite){
+	      if($_poso->p_kg) {
+	        // On ajoute la poso avec les /kg
+	        $this->_unites_prise[] = "$unite/kg";
+	      }
+	    	$this->_unites_prise[] = $unite;
       }
-    	$this->_unites_prise[] = $unite;
+    }
+    
+    // Si aucune prise n'est trouvée par le parcours des posologies, chargement direct des prises
+    if(count($this->_unites_prise)<1){
+      $this->_ref_produit->loadUnitesPrise();
+      foreach($this->_ref_produit->_prises as $_prise){
+	      if(!in_array($_prise, $this->_unites_prise)){
+	        $this->_unites_prise[] = $_prise;
+	      }  
+      }
+    }
+    
+    // Ajout de la presentation comme unite de prise
+    if ($this->_ref_produit->libelle_presentation){
+      $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
     }
     
     if (is_array($this->_unites_prise)){

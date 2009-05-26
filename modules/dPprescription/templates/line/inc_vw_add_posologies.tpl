@@ -58,8 +58,9 @@ Main.add( function(){
 	  <input type="checkbox" name="midi" /><label for="midi"> Midi</label>
 	  <input type="checkbox" name="soir" /><label for="soir"> Soir</label>
 	  
+	  {{if !$line->_protocole}}
     <input type="checkbox" name="_urgent" onchange="changeUrgence(this.form, this.checked);" /><label for="_urgent"> Urg.</label>
-    
+    {{/if}}
 	  
 	  
 	  {{/if}}

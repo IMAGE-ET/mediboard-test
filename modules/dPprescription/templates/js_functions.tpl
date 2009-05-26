@@ -89,9 +89,12 @@ selDivPoso = function(type, line_id, type_elt){
         oFormPrise.matin.enable().show();
         oFormPrise.midi.enable().show();
         oFormPrise.soir.enable().show();
-        oFormPrise._urgent.enable().show();
+        if(oFormPrise._urgent){
+	        oFormPrise._urgent.enable().show();
+	        changeUrgence(oFormPrise, oFormPrise._urgent.checked);
+        }
         $("moment_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
-        changeUrgence(oFormPrise, oFormPrise._urgent.checked);
+
       } else {
         $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
         oFormPrise.moment_unitaire_id.setStyle( { float: null } );
@@ -147,8 +150,10 @@ onSubmitPrise = function(oForm, chapitre){
       if(oForm.moment_unitaire_id){
         oForm.moment_unitaire_id.value = "";
       }
-      oForm._urgent.checked = false;
-      changeUrgence(oForm, false);
+      if(oForm._urgent){
+	      oForm._urgent.checked = false;
+	      changeUrgence(oForm, false);
+      }
   } });
 }
 

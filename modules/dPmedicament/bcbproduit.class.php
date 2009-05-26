@@ -375,6 +375,21 @@ class CBcbProduit extends CBcbObject {
     $this->rapport_unite_prise[$unite_prise][$unite_contenance] = $nb_up;
   }
   
+  function loadUnitesPrise(){
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT CODE_UNITE_DE_PRISE1, CODE_UNITE_DE_PRISE2 
+							FROM `IDENT_PRODUITS` 
+							WHERE `CODE_CIP` = '$this->code_cip';";
+    $this->_codes_prises = $ds->loadhash($query);
+   
+    foreach($this->_codes_prises as $_code_prise){
+      if($_code_prise){
+        $query = "SELECT LIBELLE_UNITE_DE_PRISE_PLURIEL FROM `POSO_UNITES_PRISE` WHERE `CODE_UNITE_DE_PRISE` = '$_code_prise';";
+        $this->_prises[] = $ds->loadResult($query);
+      }
+    }
+  }
+  
   function loadDosage($dosage_unite, $dosage_nb){
    $ds = CBcbObject::getDataSource();
    if($dosage_unite){
