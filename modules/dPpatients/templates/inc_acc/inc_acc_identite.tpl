@@ -24,22 +24,23 @@ disableOptions = function (select, list) {
   }
 }
 
-changeCiviliteForSexe = function(element) {
+changeCiviliteForSexe = function(element, assure) {
 	var oForm = document.editFrm.elements;
 	var valueSexe = $V(element);
 	if(valueSexe == 'm') {
-		disableOptions($(oForm.civilite), ['mme', 'melle', 'vve']);
+		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['mme', 'melle', 'vve']);
 	} else {
-		disableOptions($(oForm.civilite), ['m']);
+		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['m']);
 	} 
 }
 
-changeCiviliteForDate = function(element) {
+changeCiviliteForDate = function(element, assure) {
+	var oForm = document.editFrm.elements;
   if ($V(element)) {
 	  var date = new Date();
 	  var naissance = $V(element).split('/')[2];
 	  if (((date.getFullYear()-15) <= naissance) && (naissance <= (date.getFullYear()))) {
-		  $V(element.form.civilite, "enf");
+		  $V($(oForm[(assure ? 'assure_' : '')+'civilite']), "enf");
 	  } else {
 		  changeCiviliteForSexe(element.form.sexe);
 	  }
@@ -62,6 +63,7 @@ Main.add(function() {
     }
   }
   changeCiviliteForSexe(document.forms.editFrm.elements.sexe);
+  changeCiviliteForSexe(document.forms.editFrm.elements.sexe, true);
 }); 
 </script>
 

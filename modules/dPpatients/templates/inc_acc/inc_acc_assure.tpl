@@ -32,11 +32,11 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="assure_sexe"}}</th>
-    <td>{{mb_field object=$patient field="assure_sexe"}}</td>
+    <td>{{mb_field object=$patient field="assure_sexe" onchange="changeCiviliteForSexe(this, true);"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="assure_naissance"}}</th>
-    <td>{{mb_field object=$patient field="assure_naissance"}}</td>
+    <td>{{mb_field object=$patient field="assure_naissance" onchange="changeCiviliteForDate(this, true);"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="assure_civilite"}}</th>
