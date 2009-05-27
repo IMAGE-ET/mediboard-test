@@ -160,6 +160,21 @@ class CBcbProduit extends CBcbObject {
   
   
 	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche, $search_by_cis = 1) {
+    $libelle_dosage = array();
+	  // Recherche du dosage dans la chaine de caractere
+    preg_match("/[0-9].*/", $Chaine, $libelle_dosage);
+    
+	  $dosage = "";
+	  if(count($libelle_dosage)){
+		  $dosage = $libelle_dosage[0];
+	  }
+	  
+	  // Transmformation de la chaine pour avoir seulement le libelle du produit
+	  if($dosage != ''){
+	    $Chaine = str_replace($dosage,"", $Chaine);
+	  }
+	  $Chaine = rtrim($Chaine);
+
 		$lngLexico = $TypeRecherche & 256;
 		$TypeRecherche = $TypeRecherche & 255;
 		
@@ -178,6 +193,10 @@ class CBcbProduit extends CBcbObject {
 		}
 		$query .= "WHERE PRODUITS_IFP.Code_Marge <> '40' ";
 		$query .= "AND IDENT_FORMES_GALENIQUES.CODE_FORME_GALENIQUE = IDENT_PRODUITS.CODE_FORME_GALENIQUE ";
+		
+		if($dosage != ''){
+		  $query .= "AND IDENT_PRODUITS.DOSAGE LIKE '$dosage%' ";
+		}
 		if ($this->distObj->LivretTherapeutique > 0){
 			$query .= " AND PRODUITS_IFP.Code_CIP=LivretTherapeutique.CodeCIP ";
 			$query .= " AND LivretTherapeutique.CodeEtablissement=".$this->distObj->LivretTherapeutique." ";
