@@ -194,9 +194,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
        	{{if !$mode_protocole && $prescription->type == "sejour"}}
 					<span style="float: right;">
 					  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
-					  {{if !$mode_pharma}}
-						  <button type="button" class="search" onclick="popupDossierMedPatient('{{$prescription->_ref_patient->_id}}','{{$prescription->object_id}}','{{$prescription->_id}}');">Traitements du patient</button>
-					  {{/if}}
+						<button type="button" class="search" onclick="popupDossierMedPatient('{{$prescription->_ref_patient->_id}}','{{$prescription->object_id}}','{{$prescription->_id}}');">Traitements du patient</button>
 					</span>
 			  {{/if}}
 			  
