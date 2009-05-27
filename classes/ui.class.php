@@ -94,7 +94,8 @@ class CAppUI {
     );
     
     foreach ($dirs as $dir) {
-      foreach (glob($dir) as $fileName) {
+      $files = glob($dir);
+      foreach ($files as $fileName) {
         require_once("$rootDir/$fileName");
       }
     }
@@ -127,7 +128,13 @@ class CAppUI {
    */
   static function requireLibraryFile($name) {
     if ($root = self::conf("root_dir")) {
-      return require_once("$root/lib/$name.php");
+    	$file = "$root/lib/$name.php";
+    	if (is_file($file)) {
+          return require_once($file);
+    	} else {
+    		global $AppUI;
+    		$AppUI->setMsg("La librairie <b>".ucwords(dirname($name))."</b> n'est pas installée", UI_MSG_ERROR); die;
+    	}
     }
   }
   

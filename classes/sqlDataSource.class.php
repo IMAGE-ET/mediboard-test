@@ -496,7 +496,8 @@ abstract class CSQLDataSource {
     }
     
     $tmp = array();
-    foreach (get_object_vars($object) as $k => $v) {
+    $vars = get_object_vars($object);
+    foreach ($vars as $k => $v) {
       // Where clause on key name
       if ($k === $keyName) { 
         $where = "`$keyName`='" . $this->escape($v) . "'";

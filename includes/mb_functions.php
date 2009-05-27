@@ -11,6 +11,10 @@
 /**
  * Utility function to return a value from a named array or a specified default
  * array should always be passed by reference
+ * @param array $arr The array containing the values
+ * @param string $name The key of the value to get
+ * @param mixed $def The value if the key's value doesn't exist
+ * @return mixed The value correponding to $name in $arr
  */
 function dPgetParam(&$arr, $name, $def = null) {
   return isset( $arr[$name] ) ? $arr[$name] : $def;
@@ -19,7 +23,7 @@ function dPgetParam(&$arr, $name, $def = null) {
 
 /**
  * Returns the first arguments that do not evaluate to null (0, null, "")
- * @return mixed 
+ * @return mixed The first value evaluated to TRUE
  */
 function mbGetValue() {
   foreach(func_get_args() as $arg) {
@@ -30,50 +34,60 @@ function mbGetValue() {
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Get, with at least a
- * default value
+ * Returns a value from the client's cookies, with at least a default value
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from the cookies
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the cookies
  **/
 function mbGetValueFromCookie($valName, $valDefault = null) {
   return isset($_COOKIE[$valName]) ? $_COOKIE[$valName] : $valDefault;
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Get, with at least a
+ * Returns the value of a variable retreived from HTTP GET, with at least a
  * default value
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP GET
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP GET
  **/
 function mbGetValueFromGet($valName, $valDefault = null) {
   return isset($_GET[$valName]) ? $_GET[$valName] : $valDefault;
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Post, with at least a
+ * Returns the value of a variable retreived from HTTP POST, with at least a
  * default value
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP POST
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP POST
  **/
 function mbGetValueFromPost($valName, $valDefault = null) {
   return isset($_POST[$valName]) ? $_POST[$valName] : $valDefault;
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Post, with at least a
+ * Returns the value of a variable retreived from HTTP REQUEST (POST or GET), with at least a
  * default value
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP REQUEST (POST or GET)
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP REQUEST (POST or GET)
  **/
 function mbGetValueFromRequest($valName, $valDefault = null) {
   return isset($_REQUEST[$valName]) ? $_REQUEST[$valName] : $valDefault;
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Get, then from the session
- * Stores it in _SESSION[$m] in all cases, with at least a default value
+ * Returns the value of a variable retreived from HTTP GET or Session, relative 
+ * to a module ($m), with at least a default value. Stores it in $_SESSION in all 
+ * cases, with at least a default value.
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP GET or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP GET or Session
  **/
 function mbGetValueFromGetOrSession($valName, $valDefault = null) {
   global $m;
@@ -86,10 +100,12 @@ function mbGetValueFromGetOrSession($valName, $valDefault = null) {
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Get, then from the session
- * Stores it in _SESSION in all cases, with at least a default value
+ * Returns the value of a variable retreived from HTTP GET or Session, with at least a
+ * default value. Stores it in $_SESSION in all cases, with at least a default value.
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP GET or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP GET or Session
  **/
 function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
   if (isset($_GET[$valName])) {
@@ -100,10 +116,13 @@ function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Post, then from the session
- * Stores it in _SESSION[$m] in all cases, with at least a default value
+ * Returns the value of a variable retreived from HTTP POST or Session, relative 
+ * to a module ($m), with at least a default value. Stores it in $_SESSION in all 
+ * cases, with at least a default value.
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP POST or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP POST or Session
  **/
 function mbGetValueFromPostOrSession($valName, $valDefault = null) {
   global $m;
@@ -116,10 +135,12 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
 }
 
 /**
- * Returns the value of a variable retreived it from HTTP Post, then from the session
- * Stores it in _SESSION[$m] in all cases, with at least a default value
+ * Returns the value of a variable retreived from HTTP POST or Session, with at least a
+ * default value. Stores it in $_SESSION in all cases, with at least a default value.
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from HTTP POST or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP POST or Session
  **/
 function mbGetAbsValueFromPostOrSession($key, $default = null) {
   if (isset($_POST[$key])) {
@@ -129,9 +150,12 @@ function mbGetAbsValueFromPostOrSession($key, $default = null) {
 }
 
 /**
- * Returns the value of a variable retreived it from the session
+ * Returns the value of a variable retreived from Session, with at least a
+ * default value
  * @access public
- * @return any 
+ * @param string $valName The key of the value to get from Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the Session
  **/
 function mbGetValueFromSession($key, $default = null) {
   global $m;
@@ -139,11 +163,11 @@ function mbGetValueFromSession($key, $default = null) {
 }
 
 /**
- * Returns the MbObject with given GET params keys
- * @param string $class_key
- * @param string $id_key
- * @param string $guid_key
- * @return CMbObject
+ * Returns the CMbObject with given GET params keys, if it doesn't exist, a redirect is made
+ * @param string $class_key The class name of the object
+ * @param string $id_key The object ID
+ * @param string $guid_key The object GUID (classname-id)
+ * @return CMbObject The object loaded or nothing
  **/
 function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
   $object_class = mbGetValueFromGet($class_key);
@@ -169,6 +193,8 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
 /**
  * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
  * @access public
+ * @param string $key The key to store in the session
+ * @param mixed $value The value to store
  * @return void
  **/
 function mbSetValueToSession($key, $value = null) {
@@ -179,6 +205,8 @@ function mbSetValueToSession($key, $value = null) {
 /**
  * Sets a value to the session. Very useful to nullify object ids after deletion
  * @access public
+ * @param string $key The key to store in the session
+ * @param mixed $value The value to store
  * @return void
  **/
 function mbSetAbsValueToSession($key, $value = null) {
@@ -187,9 +215,9 @@ function mbSetAbsValueToSession($key, $value = null) {
 
 /**
  * Calculate the bank holidays in France
- * @return array: List of bank holidays
+ * @param string The relative date, used to calculate the bank holidays of a specific year
+ * @return array List of bank holidays
  **/
-
 function mbBankHolidays($date = null) {
   if(!$date)
     $date = mbDate();
@@ -227,9 +255,9 @@ function mbBankHolidays($date = null) {
 
 /**
  * Calculate the number of work days in the given month date
- * @return int: number of work days 
+ * @param string $date The relative date of the months to get work days
+ * @return integer Number of work days 
  **/
-
 function mbWorkDaysInMonth($date = null) {
   $result = 0;
   if(!$date)
@@ -256,7 +284,10 @@ function mbWorkDaysInMonth($date = null) {
 
 /**
  * Transforms absolute or relative time into a given format
- * @return string: the transformed time 
+ * @param string $relative A relative time
+ * @param string $ref An absolute time to transform
+ * @param string $format The data in which the date will be returned
+ * @return string The transformed date
  **/
 function mbTransformTime($relative = null, $ref = null, $format) {
   if ($relative === "last sunday") {
@@ -274,7 +305,7 @@ function mbTransformTime($relative = null, $ref = null, $format) {
  * Transforms absolute or relative time into DB friendly DATETIME format
  * @param string $relative Modifies the time (eg '+1 DAY')
  * @param datetime The reference date time fo transforms
- * @return string: the transformed time 
+ * @return string The transformed time 
  **/
 function mbDateTime($relative = null, $ref = null) {
   return mbTransformTime($relative, $ref, "%Y-%m-%d %H:%M:%S");

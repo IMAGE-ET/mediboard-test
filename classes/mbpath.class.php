@@ -51,7 +51,7 @@ class CMbPath {
 
     closedir($dh);
 
-    return $file == null;             
+    return $file === null;             
   }
   
   /**
@@ -85,12 +85,8 @@ class CMbPath {
   }
   
   static function getExtension($path) {
-    $fragments = explode(".", basename($path));
-    if (count($fragments) < 2) {
-      return "";
-    }
-    
-    return $fragments[count($fragments) - 1];
+    $info = pathinfo($path);
+    return $info['extension'];
   }
   
   /**
@@ -181,5 +177,7 @@ class CMbPath {
     return $path;
   }
 }
+
+echo CMbPath::getExtension('/454545/bahhh.p');
 
 ?>
