@@ -208,4 +208,5 @@ $locales['CGroups-back-modeles'] = '';
 $locales['pref-saveOnPrint-desc'] = '';
 $locales['pref-saveOnPrint-0'] = '';
 $locales['pref-saveOnPrint-1'] = '';
+$locales['pref-saveOnPrint-2'] = '';
 ?>

@@ -211,6 +211,7 @@ $locales['pref-saveOnPrint'] = 'Demande de sauvegarde lors de l\'impression';
 $locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
 $locales['pref-saveOnPrint-0'] = 'Non';
 $locales['pref-saveOnPrint-1'] = 'Oui';
+$locales['pref-saveOnPrint-2'] = 'Oui, sans confirmation';
 $locales['CAideSaisie-depend_value_2'] = 'Valeur 2';
 $locales['CAideSaisie-depend_value_2-court'] = 'Valeur 2';
 $locales['CAideSaisie-depend_value_2-desc'] = 'Valeur de la dépendance 2 liée à l\'aide';

@@ -341,6 +341,7 @@
       <select name="pref_name[{{$var}}]">
         <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
         <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+        <option value="2" {{if $prefsUser.$module.$var == 2 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-2{{/tr}}</option>
       </select>
     </td>
   </tr>
