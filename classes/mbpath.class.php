@@ -178,6 +178,4 @@ class CMbPath {
   }
 }
 
-echo CMbPath::getExtension('/454545/bahhh.p');
-
 ?>
