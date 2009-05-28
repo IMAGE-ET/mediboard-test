@@ -517,7 +517,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field=adresse_par_etab_id}}</th>
   <td colspan="3">
-     <select name="etablissement_transfert_id" onchange="$V(this.form.adresse_par_etab_id, $V(this))">
+     <select name="_adresse_par_etab_id" onchange="$V(this.form.adresse_par_etab_id, $V(this))">
        <option value="">&mdash;{{tr}}Choose{{/tr}}</option>
        {{foreach from=$listEtab item="etab"}}
          <option value="{{$etab->_id}}" {{if $etab->_id == $sejour->adresse_par_etab_id}}selected="selected"{{/if}}>{{$etab->_view}}</option>
