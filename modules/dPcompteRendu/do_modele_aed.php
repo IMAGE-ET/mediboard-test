@@ -20,6 +20,7 @@ if (isset($_POST["source"])) {
     $listes = $_POST["_CListeChoix"];
     CMbArray::removeValue(array(0 => "undef"), $listes);
     foreach ($listes as $list_id => $options) {
+      $options = array_map('htmlentities', $options);
 	    $list = new CListeChoix;
 	    $list->load($list_id);
 	    CMbArray::removeValue("undef", $options);
