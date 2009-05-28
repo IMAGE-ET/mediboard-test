@@ -33,13 +33,13 @@ SiblingsChecker = {
   
   // Ask confirmation before sending, when necessary
   alert: function() {
-    confirmed = !this.textDifferent && !this.textMatching;
-
+	confirmed = true;
+	confirmed &= !this.textDifferent || confirm(this.textDifferent);
+	confirmed &= !this.textMatching  || alert(this.textMatching);
+	
     if (confirmed) {
       document.forms[this.formName].submit();
-    } else {
-    	alert(this.textDifferent+"\n"+this.textMatching);
-    }
+    } 
     
     this.running = false;
   },

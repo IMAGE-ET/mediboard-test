@@ -63,7 +63,7 @@ Main.add(function() {
     }
   }
   changeCiviliteForSexe(document.forms.editFrm.elements.sexe);
-  changeCiviliteForSexe(document.forms.editFrm.elements.sexe, true);
+  changeCiviliteForSexe(document.forms.editFrm.elements.assure_sexe, true);
 }); 
 </script>
 
