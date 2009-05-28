@@ -103,13 +103,13 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
   }
   
   function updateFormFields(){
-    $this->date_prix_hopital = mbDateFromLocale("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_hopital);
-    $this->date_prix_ville = mbDateFromLocale("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_ville);
+    $this->date_prix_hopital = mbDateFromLocale($this->date_prix_hopital);
+    $this->date_prix_ville = mbDateFromLocale($this->date_prix_ville);
   }
   
   function updateDBFields(){
-    $this->distObj->DatePrixHopital = mbDateToLocale("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixHopital);
-	  $this->distObj->DatePrixVille = mbDateToLocale("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixVille);
+    $this->distObj->DatePrixHopital = mbDateToLocale($this->distObj->DatePrixHopital);
+	  $this->distObj->DatePrixVille = mbDateToLocale($this->distObj->DatePrixVille);
   }
     
   function loadRefProduit($full_mode = true){
