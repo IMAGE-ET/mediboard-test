@@ -245,7 +245,6 @@ Main.add( function(){
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
 
 <input type="hidden" name="adresse_par_prat_id" value="{{$sejour->adresse_par_prat_id}}" />
-<input type="hidden" name="adresse_par_etab_id" value="{{$sejour->adresse_par_etab_id}}" />
 {{if !$mode_operation}}
   {{mb_field object=$sejour field="sejour_id" hidden=1 prop=""}}
 {{/if}}
@@ -509,7 +508,9 @@ Main.add( function(){
 <tr>
   <td></td>
   <td colspan="3">
-    <div id="_adresse_par_prat" style="{{if !$medecin_adresse_par}}display:none{{/if}}; width: 300px;">{{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}</div>
+    <div id="_adresse_par_prat" style="{{if !$medecin_adresse_par}}display:none{{/if}}; width: 300px;">
+      {{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}
+    </div>
   </td>
 </tr>
 
@@ -517,7 +518,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field=adresse_par_etab_id}}</th>
   <td colspan="3">
-     <select name="_adresse_par_etab_id" onchange="$V(this.form.adresse_par_etab_id, $V(this))">
+     <select name="adresse_par_etab_id"">
        <option value="">&mdash;{{tr}}Choose{{/tr}}</option>
        {{foreach from=$listEtab item="etab"}}
          <option value="{{$etab->_id}}" {{if $etab->_id == $sejour->adresse_par_etab_id}}selected="selected"{{/if}}>{{$etab->_view}}</option>
