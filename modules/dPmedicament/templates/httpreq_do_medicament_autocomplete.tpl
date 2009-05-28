@@ -17,12 +17,12 @@
 			Produit:
 			<strong> 
 			{{if $search_libelle_long}}
-				{{$produit->LibelleLong|replace:$needle:"<em>$needle</em>"}}
+				{{$produit->LibelleLong|replace:$token_search:$token_replace}}
 			{{else}}
 			  {{if $search_by_cis}}
-			    {{$produit->ucd_view|replace:$needle:"<em>$needle</em>"}}
+			    {{$produit->ucd_view|replace:$token_search:$token_replace}}
 			  {{else}}
-			    {{$produit->Libelle|replace:$needle:"<em>$needle</em>"}}
+			    {{$produit->Libelle|replace:$token_search:$token_replace}}
 			  {{/if}}
 			{{/if}}
 			</strong>
@@ -32,7 +32,7 @@
 			{{/if}}
 			{{if $produit->Commentaire}}
 			<div style="padding-left: 1em">
-			  ({{$produit->Commentaire|replace:$needle:"<em>$needle</em>"}})
+			  ({{$produit->Commentaire|replace:$token_search:$token_replace}}
 			</div>
 			{{/if}}
     </li>
