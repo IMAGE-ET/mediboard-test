@@ -1,11 +1,9 @@
 <script type="text/javascript">
 {{if $compte_rendu->_id}}
-function refreshList()  {
-	window.opener.Document.refreshList(
-	  '{{$compte_rendu->object_class}}',
-		'{{$compte_rendu->object_id}}'	
-	);
-}
+window.opener.Document.refreshList(
+  '{{$compte_rendu->object_class}}',
+	'{{$compte_rendu->object_id}}'	
+);
 {{/if}}
 
 function submitCompteRendu(){
