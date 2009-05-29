@@ -39,7 +39,7 @@ $echange_hprim->_date_min = $_date_min ? $_date_min : $now;
 $echange_hprim->_date_max = $_date_max ? $_date_max : $now;
 
 $echange_hprim->load($echange_hprim_id);
-if($echange_hprim->load($echange_hprim_id)) {
+if($echange_hprim->_id) {
 	$echange_hprim->loadRefs();	
 	
 	$domGetEvenement = new CHPrimXMLEvenementsPatients();

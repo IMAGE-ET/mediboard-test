@@ -11,7 +11,23 @@
 global $can, $g, $m, $AppUI;
 
 $can->needsRead();
+ini_set("soap.wsdl_cache_enabled", "0");
 
+try {
+    // Nouvelle instance de la classe soapClient
+		if (!$client = CMbSOAPClient::make("http://192.168.0.7/mediboard_cip_1/tests/medinetWebServices.wsdl", null, null, "Medinet")) {
+      trigger_error("Impossible de joindre le destinataire");
+    }
+        
+    // appel de la méthode getServerDate du service web    
+    $O =  $client->getServerDate("toto");
+    // Affichage du résultat
+    echo $O->date ;
+} catch (SoapFault $fault) {
+    echo $fault;
+}
+
+die;
 $format = CAppUI::conf('sip soap rooturl');
 
 if (preg_match('#\%u#', $format)) {

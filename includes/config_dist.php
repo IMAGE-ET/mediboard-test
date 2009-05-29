@@ -593,4 +593,11 @@ $dPconfig["sip"] = array (
   "export_id_max" => "",
   "batch_count" => "10",
 );
+
+// Inclusion des fichiers de config de chaque modules
+$config_files = glob("./modules/*/config.php");
+foreach ($config_files as $file) {
+  require_once($file);
+}
+
 ?>
