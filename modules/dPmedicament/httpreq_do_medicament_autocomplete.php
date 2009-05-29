@@ -23,9 +23,6 @@ $produits = $mbProduit->searchProduitAutocomplete($produit, $produit_max, $inLiv
 // Tableau de tokens permettant de les mettre en evidence dans l'autocomplete
 $_tokens = explode(" ", $produit);
 foreach($_tokens as $_token){
-  $token_search[] = $_token;
-  $token_replace[] = "<em>".$_token."</em>";
-
   $_token = strtoupper($_token);
   $token_search[] = $_token;
   $token_replace[] = "<em>".$_token."</em>";
