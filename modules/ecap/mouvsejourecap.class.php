@@ -508,8 +508,8 @@ class CMouvSejourEcap extends CMouvementEcap {
   function syncDHE() {
     $values = array (
       $this->id400Etab->id400,
-      $this->id400Sej->id400,
       $this->id400Pat->id400,
+      $this->id400Sej->id400,
     );
         
     $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
@@ -517,8 +517,8 @@ class CMouvSejourEcap extends CMouvementEcap {
     $query = "SELECT * 
 			FROM $this->base.ECATPF
 			WHERE ATCIDC = ? AND ATCDIV = '01' AND ATCSDV = '01'
-		  AND ATNDOS = ?
-			AND ATDMED = ?";
+			AND ATDMED = ?
+		  AND ATNDOS = ?";
 
     // Recherche de la DHE
     $dheECap = new CRecordSante400();
