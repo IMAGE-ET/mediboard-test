@@ -55,7 +55,7 @@ tar -xvf $source_database-latest.tar.gz
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
-/etc/init.d/mysql stop
+/etc/init.d/mysqld stop
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
 
 dir_target=/var/lib/mysql/$target_database
@@ -86,7 +86,7 @@ chgrp mysql *
 check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 
 # Start mysql
-/etc/init.d/mysql start
+/etc/init.d/mysqld start
 check_errs $? "Failed to start mysql" "Succesfully start mysql"
 
 rm -rf $destination/$source_database
