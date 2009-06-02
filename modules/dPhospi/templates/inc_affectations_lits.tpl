@@ -26,12 +26,8 @@
   {{/if}}
   {{if $curr_affectation->sejour_id}}
     <a style="float: right;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}"
-              onmouseover="PrevTimeHospi.show({{$curr_affectation->_id}}, {{$sejour->praticien_id}}, '{{$sejour->_codes_ccam}}')"
-              onmouseout="PrevTimeHospi.hide({{$curr_affectation->_id}})">
-      <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
+      <img src="images/icons/edit.png" alt="edit" title="Modifier le dossier administratif du patient" />
     </a>
-    <div id="tpsPrev{{$curr_affectation->_id}}" class="tooltip" style="display: none; padding: 5px;">
-    </div>
     
     {{if $sejour->_couvert_cmu}}
     <div style="float: right;"><strong>CMU</strong></div>
@@ -61,11 +57,15 @@
         <img src="images/icons/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
       {{/if}}
     {{/if}}
+
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
     {{if $sejour->type == "ambu"}}
       <em>{{$patient->_view}}</em>
     {{else}}
       <strong>{{$patient->_view}}</strong>
     {{/if}}
+    </span>
+
     {{if (!$sejour->entree_reelle) || ($aff_prev->_id && $aff_prev->effectue == 0)}}
       {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
     {{/if}}
@@ -74,7 +74,8 @@
   <em>[LIT BLOQUE]</em>
   {{/if}}
   </td>
-  <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}">
+  <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
+  	onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
     {{$sejour->_ref_praticien->_shortview}}
   </td>
 </tr>

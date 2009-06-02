@@ -119,6 +119,7 @@ class CSejour extends CCodable {
   
   // Distant fields
   var $_dates_operations          = null;
+  var $_codes_ccam_operations     = null;
   var $_num_dossier               = null;
   var $_list_constantes_medicales = null;
   var $_cancel_alerts             = null;
@@ -975,7 +976,12 @@ class CSejour extends CCodable {
 
     $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where, $order);
-        
+    
+    // Agrégats des codes CCAM des opérations
+    $this->_codes_ccam_operations = CMbArray::pluck($this->_ref_operations, "codes_ccam");
+    CMbArray::removeValue("", $this->_codes_ccam_operations);
+    $this->_codes_ccam_operations = implode("|", $this->_codes_ccam_operations);
+    
     if (count($this->_ref_operations) > 0) {
       $this->_ref_last_operation = reset($this->_ref_operations);
     } else {

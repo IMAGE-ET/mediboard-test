@@ -223,23 +223,16 @@ function reloadService(oElement, mode) {
   }
 }
 
-var PrevTimeHospi = {
-  show: function(affectation_id, chir_id, codes) {
-	  var oElement = $("tpsPrev"+affectation_id);
-	  oElement.show();
-	  if(oElement.alt != "infos - cliquez pour fermer") {
-	    var url = new Url;
-	    url.setModuleAction("dPplanningOp", "httpreq_get_hospi_time");
-	    url.addParam("chir_id", chir_id);
-	    url.addParam("codes", codes);
-	    url.addParam("javascript", 0);
-	    url.requestUpdate(oElement);
-	    oElement.alt = "infos - cliquez pour fermer";
-	  }
-	},
-	
-	hide: function(affectation_id) {
-	  var oElement = $("tpsPrev"+affectation_id);
-	  oElement.hide();
-	}  
+ObjectTooltip.modes.timeHospi = {
+  module: "dPplanningOp",
+  action: "httpreq_get_hospi_time",
+  sClass: "tooltip",
+}
+
+ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {
+	ObjectTooltip.createEx(element, null, 'timeHospi', { 
+		chir_id : chir_id, 
+		codes : codes, 
+		javascript : 0 
+	} );
 }

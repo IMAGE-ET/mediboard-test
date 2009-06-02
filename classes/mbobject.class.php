@@ -1714,8 +1714,7 @@ class CMbObject {
       return;
     }
     
-    
-    foreach ($affectations as $key => $affectation){
+    foreach ($affectations as $key => $affectation) {
       $affectation->loadRefPersonnel();
       $affectation->_ref_personnel->loadRefUser();
       $this->_ref_affectations_personnel[$affectation->_ref_personnel->emplacement][$affectation->_id] = $affectation;
