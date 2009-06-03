@@ -68,7 +68,7 @@ case $1 in
 esac
 
 # deleting file whose date is greater than 7 days
-find ${BASEPATH} -name 'mediboard*.tar.gz' -ctime +$time -exec /bin/rm '{}' ';'
+find ${BASEPATH} -name '$database*.tar.gz' -ctime +$time -exec /bin/rm '{}' ';'
 check_errs $? "Failed to delete files" "Files deleted"
 
 ## Compress archive and remove files
