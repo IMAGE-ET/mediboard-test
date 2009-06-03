@@ -117,9 +117,10 @@ foreach ($classes as $class) {
       continue;
     }
     
-    if ($prop[0] == "_") {
-      continue;
-    }
+    // Ajout des _ dans la maintenance traduction
+    //if ($prop[0] == "_") {
+    //  continue;
+    //}
     
 	  addLocale($classname, $prop, "$classname-$prop");
 	  addLocale($classname, $prop, "$classname-$prop-desc");
