@@ -1010,32 +1010,35 @@ input[disabled].dateTime {
 
 div.date,
 input[disabled].date.notNull {
-  width: 80px;
+  width:85px;
 }
 
 div.time,
 input[disabled].time.notNull {
-  width: 50px;
+  width: 55px;
 }
 
 div.dateTime,
 input[disabled].dateTime.notNull {
-  width: 120px;
+  width: 125px;
 }
 
 div.date,
-input[disabled].date {
-  width: 90px;
+input[disabled].date,
+div.datepickerOverlay.date {
+  width: 95px;
 }
 
 div.time,
-input[disabled].time {
-  width: 60px;
+input[disabled].time,
+div.datepickerOverlay.time {
+  width: 65px;
 }
 
 div.dateTime,
-input[disabled].dateTime {
-  width: 130px;
+input[disabled].dateTime,
+div.datepickerOverlay.dateTime {
+  width: 135px;
 }
 
 div.datepickerOverlay {
@@ -1045,18 +1048,6 @@ div.datepickerOverlay {
   border: none;
   margin: 0;
   padding: 0;
-}
-
-div.datepickerOverlay.date {
-  width: 90px;
-}
-
-div.datepickerOverlay.time {
-  width: 60px;
-}
-
-div.datepickerOverlay.dateTime {
-  width: 130px;
 }
 
 div.autocomplete {

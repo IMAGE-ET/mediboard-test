@@ -327,7 +327,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
       
         {{if $prescription->type != "externe"}}   
 	        <select name="debut_date" 
-					        onchange="$('selDateLine_debut_da').innerHTML = new String;
+					        onchange="getForm('selDateLine').debut_da.value = new String;
 	 				                    this.form.debut.value = '';
 	 				          				  if(this.value == 'other') { $('calendarProt').show(); } 
 	 				          				  else { this.form.debut.value = this.value; $('calendarProt').hide();}">

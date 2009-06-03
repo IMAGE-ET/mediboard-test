@@ -34,8 +34,8 @@ function changeDate(sDebut, sFin){
   var oForm = document.printFrm;
   oForm._date_min.value = sDebut;
   oForm._date_max.value = sFin;
-  $('printFrm__date_min_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
-  $('printFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
+  oForm._date_min_da.value = Date.fromDATE(sDebut).toLocaleDate();
+  oForm._date_max_da.value = Date.fromDATE(sFin).toLocaleDate();  
 }
 </script>
 

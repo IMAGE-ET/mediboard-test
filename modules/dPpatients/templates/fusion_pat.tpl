@@ -8,9 +8,9 @@ Main.add(function () {
 function setField (field, value, form) {
   field = $(document.forms[form].elements[field]);
 
-  var dateView = $(form+'_'+field.name+'_da');
+  var dateView = $(document.forms[form].elements[field.name+'_da']);
   if (dateView) {
-    dateView.update(value);
+    dateView.value = value;
     $V(field, (value ? Date.fromLocaleDate(value).toDATE() : ''));
     return;
   }

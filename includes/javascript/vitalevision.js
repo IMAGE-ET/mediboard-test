@@ -178,7 +178,7 @@ var VitaleVision = {
     mois  = periodeDroits.substring(2, 4);
     annee = periodeDroits.substring(4, 8);
     if(jour != ""){
-      $(form.deb_amo.form.name+'_deb_amo_da').update(jour + "/" + mois + "/" + annee);
+      $V(form.deb_amo_da, jour + "/" + mois + "/" + annee);
       $V(form.deb_amo, annee + "-" + mois + "-" + jour);
     }
   
@@ -187,7 +187,7 @@ var VitaleVision = {
     mois  = periodeDroits.substring(2, 4);
     annee = periodeDroits.substring(4, 8);
     if(jour != ""){
-      $(form.fin_amo.form.name+'_fin_amo_da').update(jour + "/" + mois + "/" + annee);
+      $V(form.fin_amo_da, jour + "/" + mois + "/" + annee);
       $V(form.fin_amo, annee + "-" + mois + "-" + jour);
     }
     

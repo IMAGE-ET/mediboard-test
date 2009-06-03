@@ -161,7 +161,7 @@ function smarty_function_mb_field($params, &$smarty) {
   
   if ($canNull === "false" || $canNull === false) {
     $spec->notNull = 1;
-    $spec->prop = "canNull $spec->prop";
+    $spec->prop = "canNull notNull $spec->prop";
   }
   
   return $spec->getFormElement($object, $params);

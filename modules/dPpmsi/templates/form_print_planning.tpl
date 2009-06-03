@@ -35,8 +35,8 @@ function changeDate(sDebut, sFin){
   var oForm = document.paramFrm;
   oForm._date_min.value = sDebut;
   oForm._date_max.value = sFin;
-  $('paramFrm__date_min_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
-  $('paramFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
+  oForm_date_min_da.value = Date.fromDATE(sDebut).toLocaleDate();
+  oForm_date_max_da.value = Date.fromDATE(sFin).toLocaleDate();  
 }
 
 function changeDateCal(){

@@ -146,7 +146,7 @@ function updateSortiePrevue() {
   var oForm = document.editSejour;
     
   if (!oForm._duree_prevue.value) {
-    oForm._duree_prevue.value = 0;
+    $V(oForm._duree_prevue, 0);
   }
   
   var sDate = oForm._date_entree_prevue.value;
@@ -154,17 +154,16 @@ function updateSortiePrevue() {
     return;
   }
   
-  
   // Add days
   var dDate = Date.fromDATE(sDate);
   var nDuree = parseInt(oForm._duree_prevue.value, 10);
     
   dDate.addDays(nDuree);
-		
+
   // Update fields
 	$V(oForm._date_sortie_prevue, dDate.toDATE());
-  oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
-  oDiv.innerHTML = dDate.toLocaleDate();
+  oView = getForm('editSejour')._date_sortie_prevue_da;
+  $V(oView, dDate.toLocaleDate());
   updateHeureSortie();
   
   // Si meme jour, sortie apres entree

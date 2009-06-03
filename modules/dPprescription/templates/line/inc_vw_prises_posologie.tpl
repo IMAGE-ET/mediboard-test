@@ -16,9 +16,8 @@
 	var oForm = document.forms["editDates-Med-{{$line->_id}}"];
 	$V(oForm.debut,'{{$line->debut}}');
 	{{if $line->debut}}
-	  var oDiv = $('editDates-Med-'+{{$line->_id}}+'_debut_da');
 	  dDate = Date.fromDATE(oForm.debut.value);
-	  oDiv.innerHTML = dDate.toLocaleDate();
+	  oForm.debut_da.value = dDate.toLocaleDate();
 	{{/if}}
 	$V(oForm.duree,'{{$line->duree}}');
 	$V(oForm.unite_duree,'{{$line->unite_duree}}');

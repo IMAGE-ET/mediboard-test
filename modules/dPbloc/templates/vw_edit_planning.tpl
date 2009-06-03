@@ -141,14 +141,12 @@ function popPlanning(debut) {
         <th>{{mb_label object=$plagesel field="date"}}</th>
         <td class="date">
           {{if $plagesel->plageop_id}}
-          <div id="editFrm_date_da">{{$plagesel->date|date_format:"%d/%m/%Y"}}</div>
+          <input type="text" disabled="disabled" name="date_da" value="{{$plagesel->date|date_format:"%d/%m/%Y"}}" />
           <input type="hidden" name="date" value="{{$plagesel->date}}" />
           {{else}}
-          <div id="editFrm_date_da">{{$date|date_format:"%d/%m/%Y"}}</div>
+          <input type="text" disabled="disabled" name="date_da" value="{{$date|date_format:"%d/%m/%Y"}}" />
           <input type="hidden" name="date" value="{{$date}}" />
           {{/if}}
-          <!-- Possibilité de changer la date ? -->
-          <!--img id="editFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/-->
         </td>
       </tr>
       

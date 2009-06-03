@@ -8,9 +8,7 @@ calculFinAmo = function(){
     date = new Date;
     date.addDays(365);
     oForm.fin_amo.value = date.toDATE();
-    sDate = date.toLocaleDate();
-    var oDiv = $('editFrm_fin_amo_da');
-    oDiv.innerHTML = sDate;
+    oForm.fin_amo_da.value = date.toLocaleDate();
   }  
 }
 

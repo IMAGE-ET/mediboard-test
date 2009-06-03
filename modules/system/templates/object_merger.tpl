@@ -15,7 +15,7 @@
 function setField (field, value, form) {
   field = $(form.elements[field]);
 
-  var dateView = $(field.id+'_da');
+  var dateView = $(form.elements[field.name+'_da']);
   if (dateView) {
     dateView.update(value);
     $V(field, (value ? Date.fromLocaleDate(value).toDATE() : ''));

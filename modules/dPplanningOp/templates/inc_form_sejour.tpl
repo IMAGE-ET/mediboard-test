@@ -184,8 +184,15 @@ Main.add( function(){
       start: "{{$sejour->_date_entree_prevue}}",
       stop: "{{$sejour->_date_sortie_prevue}}"
     },
-    spots: Object.values({{$sejour->_dates_operations|@json}})
+    spots: []
   };
+  
+  // Object.value takes the internal functions too :(
+  var dates_operations = {{$sejour->_dates_operations|@json}};
+  $H(dates_operations).each(function(p){
+    if (!Object.isFunction(p.value))
+      dates.spots.push(p.value);
+  });
   
   Calendar.regField(form.entree_reelle, dates);
   Calendar.regField(form.sortie_reelle, dates);

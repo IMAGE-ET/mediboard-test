@@ -347,7 +347,7 @@ var Calendar = {
     }
     
     if (datepicker.icon && !options.noView) {
-      if (!element.hasClassName('notNull') || element.hasClassName('canNull')) {
+      if (!element.hasClassName('notNull')) {
         var cancelIcon = new Element("img", {src: "images/icons/cancel.png", width: 10, height: 10, title: "Vider"});
         var dim = datepicker.icon.getDimensions();
         cancelIcon.setStyle({
@@ -376,7 +376,7 @@ var Calendar = {
         (function(){$(datepicker.datepicker.element).unoverflow()}).defer();
       });
     }
-    //datepicker.element.observe('change', function(){oInput.fire("ui:change")});
+    datepicker.element.observe('change', function(){oInput.fire("ui:change")});
   }
 };
 
@@ -398,10 +398,12 @@ Object.extend(Date, {
   year: 365.2425 * 24 * 60 * 60 * 1000,
 
   isDATE: function(sDate) {
-    return sDate.match(/^\d{4}-\d{2}-\d{2}$/);
+    var re = /^\d{4}-\d{2}-\d{2}$/;
+    return re.match(sDate);
   },
   isDATETIME: function(sDateTime) {
-    return sDateTime.match(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/);
+    var re = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    return re.match(sDateTime);
   },
   
   // sDate must be: YYYY-MM-DD

@@ -57,7 +57,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
 	       <td class="date" style="border:none; {{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
 	         {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
-		           <select name="debut_date" onchange="$('editDates-{{$typeDate}}-{{$line->_id}}_debut_da').innerHTML = new String;
+		           <select name="debut_date" onchange="getForm('editDates-{{$typeDate}}-{{$line->_id}}').debut_da.value = new String;
 					 				                                  this.form.debut.value = '';
 		           																		 if(this.value == 'other') {
 							 				          					           $('date_mb_field-{{$typeDate}}-{{$line_id}}').show();

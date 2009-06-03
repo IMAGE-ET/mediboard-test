@@ -11,7 +11,7 @@ function viewCode(code, object_class){
 
 function setToNow(element) {
   element.value = "now";
-  $(element.id + "_da").innerHTML = "Maintenant";
+  element.form.elements[element.name+"_da"].value = "Maintenant";
 }
 
 </script>

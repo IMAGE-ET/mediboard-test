@@ -55,8 +55,8 @@ selectPeriode = function(element) {
     endDate.setTime(startDate.getTime()+24*60*60*1000-1000);
   }
   
-  $(start.id+'_da').update(startDate.toLocaleDateTime());
-  $(end.id+'_da').update(endDate.toLocaleDateTime());
+  form._dateTime_min_da.value = startDate.toLocaleDateTime();
+  form._dateTime_max_da.value = endDate.toLocaleDateTime();
   
   startDate = startDate.toDATETIME(true);
   endDate = endDate.toDATETIME(true);
