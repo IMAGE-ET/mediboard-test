@@ -106,19 +106,12 @@ var Url = Class.create({
       iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
     }
     
-    var aFeatures = new Array;
-    aFeatures.push("left=" + iLeft);
-    aFeatures.push("top=50");
-    aFeatures.push("height=" + iHeight);
-    aFeatures.push("width=" + iWidth);
-    aFeatures.push("scrollbars=yes");
-    aFeatures.push("resizable=yes");
-    aFeatures.push("menubar=yes");
+    var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
   
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
     var sTargetUrl = sBaseUrl || "";
-    this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, aFeatures.join(", "));  
+    this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, sFeatures);  
     window.children[sWindowName] = this.oWindow;
 		
     // Prefixed window collection
@@ -131,19 +124,12 @@ var Url = Class.create({
   },
   
   popDirect: function(iWidth, iHeight, sWindowName, sBaseUrl) {
-    var aFeatures = new Array;
-    aFeatures.push("left=50");
-    aFeatures.push("top=50");
-    aFeatures.push("height=" + iHeight);
-    aFeatures.push("width=" + iWidth);
-    aFeatures.push("scrollbars=yes");
-    aFeatures.push("resizable=yes");
-    aFeatures.push("menubar=yes");
+    var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
   
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
     
-    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, aFeatures.join(", "));
+    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);
     window.children[sWindowName] = this.oWindow;
   },
   
@@ -287,6 +273,26 @@ var Url = Class.create({
     this.popup(750, 550, "Fichier");
   }
 } );
+
+Url.buildPopupFeatures = function(features) {
+  features = Object.extend({
+    left: 50,
+    top: 50,
+    height: 600,
+    width: 800,
+    scrollbars: true,
+    resizable: true,
+    menubar: true
+  }, features);
+  
+  var a = [], value;
+  $H(features).each(function(f){
+    value = (f.value === true ? 'yes' : (f.value === false ? 'no' : f.value));
+    a.push(f.key+'='+value);
+  });
+  
+  return a.join(',');
+};
 
 /** General purpose ping
  *  @return {Boolean} true if user is connected, false otherwise

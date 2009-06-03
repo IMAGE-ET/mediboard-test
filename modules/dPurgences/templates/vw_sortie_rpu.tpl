@@ -1,14 +1,14 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 function modeSortieDest(mode_sortie, rpu_id) {
   var oFormRPU = document.forms["editRPU-" + rpu_id]; 
   
   // Recuperation du tableau de contrainte modeSortie/Destination en JSON
-  var contrainteDestination = {{$contrainteDestination|@json}}
+  var contrainteDestination = {{$contrainteDestination|@json}};
  
   if(mode_sortie == ""){
     $A(oFormRPU.destination).each( function(input) {
@@ -86,25 +86,26 @@ function submitSejour(){
 
 </script>
 
-
-<table style="width:100%">
+<table class="main">
   <tr>
-  <th>
-   le
-   {{$date|date_format:$dPconfig.longdate}}
-   <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-  </th>
-  </tr>
-  <tr>
-    <td style="text-align: right">
-     Type d'affichage
-     <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
-	      <select name="selAffichage" onchange="submit();">
-	        <option value="tous" {{if $selAffichage == "tous"}}selected = "selected"{{/if}}>Tous</option>
-	        <option value="sortie" {{if $selAffichage == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
-	      </select>
-	    </form>
-    </td>
+    <th>
+      <div style="float: right">
+        Type d'affichage
+        <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
+  	      <select name="selAffichage" onchange="submit();">
+  	        <option value="tous" {{if $selAffichage == "tous"}}selected = "selected"{{/if}}>Tous</option>
+  	        <option value="sortie" {{if $selAffichage == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
+  	      </select>
+  	    </form>
+      </div>
+      
+      le {{$date|date_format:$dPconfig.longdate}}
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
+    </th>
   </tr>
 </table>
 

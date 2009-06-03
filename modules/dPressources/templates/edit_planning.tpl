@@ -1,7 +1,7 @@
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regField("addPlage", "date");
-  Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut=");
+  Calendar.regField(getForm("addPlage").date);
+  Calendar.regField(getForm("changeDate").debut, null, {noView: true});
 });
 </script>
 
@@ -9,8 +9,12 @@ Main.add(function () {
   <tr>
     <th class="title" colspan="2">
       <a href="?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
-      semaine du {{$debut|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      Semaine du {{$debut|date_format:$dPconfig.longdate}}
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
+      </form>
       <a href="?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
@@ -36,7 +40,7 @@ Main.add(function () {
                     {{$curr_plage->libelle}}
                     <br />
                     {{/if}}
-                    {{$curr_plage->tarif}} €
+                    {{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}
                     <br />
                     {{$curr_plage->debut|date_format:"%H"}}h - {{$curr_plage->fin|date_format:"%H"}}h
                     {{if $curr_plage->prat_id}}
@@ -83,13 +87,10 @@ Main.add(function () {
           <th>{{mb_label object=$plage field="date"}}</th>
           <td class="date">
             {{if $plage->plageressource_id}}
-            <div id="addPlage_date_da">{{$plage->date|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="date" value="{{$plage->date}}" class="{{$plage->_props.date}}" />
             {{else}}
-            <div id="addPlage_date_da">{{$debut|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="date" value="{{$debut}}" class="{{$plage->_props.date}}" />
             {{/if}}
-            <img id="addPlage_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date"/>
           </td>
           <th>{{mb_label object=$plage field="_hour_deb"}}</th>
           <td>

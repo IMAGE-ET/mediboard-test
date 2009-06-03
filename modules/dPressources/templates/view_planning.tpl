@@ -7,8 +7,7 @@ Main.add(function () {
   {{if $isprat}}
   PairEffect.initGroup("effectCategory");
   {{/if}}
-  Calendar.regField("addPlage", "date");
-  Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut="); 
+  Calendar.regField(getForm("changeDate").debut, null, {noView: true});
 });
 </script>
 
@@ -17,7 +16,11 @@ Main.add(function () {
     <th class="title">
       <a href="?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
       semaine du {{$debut|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
+      </form>
       <a href="?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
     <th class="title">Votre compte</th>
@@ -50,7 +53,7 @@ Main.add(function () {
                     {{$curr_plage->libelle}}
                     <br />
                   {{/if}}
-                  {{$curr_plage->tarif}} €
+                  {{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}
                   <br />
                   {{$curr_plage->debut|date_format:"%H"}}h - {{$curr_plage->fin|date_format:"%H"}}h
                   {{if $curr_plage->prat_id}}
@@ -94,7 +97,7 @@ Main.add(function () {
         {{if $isprat}}
         <tr id="impayes-trigger">
           <th style="background:#ddf">Plages à régler</th>
-          <td>{{$compte.impayes.total}} ({{$compte.impayes.somme}} €)</td>
+          <td>{{$compte.impayes.total}} ({{$compte.impayes.somme}} {{$dPconfig.currency_symbol}})</td>
         </tr>
         <tbody class="effectCategory" id="impayes">
           {{foreach from=$compte.impayes.plages item=curr_plage}}
@@ -106,7 +109,7 @@ Main.add(function () {
                 {{$curr_plage->libelle}} &mdash;
               {{/if}}
               de {{$curr_plage->debut|date_format:"%H"}}h à {{$curr_plage->fin|date_format:"%H"}}h &mdash;
-              {{$curr_plage->tarif}} €
+              {{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}
               </a>
             </td>
           </tr>
@@ -120,7 +123,7 @@ Main.add(function () {
         </tbody>
         <tr id="inf15-trigger">
           <th style="background:#ddf">Plages réservées et bloquées</th>
-          <td>{{$compte.inf15.total}} ({{$compte.inf15.somme}} €)</td>
+          <td>{{$compte.inf15.total}} ({{$compte.inf15.somme}} {{$dPconfig.currency_symbol}})</td>
         </tr>
         <tbody class="effectCategory" id="inf15">
           {{foreach from=$compte.inf15.plages item=curr_plage}}
@@ -132,7 +135,7 @@ Main.add(function () {
                 {{$curr_plage->libelle}} &mdash;
               {{/if}}
               de {{$curr_plage->debut|date_format:"%H"}}h à {{$curr_plage->fin|date_format:"%H"}}h &mdash;
-              {{$curr_plage->tarif}} €
+              {{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}
               </a>
             </td>
           </tr>
@@ -146,7 +149,7 @@ Main.add(function () {
         </tbody>
         <tr id="sup15-trigger">
           <th style="background:#ddf">Plages réservées à plus de 15 jours</th>
-          <td>{{$compte.sup15.total}} ({{$compte.sup15.somme}} €)</td>
+          <td>{{$compte.sup15.total}} ({{$compte.sup15.somme}} {{$dPconfig.currency_symbol}})</td>
         </tr>
         <tbody class="effectCategory" id="sup15">
         {{foreach from=$compte.sup15.plages item=curr_plage}}
@@ -158,7 +161,7 @@ Main.add(function () {
                 {{$curr_plage->libelle}} &mdash;
               {{/if}}
               de {{$curr_plage->debut|date_format:"%H"}}h à {{$curr_plage->fin|date_format:"%H"}}h &mdash;
-              {{$curr_plage->tarif}} €
+              {{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}
               </a>
             </td>
           </tr>

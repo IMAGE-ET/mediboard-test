@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("selCabinet").date, null, {noView: true});
 });
 </script>
 
@@ -19,6 +19,7 @@ Main.add(function () {
     <td>
       <form name="selCabinet" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
       <table class="form">
         <tr>
           <th class="title" colspan="3">Sélection d'un cabinet</th>
@@ -28,7 +29,7 @@ Main.add(function () {
             <label for="cabinet_id" title="Sélectionner un cabinet">Cabinet: </label>
           </th>
           <td>
-            <select name="cabinet_id" onchange="submit()">
+            <select name="cabinet_id" onchange="this.form.submit()">
               <option value="">&mdash; Choisir un cabinet &mdash;</option>
               {{foreach from=$cabinets item=curr_cabinet}}
                 <option value="{{$curr_cabinet->_id}}" class="mediuser" style="border-color: #{{$curr_cabinet->color}}" {{if $curr_cabinet->_id == $cabinet_id}} selected="selected" {{/if}}>
@@ -39,7 +40,7 @@ Main.add(function () {
           </td>
           <td>
             {{$date|date_format:$dPconfig.longdate}}
-            <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+            <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           </td>
         </tr>
        </table> 
@@ -49,35 +50,32 @@ Main.add(function () {
    <tr>
      <td>
        <table class="form">
-       <tr>
-         <th class="title" colspan="4">Affichage du planning</th>
+         <tr>
+         {{foreach from=$anesthesistes item=curr_anesthesiste}}
+         <th class="title">
+         {{$curr_anesthesiste->_view}}
+         </th>
+         {{/foreach}}
        </tr>
+   
+       <!-- Affichage de la liste des consultations -->    
        <tr>
-       {{foreach from=$anesthesistes item=curr_anesthesiste}}
-       <th class="title">
-       {{$curr_anesthesiste->_view}}
-       </th>
+       {{foreach from=$listPlages item=curr_day}}
+         <td style="width: 200px; vertical-align: top;">
+         {{assign var="listPlage" value=$curr_day.plages}}
+         {{assign var="date" value=$date}}
+         {{assign var="hour" value=$hour}}
+         {{assign var="boardItem" value=$boardItem}}
+         {{assign var="board" value=$board}}
+         {{assign var="tab" value=""}}
+         {{assign var="vue" value="0"}}
+         {{assign var="userSel" value=$curr_day.anesthesiste}}
+         {{assign var="consult" value=$consult}}
+         {{assign var="current_m" value="dPcabinet"}}
+         {{include file="../../dPcabinet/templates/inc_list_consult.tpl"}}
+       </td>
        {{/foreach}}
      </tr>
-   
-     <!-- Affichage de la liste des consultations -->    
-     <tr>
-     {{foreach from=$listPlages item=curr_day}}
-       <td style="width: 200px; vertical-align: top;">
-       {{assign var="listPlage" value=$curr_day.plages}}
-       {{assign var="date" value=$date}}
-       {{assign var="hour" value=$hour}}
-       {{assign var="boardItem" value=$boardItem}}
-       {{assign var="board" value=$board}}
-       {{assign var="tab" value=""}}
-       {{assign var="vue" value="0"}}
-       {{assign var="userSel" value=$curr_day.anesthesiste}}
-       {{assign var="consult" value=$consult}}
-       {{assign var="current_m" value="dPcabinet"}}
-       {{include file="../../dPcabinet/templates/inc_list_consult.tpl"}}
-     </td>
-     {{/foreach}}
-   </tr>
    </table>
    </td>
   </tr>

@@ -11,15 +11,13 @@
 <script type="text/javascript">
 
 function printAmbu(date){
-  url = new Url;
-  url.setModuleAction("dPadmissions", "print_ambu");
+  url = new Url("dPadmissions", "print_ambu");
   url.addParam("date", "{{$date}}");
   url.popup(800,600,"Ambu");
 }
 
 function printPlanning() {
-  url = new Url;
-  url.setModuleAction("dPadmissions", "print_sorties");
+  url = new Url("dPadmissions", "print_sorties");
   url.addParam("date", "{{$date}}");
   url.popup(700, 550, "Sorties");
 }
@@ -30,8 +28,7 @@ function loadTransfert(oForm){
   // si Transfert, affichage du select
   if(mode_sortie=="transfert"){
     //Chargement de la liste des etablissement externes
-    var url = new Url();
-    url.setModuleAction("dPadmissions", "httpreq_vw_etab_externes");
+    var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
     url.addParam("sejour_id", sejour_id);
     url.requestUpdate('listEtabExterne-'+oForm.name, { waitingText : null });
   } else {
@@ -41,8 +38,7 @@ function loadTransfert(oForm){
 }
 
 function reload(mode) {
-  var url = new Url;
-  url.setModuleAction("dPadmissions", "httpreq_vw_sorties");
+  var url = new Url("dPadmissions", "httpreq_vw_sorties");
   url.addParam("date", "{{$date}}");
   url.addParam("vue", "{{$vue}}");
   url.addParam("mode", mode);
@@ -77,21 +73,19 @@ function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, 
 }
 
 Main.add(function () {
-  var ambuUpdater = new Url;
-  ambuUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties");
+  var ambuUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   ambuUpdater.addParam("date", "{{$date}}");
   ambuUpdater.addParam("vue", "{{$vue}}");
   ambuUpdater.addParam("mode", "ambu");
   ambuUpdater.periodicalUpdate('sortiesambu', { frequency: 90 });
   
-  var compUpdater = new Url;
-  compUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties");
+  var compUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   compUpdater.addParam("date", "{{$date}}");
   compUpdater.addParam("vue", "{{$vue}}");
   compUpdater.addParam("mode", "comp");
   compUpdater.periodicalUpdate('sortiescomp', { frequency: 90 });
 
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 </script>
@@ -100,12 +94,12 @@ Main.add(function () {
   <tr>
     <td class="halfPane">
       <form name="typeVue" action="?m={{$m}}" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <label for="vue" title="Choisir un type de vue">Type de vue</label>
-      <select name="vue" onchange="submit()">
-        <option value="0" {{if $vue == 0}}selected="selected"{{/if}}>Tout afficher</option>
-        <option value="1" {{if $vue == 1}}selected="selected"{{/if}}>Ne pas afficher les sorties effectuées</option>
-      </select>
+        <input type="hidden" name="m" value="{{$m}}" />
+        <label for="vue" title="Choisir un type de vue">Type de vue</label>
+        <select name="vue" onchange="submit()">
+          <option value="0" {{if $vue == 0}}selected="selected"{{/if}}>Tout afficher</option>
+          <option value="1" {{if $vue == 1}}selected="selected"{{/if}}>Ne pas afficher les sorties effectuées</option>
+        </select>
       </form>
     </td>
     <td class="halfPane" style="text-align: center">
@@ -113,15 +107,17 @@ Main.add(function () {
       <strong>
         <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
         {{$date|date_format:$dPconfig.longdate}}
-        <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <form name="changeDate" action="?m={{$m}}" method="get">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="tab" value="vw_idx_sortie" />
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        </form>
         <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$demain}}"> >>> </a>
       </strong>
     </td>
   </tr>
   <tr>
-    <td id="sortiesambu">
-    </td>
-    <td id="sortiescomp">
-    </td>
+    <td id="sortiesambu"></td>
+    <td id="sortiescomp"></td>
   </tr>
 </table>

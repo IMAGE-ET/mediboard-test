@@ -22,8 +22,8 @@ function getSpreadSheet() {
 }
 
 Main.add(function () {
-  Calendar.regField("bloc", "deblistbloc");
-  Calendar.regField("bloc", "finlistbloc");
+  Calendar.regField(getForm("bloc").deblistbloc);
+  Calendar.regField(getForm("bloc").finlistbloc);
 });
 
 </script>
@@ -43,11 +43,7 @@ Main.add(function () {
           </td>
           <th><label for="deblistbloc" title="Date de début">Date</label></th>
           <td class="date">
-            <div class="control">
-            <div class="date" id="bloc_deblistbloc_da">{{$deblist|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="deblistbloc" class="notNull date" value="{{$deblist}}" />
-            <img id="bloc_deblistbloc_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-            </div>
           </td>
         </tr>
         <tr>
@@ -67,11 +63,7 @@ Main.add(function () {
           <!--
           <th><label for="finlistbloc" title="Date de fin">Fin</label></th>
           <td class="date">
-            <div class="control">
-            <div class="date" id="bloc_finlistbloc_da">{{$finlist|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="finlistbloc" class="notNull date" value="{{$finlist}}" />
-            <img id="bloc_finlistbloc_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-            </div>
           </td>
           -->
           <td class="button" colspan="2">

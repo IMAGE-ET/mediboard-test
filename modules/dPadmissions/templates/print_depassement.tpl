@@ -46,7 +46,7 @@
   </tr>
   
   <tr>
-    <th>Dépassement d'honoraires: </th><td>{{$admission->depassement}} €</td>
+    <th>Dépassement d'honoraires: </th><td>{{$admission->depassement}} {{$dPconfig.currency_symbol}}</td>
   </tr>
 
   <tr>

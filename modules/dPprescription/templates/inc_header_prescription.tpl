@@ -309,8 +309,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 									    }
 									  }
 					 				  Main.add( function(){
-					 				    prepareForm("applyProtocole");
-					            Calendar.regField('applyProtocole', "debut", false, dates);
+					            Calendar.regField(getForm("applyProtocole").debut, dates);
 					          } );
 					 				</script>				 				
 				 				{{/if}}
@@ -354,8 +353,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
         
          <script type="text/javascript">
 	  	   Main.add( function(){
-		       prepareForm(document.selDateLine);
-		       Calendar.regField("selDateLine", "debut", false);
+		       Calendar.regField(getForm("selDateLine").debut);
 	    	} );
         </script>	
 	    </form>

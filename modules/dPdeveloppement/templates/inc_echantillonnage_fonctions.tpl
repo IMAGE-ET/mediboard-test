@@ -3,7 +3,7 @@ var tabs = null;
 
 Main.add(function () {
   tabs = Control.Tabs.create('tab-echantillonnage', false);
-  Calendar.regField("echantillonage", "debut");
+  Calendar.regField(getForm("echantillonage").debut);
 });
 
 function showTab(iTab) {

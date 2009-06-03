@@ -26,16 +26,14 @@
 <script type="text/javascript">
      
 function loadActesNGAP(sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
+  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
   url.addParam("object_id", sejour_id);
   url.addParam("object_class", "CSejour");
   url.requestUpdate('listActesNGAP', { waitingText: null } );
 }
 
 function loadPatient(patient_id) {
-  url = new Url;
-  url.setModuleAction("system", "httpreq_vw_complete_object");
+  url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CPatient");
   url.addParam("object_id",patient_id);
   url.requestUpdate('viewPatient', {
@@ -44,8 +42,7 @@ function loadPatient(patient_id) {
 }
 
 function loadSejour(sejour_id) {
-  url = new Url;
-  url.setModuleAction("system", "httpreq_vw_complete_object");
+  url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CSejour");
   url.addParam("object_id",sejour_id);
   url.requestUpdate('viewSejourHospi', {
@@ -54,46 +51,39 @@ function loadSejour(sejour_id) {
 }
 
 function loadDocuments(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "httpreq_documents_sejour");
+  var url = new Url("dPhospi", "httpreq_documents_sejour");
   url.addParam("sejour_id" , sejour_id);
   url.requestUpdate("documents", { waitingText: null } );
 }
 
 
 function popEtatSejour(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_parcours");
+  var url = new Url("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
   url.pop(1000, 550, 'Etat du Séjour');
 }
 
 function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url();
-  url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
+  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim", {   waitingText : null } );
 }
 
-
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '');
 }
 
-
 function reloadAntAllergie(sejour_id){
   if($('antecedent_allergie')){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_antecedent_allergie");
+  var url = new Url("dPprescription", "httpreq_vw_antecedent_allergie");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("antecedent_allergie", { waitingText: null } );
   }
 }
 
 function addSejourIdToSession(sejour_id){
-	url = new Url;
-	url.setModuleAction("system", "httpreq_set_value_to_session");
+	url = new Url("system", "httpreq_set_value_to_session");
 	url.addParam("module","{{$m}}");
 	url.addParam("name","sejour_id");
 	url.addParam("value",sejour_id);
@@ -141,24 +131,21 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
 
 {{if $can_view_dossier_medical}}
 function loadAntecedents(sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPcabinet","httpreq_vw_antecedents");
+  var url = new Url("dPcabinet","httpreq_vw_antecedents");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('antecedents', { waitingText: null } )
 }
 {{/if}}
 
 function loadResultLabo(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('Imeds', { waitingText : null });
 }
 
 function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
   if(sejour_id) {
-    var url = new Url();
-    url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+    var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
     url.addParam("date", date);
     url.addParam("mode_dossier", mode_dossier);
@@ -218,8 +205,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 
 function loadSuivi(sejour_id) {
   if(sejour_id) {
-    var urlSuivi = new Url;
-    urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
   }
@@ -252,22 +238,20 @@ function refreshConstantesHack(sejour_id) {
 
 function refreshConstantesMedicales(context_guid) {
   if(context_guid) {
-    var url = new Url;
-    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes-medicales", { waitingText: null } );
   }
 }
 
 function printPatient(patient_id) {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "print_patient");
+  var url = new Url("dPpatients", "print_patient");
   url.addParam("patient_id", patient_id);
   url.popup(700, 550, "Patient");
 }
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
   /* Tab initialization */
   var tab_sejour = Control.Tabs.create('tab-sejour', true);
@@ -297,8 +281,7 @@ function markAsSelected(element) {
 }
 
 viewBilanService = function(service_id, date){
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_bilan_service");
+  var url = new Url("dPhospi", "vw_bilan_service");
   url.addParam("service_id", service_id);
   url.addParam("date", date);
   url.popup(800,500,"Bilan par service");
@@ -318,7 +301,11 @@ viewBilanService = function(service_id, date){
         <tr>
           <th class="category">
             {{$date|date_format:$dPconfig.longdate}}
-            <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+            <form action="?" name="changeDate" method="get">
+              <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="tab" value="{{$tab}}" />
+              <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+            </form>
           </th>
         </tr>
         <tr>

@@ -13,9 +13,8 @@
 // Si ligne de traitement perso finie, on empeche le passage en ligne de prescription normale
 Main.add( function(){
   // Preparation du formulaire
-  prepareForm('form-stop-{{$line->_class_name}}-{{$line->_id}}');
-  
-  Calendar.regField('form-stop-{{$line->_class_name}}-{{$line->_id}}', "date_arret", false, dates);
+  var form = getForm('form-stop-{{$line->_class_name}}-{{$line->_id}}');
+  Calendar.regField(form.date_arret, dates);
 } );
 
 calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){

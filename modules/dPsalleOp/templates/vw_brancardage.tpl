@@ -5,8 +5,6 @@ Main.add(function () {
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_entree_bloc");
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('ops', { frequency: 90 });
-  
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_brancardage&date=");
 });
 
 </script>

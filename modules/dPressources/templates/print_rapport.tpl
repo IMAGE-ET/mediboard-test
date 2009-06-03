@@ -33,13 +33,13 @@
             {{$curr_plage->fin|date_format:$dPconfig.time}}
           </td>
           <td>{{$curr_plage->libelle}}</td>
-          <td>{{$curr_plage->tarif}} €</td>
+          <td>{{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         {{/foreach}}
         <tr>
           <th colspan="2" />
           <th>Total</th>
-          <td><strong>{{$total}} €</strong></td>
+          <td><strong>{{$total}} {{$dPconfig.currency_symbol}}</strong></td>
         </tr>
       </table>
     </td>

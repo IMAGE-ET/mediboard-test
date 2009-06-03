@@ -159,7 +159,7 @@ function printAdmission(id) {
                   &mdash; Modifs : {{$curr_acte->modificateurs}}
                 {{/if}}
                 {{if $curr_acte->montant_depassement}}
-                  &mdash; DH : {{$curr_acte->montant_depassement}} €
+                  &mdash; DH : {{$curr_acte->montant_depassement}} {{$dPconfig.currency_symbol}}
                 {{/if}}
                 {{if $curr_acte->commentaire}}
                   <br />

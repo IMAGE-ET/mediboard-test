@@ -518,28 +518,27 @@ function checkForm(oForm) {
   
   // For each element in the form
   oForm.getElementsEx().each(function (oElement) {
-    if (oElement) { // && (!oElement.tagName.match(/button/i) || Object.isArray(oElement))) { // If the element is not a button
-      var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
-      var oFirstElement = (isArray?oElement[0]:oElement);
-      
-      // Element checker preparing and error checking
-      ElementChecker.prepare(oElement);
-      var sMsgFailed = ElementChecker.sLabel ? ElementChecker.sLabel : printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
-      var oErrors = ElementChecker.checkElement();
-      
-      // If errors, we append them to the error object
-      if (oErrors.length) {
-        oFormErrors.push({
-          title: sMsgFailed,
-          element: oFirstElement.name, 
-          errors: oErrors
-        });
-        if (!oElementFirstFailed) oElementFirstFailed = oFirstElement;
-        if (oLabel) oLabel.style.color = "#f00";
-      }
-      else {
-        if (oLabel) oLabel.style.color = "#000";
-      }
+    if (!oElement || oElement.disabled) return;
+    var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
+    var oFirstElement = (isArray?oElement[0]:oElement);
+    
+    // Element checker preparing and error checking
+    ElementChecker.prepare(oElement);
+    var sMsgFailed = ElementChecker.sLabel ? ElementChecker.sLabel : printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
+    var oErrors = ElementChecker.checkElement();
+    
+    // If errors, we append them to the error object
+    if (oErrors.length) {
+      oFormErrors.push({
+        title: sMsgFailed,
+        element: oFirstElement.name, 
+        errors: oErrors
+      });
+      if (!oElementFirstFailed) oElementFirstFailed = oFirstElement;
+      if (oLabel) oLabel.style.color = "#f00";
+    }
+    else {
+      if (oLabel) oLabel.style.color = "#000";
     }
   });
   

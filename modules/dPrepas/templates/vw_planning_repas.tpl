@@ -1,6 +1,6 @@
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date="); 
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 function devalidationRepas(validation_id){
@@ -30,18 +30,20 @@ function validationRepas(typerepas_id){
   <tr>
     <td>
       <form name="FrmSelectService" action="?m={{$m}}" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <label for="service_id" title="Veuillez sélectionner un service">Service</label>
-      <select name="service_id" onchange="this.form.submit();">
-        <option value="">&mdash; Veuillez sélectionner un service</option>
-        {{foreach from=$services item=curr_service}}
-        <option value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
-          {{$curr_service->nom}}
-        </option>
-        {{/foreach}}
-      </select>
-      pour le {{$date|date_format:"%A %d %b %Y"}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        
+        <label for="service_id" title="Veuillez sélectionner un service">Service</label>
+        <select name="service_id" onchange="this.form.submit();">
+          <option value="">&mdash; Veuillez sélectionner un service</option>
+          {{foreach from=$services item=curr_service}}
+          <option value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
+            {{$curr_service->nom}}
+          </option>
+          {{/foreach}}
+        </select>
+        pour le {{$date|date_format:"%A %d %b %Y"}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form><br />
     </td>
   </tr>

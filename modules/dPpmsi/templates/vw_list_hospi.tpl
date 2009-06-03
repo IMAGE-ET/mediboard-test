@@ -1,16 +1,19 @@
 <script type="text/javascript">
-
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
-
 </script>
 
 <table class="tbl">
   <tr>
     <th class="title" colspan="8">
       Liste des {{$listSejours|@count}} personne(s) hospitalisée(s) au {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
     </th>
   </tr>
   <tr>
@@ -63,13 +66,11 @@ Main.add(function () {
     <td class="text">
       {{if $GHM->_DP}}
         {{if $GHM->_borne_basse > $GHM->_duree}}
-        <img src="images/icons/cross.png" alt="alerte" />
-        Séjour trop court
+          <img src="images/icons/cross.png" alt="alerte" /> Séjour trop court
         {{elseif $GHM->_borne_haute < $GHM->_duree}}
-        <img src="images/icons/cross.png" alt="alerte" />
-        Séjour trop long
+          <img src="images/icons/cross.png" alt="alerte" /> Séjour trop long
         {{else}}
-        <img src="images/icons/tick.png" alt="ok" />
+          <img src="images/icons/tick.png" alt="ok" />
         {{/if}}
       {{else}}
       -

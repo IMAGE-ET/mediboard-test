@@ -17,7 +17,7 @@ function checkHeureSortie(){
   var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
   
   if (oForm._hour_sortie_prevue.value < heure_entree + 1) {
-    heure_entree = heure_entree + 1;
+    heure_entree++;
     oForm._hour_sortie_prevue.value = heure_entree;
   }
 }
@@ -26,8 +26,7 @@ function loadTransfert(form, mode_sortie){
   // si Transfert, affichage du select
   if(mode_sortie=="transfert"){
     //Chargement de la liste des etablissement externes
-    var url = new Url();
-    url.setModuleAction("dPadmissions", "httpreq_vw_etab_externes");
+    var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
     url.requestUpdate('listEtabExterne', { waitingText : null });
   } else {
     // sinon, on vide le contenu de la div
@@ -107,8 +106,7 @@ PatSelector.init = function(){
 }
 
 checkCorrespondantMedical = function(form){
-	var url = new Url;
-  url.setModuleAction("dPplanningOp", "ajax_check_correspondant_medical");
+  var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(form.patient_id));
   url.addParam("sejour_id" , $V(form.sejour_id));
   url.requestUpdate("correspondant_medical" , { waitingText: null });
@@ -125,8 +123,7 @@ Medecin = {
   form: null,
   edit : function() {
     this.form = document.forms.editSejour;
-    var url = new Url();
-    url.setModuleAction("dPpatients", "vw_medecins");
+    var url = new Url("dPpatients", "vw_medecins");
     url.popup(700, 450, "Medecin");
   },
   
@@ -141,7 +138,6 @@ Medecin = {
 // Declaration d'un objet Sejour
 var Sejour = {
   sejours_collision: [],
-  
   
   // Preselectionne un sejour existant en fonction de la date d'intervention choisie
   preselectSejour: function(date_plage){
@@ -173,7 +169,6 @@ var Sejour = {
   }
 }
 
-
 Main.add( function(){
   Sejour.sejours_collision = {{$sejours_collision|@json}};
   var oForm = document.editOp;
@@ -182,32 +177,32 @@ Main.add( function(){
 {{/if}}
 
 Main.add( function(){
-  prepareForm(document.editSejour);
+  var form = getForm("editSejour");
   
   dates = {
     current: {
       start: "{{$sejour->_date_entree_prevue}}",
       stop: "{{$sejour->_date_sortie_prevue}}"
     },
-    spots: {{$sejour->_dates_operations|@json}}
-  }
+    spots: Object.values({{$sejour->_dates_operations|@json}})
+  };
   
-  Calendar.regField("editSejour", "entree_reelle", true, dates);
-  Calendar.regField("editSejour", "sortie_reelle", true, dates);
+  Calendar.regField(form.entree_reelle, dates);
+  Calendar.regField(form.sortie_reelle, dates);
   
   dates.limit = {
     start: null,
     stop: dates.spots.first()
-  }
+  };
   
-  Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
+  Calendar.regField(form._date_entree_prevue, dates);
   
   dates.limit = {
     start: dates.spots.last(),
     stop: null 
-  }
+  };
   
-  Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
+  Calendar.regField(form._date_sortie_prevue, dates);
 
   var sValue = document.editSejour.praticien_id.value;
   refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_chir_id);
@@ -262,7 +257,7 @@ Main.add( function(){
       <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
     </a>
     <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      <img src="images/icons/note_grey.png" alt="Ecrire une note" />
     </div>
     <a class="action" style="float: right"  title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
       <img src="images/icons/edit.png" alt="modifier" />
@@ -602,7 +597,6 @@ Main.add( function(){
   <td>{{mb_field object=$sejour field="lit_accompagnant"}}</td>
   <th>{{mb_label object=$sejour field="repas_sans_porc"}}</th>
   <td>{{mb_field object=$sejour field="repas_sans_porc"}}</td>
-
 </tr>
 
 <tr>

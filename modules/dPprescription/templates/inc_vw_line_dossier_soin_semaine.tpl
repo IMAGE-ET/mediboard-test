@@ -208,11 +208,9 @@
                onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ 
          		        calculSoinSemaine('{{$now}}','{{$prescription->_id}}'); } });"></button>
        
-         <script type="text/javascript">	                
-          // Preparation du formulaire
-					prepareForm(document.forms["modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}"]);
-					Main.add( function(){
-					  Calendar.regField("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}", "debut", false, dates);
+         <script type="text/javascript">
+					Main.add(function(){
+					  Calendar.regField(getForm("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}").debut, dates);
 					} );
 		     </script>
      {{/if}}
@@ -222,11 +220,9 @@
      {{if ($date == $line->_fin) && ($line->debut != $line->_fin)}}
        {{mb_field object=$line field="_fin" canNull=false form="modifDates-$line_class-$line_id-$unite_prise-$date"}}
          <button class="tick notext" type="button" onclick="calculDuree('{{$line_fin}}', this.form._fin.value, this.form, '{{$now}}', '{{$prescription->_id}}');"></button>
-         <script type="text/javascript">   
-          // Preparation du formulaire
-					prepareForm(document.forms["modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}"]);
+         <script type="text/javascript">
 					Main.add( function(){
-					  Calendar.regField("modifDates-{{$line_class}}-{{$line->_id}}-{{$unite_prise}}-{{$date}}", "_fin", false, dates);
+					  Calendar.regField(getForm("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}")._fin, dates);
 					} );
 		     </script>
      {{/if}}

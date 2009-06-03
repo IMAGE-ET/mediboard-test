@@ -1,35 +1,32 @@
 <!-- $Id$ -->
 
-{{assign var="redirect" value="?m=dPcabinet&a=plage_selector&dialog=1&chir_id=$chir_id&period=$period&hour=$hour&hide_finished=$hide_finished"}}
-
 <script type="text/javascript">
 
 var PlageConsult = {
   currPlage: {{if $plage->_id}}{{$plage->_id}}{{else}}0{{/if}},
   setClose: function(time) {
-      alert("Veuillez choisir une plage");
-    },
+    alert("Veuillez choisir une plage");
+  },
   changePlage: function(plage_id) {
-      if(this.currPlage) {
-        $("plage-"+this.currPlage).removeClassName("selected");
-      }
-      this.currPlage = plage_id;
-      $("plage-"+this.currPlage).addClassName("selected");
-      this.refreshPlage();
-    },
+    if(this.currPlage) {
+      $("plage-"+this.currPlage).removeClassName("selected");
+    }
+    this.currPlage = plage_id;
+    $("plage-"+this.currPlage).addClassName("selected");
+    this.refreshPlage();
+  },
   refreshPlage: function() {
-      var url = new Url;
-      url.setModuleAction("dPcabinet", "httpreq_list_places");
-      url.addParam("plageconsult_id", this.currPlage);
-      url.requestUpdate("listPlaces", { waitingText: null });
+    var url = new Url("dPcabinet", "httpreq_list_places");
+    url.addParam("plageconsult_id", this.currPlage);
+    url.requestUpdate("listPlaces", { waitingText: null });
   },
   addPlaceBefore: function(plage_id) {
-      alert("Veuillez choisir une plage");
+    alert("Veuillez choisir une plage");
   }
 }
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "{{$redirect|smarty:nodefaults}}&date=");  
+  Calendar.regField(getForm("Filter").date, null, {noView: true});
 });
 
 </script>
@@ -44,7 +41,6 @@ Main.add(function () {
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="a" value="plage_selector" />
     <input type="hidden" name="dialog" value="1" />
-    <input type="hidden" name="date" value="{{$date}}" />
     <input type="hidden" name="chir_id" value="{{$chir_id}}" />
     <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
 
@@ -62,20 +58,20 @@ Main.add(function () {
         </td>
         
         <td class="button" style="width: 250px;">
-          <a style="float:left" href="{{$redirect}}&amp;date={{$pdate}}">&lt;&lt;&lt;</a>
-          <a style="float:right" href="{{$redirect}}&amp;date={{$ndate}}">&gt;&gt;&gt;</a>
+          <a style="float:left" href="javascript:;" onclick="$V(getForm('Filter').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
+          <a style="float:right" href="javascript:;" onclick="$V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
           <strong>
             {{if $period == "day"  }}{{$date|date_format:" %A %d %B %Y"}}{{/if}}
             {{if $period == "week" }}{{$date|date_format:" semaine du %d %B %Y"}}{{/if}}
             {{if $period == "month"}}{{$date|date_format:" %B %Y"}}{{/if}}
           </strong>
-          <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         </td>
         
         <th><label for="hour" title="Filtrer les plages englobalt l'heure choisie">Filtrer les heures</label></th>
         <td>
           <select name="hour" onchange="this.form.submit()">
-    		<option value="">&mdash; Toutes</option>
+    		    <option value="">&mdash; Toutes</option>
             {{foreach from=$hours item="_hour"}}
             <option value="{{$_hour}}" {{if $_hour == $hour}} selected="selected" {{/if}}>
               {{$_hour|string_format:"%02d h"}}
@@ -85,13 +81,11 @@ Main.add(function () {
         </td>
         
         <td>
-          
-		  <label for="hide_finished">Masquer terminées :</label>
-		  <input type="radio" name="hide_finished" value="0" onchange="this.form.submit()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
-		  <label for="hide_finished_0">Non</label>
-		  <input type="radio" name="hide_finished" value="1" onchange="this.form.submit()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
-		  <label for="hide_finished_1">Oui</label>
-  
+    		  <label for="hide_finished">Masquer terminées :</label>
+    		  <input type="radio" name="hide_finished" value="0" onchange="this.form.submit()" {{if $hide_finished == "0"}}checked="checked" {{/if}} />
+    		  <label for="hide_finished_0">Non</label>
+    		  <input type="radio" name="hide_finished" value="1" onchange="this.form.submit()" {{if $hide_finished == "1"}}checked="checked" {{/if}} />
+    		  <label for="hide_finished_1">Oui</label>
         </td>
       </tr>
 
@@ -130,10 +124,8 @@ Main.add(function () {
       {{/foreach}}
     </table>
   </td>
-  <td>
-    <div id="listPlaces">
-      {{include file="inc_list_places.tpl"}}
-    </div>
+  <td id="listPlaces">
+    {{include file="inc_list_places.tpl"}}
   </td>
 </tr>
 

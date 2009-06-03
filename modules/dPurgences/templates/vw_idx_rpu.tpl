@@ -1,36 +1,32 @@
 <script type="text/javascript">
 
 function showLegend() {
-  url = new Url;
-  url.setModuleAction("dPurgences", "vw_legende");
+  url = new Url("dPurgences", "vw_legende");
   url.popup(300, 320, "Legende");
 }
 
 // Fonction de refresh du temps d'attente
 function updateAttente(sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPurgences", "httpreq_vw_attente");
+  var url = new Url("dPurgences", "httpreq_vw_attente");
   url.addParam("sejour_id", sejour_id);
   url.periodicalUpdate('attente-'+sejour_id, { frequency: 60, waitingText: null } );
 }
 
 // fonction de refresh periodique de la main courante
 function updateMainCourante(){
-  var url = new Url;
-  url.setModuleAction("dPurgences", "httpreq_vw_main_courante");
+  var url = new Url("dPurgences", "httpreq_vw_main_courante");
   url.periodicalUpdate('main_courante', { frequency: 60, waitingText: null } );
 }
  
 function printMainCourante() {
-  var url = new Url;
-  url.setModuleAction("dPurgences", "print_main_courante");
+  var url = new Url("dPurgences", "print_main_courante");
   url.addParam("date", "{{$date}}");
   url.popup(800, 600, "Impression main courante");
 }
 
 Main.add(function () {
   updateMainCourante();
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 </script>
@@ -45,7 +41,11 @@ Main.add(function () {
     <th>
      le
      {{$date|date_format:$dPconfig.longdate}}
-     <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
     </th>
     <td style="text-align: right">
      Type d'affichage

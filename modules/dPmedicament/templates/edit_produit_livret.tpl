@@ -21,8 +21,9 @@ function submitProduitLivret(lettre, codeATC, code_cip){
 }
 
 Main.add(function() {
-  Calendar.regField("editProduitLivret", "date_prix_hopital");
-  Calendar.regField("editProduitLivret", "date_prix_ville");
+  var form = getForm("editProduitLivret");
+  Calendar.regField(form.date_prix_hopital);
+  Calendar.regField(form.date_prix_ville);
 });
 
 </script>
@@ -37,56 +38,39 @@ Main.add(function() {
       <th colspan="2">{{$produit_livret->_ref_produit->libelle}}</th>
     </tr>
     <tr>
-      <td>
-        Prix Hopital
-      </td>
+      <td>Prix Hopital</td>
       <td>
         <input type="text" size="5" name="prix_hopital" value="{{$produit_livret->prix_hopital}}" /> {{$dPconfig.currency_symbol}}
       </td>
     </tr>
     <tr>
-      <td>
-        Prix Ville
-      </td>
+      <td>Prix Ville</td>
       <td>
         <input type="text" size="5" name="prix_ville" value="{{$produit_livret->prix_ville}}" /> {{$dPconfig.currency_symbol}}
       </td>
     </tr>
     <tr>
+      <td>Date prix hôpital</td>
       <td>
-        Date prix hôpital
-      </td>
-      <td class="date">
-        <div id="editProduitLivret_date_prix_hopital_da">{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</div>
         <input type="hidden" name="date_prix_hopital" value="{{$produit_livret->date_prix_hopital}}" />
-        <img id="editProduitLivret_date_prix_hopital_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date" />
       </td>
     </tr>
     <tr>
+      <td>Date prix ville</td>
       <td>
-        Date prix ville
-      </td>
-      <td class="date">
-        <div id="editProduitLivret_date_prix_ville_da">{{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}</div>
         <input type="hidden" name="date_prix_ville" value="{{$produit_livret->date_prix_ville}}" />
-        <img id="editProduitLivret_date_prix_ville_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date" />
       </td>
     </tr>
     <tr>
-      <td>
-        Code Interne
-      </td>
+      <td>Code Interne</td>
       <td>
         <input type="text" name="code_interne" value="{{$produit_livret->code_interne}}" />
       </td>
     </tr>
     <tr>
-      <td>
-        Commentaire
-      </td>
+      <td>Commentaire</td>
       <td>
         <textarea cols="7" rows="2" name="commentaire">{{$produit_livret->commentaire}}</textarea>
-        
       </td>
     </tr>
     <tr>

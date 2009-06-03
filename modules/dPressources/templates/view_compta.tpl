@@ -41,7 +41,7 @@ Main.add(function () {
         <tr id="plages{{$curr_prat.prat_id}}-trigger">
           <td>Dr {{$curr_prat.praticien->_view}}</td>
           <td>{{$curr_prat.total}} plage(s)</td>
-          <td>{{$curr_prat.somme}} €</td>
+          <td>{{$curr_prat.somme}} {{$dPconfig.currency_symbol}}</td>
         </tr>
         <tbody class="effectPlage" id="plages{{$curr_prat.prat_id}}">
           {{foreach from=$curr_prat.plages item=curr_plage}}
@@ -56,7 +56,7 @@ Main.add(function () {
               </form>
             </td>
             <td>{{$curr_plage->date|date_format:$dPconfig.longdate}}</td>
-            <td>{{$curr_plage->tarif}} €</td>
+            <td>{{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}</td>
           </tr>
           {{/foreach}}
         </tbody>
@@ -64,7 +64,7 @@ Main.add(function () {
         <tr>
           <th>{{$total.prat}} praticien(s)</th>
           <th>{{$total.total}} plage(s)</th>
-          <th>{{$total.somme}} €</th>
+          <th>{{$total.somme}} {{$dPconfig.currency_symbol}}</th>
       </table>
 
     </td>

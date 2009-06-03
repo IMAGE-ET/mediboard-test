@@ -2,7 +2,7 @@
 {{if $canCabinet->view}}
 <script type="text/javascript">
 Main.add( function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$current_m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeView").date, null, {noView: true});
 } );
 </script>
 {{/if}}
@@ -15,7 +15,7 @@ Main.add( function () {
         <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
         {{$date|date_format:$dPconfig.longdate}}
         {{if $canCabinet->view}}
-        <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         {{/if}}
       </td>
     </tr>

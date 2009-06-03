@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 </script>
@@ -10,7 +10,13 @@ Main.add(function () {
   <tr>
     <th class="title" colspan="9">
       Liste des {{$totalOp}} intervention(s) du {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        
+    	  Logs d'accès du {{$date|date_format:$dPconfig.longdate}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
     </th>
   </tr>
   <tr>

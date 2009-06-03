@@ -196,19 +196,11 @@
     <td colspan="3">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
       <script type="text/javascript">
-	      if(document.forms["editDates-Med-{{$line->_id}}"]){
-		      var oForm = document.forms["editDates-Med-{{$line->_id}}"];
-		      prepareForm(oForm);
-		      
-		      if(oForm.debut){
-		        Calendar.regField('editDates-Med-{{$line->_id}}', "debut", false, dates);
-		      }
-		      if(oForm._fin){
-		        Calendar.regField('editDates-Med-{{$line->_id}}', "_fin", false, dates);			      
-		      }
-		      if(oForm.fin){
-		        Calendar.regField('editDates-Med-{{$line->_id}}', "fin", false, dates);		      
-		      }
+        var oForm;
+	      if(oForm = getForm("editDates-Med-{{$line->_id}}", true)){
+		      Calendar.regField(oForm.debut, dates);
+		      Calendar.regField(oForm._fin, dates);
+		      Calendar.regField(oForm.fin, dates);
 	      }
       </script>
 	  </td>

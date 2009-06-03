@@ -28,12 +28,12 @@ class CTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
   
-    if (!preg_match ("/^([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?$/", $propValue)) { 
+    if (!preg_match ("/^(\d{1,2}):(\d{1,2})(:(\d{1,2}))?$/", $propValue)) { 
     	if($object->$fieldName === 'current'|| $object->$fieldName ===  'now') {
         $object->$fieldName = mbTime();
         return null;
       }  
-      return "format de time invalide";
+      return "Format d'heure invalide";
     }
     return null;
   }
@@ -51,32 +51,7 @@ class CTimeSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
-    CMbArray::defaultValue($params, "size", 3);
-    CMbArray::defaultValue($params, "maxLength", 5);
-    if ($object->_locked) {
-      $params["readonly"] = "readonly";
-    }
-
-    $class = htmlspecialchars(trim("$className $this->prop"));
-    $field = htmlspecialchars($this->fieldName);
-    
-    $form  = CMbArray::extract($params, "form");
-    $id    = $form.'_'.$field;
-    $extra = CMbArray::makeXmlAttributes($params);
-    
-    $html = array();
-    $html[] = '<div class="control '.$class.'">';
-    $html[] = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
-    if ($form) {
-      $html[] = '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="trigger" />';
-      if (!$this->notNull) {
-        $html[] = '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
-      }
-      $html[] = '<script type="text/javascript">Main.add(function() { new TimePicker("'.$form.'", "'.$field.'"); } ); </script>';
-    }
-    $html[] = '</div>';
-    
-    return implode("\n", $html);
+    return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("time"));
   }
 }
 

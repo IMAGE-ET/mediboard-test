@@ -10,11 +10,15 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regRedirectFlat("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true, inline: true, container: null});
 });
 </script>
 
-<div id="calendar-container"></div>
+<form name="changeDate" action="" method="get">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="tab" value="{{$tab}}" />
+  <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+</form>
 
 <table class="tbl">
   <tr>

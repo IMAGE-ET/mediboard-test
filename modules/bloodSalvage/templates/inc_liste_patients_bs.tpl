@@ -8,17 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  Calendar.regField(getForm("selection").date, null, {noView: true});
+</script>
+  
 <form action="?" name="selection" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
-  <script type="text/javascript">
-    Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_bloodSalvage_sspi&date=");
-  </script>
+  <input type="hidden" name="tab" value="vw_bloodSalvage_sspi" />
+
   <table class="form">
     <tr>
       <th class="category" colspan="2">
         <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
         {{$date|date_format:$dPconfig.longdate}}
-        <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </th>
     </tr>
   </table>

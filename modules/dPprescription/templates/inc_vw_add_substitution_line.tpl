@@ -114,19 +114,21 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     $V(oForm.decalage_line,"+0",false);
     $V(oForm.unite_decalage,"jour",false)
     $V(oForm.time_debut,"",false);
+    $V(oForm.time_debut_da,"",false);
     $V(oForm.jour_decalage_fin,"",false);
     $V(oForm.decalage_line_fin,"",false);
     $V(oForm.unite_decalage_fin,"",false);
     $V(oForm.time_fin,"",false);
+    $V(oForm.time_fin_da,"",false);
     
+    // the numericFields
     $('img_'+oForm.decalage_line_fin.id).hide();
     $('img_'+oForm.decalage_line.id).hide();
     $('img_'+oForm.duree.id).hide();
-    $(oForm.time_debut.id+"_trigger").hide();
-    $(oForm.time_debut.id+"_cancel").hide();
-    	    
-    $(oForm.time_fin.id+"_trigger").hide();
-    $(oForm.time_fin.id+"_cancel").hide();
+    
+    // The time pickers
+    $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('hide');
+    $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('hide');
     
     onSubmitFormAjax(oForm);
     
@@ -150,6 +152,15 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     oForm.decalage_line_fin.disabled = false;
     oForm.unite_decalage_fin.disabled = false;
     oForm.time_fin.disabled = false;
+      
+    // the numericFields
+    $('img_'+oForm.decalage_line_fin.id).show();
+    $('img_'+oForm.decalage_line.id).show();
+    $('img_'+oForm.duree.id).show();
+    
+    // The time pickers
+    $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('show');
+    $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('show'); 
   }
 }
 

@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("typeVue").date, null, {noView: true});
 });
 
 function saveSortie(oFormSortie, oFormAffectation){
@@ -14,20 +14,17 @@ function saveSortie(oFormSortie, oFormAffectation){
 
 <table class="main">
   <tr>
-    <td>
-      <form name="typeVue" action="?m={{$m}}" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <label for="vue" title="Choisir un type de vue">Type de vue</label>
-      <select name="vue" onchange="submit()">
-        <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Tout afficher</option>
-        <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
-      </select>
-      </form>
-    </td>
     <th>
-    {{$date|date_format:$dPconfig.longdate}}
-    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-    
+      <form name="typeVue" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <label for="vue" title="Choisir un type de vue">Type de vue</label>
+        <select name="vue" onchange="this.form.submit()">
+          <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Tout afficher</option>
+          <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
+        </select>
+        {{$date|date_format:$dPconfig.longdate}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
     </th>
   <tr>
     <td colspan="3">

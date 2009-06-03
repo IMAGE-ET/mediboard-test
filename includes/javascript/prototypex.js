@@ -78,12 +78,12 @@ Element.addMethods({
     
     // If the element exceeds the viewport on the right
     if (pos.right > viewport.width) {
-      element.setStyle({marginLeft: Math.max(viewport.width - pos.right, -pos.left) + 'px'});
+      element.style.left = parseInt(element.style.left) - (pos.right - viewport.width) + 'px';
     }
 
     // If the element exceeds the viewport on the bottom
     if (pos.bottom > viewport.height) {
-      element.setStyle({marginTop: Math.max(viewport.height - pos.bottom, -pos.top) + 'px'});
+      element.style.top = parseInt(element.style.top) - (pos.bottom - viewport.height) + 'px';
     }
     
     return element;
@@ -118,7 +118,7 @@ Element.addMethods({
   
   /** Add a class name to an element, and removing this class name to all of it's siblings */
   addUniqueClassName: function(element, className) {
-    element.siblings().each(function(e){e.removeClassName(className)});
+    $(element).siblings().invoke('removeClassName', className);
     return element.addClassName(className);
   }
 });

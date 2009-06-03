@@ -49,9 +49,7 @@
   <tr>
     <th><label for="date" title="Veuillez sélectionner une date">Date</label></th>
     <td class="date">
-      <div id="FrmSelectService_date_da"></div>
       <input type="hidden" name="date" class="notNull date" value="" />
-      <img id="FrmSelectService_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
     </td>
   </tr>
 </table>

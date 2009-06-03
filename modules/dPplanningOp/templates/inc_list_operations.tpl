@@ -1,16 +1,17 @@
-{{*mb_include_script module="dPcompteRendu" script="document"*}}
-
-<input id="currDateJSAccess" name="currDateJSAccess" type="hidden" value="{{$date}}" />
 {{if !$board}}
-<div style="font-weight:bold; height:20px; text-align:center;">
-  {{$date|date_format:$dPconfig.longdate}}
-  <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-  <script type="text/javascript">
-    Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_planning&date=");
-  </script>
-</div>
-{{/if}}
+<script type="text/javascript">
+  Main.add(function(){
+    Calendar.regField(getForm("changeDate").date, null, {noView: true});
+  });
+</script>
 
+<form action="?" name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
+  {{$date|date_format:$dPconfig.longdate}}
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="tab" value="vw_idx_planning" />
+  <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+</form>
+{{/if}}
 
 <table class="tbl" {{if $boardItem}}style="font-size: 9px;"{{/if}}>
   <tr>

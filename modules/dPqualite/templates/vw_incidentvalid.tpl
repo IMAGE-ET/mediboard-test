@@ -218,7 +218,7 @@ Main.add(function() {
         <tr>
           <td colspan="2" class="button">
 			    	<script type="text/javascript">
-			    		Main.add(function() { Calendar.regField("ProcEditFrm", "qualite_date_controle"); } );
+			    		Main.add(function() { Calendar.regField(getForm("ProcEditFrm").qualite_date_controle); } );
 			    	</script>
           
             <input type="hidden" name="qualite_user_id" value="{{$app->user_id}}" />
@@ -250,14 +250,12 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_verification"}}</th>
           <td class="date">
-            <div id="ProcEditFrm_qualite_date_verification_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
-            <img id="ProcEditFrm_qualite_date_verification_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}" />
             <button type="button" class="tick" onclick="this.form.qualite_date_verification.name = 'qualite_date_controle'; this.form.submit();">
               {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
 			    	<script type="text/javascript">
-			    		Main.add(function() { Calendar.regField("ProcEditFrm", "qualite_date_verification"); } );
+			    		Main.add(function() { Calendar.regField(getForm("ProcEditFrm").qualite_date_verification); } );
 			    	</script>
             
           </td>
@@ -266,10 +264,8 @@ Main.add(function() {
         {{elseif !$fiche->qualite_date_controle}}
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_controle"}}</th>
-          <td class="date">
-            <div id="ProcEditFrm_qualite_date_controle_da">{{$today|date_format:"%d/%m/%Y"}}</div>
-            <input type="hidden" name="qualite_date_controle" value="{{$today|date_format:"%Y-%m-%d"}}" />
-            <img id="ProcEditFrm_qualite_date_controle_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_controle-desc{{/tr}}" />
+          <td>
+            <input type="hidden" name="qualite_date_controle" value="{{$today|date_format:"%Y-%m-%d"}}" class="date" />
           </td>
         </tr>
         {{/if}}

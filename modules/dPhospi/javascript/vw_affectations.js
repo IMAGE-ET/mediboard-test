@@ -9,7 +9,7 @@ function flipSejour(sejour_id) {
 var selected_hospitalisation = null;
 var selected_hospi = false;
 function selectHospitalisation(sejour_id) {
-  var element = document.getElementById("hospitalisation" + selected_hospitalisation);
+  var element = $("hospitalisation" + selected_hospitalisation);
   if (element) {
     element.checked = false;
   }
@@ -21,7 +21,7 @@ function selectHospitalisation(sejour_id) {
 var selected_lit = null;
 
 function selectLit(lit_id) {
-  var element = document.getElementById("lit" + selected_lit);
+  var element = $("lit" + selected_lit);
   if (element) {
     element.checked = false;
   }
@@ -32,9 +32,9 @@ function selectLit(lit_id) {
 function submitAffectation() {
   if (selected_lit && selected_hospi) {
     if(selected_hospitalisation){
-      var form = eval("document.addAffectationsejour_" + selected_hospitalisation);
+      var form = getForm("addAffectationsejour_" + selected_hospitalisation);
     }else{
-      var form = eval("document.addAffectationsejour");    
+      var form = getForm("addAffectationsejour");
     }
     form.lit_id.value = selected_lit;
     form.submit();
@@ -55,7 +55,7 @@ function DragDropSejour(sejour_id, lit_id){
   if(sejour_id == 'sejour_bloque') {
     sejour_id = "sejour";
   }
-  var oForm = eval("document.addAffectation" + sejour_id);
+  var oForm = getForm("addAffectation" + sejour_id);
   oForm.lit_id.value = lit_id;
   oForm.submit();
 }
@@ -79,59 +79,29 @@ function submitAffectationSplit(form) {
   form.submit();
 }
 
-Calendar.setupAffectation = function(affectation_id, affectOptions) {
-  var options = {
-    sejour : {
-      start : null,
-      stop : null
-    },
-    
+Calendar.setupAffectation = function(affectation_id, options) {
+  options = Object.extend({
     currAffect : {
       start : null,
       stop : null
     },
-    
     outerAffect : {
       start : null,
       stop : null
     }
-  }
-  
-  
-  Object.extend(options, affectOptions);
+  }, options);
 
   var dates = {
-    current: options.sejour,
-	  spots: []
-  }
-  
-  // Entrée affectation
-	dates.limit = {
-    start: options.outerAffect.start,
-    stop: options.currAffect.stop
-  }
-
-	Calendar.prepareDates(dates);
+    limit: {// Entrée affectation
+      start: options.outerAffect.start,
+      stop: options.currAffect.stop
+    }
+  };
 	
   var form = null;
   
-  if (form = eval("document.entreeAffectation" + affectation_id)) {
-    Calendar.setup( {
-        inputField  : form.name + "_entree",
-        ifFormat    : "%Y-%m-%d %H:%M:%S",
-        button      : form.name + "__trigger_entree",
-        showsTime   : true,
-        firstDay    : 1,
-        dateStatusFunc: Calendar.dateStatus.bind(Object.clone(dates)),
-        onUpdate    : function() { 
-          if (calendar.dateClicked) {
-            var form = eval("document.entreeAffectation" + affectation_id);
-            form.submit();
-          }
-        }
-        
-      }
-    );
+  if (form = getForm("entreeAffectation" + affectation_id)) {
+    Calendar.regField(form.entree, dates, {noView: true, icon: 'images/icons/planning.png'});
   }
 	
   // Sortie affectation
@@ -139,25 +109,9 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
     start: options.currAffect.start,
     stop: options.outerAffect.stop
   }
-	
-	Calendar.prepareDates(dates);
 
-  if (form = eval("document.sortieAffectation" + affectation_id)) {
-    Calendar.setup( {
-        inputField  : form.name + "_sortie",
-        ifFormat    : "%Y-%m-%d %H:%M:%S",
-        button      : form.name + "__trigger_sortie",
-        showsTime   : true,
-        firstDay    : 1,
-        dateStatusFunc: Calendar.dateStatus.bind(Object.clone(dates)),
-        onUpdate    : function() { 
-          if (calendar.dateClicked) {
-            var form = eval("document.sortieAffectation" + affectation_id);
-            form.submit();
-          }
-        }
-      }
-    );
+  if (form = getForm("sortieAffectation" + affectation_id)) {
+    Calendar.regField(form.sortie, dates, {noView: true, icon: 'images/icons/planning.png'});
   }
   
   // Déplacement affectation
@@ -166,57 +120,36 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
     stop: options.currAffect.stop
   }
 
-	Calendar.prepareDates(dates);
-
-  if (form = eval("document.splitAffectation" + affectation_id)) {
-    Calendar.setup( {
-        inputField  : form.name + "__date_split",
-        ifFormat    : "%Y-%m-%d %H:%M:%S",
-        button      : form.name + "__trigger_split",
-        showsTime   : true,
-        firstDay    : 1,
-        dateStatusFunc: Calendar.dateStatus.bind(dates),
-        onUpdate    : function() { 
-          if (calendar.dateClicked) {
-            var form = eval("document.splitAffectation" + affectation_id);
-            submitAffectationSplit(form);
-          }
-        }
-      }
-    );
+  if (form = getForm("splitAffectation" + affectation_id)) {
+    Calendar.regField(form._date_split, dates, {noView: true, icon: 'images/icons/move.gif'});
   }
 }
 
 function popPlanning() {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_affectations");
+  var url = new Url("dPhospi", "vw_affectations");
   url.popup(700, 550, "Planning");
 }
 
 function showRapport(date) {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_rapport");
+  var url = new Url("dPhospi", "vw_rapport");
   url.addParam("date", date);
   url.popup(800, 600, "Rapport");
 }
 
 function showLegend() {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "legende");
+  var url = new Url("dPhospi", "legende");
   url.popup(500, 500, "Legend");
 }
 
 function showAlerte() {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_etat_semaine");
+  var url = new Url("dPhospi", "vw_etat_semaine");
   url.popup(500, 250, "Alerte");
 }
 
 function reloadService(oElement, mode) {
   if (oElement.checked) {
     var idService = oElement.value;
-    var url = new Url;
-    url.setModuleAction("dPhospi", "httpreq_vw_aff_service");
+    var url = new Url("dPhospi", "httpreq_vw_aff_service");
     url.addParam("service_id", idService);
     url.addParam("mode", mode);
     url.requestUpdate("service" + idService);

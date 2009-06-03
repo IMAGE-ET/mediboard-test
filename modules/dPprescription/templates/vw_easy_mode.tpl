@@ -174,15 +174,15 @@ Main.add( function(){
 	              dosql=CPrescriptionLineElement}}	      
 	              
 	     <script type="text/javascript">
-	     if(document.forms["editDates-{{$typeDate}}-"]){
-	       prepareForm("editDates-{{$typeDate}}-");  
-				 {{if !$line->fin}} 
-	         Calendar.regField("editDates-{{$typeDate}}-", "debut");
-	         Calendar.regField("editDates-{{$typeDate}}-", "_fin");     
-	       {{else}}
-	         Calendar.regField("editDates-{{$typeDate}}-", "fin");     
-	       {{/if}}
-	     }
+	       var oForm;
+         if (oForm = getForm("editDates-{{$typeDate}}-")){
+  				 {{if !$line->fin}} 
+  	         Calendar.regField(oForm.debut);
+  	         Calendar.regField(oForm._fin);
+  	       {{else}}
+  	         Calendar.regField(oForm.fin);
+  	       {{/if}}
+         }
 	     </script>
 	  </td>
 	</tr>

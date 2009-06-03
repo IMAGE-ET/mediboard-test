@@ -16,11 +16,12 @@ completeSelect = function(oSelect, line_id, type_elt){
                         document.moment_unitaire.moment_unitaire_id;
   
   oFormPrise = document.forms['addPrise'+type_elt+line_id].show();          
-  if(oSelect.length == '1'){
-    oSelect.down().remove();
+  if(oSelect.length == 1){
+    /*oSelect.down().remove();
     $A(selectMoments.childNodes).each(function (optgroup) {
       oSelect.appendChild(optgroup.cloneNode(true));
-    } );
+    } );*/
+    oSelect.innerHTML = selectMoments.innerHTML;
   }
 }
 
@@ -161,9 +162,9 @@ onSubmitPrise = function(oForm, chapitre){
 // Calcul de la date de debut lors de la modification de la fin
 syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
  
-  // Déclaration des div des dates
-  oDivDebut = $('editDates-'+type+'-'+curr_line_id+'_debut_da');
-  oDivFin = $('editDates-'+type+'-'+curr_line_id+'__fin_da');
+  // Déclaration des vues des dates
+  oDebut = $(oForm.elements._debut_da);
+  oFin = $(oForm.elements._fin_da);
 
   // Recuperation de la date actuelle
   var todayDate = new Date();
@@ -197,7 +198,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     }
 
     oForm._fin.value = dFin.toDATE();
-    oDivFin.innerHTML = dFin.toLocaleDate();
+    oFin.value = dFin.toLocaleDate();
     if(curr_line_id){
       testPharma(curr_line_id);
     }
@@ -229,7 +230,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     }
 
     oForm.debut.value = dDebut.toDATE();
-    oDivDebut.innerHTML = dDebut.toLocaleDate();
+    oDebut.value = dDebut.toLocaleDate();
     
     if(curr_line_id){
       testPharma(curr_line_id);
@@ -240,7 +241,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
   if(!sDebut && !nDuree && fieldName == "_fin"){
     dDebut = todayDate;
     oForm.debut.value = todayDate.toDATE();
-    oDivDebut.innerHTML = todayDate.toLocaleDate();
+    oDebut.value = todayDate.toLocaleDate();
     var nDuree = parseInt((dFin - dDebut)/86400000,10);
     oForm.duree.value = nDuree;
     oForm.unite_duree.value = "jour";

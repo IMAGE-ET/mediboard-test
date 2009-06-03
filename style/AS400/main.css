@@ -190,11 +190,6 @@ table.form td.button {
   vertical-align: middle;
 }
 
-table.form td.date div {
-  font-size: 9px;
-  border: 1px dotted #0f0;
-}
-
 div.autocomplete {
   position:absolute;
   width:250px;

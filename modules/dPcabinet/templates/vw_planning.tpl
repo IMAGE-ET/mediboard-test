@@ -33,7 +33,7 @@ function putArrivee(oForm) {
 }
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$debut}}", "?m={{$m}}&tab={{$tab}}&plageconsult_id=0&debut="); 
+  Calendar.regField(getForm("selection").debut, null, {noView: true});
   
   PairEffect.initGroup("functionEffect", { 
     bStoreInCookie: true,
@@ -46,19 +46,18 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th>
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
-      Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
-      <br />
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
-    </th>
-    <td>
       <form action="?" name="selection" method="get">
 
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
-
+      
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
+      Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
+      <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
+      <br />
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
+      
       <label for="chirSel" title="Praticien dont on observe le planning de consultation">Praticien</label>
       <select name="chirSel" onchange="this.form.submit()">
         <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un praticien &mdash;</option>

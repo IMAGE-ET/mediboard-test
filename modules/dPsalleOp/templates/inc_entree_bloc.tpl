@@ -1,15 +1,21 @@
+<script type="text/javascript">
+Main.add(function () {
+  Calendar.regField(getForm("selection").date, null, {noView: true});
+});
+</script>
 
 <form action="?" name="selection" method="get">
-<input type="hidden" name="m" value="{{$m}}" />
-<table class="form">
-  <tr>
-    <th class="category">{{$listEntree|@count}} patients en attente</th>
-    <th class="category" colspan="2">
-      {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-    </th>
-  </tr>
-</table>
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="tab" value="{{$tab}}" />
+  <table class="form">
+    <tr>
+      <th class="category">{{$listEntree|@count}} patients en attente</th>
+      <th class="category" colspan="2">
+        {{$date|date_format:$dPconfig.longdate}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </th>
+    </tr>
+  </table>
 </form>
 
 <table class="tbl">

@@ -100,13 +100,10 @@
   <td class="action">
     {{if $can->edit}}
     <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-    <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+      <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
     </form>
-    <a>
-      <img id="entreeAffectation{{$curr_affectation->_id}}__trigger_entree" src="images/icons/planning.png" alt="Planning" title="Modifier la date de début" />
-    </a>
     {{/if}}
   </td>
   </tr>
@@ -119,13 +116,10 @@
   <td class="action">
     {{if $can->edit}}
     <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-    <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+      <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
     </form>
-    <a>
-      <img id="sortieAffectation{{$curr_affectation->_id}}__trigger_sortie" src="images/icons/planning.png" alt="Planning" title="Modifier la date de fin" />
-    </a>
     {{/if}}
   </td>
   </tr>
@@ -166,16 +160,10 @@
   <td class="action">
     {{if $can->edit}}
     <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-    <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
-
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+      <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
     </form>
-    
-    <a>
-      <img id="entreeAffectation{{$curr_affectation->_id}}__trigger_entree" src="images/icons/planning.png" alt="Planning" title="Modifier la date d'entrée" />
-    </a>
     {{/if}}
   </td>
 </tr>
@@ -195,11 +183,10 @@
           <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
           <input type="hidden" name="no_synchro" value="1" />
           <input type="hidden" name="_new_lit_id" value="" />
-          <input type="hidden" name="_date_split" value="{{$curr_affectation->sortie}}" />
+          <span style="float: right;">
+            <input type="hidden" name="_date_split" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="submitAffectationSplit(this.form)" />
+          </span>
         </form>
-        <a style="float: right;">
-          <img id="splitAffectation{{$curr_affectation->_id}}__trigger_split" src="images/icons/move.gif" alt="Move" title="Déplacer un patient" />
-        </a>
       {{/if}}
       <em>Sortie</em>:
       {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
@@ -209,16 +196,10 @@
   <td class="action">
     {{if $can->edit}}
     <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-    <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
-
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+      <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
     </form>
-    
-    <a>
-      <img id="sortieAffectation{{$curr_affectation->_id}}__trigger_sortie" src="images/icons/planning.png" alt="Planning" title="Modifier la date de sortie" />
-    </a>
     {{/if}}
   </td>
 </tr>
@@ -230,13 +211,13 @@
   <td class="text" colspan="2"><em>Dr {{$sejour->_ref_praticien->_view}}</em></td>
 </tr>
 
-   {{if $sejour->prestation_id}}
-     <tr class="dates">
-       <td colspan="2">
-      <strong>Prestation:</strong> {{$sejour->_ref_prestation->_view}}
-     </td>
-     </tr>
-    {{/if}}
+{{if $sejour->prestation_id}}
+<tr class="dates">
+  <td colspan="2">
+    <strong>Prestation:</strong> {{$sejour->_ref_prestation->_view}}
+  </td>
+</tr>
+{{/if}}
    
 <tr class="dates">
   <td class="text" colspan="2">

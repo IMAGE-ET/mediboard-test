@@ -20,7 +20,7 @@ Main.add(function () {
   opsUpdater.addParam("date","{{$date}}");
   opsUpdater.requestUpdate("out", {waitingText: null});
   
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
+  Calendar.regField(getForm("selection").date, null, {noView: true});
 });
 </script>
 
@@ -38,7 +38,7 @@ Main.add(function () {
 		    <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_reveil" />
 		    <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
-		    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         <select name="bloc_id" onchange="this.form.submit();">
           <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
           {{foreach from=$blocs_list item=curr_bloc}}

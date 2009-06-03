@@ -1,35 +1,28 @@
-<script type="text/javascript">
-
-{{if !$dialog}}
-Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_signature_actes&date=");
-});
-{{/if}}
-
-</script>
-
-
-
 <table class="main">
   {{if !$dialog}}
   <tr>
     <th>
-    <div style="float: right">
-      Filtres
+      <script type="text/javascript">
+        Main.add(function () {
+          Calendar.regField(getForm("typeAffichage").date, null, {noView: true});
+        });
+      </script>
       <form name="typeAffichage" action="?" method="get">
         <input type="hidden" name="m" value="dPsalleOp" />
         <input type="hidden" name="tab" value="vw_signature_actes" />
-        <input type="hidden" name="date" value="{{$date}}" />
-		    <select name="praticien_id" onchange="submit();">
-		    <option value="">&mdash; Tous les praticiens</option>
-		    {{foreach from=$listPraticien item=praticien}}
-		      <option value="{{$praticien->_id}}" {{if $praticien_id == $praticien->_id}}selected="selected"{{/if}}>{{$praticien->_view}}</option>
-		    {{/foreach}}
-		    </select>
+        <div style="float: right">
+          Filtres
+    		  <select name="praticien_id" onchange="submit();">
+      		  <option value="">&mdash; Tous les praticiens</option>
+      		  {{foreach from=$listPraticien item=praticien}}
+      		    <option value="{{$praticien->_id}}" {{if $praticien_id == $praticien->_id}}selected="selected"{{/if}}>{{$praticien->_view}}</option>
+      		  {{/foreach}}
+    		  </select>
+        </div>
+        
+        {{$date|date_format:$dPconfig.longdate}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 		  </form>
-    </div>
-      {{$date|date_format:$dPconfig.longdate}}
-    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
   {{/if}}

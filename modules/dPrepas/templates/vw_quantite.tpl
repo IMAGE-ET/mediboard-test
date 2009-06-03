@@ -10,7 +10,7 @@ function reloadChambres(){
 }
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date="); 
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
   {{if $service_id}}
   reloadChambres();
   {{/if}}
@@ -21,36 +21,38 @@ Main.add(function () {
   <tr>
     <th colspan="2" class="button">
       <form name="FrmSelectService" action="?m={{$m}}" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <label for="service_id" title="Veuillez sélectionner un service">Service</label>
-      <select name="service_id" onchange="reloadChambres();">
-        <option value="">&mdash; Veuillez sélectionner un service</option>
-        {{foreach from=$services item=curr_service}}
-        {{assign var="validation" value=$curr_service->_ref_validrepas.$date.$type}}
-        {{if $type && $validation->validationrepas_id && !$validation->modif}}
-          {{assign var="classStyle" value="validation"}}
-        {{elseif $type && $validation->validationrepas_id}}
-          {{assign var="classStyle" value="modification"}}
-        {{else}}
-          {{assign var="classStyle" value=""}}
-        {{/if}}
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
         
-        <option class="{{$classStyle}}" value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
-          {{$curr_service->nom}}
-        </option>
-        {{/foreach}}
-      </select>
-      <label for="type" title="Veuillez sélectionner un type de repas">Type de repas</label>
-      <select name="type" onchange="this.form.submit();">
-        <option value="">&mdash; Veuillez sélectionner un type de repas</option>
-        {{foreach from=$listTypeRepas item=curr_type}}
-        <option value="{{$curr_type->typerepas_id}}" {{if $curr_type->typerepas_id == $type}}selected="selected"{{/if}}>
-          {{$curr_type->nom}}
-        </option>
-        {{/foreach}}
-      </select>
-      pour le {{$date|date_format:"%A %d %b %Y"}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <label for="service_id" title="Veuillez sélectionner un service">Service</label>
+        <select name="service_id" onchange="reloadChambres();">
+          <option value="">&mdash; Veuillez sélectionner un service</option>
+          {{foreach from=$services item=curr_service}}
+          {{assign var="validation" value=$curr_service->_ref_validrepas.$date.$type}}
+          {{if $type && $validation->validationrepas_id && !$validation->modif}}
+            {{assign var="classStyle" value="validation"}}
+          {{elseif $type && $validation->validationrepas_id}}
+            {{assign var="classStyle" value="modification"}}
+          {{else}}
+            {{assign var="classStyle" value=""}}
+          {{/if}}
+          
+          <option class="{{$classStyle}}" value="{{$curr_service->service_id}}" {{if $curr_service->service_id == $service_id}}selected="selected"{{/if}}>
+            {{$curr_service->nom}}
+          </option>
+          {{/foreach}}
+        </select>
+        <label for="type" title="Veuillez sélectionner un type de repas">Type de repas</label>
+        <select name="type" onchange="this.form.submit();">
+          <option value="">&mdash; Veuillez sélectionner un type de repas</option>
+          {{foreach from=$listTypeRepas item=curr_type}}
+          <option value="{{$curr_type->typerepas_id}}" {{if $curr_type->typerepas_id == $type}}selected="selected"{{/if}}>
+            {{$curr_type->nom}}
+          </option>
+          {{/foreach}}
+        </select>
+        pour le {{$date|date_format:"%A %d %b %Y"}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form><br />
     </th>
   </tr>

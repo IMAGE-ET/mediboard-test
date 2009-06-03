@@ -86,7 +86,7 @@ Main.add(function () {
   {{/if}}
   
   ViewPort.SetAvlHeight("semainier", 1);
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 </script>
@@ -97,13 +97,14 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th>
-      <form name="editFrmPratDate" action="?m={{$m}}" method="get">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
-      <input type="hidden" name="m" value="{{$m}}" />
-      {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
+      <form name="changeDate" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        {{$date|date_format:$dPconfig.longdate}}
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
 

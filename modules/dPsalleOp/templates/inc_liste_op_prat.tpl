@@ -1,3 +1,9 @@
+<script type="text/javascript">
+Main.add(function () {
+  Calendar.regField(getForm("selection").date, null, {noView: true});
+});
+</script>
+
 <form action="?" name="selection" method="get">
 
 <input type="hidden" name="m" value="{{$m}}" />
@@ -7,7 +13,7 @@
   <tr>
     <th class="category" colspan="2">
       {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
     </th>
   </tr>
   
@@ -32,9 +38,5 @@
 </table>
 
 </form>
-
-<script type="text/javascript">
-	Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&op=0&date=");
-</script>
       
 {{include file="inc_details_op_prat.tpl"}}

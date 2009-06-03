@@ -12,7 +12,7 @@ Main.add(function () {
   } );
   {{/foreach}}
 
-  Calendar.regRedirectFlat("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("chgAff").date, null, {noView: true, inline: true, container: $('calendar-container')});
 });
 
 </script>
@@ -48,6 +48,7 @@ Main.add(function () {
       <form name="chgAff" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
+      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 
       {{foreach from=$services item=curr_service}}
         <input

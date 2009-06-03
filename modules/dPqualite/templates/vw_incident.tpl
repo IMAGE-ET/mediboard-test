@@ -51,10 +51,8 @@ function choixSuiteEven(){
 }
 
 Main.add(function () {
-  Calendar.regField("FrmEI", "_incident_date");
   refreshListChoix();
-  
-  oEvenementField = new TokenField(document.FrmEI.evenements);
+  oEvenementField = new TokenField(getForm("FrmEI").evenements);
 });
 </script>
 <table class="main">
@@ -109,22 +107,22 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$fiche field="type_incident"}}</th>
           <td>{{mb_field object=$fiche field="type_incident" emptyLabel="Choose"}}</td>
-          <th>{{mb_label object=$fiche field="_incident_date"}}</th>
-          <td class="date">{{mb_field object=$fiche field="_incident_date" form=FrmEI register=true}}</td>
+          <th>{{mb_label object=$fiche field="date_incident"}}</th>
+          <td>{{mb_field object=$fiche field="date_incident" form=FrmEI register=true}}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$fiche field="elem_concerne"}}</th>
           <td>{{mb_field object=$fiche field="elem_concerne" emptyLabel="Choose"}}</td>
-          <th>{{mb_label object=$fiche field="_incident_heure"}}</th>
-          <td>{{mb_field object=$fiche field="_incident_heure" form=FrmEI}}</td>
+          <th>{{mb_label object=$fiche field="lieu"}}</th>
+          <td>{{mb_field object=$fiche field="lieu"}}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$fiche field="elem_concerne_detail"}}</th>
           <td>{{mb_field object=$fiche field="elem_concerne_detail"}}</td>
-          <th>{{mb_label object=$fiche field="lieu"}}</th>
-          <td>{{mb_field object=$fiche field="lieu"}}</td>
+          <th></th>
+          <td></td>
         </tr>
         
         <tr>
@@ -135,7 +133,7 @@ Main.add(function () {
       	{{if !count($listCategories)}}
         <tr>
 					<td colspan="10">
-					  <div class="big-warning">{{tr}}CEiCategorie.none{{/tr}}</div>
+					  <div class="small-warning">{{tr}}CEiCategorie.none{{/tr}}</div>
 					</td>
 					{{/if}}
 				</tr>

@@ -704,14 +704,16 @@ function mbPortalURL( $page="Accueil", $tab = null) {
  */
 function mbLoadScripts($modeReturn = 0) {
   $affichageScript = null;
-    
-  $affichageScript .= mbLoadScript("lib/jscalendar/calendar.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/jscalendar/lang/calendar-fr.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
-  
+
   // Prototype JS & Scriptaculous
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
+  
+  // Datepicker
+  $affichageScript .= mbLoadScript("includes/javascript/date.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/datepicker/datepicker.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/datepicker/datepicker-locale-fr_FR.js",$modeReturn);
   
   // Livepipe UI
   $affichageScript .= mbLoadScript("lib/livepipe/livepipe.js",$modeReturn);
@@ -725,7 +727,6 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/flotr/lib/canvas2image.js", $modeReturn);
   $affichageScript .= mbLoadScript("lib/flotr/lib/canvastext.js", $modeReturn);
   
-  $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/tooltip.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/controls.js",$modeReturn);
@@ -931,7 +932,7 @@ function bindHashToObject($hash, &$object) {
  * @return string Date in locale format
  */
 function mbDateToLocale($date) {
-  return preg_replace("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $date);
+  return preg_replace("/(\d{4})-(\d{2})-(\d{2})/", '$3/$2/$1', $date);
 }
 
 
@@ -941,7 +942,7 @@ function mbDateToLocale($date) {
  * @return string Date in ISO format
  */
 function mbDateFromLocale($date) {
-  return preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$3-$2-$1", $date);
+  return preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", '$3-$2-$1', $date);
 }
 
 /**

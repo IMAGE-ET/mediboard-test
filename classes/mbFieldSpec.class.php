@@ -595,30 +595,22 @@ class CMbFieldSpec {
 
     $class = htmlspecialchars(trim("$className $this->prop"));
     $field = htmlspecialchars($this->fieldName);
-    $date  = ($value && $value != '0000-00-00') ? mbTransformTime(null, $value, $format) : "";
+    $date  = ($value && $value != '0000-00-00' && 
+                        $value != '00:00:00' && 
+                        $value != '0000-00-00 00:00:00') ? mbTransformTime(null, $value, $format) : "";
     
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
-    
-    
+	
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
-    $html[] = '<div class="control">';
-    //$html[] = '<input type="text" value="'.$date.'" class="'.$this->getSpecType().'" id="'.$id.'_da" disabled="disabled" />';
-    $html[] = '<div class="'.$this->getSpecType().'" id="'.$id.'_da">'.$date.'</div>';
-    $html[] = '<input type="hidden" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
-    $html[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"  class="trigger" />';
+    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" disabled="disabled" />';
+    $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
 
-    if (!$this->notNull) {
-      $html[] = '<button id="'.$id.'_cancel" class="cancel notext" type="button" onclick="$V(this.form[\''.$field.'\'], new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
+    if ($register || $this instanceof CTimeSpec) {
+      $html[] = '<script type="text/javascript">Main.add(function(){Calendar.regField(getForm("'.$form.'").elements["'.$field.'"])})</script>';
     }
-    
-    if ($register) {
-      $time = $this instanceof CDateTimeSpec ? "true" : "false";
-      $html[] = '<script type="text/javascript">Main.add(function() { Calendar.regField("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
-    }
-    $html[] = '</div>';
     return implode("\n", $html);
   }
 

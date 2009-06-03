@@ -9,7 +9,7 @@ var ETAT_REPAS_MODIF  = 48;
 var ETAT_SYNCH        = 64;
 
 Main.add(function () {
-  Calendar.regField("FrmSelectService", "date");
+  Calendar.regField(getForm("FrmSelectService").date);
 });
 
 function storageMain(){

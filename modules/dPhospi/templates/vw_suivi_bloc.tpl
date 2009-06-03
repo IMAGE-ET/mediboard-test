@@ -1,18 +1,19 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date_suivi}}", "?m={{$m}}&tab={{$tab}}&date_suivi=");
+  Calendar.regField(getForm("chgService").date_suivi, null, {noView: true});
 });
 
 </script>
 
 <form name="chgService" action="?m={{$m}}" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="tab" value="{{$tab}}" />
 <table class="main">
   <tr>
     <th>
       <label for="service_id">Service</label>
-      <select name="service_id" onchange="submit()">
+      <select name="service_id" onchange="this.form.submit()">
         <option value="0">&mdash; Tous les services</option>
         {{foreach from=$services item=currService}}
         <option value="{{$currService->service_id}}" {{if $currService->service_id==$service_id}}selected="selected"{{/if}}>
@@ -22,7 +23,7 @@ Main.add(function () {
       </select>
       le
       {{$date_suivi|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <input type="hidden" name="date_suivi" class="date" value="{{$date_suivi}}" onchange="this.form.submit()" />
     </th>
   </tr>
 </table>

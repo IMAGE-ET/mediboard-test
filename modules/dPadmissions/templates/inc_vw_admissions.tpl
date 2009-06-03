@@ -9,9 +9,7 @@
 *}}
 
 <script type="text/javascript">
-
-Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
-
+Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 </script>
 
 <table class="tbl">
@@ -19,7 +17,11 @@ Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
     <th colspan="9">
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
       {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <form name="changeDateAdmissions" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_idx_admission" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
       <br /> 
       <em>
@@ -45,7 +47,6 @@ Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
     <th>
     {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
     </th>
-    
     
     <th>Chambre</th>
     <th>Admis</th>

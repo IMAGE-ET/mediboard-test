@@ -42,9 +42,7 @@
   <tr>
     <th><label for="debut">Date de début</label></th>
     <td class="date">
-      <div id="echantillonage_debut_da">{{$today|date_format:"%d/%m/%Y"}}</div>
       <input type="hidden" name="debut" value="{{$today}}" />
-      <img id="echantillonage_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" />
     </td>
   </tr>
   

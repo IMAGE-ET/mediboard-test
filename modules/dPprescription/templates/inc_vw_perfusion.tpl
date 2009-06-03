@@ -194,20 +194,14 @@ Main.add( function(){
 						  </td>
 						{{else}}  
 	        		<td class="date"  style="border:none;">
-	        		{{mb_label object=$_perfusion field="date_debut"}}
+	        		  {{mb_label object=$_perfusion field="date_debut"}}
 	        		  {{if $_perfusion->_can_modify_perfusion}}
-			            {{mb_field object=$_perfusion field=date_debut form="editPerf-$perfusion_id" onchange="changeColorPerf($perfusion_id,this.form); return onSubmitFormAjax(this.form);"}}
-			            {{mb_field object=$_perfusion field=time_debut form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}}
+			            {{mb_field object=$_perfusion field=date_debut form="editPerf-$perfusion_id" onchange="changeColorPerf($perfusion_id,this.form); return onSubmitFormAjax(this.form);" register=true}}
+			            {{mb_field object=$_perfusion field=time_debut form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
 		            {{else}}
 		              {{mb_value object=$_perfusion field=date_debut}}
 			            {{mb_value object=$_perfusion field=time_debut}}
-		            {{/if}}
-		            <script type="text/javascript">
-									Main.add( function(){
-									  prepareForm('editPerf-{{$perfusion_id}}'); 
-									  Calendar.regField("editPerf-{{$perfusion_id}}", "date_debut", false);
-									});
-								</script>			
+		            {{/if}}	
 						  </td>				
 						{{/if}}     
 						<td style="border:none;">
@@ -346,18 +340,12 @@ Main.add( function(){
 						          </td>
 						          <td class="date"  style="border:none; width: 20%">
 						            {{if $_perfusion->_can_modify_perfusion_line}}
-							            {{mb_field object=$line field=date_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
-							            {{mb_field object=$line field=time_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
+							            {{mb_field object=$line field=date_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
+							            {{mb_field object=$line field=time_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
 							          {{else}}
 							            {{mb_value object=$line field=date_debut}}
 							            {{mb_value object=$line field=time_debut}}
 						            {{/if}}
-						            <script type="text/javascript">
-													Main.add( function(){
-													  prepareForm('editLinePerf-{{$line->_id}}'); 
-													  Calendar.regField("editLinePerf-{{$line->_id}}", "date_debut", false);
-													});
-												</script>
 						          </td>
 					          {{/if}}
 			            </tr>

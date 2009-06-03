@@ -18,7 +18,7 @@ function drawGraphs() {
 }
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("typevue").date, null, {noView: true});
   drawGraphs();
 });
 </script>
@@ -27,11 +27,13 @@ Main.add(function () {
 
 <tr>
   <th>
-  	Logs d'accès du  {{$date|date_format:"%A %d %b %Y"}}
-    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     <form action="?" name="typevue" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
+      
+  	  Logs d'accès du  {{$date|date_format:"%A %d %b %Y"}}
+      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      
       <label for="interval" title="Echelle d'affichage">Intervalle</label>
       <select name="interval" onchange="this.form.submit()">
         <option value="day" {{if $interval == "day"}} selected="selected" {{/if}}>Journée</option>

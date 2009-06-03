@@ -5,7 +5,7 @@ var Menu = {
   toggle: function () {
     var oCNs = Element.classNames("menubar");
     oCNs.flip("iconed", "uniconed");
-    oCNs.save("menubar", Duration.year);
+    oCNs.save("menubar", Date.year);
   },
   
   init: function() {

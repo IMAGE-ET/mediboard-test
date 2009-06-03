@@ -1,15 +1,14 @@
 <script type="text/javascript">
 
 function reloadPatient(oForm) {
-  var url_patient = new Url;
-  url_patient.setModuleAction("dPhospi", "httpreq_pathologies");
+  var url_patient = new Url("dPhospi", "httpreq_pathologies");
   url_patient.addParam("affichage_patho", "{{$affichage_patho}}");
   url_patient.addParam("sejour_id", oForm.sejour_id.value);
   url_patient.requestUpdate('sejour-'+oForm.sejour_id.value, { waitingText : null });
 }
 
 Main.add(function () {
-  Calendar.regRedirectPopup("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
 </script>
@@ -36,7 +35,11 @@ Main.add(function () {
       <a href="?m={{$m}}&tab={{$tab}}&date={{$yesterday}}" style="float: left;"><<<</a>
       <a href="?m={{$m}}&tab={{$tab}}&date={{$tomorow}}" style="float: right;">>>></a>
       {{$date|date_format:$dPconfig.longdate}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <form name="changeDate" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
     </th>
   </tr>
   <tr>
