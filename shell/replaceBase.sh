@@ -45,6 +45,15 @@ else
   port=22
 fi
 
+# Mysql Path
+path=/etc/init.d/mysql
+if [ -f "$path" ]
+then 
+  mysql_path=/etc/init.d/mysql
+else
+  mysql_path=/etc/init.d/mysqld
+fi
+
 # Retrieve archive 
 scp $source_location:$source_directory/$source_database-latest.tar.gz $destination/$(echo $location | cut -d'@' -f2)
 check_errs $? "Failed to retrieve archive" "Succesfully retrieve archive!"
@@ -55,7 +64,7 @@ tar -xvf $source_database-latest.tar.gz
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
-/etc/init.d/mysqld stop
+"$mysql_path" stop
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
 
 dir_target=/var/lib/mysql/$target_database
@@ -86,7 +95,7 @@ chgrp mysql *
 check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 
 # Start mysql
-/etc/init.d/mysqld start
+"$mysql_path" start
 check_errs $? "Failed to start mysql" "Succesfully start mysql"
 
 rm -rf $destination/$source_database
