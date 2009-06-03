@@ -140,6 +140,8 @@ function modifSejour() {
     oForm.saisi_SHS.value = '0';
   }
   {{/if}}
+  canNullOK(oForm._date_entree_prevue);
+  canNullOK(oForm._date_sortie_prevue);
 }
 
 function updateSortiePrevue() {
