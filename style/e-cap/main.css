@@ -535,7 +535,6 @@ a.button.warning:hover {
   background-image: url(../tonkin/images/buttons/warningover.png);
 }
 
-
 button.remove, 
 a.button.remove {
   background-image: url(../tonkin/images/buttons/remove.png);
@@ -571,7 +570,6 @@ button.send-cancel, a.button.send-cancel {
 button.send-cancel:hover, a.button.send-cancel:hover {
   background-image: url(../tonkin/images/buttons/send-cancel.png);
 }
-
 
 button.send-again, a.button.send-again {
   background-image: url(../tonkin/images/buttons/send-again.png);
@@ -609,16 +607,6 @@ a.notext, a.notext:hover{
   width: 5px;
 }
 
-select {
-  border: 1px #a5acb2 solid;
-  font-size: 10px;
-  padding: 0;
-}
-
-optgroup {
-  font-size: 10px;
-}
-
 option {
   font-style: normal;
   font-size: 10px;
@@ -628,32 +616,27 @@ option {
   background: #fff;
 }
 
-input,
-select,
-textarea {
+input, select, textarea {
   color: #082F54;
   background: #fff;
   border: 1px #a5acb2 solid;
-  font-size: 12px;
-  padding: 1px;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-style: inset;
+  background-color: #C9D2ED;
 }
 
 select {
-  font-size: 10px;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  padding: 0px;
-  border: 2px #a5acb2 inset;
-  background-color: #ddf;
+  border: 1px #a5acb2 solid;
+  padding: 0;
 }
 
 /* Standard table */
 table.tbl, table.form {
 	border-collapse: collapse;
 }
+
 table.tbl {
   width: 100%;
   border: 0px;
@@ -769,10 +752,7 @@ table.main th.urgence {
 }
 
 table.form th.modify,
-table.main th.modify {
-  color: #fc0;
-}
-
+table.main th.modify,
 table.main th.urgence.modify {
   color: #fc0;
 }
@@ -835,7 +815,6 @@ tr.catalogue-2 th {
   font-size: 130%;
   background-color: #79d;
 }
-
 
 tr.catalogue-3 th {
   color: #444;

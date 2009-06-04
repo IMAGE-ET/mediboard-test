@@ -428,7 +428,7 @@ button.notext {
   font-size: 0;
   padding : 15px 0px 0px 0px;
   margin  : 1px 1px;
-  color: transparent;
+/*  color: transparent;*/
   overflow: hidden;
   width: 19px;
 }
@@ -441,15 +441,20 @@ a.notext{
   padding : 0px 0px 0px 16px;
   margin  : 1px 1px;
   height: 16px;
-  color: transparent;
+  /*color: transparent;*/
   overflow: hidden;
 }
 
-input {
+input, select, textarea {
   border: 1px black solid;
-  font-size: 12px;
+  font-size: 10px;
   margin: 1px;
-  padding: 0px 2px;
+  padding: 1px;
+  background-color: #efe;
+}
+
+input:focus, select:focus, textarea:focus {
+  background-color: #fff;
 }
 
 input[type=submit],
@@ -466,26 +471,20 @@ input[type=button]:hover {
 }
 
 select {
-  border: 1px black solid;
-  font-size: 10px;
   padding: 0;
+}
+
+optgroup, option {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1em;
+  padding: 0 2px;
+  margin: 0;
+  background: #fff;
 }
 
 optgroup {
-  font-style: normal;
-  font-size: 1em;
   font-weight: bold;
-  padding: 0 4px;
-  margin: 1 0px;
-  background: #fff;
-}
-
-option {
-  font-style: normal;
-  font-size: 1em;
-  font-weight: normal;
-  padding: 0;
-  background: #fff;
 }
 
 optgroup option {
@@ -498,18 +497,6 @@ option.novalue {
 
 option[value=""] {
   font-style: italic;
-}
-
-input,
-select,
-textarea {
-  background-color: #efe;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  background-color: #fff;
 }
 
 label:hover {
@@ -590,8 +577,6 @@ div#console div.value {
   height: 18px; 
   margin-left: 0px;
 }
-
-
 
 optgroup.group {
   text-align: center;
@@ -696,18 +681,12 @@ table.main tbody.viewported td.viewport {
   border: 1px solid #000;
 }
 
-table.main td.halfPane {
-  width: 50%;
-}
-
+table.main td.halfPane,
 table.main th.halfPane {
   width: 50%;
 }
 
-td.greedyPane {
-  width: 100%;
-}
-
+td.greedyPane,
 th.greedyPane {
   width: 100%;
 }
@@ -1636,7 +1615,6 @@ table.Offline button  {
 
 #user td {
   padding: 0 3px;
-  
 }
 
 #userWelcome {
@@ -1703,7 +1681,6 @@ span.hilite {
 .touchscreen input,
 .touchscreen button,
 .touchscreen a.button {
-  margin-top: -1px;
   font-size: 16px;
   height: 24px;
   font-weight: normal;
@@ -2066,7 +2043,6 @@ table.chambreexpand em {
   font-weight: bold;
 }
 
-
 table.chambrecollapse td,
 table.chambrecollapse th,
 table.chambreexpand td,
@@ -2080,7 +2056,6 @@ table.chambreexpand td.action {
   text-align: center;
   vertical-align: middle;
 }
-
 
 table.chambrecollapse th.chambre {
   padding: 2px;
@@ -2120,7 +2095,6 @@ table.chambreexpand tr.patient td {
   background: #eee;
   color: #000;
 }
-
 
 table.chambrecollapse tr.patient img,
 table.chambreexpand tr.patient img {
@@ -2622,7 +2596,7 @@ div.about div.nav {
 }
 
 .datepickerControl td.today {
-	outline:	2px solid red;
+	outline:	2px solid #EBC2C0;
 }
 
 /* Disabled days */
@@ -2808,11 +2782,8 @@ span.listeCurrent a {
  	color:red ;
 }
 
-table.tbl td.highlight{
-  background-color: #ff5;
-}
-
-td.highlight{
+table.tbl td.highlight,
+td.highlight {
   background-color: #ff5;
 }
 

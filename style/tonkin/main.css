@@ -285,10 +285,21 @@ select,
 textarea {
   color: #082F54;
   background-image:url(./images/pictures/input.png);
-  border:1px solid black;
-  font-size: 12px;
-  margin: 1px;
-  padding: 1px;
+  background-color: transparent;
+}
+
+optgroup {
+  font-style: normal;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+}
+
+option {
+  background-color: #D3F2F7;
+  background-image: none;
+  padding: 0px;
+  padding-right: 4px;
 }
 
 button, 
@@ -563,28 +574,6 @@ button.notext, button.notext:hover{
 
 a.notext, a.notext:hover{
   padding : 0px 0px 1px 18px;
-}
-
-select {
-  font-size: 10px;
-}
-
-optgroup {
-  font-style: normal;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 0px;
-  padding-left: 5px;
-  background-color: transparent;
-}
-
-option {
-  font-style: normal;
-  font-size: 10px;
-  font-weight: normal;
-  padding: 0px;
-  padding-right: 4px;
-  background-color: transparent;
 }
 
 /* Standard table */
