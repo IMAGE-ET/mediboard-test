@@ -324,12 +324,12 @@ var Calendar = {
     
     if (element.hasClassName('dateTime')) {
       options.timePicker = true;
-      options.altFormat = 'yyyy-MM-dd HH:mm:ss';
+      options.altFormat = 'yyyy-MM-dd HH:mm';
     }
     else if (element.hasClassName('time')) {
       options.timePicker = true;
       options.datePicker = false;
-      options.altFormat = 'HH:mm:ss';
+      options.altFormat = 'HH:mm';
       options.icon = "images/icons/time.png";
     }
     
