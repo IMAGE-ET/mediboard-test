@@ -209,19 +209,9 @@ div div.text {
   height: auto;
 }
 
-.control * {
-  position: relative;
-}
-
 .control .trigger {
   cursor: pointer;
-  margin: 2px 1px;
-}
-
-.control input, 
-.control button, 
-.control select {
-  margin: 0;
+  margin: 1px;
 }
 
 span.smarty-include {
@@ -447,9 +437,10 @@ a.notext{
 
 input, select, textarea {
   border: 1px black solid;
-  font-size: 10px;
+  font-size: 11px;
   margin: 1px;
   padding: 1px;
+  padding-top: 2px;
   background-color: #efe;
 }
 

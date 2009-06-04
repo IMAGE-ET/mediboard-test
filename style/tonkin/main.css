@@ -285,7 +285,7 @@ select,
 textarea {
   color: #082F54;
   background-image:url(./images/pictures/input.png);
-  background-color: transparent;
+  background-color: #D3F2F7;
 }
 
 optgroup {

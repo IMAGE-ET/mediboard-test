@@ -608,9 +608,6 @@ a.notext, a.notext:hover{
 }
 
 option {
-  font-style: normal;
-  font-size: 10px;
-  font-weight: normal;
   padding: 0px;
   padding-right: 4px;
   background: #fff;
