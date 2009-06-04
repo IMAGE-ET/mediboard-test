@@ -321,7 +321,7 @@ Main.add( function(){
     {{mb_label object=$sejour field="praticien_id"}}
   </th>
   <td colspan="3">
-    <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}">
+    <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="max-width: 150px;">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
       <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->_id == $curr_praticien->user_id}} selected="selected" {{/if}}>

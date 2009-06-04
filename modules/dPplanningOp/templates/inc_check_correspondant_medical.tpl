@@ -11,7 +11,7 @@
 <th>{{mb_label object=$sejour field=adresse_par_prat_id}}</th>
 <td colspan="3">
   <select name="_correspondants_medicaux" onchange="$V(this.form.adresse_par_prat_id, $V(this)); $('_adresse_par_prat').hide()">
-    <option value="">&mdash; Choisir un correspondant du patient</option>
+    <option value="">&mdash; Choisir un correspondant</option>
     {{foreach from=$correspondantsMedicaux key=type_correspondant item=curr_correspondant}}
       {{if $type_correspondant == "traitant"}}
         <option value="{{$curr_correspondant->_id}}" {{if $curr_correspondant->_id == $sejour->adresse_par_prat_id}}selected="selected"{{/if}}>
