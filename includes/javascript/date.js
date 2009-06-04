@@ -315,6 +315,8 @@ var Calendar = {
       dateProperties: function(date){return Calendar.dateProperties(date, dates)}
     }, options || {});
     
+    options.emptyButton = (!options.noView && !element.hasClassName('notNull'));
+    
     var elementView;
     
     if (!(elementView = $(element.form.elements[element.name+'_da']))) {
@@ -324,12 +326,12 @@ var Calendar = {
     
     if (element.hasClassName('dateTime')) {
       options.timePicker = true;
-      options.altFormat = 'yyyy-MM-dd HH:mm';
+      options.altFormat = 'yyyy-MM-dd HH:mm:ss';
     }
     else if (element.hasClassName('time')) {
       options.timePicker = true;
       options.datePicker = false;
-      options.altFormat = 'HH:mm';
+      options.altFormat = 'HH:mm:ss';
       options.icon = "images/icons/time.png";
     }
     
@@ -347,31 +349,6 @@ var Calendar = {
     }
     
     if (datepicker.icon && !options.noView) {
-      if (!element.hasClassName('notNull')) {
-        var cancelIcon = new Element("img", {src: "images/icons/cancel.png", width: 10, height: 10, title: "Vider"});
-        var dim = datepicker.icon.getDimensions();
-        cancelIcon.setStyle({
-          position: "absolute",
-          cursor: "pointer",
-          right: "14px", 
-          top: "5px"
-        }).observe("click", function(){
-          $V(datepicker.element, "");
-          $V(datepicker.altElement, "");
-        });
-        
-        var overlay = new Element('div');
-        overlay.addClassName('datepickerOverlay '+datepicker.element.className)
-               .setStyle({
-                 height: '1em'
-               })
-               .observe('mouseover', function(e){e.stop();cancelIcon.show()})
-               .observe('mouseout', function(e){e.stop();cancelIcon.hide()});
-               
-        datepicker.element.insert({after: overlay});
-        overlay.insert(cancelIcon.hide());
-      }
-    
       datepicker.icon.observe("click", function(){
         (function(){$(datepicker.datepicker.element).unoverflow()}).defer();
       });

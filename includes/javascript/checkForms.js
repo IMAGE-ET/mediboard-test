@@ -295,7 +295,7 @@ Object.extend(ElementChecker, {
     // ccam
     ccam: function() {
       this.assertNoArg("ccam");
-      if (!this.sValue.match(/^([A-Z]){4}[0-9]{3}(-[0-9](-[0-9])?)?$/i))
+      if (!this.sValue.match(/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i))
         this.addError("ccam", "Code CCAM incorrect");
     },
     
@@ -421,7 +421,7 @@ Object.extend(ElementChecker, {
     		return;
     	}
 
-      if (!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))
+      if (!this.sValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/))
         this.addError("date", "N'a pas un format de date correct");
     },
     
@@ -431,7 +431,7 @@ Object.extend(ElementChecker, {
     		return;
     	}
 
-      if(!this.sValue.match(/^(\d{1,2}):?(\d{1,2}):?(\d{1,2})?$/))
+      if(!this.sValue.match(/^\d{1,2}:\d{1,2}(:\d{1,2})?$/))
         this.addError("time", "N'a pas un format d'heure correct");
     },
     
@@ -441,7 +441,7 @@ Object.extend(ElementChecker, {
     		return;
     	}
     	
-      if (!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ \+](\d{1,2}):(\d{1,2}):(\d{1,2})$/))
+      if (!this.sValue.match(/^\d{4}-\d{1,2}-\d{1,2}[ \+]\d{1,2}:\d{1,2}(:\d{1,2})?$/))
         this.addError("dateTime", "N'a pas un format de date/heure correct");
     },
     
@@ -461,7 +461,7 @@ Object.extend(ElementChecker, {
     
     // pct
     pct: function() {
-      if (!this.sValue.match(/^(\d+)(\.\d{1,4})?$/))
+      if (!this.sValue.match(/^\d+(\.\d+)?$/))
         this.addError("pct", "N'est pas une valeur décimale (utilisez le . pour la virgule)");
     },
     

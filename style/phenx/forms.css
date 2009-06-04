@@ -295,21 +295,6 @@ input[disabled].dateTime {
 }
 
 div.date,
-input[disabled].date.notNull {
-  width: 80px;
-}
-
-div.time,
-input[disabled].time.notNull {
-  width: 50px;
-}
-
-div.dateTime,
-input[disabled].dateTime.notNull {
-  width: 120px;
-}
-
-div.date,
 input[disabled].date {
   width: 90px;
 }
@@ -321,26 +306,5 @@ input[disabled].time {
 
 div.dateTime,
 input[disabled].dateTime {
-  width: 130px;
-}
-
-div.datepickerOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
-div.datepickerOverlay.date {
-  width: 90px;
-}
-
-div.datepickerOverlay.time {
-  width: 60px;
-}
-
-div.datepickerOverlay.dateTime {
   width: 130px;
 }
