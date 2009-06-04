@@ -33,7 +33,7 @@ function putArrivee(oForm) {
 }
 
 Main.add(function () {
-  Calendar.regField(getForm("selection").debut, null, {noView: true});
+  Calendar.regField(getForm("changeDate").debut, null, {noView: true});
   
   PairEffect.initGroup("functionEffect", { 
     bStoreInCookie: true,
@@ -46,36 +46,39 @@ Main.add(function () {
 <table class="main">
   <tr>
     <th>
-      <form action="?" name="selection" method="get">
-
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="tab" value="{{$tab}}" />
-      
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
-      Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
-      <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
-      <br />
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
-      
-      <label for="chirSel" title="Praticien dont on observe le planning de consultation">Praticien</label>
-      <select name="chirSel" onchange="this.form.submit()">
-        <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un praticien &mdash;</option>
-        {{foreach from=$listChirs item=curr_chir}}
-        <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-          {{$curr_chir->_view}}
-        </option>
-        {{/foreach}}
-      </select>
-  
-      <label for="vue1" title="Type de vue du planning de consultation">Type de vue</label>
-      <select name="vue1" onchange="this.form.submit()">
-        <option value="0"{{if !$vue}}selected="selected"{{/if}}>Tout afficher</option>
-        <option value="1"{{if $vue}}selected="selected"{{/if}}>Cacher les payés</option>
-      </select>
-
+      <form action="?" name="changeDate" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        
+        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
+        Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
+        <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
+        
+        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
+        <br />
+        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
       </form>
-
+    </th>
+    <td>
+      <form action="?" name="selection" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <label for="chirSel" title="Praticien dont on observe le planning de consultation">Praticien</label>
+        <select name="chirSel" onchange="this.form.submit()">
+          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un praticien &mdash;</option>
+          {{foreach from=$listChirs item=curr_chir}}
+          <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
+            {{$curr_chir->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+    
+        <label for="vue1" title="Type de vue du planning de consultation">Type de vue</label>
+        <select name="vue1" onchange="this.form.submit()">
+          <option value="0"{{if !$vue}}selected="selected"{{/if}}>Tout afficher</option>
+          <option value="1"{{if $vue}}selected="selected"{{/if}}>Cacher les payés</option>
+        </select>
+      </form>
     </td>
   </tr>
   <tr>
