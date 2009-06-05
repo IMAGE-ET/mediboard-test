@@ -14,7 +14,7 @@
   * @param $operations array|COperation interventions ? afficher
   *}}
 
-<!-- EntÍtes -->
+<!-- Entêtes -->
 <tr>
   {{if $urgence && $salle}}
   <th>Praticien</th>

@@ -20,7 +20,7 @@
         {{else}}
           -
         {{/if}}
-        {{$_plage->debut|date_format:$dPconfig.time}} ? {{$_plage->fin|date_format:$dPconfig.time}}
+        {{$_plage->debut|date_format:$dPconfig.time}} à {{$_plage->fin|date_format:$dPconfig.time}}
     </th>
   </tr>
   <tr>
@@ -48,7 +48,7 @@
 </table>
 {{/foreach}}
 
-<!-- DÈplacÈes -->
+<!-- DÈplacées -->
 {{if $salle->_ref_deplacees|@count}}
 <hr />
 <table class="form">
