@@ -202,6 +202,8 @@ Main.add(function () {
       		ajaxSubmit=0 
       		listService=$listServicesUrgence}}
 		</td>
+		<th />
+		<td />
   </tr>
 
   {{if $can->edit}}
