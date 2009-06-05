@@ -36,6 +36,7 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where["sejour.entree_reelle"] = "LIKE '$date%'";
 $where["sejour.type"] = "= 'urg'";
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 if($selAffichage == "prendre_en_charge"){
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
