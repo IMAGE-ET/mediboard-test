@@ -621,7 +621,7 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   border-style: inset;
-  background-color: #C9D2ED;
+  background-color: #E0EAFF;
 }
 
 select {

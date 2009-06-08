@@ -11,9 +11,12 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CHtmlSpec extends CMbFieldSpec {
-
   function getSpecType() {
     return("html");
+  }
+  
+  function getDBSpec(){
+    return "MEDIUMTEXT";
   }
   
   function checkProperty($object){
@@ -43,10 +46,6 @@ class CHtmlSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
-  }
-  
-  function getDBSpec(){
-    return "MEDIUMTEXT";
   }
 }
 

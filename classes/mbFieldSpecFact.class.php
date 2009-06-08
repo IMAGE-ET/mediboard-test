@@ -29,12 +29,12 @@ class CMbFieldSpecFact {
     "currency"     => "CCurrencySpec",
     "pct"          => "CPctSpec",
     "text"         => "CTextSpec",
-    "html"         => "CHtmlSpec",
     "email"        => "CEmailSpec",
     "code"         => "CCodeSpec",
     "password"     => "CPasswordSpec",
+    "html"         => "CHtmlSpec",
     "xml"          => "CXmlSpec",
-    "php"          => "CPhpSpec",
+    "php"          => "CPhpSpec", /** @todo: Make a sourceCode spec */
   );
    
   /**
@@ -54,14 +54,11 @@ class CMbFieldSpecFact {
     $specOptions = array();
     foreach ($specFragments as $specFragment) {
       $options = explode("|", $specFragment);
-      $optionName = array_shift($options);
-
-      $specOptions[$optionName] = count($options) ? implode("|", $options) : true;
+      $specOptions[array_shift($options)] = count($options) ? implode("|", $options) : true;
     }
 
     return new $specClassName($className, $fieldName, $strSpec, $specOptions);
   }
-  
 }
 
 ?>

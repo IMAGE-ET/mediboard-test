@@ -57,7 +57,7 @@ class CMbFieldSpec {
     $aObjProperties = get_object_vars($this);
 
     foreach($aProperties as $k => $v) {
-      if (array_key_exists($k ,$aObjProperties)){
+      if (array_key_exists($k, $aObjProperties)){
         $this->$k = $aProperties[$k];
       } else {
         trigger_error("La spécification '$k' trouvée dans '$className::$field' est inexistante dans la classe '".get_class($this)."'", E_USER_WARNING);
@@ -403,15 +403,12 @@ class CMbFieldSpec {
   }
 
   static function randomString($array, $length) {
-    $key = "";
+    $string = "";
     $count = count($array) - 1;
     for($i = 0; $i < $length; $i++)  {
-      $key .= $array[rand(0, $count)];
-      if ($i % 20 == 19) {
-        $key .= " ";
-      }
+      $string .= $array[rand(0, $count)];
     }
-    return($key);
+    return $string;
   }
 
   static function checkNumeric($value, $returnInteger = true){
@@ -428,7 +425,7 @@ class CMbFieldSpec {
     if(!$length = CMbFieldSpec::checkNumeric($length)){
       return null;
     }
-    if ($length < 1 or $length > 255) {
+    if ($length < 1 || $length > 255) {
       return null;
     }
     return $length;
@@ -449,12 +446,7 @@ class CMbFieldSpec {
     if($object->_locked) {
       $params["readonly"] = "readonly";
     }
-    if ($this->mask) {
-      $value = $this->getValue($object);
-    }
-    else {
-      $value = $object->{$this->fieldName};
-    }
+    $value = $this->mask ? $this->getValue($object) : $object->{$this->fieldName};
     if ($hidden) {
       return $this->getFormHiddenElement($object, $params, $value, $className);
     }

@@ -69,17 +69,17 @@ class CProduct extends CMbObject {
     $specs['code']          = 'str maxLength|32 seekable';
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete';
-    $specs['quantity']      = 'num notNull pos';
+    $specs['quantity']      = 'num notNull min|0';
     $specs['item_title']    = 'str';
     $specs['unit_title']    = 'str';
-    $specs['unit_quantity'] = 'float pos';
+    $specs['unit_quantity'] = 'float min|0';
     $specs['packaging']     = 'str';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['code_lpp']      = 'numchar length|7';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';
-    $specs['_unit_quantity']= 'float pos';
+    $specs['_unit_quantity']= 'float min|0';
     $specs['_quantity']     = 'str';
     return $specs;
   }

@@ -197,6 +197,7 @@ function smarty_function_mb_ditto($params, &$smarty) {
  * Fonction that return the value of an object field
  */
 function smarty_function_mb_value($params, &$smarty) {
+  if (empty($params["field"])) return $params["object"]->_view;
   return $params["object"]->_specs[$params["field"]]->getValue($params["object"], $smarty, $params);
 }
 

@@ -12,26 +12,17 @@ CAppUI::requireSystemClass("mbFieldSpec");
 CAppUI::requireLibraryFile("geshi/geshi");
 
 class CPhpSpec extends CMbFieldSpec {
-
   function getSpecType() {
     return("php");
   }
   
-  function sample(&$object, $consistent = true){
-    parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = "Document confidentiel";
-  }
-  
-  function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementTextarea($object, $params, $value, $className);
+  function getDBSpec() {
+    return "MEDIUMTEXT";
   }
   
   function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
-    $propValue = var_export($object->$fieldName, true);
+    $propValue = (!empty($params['export']) ? var_export($object->$fieldName, true) : $object->$fieldName); // @todo: il faudrait enlever ce var_dump, pour prendre la donnée brute
     
     $geshi = new Geshi($propValue, "php");
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
@@ -40,8 +31,21 @@ class CPhpSpec extends CMbFieldSpec {
     return utf8_decode($geshi->parse_code());
   }
   
-  function getDBSpec(){
-    return "MEDIUMTEXT";
+  function getFormHtmlElement($object, $params, $value, $className){
+    return $this->getFormElementTextarea($object, $params, $value, $className);
+  }
+
+  function sample(&$object, $consistent = true){
+    $fieldName = $this->fieldName;
+    $object->$fieldName = 
+'<?php
+$file = fopen("welcome.txt", "r") or exit("Unable to open file!");
+//Output a line of the file until the end is reached
+while(!feof($file)) {
+  echo fgets($file). "<br />";
+}
+fclose($file);
+?>';
   }
 }
 

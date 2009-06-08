@@ -28,7 +28,7 @@ class CTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
   
-    if (!preg_match ("/^(\d{1,2}):(\d{1,2})(:(\d{1,2}))?$/", $propValue)) { 
+    if (!preg_match ("/^\d{1,2}:\d{1,2}(:\d{1,2})?$/", $propValue)) { 
     	if($object->$fieldName === 'current'|| $object->$fieldName ===  'now') {
         $object->$fieldName = mbTime();
         return null;

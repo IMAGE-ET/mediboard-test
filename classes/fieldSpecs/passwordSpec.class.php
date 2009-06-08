@@ -12,19 +12,18 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CPasswordSpec extends CMbFieldSpec {
   
-  function getSpecType() {
-    return('password');
-  }
-  
   var $minLength     = null;
   var $notContaining = null;
   var $notNear       = null;
   var $alphaAndNum   = null;
+    
+  function getSpecType() {
+    return('password');
+  }
   
   function getDBSpec(){
     return "VARCHAR(50)";
   }
-  
   
   // TODO: Factoriser les check
   function checkProperty($object) {
@@ -83,7 +82,6 @@ class CPasswordSpec extends CMbFieldSpec {
   }
   
   function sample(&$object, $consistent = true) {
-    parent::sample($object, $consistent);
     $fieldName = $this->fieldName;
     $object->$fieldName = 'mgF61Ty';
   }

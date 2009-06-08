@@ -11,9 +11,16 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CBoolSpec extends CMbFieldSpec {
-  
   var $_list = null;
   var $_locales = null;
+  
+  function getSpecType() {
+    return("bool");
+  }
+  
+  function getDBSpec(){
+    return "ENUM('0','1')";
+  }
     
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
@@ -35,10 +42,6 @@ class CBoolSpec extends CMbFieldSpec {
     return CAppUI::tr("bool.".$propValue);
   }
   
-  function getSpecType() {
-    return("bool");
-  }
-  
   function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
@@ -51,10 +54,6 @@ class CBoolSpec extends CMbFieldSpec {
       return "Ne peut être différent de 0 ou 1";
     }
     return null;
-  }
-
-  function getDBSpec(){
-    return "ENUM('0','1')";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
@@ -145,19 +144,14 @@ class CBoolSpec extends CMbFieldSpec {
       return $this->fieldName."_1";
   	}
   	if($typeEnum === "checkbox"){
-  		return "__".$this->fieldName;
+  		return "__$this->fieldName";
   	}
   }
   
   function sample(&$object, $consistent = true){
-    parent::sample($object, $consistent);
     $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = rand(0,1);
-
+    $object->$fieldName = rand(0,1);
   }
-  
 }
 
 ?>

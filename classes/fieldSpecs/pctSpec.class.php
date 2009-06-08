@@ -35,7 +35,6 @@ class CPctSpec extends CMbFieldSpec {
   }
   
   function sample(&$object, $consistent = true) {
-    parent::sample($object, $consistent);
     $fieldName = $this->fieldName;
     $object->$fieldName = rand(0, 100);
   }

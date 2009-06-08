@@ -12,17 +12,12 @@ CAppUI::requireSystemClass("mbFieldSpec");
 CAppUI::requireLibraryFile("geshi/geshi");
 
 class CXmlSpec extends CMbFieldSpec {
-
   function getSpecType() {
     return("xml");
-  }
+  }  
   
-  function sample(&$object, $consistent = true){
-    parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = "Document confidentiel";
+  function getDBSpec() {
+    return "MEDIUMTEXT";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
@@ -41,9 +36,18 @@ class CXmlSpec extends CMbFieldSpec {
     
     return utf8_decode($geshi->parse_code());
   }
-  
-  function getDBSpec(){
-    return "MEDIUMTEXT";
+
+  function sample(&$object, $consistent = true){
+    $fieldName = $this->fieldName;
+    $object->$fieldName = <<<EOD
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<note>
+	<to>Tove</to>
+	<from>Jani</from>
+	<heading>Reminder</heading>
+	<body>Don't forget me this weekend!</body>
+</note>
+EOD;
   }
 }
 

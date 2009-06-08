@@ -46,16 +46,14 @@ table {
   font-size: 11px;
 }
 
-tr {
-}
-
-
 th {
   text-align: center;
   vertical-align: top;
 }
 
-td {
+td p, th p {
+  white-space: normal;
+  margin: 0;
 }
 
 th.title.modify {

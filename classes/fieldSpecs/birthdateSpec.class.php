@@ -17,6 +17,13 @@ CAppUI::requireSystemClass("mbFieldSpec");
  *  DD > 31
  */
 class CBirthDateSpec extends CMbFieldSpec {
+  function getSpecType() {
+    return("birthdate");
+  }
+  
+  function getDBSpec(){
+    return "CHAR(10)";
+  }
   
   function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
@@ -28,15 +35,11 @@ class CBirthDateSpec extends CMbFieldSpec {
     return parent::getValue($object, $smarty, $params);
   }
   
-  function getSpecType() {
-    return("birthdate");
-  }
-  
   function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = &$object->$fieldName;
 
-    if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue)) {
+    if (!preg_match ("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/", $propValue)) {
       return "format de date invalide";
     }
     
@@ -51,10 +54,6 @@ class CBirthDateSpec extends CMbFieldSpec {
     $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2).
       "-".$this->randomString(CMbFieldSpec::$months, 1).
       "-".$this->randomString(CMbFieldSpec::$days, 1);
-  }
-  
-  function getDBSpec(){
-    return "CHAR(10)";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

@@ -3,7 +3,7 @@ var form;
 Main.add(function () {
   form = getForm("test");
   $('dom-creator').insert(
-    DOM.div({className: 'big-info'}, 
+    DOM.div({className: 'small-info'}, 
       DOM.a({href: 'http://www.mozilla-europe.org', target: '_blank'}, 
         'Cette info est générée par le DOM creator !'
       )
@@ -11,6 +11,8 @@ Main.add(function () {
   );
   
   var tabs = Control.Tabs.create('tab_categories', true);
+  
+  Calendar.regProgressiveField(form.progressive, {container: document.body});
 });
 
 </script>
@@ -34,11 +36,21 @@ Main.add(function () {
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   
+  <input name="progressive" value="2009-0-0" />
   <table class="form">
   {{foreach from=$specs item=class key=spec}}
     <tr>
       <th>{{mb_title object=$object field=$spec}}</th>
       <td>{{mb_field object=$object field=$spec form=test register=1 increment=1}}</td>
+    </tr>
+  {{/foreach}}
+  </table>
+  
+  <table class="form">
+  {{foreach from=$specs item=class key=spec}}
+    <tr>
+      <th>{{mb_title object=$object field=$spec}}</th>
+      <td>{{mb_value object=$object field=$spec}}</td>
     </tr>
   {{/foreach}}
   </table>

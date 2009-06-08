@@ -25,7 +25,6 @@ class CCodeSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
- 
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
        

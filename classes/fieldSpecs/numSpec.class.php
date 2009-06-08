@@ -12,10 +12,6 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CNumSpec extends CMbFieldSpec {
   
-  function getSpecType() {
-    return("num");
-  }
-  
   var $min       = null;
   var $max       = null;
   var $pos       = null;
@@ -23,6 +19,10 @@ class CNumSpec extends CMbFieldSpec {
   var $minLength = null;
   var $maxLength = null;
   var $minMax    = null;
+  
+  function getSpecType() {
+    return("num");
+  }
 
   function checkProperty($object){
     $fieldName = $this->fieldName;
