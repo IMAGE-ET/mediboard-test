@@ -62,6 +62,8 @@ class CBcbProduit extends CBcbObject {
   var $_ref_ATC_2_libelle = null;
   var $_ref_ATC_2_code    = null;
 
+  var $_prises = null;
+  
 	static $loaded = array();
 	static $useCount = 0;
     
@@ -368,9 +370,13 @@ class CBcbProduit extends CBcbObject {
   	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE1"], $conditionnement["CODE_UNITE_DE_CONTENANCE1"], $conditionnement["NB_UP1"]);
   	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE2"], $conditionnement["CODE_UNITE_DE_CONTENANCE2"], $conditionnement["NB_UP2"]);
   	
+  	// Ajout de la presentation
+    if($this->libelle_presentation){
+      $this->rapport_unite_prise[$this->libelle_presentation][$this->libelle_unite_presentation] = $this->nb_unite_presentation;
+    }
     $this->loadLibelleConditionnement($conditionnement["CODE_CONDITIONNEMENT"]);    
   }
- 
+  
   function loadLibelleConditionnement($code_conditionnement){
   	$ds = CBcbObject::getDataSource();
   	$query = "SELECT LIBELLE_CONDITIONNEMENT_PLURIEL FROM `IDENT_CONDITIONNEMENTS` WHERE `CODE_CONDITIONNEMENT` = '$code_conditionnement';";

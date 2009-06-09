@@ -542,10 +542,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     // Si aucune prise n'est trouvée par le parcours des posologies, chargement direct des prises
     if(count($this->_unites_prise)<1){
       $this->_ref_produit->loadUnitesPrise();
-      foreach($this->_ref_produit->_prises as $_prise){
-	      if(!in_array($_prise, $this->_unites_prise)){
-	        $this->_unites_prise[] = $_prise;
-	      }  
+      if(is_array($this->_ref_produit->_prises)){
+	      foreach($this->_ref_produit->_prises as $_prise){
+		      if(!in_array($_prise, $this->_unites_prise)){
+		        $this->_unites_prise[] = $_prise;
+		      }  
+	      }
       }
     }
     
