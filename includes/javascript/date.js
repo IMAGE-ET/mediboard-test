@@ -367,6 +367,22 @@ var Calendar = {
     var viewElement = new Element('input', {type: 'text', disabled: 'disabled'}).addClassName('date');
     element.insert({before: viewElement});
     
+    var date = getDate();
+    $V(viewElement, (parseInt(date.day) ? pad(date.day)+'/':'') + (parseInt(date.month) ? pad(date.month)+'/':'') + date.year);
+          
+    function getDate(){
+      var parts = element.value.split('-');
+      return {
+      	year: parts[0],
+      	month: parts[1],
+      	day: parts[2]
+      }
+    }
+    
+    function pad(str, length) {
+      return (str+'').pad('0', length || 2);
+    }
+    
     function fillTable(table, cols, rows, min, max, type, date) {
       if (min === null) {
         min = max - rows*cols+1;
@@ -395,8 +411,8 @@ var Calendar = {
               this.up(1).select('.current').invoke('removeClassName','current');
               this.addClassName('current');
               date[type] = this.innerHTML;
-              $V(element, date.year+'-'+date.month+'-'+date.day);
-              $V(viewElement, (parseInt(date.day) ? date.day+'/':'') + (parseInt(date.month) ? date.month+'/':'') + date.year);
+              $V(element, pad(date.year)+'-'+pad(date.month)+'-'+date.day);
+              $V(viewElement, (parseInt(date.day) ? pad(date.day)+'/':'') + (parseInt(date.month) ? pad(date.month)+'/':'') + date.year);
             })
             .observe('dblclick', function(e){
               e.stop();
@@ -452,8 +468,8 @@ var Calendar = {
             next.show().select('table').first().show();
           }
 
-          $V(element, date.year+'-'+date.month+'-'+date.day);
-          $V(viewElement, (parseInt(date.day) ? date.day+'/':'') + (parseInt(date.month) ? date.month+'/':'') + date.year);
+          $V(element, pad(date.year)+'-'+pad(date.month)+'-'+date.day);
+          $V(viewElement, (parseInt(date.day) ? pad(date.day)+'/':'') + (parseInt(date.month) ? pad(date.month)+'/':'') + date.year);
         });
       }
       
@@ -468,18 +484,12 @@ var Calendar = {
         
       var container,
           now = new Date(),
-          parts = element.value.split('-');
-          
-      var date = {
-      	year: parts[0],
-      	month: parts[1],
-      	day: parts[2]
-      };
+          date = getDate();
 
-      this.picker.update('<div style="text-align:center;font-weight:bold;">Années</div>');
+      this.picker.update('<div style="text-align:center;font-weight:bold;">Année</div>');
       
       container = createTable(this.picker, 'Mois', 4, 5, null, parseInt(now.getFullYear()), 'year', date);
-      var monthContainer = createTable(container, 'Jours', 6, 2, 1, 12, 'month', date);
+      var monthContainer = createTable(container, 'Jour', 6, 2, 1, 12, 'month', date);
       var dayContainer = createTable(monthContainer, null, 6, 6, 1, 31, 'day', date);
       
       var pos = viewElement.cumulativeOffset();
@@ -517,12 +527,11 @@ var Calendar = {
 
 			// No icon padding specified, default to 3px and calculate dynamically on image load
 			var padding = 3;
-			Event.observe(icon, 'load', function() {
+			icon.observe('load', function() {
         var elementDim = viewElement.getDimensions();
         var iconDim = icon.getDimensions();
 				padding = parseInt(elementDim.height - iconDim.height) / 2;
-			}.bind(this));
-      Element.setStyle(icon, {position: 'absolute', right: padding+'px', top: padding+'px'});
+			}.bind(this)).setStyle({position: 'absolute', right: padding+'px', top: padding+'px'});
 			cont.insert(icon);
 
 			icon.observe('click', createPicker);

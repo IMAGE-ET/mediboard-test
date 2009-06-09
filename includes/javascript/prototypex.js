@@ -131,3 +131,13 @@ Element.addMethods(['input', 'textarea'], {
       !notWhiteSpace.test(element.value);
   }
 });
+
+Class.extend(String, {
+  pad: function(ch, length, right) {
+    length = length || 30;
+    ch = ch || ' ';
+    var t = this;
+    while(t.length < length) t = (right ? t+ch : ch+t);
+    return t;
+  }
+});
