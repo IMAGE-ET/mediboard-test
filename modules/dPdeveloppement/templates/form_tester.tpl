@@ -36,7 +36,7 @@ Main.add(function () {
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   
-  <input name="progressive" value="2009-0-0" />
+  <input type="hidden" name="progressive" value="2009-0-0" />
   <table class="form">
   {{foreach from=$specs item=class key=spec}}
     <tr>

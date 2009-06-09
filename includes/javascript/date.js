@@ -360,8 +360,12 @@ var Calendar = {
     element = $(element);
     
     options = Object.extend({
-      container: null
+      container: null,
+      icon: "images/icons/calendar.gif"
     }, options || {});
+    
+    var viewElement = new Element('input', {type: 'text', disabled: 'disabled'}).addClassName('date');
+    element.insert({before: viewElement});
     
     function fillTable(table, cols, rows, min, max, type, date) {
       if (min === null) {
@@ -392,6 +396,7 @@ var Calendar = {
               this.addClassName('current');
               date[type] = this.innerHTML;
               $V(element, date.year+'-'+date.month+'-'+date.day);
+              $V(viewElement, (parseInt(date.day) ? date.day+'/':'') + (parseInt(date.month) ? date.month+'/':'') + date.year);
             })
             .observe('dblclick', function(e){
               e.stop();
@@ -448,6 +453,7 @@ var Calendar = {
           }
 
           $V(element, date.year+'-'+date.month+'-'+date.day);
+          $V(viewElement, (parseInt(date.day) ? date.day+'/':'') + (parseInt(date.month) ? date.month+'/':'') + date.year);
         });
       }
       
@@ -476,9 +482,9 @@ var Calendar = {
       var monthContainer = createTable(container, 'Jours', 6, 2, 1, 12, 'month', date);
       var dayContainer = createTable(monthContainer, null, 6, 6, 1, 31, 'day', date);
       
-      var pos = element.cumulativeOffset();
+      var pos = viewElement.cumulativeOffset();
       this.picker.setStyle({
-        top: pos.top + element.getDimensions().height + 'px',
+        top: pos.top + viewElement.getDimensions().height + 'px',
         left: pos.left+'px'
       });
       
@@ -504,7 +510,25 @@ var Calendar = {
       document.stopObserving('click', hidePicker);
     }.bindAsEventListener(element);
     
-    element.observe('click', createPicker);
+    if (options.icon) {
+			var cont = new Element('div', {'style': 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
+			viewElement.wrap(cont);
+			var icon = new Element('img', {'src': options.icon}).addClassName('inputExtension');
+
+			// No icon padding specified, default to 3px and calculate dynamically on image load
+			var padding = 3;
+			Event.observe(icon, 'load', function() {
+        var elementDim = viewElement.getDimensions();
+        var iconDim = icon.getDimensions();
+				padding = parseInt(elementDim.height - iconDim.height) / 2;
+			}.bind(this));
+      Element.setStyle(icon, {position: 'absolute', right: padding+'px', top: padding+'px'});
+			cont.insert(icon);
+
+			icon.observe('click', createPicker);
+		} else {
+			viewElement.observe('click', createPicker);
+		}
   }
 };
 
