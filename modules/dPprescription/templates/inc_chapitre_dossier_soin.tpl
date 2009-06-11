@@ -48,10 +48,10 @@
 
 {{if $chapitre == "perf"}}
 	{{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion name=foreach_perfusion}}
-	  <tr id="line_{{$_perfusion->_guid}}">
-	  {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
-	  </tr>
-  {{/foreach}}
+	    <tr id="line_{{$_perfusion->_guid}}">
+	    {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
+	    </tr>
+	{{/foreach}}
 {{/if}}
 
 {{if ($chapitre != "med") && ($chapitre != "inj") && ($chapitre != "perf")}}

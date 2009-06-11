@@ -85,7 +85,7 @@
   {{/if}}
   
   <!-- Posologie -->
-  {{if array_key_exists($code_cip, $posoduree)}}
+  {{if @array_key_exists($code_cip, $posoduree)}}
 	  {{foreach from=$posoduree.$code_cip item=_posoduree}}
 	    {{assign var=_niveau value=$_posoduree.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}
@@ -98,7 +98,7 @@
 	    {{/if}}
 	  {{/foreach}}
   {{/if}}
-  {{if array_key_exists($code_cip, $posoqte)}}
+  {{if @array_key_exists($code_cip, $posoqte)}}
 	  {{foreach from=$posoqte.$code_cip item=_posoqte}}
 	    {{assign var=_niveau value=$_posoqte.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}

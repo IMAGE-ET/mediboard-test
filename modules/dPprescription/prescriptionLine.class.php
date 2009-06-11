@@ -119,11 +119,10 @@ class CPrescriptionLine extends CMbObject {
   }
   
   /*
-   * Back Refs
+   * BackRefs
    */
   function loadRefsBack() {
     parent::loadRefsBack();
-    
     $this->loadRefsPrises();
     $this->loadRefParentLine();
   }
@@ -142,10 +141,8 @@ class CPrescriptionLine extends CMbObject {
    * Chargement du praticien
    */
   function loadRefPraticien() {
-    if (!$this->_ref_praticien) {
-	    $user = new CMediusers();
-	    $this->_ref_praticien = $user->getCached($this->praticien_id);
-    }
+	  $this->_ref_praticien = new CMediusers();
+	  $this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
     $this->_ref_praticien->loadRefFunction();
   }
   
@@ -153,10 +150,8 @@ class CPrescriptionLine extends CMbObject {
    * Chargement du createur de la ligne
    */
   function loadRefCreator() {
-    if (!$this->_ref_creator) {
-	    $user = new CMediusers();
-	    $this->_ref_creator = $user->getCached($this->creator_id);
-    }
+	  $user = new CMediusers();
+	  $this->_ref_creator = $user->getCached($this->creator_id);
   }
   
   /*
@@ -183,7 +178,6 @@ class CPrescriptionLine extends CMbObject {
   	  $_trans->loadRefsFwd();
     }					  
   }
-  
   
   function loadRefsAdministrations($date=""){
 	  $administration = new CAdministration();
@@ -266,7 +260,6 @@ class CPrescriptionLine extends CMbObject {
         return $msg;
       }
     }
-    
     // Suppression de la ligne
     if($msg = parent::delete()){
       return $msg;
@@ -366,15 +359,8 @@ class CPrescriptionLine extends CMbObject {
     $new_line->signee = 0;
     $new_line->valide_pharma = 0;
     $new_line->valide_infirmiere = 0;
-    
-    
-    // Si prescription de sortie, on duplique la ligne en ligne de prescription
-    //if($prescription->type === "sortie" && $new_line->traitement_personnel && !$date_arret_tp){
-    //  $new_line->prescription_id = $prescription_id;
-    //}
     $new_line->creator_id = $AppUI->user_id;
     $msg = $new_line->store();
-    
     $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
     
     foreach($new_line->_ref_prises as &$prise){
@@ -389,16 +375,13 @@ class CPrescriptionLine extends CMbObject {
     $old_line = new CPrescriptionLineMedicament();
     $old_line->load($this->_id);
     
-    //if(!($prescription->type === "sortie" && $old_line->traitement_personnel && !$date_arret_tp)){
-      $old_line->child_id = $new_line->_id;
-      if($prescription->type !== "sortie" && !$old_line->date_arret){
-        $old_line->date_arret = mbDate();
-        $old_line->time_arret = mbTime();
-      }
-      $old_line->store();
-    //}
+    $old_line->child_id = $new_line->_id;
+    if($prescription->type !== "sortie" && !$old_line->date_arret){
+      $old_line->date_arret = mbDate();
+      $old_line->time_arret = mbTime();
+    }
+    $old_line->store();
   }
-  
   
   /*
    * Suppression à l'affichage des prises qui ont été déplacées (planification)
@@ -472,110 +455,85 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des administrations et transmissions
    */
-  function calculAdministrations($date, $mode_feuille_soin = 0, $mode_dispensation=0, $service_id = null){
+  function calculAdministrations($date, $mode_dispensation = 0, $service_id = null){
   	$type = ($this->_class_name === "CPrescriptionLineMedicament") ? "med" : "elt";
   	$this->loadRefsAdministrations($date);
   	
-  	// Pour la feuille de soin imprimable
-  	if($mode_feuille_soin){
-  	  foreach($this->_ref_administrations as $_administration){
-        $heure_adm = substr($_administration->_heure, 0, 2);
-        $key_administration = $_administration->prise_id ? $_administration->prise_id : stripslashes($_administration->unite_prise); 
-  	    // Administrations planifiées
-			  if($_administration->planification){
-			    @$this->_quantity_by_date[$key_administration][$date]['total'] += $_administration->quantite;
-			    if(!isset($this->_administrations[$key_administration][$date][$heure_adm]['quantite_planifiee'])){
-			      $this->_administrations[$key_administration][$date][$heure_adm]['quantite_planifiee'] = $_administration->quantite;
-			    } else {
-			      $this->_administrations[$key_administration][$date][$heure_adm]['quantite_planifiee'] += $_administration->quantite; 
-			    }
-			    if(!isset($this->_administrations[$key_administration][$date][$heure_adm]['planification_id'])){
-				    $this->_administrations[$key_administration][$date][$heure_adm]['planification_id'] = "";
-				    $this->_administrations[$key_administration][$date][$heure_adm]['original_date_planif'] = "";
-				  }
-				  $this->_administrations[$key_administration][$date][$heure_adm]['planification_id'] = $_administration->_id;
-				  $this->_administrations[$key_administration][$date][$heure_adm]['original_date_planif'] = $_administration->original_dateTime;
-				}
-  	  }
-  	}
-  	
-    if(!$mode_feuille_soin){
-      foreach($this->_ref_administrations as $_administration){
-			  $heure_adm = substr($_administration->_heure, 0, 2);
-        $key_administration = $_administration->prise_id ? $_administration->prise_id : stripslashes($_administration->unite_prise);
-			  $administrations =& $this->_administrations[$key_administration][$date][$heure_adm];
-			  
-			  // Administrations planifiées
-			  if($_administration->planification){
-			    @$this->_quantity_by_date[$key_administration][$date]['total'] += $_administration->quantite;
-			    if(!isset($administrations['quantite_planifiee'])){
-			      $administrations['quantite_planifiee'] = $_administration->quantite;
-			    } else {
-			      $administrations['quantite_planifiee'] += $_administration->quantite; 
-			    }
-			    if(!isset($administrations['planification_id'])){
-				    $administrations['planification_id'] = "";
-				  }
-				  $administrations['planification_id'] = $_administration->_id;
-		      $administrations['original_date_planif'] = $_administration->original_dateTime;
+    foreach($this->_ref_administrations as $_administration){
+	    $heure_adm = substr($_administration->_heure, 0, 2);
+      $key_administration = $_administration->prise_id ? $_administration->prise_id : stripslashes($_administration->unite_prise);
+	    $administrations =& $this->_administrations[$key_administration][$date][$heure_adm];
+	  
+		  // Planifications
+		  if($_administration->planification){
+		    @$this->_quantity_by_date[$key_administration][$date]['total'] += $_administration->quantite;
+		    if(!isset($administrations['quantite_planifiee'])){
+		      $administrations['quantite_planifiee'] = 0;
+		    }
+		    $administrations['quantite_planifiee'] += $_administration->quantite; 
+		    if(!isset($administrations['planification_id'])){
+			    $administrations['planification_id'] = "";
 			  }
-			  // Administrations effectuées
-			  else {
-				  // Initialisation des tableaux
-				  if(!isset($administrations['quantite'])){
-				    $administrations['quantite'] = '';
-				    $administrations['administrations'][$_administration->_id] = '';
+			  $administrations['planification_id'] = $_administration->_id;
+	      $administrations['original_date_planif'] = $_administration->original_dateTime;
+		  }
+		  // Administrations
+		  else {
+			  if(!isset($administrations['quantite'])){
+			    $administrations['quantite'] = '';
+			    $administrations['administrations'][$_administration->_id] = '';
+			  }
+			  if(!isset($this->_administrations_by_line[$key_administration][$date])){
+			    $this->_administrations_by_line[$key_administration][$date] = 0;
+			  }
+			  
+			  // Permet de stocker les administrations par unite de prise / type de prise
+			  $administrations['quantite'] += $_administration->quantite;
+				
+			  // Stockage de la liste des administrations en fonction de la date et de l'heure sous la forme d'un token field
+			  if(!isset($administrations['list'])){
+			    $administrations['list'] = $_administration->_id;
+			  } else {
+			    $administrations['list'] .= "|".$_administration->_id;
+			  }
+			  
+			  // Sockage de la liste des administrations en fonction de la date sous forme de token field
+			  if(!isset($this->_administrations[$key_administration][$date]['list'])){
+			    $this->_administrations[$key_administration][$date]['list'] = $_administration->_id;
+			  } else {
+			    $this->_administrations[$key_administration][$date]['list'] .= "|".$_administration->_id;
+			  }
+			  $this->_administrations_by_line[$key_administration][$date] += $_administration->quantite; 
+			  
+			  if(!$mode_dispensation){
+				  // Chargement du log de creation de l'administration
+				  $log = new CUserLog;
+			    $log->object_id = $_administration->_id;
+				  $log->object_class = $_administration->_class_name;
+				  $log->loadMatchingObject();
+				  $log->loadRefsFwd();
+				  
+				  if($this->_class_name === "CPrescriptionLineMedicament"){
+				    $this->_ref_produit->loadConditionnement();
 				  }
-				  if(!isset($this->_transmissions[$key_administration][$date][$heure_adm])){
+				  $log->_ref_object->_ref_object =& $this;
+				  
+				  if($_administration->prise_id){
+					  $_administration->loadRefPrise();
+				  }
+			  	$administrations["administrations"][$_administration->_id] = $log;
+				  $_administration->loadRefsTransmissions();  
+				  
+			  	if(!isset($this->_transmissions[$key_administration][$date][$heure_adm])){
 				    $this->_transmissions[$key_administration][$date][$heure_adm]['nb'] = '';
 				    $this->_transmissions[$key_administration][$date][$heure_adm]['list'][$_administration->_id] = '';
 				  }
-				  if(!isset($this->_administrations_by_line[$key_administration][$date])){
-				    $this->_administrations_by_line[$key_administration][$date] = 0;
-				  }
-				  
-				  // Permet de stocker les administrations par unite de prise / type de prise
-				  $administrations['quantite'] += $_administration->quantite;
-					
-				  // Stockage de la liste des administrations en fonction de la date et de l'heure sous la forme d'un token field
-				  if(!isset($administrations['list'])){
-				    $administrations['list'] = $_administration->_id;
-				  } else {
-				    $administrations['list'] .= "|".$_administration->_id;
-				  }
-				  
-				  // Sockage de la liste des administrations en fonction de la date sous forme de token field
-				  if(!isset($this->_administrations[$key_administration][$date]['list'])){
-				    $this->_administrations[$key_administration][$date]['list'] = $_administration->_id;
-				  } else {
-				    $this->_administrations[$key_administration][$date]['list'] .= "|".$_administration->_id;
-				  }
-				  $this->_administrations_by_line[$key_administration][$date] += $_administration->quantite; 
-				  if(!$mode_dispensation){
-					  // Chargement du log de creation de l'administration
-					  $log = new CUserLog;
-				    $log->object_id = $_administration->_id;
-					  $log->object_class = $_administration->_class_name;
-					  $log->loadMatchingObject();
-					  $log->loadRefsFwd();
-					  
-					  if($this->_class_name === "CPrescriptionLineMedicament"){
-					    $this->_ref_produit->loadConditionnement();
-					  }
-					  $log->_ref_object->_ref_object =& $this;
-					  
-					  if($_administration->prise_id){
-						  $_administration->loadRefPrise();
-					  }
-				  	$administrations["administrations"][$_administration->_id] = $log;
-					  $_administration->loadRefsTransmissions();  
-					  $this->_transmissions[$key_administration][$date][$heure_adm]["nb"] += count($_administration->_ref_transmissions);
-					  $this->_transmissions[$key_administration][$date][$heure_adm]["list"][$_administration->_id] = $_administration->_ref_transmissions;
-				  }
-			  } 
-      }
+				  $_transmissions =& $this->_transmissions[$key_administration][$date][$heure_adm];
+				  $_transmissions["nb"] += count($_administration->_ref_transmissions);
+				  $_transmissions["list"][$_administration->_id] = $_administration->_ref_transmissions;
+			  }
+		  } 
     }
-    
     if(!$this->_ref_prises){
       $this->loadRefsPrises($service_id);
     }
@@ -584,7 +542,7 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des prises
    */
-  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = "", $with_calcul = true, $configs = null) {
+  function calculPrises($prescription, $date, $name_chap = "", $name_cat = "", $with_calcul = true, $configs = null) {
     if(!$configs){
       // Chargement des valeurs par defaut
       $config_service = new CConfigService();  

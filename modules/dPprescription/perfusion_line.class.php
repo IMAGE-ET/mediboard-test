@@ -19,9 +19,6 @@ class CPerfusionLine extends CMbObject {
   var $code_cis     = null;
   var $quantite     = null; // Quantite de produit
   var $unite        = null;
-  var $date_debut   = null; // Date de debut (si le debut est différé)
-  var $time_debut   = null; // Heure de debut (si le debut est différé)
-  var $nb_tous_les  = null; // tous les x heures
   
   // Object references
   var $_ref_perfusion = null;
@@ -36,10 +33,15 @@ class CPerfusionLine extends CMbObject {
   var $_quantite_dispensation = null;
   var $_ucd_view = null;
   var $_forme_galenique = null;
+  var $_posologie = null;
+  
+  var $_administrations = null;
   
   // Can fields
   var $_can_vw_livret_therapeutique = null;
   var $_can_vw_generique = null;
+  
+  var $_ref_administrations = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -56,18 +58,21 @@ class CPerfusionLine extends CMbObject {
     $specs["code_cis"]     = "numchar length|8";
     $specs["quantite"]     = "num";
     $specs["unite"]        = "str";
-    $specs["date_debut"]   = "date";
-    $specs["time_debut"]   = "time";
-    $specs["nb_tous_les"]  = "num";
     return $specs;
   }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["administrations"]  = "CAdministration object_id";
+    return $backProps;
+  }
+  
 
   function updateFormFields(){
     parent::updateFormFields();
     
     $this->loadRefPerfusion();
-    $this->_debut = ($this->date_debut && $this->time_debut) ? 
-                    "$this->date_debut $this->time_debut" : $this->_ref_perfusion->_debut;
+    $this->_debut = $this->_ref_perfusion->_debut;
     $this->_fin = $this->_ref_perfusion->_fin;
     
     $this->loadRefProduit();
@@ -75,11 +80,8 @@ class CPerfusionLine extends CMbObject {
     $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
     $this->_view = "$this->_ucd_view $this->_forme_galenique";
     if($this->quantite){
-      $this->_view .= " ($this->quantite $this->unite";
-      if($this->nb_tous_les){
-        $this->_view .= " toutes les $this->nb_tous_les heures";  
-      }
-      $this->_view .= ")";
+      $this->_posologie =  "$this->quantite $this->unite";
+      $this->_view .= " ($this->_posologie)";
     }
     
     // Affichage de l'icone Livret Therapeutique
@@ -111,9 +113,7 @@ class CPerfusionLine extends CMbObject {
   function loadRefsFwd() {
   	parent::loadRefsFwd();
     $this->loadRefPerfusion();
-
-//    $this->_ref_produit->loadRefPosologies();
-//    $this->_ref_produit->loadLibellePresentation();
+    
     if($this->_ref_produit->libelle_presentation){
       $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
     }
@@ -128,6 +128,10 @@ class CPerfusionLine extends CMbObject {
     if(is_array($this->_unites_prise)){
       $this->_unites_prise = array_unique($this->_unites_prise);
     }
+  }
+  
+  function loadRefsAdministrations(){
+    $this->_ref_administrations = $this->loadBackRefs("administrations");
   }
 }
   

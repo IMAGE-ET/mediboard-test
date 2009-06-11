@@ -29,18 +29,27 @@
       <!-- Quantite à administrer -->
       <td>
         <div onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$code_cip}}')" class="tooltip-trigger">
-          <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
+          <a href="#1">{{$quantite_administration}} 
+				
+            {{$produit->_unite_administration}}
+          </a>
         </div>
         <table id="tooltip-content-{{$code_cip}}" style="display: none;" class="tbl">
         {{if $mode_nominatif}}
-          <tr>
-            <th>{{$lines.$code_cip->_duree_prise}}</th>
-          </tr>
-          {{foreach from=$lines.$code_cip->_ref_prises item=prise}}
-            <tr>
-              <td>{{$prise}}</td>
-            </tr>
-          {{/foreach}}
+          {{if $lines.$code_cip->_class_name == "CPrescriptionLineMedicament"}}
+	          <tr>
+	            <th>{{$lines.$code_cip->_duree_prise}}</th>
+	          </tr>
+	          {{foreach from=$lines.$code_cip->_ref_prises item=prise}}
+	            <tr>
+	              <td>{{$prise}}</td>
+	            </tr>
+	          {{/foreach}}
+          {{else}}
+	          <tr>
+	            <td>{{$lines.$code_cip->_posologie}}</td>
+	          </tr>
+          {{/if}}
         {{else}}
           {{foreach from=$patients item=_patient}}
             {{assign var=patient value=$_patient.patient}}

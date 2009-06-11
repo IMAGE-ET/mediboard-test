@@ -60,7 +60,6 @@ Main.add(function () {
   <input type="hidden" name="_active_tab" value="dossier_soins" /> 
 </form>
 
-
 <button type="button" class="search" onclick="viewLegendPancarte();" style="float: right;">Légende</button>
 
 <ul id="tab-pancarte" class="control_tabs">
@@ -69,8 +68,6 @@ Main.add(function () {
 </ul>
 <hr class="control_tabs" />
 
-
-      
 {{assign var=images value="CPrescription"|static:"images"}}
 <div id="viewPancarte" style="display: none;">
 <table class="form">
@@ -144,21 +141,18 @@ Main.add(function () {
             {{foreach from=$_hours key=_heure_reelle item=_hour}}
               {{assign var=_date_hour value="$_date_reelle $_heure_reelle"}}						    				
               <td style="text-align: center; width: 1%;">
-              
-          		  {{if @$tab.$_prescription_id.$_date_hour}}
+          		  {{if @$pancarte.$_prescription_id.$_date_hour}}
           		    <div style="border: 1px solid #BBB; height: 16px;"
           		         onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}");'>
         		       
-        		         {{if @$new.$_prescription_id.$_date_hour}}
-          		         <img src="images/icons/ampoule.png" />
-          		       {{/if}}
-          		       
-          		       {{if @$urgences.$_prescription_id.$_date_hour}}
-          		         <img src="images/icons/ampoule_urgence.png" />
-          		       {{/if}}
-          		      
-          		      
-        		       {{foreach from=$tab.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
+        		       {{if @$new.$_prescription_id.$_date_hour}}
+         		         <img src="images/icons/ampoule.png" />
+         		       {{/if}}
+         		       {{if @$urgences.$_prescription_id.$_date_hour}}
+         		         <img src="images/icons/ampoule_urgence.png" />
+         		       {{/if}}
+         		      
+          		     {{foreach from=$pancarte.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
           		       <img src="{{$images.$chapitre}}" 
           		       {{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
           		         style="background-color: #FB4; height: 100%;"
@@ -181,58 +175,40 @@ Main.add(function () {
           		          <th>Administrée</th>
           		          <th>Unité</th>
           		        </tr>
-		          		    {{foreach from=$tab.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
+		          		    {{foreach from=$pancarte.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
 		          		      <tr>
 		          		        <th colspan="5">
 		          		          <img src="{{$images.$chapitre}}" /><strong> {{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}}</strong>
 		          		        </th>
 		          		      </tr>
-		          		      
 		          		      {{if $chapitre == "perf"}}
-		          		        {{assign var=perfusions value=$quantites}}
-		          		        {{foreach from=$perfusions item=_perfusion}}
-		          		      	<tr>
-		          		      	  <td>
-		          		      	  {{if $_perfusion->_recent_modification}}
-		          		      	    <img src="images/icons/ampoule.png" />
-		          		      	  {{/if}}
-		          		      	   {{if $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00' == $_date_hour}}
-				          		      	 {{if $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00' == $_perfusion->_debut_adm|date_format:'%Y-%m-%d %H:00:00'}}
-			          		      	     <img src="images/icons/tick.png" alt="" title="" />
-			          		      	   {{/if}}
-			          		      	 {{else}}
-			          		      	  {{if $_perfusion->_fin|date_format:'%Y-%m-%d %H:00:00' == $_perfusion->_fin_adm|date_format:'%Y-%m-%d %H:00:00'}}
-			          		      	    <img src="images/icons/tick.png" alt="" title="" />
-			          		      	  {{/if}}
-			          		      	 {{/if}} 
-		          		      	  </td>
-		          		      	  <td colspan="4">
-			          		      	  {{if $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00' == $_date_hour}}
-			          		      	  Début 
-			          		      	  {{else}}
-			          		      	  Fin 
-			          		      	  {{/if}} 
-			          		      	  {{$_perfusion->_view}} {{if $_perfusion->duree}}(Durée: {{$_perfusion->duree}} h){{/if}}
-			          		      	  <br />
-			          		      	  Produits
-			          		      	  <ul>
-			          		      	  {{foreach from=$_perfusion->_ref_lines item=_perf_line}}
-			          		      	    <li>{{$_perf_line->_view}}</li>
-			          		      	  {{/foreach}}
-			          		      	  </ul>
-			          		      	  {{if $_perfusion->_debut_adm || $_perfusion->_fin_adm}}
-			          		      	    Dates réelles:
-			          		      	  {{/if}}
-			          		      	  <ul>
-			          		      	  {{if $_perfusion->_debut_adm}}
-			          		      	    <li>Début: {{mb_value object=$_perfusion field=_debut_adm}}</li>
-			          		      	  {{/if}}
-			          		      	  {{if $_perfusion->_fin_adm}}
-			          		      	    <li>Fin: {{mb_value object=$_perfusion field=_fin_adm}}</li>
-			          		      	  {{/if}}
-			          		      	  </ul>
-		          		      	  </td>
-		          		      	</tr>  
+		          		        {{foreach from=$quantites key=perfusion_id item=quantites_by_perf}}
+		          		          <tr>
+		          		            <th colspan="5">
+		          		              {{assign var=perfusion value=$list_lines.perf.$perfusion_id}}
+		          		              {{$perfusion->_view}}
+		          		            </th>
+		          		          </tr>
+			          		        {{foreach from=$quantites_by_perf key=perf_line_id item=_quantites}}
+			          		            {{assign var=quantite_prevue value=0}}
+			          		            {{assign var=quantite_adm value=0}}
+		         		            		{{if array_key_exists('prevue', $_quantites)}}
+			          		              {{assign var=quantite_prevue value=$_quantites.prevue}}
+			          		            {{/if}}
+			          		            {{if array_key_exists('adm', $_quantites)}}
+			          		              {{assign var=quantite_adm value=$_quantites.adm}}
+			          		            {{/if}}  
+			          		            <tr> 
+			          		              <td colspan="2">
+			          		                {{assign var=perf_line value=$list_lines.perf_line.$perf_line_id}}
+			          		                {{$perf_line->_ucd_view}} ({{$perf_line->_posologie}})   
+			          		                {{if $quantite_prevue == $quantite_adm}}<img src="images/icons/tick.png" alt="" title="" />{{/if}}
+			          		              </td>
+			                            <td>{{$quantite_prevue}}</td>
+			          		              <td>{{$quantite_adm}}</td>
+			       											<td>ml</td>
+			       										</tr>
+			          		        {{/foreach}}
 		          		        {{/foreach}}
 		          		      {{else}}
 			          		      {{foreach from=$quantites key=line_id item=_quantite}}
@@ -247,18 +223,12 @@ Main.add(function () {
 			          		      	{{/if}} 	
 			          		        {{if $quantite_prevue || $quantite_adm}}
 			          		          <td>
-			          		            {{if $quantite_prevue == $quantite_adm}}
-			          		              <img src="images/icons/tick.png" alt="" title="" />
-			          		            {{/if}}
-			          		            {{if array_key_exists('new', $_quantite)}}
-			          		              <img src="images/icons/ampoule.png" alt="" title="" />
-			          		            {{/if}}
-			          		            {{if array_key_exists('urgence', $_quantite)}}
-			          		              <img src="images/icons/ampoule_urgence.png" alt="" title="" />
-			          		            {{/if}}
+			          		            {{if $quantite_prevue == $quantite_adm}}<img src="images/icons/tick.png" alt="" title="" />{{/if}}
+			          		            {{if array_key_exists('new', $_quantite)}}<img src="images/icons/ampoule.png" alt="" title="" />{{/if}}
+			          		            {{if array_key_exists('urgence', $_quantite)}}<img src="images/icons/ampoule_urgence.png" alt="" title="" />{{/if}}
 			          		          </td>
 			          		          <td>
-			          		            {{assign var=line value=$lines.$chapitre.$line_id}}
+			          		             {{assign var=line value=$list_lines.$chapitre.$line_id}}
 			          		             {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 			          		               {{$line->_ucd_view}}<br />
 			          		               <span style="opacity: 0.5; font-size:0.8em;">

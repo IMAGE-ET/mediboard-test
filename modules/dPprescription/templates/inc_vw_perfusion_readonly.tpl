@@ -61,11 +61,11 @@
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$_perfusion field="vitesse"}}</strong>:
-        {{if $_perfusion->vitesse}}
-      {{mb_value object=$_perfusion field="vitesse"}} ml/h
-      {{else}}
-       -
+      {{if $_perfusion->vitesse}}
+	      <strong>{{mb_label object=$_perfusion field="vitesse"}}</strong>:
+	      {{mb_value object=$_perfusion field="vitesse"}} ml/h
+      {{elseif $_perfusion->nb_tous_les}}
+        <strong>Fréquence</strong>: toutes les {{mb_value object=$_perfusion field="nb_tous_les"}} h
       {{/if}}
     </td>
     <td>
@@ -136,16 +136,6 @@
 	            <strong>{{mb_label object=$line field=quantite}}</strong>:
 	            {{mb_value object=$line field=quantite size=4}}
 	            {{mb_value object=$line field=unite size=4}}
-	            {{if $line->nb_tous_les}}
-	            toutes les {{$line->nb_tous_les}} heures
-	            {{/if}}
-	          </td>
-	          <td class="date" style="border: none; width:20%">
-	            <strong>{{mb_label object=$line field=date_debut}}</strong>:
-	            {{mb_value object=$line field=date_debut}}
-	            {{if $line->time_debut}}
-	              à {{mb_value object=$line field=time_debut}} 
-	            {{/if}}
 	          </td>
 	        </tr>
 	      {{foreachelse}}

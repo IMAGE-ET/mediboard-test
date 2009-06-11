@@ -149,10 +149,16 @@ Main.add( function(){
 				    <td style="border:none;">
 				      {{mb_label object=$_perfusion field="vitesse"}}
 				      {{if $_perfusion->_can_modify_perfusion}}
-				        {{mb_field object=$_perfusion field="vitesse" size="3" increment=1 min=0 form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} ml/h
+				        {{mb_field object=$_perfusion field="vitesse" size="3" increment=1 min=0 form="editPerf-$perfusion_id" onchange="this.form.nb_tous_les.value = ''; return onSubmitFormAjax(this.form);"}} ml/h
 				      {{else}}
 				        {{mb_value object=$_perfusion field="vitesse"}} ml/h
 				      {{/if}}
+				      / toutes les 
+					    {{if $_perfusion->_can_modify_perfusion}}
+						    {{mb_field object=$_perfusion field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$perfusion_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} heures
+						  {{else}}      
+						    {{mb_value object=$_perfusion field="nb_tous_les"}}
+				      {{/if}} 
 				    </td>
 				    <td style="border:none;">
 	            <strong>{{mb_value object=$_perfusion field="voie"}}</strong>
@@ -210,7 +216,7 @@ Main.add( function(){
 					     {{mb_field object=$_perfusion field=duree size=1 increment=1 min=0 form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}}heures
 				     {{else}}
 				       {{mb_value object=$_perfusion field=duree}}heures
-				     {{/if}}
+				     {{/if}}    
 				    </td>
           </tr>
 				  <tr id="bolus-{{$_perfusion->_id}}" style="display: none;">
@@ -232,7 +238,7 @@ Main.add( function(){
       </form>
     </td>
     <td>
-    				      {{if !$_perfusion->date_debut_adm && $_perfusion->_ref_prescription->object_id}} 
+    				      {{if !$_perfusion->date_pose && $_perfusion->_ref_prescription->object_id}} 
 				    	 {{if ($_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count) || ($_perfusion->_ref_substitution_lines.CPerfusion|@count)}}
 						    
 						    <form name="changeLine-{{$_perfusion->_guid}}" action="?" method="post">
@@ -324,30 +330,11 @@ Main.add( function(){
 											      <option value="{{$_unite}}" {{if $line->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
 											    {{/foreach}}
 											  </select>
-											  toutes les 
-											  {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}} heures
-					            {{else}}
+											{{else}}
 					              {{mb_value object=$line field=quantite}}
-					              {{mb_value object=$line field=unite}}			
-					              {{if $line->nb_tous_les}}
-					                toutes les {{$line->nb_tous_les}} heures
-					              {{/if}}		            
+					              {{mb_value object=$line field=unite}}			            
 										  {{/if}}
 					     		  </td>
-					     		  {{if !$line->_protocole}}
-							        <td  style="border:none;  vertical-align:middle; width: 1%">
-							          {{mb_label object=$line field=date_debut}} 
-						          </td>
-						          <td class="date"  style="border:none; width: 20%">
-						            {{if $_perfusion->_can_modify_perfusion_line}}
-							            {{mb_field object=$line field=date_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
-							            {{mb_field object=$line field=time_debut form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
-							          {{else}}
-							            {{mb_value object=$line field=date_debut}}
-							            {{mb_value object=$line field=time_debut}}
-						            {{/if}}
-						          </td>
-					          {{/if}}
 			            </tr>
 		            </table>
 	            </form>  

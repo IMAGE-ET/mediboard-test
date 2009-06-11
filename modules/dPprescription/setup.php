@@ -1213,7 +1213,43 @@ class CSetupdPprescription extends CSetup {
 					  ADD `urgence_datetime` DATETIME;";
 	  $this->addQuery($sql);
 	  
-		$this->mod_version = "0.83";
+	  $this->makeRevision("0.83");
+	  $sql = "ALTER TABLE `administration` 
+	          CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPerfusionLine') NOT NULL;";
+	  $this->addQuery($sql);
+	  
+	  $sql = "ALTER TABLE `perfusion_line` 
+						DROP `date_debut`,
+						DROP `time_debut`;";
+	  $this->addQuery($sql);
+	  
+	  $this->makeRevision("0.84");
+	  $sql = "ALTER TABLE `perfusion` 
+						ADD `nb_tous_les` INT (11);";
+	  $this->addQuery($sql);
+	  
+	  $sql = "UPDATE `perfusion`
+					  SET nb_tous_les = (SELECT perfusion_line.nb_tous_les
+															 FROM perfusion_line
+															 WHERE perfusion_line.perfusion_id = perfusion.perfusion_id
+															 AND perfusion_line.nb_tous_les IS NOT NULL
+															 GROUP BY perfusion_id)
+						WHERE perfusion.vitesse IS NULL";
+	  $this->addQuery($sql);
+	  
+	  $sql = "ALTER TABLE `perfusion_line`
+						DROP nb_tous_les;";
+	  $this->addQuery($sql);
+	  
+	  $this->makeRevision("0.85");
+	  $sql = "ALTER TABLE `perfusion` 
+	          CHANGE `date_debut_adm` `date_pose` DATE,
+            CHANGE `time_debut_adm` `time_pose` TIME,
+            CHANGE `date_fin_adm` `date_retrait` DATE,
+            CHANGE `time_fin_adm` `time_retrait` TIME;";
+	  $this->addQuery($sql);
+	  
+		$this->mod_version = "0.86";
   }  
 }
 

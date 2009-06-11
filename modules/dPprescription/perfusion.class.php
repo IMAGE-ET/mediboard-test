@@ -33,12 +33,13 @@ class CPerfusion extends CMbObject {
   var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de perfusions)
   var $operation_id     = null;
   
-  var $date_debut_adm   = null; // Date de debut de la perf
-  var $time_debut_adm   = null; // Heure de debut de la perf
+  var $date_pose   = null; // Date de la pose de la perf
+  var $time_pose   = null; // Heure de la pose de la perf
   
-  var $date_fin_adm     = null; // Date de fin de la perf
-  var $time_fin_adm     = null; // Heure de fin de la perf
+  var $date_retrait     = null; // Date de retrait de la perf
+  var $time_retrait     = null; // Heure de retrait de la perf
   var $emplacement      = null;
+  var $nb_tous_les      = null;
   
   // Champs specifiques aux PCA
   var $mode_bolus          = null; // Mode de bolus 
@@ -61,13 +62,15 @@ class CPerfusion extends CMbObject {
   // Form fields
   var $_debut             = null; // Debut de la perfusion (dateTime)
   var $_fin               = null; // Fin de la perfusion (dateTime)
-  var $_protocole         = null; // Perfusion de protocole ?
+  var $_protocole         = null; // Perfusion de protocole
   var $_add_perf_contigue = null;
   var $_count_parent_line = null;
-  var $_debut_adm = null;
-  var $_fin_adm   = null;
   var $_recent_modification = null;
   var $_count_substitution_lines = null;
+
+  var $_pose = null;
+  var $_retrait   = null;
+
   
   // Object references
   var $_ref_log_signature_prat = null;
@@ -86,6 +89,11 @@ class CPerfusion extends CMbObject {
   var $_can_vw_form_add_perf_contigue    = null;
   var $_can_vw_form_stop_perf            = null;
   
+  var $_quantite_totale                  = null;
+  var $_prises_prevues                   = null;
+
+  var $_frequence = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'perfusion';
@@ -95,41 +103,40 @@ class CPerfusion extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-  	$specs["prescription_id"]   = "ref class|CPrescription cascade";
-  	$specs["type"]              = "enum notNull list|classique|seringue|PCA";
-    $specs["libelle"]           = "str";
-    $specs["vitesse"]           = "num pos";
-    $specs["voie"]              = "str";
-    $specs["date_debut"]        = "date";
-    $specs["time_debut"]        = "time";
-    $specs["duree"]             = "num pos";
-    $specs["next_perf_id"]      = "ref class|CPerfusion"; 
-    $specs["praticien_id"]      = "ref class|CMediusers";
-    $specs["creator_id"]        = "ref class|CMediusers";
-    $specs["signature_prat"]    = "bool default|0";
-    $specs["signature_pharma"]  = "bool default|0";
-    $specs["validation_infir"]  = "bool default|0";
-    $specs["date_arret"]        = "date";
-    $specs["time_arret"]        = "time";
-    $specs["accord_praticien"]  = "bool";
-    $specs["_debut"]            = "dateTime";
-    $specs["_fin"]              = "dateTime";
-    $specs["_debut_adm"]        = "dateTime";
-    $specs["_fin_adm"]          = "dateTime";
-    $specs["decalage_interv"]   = "num";
-    $specs["operation_id"]      = "ref class|COperation";
-    $specs["mode_bolus"]        = "enum list|sans_bolus|bolus|perfusion_bolus default|sans_bolus";
-    $specs["dose_bolus"]        = "float";
-    $specs["periode_interdite"] = "num pos";
-    $specs["date_debut_adm"]    = "date";
-    $specs["time_debut_adm"]    = "time";
-    $specs["date_fin_adm"]      = "date";
-    $specs["time_fin_adm"]      = "time";
-    $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
-    $specs["substitute_for_id"]    = "ref class|CMbObject meta|substitute_for_class cascade";
-    $specs["substitute_for_class"] = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPerfusion";
-    $specs["substitution_active"]  = "bool";
+  	$specs["prescription_id"]        = "ref class|CPrescription cascade";
+  	$specs["type"]                   = "enum notNull list|classique|seringue|PCA";
+    $specs["libelle"]                = "str";
+    $specs["vitesse"]                = "num pos";
+    $specs["voie"]                   = "str";
+    $specs["date_debut"]             = "date";
+    $specs["time_debut"]             = "time";
+    $specs["duree"]                  = "num pos";
+    $specs["next_perf_id"]           = "ref class|CPerfusion"; 
+    $specs["praticien_id"]           = "ref class|CMediusers";
+    $specs["creator_id"]             = "ref class|CMediusers";
+    $specs["signature_prat"]         = "bool default|0";
+    $specs["signature_pharma"]       = "bool default|0";
+    $specs["validation_infir"]       = "bool default|0";
+    $specs["date_arret"]             = "date";
+    $specs["time_arret"]             = "time";
+    $specs["accord_praticien"]       = "bool";
+    $specs["_debut"]                 = "dateTime";
+    $specs["_fin"]                   = "dateTime";
+    $specs["decalage_interv"]        = "num";
+    $specs["operation_id"]           = "ref class|COperation";
+    $specs["mode_bolus"]             = "enum list|sans_bolus|bolus|perfusion_bolus default|sans_bolus";
+    $specs["dose_bolus"]             = "float";
+    $specs["periode_interdite"]      = "num pos";
+    $specs["date_pose"]              = "date";
+    $specs["time_pose"]              = "time";
+    $specs["date_retrait"]           = "date";
+    $specs["time_retrait"]           = "time";
+    $specs["emplacement"]            = "enum notNull list|service|bloc|service_bloc default|service";
+    $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade";
+    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPerfusion";
+    $specs["substitution_active"]    = "bool";
     $specs["substitution_plan_soin"] = "bool";
+    $specs["nb_tous_les"]            = "num";
     return $specs;
   }
 
@@ -142,25 +149,33 @@ class CPerfusion extends CMbObject {
     $this->_view .= $this->voie;
     $this->_view .= ($this->vitesse) ? " à $this->vitesse ml/h" : "";
     
+    if($this->vitesse){
+      $this->_frequence = "à $this->vitesse ml/h";
+    }
+    if($this->nb_tous_les){
+      $this->_frequence = "toutes les $this->nb_tous_les h";
+    }
+    
     if($this->type == "PCA"){
       $this->_view .= ($this->mode_bolus) ? ", mode PCA: ".CAppUI::tr("CPerfusion.mode_bolus.".$this->mode_bolus) : "";
       $this->_view .= ($this->dose_bolus) ? ", bolus de $this->dose_bolus mg" : "";
       $this->_view .= ($this->periode_interdite) ? ", période interdite de $this->periode_interdite min" : "";
     }
-    
-    if($this->date_debut_adm){
-      $this->_debut_adm = "$this->date_debut_adm $this->time_debut_adm";
+        
+    if($this->date_pose && $this->time_pose){
+      $this->_pose = "$this->date_pose $this->time_pose";
     }
-    if($this->date_fin_adm){
-      $this->_fin_adm = "$this->date_fin_adm $this->time_fin_adm";
+    if($this->date_retrait && $this->time_retrait){
+      $this->_retrait = "$this->date_retrait $this->time_retrait";
     }
     
-    // Calcul du debut et de la fin de la ligne
-    $this->_debut = "$this->date_debut $this->time_debut";
-    
-    // DateTime de fin initial de la ligne
+    // Calcul du debut de la perfusion
+    $this->_debut = ($this->date_pose) ? "$this->date_pose $this->time_pose" : "$this->date_debut $this->time_debut";
+
+    // Calcul de la fin de la perfusion
     $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree HOURS", "$this->_debut") : $this->_debut;
-    $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" : $this->_date_fin; 
+    $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" 
+                                                           : ($this->date_retrait ? "$this->date_retrait $this->time_retrait" : $this->_date_fin); 
 
     $this->loadRefPrescription();
     $this->_protocole = $this->_ref_prescription->object_id ? '0' : '1';
@@ -168,16 +183,6 @@ class CPerfusion extends CMbObject {
     
     if($this->_protocole){
       $this->countSubstitutionsLines();
-    }
-  }
-  
-  function updateDBFielfs(){
-    parent::updateDBFields();
-    if($this->date_arret == "current") {
-    	$this->date_arret = mbDate();
-    }
-    if($this->time_arret == "current") {
-    	$this->time_arret = mbTime();
     }
   }
   
@@ -289,7 +294,6 @@ class CPerfusion extends CMbObject {
     $this->next_perf_id = $new_perf->_id;
 	}
 
-	
 	function loadRefsTransmissions(){
 	  $this->_ref_transmissions = $this->loadBackRefs("transmissions");
 	  foreach($this->_ref_transmissions as &$_trans){
@@ -319,7 +323,6 @@ class CPerfusion extends CMbObject {
   	  $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
     }
   }
-  
   
   function delete(){
     // On supprime la ref vers la perf courante
@@ -377,7 +380,6 @@ class CPerfusion extends CMbObject {
     }
   }
   
-  
   /*
    * Chargement récursif des parents d'une perfusion
    */
@@ -411,11 +413,138 @@ class CPerfusion extends CMbObject {
   }
   
   /*
+   *  Calcul de la quantite totale de la perf en ml
+   */
+  function calculQuantiteTotal(){
+    if(!$this->_ref_lines){
+      $this->loadRefsLines();
+    }
+    foreach($this->_ref_lines as $_perf_line){
+      if($_perf_line->unite && $_perf_line->quantite){
+	      $_unite_prise = str_replace('/kg', '', $_perf_line->unite);
+			  // Si l'unite de prise est en fonction du poids du patient
+	      if($_unite_prise != $_perf_line->unite){
+	        $this->loadRefPrescription();
+	        $this->_ref_prescription->loadRefObject();
+	        $this->_ref_prescription->_ref_object->loadRefPatient();
+			    $patient =& $this->_ref_prescription->_ref_object->_ref_patient;
+	        if(!$patient->_ref_constantes_medicales){
+	          $patient->loadRefConstantesMedicales();
+	        }
+	        $poids = $patient->_ref_constantes_medicales->poids;
+			  }
+
+			  // Chargement du tableau de correspondance entre les unites de prises
+	      $_perf_line->_ref_produit->loadConditionnement();
+	      
+	      $coef = @$_perf_line->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
+	      $_perf_line->_quantite_administration = $_perf_line->quantite * $coef;
+	      if(isset($poids)){
+	        $_perf_line->_quantite_administration *= $poids;
+	      }
+			  $this->_quantite_totale += $_perf_line->_quantite_administration;
+			  
+			  $produit =& $_perf_line->_ref_produit;   
+    	  $_perf_line->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
+		    $_perf_line->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
+
+		    // Calcul du ration entre quantite d'administration et quantite de dispensation
+		    if($_perf_line->_unite_dispensation == $produit->libelle_unite_presentation){
+		      $_perf_line->_ratio_administration_dispensation = 1;
+		    } else {
+		      $_perf_line->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
+		    }
+		    $_perf_line->_quantite_dispensation = $_perf_line->_quantite_administration * $_perf_line->_ratio_administration_dispensation; 
+      }
+    }
+  }
+  
+  /*
+   * Calcul des prises prevues pour la perfusion
+   */
+  function calculPrisesPrevues(){    
+    // Test des infos essentielles au calcul
+    if($this->date_debut && $this->time_debut && $this->duree){
+      // Premiere prise lors du debut de la ligne
+      //$date_time_temp = "$this->date_debut $this->time_debut";
+      $date_time_temp = $this->_debut;
+      $date = mbDate($date_time_temp);
+			$hour = mbTransformTime(null, $date_time_temp, "%H");
+			    
+      $this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($date_time_temp);
+      $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
+    
+      
+      // Perfusion à la vitesse de x ml/h
+      if($this->vitesse && $this->_quantite_totale){
+        // calcul du nombre d'heure entre le renouvellement de la perf
+        $nb_hours = $this->_quantite_totale / $this->vitesse;
+        
+        // Calcul de l'incrementation
+        $explode_hour = explode(".", $nb_hours);
+        $nb_hours = $explode_hour[0]; 
+        if(isset($explode_hour[1])){
+          $minutes = substr($explode_hour[1],0,1) * 6;
+        }
+        $increment = "+ $nb_hours hours ";
+        if(isset($minutes)){
+          $increment .= "$minutes minutes";
+        }
+        
+        // Calcul des prises en fonction de la vitesse
+			  while((mbDateTime($increment, $date_time_temp)) < $this->_fin){
+	        $date_time_temp = mbDateTime($increment, $date_time_temp);
+	        
+			    $date = mbDate($date_time_temp);
+			    $hour = mbTransformTime(null, $date_time_temp, "%H");
+
+			    $this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($date_time_temp);
+	        $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
+	      } 
+      }
+  
+      // Perfusion toutes les x heures
+      if($this->nb_tous_les){
+        // Calcul des prises en fonction de la vitesse
+			  while((mbDateTime("+ $this->nb_tous_les hours", $date_time_temp)) < $this->_fin){
+	        $date_time_temp = mbDateTime("+ $this->nb_tous_les hours", $date_time_temp);
+	        
+			    $date = mbDate($date_time_temp);
+			    $hour = mbTransformTime(null, $date_time_temp, "%H");
+			    
+          $this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($date_time_temp);
+	        $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
+	      }
+      }
+    }
+  }
+  
+  /*
+   * Calcul des administrations
+   */
+  function calculAdministrations(){
+    foreach($this->_ref_lines as $_perf_line){
+      $_perf_line->loadRefsAdministrations();
+      foreach($_perf_line->_ref_administrations as $_administration){
+        $date = mbDate($_administration->dateTime);
+			  $hour = mbTransformTime(null, $_administration->dateTime, "%H");
+			    
+        if(!isset($_perf_line->_administrations[$date][$hour])){
+          $_perf_line->_administrations[$date][$hour] = 0;
+        }
+        $_perf_line->_administrations[$date][$hour] += $_administration->quantite;
+      }
+    }
+  }
+  
+  
+  /*
    * Chargement du praticien
    */
   function loadRefPraticien(){
     $this->_ref_praticien = new CMediusers();
-    $this->_ref_praticien->load($this->praticien_id);
+    $this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
+    $this->_ref_praticien->loadRefFunction();
   }
   
   /*
@@ -427,10 +556,12 @@ class CPerfusion extends CMbObject {
     $this->_count_parent_line = $perfusion->countMatchingList(); 
   }
   
+  /*
+   * Chargement du log de signature du praticien
+   */
   function loadRefLogSignaturePrat(){
     $this->_ref_log_signature_prat = $this->loadLastLogForField("signature_prat");
   }
-  
 }
   
 ?>

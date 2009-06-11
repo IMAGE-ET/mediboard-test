@@ -18,28 +18,33 @@ $prescription->load($prescription_id);
 $sejour =& $prescription->_ref_object;
 $sejour->loadRefPatient();
 $sejour->_ref_patient->loadRefConstantesMedicales();
+$sejour->loadSuiviMedical();
+
 $dossier = array();
-$lines_med = array();
-$lines_elt = array();
+$list_lines = array();
 
 // Chargement des lignes
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElementByCat();
-
-// Chargement des perfusions
 $prescription->loadRefsPerfusions();
-foreach($prescription->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefsLines();  
-  $dossier[$_perfusion->date_debut]["perfusion"][$_perfusion->_id] = $_perfusion;
-}
 
-// Chargement de toutes les transmissions du sejour
-$sejour->loadSuiviMedical();
+foreach($prescription->_ref_perfusions as $_perfusion){
+  $_perfusion->loadRefsLines();
+  foreach($_perfusion->_ref_lines as $_perf_line){
+    $list_lines["perfusion"][$_perf_line->_id] = $_perf_line;
+    $_perf_line->loadRefsAdministrations();
+    foreach($_perf_line->_ref_administrations as $_administration_perf){
+      if(!$_administration_perf->planification){
+        $dossier[mbDate($_administration_perf->dateTime)]["perfusion"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
+      }
+    }
+  }
+}
 
 // Parcours des lignes de medicament et stockage du dossier cloturé
 foreach($prescription->_ref_prescription_lines as $_line_med){
 	$_line_med->_ref_produit->loadConditionnement();
-	$lines_med[$_line_med->_id] = $_line_med;
+	$list_lines["medicament"][$_line_med->_id] = $_line_med;
 	$_line_med->loadRefsAdministrations();
 	foreach($_line_med->_ref_administrations as $_administration_med){
 	  if(!$_administration_med->planification){
@@ -52,7 +57,7 @@ foreach($prescription->_ref_prescription_lines as $_line_med){
 foreach($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lines_by_chap){
 	foreach($_lines_by_chap as $_lines_by_cat){
 		foreach($_lines_by_cat["element"] as $_line_elt){
-			$lines_elt[$_line_elt->_id] = $_line_elt;
+			$list_lines[$chap][$_line_elt->_id] = $_line_elt;
 		  $_line_elt->loadRefsAdministrations();
 		  foreach($_line_elt->_ref_administrations as $_administration_elt){
 		    if(!$_administration_elt->planification){
@@ -69,8 +74,7 @@ ksort($dossier);
 $smarty = new CSmartyDP();
 $smarty->assign("dateTime", mbDateTime());
 $smarty->assign("sejour", $sejour);
-$smarty->assign("lines_med", $lines_med);
-$smarty->assign("lines_elt", $lines_elt);
+$smarty->assign("list_lines", $list_lines);
 $smarty->assign("dossier", $dossier);
 $smarty->display("vw_dossier_cloture.tpl");
 

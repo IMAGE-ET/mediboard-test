@@ -18,7 +18,7 @@ $mode_refresh = mbGetValueFromGet("mode_refresh");
 // Chargement de la perfusion
 $perfusion = new CPerfusion();
 $perfusion->load($perfusion_id);
-
+$perfusion->loadRefsLines();
 // Refresh des transmissions
 if($mode_refresh == "trans"){
   $transmissions = array();

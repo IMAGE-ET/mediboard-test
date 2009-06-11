@@ -57,64 +57,41 @@
       </strong>
     </td>
   </tr>
-    {{foreach from=$lines key=line_id item=administrations}}
-      {{if $chap == "perfusion"}}
-        {{assign var=_perfusion value=$administrations}}
-        <tr>
-          <td class="text">
-              {{$_perfusion->_view}}
-              {{if $_perfusion->duree}} pendant {{$_perfusion->duree}} heures{{/if}}
-              {{if $_perfusion->time_debut}} à partir de {{mb_value object=$_perfusion field="time_debut"}}{{/if}} 
-          </td>
-          <td>
-          <ul>
-          {{foreach from=$_perfusion->_ref_lines item=_line_med}}
-            <li>
-              {{$_line_med->_ucd_view}}: {{$_line_med->quantite}} {{$_line_med->unite}}
-              {{if $_line_med->nb_tous_les}}
-              toutes les {{$_line_med->nb_tous_les}} heures
-              {{/if}}
-	            <span style="opacity: 0.7; font-size: 0.8em;">
-	              ({{$_line_med->_forme_galenique}})
-	            </span>
-            </li>
-          {{/foreach}}
-          </ul>
-          </td>
-        </tr>
-      {{else}}
-	      {{if $chap == "medicament"}}
-	        {{assign var=line value=$lines_med.$line_id}}
-	      {{else}}
-	        {{assign var=line value=$lines_elt.$line_id}}
-	      {{/if}}
-	      <tr>
-	        <td>
-	          {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	            {{$line->_ucd_view}} 
-	            <span style="opacity: 0.7; font-size: 0.8em;">
-	            ({{$line->_forme_galenique}})
-	            </span>
-	          {{else}}
-	            {{$line->_view}}
-	          {{/if}}
-	        </td>
-	        <td>  
-	          {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
-	            {{$quantite}} 
-	            {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	              {{$line->_ref_produit->libelle_unite_presentation}}
-	            {{else}}
-	              {{$line->_unite_prise}}
-	            {{/if}}: 
-	            {{foreach from=$_administrations_by_quantite item=_administration}}
-	            {{$_administration->dateTime|date_format:$dPconfig.time}}
-	            {{/foreach}}
-	            <br />
-	          {{/foreach}}
-	        </td>  
-	        </tr>
-      {{/if}}  
+  {{foreach from=$lines key=line_id item=administrations}}
+	  {{assign var=line value=$list_lines.$chap.$line_id}}     
+     <tr>
+       <td>
+         {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+           {{$line->_ucd_view}} 
+           <span style="opacity: 0.7; font-size: 0.8em;">
+           ({{$line->_forme_galenique}})
+           </span>
+         {{elseif $line->_class_name == "CPerfusionLine"}}
+           {{$line->_ucd_view}}           
+           {{if $line->_class_name == "CPerfusionLine"}}
+             (Perfusion: {{$line->_ref_perfusion->_view}})
+           {{/if}}
+         {{else}}
+           {{$line->_view}}
+         {{/if}}
+       </td>
+       <td>  
+         {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
+           {{$quantite}} 
+           {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+             {{$line->_ref_produit->libelle_unite_presentation}}
+           {{elseif $line->_class_name != "CPerfusionLine"}}
+             {{$line->_unite_prise}}
+           {{else}}
+           ml
+           {{/if}}: 
+           {{foreach from=$_administrations_by_quantite item=_administration}}
+           {{$_administration->dateTime|date_format:$dPconfig.time}}
+           {{/foreach}}
+           <br />
+         {{/foreach}}
+       </td>  
+       </tr>
     {{/foreach}}
   {{/foreach}}
 {{/foreach}}

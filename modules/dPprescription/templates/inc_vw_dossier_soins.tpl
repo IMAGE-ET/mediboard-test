@@ -187,6 +187,18 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.popup(500,400,"Administration");
 }
 
+addAdministrationPerf = function(perfusion_id, date, hour, time_prevue, mode_dossier, sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_add_administration_perf");
+  url.addParam("perfusion_id", perfusion_id);
+  url.addParam("date", date);
+  url.addParam("hour", hour);
+  url.addParam("time_prevue", time_prevue);
+  url.addParam("mode_dossier", mode_dossier);
+  url.addParam("sejour_id", sejour_id);
+  url.popup(500,400,"Administration d'une perfusion");
+}
+
 editPerf = function(perfusion_id, date, mode_dossier, sejour_id){
   var url = new Url;
   url.setModuleAction("dPprescription", "edit_perf_dossier_soin");
@@ -195,6 +207,22 @@ editPerf = function(perfusion_id, date, mode_dossier, sejour_id){
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
   url.popup(500,400,"Pefusion");
+}
+
+submitPosePerf = function(oFormPerf){
+  $V(oFormPerf.date_pose, 'current');
+  $V(oFormPerf.time_pose, 'current');
+  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
+    loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
+  } } )
+}
+
+submitRetraitPerf = function(oFormPerf){
+  $V(oFormPerf.date_retrait, 'current');
+  $V(oFormPerf.time_retrait, 'current');
+  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
+    loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
+  } } )
 }
 
 toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, date, heure, administrations) {

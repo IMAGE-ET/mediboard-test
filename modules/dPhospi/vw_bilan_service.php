@@ -7,6 +7,21 @@
 * @author Alexis Granger
 */
 
+function getCurrentChambre($sejour, $_date, $_hour, &$chambres, &$affectations){
+  if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
+    $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
+    $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
+    if($chambre){
+      $chambres[$chambre->_id] = $chambre;
+      $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
+    }
+  } else {
+    $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
+    $chambre = $affectation->_ref_lit->_ref_chambre;
+  }
+  return $chambre;
+}			            
+			            
 $date         = mbGetValueFromGetOrSession("date", mbDate());
 $dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
@@ -45,7 +60,9 @@ for($i=0; $i<=$nb_days; $i++){
 $lines_by_patient = array();
 $sejours = array();
 $list_lines = array();
+
 $chambres = array();
+$affectations = array();
 
 if (mbGetValueFromGet("do")) {
 	// Chargement de toutes les prescriptions
@@ -67,54 +84,63 @@ if (mbGetValueFromGet("do")) {
 	
 	$lines = array();
 	$patients = array();
-	
 	$lines["med"] = array();
 	$lines["elt"] = array();
 	foreach($prescriptions as $_prescription){
 	  // Chargement des lignes
 	  $_prescription->loadRefsLinesMed("1","1","service");
-
 		if ($do_elements) {
 	    $_prescription->loadRefsLinesElementByCat("1","","service");
 	  }
-
 	  if($do_perfusions){
 	    $_prescription->loadRefsPerfusions();
 	  }
-	  
+	  // Calcul du plan de soin
 	  foreach($dates as $_date){
-	    $_prescription->calculPlanSoin($_date, 0);
+	    $_prescription->calculPlanSoin($_date);
 	  }
 	  
+	  // Chargement du sejour et du patient
 	  $sejour =& $_prescription->_ref_object;
 	  $sejour->loadRefsOperations();
 	  $sejour->_ref_last_operation->loadRefPlageOp();
 	  // Stockage de la liste des patients
 	  $sejours[$sejour->_id] = $sejour;
-	  
-	  
 	  $sejour->loadRefPatient();
 	  $patient =& $sejour->_ref_patient;
 	  $patient->loadRefConstantesMedicales();
 	  
-	  
 	  if($do_medicaments || $do_injections || $do_perfusions){
-	    
 	    if($do_perfusions){
 		    // Parcours et stockage des perfusions
-		    if($_prescription->_ref_perfusions){
-		      foreach($_prescription->_ref_perfusions as $_perfusion){
-		        $_perfusion->loadRefsLines();
-		        $affectation = $sejour->getCurrAffectation($_perfusion->_debut);
-		        $affectation->loadRefLit();
-		        $affectation->_ref_lit->loadCompleteView();    
-		        $chambre = $affectation->_ref_lit->_ref_chambre;
-		        if(!$chambre){
-		          continue;
+		    if($_prescription->_ref_perfusions_for_plan){
+		      foreach($_prescription->_ref_perfusions_for_plan as $_perfusion){
+            $list_lines[$_perfusion->_class_name][$_perfusion->_id] = $_perfusion;
+		        // Prises prevues
+		        if(is_array($_perfusion->_prises_prevues)){
+			        foreach($_perfusion->_prises_prevues as $_date => $_prises_prevues_by_hour){
+			          foreach($_prises_prevues_by_hour as $_hour => $_prise_prevue){
+			            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+			            if(!$chambre) continue;
+			            foreach($_perfusion->_ref_lines as $_perf_line){
+			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
+			              $lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration;
+			            }
+			          }
+			        }
 		        }
-		        $chambres[$chambre->_id] = $chambre;
-		        if(in_array($_perfusion->date_debut, $dates)){
-		          $lines_by_patient[$chambre->_id][$sejour->_id][$_perfusion->date_debut]["perf"][$_perfusion->_id] = $_perfusion;
+		        // Administrations effectuees
+		        foreach($_perfusion->_ref_lines as $_perf_line){
+		          $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
+		          if(is_array($_perf_line->_administrations)){
+			          foreach($_perf_line->_administrations as $_date => $_adm_by_hour){
+				          foreach($_adm_by_hour as $_hour => $_adm){
+				            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+				            if(!$chambre) continue;			              
+				             $lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
+				          }
+				        }
+		          }
 		        }
 		      }
 		    }
@@ -128,7 +154,7 @@ if (mbGetValueFromGet("do")) {
       if($do_injections){
         $medicaments["inj"] = $_prescription->_ref_injections_for_plan;
       }
-      
+
       if($do_medicaments || $do_injections){
 		    foreach($medicaments as $type_med => $_medicaments){
 			    if($_medicaments){
@@ -142,18 +168,8 @@ if (mbGetValueFromGet("do")) {
 							        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
 							          if(@is_array($prises_prevues_by_date['quantites'])){
 								          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
-								            if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-									            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
-									            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
-									            if(!$chambre){
-									              continue;
-									            }
-				                      $chambres[$chambre->_id] = $chambre;
-			                        $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
-								            } else {
-								              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
-								              $chambre = $affectation->_ref_lit->_ref_chambre;
-								            }
+								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+			                      if(!$chambre) continue;
 								            if($prise_prevue["total"]){
 								              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 								              $prise_prevue["total"] = 0;
@@ -169,19 +185,8 @@ if (mbGetValueFromGet("do")) {
 							        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 							          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
 							            if(is_numeric($_hour)){
-							          		if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-									            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
-									            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
-							          			if(!$chambre){
-										            continue;
-										          }
-				                      $chambres[$chambre->_id] = $chambre;
-				                       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
-								            } else {
-								              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
-								              $chambre = $affectation->_ref_lit->_ref_chambre;
-								            }
-				                     
+								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+								            if(!$chambre) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
 								            if($quantite){
 								              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
@@ -220,19 +225,8 @@ if (mbGetValueFromGet("do")) {
 					        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
 					          if(is_array($prises_prevues_by_date['quantites'])){
 						          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
-	                      if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-							            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
-							            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
-	                      	if(!$chambre){
-							              continue;
-							            }
-		                      $chambres[$chambre->_id] = $chambre;
-		                       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
-						            } else {
-						              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
-						              $chambre = $affectation->_ref_lit->_ref_chambre;
-						            }
-	
+						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+						            if(!$chambre) continue;			  
 						            if($prise_prevue["total"]){
 						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue = 0;
@@ -248,19 +242,8 @@ if (mbGetValueFromGet("do")) {
 					        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 					          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
 	                    if(is_numeric($_hour)){
-						            if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-							            $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
-							            $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
-		                    	if(!$chambre){
-								            continue;
-								          }
-		                      $chambres[$chambre->_id] = $chambre;
-		                      $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
-						            } else {
-						              $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
-						              $chambre = $affectation->_ref_lit->_ref_chambre;
-						            }
-		
+						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+						            if(!$chambre) continue;			  
 						            $quantite = @$administrations_by_hour["quantite"];
 						            if($quantite){
 						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
@@ -318,7 +301,6 @@ foreach($cats as $_cat){
   }
 }
 
-// Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("hide_filters", $hide_filters);
 $smarty->assign("periode", $periode);

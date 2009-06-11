@@ -518,7 +518,6 @@ class CPrescription extends CMbObject {
     }
   }
   
-  
   /*
    * Calcul du praticien_id responsable de la prescription
    */
@@ -716,6 +715,77 @@ class CPrescription extends CMbObject {
   }
   
   /*
+   * Chargement des transmissions liées aux lignes de la prescription
+   */
+	function loadAllTransmissions(){
+	  $transmission = new CTransmissionMedicale();
+		$where = array();
+		$where[] = "(object_class = 'CCategoryPrescription') OR 
+		            (object_class = 'CPrescriptionLineElement') OR 
+		            (object_class = 'CPrescriptionLineMedicament') OR 
+								(object_class = 'CPerfusion') OR libelle_ATC IS NOT NULL";
+		$where["sejour_id"] = " = '$this->object_id'";
+		$transmissions_by_class = $transmission->loadList($where);
+		
+		foreach($transmissions_by_class as $_transmission){
+		  $_transmission->loadRefsFwd();
+			if($_transmission->object_class && $_transmission->object_id){
+		    $this->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+			}
+			if($_transmission->libelle_ATC){
+		    $this->_transmissions["ATC"][$_transmission->libelle_ATC][$_transmission->_id] = $_transmission;
+		  }
+		}
+	}
+	
+	/*
+	 * Calcul du nombre de produits dans la prescription, permet de calculer les rowspan
+	 * Les lignes doivent etre prealablement chargées
+	 */
+  function calculNbProduit($chapitre = ""){
+		$types = array("med","inj");
+		foreach($types as $_type_med){
+		  $produits = ($_type_med == "med") ? $this->_ref_lines_med_for_plan : $this->_ref_injections_for_plan;
+			if($produits){
+			  foreach($produits as $_code_ATC => $_cat_ATC){
+				  if(!isset($this->_nb_produit_by_cat[$_code_ATC])){
+				    $this->_nb_produit_by_cat[$_type_med][$_code_ATC] = 0;
+				  }
+				  foreach($_cat_ATC as $line_id => $_line) {
+				    foreach($_line as $unite_prise => $line_med){
+				      if(!isset($this->_nb_produit_by_chap[$_type_med])){
+							  $this->_nb_produit_by_chap[$_type_med] = 0;
+							}
+							$this->_nb_produit_by_chap[$_type_med]++;
+				      $this->_nb_produit_by_cat[$_type_med][$_code_ATC]++;
+				    }
+				  }
+				}
+			}
+		}
+		// Calcul du rowspan pour les elements
+		if($this->_ref_lines_elt_for_plan){
+			foreach($this->_ref_lines_elt_for_plan as $name_chap => $elements_chap){
+			  foreach($elements_chap as $name_cat => $elements_cat){
+			    if(!isset($this->_nb_produit_by_cat[$name_cat])){
+			      $this->_nb_produit_by_cat[$name_cat] = 0;
+			    }
+			    foreach($elements_cat as $_element){
+			      foreach($_element as $element){
+			        $element->loadRefLogSignee();
+			        if(!isset($this->_nb_produit_by_chap[$name_chap])){
+						    $this->_nb_produit_by_chap[$name_chap] = 0;  
+						  }
+						  $this->_nb_produit_by_chap[$name_chap]++;
+			        $this->_nb_produit_by_cat[$name_cat]++;
+			      }
+			    }
+			  }
+			}     
+		}
+  }
+	
+  /*
    * Compte le nombre de lignes non validées dans la prescription
    */ 
   function countNoValideLines(){
@@ -730,7 +800,6 @@ class CPrescription extends CMbObject {
       $this->_counts_no_valide = $line->countList($where);
     }
   }
-  
   
 	/*
 	 * Chargement du nombre des medicaments et d'elements
@@ -813,7 +882,9 @@ class CPrescription extends CMbObject {
   	}
   }
   
-  
+  /*
+   * Chargement des praticiens de la prescription
+   */
   function getPraticiens(){
     $ds = CSQLDataSource::get("std");
     $sql = "SELECT DISTINCT prescription_line_medicament.praticien_id
@@ -894,7 +965,6 @@ class CPrescription extends CMbObject {
         $historique["sejour"] = $prescription_sejour;
       }
   	}
-
   	return $historique;
   }
   
@@ -923,7 +993,7 @@ class CPrescription extends CMbObject {
         $this->_count_recent_modif["perf"] = true;
       }
     }
-    
+
     // Parcours des lignes d'elements
     foreach($this->_ref_prescription_lines_element_by_cat as $_chapitre_elt => $lines_by_cat){
       $this->_count_recent_modif[$_chapitre_elt] = false;
@@ -994,7 +1064,6 @@ class CPrescription extends CMbObject {
     $order = "prescription_line_medicament_id DESC";
     $this->_ref_prescription_lines = $line->loadList($where, $order);
   }
-  
   
   /*
    * Chargement des lignes de prescription de médicament par catégorie ATC
@@ -1067,7 +1136,6 @@ class CPrescription extends CMbObject {
     }
   }
   
-  
   /*
    * Chargement des lignes d'elements par catégorie
    */
@@ -1081,10 +1149,8 @@ class CPrescription extends CMbObject {
   		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
   		$this->_ref_lines_elements_comments[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
   	}
-
   	ksort($this->_ref_prescription_lines_element_by_cat);
   }
-  
   
   /*
    * Chargement des lignes de commentaires
@@ -1122,7 +1188,7 @@ class CPrescription extends CMbObject {
   	  }
       if($_line_comment->category_prescription_id){
   	  	// Chargement de la categorie
-          $_line_comment->loadRefCategory();
+        $_line_comment->loadRefCategory();
   	  	$cat = new CCategoryPrescription();
   	  	$cat->load($_line_comment->category_prescription_id);
   	  	$chapitre = $cat->chapitre;
@@ -1214,9 +1280,7 @@ class CPrescription extends CMbObject {
   static function getFavorisPraticien($praticien_id){
   	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
   	$listFavoris["injectable"] = CPrescription::getFavorisInjectablePraticien($praticien_id);
-  	
   	$category = new CCategoryPrescription();
-  	
     foreach($category->_specs["chapitre"]->_list as $chapitre){
   	  $listFavoris[$chapitre] = array();
   	  $favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
@@ -1232,11 +1296,10 @@ class CPrescription extends CMbObject {
 	  return $listFavoris;  	
   }
   
-
   /*
    * Controle des allergies
    */
-  function checkAllergies($listAllergies, $code_cip) {
+  function checkAllergies($allergies, $code_cip) {
     if(!isset($this->_scores["allergie"])){
       $this->_scores["allergie"] = array();
     }
@@ -1244,7 +1307,7 @@ class CPrescription extends CMbObject {
       $this->_alertes["allergie"] = array();
     }
     $niveau_max = 0;
-    foreach($listAllergies as $key => $all) {
+    foreach($allergies as $key => $all) {
       if($all->CIP == $code_cip) {
         $this->_alertes["allergie"][$code_cip][$key]["libelle"] = $all->LibelleAllergie;
       }
@@ -1255,22 +1318,25 @@ class CPrescription extends CMbObject {
   /*
    * Controle des interactions
    */
-  function checkInteractions($listInteractions, $code_cip) {
+  function checkInteractions($interactions, $code_cip) {
     if(!isset($this->_scores["interaction"])){
       $this->_scores["interaction"] = array();
     }
     if(!isset($this->_alertes["interaction"])){
       $this->_alertes["interaction"] = array();
     }
-    
     $niveau_max = 0;
-    foreach($listInteractions as $key => $int) {
+    foreach($interactions as $key => $int) {
       if($int->CIP1 == $code_cip || $int->CIP2 == $code_cip) {
-        @$this->_alertes["interaction"][$int->CIP1][$key]["libelle"] = $int->Type;
-        @$this->_alertes["interaction"][$int->CIP1][$key]["niveau"] = $int->Niveau;
-        @$this->_alertes["interaction"][$int->CIP2][$key]["libelle"] = $int->Type;
-        @$this->_alertes["interaction"][$int->CIP2][$key]["niveau"] = $int->Niveau;
-        @$this->_scores["interaction"]["niv$int->Niveau"]++;
+        $_interaction =& $this->_alertes["interaction"][$int->CIP1][$key];
+        $_interaction["libelle"] = $int->Type;
+        $_interaction["niveau"] = $int->Niveau;
+        $_interaction["libelle"] = $int->Type;
+        $_interaction["niveau"] = $int->Niveau;
+        if(!isset($this->_scores["interaction"]["niv$int->Niveau"])){
+          $this->_scores["interaction"]["niv$int->Niveau"] = 0;
+        }
+        $this->_scores["interaction"]["niv$int->Niveau"]++;
       }
       $niveau_max = max($int->Niveau, $niveau_max);
     }
@@ -1286,26 +1352,31 @@ class CPrescription extends CMbObject {
     if(!isset($this->_scores["IPC"])){
       $this->_scores["IPC"] = 0;
     }
-    @$this->_alertes["IPC"] = array();
+    if(!isset($this->_alertes["IPC"])){
+      $this->_alertes["IPC"] = array();
+    }
   }
   
   /*
    * Controle du profil du patient
    */
-  function checkProfil($listProfil, $code_cip) {
+  function checkProfil($profils, $code_cip) {
     if(!isset($this->_scores["profil"])){
       $this->_scores["profil"] = array();
     }
     if(!isset($this->_alertes["profil"])){
       $this->_alertes["profil"] = array();
     }
-
     $niveau_max = 0;
-    foreach($listProfil as $key => $profil) {
+    foreach($profils as $key => $profil) {
       if($profil->CIP == $code_cip) {
-        @$this->_alertes["profil"][$code_cip][$key]["libelle"] = $profil->LibelleMot;   
-        @$this->_alertes["profil"][$code_cip][$key]["niveau"] = $profil->Niveau;   
-        @$this->_scores["profil"]["niv$profil->Niveau"]++;
+        $_profil =& $this->_alertes["profil"][$code_cip][$key];
+        $_profil["libelle"] = $profil->LibelleMot;
+        $_profil["niveau"] = $profil->Niveau;
+        if(!isset($this->_scores["profil"]["niv$profil->Niveau"])){
+          $this->_scores["profil"]["niv$profil->Niveau"] = 0;
+        }
+        $this->_scores["profil"]["niv$profil->Niveau"]++;
       }
       $niveau_max = max($profil->Niveau, $niveau_max);
     }
@@ -1317,9 +1388,9 @@ class CPrescription extends CMbObject {
   /*
    * Controle des problèmes de posologie
    */
-  function checkPoso($listPoso, $code_cip) {
+  function checkPoso($posologies, $code_cip) {
     if(!isset($this->_scores["posoqte"])){
-      $this->_scores["posoqte"]   = array();
+      $this->_scores["posoqte"] = array();
     }
     if(!isset($this->_scores["posoduree"])){
       $this->_scores["posoduree"] = array();
@@ -1333,16 +1404,20 @@ class CPrescription extends CMbObject {
 
     $niveau_duree_max = 0;
     $niveau_qte_max   = 0;
-    foreach($listPoso as $key => $poso) {
+    foreach($posologies as $key => $poso) {
       if($poso->Type == "Duree") {
         $tab = "posoduree";
       } else {
         $tab = "posoqte";
       }
       if($poso->CIP == $code_cip) {
-        @$this->_alertes[$tab][$code_cip][$key]["libelle"] = $poso->LibellePb;   
-        @$this->_alertes[$tab][$code_cip][$key]["niveau"]  = $poso->Niveau;   
-        @$this->_scores[$tab]["niv$poso->Niveau"]++;
+        $_posologie =& $this->_alertes[$tab][$code_cip][$key];
+        $_posologie["libelle"] = $poso->LibellePb;   
+        $_posologie["niveau"]  = $poso->Niveau;
+        if(!isset($this->_scores[$tab]["niv$poso->Niveau"])){
+          $this->_scores[$tab]["niv$poso->Niveau"] = 0;
+        }
+        $this->_scores[$tab]["niv$poso->Niveau"]++;
       }
       if($poso->Type == "Duree") {
         $niveau_duree_max = max($poso->Niveau, $niveau_duree_max);
@@ -1371,197 +1446,137 @@ class CPrescription extends CMbObject {
     }
     $config_service = new CConfigService();
     $configs = $config_service->getConfigForService($service_id);
-    
-    // Stockage du tableau de ligne de medicaments
-  	$lines["medicament"] = $this->_ref_prescription_lines;
-    
-  	// Parcours des lignes
-    foreach($lines as $cat_name => $lines_cat){
-		  if(count($lines_cat)){
-		    foreach($lines_cat as &$_line_med){
-		      if(!$_line_med->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
-		        continue;  
-		      }
-		      // Code Cip
-		      if($code_cip && ($code_cip != $_line_med->code_cip)){
-		        continue;
-		      }
-		      
-		    	// On met a jour la date de fin de la ligne de medicament si celle ci n'est pas indiquée
-				  if(!$_line_med->_fin_reelle){
-				    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;
-				  }
-		  	    	
-			    if($with_calcul){
-			      // Chargement des administrations
-			      $_line_med->calculAdministrations($date, $mode_feuille_soin, $mode_dispensation, $service_id);
-			    }
-					// Si aucune prise
-           $_line_med->_ref_produit->loadClasseATC();
-           $_line_med->_ref_produit->loadRefsFichesATC();
-           $code_ATC = $_line_med->_ref_produit->_ref_ATC_2_code;
-					
-          if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     
-            if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
-						  if($_line_med->_is_injectable){
-						    $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;  
-						  } else { 
- 	              $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
-						  }
- 	            continue;
-						}
-					  // Chargement des prises
-					  $_line_med->calculPrises($this, $date, $mode_feuille_soin, null, null, $with_calcul, $configs);
-           }
-					// Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
-					if(!$mode_feuille_soin){
-					  if(isset($_line_med->_administrations['aucune_prise']) && count($_line_med->_ref_prises) >= 1){
-					    if($_line_med->_is_injectable){
-					      $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
-					    } else {
-					      $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;   
-					    }
-					  }
-					}
 
-				  // Suppression des prises prevues replanifiées
-				  if($_line_med->_quantity_by_date && $with_calcul){
-				    foreach($_line_med->_quantity_by_date as $_type => $quantity_by_date){
-				      foreach($quantity_by_date as $_date => $quantity_by_hour){
-				        if(!isset($_line_med->_quantity_by_date[$_type][$_date]['total'])){
-				          $_line_med->_quantity_by_date[$_type][$_date]['total'] = 0;
-						    }
-						    if(isset($quantity_by_hour['quantites'])){
-					        foreach($quantity_by_hour['quantites'] as $_hour => $quantity){
-					          $heure_reelle = @$quantity[0]["heure_reelle"];
-	
-					          // Recherche d'une planification correspondant à cette prise prevue
-	                  $planification = new CAdministration();
-	                  if(is_numeric($_type)){
-		                  $planification->prise_id = $_type;
-		                } else {
-		                  $planification->unite_prise = $_type;
-		                }
-		                $planification->original_dateTime = "$_date $heure_reelle:00:00";
-		                $planification->object_id = $_line_med->_id;
-		                $planification->object_class = "CPrescriptionLineMedicament";
-		                $count_planifications = $planification->countMatchingList();
-		                if($count_planifications){
-		                  $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-		                  $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total_disp'] = 0;
-		                }
-		                if($mode_semainier){
-							        $_line_med->_quantity_by_date[$_type][$_date]['total'] += $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
-							        $_line_med->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-		                }
-					        }
-						    }
-				      }
+    // Parcours des lignes de smedicaments
+		if(count($this->_ref_prescription_lines)){
+	    foreach($this->_ref_prescription_lines as &$_line_med){
+	      if(!$_line_med->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+	        continue;  
+	      }
+	      // Filtre par code_cip
+	      if($code_cip && ($code_cip != $_line_med->code_cip)){
+	        continue;
+	      }
+	      
+	    	// Mise à jour de la date de fin si celle-ci n'est pas indiquée
+			  if(!$_line_med->_fin_reelle){
+			    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;
+			  }
+	  	    	
+			  // Calcul des administrations
+		    if($with_calcul){
+		      $_line_med->calculAdministrations($date, $mode_dispensation, $service_id);
+		    }
+		    
+				// Si aucune prise
+        $produit =& $_line_med->_ref_produit;
+				$produit->loadClasseATC();
+        $produit->loadRefsFichesATC();
+        $code_ATC = $produit->_ref_ATC_2_code;
+				
+        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     
+          if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
+					  if($_line_med->_is_injectable){
+					    $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;  
+					  } else { 
+	            $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+					  }
+	          continue;
+					}
+				  $_line_med->calculPrises($this, $date, null, $with_calcul, $configs);
+        }
+				
+        // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
+				if(!$mode_feuille_soin){
+				  if(isset($_line_med->_administrations['aucune_prise']) && count($_line_med->_ref_prises) >= 1){
+				    if($_line_med->_is_injectable){
+				      $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;
+				    } else {
+				      $this->_ref_lines_med_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;   
 				    }
 				  }
-				  
-		    }
-		  }
-    }
-     
+				}
+
+			  // Suppression des prises prevues replanifiées
+			  if($with_calcul){
+			    $_line_med->removePrisesPlanif($mode_semainier);
+			  }				  
+	    }
+	  }
+    
+	  // Parcours des lignes d'elements
     if(!$mode_dispensation){
-			// Parcours des elements
 	    if($this->_ref_prescription_lines_element_by_cat){
 				foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
 				  foreach($elements_chap as $name_cat => $elements_cat){
 				    // Initialisation du compteur de lignes
 				    foreach($elements_cat as &$_elements){
 				 	    foreach($_elements as &$_line_element){
-				 	    		if(!$_line_element->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
-		                continue;  
-		              }
-		              // Chargement des administrations et des transmissions
-				      	  if($with_calcul){
-				      	    $_line_element->calculAdministrations($date, $mode_feuille_soin, null, $service_id);
-				      	  }
-				      	  
-		      	    	if($name_chap == "imagerie" || $name_chap == "consult"){
-		                if(($_line_element->debut == $date) && $_line_element->time_debut){
-								  	  $time_debut = substr($_line_element->time_debut, 0, 2);
-								  	  @$_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut]['total'] = 1;
-								  	  @$_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut]['total_disp'] = 1;
-								  	  
-								  	  @$_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
-		      	    	  }
-		      	    	}
-				 	    	  
-				      	  // Si aucune prise  
-				      	  if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
-						        if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
-						          $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-						          if($name_chap != "imagerie" && $name_chap != "consult"){
-						            continue;
-						          }
-								    }
-							        // Chargement des prises
-							        $_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat, $with_calcul, $configs);
-							      }
-							    // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
-							    if(!$mode_feuille_soin){
-							      if(isset($_line_element->_administrations['aucune_prise']) && count($_line_element->_ref_prises) >= 1){
-								      $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-							      }
+			 	    		if(!$_line_element->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+	                continue;  
+	              }
+	              // Chargement des administrations et des transmissions
+			      	  if($with_calcul){
+			      	    $_line_element->calculAdministrations($date, null, $service_id);
+			      	  }
+			      	  
+			      	  // Pre-remplissage du plan de soin dans le cas des examens d'imagerie et des consultations spec.
+	      	    	if($name_chap == "imagerie" || $name_chap == "consult"){
+	                if(($_line_element->debut == $date) && $_line_element->time_debut){
+							  	  $time_debut = substr($_line_element->time_debut, 0, 2);
+							  	  $_prises_elt =& $_line_element->_quantity_by_date["aucune_prise"][$_line_element->debut]['quantites'][$time_debut];
+							  	  $_prises_elt['total'] = 1;
+							  	  $_prises_elt['total_disp'] = 1;
+							  	  $_prises_elt[] = array("quantite" => 1, "heure_reelle" => $time_debut);
+	      	    	  }
+	      	    	}
+			 	    	  
+	      	    	// Pre-remplissage des prises prevues dans le dossier de soin
+			      	  if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+					        // Si aucune prise  
+			      	    if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
+					          $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 							    }
-				 	    
-	 			 	      // Suppression des prises prevues replanifiées
-				 	    	if($_line_element->_quantity_by_date && $with_calcul){
-							    foreach($_line_element->_quantity_by_date as $_type => $_quantity_by_date){
-							      foreach($_quantity_by_date as $_date => $_quantity_by_hour){
-							        if(!isset($_line_element->_quantity_by_date[$_type][$_date]['total'])){
-							          $_line_element->_quantity_by_date[$_type][$_date]['total'] = 0;
-									    }
-									    if(isset($_quantity_by_hour['quantites'])){
-								        foreach($_quantity_by_hour['quantites'] as $_hour => $_quantity){
-													$heure_reelle = @$_quantity[0]["heure_reelle"];
-		
-				                  // Recherche d'une planification correspondant à cette prise prevue
-				                  $planification = new CAdministration();
-				                  if(is_numeric($_type)){
-					                  $planification->prise_id = $_type;
-					                } else {
-					                  $planification->unite_prise = $_type;
-					                }
-					                $planification->original_dateTime = "$_date $heure_reelle:00:00";
-					                $planification->object_id = $_line_element->_id;
-					                $planification->object_class = "CPrescriptionLineElement";
-					                $count_planifications = $planification->countMatchingList();
-
-					                if($count_planifications){
-					                  $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-					                }
-								        	if($mode_semainier){
-										        $_line_element->_quantity_by_date[$_type][$_date]['total'] += $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'];
-										        $_line_element->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
-					                }
-								        }
-									    }
-							      }
-							    }
-							  }
+							    // Chargement des prises
+						      $_line_element->calculPrises($this, $date, $name_chap, $name_cat, $with_calcul, $configs);
+						    }
+						    
+						    // Stockage d'une ligne possedant des administrations ne faisant pas reference à une prise ou unite de prise
+						    if(!$mode_feuille_soin){
+						      if(isset($_line_element->_administrations['aucune_prise']) && count($_line_element->_ref_prises) >= 1){
+							      $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+						      }
+						    }
+			 	        
+ 			 	        // Suppression des prises prevues replanifiées
+			 	    	  if($with_calcul){
+			            $_line_element->removePrisesPlanif($mode_semainier);
+			          }
 					    }
 					  }
 				  }
 		    }
 	    }
     }
-    if(!$mode_dispensation){
-	    // Parcours des perfusions
-	    if($this->_ref_perfusions){
-	      foreach($this->_ref_perfusions as &$_perfusion){
- 				 	if(!$_perfusion->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
-            continue;  
-          }
-	        if(($date >= mbDate($_perfusion->_debut)) && ($date <= mbDate($_perfusion->_fin))){
-	          $this->_ref_perfusions_for_plan[$_perfusion->_id] = $_perfusion;
-	        }
-	      }
-	    }
-    }
+    
+    /*
+     * Parcours des perfusions
+     */
+    if($this->_ref_perfusions){
+      foreach($this->_ref_perfusions as &$_perfusion){
+				 	if(!$_perfusion->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+           continue;  
+         }
+         if(($date >= mbDate($_perfusion->_debut)) && ($date <= mbDate($_perfusion->_fin)) && !$_perfusion->_prises_prevues){
+           if($with_calcul){
+            $_perfusion->calculQuantiteTotal();
+	          $_perfusion->calculPrisesPrevues();
+             $_perfusion->calculAdministrations();
+           }
+           $this->_ref_perfusions_for_plan[$_perfusion->_id] = $_perfusion;
+         }
+      }
+    }  
   }
 }
 

@@ -46,7 +46,7 @@ class CAdministration extends CMbMetaObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["object_id"]         = "ref notNull class|CMbObject meta|object_class";
-    $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement";
+    $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement|CPerfusionLine";
     $specs["administrateur_id"] = "ref notNull class|CMediusers";
     $specs["prise_id"]          = "ref class|CPrisePosologie";
     $specs["quantite"]          = "float";
@@ -70,9 +70,7 @@ class CAdministration extends CMbMetaObject {
   	if($this->_ref_object){
       $this->_ref_object->loadRefsFwd();
   	}
-  	
     $dateFormat = "%d/%m/%Y à %Hh%M";
-
   	$this->_view = "Administration du ".mbTransformTime(null, $this->dateTime, $dateFormat)." par {$this->_ref_administrateur->_view}";
   	if($this->object_class === "CPrescriptionLineMedicament") {
   		$this->_view .= " ({$this->_ref_object->_ucd_view})";

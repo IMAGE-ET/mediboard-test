@@ -3089,7 +3089,7 @@ ul.select-tree .highlight {
   border: 2px solid #900;
 }
 
-.transmission_possible {
+.transmission_possible, a.transmission_possible {
   text-decoration: underline;
 }
 

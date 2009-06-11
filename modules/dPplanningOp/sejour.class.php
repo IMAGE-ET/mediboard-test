@@ -775,6 +775,9 @@ class CSejour extends CCodable {
     }
   }
   
+  /*
+   * Chargement de toutes les prescriptions liées au sejour (object_class CSejour)
+   */
   function loadRefsPrescriptions() {
   	$prescriptions = $this->loadBackRefs("prescriptions");
   	// Si $prescriptions n'est pas un tableau, module non installé

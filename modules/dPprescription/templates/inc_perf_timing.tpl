@@ -23,33 +23,41 @@ Main.add( function(){
   <input type="hidden" name="perfusion_id" value="{{$perfusion_id}}" />
 	<table class="form">
 	  <tr>
-	    <th class="category">{{$perfusion->_view}}</th>
+	    <th class="category text">
+	    <ul>
+	    {{foreach from=$perfusion->_ref_lines item=_perf_line name="foreach_perf"}}
+	      <li>{{$_perf_line->_view}}</li>
+	    {{/foreach}}
+	    </ul>
+	    
+	    {{$perfusion->_view}}
+	    </th>
 	  </tr>
 	  <tr>
 	    <td class="date">
-			  {{if $perfusion->date_debut_adm}}
-			    {{mb_label object=$perfusion field=date_debut_adm}}
-			    {{mb_field object=$perfusion field=date_debut_adm form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
-			    {{mb_field object=$perfusion field=time_debut_adm form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
-			    <button type="button" class="notext cancel" onclick="this.form.date_debut_adm.value = ''; this.form.time_debut_adm.value = ''; submitTiming();"></button>
+			  {{if $perfusion->date_pose}}
+			    {{mb_label object=$perfusion field=date_pose}}
+			    {{mb_field object=$perfusion field=date_pose form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
+			    {{mb_field object=$perfusion field=time_pose form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
+			    <button type="button" class="notext cancel" onclick="this.form.date_pose.value = ''; this.form.time_pose.value = ''; submitTiming();"></button>
 			  {{else}}
-			    <input type="hidden" name="date_debut_adm" value="" />
-			    <input type="hidden" name="time_debut_adm" value="" />
-			    <button type="button" class="submit" onclick="this.form.date_debut_adm.value = 'current'; this.form.time_debut_adm.value = 'current'; submitTiming();">{{tr}}CPerfusion-date_debut_adm{{/tr}} de la perfusion</button>
+			    <input type="hidden" name="date_pose" value="" />
+			    <input type="hidden" name="time_pose" value="" />
+			    <button type="button" class="submit" onclick="this.form.date_pose.value = 'current'; this.form.time_pose.value = 'current'; submitTiming();">{{tr}}CPerfusion-date_pose{{/tr}}</button>
 			  {{/if}}
 			</td>
 	  </tr>
 	  <tr>
 	    <td class="date">
-			  {{if $perfusion->date_fin_adm}}
-			    {{mb_label object=$perfusion field=date_fin_adm}}
-			    {{mb_field object=$perfusion field=date_fin_adm form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
-			    {{mb_field object=$perfusion field=time_fin_adm form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
-			    <button type="button" class="notext cancel" onclick="this.form.date_fin_adm.value = ''; this.form.time_fin_adm.value = ''; submitTiming();"></button>
+			  {{if $perfusion->date_retrait}}
+			    {{mb_label object=$perfusion field=date_retrait}}
+			    {{mb_field object=$perfusion field=date_retrait form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
+			    {{mb_field object=$perfusion field=time_retrait form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
+			    <button type="button" class="notext cancel" onclick="this.form.date_retrait.value = ''; this.form.time_retrait.value = ''; submitTiming();"></button>
 			  {{else}}
-			    <input type="hidden" name="date_fin_adm" value="" />
-			    <input type="hidden" name="time_fin_adm" value="" />
-			    <button type="button" class="submit" onclick="this.form.date_fin_adm.value = 'current'; this.form.time_fin_adm.value = 'current'; submitTiming();">{{tr}}CPerfusion-date_fin_adm{{/tr}} de la perfusion</button>
+			    <input type="hidden" name="date_retrait" value="" />
+			    <input type="hidden" name="time_retrait" value="" />
+			    <button type="button" class="submit" onclick="this.form.date_retrait.value = 'current'; this.form.time_retrait.value = 'current'; submitTiming();">{{tr}}CPerfusion-date_retrait{{/tr}}</button>
 			  {{/if}}
 			</td>
 	  </tr>

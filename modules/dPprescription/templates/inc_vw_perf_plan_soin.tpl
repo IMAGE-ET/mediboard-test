@@ -18,7 +18,7 @@
   <td class="text" style="border: 1px solid #ccc;">
     <ul>
  	   {{foreach from=$_perfusion->_ref_lines item=_line}}
- 	     <li>{{$_line->_view}}</li>
+ 	     <li style="padding: 5px 0px">{{$_line->_ucd_view}} ({{$_line->_posologie}})</li>
  	   {{/foreach}}
  	  </ul>
   </td>
@@ -45,6 +45,20 @@
 					             text-align: center">
 						  {{if $_perfusion->_debut > $_date_hour || ($_perfusion->_fin <= $_date_hour)}}
 						    <img src="images/icons/gris.gif" />
+						  {{else}}
+						    {{if isset($_perfusion->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
+			
+								  
+							    {{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perf_line"}}
+						<div style="padding: 10px 0px">
+								    {{$_perf_line->_quantite_administration}} ml
+								 </div>
+								 
+								 
+								   
+								  {{/foreach}}
+								 
+							  {{/if}}
 						  {{/if}}
 				    </td>
 	        {{/foreach}}
