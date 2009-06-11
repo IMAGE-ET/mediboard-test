@@ -377,10 +377,7 @@ table.main tbody.viewported td.viewport {
   border: 1px solid #000;
 }
 
-table.main td.halfPane {
-  width: 50%;
-}
-
+table.main td.halfPane,
 table.main th.halfPane {
   width: 50%;
 }
@@ -399,7 +396,8 @@ table.tbl td,table.tbl th {
   border-right: 1px dotted #DDD;
 }
 
-table.tbl td input,table.tbl td button {
+table.tbl td input,
+table.tbl td button {
   margin: 0;
 }
 
@@ -440,26 +438,31 @@ table.tbl th.title {
   border: #aaa 1px outset;
 }
 
-table.tbl td,div.tree-header {
+table.tbl td,
+div.tree-header {
   background-color: #fff;
   padding: 2px;
   white-space: nowrap;
   vertical-align: middle;
 }
 
-table.tbl td.error,table.tbl tr:hover td.error {
+table.tbl td.error,
+table.tbl tr:hover td.error {
   background-color: #f00;
 }
 
-table.tbl td.warning,table.tbl tr:hover td.warning {
+table.tbl td.warning,
+table.tbl tr:hover td.warning {
   background-color: #fc0;
 }
 
-table.tbl td.ok,table.tbl tr:hover td.ok {
+table.tbl td.ok,
+table.tbl tr:hover td.ok {
   background-color: #afa;
 }
 
-table.tbl tr.selected td,div.selected {
+table.tbl tr.selected td,
+div.selected {
   background-color: #ffc;
 }
 
@@ -498,12 +501,14 @@ div.previewfileMinus {
   overflow: auto;
 }
 
-table.tbl tr.clear,table.tbl tr.clear a {
+table.tbl tr.clear,
+table.tbl tr.clear a {
   background-color: #ddf;
   color: #000;
 }
 
-table.tbl tr.clear td,table.tbl tr.clear th {
+table.tbl tr.clear td,
+table.tbl tr.clear th {
   background-color: transparent;
   border: none;
 }
@@ -785,25 +790,6 @@ div.big-error {
   border-color: #a55;
 }
 
-#goUp {
-  background: #Ccc url(./images/icons/action_up.png) no-repeat center;
-  opacity: 0.5;
-  border: 1px solid #666;
-  cursor: pointer;
-  position: fixed;
-  width: 18px;
-  height: 18px;
-  right: 5px;
-  bottom: 5px;
-  z-index: 1000;
-  display: none;
-}
-
-#goUp :hover {
-  background-color: #fff;
-  opacity: 1;
-}
-
 /* @import "./tooltip.css   */
 span.tooltip-trigger {
   cursor: pointer;
@@ -880,7 +866,9 @@ div.postit table.decoration td.deco {
   opacity: .7;
 }
 
-div.postit table.decoration td.top-right,div.postit table.decoration td.top-left,div.postit table.decoration td.bottom-left {
+div.postit table.decoration td.top-right,
+div.postit table.decoration td.top-left,
+div.postit table.decoration td.bottom-left {
   background-color: transparent;
   opacity: 1;
 }
@@ -1034,7 +1022,10 @@ table.Offline td.button {
   vertical-align: middle;
 }
 
-table.Offline select,table.Offline option,table.Offline input,table.Offline button {
+table.Offline select,
+table.Offline option,
+table.Offline input,
+table.Offline button {
   height: 20px;
   font-size: 15px;
   font-weight: bold;
@@ -2104,14 +2095,14 @@ div.about div.nav {
   width: 100%;
   position: absolute;
   background-color: #000;
-  z-index: 10;
+  z-index: 100;
 }
 
 .chargementText {
   width: 20%;
   min-width: 150px;
   position: fixed;
-  z-index: 11;
+  z-index: 101;
   font-size: 1.2em;
   background-color: #fff;
   color: #000;

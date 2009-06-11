@@ -23,6 +23,9 @@ Main.add(function () {
 <a href="?m={{$m}}&amp;tab={{$a}}">Lancer cette page avec les menus</a>
 {{/if}}
 
+<button class="cancel">Annuler</button> <a class="button cancel" href="#1">Annuler</a>
+<button class="cancel notext">Annuler</button> <a class="button cancel notext" href="#1">Annuler</a>
+
 <div id="dom-creator"></div>
 
 <div id="modal" style="display: none;">test blah blah</div>

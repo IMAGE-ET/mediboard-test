@@ -307,18 +307,10 @@ a.button,
 input[type=submit],
 input[type=reset],
 input[type=button] {
-  color: #000;
-  text-decoration: none;
-  cursor: default;
-  border: 1px black solid;
-  font-size: 12px;
-  background-color: #ddd;
-  margin: 0 2px;
-  padding: 0px 2px;
   background-image: url(./images/buttons/button.png);
   background-repeat: repeat-x;
-  background-position: bottom;
-  height: 18px
+  background-position: left bottom;
+  padding-left: 18px;
 }
 
 a.button:hover,
@@ -327,253 +319,164 @@ input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover {
   background-image: url(./images/buttons/buttonover.png);
-  background-position: left bottom;
 }
 
 button.trash, a.button.trash {
   background-image: url(./images/buttons/trash.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.trash:hover, a.button.trash:hover {
   background-image: url(./images/buttons/trashover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.submit, a.button.submit {
   background-image: url(./images/buttons/save.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.submit:hover, a.button.submit:hover {
   background-image: url(./images/buttons/saveover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.new, a.button.new {
   background-image: url(./images/buttons/new.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.new:hover, a.button.new:hover {
   background-image: url(./images/buttons/newover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.print, a.button.print {
   background-image: url(./images/buttons/print.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.print:hover, a.button.print:hover {
   background-image: url(./images/buttons/printover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.cancel, a.button.cancel {
   background-image: url(./images/buttons/cancel.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.cancel:hover, a.button.cancel:hover {
   background-image: url(./images/buttons/cancelover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.modify, a.button.modify {
   background-image: url(./images/buttons/save.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.modify:hover, a.button.modify:hover {
   background-image: url(./images/buttons/saveover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 button.search, a.button.search {
   background-image: url(./images/buttons/search.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.search:hover, a.button.search:hover {
   background-image: url(./images/buttons/searchover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 button.tick, a.button.tick {
   background-image: url(./images/buttons/tick.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.tick:hover, a.button.tick:hover {
   background-image: url(./images/buttons/tickover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.down, a.button.down {
   background-image: url(./images/buttons/down.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.down:hover, a.button.down:hover {
   background-image: url(./images/buttons/downover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.change, a.button.change {
   background-image: url(./images/buttons/change.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.change:hover, a.button.change:hover {
   background-image: url(./images/buttons/changeover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.edit, a.button.edit {
   background-image: url(./images/buttons/edit.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.edit:hover, a.button.edit:hover {
   background-image: url(./images/buttons/editover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.hslip, a.button.hslip {
   background-image: url(./images/buttons/hslip.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.hslip:hover, a.button.hslip:hover {
   background-image: url(./images/buttons/hslipover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.add, a.button.add {
   background-image: url(./images/buttons/add.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.add:hover, a.button.add:hover {
   background-image: url(./images/buttons/addover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.remove, a.button.remove {
   background-image: url(./images/buttons/remove.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.remove:hover, a.button.remove:hover {
   background-image: url(./images/buttons/removeover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.stop, a.button.stop {
   background-image: url(./images/buttons/stop.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.stop:hover, a.button.stop:hover {
   background-image: url(./images/buttons/stopover.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send, a.button.send {
   background-image: url(images/buttons/send.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send:hover, a.button.send:hover {
   background-image: url(images/buttons/send.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-cancel, a.button.send-cancel {
   background-image: url(images/buttons/send-cancel.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-cancel:hover, a.button.send-cancel:hover {
   background-image: url(images/buttons/send-cancel.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-again, a.button.send-again {
   background-image: url(images/buttons/send-again.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-again:hover, a.button.send-again:hover {
   background-image: url(images/buttons/send-again.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-problem, a.button.send-problem {
   background-image: url(images/buttons/send-problem.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-problem:hover, a.button.send-problem:hover {
   background-image: url(images/buttons/send-problem.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-auto, a.button.send-auto {
   background-image: url(images/buttons/send-auto.png);
-  background-position: left bottom;
-  padding-left: 18px;
 }
 
 button.send-auto:hover, a.button.send-auto:hover {
   background-image: url(images/buttons/send-auto.png);
-  background-position: left bottom;
-  padding-left: 18px;
-}
-
-button.notext, button.notext:hover{
-  padding : 0px 0px 0px 14px;
-}
-
-a.notext, a.notext:hover{
-  padding : 0px 0px 1px 18px;
 }
 
 /* Standard table */
@@ -686,8 +589,13 @@ table#header table.titleblock td.titlecell {
 }
 
 .touchscreen button, 
-.touchscreen button:hover {
+.touchscreen button:hover,
+.touchscreen button.notext,
+.touchscreen button.notext:hover,
+.touchscreen a.button, 
+.touchscreen a:hover.button,
+.touchscreen a.button.notext,
+.touchscreen a:hover.button.notext {
   background-position: 3px 140%;
   background-repeat: repeat-x;
-  padding-left: 1.4em;
 }
