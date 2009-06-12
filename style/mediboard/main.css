@@ -517,7 +517,6 @@ div#console div {
 }
 
 div#console div#console-title {
-  font-family: "Arial";
   font-weight: bold;
   text-align: center;
 }
@@ -680,7 +679,6 @@ th.greedyPane {
 }
 
 th.title {
-  font-family: "arial narrow", sans-serif;
   font-size: 14px;
   font-weight: bold;  
   text-align: center;
