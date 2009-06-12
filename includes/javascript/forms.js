@@ -438,11 +438,29 @@ function prepareForm(oForm, bForcePrepare) {
 		    
 		    // Focus on first text input
 		    if (bGiveFormFocus && oElement.type == "text" && oElement.visible() && !oElement.disabled && !oElement.getAttribute("readonly")) {
-		      // Internet Explorer will not give focus to a not visible element but will raise an error
-		      if (oElement.clientWidth > 0) {
-		        oElement.focus();
-		        bGiveFormFocus = false;
-		      }
+		      var i, applets = document.applets;
+          if (applets.length) {
+            window._focusElement = oElement;
+            var inactiveApplets = applets.length,
+                tries = 50;
+                
+            function waitForApplet() {
+              inactiveApplets = applets.length;
+              for(i = 0; i < applets.length; i++) {
+                if (applets[i].isActive && applets[i].isActive()) inactiveApplets--;
+                else break;
+              }
+              if (inactiveApplets == 0) {
+                window._focusElement.focus();
+                return;
+              }
+              else if (tries--) setTimeout(waitForApplet, 100);
+            }
+
+            waitForApplet();
+          }
+          else oElement.focus();
+		      bGiveFormFocus = false;
 		    }
 		    
 		    // Won't make it resizable on IE
