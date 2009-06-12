@@ -447,7 +447,7 @@ function prepareForm(oForm, bForcePrepare) {
             function waitForApplet() {
               inactiveApplets = applets.length;
               for(i = 0; i < applets.length; i++) {
-                if (applets[i].isActive && applets[i].isActive()) inactiveApplets--;
+                if (Prototype.Browser.IE || applets[i].isActive && applets[i].isActive()) inactiveApplets--;
                 else break;
               }
               if (inactiveApplets == 0) {
