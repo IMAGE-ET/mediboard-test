@@ -16,5 +16,5 @@ $object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
 $smarty = new CSmartyDP();
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 $smarty->assign("object", $object);
-$smarty->display("vw_object_idsante400.tpl");
+$smarty->display("inc_object_idsante400.tpl");
 ?>

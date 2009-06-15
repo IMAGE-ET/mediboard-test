@@ -1,4 +1,4 @@
-<?php /* $Id: httpreq_vw_object_idsante400.php 6069 2009-04-14 10:17:11Z phenxdesign $ */
+<?php /* $Id $ */
 
 /**
  * @package Mediboard

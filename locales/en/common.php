@@ -147,4 +147,6 @@ $locales['User'] = '';
 $locales['Unsend'] = '';
 $locales['Resend'] = '';
 $locales['Impossible'] = '';
+$locales['Infos'] = 'Infos';
+$locales['Actions'] = 'Actions';
 ?>

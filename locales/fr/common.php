@@ -147,4 +147,6 @@ $locales['User preferences'] = 'Préferences utilisateur';
 $locales['Unsend'] = 'Annuler envoi';
 $locales['Resend'] = 'Renvoyer';
 $locales['Impossible'] = 'Impossible';
+$locales['Infos'] = 'Infos';
+$locales['Actions'] = 'Actions';
 ?>

@@ -60,10 +60,8 @@ Main.add(function () {
 	
 					<!-- Historique & identifiants externes-->
 			    <td class="text" style="vertical-align: middle; width: 1%">
-			      {{mb_include module=system template=vw_object_idsante400 object=$_doc_item}}
-			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}', 'objectViewHistory');">
-							<img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-			      </span>
+			      {{mb_include module=system template=inc_object_idsante400 object=$_doc_item}}
+			      {{mb_include module=system template=inc_object_history object=$_doc_item}}
 					</td>
 
 				</tr>

@@ -80,4 +80,5 @@ $locales['CPersonnel-title-modify'] = 'Modification du personnel';
 $locales['CPersonnel.all'] = 'Tous le personnel';
 $locales['CPersonnel.select'] = 'Choisir';
 $locales['CMediusers-back-personnels'] = 'Rôles de personnel';
+$locales['mod-dPpersonnel-tab-vw_affectations_multiples'] = 'Affectations multiples';
 ?>

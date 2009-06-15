@@ -638,12 +638,18 @@ class CMbObject {
   /**
    * Build and load an object with a given GUID
    * @param guid $guid
+   * @param bool $cached Use cache 
    * @return CMbObject Loaded object, null if inconsistent Guid 
    */
-  static function loadFromGuid($guid) {
+  static function loadFromGuid($guid, $cached = false) {
     list($class, $id) = explode('-', $guid);
     if ($class && $id) {
 	    $object = new $class;
+	    
+      if ($cached) {
+        return $object->getCached($id);
+      }
+
 	    return $object->load($id);
     }
     return null;
