@@ -30,18 +30,6 @@
        </a>
 	    
       {{$object->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
-      
-      {{if $sejour->entree_reelle}}
-      <form name="viewSoin" method="get" action="?" style="float: right">
-			  <input type="hidden" name="m" value="soins" />
-			  <input type="hidden" name="tab" value="vw_idx_sejour" />
-			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-			  <input type="hidden" name="date" value="{{$sejour->entree_reelle|date_format:'%Y-%m-%d'}}" />
-			  <input type="hidden" name="mode" value="1" />
-			  <input type="hidden" name="_active_tab" value="dossier_soins" /> 
-			  <button type="button" class="search" onclick="this.form.submit();">Dossier de soin</button>
-		  </form>
-		  {{/if}}
     </th>
   </tr>
 
