@@ -1130,6 +1130,7 @@ class CPrescription extends CMbObject {
     	if($withRefs){
 	    	$line_element->loadRefsPrises();
 	    	$line_element->loadRefExecutant();
+	    	$line_element->loadRefPraticien();
 	    }
     	$line_element->_ref_element_prescription->loadRefCategory();
     	

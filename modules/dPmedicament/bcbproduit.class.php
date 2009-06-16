@@ -38,6 +38,7 @@ class CBcbProduit extends CBcbObject {
   var $libelle_presentation       = null;
   var $nb_presentation            = null;
   var $libelle_unite_presentation = null;
+  var $libelle_unite_presentation_pluriel = null;
   var $libelle_conditionnement    = null;
   var $rapport_unite_prise        = null;
   var $dosages                    = null;
@@ -354,6 +355,7 @@ class CBcbProduit extends CBcbObject {
   	$query = "SELECT * FROM `IDENT_UNITES_DE_PRESENTATION` WHERE `CODE_UNITE_DE_PRESENTATION` = '$code_unite_presentation';";
   	$presentation = $ds->loadHash($query);
   	$this->libelle_unite_presentation = $presentation["LIBELLE_UNITE_DE_PRESENTATION"];
+  	$this->libelle_unite_presentation_pluriel = $presentation["LIBELLE_UNITE_DE_PRESENTATION_PLURIEL"];
   	
   	return $conditionnement;
   }
@@ -370,10 +372,6 @@ class CBcbProduit extends CBcbObject {
   	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE1"], $conditionnement["CODE_UNITE_DE_CONTENANCE1"], $conditionnement["NB_UP1"]);
   	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE2"], $conditionnement["CODE_UNITE_DE_CONTENANCE2"], $conditionnement["NB_UP2"]);
   	
-  	// Ajout de la presentation
-    if($this->libelle_presentation){
-      $this->rapport_unite_prise[$this->libelle_presentation][$this->libelle_unite_presentation] = $this->nb_unite_presentation;
-    }
     $this->loadLibelleConditionnement($conditionnement["CODE_CONDITIONNEMENT"]);    
   }
   
@@ -390,7 +388,37 @@ class CBcbProduit extends CBcbObject {
     $query = "SELECT LIBELLE_UNITE_DE_CONTENANCE FROM `IDENT_UNITES_DE_CONTENANCE` WHERE `CODE_UNITE_DE_CONTENANCE` = '$code_unite_contenance';";
     $unite_contenance = $ds->loadResult($query);
     $this->rapport_unite_prise[$unite_prise][$unite_contenance] = $nb_up;
+    
+    // Ajout de la presentation
+    if($this->libelle_presentation){
+      $this->rapport_unite_prise[$this->libelle_presentation][$this->libelle_unite_presentation] = $this->nb_unite_presentation;
+    }
   }
+  
+  
+  function loadRapportUnitePriseByCIS(){
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODECIS` = '$this->code_cis';";
+  	$_produits = $ds->loadList($query);
+  	
+  	$this->rapport_unite_prise = array();
+  	$produits = array();
+  	foreach($_produits as $_produit){
+  	  $produit = CBcbProduit::get($_produit["CODE_CIP"]);
+
+  	  $produit->loadConditionnement();
+      $produits[] = $produit;
+  	  // Fusion des tableaux d'unite de prises
+  	  foreach($produit->rapport_unite_prise as $_presentation_produit => $_unites_produit){
+  	    foreach($_unites_produit as $_unite_produit => $valeur_produit){
+  	      $this->rapport_unite_prise[$_presentation_produit][$_unite_produit] = $valeur_produit;
+  	      $this->rapport_unite_prise["$_presentation_produit ($valeur_produit $_unite_produit)"][$_unite_produit] = $valeur_produit;
+  	    }
+  	  }
+  	}
+  	return $produits;
+  }
+  
   
   function loadUnitesPrise(){
     $ds = CBcbObject::getDataSource();
@@ -567,7 +595,12 @@ class CBcbProduit extends CBcbObject {
   function loadRefPosologies(){
     $ds = CBcbObject::getDataSource();
     $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
-    $posologies = $ds->loadList($query);
+    /*
+    $query = "SELECT * FROM `POSO_PRODUITS` 
+              LEFT JOIN IDENT_PRODUITS ON  IDENT_PRODUITS.CODE_CIP = POSO_PRODUITS.CODE_CIP
+              WHERE IDENT_PRODUITS.CODECIS = '$this->code_cis' ORDER BY `NO_POSO` ASC;";
+*/    
+$posologies = $ds->loadList($query);
     
     // Chargement de chaque posologie
     $this->_ref_posologies = array();
@@ -580,6 +613,7 @@ class CBcbProduit extends CBcbObject {
       }
       $view_poso[] = $mbposologie->_view;
     }
+    //$this->loadConditionnement();
     return $this->_ref_posologies;
   }
   

@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
-
+ 
 // Recuperation des variables
 $prescription_id = mbGetValueFromGet("prescription_id");
 $chapitre        = mbGetValueFromGet("chapitre", "");
@@ -51,6 +51,7 @@ $pharmacien = new CMediusers();
 if($prescription->_ref_prescription_lines){
 	foreach($prescription->_ref_prescription_lines as $_line){
 		$_line->loadRefLogValidationPharma();
+		$_line->loadRefPraticien();
 		$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
 	}
 }

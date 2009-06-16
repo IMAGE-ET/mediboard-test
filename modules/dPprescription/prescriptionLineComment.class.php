@@ -57,6 +57,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     parent::updateFormFields();
     $this->_fin_reelle = "";
     $this->_view = $this->commentaire;
+    $this->loadRefsFwd();
   }
   
   function updateDBFields(){

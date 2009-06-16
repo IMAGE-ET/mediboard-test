@@ -114,17 +114,43 @@ class CPerfusionLine extends CMbObject {
   	parent::loadRefsFwd();
     $this->loadRefPerfusion();
     
-    if($this->_ref_produit->libelle_presentation){
-      $this->_unites_prise[] = $this->_ref_produit->libelle_presentation;
-    }
+    $this->_unites_prise = array();
+    $produits = $this->_ref_produit->loadRapportUnitePriseByCIS();
+    
+    $libelle_unite_presentation = $this->_ref_produit->libelle_unite_presentation;
+    $libelle_unite_presentation_pluriel = $this->_ref_produit->libelle_unite_presentation_pluriel;
+   
+    
     foreach($this->_ref_produit->_ref_posologies as $_poso){
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
-      if($_poso->p_kg) {
-        // On ajoute la poso avec les /kg
-        $this->_unites_prise[] = "$unite/kg";
+      
+      if($unite){
+	      $coef_adm = $this->_ref_produit->rapport_unite_prise[$unite][$libelle_unite_presentation];
+        if($_poso->p_kg) {
+	        // On ajoute la poso avec les /kg
+	          $_presentation = "";
+		        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+		          $_presentation = " ($coef_adm $libelle_unite_presentation/kg)";
+		        }
+		        $this->_unites_prise[] = "$unite/kg".$_presentation;
+	      }
+        $_presentation = "";
+        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+          $_presentation = " ($coef_adm $libelle_unite_presentation)";
+        }
+        $this->_unites_prise[] = $unite.$_presentation;
       }
-    	$this->_unites_prise[] = $unite;
     }
+    
+    // Ajout de la presentation comme unite de prise
+	  foreach($produits as $_produit){
+	    if ($_produit->libelle_presentation){
+	      $libelle_unite_presentation = $_produit->libelle_unite_presentation;
+		    $coef_adm = $_produit->rapport_unite_prise[$_produit->libelle_presentation][$libelle_unite_presentation];
+	      $this->_unites_prise[] = "{$_produit->libelle_presentation} ($coef_adm $libelle_unite_presentation)";
+	    }
+    }
+    
     if(is_array($this->_unites_prise)){
       $this->_unites_prise = array_unique($this->_unites_prise);
     }

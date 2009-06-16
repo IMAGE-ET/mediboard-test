@@ -268,9 +268,10 @@ class CPrescriptionLine extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    $this->loadRefsFwd();
+    //$this->loadRefsFwd();
     $this->countParentLine();
     $this->countPrisesLine();
+    $this->loadRefPrescription();
     
     $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
@@ -512,10 +513,6 @@ class CPrescriptionLine extends CMbObject {
 				  $log->object_class = $_administration->_class_name;
 				  $log->loadMatchingObject();
 				  $log->loadRefsFwd();
-				  
-				  if($this->_class_name === "CPrescriptionLineMedicament"){
-				    $this->_ref_produit->loadConditionnement();
-				  }
 				  $log->_ref_object->_ref_object =& $this;
 				  
 				  if($_administration->prise_id){
@@ -621,8 +618,7 @@ class CPrescriptionLine extends CMbObject {
 		    $unite_prise = ($_prise->_unite_sans_kg) ? $_prise->_unite_sans_kg : $_prise->unite_prise;
 
 		    $produit =& $this->_ref_produit; 
-		    $produit->loadConditionnement();
-		    
+		    $produit->loadRapportUnitePriseByCIS();
 		    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
 		    if($_prise->unite_prise == $produit->libelle_presentation){		        
 		      $_prise->_quantite_administrable *= $produit->nb_unite_presentation;

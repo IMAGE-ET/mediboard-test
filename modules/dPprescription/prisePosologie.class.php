@@ -375,7 +375,9 @@ class CPrisePosologie extends CMbMetaObject {
       
 		  if(!$this->_quantite_with_coef && $poids_ok){
 		    $unite_prise = ($this->_unite_sans_kg) ? $this->_unite_sans_kg : $this->unite_prise;
-		    $produit->loadConditionnement();
+		    
+		    $produit->loadRapportUnitePriseByCIS();
+		    
 		    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
 		    if($this->unite_prise == $produit->libelle_presentation){		        
 		      $this->quantite *= $produit->nb_unite_presentation;

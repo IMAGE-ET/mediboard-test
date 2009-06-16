@@ -149,11 +149,12 @@ Main.add(window.print);
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
         {{if !$prescription->object_id}}
-	        {{if $line_medicament_element_no_ald->_ref_substitution_lines|@count}}
+	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
+	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPerfusion|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
 	        <strong>Substitutions possibles:</strong> 
-	        	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
+	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med}}
@@ -168,10 +169,11 @@ Main.add(window.print);
       {{else}}
         {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald}}
         {{if !$prescription->object_id}}
-	        {{if $line_medicament_element_no_ald->_ref_substitution_lines|@count}}
+	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
+	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPerfusion|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
-	        <strong>Substitutions possibles:</strong> 
+	          <strong>Substitutions possibles:</strong> 
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}

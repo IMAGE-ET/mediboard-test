@@ -1249,7 +1249,93 @@ class CSetupdPprescription extends CSetup {
             CHANGE `time_fin_adm` `time_retrait` TIME;";
 	  $this->addQuery($sql);
 	  
-		$this->mod_version = "0.86";
+	  $this->makeRevision("0.86");
+	  
+	  // TODO: A supprimer apres les mises a jour (d'ici 1 semaine)
+	  function updatePrises(){
+	    set_time_limit(360);
+
+			$ds_std = CSQLDataSource::get("std");
+			
+			// Chargement des prises des medicaments
+			$query = "SELECT prescription_line_medicament.code_cip, unite_prise 
+			          FROM prise_posologie
+								LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = prise_posologie.object_id AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
+								GROUP BY prescription_line_medicament.code_cip, unite_prise";
+			$lines_by_type["prises"] = $ds_std->loadList($query);
+			
+			$query = "SELECT prescription_line_medicament.code_cip, unite_prise 
+			          FROM administration
+								LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND  administration.object_class = 'CPrescriptionLineMedicament'
+								GROUP BY prescription_line_medicament.code_cip, unite_prise";
+			$lines_by_type["adm"] = $ds_std->loadList($query);
+			
+			$query = "SELECT code_cip, unite as unite_prise
+			          FROM perfusion_line
+							  GROUP BY code_cip, unite_prise";
+			$lines_by_type["perf"] = $ds_std->loadList($query);
+			
+			foreach($lines_by_type as $lines){
+				foreach($lines as $_line){
+				  $code_cip = $_line["code_cip"];
+				  $unite_prise = $_line["unite_prise"];
+				  
+				  if(!$code_cip || $unite_prise == "aucune_prise" || !$unite_prise){
+				    continue;
+				  }
+				  $produit = new CBcbProduit();
+				  $produit->load($code_cip);
+				  $produit->loadRapportUnitePriseByCIS();
+				  
+				  $libelle_unite_presentation = $produit->libelle_unite_presentation;
+				  $libelle_unite_presentation_pluriel = $produit->libelle_unite_presentation_pluriel;
+			
+				  $_unite_prise = preg_replace("/\/kg$/i", '', $unite_prise);
+				  $coef_adm = $produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation];
+				  
+				  // si l'unite de prise ne correspond pas au libelle de presentation, on rajouter des informations dans l'unite de prise
+				  if (stripos($libelle_unite_presentation_pluriel, $unite_prise) === false){
+				    // Prise en kg
+				    if($_unite_prise != $unite_prise){
+				      $prises[$code_cip][$unite_prise] = "$unite_prise ($coef_adm $libelle_unite_presentation/kg)"; 
+				    }
+				    else {
+				      $prises[$code_cip][$unite_prise] = "$unite_prise ($coef_adm $libelle_unite_presentation)"; 
+				    }
+				  }
+				}
+			}
+			
+			foreach($prises as $code_cip => $prises_by_unite){
+			  foreach($prises_by_unite as $unite_prise => $libelle_prise){
+			    $query = "UPDATE prise_posologie, prescription_line_medicament
+										SET unite_prise = '$libelle_prise'
+										WHERE unite_prise = '$unite_prise'
+			              AND prise_posologie.object_id = prescription_line_medicament.prescription_line_medicament_id
+			              AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
+										AND prescription_line_medicament.code_cip = '$code_cip'";
+			    $ds_std->exec($query);
+				  
+				  $query = "UPDATE administration, prescription_line_medicament
+										SET unite_prise = '$libelle_prise'
+										WHERE unite_prise = '$unite_prise'
+			              AND administration.object_id = prescription_line_medicament.prescription_line_medicament_id
+			              AND administration.object_class = 'CPrescriptionLineMedicament'
+										AND prescription_line_medicament.code_cip = '$code_cip'";
+			    $ds_std->exec($query);
+				  
+				  $query = "UPDATE perfusion_line
+										SET unite = '$libelle_prise'
+										WHERE unite = '$unite_prise'
+			              AND perfusion_line.code_cip = '$code_cip'";
+			    $ds_std->exec($query);
+			  }
+			}
+			return true;
+	  }
+	  $this->addFunctions("updatePrises");
+	  
+		$this->mod_version = "0.87";
   }  
 }
 

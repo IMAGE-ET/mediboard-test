@@ -30,6 +30,7 @@ $object->loadRefPrescription();
 foreach($object->_ref_substitution_lines as $_lines){
 	foreach($_lines as $_line_sub){
 	  if($_line_sub->_class_name == "CPrescriptionLineMedicament"){
+	    $_line_sub->loadRefsFwd();
 	    $_line_sub->loadRefsPrises();
 	  } else {
 	    $_line_sub->loadRefsLines();

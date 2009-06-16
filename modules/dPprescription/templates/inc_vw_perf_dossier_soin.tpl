@@ -143,7 +143,9 @@
 											       {{if $nb_prevue && ($nb_adm || $nb_adm == 0)}}
 											         {{if $nb_prevue == $nb_adm}}administre
 											         {{elseif $nb_adm == '0'}}administration_annulee
-											         {{elseif $nb_adm}}administration_partielle{{/if}}
+											         {{elseif $nb_adm}}administration_partielle
+											         {{elseif $_date_hour < $now}}non_administre
+											         {{else}}a_administrer{{/if}}
 											       {{/if}}">
 									
 									 {{* Affichage des prises prevues et des administrations *}}

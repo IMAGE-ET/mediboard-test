@@ -168,6 +168,7 @@ if($prescription->_id){
 	  		foreach($lines_by_cat as $type_elt => $lines_by_type){
 	  			foreach($lines_by_type as $key => $_line){
 	  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
+	  			  $_line->loadRefsFwd();
 	  			  if($_line->_class_name == "CPrescriptionLineElement"){
 	  			    $_line->loadRefsPrises();
 	  			  }
@@ -189,6 +190,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  	foreach($lines_by_type as $med_id => $_line_med){
 		  	  if($_line_med->_class_name == "CPrescriptionLineMedicament"){
 		  	    $_line_med->countBackRefs("administration");
+		  	    $_line_med->loadRefsFwd();
 		  	    $_line_med->loadRefsSubstitutionLines();
 		  	    if($_line_med->_guid == $full_line_guid && $prescription->object_id){
 		  	     $_prat_id = !$prescription->object_id ? $prescription->praticien_id : null;

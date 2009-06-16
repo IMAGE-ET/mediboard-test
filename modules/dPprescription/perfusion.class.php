@@ -435,15 +435,13 @@ class CPerfusion extends CMbObject {
 			  }
 
 			  // Chargement du tableau de correspondance entre les unites de prises
-	      $_perf_line->_ref_produit->loadConditionnement();
-	      
+	      $_perf_line->_ref_produit->loadRapportUnitePriseByCIS();
 	      $coef = @$_perf_line->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
 	      $_perf_line->_quantite_administration = $_perf_line->quantite * $coef;
 	      if(isset($poids)){
 	        $_perf_line->_quantite_administration *= $poids;
 	      }
 			  $this->_quantite_totale += $_perf_line->_quantite_administration;
-			  
 			  $produit =& $_perf_line->_ref_produit;   
     	  $_perf_line->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
 		    $_perf_line->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;

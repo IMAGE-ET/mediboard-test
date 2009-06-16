@@ -96,12 +96,14 @@ $lines["medicaments"]["comment"]["ald"] = array();
 $lines["medicaments"]["comment"]["no_ald"] = array();
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
+	  $line_medicament->loadRefsFwd();
 	  if(!$prescription->object_id){
 	    if($line_medicament->_class_name == "CPrescriptionLineMedicament"){
 		    $line_medicament->loadRefsSubstitutionLines();
 		    foreach($line_medicament->_ref_substitution_lines as $_subst_by_chap){
 		      foreach($_subst_by_chap as $_subst_line){
 		        $_subst_line->loadRefsPrises();
+		        $_subst_line->loadRefsFwd();
 		      }
 		    }
 	    }
@@ -187,6 +189,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 				if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
 				  continue;
 			  }
+			  $element->loadRefsFwd();
 			  $executant = "aucun";
 		    if($element->_ref_executant){
 		      $executant = $element->_ref_executant->_guid;

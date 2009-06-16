@@ -25,6 +25,7 @@ $urgences = array();
 $lines = array();
 $pancarte = array();
 $lits = array();
+$list_lines = array();
 
 // Chargement des prescriptions qui sont dans le service selectionné
 $prescription = new CPrescription();
