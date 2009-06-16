@@ -15,11 +15,15 @@ Main.add(function () {
     Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null, true);
   }
   
-  if($('bloodSalvage')){
+  if($('soins')){
+    loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
+  }
+  
+  if($('bloodSalvage_tab')){
     var url = new Url;
     url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage");
     url.addParam("op","{{$selOp->_id}}");
-    url.requestUpdate("bloodSalvage", { waitingText: null});
+    url.requestUpdate("bloodSalvage_tab", { waitingText: null});
   }
   
   if($('Imeds_tab')){
@@ -207,15 +211,14 @@ function reloadPrescription(prescription_id){
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
-  <li><a href="#one">Timings</a></li>
-  <li onclick="reloadAnesth('{{$selOp->_id}}');"><a href="#two">Anesthésie</a></li>
+  <li><a href="#timing_tab">Timings</a></li>
+  <li onclick="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesthésie</a></li>
   {{if $isbloodSalvageInstalled}}
-  <li><a href="#bloodSalvage">Cell Saver</a></li>
+  <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
   {{/if}}
-  <li><a href="#threebis">Diagnostics</a></li>
-  <li><a href="#three">CCAM</a></li>
-  <li><a href="#four">NGAP</a></li>
-  <li><a href="#five">Dossier</a></li>
+  <li><a href="#diag_tab">Diagnostics</a></li>
+  <li><a href="#codage_tab">Actes</a></li>
+  <li><a href="#dossier_tab">Dossier</a></li>
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
     <li onclick="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
@@ -227,8 +230,8 @@ function reloadPrescription(prescription_id){
   
 <hr class="control_tabs" />
 
-<!-- Premier onglet => Timings + Personnel -->
-<div id="one" style="display:none">
+<!-- Timings + Personnel -->
+<div id="timing_tab" style="display:none">
  	<div id="timing">
     {{include file="inc_vw_timing.tpl"}}
   </div>
@@ -237,62 +240,89 @@ function reloadPrescription(prescription_id){
   </div>
 </div>
 
-<!-- Deuxieme onglet => Anesthesie -->
-<div id="two" style="display:none">
-	<script type="text/javascript">
-	Main.add(function () {
-	  Control.Tabs.create('tabs-anesth', true);
-	});
-	</script>
-	
-	<ul id="tabs-anesth" class="control_tabs">
-	  <li><a href="#info_anesth">Dossier d'anesthésie</a></li>
-	  <li><a href="#anesth">Induction peropératoire</a></li>
-	</ul>
-	
-	<hr class="control_tabs" />
-  
-  <div id="info_anesth" style="display: none;">
+<!-- Anesthesie -->
+<div id="anesth_tab" style="display:none">
+  <div id="anesth">
+    {{include file="inc_vw_anesth.tpl"}}
+  </div>  
+  <div id="info_anesth">
   {{include file="inc_vw_info_anesth.tpl"}}
   </div>
-  <div id="anesth" style="display: none;">
-    {{*A priori inutile de le charger la première fois
-    	* include file="inc_vw_anesth.tpl"
-  	  *}}
-  </div>  
   
 </div>
+
 {{if $isbloodSalvageInstalled}}
 <!--  Cell Saver -->
-<div id="bloodSalvage" style="display:none"></div>
+<div id="bloodSalvage_tab" style="display:none"></div>
 {{/if}}
 <!-- Troisieme onglet bis: codage diagnostics CIM -->
-<div id="threebis" style="display:none">
+<div id="diag_tab" style="display:none">
   <div id="cim">
     {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
   </div>
 </div>
 
-<!-- Troisieme onglet: codage acte ccam -->
-<div id="three" style="display:none">
-  <div id="ccam">
-    {{assign var="subject" value=$selOp}}
-    {{mb_include module=dPsalleOp template=inc_codage_ccam}}
+<!-- codage des acte ccam et ngap -->
+<div id="codage_tab" style="display:none">
+
+  {{if $can->edit || $modif_operation}}
+  <form name="infoFactu" action="?m={{$m}}" method="post">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_planning_aed" />
+  <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+  <input type="hidden" name="del" value="0" />
+  <table class="form">
+    <tr>
+      <th style="text-align: right">
+        {{mb_label object=$selOp field=anapath}}
+      </th>
+      <td>
+        {{mb_field object=$selOp field=anapath typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+      </td>
+      <th style="text-align: right">
+        {{mb_label object=$selOp field=prothese}}
+      </th>
+      <td>
+        {{mb_field object=$selOp field=prothese typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+      </td>
+    </tr>
+    <tr>
+      <th style="text-align: right">
+        {{mb_label object=$selOp field=labo}}
+      </th>
+      <td style="vertical-align:middle;">     
+        {{mb_field object=$selOp field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+      </td>
+      <td colspan="2" />
+    </tr>
+  </table>
+  </form>
+  {{/if}}
+  <ul id="codage_tab_group" class="control_tabs">
+    <li><a href="#ccam_tab">CCAM</a></li>
+    <li><a href="#ngap_tab">NGAP</a></li>
+  </ul>
+  
+  <hr class="control_tabs" />
+  
+  <div id="ccam_tab" style="display:none">
+    <div id="ccam">
+      {{assign var="subject" value=$selOp}}
+      {{mb_include module=dPsalleOp template=inc_codage_ccam}}
+    </div>
+  </div>
+
+  <div id="ngap_tab" style="display:none">
+    <div id="listActesNGAP">
+      {{assign var="object" value=$selOp}}
+      {{mb_include module=dPcabinet template=inc_codage_ngap}}
+    </div>
   </div>
 </div>
-<!-- Fin du troisieme onglet -->
 
-<!-- Quatrième onglet => Codage acte NGAP -->
-<div id="four" style="display:none">
-  <div id="listActesNGAP">
-    {{assign var="object" value=$selOp}}
-    {{mb_include module=dPcabinet template=inc_codage_ngap}}
-  </div>
-</div>
-
-<!-- Cinquieme onglet => Dossier Medical -->
+<!-- Dossier Medical et documents-->
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
-<div id="five" style="display:none">
+<div id="dossier_tab" style="display:none">
 	<table class="form">
 		<tr>
 		  <th class="title">Documents</th>
@@ -339,6 +369,7 @@ function reloadPrescription(prescription_id){
 {{/if}}
 
 {{if $isImedsInstalled}}
+<!-- Affichage de la prescription -->
 <div id="Imeds_tab" style="display:none">
 </div>
 {{/if}}

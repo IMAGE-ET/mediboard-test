@@ -11,30 +11,6 @@
   <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
   {{/if}}
   <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
-      
-  {{if $can->edit || $modif_operation}}
-  {{if ($subject->_class_name=="COperation")}}
-  <table class="form">
-    <tr>
-     
-      <th style="vertical-align:middle; text-align: right">
-        {{mb_label object=$subject field=anapath}}
-      </th>
-      <td style="vertical-align:middle;">
-        {{mb_field object=$subject field=anapath typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
-      </td>
-     
-      <th style="vertical-align:middle; text-align: right">
-        {{mb_label object=$subject field=labo}}
-      </th>
-      <td style="vertical-align:middle;">     
-        {{mb_field object=$subject field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
-      </td>
-     
-    </tr>
-  </table>
-  {{/if}}
-  {{/if}}
   
   {{if $can->edit || $modif_operation}}
   <table class="form">
@@ -78,7 +54,7 @@
         
         <input type="text" size="10" name="_newCode" />
         
-        <button class="tick" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
+        <button class="tick" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
           {{tr}}Ajouter{{/tr}}
         </button>        
       </td>

@@ -106,8 +106,8 @@ submitNewBloodSalvage = function(oForm) {
 	submitFormAjax(oForm,'systemMsg',{ onComplete: function() {
 	    var url = new Url;
 	    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage");
-	    url.requestUpdate("bloodSalvage");
-	}
+	    url.requestUpdate("bloodSalvage_tab");
+	  }
 	});
 }
 

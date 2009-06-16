@@ -70,7 +70,8 @@ ActesCCAM = {
 
 function setCodeTemp(code){
   var oForm = document.manageCodes;
-  oForm._newCode.value = code; 
+  oForm._newCode.value = code;
+  oForm.addCode.onclick();
 }
 
 function setAssociation(association, oForm, subject_id, chir_id, oOptions) {

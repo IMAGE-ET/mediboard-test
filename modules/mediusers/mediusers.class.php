@@ -678,6 +678,14 @@ class CMediusers extends CMbObject {
   function isPraticien () {
     return $this->_is_praticien = $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste"));
   }
+
+  /**
+   * Check whether user is an anesthesist
+   * @return bool
+   */
+  function isAnesth () {
+    return $this->_is_anesth = $this->isFromType(array("Anesthésiste"));
+  }
   
   /**
    * Check whether user is a secretary

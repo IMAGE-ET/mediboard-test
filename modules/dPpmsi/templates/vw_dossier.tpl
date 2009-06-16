@@ -392,6 +392,10 @@ Main.add(function () {
           <th>{{mb_label object=$curr_op field=labo}}</th>
           <td colspan="3">{{mb_value object=$curr_op field=labo}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$curr_op field=prothese}}</th>
+          <td colspan="3">{{mb_value object=$curr_op field=prothese}}</td>
+        </tr>
         {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
         <tr>
           <td class="button" colspan="4">Consultation de pré-anesthésie le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
@@ -494,8 +498,19 @@ Main.add(function () {
         </tr>
 
         <tr>
-          <td class="button" colspan="4">
-            <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Exporter vers S@nté.com</button>
+          <td colspan="2">
+            <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Export S@nté.com</button>
+          </td>
+          <td colspan="2" class="text">
+            {{if $curr_op->_ref_hprim_files|@count}}
+            <div class="small-success">
+              Export déjà effectué {{$curr_op->_ref_hprim_files|@count}} fois
+            </div>
+            {{else}}
+            <div class="small-info">
+              Pas d'export effectué
+            </div>
+            {{/if}}
           </td>
         </tr>
         <tr>
@@ -508,7 +523,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="4" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
-            <a href="#" onclick="setObject( {
+            <a href="javascript:;" onclick="setObject( {
               objClass: '{{$curr_op->_class_name}}', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 

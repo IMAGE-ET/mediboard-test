@@ -39,23 +39,6 @@ if($operation_id){
       $timing[$key][] = mbTime("$i minutes", $operation->$key);
     }
   }
-  // Chargement de la prescription de sejour
-	$prescription->object_id = $operation->sejour_id;
-	$prescription->object_class = "CSejour";
-	$prescription->type = "sejour";
-	$prescription->loadMatchingObject();
-	
-	// Chargement des perfusions
-	if($prescription->_id){
-	  $prescription->loadRefsPerfusions();
-	  foreach($prescription->_ref_perfusions as &$_perfusion){
-	    $_perfusion->loadRefsLines();
-	  }
-	}
-	$anesth_id = ($operation->anesth_id) ? $operation->anesth_id : $operation->_ref_plageop->anesth_id;
-	if($anesth_id && CModule::getActive('dPprescription')){
-	  $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
-	}
 }
 
 // Chargement des praticiens
@@ -78,9 +61,6 @@ $smarty->assign("selOp"           , $operation       );
 $smarty->assign("date"            , $date            );
 $smarty->assign("modif_operation" , $modif_operation );
 $smarty->assign("timing"          , $timing          );
-$smarty->assign("prescription"    , $prescription    );
-$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
-$smarty->assign("protocoles"      , $protocoles);
 $smarty->assign("anesth_id"       , $anesth_id);
 $smarty->display("inc_vw_anesth.tpl");
 

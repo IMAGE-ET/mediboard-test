@@ -776,8 +776,21 @@ class CSetupdPplanningOp extends CSetup {
             ADD `cote_hospi` ENUM ('droit','gauche') AFTER `cote_consult_anesth`,
             ADD `cote_bloc` ENUM ('droit','gauche') AFTER `cote_hospi`;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.93");
+    $sql = "ALTER TABLE `operations`
+              ADD `prothese` ENUM ('1','0','?')  DEFAULT '?' AFTER `labo`,
+              ADD `date_visite_anesth` DATETIME,
+              ADD `prat_visite_anesth_id` INT (11) UNSIGNED,
+              ADD `rques_visite_anesth` TEXT,
+              ADD `autorisation_anesth` ENUM ('0','1');";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `operations`
+              ADD INDEX (`date_visite_anesth`),
+              ADD INDEX (`prat_visite_anesth_id`);";
+    $this->addQuery($sql);
   
-    $this->mod_version = "0.93";
+    $this->mod_version = "0.94";
   }
 }
 ?>

@@ -64,13 +64,14 @@ if ($patient->patient_id) {
   foreach ($patient->_ref_sejours as &$sejour) {
     $sejour->loadExtDiagnostics();
     $sejour->loadRefs();
+    $sejour->loadHprimFiles();
     $sejour->loadRefGHM();
     $sejour->loadNumDossier();
     $sejour->canRead();
     $sejour->canEdit();
     foreach ($sejour->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
-      
+      $operation->loadHprimFiles();
       $operation->countDocItems();
       $operation->loadRefsActesCCAM();
       $operation->canRead();

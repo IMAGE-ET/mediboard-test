@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPplanningOp
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 CAppUI::requireModuleClass("dPccam", "codable");
 
@@ -40,6 +41,7 @@ class COperation extends CCodable {
   var $rank           = null;
   var $anapath        = null;
   var $labo           = null;
+  var $prothese       = null;
 
   var $depassement        = null;
   var $forfait            = null;
@@ -68,6 +70,12 @@ class COperation extends CCodable {
   var $cote_hospi          = null;
   var $cote_bloc           = null;
   
+  // Visite de préanesthésie
+  var $date_visite_anesth    = null;
+  var $prat_visite_anesth_id = null;
+  var $rques_visite_anesth   = null;
+  var $autorisation_anesth   = null;
+  
   // Form fields
   var $_hour_op        = null;
   var $_min_op         = null;
@@ -86,12 +94,13 @@ class COperation extends CCodable {
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
   var $_move           = null;
+  var $_password_visite_anesth = null;
   
   // Distant fields
-  var $_datetime = null;
-  var $_datetime_reel = null;
+  var $_datetime          = null;
+  var $_datetime_reel     = null;
   var $_datetime_reel_fin = null;
-  var $_ref_affectation = null;
+  var $_ref_affectation   = null;
   
   // Links
   var $_link_editor = null;
@@ -175,27 +184,35 @@ class COperation extends CCodable {
     $specs["entree_bloc"]        = "time";
     $specs["anapath"]            = "enum list|1|0|? default|?";
     $specs["labo"]               = "enum list|1|0|? default|?";
+    $specs["prothese"]           = "enum list|1|0|? default|?";
     $specs["horaire_voulu"]      = "time";
     
     $specs["cote_admission"]     = "enum list|droit|gauche";
     $specs["cote_consult_anesth"]= "enum list|droit|gauche";
     $specs["cote_hospi"]         = "enum list|droit|gauche";
     $specs["cote_bloc"]          = "enum list|droit|gauche";
+    
+    // Visite de préanesthésie
+    $specs["date_visite_anesth"]    = "dateTime";
+    $specs["prat_visite_anesth_id"] = "ref class|CMediusers";
+    $specs["rques_visite_anesth"]   = "text";
+    $specs["autorisation_anesth"]   = "bool default|0";
 
-    $specs["_date_min"]          = "date";
-    $specs["_date_max"]          = "date moreEquals|_date_min";
-    $specs["_plage"]             = "bool";
-    $specs["_intervention"]      = "text";
-    $specs["_prat_id"]           = "text";
-    $specs["_bloc_id"]           = "ref class|CBlocOperatoire";
-    $specs["_specialite"]        = "text";
-    $specs["_ccam_libelle"]      = "bool default|1";
-    $specs["_hour_op"]           = "";
-    $specs["_min_op"]            = "";
-    $specs["_datetime"]          = "dateTime";
-    $specs["_pause_min"]         = "numchar length|2";
-    $specs["_pause_hour"]        = "numchar length|2";
-    $specs["_move"]              = "str";
+    $specs["_date_min"]               = "date";
+    $specs["_date_max"]               = "date moreEquals|_date_min";
+    $specs["_plage"]                  = "bool";
+    $specs["_intervention"]           = "text";
+    $specs["_prat_id"]                = "text";
+    $specs["_bloc_id"]                = "ref class|CBlocOperatoire";
+    $specs["_specialite"]             = "text";
+    $specs["_ccam_libelle"]           = "bool default|1";
+    $specs["_hour_op"]                = "";
+    $specs["_min_op"]                 = "";
+    $specs["_datetime"]               = "dateTime";
+    $specs["_pause_min"]              = "numchar length|2";
+    $specs["_pause_hour"]             = "numchar length|2";
+    $specs["_move"]                   = "str";
+    $specs["_password_visite_anesth"] = "password notNull";
     
     return $specs;
   }
@@ -234,6 +251,7 @@ class COperation extends CCodable {
   }
   
   function check() {
+    global $AppUI;
     $msg = null;
     if(!$this->operation_id && !$this->chir_id) {
       $msg .= "Praticien non valide ";
@@ -256,7 +274,17 @@ class COperation extends CCodable {
     
     if($this->plageop_id !== null){
       if (!in_range(mbDate($this->_datetime), mbDate($this->_ref_sejour->entree_prevue), mbDate($this->_ref_sejour->sortie_prevue))) {
-   	    $msg .= "Intervention en dehors du séjour ";
+   	    $msg .= "Intervention en dehors du séjour";
+      }
+    }
+    
+    // Vérification de la signature de l'anesthésiste pour la
+    // visite de pré-anesthésie
+    if($this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $AppUI->user_id) {
+      $anesth = new CUser();
+      $anesth->load($this->prat_visite_anesth_id);
+      if($anesth->user_password != md5($this->_password_visite_anesth)) {
+        $msg .= "Mot de passe incorrect";
       }
     }
     return $msg . parent::check();

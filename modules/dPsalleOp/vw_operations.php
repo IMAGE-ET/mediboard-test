@@ -33,6 +33,11 @@ $tabPersonnel = array();
 // Creation du tableau de timing pour les affectations  
 $timingAffect = array();
 
+// Récupération de l'utilisateur courant
+$currUser = new CMediusers();
+$currUser->load($AppUI->user_id);
+$currUser->isAnesth();
+
 // Chargement des praticiens
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
@@ -147,6 +152,10 @@ if ($op) {
 	}
 }
 
+if(!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
+  $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
+}
+
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
@@ -182,37 +191,36 @@ $check_item_categories = $check_item_category->loadList(null);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->debugging = false;
-$smarty->assign("unites",$unites);
-
 if ($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
 }
 
-$smarty->assign("acte_ngap"       , $acte_ngap               );
-$smarty->assign("op"              , $op                      );
-$smarty->assign("salle"           , $salle_id                );
-$smarty->assign("listAnesthType"  , $listAnesthType          );
-$smarty->assign("listAnesths"     , $listAnesths             );
-$smarty->assign("listChirs"       , $listChirs               );
-$smarty->assign("modeDAS"         , $dPconfig["dPsalleOp"]["CDossierMedical"]["DAS"]);
-$smarty->assign("selOp"           , $selOp                   );
-$smarty->assign("timing"          , $timing                  );
-$smarty->assign("date"            , $date                    );
-$smarty->assign("modif_operation" , $modif_operation         );
-$smarty->assign("tabPersonnel"    , $tabPersonnel            );
-$smarty->assign("listPersAideOp"  , $listPersAideOp          );
-$smarty->assign("listPersPanseuse", $listPersPanseuse        );
+$smarty->assign("unites"                 , $unites);
+$smarty->assign("acte_ngap"              , $acte_ngap);
+$smarty->assign("op"                     , $op);
+$smarty->assign("salle"                  , $salle_id);
+$smarty->assign("currUser"               , $currUser);
+$smarty->assign("listAnesthType"         , $listAnesthType);
+$smarty->assign("listAnesths"            , $listAnesths);
+$smarty->assign("listChirs"              , $listChirs);
+$smarty->assign("modeDAS"                , $dPconfig["dPsalleOp"]["CDossierMedical"]["DAS"]);
+$smarty->assign("selOp"                  , $selOp);
+$smarty->assign("timing"                 , $timing);
+$smarty->assign("date"                   , $date);
+$smarty->assign("modif_operation"        , $modif_operation);
+$smarty->assign("tabPersonnel"           , $tabPersonnel);
+$smarty->assign("listPersAideOp"         , $listPersAideOp);
+$smarty->assign("listPersPanseuse"       , $listPersPanseuse);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
-$smarty->assign("timingAffect"    , $timingAffect            );
-$smarty->assign("prescription"    , $prescription            );
-$smarty->assign("protocoles"      , $protocoles              );
-$smarty->assign("anesth_id"       , $anesth_id               );
-$smarty->assign("check_list"      , $check_list              );
-$smarty->assign("check_item_categories", $check_item_categories);
-$smarty->assign("hide_finished"   , $hide_finished);
+$smarty->assign("timingAffect"           , $timingAffect);
+$smarty->assign("prescription"           , $prescription);
+$smarty->assign("protocoles"             , $protocoles);
+$smarty->assign("anesth_id"              , $anesth_id);
+$smarty->assign("check_list"             , $check_list);
+$smarty->assign("check_item_categories"  , $check_item_categories);
+$smarty->assign("hide_finished"          , $hide_finished);
 $smarty->display("vw_operations.tpl");
 
 ?>

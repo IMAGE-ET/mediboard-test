@@ -8,6 +8,14 @@
 
 <script type="text/javascript">
 
+function printFicheAnesth(consult_id) {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_fiche"); 
+  url.addParam("consultation_id", consult_id);
+  url.popup(700, 500, "printFiche");
+  return;
+}
+
 function submitTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
   	onComplete : function() { 
@@ -33,6 +41,10 @@ function submitAnesth(oForm) {
   		reloadAnesth(oForm.operation_id.value) 
   	}
   });
+}
+
+function signVisiteAnesth(anesth_id) {
+  alert('anesth numéro ' + anesth_id);
 }
 
 function reloadAnesth(operation_id){
@@ -81,7 +93,10 @@ Main.add(function () {
   {{if $selOp->_id}}
   // Initialisation des onglets
 	if ($('main_tab_group')){
-    new Control.Tabs('main_tab_group');
+    Control.Tabs.create('main_tab_group', true);
+	}
+	if ($('codage_tab_group')){
+    Control.Tabs.create('codage_tab_group', true);
 	}
   // Effet sur le programme
 	if ($('listplages') && $('listplages-trigger')){
