@@ -78,6 +78,7 @@ if($_entree && $_sortie && $_datetime){
 	  $prescription = $prescription->applyProtocole($protocole_id, null, null, null, $_entree, $_sortie, $_datetime);
 	  
 	  foreach($prescription->_ref_prescription_lines as &$line){
+	    $line->loadRefPraticien();
 	    $line->updateFormFields();
 	  }
 	  foreach($prescription->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
@@ -85,11 +86,13 @@ if($_entree && $_sortie && $_datetime){
 		    foreach($elements_cat as &$_elements){
 		 	    foreach($_elements as &$_line_element){
 		 	      $_line_element->updateFormFields();  
+		 	      $_line_element->loadRefPraticien();
 		 	    }
 		    }
 		  }
 	  }
 	  foreach($prescription->_ref_perfusions as &$_perfusion){
+	    $_perfusion->loadRefPraticien();
 	    $_perfusion->updateFormFields();
 	  }
 	}

@@ -1458,7 +1458,7 @@ class CPrescription extends CMbObject {
 	      if($code_cip && ($code_cip != $_line_med->code_cip)){
 	        continue;
 	      }
-	      
+	      $_line_med->loadRefPraticien();
 	    	// Mise à jour de la date de fin si celle-ci n'est pas indiquée
 			  if(!$_line_med->_fin_reelle){
 			    $_line_med->_fin_reelle = $_line_med->_ref_prescription->_ref_object->_sortie;
