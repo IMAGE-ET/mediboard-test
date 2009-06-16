@@ -252,3 +252,29 @@
 </table>
 
 </form>
+
+{{if $consult_anesth->_id}}
+<table class="form">
+  <tr>
+    <th colspan="2" class="title">Fichiers / Documents</th>
+  </tr>
+  <tr>
+    <td>
+      {{mb_include_script module="dPcabinet" script="file"}}
+      <div id="files-anesth">
+      <script type="text/javascript">
+        File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
+      </script>
+      </div>
+    </td>
+    <td>
+      <div id="documents-anesth">
+        {{mb_include_script module="dPcompteRendu" script="document"}}
+        <script type="text/javascript">
+          Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$selOp->_ref_anesth->_id}}','documents-anesth');
+        </script>
+			</div>
+    </td>
+  </tr>
+</table>
+{{/if}}
