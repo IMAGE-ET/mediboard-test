@@ -383,7 +383,7 @@ function prepareForm(oForm, bForcePrepare) {
 		    // If the element has a mask and other properties, they may conflict
 		    if (Preferences.INFOSYSTEM && props.mask) {
 		      Assert.that(!(
-		        props.min || props.max || props.minMax || props.bool || props.ref || props.pct || props.num
+		        props.min || props.max || props.bool || props.ref || props.pct || props.num
 		      ), "'"+oElement.id+"' mask may conflit with other props");
 		    }
 

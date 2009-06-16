@@ -35,7 +35,7 @@ class CSpEtablissement extends CMbObject {
     $specs = parent::getProps();
     $specs["group_id"]          = "ref notNull class|CGroups";
     $specs["increment_year"]    = "numchar length|1";
-    $specs["increment_patient"] = "num minMax|0|99999";
+    $specs["increment_patient"] = "num min|0 max|99999";
     return $specs;
   }
    

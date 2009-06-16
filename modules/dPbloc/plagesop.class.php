@@ -84,11 +84,11 @@ class CPlageOp extends CMbObject {
     $specs["delay_repl"]       = "num min|0";
     $specs["actes_locked"]     = "bool";
 
-    $specs["_heuredeb"]        = "num minMax|0|23";
-    $specs["_minutedeb"]       = "num minMax|0|59";
-    $specs["_heurefin"]        = "num minMax|0|23";
-    $specs["_minutefin"]       = "num minMax|0|59";
-    $specs["_min_inter_op"]    = "num minMax|0|59";
+    $specs["_heuredeb"]        = "num min|0 max|23";
+    $specs["_minutedeb"]       = "num min|0 max|59";
+    $specs["_heurefin"]        = "num min|0 max|23";
+    $specs["_minutefin"]       = "num min|0 max|59";
+    $specs["_min_inter_op"]    = "num min|0 max|59";
     return $specs;
   }
   

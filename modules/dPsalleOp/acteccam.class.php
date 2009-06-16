@@ -65,8 +65,8 @@ class CActeCCAM extends CActe {
   function getProps() {
     $specs = parent::getProps();
     $specs["code_acte"]           = "code notNull ccam seekable";
-    $specs["code_activite"]       = "num notNull minMax|0|99";
-    $specs["code_phase"]          = "num notNull minMax|0|99";
+    $specs["code_activite"]       = "num notNull min|0 max|99";
+    $specs["code_phase"]          = "num notNull min|0 max|99";
     $specs["execution"]           = "dateTime notNull";
     $specs["modificateurs"]       = "str maxLength|4";
     $specs["commentaire"]         = "text";

@@ -283,15 +283,6 @@ Object.extend(ElementChecker, {
         this.addError("max", printf("Doit avoir une valeur maximale de %s", iMax));
     },
     
-    minMax: function () {
-      this.assertMultipleArgs("minMax", 2);
-      var min = parseInt(this.oProperties.minMax[0]);
-      var max = parseInt(this.oProperties.minMax[1]);
-      if (this.sValue < min || 
-          this.sValue > max)
-        this.addError(printf("N'est pas compris entre %i et %i", min, max));
-    },
-    
     // ccam
     ccam: function() {
       this.assertNoArg("ccam");

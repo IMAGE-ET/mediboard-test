@@ -114,7 +114,7 @@ class CMediusers extends CMbObject {
     $specs["_user_cp"]         = "num length|5 confidential";
     $specs["_user_ville"]      = "str confidential";
     $specs["_profile_id"]      = "num";
-    $specs["_user_type"]       = "num notNull minMax|0|20";
+    $specs["_user_type"]       = "num notNull min|0 max|20";
     $specs["_group_id"]        = "ref notNull class|CGroups";
     
     // The different levels of security are stored to be usable in JS

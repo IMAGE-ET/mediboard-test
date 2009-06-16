@@ -79,7 +79,7 @@ class CUser extends CMbObject {
   	$specs = parent::getProps();
     $specs["user_username"]   = "str notNull maxLength|20";
     $specs["user_password"]   = "str";
-    $specs["user_type"]       = "num notNull minMax|0|20";
+    $specs["user_type"]       = "num notNull min|0 max|20";
     $specs["user_first_name"] = "str maxLength|50 seekable|begin";
     $specs["user_last_name"]  = "str notNull maxLength|50 confidential seekable|begin";
     $specs["user_email"]      = "str maxLength|255";

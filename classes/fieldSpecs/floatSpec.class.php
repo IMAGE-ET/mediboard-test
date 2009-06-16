@@ -15,7 +15,6 @@ class CFloatSpec extends CMbFieldSpec {
   var $min    = null;
   var $max    = null;
   var $pos    = null;
-  var $minMax = null;
   
   function getSpecType() {
     return("float");
@@ -59,20 +58,7 @@ class CFloatSpec extends CMbFieldSpec {
         return "Doit avoir une valeur maximale de $max";
       }
     }
-     
-    // minMax
-    if($this->minMax){
-      $specFragments = explode("|", $this->minMax);
-      $min= $this->checkNumeric(@$specFragments[0], false);
-      $max= $this->checkNumeric(@$specFragments[1], false);
-      if(count($specFragments) != 2 || $min === null || $max === null){
-        trigger_error("Spécification de minimum maximum numérique invalide (minMax = $this->minMax)", E_USER_WARNING);
-        return "Erreur système";
-      }
-      if($propValue>$max || $propValue<$min){
-        return "N'est pas compris entre $min et $max";
-      }
-    }
+    
     return null;
   }
   

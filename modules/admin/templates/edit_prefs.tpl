@@ -109,7 +109,7 @@
       <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
     </th>
     <td>
-      <input type="text" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" maxlength="3" size="4" class="num minMax|0|999"/>
+      <input type="text" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" maxlength="3" size="4" class="num min|0 max|999"/>
     </td>
   </tr>
   {{/if}}

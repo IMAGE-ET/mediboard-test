@@ -35,7 +35,7 @@ class CExamComp extends CMbObject {
       "consultation_id" => "ref notNull class|CConsultation",
       "examen"          => "text helped",
       "realisation"     => "enum notNull list|avant|pendant",
-      "fait"            => "num minMax|0|1"
+      "fait"            => "num min|0 max|1"
     );
     return array_merge($specsParent, $specs);
   }

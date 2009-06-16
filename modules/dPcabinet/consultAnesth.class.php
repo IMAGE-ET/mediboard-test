@@ -112,7 +112,7 @@ class CConsultAnesth extends CMbObject {
     // Données examens complementaires
     $specs["rai"]              = "enum list|?|NEG|POS default|?";
     $specs["hb"]               = "float min|0";
-    $specs["tp"]               = "float minMax|0|100";
+    $specs["tp"]               = "float min|0 max|100";
     $specs["tca"]              = "numchar maxLength|2";
     $specs["tca_temoin"]       = "numchar maxLength|2";
     $specs["creatinine"]       = "float";
@@ -121,8 +121,8 @@ class CConsultAnesth extends CMbObject {
     $specs["tsivy"]            = "time";
     $specs["plaquettes"]       = "numchar maxLength|4 pos";
     $specs["ecbu"]             = "enum list|?|NEG|POS default|?";
-    $specs["ht"]               = "float minMax|0|100";
-    $specs["ht_final"]         = "float minMax|0|100";
+    $specs["ht"]               = "float min|0 max|100";
+    $specs["ht_final"]         = "float min|0 max|100";
     $specs["premedication"]    = "text helped";
     $specs["prepa_preop"]      = "text helped";
 

@@ -18,7 +18,6 @@ class CNumSpec extends CMbFieldSpec {
   var $length    = null;
   var $minLength = null;
   var $maxLength = null;
-  var $minMax    = null;
   
   function getSpecType() {
     return("num");
@@ -96,20 +95,7 @@ class CNumSpec extends CMbFieldSpec {
         return "N'a pas la bonne longueur (longueur maximale souhaitée : $length)'";
       }
     }
-    
-    // minMax
-    if($this->minMax){
-      $specFragments = explode("|", $this->minMax);
-      $min= $this->checkNumeric(@$specFragments[0]);
-      $max= $this->checkNumeric(@$specFragments[1]);
-      if(count($specFragments) != 2 || $min === null || $max === null){
-        trigger_error("Spécification de minimum maximum numérique invalide (minMax = $this->minMax)", E_USER_WARNING);
-        return "Erreur système";
-      }
-      if($propValue>$max || $propValue<$min){
-        return "N'est pas compris entre $min et $max";
-      }
-    }
+
     return null;
   }
 
@@ -134,15 +120,9 @@ class CNumSpec extends CMbFieldSpec {
       }else{
         $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
       }
-    }elseif($this->minMax || $this->max || $this->min){
-      if($this->minMax){
-        $specFragments = explode("|", $this->minMax);
-        $min= $this->checkNumeric($specFragments[0]);
-        $max= $this->checkNumeric($specFragments[1]);
-      }else{
-        $min = $this->min ? $this->min : 0;
-        $max = $this->max ? $this->max : 999999;
-      }
+    }elseif($this->max || $this->min){
+      $min = $this->min !== null ? $this->min : 0;
+      $max = $this->max !== null ? $this->max : 999999;
       $propValue = rand($min, $max);
     }else{
       $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
@@ -151,28 +131,24 @@ class CNumSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    $type_sql   = "INT(11)";
-    $valeur_max = null;
+    $type_sql = "INT(11)";
     
-    if($this->minMax || $this->max){
-      if($this->minMax){
-        $specFragments = explode("|", $this->minMax);
-        $valeur_max = $specFragments[1];
-      }else{
-        $valeur_max = $this->max;
-      }
+    if($this->max !== null){
+      $max = $this->max;
       $type_sql = "TINYINT(4)";
-      if ($valeur_max > pow(2,8)) {
+      if ($max > pow(2,8)) {
         $type_sql = "MEDIUMINT(9)";
       }
-      if ($valeur_max > pow(2,16)) {
+      if ($max > pow(2,16)) {
         $type_sql = "INT(11)";
       }
-      if ($valeur_max > pow(2,32)) {
+      if ($max > pow(2,32)) {
         $type_sql = "BIGINT(20)";
       }
-    }elseif($this->pos){
-      $type_sql = "INT(10) UNSIGNED";
+    }
+    
+    if($this->pos || ($this->min !== null && $this->min >= 0)) {
+      $type_sql .= " UNSIGNED";
     }
     
     return $type_sql;

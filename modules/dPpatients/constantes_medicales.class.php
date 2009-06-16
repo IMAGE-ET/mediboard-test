@@ -72,11 +72,11 @@ class CConstantesMedicales extends CMbObject {
     $specs['taille']                 = 'num pos';
     $specs['ta']                     = 'str maxLength|10';
     $specs['pouls']                  = 'num pos';
-    $specs['spo2']                   = 'float minMax|0|100';
-    $specs['temperature']            = 'float minMax|20|50'; // Au cas ou il y aurait des malades très malades
-    $specs['score_sensibilite']      = 'float minMax|0|5';
-    $specs['score_motricite']        = 'float minMax|0|5';
-    $specs['EVA']                    = 'float minMax|0|10';
+    $specs['spo2']                   = 'float min|0 max|100';
+    $specs['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
+    $specs['score_sensibilite']      = 'float min|0 max|5';
+    $specs['score_motricite']        = 'float min|0 max|5';
+    $specs['EVA']                    = 'float min|0 max|10';
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = "float";
     $specs['_imc']                   = 'float';
