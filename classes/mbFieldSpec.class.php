@@ -30,8 +30,6 @@ class CMbFieldSpec {
   var $autocomplete   = null;
   var $helped         = null;
   var $seekable       = null;
-  
-  var $msgError       = null;
 
   static $chars  = array();
   static $nums   = array();
@@ -47,7 +45,7 @@ class CMbFieldSpec {
     '~' => '[+-]',
   );
 
-  var $_defaultLength = null;
+  protected $_defaultLength = null;
 
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     $this->className = $className;
@@ -58,7 +56,7 @@ class CMbFieldSpec {
 
     foreach($aProperties as $k => $v) {
       if (array_key_exists($k, $aObjProperties)){
-        $this->$k = $aProperties[$k];
+        $this->$k = $v;
       } else {
         trigger_error("La spécification '$k' trouvée dans '$className::$field' est inexistante dans la classe '".get_class($this)."'", E_USER_WARNING);
       }
@@ -89,8 +87,7 @@ class CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
     
     if ($propValue && $this->mask) {
       $propValue = self::formattedToMasked($propValue, $this->mask, $this->format);
@@ -384,19 +381,18 @@ class CMbFieldSpec {
   }
 
   function checkPropertyValue($object){
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
 
-    if($this->msgError = $this->checkParams($object)){
-      return $this->msgError;
+    if($msg = $this->checkParams($object)){
+      return $msg;
     }
 
     if ($propValue === null || $propValue === "") {
       return null;
     }
 
-    if($this->msgError = $this->checkProperty($object)){
-      return $this->msgError;
+    if($msg = $this->checkProperty($object)){
+      return $msg;
     }
 
     return null;
@@ -432,8 +428,7 @@ class CMbFieldSpec {
   }
 
   function checkConfidential(&$object){
-    $field = $this->fieldName;
-    if(!$this->confidential || $object->$field === null){
+    if(!$this->confidential || $object->{$this->fieldName} === null){
       return null;
     }
 
@@ -530,14 +525,14 @@ class CMbFieldSpec {
 	      $view = $ref_object->$view_field;
 	      
 	      $sHtml      = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
-	                     class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra />";
+	                     class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
 	      $sHtml     .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
-	                     class=\"autocomplete\" onchange=\"if(!this.value){this.form.$field.value=''}\" $extra />";
+	                     class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\'\'}' $extra />";
 	      $ref = true;
 	    }
 	    else {
 	      $sHtml      = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-	                     class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra />";
+	                     class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
 	    }
     	
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
@@ -622,13 +617,10 @@ class CMbFieldSpec {
   function checkProperty($object) {}
 
   // Return a sample value.
-  //If consistent, the random value stay the same for a given initial value
+  // If consistent, the random value stay the same for a given initial value
   function sample(&$object, $consistent = true){
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    if($consistent) {
-      srand(crc32($propValue));
-    }
+    if($consistent)
+      srand(crc32($object->{$this->fieldName}));
   }
 
   function getDBSpec(){}
