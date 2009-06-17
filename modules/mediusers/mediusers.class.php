@@ -51,6 +51,7 @@ class CMediusers extends CMbObject {
   var $_profile_id           = null;
   var $_is_praticien         = null;
   var $_is_secretaire        = null;
+  var $_is_anesth            = null;
   var $_user_password_weak   = null;
   var $_user_password_strong = null;
   
