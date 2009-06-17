@@ -145,6 +145,11 @@ foreach ($classes as $class) {
 	    addLocale($classname, $prop, "$spec->class-back-$backName");
     }
   }
+  
+  // Traductions pour les uniques
+  foreach (array_keys($object->_spec->uniques) as $unique) {
+    addLocale($classname, "Failures", "$classname-failed-$unique");
+  }
 }
 
 // Parcours des variables de configuration

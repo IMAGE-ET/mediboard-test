@@ -759,13 +759,14 @@ class CMbObject {
     $debug = CAppUI::conf("debug");
     
     $msg = null;
-    $properties = get_object_vars($this);
     
+    // Property level checking
     foreach($this->_props as $propName => $propSpec) {
       if ($propName[0] !== '_') {
-        if (!array_key_exists($propName, $properties)) {
+        if (!property_exists($this, $propName)) {
           trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
-        } else {
+        } 
+        else {
           $propValue =& $this->$propName;
           if(($propValue !== null) || (!$this->_id)) {
             $msgProp = $this->checkProperty($propName);
@@ -775,6 +776,22 @@ class CMbObject {
           }
         }
       }
+    }
+    
+    // Class level unique checking
+    foreach ($this->_spec->uniques as $unique => $propNames) {
+      $other = new $this->_class_name;
+      
+      foreach ($propNames as $propName) {
+  	    $this->completeField($propName);
+  	    $other->$propName = $this->$propName;
+      }
+      
+	    $other->loadMatchingObject();
+	
+	    if ($other->_id && $this->_id != $other->_id) {
+	      return "$this->_class_name-failed-$unique";
+	    }
     }
     
     return $msg;

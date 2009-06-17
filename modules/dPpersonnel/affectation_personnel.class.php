@@ -30,8 +30,9 @@ class CAffectationPersonnel extends CMbMetaObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'affectation_personnel';
-    $spec->key   = 'affect_id';
+    $spec->table = "affectation_personnel";
+    $spec->key   = "affect_id";
+    $spec->uniques["unique"] = array("personnel_id", "object_class", "object_id");
     return $spec;
   }
 	
@@ -62,14 +63,7 @@ class CAffectationPersonnel extends CMbMetaObject {
     $this->_ref_object = new $this->object_class;
     $this->_ref_object = $this->_ref_object->getCached($this->object_id);
   }
- 
-  
-  function check(){
-    if ($msg = parent::check()) {
-      return $msg;
-    }  
-  }
-  
+   
   /**
    * Trouve les affectations avec cible et personnel identique
    * @return $array Liste des siblings
