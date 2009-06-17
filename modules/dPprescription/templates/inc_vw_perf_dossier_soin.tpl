@@ -19,7 +19,7 @@
 		  });
 		</script>
 		{{/if}}
-		-
+		{{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}}
 	</td>
  	<td class="text">
  	  <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
@@ -33,7 +33,7 @@
 	       onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}')" 
 			   onclick='editPerf("{{$_perfusion->_id}}","{{$date}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");
 			            addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");'>
-	      {{$_perfusion->_view}}
+	      {{$_perfusion->voie}}
 	    </a>
 
 	      <form name="editPerfusion-{{$_perfusion->_id}}" method="post" action="?" style="float: right">
@@ -82,7 +82,12 @@
  	<td style="font-size: 1em;">
  	  <ul>
  	   {{foreach from=$_perfusion->_ref_lines item=_line}}
- 	     <li style="margin-bottom: 7px;"><small>{{$_line->_ucd_view}} ({{$_line->_posologie}})</small></li>
+ 	     <li style="margin-bottom: 7px;"><small>{{$_line->_ucd_view}} ({{$_line->_posologie}})
+ 	      {{if $_line->_unite_administration != "ml"}}
+					[{{$_line->_unite_administration}}]
+		 	  {{/if}}
+ 	     </small>
+ 	     </li>
  	   {{/foreach}}
  	  </ul>
  	  {{$_perfusion->_frequence}}
@@ -135,7 +140,6 @@
 								   {{assign var=hour_prevue value=""}}
 								 {{/if}}
 						     
-
 	               <div {{if $smarty.foreach.foreach_perf_line.last}}style="margin-bottom: 15px;"{{else}}style="margin-bottom: 5px;"{{/if}} 
 	                    onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}');"
 	                    ondblclick='addAdministrationPerf("{{$_perfusion->_id}}","{{$_date}}","{{$_hour}}","{{$hour_prevue}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
@@ -152,21 +156,16 @@
 									 {{if $nb_adm}}{{$nb_adm}}{{elseif $nb_prevue}}0{{/if}}
 									 {{if $nb_prevue}}/{{/if}}
 									 {{if $nb_prevue}}{{$nb_prevue}}{{/if}}
-									
-									
 						    </div>	
 						    <div id="tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}" style="display: none;">
 						      Prises prévues à {{$hour_prevue|date_format:$dPconfig.time}}
 						      <ul>
 						      {{foreach from=$_perfusion->_ref_lines item=_perf_line}}
-						        <li>{{$_perf_line->_ref_produit->libelle_abrege}} {{$_perf_line->_ref_produit->dosage}}: {{$_perf_line->_quantite_administration}} ml</li>
+						        <li>{{$_perf_line->_ref_produit->libelle_abrege}} {{$_perf_line->_ref_produit->dosage}}: {{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}</li>
 						      {{/foreach}}
 						      </ul>
 						    </div>
-					    
 					    {{/foreach}}
-						     
-						     
 			    </td>
 		    {{/foreach}}
      {{/foreach}}		   

@@ -51,7 +51,7 @@
 								  
 							    {{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perf_line"}}
 						<div style="padding: 10px 0px">
-								    {{$_perf_line->_quantite_administration}} ml
+								    {{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}
 								 </div>
 								 
 								 

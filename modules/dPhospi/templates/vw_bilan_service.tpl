@@ -245,7 +245,7 @@ selectPeriode = function(element) {
 									          {{$_perf.administre}}
 									          {{/if}}
 							            </td>
-							            <td style="width: 150px; border:none; text-align: center;">ml</td>
+							            <td style="width: 150px; border:none; text-align: center;">{{$perf_line->_unite_administration}}</td>
 							            <td />
 							          </tr>
 						          {{/foreach}}

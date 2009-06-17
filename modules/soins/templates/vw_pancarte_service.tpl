@@ -206,7 +206,7 @@ Main.add(function () {
 			          		              </td>
 			                            <td>{{$quantite_prevue}}</td>
 			          		              <td>{{$quantite_adm}}</td>
-			       											<td>ml</td>
+			       											<td>{{$perf_line->_unite_administration}}</td>
 			       										</tr>
 			          		        {{/foreach}}
 		          		        {{/foreach}}

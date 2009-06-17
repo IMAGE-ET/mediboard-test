@@ -83,7 +83,7 @@
            {{elseif $line->_class_name != "CPerfusionLine"}}
              {{$line->_unite_prise}}
            {{else}}
-           ml
+             {{$line->_unite_administration}}
            {{/if}}: 
            {{foreach from=$_administrations_by_quantite item=_administration}}
            {{$_administration->dateTime|date_format:$dPconfig.time}}

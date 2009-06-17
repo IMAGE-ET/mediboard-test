@@ -65,11 +65,11 @@ refreshAdministrations = function(){
 			  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 			  <input type="hidden" name="object_id" value="{{$_perf_line->_id}}" />
 			  <input type="hidden" name="object_class" value="{{$_perf_line->_class_name}}" />
-			  <input type="hidden" name="unite_prise" value="ml" />
+			  <input type="hidden" name="unite_prise" value="{{$_perf_line->_unite_administration}}" />
 			  <input type="hidden" name="dateTime" value="{{$dateTime}}" />
 			  <input type="hidden" name="prise_id" value="" />
 				{{mb_label object=$administration field=quantite}}
-				{{mb_field object=$administration field=quantite min=1 increment=1 form=addAdministration-$perf_line_id value=$_perf_line->_quantite_administration}} ml
+				{{mb_field object=$administration field=quantite min=1 increment=1 form=addAdministration-$perf_line_id value=$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}
 			</form>
     </td>
   </tr>

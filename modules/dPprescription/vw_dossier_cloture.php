@@ -30,6 +30,7 @@ $prescription->loadRefsPerfusions();
 
 foreach($prescription->_ref_perfusions as $_perfusion){
   $_perfusion->loadRefsLines();
+  $_perfusion->calculQuantiteTotal();
   foreach($_perfusion->_ref_lines as $_perf_line){
     $list_lines["perfusion"][$_perf_line->_id] = $_perf_line;
     $_perf_line->loadRefsAdministrations();
