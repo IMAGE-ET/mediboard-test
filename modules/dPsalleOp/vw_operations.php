@@ -150,10 +150,10 @@ if ($op) {
 	if($anesth_id && CModule::getActive('dPprescription')){
 	  $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
 	}
-}
 
-if(!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
-  $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
+  if(!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
+    $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
+  }
 }
 
 $listAnesthType = new CTypeAnesth;
