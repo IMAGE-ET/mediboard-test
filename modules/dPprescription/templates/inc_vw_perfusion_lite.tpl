@@ -29,7 +29,7 @@
         {{$_perf_line->_ucd_view}}
         
         {{if $_perf_line->quantite}}
-	      ({{mb_value object=$_perf_line field=quantite size=4}} {{mb_value object=$_perf_line field=unite size=4}}
+	      ({{mb_value object=$_perf_line field=quantite size=4}} {{mb_value object=$_perf_line field=unite size=4}})
 		    {{/if}}
 		    <span style="font-size: 0.8em; opacity: 0.7">
          ({{$_perf_line->_forme_galenique}})
