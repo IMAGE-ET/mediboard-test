@@ -13,13 +13,19 @@
   <input type="hidden" name="dosql" value="do_bcb_import" />
   <input type="hidden" name="del" value="0" />
   <h3>Import d'un fichier CSV</h3>
+  
+  <input type="radio" name="type_import" value="ucd" checked="checked" /> 
+  <label for="type_import_ucd">Import par UCD</label>
+  <input type="radio" name="type_import" value="cip" />
+  <label for="type_import_cip">Import par CIP</label>
+   
   <div class="big-info">
   	Fichier de type CSV 
   	avec séparateur <tt>,</tt> (virgule)
   	et délimiteur <tt>"</tt> (double guillemets).
   	<br />
   	La structure des colonnes est, dans l'ordre :
-<pre>CIP (obligatoire)
+<pre>Identifiant (UCD ou CIP) (obligatoire)
 PrixHopital
 PrixVille
 DatePrixHopital

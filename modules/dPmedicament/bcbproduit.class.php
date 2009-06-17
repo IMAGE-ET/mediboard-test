@@ -565,13 +565,21 @@ class CBcbProduit extends CBcbObject {
   
   static function getProduitsFromCIS($code_cis){
     $ds = CBcbObject::getDataSource();
-    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODECIS` = '$code_cis'";
+    $query = "SELECT * 
+              FROM `IDENT_PRODUITS` 
+							LEFT JOIN PRODUITS_IFP ON IDENT_PRODUITS.CODE_CIP = PRODUITS_IFP.CODE_CIP
+							WHERE `CODECIS` = '$code_cis'
+							AND PRODUITS_IFP.Produit_supprime is NULL;";
     return $ds->loadList($query);
   }
   
   static function getProduitsFromUCD($code_ucd){
     $ds = CBcbObject::getDataSource();
-    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_UCD` = '$code_ucd'";
+    $query = "SELECT * 
+              FROM `IDENT_PRODUITS` 
+              LEFT JOIN PRODUITS_IFP ON IDENT_PRODUITS.CODE_CIP = PRODUITS_IFP.CODE_CIP
+							WHERE `CODE_UCD` = '$code_ucd'
+							AND PRODUITS_IFP.Produit_supprime is NULL;";
     return $ds->loadList($query);
   }
   

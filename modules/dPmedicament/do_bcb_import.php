@@ -10,6 +10,10 @@
 
 global $AppUI, $g;
 
+set_time_limit(360);
+
+$type_import = mbGetValueFromPost("type_import");
+
 // Recuperation du fichier
 $file = $_FILES['datafile'];
 
@@ -23,56 +27,64 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
       $data[$c] = trim($data[$c]);
     }
     
-    $cip = ereg_replace('[\s\.\\'.chr(160).'A-z.-]', '', $data[0]); // 160: espace insécable
+    $identifiant = ereg_replace('[\s\.\\'.chr(160).'A-z.-]', '', $data[0]); // 160: espace insécable
 
     // if there is more than 1 column and the first isn't empty
-    if ($num > 0 && ($cip != '') && is_numeric($cip) && (strlen($cip) == 7)) {
-      $livret = new CBcbProduitLivretTherapeutique();
-      $livretLoad = new CBcbProduitLivretTherapeutique();
-      
-      $i = 0;
-      $livret->distObj->Code            = $g;
-      $livret->distObj->CIP             = $cip; $i++;
-      $livret->distObj->PrixHopital     = $data[$i]?$data[$i]:null; $i++;
-      $livret->distObj->PrixVille       = $data[$i]?$data[$i]:null; $i++;
-      $livret->distObj->DatePrixHopital = $data[$i]?$data[$i]:null; $i++;
-      $livret->distObj->DatePrixVille   = $data[$i]?$data[$i]:null; $i++;
-      $livret->distObj->Commentaire     = $data[$i]?$data[$i]:null; $i++;
-      $livret->distObj->CodeInterne     = $data[$i]?$data[$i]:null; $i++;
-        
-      // If the product exists
-      if($livretLoad->load($cip)) {
-    	  $livret->updateDBFields();
-    
-    	  if($livret->distObj->Update() >= 0){
-          $AppUI->setMsg("Element mis à jour");
+    if ($num > 0 && ($identifiant != '') && is_numeric($identifiant) && (strlen($identifiant) == 7)) {
+      $identifiants = array();
+      if($type_import == "cip"){
+        // Import par cip
+        $identifiants[] = $identifiant;  
+      } else {
+        // Import par UCD
+        $_produits = CBcbProduit::getProduitsFromUCD($identifiant);
+        foreach($_produits as $_produit){
+          $identifiants[] = $_produit["CODE_CIP"];
         }
-      } 
-      
-      else {
-        if($livret->distObj->Insert() >= 0){
-          $AppUI->setMsg("Element inséré");
+        if(count($identifiants) == 0){
+          $AppUI->setMsg("Aucun produit ne correspond au code UCD [$identifiant]", UI_MSG_WARNING);
         }
       }
+      // Parcours de tous les codes
+      foreach($identifiants as $_identifiant){
+	      $livret = new CBcbProduitLivretTherapeutique();
+	      $livretLoad = new CBcbProduitLivretTherapeutique();
+	      
+	      $i = 0;
+	      $livret->distObj->Code            = $g;
+	      $livret->distObj->CIP             = $_identifiant; $i++;
+	      $livret->distObj->PrixHopital     = isset($data[$i])?$data[$i]:null; $i++;
+	      $livret->distObj->PrixVille       = isset($data[$i])?$data[$i]:null; $i++;
+	      $livret->distObj->DatePrixHopital = isset($data[$i])?$data[$i]:null; $i++;
+	      $livret->distObj->DatePrixVille   = isset($data[$i])?$data[$i]:null; $i++;
+	      $livret->distObj->Commentaire     = isset($data[$i])?$data[$i]:null; $i++;
+	      $livret->distObj->CodeInterne     = isset($data[$i])?$data[$i]:null; $i++;
+	      
+	      // If the product exists
+	      if($livretLoad->load($_identifiant)) {
+	    	  $livret->updateDBFields();
+	    	  if($livret->distObj->Update() >= 0){
+	          $AppUI->setMsg("Element mis à jour");
+	        }
+	      }
+	      else {
+	        $produit = new CBcbProduit();
+	        $produit->load($_identifiant);
+	        if($produit->code_cip){
+		        if($livret->distObj->Insert() >= 0){
+		          $AppUI->setMsg("Element inséré");
+		        }
+	        }
+	      }
+      }
     }
-    
     else {
-      $AppUI->setMsg("Code CIP [$data[0]] invalide à la ligne $line", UI_MSG_WARNING);
+      $AppUI->setMsg("Code [$data[0]] invalide à la ligne $line", UI_MSG_WARNING);
     }
     $line++;
-  }
-  
+  }  
   fclose($csv);
 }
 
-/*
-$livret = new CBcbProduitLivretTherapeutique();
-$msg = $livret->distObj->Synchronize();
-if ($msg != 1) {
-  $AppUI->setMsg($livret->distObj->GetLastError(), UI_MSG_ERROR);
-} else {
-  $AppUI->setMsg("Synchronisation effectuée avec BCB GES");
-}
-*/
 $AppUI->redirect('m=dPmedicament&a=vw_bcb_import&dialog=1');
 ?>
