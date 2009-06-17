@@ -200,6 +200,7 @@ var Url = Class.create({
       parameters:  $H(this.oParams).toQueryString(), 
       asynchronous: true,
       evalScripts: true,
+      getParameters: null,
       onFailure: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur rencontre quelques problemes.</div>";}
     };
   
@@ -217,7 +218,8 @@ var Url = Class.create({
       WaitingMessage.cover(ioTarget);
     }  
   	
-    new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);
+    var getParams = oDefaultOptions.getParameters ? "?" + $H(oDefaultOptions.getParameters).toQueryString() : '';
+    new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php" + getParams, oDefaultOptions);
   },
   
   requestUpdateOffline: function(ioTarget, oOptions) {
