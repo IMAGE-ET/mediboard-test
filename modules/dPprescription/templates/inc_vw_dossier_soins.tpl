@@ -196,6 +196,7 @@ addAdministrationPerf = function(perfusion_id, date, hour, time_prevue, mode_dos
   url.addParam("time_prevue", time_prevue);
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
+  url.addParam("date_sel", "{{$date}}");
   url.popup(500,400,"Administration d'une perfusion");
 }
 

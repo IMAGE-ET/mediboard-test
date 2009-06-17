@@ -14,6 +14,7 @@ $hour = mbGetValueFromGet("hour");
 $time_prevue = mbGetValueFromGet("time_prevue");
 $mode_dossier = mbGetValueFromGet("mode_dossier");
 $sejour_id = mbGetValueFromGet("sejour_id");
+$date_sel  = mbGetValueFromGet("date_sel");
 
 $perfusion = new CPerfusion();
 $perfusion->load($perfusion_id);
@@ -55,6 +56,7 @@ $smarty->assign("date", $date);
 $smarty->assign("hour", $hour);
 $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("date_sel", $date_sel);
 $smarty->display("inc_vw_add_administration_perf.tpl");
 
 ?>
