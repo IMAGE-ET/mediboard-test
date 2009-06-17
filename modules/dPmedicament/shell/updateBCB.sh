@@ -46,7 +46,7 @@ config_path="$ROOT_PATH/includes/config.php"
 # Retrieve a config in Mediboard config file
 find_property() 
 {
-  property_pattern=$(echo $1 | sed "s/[a-z0-9]*/'&'/gi" | sed "s/ /.*/g")
+  property_pattern=$(echo $1 | sed "s/[a-zA-Z0-9]*/'&'/g" | sed "s/ /.*/g")
   value_pattern=".*= [']\([a-z0-9]*\)['];"
   replacement="\1"
   grep "$property_pattern" $config_path | sed "s/$value_pattern/$replacement/"
