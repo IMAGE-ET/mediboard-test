@@ -67,6 +67,9 @@ Main.add(function () {
       <th class="category" colspan="2">{{$curr_service->_view}}</th>
     </tr>
 	    {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
+	      <tr>
+          <td class="button" colspan="2">{{tr}}CChambre{{/tr}} {{$curr_chambre->_view}}</td>
+        </tr>
 		    {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
 		    {{include file=inc_idsherpa.tpl mbobject=$curr_lit nodebug=1}}
 		    {{/foreach}}
