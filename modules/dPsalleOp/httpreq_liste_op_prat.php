@@ -61,6 +61,14 @@ if ($hide_finished == 1 && $praticien->_ref_plages) {
       if ($op->sortie_salle) unset($plage->_unordered_operations[$key]);
     }
   }
+  
+  foreach($praticien->_ref_deplacees as $key => $op){
+    if ($op->sortie_salle) unset($praticien->_ref_deplacees[$key]);
+  }
+  
+  foreach($praticien->_ref_urgences as $key => $op){
+    if ($op->sortie_salle) unset($praticien->_ref_urgences[$key]);
+  }
 }
 
 // Création du template

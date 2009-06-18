@@ -2,6 +2,9 @@
 Main.add(function () {
   Calendar.regField(getForm("selection").date, null, {noView: true});
 });
+showLegend = function() {
+  new Url("dPbloc", "legende").popup(500, 150, "Légende");
+}
 </script>
 
 <form action="?" name="selection" method="get">
@@ -18,7 +21,10 @@ Main.add(function () {
   </tr>
   
   <tr>
-    <th><label for="salle" title="Salle d'opération">Salle</label></th>
+    <th>
+      <label for="salle" title="Salle d'opération">Salle</label>
+      <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
+    </th>
     <td>
       <select name="salle" onchange="this.form.submit()">
         <option value="">&mdash; {{tr}}CSalle.none{{/tr}}</option>

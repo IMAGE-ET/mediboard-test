@@ -38,6 +38,14 @@ if ($hide_finished == 1 && $salle->_ref_plages) {
       if ($op->sortie_salle) unset($plage->_unordered_operations[$key]);
     }
   }
+  
+  foreach($salle->_ref_deplacees as $key => $op){
+    if ($op->sortie_salle) unset($salle->_ref_deplacees[$key]);
+  }
+  
+  foreach($salle->_ref_urgences as $key => $op){
+    if ($op->sortie_salle) unset($salle->_ref_urgences[$key]);
+  }
 }
 
 // Création du template

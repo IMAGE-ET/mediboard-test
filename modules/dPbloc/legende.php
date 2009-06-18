@@ -11,12 +11,15 @@
 ?>
 
 <table class="tbl">
+  <col style="width: 0.1%" />
   <tr>
-    <th class="title">Icone</th><th class="title">Description</th>
+    <td class="patient-not-arrived">M. PATIENT Patient</td>
+    <td class="text">Patient pas encore dans l'établissement</td>
   </tr>
   <tr>
-    <th colspan="2">Etat des salles</th>
-  </tr>
+    <td class="septique">M. PATIENT Patient</td>
+    <td class="text">Patient septique</td>
+  </tr>   
   <tr>
     <td style="background-color:#ffa"></td>
     <td class="text">Patient entré au bloc</td>
