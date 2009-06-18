@@ -28,7 +28,7 @@ if ($keywords) {
 	$where_or = array();
 	
 	// we seek among the societes
-  foreach ($societe->getSeekables as $field => $spec) {
+  foreach ($societe->getSeekables() as $field => $spec) {
     $where_societe_or[] = "societe.$field LIKE '%$keywords%'";
   }
   $where_societe[] = implode(' OR ', $where_societe_or);

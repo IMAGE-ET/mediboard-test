@@ -19,7 +19,7 @@ $count = null;
 $where_or = array();
 
 if ($keywords) {
-	foreach ($product->getSeekables as $field => $spec) {
+	foreach ($product->getSeekables() as $field => $spec) {
 	  $where_or[] = "`$field` LIKE '%$keywords%'";
 	}
 	$where = array();
