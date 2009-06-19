@@ -577,6 +577,7 @@ class CBcbProduit extends CBcbObject {
     global $g;
     
     $ds = CBcbObject::getDataSource();
+    /*
     $query = "SELECT * 
               FROM `IDENT_PRODUITS`
 							LEFT JOIN PRODUITS_IFP ON IDENT_PRODUITS.CODE_CIP = PRODUITS_IFP.CODE_CIP
@@ -584,6 +585,14 @@ class CBcbProduit extends CBcbObject {
 							WHERE `CODECIS` = '$code_cis'
 							AND PRODUITS_IFP.Produit_supprime is NULL 
 			        AND LivretTherapeutique.CodeEtablissement='$g'";
+*/
+    $query = "SELECT * 
+              FROM `IDENT_PRODUITS`, LIVRETTHERAPEUTIQUE, PRODUITS_IFP
+							WHERE `CODECIS` = '$code_cis'
+              AND IDENT_PRODUITS.CODE_CIP = PRODUITS_IFP.CODE_CIP
+							AND PRODUITS_IFP.Produit_supprime is NULL
+              AND IDENT_PRODUITS.CODE_CIP = LIVRETTHERAPEUTIQUE.CODECIP
+			        AND LIVRETTHERAPEUTIQUE.CodeEtablissement='$g';";
     return $ds->loadList($query);
   }
   
