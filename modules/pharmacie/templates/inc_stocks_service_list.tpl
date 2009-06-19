@@ -8,7 +8,36 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+// Autocomplete des medicaments
+Main.add(function () {
+  oFormDispensation = getForm('dispensation-urgence', true);
+
+  urlAuto = new Url();
+  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+  urlAuto.addParam("produit_max", 40);
+
+  urlAuto.autoComplete(oFormDispensation.produit, "produit_auto_complete", {
+    minChars: 3,
+    updateElement: updateFieldsMedicament,
+    callback: 
+      function(input, queryString){
+        return queryString + "&inLivret=1&search_by_cis=0";
+      }
+  });
+});
+
+updateDispensationUrgence = function(formUrgence) {
+  var formFilter = getForm("filter");
+  $V(formUrgence.service_id, $V(formFilter.service_id));
+  $V(formUrgence.patient_id, $V(formFilter.patient_id));
+}
+</script>
+
 <table class="tbl">
+  <tr>
+    <th colspan="6" class="title">Dispensations - Produits présents dans les services</th>
+  </tr>
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
     <th>{{tr}}CProductStockService{{/tr}}</th>
@@ -68,4 +97,29 @@
       <td colspan="10">{{tr}}CProductStockService.none{{/tr}}</td>
     </tr>
   {{/foreach}}
+  <tr>
+    <th class="title" colspan="6">
+			Autres produits
+    </th>
+  </tr>
+  <tr>
+    <td colspan="6" style="text-align: center;">
+    <form name="dispensation-urgence" action="?" method="post" onsubmit="updateDispensationUrgence(this); $('produit_view').update(''); return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">
+      <input type="hidden" name="m" value="dPstock" />
+      <input type="hidden" name="dosql" value="do_delivery_aed" />
+      {{mb_field object=$delivrance field=service_id hidden=true}}
+      {{mb_field object=$delivrance field=patient_id hidden=true}}
+      <input type="hidden" name="date_dispensation" value="now" />
+      <input type="hidden" name="_code" value="" class="notNull" />
+      
+      Produit: <input type="text" name="produit" value="" autocomplete="off" />
+      <span id="produit_view"></span>
+      <div style="display: none; text-align: left;" class="autocomplete" id="produit_auto_complete"></div>
+      
+      Quantité: {{mb_field object=$delivrance field=quantity size="4" increment=true form="dispensation-urgence" value="1"}}
+      
+      <button class="tick">Dispenser</button>
+    </form>
+    </td>
+  </tr>
 </table>

@@ -573,6 +573,20 @@ class CBcbProduit extends CBcbObject {
     return $ds->loadList($query);
   }
   
+  static function getProduitsFromCISInLivret($code_cis){
+    global $g;
+    
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT * 
+              FROM `IDENT_PRODUITS`
+							LEFT JOIN PRODUITS_IFP ON IDENT_PRODUITS.CODE_CIP = PRODUITS_IFP.CODE_CIP
+							LEFT JOIN LIVRETTHERAPEUTIQUE ON IDENT_PRODUITS.CODE_CIP = LivretTherapeutique.CODECIP
+							WHERE `CODECIS` = '$code_cis'
+							AND PRODUITS_IFP.Produit_supprime is NULL 
+			        AND LivretTherapeutique.CodeEtablissement='$g'";
+    return $ds->loadList($query);
+  }
+  
   static function getProduitsFromUCD($code_ucd){
     $ds = CBcbObject::getDataSource();
     $query = "SELECT * 

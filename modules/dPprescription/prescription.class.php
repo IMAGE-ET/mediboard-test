@@ -1437,7 +1437,7 @@ class CPrescription extends CMbObject {
   /*
    * Génération du Dossier/Feuille de soin
    */
-  function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true){  
+  function calculPlanSoin($date, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = ""){  
     // Calcul de l'affectation courante pour connaitre le service_id
     $this->_ref_object->loadRefCurrAffectation($date);
     if($this->_ref_object->_ref_curr_affectation->_id){
@@ -1455,7 +1455,7 @@ class CPrescription extends CMbObject {
 	        continue;  
 	      }
 	      // Filtre par code_cip
-	      if($code_cip && ($code_cip != $_line_med->code_cip)){
+	      if(($code_cip && ($code_cip != $_line_med->code_cip)) || ($code_cis && ($code_cis != $_line_med->code_cis))) {
 	        continue;
 	      }
 	      $_line_med->loadRefPraticien();

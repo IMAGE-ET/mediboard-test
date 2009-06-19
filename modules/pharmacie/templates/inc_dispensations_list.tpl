@@ -47,26 +47,24 @@
   </tr>
   {{/if}}
   <tr>
-    <th>Quantité à administrer</th>
-    <th>Quantité à dispenser</th>
+    <th>Quantité<br /> à administrer</th>
+    <th>Quantité<br /> à dispenser</th>
     {{if !$infinite}}
-      <th>Stock pharmacie</th>
+      <th>Stock<br />pharmacie</th>
     {{/if}}
-    <th>Déjà effectuées</th>
     <th style="width: 30%">
+      <!-- <button style="float: right" type="button" onclick="dispenseAll()" class="tick">Tout dispenser</button> -->
       Dispensation
-      <button type="button" onclick="dispenseAll()" class="tick">Tout dispenser</button>
     </th>
-    <th>Stock du service</th>
-    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
+    <th>Déjà effectuées</th>
+    <th>Stock<br /> du service</th>
+    <th>Unité de dispensation</th>
   </tr>
-  {{foreach from=$dispensations key=code_cip item=quantites}}
-
-    <tbody id="dispensation_line_{{$code_cip}}" style="width: 100%">
+  {{foreach from=$dispensations key=code_cis item=quantites}}
+    <tbody id="dispensation_line_{{$code_cis}}" style="width: 100%">
     <!-- Affichage d'une ligne de dispensation -->
     {{include file="inc_dispensation_line.tpl" nodebug=true}}
     </tbody>
-    
   {{foreachelse}}
     <tr>
       <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>

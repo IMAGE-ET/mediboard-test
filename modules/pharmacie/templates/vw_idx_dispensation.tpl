@@ -9,7 +9,7 @@
 *}}
 
 <script type="text/javascript">
-function refreshLists(code_cip) {
+function refreshLists(code_cis) {
   var form = getForm("filter");
   var transmissionTab = $('li-transmissions');
   var showTransmissions = false;
@@ -24,7 +24,7 @@ function refreshLists(code_cip) {
   else {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
     $('list-dispensations-title').update('Nominatif reglobalisé');
-    $('list-stocks-title').update('Global');
+    $('list-stocks-title').update('Global hors prescription');
   }
 
   transmissionTab.setVisible(showTransmissions);
@@ -39,12 +39,10 @@ function refreshLists(code_cip) {
   $A(form.elements).each (function (e) {
     url.addParam(e.name, $V(e));
   });
-  if(code_cip){
-    url.addParam("code_cip", code_cip);
-  }
-  
-  if(code_cip){
-    url.requestUpdate("dispensation_line_"+code_cip, { waitingText: null } );  
+    
+  if(code_cis){
+    url.addParam("_selected_cis", code_cis);
+    url.requestUpdate("dispensation_line_"+code_cis, { waitingText: null } );    
   } else {
     url.requestUpdate("list-dispensations", { waitingText: null } );
   }
@@ -84,52 +82,12 @@ updateFieldsMedicament = function(selected) {
   }
 }
 
-// Autocomplete des medicaments
-Main.add(function () {
-  oFormDispensation = getForm('dispensation-urgence', true);
 
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.addParam("produit_max", 40);
-
-  urlAuto.autoComplete(oFormDispensation.produit, "produit_auto_complete", {
-    minChars: 3,
-    updateElement: updateFieldsMedicament,
-    callback: 
-      function(input, queryString){
-        return queryString + "&inLivret=1&search_by_cis=0";
-      }
-  });
-});
-
-function updateDispensationUrgence(formUrgence) {
-  var formFilter = getForm("filter");
-  $V(formUrgence.service_id, $V(formFilter.service_id));
-  $V(formUrgence.patient_id, $V(formFilter.patient_id));
-}
 </script>
 
 {{include file=inc_filter_delivrances.tpl}}
 
 <ul id="tab_delivrances" class="control_tabs">
-  <li style="float: right;">
-    <form title="Dispensation d'urgence" name="dispensation-urgence" action="?" method="post" onsubmit="updateDispensationUrgence(this); return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">
-      <input type="hidden" name="m" value="dPstock" />
-      <input type="hidden" name="dosql" value="do_delivery_aed" />
-      {{mb_field object=$delivrance field=service_id hidden=true}}
-      {{mb_field object=$delivrance field=patient_id hidden=true}}
-      <input type="hidden" name="date_dispensation" value="now" />
-      <input type="hidden" name="_code" value="" class="notNull" />
-      
-      Produit: <input type="text" name="produit" value="" autocomplete="off" />
-      <span id="produit_view"></span>
-      <div style="display: none; text-align: left;" class="autocomplete" id="produit_auto_complete"></div>
-      
-      Quantité: {{mb_field object=$delivrance field=quantity size="4" increment=true form="dispensation-urgence"}}
-      
-      <button class="tick">Dispenser</button>
-    </form>
-  </li>
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nominatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
   <li id="li-transmissions"><a href="#list-transmissions">Transmissions</a></li>

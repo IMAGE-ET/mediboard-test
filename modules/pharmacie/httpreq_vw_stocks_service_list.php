@@ -68,7 +68,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('list_stocks_service', $list_stocks_service);
 $smarty->assign('list_returns', $list_returns);
 $smarty->assign('list_dispensations',  $list_dispensations);
-
+$smarty->assign("delivrance", new CProductDelivery());
 $smarty->display('inc_stocks_service_list.tpl');
 
 ?>
