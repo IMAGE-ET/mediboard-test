@@ -287,8 +287,8 @@ foreach($delivrances as $code_cis => $_delivrance){
     $produit->loadConditionnement();
     $produit->loadLibellePresentation();
     $produit->_unite_administration = $produit->libelle_unite_presentation;
-		$produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
-    
+		
+    $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
     if($produit->_unite_dispensation == $produit->libelle_unite_presentation){
       $ratio = 1;
     } else {
@@ -304,6 +304,7 @@ foreach($delivrances as $code_cis => $_delivrance){
     
 	  $correction_dispensation[$code_cis][$produit->code_cip]["produit"] = $produit->libelle;
 	  $correction_dispensation[$code_cis][$produit->code_cip]["dispensation"] = $quantite_dispensation;
+	  
 	  $correction_dispensation[$code_cis]["nb"]["$quantite_dispensation"] = $quantite_dispensation;
   }
 }

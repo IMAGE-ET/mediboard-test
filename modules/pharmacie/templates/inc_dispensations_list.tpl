@@ -52,13 +52,13 @@
     {{if !$infinite}}
       <th>Stock<br />pharmacie</th>
     {{/if}}
+    <th>Unité de dispensation</th>
     <th style="width: 30%">
       <!-- <button style="float: right" type="button" onclick="dispenseAll()" class="tick">Tout dispenser</button> -->
       Dispensation
     </th>
     <th>Déjà effectuées</th>
     <th>Stock<br /> du service</th>
-    <th>Unité de dispensation</th>
   </tr>
   {{foreach from=$dispensations key=code_cis item=quantites}}
     <tbody id="dispensation_line_{{$code_cis}}" style="width: 100%">

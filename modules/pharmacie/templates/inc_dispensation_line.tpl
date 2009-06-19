@@ -29,7 +29,7 @@
     
     <tr>
       <!-- Quantite à administrer -->
-      <td style="text-align: center;">
+      <td style="text-align: center;" class="text">
         <div onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-poso-{{$code_cis}}')" class="tooltip-trigger">
           <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
         </div>
@@ -71,13 +71,15 @@
       <!-- Quantite à dispenser -->
       <td style="text-align: center;">
         {{if array_key_exists($code_cis, $correction_dispensation)}}
+          <!-- 
           <ul>
           {{foreach from=$correction_dispensation.$code_cis key=code_cip item=_corrections}}
             {{if $code_cip != "nb"}}
               <li>{{$_corrections.dispensation}}</li>
             {{/if}}
           {{/foreach}}
-          </ul>
+          </ul> -->
+          -
         {{else}}
           {{$quantite_dispensation}}
         {{/if}}
@@ -96,8 +98,9 @@
 				       {{foreach from=$stocks_pharmacie.$code_cis key=_cip item=stock_pharma}}
 				         {{if $_cip != "total"}}
 					         {{assign var=_stock_produit value=$produits_cip.$_cip}}
+					         {{assign var=deliv value=$delivrances.$code_cis.$_cip}}
 					         {{if $stock_pharma}}
-					           <li><strong>{{$stock_pharma}} </strong>{{$_stock_produit.LIBELLE_PRODUIT}}</li>
+					           <li><strong>{{$stock_pharma}} {{$deliv->_ref_stock->_ref_product->_unit_title}}</strong> {{$_stock_produit.LIBELLE_PRODUIT}}</li>
 					         {{/if}}
 				         {{/if}}
 				       {{/foreach}}
@@ -108,7 +111,19 @@
 		     {{/if}} 
 	     </td>
       {{/if}}
-      
+     
+     <td style="text-align: center;">
+	     {{if array_key_exists($code_cis,$delivrances)}}
+	       {{foreach from=$delivrances.$code_cis key=code_cip item=delivrance}}
+	         {{if $delivrance->_ref_stock->_ref_product->packaging}}
+	     	     <label title="{{$delivrance->_ref_stock->_ref_product->_unit_title}}">
+	     	     {{mb_ditto name="unite_disp" value=$delivrance->_ref_stock->_ref_product->_unit_title|truncate:30}}<br />
+	     	     </label>
+	     	   {{/if}}
+	       {{/foreach}}
+	     {{/if}}
+     </td>
+     
      <!-- Formulaire de dispensation -->
      <td style="text-align: left;">
      {{if $infinite}}
@@ -139,6 +154,7 @@
 	         {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
 	           {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style 
 	             onchange="this.form._quantity_package.value = this.value/$qty"}}
+	           
 	           
 	           (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
 	                  onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
@@ -192,6 +208,7 @@
 	             {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style 
 	               onchange="this.form._quantity_package.value = this.value/$qty"}}
 	             
+	              
 	             (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
 	                    onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
 	             {{$delivrance->_ref_stock->_ref_product->packaging}})
@@ -226,10 +243,10 @@
          {{foreach from=$done_by_cip item=curr_done}}
 	         {{assign var=_produit_cip value=$produits_cip.$done_key}}
        	   {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
-	             <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">{{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
+	             <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">{{$trace->quantity}} {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
 	             <div class="tooltip-trigger" 
 	                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done->_id}}')">
-	               {{$curr_done->quantity}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+	               {{$curr_done->quantity}}  {{$curr_done->_ref_stock->_ref_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 	               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
 	             </div>
 	             {{foreachelse}}
@@ -240,7 +257,7 @@
 	                 <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
 	                 <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
 	               </form>
-	               {{$curr_done->quantity}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+	               {{$curr_done->quantity}}  {{$curr_done->_ref_stock->_ref_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 	               <br />
 	           {{/foreach}}
 	       {{foreachelse}}
@@ -257,14 +274,14 @@
 	        	   {{assign var=_produit_cip value=$produits_cip.$done_nom_key}}
 		           {{foreach from=$curr_done_nom->_ref_delivery_traces item=trace}}
 		             <div id="tooltip-content-{{$curr_done_nom->_id}}" style="display: none;">
-		             {{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} à {{$trace->_ref_delivery->_ref_patient->_view}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
+		             {{$trace->quantity}}  {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} à {{$trace->_ref_delivery->_ref_patient->_view}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
 		             <div class="tooltip-trigger" 
 		                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_nom->_id}}')">
-		               {{$curr_done_nom->quantity}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}} à {{$trace->_ref_delivery->_ref_patient->_view}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+		               {{$curr_done_nom->quantity}}  {{$curr_done_nom->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}} à {{$trace->_ref_delivery->_ref_patient->_view}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
 		             </div>
 		             {{foreachelse}}
-		               {{$curr_done_nom->quantity}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}} à {{$curr_done_nom->_ref_patient->_view}}
+		               {{$curr_done_nom->quantity}}  {{$curr_done_nom->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}} à {{$curr_done_nom->_ref_patient->_view}}
 		               [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <br />
 		           {{/foreach}}
@@ -283,14 +300,14 @@
 		           {{assign var=_produit_cip value=$produits_cip.$done_glob_key}}
 		           {{foreach from=$curr_done_glob->_ref_delivery_traces item=trace}}
 		             <div id="tooltip-content-{{$curr_done_glob->_id}}" style="display: none;">
-		                {{$trace->quantity}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
+		                {{$trace->quantity}} {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
 		             <div class="tooltip-trigger" 
 		                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_glob->_id}}')">
-		               {{$curr_done_glob->quantity}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+		               {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
 		             </div>
 		             {{foreachelse}}
-		               {{$curr_done_glob->quantity}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} (Global) [{{$_produit_cip.LIBELLE_PRODUIT}}]
+		               {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} (Global) [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <br />
 		           {{/foreach}}
 	           {{/foreach}}
@@ -322,9 +339,5 @@
 	       Aucun stock
 	     {{/if}} 
      </td>
-     
-     <!-- Affichage de l'unite de dispensation -->
-     <td class="text">
-       {{$produit->_unite_dispensation}}
-     </td>   
+       
    </tr>

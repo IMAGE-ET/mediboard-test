@@ -330,10 +330,13 @@ foreach($done as $_done_cis => $_done) {
 	  foreach($delivrances[$_done_cis] as $_delivery_cip => $_delivery){
 	    $_quantites = $dispensations[$_done_cis];	    
 	    $_delivery->quantity = max($_quantites["quantite_dispensation"] - (isset($_done["total"]) ? $_done["total"] : 0), 0);
-	    $_delivery->quantity = min($_delivery->quantity, $stocks_pharmacie[$_done_cis][$_delivery_cip]);
+	    if(!CAppUI::conf("dPstock CProductStockGroup infinite_quantity")){
+	      $_delivery->quantity = min($_delivery->quantity, $stocks_pharmacie[$_done_cis][$_delivery_cip]);
+	    }
 	  }
   }
 }
+
 
 
 // Patch unite de dispensation
@@ -378,7 +381,6 @@ foreach($correction_dispensation as $code_cis => $_correction){
     $_delivery->quantity = $correction_dispensation[$code_cis][$code_cip]["dispensation"];
   }
 }
-
 
 // Smarty template
 $smarty = new CSmartyDP();
