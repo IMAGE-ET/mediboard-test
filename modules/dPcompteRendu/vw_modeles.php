@@ -14,7 +14,7 @@ $can->needsRead();
 $user = new CMediusers();
 
 // Liste des praticiens et cabinets accessibles
-$praticiens = $user->loadPraticiens(PERM_EDIT);
+$praticiens = $user->loadUsers(PERM_EDIT);
 
 // Filtres
 $filtre = new CCompteRendu();

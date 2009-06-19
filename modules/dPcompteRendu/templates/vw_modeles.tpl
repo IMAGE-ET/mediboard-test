@@ -10,7 +10,7 @@
 </tr>
 
 <tr>
-  <th>{{mb_label object=$filtre field=chir_id}}</th>
+  <th>Utilisateur{{*mb_label object=$filtre field=chir_id*}}</th>
   <td>
     <select name="chir_id" onchange="submit()">
       <option value="">&mdash; Choisir un utilisateur</option>
