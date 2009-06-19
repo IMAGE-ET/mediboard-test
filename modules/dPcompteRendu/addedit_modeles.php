@@ -13,7 +13,8 @@ $can->needsRead();
 
 // Liste des praticiens accessibles
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+//$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+$listPrat = $listPrat->loadUsers(PERM_EDIT);
 
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
