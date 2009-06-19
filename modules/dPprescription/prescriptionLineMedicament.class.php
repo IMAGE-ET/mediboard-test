@@ -539,18 +539,22 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
   
       if($unite){
-	      $coef_adm = $this->_ref_produit->rapport_unite_prise[$unite][$libelle_unite_presentation];
-        if($_poso->p_kg) {
+	      $coef_adm = @$this->_ref_produit->rapport_unite_prise[$unite][$libelle_unite_presentation];
+	      if($_poso->p_kg) {
 	        // On ajoute la poso avec les /kg
 	          $_presentation = "";
-		        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
-		          $_presentation = " ($coef_adm $libelle_unite_presentation/kg)";
-		        }
+	          if($coef_adm){
+			        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+			          $_presentation = " ($coef_adm $libelle_unite_presentation/kg)";
+			        }
+	          }
 		        $this->_unites_prise[] = "$unite/kg".$_presentation;
 	      }
         $_presentation = "";
-        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
-          $_presentation = " ($coef_adm $libelle_unite_presentation)";
+        if($coef_adm){
+	        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+	          $_presentation = " ($coef_adm $libelle_unite_presentation)";
+	        }
         }
         $this->_unites_prise[] = $unite.$_presentation;
       }
