@@ -12,24 +12,24 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="2">
-	  <div class="idsante400" id="{{$object->_guid}}"></div>
-      <a style="float:right;" href="#nothing" onclick="guid_log('{{$object->_guid}}')">
-        <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
-      </a>
-      <a class="action" style="float: right"  title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
-       </a>
+    <th class="title" colspan="2" style="vertical-align:middle;">
 
       <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
-      
-       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}
-       </a>
+      <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
+       {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}
+      </a>
 	    
       {{$object->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+      
+	    <div class="idsante400" id="{{$object->_guid}}"></div>
+      <a style="float:right;" href="#nothing" onclick="guid_log('{{$object->_guid}}')">
+        <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
+      </a>
+      <a style="float:right" class="action" title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
+       <img src="images/icons/edit.png" alt="modifier" />
+      </a>
     </th>
   </tr>
 
