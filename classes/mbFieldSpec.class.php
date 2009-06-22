@@ -527,7 +527,7 @@ class CMbFieldSpec {
 	      $sHtml      = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
 	                     class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
 	      $sHtml     .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
-	                     class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\'\'}' $extra />";
+	                     class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
 	      $ref = true;
 	    }
 	    else {
@@ -592,7 +592,7 @@ class CMbFieldSpec {
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
-    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" disabled="disabled" />';
+    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" readonly="readonly" />';
     $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
 
     if ($register || $this instanceof CTimeSpec) {
