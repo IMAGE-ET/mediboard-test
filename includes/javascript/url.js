@@ -222,6 +222,28 @@ var Url = Class.create({
     new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php" + getParams, oDefaultOptions);
   },
   
+  requestJSON: function(fCallback, oOptions) {
+    this.addParam("suppressHeaders", "1");
+    this.addParam("ajax", "");
+  
+    var oDefaultOptions = {
+      waitingText: null,
+      urlBase: "",
+      method: "get",
+      parameters:  $H(this.oParams).toQueryString(), 
+      asynchronous: true,
+      evalScripts: true,
+      evalJSON: 'force',
+      getParameters: null,
+    };
+  
+    Object.extend(oDefaultOptions, oOptions);
+    oDefaultOptions.onSuccess = function(transport){fCallback(transport.responseJSON)};
+  	
+    var getParams = oDefaultOptions.getParameters ? "?" + $H(oDefaultOptions.getParameters).toQueryString() : '';
+    new Ajax.Request(oDefaultOptions["urlBase"] + "index.php" + getParams, oDefaultOptions);
+  },
+  
   requestUpdateOffline: function(ioTarget, oOptions) {
     if (typeof netscape != 'undefined' && typeof netscape.security != 'undefined') {
       netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
