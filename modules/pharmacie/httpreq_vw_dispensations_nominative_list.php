@@ -53,6 +53,7 @@ $stocks_pharmacie = array();
 $warning = array();
 $produits_cip = array();
 $produits_cis = array();
+$correction_dispensation = array();
 
 $prescription = new CPrescription();
 $prescription->load($prescription_id);

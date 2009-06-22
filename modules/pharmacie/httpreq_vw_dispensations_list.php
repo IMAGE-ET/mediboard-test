@@ -52,7 +52,7 @@ $done_nominatif = array();
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 $_lines = array();
-
+$correction_dispensation = array();
 
 // Creation du tableau de dates
 $dates = array();
