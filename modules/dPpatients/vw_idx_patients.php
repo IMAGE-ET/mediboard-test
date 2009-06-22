@@ -16,8 +16,6 @@ $mediuser->load($AppUI->user_id);
 
 $showCount = 30;
 
-mbTrace($AppUI->user_prefs);
-
 // L'utilisateur est-il un chirurgien
 $chir = $mediuser->isFromType(array("Chirurgien")) ? $mediuser : null;
 
