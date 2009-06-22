@@ -58,14 +58,14 @@ Main.add(function () {
         </td>
         
         <td class="button" style="width: 250px;">
-          <a style="float:left" href="javascript:;" onclick="$V(getForm('Filter').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
-          <a style="float:right" href="javascript:;" onclick="$V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
+          <a style="float:left" href="javascript:;" onclick="$V(getForm('Filter').plageconsult_id, ''); $V(getForm('Filter').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
+          <a style="float:right" href="javascript:;" onclick="$V(getForm('Filter').plageconsult_id, ''); $V(getForm('Filter').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
           <strong>
             {{if $period == "day"  }}{{$date|date_format:" %A %d %B %Y"}}{{/if}}
             {{if $period == "week" }}{{$date|date_format:" semaine du %d %B %Y"}}{{/if}}
             {{if $period == "month"}}{{$date|date_format:" %B %Y"}}{{/if}}
           </strong>
-          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="$V(getForm('Filter').plageconsult_id, ''); this.form.submit()" />
         </td>
         
         <th><label for="hour" title="Filtrer les plages englobalt l'heure choisie">Filtrer les heures</label></th>
