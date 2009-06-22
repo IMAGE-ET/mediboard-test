@@ -149,4 +149,6 @@ $locales['Resend'] = 'Renvoyer';
 $locales['Impossible'] = 'Impossible';
 $locales['Infos'] = 'Infos';
 $locales['Actions'] = 'Actions';
+$locales['common-warning-no-mediuser'] = 'Vous n\'ètes pas relié à l\'organigramme, ce qui va nuit au bon fonctionnement et réduit les fonctionnalités.';
+$locales['common-suggest-no-mediuser'] = 'Il est fortement conseillé d\'installer le module Mediusers pour créer et utiliser un utilisateur relié à l\'organigramme.';
 ?>

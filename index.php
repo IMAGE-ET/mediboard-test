@@ -170,7 +170,6 @@ if ($user->isInstalled()) {
   $AppUI->_ref_user = $user;
 }
 
-
 // Set the module and action from the url
 if (null == $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();

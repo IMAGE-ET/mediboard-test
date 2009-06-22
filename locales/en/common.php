@@ -149,4 +149,6 @@ $locales['Resend'] = '';
 $locales['Impossible'] = '';
 $locales['Infos'] = 'Infos';
 $locales['Actions'] = 'Actions';
+$locales['common-warning-no-mediuser'] = '';
+$locales['common-suggest-no-mediuser'] = '';
 ?>

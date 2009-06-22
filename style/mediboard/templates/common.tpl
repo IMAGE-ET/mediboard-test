@@ -40,7 +40,11 @@
 <body class="{{if @$app->user_prefs.touchscreen == 1}}touchscreen{{/if}}">
 
 <!--[if lte IE 6]>
-<div style="background-color: #ffc; padding: 0.5em; border-bottom: 1px solid #333; font-size: 1.2em;"><img src="images/icons/warning.png" />Votre navigateur web est trop ancien, Mediboard ne peut pas fonctionner correctement, <a href="http://mediboard.org/public/Firefox" target="_blank">cliquez ici</a> pour installer Firefox et profiter d'une meilleure expérience.</div>
+<div style="background-color: #ffc; padding: 0.5em; border-bottom: 1px solid #333; font-size: 1.2em;">
+	<img src="images/icons/warning.png" />Votre navigateur web est trop ancien, Mediboard ne peut pas fonctionner correctement, 
+	<a href="http://mediboard.org/public/Firefox" target="_blank">cliquez ici</a> 
+	pour installer Firefox et profiter d'une meilleure expérience.
+</div>
 <![endif]-->
 
 <!--[if IE 7]>
@@ -55,7 +59,11 @@ Main.add(function () {
 <div id="ie7warning" style="background-color: #ffc; border-bottom: 1px solid #333; padding: 0.3em; height: 1.4em; display: none;">
   <a href="#1" style="float: right;" onclick="$('ie7warning').hide(); cookiejar.put('IE7WarningClosed', 'closed');">Fermer</a>
   <img src="images/icons/warning.png" style="float: left;"/>
-  <span style="margin: 0.2em;">Pour un meilleur confort d'utilisation, nous vous conseillons d'utiliser le navigateur Firefox. <a href="http://mediboard.org/public/Firefox" target="_blank" style="font-weight: bold; text-decoration: underline;">Cliquez ici</a> pour l'installer.</span>
+  <span style="margin: 0.2em;">
+  	Pour un meilleur confort d'utilisation, nous vous conseillons d'utiliser le navigateur Firefox. 
+  	<a href="http://mediboard.org/public/Firefox" target="_blank" style="font-weight: bold; text-decoration: underline;">Cliquez ici</a> 
+  	pour l'installer.
+  </span>
 </div>
 <![endif]-->
 
@@ -65,7 +73,7 @@ Main.add(function () {
   <div class="loading">Chargement en cours</div>
 </div>
 <div id="sessionLockMask" style="display: none;">
-  {{if $app->user_id}}
+  {{if $app->_ref_user}}
   <div class="window" style="position: absolute; text-align: center; -moz-border-radius: 10px; background: #eee;">
     <div style="background: #ccc; -moz-border-radius: 5px 5px 0 0; font-weight: bold; margin: 0; padding: 5px 1em;">
       Session verrouillée - {{$app->_ref_user}}
@@ -77,8 +85,8 @@ Main.add(function () {
         <label for="password">Mote de passe: </label>
         <input type="password" name="password" />
       </div>
-      <button class="tick" onclick="Session.unlock()">Déverouiller</button>
-      <button class="cancel" onclick="Session.close()">Déconnecter</button>
+      <button class="tick" onclick="Session.unlock()">{{tr}}Unlock{{/tr}}</button>
+      <button class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
     </form>
   </div>
   {{/if}}
@@ -107,7 +115,7 @@ Main.add(function () {
 
 <!-- Javascript Console -->
 
-<div id="console" style="display:none">
+<div id="console" style="display: none">
   <div id="console-title">
     <div id="console-hide" onclick="Console.hide()"></div>
     Javascript console

@@ -1,5 +1,16 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
+{{if !$dialog}}
+{{if !$app->_ref_user || !$app->_ref_user->_id}}
+<!-- No Mediuser -->
+<div class="small-warning">
+  {{tr}}common-warning-no-mediuser{{/tr}}
+  <br/>
+  {{tr}}common-suggest-no-mediuser{{/tr}}
+</div>
+{{/if}}
+{{/if}}
+
 <script type="text/javascript">
 var Menu = {
   toggle: function () {
