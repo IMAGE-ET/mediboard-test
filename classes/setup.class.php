@@ -151,15 +151,13 @@ class CSetup {
    * @param string $oldRevision revision befoire upgrade
    */
   function upgrade($oldRevision) {
-    global $AppUI;
-
     if (array_key_exists($this->mod_version, $this->queries)) {
-      $AppUI->setMsg("Latest revision '$this->mod_version' should not have upgrade queries", UI_MSG_ERROR);
+      CAppUI::setMsg("Latest revision '$this->mod_version' should not have upgrade queries", UI_MSG_ERROR);
       return;
     }
 
     if (!array_key_exists($oldRevision, $this->queries)) {
-      $AppUI->setMsg("No queries for '$this->mod_name' setup at revision '$oldRevision'", UI_MSG_ERROR);
+      CAppUI::setMsg("No queries for '$this->mod_name' setup at revision '$oldRevision'", UI_MSG_ERROR);
       return;
     }
     
@@ -175,7 +173,7 @@ class CSetup {
         $module = @CModule::getInstalled($dependency->module);
         if (!$module || $module->mod_version < $dependency->revision) {
           $depFailed = true;
-          $AppUI->setMsg("Failed module depency for '$dependency->module' at revision '$dependency->revision'", UI_MSG_WARNING, true);
+          CAppUI::setMsg("Failed module depency for '$dependency->module' at revision '$dependency->revision'", UI_MSG_WARNING, true);
         }
       }
         
@@ -191,7 +189,7 @@ class CSetup {
       // Query upgrading
       foreach ($this->queries[$currRevision] as $query) {
         if (!$this->ds->exec($query)) {
-          $AppUI->setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);
+          CAppUI::setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);
           return $currRevision;
         }
       }
@@ -199,7 +197,7 @@ class CSetup {
       // Callback upgrading
       foreach ($this->functions[$currRevision] as $function) {
         if (!call_user_func($function)) {
-          $AppUI->setMsg("Error in function '$function' call back for revision '$currRevision': see logs.", UI_MSG_ERROR);
+          CAppUI::setMsg("Error in function '$function' call back for revision '$currRevision': see logs.", UI_MSG_ERROR);
           return $currRevision;
         }
       }
@@ -215,10 +213,8 @@ class CSetup {
    * @return bool Job done
    */
   function remove() {
-    global $AppUI;
-    
     if ($this->mod_type == "core") {
-      $AppUI->setMsg("Impossible de supprimer le module '%s'", UI_MSG_ERROR, $this->mod_name);
+      CAppUI::setMsg("Impossible de supprimer le module '%s'", UI_MSG_ERROR, $this->mod_name);
       return false;
     }
     
@@ -227,7 +223,7 @@ class CSetup {
       $query = "DROP TABLE `$table`";
       if (!$this->ds->exec($query)) {
         $success = false;
-        $AppUI->setMsg("Failed to remove table '%s'", UI_MSG_ERROR, $table);
+        CAppUI::setMsg("Failed to remove table '%s'", UI_MSG_ERROR, $table);
       } 
     }
     

@@ -599,6 +599,11 @@ class CAppUI {
     $this->user_prefs = array_merge($this->user_prefs, $user_prefs);
   }
   
+  function reloadPrefs() {
+    $this->loadPrefs(0);
+    $this->loadPrefs($this->user_id);
+  }
+  
   /**
    * Attempt to make AppUI functions static for better use
    */

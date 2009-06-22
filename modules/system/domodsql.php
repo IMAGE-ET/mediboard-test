@@ -68,7 +68,6 @@ switch ($cmd) {
   break;
 
   case "install":
-  
   if ($module->mod_version = $setup->upgrade($module->mod_version)) {
     $module->mod_type = $setup->mod_type;
     $module->install();
@@ -83,6 +82,9 @@ switch ($cmd) {
   else {
     $AppUI->setMsg("Module '$module->mod_name' non installé", UI_MSG_ERROR, true);
   }
+  
+	// In case the setup has added some user prefs
+  $AppUI->reloadPrefs();
   break;
 
   case "upgrade":
@@ -100,6 +102,9 @@ switch ($cmd) {
 	else {
 		$AppUI->setMsg("Module '$module->mod_name' non mis à jour", UI_MSG_ERROR, true);
 	}
+
+	// In case the setup has added some user prefs
+  $AppUI->reloadPrefs();
 	break;
 
 	case "configure":
