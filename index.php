@@ -150,6 +150,7 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("time"                 , time());
     $smartyLogin->assign("redirect"             , $redirect);
     $smartyLogin->assign("uistyle"              , $uistyle);
+    $smartyLogin->assign("browser"              , $browser);
     $smartyLogin->assign("nodebug"              , true);
     $smartyLogin->assign("offline"              , false);
     $smartyLogin->display("login.tpl");
@@ -266,6 +267,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("messages"             , $messages);
   $smartyHeader->assign("mails"                , $mails);
   $smartyHeader->assign("uistyle"              , $uistyle);
+  $smartyHeader->assign("browser"              , $browser);
   $smartyHeader->assign("errorMessage"         , $AppUI->getMsg());
   $smartyHeader->assign("Etablissements"       , $etablissements);
   $smartyHeader->assign("portal"               , array (
