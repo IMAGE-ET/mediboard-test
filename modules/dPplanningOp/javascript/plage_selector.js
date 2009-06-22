@@ -62,7 +62,7 @@ var PlageOpSelector = {
         dAdm.setHours(hour_entree);
         dAdm.setMinutes(min_entree);
     
-        oSejourForm_date_entree_prevue_da.value = dAdm.toLocaleDate();
+        oSejourForm._date_entree_prevue_da.value = dAdm.toLocaleDate();
       }
       
       oSejourForm._curr_op_date.value = sDate;
