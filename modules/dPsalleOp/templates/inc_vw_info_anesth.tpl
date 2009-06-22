@@ -196,7 +196,7 @@
       <br />
 			<select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
 			  <option value="">&mdash; Choisir une aide</option>
-			  {{html_options options=$selOp->_aides.rques_visite_anesth.no_enum}}
+			  {{*html_options options=$selOp->_aides.rques_visite_anesth.no_enum*}}
 			</select>
 			<br />
 			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth)">
