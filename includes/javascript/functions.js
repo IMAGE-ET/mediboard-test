@@ -25,7 +25,7 @@ function main() {
 document.observe('dom:loaded', main);
 
 /**
- * Main page initialisation scripts
+ * Main page initialization scripts
  */
 var Main = {
   scripts: [],
@@ -61,12 +61,11 @@ var References = {
    * Clean references involved in memory leaks
    */
   clean: function(obj) {
-    var elements = obj.descendants();
-    for (var j = 0; j < elements.length; j++) {
-      var e = elements[j];
-      if (e) {
+    var i, j, e, elements = obj.descendants();
+    for (j = 0; j < elements.length; j++) {
+      if (e = elements[j]) {
         if (e.attributes) {
-          for (var i = 0; i < e.attributes.length ; i++) {
+          for (i = 0; i < e.attributes.length ; i++) {
             if (Object.isFunction(e.attributes[i])) e.attributes[i] = null;
           }
         }
@@ -74,7 +73,7 @@ var References = {
       }
     }
   }
-}
+};
 
 var WaitingMessage = {
   init: function() {
@@ -88,17 +87,17 @@ var WaitingMessage = {
   },
   
   show: function() {
-    var eDoc  = document.documentElement;
-    var eMask = $('waitingMsgMask');
-    var eText = $('waitingMsgText');
-    if (!eMask && !eText) {
-      return;
-    }
+    var doc  = document.documentElement,
+		    mask = $('waitingMsgMask'),
+				text = $('waitingMsgText');
+				
+    if (!mask && !text) return;
   
     // Display waiting text
-    var vpd = document.viewport.getDimensions();
-    var etd = eText.getDimensions();
-    eText.setStyle({
+    var vpd = document.viewport.getDimensions(),
+		    etd = text.getDimensions();
+				
+    text.setStyle({
       top: (vpd.height - etd.height)/2 + "px",
       left: (vpd.width  - etd.width) /2 + "px",
       zIndex: 101,
@@ -106,11 +105,11 @@ var WaitingMessage = {
     }).show();
     
     // Display waiting mask
-    eMask.setStyle({
-      top: "0",
-      left: "0",
-      height: eDoc.scrollHeight + "px",
-      width: eDoc.scrollWidth + "px",
+    mask.setStyle({
+      top: 0,
+      left: 0,
+      height: doc.scrollHeight + "px",
+      width: doc.scrollWidth + "px",
       zIndex: 100,
       opacity: 0.2
     }).show();
@@ -119,23 +118,23 @@ var WaitingMessage = {
   cover: function(element) {    
     element = $(element);
     
-    var eDiv = new Element("div").addClassName('ajax-loading').hide(),
+    var cover = new Element("div").addClassName('ajax-loading').hide(),
 		    descendant = $(element).down();
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     if (descendant && descendant.tagName.match(/^tr$/i)) {
-			descendant.insert({bottom: eDiv});
+			descendant.insert({bottom: cover});
 		}
 	  else {
-	    element.insert({bottom: eDiv});
+	    element.insert({bottom: cover});
 	  }
 		
-		eDiv.setStyle({
+		cover.setStyle({
       opacity: 0.3,
       position: 'absolute'
     }).clonePosition(element).show();
   }
-}
+};
 
 function createDocument(oSelect, consultation_id) {
   if (modele_id = oSelect.value) {
@@ -167,7 +166,7 @@ var AjaxResponse = {
   },
   
   onPerformances: Prototype.emptyFunction
-}
+};
 
 
 /**
@@ -185,8 +184,6 @@ var SystemMessage = {
 
   // show/hide the div
   doEffect : function (delay, forceFade) {
-    var oDiv = $(this.id);
-    
     // Cancel current effect
     if (this.effect) {
       this.effect.cancel();
@@ -194,7 +191,7 @@ var SystemMessage = {
     }
       
     // Ensure visible        
-    oDiv.show().setOpacity(1);
+    $(this.id).show().setOpacity(1);
     
     // Only hide on type 'message'
     this.checkType();
@@ -207,23 +204,23 @@ var SystemMessage = {
   },
   
   init : function () {
-    var oDiv = $(this.id);
-    Assert.that(oDiv, "No system message div");
+    var element = $(this.id);
+    Assert.that(element, "No system message div");
     
     // Hide on onclick
-    Event.observe(oDiv, 'click', function(event) {
+    element.observe('click', function(event) {
       SystemMessage.doEffect(0.1, true);
-    } );
+    });
         
     // Hide empty message immediately
-    if (!oDiv.innerHTML.strip()) {
+    if (!element.innerHTML.strip()) {
       SystemMessage.doEffect(0.1, true);
       return;
     }
     
     SystemMessage.doEffect();
   }
-}
+};
 
 /**
  * Javascript console
@@ -304,7 +301,7 @@ var Console = {
     var oDefault = {
       level: 1,
       current: 0
-    }
+    };
       
     Object.extend(oDefault, oOptions);
   
@@ -365,7 +362,7 @@ var Console = {
     var oDefault = {
       level: 1,
       current: 0
-    }
+    };
       
     Object.extend(oDefault, oOptions);
     
@@ -423,17 +420,17 @@ var Console = {
 };
 
 // If there is no console object, it uses the Mediboard Console
-window.console = window.console || {
-  debug: Console.debug,
-  log: Console.trace
-};
+if (typeof console === "undefined") {
+	window.console = {
+	  debug: Console.debug.bind(window),
+	  log: Console.trace
+	};
+}
 
 /**
  * Assert utility object
  */ 
- 
 var Assert = {
-
   that: function (bPredicate, sMsg) {
     if (!bPredicate) {
       var aArgs = $A(arguments);
@@ -529,11 +526,9 @@ Object.extend(PairEffect, {
 });
 
 
-
 /**
  * TogglePairEffect Class
  */
-
 var TogglePairEffect = Class.create({
   // Constructor
   initialize: function(idTarget1, idTarget2, oOptions) {
@@ -568,17 +563,12 @@ var TogglePairEffect = Class.create({
   },
   
   show: function(iWhich) {
-    var oTarget1  = $(this.oOptions.idTarget1);
-    var oTarget2  = $(this.oOptions.idTarget2);
-    var oTrigger1 = $(this.oOptions.idTrigger1);
-    var oTrigger2 = $(this.oOptions.idTrigger2);
-    oTarget1[1 == iWhich ? "show" : "hide"]();
-    oTarget2[2 == iWhich ? "show" : "hide"]();
-    oTrigger1[1 == iWhich ? "show" : "hide"]();
-    oTrigger2[2 == iWhich ? "show" : "hide"]();
+    $(this.oOptions.idTarget1).setVisible(1 == iWhich);
+    $(this.oOptions.idTarget2).setVisible(2 == iWhich);
+    $(this.oOptions.idTrigger1).setVisible(1 == iWhich);
+    $(this.oOptions.idTrigger2).setVisible(2 == iWhich);
   }
-  
-} );
+});
 
 /**
  * PairEffect utiliy function
@@ -593,7 +583,7 @@ Object.extend(TogglePairEffect, {
       idStartVisible   : null, // Forces one element to start visible
       bStartAllVisible : false,
       sCookieName      : sTargetsClass
-    }
+    };
     
     Object.extend(oDefaultOptions, oOptions);
     
@@ -612,49 +602,42 @@ Object.extend(TogglePairEffect, {
  */
 
 var ViewPort = {
-  SetAvlHeight: function (sDivId, iPct) {
-    var oDiv = $(sDivId);
-    if (!oDiv) {
-      return;
-    }
-    var fYDivPos   = 0;
-    var fNavHeight = 0;
-    var fDivHeight = 0;
+  SetAvlHeight: function (element, pct) {
+    element = $(element);
+    if (!element) return;
+
+    var pos = 0,
+		    winHeight = 0;
   
     // Position Top de la div, hauteur de la fenetre,
     // puis calcul de la taille de la div
-    fYDivPos   = Position.cumulativeOffset(oDiv)[1];
-    fNavHeight = window.getInnerDimensions().height;
-    fDivHeight = fNavHeight - fYDivPos;
-    oDiv.style.overflow = "auto";
-    oDiv.style.height = (fDivHeight * iPct - 10) +"px";
+    pos       = element.cumulativeOffset()[1];
+    winHeight = window.getInnerDimensions().height;
+    element.style.overflow = "auto";
+    element.style.height = ((winHeight - pos) * pct - 10) + "px";
   },
   
-  SetFrameHeight: function(oFrame, oOptions){
-    var oDefaultOptions = {
-      iBottomMargin : 15
-    }
+  SetFrameHeight: function(element, options){
+    options = Object.extend({
+      marginBottom : 15
+    }, options || {});
       
     var fYFramePos        = 0;
     var fNavHeight        = 0;
     var fFrameHeight      = 0;
-    var fFrameHeightFinal = 0;
     
     // Calcul de la position top de la frame
-    fYFramePos = Position.cumulativeOffset(oFrame)[1];  
+    fYFramePos = Position.cumulativeOffset(element)[1];  
     
     // hauteur de la fenetre
     fNavHeight = window.getInnerDimensions().height;
     
     // Calcul de la hauteur de la div
     fFrameHeight = fNavHeight - fYFramePos;
-  
-    // Ajustement de la hauteur
-    fFrameHeightFinal = fFrameHeight - oDefaultOptions.iBottomMargin
     
-    oFrame.setAttribute("height", fFrameHeightFinal);
+    element.setAttribute("height", fFrameHeight - options.marginBottom);
   }
-}
+};
 
 /** Token field used to manage multiple enumerations easily.
  *  @param element The element used to get piped values : token1|token2|token3
@@ -867,26 +850,26 @@ Dom = {
       }
     }
   }
-}
+};
 
 /** Levenstein function **/
 
 function levenshtein( str1, str2 ) {
-    // http://kevin.vanzonneveld.net
-    // +   original by: Carlos R. L. Rodrigues
-    // *     example 1: levenshtein('Kevin van Zonneveld', 'Kevin van Sommeveld');
-    // *     returns 1: 3
- 
-    var s, l = (s = str1.split("")).length, t = (str2 = str2.split("")).length, i, j, m, n;
-    if(!(l || t)) return Math.max(l, t);
-    for(var a = [], i = l + 1; i; a[--i] = [i]);
-    for(i = t + 1; a[0][--i] = i;);
-    for(i = -1, m = s.length; ++i < m;){
-        for(j = -1, n = str2.length; ++j < n;){
-            a[(i *= 1) + 1][(j *= 1) + 1] = Math.min(a[i][j + 1] + 1, a[i + 1][j] + 1, a[i][j] + (s[i] != str2[j]));
-        }
+  // http://kevin.vanzonneveld.net
+  // +   original by: Carlos R. L. Rodrigues
+  // *     example 1: levenshtein('Kevin van Zonneveld', 'Kevin van Sommeveld');
+  // *     returns 1: 3
+
+  var s, l = (s = str1.split("")).length, t = (str2 = str2.split("")).length, i, j, m, n;
+  if(!(l || t)) return Math.max(l, t);
+  for(var a = [], i = l + 1; i; a[--i] = [i]);
+  for(i = t + 1; a[0][--i] = i;);
+  for(i = -1, m = s.length; ++i < m;){
+    for(j = -1, n = str2.length; ++j < n;){
+      a[(i *= 1) + 1][(j *= 1) + 1] = Math.min(a[i][j + 1] + 1, a[i + 1][j] + 1, a[i][j] + (s[i] != str2[j]));
     }
-    return a[l][t];
+  }
+  return a[l][t];
 }
 
 function luhn (code) {
@@ -935,7 +918,7 @@ Object.extend (Control.Tabs, {
       return tab;
     }
   }
-} );
+});
 
 
 Class.extend (Control.Tabs, {
@@ -950,7 +933,7 @@ Class.extend (Control.Tabs, {
       }
     }
   }
-} );
+});
 
 window.getInnerDimensions = function() {
   return {width: document.documentElement.clientWidth, height: document.documentElement.clientHeight};
@@ -981,7 +964,7 @@ var DOM = {
       }
     }
     catch (ex) {
-      alert('Cannot create <' + tag + '> element:\n' + Object.inspect(args) + '\n' + ex.message);
+      Console.error('Cannot create <' + tag + '> element:\n' + Object.inspect(args) + '\n' + ex.message);
       e = null;
     }
     return e;
@@ -1006,7 +989,7 @@ var l10n = {
   tr: function (token) {
     return locales ? (locales[token] || token) : token;
   }
-}
+};
 
 locales = {};
 
@@ -1097,4 +1080,4 @@ var Session = {
   close: function(){
     document.location.href = '?logout=-1';
   }
-}
+};
