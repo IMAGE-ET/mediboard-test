@@ -972,26 +972,26 @@ div.date {
   float: left;
 }
 
-input[disabled].date,
-input[disabled].time,
-input[disabled].dateTime {
+input[readonly].date,
+input[readonly].time,
+input[readonly].dateTime {
   border: 1px dotted #333;
   color: #333;
   background: none;
 }
 
 div.date,
-input[disabled].date {
+input[readonly].date {
   width: 90px;
 }
 
 div.time,
-input[disabled].time {
+input[readonly].time {
   width: 60px;
 }
 
 div.dateTime,
-input[disabled].dateTime {
+input[readonly].dateTime {
   width: 130px;
 }
 

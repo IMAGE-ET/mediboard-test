@@ -320,7 +320,7 @@ var Calendar = {
     var elementView;
     
     if (!(elementView = $(element.form.elements[element.name+'_da']))) {
-      elementView = new Element('input', {type: 'text', disabled: true}).addClassName(element.className || 'date');
+      elementView = new Element('input', {type: 'text', readonly: 'readonly'}).addClassName(element.className || 'date');
       element.insert({before: elementView});
     }
     
@@ -341,6 +341,9 @@ var Calendar = {
       datepicker.element.setStyle({width: 0, height: 0, border: 'none'});
       if (datepicker.icon) datepicker.icon.style.position = 'relative';
     }
+    else {
+      elementView.observe('focus', datepicker.show.bindAsEventListener(datepicker));
+    }
     
     // We update the view
     if (element.value && !elementView.value) {
@@ -353,6 +356,7 @@ var Calendar = {
         (function(){$(datepicker.datepicker.element).unoverflow()}).defer();
       });
     }
+    
     datepicker.element.observe('change', function(){oInput.fire("ui:change")});
   },
   
@@ -364,7 +368,7 @@ var Calendar = {
       icon: "images/icons/calendar.gif"
     }, options || {});
     
-    var viewElement = new Element('input', {type: 'text', disabled: 'disabled'}).addClassName('date');
+    var viewElement = new Element('input', {type: 'text', readonly: 'readonly'}).addClassName('date');
     element.insert({before: viewElement});
     
     var date = getDate();

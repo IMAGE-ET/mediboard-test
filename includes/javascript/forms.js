@@ -386,20 +386,20 @@ function prepareForm(oForm, bForcePrepare) {
 		        props.min || props.max || props.bool || props.ref || props.pct || props.num
 		      ), "'"+oElement.id+"' mask may conflit with other props");
 		    }
-
-			  // Not null
-    	  if (elementClassNames.indexOf("notNull") != -1) {
-          oElement.observe("change", notNullOK)
-                  .observe("keyup",  notNullOK)
-                  .observe("ui:change", notNullOK);
-		    }
-
-        // Can null
-        if (elementClassNames.indexOf("canNull") != -1) {
-          oElement.observe("change", canNullOK)
-                  .observe("keyup",  canNullOK)
-                  .observe("ui:change", canNullOK);
-        }
+        
+            // Can null
+            if (elementClassNames.indexOf("canNull") != -1) {
+              oElement.observe("change", canNullOK)
+                      .observe("keyup",  canNullOK)
+                      .observe("ui:change", canNullOK);
+            }
+        
+            // Not null
+            if (elementClassNames.indexOf("notNull") != -1) {
+              oElement.observe("change", notNullOK)
+                      .observe("keyup",  notNullOK)
+                      .observe("ui:change", notNullOK);
+            }
 
         // XOR
         if (props.xor) {
@@ -437,8 +437,8 @@ function prepareForm(oForm, bForcePrepare) {
 		    }
 		    
 		    // Focus on first text input
-		    if (bGiveFormFocus && oElement.type == "text" && oElement.visible() && !oElement.disabled && !oElement.getAttribute("readonly")) {
-		      var i, applets = document.applets;
+		    if (bGiveFormFocus && oElement.type == "text" && oElement.visible() && oElement.clientWidth > 0 && !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly")) {
+          var i, applets = document.applets;
           if (applets.length) {
             window._focusElement = oElement;
             var inactiveApplets = applets.length,
