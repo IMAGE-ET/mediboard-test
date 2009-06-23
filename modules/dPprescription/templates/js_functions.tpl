@@ -161,11 +161,6 @@ onSubmitPrise = function(oForm, chapitre){
 
 // Calcul de la date de debut lors de la modification de la fin
 syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
- 
-  // Déclaration des vues des dates
-  oDebut = $(oForm.elements._debut_da);
-  oFin = $(oForm.elements._fin_da);
-
   // Recuperation de la date actuelle
   var todayDate = new Date();
   var dToday = todayDate.toDATE();
@@ -198,7 +193,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     }
 
     oForm._fin.value = dFin.toDATE();
-    oFin.value = dFin.toLocaleDate();
+    oForm._fin_da.value = dFin.toLocaleDate();
     if(curr_line_id){
       testPharma(curr_line_id);
     }
@@ -230,7 +225,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     }
 
     oForm.debut.value = dDebut.toDATE();
-    oDebut.value = dDebut.toLocaleDate();
+    oForm.debut_da.value = dDebut.toLocaleDate();
     
     if(curr_line_id){
       testPharma(curr_line_id);
@@ -241,7 +236,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
   if(!sDebut && !nDuree && fieldName == "_fin"){
     dDebut = todayDate;
     oForm.debut.value = todayDate.toDATE();
-    oDebut.value = todayDate.toLocaleDate();
+    oForm.debut_da.value = todayDate.toLocaleDate();
     var nDuree = parseInt((dFin - dDebut)/86400000,10);
     oForm.duree.value = nDuree;
     oForm.unite_duree.value = "jour";
