@@ -1,5 +1,6 @@
+    {{if $online && $plage->_id}}
     <script type="text/javascript">
-    {{if $plage->plageconsult_id}}
+    
     PlageConsult.setClose = function(time) {
       window.opener.PlageConsultSelector.set(time,
         "{{$plage->_id}}",
@@ -49,7 +50,8 @@
           <br />
           Plage du {{$plage->date|date_format:$dPconfig.longdate}}
         </th>
-      </tr>
+      </tr>`
+      {{if $online}}
       <tr>
         <td class="button" colspan="3">
           <button type="button" class="add" onclick="PlageConsult.addPlaceBefore()">
@@ -60,6 +62,7 @@
           </button>
         </td>
       </tr>
+      {{/if}}
       <tr>
         <th>Heure</th>
         <th>Patient</th>
@@ -74,7 +77,11 @@
       <tr>
         <td>
           <div style="float:left">
-            <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
+            {{if $online}}
+              <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
+            {{else}}
+              {{$_place.time|date_format:$dPconfig.time}}
+            {{/if}}
           </div>
           <div style="float:right">
           {{foreach from=$_place.consultations item=_consultation}}

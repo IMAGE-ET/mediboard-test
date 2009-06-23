@@ -144,6 +144,7 @@ $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlage"      , $listPlage);
 $smarty->assign("listPlace"      , $listPlace);
+$smarty->assign("online"         , true);
 
 $smarty->display("plage_selector.tpl");
 

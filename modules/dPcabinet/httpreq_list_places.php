@@ -58,6 +58,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlace"      , $listPlace);
+$smarty->assign("online"         , true);
 
 $smarty->display("inc_list_places.tpl");
 
