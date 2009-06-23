@@ -42,6 +42,7 @@
   </tr>
 
 	{{mb_include module=system template=inc_config_bool var=mode}}  
+	{{mb_include module=system template=inc_config_bool var=modif_salle}}  
   
   {{assign var="var" value="modif_actes"}}
   <tr>
