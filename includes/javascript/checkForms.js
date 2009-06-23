@@ -513,6 +513,8 @@ function checkForm(oForm) {
     var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
     var oFirstElement = (isArray?oElement[0]:oElement);
     
+    if (oFirstElement.getAttribute("readonly")) return;
+    
     // Element checker preparing and error checking
     ElementChecker.prepare(oElement);
     var sMsgFailed = ElementChecker.sLabel ? ElementChecker.sLabel : printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
