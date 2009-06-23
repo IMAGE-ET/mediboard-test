@@ -2626,6 +2626,31 @@ div.about div.nav {
 	font-weight:		bold;
 }
 
+.datepickerControl div.dropdown {
+	border:				1px solid #999999;
+	background-color:	#EEEEEE;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8em;
+  text-align: left;
+  z-index: 999;
+}
+
+.datepickerControl div.dropdown a {
+  display: block;
+  margin: 0;
+  padding: 1px 2px;
+  text-decoration: none;
+}
+
+.datepickerControl div.dropdown a.current {
+	background-color:	#CCCCCC;
+}
+
+.datepickerControl div.dropdown a:hover {
+	outline: 2px solid #666666;
+}
+
 .inputExtension {
 	cursor: pointer;
 }
