@@ -35,13 +35,14 @@ $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
 $order = "date, debut";
 
 // Chargement des plages par date
-$minDate = $maxDate = $date;
+$maxDate = mbDate("-1 DAYS", $date);
 
 for($i = 1; $i <= $nb_monthes; $i++) {
-  $minDate = $maxDate;
-  $maxDate = mbTransformTime("+1 month", $minDate, "%Y-%m-01");
+  $minDate = mbDate("+1 DAYS", $maxDate);
+  $maxDate = mbTransformTime("+1 MONTH", $minDate, "%Y-%m-01");
+  $maxDate = mbDate("-1 DAYS", $maxDate);
   $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
-  $listPlages[mbTransformTime(null, $minDate, "%B")] = $plage->loadList($where, $order);
+  $listPlages[mbTransformTime(null, $minDate, "%B %Y")] = $plage->loadList($where, $order);
 }
 
 // Chargement des places disponibles pour chaque plage

@@ -31,7 +31,7 @@
     {{/if}}
     
     </script>
-    
+    {{if $online}}
     <form action="?m=dPcabinet" method="post" name="editPlage" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_plageconsult_aed" />
@@ -41,7 +41,7 @@
       <input type="hidden" name="fin" value="{{$plage->fin}}" />
       <input type="hidden" name="_repeat" value="1" />
     </form>
-
+    {{/if}}
     <table class="tbl">
       {{if $plage->_id}}
       <tr>
