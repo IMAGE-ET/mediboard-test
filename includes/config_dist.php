@@ -209,6 +209,9 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
 );
 
 $dPconfig["dPsalleOp"] = array(
+  "mode_anesth" => "0",
+  "max_add_minutes" => "10",
+  "max_sub_minutes" => "30",
   "COperation" => array(
     "mode"        => "0",
     "modif_salle" => "0",
@@ -226,8 +229,6 @@ $dPconfig["dPsalleOp"] = array(
   "CDossierMedical" => array (
     "DAS" => "0",
   ),
-  "max_add_minutes" => "10",
-  "max_sub_minutes" => "30",
   "CReveil"			=> array (
   	"multi_tabs_reveil"	  => "1",
   ),

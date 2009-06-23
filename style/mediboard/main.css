@@ -1146,30 +1146,30 @@ div.small-mail {
   padding-left: 30px;
 }
 
-div.small-mail {
+.small-mail {
   background-image: url(images/icons/small-mail.png);
  	background-color: #ffe;
   border-color: #dd0;
 }
-div.small-success {
+.small-success {
   background-image: url(images/icons/small-success.png);
  	background-color: #efe;
   border-color: #5a5;
 }
 
-div.small-info {
+.small-info {
   background-image: url(images/icons/small-info.png);
  	background-color: #eef;
   border-color: #55a;
 }
 
-div.small-warning {
+.small-warning {
   background-image: url(images/icons/small-warning.png);
   background-color: #ffd;
   border-color: #da0;
 }
 
-div.small-error {
+.small-error {
   background-image: url(images/icons/small-error.png);
  	background-color: #fee;
   border-color: #a55;
@@ -1190,25 +1190,25 @@ div.big-error {
   padding-left: 60px;
 }
 
-div.big-warning {
+.big-warning {
   background-image: url(images/icons/warning.png);
   background-color: #ffd;
   border-color: #da0;
 }
 
-div.big-success {
+.big-success {
   background-image: url(images/icons/success.png);
  	background-color: #efe;
   border-color: #5a5;
 }
 
-div.big-info {
+.big-info {
   background-image: url(images/icons/info.png);
  	background-color: #eef;
   border-color: #55a;
 }
 
-div.big-error {
+.big-error {
   background-image: url(images/icons/error.png);
  	background-color: #fee;
   border-color: #a55;
