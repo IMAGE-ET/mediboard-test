@@ -180,18 +180,15 @@ function reloadPrescription(prescription_id){
     {{/if}}
       {{if $selOp->_ref_sejour->rques}}
       <strong>{{mb_label object=$selOp->_ref_sejour field=rques}}</strong>
-      <br />
       {{mb_value object=$selOp->_ref_sejour field=rques}}
-      <br />
       {{/if}}
       {{if $selOp->rques}}
       <strong>{{mb_label object=$selOp field=rques}}</strong>
-      <br />
       {{mb_value object=$selOp field=rques}}
-      <br />
       {{/if}}
     </td>
     {{/if}}
+    
     {{if $selOp->materiel}}
     {{if !$selOp->_ref_sejour->rques && !$selOp->rques}}
     <td class="text big-info" colspan="2">
@@ -200,7 +197,6 @@ function reloadPrescription(prescription_id){
     {{/if}}
       {{if $selOp->materiel}}
       <strong>{{mb_label object=$selOp field=materiel}}</strong>
-      <br /> 
       {{mb_value object=$selOp field=materiel}}
       {{/if}}
     </td>
@@ -211,18 +207,27 @@ function reloadPrescription(prescription_id){
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
+	{{if !$dPconfig.dPsalleOp.mode_anesth}}
   <li><a href="#timing_tab">Timings</a></li>
+	{{/if}}
+
   <li onclick="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesthésie</a></li>
+
   {{if $isbloodSalvageInstalled}}
   <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
   {{/if}}
+
+	{{if !$dPconfig.dPsalleOp.mode_anesth}}
   <li><a href="#diag_tab">Diagnostics</a></li>
   <li><a href="#codage_tab">Actes</a></li>
   <li><a href="#dossier_tab">Dossier</a></li>
-  {{if $isPrescriptionInstalled}}
+
+	  {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
     <li onclick="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
-  {{/if}}
+	  {{/if}}
+	{{/if}}
+  
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
@@ -231,6 +236,7 @@ function reloadPrescription(prescription_id){
 <hr class="control_tabs" />
 
 <!-- Timings + Personnel -->
+{{if !$dPconfig.dPsalleOp.mode_anesth}}
 <div id="timing_tab" style="display:none">
  	<div id="timing">
     {{include file="inc_vw_timing.tpl"}}
@@ -239,6 +245,7 @@ function reloadPrescription(prescription_id){
     {{include file="inc_vw_personnel.tpl"}}
   </div>
 </div>
+{{/if}}
 
 <!-- Anesthesie -->
 <div id="anesth_tab" style="display:none">
@@ -262,6 +269,7 @@ function reloadPrescription(prescription_id){
   </div>
 </div>
 
+{{if !$dPconfig.dPsalleOp.mode_anesth}}
 <!-- codage des acte ccam et ngap -->
 <div id="codage_tab" style="display:none">
 
@@ -366,6 +374,8 @@ function reloadPrescription(prescription_id){
 <!-- Affichage du dossier de soins avec les lignes "bloc" -->
 <div id="soins" style="display:none">
 </div>
+{{/if}}
+
 {{/if}}
 
 {{if $isImedsInstalled}}
