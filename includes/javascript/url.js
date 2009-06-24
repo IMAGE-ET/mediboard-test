@@ -234,7 +234,7 @@ var Url = Class.create({
       asynchronous: true,
       evalScripts: true,
       evalJSON: 'force',
-      getParameters: null,
+      getParameters: null
     };
   
     Object.extend(oDefaultOptions, oOptions);
