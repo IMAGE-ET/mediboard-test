@@ -154,7 +154,6 @@ $patch = new CLibraryPatch;
 $patch->dirName = "jpgraph";
 $patch->sourceName = "mbjpgraph.php";
 $patch->targetDir = "src";
-
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
@@ -209,40 +208,19 @@ $library->versionString = "JSON.php,v 1.30";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
-$library->fileName = "scriptaculous-js-1.8.1.tar.gz";
+$library->fileName = "scriptaculous-js-1.8.2.tar.gz";
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
-$library->sourceDir = "scriptaculous-js-1.8.1";
+$library->sourceDir = "scriptaculous-js-1.8.2";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "CHANGELOG";
-$library->versionString = "*V1.8.1*";
+$library->versionString = "*V1.8.2*";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";
 $patch->sourceName = "scriptaculous.js";
 $patch->targetDir = "src";
-
-$library->patches[] = $patch;
-
-CLibrary::$all[$library->name] = $library;
-
-$library = new CLibrary;
-$library->name = "JSCalendar";
-$library->url = "http://www.dynarch.com/projects/calendar/";
-$library->fileName = "jscalendar-1.0.zip";
-$library->description = "Composant Javascript de sélecteur de date/heure";
-$library->sourceDir = "jscalendar-1.0";
-$library->targetDir = "jscalendar";
-$library->versionFile = "ChangeLog";
-$library->versionString = "2005-03-07";
-
-$patch = new CLibraryPatch;
-$patch->dirName = "jscalendar";
-$patch->sourceName = "calendar-fr.js";
-$patch->targetDir = "lang";
-
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
@@ -274,7 +252,6 @@ $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";
 $patch->sourceName = "phpThumb.config.php";
 $patch->targetDir = "";
-
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
@@ -294,14 +271,12 @@ $patch->dirName = "fckeditor";
 $patch->subDirName = "browser";
 $patch->sourceName = "config.php";
 $patch->targetDir = "editor/filemanager/connectors/php";
-
 $library->patches[] = $patch;
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
 $patch->sourceName = "fckeditor.html";
 $patch->targetDir = "editor";
-
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
