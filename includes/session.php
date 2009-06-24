@@ -46,8 +46,8 @@ foreach($browsers as $_browser) {
     $browser['name'] = $match[1];
     $browser['version'] = $match[2];
     preg_match( "/^(\d+)\.(\d+)(?:\.(\d+))?$/", $browser['version'], $match);
-    $browser['majorver'] = $match[1];
-    $browser['minorver'] = $match[2];
+    $browser['majorver'] = @$match[1];
+    $browser['minorver'] = @$match[2];
     $browser['build'] = isset($match[3]) ? $match[3] : 0;
     break;
   }
