@@ -154,6 +154,14 @@ printDossierSoin = function(prescription_id){
   url.popup(900, 600, "Plan de soin");
 }
 
+printBons = function(prescription_id){
+  url = new Url;
+  url.setModuleAction("dPprescription", "print_bon");
+  url.addParam("prescription_id", prescription_id);
+  url.addParam("debut", "{{$date}}");
+  url.popup(900, 600, "Impression des bons");
+}
+
 addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
   oDiv = $('cibleTrans');
   if(!oDiv) {
@@ -493,9 +501,12 @@ Main.add(function () {
 	    <td>
 	    {{if !$mode_bloc}}
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
-		      Imprimer la feuille de soins immédiate
+		      Feuille de soins immédiate
 	      </button>
 	    {{/if}}
+	      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
+	        Bons
+	      </button>
         <button type="button" class="tick" onclick="applyAdministrations();" id="button_administration">
         </button>
 	    </td>
