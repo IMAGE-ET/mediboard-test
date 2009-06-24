@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <form name="passageRadio{{$rpu->_id}}" action="" method="post">
   <input type="hidden" name="dosql" value="do_rpu_aed" />
   <input type="hidden" name="del" value="0" />

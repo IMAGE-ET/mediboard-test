@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPurgences
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 global $AppUI, $can, $m, $g;
 
@@ -70,7 +71,7 @@ $contrainteDestination["normal"] = array("", 6, 7);
 // Contraintes sur le mode de sortie / orientation
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
-  
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);

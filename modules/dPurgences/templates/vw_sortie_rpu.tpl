@@ -1,7 +1,18 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <script type="text/javascript">
 
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
+  setInterval(refreshCanLeaveSince, 60000);
 });
 
 function modeSortieDest(mode_sortie, rpu_id) {
@@ -78,6 +89,22 @@ function initFields(rpu_id,sejour_id, mode_sortie){
   loadTransfert(mode_sortie, sejour_id);
 }
 
+function refreshTime(rpus) {
+	$H(rpus).each(function(s) {
+		$("rpu-"+s.key).className = "";
+		$("rpu-"+s.key).addClassName(s.value.alert).update(s.value.value);
+	});
+}
+
+function refreshCanLeaveSince() {
+	var url = new Url();
+  url.setModuleAction("dPurgences", "ajax_reload_can_leave_since");
+  {{foreach from=$listSejours item=_sejour}}
+    url.addParam("rpus[{{$_sejour->_ref_rpu->_id}}]", {{$_sejour->_ref_rpu->_id}});
+  {{/foreach}}
+  url.requestJSON(refreshTime);
+}
+
 // Fonction appelée dans inc_vw_etab_externe qui submit le sejour dans le cas de "inc_vw_rpu.tpl"
 // Dans la sortie, on ne veut pas déclencher de submit
 function submitSejour(){
@@ -111,13 +138,14 @@ function submitSejour(){
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}CRPU-_patient_id{{/tr}}</th>
-    <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
+    <th>{{mb_title class=CRPU field="_patient_id"}}</th>
+    <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     <th>
     {{mb_colonne class="CRPU" field="_pec_transport" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sortie_rpu"}}
     </th>
-    <th>RPU</th>
-    <th>Séjour</th>
+    <th>{{mb_title class=CRPU field="rpu_id"}}</th>
+    <th>{{mb_title class=CRPU field="sejour_id"}}</th>
+    <th>{{mb_title class=CRPU field="_can_leave_since"}}</th>
   </tr>
   {{foreach from=$listSejours item=sejour}}
   {{assign var=rpu value=$sejour->_ref_rpu}}
@@ -261,6 +289,9 @@ function submitSejour(){
 			  {{/if}}
 			  </table>
 			</form>
+    </td>
+    <td id="rpu-{{$rpu->_id}}" class="{{if $rpu->_can_leave_since_error}}error{{elseif $rpu->_can_leave_since_warning}}warning{{else}}ok{{/if}}">
+      {{mb_value object=$rpu field="_can_leave_since"}}
     </td>
     {{/if}}
   </tr>

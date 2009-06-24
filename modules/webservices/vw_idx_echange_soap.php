@@ -18,6 +18,8 @@ $now             = mbDate();
 $_date_min       = mbGetValueFromGetOrSession('_date_min');
 $_date_max       = mbGetValueFromGetOrSession('_date_max');
 
+$web_service    = mbGetValueFromGetOrSession("web_service"); 
+
 $doc_errors_msg = $doc_errors_ack = "";
 
 // Chargement de l'échange SOAP demandé
@@ -37,6 +39,7 @@ if($echange_soap->_id) {
 $itemEchangeSoap = new CEchangeSOAP;
 
 $where = array();
+$where["web_service_name"] = $web_service ? " = '".$web_service."'" : "IS NULL";
 
 $total_echange_soap = $itemEchangeSoap->countList($where);
 
@@ -61,6 +64,8 @@ $smarty->assign("echange_soap"       , $echange_soap);
 $smarty->assign("listEchangeSoap"    , $listEchangeSoap);
 $smarty->assign("total_echange_soap" , intval($total_echange_soap));
 $smarty->assign("total_pages"        , $total_pages);
+
+$smarty->assign("web_service"        , $web_service);
 
 $smarty->display("vw_idx_echange_soap.tpl");
 ?>

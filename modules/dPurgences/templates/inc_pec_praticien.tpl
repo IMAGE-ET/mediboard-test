@@ -1,3 +1,14 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
+
 {{** 
   * Permet un accès la prise en charge UPATOU, la crée si elle n'existe pas
   * 

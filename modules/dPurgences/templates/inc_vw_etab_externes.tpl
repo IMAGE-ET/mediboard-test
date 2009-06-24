@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $listEtab|@count}}
 <select name="etablissement_transfert_id" onchange="submitSejour(this.form)">
 <option value="">&mdash; Etablissement de transfert</option>

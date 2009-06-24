@@ -1,10 +1,11 @@
 <?php /* $Id$ */
 
 /**
- *  @package Mediboard
- *  @subpackage dPurgences
- *  @version $Revision$
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 /**
@@ -42,6 +43,9 @@ class CRPU extends CMbObject {
   var $_count_consultations = null;
   var $_attente  = null;
   var $_presence = null;
+  var $_can_leave_since = null;
+  var $_can_leave_since_warning = null;
+  var $_can_leave_since_error = null;
 
   // Patient
   var $_patient_id = null;
@@ -105,6 +109,9 @@ class CRPU extends CMbObject {
       "_etablissement_transfert_id" => "ref class|CEtabExterne",
       "_attente"         => "time",
       "_presence"        => "time",
+      "_can_leave_since" => "time",
+      "_can_leave_since_warning" => "bool",
+      "_can_leave_since_error" => "bool",
      );
      
 		$specs["urprov"] = "";
@@ -161,6 +168,18 @@ class CRPU extends CMbObject {
     
     $this->_sortie = $this->_ref_sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
+    
+    $log = new CUserLog();
+    $where = array();
+    $where['object_id'] = " = '{$this->_ref_consult->_id}'";
+    $where['object_class'] = " = 'CConsultation'";
+    $where['fields'] = " LIKE '%chrono%'";
+    $log->loadObject($where, "date DESC");
+
+    $this->_can_leave_since = mbSubTime(mbTime($log->date), mbTime());
+    $this->_can_leave_since_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave_since) && 
+                                      ($this->_can_leave_since < CAppUI::conf("dPurgences rpu_alert_time"));
+    $this->_can_leave_since_error   = ($this->_can_leave_since > CAppUI::conf("dPurgences rpu_alert_time"));
   }
   
   function loadRefsFwd() {

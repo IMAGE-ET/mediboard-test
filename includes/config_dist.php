@@ -539,7 +539,9 @@ $dPconfig["hprim21"] = array (
 );
 
 $dPconfig["dPurgences"] = array (
-  "old_rpu" => "1",
+  "old_rpu"          => "1",
+  "rpu_warning_time" => "00:20:00",
+  "rpu_alert_time"   => "01:00:00",
 );
 
 $dPconfig["dPstock"] = array (
