@@ -50,7 +50,7 @@
           <br />
           Plage du {{$plage->date|date_format:$dPconfig.longdate}}
         </th>
-      </tr>`
+      </tr>
       {{if $online}}
       <tr>
         <td class="button" colspan="3">
