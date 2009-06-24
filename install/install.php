@@ -60,7 +60,7 @@ class CLibrary {
     /// Clear out all libraries
     if (!$libSel){
       foreach (glob("$libsDir/*") as $libDir) {
-      	if (strpos($libDir, '-svn') === false) {
+      	if (strpos($libDir, '.svn') === false) {
           CMbPath::remove($libDir);
       	}
       }
