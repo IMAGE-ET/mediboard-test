@@ -338,7 +338,7 @@ class CPatient extends CMbObject {
       return $msg;
     }
     
-    if ($this->nom == "ANONYME" && $this->prenom == "Anonyme") {
+    if ($this->checkAnonymous()) {
     	$this->nom = $this->_id;
     	$this->_anonyme = true;
     	$this->store();
@@ -1184,6 +1184,10 @@ class CPatient extends CMbObject {
     $pays->nom_fr = $nomPays;
     $pays->loadMatchingObject();
     return $pays->numerique;
+  }
+  
+  function checkAnonymous() {
+  	return $this->nom == "ANONYME" && $this->prenom == "Anonyme";
   }
 }
 
