@@ -52,7 +52,7 @@ foreach($list_constantes as $const) {
   if ($const->context_class && $const->context_id) {
     $c = new $const->context_class;
     $c->load($const->context_id);
-    $c->loadRefsFwd();
+    $c->loadComplete();
     $list_contexts[$c->_guid] = $c;
   }
 }
