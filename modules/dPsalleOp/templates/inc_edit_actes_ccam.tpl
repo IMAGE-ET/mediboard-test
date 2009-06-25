@@ -342,9 +342,7 @@ function setToNow(element) {
 
 {{if $ajax}}
 <script type="text/javascript">
-  oElement = $('acte{{$key}}');
-  oForm = getSurroundingForm(oElement);
-  prepareForm(oForm);
+  prepareForm($('acte{{$key}}').getForm());
 </script>
 {{/if}}
 

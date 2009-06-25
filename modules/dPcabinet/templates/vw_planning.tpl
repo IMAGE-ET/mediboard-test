@@ -32,6 +32,10 @@ function putArrivee(oForm) {
   oForm.submit();
 }
 
+function goToDate(oForm, date) {
+  $V(oForm.debut, date);
+}
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
   
@@ -49,14 +53,16 @@ Main.add(function () {
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="plageconsult_id" value="0" />
         
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
+        <a href="javascript:;" onclick="$V(this.getForm().debut, '{{$prec}}')">&lt;&lt;&lt;</a>
+        
         Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
         <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
         
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
+        <a href="javascript:;" onclick="$V(this.getForm().debut, '{{$suiv}}')">&gt;&gt;&gt;</a>
         <br />
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
+        <a href="javascript:;" onclick="$V(this.getForm().debut, '{{$today}}')">Aujourd'hui</a>
       </form>
     </th>
     <td>

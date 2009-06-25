@@ -131,6 +131,12 @@ Element.addMethods({
   addUniqueClassName: function(element, className) {
     $(element).siblings().invoke('removeClassName', className);
     return element.addClassName(className);
+  },
+  
+  /** Get the surrounding form of the element  */
+  getForm: function(element) {
+    if (element.form) return $(element.form);
+    return $(element).up('form');
   }
 });
 

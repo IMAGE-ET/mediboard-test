@@ -218,14 +218,6 @@ function canNullOK(oEvent) {
   } 
 }
 
-function getSurroundingForm(element) {
-  var parent = element.up();
-  while (parent && !parent.nodeName.match(/^form$/i)) {
-    parent = parent.parentNode;
-  }
-  return parent;
-}
-
 var bGiveFormFocus = true;
 
 var FormObserver = {
