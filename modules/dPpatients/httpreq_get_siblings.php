@@ -36,9 +36,15 @@ $patientMatch->naissance  = $naissance;
 $textMatching = null;
 
 if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons" ) {
-  $matching = $patientMatch->loadMatchingPatient();
-
-  if($matching > 0) {
+	$ds = $this->_spec->ds;
+	if ($patient_id) {
+		$where["patient_id"] = " != '$patient_id'";
+	}
+  $where["nom"]        = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $nom));
+  $where["prenom"]     = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $prenom));
+  $where["naissance"]  = $ds->prepare("= %", $naissance);
+       
+  if($patientMatch->countList($where) > 0) {
 	  $textMatching = "Doublons détectés.";
 	  $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
 	}
