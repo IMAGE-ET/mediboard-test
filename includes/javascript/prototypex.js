@@ -64,6 +64,17 @@ Class.extend(Element.ClassNames, {
 
 // Makes an element to be in the viewport instead of overflow
 Element.addMethods({
+  // To fix a bug in Prototype 1.6.0.3 (no need to patch the lib)
+  getOffsetParent: function(element) {
+    if (element.offsetParent) return $(element.offsetParent);
+    if (element == document.body) return $(element);
+
+    while ((element = element.parentNode) && element != document.body && element != document) // Added " && element != document"
+      if (Element.getStyle(element, 'position') != 'static')
+        return $(element);
+
+    return $(document.body);
+  },
   unoverflow: function(element) {
     var dim = element.getDimensions(); // Element dimensions
     var pos = element.cumulativeOffset(); // Element position
