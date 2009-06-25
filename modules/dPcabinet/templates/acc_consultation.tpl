@@ -4,10 +4,25 @@
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
 {{assign var=sejour_id value=""}}
+{{if $consult->sejour_id}}
+  {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
+{{/if}}
 
 <script type="text/javascript">
 function setField(oField, sValue) {
   oField.value = sValue;
+}
+
+function loadSuivi(sejour_id) {
+  var url = new Url;
+  url.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("suivisoins", { waitingText: null } );
+}
+
+function submitSuivi(oForm) {
+  sejour_id = oForm.sejour_id.value;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
 }
 
 var constantesMedicalesDrawn = false;
@@ -27,6 +42,9 @@ Main.add(function () {
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
+  {{if $consult->sejour_id}}
+  loadSuivi({{$rpu->sejour_id}});
+  {{/if}}
 });
 </script>
 
@@ -41,6 +59,9 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
+  {{if $consult->sejour_id}}
+  <li><a href="#suivisoins">Suivi soins</a></li>
+  {{/if}}
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Examens">Examens</a></li>
   
@@ -53,11 +74,13 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 {{if $consult->sejour_id}}
-{{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
 <div id="rpuConsult" style="display: none;">{{include file="../../dPurgences/templates/inc_vw_rpu.tpl"}}</div>
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}</div>
+{{if $consult->sejour_id}}
+<div id="suivisoins" style="display:none"></div>
+{{/if}}
 <div id="Constantes" style="display: none"></div>
 <div id="Examens" style="display: none;">{{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}</div>
 
