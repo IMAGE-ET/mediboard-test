@@ -168,18 +168,13 @@ class CRPU extends CMbObject {
     
     $this->_sortie = $this->_ref_sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
-    
-    $log = new CUserLog();
-    $where = array();
-    $where['object_id'] = " = '{$this->_ref_consult->_id}'";
-    $where['object_class'] = " = 'CConsultation'";
-    $where['fields'] = " LIKE '%chrono%'";
-    $log->loadObject($where, "date DESC");
 
-    $this->_can_leave_since = mbSubTime(mbTime($log->date), mbTime());
-    $this->_can_leave_since_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave_since) && 
+    $this->_can_leave_since = (mbTime($this->_ref_sejour->sortie_prevue) > mbTime()) ? -1 : mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
+    if ($this->_can_leave_since != -1) {
+    	$this->_can_leave_since_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave_since) && 
                                       ($this->_can_leave_since < CAppUI::conf("dPurgences rpu_alert_time"));
-    $this->_can_leave_since_error   = ($this->_can_leave_since > CAppUI::conf("dPurgences rpu_alert_time"));
+      $this->_can_leave_since_error   = ($this->_can_leave_since > CAppUI::conf("dPurgences rpu_alert_time"));
+    }
   }
   
   function loadRefsFwd() {

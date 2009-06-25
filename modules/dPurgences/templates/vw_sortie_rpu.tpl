@@ -290,8 +290,12 @@ function submitSejour(){
 			  </table>
 			</form>
     </td>
-    <td id="rpu-{{$rpu->_id}}" class="{{if $rpu->_can_leave_since_error}}error{{elseif $rpu->_can_leave_since_warning}}warning{{else}}ok{{/if}}">
-      {{mb_value object=$rpu field="_can_leave_since"}}
+    <td id="rpu-{{$rpu->_id}}"  {{if $rpu->_can_leave_since != -1}}class="{{if $rpu->_can_leave_since_error}}error{{elseif $rpu->_can_leave_since_warning}}warning{{else}}ok{{/if}}"{{/if}}>
+      {{if $rpu->_can_leave_since == -1}}
+        En consultation
+      {{else}}
+        {{mb_value object=$rpu field="_can_leave_since"}}
+      {{/if}}
     </td>
     {{/if}}
   </tr>

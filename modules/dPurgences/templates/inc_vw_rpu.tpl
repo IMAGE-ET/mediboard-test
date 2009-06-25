@@ -282,6 +282,15 @@ function initFields(mode_sortie){
         <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
         <button class="new" type="submit">Hospitaliser</button>
       </form>
+      
+      <!--  Sortie prévue du patient -->
+      <form name="editSortiePrevu" method="post" action="?m={{$m}}">
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+        Sortie prévue à {{mb_field object=$sejour field="sortie_prevue" register=true form="editSortiePrevu" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      </form>
 	  </td>
 	</tr>
 </table>
