@@ -116,6 +116,9 @@ class CPatient extends CMbObject {
   var $_pays_naissance_insee        = null;
   var $_assure_pays_naissance_insee = null;
   
+  // Behaviour fields 
+  var $_anonyme                     = null;
+  
   // Form fields
   var $_age         = null;
   var $_civilite    = null;
@@ -337,6 +340,7 @@ class CPatient extends CMbObject {
     
     if ($this->nom == "ANONYME" && $this->prenom == "Anonyme") {
     	$this->nom = $this->_id;
+    	$this->_anonyme = true;
     	$this->store();
     }
     
