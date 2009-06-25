@@ -290,8 +290,7 @@ Document.refreshList = function(){
       <a href="#nothing">
       {{/if}}
         {{if $curr_sejour->_num_dossier && $curr_sejour->group_id == $g}}[{{$curr_sejour->_num_dossier}}]{{/if}}
-        Du {{$curr_sejour->_entree|date_format:$dPconfig.date}} 
-        au {{$curr_sejour->_sortie|date_format:$dPconfig.date}}
+        {{$curr_sejour->_shortview}}
         {{if $curr_sejour->_nb_files_docs}}
           - ({{$curr_sejour->_nb_files_docs}} Doc.)
         {{/if}}

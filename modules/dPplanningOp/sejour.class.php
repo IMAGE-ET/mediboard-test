@@ -480,11 +480,11 @@ class CSejour extends CCodable {
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
     if($this->entree_prevue && $this->sortie_prevue) {
-      $this->_view = "Séjour du ";
-      $this->_view .= mbTransformTime(null, $this->_entree, CAppUI::conf("date"));
+      $this->_view      = "Séjour du " . mbTransformTime(null, $this->_entree, CAppUI::conf("date"));
+      $this->_shortview = "Du "        . mbTransformTime(null, $this->_entree, CAppUI::conf("date"));
       if(mbTransformTime(null, $this->_entree, CAppUI::conf("date")) != mbTransformTime(null, $this->_sortie, CAppUI::conf("date"))) {
-        $this->_view .= " au ";
-        $this->_view .= mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
+        $this->_view      .= " au " . mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
+        $this->_shortview .= " au " . mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
       }
     }
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
