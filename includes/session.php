@@ -54,5 +54,3 @@ if (!isset($_SESSION['browser'])) {
   $_SESSION['browser'] =& $browser; 
 }
 else $browser =& $_SESSION['browser']; 
-
-mbTrace($browser);
