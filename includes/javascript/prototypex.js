@@ -132,9 +132,14 @@ Element.addMethods({
     $(element).siblings().invoke('removeClassName', className);
     return element.addClassName(className);
   },
+	
+  clone: function(element, deep) {
+    return $($(element).cloneNode(deep)).writeAttribute("id", "");
+  },
   
   /** Get the surrounding form of the element  */
-  getForm: function(element) {
+  getSurroundingForm: function(element) {
+		alert(element);
     if (element.form) return $(element.form);
     return $(element).up('form');
   }

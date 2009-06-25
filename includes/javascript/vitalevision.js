@@ -100,8 +100,6 @@ var VitaleVision = {
   
   // Remplissage du formulaire en fonction du bénéficiaire sélectionné dans la fenetre modale
   fillForm: function(form, id) {
-    form = form.elements;
-    
     var benef = VitaleVision.xmlDocument.getElementsByTagName("listeBenef")[0].childNodes[id],
         ident = benef.getElementsByTagName("ident")[0],
         amo = benef.getElementsByTagName("amo")[0];
