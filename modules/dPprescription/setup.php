@@ -1291,17 +1291,19 @@ class CSetupdPprescription extends CSetup {
 				  $libelle_unite_presentation_pluriel = $produit->libelle_unite_presentation_pluriel;
 			
 				  $_unite_prise = preg_replace("/\/kg$/i", '', $unite_prise);
-				  $coef_adm = $produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation];
+				  $coef_adm = @$produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation];
 				  
 				  // si l'unite de prise ne correspond pas au libelle de presentation, on rajouter des informations dans l'unite de prise
-				  if (stripos($libelle_unite_presentation_pluriel, $unite_prise) === false){
-				    // Prise en kg
-				    if($_unite_prise != $unite_prise){
-				      $prises[$code_cip][$unite_prise] = "$unite_prise ($coef_adm $libelle_unite_presentation/kg)"; 
-				    }
-				    else {
-				      $prises[$code_cip][$unite_prise] = "$unite_prise ($coef_adm $libelle_unite_presentation)"; 
-				    }
+				  if($coef_adm){
+					  if (stripos($libelle_unite_presentation_pluriel, $unite_prise) === false){
+					    // Prise en kg
+					    if($_unite_prise != $unite_prise){
+					      $prises[$code_cip][$unite_prise] = "$unite_prise ($coef_adm $libelle_unite_presentation/kg)"; 
+					    }
+					    else {
+					      $prises[$code_cip][$unite_prise] = "$unite_prise ($coef_adm $libelle_unite_presentation)"; 
+					    }
+					  }
 				  }
 				}
 			}
