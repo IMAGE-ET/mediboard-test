@@ -481,9 +481,11 @@ class CSejour extends CCodable {
 
     if($this->entree_prevue && $this->sortie_prevue) {
       $this->_view = "Séjour du ";
-      $this->_view .= mbTransformTime(null, $this->entree_prevue, CAppUI::conf("date"));
-      $this->_view .= " au ";
-      $this->_view .= mbTransformTime(null, $this->sortie_prevue, CAppUI::conf("date"));
+      $this->_view .= mbTransformTime(null, $this->_entree, CAppUI::conf("date"));
+      if(mbTransformTime(null, $this->_entree, CAppUI::conf("date")) != mbTransformTime(null, $this->_sortie, CAppUI::conf("date"))) {
+        $this->_view .= " au ";
+        $this->_view .= mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
+      }
     }
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
     $this->_praticien_id = $this->praticien_id;
@@ -666,12 +668,9 @@ class CSejour extends CCodable {
     $this->getDroitsCMU();
 
     // View
-    $this->_view = "Séjour de ";
-    $this->_view .= $this->_ref_patient->_view;
-    $this->_view .= " du ";
-    $this->_view .= mbTransformTime(null, $this->entree_prevue, "%d/%m/%Y");
-    $this->_view .= " au ";
-    $this->_view .= mbTransformTime(null, $this->sortie_prevue, "%d/%m/%Y");
+    if(substr($this->_view, 0, 9) == "Séjour du") {
+      $this->_view = $this->_ref_patient->_view . " - " . $this->_view;
+    }
   }
   
   function loadRefPraticien($cache = 0) {
