@@ -177,8 +177,8 @@ class CMbObject {
    */
   function loadRefsNotes($perm = PERM_READ) {
     $this->_ref_notes = array();
-    $notes = new CNote();
     if($this->_id){
+      $notes = new CNote();
       $this->_ref_notes = $notes->loadNotesForObject($this, $perm);
       return count($this->_ref_notes);
     } 
@@ -590,9 +590,10 @@ class CMbObject {
    * @note to optimize request, only select object oids in $sql
    */
   function loadQueryList($sql) {
-    $cur = $this->_spec->ds->exec($sql);
+  	$ds = $this->_spec->ds;
+    $cur = $ds->exec($sql);
     $list = array();
-    while ($row = $this->_spec->ds->fetchAssoc($cur)) {
+    while ($row = $ds->fetchAssoc($cur)) {
       $newObject = new $this->_class_name;
       $newObject->bind($row, false);
       $newObject->checkConfidential();
@@ -601,7 +602,7 @@ class CMbObject {
       $list[$newObject->_id] = $newObject;
     }
 
-    $this->_spec->ds->freeResult($cur);
+    $ds->freeResult($cur);
     return $list;
   }
 
@@ -611,11 +612,9 @@ class CMbObject {
    */
 
   function cloneObject() {
-    $_key = $this->_spec->key;
-    
     $newObj = $this;
     // blanking the primary key to ensure that's a new record
-    $newObj->$_key = "";
+    $newObj->{$this->_spec->key} = "";
     
     return $newObj;
   }
@@ -890,17 +889,19 @@ class CMbObject {
         CAppUI::tr($msg);
     }
 
+    $spec = $this->_spec;
+		
     // DB query
     if ($this->_old->_id) {
-      $ret = $this->_spec->ds->updateObject($this->_spec->table, $this, $this->_spec->key, $this->_spec->nullifyEmptyStrings);
+      $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
     } else {
-      $keyToUpadate = $this->_spec->incremented ? $this->_spec->key : null;
-      $ret = $this->_spec->ds->insertObject($this->_spec->table, $this, $keyToUpadate);
+      $keyToUpdate = $spec->incremented ? $spec->key : null;
+      $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate);
     }
     
 
     if (!$ret) {
-        return get_class($this)."::store failed <br />" . $this->_spec->ds->error();
+      return get_class($this)."::store failed <br />" . $spec->ds->error();
     } 
     
 
@@ -1361,8 +1362,7 @@ class CMbObject {
     // Event Handlers
     $this->onDelete();
 
-    $this->_old = null;
-    return null;
+    return $this->_old = null;
   }
 
   /**
@@ -1536,7 +1536,7 @@ class CMbObject {
       "logs"                   => "CUserLog object_id",
       "affectations_personnel" => "CAffectationPersonnel object_id",
       "contextes_constante"    => "CConstantesMedicales context_id",
-      );
+    );
   }
   
   function getTemplateClasses(){
@@ -1695,9 +1695,7 @@ class CMbObject {
   }
   
   function loadLogs() {
-    $order = "date DESC";
-    $limit = "0, 100";
-    $this->_ref_logs = $this->loadBackRefs("logs", $order, $limit);
+    $this->_ref_logs = $this->loadBackRefs("logs", "date DESC", 100);
 
     foreach($this->_ref_logs as &$_log) {
       $_log->loadRefsFwd();
@@ -1710,15 +1708,17 @@ class CMbObject {
 
   
   function loadLastLogForField($fieldName = null){	
-  	$log = new CUserLog();
-  	$where = array();
-  	$order = "date DESC";
-  	$where["object_id"] = " = '$this->_id'";
-  	$where["object_class"] = " = '$this->_class_name'";
+  	$where = array(
+      "object_id"    => " = '$this->_id'",
+      "object_class" => " = '$this->_class_name'"
+    );
+    
   	if($fieldName){
   	  $where["fields"] = " LIKE '%$fieldName%'";
   	}
-  	$log->loadObject($where, $order);
+  	
+    $log = new CUserLog();
+    $log->loadObject($where, "date DESC");
   	
   	if ($log->_id){
   	  $log->loadRefsFwd();
