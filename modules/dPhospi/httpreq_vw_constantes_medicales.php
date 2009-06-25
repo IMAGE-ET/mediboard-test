@@ -60,13 +60,16 @@ foreach($list_constantes as $const) {
 $current_context = CMbObject::loadFromGuid($context_guid);
 $current_context->loadComplete();
 
-if (!($current_context instanceof CConsultation && $current_context->sejour_id)) { 
-  if (!isset($list_contexts[$current_context->_guid])){
-    $list_contexts[$current_context->_guid] = $current_context;
-  }
-}
-else { // Cas d'un RPU
+// Cas d'un RPU
+if ($current_context instanceof CConsultation && $current_context->sejour_id) {
+  $current_context->loadRefSejour();
   $current_context = $current_context->_ref_sejour;
+  $current_context->loadComplete();
+  $context = $current_context;
+  $context_guid = $current_context->_guid;
+}
+if (!isset($list_contexts[$current_context->_guid])){
+  $list_contexts[$current_context->_guid] = $current_context;
 }
 
 if (!count($list_contexts)) {
