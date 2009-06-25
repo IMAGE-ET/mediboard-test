@@ -26,7 +26,7 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
 
 $AppUI =& $_SESSION["AppUI"]; 
 
-if (!$_SESSION["browser"]) {
+if (!isset($_SESSION['browser'])) {
   /** Basic browser detection */ 
   $browser = array(
     'version' => '0.0.0',
@@ -51,5 +51,6 @@ if (!$_SESSION["browser"]) {
     }
   }
   
-  $_SESSION["browser"] = &$browser; 
+  $_SESSION['browser'] =& $browser; 
 }
+else $browser =& $_SESSION['browser']; 
