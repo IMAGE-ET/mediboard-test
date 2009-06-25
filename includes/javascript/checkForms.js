@@ -377,7 +377,7 @@ Object.extend(ElementChecker, {
         this.addError("bool", "Ne peut être différent de 0 ou 1");
     },
     
-    // enum (must be surrounded by quotes, IE bug)
+    // enum
     "enum": function() {
       if (!this.oProperties.list) {
         Console.error("Spécification 'list' manquante pour le champ " + this.sLabel);
@@ -411,6 +411,9 @@ Object.extend(ElementChecker, {
     	if (["now", "current"].include(this.sValue)) {
     		return;
     	}
+      
+      if(this.sValue == "0000-00-00" && this.oProperties.notNull)
+        this.addError("date", "N'est pas une date correcte");
 
       if (!this.sValue.match(/^\d{4}-\d{1,2}-\d{1,2}$/))
         this.addError("date", "N'a pas un format de date correct");
