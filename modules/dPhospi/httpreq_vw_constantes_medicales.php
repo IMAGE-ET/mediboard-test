@@ -23,10 +23,13 @@ $patient_id = mbGetValueFromGet('patient_id');
 $context = null;
 $patient = null;
 
-if ($selected_context_guid) {
+if ($selected_context_guid !== 'all') {
   $context = CMbObject::loadFromGuid($selected_context_guid);
-	$context->loadRefs();
 }
+else {
+  $context = CMbObject::loadFromGuid($context_guid);
+}
+$context->loadRefs();
 
 if ($context) {
   $patient = $context->_ref_patient;
@@ -57,6 +60,7 @@ foreach($list_constantes as $const) {
     $list_contexts[$c->_guid] = $c;
   }
 }
+
 $current_context = CMbObject::loadFromGuid($context_guid);
 $current_context->loadComplete();
 
@@ -76,7 +80,7 @@ if (!count($list_contexts)) {
   $list_contexts[] = $current_context;
 }
 
-if ($context) {
+if ($context && $selected_context_guid !== 'all') {
   $constantes->context_class = $context->_class_name;
   $constantes->context_id = $context->_id;
 	$constantes->loadRefContext();
@@ -248,6 +252,7 @@ $smarty->assign('constantes', $constantes);
 $smarty->assign('context',    $context);
 $smarty->assign('context_guid', $context_guid);
 $smarty->assign('list_contexts', $list_contexts);
+$smarty->assign('all_contexts',    $selected_context_guid == 'all');
 $smarty->assign('patient',    $patient);
 $smarty->assign('data',       $data);
 $smarty->assign('dates',      $dates);

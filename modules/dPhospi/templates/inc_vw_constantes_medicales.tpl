@@ -181,9 +181,10 @@ Main.add(function () {
 
 loadConstantesMedicales  = function(context_guid) {
   var url = new Url("dPhospi", "httpreq_vw_constantes_medicales"),
-      container = $("constantes-medicales") || $("Constantes");
+      container = $("constantes-medicales") || $("constantes") || $("Constantes"); // case sensitive ?
 
   url.addParam("context_guid", '{{$context_guid}}');
+  url.addParam("patient_id", '{{$patient->_id}}');
   url.addParam("selected_context_guid", context_guid);
   url.requestUpdate(container, { waitingText: null } );
 };
@@ -197,10 +198,11 @@ loadConstantesMedicales  = function(context_guid) {
       </a>
       Constantes médicales dans le cadre de: 
       <select name="context" onchange="loadConstantesMedicales($V(this));">
+        <option value="all" {{if $all_contexts}}selected="selected"{{/if}}>Tous les contextes</option> 
         {{foreach from=$list_contexts item=curr_context}}
           <option value="{{$curr_context->_guid}}" 
-          {{if $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
-          {{if $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
+          {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
+          {{if !$all_contexts && $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
           >{{$curr_context}}</option>
         {{/foreach}}
       </select>
