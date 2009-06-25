@@ -46,7 +46,7 @@ if (!isset($_SESSION['browser'])) {
     if (preg_match("/($_browser)[\/ ]?([0-9.]*)/", $user_agent, $match)) {
       $browser['name'] = $match[1];
       $browser['version'] = $match[2];
-      list($browser['majorver'], $browser['minorver'], $browser['build']) = explode('.', $browser['version']);
+      @list($browser['majorver'], $browser['minorver'], $browser['build']) = explode('.', $browser['version']);
       break;
     }
   }
@@ -54,3 +54,5 @@ if (!isset($_SESSION['browser'])) {
   $_SESSION['browser'] =& $browser; 
 }
 else $browser =& $_SESSION['browser']; 
+
+mbTrace($browser);
