@@ -34,6 +34,7 @@ class CPerfusionLine extends CMbObject {
   var $_ucd_view = null;
   var $_forme_galenique = null;
   var $_posologie = null;
+  var $_unite_administration = null;
   
   var $_administrations = null;
   
