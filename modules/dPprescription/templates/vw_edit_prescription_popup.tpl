@@ -27,7 +27,7 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
     url.requestUpdate(list, { waitingText: null} );
   }
 }
-
+			          
 Main.add(function () {
   if (formAnesth = document.forms.editProtoPrescriptionAnesth) {
     refreshListProtocolesPrescription('{{$anesth_id}}', formAnesth.pack_protocole_id);

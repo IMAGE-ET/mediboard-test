@@ -12,7 +12,7 @@
 <script type="text/javascript">
 Main.add(function () {
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null, true);
+    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
   }
   
   if($('soins')){
@@ -118,7 +118,7 @@ function submitSuivi(oForm, prescription_id) {
 }
 
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true);
+  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
 }
  
 </script>

@@ -205,7 +205,7 @@ selectPeriode = function(element) {
 			      <th style="width: 250px; border:none;">Libellé</th> 
 					  <th style="width: 50px; border:none;">Prévues</th>
 					  <th style="width: 50px; border:none;">Effectuées</th>
-					  <th style="width: 150px; border:none;">Unité d'admininstration</th>
+					  <th style="width: 150px; border:none;">Unité d'administration</th>
 					  <th style="border:none;">Commentaire</th>
 					</tr>
 	      </table>

@@ -339,7 +339,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	}
 }
 
-// Chargement des fovoris 
+// Chargement des favoris 
 if($prescription->_id){
   if($pratSel_id){
     $prescription->_current_praticien_id = $pratSel_id;

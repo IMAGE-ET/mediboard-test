@@ -272,7 +272,7 @@ class CPrescriptionLine extends CMbObject {
     $this->countParentLine();
     $this->countPrisesLine();
     $this->loadRefPrescription();
-    
+    $this->loadRefPraticien();
     $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
     if($this->duree && $this->debut){
