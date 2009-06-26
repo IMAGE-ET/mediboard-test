@@ -139,7 +139,6 @@ Element.addMethods({
   
   /** Get the surrounding form of the element  */
   getSurroundingForm: function(element) {
-		alert(element);
     if (element.form) return $(element.form);
     return $(element).up('form');
   }
