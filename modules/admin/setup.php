@@ -208,7 +208,11 @@ class CSetupadmin extends CSetup {
     $sql = "ALTER TABLE `users` CHANGE `user_login_errors` `user_login_errors` TINYINT( 4 ) NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.14";
+    $this->makeRevision("1.0.14");
+    $sql = "ALTER TABLE `user_preferences` CHANGE `pref_value` `pref_value` VARCHAR( 255 ) NOT NULL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.15";
   }
 }
 ?>
