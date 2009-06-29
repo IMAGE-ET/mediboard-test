@@ -32,7 +32,7 @@ class CCategoryPrescription extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["chapitre"]    = "enum notNull list|anapath|biologie|imagerie|consult|kine|soin|dm|dmi";
-    $specs["nom"]         = "str notNull";
+    $specs["nom"]         = "str notNull seekable";
     $specs["description"] = "text";
     $specs["header"]      = "text";
     $specs["group_id"]    = "ref class|CGroups";

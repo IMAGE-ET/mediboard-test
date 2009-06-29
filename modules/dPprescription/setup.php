@@ -1260,13 +1260,15 @@ class CSetupdPprescription extends CSetup {
 			// Chargement des prises des medicaments
 			$query = "SELECT prescription_line_medicament.code_cip, unite_prise 
 			          FROM prise_posologie
-								LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = prise_posologie.object_id AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
+								LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = prise_posologie.object_id 
+								AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
 								GROUP BY prescription_line_medicament.code_cip, unite_prise";
 			$lines_by_type["prises"] = $ds_std->loadList($query);
 			
 			$query = "SELECT prescription_line_medicament.code_cip, unite_prise 
 			          FROM administration
-								LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND  administration.object_class = 'CPrescriptionLineMedicament'
+								LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = administration.object_id 
+								AND  administration.object_class = 'CPrescriptionLineMedicament'
 								GROUP BY prescription_line_medicament.code_cip, unite_prise";
 			$lines_by_type["adm"] = $ds_std->loadList($query);
 			
