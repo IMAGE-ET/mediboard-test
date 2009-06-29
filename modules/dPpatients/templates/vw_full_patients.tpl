@@ -8,7 +8,6 @@
 
 function viewCompleteItem(sClassName, id) {
   url = new Url;
-
   url.setModuleAction("system", "httpreq_vw_complete_object");
   url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
@@ -17,13 +16,21 @@ function viewCompleteItem(sClassName, id) {
   } );
 }
 
+function viewDossierSejour(sejour_id){
+  url = new Url;
+  url.setModuleAction("dPpatients","httpreq_vw_dossier_sejour");
+  url.addParam("sejour_id",sejour_id);
+  url.requestUpdate("listView", {
+    onComplete: initPuces
+  } );
+}
+
+
 function reloadListFile(sAction){
   if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
   var url = new Url;
-  
-  
   url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
@@ -99,7 +106,8 @@ Main.add(function () {
   {{/if}}
   
   {{if $sejour_id}}
-  viewCompleteItem('CSejour', "{{$sejour_id}}");
+  //viewCompleteItem('CSejour', "{{$sejour_id}}");
+  viewDossierSejour('{{$sejour_id}}');
   {{/if}}
   
   initNotes();
@@ -110,7 +118,6 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td id="listInfosPat" style="width:200px;" rowspan="2">
-
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile('load'); return false;">
       <input type="hidden" name="selKey"   value="" />
       <input type="hidden" name="selClass" value="" />

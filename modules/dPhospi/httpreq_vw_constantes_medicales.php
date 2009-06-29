@@ -13,7 +13,9 @@ $user = new CMediusers();
 $user->load($AppUI->user_id);
 
 if(!$user->isPraticien()) {
-  $can->needsRead();
+  if(!CModule::getCanDo('soins')->read && !CModule::getCanDo('dPurgences')->read && !CModule::getCanDo('dPcabinet')->edit){
+    CModule::getCanDo($m)->redirect();
+  }
 }
 
 $context_guid = mbGetValueFromGet('context_guid');
