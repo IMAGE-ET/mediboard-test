@@ -199,15 +199,19 @@ loadConstantesMedicales  = function(context_guid) {
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
       </a>
       Constantes médicales dans le cadre de: 
-      <select name="context" onchange="loadConstantesMedicales($V(this));">
-        <option value="all" {{if $all_contexts}}selected="selected"{{/if}}>Tous les contextes</option> 
-        {{foreach from=$list_contexts item=curr_context}}
-          <option value="{{$curr_context->_guid}}" 
-          {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
-          {{if !$all_contexts && $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
-          >{{$curr_context}}</option>
-        {{/foreach}}
-      </select>
+      {{if $readonly}}
+        {{$context->_view}}
+      {{else}}
+	      <select name="context" onchange="loadConstantesMedicales($V(this));">
+	        <option value="all" {{if $all_contexts}}selected="selected"{{/if}}>Tous les contextes</option> 
+	        {{foreach from=$list_contexts item=curr_context}}
+	          <option value="{{$curr_context->_guid}}" 
+	          {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
+	          {{if !$all_contexts && $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
+	          >{{$curr_context}}</option>
+	        {{/foreach}}
+	      </select>
+      {{/if}}
     </th>
   </tr>
   <tr>
