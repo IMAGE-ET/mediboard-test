@@ -71,7 +71,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 }
 
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '');
+  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
 }
 
 function reloadAntAllergie(sejour_id){

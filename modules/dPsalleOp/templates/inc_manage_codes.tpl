@@ -60,8 +60,9 @@
       </td>
     </tr>
   </table>
-</form>
 {{/if}}
+</form>
+
 
 {{if $ajax}}
 <script type="text/javascript">
