@@ -20,6 +20,7 @@ editConstantes = function (const_id, context_guid){
   url.setModuleAction('dPhospi', 'httpreq_vw_form_constantes_medicales');
   url.addParam('const_id', const_id);
   url.addParam('context_guid', context_guid);
+  url.addParam('readonly', '{{$readonly}}');
   url.requestUpdate('constantes-medicales-form', { 
     waitingText: null,
     onComplete: function () {
@@ -185,6 +186,7 @@ loadConstantesMedicales  = function(context_guid) {
 
   url.addParam("context_guid", '{{$context_guid}}');
   url.addParam("patient_id", '{{$patient->_id}}');
+  url.addParam("readonly", '{{$readonly}}');
   url.addParam("selected_context_guid", context_guid);
   url.requestUpdate(container, { waitingText: null } );
 };

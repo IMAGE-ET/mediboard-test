@@ -1,18 +1,17 @@
 <script type="text/javascript">
 
 refreshConstantesMedicales = function(context_guid) {
-  console.debug(context_guid);
   if(context_guid) {
     var url = new Url;
     url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
+    url.addParam("readonly", true);
     url.requestUpdate("constantes", { waitingText: null } );
   }
 }
 
 constantesMedicalesDrawn = false;
 refreshConstantesHack = function(sejour_id) {
-  console.debug(sejour_id);
   if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
     refreshConstantesMedicales('CSejour-'+sejour_id);
     constantesMedicalesDrawn = true;

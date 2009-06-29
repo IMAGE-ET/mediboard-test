@@ -21,6 +21,7 @@ if(!$user->isPraticien()) {
 $context_guid = mbGetValueFromGet('context_guid');
 $selected_context_guid = mbGetValueFromGet('selected_context_guid', $context_guid);
 $patient_id = mbGetValueFromGet('patient_id');
+$readonly = mbGetValueFromGet('readonly');
 
 $context = null;
 $patient = null;
@@ -250,6 +251,7 @@ foreach ($data as $name => &$field) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign('readonly', $readonly);
 $smarty->assign('constantes', $constantes);
 $smarty->assign('context',    $context);
 $smarty->assign('context_guid', $context_guid);

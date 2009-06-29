@@ -14,7 +14,7 @@ Main.add(function () {
 });
 </script>
 
-{{if $constantes->_ref_context && $context_guid == $constantes->_ref_context->_guid}}
+{{if $constantes->_ref_context && $context_guid == $constantes->_ref_context->_guid && !$readonly}}
   {{assign var=real_context value=1}}
 {{else}}
   {{assign var=real_context value=0}}

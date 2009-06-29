@@ -11,6 +11,7 @@ global $can;
 
 $const_id = mbGetValueFromGet('const_id', 0);
 $context_guid = mbGetValueFromGet('context_guid');
+$readonly = mbGetValueFromGet('readonly');
 
 $constantes = new CConstantesMedicales();
 $constantes->load($const_id);
@@ -31,6 +32,7 @@ $smarty->assign('constantes', $constantes);
 $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('context_guid', $context_guid);
 $smarty->assign('graphs', $graphs);
+$smarty->assign('readonly', $readonly);
 $smarty->display('inc_form_edit_constantes_medicales.tpl');
 
 ?>
