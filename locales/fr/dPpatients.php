@@ -872,7 +872,7 @@ $locales['CPatient.code_exo.4'] = '4 - Soins conformes ALD';
 $locales['CDossierMedical.object_class.'] = '';
 $locales['CDossierMedical.object_class.CPatient'] = '';
 $locales['CDossierMedical.object_class.CSejour'] = '';
-$locales['CMbObject-back-contextes_constante'] = '';
+$locales['CMbObject-back-contextes_constante'] = 'Constantes médicales';
 $locales['CPatient-_art115'] = '';
 $locales['CPatient-_art115-court'] = '';
 $locales['CPatient-_art115-desc'] = '';
@@ -922,4 +922,6 @@ $locales['config-dPpatients-CPatient-identitovigilence-desc'] = 'Niveau d\'ident
 $locales['config-dPpatients-CPatient-identitovigilence-nodate'] = 'Date de naissance optionnelle';
 $locales['config-dPpatients-CPatient-identitovigilence-date'] = 'Date de naissance obligatoire';
 $locales['config-dPpatients-CPatient-identitovigilence-doublons'] = 'Interdiction de doublons';
+$locales['config-dPpatients-CPatient-date_naissance'] = '';
+$locales['config-dPpatients-CPatient-date_naissance-desc'] = '';
 ?>
