@@ -96,4 +96,12 @@
   </tr>
   {{/foreach}}
   {{/if}}
+  <tr>
+    <td>Patient:</td>
+    <td colspan="2">{{$line->_ref_prescription->_ref_patient->_view}}</td>
+  </tr>
+  <tr>
+    <td>Contexte:</td>
+    <td colspan="2">{{$line->_ref_prescription->_ref_object->_view}}</td>
+  </tr>
 </table>
