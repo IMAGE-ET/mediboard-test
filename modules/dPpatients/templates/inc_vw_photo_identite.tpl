@@ -48,8 +48,7 @@
   {{/if}}
 {{/if}}
 
-<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777" alt="Identité"
-     {{if ($size < 100) && $file->_id}}onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-patient-{{$patient->_id}}")'{{/if}} />
+<img src="{{$src}}" style="width: {{$size}}px; border: 2px solid #777" alt="Identité" {{if ($size < 100) && $file->_id}}onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-patient-{{$patient->_id}}")'{{/if}} />
      
 {{if ($size < 100) && $file->_id}}     
 <div id="tooltip-content-patient-{{$patient->_id}}" style="display: none;">

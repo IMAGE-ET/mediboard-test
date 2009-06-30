@@ -16,9 +16,35 @@ ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
 ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
 ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
-function submitSejour(){
-  var oForm = document.editSejour;
-  submitFormAjax(oForm, 'systemMsg');
+function reloadSortiePrevue() {
+	var url = new Url;
+	url.setModuleAction("dPurgences", "ajax_sortie_prevue");
+	url.addParam("sejour_id", getForm('editSortiePrevue').elements.sejour_id.value);
+	url.requestUpdate('div_sortie_prevue', { waitingText: null } );
+}
+
+function submitSejourWithSortiePrevue(){
+  var oForm = document.editSortiePrevue;
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadSortiePrevue });
+}
+
+function submitConsultWithChrono(chrono) {
+  var oForm = document.editFrmFinish;
+  oForm.chrono.value = chrono;
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFinishBanner });
+}
+
+function submitRPU() {
+	var oForm = document.editSortieAutorise;
+	submitFormAjax(oForm, 'systemMsg');
+}
+
+function submitSejRpuConsult() {
+	if (checkForm(getForm("editRPU")) && checkForm(getForm("editRPUDest"))) {
+		submitSejourWithSortiePrevue(); 
+		submitRPU();
+	  submitConsultWithChrono({{$consult|const:'TERMINE'}}); 
+	}
 }
 
 function loadTransfert(mode_sortie){
@@ -284,13 +310,17 @@ function initFields(mode_sortie){
       </form>
       
       <!--  Sortie prévue du patient -->
-      <form name="editSortiePrevu" method="post" action="?m={{$m}}">
-        <input type="hidden" name="dosql" value="do_sejour_aed" />
-        <input type="hidden" name="m" value="dPplanningOp" />
+      <form name="editSortieAutorise" method="post" action="?m={{$m}}">
+        <input type="hidden" name="dosql" value="do_rpu_aed" />
+        <input type="hidden" name="m" value="dPurgences" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-        Sortie prévue à {{mb_field object=$sejour field="sortie_prevue" register=true form="editSortiePrevu" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+        <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+        <input type="hidden" name="sortie_autorisee" value="1" />
       </form>
+      
+      <span id="div_sortie_prevue">
+        {{include file="inc_sortie_prevue.tpl"}}
+      </span>
 	  </td>
 	</tr>
 </table>

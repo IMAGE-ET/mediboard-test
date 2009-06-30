@@ -33,41 +33,47 @@ $patientMatch->nom        = $nom;
 $patientMatch->prenom     = $prenom; 
 $patientMatch->naissance  = $naissance;
 
-$textMatching = null;
+
 
 if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons" ) {
-	$ds = $this->_spec->ds;
-	if ($patient_id) {
-		$where["patient_id"] = " != '$patient_id'";
-	}
-  $where["nom"]        = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $nom));
-  $where["prenom"]     = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $prenom));
-  $where["naissance"]  = $ds->prepare("= %", $naissance);
-       
-  if($patientMatch->countList($where) > 0) {
-	  $textMatching = "Doublons détectés.";
-	  $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
-	}
-} else {
-	$siblings = $patientMatch->getSiblings();
+	$textMatching = $textSiblings = null;
 	
-	if(count($siblings) != 0) {
-	  $textMatching = "Risque de doublons :";
-	  foreach($siblings as $key => $value) {
-	    $textMatching .= "\n\t $value->nom $value->prenom" .
-	      " né(e) le ". mbDateToLocale($value->naissance) .
-	      "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
-	      "- $value->cp $value->ville";
-	  }
-	  $textMatching .= "\nVoulez-vous tout de même sauvegarder ?";
-	}
+  if($patientMatch->loadMatchingPatient(true) > 0) {
+    $textMatching = "Doublons détectés.";
+    $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
+  }
+	
+  if (!$textMatching) {
+  	$textSiblings = patientGetSiblings($patientMatch);
+  }
+} else {
+	$textSiblings = patientGetSiblings($patientMatch);
+}
+
+function patientGetSiblings($patientMatch) {
+  $siblings = $patientMatch->getSiblings();
+  
+  $textSiblings = null;
+  
+  if(count($siblings) != 0) {
+    $textSiblings = "Risque de doublons :";
+    foreach($siblings as $key => $value) {
+      $textSiblings .= "\n\t $value->nom $value->prenom" .
+        " né(e) le ". mbDateToLocale($value->naissance) .
+        "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
+        "- $value->cp $value->ville";
+    }
+    $textSiblings .= "\nVoulez-vous tout de même sauvegarder ?";
+  }
+  
+  return $textSiblings;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("textDifferent", $textDifferent);
-$smarty->assign("textMatching" , $textMatching );
+$smarty->assign("textSiblings", $textSiblings);
+$smarty->assign("textMatching", $textMatching );
 
 $smarty->display("httpreq_get_siblings.tpl");
 ?>

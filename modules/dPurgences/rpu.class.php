@@ -32,6 +32,7 @@ class CRPU extends CMbObject {
   var $radio_fin       = null;
   var $mutation_sejour_id = null;
   var $box_id          = null;
+  var $sortie_autorisee = null;
   
   // Legacy Sherpa fields
   var $type_pathologie = null; // Should be $urtype
@@ -100,6 +101,7 @@ class CRPU extends CMbObject {
       "radio_fin"        => "dateTime",
       "mutation_sejour_id" => "ref class|CSejour",
       "box_id"           => "ref class|CLit",
+      "sortie_autorisee" => "bool",
       
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
@@ -168,12 +170,17 @@ class CRPU extends CMbObject {
     
     $this->_sortie = $this->_ref_sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
-
-    $this->_can_leave_since = (mbTime($this->_ref_sejour->sortie_prevue) > mbTime()) ? -1 : mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
-    if ($this->_can_leave_since != -1) {
-    	$this->_can_leave_since_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave_since) && 
-                                      ($this->_can_leave_since < CAppUI::conf("dPurgences rpu_alert_time"));
-      $this->_can_leave_since_error   = ($this->_can_leave_since > CAppUI::conf("dPurgences rpu_alert_time"));
+    
+    if (!$this->_ref_sejour->sortie_reelle) {
+    	//En consultation 
+    	if ($this->_ref_consult->chrono != 64) {
+    	  $this->_can_leave_since = -1;
+      } else {
+      	$this->_can_leave_since = mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
+      	$this->_can_leave_since_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave_since) 
+      	                                   && ($this->_can_leave_since < CAppUI::conf("dPurgences rpu_alert_time"));
+        $this->_can_leave_since_error   = ($this->_can_leave_since > CAppUI::conf("dPurgences rpu_alert_time"));
+      }
     }
   }
   

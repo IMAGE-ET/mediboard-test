@@ -23,6 +23,7 @@ $order_col = mbGetValueFromGetOrSession("order_col", "_pec_transport");
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $today = mbDate();
 
+
 // Chargement des urgences prises en charge
 $sejour = new CSejour;
 $where = array();

@@ -34,8 +34,8 @@ SiblingsChecker = {
   // Ask confirmation before sending, when necessary
   alert: function() {
 	confirmed = true;
-	confirmed &= !this.textDifferent || confirm(this.textDifferent);
 	confirmed &= !this.textMatching  || alert(this.textMatching);
+	confirmed &= !this.textSiblings || confirm(this.textSiblings);
 	
     if (confirmed) {
       document.forms[this.formName].submit();
@@ -46,12 +46,13 @@ SiblingsChecker = {
   
   confirm: function() {
     confirmed = true;
-    confirmed &= !this.textDifferent || confirm(this.textDifferent);
-    confirmed &= !this.textMatching  || confirm(this.textMatching);
+    confirmed &= !this.textSiblings || confirm(this.textSiblings);
+    
     if (confirmed) {
       document.forms[this.formName].submit();
     }
-	  this.running = false;
+	
+    this.running = false;
   }
 }
 

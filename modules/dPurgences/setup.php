@@ -91,7 +91,16 @@ class CSetupdPurgences extends CSetup {
 						ADD `box_id` INT(11) UNSIGNED";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `rpu`
+            ADD `sortie_autorisee` ENUM ('0','1') DEFAULT '0',
+					  ADD INDEX (`radio_debut`),
+					  ADD INDEX (`radio_fin`),
+					  ADD INDEX (`mutation_sejour_id`),
+					  ADD INDEX (`box_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.21";
   }  
 }
 

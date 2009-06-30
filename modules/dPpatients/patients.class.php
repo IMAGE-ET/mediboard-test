@@ -748,8 +748,13 @@ class CPatient extends CMbObject {
    * - Strictement la même date de naissance
    * @return Nombre d'occurences trouvées 
    */
-  function loadMatchingPatient() {
+  function loadMatchingPatient($strict = null) {
     $ds = $this->_spec->ds;
+    
+   if ($strict && $this->_id) {
+   	$where["patient_id"] = " != '$this->_id'";
+   }
+    
     $where["nom"]       = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom));
     $where["prenom"]    = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom));
     $where["naissance"] = $ds->prepare("= %", $this->naissance);

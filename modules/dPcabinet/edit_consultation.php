@@ -18,6 +18,8 @@ $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 $today        = mbDate();
 $hour         = mbTime(null);
 
+$now = mbDateTime();
+
 if(!isset($current_m)){
   $current_m = mbGetValueFromGet("current_m", $m);
 }
@@ -188,7 +190,7 @@ if ($consult->_id && $consult->sejour_id){
   $consult->_ref_sejour->loadNumDossier();
   $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
   $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
-  
+
   // Chargement des etablissements externes
   $order = "nom";
   $etab = new CEtabExterne();
@@ -262,7 +264,7 @@ $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 $smarty->assign("line", new CPrescriptionLineMedicament());
-
+$smarty->assign("now", $now);
 
 if($consult->_is_anesth) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
