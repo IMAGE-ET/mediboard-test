@@ -145,7 +145,7 @@ function submitSejour(){
     </th>
     <th>{{mb_title class=CRPU field="rpu_id"}}</th>
     <th>{{mb_title class=CRPU field="sejour_id"}}</th>
-    <th>{{mb_title class=CRPU field="_can_leave_since"}}</th>
+    <th>{{mb_title class=CRPU field="_can_leave"}}</th>
   </tr>
   {{foreach from=$listSejours item=sejour}}
   {{assign var=rpu value=$sejour->_ref_rpu}}
@@ -290,21 +290,27 @@ function submitSejour(){
 			  </table>
 			</form>
     </td>
-    <td id="rpu-{{$rpu->_id}}" class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_since_error}}error{{elseif $rpu->_can_leave_since_warning}}warning{{else}}ok{{/if}}">
+    <td id="rpu-{{$rpu->_id}}" {{if !$sejour->sortie_reelle}}class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"{{/if}}>
       {{if $sejour->sortie_reelle}}
-        -
-      {{elseif $rpu->_can_leave_since == -1}}
+        
+      {{elseif $rpu->_can_leave == -1}}
         {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
         {{if $rpu->sortie_autorisee}}
           {{tr}}CRPU-sortie_assuree.1{{/tr}}
         {{else}}
           {{tr}}CRPU-sortie_assuree.0{{/tr}}
         {{/if}}
-      {{elseif $rpu->_can_leave_since != -1 && !$rpu->sortie_autorisee}}
+      {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
         {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
         {{tr}}CRPU-sortie_assuree.0{{/tr}}
       {{else}}
-        {{mb_value object=$rpu field="_can_leave_since"}}<br />
+        {{if $rpu->_can_leave_since}}
+          {{tr}}CRPU-_can_leave_since{{/tr}}
+        {{/if}}
+        {{if $rpu->_can_leave_about}}
+          {{tr}}CRPU-_can_leave_about{{/tr}}
+        {{/if}}
+        {{mb_value object=$rpu field="_can_leave"}}<br />
         {{if $rpu->sortie_autorisee}}
           {{tr}}CRPU-sortie_assuree.1{{/tr}}
         {{else}}

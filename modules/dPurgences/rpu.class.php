@@ -44,9 +44,11 @@ class CRPU extends CMbObject {
   var $_count_consultations = null;
   var $_attente  = null;
   var $_presence = null;
-  var $_can_leave_since = null;
-  var $_can_leave_since_warning = null;
-  var $_can_leave_since_error = null;
+  var $_can_leave         = null;
+  var $_can_leave_since   = null;
+  var $_can_leave_about   = null;
+  var $_can_leave_warning = null;
+  var $_can_leave_error   = null;
 
   // Patient
   var $_patient_id = null;
@@ -111,9 +113,11 @@ class CRPU extends CMbObject {
       "_etablissement_transfert_id" => "ref class|CEtabExterne",
       "_attente"         => "time",
       "_presence"        => "time",
-      "_can_leave_since" => "time",
-      "_can_leave_since_warning" => "bool",
-      "_can_leave_since_error" => "bool",
+      "_can_leave"       => "time",
+      "_can_leave_about" => "bool",
+      "_can_leave_since" => "bool",
+      "_can_leave_warning" => "bool",
+      "_can_leave_error"   => "bool",
      );
      
 		$specs["urprov"] = "";
@@ -174,12 +178,19 @@ class CRPU extends CMbObject {
     if (!$this->_ref_sejour->sortie_reelle) {
     	//En consultation 
     	if ($this->_ref_consult->chrono != 64) {
-    	  $this->_can_leave_since = -1;
+    	  $this->_can_leave = -1;
       } else {
-      	$this->_can_leave_since = mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
-      	$this->_can_leave_since_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave_since) 
-      	                                   && ($this->_can_leave_since < CAppUI::conf("dPurgences rpu_alert_time"));
-        $this->_can_leave_since_error   = ($this->_can_leave_since > CAppUI::conf("dPurgences rpu_alert_time"));
+      	if (mbTime($this->_ref_sejour->sortie_prevue) > mbTime()) {
+      		$this->_can_leave_about = true;
+      		$this->_can_leave = mbTimeRelative(mbTime(), mbTime($this->_ref_sejour->sortie_prevue));
+      	} else {
+      		$this->_can_leave_since = true;
+      		$this->_can_leave = mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
+      	}
+      	
+      	$this->_can_leave_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave) 
+      	                                   && ($this->_can_leave < CAppUI::conf("dPurgences rpu_alert_time"));
+        $this->_can_leave_error   = ($this->_can_leave > CAppUI::conf("dPurgences rpu_alert_time"));
       }
     }
   }
