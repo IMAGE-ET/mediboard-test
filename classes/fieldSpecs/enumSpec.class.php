@@ -23,14 +23,24 @@ class CEnumSpec extends CMbFieldSpec {
     }
   }
   
+  function getSpecType() {
+    return("enum");
+  }
+  
+  function getDBSpec() {
+    return "ENUM('".str_replace('|', "','", $this->list)."')";
+  }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'list' => 'list',
+    );
+  }
+  
   function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
-  }
-  
-  function getSpecType() {
-    return("enum");
   }
   
   function checkValues(){
@@ -41,11 +51,8 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    
     $specFragments = explode("|", $this->list);
-    if (!in_array($propValue, $specFragments)) {
+    if (!in_array($object->{$this->fieldName}, $specFragments)) {
       return "N'a pas une valeur possible";
     }
     return null;
@@ -53,11 +60,8 @@ class CEnumSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
     $specFragments = explode("|", $this->list);
-    
-    $propValue = $this->randomString($specFragments, 1);
+    $object->{$this->fieldName} = self::randomString($specFragments, 1);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
@@ -144,12 +148,6 @@ class CEnumSpec extends CMbFieldSpec {
     
     trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
     return null;
-  }
-  
-  function getDBSpec() {
-    $aSpecFragments = explode("|", $this->list);
-    $type_sql = "ENUM('".implode("','", $aSpecFragments)."')";
-    return $type_sql;
   }
 }
 

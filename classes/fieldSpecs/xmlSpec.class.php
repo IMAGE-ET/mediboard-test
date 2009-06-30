@@ -25,11 +25,7 @@ class CXmlSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    $content_type = "application/xml; charset=UTF-8";
-    
-    $geshi = new Geshi($propValue, "xml");
+    $geshi = new Geshi($object->{$this->fieldName}, "xml");
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
     $geshi->set_overall_style("max-height: 100%;");
     $geshi->enable_classes();
@@ -38,8 +34,7 @@ class CXmlSpec extends CMbFieldSpec {
   }
 
   function sample(&$object, $consistent = true){
-    $fieldName = $this->fieldName;
-    $object->$fieldName = <<<EOD
+    $object->{$this->fieldName} = <<<EOD
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <note>
 	<to>Tove</to>

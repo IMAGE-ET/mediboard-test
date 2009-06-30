@@ -1,4 +1,12 @@
-<!-- $Id: -->
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
 
 {{if $app->user_type == 1 && $app->user_id != $_user->_id && $_user->_login_locked}}
 <form name="unlock-{{$_user->_id}}" action="?m={{$m}}&amp;tab={{$tab}}" method="post">

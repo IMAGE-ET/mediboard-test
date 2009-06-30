@@ -83,7 +83,7 @@ Main.add(function() {
         {{/if}}
       </td>
       <th>Objets</th>
-      <td id="objects-list" class="readonly"></td>
+      <td id="objects-list"></td>
     </tr>
     <tr>
       <td />
@@ -156,7 +156,7 @@ Main.add(function() {
 	   	 </div>
 
     	 <div class="big-info">
-    	   Il existe deux options possible pour effectuer la fusion :
+    	   Il existe deux options possibles pour effectuer la fusion :
     	   <ul>
     	     <li><strong>La fusion standard qui automotise des sauvegardes normales</strong>. Ce processus
     	       <ul>

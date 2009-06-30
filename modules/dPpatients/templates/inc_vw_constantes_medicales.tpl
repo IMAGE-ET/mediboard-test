@@ -92,13 +92,13 @@ calculImcVst = function (oForm) {
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=_vst}}</th>
-      <td class="readonly">{{mb_field object=$constantes_context field=_vst size="4" readonly="readonly"}} ml</td>
+      <td>{{mb_field object=$constantes_context field=_vst size="4" readonly="readonly"}} ml</td>
       <td>{{mb_value object=$constantes field=_vst}}{{if $constantes->_vst}} ml{{/if}}</td>
       <td />
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=_imc}}</th>
-      <td class="readonly">{{mb_field object=$constantes_context field=_imc size="4" readonly="readonly"}}</td>
+      <td>{{mb_field object=$constantes_context field=_imc size="4" readonly="readonly"}}</td>
       <td>{{mb_value object=$constantes field=_imc}}</td>
       <td />
     </tr>

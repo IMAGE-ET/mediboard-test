@@ -2,9 +2,10 @@
 
 /**
  * @package Mediboard
- * @subpackage dPpatients
+ * @subpackage admin
  * @version $Revision$
- * @author Romain Ollivier
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 class CSetupadmin extends CSetup {

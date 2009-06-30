@@ -296,19 +296,6 @@ table.titleblock td.titlecell {
   padding-bottom: 10px;
 }
 
-/* Bread crumbs block */
-table.crumbsblock {
-  width: 100%;
-}
-
-table.crumbsblock td {
-  white-space: nowrap;
-}
-
-table.crumbsblock td.crumbscell {
-  width: 100%;
-}
-
 /* Tab view table */
 #tabmenu {
   border-spacing: 0px;
@@ -591,13 +578,9 @@ table.form td.compte_rendu {
   background: #ddd;
 }
 
-table.form td.info {
+table.form td.info,
+table.form td.text {
   white-space: normal;
-}
-
-table.form td.readonly input {
-  background: #eee;
-  border: 1px dotted;
 }
 
 table.form td.button {
@@ -643,11 +626,6 @@ div.autocomplete ul li {
 
 div.autocomplete ul li small {
   white-space: normal;
-}
-
-/* links in header blocks */
-a.hdr:link,a.hdr:active,a.hdr:visited {
-  color: #fff;
 }
 
 /* tabbed boxes */
@@ -1032,23 +1010,6 @@ table.Offline button {
   margin: 2px 2px;
 }
 
-/* Banner */
-#banner {
-  vertical-align: middle;
-  text-align: center;
-}
-
-#banner p {
-  font-size: 1.9em;
-  float: left;
-  color: #620;
-  margin: 5px 10px 0;
-}
-
-#banner a {
-  display: block;
-}
-
 /* Navigation */
 #nav {
   display: block;
@@ -1163,18 +1124,18 @@ table.Offline button {
 
 #user .menu {
   background: #EFEFEF;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   margin: 2px;
-  padding: 4px;
+  padding: 2px;
   vertical-align: middle;
   padding-bottom: 2px;
   white-space: nowrap;
 }
 
 #user .menu img {
-  padding: 2px;
+  padding: 1px;
 }
 
 #user .menu a:hover img {
@@ -2654,13 +2615,31 @@ select.perennity {
 }
 
 .modal {
-  min-width: 200px;
-  padding: 1.0em;
-  border: 1px solid #999;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
+	min-width: 200px;
+	padding: 0.3em;
+	border: 1px solid #999;
   border-radius: 6px;
-  background: #eee;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	background: #eee;
+}
+
+.modal h1 {
+  text-align: center;
+  font-size: inherit;
+  background: #ccc; 
+  radius: 5px; 
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+  font-weight: bold; 
+  margin: 0; 
+  padding: 5px 1em; 
+  white-space: nowrap;
+}
+
+.modal div {
+  padding: 0.5em;
+  text-align: center;
 }
 
 button.send, a.button.send {

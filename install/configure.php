@@ -82,7 +82,7 @@ $dPconfig = $mbConfig->values;
 
   <tr>
     <th><label for="dbtype" title="Type de base de données. Seul mysql est possible pour le moment">Type de base de données :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="dbtype" value="<?php echo @$dPconfig["dbtype"]; ?>" /></td>
+    <td><input type="text" readonly="readonly" size="20" name="dbtype" value="<?php echo @$dPconfig["dbtype"]; ?>" /></td>
   </tr>
 
   <tr>

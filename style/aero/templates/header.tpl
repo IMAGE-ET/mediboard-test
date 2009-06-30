@@ -1,14 +1,6 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
-{{if !$offline}}
-
-<script type="text/javascript">
-function chgMenu(id, type) {
-  $(id).style.visibility = type;
-}
-</script>
-
-{{if !$dialog}}
+{{if !$offline && !$dialog}}
 
 {{foreach from=$messages item=currMsg}}
   <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
@@ -18,9 +10,9 @@ function chgMenu(id, type) {
 
 <table id="headerMenu">
   <tr>
-    <td class="menuTitle" id="modMenu" onmouseover="chgMenu('modMenuList', 'visible')" onmouseout="chgMenu('modMenuList', 'hidden')">
+    <td class="menuTitle" id="modMenu" onmouseover="$('modMenuList').show()" onmouseout="$('modMenuList').hide()">
       Modules
-      <div id="modMenuList" style="visibility: hidden; position: absolute">
+      <div id="modMenuList" style="display: none; position: absolute;">
 		    {{foreach from=$modules key=mod_name item=currModule}}
 		    {{if $currModule->mod_ui_active && $currModule->_can->view}}
         <div class="menuItem {{if $mod_name == $m}}selected{{/if}}">
@@ -33,20 +25,24 @@ function chgMenu(id, type) {
         {{/foreach}}
       </div>
     </td>
-    <td class="menuTitle" id="toolMenu" onmouseover="chgMenu('toolMenuList', 'visible')" onmouseout="chgMenu('toolMenuList', 'hidden')">
+    <td class="menuTitle" id="toolMenu" onmouseover="$('toolMenuList').show()" onmouseout="$('toolMenuList').hide()">
       Outils
-      <div id="toolMenuList" style="visibility: hidden; position: absolute">
+      <div id="toolMenuList" style="display: none; position: absolute;">
         <div class="menuItem">
-          <img src="style/aero/images/icons/help.png" alt="Aide" border="0" height="16" width="16" />
-          <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
+          <a href="{{$portal.help}}" target="_blank">
+            <img src="style/aero/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}portal-help{{/tr}}
+          </a>
         </div>
         <div class="menuItem">
-          <img src="style/aero/images/icons/modif.png" alt="Suggestions" border="0" height="16" width="16" />
-          <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a>
+          <a href="{{$portal.tracker}}" target="_blank">
+            <img src="style/aero/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}portal-tracker{{/tr}}
+          </a>
         </div>
         <div class="menuItem">
-          <a href="#" onclick="popChgPwd();">
-            <img src="style/aero/images/icons/passwd.png" alt="Mot de passe" border="0" height="16" width="16" />
+          <a href="javascript:popChgPwd()">
+            <img src="style/aero/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" border="0" height="16" width="16" />
             {{tr}}menu-changePassword{{/tr}}
           </a>
         </div>
@@ -57,9 +53,15 @@ function chgMenu(id, type) {
           </a>
         </div>
         <div class="menuItem">
-          <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">
-            <img src="style/aero/images/icons/prefs.png" alt="Preferences" border="0" height="16" width="16" />
-            {{tr}}mod-admin-tab-edit_prefs{{/tr}}
+          <a href="javascript:Session.lock()">
+            <img src="style/aero/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}menu-lockSession{{/tr}}
+          </a>
+        </div>
+        <div class="menuItem">
+          <a href="javascript:UserSwitch.popup()">
+            <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" border="0" height="16" width="16" />
+            {{tr}}menu-switchUser{{/tr}}
           </a>
         </div>
         <div class="menuItem">
@@ -87,7 +89,7 @@ function chgMenu(id, type) {
     <td class="end">
       <form name="ChangeGroup" action="" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
-        <select name="g" onchange="ChangeGroup.submit();">
+        <select name="g" onchange="this.form.submit();">
           {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
           <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
           {{$currEtablissement->_view}}
@@ -99,7 +101,7 @@ function chgMenu(id, type) {
   </tr>
 </table>
 {{/if}}
-{{/if}}
+
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
   

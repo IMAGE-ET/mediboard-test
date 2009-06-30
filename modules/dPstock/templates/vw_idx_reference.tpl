@@ -96,7 +96,7 @@ ProductSelector.init = function(){
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="product_id"}}</th>
-          <td class="readonly">
+          <td>
             <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
             <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>

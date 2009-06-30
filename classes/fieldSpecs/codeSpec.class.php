@@ -24,9 +24,39 @@ class CCodeSpec extends CMbFieldSpec {
     return("code");
   }
   
+  function getDBSpec(){
+    $type_sql = null;
+    
+    if($this->ccam)
+      $type_sql = "VARCHAR(7)";
+    elseif($this->cim10)
+      $type_sql = "VARCHAR(5)";
+    elseif($this->adeli)
+      $type_sql = "VARCHAR(9)";
+    elseif($this->insee)
+      $type_sql = "VARCHAR(15)";
+    elseif($this->rib)
+      $type_sql = "VARCHAR(23)";
+    elseif($this->siret)
+      $type_sql = "VARCHAR(14)";
+
+    return $type_sql;
+  }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'ccam'         => 'bool',
+      'cim10'        => 'bool',
+      'adeli'        => 'bool',
+      'insee'        => 'bool',
+      'rib'          => 'bool',
+      'siret'        => 'bool',
+      'order_number' => 'bool',
+    );
+  }
+  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
        
     // ccam
     if($this->ccam){
@@ -127,25 +157,6 @@ class CCodeSpec extends CMbFieldSpec {
     
     return null;
   }
-  
-  function getDBSpec(){
-    $type_sql = null;
-    
-    if($this->ccam){
-      $type_sql = "VARCHAR(7)";
-    }elseif($this->cim10){
-      $type_sql = "VARCHAR(5)";
-    }elseif($this->adeli){
-      $type_sql = "VARCHAR(9)";
-    }elseif($this->insee){
-      $type_sql = "VARCHAR(15)";
-    }elseif($this->rib){
-      $type_sql = "VARCHAR(23)";
-    }elseif($this->siret){
-      $type_sql = "VARCHAR(14)";
-    }      
-    return $type_sql;
-  }
 
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
@@ -153,31 +164,31 @@ class CCodeSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true) {
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
+    $propValue = &$object->{$this->fieldName};
     
     // ccam
     if($this->ccam){
-      $object->$fieldName = "BFGA004";
+      $propValue = "BFGA004";
     
     // cim10
     }elseif($this->cim10){
-      $object->$fieldName = "H251";
+      $propValue = "H251";
       
     // adeli
     }elseif($this->adeli){
-      $object->$fieldName = "123456789";
+      $propValue = "123456789";
 
     // rib
     }elseif($this->rib){
-      $object->$fieldName = "11111111111111111111111";
+      $propValue = "11111111111111111111111";
     
     // siret
     }elseif($this->siret){
-      $object->$fieldName = "73282932000074";
+      $propValue = "73282932000074";
     
     // insee
     }elseif($this->insee){
-      $object->$fieldName = "100000000000047";
+      $propValue = "100000000000047";
     }
   }
 }

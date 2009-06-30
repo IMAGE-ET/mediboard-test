@@ -14,6 +14,13 @@ class CBoolSpec extends CMbFieldSpec {
   var $_list = null;
   var $_locales = null;
   
+  function __construct($className, $field, $prop = null, $aProperties = array()) {
+    parent::__construct($className, $field, $prop, $aProperties);
+    foreach ($this->_list = array(0,1) as $value) {
+      $this->_locales[$value] = CAppUI::tr("bool.$value");
+    }
+  }
+  
   function getSpecType() {
     return("bool");
   }
@@ -21,12 +28,9 @@ class CBoolSpec extends CMbFieldSpec {
   function getDBSpec(){
     return "ENUM('0','1')";
   }
-    
-  function __construct($className, $field, $prop = null, $aProperties = array()) {
-    parent::__construct($className, $field, $prop, $aProperties);
-    foreach ($this->_list = array(0,1) as $value) {
-      $this->_locales[$value] = CAppUI::tr("bool.$value");
-    }
+  
+  function getValue($object, $smarty = null, $params = null) {
+    return CAppUI::tr("bool.".$object->{$this->fieldName});
   }
   
   function checkValues(){
@@ -36,21 +40,12 @@ class CBoolSpec extends CMbFieldSpec {
     }
   }
   
-  function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    return CAppUI::tr("bool.".$propValue);
-  }
-  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    
-    $propValue = $this->checkNumeric($propValue, false);
+    $propValue = $this->checkNumeric($object->{$this->fieldName}, false);
     if($propValue === null){
       return "N'est pas une chaîne numérique";
     }
-    if($propValue!=0 && $propValue!=1){
+    if($propValue != 0 && $propValue != 1){
       return "Ne peut être différent de 0 ou 1";
     }
     return null;
@@ -149,8 +144,8 @@ class CBoolSpec extends CMbFieldSpec {
   }
   
   function sample(&$object, $consistent = true){
-    $fieldName = $this->fieldName;
-    $object->$fieldName = rand(0,1);
+    parent::sample($object, $consistent);
+    $object->{$this->fieldName} = rand(0,1);
   }
 }
 

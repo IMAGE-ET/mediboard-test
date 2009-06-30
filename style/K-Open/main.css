@@ -141,19 +141,6 @@ table.form td.compte_rendu {
   background: #ffd;
 }
 
-table.form td.text {
-  white-space: normal;
-}
-
-table.form td.info {
-  white-space: normal;
-}
-
-table.form td.readonly input {
-  background-color: #ffd;
-  border: 1px dotted;
-}
-
 table.form td.button {
   text-align: center;
   vertical-align: middle;
@@ -243,23 +230,27 @@ table.tabmenu {
 table.tabmenu td {
   height: 25px;
   padding-top: 2px;
-}
-
-table.tabmenu td.normal {
   background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
-table.tabmenu td.normal a {
+table.tabmenu td a {
   color: #fff;
 }
 
-table.tabmenu td.normalLeft {
+table.tabmenu td.selected a {
+  color: #666;
+}
+
+table.tabmenu td.left,
+table.tabmenu td.right {
   width: 15px;
+}
+
+table.tabmenu td.left {
   background: url(./images/icons/tabLeft.gif) no-repeat bottom right;
 }
 
-table.tabmenu td.normalRight {
-  width: 15px;
+table.tabmenu td.right {
   background: url(./images/icons/tabRight.gif) no-repeat bottom left;
 }
 
@@ -267,13 +258,11 @@ table.tabmenu td.selected {
   background: url(./images/icons/tabSelectedBg.png) repeat-x bottom;
 }
 
-table.tabmenu td.selectedLeft {
-  width: 15px;
+table.tabmenu td.selected.left {
   background: url(./images/icons/tabSelectedLeft.gif) no-repeat bottom right;
 }
 
-table.tabmenu td.selectedRight {
-  width: 15px;
+table.tabmenu td.selected.right {
   background: url(./images/icons/tabSelectedRight.gif) no-repeat bottom left;
 }
 

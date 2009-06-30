@@ -10,7 +10,7 @@
 
 function main() {
   try {
-  	//Session.lock();
+    if (sessionLocked) Session.lock();
     prepareForms();
     SystemMessage.init();
     WaitingMessage.init();
@@ -115,7 +115,7 @@ var WaitingMessage = {
     }).show();
   },
   
-  cover: function(element) {    
+  cover: function(element) {
     element = $(element);
     
     var cover = new Element("div").addClassName('ajax-loading').hide(),
@@ -1028,6 +1028,15 @@ var Modal = {
     m.container.select('div').first().update(message);
     m.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate(true);}).bind(m));
     m.container.select('button.cancel').first().observe('click', (function(){this.close(); options.onValidate(false);}).bind(m));
+  }, 
+  
+  open: function(container, options) {
+    options = Object.extend({
+      className: 'modal',
+      closeOnClick: null,
+      overlayOpacity: 0.5
+    }, options || {});
+    return Control.Modal.open(container, options);
   }
 };
 /*
@@ -1054,30 +1063,72 @@ window.modal = function(container, options) {
 };
 
 var Session = {
+  window: null,
   lock: function(){
-    $('main').hide();
-    
-    var mask = $('sessionLockMask').setStyle({
-        opacity: 1,
-        backgroundColor: '#000',
-        zIndex: 10000,
-        position: 'fixed'
-      }).show().clonePosition(document.body);
-      
-    var vpd = document.viewport.getDimensions(),
-        win = mask.select('div.window').first(),
-        dim = win.getDimensions();
-        
-    win.setStyle({
-      top: (vpd.height - dim.height)/2 + 'px',
-      left: (vpd.width - dim.width) /2 + 'px'
+    var url = new Url;
+    url.addParam("lock", true);
+    url.requestUpdate("systemMsg", {
+      method: "post",
+      getParameters: {m: 'admin', a: 'ajax_unlock_session'}
     });
+    var container = $('sessionLock');
+    this.window = Modal.open(container);
+    
+    container.select('form').first().reset();
+    container.select('input[type=text], input[type=password]').first().focus();
+    
+    $('main').hide();
+  },
+  request: function(form){
+    var url = new Url;
+    url.addElement(form.password);
+    url.requestUpdate(form.select('.login-message').first(), {
+      method: "post",
+      getParameters: {m: 'admin', a: 'ajax_unlock_session'}
+    });
+    return false;
   },
   unlock: function(){
-    $('sessionLockMask').hide(); 
+    this.window.close();
     $('main').show();
+    return false;
   },
   close: function(){
     document.location.href = '?logout=-1';
+  }
+};
+
+document.reload = function(){
+  document.location.href = document.location.href;
+}
+
+var UserSwitch = {
+  window: null,
+  popup: function(){
+    var container = $('userSwitch');
+    this.window = Modal.open(container);
+    
+    container.select('form').first().reset();
+    container.select('input[type=text], input[type=password]').first().focus();
+    document.observe('keydown', function(e){
+      if (Event.key(e) == 27) UserSwitch.cancel();
+    });
+  },
+  login: function(form){
+    if (!checkForm(form)) return false;
+    var url = new Url;
+    url.addElement(form.username);
+    url.addElement(form.password);
+    url.requestUpdate(form.select('.login-message').first(), {
+      method: "post",
+      getParameters: {
+        m: 'admin',
+        a: 'ajax_login_as'
+      }
+    });
+    return false;
+  },
+  cancel: function(){
+    this.window.close();
   }
 };

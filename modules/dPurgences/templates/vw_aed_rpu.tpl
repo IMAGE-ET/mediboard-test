@@ -175,7 +175,7 @@ Main.add(function () {
 	    <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}" />
 	    {{mb_label object=$rpu field="_patient_id"}}
 	  </th>
-	  <td class="readonly">
+	  <td>
 	  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
 	   
 	    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>

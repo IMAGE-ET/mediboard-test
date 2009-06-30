@@ -1,14 +1,11 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
-{{if !$dialog}}
-{{if !$app->_ref_user || !$app->_ref_user->_id}}
+{{if !$dialog && (!$app->_ref_user || !$app->_ref_user->_id)}}
 <!-- No Mediuser -->
 <div class="small-warning">
-  {{tr}}common-warning-no-mediuser{{/tr}}
-  <br/>
+  {{tr}}common-warning-no-mediuser{{/tr}}<br/>
   {{tr}}common-suggest-no-mediuser{{/tr}}
 </div>
-{{/if}}
 {{/if}}
 
 <script type="text/javascript">
@@ -45,16 +42,14 @@ var Menu = {
   {{if !$offline}}
   <!-- Changement d'établissement courant -->
   <form name="ChangeGroup" action="?" method="get">
-
-  <input type="hidden" name="m" value="{{$m}}" />
-  <select name="g" style="width: 140px;" onchange="this.form.submit();">
-    {{foreach from=$Etablissements item=currEtablissement}}
-    <option value="{{$currEtablissement->_id}}" {{if $currEtablissement->_id == $g}}selected="selected"{{/if}}>
-      {{$currEtablissement->_view}}
-    </option>
-    {{/foreach}}
-  </select>
-
+    <input type="hidden" name="m" value="{{$m}}" />
+    <select name="g" style="width: 140px;" onchange="this.form.submit();">
+      {{foreach from=$Etablissements item=currEtablissement}}
+      <option value="{{$currEtablissement->_id}}" {{if $currEtablissement->_id == $g}}selected="selected"{{/if}}>
+        {{$currEtablissement->_view}}
+      </option>
+      {{/foreach}}
+    </select>
   </form>
   
   <!-- Welcome -->
@@ -65,35 +60,35 @@ var Menu = {
 
   <div id="menubar" class="iconed">
     <div id="menuTools">
-      <a id="toggleIcons" href="#" title="{{tr}}menu-toggleIcons{{/tr}}" onclick="Menu.toggle()" />
       <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
       </a>
       <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
       </a>
-      <a href="#" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
+      <a href="javascript:popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
       </a>
       <a href="?m=mediusers&amp;a=edit_infos" title="{{tr}}menu-myInfo{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
       </a>
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}" title="{{tr}}mod-admin-tab-edit_prefs{{/tr}}">
-        <img src="style/{{$uistyle}}/images/icons/prefs.png" alt="{{tr}}mod-admin-tab-edit_prefs{{/tr}}" />
+      <a href="javascript:Session.lock()" title="{{tr}}menu-lockSession{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
+      </a>
+      <a href="javascript:UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}">
+        <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
       </a>
       <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
+      
+      <a id="toggleIcons" href="javascript:Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}"></a>
     </div>
 
     <hr />
     {{foreach from=$modules key=mod_name item=currModule}}
 	    {{if $currModule->mod_ui_active && $currModule->_can->view}}
-		    {{if $mod_name == $m}}
-		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}" class="textSelected">
-		    {{else}}
-		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}"class="textNonSelected">
-		    {{/if}}
+		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
 		      <img src="modules/{{$currModule->mod_name}}/images/icon.png" alt="Icone {{$currModule->mod_name}}" />
 		      {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
 		    </a>
@@ -174,9 +169,10 @@ var Menu = {
         {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}</a>
       {{/if}}
       {{/foreach}}
-      <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
+      <a href="javascript:popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
       <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>
       <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a>
+      <a href="javascript:UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a>
       <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
     </td>
   </tr>

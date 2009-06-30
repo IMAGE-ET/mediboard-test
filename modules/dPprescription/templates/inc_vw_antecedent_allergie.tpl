@@ -43,9 +43,9 @@
       <ul>
       {{foreach from=$cat item=ant}}
       <li>
-      {{if $ant->date}}
- 	      {{$ant->date|date_format:"%d/%m/%Y"}}:
-	    {{/if}} 
+        {{if $ant->date}}
+   	      {{mb_value object=$ant field=date}}:
+  	    {{/if}}
 		  	{{$ant->rques}}
 	    </li>
 	    {{/foreach}}

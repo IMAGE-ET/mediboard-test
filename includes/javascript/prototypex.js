@@ -153,6 +153,12 @@ Element.addMethods(['input', 'textarea'], {
   }
 });
 
+Object.extend(Event, {
+  key: function(e){
+    return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
+  }
+});
+
 Class.extend(String, {
   pad: function(ch, length, right) {
     length = length || 30;

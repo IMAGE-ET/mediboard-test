@@ -198,7 +198,7 @@ CCAMSelector.init = function(){
                 }; 
                 Sejour.preselectSejour(this.value);" />
     </th>
-    <td class="readonly">
+    <td>
       <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}"  />
       {{if $op->_ref_salle && $op->_ref_salle->_id}}
       en {{$op->_ref_salle->_view}}

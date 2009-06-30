@@ -337,7 +337,7 @@ Main.add( function(){
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); " />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
-  <td class="readonly">
+  <td>
   	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" readonly="readonly"
   	  {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
   	    ondblclick="PatSelector.init()"

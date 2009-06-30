@@ -41,10 +41,10 @@
       {{foreach from=$object->_ref_traitements item=curr_traitement}}
         <li>
           {{if $curr_traitement->fin}}
-            Du {{mb_value object=$curr_traitement field="debut"}}
-            au {{mb_value object=$curr_traitement field="fin"}} :
+            Depuis {{mb_value object=$curr_traitement field="debut"}}
+            jusqu'à {{mb_value object=$curr_traitement field="fin"}} :
           {{elseif $curr_traitement->debut}}
-            Depuis le {{mb_value object=$curr_traitement field="debut"}} :
+            Depuis {{mb_value object=$curr_traitement field="debut"}} :
           {{/if}}
           {{mb_value object=$curr_traitement field="traitement"}}
         </li>

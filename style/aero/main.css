@@ -97,12 +97,13 @@ table.tabmenu {
 }
 
 table.tabmenu td {
-  height: 0%;
+  height: 18px;
   width: 0%;
   border: 0px;
-  padding: 0px;
   margin: 0px;
   border-bottom: 4px solid #fff;
+  padding: 0px 5px;
+  background: #fff;
 }
 
 table.tabmenu td a {
@@ -110,43 +111,34 @@ table.tabmenu td a {
   white-space: nowrap;
 }
 
-table.tabmenu td.normal {
-  padding: 0px 5px;
-  background: #fff;
-}
-
-table.tabmenu td.normal:hover {
+table.tabmenu td:hover {
   border-bottom: 4px solid #afa;
 }
 
-table.tabmenu td.normalLeft {
-  height: 0%;
-  width: 0%;
-  background: #fff;
+table.tabmenu td.left,
+table.tabmenu td.right {
+  padding: 0;
 }
 
-table.tabmenu td.normalRight {
+table.tabmenu td.left:hover,
+table.tabmenu td.right:hover {
+  border-bottom: 4px solid #fff;
+}
+
+table.tabmenu td.left,
+table.tabmenu td.right,
+table.tabmenu td.selected.left,
+table.tabmenu td.selected.right {
   height: 0%;
   width: 0%;
   background: #fff;
+  border-bottom: 4px solid #fff;
 }
 
 table.tabmenu td.selected {
   padding: 0px 5px;
   background: #fff;
   border-bottom: 4px solid #faa;
-}
-
-table.tabmenu td.selectedLeft {
-  height: 0%;
-  width: 0%;
-  background: #fff;
-}
-
-table.tabmenu td.selectedRight {
-  height: 0%;
-  width: 0%;
-  background: #fff;
 }
 
 /* panneau d'affichage */

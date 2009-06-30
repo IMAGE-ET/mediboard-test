@@ -22,11 +22,11 @@
       <input type="hidden" name="tab" value="{{$tab}}" />
       <table class="form">
         <tr>
-          <td  class="readonly">
+          <td>
             {{mb_label object=$filter field=object_class}}
             {{mb_field object=$filter field=object_class}}
           </td>
-          <td class="readonly">
+          <td>
             {{mb_label object=$filter field=object_id}}
             {{mb_field object=$filter field=object_id hidden="1" onchange="this.form.submit()"}}
             {{mb_include_script module=system script=object_selector}}
@@ -73,7 +73,7 @@
                 <ul>
                   <li>
                     {{if $curr_antecedent->date}}
-                      {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+                      {{mb_value object=$curr_antecedent field=date}} :
                     {{/if}}
                     <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}', 'objectViewHistory')">
                       {{$curr_antecedent->rques}}
@@ -93,9 +93,10 @@
               {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
-                  Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
+                  Depuis {{mb_value object=$curr_trmt field=debut}} 
+                  jusqu'à {{mb_value object=$curr_trmt field=fin}} :
                 {{elseif $curr_trmt->debut}}
-                  Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
+                  Depuis {{mb_value object=$curr_trmt field=debut}} :
                 {{/if}}
                 <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
                   {{$curr_trmt->traitement}}

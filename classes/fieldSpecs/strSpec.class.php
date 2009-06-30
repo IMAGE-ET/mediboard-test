@@ -15,15 +15,35 @@ class CStrSpec extends CMbFieldSpec {
   var $length    = null;
   var $minLength = null;
   var $maxLength = null;
-  var $mask      = null;
   
   function getSpecType() {
     return("str");
   }
   
+  function getDBSpec(){
+    $type_sql = "VARCHAR(255)";
+    
+    if ($this->maxLength) {
+      $type_sql = "VARCHAR($this->maxLength)";
+    } 
+    
+    if ($this->length) {
+      $type_sql = "CHAR($this->length)";
+    }
+    
+    return $type_sql;
+  }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'length'    => 'num',
+      'minLength' => 'num',
+      'maxLength' => 'num',
+    );
+  }
+  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
     
     // length
     if($this->length){
@@ -63,43 +83,28 @@ class CStrSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
+    $propValue =& $object->{$this->fieldName};
     
     if($this->length){
-      $propValue = $this->randomString(CMbFieldSpec::$chars, $this->length);
+      $propValue = self::randomString(CMbFieldSpec::$chars, $this->length);
     
     }elseif($this->minLength){
       if($this->_defaultLength < $this->minLength){
-        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->minLength);
+        $propValue = self::randomString(CMbFieldSpec::$chars, $this->minLength);
       }else{
-        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->_defaultLength);
+        $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
       }
     
     }elseif($this->maxLength){
       if($this->_defaultLength > $this->maxLength){
-        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->maxLength);
+        $propValue = self::randomString(CMbFieldSpec::$chars, $this->maxLength);
       }else{
-        $propValue = $this->randomString(CMbFieldSpec::$chars, $this->_defaultLength);
+        $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
       }
 
     }else{
-      $propValue = $this->randomString(CMbFieldSpec::$chars, $this->_defaultLength);
+      $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
     }
-  }
-  
-  function getDBSpec(){
-    $type_sql = "VARCHAR(255)";
-    
-    if ($this->maxLength) {
-      $type_sql = "VARCHAR($this->maxLength)";
-    } 
-    
-    if ($this->length) {
-      $type_sql = "CHAR($this->length)";
-    }
-    
-    return $type_sql;
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

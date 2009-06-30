@@ -16,13 +16,13 @@ class CCurrencySpec extends CFloatSpec {
   }
   
   function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
     
     $decimals = CMbArray::extract($params, "decimals");
     
+    // @todo: money_format() ?
     return ($propValue !== null && $propValue !== "") ? 
-      htmlspecialchars(sprintf("%.".($decimals ? $decimals : 2)."f", $propValue).CAppUI::conf("currency_symbol")) : 
+      number_format($propValue, ($decimals ? $decimals : 2)).' '.CAppUI::conf("currency_symbol") : 
       "-";
   }
   
@@ -31,6 +31,9 @@ class CCurrencySpec extends CFloatSpec {
     return parent::getFormHtmlElement($object, $params, $value, $className).CAppUI::conf("currency_symbol");
   }
 	
+  function getDBSpec(){
+    return 'DECIMAL (10, 3)'.($this->pos ? ' UNSIGNED' : '');
+  }
 }
 
 ?>

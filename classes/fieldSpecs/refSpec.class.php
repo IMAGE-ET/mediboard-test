@@ -21,6 +21,19 @@ class CRefSpec extends CMbFieldSpec {
     return("ref");
   }
   
+  function getDBSpec(){
+    return "INT(11) UNSIGNED";
+  }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'class'   => 'str',
+      'cascade' => 'bool',
+      'unlink'  => 'bool',
+      'meta'    => 'field',
+    );
+  }
+  
   function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
@@ -33,10 +46,8 @@ class CRefSpec extends CMbFieldSpec {
 
   function checkProperty($object){
     $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $this->checkNumeric($object->$fieldName, false);
     
-    $propValue = $this->checkNumeric($propValue, false);
-      
     if ($propValue === null || $object->$fieldName === ""){
       return "N'est pas une référence (format non numérique)";
     }
@@ -68,10 +79,6 @@ class CRefSpec extends CMbFieldSpec {
     }
 
     return null;
-  }
-  
-  function getDBSpec(){
-    return "INT(11) UNSIGNED";
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {

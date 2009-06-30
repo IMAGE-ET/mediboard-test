@@ -21,8 +21,8 @@ class CPhpSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = (!empty($params['export']) ? var_export($object->$fieldName, true) : $object->$fieldName); // @todo: il faudrait enlever ce var_dump, pour prendre la donnée brute
+    $propValue = $object->{$this->fieldName};
+    $propValue = (!empty($params['export']) ? var_export($propValue, true) : $propValue);
     
     $geshi = new Geshi($propValue, "php");
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
@@ -36,8 +36,7 @@ class CPhpSpec extends CMbFieldSpec {
   }
 
   function sample(&$object, $consistent = true){
-    $fieldName = $this->fieldName;
-    $object->$fieldName = 
+    $object->{$this->fieldName} = 
 '<?php
 $file = fopen("welcome.txt", "r") or exit("Unable to open file!");
 //Output a line of the file until the end is reached

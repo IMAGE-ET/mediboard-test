@@ -6,9 +6,9 @@
           {{if $tab == $currTabBox[0]}}
             {{assign var="sel" value="selected"}}
           {{else}}
-            {{assign var="sel" value="normal"}}
+            {{assign var="sel" value=""}}
           {{/if}}
-          <td class="{{$sel}}Left">
+          <td class="{{$sel}} left">
             [
           </td>
           <td class="{{$sel}}"><a href="?m={{$m}}&amp;tab={{$currTabBox[0]}}">
@@ -18,7 +18,7 @@
               {{tr}}{{$currTabBox[1]}}{{/tr}}
             {{/if}}
           </a></td>
-          <td class="{{$sel}}Right">
+          <td class="{{$sel}} right">
             ]
           </td>
           {{/foreach}}

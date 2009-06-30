@@ -19,9 +19,12 @@ class CHtmlSpec extends CMbFieldSpec {
     return "MEDIUMTEXT";
   }
   
+  function getValue($object, $smarty = null, $params = null) {
+    return $object->{$this->fieldName};
+  }
+  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
     
     // Root node surrounding
     $source = utf8_encode("<div>$propValue</div>");
@@ -38,10 +41,15 @@ class CHtmlSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = "Document confidentiel";
+    $object->{$this->fieldName} = <<<EOD
+<h1>Titre 1</h1>
+<p>Paragraphe</p>
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+EOD;
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

@@ -123,9 +123,10 @@
               {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
-                  Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
+                  Depuis {{mb_value object=$curr_trmt field=debut}} 
+                  jusqu'à {{mb_value object=$curr_trmt field=fin}} :
                 {{elseif $curr_trmt->debut}}
-                  Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
+                  Depuis {{mb_value object=$curr_trmt field=debut}} :
                 {{/if}}
                 <i>{{$curr_trmt->traitement}}</i>
               </li>
@@ -164,8 +165,8 @@
             {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
               <ul>
                 <li> 
-                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                  {{if $currAnt->date}}
+                    {{mb_value object=$currAnt field=date}} :
                   {{/if}}
                   {{$currAnt->rques}} 
                 </li>
@@ -276,8 +277,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.chir item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -295,8 +296,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.anesth item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -406,8 +407,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.cardio item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -426,8 +427,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.pulmo item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -445,8 +446,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.uro item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -464,8 +465,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.neuropsy item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -483,8 +484,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.endocrino item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -502,8 +503,8 @@
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents.gyn item=currAnt}}
               <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                  {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                {{if $currAnt->date}}
+                  {{mb_value object=$currAnt field=date}} :
                 {{/if}}
                 {{$currAnt->rques}} 
               </li>
@@ -530,8 +531,8 @@
                 && $type_name != 'gyn'}}
                 {{foreach from=$curr_type item=currAnt}}
                 <li> 
-                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                  {{if $currAnt->date}}
+                    {{mb_value object=$currAnt field=date}} :
                   {{/if}}
                   {{$currAnt->rques}} 
                 </li>

@@ -1,5 +1,15 @@
-<?php /* SYSTEM $Id$ */
-global $AppUI,$a,$tab;
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
+global $AppUI;
+
 $ds = CSQLDataSource::get("std");
 $a = mbGetValueFromGet("a",null);
 $del = isset($_POST["del"]) ? $_POST["del"] : 0;
@@ -36,7 +46,11 @@ if ($obj->pref_user) {
 if ($a){
   $AppUI->defaultRedirect = "m=$m&a=$a&user_id=".$_POST["pref_user"];
   $AppUI->state["SAVEDPLACE"] = null;
+  $AppUI->redirect();
+}
+else {
+  echo $AppUI->getMsg();
+  CApp::rip();
 }
 
-$AppUI->redirect();
 ?>

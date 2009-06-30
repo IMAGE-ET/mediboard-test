@@ -13,10 +13,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CPasswordSpec extends CMbFieldSpec {
   
   var $minLength     = null;
-  var $notContaining = null;
-  var $notNear       = null;
-  var $alphaAndNum   = null;
-    
+  
   function getSpecType() {
     return('password');
   }
@@ -25,10 +22,15 @@ class CPasswordSpec extends CMbFieldSpec {
     return "VARCHAR(50)";
   }
   
+  function getOptions(){
+    return parent::getOptions() + array(
+      'minLength' => 'num',
+    );
+  }
+  
   // TODO: Factoriser les check
   function checkProperty($object) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
 
     // minLength
     if($this->minLength){
@@ -64,7 +66,7 @@ class CPasswordSpec extends CMbFieldSpec {
     }
     
     // alphaAndNum
-    if($field = $this->alphaAndNum){
+    if($this->alphaAndNum){
       if (!preg_match("/[A-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
         return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
@@ -82,8 +84,8 @@ class CPasswordSpec extends CMbFieldSpec {
   }
   
   function sample(&$object, $consistent = true) {
-    $fieldName = $this->fieldName;
-    $object->$fieldName = 'mgF61Ty';
+    parent::sample($object, $consistent);
+    $object->{$this->fieldName} = self::randomString(array_merge(range('0','9'), range('a','z'), range('A','Z')), 8);
   }
 }
 

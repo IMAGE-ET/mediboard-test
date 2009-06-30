@@ -1,5 +1,16 @@
-<form name="changeuser" action="?m=admin&amp;{{$actionType}}={{$action}}" method="post" onsubmit="return checkForm(this)">
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
+<form name="form-edit-preferences" action="?m=admin{{if !$ajax}}&amp;{{$actionType}}={{$action}}{{/if}}" method="post" onsubmit="return onSubmitFormAjax(this)">
 <input type="hidden" name="dosql" value="do_preference_aed" />
+<input type="hidden" name="m" value="admin" />
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
 <input type="hidden" name="del" value="0" />
 
@@ -8,6 +19,7 @@
   Editer les préférences par défaut
 </a>
 {{/if}}
+
 <table class="form">
   <tr>
     <th colspan="2" class="title">
@@ -92,6 +104,20 @@
       <select name="pref_name[{{$var}}]">
         <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
         <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+  
+  {{assign var="var" value="tooltipAppearenceTimeout"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="short"{{if $prefsUser.$module.$var == "short"}}selected="selected"{{/if}}>{{tr}}Short{{/tr}}</option>
+        <option value="medium"{{if $prefsUser.$module.$var == "medium"}}selected="selected"{{/if}}>{{tr}}Medium{{/tr}}</option>
+        <option value="long"{{if $prefsUser.$module.$var == "long"}}selected="selected"{{/if}}>{{tr}}Long{{/tr}}</option>
       </select>
     </td>
   </tr>

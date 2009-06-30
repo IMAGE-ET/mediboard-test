@@ -16,18 +16,23 @@ class CEmailSpec extends CMbFieldSpec {
     return("email");
   }
   
-  function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+  function getDBSpec(){
+    return "VARCHAR(50)";
+  }
+  
+  function getValue($object, $smarty = null, $params = null) {
+    $propValue = $object->{$this->fieldName};
     
-    if (!preg_match("/^[-a-z0-9\._]+@[-a-z0-9\.]+\.[a-z]{2,4}$/i", $propValue)) {
+    return ($propValue !== null && $propValue !== "") ? 
+      "<a href='mailto:$propValue'>$propValue</a>" : 
+      '';
+  }
+  
+  function checkProperty($object){
+    if (!preg_match("/^[-a-z0-9\._]+@[-a-z0-9\.]+\.[a-z]{2,4}$/i", $object->{$this->fieldName})) {
       return "Le format de l'email n'est pas valide";
     }
     return null;
-  }
-  
-  function getDBSpec(){
-    return "VARCHAR(50)";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
@@ -36,8 +41,7 @@ class CEmailSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true) {
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $object->$fieldName = "noone@nowhere.com";
+    $object->{$this->fieldName} = "noone@nowhere.com";
   }
 }
 

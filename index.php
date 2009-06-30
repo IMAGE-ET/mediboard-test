@@ -129,6 +129,7 @@ if (!$suppressHeaders || $ajax) {
 // check if we are logged in
 if (!$AppUI->user_id) {
   $redirect = mbGetValueFromGet("logout") ?  "" : @$_SERVER["QUERY_STRING"]; 
+  $_SESSION["locked"] = null;
   
   // Ajax login alert
   if ($ajax) {
@@ -136,7 +137,6 @@ if (!$AppUI->user_id) {
     $tplAjax = new CSmartyDP("modules/system");
     $tplAjax->assign("performance", $performance);
     $tplAjax->display("ajax_errors.tpl");
-
   } 
   else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
@@ -234,9 +234,6 @@ foreach (CModule::getActive() as $module) {
 }
 
 if (!$suppressHeaders) {
-  
-  // -- Code pour le HEADER --
-  
   // Liste des Etablissements
   $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 

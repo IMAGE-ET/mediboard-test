@@ -7,7 +7,7 @@
       <table class="form">
         <tr>
           <th><label for="patNom" title="Merci de choisir un patient">Choix du patient</label></th>
-          <td class="readonly">
+          <td>
             <input type="hidden" name="m" value="dPpatients" />
             <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />

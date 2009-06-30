@@ -22,12 +22,44 @@ class CNumSpec extends CMbFieldSpec {
   function getSpecType() {
     return("num");
   }
+  
+  function getDBSpec(){
+    $type_sql = "INT(11)";
+    
+    if($this->max !== null){
+      $max = $this->max;
+      $type_sql = "TINYINT(4)";
+      if ($max > pow(2,8)) {
+        $type_sql = "MEDIUMINT(9)";
+      }
+      if ($max > pow(2,16)) {
+        $type_sql = "INT(11)";
+      }
+      if ($max > pow(2,32)) {
+        $type_sql = "BIGINT(20)";
+      }
+    }
+    
+    if($this->pos || ($this->min !== null && $this->min >= 0)) {
+      $type_sql .= ' UNSIGNED';
+    }
+    
+    return $type_sql;
+  }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'min' => 'num',
+      'max' => 'num',
+      'pos' => 'bool',
+      'length' => 'num',
+      'minLength' => 'num',
+      'maxLength' => 'num',
+    );
+  }
 
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    
-    $propValue = $this->checkNumeric($propValue, false);
+    $propValue = $this->checkNumeric($object->{$this->fieldName}, false);
     
     if($propValue === null){
       return "N'est pas une chaîne numérique";
@@ -101,57 +133,31 @@ class CNumSpec extends CMbFieldSpec {
 
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
+    $propValue =& $object->{$this->fieldName};
     
     if($this->length){
-      $propValue = $this->randomString(CMbFieldSpec::$nums, $this->length);
+      $propValue = self::randomString(CMbFieldSpec::$nums, $this->length);
       
     }elseif($this->minLength){
       if($this->_defaultLength < $this->minLength){
-        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->minLength);
+        $propValue = self::randomString(CMbFieldSpec::$nums, $this->minLength);
       }else{
-        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
+        $propValue = self::randomString(CMbFieldSpec::$nums, $this->_defaultLength);
       }
       
     }elseif($this->maxLength){
       if($this->_defaultLength > $this->maxLength){
-        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->maxLength);
+        $propValue = self::randomString(CMbFieldSpec::$nums, $this->maxLength);
       }else{
-        $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
+        $propValue = self::randomString(CMbFieldSpec::$nums, $this->_defaultLength);
       }
     }elseif($this->max || $this->min){
       $min = $this->min !== null ? $this->min : 0;
       $max = $this->max !== null ? $this->max : 999999;
       $propValue = rand($min, $max);
     }else{
-      $propValue = $this->randomString(CMbFieldSpec::$nums, $this->_defaultLength);
+      $propValue = self::randomString(CMbFieldSpec::$nums, $this->_defaultLength);
     }
-
-  }
-  
-  function getDBSpec(){
-    $type_sql = "INT(11)";
-    
-    if($this->max !== null){
-      $max = $this->max;
-      $type_sql = "TINYINT(4)";
-      if ($max > pow(2,8)) {
-        $type_sql = "MEDIUMINT(9)";
-      }
-      if ($max > pow(2,16)) {
-        $type_sql = "INT(11)";
-      }
-      if ($max > pow(2,32)) {
-        $type_sql = "BIGINT(20)";
-      }
-    }
-    
-    if($this->pos || ($this->min !== null && $this->min >= 0)) {
-      $type_sql .= " UNSIGNED";
-    }
-    
-    return $type_sql;
   }
 
   function getFormHtmlElement($object, $params, $value, $className) {

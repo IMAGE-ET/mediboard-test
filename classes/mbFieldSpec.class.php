@@ -71,6 +71,26 @@ class CMbFieldSpec {
     
     $this->checkValues();
   }
+  
+  function getOptions(){
+    return array(
+      'default'       => 'str',
+      'notNull'       => 'bool',
+      'confidential'  => 'bool',
+      'moreThan'      => 'field',
+      'moreEquals'    => 'field',
+      'sameAs'        => 'field',
+      'notContaining' => 'field',
+      'notNear'       => 'field',
+      'alphaAndNum'   => 'bool',
+      'xor'           => 'field_list',
+      'mask'          => 'str',
+      'format'        => 'str',
+      'autocomplete'  => 'bool',
+      'helped'        => 'bool',
+      'seekable'      => 'bool',
+    );
+  }
 
   /**
    * Check whether prop has been declared in parent class
@@ -538,8 +558,7 @@ class CMbFieldSpec {
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
     	$sHtml .= '<script type="text/javascript">
     	Main.add(function(){
-			  url = new Url();
-			  url.setModuleAction("system", "httpreq_field_autocomplete");
+			  url = new Url("system", "httpreq_field_autocomplete");
 			  url.addParam("class", "'.$object->_class_name.'");
 			  url.addParam("field", "'.$field.'");
 			  url.addParam("limit", '.$limit.');
@@ -596,7 +615,7 @@ class CMbFieldSpec {
     $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
 
     if ($register || $this instanceof CTimeSpec) {
-      $html[] = '<script type="text/javascript">Main.add(function(){Calendar.regField(getForm("'.$form.'").elements["'.$field.'"])})</script>';
+      $html[] = '<script type="text/javascript">Main.add(function(){Calendar.reg'.($this instanceof CDateSpec && $this->progressive ? 'Progressive' : '').'Field(getForm("'.$form.'").elements["'.$field.'"])})</script>';
     }
     return implode("\n", $html);
   }
@@ -624,6 +643,30 @@ class CMbFieldSpec {
   }
 
   function getDBSpec(){}
+
+  function getFullDBSpec(){
+    $object = new $this->className;
+    $is_key = $object->_spec->key == $this->fieldName;
+    $props = array(
+     'type' => $this->getDBSpec(),
+     //'unsigned' => $this instanceof CRefSpec ? 'UNSIGNED' : '',
+     //'zerofill' => isset($this->zerofill) ? 'ZEROFILL' : '',
+     'notnull' => isset($this->notNull) || $is_key ? 'NOT NULL' : '',
+     /*'index' => ($this instanceof CRefSpec || 
+                 $this instanceof CDateTimeSpec || 
+                 $this instanceof CDateSpec || 
+                 $this instanceof CTimeSpec ||
+                 isset($this->index)) ? "INDEX" : '',*/
+     'extra' => $is_key ? 'auto_increment' : null,
+     'default' => (isset($this->default) ? 
+                     "DEFAULT ('$this->default')" : 
+                     (isset($this->defaultOption) ?
+                       "DEFAULT ('$this->defaultOption')" :
+                       ''))
+    );
+    
+    return implode(' ', $props);
+  }
 
   function checkValues(){}
 }

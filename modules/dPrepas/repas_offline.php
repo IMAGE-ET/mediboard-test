@@ -104,7 +104,7 @@ if($image) {
 
 if($lib){
   $zipFile->add("lib/dojo");
-  $zipFile->add("lib/jscalendar");
+  $zipFile->add("lib/datepicker");
   $zipFile->add("lib/scriptaculous");
 }
 

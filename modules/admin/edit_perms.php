@@ -1,11 +1,12 @@
-<?php /* $Id: vw_idx_patients.php 783 2006-09-14 12:44:01Z rhum1 $ */
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision: 783 $
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 

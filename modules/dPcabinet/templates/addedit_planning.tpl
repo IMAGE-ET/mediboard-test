@@ -195,7 +195,7 @@ Main.add(function () {
           <th>
             {{mb_label object=$consult field="patient_id"}}
           </th>
-          <td class="readonly">
+          <td>
           	{{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
           	<input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" />
 						<button class="search" type="button" onclick="PatSelector.init()">Rechercher</button>
@@ -272,7 +272,7 @@ Main.add(function () {
 
         <tr>
           <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
-          <td class="readonly">
+          <td>
             <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" />
             {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
             <script type="text/javascript">
@@ -292,7 +292,7 @@ Main.add(function () {
 
         <tr>
           <th>{{mb_label object=$consult field="heure"}}</th>
-          <td class="readonly">
+          <td>
             <input type="text" name="heure" value="{{$consult->heure}}" size="4" readonly="readonly" />
           </td>
         </tr>

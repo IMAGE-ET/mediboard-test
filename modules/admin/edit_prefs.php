@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage admin
-* @version $Revision: $
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can;
 
@@ -52,6 +53,7 @@ $array_list_pref_generale = array (
   "MenuPosition",
   "DEFMODULE",
   "touchscreen",
+  "tooltipAppearenceTimeout"
 );
 
 foreach ($array_list_pref_generale as $namePref){

@@ -2,10 +2,6 @@
 
 /* Tab view table */
 
-table.taborflat {
-  display: none;
-}
-
 table.tabview {
   border-spacing: 0px;
   border-collapse: collapse; /* Hack for IE */
@@ -19,20 +15,17 @@ table.tabmenu {
 }
 
 table.tabmenu td {
-  height: 16px;	
-}
-
-table.tabmenu td.normal {
-  background: #bbb; /*url(./images/icons/tabBg.png) repeat-x bottom;*/
+  height: 16px;
+  background: #bbb;
   padding: 3px;
 }
 
-table.tabmenu td.normalLeft {
+table.tabmenu td.left {
   width: 3px;
   background: transparent;
 }
 
-table.tabmenu td.normalRight {
+table.tabmenu td.right {
   width: 3px;
   background: transparent;
 }
@@ -42,12 +35,12 @@ table.tabmenu td.selected {
   padding: 3px;
 }
 
-table.tabmenu td.selectedLeft {
+table.tabmenu td.selected.left {
   width: 3px;
   background: transparent;
 }
 
-table.tabmenu td.selectedRight {
+table.tabmenu td.selected.right {
   width: 3px;
   background: transparent;
 }

@@ -41,7 +41,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       <form name="patFrm" action="?" method="get">
       <table class="form">
         <tr><th>Choix du patient :</th>
-          <td class="readonly">
+          <td>
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="patSel" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
             <input type="text" size="40" readonly="readonly" ondblclick="PatSelector.init()" name="patNom" value="{{$patient->_view}}" />

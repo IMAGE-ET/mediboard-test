@@ -39,7 +39,7 @@
             {{if !$offline}}
             <form name="ChangeGroup" action="" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
-            <select name="g" onchange="ChangeGroup.submit();">
+            <select name="g" onchange="this.form.submit();">
               {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
               <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
                 {{$currEtablissement->_view}}
@@ -68,9 +68,10 @@
       </a> |
       {{/if}}
       {{/foreach}}
-      <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> | 
+      <a href="javascript:popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> | 
       <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
+      <a href="javascript:UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a> | 
+      <a href="javascript:Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> |
       <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
     </td>
   </tr>

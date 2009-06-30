@@ -161,12 +161,8 @@ Main.add(function () {
       <table class="form">
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}
-          <th>
-            {{mb_label object=$antecedent field=date}}
-          </th>
-          <td class="date">
-						{{mb_field object=$antecedent field=date form=editAntFrm register=true}}
-          </td>
+          <th>{{mb_label object=$antecedent field=date}}</th>
+          <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
           {{else}}
           <td colspan="2" />
           {{/if}}
@@ -201,16 +197,12 @@ Main.add(function () {
 
         <tr>
           <th>{{mb_label object=$antecedent field="type"}}</th>
-          <td>
-            {{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" alphabet="1" onchange="refreshAidesAntecedents()"}}
-          </td>
+          <td>{{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" alphabet="1" onchange="refreshAidesAntecedents()"}}</td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$antecedent field="appareil"}}</th>
-          <td>
-            {{mb_field object=$antecedent field="appareil" defaultOption="&mdash; Aucun" alphabet="1" onchange="refreshAidesAntecedents()"}}
-          </td>
+          <td>{{mb_field object=$antecedent field="appareil" defaultOption="&mdash; Aucun" alphabet="1" onchange="refreshAidesAntecedents()"}}</td>
         </tr>
         
         <tr>
@@ -268,30 +260,28 @@ Main.add(function () {
 	        <tr>
 	          {{if $app->user_prefs.showDatesAntecedents}}
 	          <th>{{mb_label object=$line field="debut"}}</th>
-	          <td class="date">{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
+	          <td>{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
 	          {{else}}
 	          <td colspan="2" />
 	          {{/if}}
-	          <td rowspan="3" id="addPosoLine">
-	     
-	          </td>
-	        </tr>  
+	          <td rowspan="3" id="addPosoLine"></td>
+	        </tr>
 	        
 	        {{if $app->user_prefs.showDatesAntecedents}}
 	        <tr>
 	          <th>{{mb_label object=$line field="fin"}}</th>
-	          <td class="date">{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
+	          <td>{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
 	        </tr>
 	        {{/if}}
 	        
-	        <tr> 	
+	        <tr>
 	        	<th>{{mb_label object=$line field="commentaire"}}</th>
 	          <td>{{mb_field object=$line field="commentaire" size=20}}</td>
 	        </tr>
 	        <tr>
 	          <td colspan="2" class="button">
-	            <button id='button_submit_traitement' class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
-	              onComplete: function(){ 
+	            <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+	              onComplete: function(){
 	                DossierMedical.reloadDossiersMedicaux();
 	                resetEditLineTP();
 	                $('addPosoLine').update('');
@@ -325,12 +315,8 @@ Main.add(function () {
       <table class="form">
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}
-          <th>
-            {{mb_label object=$traitement field=debut}}
-          </th>
-          <td class="date">
-						{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}
-          </td>
+          <th>{{mb_label object=$traitement field=debut}}</th>
+          <td>{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}</td>
           {{else}}
           <td colspan="2" />
           {{/if}}
@@ -348,12 +334,8 @@ Main.add(function () {
         </tr>
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}
-          <th>
-            {{mb_label object=$traitement field=fin}}
-          </th>
-          <td class="date">
-						{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}
-          </td>
+          <th>{{mb_label object=$traitement field=fin}}</th>
+          <td>{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}</td>
           {{else}}
           <td colspan="2" />
           {{/if}}

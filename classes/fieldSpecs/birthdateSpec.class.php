@@ -26,8 +26,7 @@ class CBirthDateSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
     
     if (!$propValue || $propValue === "0000-00-00") {
       return "";
@@ -36,11 +35,8 @@ class CBirthDateSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = &$object->$fieldName;
-
-    if (!preg_match ("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/", $propValue)) {
-      return "format de date invalide";
+    if (!preg_match ("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/", $object->{$this->fieldName})) {
+      return "Format de date invalide";
     }
     
     return null;
@@ -48,12 +44,11 @@ class CBirthDateSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
     
-    $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2).
-      "-".$this->randomString(CMbFieldSpec::$months, 1).
-      "-".$this->randomString(CMbFieldSpec::$days, 1);
+    $object->{$this->fieldName} = 
+     "19".self::randomString(CMbFieldSpec::$nums, 2).
+      "-".self::randomString(CMbFieldSpec::$months, 1).
+      "-".self::randomString(CMbFieldSpec::$days, 1);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

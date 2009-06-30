@@ -66,7 +66,7 @@ Main.add(function () {
           <th>
             <label for="_view" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label>
           </th>
-          <td class="readonly">
+          <td>
             <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
             </span>

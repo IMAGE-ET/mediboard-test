@@ -24,15 +24,12 @@ class CTextSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = null) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    return '<p>'.nl2br(htmlspecialchars($propValue)).'</p>';
+    return '<p>'.nl2br(htmlspecialchars($object->{$this->fieldName})).'</p>';
   }
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $object->$fieldName = $this->randomString(array_merge(CMbFieldSpec::$chars, array(' ', ' ', ', ', '. ')), 200);
+    $object->{$this->fieldName} = self::randomString(array_merge(CMbFieldSpec::$chars, array(' ', ' ', ', ', '. ')), 200);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

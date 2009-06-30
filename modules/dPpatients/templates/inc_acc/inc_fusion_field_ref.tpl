@@ -26,7 +26,7 @@
       {{/if}}
     </label>
   </td>
-  <td class="readonly">
+  <td>
     {{mb_field object=$object_final field=$field hidden=1 prop=""}}
     <input type="text" readonly="readonly" size="30" name="_{{$field}}_view" value="{{$object_final->$ref_field->_view}}" />
   </td>

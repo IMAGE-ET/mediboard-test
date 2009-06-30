@@ -109,9 +109,9 @@ transfertLineTP = function(line_id, sejour_id){
 		    	{{if $curr_antecedent->appareil}} {{mb_value object=$curr_antecedent field=appareil}} {{/if}}
 		    </strong>
 	      {{if $curr_antecedent->date}}
-	        [{{$curr_antecedent->date|date_format:"%Y"}}] 
+	        [{{mb_value object=$curr_antecedent field=date}}] : 
 	      {{/if}}
-	      : {{$curr_antecedent->rques}}
+	      {{$curr_antecedent->rques}}
 	    </span>
 	  </li>
 	  {{/foreach}}
@@ -183,9 +183,10 @@ transfertLineTP = function(line_id, sejour_id){
     {{/if}}
     
     {{if $curr_trmt->fin}}
-      Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
+      Depuis {{mb_value object=$curr_trmt field=debut}} 
+      jusqu'à {{mb_value object=$curr_trmt field=fin}} :
     {{elseif $curr_trmt->debut}}
-      Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
+      Depuis {{mb_value object=$curr_trmt field=debut}} :
     {{/if}}
     <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
      {{$curr_trmt->traitement}}

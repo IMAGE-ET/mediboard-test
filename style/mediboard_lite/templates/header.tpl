@@ -1,7 +1,6 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
-{{if !$offline}}
-{{if !$dialog}}
+{{if !$offline && !$dialog}}
 
 {{foreach from=$messages item=currMsg}}
   <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
@@ -40,7 +39,7 @@
                 {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
               </span>
               <input type="hidden" name="m" value="{{$m}}" />
-              <select name="g" onchange="ChangeGroup.submit();">
+              <select name="g" onchange="this.form.submit();">
                 {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
                 <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
                   {{$currEtablissement->_view}}
@@ -50,11 +49,12 @@
             </form>
           </td>
           <td id="userMenu">
-            <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a> |
-            <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
-            <a href="#" onclick="popChgPwd();">{{tr}}menu-changePassword{{/tr}}</a> |
+            <a href="{{$portal.help}}" target="_blank">{{tr}}portal-help{{/tr}}</a> |
+            <a href="{{$portal.tracker}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
+            <a href="javascript:popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> |
             <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-            <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
+            <a href="javascript:Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> |
+            <a href="javascript:UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a> | 
             <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
           </td>
         </tr>
@@ -63,7 +63,7 @@
   </tr>
 </table>
 {{/if}}
-{{/if}}
+
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
     <td>

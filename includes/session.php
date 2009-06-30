@@ -26,6 +26,8 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
 
 $AppUI =& $_SESSION["AppUI"]; 
 
+if (!isset($_SESSION["locked"])) $_SESSION["locked"] = false; 
+
 if (!isset($_SESSION['browser'])) {
   /** Basic browser detection */ 
   $browser = array(

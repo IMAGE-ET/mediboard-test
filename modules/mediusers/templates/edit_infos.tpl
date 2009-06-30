@@ -1,24 +1,27 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
-function submitForm(oForm){
-  submitFormAjax(oForm, 'systemMsg')
-}
-
 Main.add(function () {
   initInseeFields("editFct", "cp", "ville");
+  var tabs = Control.Tabs.create('tab_edit_mediuser', true);
+  
+  var url = new Url("admin", "edit_prefs");
+  url.addParam("user_id", "{{$user->user_id}}");
+  url.requestUpdate("edit-preferences");
 });
 </script>
+
+<ul id="tab_edit_mediuser" class="control_tabs">
+  <li><a href="#edit-mediuser">{{tr}}Account{{/tr}}</a></li>
+  <li><a href="#edit-preferences">{{tr}}Preferences{{/tr}}</a></li>
+</ul>
+<hr class="control_tabs" />
+
+<div id="edit-mediuser" style="display: none;">
 <table class="main">
   <tr>
-   <th class="title" colspan="2">
-     {{tr}}menu-myInfo{{/tr}}
-   </th>
-  </tr>
-  
-  <tr>
     <td class="halfPane">
-      <form name="editUser" action="?m={{$m}}&amp;a=edit_infos" method="post" onsubmit="return checkForm(this);">
+      <form name="editUser" action="?m={{$m}}&amp;a=edit_infos" method="post" onsubmit="return onSubmitFormAjax(this);">
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="user_id" value="{{$user->user_id}}" />
@@ -102,9 +105,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button type="button" class="modify" onclick="submitForm(this.form)">
-              {{tr}}Modify{{/tr}}
-            </button>
+            <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
           </td>
         </tr>
       </table>
@@ -112,7 +113,7 @@ Main.add(function () {
     </td>
     
     <td class="halfPane">
-      <form name="editFct" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <form name="editFct" action="?m={{$m}}" method="post" onSubmit="return onSubmitFormAjax(this)">
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="function_id" value="{{$fonction->function_id}}" />
@@ -155,9 +156,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button type="button" class="modify" onclick="submitForm(this.form)">
-              {{tr}}Modify{{/tr}}
-            </button>
+            <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
           </td>
         </tr>
       </table>
@@ -165,3 +164,6 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+</div>
+
+<div id="edit-preferences" style="display: none;"></div>

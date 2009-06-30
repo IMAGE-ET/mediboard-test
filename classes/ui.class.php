@@ -343,7 +343,6 @@ class CAppUI {
         $render = $count > 1 ? "$message x $count" : $message;
         $return .= "<div class='$class'>$render</div>";
       }
-      
     }
     
     if ($reset) {
@@ -404,7 +403,7 @@ class CAppUI {
   * @param string $callback : name of the javascript function 
   * @param string $value : value paramater for javascript function
   */
-  static function callbackAjax($callback, $value) {
+  static function callbackAjax($callback, $value = '') {
     $value = smarty_modifier_json($value);
     echo "\n<script type='text/javascript'>$callback($value);</script>";
   }
@@ -414,22 +413,22 @@ class CAppUI {
  * Login function
  *
  * Upon a successful username and password match, several fields from the user
- * table are loaded in this object for convenient reference.  The style, localces
+ * table are loaded in this object for convenient reference.  The style, locales
  * and preferences are also loaded at this time.
  *
  * @param string The user login name
  * @param string The user password
  * @return boolean True if successful, false if not
  */
-  function login() {
+  function login($force_login = false) {
   	$ds = CSQLDataSource::get("std");
   	
     // Test login and password validity
     $user = new CUser;
-        
-    // Login as, for administators
+    
+    // Login as: no need to provide a password for administators
     if ($loginas = mbGetValueFromRequest("loginas")) {
-      if ($this->user_type != 1) {
+      if ($this->user_type != 1 && !$force_login) {
         $this->setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
         return false;
       }
@@ -462,9 +461,7 @@ class CAppUI {
     // Put user_group in AppUI
     $this->user_remote = 1;
     if ($ds->loadTable("users_mediboard") && $ds->loadTable("groups_mediboard")) {
-      $sql = "SELECT `remote` 
-				FROM `users_mediboard` 
-				WHERE `user_id` = '$user->_id'";
+      $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->_id'";
       $this->user_remote = $ds->loadResult($sql);
 
       $sql = "SELECT `groups_mediboard`.`group_id`
@@ -504,7 +501,6 @@ class CAppUI {
     // load the user preferences
     $this->loadPrefs($this->user_id);
     
-    
     return true;
   }
   
@@ -529,22 +525,20 @@ class CAppUI {
     // notContaining
     if ($pwdSpecs->notContaining) {
       $target = $pwdSpecs->notContaining;
-        if ($field = $user->$target)
-          if (stristr($pwd, $field))
-             return true;
+        if ($field = $user->$target && stristr($pwd, $field))
+          return true;
     }
     
     // notNear
     if ($pwdSpecs->notNear) {
       $target = $pwdSpecs->notNear;
-        if ($field = $user->$target)
-          if (levenshtein($pwd, $field) < 3)
-            return true;
+        if ($field = $user->$target && levenshtein($pwd, $field) < 3)
+          return true;
     }
 
     // alphaAndNum
     if ($pwdSpecs->alphaAndNum) {
-      if (!preg_match("/[A-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+      if (!preg_match("/[a-z]/i", $pwd) || !preg_match("/\d+/", $pwd)) {
         return true;
       }
     }

@@ -29,8 +29,8 @@ class CTraitement extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["debut"       ] = "date";
-    $specs["fin"         ] = "date moreEquals|debut";
+    $specs["debut"       ] = "date progressive";
+    $specs["fin"         ] = "date progressive moreEquals|debut";
     $specs["traitement"  ] = "text helped seekable";
     $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     

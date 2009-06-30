@@ -12,42 +12,40 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CTimeSpec extends CMbFieldSpec {
   
-  function getValue($object, $smarty = null, $params = null) {
-    require_once $smarty->_get_plugin_filepath('modifier','date_format');
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    $format = mbGetValue(@$params["format"],  CAppUI::conf("time"));
-    return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
-  }
-  
   function getSpecType() {
     return("time");
   }
   
+  function getDBSpec(){
+    return "TIME";
+  }
+  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = &$object->{$this->fieldName};
   
     if (!preg_match ("/^\d{1,2}:\d{1,2}(:\d{1,2})?$/", $propValue)) { 
-    	if($object->$fieldName === 'current'|| $object->$fieldName ===  'now') {
-        $object->$fieldName = mbTime();
+    	if($propValue === 'current' || $propValue ===  'now') {
+        $propValue = mbTime();
         return null;
-      }  
+      }
       return "Format d'heure invalide";
     }
     return null;
   }
+  
+  function getValue($object, $smarty = null, $params = null) {
+    require_once $smarty->_get_plugin_filepath('modifier','date_format');
+    $propValue = $object->{$this->fieldName};
+    $format = mbGetValue(@$params["format"], CAppUI::conf("time"));
+    return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
+  }
 
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = $this->randomString(CMbFieldSpec::$hours, 1).":".$this->randomString(CMbFieldSpec::$mins, 1).":".$this->randomString(CMbFieldSpec::$mins, 1);
-  }
-  
-  function getDBSpec(){
-    return "TIME";
+    $object->{$this->fieldName} = 
+      self::randomString(CMbFieldSpec::$hours, 1).":".
+      self::randomString(CMbFieldSpec::$mins, 1).":".
+      self::randomString(CMbFieldSpec::$mins, 1);
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {

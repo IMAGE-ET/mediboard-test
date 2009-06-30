@@ -21,11 +21,17 @@ var ObjectTooltip = Class.create({
     this.sDiv = null;
     this.sTarget = null;
     this.idTimeout = null;
+    
+    var appearenceTimeout = {
+      "short": 0.3,
+      "medium": 0.6,
+      "long": 0.9
+    };
 
     this.oOptions = Object.extend( {
       mode: "objectView",
       popup: false,
-      duration: 0.6,
+      duration: appearenceTimeout[Preferences.tooltipAppearenceTimeout] || 0.6,
       durationHide: 0.2,
       params: {}
     }, oOptions);

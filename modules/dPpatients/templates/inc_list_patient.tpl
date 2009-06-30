@@ -165,9 +165,9 @@ var Patient = {
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
-        {{mb_value object=$curr_patient field="adresse"}}
-        {{mb_value object=$curr_patient field="cp"}}
-        {{mb_value object=$curr_patient field="ville"}}
+        {{$curr_patient->adresse}}
+        {{$curr_patient->cp}}
+        {{$curr_patient->ville}}
       </a>
     </td>
     <td>
@@ -207,9 +207,9 @@ var Patient = {
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
-        {{mb_value object=$curr_patient field="adresse"}}
-        {{mb_value object=$curr_patient field="cp"}}
-        {{mb_value object=$curr_patient field="ville"}}
+        {{$curr_patient->adresse}}
+        {{$curr_patient->cp}}
+        {{$curr_patient->ville}}
       </a>
     </td>
     <td>

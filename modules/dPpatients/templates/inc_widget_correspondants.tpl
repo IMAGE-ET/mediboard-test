@@ -102,7 +102,7 @@ Main.add(function () {
     {{if $smarty.foreach.corresp.first}}
       <th rowspan="{{$patient->_ref_medecins_correspondants|@count}}">{{tr}}CPatient-back-medecins_correspondants{{/tr}}</th>
     {{/if}}
-    <td class="readonly">
+    <td>
       <form name="correspondant-edit-{{$patient->_id}}" action="?" method="post" onsubmit="return submitMedecin(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_correspondant_aed" />

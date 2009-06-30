@@ -1,13 +1,16 @@
-<?php /* ADMIN $Id$ */
-
-##
-##  NOTE: the user_type field in the users table must be changed to a TINYINT
-##
+<?php /* $Id$ */
 
 /**
- * User Class
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+/**
+ *  NOTE: the user_type field in the users table must be changed to a TINYINT
+ */
 class CUser extends CMbObject {
   var $user_id          = null;
   var $user_username    = null;

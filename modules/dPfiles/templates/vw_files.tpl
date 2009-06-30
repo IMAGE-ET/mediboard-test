@@ -12,11 +12,11 @@
       
       <table class="form">
         <tr>
-          <td  class="readonly">
+          <td>
             <label for="selClass" title="Type de l'objet courant">Type</label>
             <input type="text" readonly="readonly" ondblclick="ObjectSelector.init()" name="selClass" value="{{$selClass}}" />
           </td>
-          <td class="readonly">
+          <td>
             <label title="Nom de l'objet sélectionné">Nom</label>
             <input type="text" size="50" readonly="readonly" ondblclick="ObjectSelector.init()" name="selView" value="{{$selView}}" />
             <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>

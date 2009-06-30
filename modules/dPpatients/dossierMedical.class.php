@@ -242,7 +242,7 @@ class CDossierMedical extends CMbMetaObject {
         foreach ($currTypeAnt as $currAnt) {
           $sAntecedent = "&bull; ";
           if ($currAnt->date) { 
-            $sAntecedent .= mbDateToLocale($currAnt->date) . " : ";
+            $sAntecedent .= $currAnt->getFormattedValue('date') . " : ";
           }
           $sAntecedent .= $currAnt->rques;
           $aAntecedentsParType[] = $sAntecedent;
@@ -268,7 +268,7 @@ class CDossierMedical extends CMbMetaObject {
         foreach ($currAppAnt as $currAppAnt) {
           $sAntecedentApp = "&bull; ";
           if ($currAppAnt->date) { 
-            $sAntecedentApp .= mbDateToLocale($currAppAnt->date) . " : ";
+            $sAntecedentApp .= $currAppAnt->getFormattedValue('date') . " : ";
           }
           $sAntecedentApp .= $currAppAnt->rques;
           $aAntecedentsParApp[] = $sAntecedentApp;
@@ -291,16 +291,11 @@ class CDossierMedical extends CMbMetaObject {
       foreach($this->_ref_traitements as $curr_trmt){
         $sTraitements.="<br /> &bull; ";
         if ($curr_trmt->fin){
-          $sTraitements .= "Du ";
-          $sTraitements .= mbDateToLocale($curr_trmt->debut) ;
-          $sTraitements .= " au ";
-          $sTraitements .= mbDateToLocale($curr_trmt->fin);
-          $sTraitements .= " : ";
+          $sTraitements .= "Depuis ".$curr_trmt->getFormattedValue('debut').
+                           " jusqu'à ".$curr_trmt->getFormattedValue('fin')." : ";
         }
         elseif($curr_trmt->debut){
-          $sTraitements .= "Depuis le ";
-          $sTraitements .= mbDateToLocale($curr_trmt->debut);
-          $sTraitements .= " : ";
+          $sTraitements .= "Depuis ".$curr_trmt->getFormattedValue('debut')." : ";
         }
         
         $sTraitements .= $curr_trmt->traitement;

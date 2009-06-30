@@ -16,7 +16,7 @@
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
   
-  <!--[if IE]>
+  <!--[if lt IE 8]>
   <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
   <![endif]-->
   
@@ -25,7 +25,8 @@
     var config = {{$configOffline|@json}};
     {{/if}}
     var Preferences = {{$app->user_prefs|@json}},
-        userId = parseInt({{$app->user_id|@json}});
+        userId = parseInt({{$app->user_id|@json}}),
+        sessionLocked = {{$smarty.session.locked|@json}};
     
     {{if $dialog}}
     Event.observe(document, 'keydown', closeWindowByEscape);
@@ -45,27 +46,45 @@
 
 <!-- Loading divs -->
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
+
 <div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
   <div class="loading">Chargement en cours</div>
 </div>
-<div id="sessionLockMask" style="display: none;">
+
+<div id="sessionLock" style="display: none;">
   {{if $app->_ref_user}}
-  <div class="window" style="position: absolute; text-align: center; -moz-border-radius: 10px; background: #eee;">
-    <div style="background: #ccc; -moz-border-radius: 5px 5px 0 0; font-weight: bold; margin: 0; padding: 5px 1em;">
-      Session verrouillée - {{$app->_ref_user}}
+  <h1>Session verrouillée - {{$app->_ref_user}}</h1>
+  <form name="sessionLockForm" method="post" action="?" onsubmit="return Session.request(this)">
+    <input type="hidden" name="unlock" value="unlock" />
+    <input type="hidden" name="username" value="{{$app->_ref_user->_user_username}}" />
+    <div>
+      <label for="password">Mote de passe </label>
+      <input type="password" name="password" />
     </div>
-    <form name="unlockSession" method="post" action="?" onsubmit="return false" 
-     style="display: block; margin: 1em;">
-      <input type="hidden" name="login" value="{{$app->_ref_user->_user_username}}" />
-      <div style="margin: 0.7em; display: block;">
-        <label for="password">Mote de passe: </label>
-        <input type="password" name="password" />
-      </div>
-      <button class="tick" onclick="Session.unlock()">{{tr}}Unlock{{/tr}}</button>
-      <button class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
-    </form>
-  </div>
+    <div>
+      <button type="submit" class="tick">{{tr}}Unlock{{/tr}}</button>
+      <button type="button" class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
+    </div>
+    <div class="login-message"></div>
+  </form>
   {{/if}}
+</div>
+
+<div id="userSwitch" style="display: none;">
+  <h1>Changement d'utilisateur</h1>
+  <form name="userSwitchForm" method="post" action="?" onsubmit="return UserSwitch.login(this)">
+    <input type="hidden" name="m" value="admin" />
+    <input type="hidden" name="dosql" value="do_login_as" />
+    <div style="text-align: right;">
+      <label for="username">Utilisateur </label><input name="username" tabIndex="1000" type="text" class="notNull" /><br />
+      <label for="password">Mot de passe </label><input name="password" tabIndex="1001" type="password" />
+    </div>
+    <div>
+      <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
+      <button type="button" class="cancel" onclick="UserSwitch.cancel()">{{tr}}Cancel{{/tr}}</button>
+    </div>
+    <div class="login-message"></div>
+  </form>
 </div>
 
 <!-- Tooltip div used for dom clonage -->

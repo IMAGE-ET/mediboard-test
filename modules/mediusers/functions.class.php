@@ -137,7 +137,7 @@ class CFunctions extends CMbObject {
     $template->addProperty("Cabinet - nom"         , $this->text      );
     $template->addProperty("Cabinet - sous-titre"  , $this->soustitre );
     $template->addProperty("Cabinet - adresse"     , $this->adresse   );
-    $template->addProperty("Cabinet - cp ville"    , $this->cp ." ". $this->ville );
+    $template->addProperty("Cabinet - cp ville"    , "$this->cp $this->ville");
     $template->addProperty("Cabinet - téléphone"   , $this->tel       );
     $template->addProperty("Cabinet - fax"         , $this->fax       );
   }

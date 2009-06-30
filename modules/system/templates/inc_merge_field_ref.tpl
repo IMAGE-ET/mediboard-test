@@ -28,7 +28,7 @@
     </td>
   {{/foreach}}
   
-  <td class="readonly">
+  <td>
     {{mb_field object=$result field=$field hidden=1 prop=""}}
     <input type="text" readonly="readonly" size="30" name="_{{$field}}_view" value="{{$result_ref->_view}}" />
   </td>

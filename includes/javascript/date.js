@@ -243,6 +243,207 @@ Object.extend(Date.prototype, {
   }
 });
 
+var ProgressiveCalendar = Class.create({
+  initialize: function(element, options) {
+    this.element = $(element);
+    
+    this.options = Object.extend({
+      container: null,
+      icon: "images/icons/calendar.gif",
+      container: $(document.body)
+    }, options || {});
+    
+    if (!(this.elementView = $(this.element.form.elements[this.element.name+'_da']))) {
+      this.elementView = new Element('input', {type: 'text', readonly: 'readonly'}).addClassName(this.element.className || 'date');
+      this.element.insert({before: this.elementView});
+    }
+    
+    this.date = this.getDate();
+    $V(this.elementView, (parseInt(this.date.day) ? this.pad(this.date.day)+'/':'') + 
+                         (parseInt(this.date.month) ? this.pad(this.date.month)+'/':'') + 
+                         (parseInt(this.date.year) ? this.pad(this.date.year, 4) : ''));
+    
+    if (this.options.icon) {
+			var cont = new Element('div', {style: 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
+			this.elementView.wrap(cont);
+			var icon = new Element('img', {src: this.options.icon}).addClassName('inputExtension');
+
+			// No icon padding specified, default to 3px and calculate dynamically on image load
+			var padding = 3;
+			icon.observe('load', function() {
+        var elementDim = this.elementView.getDimensions();
+        var iconDim = icon.getDimensions();
+				padding = parseInt(elementDim.height - iconDim.height) / 2;
+			}.bindAsEventListener(this)).setStyle({position: 'absolute', right: padding+'px', top: padding+'px'});
+			cont.insert(icon);
+
+			icon.observe('click', this.createPicker.bindAsEventListener(this));
+		} else {
+			this.elementView.observe('click', this.createPicker.bindAsEventListener(this));
+		}
+  },
+  getDate: function(){
+    var parts = this.element.value.split('-');
+    return {
+    	year: parts[0] || 0,
+    	month: parts[1] || 0,
+    	day: parts[2] || 0
+    }
+  },
+  setDate: function(date){
+    $V(this.element, this.pad(date.year,4)+'-'+this.pad(date.month)+'-'+this.pad(date.day));
+    $V(this.elementView, (parseInt(date.day) ? this.pad(date.day)+'/':'') + 
+                         (parseInt(date.month) ? this.pad(date.month)+'/':'') + 
+                         (parseInt(date.year) ? this.pad(date.year, 4) : ''));
+  },
+  pad: function (str, length) {
+    return String(str).pad('0', length || 2);
+  },
+  fillTable: function(table, cols, rows, min, max, type, date) {
+    if (min === null) {
+      min = max - rows*cols+1;
+    }
+
+    var i, j, body = table.select('tbody').first(), origMin = min;
+    
+    for (i = 0; i < rows; i++){
+      var row = new Element('tr').addClassName('calendarRow');
+      for (j = 0; j < cols; j++){
+        if (i == 0 && j == 0 && type == 'year') {
+          var before = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;'}).addClassName('day').update('<');
+          before.observe('click', function(e){
+            e.stop();
+            body.update();
+            this.fillTable(table, cols, rows, origMin-cols*rows, max-cols*rows, type, date);
+          }.bindAsEventListener(this));
+          row.insert(before);
+        }
+        
+        if (min <= max) {
+          var cell = new Element('td', {style:'padding:1px;width:16.7%;'}).addClassName('day').update(min);
+          if (min++ == date[type]) cell.addClassName('current');
+          cell.observe('click', function(e){
+            e.stop();
+            var element = e.element();
+            element.up(1).select('.current').invoke('removeClassName','current');
+            element.addClassName('current');
+            date[type] = element.innerHTML;
+            this.setDate(date);
+          }.bindAsEventListener(this))
+          .observe('dblclick', function(e){
+            e.stop();
+            this.hidePicker();
+          }.bindAsEventListener(this));
+          row.insert(cell);
+        }
+          
+        if (i == 0 && j == cols-1 && type == 'year') {
+          var after = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;'}).addClassName('day').update('>');
+          after.observe('click', function(e){
+            e.stop();
+            body.update();
+            this.fillTable(table, cols, rows, origMin+cols*rows, max+cols*rows, type, date);
+          }.bindAsEventListener(this));
+          row.insert(after);
+        }
+      }
+      body.insert(row);
+    }
+  },
+  createTable: function(container, title, cols, rows, min, max, type, date) {
+    container.insert('<div />');
+    
+    var newContainer = container.childElements().last();
+    newContainer.insert('<table style="width:100%;"><tbody /></table>');
+    var table = newContainer.childElements().last();
+
+    this.fillTable(table, cols, rows, min, max, type, date);
+    
+    if (title) {
+      newContainer.insert('<a href="javascript:;" style="text-align:center;display:block;font-weight:bold;">'+title+' <img src="./images/icons/downarrow.png" height="12" /></a>');
+    }
+    
+    if (title) {
+      table.nextSiblings().first().observe('click', function(e){
+        e.stop();
+        var element = e.findElement('a');
+        if (!element.previousSiblings().first().select('.current').length) return;
+        
+        var next = element.nextSiblings().first();
+        if (next.visible()) {
+          switch (type) {
+            case 'year': date.month = 0;
+            case 'month': date.day = 0;
+          }
+          next.hide().select('table').invoke('hide');
+          element.select('img').first().src = './images/icons/downarrow.png';
+        }
+        else {
+          var current = next.select('.current'),
+              v = current.length ? current.first().innerHTML : 0;
+          switch (type) {
+            case 'year': date.month = v; break;
+            case 'month': date.day = v; break;
+          }
+          next.show().select('table').first().show();
+          element.select('img').first().src = './images/icons/cancel.png';
+        }
+
+        this.setDate(date);
+      }.bindAsEventListener(this));
+    }
+    
+    return newContainer;
+  },
+  createPicker: function(e){
+    if (!this.picker) 
+      this.picker = new Element('div', {style: 'position:absolute;'}).
+        addClassName('datepickerControl').
+        observe('click', Event.stop);
+    if (ProgressiveCalendar.activePicker) ProgressiveCalendar.activePicker.hidePicker();
+    var container,
+        now = new Date(),
+        date = this.getDate();
+
+    this.picker.update('<a href="javascript:;" style="text-align:center;display:block;font-weight:bold;">Année <img src="./images/icons/cancel.png" height="12" /></a>');
+    this.picker.select('a').first().observe('click', function(){
+      $V(this.element, '');
+      $V(this.elementView, '');
+      this.hidePicker();
+    }.bindAsEventListener(this));
+    
+    container = this.createTable(this.picker, 'Mois', 4, 5, null, parseInt(now.getFullYear()), 'year', date);
+    var monthContainer = this.createTable(container, 'Jour', 6, 2, 1, 12, 'month', date);
+    var dayContainer = this.createTable(monthContainer, null, 6, 6, 1, 31, 'day', date);
+    
+    var pos = this.elementView.cumulativeOffset();
+    this.picker.setStyle({
+      top: pos.top + this.elementView.getDimensions().height + 'px',
+      left: pos.left+'px'
+    });
+    
+    if (container = $(this.options.container))
+      container.insert(this.picker);
+    else
+      this.insert({after: this.picker});
+    
+    if (monthContainer.firstChild.select('.current').length == 0)
+      monthContainer.hide();
+    
+    if (dayContainer.firstChild.select('.current').length == 0)
+      dayContainer.hide();
+    
+    e.stop();
+    this.picker.show();
+    document.observe('click', this.hidePicker = this.hidePicker.bindAsEventListener(this));
+    ProgressiveCalendar.activePicker = this;
+  },
+  hidePicker: function(e){
+    this.picker.hide();
+    ProgressiveCalendar.activePicker = null;
+    document.stopObserving('click', this.hidePicker);
+  }
+});
 
 var Calendar = {
   // This function is bound to date specification
@@ -342,7 +543,7 @@ var Calendar = {
       if (datepicker.icon) datepicker.icon.style.position = 'relative';
     }
     else {
-      elementView.observe('focus', datepicker.show.bindAsEventListener(datepicker));
+      elementView.observe('click', Event.stop).observe('focus', datepicker.show.bindAsEventListener(datepicker));
     }
     
     // We update the view
@@ -361,187 +562,7 @@ var Calendar = {
   },
   
   regProgressiveField: function(element, options) {
-    element = $(element);
-    
-    options = Object.extend({
-      container: null,
-      icon: "images/icons/calendar.gif"
-    }, options || {});
-    
-    var viewElement = new Element('input', {type: 'text', readonly: 'readonly'}).addClassName('date');
-    element.insert({before: viewElement});
-    
-    var date = getDate();
-    $V(viewElement, (parseInt(date.day) ? pad(date.day)+'/':'') + (parseInt(date.month) ? pad(date.month)+'/':'') + date.year);
-          
-    function getDate(){
-      var parts = element.value.split('-');
-      return {
-      	year: parts[0],
-      	month: parts[1],
-      	day: parts[2]
-      }
-    }
-    
-    function pad(str, length) {
-      return (str+'').pad('0', length || 2);
-    }
-    
-    function fillTable(table, cols, rows, min, max, type, date) {
-      if (min === null) {
-        min = max - rows*cols+1;
-      }
-
-      var i, j, body = table.select('tbody').first(), origMin = min;
-      
-      for (i = 0; i < rows; i++){
-        var row = new Element('tr').addClassName('calendarRow');
-        for (j = 0; j < cols; j++){
-          if (i == 0 && j == 0 && type == 'year') {
-            var before = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;'}).addClassName('day').update('<');
-            before.observe('click', function(e){
-              e.stop();
-              body.update();
-              fillTable(table, cols, rows, origMin-cols*rows, max-cols*rows, type, date);
-            });
-            row.insert(before);
-          }
-          
-          if (min <= max) {
-            var cell = new Element('td').addClassName('day').update(min);
-            if (min++ == date[type]) cell.addClassName('current');
-            cell.observe('click', function(e){
-              e.stop();
-              this.up(1).select('.current').invoke('removeClassName','current');
-              this.addClassName('current');
-              date[type] = this.innerHTML;
-              $V(element, pad(date.year)+'-'+pad(date.month)+'-'+date.day);
-              $V(viewElement, (parseInt(date.day) ? pad(date.day)+'/':'') + (parseInt(date.month) ? pad(date.month)+'/':'') + date.year);
-            })
-            .observe('dblclick', function(e){
-              e.stop();
-              hidePicker();
-            });
-            row.insert(cell);
-          }
-            
-          if (i == 0 && j == cols-1 && type == 'year') {
-            var after = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;'}).addClassName('day').update('>');
-            after.observe('click', function(e){
-              e.stop();
-              body.update();
-              fillTable(table, cols, rows, origMin+cols*rows, max+cols*rows, type, date);
-            });
-            row.insert(after);
-          }
-        }
-        body.insert(row);
-      }
-    }
-    
-    function createTable(container, title, cols, rows, min, max, type, date) {
-      container.insert('<div />');
-      
-      var newContainer = container.childElements().last();
-      newContainer.insert('<table><tbody /></table>');
-      var table = newContainer.childElements().last();
-
-      fillTable(table, cols, rows, min, max, type, date);
-      
-      if (title) {
-        newContainer.insert('<a href="javascript:;" style="text-align:center;display:block;font-weight:bold;">'+title+' <img src="./images/icons/downarrow.png" /></a>');
-      }
-      
-      if (title) {
-        table.nextSiblings().first().observe('click', function(e){
-          e.stop();
-          var next = this.nextSiblings().first();
-          if (next.visible()) {
-            switch (type) {
-              case 'year': date.month = 0;
-              case 'month': date.day = 0;
-            }
-            next.hide().select('table').invoke('hide');
-          }
-          else {
-            var v = next.select('.current').length ? next.select('.current').first().innerHTML : 0;
-            switch (type) {
-              case 'year': date.month = v; break;
-              case 'month': date.day = v; break;
-            }
-            next.show().select('table').first().show();
-          }
-
-          $V(element, pad(date.year)+'-'+pad(date.month)+'-'+date.day);
-          $V(viewElement, (parseInt(date.day) ? pad(date.day)+'/':'') + (parseInt(date.month) ? pad(date.month)+'/':'') + date.year);
-        });
-      }
-      
-      return newContainer;
-    }
-    
-    var createPicker = function(e){
-      if (!this.picker) 
-        this.picker = new Element('div', {style: 'position:absolute;'}).
-          addClassName('datepickerControl').
-          observe('click', function(e){e.stop()});
-        
-      var container,
-          now = new Date(),
-          date = getDate();
-
-      this.picker.update('<div style="text-align:center;font-weight:bold;">Année</div>');
-      
-      container = createTable(this.picker, 'Mois', 4, 5, null, parseInt(now.getFullYear()), 'year', date);
-      var monthContainer = createTable(container, 'Jour', 6, 2, 1, 12, 'month', date);
-      var dayContainer = createTable(monthContainer, null, 6, 6, 1, 31, 'day', date);
-      
-      var pos = viewElement.cumulativeOffset();
-      this.picker.setStyle({
-        top: pos.top + viewElement.getDimensions().height + 'px',
-        left: pos.left+'px'
-      });
-      
-      if (container = $(options.container))
-        container.insert(this.picker);
-      else
-        this.insert({after: this.picker});
-      
-      if (monthContainer.firstChild.select('.current').length == 0)
-        monthContainer.hide();
-      
-      if (dayContainer.firstChild.select('.current').length == 0)
-        dayContainer.hide();
-      
-      e.stop();
-      this.picker.show();
-      document.observe('click', hidePicker);
-    }.bindAsEventListener(element);
-    
-    var hidePicker = function(e){
-      if (e) e.stop();
-      this.picker.hide();
-      document.stopObserving('click', hidePicker);
-    }.bindAsEventListener(element);
-    
-    if (options.icon) {
-			var cont = new Element('div', {'style': 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
-			viewElement.wrap(cont);
-			var icon = new Element('img', {'src': options.icon}).addClassName('inputExtension');
-
-			// No icon padding specified, default to 3px and calculate dynamically on image load
-			var padding = 3;
-			icon.observe('load', function() {
-        var elementDim = viewElement.getDimensions();
-        var iconDim = icon.getDimensions();
-				padding = parseInt(elementDim.height - iconDim.height) / 2;
-			}.bind(this)).setStyle({position: 'absolute', right: padding+'px', top: padding+'px'});
-			cont.insert(icon);
-
-			icon.observe('click', createPicker);
-		} else {
-			viewElement.observe('click', createPicker);
-		}
+    new ProgressiveCalendar(element, options);
   }
 };
 

@@ -12,17 +12,23 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CDateTimeSpec extends CMbFieldSpec {
   
+  function getSpecType() {
+    return("dateTime");
+  }
+  
+  function getDBSpec(){
+    return "DATETIME";
+  }
+  
   function getValue($object, $smarty = null, $params = null) {
     if ($smarty) require_once $smarty->_get_plugin_filepath('modifier','date_format');
     
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = $object->{$this->fieldName};
     
     $format = CMbArray::extract($params, "format", CAppUI::conf("datetime"));
     if ($format === "relative") {
       $relative = CMbDate::relative($propValue, mbDateTime());
       return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
-      
     }
     
     return ($propValue && $propValue != "0000-00-00 00:00:00") ?
@@ -30,17 +36,12 @@ class CDateTimeSpec extends CMbFieldSpec {
       "";
   }
   
-  function getSpecType() {
-    return("dateTime");
-  }
-  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = &$object->{$this->fieldName};
     
     if (!preg_match ("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}[ \+][0-9]{1,2}:[0-9]{1,2}(:[0-9]{1,2})?$/", $propValue)) {
-      if($object->$fieldName === 'current'|| $object->$fieldName ===  'now') {
-        $object->$fieldName = mbDateTime();
+      if($propValue === 'current'|| $propValue ===  'now') {
+        $propValue = mbDateTime();
         return null;
       } 
     	return "format de dateTime invalide : '$propValue'";
@@ -50,23 +51,17 @@ class CDateTimeSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = "19".$this->randomString(CMbFieldSpec::$nums, 2).
-      "-".$this->randomString(CMbFieldSpec::$months, 1).
-      "-".$this->randomString(CMbFieldSpec::$days, 1);
-    $propValue .= " ".$this->randomString(CMbFieldSpec::$hours, 1).
-      ":".$this->randomString(CMbFieldSpec::$mins, 1).
-      ":".$this->randomString(CMbFieldSpec::$mins, 1);
-  }
-  
-  function getDBSpec(){
-    return "DATETIME";
+
+    $object->{$this->fieldName} = "19".self::randomString(CMbFieldSpec::$nums, 2).
+      "-".self::randomString(CMbFieldSpec::$months, 1).
+      "-".self::randomString(CMbFieldSpec::$days, 1).
+      " ".self::randomString(CMbFieldSpec::$hours, 1).
+      ":".self::randomString(CMbFieldSpec::$mins, 1).
+      ":".self::randomString(CMbFieldSpec::$mins, 1);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementDateTime($object, $params, $value, $className,  CAppUI::conf("datetime"));
+    return $this->getFormElementDateTime($object, $params, $value, $className, CAppUI::conf("datetime"));
   }
 }
 

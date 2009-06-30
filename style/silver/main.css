@@ -53,16 +53,16 @@
 
 /* Onglets de module */
 
-table.tabmenu td.normal {
+table.tabmenu td {
   background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
-table.tabmenu td.normalLeft {
+table.tabmenu td.left {
   width: 10px;
   background: url(./images/icons/tabLeft.png) no-repeat bottom right;
 }
 
-table.tabmenu td.normalRight {
+table.tabmenu td.right {
   width: 10px;
   background: url(./images/icons/tabRight.png) no-repeat bottom left;
 }
@@ -71,12 +71,12 @@ table.tabmenu td.selected {
   background: url(./images/icons/tabSelectedBg.png) repeat-x;
 }
 
-table.tabmenu td.selectedLeft {
+table.tabmenu td.selected.left {
   width: 10px;
   background: url(./images/icons/tabSelectedLeft2.png) no-repeat bottom right;
 }
 
-table.tabmenu td.selectedRight {
+table.tabmenu td.selected.right {
   width: 10px;
   background: url(./images/icons/tabSelectedRight2.png) no-repeat bottom left;
 }

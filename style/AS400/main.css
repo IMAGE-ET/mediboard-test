@@ -172,19 +172,6 @@ table.form td.compte_rendu {
   background: #000;
 }
 
-table.form td.text {
-  white-space: normal;
-}
-
-table.form td.info {
-  white-space: normal;
-}
-
-table.form td.readonly input {
-  background-color: #000;
-  border: 1px dotted #0f0;
-}
-
 table.form td.button {
   text-align: center;
   vertical-align: middle;
@@ -269,22 +256,19 @@ table.tabmenu {
 table.tabmenu td {
   height: 25px;
   padding-top: 2px;
-}
-
-table.tabmenu td.normal {
   background: #000;
 }
 
-table.tabmenu td.normal a {
+table.tabmenu td a {
   color: #ff0;
 }
 
-table.tabmenu td.normalLeft {
+table.tabmenu td.left {
   width: 5px;
   background: #000;
 }
 
-table.tabmenu td.normalRight {
+table.tabmenu td.right {
   width: 5px;
   background: #000;
 }
@@ -300,12 +284,12 @@ table.tabmenu td.selected a {
   background: #333;
 }
 
-table.tabmenu td.selectedLeft {
+table.tabmenu td.selected.left {
   width: 5px;
   background: #000;
 }
 
-table.tabmenu td.selectedRight {
+table.tabmenu td.selected.right {
   width: 5px;
   background: #000;
 }
@@ -500,7 +484,6 @@ table.titleblock td.titlecell {
 }
 
 /* Main table */
-
 th.title {
   font-size: 12px;
   color: #0f0;

@@ -16,17 +16,20 @@ class CPctSpec extends CMbFieldSpec {
     return("pct");
   }
   
+  function getDBSpec(){
+    return "FLOAT";
+  }
+  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    if (!preg_match ("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $propValue)) {
+    if (!preg_match ("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $object->{$this->fieldName})) {
       return "n'est pas un pourcentage (utilisez le . pour la virgule)";
     }
     return null;
   }
   
-  function getDBSpec(){
-    return "FLOAT";
+  function getValue($object, $smarty = null, $params = null) {
+    $decimals = CMbArray::extract($params, "decimals");
+    return number_format($object->{$this->fieldName}, ($decimals ? $decimals : 2)).' %';
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
@@ -35,8 +38,8 @@ class CPctSpec extends CMbFieldSpec {
   }
   
   function sample(&$object, $consistent = true) {
-    $fieldName = $this->fieldName;
-    $object->$fieldName = rand(0, 100);
+    parent::sample($object, $consistent);
+    $object->{$this->fieldName} = rand(0, 100);
   }
 }
 

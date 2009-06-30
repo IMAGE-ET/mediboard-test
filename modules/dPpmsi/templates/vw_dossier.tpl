@@ -174,7 +174,7 @@ Main.add(function () {
       <table class="form">
         <tr>
           <th><label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label></th>
-          <td class="readonly">
+          <td>
             <input type="hidden" name="m" value="dPpmsi" />
             <input type="hidden" name="pat_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
@@ -276,7 +276,7 @@ Main.add(function () {
                     <ul>
                       <li>
                         {{if $curr_antecedent->date}}
-                          {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+                          {{mb_value object=$curr_antecedent field=date}} -
                         {{/if}}
                         <em>{{$curr_antecedent->rques}}</em>
                       </li>
@@ -299,7 +299,7 @@ Main.add(function () {
                     <ul>
                       <li>
                         {{if $curr_antecedent->date}}
-                          {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+                          {{mb_value object=$curr_antecedent field=date}} -
                         {{/if}}
                         <em>{{$curr_antecedent->rques}}</em>
                       </li>
@@ -327,11 +327,12 @@ Main.add(function () {
                 <ul>
 		              {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
 		              <li>
-		                {{if $curr_trmt->fin}}
-		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}} :
-		                {{elseif $curr_trmt->debut}}
-		                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}} :
-		                {{/if}}
+                    {{if $curr_trmt->fin}}
+                      Depuis {{mb_value object=$curr_trmt field=debut}} 
+                      jusqu'à {{mb_value object=$curr_trmt field=fin}} :
+                    {{elseif $curr_trmt->debut}}
+                      Depuis {{mb_value object=$curr_trmt field=debut}} :
+                    {{/if}}
 		                <em>{{$curr_trmt->traitement}}</em>
 		              </li>
 		              {{foreachelse}}
@@ -343,11 +344,12 @@ Main.add(function () {
                 <ul>
 		              {{foreach from=$_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
 		              <li>
-		                {{if $curr_trmt->fin}}
-		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}} :
-		                {{elseif $curr_trmt->debut}}
-		                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}} :
-		                {{/if}}
+                    {{if $curr_trmt->fin}}
+                      Depuis {{mb_value object=$curr_trmt field=debut}} 
+                      jusqu'à {{mb_value object=$curr_trmt field=fin}} :
+                    {{elseif $curr_trmt->debut}}
+                      Depuis {{mb_value object=$curr_trmt field=debut}} :
+                    {{/if}}
 		                <em>{{$curr_trmt->traitement}}</em>
 		              </li>
 		              {{foreachelse}}

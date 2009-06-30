@@ -157,7 +157,7 @@ function reloadListExamComp() {
             {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
           </td>
           <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
-          <td class="readonly">
+          <td>
             {{mb_field object=$consult_anesth field="_clairance"  size="4" readonly="readonly"}}
             ml/min
           </td>
@@ -200,7 +200,7 @@ function reloadListExamComp() {
         </tr>
         <tr>
           <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
-          <td class="readonly">
+          <td>
             {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
             ml/GR
           </td>

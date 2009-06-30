@@ -278,7 +278,7 @@ Main.add(function () {
           <th>
             <label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label>
           </th>
-          <td class="readonly">
+          <td>
             <input type="hidden" name="m" value="dPlabo" />
             <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()"/>
             <input type="hidden" name="prescription_labo_id" value="" />

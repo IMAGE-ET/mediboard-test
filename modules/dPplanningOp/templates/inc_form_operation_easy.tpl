@@ -32,7 +32,7 @@
   <!-- Affichage du libelle -->
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
-    <td  class="readonly" colspan="2">{{mb_field object=$op field="libelle" readonly="readonly"}}</td>
+    <td colspan="2">{{mb_field object=$op field="libelle" readonly="readonly"}}</td>
   </tr>
   
   
@@ -114,7 +114,7 @@
                 }; 
                 Sejour.preselectSejour(this.value);" />
     </th>
-    <td class="readonly">
+    <td>
       <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
     </td>
     <td class="button">
@@ -129,7 +129,7 @@
       <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
       {{mb_label object=$sejour field="patient_id"}}
     </th>
-    <td class="readonly">
+    <td>
   	  <input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly"
   	    {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
   	      ondblclick="PatSelector.init()"

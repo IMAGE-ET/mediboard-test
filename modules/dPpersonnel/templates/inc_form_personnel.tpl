@@ -35,7 +35,7 @@
   
   <tr>
     <th>{{mb_label object=$personnel field="user_id"}}</th>
-		<td class="readonly">
+		<td>
       <input type="hidden" name="user_id" class="notNull" value="{{$personnel->user_id}}"/>
       <input type="hidden" name="object_class" value="CMediusers" />
     	<input disabled="disabled" size="40" readonly="readonly" name="object_view" value="{{$personnel->_ref_user}}" />

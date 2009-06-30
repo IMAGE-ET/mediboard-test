@@ -1,8 +1,5 @@
 /* $Id$ */
 
-/* Global CSS */
-  /* @import "./xhtml.css";   */
-
 /* XHTML elements */
 
 html, body {
@@ -549,8 +546,6 @@ div#console div.value {
   font-size: 8pt;
 }
 
-  /* @import "./common.css";  */
-
 /* classes Mediboard */
 
 .mediuser {
@@ -584,25 +579,7 @@ table.titleblock td.titlecell {
   padding-bottom: 10px;
 }
 
-/* Bread crumbs block */
-
-table.crumbsblock {
-  width: 100%;
-}
-
-table.crumbsblock td {
-  white-space: nowrap;
-}
-
-table.crumbsblock td.crumbscell {
-  width: 100%;
-}
-
 /* Tab view table */
-
-table.taborflat {
-  display: none;
-}
 
 table.tabview {
   border-spacing: 0px;
@@ -623,19 +600,19 @@ table.tabmenu {
 table.tabmenu td {
   height: 28px;	
   line-height: 90%;
-}
-
-table.tabmenu td.normal {
   background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
-table.tabmenu td.normalLeft {
+table.tabmenu td.left,
+table.tabmenu td.right {
   width: 17px;
+}
+
+table.tabmenu td.left {
   background: url(./images/icons/tabLeft.png) no-repeat bottom right;
 }
 
-table.tabmenu td.normalRight {
-  width: 17px;
+table.tabmenu td.right {
   background: url(./images/icons/tabRight.png) no-repeat bottom left;
 }
 
@@ -643,13 +620,11 @@ table.tabmenu td.selected {
   background: url(./images/icons/tabSelectedBg.png) repeat-x;
 }
 
-table.tabmenu td.selectedLeft {
-  width: 17px;
+table.tabmenu td.selected.left {
   background: url(./images/icons/tabSelectedLeft.png) no-repeat bottom right;
 }
 
-table.tabmenu td.selectedRight {
-  width: 17px;
+table.tabmenu td.selected.right {
   background: url(./images/icons/tabSelectedRight.png) no-repeat bottom left;
 }
 
@@ -943,17 +918,9 @@ table.form td.compte_rendu {
   background: #ddd;
 }
 
-table.form td.text {
-  white-space: normal;
-}
-
+table.form td.text,
 table.form td.info {
   white-space: normal;
-}
-
-table.form td.readonly input {
-  background: #eee;
-  border: 1px dotted;
 }
 
 table.form td.button {
@@ -972,11 +939,9 @@ div.date {
   float: left;
 }
 
-input[readonly].date,
-input[readonly].time,
-input[readonly].dateTime {
+input[readonly],
+input[readonly]:focus {
   border: 1px dotted #333;
-  color: #333;
   background: none;
 }
 
@@ -1050,16 +1015,7 @@ input.autocomplete.throbbing {
   background-position: 100% -19px;
 }
 
-/* links in header blocks */
-
-a.hdr:link, 
-a.hdr:active, 
-a.hdr:visited {
-  color: #fff;
-}
-
 /* tabbed boxes */
-
 td.tabox {
   background-color: #ccc;
   border: solid #ccc 2px;
@@ -1249,8 +1205,7 @@ div.big-error {
   }
 }
 
-  /* @import "./tooltip.css   */
-
+/** Tooltips */
 .tooltip-trigger {
   cursor: pointer;
 }
@@ -1408,8 +1363,8 @@ table.note th.low {
   background-color: #afa;
 }
 
-  /* @import "./login.css";   */
 
+/** Login page */
 #login {
   padding-top: 40px; 
 }
@@ -1440,10 +1395,8 @@ table.note th.low {
 	background-position: left 110%;
 }
 
-  /* @import "./header.css";  */
 
 /* Global header */
-
 #header {
   width: 100%;
   border-spacing: 0px;
@@ -1469,28 +1422,8 @@ table.Offline button  {
   margin : 2px 2px;
 }
 
-/* Banner */
-
-#banner {
-  display: none;
-  background: url(./images/pictures/titleGradient.jpg) no-repeat center;
-  vertical-align: middle;
-}
-
-#banner p {
-  font-family: Georgia, serif;
-  font-size: 20px; 
-  float: left;
-  color: #620;
-  margin: 5px 10px 0;
-}
-
-#banner a {
-  float: right;
-}
 
 /* Navigation */
-
 #menubar table {
   border: 1px solid #999;
   background-color: #ccc;
@@ -1592,7 +1525,6 @@ table.Offline button  {
 }
 
 /* Main -- table -- pane */
-
 #main {
   clear: both;
   width: 100%;
@@ -1602,7 +1534,6 @@ table.Offline button  {
 #mainPane {
   vertical-align: top;
 }
-  /* @import "./htmlarea.css" */
 
 textarea#htmlarea {
   width: 99%;
@@ -1735,8 +1666,6 @@ table.contacts td.hilite {
 	background-color: #fff;
 }
 
-  /* @import "./ccam.css";      */
-
 table.fullCode {
   width: 100%;
   background: #f99;
@@ -1801,10 +1730,8 @@ table.selectCode td {
   padding: 5px;
 }
 
-  /* @import "./admission.css"; */
 
 /* The admission table based on the form one */
-
 #admission {
   width: 100%;
   border-spacing: 6px;
@@ -1992,10 +1919,7 @@ ul.control_tabs_vertical li a.active {
 }
 
 
-  /* @import "./hospitalisation.css"; */
-
 /* Chambres */
-
 table.chambrecollapse,
 table.chambreexpand {
   width: 100%;
@@ -2183,8 +2107,7 @@ table#planningBloc td.firsthour {
   background: #ddd;
 }
 
-/* @import "./dPpatients.css" */
-
+/** dPpatients */
 table#weeklyPlanning {
   width: 100%;
   border-spacing: 1px;
@@ -2223,7 +2146,6 @@ table#weeklyPlanning td.empty {
   background: #eee;
   height: 3px; 
 }
-  /* @import "./collapser.css"; */
 
 div.progressBar {
   font-size: 80%;
@@ -2369,7 +2291,6 @@ table.affectations td.fullService {
   background-color: #fff;
 }
 
-/* @import "./consultation.css"; */
 table#weber td {
   text-align: center;
 }
@@ -3246,12 +3167,30 @@ table.active {
 
 .modal {
 	min-width: 200px;
-	padding: 1.0em;
+	padding: 0.3em;
 	border: 1px solid #999;
+  border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-  border-radius: 6px;
 	background: #eee;
+}
+
+.modal h1 {
+  text-align: center;
+  font-size: inherit;
+  background: #ccc; 
+  radius: 5px; 
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+  font-weight: bold; 
+  margin: 0; 
+  padding: 5px 1em; 
+  white-space: nowrap;
+}
+
+.modal div {
+  padding: 0.5em;
+  text-align: center;
 }
 
 /**

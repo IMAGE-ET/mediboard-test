@@ -20,20 +20,27 @@ class CFloatSpec extends CMbFieldSpec {
     return("float");
   }
   
+  function getDBSpec(){
+    return 'FLOAT'.($this->pos || ($this->min !== null && $this->min >= 0) ? ' UNSIGNED' : '');
+  }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'min' => 'num',
+      'max' => 'num',
+      'pos' => 'bool',
+    );
+  }
+  
   function checkProperty($object){
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
-    
-    $propValue = $this->checkNumeric($propValue, false);
+    $propValue = $this->checkNumeric($object->{$this->fieldName}, false);
     if($propValue === null){
       return "n'est pas une valeur décimale (utilisez le . pour la virgule)";
     }
     
     // pos
-    if($this->pos){
-      if ($propValue <= 0) {
-        return "Doit avoir une valeur positive";
-      }
+    if($this->pos && $propValue <= 0) {
+      return "Doit avoir une valeur positive";
     }
     
     // min
@@ -64,18 +71,7 @@ class CFloatSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
-    
-    $propValue = $this->randomString(CMbFieldSpec::$nums, 2).".".$this->randomString(CMbFieldSpec::$nums, 2);
-  }
-  
-  function getDBSpec(){
-    $type_sql = "FLOAT";
-    if($this->pos){
-      $type_sql = "FLOAT UNSIGNED";
-    }
-    return $type_sql;
+    $object->{$this->fieldName} = self::randomString(CMbFieldSpec::$nums, 2).".".self::randomString(CMbFieldSpec::$nums, 2);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
