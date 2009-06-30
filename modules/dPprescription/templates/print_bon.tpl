@@ -45,10 +45,20 @@ Main.add( function(){
 /* decalage du header pour permettre l'insertion de filtres */
 @media screen {
 	div.header {
-	  top: 4em;
 	  border-bottom-width: 1px;
 	}
+	div.header,
+	div.footer {
+	  position: relative; 
+	  background: #ddd;
+	  border: 0px solid #aaa;
+	  width: 100%;
+	  opacity: 0.9;
+	  overflow: hidden;
+	}
 }
+
+
 
 
 </style>
