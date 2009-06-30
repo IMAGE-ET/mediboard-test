@@ -181,10 +181,10 @@ class CRPU extends CMbObject {
     	  $this->_can_leave = -1;
       } else {
       	if (mbTime($this->_ref_sejour->sortie_prevue) > mbTime()) {
-      		$this->_can_leave_about = true;
+      		$this->_can_leave_since = true;
       		$this->_can_leave = mbTimeRelative(mbTime(), mbTime($this->_ref_sejour->sortie_prevue));
       	} else {
-      		$this->_can_leave_since = true;
+      		$this->_can_leave_about = true;
       		$this->_can_leave = mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
       	}
       	
