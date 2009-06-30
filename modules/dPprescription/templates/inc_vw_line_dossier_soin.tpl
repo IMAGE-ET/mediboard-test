@@ -20,7 +20,7 @@
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
 {{/if}}
 
-<tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise}}">
+<tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
   {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
     {{if $line_class == "CPrescriptionLineMedicament"}}
       {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
@@ -40,7 +40,7 @@
   			{{else}}
   			  Aucune transmission
   			{{/if}}
-		  </div>
+		    </div>
 		  
 	      {{if $line->_ref_produit->_ref_fiches_ATC}}
 	        <img src="images/icons/search.png" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$_key_cat_ATC}}")' />

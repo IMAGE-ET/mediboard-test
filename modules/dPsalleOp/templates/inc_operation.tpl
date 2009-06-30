@@ -74,6 +74,9 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 			    first_td.show();
 	      }
 	      
+	      unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
+	      //unite_prise = unite_prise.replace(/\(/g, '_').replace(/\)/g, '_').replace(/\//g, '_').replace(/ /g, '');
+	      	      
 				url.requestUpdate(first_td, {
 				                  waitingText: null, 
 													insertion: Insertion.After,

@@ -179,6 +179,9 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 			    td.next().remove();
 			    first_td.show();
 	      }
+	      //unite_prise = unite_prise.replace(/\(/g, '_').replace(/\)/g, '_').replace(/\//g, '_').replace(/ /g, '').replace(/./g, '_');
+	      unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
+
 	      url.requestUpdate(first_td, {
 				                  waitingText: null, 
 													insertion: Insertion.After,
