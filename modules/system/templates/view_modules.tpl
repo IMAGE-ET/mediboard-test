@@ -17,40 +17,6 @@
   {{assign var=mbmodules value=$coreModules}}
 {{/if}}
 
-<script type="text/javascript">
-
-var Templates = {
-  id: "Templates",
-  
-  empty: function() {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_do_empty_templates");
-    url.requestUpdate(this.id);
-  }
-}
-
-var SharedMemory = {
-  id : "SharedMemory", 
-  
-  empty: function(ie) {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_do_empty_shared_memory");
-    url.requestUpdate(this.id);
-  },
-  
-  check: function(ie) {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_check_shared_memory");
-    url.requestUpdate(this.id);
-  }
-}
-
-Main.add(function () {
-  SharedMemory.check("SharedMemory");
-});
-
-</script>
-
 <h2>Administration des modules</h2>
 
 <table class="tbl">
@@ -146,8 +112,9 @@ Main.add(function () {
     </td>
 
     <td style="text-align: center; width: 1%;">
-      <input type="checkbox" {{if $can->edit}}onclick="location.href='{{$cmd}}=toggleMenu'"{{/if}} 
-      {{if $mbmodule->mod_ui_active}}checked="checked"{{/if}}  />
+      <input type="checkbox" {{if $can->edit && $mbmodule->mod_active}}onclick="location.href='{{$cmd}}=toggleMenu'"{{/if}} 
+      {{if $mbmodule->mod_ui_active}}checked="checked"{{/if}}
+      {{if !$mbmodule->mod_active}}disabled="disabled"{{/if}}  />
     </td>
     
     <td style="text-align: right; width: 1%;">
@@ -166,6 +133,40 @@ Main.add(function () {
 </table>
 
 <h2>Nettoyage du cache</h2>
+
+<script type="text/javascript">
+
+var Templates = {
+  id: "Templates",
+  
+  empty: function() {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_do_empty_templates");
+    url.requestUpdate(this.id);
+  }
+}
+
+var SharedMemory = {
+  id : "SharedMemory", 
+  
+  empty: function(ie) {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_do_empty_shared_memory");
+    url.requestUpdate(this.id);
+  },
+  
+  check: function(ie) {
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_check_shared_memory");
+    url.requestUpdate(this.id);
+  }
+}
+
+Main.add(function () {
+  SharedMemory.check("SharedMemory");
+});
+
+</script>
 
 <table class="tbl">
   <tr>
