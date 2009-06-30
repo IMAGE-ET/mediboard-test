@@ -270,7 +270,8 @@ td#mainHeader td.welcome {
 }
 
 #leftMenu #menubar #menuTools a#toggleIcons {
-  margin-top: 2px;
+  position: absolute;
+  margin-top: 23px;
 }
 
 #leftMenu #menubar.iconed #menuTools a#toggleIcons {

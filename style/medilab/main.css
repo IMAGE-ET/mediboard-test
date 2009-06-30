@@ -287,6 +287,8 @@ td#mainHeader td.welcome {
 }
 #leftMenu #menubar.iconed #menuTools a#toggleIcons {
   background: url(./images/icons/action_up.png);
+  position: absolute;
+  margin-top: 23px;
 }
 
 #leftMenu #menubar.uniconed #menuTools a#toggleIcons {
