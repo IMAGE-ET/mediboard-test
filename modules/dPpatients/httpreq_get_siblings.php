@@ -33,11 +33,9 @@ $patientMatch->nom        = $nom;
 $patientMatch->prenom     = $prenom; 
 $patientMatch->naissance  = $naissance;
 
-
+$textMatching = $textSiblings = '';
 
 if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons" ) {
-	$textMatching = $textSiblings = null;
-	
   if($patientMatch->loadMatchingPatient(true) > 0) {
     $textMatching = "Doublons détectés.";
     $textMatching .= "\nVous ne pouvez pas sauvegarder le patient.";
