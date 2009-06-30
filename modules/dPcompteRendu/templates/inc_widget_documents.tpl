@@ -72,78 +72,81 @@
 
 </form>
 
-{{if $object->_ref_documents|@count && $mode != "hide"}}
+{{assign var=doc_count value=$object->_ref_documents|@count}}
+{{if $mode != "hide"}}
 <table class="tbl">
+  
+  {{if $doc_count && $mode == "collapse"}}
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="3">
     	{{tr}}{{$object->_class_name}}{{/tr}} :
-    	{{$object->_ref_documents|@count}} document(s)
+    	{{$doc_count}} document(s)
+
+		  <script type="text/javascript">
+		    Main.add(function () {
+		      new PairEffect("DocsEffect-{{$object->_guid}}", { 
+		        bStoreInCookie: true
+		      });
+		    });
+		  </script>
     </th>
   </tr>
-  
-  {{if $mode == "collapse"}}
-    <script type="text/javascript">
-      Main.add(function () {
-        new PairEffect("DocsEffect-{{$object->_guid}}", { 
-          bStoreInCookie: true
-        });
-      });
-    </script>
-    <tbody id="DocsEffect-{{$object->_guid}}" style="display:none;">
-  {{else}}
-    <tbody>
   {{/if}}
+
+  <tbody id="DocsEffect-{{$object->_guid}}" {{if $mode == "collapse" && $doc_count}}style="display: none;"{{/if}}>
   
-	  {{foreach from=$object->_ref_documents item=document}}
-	  <tr>
-	    <td class="text">
-		    <form name="DocumentEdit-{{$document->_id}}" action="?m={{$m}}" method="post">
-		    <input type="hidden" name="m" value="dPcompteRendu" />
-		    <input type="hidden" name="del" value="0" />
-		    <input type="hidden" name="dosql" value="do_modele_aed" />
-		    <input type="hidden" name="object_id" value="{{$object_id}}" />
-		    <input type="hidden" name="object_class" value="{{$object_class}}" />
+  {{foreach from=$object->_ref_documents item=document}}
+  <tr>
+    <td class="text">
+	    <a href="#" class="tooltip-trigger" onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
+	      {{$document}}
+	    </a>
+	  </td>
+	  
+	  <td class="button" style="width: 1px">
+	    <form name="Edit-{{$document->_guid}}" action="?m={{$m}}" method="post">
 
-		    {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-		    </form>
-		    <a href="#" class="tooltip-trigger" onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
-		      {{$document}}
-		    </a>
-		  </td>
-		  
-		  <td class="button" style="width: 1px">
-		    <button class="trash notext" onclick="Document.del(document.forms['DocumentEdit-{{$document->_id}}'], '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
-		    	{{tr}}Delete{{/tr}}
-		    </button>
-		    
-  	  </td> 
-  	  <td class="button" style="width: 1px">
-  	   <form name="editDoc{{$document->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-			   <input type="hidden" name="m" value="dPcompteRendu" />
-			   <input type="hidden" name="dosql" value="do_modele_aed" />
-			   <input type="hidden" name="compte_rendu_id" value="{{$document->_id}}" />
-			   <input type="hidden" name="del" value="0" />
-         
-         <!-- Send File -->
-				 {{mb_include module=dPfiles template=inc_file_send_button 
-				 		_doc_item=$document
-				 		notext=""
-				 		onComplete="Document.refreshList('$object_class','$object_id')"
-				 }}
-        </form>
-  	  </td> 
-		</tr>
-	  {{foreachelse}}
-	  <tr>
-	    <td>
-	      <em>
-	      	{{tr}}{{$object->_class_name}}{{/tr}} :
-	      	Aucun document
-	      </em>
-	    </td>
-	  </tr>
-	  {{/foreach}}
+	    <input type="hidden" name="m" value="dPcompteRendu" />
+	    <input type="hidden" name="del" value="0" />
+	    <input type="hidden" name="dosql" value="do_modele_aed" />
+	    {{mb_key object=$document}}
+	    <input type="hidden" name="object_id" value="{{$object_id}}" />
+	    <input type="hidden" name="object_class" value="{{$object_class}}" />
+	    
+	    <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
+	    	{{tr}}Delete{{/tr}}
+	    </button>
 
-	</tbody>
+	    </form>
+	    
+ 	  </td> 
+
+ 	  <td class="button" style="width: 1px">
+ 	    <form name="Send-{{$document->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+	   
+	    <input type="hidden" name="m" value="dPcompteRendu" />
+	    <input type="hidden" name="dosql" value="do_modele_aed" />
+	    <input type="hidden" name="del" value="0" />
+      {{mb_key object=$document}}
+    
+      <!-- Send File -->
+		  {{mb_include module=dPfiles template=inc_file_send_button 
+	 	 		_doc_item=$document
+		 		notext=notext
+		 		onComplete="Document.refreshList('$object_class','$object_id')"
+	 	  }}
+      </form>
+ 	  </td> 
+	</tr>
+  {{foreachelse}}
+  <tr>
+    <td>
+      <em>
+      	{{tr}}{{$object->_class_name}}{{/tr}} :
+      	Aucun document
+      </em>
+    </td>
+  </tr>
+  {{/foreach}}
 </table>
 {{/if}}

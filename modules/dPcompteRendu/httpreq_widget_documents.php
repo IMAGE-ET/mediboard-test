@@ -64,7 +64,7 @@ $smarty->assign("packs"         , $packs);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("object"        , $object);
 $smarty->assign("mode"          , mbGetValueFromGet("mode"));
-$smarty->assign("notext"        , "");
+$smarty->assign("notext"        , "notext");
 $smarty->display("inc_widget_documents.tpl");
 
 ?>
