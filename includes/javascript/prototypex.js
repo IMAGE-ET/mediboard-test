@@ -153,6 +153,18 @@ Element.addMethods(['input', 'textarea'], {
   }
 });
 
+Element.addMethods('select', {
+  sortByLabel: function(element){
+    var sortedOptions = element.childElements().sortBy(function(o){
+      return o.text;
+    });
+    element.update();
+    sortedOptions.each(function(o){
+      element.insert(o);
+    });
+  }
+});
+
 Object.extend(Event, {
   key: function(e){
     return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
