@@ -165,7 +165,7 @@ Main.add(function() {
 	</tr>
   <tr>
     <th>{{mb_label object=$patient field="profession"}}</th>
-    <td>{{mb_field object=$patient field="profession" onchange="copyIdentiteAssureValues(this)"}}</td>
+    <td>{{mb_field object=$patient field="profession" form=editFrm onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
   <tr>
     <th>{{mb_label object=$patient field="matricule"}}</th>

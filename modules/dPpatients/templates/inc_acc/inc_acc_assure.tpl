@@ -76,7 +76,7 @@
   </tr>
 	<tr>
     <th>{{mb_label object=$patient field="assure_profession"}}</th>
-    <td>{{mb_field object=$patient field="assure_profession"}}</td>
+    <td>{{mb_field object=$patient field="assure_profession" form=editFrm}}</td>
 	</tr>
 	<tr>
     <th>{{mb_label object=$patient field="assure_matricule"}}</th>

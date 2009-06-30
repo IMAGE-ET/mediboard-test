@@ -217,7 +217,7 @@ class CPatient extends CMbObject {
     $specs["cmu"]               = "bool";
     $specs["ald"]               = "bool";
     $specs["code_exo"]          = "enum list|0|4|5|9 default|0";
-    $specs["libelle_exo"]		= "text";
+    $specs["libelle_exo"]		    = "text";
     $specs["deb_amo"]           = "date";
     $specs["fin_amo"]           = "date";
     $specs["notes_amo"]         = "text";
@@ -233,7 +233,7 @@ class CPatient extends CMbObject {
     $specs["lieu_naissance"]       = "str";
     $specs["cp_naissance"]         = "str";
     $specs["pays_naissance_insee"] = "str";
-    $specs["profession"]           = "str";
+    $specs["profession"]           = "str autocomplete";
       
     $specs["employeur_nom"]     = "str confidential";
     $specs["employeur_adresse"] = "text";
@@ -271,7 +271,7 @@ class CPatient extends CMbObject {
     $specs["assure_lieu_naissance"]       = "str";
     $specs["assure_cp_naissance"]         = "str";
     $specs["assure_pays_naissance_insee"] = "str";
-    $specs["assure_profession"]           = "str";
+    $specs["assure_profession"]           = "str autocomplete";
     $specs["assure_rques"]                = "text";
     $specs["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
     

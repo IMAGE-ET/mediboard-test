@@ -193,10 +193,10 @@ Main.add(function () {
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         {{/if}}
         
-        <div id="identite" style="display: none;">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
-        <div id="beneficiaire" style="display: none;">{{include file="inc_acc/inc_acc_beneficiaire.tpl"}}</div>
+        <div id="identite"       style="display: none;">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
+        <div id="beneficiaire"   style="display: none;">{{include file="inc_acc/inc_acc_beneficiaire.tpl"}}</div>
         <div id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
-        <div id="assure" style="display: none;">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
+        <div id="assure"         style="display: none;">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
       </form>
       
       <div id="medecins" style="display: none;">{{include file="inc_acc/inc_acc_medecins.tpl"}}</div>
