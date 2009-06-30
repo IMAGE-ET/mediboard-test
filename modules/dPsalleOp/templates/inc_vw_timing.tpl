@@ -7,7 +7,7 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="3">Timing</th>
+    <th class="category" colspan="3">Horodatage</th>
   </tr>
 
 	{{assign var=submit value=submitTiming}}

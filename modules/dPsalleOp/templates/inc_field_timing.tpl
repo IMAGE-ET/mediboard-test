@@ -11,7 +11,9 @@
     {{mb_label object=$object field=$field}}
     {{if $can->edit}}
       {{mb_field object=$object field=$field form=$form onchange="$submit(this.form);"}}
+<!-- 
       <button type="button" class="tick notext" onclick="{{$submit}}(this.form);">{{tr}}Save{{/tr}}</button>
+  -->
     {{elseif $modif_operation}}
       <select name="{{$field}}" onchange="{{$submit}}(this.form);">
         <option value="">-</option>
