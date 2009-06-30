@@ -38,7 +38,7 @@ foreach($rpus as $_rpu_id) {
         $listRpu[$_rpu_id]["value"] = CAppUI::tr("CRPU-_can_leave_about")." ";
       }
 			
-			$listRpu[$_rpu_id]["value"] .= mbTransformTime($rpu->_can_leave, null, "%Hh%M"). "<br />".$_sortie_autorisee;
+			$listRpu[$_rpu_id]["value"] .= "<span title='".$rpu->_ref_sejour->sortie_prevue."'>".mbTransformTime($rpu->_can_leave, null, "%Hh%M"). "</span><br />".$_sortie_autorisee;
 		}
 	}
 	$listRpu[$_rpu_id]["value"] = utf8_encode($listRpu[$_rpu_id]["value"]);

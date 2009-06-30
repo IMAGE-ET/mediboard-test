@@ -295,11 +295,7 @@ function submitSejour(){
         
       {{elseif $rpu->_can_leave == -1}}
         {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
-        {{if $rpu->sortie_autorisee}}
-          {{tr}}CRPU-sortie_assuree.1{{/tr}}
-        {{else}}
-          {{tr}}CRPU-sortie_assuree.0{{/tr}}
-        {{/if}}
+        {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
       {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
         {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
         {{tr}}CRPU-sortie_assuree.0{{/tr}}
@@ -310,12 +306,8 @@ function submitSejour(){
         {{if $rpu->_can_leave_about}}
           {{tr}}CRPU-_can_leave_about{{/tr}}
         {{/if}}
-        {{mb_value object=$rpu field="_can_leave"}}<br />
-        {{if $rpu->sortie_autorisee}}
-          {{tr}}CRPU-sortie_assuree.1{{/tr}}
-        {{else}}
-          {{tr}}CRPU-sortie_assuree.0{{/tr}}
-        {{/if}}
+        <span title="{{$sejour->sortie_prevue}}">{{mb_value object=$rpu field="_can_leave"}}</span><br />
+        {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
       {{/if}}
     </td>
     {{/if}}
