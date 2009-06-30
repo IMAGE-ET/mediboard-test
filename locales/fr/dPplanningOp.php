@@ -859,4 +859,8 @@ $locales['COperation-_password_visite_anesth'] = 'Mot de passe';
 $locales['COperation-_password_visite_anesth-desc'] = 'Signature par saisie du mot de passe';
 $locales['COperation-date_visite_anesth'] = 'Date';
 $locales['COperation-date_visite_anesth-desc'] = 'Date de la visite de pré-anesthésie';
+$locales['pref-dPplanningOp_listeCompacte'] = 'Planning chirugical compact';
+$locales['pref-dPplanningOp_listeCompacte-desc'] = 'N\'affiche pas le libellé le des actes CCAM';
+$locales['pref-dPplanningOp_listeCompacte-info1'] = 'Pour plus de concision et une meilleure lisibilité, les libellés longs des actes CCAM sont désormais accessible au survol des codes';
+$locales['pref-dPplanningOp_listeCompacte-info2'] = 'Il est toutefois possible de revenir à l\'ancien affichage en modifiant vos Préférences, section "Planif. Séjour".';
 ?>

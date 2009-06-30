@@ -859,4 +859,8 @@ $locales['COperation-_password_visite_anesth'] = '';
 $locales['COperation-_password_visite_anesth-desc'] = '';
 $locales['COperation-date_visite_anesth'] = '';
 $locales['COperation-date_visite_anesth-desc'] = '';
+$locales['pref-dPplanningOp_listeCompacte'] = '';
+$locales['pref-dPplanningOp_listeCompacte-desc'] = '';
+$locales['pref-dPplanningOp_listeCompacte-info'] = '';
+$locales['pref-dPplanningOp_listeCompacte-info1'] = '';
 ?>

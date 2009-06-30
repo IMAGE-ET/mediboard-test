@@ -47,7 +47,7 @@ if($user_id !== null){
 $prefsUser = array();
 
 // Préférences Globales
-$array_list_pref_generale = array (
+$array_list_pref_common = array (
   "LOCALE",
   "UISTYLE",
   "MenuPosition",
@@ -56,11 +56,11 @@ $array_list_pref_generale = array (
   "tooltipAppearenceTimeout"
 );
 
-foreach ($array_list_pref_generale as $namePref){
+foreach ($array_list_pref_common as $namePref){
   if (!array_key_exists($namePref,$prefs)) {
     $prefs[$namePref] = null;
   }
-  $prefsUser["GENERALE"][$namePref] = $prefs[$namePref];
+  $prefsUser["common"][$namePref] = $prefs[$namePref];
 }
 
 // Préférences par Module
@@ -87,6 +87,7 @@ $array_list_module_pref = array (
   ),
   "dPplanningOp" => array (
     "mode_dhe",
+    "dPplanningOp_listeCompacte",
   ),
   "dPhospi" => array (
     "ccam_sejour",

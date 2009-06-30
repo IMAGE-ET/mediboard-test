@@ -11,6 +11,15 @@
   <input type="hidden" name="tab" value="vw_idx_planning" />
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 </form>
+
+{{/if}}
+
+{{if $app->user_prefs.dPplanningOp_listeCompacte}}
+<div class="small-info">
+	{{tr}}pref-dPplanningOp_listeCompacte-info1{{/tr}}
+	<br />
+	{{tr}}pref-dPplanningOp_listeCompacte-info2{{/tr}}
+</div>
 {{/if}}
 
 <table class="tbl" {{if $boardItem}}style="font-size: 9px;"{{/if}}>
@@ -31,7 +40,11 @@
   </tr>
   {{foreach from=$listDay item=curr_plage}}
   <tr>
-    <th colspan="6">{{$curr_plage->_ref_salle->nom}} : de {{$curr_plage->debut|date_format:$dPconfig.time}} à {{$curr_plage->fin|date_format:$dPconfig.time}}</th>
+    <th colspan="6">
+    	{{$curr_plage->_ref_salle->nom}} : 
+    	de {{$curr_plage->debut|date_format:$dPconfig.time}} 
+    	à {{$curr_plage->fin|date_format:$dPconfig.time}}
+    </th>
   </tr>
   
   {{foreach from=$curr_plage->_ref_operations item=curr_op}}
@@ -48,23 +61,29 @@
       </a>
     </td>
     
-    
     <td class="text">
-      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
+      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
         {{if $curr_op->libelle}}
           <em>[{{$curr_op->libelle}}]</em>
-          <br />
         {{/if}}
-        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        <strong>{{$curr_code->code}}</strong>
-        {{if !$board}}
-        : {{$curr_code->libelleLong}}
-        {{/if}}
-        {{if $boardItem}}
-        : {{$curr_code->libelleLong|truncate:50:"...":false}}
-        {{/if}}
-        <br />
-        {{/foreach}}
+
+	    	{{if $app->user_prefs.dPplanningOp_listeCompacte}}
+	        {{foreach from=$curr_op->_ext_codes_ccam item=_code name=codes}}
+	        <strong>{{$_code->code}}</strong>
+	        {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
+	        {{/foreach}}
+	      {{else}}
+	        {{foreach from=$curr_op->_ext_codes_ccam item=_code}}
+	        <br />
+	        <strong>{{$_code->code}}</strong>
+	        {{if !$board}}
+		        : {{$_code->libelleLong}}
+	        {{/if}}
+	        {{if $boardItem}}
+		        : {{$_code->libelleLong|truncate:50:"...":false}}
+	        {{/if}}
+	        {{/foreach}}
+	      {{/if}}
       </a>
     </td>
 
@@ -78,14 +97,16 @@
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
         {{if $curr_op->time_operation != "00:00:00"}}
           Validé pour 
-          <br/ >{{$curr_op->time_operation|date_format:$dPconfig.time}}
+          {{if !$app->user_prefs.dPplanningOp_listeCompacte}}<br />{{/if}}
+          {{$curr_op->time_operation|date_format:$dPconfig.time}}
         {{else}}
           Non validé
         {{/if}}
         <br />
         {{if $curr_op->horaire_voulu}}
         souhaité pour 
-        <br/>{{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
+        {{if !$app->user_prefs.dPplanningOp_listeCompacte}}<br />{{/if}}
+        {{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
         {{/if}}
       </a>
     </td>
@@ -116,6 +137,7 @@
     <th colspan="6">Hors plage</th>
   </tr>
   {{/if}}
+  
   {{foreach from=$listUrgences item=curr_op}}
   <tbody class="hoverable">
 
@@ -130,26 +152,38 @@
     </td>
     
     <td class="text">
-      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
+      <a href="?m={{$m}}&amp;tab=w_edit_urgence&amp;operation_id={{$curr_op->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
+      	{{if $curr_op->salle_id}}Déplacé en salle {{$curr_op->_ref_salle}}{{/if}}
         {{if $curr_op->libelle}}
           <em>[{{$curr_op->libelle}}]</em>
-          <br />
         {{/if}}
-        {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        <strong>{{$curr_code->code}}</strong>
-        {{if !$board}}
-        : {{$curr_code->libelleLong}}
-        {{/if}}
-        <br />
-        {{/foreach}}
+
+	    	{{if $app->user_prefs.dPplanningOp_listeCompacte}}
+	        {{foreach from=$curr_op->_ext_codes_ccam item=_code name=codes}}
+	        <strong>{{$_code->code}}</strong>
+	        {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
+	        {{/foreach}}
+	      {{else}}
+	        {{foreach from=$curr_op->_ext_codes_ccam item=_code}}
+	        <br />
+	        <strong>{{$_code->code}}</strong>
+	        {{if !$board}}
+		        : {{$_code->libelleLong}}
+	        {{/if}}
+	        {{if $boardItem}}
+		        : {{$_code->libelleLong|truncate:50:"...":false}}
+	        {{/if}}
+	        {{/foreach}}
+	      {{/if}}
       </a>
     </td>
+
     <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled"{{/if}}>
       {{if $curr_op->annulee}}
         [ANNULEE]
       {{else}}
       <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
+        {{mb_value object=$curr_op field=_datetime}}
       </a>
       {{/if}}
     </td>

@@ -790,7 +790,10 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`prat_visite_anesth_id`);";
     $this->addQuery($sql);
   
-    $this->mod_version = "0.94";
+    $this->makeRevision("0.94");
+    $this->addPrefQuery("dPplanningOp_listeCompacte", "1");
+    
+    $this->mod_version = "0.95";
   }
 }
 ?>

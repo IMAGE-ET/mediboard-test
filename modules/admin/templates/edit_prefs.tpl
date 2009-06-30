@@ -8,27 +8,56 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $tab && $can->edit && $user_id}}
+<a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="button edit">
+  Modifier les préférences par défaut
+</a>
+{{/if}}
+
+<table class="main">
+  <tr>
+    <td style="width: 0.1%">
+    
+<ul id="tab-modules" class="control_tabs_vertical" style="width: 20em;">
+  {{foreach from=$prefsUser key=module item=prefs}}
+  <li>
+  	<a href="#{{$module}}">
+	  	{{tr}}module-{{$module}}-court{{/tr}}
+	  	<small>({{$prefs|@count}})</small> 
+	  </a>
+	 </li>
+	{{/foreach}}
+</ul>
+
+<script type="text/javascript">
+Main.add(function () {
+  Control.Tabs.create('tab-modules', true);
+});
+</script>
+
+    </td><td>
+
 <form name="form-edit-preferences" action="?m=admin{{if !$ajax}}&amp;{{$actionType}}={{$action}}{{/if}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="m" value="admin" />
 <input type="hidden" name="pref_user" value="{{$user_id}}" />
 <input type="hidden" name="del" value="0" />
-
-{{if $tab && $can->edit && $user_id}}
-<a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="button edit">
-  Editer les préférences par défaut
-</a>
-{{/if}}
 
 <table class="form">
   <tr>
     <th colspan="2" class="title">
       {{tr}}User preferences{{/tr}} : {{if $user_id}}{{$user->_view}}{{else}}{{tr}}Default{{/tr}}{{/if}}
     </th>
+	</tr>
+	<tr>
+    <th class="category" style="width: 50%">Préférences</th>
+    <th class="category" style="width: 50%">Valeurs</th>
   </tr>
 
   <!-- Tous modules confondus -->
-  {{assign var="module" value="GENERALE"}}
+  {{assign var="module" value="common"}}
+	<tbody style="display: none" id="{{$module}}">
 
   {{assign var="var" value="LOCALE"}}
   <tr>
@@ -37,7 +66,7 @@
     </th>
     <td>
       <select name="pref_name[{{$var}}]" class="text" size="1">
-        {{foreach from=$locales|smarty:nodefaults item=currLocale key=keyLocale}}
+        {{foreach from=$locales item=currLocale key=keyLocale}}
         <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.$module.$var}}selected="selected"{{/if}}>
           {{tr}}language.{{$currLocale}}{{/tr}}
         </option>
@@ -55,7 +84,7 @@
     </th>
     <td>
       <select name="pref_name[{{$var}}]" class="text" size="1">
-        {{foreach from=$styles|smarty:nodefaults item=currStyles key=keyStyles}}
+        {{foreach from=$styles item=currStyles key=keyStyles}}
         <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.$module.$var}}selected="selected"{{/if}}>
           {{tr}}{{$currStyles}}{{/tr}}
         </option>
@@ -115,21 +144,21 @@
     </th>
     <td>
       <select name="pref_name[{{$var}}]">
-        <option value="short"{{if $prefsUser.$module.$var == "short"}}selected="selected"{{/if}}>{{tr}}Short{{/tr}}</option>
-        <option value="medium"{{if $prefsUser.$module.$var == "medium"}}selected="selected"{{/if}}>{{tr}}Medium{{/tr}}</option>
-        <option value="long"{{if $prefsUser.$module.$var == "long"}}selected="selected"{{/if}}>{{tr}}Long{{/tr}}</option>
+        <option value="short"  {{if $prefsUser.$module.$var == "short" }}selected="selected"{{/if}}>{{tr}}Short {{/tr}}</option>
+        <option value="medium" {{if $prefsUser.$module.$var == "medium"}}selected="selected"{{/if}}>{{tr}}Medium{{/tr}}</option>
+        <option value="long"   {{if $prefsUser.$module.$var == "long"  }}selected="selected"{{/if}}>{{tr}}Long  {{/tr}}</option>
       </select>
     </td>
   </tr>
   
+  </tbody>
+  
   {{assign var="module" value="dPpatients"}}
-  <!-- Préférences pour le module {{$module}} -->
   {{if $prefsUser.$module}}  
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
 
   {{assign var="var" value="DEPARTEMENT"}}
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
   <tr>
     <th>
       <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
@@ -138,16 +167,16 @@
       <input type="text" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" maxlength="3" size="4" class="num min|0 max|999"/>
     </td>
   </tr>
+
+	</tbody>
   {{/if}}
-  
+	  
   {{assign var="module" value="dPcabinet"}}
-  {{if $prefsUser.$module}}
+  {{if $prefsUser.$module}}  
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
   
   {{assign var="var" value="AFFCONSULT"}}
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
-
   <tr>
     <th>
       <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
@@ -330,15 +359,14 @@
     </td>
   </tr>
 
+	</tbody>
   {{/if}}
   
   {{assign var="module" value="dPcabinet"}}
-  {{if $prefsUser.$module}}
+  {{if $prefsUser.$module}}  
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
   
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}} - Anesth</th>
-  </tr>
-
   {{assign var="var" value="AUTOADDSIGN"}}
   <tr>
     <th>
@@ -351,13 +379,15 @@
       </select>
     </td>
   </tr>
+  
+  </tbody>
   {{/if}}
   
   {{assign var="module" value="dPcompteRendu"}}
-  {{if $prefsUser.$module}}
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
+  {{if $prefsUser.$module}}  
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+
   {{assign var="var" value="saveOnPrint"}}
   <tr>
     <th>
@@ -371,13 +401,15 @@
       </select>
     </td>
   </tr>
+  
+  </tbody>
   {{/if}}
   
   {{assign var="module" value="dPhospi"}}
-  {{if $prefsUser.$module}}
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
+  {{if $prefsUser.$module}}  
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+  
   {{assign var="var" value="ccam_sejour"}}
   <tr>
     <th>
@@ -390,13 +422,14 @@
       </select>
     </td>
   </tr>
+  
+  </tbody>
   {{/if}}
 
   {{assign var="module" value="system"}}
   {{if $prefsUser.$module}}  
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
 
   {{assign var="var" value="INFOSYSTEM"}}
   <tr>
@@ -413,10 +446,8 @@
   {{/if}}
   
   {{assign var="module" value="dPplanningOp"}}
+	<tbody style="display: none" id="{{$module}}">
   {{if $prefsUser.$module}}  
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
 
   {{assign var="var" value="mode_dhe"}}
   <tr>
@@ -430,13 +461,27 @@
       </select>
     </td>
   </tr>
+  
+  {{assign var="var" value="dPplanningOp_listeCompacte"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
+  </tbody>
   {{/if}}
   
   {{assign var="module" value="dPprescription"}}
   {{if $prefsUser.$module}}  
-  <tr>
-    <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
-  </tr>
+	<tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
 
   {{assign var="var" value="mode_readonly"}}
   <tr>
@@ -450,6 +495,8 @@
       </select>
     </td>
   </tr>
+
+  </tbody>
   {{/if}}
   
   <tr>
@@ -457,5 +504,11 @@
       <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
+  
 </table>
+
 </form>
+    
+    </td>
+  </tr>
+</table>
