@@ -92,7 +92,7 @@ class CAideSaisie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_view = $this->text;
+    $this->_view = $this->name;
     
     // Owner
     if ($this->user_id    ) $this->_owner = "user";
