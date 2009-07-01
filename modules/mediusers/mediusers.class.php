@@ -19,6 +19,7 @@ class CMediusers extends CMbObject {
   // DB Fields
   var $remote        = null;
   var $adeli         = null;
+  var $rpps          = null;
   var $titres        = null;
   var $commentaires  = null;
   var $actif         = null;
@@ -91,7 +92,8 @@ class CMediusers extends CMbObject {
     $specs["user_id"]          = "ref class|CUser seekable";
     
     $specs["remote"]           = "bool default|1";
-    $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9";
+    $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
+    $specs["rpps"]             = "numchar length|11 confidential mask|99999999999 control|luhn";
     $specs["function_id"]      = "ref notNull class|CFunctions seekable";
     $specs["discipline_id"]    = "ref class|CDiscipline";
     $specs["titres"]           = "text";
@@ -710,6 +712,7 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - spécialité", $this->_ref_discipline->_view);
     $template->addProperty("Praticien - titres"    , $this->titres);
     $template->addProperty("Praticien - ADELI"     , $this->adeli);
+    $template->addProperty("Praticien - RPPS"      , $this->rpps);
   }
   
   /**

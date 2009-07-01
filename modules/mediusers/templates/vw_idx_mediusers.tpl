@@ -12,6 +12,11 @@ function loadProfil(type){
   });  
 }
 
+function showPratInfo(type) {
+	// Type de la classe admin 
+	$('show_prat_info').setVisible(type == 3 || type == 4 || type == 13);
+}
+
 var Functions = {
   collapse: function() {
   	$$("tbody.functionEffect").each(Element.hide);
@@ -31,6 +36,7 @@ var Functions = {
 
 {{if $mediuserSel->_id}}
 Main.add(function () {
+	showPratInfo("{{$mediuserSel->_user_type}}");
   loadProfil("{{$mediuserSel->_user_type}}");
 });
 {{/if}}
@@ -157,11 +163,9 @@ function changeRemote(o) {
         <tr>
           {{if $mediuserSel->_id}}
           <th class="title modify" colspan="2">
-            <div class="idsante400" id="CMediusers-{{$mediuserSel->_id}}"></div>
-            
-            <a style="float:right;" href="#" onclick="view_log('CMediusers',{{$mediuserSel->user_id}})">
-              <img src="images/icons/history.gif" alt="historique" title="historique"/>
-            </a>
+          
+            {{mb_include module=system template=inc_object_idsante400 object=$mediuserSel}}
+            {{mb_include module=system template=inc_object_history object=$mediuserSel}}
             
 						{{tr}}CMediusers-title-modify{{/tr}} 
 						'{{$mediuserSel->_user_username}}'
@@ -169,7 +173,6 @@ function changeRemote(o) {
 						
           {{else}}
           <th class="title" colspan="2">
-            <input type="hidden" name="_user_type" value="0" />
             {{tr}}CMediusers-title-create{{/tr}}
           </th>
           {{/if}}
@@ -237,36 +240,11 @@ function changeRemote(o) {
             </select>
           </td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="discipline_id"}}</th>
-          <td>
-            <select name="discipline_id" style="width: 150px;" class="{{$mediuserSel->_props.discipline_id}}">
-              <option value="">&mdash; Choisir une spécialité</option>
-              {{foreach from=$disciplines item=curr_discipline}}
-              <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $mediuserSel->discipline_id}} selected="selected" {{/if}}>
-                {{$curr_discipline->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="spec_cpam_id"}}</th>
-          <td>
-            <select name="spec_cpam_id" style="width: 150px;" class="{{$mediuserSel->_props.spec_cpam_id}}">
-              <option value="">&mdash; Choisir une spécialité</option>
-              {{foreach from=$spec_cpam item=curr_spec}}
-              <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $mediuserSel->spec_cpam_id}} selected="selected" {{/if}}>
-                {{$curr_spec->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
+        
         <tr>
         <th>{{mb_label object=$mediuserSel field="_user_type"}}</th>
           <td>
-            <select name="_user_type"  style="width: 150px;" class="{{$mediuserSel->_props._user_type}}" onchange="loadProfil(this.value)">
+            <select name="_user_type"  style="width: 150px;" class="{{$mediuserSel->_props._user_type}}" onchange="showPratInfo(this.value); loadProfil(this.value)">
             {{foreach from=$utypes key=curr_key item=type}}
               <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
             {{/foreach}}
@@ -313,16 +291,8 @@ function changeRemote(o) {
           </td>
         </tr>
         {{/if}}
-
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="adeli"}}</th>
-          <td>{{mb_field object=$mediuserSel field="adeli"}}</td>
-        </tr>
         
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="titres"}}</th>
-          <td>{{mb_field object=$mediuserSel field="titres"}}</td>
-        </tr>
+        
         
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_email"}}</th>
@@ -338,6 +308,12 @@ function changeRemote(o) {
           <th>{{mb_label object=$mediuserSel field="commentaires"}}</th>
           <td>{{mb_field object=$mediuserSel field="commentaires"}}</td>
         </tr>
+        
+        <tbody id="show_prat_info" style="display:none">
+        
+          {{include file="inc_infos_praticien.tpl" object=$mediuserSel}}
+                   
+        </tbody>
         
         <tr>
           <td class="button" colspan="2">

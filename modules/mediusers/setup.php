@@ -420,7 +420,20 @@ class CSetupmediusers extends CSetup {
              ADD INDEX (`user_id`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.30";
+     $this->makeRevision("0.30");
+     
+     $sql = "ALTER TABLE `users_mediboard` 
+						   ADD `rpps` BIGINT (11) UNSIGNED ZEROFILL AFTER `adeli`;";
+     $this->addQuery($sql);
+     
+     $sql = "ALTER TABLE `users_mediboard` 
+							 ADD INDEX (`deb_activite`),
+							 ADD INDEX (`fin_activite`),
+							 ADD INDEX (`banque_id`),
+							 ADD INDEX (`spec_cpam_id`);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.31";
   }
 }
 ?>

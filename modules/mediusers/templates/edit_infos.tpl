@@ -41,40 +41,14 @@ Main.add(function () {
           <th>{{mb_label object=$user field="_user_first_name"}}</th>
           <td>{{mb_field object=$user field="_user_first_name"}}</td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$user field="discipline_id"}}</th>
-          <td>
-            <select name="discipline_id" class="{{$user->_props.discipline_id}}">
-              <option value="">&mdash; Choisir une spécialité &mdash;</option>
-              {{foreach from=$disciplines item=curr_discipline}}
-              <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $user->discipline_id}} selected="selected" {{/if}}>
-                {{$curr_discipline->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$user field="spec_cpam_id"}}</th>
-          <td>
-            <select name="spec_cpam_id" class="{{$user->_props.spec_cpam_id}}">
-              <option value="">&mdash; Choisir une spécialité &mdash;</option>
-              {{foreach from=$spec_cpam item=curr_spec}}
-              <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $user->spec_cpam_id}} selected="selected" {{/if}}>
-                {{$curr_spec->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$user field="adeli"}}</th>
-          <td>{{mb_field object=$user field="adeli"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$user field="titres"}}</th>
-          <td>{{mb_field object=$user field="titres"}}</td>
-        </tr>
+        
+        <tbody {{if ($user->_user_type != 3) && ($user->_user_type != 4) && ($user->_user_type != 13)}}style="display:none"{{/if}}>
+        
+          {{include file="inc_infos_praticien.tpl" object=$user}}     
+          
+        </tbody>
+        
+        
         <tr>
           <th>{{mb_label object=$user field="compte"}}</th>
           <td>{{mb_field object=$user field="compte"}}</td>
