@@ -12,6 +12,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 CAppUI::requireSystemClass("fieldSpecs/numSpec");
 
 class CNumcharSpec extends CNumSpec {
+  var $control = null;
   
   function getSpecType() {
     return("numchar");
@@ -37,6 +38,39 @@ class CNumcharSpec extends CNumSpec {
     }
     return $type_sql;
   }
+  
+  function getOptions(){
+    return parent::getOptions() + array(
+      'control'    => 'str',
+    );
+  }
+ 
+  function checkProperty($object){
+    $propValue = $object->{$this->fieldName};
+        
+    // control
+    if($this->control){
+    	// Luhn control
+    	if($this->control == "luhn") {
+	    	if (!$this->checkLuhn($propValue)) {
+	        return "La clé est incorrect.";
+	      }
+    	}
+    }
+    
+    return null;
+  }
+  
+  //Returns True if it's a valid Luhn number.
+  function checkLuhn($number) {
+   $split = array_reverse(str_split($number));
+   for($i=1;$i<=count($split);$i+=2) {
+     if(isset($split[$i])) 
+       $split[$i] = array_sum(str_split($split[$i]*2));
+   }
+   return (array_sum($split) % 10) ? FALSE : TRUE;
+}
+  
 }
 
 ?>
