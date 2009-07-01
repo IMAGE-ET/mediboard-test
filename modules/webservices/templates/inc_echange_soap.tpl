@@ -52,5 +52,5 @@
   <td>{{mb_value object=$object field="web_service_name"}}</td>
   <td>{{mb_value object=$object field="function_name"}}</td>
   <td>{{if $object->input}}Oui{{else}}Non{{/if}}</td>
-  <td>{{if $object->output}}Oui{{else}}Non{{/if}}</td>
+  <td {{if $object->soapfault}}class="error"{{/if}}>{{if $object->output}}Oui{{else}}Non{{/if}}</td>
 </tr>

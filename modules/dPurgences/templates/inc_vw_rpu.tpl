@@ -319,7 +319,7 @@ function initFields(mode_sortie){
       </form>
       
       <span id="div_sortie_prevue">
-        {{include file="inc_sortie_prevue.tpl"}}
+        {{include file="../../dPurgences/templates/inc_sortie_prevue.tpl"}}
       </span>
 	  </td>
 	</tr>

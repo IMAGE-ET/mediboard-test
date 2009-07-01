@@ -597,6 +597,10 @@ $dPconfig["sip"] = array (
   "batch_count" => "10",
 );
 
+$dPconfig["webservices"] = array (
+  "connection_timeout" => 5,
+);
+
 // Inclusion des fichiers de config de chaque modules
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {

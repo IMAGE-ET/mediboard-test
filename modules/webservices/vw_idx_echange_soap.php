@@ -32,7 +32,9 @@ if($echange_soap->_id) {
   $echange_soap->loadRefs(); 
     
   $echange_soap->input  = unserialize($echange_soap->input);
-  $echange_soap->output = unserialize($echange_soap->output);
+  if($echange_soap->soapfault != 1) {
+  	$echange_soap->output = unserialize($echange_soap->output);
+  }
 }
 
 // Récupération de la liste des echanges SOAP

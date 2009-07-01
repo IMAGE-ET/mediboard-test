@@ -15,7 +15,7 @@ class CMbSOAPClient extends SoapClient {
 	var $wsdl              = null;
 	var $type_echange_soap = null;
 	
-  function __construct($rooturl, $type = null, $options = null) {
+  function __construct($rooturl, $type = null, $options = array()) {
   	$this->wsdl = $rooturl;
   	
   	if ($type) {
@@ -30,8 +30,8 @@ class CMbSOAPClient extends SoapClient {
       trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
       return;
     }
-    
-    parent::__construct($this->wsdl, $options ? $options : array());
+        
+    parent::__construct($this->wsdl, $options + array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
   }
   
   public function __call($function_name, $arguments) {
@@ -51,9 +51,19 @@ class CMbSOAPClient extends SoapClient {
   	
   	$echange_soap->function_name = $function_name;
   	$echange_soap->input = serialize($arguments);
-  	$output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
-  	$echange_soap->output = serialize($output);
-  	$echange_soap->store();
+  	try {
+  	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
+  	} catch(SoapFault $fault) {
+  		$output = $echange_soap->output = $fault->faultstring;
+  		$echange_soap->soapfault = 1;
+      trigger_error($fault->faultstring, E_USER_ERROR);
+    }
+    
+    if ($echange_soap->soapfault != 1) {
+    	$echange_soap->output = serialize($output);
+    }
+
+    $echange_soap->store();
   	
   	return $output;
   }
