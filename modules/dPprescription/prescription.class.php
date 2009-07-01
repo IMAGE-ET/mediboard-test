@@ -698,7 +698,11 @@ class CPrescription extends CMbObject {
    */
   function loadRefPatient(){
     $this->_ref_patient = new CPatient();
-    $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->patient_id);	
+    if($this->object_class == "CDossierMedical"){
+      $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->object_id);	
+    } else {
+      $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->patient_id);	
+    }
   }
   
   /*
