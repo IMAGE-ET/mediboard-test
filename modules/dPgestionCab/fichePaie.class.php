@@ -31,6 +31,7 @@ class CFichePaie extends CMbObject {
   
   // Forms Fields
   var $_salaire_base = null;
+  var $_base_heures_sup = null;
   var $_salaire_heures_comp = null;
   var $_salaire_heures_sup  = null;
   var $_total_heures = null;
@@ -39,6 +40,9 @@ class CFichePaie extends CMbObject {
   var $_conges_payes = null;
   var $_salaire_brut = null;
   var $_base_csg = null;
+  var $_base_csgnis = null;
+  var $_base_csgds = null;
+  var $_base_csgnds = null;
   var $_csgnis  = null; // CSG non imposable salariale
   var $_csgds   = null; // CSG déductible salariale
   var $_csgnds  = null; // CSG non déductible salariale
@@ -56,11 +60,17 @@ class CFichePaie extends CMbObject {
   var $_acp     = null; // assurance chomage patronale
   var $_aatp    = null; // assurance accident de travail patronale
   var $_csp     = null; // contribution solidarité patronale
-  var $_reduc_bas_salaires = null;
-  var $_total_retenues     = null;
-  var $_total_cot_patr     = null;
-  var $_salaire_a_payer    = null;
-  var $_salaire_net        = null;
+  var $_reduc_heures_sup_pat = null;
+  var $_reduc_heures_sup_sal = null;
+  var $_reduc_bas_salaires  = null;
+  var $_total_retenues      = null;
+  var $_total_cot_patr      = null;
+  var $_total_heures_sup    = null;
+  var $_salaire_a_payer     = null;
+  var $_salaire_net         = null;
+  
+  // Behaviour fields
+  var $_final_store = false;
 
 
   // Object References
@@ -87,6 +97,46 @@ class CFichePaie extends CMbObject {
     $specs["conges_payes"]   = "pct notNull";
     $specs["prime_speciale"] = "currency notNull min|0";
     $specs["final_file"]     = "html";
+    
+    $specs["_salaire_base"]         = "currency";
+    $specs["_base_heures_sup"]      = "currency";
+    $specs["_salaire_heures_comp"]  = "currency";
+    $specs["_salaire_heures_sup"]   = "currency";
+    $specs["_total_heures"]         = "currency";
+    $specs["_prime_precarite"]      = "currency";
+    $specs["_prime_anciennete"]     = "currency";
+    $specs["_conges_payes"]         = "currency";
+    $specs["_salaire_brut"]         = "currency";
+    $specs["_base_csg"]             = "currency";
+    $specs["_base_csgnis"]          = "currency";
+    $specs["_base_csgds"]           = "currency";
+    $specs["_base_csgnds"]          = "currency";
+    $specs["_csgnis"]               = "currency";
+    $specs["_csgds"]                = "currency";
+    $specs["_csgnds"]               = "currency";
+    $specs["_ssms"]                 = "currency";
+    $specs["_ssmp"]                 = "currency";
+    $specs["_ssvs"]                 = "currency";
+    $specs["_ssvp"]                 = "currency";
+    $specs["_rcs"]                  = "currency";
+    $specs["_rcp"]                  = "currency";
+    $specs["_agffs"]                = "currency";
+    $specs["_agffp"]                = "currency";
+    $specs["_aps"]                  = "currency";
+    $specs["_app"]                  = "currency";
+    $specs["_acs"]                  = "currency";
+    $specs["_acp"]                  = "currency";
+    $specs["_aatp"]                 = "currency";
+    $specs["_csp"]                  = "currency";
+    $specs["_reduc_heures_sup_pat"] = "currency";
+    $specs["_reduc_heures_sup_sal"] = "currency";
+    $specs["_reduc_bas_salaires"]   = "currency";
+    $specs["_total_retenues"]       = "currency";
+    $specs["_total_cot_patr"]       = "currency";
+    $specs["_total_heures_sup"]     = "currency";
+    $specs["_salaire_a_payer"]      = "currency";
+    $specs["_salaire_net"]          = "currency";
+    
     return $specs;
   }
   
@@ -104,7 +154,8 @@ class CFichePaie extends CMbObject {
       $this->_salaire_brut        = $this->_salaire_base;
       $this->_salaire_heures_comp = $this->salaire * $this->heures_comp;
       $this->_salaire_brut       += $this->_salaire_heures_comp;
-      $this->_salaire_heures_sup  = ($this->salaire * 1.25) * $this->heures_sup;
+      $this->_base_heures_sup     = $this->salaire * 1.25;
+      $this->_salaire_heures_sup  = $this->_base_heures_sup * $this->heures_sup;
       $this->_salaire_brut       += $this->_salaire_heures_sup;
       $this->_total_heures_sup    = $this->_salaire_heures_comp + $this->_salaire_heures_sup;
       $this->_prime_precarite     = ($this->precarite / 100) *
@@ -186,10 +237,27 @@ class CFichePaie extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_params_paie) {
+    if (!$this->_ref_params_paie) {
       $this->loadRefsFwd();
     }
+    
     return ($this->_ref_params_paie->getPerm($permType));
+  }
+  
+  function store() {
+    if ($this->_final_store) {
+      $this->loadRefsFwd();
+			$this->_ref_params_paie->loadRefsFwd();
+			
+			// Création du template
+			$smarty = new CSmartyDP();
+			$smarty->assign("fichePaie" , $this);
+			
+			$this->final_file = $smarty->fetch("print_fiche.tpl");
+			mbTrace($this->final_file);
+    }
+
+    return parent::store();
   }
 }
 

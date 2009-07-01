@@ -7,9 +7,11 @@
 * @author Romain Ollivier
 */
 
+mbTrace("Start");
 $do = new CDoObjectAddEdit("CFichePaie", "fiche_paie_id");
-$do->redirect  = null;
+$do->redirect = null;
 $do->doIt();
+mbTrace("End");
 
 $fichePaie = new CFichePaie();
 $fichePaie->load($do->_obj->_id);
@@ -21,6 +23,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("fichePaie" , $fichePaie);
 
 $fichePaie->final_file = $smarty->fetch("print_fiche.tpl");
-$fichePaie->store();
+mbTrace($fichePaie->store());
+CApp::rip();
 
 ?>

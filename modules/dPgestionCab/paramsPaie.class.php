@@ -51,7 +51,7 @@ class CParamsPaie extends CMbObject {
   var $matricule = null; // numéro de sécurité sociale
 
   // Object References
-  var $_ref_user = null;
+  var $_ref_employe = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -95,7 +95,7 @@ class CParamsPaie extends CMbObject {
     $specs["ville"]         = "str confidential";
     $specs["siret"]         = "numchar length|14 confidential";
     $specs["ape"]           = "str maxLength|6 confidential";
-    $specs["matricule"]     = "code insee confidential";
+    $specs["matricule"]     = "code insee confidential mask|9S99S99S9xS999S999S99";
     return $specs;
   }
 
@@ -106,10 +106,10 @@ class CParamsPaie extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_user) {
+    if (!$this->_ref_employe) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_user->getPerm($permType));
+    return ($this->_ref_employe->getPerm($permType));
   }
   
   function loadFromUser($employecab_id) {
