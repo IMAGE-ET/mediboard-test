@@ -130,6 +130,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $this->loadRefsPrises();
     $this->loadRefsTransmissions();
     $this->loadRefPraticien();
+    $this->loadRefPrescription();
+    $this->_ref_prescription->loadRefPatient();
+    $this->_ref_prescription->loadRefObject();
   }
   
   /*
