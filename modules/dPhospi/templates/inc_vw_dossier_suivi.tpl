@@ -76,7 +76,7 @@ Main.add(function () {
       Recherche
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 	      <input name="cible" type="text" value="" />
-	      <div style="display:none; width: 350px;" class="autocomplete" id="cible_auto_complete"></div>
+	      <div style="display:none; width: 350px; white-space: normal;" class="autocomplete" id="cible_auto_complete"></div>
 	      <div id="cibleTrans" style="font-style: italic;" onclick="delCibleTransmission();"></div>
 	      <input type="hidden" name="dosql" value="do_transmission_aed" />
 	      <input type="hidden" name="del" value="0" />
