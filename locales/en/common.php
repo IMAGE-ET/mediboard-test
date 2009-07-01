@@ -162,4 +162,5 @@ $locales['pref-tooltipAppearenceTimeout'] = '';
 $locales['Short'] = '';
 $locales['Medium'] = '';
 $locales['Long'] = '';
+$locales['Enclose'] = '';
 ?>

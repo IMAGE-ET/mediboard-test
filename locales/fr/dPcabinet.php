@@ -1746,4 +1746,5 @@ $locales['config-dPcabinet-CPlageConsult-hours_stop'] = '';
 $locales['config-dPcabinet-CPlageConsult-hours_stop-desc'] = '';
 $locales['config-dPcabinet-CPlageConsult-minutes_interval'] = '';
 $locales['config-dPcabinet-CPlageConsult-minutes_interval-desc'] = '';
+$locales['mod-dPcabinet-tab-offline_programme_consult'] = 'Programme hors ligne';
 ?>

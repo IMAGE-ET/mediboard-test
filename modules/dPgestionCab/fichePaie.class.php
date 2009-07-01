@@ -245,16 +245,18 @@ class CFichePaie extends CMbObject {
   }
   
   function store() {
+    // Must store to get all fields
     if ($this->_final_store) {
       $this->loadRefsFwd();
 			$this->_ref_params_paie->loadRefsFwd();
+			$this->updateFormFields();
 			
 			// Création du template
 			$smarty = new CSmartyDP();
 			$smarty->assign("fichePaie" , $this);
 			
 			$this->final_file = $smarty->fetch("print_fiche.tpl");
-			mbTrace($this->final_file);
+			file_put_contents("tmp/fichePaie.htm", $this->final_file);
     }
 
     return parent::store();

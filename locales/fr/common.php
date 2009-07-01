@@ -162,4 +162,5 @@ $locales['pref-tooltipAppearenceTimeout'] = 'Temps avant d\'afficher les infobul
 $locales['Short'] = 'Court';
 $locales['Medium'] = 'Moyen';
 $locales['Long'] = 'Long';
+$locales['Enclose'] = 'Cloturer';
 ?>
