@@ -20,12 +20,14 @@
     
 <ul id="tab-modules" class="control_tabs_vertical" style="width: 20em;">
   {{foreach from=$prefsUser key=module item=prefs}}
+  {{if $prefs}}  
   <li>
   	<a href="#{{$module}}">
 	  	{{tr}}module-{{$module}}-court{{/tr}}
 	  	<small>({{$prefs|@count}})</small> 
 	  </a>
 	 </li>
+	 {{/if}}
 	{{/foreach}}
 </ul>
 
@@ -115,9 +117,9 @@ Main.add(function () {
     </th>
     <td>
       <select name="pref_name[{{$var}}]" class="text" size="1">
-        {{foreach from=$modules|smarty:nodefaults item=currModule key=keyModule}}
-        <option value="{{$currModule->mod_name}}" {{if $currModule->mod_name==$prefsUser.$module.$var}}selected="selected"{{/if}}>
-          {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+        {{foreach from=$modules item=_module}}
+        <option value="{{$_module->mod_name}}" {{if $_module->mod_name==$prefsUser.$module.$var}}selected="selected"{{/if}}>
+          {{tr}}module-{{$_module->mod_name}}-court{{/tr}}
         </option>
         {{/foreach}}
       </select>
