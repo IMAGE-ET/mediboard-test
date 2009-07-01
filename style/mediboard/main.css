@@ -3235,13 +3235,24 @@ table.active {
   color: #A33;
 }
 
-table.tbl td.type-trans-selected {
-  border: 1px solid black;
-  background-color: #7F7; 
-  color: black;
+table.tbl td.trans-data {
+  background-image: url(../../images/icons/trans_data.png);
+  background-repeat: no-repeat;
+  background-position: left center;
 }
 
-table.tbl td.type-trans-not-selected {
-  border:1px solid black;
-  opacity: 0.3;
+table.tbl td.trans-action {
+  background-image: url(../../images/icons/trans_action.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+table.tbl td.trans-result {
+  background-image: url(../../images/icons/trans_result.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+table.tbl td.trans-data p, table.tbl td.trans-action p, table.tbl td.trans-result p{
+	margin-left: 50px;
 }

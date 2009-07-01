@@ -89,19 +89,9 @@
 	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->libelle_ATC}}'); $V(document.forms.editTrans.libelle_ATC, '{{$_suivi->libelle_ATC}}'); }">{{$_suivi->libelle_ATC}}</a>
 	  {{/if}}
   </td>
-  <td class="text" {{if $_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
-    <strong>
-	    <table style="display: inline">
-	      <tr>
-	        <td class="{{if $_suivi->type == 'data'}}type-trans-selected{{else}}type-trans-not-selected{{/if}}">D</td>
-	        <td class="{{if $_suivi->type == 'action'}}type-trans-selected{{else}}type-trans-not-selected{{/if}}">A</td>
-	        <td class="{{if $_suivi->type == 'result'}}type-trans-selected{{else}}type-trans-not-selected{{/if}}">R</td>
-	      </tr>
-	    </table> 
-    </strong>
+  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}}" {{if $_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
     {{mb_value object=$_suivi field=text}}
   </td>
-
   {{if !$without_del_form}}
   <td class="button" style="width: 1%">
   {{if $_suivi->user_id == $app->user_id}}
