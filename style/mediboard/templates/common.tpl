@@ -32,10 +32,6 @@
     Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
   </script>
-  
-  {{if 0 && $app->user_id}}
-  <script type="text/javascript" src="?m=system&amp;a=js_locales&amp;suppressHeaders=1&amp;cache=1&amp;build={{$version.build}}"></script>
-  {{/if}}
 </head>
 
 <body class="{{if @$app->user_prefs.touchscreen == 1}}touchscreen{{/if}}">

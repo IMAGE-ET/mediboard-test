@@ -985,15 +985,9 @@ DOM.tags.each(function (tag) {
 
 
 /** l10n functions */
-var l10n = {
-  tr: function (token) {
-    return locales ? (locales[token] || token) : token;
-  }
-};
-
-locales = {};
-
-var $T = l10n.tr;
+function $T(key) {
+  return window.locales ? (window.locales[key] || key) : key;
+}
 
 // Replacements for the javascript alert() and confirm()
 var Modal = {

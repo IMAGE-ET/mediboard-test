@@ -699,12 +699,35 @@ function mbPortalURL( $page="Accueil", $tab = null) {
   $url .= ($tab) ? "-tab-$tab" : "";
   return $url;
 }
+
+function mbLoadJSLocales($modeReturn = false) {
+  global $AppUI, $version, $locales;
+  
+  $language = $AppUI->user_prefs["LOCALE"];
+  
+  $path = "./locales/$language/locales.js";
+  if ($fp = fopen($path, 'w')) {
+    $match = preg_match('#^//(\d+)#', fgets($fp), $v);
+    if (!$match || ($match && $v[1] < $version['build'])) {
+      $script = '//'.$version['build']."\nwindow.locales = ".json_encode($locales).";\nwindow.language = '$language';";
+      fwrite($fp, $script);
+    }
+    
+    fclose($fp);
+  }
+  
+  return mbLoadScript($path, $modeReturn);
+}
+
 /**
  * Loads all scripts
  */
-function mbLoadScripts($modeReturn = 0) {
-  $affichageScript = null;
-
+function mbLoadScripts($modeReturn = false) {
+  $affichageScript = '';
+  
+  // Locales
+  $affichageScript .= mbLoadJSLocales($modeReturn);
+  
   // Prototype JS & Scriptaculous
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);

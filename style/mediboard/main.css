@@ -3221,10 +3221,21 @@ table.active {
 }
 
 .pagination {
-  text-align: center;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1.8em;
+  text-align: center; 
+  font-weight: bold; 
+  margin: 2px; 
+}
+
+.pagination .page {
+  display: inline-block; 
+  border: 1px solid #999; 
+  padding: 1px 3px;
+  margin: 1px;
+}
+
+.pagination .page.active {
+  border: 1px solid #ccc; 
+  color: #ccc;
 }
 
 .septique{
