@@ -108,7 +108,7 @@
 		  </tr>
 		</table>	 
 	{{else}}
-		<div class="big-info">
+		<div class="small-info">
 		  Veuillez sélectionner un praticien ou cabinet pour créer un pack de protocole.
 		</div>
 	{{/if}}      

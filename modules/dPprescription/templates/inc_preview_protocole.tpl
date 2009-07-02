@@ -44,7 +44,7 @@
 {{if $sejour->_entree && $sejour->_sortie && $operation->_datetime}}
   {{include file="../../dPprescription/templates/vw_plan_soin.tpl"}}
 {{else}}
-  <div class="big-info">
+  <div class="small-info">
     Veuillez sélectionner une date de debut et une date de fin du séjour pour visualiser l'apercu du plan de soin.
   </div>
 {{/if}}

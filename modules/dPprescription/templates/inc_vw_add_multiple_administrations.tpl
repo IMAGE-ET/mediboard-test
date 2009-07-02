@@ -175,7 +175,7 @@ Main.add( function(){
 		  </tr>
 		</table>
 	{{else}}
-	  <div class="big-info">
+	  <div class="small-info">
 	    Veuillez sélectionner des prises prevues pour ajouter des administrations
 	  </div>
 	{{/if}}
@@ -245,7 +245,7 @@ Main.add( function(){
 		{{/foreach}}
 		</table>
 	{{else}}
-	  <div class="big-info">
+	  <div class="small-info">
 	    Veuillez sélectionner des prises prevues pour ajouter des administrations
 	  </div>
 	{{/if}}

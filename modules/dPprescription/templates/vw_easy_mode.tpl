@@ -281,7 +281,7 @@ Main.add( function(){
 	        {{if (($i % $numCols) == 0)}}</tr>{{if !$smarty.foreach.elements.last}}<tr>{{/if}}{{/if}}
 	      {{/foreach}}
 	    {{foreachelse}}
-			  <div class="big-info">
+			  <div class="small-info">
 			    Aucun élément dans la catégorie {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
 			  </div>
 	    {{/foreach}}

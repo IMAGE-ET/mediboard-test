@@ -672,7 +672,7 @@ Main.add(function () {
 	  </tr>
   </table>
 {{else}}
-  <div class="big-info">
+  <div class="small-info">
 	Ce dossier ne possède pas de prescription de séjour
   </div>
 {{/if}}

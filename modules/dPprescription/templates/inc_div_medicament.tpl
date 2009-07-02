@@ -341,7 +341,7 @@ Main.add( function(){
   {{/foreach}}
  </table> 
 {{else}}
-  <div class="big-info"> 
+  <div class="small-info"> 
      Il n'y a aucun médicament dans cette prescription.
   </div>
 {{/if}}

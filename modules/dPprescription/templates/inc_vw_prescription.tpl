@@ -99,7 +99,7 @@ Main.add(function () {
 
 
 {{if !$prescription->_id && $mode_pharma}}
-  <div class="big-info">
+  <div class="small-info">
     Veuillez sélectionner un séjour pour pouvoir accéder à sa prescription.
   </div>
 {{/if}}

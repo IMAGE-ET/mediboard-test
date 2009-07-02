@@ -46,7 +46,7 @@
         {{if !$moment->_ref_associations}}
         <tr>
           <td colspan="2">
-            <div class="big-info">
+            <div class="small-info">
               Aucun moment unitaire n'est associé à ce moment
             </div>
           </td>
@@ -105,7 +105,7 @@
    </tr>
  </table>
 {{else}}
-  <div class="big-info">
+  <div class="small-info">
     Veuillez sélectionner un moment afin d'éditer ces moments unitaires
   </div>
 {{/if}}

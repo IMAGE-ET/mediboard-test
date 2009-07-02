@@ -141,7 +141,7 @@
   {{/foreach}}
 </table>
 {{else}}
-  <div class="big-info">
+  <div class="small-info">
   Vous devez être praticien pour gérer vos protocoles
   </div>
 {{/if}}

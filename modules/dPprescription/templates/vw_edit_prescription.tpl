@@ -183,7 +183,7 @@
             <button type="button" class="new" onclick="submitFormAjax(this.form, 'systemMsg');">Créer une prescription</button>
           </form>
          {{else}}
-           <div class="big-info">
+           <div class="small-info">
              Veuillez sélectionner une prescription sur la gauche pour la visualiser.
            </div>
          {{/if}}

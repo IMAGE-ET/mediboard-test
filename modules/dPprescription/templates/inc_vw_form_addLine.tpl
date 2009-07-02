@@ -51,7 +51,7 @@
 {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
 <div id="add_{{$element}}" style="display: none">
   {{if !$categories.$element|@count}}
-    <div class="big-info">
+    <div class="small-info">
       Impossible de rajouter des éléments de prescription car cette section ne possède pas de catégorie
     </div>
   {{else}}
@@ -78,7 +78,7 @@
 <!-- Div d'ajout de commentaires -->
 <div id="add_line_comment_{{$element}}" style="display: none">
   {{if !$categories.$element|@count}}
-    <div class="big-info">
+    <div class="small-info">
       Impossible de rajouter des commentaires car cette section ne possède pas de catégorie
     </div>
   {{else}}

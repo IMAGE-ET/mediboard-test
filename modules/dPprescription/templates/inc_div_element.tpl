@@ -173,7 +173,7 @@ Main.add( function(){
 	  </table>
 	  {{/foreach}}
   {{else}}
-  <div class="big-info"> 
+  <div class="small-info"> 
      Il n'y a aucun élément de type "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}" dans cette prescription.
   </div>
   {{/if}}

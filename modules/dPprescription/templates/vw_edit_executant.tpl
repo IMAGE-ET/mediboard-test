@@ -137,7 +137,7 @@ function removeFunction(function_category_id){
   {{else}}
   <tr>
     <td>
-      <div class="big-info">
+      <div class="small-info">
         Veuillez sélectionner une catégorie
       </div>
     </td>
@@ -190,7 +190,7 @@ function removeFunction(function_category_id){
   {{else}}
   <tr>
     <td>
-      <div class="big-info">
+      <div class="small-info">
         Veuillez sélectionner une catégorie
       </div>
     </td>
