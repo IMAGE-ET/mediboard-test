@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $shm;
+global $AppUI, $can, $m, $shm, $version;
 
 $can->needsEdit();
 
@@ -21,6 +21,19 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     if (basename($localeFile) != "encoding.php") {
       require $localeFile;
     }
+  }
+  
+  $path = "./tmp/locales.$localeName.js";
+  if (!is_file($path)) {
+    echo "<div class='message'>Fichier de locales JS '$localeName' absent</div>";
+    continue;
+  }
+  
+  $fp = fopen($path, 'r');
+  preg_match('#^//(\d+)#', fgets($fp), $v);
+  if ($v[1] < $version['build']) {
+    echo "<div class='message'>Fichier de locales JS '$localeName' perimé</div>";
+    continue;
   }
 
   if (null == $sharedLocale = $shm->get("locales-$localeName")) {

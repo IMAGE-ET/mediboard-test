@@ -47,3 +47,6 @@ if (!$shm->rem("class-paths")) {
 }
 
 echo "<div class='message'>Table des classes supprimée</div>";
+
+mbWriteJSLocalesFile();
+echo "<div class='message'>Fichiers de locales mis à jour</div>";

@@ -700,24 +700,49 @@ function mbPortalURL( $page="Accueil", $tab = null) {
   return $url;
 }
 
+function mbWriteJSLocalesFile($language = null) {
+  global $version, $locales;
+  
+  $current_locales = $locales;
+  
+  if (!$language) {
+    $languages = array();
+    foreach (glob("locales/*", GLOB_ONLYDIR) as $lng)
+      $languages[] = basename($lng);
+  }
+  else {
+    $languages = array($language);
+  }
+  
+  foreach($languages as $language) {
+    $localeFiles = array_merge(glob("locales/$language/*.php"), glob("modules/*/locales/$language.php"));
+    foreach ($localeFiles as $localeFile) {
+      if (basename($localeFile) != "encoding.php") {
+        require $localeFile;
+      }
+    }
+    
+    $path = "./tmp/locales.$language.js";
+  
+    if ($fp = fopen($path, 'w')) {
+      $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_map('utf8_encode', $locales)).";\nwindow.language = '$language';";
+      fwrite($fp, $script);
+      fclose($fp);
+    }
+  }
+  
+  $locales = $current_locales;
+}
+
 function mbLoadJSLocales($modeReturn = false) {
   global $AppUI, $version, $locales;
   
   $language = $AppUI->user_prefs["LOCALE"];
   
   $path = "./tmp/locales.$language.js";
-  
-  if (!is_file($path))
-    touch($path);
-  
-  if ($fp = fopen($path, 'r+')) {
-    $match = preg_match('#^//(\d+)#', fgets($fp), $v);
-    if (!$match || ($match && $v[1] < $version['build'])) {
-      $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_map('utf8_encode', $locales)).";\nwindow.language = '$language';";
-      fwrite($fp, $script);
-    }
-    
-    fclose($fp);
+
+  if (!is_file($path)) {
+    mbWriteJSLocalesFile($language);
   }
   
   return mbLoadScript($path, $modeReturn);
