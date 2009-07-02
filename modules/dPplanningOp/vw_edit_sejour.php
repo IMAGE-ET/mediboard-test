@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI, $can, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab, $dPconfig, $g;
 
 $can->needsRead();
 
@@ -123,6 +123,13 @@ $order = "nom";
 $etab = new CEtabExterne();
 $listEtab = $etab->loadList(null, $order);
 
+// Récupération des services
+$service = new CService();
+$where = array();
+$where["group_id"] = "= '$g'";
+$order = "nom";
+$listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -147,6 +154,7 @@ $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listServices"  , $listServices);
 
 $smarty->assign("hours", $hours);
 $smarty->assign("mins" , $mins);

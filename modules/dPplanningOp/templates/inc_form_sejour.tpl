@@ -349,8 +349,22 @@ Main.add( function(){
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
   	{{/if}}
   </td>
-  
-  
+</tr>
+
+<tr>
+  <th>
+    {{mb_label object=$sejour field="service_id"}}
+  </th>
+  <td colspan="3">
+    <select name="service_id" onchange="" class="{{$sejour->_props.service_id}}" style="max-width: 150px;">
+      <option value="">&mdash; Choisir un service</option>
+      {{foreach from=$listServices item=_service}}
+      <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
+        {{$_service->_view}}
+      </option>
+      {{/foreach}}
+    </select>
+  </td>
 </tr>
 
 <tr>

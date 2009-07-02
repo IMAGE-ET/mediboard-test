@@ -206,6 +206,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_sortie_autre"  => "8",
   "locked"              => "0",
   "tag_dossier"         => "",
+  "service_id_notNull"  => "0",
 );
 
 $dPconfig["dPsalleOp"] = array(

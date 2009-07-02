@@ -31,6 +31,7 @@ class CSejour extends CCodable {
   var $chambre_seule      = null; // remplace $op->chambre
   var $reanimation        = null; // Entrée en réanimation
   var $zt                 = null; // Entrée en zone de très courte durée
+  var $service_id         = null; // Service du séjour
 
   var $entree_prevue      = null;
   var $sortie_prevue      = null;
@@ -185,6 +186,7 @@ class CSejour extends CCodable {
     $specs["chambre_seule"]       = "bool";
     $specs["reanimation"]         = "bool default|0";
     $specs["zt"]                  = "bool default|0";
+    $specs["service_id"]          = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
     $specs["entree_prevue"]       = "dateTime notNull";
     $specs["sortie_prevue"]       = "dateTime notNull moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";

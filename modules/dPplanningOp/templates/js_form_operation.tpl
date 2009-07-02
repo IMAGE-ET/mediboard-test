@@ -178,6 +178,15 @@ function synchroPrat() {
   updateTime();
 }
 
+function synchroService() {
+  var oOpForm = document.editOp;
+  var oSejourForm = document.editSejour;
+  if (!oSejourForm.sejour_id.value) {
+    $V(oSejourForm.service_id, oOpForm.service_id.value);
+  }
+  updateTime();
+}
+
 function updateEntreePrevue() {
   var oOpForm = document.editOp;
   var oSejourForm = document.editSejour;

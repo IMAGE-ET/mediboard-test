@@ -203,6 +203,25 @@ Main.add(function () {
     <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
   </tr>
   
+   <!-- Selection du service -->
+  <tr>
+	  <th>
+	    {{mb_label object=$sejour field="service_id"}}
+	  </th>
+	  <td>
+	    <select name="service_id" class="{{$sejour->_props.service_id}}">
+	      <option value="">&mdash; Choisir un service</option>
+	      {{foreach from=$listServicesUrgence item=_service}}
+	      <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
+	        {{$_service->_view}}
+	      </option>
+	      {{/foreach}}
+	    </select>
+	  </td>
+	  <th />
+    <td />
+	</tr>
+
   <tr>
     <th>{{mb_label object=$rpu field="box_id"}}</th>
     <td>

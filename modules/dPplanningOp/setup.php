@@ -793,7 +793,15 @@ class CSetupdPplanningOp extends CSetup {
     $this->makeRevision("0.94");
     $this->addPrefQuery("dPplanningOp_listeCompacte", "1");
     
-    $this->mod_version = "0.95";
+    $this->makeRevision("0.95");
+    $sql = "ALTER TABLE `sejour`
+              ADD `service_id` INT (11) UNSIGNED AFTER `zt`,
+              ADD INDEX (`etablissement_transfert_id`),
+              ADD INDEX (`service_id`),
+              ADD INDEX (`prestation_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.96";
   }
 }
 ?>
