@@ -17,7 +17,15 @@
       {{foreach from=$props key=name item=value}}
         {{if $value != ''}}
           <strong>{{mb_label object=$object field=$name}}</strong> :
-          {{mb_value object=$object field=$name}}<br />
+          {{assign var=spec value=$object->_specs.$name}}
+          {{if $spec instanceof CRefSpec}}
+          	<span onmouseover="ObjectTooltip.createEx(this,'{{$spec->class}}-{{$value}}');">
+	          {{mb_value object=$object field=$name}}
+	          </span>
+	        {{else}}
+	          {{mb_value object=$object field=$name}}
+          {{/if}}
+          <br />
         {{/if}}
       {{/foreach}}
     </td>
