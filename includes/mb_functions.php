@@ -705,11 +705,15 @@ function mbLoadJSLocales($modeReturn = false) {
   
   $language = $AppUI->user_prefs["LOCALE"];
   
-  $path = "./locales/$language/locales.js";
-  if ($fp = fopen($path, 'w')) {
+  $path = "./tmp/locales.$language.js";
+  
+  if (!is_file($path))
+    touch($path);
+  
+  if ($fp = fopen($path, 'r+')) {
     $match = preg_match('#^//(\d+)#', fgets($fp), $v);
     if (!$match || ($match && $v[1] < $version['build'])) {
-      $script = '//'.$version['build']."\nwindow.locales = ".json_encode($locales).";\nwindow.language = '$language';";
+      $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_map('utf8_encode', $locales)).";\nwindow.language = '$language';";
       fwrite($fp, $script);
     }
     
