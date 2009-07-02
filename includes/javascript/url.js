@@ -59,7 +59,15 @@ var Url = Class.create({
     // Recursive call
     $H(oObject).each( function(pair) {
       this.addObjectParam(printf("%s[%s]", sName, pair.key), pair.value);
-    }.bind(this) );
+    }, this);
+  },
+  
+  addFormData: function(oForm) {
+    Object.extend(this.oParams, oForm.serialize(true));
+  },
+  
+  mergeParams: function(oObject) {
+    Object.extend(this.oParams, oObject);
   },
   
   addElement: function(oElement, sParamName) {
@@ -81,10 +89,11 @@ var Url = Class.create({
   },
   
   redirect: function() {
+    var uri = decodeURI(this.make());
     if(this.oWindow)
-      this.oWindow.location.href = this.make();
+      this.oWindow.location.href = uri;
     else
-      window.location.href = this.make();
+      window.location.href = uri;
   },
   
   redirectOpener: function() {
@@ -201,7 +210,7 @@ var Url = Class.create({
       asynchronous: true,
       evalScripts: true,
       getParameters: null,
-      onFailure: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur rencontre quelques problemes.</div>";}
+      onFailure: function(){$(ioTarget).update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
     };
   
     Object.extend(oDefaultOptions, oOptions);
@@ -346,7 +355,6 @@ Url.parse = function(url) {
 
   return c;
 };
-
 
 function popChgPwd() {
   var url = new Url("admin", "chpwd");
