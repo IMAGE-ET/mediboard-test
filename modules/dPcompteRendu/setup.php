@@ -318,7 +318,13 @@ class CSetupdPcompteRendu extends CSetup {
             ADD `etat_envoi` ENUM ('oui','non','obsolete') NOT NULL default 'non';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.43";
+    $this->makeRevision("0.43");
+    $this->setTimeLimit(1800);
+    $sql = "ALTER TABLE `compte_rendu` 
+						CHANGE `object_class` `object_class` ENUM ('CPatient','CConsultation','CConsultAnesth','COperation','CSejour','CPrescription') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.44";
   }
 }
 ?>

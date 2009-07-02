@@ -239,4 +239,11 @@ $locales['mod-dPcompteRendu-tab-vw_idx_aides'] = 'Aides à la saisie';
 $locales['mod-dPcompteRendu-tab-vw_idx_listes'] = 'Listes de choix';
 $locales['mod-dPcompteRendu-tab-vw_modeles'] = 'Liste des modèles';
 $locales['mod-dPcompteRendu-tab-vw_idx_packs'] = 'Packs de modèles';
+$locales['CCompteRendu-_extensioned'] = '';
+$locales['CCompteRendu-_extensioned-court'] = '';
+$locales['CCompteRendu-_extensioned-desc'] = '';
+$locales['CCompteRendu-_send_problem'] = '';
+$locales['CCompteRendu-_send_problem-court'] = '';
+$locales['CCompteRendu-_send_problem-desc'] = '';
+$locales['CCompteRendu.object_class.CPrescription'] = 'Prescription';
 ?>

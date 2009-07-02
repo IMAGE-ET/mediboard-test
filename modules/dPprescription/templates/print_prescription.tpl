@@ -19,78 +19,80 @@ Main.add(window.print);
   </tr>
 </table>
 
-{{assign var=header value=10}}
-{{assign var=footer value=5}}
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css header=10 footer=8}}
 </style>
   
 <div class="header">
-	<table class="main">
-	  <tr>
-	    <td class="left">
-	      {{if $praticien->_id}}
-		      <strong>Dr {{$praticien->_view}}</strong>
+  {{if $generated_header}}
+    {{$generated_header|smarty:nodefaults}}
+  {{else}}
+  	<table class="main">
+		  <tr>
+		    <td class="left">
+		      {{if $praticien->_id}}
+			      <strong>Dr {{$praticien->_view}}</strong>
+			      <br />
+			      {{mb_title object=$praticien field=adeli}}
+			      {{mb_value object=$praticien field=adeli}}
+			      <br />
+			      {{$praticien->_ref_discipline->_view}}
+			      <br />
+			      {{mb_value object=$praticien field=titres}}
+			      <br />
+		      {{elseif $prescription->object_id}}
+		        Prescription globale
+		      {{/if}}
+		    </td>
+		    <td class="center">
+		      <h1>{{$etablissement->_view}}</h1>
+		      {{if $function}}
+		        {{mb_value object=$function field=soustitre}}
+		      {{/if}}
+		    </td>
+		    <td class="right">
+		      le {{$date|date_format:"%d %B %Y"}}
 		      <br />
-		      {{mb_title object=$praticien field=adeli}}
-		      {{mb_value object=$praticien field=adeli}}
+		      {{if $prescription->object_id}}
+					A l'attention de 
+					<br />		      
+		      <strong>{{$prescription->_ref_patient->_view}}</strong>
 		      <br />
-		      {{$praticien->_ref_discipline->_view}}
-		      <br />
-		      {{mb_value object=$praticien field=titres}}
-		      <br />
-	      {{elseif $prescription->object_id}}
-	        Prescription globale
-	      {{/if}}
-	    </td>
-	    
-	    <td class="center">
-	      <h1>{{$etablissement->_view}}</h1>
-	      {{if $function}}
-	        {{mb_value object=$function field=soustitre}}
-	      {{/if}}
-	    </td>
-	  
-	    <td class="right">
-	      le {{$date|date_format:"%d %B %Y"}}
-	      <br />
-	      {{if $prescription->object_id}}
-				A l'attention de 
-				<br />		      
-	      <strong>{{$prescription->_ref_patient->_view}}</strong>
-	      <br />
-	      Age: {{$prescription->_ref_patient->_age}} ans<br />
-	      Poids: {{$poids}} kg
-	      {{else}}
-	      Protocole: {{$prescription->libelle}}
-	      {{/if}}
-	    </td>
-	  </tr>
-	</table>    
+		      Age: {{$prescription->_ref_patient->_age}} ans<br />
+		      Poids: {{$poids}} kg
+		      {{else}}
+		      Protocole: {{$prescription->libelle}}
+		      {{/if}}
+		    </td>
+		  </tr>
+		</table>  
+	{{/if}} 
 </div>
 
 <!-- Affichage du pieds de page -->
 <div class="footer">
-  <table>
-  	<tr>
-  	  <td class="left">
-		   	{{mb_value object=$function field=soustitre}}
-			</td>
-  	  <td class="center">
-		   	{{mb_value object=$function field=adresse}}
-				<br />
-				{{$function->cp}} &mdash; {{$function->ville}}
-			</td>
-  	  <td class="right">
-			  Tel: {{mb_value object=$function field=tel}}
-	  		<br />
-	  		Fax: {{mb_value object=$function field=fax}}
-	  	</td>
-		</tr>
-  </table>
+  {{if $generated_footer}}
+    {{$generated_footer|smarty:nodefaults}}
+  {{else}}
+	  <table>
+	  	<tr>
+	  	  <td class="left">
+			   	{{mb_value object=$function field=soustitre}}
+				</td>
+	  	  <td class="center">
+			   	{{mb_value object=$function field=adresse}}
+					<br />
+					{{$function->cp}} &mdash; {{$function->ville}}
+				</td>
+	  	  <td class="right">
+				  Tel: {{mb_value object=$function field=tel}}
+		  		<br />
+		  		Fax: {{mb_value object=$function field=fax}}
+		  	</td>
+			</tr>
+	  </table>
+  {{/if}}
 </div>
-
-
 
 <!-- Affichage en mode ALD -->
 {{if $lines.medicaments.med.ald || $lines.medicaments.med.no_ald ||
@@ -110,7 +112,7 @@ Main.add(window.print);
 		</h3>
 		<ul>
     {{foreach from=$lines.medicaments.med.ald item=line_medicament_element_ald}}
-      {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald}}
+      {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald nodebug=true}}
     {{/foreach}}
    
 	    {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
@@ -128,9 +130,9 @@ Main.add(window.print);
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
-        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
       {{else}}
-        {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald}}
+        {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald nodebug=true}}
       {{/if}} 
     {{/foreach}}
     {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
@@ -157,9 +159,9 @@ Main.add(window.print);
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
-	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med}}
+	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
 	          {{else}}
-	            {{include file="inc_print_perfusion.tpl" perf=$_subst_line_med}}
+	            {{include file="inc_print_perfusion.tpl" perf=$_subst_line_med nodebug=true}}
 	          {{/if}}
 	        {{/foreach}}
 	        {{/foreach}}
@@ -177,9 +179,9 @@ Main.add(window.print);
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
-	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med}}
+	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
 	          {{else}}
-	            {{include file="inc_print_perfusion.tpl" perf=$_subst_line_med}}
+	            {{include file="inc_print_perfusion.tpl" perf=$_subst_line_med nodebug=true}}
 	          {{/if}}
 	        {{/foreach}}
 	        {{/foreach}}
@@ -236,7 +238,7 @@ Main.add(window.print);
 
 		         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
 	             <!-- Affichage de l'element -->
-	             {{include file="inc_print_element.tpl" elt=$_element_ald}}
+	             {{include file="inc_print_element.tpl" elt=$_element_ald nodebug=true}}
 	           {{else}}
 	             <!-- Affichage du commentaire -->
 	              <li>{{$_element_ald->commentaire}}</li>
@@ -264,7 +266,7 @@ Main.add(window.print);
 		
 		         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}
 	             <!-- Affichage de l'element -->
-	             {{include file="inc_print_element.tpl" elt=$_element_no_ald}}
+	             {{include file="inc_print_element.tpl" elt=$_element_no_ald nodebug=true}}
 	           {{else}}
 	             <!-- Affichage du commentaire -->
 	             <li>{{$_element_no_ald->commentaire}}</li>

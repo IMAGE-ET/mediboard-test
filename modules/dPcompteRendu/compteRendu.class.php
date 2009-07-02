@@ -62,7 +62,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["function_id"]      = "ref class|CFunctions xor|chir_id|group_id|object_id";
     $specs["group_id"]         = "ref class|CGroups xor|chir_id|function_id|object_id";
     $specs["object_id"]        = "ref class|CMbObject meta|object_class xor|function_id|chir_id|group_id";
-    $specs["object_class"]     = "enum notNull list|CPatient|CConsultation|CConsultAnesth|COperation|CSejour";
+    $specs["object_class"]     = "enum notNull list|CPatient|CConsultation|CConsultAnesth|COperation|CSejour|CPrescription";
     $specs["nom"]              = "str notNull";
     $specs["type"]             = "enum list|header|body|footer default|body";
     $specs["source"]           = "html helped|object_class";

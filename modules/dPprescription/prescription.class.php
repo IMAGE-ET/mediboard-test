@@ -77,6 +77,8 @@ class CPrescription extends CMbObject {
   var $_date_plan_soin = null;
   var $_type_alerte = null;
   var $_chapitre = null;
+  var $_ref_selected_prat = null;
+  
   
   static $images = array("med"      => "modules/soins/images/medicaments.png",
 											   "inj"      => "images/icons/anesth.png",
@@ -689,8 +691,10 @@ class CPrescription extends CMbObject {
    * Chargement de l'objet de la prescription
    */ 
   function loadRefObject(){
-  	$this->_ref_object = new $this->object_class;
-    $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    if($this->object_class){
+      $this->_ref_object = new $this->object_class;
+		  $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+    }
   }
   
   /*
@@ -701,7 +705,9 @@ class CPrescription extends CMbObject {
     if($this->object_class == "CDossierMedical"){
       $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->object_id);	
     } else {
-      $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->patient_id);	
+      if($this->_ref_object){
+        $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->patient_id);	
+      }
     }
   }
   
@@ -1582,6 +1588,42 @@ class CPrescription extends CMbObject {
          }
       }
     }  
+  }
+  
+  function fillTemplate(&$template) {
+    if(!($this->object_id && $this->object_class)){
+      $this->_ref_selected_prat = new CMediusers();
+      $this->_ref_patient = new CPatient();
+    }
+    $this->_ref_selected_prat->fillTemplate($template);
+    $this->_ref_patient->fillTemplate($template);
+  }
+  
+  /*
+   * Retourne un template de prescription (header / footer)
+   */
+  static function getPrescriptionTemplate($type, $praticien){
+    $modele = new CCompteRendu();
+    if(!$praticien->_id){
+      return $modele;
+    }
+		$modele->object_class = "CPrescription";
+		$modele->chir_id = $praticien->_id;
+		$modele->type = $type;
+		$modele->loadMatchingObject();
+		if(!$modele->_id){
+		  // Recherche du modele au niveau de la fonction
+      $modele->chir_id = null;
+		  $modele->function_id = $praticien->function_id;
+		  $modele->loadMatchingObject();
+		  if(!$modele->_id){
+		    // Recherche du modele au niveau de l'etablissement
+		    $modele->function_id = null;
+		    $modele->group_id = $praticien->_ref_function->group_id;
+		    $modele->loadMatchingObject();
+		  }
+		}
+    return $modele;
   }
 }
 

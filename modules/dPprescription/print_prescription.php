@@ -108,7 +108,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		    }
 	    }
 	  }
-		if($praticien_sortie_id && $line_medicament->praticien_id != $praticien_sortie_id){
+		if($praticien->_id && $line_medicament->praticien_id != $praticien->_id){
 			continue;
 		}	
 		if($line_medicament->child_id){
@@ -134,7 +134,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
       $_subst_perf->loadRefsLines();
     }
   }	   
-  if($praticien_sortie_id && $_perfusion->praticien_id != $praticien_sortie_id){
+  if($praticien->_id && $_perfusion->praticien_id != $praticien->_id){
 		continue;
 	}	
 	if($_perfusion->next_perf_id){
@@ -151,58 +151,58 @@ $linesElt = array();
 
 // Initialisation du tableau
 if(count($prescription->_ref_lines_elements_comments)){
-foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
-	foreach($chap_element as $name_cat => $cat_element){
-		foreach($cat_element as $type => $elements){
-			foreach($elements as $element){
-				if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
-				  continue;
-			  }
-			  if($element->_class_name == "CPrescriptionLineElement"){
-				  $element->loadCompleteView();
+	foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
+		foreach($chap_element as $name_cat => $cat_element){
+			foreach($cat_element as $type => $elements){
+				foreach($elements as $element){
+					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
+					  continue;
+				  }
+				  if($element->_class_name == "CPrescriptionLineElement"){
+					  $element->loadCompleteView();
+					}
+					$executant = "aucun";
+			    if($element->_ref_executant){
+			      $executant = $element->_ref_executant->_guid;
+			    }
+			    
+		      $linesElt[$name_chap][$executant]["ald"] = array();
+			    $linesElt[$name_chap][$executant]["no_ald"] = array();	
 				}
-				$executant = "aucun";
-		    if($element->_ref_executant){
-		      $executant = $element->_ref_executant->_guid;
-		    }
-		    
-	      $linesElt[$name_chap][$executant]["ald"] = array();
-		    $linesElt[$name_chap][$executant]["no_ald"] = array();	
 			}
 		}
 	}
 }
-}
 
 // Parcours des elements
 if(count($prescription->_ref_lines_elements_comments)){
-foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
-	foreach($chap_element as $name_cat => $cat_element){
-		foreach($cat_element as $type => $elements){
-			foreach($elements as $element){
-		  	if($praticien_sortie_id && $element->praticien_id != $praticien_sortie_id){
-			    continue;
-		    }	
-				if($element->child_id){
-					continue;
-				}
-				if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
-				  continue;
+	foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
+		foreach($chap_element as $name_cat => $cat_element){
+			foreach($cat_element as $type => $elements){
+				foreach($elements as $element){
+			  	if($praticien->_id && $element->praticien_id != $praticien->_id){
+				    continue;
+			    }	
+					if($element->child_id){
+						continue;
+					}
+					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
+					  continue;
+				  }
+				  $element->loadRefsFwd();
+				  $executant = "aucun";
+			    if($element->_ref_executant){
+			      $executant = $element->_ref_executant->_guid;
+			    }
+			    if($element->ald){
+			    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
+			    } else {
+			      $linesElt[$name_chap][$executant]["no_ald"][$name_cat][] = $element;
+			    }
 			  }
-			  $element->loadRefsFwd();
-			  $executant = "aucun";
-		    if($element->_ref_executant){
-		      $executant = $element->_ref_executant->_guid;
-		    }
-		    if($element->ald){
-		    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
-		    } else {
-		      $linesElt[$name_chap][$executant]["no_ald"][$name_cat][] = $element;
-		    }
-		  }
-		}
-  }
-}
+			}
+	  }
+	}
 }
 
 if(count($prescription->_ref_lines_dmi)){
@@ -212,27 +212,45 @@ if(count($prescription->_ref_lines_dmi)){
   }
 }
 
+// Tableau de traductions
+$traduction = array("E" => "l'entrée", "I" => "I", "S" => "la sortie");
 
-$traduction = array();
-$traduction["E"] = "l'entrée";
-$traduction["I"] = "I";
-$traduction["S"] = "la sortie";
+// Affectation du praticien selectionné
+$prescription->_ref_selected_prat = $praticien;
+
+// Chargement du header
+$template_header = new CTemplateManager();
+$prescription->fillTemplate($template_header);
+$header = CPrescription::getPrescriptionTemplate("header", $praticien);
+if($header->_id){
+  $template_header->renderDocument($header->source);
+}
+
+// Chargement du footer
+$template_footer = new CTemplateManager();
+$prescription->fillTemplate($template_footer);
+$footer = CPrescription::getPrescriptionTemplate("footer", $praticien);
+if($footer->_id){
+  $template_footer->renderDocument($footer->source);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("traduction"          , $traduction);
-$smarty->assign("print"               , $print);
-$smarty->assign("praticien"           , $praticien);
-$smarty->assign("function"            , $praticien->_id ? $praticien->_ref_function : new CFunctions());
-$smarty->assign("date"                , mbDate());
-$smarty->assign("etablissement"       , $etablissement);
-$smarty->assign("prescription"        , $prescription);
-$smarty->assign("lines"               , $lines);
-$smarty->assign("linesElt"            , $linesElt);
-$smarty->assign("linesDMI"            , $linesDMI);
-$smarty->assign("categories"          , $categories);
-$smarty->assign("executants"          , $executants);
-$smarty->assign("poids"               , $poids);
+$smarty->assign("traduction"     , $traduction);
+$smarty->assign("print"          , $print);
+$smarty->assign("praticien"      , $praticien);
+$smarty->assign("function"       , $praticien->_id ? $praticien->_ref_function : new CFunctions());
+$smarty->assign("date"           , mbDate());
+$smarty->assign("etablissement"  , $etablissement);
+$smarty->assign("prescription"   , $prescription);
+$smarty->assign("lines"          , $lines);
+$smarty->assign("linesElt"       , $linesElt);
+$smarty->assign("linesDMI"       , $linesDMI);
+$smarty->assign("categories"     , $categories);
+$smarty->assign("executants"     , $executants);
+$smarty->assign("poids"          , $poids);
+$smarty->assign("generated_header", $header->_id ? $template_header->document : "");
+$smarty->assign("generated_footer", $footer->_id ? $template_footer->document : "");
 $smarty->display("print_prescription.tpl");
 
 ?>
