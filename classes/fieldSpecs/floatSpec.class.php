@@ -120,8 +120,7 @@ class CFloatSpec extends CMbFieldSpec {
 </table>';
     } */
     if ($form && $increment) {
-      $sHtml  = '<div class="control numericField">';
-      $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
+      $sHtml  = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
       $sHtml .= '
     <script type="text/javascript">
       Main.add(function(){
@@ -133,16 +132,10 @@ class CFloatSpec extends CMbFieldSpec {
           if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
           if ($decimals)   $sHtml .= "decimals: $decimals,";
           if ($fraction)   $sHtml .= "fraction: $fraction,";
-          $sHtml .= 'spinnerElement: $("img_'.$fieldId.'")
+          $sHtml .= '_:0 // IE rules
         });
       });
-    </script>
-    <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" id="img_'.$fieldId.'" />
-    <map name="arrow_'.$fieldId.'" >
-      <area coords="0,0,10,8"   tabIndex="10000" style="cursor: pointer;" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.inc()" title="+" />
-      <area coords="0,10,10,18" tabIndex="10000" style="cursor: pointer;" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.dec()" title="-" />
-    </map>
-    </div>';
+    </script>';
     }
     else {
       $sHtml = $this->getFormElementText($object, $params, $value, $className);

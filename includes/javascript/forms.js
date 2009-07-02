@@ -657,26 +657,18 @@ Element.addMethods('input', {
       }
     }
     
-    Main.add(function () {
-      if (!options.spinnerElement) {
-        var container = new Element('div', {className: 'control numericField'});
-        element.wrap(container);
-        element.addClassName('num');
-        
-        options.spinnerElement = new Element('img', {src: './images/icons/numeric_updown.gif', usemap: '#arrow_'+element.id, alt: 'spinner'});
-        container.insert(options.spinnerElement);
+    var table = '<table class="control numericField"><tr><td style="padding:0;border:none;" /><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></tr>';
+    element.insert({before: table});
+    table = element.previous();
+    table.select('td')[0].update(element.remove().addClassName('num'));
+
+    var arrows = table.select('.arrows div');
+    arrows[0].observe('click', element.spinner.inc);
+    arrows[1].observe('click', element.spinner.dec);
   
-        var map  = new Element('map', {name: 'arrow_'+element.id});
-        container.insert(map);
-        
-        map.insert(new Element('area', {coords:'0,0,10,8',   tabIndex:10000, title:'+', style:'cursor: pointer;'}).observe('click', element.spinner.inc));
-        map.insert(new Element('area', {coords:'0,10,10,18', tabIndex:10000, title:'-', style:'cursor: pointer;'}).observe('click', element.spinner.dec));
-      }
-    
-      if (element.disabled && options.spinnerElement) {
-        options.spinnerElement.hide();
-      }
-    });
+    if (element.disabled && options.spinnerElement) {
+      arrows.invoke('hide');
+    }
   }
 });
 

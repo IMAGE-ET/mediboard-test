@@ -186,8 +186,7 @@ class CNumSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     if ($form && $increment) {
-	    $sHtml  = '<div class="control numericField">';
-	    $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
+	    $sHtml = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
 	    $sHtml .= '
 	  <script type="text/javascript">
 	    Main.add(function(){
@@ -196,18 +195,11 @@ class CNumSpec extends CMbFieldSpec {
 		      if ($this->pos)  $sHtml .= "min: 0,";
 		      elseif($min)     $sHtml .= "min: $min,";
 		      if (isset($max)) $sHtml .= "max: $max,";
-		      if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
-		      $sHtml .= 'spinnerElement: $("img_'.$fieldId.'")
+		      if ($showPlus)   $sHtml .= "showPlus: $showPlus";
+		      $sHtml .= '_:0 // IE rules
         });
       });
-		</script>
-    <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" id="img_'.$fieldId.'" />
-	  <map name="arrow_'.$fieldId.'" >
-	    <area coords="0,0,10,8"   tabIndex="10000" style="cursor: pointer;" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.inc()" title="+" />
-	    <area coords="0,10,10,18" tabIndex="10000" style="cursor: pointer;" onclick="$(document.forms[\''.$form.'\'][\''.$field.'\']).spinner.dec()" title="-" />
-	  </map>
-	  
-	  </div>';
+		</script>';
     } else {
     	$sHtml = $this->getFormElementText($object, $params, $value, $className);
     }

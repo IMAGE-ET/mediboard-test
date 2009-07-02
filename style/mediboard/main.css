@@ -429,12 +429,15 @@ button.intermax-result {
 	opacity: .4;
 }
 
-input, select, textarea {
-  border: 1px black solid;
-  font-size: 11px;
+input, select, textarea, .control {
   margin: 1px;
+}
+
+input, select, textarea {
   padding: 1px;
   padding-top: 2px;
+  border: 1px black solid;
+  font-size: 11px;
   background-color: #efe;
 }
 
@@ -2796,20 +2799,48 @@ table.tbl td.ccmu-P{
   background: none;
 }
 
-.numericField, .numericField map {
-  display: inline;
+.numericField {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-.numericField img {
-  height: 19px; 
-  width: 11px; 
-  line-height: 19px; 
-  vertical-align: middle; 
-  margin: -5px 0 0 -2px; 
+.numericField .arrows {
+  position: relative;
+  width: 1em;
+}
+
+.numericField .arrows div {
+  /*outline: 1px solid #999;*/
+  background-color: #EEE;
+  background-repeat: no-repeat;
+  background-position: center center;
+  cursor: pointer;
+  position: absolute;
+  height: 50%;
+  width: 1em;
+  right: 1em;
+  margin-right: 1px;
+}
+
+.numericField .arrows div.up {
+  top: 1px;
+  background-image: url(../../images/buttons/up.gif);
+}
+
+.numericField .arrows div.down {
+  bottom: 1px;
+  background-image: url(../../images/buttons/down.gif);
+}
+
+.numericField .arrows div:hover {
+  background-color: #FFF;
+  outline: 1px solid #000;
+  z-index:100;
 }
 
 .numericField input {
-  margin-right: 0;
+  margin: 0;
 }
 
 table.main td.step {
