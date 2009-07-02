@@ -1092,10 +1092,6 @@ var Session = {
   }
 };
 
-document.reload = function(){
-  document.location.href = document.location.href;
-}
-
 var UserSwitch = {
   window: null,
   popup: function(){
