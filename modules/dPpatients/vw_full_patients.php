@@ -48,6 +48,7 @@ foreach($patient->_ref_consultations as $keyConsult => $consult){
 }
 
 $can_view_dossier_medical = 
+  CModule::getCanDo('soins')->edit ||
   CModule::getCanDo('dPurgences')->edit ||
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
