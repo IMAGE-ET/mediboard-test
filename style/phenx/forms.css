@@ -227,7 +227,6 @@ button.notext, a.notext {
 
 .numericField .arrows {
   position: relative;
-  width: 1em;
 }
 
 .numericField .arrows div {
@@ -239,8 +238,7 @@ button.notext, a.notext {
   position: absolute;
   height: 50%;
   width: 1em;
-  right: 1em;
-  margin-right: 1px;
+  right: 1px;
 }
 
 .numericField .arrows div.up {
@@ -255,12 +253,13 @@ button.notext, a.notext {
 
 .numericField .arrows div:hover {
   background-color: #FFF;
-  outline: 1px solid #000;
+  outline: 1px solid #999;
   z-index:100;
 }
 
 .numericField input {
   margin: 0;
+  padding-right: 1em;
 }
 
 .control {
