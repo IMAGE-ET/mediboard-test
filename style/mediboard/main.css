@@ -1657,6 +1657,14 @@ span.hilite {
   font-size: 15px;
 }
 
+.touchscreen .numericField .arrows div {
+  width: 2em;
+}
+
+.touchscreen .numericField input {
+  padding-right: 2em;
+}
+
 /* contacts table */
 table.contacts {
 	background-color: #888;
@@ -2803,6 +2811,7 @@ table.tbl td.ccmu-P{
   border: none;
   border-collapse: collapse;
   border-spacing: 0;
+  display: inline-block;
 }
 
 .numericField .arrows {

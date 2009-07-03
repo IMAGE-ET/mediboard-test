@@ -1,17 +1,22 @@
 {{if !$board}}
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+{{if $app->user_prefs.VitaleVision}}
+  {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+{{else}}
+  {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+	
+	<script type="text/javascript">
+    Intermax.ResultHandler["Consulter Vitale"] =
+    Intermax.ResultHandler["Lire Vitale"] = function() {
+      var url = new Url;
+      url.setModuleTab("dPpatients", "vw_idx_patients");
+      url.addParam("useVitale", 1);
+      url.redirect();
+    }
+	</script>
+{{/if}}
 
 <script type="text/javascript">
-
-Intermax.ResultHandler["Consulter Vitale"] =
-Intermax.ResultHandler["Lire Vitale"] = function() {
-  var url = new Url;
-  url.setModuleTab("dPpatients", "vw_idx_patients");
-  url.addParam("useVitale", 1);
-  url.redirect();
-}
-
 var Patient = {
   create : function() {
     url = new Url;
@@ -25,6 +30,21 @@ var Patient = {
 }
 </script>
 {{/if}}
+
+<div id="modal-beneficiaire" style="display:none; text-align:center;">
+  <p id="msg-multiple-benef">
+    Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :
+  </p>
+  <p id="msg-confirm-benef" style="display: none;"></p>
+	<p id="benef-nom">
+	  <select id="modal-beneficiaire-select"></select>
+    <span></span>
+  </p>
+  <div>
+  	<button type="button" class="tick" onclick="VitaleVision.search(getForm('find'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
+	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
+  </div>
+</div>
 
 <form name="find" action="?" method="get">
 
@@ -82,7 +102,7 @@ var Patient = {
            day_extra="tabindex='7'"
            month_extra="tabindex='8'"
            year_extra="tabindex='9'"
-           all_extra="style='display:inline;'"}}   
+           all_extra="style='display:inline;'"}}
     </td>
   </tr>
   
@@ -96,13 +116,19 @@ var Patient = {
       <button class="search" type="submit">
         {{tr}}Search{{/tr}}
       </button>
-      {{if $app->user_prefs.GestionFSE && !$app->user_prefs.VitaleVision}}
-	      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-	        Lire Vitale
-	      </button>
-	      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire Vitale');">
-	        Résultat Vitale
-	      </button>
+      {{if $app->user_prefs.GestionFSE}}
+        {{if $app->user_prefs.VitaleVision}}
+  	      <button class="search" type="button" onclick="VitaleVision.read();">
+  	        Lire Vitale
+  	      </button>
+        {{else}}
+  	      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+  	        Lire Vitale
+  	      </button>
+  	      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire Vitale');">
+  	        Résultat Vitale
+  	      </button>
+        {{/if}}
       {{/if}}
       
       {{if $can->edit}}

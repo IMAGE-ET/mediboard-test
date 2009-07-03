@@ -77,9 +77,7 @@ var VitaleVision = {
         for (i = 0; i < listBeneficiaires.length; i++) {
           var ident = listBeneficiaires[i].getElementsByTagName("ident")[0], nom = getNodeValue("nomUsuel", ident), prenom = getNodeValue("prenomUsuel", ident);
           
-          beneficiaireSelect.insert(new Element('option', {
-            value: i
-          }).update(nom + " " + prenom));
+          beneficiaireSelect.insert('<option value="'+i+'">'+nom+' '+prenom+'</option>');
         }
         if (listBeneficiaires.length == 1) {
           $('msg-multiple-benef').hide();
@@ -96,6 +94,50 @@ var VitaleVision = {
       alert('Erreur lors de la lecture de la carte vitale, veuillez la ré-insérer.');
       return;
     }}, 1000);
+  },
+  
+  // Remplissage du formulaire de recherche en fonction du bénéficiaire sélectionné dans la fenetre modale
+  search: function(form, id) {
+    var benef = VitaleVision.xmlDocument.getElementsByTagName("listeBenef")[0].childNodes[id],
+        ident = benef.getElementsByTagName("ident")[0];
+  
+    $V(form.nom, getNodeValue("nomUsuel", ident));  
+    $V(form.prenom, getNodeValue("prenomUsuel", ident));  
+    
+    if(getNodeValue("naissance date", ident) != "") { // Si format FR
+      var dateNaissance = getNodeValue("naissance date", ident),
+          jour  = dateNaissance.substring(0, 2),
+          mois  = dateNaissance.substring(2, 4);
+      
+      if(dateNaissance.length == 8){
+        var annee = dateNaissance.substring(4, 8);
+      } else {
+        var annee = dateNaissance.substring(4, 6),
+            an = new Date().getFullYear();
+            
+        annee = (("20"+annee > an) ? "19" : "20")+annee;
+      }
+    } else { // Si format ISO
+      var dateNaissance = getNodeValue("naissance dateEnCarte", ident);
+      if(dateNaissance.length == 8){
+        var jour  = dateNaissance.substring(6, 8),
+            mois  = dateNaissance.substring(4, 6),
+            annee = dateNaissance.substring(0, 4);
+      } else {
+        var jour  = dateNaissance.substring(4, 6),
+            mois  = dateNaissance.substring(2, 4),
+            annee = dateNaissance.substring(0, 2),
+            an = new Date().getFullYear();
+            
+        annee = (("20"+annee > an) ? "19" : "20")+annee;
+      }
+    }
+  
+    $V(form.Date_Day, jour);
+    $V(form.Date_Month, mois);
+    $V(form.Date_Year, annee);
+    
+    form.submit();
   },
   
   // Remplissage du formulaire en fonction du bénéficiaire sélectionné dans la fenetre modale
