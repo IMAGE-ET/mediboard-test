@@ -85,7 +85,7 @@ function popEtatSejour(sejour_id) {
 
 <!--  onmouseover="ObjectTooltip.createEx(this,'{{$curr_sejour->_guid}}');"  -->
     <span class="tooltip-trigger"
-      onclick="viewDossierSejour('{{$curr_sejour->_id}}'); ViewFullPatient.select(this)">
+      onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$curr_sejour->_id}}');{{else}}viewCompleteItem('{{$curr_sejour->_class_name}}','{{$curr_sejour->_id}}');{{/if}} ViewFullPatient.select(this)">
       {{$curr_sejour->_shortview}} 
     </span>
     <script type="text/javascript">
