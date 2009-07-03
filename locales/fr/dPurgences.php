@@ -260,4 +260,8 @@ $locales['CRPU-_can_leave_error-desc'] = '';
 $locales['CRPU-_can_leave_warning'] = '';
 $locales['CRPU-_can_leave_warning-court'] = '';
 $locales['CRPU-_can_leave_warning-desc'] = '';
+$locales['CRPU-_service_id'] = 'Service';
+$locales['CRPU-_service_id-court'] = 'Service';
+$locales['CRPU-_service_id-desc'] = 'Service';
+$locales['CService-back-'] = '';
 ?>

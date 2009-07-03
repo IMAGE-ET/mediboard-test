@@ -206,10 +206,10 @@ Main.add(function () {
    <!-- Selection du service -->
   <tr>
 	  <th>
-	    {{mb_label object=$sejour field="service_id"}}
+	    {{mb_label object=$rpu field="_service_id"}}
 	  </th>
 	  <td>
-	    <select name="service_id" class="{{$sejour->_props.service_id}}">
+	    <select name="_service_id" class="{{$sejour->_props.service_id}}">
 	      <option value="">&mdash; Choisir un service</option>
 	      {{foreach from=$listServicesUrgence item=_service}}
 	      <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>

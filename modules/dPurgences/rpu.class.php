@@ -63,6 +63,7 @@ class CRPU extends CMbObject {
   var $_DP             = null;
   var $_DAS            = null;
   var $_ref_actes_ccam = null;
+  var $_service_id     = null;
   
   // Object References
   var $_ref_sejour = null;
@@ -109,6 +110,7 @@ class CRPU extends CMbObject {
       "_sortie"          => "dateTime",
       "_patient_id"      => "ref notNull class|CPatient",
       "_responsable_id"  => "ref notNull class|CMediusers",
+      "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",      
       "_entree"          => "dateTime",
       "_etablissement_transfert_id" => "ref class|CEtabExterne",
       "_attente"         => "time",
@@ -254,6 +256,8 @@ class CRPU extends CMbObject {
     $sejour->entree_reelle = $this->_entree;
     $sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
     $sejour->annule        = $this->_annule;
+    
+    $sejour->service_id    = $this->_service_id;
 
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onStore(). Ne pas supprimer.
