@@ -29,7 +29,7 @@
       {{if $curr_type->category_id != $category_id}}
         {{assign var=curr_cat value=$curr_type->category_id}}
         <tr>
-          <th colspan="3" class="category">{{$check_item_categories.$curr_cat}}</th>
+          <th colspan="3" class="category" style="text-align: left;">{{$check_item_categories.$curr_cat}}</th>
         </tr>
       {{/if}}
 		  <tr>

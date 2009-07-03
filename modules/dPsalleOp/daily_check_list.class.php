@@ -117,7 +117,11 @@ class CDailyCheckList extends CMbObject {
 		$where = array(
 		  'active' => "= '1'"
 		);
-		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, 'category_id, title');
+        $ljoin = array(
+          'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
+        );
+    
+		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, 'daily_check_item_category.title, title', null, null, $ljoin);
 		foreach($this->_ref_item_types as &$type) {
 			$type->loadRefsFwd();
 		}
