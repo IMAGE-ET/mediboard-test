@@ -40,6 +40,7 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
 	
 	$salles = $salle->loadList($where);
 	$series = array();
+  $total = 0;
 
 	foreach($salles as $salle) {
 	  $serie = array(
@@ -72,7 +73,6 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
                ORDER BY orderitem";
 
     $result = $prat->_spec->ds->loadlist($query);
-    $total = 0;
     foreach($ticks as $i => $tick) {
   	  $f = true;
       foreach($result as $r) {
