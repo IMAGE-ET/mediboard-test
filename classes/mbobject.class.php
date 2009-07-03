@@ -1058,7 +1058,7 @@ class CMbObject {
    * @param $limit string Limit DB query option
    * @return array[CMbObject] the collection
    */
-  function loadBackRefs($backName, $order = null, $limit = null) {
+  function loadBackRefs($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1085,7 +1085,7 @@ class CMbObject {
       $backObject->$backMeta = $this->_class_name;
     }
     
-    return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit);
+    return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit, $group, $ljoin);
   }
   
   /**
