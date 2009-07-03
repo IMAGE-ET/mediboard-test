@@ -141,9 +141,37 @@ Main.add(function () {
 
 <table class="form">
   <tr>
-    <td class="text">
-      <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
-            
+    <th class="category">
+      <button style="float: left" class="edit" type="button" onclick="easyMode();">Mode grille</button>
+      Antécédents
+    </th>
+    <td class="halfPane" rowspan="100">
+      <table class="form">
+        <tr>
+          <th class="category">
+            Dossier patient
+          </th>
+        </tr>
+        <tr>
+          <td class="text" id="listAnt">       
+          </td>
+        </tr> 
+        {{if $_is_anesth}}
+        <tr>
+          <th class="category">
+            Eléments significatifs pour le séjour
+          </th>
+        </tr>
+        <tr>
+          <td class="text" id="listAntCAnesth">
+          </td>
+        </tr>
+        {{/if}}
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="text">      
       <!-- Antécédents -->
       <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
       
@@ -214,9 +242,16 @@ Main.add(function () {
         </tr>
       </table>
       </form>
-      
-      {{if $isPrescriptionInstalled}}
-      <hr />
+    </td>
+  </tr>
+  {{if $isPrescriptionInstalled}}
+  <tr>
+    <th class="category">
+      Traitements (base de données de médicaments)
+    </th>
+  </tr>
+  <tr>
+    <td class="text">
       <!-- Formulaire d'ajout de traitements -->
       <form name="editLineTP" action="?m=dPcabinet" method="post">
         <input type="hidden" name="m" value="dPprescription" />
@@ -295,12 +330,20 @@ Main.add(function () {
           </tr>
 	      </table>
       </form>
-      {{/if}}
+    </td>
+  </tr>
+  {{/if}}
       
       
-			<!-- Traitements -->
-			{{if $dPconfig.dPpatients.CTraitement.enabled}}
-      <hr />
+  <!-- Traitements -->
+	{{if $dPconfig.dPpatients.CTraitement.enabled}}
+	<tr>
+	  <th class="category">
+	    Traitements (texte simple)
+	  </th>
+	</tr>
+	<tr>
+	  <td class="text">
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -367,10 +410,18 @@ Main.add(function () {
         </tr>
       </table>
       </form>
-      {{/if}}
+    </td>
+  </tr>
+  {{/if}}
       
-      <!-- Diagnostics CIM -->
-      <hr />
+  <!-- Diagnostics CIM -->
+  <tr>
+    <th class="category">
+      Base de données CIM
+    </th>
+  </tr>
+  <tr>
+    <td class="text">
       <form name="addDiagFrm" action="?m=dPcabinet" method="post">
         <strong>Ajouter un diagnostic</strong>
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
@@ -425,30 +476,6 @@ Main.add(function () {
            {{/foreach}}
         </tbody>
       {{/foreach}}
-      </table>
-    </td>
-    <td class="halfPane">
-      <table class="form">
-        <tr>
-          <th class="category">
-            Dossier patient
-          </th>
-        </tr>
-        <tr>
-          <td class="text" id="listAnt">       
-          </td>
-        </tr> 
-        {{if $_is_anesth}}
-        <tr>
-          <th class="category">
-            Eléments significatifs pour le séjour
-          </th>
-        </tr>
-        <tr>
-          <td class="text" id="listAntCAnesth">
-          </td>
-        </tr>
-        {{/if}}
       </table>
     </td>
   </tr>
