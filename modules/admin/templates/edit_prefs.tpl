@@ -445,12 +445,16 @@ Main.add(function () {
       </select>
     </td>
   </tr>
+  
+  </tbody>
   {{/if}}
   
+  
   {{assign var="module" value="dPplanningOp"}}
+  
+  {{if $prefsUser.$module}}
 	<tbody style="display: none" id="{{$module}}">
-  {{if $prefsUser.$module}}  
-
+	  
   {{assign var="var" value="mode_dhe"}}
   <tr>
     <th>
