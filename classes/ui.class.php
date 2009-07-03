@@ -525,14 +525,14 @@ class CAppUI {
     // notContaining
     if ($pwdSpecs->notContaining) {
       $target = $pwdSpecs->notContaining;
-        if ($field = $user->$target && stristr($pwd, $field))
+        if (($field = $user->$target) && stristr($pwd, $field))
           return true;
     }
     
     // notNear
     if ($pwdSpecs->notNear) {
       $target = $pwdSpecs->notNear;
-        if ($field = $user->$target && levenshtein($pwd, $field) < 3)
+        if (($field = $user->$target) && (levenshtein($pwd, $field) < 3))
           return true;
     }
 
