@@ -45,3 +45,25 @@
   <th>{{mb_label object=$object field="titres"}}</th>
   <td>{{mb_field object=$object field="titres"}}</td>
 </tr>
+
+<tr>
+  <th>{{mb_label object=$mediuserSel field="compte"}}</th>
+  <td>{{mb_field object=$mediuserSel field="compte"}}</td>
+</tr>
+
+{{if is_array($banques)}}
+<!-- Choix de la banque quand disponible -->
+<tr>
+  <th>{{mb_label object=$mediuserSel field="banque_id"}}</th>
+  <td>
+    <select name="banque_id" style="width: 150px;">
+      <option value="">&mdash; Choix d'une banque</option>
+      {{foreach from=$banques item="banque"}}
+      <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>
+        {{$banque->_view}}
+      </option>
+      {{/foreach}}
+    </select>
+  </td>
+</tr>
+{{/if}}
