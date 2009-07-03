@@ -72,8 +72,11 @@
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_login_as" />
     <div style="text-align: right;">
-      <label for="username">Utilisateur </label><input name="username" tabIndex="1000" type="text" class="notNull" /><br />
-      <label for="password">Mot de passe </label><input name="password" tabIndex="1001" type="password" />
+      <label for="username">Utilisateur </label><input name="username" tabIndex="1000" type="text" class="notNull" />
+      
+      {{if $app->user_type != 1}}
+        <br /><label for="password">Mot de passe </label><input name="password" tabIndex="1001" type="password" />
+      {{/if}}
     </div>
     <div>
       <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
