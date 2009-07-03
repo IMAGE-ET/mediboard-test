@@ -301,6 +301,7 @@ Main.add(function () {
   <li><a href="#antecedents">Antécédents / Traitements</a></li>
   <li><a href="#suivisoins">Suivi soins</a></li>
   <li onclick="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
+  <li><a href="#examens">Examens</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -315,6 +316,11 @@ Main.add(function () {
 
 <div id="suivisoins" style="display:none"></div>
 <div id="constantes" style="display:none"></div>
+
+<div id="examens">
+  {{assign var="readonly" value=1}}
+  {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
+</div>
 
 {{/if}}
 
