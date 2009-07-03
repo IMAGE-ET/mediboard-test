@@ -888,4 +888,7 @@ $locales['config-dPplanningOp-CSejour-service_id'] = '';
 $locales['config-dPplanningOp-CSejour-service_id-desc'] = '';
 $locales['config-dPplanningOp-CSejour-service_id_notNull'] = 'Service obligatoire';
 $locales['config-dPplanningOp-CSejour-service_id_notNull-desc'] = '';
+$locales['CProtocole-service_id_sejour'] = 'Service ';
+$locales['CProtocole-service_id_sejour-court'] = 'Service';
+$locales['CProtocole-service_id_sejour-desc'] = 'Service';
 ?>
