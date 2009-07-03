@@ -23,6 +23,8 @@ var ProtocoleSelector = {
   sRques_sej       : null,
   sProtoPrescAnesth: null,
   sProtoPrescChir  : null,
+  sServiceId	   : null,
+  sServiceId_easy  : null,
   options : {
     width : 700,
     height: 500
@@ -47,8 +49,10 @@ var ProtocoleSelector = {
     // Champs de l'intervention
     if (oOpForm) {
       $V(oOpForm[this.sChir_id], protocole.chir_id, true);
+      $V(oOpForm[this.sServiceId], protocole.service_id_sejour, true);
       if(oOpFormEasy) {
         $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
+        $V(oOpFormEasy[this.sServiceId_easy] , protocole.service_id_sejour);
         $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
         $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
       }
@@ -76,6 +80,9 @@ var ProtocoleSelector = {
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       oSejourForm[this.sType].value = protocole.type;
+    }
+    if(!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value) {
+      $V(oSejourForm[this.sServiceId], protocole.service_id_sejour);
     }
     if(!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value) {
       $V(oSejourForm[this.sDP], protocole.DP);

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab, $g;
+global $AppUI, $can, $m, $tab;
 
 $can->needsEdit();
 
@@ -152,7 +152,7 @@ $mins_duree = range(0, 59, $config["min_intervalle"]);
 // Récupération des services
 $service = new CService();
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 

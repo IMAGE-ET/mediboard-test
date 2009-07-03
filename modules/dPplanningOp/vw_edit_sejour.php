@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI, $can, $m, $tab, $dPconfig, $g;
+global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsRead();
 
@@ -126,7 +126,7 @@ $listEtab = $etab->loadList(null, $order);
 // Récupération des services
 $service = new CService();
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 

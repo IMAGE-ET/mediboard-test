@@ -52,6 +52,14 @@ $step  = CAppUI::conf("dPplanningOp COperation min_intervalle");
 $hours = range($start, $stop);
 $mins = range(0,59,$step);
 
+// Récupération des services
+$service = new CService();
+$where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$order = "nom";
+$listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -60,6 +68,7 @@ $smarty->assign("protocole", $protocole);
 $smarty->assign("chir"     , $chir);
 
 $smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listServices"  , $listServices);
 
 $smarty->assign("hours", $hours);
 $smarty->assign("mins" , $mins);

@@ -296,6 +296,23 @@ Main.add(function () {
         <tr>
          <th class="category" colspan="3">Informations concernant le séjour</th>
         </tr>
+        
+        <tr>
+				  <th>
+				    {{mb_label object=$protocole field="service_id_sejour"}}
+				  </th>
+				  <td colspan="3">
+				    <select name="service_id_sejour" class="{{$protocole->_props.service_id_sejour}}" style="max-width: 150px;">
+				      <option value="">&mdash; Choisir un service</option>
+				      {{foreach from=$listServices item=_service}}
+				      <option value="{{$_service->_id}}" {{if $protocole->service_id_sejour == $_service->_id}} selected="selected" {{/if}}>
+				        {{$_service->_view}}
+				      </option>
+				      {{/foreach}}
+				    </select>
+				  </td>
+				</tr>
+        
         <tr>
           <th>{{mb_label object=$protocole field="DP"}}</th>
           <td>{{mb_field object=$protocole field="DP" size="10"}}</td>

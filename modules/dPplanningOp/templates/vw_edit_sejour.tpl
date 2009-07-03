@@ -5,6 +5,7 @@ ProtocoleSelector.init = function(){
   this.sForSejour     = true;
   this.sForm          = "editSejour";
   this.sChir_id       = "praticien_id";
+  this.sServiceId     = "service_id";
   this.sDepassement   = "depassement";
   
   this.sType          = "type";

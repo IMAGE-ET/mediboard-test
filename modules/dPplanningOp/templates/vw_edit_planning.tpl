@@ -110,6 +110,7 @@ ProtocoleSelector.init = function(){
   this.sForfait       = "forfait";
   this.sFournitures   = "fournitures";
   this.sRques_op      = "rques";
+  this.sServiceId     = "service_id";
   
   this.sType          = "type";
   this.sDuree_prevu   = "_duree_prevue";
@@ -118,6 +119,7 @@ ProtocoleSelector.init = function(){
   this.sRques_sej     = "rques";
 
   this.sChir_id_easy    = "chir_id";
+  this.sServiceId_easy  = "service_id";
   this.sLibelle_easy    = "libelle";
   this.sCodes_ccam_easy = "codes_ccam";
 

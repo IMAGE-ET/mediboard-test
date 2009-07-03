@@ -36,6 +36,7 @@ class CProtocole extends CMbObject {
   var $depassement     = null;
   var $forfait         = null;
   var $fournitures     = null;
+  var $service_id_sejour = null;
   var $libelle_sejour  = null;
 
   // DB fields linked protocols
@@ -72,6 +73,7 @@ class CProtocole extends CMbObject {
     $specs["rques_sejour"]    = "text confidential";
     $specs["libelle"]         = "str seekable";
     $specs["libelle_sejour"]  = "str seekable";
+    $specs["service_id_sejour"] = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
     $specs["examen"]          = "text confidential seekable";
     $specs["materiel"]        = "text confidential seekable";
     $specs["duree_hospi"]     = "num notNull min|0 max|36500";
