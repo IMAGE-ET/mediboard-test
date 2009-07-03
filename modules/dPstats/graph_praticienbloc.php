@@ -135,7 +135,7 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 			'tabGraphLabel' => utf8_encode('Graphique'),
       'tabDataLabel' => utf8_encode('Données'),
       'toolbarDownload' => utf8_encode('Fichier CSV'),
-      'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
+      'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
 	  )
 	);
   if ($total == 0) $options['yaxis']['max'] = 1;

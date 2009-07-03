@@ -113,7 +113,7 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 			'tabGraphLabel' => utf8_encode('Graphique'),
       'tabDataLabel' => utf8_encode('Données'),
       'toolbarDownload' => utf8_encode('Fichier CSV'),
-      'toolbarSelectAll' => utf8_encode('Seléctionner tout le tableau')
+      'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
 	  )
 	);
 	

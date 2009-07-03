@@ -39,6 +39,7 @@ CAppUI::requireModuleFile("dPstats", "graph_activite");
 CAppUI::requireModuleFile("dPstats", "graph_praticienbloc");
 CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
 CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
+CAppUI::requireModuleFile("dPstats", "graph_op_annulees");
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
@@ -76,6 +77,8 @@ else if($filter->_specialite)
   $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
 else
   $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
+
+$graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
 
 // Création du template
 $smarty = new CSmartyDP();
