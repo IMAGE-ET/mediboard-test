@@ -47,14 +47,14 @@
 </tr>
 
 <tr>
-  <th>{{mb_label object=$mediuserSel field="compte"}}</th>
-  <td>{{mb_field object=$mediuserSel field="compte"}}</td>
+  <th>{{mb_label object=$object field="compte"}}</th>
+  <td>{{mb_field object=$object field="compte"}}</td>
 </tr>
 
 {{if is_array($banques)}}
 <!-- Choix de la banque quand disponible -->
 <tr>
-  <th>{{mb_label object=$mediuserSel field="banque_id"}}</th>
+  <th>{{mb_label object=$object field="banque_id"}}</th>
   <td>
     <select name="banque_id" style="width: 150px;">
       <option value="">&mdash; Choix d'une banque</option>
