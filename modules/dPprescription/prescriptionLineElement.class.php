@@ -97,6 +97,15 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
   }
   
+  function updateLongView(){
+    $this->loadRefsPrises();
+    $this->_long_view = "$this->_view, "; 
+    foreach($this->_ref_prises as $_poso){
+      $this->_long_view .= "$_poso->_view, ";
+    }
+    $this->_long_view .= $this->_duree_prise;
+  }
+  
   function updateDBFields(){
     parent::updateDBFields();
     if($this->_executant !== null){

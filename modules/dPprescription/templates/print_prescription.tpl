@@ -103,7 +103,7 @@ Main.add(window.print);
   {{else}}
   <div class="bodyWithoutPageBreak">
   {{/if}}
-
+  
 {{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald}}
   <h1>Medicaments</h1>
     <!-- Affichage des ald -->
@@ -122,7 +122,6 @@ Main.add(window.print);
 	    {{/foreach}}
     </ul>
     <div class="middle"></div>
-    
     <!-- Affichage des no_ald -->
     <h3>
     Prescriptions SANS RAPPORT avec l'affection de longue durée
@@ -141,7 +140,6 @@ Main.add(window.print);
 		  </li>
 	  {{/foreach}}
     </ul>
-    
 <!-- Affichage en mode normal -->
 {{else}}
   <h1>Médicaments</h1>
@@ -196,7 +194,6 @@ Main.add(window.print);
 		    </li>
 	    {{/foreach}}
     </ul>
-    
 {{/if}}
  </div>
 {{/if}}
@@ -204,7 +201,6 @@ Main.add(window.print);
 
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
- 
 <!-- Parcours des categories -->
   {{foreach from=$elementsChap key=exec item=elements name="foreachExec"}}
     {{if $exec != "aucun"}}
@@ -216,11 +212,8 @@ Main.add(window.print);
      {{else}} 
        <div class="body">
      {{/if}}
-     
      <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
-     
      <h2>{{$dPconfig.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
-     
      {{if $elements.ald|@count}}
      <h3>
 	     Prescriptions relatives au traitement de l'affection de longue durée 
@@ -243,7 +236,6 @@ Main.add(window.print);
 	             <!-- Affichage du commentaire -->
 	              <li>{{$_element_ald->commentaire}}</li>
 	           {{/if}}
-	           
 	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
@@ -254,7 +246,6 @@ Main.add(window.print);
 	         Prescriptions SANS RAPPORT avec l'affection de longue durée 
 	       </h3>
 	    {{/if}}
-	     
 	     <!-- Affichage des no_ald -->
 	     <ul>
 	     {{foreach from=$elements.no_ald key=name_cat item=_elements_no_ald name="foreach_elts_no_ald"}}
@@ -287,10 +278,10 @@ Main.add(window.print);
       Code lot:{{$_line_dmi->_ref_product_order_item_reception->code}})
       </li>
     {{/foreach}}
-    
     </ul>
   </div>
 {{/if}}
+
 <!-- Re-ouverture des tableaux -->
 <table>
   <tr>

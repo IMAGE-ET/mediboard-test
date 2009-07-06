@@ -79,6 +79,7 @@ class CPrescription extends CMbObject {
   var $_chapitre = null;
   var $_ref_selected_prat = null;
   
+  var $_chapter_view = null;
   
   static $images = array("med"      => "modules/soins/images/medicaments.png",
 											   "inj"      => "images/icons/anesth.png",
@@ -141,14 +142,64 @@ class CPrescription extends CMbObject {
 	    if(!$this->object_id){
 	      $this->_view = "Protocole: ".$this->libelle;
 	    } else {
-	      
-			    $this->_view = "Prescription du Dr ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
-			    if($this->libelle){
-			    	$this->_view .= "($this->libelle)";
-			    }
-	      }
-	    
+			  $this->_view = "Prescription du Dr ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
+			  if($this->libelle){
+			  	$this->_view .= "($this->libelle)";
+			  }
+	    }
 	    $this->loadRefCurrentPraticien();
+    }
+  }
+  
+  function updateChapterView(){
+    // Initialisation du tableau par chapitre
+    foreach($this->_specs["_chapitres"]->_list as $_chapitre){
+      $this->_chapter_view[$_chapitre] = "";
+    }
+    unset($this->_chapter_view["inj"]);
+    
+    // Chargement des medicaments et des commentaires
+    $this->loadRefsLinesMedComments();
+    if($this->_ref_lines_med_comments){
+	    foreach($this->_ref_lines_med_comments as $lines){
+	      foreach($lines as $_line){
+	        if($_line instanceOf CPrescriptionLineMedicament){
+	          $_line->updateLongView();
+	          $this->_chapter_view["med"] .= "$_line->_long_view<br />";
+	        } else {
+	          $this->_chapter_view["med"] .= "$_line->_view<br />";
+	        }
+	      }
+	    }
+    }
+    
+    // Chargement des elements
+    $this->loadRefsLinesElementsComments();
+    if($this->_ref_lines_elements_comments){
+	    foreach($this->_ref_lines_elements_comments as $chapitre => $_lines_by_cat){
+	      foreach($_lines_by_cat as $_lines){
+	        foreach($_lines["element"] as $_line_element){
+	          $_line_element->updateLongView();
+	          $this->_chapter_view[$chapitre] .= "$_line_element->_long_view<br />";
+	        }
+	        foreach($_lines["comment"] as $_line_comment){
+	          $this->_chapter_view[$chapitre] .= "$_line_comment->_view<br />";
+	        }
+	      }
+      }
+    }
+    
+    // Chargement des perfusions
+    $this->loadRefsPerfusions();
+    if(count($this->_ref_perfusions)){
+	    foreach($this->_ref_perfusions as $_perf){
+	      $this->_chapter_view["perf"] = "$_perf->_view: ";
+	      $_perf->loadRefsLines();
+	      foreach($_perf->_ref_lines as $_perf_line){
+	        $this->_chapter_view["perf"] .= "$_perf_line->_view, ";
+	      }
+	      $this->_chapter_view["perf"] .= "<br />";
+	    }
     }
   }
   
@@ -1101,11 +1152,13 @@ class CPrescription extends CMbObject {
   	$this->_ref_lines_med_comments["med"] = array();
   	$this->_ref_lines_med_comments["comment"] = array();
   	
-  	foreach($this->_ref_prescription_lines as &$line_med){
-  		if($withRefs){
-  			$line_med->loadRefsPrises();
-  		}
-  		$this->_ref_lines_med_comments["med"][] = $line_med;
+  	if(count($this->_ref_prescription_lines)){
+	  	foreach($this->_ref_prescription_lines as &$line_med){
+	  		if($withRefs){
+	  			$line_med->loadRefsPrises();
+	  		}
+	  		$this->_ref_lines_med_comments["med"][] = $line_med;
+	  	}
   	}
   	if(isset($this->_ref_prescription_lines_comment["medicament"][""]["comment"])){
       foreach($this->_ref_prescription_lines_comment["medicament"][""]["comment"] as &$comment_med){
@@ -1135,15 +1188,16 @@ class CPrescription extends CMbObject {
     $order = "prescription_line_element_id DESC";
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     
-    foreach ($this->_ref_prescription_lines_element as &$line_element){	
-    	$line_element->loadRefElement();
-    	if($withRefs){
-	    	$line_element->loadRefsPrises();
-	    	$line_element->loadRefExecutant();
-	    	$line_element->loadRefPraticien();
+    if(count($this->_ref_prescription_lines_element)){
+	    foreach($this->_ref_prescription_lines_element as &$line_element){	
+	    	$line_element->loadRefElement();
+	    	if($withRefs){
+		    	$line_element->loadRefsPrises();
+		    	$line_element->loadRefExecutant();
+		    	$line_element->loadRefPraticien();
+		    }
+	    	$line_element->_ref_element_prescription->loadRefCategory();
 	    }
-    	$line_element->_ref_element_prescription->loadRefCategory();
-    	
     }
   }
   
@@ -1154,11 +1208,13 @@ class CPrescription extends CMbObject {
   	$this->loadRefsLinesElement($chapitre, $withRefs, $emplacement);
   	$this->_ref_prescription_lines_element_by_cat = array();
   	
-  	foreach($this->_ref_prescription_lines_element as $line){
-  	  $line->_ref_element_prescription->loadRefCategory();
-  	  $category =& $line->_ref_element_prescription->_ref_category_prescription;
-  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
-  		$this->_ref_lines_elements_comments[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
+  	if(count($this->_ref_prescription_lines_element)){
+	  	foreach($this->_ref_prescription_lines_element as $line){
+	  	  $line->_ref_element_prescription->loadRefCategory();
+	  	  $category =& $line->_ref_element_prescription->_ref_category_prescription;
+	  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
+	  		$this->_ref_lines_elements_comments[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
+	  	}
   	}
   	ksort($this->_ref_prescription_lines_element_by_cat);
   }
@@ -1193,22 +1249,24 @@ class CPrescription extends CMbObject {
   	
   	$commentaires = $line_comment->loadList($where, $order, null, null, $ljoin);
   	
-  	foreach($commentaires as $_line_comment){
-  	  if ($withRefs){
-          $_line_comment->loadRefExecutant();
-  	  }
-      if($_line_comment->category_prescription_id){
-  	  	// Chargement de la categorie
-        $_line_comment->loadRefCategory();
-  	  	$cat = new CCategoryPrescription();
-  	  	$cat->load($_line_comment->category_prescription_id);
-  	  	$chapitre = $cat->chapitre;
-  	  } else {
-  	  	$chapitre = "medicament";
-  	  }
-      $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
-      $this->_ref_lines_elements_comments[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
-    }
+  	if(count($commentaires)){
+	  	foreach($commentaires as $_line_comment){
+	  	  if ($withRefs){
+	          $_line_comment->loadRefExecutant();
+	  	  }
+	      if($_line_comment->category_prescription_id){
+	  	  	// Chargement de la categorie
+	        $_line_comment->loadRefCategory();
+	  	  	$cat = new CCategoryPrescription();
+	  	  	$cat->load($_line_comment->category_prescription_id);
+	  	  	$chapitre = $cat->chapitre;
+	  	  } else {
+	  	  	$chapitre = "medicament";
+	  	  }
+	      $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
+	      $this->_ref_lines_elements_comments[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
+	    }
+  	}
   }
   
   /*
@@ -1588,6 +1646,14 @@ class CPrescription extends CMbObject {
          }
       }
     }  
+  }
+  
+  // fillTemplate utilisé pour la consultation et le sejour (affichage des chapitres de la prescription)
+  function fillLimitedTemplate(&$template) {
+    $this->updateChapterView();
+    foreach($this->_chapter_view as $_chapitre => $view_chapitre){
+      $template->addProperty("Prescription ".CAppUI::tr("CPrescription.type.$this->type")." - ".CAppUI::tr("CPrescription._chapitres.$_chapitre"), $view_chapitre);
+    }
   }
   
   function fillTemplate(&$template) {

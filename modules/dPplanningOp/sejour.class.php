@@ -1053,6 +1053,14 @@ class CSejour extends CCodable {
     $this->loadRefDossierMedical();
     // Dossier médical
     $this->_ref_dossier_medical->fillTemplate($template, "Sejour");
+    
+    if(CModule::getActive('dPprescription')){
+	    // Chargement du fillTemplate de la prescription
+	    $this->loadRefsPrescriptions();
+	    $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
+	    $prescription->type = "sejour";
+	    $prescription->fillLimitedTemplate($template);
+    }
   }
   
   /**

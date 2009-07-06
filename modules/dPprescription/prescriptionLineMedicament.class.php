@@ -154,6 +154,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_quantite_administration            = null;
   var $_quantite_dispensation              = null;
   
+  var $_long_view = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_medicament';
@@ -207,7 +209,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function updateFormFields() {
     parent::updateFormFields();   
- 
+
     $this->_nb_alertes = 0;
     $this->loadRefProduit();
     $this->_view = $this->_ref_produit->libelle;
@@ -251,6 +253,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
     $this->isPerfusable();
     $this->isInjectable();
+  }
+    
+  function updateLongView(){
+    $this->loadRefsPrises();
+    $this->_long_view = "$this->_ucd_view, "; 
+    foreach($this->_ref_prises as $_poso){
+      $this->_long_view .= "$_poso->_view, ";
+    }
+    $this->_long_view .= $this->_duree_prise;
   }
   
   /*

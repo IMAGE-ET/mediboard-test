@@ -960,6 +960,14 @@ class CConsultation extends CCodable {
     $this->_ref_plageconsult->loadRefsFwd();
     $this->_ref_plageconsult->_ref_chir->fillTemplate($template);
     $this->_ref_patient->fillTemplate($template);
+   
+    if(CModule::getActive('dPprescription')){
+      // Chargement du fillTemplate de la prescription
+	    $this->loadRefsPrescriptions();
+	    $prescription = isset($this->_ref_prescriptions["externe"]) ? $this->_ref_prescriptions["externe"] : new CPrescription();
+	    $prescription->type = "externe";
+	    $prescription->fillLimitedTemplate($template);
+    }
     $this->fillLimitedTemplate($template);
   }
   
