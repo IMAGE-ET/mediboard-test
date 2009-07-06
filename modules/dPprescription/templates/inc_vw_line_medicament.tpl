@@ -226,8 +226,10 @@
       <table style="width:100%">
         <tr>
           <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left; width: 50%">
-			      <!-- Selection des posologies BCB -->
-			      {{*include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"*}}
+			      <!-- Selection des posologies statistiques -->
+			      {{if $line->_ref_prescription->object_id}}
+			      {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
+			      {{/if}}
 			      <!-- Ajout de posologies -->			       
 			      {{if $line->_can_modify_poso}}
 			        {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Med"}}	  

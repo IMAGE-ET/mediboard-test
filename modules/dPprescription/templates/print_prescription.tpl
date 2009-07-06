@@ -225,8 +225,10 @@ Main.add(window.print);
 	     {{foreach from=$elements.ald key=name_cat item=_elements_ald name="foreach_elts_ald"}}  
 	        {{foreach from=$_elements_ald  item=_element_ald name=foreach_elt_ald}}
 	           {{if $smarty.foreach.foreach_elt_ald.first}}
-	           {{assign var=category value=$categories.$name_chap.$name_cat}}
-		         <strong>{{$category->nom}}</strong>
+		           {{assign var=category value=$categories.$name_chap.$name_cat}}
+			         <strong>{{$category->nom}}</strong>
+			         {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+			         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 		         {{/if}}
 
 		         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
@@ -253,7 +255,9 @@ Main.add(window.print);
 	           {{if $smarty.foreach.foreach_elt_no_ald.first}}
 	           {{assign var=category value=$categories.$name_chap.$name_cat}}
 		         <strong>{{$category->nom}}</strong>
-		         {{/if}}
+		         	 {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+			         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+			       {{/if}}
 		
 		         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}
 	             <!-- Affichage de l'element -->

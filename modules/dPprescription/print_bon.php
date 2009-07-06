@@ -47,16 +47,16 @@ if(count($prescription->_ref_lines_elt_for_plan)){
 			            if(is_array($_quantites)){  
 			              foreach($_quantites as $_hour => $_quantite){
 			                if(isset($_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"])){
-			                	if(!isset($bons[$_name_chap][$_hour][$_line->_id])){
-			                    $bons[$_name_chap][$_hour][$_line->_id] = 0;
+			                	if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
+			                    $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
 			                  }
-			                  $bons[$_name_chap][$_hour][$_line->_id] += $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
+			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
 			                }
 			                if(isset($_quantite["total"]) && $_quantite["total"]){
-			                  if(!isset($bons[$_name_chap][$_hour][$_line->_id])){
-			                    $bons[$_name_chap][$_hour][$_line->_id] = 0;
+			                  if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
+			                    $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
 			                  }		                  
-			                  $bons[$_name_chap][$_hour][$_line->_id] += $_quantite["total"];
+			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
 			                }
 			                if(!array_key_exists($_line->_id, $lines)){
 			                  $lines[$_line->_id] = $_line;
@@ -74,10 +74,10 @@ if(count($prescription->_ref_lines_elt_for_plan)){
 	                if(is_numeric($_hour)){  
 				          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 					          if($quantite_planifiee){
-		                	if(!isset($bons[$_name_chap][$_hour][$_line->_id])){
-			                  $bons[$_name_chap][$_hour][$_line->_id] = 0;
+		                	if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
+			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
 			                }
-			                $bons[$_name_chap][$_hour][$_line->_id] += $quantite_planifiee;
+			                $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
 					          }
 	                	if(!array_key_exists($_line->_id, $lines)){
 			                $lines[$_line->_id] = $_line;
@@ -98,6 +98,9 @@ foreach($bons as $_chap => &$_bons){
   ksort($_bons);
 }
 
+// Chargement de toutes les categories
+$categories = CCategoryPrescription::loadCategoriesByChap();
+
 $filter_line = new CPrescriptionLineElement();
 $filter_line->debut = $debut;
 
@@ -110,6 +113,7 @@ $smarty->assign("nodebug", true);
 $smarty->assign("sel_chapitre", $sel_chapitre);
 $smarty->assign("chapitres", $chapitres);
 $smarty->assign("filter_line", $filter_line);
+$smarty->assign("categories", $categories);
 $smarty->display("print_bon.tpl");
 
 ?>

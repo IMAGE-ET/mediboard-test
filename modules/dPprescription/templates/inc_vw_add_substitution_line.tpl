@@ -122,10 +122,11 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     $V(oForm.time_fin_da,"",false);
     
     // the numericFields
+    /*
     $('img_'+oForm.decalage_line_fin.id).hide();
     $('img_'+oForm.decalage_line.id).hide();
     $('img_'+oForm.duree.id).hide();
-    
+    */
     // The time pickers
     $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('hide');
     $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('hide');
@@ -154,10 +155,11 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     oForm.time_fin.disabled = false;
       
     // the numericFields
+    /*
     $('img_'+oForm.decalage_line_fin.id).show();
     $('img_'+oForm.decalage_line.id).show();
     $('img_'+oForm.duree.id).show();
-    
+    */
     // The time pickers
     $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('show');
     $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('show'); 

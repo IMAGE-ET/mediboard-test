@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
 {{assign var=patient value=$prescription->_ref_patient}}
 {{assign var=sejour value=$prescription->_ref_object}}
 {{if $sejour->_ref_curr_affectation->_id}}
@@ -57,9 +56,6 @@ Main.add( function(){
 	  overflow: hidden;
 	}
 }
-
-
-
 
 </style>
 
@@ -117,26 +113,36 @@ Main.add( function(){
 </div>
 
 {{foreach from=$bons key=chapitre item=_bons_by_hour name=foreach_chap}}
-  {{foreach from=$_bons_by_hour key=hour item=_bons name=foreach_hour}}
-    <div class="{{if $smarty.foreach.foreach_chap.last && $smarty.foreach.foreach_hour.last}}bodyWithoutPageBreak{{else}}body{{/if}}">
-	    <table class="tbl">
-			  <tr>
-			    <th colspan="2">{{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}} - Examens demandés pour le {{$debut|date_format:$dPconfig.date}} à {{$hour}} h</th>
-			  </tr>
-		    {{foreach from=$_bons key=line_id item=_bon}}
-		      {{assign var=line value=$lines.$line_id}}
-		      <tr>
-			      <td>
-			      	{{$_bon}} {{$line->_unite_prise}} {{$line->_view}}
-			      </td>
-			      <td style="width: 20%">
-			        Prescripteur: {{$line->_ref_praticien->_view}}
-			      </td>
-		      </tr>
-		    {{/foreach}}
-	    </table>
-    </div>
-  {{/foreach}}
+	  {{foreach from=$_bons_by_hour key=hour item=_bons_by_cat name=foreach_hour}}
+	    <div class="{{if $smarty.foreach.foreach_chap.last && $smarty.foreach.foreach_hour.last}}bodyWithoutPageBreak{{else}}body{{/if}}">
+		    <table class="tbl">
+				  <tr>
+				    <th colspan="2" class="title">{{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}} - Examens demandés pour le {{$debut|date_format:$dPconfig.date}} à {{$hour}} h</th>
+				  </tr>
+				  {{foreach from=$_bons_by_cat item=_bons key=name_cat}}
+				  <tr>
+				    <th colspan="2" class="text">
+				      {{assign var=category value=$categories.$chapitre.$name_cat}}
+			        {{$category->nom}}
+			        {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+			        {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+		        </th>
+				  </tr>
+			    {{foreach from=$_bons key=line_id item=_bon}}
+			      {{assign var=line value=$lines.$line_id}}
+			      <tr>
+				      <td>
+				      	{{$_bon}} {{$line->_unite_prise}} {{$line->_view}}
+				      </td>
+				      <td style="width: 20%">
+				        Prescripteur: {{$line->_ref_praticien->_view}}
+				      </td>
+			      </tr>
+			    {{/foreach}}
+			    {{/foreach}}
+		    </table>
+	    </div>
+	{{/foreach}}
 {{/foreach}}
 
 <!-- re-ouverture du tableau -->
