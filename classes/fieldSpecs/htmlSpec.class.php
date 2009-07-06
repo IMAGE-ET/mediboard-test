@@ -36,6 +36,7 @@ class CHtmlSpec extends CMbFieldSpec {
     if (!@DOMDocument::loadXML($source)) {
       return "Le document HTML est mal formé, ou la requête n'a pas pu se terminer.";
     }
+
     return null;
   }
   

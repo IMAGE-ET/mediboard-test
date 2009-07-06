@@ -67,9 +67,8 @@ class CConsultation extends CCodable {
   
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
-  var $_ref_plageconsult = null;
   var $_ref_sejour       = null; // Declared in CCodable
-  
+  var $_ref_plageconsult = null;
   
   // FSE
   var $_bind_fse       = null;
@@ -389,7 +388,7 @@ class CConsultation extends CCodable {
     // Copie des elements du tarif dans la consultation
     $this->secteur1     = $tarif->secteur1;
     $this->secteur2     = $tarif->secteur2;
-    $this->du_patient     = $tarif->secteur1 + $tarif->secteur2;
+    $this->du_patient   = $tarif->secteur1 + $tarif->secteur2;
     $this->tarif        = $tarif->description;
     
     // codes_ccam complet avec infos sur l'activite phase
@@ -593,7 +592,7 @@ class CConsultation extends CCodable {
     return $consult->store();
   }
 
-  function precodeCCAM(){
+  function precodeCCAM() {
     $this->loadRefPlageConsult();
     // Explode des codes_ccam du tarif
     $listCodesCCAM = explode("|", $this->codes_ccam);
@@ -621,31 +620,17 @@ class CConsultation extends CCodable {
     }
   }
   
-  function precodeNGAP(){
+  function precodeNGAP() {
     $listCodesNGAP = explode("|",$this->_tokens_ngap);
     foreach($listCodesNGAP as $key => $code_ngap){
       if($code_ngap) {
-	      $detailCodeNGAP = explode("-", $code_ngap);
 	      $acte = new CActeNGAP();
-        $acte->executant_id = $this->getExecutantId();
 	      $acte->_preserve_montant = true;
-	      $acte->quantite            = $detailCodeNGAP[0];
-	      $acte->code                = $detailCodeNGAP[1];
-	      $acte->coefficient         = $detailCodeNGAP[2];
-	      if(count($detailCodeNGAP) >= 4){
-	        $acte->montant_base        = $detailCodeNGAP[3];
-	      }
-	      if(count($detailCodeNGAP) >= 5){
-	        $acte->montant_depassement = str_replace("*","-",$detailCodeNGAP[4]);
-	      }
-	      if(count($detailCodeNGAP) >= 6){
-	      	$acte->demi = $detailCodeNGAP[5];
-	      }
-        if(count($detailCodeNGAP) >= 7){
-	      	$acte->complement = $detailCodeNGAP[6];
-	      }
-	      $acte->object_id = $this->_id;
+        $acte->setCodeComplet($code_ngap);
+
+        $acte->object_id = $this->_id;
 	      $acte->object_class = $this->_class_name;
+        $acte->executant_id = $this->getExecutantId();
 	      if (!$acte->countMatchingList()) {
 	        if ($msg = $acte->store()) {
 	          return $msg;

@@ -28,6 +28,9 @@ class CTarif extends CMbObject {
   var $_codes_ngap = array();
   var $_codes_ccam = array();
   
+  // Remote fields
+  var $_precode_ready = null;
+  
   // Object References
   var $_ref_chir     = null;
   var $_ref_function = null;
@@ -107,20 +110,47 @@ class CTarif extends CMbObject {
     return parent::store();
   }
   
+  function getPrecodeReady() {
+    if (count($this->_codes_ccam) + count($this->_codes_ngap) == 0) {
+      return $this->_precode_ready = false;
+    }
+    
+    foreach ($this->_codes_ccam as $code) {
+      $acte = new CActeCCAM();
+      $acte->setCodeComplet($code);
+      if (!$acte->getPrecodeReady()) {
+        return $this->_precode_ready = false;
+      }
+    }
+
+    foreach ($this->_codes_ngap as $code) {
+      $acte = new CActeNGAP();
+      $acte->setCodeComplet($code);
+      if (!$acte->getPrecodeReady()) {
+        return $this->_precode_ready = false;
+      }
+    }
+    
+    return $this->_precode_ready = true;
+  }
   
   function loadRefsFwd() {
     $this->_ref_chir = new CMediusers();
     $this->_ref_chir->load($this->chir_id);
     $this->_ref_function = new CFunctions();
     $this->_ref_function->load($this->function_id);
+    
+    $this->getPrecodeReady();
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_chir || !$this->_ref_function) {
+    if (!$this->_ref_chir || !$this->_ref_function) {
       $this->loadRefsFwd();
     }
     
-    return ($this->_ref_chir->getPerm($permType) || $this->_ref_function->getPerm($permType));
+    return 
+      $this->_ref_chir->getPerm($permType) || 
+      $this->_ref_function->getPerm($permType);
   }
 }
 

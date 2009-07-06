@@ -56,12 +56,21 @@ if ($user->isSecretaire()) {
   }
 }
 
+if ($listeTarifsChir) {
+  foreach ($listeTarifsChir as $_tarif) {
+    $_tarif->getPrecodeReady();
+  }
+}
+
 // Liste des tarifs de la spécialité
 $where = array();
 $where["chir_id"] = "IS NULL";
 $where["function_id"] = "= '$prat->function_id'";
 $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where, $order);
+foreach ($listeTarifsSpe as $_tarif) {
+  $_tarif->getPrecodeReady();
+}
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 $listPrat = $user->_is_secretaire ?

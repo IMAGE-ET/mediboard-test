@@ -56,13 +56,40 @@ class CActeNGAP extends CActe {
       $this->_shortview.= "/2";
     }
     
-    $this->_view = "Acte NGAP $this->_shortview de $this->object_class:$this->object_id";
+    $this->_view = "Acte NGAP $this->_shortview de $this->object_class-$this->object_id";
   }
   
   function loadExecution() {
     $this->loadTargetObject();
     $this->_ref_object->getActeExecution();
     $this->_execution = $this->_ref_object->_acte_execution;
+  }
+  
+  function setCodeComplet($code){
+    $details = explode("-", $code);
+    $this->quantite    = $details[0];
+    $this->code        = $details[1];
+    $this->coefficient = $details[2];
+
+    if (count($details) >= 4) {
+      $this->montant_base = $details[3];
+    }
+
+    if (count($details) >= 5){
+      $this->montant_depassement = str_replace("*","-",$details[4]);
+    }
+    
+    if (count($details) >= 6){
+    	$this->demi = $details[5];
+    }
+
+     if (count($details) >= 7){
+    	$this->complement = $details[6];
+    }
+  }
+  
+  function getPrecodeReady() {
+    return $this->quantite && $this->code && $this->coefficient;
   }
   
   function check(){

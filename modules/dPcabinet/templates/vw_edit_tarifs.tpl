@@ -1,25 +1,5 @@
 <script type="text/javascript">
 
-var Tarif = {
-  add: function(value){
-    var oForm = document.editFrm;
-    if(oForm.secteur1.value==''){
-      oForm.secteur1.value = 0;
-    } 
-    oForm.secteur1.value = parseFloat(oForm.secteur1.value) + parseFloat(value);
-  },
-  
-  del: function(value){
-    var oForm = document.editFrm;
-    if(oForm.secteur1.value==''){
-      oForm.secteur1.value = 0;
-    } 
-    oForm.secteur1.value = parseFloat(oForm.secteur1.value) - parseFloat(value);
-    Math.round(oForm.secteur1.value*100)/100;
-    
-  }
-}
-
 function refreshTotal() {
   var oForm = document.editFrm;
   var secteur1 = oForm.secteur1.value;
@@ -109,7 +89,7 @@ Main.add(function () {
 
         {{foreach from=$listeTarifsChir item=_tarif}}
         <tr {{if $_tarif->_id == $tarif->_id}}class="selected"{{/if}}>
-          <td>
+          <td {{if $_tarif->_precode_ready}}class="checked"{{/if}}>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id={{$_tarif->_id}}">
             	{{mb_value object=$_tarif field=description}}
             </a>
@@ -152,7 +132,13 @@ Main.add(function () {
 
       <table class="form">
         {{if $tarif->_id}}
-        <tr><th class="title modify" colspan="2">{{tr}}CTarif-title-modify{{/tr}} '{{$tarif->_view}}'</th></tr>
+        <tr>
+        	<th class="title modify text" colspan="2">
+        		{{mb_include  module=system template=inc_object_history object=$tarif}}
+        		{{mb_include  module=system template=inc_object_idsante400 object=$tarif}}
+        		{{tr}}CTarif-title-modify{{/tr}} '{{$tarif->_view}}'
+        	</th>
+        </tr>
         {{else}}
         <tr><th class="title" colspan="2">{{tr}}CTarif-title-create{{/tr}}</th></tr>
         {{/if}}
@@ -232,7 +218,7 @@ Main.add(function () {
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le tarif',objName:'{{$tarif->description|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
             {{else}}
-            <button class="submit" type="submit" name="btnFuseAction">{{tr}}Create{{/tr}}</button>
+            <button class="new" type="submit" name="btnFuseAction">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>
@@ -241,9 +227,18 @@ Main.add(function () {
       
       </form>
       
+      {{if $tarif->_precode_ready}}
+      <div class="small-success">
+      	Les codages CCAM et NGAP de ce tarif sont suffisamment complets pour permettre une cotation réelle automatique. 
+      	complète automatiquement
+      </div>
+      {{else}}
+      <div class="small-warning">
+      	Les codages CCAM et NGAP de ce tarif ne sont pas assez complets pour permettre une cotation complète automatiquement.
+      </div>
+			{{/if}}
+      
       <div class="big-info">
-        Compte-tenu du grand nombre de paramètres possibles pour les cotations NGAP et CCAM,
-        il n'est pas possible de manipuler ces codes dans la présente interface.<br />
         Pour créer un tarif contenant des codes CCAM et NGAP, effectuer une cotation réelle
         pendant une consultation en trois étapes :
         <ul>

@@ -483,6 +483,11 @@ option.novalue {
   display:none;
 }
 
+option.checked {
+	background: url(images/buttons/tick.png) no-repeat 12px;
+	padding-left: 30px;	
+}
+
 option[value=""] {
   font-style: italic;
 }
@@ -764,6 +769,11 @@ table.tbl tr:hover td.ok,
 table.tbl tbody:hover td.ok,
 span.ok {
   background-color: #afa;
+}
+
+table.tbl td.checked {
+	background: url(images/buttons/tick.png) no-repeat 4px;
+	padding-left: 20px;	
 }
 
 table.tbl td.big-info,

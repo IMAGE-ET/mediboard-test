@@ -86,11 +86,17 @@ $where = array();
 $where["chir_id"] = "= '$userSel->user_id'";
 $tarifsChir = new CTarif;
 $tarifsChir = $tarifsChir->loadList($where, $order);
+foreach($tarifsChir as $_tarif) {
+  $_tarif->getPrecodeReady();
+}
 
 $where = array();
 $where["function_id"] = "= '$userSel->function_id'";
 $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
+foreach($tarifsCab as $_tarif) {
+  $_tarif->getPrecodeReady();
+}
 
 // Reglement vide pour le formulaire
 $reglement = new CReglement();

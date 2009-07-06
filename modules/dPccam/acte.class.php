@@ -95,20 +95,37 @@ class CActe extends CMbMetaObject {
   }
   
   function checkCoded() {
-    if(!$this->_check_coded){
-        return;
+    if (!$this->_check_coded){
+      return;
     }
+    
     $this->completeField("object_class");
     $this->completeField("object_id");
     $object = new $this->object_class;
     $object->load($this->object_id);
-    if($object->_coded == "1") {
-      return "$object->_class_name déjà validée : Impossible de coter l\'acte";
+    if ($object->_coded == "1") {
+      return CApp::tr($object->_class_name) ." déjà validée : Impossible de coter l\'acte";
     }
   }
 
+  /**
+   * Tell wether acte is ready for prcoding
+   * @return bool
+   */
+  function getPrecodeReady() {
+    return false;
+  }
+  
+  /**
+   * Precode with a single serialized string.
+   * @param string $details
+   * @return void
+   */
+  function setCodeComplet($details) {
+  }
+  
   function updateMontant(){
-    if(!$this->_preserve_montant){
+    if (!$this->_preserve_montant){
       $object = new $this->object_class;
       $object->load($this->object_id);
       // Permet de mettre a jour le montant dans le cas d'un consultation

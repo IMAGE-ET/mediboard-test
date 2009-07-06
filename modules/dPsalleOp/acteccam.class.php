@@ -170,24 +170,28 @@ class CActeCCAM extends CActe {
     // datetime_execution: attention à rester dans la plage de l'opération
   }
    
-  
   function setCodeComplet($code){
-    $detailCode = explode("-", $code);
-    if(count($detailCode) >= 3){
-      $this->code_acte = $detailCode[0];
-      $this->code_activite = $detailCode[1];
-      $this->code_phase = $detailCode[2];
+    $details = explode("-", $code);
+    if (count($details) >= 3){
+      $this->code_acte     = $details[0];
+      $this->code_activite = $details[1];
+      $this->code_phase    = $details[2];
+      
       // Modificateurs
-      if(count($detailCode) >= 4){
-        $this->modificateurs = $detailCode[3];
+      if (count($details) >= 4){
+        $this->modificateurs = $details[3];
       } 
-      if(count($detailCode) >= 5){
-        $this->montant_depassement = str_replace("*","-",$detailCode[4]);
+      
+      // Dépassement
+      if (count($details) >= 5){
+        $this->montant_depassement = str_replace("*","-",$details[4]);
       }
- 
     }
   }
   
+  function getPrecodeReady() {
+    return $this->code_acte && $this->code_activite && $this->code_phase !== null;
+  }
   
   function updateFormFields() {
     parent::updateFormFields();

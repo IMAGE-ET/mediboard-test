@@ -139,15 +139,15 @@ Main.add( function(){
       	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
       	              {{if $tarifsChir|@count}}
         	              <optgroup label="Tarifs praticien">
-        	              {{foreach from=$tarifsChir item=curr_tarif}}
-        	                <option value="{{$curr_tarif->_id}}">{{$curr_tarif->_view}}</option>
+        	              {{foreach from=$tarifsChir item=_tarif}}
+        	                <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
         	              {{/foreach}}
         	              </optgroup>
       	              {{/if}}
       	              {{if $tarifsCab|@count}}
         	              <optgroup label="Tarifs cabinet">
-        	              {{foreach from=$tarifsCab item=curr_tarif}}
-        	                <option value="{{$curr_tarif->_id}}">{{$curr_tarif->_view}}</option>
+        	              {{foreach from=$tarifsCab item=_tarif}}
+        	                <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
         	              {{/foreach}}
         	              </optgroup>
       	              {{/if}}
