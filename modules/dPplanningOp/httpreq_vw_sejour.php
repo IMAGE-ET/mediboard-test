@@ -82,6 +82,13 @@ $order = "nom";
 $etab = new CEtabExterne();
 $listEtab = $etab->loadList(null, $order);
 
+// Récupération des services
+$service = new CService();
+$where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$order = "nom";
+$listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -110,6 +117,8 @@ $smarty->assign("listEtab", $listEtab);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listServices"  , $listServices);
+
 $smarty->assign("mode_operation", $mode_operation);
 $smarty->assign("etablissements", $etablissements);
 $smarty->assign("prestations"   , $prestations   );
