@@ -20,13 +20,14 @@ if ($service->load($service_id) && $date_min && $date_max) {
   
   foreach($stocks as $stock) {
     $stock->loadRefsFwd();
+    $stock_group = CProductStockGroup::getFromCode($stock->_ref_product->code);
     
     $target_quantity = $stock->order_threshold_optimum ? $stock->order_threshold_optimum : $stock->order_threshold_max;
     $effective_quantity = $stock->quantity;
     
     $where = array(
       'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
-      'product_delivery.stock_id' => "= $stock->_id",
+      'product_delivery.stock_id' => "= $stock_group->_id",
       'product.category_id' => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
     );
     $ljoin = array(
@@ -34,7 +35,7 @@ if ($service->load($service_id) && $date_min && $date_max) {
       'product' => 'product.product_id = product_stock_group.product_id',
     );
     $delivery = new CProductDelivery;
-    $deliveries = $delivery->loadList($where, 'date_dispensation', null, null, $ljoin);
+    $deliveries = $delivery->loadList($where, null, null, null, $ljoin);
     
     foreach($deliveries as $delivery) {
       if ($delivery->order == 1 && $delivery->quantity > 0){
@@ -44,7 +45,7 @@ if ($service->load($service_id) && $date_min && $date_max) {
   
     if ($target_quantity > $effective_quantity) {
       // This the GROUP stock!
-      $orders[CProductStockGroup::getFromCode($stock->_ref_product->code)->_id] = $target_quantity - $effective_quantity;
+      $orders[$stock_group->_id] = $target_quantity - $effective_quantity;
     }
   }
 }
