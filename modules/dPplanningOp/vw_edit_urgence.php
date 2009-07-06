@@ -125,6 +125,13 @@ $heure_sortie_autre  = $config["heure_sortie_autre"];
 $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
+// Récupération des services
+$service = new CService();
+$where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$order = "nom";
+$listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -151,6 +158,7 @@ $smarty->assign("tomorow"   , $tomorow);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listServices"  , $listServices);
 $smarty->assign("etablissements", $etablissements);
 
 $smarty->assign("hours"        , $hours);
