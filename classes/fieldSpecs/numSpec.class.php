@@ -195,7 +195,7 @@ class CNumSpec extends CMbFieldSpec {
 		      if ($this->pos)  $sHtml .= "min: 0,";
 		      elseif($min)     $sHtml .= "min: $min,";
 		      if (isset($max)) $sHtml .= "max: $max,";
-		      if ($showPlus)   $sHtml .= "showPlus: $showPlus";
+		      if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
 		      $sHtml .= '_:0 // IE rules
         });
       });
