@@ -14,7 +14,19 @@ autoOrder = function(service_id, date_min, date_max) {
   url.addParam('service_id', service_id);
   url.addParam('date_min', date_min);
   url.addParam('date_max', date_max);
-  url.requestUpdate('systemMsg', {onComplete:refreshLists});
+  url.requestJSON(fillInputs);
+}
+
+fillInputs = function(data){
+  $('list-order').select('input.num').each(function(e){
+    var stock_id = e.form.stock_id.value;
+    if (data[stock_id]) {
+      if (e.name == 'quantity') {
+        $V(e, data[stock_id], true);
+      }
+    }
+    else e.value = 0;
+  });
 }
 </script>
 
@@ -27,12 +39,20 @@ autoOrder = function(service_id, date_min, date_max) {
 <div class="pagination">
   <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}')">Commande auto</button>
 
-{{foreach from=0|range:$count_stocks:20 item=page}}
+  <label style="float: left; font-weight: normal;">
+    <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
+    Seulement les stocks du service 
+  </label>
+
+{{assign var=step value=$count_stocks|min:20}}
+{{foreach from=0|range:$count_stocks:$step item=page}}
+  {{assign var=view value=$page/20+1}}
+  {{if $view|intval == $view}}
   <a href="javascript:;" class="page {{if $page==$start}}active{{/if}}" 
-     onclick="$V(getForm('filter').start,{{$page}}); getForm('filter').onsubmit();">{{$page/20+1}}</a>
+     onclick="$V(getForm('filter').start,'{{$page}}'); refreshOrders();">{{$view}}</a>
+  {{/if}}
 {{/foreach}}
 </div>
-
 
 {{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}

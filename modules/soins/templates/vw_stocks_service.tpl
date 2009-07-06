@@ -12,9 +12,7 @@
 function refreshLists() {
   var url, form = getForm("filter");
     
-  url = new Url("soins", "httpreq_vw_stock_order");
-  url.addFormData(form);
-  url.requestUpdate("list-order", { waitingText: null } );
+  refreshOrders();
   
   url = new Url("soins", "httpreq_vw_stock_reception");
   url.addFormData(form);
@@ -25,6 +23,12 @@ function refreshLists() {
   url.requestUpdate("list-inventory", { waitingText: null } );
   
   return false;
+}
+
+function refreshOrders(){
+  var url = new Url("soins", "httpreq_vw_stock_order");
+  url.addFormData(getForm("filter"));
+  url.requestUpdate("list-order", { waitingText: null } );
 }
 
 function receiveLine(form, dontRefresh) {
@@ -55,6 +59,7 @@ Main.add(function () {
 <form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="start" value="{{$start}}" />
+  <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="refreshOrders()"/>
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>

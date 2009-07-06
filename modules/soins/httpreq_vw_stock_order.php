@@ -12,7 +12,8 @@ global $can;
 $can->needsRead();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
-$start = mbGetValueFromGetOrSession('start', 0);
+$start = intval(mbGetValueFromGetOrSession('start', 0));
+$only_service_stocks = mbGetValueFromGetOrSession('only_service_stocks', 1);
 
 // Calcul de date_max et date_min
 $date_min = mbGetValueFromGetOrSession('_date_min');
@@ -24,9 +25,25 @@ $ljoin = array(
   'product' => 'product.product_id = product_stock_group.product_id'
 );
 
-$group = CGroups::loadCurrent();
-$stocks = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
-$count_stocks = $group->countBackRefs('product_stocks');
+if ($only_service_stocks == 1) {
+  $service = new CService;
+  $service->load($service_id);
+  $stocks_service = $service->loadBackRefs('product_stock_services');
+  
+  $stocks = array();
+  $count_stocks = 0;
+  foreach($stocks_service as $stock_service){
+    $count_stocks++;
+    //if (count($stocks) == 20) continue;
+    $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
+    $stocks[$stock->_id] = $stock;
+  }
+} 
+else {
+  $group = CGroups::loadCurrent();
+  $stocks = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
+  $count_stocks = $group->countBackRefs('product_stocks', null, null, null, $ljoin);
+}
 
 // Load the already ordered dispensations
 foreach($stocks as &$stock) {
@@ -37,6 +54,7 @@ foreach($stocks as &$stock) {
     'product_delivery.stock_id' => "= $stock->_id",
     'product.category_id' => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
   );
+  
   $ljoin = array(
     'product_stock_group' => 'product_delivery.stock_id = product_stock_group.stock_id',
     'product' => 'product.product_id = product_stock_group.product_id',
@@ -57,5 +75,6 @@ $smarty->assign('count_stocks', $count_stocks);
 $smarty->assign('date_min', $date_min);
 $smarty->assign('date_max', $date_max);
 $smarty->assign('service', $service);
+$smarty->assign('only_service_stocks', $only_service_stocks);
 
 $smarty->display('inc_stock_order.tpl');

@@ -13,6 +13,7 @@ $can->needsEdit();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
 $start = mbGetValueFromGetOrSession('start', 0);
+$only_service_stocks = mbGetValueFromGetOrSession('only_service_stocks', 1);
 
 // Services list
 $service = new CService();
@@ -36,5 +37,6 @@ $smarty->assign('service_id',    $service_id);
 $smarty->assign('list_services', $list_services);
 $smarty->assign('delivrance',    $delivrance);
 $smarty->assign('start',         $start);
+$smarty->assign('only_service_stocks', $only_service_stocks);
 
 $smarty->display('vw_stocks_service.tpl');

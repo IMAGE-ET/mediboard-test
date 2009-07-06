@@ -13,6 +13,8 @@ $date_min = mbGetValueFromGet('date_min');
 $date_max = mbGetValueFromGet('date_max');
 
 $service = new CService;
+$orders = array();
+
 if ($service->load($service_id) && $date_min && $date_max) {
   $stocks = $service->loadBackRefs('product_stock_services');
   
@@ -41,20 +43,11 @@ if ($service->load($service_id) && $date_min && $date_max) {
     }
   
     if ($target_quantity > $effective_quantity) {
-      $order = new CProductDelivery;
-      $order->service_id = $service_id;
-      $order->stock_id = $stock->_id;
-      $order->order = 1;
-      $order->date_dispensation = mbDateTime();
-      $order->quantity = $target_quantity - $effective_quantity;
-      if ($msg = $order->store()) 
-        CAppUI::setMsg($msg);
-      else {
-        CAppUI::setMsg(CAppUI::tr('CProductOrder-msg-create'));
-      }
+      // This the GROUP stock!
+      $orders[CProductStockGroup::getFromCode($stock->_ref_product->code)->_id] = $target_quantity - $effective_quantity;
     }
   }
 }
 
-echo CAppUI::getMsg();
+echo json_encode($orders);
 CApp::rip();
