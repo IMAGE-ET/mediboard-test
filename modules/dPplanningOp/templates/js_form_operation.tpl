@@ -179,7 +179,7 @@ function synchroPrat() {
 }
 
 function synchroService() {
-  var oOpForm = document.editOp;
+  var oOpForm = document.editOpEasy;
   var oSejourForm = document.editSejour;
   if (!oSejourForm.sejour_id.value) {
     $V(oSejourForm.service_id, oOpForm.service_id.value);
