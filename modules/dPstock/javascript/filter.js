@@ -54,38 +54,20 @@ Filter.prototype = {
         var form = document.forms[element.sForm];
         var field = form.limit;
   
-        var rangeSel = new Element('div').setStyle({textAlign: 'center'});
+        var rangeSel = new Element('div', {className:'pagination'});
         if (count > 20) {
           var total = count;
           var r = makeRanges(total, 20);
           
-          rangeSel.insert(
-            new Element('a', {'href': '#1'})
-               .update('|&lt;&nbsp;')
-               .observe('click', function () {$V(field, 20); form.onsubmit(); element.selected = 0;})
-          );
-          
           r.each(function (e, k) {
-            var a = new Element('a', {'href': '#1'})
-                        .update('&nbsp;'+(k+1)+'&nbsp;')
+            var a = new Element('a', {href: 'javascript:;', className: 'page'})
+                        .update(k+1)
                         .observe('click', function () {$V(field, e); form.onsubmit(); element.selected = k;});
             if (k == element.selected) {
-              a.setStyle({fontWeight: 'bold'});
+              a.addClassName('active');
             }
             rangeSel.insert(a);
           });
-          
-          rangeSel.insert(
-            new Element('a', {'href': '#1'})
-               .update('&nbsp;&gt;|')
-               .observe('click', 
-                  function () {
-                    $V(field, (total-(total%20))+', '+20);
-                    form.onsubmit(); 
-                    element.selected = r.length-1;
-                  }
-               )
-          );
         }
         $(list).insert(rangeSel);
       });

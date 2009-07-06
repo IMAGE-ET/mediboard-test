@@ -148,7 +148,7 @@ $dPconfig["debug"] = true;
 // Use mediboard in a read-only mode
 $dPconfig["readonly"] = false;
 
-// Choose shared memory handler [none|eaccelerator] up to now
+// Choose shared memory handler [none|eaccelerator|apc]
 $dPconfig["shared_memory"] = "none";
 
 // Object handlers
@@ -551,6 +551,9 @@ $dPconfig["dPstock"] = array (
   ),
   "CProductStockGroup" => array(
     "infinite_quantity" => 0
+  ),
+  "CProductStockService" => array(
+    "infinite_quantity" => 0
   )
 );
 
@@ -602,7 +605,7 @@ $dPconfig["webservices"] = array (
   "connection_timeout" => 5,
 );
 
-// Inclusion des fichiers de config de chaque modules
+// Inclusion des fichiers de config de chaque module
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {
   require_once($file);

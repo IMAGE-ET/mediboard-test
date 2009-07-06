@@ -10,6 +10,8 @@ Main.add(function () {
     )
   );
   
+  form.elements.sorted.sortByLabel();
+  
   var tabs = Control.Tabs.create('tab_categories', true);
   
   Calendar.regProgressiveField(form.progressive, {container: document.body});
@@ -40,6 +42,7 @@ Main.add(function () {
   <input type="hidden" name="tab" value="{{$tab}}" />
   
   <input type="hidden" name="progressive" value="2009-0-0" />
+  
   <table class="form">
   {{foreach from=$specs item=class key=spec}}
     <tr>
@@ -74,6 +77,16 @@ Main.add(function () {
             <option value="9" ></option>
             <option value="10" >encore un</option>
           </optgroup>
+        </select>
+        
+        <select id="sorted">
+          <option value="c">&mdash;</option>
+          <option value="c">c</option>
+          <option value="e">e</option>
+          <option value="b">b</option>
+          <option value="a">a</option>
+          <option value="d">d</option>
+          <option value="f">f</option>
         </select>
       </td>
     </tr>

@@ -2,16 +2,17 @@
 
 /**
  *	@package Mediboard
- *	@subpackage pharmacie
+ *	@subpackage soins
  *	@version $Revision$
  *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $can, $g;
-$can->needsRead();
+$can->needsEdit();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
+$start = mbGetValueFromGetOrSession('start', 0);
 
 // Services list
 $service = new CService();
@@ -34,7 +35,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('service_id',    $service_id);
 $smarty->assign('list_services', $list_services);
 $smarty->assign('delivrance',    $delivrance);
+$smarty->assign('start',         $start);
 
-$smarty->display('vw_idx_restockage_service.tpl');
-
-?>
+$smarty->display('vw_stocks_service.tpl');

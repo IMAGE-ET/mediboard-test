@@ -35,6 +35,17 @@
         <label><input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if !$dPconfig.$m.$class.$var}}checked="checked"{{/if}} /> {{tr}}bool.0{{/tr}}</label>
       </td>
     </tr>
+    
+    {{assign var="class" value="CProductStockService"}}
+    {{assign var="var" value="infinite_quantity"}}
+    <tr>
+      <th>{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
+      <td>
+        <label><input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if  $dPconfig.$m.$class.$var}}checked="checked"{{/if}} /> {{tr}}bool.1{{/tr}}</label>
+        <label><input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if !$dPconfig.$m.$class.$var}}checked="checked"{{/if}} /> {{tr}}bool.0{{/tr}}</label>
+      </td>
+    </tr>
+    
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

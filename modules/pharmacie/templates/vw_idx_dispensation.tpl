@@ -47,26 +47,37 @@ function refreshLists(code_cis) {
     url.requestUpdate("list-dispensations", { waitingText: null } );
   }
   refreshStocks.defer();
+  refreshOrders.defer();
   return false;
 }
 
 function refreshStocks() {
   var formFilter = getForm("filter");
-  url = new Url;
-  url.setModuleAction("pharmacie", "httpreq_vw_stocks_service_list");
+  url = new Url("pharmacie", "httpreq_vw_stocks_service_list");
   url.addParam("service_id", $V(formFilter.service_id));
   url.requestUpdate("list-stocks", { waitingText: null } );
 }
 
-function dispenseAll() {
-  var submitted = false;
-  $("list-dispensations").select("form").each(function(f) {
-    if ((!f.del || $V(f.del) == "0") && (f.patient_id && $V(f.patient_id) || f.service_id && $V(f.service_id)) && $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
-      onSubmitFormAjax(f);
+function refreshOrders() {
+  var formFilter = getForm("filter");
+  url = new Url("pharmacie", "httpreq_vw_orders_list");
+  url.addParam("service_id", $V(formFilter.service_id));
+  url.requestUpdate("list-orders", { waitingText: null } );
+}
+
+function dispenseAll(container, callback) {
+  var list = $(container).select("form");
+  list.each(function(f, i) {
+    if ((!f.del || $V(f.del) == "0") && 
+        (f.patient_id && $V(f.patient_id) || f.service_id && $V(f.service_id) || f.order && $V(f.order) == '0') && 
+        $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
+      if (i == list.length-1)
+        onSubmitFormAjax(f, {onComplete: callback});
+      else
+        onSubmitFormAjax(f);
       submitted = true;
     }
   });
-  if (submitted) refreshLists.defer();
 }
 
 var oFormDispensation;
@@ -82,7 +93,6 @@ updateFieldsMedicament = function(selected) {
   }
 }
 
-
 </script>
 
 {{include file=inc_filter_delivrances.tpl}}
@@ -90,6 +100,7 @@ updateFieldsMedicament = function(selected) {
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nominatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
+  <li><a href="#list-orders" id="list-orders-title">Commandes <small>(0)</small></a></li>
   <li id="li-transmissions"><a href="#list-transmissions">Transmissions</a></li>
 </ul>
 <hr class="control_tabs" />
@@ -97,4 +108,5 @@ updateFieldsMedicament = function(selected) {
 <!-- Tabs containers -->
 <div id="list-dispensations" style="display: none;"></div>
 <div id="list-stocks" style="display: none;"></div>
+<div id="list-orders" style="display: none;"></div>
 <div id="list-transmissions" style="display:none"></div>

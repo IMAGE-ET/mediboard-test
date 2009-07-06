@@ -337,12 +337,14 @@ class CAppUI {
    * Display the formatted message and icon
    * @param boolean $reset If true the system UI is cleared
    */
-  function getMsg($reset = true) {
+  static function getMsg($reset = true) {
+    global $AppUI;
+    
     $return = "";
     
-    ksort($this->messages);
+    ksort($AppUI->messages);
     
-    foreach ($this->messages as $type => $messages) {
+    foreach ($AppUI->messages as $type => $messages) {
       switch ($type) {
         case UI_MSG_OK      : $class = "message"; break;
         case UI_MSG_ALERT   : $class = "message"; break;
@@ -358,7 +360,7 @@ class CAppUI {
     }
     
     if ($reset) {
-      $this->messages = array();
+      $AppUI->messages = array();
     }
 
     return $return;

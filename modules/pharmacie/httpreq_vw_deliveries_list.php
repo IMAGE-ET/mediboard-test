@@ -23,7 +23,9 @@ mbSetValueToSession('_date_min', $date_min);
 mbSetValueToSession('_date_max', $date_max);
 
 $order_by = 'date_dispensation DESC';
-$where = array ();
+$where = array (
+ 'order' => " != '1'"
+);
 if ($service_id && $mode == "global") {
   $where['service_id'] = " = $service_id";
 }
@@ -32,6 +34,7 @@ if ($patient_id && $mode == "nominatif") {
 }
 $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
+$where['order'] = " != '1'";
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, 20);
 

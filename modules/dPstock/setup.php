@@ -341,8 +341,10 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_stock_location` ADD INDEX (`group_id`);";
 		$this->addQuery($sql);
     
-    $this->mod_version = "0.98";
+    $this->makeRevision('0.98');
+    $sql = "ALTER TABLE `product_delivery` ADD `order` ENUM('0','1')";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.99";
   }
 }
-
-?>

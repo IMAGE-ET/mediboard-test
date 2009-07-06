@@ -115,7 +115,7 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_service->product_id = $stock->product_id;
       $stock_service->service_id = $this->_ref_delivery->service_id;
       
-      if ($stock_service->loadMatchingObject()) {
+      if ($stock_service->loadMatchingObject() && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0) {
         $stock_service->quantity -= $this->quantity;
         if ($msg = $stock_service->store()) return $msg;
       }

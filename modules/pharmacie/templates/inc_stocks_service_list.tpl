@@ -40,8 +40,10 @@ updateDispensationUrgence = function(formUrgence) {
   </tr>
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
+    {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
     <th>{{tr}}CProductStockService{{/tr}}</th>
     <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>{{tr}}CProductDelivery{{/tr}}</th>
     <th>Retour des services</th>
@@ -55,8 +57,10 @@ updateDispensationUrgence = function(formUrgence) {
         {{$stock->_ref_product}}
         </a>
       </td>
+      {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
       <td>{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>
       <td style="text-align: center;">{{mb_value object=$stock field=quantity}}</td>
+      {{/if}}
       <td>{{mb_value object=$stock->_ref_product field=_unit_title}}</td>
       <td>
         {{assign var=id value=$stock->_id}}

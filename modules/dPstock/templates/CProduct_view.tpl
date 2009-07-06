@@ -16,6 +16,8 @@
 		<td>
 			<strong>{{mb_title object=$object field=name}}</strong> : {{mb_value object=$object field=name}}<br />
 			<strong>{{mb_title object=$object field=description}}</strong> : {{mb_value object=$object field=description}}<br />
+			<strong>{{mb_title object=$object field=code}}</strong> : {{mb_value object=$object field=code}}<br />
+			<strong>{{mb_title object=$object field=_quantity}}</strong> : {{mb_value object=$object field=_quantity}}<br />
 			<strong>{{mb_title object=$object field=societe_id}}</strong> : {{mb_value object=$object field=societe_id}}<br />
 			<strong>{{mb_title object=$object field=category_id}}</strong> : {{mb_value object=$object field=category_id}}<br />
 			<strong>{{mb_title object=$object field=renewable}}</strong> : {{mb_value object=$object field=renewable}}<br />

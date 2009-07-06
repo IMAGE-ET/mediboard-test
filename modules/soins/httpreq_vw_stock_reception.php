@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id: httpreq_vw_restockages_service_list.php 6146 2009-04-21 14:40:08Z alexis_granger $ */
 
 /**
  *	@package Mediboard
  *	@subpackage pharmacie
- *	@version $Revision$
+ *	@version $Revision: 6146 $
  *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -20,7 +20,7 @@ $date_max = mbGetValueFromGetOrSession('_date_max');
 mbSetValueToSession('_date_min', $date_min);
 mbSetValueToSession('_date_max', $date_max);
 
-$order_by = 'date_dispensation DESC';
+$order_by = 'service_id, patient_id, date_dispensation DESC';
 $where = array ();
 if ($service_id) {
   $where['service_id'] = " = $service_id";
@@ -40,25 +40,23 @@ if (count($deliveries)) {
     $_delivery->loadRefsFwd();
     $_delivery->loadRefsBack();
     $_delivery->_ref_stock->loadRefsFwd();
+    $_delivery->loadRefPatient();
+    $_delivery->loadRefService();
     
-    if($_delivery->patient_id){
+    /*if($_delivery->patient_id){
       $_delivery->loadRefPatient();
       $deliveries_nominatif[$_delivery->_id] = $_delivery;
     } else {
       $_delivery->loadRefService();
       $deliveries_global[$_delivery->_id] = $_delivery;
-    }
+    }*/
     $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign('mode',    $mode);
-$smarty->assign('deliveries_global', $deliveries_global);
-$smarty->assign('deliveries_nominatif', $deliveries_nominatif);
-
-$smarty->display('inc_restockages_service_list.tpl');
+$smarty->assign('deliveries', $deliveries);
+$smarty->display('inc_stock_reception.tpl');
 
 ?>

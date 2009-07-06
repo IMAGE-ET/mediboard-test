@@ -116,6 +116,6 @@ if ($all_stocks) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('destockages', $destockages);
-$smarty->display('inc_destockages_service_list.tpl');
+$smarty->display('inc_stock_inventory.tpl');
 
 ?>

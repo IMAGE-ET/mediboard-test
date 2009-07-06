@@ -32,11 +32,8 @@
 
 </script>
 
-{{if $dPconfig.dPstock.CProductStockGroup.infinite_quantity == 1}}
-  {{assign var=infinite value=1}}
-{{else}}
-  {{assign var=infinite value=0}}
-{{/if}}
+{{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
+{{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 
 <table class="tbl">
   {{if $mode_nominatif}}
@@ -54,11 +51,13 @@
     {{/if}}
     <th>Unité de dispensation</th>
     <th style="width: 30%">
-      <!-- <button style="float: right" type="button" onclick="dispenseAll()" class="tick">Tout dispenser</button> -->
+      <!-- <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout dispenser</button> -->
       Dispensation
     </th>
     <th>Déjà effectuées</th>
+    {{if !$infinite_service}}
     <th>Stock<br /> du service</th>
+    {{/if}}
   </tr>
   {{foreach from=$dispensations key=code_cis item=quantites}}
     <tbody id="dispensation_line_{{$code_cis}}" style="width: 100%">

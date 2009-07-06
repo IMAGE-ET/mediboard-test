@@ -18,6 +18,7 @@ class CProductDelivery extends CMbObject {
   var $quantity       = null;
   var $service_id     = null;
   var $patient_id     = null;
+  var $order          = null;
 
   // Object References
   //    Single
@@ -43,6 +44,7 @@ class CProductDelivery extends CMbObject {
     $specs['quantity']          = 'num notNull';
     $specs['service_id']        = 'ref notNull class|CService';
     $specs['patient_id']        = 'ref class|CPatient';
+    $specs['order']             = 'bool';
     $specs['_date_min']         = 'date notNull';
     $specs['_date_max']         = 'date notNull moreEquals|_date_min';
     return $specs;

@@ -25,7 +25,7 @@ $order_by = 'product_stock_location.position ASC, product.name ASC';
 $where = array (
   "product_delivery.date_dispensation BETWEEN '$date_min' AND '$date_max'",
   'product_delivery.quantity' => " > 0",
-  //'product_delivery.order' => " != '1'",
+  'product_delivery.order' => " != '1'",
   'product_delivery.patient_id' => "IS NULL",
 );
 

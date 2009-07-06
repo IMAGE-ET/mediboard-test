@@ -14,12 +14,8 @@
   <th colspan="10" class="element">{{$produit->libelle_abrege}} {{$produit->dosage}}</th>
 </tr>
 
-    
-{{if $dPconfig.dPstock.CProductStockGroup.infinite_quantity == 1}}
-  {{assign var=infinite value=1}}
-{{else}}
-  {{assign var=infinite value=0}}
-{{/if}}
+{{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
+{{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 
 {{assign var=quantite_administration value=$quantites.quantite_administration}}
 {{assign var=quantite_dispensation value=$quantites.quantite_dispensation}}
@@ -317,6 +313,7 @@
        {{/if}}
      </td>
      
+     {{if !$infinite_service}}
      <!-- Affichage des stocks du service -->
      <td style="text-align: center;">
 	     {{if array_key_exists($code_cis, $stocks_service) && $stocks_service.$code_cis.total}}
@@ -339,5 +336,6 @@
 	       Aucun stock
 	     {{/if}} 
      </td>
+     {{/if}}
        
    </tr>
