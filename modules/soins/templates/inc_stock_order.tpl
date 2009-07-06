@@ -29,9 +29,11 @@ fillInputs = function(data){
   });
 }
 
+{{if $only_service_stocks == 1}}
 Main.add(function(){
   autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}');
 });
+{{/if}}
 </script>
 
 {{if $smarty.now|date_format:"%Y-%m-%d" < $date_min || $smarty.now|date_format:"%Y-%m-%d" > $date_max}}
