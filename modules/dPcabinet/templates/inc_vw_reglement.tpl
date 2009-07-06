@@ -135,7 +135,7 @@ Main.add( function(){
       	        <tr>
       	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
       	          <td>
-      	            <select name="_tarif_id"  class="notNull str" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload } );">
+      	            <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload } );">
       	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
       	              {{if $tarifsChir|@count}}
         	              <optgroup label="Tarifs praticien">
