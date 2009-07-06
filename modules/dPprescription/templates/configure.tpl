@@ -70,29 +70,6 @@ popupVoies = function(){
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
   </tr>
-  
-  <!-- 
-  {{assign var="var" value="time_print_ordonnance"}}
-  <tr>
-    <th class="category" colspan="6">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-  </tr>
-  <tr>  
-    <td colspan="6" style="text-align: center">
-      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
-      {{foreach from=$listHours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
-          {{$_hour}}
-        </option>
-      {{/foreach}}
-      </select>
-      heures
-    </td>             
-  </tr>
- -->
   {{assign var="var" value="time_alerte_modification"}}
   <tr>
     <th class="category" colspan="6">
@@ -128,240 +105,36 @@ popupVoies = function(){
        {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction{{/tr}}
     </th>
   </tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv1]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv1{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv1{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv1]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv1}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv1}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv1}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv2]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv2{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv2{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv2]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv2}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv2}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv2}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv3]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv3{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv3{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv3]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv3}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv3}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv3}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][interaction][niv4]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv4{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-interaction-niv4{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][interaction][niv4]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.interaction.niv4}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.interaction.niv4}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.interaction.niv4}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
+  {{assign var=type_niveau value=interaction}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv1"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv2"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv3"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv4"}}
 	<tr>
     <th colspan="6" class="category">
        {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posologie{{/tr}}
     </th>
   </tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][posoqte][niv10]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv10{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv10{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][posoqte][niv10]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoqte.niv10}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoqte.niv10}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoqte.niv10}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][posoqte][niv11]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv11{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv11{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][posoqte][niv11]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoqte.niv11}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoqte.niv11}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoqte.niv11}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][posoqte][niv12]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv12{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoqte-niv12{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][posoqte][niv12]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoqte.niv12}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoqte.niv12}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoqte.niv12}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][posoduree][niv20]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv20{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv20{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][posoduree][niv20]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoduree.niv20}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoduree.niv20}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoduree.niv20}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][posoduree][niv21]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv21{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv21{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][posoduree][niv21]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoduree.niv21}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoduree.niv21}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoduree.niv21}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][posoduree][niv22]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv22{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-posoduree-niv22{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][posoduree][niv22]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.posoduree.niv22}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.posoduree.niv22}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.posoduree.niv22}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
+  {{assign var=type_niveau value=posoqte}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv10"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv11"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv12"}}
+  {{assign var=type_niveau value=posoduree}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv20"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv21"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv22"}}
 	<tr>
     <th colspan="6" class="category">
        {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil{{/tr}}
     </th>
   </tr>
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv0]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv0{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv0{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv0]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv0}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv0}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv0}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv1]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv1{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv1{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv1]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv1}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv1}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv1}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv2]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv2{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv2{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv2]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv2}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv2}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv2}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv9]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv9{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv9{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv9]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv9}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv9}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv9}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv30]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv30{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv30{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv30]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv30}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv30}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv30}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
-	<tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}][profil][niv39]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv39{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-profil-niv39{{/tr}}
-      </label>  
-    </th>
-	  <td colspan="3" style="text-align: center">
-	    <select name="{{$m}}[{{$class}}][{{$var}}][profil][niv39]">
-        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.profil.niv39}} selected="selected" {{/if}}>0</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.profil.niv39}} selected="selected" {{/if}}>1</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.profil.niv39}} selected="selected" {{/if}}>2</option>
-      </select>
-	  </td>
-	</tr>
+  {{assign var=type_niveau value=profil}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv0"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv1"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv2"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv9"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv30"}}
+  {{include file="inc_configure_niveau.tpl" niveau="niv39"}}
 	<tr>
     <th colspan="6" class="category">
       Autres
@@ -466,154 +239,6 @@ popupVoies = function(){
    </th>
   </tr>
 
-  {{assign var="var" value="heures"}}
-  <tr>  
-	  <th><strong>Tous les</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][tous_les]" value="{{$dPconfig.$m.$class.$var.tous_les}}" /> heures
-	  </td>
-	  <td colspan="2" />             
-  </tr>
-  <tr>  
-	  <th><strong>1 fois par jour</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][1]" value="{{$dPconfig.$m.$class.$var.fois_par.1}}" /> heures
-	  </td>   
-	  <td colspan="2" />              
-  </tr>
-  <tr>  
-	  <th><strong>2 fois par jour</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][2]" value="{{$dPconfig.$m.$class.$var.fois_par.2}}" /> heures
-	  </td>
-	  <td colspan="2" />                 
-  </tr>
-  <tr>  
-	  <th><strong>3 fois par jour</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][3]" value="{{$dPconfig.$m.$class.$var.fois_par.3}}" /> heures
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  <tr>  
-	  <th><strong>4 fois par jour</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][4]" value="{{$dPconfig.$m.$class.$var.fois_par.4}}" /> heures
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  <tr>  
-	  <th><strong>5 fois par jour</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][5]" value="{{$dPconfig.$m.$class.$var.fois_par.5}}" /> heures
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  <tr>  
-	  <th><strong>6 fois par jour</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][6]" value="{{$dPconfig.$m.$class.$var.fois_par.6}}" /> heures
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-
-  <!-- Gestion des horaires matin/soir/nuit -->
-  <tr>  
-	  <th><strong>Matin</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    De 
-	    <select name="{{$m}}[{{$class}}][{{$var}}][matin][min]"
-	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][nuit][max]'])">
-	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.matin.min}}selected="selected"{{/if}}>{{$_hour}}h</option>
-	      {{/foreach}}
-	    </select>
-	    à 
-	    <select name="{{$m}}[{{$class}}][{{$var}}][matin][max]" 
-	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][soir][min]'])">
-	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.matin.max}}selected="selected"{{/if}}>{{$_hour}}h</option>
-	      {{/foreach}}
-	    </select>
-	  </td>      
-	  <td colspan="2" />           
-  </tr>
-  
-  <tr>  
-	  <th><strong>Soir</strong></th>
-	  <td colspan="3" style="text-align: center">  
-	    De 
-	    <select name="{{$m}}[{{$class}}][{{$var}}][soir][min]"
-	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][matin][max]'])">
-	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.soir.min}}selected="selected"{{/if}}>{{$_hour}}h</option>
-	      {{/foreach}}
-	    </select>
-	    à 
-	    <select name="{{$m}}[{{$class}}][{{$var}}][soir][max]" 
-	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][nuit][min]'])">
-	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.soir.max}}selected="selected"{{/if}}>{{$_hour}}h</option>
-	      {{/foreach}}
-	    </select>
-	  </td> 
-	  <td colspan="2" />            
-  </tr>
-  
-  <tr>  
-	  <th><strong>Nuit</strong></th>
-	  <td colspan="3" style="text-align: center">  
-	    De 
-	    <select name="{{$m}}[{{$class}}][{{$var}}][nuit][min]"
-	    				onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][soir][max]'])">
-	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.nuit.min}}selected="selected"{{/if}}>{{$_hour}}h</option>
-	      {{/foreach}}
-	    </select>
-	    à 
-	    <select name="{{$m}}[{{$class}}][{{$var}}][nuit][max]"
-	   				  onchange="checkValue(this, document.forms.editConfig['{{$m}}[{{$class}}][{{$var}}][matin][min]'])">
-	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var.nuit.max}}selected="selected"{{/if}}>{{$_hour}}h</option>
-	      {{/foreach}}
-	    </select>
-	  </td>         
-	  <td colspan="2" />    
-  </tr>
-  
-      
-    
-    
-  {{assign var="var" value="semaine"}}
-  <tr>  
-	  <th><strong>1 fois par semaine</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][1]" value="{{$dPconfig.$m.$class.$var.1}}" />
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  <tr>  
-	  <th><strong>2 fois par semaine</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][2]" value="{{$dPconfig.$m.$class.$var.2}}" />
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  <tr>  
-	  <th><strong>3 fois par semaine</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][3]" value="{{$dPconfig.$m.$class.$var.3}}" />
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  <tr>  
-	  <th><strong>4 fois par semaine</strong></th>
-	  <td colspan="3" style="text-align: center">
-	    <input type="text" size="35" name="{{$m}}[{{$class}}][{{$var}}][4]" value="{{$dPconfig.$m.$class.$var.4}}" />
-	  </td>  
-	  <td colspan="2" />               
-  </tr>
-  
   {{assign var="var" value="show_poso_bcb"}}
   <tr>
     <th class="category" colspan="6">
@@ -716,17 +341,14 @@ function updateUCD(){
   <tr>
     <th class="title" colspan="2">Opération d'imports et exports</th>
   </tr>
-
   <tr>
     <th>Action</th>
     <th>Status</th>
   </tr>
-  
   <tr>
     <td><button class="tick" onclick="startAssociation()" >Importer la table d'association</button></td>
     <td id="do_add_association"></td>
   </tr>
-
   <tr>
     <td>
 	    <button class="tick" onclick="exportElementsPrescription()" >Exporter les elements de prescriptions</button>
