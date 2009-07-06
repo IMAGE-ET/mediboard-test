@@ -274,6 +274,18 @@ class CAppUI {
       $params = !empty($this->state["SAVEDPLACE$hist"]) ? $this->state["SAVEDPLACE$hist"] : $this->defaultRedirect;
     }
     
+    if (mbGetValueFromGet("dialog")) {
+      $params .= "&dialog=1";
+    }
+    
+    if (mbGetValueFromGet("ajax")) {
+      $params .= "&ajax=1";
+    }
+    
+    if (mbGetValueFromGet("suppressHeaders")) {
+      $params .= "&suppressHeaders=1";
+    }
+    
     // Fix to handle cookieless sessions
     if ($session_id != "") {
       if (!$params)

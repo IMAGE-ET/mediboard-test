@@ -187,7 +187,7 @@ if (null == $m) {
 }
 
 if (null == $currentModule = CModule::getInstalled($m)) {
-  $AppUI->redirect("m=system&a=access_denied");
+  $AppUI->redirect("m=system&a=module_missing&module=$m");
 }
 
 // Get current module permissions

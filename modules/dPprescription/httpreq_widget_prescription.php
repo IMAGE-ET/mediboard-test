@@ -21,7 +21,7 @@ if (!$prescription->_ref_module) {
   return;
 }
 
-if(!$object_id || !$object_class){
+if (!$object_id || !$object_class){
 	return; 
 }
 
