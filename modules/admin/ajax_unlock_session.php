@@ -18,11 +18,14 @@ if ($lock) {
   CApp::rip();
 }
 else {
+  $user = new CUser;
+  $user->load($AppUI->user_id);
+  
   if (!$password) {
     $AppUI->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
   }
   
-  else if ($AppUI->_ref_user->_user_password != md5($password)) {
+  else if ($user->user_password != md5($password)) {
     $AppUI->setMsg("Auth-failed-combination", UI_MSG_ERROR);
   }
   

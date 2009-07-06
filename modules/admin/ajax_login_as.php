@@ -45,4 +45,4 @@ if ($msg = $AppUI->getMsg()) {
   echo $msg;
   CApp::rip();
 }
-else CAppUI::callbackAjax('location.reload');
+else CAppUI::callbackAjax('UserSwitch.reload');

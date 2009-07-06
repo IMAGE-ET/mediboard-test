@@ -1092,6 +1092,17 @@ var Session = {
   }
 };
 
+/*
+function dataUri2File(data, filename, replace) {
+  data = new String(data).replace(/=/g, '%3D').replace(/\//g, '%2F').replace(/\+/g, '%2B');
+  
+  new Ajax.Request('?m=system&a=datauri_to_file&suppressHeaders=1', {
+    method: 'post',
+    postBody: 'filename='+filename+'&replace='+replace+'&data='+data
+  });
+}
+*/
+
 var UserSwitch = {
   window: null,
   popup: function(){
@@ -1103,6 +1114,10 @@ var UserSwitch = {
     document.observe('keydown', function(e){
       if (Event.key(e) == 27) UserSwitch.cancel();
     });
+  },
+  reload: function(){
+    this.window.close();
+    location.reload();
   },
   login: function(form){
     if (!checkForm(form)) return false;
