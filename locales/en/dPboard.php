@@ -11,4 +11,5 @@ $locales['mod-dPboard-tab-vw_sejours_interventions'] = '';
 $locales['mod-dPboard-tab-vw_prescripteurs'] = '';
 $locales['mod-dPboard-tab-vw_stats_consultations'] = '';
 $locales['mod-dPboard-tab-vw_bilan_transmissions'] = '';
+$locales['mod-dPboard-tab-vw_trace_cotes'] = '';
 ?>

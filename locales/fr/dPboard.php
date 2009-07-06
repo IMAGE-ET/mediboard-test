@@ -11,4 +11,5 @@ $locales['mod-dPboard-tab-vw_sejours_interventions'] = 'Séjours et interventions
 $locales['mod-dPboard-tab-vw_prescripteurs'] = 'Médecins traitants';
 $locales['mod-dPboard-tab-vw_stats_consultations'] = 'Consultations';
 $locales['mod-dPboard-tab-vw_bilan_transmissions'] = 'Bilan des transmissions';
+$locales['mod-dPboard-tab-vw_trace_cotes'] = 'Vérification des côtés';
 ?>
