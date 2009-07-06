@@ -43,13 +43,15 @@ if (!isset($_SESSION['browser'])) {
     'gecko', 'navigator', 'mosaic', 'lynx', 'amaya', 'omniweb', 'avant', 'camino', 'flock', 'aol'
   );
   
-  $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-  foreach($browsers as $_browser) {
-    if (preg_match("/($_browser)[\/ ]?([0-9.]*)/", $user_agent, $match)) {
-      $browser['name'] = $match[1];
-      $browser['version'] = $match[2];
-      @list($browser['majorver'], $browser['minorver'], $browser['build']) = explode('.', $browser['version']);
-      break;
+  if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    foreach($browsers as $_browser) {
+      if (preg_match("/($_browser)[\/ ]?([0-9.]*)/", $user_agent, $match)) {
+        $browser['name'] = $match[1];
+        $browser['version'] = $match[2];
+        @list($browser['majorver'], $browser['minorver'], $browser['build']) = explode('.', $browser['version']);
+        break;
+      }
     }
   }
   
