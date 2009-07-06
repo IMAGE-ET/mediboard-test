@@ -65,15 +65,10 @@ Main.add(function () {
 	      </a>
       </td>
       <td>
-        {{if $rpu->radio_debut && !$rpu->radio_fin}}
-	      <strong>En radiologie</strong>
-	      {{/if}}
 	      {{mb_value object=$rpu field="radio_debut"}}
 	    </td>
       <td>
-	      {{if $rpu->radio_debut && $rpu->radio_fin}}
-	      <strong>Retour de radiologie</strong> : {{mb_value object=$rpu field="radio_fin"}}
-	      {{/if}}
+	      {{mb_value object=$rpu field="radio_fin"}}
       </td>
     </tr>
   {{/foreach}}
