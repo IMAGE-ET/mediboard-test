@@ -28,6 +28,10 @@ fillInputs = function(data){
     else e.value = 0;
   });
 }
+
+Main.add(function(){
+  autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}');
+});
 </script>
 
 {{if $smarty.now|date_format:"%Y-%m-%d" < $date_min || $smarty.now|date_format:"%Y-%m-%d" > $date_max}}
@@ -37,8 +41,9 @@ fillInputs = function(data){
 {{/if}}
 
 <div class="pagination">
+  <!-- 
   <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}')">Commande auto</button>
-
+  -->
   <label style="float: left; font-weight: normal;">
     <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
     Seulement les stocks du service 

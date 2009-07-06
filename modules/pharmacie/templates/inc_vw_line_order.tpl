@@ -53,7 +53,6 @@
       <input type="hidden" name="date_dispensation" value="now" />
       <input type="hidden" name="order" value="0" />
       {{mb_field object=$curr_delivery field=quantity increment=1 form=dispensation-validate-$id size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
-      <input type="text" name="code" value="" />
       <button type="submit" class="tick" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})">Dispenser</button>
       <button type="submit" class="cancel" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})">Refuser</button>
     </form>
