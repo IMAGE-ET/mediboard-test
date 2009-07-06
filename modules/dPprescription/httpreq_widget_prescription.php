@@ -16,10 +16,6 @@ $praticien_id = mbGetValueFromGet("praticien_id", $AppUI->user_id);
 $suffixe = mbGetValueFromGet("suffixe");
 
 $prescription = new CPrescription();
-if (!$prescription->_ref_module) {
-  CAppUI::stepAjax("Module Prescriptions non installé", UI_MSG_WARNING);
-  return;
-}
 
 if (!$object_id || !$object_class){
 	return; 
@@ -62,8 +58,6 @@ if($object_class == "CSejour"){
 if($object_class == "CConsultation"){
 	$type = "externe";
 } 
-
-
 
 // Création du template
 $smarty = new CSmartyDP();

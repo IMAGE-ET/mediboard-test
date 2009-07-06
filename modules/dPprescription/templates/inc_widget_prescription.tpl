@@ -83,8 +83,4 @@ openPrescription = function(prescription_id){
     {{/foreach}}
     </table>
   {{/if}}
-{{else}}
-  <div class="warning">
-    Module Prescriptions non installé
-  </div>
 {{/if}}
