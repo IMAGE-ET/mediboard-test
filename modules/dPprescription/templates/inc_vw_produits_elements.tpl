@@ -29,11 +29,14 @@ resetBolus = function(oForm){
 
 // Modification de la perfusion en fonction du mode bolus
 changeModeBolus = function(oForm){
-  $("img_"+oForm.name+"_vitesse").show();
-
   // Reactivation de la vitesse
   oForm.vitesse.writeAttribute("disabled",null);
+  oForm.vitesse.up('table').select('td.arrows').invoke('show');
   oForm.vitesse.setOpacity(1);
+  
+  oForm.nb_tous_les.writeAttribute("disabled",null);
+  oForm.nb_tous_les.up('table').select('td.arrows').invoke('show');
+  oForm.nb_tous_les.setOpacity(1);
   
   oForm.dose_bolus.writeAttribute("disabled",null);
   oForm.dose_bolus.setOpacity(1);
@@ -55,12 +58,18 @@ changeModeBolus = function(oForm){
     return;
   }
   if(oForm.mode_bolus.value == 'bolus'){
+  
     // Désactivation de la vitesse
     $V(oForm.vitesse, '');
     oForm.vitesse.writeAttribute("disabled","disabled");
+    oForm.vitesse.up('table').select('td.arrows').invoke('hide');
     oForm.vitesse.setOpacity(0.3);
-    
-    $("img_"+oForm.name+"_vitesse").hide();
+
+    $V(oForm.nb_tous_les, '');
+    oForm.nb_tous_les.writeAttribute("disabled","disabled");
+    oForm.nb_tous_les.up('table').select('td.arrows').invoke('hide');
+    oForm.nb_tous_les.setOpacity(0.3);
+        
     return;
   }
 }
