@@ -264,4 +264,5 @@ $locales['CRPU-_service_id'] = 'Service';
 $locales['CRPU-_service_id-court'] = 'Service';
 $locales['CRPU-_service_id-desc'] = 'Service';
 $locales['CService-back-'] = '';
+$locales['mod-dPurgences-tab-vw_radio'] = 'Radiologie';
 ?>
