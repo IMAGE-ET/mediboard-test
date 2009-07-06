@@ -59,7 +59,7 @@
     <select name="banque_id" style="width: 150px;">
       <option value="">&mdash; Choix d'une banque</option>
       {{foreach from=$banques item="banque"}}
-      <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>
+      <option value="{{$banque->_id}}" {{if $object->banque_id == $banque->_id}}selected = "selected"{{/if}}>
         {{$banque->_view}}
       </option>
       {{/foreach}}
