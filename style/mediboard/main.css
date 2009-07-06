@@ -772,8 +772,10 @@ span.ok {
 }
 
 table.tbl td.checked {
-	background: url(images/buttons/tick.png) no-repeat 4px;
-	padding-left: 20px;	
+	background-image : url(images/buttons/tick.png);
+	background-repeat: no-repeat;
+	background-position: 4px;
+	padding-left: 20px;
 }
 
 table.tbl td.big-info,
