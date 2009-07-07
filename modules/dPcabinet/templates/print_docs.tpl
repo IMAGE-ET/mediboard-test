@@ -1,5 +1,7 @@
 {{if !$documents|@count}}
-  <strong>Il n'y a pas de document pour cette consultation</strong>
+  <div class="small-info">
+    Il n'y a aucun document pour cette consultation
+  </div>
 {{else}}
 <script type="text/javascript">
 Main.add(window.print);

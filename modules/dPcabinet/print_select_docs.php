@@ -13,12 +13,16 @@ $consultation_id = mbGetValueFromGet("consultation_id");
 $sejour_id = mbGetValueFromGet("sejour_id");
 
 // Chargement de la prescription de pre-admission
-$prescription_pre_adm = new CPrescription();
+$prescription_preadm = new CPrescription();
+$prescription_sortie = new CPrescription();
 if($sejour_id){
-	$prescription_pre_adm->object_id = $sejour_id;
-	$prescription_pre_adm->object_class = "CSejour";
-	$prescription_pre_adm->type = "pre_admission";
-	$prescription_pre_adm->loadMatchingObject();
+	$prescription_sortie->object_id = $prescription_preadm->object_id = $sejour_id;
+	$prescription_sortie->object_class = $prescription_preadm->object_class = "CSejour";
+	$prescription_preadm->type = "pre_admission";
+	$prescription_preadm->loadMatchingObject();
+	
+	$prescription_sortie->type = "sortie";
+	$prescription_sortie->loadMatchingObject();
 }
 
 // Consultation courante
@@ -33,10 +37,9 @@ $consult->loadRefsDocs();
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("prescription_pre_adm_id", $prescription_pre_adm->_id);
-$smarty->assign("consult"   , $consult);
-$smarty->assign("documents" , $consult->_ref_documents);
-
+$smarty->assign("prescription_preadm", $prescription_preadm);
+$smarty->assign("prescription_sortie" , $prescription_sortie);
+$smarty->assign("consult"             , $consult);
+$smarty->assign("documents"           , $consult->_ref_documents);
 $smarty->display("print_select_docs.tpl");
 ?>

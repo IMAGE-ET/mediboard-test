@@ -79,8 +79,14 @@
     </td>
   </tr>
   <tr>
-    <td colspan="3">
-      Praticien: 
+    <td>
+      {{if $line->_ref_prescription->object_class == "CDossierMedical"}}
+        {{tr}}User{{/tr}}: 
+      {{else}}
+        {{mb_label object=$line field="praticien_id"}}:
+      {{/if}}
+    </td>
+    <td colspan="2">
       {{$line->_ref_praticien->_view}}
     </td>
   </tr>
