@@ -23,7 +23,7 @@ $listPlages = $plage->loadList($where, $order);
 
 $interv = new COperation();
 $where = array();
-$where[] = "(plageop_id " . $ds->prepareIn(array_keys($listPlages)) . " OR (operations.date = '$date' AND operations.chir_id = '" . $prat->_id . "'))";
+$where[] = "(plageop_id " . $ds->prepareIn(array_keys($listPlages)) . " OR (operations.date = '$date_interv' AND operations.chir_id = '" . $prat->_id . "'))";
 $listIntervs = $interv->loadList($where);
 
 foreach($listIntervs as &$_interv) {
