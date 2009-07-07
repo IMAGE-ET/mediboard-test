@@ -1105,7 +1105,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de prescription de médicament
    */
-  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="") {
+  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="") {
     $line = new CPrescriptionLineMedicament();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
@@ -1122,7 +1122,9 @@ class CPrescription extends CMbObject {
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '1'";
     
-    $order = "prescription_line_medicament_id DESC";
+    if(!$order){
+      $order = "prescription_line_medicament_id DESC";
+    }
     $this->_ref_prescription_lines = $line->loadList($where, $order);
   }
   
@@ -1142,9 +1144,9 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de medicaments (medicaments + commentaires)
    */
-  function loadRefsLinesMedComments($withRefs = "1"){
+  function loadRefsLinesMedComments($withRefs = "1", $order=""){
     // Chargement des lignes de medicaments
-  	$this->loadRefsLinesMed();
+  	$this->loadRefsLinesMed(0,0,"",$order);
   	// Chargement des lignes de commentaire du medicament
   	$this->loadRefsLinesComment("medicament");
   	
@@ -1170,7 +1172,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'element
    */
-  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement=""){
+  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement="", $order=""){
   	$line = new CPrescriptionLineElement();
   	$where = array();
   	$ljoin = array();
@@ -1184,8 +1186,9 @@ class CPrescription extends CMbObject {
     if($emplacement){
       $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
     }
-    
-    $order = "prescription_line_element_id DESC";
+    if(!$order){
+      $order = "prescription_line_element_id DESC";
+    }
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     
     if(count($this->_ref_prescription_lines_element)){
@@ -1204,8 +1207,8 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement=""){
-  	$this->loadRefsLinesElement($chapitre, $withRefs, $emplacement);
+  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order=""){
+  	$this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order);
   	$this->_ref_prescription_lines_element_by_cat = array();
   	
   	if(count($this->_ref_prescription_lines_element)){
@@ -1279,8 +1282,8 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements (Elements + commentaires)
    */
-  function loadRefsLinesElementsComments($withRefs = "1", $chapitre=""){
-  	$this->loadRefsLinesElementByCat($withRefs, $chapitre);
+  function loadRefsLinesElementsComments($withRefs = "1", $chapitre="", $order=""){
+  	$this->loadRefsLinesElementByCat($withRefs, $chapitre,"",$order);
   	$this->loadRefsLinesComment("",$withRefs);
   	
   	// Suppression des ligne de medicaments

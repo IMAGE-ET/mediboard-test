@@ -73,8 +73,8 @@ foreach($mediusers as $_mediuser){
 }
 
 // Chargement des lignes de prescriptions
-$prescription->loadRefsLinesMedComments();
-$prescription->loadRefsLinesElementsComments();
+$prescription->loadRefsLinesMedComments("1", "debut ASC");
+$prescription->loadRefsLinesElementsComments("1","","debut ASC");
 
 // Chargement des perfusions
 $prescription->loadRefsPerfusions();
