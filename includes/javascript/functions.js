@@ -903,9 +903,9 @@ Object.extend (Control.Tabs, {
   loadTab: function (tabName) {
     return new CookieJar().getValue("TabState", tabName);
   },
-  create: function (name, storeInCookie) {
+  create: function (name, storeInCookie, options) {
     if ($(name)) {
-      var tab = new Control.Tabs(name);
+      var tab = new Control.Tabs(name, options);
       if (storeInCookie) {
         tab.options.afterChange = function (tab, tabName) {
           Control.Tabs.storeTab(name, tab.id);
