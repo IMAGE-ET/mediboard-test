@@ -90,6 +90,7 @@ class CSejour extends CCodable {
   
   // Behaviour fields
   var $_check_bounds = true;
+  var $_en_mutation  = null;
   
   // Object References
   var $_ref_patient           = null; // Declared in CCodable

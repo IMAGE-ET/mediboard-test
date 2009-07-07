@@ -43,6 +43,9 @@ $sejour->type = "comp";
 $sejour->DP = $sejour_rpu->DP;
 $sejour->DR = $sejour_rpu->DR;
 $sejour->rques  = "";
+$sejour->_en_mutation = $sejour_rpu->_id;
+
+$sejour->service_id  = $sejour_rpu->service_id;
 
 if ($rpu->diag_infirmier){ 
   $sejour->rques .= "Diagnostic infirmier: $rpu->diag_infirmier\n";
