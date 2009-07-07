@@ -65,7 +65,7 @@ class CLmLot extends CLmObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["fses"] = "CLmFSE S_FSE_NUM_LOT";
+    $backProps["fses"] = "CLmFSE S_FSE_LOT";
     return $backProps;
   }
 }

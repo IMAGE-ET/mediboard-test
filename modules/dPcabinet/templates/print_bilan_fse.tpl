@@ -63,7 +63,7 @@ Consultation = {
       <table class="tbl">
         <tr>
           <th width="15%">{{mb_label object=$filter field=S_FSE_NUMERO_FSE}}</th>
-          <th width="05%">{{mb_title object=$filter field=S_FSE_NUM_LOT}}</th>
+          <th width="05%">{{mb_title object=$filter field=S_FSE_LOT}}</th>
           <th width="05%">{{mb_title class=CLmLot   field=S_LOT_FIC}}</th>
           <th width="15%">{{mb_label object=$filter field=_consult_id}}</th>
           <th width="15%">{{mb_label object=$filter field=S_FSE_ETAT}}</th>

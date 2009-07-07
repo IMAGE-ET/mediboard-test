@@ -54,7 +54,7 @@ class CLmFSE extends CLmObject {
     $specs["S_FSE_DATE_FSE"]          = "date";
     $specs["S_FSE_CPS"]               = "num";
     $specs["S_FSE_VIT"]               = "num";
-    $specs["S_FSE_NUM_LOT"]           = "ref class|CLmLot";
+    $specs["S_FSE_LOT"]               = "ref class|CLmLot";
     $specs["S_FSE_TOTAL_FACTURE"]     = "currency";
     $specs["S_FSE_TOTAL_AMO"]         = "currency";
     $specs["S_FSE_TOTAL_ASSURE"]      = "currency";
@@ -72,7 +72,7 @@ class CLmFSE extends CLmObject {
   
   function loadRefLot() {
     $lot = new CLmLot();
-    $this->_ref_lot = $lot->getCached($this->S_FSE_NUM_LOT);
+    $this->_ref_lot = $lot->getCached($this->S_FSE_LOT);
   }
   
   function loadRefIdExterne() {
