@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<li>{{if !$praticien->_id}}({{$perf->_ref_praticien->_view}}){{/if}}
+<li>{{if !$praticien->_id && $perf->_ref_prescription->object_id}}({{$perf->_ref_praticien->_view}}){{/if}}
 	<strong>{{$perf->_view}}
 	{{if $perf->duree}}
 	  pendant {{$perf->duree}} heures

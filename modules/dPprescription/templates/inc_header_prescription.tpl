@@ -123,7 +123,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	    </td>
 	  </tr>
 	   <tr>
-	    <th>{{mb_title object=$prescription field=libelle}}</th>
+	    <th>{{mb_title object=$prescription field=_owner}}</th>
 	     <td>
          <!-- Modification du pratcien_id / user_id -->
          <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">

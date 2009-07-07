@@ -131,6 +131,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
   $_perfusion->loadRefsSubstitutionLines();
   foreach($_perfusion->_ref_substitution_lines as $_subst_by_chap){
     foreach($_subst_by_chap as &$_subst_perf){
+      $_subst_perf->loadRefPraticien();
       $_subst_perf->loadRefsLines();
     }
   }	   

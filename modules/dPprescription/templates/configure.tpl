@@ -10,39 +10,33 @@
 
 <script type="text/javascript">
 function popupVoies(){
-  url = new Url;
-  url.setModuleAction("dPprescription", "vw_voies");
+  url = new Url("dPprescription", "vw_voies");
   url.popup(300,700,"Voies");
 }
 
 function startAssociation(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_do_add_table_association");
+  var url = new Url("dPprescription", "httpreq_do_add_table_association");
   url.requestUpdate("do_add_association");
 }
 
 function exportElementsPrescription(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_export_elements_prescription");
+  var url = new Url("dPprescription", "httpreq_export_elements_prescription");
   url.addParam("group_id", $V(document.exportElements.group_id));
   url.requestUpdate("export_elements_prescription");
 }
 
 function importElementsPrescription(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "import_elements_prescription");
+  var url = new Url("dPprescription", "import_elements_prescription");
   url.popup(700, 500, "export_elements_prescription");
 }
 
 function updateVoie(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_update_voie");
+  var url = new Url("dPprescription", "httpreq_update_voie");
   url.requestUpdate("update_voie");
 }
 
 function updateUCD(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_update_ucd");
+  var url = new Url("dPprescription", "httpreq_update_ucd");
   url.requestUpdate("update_ucd");
 }
 </script>
@@ -160,7 +154,7 @@ function updateUCD(){
 	          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-IPC{{/tr}}
 	      </label>  
 	    </th>
-		  <td style="text-align: center">
+		  <td>
 		    <select name="{{$m}}[{{$class}}][{{$var}}][IPC]">
 	        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>0</option>
 	        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>1</option>
@@ -174,7 +168,7 @@ function updateUCD(){
 	          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-allergie{{/tr}}
 	      </label>  
 	    </th>
-		  <td style="text-align: center">
+		  <td>
 		    <select name="{{$m}}[{{$class}}][{{$var}}][allergie]">
 	        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>0</option>
 	        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>1</option>
@@ -188,7 +182,7 @@ function updateUCD(){
 	          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-hors_livret{{/tr}}
 	      </label>  
 	    </th>
-		  <td style="text-align: center">
+		  <td>
 		    <select name="{{$m}}[{{$class}}][{{$var}}][hors_livret]">
 	        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>0</option>
 	        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>1</option>

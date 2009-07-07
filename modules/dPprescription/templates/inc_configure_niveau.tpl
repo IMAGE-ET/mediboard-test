@@ -14,7 +14,7 @@
          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type_niveau}}-{{$niveau}}{{/tr}}
      </label>  
    </th>
-  <td style="text-align: center">
+  <td>
     <select name="{{$m}}[{{$class}}][{{$var}}][{{$type_niveau}}][{{$niveau}}]">
        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.$type_niveau.$niveau}} selected="selected" {{/if}}>0</option>
        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.$type_niveau.$niveau}} selected="selected" {{/if}}>1</option>
