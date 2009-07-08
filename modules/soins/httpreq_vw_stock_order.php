@@ -28,11 +28,11 @@ if ($only_service_stocks == 1) {
   $service = new CService;
   $service->load($service_id);
   $stocks_service = $service->loadBackRefs('product_stock_services', 'product.name', "$start,20", null, $ljoin);
+  $count_stocks   = $service->countBackRefs('product_stock_services', null, null, null, $ljoin);
   
   $stocks = array();
   $count_stocks = 0;
   foreach($stocks_service as $stock_service){
-    $count_stocks++;
     //if (count($stocks) == 20) continue;
     $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
     $stocks[$stock->_id] = $stock;
@@ -42,8 +42,8 @@ else {
   $ljoin = array(
     'product' => 'product.product_id = product_stock_group.product_id'
   );
-  $group = CGroups::loadCurrent();
-  $stocks = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
+  $group        = CGroups::loadCurrent();
+  $stocks       = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
   $count_stocks = $group->countBackRefs('product_stocks', null, null, null, $ljoin);
 }
 
