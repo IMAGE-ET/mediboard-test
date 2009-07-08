@@ -31,7 +31,6 @@ if ($only_service_stocks == 1) {
   $count_stocks   = $service->countBackRefs('product_stock_services', null, null, null, $ljoin);
   
   $stocks = array();
-  $count_stocks = 0;
   foreach($stocks_service as $stock_service){
     //if (count($stocks) == 20) continue;
     $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
