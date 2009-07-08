@@ -603,7 +603,7 @@ class CMbFieldSpec {
     $field = htmlspecialchars($this->fieldName);
     $date  = ($value && $value != '0000-00-00' && 
                         $value != '00:00:00' && 
-                        $value != '0000-00-00 00:00:00') ? ($this->progressive ? $this->getValue($object, null, $params) : mbTransformTime(null, $value, $format)) : "";
+                        $value != '0000-00-00 00:00:00') ? (($this instanceof CDateSpec && $this->progressive) ? $this->getValue($object, null, $params) : mbTransformTime(null, $value, $format)) : "";
     
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
