@@ -46,34 +46,36 @@ if(!$bloc->load($bloc_id) && count($blocs_list)) {
 
 $op_reveil = new COperation();
 $op_reveil->load($op_reveil_id);
-$op_reveil->loadRefs();
-$modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$op_reveil->_ref_plageop->actes_locked);
-$sejour =& $op_reveil->_ref_sejour;
-$sejour->loadExtDiagnostics();
-$sejour->loadRefDossierMedical();
-$sejour->_ref_dossier_medical->loadRefsBack();
-$sejour->loadRefsConsultAnesth();
-$sejour->loadRefsPrescriptions();
-$sejour->_ref_consult_anesth->loadRefsFwd();
+if($op_reveil->_id) {
+  $op_reveil->loadRefs();
+  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$op_reveil->_ref_plageop->actes_locked);
+  $sejour =& $op_reveil->_ref_sejour;
+  $sejour->loadExtDiagnostics();
+  $sejour->loadRefDossierMedical();
+  $sejour->_ref_dossier_medical->loadRefsBack();
+  $sejour->loadRefsConsultAnesth();
+  $sejour->loadRefsPrescriptions();
+  $sejour->_ref_consult_anesth->loadRefsFwd();
 
-// Chargement des consultation d'anesthésie pour les associations a posteriori
-$patient =& $sejour->_ref_patient;
-$patient->loadRefsConsultations();
-$patient->loadRefPhotoIdentite();
-foreach ($patient->_ref_consultations as $consultation) {
-  $consultation->loadRefConsultAnesth();
-  $consult_anesth =& $consultation->_ref_consult_anesth;
-  if ($consult_anesth->_id) {
-    $consultation->loadRefPlageConsult();
-    $consult_anesth->loadRefOperation();
+  // Chargement des consultation d'anesthésie pour les associations a posteriori
+  $patient =& $sejour->_ref_patient;
+  $patient->loadRefsConsultations();
+  $patient->loadRefPhotoIdentite();
+  foreach ($patient->_ref_consultations as $consultation) {
+    $consultation->loadRefConsultAnesth();
+    $consult_anesth =& $consultation->_ref_consult_anesth;
+    if ($consult_anesth->_id) {
+      $consultation->loadRefPlageConsult();
+      $consult_anesth->loadRefOperation();
+    }
   }
-}
 
-$op_reveil->getAssociationCodesActes();
-$op_reveil->loadExtCodesCCAM();
-$op_reveil->loadPossibleActes();
+  $op_reveil->getAssociationCodesActes();
+  $op_reveil->loadExtCodesCCAM();
+  $op_reveil->loadPossibleActes();
   
-$op_reveil->_ref_plageop->loadRefsFwd();
+  $op_reveil->_ref_plageop->loadRefsFwd();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
