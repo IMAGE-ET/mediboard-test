@@ -14,13 +14,13 @@
 <tr>
 <!-- Stock Pharmacie -->
   <!-- Affichage des stocks du service -->
-  <td>
+  <td class="text">
     <a href="javascript:;" onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}');" class="tooltip-trigger">
     {{$stock}}
     </a>
   </td>
 
-  <td style="text-align: right;">
+  <td style="text-align: right;" class="text">
    {{if $stock->_ref_product->item_title}}
    {{$stock->_ref_product->item_title}} x {{$stock->_ref_product->unit_quantity}}
    {{/if}}
