@@ -647,6 +647,7 @@ class COperation extends CCodable {
     $this->loadExtCodesCCAM();
     $this->loadRefSejour($cache);
     $this->_ref_sejour->loadRefsFwd($cache);
+    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
   }
   

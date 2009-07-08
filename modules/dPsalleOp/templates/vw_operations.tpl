@@ -121,10 +121,10 @@ Main.add(function () {
       <div class="big-info">
       	Veuillez sélectionner une intervention dans la liste pour pouvoir :
       	<ul>
-      	  <li>coder les actes</li>
-      	  <li>coder les diagnostics</li>
-      	  <li>effectuer l'horodatage</li>
       	  <li>sélectionner le personnel en salle</li>
+      	  <li>effectuer l'horodatage</li>
+      	  <li>coder les diagnostics</li>
+      	  <li>coder les actes</li>
       	  <li>consulter le dossier</li>
       	</ul>
       </div>

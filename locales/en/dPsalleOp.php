@@ -268,4 +268,5 @@ $locales['CMediusers-back-checked_lists'] = '';
 $locales['config-dPsalleOp-mode_anesth'] = '';
 $locales['config-dPsalleOp-mode_anesth-desc'] = '';
 $locales['CSalle-back-check_lists'] = '';
+$locales['mod-dPsalleOp-tab-vw_soins_reveil'] = '';
 ?>

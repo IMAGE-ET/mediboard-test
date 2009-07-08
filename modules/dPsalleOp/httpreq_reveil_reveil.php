@@ -18,22 +18,25 @@ $modif_operation = $date >= mbDate();
 $timing = array();
 
 // Selection des plages opératoires de la journée
-$plages = new CPlageOp;
+$plage = new CPlageOp();
 $where = array();
 $where["date"] = "= '$date'";
-$plages = $plages->loadList($where);
+$plages = $plage->loadList($where);
 
+// Selection des salles du bloc
 $salle = new CSalle();
 $whereSalle = array("bloc_id" => " = '$bloc_id'");
+$listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 
+// Récupération des interventions
 $where = array();
-$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NULL";
 $order = "entree_reveil";
 
-$operation = new COperation;
+$operation = new COperation();
 $listOperations = $operation->loadList($where, $order);
 
 foreach($listOperations as $key => &$op) {
@@ -98,4 +101,5 @@ $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("modif_operation"        , $modif_operation);
 
 $smarty->display("inc_reveil_reveil.tpl");
+
 ?>

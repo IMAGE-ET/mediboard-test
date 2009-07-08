@@ -9,13 +9,14 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_operations", null,TAB_READ);
-$module->registerTab("vw_reveil"    , null, TAB_READ);
+$module->registerTab("vw_operations"  , null, TAB_READ);
+$module->registerTab("vw_reveil"      , null, TAB_READ);
+$module->registerTab("vw_soins_reveil", null, TAB_READ);
 
 //$module->registerTab("vw_brancardage", "Brancardage"       , TAB_READ);
 
-$module->registerTab("vw_urgences"    , null , TAB_READ);
-$module->registerTab("vw_suivi_salles", null , TAB_READ);
+$module->registerTab("vw_urgences"    , null, TAB_READ);
+$module->registerTab("vw_suivi_salles", null, TAB_READ);
 
 //$module->registerTab("vw_anesthesie" , "Anesthésie"        , TAB_READ);
 
