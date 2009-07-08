@@ -263,4 +263,9 @@ $locales['CDailyCheckItemCategory.select'] = '';
 $locales['CDailyCheckItemType-category_id'] = '';
 $locales['CDailyCheckItemType-category_id-court'] = '';
 $locales['CDailyCheckItemType-category_id-desc'] = '';
+$locales['CGroups-back-check_item_types'] = '';
+$locales['CMediusers-back-checked_lists'] = '';
+$locales['config-dPsalleOp-mode_anesth'] = '';
+$locales['config-dPsalleOp-mode_anesth-desc'] = '';
+$locales['CSalle-back-check_lists'] = '';
 ?>

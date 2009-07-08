@@ -429,7 +429,7 @@ function popEtatSejour(sejour_id) {
     </td>
     <td class="button">
       <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-        Urgence
+        Interv. hors plage
       </a>
     {{/if}}
     </td>

@@ -56,7 +56,7 @@
 <table class="form">
   <tr>
     <th class="category" colspan="2">
-      Urgences
+      Hors plage
     </th>
   </tr>        
 </table>

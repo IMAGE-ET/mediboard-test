@@ -13,7 +13,7 @@ $can->needsRead();
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 
-// Listes des urgences
+// Listes des interventions hors plage
 $operation = new COperation;
 $where = array (
   "date" => "= '$date'",

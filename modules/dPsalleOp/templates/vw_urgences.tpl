@@ -7,7 +7,7 @@ Main.add(function () {
 <table class="tbl main">
   <tr>
     <th class="title" colspan="7">
-      Urgences du {{$date|date_format:$dPconfig.longdate}}
+      Hors plage du {{$date|date_format:$dPconfig.longdate}}
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
