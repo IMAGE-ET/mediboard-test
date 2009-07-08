@@ -144,7 +144,11 @@ function smarty_modifier_stripslashes($string){
 function smarty_function_mb_field($params, &$smarty) {
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
 
-  $object  = CMbArray::extract($params, "object", null, true);
+  if (null == $object = CMbArray::extract($params, "object")) {
+    $class = CMbArray::extract($params, "class" , null, true);
+    $object = new $class;
+  }
+  
   $field   = CMbArray::extract($params, "field" , null, true);
   $propKey = array_key_exists("prop", $params);
   $prop    = CMbArray::extract($params, "prop");

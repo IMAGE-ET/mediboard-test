@@ -166,7 +166,7 @@ Main.add( function(){
 			      {{/foreach}}
 			      {{/if}}
 			    </select>
-			    <button class="new" onclick="$('add_line_comment_med').show();" type="button">Ajouter un commentaire</button>
+			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
 			    <input type="text" name="produit" value="" size="20" />
 			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
@@ -189,22 +189,6 @@ Main.add( function(){
 			      }
 			  </script>
 			  </form>
-			  <br />
-			  <div id="add_line_comment_med" style="display: none">
-			   <button class="cancel notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
-			   <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">
-			      <input type="hidden" name="m" value="dPprescription" />
-			      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-			      <input type="hidden" name="del" value="0" />
-			      <input type="hidden" name="prescription_line_comment_id" value="" />
-			      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-			      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			      <input type="hidden" name="chapitre" value="medicament" />
-			      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
-			      <input name="commentaire" type="text" size="98" />
-			      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
-			    </form>
-			 </div> 
     </td>
     {{/if}}
     <td style="text-align: center;">
@@ -238,6 +222,34 @@ Main.add( function(){
       {{/if}}
     </td>
   </tr>
+  <tbody id="add_line_comment_med" style="display: none">
+  <tr>
+	  <th colspan="2" class="category">{{mb_title class=CPrescriptionLineComment field=commentaire}}</th>
+	</tr>
+	<tr>
+	  <td colspan="2" style="text-align:center;"> 		 
+		  <div>
+	    <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">
+	      <input type="hidden" name="m" value="dPprescription" />
+	      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="prescription_line_comment_id" value="" />
+	      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+	      <input type="hidden" name="chapitre" value="medicament" />
+	      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
+	      {{mb_field class=CPrescriptionLineComment field=commentaire}}
+	      <button class="submit" type="button" onclick="this.form.onsubmit();"">Ajouter ce commentaire</button>
+	    </form>
+	    </div>
+	    <script type="text/javascript">
+	      Main.add(function () {
+				  prepareForm('addLineCommentMed');
+				});
+	    </script>
+		</td>
+  </tr>
+  </tbody>
 </table>
 
 {{if $lite && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment) && $readonly}}

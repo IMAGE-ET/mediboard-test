@@ -43,6 +43,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     $specs["category_prescription_id"]       = "ref class|CCategoryPrescription";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
+    $specs["commentaire"]                    = "text helped";
     return $specs;
   }
   
@@ -85,7 +86,8 @@ class CPrescriptionLineComment extends CPrescriptionLine {
 		global $AppUI, $can;
 		               
 		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id));             
-                 
+    $this->_perm_edit = $perm_edit;
+    
     // Executant
     if($perm_edit){
       $this->_can_select_executant = 1;

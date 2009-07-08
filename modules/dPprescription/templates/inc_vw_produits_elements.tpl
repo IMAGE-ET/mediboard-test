@@ -15,6 +15,17 @@ Main.add( function(){
   window.menuTabs = Control.Tabs.create('prescription_tab_group', false);
 } );
 
+toggleFieldComment = function(button, tr_comment, libelle){
+  tr_comment.toggle();
+  if(tr_comment.visible()){
+    button.update("Masquer "+libelle);
+    button.className = "cancel";
+  } else {
+    button.update("Ajouter "+libelle);
+    button.className = "new";
+  }
+}
+
 // Initialisation des alertes
 if($('alertes')){
   Prescription.reloadAlertes({{$prescription->_id}});

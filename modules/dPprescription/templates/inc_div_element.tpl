@@ -65,11 +65,44 @@ Main.add( function(){
     <th class="category">Affichage</th>
   </tr>
   <tr>
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
-	    <td>
-	      {{include file="inc_vw_form_addLine.tpl"}}
-	    </td>
-    {{/if}}
+    <td>
+      <!-- Formulaire d'elements les plus utilisés -->
+			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
+			  <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" style="width: 145px;">
+			    <option value="">&mdash; les plus utilisés</option>
+			    {{if array_key_exists($element, $listFavoris)}}
+			    {{foreach from=$listFavoris.$element item=curr_element}}
+			    <option value="{{$curr_element->_id}}">
+			      {{$curr_element->libelle}}
+			    </option>
+			    {{/foreach}}
+			    {{/if}}
+			  </select>
+			  
+			  <!-- Boutons d'ajout d'elements et de commentaires -->
+			  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
+			  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément');">Ajouter élément</button>
+			  {{/if}}
+			  <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_{{$element}}'), 'commentaire');" type="button">Ajouter commentaire</button>
+			 <br />
+			 
+			  <!-- Selecteur d'elements -->
+			  <input type="text" name="{{$element}}" value="" />
+			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
+			  <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
+			  <button class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>
+			  <script type="text/javascript">   
+			    ElementSelector.init{{$element}} = function(type){
+			      this.sForm = "search{{$element}}";
+			      this.sLibelle = "{{$element}}";
+			      this.sElement_id = "element_id";
+			      this.sType = type;
+			      this.selfClose = false;
+			      this.pop();
+			    }
+			  </script>
+			</form>
+    </td>
     <td>
 		  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}}, {{if $readonly}}false{{else}}{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}{{/if}},'');");">
@@ -95,6 +128,93 @@ Main.add( function(){
 		  {{/if}}
     </td>
   </tr>
+  {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
+  <tbody id="add_{{$element}}" style="display: none">
+    <tr>
+      <th colspan="2" class="category">
+        Ajout d'un element dans la nomenclature et dans la prescription
+      </th>
+    </tr>
+		<tr>
+	    <td colspan="2">
+		    <!-- Div d'ajout d'element dans la prescription (et dans la nomenclature) -->
+				{{if $dPconfig.dPprescription.CPrescription.add_element_category}}
+					<div>
+					  {{if !$categories.$element|@count}}
+					    <div class="small-info">
+					      Impossible de rajouter des éléments de prescription car cette section ne possède pas de catégorie
+					    </div>
+					  {{else}}
+					    <form name="add{{$element}}" method="post" action="" onsubmit="document.addLineElement._chapitre.value='{{$element}}'; return onSubmitFormAjax(this);">
+					      <input type="hidden" name="m" value="dPprescription" />
+					      <input type="hidden" name="dosql" value="do_element_prescription_aed" />
+					      <input type="hidden" name="del" value="0" />
+					      <input type="hidden" name="element_prescription_id" value="" />
+					      <input type="hidden" name="callback" value="Prescription.addLineElement" />
+					      <select name="category_prescription_id">
+					      {{foreach from=$categories.$element item=cat}}
+					        <option value="{{$cat->_id}}">{{$cat->_view}}</option>
+					      {{/foreach}}
+					      </select>
+					      <input name="libelle" type="text" size="80" />
+					      <button class="submit notext" type="button" 
+					              onclick="this.form.onsubmit()">Ajouter</button>
+				      </form>
+					  {{/if}}
+					</div>
+				{{/if}}
+		</td>
+		</tr>
+		</tbody>
+		<tbody id="add_line_comment_{{$element}}" style="display: none;">
+		<tr>
+      <th colspan="2" class="category">
+        Ajout d'un commentaire
+      </th>
+    </tr>
+		<tr>
+		  <td colspan="2">
+				<div>
+				  {{if !$categories.$element|@count}}
+				    <div class="small-info">
+				      Impossible de rajouter des commentaires car cette section ne possède pas de catégorie
+				    </div>
+				  {{else}}
+				    <form name="addLineComment{{$element}}" method="post" action="" 
+				          onsubmit="return Prescription.onSubmitCommentaire(this,'{{$prescription->_id}}','{{$element}}');">
+				      <input type="hidden" name="m" value="dPprescription" />
+				      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+				      <input type="hidden" name="del" value="0" />
+				      <input type="hidden" name="prescription_line_comment_id" value="" />
+				      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+				      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+				      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
+				      <select name="category_prescription_id">
+				        {{foreach from=$categories.$element item=cat}}
+				        <option value="{{$cat->_id}}">{{$cat->_view}}</option>
+				        {{/foreach}}
+				      </select>
+				      <br />
+				      {{mb_field class="CPrescriptionLineComment" field="commentaire"}}
+				      <br />
+				      <div style="text-align: center;">
+					      <button class="submit" type="button" 
+					              onclick="if(document.selPraticienLine){
+					                         this.form.praticien_id.value = document.selPraticienLine.praticien_id.value;
+					                       }                        
+					                       this.form.onsubmit();">Ajouter</button>
+				      </div>
+				    </form>
+				    <script type="text/javascript">
+					    Main.add(function () {
+						    prepareForm('addLineComment{{$element}}');
+						  });
+					  </script>
+				  {{/if}}
+				</div>
+      </td>
+	  </tr>
+  {{/if}}
 </table>
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
@@ -158,7 +278,7 @@ Main.add( function(){
   	  {{/if}}
   	  {{/if}}
   	  {{foreach from=$lines_cat.comment item=line_comment}}
-  	    {{if !$praticien_sortie_id || ($praticien_sortie_id != $line_comment->praticien_id)}}
+  	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_comment->praticien_id)}}
           {{if $readonly}}
             {{if $full_line_guid == $line_comment->_guid}}
               {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}            

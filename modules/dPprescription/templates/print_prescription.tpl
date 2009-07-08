@@ -111,14 +111,11 @@ Main.add(window.print);
     Prescriptions relatives au traitement de l'affection de longue durée
 		</h3>
 		<ul>
-    {{foreach from=$lines.medicaments.med.ald item=line_medicament_element_ald}}
-      {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald nodebug=true}}
-    {{/foreach}}
-   
-	    {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
-		    <li>
-		      {{$line_medicament_comment_ald->commentaire}}
-		    </li>
+      {{foreach from=$lines.medicaments.med.ald item=line_medicament_element_ald}}
+        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald nodebug=true}}
+      {{/foreach}}
+      {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
+		      {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_ald nodebug=true}}
 	    {{/foreach}}
     </ul>
     <div class="middle"></div>
@@ -135,9 +132,7 @@ Main.add(window.print);
       {{/if}} 
     {{/foreach}}
     {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
-		  <li>
-		    {{$line_medicament_comment_no_ald->commentaire}}
-		  </li>
+      {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_no_ald nodebug=true}}
 	  {{/foreach}}
     </ul>
 <!-- Affichage en mode normal -->
@@ -189,9 +184,7 @@ Main.add(window.print);
       {{/if}}  
     {{/foreach}}
       {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
-		    <li>
-		      {{$line_medicament_comment_no_ald->commentaire}}
-		    </li>
+        {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_no_ald nodebug=true}}
 	    {{/foreach}}
     </ul>
 {{/if}}
@@ -235,8 +228,7 @@ Main.add(window.print);
 	             <!-- Affichage de l'element -->
 	             {{include file="inc_print_element.tpl" elt=$_element_ald nodebug=true}}
 	           {{else}}
-	             <!-- Affichage du commentaire -->
-	              <li>{{$_element_ald->commentaire}}</li>
+               {{include file="inc_print_commentaire.tpl" comment=$_element_ald nodebug=true}}
 	           {{/if}}
 	        {{/foreach}}
 	     {{/foreach}}
@@ -263,8 +255,7 @@ Main.add(window.print);
 	             <!-- Affichage de l'element -->
 	             {{include file="inc_print_element.tpl" elt=$_element_no_ald nodebug=true}}
 	           {{else}}
-	             <!-- Affichage du commentaire -->
-	             <li>{{$_element_no_ald->commentaire}}</li>
+               {{include file="inc_print_commentaire.tpl" comment=$_element_no_ald nodebug=true}}
 	           {{/if}}
 	        {{/foreach}}
 	     {{/foreach}}

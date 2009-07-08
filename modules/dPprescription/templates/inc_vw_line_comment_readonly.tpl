@@ -23,7 +23,7 @@
    <tr>
      <td style="width: 25px"></td>
      <td style="width: 80%;" class="text">
-       {{$line->commentaire}}
+       {{$line->commentaire|nl2br}}
      </td>
      
      <td style="text-align: right;">

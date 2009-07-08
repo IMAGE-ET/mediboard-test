@@ -28,6 +28,14 @@
 </table>
 </form>
 
+<script type="text/javascript">
+Main.add(function () {
+  getForm('modlang').elements.module.sortByLabel();
+});
+
+</script>
+
+
 
 <!-- Modification des items -->
 <form action="?m=dPdeveloppement" name="translate" method="post">

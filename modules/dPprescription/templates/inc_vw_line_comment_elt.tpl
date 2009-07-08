@@ -36,7 +36,17 @@
        {{/if}}
      </td>
      <td style="width: 80%;" class="text">
-       {{$line->commentaire}}
+       {{if $line->_perm_edit}}
+       <form name="editCommentaire-{{$line->_guid}}">
+         <input type="hidden" name="m" value="dPprescription" />
+	       <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	       <input type="hidden" name="del" value="0" />
+	       <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
+         {{mb_field object=$line field=commentaire onchange="submitFormAjax(this.form, 'systemMsg');"}}
+       </form>
+       {{else}}
+         {{mb_value object=$line field=commentaire}}
+       {{/if}}
      </td>
      <td>
        {{if $line->category_prescription_id}}
