@@ -155,13 +155,15 @@ Element.addMethods(['input', 'textarea'], {
 
 Element.addMethods('select', {
   sortByLabel: function(element){
-    var sortedOptions = element.childElements().sortBy(function(o){
+    var selected = $V(element),
+        sortedOptions = element.childElements().sortBy(function(o){
       return o.text;
     });
     element.update();
     sortedOptions.each(function(o){
       element.insert(o);
     });
+    $V(element, selected, false);
   }
 });
 
