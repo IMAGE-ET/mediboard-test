@@ -21,14 +21,13 @@ $date_max = mbGetValueFromGetOrSession('_date_max');
 mbSetValueToSession('_date_min', $date_min);
 mbSetValueToSession('_date_max', $date_max);
 
-$ljoin = array(
-  'product' => 'product.product_id = product_stock_group.product_id'
-);
-
 if ($only_service_stocks == 1) {
+  $ljoin = array(
+    'product' => 'product.product_id = product_stock_service.product_id'
+  );
   $service = new CService;
   $service->load($service_id);
-  $stocks_service = $service->loadBackRefs('product_stock_services');
+  $stocks_service = $service->loadBackRefs('product_stock_services', 'product.name', "$start,20", null, $ljoin);
   
   $stocks = array();
   $count_stocks = 0;
@@ -40,6 +39,9 @@ if ($only_service_stocks == 1) {
   }
 } 
 else {
+  $ljoin = array(
+    'product' => 'product.product_id = product_stock_group.product_id'
+  );
   $group = CGroups::loadCurrent();
   $stocks = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
   $count_stocks = $group->countBackRefs('product_stocks', null, null, null, $ljoin);
