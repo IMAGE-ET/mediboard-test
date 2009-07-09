@@ -70,7 +70,7 @@ Main.add(function(){
     <th>Unité de dispensation</th>
     <th style="width: 30%">Dispensation</th>
     <th>Déjà effectuées</th>
-    {{if !$infinite_service}}
+    {{if !$infinite_service && $only_service_stocks == 1}}
     <th>Stock<br /> du service</th>
     {{/if}}
   </tr>

@@ -34,6 +34,7 @@ if ($only_service_stocks == 1) {
   foreach($stocks_service as $stock_service){
     //if (count($stocks) == 20) continue;
     $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
+    $stock->_ref_stock_service = $stock_service;
     $stocks[$stock->_id] = $stock;
   }
 } 

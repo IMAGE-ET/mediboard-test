@@ -69,7 +69,7 @@
   <!-- Affichage des dispensations deja effectuées -->
   <td style="text-align: left" class="text">  
   {{foreach from=$stock->_ref_deliveries item=dispensation}}
-    {{if $dispensation->order == 1}}
+     {{if $dispensation->order == 1}}
      <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:refreshLists})">
        <input type="hidden" name="m" value="dPstock" />
        <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -84,4 +84,11 @@
      <br />
   {{/foreach}}
   </td>
+  
+  {{if !$infinite_service && $only_service_stocks == 1}}
+  <td>
+   {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock->_ref_stock_service}}
+   {{$stock->_ref_stock_service->quantity}}
+  </td>
+  {{/if}}
 </tr>
