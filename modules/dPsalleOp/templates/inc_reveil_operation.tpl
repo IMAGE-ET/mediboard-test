@@ -186,7 +186,7 @@ function reloadPrescription(prescription_id){
   <li><a href="#diag_tab">Diagnostics</a></li>
   <li><a href="#codage_tab">Actes</a></li>
   <li><a href="#dossier_tab">Dossier</a></li>
-  <li><a href="#constantes-medicales">Constantes</a></li>
+  <li onclick="refreshConstantesHack({{$sejour->_id}})"><a href="#constantes-medicales">Constantes</a></li>
 
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
