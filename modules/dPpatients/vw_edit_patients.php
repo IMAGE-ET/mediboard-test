@@ -7,13 +7,14 @@
  * @author Romain Ollivier
  */
 
-global $can;
+global $can, $AppUI;
 
 $can->needsEdit();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");
+$useVitale  = mbGetValueFromGet("useVitale");
 
 $date = mbDate();
 
@@ -31,7 +32,8 @@ if (!$patient_id) {
   $patient->prenom = $firstName;
 }
 
-if (mbGetValueFromGet("useVitale")) {
+// Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
+if ($useVitale && $AppUI->user_prefs['GestionFSE'] && !$AppUI->user_prefs['VitaleVision']) {
   $patVitale = new CPatient();
   $patVitale->getValuesFromVitale();
   $patVitale->nullifyEmptyFields();
@@ -47,5 +49,5 @@ if($patient_id)
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
+$smarty->assign("useVitale", $useVitale);
 $smarty->display("vw_edit_patients.tpl");
-?>

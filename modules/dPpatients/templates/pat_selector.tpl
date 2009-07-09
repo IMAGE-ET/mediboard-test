@@ -1,19 +1,24 @@
 {{* $Id$ *}}
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
+{{if $app->user_prefs.GestionFSE}}
+  {{if $app->user_prefs.VitaleVision}}
+    {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+  {{else}}
+    {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+  {{/if}}
+{{/if}}
 
 <script type="text/javascript">
 
 var Patient = {
-  create: function() {
-    this.edit(0);
+  create: function(useVitale) {
+    this.edit(0, useVitale);
   },
 
-  edit: function(patient_id) {
-    var url = new Url();
-    url.setModuleAction("dPpatients", "vw_edit_patients");
+  edit: function(patient_id, useVitale) {
+    var url = new Url("dPpatients", "vw_edit_patients");
     url.addParam("patient_id", patient_id);
-    url.addParam("dialog", "1");
+    url.addParam("dialog", 1);
 
 	  var oForm = null;
     if (oForm = document.patientSearch) {
@@ -21,7 +26,7 @@ var Patient = {
       url.addElement(oForm.firstName);
     }
     
-    if (oForm = document.patientEdit) {
+    if (useVitale || (oForm = document.patientEdit)) {
       url.addParam("useVitale", 1);
     }
 
@@ -41,15 +46,31 @@ var Patient = {
   }
 }
 
+{{if $app->user_prefs.GestionFSE && !$app->user_prefs.VitaleVision}}
 Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "pat_selector");
+  var url = new Url("dPpatients", "pat_selector");
   url.addParam("useVitale", 1);
   url.addParam("dialog", 1);
   url.redirect();
 }
+{{/if}}
 </script>
+
+<div id="modal-beneficiaire" style="display:none; text-align:center;">
+  <p id="msg-multiple-benef">
+    Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :
+  </p>
+  <p id="msg-confirm-benef" style="display: none;"></p>
+	<p id="benef-nom">
+	  <select id="modal-beneficiaire-select"></select>
+    <span></span>
+  </p>
+  <div>
+  	<button type="button" class="tick" onclick="VitaleVision.search(getForm('patientSearch'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
+	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
+  </div>
+</div>
 
 {{if $patVitale}}
 
@@ -139,6 +160,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 <input type="hidden" name="m" value="dPpatients" />
 <input type="hidden" name="a" value="pat_selector" />
 <input type="hidden" name="dialog" value="1" />
+<input type="hidden" name="useVitale" value="" />
 
 <table class="form">
 
@@ -154,8 +176,12 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="3" /></td>
   
   <td>
-  {{if !$app->user_prefs.VitaleVision}}
-    {{if $app->user_prefs.GestionFSE}}
+  {{if $app->user_prefs.GestionFSE}}
+    {{if $app->user_prefs.VitaleVision}}
+      <button class="search" type="button" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
+        Lire Vitale
+      </button>
+    {{else}}
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
       </button>
@@ -236,7 +262,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <tr>
     <td class="button" colspan="5">
       {{if $can->edit}}
-      <button class="new" type="button" onclick="Patient.create();">
+      <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
         {{tr}}Create{{/tr}}
         {{if $useVitale}}avec Vitale{{/if}}
       </button>

@@ -57,8 +57,7 @@ function confirmCreation(oForm){
 }
 
 function printPatient(id) {
-  var url = new Url();
-  url.setModuleAction("dPpatients", "print_patient");
+  var url = new Url("dPpatients", "print_patient");
   url.addParam("patient_id", id);
   url.popup(700, 550, "Patient");
 }
@@ -76,8 +75,12 @@ Main.add(function () {
   initInseeFields("editFrm", "assure_cp_naissance", "assure_lieu_naissance","_assure_pays_naissance_insee");
   initPaysField("editFrm", "_assure_pays_naissance_insee", "assure_nationalite");
   initPaysField("editFrm", "assure_pays", "assure_tel");
-  
+
   tabs = new Control.Tabs('tab-patient');
+  
+  {{if $useVitale && $app->user_prefs.VitaleVision}}
+  lireVitale.delay(1); // 1 second
+  {{/if}}
 });
 
 </script>

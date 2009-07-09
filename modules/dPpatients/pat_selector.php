@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can, $g;
+global $can, $g, $AppUI;
 $can->needsRead();
 
 $name          = mbGetValueFromGet("name"       );
@@ -45,7 +45,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 } else {
 
   // Gestion du cas vitale
-  if ($useVitale) {
+  if ($useVitale && $AppUI->user_prefs['GestionFSE'] && !$AppUI->user_prefs['VitaleVision']) {
     $patVitale = new CPatient();  
     $patVitale->loadFromIdVitale();
     $patVitale->getValuesFromVitale();

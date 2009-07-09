@@ -101,8 +101,13 @@ var VitaleVision = {
     var benef = VitaleVision.xmlDocument.getElementsByTagName("listeBenef")[0].childNodes[id],
         ident = benef.getElementsByTagName("ident")[0];
   
-    $V(form.nom, getNodeValue("nomUsuel", ident));  
-    $V(form.prenom, getNodeValue("prenomUsuel", ident));  
+    $V(form.elements.nom, getNodeValue("nomUsuel", ident));
+    $V(form.elements.prenom, getNodeValue("prenomUsuel", ident));  
+    
+    // For the patient selector TODO: change the field names !
+    $V(form.elements.name, getNodeValue("nomUsuel", ident));  
+    $V(form.elements.firstName, getNodeValue("prenomUsuel", ident));  
+    $V(form.elements.nomjf, getNodeValue("nomPatronymique", ident));  
     
     if(getNodeValue("naissance date", ident) != "") { // Si format FR
       var dateNaissance = getNodeValue("naissance date", ident),
