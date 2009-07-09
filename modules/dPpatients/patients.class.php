@@ -1098,6 +1098,7 @@ class CPatient extends CMbObject {
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales();
+    $this->loadIPP();
     
     $template->addProperty("Patient - article"           , $this->_civilite );
     $template->addProperty("Patient - article long"      , $this->_civilite_long  );
@@ -1112,6 +1113,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - téléphone"         , $this->tel        );
     $template->addProperty("Patient - mobile"            , $this->tel2       );
     $template->addProperty("Patient - profession"        , $this->profession );
+    $template->addProperty("Patient - IPP"               , $this->_IPP       );
     
     if ($this->sexe == "m"){
       $template->addProperty("Patient - il/elle"         , "il"              );
