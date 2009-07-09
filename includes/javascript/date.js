@@ -254,7 +254,7 @@ var ProgressiveCalendar = Class.create({
     }, options || {});
     
     if (!(this.elementView = $(this.element.form.elements[this.element.name+'_da']))) {
-      this.elementView = new Element('input', {type: 'text', readonly: 'readonly'}).addClassName(this.element.className || 'date');
+      this.elementView = new Element('input', {type: 'text', readonly: 'readonly', className: this.element.className || 'date'});
       this.element.insert({before: this.elementView});
     }
     
@@ -266,7 +266,7 @@ var ProgressiveCalendar = Class.create({
     if (this.options.icon) {
 			var cont = new Element('div', {style: 'position:relative;border:none;padding:0;margin:0;display:inline'+(Prototype.Browser.IE&&document.documentMode<8?'':'-block')+';'});
 			this.elementView.wrap(cont);
-			var icon = new Element('img', {src: this.options.icon}).addClassName('inputExtension');
+			var icon = new Element('img', {src: this.options.icon, className: 'inputExtension'});
 
 			// No icon padding specified, default to 3px and calculate dynamically on image load
 			var padding = 3;
@@ -338,7 +338,7 @@ var ProgressiveCalendar = Class.create({
         }
           
         if (i == 0 && j == cols-1 && type == 'year') {
-          var after = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;'}).addClassName('day').update('>');
+          var after = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;', className: 'day'}).update('>');
           after.observe('click', function(e){
             e.stop();
             body.update();
@@ -397,9 +397,7 @@ var ProgressiveCalendar = Class.create({
   },
   createPicker: function(e){
     if (!this.picker) 
-      this.picker = new Element('div', {style: 'position:absolute;'}).
-        addClassName('datepickerControl').
-        observe('click', Event.stop);
+      this.picker = new Element('div', {style: 'position:absolute;', className: 'datepickerControl'}).observe('click', Event.stop);
     if (ProgressiveCalendar.activePicker) ProgressiveCalendar.activePicker.hidePicker();
     var container,
         now = new Date(),
@@ -521,7 +519,7 @@ var Calendar = {
     var elementView;
     
     if (!(elementView = $(element.form.elements[element.name+'_da']))) {
-      elementView = new Element('input', {type: 'text', readonly: 'readonly'}).addClassName(element.className || 'date');
+      elementView = new Element('input', {type: 'text', readonly: 'readonly', className: element.className || 'date'});
       element.insert({before: elementView});
     }
     
@@ -543,7 +541,10 @@ var Calendar = {
       if (datepicker.icon) datepicker.icon.style.position = 'relative';
     }
     else {
-      elementView.observe('click', Event.stop).observe('focus', datepicker.show.bindAsEventListener(datepicker));
+      elementView.observe('click', Event.stop).observe('focus', function(e){
+        datepicker.show.bind(datepicker)(e);
+        (function(){$(datepicker.datepicker.element).unoverflow()}).defer();
+      });
     }
     
     // We update the view

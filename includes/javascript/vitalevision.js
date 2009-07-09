@@ -133,7 +133,7 @@ var VitaleVision = {
       }
     }
   
-    $V(form.Date_Day, jour);
+    $V(form.Date_Day, parseInt(jour));
     $V(form.Date_Month, mois);
     $V(form.Date_Year, annee);
     
@@ -199,7 +199,7 @@ var VitaleVision = {
 
     var ville = getNodeValue("adresse ligne5", ident);
     if($V(form.cp) == "")    $V(form.cp, ville.substring(0, 5));
-    if($V(form.ville) == "") $V(form.ville, ville.substring(6, ville.length));
+    if($V(form.ville) == "") $V(form.ville, ville.substring(6));
     
     $V(form.rang_naissance, getNodeValue("rangDeNaissance", ident));
 
@@ -313,7 +313,7 @@ var VitaleVision = {
 
     var ville = getNodeValue("adresse ligne5", ident);
     if($V(form.assure_cp) == "")    $V(form.assure_cp, ville.substring(0, 5));
-    if($V(form.assure_ville) == "") $V(form.assure_ville, ville.substring(6, ville.length));
+    if($V(form.assure_ville) == "") $V(form.assure_ville, ville.substring(6));
     
     tabs.setActiveTab('assure');
     $(form.assure_matricule).focus(); // Application du masque
