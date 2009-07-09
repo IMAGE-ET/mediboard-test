@@ -95,6 +95,24 @@ $sejour_rpu->etablissement_transfert_id = "";
 $msg = $sejour_rpu->store();
 viewMsg($msg, "CSejour-title-close", "(Urgences)");
 
+// Chargement des prescriptions liées au RPU
+$rpu->_ref_sejour->loadRefsPrescriptions();
+foreach($rpu->_ref_sejour->_ref_prescriptions as $_prescription){
+  if($_prescription->_id){
+	  $_prescription->object_id = $sejour->_id;
+	  $msg = $_prescription->store();
+	  viewMsg($msg, "CPrescription-msg-modify");  
+  }
+}
+
+// Transfert des transmissions et observations
+$rpu->_ref_sejour->loadSuiviMedical();
+foreach($rpu->_ref_sejour->_ref_suivi_medical as $_suivi){
+  $_suivi->sejour_id = $sejour->_id;
+  $msg = $_suivi->store();
+	viewMsg($msg, "$_suivi->_class_name-msg-modify");  
+}
+
 $AppUI->redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
 
 ?>
