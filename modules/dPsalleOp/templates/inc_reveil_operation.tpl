@@ -9,6 +9,11 @@
 
 <script type="text/javascript">
 Main.add(function () {
+  if($('constantes-medicales')){
+    constantesMedicalesDrawn = false;
+    refreshConstantesHack({{$sejour->_id}});
+  }
+  
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('','{{$op_reveil->_ref_sejour->_id}}', null, null, '{{$op_reveil->_id}}', null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
   }
@@ -24,6 +29,22 @@ Main.add(function () {
     url.requestUpdate('Imeds_tab', { waitingText : null });
   }
 });
+
+var constantesMedicalesDrawn = false;
+function refreshConstantesHack(sejour_id) {
+  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+    refreshConstantesMedicales('CSejour-'+sejour_id);
+    constantesMedicalesDrawn = true;
+  }
+}
+
+function refreshConstantesMedicales(context_guid) {
+  if(context_guid) {
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("context_guid", context_guid);
+    url.requestUpdate("constantes-medicales", { waitingText: null } );
+  }
+}
 
 
 function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
@@ -165,6 +186,7 @@ function reloadPrescription(prescription_id){
   <li><a href="#diag_tab">Diagnostics</a></li>
   <li><a href="#codage_tab">Actes</a></li>
   <li><a href="#dossier_tab">Dossier</a></li>
+  <li><a href="#constantes-medicales">Constantes</a></li>
 
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
@@ -280,6 +302,9 @@ function reloadPrescription(prescription_id){
       </td>
     </tr>
   </table>
+</div>
+
+<div id="constantes-medicales" style="display:none">
 </div>
 
 {{if $isPrescriptionInstalled}}
