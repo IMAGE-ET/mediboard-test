@@ -71,6 +71,7 @@ foreach ($listPlages as &$element) {
         $consultation->_ref_sejour->loadRefRPU();
         if($consultation->_ref_sejour->_ref_rpu->_id){
           unset($plage->_ref_consultations[$consultation->_id]);
+          continue;
         }
       }
       if($consultation->chrono == CConsultation::PATIENT_ARRIVE){
