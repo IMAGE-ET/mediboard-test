@@ -77,6 +77,10 @@ function cancelRPU() {
   }
 }
 
+function reloadPrescription(prescription_id){
+  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
+}
+
 Main.add(function () {
   {{if $rpu->_id && $can->edit}}
     DossierMedical.reloadDossierPatient();
@@ -302,6 +306,7 @@ Main.add(function () {
   <li><a href="#suivisoins">Suivi soins</a></li>
   <li onclick="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
   <li><a href="#examens">Examens</a></li>
+  <li {{if $rpu->_ref_consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$rpu->_ref_consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -320,6 +325,12 @@ Main.add(function () {
 <div id="examens">
   {{assign var="readonly" value=1}}
   {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
+</div>
+
+<div id="prescription_sejour" style="display: none;">
+  <div class="small-info">
+    Aucune prescription
+  </div>
 </div>
 
 {{/if}}
