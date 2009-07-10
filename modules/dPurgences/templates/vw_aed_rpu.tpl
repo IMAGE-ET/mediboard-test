@@ -11,6 +11,9 @@
 {{mb_include_script module=dPpatients script=pat_selector}}
 {{mb_include_script module=dPurgences script=contraintes_rpu}}
 {{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_include_script module="dPprescription" script="element_selector"}}
 
 <script type="text/javascript">
 
