@@ -23,6 +23,7 @@ $order_col = mbGetValueFromGetOrSession("order_col", "ccmu");
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $today = mbDate();
 
+
 // Création du template
 $smarty = new CSmartyDP();
 

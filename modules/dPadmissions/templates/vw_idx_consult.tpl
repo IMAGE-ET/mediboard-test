@@ -72,6 +72,7 @@ Main.add(function () {
          {{assign var="userSel" value=$curr_day.anesthesiste}}
          {{assign var="consult" value=$consult}}
          {{assign var="current_m" value="dPcabinet"}}
+         {{assign var=mode_urgence value=false}}
          {{include file="../../dPcabinet/templates/inc_list_consult.tpl"}}
        </td>
        {{/foreach}}

@@ -13,19 +13,24 @@ $can->needsRead();
 
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
+
 //Initialisations des variables
 $cabinet_id   = mbGetValueFromGetOrSession("cabinet_id", $mediuser->function_id);
 $date         = mbGetValueFromGetOrSession("date", mbDate());
 $closed       = mbGetValueFromGetOrSession("closed", true);
+$mode_urgence = mbGetValueFromGet("mode_urgence", false);
+
 $hour         = mbTime(null);
 $board        = mbGetValueFromGet("board", 1);
 $boardItem    = mbGetValueFromGet("boardItem", 1);
-$consult      = new CConsultation;
-
-
-// Récupération des fonctions
+$consult      = new CConsultation();
 
 $cabinets = CMediusers::loadFonctions(PERM_EDIT, $g, "cabinet");
+
+if($mode_urgence){
+  $group = CGroups::loadCurrent();
+  $cabinet_id = $group->service_urgences_id;
+}
 
 // Récupération de la liste des praticiens
 $praticiens = array();
@@ -37,7 +42,6 @@ if ($consult->_id) {
   $date = $consult->_ref_plageconsult->date;
   mbSetValueToSession("date", $date);
 }
-
 
 // Récupération des plages de consultation du jour et chargement des références
 $listPlages = array();
@@ -56,11 +60,15 @@ foreach($praticiens as $keyPrat => $prat) {
   }
 }
 
+$nb_attente = 0;
 foreach ($listPlages as &$element) {
   foreach ($element["plages"] as &$plage) {
     $plage->_ref_chir =& $element["prat"];
     $plage->loadRefsConsultations(true, $closed);
     foreach ($plage->_ref_consultations as &$consultation) {
+      if($consultation->chrono == CConsultation::PATIENT_ARRIVE){
+        $nb_attente++;
+      }
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
       $consultation->countDocItems();
@@ -71,19 +79,19 @@ foreach ($listPlages as &$element) {
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("cabinet_id"    ,$cabinet_id);
-$smarty->assign("consult"       ,$consult);
-$smarty->assign("listPlages"    ,$listPlages);
-$smarty->assign("closed"        ,$closed);
-$smarty->assign("date"          ,$date);
-$smarty->assign("hour"          ,$hour);
-$smarty->assign("praticiens"    ,$praticiens);
-$smarty->assign("cabinets"      ,$cabinets);
-$smarty->assign("board"         ,$board);
-$smarty->assign("boardItem"     ,$boardItem);
-$smarty->assign("canCabinet"    ,CModule::getCanDo("dPcabinet"));
-
+$smarty->assign("cabinet_id"    , $cabinet_id);
+$smarty->assign("consult"       , $consult);
+$smarty->assign("listPlages"    , $listPlages);
+$smarty->assign("closed"        , $closed);
+$smarty->assign("date"          , $date);
+$smarty->assign("hour"          , $hour);
+$smarty->assign("praticiens"    , $praticiens);
+$smarty->assign("cabinets"      , $cabinets);
+$smarty->assign("board"         , $board);
+$smarty->assign("boardItem"     , $boardItem);
+$smarty->assign("canCabinet"    , CModule::getCanDo("dPcabinet"));
+$smarty->assign("mode_urgence"  , $mode_urgence);
+$smarty->assign("nb_attente"    , $nb_attente);
 $smarty->display("vw_journee.tpl");
 
 

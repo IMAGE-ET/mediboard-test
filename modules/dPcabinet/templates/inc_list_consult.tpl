@@ -1,3 +1,15 @@
+<script type="text/javascript">
+
+// Notification de l'arrivée du patient
+putArrivee = function(oForm) {
+  var today = new Date();
+  oForm.arrivee.value = today.toDATETIME(true);
+  submitFormAjax(oForm, 'systemMsg', { onComplete: updateConsultations } );
+}
+
+</script>
+
+
 {{if !$board}}
 {{if $canCabinet->view}}
 <script type="text/javascript">
@@ -29,7 +41,6 @@ Main.add( function () {
         </select>
       </td>
       {{/if}}
-      
     </tr>
   </table>
 </form>
@@ -49,7 +60,6 @@ Main.add( function () {
 {{assign var="font" value="font-size: 9px;"}} 
 <table class="tbl" style="width: 250px">
 {{/if}}
-
   <tr>
     <th class="title" colspan="3">Consultations</th>
   </tr>
@@ -72,15 +82,28 @@ Main.add( function () {
   {{/if}}
   <tbody class="hoverable">
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2">
-
+    <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
-      <a href="?m={{$current_m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
-        <img src="images/icons/planning.png" alt="modifier" />
+        {{if ($curr_consult->chrono == $curr_consult|const:'PLANIFIE') && $mode_urgence}}
+		      <form name="etatFrm{{$curr_consult->_id}}" action="?m={{$current_m}}" method="post">
+			      <input type="hidden" name="m" value="dPcabinet" />
+			      <input type="hidden" name="dosql" value="do_consultation_aed" />
+			      {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
+			      <input type="hidden" name="chrono" value="{{$curr_consult|const:'PATIENT_ARRIVE'}}" />
+			      <input type="hidden" name="arrivee" value="" />
+		      </form>
+
+          <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$curr_consult->_id}})" style="float: right">
+            <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
+          </a>
+        {{/if}}
+        <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
+          <img src="images/icons/planning.png" alt="modifier" />
+        </a>
       {{else}}
-      <a href="#nowhere" title="Impossible de modifier le RDV">
+        <a href="#nowhere" title="Impossible de modifier le RDV"></a>
       {{/if}}
-      </a>
+      
       
       {{if $curr_consult->patient_id}}
       {{if $canCabinet->view}}
@@ -133,8 +156,9 @@ Main.add( function () {
         {{$curr_consult->motif|truncate:30:"...":true}}
       {{/if}}
       {{if $listPlages && $canCabinet->edit}}
-      <form name="editFrm-consult{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
+      <form name="editFrm-consult{{$curr_consult->_id}}" action="?m={{$current_m}}" method="post">
       <input type="hidden" name="dosql" value="do_consultation_aed" />
+      <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
       <select name="plageconsult_id" onchange="this.form.submit();" style="font-size: 9px;">

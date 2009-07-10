@@ -1,15 +1,29 @@
 <script type="text/javascript">
 Main.add(function () {
-  Calendar.regField(getForm("selCabinet").date, null, {noView: true});
+  if(document.selCabinet){
+    Calendar.regField(getForm("selCabinet").date, null, {noView: true});
+  }
+  
+  // Mise à jour du compteur de patients arrivés
+	if($('tab_main_courante')){
+		link = $('tab_main_courante').select("a[href=#consultations]")[0];
+	  link.update('Consultations ('+{{$nb_attente}}+')');
+	  {{if $nb_attente == '0'}}
+	    link.addClassName('empty');
+	  {{else}}
+	    link.removeClassName('empty');
+	  {{/if}}
+  }
 });
 </script>
 
 <table class="main">
+  {{if !$mode_urgence}}
   <tr>
     <td>
       <form name="selCabinet" action="?" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="tab" value="{{$tab}}" />
+	    <input type="hidden" name="m" value="{{$m}}" />
+	    <input type="hidden" name="tab" value="{{$tab}}" />
       <table class="form">
         <tr>
           <th class="title" colspan="100">
@@ -18,7 +32,6 @@ Main.add(function () {
             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           </th>
         </tr>
-        
         <tr>
           <th>
             <label for="cabinet_id" title="Sélectionner un cabinet">Cabinet</label>
@@ -33,7 +46,6 @@ Main.add(function () {
               {{/foreach}}
             </select>
           </td>
-          
 		      <th>
 		      	<label for="closed" title="Type de vue du planning">Type de vue</label></th>
 		      <td colspan="5">
@@ -42,16 +54,14 @@ Main.add(function () {
 		          <option value="0"{{if $closed == "0"}}selected="selected"{{/if}}>Masquer les Terminées</option>
 		        </select>
 		      </td>
-          
           <td>
           </td>
-
         </tr>
       </table> 
-      
       </form>
     </td>
   </tr>
+ {{/if}}
   <tr>
     <td>
       <table class="form">
@@ -76,7 +86,13 @@ Main.add(function () {
        {{assign var="vue" value="0"}}
        {{assign var="userSel" value=$curr_day.prat}}
        {{assign var="consult" value=$consult}}
-       {{assign var="current_m" value="dPcabinet"}}
+       
+       {{if $mode_urgence}}
+         {{assign var="current_m" value="dPurgences"}}
+       {{else}}
+         {{assign var="current_m" value="dPcabinet"}}
+       {{/if}}
+       
        {{include file="../../dPcabinet/templates/inc_list_consult.tpl"}}
      </td>
      {{/foreach}}
