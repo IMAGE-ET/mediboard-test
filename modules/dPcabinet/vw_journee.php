@@ -66,6 +66,13 @@ foreach ($listPlages as &$element) {
     $plage->_ref_chir =& $element["prat"];
     $plage->loadRefsConsultations(true, $closed);
     foreach ($plage->_ref_consultations as &$consultation) {
+      if($mode_urgence){
+        $consultation->loadRefSejour();
+        $consultation->_ref_sejour->loadRefRPU();
+        if($consultation->_ref_sejour->_ref_rpu->_id){
+          unset($plage->_ref_consultations[$consultation->_id]);
+        }
+      }
       if($consultation->chrono == CConsultation::PATIENT_ARRIVE){
         $nb_attente++;
       }
