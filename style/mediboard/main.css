@@ -238,17 +238,17 @@ a.button {
   background-color: #ddd;
   margin: 0px 2px;
   padding: 2px;
+  height: 18px;
   background-repeat: no-repeat;
   background-position: left bottom;
-  height: 18px;
   white-space: nowrap;
   vertical-align: middle;
-  line-height: 1em;
   cursor: pointer;
 }
 
 a.button {
-  padding-bottom:1px;
+  display: inline-block;
+  height: 14px;
   text-decoration: none;
 }
 

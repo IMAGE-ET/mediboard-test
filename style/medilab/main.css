@@ -383,7 +383,7 @@ input[type=button] {
   background-image: url(../tonkin/images/buttons/button.png);
   background-repeat: repeat-x;
   background-position: left bottom;
-  height: 18px
+  height: 18px;
 }
 
 button:hover,
