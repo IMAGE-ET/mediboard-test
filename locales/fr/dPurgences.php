@@ -265,4 +265,7 @@ $locales['CRPU-_service_id-court'] = 'Service';
 $locales['CRPU-_service_id-desc'] = 'Service';
 $locales['CService-back-'] = '';
 $locales['mod-dPurgences-tab-vw_radio'] = 'Radiologie';
+$locales['CRPU-accident_travail'] = 'Accident de travail';
+$locales['CRPU-accident_travail-court'] = 'Accident de travail';
+$locales['CRPU-accident_travail-desc'] = 'Accident de travail';
 ?>
