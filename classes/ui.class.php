@@ -613,6 +613,16 @@ class CAppUI {
   }
   
   /**
+   * Get a named user preference
+   * @param string $name of the user preference
+   * @return string The value
+   */
+  static function pref($name) {
+    global $AppUI;
+    return $AppUI->user_prefs[$name]; 
+  }
+  
+  /**
    * Attempt to make AppUI functions static for better use
    */
 
