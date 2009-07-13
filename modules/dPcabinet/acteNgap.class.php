@@ -51,12 +51,18 @@ class CActeNGAP extends CActe {
     
     // Vue codée
     $this->_shortview = $this->quantite > 1 ? "{$this->quantite}x" : "";
-    $this->_shortview.= "$this->code$this->coefficient";
+    $this->_shortview.= $this->code;
+    if ($this->coefficient != 1) {
+      $this->_shortview.= $this->coefficient;      
+    }
     if ($this->demi) {
       $this->_shortview.= "/2";
     }
     
-    $this->_view = "Acte NGAP $this->_shortview de $this->object_class-$this->object_id";
+    $this->_view = "Acte NGAP $this->_shortview";
+    if ($this->object_class && $this->object_id) {
+      $this->_view .= "de $this->object_class-$this->object_id";
+    }
   }
   
   function loadExecution() {
@@ -86,6 +92,8 @@ class CActeNGAP extends CActe {
      if (count($details) >= 7){
     	$this->complement = $details[6];
     }
+    
+    $this->updateFormFields();
   }
   
   function getPrecodeReady() {

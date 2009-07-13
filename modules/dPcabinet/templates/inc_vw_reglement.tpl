@@ -221,7 +221,7 @@ Main.add( function(){
                 <th>Codes NGAP</th>
                 <td>{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
                   {{foreach from=$consult->_ref_actes_ngap item=acte_ngap}}
-                    {{$acte_ngap->quantite}}-{{$acte_ngap->code}}-{{$acte_ngap->coefficient}}   
+                  	<span onmouseover="ObjectTooltip.createEx(this, '{{$acte_ngap->_guid}}');">{{$acte_ngap->_shortview}}</span>
                   {{/foreach}}
                 </td>
               </tr>

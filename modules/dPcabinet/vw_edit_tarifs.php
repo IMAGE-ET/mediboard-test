@@ -72,6 +72,8 @@ foreach ($listeTarifsSpe as $_tarif) {
   $_tarif->getPrecodeReady();
 }
 
+
+
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 $listPrat = $user->_is_secretaire ?
   $user->loadPraticiens(PERM_READ) :

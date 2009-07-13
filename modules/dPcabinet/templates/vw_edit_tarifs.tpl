@@ -2,14 +2,22 @@
 
 function refreshTotal() {
   var oForm = document.editFrm;
+  if (!oForm.secteur1 || !oForm.secteur1) {
+  	return;
+  }
+  
+  
   var secteur1 = oForm.secteur1.value;
-  var secteur2 = oForm.secteur2.value;
-  if(secteur1 == ""){
+  var secteur2 = oForm.secteur2.value; 
+  
+  if (secteur1 == ""){
     secteur1 = 0;
   }
-  if(secteur2 == ""){
+  
+  if (secteur2 == ""){
     secteur2 = 0;
   }
+  
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
   oForm._somme.value = Math.round(oForm._somme.value*100)/100;
 }
@@ -18,10 +26,10 @@ function modifSecteur2(){
   var oForm = document.editFrm;
   var secteur1 = oForm.secteur1.value;
   var somme = oForm._somme.value;
-  if(somme == ""){
+  if (somme == "") {
     somme = 0;
   }
-  if(secteur1 == ""){
+  if (secteur1 == "") {
     secteur = 0;
   }
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
@@ -44,84 +52,7 @@ Main.add(function () {
   </tr>
   <tr>
     <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th colspan="3" class="title">{{tr}}CMediusers-back-tarifs{{/tr}}</th>
-        </tr>
-        
-        {{if !$user->_is_praticien && !$user->_is_secretaire}}
-        <tr>
-          <td class="text">
-            <div class="big-info">
-              N'étant pas praticien, vous n'avez pas accès à la liste de tarifs personnels.
-            </div>
-          </td>
-        </tr>
-        {{/if}}
-        
-        {{if $user->_is_secretaire}}
-        <tr>
-          <td colspan="3">
-            <form action="?" name="selection" method="get">
-              <input type="hidden" name="tarif_id" value="" />
-              <input type="hidden" name="m" value="{{$m}}" />
-              <select name="prat_id" onchange="this.form.submit()">
-                <option value="">&mdash; Aucun praticien</option>
-                {{foreach from=$listPrat item=_prat}}
-                <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-                {{if $_prat->_id == $prat->_id}}selected="selected"{{/if}}>
-                  {{$_prat->_view}}
-                </option>
-                {{/foreach}}
-              </select>
-            </form>
-          </td>
-        </tr>
-        {{/if}}
-        
-
-        {{if $user->_is_praticien || $user->_is_secretaire}}
-        <tr>
-          <th>{{mb_label class=CTarif field=description}}</th>
-          <th>{{mb_label class=CTarif field=secteur1}}</th>
-          <th>{{mb_label class=CTarif field=secteur2}}</th>
-        </tr>
-
-        {{foreach from=$listeTarifsChir item=_tarif}}
-        <tr {{if $_tarif->_id == $tarif->_id}}class="selected"{{/if}}>
-          <td {{if $_tarif->_precode_ready}}class="checked"{{/if}}>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id={{$_tarif->_id}}">
-            	{{mb_value object=$_tarif field=description}}
-            </a>
-          </td>
-          <td>{{mb_value object=$_tarif field=secteur1}}</td>
-          <td>{{mb_value object=$_tarif field=secteur2}}</td>
-        </tr>
-        {{/foreach}}
-        {{/if}}
-      </table>
-    
-      <table class="tbl">
-        <tr><th colspan="3" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th></tr>
-
-        <tr>
-          <th>{{mb_label class=CTarif field=description}}</th>
-          <th>{{mb_label class=CTarif field=secteur1}}</th>
-          <th>{{mb_label class=CTarif field=secteur2}}</th>
-        </tr>
-
-        {{foreach from=$listeTarifsSpe item=_tarif}}
-        <tr {{if $_tarif->_id == $tarif->_id}}class="selected"{{/if}}>
-          <td>
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id={{$_tarif->_id}}">
-            	{{mb_value object=$_tarif field=description}}
-            </a>
-          </td>
-          <td>{{mb_value object=$_tarif field=secteur1}}</td>
-          <td>{{mb_value object=$_tarif field=secteur2}}</td>
-        </tr>
-        {{/foreach}}
-      </table>
+      {{include file=inc_list_tarifs.tpl}}
     </td>
     
     <td>
@@ -136,7 +67,7 @@ Main.add(function () {
         	<th class="title modify text" colspan="2">
         		{{mb_include  module=system template=inc_object_history object=$tarif}}
         		{{mb_include  module=system template=inc_object_idsante400 object=$tarif}}
-        		{{tr}}CTarif-title-modify{{/tr}} '{{$tarif->_view}}'
+        		{{tr}}CTarif-title-modify{{/tr}} '{{$tarif}}'
         	</th>
         </tr>
         {{else}}
@@ -177,7 +108,10 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field=codes_ccam}}</th>
 			    <td>
 			    	{{foreach from=$tarif->_codes_ccam item=_code_ccam}}
-						{{$_code_ccam}}<br />
+						<div onmouseover="ObjectTooltip.createDOM(this, 'DetailCCAM-{{$_code_ccam}}');">{{$_code_ccam}}</div>
+						<div id="DetailCCAM-{{$_code_ccam}}" style="display: none">
+							{{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ccam show_derived=1}}
+						</div>
 			    	{{foreachelse}}
 			    	<em>{{tr}}None{{/tr}}</em>
 						{{/foreach}}
@@ -186,37 +120,62 @@ Main.add(function () {
 
         <tr>
           <th>{{mb_label object=$tarif field=codes_ngap}}</th>
-         <td>
-         	{{foreach from=$tarif->_codes_ngap item=_code_ngap}}
-					{{$_code_ngap}}<br />
-         	{{foreachelse}}
-         	<em>{{tr}}None{{/tr}}</em>
-					{{/foreach}}
-         </td>
+          <td>
+         	  {{foreach from=$tarif->_codes_ngap item=_code_ngap}}
+					  <div onmouseover="ObjectTooltip.createDOM(this, 'DetailNGAP-{{$_code_ngap}}');">{{$_code_ngap}}</div>
+					  <div id="DetailNGAP-{{$_code_ngap}}" style="display: none">
+				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap show_derived=1}}
+			 		  </div>
+          	{{foreachelse}}
+            <em>{{tr}}None{{/tr}}</em>
+	 				{{/foreach}}
+          </td>
         </tr>
 
         <tr>
-          <th>{{mb_label object=$tarif field="secteur1"}}</th>
-          <td>{{mb_field object=$tarif field="secteur1" size="6" onChange="refreshTotal();"}}<input type="hidden" name="_tarif" /></td>
+          <th>{{mb_label object=$tarif field=secteur1}}</th>
+          <td>
+            {{if count($tarif->_new_actes)}}
+	          	{{mb_value object=$tarif field=secteur1}}
+						{{else}}
+	          	{{mb_field object=$tarif field=secteur1 size=6 onchange="refreshTotal();"}}
+	          	<input type="hidden" name="_tarif" />
+						{{/if}}
+          </td>
         </tr>
         
         <tr>
-          <th>{{mb_label object=$tarif field="secteur2"}}</th>
-          <td>{{mb_field object=$tarif field="secteur2" size="6" onChange="refreshTotal();"}}</td>
+          <th>{{mb_label object=$tarif field=secteur2}}</th>
+          <td>
+            {{if count($tarif->_new_actes)}}
+	          	{{mb_value object=$tarif field=secteur2}}
+						{{else}}
+	          	{{mb_field object=$tarif field=secteur2 size=6 onchange="refreshTotal();"}}
+						{{/if}}
+          </td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$tarif field=_somme}}</th>
           <td>
-            {{mb_field object=$tarif field="_somme" onchange="modifSecteur2()"}}
+            {{if count($tarif->_new_actes)}}
+	          	{{mb_value object=$tarif field=_somme}}
+						{{else}}
+	            {{mb_field object=$tarif field=_somme onchange="modifSecteur2()"}}
+						{{/if}}
+          
           </td>
         </tr>
         
         <tr>
           <td class="button" colspan="2">
             {{if $tarif->_id}}
-            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le tarif',objName:'{{$tarif->description|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
+	            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+              {{if count($tarif->_new_actes) && !$tarif->_has_mto}}
+              <input type="hidden" name="_add_mto" value="0" />
+	            <button class="add" type="submit" onclick="$V(this.form._add_mto, '1');">{{tr}}Add{{/tr}} MTO</button>
+              {{/if}}
+	            <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif',objName: this.form.description.value } )">{{tr}}Delete{{/tr}}</button>
             {{else}}
             <button class="new" type="submit" name="btnFuseAction">{{tr}}Create{{/tr}}</button>
             {{/if}}
@@ -227,23 +186,25 @@ Main.add(function () {
       
       </form>
       
-      {{if $tarif->_precode_ready}}
-      <div class="small-success">
-      	Les codages CCAM et NGAP de ce tarif sont suffisamment complets pour permettre une cotation réelle automatique. 
-      	complète automatiquement
-      </div>
-      {{else}}
-      <div class="small-warning">
-      	Les codages CCAM et NGAP de ce tarif ne sont pas assez complets pour permettre une cotation complète automatiquement.
-      </div>
+      {{if $tarif->_id}}
+	      {{if $tarif->_precode_ready}}
+	      <div class="small-success">
+	      	Les codages CCAM et NGAP de ce tarif sont suffisamment complets pour permettre une cotation réelle automatique. 
+	      	complète automatiquement
+	      </div>
+	      {{else}}
+	      <div class="small-warning">
+	      	Les codages CCAM et NGAP de ce tarif ne sont pas assez complets pour permettre une cotation complète automatiquement.
+	      </div>
+				{{/if}}
 			{{/if}}
-      
+			      
       <div class="big-info">
         Pour créer un tarif contenant des codes CCAM et NGAP, effectuer une cotation réelle
         pendant une consultation en trois étapes :
         <ul>
           <li><em>Ajouter</em> des actes dans le volet <strong>Actes</strong></li>
-          <li><em>Valider</em> la cotation la cotation dans le volet <strong>Docs. et Règlements</strong>, section <strong>Règlement</strong></li>
+          <li><em>Valider</em> la cotation dans le volet <strong>Docs. et Règlements</strong></li>
           <li><em>Cliquer</em> <strong>Nouveau tarif</strong> dans cette même section</li>
         </ul>
       </div>

@@ -186,6 +186,8 @@ class CActeCCAM extends CActe {
       if (count($details) >= 5){
         $this->montant_depassement = str_replace("*","-",$details[4]);
       }
+      
+      $this->updateFormFields();
     }
   }
   

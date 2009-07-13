@@ -1747,4 +1747,10 @@ $locales['config-dPcabinet-CPlageConsult-hours_stop-desc'] = '';
 $locales['config-dPcabinet-CPlageConsult-minutes_interval'] = '';
 $locales['config-dPcabinet-CPlageConsult-minutes_interval-desc'] = '';
 $locales['mod-dPcabinet-tab-offline_programme_consult'] = 'Programme hors ligne';
+$locales['CTarif-_has_mto'] = 'MTO présent';
+$locales['CTarif-_has_mto-court'] = 'MTO';
+$locales['CTarif-_has_mto-desc'] = 'La majoration MTO (orientation du médecin traitant) est bien disponible par défaut';
+$locales['CTarif-_precode_ready'] = 'Prêt pour cotation';
+$locales['CTarif-_precode_ready-court'] = 'Prêt';
+$locales['CTarif-_precode_ready-desc'] = 'Le tarif est prêt pour une cotation complète automatique';
 ?>

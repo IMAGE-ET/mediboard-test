@@ -88,8 +88,8 @@ class CActe extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["object_id"]           = "ref notNull class|CCodable meta|object_class";
     $specs["executant_id"]        = "ref notNull class|CMediusers";
-    $specs["montant_depassement"] = "currency";
     $specs["montant_base"]        = "currency";
+    $specs["montant_depassement"] = "currency";
     $specs["_montant_facture"]    = "currency";
     return $specs;
   }

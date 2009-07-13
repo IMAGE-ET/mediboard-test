@@ -31,7 +31,6 @@ class CConsultation extends CCodable {
   var $chrono          = null;
   var $annule          = null;
   
-  
   var $patient_date_reglement = null;
   var $tiers_date_reglement   = null;
   

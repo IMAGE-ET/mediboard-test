@@ -30,6 +30,10 @@ class CTarif extends CMbObject {
   
   // Remote fields
   var $_precode_ready = null;
+  var $_has_mto = null;
+  
+  // Behaviour fields
+  var $_add_mto = null;
   
   // Object References
   var $_ref_chir     = null;
@@ -56,6 +60,10 @@ class CTarif extends CMbObject {
     $specs["codes_ngap"]  = "str";
     $specs["_somme"]      = "currency";
     $specs["_type"]       = "";
+    
+    $specs["_precode_ready"] = "bool";
+    $specs["_has_mto"]       = "bool";
+    
     return $specs;
   }
     
@@ -67,6 +75,7 @@ class CTarif extends CMbObject {
     $this->_codes_ccam = explode("|", $this->codes_ccam);
     CMbArray::removeValue("", $this->_codes_ngap);
     CMbArray::removeValue("", $this->_codes_ccam);
+    $this->_somme = $this->secteur1 + $this->secteur2;
   }
   
   function updateDBFields() {
@@ -77,7 +86,6 @@ class CTarif extends CMbObject {
         $this->chir_id = "";
   	}
   }
-  
   
   function bindConsultation(){
     $this->_bind_consult = false;
@@ -99,10 +107,15 @@ class CTarif extends CMbObject {
     $this->function_id = "";
   }
   
-  
-  function store(){ 
+  function store() { 
+    if ($this->_add_mto) {
+      mbTrace("coucou");
+      $this->completeField("codes_ngap");
+      $this->codes_ngap .= "|1-MTO-1---0-";
+    }
+    
     if ($this->_bind_consult){
-      if($msg = $this->bindConsultation()){
+      if ($msg = $this->bindConsultation()){
         return $msg;
       }
     }
@@ -111,27 +124,36 @@ class CTarif extends CMbObject {
   }
   
   function getPrecodeReady() {
+    $this->_has_mto = '0';
+    $this->_new_actes = array();
+    
     if (count($this->_codes_ccam) + count($this->_codes_ngap) == 0) {
-      return $this->_precode_ready = false;
+      return $this->_precode_ready = '0';
     }
     
     foreach ($this->_codes_ccam as $code) {
       $acte = new CActeCCAM();
       $acte->setCodeComplet($code);
+      $this->_new_actes["$code"] = $acte;
       if (!$acte->getPrecodeReady()) {
-        return $this->_precode_ready = false;
+        return $this->_precode_ready = '0';
       }
     }
 
     foreach ($this->_codes_ngap as $code) {
       $acte = new CActeNGAP();
       $acte->setCodeComplet($code);
+      $this->_new_actes["$code"] = $acte;
       if (!$acte->getPrecodeReady()) {
-        return $this->_precode_ready = false;
+        return $this->_precode_ready = '0';
+      }
+      
+      if ($acte->code == "MTO") {
+        $this->_has_mto = '1';
       }
     }
     
-    return $this->_precode_ready = true;
+    return $this->_precode_ready = '1';
   }
   
   function loadRefsFwd() {
