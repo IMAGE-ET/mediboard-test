@@ -17,6 +17,7 @@ if(!$user->isPraticien()) {
 }
 
 $sejour_id = mbGetValueFromGet("sejour_id", 0);
+$user_id = mbGetValueFromGet("user_id");
 
 // Chargement de la prescription
 $prescription = new CPrescription();
@@ -37,7 +38,14 @@ $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
 
 $cibles = array();
+$users = array();
 foreach($sejour->_ref_suivi_medical as $_trans_or_obs){
+  $users[$_trans_or_obs->user_id] = $_trans_or_obs->_ref_user;
+  $type = ($_trans_or_obs->_class_name == "CObservationMedicale") ? "obs" : "trans";
+  if($user_id && $_trans_or_obs->user_id != $user_id){
+    unset($sejour->_ref_suivi_medical[$_trans_or_obs->date.$_trans_or_obs->_id.$type]);
+  }
+  $_trans_or_obs->loadRefUser();
   if($_trans_or_obs instanceof CTransmissionMedicale){
     $trans = $_trans_or_obs;
     $trans->calculCibles($cibles);
@@ -53,6 +61,8 @@ $smarty->assign("isPraticien"         , $user->isPraticien());
 $smarty->assign("sejour"              , $sejour);
 $smarty->assign("prescription"        , $prescription);
 $smarty->assign("cibles", $cibles);
+$smarty->assign("users", $users);
+$smarty->assign("user_id", $user_id);
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>

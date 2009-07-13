@@ -100,11 +100,12 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     }
 }
 
-function loadSuivi(sejour_id) {
+function loadSuivi(sejour_id, user_id) {
   if(sejour_id) {
     var urlSuivi = new Url;
     urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
+    urlSuivi.addParam("user_id", user_id);
     urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
   }
 }

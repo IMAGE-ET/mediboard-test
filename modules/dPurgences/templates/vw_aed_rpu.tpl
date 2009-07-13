@@ -30,11 +30,13 @@ function reloadRadio(oForm){
   url.requestUpdate('radio', { waitingText: null } );
 }
 
-function loadSuivi(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("suivisoins", { waitingText: null } );
+function loadSuivi(sejour_id, user_id) {
+  if(sejour_id) {
+    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+    urlSuivi.addParam("sejour_id", sejour_id);
+    urlSuivi.addParam("user_id", user_id);
+    urlSuivi.requestUpdate("suivisoins", { waitingText: null } );
+  }
 }
 
 function submitSuivi(oForm) {

@@ -12,14 +12,25 @@ toggleTrans = function(trans_class){
   <tr>
     <th colspan="7" class="title">
 			{{if !$without_del_form}}
-	    <select name="selCible" onchange="toggleTrans(this.value);" style="float: right">
-	      <option value="">&mdash; Toutes les cibles</option>
-	      {{foreach from=$cibles item=cibles_by_type}}
-	        {{foreach from=$cibles_by_type item=_cible}}
-	          <option value="{{$_cible}}">{{$_cible|capitalize}}</option>
-	        {{/foreach}}
-	      {{/foreach}}
-	    </select>
+				<div style="float: right">
+			    <select name="selCible" onchange="toggleTrans(this.value);" >
+			      <option value="">&mdash; Toutes les cibles</option>
+			      {{foreach from=$cibles item=cibles_by_type}}
+			        {{foreach from=$cibles_by_type item=_cible}}
+			          <option value="{{$_cible}}">{{$_cible|capitalize}}</option>
+			        {{/foreach}}
+			      {{/foreach}}
+			    </select>
+			    
+			    {{if @$users}}
+			    <select name="user_id" onchange="loadSuivi('{{$sejour->_id}}',this.value)">
+			      <option value="">&mdash; Tous les utilisateurs</option>
+			      {{foreach from=$users item=_user}}
+			        <option value="{{$_user->_id}}" {{if $user_id == $_user->_id}}selected="selected"{{/if}}>{{$_user->_view}}</option>
+			      {{/foreach}}
+			    </select>
+			    {{/if}}
+		    </div>
 	    {{/if}}
 	    Observations et Transmissions
     </th>
