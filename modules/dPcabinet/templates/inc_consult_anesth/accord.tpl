@@ -11,18 +11,17 @@
 
 <script type="text/javascript">
 
+{{if $isPrescriptionInstalled}}
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
 }
+{{/if}}
 
 Main.add(function () {
   tabsConsultAnesth = new Control.Tabs.create('tab-consult-anesth', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
-  //if($('prescription_sejour')){
-    //Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
-  //}
 });
 </script>
 

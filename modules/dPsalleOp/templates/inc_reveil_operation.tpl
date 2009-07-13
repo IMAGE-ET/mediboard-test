@@ -14,9 +14,11 @@ Main.add(function () {
     refreshConstantesHack({{$sejour->_id}});
   }
   
+  {{if $isPrescriptionInstalled}}
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('','{{$op_reveil->_ref_sejour->_id}}', null, null, '{{$op_reveil->_id}}', null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
   }
+  {{/if}}
   
   if($('soins')){
     loadTraitement('{{$op_reveil->sejour_id}}','{{$date}}','','administration');
@@ -132,10 +134,12 @@ function submitSuivi(oForm, prescription_id) {
   } });
 }
 
+{{if $isPrescriptionInstalled}}
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
 }
- 
+{{/if}}
+
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->

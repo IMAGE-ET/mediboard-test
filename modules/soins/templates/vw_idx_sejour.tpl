@@ -70,9 +70,11 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   url.requestUpdate("cim", {   waitingText : null } );
 }
 
-function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
-}
+{{if $isPrescriptionInstalled}}
+	function reloadPrescription(prescription_id){
+	  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
+	}
+{{/if}}
 
 function reloadAntAllergie(sejour_id){
   if($('antecedent_allergie')){
@@ -92,9 +94,12 @@ function addSejourIdToSession(sejour_id){
 
 function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   // Affichage de la prescription
-  if($('prescription_sejour') && $('prescription_sejour').visible()){
-    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, null, null, true);
-  }
+  {{if $isPrescriptionInstalled}}
+    if($('prescription_sejour') && $('prescription_sejour').visible()){
+	    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, null, null, true);
+	  }
+  {{/if}}
+  
   loadPatient(patient_id);
   loadSejour(sejour_id); 
   loadDocuments(sejour_id);

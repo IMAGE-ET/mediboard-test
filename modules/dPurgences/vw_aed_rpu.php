@@ -89,6 +89,6 @@ $smarty->assign("sejour"              , $sejour);
 $smarty->assign("patient"             , $patient);
 $smarty->assign("listResponsables"    , $listResponsables);
 $smarty->assign("listPrats"           , $listPrats);
-
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->display("vw_aed_rpu.tpl");
 ?>

@@ -41,7 +41,7 @@ function refreshConstantesMedicales (force) {
 };
 
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
+  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, !Preferences.mode_readonly,'');
 }
 
 Main.add(function () {
@@ -65,7 +65,7 @@ Main.add(function () {
       [{{$consult->_ref_sejour->_num_dossier}}]
     {{/if}}</a>
   </li>
-   <li {{if !$rpu->mutation_sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}>
+   <li {{if !$rpu->mutation_sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, !Preferences.mode_readonly,'');"{{/if}}>
     <a href="#prescription_sejour">
       Prescription
     </a>
