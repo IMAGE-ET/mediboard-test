@@ -204,7 +204,7 @@ class CSetupmediusers extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_updateFct");
+    $this->addFunction("setup_updateFct");
     
     $this->makeRevision("0.15");
     $sql = "ALTER TABLE `functions_mediboard` ADD INDEX ( `group_id` ) ;";

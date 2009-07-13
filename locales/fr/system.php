@@ -389,4 +389,7 @@ $locales['CAccessLog-warnings-desc'] = '';
 $locales['CMediusers-back-owned_notes'] = 'Notes rédigées';
 $locales['CUser-back-owned_logs'] = 'Logs utilisateurs';
 $locales['mod-system-tab-about'] = 'A propos...';
+$locales['CModule-_dsns'] = 'Source de données';
+$locales['CModule-_dsns-court'] = 'SD';
+$locales['CModule-_dsns-desc'] = 'Sources de données obsolètes et à jour';
 ?>

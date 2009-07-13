@@ -289,7 +289,7 @@ class CSetupdPpatients extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_soundex");
+    $this->addFunction("setup_soundex");
     
     $this->makeRevision("0.38");
     $sql = "ALTER TABLE `patients` ADD `rang_beneficiaire` enum('1','2','11','12','13') NULL AFTER `ald`;";
@@ -1054,6 +1054,13 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
     
     $this->mod_version = "0.88";
+    
+    // Data source query
+    $query = "SELECT *
+			FROM `communes_france`
+			WHERE `INSEE` = '99138'";
+    $this->addDatasource("INSEE", $query);
+    
   }
 }
 

@@ -113,7 +113,7 @@ class CSetupdPfiles extends CSetup {
         }
         return true;
       }
-      $this->addFunctions("setup_install");
+      $this->addFunction("setup_install");
       
     }else{
       $this->addTable("files_mediboard");

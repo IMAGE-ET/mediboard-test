@@ -16,26 +16,33 @@ class CSetupdPccam extends CSetup {
     $this->mod_name = "dPccam";
     
     $this->makeRevision("all");
-    $sql = "CREATE TABLE `ccamfavoris` (
-            `favoris_id` bigint(20) NOT NULL auto_increment,
-            `favoris_user` int(11) NOT NULL default '0',
-            `favoris_code` varchar(7) NOT NULL default '',
-            PRIMARY KEY  (`favoris_id`)
-            ) TYPE=MyISAM COMMENT='table des favoris'";
-    $this->addQuery($sql);
+    $query = "CREATE TABLE `ccamfavoris` (
+      `favoris_id` bigint(20) NOT NULL auto_increment,
+      `favoris_user` int(11) NOT NULL default '0',
+      `favoris_code` varchar(7) NOT NULL default '',
+      PRIMARY KEY  (`favoris_id`)
+      ) TYPE=MyISAM COMMENT='table des favoris'";
+    $this->addQuery($query);
     
     $this->makeRevision("0.1");
-    $sql = "ALTER TABLE `ccamfavoris` " .
-               "\nCHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `ccamfavoris` 
+			CHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			CHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
 
     $this->makeRevision("0.11");
-    $sql = "ALTER TABLE `ccamfavoris` " .
-               "\nADD `object_class` VARCHAR(25) NOT NULL DEFAULT 'COperation';";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `ccamfavoris`
+			ADD `object_class` VARCHAR(25) NOT NULL DEFAULT 'COperation';";
+    $this->addQuery($query);
     
     $this->mod_version = "0.12";    
+
+    // Data source query
+    $query = "SELECT *
+			FROM `codes_ngap`
+			WHERE code = 'ZN' 
+			AND tarif = '1.53'";
+    $this->addDatasource("ccamV2", $query);
   }
 }
 ?>

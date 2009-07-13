@@ -97,7 +97,7 @@ class CSetupdPbloc extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_swapPratIds");
+    $this->addFunction("setup_swapPratIds");
 
     $this->makeRevision("0.12");
     $sql = "ALTER TABLE `sallesbloc` ADD `stats` TINYINT DEFAULT '0' NOT NULL AFTER `nom` ;";

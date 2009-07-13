@@ -150,7 +150,7 @@ class CSetupdPgestionCab extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_paie");
+    $this->addFunction("setup_paie");
     
     $this->makeRevision("0.13");
     $sql = "ALTER TABLE `employecab` " .

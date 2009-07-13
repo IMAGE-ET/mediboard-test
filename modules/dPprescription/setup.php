@@ -629,7 +629,7 @@ class CSetupdPprescription extends CSetup {
      }
      return true;
     }
-    $this->addFunctions("updateUnitePrise");
+    $this->addFunction("updateUnitePrise");
    
     $this->makeRevision("0.42");
     $sql = "ALTER TABLE `category_prescription` 
@@ -1337,7 +1337,7 @@ class CSetupdPprescription extends CSetup {
 			}
 			return true;
 	  }
-	  $this->addFunctions("updatePrises");
+	  $this->addFunction("updatePrises");
 	  
 		$this->mod_version = "0.87";
   }  

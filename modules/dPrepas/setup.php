@@ -97,7 +97,7 @@ class CSetupdPrepas extends CSetup {
       $ds->exec($sql); $ds->error(); 
       return true;
     }
-    $this->addFunctions("setup_menu");
+    $this->addFunction("setup_menu");
     
     $this->makeRevision("0.11");
     $sql = "CREATE TABLE `validationrepas` (" .

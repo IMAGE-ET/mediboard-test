@@ -47,6 +47,9 @@ class CModule extends CMbObject {
   var $_upgradable = null;
   var $_configable = null;
   
+  // Other fields
+  var $_dsns = null;
+  
   // Other collections
   var $_tabs      = null;  // List of tabs with permission
   var $_can       = null;  // Rights
@@ -95,18 +98,21 @@ class CModule extends CMbObject {
 	}
   
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["mod_name"]      = "str notNull maxLength|20";
-    $specs["mod_type"]      = "enum notNull list|core|user";
-    $specs["mod_version"]   = "str notNull maxLength|6";
-    $specs["mod_active"]    = "bool";
-    $specs["mod_ui_active"] = "bool";
-    $specs["mod_ui_order"]  = "num";
+  	$props = parent::getProps();
+    $props["mod_name"]      = "str notNull maxLength|20";
+    $props["mod_type"]      = "enum notNull list|core|user";
+    $props["mod_version"]   = "str notNull maxLength|6";
+    $props["mod_active"]    = "bool";
+    $props["mod_ui_active"] = "bool";
+    $props["mod_ui_order"]  = "num";
 
-    $specs["_latest"]       = "str notNull maxLength|6";
-    $specs["_upgradable"]   = "bool";
-    $specs["_configable"]   = "bool";
-    return $specs;
+    $props["_latest"]       = "str notNull maxLength|6";
+    $props["_upgradable"]   = "bool";
+    $props["_configable"]   = "bool";
+    
+    $props["_dsns"]   = "";
+    
+    return $props;
   }
   
   /**
@@ -117,9 +123,11 @@ class CModule extends CMbObject {
     $this->mod_name = $setup->mod_name;
     $this->loadMatchingObject();
     $this->mod_type = $setup->mod_type;
-    $this->_latest = $setup->mod_version;
+    $this->_latest  = $setup->mod_version;
     $this->_upgradable = $this->mod_version != $this->_latest;
     $this->_configable = is_file("modules/$this->mod_name/configure.php");
+    $this->_dsns = $setup->getDatasources();
+    
     if (!$this->_id) {
       $this->mod_ui_order = 100;
     }

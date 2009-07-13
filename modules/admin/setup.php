@@ -113,7 +113,7 @@ class CSetupadmin extends CSetup {
         return true;
       }
     }
-    $this->addFunctions("setup_changePerm");
+    $this->addFunction("setup_changePerm");
     
                 
     $this->makeRevision("1.0.2");

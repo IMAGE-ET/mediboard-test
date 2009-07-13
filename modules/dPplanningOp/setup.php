@@ -123,7 +123,7 @@ class CSetupdPplanningOp extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_ccam");
+    $this->addFunction("setup_ccam");
     
     $this->makeRevision("0.30");
     $sql = "ALTER TABLE `operations`

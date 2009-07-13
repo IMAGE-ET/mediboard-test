@@ -20,19 +20,20 @@ class CSetup {
   var $mod_type = "user";
 
   // Protected vars
-  var $revisions = array();
-  var $queries = array();
-  var $functions = array();
+  var $revisions    = array();
+  var $queries      = array();
+  var $functions    = array();
   var $dependencies = array();
-  var $timeLimit = array();
-  var $tables = array();
+  var $timeLimit    = array();
+  var $tables       = array();
+  var $datasources  = array();
   
   function __construct() {
   	$this->ds = CSQLDataSource::get("std");
   }
 
   /**
-   * Creates a revision of a given name
+   * Create a revision of a given name
    * @param string $revision Revision number of form x.y
    */
   function makeRevision($revision) {
@@ -42,10 +43,10 @@ class CSetup {
     }
     
     $this->revisions[] = $revision;
-    $this->queries[$revision] = array();
-    $this->functions[$revision] = array();
+    $this->queries     [$revision] = array();
+    $this->functions   [$revision] = array();
     $this->dependencies[$revision] = array();
-    $this->timeLimit[$revision] = null;
+    $this->timeLimit   [$revision] = null;
     end($this->revisions);
   }
   
@@ -53,15 +54,42 @@ class CSetup {
    * Add a callback function to be executed
    * function must return true/false
    */
-  function addFunctions($function) {
+  function addFunction($function) {
     $this->functions[current($this->revisions)][] = $function;
+  }
+  
+  /**
+   * Add a data source to module for existence and up to date checking
+   * @param string $dsn Name of the data sourcec
+   * @param string $query Data source is considered up to date if the returns a result
+   */
+  function addDatasource($dsn, $query) {
+    $this->datasources[$dsn] = $query;
+  }
+
+  /**
+   * Check all declared datasources and retrieve them as uptodate or obosolete
+   * @return array The uptodate and obsolete DSNs
+   */
+  function getDatasources() {
+    $dsns = array();
+    foreach($this->datasources as $dsn => $query) {
+      if ($ds = @CSQLDataSource::get($dsn)) {
+        $dsns[$ds->loadResult($query) ? "uptodate" : "obsolete"][] = $dsn;
+      }
+      else {
+        $dsns["unavailable"][] = $dsn;
+      }
+    }
+    
+    return $dsns;
   }
   
   /**
    * Set a time limit for un actual upgrade
    * @param int $limit Limits in seconds
    */
-  function setTimeLimit($limit){
+  function setTimeLimit($limit) {
     $this->timeLimit[current($this->revisions)] = $limit;
   }
   

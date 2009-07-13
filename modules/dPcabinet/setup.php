@@ -318,7 +318,7 @@ class CSetupdPcabinet extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_consultAnesth");
+    $this->addFunction("setup_consultAnesth");
     
     $this->makeRevision("0.45");
     $sql = "ALTER TABLE `exams_comp` CHANGE `consult_id` `consultation_id` INT NOT NULL ;";
@@ -513,7 +513,7 @@ class CSetupdPcabinet extends CSetup {
       }
       return true;
     }
-    $this->addFunctions("setup_cleanOperationIdError");
+    $this->addFunction("setup_cleanOperationIdError");
     
     $this->makeRevision("0.57");
     $this->setTimeLimit(1800);
