@@ -100,7 +100,13 @@ class CSetupdPurgences extends CSetup {
 					  ADD INDEX (`box_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.21";
+   $this->makeRevision("0.21");
+    $sql = "ALTER TABLE `rpu`
+              ADD `accident_travail` DATE,
+              ADD INDEX (`accident_travail`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.22";
   }  
 }
 

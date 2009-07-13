@@ -225,8 +225,8 @@ Main.add(function () {
 	      {{/foreach}}
 	    </select>
 	  </td>
-	  <th />
-    <td />
+	  <th>{{mb_label object=$rpu field="accident_travail"}}</th>
+    <td>{{mb_field object=$rpu field="accident_travail" form="editRPU" register=true}}</td>
 	</tr>
 
   <tr>

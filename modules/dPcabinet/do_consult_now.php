@@ -100,6 +100,7 @@ $consult->heure = $time_now;
 $consult->arrivee = $day_now." ".$time_now;
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
+$consult->accident_travail = mbGetValueFromPost("accident_travail");
 
 // Cas des urgences
 if ($sejour_id) {

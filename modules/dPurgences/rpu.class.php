@@ -33,6 +33,7 @@ class CRPU extends CMbObject {
   var $mutation_sejour_id = null;
   var $box_id          = null;
   var $sortie_autorisee = null;
+  var $accident_travail = null;
   
   // Legacy Sherpa fields
   var $type_pathologie = null; // Should be $urtype
@@ -105,6 +106,7 @@ class CRPU extends CMbObject {
       "mutation_sejour_id" => "ref class|CSejour",
       "box_id"           => "ref class|CLit",
       "sortie_autorisee" => "bool",
+      "accident_travail" => "date",
       
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
