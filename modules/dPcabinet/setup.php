@@ -1207,8 +1207,14 @@ class CSetupdPcabinet extends CSetup {
               ADD INDEX (`chir_id`),
               ADD INDEX (`date_interv`);";
     $this->addQuery($sql);
-        
-    $this->mod_version = "1.12";
+    
+    $this->makeRevision("1.12");
+    $sql = "ALTER TABLE `consultation`
+              ADD `histoire_maladie` TEXT AFTER `traitement`,
+              ADD `conclusion` TEXT AFTER `histoire_maladie`";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.13";
   }
 }
 ?>

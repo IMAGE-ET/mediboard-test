@@ -647,6 +647,14 @@ table.main td {
   vertical-align: top;
 }
 
+table.main td.button {
+  text-align: center;
+}
+
+table.main td.text {
+  white-space: normal;
+}
+
 table.main tbody.viewported td.viewport {
   border: 1px solid #000;
 }
@@ -906,6 +914,11 @@ label.canNull {
 label.notNullOK {
   padding-right: 5px;
   font-weight: bold;
+}
+
+label.error,
+table.form th.category label.error {
+  color: #f00;
 }
 
 table.form th.text {

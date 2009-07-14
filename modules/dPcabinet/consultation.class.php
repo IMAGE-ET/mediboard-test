@@ -34,9 +34,12 @@ class CConsultation extends CCodable {
   var $patient_date_reglement = null;
   var $tiers_date_reglement   = null;
   
-  var $motif           = null;
-  var $rques           = null;
-  var $examen          = null;
+  var $motif            = null;
+  var $rques            = null;
+  var $examen           = null;
+  var $histoire_maladie = null;
+  var $conclusion       = null;
+  
   var $traitement      = null;
   var $premiere        = null;
   var $adresse         = null; // Le patient a-t'il été adressé ?
@@ -50,8 +53,8 @@ class CConsultation extends CCodable {
   var $total_amc       = null; 
   var $total_amo       = null;
 
-  var $du_patient      = null; // somme que le patient doit régler
-  var $du_tiers        = null;
+  var $du_patient       = null; // somme que le patient doit régler
+  var $du_tiers         = null;
   var $accident_travail = null;
   
   // Form fields
@@ -63,6 +66,7 @@ class CConsultation extends CCodable {
   var $_somme          = null;
   var $_types_examen   = null;
   var $_precode_acte   = null;
+  var $_exam_fields    = null;
   
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
@@ -93,8 +97,8 @@ class CConsultation extends CCodable {
   var $_ref_reglements_patient = null;
   var $_ref_reglements_tiers   = null;
 
-  var $_ref_prescription            = null; 
-  var $_ref_categorie               = null;
+  var $_ref_prescription = null; 
+  var $_ref_categorie    = null;
   
   // Distant fields
   var $_ref_chir                 = null;
@@ -107,14 +111,14 @@ class CConsultation extends CCodable {
   var $_reglements_total_tiers   = null;
   
   // Filter Fields
-  var $_date_min	 	   = null;
-  var $_date_max 		   = null;
-  var $_prat_id 		   = null;
+  var $_date_min	 	           = null;
+  var $_date_max 		           = null;
+  var $_prat_id 		           = null;
   var $_etat_reglement_patient = null;
   var $_etat_reglement_tiers   = null;
-  var $_type_affichage     = null;
-  var $_coordonnees        = null;
-  var $_plages_vides       = null;
+  var $_type_affichage         = null;
+  var $_coordonnees            = null;
+  var $_plages_vides           = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -153,20 +157,24 @@ class CConsultation extends CCodable {
     $specs["rques"]             = "text helped seekable";
     $specs["examen"]            = "text helped seekable";
     $specs["traitement"]        = "text helped seekable";
+    $specs["histoire_maladie"]  = "text helped seekable";
+    $specs["conclusion"]        = "text helped seekable";
+    
+    
     $specs["premiere"]          = "bool";
     $specs["adresse"]           = "bool";
     $specs["tarif"]             = "str";
     $specs["arrivee"]           = "dateTime";
     
-    $specs["patient_date_reglement"] = "date";
-    $specs["tiers_date_reglement"]   = "date";
-    $specs["du_patient"]          = "currency";
-    $specs["du_tiers"  ]            = "currency";
-    $specs["_du_patient_restant"] = "currency";
+    $specs["patient_date_reglement"]    = "date";
+    $specs["tiers_date_reglement"]      = "date";
+    $specs["du_patient"]                = "currency";
+    $specs["du_tiers"  ]                = "currency";
+    $specs["_du_patient_restant"]       = "currency";
     $specs["_reglements_total_patient"] = "currency";
     $specs["_reglements_total_tiers"  ] = "currency";
-    $specs["_etat_reglement_patient"] = "enum list|reglee|non_reglee";
-    $specs["_etat_reglement_tiers"  ] = "enum list|reglee|non_reglee";
+    $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
+    $specs["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
     
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date"]             = "date";
@@ -236,6 +244,8 @@ class CConsultation extends CCodable {
     
     // si _coded vaut 1 alors, impossible de modifier la consultation
     $this->_coded = $this->valide;
+    
+    $this->_exam_fields = $this->getExamFields();
     
     $this->loadRefsReglements();
   }
@@ -945,6 +955,26 @@ class CConsultation extends CCodable {
       $this->_types_examen[$currExam->realisation][$keyExam] = $currExam;
     }
     
+  }
+  
+  static function getExamFields() {
+    global $AppUI;
+    $fields = array();
+    $fields[] = "motif";
+    $fields[] = "rques";
+    if(CAppUI::conf("dPcabinet CConsultation show_histoire_maladie")) {
+      $fields[] = "histoire_maladie";
+    }
+    if(CAppUI::conf("dPcabinet CConsultation show_examen")) {
+      $fields[] = "examen";
+    }
+    if(CAppUI::pref("view_traitement")) {
+      $fields[] = "traitement";
+    }
+    if(CAppUI::conf("dPcabinet CConsultation show_conclusion")) {
+      $fields[] = "conclusion";
+    }
+    return $fields;
   }
   
   function getPerm($permType) {

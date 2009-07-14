@@ -247,6 +247,11 @@ $dPconfig["dPcabinet"] = array(
 	  "hours_stop"       => "20",
 	  "minutes_interval" => "15",
 	),
+	"CConsultation" => array(
+	  "show_examen"           => 1,
+	  "show_histoire_maladie" => 0,
+	  "show_conclusion"       => 0,
+	),
 	"CConsultAnesth" => array(
 	  "feuille_anesthesie" => "print_fiche",
 	  /* Format des champs auto :

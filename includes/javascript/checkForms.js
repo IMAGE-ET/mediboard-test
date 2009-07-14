@@ -531,10 +531,10 @@ function checkForm(oForm) {
         errors: oErrors
       });
       if (!oElementFirstFailed) oElementFirstFailed = oFirstElement;
-      if (oLabel) oLabel.style.color = "#f00";
+      if (oLabel) oLabel.addClassName('error');
     }
     else {
-      if (oLabel) oLabel.style.color = "#000";
+      if (oLabel) oLabel.removeClassName('error');
     }
   });
   

@@ -512,7 +512,7 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
 function onSubmitFormAjax(oForm, oUserOptions) {
   var oOptions = {
     method : oForm.method,
-    check : checkForm
+    check  : checkForm
   };
   
   Object.extend(oOptions, oUserOptions);

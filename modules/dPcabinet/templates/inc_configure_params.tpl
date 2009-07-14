@@ -30,6 +30,19 @@
   </tr>
   
   {{mb_include module=system template=inc_config_bool var=keepchir}}
+  
+  <!-- Champs de l'onglet examen -->
+  {{assign var="class" value="CConsultation"}}
+    
+  <tr>
+    <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
+  </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=show_examen}}
+  
+  {{mb_include module=system template=inc_config_bool var=show_histoire_maladie}}
+  
+  {{mb_include module=system template=inc_config_bool var=show_conclusion}}
 
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
