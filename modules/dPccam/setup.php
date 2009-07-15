@@ -40,8 +40,8 @@ class CSetupdPccam extends CSetup {
     // Data source query
     $query = "SELECT *
 			FROM `codes_ngap`
-			WHERE code = 'ZN' 
-			AND tarif = '1.53'";
+			WHERE code = 'FSD' 
+			AND tarif = '35'";
     $this->addDatasource("ccamV2", $query);
   }
 }

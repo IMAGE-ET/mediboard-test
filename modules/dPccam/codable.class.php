@@ -224,14 +224,14 @@ class CCodable extends CMbObject {
 	    $nb_codes_ccam_minimal[$key] = reset($max);
 	  }
 	  foreach($nb_codes_ccam_minimal as $key => $acte) {
-	    for($i = 0; $i < $acte; $i++){
+	    for ($i = 0; $i < $acte; $i++){
 	      $oldObject->_codes_ccam_minimal[] = $key;
 	    }
 	  }
 
 	  // Transformation du tableau de codes ccam
 	  foreach($oldObject->_codes_ccam as $key => $code) {
-	    if(strlen($code) > 7){
+	    if (strlen($code) > 7){
 	      // si le code est de la forme code-activite-phase
         $detailCode = explode("-", $code);
         $code = $detailCode[0];
@@ -242,7 +242,7 @@ class CCodable extends CMbObject {
 	  
 	  // Test entre les deux tableaux
 	  foreach($nb_codes_ccam_minimal as $code => $nb_code_minimal){
-	    if($nb_code_minimal > @$nb_codes_ccam[$code]){
+	    if ($nb_code_minimal > @$nb_codes_ccam[$code]){
 	      return "Impossible de supprimer le code";
 	    }
 	  }
