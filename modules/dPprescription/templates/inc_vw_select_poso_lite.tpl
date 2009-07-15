@@ -64,9 +64,9 @@ Main.add(function () {
 <br />
 
 <span id="checkboxPoso">
-	<input type="checkbox" name="matin" /><label for="matin"> Matin</label>
-	<input type="checkbox" name="midi" /><label for="midi"> Midi</label>
-  <input type="checkbox" name="soir" /><label for="soir"> Soir</label>
+	<label><input type="checkbox" name="matin" /> Matin</label>
+	<label><input type="checkbox" name="midi" /> Midi</label>
+  <label><input type="checkbox" name="soir" /> Soir</label>
 </span>
 
 <button type="button" class="add notext" onclick="addToTokenPoso()">Ajouter</button>
