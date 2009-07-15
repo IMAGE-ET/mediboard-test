@@ -109,7 +109,6 @@ class CTarif extends CMbObject {
   
   function store() { 
     if ($this->_add_mto) {
-      mbTrace("coucou");
       $this->completeField("codes_ngap");
       $this->codes_ngap .= "|1-MTO-1---0-";
     }
@@ -148,7 +147,7 @@ class CTarif extends CMbObject {
         return $this->_precode_ready = '0';
       }
       
-      if ($acte->code == "MTO") {
+      if (in_array($acte->code, array("MTO", "MPJ"))) {
         $this->_has_mto = '1';
       }
     }

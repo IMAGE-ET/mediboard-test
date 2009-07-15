@@ -462,7 +462,8 @@ class CConsultation extends CCodable {
 	      "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
 	      "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
 	      "PRE_ASSOCIATION"   => $acte_ccam->code_association,
-	    );
+	      "PRE_RMB_EXCEP"     => $acte_ccam->_rembex ? "O" : "N",
+	      );
 	    
 	    // Ajout des modificateurs
 	    for ($i = 1; $i <= 4; $i++) {
@@ -531,6 +532,8 @@ class CConsultation extends CCodable {
         $acte->quantite    = $fseActe["PRE_QUANTITE"];
         $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
         $acte->demi        = $fseActe["PRE_DEMI"];
+        $acte->demi        = $fseActe["PRE_DEMI"];
+        
 
         // Coefficient facial doublé
         if ($acte->demi) {
@@ -548,6 +551,9 @@ class CConsultation extends CCodable {
         $acte->code_activite = $fseActe["PRE_CODE_ACTIVITE"];
         $acte->code_phase    = $fseActe["PRE_CODE_PHASE"];
         $acte->execution     = $this->_acte_execution;
+        if ($fseActe["PRE_RMB_EXCEP"]) {
+          $acte->rembourse     = "1";
+        }
         $acte->modificateurs = null;
         
         for ($iModif = 1; $iModif <= 4; $iModif++) {
