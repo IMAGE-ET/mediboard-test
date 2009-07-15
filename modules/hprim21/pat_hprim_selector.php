@@ -98,12 +98,13 @@ if($where){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("name"             , $name            );
-$smarty->assign("firstName"        , $firstName       );
-$smarty->assign("nomjf"            , $nomjf           );
-$smarty->assign("patients"         , $patients        );
-$smarty->assign("patientsSoundex"  , $patientsSoundex );
-$smarty->assign("datePat"          , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("name"           , $name);
+$smarty->assign("firstName"      , $firstName);
+$smarty->assign("nomjf"          , $nomjf);
+$smarty->assign("patients"       , $patients);
+$smarty->assign("patientsSoundex", $patientsSoundex);
+$smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("IPP"            , $IPP);
 
 $smarty->display("pat_hprim_selector.tpl");
 
