@@ -985,11 +985,12 @@ class CConsultation extends CCodable {
   }
   
   function fillTemplate(&$template) {
+    $this->updateFormFields();
   	$this->loadRefsFwd();
     $this->_ref_plageconsult->loadRefsFwd();
     $this->_ref_plageconsult->_ref_chir->fillTemplate($template);
     $this->_ref_patient->fillTemplate($template);
-   
+    $this->fillLimitedTemplate($template);
     if(CModule::getActive('dPprescription')){
       // Chargement du fillTemplate de la prescription
 	    $this->loadRefsPrescriptions();
@@ -997,17 +998,19 @@ class CConsultation extends CCodable {
 	    $prescription->type = "externe";
 	    $prescription->fillLimitedTemplate($template);
     }
-    $this->fillLimitedTemplate($template);
   }
   
   function fillLimitedTemplate(&$template) {
+    $this->updateFormFields();
     $this->loadRefsFwd();
     $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
     $template->addTimeProperty("Consultation - heure" , $this->heure);
-    $template->addProperty("Consultation - motif"     , $this->motif);
-    $template->addProperty("Consultation - remarques" , $this->rques);
-    $template->addProperty("Consultation - examen"    , $this->examen);
-    $template->addProperty("Consultation - traitement", $this->traitement);
+    foreach($this->_exam_fields as $field) {
+      $template->addProperty("Consultation - ".CAppUI::tr("CConsultation-".$field), $this->$field);
+    }
+    if(!in_array("traitement", $this->_exam_fields)) {
+      $template->addProperty("Consultation - traitement", $this->traitement);
+    }
   }
     
   function canDeleteEx() {
