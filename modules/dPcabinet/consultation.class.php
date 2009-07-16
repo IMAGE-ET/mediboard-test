@@ -1011,8 +1011,16 @@ class CConsultation extends CCodable {
     $this->loadRefsFwd();
     $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
     $template->addTimeProperty("Consultation - heure" , $this->heure);
+    $tradExamFields = array(
+      "motif"            => "motif",
+      "rques"            => "remarques",
+      "examen"           => "examen",
+      "traitement"       => "traitement",
+      "histoire_maladie" => "histoire maladie",
+      "conclusion"       => "conclusion"
+    );
     foreach($this->_exam_fields as $field) {
-      $template->addProperty("Consultation - ".CAppUI::tr("CConsultation-".$field), $this->$field);
+      $template->addProperty("Consultation - ".$tradExamFields[$field], $this->$field);
     }
     if(!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);
