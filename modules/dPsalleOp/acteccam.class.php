@@ -130,7 +130,7 @@ class CActeCCAM extends CActe {
     parent::canDeleteEx();
    
     // Test si la consultation est validée
-    if($msg = $this->checkCoded()){
+    if ($msg = $this->checkCoded()){
       return $msg;
     }
   }
@@ -138,7 +138,7 @@ class CActeCCAM extends CActe {
   function check() {
     
     // Test si la consultation est validée
-    if($msg = $this->checkCoded()){
+    if ($msg = $this->checkCoded()){
       return $msg;
     }
     
@@ -151,45 +151,42 @@ class CActeCCAM extends CActe {
       }
       return $msg;
     }
-    
-    if ($this->code_activite !== null){
-
-// 			Temporairement désactivé pour les imports eCap et Sherpa      
-//      $this->loadRefExecutant();
-//      // si c'est un acte chir et que le prat est un anesth => break
-//      if($this->code_activite == 1 && $this->_ref_executant->isFromType(array("Anesthésiste"))){
-//          return "$this->code_acte: Impossible de coder cet acte de chirurgie";
-//      }
-//      // si c'est un acte d'anesth et que le prat est un chir
-//      if($this->code_activite == 4 && $this->_ref_executant->isFromType(array("Chirurgien"))){
-//          return "$this->code_acte: Impossible de coder cet acte d'anesthésie";
-//      }
-    }   
- 
+     
     return parent::check(); 
     // datetime_execution: attention à rester dans la plage de l'opération
   }
    
   function setCodeComplet($code){
     $details = explode("-", $code);
-    if (count($details) >= 3){
+    if (count($details) > 2) {
       $this->code_acte     = $details[0];
       $this->code_activite = $details[1];
       $this->code_phase    = $details[2];
       
       // Modificateurs
-      if (count($details) >= 4){
+      if (count($details) > 3) {
         $this->modificateurs = $details[3];
       } 
       
       // Dépassement
-      if (count($details) >= 5){
+      if (count($details) > 4) {
         $this->montant_depassement = str_replace("*","-",$details[4]);
+      }
+      
+      // Code association
+      if (count($details) > 5) {
+        $this->code_association = $details[5];
+      }
+      
+      // Remboursement
+      if (count($details) > 6) {
+        $this->rembourse = $details[6];
       }
       
       $this->updateFormFields();
     }
   }
+  
   
   function getPrecodeReady() {
     return $this->code_acte && $this->code_activite && $this->code_phase !== null;
@@ -236,7 +233,6 @@ class CActeCCAM extends CActe {
       }
     }
     
-    //mbTrace($)
     // Standard store
     if ($msg = parent::store()) {
       return $msg;

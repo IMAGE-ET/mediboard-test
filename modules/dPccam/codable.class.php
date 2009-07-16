@@ -338,7 +338,13 @@ class CCodable extends CMbObject {
       } else {
         $_montant_depassement_temp = $_acte_ccam->montant_depassement;
       }
-      $this->_temp_ccam[] = $_acte_ccam->code_acte."-".$_acte_ccam->code_activite."-".$_acte_ccam->code_phase."-".$_acte_ccam->modificateurs."-".$_montant_depassement_temp; 
+      $this->_temp_ccam[] = $_acte_ccam->code_acte.
+        "-".$_acte_ccam->code_activite.
+        "-".$_acte_ccam->code_phase.
+        "-".$_acte_ccam->modificateurs.
+        "-".$_montant_depassement_temp.
+        "-".$_acte_ccam->code_association.
+        "-".$_acte_ccam->rembourse; 
     }
     $this->_tokens_ccam = join($this->_temp_ccam, "|");
   }
