@@ -23,10 +23,11 @@ class CTarif extends CMbObject {
   var $codes_ngap  = null;
   
   // Form fields
-  var $_type = null;
-  var $_somme = null;
+  var $_type       = null;
+  var $_somme      = null;
   var $_codes_ngap = array();
   var $_codes_ccam = array();
+  var $_new_actes  = array();
   
   // Remote fields
   var $_precode_ready = null;
