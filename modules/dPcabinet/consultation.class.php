@@ -83,7 +83,6 @@ class CConsultation extends CCodable {
   // Tarif
   var $_bind_tarif     = null;
   var $_tarif_id       = null;
-  var $_delete_actes   = null;
   
   // Back References
   var $_ref_consult_anesth     = null;
@@ -350,29 +349,11 @@ class CConsultation extends CCodable {
   }
   
   /**
-   * Détruit les actes CCAM et NGAP
+   * Redefinition
    */  
-  function deleteActes(){
-    $this->_delete_actes = false;
+  function deleteActes() {
+    parent::deleteActes();
 
-    // Suppression des anciens actes CCAM
-    $this->loadRefsActesCCAM();
-    foreach ($this->_ref_actes_ccam as $acte) {
-      if ($msg = $acte->delete()) {
-        return $msg;
-      }
-    }
-    $this->codes_ccam = "";
-    
-    // Suppression des anciens actes NGAP
-    $this->loadRefsActesNGAP();
-    foreach ($this->_ref_actes_ngap as $acte) { 
-      if ($msg = $acte->delete()) {
-        return $msg;
-      }
-    }
-    $this->_tokens_ngap = "";
-    
     $this->secteur1 = "";
     $this->secteur2 = "";
 //    $this->valide = 0; // Ne devrait pas être nécessaire
@@ -383,7 +364,7 @@ class CConsultation extends CCodable {
     $this->du_tiers = 0.0;
     
     if ($msg = $this->store()) {
-     return $msg;
+      return $msg;
     }
   }  
  
@@ -531,9 +512,7 @@ class CConsultation extends CCodable {
         $acte->code        = $fseActe["PRE_CODE"];
         $acte->quantite    = $fseActe["PRE_QUANTITE"];
         $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
-        $acte->demi        = $fseActe["PRE_DEMI"];
-        $acte->demi        = $fseActe["PRE_DEMI"];
-        
+        $acte->demi        = $fseActe["PRE_DEMI"];        
 
         // Coefficient facial doublé
         if ($acte->demi) {
@@ -688,12 +667,6 @@ class CConsultation extends CCodable {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
-    }
-    
-    if ($this->_delete_actes && $this->_id){
-      if($msg = $this->deleteActes()){
-        return $msg;    
-      }
     }
     
     // Gestion du tarif et precodage des actes
@@ -997,7 +970,7 @@ class CConsultation extends CCodable {
     $this->_ref_plageconsult->_ref_chir->fillTemplate($template);
     $this->_ref_patient->fillTemplate($template);
     $this->fillLimitedTemplate($template);
-    if(CModule::getActive('dPprescription')){
+    if (CModule::getActive('dPprescription')) {
       // Chargement du fillTemplate de la prescription
 	    $this->loadRefsPrescriptions();
 	    $prescription = isset($this->_ref_prescriptions["externe"]) ? $this->_ref_prescriptions["externe"] : new CPrescription();

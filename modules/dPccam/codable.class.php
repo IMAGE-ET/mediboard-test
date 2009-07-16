@@ -47,6 +47,52 @@ class CCodable extends CMbObject {
   var $_ref_patient = null;
   var $_ref_praticien = null;
   
+  // Behaviour fields
+  var $_delete_actes   = null;
+  
+  /**
+   * Détruit les actes CCAM et NGAP
+   * @return string Store-like message
+   */  
+  function deleteActes() {
+    $this->_delete_actes = false;
+
+    // Suppression des anciens actes CCAM
+    $this->loadRefsActesCCAM();
+    foreach ($this->_ref_actes_ccam as $acte) {
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+    $this->codes_ccam = "";
+    
+    // Suppression des anciens actes NGAP
+    $this->loadRefsActesNGAP();
+    foreach ($this->_ref_actes_ngap as $acte) { 
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+    $this->_tokens_ngap = "";
+  }  
+  
+  /**
+   * Store redefinition
+   * @return string Store-like message
+   */
+  function store() {
+    // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($this->_delete_actes && $this->_id){
+      if ($msg = $this->deleteActes()){
+        return $msg;    
+      }
+    }
+  }
+  
   function loadRefSejour() {
   }
   
