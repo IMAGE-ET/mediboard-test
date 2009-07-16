@@ -349,10 +349,13 @@ class CConsultation extends CCodable {
   }
   
   /**
-   * Redefinition
+   * deleteActes() Redefinition
+   * @return string Store-like message
    */  
   function deleteActes() {
-    parent::deleteActes();
+    if ($msg = parent::deleteActes()) {
+      return $msg;
+    }
 
     $this->secteur1 = "";
     $this->secteur2 = "";
