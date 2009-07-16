@@ -332,7 +332,7 @@ class CCodeCCAM {
     // Extraction des phases
     $activite->phases = array();
     $phases =& $activite->phases;
-    $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif
+    $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif, CHARGESCAB charges
 			        FROM phaseacte
 			        WHERE CODEACTE = %1
 			        AND ACTIVITE = %2
@@ -346,6 +346,7 @@ class CCodeCCAM {
       $phase =& $phases[$obj->phase];
       $phase->tarif = floatval($obj->tarif)/100;
       $phase->libelle = "Phase Principale";
+      $phase->charges = floatval($obj->charges)/100;
       
       // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
       $phase->_modificateurs = $activite->modificateurs;

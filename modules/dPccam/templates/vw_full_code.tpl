@@ -118,9 +118,9 @@ Main.add(function () {
           <td><strong>Description</strong><br />{{$libelle}}</td>
         </tr>
 
-        {{foreach from=$rq|smarty:nodefaults item=curr_rq}}
+        {{foreach from=$rq item=_rq}}
         <tr>
-          <td><em>{{$curr_rq|nl2br}}</em></td>
+          <td><em>{{$_rq|nl2br}}</em></td>
         </tr>
         {{/foreach}}
  
@@ -129,23 +129,29 @@ Main.add(function () {
           <td><strong>Activités associées</strong></td>
         </tr>
         
-        {{foreach from=$act item=curr_act}}
+        {{foreach from=$act item=_act}}
         <tr>
           <td style="vertical-align: top; width: 100%">
             <ul>
-              <li>Activité {{$curr_act->numero}} ({{$curr_act->type}}) : {{$curr_act->libelle}}
+              <li>
+              	Activité {{$_act->numero}} <em>({{$_act->type}}) {{$_act->libelle}}</em> :
                 <ul>
                   <li>Phase(s) :
                     <ul>
-                      {{foreach from=$curr_act->phases item=curr_phase}}
-                      <li>Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}} : {{$curr_phase->tarif}}{{$dPconfig.currency_symbol}}</li>
+                      {{foreach from=$_act->phases item=_phase}}
+                      <li>
+                      	Phase {{$_phase->phase}} <em>({{$_phase->libelle}})</em> : {{$_phase->tarif}}{{$dPconfig.currency_symbol}}
+                      	{{if $_phase->charges}}
+                      		<br />Charges supplémentaires de cabinets possibles : {{$_phase->charges}}{{$dPconfig.currency_symbol}}
+                      	{{/if}}
+                      </li>
                       {{/foreach}}
                     </ul>
                   </li>
                   <li>Modificateur(s) :
                     <ul>
-                      {{foreach from=$curr_act->modificateurs item=curr_mod}}
-                      <li>{{$curr_mod->code}} : {{$curr_mod->libelle}}</li>
+                      {{foreach from=$_act->modificateurs item=_mod}}
+                      <li>{{$_mod->code}} : {{$_mod->libelle}}</li>
                       {{foreachelse}}
                       <li><em>Aucun modificateur applicable à cet acte</em></li>
                       {{/foreach}}
@@ -192,18 +198,18 @@ Main.add(function () {
           <th class="category" colspan="2">Place dans la CCAM {{$place}}</th>
         </tr>
         
-        {{foreach from=$chap item=curr_chap}}
-        <tr id="chap{{$curr_chap.rang}}-trigger">
-          <th style="text-align:left">{{$curr_chap.rang}}</th>
-          <td>{{$curr_chap.nom}}<br /></td>
+        {{foreach from=$chap item=_chap}}
+        <tr id="chap{{$_chap.rang}}-trigger">
+          <th style="text-align:left">{{$_chap.rang}}</th>
+          <td>{{$_chap.nom}}<br /></td>
         </tr>
-        <tbody class="chapEffect" id="chap{{$curr_chap.rang}}">
+        <tbody class="chapEffect" id="chap{{$_chap.rang}}">
           <tr>
             <td />
             <td>
               <em>
-                {{if $curr_chap.rq}}
-                {{$curr_chap.rq|nl2br}}
+                {{if $_chap.rq}}
+                {{$_chap.rq|nl2br}}
                 {{else}}
                 * Pas d'informations
                 {{/if}}
@@ -225,10 +231,10 @@ Main.add(function () {
           <th class="category" colspan="2">Actes associés ({{$asso|@count}})</th>
         </tr>
         
-        {{foreach name=associations from=$asso item=curr_asso}}
+        {{foreach name=associations from=$asso item=_asso}}
         <tr>
-          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$curr_asso.code}}">{{$curr_asso.code}}</a></th>
-          <td>{{$curr_asso.texte}}</td>
+          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$_asso.code}}">{{$_asso.code}}</a></th>
+          <td>{{$_asso.texte}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -241,10 +247,10 @@ Main.add(function () {
           <th class="category" colspan="2">Actes incompatibles ({{$incomp|@count}})</th>
         </tr>
         
-        {{foreach name=incompatibilites from=$incomp item=curr_incomp}}
+        {{foreach name=incompatibilites from=$incomp item=_incomp}}
         <tr>
-          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$curr_incomp.code}}">{{$curr_incomp.code}}</a></th>
-          <td>{{$curr_incomp.texte}}</td>
+          <th><a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}={{$action}}&amp;codeacte={{$_incomp.code}}">{{$_incomp.code}}</a></th>
+          <td>{{$_incomp.texte}}</td>
         </tr>
         {{/foreach}}
       </table>

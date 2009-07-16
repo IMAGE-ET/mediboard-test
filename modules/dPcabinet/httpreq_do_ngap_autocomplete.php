@@ -18,16 +18,20 @@ $object = new $object_class;
 $object->load($object_id);
 
 // Chargement de ces actes NGAP
-$object->loadRefsActesNGAP();
+$object->countActes();
 
 // Creation de la requete permettant de retourner tous les codes correspondants
-if($code && $object->_ref_actes_ngap){
-  $sql = "SELECT * FROM `codes_ngap` WHERE `code` LIKE '".addslashes($code)."%' ";
+if ($code && $object->_count_actes) {
+  $sql = "SELECT * 
+		FROM `codes_ngap` 
+		WHERE `code` LIKE '".addslashes($code)."%' ";
 }
 
-if($code && !$object->_ref_actes_ngap){
-  $sql = "SELECT * FROM `codes_ngap` WHERE `code` LIKE '".addslashes($code)."%' 
-                                     AND `lettre_cle` = '1' ";
+if ($code && !$object->_count_actes) {
+  $sql = "SELECT * 
+		FROM `codes_ngap` 
+		WHERE `code` LIKE '".addslashes($code)."%'                                  
+		AND `lettre_cle` = '1' ";
 }
 
 $result = $ds->loadList($sql, null);
