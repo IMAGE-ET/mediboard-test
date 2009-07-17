@@ -135,7 +135,7 @@ Main.add(function () {
             {{/if}}
           </button>
           {{if $constantes->datetime}}
-            <button class="new" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); ">
+            <button class="new" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
               {{tr}}Create{{/tr}}
             </button>
             <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
