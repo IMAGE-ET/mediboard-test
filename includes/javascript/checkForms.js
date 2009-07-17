@@ -293,8 +293,8 @@ Object.extend(ElementChecker, {
     // cim10
     cim10: function () {
       this.assertNoArg("cim10");
-      if (!this.sValue.match(/^[a-z][0-9]{2,4}$/i))
-        this.addError("cim10", "Code CIM incorrect, doit contenir 5 lettres maximum");
+      if (!this.sValue.match(/^[a-z][0-9x]{2,4}$/i))
+        this.addError("cim10", "Code CIM incorrect, doit contenir une lettre, puis de 2 à 4 chiffres ou la lettre X");
     },
     
     // adeli
@@ -379,8 +379,8 @@ Object.extend(ElementChecker, {
     
     // enum
     "enum": function() {
-      if (!this.oProperties.list) {
-        Console.error("Spécification 'list' manquante pour le champ " + this.sLabel);
+      if (!this.oProperties.list && !this.oProperties['class']) {
+        Console.error("Spécification 'list' ou 'class' manquante pour le champ " + this.sLabel);
         return;
       }
     },
