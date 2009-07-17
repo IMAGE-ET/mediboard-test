@@ -60,7 +60,7 @@ ActesNGAP = {
   	{{if $object->_coded}}
     <tr>
       <td colspan="10">
-        <div class="big-info">
+        <div class="small-info">
         La cotation des actes est terminée.<br />
         Pour pouvoir coder des actes, veuillez dévalider la consultation.
         </div>
@@ -133,8 +133,14 @@ ActesNGAP = {
           Aucun
         {{/if}}
       </td>
-      <td>{{$_acte_ngap->_ref_executant->_view}}</td>
-      
+
+      {{assign var="executant" value=$_acte_ngap->_ref_executant}}
+      <td> 
+        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+         {{$executant}}
+        </div>
+      </td>
+
       {{if !$object->_coded}}
       <td>
        	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">

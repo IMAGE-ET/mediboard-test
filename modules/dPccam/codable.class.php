@@ -216,15 +216,47 @@ class CCodable extends CMbObject {
     $this->_count_actes = count($this->_ref_actes);
   }
   
+  /**
+   * Charge les actes CCAM codés
+   */
+  function loadRefsActesCCAM() {
+    if ($this->_ref_actes_ccam) {
+      return;
+    }
+
+  	$order = array();
+  	$order[] = "code_association";
+  	$order[] = "code_acte";
+  	$order[] = "code_activite";
+  	$order[] = "code_phase";
+  	$order[] = "acte_id";
+  	
+    if (null === $this->_ref_actes_ccam = $this->loadBackRefs("actes_ccam", $order)) {
+      return;
+    }
+  	
+    $this->_temp_ccam = array();
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
+      $this->_temp_ccam[] = $_acte_ccam->makeFullCode();
+    }
+    
+    $this->_tokens_ccam = join($this->_temp_ccam, "|");
+  }
+  
+  /**
+   * Charge les actes NGAP codés
+   */
   function loadRefsActesNGAP() {
     if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap")) {
       return;
     }
+    
     $this->_codes_ngap = array();
     foreach ($this->_ref_actes_ngap as $_acte_ngap){
       $this->_codes_ngap[] = $_acte_ngap->makeFullCode(); 
       $_acte_ngap->loadRefExecutant();
     }
+    
     $this->_tokens_ngap = join($this->_codes_ngap, "|");
   }
   
@@ -306,33 +338,7 @@ class CCodable extends CMbObject {
     }
     return parent::check();
   }
-  
-  /**
-   * Charge les actes CCAM codés
-   */
-  function loadRefsActesCCAM() {
-    if ($this->_ref_actes_ccam) {
-      return;
-    }
-
-  	$order = array();
-  	$order[] = "code_association";
-  	$order[] = "code_acte";
-  	$order[] = "code_activite";
-  	$order[] = "code_phase";
-  	$order[] = "acte_id";
-  	
-    if (null === $this->_ref_actes_ccam = $this->loadBackRefs("actes_ccam", $order)) {
-      return;
-    }
-  	
-    $this->_temp_ccam = array();
-    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
-      $this->_temp_ccam[] = $_acte_ccam->makeFullCode();
-    }
-    $this->_tokens_ccam = join($this->_temp_ccam, "|");
-  }
-  
+    
   /**
    * Charge les actes CCAM codables en fonction des code CCAM fournis
    */
