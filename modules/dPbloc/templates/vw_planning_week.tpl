@@ -11,6 +11,9 @@
 <table class="main">
   <tr>
     <td>
+      {{if $nbIntervNonPlacees}}
+        <div class="warning" style="float: right;">{{$nbIntervNonPlacees}} interventions non validées cette semaine</div>
+      {{/if}}
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_planning_week" />

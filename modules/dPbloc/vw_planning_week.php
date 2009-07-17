@@ -24,10 +24,6 @@ for($i = 0; $i < 7; $i++) {
   $listDays[$dateArr] = $dateArr;  
 }
 
-// Liste des Salles
-/*$salle = new CSalle();
-$listSalles = $salle->loadListWithPerms(PERM_READ, null, "nom");*/
-
 // Liste des blocs
 $listBlocs = CGroups::loadCurrent()->loadBlocs();
 
@@ -57,9 +53,11 @@ foreach($listDays as $keyDate=>$valDate){
 
 $listPlages = array();
 
+$nbIntervNonPlacees = 0;
 
 // Extraction des plagesOp par date
-foreach($listDays as $keyDate=>$valDate){
+foreach($listDays as $keyDate => $valDate){
+  
   // Récupération des plages par jour
   $listPlage = new CPlageOp();
   $where = array();
@@ -76,6 +74,7 @@ foreach($listDays as $keyDate=>$valDate){
     $plage->loadRefsFwd();
     $plage->_ref_chir->loadRefsFwd();
     $plage->getNbOperations();
+    $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
     //$plage->loadAffectationsPersonnel();
   
     $plage->fin = min($plage->fin, $max);
@@ -106,16 +105,17 @@ $listSpec = $listSpec->loadSpecialites();
 //Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listPlages"     , $listPlages        );
-$smarty->assign("listDays"       , $listDays          );
-$smarty->assign("listBlocs"      , $listBlocs         );
-$smarty->assign("bloc"           , $bloc              );
-$smarty->assign("listSalles"     , $listSalles        );
-$smarty->assign("listHours"      , CPlageOp::$hours   );
-$smarty->assign("listMins"       , CPlageOp::$minutes );
-$smarty->assign("affichages"     , $affichages        );
-$smarty->assign("date"           , $date              );
-$smarty->assign("listSpec"       , $listSpec          );
+$smarty->assign("listPlages"        , $listPlages        );
+$smarty->assign("listDays"          , $listDays          );
+$smarty->assign("listBlocs"         , $listBlocs         );
+$smarty->assign("bloc"              , $bloc              );
+$smarty->assign("listSalles"        , $listSalles        );
+$smarty->assign("listHours"         , CPlageOp::$hours   );
+$smarty->assign("listMins"          , CPlageOp::$minutes );
+$smarty->assign("affichages"        , $affichages        );
+$smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
+$smarty->assign("date"              , $date              );
+$smarty->assign("listSpec"          , $listSpec          );
 
 $smarty->display("vw_planning_week.tpl");
 ?>
