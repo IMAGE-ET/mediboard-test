@@ -63,6 +63,9 @@
                 <option value="SigeGateActeCcam" {{if $web_service == "SigeGateActeCcam"}}selected="selected"{{/if}}>
                   Acte CCAM
                 </option>
+                <option value="SigeGateActeNgap" {{if $web_service == "SigeGateActeNgap"}}selected="selected"{{/if}}>
+                  Acte NGAP
+                </option>
                 <option value="SigeGateDiag" {{if $web_service == "SigeGateDiag"}}selected="selected"{{/if}}>
                   Diagnostic - CIM10
                 </option>
