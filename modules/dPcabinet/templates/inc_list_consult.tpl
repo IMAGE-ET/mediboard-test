@@ -1,6 +1,13 @@
 <script type="text/javascript">
 
 // Notification de l'arrivée du patient
+
+if (!window.updateConsultations) {
+  updateConsultations = function() {
+  	window.location.reload();
+  }
+}
+
 putArrivee = function(oForm) {
   var today = new Date();
   oForm.arrivee.value = today.toDATETIME(true);
@@ -84,7 +91,7 @@ Main.add( function () {
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
-        {{if ($curr_consult->chrono == $curr_consult|const:'PLANIFIE') && $mode_urgence}}
+        {{if ($curr_consult->chrono == $curr_consult|const:'PLANIFIE')}}
 		      <form name="etatFrm{{$curr_consult->_id}}" action="?m={{$current_m}}" method="post">
 			      <input type="hidden" name="m" value="dPcabinet" />
 			      <input type="hidden" name="dosql" value="do_consultation_aed" />

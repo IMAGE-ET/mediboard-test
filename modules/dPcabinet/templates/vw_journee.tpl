@@ -93,7 +93,7 @@ Main.add(function () {
          {{assign var="current_m" value="dPcabinet"}}
        {{/if}}
        
-       {{include file="../../dPcabinet/templates/inc_list_consult.tpl"}}
+       {{mb_include module=dPcabinet template=inc_list_consult}}
      </td>
      {{/foreach}}
    </tr>
