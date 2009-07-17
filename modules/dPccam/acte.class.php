@@ -117,11 +117,18 @@ class CActe extends CMbMetaObject {
   }
   
   /**
-   * Precode with a single serialized string.
-   * @param string $details
+   * Return a full serialised code for precoding
+   * @return string Serialised full code
+   */
+  function makeFullCode() {
+  }
+  
+  /**
+   * Precode with a full serialised code for the act
+   * @param string $code Serialised full code
    * @return void
    */
-  function setCodeComplet($details) {
+  function setFullCode($details) {
   }
   
   function updateMontant(){

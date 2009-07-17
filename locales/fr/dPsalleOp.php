@@ -269,4 +269,7 @@ $locales['CSalle-back-check_lists'] = '';
 $locales['config-dPsalleOp-mode_anesth'] = 'Mode anesthésie';
 $locales['config-dPsalleOp-mode_anesth-desc'] = 'N\'affiche que les informations modifiables dans un contexte d\'anesthésue';
 $locales['mod-dPsalleOp-tab-vw_soins_reveil'] = 'Soins reveil';
+$locales['CActeCCAM-charges_sup'] = 'Charges supplémentaires';
+$locales['CActeCCAM-charges_sup-court'] = 'Charges';
+$locales['CActeCCAM-charges_sup-desc'] = 'Charges supplémentaire de cabinet';
 ?>

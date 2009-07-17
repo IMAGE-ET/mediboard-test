@@ -156,7 +156,9 @@ class CSetupdPsalleOp extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.26");
-    $sql = "ALTER TABLE `daily_check_item_type` ADD `category_id` INT (11) UNSIGNED NOT NULL, ADD INDEX (`category_id`);";
+    $sql = "ALTER TABLE `daily_check_item_type` 
+			ADD `category_id` INT (11) UNSIGNED NOT NULL, 
+			ADD INDEX (`category_id`);";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `daily_check_item_category` (
               `daily_check_item_category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
@@ -165,7 +167,12 @@ class CSetupdPsalleOp extends CSetup {
             ) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.27";
+    $this->makeRevision("0.27");
+    $sql = "ALTER TABLE `acte_ccam` 
+			ADD `charges_sup` ENUM ('0','1')";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.28";
   }
 }
 ?>

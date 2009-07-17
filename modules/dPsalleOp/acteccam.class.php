@@ -33,6 +33,7 @@ class CActeCCAM extends CActe {
   var $commentaire         = null;
   var $code_association    = null;
   var $rembourse           = null;
+  var $charges_sup         = null;
   var $regle               = null;
   var $signe               = null;
   
@@ -72,10 +73,10 @@ class CActeCCAM extends CActe {
     $specs["commentaire"]         = "text";
     $specs["code_association"]    = "enum list|1|2|3|4|5";
     $specs["rembourse"]           = "bool default|1";
+    $specs["charges_sup"]         = "bool";
     $specs["regle"]               = "bool";
     $specs["signe"]               = "bool default|0";
 
-    $specs["_montant_facture"]    = "currency";
     $specs["_rembex"]             = "bool";
     
     return $specs;
@@ -155,8 +156,28 @@ class CActeCCAM extends CActe {
     return parent::check(); 
     // datetime_execution: attention à rester dans la plage de l'opération
   }
-   
-  function setCodeComplet($code){
+  
+  /**
+   * CActe redefinition
+   * @return string Serialised full code
+   */
+  function makeFullCode() {
+	  return $this->code_acte.
+	    "-". $this->code_activite.
+	    "-". $this->code_phase.
+	    "-". $this->modificateurs.
+	    "-". str_replace("-","*", $this->montant_depassement).
+	    "-". $this->code_association.
+	    "-". $this->rembourse.
+	    "-". $this->charges_sup;
+  }
+
+  /**
+   * CActe redefinition
+   * @param string $code Serialised full code
+   * @return void
+   */
+  function setFullCode($code){
     $details = explode("-", $code);
     if (count($details) > 2) {
       $this->code_acte     = $details[0];
@@ -183,6 +204,11 @@ class CActeCCAM extends CActe {
         $this->rembourse = $details[6];
       }
       
+      // Remboursement
+      if (count($details) > 6) {
+        $this->charges_sup = $details[6];
+      }
+      
       $this->updateFormFields();
     }
   }
@@ -196,6 +222,7 @@ class CActeCCAM extends CActe {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
     CMbArray::removeValue("", $this->_modificateurs);
+    $this->_shortview  = $this->code_acte;
     $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
     $this->_anesth = ($this->code_activite == 4) ? true : false;
@@ -203,9 +230,7 @@ class CActeCCAM extends CActe {
     // Remboursement exceptionnel
     $code = CCodeCCAM::get($this->code_acte, CCodeCCAM::LITE);
     $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
-    
   }
-  
   
   function store() {
     // Sauvegarde du montant de base
@@ -213,7 +238,6 @@ class CActeCCAM extends CActe {
       $this->updateFormFields();
       $this->montant_base = $this->getTarif();  
     }
-   
    
     // En cas d'une modification autre que signe, on met signe à 0
     if(!$this->signe){
@@ -623,16 +647,25 @@ class CActeCCAM extends CActe {
   
   function getTarif() {
     $this->loadRefCodeCCAM();
-    $this->_tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
+    $phase = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase];
+    $this->_tarif = $phase->tarif;
     $coeffAsso    = $this->_ref_code_ccam->getCoeffAsso($this->code_association);
+    
     $forfait     = 0;
     $coefficient = 100;
-    foreach($this->_modificateurs as $modif) {
+    
+    foreach ($this->_modificateurs as $modif) {
       $result = $this->_ref_code_ccam->getForfait($modif);
       $forfait     += $result["forfait"];
       $coefficient += ($result["coefficient"]) - 100;
     }
     $this->_tarif = ($this->_tarif * ($coefficient / 100) + $forfait) * ($coeffAsso / 100);
+    
+    // Charges supplémentaires
+	  if ($this->charges_sup) {
+	    $this->_tarif += $phase->charges;
+	  }
+    
     return $this->_tarif;
   }
 }

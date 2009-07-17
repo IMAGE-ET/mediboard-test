@@ -254,6 +254,14 @@ class CConsultation extends CCodable {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
     
+    // Nom de tarif manuel
+    if ($this->tarif == "manuel") {
+      $this->loadRefsActes();
+      foreach ($this->_ref_actes as $acte) {
+        $this->tarif.= " $acte->_shortview";
+      }
+    }
+    
     // Liaison FSE prioritaire sur l'état
     if ($this->_bind_fse) {
       $this->valide = 0;
@@ -598,7 +606,7 @@ class CConsultation extends CCodable {
       $acte->_adapt_object = true;
         
       $acte->_preserve_montant = true;
-      $acte->setCodeComplet($code);
+      $acte->setFullCode($code);
       
       // si le code ccam est composé de 3 elements, on le precode
       if($acte->code_activite != "" && $acte->code_phase != ""){
@@ -623,7 +631,7 @@ class CConsultation extends CCodable {
       if($code_ngap) {
 	      $acte = new CActeNGAP();
 	      $acte->_preserve_montant = true;
-        $acte->setCodeComplet($code_ngap);
+        $acte->setFullCode($code_ngap);
 
         $acte->object_id = $this->_id;
 	      $acte->object_class = $this->_class_name;

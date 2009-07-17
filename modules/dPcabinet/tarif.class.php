@@ -133,7 +133,7 @@ class CTarif extends CMbObject {
     
     foreach ($this->_codes_ccam as $code) {
       $acte = new CActeCCAM();
-      $acte->setCodeComplet($code);
+      $acte->setFullCode($code);
       $this->_new_actes["$code"] = $acte;
       if (!$acte->getPrecodeReady()) {
         return $this->_precode_ready = '0';
@@ -142,7 +142,7 @@ class CTarif extends CMbObject {
 
     foreach ($this->_codes_ngap as $code) {
       $acte = new CActeNGAP();
-      $acte->setCodeComplet($code);
+      $acte->setFullCode($code);
       $this->_new_actes["$code"] = $acte;
       if (!$acte->getPrecodeReady()) {
         return $this->_precode_ready = '0';

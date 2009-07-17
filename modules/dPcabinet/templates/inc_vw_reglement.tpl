@@ -29,14 +29,8 @@ validTarif = function(){
   
   $V(oForm.du_tiers,  $V(oForm._somme) - $V(oForm.du_patient));
   
-  if($V(oForm.tarif) == ""){
+  if ($V(oForm.tarif) == ""){
     $V(oForm.tarif, "manuel");
-    if($V(oForm._tokens_ccam)){
-      oForm.tarif.value += " / "+$V(oForm._tokens_ccam);
-    }
-    if($V(oForm._tokens_ngap)){
-      oForm.tarif.value += " / "+$V(oForm._tokens_ngap);
-    }
   }
   Reglement.submit(oForm);
 }
@@ -213,7 +207,7 @@ Main.add( function(){
                 <th>Codes CCAM</th>
                 <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
                   {{foreach from=$consult->_ref_actes_ccam item="acte_ccam"}}
-                    {{$acte_ccam->code_acte}}
+                  	<span onmouseover="ObjectTooltip.createEx(this, '{{$acte_ccam->_guid}}');">{{$acte_ccam->_shortview}}</span>
                   {{/foreach}}
                 </td>
               </tr>

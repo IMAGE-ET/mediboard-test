@@ -71,7 +71,26 @@ class CActeNGAP extends CActe {
     $this->_execution = $this->_ref_object->_acte_execution;
   }
   
-  function setCodeComplet($code){
+  /**
+   * CActe redefinition
+   * @return string Serialised full code
+   */
+  function makeFullCode() {
+      return $this->quantite.
+        "-". $this->code.
+        "-". $this->coefficient.
+        "-". $this->montant_base.
+        "-". str_replace("-","*", $this->montant_depassement).
+        "-". $this->demi.
+        "-". $this->complement; 
+  }
+
+  /**
+   * CActe redefinition
+   * @param string $code Serialised full code
+   * @return void
+   */
+  function setFullCode($code){
     $details = explode("-", $code);
     $this->quantite    = $details[0];
     $this->code        = $details[1];

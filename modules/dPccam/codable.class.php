@@ -221,14 +221,9 @@ class CCodable extends CMbObject {
       return;
     }
     $this->_codes_ngap = array();
-    foreach ($this->_ref_actes_ngap as $_actes_ngap){
-      if($_actes_ngap->montant_depassement < 0){
-        $_montant_depassement_temp = str_replace("-", "*", $_actes_ngap->montant_depassement);
-      } else {
-        $_montant_depassement_temp = $_actes_ngap->montant_depassement;
-      }
-      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient."-".$_actes_ngap->montant_base."-".$_montant_depassement_temp."-".$_actes_ngap->demi."-".$_actes_ngap->complement; 
-      $_actes_ngap->loadRefExecutant();
+    foreach ($this->_ref_actes_ngap as $_acte_ngap){
+      $this->_codes_ngap[] = $_acte_ngap->makeFullCode(); 
+      $_acte_ngap->loadRefExecutant();
     }
     $this->_tokens_ngap = join($this->_codes_ngap, "|");
   }
@@ -333,18 +328,7 @@ class CCodable extends CMbObject {
   	
     $this->_temp_ccam = array();
     foreach ($this->_ref_actes_ccam as $_acte_ccam) {
-      if($_acte_ccam->montant_depassement < 0){
-        $_montant_depassement_temp = str_replace("-", "*", $_acte_ccam->montant_depassement);
-      } else {
-        $_montant_depassement_temp = $_acte_ccam->montant_depassement;
-      }
-      $this->_temp_ccam[] = $_acte_ccam->code_acte.
-        "-".$_acte_ccam->code_activite.
-        "-".$_acte_ccam->code_phase.
-        "-".$_acte_ccam->modificateurs.
-        "-".$_montant_depassement_temp.
-        "-".$_acte_ccam->code_association.
-        "-".$_acte_ccam->rembourse; 
+      $this->_temp_ccam[] = $_acte_ccam->makeFullCode();
     }
     $this->_tokens_ccam = join($this->_temp_ccam, "|");
   }
