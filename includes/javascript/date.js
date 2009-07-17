@@ -514,6 +514,7 @@ var Calendar = {
       dateProperties: function(date){return Calendar.dateProperties(date, dates)}
     }, options || {});
     
+		options.captureKeys = !options.inline;
     options.emptyButton = (!options.noView && !element.hasClassName('notNull'));
     
     var elementView;
