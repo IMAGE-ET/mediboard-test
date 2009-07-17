@@ -101,14 +101,5 @@
   </tr>
 {{/if}}
 {{/foreach}}
-{{if !$readonly}}
-  <tr>
-    <td class="button" colspan="2">
-      <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
-        sauver
-      </button>
-    </td>
-  </tr>
-{{/if}}
 </table>
 </form>
