@@ -9,18 +9,12 @@
  */
 
 function addHelp(sClass, oField, sName, sDepend1, sDepend2) {
-  if(!sDepend1) {
-    sDepend1 = null;
-  }
-  if(!sDepend2) {
-    sDepend2 = null;
-  }
   url = new Url("dPcompteRendu", "edit_aide");
   url.addParam("class"       , sClass);
   url.addParam("field"       , sName || oField.name);
   url.addParam("text"        , oField.value);
-  url.addParam("depend_value_1", sDepend1);
-  url.addParam("depend_value_2", sDepend2)
+  url.addParam("depend_value_1", sDepend1 || null);
+  url.addParam("depend_value_2", sDepend2 || null)
   url.popup(600, 300, "AidesSaisie");
 }
 
@@ -255,14 +249,13 @@ Element.addMethods({
     element.style.marginBottom = '0';
     
     // grippie's class and style
-    oGrippie.addClassName('grippie-h');
-    oGrippie.setOpacity(0.5);
+    oGrippie.addClassName('grippie-h').setOpacity(0.5);
     if (!element.visible()) {
       oGrippie.hide();
     }
     
     // When the mouse is pressed on the grippie, we begin the drag
-    oGrippie.onmousedown = startDrag;
+    oGrippie.observe('mousedown', startDrag);
     element.insert({after: oGrippie});
     
     // Loads the height maybe saved in a cookie
@@ -274,14 +267,15 @@ Element.addMethods({
     loadHeight.defer(); // deferred to prevent Firefox 2 resize bug
     
     function startDrag(e) {
+      Event.stop(e);
       staticOffset = element.getHeight() - e.pointerY(); 
       element.setOpacity(0.4);
-      document.onmousemove = performDrag;
-      document.onmouseup = endDrag;
-      return false;
+      document.observe('mousemove', performDrag)
+              .observe('mouseup', endDrag);
     }
   
     function performDrag(e) {
+      Event.stop(e);
       var h = null;
       if (typeof options.step == 'string') {
         var iStep = element.getStyle(options.step);
@@ -293,18 +287,17 @@ Element.addMethods({
         h = Math.max(32, staticOffset + e.pointerY());
       }
       element.setStyle({height: h + 'px'});
-      return false;
     }
   
     function endDrag(e) {
-      element.setStyle({opacity: 1});
-      document.onmousemove = null;
-      document.onmouseup = null;
+      Event.stop(e);
+      element.setOpacity(1);
+      document.stopObserving('mousemove', performDrag)
+              .stopObserving('mouseup', endDrag);
 
       if (element.id) {
         cookie.setValue('ElementHeight', element.id, element.getHeight() - Math.round(oGrippie.getHeight()/2));
       }
-      return false;
     }
   }
 } );
@@ -674,12 +667,12 @@ Element.addMethods('input', {
 
 Element.addMethods('select', {
   buildTree: function (element, options) {
-    var select  = element; // DOM select
-    var search  = null; // DOM text input
-    var tree    = null; // DOM UL/LI tree representing the select/optgroup
-    var list    = null; // DOM UL/LI list for keyword search
-    var pos     = null; // DOM select position
-    var dim     = null; // DOM select dimensions
+    var select  = element, // DOM select
+        search  = null, // DOM text input
+        tree    = null, // DOM UL/LI tree representing the select/optgroup
+        list    = null, // DOM UL/LI list for keyword search
+        pos     = null, // DOM select position
+        dim     = null; // DOM select dimensions
     
     options = Object.extend({
       className: 'select-tree'
@@ -951,6 +944,26 @@ Element.addMethods('select', {
     }
 
     select.onclick = tree.display;
+  },
+  makeAutocomplete: function(element) {
+    element = $(element);
+    
+    var textInput = new Element('input', {type: 'text', className: 'autocomplete'}).writeAttribute('autocomplete', false),
+        list = new Element('div', {className: 'autocomplete'}),
+        views = [], viewToValue = {};
+        
+    element.insert({after: textInput}).insert({after: list}).hide();
+    
+    $A(element.options).each(function(e){
+      views.push(e.text);
+      viewToValue[e.text] = e.value;
+    });
+    
+    new Autocompleter.Local(textInput, list.identify(), views, {
+      afterUpdateElement: function(text, li){ 
+        $V(element, viewToValue[text.value]);
+      }
+    });
   }
 });
 
