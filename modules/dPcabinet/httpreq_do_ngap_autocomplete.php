@@ -20,18 +20,16 @@ $object->load($object_id);
 // Chargement de ces actes NGAP
 $object->countActes();
 
-// Creation de la requete permettant de retourner tous les codes correspondants
-if ($code && $object->_count_actes) {
-  $sql = "SELECT * 
-		FROM `codes_ngap` 
-		WHERE `code` LIKE '".addslashes($code)."%' ";
-}
+$sql = null;
 
-if ($code && !$object->_count_actes) {
+// Creation de la requete permettant de retourner tous les codes correspondants
+if ($code) {
   $sql = "SELECT * 
-		FROM `codes_ngap` 
-		WHERE `code` LIKE '".addslashes($code)."%'                                  
-		AND `lettre_cle` = '1' ";
+    FROM `codes_ngap` 
+    WHERE `code` LIKE '".addslashes($code)."%' ";
+
+  if (!$object->_count_actes)
+    $sql .= " AND `lettre_cle` = '1' ";
 }
 
 $result = $ds->loadList($sql, null);
