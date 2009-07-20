@@ -2,6 +2,7 @@
 {{assign var=readonly value=0}}
 {{/if}}
 
+{{if $consult->_id}}
 <form class="watch" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="del" value="0" />
@@ -103,3 +104,7 @@
 {{/foreach}}
 </table>
 </form>
+
+{{else}}
+<div class="small-info">Consultation non réalisée</div>
+{{/if}}

@@ -70,7 +70,7 @@
 
   {{foreach from=$listeTarifsSpe item=_tarif}}
   <tr {{if $_tarif->_id == $tarif->_id}}class="selected"{{/if}}>
-    <td>
+    <td {{if $_tarif->_precode_ready}}class="checked"{{/if}}>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;tarif_id={{$_tarif->_id}}">
       	{{mb_value object=$_tarif field=description}}
       </a>

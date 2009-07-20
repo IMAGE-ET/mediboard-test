@@ -54,7 +54,7 @@
     {{mb_ditto name=date value=$_suivi->date|date_format:$dPconfig.date}}
   </td>
   <td style="width: 1%;">{{$_suivi->date|date_format:$dPconfig.time}}</td>
-  <td class="text">
+  <td class="text" style="height: 22px;">
 	  {{if $_suivi->object_id && $_suivi->object_class}}
 	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->_ref_object}}'); $V(document.forms.editTrans.object_id, '{{$_suivi->object_id}}'); 
 	    											$V(document.forms.editTrans.object_class, '{{$_suivi->object_class}}'); }">

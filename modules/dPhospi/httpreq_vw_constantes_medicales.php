@@ -177,8 +177,8 @@ function getMin($n, $array) {
 $data['ta']['standard'] = 12;
 $data['ta']['options']['title'] = utf8_encode('Tension artérielle (cmHg)');
 $data['ta']['options']['yaxis'] = array(
-  'min' => getMin(0,  $data['ta']['series'][0]['data']), // min
-  'max' => getMax(30, $data['ta']['series'][0]['data']), // max
+  'min' => getMin(5,  $data['ta']['series'][0]['data']), // min
+  'max' => getMax(20, $data['ta']['series'][0]['data']), // max
 );
 
 $data['pouls']['standard'] = 60;

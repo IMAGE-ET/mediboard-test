@@ -334,8 +334,7 @@ Main.add(function () {
 <div id="constantes" style="display:none"></div>
 
 <div id="examens">
-  {{assign var="readonly" value=1}}
-  {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
+  {{mb_include module=dPcabinet template=inc_main_consultform readonly=1}}
 </div>
 
 {{if $isPrescriptionInstalled}}
