@@ -16,8 +16,6 @@ $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");
 $useVitale  = mbGetValueFromGet("useVitale");
 
-$date = mbDate();
-
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsFwd();
