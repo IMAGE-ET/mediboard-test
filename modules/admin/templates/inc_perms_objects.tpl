@@ -18,6 +18,10 @@ function cancelObject(oObject) {
   oForm._object_view.value = "";
 }
 
+Main.add(function(){
+  $(getForm('editPermObj').object_class).makeAutocomplete({width: '200px'});
+});
+
 </script>
 
 <form name="editPermObj" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -32,13 +36,15 @@ function cancelObject(oObject) {
   <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
-      <select class="select-tree" name="object_class">
+			<span style="text-align: left; font-weight: normal;">
+      <select name="object_class">
         {{foreach from=$listClasses|smarty:nodefaults item=class}}
         <option value="{{$class}}">
           {{tr}}{{$class}}{{/tr}}
         </option>
         {{/foreach}}
       </select>
+			</span>
     </th>
   </tr>
   <tr>

@@ -728,7 +728,7 @@ Element.addMethods('select', {
         });*/
         
         // If it is an optgroup
-        if (o.tagName.toLowerCase() == 'optgroup') {
+        if (/optgroup/i.test(o.tagName)) {
           li.insert(o.label?o.label:'&nbsp;');
           
           // New sublist
@@ -781,14 +781,13 @@ Element.addMethods('select', {
     
     // Every element is hidden, but preserves its width
     select.childElements().each(function(d) {
-      d.setOpacity(0.01);
-      d.setStyle({height: 0});
+      d.setOpacity(0.01).setStyle({height: 0});
     });
     
     // Tree -------------
     tree = new Element('ul', {className: options.className, id: select.id+'_tree'});
     tree.display = function (e) {
-			e.stop();
+      Event.stop(e);
       if (tree.empty()) {
         makeTree(select, tree);
       }
@@ -867,12 +866,12 @@ Element.addMethods('select', {
 					text = c.text.toLowerCase();
           if (text.indexOf(s) != -1) {
             li = new Element('li').update(c.text.replace(new RegExp(s, "gi"), function($1){return '<span class="highlight">'+$1+'</span>'}));
-            li.onclick = function() {
+            li.observe('click', function() {
               $V(select, c.value, true);
               tree.highlight();
               search.value = '';
               select.display(false);
-            };
+            });
             list.insert(li);
           }
         });
@@ -888,8 +887,6 @@ Element.addMethods('select', {
                    position: 'absolute',
                    top: '-1000px'
                  });
-    search.name = select.name+'_tree__search';
-    search.id   = select.id+'_tree__search';
     
     search.catchKey = function (e) {
       var keycode = getKeycode(e);
@@ -907,7 +904,7 @@ Element.addMethods('select', {
       else if (keycode == 13) { // Enter
         var focused = list.select('.focused');
         if (focused && (focused = focused[0])) {
-          focused.onclick(e.stop());
+          focused.onclick(Event.stop(e));
         }
         search.value = null;
       }
@@ -945,16 +942,21 @@ Element.addMethods('select', {
 
     select.onclick = tree.display;
   },
-  makeAutocomplete: function(element) {
+  makeAutocomplete: function(element, options) {
     element = $(element);
+		
+		options = Object.extend({
+			width: '100px'
+		}, options);
     
-    var textInput = new Element('input', {type: 'text', className: 'autocomplete'}).writeAttribute('autocomplete', false),
+    var textInput = new Element('input', {type: 'text', className: 'autocomplete', style:'width:'+options.width}).writeAttribute('autocomplete', false),
         list = new Element('div', {className: 'autocomplete'}),
         views = [], viewToValue = {};
         
     element.insert({after: textInput}).insert({after: list}).hide();
     
     $A(element.options).each(function(e){
+			if (e.disabled) return;
       views.push(e.text);
       viewToValue[e.text] = e.value;
     });
