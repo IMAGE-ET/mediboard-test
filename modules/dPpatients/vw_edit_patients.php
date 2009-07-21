@@ -30,6 +30,8 @@ $patient->loadIdVitale();
 if (!$patient_id) {
   $patient->nom    = $name;
   $patient->prenom = $firstName;
+	$patient->assure_nom    = $name;
+  $patient->assure_prenom = $firstName;
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
