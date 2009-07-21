@@ -38,7 +38,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
 $smarty->assign("today"  , $today  );
 
-if (CAppUI::pref('ExtendedPrintPatient'))
+if (CAppUI::conf('dPpatients CPatient extended_print'))
   $smarty->display("print_patient_extended.tpl");
 else
   $smarty->display("print_patient.tpl");

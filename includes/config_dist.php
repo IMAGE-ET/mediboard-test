@@ -312,6 +312,7 @@ $dPconfig["dPpatients"] = array (
     "tag_ipp" => "",
     "identitovigilence" => "nodate",
     "merge_only_admin" => "0",
+		"extended_print" => "0"
   ),
   
   "CAntecedent" => array (

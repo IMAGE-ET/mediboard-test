@@ -916,7 +916,6 @@ $locales['CPatient.assure_civilite.mme'] = '';
 $locales['CPatient.assure_civilite.pr'] = '';
 $locales['CPatient.assure_civilite.vve'] = '';
 $locales['CPatient.civilite.la_jeune'] = '';
-$locales['pref-ExtendedPrintPatient'] = '';
 $locales['CMedecin-adeli'] = '';
 $locales['CMedecin-adeli-court'] = '';
 $locales['CMedecin-adeli-desc'] = '';

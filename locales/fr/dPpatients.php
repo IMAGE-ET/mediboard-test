@@ -924,5 +924,6 @@ $locales['config-dPpatients-CPatient-identitovigilence-date'] = 'Date de naissan
 $locales['config-dPpatients-CPatient-identitovigilence-doublons'] = 'Interdiction de doublons';
 $locales['config-dPpatients-CPatient-date_naissance'] = '';
 $locales['config-dPpatients-CPatient-date_naissance-desc'] = '';
-$locales['pref-ExtendedPrintPatient'] = 'Impression avancée des fiches patient';
+$locales['config-dPpatients-CPatient-extended_print'] = 'Fiche d\'impression étendue';
+$locales['config-dPpatients-CPatient-extended_print-desc'] = 'Fiche d\'impression étendue';
 ?>
