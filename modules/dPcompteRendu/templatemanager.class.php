@@ -23,19 +23,28 @@ class CTemplateManager {
   var $valueMode = true; // @todo : changer en applyMode
   var $printMode = false;
   var $simplifyMode = false;
+  var $parameters = array();
   
-  function CTemplateManager() {
+  function CTemplateManager($parameters = array()) {
+    global $AppUI;
+    $user = new CMediusers();
+    $user->load($AppUI->user_id);
+		
+  	$this->parameters = $parameters;
+		
     $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
     $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
     $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
     $this->addProperty("Courrier - copie à"              , "[Courrier - copie à]");
-    global $AppUI;
-    $user = new CMediusers();
-    $user->load($AppUI->user_id);
+
     $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, CAppUI::conf("date")));
     $this->addProperty("Général - heure courante", mbTransformTime(null, null, CAppUI::conf("time")));
     $this->addProperty("Général - rédacteur"     , $user->_view);
   }
+	
+	function getParameter($name, $default = null) {
+		return isset($this->parameters[$name]) ? $this->parameters[$name] : $default;
+	}
 
   function makeSpan($spanClass, $text) {
     // Escape entities cuz FCKEditor does so
@@ -43,13 +52,11 @@ class CTemplateManager {
     
     // Keep backslashed double quotes instead of quotes 
     // cuz FCKEditor creates double quoted attributes
-    $html = "<span class=\"{$spanClass}\">{$text}</span>";
-    
-    return $html; 
+    return "<span class=\"{$spanClass}\">{$text}</span>";
   }
   
   function addProperty($field, $value = null) {
-  	$sec = split(' - ', $field, 2);
+  	$sec = explode(' - ', $field, 2);
   	if (count($sec) > 1) {
   		$section = $sec[0];
   		$item = $sec[1];
@@ -84,6 +91,12 @@ class CTemplateManager {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("datetime")) : "";
     $this->addProperty($field, $value);
   }
+	
+  function addListProperty($field, $list = null) {
+    if (!is_array($list)) $list = array($list);
+		$str = '<ul><li>' . implode('</li><li>', $list) . '</li></ul>';
+    $this->addProperty($field, $str);
+  }
 
   function addList($name, $choice = null) {
     $this->lists[$name] = array (
@@ -91,7 +104,7 @@ class CTemplateManager {
       // @todo : passer en regexp
       //"nameHTML" => $this->makeSpan("name", "[Liste - {$name}]"));
       "nameHTML" => htmlentities("[Liste - {$name}]"));
-  } 
+  }
   
   function addHelper($name, $text) {
     $this->helpers[$name] = $text;
@@ -138,7 +151,6 @@ class CTemplateManager {
   }
   
   function loadLists($user_id, $compte_rendu_id = 0) {
-    global $AppUI;
     // Liste de choix
     $chir = new CMediusers;
     $compte_rendu = new CCompteRendu();
@@ -149,6 +161,7 @@ class CTemplateManager {
       $chir->load($user_id);
       $where[] = "(chir_id = '$chir->user_id' OR function_id = '$chir->function_id')";
     }else{
+    	global $AppUI;
       $chir->load($AppUI->user_id); 
       $where["function_id"] = "IN('$chir->function_id', '$compte_rendu->function_id')";
     }
@@ -161,29 +174,30 @@ class CTemplateManager {
     }
   }
   
-  
   function loadHelpers($user_id, $modeleType) {
     $compte_rendu = new CCompteRendu();
-    
+    $ds = $compte_rendu->_spec->ds;
+		
     // Chargement de l'utilisateur courant
     $currUser = new CMediusers();
     $currUser->load($user_id);
     
     $aidesUser = array();
     $aidesFunc = array();
-    
     $order = "name";
+		
     // Where user_id
     $whereUser = array();
-    $whereUser["user_id"] = $compte_rendu->_spec->ds->prepare("= %", $user_id);
-    $whereUser["class"]   = $compte_rendu->_spec->ds->prepare("= %", $compte_rendu->_class_name);
+    $whereUser["user_id"] = $ds->prepare("= %", $user_id);
+    $whereUser["class"]   = $ds->prepare("= %", $compte_rendu->_class_name);
+		
     // Where function_id
     $whereFunc = array();
-    $whereFunc["function_id"] = $compte_rendu->_spec->ds->prepare("= %", $currUser->function_id);
-    $whereFunc["class"]       = $compte_rendu->_spec->ds->prepare("= %", $compte_rendu->_class_name);
+    $whereFunc["function_id"] = $ds->prepare("= %", $currUser->function_id);
+    $whereFunc["class"]       = $ds->prepare("= %", $compte_rendu->_class_name);
     
-    $aide = new CAideSaisie();
     // Chargement des aides
+    $aide = new CAideSaisie();
     $aidesUser = $aide->loadList($whereUser,$order);
     $aidesFunc = $aide->loadList($whereFunc,$order);
     

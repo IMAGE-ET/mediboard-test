@@ -62,7 +62,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["function_id"]      = "ref class|CFunctions xor|chir_id|group_id|object_id";
     $specs["group_id"]         = "ref class|CGroups xor|chir_id|function_id|object_id";
     $specs["object_id"]        = "ref class|CMbObject meta|object_class xor|function_id|chir_id|group_id";
-    $specs["object_class"]     = "enum notNull list|CPatient|CConsultation|CConsultAnesth|COperation|CSejour|CPrescription";
+    $specs["object_class"]     = "enum notNull class";
     $specs["nom"]              = "str notNull";
     $specs["type"]             = "enum list|header|body|footer default|body";
     $specs["source"]           = "html helped|object_class";
@@ -108,27 +108,27 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function updateDBFields() {
-  	parent::updateDBFields();
-  	$this->completeField("etat_envoi");
-  	
+    parent::updateDBFields();
+    $this->completeField("etat_envoi");
+    
     if($this->fieldModified("source") && ($this->etat_envoi == "oui"))
         $this->etat_envoi = "obsolete";
   }
   
   function loadComponents() {
     if (!$this->_ref_header) {
-	    $this->_ref_header = new CCompteRendu();
-	    $this->_ref_header->load($this->header_id);
+      $this->_ref_header = new CCompteRendu();
+      $this->_ref_header->load($this->header_id);
     }
     
     if (!$this->_ref_footer) {
-	    $this->_ref_footer = new CCompteRendu();
-	    $this->_ref_footer->load($this->footer_id);
+      $this->_ref_footer = new CCompteRendu();
+      $this->_ref_footer->load($this->footer_id);
     }
   }
 
   function loadRefsFwd() {
-	  parent::loadRefsFwd();
+    parent::loadRefsFwd();
 
     $this->_ref_object->loadRefsFwd();
     
@@ -177,9 +177,9 @@ class CCompteRendu extends CDocumentItem {
     
     if(count($resultCategory) || $horsCat){
       $where = array();
-    	if($horsCat){
+      if($horsCat){
         $resultCategory[0] = "";
-    	  $where[] = "file_category_id IS NULL OR file_category_id ".$ds->prepareIn(array_keys($resultCategory));
+        $where[] = "file_category_id IS NULL OR file_category_id ".$ds->prepareIn(array_keys($resultCategory));
       } else {
         $where["file_category_id"] = $ds->prepareIn(array_keys($resultCategory));
       }
@@ -229,53 +229,53 @@ class CCompteRendu extends CDocumentItem {
     $order = "object_class, type, nom";
 
     switch ($owner) {
-    	case 'prat': // Modèle du praticien
+      case 'prat': // Modèle du praticien
         $prat = new CMediusers();
         if (!$prat->load($id)) return $modeles;
         $prat->loadRefFunction();
 
-		    $where["chir_id"]     = "= '$prat->_id'";
-		    $where["function_id"] = "IS NULL";
-		    $where["group_id"]    = "IS NULL";
-		    $modeles["prat"] = $modele->loadlist($where, $order);
-		    
-    	case 'func': // Modèle de la fonction
-    		if (isset($prat)) {
-    			$func_id = $prat->function_id;
-    		} else {
-	        $func = new CFunctions();
-	        if (!$func->load($id)) return $modeles;
-	        
-	        $func_id = $func->_id;
-    		}
+        $where["chir_id"]     = "= '$prat->_id'";
+        $where["function_id"] = "IS NULL";
+        $where["group_id"]    = "IS NULL";
+        $modeles["prat"] = $modele->loadlist($where, $order);
         
-		    $where["chir_id"]     = "IS NULL";
-		    $where["function_id"] = "= '$func_id'";
-		    $where["group_id"]    = "IS NULL";
-		    $modeles["func"] = $modele->loadlist($where, $order);
-		    
-    	case 'etab': // Modèle de l'établissement
-    		$etab_id = CGroups::loadCurrent()->_id;
-    		if ($owner == 'etab') {
+      case 'func': // Modèle de la fonction
+        if (isset($prat)) {
+          $func_id = $prat->function_id;
+        } else {
+          $func = new CFunctions();
+          if (!$func->load($id)) return $modeles;
+          
+          $func_id = $func->_id;
+        }
+        
+        $where["chir_id"]     = "IS NULL";
+        $where["function_id"] = "= '$func_id'";
+        $where["group_id"]    = "IS NULL";
+        $modeles["func"] = $modele->loadlist($where, $order);
+        
+      case 'etab': // Modèle de l'établissement
+        $etab_id = CGroups::loadCurrent()->_id;
+        if ($owner == 'etab') {
           $etab = new CGroups();
           if (!$etab->load($id)) return $modeles;
           
           $etab_id = $etab->_id;
-    		}
+        }
         else if (isset($func)) {
           $etab_id = $func->group_id;
         } 
         else if(isset($func_id)) {
-        	$func = new CFunctions();
-        	$func->load($func_id);
-        	
-        	$etab_id = $func->group_id;
+          $func = new CFunctions();
+          $func->load($func_id);
+          
+          $etab_id = $func->group_id;
         }
         
-		    $where["chir_id"]     = "IS NULL";
-		    $where["function_id"] = "IS NULL";
-		    $where["group_id"]    = " = '$etab_id'";
-		    $modeles["etab"] = $modele->loadlist($where, $order);
+        $where["chir_id"]     = "IS NULL";
+        $where["function_id"] = "IS NULL";
+        $where["group_id"]    = " = '$etab_id'";
+        $modeles["etab"] = $modele->loadlist($where, $order);
     }
     
     return $modeles;
@@ -292,7 +292,7 @@ class CCompteRendu extends CDocumentItem {
     } elseif($this->_ref_function->_id) {
       $can = $this->_ref_function->getPerm($permType);
     } else {
-    	$can = $this->_ref_group->getPerm($permType);
+      $can = $this->_ref_group->getPerm($permType);
     }
     return $can;
   }
@@ -310,9 +310,20 @@ class CCompteRendu extends CDocumentItem {
     }
     
     // Xor check...
-		$this->function_id = "";
-		$this->chir_id = "";
-		$this->group_id = "";
+    $this->function_id = "";
+    $this->chir_id = "";
+    $this->group_id = "";
+  }
+	
+  static function getTemplatedClasses() {
+    $installed = getInstalledClasses();
+    $classes = array();
+    foreach ($installed as $key=>$class) {
+      if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {
+        $classes[$class] = CAppUI::tr($class);
+      }
+    }
+    return $classes;
   }
 }
 

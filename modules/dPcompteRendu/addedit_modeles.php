@@ -7,14 +7,17 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can;
 
 $can->needsRead();
 
+$prat_id         = mbGetValueFromGetOrSession("selPrat");
+$compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
+
 // Liste des praticiens accessibles
-$listPrat = new CMediusers();
-//$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-$listPrat = $listPrat->loadUsers(PERM_EDIT);
+$listUser = new CMediusers();
+//$listUser = $listUser->loadPraticiens(PERM_EDIT);
+$listUser = $listUser->loadUsers(PERM_EDIT);
 
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
@@ -22,8 +25,6 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 $listEtab = array(CGroups::loadCurrent());
 
 // L'utilisateur est-il praticien?
-$prat_id = mbGetValueFromGetOrSession("selPrat");
-
 if (!$prat_id) {
   $mediuser = new CMediusers;
   $mediuser->load($AppUI->user_id);
@@ -39,7 +40,6 @@ $user_id = $AppUI->user_id;
 $userCourant = $med->load($user_id);
 
 // Compte-rendu selectionné
-$compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
 if ($compte_rendu->object_id) {
@@ -48,10 +48,10 @@ if ($compte_rendu->object_id) {
 else{
   $compte_rendu->loadRefCategory();
 }
-// Gestion du modèle
-$templateManager = new CTemplateManager;
-$templateManager->editor = "fckeditor";
 
+// Gestion du modèle
+$templateManager = new CTemplateManager($_GET);
+$templateManager->editor = "fckeditor";
 
 // L'utilisateur est il une secretaire ou un administrateur?
 $mediuser = new CMediusers();
@@ -59,10 +59,10 @@ $mediuser->load($AppUI->user_id);
 $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 
 // si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus, sinon, seulement droit en lecture
-$droit = (!($compte_rendu->_id)||
-           ($secretaire)||
-           ($compte_rendu->chir_id == $mediuser->user_id)||
-           ($compte_rendu->function_id==$mediuser->function_id) ||
+$droit = (!($compte_rendu->_id) ||
+           ($secretaire) ||
+           ($compte_rendu->chir_id == $mediuser->user_id) ||
+           ($compte_rendu->function_id == $mediuser->function_id) ||
            $compte_rendu->canEdit());
 
 $templateManager->printMode = !$droit;
@@ -79,17 +79,16 @@ if ($compte_rendu->_id) {
   $templateManager->initHTMLArea();
 }
 
-
 // Class and fields
 $listObjectClass     = array();
 $listObjectAffichage = array();
 
-foreach ($compte_rendu->_specs["object_class"]->_list as $valueClass){
+foreach (CCompteRendu::getTemplatedClasses() as $valueClass => $localizedClassName){
   $listObjectClass[$valueClass]     = array();
-  $listObjectAffichage[$valueClass] = CAppUI::tr($valueClass);
+  $listObjectAffichage[$valueClass] = $localizedClassName;
 }
 
-foreach ($listObjectClass as $keyClass=>$value){
+foreach ($listObjectClass as $keyClass => $value) {
   $listCategory = CFilesCategory::listCatClass($keyClass);
   foreach($listCategory as $keyCat=>$valueCat){
     $listObjectClass[$keyClass][$keyCat] = utf8_encode($listCategory[$keyCat]->nom);
@@ -98,8 +97,8 @@ foreach ($listObjectClass as $keyClass=>$value){
 
 // Headers and footers
 $component = new CCompteRendu();
-$footers = null;
-$headers = null;
+$footers = array();
+$headers = array();
 
 if ($compte_rendu->_id) {
 	// Si modèle de fonction, on charge en fonction d'un des praticiens de la fonction
@@ -141,7 +140,7 @@ $smarty->assign("isPraticien"         , $userCourant->isPraticien());
 $smarty->assign("user_id"             , $user_id);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("compte_rendu_id"     , $compte_rendu_id);
-$smarty->assign("listPrat"            , $listPrat);
+$smarty->assign("listPrat"            , $listUser);
 $smarty->assign("listEtab"            , $listEtab);
 $smarty->assign("listFunc"            , $listFunc);
 $smarty->assign("listObjectClass"     , $listObjectClass);

@@ -246,4 +246,5 @@ $locales['CCompteRendu-_send_problem'] = '';
 $locales['CCompteRendu-_send_problem-court'] = '';
 $locales['CCompteRendu-_send_problem-desc'] = '';
 $locales['CCompteRendu.object_class.CPrescription'] = 'Prescription';
+$locales['mod-dPcompteRendu-tab-edit_compte_rendu'] = 'Modification de compte rendu';
 ?>

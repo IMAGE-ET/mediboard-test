@@ -26,7 +26,7 @@ function copie() {
     oForm.nom.value = "Copie de "+oForm.nom.value;
     oForm.submit();
   {{/if}}
-} 
+}
 
 function nouveau() {
   var url = new Url;
@@ -43,30 +43,20 @@ function supprimer() {
 
 // Taleau des categories en fonction de la classe du compte rendu
 var listObjectClass = {{$listObjectClass|@json}};
-
-// Creation du tableau de traduction
-var aTraducClass = new Array();
-{{foreach from=$listObjectAffichage key=key item=currClass}}
-aTraducClass["{{$key}}"] = "{{$currClass}}";
-{{/foreach}}
+var aTraducClass = {{$listObjectAffichage|@json}};
 
 function loadObjectClass(value) {
   var form = document.editFrm;
-  var select = form.elements['object_class'];
-  var options = listObjectClass;
-
-  // Delete all former options except first
-  while (select.length > 1) {
-    select.options[1] = null;
-  }
+  var select = $(form.elements.object_class);
+  var children = select.childElements();
+	
+	if (children.length > 0)
+    children[0].nextSiblings().invoke('remove');
   
   // Insert new ones
-  for (var elm in options) {
-    var option = elm;
-    if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(aTraducClass[option], option, option == value);
-    }
-  }
+  $H(listObjectClass).each(function(pair){
+	  select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(aTraducClass[pair.key]));
+	});
   
   // Check null position
   select.fire("ui:change");
@@ -74,22 +64,18 @@ function loadObjectClass(value) {
   loadCategory();
 }
 
-function loadCategory(value){
+function loadCategory(value) {
   var form = document.editFrm;
-  var select = form.elements['file_category_id'];
-  var className  = form.elements['object_class'].value;
-  var options = listObjectClass[className];
-  // delete all former options except first
-  while (select.length > 1) {
-    select.options[1] = null;
-  }
-  // insert new ones
-  for (var elm in options) {
-    var option = options[elm];
-    if (typeof(option) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(option, elm, elm == value);
-    }
-  }
+  var select = $(form.elements.file_category_id);
+  var children = select.childElements();
+  
+  if (children.length > 0)
+    children[0].nextSiblings().invoke('remove');
+  
+  // Insert new ones
+  $H(listObjectClass[form.elements.object_class.value]).each(function(pair){
+    select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(pair.value));
+  });
 }
 
 function submitCompteRendu(){
@@ -100,6 +86,15 @@ function submitCompteRendu(){
 	  }
 	}).defer();
 }
+
+// Catches Ctrl+s and Command+s
+document.observe('keydown', function(e){
+  var keycode = getKeycode(e);
+  if(keycode == 83 && (e.ctrlKey || e.metaKey)){
+    submitCompteRendu();
+    Event.stop(e);
+  }
+});
 
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
@@ -112,11 +107,11 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td>
+    <td style="width: 0.1%;">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
-      {{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
+      {{mb_key object=$compte_rendu}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
       {{if $compte_rendu->compte_rendu_id}}
       <button class="new" type="button" onclick="nouveau()">
@@ -203,7 +198,7 @@ Main.add(function () {
 	          {{if $droit}}
 	            {{mb_field object=$compte_rendu field=type onchange="updateType()"}}
 	          {{else}}
-	            {{mb_field object=$compte_rendu field=type disabled="disable"}}
+	            {{mb_field object=$compte_rendu field=type disabled="disabled"}}
 	          {{/if}}
           
             <script type="text/javascript">
@@ -247,7 +242,7 @@ Main.add(function () {
           </td>
         </tr>
           
-        {{if is_array($footers)}}
+        {{if $footers|@count}}
         <tr id="footers">
           <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
           <td>
@@ -267,7 +262,7 @@ Main.add(function () {
         </tr>
         {{/if}}
 
-        {{if is_array($headers)}}
+        {{if $headers|@count}}
         <tr id="headers">
           <th>{{mb_label object=$compte_rendu field=header_id}}</th>
           <td>

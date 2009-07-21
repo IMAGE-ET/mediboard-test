@@ -323,8 +323,14 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "ALTER TABLE `compte_rendu` 
 						CHANGE `object_class` `object_class` ENUM ('CPatient','CConsultation','CConsultAnesth','COperation','CSejour','CPrescription') NOT NULL;";
     $this->addQuery($sql);
+		
+    $this->makeRevision("0.44");
+    $this->setTimeLimit(1800);
+    $sql = "ALTER TABLE `compte_rendu` 
+            CHANGE `object_class` `object_class` VARCHAR (80) NOT NULL;";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.44";
+    $this->mod_version = "0.45";
   }
 }
 ?>

@@ -239,4 +239,12 @@ $locales['mod-dPcompteRendu-tab-vw_idx_aides'] = '';
 $locales['mod-dPcompteRendu-tab-vw_idx_listes'] = '';
 $locales['mod-dPcompteRendu-tab-vw_idx_packs'] = '';
 $locales['mod-dPcompteRendu-tab-vw_modeles'] = '';
+$locales['mod-dPcompteRendu-tab-edit_compte_rendu'] = '';
+$locales['CCompteRendu-_extensioned'] = '';
+$locales['CCompteRendu-_extensioned-court'] = '';
+$locales['CCompteRendu-_extensioned-desc'] = '';
+$locales['CCompteRendu-_send_problem'] = '';
+$locales['CCompteRendu-_send_problem-court'] = '';
+$locales['CCompteRendu-_send_problem-desc'] = '';
+$locales['CCompteRendu.object_class.CPrescription'] = '';
 ?>

@@ -1,9 +1,12 @@
 <script type="text/javascript">
 {{if $compte_rendu->_id}}
+try {
 window.opener.Document.refreshList(
   '{{$compte_rendu->object_class}}',
 	'{{$compte_rendu->object_id}}'	
 );
+}
+catch (e) {}
 {{/if}}
 
 function submitCompteRendu(){
@@ -22,7 +25,13 @@ document.stopObserving('keydown', closeWindowByEscape);
 document.observe('keydown', function(e){
   var keycode = getKeycode(e);
   if(keycode == 27 || keycode == 115 && e.altKey){
-    e.stop();
+    return Event.stop(e);
+  }
+	
+	// Catches Ctrl+s and Command+s
+  if(keycode == 83 && (e.ctrlKey || e.metaKey)){
+    submitCompteRendu();
+		Event.stop(e);
   }
 });
 </script>
@@ -36,7 +45,7 @@ document.observe('keydown', function(e){
 <input type="hidden" name="chir_id" value="" />
 <input type="hidden" name="group_id" value="" />
 
-{{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
+{{mb_key object=$compte_rendu}}
 {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
 {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
 
@@ -126,7 +135,7 @@ document.observe('keydown', function(e){
   </tr>  
 </table>
 
-{{if $compte_rendu->_id &&  $dPconfig.dPfiles.system_sender}}
+{{if $compte_rendu->_id && $dPconfig.dPfiles.system_sender}}
 <table class="form">
 	<tr>
 		<th style="width: 50%">

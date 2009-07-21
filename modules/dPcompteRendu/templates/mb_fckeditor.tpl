@@ -1,5 +1,5 @@
 // Mediboard Combo configuration
-var aMbCombos = new Array();
+var aMbCombos = [];
 var bAutoSelectSpans = {{if $templateManager->valueMode}} false {{else}} true {{/if}};
 
 // FCK editor general configuration
@@ -40,14 +40,13 @@ FCKConfig.ToolbarSets["Default"] = [
 ] ;
 
 // Add properties Combo
-var oMbCombo = new Object();
-oMbCombo.commandName = "MbField";
-oMbCombo.spanClass = {{if $templateManager->valueMode}} "value" {{else}} "field" {{/if}};
-oMbCombo.commandLabel = "Champs";
-
-var aOptions = new Array();
-oMbCombo.options = aOptions;
-aMbCombos.push(oMbCombo);
+var aOptions = [];
+aMbCombos.push({
+  commandName: "MbField",
+  spanClass: {{if $templateManager->valueMode}} "value" {{else}} "field" {{/if}},
+  commandLabel: "Champs",
+  options: aOptions
+});
 
 {{foreach from=$templateManager->sections key=title item=section}}
   aOptions.push({view: "<b>{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}</b>" ,item: ""});
@@ -67,14 +66,13 @@ aMbCombos.push(oMbCombo);
 
 {{if !$templateManager->valueMode}}
 // Add name lists Combo
-var oMbCombo = new Object();
-oMbCombo.commandName = "MbNames";
-oMbCombo.spanClass = "name";
-oMbCombo.commandLabel = "Liste de choix";
-
-var aOptions = new Array();
-oMbCombo.options = aOptions;
-aMbCombos.push(oMbCombo);
+var aOptions = [];
+aMbCombos.push({
+  commandName: "MbNames",
+  spanClass: "name",
+  commandLabel: "Liste de choix",
+  options: aOptions
+});
 
 {{foreach from=$templateManager->lists item=list}}
   aOptions.push( { 
@@ -85,14 +83,13 @@ aMbCombos.push(oMbCombo);
 {{/if}}
 
 // Add helpers Combo
-var oMbCombo = new Object();
-oMbCombo.commandName = "MbHelpers";
-oMbCombo.spanClass = "helper";
-oMbCombo.commandLabel = "Aides &agrave; la saisie";
-
-var aOptions = new Array();
-oMbCombo.options = aOptions;
-aMbCombos.push(oMbCombo);
+var aOptions = [];
+aMbCombos.push({
+  commandName: "MbHelpers",
+  spanClass: "helper",
+  commandLabel: "Aides &agrave; la saisie",
+  options: aOptions
+});
 
 {{foreach from=$templateManager->helpers key=helperName item=helperText}}
   {{if $helperText == ""}}
@@ -112,7 +109,7 @@ aMbCombos.push(oMbCombo);
 aToolbarSet = FCKConfig.ToolbarSets["Default"];
 
 // Add MbCombos toolbar
-aMbToolbar = new Array();
+aMbToolbar = [];
 for (var i = 0; i < aMbCombos.length; i++) {
   aMbToolbar.push(aMbCombos[i].commandName);
 }

@@ -17,6 +17,8 @@ $praticien_id    = mbGetValueFromGet("praticien_id"      , 0);
 $type            = mbGetValueFromGet("type"              , 0);
 $pack_id         = mbGetValueFromGet("pack_id"           , 0);
 $object_id       = mbGetValueFromGet("object_id"         , 0);
+$target_id       = mbGetValueFromGet("target_id");
+$target_class    = mbGetValueFromGet("target_class");
 
 // Faire ici le test des différentes variables dont on a besoin
 
@@ -48,8 +50,6 @@ else {
   }
   
   // On fournit la cible
-  $target_id = mbGetValueFromGet("target_id");
-  $target_class = mbGetValueFromGet("target_class");
   if ($target_id && $target_class){
     $compte_rendu->object_id = $target_id;
     $compte_rendu->object_class = $target_class;
@@ -141,7 +141,7 @@ $user->load();
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Gestion du template
-$templateManager = new CTemplateManager;
+$templateManager = new CTemplateManager($_GET);
 
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->source;
@@ -167,7 +167,6 @@ if($isCourrier) {
 $templateManager->initHTMLArea();
 
 // Création du template
-
 $smarty = new CSmartyDP();
 
 $smarty->assign("listCategory"   , $listCategory);
