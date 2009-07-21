@@ -39,6 +39,10 @@ function popPlanning(debut) {
   url.addParam("salle"    , 0);
   url.popup(900, 550, "Planning");
 }
+
+Main.add(function(){
+  Calendar.regField(getForm('editFrm').date);
+});
 </script>
 <table class="main">
   <tr>
@@ -141,10 +145,8 @@ function popPlanning(debut) {
         <th>{{mb_label object=$plagesel field="date"}}</th>
         <td class="date">
           {{if $plagesel->plageop_id}}
-          <input type="text" disabled="disabled" name="date_da" value="{{$plagesel->date|date_format:"%d/%m/%Y"}}" />
           <input type="hidden" name="date" value="{{$plagesel->date}}" />
           {{else}}
-          <input type="text" disabled="disabled" name="date_da" value="{{$date|date_format:"%d/%m/%Y"}}" />
           <input type="hidden" name="date" value="{{$date}}" />
           {{/if}}
         </td>
@@ -221,8 +223,12 @@ function popPlanning(debut) {
         </td>
         <th>{{mb_label object=$plagesel field="_min_inter_op"}}</th>
         <td>
-          <input type="text" size="2" value="{{if $plagesel->_id}}{{$plagesel->_min_inter_op}}{{else}}15{{/if}}" name="_min_inter_op" class="{{$plagesel->_props._min_inter_op}}" />
-          min
+          {{if $plagesel->_id}}
+            {{assign var=min_inter_op value=$plagesel->_min_inter_op}}
+          {{else}}
+            {{assign var=min_inter_op value=15}}
+          {{/if}}
+          {{mb_field object=$plagesel field="_min_inter_op" prop="num notNull min|0 max|59" size=1 increment=true form="editFrm" value=$min_inter_op}} min
         </td>
       </tr>
       <tr>
