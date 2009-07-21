@@ -213,6 +213,11 @@ function mbSetAbsValueToSession($key, $value = null) {
   $_SESSION[$key] = $value;
 }
 
+function toBool($value) {
+  if (!$value) return false;
+  return $value === true || preg_match('/^on|1|true|yes$/i', $value);
+}
+
 /**
  * Calculate the bank holidays in France
  * @param string The relative date, used to calculate the bank holidays of a specific year
@@ -949,9 +954,20 @@ function has_default_constructor($classname) {
 }
 
 /**
+ * Check if a method is overridden in a given class
+ * @param mixed $class The class or object
+ * @param string $method The method name
+ * @return bool
+ */
+function is_method_overridden($class, $method) {
+  $rMethod = new ReflectionMethod($class, $method);
+  return $rMethod->getDeclaringClass()->getName() == $class;
+}
+
+/**
  * Strip slashes recursively if value is an array
  * @param mixed $value
- * @param return stripped value
+ * @return mixed the stripped value
  **/
 function stripslashes_deep($value) {
   return is_array($value) ?
