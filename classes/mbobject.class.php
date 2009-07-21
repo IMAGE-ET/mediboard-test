@@ -783,7 +783,7 @@ class CMbObject {
       
       foreach ($propNames as $propName) {
   	    $this->completeField($propName);
-  	    $other->$propName = $this->$propName;
+  	    $other->$propName = addslashes($this->$propName);
       }
       
 	    $other->loadMatchingObject();
@@ -1397,7 +1397,11 @@ class CMbObject {
    */
   function seek($keywords, $where = array(), $limit = 100) {
     $query = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
-    
+		
+    if (!is_array($keywords)) {
+      $keywords = explode(' ', $keywords);
+    }
+		
     $seekables = $this->getSeekables();
     
     // Add specific where clauses
@@ -1450,7 +1454,7 @@ class CMbObject {
       $query .= "\n`$field`,";
     }
     $query .= "\n `{$this->_spec->key}`";
-    $query .=" LIMIT 0, $limit";
+    $query .=" LIMIT $limit";
     return $this->loadQueryList($query);
   }
   

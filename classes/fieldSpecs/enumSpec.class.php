@@ -13,14 +13,27 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
+  var $class = null;
   var $_list = null;
   var $_locales = null;
   
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
-    foreach ($this->_list = explode("|", $this->list) as $value) {
-      $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
+    if ($this->class) {
+      foreach ($this->getClassList() as $value) {
+        $this->_locales[$value] = CAppUI::tr($value);
+      }
     }
+    else {
+      foreach ($this->_list = explode('|', $this->list) as $value) {
+        $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
+      }
+    }
+  }
+  
+  private function getClassList(){
+    if ($this->_list) return $this->_list;
+      return $this->_list = getInstalledClasses();
   }
   
   function getSpecType() {
@@ -28,52 +41,67 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function getDBSpec() {
-    return "ENUM('".str_replace('|', "','", $this->list)."')";
+    if ($this->class) 
+      return "VARCHAR (80)";
+    else
+      return "ENUM('".str_replace('|', "','", $this->list)."')";
   }
   
   function getOptions(){
     return parent::getOptions() + array(
       'list' => 'list',
+        'class' => 'class',
     );
   }
   
   function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
+    if ($this->class) 
+      return htmlspecialchars(CAppUI::tr($propValue));
+    else 
+      return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
   }
   
   function checkValues(){
     parent::checkValues();
-    if(!$this->list){
-      trigger_error("Spécification 'list' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
+    if(!$this->list && !$this->class){
+      trigger_error("Spécification 'list' ou 'class' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
     }
   }
   
   function checkProperty($object){
-    $specFragments = explode("|", $this->list);
-    if (!in_array($object->{$this->fieldName}, $specFragments)) {
-      return "N'a pas une valeur possible";
+    $propValue = $object->{$this->fieldName};
+    if ($this->class) {
+      $object = @new $propValue;
+      if (!$object) {
+        return "La classe '$propValue' n'existe pas";
+      }
     }
-    return null;
+    else {
+      $specFragments = explode('|', $this->list);
+      if (!in_array($propValue, $specFragments)) {
+        return "N'a pas une valeur possible";
+      }
+    }
   }
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $specFragments = explode("|", $this->list);
+    $specFragments = $this->class ? $this->getClassList() : explode('|', $this->list);
     $object->{$this->fieldName} = self::randomString($specFragments, 1);
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $sHtml         = null;
     $field         = htmlspecialchars($this->fieldName);
     $typeEnum      = CMbArray::extract($params, "typeEnum", "select");
     $separator     = CMbArray::extract($params, "separator");
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $defaultOption = CMbArray::extract($params, "defaultOption");
-    $alphabet      = CMbArray::extract($params, "alphabet", 0);
+    $alphabet      = CMbArray::extract($params, "alphabet", false);
     $extra         = CMbArray::makeXmlAttributes($params);
     $locales       = $this->_locales;
+    $sHtml         = '';
     
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
       $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);
@@ -84,8 +112,8 @@ class CEnumSpec extends CMbFieldSpec {
     }
     
     if ($typeEnum === "select") {
-      $sHtml       = "<select name=\"$field\"";
-      $sHtml      .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>";
+      $sHtml      .= "<select name=\"$field\"";
+      $sHtml      .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>";
       
       if($defaultOption){
         if($value === null) {
@@ -107,8 +135,7 @@ class CEnumSpec extends CMbFieldSpec {
     }
 
     if ($typeEnum === "radio"){
-      $compteur    = 0;
-      $sHtml       = "";
+      $compteur = 0;
       
       foreach ($locales as $key => $item){
         if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
@@ -118,11 +145,11 @@ class CEnumSpec extends CMbFieldSpec {
         }
         $sHtml    .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
         if($compteur == 0) {
-          $sHtml  .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"";
+          $sHtml  .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\"";
         }elseif($className != ""){
           $sHtml  .= " class=\"".htmlspecialchars(trim($className))."\"";
         }
-        $sHtml    .= " $extra/><label for=\"".$field."_$key\">$item</label> ";
+        $sHtml    .= " $extra /><label for=\"".$field."_$key\">$item</label> ";
         $compteur++;
         if($compteur % $cycle == 0){
           $sHtml  .= $separator;
@@ -150,5 +177,3 @@ class CEnumSpec extends CMbFieldSpec {
     return null;
   }
 }
-
-?>

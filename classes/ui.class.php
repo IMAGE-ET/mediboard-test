@@ -667,6 +667,26 @@ class CAppUI {
   static function unique_id() {
     return self::$unique_id++;
   }
+	
+  static function HtmlTable($array, $options = array()) {
+    $options += array(
+      'tableClass' => '',
+      'tableStyle' => 'width: 100%',
+      'firstRowHeader' => true,
+      'firstColHeader' => false,
+    );
+    
+    $output = '<table class="'.$options['tableClass'].'" style="'.$options['tableStyle'].'"><tbody>';
+    foreach($array as $y => $row) {
+      $output .= '<tr>';
+      foreach($row as $x => $cell) {
+        $output .= ($options['firstRowHeader'] && $y == 0 || 
+                    $options['firstColHeader'] && $x == 0) ? "<th>$cell</th>" : "<td>$cell</td>";
+      }
+      $output .= '</tr>';
+    }
+    return "$output</tbody></table>";
+  }
 }
 
 // choose to alert for missing translation or not
