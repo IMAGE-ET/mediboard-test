@@ -85,7 +85,7 @@ $listObjectAffichage = array();
 
 foreach (CCompteRendu::getTemplatedClasses() as $valueClass => $localizedClassName){
   $listObjectClass[$valueClass]     = array();
-  $listObjectAffichage[$valueClass] = $localizedClassName;
+  $listObjectAffichage[$valueClass] = utf8_encode($localizedClassName);
 }
 
 foreach ($listObjectClass as $keyClass => $value) {
