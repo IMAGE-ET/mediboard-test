@@ -60,9 +60,15 @@
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">
     {{/if}}
-      <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
-        <img src="images/icons/search.png" alt="Dossier patient"/>
-      </a>
+    	<div style="float: right">
+		    <a title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
+		      <img src="images/icons/search.png" alt="Dossier patient"/>
+		    </a>
+		    <a title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+		      <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient">
+		    </a>
+      </div>
+
       <a style="float: right;" title="Modifier le patient" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" alt="Dossier patient"/>
       </a>
@@ -70,10 +76,12 @@
         <strong>
         {{$patient->_view}}
         </strong>
-        {{if $patient->_IPP}}
-        <br />[{{$patient->_IPP}}]
-        {{/if}}
       </a>
+      
+      {{if $patient->_IPP}}
+      [{{$patient->_IPP}}]
+      {{/if}}
+      
     </td>
 
   	{{if $curr_sejour->annule}}
@@ -89,8 +97,10 @@
     </td>
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">
+    	{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
+    
       {{if $can->edit}}
-      <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
+      <a style="float: right" title="{{tr}}CSejour.modify{{/tr}}" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
       {{/if}}
@@ -105,11 +115,10 @@
           [{{$curr_sejour->_num_dossier}}]
         {{/if}}
       </a>
-      {{if $rpu->radio_debut && !$rpu->radio_fin}}
-      <strong>En radiologie</strong>
-      {{/if}}
-      {{if $rpu->radio_debut && $rpu->radio_fin}}
-      <strong>Retour de radiologie</strong>
+      {{if $rpu->radio_debut}}
+        <strong style="clear:both">
+        	{{mb_ternary test=$rpu->radio_fin value="Retour de radio" other="En radiologie"}}
+      	</strong>
       {{/if}}
       
     </td>

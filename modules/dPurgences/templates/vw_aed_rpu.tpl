@@ -80,7 +80,6 @@ function cancelRPU() {
   }
 }
 
-
 {{if $isPrescriptionInstalled}}
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
@@ -120,6 +119,10 @@ Main.add(function () {
   <tr>
     {{if $rpu->_id}}
     <th class="title modify" colspan="4">
+      <div style="float: left;" class="noteDiv {{$sejour->_guid}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
+    
 	    <a style="float:right;" href="#" onclick="view_log('CRPU',{{$rpu->_id}})">
 	      <img src="images/icons/history.gif" alt="historique" />
 	    </a>
@@ -128,7 +131,7 @@ Main.add(function () {
 	      <img src="images/icons/edit.png" alt="modifier" />
 	    </a>
 
-	    Modification de du RPU {{$rpu->_view}}
+	    Modification de du RPU {{$rpu}}
 	    {{if $sejour->_num_dossier}}
 	      [{{$sejour->_num_dossier}}]
 	    {{/if}}

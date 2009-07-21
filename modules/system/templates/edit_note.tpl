@@ -15,8 +15,8 @@ function reloadNotes(){
 function submitNote(){
   var oForm = document.editFrm;
   
-  if(checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', {onComplete: function() {reloadNotes(); window.close()} });
+  if (checkForm(oForm)){
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { reloadNotes(); window.close()} });
     oForm.reset();
   }
 }
@@ -51,8 +51,7 @@ function submitNote(){
   <tr>
     <th>{{mb_label object=$note field="date"}}</th>
     <td>
-      {{$note->date|date_format:"%A %d %B %Y à %Hh%M"}}
-      {{mb_field object=$note field="date" hidden=1}}
+      {{mb_field object=$note field="date" form=editFrm register=true}}
     </td>
   </tr>
   <tr>

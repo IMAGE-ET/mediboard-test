@@ -21,19 +21,9 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadRefsNotes(PERM_READ);
 
-$high = false;
-
-foreach($object->_ref_notes as $key => $note) {
-  if($note->degre == "high"){
-    $high = true;
-    break;
-  }
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object" , $object);
-$smarty->assign("notes"  , $object->_ref_notes);
-$smarty->assign("high"   , $high);
+$smarty->assign("mode" , "edit");
 $smarty->display("inc_get_notes_image.tpl");
 ?>

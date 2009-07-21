@@ -33,8 +33,6 @@ function popFile(objectClass, objectId, elementClass, elementId){
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
-
-
 function printIntervention(id) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "view_planning");
@@ -46,7 +44,7 @@ function reloadVwPatient(){
   var mainUrl = new Url;
   mainUrl.setModuleAction("dPpatients", "httpreq_vw_patient");
   mainUrl.addParam("patient_id", document.actionPat.patient_id.value);
-  mainUrl.requestUpdate('vwPatient', { waitingText : null });
+  mainUrl.requestUpdate('vwPatient', { waitingText : null } );
 }
 
 Document.refreshList = function(){

@@ -39,7 +39,7 @@ $where["sejour.entree_reelle"] = "LIKE '$date%'";
 $where["sejour.type"] = "= 'urg'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
-if($selAffichage == "prendre_en_charge"){
+if ($selAffichage == "prendre_en_charge"){
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
   $where["consultation.consultation_id"] = "IS NULL";
 } else if($selAffichage == "presents"){
@@ -47,19 +47,19 @@ if($selAffichage == "prendre_en_charge"){
 }
 
 
-if($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id"){
+if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id") {
   $order_col = "ccmu";  
 }
 
-if($order_col == "_entree"){
+if ($order_col == "_entree") {
   $order = "entree_reelle $order_way, rpu.ccmu $order_way";
 }
 
-if($order_col == "ccmu"){
+if ($order_col == "ccmu") {
   $order = "rpu.ccmu $order_way, entree_reelle $order_way";
 }
 
-if($order_col == "_patient_id"){
+if ($order_col == "_patient_id") {
   $order = "patients.nom $order_way, ccmu $order_way";
 }
 
@@ -72,7 +72,8 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadRefRPU();
   $sejour->_ref_rpu->loadRefSejourMutation();
   $sejour->loadRefsConsultations();
-  
+  $sejour->loadRefsNotes();
+    
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
 }
