@@ -60,6 +60,9 @@
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">
     {{/if}}
+      <a style="float: right;" title="Modifier le patient" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+        <img src="images/icons/edit.png" alt="Dossier patient"/>
+      </a>
       <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
         <img src="images/icons/search.png" alt="Dossier patient"/>
       </a>

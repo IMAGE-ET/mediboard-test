@@ -24,8 +24,7 @@ function submitRadio(oForm){
 }
 
 function reloadRadio(oForm){
-  var url = new Url;
-  url.setModuleAction("dPurgences", "httpreq_vw_radio");
+  var url = new Url("dPurgences", "httpreq_vw_radio");
   url.addParam("rpu_id", oForm.rpu_id.value);
   url.requestUpdate('radio', { waitingText: null } );
 }
@@ -46,8 +45,7 @@ function submitSuivi(oForm) {
 
 function refreshConstantesMedicales(context_guid) {
   if(context_guid) {
-    var url = new Url;
-    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes", { waitingText: null } );
   }
@@ -105,7 +103,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editRPU" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editRPU" action="?m={{$m}}{{if !$can->edit}}&amp;tab=vw_idx_rpu{{/if}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPurgences" />
 <input type="hidden" name="dosql" value="do_rpu_aed" />
@@ -349,11 +347,10 @@ Main.add(function () {
 {{/if}}
 {{/if}}
 
-<script type="text/javascript">
 
-// Lancement des fonctions de contraintes entre les champs
 {{if $rpu->mode_entree}}
+<script type="text/javascript">
+// Lancement des fonctions de contraintes entre les champs
 ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
-{{/if}}
-
 </script>
+{{/if}}
