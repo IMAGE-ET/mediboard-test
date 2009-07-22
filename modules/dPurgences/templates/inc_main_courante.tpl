@@ -96,7 +96,7 @@
     <td class="text" style="background-color: {{$background}};">
     	{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
     
-      {{if $can->edit}}
+      {{if $modules.dPhospi->_canEdit}}
       <a style="float: right" title="{{tr}}CSejour.modify{{/tr}}" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
