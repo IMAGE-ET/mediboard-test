@@ -421,10 +421,7 @@ var Console = {
 
 // If there is no console object, it uses the Mediboard Console
 if (typeof console === "undefined") {
-	window.console = {
-	  debug: Console.debug.bind(window),
-	  log: Console.trace
-	};
+	window.console = Console;
 }
 
 /**
