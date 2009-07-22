@@ -25,5 +25,6 @@ $object->loadRefsNotes(PERM_READ);
 $smarty = new CSmartyDP();
 $smarty->assign("object" , $object);
 $smarty->assign("mode" , "edit");
+$smarty->assign("float", "left");
 $smarty->display("inc_get_notes_image.tpl");
 ?>
