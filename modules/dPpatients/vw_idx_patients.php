@@ -46,7 +46,7 @@ $patient_month       = mbGetValueFromGet("Date_Month"  , "");
 $patient_year        = mbGetValueFromGet("Date_Year"   , "");
 $patient_naissance   = null;
 $patient_ipp         = mbGetValueFromGet("patient_ipp");
-$useVitale           = mbGetValueFromGet("useVitale", 0);
+$useVitale           = mbGetValueFromGet("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
 
 $patVitale = new CPatient();
   
@@ -73,7 +73,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 } 
 else {
 	// Champs vitale
-	if ($useVitale) {
+	if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
 	  $patVitale->getValuesFromVitale();
 	  $patVitale->updateFormFields();
 	  $patient_nom    = $patVitale->nom;
@@ -200,7 +200,6 @@ $smarty->assign("patients"            , $patients                 );
 $smarty->assign("patientsSoundex"     , $patientsSoundex          );
 $smarty->assign("patientsCount"       , $patientsCount            );
 $smarty->assign("patientsSoundexCount", $patientsSoundexCount     );
-
 
 $smarty->assign("patient"             , $patient                  );
 $smarty->assign("chir"                , $chir                     );
