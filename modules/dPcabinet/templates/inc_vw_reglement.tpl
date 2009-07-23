@@ -53,6 +53,12 @@ modifSecteur2 = function(){
   $V(oForm.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
 }
 
+printActes = function(){
+  var url = new Url('dPcabinet', 'print_actes');
+	url.addParam('consultation_id', '{{$consult->_id}}');
+	url.popup(600, 600, 'Impression des actes');
+}
+
 Main.add( function(){
   prepareForm(document.accidentTravail);
 });
@@ -236,6 +242,7 @@ Main.add( function(){
                   {{if !$consult->_current_fse && $consult->_ref_reglements|@count == 0}}
                   <button class="cancel" type="button" onclick="this.form.du_tiers.value = 0; this.form.du_patient.value = 0; cancelTarif()">Annuler la validation</button>
                   {{/if}}
+                  <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
                 </td>
               </tr>
               {{elseif !$consult->patient_date_reglement}}
