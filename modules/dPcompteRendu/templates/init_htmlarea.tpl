@@ -3,7 +3,7 @@
 {{mb_include_script path="lib/fckeditor/fckeditor.js"}}
 
 <script type="text/javascript">
-
+var oFCKeditor;
 function initFCKEditor() {
 	var element = $("htmlarea");
 	oFCKeditor = new FCKeditor(element.name, '100%', '100%');

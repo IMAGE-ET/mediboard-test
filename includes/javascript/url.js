@@ -63,7 +63,7 @@ var Url = Class.create({
   },
   
   addFormData: function(oForm) {
-    Object.extend(this.oParams, oForm.serialize(true));
+    Object.extend(this.oParams, getForm(oForm).serialize(true));
   },
   
   mergeParams: function(oObject) {

@@ -7,13 +7,13 @@
 * @author Thomas Despoix
 */
 
-
 class CTemplateManager {
   var $editor = "fckeditor";
   
   var $sections = array();
   var $helpers = array();
   var $lists = array();
+  var $graphs = array();
   
   var $template = null;
   var $document = null;
@@ -94,8 +94,20 @@ class CTemplateManager {
 	
   function addListProperty($field, $list = null) {
     if (!is_array($list)) $list = array($list);
-		$str = '<ul><li>' . implode('</li><li>', $list) . '</li></ul>';
+		$str = '<ul>';
+		if (count($list)) {
+			'<li>' . implode('</li><li>', $list) . '</li>';
+		}
+		$str .= '</ul>';
     $this->addProperty($field, $str);
+  }
+	
+  function addGraph($field, $data, $options = array()) {
+    $this->graphs[utf8_encode($field)] = array(
+      'data' => $data, 
+      'options' => $options, 
+      'name' => htmlentities(htmlentities($field))
+    );
   }
 
   function addList($name, $choice = null) {
@@ -115,6 +127,7 @@ class CTemplateManager {
     
     if($template instanceof CCompteRendu) {
     
+		  /** @todo : setFields doesn't take two arguments*/ 
       if (!$this->valueMode) {
         $this->setFields($template->object_class, $template->chir_id);
       }
@@ -143,9 +156,6 @@ class CTemplateManager {
   function setFields($modeleType) {
     if ($modeleType){
       $object = new $modeleType;
-    }
-    
-    if (isset($object)) {
       $object->fillTemplate($this);
     }
   }
