@@ -239,8 +239,8 @@ $data['score_sedation']['options']['yaxis'] = array(
 
 $data['frequence_respiratoire']['options']['title'] = utf8_encode('Fréquence respiratoire');
 $data['frequence_respiratoire']['options']['yaxis'] = array(
-  'min' => getMin(70,  $data['frequence_respiratoire']['series'][0]['data']), // min
-  'max' => getMax(100, $data['frequence_respiratoire']['series'][0]['data']), // max
+  'min' => getMin(0,  $data['frequence_respiratoire']['series'][0]['data']), // min
+  'max' => getMax(60, $data['frequence_respiratoire']['series'][0]['data']), // max
 );
 
 // Tableau contenant le nom de tous les graphs
