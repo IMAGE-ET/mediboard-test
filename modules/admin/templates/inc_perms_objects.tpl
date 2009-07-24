@@ -36,7 +36,7 @@ Main.add(function(){
   <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
-			<span style="text-align: left; font-weight: normal;">
+			<span style="text-align: left; font-weight: normal; color:#000;">
       <select name="object_class">
         {{foreach from=$listClasses|smarty:nodefaults item=class}}
         <option value="{{$class}}">
