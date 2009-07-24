@@ -15,7 +15,7 @@ $list  = mbGetValueFromGet('id', array());
 $owner = mbGetValueFromGet('owner');
 
 $out = fopen('php://output', 'w');
-header('Content-Type: text/csv');
+header('Content-Type: application/csv');
 header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - $owner" : '') .'.csv"');
 
 $aide = new CAideSaisie();
