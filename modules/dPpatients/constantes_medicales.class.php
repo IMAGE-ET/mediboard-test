@@ -69,7 +69,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['context_class']          = 'str';
     $specs['context_id']             = 'ref class|CMbObject meta|context_class cascade';
     $specs['poids']                  = 'float pos';
-    $specs['taille']                 = 'num pos';
+    $specs['taille']                 = 'float pos';
     $specs['ta']                     = 'str maxLength|10';
     $specs['pouls']                  = 'num pos';
     $specs['spo2']                   = 'float min|0 max|100';
@@ -81,8 +81,8 @@ class CConstantesMedicales extends CMbObject {
     $specs['frequence_respiratoire'] = 'float';
     $specs['_imc']                   = 'float';
     $specs['_vst']                   = 'float';
-    $specs['_ta_systole']            = 'num';
-    $specs['_ta_diastole']           = 'num';
+    $specs['_ta_systole']            = 'num pos max|50';
+    $specs['_ta_diastole']           = 'num pos max|50';
     return $specs;
   }
 

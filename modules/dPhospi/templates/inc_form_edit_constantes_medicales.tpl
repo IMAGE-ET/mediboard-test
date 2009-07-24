@@ -46,8 +46,8 @@ Main.add(function () {
       <th>{{mb_label object=$constantes field=ta}} (cm Hg)</th>
       {{if $real_context}}
       <td>
-        {{mb_field object=$constantes field=_ta_systole size="1" class="num min|0 max|50"}} /
-        {{mb_field object=$constantes field=_ta_diastole size="1" class="num min|0 max|50"}}
+        {{mb_field object=$constantes field=_ta_systole size="1"}} /
+        {{mb_field object=$constantes field=_ta_diastole size="1"}}
       </td>
       {{/if}}
       <td style="text-align: center">

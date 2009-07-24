@@ -49,7 +49,7 @@ tickFormatter = function (n) {
 };
 
 trackFormatter = function (obj) {
-  return dates[parseInt(obj.x)] + ' : ' + obj.y;
+  return dates[parseInt(obj.x)] + ' : ' + obj.series.data[obj.index][1];
 };
 
 initializeGraph = function (src, data) {
@@ -97,7 +97,7 @@ options = {
   mouse: {
     track: true,
     trackFormatter: trackFormatter,
-    trackDecimals: 1,
+    trackDecimals: 2,
     position: 'nw',
     relative: true
   },

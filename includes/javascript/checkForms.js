@@ -441,11 +441,12 @@ Object.extend(ElementChecker, {
     
     // float
     'float': function() {
-      this.sValue = this.sValue.toString().replace(',', '.');
+      this.sValue = new String(this.sValue).replace(',', '.');
+			this.oElement.value = this.sValue;
       this.isNumeric();
       
       if (parseFloat(this.sValue) != this.sValue)
-        this.addError("float", "N'est pas une valeur décimale (utilisez le . pour la virgule)");
+        this.addError("float", "N'est pas une valeur décimale");
     },
     
     // currency
@@ -455,8 +456,12 @@ Object.extend(ElementChecker, {
     
     // pct
     pct: function() {
+      this.sValue = new String(this.sValue).replace(',', '.');
+      this.oElement.value = this.sValue;
+      this.isNumeric();
+			
       if (!this.sValue.match(/^\d+(\.\d+)?$/))
-        this.addError("pct", "N'est pas une valeur décimale (utilisez le . pour la virgule)");
+        this.addError("pct", "N'est pas une valeur décimale");
     },
     
     // text
