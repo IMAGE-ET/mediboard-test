@@ -926,4 +926,7 @@ $locales['config-dPpatients-CPatient-date_naissance'] = '';
 $locales['config-dPpatients-CPatient-date_naissance-desc'] = '';
 $locales['config-dPpatients-CPatient-extended_print'] = 'Fiche d\'impression étendue';
 $locales['config-dPpatients-CPatient-extended_print-desc'] = 'Fiche d\'impression étendue';
+$locales['CConstantesMedicales-glycemie'] = 'Glycémie';
+$locales['CConstantesMedicales-glycemie-court'] = 'Glycémie';
+$locales['CConstantesMedicales-glycemie-desc'] = 'Glycémie capilaire';
 ?>

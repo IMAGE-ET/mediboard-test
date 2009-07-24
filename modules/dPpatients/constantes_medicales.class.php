@@ -27,6 +27,7 @@ class CConstantesMedicales extends CMbObject {
   var $EVA                   = null;
   var $score_sedation        = null;
   var $frequence_respiratoire = null;
+  var $glycemie              = null;
 
   // Object References
   //    Single
@@ -53,6 +54,7 @@ class CConstantesMedicales extends CMbObject {
     'score_sedation',
     'frequence_respiratoire',
     'EVA',
+		'glycemie',
   );
 
   function getSpec() {
@@ -78,9 +80,10 @@ class CConstantesMedicales extends CMbObject {
     $specs['score_motricite']        = 'float min|0 max|5';
     $specs['EVA']                    = 'float min|0 max|10';
     $specs['score_sedation']         = 'float';
-    $specs['frequence_respiratoire'] = 'float';
-    $specs['_imc']                   = 'float';
-    $specs['_vst']                   = 'float';
+    $specs['frequence_respiratoire'] = 'float pos';
+		$specs['glycemie']               = 'float pos max|10';
+    $specs['_imc']                   = 'float pos';
+    $specs['_vst']                   = 'float pos';
     $specs['_ta_systole']            = 'num pos max|50';
     $specs['_ta_diastole']           = 'num pos max|50';
     return $specs;

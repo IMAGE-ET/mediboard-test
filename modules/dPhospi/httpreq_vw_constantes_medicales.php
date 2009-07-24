@@ -243,6 +243,13 @@ $data['frequence_respiratoire']['options']['yaxis'] = array(
   'max' => getMax(60, $data['frequence_respiratoire']['series'][0]['data']), // max
 );
 
+//$data['glycemie']['standard'] = 1;
+$data['glycemie']['options']['title'] = utf8_encode('Glycémie (g/l)');
+$data['glycemie']['options']['yaxis'] = array(
+  'min' => getMin(0, $data['glycemie']['series'][0]['data']), // min
+  'max' => getMax(4, $data['glycemie']['series'][0]['data']), // max
+);
+
 // Tableau contenant le nom de tous les graphs
 $graphs = array();
 foreach ($data as $name => &$field) {

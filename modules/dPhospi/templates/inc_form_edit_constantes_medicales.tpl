@@ -118,6 +118,12 @@ Main.add(function () {
       <td style="text-align: center">{{if $const->EVA}}{{mb_value object=$const field=EVA size="4"}}{{/if}}</td>
       <td><input type="checkbox" name="checkbox-constantes-medicales-EVA"  onchange="toggleGraph('constantes-medicales-EVA');" /></td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$constantes field=glycemie}} (g/l)</th>
+      {{if $real_context}}<td>{{mb_field object=$constantes field=glycemie size="4"}}</td>{{/if}}
+      <td style="text-align: center">{{if $const->glycemie}}{{mb_value object=$const field=glycemie size="4"}}{{/if}}</td>
+      <td><input type="checkbox" name="checkbox-constantes-medicales-glycemie"  onchange="toggleGraph('constantes-medicales-glycemie');" /></td>
+    </tr>
     {{if $real_context}}
       {{if $constantes->datetime}}
       <tr>

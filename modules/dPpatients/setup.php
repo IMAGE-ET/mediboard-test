@@ -1052,15 +1052,18 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `medecin` 
             ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
     $this->addQuery($sql);
-    
-    $this->mod_version = "0.88";
-    
+		
     // Data source query
     $query = "SELECT *
-			FROM `communes_france`
-			WHERE `INSEE` = '99138'";
+      FROM `communes_france`
+      WHERE `INSEE` = '99138'";
     $this->addDatasource("INSEE", $query);
-    
+		
+    $this->makeRevision("0.88");
+    $query = "ALTER TABLE `constantes_medicales` ADD `glycemie` FLOAT UNSIGNED";
+    $this->addQuery($query);
+		
+    $this->mod_version = "0.89";
   }
 }
 
