@@ -104,6 +104,9 @@ var Url = Class.create({
     this.addParam("dialog", "1");
   
     var iLeft = 50;
+    iWidth = iWidth || 800;
+    iHeight = iHeight || 600;
+    sWindowName = sWindowName || "";
   
     // Pefixed window collection
     if (sPrefix && this.oPrefixed[sPrefix]) {
@@ -135,6 +138,10 @@ var Url = Class.create({
   popDirect: function(iWidth, iHeight, sWindowName, sBaseUrl) {
     var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
   
+    iWidth = iWidth || 800;
+    iHeight = iHeight || 600;
+    sWindowName = sWindowName || "";
+		
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
     
