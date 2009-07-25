@@ -73,10 +73,14 @@ $contrainteProvenance[8] = array("", 5, 8);
 // Chargement des boxes d'urgences
 $listServicesUrgence = CService::loadServicesUrgence();
 
+// Chargement des etablissements externes
+$order = "nom";
+$etab = new CEtabExterne();
+$listEtab = $etab->loadList(null, $order);
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("line", new CPrescriptionLineMedicament());
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
@@ -89,6 +93,7 @@ $smarty->assign("sejour"              , $sejour);
 $smarty->assign("patient"             , $patient);
 $smarty->assign("listResponsables"    , $listResponsables);
 $smarty->assign("listPrats"           , $listPrats);
+$smarty->assign("listEtab", $listEtab);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->display("vw_aed_rpu.tpl");
 ?>

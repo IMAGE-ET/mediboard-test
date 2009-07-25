@@ -22,7 +22,8 @@ class CSejour extends CCodable {
   var $praticien_id       = null; // clone $op->chir_id
   var $group_id           = null;
   
-  var $etablissement_transfert_id = null;
+  var $etablissement_transfert_id        = null;
+  var $etablissement_entree_transfert_id = null;
   
   // DB Fields
   var $type               = null; // remplace $op->type_adm
@@ -213,6 +214,7 @@ class CSejour extends CCodable {
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
     $specs["etablissement_transfert_id"] = "ref class|CEtabExterne";
+    $specs["etablissement_entree_transfert_id"] = "ref class|CEtabExterne";
     $specs["adresse_par_prat_id"] = "num";
     $specs["adresse_par_etab_id"] = "num";
     $specs["libelle"]             = "str seekable";

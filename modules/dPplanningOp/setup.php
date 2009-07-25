@@ -808,7 +808,13 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`service_id_sejour`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.97";
+    $this->makeRevision("0.97");
+    $sql = "ALTER TABLE `sejour` 
+              ADD `etablissement_entree_transfert_id` INT (11) UNSIGNED,
+              ADD INDEX (`etablissement_entree_transfert_id`);";
+    $this->addQuery($sql);    
+    
+    $this->mod_version = "0.98";
   }
 }
 ?>

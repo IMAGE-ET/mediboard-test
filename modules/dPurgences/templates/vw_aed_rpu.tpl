@@ -86,6 +86,26 @@ function reloadPrescription(prescription_id){
 }
 {{/if}}
 
+function loadTransfert(mode_sortie, sejour_id){
+  if(mode_sortie=="transfert"){
+    var url = new Url();
+    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
+    url.requestUpdate('listEtabs-'+sejour_id, { waitingText: null } );
+  } else {
+    // sinon, on vide le contenu de la div et l'etablissement de transfert du sejour
+    $('listEtabs-'+sejour_id).innerHTML = "";
+  }
+}
+
+function showEtabEntreeTransfert(mode) {
+	// mode de transfert = transfert (7)
+	if (mode == 7) {
+		$('etablissement_entree_transfert').show();
+	} else {
+		$('etablissement_entree_transfert').hide();
+		$V(getForm('editRPU')._etablissement_entree_transfert_id, '');
+	}
+}
 
 Main.add(function () {
   {{if $rpu->_id && $can->edit}}
@@ -168,20 +188,27 @@ Main.add(function () {
     </td>
     
     <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true)"}}</td>
+    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value);"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$rpu field="_entree"}}</th>
     <td class="date">{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
-
-	  {{if $dPconfig.dPurgences.old_rpu == "1"}}
-    <th>{{mb_label object=$rpu field="urprov"}}</th>
-    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance"}}</td>
-		{{else}}
-    <th>{{mb_label object=$rpu field="provenance"}}</th>
-    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance"}}</td>
-	  {{/if}}
+    
+	  <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
+	  <td>
+	     <div id="etablissement_entree_transfert" {{if !$sejour->etablissement_entree_transfert_id}}style="display:none"{{/if}}> 
+	       {{assign var=_transfert_id value=$sejour->etablissement_entree_transfert_id}}
+	       {{if $listEtab|@count}}
+				 <select name="_etablissement_entree_transfert_id">
+					 <option value="">&mdash; Etablissement de transfert</option>
+				   {{foreach from=$listEtab item="etab"}}
+					 <option value="{{$etab->_id}}" {{if $etab->_id == $_transfert_id}}selected="selected"{{/if}}>{{$etab->_view}}</option>
+					 {{/foreach}}
+				</select>
+				{{/if}}
+       </div>
+	  </td>
   </tr>
 
   <tr>
@@ -204,8 +231,13 @@ Main.add(function () {
 	    
     </td>
     
-    <th>{{mb_label object=$rpu field="transport"}}</th>
-    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport"}}</td>
+    {{if $dPconfig.dPurgences.old_rpu == "1"}}
+    <th>{{mb_label object=$rpu field="urprov"}}</th>
+    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance"}}</td>
+    {{else}}
+    <th>{{mb_label object=$rpu field="provenance"}}</th>
+    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance"}}</td>
+    {{/if}}
   </tr>
   
   <tr>
@@ -216,8 +248,8 @@ Main.add(function () {
 		<th></th>
     <td></td>
 	  {{/if}}
-    <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
+	  <th>{{mb_label object=$rpu field="transport"}}</th>
+    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport"}}</td>
   </tr>
   
    <!-- Selection du service -->
@@ -235,8 +267,8 @@ Main.add(function () {
 	      {{/foreach}}
 	    </select>
 	  </td>
-	  <th>{{mb_label object=$rpu field="accident_travail"}}</th>
-    <td>{{mb_field object=$rpu field="accident_travail" form="editRPU" register=true}}</td>
+	  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
+    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
 	</tr>
 
   <tr>
@@ -248,8 +280,8 @@ Main.add(function () {
       		ajaxSubmit=0 
       		listService=$listServicesUrgence}}
 		</td>
-		<th />
-		<td />
+		<th>{{mb_label object=$rpu field="accident_travail"}}</th>
+    <td>{{mb_field object=$rpu field="accident_travail" form="editRPU" register=true}}</td>
   </tr>
 
   {{if $can->edit}}

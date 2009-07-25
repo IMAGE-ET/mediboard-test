@@ -85,7 +85,7 @@ $locales['module-dPurgences-court'] = 'Urgences';
 $locales['module-dPurgences-long'] = 'Service d\'urgences';
 $locales['CRPU-mode_sortie'] = 'Mode de sortie';
 $locales['CRPU-mode_sortie-desc'] = 'Mode de sortie du patient';
-$locales['CEtabExterne-back-'] = '';
+$locales['CEtabExterne-back-'] = 'Séjours';
 $locales['CMediusers-back-'] = '';
 $locales['CPatient-back-'] = '';
 $locales['CRPU-_entree-court'] = '';
@@ -268,4 +268,7 @@ $locales['mod-dPurgences-tab-vw_radio'] = 'Radiologie';
 $locales['CRPU-accident_travail'] = 'Accident de travail';
 $locales['CRPU-accident_travail-court'] = 'Accident de travail';
 $locales['CRPU-accident_travail-desc'] = 'Accident de travail';
+$locales['CRPU-_etablissement_entree_transfert_id'] = 'Etablissement de transfert d\'entrée';
+$locales['CRPU-_etablissement_entree_transfert_id-court'] = 'Transfert d\'entrée';
+$locales['CRPU-_etablissement_entree_transfert_id-desc'] = 'Etablissement de transfert du patient après son entrée';
 ?>
