@@ -78,6 +78,7 @@ class CMbObject {
   
   // Behaviour fields
   var $_merging = null;
+  var $_purge = null;
   
   function __construct() {
     return $this->CMbObject();
@@ -818,7 +819,7 @@ class CMbObject {
   	global $AppUI;
   	
     // Si object non loggable
-    if (!$this->_spec->loggable){
+    if (!$this->_spec->loggable || $this->_purge) {
       return;
     }
 
@@ -1319,9 +1320,13 @@ class CMbObject {
   function delete() {
     // Préparation du log
     $this->loadOldObject();
-        
-    if ($msg = $this->canDeleteEx()) {
-      return $msg;
+    
+    
+    // Delete checking
+    if (!$this->_purge) {
+	    if ($msg = $this->canDeleteEx()) {
+	      return $msg;
+	    }
     }
 
     // Deleting backSpecs
@@ -1373,6 +1378,37 @@ class CMbObject {
     return $this->_old = null;
   }
 
+  /**
+   * Purge an entire object, including recursive back references
+   * @return string Store-like message
+   */
+  function purge() {
+    $this->loadAllBackRefs();
+    foreach ($this->_back as $backName => $backRefs) {
+      foreach ($backRefs as $backRef) {
+        $backSpec = $this->_backSpecs[$backName];
+        if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade) {
+ 	        if ($msg = $backRef->purge()) {
+ 	          return $msg;
+ 	        }
+ 	        CAppUI::setMsg(CAppUI::tr("$backRef->_class_name-msg-delete"), UI_MSG_ALERT);
+ 	        
+        }
+        else {
+          $backRef->{$backSpec->field} = "";
+ 	        if ($msg = $backRef->store()) {
+ 	          return $msg;
+ 	        }
+ 	        CAppUI::setMsg(CAppUI::tr($backRef->_class_name) . " " . CAppUI::tr("-msg-delete"), UI_MSG_ALERT);
+        }
+      }
+    }
+
+    // Make sure delete won't log
+    $this->_purge = "1";
+    return $this->delete();
+  }
+  
   /**
    * Trigger delete event for handlers
    * @return void

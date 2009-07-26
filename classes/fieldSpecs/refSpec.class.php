@@ -16,6 +16,7 @@ class CRefSpec extends CMbFieldSpec {
   var $cascade   = null;
   var $unlink    = null;
   var $meta      = null;
+  var $purgeable = null;
   
   function getSpecType() {
     return("ref");
@@ -27,10 +28,11 @@ class CRefSpec extends CMbFieldSpec {
   
   function getOptions(){
     return parent::getOptions() + array(
-      'class'   => 'str',
-      'cascade' => 'bool',
-      'unlink'  => 'bool',
-      'meta'    => 'field',
+      'class'     => 'str',
+      'cascade'   => 'bool',
+      'unlink'    => 'bool',
+      'meta'      => 'field',
+      'purgeable' => 'bool',
     );
   }
   

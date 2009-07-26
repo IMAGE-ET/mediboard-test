@@ -144,7 +144,7 @@ class CConsultation extends CCodable {
   function getProps() {
   	$specs = parent::getProps();
     $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable";
-    $specs["patient_id"]        = "ref class|CPatient seekable";
+    $specs["patient_id"]        = "ref class|CPatient purgeable seekable";
     $specs["heure"]             = "time notNull";
     $specs["duree"]             = "numchar maxLength|1";
     $specs["secteur1"]          = "currency min|0";

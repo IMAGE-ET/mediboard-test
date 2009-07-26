@@ -14,7 +14,10 @@ class CMbBackSpec {
   public $class = null; 
   public $field = null;
   public $_initiator = null; // The class actually pointed to by $class
-
+  public $_notNull = null;
+  public $_purgeable = null;
+  public $_cascade = null;
+  
   static function make($owner, $name, $backProp) {
     list($class, $field) = explode(' ', $backProp);
   	if (!class_exists($class)) return null;
@@ -27,6 +30,9 @@ class CMbBackSpec {
     $backSpec->class = $class;
     $backSpec->field = $field;
     $backSpec->_initiator = $backObject->_specs[$field]->class;
+    $backSpec->_notNull   = $backObject->_specs[$field]->notNull;
+    $backSpec->_purgeable = $backObject->_specs[$field]->purgeable;
+    $backSpec->_cascade   = $backObject->_specs[$field]->cascade;
     
     return $backSpec;
   }

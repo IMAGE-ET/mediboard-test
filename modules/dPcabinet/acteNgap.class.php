@@ -61,7 +61,7 @@ class CActeNGAP extends CActe {
     
     $this->_view = "Acte NGAP $this->_shortview";
     if ($this->object_class && $this->object_id) {
-      $this->_view .= "de $this->object_class-$this->object_id";
+      $this->_view .= " de $this->object_class-$this->object_id";
     }
   }
   

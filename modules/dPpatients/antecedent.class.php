@@ -55,7 +55,7 @@ class CAntecedent extends CMbObject {
     $specs["appareil"] = "enum list|".CAppUI::conf("dPpatients CAntecedent appareils");
     $specs["date"]  = "date progressive";
     $specs["rques"] = "text helped|type|appareil";
-    $specs["dossier_medical_id"] = "ref class|CDossierMedical";
+    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
     $specs["annule"] = "bool";
     $specs["_search"] = "str";
     return $specs;

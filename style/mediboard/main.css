@@ -2154,12 +2154,13 @@ table#weeklyPlanning td {
   text-align: center; 
   vertical-align: middle;
   white-space: normal;
-  padding: 2px;
+  padding: 3px;
 }
 
 table#weeklyPlanning td.selectedPlage {
   background: #ddd;
   border: 2px solid #444;
+  padding: 1px;
 }
 
 table#weeklyPlanning td.nonEmpty {

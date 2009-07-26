@@ -119,7 +119,7 @@ class CPrescription extends CMbObject {
     $specs["praticien_id"]  = "ref class|CMediusers";
     $specs["function_id"]   = "ref class|CFunctions";  
     $specs["group_id"]      = "ref class|CGroups";
-    $specs["object_id"]     = "ref class|CCodable meta|object_class";
+    $specs["object_id"]     = "ref class|CCodable meta|object_class purgeable";
     $specs["object_class"]  = "enum notNull list|CSejour|CConsultation|CDossierMedical";
     $specs["libelle"]       = "str";
     $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";

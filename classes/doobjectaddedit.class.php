@@ -68,12 +68,31 @@ class CDoObjectAddEdit {
   function doDelete() {
     global $AppUI;
 
+    if ($this->_obj->_purge) {
+      set_time_limit(120);
+	    if ($msg = $this->_obj->purge()) {
+	      $AppUI->setMsg($msg, UI_MSG_ERROR );
+	      if ($this->redirectError) {
+	        $this->redirect =& $this->redirectError;
+	      }
+	    }
+	    else {
+	      mbSetValueToSession($this->objectKeyGetVarName);
+	      $AppUI->setMsg(CAppUI::tr("msg-purge"), UI_MSG_ALERT);
+	      if ($this->redirectDelete) {
+	        $this->redirect =& $this->redirectDelete;
+	      }
+	    }
+	    return;
+    }
+    
     if ($msg = $this->_obj->delete()) {
       $AppUI->setMsg($msg, UI_MSG_ERROR );
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
-    } else {
+    } 
+    else {
       mbSetValueToSession($this->objectKeyGetVarName);
       $AppUI->setMsg($this->deleteMsg, UI_MSG_ALERT);
       if ($this->redirectDelete) {
@@ -89,7 +108,8 @@ class CDoObjectAddEdit {
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
-    } else {
+    } 
+    else {
       $id = $this->objectKeyGetVarName;
       mbSetValueToSession($id, $this->_obj->$id);
       $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
