@@ -817,7 +817,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
 
     $this->makeRevision("0.71");
-    $sql = "CREATE TABLE IF NOT EXISTS `correspondant` (
+    $sql = "CREATE TABLE `correspondant` (
       `correspondant_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `medecin_id` INT (11) UNSIGNED NOT NULL,
       `patient_id` INT (11) UNSIGNED NOT NULL,
