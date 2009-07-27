@@ -65,8 +65,8 @@ class CActe extends CMbMetaObject {
     global $AppUI;
     
     $list_executants = new CMediusers;
-    $this->_list_executants = $list_executants->loadPraticiens(PERM_READ);
-    
+    $this->_list_executants = $list_executants->loadPraticiensInfirmieres(PERM_READ);
+
     // We guess who is the executant
     if ($guess && $this->executant_id == null && $this->_id == null) {
       if ($this->_ref_object && $this->loadRefPraticien() && $this->_ref_praticien->_id) {
@@ -76,7 +76,7 @@ class CActe extends CMbMetaObject {
       else {
         $user = new CMediusers();
         $user->load($AppUI->user_id);
-        if ($user->isPraticien()) {
+        if ($user->isPraticien() || $user->isInfirmiere()) {
           $this->executant_id = $user->_id;
           return;
         }

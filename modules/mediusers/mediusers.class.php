@@ -53,6 +53,7 @@ class CMediusers extends CMbObject {
   var $_is_praticien         = null;
   var $_is_secretaire        = null;
   var $_is_anesth            = null;
+  var $_is_infirmiere        = null;
   var $_user_password_weak   = null;
   var $_user_password_strong = null;
   
@@ -663,6 +664,10 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name);
   }
 
+  function loadPraticiensInfirmieres($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière"), $permType, $function_id, $name);
+  }
+  
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
     return $this->loadListFromType(array("Personnel"), $permType, $function_id, $name);
   }
@@ -686,6 +691,14 @@ class CMediusers extends CMbObject {
    */
   function isAnesth () {
     return $this->_is_anesth = $this->isFromType(array("Anesthésiste"));
+  }
+  
+  /**
+   * Check whether user is a nurse
+   * @return bool
+   */
+  function isInfirmiere () {
+    return $this->_is_infirmiere = $this->isFromType(array("Infirmière"));
   }
   
   /**
