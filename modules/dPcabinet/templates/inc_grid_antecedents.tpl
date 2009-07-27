@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function addAntecedent(rques, type, appareil, element) {
+function addAntecedent(rques, type, appareil, input) {
   if (window.opener) {
     var oForm = window.opener.document.forms['editAntFrm'];
     if (oForm) {
@@ -8,11 +8,10 @@ function addAntecedent(rques, type, appareil, element) {
       oForm.appareil.value = appareil;
       window.opener.onSubmitAnt(oForm);
       
-      var input = element.select('input').first();
-      input.checked = true;
-      input.onclick = function(){return false};
+      //input.checked = 'checked';
+      input.disabled = 'disabled';
       
-      $(element).setStyle({cursor: 'default', opacity: 0.3}).onclick = null;
+      $(input).up('td').setStyle({cursor: 'default', opacity: 0.3});
     }
   }
   return false;
@@ -63,8 +62,12 @@ Main.add(function () {
             {{/if}}
 	          <td class="text" style="cursor: pointer; width: {{$width}}%; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
 	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
-	              onclick="return addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)">
-	            <input type="checkbox" {{if $checked}}checked="checked"{{/if}} /> {{$curr_aide->name}}
+	              >
+	            <label>
+	            	<input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} 
+							         onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/> 
+								{{$curr_aide->name}}
+							</label>
 	          </td>
 	          {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
 	        {{/foreach}}
