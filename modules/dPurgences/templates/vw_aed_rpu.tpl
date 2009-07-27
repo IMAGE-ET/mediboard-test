@@ -258,6 +258,10 @@ Main.add(function () {
 	    {{mb_label object=$rpu field="_service_id"}}
 	  </th>
 	  <td>
+	    {{if $listServicesUrgence|@count == 1}}
+	      {{assign var=first_service value=$listServicesUrgence|@reset}}
+	      {{$first_service->_view}}
+	    {{else}}
 	    <select name="_service_id" class="{{$sejour->_props.service_id}}">
 	      <option value="">&mdash; Choisir un service</option>
 	      {{foreach from=$listServicesUrgence item=_service}}
@@ -266,6 +270,7 @@ Main.add(function () {
 	      </option>
 	      {{/foreach}}
 	    </select>
+	    {{/if}}
 	  </td>
 	  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
     <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
