@@ -20,18 +20,18 @@
   
   <tr>
     <th><label for="user_last_name" title="Nom de l'utilisateur à rechercher, au moins les premières lettres">Nom</label></th>
-    <td><input tabindex="1" type="text" name="user_last_name" value="{{$user_last_name|stripslashes}}" /></td>
+    <td><input type="text" name="user_last_name" value="{{$user_last_name|stripslashes}}" /></td>
     <th><label for="user_first_name" title="Nom d'utilisateur (login) à rechercher, au moins les premières lettres">Utilisateur</label></th>
-    <td><input tabindex="3" type="text" name="user_username" value="{{$user_username|stripslashes}}" /></td>
+    <td><input type="text" name="user_username" value="{{$user_username|stripslashes}}" /></td>
   </tr>
     
   <tr>
     <th><label for="user_first_name" title="Prénom de l'utilisateur à rechercher, au moins les premières lettres">Prénom</label></th>
-    <td><input tabindex="2" type="text" name="user_first_name" value="{{$user_first_name|stripslashes}}" /></td>
+    <td><input type="text" name="user_first_name" value="{{$user_first_name|stripslashes}}" /></td>
     <th><label for="user_type" title="Type de l'utilisateur">Type</label></th>
     
     <td>
-      <select tabindex="4" name="user_type">
+      <select name="user_type">
         {{foreach from=$utypes key=_key item=type}}
         <option value="{{$_key}}" {{if $_key == $user_type}}selected="selected"{{/if}}>{{$type}}</option>
         {{/foreach}}
@@ -43,7 +43,7 @@
 	   <th colspan="3"><label for="template" title="Statut">Statut</label></th>
 
 	   <td class="text">
-			<select tabindex="4" name="template">
+			<select name="template">
 				<option value="">&mdash; Choisir le statut</option>
 				<option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
 				<option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
