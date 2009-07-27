@@ -169,6 +169,30 @@ Document.refreshList = function(){
       </button>
       {{/if}}
       </form>
+			
+      {{if $can->admin}} 
+      <form name="editPatientPurge" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
+      <input type="hidden" name="dosql" value="do_patients_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="_purge" value="0" />
+              
+       <script type="text/javascript">
+         function confirmPurge() {
+           var oForm = document.editPatientPurge;
+           if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier de ce patient")) {
+             oForm._purge.value = "1";
+             confirmDeletion(oForm,  {
+               typeName:'le patient',
+               objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'
+             } );
+           }
+         }
+       </script>
+       <button type="button" class="cancel" onclick="confirmPurge();">
+         {{tr}}Purge{{/tr}}
+       </button>
+      </form>
+      {{/if}}
 
     </td>
   </tr>
