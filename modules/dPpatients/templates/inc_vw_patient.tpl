@@ -171,10 +171,12 @@ Document.refreshList = function(){
       </form>
 			
       {{if $can->admin}} 
-      <form name="editPatientPurge" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
+      <form name="editPatientPurge" action="?m={{$m}}&amp;tab=vw_idx_patients" method="post" onsubmit="return confirmCreation(this)">
       <input type="hidden" name="dosql" value="do_patients_aed" />
+			<input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_purge" value="0" />
+      <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
               
        <script type="text/javascript">
          function confirmPurge() {
