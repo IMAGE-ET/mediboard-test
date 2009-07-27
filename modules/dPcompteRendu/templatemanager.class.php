@@ -96,7 +96,7 @@ class CTemplateManager {
     if (!is_array($list)) $list = array($list);
 		$str = '<ul>';
 		if (count($list)) {
-			'<li>' . implode('</li><li>', $list) . '</li>';
+			$str .= '<li>' . implode('</li><li>', $list) . '</li>';
 		}
 		$str .= '</ul>';
     $this->addProperty($field, $str);
