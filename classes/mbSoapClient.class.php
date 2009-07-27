@@ -14,6 +14,7 @@
 class CMbSOAPClient extends SoapClient {
 	var $wsdl              = null;
 	var $type_echange_soap = null;
+	var $soap_client_error = false;
 	
   function __construct($rooturl, $type = null, $options = array()) {
   	$this->wsdl = $rooturl;
@@ -23,10 +24,12 @@ class CMbSOAPClient extends SoapClient {
   	}
   	
     if (!$html = file_get_contents($this->wsdl)) {
+    	$this->soap_client_error = true;
     	trigger_error("Impossible d'analyser l'url : ".$this->wsdl, E_USER_ERROR);
     	return;
     }
     if (strpos($html, "<?xml") === false) {
+    	$this->soap_client_error = true;
       trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
       return;
     }
