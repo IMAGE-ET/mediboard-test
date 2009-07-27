@@ -482,6 +482,8 @@ var Calendar = {
   regField: function(element, dates, options){
     if (!$(element)) return;
 
+    if (element.hasClassName('datepicker')) return;
+		
     if (dates) {
       dates.spots = $A(dates.spots);
     }
@@ -561,6 +563,7 @@ var Calendar = {
     }
     
     datepicker.element.observe('change', function(){oInput.fire("ui:change")});
+		element.addClassName('datepicker');
   },
   
   regProgressiveField: function(element, options) {
