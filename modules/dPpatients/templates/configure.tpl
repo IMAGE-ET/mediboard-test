@@ -50,8 +50,8 @@ Main.add(function () {
     </th>
     <td class="text" colspan="3">
       <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="nodate" {{if "$dPconfig.$m.$class.$var == nodate"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-nodate{{/tr}}</option>
-        <option value="date" {{if $dPconfig.$m.$class.$var == "date"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-date{{/tr}}</option>
+        <option value="nodate"   {{if $dPconfig.$m.$class.$var == "nodate"  }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-nodate{{/tr}}</option>
+        <option value="date"     {{if $dPconfig.$m.$class.$var == "date"    }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-date{{/tr}}</option>
         <option value="doublons" {{if $dPconfig.$m.$class.$var == "doublons"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-doublons{{/tr}}</option>
       </select> 
     </td>            

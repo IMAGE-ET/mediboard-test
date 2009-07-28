@@ -10,6 +10,7 @@ var Process = {
 	  this.running = value;
 	  $("start-process")[this.running ? "hide" : "show"]();
 	  $("stop-process" )[this.running ? "show" : "hide"]();
+	  $("retry-process")[this.running ? "show" : "hide"]();
 	},
 	
   total: {
@@ -22,6 +23,11 @@ var Process = {
 	start: function() {
 		this.setRunning(true);	
 		this.doStep();
+	},
+
+	retry: function() {
+		this.step--;
+		this.start();	
 	},
 	
 	stop: function() {
@@ -88,9 +94,15 @@ var Process = {
 			  Commencer le processus
 			</button>
 			
+			<button class="change" id="retry-process" onclick="Process.retry()">
+			  Recommencer l'étape
+			</button>
+			<br />
+
 			<button class="cancel" style="display:none" id="stop-process" onclick="Process.stop()">
 			  Arrêter le processus après l'étape courante
 			</button>
+
 	  </td>
 	  <td id="process" colspan="3">
 	  </td>
