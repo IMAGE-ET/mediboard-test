@@ -19,16 +19,6 @@
 
 ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
 
-function submitRadio(oForm){
-  submitFormAjax(oForm, 'systemMsg', {onComplete: function() { reloadRadio(oForm) } }); 
-}
-
-function reloadRadio(oForm){
-  var url = new Url("dPurgences", "httpreq_vw_radio");
-  url.addParam("rpu_id", oForm.rpu_id.value);
-  url.requestUpdate('radio', { waitingText: null } );
-}
-
 function loadSuivi(sejour_id, user_id) {
   if(sejour_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
@@ -342,7 +332,7 @@ Main.add(function () {
   </tr>
 
   <tr>
-    <td id="radio">
+    <td style="width: 60%">
       {{include file="inc_vw_radio.tpl"}}
     </td>
     <td class="button">

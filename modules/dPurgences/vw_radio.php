@@ -23,7 +23,7 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
   
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
-$where["rpu.radio_debut"] = "IS NOT NULL";
+$where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL)";
 
 $listSejours = $sejour->loadList($where, null, null, null, $ljoin);
 

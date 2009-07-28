@@ -30,6 +30,8 @@ class CRPU extends CMbObject {
   var $orientation     = null;
   var $radio_debut     = null;
   var $radio_fin       = null;
+  var $bio_depart      = null;
+  var $bio_retour      = null;
   var $mutation_sejour_id = null;
   var $box_id          = null;
   var $sortie_autorisee = null;
@@ -104,6 +106,8 @@ class CRPU extends CMbObject {
       "orientation"      => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
       "radio_debut"      => "dateTime",
       "radio_fin"        => "dateTime",
+      "bio_depart"       => "dateTime",
+      "bio_retour"       => "dateTime",
       "mutation_sejour_id" => "ref class|CSejour",
       "box_id"           => "ref class|CLit",
       "sortie_autorisee" => "bool",

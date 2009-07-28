@@ -36,6 +36,8 @@ Main.add(function () {
     <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     <th>{{mb_title class=CRPU field="radio_debut"}}</th>
     <th>{{mb_title class=CRPU field="radio_fin"}}</th>
+    <th>{{mb_title class=CRPU field="bio_depart"}}</th>
+    <th>{{mb_title class=CRPU field="bio_retour"}}</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
     {{assign var=rpu value=$_sejour->_ref_rpu}}
@@ -59,17 +61,17 @@ Main.add(function () {
 	        {{/if}}
 	      </a>
       </td>
+      
       <td>
 	      <a href="{{$rpu_link}}">
 	        {{$_sejour->_ref_praticien->_view}}
 	      </a>
       </td>
-      <td>
-	      {{mb_value object=$rpu field="radio_debut"}}
-	    </td>
-      <td>
-	      {{mb_value object=$rpu field="radio_fin"}}
-      </td>
+      
+      <td>{{mb_value object=$rpu field="radio_debut"}}</td>
+      <td>{{mb_value object=$rpu field="radio_fin"}}</td>
+      <td>{{mb_value object=$rpu field="bio_depart"}}</td>
+      <td>{{mb_value object=$rpu field="bio_retour"}}</td>
     </tr>
   {{/foreach}}
 </table>
