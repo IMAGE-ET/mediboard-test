@@ -358,7 +358,7 @@ Main.add(function () {
   {{assign var="_is_anesth" value="0"}}
   {{assign var="consult" value=$rpu->_ref_consult}}
   {{assign var=sejour_id value=""}}
-  {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
+  {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$app->user_id}}
 </div>
 
 <div id="suivisoins" style="display:none"></div>
