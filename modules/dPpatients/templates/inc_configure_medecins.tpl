@@ -94,7 +94,7 @@ var Process = {
 			  Commencer le processus
 			</button>
 			
-			<button class="change" id="retry-process" onclick="Process.retry()">
+			<button class="change" style="display:none" id="retry-process" onclick="Process.retry()">
 			  Recommencer l'étape
 			</button>
 			<br />
