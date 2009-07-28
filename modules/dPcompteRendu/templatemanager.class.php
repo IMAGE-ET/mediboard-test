@@ -106,8 +106,10 @@ class CTemplateManager {
     $this->graphs[utf8_encode($field)] = array(
       'data' => $data, 
       'options' => $options, 
-      'name' => htmlentities(htmlentities($field))
+      'name' => utf8_encode($field)
     );
+		
+		$this->addProperty($field, $field);
   }
 
   function addList($name, $choice = null) {
