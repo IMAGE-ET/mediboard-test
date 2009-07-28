@@ -37,26 +37,19 @@ $paramsPaie->loadFromUser($employe->employecab_id);
 
 $fichePaie = new CFichePaie();
 $fichePaie->load($fiche_paie_id);
-if(!$fichePaie->fiche_paie_id) {
+if (!$fichePaie->fiche_paie_id) {
   $fichePaie->debut = mbDate();
   $fichePaie->fin = mbDate();
+  $fichePaie->params_paie_id = $paramsPaie->_id;
 }
 
-$listeFiches = new CFichePaie();
-$where = array();
-if($paramsPaie->params_paie_id)
-  $where["params_paie_id"] = "= $paramsPaie->params_paie_id";
-else
-  $where[] = "0 = 1";
-$order = "debut DESC";
-$listeFiches = $listeFiches->loadList($where, $order);
+$listeFiches = $paramsPaie->loadBackRefs("fiches");
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("employe"      , $employe);
 $smarty->assign("fichePaie"    , $fichePaie);
-$smarty->assign("paramsPaie"   , $paramsPaie);
 $smarty->assign("listFiches"   , $listeFiches);
 $smarty->assign("listEmployes" , $listEmployes);
 

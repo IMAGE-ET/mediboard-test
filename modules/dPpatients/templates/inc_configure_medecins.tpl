@@ -10,7 +10,7 @@ var Process = {
 	  this.running = value;
 	  $("start-process")[this.running ? "hide" : "show"]();
 	  $("stop-process" )[this.running ? "show" : "hide"]();
-	  $("retry-process")[this.running ? "show" : "hide"]();
+	  $("retry-process")[this.running ? "show" : "show"]();
 	},
 	
   total: {

@@ -24,7 +24,11 @@
 	          {{mb_value object=$object field=$name}}
 	          </span>
 	        {{else}}
+	        	{{if $spec instanceof CHtmlSpec}}
+	        	  {{$object->$name|count_words}} mots
+	          {{else}}
 	          {{mb_value object=$object field=$name}}
+	          {{/if}}
           {{/if}}
           <br />
         {{/if}}
