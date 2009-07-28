@@ -34,9 +34,9 @@ else {
   $user = new CUser;
   $user->user_username = trim($username);
   $user->loadMatchingObject();
-  
-  if (!$AppUI->checkPasswordAttempt($user)) {
-    $AppUI->setMsg("Auth-failed-loginas", UI_MSG_ERROR);
+	
+  if (md5($password) != $user->user_password) {
+    $AppUI->setMsg("Auth-failed-combination", UI_MSG_ERROR);
   }
   else $AppUI->login(true);
 }
