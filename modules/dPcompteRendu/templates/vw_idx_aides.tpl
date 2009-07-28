@@ -23,9 +23,11 @@ function loadClasses(value) {
   for (var elm in options) {
     var option = elm;
     if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(aTraduction[option], option, option == value);
+      select.options[select.length] = new Option(aTraduction[option], option);
     }
   }
+	
+  $V(select, value);
   loadFields();
 }
 
@@ -44,9 +46,11 @@ function loadFields(value) {
   for (var elm in options) {
     var option = elm;
     if (typeof(options[option]) != "function") { // to filter prototype functions
-      select.options[select.length] = new Option(option, option, option == value);
+      select.options[select.length] = new Option(option, option);
     }
   }
+	
+  $V(select, value);
   loadDependances();
 }
 
@@ -270,7 +274,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field=text"}}</th>
       <td>
-        {{mb_field object=$aide field="text" style="width: 200px" rows="4"}}
+        {{mb_field object=$aide field="text"}}
       </td>
     </tr>
 
