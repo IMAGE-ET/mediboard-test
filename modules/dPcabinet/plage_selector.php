@@ -84,9 +84,7 @@ $where[] = "libelle != 'automatique' OR libelle IS NULL";
 $order = "date, debut";
 
 // Chargement des plages disponibles
-CSQLDataSource::$trace = true;
 $listPlage = $listPlage->loadList($where, $order);
-CSQLDataSource::$trace = false;
 
 if (!array_key_exists($plageconsult_id, $listPlage)) {
   $plage->_id = $plageconsult_id = null;
