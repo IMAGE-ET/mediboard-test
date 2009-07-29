@@ -65,6 +65,14 @@ class CActeNGAP extends CActe {
     }
   }
   
+  function updateDBFields() {
+    parent::updateDBFields();
+    
+    if ($this->code) {
+      $this->code = strtoupper($this->code);
+    }
+  }
+  
   function loadExecution() {
     $this->loadTargetObject();
     $this->_ref_object->getActeExecution();
