@@ -85,13 +85,9 @@ Element.addMethods({
   *                single checkboxes/radios, a string for textareas and text inputs
   */
 function $V (element, value, fire) {
-  if (!element) {
-    Console.trace("Warning: This form field doesn't exist");
-    return;
-  }
+  if (!(element = $(element))) return;
   
   //element = element.name ? $(element.form[element.name]) : $(element);
-  element = $(element);
   fire = Object.isUndefined(fire) ? true : fire;
   
   // We get the tag and the type
@@ -230,6 +226,17 @@ var FormObserver = {
     }
     this.lastFCKChange = timer;
   }
+}
+
+function isKeyAllowed(event, allowed){
+	var key = Event.key(event);
+	console.debug(key);
+	if (!(key >= 48 && key <= 90 || 
+	      key >= 96 && key <= 111 || 
+				key >= 186 && key <= 222)) return true;
+	
+	var c = String.fromCharCode(key);
+	if (allowed.test(c)) return c;
 }
 
 Element.addMethods({
