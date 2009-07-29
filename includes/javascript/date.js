@@ -553,7 +553,7 @@ var Calendar = {
     // We update the view
     if (element.value && !elementView.value) {
       var date = DateFormat.parse(element.value, datepicker.options.altFormat);
-      elementView.value = DateFormat.format(date, datepicker.options.currentFormat);
+      elementView.value = DateFormat.format(date, datepicker.options.currentFormat) || '';
     }
     
     if (datepicker.icon && !options.noView) {
