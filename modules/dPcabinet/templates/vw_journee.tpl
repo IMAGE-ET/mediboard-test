@@ -7,7 +7,7 @@ Main.add(function () {
   // Mise à jour du compteur de patients arrivés
 	if($('tab_main_courante')){
 		link = $('tab_main_courante').select("a[href=#consultations]")[0];
-	  link.update('Consultations ('+{{$nb_attente}}+')');
+	  link.update('Reconvocations ('+{{$nb_attente}}+')');
 	  {{if $nb_attente == '0'}}
 	    link.addClassName('empty');
 	  {{else}}
@@ -87,13 +87,13 @@ Main.add(function () {
        {{assign var="userSel" value=$curr_day.prat}}
        {{assign var="consult" value=$consult}}
        
-       {{if $mode_urgence}}
-         {{assign var="current_m" value="dPurgences"}}
-       {{else}}
-         {{assign var="current_m" value="dPcabinet"}}
-       {{/if}}
+       {{mb_ternary var=current_m test=$mode_urgence value=dPurgences other=dPcabinet}}
        
        {{mb_include module=dPcabinet template=inc_list_consult}}
+     </td>
+     {{foreachelse}}
+     <td>
+       <em>{{tr}}CPlageconsult.none{{/tr}}
      </td>
      {{/foreach}}
    </tr>

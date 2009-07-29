@@ -45,7 +45,7 @@ if ($consult->_id) {
 
 // Récupération des plages de consultation du jour et chargement des références
 $listPlages = array();
-foreach($praticiens as $keyPrat => $prat) {
+foreach($praticiens as $prat) {
   $listPlage = new CPlageconsult();
   $where = array();
   $where["chir_id"] = "= '$prat->_id'";
@@ -53,30 +53,34 @@ foreach($praticiens as $keyPrat => $prat) {
   $order = "debut";
   $listPlage = $listPlage->loadList($where, $order);
   if(!count($listPlage)) {
-    unset($praticiens[$keyPrat]);
-  } else {
+    unset($praticiens[$prat->_id]);
+  } 
+  else {
     $listPlages[$prat->_id]["prat"] = $prat;
     $listPlages[$prat->_id]["plages"] = $listPlage;
+    $listPlages[$prat->_id]["destinations"] = array();    
   }
 }
 
 $nb_attente = 0;
-foreach ($listPlages as &$element) {
-  foreach ($element["plages"] as &$plage) {
-    $plage->_ref_chir =& $element["prat"];
+foreach ($listPlages as &$infos_by_prat) {
+  foreach ($infos_by_prat["plages"] as $plage) {
+    $plage->_ref_chir =& $infos_by_prat["prat"];
     $plage->loadRefsConsultations(true, $closed);
     foreach ($plage->_ref_consultations as &$consultation) {
-      if($mode_urgence){
+      if ($mode_urgence){
         $consultation->loadRefSejour();
         $consultation->_ref_sejour->loadRefRPU();
-        if($consultation->_ref_sejour->_ref_rpu->_id){
+        if ($consultation->_ref_sejour->_ref_rpu->_id){
           unset($plage->_ref_consultations[$consultation->_id]);
           continue;
         }
       }
-      if($consultation->chrono == CConsultation::PATIENT_ARRIVE){
+      
+      if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
         $nb_attente++;
       }
+      
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
       $consultation->countDocItems();
@@ -84,6 +88,16 @@ foreach ($listPlages as &$element) {
   }
 }
 
+// Destinations : plages des autres praticiens
+foreach ($listPlages as &$infos_by_prat) {
+  foreach ($listPlages as &$infos_other_prat) {
+    if ($infos_by_prat["prat"]->_id != $infos_other_prat["prat"]->_id) {
+      foreach ($infos_other_prat["plages"] as $other_plage) {
+        $infos_by_prat["destinations"][] = $other_plage;
+      }
+    }
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();

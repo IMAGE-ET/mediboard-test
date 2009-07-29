@@ -16,7 +16,7 @@ function showLegend() {
 }
 
 // Fonction de refresh du temps d'attente
-function updateAttente(sejour_id){
+function updateAttente(sejour_id) {
   var url = new Url("dPurgences", "httpreq_vw_attente");
   url.addParam("sejour_id", sejour_id);
   url.periodicalUpdate('attente-'+sejour_id, { frequency: 60, waitingText: null } );
@@ -44,7 +44,7 @@ function printMainCourante() {
 Main.add(function () {
   updateMainCourante();
   updateConsultations();
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
+  Calendar.regField(getForm("changeDate").date, null, { noView: true } );
   
   var tabs = Control.Tabs.create('tab_main_courante', true);
 });
@@ -54,7 +54,7 @@ Main.add(function () {
 
 <ul id="tab_main_courante" class="control_tabs">
   <li><a href="#_main_courante">Main courante</a></li>
-  <li><a href="#consultations">Consultations</a></li>
+  <li><a class="empty" href="#consultations">Reconvocations</a></li>
 </ul>
 <hr class="control_tabs" />
 
