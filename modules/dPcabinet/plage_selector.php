@@ -79,12 +79,14 @@ $ndate = mbDate("+1 $period", $relDate);
 $pdate = mbDate("-1 $period", $relDate);
 
 $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
-//$where["libelle"] = $ds->prepare("!= %1", "automatique");
+$where[] = "libelle != 'automatique' OR libelle IS NULL";
 
 $order = "date, debut";
 
 // Chargement des plages disponibles
+CSQLDataSource::$trace = true;
 $listPlage = $listPlage->loadList($where, $order);
+CSQLDataSource::$trace = false;
 
 if (!array_key_exists($plageconsult_id, $listPlage)) {
   $plage->_id = $plageconsult_id = null;
