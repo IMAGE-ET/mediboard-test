@@ -786,6 +786,8 @@ class CMbObject {
       }
     }
     
+    if ($this->_merging) return $msg;
+
     // Class level unique checking
     foreach ($this->_spec->uniques as $unique => $propNames) {
       $other = new $this->_class_name;
