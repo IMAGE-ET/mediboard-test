@@ -79,7 +79,7 @@ $ndate = mbDate("+1 $period", $relDate);
 $pdate = mbDate("-1 $period", $relDate);
 
 $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
-$where["libelle"] = $ds->prepare("!= %1", "automatique");
+//$where["libelle"] = $ds->prepare("!= %1", "automatique");
 
 $order = "date, debut";
 
