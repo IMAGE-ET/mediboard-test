@@ -277,4 +277,8 @@ $locales['CRPU-bio_depart-desc'] = 'Dépôt des prélèvements de biologie';
 $locales['CRPU-bio_retour'] = 'Réception Biologie';
 $locales['CRPU-bio_retour-court'] = 'Réc. Bio.';
 $locales['CRPU-bio_retour-desc'] = 'Réception des résultats de biologie';
+$locales['config-dPurgences-default_view'] = 'Affichage par défaut dans la main courante';
+$locales['config-dPurgences-default_view-desc'] = 'Affichage par défaut dans la main courante';
+$locales['config-dPurgences-default_view-tous'] = 'Tous les patients';
+$locales['config-dPurgences-default_view-presents'] = 'Seulement les patients présents';
 ?>

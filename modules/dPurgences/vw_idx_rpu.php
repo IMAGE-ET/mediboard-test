@@ -13,7 +13,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Type d'affichage
-$selAffichage = mbGetValueFromPostOrSession("selAffichage","tous");
+$selAffichage = mbGetValueFromPostOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
 
 // Parametre de tri
 $order_way = mbGetValueFromGetOrSession("order_way", "DESC");

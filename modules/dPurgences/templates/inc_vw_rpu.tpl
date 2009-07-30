@@ -20,12 +20,17 @@ function reloadSortiePrevue() {
 	var url = new Url;
 	url.setModuleAction("dPurgences", "ajax_sortie_prevue");
 	url.addParam("sejour_id", getForm('editSortiePrevue').elements.sejour_id.value);
+	url.addParam("consult_id", getForm('formValidCotation').elements.consultation_id.value);
 	url.requestUpdate('div_sortie_prevue', { waitingText: null } );
 }
 
+function submitSejour(){
+  var oForm = document.editSejour;
+  submitFormAjax(oForm, 'systemMsg');
+}
+
 function submitSejourWithSortiePrevue(){
-  var oForm = document.editSortiePrevue;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadSortiePrevue });
+  submitFormAjax(getForm('editSortiePrevue'), 'systemMsg', { onComplete : reloadSortiePrevue });
 }
 
 function submitConsultWithChrono(chrono) {
@@ -45,6 +50,10 @@ function submitSejRpuConsult() {
 		submitRPU();
 	  submitConsultWithChrono({{$consult|const:'TERMINE'}}); 
 	}
+}
+
+function validCotation() {
+  submitFormAjax(getForm('formValidCotation'), 'systemMsg');
 }
 
 function loadTransfert(mode_sortie){
@@ -309,7 +318,7 @@ function initFields(mode_sortie){
         <button class="new" type="submit">Hospitaliser</button>
       </form>
       
-      <!--  Sortie prévue du patient -->
+      <!--  Autoriser sortie du patient --> <!--  Autoriser sortie du patient et valider la sortie -->
       <form name="editSortieAutorise" method="post" action="?m={{$m}}">
         <input type="hidden" name="dosql" value="do_rpu_aed" />
         <input type="hidden" name="m" value="dPurgences" />
@@ -317,7 +326,6 @@ function initFields(mode_sortie){
         <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
         <input type="hidden" name="sortie_autorisee" value="1" />
       </form>
-      
       <span id="div_sortie_prevue">
         {{include file="../../dPurgences/templates/inc_sortie_prevue.tpl"}}
       </span>

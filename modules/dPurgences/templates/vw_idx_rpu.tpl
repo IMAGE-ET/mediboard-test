@@ -78,7 +78,7 @@ Main.add(function () {
 	    <td style="text-align: right">
 	     Type d'affichage
 	     <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
-		      <select name="selAffichage" onchange="submit();">
+		      <select name="selAffichage" onchange="this.form.submit();">
 		        <option value="tous" {{if $selAffichage == "tous"}}selected = "selected"{{/if}}>Tous</option>
 		        <option value="presents" {{if $selAffichage == "presents"}} selected = "selected" {{/if}}>Présents</option>
 		        <option value="prendre_en_charge" {{if $selAffichage == "prendre_en_charge"}} selected = "selected" {{/if}}>A prendre en charge</option>

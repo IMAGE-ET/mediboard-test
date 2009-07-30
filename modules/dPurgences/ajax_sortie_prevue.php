@@ -12,8 +12,8 @@ global $can;
 
 $can->needsRead();
 
-$sejour_id = mbGetValueFromGet("sejour_id");
-$rpu_id    = mbGetValueFromGet("rpu_id");
+$sejour_id  = mbGetValueFromGet("sejour_id");
+$consult_id = mbGetValueFromGet("consult_id");
 
 $now = mbDateTime();
 
@@ -22,11 +22,15 @@ $sejour->load($sejour_id);
 $sejour->loadRefRPU();
 $rpu = $sejour->_ref_rpu;
 
+$consult = new CConsultation();
+$consult->load($consult_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("now"   , $now);
 
 $smarty->assign("sejour", $sejour);
+$smarty->assign("consult", $consult);
 $smarty->assign("rpu"   , $rpu);
 
 $smarty->display("inc_sortie_prevue.tpl");

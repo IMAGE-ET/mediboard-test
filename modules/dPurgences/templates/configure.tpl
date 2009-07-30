@@ -58,6 +58,21 @@
        <input class="str" size="40" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
      </td>
    </tr>
+   
+   <tr>
+    {{assign var=var value=default_view}}
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <select name="{{$m}}[{{$var}}]">
+        <option value="tous" {{if "tous" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-tous{{/tr}}</option>
+        <option value="presents" {{if "presents" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-presents{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
     
   <tr>
     <td class="button" colspan="2">
