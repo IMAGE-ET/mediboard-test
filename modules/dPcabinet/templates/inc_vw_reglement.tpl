@@ -59,6 +59,32 @@ printActes = function(){
 	url.popup(600, 600, 'Impression des actes');
 }
 
+checkActe = function(button) {
+	{{if array_key_exists('sigems', $modules)}}
+	  button.disabled = "disabled";
+	  $(button).setOpacity(0.5);
+	  var url = new Url('sigems', 'ajax_check_actes');
+	  url.addParam("sejour_id", button.form.sejour_id.value);
+	  $('systemMsg').show().update('<div class="loading">Recherche des actes. Veuillez patienter.</div>');
+	  url.requestJSON(checkSigemsActes);
+	{{else}}
+	  button.form.du_tiers.value = 0; 
+	  button.form.du_patient.value = 0; 
+	  cancelTarif();
+	{{/if}}
+}
+
+checkSigemsActes = function(actes) {
+	if (!actes) {
+    getForm('tarifFrm').du_tiers.value = 0; 
+    getForm('tarifFrm').du_patient.value = 0; 
+    cancelTarif();
+  } else {
+	  $('systemMsg').show().update('<div class="error">Des actes ont été validés par la facturation, vous ne pouvez pas modifier votre cotation.</div>'); 
+  }
+	$('buttonCheckActe').setOpacity(1).disabled = false;
+}
+
 Main.add( function(){
   prepareForm(document.accidentTravail);
 });
@@ -240,7 +266,7 @@ Main.add( function(){
                   {{/if}}
                   
                   {{if !$consult->_current_fse && $consult->_ref_reglements|@count == 0}}
-                  <button class="cancel" type="button" onclick="this.form.du_tiers.value = 0; this.form.du_patient.value = 0; cancelTarif()">Annuler la validation</button>
+                  <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this)">Annuler la validation</button>
                   {{/if}}
                   <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
                 </td>

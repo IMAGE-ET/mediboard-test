@@ -105,6 +105,10 @@ function refreshCanLeaveSince() {
   url.requestJSON(refreshTime);
 }
 
+function validCotation(consutation_id) {
+	submitFormAjax(getForm('validCotation-'+consutation_id), 'systemMsg');
+}
+
 // Fonction appelée dans inc_vw_etab_externe qui submit le sejour dans le cas de "inc_vw_rpu.tpl"
 // Dans la sortie, on ne veut pas déclencher de submit
 function submitSejour(){
@@ -152,6 +156,14 @@ function submitSejour(){
   {{assign var=patient value=$sejour->_ref_patient}}
   <tr>
     <td {{if $sejour->annule}}class="cancelled"{{/if}}>
+      <form name="validCotation-{{$sejour->_ref_consult_atu->_id}}" action="" method="post"> 
+		    <input type="hidden" name="dosql" value="do_consultation_aed" />
+		    <input type="hidden" name="m" value="dPcabinet" />
+		    <input type="hidden" name="del" value="0" />
+		    <input type="hidden" name="consultation_id" value="{{$sejour->_ref_consult_atu->_id}}" />
+		    <input type="hidden" name="valide" value="1" />
+		  </form>
+  
 		  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
 	        <img src="images/icons/edit.png" alt="modifier" />
 	 	  </a>
@@ -271,7 +283,7 @@ function submitSejour(){
             
             {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields($rpu_id,$sejour_id,this.value);"}}
             <input type="hidden" name="_modifier_sortie" value="1" />
-			      <button class="tick" type="button" onclick="this.form.submit();">
+			      <button class="tick" type="button" onclick="validCotation('{{$sejour->_ref_consult_atu->_id}}'); this.form.submit();">
 			        Effectuer la sortie
 			      </button>
 			     </td>
