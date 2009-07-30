@@ -39,6 +39,10 @@
             <th class="category" colspan="2">Critères de filtres</th>
           </tr>
           <tr>
+            <th>{{mb_label object=$echange_soap field="echange_soap_id"}}</th>
+            <td>{{mb_field object=$echange_soap field="echange_soap_id"}}</td>
+          </tr>
+          <tr>
             <th>Types de services</th>
             <td>
               <select class="str" name="web_service">
@@ -152,6 +156,8 @@
       <table class="form">
         <tr>
           <th class="title" colspan="2">
+            ECHANGE SOAP - {{$echange_soap->echange_soap_id|str_pad:6:'0':STR_PAD_LEFT}}
+            <br />
             {{mb_value object=$echange_soap field="function_name"}}
           </th>
         </tr>
