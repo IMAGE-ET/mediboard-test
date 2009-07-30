@@ -2,16 +2,8 @@
 
 var Process = {
   running: false,
-  curl: 0,
-	step: 0,
+  step: null,
 	pass: {{$pass|json}},
-
-	setRunning: function(value) {
-	  this.running = value;
-	  $("start-process")[this.running ? "hide" : "show"]();
-	  $("stop-process" )[this.running ? "show" : "hide"]();
-	  $("retry-process")[this.running ? "show" : "show"]();
-	},
 	
   total: {
   	medecins: 0,
@@ -19,33 +11,18 @@ var Process = {
   	updates: 0.0,
   	errors: 0
   },
-  
-	start: function() {
-		this.setRunning(true);	
-		this.doStep();
-	},
-
-	retry: function() {
-		this.step--;
-		this.start();	
-	},
-	
-	stop: function() {
-		this.setRunning(false);
-	},
-	
+  		
 	doStep: function() {
-	  if (!this.running) {
-	    this.step = 0;
-	    return;
-	  }
+		var form = document.import;
+		
+	  this.step =  $V(form.step);
 	  		
 	  url = new Url();
 	  url.setModuleAction("dPpatients", "import_medecin");
-	  url.addParam("step", ++this.step);
-	  url.addParam("curl", this.curl);
+	  url.addElement(form.step);	  
+	  url.addParam("mode", $V(form.mode));
 	  url.addParam("pass", this.pass);
-	  url.requestUpdate("process");
+	  url.requestUpdate("process", { waitingText : null } );
 	},
 	
 	updateScrewed: function(medecins, time, updates, errors) {
@@ -56,22 +33,35 @@ var Process = {
 	},
 	
 	updateTotal: function(medecins, time, updates, errors) {
+	  this.total.medecins += medecins;
+	  this.total.time     += time;
+	  this.total.updates  += updates;
+	  this.total.errors   += errors;	  
+
 	  var tr = document.createElement("tr");
 	  td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
 	  td = document.createElement("td"); td.textContent = medecins ; tr.appendChild(td);
-	  td = document.createElement("td"); td.textContent = time     ; tr.appendChild(td);
+	  td = document.createElement("td"); td.textContent = time.toFixed(2)     ; tr.appendChild(td);
 	  td = document.createElement("td"); td.textContent = updates  ; tr.appendChild(td);
 	  td = document.createElement("td"); td.textContent = errors   ; tr.appendChild(td);
 	  
 	  var node = { tr: { td : [this.step, medecins, time, updates, errors] } };
 
-		
 	  $("results").appendChild(tr);
 	  
-	  $("total-medecins").innerHTML = this.total.medecins += medecins;
-	  $("total-time"    ).innerHTML = this.total.time     += time;
-	  $("total-updates" ).innerHTML = this.total.updates  += updates;
-	  $("total-errors"  ).innerHTML = this.total.errors   += errors;	  
+	  $("total-medecins").innerHTML = this.total.medecins;
+	  $("total-time"    ).innerHTML = this.total.time.toFixed(2);
+	  $("total-updates" ).innerHTML = this.total.updates;
+	  $("total-errors"  ).innerHTML = this.total.errors;	  
+	},
+	
+	endStep: function() {
+		var form = document.import
+		var step = form.step;
+	  $V(step, parseInt($V(step))+1);
+	  if ($V(form.auto)) {
+	  	Process.doStep.bind(Process).defer();
+	  }
 	}
 }
 
@@ -87,28 +77,34 @@ var Process = {
 	  
 	<tr>
 	  <td colspan="3">
-	    <input type="checkbox" name="curl" id="curl" onchange="Process.curl = this.checked ? 1 : 0" />
-	    <label for="curl">Import distant</label>
+	    <form name="import" action="#" onsubmit="return false">
+	    
+	    <input type="radio" name="mode" value="get" />
+	    <label for="get">Import distant</label>
+	    <input type="radio" name="mode" value="xml" />
+	    <label for="xml">Fichiers XML</label>
+	    <input type="radio" name="mode" value="csv" checked="checked" />
+	    <label for="csv">Fichiers CSV</label>
+	    
+	    <input type="checkbox" name="auto" />
+	    <label for="auto">Automatique</label>
+
 	    <br/>
-			<button class="tick" id="start-process" onclick="Process.start()">
-			  Commencer le processus
+
+	    <label for="step">Etape</label>
+	    <input type="text" name="step" value="1" size="2" />
+
+			<button class="tick" id="start-process" onclick="Process.doStep()">
+			  Traiter étape
 			</button>
 			
-			<button class="change" style="display:none" id="retry-process" onclick="Process.retry()">
-			  Recommencer l'étape
-			</button>
-			<br />
-
-			<button class="cancel" style="display:none" id="stop-process" onclick="Process.stop()">
-			  Arrêter le processus après l'étape courante
-			</button>
-
+			</form>
 	  </td>
 	  <td id="process" colspan="3">
 	  </td>
 	</tr>
 
-	<tbody id="results">
+	<tbody id="results" style="text-align: right">
 	  <tr>
 	    <th>Etape #</th>
 	    <th>Nombre de médecins</th>
@@ -118,7 +114,7 @@ var Process = {
 	  </tr>
 	</tbody>
 
-  <tr id="total">
+  <tr id="total" style="text-align: right">
     <th>Total</th>
     <td id="total-medecins" />
     <td id="total-time" />

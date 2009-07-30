@@ -19,21 +19,9 @@ header('Content-Type: application/csv');
 header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - $owner" : '') .'.csv"');
 
 $aide = new CAideSaisie();
-
-$line = array();
-foreach($aide->getDBFields() as $key => $value) {
-  if (!$aide->_specs[$key] instanceof CRefSpec)
-    $line[] = $key;
-}
-fputcsv($out, $line);
+fputcsv($out, array_keys($aide->getCSVFields()));
 
 foreach($list as $id) {
   if (!$aide->load($id)) continue;
-  
-  $line = array();
-  foreach($aide->getDBFields() as $key => $value) {
-    if (!$aide->_specs[$key] instanceof CRefSpec)
-      $line[] = $value;
-  }
-  fputcsv($out, $line);
+  fputcsv($out, $aide->getCSVFields());
 }

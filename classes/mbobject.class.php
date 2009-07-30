@@ -1589,6 +1589,20 @@ class CMbObject {
     );
   }
   
+  /**
+   * Get CSV values for object, i.e. db fields, references excepted
+   * @return array Associative array of values
+   */
+  function getCSVFields() {
+		$fields = array();
+		foreach ($this->getDBFields() as $key => $value) {
+		  if (!$this->_specs[$key] instanceof CRefSpec) {
+		    $fields[$key] = $value;
+		  }
+		}
+		return $fields;
+  }
+  
   function getTemplateClasses(){
     return array($this->_class_name => $this->_id);
   }

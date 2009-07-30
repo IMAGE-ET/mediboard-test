@@ -29,19 +29,19 @@ if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
     break;
   }
   
-  // Object fields on the first line
-  $fields = fgetcsv($fp);
+  // Object columns on the first line
+  $cols = fgetcsv($fp);
   
   // Each line
   while($line = fgetcsv($fp)) {
     $aide = new CAideSaisie;
-
+    foreach($cols as $index => $field) {
+      $aide->$field = $line[$index];
+    }
+    
     $aide->user_id = $user_id;
     $aide->function_id = $function_id;
     
-    foreach($fields as $key => $field) {
-      $aide->$field = $line[$key];
-    }
     if ($msg = $aide->store()) {
       CAppUI::setMsg($msg);
     }

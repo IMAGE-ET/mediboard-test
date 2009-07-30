@@ -40,9 +40,7 @@
   );
 {{/if}}
 {{if count($medecins)}}
-  Process.doStep();
-{{else}}
-	Process.stop();
+  Process.endStep();
 {{/if}}
 </script>
 {{/if}}
