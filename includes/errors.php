@@ -186,6 +186,10 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
+	
+  $session = $_SESSION;
+  unset($session['AppUI']);
+  $log .= print_infos($session, 'SESSION');
 						 
   // Contextes 
   $contexts = debug_backtrace();
@@ -252,6 +256,10 @@ function exceptionHandler($exception) {
 						 
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
+	
+	$session = $_SESSION;
+	unset($session['AppUI']);
+  $log .= print_infos($session, 'SESSION');
 		
   // Contextes 
   $contexts = $exception->getTrace();
