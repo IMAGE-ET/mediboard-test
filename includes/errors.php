@@ -141,54 +141,52 @@ function mbExport($var, $label = null, $log = false) {
   } else {
     echo $msg;
   }
-  
+}
+
+function print_infos($var, $name = '') {
+	if (count($var))
+	  return "\n<pre><a href='javascript:;' onclick='var s=this.parentNode.childNodes[1].style; s.display=s.display==\"none\"?\"\":\"none\"'>$name</a><span style='display:none;'> " . 
+             substr(print_r($var, true), 6) . '</span></pre>';
 }
 
 /**
  * Custom herror handler with backtrace
  * @return null
  */
-function errorHandler($errno, $errstr, $errfile, $errline) {
+function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   global $divClasses, $errorTypes, $errorCategories, $logPath, $AppUI, $performance;
   
 // See ALL errors
-//  echo "<br />[$errno] : $errstr, $errfile : $errline";
+//  echo "<br />[$errno] : $errorText, $errorFile : $errorLine";
   
   // Handles the @ case
-  if (!error_reporting()) {
-    return;
-  }
-  
-  if (!array_key_exists($errno, $divClasses)) {
+  if (!error_reporting() || !array_key_exists($errorCode, $divClasses)) {
     return;
   }
   
   $errorTime = date("Y-m-d H:i:s");
   
   // CMbArray non chargé
-  $divClass = isset($divClasses[$errno]) ? $divClasses[$errno] : null;
-  $errorType = isset($errorTypes[$errno]) ? $errorTypes[$errno] : null;
-  
+  $divClass = isset($divClasses[$errorCode]) ? $divClasses[$errorCode] : null;
+  $errorType = isset($errorTypes[$errorCode]) ? $errorTypes[$errorCode] : null;
   
   $log = "\n\n<div class='$divClass'>";
   
   if ($AppUI && $AppUI->user_id){
     $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
   }
-  
-  $log .= "\n<strong>Query: </strong>" . @$_SERVER["QUERY_STRING"];
-  
-  $log .= "<br />";
-  
+
   // Erreur générale
-  $errfile = mbRelativePath($errfile);
-  $log .= "\n<strong>Time: </strong>$errorTime";
-  $log .= "\n<strong>Type: </strong>$errorType";
-  $log .= "\n<strong>Text: </strong>$errstr";
-  $log .= "\n<strong>File: </strong>$errfile";
-  $log .= "\n<strong>Line: </strong>$errline";
-  $log .= "<hr />";
+  $errorFile = mbRelativePath($errorFile);
+  $log .= "\n<strong>Time: </strong>$errorTime
+	           <strong>Type: </strong>$errorType
+						 <strong>Text: </strong>$errorText
+						 <strong>File: </strong>$errorFile
+						 <strong>Line: </strong>$errorLine";
   
+  $log .= print_infos($_GET, 'GET');
+  $log .= print_infos($_POST, 'POST');
+						 
   // Contextes 
   $contexts = debug_backtrace();
   array_shift($contexts);
@@ -196,7 +194,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
     
-    $log .= "\n<strong>Function: </strong>" . $function;
+    $log .= "\n<strong>Function: </strong> $function";
     
     if (isset($context["file"])) {
       $context["file"] = mbRelativePath($context["file"]);
@@ -212,7 +210,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $log .= "</div>";
   
-  $performance[$errorCategories[$errno]]++;
+  $performance[$errorCategories[$errorCode]]++;
   
   if (ini_get("log_errors")) {
     file_put_contents($logPath, $log, FILE_APPEND);
@@ -240,30 +238,28 @@ function exceptionHandler($exception) {
     $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
   }
   
-  $log .= "\n<strong>Query: </strong>" . @$_SERVER["QUERY_STRING"];
-  
-  $log .= "<br />";
-  
   // Erreur générale
   $errorTime = date("Y-m-d H:i:s");
   $errorType = "Exception";
   $errorFile = mbRelativePath($exception->getFile());
   $errorLine = $exception->getLine();
   $errorText = $exception->getMessage();
-  $log .= "\n<strong>Time: </strong>$errorTime";
-  $log .= "\n<strong>Type: </strong>$errorType";
-  $log .= "\n<strong>Text: </strong>$errorText";
-  $log .= "\n<strong>File: </strong>$errorFile";
-  $log .= "\n<strong>Line: </strong>$errorLine";
-  $log .= "<hr />";
-  
+  $log .= "\n<strong>Time: </strong>$errorTime
+             <strong>Type: </strong>$errorType
+             <strong>Text: </strong>$errorText
+             <strong>File: </strong>$errorFile
+             <strong>Line: </strong>$errorLine";
+						 
+  $log .= print_infos($_GET, 'GET');
+  $log .= print_infos($_POST, 'POST');
+		
   // Contextes 
   $contexts = $exception->getTrace();
   foreach($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
     
-    $log .= "\n<strong>Function: </strong>" . $function;
+    $log .= "\n<strong>Function: </strong> $function";
     
     if (isset($context["file"])) {
       $context["file"] = mbRelativePath($context["file"]);
