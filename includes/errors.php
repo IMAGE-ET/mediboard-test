@@ -179,10 +179,10 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   // Erreur générale
   $errorFile = mbRelativePath($errorFile);
   $log .= "\n<strong>Time: </strong>$errorTime
-	           <strong>Type: </strong>$errorType
-						 <strong>Text: </strong>$errorText
-						 <strong>File: </strong>$errorFile
-						 <strong>Line: </strong>$errorLine";
+             <strong>Type: </strong>$errorType
+             <strong>Text: </strong>$errorText
+             <strong>File: </strong>$errorFile
+             <strong>Line: </strong>$errorLine";
   
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
