@@ -16,7 +16,7 @@ $echange_soap_id = mbGetValueFromGet("echange_soap_id");
 $page            = mbGetValueFromGet('page', 1);
 $now             = mbDate();
 $_date_min       = mbGetValueFromGetOrSession('_date_min');
-$_date_max       = mbGetValueFromGetOrSession('_date_max', $now);
+$_date_max       = mbGetValueFromGetOrSession('_date_max');
 
 $web_service    = mbGetValueFromGetOrSession("web_service"); 
 
@@ -24,8 +24,6 @@ $doc_errors_msg = $doc_errors_ack = "";
 
 // Chargement de l'échange SOAP demandé
 $echange_soap = new CEchangeSOAP();
-$echange_soap->_date_min = $_date_min ? $_date_min : $now;
-$echange_soap->_date_max = $_date_max ? $_date_max : $now;
 
 $echange_soap->load($echange_soap_id);
 if($echange_soap->_id) {

@@ -29,11 +29,11 @@
           </tr>
           <tr>
             <th>{{mb_label object=$echange_soap field="_date_min"}}</th>
-            <td class="date">{{mb_field object=$echange_soap field="_date_min" form="filterEchange" register=true}} </td>
+            <td class="date">{{mb_field object=$echange_soap field="_date_min" form="filterEchange" register=true}}</td>
           </tr>
           <tr>
              <th>{{mb_label object=$echange_soap field="_date_max"}}</th>
-             <td class="date">{{mb_field object=$echange_soap field="_date_max" form="filterEchange" register=true}} </td>
+             <td class="date">{{mb_field object=$echange_soap field="_date_max" form="filterEchange" register=true}}</td>
           </tr>
           <tr>
             <th class="category" colspan="2">Critères de filtres</th>
