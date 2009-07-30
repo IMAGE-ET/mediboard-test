@@ -44,17 +44,17 @@
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
 
 <div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
-  <div class="loading">Chargement en cours</div>
+  <div class="loading">{{tr}}Loading in progress{{/tr}}</div>
 </div>
 
 <div id="sessionLock" style="display: none;">
   {{if $app->_ref_user}}
-  <h1>Session verrouillée - {{$app->_ref_user}}</h1>
+  <h1>{{tr}}Session locked{{/tr}} - {{$app->_ref_user}}</h1>
   <form name="sessionLockForm" method="post" action="?" onsubmit="return Session.request(this)">
     <input type="hidden" name="unlock" value="unlock" />
     <input type="hidden" name="username" value="{{$app->_ref_user->_user_username}}" />
     <div>
-      <label for="password">Mote de passe </label>
+      <label for="password">{{tr}}Password{{/tr}}</label>
       <input type="password" name="password" />
     </div>
     <div>
@@ -67,15 +67,15 @@
 </div>
 
 <div id="userSwitch" style="display: none;">
-  <h1>Changement d'utilisateur</h1>
+  <h1>{{tr}}User switch{{/tr}}</h1>
   <form name="userSwitchForm" method="post" action="?" onsubmit="return UserSwitch.login(this)">
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_login_as" />
     <div style="text-align: right;">
-      <label for="username">Utilisateur </label><input name="username" tabIndex="1000" type="text" class="notNull" />
+      <label for="username">{{tr}}User{{/tr}} </label><input name="username" tabIndex="1000" type="text" class="notNull" />
       
       {{if $app->user_type != 1}}
-        <br /><label for="password">Mot de passe </label><input name="password" tabIndex="1001" type="password" />
+        <br /><label for="password">{{tr}}Password{{/tr}} </label><input name="password" tabIndex="1001" type="password" />
       {{/if}}
     </div>
     <div>

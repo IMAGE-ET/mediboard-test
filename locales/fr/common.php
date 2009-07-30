@@ -163,4 +163,8 @@ $locales['Short'] = 'Court';
 $locales['Medium'] = 'Moyen';
 $locales['Long'] = 'Long';
 $locales['Enclose'] = 'Cloturer';
+$locales['Loading in progress'] = 'Chargement en cours';
+$locales['Session locked'] = 'Session verrouillée';
+$locales['Password'] = 'Mot de passe';
+$locales['User switch'] = 'Changement d\'utilisateur';
 ?>
