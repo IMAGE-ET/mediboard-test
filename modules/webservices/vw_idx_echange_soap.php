@@ -16,7 +16,7 @@ $echange_soap_id = mbGetValueFromGet("echange_soap_id");
 $page            = mbGetValueFromGet('page', 1);
 $now             = mbDate();
 $_date_min       = mbGetValueFromGetOrSession('_date_min');
-$_date_max       = mbGetValueFromGetOrSession('_date_max');
+$_date_max       = mbGetValueFromGetOrSession('_date_max', $now);
 
 $web_service    = mbGetValueFromGetOrSession("web_service"); 
 
@@ -41,6 +41,10 @@ if($echange_soap->_id) {
 $itemEchangeSoap = new CEchangeSOAP;
 
 $where = array();
+if ($_date_min && $_date_max) {
+	$where['date_echange'] = " = ' BETWEEN ".$_date_min." AND ".$_date_max."' "; 
+}
+
 $where["web_service_name"] = $web_service ? " = '".$web_service."'" : "IS NULL";
 
 $total_echange_soap = $itemEchangeSoap->countList($where);
@@ -66,6 +70,7 @@ $smarty->assign("echange_soap"       , $echange_soap);
 $smarty->assign("listEchangeSoap"    , $listEchangeSoap);
 $smarty->assign("total_echange_soap" , intval($total_echange_soap));
 $smarty->assign("total_pages"        , $total_pages);
+$smarty->assign("page"               , $page);
 
 $smarty->assign("web_service"        , $web_service);
 

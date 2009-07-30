@@ -21,6 +21,7 @@
       <form action="?" name="filterEchange" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
         
         <table class="form">
           <tr>
@@ -78,6 +79,37 @@
             </td>
           </tr>
         </table>
+        {{if $total_echange_soap != 0}}
+	        <div style="font-weight:bold;padding-top:10px"> 
+	          {{$total_echange_soap}} {{tr}}results{{/tr}}
+	        </div>
+	        <div class="pagination">
+	          {{if ($page == 1)}}
+	            {{$page}}
+	          {{else}}
+	            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$page-1}})"> < Précédent </a> |
+	            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, 1)"> 1 </a> | 
+	            {{$page}} 
+	          {{/if}}
+	          {{if $page != $total_pages}}
+	            | <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$total_pages}})"> {{$total_pages}} </a> | 
+	            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$page+1}})"> Suivant > </a>
+	          {{/if}}
+	        </div>
+	        <div>
+	          <select name="listpageeechangesoap" onchange="$V(this.form.elements.page, $V(this))">
+	            <option value="">&mdash; Page</option>
+	            {{if $total_pages < 4}}
+	              {{assign var="step" value=1}}
+	            {{else}}
+	              {{assign var="step" value=4}}
+	            {{/if}}
+	            {{foreach from=1|range:$total_pages:$step item=_page}}
+	              <option value="{{$_page}}" {{if $_page == $page}}selected="selected"{{/if}}>{{$_page}}</option>
+	            {{/foreach}}
+	          </select>
+	        </div>
+	      {{/if}}
       </form>
     </td>
   </tr>
