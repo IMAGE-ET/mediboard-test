@@ -26,14 +26,15 @@ function hideAddCorres() {
 }
 
 function addCorrespondant() {
-	onSubmitFormAjax(getForm('editFrmCorres'));
-	hideAddCorres();
-	var formFind = getForm('find');
-	var formEditFrmCorres = getForm('editFrmCorres');
-	formFind.elements.medecin_nom.value    = formEditFrmCorres.elements.nom.value;
-	formFind.elements.medecin_prenom.value = formEditFrmCorres.elements.prenom.value;
-	formFind.elements.medecin_dept.value   = '';
-	formFind.submit();
+	onSubmitFormAjax(getForm('editFrmCorres'), { onComplete : function() {
+		hideAddCorres();
+		var formFind = getForm('find');
+		var formEditFrmCorres = getForm('editFrmCorres');
+		formFind.elements.medecin_nom.value    = formEditFrmCorres.elements.nom.value;
+		formFind.elements.medecin_prenom.value = formEditFrmCorres.elements.prenom.value;
+		formFind.elements.medecin_dept.value   = '';
+    formFind.submit();
+	}});
 }
 
 Main.add(function () {
@@ -118,8 +119,8 @@ Main.add(function () {
           {{/if}}
           <th>{{mb_title class=CMedecin field=nom}}</th>
           <th>{{mb_title class=CMedecin field=adresse}}</th>
-          <th>{{mb_title class=CMedecin field=ville}}</th>
-          <th>{{mb_title class=CMedecin field=cp}}</th>
+          <th>{{mb_colonne class=CMedecin field="ville" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_medecins"}}</th>
+          <th>{{mb_colonne class=CMedecin field="cp" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_medecins"}}</th>
           <th>{{mb_title class=CMedecin field=tel}}</th>
           <th>{{mb_title class=CMedecin field=fax}}</th>
           <th>{{mb_title class=CMedecin field=portable}}</th>

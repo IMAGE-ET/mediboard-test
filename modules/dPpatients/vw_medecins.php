@@ -13,6 +13,10 @@ $can->needsRead();
 $dialog     = mbGetValueFromGet("dialog");
 $medecin_id = mbGetValueFromGetOrSession("medecin_id");
 
+// Parametre de tri
+$order_way = mbGetValueFromGetOrSession("order_way", "DESC");
+$order_col = mbGetValueFromGetOrSession("order_col", "ccmu");
+
 // Récuperation du medecin sélectionné
 $medecin = new CMedecin();
 if(mbGetValueFromGet("new", 0) || $dialog) {
@@ -44,8 +48,16 @@ if ($medecin_prenom) $where["prenom"]   = "LIKE '$medecin_prenom%'";
 if ($medecin_dept && $medecin_dept != "00") $where["cp"] = "LIKE '".$medecin_dept."___'";
 if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
 
+if ($order_col == "cp") {
+  $order = "cp $order_way, nom, prenom";
+} else if ($order_col == "ville") {
+	$order = "ville $order_way, nom, prenom";
+} else {
+	$order = "nom, prenom";
+}
+
 $medecins = new CMedecin();
-$medecins = $medecins->loadList($where, "nom, prenom", "0, 50");
+$medecins = $medecins->loadList($where, $order, "0, 50");
 
 $list_types = $medecin->_specs['type']->_locales;
 
@@ -60,6 +72,9 @@ $smarty->assign("type"       , $medecin_type);
 $smarty->assign("medecins"   , $medecins);
 $smarty->assign("medecin"    , $medecin);
 $smarty->assign("list_types" , $list_types);
+
+$smarty->assign("order_col"   , $order_col);
+$smarty->assign("order_way"   , $order_way);
 
 $smarty->display("vw_medecins.tpl");
 
