@@ -105,7 +105,10 @@ $consult->accident_travail = mbGetValueFromPost("accident_travail");
 // Cas des urgences
 if ($sejour_id) {
   // Motif de la consultation
-  $consult->motif = "RPU: ";
+  $consult->motif = "";
+  if (CAppUI::conf('dPurgences motif_rpu_view')) {
+	  $consult->motif .= "RPU: ";
+  }
   $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
 } 
 

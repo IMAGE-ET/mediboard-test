@@ -283,4 +283,6 @@ $locales['config-dPurgences-default_view-tous'] = 'Tous les patients';
 $locales['config-dPurgences-default_view-presents'] = 'Seulement les patients présents';
 $locales['config-dPurgences-allow_change_patient'] = 'Possibilité de modifier le patient d\'un RPU';
 $locales['config-dPurgences-allow_change_patient-desc'] = 'Possibilité de modifier le patient d\'un RPU';
+$locales['config-dPurgences-motif_rpu_view'] = 'Affichage du motif du RPU';
+$locales['config-dPurgences-motif_rpu_view-desc'] = 'Affichage du motif du RPU';
 ?>

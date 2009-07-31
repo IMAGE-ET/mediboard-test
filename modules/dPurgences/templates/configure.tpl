@@ -88,6 +88,21 @@
       <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
   </tr>
+
+ {{assign var="var" value="motif_rpu_view"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td>
+      <label for="{{$m}}[{{$var}}]_1">Oui</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$var}}]_0">Non</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
   
   <tr>
     <td class="button" colspan="2">
