@@ -8,6 +8,32 @@ function setClose(id, view) {
   window.close();
 }
 
+var formVisible = false;
+function showAddCorres() {
+	if (!formVisible) {
+		window.resizeBy(320,0);
+		$('addCorres').show();
+		formVisible = true;
+	} else {
+		hideAddCorres();
+	}
+}
+
+function hideAddCorres() {
+	window.resizeBy(-320,0);
+  $('addCorres').hide();
+  formVisible = false;
+}
+
+function addCorrespondant() {
+	submitFormAjax(getForm('editFrmCorres'), 'systemMsg');
+	hideAddCorres();
+	getForm('find').elements.medecin_nom.value    = getForm('editFrmCorres').elements.nom.value;
+	getForm('find').elements.medecin_prenom.value = getForm('editFrmCorres').elements.prenom.value;
+	getForm('find').elements.medecin_dept.value   = '';
+	getForm('find').submit();
+}
+
 Main.add(function () {
   if (document.editFrm) {
     initInseeFields("editFrm", "cp", "ville","tel");
@@ -45,7 +71,7 @@ Main.add(function () {
         </tr>
         
         <tr>
-          <th><label for="medecin_dept" title="Département du correspondant recherché">Département (00 pour tous)</label></th>
+          <th><label for="medecin_dept" title="Département du correspondant recherché">Département</label></th>
           <td><input type="text" name="medecin_dept" value="{{$departement|stripslashes}}" /></td>
         </tr>
         
@@ -62,7 +88,14 @@ Main.add(function () {
         </tr>
         
         <tr>
-          <td class="button" colspan="2"><button class="search" type="submit">Rechercher</button></td>
+          {{if !$dialog}}
+          <td class="button" colspan="2"><button class="search" type="submit">{{tr}}Search{{/tr}}</button></td>
+          {{else}}
+          <td class="button" colspan="2">
+            <button class="search" type="submit" onclick="formVisible=false;">{{tr}}Search{{/tr}}</button>
+            <button class="new" type="button" onclick="showAddCorres();">{{tr}}Create{{/tr}} &gt;</button>
+          </td>
+          {{/if}}
         </tr>
       </table>
 
@@ -293,6 +326,68 @@ Main.add(function () {
       </table>
       {{/if}}
       
+    </td>
+    {{else}}
+    <td id="addCorres" style="display:none">
+      <form name="editFrmCorres" method="post" action="?m={{$m}}">
+	      <input type="hidden" name="dosql" value="do_medecins_aed" />
+	      <input type="hidden" name="m" value="dPpatients" />
+	      {{mb_field object=$medecin field="medecin_id" hidden=1 prop=""}}
+	      <input type="hidden" name="del" value="0" />
+	      <table class="form">
+	        <tr>
+            <th class="category" colspan="2">
+              Création d'une fiche
+            </th>
+          </tr>
+          <tr>
+	          <th>{{mb_label object=$medecin field="nom"}}</th>
+	          <td>{{mb_field object=$medecin field="nom"}}</td>
+	        </tr>
+	        
+	        <tr>
+	          <th>{{mb_label object=$medecin field="prenom"}}</th>
+	          <td>{{mb_field object=$medecin field="prenom"}}</td>
+	        </tr>
+	        
+	        <tr>
+	          <th>{{mb_label object=$medecin field="adresse"}}</th>
+	          <td>{{mb_field object=$medecin field="adresse"}}</td>
+	        </tr>
+	        
+	        <tr>
+	          <th>{{mb_label object=$medecin field="cp"}}</th>
+	          <td>
+	            {{mb_field object=$medecin field="cp" size="31" maxlength="5"}}
+	            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
+	          </td>
+	        </tr>
+	        
+	        <tr>
+	          <th>{{mb_label object=$medecin field="ville"}}</th>
+	          <td>
+	            {{mb_field object=$medecin field="ville" size="31"}}
+	            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
+	          </td>
+	        </tr>
+	        
+	        <tr>
+	          <th>{{mb_label object=$medecin field="tel"}}</th>
+	          <td>{{mb_field object=$medecin field="tel"}}</td>
+	        </tr>
+	        
+	        <tr>
+	          <th>{{mb_label object=$medecin field="type"}}</th>
+	          <td>{{mb_field object=$medecin field="type"}}</td>
+	        </tr>
+        
+	        <tr>
+	          <td class="button" colspan="4">
+	            <button class="submit" type="button" onclick="addCorrespondant();">{{tr}}Create{{/tr}}</button>
+	          </td>
+	        </tr>
+	      </table>
+	    </form>
     </td>
     {{/if}}
   </tr>

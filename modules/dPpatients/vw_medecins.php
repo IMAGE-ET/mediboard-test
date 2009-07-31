@@ -15,7 +15,7 @@ $medecin_id = mbGetValueFromGetOrSession("medecin_id");
 
 // Récuperation du medecin sélectionné
 $medecin = new CMedecin();
-if(mbGetValueFromGet("new", 0)) {
+if(mbGetValueFromGet("new", 0) || $dialog) {
   $medecin->load(null);
   mbSetValueToSession("medecin_id", null);
 }
@@ -41,7 +41,7 @@ if($dialog) {
 $where = array();
 if ($medecin_nom   ) $where["nom"]      = "LIKE '$medecin_nom%'";
 if ($medecin_prenom) $where["prenom"]   = "LIKE '$medecin_prenom%'";
-if ($medecin_dept != "00") $where["cp"] = "LIKE '".$medecin_dept."___'";
+if ($medecin_dept && $medecin_dept != "00") $where["cp"] = "LIKE '".$medecin_dept."___'";
 if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
 
 $medecins = new CMedecin();
