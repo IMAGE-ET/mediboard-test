@@ -96,8 +96,13 @@ var Patient = {
       <input type="hidden" name="naissance" value="{{$useNaissance}}" />
     </th>
     <td colspan="2">
+    	{{if $naissance}}
+			  {{assign var=naiss value=$naissance}}
+			{{else}}
+			  {{assign var=naiss value='0000-00-00'}}
+			{{/if}}
          {{html_select_date
-           time=$naissance
+           time=$naiss
            start_year=1900
            field_order=DMY
            day_empty="Jour"
