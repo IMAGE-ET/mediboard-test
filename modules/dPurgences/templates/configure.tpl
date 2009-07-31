@@ -20,8 +20,8 @@
     <th class="category" colspan="100">Mode RPU</th>
   </tr>
   
+  {{assign var=var value=old_rpu}}
   <tr>
-    {{assign var=var value=old_rpu}}
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
@@ -35,8 +35,8 @@
     </td>
   </tr>
   
+  {{assign var="var" value="rpu_warning_time"}}
   <tr>
-    {{assign var="var" value="rpu_warning_time"}}
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
@@ -48,32 +48,47 @@
   </tr>
    
   <tr>
-     {{assign var="var" value="rpu_alert_time"}}
-     <th>
-       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-       </label>  
-     </th>
-     <td>
-       <input class="str" size="40" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-     </td>
-   </tr>
-   
-   <tr>
-    {{assign var=var value=default_view}}
+    {{assign var="var" value="rpu_alert_time"}}
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
       </label>  
     </th>
     <td>
-      <select name="{{$m}}[{{$var}}]">
-        <option value="tous" {{if "tous" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-tous{{/tr}}</option>
-        <option value="presents" {{if "presents" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-presents{{/tr}}</option>
-      </select>
+      <input class="str" size="40" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>
-    
+  
+  {{assign var=var value=default_view}} 
+  <tr>
+   <th>
+     <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+       {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+     </label>  
+   </th>
+   <td>
+     <select name="{{$m}}[{{$var}}]">
+       <option value="tous" {{if "tous" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-tous{{/tr}}</option>
+       <option value="presents" {{if "presents" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-presents{{/tr}}</option>
+     </select>
+   </td>
+  </tr>
+  
+  {{assign var="var" value="allow_change_patient"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td>
+      <label for="{{$m}}[{{$var}}]_1">Oui</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$var}}]_0">Non</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+  
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

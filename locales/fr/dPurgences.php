@@ -281,4 +281,6 @@ $locales['config-dPurgences-default_view'] = 'Affichage par défaut dans la main 
 $locales['config-dPurgences-default_view-desc'] = 'Affichage par défaut dans la main courante';
 $locales['config-dPurgences-default_view-tous'] = 'Tous les patients';
 $locales['config-dPurgences-default_view-presents'] = 'Seulement les patients présents';
+$locales['config-dPurgences-allow_change_patient'] = 'Possibilité de modifier le patient d\'un RPU';
+$locales['config-dPurgences-allow_change_patient-desc'] = 'Possibilité de modifier le patient d\'un RPU';
 ?>

@@ -207,9 +207,15 @@ Main.add(function () {
 	    {{mb_label object=$rpu field="_patient_id"}}
 	  </th>
 	  <td>
-	  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
-	   
-	    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+	  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" 
+	  	  {{if $dPconfig.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+	  	    ondblclick="PatSelector.init()" 
+	  	  {{/if}}
+	  	readonly="readonly" />
+	    
+	    {{if $dPconfig.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+	      <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+	    {{/if}}
 	    <script type="text/javascript">
 	      PatSelector.init = function(){
 	        this.sForm = "editRPU";
