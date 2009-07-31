@@ -18,13 +18,16 @@
 
 <script type="text/javascript">
 var Patient = {
-  create : function() {
+  create : function(form) {
     url = new Url;
     url.setModuleTab("dPpatients", "vw_edit_patients");
     url.addParam("patient_id", 0);
-    url.addParam("useVitale", "{{$useVitale}}");
-    url.addParam("name", "{{$nom}}");
-    url.addParam("firstName", "{{$prenom}}");
+    url.addParam("useVitale", $V(form.useVitale));
+    url.addParam("name",      $V(form.nom));
+    url.addParam("firstName", $V(form.prenom));
+    url.addParam("naissance_day",  $V(form.Date_Day));
+    url.addParam("naissance_month",$V(form.Date_Month));
+    url.addParam("naissance_year", $V(form.Date_Year));
     url.redirect();
   }
 }
@@ -51,6 +54,7 @@ var Patient = {
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="new" value="1" />
+<input type="hidden" name="useVitale" value="{{$useVitale}}" />
 
 <table class="form">
   <tr>
@@ -89,11 +93,11 @@ var Patient = {
       <label for="Date_Day" title="Date de naissance du patient à rechercher">
         Date de naissance
       </label>
-      <input type="hidden" name="naissance" {{if $naissance == "on"}}value="on"{{else}}value="off"{{/if}} />
+      <input type="hidden" name="naissance" value="{{$useNaissance}}" />
     </th>
     <td colspan="2">
          {{html_select_date
-           time=0000-00-00
+           time=$naissance
            start_year=1900
            field_order=DMY
            day_empty="Jour"
@@ -132,7 +136,7 @@ var Patient = {
       {{/if}}
       
       {{if $can->edit}}
-      <button class="new" type="button" onclick="Patient.create();">
+      <button class="new" type="button" onclick="Patient.create(this.form);">
         {{tr}}Create{{/tr}}
         {{if $useVitale}}avec Vitale{{/if}}
       </button>
@@ -212,7 +216,6 @@ var Patient = {
     <th colspan="5">
       Résultats proches
       ({{$patientsSoundexCount}} {{tr}}found{{/tr}})
-      
     </th>
   </tr>
   {{/if}}

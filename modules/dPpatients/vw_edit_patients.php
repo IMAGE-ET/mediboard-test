@@ -14,6 +14,9 @@ $can->needsEdit();
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");
+$naissance_day   = mbGetValueFromGet("naissance_day");
+$naissance_month = mbGetValueFromGet("naissance_month");
+$naissance_year  = mbGetValueFromGet("naissance_year");
 $useVitale  = mbGetValueFromGet("useVitale");
 
 $patient = new CPatient;
@@ -30,6 +33,10 @@ if (!$patient_id) {
   $patient->prenom = $firstName;
 	$patient->assure_nom    = $name;
   $patient->assure_prenom = $firstName;
+	
+	if ($naissance_day && $naissance_month && $naissance_year) {
+		$patient->naissance = sprintf('%04d-%02d-%02d', $naissance_year, $naissance_month, $naissance_day);
+	}
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision

@@ -34,16 +34,16 @@ if ($new = mbGetValueFromGet("new")) {
   $patient->load($patient_id);
 }
 
-
 // Récuperation des patients recherchés
-$patient_nom         = mbGetValueFromGetOrSession("nom"         , ""       );
-$patient_prenom      = mbGetValueFromGetOrSession("prenom"      , ""       );
-$patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
-$patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
-$patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
-$patient_day         = mbGetValueFromGet("Date_Day"    , "");
-$patient_month       = mbGetValueFromGet("Date_Month"  , "");
-$patient_year        = mbGetValueFromGet("Date_Year"   , "");
+$patient_nom         = mbGetValueFromGetOrSession("nom"        , "");
+$patient_prenom      = mbGetValueFromGetOrSession("prenom"     , "");
+$patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille" , "");
+$patient_ville       = mbGetValueFromGetOrSession("ville"      , "");
+$patient_cp          = mbGetValueFromGetOrSession("cp"         , "");
+$patient_day         = mbGetValueFromGet("Date_Day"  , "");
+$patient_month       = mbGetValueFromGet("Date_Month", "");
+$patient_year        = mbGetValueFromGet("Date_Year" , "");
+$patient_useNaissance= null;
 $patient_naissance   = null;
 $patient_ipp         = mbGetValueFromGet("patient_ipp");
 $useVitale           = mbGetValueFromGet("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
@@ -65,10 +65,10 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   $idsante->loadMatchingObject();
   
   if ($idsante->object_id){
-   $patient = new CPatient();
-   $patient->load($idsante->object_id);
-   mbSetValueToSession("patient_id", $patient->_id);
-   $patients[$patient->_id] = $patient; 
+    $patient = new CPatient();
+    $patient->load($idsante->object_id);
+    mbSetValueToSession("patient_id", $patient->_id);
+    $patients[$patient->_id] = $patient; 
   }
 } 
 else {
@@ -80,7 +80,7 @@ else {
 	  $patient_prenom = $patVitale->prenom;
 	  mbSetValueToSession("nom", $patVitale->nom);
 	  mbSetValueToSession("prenom", $patVitale->prenom);
-	  $patient_naissance = "on";
+	  $patient_useNaissance = "on";
 	  mbSetValueToSession("naissance", "on");
 	  $patVitale->loadFromIdVitale();
 	}
@@ -89,39 +89,35 @@ else {
 	$whereSoundex = array();
 	$soundexObj   = new soundex2();
 	
-	if ($patient_nom) {
-	  $patient_nom = trim($patient_nom);
+	if ($patient_nom = trim($patient_nom)) {
 	  $where["nom"]                 = "LIKE '$patient_nom%'";
 	  $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
 	}
-	if ($patient_prenom) {
-	  $patient_prenom = trim($patient_prenom);
+	if ($patient_prenom = trim($patient_prenom)) {
 	  $where["prenom"]                 = "LIKE '$patient_prenom%'";
 	  $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
 	}
-	if ($patient_jeuneFille) {
-	  $patient_jeuneFille = trim($patient_jeuneFille);
+	if ($patient_jeuneFille = trim($patient_jeuneFille)) {
 	  $where["nom_jeune_fille"]        = "LIKE '$patient_jeuneFille%'";
 	  $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
 	}
 	
-	
-	if(($patient_year) || ($patient_month) || ($patient_day)){
-		$patient_naissance = "on";
+	if($patient_year || $patient_month || $patient_day){
+		$patient_useNaissance = "on";
 	}
 	
-	if ($patient_naissance == "on"){
-	  $year =($patient_year)?"$patient_year-":"%-";
-	  $month =($patient_month)?"$patient_month-":"%-";
-	  $day =($patient_day)?"$patient_day":"%";
-	  if ($day!="%") {
-	    $day = str_pad($day,2,"0",STR_PAD_LEFT);
-	  }
+	if ($patient_useNaissance == "on"){
+    if($patient_year || $patient_month || $patient_day){
+		  $year  = $patient_year  ? "$patient_year-"  : "%-";
+		  $month = $patient_month ? "$patient_month-" : "%-";
+		  $day   = $patient_day   ? "$patient_day"    : "%";
+		  if ($day != "%") {
+		    $day = str_pad($day, 2, "0", STR_PAD_LEFT);
+		  }
+		  
+		  $patient_naissance = $year.$month.$day;
 	  
-	  $naissance = $year.$month.$day;
-	  
-	  if($patient_year || $patient_month || $patient_day){
-	    $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
+	    $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
 	  }
 	}
 	
@@ -141,16 +137,16 @@ else {
 	
 	// Chargement des patients
 	if ($where) {
-	  $patients = $pat->loadList($where, $order, "0, $showCount");
+	  $patients = $pat->loadList($where, $order, $showCount);
 	}
 	
 	if ($whereSoundex) {
-	  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $showCount");
+	  $patientsSoundex = $pat->loadList($whereSoundex, $order, $showCount);
 	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
 	}
 	
 	// Sélection du premier de la liste si aucun n'est déjà sélectionné
-	if (!$patient->_id and count($patients) == 1) {
+	if (!$patient->_id && count($patients) == 1) {
 	  $patient = reset($patients);
 	}
 	
@@ -177,7 +173,6 @@ if ($patient->_id) {
 $patient->loadIPP();
 $patient->loadIdVitale();
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -190,7 +185,8 @@ $smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet")     );
 $smarty->assign("nom"                 , $patient_nom              );
 $smarty->assign("prenom"              , $patient_prenom           );
 $smarty->assign("jeuneFille"          , $patient_jeuneFille       );
-$smarty->assign("naissance"           , $patient_naissance        );
+$smarty->assign("useNaissance"        , $patient_useNaissance     ); // 'on' or null
+$smarty->assign("naissance"           , $patient_naissance        ); // date
 $smarty->assign("ville"               , $patient_ville            );
 $smarty->assign("cp"                  , $patient_cp               );
 
