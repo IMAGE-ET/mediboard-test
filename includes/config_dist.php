@@ -551,6 +551,8 @@ $dPconfig["dPurgences"] = array (
   "old_rpu"          => "1",
   "rpu_warning_time" => "00:20:00",
   "rpu_alert_time"   => "01:00:00",
+  "default_view"     => "tous",
+  "patient_id"       => "1"
 );
 
 $dPconfig["dPstock"] = array (
