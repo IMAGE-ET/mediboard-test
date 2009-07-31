@@ -26,12 +26,14 @@ function hideAddCorres() {
 }
 
 function addCorrespondant() {
-	submitFormAjax(getForm('editFrmCorres'), 'systemMsg');
+	onSubmitFormAjax(getForm('editFrmCorres'));
 	hideAddCorres();
-	getForm('find').elements.medecin_nom.value    = getForm('editFrmCorres').elements.nom.value;
-	getForm('find').elements.medecin_prenom.value = getForm('editFrmCorres').elements.prenom.value;
-	getForm('find').elements.medecin_dept.value   = '';
-	getForm('find').submit();
+	var formFind = getForm('find');
+	var formEditFrmCorres = getForm('editFrmCorres');
+	formFind.elements.medecin_nom.value    = formEditFrmCorres.elements.nom.value;
+	formFind.elements.medecin_prenom.value = formEditFrmCorres.elements.prenom.value;
+	formFind.elements.medecin_dept.value   = '';
+	formFind.submit();
 }
 
 Main.add(function () {
@@ -329,7 +331,7 @@ Main.add(function () {
     </td>
     {{else}}
     <td id="addCorres" style="display:none">
-      <form name="editFrmCorres" method="post" action="?m={{$m}}">
+      <form name="editFrmCorres" method="post" action="?m={{$m}}" onsubmit="return checkForm(this)">
 	      <input type="hidden" name="dosql" value="do_medecins_aed" />
 	      <input type="hidden" name="m" value="dPpatients" />
 	      {{mb_field object=$medecin field="medecin_id" hidden=1 prop=""}}
