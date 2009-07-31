@@ -9,7 +9,7 @@
   {{else}}
     <input type="hidden" name="sortie_prevue" value="{{$now}}" />
     <button class="tick" type="button" onclick="submitSejRpuConsult();">{{mb_label object=$rpu field="sortie_autorisee"}}</button>
-    <button class="tick" type="button" onclick="this.form.elements._modifier_sortie.value=1; validCotation(); submitSejRpuConsult();">Autoriser/Effectuer la sortie</button>
+    <button class="tick" type="button" onclick="this.form.elements._modifier_sortie.value=1; validCotation(); submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
   {{/if}}
 </form>
 
