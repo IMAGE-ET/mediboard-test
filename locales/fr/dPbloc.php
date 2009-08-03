@@ -147,4 +147,6 @@ $locales['CPlageOp-spec_repl_id-court'] = 'Remplacement';
 $locales['config-dPbloc-CPlageOp-hours_start-desc'] = 'Here de début pour l\'affichage des plannings';
 $locales['config-dPbloc-CPlageOp-hours_stop-desc'] = 'Here de fin pour l\'affichage des plannings';
 $locales['config-dPbloc-CPlageOp-minutes_interval-desc'] = 'Intervalles en minutes par défaut';
+$locales['config-dPbloc-CPlageOp-locked'] = 'Blocage de plages opératoires pleines';
+$locales['config-dPbloc-CPlageOp-days_locked'] = 'Blocage de plages opératoires à J-';
 ?>

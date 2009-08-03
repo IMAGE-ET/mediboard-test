@@ -13,7 +13,7 @@ function setClose(date, salle_id) {
   
   var plage_id = $V(list);
   if (!plage_id) {
-    alert('choisissez une plage non pleine');
+    alert('Vous n\'avez pas selectionné de plage ou la plage selectionnée n\'est plus disponible à la planification.\n\nPour plus d\'information, veuillez contacter le responsable du bloc');
   	return;
   }
    
@@ -151,12 +151,16 @@ Main.add(function () {
             </div>
           </td>
           <td style="width: 1%;">
-            {{if !$over || !$dPconfig.dPbloc.CPlageOp.locked}}
-            {{if (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0) || ($curr_plage->max_intervention == ""))}}
+            {{if $resp_bloc ||
+              (
+               (!$over || !$dPconfig.dPbloc.CPlageOp.locked)
+               && ($curr_plage->date >= $date_min)
+               && (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0) || ($curr_plage->max_intervention == ""))
+              )
+            }}
             <input type="radio" name="list" value="{{$curr_plage->plageop_id}}"
                ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"
                onclick="document.frmSelector._date.value='{{$curr_plage->date}}'; document.frmSelector._salle_id.value='{{$curr_plage->salle_id}}';"/>
-            {{/if}}
             {{/if}}
           </td>
         </tr>

@@ -20,6 +20,8 @@ $operation_id = mbGetValueFromGet("operation_id" , null);
 $curr_op_hour = mbGetValueFromGet("curr_op_hour" , "25");
 $curr_op_min  = mbGetValueFromGet("curr_op_min"  , "00");
 
+$date_min = mbDate("+ ".CAppUI::conf("dPbloc CPlageOp days_locked")." DAYS");
+
 // Liste des mois selectionnables
 
 $date = mbTransformTime(null, $date, "%Y-%m-01");
@@ -71,6 +73,7 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"        , $date);
+$smarty->assign("date_min"    , $date_min);
 $smarty->assign("listMonthes" , $listMonthes);
 $smarty->assign("operation_id", $operation_id);
 $smarty->assign("chir"        , $chir);
@@ -83,6 +86,8 @@ $smarty->assign("hours"              , $hours);
 $smarty->assign("mins"               , $mins);
 $smarty->assign("heure_entree_veille", $heure_entree_veille);
 $smarty->assign("heure_entree_jour"  , $heure_entree_jour);
+
+$smarty->assign("resp_bloc", CModule::getInstalled("dPbloc")->canEdit());
 
 $smarty->display("plage_selector.tpl");
 ?>

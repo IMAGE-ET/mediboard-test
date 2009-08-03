@@ -281,6 +281,7 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "plage_vide"       => "0",
   "libelle_ccam"     => "1", 
   "locked"           => "1",
+  "days_locked"      => "0",
   "planning" => array (
   	"col1" => "interv",
 		"col2" => "sejour",

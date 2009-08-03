@@ -106,15 +106,27 @@ function doReaffectation(mode_real) {
   </tr>
 
   <tr>
-    <th class="category" colspan="4">Dépassement de plage opératoire bloquant</th>
+    <th class="category" colspan="4">Blocage des plages opératoires</th>
   </tr>
   <tr>
     {{assign var="var" value="locked"}}
-    <td colspan="4" style="text-align: center">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    <th colspan="2">
+      <label for="{{$m}}[{{$class}}][{{$var}}]_1">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</label>
+    </th>
+    <td colspan="2">
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+      <label for="{{$m}}[{{$class}}][{{$var}}]_1">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+      <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
+    </td>          
+  </tr>
+  <tr>
+    {{assign var="var" value="days_locked"}}
+    <th colspan="2">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</label>
+    </th>
+    <td colspan="2">
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="2" /> jours
     </td>          
   </tr>
 
@@ -124,10 +136,10 @@ function doReaffectation(mode_real) {
   </tr>
   <tr>
     <td colspan="4" style="text-align: center">
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]_1" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]_0" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>          
   </tr>
  

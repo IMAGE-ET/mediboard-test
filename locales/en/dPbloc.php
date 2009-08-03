@@ -138,4 +138,15 @@ $locales['CPlageOp-delay_repl'] = '';
 $locales['CPlageOp-delay_repl-desc'] = '';
 $locales['CPlageOp-spec_repl_id'] = '';
 $locales['CPlageOp-spec_repl_id-desc'] = '';
+$locales['config-dPbloc-CPlageOp-locked'] = '';
+$locales['CFunctions-back-plages_op_repl'] = '';
+$locales['config-dPbloc-CPlageOp-hours_start-desc'] = '';
+$locales['config-dPbloc-CPlageOp-hours_stop-desc'] = '';
+$locales['config-dPbloc-CPlageOp-minutes_interval-desc'] = '';
+$locales['CPlageOp-actes_locked'] = '';
+$locales['CPlageOp-actes_locked-court'] = '';
+$locales['CPlageOp-actes_locked-desc'] = '';
+$locales['CPlageOp-delay_repl-court'] = '';
+$locales['CPlageOp-spec_repl_id-court'] = '';
+$locales['config-dPbloc-CPlageOp-days_locked'] = '';
 ?>
