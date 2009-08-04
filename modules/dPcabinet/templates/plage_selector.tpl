@@ -42,6 +42,7 @@ Main.add(function () {
     <input type="hidden" name="a" value="plage_selector" />
     <input type="hidden" name="dialog" value="1" />
     <input type="hidden" name="chir_id" value="{{$chir_id}}" />
+    <input type="hidden" name="function_id" value="{{$function_id}}" />
     <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
 
     <table class="form">

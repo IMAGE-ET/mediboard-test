@@ -14,11 +14,12 @@ $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
 $plageconsult_id = mbGetValueFromGet("plageconsult_id");
-$hour    = mbGetValueFromGet("hour");
-$chir_id = mbGetValueFromGet("chir_id");
-$date    = mbGetValueFromGet("date", mbDate());
-$hide_finished = mbGetValueFromGet("hide_finished", true);
-$period = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
+$hour            = mbGetValueFromGet("hour");
+$chir_id         = mbGetValueFromGet("chir_id");
+$function_id     = mbGetValueFromGet("function_id");
+$date            = mbGetValueFromGet("date", mbDate());
+$hide_finished   = mbGetValueFromGet("hide_finished", true);
+$period          = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
@@ -33,7 +34,7 @@ $where = array();
 
 // Praticiens sélectionnés
 $listPrat = new CMediusers;
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+$listPrat = $listPrat->loadPraticiens(PERM_EDIT, $function_id);
 
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
 
@@ -141,6 +142,7 @@ $smarty->assign("date"           , $date);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);
 $smarty->assign("chir_id"        , $chir_id);
+$smarty->assign("function_id"    , $function_id);
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlage"      , $listPlage);

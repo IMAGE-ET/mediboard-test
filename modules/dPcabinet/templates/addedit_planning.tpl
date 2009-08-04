@@ -44,10 +44,10 @@ function requestInfoPat() {
 }
 
 function ClearRDV(){
-  var f = document.editFrm;
-  f.plageconsult_id.value = 0;
-  f._date.value = "";
-  f.heure.value = "";
+  var oForm = document.editFrm;
+  $V(oForm.plageconsult_id, "", true);
+  $V(oForm._date, "");
+  $V(oForm.heure, "");
 }
 
 function annuleConsult(oForm, etat) {
@@ -178,7 +178,7 @@ Main.add(function () {
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>
-            <select name="chir_id" class="{{$consult->_props.patient_id}}" onChange="ClearRDV(); refreshListCategorie(this.value)">
+            <select name="chir_id" style="max-width: 150px" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); $V(this.form._function_id, '');">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -255,7 +255,7 @@ Main.add(function () {
             {{mb_field object=$consult field="premiere" hidden="hidden"}}
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
-          <td rowspan="5" class="button">
+          <td rowspan="6" class="button">
             <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
           </td>
         </tr>
@@ -277,12 +277,13 @@ Main.add(function () {
             {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
             <script type="text/javascript">
             PlageConsultSelector.init = function(){
-              this.sForm = "editFrm";
-              this.sHeure = "heure";
+              this.sForm            = "editFrm";
+              this.sHeure           = "heure";
               this.sPlageconsult_id = "plageconsult_id";
-              this.sDate = "_date";
-              this.sDuree = "duree";
-              this.sChir_id = "chir_id";
+              this.sDate            = "_date";
+              this.sDuree           = "duree";
+              this.sChir_id         = "chir_id";
+              this.sFunction_id     = "_function_id";
               this.pop();
             }
            </script> 
@@ -306,9 +307,7 @@ Main.add(function () {
             </select>
           </td>
         </tr>
-        
-          <tbody id="listCategorie">
-          
+        <tbody id="listCategorie">
           {{if $consult->_id || $chir->_id}}
 	          {{include file="httpreq_view_list_categorie.tpl" 
           		categorie_id=$consult->categorie_id 
@@ -322,8 +321,20 @@ Main.add(function () {
           		categories=$categories
           		listCat=$listCat}}
           {{/if}}
-        
-          </tbody>
+        </tbody>
+        <tr>
+          <th>Choix par cabinet</th>
+          <td>
+            <select name="_function_id" style="max-width: 130px;">
+              <option value="">&mdash; choisir un cabinet</option>
+              {{foreach from=$listFunctions item=_function}}
+              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
+                {{$_function->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
         <tr>
           <td colspan="5">
             {{if $dPconfig.dPcabinet.CConsultAnesth.format_auto_rques}}

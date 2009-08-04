@@ -29,8 +29,10 @@ if ($mediuser->isPraticien()) {
   $chir = $mediuser;
 }
 
-// Vérification des droits sur les praticiens
+// Vérification des droits sur les praticiens et les fonctions
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
+$function       = new CFunctions();
+$listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 $plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
@@ -102,6 +104,7 @@ $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
 $smarty->assign("listPraticiens"    , $listPraticiens    );
+$smarty->assign("listFunctions"     , $listFunctions     );
 
 $smarty->display("addedit_planning.tpl");
 
