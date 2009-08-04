@@ -83,21 +83,23 @@ class CAffectation extends CMbObject {
     if($msg = parent::check()) {
       return $msg;
     }
-    if(!$this->affectation_id) {
-      return null;
-    }
-    $obj = new CAffectation();
-    $obj->load($this->affectation_id);
-    $obj->loadRefsFwd();
-     
-    $obj->_mode_sortie = $this->_mode_sortie;
-     
-    if(!$this->entree && $obj->affectation_id)
-    $this->entree = $obj->entree;
-    if(!$this->sortie && $obj->affectation_id)
-    $this->sortie = $obj->sortie;
+    
+    $this->completeField("entree");
+    $this->completeField("sortie");
+    $this->completeField("sejour_id");
     if ($this->sortie <= $this->entree) {
       return "La date de sortie doit être supérieure à la date d'entrée";
+    }
+    $where = array();
+    $where["sejour_id"] = "= $this->sejour_id";
+    if($this->_id) {
+      $where["affectation_id"] = "!= $this->_id";
+    }
+    $listAffectations = $this->loadList($where);
+    foreach($listAffectations as $_aff) {
+      if($this->colide($_aff)) {
+        return "Placement déjà effectué";
+      }
     }
     return null;
   }
