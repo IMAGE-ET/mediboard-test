@@ -8,11 +8,26 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+
+function showAlerte() {
+  var url = new Url("dPbloc", "vw_alertes_semaine");
+  url.addParam("date", "{{$date}}");
+  url.addParam("bloc_id", "{{$bloc->_id}}");
+  url.popup(500, 250, "Alerte");
+}
+
+</script>
+
 <table class="main">
   <tr>
     <td>
       {{if $nbIntervNonPlacees}}
-        <div class="warning" style="float: right;">{{$nbIntervNonPlacees}} interventions non validées cette semaine</div>
+        <div class="warning" style="float: right;">
+          <a href="#nothing" onclick="showAlerte()">
+            {{$nbIntervNonPlacees}} interventions non validées cette semaine
+          </a>
+        </div>
       {{/if}}
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
