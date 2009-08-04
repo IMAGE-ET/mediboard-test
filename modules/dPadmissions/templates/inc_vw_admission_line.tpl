@@ -221,8 +221,9 @@
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
-  {{$curr_op->_ref_consult_anesth->_date_consult|date_format:"%d/%m/%Y"}}
-  <br />
+  <div class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{/if}}">
+  {{$curr_op->_ref_consult_anesth->_date_consult|date_format:$dPconfig.date}}
+  </div>
   {{/if}}
   {{/foreach}}
 </td>

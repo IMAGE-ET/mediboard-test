@@ -95,19 +95,6 @@ Main.add( function () {
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 42px; {{if $_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
-        {{if ($_consult->chrono == $_consult|const:'PLANIFIE')}}
-		      <form name="etatFrm{{$_consult->_id}}" action="?m={{$current_m}}" method="post">
-			      <input type="hidden" name="m" value="dPcabinet" />
-			      <input type="hidden" name="dosql" value="do_consultation_aed" />
-			      {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
-			      <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
-			      <input type="hidden" name="arrivee" value="" />
-		      </form>
-
-          <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$_consult->_id}})" style="float: right">
-            <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
-          </a>
-        {{/if}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" alt="modifier" />
         </a>
@@ -120,7 +107,7 @@ Main.add( function () {
       {{if $canCabinet->view}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}" style="margin-bottom: 4px;">
       {{else}}
-       <a href="#nowhere" title="Impossible de modifier le RDV">
+        <a href="#nowhere" title="Impossible de modifier le RDV">
       {{/if}}
            {{$_consult->heure|truncate:5:"":true}}
         </a>
@@ -128,7 +115,22 @@ Main.add( function () {
         {{$_consult->heure|truncate:5:"":true}}
       {{/if}}
       {{if $_consult->patient_id}}
-        {{$_consult->_etat}}
+        {{if ($_consult->chrono == $_consult|const:'PLANIFIE')}}
+		      <form name="etatFrm{{$_consult->_id}}" action="?m={{$current_m}}" method="post">
+			      <input type="hidden" name="m" value="dPcabinet" />
+			      <input type="hidden" name="dosql" value="do_consultation_aed" />
+			      {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
+			      <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
+			      <input type="hidden" name="arrivee" value="" />
+		      </form>
+
+          <a style="white-space: nowrap;" href="#" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">
+            <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
+            {{$_consult->_etat}}
+          </a>
+        {{else}}
+          {{$_consult->_etat}}
+        {{/if}}
       {{/if}}
     </td>
     <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
