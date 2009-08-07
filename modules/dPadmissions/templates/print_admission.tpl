@@ -92,7 +92,7 @@
     <th>Admission en :</th>
     <td>{{tr}}CSejour.type.{{$admission->type}}{{/tr}}</td>
     <th>Durée d'hospitalisation :</th>
-    <td>{{$admission->_duree_prevue}} jour(s)</td>
+    <td>{{$admission->_duree_prevue}} nuit(s)</td>
   </tr>
 
   <tr>
