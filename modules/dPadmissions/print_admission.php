@@ -15,7 +15,9 @@ $id = mbGetValueFromGetOrSession("id");
 $admission = new CSejour();
 $admission->load($id);
 $admission->loadRefs();
+$admission->loadNumDossier();
 $admission->_ref_patient->loadRefsFwd();
+$admission->_ref_patient->loadIPP();
 foreach($admission->_ref_operations as $keyOp => $op) {
   $admission->_ref_operations[$keyOp]->loadRefsFwd();
   $admission->_ref_operations[$keyOp]->loadExtCodesCCAM();
