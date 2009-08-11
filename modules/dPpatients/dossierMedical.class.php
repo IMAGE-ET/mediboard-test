@@ -284,7 +284,7 @@ class CDossierMedical extends CMbMetaObject {
       //$template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
     }
     
-    // Traitements
+    // Traitements 
     $this->loadRefsTraitements();
     if (is_array($this->_ref_traitements)) {
       $sTraitements = "";
