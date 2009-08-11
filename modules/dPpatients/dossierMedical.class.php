@@ -297,8 +297,26 @@ class CDossierMedical extends CMbMetaObject {
         elseif($curr_trmt->debut){
           $sTraitements .= "Depuis ".$curr_trmt->getFormattedValue('debut')." : ";
         }
-        
         $sTraitements .= $curr_trmt->traitement;
+      }
+
+      // Ajout des traitements notés a l'aide de la BCB
+      if(CModule::getActive('dPprescription')){
+	      $this->loadRefPrescription();
+	      if($this->_ref_prescription->_id){
+	        $this->_ref_prescription->loadRefsLinesMed();
+	        foreach($this->_ref_prescription->_ref_prescription_lines as $_line_med){
+	           $sTraitements .= "<br /> &bull; ".$_line_med->_ucd_view;
+	           $_line_med->loadRefsPrises();
+	           if(count($_line_med->_ref_prises)){
+	             $_posologie = "";
+	             foreach($_line_med->_ref_prises as $_prise){
+	               $_posologie .= "$_prise->_view ";
+	             }
+	             $sTraitements .= " ($_posologie)";
+	           }
+	        }
+	      }
       }
       $template->addProperty("$champ - Traitements", $sTraitements !== "" ? $sTraitements : null);
     }
