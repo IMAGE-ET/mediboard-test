@@ -314,9 +314,11 @@ var Prescription = {
   printPrescription: function(prescription_id, print) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
-    if(document.selPratForPresc){
-      praticien_sortie_id = document.selPratForPresc.selPraticien.value;
+    
+    if(document.selPraticienLine){
+      praticien_sortie_id = document.selPraticienLine.praticien_id.value;
     }
+    
     if(prescription_id){
       var url = new Url;
       url.setModuleAction("dPprescription", "print_prescription");
