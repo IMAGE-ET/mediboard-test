@@ -49,11 +49,12 @@ changePraticien = function(praticien_id){
 
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
-  if(document.selPraticienLine){
-	  changePraticien(document.selPraticienLine.praticien_id.value);
-  }
   initPuces();
   if(document.selPraticienLine){
+    {{if $praticien_for_prot_id}}
+      document.selPraticienLine.praticien_id.value = {{$praticien_for_prot_id}};   
+    {{/if}}
+    changePraticien(document.selPraticienLine.praticien_id.value);
     refreshSelectProtocoles(document.selPraticienLine.praticien_id.value, '{{$prescription->_id}}');
   } else {
     refreshSelectProtocoles('{{$prescription->_ref_current_praticien->_id}}', '{{$prescription->_id}}');

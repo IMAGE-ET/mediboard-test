@@ -29,6 +29,7 @@ $chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
 $mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 $pratSel_id      = mbGetValueFromGetOrSession("pratSel_id");
 $mode_sejour     = mbGetValueFromGetOrSession("mode_sejour", false);
+$praticien_for_prot_id = mbGetValueFromGetOrSession("praticien_for_prot_id");
 
 // Recuperation de l'operation_id stocké en session en salle d'op
 if(!$operation_id && !$mode_sejour){
@@ -491,7 +492,8 @@ $smarty->assign("perfusion", new CPerfusion());
 $smarty->assign("operation_id", $operation_id);
 $smarty->assign("pratSel_id", $pratSel_id);
 $smarty->assign("mode_sejour", $mode_sejour);
-  
+$smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
+
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
   $smarty->assign("chir_id", $_chir_id);
