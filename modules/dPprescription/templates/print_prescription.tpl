@@ -23,7 +23,7 @@ Main.add(window.print);
 {{include file=../../dPcompteRendu/css/print.css header=10 footer=8}}
 </style>
   
-<div class="header">
+<div class="header" onclick="window.print();" style="cursor: pointer">
   {{if $generated_header}}
     {{$generated_header|smarty:nodefaults}}
   {{else}}

@@ -76,6 +76,15 @@ changeModeBolus = function(oForm){
   }
 }
 
+	submitEditPerfCommentaireSubst = function (object_id, commentaire) {
+	  var oForm = getForm("editCommentairePerf");
+	  prepareForm(oForm);
+	  oForm.dosql.value = "do_perfusion_aed";
+	  oForm.perfusion_id.value = object_id;
+	  oForm.commentaire.value = commentaire;
+	  submitFormAjax(oForm, 'systemMsg');
+	}
+
 
 	submitEditCommentaireSubst = function (object_id, commentaire) {
 	  var oForm = getForm("editCommentaire");
@@ -193,6 +202,15 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="commentaire" value="" />
 </form>
+
+<form name="editCommentairePerf" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="commentaire" value="" />
+</form>
+
 
 <form name="editEmplacement" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />

@@ -1339,7 +1339,12 @@ class CSetupdPprescription extends CSetup {
 	  }
 	  $this->addFunction("updatePrises");
 	  
-		$this->mod_version = "0.87";
+	  $this->makeRevision("0.87");
+	  $sql = "ALTER TABLE `perfusion`
+	          ADD `commentaire` VARCHAR (255);";
+	  $this->addQuery($sql);
+	  
+		$this->mod_version = "0.88";
   }  
 }
 

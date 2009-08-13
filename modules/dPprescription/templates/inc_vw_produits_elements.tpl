@@ -119,6 +119,10 @@ setPrimaryKeyDosql = function (form, object_class, object_id) {
       field = "prescription_line_comment_id";
       dosql = "do_prescription_line_comment_aed";
       break;
+    case "CPerfusion": 
+      field = "perfusion_id";
+      dosql = "do_perfusion_aed";
+      break;  
   }
   form[field].value = object_id;
   form.dosql.value = dosql;
@@ -185,6 +189,7 @@ submitAddComment = function (object_class, object_id, commentaire) {
   oForm.commentaire.value = commentaire;
   return onSubmitFormAjax(oForm);
 }
+
 
 submitEmplacement = function(object_class, object_id, emplacement){
   var oForm = getForm("emplacement-"+object_class);
@@ -542,6 +547,15 @@ toggleTypePerfusion = function(oForm){
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="commentaire" value="" />
 </form>
+
+<form name="addComment-CPerfusion" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="commentaire" value="" />
+</form>
+
 
 <form name="addComment-CPrescriptionLineElement" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />

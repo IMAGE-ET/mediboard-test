@@ -1531,4 +1531,7 @@ $locales['config-dPprescription-CCategoryPrescription-show_description'] = 'Affi
 $locales['config-dPprescription-CCategoryPrescription-show_description-desc'] = 'Afficher la description des catégories lors de l\'impression de l\'ordonnance';
 $locales['config-dPprescription-CCategoryPrescription-show_header'] = 'Afficher l\'entête';
 $locales['config-dPprescription-CCategoryPrescription-show_header-desc'] = 'Afficher l\'entête des catégories lors de l\'impression de l\'ordonnance';
+$locales['CPerfusion-commentaire'] = 'Commentaire';
+$locales['CPerfusion-commentaire-court'] = 'Commentaire';
+$locales['CPerfusion-commentaire-desc'] = 'Commentaire';
 ?>

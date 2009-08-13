@@ -32,6 +32,7 @@ class CPerfusion extends CMbObject {
   var $accord_praticien = null;
   var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de perfusions)
   var $operation_id     = null;
+  var $commentaire      = null;
   
   var $date_pose   = null; // Date de la pose de la perf
   var $time_pose   = null; // Heure de la pose de la perf
@@ -137,6 +138,7 @@ class CPerfusion extends CMbObject {
     $specs["substitution_active"]    = "bool";
     $specs["substitution_plan_soin"] = "bool";
     $specs["nb_tous_les"]            = "num";
+    $specs["commentaire"]            = "str helped";
     return $specs;
   }
 

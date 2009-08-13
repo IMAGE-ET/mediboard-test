@@ -401,6 +401,8 @@ $prise->quantite = 1.0;
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescriptionLineElement = new CPrescriptionLineElement();
+$perfusion = new CPerfusion();
+
 $aides_prescription = array();
 if($prescription->_id){
   // Si protocole
@@ -414,6 +416,9 @@ if($prescription->_id){
 		  $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
 		  $prescriptionLineElement->loadAides($praticien_id);
 		  $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
+		  $perfusion->loadAides($praticien_id);
+		  $aides_prescription[$praticien_id]["CPerfusion"] = $perfusion->_aides["commentaire"]["no_enum"];
+		  
 		}
   }
 }
