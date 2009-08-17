@@ -157,11 +157,11 @@ foreach($listDays as $keyDate=>$valDate){
   }
   
   foreach($listPlages[$keyDate] as $plage){
-    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
-    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
-      $affichages["$keyDate ".$time] = "full";
+    $plage->_nb_intervals = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
+    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageconsult::$minutes_interval." minutes", $time) ){
+      $affichages["$keyDate $time"] = "full";
     } 
-    $affichages["$keyDate ".$plage->debut] = $plage->_id;
+    $affichages["$keyDate $plage->debut"] = $plage->_id;
   }
 }
 
@@ -187,6 +187,8 @@ foreach($listDays as $keyDate=>$valDate){
 }
 
 
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -208,6 +210,7 @@ $smarty->assign("prec"              , $prec);
 $smarty->assign("suiv"              , $suiv);
 $smarty->assign("listHours"         , CPlageconsult::$hours);
 $smarty->assign("listMins"          , CPlageconsult::$minutes);
+$smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));
 
 $smarty->display("vw_planning.tpl");
 

@@ -94,53 +94,54 @@ Main.add(function () {
           <!-- Affichage du nom des jours -->
           <th></th>
           {{foreach from=$listDays key=curr_day item=plagesPerDay}}
-          <th>{{$curr_day|date_format:"%A %d"}}</th>
+          <th style="width: {{math equation="100/x" x=$listDays|@count}}%">{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>       
         <!-- foreach sur les heures -->
         {{foreach from=$listHours item=curr_hour}}
         <tr>
-          <th rowspan="4">{{$curr_hour}}h</th>
+          <th rowspan="{{$nb_intervals_hour}}">{{$curr_hour}}h</th>
           <!-- foreach sur les minutes -->
-          {{foreach from=$listMins item=curr_mins key=keyMins}}   
-          {{if $keyMins}}
-          </tr><tr>
-          {{/if}}
+          {{foreach from=$listMins item=curr_mins key=keyMins}}
+            {{if $keyMins}}
+              </tr><tr>
+            {{/if}}
+
             {{foreach from=$listDays item=curr_day}}
               {{assign var="keyAff" value="$curr_day $curr_hour:$curr_mins:00"}}
               {{assign var="affichage" value=$affichages.$keyAff}}
              
               {{if $affichage === "empty"}}
-              <td class="empty"></td>
+                <td class="empty"></td>
               {{elseif $affichage == "hours"}}
-            <td class="empty" rowspan="4"></td>
+                <td class="empty" rowspan="{{$nb_intervals_hour}}"></td>
               {{elseif $affichage === "full"}}
               
               {{else}}
                 {{assign var="_listPlages" value=$listPlages.$curr_day}}
                 {{assign var=plage value=$_listPlages.$affichage}}
               
-              <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$plage->_nbQuartHeure}}">
-              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage">
-                {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
-                {{$plage->debut|date_format:$dPconfig.time}} - {{$plage->fin|date_format:$dPconfig.time}}
-              </a>
-              {{assign var="pct" value=$plage->_fill_rate}}
-              {{if $pct gt 100}}
-              {{assign var="pct" value=100}}
-              {{/if}}
-              {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
-              {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
-              {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
-              {{else}}{{assign var="backgroundClass" value="full"}}
-              {{/if}} 
-              <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
-                <div class="progressBar">
-                  <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                  <div class="text">{{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}</div>
-                </div>
-              </a>
-              </td>
+                <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$plage->_nb_intervals}}">
+                  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage">
+                    {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
+                    {{$plage->debut|date_format:$dPconfig.time}} - {{$plage->fin|date_format:$dPconfig.time}}
+                  </a>
+                  {{assign var="pct" value=$plage->_fill_rate}}
+                  {{if $pct gt 100}}
+                    {{assign var="pct" value=100}}
+                  {{/if}}
+                  {{if $pct lt 50}}{{assign var="backgroundClass" value="empty"}}
+                  {{elseif $pct lt 90}}{{assign var="backgroundClass" value="normal"}}
+                  {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
+                  {{else}}{{assign var="backgroundClass" value="full"}}
+                  {{/if}} 
+                  <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
+                    <div class="progressBar">
+                      <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
+                      <div class="text">{{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}</div>
+                    </div>
+                  </a>
+                </td>
               {{/if}}
             {{/foreach}}
           {{/foreach}}  
@@ -203,6 +204,11 @@ Main.add(function () {
                       {{$curr_min|string_format:"%02d"}}
                     </option>
                   {{/foreach}}
+                  {{if !in_array($plageSel->_min_deb, $listMins)}}
+                    <option value="{{$plageSel->_min_deb|string_format:"%02d"}}" selected="selected">
+                      {{$plageSel->_min_deb|string_format:"%02d"}}
+                    </option>
+                  {{/if}}
                 </select> min
               </td>
               <th>{{mb_label object=$plageSel field="date"}}</th>
@@ -233,6 +239,11 @@ Main.add(function () {
                       {{$curr_min|string_format:"%02d"}}
                     </option>
                   {{/foreach}}
+                  {{if !in_array($plageSel->_min_fin, $listMins)}}
+                    <option value="{{$plageSel->_min_fin|string_format:"%02d"}}" selected="selected">
+                      {{$plageSel->_min_fin|string_format:"%02d"}}
+                    </option>
+                  {{/if}}
                 </select> min
               </td>
               <th><label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label></th>
