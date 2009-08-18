@@ -2858,7 +2858,7 @@ table.tbl td.ccmu-P{
   background-position: center center;
   cursor: pointer;
   position: absolute;
-  height: 9px;
+  height: 8px;
   width: 1.2em;
   right: -2px;
   border: 1px solid #999;
@@ -2866,13 +2866,13 @@ table.tbl td.ccmu-P{
 
 .numericField .arrows div.up {
   -moz-border-radius: 4px 4px 0 0;
-  top: -2px;
+  top: -1px;
   background-image: url(../../images/buttons/up.gif);
 }
 
 .numericField .arrows div.down {
   -moz-border-radius: 0 0 4px 4px;
-  bottom: -2px;
+  bottom: -1px;
   background-image: url(../../images/buttons/down.gif);
 }
 
