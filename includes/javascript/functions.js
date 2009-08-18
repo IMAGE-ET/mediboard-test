@@ -111,7 +111,7 @@ var WaitingMessage = {
       height: doc.scrollHeight + "px",
       width: doc.scrollWidth + "px",
       zIndex: 100,
-      opacity: 0.2
+      opacity: 0.3
     }).show();
   },
   
@@ -130,7 +130,7 @@ var WaitingMessage = {
 	  }
 		
 		cover.setStyle({
-      opacity: 0.3,
+      opacity: 0.4,
       position: 'absolute'
     }).clonePosition(element).show();
   }
