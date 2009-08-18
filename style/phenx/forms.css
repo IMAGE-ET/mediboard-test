@@ -236,24 +236,27 @@ button.notext, a.notext {
   background-position: center center;
   cursor: pointer;
   position: absolute;
-  height: 50%;
-  width: 1em;
-  right: 1px;
+  height: 9px;
+  width: 1.2em;
+  right: -2px;
+  border: 1px solid #999;
 }
 
 .numericField .arrows div.up {
-  top: 1px;
+  -moz-border-radius: 4px 4px 0 0;
+  top: -2px;
   background-image: url(../../images/buttons/up.gif);
 }
 
 .numericField .arrows div.down {
-  bottom: 1px;
+  -moz-border-radius: 0 0 4px 4px;
+  bottom: -2px;
   background-image: url(../../images/buttons/down.gif);
 }
 
 .numericField .arrows div:hover {
   background-color: #FFF;
-  outline: 1px solid #999;
+  border-color: #666;
   z-index:100;
 }
 
