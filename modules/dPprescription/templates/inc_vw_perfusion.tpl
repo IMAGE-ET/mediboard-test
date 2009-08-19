@@ -161,8 +161,30 @@ Main.add( function(){
 				      {{/if}} 
 				    </td>
 				    <td style="border:none;">
-	            <strong>{{mb_value object=$_perfusion field="voie"}}</strong>
-            </td>
+				      {{if $_perfusion->_perm_edit}}
+				        {{if $_perfusion->_voies}}
+					        <select name="voie" onchange="{{if !in_array($_perfusion->voie, $_perfusion->_voies)}}
+					                                        Element.hide($('warning_voie_{{$_perfusion->_id}}')); 
+					                                        Element.hide($('last_option_{{$_perfusion->_id}}'));
+					                                      {{/if}}
+					                                      submitFormAjax(this.form, 'systemMsg');">
+					          {{foreach from=$_perfusion->_voies item=_voie}}
+					            <option value="{{$_voie}}" {{if $_perfusion->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
+					          {{/foreach}}
+					          {{if !in_array($_perfusion->voie, $_perfusion->_voies)}}
+					            <option value="{{$_perfusion->voie}}" selected="selected" id="last_option_{{$_perfusion->_id}}">{{$_perfusion->voie}}</option>
+					          {{/if}}
+					        </select>
+					         {{if !in_array($_perfusion->voie, $_perfusion->_voies)}}
+					         <div class="warning" id="warning_voie_{{$_perfusion->_id}}">
+					           Attention, la voie selectionnée n'est plus disponible
+					         </div>
+					         {{/if}}
+				        {{/if}}
+				      {{else}}
+				        <strong>{{mb_value object=$_perfusion field="voie"}}</strong>
+              {{/if}}
+	          </td>
 				    <td style="border:none;">
 				      {{if !$_perfusion->_protocole && $_perfusion->signature_prat && ($is_praticien || @$operation_id || $can->admin)}}
 					      <!-- Modification de la ligne -->
@@ -193,13 +215,14 @@ Main.add( function(){
 				    </td>   
 					</tr>
 					<tr>
+					  <td style="border: none" />
             {{if $_perfusion->_protocole}}
 						  <td style="border:none;">
 						  {{mb_label object=$_perfusion field="date_debut"}}
 						    à I {{mb_field object=$_perfusion field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} h
 						  </td>
 						{{else}}  
-	        		<td class="date"  style="border:none;">
+	        		<td class="date" style="border:none;">
 	        		  {{mb_label object=$_perfusion field="date_debut"}}
 	        		  {{if $_perfusion->_can_modify_perfusion}}
 			            {{mb_field object=$_perfusion field=date_debut form="editPerf-$perfusion_id" onchange="changeColorPerf($perfusion_id,this.form); return onSubmitFormAjax(this.form);" register=true}}

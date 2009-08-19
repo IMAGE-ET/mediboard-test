@@ -71,7 +71,7 @@ class CPerfusion extends CMbObject {
 
   var $_pose = null;
   var $_retrait   = null;
-
+  var $_voies = null;
   
   // Object references
   var $_ref_log_signature_prat = null;
@@ -412,7 +412,23 @@ class CPerfusion extends CMbObject {
    */
   function loadRefsLines(){
     $this->_ref_lines = $this->loadBackRefs("lines_perfusion");
+    $this->loadVoies();
   }
+  
+  
+  /*
+   * Chargement des differentes voies disponibles pour la perfusion
+   */
+  function loadVoies(){
+    foreach($this->_ref_lines as $_perf_line){
+      foreach($_perf_line->_ref_produit->voies as $_voie){
+        //if(CPrescriptionLineMedicament::$voies[$_voie]["perfusable"]){
+          $this->_voies[$_voie] = $_voie;
+        //}
+      }
+    }
+  }
+  
   
   /*
    *  Calcul de la quantite totale de la perf en ml

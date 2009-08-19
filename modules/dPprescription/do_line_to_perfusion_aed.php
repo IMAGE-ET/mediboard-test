@@ -73,10 +73,11 @@ if(($perfusion->voie == "Voie parentérale" || $line_med->voie == "Voie parentéra
 	}
 }
 
+
 if($error){
-  $AppUI->setMsg("La voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_ERROR);
+  $AppUI->setMsg("Attention, la voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_WARNING);
   echo $AppUI->getMsg();
-  CApp::rip(); 
+//  CApp::rip(); 
 }
 
 if($perfusion->signature_prat || $perfusion->signature_pharma){
