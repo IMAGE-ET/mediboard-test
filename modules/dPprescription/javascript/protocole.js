@@ -45,7 +45,7 @@ var Protocole = {
   // Edition d'un protocole
   edit : function(protocole_id, praticien_id, function_id) {
     Prescription.reload(protocole_id,"","","1");
-    Protocole.refreshList(protocole_id);
+    //Protocole.refreshList(protocole_id);
   },
   duplicate: function(protocole_id){
     var url = new Url;

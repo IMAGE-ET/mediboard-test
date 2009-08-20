@@ -104,7 +104,7 @@ Main.add( function(){
 			</form>
     </td>
     <td>
-		  {{if $prescription->object_id && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
+		  {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 		  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}}, {{if $readonly}}false{{else}}{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}{{/if}},'');");">
 		    {{if $readonly}}Modification
 		    {{else}}Lecture seule
@@ -221,12 +221,15 @@ Main.add( function(){
 {{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
  <table class="tbl">
    <th style="width:22%;">Libellé</th>
-   <th style="width:25%;">Prises</th>
+   <th style="width:35%;">Prises</th>
    <th style="width:8%;">Prat.</th>
-   <th style="width:15%;">Début</th>
-   <th style="width:10%;">Durée</th>
+	 {{if $prescription->object_id}}
+	   <th style="width:15%;">Début</th>
+	   <th style="width:10%;">Durée</th>
+	 {{else}}
+	   <th style="width: 25%">Dates</th>
+	 {{/if}}
    <th style="width:10%;">Exécutant</th>
-   <th style="width:10%">Emplacement</th>
  </table>
 {{/if}}
 	  

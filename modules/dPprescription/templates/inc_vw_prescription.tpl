@@ -110,6 +110,7 @@ Main.add(function () {
   <!-- Affichage de l'entete de la prescription -->
   {{include file="../../dPprescription/templates/inc_header_prescription.tpl"}}	
 {{/if}}
+
 	<!-- Affichage des elements de la prescription -->
 	<div id="produits_elements">
 	  {{include file="../../dPprescription/templates/inc_vw_produits_elements.tpl"}}  

@@ -8,7 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl">
+<script type="text/javascript">
+	
+markAsSelected = function(element) {
+  removeSelectedTr();
+  $(element).up(1).addClassName('selected');
+}
+
+removeSelectedTr = function(){
+  $("all_protocoles").select('.selected').each(function (e) {e.removeClassName('selected')});
+}
+
+</script>
+
+<table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
   {{if $_protocoles_by_owner|@count}}
   <tr>
@@ -35,7 +48,7 @@
 	        <button class="trash notext" type="button" onclick="Protocole.remove(this.form)">Supprimer</button>
 	      </form>
       </div>
-      <a href="#{{$protocole->_id}}" onclick="Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
+      <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
         {{$protocole->_view}}
       </a>
     </td>

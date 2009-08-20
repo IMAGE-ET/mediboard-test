@@ -38,7 +38,7 @@
      </td>
      <td />
      <td style="text-align: right"> 
-       <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+       <div class="mediuser" {{if !$line->_protocole}}style="border-color: #{{$line->_ref_praticien->_ref_function->color}};"{{/if}}>
 	       <!-- Affichage de la signature du praticien -->
 	       {{if $line->_can_view_signature_praticien}}
 	         {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}

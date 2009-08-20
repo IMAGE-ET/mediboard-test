@@ -30,7 +30,7 @@
       {{/if}}
       <div style="float:left;">
             <!-- Fomulaire de modification de l'emplacement -->
-  		  {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
+  		  {{*include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"*}}
         {{if $line->_ref_parent_line->_id}}
           {{assign var=parent_line value=$line->_ref_parent_line}}
           <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
@@ -113,11 +113,15 @@
     </th>
   </tr>
   
+	
+	<!-- Produit perfusable -->
   {{if $line->_is_perfusable && $line->_perm_edit}}
 	  <tr>
 	    <td />
 	    <td>
-	      <div class="small-info text">Ce <strong>produit est injectable</strong>, vous pouvez l'<em>associer à une perfusion</em> existante ou une nouvelle.</div>
+	      <div class="small-info">
+	      	<label title="Vous pouvez l'associer à une perfusion existante ou une nouvelle">Ce produit est injectable</label>
+				</div>
 	    </td>
 	    <td>
 	    		<form name="addPerfusionLine-{{$line->_id}}">
@@ -167,7 +171,6 @@
 	  </tr>
   {{/if}}
   
-  
   <!-- Pas traitement ni protocole -->
   <tr>
     <td style="text-align: center">
@@ -192,7 +195,6 @@
       {{/if}}
     </td>
     
-    {{if !$line->_protocole}}
     <td colspan="3">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
       <script type="text/javascript">
@@ -204,16 +206,7 @@
 	      }
       </script>
 	  </td>
-    {{else}}
-    <td colspan="3" />
-    {{/if}}
   </tr> 
-  
-  
-  <!-- Si protocole, possibilité de rajouter une durée et un decalage entre les lignes -->
-  {{if $line->_protocole}}
-    {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
-  {{/if}}  
   
   <tr>  
 	  <td style="text-align: left">

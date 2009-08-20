@@ -24,15 +24,20 @@
         {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
         {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
       </div>
-      <div class="mediuser" style="float: right; border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-        <!-- Affichage de la signature du praticien -->
+		
+		
+      <div class="mediuser" style="float: right; {{if !$line->_protocole}}border-color: #{{$line->_ref_praticien->_ref_function->color}};{{/if}}">
+        {{if !$line->_protocole}}
+				<!-- Affichage de la signature du praticien -->
         {{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
         {{else if !$line->traitement_personnel && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
         {{/if}}
+				{{/if}}
         <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
       </div>
+		
       {{$line->_ref_element_prescription->_view}}
     </th>
   </tr>

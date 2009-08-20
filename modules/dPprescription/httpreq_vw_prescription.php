@@ -152,8 +152,8 @@ if($prescription->_id){
   
 	// Chargement de l'historique
   $historique = $prescription->loadRefsLinesHistorique();
-	
-  // Chargement des lignes de DMI
+  
+	// Chargement des lignes de DMI
   if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
     $prescription->loadRefsLinesDMI();
     foreach($prescription->_ref_lines_dmi as $_line_dmi){
@@ -263,8 +263,9 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	  }		  
 	  $alertesInteractions = $interactions->getInteractions();
 	  $alertesIPC          = $IPC->getIPC();
-	  $alertesPosologie    = $surdosage->getSurdosage();
-	  
+		if($prescription->object_id){
+	    $alertesPosologie    = $surdosage->getSurdosage();
+		}
 	  if(!$prescription->object_id){
 	    $prescription->_alertes["allergie"] = array();
 	    $prescription->_alertes["profil"] = array(); 
@@ -361,6 +362,7 @@ if($prescription->_id){
 	}
 }
 
+
 if($mode_protocole){
 	// Chargement de la liste des praticiens
   $praticien = new CMediusers();
@@ -418,11 +420,9 @@ if($prescription->_id){
 		  $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
 		  $perfusion->loadAides($praticien_id);
 		  $aides_prescription[$praticien_id]["CPerfusion"] = $perfusion->_aides["commentaire"]["no_enum"];
-		  
 		}
   }
 }
-
 
 $_sejour = new CSejour();
 $_sejour->load($sejour_id);
@@ -445,13 +445,11 @@ if(isset($prescription->_ref_current_praticien->_id)){
   unset($listPrats[$prescription->_ref_current_praticien->_id]);
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
 $smarty->assign("mode_induction_perop", false);
-
 $smarty->assign("aides_prescription", $aides_prescription);
 $smarty->assign("full_line_guid", $full_line_guid);
 $smarty->assign("mode_anesth", $mode_anesth);
@@ -459,44 +457,44 @@ $smarty->assign("historique", $historique);
 $smarty->assign("filter_line", $filter_line);
 $smarty->assign("hours", $hours);
 $smarty->assign("mins", $mins);
-$smarty->assign("praticien_sortie_id", $praticien_sortie_id);
-$smarty->assign("contexteType"       , $contexteType);
-$smarty->assign("httpreq"            , 1);
-$smarty->assign("sejour_id"          , $sejour_id);
-$smarty->assign("is_praticien"       , $is_praticien);
-$smarty->assign("today"              , mbDate());
-$smarty->assign("now"                , mbDateTime());
-$smarty->assign("poids"              , $poids);
-$smarty->assign("categories"         , $categories);
-$smarty->assign("executants"         , $executants);
-$smarty->assign("moments"            , $moments);
-$smarty->assign("prise_posologie"    , $prise);
-$smarty->assign("protocole"          , new CPrescription());
-$smarty->assign("alertesAllergies"   , $alertesAllergies);
-$smarty->assign("alertesInteractions", $alertesInteractions);
-$smarty->assign("alertesIPC"         , $alertesIPC);
-$smarty->assign("alertesProfil"      , $alertesProfil);
-$smarty->assign("prescription"       , $prescription);
-$smarty->assign("listPrats"          , $listPrats);
-$smarty->assign("listFavoris"        , $listFavoris);
-$smarty->assign("category"           , $chapitre);
-$smarty->assign("categories"         , $categories);
-$smarty->assign("class_category"     , new CCategoryPrescription());
-$smarty->assign("refresh_pharma"     , $refresh_pharma);
-$smarty->assign("mode_pharma"        , $mode_pharma);
-$smarty->assign("full_mode"          , $full_mode);
-$smarty->assign("protocole_line"     , $protocole_line);
-$smarty->assign("mode_protocole"     , $mode_protocole);
-$smarty->assign("prescriptions_sejour", $prescriptions_sejour);
-$smarty->assign("dossier_medical"    , $dossier_medical);
-$smarty->assign("now_time", mbTime());
-$smarty->assign("mode_pack", "0");
-$smarty->assign("readonly",            $readonly && $prescription->object_id);
-$smarty->assign("lite", $lite);
-$smarty->assign("perfusion", new CPerfusion());
-$smarty->assign("operation_id", $operation_id);
-$smarty->assign("pratSel_id", $pratSel_id);
-$smarty->assign("mode_sejour", $mode_sejour);
+$smarty->assign("praticien_sortie_id"  , $praticien_sortie_id);
+$smarty->assign("contexteType"         , $contexteType);
+$smarty->assign("httpreq"              , 1);
+$smarty->assign("sejour_id"            , $sejour_id);
+$smarty->assign("is_praticien"         , $is_praticien);
+$smarty->assign("today"                , mbDate());
+$smarty->assign("now"                  , mbDateTime());
+$smarty->assign("poids"                , $poids);
+$smarty->assign("categories"           , $categories);
+$smarty->assign("executants"           , $executants);
+$smarty->assign("moments"              , $moments);
+$smarty->assign("prise_posologie"      , $prise);
+$smarty->assign("protocole"            , new CPrescription());
+$smarty->assign("alertesAllergies"     , $alertesAllergies);
+$smarty->assign("alertesInteractions"  , $alertesInteractions);
+$smarty->assign("alertesIPC"           , $alertesIPC);
+$smarty->assign("alertesProfil"        , $alertesProfil);
+$smarty->assign("prescription"         , $prescription);
+$smarty->assign("listPrats"            , $listPrats);
+$smarty->assign("listFavoris"          , $listFavoris);
+$smarty->assign("category"             , $chapitre);
+$smarty->assign("categories"           , $categories);
+$smarty->assign("class_category"       , new CCategoryPrescription());
+$smarty->assign("refresh_pharma"       , $refresh_pharma);
+$smarty->assign("mode_pharma"          , $mode_pharma);
+$smarty->assign("full_mode"            , $full_mode);
+$smarty->assign("protocole_line"       , $protocole_line);
+$smarty->assign("mode_protocole"       , $mode_protocole);
+$smarty->assign("prescriptions_sejour" , $prescriptions_sejour);
+$smarty->assign("dossier_medical"      , $dossier_medical);
+$smarty->assign("now_time"             , mbTime());
+$smarty->assign("mode_pack"            , "0");
+$smarty->assign("readonly"             , $readonly);
+$smarty->assign("lite"                 , $lite);
+$smarty->assign("perfusion"            , new CPerfusion());
+$smarty->assign("operation_id"         , $operation_id);
+$smarty->assign("pratSel_id"           , $pratSel_id);
+$smarty->assign("mode_sejour"          , $mode_sejour);
 $smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
 
 if($full_mode){
@@ -509,7 +507,7 @@ if($full_mode){
 }
 
 if($mode_protocole){
-  $smarty->assign("function_id", "");
+	$smarty->assign("function_id", "");
   $smarty->assign("praticien_id", "");
   $smarty->assign("group_id", "");
   $smarty->assign("praticiens", $praticiens);

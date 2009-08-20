@@ -23,8 +23,9 @@
       </div>
       {{/if}}
       
-      <div class="mediuser" style="float: right; border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};">	  
-        <!-- Siganture du praticien -->
+      <div class="mediuser" style="float: right; {{if !$_perfusion->_protocole}}border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};{{/if}}">	  
+        {{if !$_perfusion->_protocole}}
+				<!-- Siganture du praticien -->
         {{if $_perfusion->_can_vw_signature_praticien}}
           {{$_perfusion->_ref_praticien->_view}}
 					{{if $_perfusion->signature_prat}}
@@ -39,7 +40,8 @@
 						  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
 				  	{{/if}}
 			  	{{/if}}
-        {{/if}} 
+        {{/if}}
+				{{/if}} 
        <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$_perfusion->_guid}}');"></button>
       </div>
         

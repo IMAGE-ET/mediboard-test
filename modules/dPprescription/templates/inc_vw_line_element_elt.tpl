@@ -29,9 +29,9 @@
         <!-- Formulaire ALD -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
         <!-- Formulaire conditionnel -->
-		{{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}} 
+ 		   {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}} 
       </div>    
-      <div class="div_signature mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+    <div class="div_signature mediuser" {{if !$line->_protocole}}style="border-color: #{{$line->_ref_praticien->_ref_function->color}};"{{/if}}>
         <!-- Affichage de la signature du praticien -->
         {{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
@@ -52,11 +52,8 @@
 	    </strong>
 	  </th>
 	</tr>
-  {{if $category->chapitre != "dmi"}}
-  <!-- Si protocole, possibilité de rajouter une durée et un decalage entre les lignes -->
-  {{if $line->_protocole}}
-    {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
-  {{/if}}
+	
+	{{if $category->chapitre != "dmi"}}
   <tr>
     <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
       {{if $line->_can_delete_line}}
@@ -66,7 +63,6 @@
       {{/if}}
     </td>
     <!-- Gestion des dates -->
-    {{if !$line->_protocole}}
     <td colspan="2">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}
 	      <script type="text/javascript">
@@ -78,7 +74,6 @@
   	      }
 	      </script>
     </td>
-    {{/if}}
   </tr>
   <!-- Affichage des pososlogies -->
   {{if $category->chapitre != "anapath" && $category->chapitre != "consult" && $category->chapitre != "imagerie"}}
@@ -158,7 +153,7 @@
 	    </form>
 	    
       <!-- Formulaire de modification de l'emplacement -->
-      {{include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"}}
+      {{*include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"*}}
     </td>   
   </tr>
   {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}

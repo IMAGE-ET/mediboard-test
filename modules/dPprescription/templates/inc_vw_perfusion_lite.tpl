@@ -39,6 +39,7 @@
     {{/foreach}}
   </td> 
   <td style="width: 8%" class="text">
+     {{if !$_perfusion->_protocole}}
      <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};">
        <label title="{{$_perfusion->_ref_praticien->_view}}">{{$_perfusion->_ref_praticien->_shortview}}</label>
        {{if $_perfusion->signature_prat}}
@@ -54,9 +55,13 @@
 			  	{{/if}}	
 		  	{{/if}}
      </div>
+		 {{else}}
+		   -
+		 {{/if}}
   </td>
   <td style="width: 5%;" class="text">{{mb_value object=$_perfusion field=vitesse}} ml/h</td>
   <td style="width: 15%;" class="text">{{mb_value object=$_perfusion field=voie}}</td>
+	{{if !$_perfusion->_protocole}}
   <td style="width: 10%;" class="text">
 	  {{mb_value object=$_perfusion field=date_debut}}
 	  {{if $_perfusion->time_debut}} 
@@ -66,6 +71,17 @@
   <td style="width: 10%;" class="text">
     <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$_perfusion->_guid}}');"></button>
     {{mb_value object=$_perfusion field=duree}} heures
-  </td>   
+  </td>  
+	{{else}}
+	<td style="width: 20%" class="text">
+		<button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$_perfusion->_guid}}');"></button>
+    {{if $_perfusion->decalage_interv}}
+		A partir de I + {{mb_value object=$_perfusion field=decalage_interv}}
+		{{/if}}
+		{{if $_perfusion->duree}}
+		pendant {{$_perfusion->duree}} heures
+		{{/if}}
+	</td>
+	{{/if}} 
 </tr>
 </table>

@@ -179,12 +179,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
    Cette ligne de prescription est liée à l'intervention, elle est seulement appliquée le jour de l'intervention, le {{$line->debut|date_format:"%d/%m/%Y"}}
  </div>
   {{else}}
-	  <table>
-	    <tr>
-	      <td>
-	        <!-- Selection d'une date dans le cas des protocoles -->
-	        {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
-	      </td>
-	    </tr>
-	  </table>
+     <!-- Selection d'une date dans le cas des protocoles -->
+     {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
 	{{/if}}

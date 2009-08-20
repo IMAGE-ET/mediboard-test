@@ -208,13 +208,10 @@ class CBcbControleSurdosage {
   
   function getSurdosage() {
     $this->alertes = array();
-    $myChrono = new Chronometer();
     foreach($this->_ref_prescription->_ref_prescription_lines as $_line) {
-      $myChrono->start();
       $this->getPosoMax($_line);
       $this->controleSurdosage($_line);
       $this->controleDureeMax($_line);
-      $myChrono->stop();
     }
     return $this->alertes;
   }

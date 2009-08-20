@@ -37,8 +37,10 @@
           {{if $line->traitement_personnel}}{{mb_label object=$line field="traitement_personnel"}}&nbsp;{{/if}}
       </div>
       <div style="float: right;">
-        <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-        {{if $line->_can_view_signature_praticien}}
+			
+        <div class="mediuser" {{if !$line->_protocole}}style="border-color: #{{$line->_ref_praticien->_ref_function->color}};"{{/if}}>
+        {{if !$line->_protocole}}
+				{{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
           {{if $prescription_reelle->type != "externe"}}
           {{if $line->valide_pharma}}
@@ -50,8 +52,10 @@
         {{else if !$line->traitement_personnel && !$line->_protocole}}
           {{$line->_ref_praticien->_view}}
         {{/if}}
+				{{/if}}
         <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
         </div>
+			
       </div>
             
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">

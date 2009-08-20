@@ -100,8 +100,12 @@ Main.add( function(){
   {{/if}}
 </form>
 
+
+
+
+
 <table class="form">
-  {{if $prescription->_score_prescription >= 1}}
+{{if $prescription->_score_prescription >= 1}}
   <tr>
     <td colspan="2">
       <div class="{{if $prescription->_score_prescription == '1'}}small-warning{{else}}small-error{{/if}}">
@@ -192,7 +196,7 @@ Main.add( function(){
     </td>
     {{/if}}
     <td style="text-align: center;">
-			{{if $prescription->object_id && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions)}}
+			{{if ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions)}}
 			  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" 
 			  				onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}},{{if $readonly}}false{{else}}{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}{{/if}},'');">
 			    {{if $readonly}}Modification
@@ -262,8 +266,12 @@ Main.add( function(){
     <th style="width: 25%">Produit</th>
     <th style="width: 37%;">Posologie</th>
     <th style="width: 8%">Praticien</th>
-    <th style="width: 15%">Début</th>
-    <th style="width: 10%">Durée</th>
+		{{if $prescription->object_id}}
+	    <th style="width: 15%">Début</th>
+	    <th style="width: 10%">Durée</th>
+		{{else}}
+		  <th style="width: 25%">Dates</th>
+		{{/if}}
   </tr>
 </table>
 {{/if}}
@@ -303,11 +311,15 @@ Main.add( function(){
 	  <tr>
 	    <th style="width: 8%;">Type</th>
 	    <th style="width: 44%;">Médicaments</th> 
-	    <th style="width: 8%">Prat</th>
+	    <th style="width: 8%;">Prat</th>
 	    <th style="width: 5%;">Vitesse</th>
 	    <th style="width: 15%;">Voie</th>
-	    <th style="width: 10%;">Début</th>
-	    <th style="width: 10%;">Durée</th>
+			{{if $prescription->object_id}}
+		    <th style="width: 10%;">Début</th>
+	      <th style="width: 10%;">Durée</th>
+			{{else}}
+			  <th style="20%">Dates</th>
+			{{/if}}
 	  </tr>
 	</table>
 	{{/if}}
