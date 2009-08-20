@@ -20,7 +20,6 @@ function dPgetParam(&$arr, $name, $def = null) {
   return isset( $arr[$name] ) ? $arr[$name] : $def;
 }
 
-
 /**
  * Returns the first arguments that do not evaluate to null (0, null, "")
  * @return mixed The first value evaluated to TRUE
@@ -1101,35 +1100,22 @@ function make_url($components) {
  * @return bool
  */
 function is_intranet_ip($ip) {
-  /*// Optimized version, must be tested
-  
+  // ipv6 en local
+  if ($ip === '::1' || $ip === '0:0:0:0:0:0:0:1'){
+    return true;
+  }
+
   $ip = explode('.', $ip);
   return 
     ($ip[0] == 127) ||
-    ($ip[0] == 10)  ||
+    ($ip[0] == 10) ||
     ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] < 32) ||
-    ($ip[0] == 192 && $ip[1] == 168);*/
-  
-  // ipv6 en local
-  if ($ip == "::1"){
-    return true;
-  }
-    
-  $browserIP = explode(".", $ip);
-  $ip0 = intval($browserIP[0]);
-  $ip1 = intval($browserIP[1]);
-  $ip2 = intval($browserIP[2]);
-  $ip3 = intval($browserIP[3]);
-  $is_local[1] = ($ip0 == 127 && $ip1 == 0 && $ip2 == 0 && $ip3 == 1);
-  $is_local[2] = ($ip0 == 10);
-  $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
-  $is_local[4] = ($ip0 == 192 && $ip1 == 168);
-  return $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
+    ($ip[0] == 192 && $ip[1] == 168);
 }
 
 /**
  * Checks recursively if a value exists in an array
- * @return Returns TRUE if needle  is found in the array, FALSE otherwise. 
+ * @return Returns TRUE if needle is found in the array, FALSE otherwise. 
  * @param mixed $needle The searched value.
  * @param array $haystack The array.
  * @param bool $strict If the third parameter strict is set to TRUE then the in_array_recursive() function will also check the types of the needle in the haystack.
