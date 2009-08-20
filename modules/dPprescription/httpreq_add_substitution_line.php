@@ -47,7 +47,9 @@ $prescription =& $object->_ref_prescription;
 
 // Chargement de toutes les perfusions qui ne sont pas actives
 $prescription->loadRefsPerfusions(0,null,0);
-
+foreach($prescription->_ref_perfusions as $_perfusion){
+	$_perfusion->loadRefsLines();
+}
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 

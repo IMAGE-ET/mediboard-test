@@ -139,12 +139,24 @@
 		  		  {{if $line->substitute_for_id}}
 			  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
 			  		    {{if ($line->substitute_for_id == $_perfusion->substitute_for_id) && ($line->substitute_for_class == $_perfusion->substitute_for_class)}}
-			  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
+			  		    <option value="{{$_perfusion->_id}}">
+			  		    {{foreach from=$_perfusion->_ref_lines item=_perf_line name=foreach_perfusion}}
+								  {{$_perf_line->_ref_produit->libelle_abrege}}
+									{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
+								{{/foreach}}
+								({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
+                </option>
 			  		    {{/if}}
 			  		  {{/foreach}}
 		  		  {{else}}
 			  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-			  		    <option value="{{$_perfusion->_id}}">{{$_perfusion->_view}}</option>
+			  		    <option value="{{$_perfusion->_id}}">
+			  		    	{{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perfusion"}}
+                  {{$_perf_line->_ref_produit->libelle_abrege}}
+									{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
+                {{/foreach}}
+							  ({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
+                </option>
 			  		  {{/foreach}}
 		  		  {{/if}}
 		  		  
