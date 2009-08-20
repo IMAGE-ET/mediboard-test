@@ -191,7 +191,6 @@ div div.text {
 .control {
   border: none;
   background: transparent;
-  margin: 0;
   padding: 0;
   position: relative;
   display: inline; /* IE */
@@ -429,8 +428,12 @@ button.intermax-result {
 	opacity: .4;
 }
 
-input, select, textarea, .control {
+input, select, textarea, button {
   margin: 1px;
+}
+
+.control {
+  margin: 1px !important;
 }
 
 input, select, textarea {
@@ -2841,7 +2844,7 @@ table.tbl td.ccmu-P{
 }
 
 .numericField {
-  border: none;
+  border: none !important;
   border-collapse: collapse;
   border-spacing: 0;
   display: inline-block;

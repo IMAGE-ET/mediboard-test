@@ -21,8 +21,12 @@ legend {
   margin: 0 4px;
 }
 
-input, select, textarea, button, .control {
+input, select, textarea, button {
   margin: 1px;
+}
+
+.control {
+  margin: 1px !important;
 }
 
 input, select, textarea, button {
@@ -220,7 +224,7 @@ button.notext, a.notext {
 }
 
 .numericField {
-  border: none;
+  border: none !important;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -268,7 +272,6 @@ button.notext, a.notext {
 .control {
   border: none;
   background: transparent;
-  margin: 0;
   padding: 0;
   position: relative;
   display: inline; /* IE */
