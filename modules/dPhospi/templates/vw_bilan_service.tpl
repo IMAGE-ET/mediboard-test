@@ -173,13 +173,17 @@ selectPeriode = function(element) {
   </td>
 </tr>
 {{/if}}
+</table>
+<br />
+<table class="tbl">
 
 {{foreach from=$lines_by_patient key=chambre_id item=_lines_by_patient}}
   {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
     {{assign var=sejour value=$sejours.$sejour_id}}
     {{assign var=patient value=$sejour->_ref_patient}}
+		{{assign var=operation value=$sejour->_ref_last_operation}} 
     <tr>
-      <th colspan="6">
+      <th colspan="6" class="text">
         <span style="float: left">
           {{assign var=chambre value=$chambres.$chambre_id}}
           <strong>Chambre {{$chambre->_view}}</strong>
@@ -191,11 +195,22 @@ selectPeriode = function(element) {
 		    <strong>{{$patient->_view}}</strong>
 		    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
 		    <br />
-		    {{assign var=operation value=$sejour->_ref_last_operation}}
-		    Intervention: {{$operation->libelle}} le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
+
+        Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
 		    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
       </th>
     </tr>
+		<tr>
+			<th colspan="2" style="text-align: left" class="text">
+        <strong>{{$operation->libelle}}</strong> 
+        {{if !$operation->libelle}}
+          {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
+            <strong>{{$curr_ext_code->code}}</strong> :
+            {{$curr_ext_code->libelleLong}}<br />
+            {{/foreach}}
+        {{/if}}
+			</th>
+		</tr>
   	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
 	  <tr>
 	    <td style="width: 20px; border:none;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>

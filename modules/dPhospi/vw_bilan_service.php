@@ -104,6 +104,7 @@ if (mbGetValueFromGet("do")) {
 	  $sejour =& $_prescription->_ref_object;
 	  $sejour->loadRefsOperations();
 	  $sejour->_ref_last_operation->loadRefPlageOp();
+		$sejour->_ref_last_operation->loadExtCodesCCAM();
 	  // Stockage de la liste des patients
 	  $sejours[$sejour->_id] = $sejour;
 	  $sejour->loadRefPatient();

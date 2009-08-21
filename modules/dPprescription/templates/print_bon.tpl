@@ -135,7 +135,7 @@ Main.add( function(){
 				      	{{$_bon}} {{$line->_unite_prise}} {{$line->_view}}
 				      </td>
 				      <td style="width: 20%">
-				        Prescripteur: {{$line->_ref_praticien->_view}}
+				        Prescripteur: {{$line->_ref_praticien->_view}} ({{$line->_ref_praticien->adeli}})
 				      </td>
 			      </tr>
 			    {{/foreach}}
