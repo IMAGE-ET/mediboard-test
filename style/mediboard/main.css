@@ -2150,20 +2150,32 @@ table#planningBloc td.firsthour {
 /** dPpatients */
 table#weeklyPlanning {
   width: 100%;
-  border-spacing: 1px;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
 }
 
 table#weeklyPlanning td {
   text-align: center; 
   vertical-align: middle;
   white-space: normal;
-  padding: 3px;
+  border-left: 1px solid #ccc;
+  padding: 1px;
+}
+
+table#weeklyPlanning th[scope=row] {
+  border-top: 1px solid #ccc;
+  padding: 0 5px;
+  vertical-align: middle;
+}
+
+table#weeklyPlanning th[scope=col] {
+  border-left: 1px solid #ccc;
 }
 
 table#weeklyPlanning td.selectedPlage {
   background: #ddd;
-  border: 2px solid #444;
-  padding: 1px;
+  outline: 2px solid #444;
 }
 
 table#weeklyPlanning td.nonEmpty {
@@ -2192,29 +2204,45 @@ table#weeklyPlanning td.selectedOp {
 
 table#weeklyPlanning td.empty {
   background: #eee;
-  height: 3px; 
+}
+
+table#weeklyPlanning td.hour_start {
+  border-top: 1px solid #ccc;
+}
+
+table#weeklyPlanning th.today {
+  background-color: #ffd;
 }
 
 div.progressBar {
-  font-size: 80%;
+  font-size: 0.8em;
   background: #fff;
   margin: 0 auto;
-  height: 12px;
+  height: 11px;
   width: 90%;
   text-align: left;
-  border: 1px solid #888;
+  border: none;
+  position: relative;
+  color: #000;
 }
 
 div.progressBar div {
+  position: absolute;
+  top: 0;
+  left: 0;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 
 div.progressBar div.bar {
-  height: 12px;
-/*  opacity: 0.2; */
-  display: block;
+  height: 100%;
   background-repeat: repeat;
+}
+
+div.progressBar div.text {
+  text-align: center;
+  white-space: nowrap;
 }
 
 div.progressBar div.empty {
@@ -2232,15 +2260,6 @@ div.progressBar div.booked {
 div.progressBar div.full {
   background-image: url(./images/icons/pfull.png);
 }
-
-div.progressBar div.text {
-  margin-top: -13px;
-  text-align: center;
-  font-size: 11px;
-  white-space: nowrap;
-  width: 90%;
-}
-
 
 tr.groupexpand td,
 tr.groupcollapse td {

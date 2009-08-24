@@ -94,13 +94,13 @@ Main.add(function () {
           <!-- Affichage du nom des jours -->
           <th></th>
           {{foreach from=$listDays key=curr_day item=plagesPerDay}}
-          <th style="width: {{math equation="100/x" x=$listDays|@count}}%">{{$curr_day|date_format:"%A %d"}}</th>
+          <th style="width: {{math equation="100/x" x=$listDays|@count}}%" {{if $smarty.now|date_format:"%A %d" == $curr_day|date_format:"%A %d"}}class="today"{{/if}} scope="col">{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>       
         <!-- foreach sur les heures -->
         {{foreach from=$listHours item=curr_hour}}
         <tr>
-          <th rowspan="{{$nb_intervals_hour}}">{{$curr_hour}}h</th>
+          <th rowspan="{{$nb_intervals_hour}}" scope="row">{{$curr_hour}}h</th>
           <!-- foreach sur les minutes -->
           {{foreach from=$listMins item=curr_mins key=keyMins}}
             {{if $keyMins}}
@@ -112,16 +112,16 @@ Main.add(function () {
               {{assign var="affichage" value=$affichages.$keyAff}}
              
               {{if $affichage === "empty"}}
-                <td class="empty"></td>
+                <td class="empty {{if $curr_mins == '00'}}hour_start{{/if}}"></td>
               {{elseif $affichage == "hours"}}
-                <td class="empty" rowspan="{{$nb_intervals_hour}}"></td>
+                <td class="empty hour_start" rowspan="{{$nb_intervals_hour}}"></td>
               {{elseif $affichage === "full"}}
               
               {{else}}
                 {{assign var="_listPlages" value=$listPlages.$curr_day}}
                 {{assign var=plage value=$_listPlages.$affichage}}
               
-                <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$plage->_nb_intervals}}">
+                <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}} {{if $curr_mins == '00'}}hour_start{{/if}}" rowspan="{{$plage->_nb_intervals}}">
                   <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage">
                     {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
                     {{$plage->debut|date_format:$dPconfig.time}} - {{$plage->fin|date_format:$dPconfig.time}}
