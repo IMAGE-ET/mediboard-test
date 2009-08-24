@@ -2153,6 +2153,8 @@ table#weeklyPlanning {
   border-spacing: 0;
   border-collapse: collapse;
   border: 1px solid #ccc;
+  font-size: 0.9em;
+  line-height: 115%;
 }
 
 table#weeklyPlanning td {
@@ -2163,9 +2165,12 @@ table#weeklyPlanning td {
   padding: 1px;
 }
 
+table#weeklyPlanning th {
+  padding: 4px;
+}
+
 table#weeklyPlanning th[scope=row] {
   border-top: 1px solid #ccc;
-  padding: 0 5px;
   vertical-align: middle;
 }
 
@@ -2180,6 +2185,7 @@ table#weeklyPlanning td.selectedPlage {
 
 table#weeklyPlanning td.nonEmpty {
   background: #ccc; 
+  border: 1px solid #999 !important;
 }
 
 table#weeklyPlanning td.nonEmptyConsult {
@@ -2215,7 +2221,7 @@ table#weeklyPlanning th.today {
 }
 
 div.progressBar {
-  font-size: 0.8em;
+  font-size: 0.9em;
   background: #fff;
   margin: 0 auto;
   height: 11px;
