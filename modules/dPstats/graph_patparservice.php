@@ -110,6 +110,8 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 		'grid' => array('verticalLines' => false),
 		'spreadsheet' => array(
 		  'show' => true,
+      'csvFileSeparator' => ';',
+      'decimalSeparator' => ',',
 			'tabGraphLabel' => utf8_encode('Graphique'),
       'tabDataLabel' => utf8_encode('Données'),
       'toolbarDownload' => utf8_encode('Fichier CSV'),

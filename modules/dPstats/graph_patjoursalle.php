@@ -92,6 +92,8 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
 		'mouse' => array('track' => true, 'relative' => true, 'position' => 'ne'),
 		'spreadsheet' => array(
 		  'show' => true,
+      'csvFileSeparator' => ';',
+      'decimalSeparator' => ',',
 			'tabGraphLabel' => utf8_encode('Graphique'),
       'tabDataLabel' => utf8_encode('Données'),
       'toolbarDownload' => utf8_encode('Fichier CSV'),

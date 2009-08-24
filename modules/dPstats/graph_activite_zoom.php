@@ -127,6 +127,8 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     'grid' => array('verticalLines' => false),
     'spreadsheet' => array(
       'show' => true,
+      'csvFileSeparator' => ';',
+      'decimalSeparator' => ',',
       'tabGraphLabel' => utf8_encode('Graphique'),
       'tabDataLabel' => utf8_encode('Données'),
       'toolbarDownload' => utf8_encode('Fichier CSV'),

@@ -155,7 +155,11 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
       'relative' => true
     ),*/
 	  'HtmlText' => false,
-    'spreadsheet' => array('show' => true)
+    'spreadsheet' => array(
+		  'show' => true, 
+			'csvFileSeparator' => ';',
+			'decimalSeparator' => ','
+		)
 	);
 	
 	$series = array();

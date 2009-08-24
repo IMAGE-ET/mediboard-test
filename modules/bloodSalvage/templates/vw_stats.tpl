@@ -40,7 +40,9 @@ function drawGraph(key) {
 		  	tabGraphLabel: 'Graphique',
 		  	tabDataLabel: 'Données',
         toolbarDownload: 'Télécharger le fichier CSV',
-        toolbarSelectAll: 'Séléctionner le tableau'
+        toolbarSelectAll: 'Séléctionner le tableau',
+				csvFileSeparator: ';',
+				decimalSeparator: ','
 		  }
     }, options)
   );

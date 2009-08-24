@@ -89,7 +89,7 @@ if (isset($_REQUEST["login"])) {
     $AppUI->setMsg("Auth-failed", UI_MSG_ERROR);
   }
   
-  if ($ok && $dialog) {
+  if ($ok && $dialog && !isset($_REQUEST["no_login_info"])) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
 

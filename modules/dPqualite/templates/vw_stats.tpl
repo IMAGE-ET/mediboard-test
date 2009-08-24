@@ -91,7 +91,9 @@ function drawGraph(id) {
         tabGraphLabel: 'Graphique',
         tabDataLabel: 'Données',
         toolbarDownload: 'Fichier CSV',
-        toolbarSelectAll: 'Seléctionner tout le tableau'
+        toolbarSelectAll: 'Sélectionner tout le tableau',
+        csvFileSeparator: ';',
+        decimalSeparator: ','
       }
     }, options)
   );
