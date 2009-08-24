@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<a href="?m={{$m}}&amp;tab={{$tab}}&amp;personnel_id=0" class="buttonnew">
+<a href="?m={{$m}}&amp;tab={{$tab}}&amp;personnel_id=0" class="button new">
 	{{tr}}CPersonnel-title-create{{/tr}}
 </a>
 
