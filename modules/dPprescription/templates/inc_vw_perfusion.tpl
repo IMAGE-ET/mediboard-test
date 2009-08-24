@@ -23,7 +23,21 @@ Main.add( function(){
   <tr>
     <th colspan="9" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       <div style="float: left">
-  
+				{{if $_perfusion->_ref_prescription->type != "externe"}}
+				  {{if $_perfusion->_perm_edit}}
+					  <form name="editCondPerf-{{$_perfusion->_id}}">
+					  	<input type="hidden" name="m" value="dPprescription" />
+							<input type="hidden" name="dosql" value="do_perfusion_aed" />
+							<input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
+				      {{mb_field object=$_perfusion field=conditionnel onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+				      {{mb_label object=$_perfusion field="conditionnel"}}
+						</form>
+					{{else}}
+				    {{mb_label object=$_perfusion field="conditionnel"}}:
+				    {{if $_perfusion->conditionnel}}Oui{{else}}Non{{/if}} 
+				  {{/if}}
+				{{/if}}
+
         {{if $_perfusion->_ref_parent_line->_id}}
 	        {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
 	        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 

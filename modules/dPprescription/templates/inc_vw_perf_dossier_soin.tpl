@@ -34,8 +34,12 @@
 			   onclick='editPerf("{{$_perfusion->_id}}","{{$date}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");
 			            addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");'>
 	      {{$_perfusion->voie}}
+				{{if $_perfusion->commentaire}}
+				<br />
+				{{$_perfusion->commentaire}}
+				{{/if}}
 	    </a>
-
+    {{if $_perfusion->_active}}
 	      <form name="editPerfusion-{{$_perfusion->_id}}" method="post" action="?" style="float: right">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_perfusion_aed" />
@@ -54,29 +58,59 @@
 	         <img src="images/icons/stop.png" alt="" title="Retrait de la perfusion" style="{{if $_perfusion->date_retrait}}opacity: 0.5{{/if}}" />
 	        {{if !$_perfusion->date_retrait}}</a>{{/if}}	         
 	      </form>
-	   
+				{{/if}}
 	  </div>
 	  
-	  {{if !$_perfusion->date_pose}}
-    {{if ($_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $_perfusion->_ref_substitution_lines.CPerfusion|@count) &&
-          $_perfusion->_ref_substitute_for->substitution_plan_soin}}
-    <form action="?" method="post" name="changeLine-{{$perfusion_id}}">
-      <input type="hidden" name="m" value="dPprescription" />
-      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-      <select name="object_guid" style="width: 75px;" 
-              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-      										loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration');} } )">
-        <option value="">Conserver</option>
-        {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
-          {{foreach from=$lines_subst_by_chap item=_line_subst}}
-            <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
-            {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
-	        {{/foreach}}
-	      {{/foreach}}
-      </select>
-    </form>
+		{{if $_perfusion->conditionnel}}
+      <form action="?" method="post" name="activeCondition-{{$_perfusion->_id}}-{{$_perfusion->_class_name}}">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_perfusion_aed" />
+        <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
+        <input type="hidden" name="del" value="0" />
+        
+        {{if !$_perfusion->condition_active}}
+        <!-- Activation -->
+        <input type="hidden" name="condition_active" value="1" />
+        <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','perf', true); } });">
+          Activer
+        </button>
+        {{else}}
+        <!-- Activation -->
+        <input type="hidden" name="condition_active" value="0" />
+        <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','perf', true); } });">
+          Désactiver
+        </button>
+         {{/if}}
+       </form>
     {{/if}}
-    {{/if}}
+		
+
+		  {{if !$_perfusion->date_pose}}
+		    {{if ($_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $_perfusion->_ref_substitution_lines.CPerfusion|@count) &&
+		          $_perfusion->_ref_substitute_for->substitution_plan_soin}}
+		    <form action="?" method="post" name="changeLine-{{$perfusion_id}}">
+		      <input type="hidden" name="m" value="dPprescription" />
+		      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+		      <select name="object_guid" style="width: 75px;" 
+		              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+		      										loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration');} } )">
+		        <option value="">Conserver</option>
+		        {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
+		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
+							  <option value="{{$_line_subst->_guid}}">
+		              {{if $_line_subst->_class_name == "CPerfusion"}}
+								      {{$_line_subst->_short_view}}
+                  {{else}}	
+									  {{$_line_subst->_view}}
+								  {{/if}}
+								{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+			        {{/foreach}}
+			      {{/foreach}}
+		      </select>
+		    </form>
+		    {{/if}}
+	    {{/if}}
+
 	  </div>
 	</td>
  	<td style="font-size: 1em;">
@@ -101,7 +135,8 @@
 			    <td class="{{$_view_date}}-{{$moment_journee}}"
 			        style='cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
 					    
-					    {{if ($_date_hour >= $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00') && ($_date_hour < $_perfusion->_fin)}}
+							
+					    {{if ($_date_hour >= $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00') && ($_date_hour < $_perfusion->_fin) && $_perfusion->_active}}
 					      {{if ($_date_hour < $now) && $_perfusion->_pose}}
 					        background-image: url(images/pictures/perf_vert.png);
 					      {{else}}
@@ -144,7 +179,7 @@
 	                    onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}');"
 	                    ondblclick='addAdministrationPerf("{{$_perfusion->_id}}","{{$_date}}","{{$_hour}}","{{$hour_prevue}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
 											class="administration tooltip-trigger
-											       {{if $nb_prevue && ($nb_adm || $nb_adm == 0)}}
+											       {{if $nb_prevue && $_perfusion->_active && ($nb_adm || $nb_adm == 0)}}
 											         {{if $nb_prevue == $nb_adm}}administre
 											         {{elseif $nb_adm == '0'}}administration_annulee
 											         {{elseif $nb_adm}}administration_partielle
@@ -153,9 +188,9 @@
 											       {{/if}}">
 									
 									 {{* Affichage des prises prevues et des administrations *}}
-									 {{if $nb_adm}}{{$nb_adm}}{{elseif $nb_prevue}}0{{/if}}
-									 {{if $nb_prevue}}/{{/if}}
-									 {{if $nb_prevue}}{{$nb_prevue}}{{/if}}
+									 {{if $nb_adm}}{{$nb_adm}}{{elseif $nb_prevue && $_perfusion->_active}}0{{/if}}
+									 {{if $nb_prevue && $_perfusion->_active}}/{{/if}}
+									 {{if $nb_prevue && $_perfusion->_active}}{{$nb_prevue}}{{/if}}
 						    </div>	
 						    <div id="tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}" style="display: none;">
 						      Prises prévues à {{$hour_prevue|date_format:$dPconfig.time}}
@@ -166,6 +201,8 @@
 						      </ul>
 						    </div>
 					    {{/foreach}}
+							
+							
 			    </td>
 		    {{/foreach}}
      {{/foreach}}		   

@@ -122,7 +122,14 @@ changeModeBolus = function(oForm){
 	  submitFormAjax(oForm, 'systemMsg');
   }
 
-	
+	submitConditionnel = function(object_class, object_id, conditionnel){
+	  var oForm = getForm("editConditionnel");
+	  prepareForm(oForm);
+    oForm.prescription_line_medicament_id.value = object_id;
+		oForm.conditionnel.value = conditionnel ? "1" : "0";
+	  return onSubmitFormAjax(oForm);
+  }
+
 
 modifFormDate = function(nb_prises, form_name, protocole,line_id){
   var oForm = document.forms[form_name];
@@ -140,12 +147,6 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     $V(oForm.time_fin,"",false);
     $V(oForm.time_fin_da,"",false);
     
-    // the numericFields
-    /*
-    $('img_'+oForm.decalage_line_fin.id).hide();
-    $('img_'+oForm.decalage_line.id).hide();
-    $('img_'+oForm.duree.id).hide();
-    */
     // The time pickers
     $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('hide');
     $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('hide');
@@ -172,13 +173,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     oForm.decalage_line_fin.disabled = false;
     oForm.unite_decalage_fin.disabled = false;
     oForm.time_fin.disabled = false;
-      
-    // the numericFields
-    /*
-    $('img_'+oForm.decalage_line_fin.id).show();
-    $('img_'+oForm.decalage_line.id).show();
-    $('img_'+oForm.duree.id).show();
-    */
+     
     // The time pickers
     $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('show');
     $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('show'); 
@@ -234,6 +229,14 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="ald" value="" />
+</form>
+
+<form name="editConditionnel" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="conditionnel" value="" />
 </form>
 
 <!-- Select de moments unitaire -->

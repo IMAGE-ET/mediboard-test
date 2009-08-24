@@ -155,8 +155,12 @@
 	        <option value="">Conserver</option>
 		      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
+							{{if $_line_subst->_class_name == "CPerfusion"}}
+							<option value="{{$_line_subst->_guid}}">{{$_line_subst->_short_view}}
+              {{else}}
 		          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
-		          {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+		          {{/if}}
+							{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
 		        {{/foreach}}
 		      {{/foreach}}
 	      </select>

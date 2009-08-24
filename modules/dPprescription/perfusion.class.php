@@ -52,8 +52,11 @@ class CPerfusion extends CMbObject {
   var $substitute_for_class = null;
   var $substitution_active = null;
   var $substitution_plan_soin = null;
-    
-  // Fwd Refs
+  
+	var $conditionnel = null;
+	var $condition_active = null;
+	
+	// Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;
   
@@ -72,10 +75,14 @@ class CPerfusion extends CMbObject {
   var $_pose = null;
   var $_retrait   = null;
   var $_voies = null;
-  
+  var $_active = null;
+	  
   // Object references
   var $_ref_log_signature_prat = null;
   var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
+
+
+  var $_short_view = null;
 
   // Can fields
   var $_perm_edit                        = null;
@@ -139,6 +146,8 @@ class CPerfusion extends CMbObject {
     $specs["substitution_plan_soin"] = "bool";
     $specs["nb_tous_les"]            = "num";
     $specs["commentaire"]            = "str helped";
+		$specs["conditionnel"]           = "bool";
+    $specs["condition_active"]       = "bool";
     return $specs;
   }
 
@@ -186,6 +195,7 @@ class CPerfusion extends CMbObject {
     if($this->_protocole){
       $this->countSubstitutionsLines();
     }
+		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
   }
   
   function getBackProps() {
@@ -366,6 +376,9 @@ class CPerfusion extends CMbObject {
 			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
 		  $this->_ref_substitute_for = $_base_line;			  
 	  }
+		foreach($this->_ref_substitution_lines["CPerfusion"] as $_substitution_line){
+      $_substitution_line->loadRefsLines();
+    }
   }
   
   /*
@@ -413,8 +426,14 @@ class CPerfusion extends CMbObject {
   function loadRefsLines(){
     $this->_ref_lines = $this->loadBackRefs("lines_perfusion");
     $this->loadVoies();
-  }
-  
+    
+		if(!$this->_short_view){
+		  foreach($this->_ref_lines as $_perf_line){
+		  	$this->_short_view .= $_perf_line->_ref_produit->libelle_abrege.", ";
+		  }
+			$this->_short_view .= "($this->voie - ".CAppUI::tr('CPerfusion.type.'.$this->type).")";
+		}
+	}
   
   /*
    * Chargement des differentes voies disponibles pour la perfusion

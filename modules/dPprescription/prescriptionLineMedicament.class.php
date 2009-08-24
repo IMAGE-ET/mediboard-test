@@ -312,7 +312,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_ald = 1;
     }
     // View Conditionnel
-    if($perm_edit && !($this->_protocole && $this->substitute_for_id)){
+    //if($perm_edit && !($this->_protocole && $this->substitute_for_id)){
+    if($perm_edit){
     	$this->_can_view_form_conditionnel = 1;
     }
     // View formulaire traitement
@@ -707,6 +708,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	    $this->_ref_substitution_lines[$_base_line->_class_name][$_base_line->_id] = $_base_line;
 			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
 		  $this->_ref_substitute_for = $_base_line;			  
+	  }
+		foreach($this->_ref_substitution_lines["CPerfusion"] as $_substitution_line){
+		  $_substitution_line->loadRefsLines();
 	  }
   }
   

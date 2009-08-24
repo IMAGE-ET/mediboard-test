@@ -1534,4 +1534,10 @@ $locales['config-dPprescription-CCategoryPrescription-show_header-desc'] = 'Affi
 $locales['CPerfusion-commentaire'] = 'Commentaire';
 $locales['CPerfusion-commentaire-court'] = 'Commentaire';
 $locales['CPerfusion-commentaire-desc'] = 'Commentaire';
+$locales['CPerfusion-condition_active'] = 'Condition active';
+$locales['CPerfusion-condition_active-court'] = 'Cond. active';
+$locales['CPerfusion-condition_active-desc'] = 'Condition active';
+$locales['CPerfusion-conditionnel'] = 'Cond.';
+$locales['CPerfusion-conditionnel-court'] = 'Cond.';
+$locales['CPerfusion-conditionnel-desc'] = 'Conditionnel';
 ?>

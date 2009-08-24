@@ -1344,7 +1344,13 @@ class CSetupdPprescription extends CSetup {
 	          ADD `commentaire` VARCHAR (255);";
 	  $this->addQuery($sql);
 	  
-		$this->mod_version = "0.88";
+		$this->makeRevision("0.88");
+		$sql = "ALTER TABLE `perfusion`
+            ADD `conditionnel` ENUM ('0','1')  DEFAULT '0',
+            ADD `condition_active` ENUM ('0','1')  DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.89";
   }  
 }
 
