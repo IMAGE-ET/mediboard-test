@@ -33,6 +33,9 @@ if ($user->isPraticien()) {
 
 $modeles = CCompteRendu::loadAllModelesFor($filtre->chir_id, 'prat', $filtre->object_class, $filtre->type);
 
+// On ne met que les classes qui ont une methode filTemplate
+$filtre->_specs['object_class']->_locales = CCompteRendu::getTemplatedClasses();
+
 // Création du template
 $smarty = new CSmartyDP();
 
