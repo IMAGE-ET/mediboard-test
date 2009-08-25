@@ -721,7 +721,7 @@ function mbWriteJSLocalesFile($language = null) {
   foreach($languages as $language) {
     $localeFiles = array_merge(glob("locales/$language/*.php"), glob("modules/*/locales/$language.php"));
     foreach ($localeFiles as $localeFile) {
-      if (basename($localeFile) != "encoding.php") {
+      if (basename($localeFile) != "meta.php") {
         require $localeFile;
       }
     }

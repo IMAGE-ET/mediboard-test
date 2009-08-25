@@ -27,7 +27,4 @@ if (null == $locales = $shm->get($shared_name)) {
 }
 
 // Encoding definition
-require_once("$root_dir/locales/$locale/encoding.php");
-
-$GLOBALS["translate"] =& $locales;
-?>
+require("$root_dir/locales/$locale/meta.php");

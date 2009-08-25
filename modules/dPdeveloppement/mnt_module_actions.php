@@ -7,15 +7,15 @@
  * @author openXtrem
  */
 
-global $can;
+global $can, $locales;
 $can->needsRead();
 
 foreach ($modules = CModule::getInstalled() as $module) {
   CAppUI::requireModuleFile($module->mod_name, "index");
   foreach ($module->_tabs as &$tab) {
     $tab["name"] = "mod-$module->mod_name-tab-" . $tab[0];
-    $tab["locale"] = isset($GLOBALS["translate"][$tab["name"]]) ? 
-      $GLOBALS["translate"][$tab["name"]] : null; 
+    $tab["locale"] = isset($locales[$tab["name"]]) ? 
+      $locales[$tab["name"]] : null; 
   }
 }
 

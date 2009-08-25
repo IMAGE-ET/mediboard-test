@@ -18,7 +18,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $locales = array();
   $localeFiles = array_merge(glob("locales/$localeName/*.php"), glob("modules/*/locales/$localeName.php"));
   foreach ($localeFiles as $localeFile) {
-    if (basename($localeFile) != "encoding.php") {
+    if (basename($localeFile) != "meta.php") {
       require $localeFile;
     }
   }

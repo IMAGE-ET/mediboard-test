@@ -14,9 +14,6 @@ define("UI_MSG_ALERT"  , 2);
 define("UI_MSG_WARNING", 3);
 define("UI_MSG_ERROR"  , 4);
 
-// global variable holding the translation array
-$GLOBALS["translate"] = array();
-
 /**
  * The true application class
  */
@@ -632,14 +629,16 @@ class CAppUI {
    * @return string translated statement
    */
   static function tr($str) {
+    global $locales;
+    
     $str = trim($str);
     if (empty($str)) {
       return "";
     }
     
     // Defined and not empty
-    if (isset($GLOBALS["translate"][$str]) && $GLOBALS["translate"][$str] != "") {
-      return $GLOBALS["translate"][$str];
+    if (!empty($locales[$str])) {
+      return $locales[$str];
     }
 
     return nl2br(sprintf(self::$locale_mask, $str));

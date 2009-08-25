@@ -116,19 +116,19 @@ $g = "";
 
 // load locale settings
 require_once("./locales/core.php");
-if (!isset($locale_names)){
-  $locale_names = array();
+
+if (empty($locale_info['names'])){
+  $locale_info['names'] = array();
 }
+setlocale(LC_TIME, $locale_info['names']);
 
-setlocale(LC_TIME, $locale_names);
-
-if (!isset($locale_char_set)){
-  $locale_char_set = "UTF-8";
+if (empty($locale_info['charset'])){
+  $locale_info['charset'] = "UTF-8";
 }
 
 // output the character set header
 if (!$suppressHeaders || $ajax) {
-  header("Content-type: text/html;charset=$locale_char_set");
+  header("Content-type: text/html;charset=".$locale_info['charset']);
 }
 
 // check if we are logged in
@@ -260,7 +260,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("offline"              , false);
   $smartyHeader->assign("nodebug"              , true);
   $smartyHeader->assign("configOffline"        , null);
-  $smartyHeader->assign("localeCharSet"        , $locale_char_set);
+  $smartyHeader->assign("localeCharSet"        , $locale_info['charset']);
   $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico", true));
   $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
   $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));
