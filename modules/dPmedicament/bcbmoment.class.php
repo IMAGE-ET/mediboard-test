@@ -18,11 +18,8 @@ class CBcbMoment extends CBcbObject {
 	
 	var $_ref_associations = null;
 	
-	
   // Constructeur
-  function CBcbMoment(){
-  
-  }
+  function CBcbMoment(){}
  
   // Chargement d'une posologie a partir d'un code CIP
   function load($code_moment_id){
@@ -60,11 +57,6 @@ class CBcbMoment extends CBcbObject {
     $moments = $ds->loadList($query);
     return $moments;
   }
-  
-  function updateFormFields() {
-    parent::updateFormFields();
-  }
-
 }
 
 ?>

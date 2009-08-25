@@ -308,7 +308,6 @@ abstract class CSQLDataSource {
    * @param object The address of variable
    **/
   function loadObject($sql, &$object) {
-    $class = get_class($object);
     if ($object != null) {
       if (null == $hash = $this->loadHash($sql)) {
         return false;
