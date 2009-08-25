@@ -1,6 +1,6 @@
     <table class="tbl">
       <tr>
-        <th>Date</th>
+        <th style="width: 7em;">Date</th>
         <th>Praticien</th>
         <th>Libelle</th>
         <th>Etat</th>
