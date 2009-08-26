@@ -145,7 +145,7 @@ if (!$AppUI->user_id) {
   } 
   else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
-    $smartyLogin->assign("localeCharSet"        , $locale_char_set);
+    $smartyLogin->assign("localeCharSet"        , $locale_info['charset']);
     $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico", true));
     $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));
