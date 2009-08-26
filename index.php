@@ -26,6 +26,10 @@ require_once("./includes/config.php");
 require_once("./includes/version.php");
 require_once("./classes/sharedmemory.class.php");
 
+if(function_exists("date_default_timezone_set")) {
+  date_default_timezone_set($dPconfig["timezone"]);
+}
+
 if ($dPconfig["offline"]) {
   header("Location: offline.php");
   die("Le système est actuellement en cours de maintenance");
@@ -70,10 +74,6 @@ require_once("./includes/autoload.php");
 // Load default preferences if not logged in
 if (!$AppUI->user_id) {
   $AppUI->loadPrefs(0);
-}
-
-if(function_exists("date_default_timezone_set")) {
-  date_default_timezone_set(isset($AppUI->user_prefs["timezone"]) ? $AppUI->user_prefs["timezone"] : 'Europe/Paris');
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.

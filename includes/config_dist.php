@@ -24,6 +24,7 @@ $dPconfig["time"] = "%Hh%M";
 $dPconfig["datetime"] = "%d/%m/%Y %Hh%M";
 $dPconfig["longdate"] = "%A %d %B %Y";
 $dPconfig["longtime"] = "%H heures %M minutes";
+$dPconfig["timezone"] = "Europe/Paris";
 
 $dPconfig["graph_engine"] = "jpgraph";
 $dPconfig["graph_svg"] = "non";

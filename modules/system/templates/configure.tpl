@@ -102,6 +102,26 @@
   {{include file=inc_config_date_format.tpl var=longdate}}
   {{include file=inc_config_date_format.tpl var=longtime}}
   {{include file=inc_config_date_format.tpl var=datetime}}
+  
+  {{assign var="var" value="timezone"}}
+  <tr>
+    <th>
+      <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">{{tr}}config-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="{{$var}}">
+        {{foreach from=$timezones item=timezone_group key=title_group}}
+          <optgroup label="{{$title_group}}">
+            {{foreach from=$timezone_group item=title key=timezone}}
+              <option value="{{$timezone}}" {{if $timezone==$dPconfig.$var}}selected="selected"{{/if}}>
+                {{$title}}
+              </option>
+            {{/foreach}}
+          </optgroup>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
 
   {{assign var="var" value="type_telephone"}}
   <tr>
