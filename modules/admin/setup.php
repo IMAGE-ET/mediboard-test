@@ -213,7 +213,10 @@ class CSetupadmin extends CSetup {
     $sql = "ALTER TABLE `user_preferences` CHANGE `pref_value` `pref_value` VARCHAR( 255 ) NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.15";
+    $this->makeRevision("1.0.15");
+    $this->addPrefQuery("timezone", "Europe/Paris");
+    
+    $this->mod_version = "1.0.16";
   }
 }
 ?>

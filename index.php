@@ -20,9 +20,6 @@ if (!is_file("./includes/config.php")) {
 
 // PHP Configuration
 ini_set("memory_limit", "128M");
-if(function_exists("date_default_timezone_set")) {
-  date_default_timezone_set("Europe/Paris");
-}
 
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
@@ -73,6 +70,10 @@ require_once("./includes/autoload.php");
 // Load default preferences if not logged in
 if (!$AppUI->user_id) {
   $AppUI->loadPrefs(0);
+}
+
+if(function_exists("date_default_timezone_set")) {
+  date_default_timezone_set($AppUI->user_prefs["timezone"]);
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.

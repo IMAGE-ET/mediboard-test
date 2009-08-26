@@ -153,6 +153,26 @@ Main.add(function () {
     </td>
   </tr>
   
+  {{assign var="var" value="timezone"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}-desc{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        {{foreach from=$timezones item=timezone_group key=title_group}}
+          <optgroup label="{{$title_group}}">
+            {{foreach from=$timezone_group item=title key=timezone}}
+              <option value="{{$timezone}}" {{if $timezone==$prefsUser.$module.$var}}selected="selected"{{/if}}>
+                {{$title}}
+              </option>
+            {{/foreach}}
+          </optgroup>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  
   </tbody>
   
   {{assign var="module" value="dPpatients"}}
