@@ -230,11 +230,12 @@ $dPconfig["dPsalleOp"] = array(
   "CDossierMedical" => array (
     "DAS" => "0",
   ),
-  "CReveil"			=> array (
-  	"multi_tabs_reveil"	  => "1",
+  "CReveil"	=> array (
+  	"multi_tabs_reveil" => "1",
   ),
   "CDailyCheckList" => array(
-    "active" => "0"
+    "active" => "0",
+    "active_salle_reveil" => "0"
   )
 );
    
