@@ -188,7 +188,6 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
   return $object;
 }
 
-
 /**
  * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
  * @access public
@@ -360,7 +359,6 @@ function mbTimeCountIntervals($reference, $relative, $interval) {
   $diffStamp = $relStamp - $refStamp;
   $nbInterval = floatval($diffStamp / $intStamp);
   return intval($nbInterval);
-  
 }
 
 function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
@@ -508,8 +506,7 @@ class CMbDate {
 
 function mbMoyenne($array) {
   if (is_array($array)) {
-    $moyenne = array_sum($array) / count($array);
-    return $moyenne;
+    return array_sum($array) / count($array);
   } else {
     return false;
   }
@@ -1002,7 +999,6 @@ function mbDateToLocale($date) {
   return preg_replace("/(\d{4})-(\d{2})-(\d{2})/", '$3/$2/$1', $date);
 }
 
-
 /**
  * Convert a date from locale to ISO format
  * @param string $date Date in locale format
@@ -1127,5 +1123,3 @@ function in_array_recursive($needle, $haystack, $strict = false) {
   }
   return false;
 }
-
-?>

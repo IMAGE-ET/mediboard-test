@@ -170,7 +170,11 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   $divClass = isset($divClasses[$errorCode]) ? $divClasses[$errorCode] : null;
   $errorType = isset($errorTypes[$errorCode]) ? $errorTypes[$errorCode] : null;
   
-  $log = "\n\n<div class='$divClass'>";
+  // Contextes 
+  $contexts = debug_backtrace();
+  $hash = md5(serialize($contexts));
+  
+  $log = "\n\n<div class='$divClass' title='$hash'>";
   
   if ($AppUI && $AppUI->user_id){
     $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
@@ -191,8 +195,6 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   unset($session['AppUI']);
   $log .= print_infos($session, 'SESSION');
 						 
-  // Contextes 
-  $contexts = debug_backtrace();
   array_shift($contexts);
   foreach($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
@@ -236,7 +238,11 @@ function exceptionHandler($exception) {
   
   $divClass = "big-warning";
   
-  $log = "\n\n<div class='$divClass'>";
+  // Contextes 
+  $contexts = $exception->getTrace();
+  $hash = md5(serialize($contexts));
+  
+  $log = "\n\n<div class='$divClass' title='$hash'>";
   
   if ($AppUI && $AppUI->user_id) {
     $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
@@ -257,12 +263,10 @@ function exceptionHandler($exception) {
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
 	
-	$session = $_SESSION;
-	unset($session['AppUI']);
+  $session = $_SESSION;
+  unset($session['AppUI']);
   $log .= print_infos($session, 'SESSION');
-		
-  // Contextes 
-  $contexts = $exception->getTrace();
+  
   foreach($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
@@ -300,4 +304,3 @@ if (!is_file($logPath)) {
   $logInit = "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
   file_put_contents($logPath, $logInit);
 }
-?>

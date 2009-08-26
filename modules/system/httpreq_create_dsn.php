@@ -36,10 +36,10 @@ $dsConfig["dbpass"] = mbGetValueFromGet("master_pass");
 $dsConfig["dbname"] = "";
 
 if (null == $ds = CSQLDataSource::get($dsn)) {
-  $AppUI->stepAjax("Connexion en tant qu'admisnitrateur échouée", UI_MSG_ERROR);
+  $AppUI->stepAjax("Connexion en tant qu'administrateur échouée", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("Connexion en tant qu'admisnitrateur réussie");
+$AppUI->stepAjax("Connexion en tant qu'administrateur réussie");
 
 foreach ($ds->queriesForDSN($user, $pass, $name) as $key => $query) {
   if (!$ds->exec($query)) {

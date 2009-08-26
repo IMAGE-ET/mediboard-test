@@ -35,4 +35,3 @@ if(isset($_REQUEST["ajax"])){
   $_COOKIE  = array_map_recursive("utf8_decode", $_COOKIE );
   $_REQUEST = array_map_recursive("utf8_decode", $_REQUEST);
 }
-?>

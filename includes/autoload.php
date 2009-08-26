@@ -30,8 +30,7 @@ if ($shm->isReady()) {
     // Recherche dans les classes de mediboard
     if (isset($classPaths[$className])) {
       $performance["autoload"]++;
-      require($classPaths[$className]);
-      return;
+      return require($classPaths[$className]);
     } 
     
     // Recherche dans les classes de ezComponent
@@ -41,8 +40,4 @@ if ($shm->isReady()) {
   }
 }
 // Load all classes normally
-else {
-  CAppUI::getAllClasses();
-}
-
-?>
+else CAppUI::getAllClasses();

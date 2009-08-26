@@ -10,6 +10,6 @@
 
 ?>
 
-<div class="big-info">
+<div class="small-info">
 Vous n'êtes pas autorisé à accéder à cette information !
 </div>
