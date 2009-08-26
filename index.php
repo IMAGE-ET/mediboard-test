@@ -73,7 +73,7 @@ if (!$AppUI->user_id) {
 }
 
 if(function_exists("date_default_timezone_set")) {
-  date_default_timezone_set($AppUI->user_prefs["timezone"]);
+  date_default_timezone_set(isset($AppUI->user_prefs["timezone"]) ? $AppUI->user_prefs["timezone"] : 'Europe/Paris');
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
