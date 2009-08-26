@@ -35,12 +35,14 @@ foreach ($list as $path) {
 	
 	$info = pathinfo($path);
 	
-	if (in_array(strtolower($info['extension']), array('jpg', 'jpeg', 'png', 'gif', 'zip', 'gz', 'bz', 'xml', 'xsd', 'csv', 'htm'))) continue;
+  $ext = strtolower($info['extension']);
+  if (!in_array($ext, array('php', 'js', 'css', 'sql', 'tpl'))) continue;
+	//if (in_array($ext, array('jpg', 'jpeg', 'png', 'gif', 'zip', 'gz', 'bz', 'xml', 'xsd', 'csv', 'htm'))) continue;
 	
   $dir = dirname($path);
   $file = basename($path);
 	
-	$svn_file = $dir."/.svn/prop-base/".$file.".svn-base";
+	$svn_file = "$dir/.svn/prop-base/$file.svn-base";
 	if (!is_file($svn_file)) {
 		$issues[$path] = 'Missing prop file';
 		continue;
