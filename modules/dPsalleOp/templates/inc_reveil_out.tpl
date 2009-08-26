@@ -22,6 +22,7 @@ function refreshOutPanels() {
 
 </script>
 
+{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || $check_list->_id && $check_list->validator_id}}
 
 <table class="tbl">
   <tr>
@@ -120,3 +121,7 @@ function refreshOutPanels() {
 <script type="text/javascript">
   $('liout').innerHTML = {{$listOut|@count}};
 </script>
+
+{{else}}
+  {{include file=inc_edit_check_list.tpl personnel=$personnels}}
+{{/if}}

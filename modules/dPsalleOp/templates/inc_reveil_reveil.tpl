@@ -33,8 +33,9 @@ refreshReveilPanels = function() {
   url.addParam('date',"{{$date}}");
   url.requestUpdate("out", {waitingText : null});
 }
-
 </script> 
+
+{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || $check_list->_id && $check_list->validator_id}}
 
 <table class="tbl">
   <tr>
@@ -197,3 +198,7 @@ refreshReveilPanels = function() {
 <script type="text/javascript">
   $('lireveil').innerHTML = {{$listReveil|@count}};
 </script>
+
+{{else}}
+  {{include file=inc_edit_check_list.tpl personnel=$personnels}}
+{{/if}}

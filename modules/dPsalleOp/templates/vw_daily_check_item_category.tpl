@@ -8,7 +8,7 @@
   			</tr>
 				{{foreach from=$item_categories_list item=curr_item}}
         <tr>
-          <td><a href="?m={{$m}}&amp;tab=vw_daily_check_item_category&amp;item_category_id={{$curr_item->_id}}">{{mb_value object=$curr_item field=title}}</a></td>
+          <td><a href="?m={{$m}}&amp;a=vw_daily_check_item_category&amp;item_category_id={{$curr_item->_id}}&amp;dialog={{$dialog}}">{{mb_value object=$curr_item field=title}}</a></td>
           <td>{{mb_value object=$curr_item field=desc}}</td>
         </tr>
 				{{foreachelse}}
@@ -19,10 +19,10 @@
   		</table>
   	</td>
 		<td>
-      <button type="button" class="new" onclick="location.href='?m={{$m}}&amp;tab=vw_daily_check_item_category&amp;item_category_id=0'">
+      <button type="button" class="new" onclick="location.href='?m={{$m}}&amp;a=vw_daily_check_item_category&amp;item_category_id=0&amp;dialog={{$dialog}}'">
       	{{tr}}CDailyCheckItemCategory-title-create{{/tr}}
 			</button>
-      <form name="edit-CDailyCheckItemCategory" action="?m={{$m}}&amp;tab=vw_daily_check_item_category" method="post" onsubmit="return checkForm(this)">
+      <form name="edit-CDailyCheckItemCategory" action="?m={{$m}}&amp;a=vw_daily_check_item_category&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
 	      <input type="hidden" name="dosql" value="do_daily_check_item_category_aed" />
         <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="daily_check_item_category_id" value="{{$item_category->_id}}" />
@@ -39,6 +39,10 @@
 	          <th style="width: 1%;">{{mb_label object=$item_category field="title"}}</th>
 	          <td>{{mb_field object=$item_category field="title"}}</td>
 	        </tr>
+          <tr>
+            <th>{{mb_label object=$item_category field="target_class"}}</th>
+            <td>{{mb_field object=$item_category field="target_class"}}</td>
+          </tr>
 	        <tr>
 	          <th>{{mb_label object=$item_category field="desc"}}</th>
 	          <td>{{mb_field object=$item_category field="desc"}}</td>

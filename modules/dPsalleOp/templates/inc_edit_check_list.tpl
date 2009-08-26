@@ -1,14 +1,15 @@
 <script type="text/javascript">
 	confirmCheckList = function(form) {
-		return checkForm(form) && confirm('Tous les points ont-ils été bien vérifiés ?')
+		return checkForm(form) && confirm('Tous les points ont-ils été bien vérifiés ?') && onSubmitFormAjax(form, {onComplete: function(){location.reload()} });
 	}
 </script>
 
-<form name="edit-CDailyCheckList" method="post" action="?m={{$m}}&amp;tab={{$tab}}" onsubmit="return confirmCheckList(this)">
+<form name="edit-CDailyCheckList" method="post" action="?" onsubmit="return confirmCheckList(this)">
   <input type="hidden" name="dosql" value="do_daily_check_list_aed" />
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="daily_check_list_id" value="{{$check_list->_id}}" />
-  <input type="hidden" name="room_id" value="{{$salle}}" />
+  <input type="hidden" name="object_class" value="{{$check_list->object_class}}" />
+  <input type="hidden" name="object_id" value="{{$check_list->object_id}}" />
   <input type="hidden" name="date" value="now" />
   
   <input type="hidden" name="del" value="0" />
@@ -51,7 +52,7 @@
 	
   <select name="validator_id" class="notNull ref">
     <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
-    {{foreach from=$listPersAideOp item=curr_personnel}}
+    {{foreach from=$personnel item=curr_personnel}}
 		  {{assign var=curr_user value=$curr_personnel->_ref_user}}
       <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
     {{/foreach}}

@@ -34,6 +34,7 @@ refreshOpsPanels = function() {
 
 </script>
 
+{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || $check_list->_id && $check_list->validator_id}}
 
 <table class="tbl">
   <tr>
@@ -161,3 +162,7 @@ refreshOpsPanels = function() {
   $('liops').innerHTML = {{$listOps|@count}};
   $('heure').innerHTML = "{{$hour|date_format:$dPconfig.time}}";
 </script>
+
+{{else}}
+  {{include file=inc_edit_check_list.tpl personnel=$personnels}}
+{{/if}}

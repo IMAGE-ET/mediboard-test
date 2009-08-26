@@ -80,6 +80,15 @@ if(Cmodule::getActive("dPpersonnel")) {
   $personnels = $personnel->loadListPers("reveil");
 }
 
+// Vérification de la check list journalière
+$check_list = CDailyCheckList::getTodaysList('CBlocOperatoire', $bloc_id);
+$check_list->loadItemTypes();
+$check_list->loadBackRefs('items');
+
+$where = array('target_class' => "= 'CBlocOperatoire'");
+$check_item_category = new CDailyCheckItemCategory;
+$check_item_categories = $check_item_category->loadList($where);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -91,6 +100,8 @@ $smarty->assign("date"                   , $date);
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("hour"                   , $hour);
 $smarty->assign("modif_operation"        , $modif_operation);
+$smarty->assign("check_list"             , $check_list);
+$smarty->assign("check_item_categories"  , $check_item_categories);
 
 $smarty->display("inc_reveil_ops.tpl");
 

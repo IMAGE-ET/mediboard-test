@@ -96,7 +96,8 @@
     <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
   
-	{{mb_include module=system template=inc_config_bool var=active}}  
+	{{mb_include module=system template=inc_config_bool var=active}}
+  {{mb_include module=system template=inc_config_bool var=active_salle_reveil}}
   
   <tr>
     <td class="button" colspan="100">

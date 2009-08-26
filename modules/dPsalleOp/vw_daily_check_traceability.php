@@ -13,21 +13,25 @@ $can->needsRead();
 
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
-$room_id = mbGetValueFromGetOrSession('room_id');
+$object_class = mbGetValueFromGetOrSession('object_class');
+$object_id = mbGetValueFromGetOrSession('object_id');
 $check_list_id = mbGetValueFromGetOrSession('check_list_id');
 
 $check_list = new CDailyCheckList;
 $check_list->load($check_list_id);
 $check_list->loadBackRefs('items');
+
 if ($check_list->_back['items']) {
-	foreach($check_list->_back['items'] as &$item) {
+	foreach($check_list->_back['items'] as $id => $item) {
 		$item->loadRefsFwd();
 	}
 }
 
 $where = array();
-if ($room_id) {
-	$where['room_id'] = "= '$room_id'";
+if ($object_class) {
+	$where['object_class'] = "= '$object_class'";
+  if ($object_id)
+    $where['object_id'] = "= '$object_id'";
 }
 if ($date_min) {
   $where[] = "date >= '$date_min'";
@@ -35,12 +39,14 @@ if ($date_min) {
 if ($date_max) {
 	$where[] = "date <= '$date_max'";
 }
-$list_check_lists = $check_list->loadList($where, 'date', 30);
+$list_check_lists = $check_list->loadList($where, 'object_class, date', 30);
 
 $check_list_filter = new CDailyCheckList;
-$check_list_filter->room_id = $room_id;
+$check_list_filter->object_class = $object_class;
+$check_list_filter->object_id = $object_id;
 $check_list_filter->_date_min = $date_min;
 $check_list_filter->_date_max = $date_max;
+$check_list_filter->loadRefsFwd();
 
 // Création du template
 $smarty = new CSmartyDP();

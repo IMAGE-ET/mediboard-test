@@ -115,7 +115,7 @@ Main.add(function () {
 		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || $check_list->_id && $check_list->validator_id}}
         {{include file=inc_operation.tpl}}
 			{{else}}
-        {{include file=inc_edit_check_list.tpl}}
+        {{include file=inc_edit_check_list.tpl personnel=$listPersAideOp}}
       {{/if}}
     {{else}}
       <div class="big-info">

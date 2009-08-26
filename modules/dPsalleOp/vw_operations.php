@@ -182,11 +182,13 @@ $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
 // Vérification de la check list journalière
-$check_list = CDailyCheckList::getTodaysList($salle_id);
+$check_list = CDailyCheckList::getTodaysList('CSalle', $salle_id);
 $check_list->loadItemTypes();
 $check_list->loadBackRefs('items');
+
+$where = array('target_class' => "= 'CSalle'");
 $check_item_category = new CDailyCheckItemCategory;
-$check_item_categories = $check_item_category->loadList(null);
+$check_item_categories = $check_item_category->loadList($where);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -172,7 +172,16 @@ class CSetupdPsalleOp extends CSetup {
 			ADD `charges_sup` ENUM ('0','1')";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $query = "ALTER TABLE `daily_check_list` 
+              CHANGE `room_id` `object_id` INT (11) UNSIGNED NOT NULL,
+              ADD `object_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_item_category` 
+              ADD `target_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.29";
   }
 }
 ?>

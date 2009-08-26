@@ -17,7 +17,7 @@ $item_type = new CDailyCheckItemType;
 $item_type->load($item_type_id);
 
 $item_category = new CDailyCheckItemCategory;
-$item_categories_list = $item_category->loadList(null, 'title');
+$item_categories_list = $item_category->loadList(null, 'target_class, title');
 
 foreach($item_categories_list as $cat) {
   $cat->loadBackRefs('item_types', 'title');

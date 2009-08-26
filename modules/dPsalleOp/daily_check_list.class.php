@@ -8,23 +8,24 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CDailyCheckList extends CMbObject {
+class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be multiple objects for different dates
   var $daily_check_list_id  = null;
 
   // DB Fields
   var $date         = null;
-	var $room_id      = null;
+  var $object_class = null;
+  var $object_id    = null;
   var $validator_id = null;
 	
 	// Refs
   var $_ref_validator = null;
-	var $_ref_room      = null;
+  var $_ref_object    = null;
 	
-	// Form fields
-	var $_ref_item_types = null;
-	var $_items          = null;
-	var $_validator_password = null;
-	var $_date_min = null;
+  // Form fields
+  var $_ref_item_types = null;
+  var $_items          = null;
+  var $_validator_password = null;
+  var $_date_min = null;
   var $_date_max = null;
   
   function getSpec() {
@@ -38,8 +39,9 @@ class CDailyCheckList extends CMbObject {
     $specs = parent::getProps();
     $specs['date']         = 'date notNull';
     $specs['validator_id'] = 'ref class|CMediusers';
-    $specs['room_id']      = 'ref notNull class|CSalle autocomplete|nom';
-		$specs['_validator_passord'] = 'password notNull';
+    $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire notNull default|CSalle';
+    $specs['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
+    $specs['_validator_passord'] = 'password notNull';
     $specs['_date_min'] = 'date';
     $specs['_date_max'] = 'date';
     return $specs;
@@ -54,13 +56,15 @@ class CDailyCheckList extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = "$this->_ref_room le $this->date ($this->_ref_validator)";
+    $this->_view = "$this->_ref_object le $this->date ($this->_ref_validator)";
   }
   
   function loadRefsFwd() {
-    $this->_ref_room = new CSalle();
-    $this->_ref_room = $this->_ref_room->getCached($this->room_id); 
-		
+    if ($this->object_class) {
+      $this->_ref_object = new $this->object_class;
+      $this->_ref_object->load($this->object_id); 
+    }
+    
     $this->_ref_validator = new CMediusers();
     $this->_ref_validator = $this->_ref_validator->getCached($this->validator_id); 
   }
@@ -105,30 +109,33 @@ class CDailyCheckList extends CMbObject {
 		}
 	}
 	
-	static function getTodaysList($room_id){
-		$todays_list = new self;
-		$todays_list->date = mbDate();
-    $todays_list->room_id = $room_id;
+	static function getTodaysList($object_class, $object_id){
+    $todays_list = new self;
+    $todays_list->date = mbDate();
+    $todays_list->object_class = $object_class;
+    $todays_list->object_id = $object_id;
     $todays_list->loadMatchingObject();
 		return $todays_list;
 	}
 	
 	function loadItemTypes() {
-		$where = array(
-		  'active' => "= '1'"
-		);
-        $ljoin = array(
-          'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
-        );
+      $where = array(
+        'active' => "= '1'",
+        'daily_check_item_category.target_class' => "= '$this->object_class'"
+      );
+      $ljoin = array(
+        'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
+      );
     
 		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, 'daily_check_item_category.title, title', null, null, $ljoin);
-		foreach($this->_ref_item_types as &$type) {
+		foreach($this->_ref_item_types as $type) {
 			$type->loadRefsFwd();
 		}
 		$this->loadBackRefs('items');
 		if ($this->_back['items']) {
-			foreach($this->_back['items'] as &$item) {
-	      $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
+			foreach($this->_back['items'] as $item) {
+			  if (isset($this->_ref_item_types[$item->item_type_id]))
+	        $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
 	    }
 		}
 	}
