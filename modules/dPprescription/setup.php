@@ -1350,7 +1350,32 @@ class CSetupdPprescription extends CSetup {
             ADD `condition_active` ENUM ('0','1')  DEFAULT '0';";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.89";
+		$this->makeRevision("0.89");
+		$sql = "CREATE TABLE `prescription_category_group` (
+						  `prescription_category_group_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						  `libelle` VARCHAR (255) NOT NULL,
+						  `group_id` INT (11) UNSIGNED
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+		
+    $sql = "ALTER TABLE `prescription_category_group` 
+            ADD INDEX (`group_id`);";
+	  $this->addQuery($sql);
+		
+		$sql = "CREATE TABLE `prescription_category_group_item` (
+						  `prescription_category_group_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						  `prescription_category_group_id` INT (11) UNSIGNED NOT NULL,
+						  `category_prescription_id` INT (11) UNSIGNED,
+						  `type_produit` ENUM ('med','perf','inj')
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+		
+    $sql = "ALTER TABLE `prescription_category_group_item` 
+					  ADD INDEX (`prescription_category_group_id`),
+					  ADD INDEX (`category_prescription_id`);";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.90";
   }  
 }
 

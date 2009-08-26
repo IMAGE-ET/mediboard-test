@@ -1368,4 +1368,5 @@ $locales['CPrescription._type_alerte.posoduree'] = '';
 $locales['CPrescriptionLineMedicament-alerte-posoduree-court'] = '';
 $locales['CPrescriptionLineMedicament-alerte-posoqte-court'] = '';
 $locales['mod-dPprescription-tab-vw_edit_config_service'] = '';
+$locales['mod-dPprescription-tab-vw_edit_categories_group'] = ''; 
 ?>

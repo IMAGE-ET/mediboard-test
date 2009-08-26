@@ -1,5 +1,6 @@
 {{if !$hide_filters}}
 <script type="text/javascript">
+
 Main.add( function(){
   oCatField = new TokenField(document.filter_prescription.token_cat); 
   
@@ -13,6 +14,23 @@ Main.add( function(){
   getForm("filter_prescription")._dateTime_min.observe("ui:change", resetPeriodes);
   getForm("filter_prescription")._dateTime_max.observe("ui:change", resetPeriodes);
 } );
+
+var groups = {{$all_groups|@json}};
+
+function preselectCat(cat_group_id){
+  // On efface la selection de toutes les checkbox
+  $$('input').each( function(oCheckbox) {
+    oCheckbox.checked = false;
+		oCatField.remove(oCheckbox.value);
+  });
+	
+	// Selection des checkbox en fonction du groupe selectionné
+  group = groups[cat_group_id];
+  group.each( function(item_id){
+    $(item_id).checked = true;
+    $(item_id).onclick();
+  });
+}
 
 function resetPeriodes() {
   getForm("filter_prescription").select('input[name=periode]').each(function(e) {
@@ -91,7 +109,23 @@ selectPeriode = function(element) {
         {{mb_field object=$prescription field="_dateTime_max" canNull="false" form="filter_prescription" register="true"}}
        </td>
      </tr>
-     <tr>
+		 <tr>
+		   <th class="category" colspan="4">Pré-sélection des catégories</th>	
+		 </tr>
+		 <tr>
+		   <td colspan="4" class="text" style="text-align: center;">
+		   	 {{if $cat_groups|@count}}
+				   <select name="cat_group_id" onchange="preselectCat(this.value);">
+				   	 <option value="">&mdash; Groupe de catégories</option>
+	           {{foreach from=$cat_groups item=_cat_group}}
+	             <option value="{{$_cat_group->_id}}">{{$_cat_group->libelle}}</option>
+	           {{/foreach}}
+	         </select>
+	       {{else}}
+				   <div class="small-info">Aucun groupe de catégories n'est disponible. <br />Pour pouvoir utiliser des pré-sélections de catégories, il faut tout d'abord les paramétrer dans le module "Prescription", onglet "Groupe de catégories"</div>
+         {{/if}}
+			 </td>
+		 <tr>
        <th class="category" colspan="4">Sélection des catégories</th>
      </tr>
      <tr>
@@ -102,7 +136,7 @@ selectPeriode = function(element) {
                <strong>Médicaments</strong>
              </td>
              <td>
-               <input type="checkbox" value="med" onclick="oCatField.toggle(this.value, this.checked);" />
+               <input type="checkbox" value="med" id="med" onclick="oCatField.toggle(this.value, this.checked);" />
              </td>
            </tr>
            <tr>
@@ -110,7 +144,7 @@ selectPeriode = function(element) {
                <strong>Injections</strong>
              </td>
              <td>
-               <input type="checkbox" value="inj" onclick="oCatField.toggle(this.value, this.checked);" />
+               <input type="checkbox" value="inj" id="inj" onclick="oCatField.toggle(this.value, this.checked);" />
              </td>
            </tr>
            <tr>
@@ -118,7 +152,7 @@ selectPeriode = function(element) {
                <strong>Perfusions</strong>
              </td>
              <td>
-               <input type="checkbox" value="perf" onclick="oCatField.toggle(this.value, this.checked);" />
+               <input type="checkbox" value="perf" id="perf" onclick="oCatField.toggle(this.value, this.checked);" />
              </td>
            </tr>
            {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
@@ -131,7 +165,7 @@ selectPeriode = function(element) {
   	             {{foreach from=$categories_by_chap item=categorie}}
   	               <td style="white-space: nowrap; float: left; width: 10em;">
   	                 <label title="{{$categorie->_view}}">
-  	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}
+  	                 <input class="{{$name}}" type="checkbox" id="{{$categorie->_id}}" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}
   	                 </label>
   	               </td>
   	             {{/foreach}}

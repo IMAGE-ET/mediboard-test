@@ -291,14 +291,28 @@ $token_cat = implode("|", $cats);
 
 $cat_used = array();
 foreach($cats as $_cat){
-  if($_cat === "med"){
-    $cat_used["med"] = "Médicament";
+  if($_cat === "med" || $_cat === "inj" || $_cat === "perf"){
+    $cat_used[$_cat] = CAppUI::tr("CPrescription._chapitres.".$_cat);
   } else {
     if(!array_key_exists($_cat, $cat_used)){
       $categorie = new CCategoryPrescription();
       $categorie->load($_cat);
       $cat_used[$categorie->_id] = $categorie->_view;
     } 
+  }
+}
+
+// Chargement de tous les groupes de categories de prescription de l'etablissement courant
+$cat_group = new CPrescriptionCategoryGroup();
+$group_id = CGroups::loadCurrent()->_id;
+$where = array();
+$where["group_id"] = " = '$group_id'";
+$cat_groups = $cat_group->loadList($where, "libelle");
+
+foreach($cat_groups as $_cat_group){
+	$_cat_group->loadRefsCategoryGroupItems();
+  foreach($_cat_group->_ref_category_group_items as $_item){
+  	$all_groups[$_cat_group->_id][] = $_item->category_prescription_id ? $_item->category_prescription_id : $_item->type_produit;
   }
 }
 
@@ -317,6 +331,8 @@ $smarty->assign("list_lines", $list_lines);
 $smarty->assign("chambres", $chambres);
 $smarty->assign("dateTime_min", $dateTime_min);
 $smarty->assign("dateTime_max", $dateTime_max);
+$smarty->assign("cat_groups", $cat_groups);
+$smarty->assign("all_groups", $all_groups);
 $smarty->display('vw_bilan_service.tpl');
 
 ?>

@@ -924,4 +924,9 @@ $locales['config-dPpatients-CPatient-identitovigilence-date'] = '';
 $locales['config-dPpatients-CPatient-identitovigilence-desc'] = '';
 $locales['config-dPpatients-CPatient-identitovigilence-doublons'] = '';
 $locales['config-dPpatients-CPatient-identitovigilence-nodate'] = '';
+$locales['CConstantesMedicales-glycemie'] = '';
+$locales['CConstantesMedicales-glycemie-court'] = '';
+$locales['CConstantesMedicales-glycemie-desc'] = '';
+$locales['config-dPpatients-CPatient-extended_print'] = '';
+$locales['config-dPpatients-CPatient-extended_print-desc'] = '';
 ?>
