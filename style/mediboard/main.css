@@ -1581,7 +1581,7 @@ span.hilite {
 .touchscreen option,
 .touchscreen optgroup {
   padding: 0;
-  font-size: 16px;
+  font-size: 14px;
   vertical-align: middle;
 }
 
@@ -1605,7 +1605,7 @@ span.hilite {
 .touchscreen input,
 .touchscreen button,
 .touchscreen a.button {
-  font-size: 16px;
+  font-size: 15px;
   height: 24px;
   font-weight: normal;
   vertical-align: middle;
@@ -1617,12 +1617,13 @@ span.hilite {
   padding-bottom: 1px;
 }
 
-.touchscreen input[type=text] {
+.touchscreen input[type=text],
+.touchscreen input[type=password] {
   padding: 2px;
   padding-bottom: 0px;
   padding-left: 1px;
   height: 20px;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .touchscreen button, 
@@ -1636,13 +1637,8 @@ span.hilite {
   background-repeat: no-repeat;
 }
 
-.touchscreen label,
-.touchscreen td.date div.date {
+.touchscreen label {
   padding: 4px;
-}
-
-.touchscreen td.date div.date {
-  font-size: 12px;
 }
 
 .touchscreen optgroup option {
@@ -1670,9 +1666,14 @@ span.hilite {
   padding: 11px;
 }
 
-.touchscreen .control .trigger {
+.touchscreen .control .trigger,
+.touchscreen .inputExtension  {
   margin: 1px;
   top: 3px;
+}
+
+.touchscreen .inputExtension  {
+  margin: 2px;
 }
 
 .touchscreen .control button,
@@ -1686,11 +1687,22 @@ span.hilite {
 }
 
 .touchscreen .numericField .arrows div {
-  width: 2em;
+  width: 2.2em;
+  height: 12px;
+  right: -2px;
+}
+
+.touchscreen .numericField .arrows div.up {
+  top: -2px;
+  height: 13px;
+}
+
+.touchscreen .numericField .arrows div.down {
+  bottom: -2px;
 }
 
 .touchscreen .numericField input {
-  padding-right: 2em;
+  padding-right: 2.2em;
 }
 
 /* contacts table */
