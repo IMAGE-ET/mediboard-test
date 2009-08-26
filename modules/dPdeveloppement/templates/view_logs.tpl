@@ -10,15 +10,19 @@
 Main.add(function(){
   var values = new CookieJar().get("filter-logs");
   $V(getForm("filter-logs").filter, values);
+  insertDeleteButtons();
+});
+
+function insertDeleteButtons(){
   $('logs').select('div[title]').each(function(e){
     e.insert({top: '<button class="trash notext" type="button" onclick="removeByHash(\''+e.title+'\')">Remove</button>'});
   });
-});
+}
 
 function removeByHash(hash) {
   var url = new Url('dPdeveloppement', 'ajax_delete_logs');
   url.addParam('hash', hash);
-  url.requestUpdate('logs');
+  url.requestUpdate('logs', {onComplete: insertDeleteButtons});
 }
 
 function updateFilter(element) {
