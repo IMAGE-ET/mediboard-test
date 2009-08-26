@@ -172,6 +172,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   
   // Contextes 
   $contexts = debug_backtrace();
+  array_shift($contexts);
   $hash = md5(serialize($contexts));
   
   $log = "\n\n<div class='$divClass' title='$hash'>";
@@ -194,8 +195,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   $session = $_SESSION;
   unset($session['AppUI']);
   $log .= print_infos($session, 'SESSION');
-						 
-  array_shift($contexts);
+	
   foreach($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
