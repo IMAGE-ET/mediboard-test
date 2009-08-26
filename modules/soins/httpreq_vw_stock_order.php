@@ -31,11 +31,13 @@ if ($only_service_stocks == 1) {
   $count_stocks   = $service->countBackRefs('product_stock_services', null, null, null, $ljoin);
   
   $stocks = array();
-  foreach($stocks_service as $stock_service){
-    //if (count($stocks) == 20) continue;
-    $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
-    $stock->_ref_stock_service = $stock_service;
-    $stocks[$stock->_id] = $stock;
+  if ($stocks_service) {
+    foreach($stocks_service as $stock_service){
+      //if (count($stocks) == 20) continue;
+      $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
+      $stock->_ref_stock_service = $stock_service;
+      $stocks[$stock->_id] = $stock;
+    }
   }
 } 
 else {
