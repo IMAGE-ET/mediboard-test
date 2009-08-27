@@ -26,7 +26,7 @@ function insertDeleteButtons(){
 function removeByHash(hash) {
   var url = new Url('dPdeveloppement', 'ajax_delete_logs');
   url.addParam('hash', hash);
-  url.requestUpdate('logs', {onComplete: function(){insertDeleteButtons(); updateFilter();}});
+  url.requestUpdate('logs', {waitingText: null, onComplete: function(){insertDeleteButtons(); updateFilter();}});
 }
 
 function updateFilter() {
