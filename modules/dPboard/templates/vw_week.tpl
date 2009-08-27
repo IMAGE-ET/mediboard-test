@@ -9,34 +9,26 @@
 *}}
 
 <script type="text/javascript">
-function viewItem(oTd, sClassName, id, date) {
-
+function viewItem(oTd, guid, date) {
   // Mise en surbrillance de la plage survolée
+  $$('td.selectedConsult').each(function(elem) { elem.className = "nonEmptyConsult";});
+  $$('td.selectedOp').each(function(elem) { elem.className = "nonEmptyOp";});
   
-  aListConsult = $$('td.selectedConsult');
-  aListConsult.each(function(elem) { elem.className = "nonEmptyConsult";});
-  
-  aListConsult = $$('td.selectedOp');
-  aListConsult.each(function(elem) { elem.className = "nonEmptyOp";});
-  
+  var parts = guid.split('-'),
+      sClassName = parts[0],
+      id = parts[1];
+      
   if(sClassName == "CPlageconsult"){
-    oTd.parentNode.className = "selectedConsult";
+    oTd.up().className = "selectedConsult";
   }else if(sClassName == "CPlageOp"){
-    oTd.parentNode.className = "selectedOp";
+    oTd.up().className = "selectedOp";
   }
   
   // Affichage de la plage selectionnée et chargement si besoin
-  
   Dom.cleanWhitespace($('viewTooltip'));
-  var oDiv = $('viewTooltip').childNodes;
+  $('viewTooltip').childElements().invoke('hide');
 
-  $H(oDiv).each(function (pair) {
-    if(typeof pair.value == "object"){
-      $(pair.value["id"]).hide();
-    }
-  });
-
-  oElement = $(sClassName+id).show();
+  oElement = $(guid).show();
   
   if(oElement.alt == "infos - cliquez pour fermer") {
     return;
@@ -58,25 +50,17 @@ function viewItem(oTd, sClassName, id, date) {
     url.addParam("chirSel" , "{{$prat->_id}}");
     url.addParam("date"    , date);
     url.addParam("urgences", "0");
-  } else{
-    return;
-  }
+  } else return;
+
   url.requestUpdate(oElement);
   oElement.alt = "infos - cliquez pour fermer";
 }
 
-function hideItem(sClassName, id) {
-  $(sClassName+id).hide();
-}
-
 function updateSemainier() {
-  var url = new Url;
-  url.setModuleAction("dPboard", "httpreq_semainier");
-
+  var url = new Url("dPboard", "httpreq_semainier");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
-
   url.requestUpdate("semainier");
 }
 

@@ -12,7 +12,7 @@
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
-function viewItem(oTd, sClassName, id, date) {
+function viewItem(oTd, guid, date) {
 
   // Mise en surbrillance de la plage survolée
   
@@ -39,7 +39,7 @@ function viewItem(oTd, sClassName, id, date) {
     }
   });
 
-  oElement = $(sClassName+id);
+  oElement = $(guid);
   oElement.show();
   
   if(oElement.alt == "infos - cliquez pour fermer") {
@@ -67,11 +67,6 @@ function viewItem(oTd, sClassName, id, date) {
   }
   url.requestUpdate(oElement);
   oElement.alt = "infos - cliquez pour fermer";
-}
-
-function hideItem(sClassName, id) {
-  oElement = $(sClassName+id);
-  oElement.hide();
 }
 
 function affNaissance() {

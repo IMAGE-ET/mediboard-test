@@ -2200,24 +2200,18 @@ table#weeklyPlanning td.nonEmpty {
   border: 1px solid #999 !important;
 }
 
+table#weeklyPlanning td.selectedConsult,
 table#weeklyPlanning td.nonEmptyConsult {
   background: #ccc url(images/pictures/plageConsult.png) repeat-y left;
-  border: #9f9 1px solid;
 }
-
+table#weeklyPlanning td.selectedOp,
 table#weeklyPlanning td.nonEmptyOp {
   background: #ccc url(images/pictures/plageOp.png) repeat-y left;
-  border: #99f 1px solid;
 }
 
-table#weeklyPlanning td.selectedConsult {
-  background: #ddd;
-  border: #9f9 1px solid;
-}
-
+table#weeklyPlanning td.selectedConsult,
 table#weeklyPlanning td.selectedOp {
-  background: #ddd;
-  border: #99f 1px solid;
+  outline: #666 2px solid;
 }
 
 table#weeklyPlanning td.empty {

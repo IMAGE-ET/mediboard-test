@@ -11,12 +11,12 @@
 {{assign var="plageInfos" value=$plageJour.$colonne}}
 
 {{if is_string($plageJour.$colonne) && $plageJour.$colonne == "empty"}}
-  <td class="empty"></td>
+  <td class="empty {{if $curr_mins == '00'}}hour_start{{/if}}"></td>
 {{elseif is_string($plageJour.$colonne) && $plageJour.$colonne == "hours"}}
-  <td class="empty" rowspan="4"></td>
+  <td class="empty hour_start" rowspan="4"></td>
 {{elseif is_string($plageJour.$colonne) && $plageJour.$colonne == "full"}}
 {{else}}
-  <td class="nonEmpty{{$style}}" rowspan="{{$plageInfos->_nbQuartHeure}}">
+  <td class="nonEmpty{{$style}} {{if $curr_mins == '00'}}hour_start{{/if}}" rowspan="{{$plageInfos->_nbQuartHeure}}">
   
   {{assign var="pct" value=$plageInfos->_fill_rate}}
   {{if $pct gt 100}}
@@ -30,7 +30,7 @@
 
   {{if $colonne=="plagesConsult"}}
     <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$plageInfos->date}}" 
-       onmouseover="viewItem(this, 'CPlageconsult',{{$plageInfos->_id}},'{{$curr_day}}')">
+       onmouseover="viewItem(this, '{{$plageInfos->_guid}}','{{$curr_day}}')">
       {{if $plageInfos->libelle}}{{$plageInfos->libelle}}<br />{{/if}}
       {{$plageInfos->debut|date_format:$dPconfig.time}} - {{$plageInfos->fin|date_format:$dPconfig.time}}
     </a>
@@ -40,7 +40,7 @@
     </div>
   {{else}}
     <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;date={{$plageInfos->date}}"
-       onmouseover="viewItem(this, 'CPlageOp',{{$plageInfos->_id}},'{{$curr_day}}')">
+       onmouseover="viewItem(this, '{{$plageInfos->_guid}}','{{$curr_day}}')">
       {{$plageInfos->_ref_salle->nom}}<br />
       {{$plageInfos->debut|date_format:$dPconfig.time}} - {{$plageInfos->fin|date_format:$dPconfig.time}}
     </a>
