@@ -650,7 +650,7 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
 function mbLoadScript($filepath, $modeReturn = 0, $conditionnalComments = '') {
   global $version;
   $build = $version["build"];
-  $tag = "\n<script type='text/javascript' src='$filepath?build=$build'></script>";
+  $tag = "\n<script type=\"text/javascript\" src=\"$filepath?build=$build\"></script>";
   if ($conditionnalComments) {
     $tag = "\n<!--[if $conditionnalComments]>$tag\n<![endif]-->";
   }
@@ -665,7 +665,7 @@ function mbLoadScript($filepath, $modeReturn = 0, $conditionnalComments = '') {
 function mbLinkStylesheet($filepath, $media = "all", $modeReturn = 0) {
   global $version;
   $build = $version["build"];
-  $tag = "\n<link rel='stylesheet' type='text/css' href='$filepath?build=$build' media='$media' />";
+  $tag = "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"$filepath?build=$build\" media=\"$media\" />";
   if ($modeReturn) { 
     return $tag;
   }
@@ -679,7 +679,7 @@ function mbLinkStylesheet($filepath, $media = "all", $modeReturn = 0) {
 function mbLinkShortcutIcon($filepath, $modeReturn = 0) {
   global $version;
   $build = $version["build"];
-  $tag = "\n<link rel='shortcut icon' type='image/ico' href='$filepath?build=$build' />";
+  $tag = "\n<link rel=\"shortcut icon\" type=\"image/ico\" href=\"$filepath?build=$build\" />";
   if ($modeReturn) { 
     return $tag;
   }
@@ -694,10 +694,10 @@ function mbPortalURL( $page="Accueil", $tab = null) {
   $url = "http://www.mediboard.org/public/";
   
   $url .= $page == "tracker" ?
-    "/tiki-view_tracker.php?trackerId=4" :
+    "tiki-view_tracker.php?trackerId=4" :
     "tiki-index.php?page=mod-$page";
   
-  $url .= ($tab) ? "-tab-$tab" : "";
+  $url .= $tab ? "-tab-$tab" : "";
   return $url;
 }
 
@@ -800,7 +800,7 @@ function mbLoadScripts($modeReturn = false) {
 }
 
 function mbLoadScriptsStorage($modeReturn){
-  $affichageScript = null;
+  $affichageScript = '';
   
   $affichageScript .= mbLoadScript("lib/dojo/dojo.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/dojo/src/io/__package__.js",$modeReturn);
