@@ -171,11 +171,13 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   $errorType = isset($errorTypes[$errorCode]) ? $errorTypes[$errorCode] : null;
   
   // Contextes 
-  $contexts = debug_backtrace();
+  $contexts = debug_backtrace(false);
   array_shift($contexts);
   
   $contexts_reduced = $contexts;
-  unset($contexts_reduced['args']);
+  foreach($contexts_reduced as &$ctx) {
+    unset($ctx['args']);
+  }
   $hash = md5(serialize($contexts_reduced));
   
   $log = "\n\n<div class='$divClass' title='$hash'>";
@@ -245,7 +247,9 @@ function exceptionHandler($exception) {
   $contexts = $exception->getTrace();
   
   $contexts_reduced = $contexts;
-  unset($contexts_reduced['args']);
+  foreach($contexts_reduced as &$ctx) {
+    unset($ctx['args']);
+  }
   $hash = md5(serialize($contexts_reduced));
   
   $log = "\n\n<div class='$divClass' title='$hash'>";
