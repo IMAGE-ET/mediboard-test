@@ -48,11 +48,13 @@ span.hilite {
 		border-collapse: collapse;
 	}
 	
-	span.field {
+	span.field,
+  span.field * {
     background: #dde;
   }
 
-  span.value {
+  span.value,
+  span.value * {
     background: #eee;
   }
 
