@@ -13,7 +13,12 @@ $can->needsRead();
 
 $hash = mbGetValueFromGet('hash');
 
-if ($hash) {
+if($hash == 'clean') {
+  $content = "<h2>Log de Mediboard ré-initialisé depuis ".date("Y-m-d H:i:s")."</h2>";
+  file_put_contents($logPath, $content);
+}
+
+else if ($hash) {
   $doc = new DOMDocument();
   @$doc->loadHTMLFile($logPath);
   
@@ -24,12 +29,11 @@ if ($hash) {
     $element->parentNode->removeChild($element);
   }
   $content = $doc->saveHTML();
-
+  file_put_contents($logPath, $content);
 }
 
 else {
-  $content = "<h2>Log de Mediboard ré-initialisé depuis ".date("Y-m-d H:i:s")."</h2>";
+  $content = file_get_contents($logPath);
 }
 
-file_put_contents($logPath, $content);
 echo $content;

@@ -1,16 +1,20 @@
 {{* $Id$ *}}
 
 {{if $can->edit}}
-<button class="trash" type="button" onclick="removeByHash()">
-  Réinitialiser les logs
+<button class="trash" type="button" onclick="removeByHash('clean')">
+  {{tr}}Reset{{/tr}}
 </button>
 {{/if}}
+
+<button class="change" type="button" onclick="removeByHash()">
+  {{tr}}Refresh{{/tr}}
+</button>
 
 <script type="text/javascript">
 Main.add(function(){
   var values = new CookieJar().get("filter-logs");
   $V(getForm("filter-logs").filter, values);
-  insertDeleteButtons();
+  removeByHash();
 });
 
 function insertDeleteButtons(){
@@ -22,19 +26,22 @@ function insertDeleteButtons(){
 function removeByHash(hash) {
   var url = new Url('dPdeveloppement', 'ajax_delete_logs');
   url.addParam('hash', hash);
-  url.requestUpdate('logs', {onComplete: insertDeleteButtons});
+  url.requestUpdate('logs', {onComplete: function(){insertDeleteButtons(); updateFilter();}});
 }
 
-function updateFilter(element) {
-  $('logs').select('.'+element.value).invoke('setVisible', element.checked);
-  new CookieJar().put("filter-logs", $V(element.form.elements[element.name]));
+function updateFilter() {
+  var elements = getForm('filter-logs').filter;
+  $A(elements).each(function(e){
+    $('logs').select('.'+e.value).invoke('setVisible', e.checked);
+  });
+  new CookieJar().put("filter-logs", $V(elements));
 }
 </script>
 
 <form name="filter-logs" action="" method="get" onsubmit="return false">
-  <label><input type="checkbox" name="filter" value="big-error" checked="checked" onchange="updateFilter(this)" /> Error</label>
-  <label><input type="checkbox" name="filter" value="big-warning" checked="checked" onchange="updateFilter(this)" /> Warning</label>
-  <label><input type="checkbox" name="filter" value="big-info" checked="checked" onchange="updateFilter(this)" /> Info</label>
+  <label><input type="checkbox" name="filter" value="big-error" checked="checked" onchange="updateFilter()" /> Error</label>
+  <label><input type="checkbox" name="filter" value="big-warning" checked="checked" onchange="updateFilter()" /> Warning</label>
+  <label><input type="checkbox" name="filter" value="big-info" checked="checked" onchange="updateFilter()" /> Info</label>
 </form>
 
-<div id="logs">{{$logs|smarty:nodefaults}}</div>
+<div id="logs"></div>

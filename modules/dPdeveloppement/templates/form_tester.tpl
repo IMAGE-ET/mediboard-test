@@ -15,9 +15,15 @@ Main.add(function () {
   var tabs = Control.Tabs.create('tab_categories', true);
   
   Calendar.regProgressiveField(form.progressive, {container: document.body});
+  
+  Url.autoComplete($('ac'), {
+    
+  });
 });
 
 </script>
+
+<textarea id="ac"></textarea>
 
 {{if !$dialog}}
 <a href="?m={{$m}}&amp;a={{$tab}}&amp;dialog=1">Lancer cette page sans les menus</a>
