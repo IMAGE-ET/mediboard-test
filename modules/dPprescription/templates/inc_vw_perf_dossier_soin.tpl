@@ -94,7 +94,7 @@
 		      <select name="object_guid" style="width: 75px;" 
 		              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
 		      										loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration');} } )">
-		        <option value="">Conserver</option>
+		        <option value="">Subst.</option>
 		        {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
 		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
 							  <option value="{{$_line_subst->_guid}}">

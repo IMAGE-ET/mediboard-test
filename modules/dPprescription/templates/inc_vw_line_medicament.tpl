@@ -296,7 +296,7 @@
 		      {{/if}}
 		      {{if $line->_perm_edit}}
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
-		        <option value="">&mdash; Choisir une aide</option>
+		        <option value="">&mdash; Aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMedicament}}
 		      </select>
 		      <input type="hidden" name="_hidden_commentaire" value="" />
@@ -346,7 +346,7 @@
 		              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
 		                           Prescription.reload('{{$line->_ref_prescription->_id}}', '', 'medicament');	
 		                         } } )">
-		        <option value="">Conserver</option>
+		        <option value="">Subst.</option>
 			      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 			          {{foreach from=$lines_subst_by_chap item=_line_subst}}
 			          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}

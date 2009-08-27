@@ -172,7 +172,7 @@ Main.add( function(){
 			    </select>
 			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
-			    <input type="text" name="produit" value="" size="20" />
+			    <input type="text" name="produit" value="" size="20" class="autocomplete" />
 			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
 			    Livret Thérap.
 			    

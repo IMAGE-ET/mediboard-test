@@ -274,7 +274,7 @@ Main.add( function(){
 			      <select name="object_guid" style="width: 75px;" 
 			              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
 			                           Prescription.reload('{{$_perfusion->_ref_prescription->_id}}', '', 'medicament');} } )">
-			        <option value="">Conserver</option>
+			        <option value="">Subst.</option>
 				      {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
 				          {{foreach from=$lines_subst_by_chap item=_line_subst}}
 				          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
@@ -388,7 +388,7 @@ Main.add( function(){
 		      
 		      <input type="text" name="commentaire" value="{{$_perfusion->commentaire}}" size=60 onchange="{{if $_perfusion->substitute_for_id && !$_perfusion->substitution_active}}submitEditPerfCommentaireSubst('{{$_perfusion->_id}}',this.value);{{else}}submitAddComment('{{$_perfusion->_class_name}}', '{{$_perfusion->_id}}', this.value);{{/if}}" />
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
-		        <option value="">&mdash; Choisir une aide</option>
+		        <option value="">&mdash; Aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPerfusion}}
 		      </select>
 		      <input type="hidden" name="_hidden_commentaire" value="" />

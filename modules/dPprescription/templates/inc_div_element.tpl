@@ -87,7 +87,7 @@ Main.add( function(){
 			 <br />
 			 
 			  <!-- Selecteur d'elements -->
-			  <input type="text" name="{{$element}}" value="" />
+			  <input type="text" name="{{$element}}" value="" class="autocomplete" />
 			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
 			  <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
 			  <button class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>

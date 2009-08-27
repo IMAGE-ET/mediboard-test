@@ -150,7 +150,7 @@ function printLivret(){
      <td>
        <form action="?" method="get" name="searchProd" onsubmit="return false;">
          <!-- Champ permettant d'effectuer une recherche par autocomplete-->
-         <input type="text" name="produit" value=""/>
+         <input type="text" name="produit" value="" class="autocomplete" />
          <!-- Champ permettant de stocker le libelle dans le cas d'une recherche par la popup -->
          <input type="text" name="_produit" value="" style="display: none;"/>  
          <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
@@ -182,7 +182,7 @@ function printLivret(){
     <td>
       Libelle
        <form action="?" method="get" name="searchProdLivret" onsubmit="return false;">
-         <input type="text" name="produit" value=""/>
+         <input type="text" name="produit" value="" class="autocomplete" />
          <div style="display:none;" class="autocomplete" id="produit_livret_auto_complete"></div>
        </form>
     </td>

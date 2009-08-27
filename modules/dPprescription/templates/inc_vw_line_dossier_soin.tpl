@@ -152,7 +152,7 @@
 	              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
 	                           loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')
 	                         } } )">
-	        <option value="">Conserver</option>
+	        <option value="">Subst.</option>
 		      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
 							{{if $_line_subst->_class_name == "CPerfusion"}}
