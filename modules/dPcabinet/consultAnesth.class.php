@@ -269,10 +269,10 @@ class CConsultAnesth extends CMbObject {
 
   function loadRefsTechniques() {
     $this->_ref_techniques = new CTechniqueComp;
-    $where = array();
-    $where["consultation_anesth_id"] = "= '$this->consultation_anesth_id'";
-    $order = "technique";
-    $this->_ref_techniques = $this->_ref_techniques->loadList($where,$order);
+    $where = array(
+      "consultation_anesth_id" => "= '$this->consultation_anesth_id'"
+    );
+    return $this->_ref_techniques = $this->_ref_techniques->loadList($where,"technique");
   }
 
   function loadRefsBack() {
@@ -326,33 +326,51 @@ class CConsultAnesth extends CMbObject {
     $this->fillLimitedTemplate($template);
     $this->_ref_sejour->fillLimitedTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
-    
     $this->_ref_sejour->loadRefDossierMedical();
     $this->_ref_sejour->_ref_dossier_medical->fillTemplate($template, "Sejour");
   }
 
   function fillLimitedTemplate(&$template) {
-    $template->addProperty("Anesthésie - tabac"                  , $this->tabac);
-    $template->addProperty("Anesthésie - oenolisme"              , $this->oenolisme);
-    $template->addProperty("Anesthésie - Groupe Sanguin"         , $this->groupe." ".$this->rhesus);
+    $template->addProperty("Anesthésie - Tabac"                  , $this->tabac);
+    $template->addProperty("Anesthésie - Oenolisme"              , $this->oenolisme);
+    
+    $this->updateFormFields();
+    $template->addProperty("Anesthésie - Groupe sanguin"         , "$this->groupe $this->rhesus");
+    $template->addProperty("Anesthésie - RAI"                    , $this->rai);
+    $template->addProperty("Anesthésie - Hb"                     , "$this->hb g/dl");
+    $template->addProperty("Anesthésie - Ht"                     , "$this->ht %");
+    $template->addProperty("Anesthésie - Ht final"               , "$this->ht_final %");
+    $template->addProperty("Anesthésie - PSA"                    , "$this->_psa ml/GR");
+    $template->addProperty("Anesthésie - Plaquettes"             , ($this->plaquettes*1000)."/mm3");
+    $template->addProperty("Anesthésie - Créatinine"             , "$this->creatinine ml/l");
+    $template->addProperty("Anesthésie - Clairance"              , "$this->_clairance ml/min");
+    $template->addProperty("Anesthésie - Na+"                    , "$this->na mmol/l");
+    $template->addProperty("Anesthésie - K+"                     , "$this->k mmol/l");
+    $template->addProperty("Anesthésie - TP"                     , "$this->tp %");
+    $template->addProperty("Anesthésie - TCA"                    , "$this->tca_temoin s / $this->tca s");
+    $template->addProperty("Anesthésie - TS Ivy"                 , "$this->_min_tsivy min $this->_sec_tsivy s");
+    $template->addProperty("Anesthésie - ECBU"                   , $this->ecbu);
+    
     $template->addProperty("Anesthésie - ASA"                    , $this->ASA);
     $template->addProperty("Anesthésie - Préparation pré-opératoire", $this->prepa_preop);
+    $template->addProperty("Anesthésie - Prémédication", $this->getFormattedValue('premedication'));
+    $template->addProperty("Anesthésie - Position", $this->getFormattedValue('position'));
+
+    $list = CMbArray::pluck($this->loadRefsTechniques(), 'technique');
+    $template->addListProperty("Anesthésie - Techniques complémentaires", $list);
     
-    $this->loadRefsTechniques();
-    $str = '';
-    foreach ($this->_ref_techniques as $tech) {
-      $str .= "&bull; $tech->technique<br />";
-    }
-    $template->addProperty("Anesthésie - Techniques complémentaires", $str);
-    $template->addProperty("Anesthésie - Etat bucco-dentaire"    , $this->etatBucco);
     $template->addProperty("Anesthésie - Examen cardiovasculaire", $this->examenCardio);
     $template->addProperty("Anesthésie - Examen pulmonaire"      , $this->examenPulmo);
     
+    $template->addProperty("Anesthésie - Ouverture de la bouche",     $this->getFormattedValue('bouche'));
+    $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'));
+    $template->addProperty("Anesthésie - Etat bucco-dentaire" ,       $this->etatBucco);
     $img = '';
     if ($this->mallampati) {
       $img = $this->mallampati.'<br /><img src="../../../images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
     }
     $template->addProperty("Anesthésie - Mallampati", $img);
+    $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
   }
 
   function canDeleteEx() {
@@ -367,6 +385,3 @@ class CConsultAnesth extends CMbObject {
     return parent::canDeleteEx();
   }
 }
-
-
-?>

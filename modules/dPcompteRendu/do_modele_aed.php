@@ -29,8 +29,7 @@ if (isset($_POST["source"])) {
 	  }
   }
   
-  $_POST["source"] = str_replace($fields, $values, $_POST["source"]);
-    
+  $_POST["source"] = str_ireplace($fields, $values, $_POST["source"]);
 
   // Application des destinataires
   $destinataires = array();
@@ -76,7 +75,7 @@ if (isset($_POST["source"])) {
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
         $copyTo
       );
-      $allSources[] = str_replace($fields, $values, $body);
+      $allSources[] = str_ireplace($fields, $values, $body);
     }
     // On concatène les en-tête, pieds de page et body's
     if($headerfooter) {
