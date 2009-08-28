@@ -16,14 +16,74 @@ Main.add(function () {
   
   Calendar.regProgressiveField(form.progressive, {container: document.body});
   
-  Url.autoComplete($('ac'), {
+  $$('.textarea-helped').each(function(area){
+    var toolbar = area.select('.toolbar')[0],
+        textarea = area.select('textarea')[0],
+        autocomplete = area.select('.autocomplete')[0];
+        
+    area.
+    observe('mousemove', function(){toolbar.show()}).
+    observe('mouseout',  function(){toolbar.hide()}).
+    observe('click',     function(){toolbar.hide()}).
+    observe('keydown',   function(){toolbar.hide()})
+    ;
     
+    var url = new Url("dPdeveloppement", "ajax_autocomplete_test");
+    url.autoComplete(textarea, autocomplete, {
+        minChars: 2,
+        frequency: 0.2,
+        updateElement: function(li){
+          textarea.value += li.innerHTML+"\n";
+        }
+    } );
   });
 });
 
 </script>
 
-<textarea id="ac"></textarea>
+<style type="text/css">
+.textarea-helped {
+  position: relative;
+}
+
+.textarea-helped .toolbar {
+  position: absolute;
+  bottom: 6px;
+  padding: 4px;
+}
+
+.textarea-helped .toolbar a {
+  
+}
+
+.textarea-helped .toolbar a:hover img {
+  outline: 1px dotted #ccc;
+}
+</style>
+
+<form onsubmit="return false">
+<div class="textarea-helped">
+  <textarea></textarea>
+  <div class="toolbar" style="display: none;">
+    <a href="#1"><img src="images/icons/cancel.png" /></a>
+    <a href="#1"><img src="images/icons/search.png" /></a>
+    <a href="#1"><img src="images/icons/next.png" /></a>
+    <a href="#1"><img src="images/icons/stop.png" /></a>
+  </div>
+  <div class="autocomplete" style="display: none; margin-top: -1px;"></div>
+</div>
+
+<div class="textarea-helped">
+  <textarea></textarea>
+  <div class="toolbar" style="display: none;">
+    <a href="#1"><img src="images/icons/cancel.png" /></a>
+    <a href="#1"><img src="images/icons/search.png" /></a>
+    <a href="#1"><img src="images/icons/next.png" /></a>
+    <a href="#1"><img src="images/icons/stop.png" /></a>
+  </div>
+  <div class="autocomplete" style="display: none; margin-top: -1px;"></div>
+</div>
+</form>
 
 {{if !$dialog}}
 <a href="?m={{$m}}&amp;a={{$tab}}&amp;dialog=1">Lancer cette page sans les menus</a>
@@ -47,6 +107,7 @@ Main.add(function () {
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   
+
   <input type="hidden" name="progressive" value="2009-0-0" />
   
   <table class="form">

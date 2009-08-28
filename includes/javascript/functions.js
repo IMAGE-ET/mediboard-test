@@ -148,7 +148,7 @@ function createDocument(oSelect, consultation_id) {
 }
 
 function closeWindowByEscape(e) {
-  if(getKeycode(e) == 27){
+  if(Event.key(e) == 27){
   	e.stop();
     window.close();
   }

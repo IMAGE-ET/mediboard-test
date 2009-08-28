@@ -89,7 +89,7 @@ function submitCompteRendu(){
 
 // Catches Ctrl+s and Command+s
 document.observe('keydown', function(e){
-  var keycode = getKeycode(e);
+  var keycode = Event.key(e);
   if(keycode == 83 && (e.ctrlKey || e.metaKey)){
     submitCompteRendu();
     Event.stop(e);

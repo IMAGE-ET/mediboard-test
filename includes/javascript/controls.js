@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function getKeycode(e) {
-  return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
-}
-
 /** Helper Function for Caret positioning
  * @param element The form element (automatically added by Prototype, don't use it)
  * @param begin   Where the selection starts
@@ -143,7 +139,7 @@ Element.addMethods('input', {
     // Key down event, called on element.onkeydown
     function keydownEvent(e) {
       var pos = element.caret();
-      var k = getKeycode(e);
+      var k = Event.key(e);
       ignore = ((k < 41) && (k != 32) && (k != 16)); // ignore modifiers, home, end, ... except space and shift
       
       //delete selection before proceeding
@@ -199,7 +195,7 @@ Element.addMethods('input', {
       }
       
       e = e || window.event;
-      var k = getKeycode(e);
+      var k = Event.key(e);
 
       if (e.ctrlKey || e.altKey || 
           (k == Event.KEY_TAB) || 

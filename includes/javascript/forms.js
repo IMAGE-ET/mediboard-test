@@ -830,7 +830,7 @@ Element.addMethods('select', {
     
     list.navigate = function (e) {
       if (search.value) {
-        var keycode = getKeycode(e),
+        var keycode = Event.key(e),
 				    focused = list.select('.focused');
         
         switch (keycode) {
@@ -896,7 +896,7 @@ Element.addMethods('select', {
                  });
     
     search.catchKey = function (e) {
-      var keycode = getKeycode(e);
+      var keycode = Event.key(e);
 
       if (validKey(keycode)) { // Valid keycode
         if (keycode == 8 && search.value == '' && !select.visible()) {
@@ -918,7 +918,7 @@ Element.addMethods('select', {
     }
     
     search.display = function (e) {
-      var keycode = getKeycode(e);
+      var keycode = Event.key(e);
       
       if (validKey(keycode) && keycode != 8 && keycode != 27) {
         select.hide();
