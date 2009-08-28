@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can, $logPath;
+global $can;
 
 $can->needsRead();
 
@@ -15,12 +15,12 @@ $hash = mbGetValueFromGet('hash');
 
 if($hash == 'clean') {
   $content = "<h2>Log de Mediboard ré-initialisé depuis ".date("Y-m-d H:i:s")."</h2>";
-  file_put_contents($logPath, $content);
+  file_put_contents(LOG_PATH, $content);
 }
 
 else if ($hash) {
   $doc = new DOMDocument();
-  @$doc->loadHTMLFile($logPath);
+  @$doc->loadHTMLFile(LOG_PATH);
   
   $xpath = new DOMXPath($doc);
   $elements = $xpath->query("//div[@title='$hash']");
@@ -29,11 +29,11 @@ else if ($hash) {
     $element->parentNode->removeChild($element);
   }
   $content = $doc->saveHTML();
-  file_put_contents($logPath, $content);
+  file_put_contents(LOG_PATH, $content);
 }
 
 else {
-  $content = file_get_contents($logPath);
+  $content = file_get_contents(LOG_PATH);
 }
 
 echo $content;

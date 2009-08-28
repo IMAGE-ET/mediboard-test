@@ -62,7 +62,6 @@ if($indexFile){
   $smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
   $smartyStyle->assign("messages"             , $messages);
   $smartyStyle->assign("debugMode"            , @$AppUI->user_prefs["INFOSYSTEM"]);
-  $smartyStyle->assign("demoVersion"          , $dPconfig["demo_version"]);
   $smartyStyle->assign("configOffline"        , $configOffline);
   $smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
   $smartyStyle->assign("uistyle"              , $uistyle);

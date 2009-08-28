@@ -46,7 +46,7 @@
   </tr>
 </table>
 
-{{if $demoVersion && !$offline}}
+{{if $dPconfig.demo_version && !$offline}}
 <div style="margin: 10px; float:right">
   <a href="http://www.sourceforge.net/projects/mediboard/" title="Projet Mediboard sur Sourceforge">
     <img src="http://www.sourceforge.net/sflogo.php?group_id=112072&amp;type=2" alt="Sourceforge Project Logo" />

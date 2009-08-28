@@ -12,13 +12,13 @@ global $performance, $dPconfig;
 $performance["error"] = 0;
 $performance["warning"] = 0;
 $performance["notice"] = 0;
-$logPath = $dPconfig["root_dir"]."/tmp/mb-log.html";
+define('LOG_PATH', $dPconfig["root_dir"]."/tmp/mb-log.html");
 
 // Do not set to E_STRICT as it hides fatal errors to our error handler
 // Strict warning will still be handle by our handler anyway
 
 error_reporting(E_ALL);
-ini_set("error_log", $logPath);
+ini_set("error_log", LOG_PATH);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);
 ini_set("display_errors", $dPconfig["debug"]);
@@ -104,43 +104,34 @@ function mbDump($var, $label = null) {
 }
 
 /**
- * Traces variable using preformated text prefixed with a label
- * @return void 
+ * Process the exported data
+ * @return string|int The processed log or the size of the data written in the log file 
  **/
-function mbTrace($var, $label = null, $log = false) {
-  $export = print_r($var, true);
-//  $export = var_export($var, true); 
+function processLog($export, $label = null, $log = false) {
   $export = htmlspecialchars($export);
-  $errorTime = date("Y-m-d H:i:s");
-  
-  $msg = "\n<pre>[$errorTime] $label: $export</pre>";
+  $time = date("Y-m-d H:i:s");
+  $msg = "\n<pre>[$time] $label: $export</pre>";
   
   if ($log) {
-    global $logPath;
-    file_put_contents($logPath, $msg, FILE_APPEND);
-  } else {
-    echo $msg;
+    return file_put_contents(LOG_PATH, $msg, FILE_APPEND);
   }
-  
+  echo $msg;
 }
 
 /**
  * Traces variable using preformated text prefixed with a label
- * @return void 
+ * @return string|int The processed log or the size of the data written in the log file 
+ **/
+function mbTrace($var, $label = null, $log = false) {
+  return processLog(print_r($var, true), $label, $log);
+}
+
+/**
+ * Traces variable using preformated text prefixed with a label
+ * @return string|int The processed log or the size of the data written in the log file 
  **/
 function mbExport($var, $label = null, $log = false) {
-  $export = var_export($var, true); 
-  $export = htmlspecialchars($export);
-  $errorTime = date("Y-m-d H:i:s");
-  
-  $msg = "<pre>[$errorTime] $label: $export</pre>";
-  
-  if ($log) {
-    global $logPath;
-    file_put_contents($logPath, $msg, FILE_APPEND);
-  } else {
-    echo $msg;
-  }
+  return processLog(var_export($var, true), $label, $log);
 }
 
 function print_infos($var, $name = '') {
@@ -154,7 +145,7 @@ function print_infos($var, $name = '') {
  * @return null
  */
 function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
-  global $divClasses, $errorTypes, $errorCategories, $logPath, $AppUI, $performance;
+  global $divClasses, $errorTypes, $errorCategories, $AppUI, $performance;
   
 // See ALL errors
 //  echo "<br />[$errno] : $errorText, $errorFile : $errorLine";
@@ -225,7 +216,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   $performance[$errorCategories[$errorCode]]++;
   
   if (ini_get("log_errors")) {
-    file_put_contents($logPath, $log, FILE_APPEND);
+    file_put_contents(LOG_PATH, $log, FILE_APPEND);
   }
   
   if (ini_get("display_errors")) {
@@ -240,7 +231,7 @@ set_error_handler("errorHandler");
  * @return null
  */
 function exceptionHandler($exception) {
-  global $divClasses, $errorTypes, $errorCategories, $logPath, $AppUI, $performance;
+  global $divClasses, $errorTypes, $errorCategories, $AppUI, $performance;
   
   $divClass = "big-warning";
   
@@ -299,7 +290,7 @@ function exceptionHandler($exception) {
   $log .= "</div>";
   
   if (ini_get("log_errors")) {
-    file_put_contents($logPath, $log, FILE_APPEND);
+    file_put_contents(LOG_PATH, $log, FILE_APPEND);
   }
   
   if (ini_get("display_errors")) {
@@ -310,8 +301,8 @@ function exceptionHandler($exception) {
 set_exception_handler("exceptionHandler");
 
 // Initialize custom error handler
-if (!is_file($logPath)) {
+if (!is_file(LOG_PATH)) {
   $initTime = date("Y-m-d H:i:s");
   $logInit = "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
-  file_put_contents($logPath, $logInit);
+  file_put_contents(LOG_PATH, $logInit);
 }

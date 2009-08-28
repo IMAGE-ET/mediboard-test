@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-include_once("./includes/magic_quotes_gpc.php");
+require("./includes/magic_quotes_gpc.php");
 
 $dPconfig = array();
 $performance = array();
@@ -21,10 +21,10 @@ if (!is_file("./includes/config.php")) {
 // PHP Configuration
 ini_set("memory_limit", "128M");
 
-require_once("./includes/config_dist.php");
-require_once("./includes/config.php");
-require_once("./includes/version.php");
-require_once("./classes/sharedmemory.class.php");
+require("./includes/config_dist.php");
+require("./includes/config.php");
+require("./includes/version.php");
+require("./classes/sharedmemory.class.php");
 
 if(function_exists("date_default_timezone_set")) {
   date_default_timezone_set($dPconfig["timezone"]);
@@ -39,24 +39,24 @@ if ($dPconfig["offline"]) {
 is_file ($dPconfig["root_dir"]."/includes/config.php") 
   or die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
 
-require_once("./includes/mb_functions.php");
-require_once("./includes/compat.php");
-require_once("./includes/errors.php");
+require("./includes/mb_functions.php");
+require("./includes/compat.php");
+require("./includes/errors.php");
 
 // Start chrono
-require_once("./classes/chrono.class.php");
+require("./classes/chrono.class.php");
 $phpChrono = new Chronometer;
 $phpChrono->start();
 
 // Load AppUI from session
-require_once("./classes/ui.class.php");
-require_once("./includes/session.php");
+require("./classes/ui.class.php");
+require("./includes/session.php");
 
 // Register shutdown
 register_shutdown_function(array("CApp", "checkPeace"));
 
-require_once("./classes/sqlDataSource.class.php");
-require_once("./classes/mysqlDataSource.class.php");
+require("./classes/sqlDataSource.class.php");
+require("./classes/mysqlDataSource.class.php");
 
 if(!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
@@ -69,7 +69,7 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modifi
 header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 
-require_once("./includes/autoload.php");
+require("./includes/autoload.php");
 
 // Load default preferences if not logged in
 if (!$AppUI->user_id) {
@@ -87,7 +87,7 @@ $dialog = mbGetValueFromRequest("dialog");
 
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
-  include_once("./locales/core.php");
+  require("./locales/core.php");
   $redirect = mbGetValueFromRequest("redirect");
 
   $ok = $AppUI->login();
@@ -107,16 +107,11 @@ if (isset($_REQUEST["login"])) {
 // Get the user preference
 $uistyle = $AppUI->user_prefs["UISTYLE"];
 
-CAppUI::requireSystemClass("smartydp");
-
 // clear out main url parameters
-$m = "";
-$a = "";
-$u = "";
-$g = "";
+$m = $a = $u = $g = "";
 
 // load locale settings
-require_once("./locales/core.php");
+require("./locales/core.php");
 
 if (empty($locale_info['names'])){
   $locale_info['names'] = array();
@@ -139,7 +134,6 @@ if (!$AppUI->user_id) {
   
   // Ajax login alert
   if ($ajax) {
-    // Creation du Template
     $tplAjax = new CSmartyDP("modules/system");
     $tplAjax->assign("performance", $performance);
     $tplAjax->display("ajax_errors.tpl");
@@ -151,7 +145,6 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));
     $smartyLogin->assign("mediboardScript"      , mbLoadScripts(true));
-    $smartyLogin->assign("demoVersion"          , $dPconfig["demo_version"]);
     $smartyLogin->assign("errorMessage"         , $AppUI->getMsg());
     $smartyLogin->assign("time"                 , time());
     $smartyLogin->assign("redirect"             , $redirect);
@@ -236,7 +229,7 @@ ob_start();
 
 // Feed modules with tabs
 foreach (CModule::getActive() as $module) {
-  require_once "./modules/$module->mod_name/index.php";
+  require("./modules/$module->mod_name/index.php");
 }
 
 if (!$suppressHeaders) {
@@ -304,9 +297,7 @@ $performance["ccam"] = array (
 );
 
 foreach (CSQLDataSource::$dataSources as $dsn => $dataSource) {
-  if (!$dataSource) {
-    continue;
-  }
+  if (!$dataSource) continue;
   
   $chrono = $dataSource->chrono;
   $performance["dataSources"][$dataSource->dsn] = array(
@@ -317,29 +308,23 @@ foreach (CSQLDataSource::$dataSources as $dsn => $dataSource) {
 
 // Inclusion du footer
 if (!$suppressHeaders) {
-  
-  // Creation du Template
   $smartyFooter = new CSmartyDP("style/$uistyle");
   $smartyFooter->assign("offline"       , false);
   $smartyFooter->assign("debugMode"     , @$AppUI->user_prefs["INFOSYSTEM"]);
   $smartyFooter->assign("performance"   , $performance);
   $smartyFooter->assign("userIP"        , $_SERVER["REMOTE_ADDR"]);
   $smartyFooter->assign("errorMessage"  , $AppUI->getMsg());
-  $smartyFooter->assign("demoVersion"   , $dPconfig["demo_version"]);
   $smartyFooter->display("footer.tpl");
 }
 
 // Ajax performance
 if ($ajax) {
-  // Creation du Template
   $tplAjax = new CSmartyDP("modules/system");
   $tplAjax->assign("performance", $performance);
   $tplAjax->display("ajax_errors.tpl");
 }
 
-require "./includes/access_log.php";
+require("./includes/access_log.php");
 ob_end_flush();
 
 CApp::rip();
-
-?>
