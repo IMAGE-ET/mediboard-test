@@ -56,7 +56,8 @@ class CConsultation extends CCodable {
   var $du_patient       = null; // somme que le patient doit régler
   var $du_tiers         = null;
   var $accident_travail = null;
-  
+  var $concerne_ALD     = null;
+	
   // Form fields
   var $_etat           = null;
   var $_hour           = null;
@@ -164,7 +165,8 @@ class CConsultation extends CCodable {
     $specs["adresse"]           = "bool";
     $specs["tarif"]             = "str";
     $specs["arrivee"]           = "dateTime";
-    
+    $specs["concerne_ALD"]      = "bool";
+		
     $specs["patient_date_reglement"]    = "date";
     $specs["tiers_date_reglement"]      = "date";
     $specs["du_patient"]                = "currency";

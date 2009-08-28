@@ -1765,4 +1765,7 @@ $locales['config-dPcabinet-CConsultation-show_examen'] = 'Afficher la case de l\
 $locales['config-dPcabinet-CConsultation-show_examen-desc'] = 'Afficher la case de l\'examen dans l\'onglet d\'examen du patient';
 $locales['config-dPcabinet-CConsultation-show_histoire_maladie'] = 'Afficher la case de l\'histoire de la maladie';
 $locales['config-dPcabinet-CConsultation-show_histoire_maladie-desc'] = 'Afficher la case de l\'histoire de la maladie dans l\'onglet d\'examen du patient';
+$locales['CConsultation-concerne_ALD'] = 'Concerne ALD';
+$locales['CConsultation-concerne_ALD-court'] = 'ALD';
+$locales['CConsultation-concerne_ALD-desc'] = 'Concerne ALD';
 ?>

@@ -1214,7 +1214,12 @@ class CSetupdPcabinet extends CSetup {
               ADD `conclusion` TEXT AFTER `histoire_maladie`";
     $this->addQuery($sql);
 
-    $this->mod_version = "1.13";
+    $this->makeRevision("1.13");
+		$sql = "ALTER TABLE `consultation` 
+            ADD `concerne_ALD` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+    
+		$this->mod_version = "1.14";
   }
 }
 ?>

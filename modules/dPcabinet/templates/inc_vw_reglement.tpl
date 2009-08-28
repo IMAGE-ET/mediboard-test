@@ -87,6 +87,13 @@ checkSigemsActes = function(actes) {
 
 Main.add( function(){
   prepareForm(document.accidentTravail);
+	
+	{{if $consult->_ref_patient->ald}}
+	if($('accidentTravail_concerne_ALD_1')){
+	  $('accidentTravail_concerne_ALD_1').checked = "checked";
+		submitFormAjax(document.accidentTravail, 'systemMsg');
+	}
+	{{/if}}	
 });
 </script>
 
@@ -144,6 +151,13 @@ Main.add( function(){
                    {{/if}}
                  </td>
                </tr>
+							 {{if $consult->_ref_patient->ald && !$consult->tarif}}
+                <tr>
+                  <th>{{mb_label object=$consult field=concerne_ALD}}</th>
+                  <td colspan="2">{{mb_field object=$consult field=concerne_ALD onchange="submitFormAjax(this.form,'systemMsg');"}}</td>
+                </tr>
+                {{/if}}
+								
               </table>  
             </form>
             
@@ -181,6 +195,12 @@ Main.add( function(){
       	          </td>
       	        </tr>
       	        {{else}}
+								 {{if $consult->_ref_patient->ald}}
+                  <tr>
+                    <th>{{mb_label object=$consult field=concerne_ALD}}</th>
+                    <td>{{mb_value object=$consult field=concerne_ALD}}</td>
+                  </tr>
+								  {{/if}}
         	        <tr>
         	          <th>{{mb_label object=$consult field=tarif}}</th>
         	          <td>{{mb_value object=$consult field=tarif}}</td>    
