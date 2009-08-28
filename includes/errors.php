@@ -171,12 +171,13 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   $errorType = isset($errorTypes[$errorCode]) ? $errorTypes[$errorCode] : null;
   
   // Contextes 
-  $contexts = debug_backtrace(false);
+  $contexts = debug_backtrace();
   array_shift($contexts);
   
   $contexts_reduced = $contexts;
   foreach($contexts_reduced as &$ctx) {
     unset($ctx['args']);
+    unset($ctx['object']);
   }
   $hash = md5(serialize($contexts_reduced));
   
