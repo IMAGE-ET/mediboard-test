@@ -64,10 +64,13 @@ function patientGetSiblings($patientMatch) {
   if(count($siblings) != 0) {
     $textSiblings = "Risque de doublons :";
     foreach($siblings as $key => $value) {
-      $textSiblings .= "\n\t $value->nom $value->prenom ($value->nom_jeune_fille)" .
-        " né(e) le ". mbDateToLocale($value->naissance) .
-        "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
-        "- $value->cp $value->ville";
+      $textSiblings .= "\n\t $value->nom $value->prenom ";
+      if ($value->nom_jeune_fille)
+        $textSiblings .= "($value->nom_jeune_fille)";
+      
+      $textSiblings .= " né(e) le ". mbDateToLocale($value->naissance) .
+      "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
+      "- $value->cp $value->ville";
     }
     $textSiblings .= "\nVoulez-vous tout de même sauvegarder ?";
   }

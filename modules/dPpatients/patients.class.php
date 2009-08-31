@@ -754,11 +754,19 @@ class CPatient extends CMbObject {
     if ($strict && $this->_id) {
    	  $where["patient_id"] = " != '$this->_id'";
     }
-    
-    $where["nom"]             = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom));
+        
+    $whereOr = array();
     if ($this->nom_jeune_fille) {
-    	$where["nom_jeune_fille"] = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom_jeune_fille));
+    	$whereOr[] = $ds->prepare("nom LIKE %", preg_replace("/\W/", "%", $this->nom));
+    	$whereOr[] = $ds->prepare("nom LIKE %", preg_replace("/\W/", "%", $this->nom_jeune_fille));
+    	$whereOr[] = $ds->prepare("nom_jeune_fille LIKE %", preg_replace("/\W/", "%", $this->nom));
+      $whereOr[] = $ds->prepare("nom_jeune_fille LIKE %", preg_replace("/\W/", "%", $this->nom_jeune_fille));
+    } else {
+    	$whereOr[] = $ds->prepare("nom LIKE %", preg_replace("/\W/", "%", $this->nom));
+      $whereOr[] = $ds->prepare("nom_jeune_fille LIKE %", preg_replace("/\W/", "%", $this->nom));
     }
+    $where[] = implode(" OR ", $whereOr);
+    
     $where["prenom"]          = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom));
     if ($this->prenom_2) {
     	$where["prenom_2"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_2));
