@@ -28,6 +28,10 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("admission", $admission);
 
-$smarty->display("print_admission.tpl");
+if(CAppUI::conf("dPadmissions fiche_admission") == "a4") {
+  $smarty->display("print_admission.tpl");
+} else {
+  $smarty->display("print_admission_A5.tpl");
+}
 
 ?>

@@ -184,6 +184,10 @@ $dPconfig["dPinterop"]["hprim_export"] = array (
   "filenbroll"     => 2,
 );
 
+$dPconfig["dPadmissions"] = array (
+  "fiche_admission" => "a4",
+);
+
 $dPconfig["dPplanningOp"]["COperation"] = array (
   "duree_deb"        => "0",
   "duree_fin"        => "10",
