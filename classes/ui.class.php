@@ -415,7 +415,7 @@ class CAppUI {
   * @param string $value : value paramater for javascript function
   */
   static function callbackAjax($callback, $value = '') {
-    $value = smarty_modifier_json($value);
+    $value = json_encode($value);
     echo "\n<script type='text/javascript'>$callback($value);</script>";
   }
   
