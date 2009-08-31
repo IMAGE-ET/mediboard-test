@@ -107,6 +107,8 @@ if (isset($_REQUEST["login"])) {
 // Get the user preference
 $uistyle = $AppUI->user_prefs["UISTYLE"];
 
+CAppUI::requireSystemClass("smartydp");
+
 // clear out main url parameters
 $m = $a = $u = $g = "";
 
