@@ -11,10 +11,14 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$patient_id = mbGetValueFromGet("patient_id", null);
-$nom        = mbGetValueFromGet("nom"       , null);
-$prenom     = mbGetValueFromGet("prenom"    , null);
-$naissance  = mbGetValueFromGet("naissance" , "0000-00-00");
+$patient_id      = mbGetValueFromGet("patient_id", null);
+$nom             = mbGetValueFromGet("nom"       , null);
+$nom_jeune_fille = mbGetValueFromGet("nom_jeune_fille", null);
+$prenom          = mbGetValueFromGet("prenom"    , null);
+$prenom_2        = mbGetValueFromGet("prenom_2"  , null);
+$prenom_3        = mbGetValueFromGet("prenom_3"  , null);
+$prenom_4        = mbGetValueFromGet("prenom_4"  , null);
+$naissance       = mbGetValueFromGet("naissance" , "0000-00-00");
 
 $textDifferent = null;
 if($patient_id) {
@@ -30,7 +34,11 @@ if($patient_id) {
 $patientMatch = new CPatient();
 $patientMatch->patient_id = $patient_id;
 $patientMatch->nom        = $nom;
+$patientMatch->nom_jeune_fille = $nom_jeune_fille;
 $patientMatch->prenom     = $prenom; 
+$patientMatch->prenom_2   = $prenom_2; 
+$patientMatch->prenom_3   = $prenom_3;
+$patientMatch->prenom_4   = $prenom_4;  
 $patientMatch->naissance  = $naissance;
 
 $textMatching = $textSiblings = '';
@@ -56,7 +64,7 @@ function patientGetSiblings($patientMatch) {
   if(count($siblings) != 0) {
     $textSiblings = "Risque de doublons :";
     foreach($siblings as $key => $value) {
-      $textSiblings .= "\n\t $value->nom $value->prenom" .
+      $textSiblings .= "\n\t $value->nom $value->prenom ($value->nom_jeune_fille)" .
         " né(e) le ". mbDateToLocale($value->naissance) .
         "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
         "- $value->cp $value->ville";

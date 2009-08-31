@@ -751,16 +751,28 @@ class CPatient extends CMbObject {
   function loadMatchingPatient($strict = null) {
     $ds = $this->_spec->ds;
     
-   if ($strict && $this->_id) {
-   	$where["patient_id"] = " != '$this->_id'";
-   }
+    if ($strict && $this->_id) {
+   	  $where["patient_id"] = " != '$this->_id'";
+    }
     
-    $where["nom"]       = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom));
-    $where["prenom"]    = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom));
-    $where["naissance"] = $ds->prepare("= %", $this->naissance);
+    $where["nom"]             = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom));
+    if ($this->nom_jeune_fille) {
+    	$where["nom_jeune_fille"] = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom_jeune_fille));
+    }
+    $where["prenom"]          = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom));
+    if ($this->prenom_2) {
+    	$where["prenom_2"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_2));
+    }
+    if ($this->prenom_3) {
+      $where["prenom_3"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_3));
+    }
+    if ($this->prenom_4) {
+      $where["prenom_4"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_4));
+    }
+    $where["naissance"]       = $ds->prepare("= %", $this->naissance);
     
     $this->loadObject($where);
-    
+
     return $this->countList($where);
   }
   
