@@ -23,15 +23,13 @@ Main.add(function () {
   }
   
   if($('bloodSalvage_tab')){
-    var url = new Url;
-    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage");
+    var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
     url.addParam("op","{{$selOp->_id}}");
     url.requestUpdate("bloodSalvage_tab", { waitingText: null});
   }
   
   if($('Imeds_tab')){
-    var url = new Url;
-    url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", {{$sejour->_id}});
     url.requestUpdate('Imeds_tab', { waitingText : null });
   }
@@ -39,8 +37,7 @@ Main.add(function () {
 
 
 function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+  var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
   url.addParam("sejour_id", sejour_id);
   url.addParam("date", date);
   url.addParam("line_type", "bloc");
@@ -105,8 +102,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 
 function loadSuivi(sejour_id, user_id) {
   if(sejour_id) {
-    var urlSuivi = new Url;
-    urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
     urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
@@ -220,7 +216,7 @@ function reloadPrescription(prescription_id){
   <li><a href="#timing_tab">Timings</a></li>
 	{{/if}}
 
-  <li onclick="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesthésie</a></li>
+  <li onmouseup="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesthésie</a></li>
 
   {{if $isbloodSalvageInstalled}}
   <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
@@ -233,7 +229,7 @@ function reloadPrescription(prescription_id){
 
 	  {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
-    <li onclick="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
+    <li onmouseup="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
 	  {{/if}}
 	{{/if}}
   
