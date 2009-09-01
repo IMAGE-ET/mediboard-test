@@ -362,6 +362,12 @@ class CBcbProduit extends CBcbObject {
   }
   
   function loadRapportUnitePrise($code_unite_prise, $code_unite_contenance, $nb_up){
+  	if(!$this->libelle_presentation){
+  		$this->loadLibellePresentation();
+  	}
+		if(!$this->libelle_unite_presentation){
+			$this->loadUnitePresentation();
+		}
   	$ds = CBcbObject::getDataSource();
     $query = "SELECT LIBELLE_UNITE_DE_PRISE_PLURIEL FROM `POSO_UNITES_PRISE` WHERE `CODE_UNITE_DE_PRISE` = '$code_unite_prise';";
     $unite_prise = $ds->loadResult($query);
@@ -385,7 +391,7 @@ class CBcbProduit extends CBcbObject {
   	$produits = array();
   	foreach($_produits as $_produit){
   	  $produit = CBcbProduit::get($_produit["CODE_CIP"]);
-
+  	  
   	  $produit->loadConditionnement();
       $produits[] = $produit;
   	  // Fusion des tableaux d'unite de prises
