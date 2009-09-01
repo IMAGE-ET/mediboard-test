@@ -35,8 +35,10 @@ switch($_GET["reason"]) {
   <h2>
     <?php echo $msg; ?>
     <br />
-    Merci de ressayer ultérieurement.
+    Merci de réessayer ultérieurement.
   </h2>
+  <br />
+  <a class="button" href="index.php">Accéder à Mediboard</a>
 </body>
 
 </html>
