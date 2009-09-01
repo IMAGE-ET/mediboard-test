@@ -15,7 +15,8 @@
   <!-- Header de la ligne -->
   <tr  class="hoverable">
     <td style="text-align: center; width: 5%;" class="text">
-      {{if $line->_can_vw_livret_therapeutique}}
+
+		  {{if $line->_can_vw_livret_therapeutique}}
       <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
       {{/if}}  
       {{if !$line->_ref_produit->inT2A}}
@@ -28,9 +29,9 @@
       <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
       {{/if}}
       {{if $line->_ref_produit->_supprime}}
-      <br /><img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
+      <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
       {{/if}}
-      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}     
+      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->traitement_personnel}}traitement{{/if}}
@@ -71,7 +72,6 @@
     <td class="text" style="width: 8%" >
     	{{if !$line->_protocole}}
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-        {{if $line->_can_view_signature_praticien}}
 					{{if @$modules.messagerie}}
 					<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
 					  <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
@@ -90,9 +90,6 @@
 				  	{{/if}}
 			  	{{/if}}
 			   <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-        {{else if !$line->traitement_personnel && !$line->_protocole}}
-			  	<label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-        {{/if}}
        </div>
 			 {{else}}
 			 -

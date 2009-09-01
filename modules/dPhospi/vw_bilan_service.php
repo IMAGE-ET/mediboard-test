@@ -303,6 +303,7 @@ foreach($cats as $_cat){
 }
 
 // Chargement de tous les groupes de categories de prescription de l'etablissement courant
+$all_groups = array();
 $cat_group = new CPrescriptionCategoryGroup();
 $group_id = CGroups::loadCurrent()->_id;
 $where = array();

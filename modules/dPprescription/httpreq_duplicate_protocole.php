@@ -69,6 +69,7 @@ foreach($protocole->_ref_prescription_lines as $line){
       // Perfusions
       else {
         $_line_subst->loadRefsLines();
+				$_line_subst->loadVoies();
         $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
 			  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
@@ -86,6 +87,7 @@ foreach($protocole->_ref_prescription_lines as $line){
 // Parcours des perfusions
 foreach($protocole->_ref_perfusions as $_perfusion){
   $_perfusion->loadRefsLines();
+	$_perfusion->loadVoies();
   $_perfusion->loadRefsSubstitutionLines();
   $_perfusion->prescription_id = $protocole->_id;
   $_perfusion->_id = "";
@@ -117,6 +119,7 @@ foreach($protocole->_ref_perfusions as $_perfusion){
       // Perfusions
       else {
         $_line_subst->loadRefsLines();
+				$_line_subst->loadVoies();
         $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
 			  $AppUI->displayMsg($msg, "CPerfusion-msg-create");

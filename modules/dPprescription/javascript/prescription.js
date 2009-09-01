@@ -261,6 +261,13 @@ var Prescription = {
       }
     }
     
+		// Permet de garder le praticien selectionné pour l'ajout de ligne et l'application de protocoles
+		if(!praticien_for_prot_id){
+			if(document.selPraticienLine){
+				praticien_for_prot_id = document.selPraticienLine.praticien_id.value;
+			}
+		}
+		
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);

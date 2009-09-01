@@ -23,11 +23,10 @@ class CBcbObject {
   }
   
   function initBCBConnection() {
-    
-    include_once("lib/bcb/PackageBCB.php");
-    
+              
     // Connexion a la base BCB
     if (!self::$objDatabase) {  
+      include_once("lib/bcb/PackageBCB.php");
       $objDatabase = new BCBConnexion();
       $TypeDatabase = 2;
       $dbConf = CAppUI::conf("db");

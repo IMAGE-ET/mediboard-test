@@ -66,6 +66,7 @@
   </tr>
   <tr>
     <td style="text-align: center; width: 0.1%;">
+		  
       {{if $line->_can_vw_livret_therapeutique}}
       <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
       <br />

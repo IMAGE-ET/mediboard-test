@@ -8,6 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+
+<script type="text/javascript">
+
+Main.add(function(){
+  document.signaturePrescriptionPopup.password.focus();
+});
+
+</script>
+
 <table class="main">
   <tr>
     <td>

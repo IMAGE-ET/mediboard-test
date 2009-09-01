@@ -168,6 +168,7 @@ if($object_id && $object_class){
 	 	$line->countSubstitutionsLines();
 		$line->loadRefsSubstitutionLines();
     $line->loadRefsLines();
+		$line->loadVoies();
     $line->loadRefPraticien();
 	  $line->loadRefLogSignaturePrat();
 	  // Calcul de la quantite totale de la perfusion
@@ -213,6 +214,7 @@ else {
 		    $_perfusion->loadRefsSubstitutionLines();
 		    $_perfusion->getRecentModification();
 		    $_perfusion->loadRefsLines();
+				$_perfusion->loadVoies();
 		    $_perfusion->loadRefPraticien();
 		    $_perfusion->loadRefLogSignaturePrat();
 		  }

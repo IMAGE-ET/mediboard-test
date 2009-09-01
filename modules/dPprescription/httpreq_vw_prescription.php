@@ -38,13 +38,11 @@ if(!$operation_id && !$mode_sejour){
 }
 
 // Gestion du mode d'affichage
-$readonly        = mbGetValueFromGetOrSession("readonly", 1);
-$lite            = mbGetValueFromGetOrSession("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
-$full_line_guid  = mbGetValueFromGetOrSession("full_line_guid"); 
+$readonly            = mbGetValueFromGetOrSession("readonly", 1);
+$lite                = mbGetValueFromGetOrSession("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
+$full_line_guid      = mbGetValueFromGetOrSession("full_line_guid"); 
+$praticien_sortie_id = mbGetValueFromGetOrSession("praticien_sortie_id");
 
-$praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
-
-$historique = array();
 // Initialisations
 $protocoles_praticien = array();
 $protocoles_function  = array();
@@ -59,7 +57,9 @@ $alertesProfil        = array();
 $alertesPosologie     = array();
 $favoris              = array();
 $listProduits         = array();
-$dossier_medical = new CDossierMedical();
+$historique           = array();
+$executants           = array();
+$dossier_medical      = new CDossierMedical();
 
 // Chargement de l'utilisateur courant
 $user = new CMediusers();
@@ -71,10 +71,6 @@ $listPrats = $is_praticien ? null : $user->loadPraticiens(PERM_EDIT);
 
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
-
-// Chargement des executants
-$executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
-$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
 
 // Calcul de la div à rafraichir
 if ($element_id){
@@ -123,85 +119,62 @@ if(!$prescription_id && $object_class && $object_id && $type){
 }
  
 // Chargement des categories pour chaque chapitre
-/* Ici, chargement de toutes les categories pour permettre de visualiser correctement les prescriptions 
- * qui ont ete faites avant que les categories soient associées à un group_id
- */
-$categories = $full_mode || $chapitre != "medicament" ? CCategoryPrescription::loadCategoriesByChap() : null;
+$categories = ($full_mode || $chapitre != "medicament") ? CCategoryPrescription::loadCategoriesByChap() : null;
 
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
-  $prescription->loadRefsPerfusions();
-  
+  // Chargement de la photo d'identité du patient
   $patient =& $prescription->_ref_patient;
   $patient->loadRefPhotoIdentite();
-  
-	foreach($prescription->_ref_perfusions as $_perfusion){
-	  $_perfusion->loadRefsSubstitutionLines(); 
-    $_perfusion->loadRefsLines();
-	  $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
-	  $_perfusion->loadRefPraticien();
-	  $_perfusion->loadRefParentLine();
-	  if($_perfusion->_ref_lines){
-		  foreach($_perfusion->_ref_lines as &$line_perf){
-		    $line_perf->loadRefsFwd();
-		  }
-	  }
-	}
 
+  // Chargement des praticiens prescripteurs
   $prescription->getPraticiens();
-  
-	// Chargement de l'historique
+
+  // Chargement de l'historique
   $historique = $prescription->loadRefsLinesHistorique();
-  
-	// Chargement des lignes de DMI
-  if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
-    $prescription->loadRefsLinesDMI();
-    foreach($prescription->_ref_lines_dmi as $_line_dmi){
-      $_line_dmi->loadRefsFwd();
-    }
-  }
-  
-  // Chargement des elements et commentaires d'elements
-  $prescription->loadRefsLinesElementsComments("", $chapitre);
-  if(count($prescription->_ref_lines_elements_comments)){
-	  foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
-	  	foreach($cat_by_chap as $name_cat => $lines_by_cat){
-	  		foreach($lines_by_cat as $type_elt => $lines_by_type){
-	  			foreach($lines_by_type as $key => $_line){
-	  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
-	  			  $_line->loadRefsFwd();
-	  			  if($_line->_class_name == "CPrescriptionLineElement"){
-	  			    $_line->loadRefsPrises();
-	  			  }
-	  			}
-	  		}
-	  	}
-	  }
-  }    	
+   	
   // Calcul du nombre d'elements dans la prescription
 	$prescription->countLinesMedsElements($praticien_sortie_id);
-}
 
-// Chargement des medicaments et commentaires de medicament
-if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
-  if ($prescription->_id) {
-	  if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
-			$prescription->loadRefsLinesMedComments();
-		  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
-		  	foreach($lines_by_type as $med_id => $_line_med){
-		  	  if($_line_med->_class_name == "CPrescriptionLineMedicament"){
-		  	    $_line_med->countBackRefs("administration");
-		  	    $_line_med->loadRefsFwd();
-		  	    $_line_med->loadRefsSubstitutionLines();
-		  	    if($_line_med->_guid == $full_line_guid && $prescription->object_id){
-		  	     $_prat_id = !$prescription->object_id ? $prescription->praticien_id : null;
-		  	     $_line_med->loadMostUsedPoso(null, $_prat_id);
-		  	    }
-		  	  }
-			    $_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
-			    $_line_med->loadRefParentLine();
-		  	}
-		  }
+	// Chargement des medicaments et commentaires de medicament
+	if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
+		// Chargement des medicaments
+		$prescription->loadRefsLinesMedComments();
+	  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
+	  	foreach($lines_by_type as $med_id => $_line_med){
+	  	  if($_line_med->_class_name == "CPrescriptionLineMedicament"){
+	  	    $_line_med->countBackRefs("administration");
+	  	    $_line_med->loadRefsSubstitutionLines();
+					$_line_med->loadRefParentLine();
+					$_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
+	  	    if($_line_med->_guid == $full_line_guid){
+	  	     $_prat_id = !$prescription->object_id ? $prescription->praticien_id : null;
+	  	     $_line_med->loadMostUsedPoso(null, $_prat_id);
+					 $_line_med->loadRefsFwd();
+					 $_line_med->_ref_produit->loadVoies();
+					
+					 $_line_med->isPerfusable();
+	  	    }
+	  	  }
+	  	}
+	  }
+		
+		// Chargement des perfusions
+	  $prescription->loadRefsPerfusions();  
+	  foreach($prescription->_ref_perfusions as $_perfusion){
+	    $_perfusion->loadRefPraticien();
+	    $_perfusion->loadRefsLines();
+	    $_perfusion->loadRefParentLine();
+	    $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
+			if($_perfusion->_guid == $full_line_guid){
+	      $_perfusion->loadRefsSubstitutionLines();
+	      $_perfusion->loadVoies();
+	      if($_perfusion->_ref_lines){
+	        foreach($_perfusion->_ref_lines as &$line_perf){
+	          $line_perf->loadRefsFwd();
+	        }
+	      }
+	    }
 	  }
 	  
 	  // Pour une prescription non protocole
@@ -211,7 +184,6 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $object->loadRefPatient();
 			$patient =& $object->_ref_patient;
 			$patient->loadRefDossierMedical();
-		  
 			$object->loadRefsPrescriptions();
 			
 			// Chargement du dossier medicam
@@ -228,14 +200,11 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $profil       = new CBcbControleProfil();
 		  $profil->setPatient($patient);
 	  }
-
+	
 	  $interactions = new CBcbControleInteraction();
 		$IPC          = new CBcbControleIPC();
 	  $surdosage    = new CBcbControleSurdosage();
 	  $surdosage->setPrescription($prescription);
-	  
-	  $lines = array();
-	  $lines["prescription"] = $prescription->_ref_prescription_lines;
 	  
 	  foreach($prescription->_ref_perfusions as $_perfusion){
 	    foreach($_perfusion->_ref_lines as $_perf_line){
@@ -247,20 +216,18 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		    $IPC->addProduit($_perf_line->code_cip);
 	    }
 	  }
-	  foreach($lines as $type => $type_line){
-		  foreach($type_line as &$line) {
-		    if($prescription->object_id){
-		      $allergies->addProduit($line->code_cip);
-		      $profil->addProduit($line->code_cip);
-		    }			    
-		    $interactions->addProduit($line->code_cip);
-		    $IPC->addProduit($line->code_cip);
-		  }
+	  foreach($prescription->_ref_prescription_lines as &$line) {
+	    if($prescription->object_id){
+	      $allergies->addProduit($line->code_cip);
+	      $profil->addProduit($line->code_cip);
+	    }			    
+	    $interactions->addProduit($line->code_cip);
+	    $IPC->addProduit($line->code_cip);
 	  }
 	  if($prescription->object_id){
 	    $alertesAllergies    = $allergies->getAllergies();
 	    $alertesProfil       = $profil->getProfil();
-	  }		  
+		}		  
 	  $alertesInteractions = $interactions->getInteractions();
 	  $alertesIPC          = $IPC->getIPC();
 		if($prescription->object_id){
@@ -272,21 +239,18 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	  }
 	  
 	  $prescription->_scores["hors_livret"] = 0;
-	  foreach($lines as $type_line){
-	    foreach($type_line as &$line) {
-	      if($prescription->object_id){
-	        $prescription->checkAllergies($alertesAllergies, $line->code_cip);
-	        $prescription->checkProfil($alertesProfil, $line->code_cip);
-	      }		      
-	      $prescription->checkIPC($alertesIPC, $line->code_cip);
-	      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
-	      $prescription->checkPoso($alertesPosologie, $line->code_cip);
-
-	      if(!$line->_ref_produit->inLivret && $prescription->type == "sejour"){
-	        $prescription->_scores["hors_livret"]++;
-	      }
-	    }
-	  }
+    foreach($prescription->_ref_prescription_lines as &$line) {
+      if($prescription->object_id){
+        $prescription->checkAllergies($alertesAllergies, $line->code_cip);
+        $prescription->checkProfil($alertesProfil, $line->code_cip);
+      }		      
+      $prescription->checkIPC($alertesIPC, $line->code_cip);
+      $prescription->checkInteractions($alertesInteractions, $line->code_cip);
+      $prescription->checkPoso($alertesPosologie, $line->code_cip);
+      if(!$line->_ref_produit->inLivret && $prescription->type == "sejour"){
+        $prescription->_scores["hors_livret"]++;
+      }
+    }
 	  foreach($prescription->_ref_perfusions as $_perfusion){
 	  	foreach($_perfusion->_ref_lines as $_perf_line){
 	  	  if($prescription->object_id){
@@ -295,7 +259,6 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	  	  }			    
 		    $prescription->checkIPC($alertesIPC, $_perf_line->code_cip);
 		    $prescription->checkInteractions($alertesInteractions, $_perf_line->code_cip);
-
 		    if(!$_perf_line->_ref_produit->inLivret && $prescription->type == "sejour"){
 		      $prescription->_scores["hors_livret"]++;
 		    }
@@ -313,16 +276,15 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		      } elseif ($type_score == "allergie") {
 		        // allergies
 		        if(count($_score)){
-              $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score"));
-            }
+	            $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score"));
+	          }
 		      }
 		    } elseif($_score > 0) {
 		      $score_prescription = max($score_prescription, CAppUI::conf("dPprescription CPrescription scores $type_score"));
 		    }
 		  }
 		  $prescription->_score_prescription = $score_prescription;
-
-		  
+	  
 			// Chargement du poids du patient
 			$patient->loadRefConstantesMedicales();
 		  $constantes_medicales = $patient->_ref_constantes_medicales;
@@ -338,11 +300,40 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		    }
 		  }
 		}
-	}
-}
+	} else {		
+		// Chargement des executants
+		$executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
+		$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
 
-// Chargement des favoris 
-if($prescription->_id){
+		// Chargement des lignes de DMI
+	  if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
+	    $prescription->loadRefsLinesDMI();
+	    foreach($prescription->_ref_lines_dmi as $_line_dmi){
+	      $_line_dmi->loadRefsFwd();
+	    }
+	  }
+	  
+	  // Chargement des elements et commentaires d'elements
+	  $prescription->loadRefsLinesElementsComments("", $chapitre);
+	  if(count($prescription->_ref_lines_elements_comments)){
+	    foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
+	      foreach($cat_by_chap as $name_cat => $lines_by_cat){
+	        foreach($lines_by_cat as $type_elt => $lines_by_type){
+	          foreach($lines_by_type as $key => $_line){
+	          	if($_line->_class_name == "CPrescriptionLineElement"){
+                $_line->loadRefsPrises();
+              }
+							$_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
+							if($full_line_guid == $_line->_guid){
+		            $_line->loadRefsFwd();
+							}
+	          }
+	        }
+	      }
+	    }
+	  }   
+	}
+
   if($pratSel_id){
     $prescription->_current_praticien_id = $pratSel_id;
   }
@@ -429,8 +420,8 @@ $_sejour->load($sejour_id);
 
 $operation = new COperation();
 if($operation->load($operation_id)) {
- $operation->loadRefPlageOp();
- $operation->_ref_anesth->loadRefFunction();
+  $operation->loadRefPlageOp();
+  $operation->_ref_anesth->loadRefFunction();
 }
 
 $_chir_id   = $chir_id   ? $chir_id : ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id);

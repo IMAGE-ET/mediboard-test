@@ -37,7 +37,11 @@ if(count($produits) && !$code_cip){
 $mbProduit = new CBcbProduit();
 if($code_cip){
 	$mbProduit = CBcbProduit::get($code_cip, true);
-	
+	$mbProduit->loadRefMonographie();
+	$mbProduit->getStatut();
+	$mbProduit->getAgrement();
+	$mbProduit->getSuppression();
+	$mbProduit->loadRefComposition();
 	if($mbProduit->code_cip){
 		// Chargement des donnees technico-reglementaires
 		$mbProduit->loadRefEconomique();

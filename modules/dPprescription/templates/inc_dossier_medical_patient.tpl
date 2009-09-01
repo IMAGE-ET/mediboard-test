@@ -27,6 +27,7 @@ transfertLineTP = function(line_id, sejour_id){
   <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="sejour_id" value="" />
+	<input type="hidden" name="user_id" value="{{$user->_id}}" />
 </form>
 
 <table class="form">

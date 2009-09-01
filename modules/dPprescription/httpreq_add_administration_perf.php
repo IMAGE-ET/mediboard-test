@@ -19,6 +19,7 @@ $date_sel  = mbGetValueFromGet("date_sel");
 $perfusion = new CPerfusion();
 $perfusion->load($perfusion_id);
 $perfusion->loadRefsLines();
+$perfusion->loadVoies();
 $perfusion->calculQuantiteTotal();
 
 if($time_prevue){

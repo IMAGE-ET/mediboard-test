@@ -107,6 +107,54 @@ class CPrescriptionLine extends CMbObject {
     return $specs;
   }
   
+	function updateFormFields(){
+    parent::updateFormFields();
+    $this->countParentLine();
+    $this->countPrisesLine();
+    $this->loadRefPrescription();
+    $this->loadRefPraticien();
+    $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
+    
+    if($this->duree && $this->debut){
+      switch ($this->unite_duree) {
+        case "minute":
+        case "heure":
+        case "demi_journee":
+          $this->_fin = $this->debut; break;
+        case "jour": 
+          $this->_fin = mbDate("+ $this->duree DAYS", $this->debut); break;
+        case "semaine":
+          $this->_fin = mbDate("+ $this->duree WEEKS", $this->debut); break;
+        case "quinzaine":
+          $duree_temp = 2 * $this->duree;
+          $this->_fin = mbDate("+ $duree_temp WEEKS", $this->debut); break;
+        case "mois":
+          $this->_fin = mbDate("+ $this->duree MONTHS", $this->debut); break;
+        case "trimestre":
+          $duree_temp = 3 * $this->duree;
+          $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut); break;
+        case "semestre":
+          $duree_temp = 6 * $this->duree;
+          $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut); break;
+        case "an":
+          $this->_fin = mbDate("+ $this->duree YEARS", $this->debut); break;
+      }
+      
+      // Si la duree est superieure à une journée, on transforme la date de fin
+      if($this->debut != $this->_fin){
+        $this->_fin = mbDate(" -1 DAYS", $this->_fin);  
+      }
+    }
+    
+    // Calcul du debut reel de la ligne
+    $time_debut = ($this->time_debut) ? $this->time_debut : "00:00:00";
+    $this->_debut_reel = "$this->debut $time_debut";
+    
+    $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
+    $this->getRecentModification();
+    $this->calculDatesUrgences();
+  }
+	
   /*
    * Forward Refs
    */
@@ -265,56 +313,7 @@ class CPrescriptionLine extends CMbObject {
       return $msg;
     }
   }
-  
-  function updateFormFields(){
-    parent::updateFormFields();
-    //$this->loadRefsFwd();
-    $this->countParentLine();
-    $this->countPrisesLine();
-    $this->loadRefPrescription();
-    $this->loadRefPraticien();
-    $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
-    if($this->duree && $this->debut){
-      switch ($this->unite_duree) {
-	      case "minute":
-	      case "heure":
-	      case "demi_journee":
-	        $this->_fin = $this->debut; break;
-	      case "jour": 
-	        $this->_fin = mbDate("+ $this->duree DAYS", $this->debut); break;
-	      case "semaine":
-	        $this->_fin = mbDate("+ $this->duree WEEKS", $this->debut); break;
-	      case "quinzaine":
-	        $duree_temp = 2 * $this->duree;
-	        $this->_fin = mbDate("+ $duree_temp WEEKS", $this->debut); break;
-	      case "mois":
-	        $this->_fin = mbDate("+ $this->duree MONTHS", $this->debut); break;
-	      case "trimestre":
-	        $duree_temp = 3 * $this->duree;
-	        $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut); break;
-	      case "semestre":
-	        $duree_temp = 6 * $this->duree;
-	        $this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut); break;
-	      case "an":
-	        $this->_fin = mbDate("+ $this->duree YEARS", $this->debut); break;
-	    }
-      
-      // Si la duree est superieure à une journée, on transforme la date de fin
-      if($this->debut != $this->_fin){
-        $this->_fin = mbDate(" -1 DAYS", $this->_fin);  
-      }
-    }
-    
-    // Calcul du debut reel de la ligne
-    $time_debut = ($this->time_debut) ? $this->time_debut : "00:00:00";
-    $this->_debut_reel = "$this->debut $time_debut";
-    
-    $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
-    $this->getRecentModification();
-    $this->calculDatesUrgences();
-  }
-  
   /*
    * Chargement du log d'arret de la ligne
    */
@@ -618,6 +617,12 @@ class CPrescriptionLine extends CMbObject {
 		    $unite_prise = ($_prise->_unite_sans_kg) ? $_prise->_unite_sans_kg : $_prise->unite_prise;
 
 		    $produit =& $this->_ref_produit; 
+				
+				if(!$produit->libelle_unite_presentation){
+          $produit->loadLibellePresentation();
+          $produit->loadUnitePresentation();
+        }
+				
 		    $produit->loadRapportUnitePriseByCIS();
 		    // Gestion des unites de prises exprimées en libelle de presentation (ex: poche ...)
 		    if($_prise->unite_prise == $produit->libelle_presentation){		        

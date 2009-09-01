@@ -66,6 +66,7 @@ if($pack->_id){
       foreach($_prescription->_ref_perfusions as $_perfusion){
         $_perfusion->countSubstitutionsLines();
         $_perfusion->loadRefsLines();
+				$_perfusion->loadVoies();
         $prescription->_ref_perfusions[$_perfusion->_id] = $_perfusion;
       }
     }

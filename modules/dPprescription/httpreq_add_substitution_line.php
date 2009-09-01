@@ -34,6 +34,7 @@ foreach($object->_ref_substitution_lines as $_lines){
 	    $_line_sub->loadRefsPrises();
 	  } else {
 	    $_line_sub->loadRefsLines();
+			$_line_sub->loadVoies();
 	    foreach($_line_sub->_ref_lines as $_line_perf){
 	      $_line_perf->loadRefsFwd();
 	    }
@@ -49,6 +50,7 @@ $prescription =& $object->_ref_prescription;
 $prescription->loadRefsPerfusions(0,null,0);
 foreach($prescription->_ref_perfusions as $_perfusion){
 	$_perfusion->loadRefsLines();
+	$_perfusion->loadVoies();
 }
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();

@@ -424,9 +424,7 @@ class CPerfusion extends CMbObject {
    * Chargement des lignes de la perfusion
    */
   function loadRefsLines(){
-    $this->_ref_lines = $this->loadBackRefs("lines_perfusion");
-    $this->loadVoies();
-    
+    $this->_ref_lines = $this->loadBackRefs("lines_perfusion");  
 		if(!$this->_short_view){
 		  foreach($this->_ref_lines as $_perf_line){
 		  	$this->_short_view .= $_perf_line->_ref_produit->libelle_abrege.", ";
@@ -440,6 +438,9 @@ class CPerfusion extends CMbObject {
    */
   function loadVoies(){
     foreach($this->_ref_lines as $_perf_line){
+    	if(!$_perf_line->_ref_produit->voies){
+			  $_perf_line->_ref_produit->loadVoies();
+			}
       foreach($_perf_line->_ref_produit->voies as $_voie){
         //if(CPrescriptionLineMedicament::$voies[$_voie]["perfusable"]){
           $this->_voies[$_voie] = $_voie;
@@ -485,6 +486,10 @@ class CPerfusion extends CMbObject {
 			    $this->_quantite_totale += $_perf_line->_quantite_administration;
 	      }
 			  $produit =& $_perf_line->_ref_produit;   
+				if(!$produit->libelle_unite_presentation){
+			    $produit->loadLibellePresentation();
+          $produit->loadUnitePresentation();
+				}
     	  $_perf_line->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
 		    $_perf_line->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
 

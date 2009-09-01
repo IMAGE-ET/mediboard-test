@@ -129,36 +129,16 @@ class CBcbProduit extends CBcbObject {
     }
     
    if ($full_mode){
-	    // Chargement de la monographie (permet d'obtenir la date de suppression) 
-	    $this->loadRefMonographie();
-	
-	    // Chargement du statut du produit
-	    $this->getStatut();  
-	    
-	    // Chargement de l'agrement
-	    $this->getAgrement();
-
-	    // Produit supprime ?
-	    $this->getSuppression();
-	
-	    // Chargement de la composition du produit
-	    $this->loadRefComposition();
-	    	    
-	    // Produit dans la T2A
 	    $this->isInT2A();
-	    
-	  	// Produit générique ?
 	    $this->getGenerique();
-	   
-	    // Produit référent ?
 	    $this->getReferent();
 
-	    $this->loadRefPosologies();
-	    $this->loadLibellePresentation();
-      $this->loadUnitePresentation();
+	    //$this->loadRefPosologies();
+	    //$this->loadLibellePresentation();
+      //$this->loadUnitePresentation();
     }
     $this->isInLivret();
-    $this->loadVoies();
+    //$this->loadVoies();
   }
   
   
@@ -451,9 +431,11 @@ class CBcbProduit extends CBcbObject {
   }
   
   function getSuppression(){
+  	/*
     if($this->_ref_monographie->date_suppression){
       $this->_supprime = 1;
     }
+    */
   }
   
   // Permet de savoir si le produit est un referent

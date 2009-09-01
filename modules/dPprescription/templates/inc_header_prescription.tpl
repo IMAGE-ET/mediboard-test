@@ -92,6 +92,9 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
   url.addParam("patient_id", patient_id);
   url.addParam("sejour_id", sejour_id);
   url.addParam("prescription_sejour_id", prescription_sejour_id);
+	if(document.selPraticienLine){
+	  url.addParam("praticien_id", document.selPraticienLine.praticien_id.value);
+	}
   url.popup(700, 500, "Traitements du patient");
 }
 

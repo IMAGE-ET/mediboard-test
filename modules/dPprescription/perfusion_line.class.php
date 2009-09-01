@@ -118,10 +118,16 @@ class CPerfusionLine extends CMbObject {
     $this->_unites_prise = array();
     $produits = $this->_ref_produit->loadRapportUnitePriseByCIS();
     
+    $this->_ref_produit->loadLibellePresentation();
+    $this->_ref_produit->loadUnitePresentation();
+      
     $libelle_unite_presentation = $this->_ref_produit->libelle_unite_presentation;
     $libelle_unite_presentation_pluriel = $this->_ref_produit->libelle_unite_presentation_pluriel;
    
-    
+    if(!$this->_ref_produit->_ref_posologies){
+    	$this->_ref_produit->loadRefPosologies();
+    } 
+		
     foreach($this->_ref_produit->_ref_posologies as $_poso){
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
       

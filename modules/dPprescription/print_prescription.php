@@ -102,7 +102,11 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		    $line_medicament->loadRefsSubstitutionLines();
 		    foreach($line_medicament->_ref_substitution_lines as $_subst_by_chap){
 		      foreach($_subst_by_chap as $_subst_line){
-		        $_subst_line->loadRefsPrises();
+		        if($_subst_line->_class_name == "CPrescriptionLineMedicament"){
+						  $_subst_line->loadRefsPrises();
+					  } else {
+					  	$_subst_line->loadRefsLines();
+					  }
 		        $_subst_line->loadRefsFwd();
 		      }
 		    }
@@ -132,7 +136,11 @@ foreach($prescription->_ref_perfusions as $_perfusion){
   foreach($_perfusion->_ref_substitution_lines as $_subst_by_chap){
     foreach($_subst_by_chap as &$_subst_perf){
       $_subst_perf->loadRefPraticien();
-      $_subst_perf->loadRefsLines();
+			if($_subst_perf->_class_name == "CPerfusion"){
+        $_subst_perf->loadRefsLines();
+		  } else {
+		  	$_subst_perf->loadRefsPrises();
+		  }
     }
   }	   
   if($praticien->_id && $_perfusion->praticien_id != $praticien->_id){

@@ -13,6 +13,8 @@ global $AppUI;
 $patient_id = mbGetValueFromGet("patient_id");
 $sejour_id = mbGetValueFromGet("sejour_id");
 $prescription_sejour_id = mbGetValueFromGet("prescription_sejour_id");
+$praticien_id = mbGetValueFromGet("praticien_id");
+
 $patient = new CPatient();
 $patient->load($patient_id);
 $patient->loadRefDossierMedical();
@@ -25,8 +27,10 @@ if($dossier_medical->_id){
   }
 }
 
+$user_id = $praticien_id ? $praticien_id : $AppUI->user_id;
+
 $user = new CMediusers();
-$user->load($AppUI->user_id);
+$user->load($user_id);
 $user->isPraticien();
 
 // Création du template

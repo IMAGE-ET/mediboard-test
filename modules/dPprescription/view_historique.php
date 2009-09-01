@@ -31,7 +31,6 @@ if($type == "historique"){
 foreach($med_lines as $_type_line => $meds_by_cat){
 	if(is_array($meds_by_cat)){
 		foreach($meds_by_cat as &$line){
-		  $line->loadRefCreator();
 		  if($line->_class_name == "CPerfusion"){
 		    $parent_lines = $line->loadRefsParents();
         $lines["perf"][$line->_id]= $line;
@@ -41,6 +40,7 @@ foreach($med_lines as $_type_line => $meds_by_cat){
 			  $hist["perf"][$line->_id] = $parent_lines;
 		  } else {
 				// Chargement des parents lines
+			  $line->loadRefCreator();
 	      if ($type == "historique"){
 				  $parent_lines = $line->loadRefsParents();
 	      } else {

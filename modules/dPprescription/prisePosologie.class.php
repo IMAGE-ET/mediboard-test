@@ -344,6 +344,12 @@ class CPrisePosologie extends CMbMetaObject {
     
 		$line =& $this->_ref_object;
 		$produit =& $line->_ref_produit;
+		
+		if(!$produit->libelle_unite_presentation){
+      $produit->loadLibellePresentation();
+      $produit->loadUnitePresentation();
+    }
+		
 		$prescription =& $line->_ref_prescription;
 		$sejour =& $prescription->_ref_object;
 		
@@ -353,7 +359,6 @@ class CPrisePosologie extends CMbMetaObject {
 			  $_unite_prise = str_replace('/kg', '', $this->unite_prise);
 			  if($_unite_prise != $this->unite_prise){
 			    // On recupere le poids du patient pour calculer la quantite
-
 	        if(!$sejour->_ref_patient){
 	         $sejour->loadRefPatient();
 	        }

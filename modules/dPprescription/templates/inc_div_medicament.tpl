@@ -197,19 +197,17 @@ Main.add( function(){
     {{/if}}
     <td style="text-align: center;">
 			{{if ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions)}}
-			  <button class="{{if $readonly}}edit{{else}}lock{{/if}}" type="button" 
-			  				onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{if $readonly}}false{{else}}true{{/if}},{{if $readonly}}false{{else}}{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}{{/if}},'');">
-			    {{if $readonly}}Modification
-			    {{else}}Lecture seule
-			    {{/if}}
-			  </button>
-			  
 			  {{if $readonly}}
         <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
-			    {{if $lite}}Vue complète
-			    {{else}}Vue simplifiée
-			    {{/if}}
-	 		  </button>
+          {{if $lite}}Vue complète
+          {{else}}Vue simplifiée
+          {{/if}}
+        </button>
+        {{else}}
+				<button class="lock" type="button" 
+			  				onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true,{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
+			    Lecture seule
+			  </button>
 			  {{/if}}
 		  {{/if}}
       

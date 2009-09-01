@@ -297,7 +297,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     
     $this->_perm_edit = $perm_edit;
     
-    
     // Modification des dates et des commentaires
     if($perm_edit){
     	$this->_can_modify_dates = 1;
@@ -494,7 +493,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     // Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
       $this->loadRefProduit();
-      if(isset($this->_ref_produit->voies[0])){
+			if(!$this->_ref_produit->voies){
+			  $this->_ref_produit->loadVoies();
+			}
+			if(isset($this->_ref_produit->voies[0])){
         $this->voie = $this->_ref_produit->voies[0];
       }
     }
@@ -545,6 +547,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function loadRefsFwd() {
   	parent::loadRefsFwd();
     $this->loadRefProduit();
+		$this->_ref_produit->loadRefPosologies();
+    if(!$this->_ref_produit->libelle_unite_presentation){
+      $this->_ref_produit->loadLibellePresentation();
+      $this->_ref_produit->loadUnitePresentation();
+    }
+		
     $this->loadPosologie();
    
     $this->_unites_prise = array();
