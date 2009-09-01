@@ -121,10 +121,15 @@ var ElementChecker = {
 
 Object.extend(ElementChecker, {
   check: {
-    // isNumeric
-    isNumeric: function () {
+    // toNumeric
+    toNumeric: function (getInt) {
+      this.sValue = new String(this.sValue).replace(/\s/g, '').replace(/,/, '.');
+      this.sValue = getInt ? parseInt(this.sValue) : parseFloat(this.sValue);
+      
       if (isNaN(this.sValue))
-        this.addError("isNumeric", "N'est pas dans un format numérique valide");
+        this.addError("toNumeric", "N'est pas dans un format numérique valide");
+      
+      this.oElement.value = this.sValue;
     },
     
     // notNull
@@ -258,7 +263,8 @@ Object.extend(ElementChecker, {
     // pos
     pos: function () {
       this.assertNoArg("pos");
-      this.isNumeric();
+      this.toNumeric();
+      
       if (this.sValue <= 0)
         this.addError("pos", "Doit être une valeur positive");
     },
@@ -266,7 +272,7 @@ Object.extend(ElementChecker, {
     // min
     min: function () {
       this.assertSingleArg("min");
-      this.isNumeric();
+      this.toNumeric();
       
       iMin = parseInt(this.oProperties["min"], 10);
       if (this.sValue < iMin)
@@ -276,7 +282,7 @@ Object.extend(ElementChecker, {
     // max
     max: function () {
       this.assertSingleArg("max");
-      this.isNumeric();
+      this.toNumeric();
       
       iMax = parseInt(this.oProperties["max"], 10);
       if (this.sValue > iMax)
@@ -367,12 +373,12 @@ Object.extend(ElementChecker, {
     
     // num
     num: function() {
-      this.isNumeric();
+      this.toNumeric(true);
     },
     
     // bool
     bool: function() {
-      this.isNumeric();
+      this.toNumeric(true);
       if(this.sValue != 0 && this.sValue != 1)
         this.addError("bool", "Ne peut être différent de 0 ou 1");
     },
@@ -441,9 +447,7 @@ Object.extend(ElementChecker, {
     
     // float
     'float': function() {
-      this.sValue = new String(this.sValue).replace(',', '.');
-			this.oElement.value = this.sValue;
-      this.isNumeric();
+      this.toNumeric();
       
       if (parseFloat(this.sValue) != this.sValue)
         this.addError("float", "N'est pas une valeur décimale");
@@ -456,9 +460,7 @@ Object.extend(ElementChecker, {
     
     // pct
     pct: function() {
-      this.sValue = new String(this.sValue).replace(',', '.');
-      this.oElement.value = this.sValue;
-      this.isNumeric();
+      this.toNumeric();
 			
       if (!this.sValue.match(/^\d+(\.\d+)?$/))
         this.addError("pct", "N'est pas une valeur décimale");

@@ -48,7 +48,7 @@ class CRefSpec extends CMbFieldSpec {
 
   function checkProperty($object){
     $fieldName = $this->fieldName;
-    $propValue = $this->checkNumeric($object->$fieldName, false);
+    $propValue = CMbFieldSpec::checkNumeric($object->$fieldName, true);
     
     if ($propValue === null || $object->$fieldName === ""){
       return "N'est pas une référence (format non numérique)";

@@ -62,7 +62,7 @@ class CMbFieldSpec {
       }
     }
 
-    $this->_defaultLength = 6;
+    $this->_defaultLength = 11;
     
     // Helped fields
     if (is_string($this->helped)) {
@@ -427,14 +427,12 @@ class CMbFieldSpec {
     return $string;
   }
 
-  static function checkNumeric($value, $returnInteger = true){
-    if (!is_numeric($value)) {
-      return null;
-    }
-    if($returnInteger){
-      $value = intval($value);
-    }
-    return $value;
+  static function checkNumeric($value, $int = true){
+    $value = preg_replace(array('/\s/', '/,/'), array('', '.'), $value);
+    
+    if (!is_numeric($value)) return null;
+    
+    return $int ? intval($value) : floatval($value);
   }
 
   static function checkLengthValue($length){
@@ -558,7 +556,7 @@ class CMbFieldSpec {
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
     	$sHtml .= '<script type="text/javascript">
     	Main.add(function(){
-			  url = new Url("system", "httpreq_field_autocomplete");
+			  var url = new Url("system", "httpreq_field_autocomplete");
 			  url.addParam("class", "'.$object->_class_name.'");
 			  url.addParam("field", "'.$field.'");
 			  url.addParam("limit", '.$limit.');

@@ -41,7 +41,7 @@ class CBoolSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    $propValue = $this->checkNumeric($object->{$this->fieldName}, false);
+    $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, true);
     if($propValue === null){
       return "N'est pas une chaîne numérique";
     }

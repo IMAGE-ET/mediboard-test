@@ -29,7 +29,7 @@ class CPctSpec extends CMbFieldSpec {
   
   function getValue($object, $smarty = null, $params = null) {
     $decimals = CMbArray::extract($params, "decimals");
-    return number_format($object->{$this->fieldName}, ($decimals ? $decimals : 2)).' %';
+    return number_format($object->{$this->fieldName}, ($decimals ? $decimals : 2), ',', ' ').' %';
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

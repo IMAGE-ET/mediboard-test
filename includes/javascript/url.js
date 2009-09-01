@@ -194,9 +194,15 @@ var Url = Class.create({
     this.addParam("ajax", "1");
     this.addParam("suppressHeaders", "1");
     
-		var autocompleter = new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
-		autocompleter.startIndicator = function(){input.addClassName("throbbing")};
-		autocompleter.stopIndicator = function(){input.removeClassName("throbbing")};
+    var autocompleter = new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
+    autocompleter.startIndicator = function(){
+      if(this.options.indicator) Element.show(this.options.indicator);
+      input.addClassName("throbbing");
+    };
+    autocompleter.stopIndicator = function(){
+      if(this.options.indicator) Element.hide(this.options.indicator);
+      input.removeClassName("throbbing");
+    };
   },
   
   close: function() {

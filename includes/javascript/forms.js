@@ -9,23 +9,23 @@
  */
 
 function addHelp(sClass, oField, sName, sDepend1, sDepend2) {
-  url = new Url("dPcompteRendu", "edit_aide");
+  var url = new Url("dPcompteRendu", "edit_aide");
   url.addParam("class"       , sClass);
   url.addParam("field"       , sName || oField.name);
   url.addParam("text"        , oField.value);
   url.addParam("depend_value_1", sDepend1 || null);
-  url.addParam("depend_value_2", sDepend2 || null)
+  url.addParam("depend_value_2", sDepend2 || null);
   url.popup(600, 300, "AidesSaisie");
 }
 
 function confirmDeletion(oForm, oOptions, oOptionsAjax) {
-  oDefaultOptions = {
+  var oDefaultOptions = {
     typeName: "",
     objName : "",
     msg     : "Voulez-vous réellement supprimer ",
     ajax    : 0,
     target  : "systemMsg"
-  }
+  };
   
   Object.extend(oDefaultOptions, oOptions);
   
@@ -40,13 +40,13 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
 }
 
 function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
-  oDefaultOptions = {
+  var oDefaultOptions = {
     typeName: "",
     objName : "",
     msg     : "Voulez-vous réellement supprimer ",
     ajax    : 0,
     target  : "systemMsg"
-  }
+  };
   
   Object.extend(oDefaultOptions, oOptions);
   
@@ -67,7 +67,6 @@ function getLabelFor(oElement) {
       return oLabel;
     }
   } 
-  
   return null; 
 }
 
@@ -226,7 +225,7 @@ var FormObserver = {
     }
     this.lastFCKChange = timer;
   }
-}
+};
 
 function isKeyAllowed(event, allowed){
 	var key = Event.key(event);
@@ -314,6 +313,7 @@ function prepareForm(oForm, bForcePrepare) {
     oForm = document.forms[oForm];
   }
   oForm = $(oForm);
+  var sFormName;
   
   if (oForm) {
 		// If this form hasn't been prepared yet
@@ -327,9 +327,9 @@ function prepareForm(oForm, bForcePrepare) {
 		// Form preparation
 		  
 		  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
-		  	var sFormName = oForm.cloneNode(false).getAttribute("name");
+		  	sFormName = oForm.cloneNode(false).getAttribute("name");
 		  else
-		  	var sFormName = oForm.getAttribute("name");
+		  	sFormName = oForm.getAttribute("name");
 
 		  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
 		
@@ -341,7 +341,7 @@ function prepareForm(oForm, bForcePrepare) {
 		  while (oLabel = aLabels[iLabel++]) {
 		    // oLabel.getAttribute("for") is not accessible in IE
 		    if (sFor = oLabel.htmlFor) {
-		      if (sFor.indexOf(sFormName) != 0) {
+		      if (sFor.indexOf(sFormName) !== 0) {
 		        oLabel.htmlFor = sFormName + "_" + sFor;
 		      }
 		    }
@@ -350,8 +350,6 @@ function prepareForm(oForm, bForcePrepare) {
 		  // For each element
 		  var iElement = 0;
 		  var oElement = null;
-		  var sPropSpec = null;
-		  var aSpecFragments = null;
 		  while (oElement = oForm.elements[iElement++]) {
 		  	oElement = $(oElement);
 		  	
@@ -660,7 +658,7 @@ Element.addMethods('input', {
     var table = '<table class="control numericField"><tr><td style="padding:0;border:none;" /><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></tr>';
     element.insert({before: table});
     table = element.previous();
-    table.select('td')[0].update(element.remove().addClassName('num'));
+    table.select('td')[0].update(element);
 
     var arrows = table.select('.arrows div');
     arrows[0].observe('click', element.spinner.inc);

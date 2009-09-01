@@ -33,7 +33,7 @@ class CFloatSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    $propValue = $this->checkNumeric($object->{$this->fieldName}, false);
+    $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
     if($propValue === null){
       return "n'est pas une valeur décimale (utilisez le . pour la virgule)";
     }
@@ -45,7 +45,7 @@ class CFloatSpec extends CMbFieldSpec {
     
     // min
     if($this->min){
-      if(!$min = $this->checkNumeric($this->min, false)){
+      if(!$min = CMbFieldSpec::checkNumeric($this->min, false)){
         trigger_error("Spécification de minimum numérique invalide (min = $this->min)", E_USER_WARNING);
         return "Erreur système";
       }
@@ -56,7 +56,7 @@ class CFloatSpec extends CMbFieldSpec {
       
     // max
     if($this->max){
-      $max = $this->checkNumeric($this->max, false);
+      $max = CMbFieldSpec::checkNumeric($this->max, false);
       if($max === null){
         trigger_error("Spécification de maximum numérique invalide (max = $this->max)", E_USER_WARNING);
         return "Erreur système";
@@ -87,12 +87,12 @@ class CFloatSpec extends CMbFieldSpec {
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {
-      $min = $this->checkNumeric($this->min);
+      $min = CMbFieldSpec::checkNumeric($this->min);
     }
     
     $max = CMbArray::extract($params, "max");
     if ($max === null) {
-      $max = $this->checkNumeric($this->max);
+      $max = CMbFieldSpec::checkNumeric($this->max);
     }
     
     $new_value = CMbArray::extract($params, "value");

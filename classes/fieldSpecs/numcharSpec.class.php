@@ -61,16 +61,15 @@ class CNumcharSpec extends CNumSpec {
     return null;
   }
   
-  //Returns True if it's a valid Luhn number.
+  //Returns true if it's a valid Luhn number.
   function checkLuhn($number) {
-   $split = array_reverse(str_split($number));
-   for($i=1;$i<=count($split);$i+=2) {
-     if(isset($split[$i])) 
-       $split[$i] = array_sum(str_split($split[$i]*2));
-   }
-   return (array_sum($split) % 10) ? FALSE : TRUE;
-}
-  
+    $split = array_reverse(str_split($number));
+    for($i = 1; $i <= count($split); $i += 2) {
+      if(isset($split[$i]))
+        $split[$i] = array_sum(str_split($split[$i]*2));
+    }
+    return !(array_sum($split) % 10);
+  }
 }
 
 ?>

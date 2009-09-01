@@ -708,7 +708,7 @@ var TokenField = Class.create({
 });
 
 function view_log(classe, id) {
-  url = new Url("system", "view_history");
+  var url = new Url("system", "view_history");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.addParam("user_id", "");
@@ -722,7 +722,7 @@ function guid_log(guid) {
 }
 
 function view_idsante400(classe, id) {
-  url = new Url("dPsante400", "view_identifiants");
+  var url = new Url("dPsante400", "view_identifiants");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.popup(750, 400, "sante400");
@@ -734,7 +734,7 @@ function guid_ids(guid) {
 }
 
 function uploadFile(classe, id, categorie_id, file_rename){
-  url = new Url("dPfiles", "upload_file");
+  var url = new Url("dPfiles", "upload_file");
   url.addParam("object_class", classe);
   url.addParam("object_id", id);
   url.addParam("file_category_id", categorie_id);

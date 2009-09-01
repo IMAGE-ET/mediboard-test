@@ -22,7 +22,7 @@ class CCurrencySpec extends CFloatSpec {
     
     // @todo: money_format() ?
     return ($propValue !== null && $propValue !== "") ? 
-      number_format($propValue, ($decimals ? $decimals : 2)).' '.CAppUI::conf("currency_symbol") : 
+      number_format($propValue, ($decimals ? $decimals : 2), ',', ' ').' '.CAppUI::conf("currency_symbol") : 
       "-";
   }
   
