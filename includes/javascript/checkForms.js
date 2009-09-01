@@ -122,14 +122,11 @@ var ElementChecker = {
 Object.extend(ElementChecker, {
   check: {
     // toNumeric
-    toNumeric: function (getInt) {
+    toNumeric: function () {
       this.sValue = new String(this.sValue).replace(/\s/g, '').replace(/,/, '.');
-      this.sValue = getInt ? parseInt(this.sValue) : parseFloat(this.sValue);
       
       if (isNaN(this.sValue))
         this.addError("toNumeric", "N'est pas dans un format numérique valide");
-      
-      this.oElement.value = this.sValue;
     },
     
     // notNull
@@ -373,12 +370,12 @@ Object.extend(ElementChecker, {
     
     // num
     num: function() {
-      this.toNumeric(true);
+      this.toNumeric();
     },
     
     // bool
     bool: function() {
-      this.toNumeric(true);
+      this.toNumeric();
       if(this.sValue != 0 && this.sValue != 1)
         this.addError("bool", "Ne peut être différent de 0 ou 1");
     },

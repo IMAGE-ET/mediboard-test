@@ -21,8 +21,13 @@ class CPctSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    if (!preg_match ("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $object->{$this->fieldName})) {
-      return "n'est pas un pourcentage (utilisez le . pour la virgule)";
+    $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
+    if($propValue === null){
+      return "N'est pas une valeur décimale";
+    }
+    
+    if (!preg_match ("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $propValue)) {
+      return "N'est pas un pourcentage";
     }
     return null;
   }

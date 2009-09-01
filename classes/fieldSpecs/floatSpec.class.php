@@ -35,7 +35,7 @@ class CFloatSpec extends CMbFieldSpec {
   function checkProperty($object){
     $propValue = CMbFieldSpec::checkNumeric($object->{$this->fieldName}, false);
     if($propValue === null){
-      return "n'est pas une valeur décimale (utilisez le . pour la virgule)";
+      return "N'est pas une valeur décimale";
     }
     
     // pos

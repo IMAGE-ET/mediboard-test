@@ -427,12 +427,10 @@ class CMbFieldSpec {
     return $string;
   }
 
-  static function checkNumeric($value, $int = true){
+  static function checkNumeric(&$value, $int = true){
     $value = preg_replace(array('/\s/', '/,/'), array('', '.'), $value);
-    
     if (!is_numeric($value)) return null;
-    
-    return $int ? intval($value) : floatval($value);
+    return $value = ($int ? intval($value) : floatval($value));
   }
 
   static function checkLengthValue($length){
