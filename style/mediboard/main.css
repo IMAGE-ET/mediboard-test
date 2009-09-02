@@ -420,8 +420,7 @@ button.notext {
 }
 
 a.button.notext {
-  padding: 8px 0;
-  padding-left: 16px;
+  padding: 1px 0 1px 16px;
 }
 
 button.intermax-result {
@@ -996,8 +995,9 @@ div.autocomplete {
   width:250px;
   max-height:200px;
   overflow: auto;
+  overflow-x: hidden;
   background-color:white;
-  border:1px solid #888;
+  border:1px solid #999;
   margin:0px;
   padding:0px;
   z-index: 30;
@@ -1006,7 +1006,7 @@ div.autocomplete {
 div.autocomplete ul {
   list-style-type:none;
   margin:0px;
-  padding:0px;
+  padding:2px;
 }
 
 div.autocomplete ul em {
@@ -1022,8 +1022,8 @@ div.autocomplete ul li.selected {
 div.autocomplete ul li {
   list-style-type: none;
   display: block;
-  margin: 0;
-  padding:2px;  
+  margin: 0px;
+  padding: 2px;  
   cursor:pointer;
 }
 
@@ -1092,6 +1092,7 @@ div.warning, div.error, div.message, div.loading {
   padding: 2px;
   padding-left: 20px;
 }
+
 div.warning {
   color: #666;
   background-image: url(../../images/icons/warning.png);
