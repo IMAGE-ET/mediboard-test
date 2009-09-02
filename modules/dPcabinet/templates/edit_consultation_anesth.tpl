@@ -6,8 +6,7 @@
 <script type="text/javascript">
 
 function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url();
-  url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
+  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim", { waitingText : null } );
@@ -16,8 +15,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 var tabSejour = {{$tabSejour|@json}};
 
 function view_history_consult(id){
-  url = new Url();
-  url.setModuleAction("dPcabinet", "vw_history");
+  var url = new Url("dPcabinet", "vw_history");
   url.addParam("consultation_id", id);
   url.popup(600, 500, "consult_history");
 }
@@ -43,40 +41,33 @@ function submitAll() {
 }
 
 function showAll(patient_id) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "vw_resume");
+  var url = new Url("dPcabinet", "vw_resume");
   url.addParam("dialog", 1);
   url.addParam("patient_id", patient_id);
   url.popup(800, 500, "Resume");
 }
 
 function printFiche() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_fiche"); 
+  var url = new Url("dPcabinet", "print_fiche"); 
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, "printFiche");
-  return;
 }
 
 function printAllDocs() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_select_docs"); 
+  var url = new Url("dPcabinet", "print_select_docs"); 
   url.addElement(document.editFrmFinish.consultation_id);
   url.addParam("sejour_id", DossierMedical.sejour_id);
   url.popup(700, 500, "printDocuments");
-  return;
 }
 
 function updateList() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
+  var url = new Url("dPcabinet", "httpreq_vw_list_consult");
   url.addParam("selConsult", "{{$consult->consultation_id}}");
   url.addParam("prat_id", "{{$userSel->user_id}}");
   url.addParam("date", "{{$date}}");
   url.addParam("vue2", "{{$vue}}");
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
-
 
 function reloadConsultAnesth() {
   var sejour_id = tabSejour[document.addOpFrm.operation_id.value];
@@ -93,14 +84,12 @@ function reloadConsultAnesth() {
   
 
   // Reload Intervention
-  var consultUrl = new Url;
-  consultUrl.setModuleAction("dPcabinet", "httpreq_vw_consult_anesth");
+  var consultUrl = new Url("dPcabinet", "httpreq_vw_consult_anesth");
   consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   consultUrl.requestUpdate('consultAnesth', { waitingText: null } );
   
   // Reload Infos Anesth
-  var infosAnesthUrl = new Url;
-  infosAnesthUrl.setModuleAction("dPcabinet", "httpreq_vw_choix_anesth");
+  var infosAnesthUrl = new Url("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   infosAnesthUrl.requestUpdate('InfoAnesth', { waitingText: null } );
  

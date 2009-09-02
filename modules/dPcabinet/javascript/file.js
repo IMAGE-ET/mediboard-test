@@ -1,12 +1,11 @@
 var File = {
   popup: function(object_class, object_id, element_class, element_id, sfn) {
-    url = new Url;
+    var url = new Url;
     url.ViewFilePopup(object_class, object_id, element_class, element_id, sfn);
   },
     
   upload: function(object_class, object_id, file_category_id){
-    url = new Url();
-    url.setModuleAction("dPfiles", "upload_file");
+    var url = new Url("dPfiles", "upload_file");
     url.addParam("object_class", object_class);
     url.addParam("object_id", object_id);
     url.addParam("file_category_id", file_category_id);
@@ -29,8 +28,7 @@ var File = {
   refresh: function(object_id, object_class) {
   	var div_id = printf("files-%s-%s", object_id, object_class);
   	
-    var url = new Url;
-    url.setModuleAction("dPcabinet", "httpreq_widget_files");
+    var url = new Url("dPcabinet", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.requestUpdate("files-"+object_id+"-"+object_class, { waitingText: null } );

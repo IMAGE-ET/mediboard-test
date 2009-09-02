@@ -2,8 +2,7 @@
 
 refreshTarif = function(){
   var oForm = document.editNGAP;
-  url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_tarif_code_ngap");
+  var url = new Url("dPcabinet", "httpreq_vw_tarif_code_ngap");
   url.addParam("quantite", oForm.quantite.value);
   url.addParam("coefficient", oForm.coefficient.value);
   url.addParam("demi", oForm.demi.value);
@@ -22,8 +21,7 @@ ActesNGAP = {
 	    refreshReglement("{{$object->_id}}");
 	  {{/if}}
 	  
-	  var url = new Url;
-	  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
+	  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("object_id", "{{$object->_id}}");
 	  url.addParam("object_class", "{{$object->_class_name}}");
 	  url.requestUpdate('listActesNGAP', {
@@ -166,8 +164,7 @@ function updateFields(selected) {
 }
 
 // Autocomplete
-url = new Url();
-url.setModuleAction("dPcabinet", "httpreq_do_ngap_autocomplete");
+var url = new Url("dPcabinet", "httpreq_do_ngap_autocomplete");
 url.addParam("object_id", "{{$object->_id}}");
 url.addParam("object_class", "{{$object->_class_name}}");
 url.autoComplete('editNGAP_code', 'code_auto_complete', {

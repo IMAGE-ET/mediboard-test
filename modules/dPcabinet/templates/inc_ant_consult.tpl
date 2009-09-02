@@ -65,8 +65,7 @@ onSubmitTraitement = function (oForm) {
 easyMode = function() {
   var width = 900;
   var height = 600;
-  var url = new Url();
-  url.setModuleAction("dPcabinet", "vw_ant_easymode");
+  var url = new Url("dPcabinet", "vw_ant_easymode");
   url.addParam("user_id", "{{$userSel->_id}}");
   url.addParam("patient_id", "{{$patient->_id}}");
   url.pop(width, height, "Mode grille");
@@ -91,8 +90,7 @@ DossierMedical = {
   },
   
   reloadDossierPatient: function() {
-	  var antUrl = new Url;
-	  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents");
+	  var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents");
 	  antUrl.addParam("patient_id", "{{$patient->_id}}");
 	  antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
 	  {{if $_is_anesth}}
@@ -101,8 +99,7 @@ DossierMedical = {
 	  antUrl.requestUpdate('listAnt', { waitingText : null } );
 	},
 	reloadDossierSejour: function(){
-		var antUrl = new Url;  
-	  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
+      var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
 	  antUrl.addParam("sejour_id", DossierMedical.sejour_id);
 	  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
 	},
@@ -127,7 +124,7 @@ refreshAidesAntecedents = function(){
 }
  
 refreshAddPoso = function(code_cip){
-  url.setModuleAction("dPprescription", "httpreq_vw_select_poso");
+  var url = new Url("dPprescription", "httpreq_vw_select_poso");
   url.addParam("code_cip", code_cip);
   url.requestUpdate("addPosoLine", { waitingText: null } );
 }
@@ -139,36 +136,16 @@ Main.add(function () {
 
 </script>
 
+<table class="main">
+  <tr>
+    <td class="halfPane">
+      
 <table class="form">
   <tr>
     <th class="category">
       <button style="float: left" class="edit" type="button" onclick="easyMode();">Mode grille</button>
       Antécédents
     </th>
-    <td class="halfPane" rowspan="100">
-      <table class="form">
-        <tr>
-          <th class="category">
-            Dossier patient
-          </th>
-        </tr>
-        <tr>
-          <td class="text" id="listAnt">       
-          </td>
-        </tr> 
-        {{if $_is_anesth}}
-        <tr>
-          <th class="category">
-            Eléments significatifs pour le séjour
-          </th>
-        </tr>
-        <tr>
-          <td class="text" id="listAntCAnesth">
-          </td>
-        </tr>
-        {{/if}}
-      </table>
-    </td>
   </tr>
   <tr>
     <td class="text">      
@@ -196,8 +173,8 @@ Main.add(function () {
           {{/if}}
           <th id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
-						<span id="div_helpers_rques">
-						</span>
+            <span id="div_helpers_rques">
+            </span>
             <input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value)">
               {{tr}}New{{/tr}}
@@ -206,18 +183,18 @@ Main.add(function () {
         </tr>
 
         <tr>
-			    <!-- Auto-completion -->
-			    <th style="width: 70px;">{{mb_label object=$antecedent field=_search}}</th>
-			    <td style="width:100px;">
-			      {{mb_field object=$antecedent field=_search size=10}}
-						{{mb_include_script module=dPcompteRendu script=aideSaisie}}
-			      <script type="text/javascript">
-			      	Main.add(function() {
-				        prepareForm(document.editAntFrm);
-				        new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "appareil", "_search", "CAntecedent", "{{$userSel->_id}}");
-			      	} );
-			      </script>
-			    </td>
+          <!-- Auto-completion -->
+          <th style="width: 70px;">{{mb_label object=$antecedent field=_search}}</th>
+          <td style="width:100px;">
+            {{mb_field object=$antecedent field=_search size=10 class="autocomplete"}}
+            {{mb_include_script module=dPcompteRendu script=aideSaisie}}
+            <script type="text/javascript">
+              Main.add(function() {
+                prepareForm(document.editAntFrm);
+                new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "appareil", "_search", "CAntecedent", "{{$userSel->_id}}");
+              } );
+            </script>
+          </td>
           <td rowspan="3">
             <textarea name="rques" onblur="this.form.onsubmit();"></textarea>
           </td>
@@ -258,92 +235,91 @@ Main.add(function () {
         <input type="hidden" name="dosql" value="do_add_line_tp_aed" />
         <input type="hidden" name="code_cip" value="" onchange="refreshAddPoso(this.value);"/>
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
-				<input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
-				
+        <input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
+        
         <table class="form">
           <tr>
             <th style="width: 1%">Recherche</th>
             <td>
-		          <input type="text" name="produit" value="" size="12" />
-		          <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
-					    <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
-			        <script type="text/javascript">
-						      MedSelector.init = function(onglet){
-						        this.sForm = "editLineTP";
-						        this.sView = "produit";
-						        this.sCode = "code_cip";
-						        this.sSearch = document.editLineTP.produit.value;
-						        this.selfClose = true;
-						        this.sOnglet = onglet;
-						        this.pop();
-						      }
-									MedSelector.doSet = function(){
-				            var oForm = document[MedSelector.sForm];
-				            $('_libelle').update(MedSelector.prepared.nom);
-				            $V(oForm.code_cip, MedSelector.prepared.code);
-				            $('button_submit_traitement').focus();
-				          }
-						  </script>
-			      </td>
-			      <td style="width: 50%">
-			        <strong>
-			        <div id="_libelle"></div>
-			        </strong>
-			      </td>
+              <input type="text" name="produit" value="" size="12" class="autocomplete" />
+              <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
+              <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
+              <script type="text/javascript">
+                  MedSelector.init = function(onglet){
+                    this.sForm = "editLineTP";
+                    this.sView = "produit";
+                    this.sCode = "code_cip";
+                    this.sSearch = document.editLineTP.produit.value;
+                    this.selfClose = true;
+                    this.sOnglet = onglet;
+                    this.pop();
+                  }
+                  MedSelector.doSet = function(){
+                    var oForm = document[MedSelector.sForm];
+                    $('_libelle').update(MedSelector.prepared.nom);
+                    $V(oForm.code_cip, MedSelector.prepared.code);
+                    $('button_submit_traitement').focus();
+                  }
+              </script>
+            </td>
+            <td style="width: 50%">
+              <strong>
+              <div id="_libelle"></div>
+              </strong>
+            </td>
           </tr>
           
-	        <tr>
-	          {{if $app->user_prefs.showDatesAntecedents}}
-	          <th>{{mb_label object=$line field="debut"}}</th>
-	          <td>{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
-	          {{else}}
-	          <td colspan="2" />
-	          {{/if}}
-	          <td rowspan="3" id="addPosoLine"></td>
-	        </tr>
-	        
-	        {{if $app->user_prefs.showDatesAntecedents}}
-	        <tr>
-	          <th>{{mb_label object=$line field="fin"}}</th>
-	          <td>{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
-	        </tr>
-	        {{/if}}
-	        
-	        <tr>
-	        	<th>{{mb_label object=$line field="commentaire"}}</th>
-	          <td>{{mb_field object=$line field="commentaire" size=20}}</td>
-	        </tr>
-	        <tr>
-	          <td colspan="2" class="button">
-	            <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
-	              onComplete: function(){
-	                DossierMedical.reloadDossiersMedicaux();
-	                resetEditLineTP();
-	                $('addPosoLine').update('');
-	                this.form.token_poso.value = '';
-	                this.form.commentaire.value = '';
-	              }
-	             } ); this.form.produit.focus();">
-	              {{tr}}Add{{/tr}} un traitement
-	            </button>
-	          </td>
+          <tr>
+            {{if $app->user_prefs.showDatesAntecedents}}
+            <th>{{mb_label object=$line field="debut"}}</th>
+            <td>{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
+            {{else}}
+            <td colspan="2" />
+            {{/if}}
+            <td rowspan="3" id="addPosoLine"></td>
           </tr>
-	      </table>
+          
+          {{if $app->user_prefs.showDatesAntecedents}}
+          <tr>
+            <th>{{mb_label object=$line field="fin"}}</th>
+            <td>{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
+          </tr>
+          {{/if}}
+          
+          <tr>
+            <th>{{mb_label object=$line field="commentaire"}}</th>
+            <td>{{mb_field object=$line field="commentaire" size=20}}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="button">
+              <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+                onComplete: function(){
+                  DossierMedical.reloadDossiersMedicaux();
+                  resetEditLineTP();
+                  $('addPosoLine').update('');
+                  this.form.token_poso.value = '';
+                  this.form.commentaire.value = '';
+                }
+               } ); this.form.produit.focus();">
+                {{tr}}Add{{/tr}} un traitement
+              </button>
+            </td>
+          </tr>
+        </table>
       </form>
     </td>
   </tr>
   {{/if}}
       
-      
   <!-- Traitements -->
-	{{if $dPconfig.dPpatients.CTraitement.enabled}}
-	<tr>
-	  <th class="category">
-	    Traitements (texte simple)
-	  </th>
-	</tr>
-	<tr>
-	  <td class="text">
+  {{if $dPconfig.dPpatients.CTraitement.enabled}}
+  <tr>
+    <th class="category">
+      Traitements (texte simple)
+    </th>
+  </tr>
+  <tr>
+    <td class="text">
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -387,18 +363,18 @@ Main.add(function () {
           </td>
         </tr>
         <tr>
-			    <!-- Auto-completion -->
-			    <th style="width: 70px;">{{mb_label object=$traitement field=_search}}</th>
-			    <td style="width: 100px;">
-			      {{mb_field object=$traitement field=_search size=10}}
-						{{mb_include_script module=dPcompteRendu script=aideSaisie}}
-			      <script type="text/javascript">
-			      	Main.add(function() {
-			      		prepareForm(document.editTrmtFrm);
-				        new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, null, "_search", "CTraitement", "{{$userSel->_id}}");
-			      	} );
-			      </script>
-			    </td>
+          <!-- Auto-completion -->
+          <th style="width: 70px;">{{mb_label object=$traitement field=_search}}</th>
+          <td style="width: 100px;">
+            {{mb_field object=$traitement field=_search size=10 class="autocomplete"}}
+            {{mb_include_script module=dPcompteRendu script=aideSaisie}}
+            <script type="text/javascript">
+              Main.add(function() {
+                prepareForm(document.editTrmtFrm);
+                new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, null, "_search", "CTraitement", "{{$userSel->_id}}");
+              } );
+            </script>
+          </td>
         </tr>
 
         <tr>
@@ -481,26 +457,51 @@ Main.add(function () {
   </tr>
 </table>
 
-<script type="text/javascript">
+    </td>
+    <td class="halfPane">
+      
+<table class="form">
+  <tr>
+    <th class="category">
+      Dossier patient
+    </th>
+  </tr>
+  <tr>
+    <td class="text" id="listAnt"></td>
+  </tr> 
+  {{if $_is_anesth}}
+  <tr>
+    <th class="category">
+      Eléments significatifs pour le séjour
+    </th>
+  </tr>
+  <tr>
+    <td class="text" id="listAntCAnesth"></td>
+  </tr>
+  {{/if}}
+</table>
 
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
 {{if $isPrescriptionInstalled}}
-  var oFormTP = document.editLineTP;
-  prepareForm(oFormTP);
+  var oFormTP = getForm(editLineTP);
   
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicament = function(selected) {
     resetEditLineTP();
     Element.cleanWhitespace(selected);
-    dn = selected.childElements();
+    var dn = selected.childElements();
     $V(oFormTP.code_cip, dn[0].innerHTML);
-    $("_libelle").insert("<a href=#1 onclick=Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')>"+dn[3].innerHTML.stripTags()+"</a>");
+    $("_libelle").insert("<a href=\"javascript:void(0);\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
     $V(oFormTP.produit, '');
     $('button_submit_traitement').focus();
   }
   
   // Autocomplete des medicaments
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+  var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
   urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsMedicament, 

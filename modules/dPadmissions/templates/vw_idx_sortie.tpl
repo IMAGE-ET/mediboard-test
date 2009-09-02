@@ -11,13 +11,13 @@
 <script type="text/javascript">
 
 function printAmbu(date){
-  url = new Url("dPadmissions", "print_ambu");
+  var url = new Url("dPadmissions", "print_ambu");
   url.addParam("date", "{{$date}}");
   url.popup(800,600,"Ambu");
 }
 
 function printPlanning() {
-  url = new Url("dPadmissions", "print_sorties");
+  var url = new Url("dPadmissions", "print_sorties");
   url.addParam("date", "{{$date}}");
   url.popup(700, 550, "Sorties");
 }

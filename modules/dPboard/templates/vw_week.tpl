@@ -34,7 +34,7 @@ function viewItem(oTd, guid, date) {
     return;
   }
   
-  url = new Url;
+  var url = new Url;
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
   
