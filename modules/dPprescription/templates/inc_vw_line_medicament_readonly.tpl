@@ -87,7 +87,7 @@
       <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
       {{/if}}
     </td>
-    <td colspan="2">
+    <td colspan="2" class="text">
       <!-- Date d'arret de la ligne -->
       <div style="float: right;">
       {{if $line->date_arret}}
