@@ -37,6 +37,10 @@ if(!$operation_id && !$mode_sejour){
   mbSetValueToSession("operation_id", $operation_id);
 }
 
+if($pratSel_id){
+  $prescription->_current_praticien_id = $pratSel_id;
+}
+	
 // Gestion du mode d'affichage
 $readonly            = mbGetValueFromGetOrSession("readonly", 1);
 $lite                = mbGetValueFromGetOrSession("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
@@ -117,6 +121,22 @@ if(!$prescription_id && $object_class && $object_id && $type){
   $prescription->type = $type;	
   $prescription->loadMatchingObject();
 }
+
+if($prescription->object_id && $prescription->_current_praticien_id){
+  $_favoris_praticien_id = $prescription->_current_praticien_id;
+} else {
+  // Dans le cas d'un protocole
+  // Si le protocole appartient à un praticien, on charge les favoris du praticien
+  if($prescription->praticien_id){
+    $_favoris_praticien_id = $prescription->praticien_id;
+  } else {
+  // Sinon, on charge les favoris du user courant si c'est un praticien (protocole de cabinet et d'etablissement)
+    if($is_praticien){
+      $_favoris_praticien_id = $AppUI->user_id;
+    }
+  }
+}
+	
  
 // Chargement des categories pour chaque chapitre
 $categories = ($full_mode || $chapitre != "medicament") ? CCategoryPrescription::loadCategoriesByChap() : null;
@@ -138,6 +158,10 @@ if($prescription->_id){
 
 	// Chargement des medicaments et commentaires de medicament
 	if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
+		
+		// Chargement des favoris de medicaments
+		$listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, "med");
+		
 		// Chargement des medicaments
 		$prescription->loadRefsLinesMedComments();
 	  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
@@ -152,7 +176,6 @@ if($prescription->_id){
 	  	     $_line_med->loadMostUsedPoso(null, $_prat_id);
 					 $_line_med->loadRefsFwd();
 					 $_line_med->_ref_produit->loadVoies();
-					
 					 $_line_med->isPerfusable();
 	  	    }
 	  	  }
@@ -300,7 +323,10 @@ if($prescription->_id){
 		    }
 		  }
 		}
-	} else {		
+	} else {
+	  // Chargement des favoris du chapitre
+		$listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, $chapitre);
+
 		// Chargement des executants
 		$executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
 		$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
@@ -333,26 +359,7 @@ if($prescription->_id){
 	    }
 	  }   
 	}
-
-  if($pratSel_id){
-    $prescription->_current_praticien_id = $pratSel_id;
-  }
-	if($prescription->object_id && $prescription->_current_praticien_id){
-    $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
-	} else {
-	  // Dans le cas d'un protocole
-    // Si le protocole appartient à un praticien, on charge les favoris du praticien
-	  if($prescription->praticien_id){
-      $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);
-	  } else {
-	  // Sinon, on charge les favoris du user courant si c'est un praticien (protocole de cabinet et d'etablissement)
-	    if($is_praticien){
-	      $listFavoris = CPrescription::getFavorisPraticien($AppUI->user_id);
-	    }
-	  }
-	}
 }
-
 
 if($mode_protocole){
 	// Chargement de la liste des praticiens

@@ -32,6 +32,8 @@ foreach($object->_ref_substitution_lines as $_lines){
 	  if($_line_sub->_class_name == "CPrescriptionLineMedicament"){
 	    $_line_sub->loadRefsFwd();
 	    $_line_sub->loadRefsPrises();
+      $_line_sub->_ref_produit->loadVoies();
+      $_line_sub->isPerfusable();
 	  } else {
 	    $_line_sub->loadRefsLines();
 			$_line_sub->loadVoies();

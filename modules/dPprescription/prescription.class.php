@@ -1345,21 +1345,28 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des favoris de prescription pour un praticien donné
    */
-  static function getFavorisPraticien($praticien_id){
-  	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
-  	$listFavoris["injectable"] = CPrescription::getFavorisInjectablePraticien($praticien_id);
-  	$category = new CCategoryPrescription();
-    foreach($category->_specs["chapitre"]->_list as $chapitre){
-  	  $listFavoris[$chapitre] = array();
-  	  $favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
-    }
-    
-	  foreach($favoris as $key => $typeFavoris) {
-	  	foreach($typeFavoris as $curr_fav){
-	  		$element = new CElementPrescription();
-	  	  $element->load($curr_fav["element_prescription_id"]);
-	  		$listFavoris[$key][] = $element;
-      }
+  static function getFavorisPraticien($praticien_id, $chapitreSel){
+		$listFavoris = array();
+  	if($chapitreSel == "med"){
+	  	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
+	  	$listFavoris["injectable"] = CPrescription::getFavorisInjectablePraticien($praticien_id);
+		} else {
+			$favoris[$chapitreSel] = CElementPrescription::getFavoris($praticien_id, $chapitreSel);
+		}
+		
+  	//$category = new CCategoryPrescription();
+    //foreach($category->_specs["chapitre"]->_list as $chapitre){
+  	  //$listFavoris[$chapitre] = array();
+  	  //$favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
+    //}
+    if(isset($favoris)){
+		  foreach($favoris as $key => $typeFavoris) {
+		  	foreach($typeFavoris as $curr_fav){
+		  		$element = new CElementPrescription();
+		  	  $element->load($curr_fav["element_prescription_id"]);
+		  		$listFavoris[$key][] = $element;
+	      }
+		  }
 	  }
 	  return $listFavoris;  	
   }

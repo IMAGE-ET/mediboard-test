@@ -54,10 +54,11 @@ if($protocole_id){
 }
 
 // Chargement des favoris
+/*
 if($praticien_id){
   $listFavoris = CPrescription::getFavorisPraticien($praticien_id);
 }
-
+*/
 $contexteType = array();
 $contexteType["CConsultation"][] = "externe";
 $contexteType["CSejour"][] = "pre_admission";
@@ -76,7 +77,7 @@ $smarty->assign("group_id"       , $group_id);
 $smarty->assign("praticien"      , $praticien);
 //$smarty->assign("protocoles"     , $protocoles);
 $smarty->assign("protocole"      , $protocole);
-$smarty->assign("listFavoris"    , $listFavoris);
+//$smarty->assign("listFavoris"    , $listFavoris);
 $smarty->assign("function_id"    , $function_id);
 $smarty->assign("protocoleSel_id", "");
 $smarty->assign("mode_pharma"    , "0");
