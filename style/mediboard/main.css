@@ -1582,7 +1582,7 @@ span.hilite {
 .touchscreen option,
 .touchscreen optgroup {
   padding: 0;
-  font-size: 14px;
+  font-size: 16px;
   vertical-align: middle;
 }
 
@@ -1605,9 +1605,15 @@ span.hilite {
 
 .touchscreen input,
 .touchscreen button,
+.touchscreen a.button,
+.touchscreen textarea {
+  font-size: 17px;
+}
+
+.touchscreen input,
+.touchscreen button,
 .touchscreen a.button {
-  font-size: 15px;
-  height: 24px;
+  height: 26px;
   font-weight: normal;
   vertical-align: middle;
 }
@@ -1623,8 +1629,8 @@ span.hilite {
   padding: 2px;
   padding-bottom: 0px;
   padding-left: 1px;
-  height: 18px;
-  font-size: 13px;
+  height: 20px;
+  font-size: 15px;
 }
 
 .touchscreen button, 
@@ -1689,21 +1695,29 @@ span.hilite {
 
 .touchscreen .numericField .arrows div {
   width: 2.2em;
-  height: 12px;
-  right: -2px;
+  height: 13px;
+  right: -3px;
 }
 
 .touchscreen .numericField .arrows div.up {
-  top: -2px;
-  height: 13px;
+  top: -3px;
+  height: 14px;
 }
 
 .touchscreen .numericField .arrows div.down {
-  bottom: -2px;
+  bottom: -3px;
 }
 
 .touchscreen .numericField input {
   padding-right: 2.2em;
+}
+
+.touchscreen .datepickerControl {
+  font-size: 14px;
+}
+
+.touchscreen .datepickerControl td {
+  padding: 3px;
 }
 
 /* contacts table */
