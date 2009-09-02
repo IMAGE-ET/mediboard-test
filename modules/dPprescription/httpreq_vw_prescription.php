@@ -166,11 +166,12 @@ if($prescription->_id){
 		$prescription->loadRefsLinesMedComments();
 	  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
 	  	foreach($lines_by_type as $med_id => $_line_med){
+	  		$_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
 	  	  if($_line_med->_class_name == "CPrescriptionLineMedicament"){
 	  	    $_line_med->countBackRefs("administration");
 	  	    $_line_med->loadRefsSubstitutionLines();
 					$_line_med->loadRefParentLine();
-					$_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma, $operation_id);
+					
 	  	    if($_line_med->_guid == $full_line_guid){
 	  	     $_prat_id = !$prescription->object_id ? $prescription->praticien_id : null;
 	  	     $_line_med->loadMostUsedPoso(null, $_prat_id);
