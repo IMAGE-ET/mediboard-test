@@ -11,8 +11,7 @@
 <script type="text/javascript">
 loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
   var oForm = document.rechercheDCI;  
-  url = new Url;
-  url.setModuleAction("dPmedicament", "httpreq_vw_DCI");
+  var url = new Url("dPmedicament", "httpreq_vw_DCI");
   url.addParam("DC_search", DC_search);
   url.addParam("DCI_code", DCI_code);
   url.addParam("dialog", dialog);

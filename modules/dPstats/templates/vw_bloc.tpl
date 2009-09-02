@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 function zoomGraphIntervention(date){
-  url = new Url("dPstats", "vw_graph_activite_zoom");
+  var url = new Url("dPstats", "vw_graph_activite_zoom");
   url.addParam("date"         , date);
   url.addParam("salle_id"     , "{{$filter->salle_id}}");
   url.addParam("prat_id"      , "{{$filter->_prat_id}}");

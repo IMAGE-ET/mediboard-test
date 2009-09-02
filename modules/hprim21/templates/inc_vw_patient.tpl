@@ -2,8 +2,7 @@
 
 <script type="text/javascript">
 function view_history_patient(id){
-  url = new Url();
-  url.setModuleAction("dPpatients", "vw_history");
+  var url = new Url("dPpatients", "vw_history");
   url.addParam("patient_id", id);
   url.popup(600, 500, "history");
 }

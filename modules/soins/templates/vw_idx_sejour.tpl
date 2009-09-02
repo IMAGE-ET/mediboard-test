@@ -33,7 +33,7 @@ function loadActesNGAP(sejour_id){
 }
 
 function loadPatient(patient_id) {
-  url = new Url("system", "httpreq_vw_complete_object");
+  var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CPatient");
   url.addParam("object_id",patient_id);
   url.requestUpdate('viewPatient', {
@@ -42,7 +42,7 @@ function loadPatient(patient_id) {
 }
 
 function loadSejour(sejour_id) {
-  url = new Url("system", "httpreq_vw_complete_object");
+  var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CSejour");
   url.addParam("object_id",sejour_id);
   url.requestUpdate('viewSejourHospi', {
@@ -85,7 +85,7 @@ function reloadAntAllergie(sejour_id){
 }
 
 function addSejourIdToSession(sejour_id){
-	url = new Url("system", "httpreq_set_value_to_session");
+	var url = new Url("system", "httpreq_set_value_to_session");
 	url.addParam("module","{{$m}}");
 	url.addParam("name","sejour_id");
 	url.addParam("value",sejour_id);

@@ -2,8 +2,7 @@
 
 function addFtpParams() {
   oForm = document.paramsFtp;
-  url = new Url();
-  url.setModuleAction("dPinterop", "do_test_ftp");
+  var url = new Url("dPinterop", "do_test_ftp");
   url.addElement(oForm.hostname);
   url.addElement(oForm.username);
   url.addElement(oForm.userpass);
@@ -16,19 +15,19 @@ function addFtpParams() {
 }
 
 function testSocket() {
-  url = addFtpParams();
+  var url = addFtpParams();
   url.addParam("testType", "socket");
   url.requestUpdate("test_socket");
 }
 
 function testFtp() {
-	url = addFtpParams();
+  var url = addFtpParams();
   url.addParam("testType", "ftp");
   url.requestUpdate("test_ftp");
 }
 
 function testSendFile() {
-  url = addFtpParams();
+  var url = addFtpParams();
   url.addParam("testType", "sendfile");
   url.requestUpdate("test_send_file");
 }

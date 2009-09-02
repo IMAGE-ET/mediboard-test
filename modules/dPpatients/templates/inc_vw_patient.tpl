@@ -3,8 +3,7 @@
 
 <script type="text/javascript">
 function view_history_patient(id){
-  url = new Url();
-  url.setModuleAction("dPpatients", "vw_history");
+  var url = new Url("dPpatients", "vw_history");
   url.addParam("patient_id", id);
   url.popup(600, 500, "patient history");
 }
@@ -22,8 +21,7 @@ function editPatient(form) {
 }
 
 function printPatient(id) {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "print_patient");
+  var url = new Url("dPpatients", "print_patient");
   url.addParam("patient_id", id);
   url.popup(700, 550, "Patient");
 }
@@ -34,15 +32,13 @@ function popFile(objectClass, objectId, elementClass, elementId){
 }
 
 function printIntervention(id) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "view_planning");
+  var url = new Url("dPplanningOp", "view_planning");
   url.addParam("operation_id", id);
   url.popup(700, 550, "Admission");
 }
 
 function reloadVwPatient(){
-  var mainUrl = new Url;
-  mainUrl.setModuleAction("dPpatients", "httpreq_vw_patient");
+  var mainUrl = new Url("dPpatients", "httpreq_vw_patient");
   mainUrl.addParam("patient_id", document.actionPat.patient_id.value);
   mainUrl.requestUpdate('vwPatient', { waitingText : null } );
 }

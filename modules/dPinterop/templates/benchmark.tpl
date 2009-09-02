@@ -78,7 +78,7 @@ var Benchmark = {
     if (fMilliseconds != 0.0) {
       this.executer = new PeriodicalExecuter(this.send.bind(this), fMilliseconds);
     }
-  },
+  }
 }
 
 </script>

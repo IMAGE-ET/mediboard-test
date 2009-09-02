@@ -11,7 +11,7 @@
 <script type="text/javascript">
 
 function showLegend() {
-  url = new Url("dPurgences", "vw_legende");
+  var url = new Url("dPurgences", "vw_legende");
   url.popup(300, 320, "Legende");
 }
 

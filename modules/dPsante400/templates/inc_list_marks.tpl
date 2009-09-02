@@ -1,7 +1,6 @@
 <script type="text/javascript">
 function retry(sClass, iRec) {
-  url = new Url();
-  url.setModuleAction("{{$m}}", "synchro_sante400");
+  var url = new Url("{{$m}}", "synchro_sante400");
   url.addParam("class", sClass);
   url.addParam("rec", iRec);
   url.addParam("verbose", 1);

@@ -17,8 +17,7 @@ var Process = {
 		
 	  this.step =  $V(form.step);
 	  		
-	  url = new Url();
-	  url.setModuleAction("dPpatients", "import_medecin");
+	  var url = new Url("dPpatients", "import_medecin");
 	  url.addElement(form.step);	  
 	  url.addParam("mode", $V(form.mode));
 	  url.addParam("pass", this.pass);

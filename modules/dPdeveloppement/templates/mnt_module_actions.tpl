@@ -4,7 +4,7 @@
 
 Documentation = {
   check: function(page) {
-	  url = new Url("dPdeveloppement", "ajax_check_documentation");
+	  var url = new Url("dPdeveloppement", "ajax_check_documentation");
 	  url.addParam("page", page);
 	  url.requestUpdate(page);
   },

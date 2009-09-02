@@ -14,7 +14,7 @@ function refreshLists() {
     
   refreshOrders();
   
-  url = new Url("soins", "httpreq_vw_stock_reception");
+  var url = new Url("soins", "httpreq_vw_stock_reception");
   url.addFormData(form);
   url.requestUpdate("list-reception", { waitingText: null } );
   

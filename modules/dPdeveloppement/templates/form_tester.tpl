@@ -17,10 +17,11 @@ Main.add(function () {
   Calendar.regProgressiveField(form.progressive, {container: document.body});
   
   $$('.textarea-helped').each(function(area){
-    var toolbar = area.select('.toolbar')[0],
+    var toolbar = area.select('div.toolbar')[0],
         textarea = area.select('textarea')[0],
-        autocomplete = area.select('.autocomplete')[0];
-        
+        autocomplete = area.select('div.autocomplete')[0],
+        throbber = area.select('div.throbber')[0];
+
     area.
     observe('mousemove', function(){toolbar.show()}).
     observe('mouseout',  function(){toolbar.hide()}).
@@ -32,9 +33,8 @@ Main.add(function () {
     url.autoComplete(textarea, autocomplete, {
         minChars: 2,
         frequency: 0.2,
-        updateElement: function(li){
-          textarea.value += li.innerHTML+"\n";
-        }
+        tokens: '\n',
+        indicator: throbber
     } );
   });
 });
@@ -46,40 +46,41 @@ Main.add(function () {
   position: relative;
 }
 
-.textarea-helped .toolbar {
-  position: absolute;
-  bottom: 6px;
-  padding: 4px;
+.textarea-helped textarea {
+  padding-bottom: 18px;
 }
 
-.textarea-helped .toolbar a {
-  
+.textarea-helped .toolbar {
+  position: absolute;
+  bottom: 4px;
+  padding: 4px;
 }
 
 .textarea-helped .toolbar a:hover img {
   outline: 1px dotted #ccc;
 }
+
+.textarea-helped .throbber {
+  position: absolute;
+  height: 13px;
+  width: 13px;
+  bottom: 6px;
+  margin: 4px;
+  background-image: url(images/icons/throbber.gif);
+  background-position: 100% -20px;
+  background-repeat: no-repeat;
+}
 </style>
 
 <form onsubmit="return false">
 <div class="textarea-helped">
-  <textarea></textarea>
+  <textarea class="autocomplete"></textarea>
+  <div class="throbber" style="display: none;"></div>
   <div class="toolbar" style="display: none;">
-    <a href="#1"><img src="images/icons/cancel.png" /></a>
-    <a href="#1"><img src="images/icons/search.png" /></a>
-    <a href="#1"><img src="images/icons/next.png" /></a>
-    <a href="#1"><img src="images/icons/stop.png" /></a>
-  </div>
-  <div class="autocomplete" style="display: none; margin-top: -1px;"></div>
-</div>
-
-<div class="textarea-helped">
-  <textarea></textarea>
-  <div class="toolbar" style="display: none;">
-    <a href="#1"><img src="images/icons/cancel.png" /></a>
-    <a href="#1"><img src="images/icons/search.png" /></a>
-    <a href="#1"><img src="images/icons/next.png" /></a>
-    <a href="#1"><img src="images/icons/stop.png" /></a>
+    <a href="javascript:void(0);"><img src="images/icons/downarrow.png" title="Voir tous les choix" /></a>
+    <a href="javascript:void(0);"><img src="images/icons/grid.png" title="Mode grille" /></a>
+    <a href="javascript:void(0);"><img src="images/icons/new.png" title="Nouvelle aide" /></a>
+    <a href="javascript:void(0);"><img src="images/icons/group.png" title="Cette aide appartient à " /></a>
   </div>
   <div class="autocomplete" style="display: none; margin-top: -1px;"></div>
 </div>

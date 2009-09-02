@@ -1,3 +1,15 @@
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage dPdeveloppement
+ * @version $Revision$
+ * @author openXtrem
+ */
+
+sleep(1);
+
+?>
 <ul>
   <li>truc</li>
   <li>bidule</li>

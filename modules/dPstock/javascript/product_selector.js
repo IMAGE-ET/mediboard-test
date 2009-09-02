@@ -21,9 +21,7 @@ var ProductSelector = {
   },
 
   pop: function(product_id) {
-    var oForm = document[this.sForm];
-    var url = new Url();
-    url.setModuleAction("dPstock", "product_selector");
+    var url = new Url("dPstock", "product_selector");
     url.addParam("product_id", product_id);
     url.popup(this.options.width, this.options.height, "Sélecteur de produit");
   },
@@ -36,4 +34,4 @@ var ProductSelector = {
     $V(oForm[this.sPackaging], packaging, true);
     $V(oForm[this.sQuantity],  quantity, true);
   }
-}
+};

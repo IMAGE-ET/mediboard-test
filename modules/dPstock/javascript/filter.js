@@ -77,8 +77,7 @@ Filter.prototype = {
       this.sList = [this.sList];
     }
     this.sList.each(function (list) {
-      url = new Url;
-      url.setModuleAction(element.sModule, element.sAction);
+      var url = new Url(element.sModule, element.sAction);
   
       element.aFields.each (function (f) {
         if (oForm[f]) {

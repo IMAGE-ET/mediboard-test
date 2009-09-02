@@ -1,7 +1,6 @@
 <script type="text/javascript">
 function retry(iRec) {
-  url = new Url();
-  url.setModuleAction("{{$m}}", "{{$action}}");
+  var url = new Url("{{$m}}", "{{$action}}");
   url.addParam("rec", iRec);
   url.addParam("verbose", 1);
   url.popup(900, 700, "Explaination Import Sante400");

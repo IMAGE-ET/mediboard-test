@@ -7,8 +7,7 @@
 <script type="text/javascript">
 
 function viewCompleteItem(sClassName, id) {
-  url = new Url;
-  url.setModuleAction("system", "httpreq_vw_complete_object");
+  var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
   url.requestUpdate("listView", { 
@@ -17,8 +16,7 @@ function viewCompleteItem(sClassName, id) {
 }
 
 function viewDossierSejour(sejour_id){
-  url = new Url;
-  url.setModuleAction("dPpatients","httpreq_vw_dossier_sejour");
+  var url = new Url("dPpatients","httpreq_vw_dossier_sejour");
   url.addParam("sejour_id",sejour_id);
   url.requestUpdate("listView", {
     onComplete: initPuces
@@ -30,8 +28,7 @@ function reloadListFile(sAction){
   if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
-  var url = new Url;
-  url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
+  var url = new Url("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
@@ -40,8 +37,7 @@ function reloadListFile(sAction){
   } );
   
   if(sAction == "add" || sAction == "delete"){
-    var url = new Url;
-    url.setModuleAction("dPpatients", "httpreq_vw_full_patient");
+    url = new Url("dPpatients", "httpreq_vw_full_patient");
     url.addParam("patient_id", "{{$patient->_id}}");
     url.requestUpdate('listInfosPat', { 
       waitingText: null, 
@@ -51,30 +47,26 @@ function reloadListFile(sAction){
 }
 
 function saveObjectInfos(oObject){
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_save_classKey");
+  var url = new Url("dPpatients", "httpreq_save_classKey");
   url.addParam("selClass", oObject.objClass);
   url.addParam("selKey", oObject.id);
   url.requestUpdate('systemMsg', { waitingText : null });
 }
 
 function view_labo_patient() {
-  var url = new Url;
-  url.setModuleAction("dPImeds", "httpreq_vw_patient_results");
+  var url = new Url("dPImeds", "httpreq_vw_patient_results");
   url.addParam("patient_id", "{{$patient->_id}}");
   url.requestUpdate('listView', { waitingText : null });
 }
 
 function view_labo_sejour(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('listView', { waitingText : null });
 }
 
 function view_history_patient(id){
-  url = new Url();
-  url.setModuleAction("dPpatients", "vw_history");
+  var url = new Url("dPpatients", "vw_history");
   url.addParam("patient_id", id);
   url.popup(600, 500, "history");
 }
@@ -87,8 +79,7 @@ function editPatient() {
 }
 
 function printPatient(id) {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "print_patient");
+  var url = new Url("dPpatients", "print_patient");
   url.addParam("patient_id", id);
   url.popup(700, 550, "Patient");
 }

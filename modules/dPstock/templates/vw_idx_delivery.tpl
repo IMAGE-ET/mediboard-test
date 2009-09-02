@@ -15,19 +15,16 @@ Main.add(function () {
   filterFields = ["category_id", "keywords"];
   stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_delivery_stocks_list", "delivery-list-stocks", filterFields);
   stocksFilter.submit();
-  
   refreshDeliveriesList();
 });
 
 function refreshDeliveriesList() {
-  url = new Url;
-  url.setModuleAction("dPstock","httpreq_vw_deliveries_list");
+  var url = new Url("dPstock","httpreq_vw_deliveries_list");
   url.requestUpdate("deliveries", { waitingText: null } );
 }
 
 function refreshStock(stock_id) {
-  url = new Url;
-  url.setModuleAction("dPstock","httpreq_vw_delivery_stock_item");
+  var url = new Url("dPstock","httpreq_vw_delivery_stock_item");
   url.addParam("stock_id", stock_id);
   url.requestUpdate("delivery-"+stock_id, { waitingText: null } );
 }

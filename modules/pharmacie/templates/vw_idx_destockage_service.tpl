@@ -18,8 +18,7 @@ Main.add(function () {
 });
 
 function refreshDestockagesList() {
-  url = new Url;
-  url.setModuleAction("pharmacie", "httpreq_vw_destockages_service_list");
+  var url = new Url("pharmacie", "httpreq_vw_destockages_service_list");
   url.requestUpdate("list-destockages", { waitingText: null } );
 }
 </script>

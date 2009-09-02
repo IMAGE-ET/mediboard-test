@@ -19,7 +19,7 @@
 <script type="text/javascript">
 var Patient = {
   create : function(form) {
-    url = new Url;
+    var url = new Url;
     url.setModuleTab("dPpatients", "vw_edit_patients");
     url.addParam("patient_id", 0);
     url.addParam("useVitale", $V(form.useVitale));

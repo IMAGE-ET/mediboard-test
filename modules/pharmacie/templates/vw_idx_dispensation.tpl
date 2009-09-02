@@ -14,7 +14,7 @@ function refreshLists(code_cis) {
   var transmissionTab = $('li-transmissions');
   var showTransmissions = false;
   
-  url = new Url;
+  var url = new Url;
   if (form.patient_id && $V(form.patient_id)) {
     url.setModuleAction("pharmacie", "httpreq_vw_dispensations_nominative_list");
     $('list-dispensations-title').update('Nominatif');
@@ -53,14 +53,14 @@ function refreshLists(code_cis) {
 
 function refreshStocks() {
   var formFilter = getForm("filter");
-  url = new Url("pharmacie", "httpreq_vw_stocks_service_list");
+  var url = new Url("pharmacie", "httpreq_vw_stocks_service_list");
   url.addParam("service_id", $V(formFilter.service_id));
   url.requestUpdate("list-stocks", { waitingText: null } );
 }
 
 function refreshOrders() {
   var formFilter = getForm("filter");
-  url = new Url("pharmacie", "httpreq_vw_orders_list");
+  var url = new Url("pharmacie", "httpreq_vw_orders_list");
   url.addParam("service_id", $V(formFilter.service_id));
   url.requestUpdate("list-orders", { waitingText: null } );
 }

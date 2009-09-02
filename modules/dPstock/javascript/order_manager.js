@@ -10,8 +10,7 @@
  
 function refreshValue(element, klass, id, field) {
   if (id && $(element)) {
-    var url = new Url;
-    url.setModuleAction("dPstock", "httpreq_vw_object_value");
+    var url = new Url("dPstock", "httpreq_vw_object_value");
     url.addParam("class", klass);
     url.addParam("id", id);
     url.addParam("field", field);
@@ -75,22 +74,19 @@ function refreshOrder(order_id, options) {
   if (options && options.refreshLists) {
     refreshLists();
   }
-  url = new Url;
-  url.setModuleAction("dPstock","httpreq_vw_order");
+  var url = new Url("dPstock","httpreq_vw_order");
   url.addParam("order_id", order_id);
   url.requestUpdate("order-"+order_id, { waitingText: null } );
 }
 
 function refreshOrderItem(order_item_id) {
-  url = new Url;
-  url.setModuleAction("dPstock", "httpreq_vw_order_item");
+  var url = new Url("dPstock", "httpreq_vw_order_item");
   url.addParam("order_item_id", order_item_id);
   url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
 }
 
 function refreshListOrders(type, keywords) {
-  url = new Url;
-  url.setModuleAction("dPstock","httpreq_vw_orders_list");
+  var url = new Url("dPstock","httpreq_vw_orders_list");
   url.addParam("type", type);
   url.addParam("keywords", keywords);
   url.requestUpdate("list-orders-"+type, { waitingText: null } );
@@ -115,8 +111,7 @@ function popupOrder(iOrderId, width, height, bAutofill) {
   width = width || 800;
   height = height || 600;
 
-  var url = new Url();
-  url.setModuleAction("dPstock", "vw_aed_order");
+  var url = new Url("dPstock", "vw_aed_order");
   url.addParam("order_id", iOrderId);
   if (bAutofill) {
     url.addParam("_autofill", 'true');
@@ -129,20 +124,16 @@ function popupOrderForm(iOrderId, width, height) {
   width = width || 500;
   height = height || 500;
 
-  var url = new Url();
-  url.setModuleAction("dPstock", "vw_order_form");
+  var url = new Url("dPstock", "vw_order_form");
   url.addParam("order_id", iOrderId);
-
   url.popup(width, height, "Bon de commande");
 }
 
 function printBarcodeGrid(order_id, receptions_list, force_print) {
-  var url = new Url;
-  url.setModuleAction("dPstock", "print_reception_barcodes");
+  var url = new Url("dPstock", "print_reception_barcodes");
   url.addParam("order_id", order_id);
   url.addParam("receptions_list", receptions_list);
   url.addParam("force_print", force_print);
   url.addParam("suppressHeaders", true);
-
   url.popup(600, 600, "Codes barres");
 }
