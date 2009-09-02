@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  var values = new CookieJar().get("filter-logs");
+  var values = new CookieJar().get("filter-logs") || ["big-error", "big-warning", "big-info"];
   $V(getForm("filter-logs").filter, values);
   removeByHash();
 });
