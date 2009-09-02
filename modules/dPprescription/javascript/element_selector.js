@@ -22,8 +22,7 @@ var ElementSelector = {
   },
   pop: function() {
     var oForm = document[this.sForm];
-    this.oUrl = new Url();
-    this.oUrl.setModuleAction("dPprescription", "element_selector");
+    this.oUrl = new Url("dPprescription", "element_selector");
     this.oUrl.addParam("libelle", oForm[this.sLibelle].value)
     this.oUrl.addParam("type"  , this.sType);
     this.oUrl.popup(this.options.width, this.options.height, "Element Prescription Selector");

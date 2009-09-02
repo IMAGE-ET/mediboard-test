@@ -133,8 +133,7 @@ selDivPoso = function(type, line_id, type_elt){
 }
 
 reloadPrises = function(prescription_line_id, chapitre){
-  url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_prises");
+  var url = new Url("dPprescription", "httpreq_vw_prises");
   url.addParam("prescription_line_id", prescription_line_id);
   url.addParam("chapitre", chapitre);
   url.requestUpdate('prises-'+chapitre+prescription_line_id, { waitingText: null });
@@ -292,8 +291,7 @@ submitPoso = function(oForm, curr_line_id){
   // Suppression des prises de la ligne de prescription
   oForm._delete_prises.value = "1";
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){
-      var url = new Url;
-      url.setModuleAction("dPprescription", "httpreq_prescription_prepare");
+      var url = new Url("dPprescription", "httpreq_prescription_prepare");
       url.addParam("prescription_line_id", curr_line_id);
       if(oForm.no_poso){
         url.addParam("no_poso", oForm.no_poso.value);

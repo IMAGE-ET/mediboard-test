@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 function popupVoies(){
-  url = new Url("dPprescription", "vw_voies");
+  var url = new Url("dPprescription", "vw_voies");
   url.popup(300,700,"Voies");
 }
 

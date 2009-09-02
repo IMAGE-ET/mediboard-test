@@ -148,15 +148,13 @@ refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
 }
 
 printDossierSoin = function(prescription_id){
-  url = new Url;
-  url.setModuleAction("dPprescription", "vw_plan_soin_pdf");
+  var url = new Url("dPprescription", "vw_plan_soin_pdf");
   url.addParam("prescription_id", prescription_id);
   url.popup(900, 600, "Plan de soin");
 }
 
 printBons = function(prescription_id){
-  url = new Url;
-  url.setModuleAction("dPprescription", "print_bon");
+  var url = new Url("dPprescription", "print_bon");
   url.addParam("prescription_id", prescription_id);
   url.addParam("debut", "{{$date}}");
   url.popup(900, 600, "Impression des bons");
@@ -180,8 +178,7 @@ addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
 }
 
 addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations, planification_id) {
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_add_administration");
+  var url = new Url("dPprescription", "httpreq_add_administration");
   url.addParam("line_id",  line_id);
   url.addParam("quantite", quantite);
   url.addParam("key_tab", key_tab);
@@ -196,8 +193,7 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 }
 
 addAdministrationPerf = function(perfusion_id, date, hour, time_prevue, mode_dossier, sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_add_administration_perf");
+  var url = new Url("dPprescription", "httpreq_add_administration_perf");
   url.addParam("perfusion_id", perfusion_id);
   url.addParam("date", date);
   url.addParam("hour", hour);
@@ -209,8 +205,7 @@ addAdministrationPerf = function(perfusion_id, date, hour, time_prevue, mode_dos
 }
 
 editPerf = function(perfusion_id, date, mode_dossier, sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "edit_perf_dossier_soin");
+  var url = new Url("dPprescription", "edit_perf_dossier_soin");
   url.addParam("perfusion_id", perfusion_id);
   url.addParam("date", date);
   url.addParam("mode_dossier", mode_dossier);
@@ -269,21 +264,18 @@ applyAdministrations = function () {
 }
 
 viewLegend = function(){
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_lengende_dossier_soin");
+  var url = new Url("dPhospi", "vw_lengende_dossier_soin");
   url.popup(300,150, "Légende");
 }
 
 viewDossier = function(prescription_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "vw_dossier_cloture");
+  var url = new Url("dPprescription", "vw_dossier_cloture");
   url.addParam("prescription_id", prescription_id);
   url.popup(800,600,"Dossier cloturé");
 }
 
 calculSoinSemaine = function(date, prescription_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin_semaine");
+  var url = new Url("dPprescription", "httpreq_vw_dossier_soin_semaine");
   url.addParam("date", date);
   url.addParam("prescription_id", prescription_id);
   url.requestUpdate("semaine", { waitingText: null } );

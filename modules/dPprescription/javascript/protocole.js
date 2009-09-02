@@ -30,8 +30,7 @@ var Protocole = {
   // Refresh de la liste des protocoles
   refreshList : function(protocoleSel_id) {
     var oForm = document.selPrat;
-    var url = new Url;
-    url.setModuleAction("dPprescription", "httpreq_vw_list_protocoles");
+    var url = new Url("dPprescription", "httpreq_vw_list_protocoles");
     url.addParam("praticien_id", oForm.praticien_id.value);
     url.addParam("function_id", oForm.function_id.value);
     url.addParam("group_id", oForm.group_id.value);
@@ -48,14 +47,12 @@ var Protocole = {
     //Protocole.refreshList(protocole_id);
   },
   duplicate: function(protocole_id){
-    var url = new Url;
-    url.setModuleAction("dPprescription", "httpreq_duplicate_protocole");
+    var url = new Url("dPprescription", "httpreq_duplicate_protocole");
     url.addParam("protocole_id", protocole_id);
     url.requestUpdate("systemMsg", { waitingText : null });
   },
   preview: function(protocole_id){
-    var url = new Url;
-    url.setModuleAction("dPprescription", "httpreq_preview_protocole");
+    var url = new Url("dPprescription", "httpreq_preview_protocole");
     url.addParam("protocole_id", protocole_id);
     url.popup(800,600, "Previsualisation protocole");
   },
@@ -78,15 +75,13 @@ var Protocole = {
     } );
   },
   viewPack: function(pack_id){
-   var url = new Url;
-   url.setModuleAction("dPprescription", "httpreq_vw_pack");
+   var url = new Url("dPprescription", "httpreq_vw_pack");
    url.addParam("pack_id", pack_id);
    url.requestUpdate("view_pack", { waitingText: null , onComplete: function(){ Protocole.refreshListPack(pack_id); } } );
   },
   refreshListPack: function(pack_id){
     var oFormPrat = document.selPrat;
-    var url = new Url;
-    url.setModuleAction("dPprescription", "httpreq_vw_list_pack");
+    var url = new Url("dPprescription", "httpreq_vw_list_pack");
     url.addParam("praticien_id", oFormPrat.praticien_id.value);
     url.addParam("function_id", oFormPrat.function_id.value);
     url.addParam("pack_id", pack_id);
@@ -113,8 +108,7 @@ var Protocole = {
     } );
   },
   previewPack: function(pack_id){
-    var url = new Url;
-    url.setModuleAction("dPprescription", "httpreq_preview_protocole");
+    var url = new Url("dPprescription", "httpreq_preview_protocole");
     url.addParam("pack_id", pack_id);
     url.popup(800,600, "Previsualisation pack");
   }

@@ -28,7 +28,7 @@
       <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
           onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
 	      <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
-            <a href="#1">{{$libelle_ATC}}</a>
+            <a href="#1">{{$libelle_ATC|smarty:nodefaults}}</a>
           </div>
           <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.ATC.$libelle_ATC)}}

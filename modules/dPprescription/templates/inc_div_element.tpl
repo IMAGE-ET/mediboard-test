@@ -28,8 +28,7 @@ Main.add( function(){
     // Autocomplete
     prepareForm(document.search{{$element}});
       
-    url = new Url();
-    url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
+    var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
     url.addParam("category", "{{$element}}");
     url.autoComplete("search{{$element}}_{{$element}}", "{{$element}}_auto_complete", {
       minChars: 2,
