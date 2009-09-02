@@ -14,7 +14,7 @@
   <tr>
     <th colspan="8" id="th-perf-{{$_perfusion->_id}}" class="text element {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
       
-			{{if $_perfusion->_ref_parent_line->_id}}
+		{{if $_perfusion->_ref_parent_line->_id}}
       <div style="float: left">
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
@@ -55,6 +55,21 @@
   </tr>
   <tr>
     <td>
+    	
+			     {{if $_perfusion->_can_delete_perfusion}}
+					 <form name="editPerf-{{$_perfusion->_id}}" action="" method="post">
+				        <input type="hidden" name="m" value="dPprescription" />
+				        <input type="hidden" name="dosql" value="do_perfusion_aed" />
+				        <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
+				        <input type="hidden" name="del" value="1" />
+								<button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { 
+                  onComplete: function(){
+                      Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+                  }        
+                } );"></button>
+							</form>
+              {{/if}}
+							
       <strong>{{mb_label object=$_perfusion field="type"}}</strong>:
       {{if $_perfusion->type}}
         {{mb_value object=$_perfusion field="type"}}

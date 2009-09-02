@@ -15,7 +15,8 @@
   <tr>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
         class="element {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
-      <script type="text/javascript">
+        	
+	   <script type="text/javascript">
          Main.add( function(){
            moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
          });
@@ -43,6 +44,12 @@
   </tr>
   <tr>
     <td colspan="2">
+			{{if $line->_can_delete_line}}
+      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+        {{tr}}Delete{{/tr}}
+      </button>
+      {{/if}}
+			
       <!-- Date d'arret de la ligne -->
       <div style="float: right;">
       {{if $line->date_arret}}

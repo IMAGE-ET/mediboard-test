@@ -12,15 +12,32 @@
 {{assign var=perfusion_id value=$_perfusion->_id}}
 <tr>
   <td style="width: 8%;" class="text {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}arretee{{/if}}">
+			     
+          {{if $_perfusion->_can_delete_perfusion}}
+           <form name="editPerf-{{$_perfusion->_id}}" action="" method="post">
+                <input type="hidden" name="m" value="dPprescription" />
+                <input type="hidden" name="dosql" value="do_perfusion_aed" />
+                <input type="hidden" name="perfusion_id" value="{{$_perfusion->_id}}" />
+                <input type="hidden" name="del" value="1" />
+                <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { 
+                  onComplete: function(){
+                      Prescription.reloadPrescPerf('{{$_perfusion->prescription_id}}','{{$_perfusion->_protocole}}','{{$mode_pharma}}');
+                  }        
+                } );"></button>
+              </form>
+              {{/if}}
+							
 			{{if $_perfusion->_ref_parent_line->_id}}
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
              class="tooltip-trigger" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')"/>
       {{/if}}
-      <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');">
+      <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');" style="display: inline;">
         {{mb_value object=$_perfusion field=type}}
       </a>
+
+							
   </td>
   <td style="width: 44%" class="text">
     {{foreach from=$_perfusion->_ref_lines item=_perf_line name=lines}}

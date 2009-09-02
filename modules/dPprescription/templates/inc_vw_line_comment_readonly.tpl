@@ -21,7 +21,21 @@
 
 <tbody class="hoverable">
    <tr>
-     <td style="width: 25px"></td>
+     <td style="width: 25px">
+     	 
+			 {{if $line->_can_delete_line}}
+         <form name="delLineComment-{{$line->_id}}" action="" method="post">
+           <input type="hidden" name="m" value="dPprescription" />
+           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+           <input type="hidden" name="del" value="1" />
+           <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
+           <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}') } } );">
+             {{tr}}Delete{{/tr}}
+           </button>
+         </form>
+       {{/if}}
+			 
+     </td>
      <td style="width: 80%;" class="text">
        {{$line->commentaire|nl2br}}
      </td>

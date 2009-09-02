@@ -15,7 +15,12 @@
   <!-- Header de la ligne -->
   <tr  class="hoverable">
     <td style="text-align: center; width: 5%;" class="text">
-
+      <!-- Suppression de la ligne -->
+      {{if $line->_can_delete_line}}
+        <button type="button" class="trash notext" onclick="Prescription.delLine({{$line->_id}})" style="float: left">
+          {{tr}}Delete{{/tr}}
+        </button>
+      {{/if}}
 		  {{if $line->_can_vw_livret_therapeutique}}
       <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
       {{/if}}  

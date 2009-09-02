@@ -14,6 +14,11 @@
 <tr class="hoverable">    
   <td style="width:22%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
       class="text {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
+			{{if $line->_can_delete_line}}
+      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+        {{tr}}Delete{{/tr}}
+      </button>
+      {{/if}}
     <script type="text/javascript">
        Main.add( function(){
          moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
