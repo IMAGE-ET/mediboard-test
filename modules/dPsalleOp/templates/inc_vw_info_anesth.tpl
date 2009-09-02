@@ -1,3 +1,14 @@
+<script type="text/javascript">
+refreshAidesPreAnesth = function(user_id) {
+  var url = new Url('dPcompteRendu', 'httpreq_vw_select_aides');
+  url.addParam('object_class', 'COperation');
+  url.addParam('field', 'rques_visite_anesth');
+  url.addParam('user_id', user_id);
+  url.addParam('no_enum', 1);
+  url.requestUpdate('select_aides_pre_anesth');
+}
+</script>
+
 {{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
 {{if $consult_anesth->_id}}
 
@@ -178,7 +189,7 @@
       <input name="prat_visite_anesth_id" type="hidden" value="{{$currUser->_id}}" />
       Dr {{$currUser->_view}}
       {{else}}
-      <select name="prat_visite_anesth_id" class="notNull">
+      <select name="prat_visite_anesth_id" class="notNull" onchange="refreshAidesPreAnesth($V(this))">
         <option value="">&mdash; Anesthésiste</option>
         {{foreach from=$listAnesths item=curr_anesth}}
         <option value="{{$curr_anesth->user_id}}" {{if $selOp->prat_visite_anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
@@ -192,17 +203,16 @@
   </tr>
     <th>
       {{mb_label object=$selOp field="rques_visite_anesth"}}
-      <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !!
-      <br />
-			<select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
-			  <option value="">&mdash; Choisir une aide</option>
-			  {{*html_options options=$selOp->_aides.rques_visite_anesth.no_enum*}}
-			</select>
-			<br />
+      <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !! -->
+      <div id="select_aides_pre_anesth">
+  			<select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this);">
+  			  <option value="">&mdash; Choisir</option>
+  			  {{html_options options=$selOp->_aides.rques_visite_anesth.no_enum}}
+  			</select>
+			</div>
 			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth)">
 			  {{tr}}New{{/tr}}
 			</button>
-			-->
     </th>
     <td class="text">
       {{if $selOp->date_visite_anesth}}

@@ -3,12 +3,9 @@ var Document = {
 	 * @param ... A DECRIRE
 	 */
   create: function(modele_id, object_id, target_id, target_class) {
-    if (!modele_id) {
-      return;
-    }
+    if (!modele_id) return;
     
-    url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("modele_id", modele_id);
     url.addParam("object_id", object_id);
  
@@ -24,12 +21,9 @@ var Document = {
   },
   
   createPack: function(pack_id, object_id, target_id, target_class) {
-    if (!pack_id) {
-      return;
-    }
+    if (!pack_id) return;
     
-    url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("pack_id", pack_id);
     url.addParam("object_id", object_id);
  
@@ -42,12 +36,10 @@ var Document = {
     }
     
     url.popup(700, 700, "Document");
-  
   },
   
   edit: function(compte_rendu_id){
-    var url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", compte_rendu_id);
     url.popup(900, 700, "Document");  
   },
@@ -58,13 +50,13 @@ var Document = {
   		objName: doc_view,
   		ajax: 1,
   		target: 'systemMsg'
-  	}
+  	};
   	
   	var oAjaxOptions = {
   		onComplete: function () { 
   			Document.refreshList($V(form.object_class), $V(form.object_id)); 
   		}
-  	}
+  	};
   	
 		confirmDeletion(form, oConfirmOptions, oAjaxOptions);
   },
@@ -78,10 +70,10 @@ var Document = {
    * Mode normal|collapse Defaults to normal
    */
   register: function(object_id, object_class, praticien_id, container, mode, userOptions) {
-  	options = {
+  	var options = {
   	  mode: "normal",
   	  categories: "hide"
-  	}
+  	};
   	
   	Object.extend(options, userOptions);
   	
@@ -100,23 +92,20 @@ var Document = {
   refresh: function(div) {
     var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
     
-	  var url = new Url;
-	  url.setModuleAction("dPcompteRendu", "httpreq_widget_documents");
+	  var url = new Url("dPcompteRendu", "httpreq_widget_documents");
 	  url.addParam("object_class", matches[1]);
 	  url.addParam("object_id"   , matches[2]);
 	  url.addParam("praticien_id", matches[3]);
 	  url.addParam("mode"        , matches[4]);
 	  url.requestUpdate(div, { waitingText : null } );
-    
   }
 };
 
 var DocumentPack = {
   create : function (pack_id, operation_id) {
-	  var url = new Url();
-	  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+	  var url = new Url("dPcompteRendu", "edit_compte_rendu");
 	  url.addParam("pack_id", pack_id);
 	  url.addParam("object_id", operation_id);
 	  url.popup(700, 700, "Document");
 	}
-}
+};

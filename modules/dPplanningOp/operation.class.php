@@ -195,7 +195,7 @@ class COperation extends CCodable {
     // Visite de préanesthésie
     $specs["date_visite_anesth"]    = "dateTime";
     $specs["prat_visite_anesth_id"] = "ref class|CMediusers";
-    $specs["rques_visite_anesth"]   = "text";
+    $specs["rques_visite_anesth"]   = "text helped";
     $specs["autorisation_anesth"]   = "bool default|0";
 
     $specs["_date_min"]               = "date";

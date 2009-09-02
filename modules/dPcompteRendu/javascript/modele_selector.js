@@ -24,9 +24,7 @@ ModeleSelector = Class.create({
   },
 
   pop: function(object_id, object_class, praticien_id) {
-    var oForm = getForm(this.sForm);
-    var url = new Url();
-    url.setModuleAction("dPcompteRendu", "modele_selector");
+    var url = new Url("dPcompteRendu", "modele_selector");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("praticien_id", praticien_id);

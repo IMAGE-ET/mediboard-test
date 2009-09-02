@@ -3,8 +3,7 @@
 <script type="text/javascript">
 
 function reloadListModele(object_class){
-  url = new Url;
-  url.setModuleAction("dPcompteRendu","httpreq_vw_list_modeles");
+  var url = new Url("dPcompteRendu","httpreq_vw_list_modeles");
   url.addParam("object_class", object_class);
   url.addParam("user_id", "{{$user_id}}");
   url.addParam("pack_id", "{{$pack->_id}}");
@@ -16,11 +15,7 @@ Main.add(function () {
     reloadListModele("{{$pack->object_class}}");
   }
 });
-
-
 </script>
-
-
 
 <table class="main">
 

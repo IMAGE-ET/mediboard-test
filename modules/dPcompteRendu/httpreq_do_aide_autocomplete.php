@@ -31,5 +31,3 @@ $smarty->assign("depend_field_1", $depend_field_1);
 $smarty->assign("depend_field_2", $depend_field_2);
 
 $smarty->display("httpreq_do_aide_autocomplete.tpl");
-
-?>

@@ -9,13 +9,13 @@
       <div class="depend" style="display:none">{{$depend1}}</div>
       <div class="depend2" style="display:none">{{$depend2}}</div>
       <strong>
-        {{if $depend1}}{{tr}}{{$object->_class_name}}.{{$depend_field_1}}.{{$depend1}}{{/tr}}{{/if}}
-        {{if $depend2}}{{tr}}{{$object->_class_name}}.{{$depend_field_2}}.{{$depend2}}{{/tr}}{{/if}}
+        {{if $depend1}}{{tr}}{{$object->_class_name}}.{{$depend_field_1}}.{{$depend1}}{{/tr}} - {{/if}}
+        {{if $depend2}}{{tr}}{{$object->_class_name}}.{{$depend_field_2}}.{{$depend2}}{{/tr}} - {{/if}}
       </strong>
 		
       <span>{{$_aide->name|lower|replace:$needle:"<em>$needle</em>"}}</span>
       <br/>
-      <small class="text">{{$_aide->text|lower|replace:$needle:"<em>$needle</em>"}}</small>
+      <small class="text" style="color: #666;">{{$_aide->text|lower|replace:$needle:"<em>$needle</em>"}}</small>
     </li>
   {{/foreach}}
   {{/foreach}}

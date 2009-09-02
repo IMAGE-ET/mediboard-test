@@ -190,6 +190,8 @@ $where = array('target_class' => "= 'CSalle'");
 $check_item_category = new CDailyCheckItemCategory;
 $check_item_categories = $check_item_category->loadList($where);
 
+$selOp->loadAides($anesth_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
