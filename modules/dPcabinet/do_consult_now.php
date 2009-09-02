@@ -14,8 +14,13 @@ global $AppUI, $m;
 //$canModule = $module->canDo();
 //$canModule->needsEdit();
 
+$sejour_id = mbGetValueFromPost("sejour_id");
+$prat_id = mbGetValueFromPost("prat_id");
+$patient_id = mbGetValueFromPost("patient_id");
+$_operation_id = mbGetValueFromPost("_operation_id");
+
 // Cas des urgences 
-if ($sejour_id = mbGetValueFromPost("sejour_id")) {
+if ($sejour_id) {
   $sejour = new CSejour();
   $sejour->load($sejour_id);
   
@@ -27,13 +32,13 @@ if ($sejour_id = mbGetValueFromPost("sejour_id")) {
   }
   
   // Changement de praticien pour le sejour
-  $sejour->praticien_id = $_POST["prat_id"];
+  $sejour->praticien_id = $prat_id;
   $sejour->store();
 }
 
 
 $chir = new CMediusers;
-$chir->load($_POST["prat_id"]);
+$chir->load($prat_id);
 if(!$chir->_id) {
   $AppUI->setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_WARNING);
   $AppUI->redirect();
@@ -47,6 +52,7 @@ $hour_next = mbTime("+1 HOUR", $hour_now);
 $plage = new CPlageconsult();
 $plageBefore = new CPlageconsult();
 $plageAfter = new CPlageconsult();
+
 // Cas ou une plage correspond
 $where = array();
 $where["chir_id"] = "= '$chir->user_id'";
@@ -95,7 +101,7 @@ $ref_chir = $plage->_ref_chir;
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->plageconsult_id;
 $consult->sejour_id = $sejour_id;
-$consult->patient_id = $_POST["patient_id"];
+$consult->patient_id = $patient_id;
 $consult->heure = $time_now;
 $consult->arrivee = $day_now." ".$time_now;
 $consult->duree = 1;
@@ -126,11 +132,7 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
   $where["consultation_id"] = "= '".$consult->consultation_id."'";
   $consultAnesth->loadObject($where);  
   $consultAnesth->consultation_id = $consult->consultation_id;
-  if(isset($_POST["_operation_id"])){
-    $consultAnesth->operation_id = $_POST["_operation_id"];      
-  } else {
-    $consultAnesth->operation_id = "";
-  }
+  $consultAnesth->operation_id = $_operation_id;      
   $consultAnesth->store();
 }
 
