@@ -71,9 +71,8 @@ $graphs = array(
   graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam),
 );
 
-if ($filter->_prat_id)
-	$graphs[] = graphPraticienBloc($debutact, $finact, $prat_id, $salle_id, $bloc_id);
-else if($filter->_specialite)
+$graphs[] = graphPraticienBloc($debutact, $finact, $prat_id, $salle_id, $bloc_id);
+if($filter->_specialite)
   $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
 else
   $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);

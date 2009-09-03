@@ -15,8 +15,11 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 	$prat = new CMediusers;
 	$prat->load($prat_id);
 	
-	$salle = new CSalle;
+	$salle = new CSalle();
 	$salle->load($salle_id);
+	
+	$bloc = new CBlocOperatoire();
+	$bloc->load($bloc_id);
 	
 	$ticks = array();
 	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
@@ -115,8 +118,9 @@ function graphPraticienBloc($debut = null, $fin = null, $prat_id = 0, $salle_id 
 	// Set up the title for the graph
 	$title = "Heures réservées / occupées par mois";
 	$subtitle = "";
-	if($prat_id)  $subtitle .= " - Dr $prat->_view";
-	if($salle_id) $subtitle .= " - $salle->nom";
+	if($prat_id)  $subtitle .= "Dr $prat->_view - ";
+	if($salle_id) $subtitle .= "$salle->nom - ";
+	if($bloc_id) $subtitle  .= "$bloc->nom - ";
 
 	$options = array(
 		'title' => utf8_encode($title),
