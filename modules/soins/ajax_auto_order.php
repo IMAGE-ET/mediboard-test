@@ -18,6 +18,7 @@ $orders = array();
 if ($service->load($service_id) && $date_min && $date_max) {
   $stocks = $service->loadBackRefs('product_stock_services');
   
+  if ($stocks)
   foreach($stocks as $stock) {
     $stock->loadRefsFwd();
     $stock_group = CProductStockGroup::getFromCode($stock->_ref_product->code);
