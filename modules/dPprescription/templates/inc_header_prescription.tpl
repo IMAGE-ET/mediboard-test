@@ -365,7 +365,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	  {{/if}} 
  
     <td style="text-align: left;">
-      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';" style="width: 65px;">
+      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
         <option value="">&mdash; Action</option>
         <optgroup label="Afficher">
       	  <option value="viewAlertes">Alertes</option>
@@ -410,9 +410,19 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
               <input type="hidden" name="chapitre" value="all" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-              <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg');">Signer toutes les lignes</button>
+              <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg');">Tout signer</button>
             </form>
-	        {{else}}
+	        
+					  <form name="removeSignaturePrescription" method="post" action="">
+              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+              <input type="hidden" name="chapitre" value="all" />
+              <input type="hidden" name="annulation" value="1" />
+              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg');">Annuler signatures</button>
+            </form>
+					{{else}}
 		        <!-- Validation de la prescription -->
 			      <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');">
 			        Tout signer

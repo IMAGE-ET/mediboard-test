@@ -46,6 +46,7 @@ foreach($lines as $lines_by_type){
   }
 }
 
+echo $AppUI->getMsg();  
 CApp::rip();
 
 ?>

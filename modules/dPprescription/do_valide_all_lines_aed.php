@@ -99,7 +99,7 @@ $prescription_id = mbGetValueFromPost("prescription_id");
 $prescription_reelle_id = mbGetValueFromPost("prescription_reelle_id");
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 $chapitre = mbGetValueFromPost("chapitre", "medicament");
-$annulation = mbGetValueFromGet("annulation", "0");
+$annulation = mbGetValueFromRequest("annulation", "0");
 $search_value = $annulation ? 1 : 0;
 $new_value = $annulation ? 0 : 1;
 
