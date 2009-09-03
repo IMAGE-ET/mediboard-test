@@ -45,16 +45,15 @@ var Intermax = {
       // Create new category
       if (aMatches = line.match(/\[(\w*)\]/)) {
         sCurrentCategory = aMatches[1];
-        Intermax.oContent[sCurrentCategory] = {}
+        Intermax.oContent[sCurrentCategory] = {};
       }
       
       // Fill a key-value pair in current category
       if (aMatches = line.match(/(\w*)=(.*)/)) {
         sKey = aMatches[1];
-        sValue = aMatches[2];
+        sValue = aMatches[2].replace(/,/g, '.');
         Intermax.oContent[sCurrentCategory][sKey] = sValue;
       }
-      
     } );
   },
   
