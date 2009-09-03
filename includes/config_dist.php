@@ -561,6 +561,8 @@ $dPconfig["dPurgences"] = array (
   "default_view"     => "tous",
   "allow_change_patient" => "1",
   "motif_rpu_view"   => "1",
+  "age_patient_rpu_view"   => "0",
+  "responsable_rpu_view"   => "1",
 );
 
 $dPconfig["dPstock"] = array (

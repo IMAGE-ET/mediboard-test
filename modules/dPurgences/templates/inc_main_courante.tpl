@@ -13,7 +13,9 @@
     <th>{{mb_colonne class=CRPU field="ccmu"        order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>{{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
+    {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
+    {{/if}}
     <th>{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
     <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
@@ -71,7 +73,8 @@
 
       <a href="{{$rpu_link}}">
         <strong>
-        {{$patient}}
+        {{$patient}} 
+        {{if $dPconfig.dPurgences.age_patient_rpu_view}}<br /> {{$patient->_age}} ans{{/if}}
         </strong>
       </a>
       
@@ -123,11 +126,13 @@
       
     </td>
     
+    {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <td class="text" style="background-color: {{$background}};">
       <a href="{{$rpu_link}}">
         {{$curr_sejour->_ref_praticien->_view}}
       </a>
     </td>
+    {{/if}}
 
     {{if $rpu->_id}}
 		  <td id="attente-{{$sejour_id}}" style="background-color: {{$background}}; text-align: center">

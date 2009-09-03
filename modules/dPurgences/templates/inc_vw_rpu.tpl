@@ -29,19 +29,28 @@ function submitSejour(){
   submitFormAjax(oForm, 'systemMsg');
 }
 
+var redirection = 0;
+
+function redir(){
+	redirection++;
+  if (redirection == 3) { 
+	 document.location.href="?m=dPurgences&tab=vw_idx_rpu";
+  }
+}
+
 function submitSejourWithSortiePrevue(){
-  submitFormAjax(getForm('editSortiePrevue'), 'systemMsg', { onComplete : reloadSortiePrevue });
+  submitFormAjax(getForm('editSortiePrevue'), 'systemMsg', { onComplete : function(){ reloadSortiePrevue(); redir(); }});
 }
 
 function submitConsultWithChrono(chrono) {
   var oForm = document.editFrmFinish;
   oForm.chrono.value = chrono;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFinishBanner });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadFinishBanner(); redir(); }});
 }
 
 function submitRPU() {
 	var oForm = document.editSortieAutorise;
-	submitFormAjax(oForm, 'systemMsg');
+	submitFormAjax(oForm, 'systemMsg', { onComplete : redir });
 }
 
 function submitSejRpuConsult() {

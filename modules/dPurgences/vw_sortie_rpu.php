@@ -56,7 +56,8 @@ foreach($listSejours as &$curr_sejour) {
   $curr_sejour->_ref_rpu->loadRefSejourMutation();
   $curr_sejour->loadNumDossier();
   $curr_sejour->loadRefsConsultations();
-  
+  $curr_sejour->_ref_rpu->_ref_consult->loadRefsActes();
+   
   // Chargement de l'IPP
   $curr_sejour->_ref_patient->loadIPP();
 }

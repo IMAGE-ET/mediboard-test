@@ -285,4 +285,8 @@ $locales['config-dPurgences-allow_change_patient'] = 'Possibilité de modifier le
 $locales['config-dPurgences-allow_change_patient-desc'] = 'Possibilité de modifier le patient d\'un RPU';
 $locales['config-dPurgences-motif_rpu_view'] = 'Affichage du motif du RPU';
 $locales['config-dPurgences-motif_rpu_view-desc'] = 'Affichage du motif du RPU';
+$locales['config-dPurgences-age_patient_rpu_view'] = 'Affichage de l\'âge du patient';
+$locales['config-dPurgences-age_patient_rpu_view-desc'] = 'Affichage de l\'âge du patient';
+$locales['config-dPurgences-responsable_rpu_view'] = 'Affichage du responsable du patient';
+$locales['config-dPurgences-responsable_rpu_view-desc'] = 'Affichage du responsable du patient';
 ?>
