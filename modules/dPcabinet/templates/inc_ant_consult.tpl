@@ -487,7 +487,7 @@ Main.add(function () {
 
 <script type="text/javascript">
 {{if $isPrescriptionInstalled}}
-  var oFormTP = getForm(editLineTP);
+  var oFormTP = getForm("editLineTP");
   
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicament = function(selected) {
