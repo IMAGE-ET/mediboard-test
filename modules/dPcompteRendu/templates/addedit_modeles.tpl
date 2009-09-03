@@ -5,8 +5,8 @@ function popFile(objectClass, objectId, elementClass, elementId, sfn){
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function copie() {
-  var oForm = document.editFrm;
+function copie(oForm) {
+  oForm = oForm || document.editFrm;
   
   {{if $droit}}
     if(confirm('Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?')){
@@ -18,13 +18,13 @@ function copie() {
       {{/if}}
       
       oForm.nom.value = "Copie de "+oForm.nom.value;
-      oForm.submit(); 
-    }  
+      oForm.onsubmit(); 
+    }
   {{else}}
     oForm.compte_rendu_id.value = "";
     oForm.chir_id.value = "{{$user_id}}";
     oForm.nom.value = "Copie de "+oForm.nom.value;
-    oForm.submit();
+    oForm.onsubmit();
   {{/if}}
 }
 
@@ -35,12 +35,6 @@ function nouveau() {
   url.redirect();
 }
 
-function supprimer() {
-  var form = document.editFrm;
-  form.del.value = 1;
-  form.submit();
-}
-
 // Taleau des categories en fonction de la classe du compte rendu
 var listObjectClass = {{$listObjectClass|@json}};
 var aTraducClass = {{$listObjectAffichage|@json}};
@@ -49,14 +43,14 @@ function loadObjectClass(value) {
   var form = document.editFrm;
   var select = $(form.elements.object_class);
   var children = select.childElements();
-	
-	if (children.length > 0)
+  
+  if (children.length > 0)
     children[0].nextSiblings().invoke('remove');
   
   // Insert new ones
   $H(listObjectClass).each(function(pair){
-	  select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(aTraducClass[pair.key]));
-	});
+    select.insert(new Element('option', {value: pair.key, selected: pair.key == value}).update(aTraducClass[pair.key]));
+  });
   
   // Check null position
   select.fire("ui:change");
@@ -79,12 +73,12 @@ function loadCategory(value) {
 }
 
 function submitCompteRendu(){
-	(function(){
-		var form = getForm("editFrm");
-		if(checkForm(form) && window.userId) {
-			form.submit();
-	  }
-	}).defer();
+  (function(){
+    var form = getForm("editFrm");
+    if(checkForm(form) && window.userId) {
+      form.submit();
+    }
+  }).defer();
 }
 
 // Catches Ctrl+s and Command+s
@@ -195,11 +189,11 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
           <td>
-	          {{if $droit}}
-	            {{mb_field object=$compte_rendu field=type onchange="updateType()"}}
-	          {{else}}
-	            {{mb_field object=$compte_rendu field=type disabled="disabled"}}
-	          {{/if}}
+            {{if $droit}}
+              {{mb_field object=$compte_rendu field=type onchange="updateType()"}}
+            {{else}}
+              {{mb_field object=$compte_rendu field=type disabled="disabled"}}
+            {{/if}}
           
             <script type="text/javascript">
             function updateType() {
@@ -210,18 +204,18 @@ Main.add(function () {
               $("height").setVisible(!bBody);
               if (bBody) $V(oForm.height, '');
 
-							// Footers
-							var oFooter = $("footers");
-							if (oFooter) {
-	              oFooter.setVisible(bBody);
-	              if (!bBody) $V(oForm.footer_id, '');
+              // Footers
+              var oFooter = $("footers");
+              if (oFooter) {
+                oFooter.setVisible(bBody);
+                if (!bBody) $V(oForm.footer_id, '');
               }
 
-							// Headers
-							var oHeader = $("headers");
-							if (oHeader) {
-	              oHeader.setVisible(bBody);
-	              if (!bBody) $V(oForm.header_id, '');
+              // Headers
+              var oHeader = $("headers");
+              if (oHeader) {
+                oHeader.setVisible(bBody);
+                if (!bBody) $V(oForm.header_id, '');
               }
             }
             
@@ -246,18 +240,18 @@ Main.add(function () {
         <tr id="footers">
           <th>{{mb_label object=$compte_rendu field=footer_id}}</th>
           <td>
-					  <select name="footer_id" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}}>
-					    <option value="">&mdash; Choisir un pied-de-page</option>
-					    {{foreach from=$footers item=footersByOwner key=owner}}
-					    <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-					      {{foreach from=$footersByOwner item=_footer}}
-					      <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
-					      {{foreachelse}}
-					      <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-					      {{/foreach}}
-					    </optgroup>
-					    {{/foreach}}
-					  </select>
+            <select name="footer_id" class="{{$compte_rendu->_props.footer_id}}" {{if !$droit}}disabled="disabled"{{/if}}>
+              <option value="">&mdash; Choisir un pied-de-page</option>
+              {{foreach from=$footers item=footersByOwner key=owner}}
+              <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                {{foreach from=$footersByOwner item=_footer}}
+                <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
+                {{foreachelse}}
+                <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                {{/foreach}}
+              </optgroup>
+              {{/foreach}}
+            </select>
           </td>
         </tr>
         {{/if}}
@@ -266,18 +260,18 @@ Main.add(function () {
         <tr id="headers">
           <th>{{mb_label object=$compte_rendu field=header_id}}</th>
           <td>
-					  <select name="header_id" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}}>
-					    <option value="">&mdash; Choisir une en-tête</option>
-					    {{foreach from=$headers item=headersByOwner key=owner}}
-					    <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
-					      {{foreach from=$headersByOwner item=_header}}
-					      <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
-					      {{foreachelse}}
-					      <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-					      {{/foreach}}
-					    </optgroup>
-					    {{/foreach}}
-					  </select>
+            <select name="header_id" class="{{$compte_rendu->_props.header_id}}" {{if !$droit}}disabled="disabled"{{/if}}>
+              <option value="">&mdash; Choisir une en-tête</option>
+              {{foreach from=$headers item=headersByOwner key=owner}}
+              <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                {{foreach from=$headersByOwner item=_header}}
+                <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
+                {{foreachelse}}
+                <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                {{/foreach}}
+              </optgroup>
+              {{/foreach}}
+            </select>
           </td>
         </tr>
         {{/if}}
@@ -303,16 +297,16 @@ Main.add(function () {
           
           <tr>
             {{if $droit}}
-	            <td class="button" colspan="2">
-	            {{if $compte_rendu->_id}}
-	            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-	            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
-	            {{tr}}Delete{{/tr}}
-	            </button>
-	            {{else}}
-	            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-	            {{/if}}
-	            </td>
+              <td class="button" colspan="2">
+              {{if $compte_rendu->_id}}
+              <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+              </button>
+              {{else}}
+              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+              {{/if}}
+              </td>
             {{/if}}
           </tr>
           
@@ -322,7 +316,7 @@ Main.add(function () {
           
           <tr>
             <td class="button" colspan="2">
-               <button class="add" onclick="copie(this.form)">{{tr}}Duplicate{{/tr}}</button>
+               <button type="button" class="add" onclick="copie(this.form)">{{tr}}Duplicate{{/tr}}</button>
             </td>
           </tr>
           
