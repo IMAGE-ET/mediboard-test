@@ -120,7 +120,6 @@ $smarty->assign("list1"             , $list1             );
 $smarty->assign("list2"             , $list2             );
 $smarty->assign("max"               , sizeof($list2)     );
 
-//$smarty->display("vw_edit_interventions.tpl");
-$smarty->display("vw_edit_operations.tpl");
+$smarty->display("vw_edit_interventions.tpl");
 
 ?>
