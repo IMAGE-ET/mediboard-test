@@ -122,6 +122,7 @@ if(!$prescription_id && $object_class && $object_id && $type){
   $prescription->loadMatchingObject();
 }
 
+$_favoris_praticien_id = "";
 if($prescription->object_id && $prescription->_current_praticien_id){
   $_favoris_praticien_id = $prescription->_current_praticien_id;
 } else {
@@ -136,7 +137,6 @@ if($prescription->object_id && $prescription->_current_praticien_id){
     }
   }
 }
-	
  
 // Chargement des categories pour chaque chapitre
 $categories = ($full_mode || $chapitre != "medicament") ? CCategoryPrescription::loadCategoriesByChap() : null;
@@ -160,7 +160,9 @@ if($prescription->_id){
 	if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
 		
 		// Chargement des favoris de medicaments
-		$listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, "med");
+		if($_favoris_praticien_id){
+		  $listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, "med");
+		}
 		
 		// Chargement des medicaments
 		$prescription->loadRefsLinesMedComments();
@@ -326,8 +328,9 @@ if($prescription->_id){
 		}
 	} else {
 	  // Chargement des favoris du chapitre
-		$listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, $chapitre);
-
+		if($_favoris_praticien_id){
+		  $listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, $chapitre);
+		}
 		// Chargement des executants
 		$executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
 		$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
