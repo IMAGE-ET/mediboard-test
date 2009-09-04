@@ -28,7 +28,7 @@ Main.add(function () {
       <input type="hidden" name="tab" value="{{$tab}}" />
       <label for="selChir">Chirurgien</label>
       <select name="selChir" onchange="this.form.submit()">
-        <option value="-1">&mdash; Choisir un chirurgien</option>
+        <option value="-1">&mdash; Choisir un praticien</option>
         {{foreach from=$listChir item=curr_chir}}
         <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $curr_chir->user_id == $selChir}} selected="selected" {{/if}}>
           {{$curr_chir->_view}}

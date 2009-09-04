@@ -13,7 +13,7 @@
   {{/if}}
   <th>Patient</th>
   {{if !$vueReduite}}
-  <th>Actes</th>
+  <th>Interv</th>
   <th>Coté</th>
   <th>Durée</th>
   {{/if}}
@@ -101,12 +101,16 @@
   </td>
   
 	{{if !$vueReduite}}
-  <td>
+  <td class="text">
 		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
     <a href="?m=dPplanningOp&amp;tab={{$direction}}&amp;operation_id={{$_operation->_id}}" title="Modifier l'intervention">
-      {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
-      {{$curr_code->code}}<br />
-      {{/foreach}}
+      {{if $_operation->libelle}}
+        {{$_operation->libelle}}
+      {{else}}
+        {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
+          {{$curr_code->code}}
+        {{/foreach}}
+      {{/if}}
     </a>
   </td>
   <td>

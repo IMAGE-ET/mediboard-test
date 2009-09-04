@@ -28,29 +28,34 @@ function reloadFinishBanner() {
 
 <table class="form">
   <tr>
-    <th class="category" colspan="4">
+    <th colspan="4" class="title text">
       {{if $_is_anesth}}
       <button class="print" type="button" style="float: left;" onclick="printFiche()">
         Imprimer la fiche
       </button>
       <button class="print" type="button" style="float: left;" onclick="printAllDocs()">
-        Imprimer les documents 
+        Imprimer les documents
       </button>      
       {{else}}
-      <button class="hslip" id="listConsult-trigger" type="button" style="float:left">
+      <button class="hslip notext" id="listConsult-trigger" type="button" style="float:left">
         {{tr}}Programme{{/tr}}
       </button>
+      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$consult->_ref_patient->_id}}"'>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$consult->_ref_patient size=42}}
+      </a>
       <button class="print" type="button" style="float: right;" onclick="printAllDocs()">
         Imprimer les documents
       </button> 
       {{/if}}
-        Consultation
-        (Etat : {{$consult->_etat}}
+      {{$consult->_ref_patient->_view}} - Dr {{$consult->_ref_plageconsult->_ref_chir->_view}}
+      <br />
+      Consultation
+      (Etat : {{$consult->_etat}}
       {{if $consult->chrono <= $consult|const:'EN_COURS'}}
-      / 
-      <button class="submit" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}})">
-        Terminer
-      </button>
+        / 
+        <button class="submit" type="button" onclick="submitAll(); submitConsultWithChrono({{$consult|const:'TERMINE'}})">
+          Terminer
+        </button>
       {{/if}})
     </th>
   </tr>

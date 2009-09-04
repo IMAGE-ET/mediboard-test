@@ -43,12 +43,17 @@ $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter-
 
 $order = "date, salle_id, debut";
 
-$chir_id = mbGetValueFromGet("chir");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
+$praticien = new CMediusers();
+$praticien->load($filter->_prat_id);
+if($praticien->isFromType(array("Anesthésiste"))) {
+  $filter->_prat_id = null;
+}
+
 // Liste des praticiens accessibles
-if(!$user->isFromType(array("Anesthésiste"))) {
+if(!$user->isFromType(array("Anesthésiste")) && !$praticien->isFromType(array("Anesthésiste"))) {
   $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($user->loadPraticiens()));
 }
 

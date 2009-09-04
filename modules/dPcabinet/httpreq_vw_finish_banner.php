@@ -43,6 +43,7 @@ if ($selConsult) {
   $canConsult->needsEdit();
   
   $consult->loadRefsFwd();
+  $consult->_ref_patient->loadRefPhotoIdentite();
   $userSel->load($consult->_ref_plageconsult->chir_id);
   $consult->loadAides($userSel->user_id);
 }

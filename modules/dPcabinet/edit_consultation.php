@@ -120,6 +120,7 @@ if ($consult->_id) {
   // Chargement du patient
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
+  $patient->loadRefPhotoIdentite();
   $patient->loadStaticCIM10($userSel->user_id);
   
   // Chargement des ses consultations
