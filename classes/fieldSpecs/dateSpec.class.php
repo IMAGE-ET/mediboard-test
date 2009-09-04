@@ -34,6 +34,7 @@ class CDateSpec extends CMbFieldSpec {
     return ($propValue && $propValue != "0000-00-00") ? 
       ($this->progressive ? $this->progressiveFormat($propValue) : smarty_modifier_date_format($propValue, $format)) :
       "";
+    // TODO: test and use strftime($format, strtotime($propValue)) instead of smarty
   }
   
   function progressiveFormat($value) {

@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $object_class     = mbGetValueFromGetOrSession("object_class");
 $object_id        = mbGetValueFromGetOrSession("object_id");

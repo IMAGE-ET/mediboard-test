@@ -170,7 +170,7 @@ class CMbObject {
    * @return string The field's formatted value
    */
   function getFormattedValue($field) {
-  	return $this->_specs[$field]->getValue($this);
+  	return $this->_specs[$field]->getValue($this, new CSmartyDP);
   }
   
   /**
