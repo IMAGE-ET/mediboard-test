@@ -39,7 +39,7 @@ class CTemplateManager {
 
     $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, CAppUI::conf("date")));
     $this->addProperty("Général - heure courante", mbTransformTime(null, null, CAppUI::conf("time")));
-    $this->addProperty("Général - rédacteur"     , $user->_view);
+    $this->addProperty("Général - rédacteur"     , $user->_shortview);
   }
 	
 	function getParameter($name, $default = null) {

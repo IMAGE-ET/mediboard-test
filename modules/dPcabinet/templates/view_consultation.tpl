@@ -15,7 +15,12 @@
     <th>Praticien</th>
     <td>Dr {{$prat_id->_view}}</td>
   </tr>
-  
+  {{if $prat_id->discipline_id}}
+  <tr>
+    <th>Spécialité</th>
+    <td>{{$prat_id->_ref_discipline->_view}}</td>
+  </tr>
+  {{/if}}
   <tr>
   	<th>Adresse </th>
     <td>
