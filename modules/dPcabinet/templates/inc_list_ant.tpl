@@ -117,7 +117,7 @@ transfertLineTP = function(line_id, sejour_id){
 	  {{/foreach}}
 	  {{/foreach}}
 	{{else}}
-		<li><em>{{tr}}CAntecedent.none{{/tr}}</em></li>
+		<li><em>{{tr}}CAntecedent.unknown{{/tr}}</em></li>
 	{{/if}}
 </ul>
 
@@ -196,7 +196,7 @@ transfertLineTP = function(line_id, sejour_id){
   </li>
   {{foreachelse}}
   {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
-  <li><em>Pas de traitements</em></li>
+  <li><em>{{tr}}CTraitement.unknown{{/tr}}</em></li>
   {{/if}}
   {{/foreach}}
 </ul>
@@ -217,7 +217,7 @@ transfertLineTP = function(line_id, sejour_id){
     {{$curr_code->code}}: {{$curr_code->libelle}}
   </li>
   {{foreachelse}}
-  <li><em>Pas de diagnostic</em></li>
+  <li><em>{{tr}}CDossierMedical-codes_cim.unknown{{/tr}}</em></li>
   {{/foreach}}
 </ul>
 

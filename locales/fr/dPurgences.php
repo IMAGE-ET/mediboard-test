@@ -289,4 +289,6 @@ $locales['config-dPurgences-age_patient_rpu_view'] = 'Affichage de l\'âge du pat
 $locales['config-dPurgences-age_patient_rpu_view-desc'] = 'Affichage de l\'âge du patient';
 $locales['config-dPurgences-responsable_rpu_view'] = 'Affichage du responsable du patient';
 $locales['config-dPurgences-responsable_rpu_view-desc'] = 'Affichage du responsable du patient';
+$locales['config-dPurgences-programme_rpu_view'] = 'Affichage du programme de consultation';
+$locales['config-dPurgences-programme_rpu_view-desc'] = 'Affichage du programme de consultation';
 ?>

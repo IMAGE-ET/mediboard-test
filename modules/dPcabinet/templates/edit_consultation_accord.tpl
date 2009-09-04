@@ -65,6 +65,10 @@ Main.add(function () {
   {{if $consult->_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   {{/if}}
+
+  {{if $m == "dPurgences" && !$dPconfig.dPurgences.programme_rpu_view}}
+    $('listConsult').hide();
+  {{/if}}
     
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();

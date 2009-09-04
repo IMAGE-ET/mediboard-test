@@ -929,4 +929,7 @@ $locales['CConstantesMedicales-glycemie-court'] = '';
 $locales['CConstantesMedicales-glycemie-desc'] = '';
 $locales['config-dPpatients-CPatient-extended_print'] = '';
 $locales['config-dPpatients-CPatient-extended_print-desc'] = '';
+$locales['CAntecedent.unknown'] = '';
+$locales['CTraitement.unknown'] = '';
+$locales['CDossierMedical-codes_cim.unknown'] = '';
 ?>
