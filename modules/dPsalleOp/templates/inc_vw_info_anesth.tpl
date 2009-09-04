@@ -137,7 +137,7 @@ refreshAidesPreAnesth = function(user_id) {
 			<input type="hidden" name="consultation_id" value="" />
 			<input type="hidden" name="_operation_id" value="{{$selOp->_id}}" />
 			<input type="hidden" name="_m_redirect" value="{{$m}}" />
-			<input type="hidden" name="patient_id" value="{{$selOp->patient_id}}" />
+			<input type="hidden" name="patient_id" value="{{$selOp->_ref_sejour->patient_id}}" />
       <select name="prat_id">
         {{foreach from=$listAnesths item=curr_anesth}}
         <option value="{{$curr_anesth->user_id}}" {{if $selOp->_ref_anesth->user_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
