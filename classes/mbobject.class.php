@@ -1225,7 +1225,8 @@ class CMbObject {
   function loadFwdRef($field, $cached = false) {
     $spec = $this->_specs[$field];
     if ($spec instanceof CRefSpec) {
-      $fwd = new $spec->class;
+      $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
+      $fwd = new $class;
       if ($cached) {
         $fwd = $fwd->getCached($this->$field);
       }
