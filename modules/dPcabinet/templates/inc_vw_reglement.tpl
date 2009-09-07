@@ -131,36 +131,16 @@ Main.add( function(){
       	<tr>
           <!-- Règlements -->  
           <td>
-          
-            <form name="accidentTravail" action="" method="post">
-              <input type="hidden" name="m" value="dPcabinet" />
-              <input type="hidden" name="dosql" value="do_consultation_aed" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
-              <table class="form">
-                <tr>
-                  <th>
-                   {{mb_label object=$consult field="accident_travail"}}
-                 </th>
-                 <td class="date">
-                   {{mb_field object=$consult field="accident_travail" form="accidentTravail" onchange="submitFormAjax(this.form,'systemMsg');" register=true}}
-                 </td>
-                 <td>
-                   {{if $patient->cmu}}
-                   <strong>Bénéficiaire d'une CMU</strong>
-                   {{/if}}
-                 </td>
-               </tr>
-							 {{if $consult->_ref_patient->ald && !$consult->tarif}}
-                <tr>
-                  <th>{{mb_label object=$consult field=concerne_ALD}}</th>
-                  <td colspan="2">{{mb_field object=$consult field=concerne_ALD onchange="submitFormAjax(this.form,'systemMsg');"}}</td>
-                </tr>
-                {{/if}}
-								
-              </table>  
-            </form>
+          	<div style="text-align: center; font-weight: bold;">
+              {{if $patient->cmu}}
+                Couverture Maladie Universelle<br/>
+              {{/if}}
             
+              {{if $patient->ald}}
+                Affection Longue Durée<br/>
+              {{/if}}
+            </div>
+          
             <!-- Formulaire de selection de tarif -->
             <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       	      <input type="hidden" name="m" value="dPcabinet" />
@@ -172,6 +152,19 @@ Main.add( function(){
       	     
       	      <table class="form">
       	        {{if !$consult->tarif}}
+
+       	        <tr>
+       	          <th>{{mb_label object=$consult field=accident_travail}}</th>
+       	          <td>{{mb_field object=$consult field=accident_travail form=selectionTarif register=true}}</td>    
+       	        </tr>
+
+                {{if $consult->_ref_patient->ald}}
+                <tr>
+                  <th>{{mb_label object=$consult field=concerne_ALD}}</th>
+                  <td>{{mb_field object=$consult field=concerne_ALD}}</td>
+                </tr>
+                {{/if}}
+      	        
       	        <tr>
       	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
       	          <td>
@@ -195,12 +188,21 @@ Main.add( function(){
       	          </td>
       	        </tr>
       	        {{else}}
-								 {{if $consult->_ref_patient->ald}}
+      	          
+                  {{if $consult->accident_travail}}
+        	        <tr>
+        	          <th>{{mb_label object=$consult field=accident_travail}}</th>
+        	          <td>{{mb_value object=$consult field=accident_travail}}</td>    
+        	        </tr>
+        	        {{/if}}
+
+                  {{if $consult->_ref_patient->ald ||  $consult->concerne_ALD}}
                   <tr>
                     <th>{{mb_label object=$consult field=concerne_ALD}}</th>
                     <td>{{mb_value object=$consult field=concerne_ALD}}</td>
                   </tr>
 								  {{/if}}
+        	        
         	        <tr>
         	          <th>{{mb_label object=$consult field=tarif}}</th>
         	          <td>{{mb_value object=$consult field=tarif}}</td>    

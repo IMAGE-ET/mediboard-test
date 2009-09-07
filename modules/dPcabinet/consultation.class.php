@@ -430,7 +430,7 @@ class CConsultation extends CCodable {
    */
   function makeFSE() {
     $this->_fse_intermax = array();
-    
+
     // Ajout des actes NGAP
     $this->loadRefsActesNGAP();
     foreach ($this->_ref_actes_ngap as $acte_ngap) {
@@ -467,12 +467,20 @@ class CConsultation extends CCodable {
 	    $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
     }
 
-    // Accident de travail
+    // Section FSE
+    $this->_fse_intermax["FSE"] = array();
+
     if ($this->accident_travail) {
-		  $this->_fse_intermax["FSE"] = array(
-		    "FSE_NATURE_ASSURANCE" => "AT",
-		    "FSE_DATE_AT" => mbDateToLocale($this->accident_travail),
-		  );
+		  $this->_fse_intermax["FSE"]["FSE_NATURE_ASSURANCE"] = "AT";
+		  $this->_fse_intermax["FSE"]["FSE_DATE_AT"] = mbDateToLocale($this->accident_travail);
+    }
+    
+    if ($this->concerne_ALD) {
+      $this->_fse_intermax["FSE"]["FSE_ALD"] = "1";      
+    }
+    
+    if (!count($this->_fse_intermax["FSE"])) {
+      unset($this->_fse_intermax["FSE"]);
     }
   }
   

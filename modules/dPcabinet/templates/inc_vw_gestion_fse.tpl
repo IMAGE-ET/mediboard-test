@@ -6,23 +6,48 @@ Object.extend(Intermax.ResultHandler, {
   "Lire Vitale": function() {
     var oVitale = Intermax.oContent.VITALE;
     
-    var msg = {{$patient->_id_vitale|json}} ?
-      "Vous êtes sur le point de mettre à jour le patient" :
-      "Vous êtes sur le point d'associer le patient";
-    msg += printf("\n\t%s %s (%s)",
-      '{{$patient->nom|smarty:nodefaults|JSAttribute}}', 
-      '{{$patient->prenom|smarty:nodefaults|JSAttribute}}', 
-      '{{mb_value object=$patient field=naissance}}');
-    msg += "\nAvec le bénéficiaire Vitale";
-    msg += printf("\n\t%s %s (%s)", 
+    var sVitaleView = printf("\n\t%s %s (%s)", 
       oVitale.VIT_NOM, 
       oVitale.VIT_PRENOM, 
       oVitale.VIT_DATE_NAISSANCE);
+      
+    var oPatient = {
+      nom   : '{{$patient->nom|smarty:nodefaults|JSAttribute}}',
+      prenom: '{{$patient->prenom|smarty:nodefaults|JSAttribute}}',
+      naissance : '{{mb_value object=$patient field=naissance}}'
+    }
+    
+    var sPatientView = printf("\n\t%s %s (%s)",
+      oPatient.nom, 
+      oPatient.prenom,
+      oPatient.naissance);
+      
+      
+    var msg = {{$patient->_id_vitale|json}} ?
+      "Vous êtes sur le point de mettre à jour le patient" :
+      "Vous êtes sur le point d'associer le patient";
+    msg += sPatientView;
+    msg += "\nAvec le bénéficiaire Vitale";
+    msg += sVitaleView;
+    msg += "\n\nNOUVEAU : La fiche patient de Mediboard sera mise à jour avec les informations de la carte Vitale.";
     msg += "\n\nVoulez-vous continuer ?";
         
-    if (confirm(msg)) {
-      Reglement.submit(document.BindVitale);
+    if (!confirm(msg)) {
+    	return;
     }
+
+    if (oVitale.VIT_DATE_NAISSANCE != oPatient.naissance && oPatient.naissance != '') {
+    	msg = "ATTENTION : Les dates de naissance ne correspondent pas ! ";
+    	msg += "\n\nEtes vous certain de vouloir remplacer ";
+	    msg += sPatientView;
+	    msg += "\nPar ";
+	    msg += sVitaleView;
+      if (!confirm(msg)) {
+        return;
+			}
+    }
+
+    Reglement.submit(document.BindVitale);
   },
   
   "Lire CPS": function() {
@@ -74,9 +99,8 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         <tr>
           <td class="text">
             {{if !$patient->_id_vitale || !$praticien->_id_cps}}
-              <div class="warning">
-                Professionnel de Santé ou Bénéficiaire Vitale non identifié<br/>
-                Merci d'associer la CPS et la carte Vitale pour permettre le formatage d'une FSE. 
+              <div class="small-warning">
+                Merci d'associer <strong>la CPS et la carte Vitale</strong> pour formater une FSE. 
               </div>
             {{else}}
               <form name="BindFSE" action="?m={{$m}}" method="post">
@@ -163,12 +187,12 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
       </form>
     
       {{if !$praticien->_id_cps}}
-        <div class="warning">
+        <div class="small-info">
           Praticien non associé à une CPS. <br/>
           Merci d'effectuer une lecture de la CPS pour permettre le formatage d'une FSE. 
         </div>
       {{else}}
-        <div class="message">
+        <div class="small-success">
           Praticien correctement associé à une CPS.
         </div>
       {{/if}}
@@ -179,17 +203,18 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
       <form name="BindVitale" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="dosql" value="do_patients_aed" />
+        {{mb_key object=$patient}}
         <input type="hidden" name="_bind_vitale" value="1" />
-        {{mb_field object=$patient field="patient_id" hidden="1"}}
+        <input type="hidden" name="_update_vitale" value="1" />
       </form>
             
       {{if !$patient->_id_vitale}}
-        <div class="warning">
+        <div class="small-info">
           Patient non associé à un bénéficiaire Vitale. <br/>
-          Merci d'éffectuer une lecture de la carte pour permettre le formatage d'une FSE. 
+          Merci d'effectuer une lecture de la carte pour permettre le formatage d'une FSE. 
         </div>
       {{else}}
-        <div class="message">
+        <div class="small-success">
           Patient correctement associé à un bénéficiaire Vitale.
         </div>
       {{/if}}

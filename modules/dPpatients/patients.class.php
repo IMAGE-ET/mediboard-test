@@ -127,9 +127,10 @@ class CPatient extends CMbObject {
   var $_art115      = null;
 	var $_exoneration = null;
   
-  // Vitale
-  var $_bind_vitale = null;
-  var $_id_vitale   = null;
+  // Vitale behaviour
+  var $_bind_vitale   = null;
+  var $_update_vitale = null;
+  var $_id_vitale     = null;
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
@@ -344,13 +345,27 @@ class CPatient extends CMbObject {
     	$this->store();
     }
     
-    // Bind vitale
-    if ($this->_bind_vitale && $this->_id) {
-      return $this->bindVitale();
+    // Vitale
+    if ($msg = $this->bindVitale()) {
+      return $msg;
     }
   }
        
+  /**
+   * Bind LogicMax idex to patient
+   * @return Store-like message
+   */
   function bindVitale() {
+    if (!$this->_bind_vitale) {
+      return;
+    }
+    
+    $this->_bind_vitale = null;
+    
+    if (!$this->_id) {
+      return;
+    }
+    
     // Make id400
     if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
@@ -374,7 +389,26 @@ class CPatient extends CMbObject {
     
     $id_vitale->object_id = $this->_id;
     $id_vitale->last_update = mbDateTime();
-    return $id_vitale->store();
+    
+    if ($msg = $id_vitale->store()) {
+      return $msg;
+    }
+
+    // Mise à jour dupuis Vitale
+    if ($this->_update_vitale) {
+      $patient_vitale = new CPatient;
+      $patient_vitale->getValuesFromVitale();
+
+      foreach (array_keys($this->getDBFields()) as $field) {
+        if ($patient_vitale->$field !== null) {
+          $this->$field = $patient_vitale->$field;
+        }
+      }
+
+	    if ($msg = $this->store()) {
+	      return $msg;
+	    }
+    }
   }
 
   function loadIdVitale() {
@@ -499,9 +533,7 @@ class CPatient extends CMbObject {
           $this->ald      = $periode["PER_AMO_ALD"];
           $this->code_exo = $periode["PER_AMO_CODE_EXO"];
           $this->code_sit = $periode["PER_AMO_CODE_SIT"];
-          if ($vitale["VIT_CMU"]) {
-            $this->cmu = 1;
-          }
+          $this->cmu      = $vitale["VIT_CMU"];
         }
       }
     }
