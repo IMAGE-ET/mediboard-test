@@ -12,8 +12,8 @@ Object.extend(Intermax.ResultHandler, {
       oVitale.VIT_DATE_NAISSANCE);
       
     var oPatient = {
-      nom   : '{{$patient->nom|smarty:nodefaults|JSAttribute}}',
-      prenom: '{{$patient->prenom|smarty:nodefaults|JSAttribute}}',
+      nom       : '{{$patient->nom|smarty:nodefaults|JSAttribute}}',
+      prenom    : '{{$patient->prenom|smarty:nodefaults|JSAttribute}}',
       naissance : '{{mb_value object=$patient field=naissance}}'
     }
     
