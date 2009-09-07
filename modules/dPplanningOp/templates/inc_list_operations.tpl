@@ -14,14 +14,6 @@
 
 {{/if}}
 
-{{if $app->user_prefs.dPplanningOp_listeCompacte}}
-<div class="small-info">
-	{{tr}}pref-dPplanningOp_listeCompacte-info1{{/tr}}
-	<br />
-	{{tr}}pref-dPplanningOp_listeCompacte-info2{{/tr}}
-</div>
-{{/if}}
-
 <table class="tbl" {{if $boardItem}}style="font-size: 9px;"{{/if}}>
   <tr>
     <th class="title" colspan="5">
