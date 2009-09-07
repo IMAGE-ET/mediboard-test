@@ -47,7 +47,7 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       $V(formTraitant.medecin_traitant, element.id.split('-')[1]);
-      $V(formTraitant._view, element.select(".view")[0].innerHTML);
+      $V(formTraitant._view, element.select(".view")[0].innerHTML.stripTags());
     }
   });
 	
@@ -86,8 +86,8 @@ Main.add(function () {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
-        <input type="hidden" name="medecin_traitant" value="{{$medecin_traitant_id}}" onchange="this.form.onsubmit()""/>
-        <input type="text" name="_view" size="50" value="{{$medecin_traitant_view}}" ondblclick="Medecin.edit(this.form)" />
+        <input type="hidden" name="medecin_traitant" value="{{$medecin_traitant_id}}" onchange="this.form.onsubmit()"/>
+        <input type="text" name="_view" size="50" value="{{$medecin_traitant_view}}" ondblclick="Medecin.edit(this.form)" class="autocomplete" />
         <div id="traitant-edit-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
         <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="Medecin.del(this.form)">{{tr}}Delete{{/tr}}</button>
@@ -126,7 +126,7 @@ Main.add(function () {
         <input type="hidden" name="dosql" value="do_correspondant_aed" />
         <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
         <input type="hidden" name="medecin_id" value="" onchange="this.form.onsubmit()" />
-        <input type="text" name="_view" size="50" value="" ondblclick="Medecin.edit(this.form)" />
+        <input type="text" name="_view" size="50" value="" ondblclick="Medecin.edit(this.form)" class="autocomplete" />
         <div id="correspondant-new-{{$patient->_id}}__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
         <button class="search" type="button" onclick="Medecin.edit(this.form)">{{tr}}Choose{{/tr}}</button>
       </form>
