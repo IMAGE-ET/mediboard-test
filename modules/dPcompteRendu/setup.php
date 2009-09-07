@@ -333,7 +333,13 @@ class CSetupdPcompteRendu extends CSetup {
             CHANGE `object_class` `object_class` VARCHAR (80) NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.45";
+    $this->makeRevision("0.45");
+    $sql = "ALTER TABLE `liste_choix` ADD `group_id` INT (11) UNSIGNED";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `liste_choix` ADD INDEX (`group_id`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.46";
   }
 }
 ?>

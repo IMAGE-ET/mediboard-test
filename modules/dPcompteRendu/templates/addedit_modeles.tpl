@@ -176,7 +176,7 @@ Main.add(function () {
               <input type="hidden" name="chir_id" value="{{$mediuser->_id}}" />
             {{/if}}
             <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}">
-              <option value="">&mdash; Associer à un praticien</option>
+              <option value="">&mdash; Associer à un utilisateur</option>
               {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->chir_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}

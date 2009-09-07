@@ -136,6 +136,7 @@ if ($object instanceof CCodable) {
 }
 
 $user->load();
+$user->loadRefFunction();
 
 // Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
@@ -150,8 +151,12 @@ $templateManager->loadLists($user->_id);
 $templateManager->applyTemplate($compte_rendu);
 
 $where = array();
-$where[] = "(chir_id = '$user->_id' OR function_id = '$user->function_id')";
-$order = "chir_id, function_id";
+$where[] = "(
+  chir_id = '$user->_id' OR 
+  function_id = '$user->function_id' OR 
+  group_id = '{$user->_ref_function->group_id}'
+)";
+$order = "chir_id, function_id, group_id";
 $chirLists = new CListeChoix;
 $chirLists = $chirLists->loadList($where, $order);
 $lists = $templateManager->getUsedLists($chirLists);

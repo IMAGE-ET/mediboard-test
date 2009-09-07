@@ -164,19 +164,30 @@ class CTemplateManager {
   
   function loadLists($user_id, $compte_rendu_id = 0) {
     // Liste de choix
-    $chir = new CMediusers;
+    $user = new CMediusers;
     $compte_rendu = new CCompteRendu();
     $compte_rendu->load($compte_rendu_id);
     
     $where = array();
     if($user_id){
-      $chir->load($user_id);
-      $where[] = "(chir_id = '$chir->user_id' OR function_id = '$chir->function_id')";
-    }else{
-    	global $AppUI;
-      $chir->load($AppUI->user_id); 
-      $where["function_id"] = "IN('$chir->function_id', '$compte_rendu->function_id')";
+      $user->load($user_id);
+      $user->loadRefFunction();
+      $where[] = "(
+        chir_id = '$user->user_id' OR 
+        function_id = '$user->function_id' OR 
+        group_id = '{$user->_ref_function->group_id}'
+      )";
     }
+    else {
+      global $AppUI;
+      $user->load($AppUI->user_id);
+      $user->loadRefFunction();
+      $where[] = "(
+        function_id IN('$user->function_id', '$compte_rendu->function_id') OR 
+        group_id IN('{$user->_ref_function->group_id}', '$compte_rendu->group_id')
+      )";
+    }
+    
     $where[] = CSQLDataSource::get("std")->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
     $order = "nom ASC";
     $lists = new CListeChoix();

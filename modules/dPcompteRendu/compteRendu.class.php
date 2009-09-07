@@ -70,9 +70,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float";
     $specs["valide"]           = "bool";
-
     $specs["_owner"]           = "enum list|prat|func|etab";
-
     return $specs;
   }
   
@@ -112,7 +110,7 @@ class CCompteRendu extends CDocumentItem {
     $this->completeField("etat_envoi");
     
     if($this->fieldModified("source") && ($this->etat_envoi == "oui"))
-        $this->etat_envoi = "obsolete";
+      $this->etat_envoi = "obsolete";
   }
   
   function loadComponents() {
@@ -282,16 +280,19 @@ class CCompteRendu extends CDocumentItem {
   }
     
   function getPerm($permType) {
-    if(!($this->_ref_chir || $this->_ref_function) || !$this->_ref_object) {
+    if(!($this->_ref_chir || $this->_ref_function || $this->_ref_group) || !$this->_ref_object) {
       $this->loadRefsFwd();
     }
     if($this->_ref_object->_id){
       $can = $this->_ref_object->getPerm($permType);
-    }elseif($this->_ref_chir->_id) {
+    }
+    elseif($this->_ref_chir->_id) {
       $can = $this->_ref_chir->getPerm($permType);
-    } elseif($this->_ref_function->_id) {
+    }
+    elseif($this->_ref_function->_id) {
       $can = $this->_ref_function->getPerm($permType);
-    } else {
+    }
+    else {
       $can = $this->_ref_group->getPerm($permType);
     }
     return $can;

@@ -132,7 +132,7 @@ class CSetupdPfiles extends CSetup {
             "\nPRIMARY KEY (file_category_id)" .
             "\n) TYPE=MyISAM;";
     $this->addQuery($sql);
-    $sql = "INSERT INTO `files_category` VALUES('1', 'divers', NULL)";
+    $sql = "INSERT INTO `files_category` VALUES('1', 'Divers', NULL)";
     $this->addQuery($sql);
     
     $this->makeRevision("0.11");

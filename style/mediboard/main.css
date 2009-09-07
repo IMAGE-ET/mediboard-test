@@ -684,8 +684,9 @@ th.title {
 
 table.tbl {
   width: 100%;
-  border: 0px;
-  border-spacing: 1px;
+  border: 1px solid #999;
+  border-spacing: 0;
+  border-collapse: collapse;
   background-color: #777;
 }
 
@@ -741,6 +742,7 @@ div.tree-header {
   padding: 2px;
   white-space: nowrap;
   vertical-align: middle;
+  border: 1px solid #999;
 }
 
 table.tbl td.error,
@@ -3246,6 +3248,14 @@ ul.select-tree .highlight {
 }
 .flotr-tab:hover {
   background: #ccc;
+}
+.flotr-datagrid tr:hover, .flotr-datagrid col.hover {
+  border: none;
+  background: #f3f3f3;
+}
+.flotr-datagrid tr:hover th, .flotr-datagrid th.hover {
+  background: #999;
+  color: #fff;
 }
 
 table.tbl td.soin-selected div{

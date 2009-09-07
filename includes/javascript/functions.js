@@ -453,7 +453,8 @@ var PairEffect = Class.create({
       sEffect        : null, // could be null, "appear", "slide", "blind"
       bStartVisible  : false, // Make it visible at start
       bStoreInCookie : true,
-      sCookieName    : "effects"
+      sCookieName    : "effects",
+      duration       : 0.3
     };
 
     Object.extend(oDefaultOptions, oOptions);
@@ -482,7 +483,7 @@ var PairEffect = Class.create({
     var oTarget = $(this.oOptions.idTarget);
     var oTrigger = $(this.oOptions.idTrigger);
     if (this.oOptions.sEffect && !Prototype.Browser.IE) {
-      new Effect.toggle(oTarget, this.oOptions.sEffect);
+      new Effect.toggle(oTarget, this.oOptions.sEffect, this.oOptions);
     } else {
       oTarget.toggle();
     }

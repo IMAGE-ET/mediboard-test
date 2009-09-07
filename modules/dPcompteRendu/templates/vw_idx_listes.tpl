@@ -4,6 +4,8 @@
 Main.add(function () {
   if(oForm = document.addFrm)
     document.addFrm._new.focus();
+  
+  Control.Tabs.create("tabs-CListeChoix");
 });
 </script>
 
@@ -13,79 +15,105 @@ Main.add(function () {
   <td class="greedyPane">
 
     <form name="filterFrm" action="?" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
     
-    <input type="hidden" name="m" value="{{$m}}" />
-	<a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new"><strong>Créer une liste de choix</strong></a>        
-    <table class="form">
-
-      <tr>
-        <th><label for="filter_user_id" title="Filtrer les listes pour cet utilisateur">Utilisateur</label></th>
-        <td>
-          <select name="filter_user_id" onchange="this.form.submit()">
-            <option value="0">&mdash; Choisir un utilisateur</option>
-            {{foreach from=$users item=curr_user}}
-            <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}} selected="selected" {{/if}}>
-              {{$curr_user->_view}}
-            </option>
-            {{/foreach}}
-          </select>
-        </td>
-      </tr>
-    </table>
-
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new"><strong>Créer une liste de choix</strong></a>        
+      <table class="form">
+        <tr>
+          <th><label for="filter_user_id" title="Filtrer les listes pour cet utilisateur">Utilisateur</label></th>
+          <td>
+            <select name="filter_user_id" onchange="this.form.submit()">
+              <option value="0">&mdash; Choisir un utilisateur</option>
+              {{foreach from=$users item=curr_user}}
+              <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}} selected="selected" {{/if}}>
+                {{$curr_user->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+      </table>
     </form>
+    
+    <ul id="tabs-CListeChoix" class="control_tabs">
+      <li><a href="#listes-user">Listes personnelles <small>({{$listesUser|@count}})</small></a></li>
+      <li><a href="#listes-func">Listes de la fonction <small>({{$listesFunc|@count}})</small></a></li>
+      <li><a href="#listes-etab">Listes d'établissement <small>({{$listesEtab|@count}})</small></a></li>
+    </ul>
+    <hr class="control_tabs" />
     
     <table class="tbl">
     
     <tr>
-      <th class="title" colspan="4">Listes de choix créées</th>
-    </tr>
-    
-    <tr>
-      <th>Utilisateur</th>
+      <th>Propriétaire</th>
       <th>Nom</th>
       <th>Valeurs</th>
       <th>Compte-rendu associé</th>
     </tr>
     
-    <tr>
-      <th colspan="4"><strong>Modèles personnels</strong></th>
-    </tr>
-
-    {{foreach from=$listesPrat item=curr_liste}}
-    <tr>
-      {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
-      {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_chir->_view}}</a></td>
-      <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
-      <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
-      {{if $curr_liste->_ref_modele->compte_rendu_id}}
-      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
-      {{else}}
-      <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
-      {{/if}}
-    </tr>
-    {{/foreach}}
+    <tbody id="listes-user" style="display: none;">
+      {{foreach from=$listesUser item=curr_liste}}
+      <tr>
+        {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
+        {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
+        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_chir}}</a></td>
+        <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
+        <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
+        {{if $curr_liste->_ref_modele->compte_rendu_id}}
+        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
+        {{else}}
+        <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
+        {{/if}}
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td colspan="10">{{tr}}CListeChoix.none{{/tr}}</td>
+      </tr>
+      {{/foreach}}
+    </tbody>
     
-    <tr>
-      <th colspan="4"><strong>Modèles de cabinet</strong></th>
-    </tr>
-
-    {{foreach from=$listesFunc item=curr_liste}}
-    <tr>
-      {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
-      {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_function->text}}</a></td>
-      <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
-      <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
-      {{if $curr_liste->_ref_modele->compte_rendu_id}}
-      <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
-      {{else}}
-      <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
-      {{/if}}
-    </tr>
-    {{/foreach}}
-      
+    <tbody id="listes-func" style="display: none;">
+      {{foreach from=$listesFunc item=curr_liste}}
+      <tr>
+        {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
+        {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
+        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_function}}</a></td>
+        <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
+        <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
+        {{if $curr_liste->_ref_modele->compte_rendu_id}}
+        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
+        {{else}}
+        <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
+        {{/if}}
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td colspan="10">{{tr}}CListeChoix.none{{/tr}}</td>
+      </tr>
+      {{/foreach}}    
+    </tbody>
+    
+    
+    <tbody id="listes-etab" style="display: none;">
+      {{foreach from=$listesEtab item=curr_liste}}
+      <tr>
+        {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
+        {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
+        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_group}}</a></td>
+        <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
+        <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
+        {{if $curr_liste->_ref_modele->compte_rendu_id}}
+        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
+        {{else}}
+        <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
+        {{/if}}
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td colspan="10">{{tr}}CListeChoix.none{{/tr}}</td>
+      </tr>
+      {{/foreach}}
+    </tbody>
     </table>
 
   </td>
@@ -111,6 +139,20 @@ Main.add(function () {
     </tr>
   
     <tr>
+      <th>{{mb_label object=$liste field="chir_id"}}</th>
+      <td>
+        <select name="chir_id" class="{{$liste->_props.chir_id}}">
+          <option value="">&mdash; Associer à un praticien &mdash;</option>
+          {{foreach from=$listPrat item=curr_prat}}
+            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>
+              {{$curr_prat->_view}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+  
+    <tr>
       <th>{{mb_label object=$liste field="function_id"}}</th>
       <td>
         <select name="function_id" class="{{$liste->_props.function_id}}">
@@ -123,15 +165,15 @@ Main.add(function () {
         </select>
       </td>
     </tr>
-  
+    
     <tr>
-      <th>{{mb_label object=$liste field="chir_id"}}</th>
+      <th>{{mb_label object=$liste field="group_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$liste->_props.chir_id}}">
-          <option value="">&mdash; Associer à un praticien &mdash;</option>
-          {{foreach from=$listPrat item=curr_prat}}
-            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>
-              {{$curr_prat->_view}}
+        <select name="group_id" class="{{$liste->_props.group_id}}">
+          <option value="">&mdash; Associer à un établissement &mdash;</option>
+          {{foreach from=$listEtab item=curr_group}}
+            <option value="{{$curr_group->_id}}" {{if $curr_group->_id == $liste->group_id}} selected="selected" {{/if}}>
+              {{$curr_group->_view}}
             </option>
           {{/foreach}}
         </select>
@@ -148,19 +190,29 @@ Main.add(function () {
       <td>
         <select name="compte_rendu_id">
           <option value="">&mdash; Tous</option>
-          <optgroup label="CR du praticien">
-          {{foreach from=$listCrPrat item=curr_cr}}
-          <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
-            {{$curr_cr->nom}}
-          </option>
-          {{/foreach}}
+          
+          <optgroup label="CR de l'utilisateur">
+            {{foreach from=$listCrUser item=curr_cr}}
+            <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
+              {{$curr_cr->nom}}
+            </option>
+            {{/foreach}}
           </optgroup>
-          <optgroup label="CR du cabinet">
-          {{foreach from=$listCrFunc item=curr_cr}}
-          <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
-            {{$curr_cr->nom}}
-          </option>
-          {{/foreach}}
+          
+          <optgroup label="CR de la fonction">
+            {{foreach from=$listCrFunc item=curr_cr}}
+            <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
+              {{$curr_cr->nom}}
+            </option>
+            {{/foreach}}
+          </optgroup>
+          
+          <optgroup label="CR de l'établissement">
+            {{foreach from=$listCrEtab item=curr_cr}}
+            <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
+              {{$curr_cr->nom}}
+            </option>
+            {{/foreach}}
           </optgroup>
         </select>
 
@@ -190,7 +242,7 @@ Main.add(function () {
  
     {{if $liste->_valeurs|@count}}
     <table class="tbl">
-      <tr><th class="category" colspan="2">Choix diponibles</th></tr>
+      <tr><th class="category" colspan="2">Choix disponibles</th></tr>
       {{foreach from=$liste->_valeurs item=curr_valeur name=choix}}
       <tr>
         <td class="text">{{$curr_valeur|nl2br}}</td>
@@ -202,6 +254,7 @@ Main.add(function () {
           {{mb_field object=$liste field="valeurs" hidden=1 prop=""}}
           {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
           {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
+          {{mb_field object=$liste field="group_id" hidden=1 prop=""}}
           <input type="hidden" name="_del" value="{{$curr_valeur}}" />
           <button class="remove notext" type="submit">{{tr}}Delete{{/tr}}</button>
           </form>
