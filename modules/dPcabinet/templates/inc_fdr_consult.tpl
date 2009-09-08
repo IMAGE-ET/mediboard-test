@@ -22,20 +22,12 @@
       </div>
     </td>
   </tr>
-
-  <!-- Fiches d'examens -->
+  
   <tr>
-    <th class="category">Fiches d'examens</th>
+    <td colspan="2">
+      <div class="small-info">Les fiches d'examen ont été déplacées dans l'onglet "Examen" ou "Exam. Clinique"</div>
+    </td>
   </tr>
-
-  <tr>
-    <td class="text">
-      {{mb_include_script module="dPcabinet" script="exam_dialog"}}
-      <script type="text/javascript">
-        ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
-      </script>
-		</td>
-	</tr>
 	
 </table>
       

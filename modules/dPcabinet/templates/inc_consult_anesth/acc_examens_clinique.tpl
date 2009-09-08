@@ -1,7 +1,6 @@
 <script type="text/javascript">
   function refreshConstantesMedicales () {
-    var url = new Url();
-    url.setModuleAction("dPpatients", "httpreq_vw_constantes_medicales");
+    var url = new Url("dPpatients", "httpreq_vw_constantes_medicales");
     url.addParam("patient_id", {{$consult->_ref_patient->_id}});
     url.addParam("context_class", "{{$consult->_class_name}}");
     url.addParam("context_id", {{$consult->consultation_id}});
@@ -11,7 +10,16 @@
 </script>
 <table class="form">
   <tr>
-    <td id="constantes-medicales"></td>
+    <td rowspan="2" id="constantes-medicales"></td>
+    <td>
+      <!-- Fiches d'examens -->
+      {{mb_include_script module="dPcabinet" script="exam_dialog"}}
+      <script type="text/javascript">
+        ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
+      </script>
+    </td>
+  </tr>
+  <tr>
     <td class="greedyPane">
       <table class="form">
         <tr>

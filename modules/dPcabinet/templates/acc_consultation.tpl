@@ -111,7 +111,9 @@ Main.add(function () {
 
 <div id="Constantes" style="display: none"></div>
 
-<div id="Examens" style="display: none;">{{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}</div>
+<div id="Examens" style="display: none;">
+  {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
+</div>
 
 {{if $app->user_prefs.ccam_consultation == 1}}
 <div id="Actes" style="display: none;">
