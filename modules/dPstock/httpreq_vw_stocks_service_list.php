@@ -16,6 +16,8 @@ $service_id  = mbGetValueFromGet('service_id');
 $keywords    = mbGetValueFromGet('keywords');
 $limit       = mbGetValueFromGet('limit');
 
+mbSetValueToSession('category_id', $category_id);
+
 $where = array();
 if ($service_id) {
   $where['product_stock_service.service_id'] = " = $service_id";

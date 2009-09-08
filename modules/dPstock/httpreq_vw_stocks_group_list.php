@@ -16,6 +16,8 @@ $keywords            = mbGetValueFromGet('keywords');
 $limit               = mbGetValueFromGet('limit');
 $only_ordered_stocks = mbGetValueFromGet('only_ordered_stocks')=='true';
 
+mbSetValueToSession('category_id', $category_id);
+
 $where = array();
 if ($g) {
   $where['product_stock_group.group_id'] = " = $g";
