@@ -43,7 +43,7 @@ class CDailyCheckItemCategory extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = CAppUI::tr($this->target_class)." - $this->title";
+    $this->_view = ($this->target_class == 'CBlocOperatoire' ? 'Salle de réveil' : CAppUI::tr($this->target_class))." - $this->title";
   }
 }
 ?>

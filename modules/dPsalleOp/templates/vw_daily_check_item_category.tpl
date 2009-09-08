@@ -4,11 +4,13 @@
   		<table class="main tbl">
   			<tr>
   				<th>{{mb_title class=CDailyCheckItemCategory field=title}}</th>
+          <th>{{mb_title class=CDailyCheckItemCategory field=target_class}}</th>
           <th>{{mb_title class=CDailyCheckItemCategory field=desc}}</th>
   			</tr>
 				{{foreach from=$item_categories_list item=curr_item}}
         <tr>
           <td><a href="?m={{$m}}&amp;a=vw_daily_check_item_category&amp;item_category_id={{$curr_item->_id}}&amp;dialog={{$dialog}}">{{mb_value object=$curr_item field=title}}</a></td>
+          <td>{{mb_value object=$curr_item field=target_class}}</td>
           <td>{{mb_value object=$curr_item field=desc}}</td>
         </tr>
 				{{foreachelse}}
