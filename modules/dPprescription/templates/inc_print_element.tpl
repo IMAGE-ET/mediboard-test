@@ -11,14 +11,13 @@
 {{assign var=chapitre_category value=$elt->_ref_element_prescription->_ref_category_prescription->chapitre}}
 {{if !$elt->_protocole}}
 <li>{{if !$praticien->_id}}({{$elt->_ref_praticien->_view}}){{/if}}
-  <strong>{{$elt->_ref_element_prescription->_view}} {{if $elt->conditionnel}}(Conditionnel){{/if}}</strong>
+  <strong>{{$elt->_ref_element_prescription->_view}}: {{if $elt->conditionnel}}(Conditionnel){{/if}}</strong>
 
   {{if $elt->commentaire}}
   <em>({{$elt->commentaire}})</em>
   {{/if}}
   {{if  $chapitre_category != "dmi" && ($elt->_ref_prises|@count || $elt->_duree_prise || $elt->date_arret) }}
-	  <ul>
-	    <li>
+
 			  <!-- Affichage des prises s'il y en a -->
 			    {{foreach from=$elt->_ref_prises item=prise name=foreach_prise}}
 				    {{if $prise->quantite}}
@@ -33,8 +32,7 @@
 					{{if $elt->date_arret}}
 					  (Element arrêté le {{$elt->date_arret|date_format:"%d/%m/%Y"}}) 
 					{{/if}}
-			</li>
-	  </ul>
+
   {{/if}}    
 </li>
 {{else}}

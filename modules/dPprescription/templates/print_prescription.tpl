@@ -140,7 +140,12 @@ Main.add(window.print);
   <h1>Médicaments</h1>
     <!-- Affichage des no_ald -->
     <ul>
-    {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
+    {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald name="foreach_med"}}
+		  {{if !$smarty.foreach.foreach_med.first && $smarty.foreach.foreach_med.index%15 == 0}}
+			 </div>
+			 <div class="body">
+			{{/if}}
+		
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
         {{if !$prescription->object_id}}
