@@ -23,6 +23,9 @@ if (mbGetValueFromPost('order_id') == 0) {
 	if ($msg = $order->store()) {
 		$AppUI->setMsg($msg);
 	} else {
+	  if (mbGetValueFromPost('_autofill') == 1) {
+	    $order->autofill();
+	  }
 		$AppUI->setMsg($do->createMsg);
 		$AppUI->redirect('m=dPstock&a=vw_aed_order&dialog=1&order_id='.$order->order_id);
 	}

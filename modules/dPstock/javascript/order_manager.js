@@ -114,7 +114,7 @@ function popupOrder(iOrderId, width, height, bAutofill) {
   var url = new Url("dPstock", "vw_aed_order");
   url.addParam("order_id", iOrderId);
   if (bAutofill) {
-    url.addParam("_autofill", 'true');
+    url.addParam("_autofill", 1);
   }
 
   url.popup(width, height, "Edition de commande");

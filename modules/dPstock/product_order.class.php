@@ -115,6 +115,7 @@ class CProductOrder extends CMbObject {
   /** Fills the order in function of the stocks and future stocks */
   function autofill() {
     $this->updateFormFields();
+    $this->completeField('societe_id');
     
     // if the order has not been ordered yet
     // and not partially received
