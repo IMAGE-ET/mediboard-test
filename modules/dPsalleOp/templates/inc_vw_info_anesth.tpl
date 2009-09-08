@@ -1,5 +1,8 @@
 <script type="text/javascript">
 refreshAidesPreAnesth = function(user_id) {
+  var select = $('select_aides_pre_anesth');
+  if (!select) return;
+  
   var url = new Url('dPcompteRendu', 'httpreq_vw_select_aides');
   url.addParam('object_class', 'COperation');
   url.addParam('field', 'rques_visite_anesth');
@@ -7,6 +10,10 @@ refreshAidesPreAnesth = function(user_id) {
   url.addParam('no_enum', 1);
   url.requestUpdate('select_aides_pre_anesth');
 }
+
+Main.add(function(){
+  refreshAidesPreAnesth($V(getForm('visiteAnesth').prat_visite_anesth_id));
+});
 </script>
 
 {{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
@@ -164,10 +171,8 @@ refreshAidesPreAnesth = function(user_id) {
 {{if !$selOp->date_visite_anesth}}
 <input name="date_visite_anesth" type="hidden" value="current" />
 {{else}}
+<input name="prat_visite_anesth_id" type="hidden" value="{{$selOp->prat_visite_anesth_id}}" />
 <input name="date_visite_anesth"    type="hidden" value="" />
-<input name="prat_visite_anesth_id" type="hidden" value="" />
-<input name="rques_visite_anesth"   type="hidden" value="" />
-<input name="autorisation_anesth"   type="hidden" value="" />
 {{/if}}
 
 <table class="form">
@@ -203,6 +208,8 @@ refreshAidesPreAnesth = function(user_id) {
   </tr>
     <th>
       {{mb_label object=$selOp field="rques_visite_anesth"}}
+      
+      {{if !$selOp->date_visite_anesth}}
       <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !! -->
       <div id="select_aides_pre_anesth">
   			<select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this);">
@@ -213,6 +220,7 @@ refreshAidesPreAnesth = function(user_id) {
 			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth)">
 			  {{tr}}New{{/tr}}
 			</button>
+      {{/if}}
     </th>
     <td class="text">
       {{if $selOp->date_visite_anesth}}
@@ -254,7 +262,7 @@ refreshAidesPreAnesth = function(user_id) {
   <tr>
     <td class="button" colspan="2">
       <button class="trash" type="submit">
-        {{tr}}Supprimer{{/tr}}
+        {{tr}}Cancel{{/tr}}
       </button>
     </td>
   </tr>
