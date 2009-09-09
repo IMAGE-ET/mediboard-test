@@ -284,4 +284,7 @@ $locales['CDailyCheckList.object_class.CBlocOperatoire'] = 'Salle de réveil (Blo
 $locales['CDailyCheckList.object_class.CSalle'] = 'Salle opératoire';
 $locales['config-dPsalleOp-CDailyCheckList-active_salle_reveil'] = 'Obliger la vérification des salles de réveil chaque jour';
 $locales['config-dPsalleOp-CDailyCheckList-active_salle_reveil-desc'] = 'Utilisation de la fonctionnalité de checklist par salle de réveil et par jour';
+$locales['CDailyCheckList-comments'] = 'Commentaires';
+$locales['CDailyCheckList-comments-court'] = 'Comm.';
+$locales['CDailyCheckList-comments-desc'] = 'Remarques et suppléments d\'information';
 ?>
