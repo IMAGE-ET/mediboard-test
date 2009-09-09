@@ -15,6 +15,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $date         = null;
   var $object_class = null;
   var $object_id    = null;
+  var $comments     = null;
   var $validator_id = null;
 	
 	// Refs
@@ -38,9 +39,10 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   function getProps() {
     $specs = parent::getProps();
     $specs['date']         = 'date notNull';
-    $specs['validator_id'] = 'ref class|CMediusers';
     $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire notNull default|CSalle';
     $specs['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
+    $specs['validator_id'] = 'ref class|CMediusers';
+    $specs['comments']     = 'text';
     $specs['_validator_passord'] = 'password notNull';
     $specs['_date_min'] = 'date';
     $specs['_date_max'] = 'date';

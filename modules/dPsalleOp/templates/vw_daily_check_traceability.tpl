@@ -51,12 +51,14 @@
 				<tr>
           <th>{{mb_title class=CDailyCheckList field=date}}</th>
           <th>{{mb_title class=CDailyCheckList field=object_id}}</th>
+          <th>{{mb_title class=CDailyCheckList field=comments}}</th>
           <th>{{mb_title class=CDailyCheckList field=validator_id}}</th>
 				</tr>
 				{{foreach from=$list_check_lists item=curr_list}}
 				<tr>
           <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;check_list_id={{$curr_list->_id}}">{{mb_value object=$curr_list field=date}}</a></td>
           <td>{{$curr_list->_ref_object}}</td>
+          <td>{{mb_value object=$curr_list field=comments}}</td>
           <td>{{mb_value object=$curr_list field=validator_id}}</td>
         </tr>
 				{{foreachelse}}
@@ -79,6 +81,10 @@
         <tr>
           <th>{{mb_label object=$check_list field=object_id}}</th>
           <td>{{$check_list->_ref_object}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$check_list field=comments}}</th>
+          <td>{{mb_value object=$check_list field=comments}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=validator_id}}</th>

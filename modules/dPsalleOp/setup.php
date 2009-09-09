@@ -181,7 +181,11 @@ class CSetupdPsalleOp extends CSetup {
               ADD `target_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
     $this->addQuery($query);
     
-    $this->mod_version = "0.29";
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `daily_check_list` ADD `comments` TEXT";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.30";
   }
 }
 ?>

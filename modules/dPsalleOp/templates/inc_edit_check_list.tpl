@@ -1,7 +1,10 @@
 <script type="text/javascript">
-	confirmCheckList = function(form) {
-		return checkForm(form) && confirm('Tous les points ont-ils été bien vérifiés ?') && onSubmitFormAjax(form, {onComplete: function(){location.reload()} });
-	}
+confirmCheckList = function(form) {
+	return checkForm(form) && confirm('Tous les points ont-ils été bien vérifiés ?') && onSubmitFormAjax(form, {onComplete: function(){location.reload()} });
+}
+Main.add(function(){
+  prepareForm('edit-CDailyCheckList');
+});
 </script>
 
 <form name="edit-CDailyCheckList" method="post" action="?" onsubmit="return confirmCheckList(this)">
@@ -48,8 +51,14 @@
 		  	<td colspan="3">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
 		  </tr>
 		{{/foreach}}
+    <tr>
+      <td colspan="10">
+        {{mb_label object=$check_list field=comments}}<br />
+        {{mb_field object=$check_list field=comments}}
+      </td>
+    </tr>
 	</table>
-	
+
   <select name="validator_id" class="notNull ref">
     <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
     {{foreach from=$personnel item=curr_personnel}}
