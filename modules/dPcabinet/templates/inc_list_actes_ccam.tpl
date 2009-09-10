@@ -15,7 +15,7 @@ viewCode = function(code, object_class){
 {{if $subject->_ref_actes_ccam && $vue == "complete"}}
 	<tr>
 	  <th class="category" colspan="10">
-	  	{{tr}}{{$subject->_class_name}}-_ref_actes_ccam{{/tr}}
+	  	{{tr}}Codage des actes CCAM{{/tr}}
 	  </th>
 	</tr> 
 	{{foreach from=$subject->_ref_actes_ccam item=_acte name=acte}}

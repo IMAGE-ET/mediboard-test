@@ -84,6 +84,13 @@ function initFields(mode_sortie){
   ContraintesRPU.updateOrientation(mode_sortie, true); 
 }
 
+function printDossier(id) {
+  var url = new Url("dPurgences", "print_dossier");
+  url.addParam("rpu_id", id);
+  url.popup(700, 550, "RPU");
+}
+
+
 </script>
 
 <table style="width:100%">
@@ -338,6 +345,10 @@ function initFields(mode_sortie){
       <span id="div_sortie_prevue">
         {{include file="../../dPurgences/templates/inc_sortie_prevue.tpl"}}
       </span>
+      
+      <button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
+        {{tr}}Print{{/tr}} dossier
+      </button>
 	  </td>
 	</tr>
 </table>

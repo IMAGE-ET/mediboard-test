@@ -74,14 +74,17 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 	      <div id="dhe"></div>
 	      <script type="text/javascript">DHE.register("{{$consult->patient_id}}", "{{$consult->_praticien_id}}", "dhe");</script>
 	      {{else}}
+	      {{if $m != "dPurgences"}}
 	      <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
 	      <br/>
 	      <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouveau séjour</button>
 	      <br/>
+	      {{/if}}
 	    	{{/if}}
     	{{/if}}
-    	
+    	{{if $m != "dPurgences"}}
       <button style="margin: 1px;" class="new" type="button" onclick="newConsultation   ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle consultation</button>
+      {{/if}}
     </td>
   </tr>
 </table>

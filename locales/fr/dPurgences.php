@@ -291,4 +291,6 @@ $locales['config-dPurgences-responsable_rpu_view'] = 'Affichage du responsable d
 $locales['config-dPurgences-responsable_rpu_view-desc'] = 'Affichage du responsable du patient';
 $locales['config-dPurgences-programme_rpu_view'] = 'Affichage du programme de consultation';
 $locales['config-dPurgences-programme_rpu_view-desc'] = 'Affichage du programme de consultation';
+$locales['config-dPurgences-diag_prat_view'] = 'Afficher diagnostic d\'examen du praticien';
+$locales['config-dPurgences-diag_prat_view-desc'] = 'Afficher diagnostic d\'examen du praticien';
 ?>

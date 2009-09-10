@@ -932,4 +932,7 @@ $locales['CConstantesMedicales-glycemie-desc'] = 'Glycémie capilaire';
 $locales['CAntecedent.unknown'] = 'Aucun antécédent renseigné';
 $locales['CTraitement.unknown'] = 'Traitement non renseigné';
 $locales['CDossierMedical-codes_cim.unknown'] = 'Diagnostic non renseigné';
+$locales['CPatient-_age'] = 'Âge';
+$locales['CPatient-_age-court'] = 'Âge';
+$locales['CPatient-_age-desc'] = 'Âge';
 ?>

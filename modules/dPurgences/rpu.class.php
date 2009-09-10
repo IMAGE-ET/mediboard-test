@@ -294,5 +294,11 @@ class CRPU extends CMbObject {
     
     $this->_ref_sejour->onStore();
   }
+  
+  function loadComplete() {
+    parent::loadComplete();
+    
+    $this->_ref_sejour->loadComplete();
+  }
 }
 ?>

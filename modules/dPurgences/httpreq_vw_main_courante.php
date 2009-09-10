@@ -44,6 +44,9 @@ if ($selAffichage == "prendre_en_charge"){
   $where["consultation.consultation_id"] = "IS NULL";
 } else if($selAffichage == "presents"){
   $where["sejour.sortie_reelle"] = "IS NULL";
+  $where["sejour.annule"] = " = '0'";
+} else if ($selAffichage == "annule_hospitalise") {
+	$where["sejour.annule"] = " = '1'";
 }
 
 

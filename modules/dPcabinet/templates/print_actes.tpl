@@ -1,11 +1,13 @@
-<h1>Consultation de {{$consult->_ref_patient}} par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}}</h1>
+<table>
+  <tr>
+    <td><h1>Consultation de {{$consult->_ref_patient}} par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}}</h1></td>
+  </tr>
+</table>
 
-<h4>Actes CCAM</h4>
 <table class="main tbl">
 {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consult vue=complete}}
 </table>
 
-<h4>Actes NGAP</h4>
 {{assign var=object value=$consult}}
 <table class="main tbl">
   <tr>

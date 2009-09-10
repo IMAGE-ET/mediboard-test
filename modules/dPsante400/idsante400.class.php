@@ -48,6 +48,7 @@
   
   /**
    * Loads a specific id400 for a given object (and optionnaly tag)
+   * @return ref|CMbObject Id of the loaded object
    */
   function loadLatestFor($mbObject, $tag = null) {
     $object_class = get_class($mbObject);
@@ -64,6 +65,8 @@
     if ($mbObject->_id) {
       $this->loadMatchingObject("`last_update` DESC");
     }
+    
+    return $mbObject->_id;
   }
   
   /**
