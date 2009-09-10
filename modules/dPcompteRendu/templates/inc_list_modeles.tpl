@@ -6,12 +6,12 @@
   <label for="_new" title="Veuillez choisir un modèle" />
   <select name="_new" class="notNull ref" onchange="this.form.submit()">
     <option value="">&mdash; Choisir un modèle</option>
-    <optgroup label="Modèles du praticien">
+    <optgroup label="Modèles de l'utilisateur">
       {{foreach from=$modeles.prat item=_modele}}
       <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
       {{/foreach}}
     </optgroup>
-    <optgroup label="Modèles du cabinet">
+    <optgroup label="Modèles de la fonction">
       {{foreach from=$modeles.func item=_modele}}
       <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
       {{/foreach}}

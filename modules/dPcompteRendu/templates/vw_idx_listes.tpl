@@ -142,7 +142,7 @@ Main.add(function () {
       <th>{{mb_label object=$liste field="chir_id"}}</th>
       <td>
         <select name="chir_id" class="{{$liste->_props.chir_id}}">
-          <option value="">&mdash; Associer à un praticien &mdash;</option>
+          <option value="">&mdash; Associer à un utilisateur &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>
               {{$curr_prat->_view}}

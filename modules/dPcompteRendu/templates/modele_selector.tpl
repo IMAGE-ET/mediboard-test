@@ -24,12 +24,12 @@ function setClose(modele_id, object_id) {
 <input type="hidden" name="object_id" value="{{$target_id}}" />
 <input type="hidden" name="object_class" value="{{$target_class}}" />
 
-<label for="praticien_id" title="Choisir un autre praticien permet d'accéder à ses modèles">
-	Changer de praticien
+<label for="praticien_id" title="Choisir un autre utilisateur permet d'accéder à ses modèles">
+	Changer d'utilisateur
 </label> :
 
 <select name="praticien_id" class="ref" onchange="this.form.submit()">
-  <option value="">&mdash; Choisir un praticien</option>
+  <option value="">&mdash; Choisir un utilisateur</option>
   {{foreach from=$praticiens item=_praticien}}
     <option class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" value="{{$_praticien->user_id}}" 
       {{if $_praticien->_id == $praticien->_id}} selected="selected" {{/if}}>
@@ -74,7 +74,7 @@ function setClose(modele_id, object_id) {
 	</div>
 {{else}}
 	<div class="big-info">
-	  Les modèles pour le praticien courant ne vous sont pas accessibles.<br />
-	  Vous devriez changer le praticien pour accéder à d'autres modèles.
+	  Les modèles pour l'utilisateur courant ne vous sont pas accessibles.<br />
+	  Vous devriez changer l'utilisateur pour accéder à d'autres modèles.
 	</div>
 {{/if}}

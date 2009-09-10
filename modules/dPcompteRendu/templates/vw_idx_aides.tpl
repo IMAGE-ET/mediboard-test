@@ -219,7 +219,7 @@ Main.add(function () {
       <th>{{mb_label object=$aide field="user_id"}}</th>
       <td>
         <select name="user_id" class="{{$aide->_props.user_id}}">
-          <option value="">&mdash; Associer à un praticien &mdash;</option>
+          <option value="">&mdash; Associer à un utilisateur &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
