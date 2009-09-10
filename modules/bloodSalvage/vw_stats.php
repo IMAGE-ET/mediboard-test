@@ -93,7 +93,7 @@ $titles['6h'] = utf8_encode('Durée règlementaire');
 $series = &$graphs['6h'];
 $areas = array("< 6", ">= 6", "IS NULL");
 foreach($areas as $key => $area) {
-	$where[] = "TIME_FORMAT(blood_salvage.transfusion_end - blood_salvage.recuperation_start, '%k') $area";
+	$where[] = "HOUR(TIMEDIFF(blood_salvage.transfusion_end, blood_salvage.recuperation_start)) $area";
 	$pos = end(array_keys($where));
 	
 	$series[$key] = array('data' => null, 'label' => (($area == 'IS NULL') ? 'Inconnu' : $area.'h'));
