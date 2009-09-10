@@ -7,29 +7,26 @@
 
   {{if $fileSel->_class_name == "CFile" && $fileSel->_nb_pages && !$acces_denied}}
   <!-- Déplacement dans les pages -->
-    {{if $page_prev !== null}}
-    <button type="button" title="Page précédente" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_prev}}');">
+    
+    <button type="button" {{if $page_prev === null}}disabled="disabled"{{/if}} title="Page précédente" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_prev}}');">
     	<img src="images/icons/prev.png" />
     </button>
-    {{/if}}
     
     {{if $fileSel->_nb_pages && $fileSel->_nb_pages>=2}}
-      <select name="_num_page" onchange="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', this.value);">
+    <select name="_num_page" onchange="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', this.value);">
       {{foreach from=$arrNumPages item=currPage}}
-      <option value="{{$currPage-1}}" {{if $currPage-1==$sfn}}selected="selected" {{/if}}>
-      Page {{$currPage}} / {{$fileSel->_nb_pages}}
-      </option>
+        <option value="{{$currPage-1}}" {{if $currPage-1==$sfn}}selected="selected" {{/if}}>
+          {{$currPage}} / {{$fileSel->_nb_pages}}
+        </option>
       {{/foreach}}
-      </select>
+    </select>
     {{elseif $fileSel->_nb_pages}}
       Page {{$sfn+1}} / {{$fileSel->_nb_pages}}
     {{/if}}
-            
-    {{if $page_next}}
-    <button type="button" title="Page suivante" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_next}}');">
+    
+    <button type="button" {{if !$page_next}}disabled="disabled"{{/if}} title="Page suivante" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_next}}');">
     	<img src="images/icons/next.png" />
     </button>
-    {{/if}}
   {{/if}}
   
   <hr />

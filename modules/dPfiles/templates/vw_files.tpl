@@ -21,7 +21,7 @@
           <td>
             <label title="Nom de l'objet sélectionné">Nom</label>
             <input type="text" size="50" readonly="readonly" ondblclick="ObjectSelector.init()" name="selView" value="{{$selView}}" />
-            <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
+            <button type="button" onclick="ObjectSelector.init()" class="search">{{tr}}Search{{/tr}}</button>
             <input type="hidden" name="selKey" value="{{$selKey}}" onchange="this.form.submit()" />
             <input type="hidden" name="keywords" value="{{$keywords}}" />
             <script type="text/javascript">
@@ -40,7 +40,7 @@
           <td>
             <select name="typeVue" onchange="if (this.form.onsubmit()) { this.form.submit() };">
               <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Miniatures et aperçus</option>
-              <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Miniatures seuls</option>
+              <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Miniatures seules</option>
             </select>
           </td>
           {{/if}}
