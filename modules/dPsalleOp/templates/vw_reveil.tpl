@@ -1,14 +1,14 @@
 
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 <script type="text/javascript">
-
+var updater = null; 
 Main.add(function () {
   new Control.Tabs('reveil_tabs');
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
   opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");
   opsUpdater.addParam("date", "{{$date}}");
-  opsUpdater.periodicalUpdate("ops", { frequency: 90 });
+  updater = opsUpdater.periodicalUpdate("ops", { frequency: 90 });
   
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
   opsUpdater.addParam("bloc_id", "{{$bloc->_id}}");

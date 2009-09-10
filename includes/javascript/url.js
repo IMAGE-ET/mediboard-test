@@ -303,7 +303,7 @@ var Url = Class.create({
     if(oDefaultOptions.waitingText)
       $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
     
-    new Ajax.PeriodicalUpdater(ioTarget, "index.php", oDefaultOptions);
+    return new Ajax.PeriodicalUpdater(ioTarget, "index.php", oDefaultOptions);
   },
   
   ViewFilePopup: function(objectClass, objectId, elementClass, elementId, sfn){
