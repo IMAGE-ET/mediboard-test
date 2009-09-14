@@ -277,6 +277,8 @@ if(!$mode_pharma){
 }
 
 
+
+/*
 // Ajout des lignes a la prescription suivante si la ligne n'est pas déja incluse
 if(!$mode_pharma){
 	// Stockage dans un tableaux des medicaments et elements de la prescription courante
@@ -319,6 +321,7 @@ if(!$mode_pharma){
 		}
 	}
 }
+*/
 
 $prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescription->_id;
 
