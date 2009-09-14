@@ -9,8 +9,6 @@ var Analyse = {
     }
     
     var oEditForm = document.editExamen;
-    Console.debug(Form.toObject(oForm), "Sibling Form");
-    Console.debug(Form.toObject(oEditForm), "Edit Form");
     oEditForm.examen_labo_id.value = "";
     oEditForm.catalogue_labo_id.value = oForm.catalogue_labo_id.value;
     oEditForm.submit();

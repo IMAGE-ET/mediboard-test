@@ -11,10 +11,8 @@ var Catalogue = {
         iCatalogue = oForm.catalogue_labo_id.value;
       }
     }
-    var urlCat = new Url;
-    var urlExam = new Url;
-    urlCat.setModuleAction("dPlabo", "httpreq_vw_catalogues");
-    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_catalogues");
+    var urlCat = new Url("dPlabo", "httpreq_vw_catalogues");
+    var urlExam = new Url("dPlabo", "httpreq_vw_examens_catalogues");
     if(iCatalogue) {
       urlCat.addParam("catalogue_labo_id", iCatalogue);
       urlExam.addParam("catalogue_labo_id", iCatalogue);
@@ -34,10 +32,8 @@ var Pack = {
         pack_id = oForm.pack_examens_labo_id.value;
       }
     }
-    var urlPack = new Url;
-    var urlExam = new Url;
-    urlPack.setModuleAction("dPlabo", "httpreq_vw_packs");
-    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_packs");
+    var urlPack = new Url("dPlabo", "httpreq_vw_packs");
+    var urlExam = new Url("dPlabo", "httpreq_vw_examens_packs");
     if(pack_id) {
       urlPack.addParam("pack_examens_labo_id", pack_id);
       urlExam.addParam("pack_examens_labo_id", pack_id);
@@ -71,10 +67,8 @@ var Prescription = {
       }
     }
     var iPatient_id = document.patFrm.patient_id.value;
-    var urlPresc = new Url;
-    var urlExam  = new Url;
-    urlPresc.setModuleAction("dPlabo", "httpreq_vw_prescriptions");
-    urlExam.setModuleAction("dPlabo", "httpreq_vw_examens_prescriptions");
+    var urlPresc = new Url("dPlabo", "httpreq_vw_prescriptions");
+    var urlExam  = new Url("dPlabo", "httpreq_vw_examens_prescriptions");
     if(prescription_id) {
       urlPresc.addParam("prescription_labo_id", prescription_id);
       urlExam.addParam("prescription_labo_id", prescription_id);
@@ -86,8 +80,7 @@ var Prescription = {
   },
   
   edit : function(prescription_id) {
-    var url = new Url;
-    url.setModuleAction("dPlabo", "httpreq_edit_prescription");
+    var url = new Url("dPlabo", "httpreq_edit_prescription");
     url.addParam("prescription_labo_id", prescription_id);
     url.addParam("patient_id", document.patFrm.patient_id.value);
     url.requestUpdate("listExamens", { waitingText: null });
@@ -132,8 +125,7 @@ var Prescription = {
   },
   
   print: function(prescription_id) {
-    var url = new Url;
-    url.setModuleAction("dPlabo", "vw_prescriptionPdf");
+    var url = new Url("dPlabo", "vw_prescriptionPdf");
     url.addParam("suppressHeaders", "1");
     url.addParam("prescription_id", prescription_id);
     url.popup(800, 700, "CPrescriptionLabo");
@@ -169,11 +161,9 @@ var Prescription = {
     },
 
     edit: function(iPrescriptionItem) {
-      $V(document.typeListeFrm.typeListe, "Resultat");
-      var urlResult = new Url;
-      var urlGraph  = new Url;
-      urlResult.setModuleAction("dPlabo", "httpreq_edit_resultat");
-      urlGraph.setModuleAction("dPlabo", "httpreq_graph_resultats");
+      $V(document.typeListeFrm.typeListe, "Resultat", false);
+      var urlResult = new Url("dPlabo", "httpreq_edit_resultat");
+      var urlGraph  = new Url("dPlabo", "httpreq_graph_resultats");
       urlResult.addParam("typeListe", $V(document.typeListeFrm.typeListe));
       if (!isNaN(iPrescriptionItem)) {
         Prescription.Examen.select(iPrescriptionItem);
@@ -239,10 +229,8 @@ var oDragOptions = {
 
 // Recherche des analyses
 function search(){
-  var oForm = document.frmRecherche;
-  var url = new Url();
-  url.setModuleAction("dPlabo", "httpreq_search_exam");
-  url.addParam("recherche", oForm.search.value);
+  var url = new Url("dPlabo", "httpreq_search_exam");
+  url.addParam("recherche", document.frmRecherche.search.value);
   url.requestUpdate("bottomRightDiv", { waitingText: null });
 } 
     
@@ -310,10 +298,10 @@ Main.add(function () {
     </td>
     <td class="halfPane">
       <form name="typeListeFrm" action="?" method="get">
+      <input type="hidden" name="m" value="dPlabo" />
       <table class="form">
         <tr>
           <td class="button">
-            <input type="hidden" name="m" value="dPlabo" />
             <input type="radio" name="typeListe" value="Pack" {{if $typeListe == "Pack" || $typeListe == ""}}checked="checked"{{/if}} onchange="window[this.value].select();" />
             <label for="typeListe_Pack">Packs</label>
             <input type="radio" name="typeListe" value="Catalogue" {{if $typeListe == "Catalogue"}}checked="checked"{{/if}} onchange="window[this.value].select();" />
