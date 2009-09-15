@@ -29,7 +29,12 @@ function drawGraphs(size) {
     g.options.yaxis.noTicks = size.yaxisNoTicks;
     g.options.yaxis.tickFormatter = yAxisTickFormatter;
     g.options.y2axis.tickFormatter = yAxisTickFormatter;
-    Flotr.draw(container, g.series, g.options);
+    var f = Flotr.draw(container, g.series, g.options);
+    
+    {{if $groupmod==1}}
+    f.overlay.setStyle({cursor: 'pointer'})
+             .observe('click', function(m){return function(){$V(getForm('typevue').elements.groupmod, m)}}(g.module));
+    {{/if}}
   });
 }
 
@@ -104,14 +109,7 @@ Main.add(function () {
 <tr>
   <td>
   {{foreach from=$graphs item=graph name=graphs}}
-    <div id="graph-{{$smarty.foreach.graphs.index}}" 
-         {{if $groupmod==1}}
-         style="width: 400px; height: 250px; float: left; margin: 1em; cursor: pointer;" 
-         onclick="$V(getForm('typevue').elements.groupmod, '{{$graph.module}}')"
-         {{else}}
-         style="width: 400px; height: 250px; float: left; margin: 1em;" 
-         {{/if}}
-         ></div>
+    <div id="graph-{{$smarty.foreach.graphs.index}}" style="width: 400px; height: 250px; float: left; margin: 1em;"></div>
   {{/foreach}}
   </td>
 </tr>
