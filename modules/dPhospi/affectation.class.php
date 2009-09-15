@@ -84,24 +84,38 @@ class CAffectation extends CMbObject {
       return $msg;
     }
     
+    //TODO: utiliser moreThan
     $this->completeField("entree");
     $this->completeField("sortie");
-    $this->completeField("sejour_id");
     if ($this->sortie <= $this->entree) {
       return "La date de sortie doit être supérieure à la date d'entrée";
     }
-    $where = array();
-    $where["sejour_id"] = "= $this->sejour_id";
-    if($this->_id) {
-      $where["affectation_id"] = "!= $this->_id";
+    
+    if ($msg = $this->checkCollisions()) {
+      return $msg;
     }
-    $listAffectations = $this->loadList($where);
-    foreach($listAffectations as $_aff) {
+    
+    return null;
+  }
+  
+  /**
+   * @return string Store-like message
+   */
+  function checkCollisions(){
+    $this->completeField("sejour_id");
+    if (!$this->sejour_id) return;
+    
+    $affectation = new CAffectation;
+    $affectation->sejour_id = $this->sejour_id;
+    $affectations = $this->loadMatchingList();
+    unset($affectations[$this->_id]);
+    
+    //TODO: corriger l'orthographe de colide > collide
+    foreach($affectations as $_aff) {
       if($this->colide($_aff)) {
         return "Placement déjà effectué";
       }
     }
-    return null;
   }
 
   function deleteOne() {
@@ -211,7 +225,6 @@ class CAffectation extends CMbObject {
   }
 
   function loadRefsAffectations() {
-
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
       "sejour_id" => "= '$this->sejour_id'",
@@ -243,17 +256,16 @@ class CAffectation extends CMbObject {
 
   function checkDaysRelative($date) {
     if ($this->entree and $this->sortie) {
-      $this->_entree_relative = mbDaysRelative($date." 10:00:00", $this->entree);
-      $this->_sortie_relative = mbDaysRelative($date." 10:00:00", $this->sortie);
+      $this->_entree_relative = mbDaysRelative("$date 10:00:00", $this->entree);
+      $this->_sortie_relative = mbDaysRelative("$date 10:00:00", $this->sortie);
     }
   }
 
   function colide($aff) {
-    if (($aff->entree < $this->sortie and $aff->sortie > $this->sortie)
-    or ($aff->entree < $this->entree and $aff->sortie > $this->entree)
-    or ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie))
-    return true;
-    return false;
+    return 
+      ($aff->entree < $this->sortie and $aff->sortie > $this->sortie) || 
+      ($aff->entree < $this->entree and $aff->sortie > $this->entree) || 
+      ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie);
   }
 
   function loadMenu($date, $listTypeRepas = null){
@@ -274,8 +286,6 @@ class CAffectation extends CMbObject {
       $repasDuJour->loadObject($where);
       $repas[$keyType] = $repasDuJour;
     }
-
-
   }
 }
 ?>
