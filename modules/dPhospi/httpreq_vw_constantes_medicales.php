@@ -49,6 +49,7 @@ $patient->loadRefPhotoIdentite();
 // Construction d'une constante médicale
 $constantes = new CConstantesMedicales();
 $constantes->patient_id = $patient->_id;
+$constantes->loadRefPatient();
 
 // Les constantes qui correspondent (dans le contexte ou non)
 $list_constantes = $constantes->loadMatchingList('datetime');

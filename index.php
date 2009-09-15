@@ -106,6 +106,9 @@ if (isset($_REQUEST["login"])) {
 
 // Get the user preference
 $uistyle = $AppUI->user_prefs["UISTYLE"];
+if (!is_dir("style/$uistyle")) {
+  $uistyle = "mediboard";
+}
 
 CAppUI::requireSystemClass("smartydp");
 

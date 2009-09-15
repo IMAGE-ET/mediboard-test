@@ -1,7 +1,5 @@
 <script type="text/javascript">
-
 // Notification de l'arrivée du patient
-
 if (!window.updateConsultations) {
   updateConsultations = function() {
   	window.location.reload();
@@ -13,7 +11,6 @@ putArrivee = function(oForm) {
   oForm.arrivee.value = today.toDATETIME(true);
   submitFormAjax(oForm, 'systemMsg', { onComplete: updateConsultations } );
 }
-
 </script>
 
 
@@ -151,8 +148,8 @@ Main.add( function () {
     </td>
     <td rowspan="2">
     	{{assign var=categorie value=$_consult->_ref_categorie}}
-      {{if $categorie}}
-      <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}"/>
+      {{if $categorie && $categorie->nom_icone}}
+        <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}"/>
       {{/if}}
     </td>
   </tr>
@@ -162,7 +159,7 @@ Main.add( function () {
       {{if $canCabinet->view}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
       {{else}}
-      <a href="#nowhere" title="Impossible de modifier le RDV">
+        <a href="#nowhere" title="Impossible de modifier le RDV">
       {{/if}}
           {{$_consult->motif|truncate:40:"...":true}}
         </a>

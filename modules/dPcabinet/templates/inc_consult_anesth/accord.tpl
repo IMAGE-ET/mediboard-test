@@ -17,6 +17,18 @@ function reloadPrescription(prescription_id){
 }
 {{/if}}
 
+var constantesMedicalesDrawn = false;
+function refreshConstantesMedicales (force) {
+  if (!constantesMedicalesDrawn || force) {
+    var url = new Url();
+    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("patient_id", {{$consult->_ref_patient->_id}});
+    url.addParam("context_guid", "{{$consult->_guid}}");
+    url.requestUpdate("Constantes");
+    constantesMedicalesDrawn = true;
+  }
+}
+
 Main.add(function () {
   tabsConsultAnesth = new Control.Tabs.create('tab-consult-anesth', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
@@ -44,6 +56,8 @@ Main.add(function () {
   	<a href="#prescription_sejour">Trait. et prescription</a>
   </li>
   {{/if}}
+  
+  <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>
   
@@ -67,6 +81,8 @@ Main.add(function () {
 {{if $isPrescriptionInstalled}}
 <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
+
+<div id="Constantes" style="display: none;"></div>
 <div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
 <div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
 

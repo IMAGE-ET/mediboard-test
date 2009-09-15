@@ -16,6 +16,7 @@ $readonly = mbGetValueFromGet('readonly');
 $constantes = new CConstantesMedicales();
 $constantes->load($const_id);
 $constantes->loadRefContext();
+$constantes->loadRefPatient();
 
 $latest_constantes = CConstantesMedicales::getLatestFor($constantes->patient_id);
 

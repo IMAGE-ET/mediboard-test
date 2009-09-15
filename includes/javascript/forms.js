@@ -147,13 +147,10 @@ function pasteHelperContent(oHelpElement) {
   var aFound = oHelpElement.name.match(/_helpers_(.*)/);
   Assert.that(aFound.length == 2, "Helper element '%s' is not of the form '_helpers_propname'", oHelpElement.name);
   
-  var oForm       = oHelpElement.form; 
-  var aFieldFound = aFound[1].split("-");
-  
-  var sPropName = aFieldFound[0];
-  var oAreaField = $(oForm.elements[sPropName]);
-
+  var sPropName = aFound[1].split("-")[0];
+  var oAreaField = $(oHelpElement.form.elements[sPropName]);
   var sValue = oHelpElement.value;
+  
   oHelpElement.value = "";
   var caret = oAreaField.caret();
   oAreaField.caret(caret.begin, caret.end, sValue + '\n');

@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script type="text/javascript">  
 g = [];
 data = {{$data|@json}};
 dates = {{$dates|@json}};
@@ -48,6 +48,11 @@ tickFormatter = function (n) {
   return s+'</a>';
 };
 
+tickFormatterSpreadsheet = function (n) {
+  n = parseInt(n);
+  return dates[n]+' '+hours[n];
+};
+
 trackFormatter = function (obj) {
   return dates[parseInt(obj.x)] + ' : ' + obj.series.data[obj.index][1];
 };
@@ -83,7 +88,7 @@ initializeGraph = function (src, data) {
   });
   
   // Ajout de la ligne de niveau standard
-  if (src.standard) {
+  if (0 && src.standard) {
     src.series.unshift({
       data: [[0, src.standard], [1000, src.standard]], 
       points: {show: false},
@@ -121,6 +126,14 @@ options = {
   legend: {
     position: 'nw',
     backgroundOpacity: 0
+  },
+  spreadsheet: {
+    show: true,
+    tabGraphLabel: 'Graphique',
+    tabDataLabel: 'Données',
+    toolbarDownload: 'Télécharger les données (CSV)',
+    toolbarSelectAll: 'Tout sélectionner',
+    tickFormatter: tickFormatterSpreadsheet
   }
 };
 
@@ -130,7 +143,7 @@ initializeGraph(data.{{$name}}, options);
 {{/foreach}}
 
 // And we put the the specific options
-data.ta.options.colors = ['silver', '#00A8F0', '#C0D800'];
+data.ta.options.colors = [/*'silver', */'#00A8F0', '#C0D800'];
 
 data.pouls.options.colors = ['silver', 'black'];
 data.pouls.options.mouse.trackDecimals = 0;
@@ -140,9 +153,24 @@ data.temperature.options.colors = ['silver', 'orange'];
 drawGraph = function() {
   var c = $('constantes-medicales-graph');
   if (c) {
-		$H(data).each(function(pair){
-			g.push(insertGraph(c, pair.value, 'constantes-medicales-'+pair.key, '500px', '120px'));
-		});
+    $H(data).each(function(pair){
+      g.push(insertGraph(c, pair.value, 'constantes-medicales-'+pair.key, '500px', '130px'));
+      last_date = null;
+    });
+    
+    g.each(function(graph){
+      graph.spreadsheet.tabs.data.observe('click', function(e){
+        g.each(function(graph2){
+          graph2.spreadsheet.showTab('data');
+        });
+      });
+      
+      graph.spreadsheet.tabs.graph.observe('click', function(e){
+        g.each(function(graph2){
+          graph2.spreadsheet.showTab('graph');
+        });
+      });
+    });
   }
 };
 
