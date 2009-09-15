@@ -18,20 +18,20 @@
 	</td>
 	<td>
 	  <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}" class="button search">
-	   {{$object->echange_hprim_id|str_pad:6:'0':STR_PAD_LEFT}}
+	   {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	  </a>
 	</td>
 	<td>
 	  {{if $object->initiateur_id}}
 	    <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}" class="button search">
-        {{$object->initiateur_id|str_pad:6:'0':STR_PAD_LEFT}}
+        {{$object->initiateur_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	    </a>
     {{/if}}
 	</td>
 	<td>
 	  {{if @$object->_patient_ipp}}
 	    <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$object->_patient_id}}" class="button search">
-	      {{$object->_patient_ipp|str_pad:6:'0':STR_PAD_LEFT}}
+	      {{$object->_patient_ipp|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	    </a>
     {{/if}}
 	</td>
@@ -49,7 +49,7 @@
 	     {{mb_value object=$object field="emetteur"}}
 	   {{/if}}
 	   {{if $object->identifiant_emetteur}}
-	    : {{$object->identifiant_emetteur|str_pad:6:'0':STR_PAD_LEFT}}
+	    : {{$object->identifiant_emetteur|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	   {{/if}}
 	</td>
 	<td>

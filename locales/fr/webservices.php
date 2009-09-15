@@ -58,4 +58,6 @@ $locales['CEchangeSOAP-soapfault-court'] = 'Erreur SOAP';
 $locales['CEchangeSOAP-soapfault-desc'] = 'Erreur SOAP';
 $locales['config-webservices-connection_timeout'] = 'Délai de connexion';
 $locales['config-webservices-connection_timeout-desc'] = 'Délai de connexion';
+$locales['config-webservices-webservice'] = 'Nom du webservice';
+$locales['config-webservices-webservice-desc'] = 'Nom du webservice';
 ?>

@@ -47,36 +47,23 @@
             <td>
               <select class="str" name="web_service">
                 <option value="">&mdash; Liste des web services </option>
-                <option value="SigeGateConf" {{if $web_service == "SigeGateConf"}}selected="selected"{{/if}}>
-                  Configuration
-                </option>
-                <option value="SigeGateDico" {{if $web_service == "SigeGateDico"}}selected="selected"{{/if}}>
-                  Dictionnaire
-                </option>
-                <option value="SigeGatePat" {{if $web_service == "SigeGatePat"}}selected="selected"{{/if}}>
-                  Patient
-                </option>
-                <option value="SigeGateDosBase" {{if $web_service == "SigeGateDosBase"}}selected="selected"{{/if}}>
-                  Dossier Administratif
-                </option>
-                <option value="SigeGateInterv" {{if $web_service == "SigeGateInterv"}}selected="selected"{{/if}}>
-                  Intervention
-                </option>
-                <option value="SigeGateSej" {{if $web_service == "SigeGateSej"}}selected="selected"{{/if}}>
-                  Séjour
-                </option>
-                <option value="SigeGateActeCcam" {{if $web_service == "SigeGateActeCcam"}}selected="selected"{{/if}}>
-                  Acte CCAM
-                </option>
-                <option value="SigeGateActeNgap" {{if $web_service == "SigeGateActeNgap"}}selected="selected"{{/if}}>
-                  Acte NGAP
-                </option>
-                <option value="SigeGateDiag" {{if $web_service == "SigeGateDiag"}}selected="selected"{{/if}}>
-                  Diagnostic - CIM10
-                </option>
+                {{foreach from=$dPconfig.webservices.webservice|static:"services" key=_service_name item=_service_libelle}}
+								  <option value="{{$_service_name}}" {{if $web_service == $_service_name}}selected="selected"{{/if}}>
+                    {{$_service_libelle}}
+                  </option>
+								{{/foreach}}
               </select>
             </td>
           </tr>
+					 <tr>
+            <th>Fonctions</th>
+            <td>
+            	<select class="str" name="fonction">
+                <option value="">&mdash; Liste des fonctions </option>
+                
+              </select>
+						</td>
+				  </tr>
           <tr>
             <td colspan="2" style="text-align: center">
               <button type="submit" class="search">Filtrer</button>
@@ -156,7 +143,7 @@
       <table class="form">
         <tr>
           <th class="title" colspan="2">
-            ECHANGE SOAP - {{$echange_soap->echange_soap_id|str_pad:6:'0':STR_PAD_LEFT}}
+            ECHANGE SOAP - {{$echange_soap->echange_soap_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
             <br />
             {{mb_value object=$echange_soap field="function_name"}}
           </th>

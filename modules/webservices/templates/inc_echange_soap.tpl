@@ -18,7 +18,7 @@
   </td>
   <td>
     <a href="?m=webservices&amp;tab=vw_idx_echange_soap&amp;echange_soap_id={{$object->_id}}" class="button search">
-     {{$object->echange_soap_id|str_pad:6:'0':STR_PAD_LEFT}}
+     {{$object->echange_soap_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
     </a>
   </td>
   <td>

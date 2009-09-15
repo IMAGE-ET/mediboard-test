@@ -61,6 +61,9 @@ foreach($listEchangeSoap as &$curr_echange_soap) {
   $curr_echange_soap->destinataire = $url['host'];
 }
 
+$functions = array();
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -71,6 +74,7 @@ $smarty->assign("total_pages"        , $total_pages);
 $smarty->assign("page"               , $page);
 
 $smarty->assign("web_service"        , $web_service);
+$smarty->assign("functions"          , $functions);
 
 $smarty->display("vw_idx_echange_soap.tpl");
 ?>

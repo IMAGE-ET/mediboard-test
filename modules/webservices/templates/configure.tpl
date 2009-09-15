@@ -30,6 +30,22 @@
         <input class="num" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
       </td>
     </tr>
+		
+		<tr>
+	    {{assign var="var" value="webservice"}}
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <select class="str" name="{{$m}}[{{$var}}]">
+	        <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
+	        <option value="CSigems" {{if "CSigems" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Sigems</option>
+	      </select>
+	    </td>
+	  </tr>  
+
         
     <tr>
       <td class="button" colspan="10">

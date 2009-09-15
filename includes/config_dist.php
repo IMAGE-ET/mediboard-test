@@ -625,6 +625,7 @@ $dPconfig["sip"] = array (
 
 $dPconfig["webservices"] = array (
   "connection_timeout" => 5,
+	"webservice" => "",
 );
 
 // Inclusion des fichiers de config de chaque module
