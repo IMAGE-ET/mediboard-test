@@ -401,11 +401,12 @@ class CPatient extends CMbObject {
       $patient_vitale->getValuesFromVitale();
 
       foreach (array_keys($this->getDBFields()) as $field) {
-        if ($patient_vitale->$field !== null) {
+        $vitale_value = $patient_vitale->$field;
+        if ($vitale_value || $vitale_value === "0") {
           $this->$field = $patient_vitale->$field;
         }
       }
-
+      
 	    if ($msg = $this->store()) {
 	      return $msg;
 	    }
@@ -465,14 +466,12 @@ class CPatient extends CMbObject {
     $this->rang_naissance = $vitale["VIT_RANG_GEMELLAIRE"];
     
     // Adresse
-    $this->adresse = join("\n", array(
+    $this->adresse = trim(join("\n", array(
       $vitale["VIT_ADRESSE_1"],
       $vitale["VIT_ADRESSE_2"],
       $vitale["VIT_ADRESSE_3"],
       $vitale["VIT_ADRESSE_4"])
-    );
-    
-    $this->adresse = trim($this->adresse);     
+    ));
     
     // CP et ville
     $cpville = split(" ", $vitale["VIT_ADRESSE_5"], 2);

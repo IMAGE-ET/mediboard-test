@@ -861,8 +861,6 @@ $locales['COperation-date_visite_anesth'] = '';
 $locales['COperation-date_visite_anesth-desc'] = '';
 $locales['pref-dPplanningOp_listeCompacte'] = '';
 $locales['pref-dPplanningOp_listeCompacte-desc'] = '';
-$locales['pref-dPplanningOp_listeCompacte-info'] = '';
-$locales['pref-dPplanningOp_listeCompacte-info1'] = '';
 $locales['CMediusers-back-'] = '';
 $locales['config-dPplanningOp-CSejour-service_id'] = '';
 $locales['config-dPplanningOp-CSejour-service_id-desc'] = '';
@@ -891,5 +889,4 @@ $locales['CSejour-_adresse_par_prat'] = '';
 $locales['CSejour-_adresse_par_prat-court'] = '';
 $locales['CSejour-_adresse_par_prat-desc'] = '';
 $locales['CService-back-'] = '';
-$locales['pref-dPplanningOp_listeCompacte-info2'] = '';
 ?>

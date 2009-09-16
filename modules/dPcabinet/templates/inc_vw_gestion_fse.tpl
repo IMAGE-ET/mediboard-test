@@ -42,6 +42,7 @@ Object.extend(Intermax.ResultHandler, {
 	    msg += sPatientView;
 	    msg += "\nPar ";
 	    msg += sVitaleView;
+	    
       if (!confirm(msg)) {
         return;
 			}
