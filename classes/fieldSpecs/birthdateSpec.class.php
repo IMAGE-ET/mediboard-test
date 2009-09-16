@@ -35,10 +35,14 @@ class CBirthDateSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    if (!preg_match ("/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/", $object->{$this->fieldName})) {
+    if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $object->{$this->fieldName}, $match)) {
       return "Format de date invalide";
     }
-    
+
+		if ($match[1] < 1850) {
+      return "Année inférieure a 1850";
+    }
+
     return null;
   }
   
