@@ -32,7 +32,8 @@ $pack_praticien->object_class = 'CSejour';
 $packs_praticien = $pack_praticien->loadMatchingList("libelle");
   
 $where["function_id"] = "= '$praticien->function_id'";
-$where["praticien_id"] = null;
+unset($where["praticien_id"]);
+
 $protocoles_list_function = $prescription->loadList($where, "libelle");
 
  // Chargement des packs de la fonction
@@ -41,7 +42,6 @@ $pack_function->function_id = $praticien->function_id;
 $pack_function->object_class = 'CSejour';
 $packs_function = $pack_function->loadMatchingList("libelle");
 
-  
 // Création du template
 $smarty = new CSmartyDP();
 
