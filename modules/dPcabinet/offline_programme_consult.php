@@ -10,16 +10,16 @@
 
 
 
-global $AppUI, $can, $m;
+global $AppUI, $can;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-$chir_id    = mbGetValueFromGet("chir_id");
-$date       = mbGetValueFromGet("date", mbDate());
-$nb_monthes = mbGetValueFromGet("nb_monthes", 3);
-$period     = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
+$chir_id   = mbGetValueFromGet("chir_id");
+$date      = mbGetValueFromGet("date", mbDate());
+$nb_months = mbGetValueFromGet("nb_months", 3);
+$period    = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
 
 // Récupération des plages de consultation disponibles
 $plage = new CPlageconsult;
@@ -37,7 +37,7 @@ $order = "date, debut";
 // Chargement des plages par date
 $maxDate = mbDate("-1 DAYS", $date);
 
-for($i = 1; $i <= $nb_monthes; $i++) {
+for($i = 1; $i <= $nb_months; $i++) {
   $minDate = mbDate("+1 DAYS", $maxDate);
   $maxDate = mbTransformTime("+1 MONTH", $minDate, "%Y-%m-01");
   $maxDate = mbDate("-1 DAYS", $maxDate);

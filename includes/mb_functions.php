@@ -761,6 +761,14 @@ function mbLoadScripts($modeReturn = false) {
   // Prototype JS & Scriptaculous
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
+  // We force the download of the dependencies 
+  // TODO: remove the autoloader in the scriptaculous patch
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/builder.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/effects.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/dragdrop.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/controls.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/slider.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/sound.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   
   // Datepicker

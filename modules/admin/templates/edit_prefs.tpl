@@ -47,14 +47,13 @@ Main.add(function () {
 <input type="hidden" name="del" value="0" />
 
 <table class="form">
+  <col style="width: 50%;" />
+  <col style="width: 50%;" />
+  
   <tr>
     <th colspan="2" class="title">
       {{tr}}User preferences{{/tr}} : {{if $user_id}}{{$user->_view}}{{else}}{{tr}}Default{{/tr}}{{/if}}
     </th>
-	</tr>
-	<tr>
-    <th class="category" style="width: 50%">Préférences</th>
-    <th class="category" style="width: 50%">Valeurs</th>
   </tr>
 
   <!-- Tous modules confondus -->

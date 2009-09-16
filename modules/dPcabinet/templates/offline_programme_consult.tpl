@@ -1,3 +1,5 @@
+"c:\Program Files\WinHTTrack\httrack.exe" "http://localhost/mediboard/?login=1&dialog=1&no_login_info=1&username=admin&password=abc123&m=dPcabinet&a=offline_programme_consult&nb_months=1&chir_id=25" -O c:\Users\Fabien\Desktop\offline -v -N100 -s0 -I0 -C2
+
 <script type="text/javascript">
 
 var PlageConsult = {
@@ -19,6 +21,8 @@ Main.add(function () {
 });
 
 </script>
+
+<h3>Dernière mise à jour : {{$smarty.now|date_format:$dPconfig.datetime}}</h3>
 
 <ul id="month_tabs" class="control_tabs">
   {{foreach from=$listPlages key=month_name item=listPlage}}
