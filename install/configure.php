@@ -25,9 +25,9 @@ $mbConfig->load();
 
 $dPconfig = $mbConfig->values;
 
-?>
+showHeader(); 
 
-<?php showHeader(); ?>
+?>
 
 <h2>Création du fichier de configuration</h2>
 

@@ -67,17 +67,17 @@ class CMbDb {
   }
   
   function queryDump($path) {
-   $sqlLines = file($path);
-   $query = "";
-   foreach($sqlLines as $lineNumber => $sqlLine) {
-     $sqlLine = trim($sqlLine);
-     if (($sqlLine != "") && (substr($sqlLine, 0, 2) != "--") && (substr($sqlLine, 0, 1) != "#")) {
-       $query .= $sqlLine;
-       if (preg_match("/;\s*$/", $sqlLine)) {
-         $this->query($query);
-         $query = "";
-       }
-     }
-   }
+    $sqlLines = file($path);
+    $query = "";
+    foreach($sqlLines as $lineNumber => $sqlLine) {
+      $sqlLine = trim($sqlLine);
+      if (($sqlLine != "") && (substr($sqlLine, 0, 2) != "--") && (substr($sqlLine, 0, 1) != "#")) {
+        $query .= $sqlLine;
+        if (preg_match("/;\s*$/", $sqlLine)) {
+          $this->query($query);
+          $query = "";
+        }
+      }
+    }
   }
 }

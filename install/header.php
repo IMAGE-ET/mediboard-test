@@ -24,7 +24,8 @@ $stepsText = array (
   "configure" => "Configuration", 
   "initialize" => "Initialisation", 
   "feed" => "Remplissage des bases", 
-  "finish" => "Finalisation"
+  "finish" => "Finalisation",
+  "phpinfo" => "Infos PHP"
 );
 
 $steps = array_keys($stepsText);
@@ -32,7 +33,7 @@ $steps = array_keys($stepsText);
 $currentStep = basename($_SERVER["PHP_SELF"], ".php");
 
 if (!in_array($currentStep, $steps)) {
-   trigger_error("Etape $currentStep inexistante", E_USER_ERROR);
+  trigger_error("Etape $currentStep inexistante", E_USER_ERROR);
 }
 
 $currentStepKey = array_search($currentStep, $steps);
@@ -42,6 +43,8 @@ $chrono->start();
 
 function showHeader() {
   global $stepsText, $currentStepKey, $currentStep, $steps, $version;
+  
+  header("Content-type: text/html; charset=iso-8859-1");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

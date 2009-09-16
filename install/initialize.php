@@ -20,9 +20,9 @@ $dbConfigs = array (
 require_once("mbdb.class.php");
 require_once("addusers.sql.php");
 
-?>
+showHeader(); 
 
-<?php showHeader(); ?>
+?>
 
 <h2>Initialisation des bases de données</h2>
 

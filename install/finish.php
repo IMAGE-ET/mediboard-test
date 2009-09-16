@@ -11,9 +11,10 @@
 require_once("checkconfig.php");
 require_once("checkstructure.php");
 require_once("checkauth.php");
-?>
 
-<?php showHeader(); ?>
+showHeader(); 
+
+?>
 
 <script type="text/javascript">
 

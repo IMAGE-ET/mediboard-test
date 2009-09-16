@@ -332,9 +332,9 @@ CLibrary::$all[$library->name] = $library;
 
 $install = @$_POST['install'];
 
-?>
+showHeader(); 
 
-<?php showHeader(); ?>
+?>
 
 <h2>Installation des bibliothèques externes</h2>
 

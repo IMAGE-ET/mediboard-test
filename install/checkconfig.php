@@ -14,9 +14,9 @@ if (!@include_once($mbpath."includes/config.php")) {
   showHeader();
 ?>
 
-<div class="big-error">
+<div class="small-error">
   Erreur : Le fichier de configuration n'a pas été validé, merci de revenir à l'étape 
-  précédante.
+  précédente.
 </div>
 
 <?php

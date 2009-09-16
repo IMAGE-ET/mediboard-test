@@ -72,9 +72,9 @@ foreach(glob($mbpath."style/*/templates_c") as $templates_c) {
   $pathAccesses[] = $pathAccess;  
 }
 
-?>
+showHeader(); 
 
-<?php showHeader(); ?>
+?>
 
 <h2>Vérification des accès en écriture</h2>
 

@@ -14,9 +14,9 @@ require_once("checkauth.php");
 $dbConfigs = $dPconfig["db"];
 unset($dbConfigs["ccam"]);
 
-?>
+showHeader(); 
 
-<?php showHeader(); ?>
+?>
 
 <h2>Test et construction initial de la base de données</h2>
 

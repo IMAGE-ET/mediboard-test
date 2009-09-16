@@ -210,9 +210,9 @@ $php->reasons[] = "Intégration de PDO : accès universel et sécurisé aux base de 
 $php->reasons[] = "Conception objet plus évoluée";
 $versions[] = $php;
 
-?>
+showHeader(); 
 
-<?php showHeader(); ?>
+?>
 
 <h2>Vérification des prérequis</h2>
 

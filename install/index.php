@@ -8,4 +8,4 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-header("location: check.php");
+header("Location: check.php");
