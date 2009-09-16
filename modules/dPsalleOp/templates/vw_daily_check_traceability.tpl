@@ -43,13 +43,16 @@
 					<tr>
 						<td colspan="4" class="button">
               <button type="submit" class="submit">{{tr}}Filter{{/tr}}</button>
+              Seules les 30 dernières checklists sont affichées
             </td>
           </tr>
 				</table>
 			</form>
+      
 			<table class="main tbl">
 				<tr>
           <th>{{mb_title class=CDailyCheckList field=date}}</th>
+          <th>{{mb_title class=CDailyCheckList field=object_class}}</th>
           <th>{{mb_title class=CDailyCheckList field=object_id}}</th>
           <th>{{mb_title class=CDailyCheckList field=comments}}</th>
           <th>{{mb_title class=CDailyCheckList field=validator_id}}</th>
@@ -57,6 +60,7 @@
 				{{foreach from=$list_check_lists item=curr_list}}
 				<tr>
           <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;check_list_id={{$curr_list->_id}}">{{mb_value object=$curr_list field=date}}</a></td>
+          <td>{{mb_value object=$curr_list field=object_class}}</td>
           <td>{{$curr_list->_ref_object}}</td>
           <td>{{mb_value object=$curr_list field=comments}}</td>
           <td>{{mb_value object=$curr_list field=validator_id}}</td>

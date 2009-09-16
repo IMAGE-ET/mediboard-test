@@ -39,7 +39,7 @@ if ($date_min) {
 if ($date_max) {
 	$where[] = "date <= '$date_max'";
 }
-$list_check_lists = $check_list->loadList($where, 'object_class, date', 30);
+$list_check_lists = $check_list->loadList($where, 'date DESC, object_class' , 30);
 
 $check_list_filter = new CDailyCheckList;
 $check_list_filter->object_class = $object_class;
