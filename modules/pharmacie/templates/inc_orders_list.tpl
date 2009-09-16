@@ -17,7 +17,9 @@
       <th>Stock pharmacie</th>
     {{/if}}
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
-    <th>Stock service</th>
+    {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+      <th>Stock service</th>
+    {{/if}}
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th><button type="button" onclick="dispenseAll('list-orders', refreshOrders)" class="tick">Tout dispenser</button></th>
   </tr>

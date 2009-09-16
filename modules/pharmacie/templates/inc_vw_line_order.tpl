@@ -31,13 +31,15 @@
   </td>
   {{/if}}
   <td style="text-align: center;">{{mb_value object=$curr_delivery field=quantity}}</td>
-  <td style="text-align: center;">
-    {{assign var=id value=$curr_delivery->_id}}
-    {{assign var=stock value=$curr_delivery->_ref_stock}}
-    <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
-      {{$stock->quantity}}
-    </a>
-  </td>
+  {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+    <td style="text-align: center;">
+      {{assign var=id value=$curr_delivery->_id}}
+      {{assign var=stock value=$curr_delivery->_ref_stock}}
+      <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
+        {{$stock->quantity}}
+      </a>
+    </td>
+  {{/if}}
   <td style="text-align: center;">
     {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
   </td>
