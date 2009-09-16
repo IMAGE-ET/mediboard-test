@@ -39,10 +39,10 @@ class CBirthDateSpec extends CMbFieldSpec {
       return "Format de date invalide";
     }
 
-		if ($match[1] < 1850) {
+    if ($match[1] < 1850) {
       return "Année inférieure a 1850";
     }
-
+    
     return null;
   }
   

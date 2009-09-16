@@ -392,6 +392,9 @@ Object.extend(ElementChecker, {
       this.date();
       var values = null;
       if (values = this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
+        if (parseInt(values[1]) < 1850) {
+          this.addError("birthDate", "L'année est inférieure à 1850");
+        }
 	      if (parseInt(values[3]) > 31 || parseInt(values[2]) > 12) {
 	        var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
 	          this.sLabel,
