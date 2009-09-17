@@ -30,7 +30,7 @@ Antecedent = {
   },
 
   toggleCancelled: function(list) {
-    $(list).select('.cancelled').each(Element.show);
+    $(list).select('.cancelled').invoke('toggle');
   }
 };
 

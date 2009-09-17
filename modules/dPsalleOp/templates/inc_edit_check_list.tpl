@@ -4,7 +4,7 @@ confirmCheckList = function(form) {
 }
 Main.add(function(){
   prepareForm('edit-CDailyCheckList');
-  if (updater) {
+  if (window.updater) {
     updater.stop();
   }
 });

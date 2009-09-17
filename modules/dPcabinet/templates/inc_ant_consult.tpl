@@ -112,9 +112,8 @@ DossierMedical = {
 }
 
 refreshAidesAntecedents = function(){
-  var url = new Url;
   var oForm = document.editAntFrm;
-  url.setModuleAction("dPcompteRendu", "httpreq_vw_select_aides");
+  var url = new Url("dPcompteRendu", "httpreq_vw_select_aides");
   url.addParam("object_class", "CAntecedent");
   url.addParam("depend_value_1", oForm.type.value);
   url.addParam("depend_value_2", oForm.appareil.value);

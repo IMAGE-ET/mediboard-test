@@ -11,14 +11,12 @@
 <script type="text/javascript">
 
 Main.add(function(){
-  {{if $blood_salvage->_id}}
-	  var url = new Url;
-	  url.setModuleAction("bloodSalvage","httpreq_vw_recuperation_start_timing");
-	  url.addParam("blood_salvage_id","{{$blood_salvage->_id}}");
-	  url.requestUpdate("start-timing");
-  {{/if}}
-  }
-);
+{{if $blood_salvage->_id}}
+  var url = new Url("bloodSalvage","httpreq_vw_recuperation_start_timing");
+  url.addParam("blood_salvage_id","{{$blood_salvage->_id}}");
+  url.requestUpdate("start-timing");
+{{/if}}
+});
 
 </script>
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
@@ -43,7 +41,7 @@ Main.add(function(){
   </form>
  </div>
 {{else}}
-	<div class="big-info">
+	<div class="small-info">
 		Aucun Cell Saver n'est prévu pour cette intervention.
 	</div>
 	<div id="register" style="text-align:center">

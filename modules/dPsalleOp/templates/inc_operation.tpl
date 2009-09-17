@@ -5,7 +5,6 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 {{mb_include_script module=dPprescription script=prescription_med}}
 
-
 {{assign var="sejour" value=$selOp->_ref_sejour}}
 {{assign var="patient" value=$sejour->_ref_patient}}
 
@@ -20,6 +19,12 @@ Main.add(function () {
   
   if($('soins')){
     loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
+  }
+  
+  if($('antecedents')){
+    var url = new Url("dPcabinet", "httpreq_vw_antecedents");
+    url.addParam("sejour_id","{{$selOp->sejour_id}}");
+    url.requestUpdate("antecedents", {waitingText: null});
   }
   
   if($('bloodSalvage_tab')){
@@ -213,23 +218,24 @@ function reloadPrescription(prescription_id){
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
 	{{if !$dPconfig.dPsalleOp.mode_anesth}}
-  <li><a href="#timing_tab">Timings</a></li>
+    <li><a href="#timing_tab">Timings</a></li>
 	{{/if}}
 
   <li onmouseup="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesthésie</a></li>
 
   {{if $isbloodSalvageInstalled}}
-  <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
+    <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
   {{/if}}
 
 	{{if !$dPconfig.dPsalleOp.mode_anesth}}
-  <li><a href="#diag_tab">Diagnostics</a></li>
-  <li><a href="#codage_tab">Actes</a></li>
-  <li><a href="#dossier_tab">Dossier</a></li>
+    <li><a href="#diag_tab">Diagnostics</a></li>
+    <li><a href="#codage_tab">Actes</a></li>
+    <li><a href="#antecedents">Antécedents</a></li>
+    <li><a href="#dossier_tab">Chirurgie</a></li>
 
 	  {{if $isPrescriptionInstalled}}
-    <li><a href="#prescription_sejour_tab">Prescription</a></li>
-    <li onmouseup="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
+      <li><a href="#prescription_sejour_tab">Prescription</a></li>
+      <li onmouseup="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
 	  {{/if}}
 	{{/if}}
   
@@ -260,7 +266,6 @@ function reloadPrescription(prescription_id){
   <div id="info_anesth">
   {{include file="inc_vw_info_anesth.tpl"}}
   </div>
-  
 </div>
 
 {{if $isbloodSalvageInstalled}}
@@ -333,6 +338,9 @@ function reloadPrescription(prescription_id){
   </div>
 </div>
 
+{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+<div id="antecedents" style="display:none"></div>
+
 <!-- Dossier Medical et documents-->
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
 <div id="dossier_tab" style="display:none">
@@ -349,42 +357,22 @@ function reloadPrescription(prescription_id){
 			  </div>
 		  </td>
 	  </tr>
-	  <tr>
-	    <td>
-			  {{if !$dossier_medical->_id}}
-			  <div class="big-info">
-			    Le dossier médical pour ce séjour n'est pas créé, ou ne contient pas d'éléments parmi :
-			    <ul>
-			      <li>{{tr}}CAntecedent{{/tr}}</li>
-			      <li>Diagnostics associés</li>
-			    </ul>
-			    Ces informations doivent-être renseignés pendant la consultation de pré-anesthésie
-			  </div>
-			
-				{{else}}
-			  <div class="text">
-					{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$dossier_medical}}
-			  </div>
-			  {{/if}}
-	    </td>
-	  </tr>
 	</table>
 </div>
 
 {{if $isPrescriptionInstalled}}
-<!-- Affichage de la prescription -->
-<div id="prescription_sejour_tab" style="display:none">
-  <div id="prescription_sejour"></div>
-</div>
-<!-- Affichage du dossier de soins avec les lignes "bloc" -->
-<div id="soins" style="display:none">
-</div>
+  <!-- Affichage de la prescription -->
+  <div id="prescription_sejour_tab" style="display:none">
+    <div id="prescription_sejour"></div>
+  </div>
+  
+  <!-- Affichage du dossier de soins avec les lignes "bloc" -->
+  <div id="soins" style="display:none"></div>
 {{/if}}
 
 {{/if}}
 
 {{if $isImedsInstalled}}
-<!-- Affichage de la prescription -->
-<div id="Imeds_tab" style="display:none">
-</div>
+  <!-- Affichage de la prescription -->
+  <div id="Imeds_tab" style="display:none"></div>
 {{/if}}
