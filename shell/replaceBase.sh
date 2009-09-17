@@ -74,9 +74,12 @@ then
   DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
   # Copy database
   mv $dir_target $dir_target_$DATETIME
+  check_errs $? "Move mysql target directory" "Succesfully move mysql target directory"
   mkdir $dir_target
+  check_errs $? "Create mysql target directory" "Succesfully create mysql target directory"
   chown mysql $dir_target
   chgrp mysql $dir_target
+  check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 else
   # Delete files in mediboard database
   rm -f $dir_target/*
