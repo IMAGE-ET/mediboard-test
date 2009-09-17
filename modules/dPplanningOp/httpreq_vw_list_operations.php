@@ -12,9 +12,9 @@ global $AppUI, $can, $m, $g, $dPconfig;
 $can->needsRead();
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
-$chirSel = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
+$pratSel = mbGetValueFromGetOrSession("pratSel", $AppUI->user_id);
 $userSel = new CMediusers;
-$userSel->load($chirSel);
+$userSel->load($pratSel);
 $board = mbGetValueFromGet("board", 0);
 $boardItem = mbGetValueFromGet("boardItem", 0);
 
@@ -56,7 +56,7 @@ if ($AppUI->_ref_user->isPraticien()) {
 }
 else {
   $praticien = new CMediusers();
-  $praticien->load(mbGetValueFromGetOrSession("chirSel", mbGetValueFromGetOrSession("praticien_id")));
+  $praticien->load(mbGetValueFromGetOrSession("pratSel", mbGetValueFromGetOrSession("praticien_id")));
 }
 
 $praticien->loadRefFunction();

@@ -66,38 +66,20 @@
   
   {{else}}
   <td class="text">
-    {{if $dPconfig.dPbloc.CPlageOp.chambre_operation == 0}}
-  	  {{if $vueReduite}}
-  	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
-  	  {{/if}}
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
-    	{{$_operation->_ref_patient->_view}}
-    	</span>
-      </a>
-    {{else}}
-      <table style="border: none; width: 100%;">
-        <tr>
-          <td style="border: none;">
-          	<a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-			      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
-			    	{{$_operation->_ref_patient->_view}}
-			    	</span>
-          	</a>
-          </td>
-          {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id}}
-            <td style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap; border: none;">
-              {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
-              {{$_operation->_ref_affectation->_ref_lit->_view}}
-            </td>
-          {{/if}}
-          {{if $vueReduite}}
-            <td style="width: 1%; border: none;"><button class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button></td>
-          {{/if}}
-  	  	</tr>
-      </table>
-      {{$_operation->libelle}}
+  	{{if $vueReduite}}
+  	  <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
+  	{{/if}}
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+    <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
+    {{$_operation->_ref_patient->_view}}
+    </span>
+    {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $dPconfig.dPbloc.CPlageOp.chambre_operation == 1}}
+      <div style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap; border: none;">
+        {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
+        {{$_operation->_ref_affectation->_ref_lit->_view}}
+      </div>
     {{/if}}
+    </a>
   </td>
   
 	{{if !$vueReduite}}

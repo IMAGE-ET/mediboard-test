@@ -8,7 +8,7 @@ function updateListOperations(date) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
 
-  url.addParam("chirSel" , "{{$selChir}}");
+  url.addParam("pratSel" , "{{$selPrat}}");
   url.addParam("date"    , date);
 
   url.requestUpdate('operations', { waitingText:null } );
@@ -19,19 +19,18 @@ Main.add(function () {
 });
 
 </script>
-
 <table class="main">
   <tr>
     <td style="height: 16px;">
       <form action="?" name="selection" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
-      <label for="selChir">Chirurgien</label>
-      <select name="selChir" onchange="this.form.submit()">
+      <label for="selPrat">Praticien</label>
+      <select name="selPrat" onchange="this.form.submit()" style="max-width: 150px;">
         <option value="-1">&mdash; Choisir un praticien</option>
-        {{foreach from=$listChir item=curr_chir}}
-        <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $curr_chir->user_id == $selChir}} selected="selected" {{/if}}>
-          {{$curr_chir->_view}}
+        {{foreach from=$listPrat item=curr_prat}}
+        <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $selPrat}} selected="selected" {{/if}}>
+          {{$curr_prat->_view}}
         </option>
         {{/foreach}}
       </select>

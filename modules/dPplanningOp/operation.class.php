@@ -113,6 +113,7 @@ class COperation extends CCodable {
   var $_ref_anesth         = null;
   var $_ref_type_anesth    = null;
   var $_ref_consult_anesth = null;
+  var $_ref_anesth_visite  = null;
   var $_ref_actes_ccam     = array();
   var $_ref_hprim_files    = null;
 
@@ -552,6 +553,13 @@ class COperation extends CCodable {
     } else {
       $this->_ref_anesth->load($this->anesth_id);
     }
+    $this->_ref_anesth_visite = new CMediusers;
+    if($cache) {
+      $this->_ref_anesth_visite = $this->_ref_anesth_visite->getCached($this->prat_visite_anesth_id);
+    } else {
+      $this->_ref_anesth_visite->load($this->prat_visite_anesth_id);
+    }
+    
     $this->_ref_plageop = new CPlageOp;
     
     // Avec plage d'opération
