@@ -998,6 +998,10 @@ class CConsultation extends CCodable {
 	    $prescription->type = "externe";
 	    $prescription->fillLimitedTemplate($template);
     }
+		$this->loadRefSejour();
+		if ($this->_ref_sejour->_id) {
+			$this->_ref_sejour->fillTemplate($template);
+		}
   }
   
   function fillLimitedTemplate(&$template) {

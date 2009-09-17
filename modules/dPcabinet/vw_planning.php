@@ -74,6 +74,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
     unset($plageSel->_ref_consultations[$keyConsult]);
     continue;
   }
+	$consultation->loadRefSejour(1);
   $consultation->loadRefPatient(1);
   $consultation->loadRefCategorie(1);
   $consultation->countDocItems();    

@@ -163,8 +163,8 @@
     
 	    {{if $medicalView}}
 	    <td class="text" style="background-color: {{$background}};">
-	      {{if $rpu->_ref_consult->examen && $dPconfig.dPurgences.diag_prat_view}}
-	       {{$rpu->_ref_consult->examen|nl2br}}
+	      {{if $rpu->_ref_consult->motif && $dPconfig.dPurgences.diag_prat_view}}
+	       {{$rpu->_ref_consult->motif|nl2br}}
 	      {{else}}
 	      <a href="{{$rpu_link}}">
 	        {{$rpu->diag_infirmier|nl2br}}

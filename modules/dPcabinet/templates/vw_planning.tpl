@@ -345,6 +345,8 @@ Main.add(function () {
             {{assign var="style" value="style='background: #ffa;'"}}          
           {{elseif $_consult->premiere}} 
             {{assign var="style" value="style='background: #faa;'"}}
+					{{elseif $_consult->_ref_sejour->_id}} 
+            {{assign var="style" value="style='background: #CFFFAD;'"}}
           {{else}} 
             {{assign var="style" value=""}}
           {{/if}}

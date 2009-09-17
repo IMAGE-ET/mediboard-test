@@ -80,6 +80,7 @@ foreach ($listPlage as &$plage) {
   $plage->loadRefsConsultations(true, !$vue);
   foreach ($plage->_ref_consultations as &$consultation) {
     $consultation->loadRefPatient(1);
+		$consultation->loadRefSejour(1);
     $consultation->loadRefCategorie(1);
     $consultation->countDocItems();
   }
