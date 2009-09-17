@@ -55,12 +55,13 @@ else
 fi
 
 # Retrieve archive 
-scp $source_location:$source_directory/$source_database-latest.tar.gz $target_directory/$(echo $location | cut -d'@' -f2)
+archive="archive.tar.gz"
+scp $source_location:$source_directory/$source_database-latest.tar.gz $target_directory/$archive
 check_errs $? "Failed to retrieve archive" "Succesfully retrieve archive!"
 
 # Extract base
 cd $target_directory
-tar -xvf $source_database-latest.tar.gz
+tar -xvf $archive
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
@@ -73,10 +74,10 @@ if [ $5 ]
 then
   DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
   # Copy database
-  mv $dir_target $dir_target_$DATETIME
+  mv $dir_target ${dir_target}_$DATETIME
   check_errs $? "Move mysql target directory" "Succesfully move mysql target directory"
   mkdir $dir_target
-  check_errs $? "Create mysql target directory" "Succesfully create mysql target directory"
+  check_errs $? "Failed to create mysql target directory" "Succesfully create mysql target directory"
   chown mysql $dir_target
   chgrp mysql $dir_target
   check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
@@ -86,7 +87,7 @@ else
   check_errs $? "Failed to delete files" "Succesfully deleted files"
 fi
 
-# Transfer files 
+# Move table files 
 cd $source_database
 mv * $dir_target
 check_errs $? "Failed to move files" "Succesfully moved files"
@@ -102,5 +103,5 @@ check_errs $? "Failed to change owner and group" "Succesfully changed owner and 
 check_errs $? "Failed to start mysql" "Succesfully start mysql"
 
 rm -rf $target_directory/$source_database
-rm $target_directory/$source_database-latest.tar.gz
+rm $target_directory/$archive
 check_errs $? "Failed to delete archive" "Succesfully deleted archive"
