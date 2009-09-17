@@ -168,7 +168,7 @@ if (!$AppUI->user_id) {
 
 // Show errors to admin
 ini_set("display_errors", $AppUI->user_prefs["INFOSYSTEM"]);
-  
+
 $user = new CMediusers();
 if ($user->isInstalled()) {
   $user->load($AppUI->user_id);
@@ -184,7 +184,7 @@ if (null == $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0))) {
     }
   }
 }
-    
+
 // Still no target module
 if (null == $m) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -249,6 +249,12 @@ if (!$suppressHeaders) {
   $mail = new CMbMail();
   $mails = $mail->loadVisibleList();
   
+  $svnStatus = null;
+  if (CAppUI::pref('showLastUpdate') && is_readable('./tmp/svnstatus.txt')) {
+    $svnStatus = explode(' ', file_get_contents('./tmp/svnstatus.txt'), 2);
+    $svnStatus['relative'] = CMbDate::relative(end($svnStatus));
+  }
+  
   // Creation du Template
   $smartyHeader = new CSmartyDP();
   $smartyHeader->template_dir = "style/$uistyle/templates/";
@@ -271,6 +277,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("browser"              , $browser);
   $smartyHeader->assign("errorMessage"         , $AppUI->getMsg());
   $smartyHeader->assign("Etablissements"       , $etablissements);
+  $smartyHeader->assign("svnStatus"            , $svnStatus);
   $smartyHeader->assign("portal"               , array (
     "help" => mbPortalURL($m, $tab),
     "tracker" => mbPortalURL("tracker"),

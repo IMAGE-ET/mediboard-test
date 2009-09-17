@@ -53,9 +53,17 @@ var Menu = {
   </form>
   
   <!-- Welcome -->
-  <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
-  {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
-  </label>
+  <div>
+    <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+      {{$app->user_first_name}} {{$app->user_last_name}}
+    </label>
+    <br />
+    {{if $svnStatus}}
+    <a href="tmp/svnlog.txt" target="_blank" title="{{$svnStatus.1|date_format:$dPconfig.datetime}} (r{{$svnStatus.0}})">
+      {{tr}}Latest update{{/tr}} {{$svnStatus.relative.count}} {{tr}}{{$svnStatus.relative.unit}}{{if $svnStatus.relative.count > 1}}s{{/if}}{{/tr}}
+    </a>
+    {{/if}}
+  </div>
   {{/if}}
 
   <div id="menubar" class="iconed">
@@ -137,6 +145,11 @@ var Menu = {
           </td>
           <td class="welcome">
             {{if !$offline}}
+            {{if $svnStatus}}
+            <a href="tmp/svnlog.txt" target="_blank" title="{{$svnStatus.1|date_format:$dPconfig.datetime}} (r{{$svnStatus.0}})">
+              {{tr}}Latest update{{/tr}} {{$svnStatus.relative.count}} {{tr}}{{$svnStatus.relative.unit}}{{if $svnStatus.relative.count > 1}}s{{/if}}{{/tr}}
+            </a>
+            {{/if}}
             <form name="ChangeGroup" action="" method="get">
 
             <input type="hidden" name="m" value="{{$m}}" />
@@ -151,7 +164,7 @@ var Menu = {
             {{/if}}
             <br />
             <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
-            {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
+            {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
 
           </td>

@@ -11,6 +11,12 @@
           {{$app->user_first_name}} {{$app->user_last_name}}
         </div>
         
+        {{if $svnStatus}}
+        <a href="tmp/svnlog.txt" target="_blank" title="{{$svnStatus.1|date_format:$dPconfig.datetime}} (r{{$svnStatus.0}})">
+          {{tr}}Latest update{{/tr}} {{$svnStatus.relative.count}} {{tr}}{{$svnStatus.relative.unit}}{{if $svnStatus.relative.count > 1}}s{{/if}}{{/tr}} 
+        </a>
+        {{/if}}
+        
         <div class="menu">
           <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" /></a>
           <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank"><img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" /></a>

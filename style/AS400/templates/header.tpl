@@ -29,8 +29,14 @@
             <form name="ChangeGroup" action="" method="get">
               <input type="hidden" name="m" value="{{$m}}" />
               <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
-              {{tr}}Welcome{{/tr}} {{$app->user_first_name}} {{$app->user_last_name}}
+              {{$app->user_first_name}} {{$app->user_last_name}}
               </span>
+              <br />
+              {{if $svnStatus}}
+              <a href="tmp/svnlog.txt" target="_blank" title="{{$svnStatus.1|date_format:$dPconfig.datetime}} (r{{$svnStatus.0}})">
+                {{tr}}Latest update{{/tr}} {{$svnStatus.relative.count}} {{tr}}{{$svnStatus.relative.unit}}{{if $svnStatus.relative.count > 1}}s{{/if}}{{/tr}}
+              </a>
+              {{/if}}
               -
               <select name="g" onchange="this.form.submit();">
                 {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}

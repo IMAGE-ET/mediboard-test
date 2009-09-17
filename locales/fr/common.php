@@ -76,6 +76,8 @@ $locales['pref-UISTYLE'] = 'Thème de l\'interface';
 $locales['pref-UISTYLE-desc'] = 'Veuillez choisir l\'apparence que vous souhaitez utiliser';
 $locales['pref-touchscreen'] = 'Ecran tactile';
 $locales['pref-touchscreen-desc'] = 'Choisissez Oui si vous utilisez l\'application sur un écran tactile';
+$locales['pref-showLastUpdate'] = 'Afficher la date de dernière mise à jour';
+$locales['pref-showLastUpdate-desc'] = 'Afficher la date de dernière mise à jour';
 $locales['Previous'] = 'Précédent';
 $locales['Print'] = 'Imprimer';
 $locales['Private'] = 'Privé';
@@ -167,4 +169,5 @@ $locales['Loading in progress'] = 'Chargement en cours';
 $locales['Session locked'] = 'Session verrouillée';
 $locales['Password'] = 'Mot de passe';
 $locales['User switch'] = 'Changement d\'utilisateur';
+$locales['Latest update'] = 'Màj il y a';
 ?>

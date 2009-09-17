@@ -129,8 +129,11 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.14");
     $this->addPrefQuery("tooltipAppearenceTimeout", "medium");
+    
+    $this->makeRevision("1.0.15");
+    $this->addPrefQuery("showLastUpdate", "0");
 
-    $this->mod_version = "1.0.15";
+    $this->mod_version = "1.0.16";
   }
 }
 ?>

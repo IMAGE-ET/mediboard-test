@@ -20,6 +20,7 @@ body {
 #headerMenu td.end {
   text-align: right;
   vertical-align: top;
+  white-space: nowrap;
 }
 
 #headerMenu td.titlecell img {
