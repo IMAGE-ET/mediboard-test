@@ -18,7 +18,11 @@
     {{/if}}
     <th>{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
-    <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
+			{{if $dPconfig.dPurgences.diag_prat_view}}
+	      <th>{{tr}}CRPU-diag_infirmier{{/tr}} / médical</th>
+			{{else}}
+			 <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
+			{{/if}}
     {{/if}}
     <th>Prise en charge</th>
   </tr>
@@ -85,7 +89,7 @@
     </td>
 
   	{{if $curr_sejour->annule}}
-    <td class="cancelled"colspan="5">
+    <td class="cancelled" colspan="4">
       {{if $rpu->mutation_sejour_id}}
       Hospitalisation
       <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
@@ -94,6 +98,9 @@
       {{else}}
       {{tr}}Cancelled{{/tr}}
       {{/if}}
+    </td>
+		<td class="cancelled">
+      {{include file="inc_pec_praticien.tpl"}}
     </td>
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">

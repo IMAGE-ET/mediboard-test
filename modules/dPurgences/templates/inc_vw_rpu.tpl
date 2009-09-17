@@ -352,6 +352,16 @@ function printDossier(id) {
 	  </td>
 	</tr>
 </table>
+{{else}}
+<table class="form">    
+  <tr>
+    <td class="button">
+			<button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
+			  {{tr}}Print{{/tr}} dossier
+			</button>
+	 </td>
+	</tr>
+</table>
 {{/if}}
 
 <script type="text/javascript">
