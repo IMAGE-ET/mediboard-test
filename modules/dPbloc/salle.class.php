@@ -38,7 +38,7 @@ class CSalle extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["operations"]  = "COperation salle_id";
     $backProps["plages_op"]   = "CPlageOp salle_id";
-    $backProps["check_lists"] = "CDailyCheckList room_id";
+    $backProps["check_lists"] = "CDailyCheckList object_id";
     return $backProps;
   }
   

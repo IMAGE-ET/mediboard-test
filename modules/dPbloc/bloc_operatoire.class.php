@@ -33,6 +33,7 @@ class CBlocOperatoire extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["salles"] = "CSalle bloc_id";
+    $backProps["check_lists"] = "CDailyCheckList object_id";
     return $backProps;
   }
   
