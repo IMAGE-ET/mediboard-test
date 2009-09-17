@@ -139,7 +139,7 @@ class CDossierMedical extends CMbMetaObject {
       $this->_ref_antecedents[$type] = array();
     }
 
-    $order = "type ASC";
+    $order = "type, rques";
     if (null == $antecedents = $this->loadBackRefs("antecedents", $order)) {
       return;
     }
@@ -158,7 +158,7 @@ class CDossierMedical extends CMbMetaObject {
     foreach ($list_types as $appareil) {
       $this->_ref_antecedents_by_appareil[$appareil] = array();
     }
-    $order = "type ASC";
+    $order = "type, rques";
     if (null == $antecedents = $this->loadBackRefs("antecedents", $order)) {
       return;
     }
