@@ -221,17 +221,16 @@ function reloadPrescription(prescription_id){
     <li><a href="#timing_tab">Timings</a></li>
 	{{/if}}
 
-  <li onmouseup="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesthésie</a></li>
-
   {{if $isbloodSalvageInstalled}}
     <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
   {{/if}}
 
 	{{if !$dPconfig.dPsalleOp.mode_anesth}}
-    <li><a href="#diag_tab">Diagnostics</a></li>
+    <li><a href="#diag_tab">Diags.</a></li>
     <li><a href="#codage_tab">Actes</a></li>
-    <li><a href="#antecedents">Antécedents</a></li>
-    <li><a href="#dossier_tab">Chirurgie</a></li>
+    <li onmouseup="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesth.</a></li>
+    <li><a href="#dossier_tab">Chir.</a></li>
+    <li><a href="#antecedents">Atcd.</a></li>
 
 	  {{if $isPrescriptionInstalled}}
       <li><a href="#prescription_sejour_tab">Prescription</a></li>
@@ -257,16 +256,6 @@ function reloadPrescription(prescription_id){
   </div>
 </div>
 {{/if}}
-
-<!-- Anesthesie -->
-<div id="anesth_tab" style="display:none">
-  <div id="anesth">
-    {{include file="inc_vw_anesth.tpl"}}
-  </div>  
-  <div id="info_anesth">
-  {{include file="inc_vw_info_anesth.tpl"}}
-  </div>
-</div>
 
 {{if $isbloodSalvageInstalled}}
 <!--  Cell Saver -->
@@ -338,8 +327,15 @@ function reloadPrescription(prescription_id){
   </div>
 </div>
 
-{{mb_include_script module=dPcompteRendu script=aideSaisie}}
-<div id="antecedents" style="display:none"></div>
+<!-- Anesthesie -->
+<div id="anesth_tab" style="display:none">
+  <div id="anesth">
+    {{include file="inc_vw_anesth.tpl"}}
+  </div>  
+  <div id="info_anesth">
+  {{include file="inc_vw_info_anesth.tpl"}}
+  </div>
+</div>
 
 <!-- Dossier Medical et documents-->
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
@@ -359,6 +355,9 @@ function reloadPrescription(prescription_id){
 	  </tr>
 	</table>
 </div>
+
+{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+<div id="antecedents" style="display:none"></div>
 
 {{if $isPrescriptionInstalled}}
   <!-- Affichage de la prescription -->
