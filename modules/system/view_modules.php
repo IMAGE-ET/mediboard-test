@@ -20,13 +20,18 @@ foreach($setupClasses as $setupClass) {
   $setup = new $setupClass;
   $mbmodule = new CModule();
   $mbmodule->compareToSetup($setup);
-  $mbmodules[] = $mbmodule;
+	
+  if ($mbmodule->mod_ui_order == 100) {
+    $mbmodules["aInstaller"][] = $mbmodule;
+  } else {
+    $mbmodules["installe"][] = $mbmodule;
+  }
   if ($mbmodule->mod_type == "core" && $mbmodule->_upgradable) {
     $coreModules[] = $mbmodule;
   }
 }
 
-array_multisort(CMbArray::pluck($mbmodules, "mod_ui_order"), SORT_ASC, $mbmodules);
+array_multisort(CMbArray::pluck($mbmodules["installe"], "mod_ui_order"), SORT_ASC, $mbmodules["installe"]);
 
 // Création du template
 $smarty = new CSmartyDP();

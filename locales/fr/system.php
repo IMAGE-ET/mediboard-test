@@ -394,4 +394,6 @@ $locales['mod-system-tab-about'] = 'A propos...';
 $locales['CModule-_dsns'] = 'Source de données';
 $locales['CModule-_dsns-court'] = 'SD';
 $locales['CModule-_dsns-desc'] = 'Sources de données obsolètes et à jour';
+$locales['CModule-modules-installed'] = 'Installés';
+$locales['CModule-modules-notInstalled'] = 'A installer';
 ?>
