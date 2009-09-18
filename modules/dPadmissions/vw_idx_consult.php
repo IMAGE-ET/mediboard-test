@@ -58,6 +58,7 @@ foreach($listPlages as &$element) {
         unset($plage->_ref_consultations[$keyConsult]);
         continue;
       }
+			$consultation->loadRefSejour();
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
       $consultation->countDocItems();
