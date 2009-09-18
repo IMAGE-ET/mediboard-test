@@ -22,6 +22,7 @@ fi
 MB_PATH=$BASH_PATH/..
 log=$MB_PATH/tmp/svnlog.txt
 tmp=$MB_PATH/tmp/svnlog.tmp
+status=$MB_PATH/tmp/svnstatus.txt
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
 
@@ -80,8 +81,10 @@ case "$1" in
     rm -f $tmp
     ;;
 
+    # Write status file
+    svn info | awk 'NR==5' > $status
+    echo "Date: $(date)" >> $status
   *)
     echo "Action $1 unknown" \
     ;; \
 esac
-
