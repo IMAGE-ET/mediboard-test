@@ -65,17 +65,14 @@ Main.add(function(){
   <div class="about" style="display: none;">
     <div class="text">
       <h2>L'equipe</h2>
-      <ul>
-        <li>Romain Ollivier</li>
-        <li>Thomas Despoix</li>
-        <li>Alexis Granger</li>
-        <li>Fabien Ménager</li>
-      </ul>
+      Romain Ollivier<br />
+      Thomas Despoix<br />
+      Alexis Granger<br />
+      Fabien Ménager<br />
+      Yohann Poiron<br />
       <h2>Sociétés actives</h2>
-      <ul>
-        <li>OpenXtrem</li>
-        <li>Kheops Technologies</li>
-      </ul>
+      OpenXtrem<br />
+      Kheops Technologies<br />
     </div>
     <div class="nav">
       <a href="#1" onclick="return Slideshow.previous()">&lt;&lt; Présentation</a>
