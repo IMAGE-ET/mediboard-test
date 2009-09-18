@@ -9,7 +9,7 @@
     {{if !$dialog}}    
     <tr>
       <td class="logo" colspan="3 ">
-        <a href="http://www.mediboard.org/">
+        <a href="{{$dPconfig.system.website_url}}">
           <img src="style/{{$uistyle}}/images/pictures/medilab.jpg" alt="MediLab logo" />
         </a>
         <p>

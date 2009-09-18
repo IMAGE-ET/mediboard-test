@@ -17,7 +17,7 @@
     
     <tr>
       <td class="logo" colspan="3 ">
-        <a href="http://www.mediboard.org/">
+        <a href="{{$dPconfig.system.website_url}}">
           <img src="images/pictures/logo.png" alt="MediBoard logo" />
         </a>
         <p>

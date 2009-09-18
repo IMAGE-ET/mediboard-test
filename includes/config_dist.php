@@ -512,6 +512,7 @@ $dPconfig["dPprescription"] = array (
 $dPconfig["system"] = array(
   "type_telephone" => "france",
   "reverse_proxy"  => "0.0.0.0",
+	"website_url"    => "http://www.mediboard.org",
 );
 
 $dPconfig["sherpa"] = array (

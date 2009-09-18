@@ -396,4 +396,8 @@ $locales['CModule-_dsns-court'] = 'SD';
 $locales['CModule-_dsns-desc'] = 'Sources de données obsolètes et à jour';
 $locales['CModule-modules-installed'] = 'Installés';
 $locales['CModule-modules-notInstalled'] = 'A installer';
+$locales['config-object_handlers-CSigemsObjectHandler'] = '';
+$locales['config-object_handlers-CSigemsObjectHandler-desc'] = '';
+$locales['config-system-website_url'] = 'URL du logo de la page d\'accueil';
+$locales['config-system-website_url-desc'] = 'URL du logo de la page d\'accueil';
 ?>

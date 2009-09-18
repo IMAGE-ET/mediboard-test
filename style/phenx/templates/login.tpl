@@ -3,7 +3,7 @@
 <div id="login" {{if $dialog}}style="height: 50px; margin: auto; position: relative; top: 0; left: 0;"{{/if}}>
   <h2>{{$dPconfig.company_name}}</h2>
   {{if !$dialog}}
-    <a href="http://www.mediboard.org/">
+    <a href="{{$dPconfig.system.website_url}}">
       <img src="images/pictures/logo.png" alt="{{$dPconfig.company_name}}" title="{{$dPconfig.company_name}}" width="290" height="107" /><br />
     </a>
   {{/if}}
