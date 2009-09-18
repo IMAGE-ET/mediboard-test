@@ -70,6 +70,8 @@ Main.add(function () {
   {{assign var=const value=$latest_constantes.0}}
   {{assign var=dates value=$latest_constantes.1}}
   
+  <input type="hidden" name="_poids" value="{{$const->poids}}" />
+  
   <table class="main form" style="width: 1%;">
     <tr>
       <th class="category">Constantes</th>
@@ -106,7 +108,7 @@ Main.add(function () {
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=_vst}} (ml)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=_vst size="4" readonly="readonly" tabIndex="100"}}</td>{{/if}}
+      {{if $real_context}}<td>{{mb_field object=$const field=_vst size="4" readonly="readonly" tabIndex="100"}}</td>{{/if}}
       <td>{{mb_value object=$const field=_vst}}{{if $const->_vst}}{{/if}}</td>
       <td />
     </tr>

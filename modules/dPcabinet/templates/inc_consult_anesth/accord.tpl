@@ -20,8 +20,7 @@ function reloadPrescription(prescription_id){
 var constantesMedicalesDrawn = false;
 function refreshConstantesMedicales (force) {
   if (!constantesMedicalesDrawn || force) {
-    var url = new Url();
-    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("patient_id", {{$consult->_ref_patient->_id}});
     url.addParam("context_guid", "{{$consult->_guid}}");
     url.requestUpdate("Constantes");
@@ -82,7 +81,14 @@ Main.add(function () {
 <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
 
-<div id="Constantes" style="display: none;"></div>
+<div id="Constantes" style="display: none;">
+  <!-- We put a fake form for the ExamCompFrm form, before we insert the real one -->
+  <form name="edit-constantes-medicales" action="?" method="post" onsubmit="return false">
+    <input type="hidden" name="_poids" value="{{$consult->_ref_patient->_ref_constantes_medicales->poids}}" />
+    <input type="hidden" name="_vst" value="{{$consult->_ref_patient->_ref_constantes_medicales->_vst}}" />
+  </form>
+</div>
+
 <div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
 <div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
 
