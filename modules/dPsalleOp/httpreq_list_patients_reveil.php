@@ -20,20 +20,15 @@ $interv = new COperation();
 $plage = new CPlageOp();
 
 foreach($listSalles as &$_salle) {
-  // Selection des plages opératoires de la journée
+  // Recuperation des interventions
   $where = array();
-  $where["date"] = "= '$date'";
-  $where["salle_id"] = "= '".$_salle->_id."'";
-  $plages = $plage->loadList($where);
-  
-  // Récupération des interventions
-  $where = array();
-  $where["salle_id"] = "= '".$_salle->_id."'";
-  $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
+  $where["operations.salle_id"] = "= '".$_salle->_id."'";
+  $leftjoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+  $where["plagesop.date"] = " = '$date'";
   $where["entree_reveil"] = "IS NOT NULL";
   $where["sortie_reveil"] = "IS NULL";
   $order = "entree_reveil";
-  $_salle->_list_patients_reveil = $interv->loadList($where, $order);
+  $_salle->_list_patients_reveil = $interv->loadList($where, $order, null, null, $leftjoin);
   foreach($_salle->_list_patients_reveil as &$_interv) {
     $_interv->loadRefsFwd();
     $_interv->_presence_reveil = mbSubTime($_interv->entree_reveil, mbTime());
