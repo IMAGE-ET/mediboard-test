@@ -92,6 +92,19 @@ if(!function_exists('json_encode')) {
   }
 }
 
+/**
+ * (PHP 5 >= 5.1.0)
+ * timezone_identifiers_list - Returns numerically index array with all timezone identifiers
+ * @param int $what
+ * @param string $country
+ * @return array The identifiers
+ */
+if(!function_exists('timezone_identifiers_list')) {
+  function timezone_identifiers_list($what = null, $country = null) {
+    return include('timezones.php');
+  }
+}
+
 if (!function_exists('mb_strtoupper')) {
   function mb_strtoupper($string) {
     return strtoupper($string);
