@@ -1029,6 +1029,7 @@ class CSejour extends CCodable {
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
     
+		$this->loadNumDossier();
 		$template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
 		
     $this->loadRefPraticien();

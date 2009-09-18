@@ -80,7 +80,7 @@ foreach ($listPlages as &$infos_by_prat) {
       if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
         $nb_attente++;
       }
-      
+      $consultation->loadRefSejour();
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
       $consultation->countDocItems();
