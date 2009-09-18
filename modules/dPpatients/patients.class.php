@@ -1162,6 +1162,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - cp"                , $this->cp         );
     $template->addProperty("Patient - âge"               , $this->_age       );
     $template->addDateProperty("Patient - date de naissance", $this->naissance);
+		$template->addDateProperty("Patient - lieu de naissance", $this->lieu_naissance);
     $template->addProperty("Patient - numéro d'assuré"   , $this->matricule  );
     $template->addProperty("Patient - téléphone"         , $this->tel        );
     $template->addProperty("Patient - mobile"            , $this->tel2       );
