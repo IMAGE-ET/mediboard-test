@@ -79,11 +79,13 @@ case "$1" in
     # Clean files
     rm -f $log.straight
     rm -f $tmp
-    ;;
 
     # Write status file
     svn info | awk 'NR==5' > $status
     echo "Date: $(date)" >> $status
+    check_errs $? "Failed to write status file" "Status file written!"
+    ;;
+
   *)
     echo "Action $1 unknown" \
     ;; \
