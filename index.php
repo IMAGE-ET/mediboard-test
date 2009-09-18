@@ -118,18 +118,18 @@ $m = $a = $u = $g = "";
 // load locale settings
 require("./locales/core.php");
 
-if (empty($locale_info['names'])){
-  $locale_info['names'] = array();
+if (empty($locale_info["names"])){
+  $locale_info["names"] = array();
 }
-setlocale(LC_TIME, $locale_info['names']);
+setlocale(LC_TIME, $locale_info["names"]);
 
-if (empty($locale_info['charset'])){
-  $locale_info['charset'] = "UTF-8";
+if (empty($locale_info["charset"])){
+  $locale_info["charset"] = "UTF-8";
 }
 
 // output the character set header
 if (!$suppressHeaders || $ajax) {
-  header("Content-type: text/html;charset=".$locale_info['charset']);
+  header("Content-type: text/html;charset=".$locale_info["charset"]);
 }
 
 // check if we are logged in
@@ -145,7 +145,7 @@ if (!$AppUI->user_id) {
   } 
   else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
-    $smartyLogin->assign("localeCharSet"        , $locale_info['charset']);
+    $smartyLogin->assign("localeCharSet"        , $locale_info["charset"]);
     $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico", true));
     $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
     $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));
@@ -250,9 +250,16 @@ if (!$suppressHeaders) {
   $mails = $mail->loadVisibleList();
   
   $svnStatus = null;
-  if (CAppUI::pref('showLastUpdate') && is_readable('./tmp/svnstatus.txt')) {
-    $svnStatus = explode(' ', file_get_contents('./tmp/svnstatus.txt'), 2);
-    $svnStatus['relative'] = CMbDate::relative(end($svnStatus));
+  if (CAppUI::pref("showLastUpdate") && is_readable("./tmp/svnstatus.txt")) {
+    $svnInfo = file("./tmp/svnstatus.txt");
+    $svnStatus = array( 
+      "revision" => explode(": ", $svnInfo[0]),
+      "date"     => explode(": ", $svnInfo[1]),
+    );    
+
+    $svnStatus["revision"] = $svnStatus["revision"][1];
+    $svnStatus["date"]     = $svnStatus["date"][1];
+    $svnStatus["relative"] = CMbDate::relative($svnStatus["date"]);
   }
   
   // Creation du Template
@@ -265,7 +272,7 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("offline"              , false);
   $smartyHeader->assign("nodebug"              , true);
   $smartyHeader->assign("configOffline"        , null);
-  $smartyHeader->assign("localeCharSet"        , $locale_info['charset']);
+  $smartyHeader->assign("localeCharSet"        , $locale_info["charset"]);
   $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico", true));
   $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
   $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));

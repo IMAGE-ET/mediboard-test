@@ -87,11 +87,8 @@
       {{/if}}
     </td>
     <td class="end">
-      {{if $svnStatus}}
-      <a href="tmp/svnlog.txt" target="_blank" title="{{$svnStatus.1|date_format:$dPconfig.datetime}} (r{{$svnStatus.0}})">
-        {{tr}}Latest update{{/tr}} {{$svnStatus.relative.count}} {{tr}}{{$svnStatus.relative.unit}}{{if $svnStatus.relative.count > 1}}s{{/if}}{{/tr}}
-      </a>
-      {{/if}}
+	    {{mb_include module=mediboard template=svnstatus}}    
+
       <form name="ChangeGroup" action="" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <select name="g" onchange="this.form.submit();">

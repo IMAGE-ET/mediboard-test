@@ -82,7 +82,7 @@ case "$1" in
 
     # Write status file
     svn info | awk 'NR==5' > $status
-    echo "Date: $(date)" >> $status
+    echo "Date: $(date +%Y-%m-%dT%H:%M:%S)" >> $status
     check_errs $? "Failed to write status file" "Status file written!"
     ;;
 
