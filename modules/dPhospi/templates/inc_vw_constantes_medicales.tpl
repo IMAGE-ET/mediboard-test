@@ -38,7 +38,7 @@ insertGraph = function (container, data, id, width, height) {
 tickFormatter = function (n) {
   n = parseInt(n);
   
-  var s = '<a href="javascript:;" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
+  var s = '<a href="#1" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
   if (dates[n] && dates[n] == last_date) {
     s += hours[n];
   } else if (dates[n] && hours[n]) {

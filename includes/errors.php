@@ -136,7 +136,7 @@ function mbExport($var, $label = null, $log = false) {
 
 function print_infos($var, $name = '') {
 	if (count($var))
-	  return "\n<pre><a href='javascript:;' onclick='var s=this.parentNode.childNodes[1].style; s.display=s.display==\"none\"?\"\":\"none\"'>$name</a><span style='display:none;'> " . 
+	  return "\n<pre><a href='#1' onclick='var s=this.parentNode.childNodes[1].style;s.display=s.display==\"none\"?\"\":\"none\";return false;'>$name</a><span style='display:none;'> " . 
              substr(print_r($var, true), 6) . '</span></pre>';
 }
 

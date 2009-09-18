@@ -525,7 +525,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="4" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
-            <a href="javascript:;" onclick="setObject( {
+            <a href="#1" onclick="setObject( {
               objClass: '{{$curr_op->_class_name}}', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 

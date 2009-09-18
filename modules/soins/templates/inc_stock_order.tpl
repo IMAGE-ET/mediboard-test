@@ -55,7 +55,7 @@ Main.add(function(){
 {{foreach from=0|range:$count_stocks:$step item=page}}
   {{assign var=view value=$page/20+1}}
   {{if $view|intval == $view}}
-  <a href="javascript:;" class="page {{if $page==$start}}active{{/if}}" 
+  <a href="#1" class="page {{if $page==$start}}active{{/if}}" 
      onclick="$V(getForm('filter').start,'{{$page}}'); refreshOrders();">{{$view}}</a>
   {{/if}}
 {{/foreach}}

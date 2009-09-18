@@ -360,7 +360,7 @@ var ProgressiveCalendar = Class.create({
     this.fillTable(table, cols, rows, min, max, type, date);
     
     if (title) {
-      newContainer.insert('<a href="javascript:;" style="text-align:center;display:block;font-weight:bold;">'+title+' <img src="./images/icons/downarrow.png" height="12" /></a>');
+      newContainer.insert('<a href="#1" style="text-align:center;display:block;font-weight:bold;">'+title+' <img src="./images/icons/downarrow.png" height="12" /></a>');
     }
     
     if (title) {
@@ -403,7 +403,7 @@ var ProgressiveCalendar = Class.create({
         now = new Date(),
         date = this.getDate();
 
-    this.picker.update('<a href="javascript:;" style="text-align:center;display:block;font-weight:bold;">Année <img src="./images/icons/cancel.png" height="12" /></a>');
+    this.picker.update('<a href="#1" style="text-align:center;display:block;font-weight:bold;">Année <img src="./images/icons/cancel.png" height="12" /></a>');
     this.picker.select('a').first().observe('click', function(){
       $V(this.element, '');
       $V(this.elementView, '');

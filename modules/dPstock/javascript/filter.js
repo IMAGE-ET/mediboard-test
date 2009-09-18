@@ -60,7 +60,7 @@ Filter.prototype = {
           var r = makeRanges(total, 20);
           
           r.each(function (e, k) {
-            var a = new Element('a', {href: 'javascript:;', className: 'page'})
+            var a = new Element('a', {href: '#1', className: 'page'})
                         .update(k+1)
                         .observe('click', function () {$V(field, e); form.onsubmit(); element.selected = k;});
             if (k == element.selected) {

@@ -15,7 +15,7 @@
 <!-- Stock Pharmacie -->
   <!-- Affichage des stocks du service -->
   <td class="text">
-    <a href="javascript:;" onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}');" class="tooltip-trigger">
+    <a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}');" class="tooltip-trigger">
     {{$stock}}
     </a>
   </td>
