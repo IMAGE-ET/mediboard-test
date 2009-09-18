@@ -374,7 +374,7 @@ changePraticienElt = function(praticien_id, element){
 // UpdateFields de l'autocomplete des elements
 updateFieldsElement = function(selected, formElement, element) {
   Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
+  var dn = selected.childNodes;
   Prescription.addLineElement(dn[0].firstChild.nodeValue, dn[1].firstChild.nodeValue);
   $(formElement+'_'+element).value = "";
 }
@@ -382,7 +382,7 @@ updateFieldsElement = function(selected, formElement, element) {
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicament = function(selected) {
   Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
+  var dn = selected.childNodes;
   Prescription.addLine(dn[0].firstChild.nodeValue);
   $('searchProd_produit').value = "";
 }
