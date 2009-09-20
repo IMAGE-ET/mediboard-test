@@ -2,29 +2,13 @@
 
 /* Tab view table */
 
-table.tabview {
-  border-spacing: 0px;
-  border-collapse: collapse; /* Hack for IE */
-  empty-cells: show;
-  width: 100%;
-}
-
-table.tabmenu {
-  margin-left: 20px;
-  border-spacing: 0px;
-}
-
 table.tabmenu td {
   height: 16px;
   background: #bbb;
   padding: 3px;
 }
 
-table.tabmenu td.left {
-  width: 3px;
-  background: transparent;
-}
-
+table.tabmenu td.left,
 table.tabmenu td.right {
   width: 3px;
   background: transparent;
@@ -35,11 +19,7 @@ table.tabmenu td.selected {
   padding: 3px;
 }
 
-table.tabmenu td.selected.left {
-  width: 3px;
-  background: transparent;
-}
-
+table.tabmenu td.selected.left,
 table.tabmenu td.selected.right {
   width: 3px;
   background: transparent;

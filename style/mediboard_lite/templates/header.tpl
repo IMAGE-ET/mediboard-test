@@ -23,8 +23,6 @@
           </td>
           {{/if}}
           {{/foreach}}
-          <td id="new">
-          </td>
         </tr>
       </table>
     </td>

@@ -2,9 +2,7 @@
 
 body {
   font-family: arial, sans-serif;
-  font-size: 11px;  
   background: #fff;
-  margin: 0px;
 }
 
 #headerMenu {
@@ -160,44 +158,4 @@ table.main {
   float: left;
   height: 12px;
   white-space: nowrap;
-}
-
-button.send, a.button.send {
-  background-image: url(../tonkin/images/buttons/send.png);
-}
-
-button.send:hover, a.button.send:hover {
-  background-image: url(../tonkin/images/buttons/send.png);
-}
-
-button.send-cancel, a.button.send-cancel {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-}
-
-button.send-cancel:hover, a.button.send-cancel:hover {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-}
-
-button.send-again, a.button.send-again {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-}
-
-button.send-again:hover, a.button.send-again:hover {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-}
-
-button.send-problem, a.button.send-problem {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-}
-
-button.send-problem:hover, a.button.send-problem:hover {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-}
-
-button.send-auto, a.button.send-auto {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
-}
-
-button.send-auto:hover, a.button.send-auto:hover {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
 }

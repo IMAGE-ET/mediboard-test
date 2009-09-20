@@ -12,7 +12,7 @@ body {
 
 table {
   font-family: "Lucida Console", "Courier New", Courier, mono;
-  font-size: 9px;
+  font-size: 1em;
 }
 
 /* Login */
@@ -55,35 +55,24 @@ a:hover {
 
 table#weeklyPlanning td.empty{
   background-color: #000;
-  border: dashed 1px #0f0
+  border: dashed 1px #0f0;
 }
 
 /* Form tables */
 
 table.form {
-  width: 100%;
-  border-spacing: 1px;
-  border-style: dashed;
-  border-width: 2px;
-  border-color: #0f0;
+  border: 2px dashed #0f0;
 }
 
 table.form th {
   color: #0f0;
-  white-space: nowrap;
   background-color: #000;
   vertical-align: top;
-  text-align: right;
-  font-weight: normal;
-  padding: 2px 4px;
-  /*border: none;*/
 }
 
 table.form th.title {
   color: #fff;
   font-size: 12px;
-  font-weight: bold; 
-  text-align: center;
   background-color: #000;
   border: #0f0 1px dashed;
 }
@@ -119,45 +108,19 @@ table.form th.category label {
   background-color: transparent;
 }
 
-table.form th.mandatory {
-  color: #f00;
-  font-weight: bold;
-}
-
-label.notNull {
-  padding-right: 13px;
-  background: url(./images/icons/redbox.jpg) no-repeat center right;
-  font-weight: bold;
-}
-
+label.notNull,
 label.canNull {
   padding-right: 13px;
   background: url(./images/icons/redbox.jpg) no-repeat center right;
-  font-weight: bold;
 }
 
 label.notNullOK {
   padding-right: 13px;
-  background: url(./images/icons/reenbox.jpg) no-repeat center right;
-  font-weight: bold;
-}
-
-label:hover {
-  border-bottom: 1px dotted #fff;
-  cursor: help;
-}
-
-table.form th.text {
-  white-space: normal;
-  text-align: center;
+  background: url(./images/icons/greenbox.jpg) no-repeat center right;
 }
 
 table.form td {
-  white-space: nowrap;
-  vertical-align: top;
   background-color: #000;
-  text-align: left;
-  padding: 1px 4px;
 }
 
 table.form td.dark {
@@ -172,39 +135,15 @@ table.form td.compte_rendu {
   background: #000;
 }
 
-table.form td.button {
-  text-align: center;
-  vertical-align: middle;
+div.autocomplete {
+  border:1px solid #0f0;
 }
 
-div.autocomplete {
-  position:absolute;
-  width:250px;
-  max-height:200px;
-  overflow: auto;
-  background-color:white;
-  border:1px solid #0f0;
-  margin:0px;
-  padding:0px;
-}
-div.autocomplete ul {
-  list-style-type:none;
-  margin:0px;
-  padding:0px;
-}
 div.autocomplete ul li.selected {
   background-color: #333;
 }
-div.autocomplete ul li {
-  list-style-type:none;
-  display:block;
-  margin:0;
-  padding:2px;
-  cursor:pointer;
-}
 
 /* Navigation */
-
 td#mainHeader table {
   width: 100%;
 }
@@ -245,7 +184,7 @@ td#menubar a:hover {
 
 td.tabox {
   background-color: #000;
-  border: dashed #0f0 0px;
+  border: none;
 }
 
 table.tabmenu {
@@ -350,13 +289,11 @@ select {
   font-family: "Lucida Console", "Courier New", Courier, mono;
   border: 1px #0f0 dashed;
   font-size: 9px;
-  padding: 0;
 }
 
 optgroup {
   font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
-  font-style: normal;
   font-size: 9px;
   font-weight: bold;
   padding: 0px;
@@ -367,9 +304,7 @@ optgroup {
 option {
   font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
-  font-style: normal;
   font-size: 9px;
-  font-weight: normal;
   padding: 0px;
   padding-right: 4px;
   background: #000;
@@ -397,28 +332,11 @@ textarea:focus {
 /* Standard table */
 
 table.tbl {
-  width: 100%;
-  border: 0px;
-  border-spacing: 1px;
   background-color: #000;
-}
-
-table.tbl a {
-  display: block;
 }
 
 table.tbl tr:hover td {
   background-color: #333;
-}
-
-a.actionPat {
-  display: inline;
-  float: right;
-  margin: 0 1px;
-}
-
-table.tbl a.action {
-  display: inline;
 }
 
 table.tbl th a {
@@ -427,40 +345,19 @@ table.tbl th a {
 
 table.tbl th {
   background-color: #000;
-  padding: 2px;
   color: #0f0;
   border: dashed #0f0 1px;
-  font-weight: normal;
-  text-align: center;
   font-style: italic;
-  white-space: nowrap;
 }
 
 table.tbl th.title {
   font-size: 12px;
-  font-weight: bold;  
-  text-align: center;
   background: #000;
   border: #0f0 1px dashed;
 }
 
 table.tbl td {
   background-color: #000;
-  padding: 2px;
-  white-space: nowrap;
-}
-
-table.tbl th.text {
-  white-space: normal;
-}
-
-table.tbl td.text {
-  white-space: normal;
-}
-
-table.tbl td.button {
-  text-align: center;
-  vertical-align: middle;
 }
 
 table.tbl tr.clear,
@@ -469,17 +366,10 @@ table.tbl tr.clear a {
   color: #fff;
 }
 
-table.tbl tr.clear td,
-table.tbl tr.clear th {
-  background-color: transparent;
-  border: none;
-}
-
 table.titleblock td.titlecell {
   font-family: "Lucida Console", "Courier New", Courier, mono;
   font-size: 16px; 
   color: #0f0;
-  width: 100%;
   padding-bottom: 5px;
 }
 
@@ -487,8 +377,6 @@ table.titleblock td.titlecell {
 th.title {
   font-size: 12px;
   color: #0f0;
-  font-weight: bold;  
-  text-align: center;
   background: #000;
   border: #0f0 1px dashed;
 }

@@ -27,7 +27,6 @@
               {{/foreach}}
             </ul>
           </td>
-          <td id="new"></td>
         </tr>
       </table>
     </td>
@@ -72,7 +71,7 @@
   <tr>
     <td>
       <div id="systemMsg">
-        {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}
+        {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
       {{if !$dialog && !$offline}}
       <table class='titleblock'>
@@ -80,7 +79,7 @@
           <td>
             <img src="./modules/{{$m}}/images/icon.png" alt="Icone {{$m}}" height="24" width="24" />
           </td>
-          <td class='titlecell'>
+          <td class="titlecell">
             {{tr}}module-{{$m}}-long{{/tr}}
           </td>
         </tr>

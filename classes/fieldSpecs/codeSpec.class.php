@@ -106,12 +106,9 @@ class CCodeSpec extends CMbFieldSpec {
         }
       }
       $int = $compte_banque . $compte_guichet . $tabcompte . $compte_cle;
-	    // Use bcmod since standard modulus
-	    if (function_exists("bcmod")) {
-	      if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
-	        return "Rib incorrect";
-	      }
-	    }
+      if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
+        return "Rib incorrect";
+      }
     }
      
     // INSEE
@@ -129,11 +126,8 @@ class CCodeSpec extends CMbFieldSpec {
       $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
       $cle  = $matches[2];
       
-      // Use bcmod since standard modulus
-      if (function_exists("bcmod")) {
-        if (97 - bcmod($code, 97) != $cle) {
-          return "Matricule incorrect, la clé n'est pas valide";
-        }
+      if (97 - bcmod($code, 97) != $cle) {
+        return "Matricule incorrect, la clé n'est pas valide";
       }
     }
     

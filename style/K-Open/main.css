@@ -1,58 +1,29 @@
 /* Global CSS for Mediboard_lite (include of Mediboard before)*/
 
 /* Body */
-
 body {
   font-family: arial, sans-serif;
-  font-size: 11px;  
   background: #fff;
-  margin: 0px;
 }
 
 /* Login */
-
 #login {
   margin: 40px 0px 0px; 
 }
 
 #login table {
   border: solid #000 3px;
-  width: 600px;
   background: #fff;
-  margin: auto;
-  padding: 5px;
-}
-
-#login table td.logo {
-  width: 33%;
-  text-align: center;
-  font-size: 9px;
-  white-space: normal;
 }
 
 /* Form tables */
-
-table.form {
-  width: 100%;
-  border-spacing: 1px;
-}
-
 table.form th {
-  color: #000;
-  white-space: nowrap;
   background-color: #ffd;
   vertical-align: top;
-  text-align: right;
-  font-weight: normal;
-  padding: 2px 4px;
-  border: none;
 }
 
 table.form th.title {
   color: #fff;
-  font-size: 14px;
-  font-weight: bold; 
-  text-align: center;
   background-color: #638cc9;
   border: #aaa 1px outset;
 }
@@ -73,60 +44,37 @@ table.form tr.triggerHide th {
 
 table.form th.category {
   color: #fff;
-  font-weight: bold;  
-  font-style: italic;  
-  text-align: center;
+  font-style: italic; 
   background-color: #638cc9;
   border: #638cc9 1px outset;
 }
 
 table.form th.category label {
   color: #fff;
-  font-weight: bold;  
-  font-style: italic;  
-  text-align: center;
-  background-color: transparent;
+  font-style: italic;
 }
 
-table.form th.mandatory {
-  color: #f00;
-  font-weight: bold;
+
+label.notNull,
+label.canNull,
+label.notNullOK {
+  padding-right: 13px;
 }
 
 label.notNull {
-  padding-right: 13px;
   background: url(./images/icons/redbox.jpg) no-repeat center right;
-  font-weight: bold;
 }
 
 label.canNull {
-  padding-right: 13px;
   background: url(./images/icons/orangebox.jpg) no-repeat center right;
-  font-weight: bold;
 }
 
 label.notNullOK {
-  padding-right: 13px;
   background: url(./images/icons/greenbox.jpg) no-repeat center right;
-  font-weight: bold;
-}
-
-label:hover {
-  border-bottom: 1px dotted #888;
-  cursor: help;
-}
-
-table.form th.text {
-  white-space: normal;
-  text-align: center;
 }
 
 table.form td {
-  white-space: nowrap;
-  vertical-align: top;
   background-color: #ffd;
-  text-align: left;
-  padding: 1px 4px;
 }
 
 table.form td.dark {
@@ -141,40 +89,12 @@ table.form td.compte_rendu {
   background: #ffd;
 }
 
-table.form td.button {
-  text-align: center;
-  vertical-align: middle;
-}
-
-div.autocomplete {
-  position:absolute;
-  width:250px;
-  max-height:200px;
-  overflow: auto;
-  background-color:white;
-  border:1px solid #888;
-  margin:0px;
-  padding:0px;
-}
-div.autocomplete ul {
-  list-style-type:none;
-  margin:0px;
-  padding:0px;
-}
 div.autocomplete ul li.selected { 
 	background-color: #ffd;
 	font-weight:bold;
 }
-div.autocomplete ul li {
-  list-style-type:none;
-  display:block;
-  margin:0;
-  padding:2px;
-  cursor:pointer;
-}
 
 /* Navigation */
-
 td#mainHeader table {
   width: 100%;
 }
@@ -216,7 +136,6 @@ td#menubar a:hover {
 }
 
 /* Tabbed items */
-
 td.tabox {
   background-color: #fff;
   border: solid #fff 0px;
@@ -224,7 +143,6 @@ td.tabox {
 
 table.tabmenu {
   margin: 5px 10px;
-  border-spacing: 0px;
 }
 
 table.tabmenu td {
@@ -267,10 +185,8 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-
 a.button, button {
   color: #fff;
-  height: 18px;
   background-color: #638cc9;
 }
 
@@ -292,14 +208,17 @@ button.submit, a.button.submit {
   background-image: url(images/buttons/save.gif);
   padding-left: 18px;
 }
+
 button.new, a.button.new {
   background-image: url(images/buttons/new.gif);
   padding-left: 18px;
 }
+
 button.print, a.button.print {
   background-image: url(images/buttons/print.gif);
   padding-left: 18px;
 }
+
 button.cancel, a.button.cancel {
   background-image: url(images/buttons/cancel.gif);
   padding-left: 18px;
@@ -309,10 +228,12 @@ button.modify, a.button.modify {
   background-image: url(images/buttons/save.gif);
   padding-left: 18px;
 }
+
 button.search, a.button.search {
   background-image: url(images/buttons/search.gif);
   padding-left: 18px;
 }
+
 button.tick, a.button.tick {
   background-image: url(images/buttons/tick.gif);
   padding-left: 18px;
@@ -325,30 +246,6 @@ button.down, a.button.down {
 
 button.change, a.button.change {
   background-image: url(images/buttons/change.gif);
-  padding-left: 18px;
-}
-button.send, a.button.send {
-  background-image: url(../tonkin/images/buttons/send.png);
-  padding-left: 18px;
-}
-
-button.send-cancel, a.button.send-cancel {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-  padding-left: 18px;
-}
-
-button.send-again, a.button.send-again {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-  padding-left: 18px;
-}
-
-button.send-problem, a.button.send-problem {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-  padding-left: 18px;
-}
-
-button.send-auto, a.button.send-auto {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
   padding-left: 18px;
 }
 
@@ -366,7 +263,6 @@ a.notext{
 input {
   border: 1px #a5acb2 solid;
   font-size: 12px;
-  margin: 1px;
   padding: 0px 2px;
 }
 
@@ -375,7 +271,6 @@ input[type=reset],
 input[type=button] {
   border-color: black;
   background: #638cc9;
-  margin: 0 10px;
   color: #fff;
 }
 
@@ -389,31 +284,24 @@ input[type=button]:hover {
 select {
   border: 1px #a5acb2 solid;
   font-size: 10px;
-  padding: 0;
 }
 
 optgroup {
-  font-style: normal;
   font-size: 10px;
   font-weight: bold;
   padding: 0px;
   padding-left: 5px;
-  background: #fff;
 }
 
 option {
-  font-style: normal;
   font-size: 10px;
-  font-weight: normal;
   padding: 0px;
   padding-right: 4px;
-  background: #fff;
 }
 
 input,
 select,
 textarea {
-  padding: 1px;
   border: 1px #a5acb2 solid;
   background: #fff;
 }
@@ -427,45 +315,17 @@ textarea:focus {
 }
 
 /* Standard table */
-
 table.tbl {
-  width: 100%;
-  border: 0px;
-  border-spacing: 1px;
   background-color: #fff;
-}
-
-table.tbl a {
-  display: block;
 }
 
 table.tbl tr:hover td {
   background-color: #fdd;
 }
 
-a.actionPat {
-  display: inline;
-  float: right;
-  margin: 0 1px;
-}
-
-table.tbl a.action {
-  display: inline;
-}
-
-table.tbl th a {
-  color: #fff;
-}
-
 table.tbl th {
   background-color: #638cc9;
-  padding: 2px;
-  color: #fff;
-  border: outset #ccc 1px;
-  font-weight: normal;
-  text-align: center;
   font-style: italic;
-  white-space: nowrap;
 }
 
 table.tbl tr.triggerShow td,
@@ -474,59 +334,27 @@ table.tbl tr.triggerHide td{
 }
 
 table.tbl th.title {
-  font-size: 14px;
-  font-weight: bold;  
-  text-align: center;
   background: #638cc9;
-  border: #aaa 1px outset;
 }
 
 table.tbl td {
   background-color: #ffd;
-  padding: 2px;
-  white-space: nowrap;
-}
-
-table.tbl th.text {
-  white-space: normal;
-}
-
-table.tbl td.text {
-  white-space: normal;
-}
-
-table.tbl td.button {
-  text-align: center;
-  vertical-align: middle;
 }
 
 table.tbl tr.clear,
 table.tbl tr.clear a {
   background-color: #fff;
-  color: #000;
-}
-
-table.tbl tr.clear td,
-table.tbl tr.clear th {
-  background-color: transparent;
-  border: none;
 }
 
 table.titleblock td.titlecell {
   font-family: Arial;
-  font-size: 20px; 
   color: #638cc9;
-  width: 100%;
   padding-bottom: 5px;
 }
 
 /* Main table */
-
 th.title {
-  font-size: 14px;
   color: #fff;
-  font-weight: bold;  
-  text-align: center;
   background: #638cc9;
   border: #638cc9 1px outset;
 }

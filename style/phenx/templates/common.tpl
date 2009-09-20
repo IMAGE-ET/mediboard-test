@@ -102,13 +102,9 @@
 </div>
 
 <!-- Javascript Console -->
-
 <div id="console" style="display:none;">
   <div class="title">
     <div class="hide" onclick="Console.hide()"></div>
     Javascript console
   </div>
 </div>
-
-<!-- Up button -->
-<div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>

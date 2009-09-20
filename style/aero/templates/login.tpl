@@ -32,7 +32,7 @@
       <th>
         <label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label>
       </th>
-      <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" class="text" /></td>
+      <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" /></td>
       {{if $dPconfig.demo_version}}
       <td rowspan="3" class="category">
         <strong>Administrateur</strong>: admin/admin<br />
@@ -45,7 +45,7 @@
     </tr>
     <tr>
       <th><label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label></th>
-      <td><input type="password" class="notNull str" size="25" maxlength="32" name="password" class="text" /></td>
+      <td><input type="password" class="notNull str" size="25" maxlength="32" name="password" /></td>
     </tr>
     <tr>
       <td colspan="2" class="button"><button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button></td>

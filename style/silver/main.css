@@ -6,9 +6,6 @@
   border: 0px;
   border-spacing: 0px;
   background: url(./images/pictures/acier.png) repeat-x scroll bottom left;
-  color: #fff;
-  text-align: left;
-  width: 100%;
 }
 
 
@@ -57,13 +54,16 @@ table.tabmenu td {
   background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
 
-table.tabmenu td.left {
+table.tabmenu td.left,
+table.tabmenu td.right {
   width: 10px;
+}
+
+table.tabmenu td.left {
   background: url(./images/icons/tabLeft.png) no-repeat bottom right;
 }
 
 table.tabmenu td.right {
-  width: 10px;
   background: url(./images/icons/tabRight.png) no-repeat bottom left;
 }
 
@@ -72,24 +72,19 @@ table.tabmenu td.selected {
 }
 
 table.tabmenu td.selected.left {
-  width: 10px;
   background: url(./images/icons/tabSelectedLeft2.png) no-repeat bottom right;
 }
 
 table.tabmenu td.selected.right {
-  width: 10px;
   background: url(./images/icons/tabSelectedRight2.png) no-repeat bottom left;
 }
 
 /* panneau d'affichage */
-
 table.tabview td.tabox {
   background: url(./images/pictures/acierOnglet.png) repeat;
 }
 
 /* Bouttons */
-
-
 button, 
 a.button,
 input[type=submit],
@@ -266,46 +261,6 @@ a.button.stop {
 button.stop:hover, 
 a.button.stop:hover {
   background-image: url(../tonkin/images/buttons/stopover.png);
-}
-
-button.send, a.button.send {
-  background-image: url(../tonkin/images/buttons/send.png);
-}
-
-button.send:hover, a.button.send:hover {
-  background-image: url(../tonkin/images/buttons/send.png);
-}
-
-button.send-cancel, a.button.send-cancel {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-}
-
-button.send-cancel:hover, a.button.send-cancel:hover {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-}
-
-button.send-again, a.button.send-again {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-}
-
-button.send-again:hover, a.button.send-again:hover {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-}
-
-button.send-problem, a.button.send-problem {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-}
-
-button.send-problem:hover, a.button.send-problem:hover {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-}
-
-button.send-auto, a.button.send-auto {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
-}
-
-button.send-auto:hover, a.button.send-auto:hover {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
 }
 
 .touchscreen button, 

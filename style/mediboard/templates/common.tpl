@@ -116,9 +116,6 @@
   </div>
 </div>
 
-<!-- Up button -->
-<div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>
-
 <!-- Mails -->
 {{if !$dialog && @count($mails)}}
 <div class="small-mail" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">

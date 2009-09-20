@@ -13,6 +13,7 @@ $performance["error"] = 0;
 $performance["warning"] = 0;
 $performance["notice"] = 0;
 define('LOG_PATH', $dPconfig["root_dir"]."/tmp/mb-log.html");
+define('E_JS_ERROR', 0);
 
 // Do not set to E_STRICT as it hides fatal errors to our error handler
 // Strict warning will still be handle by our handler anyway
@@ -36,6 +37,7 @@ $divClasses = array (
   E_USER_ERROR => "big-error",
   E_USER_WARNING => "big-warning",
   E_USER_NOTICE => "big-info",
+  E_JS_ERROR => "big-warning",
 );
 
 // Pour BCB 
@@ -58,6 +60,7 @@ $errorTypes = array (
   E_USER_ERROR => "User error",
   E_USER_WARNING => "User warning",
   E_USER_NOTICE => "User notice",
+  E_JS_ERROR => "Javascript error",
 );
 
 $errorCategories = array (
@@ -73,6 +76,7 @@ $errorCategories = array (
   E_USER_ERROR => "error",
   E_USER_WARNING => "warning",
   E_USER_NOTICE => "notice",
+  E_JS_ERROR => "warning",
 );
 
 // To be put in mbFonctions
@@ -163,15 +167,13 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   
   // Contextes 
   $contexts = debug_backtrace();
-  array_shift($contexts);
-  
-  $contexts_reduced = $contexts;
-  foreach($contexts_reduced as &$ctx) {
+  foreach($contexts as &$ctx) {
     unset($ctx['args']);
     unset($ctx['object']);
   }
-  $hash = md5(serialize($contexts_reduced));
+  $hash = md5($errorCode.$errorText.$errorFile.$errorLine.serialize($contexts));
   
+  array_shift($contexts);
   $log = "\n\n<div class='$divClass' title='$hash'>";
   
   if ($AppUI && $AppUI->user_id){
@@ -238,12 +240,10 @@ function exceptionHandler($exception) {
   
   // Contextes 
   $contexts = $exception->getTrace();
-  
-  $contexts_reduced = $contexts;
-  foreach($contexts_reduced as &$ctx) {
+  foreach($contexts as &$ctx) {
     unset($ctx['args']);
   }
-  $hash = md5(serialize($contexts_reduced));
+  $hash = md5(serialize($contexts));
   
   $log = "\n\n<div class='$divClass' title='$hash'>";
   

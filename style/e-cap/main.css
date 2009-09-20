@@ -4,9 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;  
   background: #fff;
-  margin: 0px;
 }
 
 #login {
@@ -16,43 +14,23 @@ body {
 /* Login */
 #login table {
   border: solid #000 3px;
-  width: 600px;
   background: #fff;
-  margin: auto;
-  padding: 5px;
-}
-
-#login table td.logo {
-  width: 33%;
-  text-align: center;
-  font-size: 9px;
-  white-space: normal;
 }
 
 /* Form tables */
 table.form {
-  width: 100%;
   border-spacing: 0px;
 }
 
 table.form th {
-  color: #000;
-  white-space: nowrap;
   background-color: #ffd;
   vertical-align: top;
-  text-align: right;
-  font-weight: normal;
-  padding: 2px 4px;
   border-right: 1px solid #ddd;
 }
 
 table.form th.title {
   color: #fff;
-  font-size: 14px;
-  font-weight: bold; 
-  text-align: center;
   background-color: #68c;
-  border: #aaa 1px solid;
 }
 
 table.form tr.groupexpand td,
@@ -71,58 +49,36 @@ table.form tr.triggerHide th {
 
 table.form th.category {
   color: #fff;
-  font-weight: bold;  
   font-style: italic;  
-  text-align: center;
   background-color: #68c;
   border: #ccc 1px solid;
 }
 
 table.form th.category label {
   color: #fff;
-  font-weight: bold;  
-  font-style: italic;  
-  text-align: center;
-  background-color: transparent;
+  font-style: italic;
 }
 
-table.form th.mandatory {
-  color: #f00;
+label.notNull,
+label.canNull,
+label.notNullOK {
+  padding-right: 13px;
   font-weight: bold;
 }
 
 label.notNull {
-  padding-right: 13px;
   background: url(./images/icons/redbox.jpg) no-repeat center right;
-  font-weight: bold;
 }
 
 label.canNull {
-  padding-right: 13px;
   background: url(./images/icons/orangebox.jpg) no-repeat center right;
-  font-weight: bold;
 }
 
 label.notNullOK {
-  padding-right: 13px;
   background: url(./images/icons/greenbox.jpg) no-repeat center right;
-  font-weight: bold;
 }
 
-label:hover {
-  border-bottom: 1px dotted #888;
-  cursor: help;
-}
-
-table.form th.text {
-  white-space: normal;
-  text-align: center;
-}
-
-table.form th a:link {
-  color: #eee;
-}
-
+table.form th a:link,
 table.form th a:visited {
   color: #eee;
 }
@@ -135,11 +91,7 @@ table.form th a.button.save:link {
 }
 
 table.form td {
-  white-space: nowrap;
-  vertical-align: top;
   background-color: #ffd;
-  text-align: left;
-  padding: 1px 4px;
   border: none;
 }
 
@@ -153,11 +105,6 @@ table.form td.light {
 
 table.form td.compte_rendu {
   background: #ffd;
-}
-
-table.form td.button {
-  text-align: center;
-  vertical-align: middle;
 }
 
 div.wizard {
@@ -293,7 +240,7 @@ td#mainHeader td.welcome {
 /* Tabbed items */
 td.tabox {
   background-color: #fff;
-  border: solid #fff 0px;
+  border: none;
 }
 
 table.tabmenu {
@@ -540,46 +487,6 @@ a.button.stop:hover {
   background-image: url(../tonkin/images/buttons/stopover.png);
 }
 
-button.send, a.button.send {
-  background-image: url(../tonkin/images/buttons/send.png);
-}
-
-button.send:hover, a.button.send:hover {
-  background-image: url(../tonkin/images/buttons/send.png);
-}
-
-button.send-cancel, a.button.send-cancel {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-}
-
-button.send-cancel:hover, a.button.send-cancel:hover {
-  background-image: url(../tonkin/images/buttons/send-cancel.png);
-}
-
-button.send-again, a.button.send-again {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-}
-
-button.send-again:hover, a.button.send-again:hover {
-  background-image: url(../tonkin/images/buttons/send-again.png);
-}
-
-button.send-problem, a.button.send-problem {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-}
-
-button.send-problem:hover, a.button.send-problem:hover {
-  background-image: url(../tonkin/images/buttons/send-problem.png);
-}
-
-button.send-auto, a.button.send-auto {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
-}
-
-button.send-auto:hover, a.button.send-auto:hover {
-  background-image: url(../tonkin/images/buttons/send-auto.png);
-}
-
 button.notext, 
 button.notext:hover,
 a.notext, 
@@ -588,7 +495,6 @@ a.notext:hover{
 }
 
 option {
-  background: #fff;
 }
 
 input, select, textarea {
@@ -604,7 +510,6 @@ input:focus, select:focus, textarea:focus {
 
 select {
   border: 1px #a5acb2 solid;
-  padding: 0;
 }
 
 /* Standard table */
@@ -613,8 +518,6 @@ table.tbl, table.form {
 }
 
 table.tbl {
-  width: 100%;
-  border: 0px;
   border-spacing: 0px;
   background-color: #fff;
 }
@@ -623,37 +526,11 @@ table.tbl td,
 table.tbl th {
   border: 1px solid #eee;
 	background-color: #ffd;
-  padding: 2px;
-  white-space: nowrap;
-}
-
-table.tbl a {
-  display: block;
-}
-
-a.actionPat {
-  display: inline;
-  float: right;
-  margin: 0 1px;
-}
-
-table.tbl a.action {
-  display: inline;
-}
-
-table.tbl th a {
-  color: #fff;
 }
 
 table.tbl th {
   background-color: #68c;
-  padding: 2px;
-  color: #fff;
-  border-color: #ccc;
-  font-weight: normal;
-  text-align: center;
   font-style: italic;
-  white-space: nowrap;
 }
 
 table.tbl tr.triggerShow td,
@@ -662,9 +539,6 @@ table.tbl tr.triggerHide td{
 }
 
 table.tbl th.title {
-  font-size: 14px;
-  font-weight: bold;  
-  text-align: center;
   background: #68c;
   border-color: #ccc;
 }
@@ -681,11 +555,6 @@ table.form tr.selected td {
   background-color: #edb;
 }
 
-table.tbl th.text ,
-table.tbl td.text {
-  white-space: normal;
-}
-
 table.tbl td.button {
   text-align: center;
   vertical-align: middle;
@@ -694,20 +563,11 @@ table.tbl td.button {
 table.tbl tr.clear,
 table.tbl tr.clear a {
   background-color: #fff;
-  color: #000;
-}
-
-table.tbl tr.clear td,
-table.tbl tr.clear th {
-  background-color: transparent;
-  border: none;
 }
 
 table.titleblock td.titlecell {
   font-family: Arial;
-  font-size: 20px; 
   color: #68c;
-  width: 100%;
   padding-bottom: 5px;
 }
 
@@ -762,12 +622,6 @@ table.note th,
 table.note td {
   font-style: normal;
   color: #000000;
-  background: transparent;
-  text-align: left;
-}
-
-table.note th {
-  font-weight: bold;
 }
 
 /* dPlabo catalogues */

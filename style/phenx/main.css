@@ -125,17 +125,6 @@ h2 {
   margin: 5px 10px;
 }
 
-h2.module {
-  background-position: left center;
-  background-repeat: no-repeat;
-  padding: 10px 0;
-  padding-left: 55px;
-}
-
-h2.dPpatients {
-  background-image: url(../../images/modules/dPpatients.png);
-}
-
 h3 {
   font-size: 1.3em;
   color: #449;
@@ -476,18 +465,6 @@ table.tbl td.button {
   line-height: 140%;
 }
 
-div.previewfile {
-  white-space: normal;
-  text-align: left;
-}
-
-div.previewfileMinus {
-  font-size: 70%;
-  max-width: 450px;
-  max-height: 450px;
-  overflow: auto;
-}
-
 table.tbl tr.clear,
 table.tbl tr.clear a {
   background-color: #ddf;
@@ -536,11 +513,6 @@ table.form th.category label {
   text-align: center;
   background-color: transparent;
   vertical-align: middle;
-}
-
-table.form th.mandatory {
-  color: #000;
-  font-weight: bold;
 }
 
 label.notNull {

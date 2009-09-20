@@ -24,11 +24,8 @@ ini_set("memory_limit", "128M");
 require("./includes/config_dist.php");
 require("./includes/config.php");
 require("./includes/version.php");
+require("./includes/compat.php");
 require("./classes/sharedmemory.class.php");
-
-if(function_exists("date_default_timezone_set")) {
-  date_default_timezone_set($dPconfig["timezone"]);
-}
 
 if ($dPconfig["offline"]) {
   header("Location: offline.php");
@@ -40,8 +37,9 @@ is_file ($dPconfig["root_dir"]."/includes/config.php")
   or die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
 
 require("./includes/mb_functions.php");
-require("./includes/compat.php");
 require("./includes/errors.php");
+
+date_default_timezone_set($dPconfig["timezone"]);
 
 // Start chrono
 require("./classes/chrono.class.php");

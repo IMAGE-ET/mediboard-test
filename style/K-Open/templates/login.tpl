@@ -14,7 +14,7 @@
     </tr>
     
     <tr>
-      <td class="logo" colspan="3 ">
+      <td class="logo" colspan="3">
         <a href="http://www.mediboard.org/">
           <img src="images/pictures/logo.png" alt="MediBoard logo" />
         </a>
@@ -31,12 +31,12 @@
     
     <tr>
       <th><label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label></th>
-      <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" class="text" /></td>
+      <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" /></td>
     </tr>
     
     <tr>
       <th><label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label></th>
-      <td><input type="password"  class="notNull str" size="25" maxlength="32" name="password" class="text" /></td>
+      <td><input type="password" class="notNull str" size="25" maxlength="32" name="password" /></td>
     </tr>
     
     <tr>

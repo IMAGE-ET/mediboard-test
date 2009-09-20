@@ -24,8 +24,6 @@
           </td>
           {{/if}}
           {{/foreach}}
-          <td id="new">
-          </td>
         </tr>
       </table>
     </td>
@@ -49,14 +47,14 @@
               </select>
 					    {{mb_include module=mediboard template=svnstatus}}    
             </form>
-          </td>      
+          </td>
           <td id="userMenu">
             <a href="{{$portal.help}}" target="_blank">{{tr}}portal-help{{/tr}}</a> |
             <a href="{{$portal.tracker}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
             <a href="javascript:popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> |
             <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-            <a href="javascript:Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> |
             <a href="javascript:UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a> | 
+            <a href="javascript:Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> | 
             <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
           </td>
         </tr>
@@ -66,7 +64,7 @@
 </table>
 {{/if}}
 
-<table {{if $dialog}}class="dialog"{{/if}} id="main">
+<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
     <td>
       <div id="systemMsg">

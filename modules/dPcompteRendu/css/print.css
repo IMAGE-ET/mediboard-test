@@ -91,10 +91,6 @@ table#mainPane {
   display:none;
 }
 
-div#goUp {
-  display: none;
-}
-
 div.body, 
 div.bodyWithoutPageBreak {
   padding-top: {{$header}}em;

@@ -54,7 +54,7 @@ foreach ($list as $path) {
 	}
 }
 
-echo count($issues)." issues";
+echo count($issues)." issues on ".count($list)." files";
 ?>
 <table>
 <?php
