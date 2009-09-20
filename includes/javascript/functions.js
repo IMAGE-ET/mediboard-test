@@ -10,12 +10,12 @@
 
 // Javascript error logging
 // TODO needs testing
-window.onerror = function(errorMsg, url, lineNumber) {
+/*window.onerror = function(errorMsg, url, lineNumber) {
   new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
     method: 'post',
     parameters: 'm=system&a=js_error_handler&'+$H({errorMsg: errorMsg, url: url, lineNumber: lineNumber}).toQueryString()
   });
-};
+};*/
 
 function main() {
   try {
