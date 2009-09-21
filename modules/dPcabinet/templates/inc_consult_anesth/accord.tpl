@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 
-{{if $isPrescriptionInstalled}}
+{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
 }
@@ -50,7 +50,7 @@ Main.add(function () {
   
   <li onclick="DossierMedical.reloadDossierSejour();"><a href="#AntTrait">Antécédents</a></li>
   
-  {{if $isPrescriptionInstalled}}
+  {{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
   <li onclick="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
   	<a href="#prescription_sejour">Trait. et prescription</a>
   </li>
@@ -77,7 +77,7 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl" sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
-{{if $isPrescriptionInstalled}}
+{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
 <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
 
