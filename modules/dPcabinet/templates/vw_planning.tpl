@@ -266,8 +266,14 @@ Main.add(function () {
               <td>
                 <select name="_type_repeat">
                   <option value="1">Normale</option>
-                  <option value="2">Une semaine sur deux</option>
-                  <option value="3">Une semaine sur trois</option>
+                  <option value="2">Une semaine sur 2</option>
+                  <option value="3">Une semaine sur 3</option>
+                  <option value="4">Une semaine sur 4</option>
+                  <option value="5">Une semaine sur 5</option>
+                  <option value="6">Une semaine sur 6</option>
+                  <option value="7">Une semaine sur 7</option>
+                  <option value="8">Une semaine sur 8</option>
+                  <option value="9">Une semaine sur 9</option>
                 </select>
               </td>
             </tr>

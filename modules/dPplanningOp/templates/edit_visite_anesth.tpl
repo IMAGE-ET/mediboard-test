@@ -1,0 +1,113 @@
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_include_script module="dPprescription" script="element_selector"}}
+{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module=dPprescription script="prescription_med"}}
+
+<script type="text/javascript">
+
+printFicheAnesth = function(consult_id) {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_fiche"); 
+  url.addParam("consultation_id", consult_id);
+  url.popup(700, 500, "printFiche");
+  return;
+}
+
+submitAnesth = function(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { 
+  	onComplete: function() { 
+  		reloadAnesth(oForm.operation_id.value) 
+  	}
+  });
+}
+
+reloadPrescription = function(prescription_id){
+  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
+}
+
+signVisiteAnesth = function(anesth_id) {
+  alert('anesth numéro ' + anesth_id);
+}
+
+reloadAnesth = function(operation_id){
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("anesth", { 
+  	waitingText: null,
+  	onComplete: function() { 
+  		ActesCCAM.refreshList(operation_id,"{{$operation->chir_id}}"); 
+  	}
+  } );	
+}
+
+Main.add(function () {
+  // Initialisation des onglets
+	if ($('main_tab_group')){
+    Control.Tabs.create('main_tab_group', true);
+	}
+  
+  if($('antecedents')){
+    var url = new Url("dPcabinet", "httpreq_vw_antecedents");
+    url.addParam("sejour_id","{{$operation->sejour_id}}");
+    url.requestUpdate("antecedents", {waitingText: null});
+  }
+
+	{{if $isPrescriptionInstalled}}
+  if($('prescription_sejour')){
+    Prescription.reloadPrescSejour('','{{$operation->_ref_sejour->_id}}', null, null, '{{$operation->_id}}', null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
+  }
+  {{/if}}
+
+  if($('Imeds_tab')){
+    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    url.addParam("sejour_id", {{$operation->_ref_sejour->_id}});
+    url.requestUpdate('Imeds_tab', { waitingText : null });
+  }
+});
+
+</script>
+
+{{assign var="selOp" value=$operation}}
+{{assign var="sejour" value=$operation->_ref_sejour}}
+{{assign var="patient" value=$sejour->_ref_patient}}
+
+<!-- Tabulations -->
+<ul id="main_tab_group" class="control_tabs">
+  <li><a href="#anesth_tab">Anesth.</a></li>
+  <li><a href="#antecedents">Atcd.</a></li>
+
+  {{if $isPrescriptionInstalled}}
+    <li><a href="#prescription_sejour_tab">Prescription</a></li>
+	{{/if}}
+  
+  {{if $isImedsInstalled}}
+    <li><a href="#Imeds_tab">Labo</a></li>
+  {{/if}}
+</ul>
+  
+<hr class="control_tabs" />
+
+<!-- Anesthesie -->
+<div id="anesth_tab" style="display:none">
+  <div id="info_anesth">
+  {{include file="../../dPsalleOp/templates/inc_vw_info_anesth.tpl"}}
+  </div>
+</div>
+
+<!-- Antécédents -->
+{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+<div id="antecedents" style="display:none"></div>
+
+<!-- Prescription -->
+{{if $isPrescriptionInstalled}}
+  <div id="prescription_sejour_tab" style="display:none">
+    <div id="prescription_sejour"></div>
+  </div>
+{{/if}}
+
+<!-- Résultats labo -->
+{{if $isImedsInstalled}}
+  <div id="Imeds_tab" style="display:none"></div>
+{{/if}}

@@ -183,9 +183,8 @@ var Prescription = {
       if(document.selPratForPresc){
         var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
       }
-  
       var oForm = document.addLine;    
-      if(window.opener){
+      if(window.opener && window.opener.PrescriptionEditor){
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
       }
       var urlPrescription = new Url("dPprescription", "httpreq_vw_prescription");
@@ -208,7 +207,6 @@ var Prescription = {
       if(!Object.isUndefined(full_line_guid)){
         urlPrescription.addParam("full_line_guid", full_line_guid);
       }
-      
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { waitingText : null, onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {

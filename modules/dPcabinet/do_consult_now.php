@@ -137,6 +137,10 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
 }
 
 // Redirect final
+if($ajax) {
+  echo $AppUI->getMsg();
+  CApp::rip();
+}
 if($current_m = mbGetValueFromPost("_m_redirect")) {
   $AppUI->redirect("m=$current_m");
 } else {

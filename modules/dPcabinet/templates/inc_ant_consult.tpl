@@ -494,7 +494,7 @@ Main.add(function () {
     Element.cleanWhitespace(selected);
     var dn = selected.childElements();
     $V(oFormTP.code_cip, dn[0].innerHTML);
-    $("_libelle").insert("<a href=\"javascript:void(0);\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
+    $("_libelle").insert("<a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
     $V(oFormTP.produit, '');
     $('button_submit_traitement').focus();
   }

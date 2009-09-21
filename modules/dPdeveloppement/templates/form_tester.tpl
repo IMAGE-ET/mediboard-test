@@ -77,10 +77,10 @@ Main.add(function () {
   <textarea class="autocomplete"></textarea>
   <div class="throbber" style="display: none;"></div>
   <div class="toolbar" style="display: none;">
-    <a href="javascript:void(0);"><img src="images/icons/downarrow.png" title="Voir tous les choix" /></a>
-    <a href="javascript:void(0);"><img src="images/icons/grid.png" title="Mode grille" /></a>
-    <a href="javascript:void(0);"><img src="images/icons/new.png" title="Nouvelle aide" /></a>
-    <a href="javascript:void(0);"><img src="images/icons/group.png" title="Cette aide appartient à " /></a>
+    <a href="#nothing"><img src="images/icons/downarrow.png" title="Voir tous les choix" /></a>
+    <a href="#nothing"><img src="images/icons/grid.png" title="Mode grille" /></a>
+    <a href="#nothing"><img src="images/icons/new.png" title="Nouvelle aide" /></a>
+    <a href="#nothing"><img src="images/icons/group.png" title="Cette aide appartient à " /></a>
   </div>
   <div class="autocomplete" style="display: none; margin-top: -1px;"></div>
 </div>

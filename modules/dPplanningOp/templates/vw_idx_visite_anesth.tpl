@@ -1,10 +1,26 @@
 <script type="text/javascript">
-  Main.add(function(){
-    Calendar.regField(getForm("selection").date, null, {noView: true});
-	  if ($('type_sejour')){
-      Control.Tabs.create('type_sejour', true);
-    }
-  });
+function printFicheAnesth(consult_id) {
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "print_fiche"); 
+  url.addParam("consultation_id", consult_id);
+  url.popup(700, 500, "printFiche");
+  return;
+}
+
+function editVisite(operation_id) {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "edit_visite_anesth"); 
+  url.addParam("operation_id", operation_id);
+  url.popup(800, 500, "editVisite");
+  return;
+}
+
+Main.add(function(){
+  Calendar.regField(getForm("selection").date, null, {noView: true});
+ if ($('type_sejour')){
+    Control.Tabs.create('type_sejour', true);
+  }
+});
 </script>
 
 <table class="main">
@@ -40,18 +56,28 @@
       {{foreach from=$listInterv key=_key_type item=_services}}
       <div id="{{$_key_type}}_tab" style="display:none">
       <table class="tbl">
+        <tr>
+          <th>Chirurgien</th>
+          <th>Patient</th>
+          <th>Intervention</th>
+          <th>Heure</th>
+          <th>Chambre</th>
+          <th>Consultation</th>
+          <th colspan="2">Visite</th>
+        </tr>
         {{foreach from=$_services key=_key_service item=_list_intervs}}
         {{if $_list_intervs|@count}}
         <tr>
           {{if $_key_service == "non_place"}}
-          <th colspan="5">Non placés</th>
+          <th colspan="8">Non placés</th>
           {{else}}
-          <th colspan="5">Service {{$services.$_key_service->_view}}</th>
+          <th colspan="8">Service {{$services.$_key_service->_view}}</th>
           {{/if}}
         </tr>
         {{foreach from=$_list_intervs item=_operation}}
         <tr>
-          <td>{{$_operation->_ref_chir->_view}}</td>
+          <td class="text">Dr {{$_operation->_ref_chir->_view}}</td>
+          <td class="text">{{$_operation->_ref_sejour->_ref_patient->_view}}</td>
           <td>
             {{if $_operation->libelle}}
               {{$_operation->libelle}}
@@ -61,14 +87,26 @@
               {{/foreach}}
             {{/if}}
           </td>
-          <td>{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
-          <td>{{$_operation->time_operation|date_format:$dPconfig.time}}</td>
-          <td>
+          <td class="button">{{$_operation->time_operation|date_format:$dPconfig.time}}</td>
+          <td class="button">{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
+          <td class="text">
+            {{if $_operation->_ref_consult_anesth->_id}}
+              <a href="#nothing" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">
+                Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
+              </a>
+            {{else}}
+              -
+            {{/if}}
+          </td>
+          <td class="text">
             {{if $_operation->date_visite_anesth}}
             Le {{$_operation->date_visite_anesth|date_format:$dPconfig.datetime}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
             {{else}}
             Visite non effectuée
             {{/if}}
+          </td>
+          <td class="button">
+            <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}
           </td>
         </tr>
         {{/foreach}}

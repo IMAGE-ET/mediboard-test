@@ -11,12 +11,24 @@ refreshAidesPreAnesth = function(user_id) {
   url.requestUpdate('select_aides_pre_anesth');
 }
 
+function reloadAnesth() {
+  window.opener.location.reload(true);
+  window.location.reload(true);
+}
+
 Main.add(function(){
   refreshAidesPreAnesth($V(getForm('visiteAnesth').prat_visite_anesth_id));
 });
 </script>
 
+{{if $dialog}}
+  {{assign var=onSubmit value="return onSubmitFormAjax(this, {onComplete: reloadAnesth})"}}
+{{else}}
+  {{assign var=onSubmit value="return checkForm(this)"}}
+{{/if}}
+
 {{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
+
 {{if $consult_anesth->_id}}
 
 <table class="tbl">
@@ -29,9 +41,13 @@ Main.add(function(){
       <button type="button" class="print" onclick="printFicheAnesth('{{$consult_anesth->_ref_consultation->_id}}')" style="float: right">
         Consulter la fiche
       </button>
+      {{if $dialog}}
+      Par le Dr {{$consult_anesth->_ref_consultation->_ref_chir->_view}} le {{mb_value object=$consult_anesth->_ref_consultation field="_date"}}
+      {{else}}
       <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult_anesth->_ref_consultation->_id}}" title="Voir ou modifier la consultation d'anesthésie">
         Par le Dr {{$consult_anesth->_ref_consultation->_ref_chir->_view}} le {{mb_value object=$consult_anesth->_ref_consultation field="_date"}}
       </a>
+      {{/if}}
     </td>
   </tr>
 </table>
@@ -128,22 +144,20 @@ Main.add(function(){
 	  <td><em>Aucun dossier d'anesthésie existant pour ce patient</em></td>
 	</tr>
 	{{/foreach}}
-	
 
 	<tr>
 	  <th colspan="3" class="category">Créer un nouveau dossier</th>
 	</tr>
   <tr>
     <td colspan="3" class="button">
-
-			<form name="createConsult" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+			<form name="createConsult" action="?m={{$m}}" method="post" onsubmit="{{$onSubmit}}">
 			
 			<input type="hidden" name="dosql" value="do_consult_now" />
 			<input type="hidden" name="m" value="dPcabinet" />
 			<input type="hidden" name="del" value="0" />
 			<input type="hidden" name="consultation_id" value="" />
 			<input type="hidden" name="_operation_id" value="{{$selOp->_id}}" />
-			<input type="hidden" name="_m_redirect" value="{{$m}}" />
+			<input type="hidden" name="_redirect" value="?" />
 			<input type="hidden" name="patient_id" value="{{$selOp->_ref_sejour->patient_id}}" />
       <select name="prat_id">
         {{foreach from=$listAnesths item=curr_anesth}}
@@ -163,7 +177,7 @@ Main.add(function(){
 
 {{/if}}
 
-<form name="visiteAnesth" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+<form name="visiteAnesth" action="?m={{$m}}" method="post" onsubmit="{{$onSubmit}}">
 <input type="hidden" name="dosql" value="do_planning_aed" />
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
@@ -261,6 +275,9 @@ Main.add(function(){
   </tr>
   <tr>
     <td class="button" colspan="2">
+      {{mb_field class="COperation" hidden="hidden" field="date_visite_anesth"}}
+      {{mb_field class="COperation" hidden="hidden" field="rques_visite_anesth"}}
+      {{mb_field class="COperation" hidden="hidden" field="autorisation_anesth"}}
       <button class="trash" type="submit">
         {{tr}}Cancel{{/tr}}
       </button>
