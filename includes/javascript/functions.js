@@ -10,12 +10,13 @@
 
 // Javascript error logging
 // TODO needs testing
-/*window.onerror = function(errorMsg, url, lineNumber) {
+window.onerror = function(errorMsg, url, lineNumber) {
+  return; // Comment this line to make it work
   new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
     method: 'post',
     parameters: 'm=system&a=js_error_handler&'+$H({errorMsg: errorMsg, url: url, lineNumber: lineNumber}).toQueryString()
   });
-};*/
+};
 
 function main() {
   try {
@@ -28,6 +29,7 @@ function main() {
   }
   catch (e) {
     Console.debugException(e);
+    window.onerror(e.extMessage || e.message, e.fileName, e.lineNumber)
   }
 }
 
@@ -70,11 +72,14 @@ var References = {
    * Clean references involved in memory leaks
    */
   clean: function(obj) {
-    var i, j, e, elements = obj.descendants();
-    for (j = 0; j < elements.length; j++) {
+    var i, j, e, 
+        elements = obj.childElements(), 
+        le = elements.length, la;
+    for (j = 0; j < le; j++) {
       if (e = elements[j]) {
         if (e.attributes) {
-          for (i = 0; i < e.attributes.length ; i++) {
+          la = e.attributes.length;
+          for (i = 0; i < la; i++) {
             if (Object.isFunction(e.attributes[i])) e.attributes[i] = null;
           }
         }
@@ -90,7 +95,7 @@ var WaitingMessage = {
       if(FormObserver.checkChanges()) {
         WaitingMessage.show();
       } else {
-        return "Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous appuyez sur OK, ces données seront perdues.";
+        return "Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous cliquez sur OK, ces données seront perdues.";
       }
     };
   },

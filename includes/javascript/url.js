@@ -43,7 +43,7 @@ var Url = Class.create({
   },
   
   setFragment: function(sFragment) {
-     this.sFragment = sFragment;
+    this.sFragment = sFragment;
   },
   
   addParam: function(sName, sValue) {
