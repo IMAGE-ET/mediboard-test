@@ -193,7 +193,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
 	
   $session = $_SESSION;
   unset($session['AppUI']);
-  unset($session['dPCompteRendu']['templateManager']);
+  unset($session['dPcompteRendu']['templateManager']);
   $log .= print_infos($session, 'SESSION');
 	
   foreach($contexts as $context) {
@@ -268,7 +268,7 @@ function exceptionHandler($exception) {
 	
   $session = $_SESSION;
   unset($session['AppUI']);
-  unset($session['dPCompteRendu']['templateManager']);
+  unset($session['dPcompteRendu']['templateManager']);
   $log .= print_infos($session, 'SESSION');
   
   foreach($contexts as $context) {
