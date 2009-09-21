@@ -40,7 +40,7 @@ Main.add(function(){
       <select name="object_class">
         {{foreach from=$listClasses|smarty:nodefaults item=class}}
         <option value="{{$class}}">
-          {{tr}}{{$class}}{{/tr}}
+          {{tr}}{{$class}}{{/tr}} - {{$class}}
         </option>
         {{/foreach}}
       </select>

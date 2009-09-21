@@ -1134,3 +1134,16 @@ function in_array_recursive($needle, $haystack, $strict = false) {
   }
   return false;
 }
+
+/**
+ * Truncates a string to a given maximum length
+ * @param string $string The string to truncate
+ * @param int $max [optional] The max length of the resulting string
+ * @param string $replacement [optional] The string that replaces the characters removed
+ * @return string The truncated string
+ */
+function truncate($string, $max = 25, $replacement = '...'){
+  if(strlen($string) > $max)
+    return substr($string, 0, $max - strlen($replacement)).$replacement;
+  return $string;
+}

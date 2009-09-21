@@ -33,9 +33,9 @@ class CGroups extends CMbObject {
   var $_ref_functions = null;
   var $_ref_blocs = null;
   var $_ref_produits_livret = null;
-  static $_ref_current = null;
   var $_ref_dmi_categories = null;
   var $_ref_services = null;
+  static $_ref_current = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -97,10 +97,7 @@ class CGroups extends CMbObject {
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->text;
-    if(strlen($this->text) > 25)
-      $this->_shortview = substr($this->text, 0, 23)."...";
-    else
-      $this->_shortview = $this->text;
+    $this->_shortview = truncate($this->text);
   }
   
   function loadRefLivretTherapeutique($lettre = "%", $limit = 50, $full_mode = true){

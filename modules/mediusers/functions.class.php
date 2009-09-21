@@ -82,12 +82,8 @@ class CFunctions extends CMbObject {
     
   function updateFormFields() {
 		parent::updateFormFields();
-
     $this->_view = $this->text;
-    if(strlen($this->text) > 25)
-      $this->_shortview = substr($this->text, 0, 23)."...";
-    else
-      $this->_shortview = $this->text;
+    $this->_shortview = truncate($this->text);
  	}
   
   // Forward references
@@ -107,9 +103,12 @@ class CFunctions extends CMbObject {
   
   function loadRefsUsers($type = null) {
     if(!$type) {
-      $where = array();
-      $where["function_id"] = "= '$this->function_id'";
-      $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
+      $where = array(
+        "function_id" => "= '$this->function_id'"
+      );
+      $ljoin = array(
+        "users" => "`users`.`user_id` = `users_mediboard`.`user_id`"
+      );
       $order = "`users`.`user_last_name`, `users`.`user_first_name`";
       $this->_ref_users = new CMediusers;
       $this->_ref_users = $this->_ref_users->loadList($where, $order, null, null, $ljoin);
@@ -123,12 +122,10 @@ class CFunctions extends CMbObject {
   // (loadfunction($groupe, $permtype) par exemple)
   function loadSpecialites($perm_type = null) {
     global $g;
-    $where = array();
-    $where["type"] = "= 'cabinet'";
-    $where["group_id"] = "= '$g'";
-    $order = "text";
-    $specs = $this->loadListWithPerms($perm_type, $where, $order);
-    return $specs;
+    $where = array(
+      "group_id" => "= '$g'"
+    );
+    return $this->loadListWithPerms($perm_type, $where, "text");
   }
   
   function fillTemplate(&$template) {
