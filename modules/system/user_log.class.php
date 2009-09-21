@@ -29,13 +29,14 @@ class CUserLog extends CMbMetaObject {
   var $_fields = null;
   var $_ref_user = null;
   
-  var $_merged_ids = null; // Tableau d'identifiants des objets fusionnés
+  var $_merged_ids = null; // Tableau d'identifiants des objets fusionnï¿½s
 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
     $spec->table = 'user_log';
     $spec->key   = 'user_log_id';
+    $spec->measureable = true;
     return $spec;
   }
 
