@@ -50,7 +50,7 @@ case "$1" in
     svn log $MB_PATH -r BASE:$revision > $dif
     check_errs $? "Failed to retrieve SVN log" "SVN log retrieved!"
     
-    grep -i -E "(${prefixes})" -f $dif >> $tmp
+    grep -i -E "(${prefixes})" $dif >> $tmp
     echo "SVN log parsed!"
     # Don't check beacause grep returns 1 if no occurence found
     rm -f $dif
