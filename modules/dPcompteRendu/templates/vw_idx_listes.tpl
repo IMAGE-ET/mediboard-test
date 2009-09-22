@@ -272,6 +272,7 @@ Main.add(function () {
     {{mb_field object=$liste field="valeurs" hidden=1 prop=""}}
     {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
     {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
+    {{mb_field object=$liste field="group_id" hidden=1 prop=""}}
 
     <table class="form">
       <tr>
