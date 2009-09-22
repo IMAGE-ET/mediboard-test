@@ -729,7 +729,7 @@ function mbWriteJSLocalesFile($language = null) {
       // TODO: change the inavlid keys (with accents) of the locales to simplify this
       $keys = array_map('utf8_encode', array_keys($locales));
       $values = array_map('utf8_encode', $locales);
-      $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_combine($keys, $values)).";\nwindow.language = '$language';";
+      $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_combine($keys, $values)).";";
       fwrite($fp, $script);
       fclose($fp);
     }
