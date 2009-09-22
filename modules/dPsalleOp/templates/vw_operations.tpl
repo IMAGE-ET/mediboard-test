@@ -37,8 +37,11 @@ function reloadTiming(operation_id){
 
 function submitAnesth(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
-  	onComplete: function() { 
-  		reloadAnesth(oForm.operation_id.value) 
+  	onComplete: function() {
+  		if(reloadDocumentsAnesth) {
+  		  reloadDocumentsAnesth();
+  		}
+  		reloadAnesth(oForm.operation_id.value);
   	}
   });
 }

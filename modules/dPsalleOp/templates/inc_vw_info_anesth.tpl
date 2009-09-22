@@ -1,3 +1,8 @@
+{{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
+{{if !@$modeles_prat_id}}
+  {{assign var="modeles_prat_id" value=$selOp->_ref_anesth->_id}}
+{{/if}}
+
 <script type="text/javascript">
 refreshAidesPreAnesth = function(user_id) {
   var select = $('select_aides_pre_anesth');
@@ -11,7 +16,18 @@ refreshAidesPreAnesth = function(user_id) {
   url.requestUpdate('select_aides_pre_anesth');
 }
 
-function reloadAnesth() {
+reloadDocumentsAnesth = function () {
+  if(document.anesthTiming) {
+    var sAnesth_id = document.anesthTiming.anesth_id.value;
+  } else {
+    var sAnesth_id = document.visiteAnesth.prat_anesth_id.value;
+  }
+  $$('.documents-CConsultAnesth-{{$consult_anesth->_id}}').each(function(doc){
+    Document.refresh(doc, {praticien_id: oForm.anesth_id.value });
+  });    
+}
+
+reloadAnesth = function() {
   window.opener.location.reload(true);
   window.location.reload(true);
 }
@@ -26,8 +42,6 @@ Main.add(function(){
 {{else}}
   {{assign var=onSubmit value="return checkForm(this)"}}
 {{/if}}
-
-{{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
 
 {{if $consult_anesth->_id}}
 
@@ -306,7 +320,7 @@ Main.add(function(){
       <div id="documents-anesth">
         {{mb_include_script module="dPcompteRendu" script="document"}}
         <script type="text/javascript">
-          Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$selOp->_ref_anesth->_id}}','documents-anesth');
+          Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
         </script>
 			</div>
     </td>

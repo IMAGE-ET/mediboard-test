@@ -72,6 +72,11 @@ Main.add(function () {
 {{assign var="selOp" value=$operation}}
 {{assign var="sejour" value=$operation->_ref_sejour}}
 {{assign var="patient" value=$sejour->_ref_patient}}
+{{if $selOp->prat_visite_anesth_id}}
+  {{assign var="modeles_prat_id" value=$selOp->prat_visite_anesth_id}}
+{{elseif $selOp->_ref_consult_anesth->_id}}
+  {{assign var="modeles_prat_id" value=$selOp->_ref_consult_anesth->_ref_consultation->_ref_chir->_id}}
+{{/if}}
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">

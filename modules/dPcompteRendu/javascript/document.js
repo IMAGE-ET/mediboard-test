@@ -89,14 +89,21 @@ var Document = {
     } );
   },
   
-  refresh: function(div) {
-    var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
+  refresh: function(div, oOptions) {
     
+    var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
+    var oDefaultOptions = {
+      object_class: matches[1],
+	    object_id   : matches[2],
+	    praticien_id: matches[3],
+	    mode        : matches[4]
+    };
+    Object.extend(oDefaultOptions, oOptions);
 	  var url = new Url("dPcompteRendu", "httpreq_widget_documents");
-	  url.addParam("object_class", matches[1]);
-	  url.addParam("object_id"   , matches[2]);
-	  url.addParam("praticien_id", matches[3]);
-	  url.addParam("mode"        , matches[4]);
+	  url.addParam("object_class", oDefaultOptions.object_class);
+	  url.addParam("object_id"   , oDefaultOptions.object_id);
+	  url.addParam("praticien_id", oDefaultOptions.praticien_id);
+	  url.addParam("mode"        , oDefaultOptions.mode);
 	  url.requestUpdate(div, { waitingText : null } );
   }
 };
