@@ -75,7 +75,6 @@ class CAppUI {
   // Global collections
   var $messages = array();
   var $user_prefs = array();
-  var $cfg = array();
   var $state = array();
   
   /** @var string Default page for a redirect call*/

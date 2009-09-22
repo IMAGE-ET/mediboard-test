@@ -277,15 +277,6 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-input,
-select,
-textarea {
-  color: #082F54;
-  background-image:url(./images/pictures/input.png);
-  font-size: 12px;
-  padding: 1px;
-}
-
 button, 
 a.button, 
 input[type=submit],
@@ -493,30 +484,13 @@ a.notext, a.notext:hover{
 
 select {
   border: 1px #a5acb2 solid;
-  font-size: 10px;
-}
-
-optgroup,
-option {
-  font-size: 10px;
-  padding: 0px;
-  padding-left: 5px;
 }
 
 input,
 select,
 textarea {
-  padding: 1px;
   border: 1px #a5acb2 solid;
   background: #fff;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  padding: 0px;
-  border: 2px #a5acb2 inset;
-  background: #ddf;
 }
 
 /* Standard table */
@@ -661,7 +635,6 @@ textarea {
 input:focus, 
 select:focus, 
 textarea:focus {
-	padding: 1px;
   background-color: #fde0b6;
   border: 1px solid #ae0040;
 }

@@ -1013,6 +1013,40 @@ input.autocomplete.throbbing {
   background-position: 100% -19px;
 }
 
+.textarea-helped {
+  position: relative;
+}
+
+.textarea-helped .toolbar {
+  position: absolute;
+  bottom: 4px;
+  padding: 4px;
+}
+
+.textarea-helped .toolbar a:hover img {
+  outline: 1px dotted #999;
+}
+
+.textarea-helped .toolbar a:focus {
+  outline: none;
+}
+
+.textarea-helped .toolbar img {
+  margin: 1px;
+  padding: 1px;
+}
+
+.textarea-helped .throbber {
+  position: absolute;
+  height: 13px;
+  width: 13px;
+  bottom: 6px;
+  margin: 4px;
+  background-image: url(../../images/icons/throbber.gif);
+  background-position: 100% -20px;
+  background-repeat: no-repeat;
+}
+
 /* tabbed boxes */
 td.tabox {
   background-color: #ccc;

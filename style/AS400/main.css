@@ -2,16 +2,18 @@
 
 /* Body */
 
-body {
+* {
   font-family: "Lucida Console", "Courier New", Courier, mono;
+}
+
+body {
   color: #0f0;
-  font-size: 9px;  
+  font-size: 9px;
   background: #000;
   margin: 0px;
 }
 
 table {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   font-size: 1em;
 }
 
@@ -236,7 +238,6 @@ table.tabmenu td.selected.right {
 /* Inputs */
 
 button, a.button {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
   background-color: #0f0;
 }
@@ -261,20 +262,14 @@ button.change, a.button.change {
 }
 
 input {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   border: 1px #0f0 dashed;
-  font-size: 10px;
-  margin: 1px;
-  padding: 0px 2px;
 }
 
 input[type=submit],
 input[type=reset],
 input[type=button] {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   border-color: #0f0;
   background: #0f0;
-  margin: 0 10px;
   color: #fff;
 }
 
@@ -286,36 +281,23 @@ input[type=button]:hover {
 }
 
 select {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   border: 1px #0f0 dashed;
-  font-size: 9px;
 }
 
 optgroup {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
-  font-size: 9px;
-  font-weight: bold;
-  padding: 0px;
-  padding-left: 5px;
   background: #000;
 }
 
 option {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
-  font-size: 9px;
-  padding: 0px;
-  padding-right: 4px;
   background: #000;
 }
 
 input,
 select,
 textarea {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   color: #fff;
-  padding: 1px;
   border: 1px #0f0 solid;
   background: #000;
 }
@@ -324,8 +306,7 @@ input:focus,
 select:focus,
 textarea:focus {
   color: #fff;
-  padding: 0px;
-  border: 2px #0f0 solid;
+  outline: 1px #0f0 solid;
   background: #000;
 }
 
@@ -367,7 +348,6 @@ table.tbl tr.clear a {
 }
 
 table.titleblock td.titlecell {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
   font-size: 16px; 
   color: #0f0;
   padding-bottom: 5px;

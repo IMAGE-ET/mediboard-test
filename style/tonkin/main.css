@@ -111,11 +111,6 @@ td#menubar1 a:hover {
   color: #cbecf3;
 }
 
-td#menubar1 select{
-  font-size: 8px;
-  height: 12px;
-}
-
 td#menubar2 {
   text-align: right;
   color: #fff;
@@ -189,24 +184,15 @@ table.tabmenu td.selected.right {
 /* Inputs */
 
 input,
-select,
+select, option,
 textarea {
   color: #082F54;
-  background-image:url(./images/pictures/input.png);
+  background-image: url(./images/pictures/input.png);
   background-color: #D3F2F7;
-}
-
-optgroup {
-  font-weight: bold;
-  padding: 0px;
-  padding-left: 5px;
 }
 
 option {
-  background-color: #D3F2F7;
   background-image: none;
-  padding: 0px;
-  padding-right: 4px;
 }
 
 button, 
