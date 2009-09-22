@@ -22,6 +22,7 @@ fi
 MB_PATH=$BASH_PATH/..
 log=$MB_PATH/tmp/svnlog.txt
 tmp=$MB_PATH/tmp/svnlog.tmp
+dif=$MB_PATH/tmp/svnlog.dif
 status=$MB_PATH/tmp/svnstatus.txt
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
@@ -46,8 +47,13 @@ case "$1" in
     echo >> $tmp
 
     # Concat SVN Log from BASE to target revision
-    svn log $MB_PATH -r BASE:$revision | grep -i -E "(${prefixes})" >> $tmp
-    check_errs $? "Failed to parse SVN log" "SVN log parsed!"
+    svn log $MB_PATH -r BASE:$revision > $dif
+    check_errs $? "Failed to retrieve SVN log" "SVN log retrieved!"
+    
+    grep -f $dif -i -E "(${prefixes})" >> $tmp
+    echo "SVN log parsed!"
+    # Don't check beacause grep returns 1 if no occurence found
+    rm -f $dif
     
     # Perform actual update
     svn update $MB_PATH --revision $revision
