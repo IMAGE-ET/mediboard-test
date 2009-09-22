@@ -91,9 +91,7 @@ Main.add(function(){
           <td class="button">{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
           <td class="text">
             {{if $_operation->_ref_consult_anesth->_id}}
-              <a href="#nothing" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">
-                Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
-              </a>
+              Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
             {{else}}
               -
             {{/if}}
@@ -106,7 +104,10 @@ Main.add(function(){
             {{/if}}
           </td>
           <td class="button">
-            <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}
+            <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
+            {{if $_operation->_ref_consult_anesth->_id}}
+              <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">{{tr}}Print{{/tr}}</button>
+            {{/if}}
           </td>
         </tr>
         {{/foreach}}
