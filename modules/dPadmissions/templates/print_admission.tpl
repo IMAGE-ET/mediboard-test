@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
   
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <th class="title" colspan="2">
       <a href="#" onclick="window.print()">Récapitulatif admission</a>

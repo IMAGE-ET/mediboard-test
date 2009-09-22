@@ -1,4 +1,4 @@
-<table class="form" id="admission">
+<table class="print">
   <tr><th class="title" colspan="2"><a href="#" onclick="window.print()">Fiche Patient</a></th></tr>
   
   <tr><th>Date: </th><td>{{$today}}</td></tr>

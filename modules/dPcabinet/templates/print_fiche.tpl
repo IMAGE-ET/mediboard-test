@@ -3,7 +3,7 @@
     </td>
   </tr>
 </table>
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td>
       <table width="100%">
@@ -26,7 +26,7 @@
 </table>
 
 
-<table class="form" id="admission" style="page-break-after: always;">
+<table class="print" style="page-break-after: always;">
   <tr>
     <td colspan="2">
       <table width="100%">
@@ -338,7 +338,7 @@
   </tr>
 </table>
 
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td>
       <table width="100%">
@@ -365,7 +365,7 @@
   </tr>
 </table>
         
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td>
       <table width="100%">

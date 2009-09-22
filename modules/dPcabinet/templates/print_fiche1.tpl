@@ -10,7 +10,7 @@
 {{assign var=const_med value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{assign var=ant value=$dossier_medical->_ref_antecedents}}
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td colspan="2">
       <!-- Bordereau d'en-tête -->

@@ -1,4 +1,4 @@
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td>
       <table width="100%" style="font-size: 110%;">
@@ -14,7 +14,7 @@
   </tr>
 </table>
 
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td class="halfPane">
       <table width="100%" style="font-size: 100%;">

@@ -89,7 +89,7 @@
     </td>
 
   	{{if $curr_sejour->annule}}
-    <td class="cancelled" colspan="4">
+    <td class="cancelled" colspan=" {{if $dPconfig.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
       {{if $rpu->mutation_sejour_id}}
       Hospitalisation
       <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">

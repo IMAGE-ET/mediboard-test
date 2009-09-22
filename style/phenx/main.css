@@ -1275,58 +1275,59 @@ table.selectCode td {
 }
 
 /* @import "./admission.css"; */ /* The admission table based on the form one */
-#admission {
+table.print {
   width: 100%;
-  border-spacing: 6px;
+  border-spacing: 3px;
+  font-family: georgia, serif;
   color: #006;
 }
 
-#admission th {
+table.print th {
   white-space: nowrap;
   background: transparent;
   vertical-align: top;
   text-align: right;
   font-weight: bold;
+  border-right: #aaa 1px solid;
+  padding-right : 0.5em;
 }
 
-#admission th.title {
-  font-weight: bold;
+table.print th.title {
+  font-weight: bold;  
   text-align: center;
   background: #68f;
-  border: #aaa 3px outset;
+  border: #aaa 2px solid;
   padding: 2px;
   font-size: 16pt;
   color: #006;
 }
 
-#admission th.category {
-  font-weight: bold;
+table.print th.category {
+  font-weight: bold;  
   text-align: center;
   background: #abf;
   padding: 2px;
-  border: #aaa 3px outset;
+  border: #aaa 2px solid;
   font-size: 12pt;
 }
 
-#admission td {
+table.print td {
   white-space: normal;
   vertical-align: top;
   background: transparent;
   text-align: left;
-  padding: 1px 4px;
   font-size: 10pt;
 }
 
-#admission td.halfPane {
+table.print td.halfPane {
   white-space: normal;
   vertical-align: top;
   width: 50%;
   background: transparent;
   text-align: left;
-  padding: 1px 4px;
 }
 
-#admission td.info {
+ table.print td.info {
   white-space: normal;
   font-style: italic;
   padding: 10px;

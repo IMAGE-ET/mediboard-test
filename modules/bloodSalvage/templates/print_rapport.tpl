@@ -20,7 +20,7 @@
   {{assign var=no_alle value=$ant&&!array_key_exists("alle",$ant)}}
 {{/if}}
 
- <table class="form" id="admission">
+ <table class="print">
   <tr>
 	  <th class="title" colspan="4">
 	    <a href="#" onclick="window.print()">

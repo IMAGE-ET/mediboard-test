@@ -1,7 +1,7 @@
     </td>
   </tr>
 </table>
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td>
       <div style="float:right;">
@@ -34,7 +34,7 @@
   </tr>
 </table>
 
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <td class="halfPane">
       <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
@@ -137,7 +137,7 @@
 </table>
 
 <br style="page-break-after: always;" />
-<table class="form" id="admission">      
+<table class="print">    
   <tr>
     <td>
       <div style="float:right;">

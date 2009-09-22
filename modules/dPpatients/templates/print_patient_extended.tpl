@@ -4,7 +4,7 @@
 
 <button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
 
-<table class="form" id="admission">
+<table class="print">
   <tr><th class="title" colspan="10">Fiche Patient ({{$today}})</th></tr>
   
   <tr>

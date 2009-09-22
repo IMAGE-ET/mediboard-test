@@ -1,5 +1,5 @@
 {{assign var="sejour" value=$operation->_ref_sejour}}
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <th class="title" colspan="2">
       <span style="float:right;font-size:12px;">

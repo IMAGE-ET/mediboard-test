@@ -10,7 +10,7 @@
   
 {{assign var=patient value=$admission->_ref_patient}}
 
-<table class="form" id="admission">
+<table class="print">
   <tr>
     <th class="title" colspan="4">
       <a href="#" onclick="window.print()">Admission de {{$patient->_view}}

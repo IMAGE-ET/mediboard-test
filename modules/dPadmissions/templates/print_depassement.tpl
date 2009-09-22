@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="form" id="admission">
+<table class="print">
   <tr><th colspan="2">Dr {{$admission->_ref_chir->_view}}</th></tr>
   <tr><th colspan="2"><!-- Adresse 1 --></th></tr>
   <tr><th colspan="2"><!-- Adresse 2 --></th></tr>
