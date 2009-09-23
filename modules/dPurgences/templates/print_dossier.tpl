@@ -167,6 +167,11 @@
   </tr>
 	
 	<tr>
+    <th>{{mb_label object=$consult field="traitement"}}</th>
+    <td>{{mb_value object=$consult field="traitement"}}</td>
+  </tr>
+	
+	<tr>
     <th>{{mb_label object=$consult field="histoire_maladie"}}</th>
     <td>{{mb_value object=$consult field="histoire_maladie"}}</td>
   </tr>
