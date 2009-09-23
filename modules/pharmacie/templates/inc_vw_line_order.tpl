@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=id value=$curr_delivery->_id}}
+
 <tr>
   <td>
     {{if $curr_delivery->patient_id}}
@@ -33,7 +35,6 @@
   <td style="text-align: center;">{{mb_value object=$curr_delivery field=quantity}}</td>
   {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
     <td style="text-align: center;">
-      {{assign var=id value=$curr_delivery->_id}}
       {{assign var=stock value=$curr_delivery->_ref_stock}}
       <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
         {{$stock->quantity}}

@@ -14,7 +14,7 @@
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
-    <th><button type="button" onclick="receiveAll('list-globales')" class="tick">Tout recevoir</button></th>
+    <th><button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button></th>
   </tr>
   {{foreach from=$deliveries item=curr_delivery}}
     <tr>
