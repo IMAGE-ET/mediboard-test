@@ -216,9 +216,9 @@ function changeDateCal(){
           <td>  
             {{assign var="var" value="plage_vide"}}
             <label for="_plage">Oui</label>
-            <input type="radio" name="_plage_1" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <input type="radio" name="_plage" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
             <label for="_plage">Non</label>
-            <input type="radio" name="_plage_0" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <input type="radio" name="_plage" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
         <tr>
