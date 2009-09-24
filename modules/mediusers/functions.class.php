@@ -123,6 +123,7 @@ class CFunctions extends CMbObject {
   function loadSpecialites($perm_type = null) {
     global $g;
     $where = array(
+      "type" => "= 'cabinet'",
       "group_id" => "= '$g'"
     );
     return $this->loadListWithPerms($perm_type, $where, "text");
