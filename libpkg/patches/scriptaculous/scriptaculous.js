@@ -33,6 +33,7 @@ var Scriptaculous = {
   },
   REQUIRED_PROTOTYPE: '1.6.0.3',
   load: function() {
+    return; // The scripts are already loaded
     function convertVersionString(versionString) {
       var v = versionString.replace(/_.*|\./g, '');
       v = parseInt(v + '0'.times(4-v.length));
