@@ -11,7 +11,7 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_planning_week"     , null, TAB_EDIT);
-$module->registerTab("vw_edit_planning"     , null, TAB_EDIT);
+$module->registerTab("vw_edit_planning"     , null, TAB_READ);
 $module->registerTab("vw_edit_interventions", null, TAB_EDIT);
 $module->registerTab("vw_suivi_salles"      , null, TAB_EDIT);
 $module->registerTab("vw_urgences"          , null, TAB_EDIT);

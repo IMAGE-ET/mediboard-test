@@ -50,6 +50,7 @@
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
                   </div>
                 </div>
+                {{if $can->edit}}
                 <strong title="{{$plage->_fill_rate}} % du temps occupé">
                 <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
                   {{$plage->_view}}
@@ -98,6 +99,12 @@
                       {{/foreach}}
                     </table>
                   </div>
+                {{/if}}
+                {{else}}
+                <strong title="{{$plage->_fill_rate}} % du temps occupé">
+                  {{$plage->_view}}
+                  ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
+                </strong>
                 {{/if}}
               </td>
             {{/if}}

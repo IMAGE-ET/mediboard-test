@@ -9,6 +9,7 @@
 *}}
 
 <script type="text/javascript">
+{{if $can->edit}}
 function checkPlage() {
   var form = document.editFrm;
   
@@ -39,17 +40,22 @@ function popPlanning(debut) {
   url.addParam("salle"    , 0);
   url.popup(900, 550, "Planning");
 }
+{{/if}}
 
 Main.add(function(){
+  {{if $can->edit}}
   Calendar.regField(getForm('editFrm').date);
+  {{/if}}
 });
 </script>
 <table class="main">
   <tr>
     <td class="greedyPane" style="text-align:center;">
+      {{if $can->edit}}
       <button class="print" onclick="popPlanning('{{$date}}');" style="font-weight: bold;">
         {{$date|date_format:"%A %d %B"}}
       </button>
+      {{/if}}
       
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
@@ -69,6 +75,7 @@ Main.add(function(){
       {{assign var=curr_day value=$date}}
       {{include file="inc_planning_day.tpl"}}
       </table>
+      {{if $can->edit}}
       {{if $plagesel->plageop_id}}
       <a class="button new" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
         {{tr}}CPlageOp-title-create{{/tr}}
@@ -287,6 +294,7 @@ Main.add(function(){
         </tr>
       </table>
       </form>
+    {{/if}}
     {{/if}}
     {{/if}}
    </td>
