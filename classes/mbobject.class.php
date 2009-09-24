@@ -778,8 +778,9 @@ class CMbObject {
           $propValue =& $this->$propName;
           if(($propValue !== null) || (!$this->_id)) {
             $msgProp = $this->checkProperty($propName);
-          
-            $debugInfo = $debug ? "(val:'$propValue', spec:'$propSpec')" : "";
+            
+            $value = truncate($propValue);
+            $debugInfo = $debug ? "(val:\"$value\", spec:\"$propSpec\")" : "(valeur: \"$value\")";
             $msg .= $msgProp ? "<br/> => $propName : $msgProp $debugInfo" : null;
           }
         }
