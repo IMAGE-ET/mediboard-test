@@ -14,15 +14,20 @@ $can->needsRead();
 $prat_id         = mbGetValueFromGetOrSession("selPrat");
 $compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
 
+$group = CGroups::loadCurrent();
+$listEtab = array($group);
+
+$where = array(
+  "group_id" => "= '$group->_id'"
+);
+$listFunc = new CFunctions();
+$listFunc = $listFunc->loadListWithPerms(PERM_EDIT, $where, "text");
+
 // Liste des praticiens accessibles
 $listUser = new CMediusers();
 //$listUser = $listUser->loadPraticiens(PERM_EDIT);
 $listUser = $listUser->loadUsers(PERM_EDIT);
 
-$listFunc = new CFunctions();
-$listFunc = $listFunc->loadSpecialites(PERM_EDIT);
-
-$listEtab = array(CGroups::loadCurrent());
 
 // L'utilisateur est-il praticien?
 if (!$prat_id) {
