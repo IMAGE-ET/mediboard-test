@@ -8,8 +8,7 @@
 <script type="text/javascript">
 
 function refreshListCategorie(praticien_id){
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_view_list_categorie");
+  var url = new Url("dPcabinet", "httpreq_view_list_categorie");
   url.addParam("praticien_id", praticien_id);
   url.requestUpdate("listCategorie", {
     waitingText: null
@@ -17,7 +16,7 @@ function refreshListCategorie(praticien_id){
 }
 
 function changePause(){
-  oForm = document.editFrm;
+  var oForm = document.editFrm;
   if(oForm._pause.checked){
     oForm.patient_id.value = "";
     oForm._pat_name.value = "";
@@ -34,8 +33,7 @@ function requestInfoPat() {
   if(!oForm.patient_id.value){
     return false;
   }
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_get_last_refs");
+  var url = new Url("dPpatients", "httpreq_get_last_refs");
   url.addElement(oForm.patient_id);
   url.addElement(oForm.consultation_id);
   url.requestUpdate("infoPat", {
@@ -72,7 +70,7 @@ function annuleConsult(oForm, etat) {
 
 function checkFormRDV(oForm){
   if(!oForm._pause.checked && oForm.patient_id.value == ""){
-    alert("Veuillez Selectionner un Patient");
+    alert("Veuillez sélectionner un patient");
     PatSelector.init();
     return false;
   }else{
@@ -87,18 +85,16 @@ function checkFormRDV(oForm){
 }
 
 function printForm() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "view_consultation"); 
+  var url = new Url("dPcabinet", "view_consultation"); 
   url.addElement(document.editFrm.consultation_id);
   url.popup(700, 500, "printConsult");
   return;
 }
 
 function printDocument(iDocument_id) {
-	oForm = document.editFrm;
+	var oForm = document.editFrm;
   if (iDocument_id.value != 0) {
-    var url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addElement(oForm.consultation_id, "object_id");
     url.addElement(iDocument_id, "modele_id");
     url.popup(700, 600, "Document");
@@ -122,7 +118,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" class="nowatched" method="post" onsubmit="return checkFormRDV(this)">
+<form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return checkFormRDV(this)">
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
