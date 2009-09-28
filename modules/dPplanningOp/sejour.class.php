@@ -437,9 +437,13 @@ class CSejour extends CCodable {
   
   function delAffectations() {
     $this->loadRefsAffectations();
-    foreach($this->_ref_affectations as $key => $value) {
-      $this->_ref_affectations[$key]->deleteOne();
-    }
+    
+		// dPhospi might not be active
+		if ($this->_ref_affectations) {
+	    foreach($this->_ref_affectations as $key => $value) {
+	      $this->_ref_affectations[$key]->deleteOne();
+	    }
+		}
     return null;
   }
   

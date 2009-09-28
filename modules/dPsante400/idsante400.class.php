@@ -135,6 +135,7 @@
     
     // Create/update bound object
     $mbObject->_id = $this->object_id;
+    $mbObject->updateDBFields();
     $mbObject->repair();
     
     if ($msg = $mbObject->store()) {

@@ -22,7 +22,6 @@ class CMouvementEcap extends CMouvement400 {
   function getFilterClause() {
     $group_id = CAppUI::conf("dPsante400 group_id");
     return $group_id ? "\n AND CIDC = '$group_id'" : "";
-//    return $group_id ? "\n AND (B_CIDC = '$group_id' OR A_CIDC = '$group_id')" : "";
   }
 }
 ?>

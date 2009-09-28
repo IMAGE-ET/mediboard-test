@@ -124,8 +124,6 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     $etab400->query($query, $values);
     $etab400->valuePrefix = "CI";
-    $this->etablissement->text           = $etab400->consume("ZIDC");
-    $this->etablissement->raison_sociale = $this->etablissement->text;
     $this->etablissement->adresse        = $etab400->consumeMulti("ZAD1", "ZAD2");
     $this->etablissement->cp             = $etab400->consume("CPO");
     $this->etablissement->ville          = $etab400->consume("ZLOC");
@@ -134,10 +132,14 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->etablissement->web            = $etab400->consume("ZWEB");
     $this->etablissement->mail           = $etab400->consume("MAIL");
     $this->etablissement->domiciliation  = $etab400->consume("FINS");
+		
+    $etablissement = new CGroups;
+    $etablissement->text = $etab400->consume("ZIDC");
+    $etablissement->raison_sociale = $etablissement->text;
 
     $this->trace($this->etablissement->getDBFields(), "Etablissement à enregistrer");
 
-    $this->id400Etab->bindObject($this->etablissement);
+    $this->id400Etab->bindObject($this->etablissement, $etablissement);
 
     $id400EtabSHS = new CIdSante400();
     $id400EtabSHS->loadLatestFor($this->etablissement, "eCap SHS");
@@ -386,6 +388,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     $this->patient->nom_jeune_fille  = $pat400->consume("ZNJF");
     $this->patient->sexe             = @$transformSexe[$pat400->consume("ZSEX")];
+    $this->patient->civilite         = "guess";
     $this->patient->adresse          = $pat400->consumeMulti("ZAD1", "ZAD2");
     $this->patient->ville            = $pat400->consume("ZVIL");
     $this->patient->cp               = $pat400->consume("CPO");
