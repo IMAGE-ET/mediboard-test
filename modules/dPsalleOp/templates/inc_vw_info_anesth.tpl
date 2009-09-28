@@ -23,14 +23,16 @@ reloadDocumentsAnesth = function () {
     var sAnesth_id = document.visiteAnesth.prat_anesth_id.value;
   }
   $$('.documents-CConsultAnesth-{{$consult_anesth->_id}}').each(function(doc){
-    Document.refresh(doc, {praticien_id: oForm.anesth_id.value });
+    Document.refresh(doc, {praticien_id: sAnesth_id });
   });    
 }
 
+{{if $dialog}}
 reloadAnesth = function() {
   window.opener.location.reload(true);
   window.location.reload(true);
 }
+{{/if}}
 
 Main.add(function(){
   refreshAidesPreAnesth($V(getForm('visiteAnesth').prat_visite_anesth_id));

@@ -2,16 +2,16 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module=dPprescription script="prescription_med"}}
+{{mb_include_script module="dPprescription" script="prescription_med"}}
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
 
 printFicheAnesth = function(consult_id) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_fiche"); 
+  var url = new Url("dPcabinet", "print_fiche"); 
   url.addParam("consultation_id", consult_id);
   url.popup(700, 500, "printFiche");
-  return;
 }
 
 submitAnesth = function(oForm) {
@@ -31,8 +31,7 @@ signVisiteAnesth = function(anesth_id) {
 }
 
 reloadAnesth = function(operation_id){
-  var url = new Url();
-  url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
+  var url = new Url("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("anesth", { 
   	waitingText: null,

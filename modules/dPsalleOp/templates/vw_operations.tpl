@@ -9,11 +9,9 @@
 <script type="text/javascript">
 
 function printFicheAnesth(consult_id) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_fiche"); 
+  var url = new Url("dPcabinet", "print_fiche"); 
   url.addParam("consultation_id", consult_id);
   url.popup(700, 500, "printFiche");
-  return;
 }
 
 function submitTiming(oForm) {
@@ -27,9 +25,8 @@ function submitTiming(oForm) {
 }
 
 function reloadTiming(operation_id){
-  var url = new Url();
   {{if $object->_id}}
-  url.setModuleAction("dPsalleOp", "httpreq_vw_timing");
+  var url = new Url("dPsalleOp", "httpreq_vw_timing");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("timing", { waitingText: null, onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});} } );
   {{/if}}
@@ -38,10 +35,7 @@ function reloadTiming(operation_id){
 function submitAnesth(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
   	onComplete: function() {
-  		if(reloadDocumentsAnesth) {
-  		  reloadDocumentsAnesth();
-  		}
-  		reloadAnesth(oForm.operation_id.value);
+      reloadAnesth(oForm.operation_id.value);
   	}
   });
 }
@@ -51,28 +45,28 @@ function signVisiteAnesth(anesth_id) {
 }
 
 function reloadAnesth(operation_id){
-  var url = new Url();
-  url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
+  var url = new Url("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("anesth", { 
   	waitingText: null,
   	onComplete: function() { 
+      if(reloadDocumentsAnesth) {
+        reloadDocumentsAnesth();
+      }
   		ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}"); 
   	}
   } );	
 }
 
 function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url();
-  url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
+  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim", { waitingText : null } );
 }
 
 function reloadPersonnel(operation_id){
-  var url = new Url;
-  url.setModuleAction("dPsalleOp", "httpreq_vw_personnel");
+  var url = new Url("dPsalleOp", "httpreq_vw_personnel");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("listPersonnel", {waitingText: null} );
 }
