@@ -77,7 +77,7 @@
       </label>  
     </th>
     <td>
-      <input class="num" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+      <input class="" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
     </td>
   </tr>  
     

@@ -20,8 +20,18 @@ class CMouvementEcap extends CMouvement400 {
   }
   
   function getFilterClause() {
-    $group_id = CAppUI::conf("dPsante400 group_id");
-    return $group_id ? "\n AND CIDC = '$group_id'" : "";
+    if (null == $group_ids = CAppUI::conf("dPsante400 group_id")) {
+    	return "";
+    }
+
+		$group_ids = explode("|", $group_ids);
+		$ors = array();
+		foreach($group_ids as $group_id) {
+			$ors[] = "CIDC = '$group_id'";
+		}
+		$ors = implode(" OR ", $ors);
+		
+    return "\n AND ($ors)";
   }
 }
 ?>

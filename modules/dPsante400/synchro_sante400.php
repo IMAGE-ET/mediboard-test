@@ -15,11 +15,6 @@ set_time_limit(90);
 
 CRecordSante400::$verbose = mbGetValueFromGet("verbose");
 
-if ($CIDC = mbGetValueFromGet("CIDC")) {
-  global $dPconfig;
-  $dPconfig["dPsante400"]["group_id"] = mbGetValueFromGet("CIDC");
-}
-
 $types = CMouvFactory::getTypes();
 $type = mbGetValueFromGetOrSession("type", reset($types));
 
