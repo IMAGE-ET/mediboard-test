@@ -259,7 +259,6 @@ class CMouvSejourEcap extends CMouvementEcap {
       $nomsPraticien     = split(" ", $prat400->consume("ZNOM"));
       $prenomsPraticiens = split(" ", $prat400->consume("ZPRE"));
   
-      $praticien->_user_username = substr(strtolower($prenomsPraticiens[0][0] . join($nomsPraticien, "")), 0, 20);
       $praticien->_user_last_name  = join(" ", $nomsPraticien);
       $praticien->_user_first_name = join(" ", $prenomsPraticiens);
       $praticien->_user_email      = $prat400->consume("MAIL");
@@ -303,6 +302,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     // Uniquement utilisé à la première utilisation
     $pratDefault = new CMediusers;
     $pratDefault->function_id = $this->fonction->_id;
+    $pratDefault->_user_username = substr(strtolower($prenomsPraticiens[0][0] . join($nomsPraticien, "")), 0, 16) . $CPRT;
     
     // Type de mediuser
     if (isset($prat400)) {

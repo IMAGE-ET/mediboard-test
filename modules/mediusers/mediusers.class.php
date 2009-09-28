@@ -105,6 +105,7 @@ class CMediusers extends CMbObject {
     $specs["spec_cpam_id"]     = "ref class|CSpecCPAM";
     $specs["compte"]           = "code rib confidential mask|99999S99999S99999999999S99";
     $specs["banque_id"]        = "ref class|CBanque";
+		
     $specs["_user_username"]   = "str notNull minLength|4";
     $specs["_user_password2"]  = "password sameAs|_user_password";
     $specs["_user_first_name"] = "str";
