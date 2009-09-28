@@ -701,7 +701,7 @@ class CPatient extends CMbObject {
 		// Détermine la civilité des patients dont la civité est inconnu (import)
 		if ($this->civilite == "guess") {
 			$this->evalAge();
-			$this->civilite = ($this->_age < CAppUI::conf("dPpatiens CPatient adult_age")) ?
+			$this->civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
 	      "enf" : ($this->sexe == "m") ? "m" : "mme";
 		}
   }
