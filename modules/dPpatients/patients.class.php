@@ -704,7 +704,6 @@ class CPatient extends CMbObject {
 			$this->civilite = ($this->_age < CAppUI::conf("dPpatiens CPatient adult_age")) ?
 	      "enf" : ($this->sexe == "m") ? "m" : "mme";
 		}
-		mbTrace($this->civilite, "civilite", true);
   }
   
   // Backward references
