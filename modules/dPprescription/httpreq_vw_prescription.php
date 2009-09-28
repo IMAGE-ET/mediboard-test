@@ -52,7 +52,6 @@ $protocoles_praticien = array();
 $protocoles_function  = array();
 $packs_praticien      = array();
 $packs_function       = array();
-$listFavoris          = array();
 $poids                = "";
 $alertesAllergies     = array();
 $alertesInteractions  = array();
@@ -122,18 +121,18 @@ if(!$prescription_id && $object_class && $object_id && $type){
   $prescription->loadMatchingObject();
 }
 
-$_favoris_praticien_id = "";
+$favoris_praticien_id = "";
 if($prescription->object_id && $prescription->_current_praticien_id){
-  $_favoris_praticien_id = $prescription->_current_praticien_id;
+  $favoris_praticien_id = $prescription->_current_praticien_id;
 } else {
   // Dans le cas d'un protocole
   // Si le protocole appartient à un praticien, on charge les favoris du praticien
   if($prescription->praticien_id){
-    $_favoris_praticien_id = $prescription->praticien_id;
+    $favoris_praticien_id = $prescription->praticien_id;
   } else {
   // Sinon, on charge les favoris du user courant si c'est un praticien (protocole de cabinet et d'etablissement)
     if($is_praticien){
-      $_favoris_praticien_id = $AppUI->user_id;
+      $favoris_praticien_id = $AppUI->user_id;
     }
   }
 }
@@ -158,12 +157,6 @@ if($prescription->_id){
 
 	// Chargement des medicaments et commentaires de medicament
 	if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
-		
-		// Chargement des favoris de medicaments
-		if($_favoris_praticien_id){
-		  $listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, "med");
-		}
-		
 		// Chargement des medicaments
 		$prescription->loadRefsLinesMedComments();
 	  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
@@ -335,10 +328,6 @@ if($prescription->_id){
 		  }
 		}
 	} else {
-	  // Chargement des favoris du chapitre
-		if($_favoris_praticien_id){
-		  $listFavoris = CPrescription::getFavorisPraticien($_favoris_praticien_id, $chapitre);
-		}
 		// Chargement des executants
 		$executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
 		$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
@@ -486,7 +475,7 @@ $smarty->assign("alertesIPC"           , $alertesIPC);
 $smarty->assign("alertesProfil"        , $alertesProfil);
 $smarty->assign("prescription"         , $prescription);
 $smarty->assign("listPrats"            , $listPrats);
-$smarty->assign("listFavoris"          , $listFavoris);
+$smarty->assign("favoris_praticien_id" , $favoris_praticien_id);
 $smarty->assign("category"             , $chapitre);
 $smarty->assign("categories"           , $categories);
 $smarty->assign("class_category"       , new CCategoryPrescription());

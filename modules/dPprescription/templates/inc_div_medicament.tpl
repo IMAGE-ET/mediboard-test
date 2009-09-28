@@ -151,25 +151,12 @@ Main.add( function(){
     <td>
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
-			    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
-			      <option value="">&mdash; les plus utilisés</option>
-			      <optgroup label="Produits les plus utilisés"></optgroup>
-			      {{if array_key_exists("medicament", $listFavoris)}}
-			      {{foreach from=$listFavoris.medicament item=curr_prod}}
-			      <option value="{{$curr_prod->code_cip}}">
-			        {{$curr_prod->libelle_abrege}} {{$curr_prod->dosage}} ({{$curr_prod->forme}})
-			      </option>
-			      {{/foreach}}
-			      {{/if}}
-			      <optgroup label="Injectables les plus utilisés"></optgroup>
-			      {{if array_key_exists("injectable", $listFavoris)}}
-			      {{foreach from=$listFavoris.injectable item=curr_inj}}
-			      <option value="{{$curr_inj->code_cip}}">
-			        {{$curr_inj->libelle_abrege}} {{$curr_inj->dosage}} ({{$curr_inj->forme}})
-			      </option>
-			      {{/foreach}}
-			      {{/if}}
-			    </select>
+			    
+					<!-- Affichage des produits les plus utilises -->
+				  <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this);">
+				 	  <option value="">&mdash; les plus utilisés</option>
+					</select>
+					
 			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
 			    <input type="text" name="produit" value="" size="20" class="autocomplete" />

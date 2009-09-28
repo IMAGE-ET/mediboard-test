@@ -67,17 +67,13 @@ Main.add( function(){
     <td>
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
-			  <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" style="width: 145px;">
-			    <option value="">&mdash; les plus utilisés</option>
-			    {{if array_key_exists($element, $listFavoris)}}
-			    {{foreach from=$listFavoris.$element item=curr_element}}
-			    <option value="{{$curr_element->_id}}">
-			      {{$curr_element->libelle}}
-			    </option>
-			    {{/foreach}}
-			    {{/if}}
-			  </select>
 			  
+			  <!-- Affichage des produits les plus utilises -->
+        <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" style="width: 140px;" onclick="updateFavoris('{{$favoris_praticien_id}}','{{$element}}', this);">
+          <option value="">&mdash; les plus utilisés</option>
+        </select>
+				
+				
 			  <!-- Boutons d'ajout d'elements et de commentaires -->
 			  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
 			  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément');">Ajouter élément</button>

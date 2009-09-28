@@ -31,6 +31,15 @@ if($('alertes')){
   Prescription.reloadAlertes({{$prescription->_id}});
 }
 
+updateFavoris = function (praticien_id, chapitre, select){
+  // Suppression du onclick du select
+	select.onclick="";
+  var url = new Url("dPprescription", "httpreq_vw_favoris_prescription");
+  url.addParam("praticien_id", praticien_id);
+  url.addParam("chapitre", chapitre);
+  url.requestUpdate(select, { waitingText: null });
+}
+
 // Si la perfusion n'est pas de type PCA, on vide toutes les catarteristiques specifiques
 resetBolus = function(oForm){
   $V(oForm.mode_bolus, 'sans_bolus');
