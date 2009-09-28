@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="dpPatients" script="pat_selector"}}
+{{mb_include_script module="dPpatients" script="pat_selector"}}
 {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 
 <script type="text/javascript">
@@ -52,8 +52,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 <script type="text/javascript">
 
 function checkBilanCPS() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_bilan_cps");
+  var url = new Url("dPcabinet", "print_bilan_cps");
   url.popup("800", "500", "Bilan CPS");
   return false;
 }
@@ -84,8 +83,7 @@ function checkBilanFSE() {
   	return false;
   }
   
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_bilan_fse");
+  var url = new Url("dPcabinet", "print_bilan_fse");
   $H(Form.toObject(oForm)).each(function (pair) { 
   	url.addParam(pair.key, pair.value) 
   } );
