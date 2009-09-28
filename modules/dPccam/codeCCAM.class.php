@@ -9,6 +9,7 @@
  */
 
 class CCodeCCAM {
+  
   var $code          = null; // Code de l'acte 
   var $chapitres     = null; // Chapitres de la CCAM concernes
   var $libelleCourt  = null; // Libelles
@@ -29,6 +30,8 @@ class CCodeCCAM {
   // Activités et phases recuperées depuis le code CCAM
   var $_activite = null;
   var $_phase    = null;
+  
+  var $_couleursChap = null;
   
 	// niveaux de chargement
 	const LITE   = 1;
@@ -60,6 +63,12 @@ class CCodeCCAM {
     }
     
     $this->_spec = self::$spec;
+    
+    $this->_couleursChap = array(1  => "669966", 2  => "6666cc", 3  => "6699ee", 4  => "cc6633", 5  => "ee6699",
+                                 6  => "ff66ee", 7  => "33cc33", 8  => "66cc99", 9  => "99ccee", 10 => "cccc33",
+                                 11 => "eecc99", 12 => "ffccee", 13 => "33ff33", 14 => "66ff99", 15 => "99ffee",
+                                 16 => "ccff33", 17 => "eeff99", 18 => "ffffee", 19 => "cccccc"
+                                );
     
     if (strlen($code) > 7){
       if (!preg_match ("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $code)) {
@@ -203,6 +212,7 @@ class CCodeCCAM {
     $row = $ds->fetchArray($result);
 
     // On rentre les champs de la table actes
+    $this->couleur = $this->_couleursChap[intval($row["ARBORESCENCE1"])];
     $this->chapitres[0]["db"] = $row["ARBORESCENCE1"];
     $this->chapitres[1]["db"] = $row["ARBORESCENCE2"];
     $this->chapitres[2]["db"] = $row["ARBORESCENCE3"];

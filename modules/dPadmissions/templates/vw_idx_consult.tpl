@@ -22,26 +22,11 @@ Main.add(function () {
       <input type="hidden" name="tab" value="{{$tab}}" />
       <table class="form">
         <tr>
-          <th class="title" colspan="3">Sélection d'un cabinet</th>
-        </tr>
-        <tr>
-          <th>
-            <label for="cabinet_id" title="Sélectionner un cabinet">Cabinet: </label>
-          </th>
-          <td>
-            <select name="cabinet_id" onchange="this.form.submit()">
-              <option value="">&mdash; Choisir un cabinet &mdash;</option>
-              {{foreach from=$cabinets item=curr_cabinet}}
-                <option value="{{$curr_cabinet->_id}}" class="mediuser" style="border-color: #{{$curr_cabinet->color}}" {{if $curr_cabinet->_id == $cabinet_id}} selected="selected" {{/if}}>
-                  {{$curr_cabinet->_view}}
-                </option>
-              {{/foreach}}
-            </select>
-          </td>
-          <td>
+          <th class="title">
+            Consultations d'anesthésie - 
             {{$date|date_format:$dPconfig.longdate}}
             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-          </td>
+          </th>
         </tr>
        </table> 
        </form>
@@ -49,11 +34,11 @@ Main.add(function () {
    </tr>
    <tr>
      <td>
-       <table class="form">
+       <table class="tbl">
          <tr>
          {{foreach from=$anesthesistes item=curr_anesthesiste}}
          <th class="title">
-         {{$curr_anesthesiste->_view}}
+           Dr {{$curr_anesthesiste->_view}}
          </th>
          {{/foreach}}
        </tr>

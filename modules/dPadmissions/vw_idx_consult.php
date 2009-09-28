@@ -13,7 +13,6 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 //Initialisations des variables
-$cabinet_id   = mbGetValueFromGetOrSession("cabinet_id");
 $date         = mbGetValueFromGetOrSession("date", mbDate());
 $today        = mbDate();
 $hour         = mbTime(null);
@@ -27,7 +26,7 @@ $cabinets = CMediusers::loadFonctions();
 
 // Récupération de la liste des anesthésistes
 $mediuser = new CMediusers;
-$anesthesistes = $mediuser->loadAnesthesistes(PERM_READ,$cabinet_id);
+$anesthesistes = $mediuser->loadAnesthesistes(PERM_READ);
 
 
 if($consult->consultation_id) {
@@ -46,7 +45,12 @@ foreach($anesthesistes as $anesth) {
   $where["date"] = "= '$date'";
   $order = "debut";
   $listPlage = $listPlage->loadList($where, $order);
-  $listPlages[$anesth->_id]["plages"] = $listPlage;
+  if(count($listPlage)) {
+    $listPlages[$anesth->_id]["plages"] = $listPlage;
+  } else {
+    unset($listPlages[$anesth->_id]);
+    unset($anesthesistes[$anesth->_id]);
+  }
 }
 
 foreach($listPlages as &$element) {

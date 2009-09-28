@@ -556,7 +556,7 @@ class CMediusers extends CMbObject {
     $where["users_mediboard.function_id"] = $this->_spec->ds->prepareIn(array_keys($functions));
     $where["users_mediboard.actif"] = "= '1'";
 
-    // Filters on users' values
+    // Filters on users values
     $ljoin = array();
     $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
 

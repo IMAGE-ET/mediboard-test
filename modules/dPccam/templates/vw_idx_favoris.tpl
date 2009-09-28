@@ -53,7 +53,7 @@ function modifClass(){
   {{if $smarty.foreach.fusion.index % 3 == 0}}
   <tr>
   {{/if}}
-    <td>
+    <td style="background-color: #{{$curr_code->couleur}};">
       <strong>
         {{if $curr_code->occ==0}}
       <span style="float:right">Favoris</span>

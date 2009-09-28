@@ -4,7 +4,7 @@
 
 <tr>
 {{foreach from=$fusion item=curr_code name=fusion}}
-  <td>
+  <td style="background-color: #{{$curr_code->couleur}};">
     <strong><span style="float:left">{{$curr_code->code}}</span>
     {{if $curr_code->occ==0}}
     <span style="float:right">Favoris</span>
