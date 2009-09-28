@@ -11,10 +11,11 @@
 global $AppUI, $can, $m, $g, $dPconfig, $dialog;
 
 $search_by_cis = mbGetValueFromGet("search_by_cis", 1);
+$gestion_produits = mbGetValueFromGet("gestion_produits", 0);
 $_recherche_livret = mbGetValueFromGet("_recherche_livret");
 
 if($_recherche_livret){
-  // Si selecteur de medicament en mode sejour, on recherche en par default dans le livret
+  // Si selecteur de medicament en mode sejour, on recherche par default dans le livret
 	$rechercheLivret = 1;
   $rechercheLivretComposant = 1;
   $rechercheLivretDCI = 1;
@@ -57,6 +58,7 @@ $dialog = mbGetValueFromGet("dialog");
 
 // Recherche des elements supprimés
 $supprime = mbGetValueFromGet("supprime", 0);
+$hors_specialite = mbGetValueFromGet("hors_specialite", 0);
 
 // Parametres de recherche
 switch($type_recherche) {
@@ -71,11 +73,11 @@ $mbProduit = new CBcbProduit();
 
 if($produit){
 	if(!$rechercheLivret){
-	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, 1, 200, null, null, $search_by_cis);
+	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, 200, null, null, $search_by_cis);
 	}
 	// Recherche de produits dans le livret Therapeutique
 	if($rechercheLivret){
-	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $specialite = 0, $max = 100, $livretTherapeutique = $g, null, $search_by_cis);  
+	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, $max = 100, $livretTherapeutique = $g, null, $search_by_cis);
 	}
 }
 
@@ -92,6 +94,7 @@ $niveauCodeBCB = "";
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("gestion_produits", $gestion_produits);
 $smarty->assign("search_by_cis", $search_by_cis);
 $smarty->assign("onglet_recherche", $onglet_recherche);
 $smarty->assign("rechercheLivret" , $rechercheLivret );
@@ -121,6 +124,7 @@ $smarty->assign("type_recherche"  , $type_recherche  );
 $smarty->assign("mbProduit"       , $mbProduit       );
 $smarty->assign("produits"        , $produits        );
 $smarty->assign("produit"         , $produit         );
+$smarty->assign("hors_specialite", $hors_specialite);
 $smarty->display("vw_idx_recherche.tpl");
 
 ?>

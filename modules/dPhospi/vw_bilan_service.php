@@ -132,6 +132,7 @@ if (mbGetValueFromGet("do")) {
 		        }
 		        // Administrations effectuees
 		        foreach($_perfusion->_ref_lines as $_perf_line){
+		        	$_perf_line->loadRefProduitPrescription();
 		          $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 		          if(is_array($_perf_line->_administrations)){
 			          foreach($_perf_line->_administrations as $_date => $_adm_by_hour){
@@ -162,6 +163,7 @@ if (mbGetValueFromGet("do")) {
 						foreach($_medicaments as $_code_ATC => &$_cat_ATC){
 						  foreach($_cat_ATC as &$_lines_by_unite) {
 						    foreach($_lines_by_unite as &$_line_med){
+						    	$_line_med->loadRefProduitPrescription();
 						      $list_lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
 						      // Prises prevues
 					        if(is_array($_line_med->_quantity_by_date)){

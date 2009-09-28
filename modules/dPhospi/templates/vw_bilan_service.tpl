@@ -294,7 +294,13 @@ selectPeriode = function(element) {
 									          {{$_perf.administre}}
 									          {{/if}}
 							            </td>
-							            <td style="width: 150px; border:none; text-align: center;">{{$perf_line->_unite_administration}}</td>
+							            <td style="width: 150px; border:none; text-align: center;">
+													  {{if $perf_line->_ref_produit_prescription->_id}}
+														  {{$perf_line->_ref_produit_prescription->unite_prise}}
+														{{else}}
+													    {{$perf_line->_unite_administration}}
+														{{/if}}
+												  </td>
 							            <td />
 							          </tr>
 						          {{/foreach}}
@@ -313,7 +319,11 @@ selectPeriode = function(element) {
 								        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
 								        <td style="width: 150px; border:none;" class="text">
 								          {{if $line_class=="CPrescriptionLineMedicament"}}
-								            {{$line->_ref_produit->libelle_unite_presentation}}
+													  {{if $line->_ref_produit_prescription->_id}}
+														  {{$line->_ref_produit_prescription->unite_prise}}
+														{{else}}
+								              {{$line->_ref_produit->libelle_unite_presentation}}
+														{{/if}}
 								          {{else}}
 								            {{$line->_unite_prise}}
 								          {{/if}}

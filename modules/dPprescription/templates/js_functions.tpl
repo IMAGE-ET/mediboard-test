@@ -381,9 +381,11 @@ updateFieldsElement = function(selected, formElement, element) {
 
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicament = function(selected) {
-  Element.cleanWhitespace(selected);
+	Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
-  Prescription.addLine(dn[0].firstChild.nodeValue);
+	if(dn[0].className != 'informal'){
+    Prescription.addLine(dn[0].firstChild.nodeValue);
+	}
   $('searchProd_produit').value = "";
 }
 

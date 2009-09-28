@@ -205,6 +205,7 @@ else {
 			  $_line_med->countSubstitutionsLines();
 			  $_line_med->countBackRefs("administration");
 				$_line_med->loadRefsSubstitutionLines();
+				$_line_med->loadRefProduitPrescription();
 			}
     } elseif($chapitre == "perf") {
       // Chargement des perfusions

@@ -38,9 +38,9 @@ function viewBCB(){
   $('ATC').hide();
 }
 
-function setClose(libelle, code_cip) {
+function setClose(libelle, code_cip, code_ucd, code_cis) {
   var oSelector = window.opener.MedSelector;
-  oSelector.set(libelle, code_cip);
+  oSelector.set(libelle, code_cip, code_ucd, code_cis);
   window.close();
 }
 
@@ -67,9 +67,11 @@ Main.add(function () {
 
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#produits">Produits</a></li>
-  <li><a href="#classes">Classes</a></li>
-  <li><a href="#composants">Composants</a></li>
-  <li><a href="#DCI">DCI</a></li>
+	{{if !$gestion_produits}}
+	  <li><a href="#classes">Classes</a></li>
+	  <li><a href="#composants">Composants</a></li>
+	  <li><a href="#DCI">DCI</a></li>
+	{{/if}}
 </ul>
 <hr class="control_tabs" />
 
@@ -77,6 +79,7 @@ Main.add(function () {
   Recherche par
   <form name="formSearch" action="?" method="get">
     <input type="hidden" name="search_by_cis" value="{{$search_by_cis}}" />
+		 <input type="hidden" name="gestion_produits" value="{{$gestion_produits}}" />
     {{if $dialog}}
     <input type="hidden" name="dialog" value="1" />
     <input type="hidden" name="m" value="dPmedicament" />
@@ -95,8 +98,15 @@ Main.add(function () {
     <br />
     <input type="text" name="produit" value="{{$produit}}"/>
     <button type="button" class="search" onclick="submit();">Rechercher</button>
-    <br />
-    <input type="checkbox" name="supprime" value="1" {{if $supprime == 1}}checked = "checked"{{/if}} />
+		<br />
+		{{if $gestion_produits}}
+		<input type="hidden" name="hors_specialite" value="1" />
+		{{else}}
+    <input type="checkbox" name="hors_specialite" value="1" {{if $hors_specialite == 1 || $gestion_produits}}checked = "checked"{{/if}} />
+    Recherche hors spécialités
+		<br />
+    {{/if}}
+		<input type="checkbox" name="supprime" value="1" {{if $supprime == 1}}checked = "checked"{{/if}} />
     Afficher les produits supprimés
     <br />
     <input type="checkbox" name="position_text" value="partout" {{if $param_recherche == 'partout'}}checked = "checked"{{/if}} />
@@ -121,7 +131,15 @@ Main.add(function () {
     <tr>
       <td>
         {{if $dialog && !$produit->_supprime}}
-          <button type="button" class="add notext" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')"></button>
+				  {{if $gestion_produits && $search_by_cis && ($produit->code_cis || $produit->code_ucd)}}
+				    {{if $produit->code_cis}}
+						  <button type="button" class="add notext" onclick="setClose('{{$produit->libelle}}','','','{{$produit->code_cis}}')"></button>
+						{{else}}
+						  <button type="button" class="add notext" onclick="setClose('{{$produit->libelle}}','','{{$produit->code_ucd}}')"></button>
+						{{/if}}
+          {{else}}
+					  <button type="button" class="add notext" onclick="setClose('{{$produit->libelle}}','{{$produit->code_cip}}')"></button>
+          {{/if}}
         {{/if}}
       </td>
       {{if !$search_by_cis}}
@@ -153,7 +171,7 @@ Main.add(function () {
       <td class="text">
         <a href="#produit{{$produit->code_cip}}" onclick="Prescription.viewProduit('','{{$produit->code_ucd}}','{{$produit->code_cis}}')" {{if $produit->_supprime}}style="color: red"{{/if}}>
 	        {{if $search_by_cis}}
-	          {{$produit->libelle_abrege}} {{$produit->dosage}} ({{$produit->forme}})
+	          {{$produit->libelle_abrege}} {{$produit->dosage}} {{if $produit->forme}}({{$produit->forme}}){{/if}}
 	        {{else}}
 	          {{$produit->libelle_long}}
 	        {{/if}}

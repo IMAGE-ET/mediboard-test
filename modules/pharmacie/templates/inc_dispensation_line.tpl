@@ -9,7 +9,9 @@
 *}}
 
 
-{{assign var=produit value=$produits_cis.$code_cis}}
+{{assign var=line_med value=$produits_cis.$code_cis}}
+{{assign var=produit value=$line_med->_ref_produit}}
+
 <tr>
   <th colspan="10" class="element">{{$produit->libelle_abrege}} {{$produit->dosage}}</th>
 </tr>
@@ -27,7 +29,12 @@
       <!-- Quantite à administrer -->
       <td style="text-align: center;" class="text">
         <div onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-poso-{{$code_cis}}')" class="tooltip-trigger">
-          <a href="#1">{{$quantite_administration}} {{$produit->_unite_administration}}</a>
+          <a href="#1">{{$quantite_administration}} 
+					{{if $line_med->_ref_produit_prescription->_id}}
+					  {{$line_med->_ref_produit_prescription->unite_prise}}
+					{{else}}
+					  {{$produit->_unite_administration}}
+					{{/if}}</a>
         </div>
         <table id="tooltip-content-poso-{{$code_cis}}" style="display: none;" class="tbl">
         {{if $mode_nominatif}}
@@ -109,15 +116,19 @@
       {{/if}}
      
      <td style="text-align: center;">
-	     {{if array_key_exists($code_cis,$delivrances)}}
-	       {{foreach from=$delivrances.$code_cis key=code_cip item=delivrance}}
-	         {{if $delivrance->_ref_stock->_ref_product->packaging}}
-	     	     <label title="{{$delivrance->_ref_stock->_ref_product->_unit_title}}">
-	     	     {{mb_ditto name="unite_disp" value=$delivrance->_ref_stock->_ref_product->_unit_title|truncate:30}}<br />
-	     	     </label>
-	     	   {{/if}}
-	       {{/foreach}}
-	     {{/if}}
+		   {{if $line_med->_ref_produit_prescription->_id}}
+			   {{$line_med->_ref_produit_prescription->unite_dispensation}}
+			 {{else}}
+		     {{if array_key_exists($code_cis,$delivrances)}}
+		       {{foreach from=$delivrances.$code_cis key=code_cip item=delivrance}}
+		         {{if $delivrance->_ref_stock->_ref_product->packaging}}
+		     	     <label title="{{$delivrance->_ref_stock->_ref_product->_unit_title}}">
+		     	     {{mb_ditto name="unite_disp" value=$delivrance->_ref_stock->_ref_product->_unit_title|truncate:30}}<br />
+		     	     </label>
+		     	   {{/if}}
+		       {{/foreach}}
+		     {{/if}}
+			 {{/if}}
      </td>
      
      <!-- Formulaire de dispensation -->

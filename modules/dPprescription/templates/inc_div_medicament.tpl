@@ -39,7 +39,7 @@ Main.add( function(){
     prepareForm(oFormProduit);
     
     // Autocomplete des medicaments
-    urlAuto = new Url();
+    var urlAuto = new Url();
     urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
     urlAuto.addParam("produit_max", 40);
     

@@ -37,6 +37,7 @@ class CPerfusionLine extends CMbObject {
   var $_unite_administration = null;
   
   var $_administrations = null;
+	var $_ref_produit_prescription = null;
   
   // Can fields
   var $_can_vw_livret_therapeutique = null;
@@ -165,6 +166,31 @@ class CPerfusionLine extends CMbObject {
   
   function loadRefsAdministrations(){
     $this->_ref_administrations = $this->loadBackRefs("administrations");
+  }
+	
+  function loadRefProduitPrescription(){
+    $this->_ref_produit_prescription = new CProduitPrescription();
+    if($this->code_cis){
+      $this->_ref_produit_prescription->code_cis = $this->code_cis;
+      $this->_ref_produit_prescription->loadMatchingObject();
+    }
+    
+    if(!$this->_ref_produit_prescription->_id && $this->code_ucd){
+      $this->_ref_produit_prescription->code_cis = null;
+      $this->_ref_produit_prescription->code_ucd = $this->code_ucd;
+      $this->_ref_produit_prescription->loadMatchingObject();
+    }
+    
+    if(!$this->_ref_produit_prescription->_id && $this->code_cip){
+      $this->_ref_produit_prescription->code_cis = null;
+      $this->_ref_produit_prescription->code_ucd = null;
+      $this->_ref_produit_prescription->code_cip = $this->code_cip;
+      $this->_ref_produit_prescription->loadMatchingObject();
+    }
+    
+    if($this->_ref_produit_prescription->unite_prise){
+      $this->_unite_administration = $this->_ref_produit_prescription->unite_prise;
+    }
   }
 }
   

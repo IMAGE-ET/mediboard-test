@@ -131,7 +131,7 @@
          {{if $line->_class_name == "CPrescriptionLineMedicament"}}
            {{$line->_ucd_view}} 
            <span style="opacity: 0.7; font-size: 0.8em;">
-           ({{$line->_forme_galenique}})
+           {{if $line->_forme_galenique}}({{$line->_forme_galenique}}){{/if}}
            </span>
          {{elseif $line->_class_name == "CPerfusionLine"}}
            {{$line->_ucd_view}}           
@@ -146,7 +146,11 @@
          {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
            {{$quantite}} 
            {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-             {{$line->_ref_produit->libelle_unite_presentation}}
+					   {{if $line->_ref_produit_prescription->_id}}
+						   {{$line->_ref_produit_prescription->unite_prise}}
+						 {{else}}
+               {{$line->_ref_produit->libelle_unite_presentation}}
+						 {{/if}}
            {{elseif $line->_class_name != "CPerfusionLine"}}
              {{$line->_unite_prise}}
            {{else}}

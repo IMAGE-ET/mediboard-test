@@ -352,9 +352,13 @@ Main.add( function(){
 					            {{if $_perfusion->_can_modify_perfusion_line}}
 					              {{mb_field object=$line field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form);"}}
 						            <select name="unite" style="width: 75px;" onchange="return onSubmitFormAjax(this.form);">
-											    {{foreach from=$line->_unites_prise item=_unite}}
-											      <option value="{{$_unite}}" {{if $line->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
-											    {{/foreach}}
+												  {{if $line->_ref_produit_prescription->_id}}
+													   <option value="{{$line->_ref_produit_prescription->unite_prise}}">{{$line->_ref_produit_prescription->unite_prise}}</option>
+													{{else}}
+												    {{foreach from=$line->_unites_prise item=_unite}}
+												      <option value="{{$_unite}}" {{if $line->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
+												    {{/foreach}}
+													{{/if}}
 											  </select>
 											{{else}}
 					              {{mb_value object=$line field=quantite}}

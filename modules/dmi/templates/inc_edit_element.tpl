@@ -55,7 +55,7 @@ Main.add(function () {
 	    updateElement: updateFieldsDM,
       callback: 
         function(input, queryString){
-          return (queryString + "&specialite=2"); 
+          return (queryString + "&hors_specialite=1"); 
         }
     } );
   }

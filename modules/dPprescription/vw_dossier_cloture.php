@@ -44,6 +44,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
 
 // Parcours des lignes de medicament et stockage du dossier cloturé
 foreach($prescription->_ref_prescription_lines as $_line_med){
+	$_line_med->loadRefProduitPrescription();
 	$_line_med->_ref_produit->loadConditionnement();
 	$list_lines["medicament"][$_line_med->_id] = $_line_med;
 	$_line_med->loadRefsAdministrations();

@@ -12,10 +12,13 @@ var MedSelector = {
   sForm     : null,
   sView     : null,
   sCode     : null,
+	sCodeUCD  : null,
+	sCodeCIS  : null,
   sSearch   : null,
   sRechercheLivret : null,
   sOnglet   : null,
   sSearchByCIS : null,
+	sGestionProduits: null,
   oUrl      : null,
   selfClose : true,
   options : {
@@ -38,14 +41,27 @@ var MedSelector = {
     if(this.sSearchByCIS){
       this.oUrl.addParam("search_by_cis", this.sSearchByCIS);
     }
+		if(this.sGestionProduits){
+      this.oUrl.addParam("gestion_produits", this.sGestionProduits);
+    }
     this.oUrl.setModuleAction("dPmedicament", "vw_idx_recherche");
     
     this.oUrl.popup(this.options.width, this.options.height, "Medicament Selector");
   },
-  set: function(nom, code) {
+  set: function(nom, code_cip, code_ucd, code_cis) {
     this.prepared.nom = nom;
-    this.prepared.code = code;  
-  
+    
+		if (code_cip) {
+	 	  this.prepared.code = code_cip;
+	  }
+		
+		if(code_ucd){
+			this.prepared.codeUCD = code_ucd;
+		}
+	  if(code_cis){
+      this.prepared.codeCIS = code_cis;
+    }
+	
     // Lancement de l'execution du set
     window.setTimeout( window.MedSelector.doSet , 1);
   },
@@ -53,8 +69,15 @@ var MedSelector = {
   doSet: function(){
     var oForm = document[MedSelector.sForm];
     $V(oForm[MedSelector.sView], MedSelector.prepared.nom);
-    $V(oForm[MedSelector.sCode], MedSelector.prepared.code);
-    
+    if (MedSelector.prepared.code) {
+		  $V(oForm[MedSelector.sCode], MedSelector.prepared.code);
+	  }
+    if (MedSelector.prepared.codeUCD) {
+      $V(oForm[MedSelector.sCodeUCD], MedSelector.prepared.codeUCD);
+    }
+		if (MedSelector.prepared.codeCIS) {
+      $V(oForm[MedSelector.sCodeCIS], MedSelector.prepared.codeCIS);
+    }
   },
       
   // Peut être appelé sans contexte : ne pas utiliser this

@@ -118,7 +118,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_posologie    = null;
   var $_ref_substitution_lines = null;
   var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
-  
+  var $_ref_produit_prescription = null;
+	
   // Alertes
   var $_ref_alertes      = null;
   var $_ref_alertes_text = null;
@@ -492,13 +493,19 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function store(){
     // Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
-      $this->loadRefProduit();
-			if(!$this->_ref_produit->voies){
-			  $this->_ref_produit->loadVoies();
+    	
+    	$this->loadRefProduitPrescription();
+			if($this->_ref_produit_prescription->_id && $this->_ref_produit_prescription->voie){
+			  $this->voie = $this->_ref_produit_prescription->voie;	
+			} else {
+			  $this->loadRefProduit();
+				if(!$this->_ref_produit->voies){
+				  $this->_ref_produit->loadVoies();
+				}
+				if(isset($this->_ref_produit->voies[0])){
+	        $this->voie = $this->_ref_produit->voies[0];
+	      }
 			}
-			if(isset($this->_ref_produit->voies[0])){
-        $this->voie = $this->_ref_produit->voies[0];
-      }
     }
     
     $mode_creation = !$this->_id;
@@ -508,7 +515,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	}
 
     // Pre-remplissage de la posologie la plus utilisée
-    if($mode_creation && $this->_most_used_poso){
+    if($mode_creation && $this->_most_used_poso && $this->code_cis){
       $posos = $this->getMostUsedPoso();
       if(count($posos)){
         $this->applyPoso(reset($posos));
@@ -614,7 +621,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function isPerfusable(){
-    if($this->_ref_produit->voies){
+  	$this->loadRefProduitPrescription();
+    if($this->_ref_produit_prescription->_id && $this->_ref_produit_prescription->voie){
+    	if(self::$voies[$this->_ref_produit_prescription->voie]["perfusable"]){
+    		  $this->_is_perfusable = true;
+
+    	}
+    }
+		
+		if($this->_ref_produit->voies){
 	    foreach($this->_ref_produit->voies as $_voie){
 	      if(self::$voies[$_voie]["perfusable"]){
 	        $this->_is_perfusable = true;
@@ -622,6 +637,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	      }
 	    }
     }
+		
   }
 
   
@@ -758,6 +774,31 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function loadRefLogValidationPharma(){
     $this->_ref_log_validation_pharma = $this->loadLastLogForField("valide_pharma");
   }
+	
+	function loadRefProduitPrescription(){
+		$this->_ref_produit_prescription = new CProduitPrescription();
+		if($this->code_cis){
+			$this->_ref_produit_prescription->code_cis = $this->code_cis;
+			$this->_ref_produit_prescription->loadMatchingObject();
+		}
+		
+		if(!$this->_ref_produit_prescription->_id && $this->code_ucd){
+			$this->_ref_produit_prescription->code_cis = null;
+      $this->_ref_produit_prescription->code_ucd = $this->code_ucd;
+      $this->_ref_produit_prescription->loadMatchingObject();
+		}
+		
+		if(!$this->_ref_produit_prescription->_id && $this->code_cip){
+      $this->_ref_produit_prescription->code_cis = null;
+      $this->_ref_produit_prescription->code_ucd = null;
+      $this->_ref_produit_prescription->code_cip = $this->code_cip;
+      $this->_ref_produit_prescription->loadMatchingObject();
+    }
+		
+		if($this->_ref_produit_prescription->unite_prise){
+		  $this->_unite_administration = $this->_ref_produit_prescription->unite_prise;
+		}
+	}
 }
 
 ?>

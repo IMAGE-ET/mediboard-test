@@ -66,6 +66,8 @@ if($date_max_orig != $date_min_orig){
   $dates[] = $date_min_orig; 
 }
 
+
+
 if($prescriptions) {
   foreach($prescriptions as $_prescription){	  
     $date_min = $date_min_orig;
@@ -92,42 +94,56 @@ if($prescriptions) {
 	  $lines = array();
     $lines["medicament"] = $_prescription->_ref_prescription_lines;
 
-	  
 	  // Calcul du plan de soin
     foreach($dates as $_date){
-      $_prescription->calculPlanSoin($_date, 0, 0, 1, null, true, $_selected_cis);
-    }
+	    if(strlen($_selected_cis) == 8){
+	      // CIS
+	      $_prescription->calculPlanSoin($_date, 0, 0, 1, null, true, $_selected_cis);
+	    } else {
+	      // CIP
+	      $_prescription->calculPlanSoin($_date, 0, 0, 1, $_selected_cis, true);
+	    }
+		}
     
      // Parcours des prises prevues pour les medicaments
      foreach($lines as $lines_by_type){
        foreach($lines_by_type as $_line_med){
+
           $_lines[$_line_med->code_cis] = $_line_med;
-          if($_selected_cis && ($_line_med->code_cis != $_selected_cis)){
+          if($_selected_cis && ($_line_med->code_cis != $_selected_cis) && ($_line_med->code_cip != $_selected_cis)){
             continue;
           }
 
-	 				if(!isset($besoin_patient[$_line_med->code_cis][$patient->_id])){
-		        $besoins =& $besoin_patient[$_line_med->code_cis][$patient->_id];
+          $_line_med->loadRefProduitPrescription();
+          $code = $_line_med->code_cis ? $_line_med->code_cis : $_line_med->code_cip;
+
+	 				if(!isset($besoin_patient[$code][$patient->_id])){
+		        $besoins =& $besoin_patient[$code][$patient->_id];
 		        $besoins = array("patient" => "", "quantite_administration" => 0, "quantite_dispensation" => 0);
 		      }
 		      if($_line_med->_quantity_by_date){
-	          if(!isset($produits_cis[$_line_med->code_cis])){
-	             $produits_cis[$_line_med->code_cis] = $_line_med->_ref_produit;
+	          if(!isset($produits_cis[$code])){
+	             $produits_cis[$code] = $_line_med;
 	          }  
 	          foreach($_line_med->_quantity_by_date as $type => $quantity_by_date){
 					  	foreach($quantity_by_date as $date => $quantity_by_hour){
 					  		if(@$quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
 						  	  foreach($quantity_by_hour['quantites'] as $hour => $quantity){
-						  	    if(!isset($dispensations[$_line_med->code_cis])){
-						  	      $dispensations[$_line_med->code_cis]["quantite_administration"] = 0;
-						  	      $dispensations[$_line_med->code_cis]["quantite_dispensation"] = 0;
+						  	    if(!isset($dispensations[$code])){
+						  	      $dispensations[$code]["quantite_administration"] = 0;
+						  	      $dispensations[$code]["quantite_dispensation"] = 0;
 						  	    }
 						  	    
-						  	    $dispensations[$_line_med->code_cis]["quantite_administration"] += $quantity["total"];
-							      $dispensations[$_line_med->code_cis]["quantite_dispensation"] += $quantity["total_disp"];
-							      $besoin_patient[$_line_med->code_cis][$patient->_id]["patient"] = $patient; 
-		  				      $besoin_patient[$_line_med->code_cis][$patient->_id]["quantite_administration"] += $quantity["total"];
-							      $besoin_patient[$_line_med->code_cis][$patient->_id]["quantite_dispensation"] += $quantity["total_disp"];
+						  	    $dispensations[$code]["quantite_administration"] += $quantity["total"];
+										
+										if($_line_med->_ref_produit_prescription->_id && ($_line_med->_ref_produit_prescription->unite_prise != $_line_med->_ref_produit_prescription->unite_dispensation)){
+                      $quantity["total_disp"] = $quantity["total_disp"] / ($_line_med->_ref_produit_prescription->quantite * $_line_med->_ref_produit_prescription->nb_presentation);
+                    }
+								
+							      $dispensations[$code]["quantite_dispensation"] += $quantity["total_disp"];
+							      $besoin_patient[$code][$patient->_id]["patient"] = $patient; 
+		  				      $besoin_patient[$code][$patient->_id]["quantite_administration"] += $quantity["total"];
+							      $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += $quantity["total_disp"];
 							      
 						  	  }
 					  		}
@@ -144,12 +160,18 @@ if($prescriptions) {
 			          		$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 				            if($quantite_planifiee){
 									    // Calcul de la quantite 
-									    @$dispensations[$_line_med->code_cis]["quantite_administration"] += $quantite_planifiee;
-									    $quantite_dispensation = $quantite_planifiee * $_line_med->_ratio_administration_dispensation; 
-									    @$dispensations[$_line_med->code_cis]["quantite_dispensation"] += $quantite_dispensation;
-								      $besoin_patient[$_line_med->code_cis][$patient->_id]["patient"] = $patient; 
-								      $besoin_patient[$_line_med->code_cis][$patient->_id]["quantite_administration"] += $quantite_planifiee;
-					            $besoin_patient[$_line_med->code_cis][$patient->_id]["quantite_dispensation"] += $quantite_dispensation;
+									    @$dispensations[$code]["quantite_administration"] += $quantite_planifiee;
+											
+											if($_line_med->_ref_produit_prescription->_id && ($_line_med->_ref_produit_prescription->unite_prise != $_line_med->_ref_produit_prescription->unite_dispensation)){
+                        $quantite_dispensation = $quantite_planifiee / ($_line_med->_ref_produit_prescription->quantite * $_line_med->_ref_produit_prescription->nb_presentation);
+                      } else {
+										    $quantite_dispensation = $quantite_planifiee * $_line_med->_ratio_administration_dispensation; 
+										  }
+											
+									    @$dispensations[$code]["quantite_dispensation"] += $quantite_dispensation;
+								      $besoin_patient[$code][$patient->_id]["patient"] = $patient; 
+								      $besoin_patient[$code][$patient->_id]["quantite_administration"] += $quantite_planifiee;
+					            $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += $quantite_dispensation;
 				            }
 			            }
 			          }
@@ -165,28 +187,38 @@ if($prescriptions) {
 			    foreach($_perfusion->_prises_prevues as $_date => $_prises_by_hour){
 			      foreach($_prises_by_hour as $_hour => $_prise){
 			        foreach($_perfusion->_ref_lines as $_perf_line){
-			          $_lines[$_perf_line->code_cis] = $_perf_line;
+			        	$_perf_line->loadRefProduitPrescription();
+								$code = $_perf_line->code_cis ? $_perf_line->code_cis : $_perf_line->code_cip;
+								
+			          $_lines[$code] = $_perf_line;
 			                  
 			          $datetime = "$_date $_hour:00:00";			          
 			          if($datetime < "$date_min_orig 00:00:00" || $datetime > "$date_max_orig 23:59:59"){
 			            continue;
 			          }
-			        	if(!isset($besoin_patient[$_perf_line->code_cis][$patient->_id])){
-					        $besoins =& $besoin_patient[$_perf_line->code_cis][$patient->_id];
+			        	if(!isset($besoin_patient[$code][$patient->_id])){
+					        $besoins =& $besoin_patient[$code][$patient->_id];
 			            $besoins = array("patient" => "", "quantite_administration" => 0, "quantite_dispensation" => 0);
 					      }
-			          if(!isset($produits_cis[$_perf_line->code_cis])){
-			           $produits_cis[$_perf_line->code_cis] = $_perf_line->_ref_produit;
+			          if(!isset($produits_cis[$code])){
+			           $produits_cis[$code] = $_perf_line;
 			          }      
-			          if(!isset($dispensations[$_perf_line->code_cis])){
-			            $dispensations[$_perf_line->code_cis]["quantite_administration"] = 0;
-			            $dispensations[$_perf_line->code_cis]["quantite_dispensation"] = 0;
+			          if(!isset($dispensations[$code])){
+			            $dispensations[$code]["quantite_administration"] = 0;
+			            $dispensations[$code]["quantite_dispensation"] = 0;
 			          }
-			          $dispensations[$_perf_line->code_cis]["quantite_administration"] += $_perf_line->_quantite_administration;
-			          $dispensations[$_perf_line->code_cis]["quantite_dispensation"] += $_perf_line->_quantite_dispensation;
-					      $besoin_patient[$_perf_line->code_cis][$patient->_id]["patient"] = $patient; 
-	 				      $besoin_patient[$_perf_line->code_cis][$patient->_id]["quantite_administration"] += $_perf_line->_quantite_administration;
-					      $besoin_patient[$_perf_line->code_cis][$patient->_id]["quantite_dispensation"] += $_perf_line->_quantite_dispensation;
+			          $dispensations[$code]["quantite_administration"] += $_perf_line->_quantite_administration;
+								
+						    if($_perf_line->_ref_produit_prescription->_id && ($_perf_line->_ref_produit_prescription->unite_prise != $_perf_line->_ref_produit_prescription->unite_dispensation)){
+                  $quantite_dispensation = $_perf_line->_quantite_dispensation / ($_perf_line->_ref_produit_prescription->quantite * $_perf_line->_ref_produit_prescription->nb_presentation);
+                } else {
+                	$quantite_dispensation = $_perf_line->_quantite_dispensation;
+                }
+										
+			          $dispensations[$code]["quantite_dispensation"] += $quantite_dispensation;
+					      $besoin_patient[$code][$patient->_id]["patient"] = $patient; 
+	 				      $besoin_patient[$code][$patient->_id]["quantite_administration"] += $_perf_line->_quantite_administration;
+					      $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += $quantite_dispensation;
 	
 			        }
 			      }
@@ -211,13 +243,25 @@ foreach($besoin_patient as &$quantites_by_patient){
 $category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
 
 // Calcul du nombre de boites (unites de presentation)
-foreach($dispensations as $cis => $unites){
-  if ($dispensations[$cis]["quantite_administration"] == 0) {
-    unset($dispensations[$cis]); continue;
+foreach($dispensations as $code => $unites){
+  if ($dispensations[$code]["quantite_administration"] == 0) {
+    unset($dispensations[$code]); continue;
   }
   
-  $_produits_from_cis[$cis] = CBcbProduit::getProduitsFromCISInLivret($cis);
-  foreach($_produits_from_cis[$cis] as $_produit){
+  if(strstr($dispensations[$code]["quantite_dispensation"],'.')){
+    $dispensations[$code]["quantite_dispensation"] = ceil($dispensations[$code]["quantite_dispensation"]);
+  }
+		
+	// Si le code est bien un code CIS
+  if(strlen($code) == '8'){
+    $_produits_from_cis[$code] = CBcbProduit::getProduitsFromCISInLivret($code); 
+  } else {
+    $produit = new CBcbProduit();
+    $produit->load($code);
+    $_produits_from_cis[$code] = array(array("CODE_CIP" => $code, "LIBELLE_PRODUIT" => $produit->libelle));
+  }
+	
+  foreach($_produits_from_cis[$code] as $_produit){
     $_code_cip = $_produit["CODE_CIP"];
     $produits_cip[$_code_cip] = $_produit;
     
@@ -239,14 +283,14 @@ foreach($dispensations as $cis => $unites){
 	    $delivery->loadRefsFwd();
 	    $delivery->_ref_stock->loadRefsFwd();
 	    $delivery->_ref_stock->_ref_product->updateFormFields();
-	    $delivrances[$cis][$_code_cip] = $delivery;
+	    $delivrances[$code][$_code_cip] = $delivery;
 	    
 	    // Calcul du stock de la pharmacie
-	  	$stocks_pharmacie[$cis][$_code_cip] = $delivery->_ref_stock->quantity;
-		  if(!isset($stocks_pharmacie[$cis]["total"])){
-		    $stocks_pharmacie[$cis]["total"] = 0;
+	  	$stocks_pharmacie[$code][$_code_cip] = $delivery->_ref_stock->quantity;
+		  if(!isset($stocks_pharmacie[$code]["total"])){
+		    $stocks_pharmacie[$code]["total"] = 0;
 		  }
-	    $stocks_pharmacie[$cis]["total"] += $stocks_pharmacie[$cis][$_code_cip];
+	    $stocks_pharmacie[$code]["total"] += $stocks_pharmacie[$code][$_code_cip];
 	  }
   }
 }

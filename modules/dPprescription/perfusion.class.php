@@ -441,11 +441,19 @@ class CPerfusion extends CMbObject {
     	if(!$_perf_line->_ref_produit->voies){
 			  $_perf_line->_ref_produit->loadVoies();
 			}
-      foreach($_perf_line->_ref_produit->voies as $_voie){
-        //if(CPrescriptionLineMedicament::$voies[$_voie]["perfusable"]){
-          $this->_voies[$_voie] = $_voie;
-        //}
+			
+			$_perf_line->loadRefProduitPrescription();
+			if($_perf_line->_ref_produit_prescription->_id){
+			  $this->_voies[$_perf_line->_ref_produit_prescription->voie] = $_perf_line->_ref_produit_prescription->voie;
       }
+			if($_perf_line->_ref_produit->voies){
+	      foreach($_perf_line->_ref_produit->voies as $_voie){
+	        //if(CPrescriptionLineMedicament::$voies[$_voie]["perfusable"]){
+	          $this->_voies[$_voie] = $_voie;
+	        //}
+	      }
+		  }
+			
     }
   }
   

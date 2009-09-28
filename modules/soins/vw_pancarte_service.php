@@ -139,6 +139,9 @@ foreach($prescriptions as $_prescription){
 	          	foreach($_lines as $chapitres){
 						    foreach($chapitres as $_lines_by_unite){
 						      foreach($_lines_by_unite as $unite_prise => $_line){
+						      	if($_line->_class_name == "CPrescriptionLineMedicament"){
+						      		$_line->loadRefProduitPrescription();
+						      	}
 						        $quantite_prevue = $quantite_adm = 0;           
 						        if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'])){
 			                $quantite_prevue = $_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'];

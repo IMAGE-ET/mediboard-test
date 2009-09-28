@@ -92,7 +92,11 @@
 		       {{$prise->_short_view}}
 		       <br />
 		       {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-		         ({{$prise->_ref_object->_unite_administration}})<br />
+					   {{if $line->_ref_produit_prescription->_id}}
+						   ({{$prise->_ref_object->_ref_produit_prescription->unite_prise}})<br />
+						 {{else}}
+		           ({{$prise->_ref_object->_unite_administration}})<br />
+						 {{/if}}
 		       {{/if}}
 	       </div>
 	     {{else}}
@@ -103,8 +107,12 @@
 					 </div>
 	       {{/foreach}}
 	       {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	         ({{$_prise->_ref_object->_unite_administration}})<br />
-	       {{/if}}
+				   {{if $line->_ref_produit_prescription->_id}}
+             ({{$_prise->_ref_object->_ref_produit_prescription->unite_prise}})<br />
+					 {{else}}
+	           ({{$_prise->_ref_object->_unite_administration}})<br />
+	         {{/if}}
+				 {{/if}}
 	     {{/if}}
 	   {{/if}}
 	   </small>

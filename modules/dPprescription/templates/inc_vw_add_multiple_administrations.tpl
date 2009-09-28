@@ -116,8 +116,12 @@ Main.add( function(){
 		        <tr>
 		          <td id="adm_{{$key}}">
 		            {{if $by_hour.line->_class_name == "CPrescriptionLineMedicament"}}
-		              {{assign var=unite_prise value=$by_hour.line->_ref_produit->libelle_unite_presentation}}
-		            {{else}}
+								  {{if $by_hour.line->_ref_produit_prescription->_id}}
+									  {{assign var=unite_prise value=$by_hour.line->_ref_produit_prescription->unite_prise}}
+                  {{else}}
+		                {{assign var=unite_prise value=$by_hour.line->_ref_produit->libelle_unite_presentation}}
+		              {{/if}}
+								{{else}}
 		              {{assign var=unite_prise value=$by_hour.line->_unite_prise}}
 		            {{/if}}
 		            {{if !$by_hour.notToday}}

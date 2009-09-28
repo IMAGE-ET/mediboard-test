@@ -26,6 +26,9 @@ $prescription = new CPrescription();
 if($prescription_id){
   $prescription->load($prescription_id);
   $prescription->loadRefsLinesMed("1","1","service");
+	foreach($prescription->_ref_prescription_lines as $_line_med){
+		$_line_med->loadRefProduitPrescription();
+	}
   $prescription->loadRefsLinesElementByCat("1","","service");
   $prescription->loadRefsPerfusions("1","service");
   foreach($prescription->_ref_perfusions as &$_perfusion){

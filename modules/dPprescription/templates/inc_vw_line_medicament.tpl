@@ -106,7 +106,7 @@
         <strong style="font-size: 1.5em;">
           {{$line->_ucd_view}}
         </strong>
-        ({{$line->_forme_galenique}})
+        {{if $line->_forme_galenique}}({{$line->_forme_galenique}}){{/if}}
       </a>
     </th>
   </tr>
@@ -230,13 +230,19 @@
         <tr>
           <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left; width: 50%">
 			      <!-- Selection des posologies statistiques -->
-			      {{if $line->_ref_prescription->object_id}}
+			      {{if $line->_ref_prescription->object_id && $line->_unites_prise|@count}}
 			      {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
 			      {{/if}}
 			      <!-- Ajout de posologies -->			       
 			      {{if $line->_can_modify_poso}}
-			        {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Med"}}	  
-						{{/if}}
+						  {{if $line->_unites_prise|@count}}
+						    {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Med"}}   
+            	{{else}}
+						    <div class="small-warning">
+						    	 Ce produit ne contient les informations nécessaires pour pouvoir gérer des posologies.
+						    </div>  	
+							{{/if}}
+			      {{/if}}
 	        </td>
           <td style="border:none; padding: 0;"><img src="images/icons/a_right.png" title="" alt="" /></td>
 	        <td style="border:none; text-align: left;">
@@ -307,9 +313,13 @@
 	    </form>
   		
   		 <!-- Si seulement 1 voie possible ou affichage bloqué-->
-  		{{if $line->voie}}
+  		{{if $line->voie || $line->_ref_produit_prescription->voie}}
 	  		{{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
-	  		  {{$line->voie}}
+	  		  {{if $line->voie}}
+					  {{$line->voie}}
+					{{elseif $line->_ref_produit_prescription->voie}}
+					   {{$line->_ref_produit_prescription->voie}}
+					{{/if}}
 	  		{{else}}
 		  		<select name="voie-{{$line->_id}}" 
 		  						onchange="{{if !in_array($line->voie, $line->_ref_produit->voies)}}

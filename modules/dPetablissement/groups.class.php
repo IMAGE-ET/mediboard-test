@@ -106,8 +106,8 @@ class CGroups extends CMbObject {
 	    $produit = new CBcbProduit();
 	    
 	    // Chargement des produits du livret Therapeutique en fonction d'une lettre
-	    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, $g, $full_mode, "0");
-	    
+	    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, $g, $full_mode, "0") + $produit->searchProduit($lettre, 1, "debut", 1, $limit, $g, $full_mode, "0");
+
 	    $this->_ref_produits_livret = array();
 	    foreach($produits as $code_cip => $prod){
 	      $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();

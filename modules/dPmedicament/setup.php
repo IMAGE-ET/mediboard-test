@@ -53,7 +53,26 @@ class CSetupdPmedicament extends CSetup {
 						) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+		$this->makeRevision("0.14");
+		$sql = "CREATE TABLE `produit_prescription` (
+						  `produit_prescription_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+						  `code_cip` INT (7) UNSIGNED ZEROFILL,
+						  `code_ucd` INT (7) UNSIGNED ZEROFILL,
+						  `code_cis` INT (8) UNSIGNED ZEROFILL,
+						  `libelle` VARCHAR (255) NOT NULL,
+						  `quantite` FLOAT NOT NULL,
+						  `unite_prise` VARCHAR (255) NOT NULL,
+						  `nb_presentation` INT (11) NOT NULL,
+						  `voie` VARCHAR (255)
+						) TYPE=MYISAM;";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("0.15");
+		$sql = "ALTER TABLE `produit_prescription` 
+            ADD `unite_dispensation` VARCHAR (255) NOT NULL;";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.16";
   }  
 }
 

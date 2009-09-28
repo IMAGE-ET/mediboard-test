@@ -176,10 +176,18 @@ if($prescription->_id){
 					
 	  	    if($_line_med->_guid == $full_line_guid){
 	  	     $_prat_id = !$prescription->object_id ? $prescription->praticien_id : null;
-	  	     $_line_med->loadMostUsedPoso(null, $_prat_id);
-					 $_line_med->loadRefsFwd();
-					 $_line_med->_ref_produit->loadVoies();
-					 $_line_med->isPerfusable();
+					 
+					 $_line_med->loadRefProduitPrescription();
+					 if(!$_line_med->_ref_produit_prescription->_id){
+					   $_line_med->loadMostUsedPoso(null, $_prat_id);
+						 $_line_med->loadRefsFwd();
+						 $_line_med->_ref_produit->loadVoies();
+						 $_line_med->isPerfusable();
+					 } else {
+					 	$_line_med->_unites_prise[] = $_line_med->_ref_produit_prescription->unite_prise;
+						$_line_med->_ref_produit->voies[] = $_line_med->_ref_produit_prescription->voie;
+					 	//mbTrace($_line_med->_ref_produit_prescription);
+					 }
 	  	    }
 	  	  }
 	  	}

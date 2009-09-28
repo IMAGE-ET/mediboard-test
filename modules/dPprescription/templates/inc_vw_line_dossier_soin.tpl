@@ -110,10 +110,17 @@
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
 	  {{/if}}
-    {{if $line->_class_name == "CPrescriptionLineMedicament" && $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
-      <br />
-      ({{$line->_unite_administration}})<br />
-    {{/if}}
+		
+    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		{{if $line->_ref_produit_prescription->unite_prise}}
+			({{$line->_ref_produit_prescription->unite_prise}})
+		{{else}}
+			{{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
+	      <br />
+	      ({{$line->_unite_administration}})<br />
+	    {{/if}}
+		{{/if}}
+		{{/if}}
     </small>
     
     {{if $line->conditionnel}}

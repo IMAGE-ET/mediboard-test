@@ -30,26 +30,50 @@ $group->loadRefLivretTherapeutique('%', 1000, false);
 
 // Chargement des produits du livret thérapeutique
 foreach ($group->_ref_produits_livret as $produit_livret) {
+
 	$produit_livret->_ref_produit->loadConditionnement();
 	$produit_livret->_ref_produit->loadLibellePresentation();
+	
+	// Recherche du produit dans la table de produits hors AMM
+	$produit_prescription = new CProduitPrescription();
+	$produit_prescription->code_cip = $produit_livret->code_cip;
+	$produit_prescription->loadMatchingObject();
 	
   $product = new CProduct();
   $product->code          = $produit_livret->code_cip;
   
   $product->loadMatchingObject();
   
-  $product->name          = $produit_livret->_ref_produit->libelle;
   $product->description   = $produit_livret->commentaire;
-  
-  $product->quantity      = $produit_livret->_ref_produit->nb_presentation ? $produit_livret->_ref_produit->nb_presentation : 1;
-  $product->item_title    = $produit_livret->_ref_produit->libelle_presentation;
-  
-  $product->unit_quantity = $produit_livret->_ref_produit->nb_unite_presentation ? $produit_livret->_ref_produit->nb_unite_presentation : 1;
-  $product->unit_title    = $produit_livret->_ref_produit->libelle_unite_presentation;
-  
-  $product->packaging     = $produit_livret->_ref_produit->libelle_conditionnement;
   $product->category_id   = $category_id;
   
+	if($produit_prescription->_id){
+		$libelle = $produit_prescription->libelle;
+    $quantite = $produit_prescription->nb_presentation;
+		
+		$libelle_presentation = $produit_prescription->unite_dispensation;
+		$nb_unite_presentation = $produit_prescription->quantite; 
+		$libelle_unite_presentation = $produit_prescription->unite_prise;
+		$packaging = "";
+	} else {
+		$libelle = $produit_livret->_ref_produit->libelle;
+    $quantite = $produit_livret->_ref_produit->nb_presentation ? $produit_livret->_ref_produit->nb_presentation : 1;
+    $libelle_presentation = $produit_livret->_ref_produit->libelle_presentation;
+		$nb_unite_presentation = $produit_livret->_ref_produit->nb_unite_presentation ? $produit_livret->_ref_produit->nb_unite_presentation : 1;
+    $libelle_unite_presentation = $produit_livret->_ref_produit->libelle_unite_presentation;
+		$packaging = $produit_livret->_ref_produit->libelle_conditionnement;	
+	}
+	
+	$product->name          = $libelle;
+  $product->quantity      = $quantite;
+  $product->item_title    = $libelle_presentation;
+  $product->unit_quantity = $nb_unite_presentation;
+  $product->unit_title    = $libelle_unite_presentation;
+  $product->packaging     = $packaging;
+  
+  if($product->item_title == $product->unit_title){
+  	$product->item_title = "";
+  }
   
   // On vérifie si le fabriquant du produit est déjà dans la base de données
   if ($produit_livret->_ref_produit->nom_laboratoire) {

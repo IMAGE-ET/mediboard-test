@@ -112,7 +112,11 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
 	      {{$log->_ref_object->quantite}} 
 	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	        {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
+				  {{if $line->_ref_produit_prescription->_id}}
+					  {{$_administration->_ref_object->_ref_produit_prescription->unite_prise}} 
+          {{else}}
+	          {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
+					{{/if}}
 	      {{else}}
 	        {{$line->_unite_prise}}
 	      {{/if}}
@@ -161,7 +165,11 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      {{mb_field object=$prise field=quantite min=1 increment=1 form=addAdministration}}
 	      
 	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	        {{$line->_ref_produit->libelle_unite_presentation}}
+				  {{if $line->_ref_produit_prescription->_id}}
+					  {{$line->_ref_produit_prescription->unite_prise}}
+					{{else}}
+	          {{$line->_ref_produit->libelle_unite_presentation}}
+					{{/if}}
 	      {{else}}
 	        {{$line->_unite_prise}}
 	      {{/if}} 
@@ -258,8 +266,12 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 		      {{mb_field object=$prise field=quantite min=1 increment=1 form=addPlanification}}
 		      
 		      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-		        {{$line->_ref_produit->libelle_unite_presentation}}
-		      {{else}}
+					  {{if $line->_ref_produit_prescription->_id}}
+						  {{$line->_ref_produit_prescription->unite_prise}}
+						{{else}}
+		          {{$line->_ref_produit->libelle_unite_presentation}}
+		        {{/if}}
+					{{else}}
 		        {{$line->_unite_prise}}
 		      {{/if}} 
 		      

@@ -348,10 +348,12 @@ if(document.addLine && document.searchProd){
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicament = function(selected) {
     Element.cleanWhitespace(selected);
-    dn = selected.childNodes;
-    oFormAddLine.code_cip.value = dn[0].firstChild.nodeValue;
-    submitFormAjax(document.addLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}') } });
-    $('searchProd_produit').value = "";
+    var dn = selected.childNodes;
+		if(dn[0].className != 'informal'){
+	    oFormAddLine.code_cip.value = dn[0].firstChild.nodeValue;
+	    submitFormAjax(document.addLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}') } });
+    }
+		$('searchProd_produit').value = "";
   }
   
   var oFormProduit = document.searchProd;

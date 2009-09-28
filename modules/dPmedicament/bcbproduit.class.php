@@ -42,7 +42,7 @@ class CBcbProduit extends CBcbObject {
   var $libelle_conditionnement    = null;
   var $rapport_unite_prise        = null;
   var $dosages                    = null;
-  
+  var $dosage = null;
   var $inLivret = null;
   var $inT2A = true;
   var $ucd_view = null;
@@ -64,7 +64,7 @@ class CBcbProduit extends CBcbObject {
   var $_ref_ATC_2_code    = null;
 
   var $_prises = null;
-  
+
 	static $loaded = array();
 	static $useCount = 0;
     
@@ -142,7 +142,7 @@ class CBcbProduit extends CBcbObject {
   }
   
   
-	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche, $search_by_cis = 1) {
+	function SearchEx($Chaine, $Posit, $nbr, $TypeRecherche, $search_by_cis = 1, $hors_specialite = 0) {
 	  
 	  $tokens = explode(" ", $Chaine);
 	  $Chaine = $tokens[0];
@@ -158,22 +158,26 @@ class CBcbProduit extends CBcbObject {
 		  $query .= ", ''";
 		}
 		$query .= ", PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier, 
-										 IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_FORMES_GALENIQUES.LIBELLE_FORME_GALENIQUE, IDENT_PRODUITS.CODECIS";
-		$query .= " FROM PRODUITS_IFP, IDENT_PRODUITS, IDENT_FORMES_GALENIQUES ";
+										 IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_FORMES_GALENIQUES.LIBELLE_FORME_GALENIQUE, IDENT_PRODUITS.CODECIS, produits_codes_acl.CODE_FICHE ";
+		$query .= " FROM (PRODUITS_IFP, IDENT_FORMES_GALENIQUES ";
+		
 		
 		if ($this->distObj->LivretTherapeutique > 0){
-		  $query .= ", LivretTherapeutique ";
-		}
+		  $query .= ", LivretTherapeutique) ";
+		} else {
+		  $query .= ") ";
+    }
+		
+		$query .= " LEFT JOIN IDENT_PRODUITS ON IDENT_PRODUITS.Code_CIP = PRODUITS_IFP.Code_CIP ";
+		$query .= " LEFT JOIN PRODUITS_CODES_ACL ON PRODUITS_CODES_ACL.CODE_ACL = PRODUITS_IFP.CODE_CIP ";
+		
 		$query .= "WHERE PRODUITS_IFP.Code_Marge <> '40' ";
-		$query .= "AND IDENT_FORMES_GALENIQUES.CODE_FORME_GALENIQUE = IDENT_PRODUITS.CODE_FORME_GALENIQUE ";
+		$query .= "AND (IDENT_FORMES_GALENIQUES.CODE_FORME_GALENIQUE = IDENT_PRODUITS.CODE_FORME_GALENIQUE OR IDENT_PRODUITS.Code_CIP IS NULL)";
 		
 		if ($this->distObj->LivretTherapeutique > 0){
 			$query .= " AND PRODUITS_IFP.Code_CIP=LivretTherapeutique.CodeCIP ";
 			$query .= " AND LivretTherapeutique.CodeEtablissement=".$this->distObj->LivretTherapeutique." ";
 		}
-		//if ($TypeRecherche == 2) {
-			$query .= " AND PRODUITS_IFP.Code_CIP = IDENT_PRODUITS.Code_CIP ";
-		//}
 
 		if (($this->distObj->LivretTherapeutique > 0) && (strlen($Chaine) > 1) && $TypeRecherche == 0){
 		  $query .= " AND (PRODUITS_IFP.LIBELLELONG Like '$Chaine%' OR LivretTherapeutique.Commentaire LIKE '$Chaine%')";	  
@@ -195,16 +199,17 @@ class CBcbProduit extends CBcbObject {
 			$query .= $Chaine."%'";
 		}
 
-		
 		foreach($tokens as $_token){
 		  $query .= "AND ((PRODUITS_IFP.LIBELLELONG Like '%$_token%') OR (IDENT_PRODUITS.DOSAGE LIKE '%$_token%')) ";
 		}
 		
-		if ($this->distObj->Specialite == 1){ 
-		  $query .= " AND (PRODUITS_IFP.Code_CIP Like '0%' OR PRODUITS_IFP.Code_CIP Like '1%' OR PRODUITS_IFP.Code_CIP Like '3%' OR PRODUITS_IFP.Code_CIP Like '5%')  ";
+		if ($hors_specialite == 0){ 
+		  // Medicaments
+      $query .= " AND (PRODUITS_IFP.Code_CIP Like '0%' OR PRODUITS_IFP.Code_CIP Like '1%' OR PRODUITS_IFP.Code_CIP Like '3%' OR PRODUITS_IFP.Code_CIP Like '5%')  ";
 		}
-		if ($this->distObj->Specialite == 2){ 
-		  $query .= " AND (PRODUITS_IFP.Code_CIP Like '4%' OR PRODUITS_IFP.Code_CIP Like '6%' OR PRODUITS_IFP.Code_CIP Like '7%')";
+		if ($hors_specialite == 1){ 
+		  // Autres produits
+			$query .= " AND (PRODUITS_IFP.Code_CIP Like '4%' OR PRODUITS_IFP.Code_CIP Like '6%' OR PRODUITS_IFP.Code_CIP Like '7%')";
 		}
 		if ($this->distObj->Supprime == 1){ 
 		  $query .= " AND PRODUITS_IFP.Produit_supprime is NULL ";
@@ -230,17 +235,21 @@ class CBcbProduit extends CBcbObject {
 				$Temp->DateSupp=$row[4];
 				$Temp->Hospitalier=$row[5];
 				$Temp->CodeUCD=$row[6];
-				$Temp->ucd_view = "$row[7] $row[8]";
+				if($row[7]){
+				  $Temp->ucd_view = "$row[7] $row[8]";
+        } else {
+				  $Temp->ucd_view = $Temp->Libelle;
+				}
 				$Temp->forme_galenique = $row[9];
 				$Temp->code_cis = $row[10];
-				
-				$key = ($search_by_cis == 1) ? ($Temp->code_cis ? $Temp->code_cis : "_$Temp->CodeUCD") : $Temp->CodeCIP;
+				$Temp->code_fiche = $row[11];
+				$key = (($search_by_cis == 1) && ($Temp->code_cis || $Temp->CodeUCD)) ? ($Temp->code_cis ? $Temp->code_cis : "_$Temp->CodeUCD" ) : $Temp->CodeCIP;
 				$this->distObj->TabProduit[$key] = $Temp;
-				
 				$nbr--;
 				$cpt++;
 			}
 		}
+		
 		$this->distObj->NbTotalLigne=count($this->distObj->TabProduit);
 		return count($this->distObj->TabProduit);
 	}
@@ -251,53 +260,60 @@ class CBcbProduit extends CBcbObject {
 		$this->distObj->DataInfo = new Type_Info();
 		$this->distObj->DataInfo->Charge = 0;
 	
-		$query = "SELECT PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, PRODUITS_IFP.Code_Labo_RESIP, PRODUITS_IFP.Hospitalier ";
+		$query = "SELECT PRODUITS_IFP.Libelle_Produit, PRODUITS_IFP.LIBELLELONG, PRODUITS_IFP.Code_Labo_RESIP, PRODUITS_IFP.Hospitalier, PRODUITS_CODES_ACL.CODE_FICHE ";
+		
 		$query .= "FROM PRODUITS_IFP ";
+		$query .= " LEFT JOIN PRODUITS_CODES_ACL ON PRODUITS_CODES_ACL.CODE_ACL = PRODUITS_IFP.CODE_CIP ";
 		$query .= "WHERE PRODUITS_IFP.Code_CIP ='".$CodeCIP."'";
 		$query = strtoupper($query);
 		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
 	
+	  $this->distObj->DataInfo->Code_FICHE = "";
+	
 		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
 			$this->distObj->DataInfo->Charge = 1;
 			$this->distObj->DataInfo->Code_CIP = $CodeCIP;
-			$this->distObj->DataInfo->Libelle = $row[0];
+			$this->libelle_abrege = $this->distObj->DataInfo->Libelle = $row[0];
 			$this->distObj->DataInfo->LibelleLong = $row[1];
 			$code_labo = $row[2];
 			$this->distObj->DataInfo->Hospitalier = $row[3];
+			$this->distObj->DataInfo->Code_FICHE = $row[4];
 		}
 		
-		$query = "SELECT IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.Libelle_Abrege, ";
-		$query .= "IDENT_PRODUITS.Code_Forme_Galenique, IDENT_PRODUITS.Nb_UP2, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_PRODUITS.CODECIS ";
-		$query .= "FROM IDENT_PRODUITS ";
-		$query .= "WHERE IDENT_PRODUITS.Code_CIP=".$CodeCIP; 
-		$query = strtoupper($query);
-		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
-	
-		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
-			$this->distObj->DataInfo->Code_Ucd = $row[0];
-			$this->distObj->DataInfo->NomCommercial = $row[1];
-			$code_forme = $row[2];
-			$this->distObj->DataInfo->Nb_UCD = $row[3];
-			$this->libelle_abrege = $row[4];
-			$this->dosage = $row[5];
-			$this->code_cis = $row[6];
-		}
+		if(!$this->distObj->DataInfo->Code_FICHE){
+			$query = "SELECT IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.Libelle_Abrege, ";
+			$query .= "IDENT_PRODUITS.Code_Forme_Galenique, IDENT_PRODUITS.Nb_UP2, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_PRODUITS.CODECIS ";
+			$query .= "FROM IDENT_PRODUITS ";
+			$query .= "WHERE IDENT_PRODUITS.Code_CIP=".$CodeCIP; 
+			$query = strtoupper($query);
+			$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
 		
-		$query = "SELECT IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique,  IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique_Pluriel ";
-		$query .= "FROM IDENT_FORMES_GALENIQUES WHERE IDENT_FORMES_GALENIQUES.Code_Forme_Galenique='".$code_forme."'";
-		
-		$query = strtoupper($query);
-		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
-		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
-			$this->distObj->DataInfo->Forme = $row[0];
-			$this->distObj->DataInfo->Formes = $row[1];
-		}
-		
-		$query = "SELECT LABORATOIRES.Nom_du_Laboratoire FROM LABORATOIRES WHERE LABORATOIRES.Code_Laboratoire='".$code_labo."'";
-		$query = strtoupper($query);
-		$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
-		if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
-			$this->distObj->DataInfo->Laboratoire = $row[0];
+			if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+				$this->distObj->DataInfo->Code_Ucd = $row[0];
+				$this->distObj->DataInfo->NomCommercial = $row[1];
+				$code_forme = $row[2];
+				$this->distObj->DataInfo->Nb_UCD = $row[3];
+				$this->libelle_abrege = $row[4];
+				$this->dosage = $row[5];
+				$this->code_cis = $row[6];
+			}
+			
+			$query = "SELECT IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique,  IDENT_FORMES_GALENIQUES.Libelle_Forme_Galenique_Pluriel ";
+			$query .= "FROM IDENT_FORMES_GALENIQUES WHERE IDENT_FORMES_GALENIQUES.Code_Forme_Galenique='".$code_forme."'";
+			
+			$query = strtoupper($query);
+			$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+			if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+				$this->distObj->DataInfo->Forme = $row[0];
+				$this->distObj->DataInfo->Formes = $row[1];
+			}
+			
+			$query = "SELECT LABORATOIRES.Nom_du_Laboratoire FROM LABORATOIRES WHERE LABORATOIRES.Code_Laboratoire='".$code_labo."'";
+			$query = strtoupper($query);
+			$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
+			if ($row = $this->distObj->ClasseSQL->sql_fetch_row($result)){
+				$this->distObj->DataInfo->Laboratoire = $row[0];
+			}
 		}
 		return 1;
 	}
@@ -412,13 +428,15 @@ class CBcbProduit extends CBcbObject {
 							FROM `IDENT_PRODUITS` 
 							WHERE `CODE_CIP` = '$this->code_cip';";
     $this->_codes_prises = $ds->loadhash($query);
-   
-    foreach($this->_codes_prises as $_code_prise){
-      if($_code_prise){
-        $query = "SELECT LIBELLE_UNITE_DE_PRISE_PLURIEL FROM `POSO_UNITES_PRISE` WHERE `CODE_UNITE_DE_PRISE` = '$_code_prise';";
-        $this->_prises[] = $ds->loadResult($query);
-      }
-    }
+
+	  if(is_array($this->_codes_prises)){
+	    foreach($this->_codes_prises as $_code_prise){
+	      if($_code_prise){
+	        $query = "SELECT LIBELLE_UNITE_DE_PRISE_PLURIEL FROM `POSO_UNITES_PRISE` WHERE `CODE_UNITE_DE_PRISE` = '$_code_prise';";
+	        $this->_prises[] = $ds->loadResult($query);
+	      }
+	    }
+		}
   }
   
   function loadDosage($dosage_unite, $dosage_nb){
@@ -480,8 +498,9 @@ class CBcbProduit extends CBcbObject {
     $ds = CBcbObject::getDataSource();
 	  $query = "SELECT count(*) 
 							FROM LIVRETTHERAPEUTIQUE
-							LEFT JOIN IDENT_PRODUITS ON IDENT_PRODUITS.CODE_CIP = LIVRETTHERAPEUTIQUE.CODECIP 
-							WHERE IDENT_PRODUITS.CODE_UCD = '$this->code_ucd'	OR IDENT_PRODUITS.CODECIS = '$this->code_cis';";
+							LEFT JOIN IDENT_PRODUITS ON IDENT_PRODUITS.CODE_CIP = LIVRETTHERAPEUTIQUE.CODECIP
+							WHERE ((IDENT_PRODUITS.CODE_UCD = '$this->code_ucd'	OR IDENT_PRODUITS.CODECIS = '$this->code_cis')
+							       OR(LIVRETTHERAPEUTIQUE.CODECIP = '$this->code_cip'));";
 	  $countInLivret = $ds->loadResult($query);
     $this->inLivret = ($countInLivret > 0) ? 1 : 0;
   }
@@ -512,7 +531,7 @@ class CBcbProduit extends CBcbObject {
     return $produits;
   }
   
-  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0, $full_mode = true, $search_by_cis = 1){   
+  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $hors_specialite = 0, $max = 50, $livretTherapeutique = 0, $full_mode = true, $search_by_cis = 1){   
     // Type_recherche
     // 0 ou 256 => recherche par nom
     // 1: recherche par CIP
@@ -537,18 +556,18 @@ class CBcbProduit extends CBcbObject {
     $this->distObj->Supprime = $supprime;
         
     // 1ere recherche 
-    $this->distObj->Specialite = $specialite;
+    //$this->distObj->Specialite = $specialite;
     //$this->distObj->Search($text, 0, $max, $type_recherche);
-    $this->SearchEx($text, 0, $max, $type_recherche, $search_by_cis);
+    $this->SearchEx($text, 0, $max, $type_recherche, $search_by_cis, $hors_specialite);
     
-    $produits = array();
+    $_produits = array();
     // Parcours des produits
     foreach($this->distObj->TabProduit as $key => $prod){
       $produit = new CBcbProduit();
       $produit->load($prod->CodeCIP, $full_mode); 
-      $produits[$prod->CodeCIP] = $produit; 
+      $_produits[$prod->CodeCIP] = $produit; 
     }
-    return $produits;
+    return $_produits;
   }
   
   static function getProduitsFromCIS($code_cis){
@@ -594,15 +613,14 @@ class CBcbProduit extends CBcbObject {
     return $ds->loadList($query);
   }
   
-  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false, $specialite = 1, $search_by_cis = 1){   
+  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0, $search_libelle_long = false, $hors_specialite = 0, $search_by_cis = 1){   
     global $g;
-  	$this->distObj->Specialite = $specialite;
     $this->distObj->Supprime = 1;
     if($livretTherapeutique){
       $this->distObj->LivretTherapeutique = $g;  
     }
     //if($search_libelle_long){
-      $this->SearchEx($text, 0, $nb_max, 0, $search_by_cis);
+      $this->SearchEx($text, 0, $nb_max, 0, $search_by_cis, $hors_specialite);
     //} else {
     //  $this->distObj->Search($text, 0, $nb_max, 0);
     //}

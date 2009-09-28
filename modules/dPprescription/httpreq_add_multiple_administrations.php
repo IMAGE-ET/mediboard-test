@@ -51,7 +51,7 @@ if (count($adm) > 0) {
 		// Chargement de la ligne
 		$line = new $ad['object_class'];
 		$line->load($ad['line_id']);
-		
+		$line->loadRefProduitPrescription();
 		// Recherche des chapitres a rafraichir apres la creation des administrations
 		switch($line->_class_name){
 		  case 'CPrescriptionLineMedicament':
