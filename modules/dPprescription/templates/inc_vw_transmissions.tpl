@@ -58,9 +58,9 @@ function updateFieldsCible(selected) {
 Main.add(function () {
   prepareForm("editTrans");
   
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPprescription", "httpreq_cible_autocomplete");
-  urlAuto.autoComplete("editTrans_cible", "cible_auto_complete", {
+  var url = new Url();
+  url.setModuleAction("dPprescription", "httpreq_cible_autocomplete");
+  url.autoComplete("editTrans_cible", "cible_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsCible
   } );

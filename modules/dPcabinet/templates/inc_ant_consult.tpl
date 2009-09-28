@@ -489,7 +489,7 @@ Main.add(function () {
   var oFormTP = getForm("editLineTP");
   
   // UpdateFields de l'autocomplete de medicaments
-  updateFieldsMedicament = function(selected) {
+  updateFieldsMedicamentTP = function(selected) {
     resetEditLineTP();
     Element.cleanWhitespace(selected);
     var dn = selected.childElements();
@@ -503,7 +503,7 @@ Main.add(function () {
   var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
   urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
     minChars: 3,
-    updateElement: updateFieldsMedicament, 
+    updateElement: updateFieldsMedicamentTP, 
     callback: 
       function(input, queryString){
         return (queryString + "&produit_max=25"); 
