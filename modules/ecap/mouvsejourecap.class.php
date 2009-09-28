@@ -256,11 +256,8 @@ class CMouvSejourEcap extends CMouvementEcap {
       $prat400->valuePrefix = "PR";
       $this->trace($prat400->data, "Données praticien à importer");
   
-      $nomsPraticien     = split(" ", $prat400->consume("ZNOM"));
-      $prenomsPraticiens = split(" ", $prat400->consume("ZPRE"));
-  
-      $praticien->_user_last_name  = join(" ", $nomsPraticien);
-      $praticien->_user_first_name = join(" ", $prenomsPraticiens);
+      $praticien->_user_last_name  = $prat400->consume("ZNOM");
+      $praticien->_user_first_name = $prat400->consume("ZPRE");
       $praticien->_user_email      = $prat400->consume("MAIL");
       $praticien->_user_phone      = mbGetValue(
         $prat400->consume("ZTL1"), 
@@ -302,7 +299,11 @@ class CMouvSejourEcap extends CMouvementEcap {
     // Uniquement utilisé à la première utilisation
     $pratDefault = new CMediusers;
     $pratDefault->function_id = $this->fonction->_id;
-    $pratDefault->_user_username = substr(strtolower($prenomsPraticiens[0][0] . join($nomsPraticien, "")), 0, 16) . $CPRT;
+    
+		// Permettre plusieurs praticiens en doublant avec des CPRT différents
+    $nomsPraticien     = split(" ", $praticien->_user_last_name);
+    $prenomsPraticiens = split(" ", $praticien->_user_first_name);
+		$pratDefault->_user_username = substr(strtolower($prenomsPraticiens[0][0] . join($nomsPraticien, "")), 0, 16) . $CPRT;
     
     // Type de mediuser
     if (isset($prat400)) {
