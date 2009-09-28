@@ -34,12 +34,14 @@ changeCiviliteForSexe = function(element, assure) {
 	} 
 }
 
+var adult_age = {{$dPconfig.dPpatients.CPatient.adult_age}};
+
 changeCiviliteForDate = function(element, assure) {
 	var oForm = document.editFrm.elements;
   if ($V(element)) {
 	  var date = new Date();
 	  var naissance = $V(element).split('/')[2];
-	  if (((date.getFullYear()-15) <= naissance) && (naissance <= (date.getFullYear()))) {
+	  if (((date.getFullYear()- adult_age) <= naissance) && (naissance <= (date.getFullYear()))) {
 		  $V($(oForm[(assure ? 'assure_' : '')+'civilite']), "enf");
 	  } else {
 		  changeCiviliteForSexe(element.form.sexe);

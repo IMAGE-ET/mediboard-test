@@ -88,6 +88,18 @@ Main.add(function () {
     </td>             
   </tr>
   
+	<tr>
+    {{assign var="var" value="adult_age"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td colspan="3">
+      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+	
   {{assign var="class" value="intermax"}}
   <tr>
     <th class="category" colspan="100">Configuration Intermax</th>

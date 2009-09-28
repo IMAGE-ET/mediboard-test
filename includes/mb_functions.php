@@ -906,8 +906,7 @@ function getChildClasses($parent = "CMbObject", $properties = array()) {
  * @return array
  */
 function getMbClasses($properties = array()) {
-  global $AppUI;
-  $AppUI->getAllClasses();
+  CAppUI::getAllClasses();
   $classes = getChildClasses("CMbObject", $properties);
   foreach ($classes as $key => $class) {
     // Escaped instanciation in case of DSN errors
@@ -1066,7 +1065,10 @@ function luhn ($code) {
  * @return bool
  */
 function url_exists($url) {
+	$old = ini_set('default_socket_timeout', 5); 
+	
   $headers = @get_headers($url);
+	ini_set('default_socket_timeout', $old); 
   return (preg_match("|200|", $headers[0])); 
 }
 

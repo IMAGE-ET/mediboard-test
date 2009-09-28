@@ -935,4 +935,6 @@ $locales['CDossierMedical-codes_cim.unknown'] = 'Diagnostic non renseigné';
 $locales['CPatient-_age'] = 'Âge';
 $locales['CPatient-_age-court'] = 'Âge';
 $locales['CPatient-_age-desc'] = 'Âge';
+$locales['config-dPpatients-CPatient-adult_age'] = 'Age de passage d\'un enfant en adulte';
+$locales['config-dPpatients-CPatient-adult_age-desc'] = 'Age de passage d\'un enfant en adulte';
 ?>
