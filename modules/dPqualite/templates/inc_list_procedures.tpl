@@ -1,6 +1,6 @@
-<div style="text-align: center; font-size: 1.3em;">
+<div class="pagination">
 {{foreach from=$pages item=page key=number}}
-  <a href="#1" onclick="$V(document.forms['filter-procedures'].first, {{$page}})" style="padding: 0.4em;{{if $first == $page}}font-weight: bold;{{/if}}">{{$number+1}}</a>
+  <a class="page {{if $first == $page}}active{{/if}}" href="#1" onclick="$V(document.forms['filter-procedures'].first, {{$page}})">{{$number+1}}</a>
 {{/foreach}}
 </div>
 

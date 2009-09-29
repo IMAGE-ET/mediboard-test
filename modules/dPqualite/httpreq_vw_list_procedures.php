@@ -23,7 +23,7 @@ $ds = CSQLDataSource::get("std");
 
 // Procédure active et non annulée
 $where = array();
-$where["annule"]   = "= '0'";
+$where[] = "annule = '0' OR annule IS NULL";
 $where[] = "group_id = '$g' OR group_id IS NULL";
 $where["actif"]    = "= '1'";
 if($theme_id){
@@ -42,11 +42,12 @@ $ljoin = array();
 $ljoin["doc_ged_suivi"] = "doc_ged.doc_ged_id = doc_ged_suivi.doc_ged_id";
 $ljoin["doc_categories"] = "doc_ged.doc_categorie_id = doc_categories.doc_categorie_id";
 
+$group = "doc_ged.doc_ged_id";
 if ($sort_by == 'ref') {
   if(CAppUI::conf("dPqualite CDocGed _reference_doc")) {
-    $sort_by = "doc_categories.code, doc_chapitre_id, doc_ged.num_ref";
+    $sort_by = $group = "doc_categories.code, doc_chapitre_id, doc_ged.num_ref";
   } else {
-  	$sort_by = "doc_ged.doc_chapitre_id, doc_categories.code, doc_ged.num_ref";
+  	$sort_by = $group = "doc_ged.doc_chapitre_id, doc_categories.code, doc_ged.num_ref";
   }
 }
 else {
@@ -54,7 +55,7 @@ else {
 }
 
 $procedure = new CDocGed;
-$list_procedures = $procedure->loadList($where, "$sort_by $sort_way", "$first,20", null, $ljoin);
+$list_procedures = $procedure->loadList($where, "$sort_by $sort_way", "$first,20", $group, $ljoin);
 foreach($list_procedures as &$curr_proc){
   $curr_proc->loadRefs();
   $curr_proc->loadLastActif();
@@ -66,6 +67,8 @@ if ($count_procedures >= 20)
   $pages = range(0, $count_procedures, 20);
 else 
   $pages = array();
+  
+array_pop($pages);
 
 // Création du template
 $smarty = new CSmartyDP();
