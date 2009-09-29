@@ -13,11 +13,9 @@
 Main.add(function () {
   oFormDispensation = getForm('dispensation-urgence', true);
 
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.addParam("produit_max", 40);
-
-  urlAuto.autoComplete(oFormDispensation.produit, "produit_auto_complete", {
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.addParam("produit_max", 40);
+  url.autoComplete(oFormDispensation.produit, "produit_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsMedicament,
     callback: 
@@ -116,7 +114,7 @@ updateDispensationUrgence = function(formUrgence) {
       <input type="hidden" name="date_dispensation" value="now" />
       <input type="hidden" name="_code" value="" class="notNull" />
       
-      Produit: <input type="text" name="produit" value="" autocomplete="off" />
+      Produit: <input type="text" name="produit" value="" autocomplete="off" class="autocomplete" />
       <span id="produit_view"></span>
       <div style="display: none; text-align: left;" class="autocomplete" id="produit_auto_complete"></div>
       

@@ -8,6 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+printReceptionReport = function(service_id){
+  var url = new Url("soins", "httpreq_vw_stock_reception");
+  url.addParam("service_id", service_id);
+  url.addParam("mode", "print");
+  url.popup(800, 600, "Rapport des commandes");
+}
+</script>
+
+<button class="print" onclick="printReceptionReport()">{{tr}}Print{{/tr}}</button>
+
 <table class="tbl">
   <tr>
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>

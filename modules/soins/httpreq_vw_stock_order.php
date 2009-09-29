@@ -32,11 +32,16 @@ if ($only_service_stocks == 1) {
   
   $stocks = array();
   if ($stocks_service) {
-    foreach($stocks_service as $stock_service){
+    foreach($stocks_service as $_id => $stock_service){
+      if ($stock_service->_ref_product->cancelled) {
+        continue;
+      }
       //if (count($stocks) == 20) continue;
       $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
-      $stock->_ref_stock_service = $stock_service;
-      $stocks[$stock->_id] = $stock;
+      if ($stock && $stock->_id) {
+        $stock->_ref_stock_service = $stock_service;
+        $stocks[$stock->_id] = $stock;
+      }
     }
   }
 } 
@@ -46,6 +51,13 @@ else {
   );
   $group        = CGroups::loadCurrent();
   $stocks       = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
+  if ($stocks) {
+    foreach($stocks as $_id => $stock){
+      if ($stock->_ref_product->cancelled) {
+        unset($stocks[$_id]);
+      }
+    }
+  }
   $count_stocks = $group->countBackRefs('product_stocks', null, null, null, $ljoin);
 }
 

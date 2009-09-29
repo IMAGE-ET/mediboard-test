@@ -11,12 +11,8 @@
 <script type="text/javascript">
 function refreshLists() {
   var form = getForm("filter");
-  
-  urlGlobales = new Url;
-  urlGlobales.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
-  
-  urlNominatives = new Url;
-  urlNominatives.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
+  var urlGlobales = new Url("pharmacie", "httpreq_vw_deliveries_list");
+  var urlNominatives = new Url("pharmacie", "httpreq_vw_deliveries_list");
 
   $A(form.elements).each (function (e) {
     urlGlobales.addParam(e.name, $V(e));

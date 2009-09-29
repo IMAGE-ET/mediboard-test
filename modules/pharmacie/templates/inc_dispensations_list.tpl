@@ -18,13 +18,11 @@
   $$('a[href=#list-dispensations] small').first().update('({{$dispensations|@count}})');
   
   loadSuivi = function(sejour_id, user_id) {
-   var urlSuivi = new Url;
-   urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
-   urlSuivi.addParam("sejour_id", sejour_id);
-   urlSuivi.addParam("user_id", user_id);
-   urlSuivi.requestUpdate("list-transmissions", { waitingText: null } );
+    var url = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("user_id", user_id);
+    url.requestUpdate("list-transmissions", { waitingText: null } );
   }
-  
  
 	submitSuivi = function(oForm) {
 	  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 

@@ -18,8 +18,7 @@ Main.add(function () {
 
 function refreshPatient(){
   var form = getForm("filter");
-  var url = new Url;
-  url.setModuleAction("pharmacie","httpreq_vw_list_patients");
+  var url = new Url("pharmacie","httpreq_vw_list_patients");
   url.addParam("date_min", form._date_min.value);
   url.addParam("date_max", form._date_max.value);
   url.addParam("service_id", form.service_id.value);

@@ -25,6 +25,7 @@ class CProduct extends CMbObject {
   var $packaging         = null;
   var $renewable         = null;
   var $code_lpp          = null;
+  var $cancelled         = null;
 
   // Object References
   //    Single
@@ -76,6 +77,7 @@ class CProduct extends CMbObject {
     $specs['packaging']     = 'str';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['code_lpp']      = 'numchar length|7';
+    $specs['cancelled']     = 'bool notNull default|0';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';
@@ -87,10 +89,10 @@ class CProduct extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = ($this->code ? "[$this->code] " : '') . $this->name . ($this->packaging ? " ($this->packaging)" : '');
-    if ($this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
+    if ($this->unit_quantity !== null && $this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
 	    $this->unit_quantity = round($this->unit_quantity);
 	  }
-	  if ($this->unit_quantity === 0) $this->unit_quantity = null;
+	  if ($this->unit_quantity === 0) $this->unit_quantity = '';
 	  $this->_quantity = '';
     if ($this->item_title && $this->quantity) {
     	$this->_quantity .= "$this->quantity $this->item_title x ";
@@ -149,8 +151,8 @@ class CProduct extends CMbObject {
   	$this->completeField('unit_quantity');
   	
   	if(!$this->quantity)          $this->quantity = 1;
-    if($this->unit_quantity == 0) $this->unit_quantity = null;
-    
+    if($this->unit_quantity == 0) $this->unit_quantity = '';
+
   	if ($this->code) {
 	    $product = new CProduct();
 	    $product->code = $this->code;
@@ -165,10 +167,6 @@ class CProduct extends CMbObject {
     
       if (count($duplicates)) return 'Un produit avec ce code existe déjà';
   	}
-  }
-  function loadView()
-  {
-  	$this->loadRefsFwd();
   }
 }
 ?>

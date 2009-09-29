@@ -12,7 +12,7 @@ global $can;
 $can->needsRead();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
-$mode       = mbGetValueFromGetOrSession('mode');
+$mode       = mbGetValueFromGet('mode');
 
 // Calcul de date_max et date_min
 $date_min = mbGetValueFromGetOrSession('_date_min');
@@ -57,6 +57,10 @@ if (count($deliveries)) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('deliveries', $deliveries);
-$smarty->display('inc_stock_reception.tpl');
-
+if (!$mode) {
+  $smarty->display('inc_stock_reception.tpl');
+}
+else {
+  $smarty->display('print_stock_reception.tpl');
+}
 ?>

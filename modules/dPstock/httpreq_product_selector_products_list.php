@@ -24,6 +24,7 @@ if ($keywords) {
 	}
 	$where = array();
 	$where[] = implode(' OR ', $where_or);
+  $where[] = "cancelled IS NULL OR cancelled == '0'";
 	
   $list_products = $product->loadList($where, 'name', 20);
   $total = $product->countList($where);
@@ -39,6 +40,7 @@ if ($keywords) {
 	  $total = count($list_products);
 	}
 }
+
 $count = count($list_products);
 if ($total == $count) $total = null;
 

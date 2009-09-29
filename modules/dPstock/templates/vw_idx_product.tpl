@@ -32,7 +32,7 @@ Main.add(function () {
         </select>
         
         <select name="societe_id" onchange="productsFilter.submit();">
-          <option value="0" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
+          <option value="0">&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -51,7 +51,7 @@ Main.add(function () {
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
-	  <input type="hidden" name="product_id" value="{{$product->_id}}" />
+	    <input type="hidden" name="product_id" value="{{$product->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -127,6 +127,10 @@ Main.add(function () {
           <td>{{mb_field object=$product field="packaging"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$product field="cancelled"}}</th>
+          <td>{{mb_field object=$product field="cancelled"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
             {{if $product->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
@@ -137,7 +141,7 @@ Main.add(function () {
             <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
-        </tr>        
+        </tr>
       </table>
       </form>
     </td>
