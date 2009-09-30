@@ -698,12 +698,18 @@ class CPatient extends CMbObject {
       $this->assure_pays_insee = $this->updatePatNumPaysInsee($this->assure_pays);
     }
 		
+		$this->evalAge();
+		
 		// Détermine la civilité des patients dont la civité est inconnu (import)
 		if ($this->civilite == "guess") {
-			$this->evalAge();
 			$this->civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
-	      "enf" : ($this->sexe == "m") ? "m" : "mme";
+	      "enf" : (($this->sexe == "m") ? "m" : "mme");
 		}
+		
+		if ($this->assure_civilite == "guess") {
+      $this->assure_civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
+        "enf" : (($this->sexe == "m") ? "m" : "mme");
+    }
   }
   
   // Backward references
