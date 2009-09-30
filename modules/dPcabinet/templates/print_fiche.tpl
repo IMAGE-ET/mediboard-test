@@ -390,7 +390,12 @@
         </tr>
         <tr>
           <th style="font-weight: normal;">Etat bucco-dentaire</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->etatBucco}}</td>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->etatBucco}}
+				  <br />
+	          {{if $etatDents}}
+	            {{$etatDents|nl2br}}
+	          {{/if}}
+					</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen cardiovasculaire</th>
