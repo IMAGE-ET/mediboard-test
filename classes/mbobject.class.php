@@ -1726,16 +1726,18 @@ class CMbObject {
   
   function orderAides($aides, $depend_value_1 = null, $depend_value_2 = null) {
     foreach ($aides as $aide) { 
+		  $owner = CAppUI::tr("CAideSaisie._owner.".$aide->_owner);
+			
       // si on filtre seulement sur depend_value_1, il faut afficher les resultats suivant depend_value_2
       if ($depend_value_1) {
         $depend_field_2 = $aide->_depend_field_2;
         $depend_2 = CAppUI::tr("$this->_class_name.$aide->_depend_field_2.$aide->depend_value_2");
         if ($aide->depend_value_2){
-          $this->_aides[$aide->field][$aide->_owner][$depend_2][$aide->text] = $aide->name;
+          $this->_aides[$aide->field][$owner][$depend_2][$aide->text] = $aide->name;
         } 
         else {
           $depend_name_2 = CAppUI::tr("$this->_class_name-$depend_field_2");
-          $this->_aides[$aide->field][$aide->_owner]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
+          $this->_aides[$aide->field][$owner]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
         }
         continue;
       }
@@ -1745,11 +1747,11 @@ class CMbObject {
         $depend_field_1 = $aide->_depend_field_1;
         $depend_1 = CAppUI::tr("$this->_class_name.$aide->_depend_field_1.$aide->depend_value_1");
         if ($aide->depend_value_1){    
-          $this->_aides[$aide->field][$aide->_owner][$depend_1][$aide->text] = $aide->name;
+          $this->_aides[$aide->field][$owner][$depend_1][$aide->text] = $aide->name;
         } 
         else {
           $depend_name_1 = CAppUI::tr("$this->_class_name-$depend_field_1");
-          $this->_aides[$aide->field][$aide->_owner]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
+          $this->_aides[$aide->field][$owner]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
         }
         continue;
       }
@@ -1757,7 +1759,7 @@ class CMbObject {
       $this->_aides_all_depends[$aide->field][$aide->depend_value_1][$aide->depend_value_2][$aide->_id] = $aide;
       
       // Ajout de l'aide à la liste générale
-      $this->_aides[$aide->field]["no_enum"][$aide->_owner][$aide->text] = $aide->name;
+      $this->_aides[$aide->field]["no_enum"][$owner][$aide->text] = $aide->name;
     }
   }
   
