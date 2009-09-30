@@ -11,7 +11,6 @@ global $can;
 $can->needsAdmin();
 
 $patient = new CPatient;
-
 $fields = array("civilite", "assure_civilite");
 
 foreach ($fields as $_field) {
@@ -35,11 +34,19 @@ foreach ($fields as $_field) {
 	  $where = array();
     $where["$_field"] = "IS NULL";
     $repaired = 0;
-    foreach($patient->loadList($where) as $_patient) {
+		$max = mbGetValueFromGet("max", 1000);
+    $limit = "0, $max";
+    CAppUI::stepAjax("Patients détectés pour une correction de '%s' : %s trouvés.", 
+		  UI_MSG_OK,
+			CAppUI::tr("CPatient-$_field-desc"),
+			$patient->countList($where));
+
+
+    foreach($patient->loadList($where, null, $limit) as $_patient) {
       $_patient->$_field = "guess";
       if ($msg = $_patient->store()) {
         CAppUI::stepAjax("Echec de la correction de %s pour le patient '%s' : %s", 
-         UI_MSG_ERROR, 
+         UI_MSG_WARNING, 
          CAppUI::tr("CPatient-$_field-desc"),
          $_patient, 
          $msg);

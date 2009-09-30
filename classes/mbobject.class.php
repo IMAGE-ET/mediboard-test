@@ -582,7 +582,7 @@ class CMbObject {
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
-    
+
     $result = $this->_spec->ds->exec($request->getCountRequest($this));
     $row = $this->_spec->ds->fetchArray($result);
     
