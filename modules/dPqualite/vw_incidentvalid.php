@@ -23,6 +23,8 @@ $droitFiche = !$fiche->load($fiche_ei_id);
 $droitFiche = $droitFiche || (!$can->edit && $fiche->user_id != $AppUI->user_id);
 $droitFiche = $droitFiche || ($can->edit && !$can->admin && $fiche->user_id != $AppUI->user_id && $fiche->service_valid_user_id != $AppUI->user_id);
 
+$listCategories = array();
+
 if($droitFiche){
   // Cette fiche n'est pas valide
   $fiche_ei_id = null;
@@ -100,12 +102,14 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("catFiche"         , $catFiche);
 $smarty->assign("fiche"            , $fiche);
+$smarty->assign("filterFiche"      , new CFicheEi);
 $smarty->assign("first"            , $first);
 $smarty->assign("today"            , mbDate());
 $smarty->assign("listUsersEdit"    , $listUsersEdit);
 $smarty->assign("listCounts"       , $listCounts);
 $smarty->assign("selectedUser"     , $selectedUser);
 $smarty->assign("selected_fiche_id", $fiche_ei_id);
+$smarty->assign("listCategories"   , $listCategories);
 
 $smarty->display("vw_incidentvalid.tpl");
 ?>

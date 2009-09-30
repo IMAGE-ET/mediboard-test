@@ -219,7 +219,7 @@ class CFicheEi extends CMbObject {
               $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
-  function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0, $countOnly = false, $first = 0){
+  static function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0, $countOnly = false, $first = 0){
     $where = array();
     $where["annulee"] = "= '$annule'";
     
@@ -258,15 +258,15 @@ class CFicheEi extends CMbObject {
           $where["fiches_ei.service_valid_user_id"]   = "= '$user_id'";
           $where["fiches_ei.qualite_date_validation"] = " IS NOT NULL";
         }else{
-          if($where_termine){
-            $where = array_merge($where, $where_termine);
-          }
           $where["fiches_ei.qualite_date_controle"]   = " IS NOT NULL";
         }
         break;
       case "ANNULE":
         $where["annulee"] = "= '1'";
         break;
+    }
+    if($where_termine){
+      $where = array_merge($where, $where_termine);
     }
     $order = "fiches_ei.date_incident DESC, fiches_ei.fiche_ei_id DESC";
     $listFiches = new CFicheEi();

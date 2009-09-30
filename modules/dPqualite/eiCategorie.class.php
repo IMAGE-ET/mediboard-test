@@ -36,6 +36,11 @@ class CEiCategorie extends CMbObject {
     return $specs;
   }
   
+  function updateFormFields(){
+    parent::updateFormFields();
+    $this->_view = $this->nom;
+  }
+  
   function loadRefsBack() {
     $this->_ref_items = $this->loadBackRefs("items", "nom");
   }

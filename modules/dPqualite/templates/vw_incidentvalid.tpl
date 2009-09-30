@@ -5,8 +5,7 @@ function filterAllEi(field){
     $("tab-incident").select('a[href="#ALL_TERM"] span.user')[0].update(field.options[field.selectedIndex].text);
   }
   
-  var url = new Url;
-  url.setModuleAction("dPqualite", "httpreq_vw_allEi");
+  var url = new Url("dPqualite", "httpreq_vw_allEi");
   url.addElement(field);
   url.requestUpdate('ALL_TERM');
 }
@@ -21,7 +20,8 @@ function refusMesures(oForm){
   if(oForm.remarques.value == ""){
     alert("{{tr}}CFicheEi-msg-validdoc{{/tr}}");
     oForm.remarques.focus();
-  }else{
+  }
+  else {
     oForm.service_date_validation.value = "";
     oForm._validation.value= 1;
     oForm.submit();
@@ -36,32 +36,52 @@ function saveVerifControle(oForm){
 
 function loadListFiches(type, first) {
   if ($(type).empty() || first) {
-    var url = new Url;
-    url.setModuleAction("dPqualite", "httpreq_vw_allEi");
+    var url = new Url("dPqualite", "httpreq_vw_allEi");
     url.addParam("selected_fiche_id", '{{$selected_fiche_id}}');
     url.addParam("type", type);
     url.addParam("first", first);
+    url.addFormData(getForm("filter-ei"));
     url.requestUpdate(type);
   }
 }
 
-function printIncident(ficheId){
-  var url = new Url;
-  url.setModuleAction("dPqualite", "print_fiche"); 
-  url.addParam("fiche_ei_id", ficheId);
-  url.popup(700, 500, "printFicheEi");
-  return;
+function filterFiches() {
+  $$("#tab-incident a").each(function(a){
+    $(Url.parse(a.href).fragment).update();
+  });
+  loadListFiches(tab.activeContainer);
+  return false;
 }
 
+function printIncident(ficheId){
+  var url = new Url("dPqualite", "print_fiche"); 
+  url.addParam("fiche_ei_id", ficheId);
+  url.popup(700, 500, "printFicheEi");
+}
+
+var tab;
 Main.add(function() {
-  var tab = Control.Tabs.create('tab-incident', true);
-  loadListFiches(tab.activeContainer.id, '{{$first}}');
+  tab = Control.Tabs.create('tab-incident', true);
+  loadListFiches(tab.activeContainer, '{{$first}}');
 });
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
+      <form name="filter-ei" action="?" method="get" onsubmit="return filterFiches()">
+        {{mb_field object=$filterFiche field=elem_concerne defaultOption=" &ndash; Cet élément concerne" onchange="this.form.onsubmit()"}}
+        
+        <!--<select name="evenements" onchange="this.form.onsubmit()">
+          <option value=""> &ndash; Catégorie</option>
+          {{foreach from=$listCategories item=category}}
+            <option value="{{$category->_id}}">{{$category}}</option>
+          {{/foreach}}
+        </select>-->
+        
+        <button class="search">{{tr}}Filter{{/tr}}</button>
+      </form>
+      
       <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin && $can->edit}}
         <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
@@ -301,8 +321,8 @@ Main.add(function() {
       </table>
       </form>
     {{else}}
-    <div class="big-info">
-      Veuillez sélectionner un incident
+    <div class="small-info">
+      Veuillez séléctionner un incident
     </div>
     {{/if}}
     </td>

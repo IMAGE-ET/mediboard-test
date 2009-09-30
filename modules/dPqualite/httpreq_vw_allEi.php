@@ -15,11 +15,17 @@ $first             = mbGetValueFromGetOrSession("first");
 $selected_user_id  = mbGetValueFromGetOrSession("selected_user_id");
 $selected_service_valid_user_id = mbGetValueFromGetOrSession("selected_service_valid_user_id");
 $selected_fiche_id = mbGetValueFromGetOrSession("selected_fiche_id");
+$elem_concerne     = mbGetValueFromGet("elem_concerne");
+$evenements        = mbGetValueFromGet("evenements");
 
 $listUsersTermine = new CMediusers;
 
 $user_id = null;
-$where = null;
+$where = array();
+if ($elem_concerne) {
+  $where["elem_concerne"] = "= '$elem_concerne'";
+}
+
 if($type == "AUTHOR" || ($can->edit && !$can->admin)){
   $user_id = $AppUI->user_id;
 }
@@ -27,7 +33,6 @@ if($type == "AUTHOR" || ($can->edit && !$can->admin)){
 $list_service_valid_users = new CMediusers;
 if($type == "ALL_TERM" && $can->admin){
   $listUsersTermine = $listUsersTermine->loadListFromType();
-  $where = array();
   if($selected_user_id){
     $where["fiches_ei.user_id"] = "= '$selected_user_id'";
   }
