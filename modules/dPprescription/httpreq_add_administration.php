@@ -47,6 +47,7 @@ if($list_administrations){
     $line->loadRefsFwd();
     if($line->_class_name == "CPrescriptionLineMedicament"){
       $line->_ref_produit->loadConditionnement();
+			$line->loadRefProduitPrescription();
     }
     $administrations[$administration->_id] = $administration;
   }
@@ -60,6 +61,7 @@ if($planification_id){
   $line->loadRefsFwd();
   if($line->_class_name == "CPrescriptionLineMedicament"){
     $line->_ref_produit->loadConditionnement();
+		$line->loadRefProduitPrescription();
   }
 }
 
@@ -88,7 +90,7 @@ foreach($hours as &$_hour){
   $_hour = str_pad($_hour, 2, "0", STR_PAD_LEFT);
 }
 
-$line->loadRefProduitPrescription();
+
       
 // Transmission
 $transmission = new CTransmissionMedicale();
