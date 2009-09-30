@@ -60,11 +60,12 @@ Main.add(function () {
   <!-- Merge only for admin -->
   {{assign var="var" value="merge_only_admin"}}
   <tr>
-   <th colspan="3">
+  
+    <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>    
-   </th>
+    </th>
     <td  colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
@@ -263,3 +264,4 @@ function startINSEE() {
 
 {{include file=inc_configure_medecins.tpl}}
 
+{{include file=inc_configure_actions.tpl}}

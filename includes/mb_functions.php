@@ -466,6 +466,37 @@ class CMbDate {
     "second" =>        1, // 1 
    );
     
+  /** Compute real relative achieved gregorian durations in years and months
+   * @param date $from Starting time
+   * @param date $to Ending time, now if null
+   * return array[int] Number of years and months
+   */
+	static function achievedDurations($from, $to = null) {
+    $achieved = array(
+      "year" => "??",
+      "month" => "??",
+		);
+		
+    if ($from == "0000-00-00" || !$from) {
+      return $achieved;
+    }
+
+    if (!$to) {
+      $to = mbDate();
+    }
+    
+		list($yf, $mf, $df) = explode("-", $from);
+    list($yt, $mt, $dt) = explode("-", $to);
+
+    $achieved["month"] = 12*($yt-$yf) + ($mt-$mf);
+    if ($mt == $mf && $dt > $df) {
+      $achieved["month"]--;
+    }
+		
+		$achieved["year"] = intval($achieved["month"] / 12); 
+		return $achieved;
+	}
+	
   /**
    * Compute user friendly approximative duration between two date time
    * @param datetime $from Starting time

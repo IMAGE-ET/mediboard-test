@@ -121,6 +121,7 @@ class CPatient extends CMbObject {
   
   // Form fields
   var $_age         = null;
+  var $_age_assure  = null;
   var $_civilite    = null;
   var $_civilite_long = null;
   var $_longview    = null;
@@ -281,6 +282,7 @@ class CPatient extends CMbObject {
     $specs["_assure_pays_naissance_insee"]= "str";
     $specs["_art115"]                     = "bool";
     $specs["_age"]                        = "num";
+    $specs["_age_assure"]                 = "num";
     return $specs;
   }
   
@@ -575,47 +577,32 @@ class CPatient extends CMbObject {
   
   /**
    * Calcul l'âge du patient en années
+   * @param date $date Date de référence pour le calcul, maintenant si null
+   * @return int l'age du patient en années
    */
-  function evalAge($date = null){
-    $annee = $date ? substr($date, 0, 4) : date("Y");
-    $mois  = $date ? substr($date, 5, 2) : date("m");
-    $jour  = $date ? substr($date, 8, 2) : date("d");
-    
-    if ($this->naissance == "0000-00-00" || !$this->naissance) {
-      $this->_age = "??";
-      return;
-    }
-    
-    list($anneeN, $moisN, $jourN) = explode("-", $this->naissance);
-
-    $this->_age = $annee - $anneeN;
-
-    // Ajustement en fonction des mois et des jours
-    if ($mois < $moisN || ($jour < $jourN && $mois == $moisN)) {
-      $this->_age--;
-    }
+  function evalAge($date = null) {
+  	$achieved = CMbDate::achievedDurations($this->naissance, $date);
+		return $this->_age = $achieved["year"];
   }
   
   /**
+   * Calcul l'âge de l'assuré en années
+   * @param date $date Date de référence pour le calcul, maintenant si null
+   * @return int l'age de l'assuré en années
+   */
+  function evalAgeAssure($date = null) {
+    $achieved = CMbDate::achievedDurations($this->assure_naissance, $date);
+    return $this->_age_assure = $achieved["year"];
+  }
+
+  /**
    * Calcul l'âge du patient en mois
+   * @param date $date Date de référence pour le calcul, maintenant si null
+   * @return int l'age du patient en mois
    */
   function evalAgeMois($date = null){
-    $annee = $date ? substr($date, 0, 4) : date("Y");
-    $mois  = $date ? substr($date, 5, 2) : date("m");
-    $jour  = $date ? substr($date, 8, 2) : date("d");
-    
-    if ($this->naissance == "0000-00-00" || !$this->naissance) {
-      return 0;
-    }
-    
-    list($anneeN, $moisN, $jourN) = explode("-", $this->naissance);
-
-    $nbMois = 12*($annee - $anneeN);
-    $nbMois += $mois - $moisN;
-    if($jour < $jourN && $mois == $moisN) {
-      $nbMois--;
-    }
-    return $nbMois;
+    $achieved = CMbDate::achievedDurations($this->naissance, $date);
+    return $achieved["month"];
   }
   
   /**
@@ -692,16 +679,17 @@ class CPatient extends CMbObject {
       $this->assure_pays_insee = $this->updatePatNumPaysInsee($this->assure_pays);
     }
 		
-		$this->evalAge();
-		
-		// Détermine la civilité des patients dont la civité est inconnu (import)
+		// Détermine la civilité du patient automatiquement (utile en cas d'import)
 		if ($this->civilite == "guess") {
+      $this->evalAge();
 			$this->civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
 	      "enf" : (($this->sexe == "m") ? "m" : "mme");
 		}
 		
+    // Détermine la civilité de l'assure automatiquement (utile en cas d'import)
 		if ($this->assure_civilite == "guess") {
-      $this->assure_civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
+      $this->evalAgeAssure();
+      $this->assure_civilite = ($this->_age_assure < CAppUI::conf("dPpatients CPatient adult_age")) ?
         "enf" : (($this->sexe == "m") ? "m" : "mme");
     }
   }
