@@ -70,7 +70,11 @@ Main.add(function () {
 	  {{mb_field object=$prise field=quantite size="3" increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg');"}}	  
 	  
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	  {{$prise->unite_prise}}
+			<select name="unite_prise" onchange="submitFormAjax(this.form, 'systemMsg');">
+			   {{foreach from=$line->_unites_prise item=_unite_prise}}
+			   <option value="{{$_unite_prise}}" {{if $prise->unite_prise == $_unite_prise}}selected="selected"{{/if}}>{{$_unite_prise}}</option>
+			   {{/foreach}}
+			</select>
 	  {{/if}}
 	  {{if $line->_class_name == "CPrescriptionLineElement"}}
 		  {{$line->_unite_prise}}
@@ -87,16 +91,16 @@ Main.add(function () {
 	  
 	  <!-- Cas des fois par -->
 	  {{if $prise->nb_fois && $prise->unite_fois}}
-      {{mb_value object=$prise field=nb_fois size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}} fois par 
-			{{mb_value object=$prise field=unite_fois onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
+      {{mb_value object=$prise field=nb_fois}} fois par 
+			{{mb_value object=$prise field=unite_fois}}
 		{{/if}}
   
     <!-- Cas des tous les -->
     {{if $prise->unite_tous_les && (!$prise->unite_fois || ($prise->unite_fois == "jour" && $prise->nb_tous_les))}}
       tous les
-			{{mb_value object=$prise field=nb_tous_les size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}				   
-			{{mb_value object=$prise field=unite_tous_les onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
-		  (J+{{mb_value object=$prise field=decalage_prise size=1 increment=1 min=0 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}})
+			{{mb_value object=$prise field=nb_tous_les}}				   
+			{{mb_value object=$prise field=unite_tous_les}}
+		  (J+{{mb_value object=$prise field=decalage_prise}})
 		{{/if}}
 		
 		<!-- Cas du decalage par rapport à l'intervention -->

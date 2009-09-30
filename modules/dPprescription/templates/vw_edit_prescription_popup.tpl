@@ -96,7 +96,6 @@ Main.add(function () {
           <!-- Séjour -->
           <td id="sejour" class="step {{if $prescription->type == 'sejour'}}selected{{/if}}">
 	          {{if $prescription_sejour->_id}}
-	            
 		          <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '');">
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
@@ -111,7 +110,7 @@ Main.add(function () {
 						          </select>
 					         </form>
 			            {{/if}}
-		          {{if $prescription->type == "sejour" && !$prescription_sortie->_id && $is_praticien}}
+		          {{if $prescription->type == "sejour" && !$prescription_sortie->_id}}
 			          <form name="addPrescriptionSejour" method="post" action="">
 				          <input type="hidden" name="m" value="dPprescription" />
 				          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />

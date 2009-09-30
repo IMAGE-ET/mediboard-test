@@ -20,6 +20,8 @@ if($typeDate == "Med"){
   // Medicaments
 	$prescription_line = new CPrescriptionLineMedicament();
   $prescription_line->load($prescription_line_id);
+  // Calcul des unites de prises
+  $prescription_line->loadRefsFwd();
   $type = "Med";
 } else {
   // Elements
