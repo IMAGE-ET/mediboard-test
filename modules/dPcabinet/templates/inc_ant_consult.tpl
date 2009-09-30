@@ -295,9 +295,7 @@ Main.add(function () {
                 onComplete: function(){
                   DossierMedical.reloadDossiersMedicaux();
                   resetEditLineTP();
-                  $('addPosoLine').update('');
-                  this.form.token_poso.value = '';
-                  this.form.commentaire.value = '';
+                  resetFormTP();
                 }
                } ); this.form.produit.focus();">
                 {{tr}}Add{{/tr}} un traitement
@@ -513,6 +511,12 @@ Main.add(function () {
   resetEditLineTP = function(){
     $("_libelle").update("");
     oFormTP.code_cip.value = '';
+  }
+  
+  resetFormTP = function(){
+    $V(oFormTP.commentaire, '');
+    $V(oFormTP.token_poso, '');
+    $('addPosoLine').update('');                   
   }
 {{/if}}
 </script>
