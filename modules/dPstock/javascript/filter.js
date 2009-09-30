@@ -9,33 +9,34 @@
  */
  
 /** A filter function, useful */
-function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
-  this.sForm   = sForm;
-  this.sModule = sModule;
-  this.sAction = sAction;
-  this.sList   = sList;
-  this.aFields = aFields;
-  this.sHiddenColumn = sHiddenColumn;
-  this.selected = 0;
+var Filter = Class.create({
+  initialize: function(sForm, sModule, sAction, sList, aFields, sHiddenColumn){
+    this.sForm = sForm;
+    this.sModule = sModule;
+    this.sAction = sAction;
+    this.sList = sList;
+    this.aFields = aFields;
+    this.sHiddenColumn = sHiddenColumn;
+    this.selected = 0;
+    
+    var oForm = this.getForm();
+    this.aFields.each(function(f){
+      var oElement = $(oForm.elements[f]);
+      if (oElement && oElement.observe) {
+        oElement.observe('change', this.resetRange.bindAsEventListener(this));
+      }
+    }, this);
+  },
   
-  element = this;
-  oForm = getForm(this.sForm);
-  this.aFields.each (function (f) {
-    oElement = $(oForm[f]);
-    if (oElement && oElement.observe) {
-      oElement.observe('change', element.resetRange.bindAsEventListener(element));
-    }
-  });
-}
+  getForm: function(){
+    return getForm(this.sForm);
+  },
 
-Filter.prototype = {
   submit: function (fieldToSelect) {
-    oForm = document.forms[this.sForm];
-    element = this;
+    var oForm = this.getForm();
     
     makeRanges = function (total, step) {
-      var ranges = [];
-      var i = 0;
+      var ranges = [], i = 0;
       while(total > 0) {
         ranges.push(i*step+','+step);
         total-=step;
@@ -45,16 +46,17 @@ Filter.prototype = {
     }
 
     makeRangeSelector = function () {
-      element.sList.each(function (list) {
+      var form = this.getForm();
+
+      this.sList.each(function (list) {
         var count = $(list+'-total-count');
         if (count) {
           count = parseInt(count.innerHTML);
         }
         
-        var form = document.forms[element.sForm];
         var field = form.limit;
-  
         var rangeSel = new Element('div', {className:'pagination'});
+        
         if (count > 20) {
           var total = count;
           var r = makeRanges(total, 20);
@@ -62,24 +64,25 @@ Filter.prototype = {
           r.each(function (e, k) {
             var a = new Element('a', {href: '#1', className: 'page'})
                         .update(k+1)
-                        .observe('click', function () {$V(field, e); form.onsubmit(); element.selected = k;});
-            if (k == element.selected) {
+                        .observe('click', function () {$V(field, e); form.onsubmit(); this.selected = k;}.bind(this));
+                        
+            if (k == this.selected) {
               a.addClassName('active');
             }
             rangeSel.insert(a);
-          });
+          }, this);
         }
         $(list).insert(rangeSel);
-      });
-    }
+      }, this);
+    }.bind(this);
     
     if (!Object.isArray(this.sList)) {
       this.sList = [this.sList];
     }
     this.sList.each(function (list) {
-      var url = new Url(element.sModule, element.sAction);
+      var url = new Url(this.sModule, this.sAction);
   
-      element.aFields.each (function (f) {
+      this.aFields.each (function (f) {
         if (oForm[f]) {
           url.addParam(f, $V(oForm[f]));
         }
@@ -94,18 +97,18 @@ Filter.prototype = {
         }
       }
       
-      if (element.sHiddenColumn) {
-        url.addParam("hidden_column", element.sHiddenColumn);
+      if (this.sHiddenColumn) {
+        url.addParam("hidden_column", this.sHiddenColumn);
       }
       
       url.requestUpdate(list, { waitingText: null, onComplete: makeRangeSelector } );
-    });
+    }, this);
 
     return false;
   },
   
   empty: function (fields) {
-    oForm = document.forms[this.sForm];
+    var oForm = this.getForm();
     if (!fields) {
       this.aFields.each (function (f) {
         if (oForm[f]) {
@@ -131,6 +134,6 @@ Filter.prototype = {
   
   resetRange: function () {
     this.selected = 0;
-    $V(document.forms[this.sForm].limit, '');
+    $V(this.getForm().limit, '');
   }
-}
+});

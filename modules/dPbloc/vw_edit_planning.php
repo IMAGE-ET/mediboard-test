@@ -33,14 +33,17 @@ $listSalles = $bloc->_ref_salles;
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
-if($plagesel->plageop_id){
+if($plagesel->_id){
   $arrKeySalle = array_keys($listSalles);
   if(!in_array($plagesel->salle_id,$arrKeySalle) || $plagesel->date!=$date) {
     $plageop_id = 0;
     $plagesel = new CPlageOp;
   }
 }
-
+else {
+  $plagesel->debut = CPlageOp::$hours_start.":00:00";
+  $plagesel->fin = CPlageOp::$hours_start.":00:00";
+}
 
 // Liste des Specialités
 $function = new CFunctions;
@@ -52,7 +55,6 @@ foreach($specs as $key => $spec) {
 // Liste des Anesthésistes
 $mediuser = new CMediusers;
 $anesths = $mediuser->loadAnesthesistes();
-
 
 $_temps_inter_op = range(0,59,15);
 

@@ -60,13 +60,13 @@ function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
 function getLabelFor(oElement) {
   if (!oElement.form) return null;
   
-  var aLabels = $(oElement.form).select("label");
-  var iLabel = 0;
-  while (oLabel = aLabels[iLabel++]) {
+  var aLabels = $(oElement.form).select("label"),
+      oLabel, i = 0;
+  while (oLabel = aLabels[i++]) {
     if (oElement.id == oLabel.htmlFor) {
       return oLabel;
     }
-  } 
+  }
   return null; 
 }
 
@@ -168,13 +168,10 @@ function putHelperContent(oElem, sFieldSelect) {
     
     // Filter helper elements
     var aFound = element.name.match(/_helpers_(.*)/);
-    if (!aFound) {
-    	continue;
-    }
+    if (!aFound) continue;
     
     Assert.that(aFound.length == 2, "Helper field name '%s' incorrect", element.name);
     Assert.that(element.nodeName == "SELECT", "Helper field name '%s' should be a select", element.name);
-    
     
     // Check correspondance
 		var aHelperParts = aFound[1].split("-");
@@ -191,14 +188,14 @@ function putHelperContent(oElem, sFieldSelect) {
 }
 
 function notNullOK(oEvent) {
-  var oElement = oEvent.element ? oEvent.element() : oEvent;
+  var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
   if (oLabel = oElement.getLabel()) {
     oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "notNull");
   }
 }
 
 function canNullOK(oEvent) {
-  var oElement = oEvent.element ? oEvent.element() : oEvent;
+  var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
   if (oLabel = oElement.getLabel()) {
     oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "canNull");
   } 
@@ -321,9 +318,8 @@ function prepareForm(oForm, bForcePrepare) {
 		    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
 		  }
 		  
-		// Form preparation
-		  
-		  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
+		  // Form preparation
+		  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute hg
 		  	sFormName = oForm.cloneNode(false).getAttribute("name");
 		  else
 		  	sFormName = oForm.getAttribute("name");
@@ -331,26 +327,19 @@ function prepareForm(oForm, bForcePrepare) {
 		  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
 		
 		  // Build label targets
-		  var aLabels = oForm.select("label");
-		  var iLabel = 0;
-		  var oLabel = null;
-		  var sFor = null;
-		  while (oLabel = aLabels[iLabel++]) {
-		    // oLabel.getAttribute("for") is not accessible in IE
-		    if (sFor = oLabel.htmlFor) {
-		      if (sFor.indexOf(sFormName) !== 0) {
-		        oLabel.htmlFor = sFormName + "_" + sFor;
-		      }
+		  var aLabels = oForm.select("label"),
+          oLabel = null,
+          sFor = null, i = 0;
+		  while (oLabel = aLabels[i++]) {
+		    if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
+		      oLabel.htmlFor = sFormName + "_" + sFor;
 		    }
 		  }
 		
 		  // For each element
 		  var iElement = 0;
 		  var oElement = null;
-		  while (oElement = oForm.elements[iElement++]) {
-		  	oElement = $(oElement);
-		  	
-		  	var elementClassNames = $w(oElement.className);
+		  while (oElement = $(oForm.elements[iElement++])) {
 		  	var sElementName = oElement.getAttribute("name");
 		  	var props = oElement.getProperties();
 		
@@ -362,7 +351,7 @@ function prepareForm(oForm, bForcePrepare) {
 		    // Create id for each element if id is null
 		    if (!oElement.id && sElementName) {
 		      oElement.id = sFormName + "_" + sElementName;
-		      if (oElement.type == "radio") {
+		      if (oElement.type === "radio") {
 		        oElement.id += "_" + oElement.value;
 		      }
 		    }
@@ -375,14 +364,14 @@ function prepareForm(oForm, bForcePrepare) {
 		    }
         
             // Can null
-            if (elementClassNames.indexOf("canNull") != -1) {
+            if (props.canNull) {
               oElement.observe("change", canNullOK)
                       .observe("keyup",  canNullOK)
                       .observe("ui:change", canNullOK);
             }
         
             // Not null
-            if (elementClassNames.indexOf("notNull") != -1) {
+            if (props.notNull) {
               oElement.observe("change", notNullOK)
                       .observe("keyup",  notNullOK)
                       .observe("ui:change", notNullOK);
@@ -409,7 +398,7 @@ function prepareForm(oForm, bForcePrepare) {
         oElement.fire("ui:change");
 
 		    // Select tree
-		    if (elementClassNames.indexOf("select-tree") != -1 && Prototype.Browser.Gecko) {
+		    if (props["select-tree"] && Prototype.Browser.Gecko) {
 		      oElement.buildTree();
 		    }
 		
@@ -419,12 +408,22 @@ function prepareForm(oForm, bForcePrepare) {
 		    }
 		    
 		    // Default autocomplete deactivation
-		    if (oElement.type == "text") {
+		    if (oElement.type === "text") {
 		    	oElement.writeAttribute("autocomplete", "off");
 		    }
+        
+        // Won't make it resizable on IE
+        if ((Prototype.Browser.Gecko || Prototype.Browser.Opera) && 
+            oElement.type === "textarea" && 
+            oElement.id !== "htmlarea") {
+          oElement.setResizable({autoSave: true, step: 'font-size'});
+        }
 		    
 		    // Focus on first text input
-		    if (bGiveFormFocus && oElement.type == "text" && oElement.visible() && oElement.clientWidth > 0 && !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly")) {
+		    if (bGiveFormFocus && oElement.clientWidth > 0 && 
+            !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
+            oElement.type === "text") {
+          
           var i, applets = document.applets;
           if (applets.length) {
             window._focusElement = oElement;
@@ -450,11 +449,6 @@ function prepareForm(oForm, bForcePrepare) {
 		      bGiveFormFocus = false;
 		    }
 		    
-		    // Won't make it resizable on IE
-		    if (oElement.type == "textarea" && oElement.id != "htmlarea" && (Prototype.Browser.Gecko || Prototype.Browser.Opera)) {
-		      oElement.setResizable({autoSave: true, step: 'font-size'});
-		    }
-		    
 		    // We mark this form as prepared
 		    oForm.addClassName("prepared");
 		  }
@@ -464,10 +458,9 @@ function prepareForm(oForm, bForcePrepare) {
 
 function prepareForms() {
   // For each form
-  var iForm = 0;
-  var oForm = null;
-  while (oForm = document.forms[iForm++]) {
-    prepareForm(oForm);
+  var i = 0, form = null;
+  while (form = document.forms[i++]) {
+    prepareForm(form);
   }
 }
 
@@ -480,22 +473,18 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
     }  
   }
 
-  var url = new Url;
-  var iElement = 0;
-  var oElement = null;
-  while (oElement = oForm.elements[iElement++]) {
+  var url = new Url, i = 0, oElement;
+  while (oElement = oForm.elements[i++]) {
     if (!oElement.disabled && ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked)) {
       url.addParam(oElement.name, oElement.value);
     }
   }
 
-  var oDefaultOptions = {
+  oOptions = Object.extend({
     method : oForm.method
-  };
- 
-  Object.extend(oDefaultOptions, oOptions);
+  }, oOptions);
 
-  url.requestUpdate(ioTarget, oDefaultOptions);
+  url.requestUpdate(ioTarget, oOptions);
 }
 
 /**
@@ -518,10 +507,8 @@ function onSubmitFormAjax(oForm, oUserOptions) {
   }
 
 	// Build url
-  var url = new Url;
-  var iElement = 0;
-  var oElement = null;
-  while (oElement = oForm.elements[iElement++]) {
+  var url = new Url, i = 0, oElement;
+  while (oElement = oForm.elements[i++]) {
     if (!oElement.disabled && ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked)) {
       url.addParam(oElement.name, oElement.value);
     }
@@ -544,21 +531,18 @@ function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
     }  
   }
   
-  var url = new Url;
-  var iElement = 0;
-  var oElement = null;
-  while (oElement = oForm.elements[iElement++]) {
+  var url = new Url, i = 0, oElement;
+  while (oElement = oForm.elements[i++]) {
     if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
       url.addParam(oElement.name, oElement.value);
     }
   }
 
-  var oDefaultOptions = {
+  oOptions = Object.extend({
     method : "post"
-  };
-  Object.extend(oDefaultOptions, oOptions);
+  }, oOptions);
 
-  url.requestUpdateOffline(ioTarget, oDefaultOptions);
+  url.requestUpdateOffline(ioTarget, oOptions);
 }
 
 Object.extend(Form, {

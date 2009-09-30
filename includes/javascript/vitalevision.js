@@ -265,8 +265,8 @@ var VitaleVision = {
         }
       }
     }
-    benef = benefList[id],
-    ident = benef.getElementsByTagName("ident")[0],
+    benef = benefList[id];
+    ident = benef.getElementsByTagName("ident")[0];
     amo = benef.getElementsByTagName("amo")[0];
     
     $V(form.assure_nom, getNodeValue("nomUsuel", ident));

@@ -166,7 +166,7 @@ Object.extend(ElementChecker, {
       this.addError("moreThan", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && (this.oCompare.source <= this.oCompare.target))
-        this.addError("moreThan", "'%s' n'est pas strictement supérieur à '%s'", this.sValue,  this.oTargetElement.value);
+        this.addError("moreThan", printf("'%s' n'est pas strictement supérieur à '%s'", this.sValue,  this.oTargetElement.value));
     },
     
     // moreEquals
@@ -515,13 +515,12 @@ function checkForm(oForm) {
   
   var oElementFirstFailed = null;
   var oFormErrors = [];
-  var i = 0;
   
   // For each element in the form
   oForm.getElementsEx().each(function (oElement) {
     if (!oElement || oElement.disabled) return;
     var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
-    var oFirstElement = (isArray?oElement[0]:oElement);
+    var oFirstElement = isArray ? oElement[0] : oElement;
     
     if (oFirstElement.getAttribute("readonly")) return;
     
@@ -529,6 +528,7 @@ function checkForm(oForm) {
     ElementChecker.prepare(oElement);
     var sMsgFailed = ElementChecker.sLabel ? ElementChecker.sLabel : printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
     var oErrors = ElementChecker.checkElement();
+    var oLabel = oFirstElement.getLabel();
     
     // If errors, we append them to the error object
     if (oErrors.length) {

@@ -14,7 +14,7 @@ function refreshLists() {
     
   refreshOrders();
   
-  var url = new Url("soins", "httpreq_vw_stock_reception");
+  url = new Url("soins", "httpreq_vw_stock_reception");
   url.addFormData(form);
   url.requestUpdate("list-reception", { waitingText: null } );
   
@@ -63,11 +63,11 @@ Main.add(function () {
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td>{{mb_field object=$delivrance field=_date_min form=filter register=true}}</td>
+      <td>{{mb_field object=$delivrance field=_date_min form=filter register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td>{{mb_field object=$delivrance field=_date_max form=filter register=true}}</td>
+      <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
       <td>
-        <select name="service_id">
+        <select name="service_id" onchange="$V(this.form.start, 0); refreshOrders()">
         {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}

@@ -586,10 +586,7 @@ class CPatient extends CMbObject {
       return;
     }
     
-    $naissance = explode("-", $this->naissance);
-    $jourN  = $naissance[2];
-    $moisN  = $naissance[1];
-    $anneeN = $naissance[0];
+    list($anneeN, $moisN, $jourN) = explode("-", $this->naissance);
 
     $this->_age = $annee - $anneeN;
 
@@ -611,10 +608,7 @@ class CPatient extends CMbObject {
       return 0;
     }
     
-    $naissance = explode("-", $this->naissance);
-    $jourN  = $naissance[2];
-    $moisN  = $naissance[1];
-    $anneeN = $naissance[0];
+    list($anneeN, $moisN, $jourN) = explode("-", $this->naissance);
 
     $nbMois = 12*($annee - $anneeN);
     $nbMois += $mois - $moisN;
@@ -628,7 +622,7 @@ class CPatient extends CMbObject {
    * Calcul l'âge du patient en semaines
    */
   function evalAgeSemaines($date = null){
-    $jours = evalAgeJours($date);
+    $jours = $this->evalAgeJours($date);
     return intval($jours/7);
   }
   

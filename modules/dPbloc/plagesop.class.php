@@ -64,9 +64,9 @@ class CPlageOp extends CMbObject {
   }
   
   function getBackProps() {
-      $backProps = parent::getBackProps();
-      $backProps["operations"] = "COperation plageop_id";
-     return $backProps;
+    $backProps = parent::getBackProps();
+    $backProps["operations"] = "COperation plageop_id";
+    return $backProps;
   }
   
   function getProps() {
@@ -78,12 +78,13 @@ class CPlageOp extends CMbObject {
     $specs["spec_repl_id"]     = "ref class|CFunctions";
     $specs["date"]             = "date notNull";
     $specs["debut"]            = "time notNull";
-    $specs["fin"]              = "time notNull";
+    $specs["fin"]              = "time notNull moreThan|debut";
     $specs["temps_inter_op"]   = "time notNull";
     $specs["max_intervention"] = "num min|0";
     $specs["delay_repl"]       = "num min|0";
     $specs["actes_locked"]     = "bool";
 
+    // TODO: get rid of these form fields !
     $specs["_heuredeb"]        = "num min|0 max|23";
     $specs["_minutedeb"]       = "num min|0 max|59";
     $specs["_heurefin"]        = "num min|0 max|23";
@@ -231,10 +232,8 @@ class CPlageOp extends CMbObject {
   function check() {
     // Data checking
     $msg = null;
-    if(!$this->plageop_id) {
-      if (!$this->chir_id && !$this->spec_id) {
-        $msg .= "Vous devez choisir un praticien ou une spécialité<br />";
-      }
+    if(!$this->plageop_id && !$this->chir_id && !$this->spec_id) {
+      $msg .= "Vous devez choisir un praticien ou une spécialité<br />";
     }
     return $msg . parent::check();
   }
@@ -343,11 +342,11 @@ class CPlageOp extends CMbObject {
       $select_time = "\nSUM(TIME_TO_SEC(`operations`.`temp_operation`)) AS time";
     }
         
-    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total," . $select_time .
-        "\nFROM `operations`, `plagesop`" .
-        "\nWHERE `operations`.`plageop_id` = '$this->plageop_id'" .
-        "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`" .
-        "\nAND `operations`.`annulee` = '0'";
+    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total, $select_time
+        FROM `operations`, `plagesop`
+        WHERE `operations`.`plageop_id` = '$this->plageop_id'
+        AND `operations`.`plageop_id` = `plagesop`.`plageop_id`
+        AND `operations`.`annulee` = '0'";
     $result = $this->_spec->ds->loadHash($sql);
     $this->_nb_operations = $result["total"];
     if($addedTime){
@@ -355,12 +354,12 @@ class CPlageOp extends CMbObject {
     }
     $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
         
-    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total," . $select_time .
-        "\nFROM `operations`, `plagesop`" .
-        "\nWHERE `operations`.`plageop_id` = '$this->plageop_id'" .
-        "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`" .
-        "\nAND `operations`.`rank` > 0" .
-        "\nAND `operations`.`annulee` = '0'";
+    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total, $select_time
+        FROM `operations`, `plagesop`
+        WHERE `operations`.`plageop_id` = '$this->plageop_id'
+        AND `operations`.`plageop_id` = `plagesop`.`plageop_id`
+        AND `operations`.`rank` > 0
+        AND `operations`.`annulee` = '0'";
     $result = $this->_spec->ds->loadHash($sql);
     $this->_nb_operations_placees = $result["total"];
   }
@@ -404,6 +403,5 @@ foreach($listHours as $key => $hour){
 foreach($listMins as $key => $min){
 	CPlageOp::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
-
 	
 ?>

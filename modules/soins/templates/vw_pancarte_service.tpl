@@ -11,20 +11,18 @@
 <script type="text/javascript">
 
 function viewDossierSoin(sejour_id){
-  oForm = document.viewSoin;
+  var oForm = document.viewSoin;
   oForm.sejour_id.value = sejour_id;
   oForm.submit();
 }
        
 function viewLegendPancarte(){
-  var url = new Url;
-  url.setModuleAction("soins", "vw_legende_pancarte");
+  var url = new Url("soins", "vw_legende_pancarte");
   url.popup(300, 400, "Légende de la pancarte");
 }
        
 function viewTransmissions(service_id, user_id, degre, observations, transmissions, refresh, order_col, order_way){
-  var url = new Url;
-  url.setModuleAction("soins", "httpreq_vw_transmissions_pancarte");
+  var url = new Url("soins", "httpreq_vw_transmissions_pancarte");
   url.addParam("service_id", service_id);
   url.addParam("user_id", user_id);
   url.addParam("degre", degre);

@@ -9,14 +9,25 @@
  */
 
 // Javascript error logging
-// TODO needs testing
-window.onerror = function(errorMsg, url, lineNumber) {
-  return; // Comment this line to make it work
-  new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
-    method: 'post',
-    parameters: 'm=system&a=js_error_handler&'+$H({errorMsg: errorMsg, url: url, lineNumber: lineNumber}).toQueryString()
-  });
-};
+// TODO needs testing (doesn't throw console.error every time)
+/*window.onerror = function(errorMsg, url, lineNumber, exception) {
+  try {
+    try {
+      console.error(new Error(errorMsg, url, lineNumber) || exception);
+    } catch (e) {}
+    
+    new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
+      method: 'post',
+      parameters: 'm=system&a=js_error_handler&' +
+      $H({
+        errorMsg: errorMsg,
+        url: url,
+        lineNumber: lineNumber
+      }).toQueryString()
+    });
+  } catch (e) {}
+  return true;
+};*/
 
 function main() {
   try {
@@ -28,8 +39,8 @@ function main() {
     Main.init();
   }
   catch (e) {
-    Console.debugException(e);
-    window.onerror(e.extMessage || e.message, e.fileName, e.lineNumber)
+    console.error(exception);
+    //window.onerror(e.extMessage || e.message, e.fileName, e.lineNumber, e);
   }
 }
 
@@ -95,7 +106,7 @@ var WaitingMessage = {
       if(FormObserver.checkChanges()) {
         WaitingMessage.show();
       } else {
-        return "Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous cliquez sur OK, ces données seront perdues.";
+        return $T("FormObserver-msg-confirm");
       }
     };
   },
@@ -113,7 +124,7 @@ var WaitingMessage = {
 				
     text.setStyle({
       top: (vpd.height - etd.height)/2 + "px",
-      left: (vpd.width  - etd.width) /2 + "px",
+      left: (vpd.width - etd.width)/2 + "px",
       zIndex: 101,
       opacity: 0.8
     }).show();
@@ -299,9 +310,9 @@ var Console = {
     }
   },
   
-  debugException: function(exception) {
+  error: function(exception) {
     var regexp = /([^@])+@(http[s]?:([^:]+))?:([\d]+)/g;
-    if (exception.stack) exception.stack = exception.stack.match(regexp);
+    exception.stack = (exception.stack || exception.stacktrace || "").match(regexp);
     this.debug(exception, "Exception", { level: 2 } );
   },
   

@@ -167,4 +167,8 @@ $locales['Loading in progress'] = '';
 $locales['Session locked'] = '';
 $locales['Password'] = '';
 $locales['User switch'] = '';
+$locales['FormObserver-msg-confirm'] = '';
+$locales['Latest update'] = '';
+$locales['pref-showLastUpdate'] = '';
+$locales['pref-showLastUpdate-desc'] = '';
 ?>

@@ -12,7 +12,8 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "societe_id", "keywords", "limit"];
+  var filterFields = ["category_id", "societe_id", "keywords", "limit"];
+  // Filter must be global
   productsFilter = new Filter("filter-products", "{{$m}}", "httpreq_vw_products_list", "list-products", filterFields);
   productsFilter.submit();
 });
@@ -31,7 +32,7 @@ Main.add(function () {
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="productsFilter.submit();">
+        <select name="societe_id" onchange="productsFilter.submit();" style="width: 12em;">
           <option value="0">&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>

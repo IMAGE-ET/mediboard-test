@@ -227,6 +227,7 @@ a.button {
   white-space: nowrap;
   vertical-align: middle;
   cursor: pointer;
+  -moz-user-select: none;
 }
 
 a.button {
@@ -1019,8 +1020,12 @@ input.autocomplete.throbbing {
 
 .textarea-helped .toolbar {
   position: absolute;
-  bottom: 4px;
+  top: 0;
+  right: 4px;
   padding: 4px;
+  width: 60px;
+  vertical-align: top;
+  text-align: right;
 }
 
 .textarea-helped .toolbar a:hover img {
@@ -2517,20 +2522,6 @@ div.about div.nav {
 	outline:	2px solid #EBC2C0;
 }
 
-/* Disabled days */
-.datepickerControl td.day.disabled,
-.datepickerControl td.dayothermonth.disabled {
-	color: #999999;
-	background-color: #EEEEEE;
-	cursor: default;
-}
-
-.datepickerControl td.day.disabled:hover,
-.datepickerControl td.dayothermonth.disabled:hover {
-	background-color:	#EEEEEE;
-	border:				1px solid #EEEEEE;
-}
-
 /* Spotted days */
 .datepickerControl td.day.spot,
 .datepickerControl td.dayothermonth.spot {
@@ -2553,6 +2544,18 @@ div.about div.nav {
 	background-color:	#FFFFFF;
 	border:				1px solid #EEEEEE;
 	width:				2em;
+}
+
+/* Disabled days, minutes and hours */
+.datepickerControl td.disabled {
+  color: #999999;
+  background-color: #EEEEEE;
+  cursor: default;
+}
+
+.datepickerControl td.disabled:hover {
+  background-color: #EEEEEE;
+  border:       1px solid #EEEEEE;
 }
 
 .datepickerControl td input,

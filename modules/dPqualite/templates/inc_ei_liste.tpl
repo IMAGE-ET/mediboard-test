@@ -99,7 +99,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="7">{{tr}}CFicheEi.none{{/tr}}</td>
+    <td colspan="10">{{tr}}CFicheEi.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

@@ -11,11 +11,11 @@
 <script type="text/javascript">
 {{if $can->edit}}
 function checkPlage() {
-  var form = document.editFrm;
+  var form = getForm('editFrm');
   
   if (!checkForm(form)) {
     return false;
-   }
+  }
     
   if (form.chir_id.value == "" && form.spec_id.value == "") {
     alert("Merci de choisir un chirurgien ou une spécialité");
@@ -23,30 +23,30 @@ function checkPlage() {
     return false;
   }
   
-  if (form._heurefin.value < form._heuredeb.value || (form._heurefin.value == form._heuredeb.value && form._minutefin.value <= form._minutedeb.value)) {
-    alert("L'heure de début doit être supérieure à la l'heure de fin");
-    form._heurefin.focus();
-    return false;
-  }
-  
   return true;
 }
 
 function popPlanning(debut) {
-  var url = new Url;
-  url.setModuleAction("dPbloc", "view_planning");
+  var url = new Url("dPbloc", "view_planning");
   url.addParam("_date_min", debut);
   url.addParam("_date_max", debut);
   url.addParam("salle"    , 0);
   url.popup(900, 550, "Planning");
 }
-{{/if}}
 
 Main.add(function(){
-  {{if $can->edit}}
-  Calendar.regField(getForm('editFrm').date);
-  {{/if}}
+  var form = getForm('editFrm');
+  Calendar.regField(form.date);
+  var options = {
+    exactMinutes: false, 
+    minInterval: {{"CPlageOp"|static:minutes_interval}},
+    minHours: {{"CPlageOp"|static:hours_start}},
+    maxHours: {{"CPlageOp"|static:hours_stop}}
+  };
+  Calendar.regField(form.debut, null, options);
+  Calendar.regField(form.fin, null, options);
 });
+{{/if}}
 </script>
 <table class="main">
   <tr>
@@ -171,24 +171,8 @@ Main.add(function(){
             {{/foreach}}
     	  </select>
         </td>
-        <th>{{mb_label object=$plagesel field="_heuredeb"}}</th>
-        <td>
-          <select name="_heuredeb" class="notNull num">
-          {{foreach from=$listHours item=heure}}
-            <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
-              {{$heure|string_format:"%02d"}}
-            </option>
-          {{/foreach}}
-          </select>
-          :
-          <select name="_minutedeb">
-          {{foreach from=$listMins item=minute}}
-            <option value="{{$minute|string_format:"%02d"}}" {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
-              {{$minute|string_format:"%02d"}}
-            </option>
-          {{/foreach}}
-          </select>
-        </td>
+        <th>{{mb_label object=$plagesel field="debut"}}</th>
+        <td>{{mb_field object=$plagesel field="debut" hidden=true}}</td>
       </tr>
       
       <tr>
@@ -198,24 +182,8 @@ Main.add(function(){
         <td>
           <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
         </td>
-    	  <th>{{mb_label object=$plagesel field="_heurefin"}}</th>
-        <td>
-          <select name="_heurefin" class="notNull num">
-            {{foreach from=$listHours item=heure}}
-            <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heurefin == $heure}} selected="selected" {{/if}} >
-              {{$heure|string_format:"%02d"}}
-            </option>
-            {{/foreach}}
-          </select>
-          :
-          <select name="_minutefin">
-            {{foreach from=$listMins item=minute}}
-            <option value="{{$minute|string_format:"%02d"}}" {{if $plagesel->_minutefin == $minute}} selected="selected" {{/if}} >
-              {{$minute|string_format:"%02d"}}
-            </option>
-            {{/foreach}}
-          </select>
-        </td>
+    	  <th>{{mb_label object=$plagesel field="fin"}}</th>
+        <td>{{mb_field object=$plagesel field="fin" hidden=true}}</td>
       </tr>
       <tr>
         <th>

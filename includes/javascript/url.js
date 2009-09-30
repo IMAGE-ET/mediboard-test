@@ -203,6 +203,8 @@ var Url = Class.create({
       if(this.options.indicator) Element.hide(this.options.indicator);
       input.removeClassName("throbbing");
     };
+    
+    return autocompleter;
   },
   
   close: function() {
@@ -241,7 +243,7 @@ var Url = Class.create({
     }  
   	
     var getParams = oDefaultOptions.getParameters ? "?" + $H(oDefaultOptions.getParameters).toQueryString() : '';
-    new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php" + getParams, oDefaultOptions);
+    new Ajax.Updater(ioTarget, oDefaultOptions.urlBase + "index.php" + getParams, oDefaultOptions);
   },
   
   requestJSON: function(fCallback, oOptions) {
@@ -263,7 +265,7 @@ var Url = Class.create({
     oDefaultOptions.onSuccess = function(transport){fCallback(transport.responseJSON)};
   	
     var getParams = oDefaultOptions.getParameters ? "?" + $H(oDefaultOptions.getParameters).toQueryString() : '';
-    new Ajax.Request(oDefaultOptions["urlBase"] + "index.php" + getParams, oDefaultOptions);
+    new Ajax.Request(oDefaultOptions.urlBase + "index.php" + getParams, oDefaultOptions);
   },
   
   requestUpdateOffline: function(ioTarget, oOptions) {
@@ -272,12 +274,12 @@ var Url = Class.create({
     }
     
     this.addParam("_syncroOffline", "1");
-    if(config["date_synchro"]){
-      this.addParam("_synchroDatetime" , config["date_synchro"]);
+    if(config.date_synchro){
+      this.addParam("_synchroDatetime" , config.date_synchro);
     }
     
     var oDefaultOptions = {
-        urlBase: config["urlMediboard"]
+        urlBase: config.urlMediboard
     };
   
     Object.extend(oDefaultOptions, oOptions);
@@ -359,7 +361,7 @@ Url.parse = function(url) {
   url = url || location.href;
 
   var keys = ["source","scheme","authority","userInfo","user","pass","host","port","relative","path","directory","file","query","fragment"],
-      regex = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
+      regex = /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
       m = regex.exec(url),
       c = {},
       i = keys.length;

@@ -170,4 +170,5 @@ $locales['Session locked'] = 'Session verrouillée';
 $locales['Password'] = 'Mot de passe';
 $locales['User switch'] = 'Changement d\'utilisateur';
 $locales['Latest update'] = 'Màj il y a';
+$locales['FormObserver-msg-confirm'] = 'Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous cliquez sur OK, ces données seront perdues.';
 ?>

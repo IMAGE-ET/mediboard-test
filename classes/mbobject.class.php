@@ -1031,6 +1031,7 @@ class CMbObject {
    * Count number back refreferecing object
    * @param string $backName name the of the back references to count
    * @return int the count null if back references module is not installed
+   * @todo Add the missing arguments (the same as loadbackRefs)
    */
   function countBackRefs($backName) {
     if (!$backSpec = $this->makeBackSpec($backName)) {

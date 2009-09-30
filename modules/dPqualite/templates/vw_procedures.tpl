@@ -1,8 +1,7 @@
 <script type="text/javascript">
 function refreshProceduresList() {
   var form = getForm("filter-procedures");
-  var url = new Url;
-  url.setModuleAction("dPqualite", "httpreq_vw_list_procedures");
+  var url = new Url("dPqualite", "httpreq_vw_list_procedures");
   $(form).getElements().each(function(e) {
     url.addParam(e.name, $V(e));
   });
@@ -29,8 +28,7 @@ function highlightRow(element) {
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   file_preview = elementId;
-  var url = new Url;
-  url.setModuleAction("dPfiles", "preview_files");
+  var url = new Url("dPfiles", "preview_files");
   url.addParam("objectClass", objectClass);
   url.addParam("objectId", objectId);
   url.addParam("elementClass", elementClass);

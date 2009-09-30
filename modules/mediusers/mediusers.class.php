@@ -792,7 +792,23 @@ class CMediusers extends CMbObject {
 	  }
   }
   
-  
+  function getBasicInfo(){
+    $this->updateFormFields();
+    $this->loadRefFunction();
+    $this->_ref_function->loadRefGroup();
+    return array(
+      'id' => $this->_id,
+      'view' => $this->_view,
+      'function' => array(
+        'id' => $this->_ref_function->_id,
+        'view' => $this->_ref_function->_view,
+      ),
+      'group' => array(
+        'id' => $this->_ref_function->_ref_group->_id,
+        'view' => $this->_ref_function->_ref_group->_view,
+      )
+    );
+  }
 }
 
 ?>
