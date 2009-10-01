@@ -30,7 +30,7 @@ function refusMesures(oForm){
 
 function saveVerifControle(oForm){
   oForm._validation.value= 1;
-  oForm.submit();  
+  oForm.submit();
 }
 {{/if}}
 
@@ -47,7 +47,9 @@ function loadListFiches(type, first) {
 
 function filterFiches() {
   $$("#tab-incident a").each(function(a){
-    $(Url.parse(a.href).fragment).update();
+    var id = Url.parse(a.href).fragment;
+    $(id).update();
+    $("tab-incident").select('a[href="#'+id+'"] span').last().update("?");
   });
   loadListFiches(tab.activeContainer);
   return false;
@@ -72,12 +74,12 @@ Main.add(function() {
       <form name="filter-ei" action="?" method="get" onsubmit="return filterFiches()">
         {{mb_field object=$filterFiche field=elem_concerne defaultOption=" &ndash; Cet élément concerne" onchange="this.form.onsubmit()"}}
         
-        <!--<select name="evenements" onchange="this.form.onsubmit()">
+        <select name="evenements" onchange="this.form.onsubmit()">
           <option value=""> &ndash; Catégorie</option>
           {{foreach from=$listCategories item=category}}
             <option value="{{$category->_id}}">{{$category}}</option>
           {{/foreach}}
-        </select>-->
+        </select>
         
         <button class="search">{{tr}}Filter{{/tr}}</button>
       </form>

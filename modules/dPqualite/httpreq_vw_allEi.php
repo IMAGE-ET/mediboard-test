@@ -52,8 +52,25 @@ if($type == "ALL_TERM" && $can->admin){
   }
 }
 
-$countFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, true);
-$listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false, $countFiches > 20 ? $first : null);
+if ($evenements) {
+  $listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false);
+  $item = new CEiItem;
+  $item->ei_categorie_id = $evenements;
+  $listTypes = array_keys($item->loadMatchingList());
+
+  foreach($listeFiches as $id => $fiche) {
+    if (count(array_intersect($fiche->_ref_evenement, $listTypes)) == 0) {
+      unset($listeFiches[$id]);
+    }
+  }
+  $countFiches = count($listeFiches);
+}
+
+else {
+  $countFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, true);
+  $listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false, $countFiches > 20 ? $first : null);
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();
