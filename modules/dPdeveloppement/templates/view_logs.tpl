@@ -14,7 +14,8 @@
 Main.add(function(){
   var values = new CookieJar().get("filter-logs") || ["big-error", "big-warning", "big-info"];
   $V(getForm("filter-logs").filter, values);
-  removeByHash();
+  insertDeleteButtons();
+  updateFilter();
 });
 
 function insertDeleteButtons(){
@@ -44,4 +45,6 @@ function updateFilter() {
   <label><input type="checkbox" name="filter" value="big-info" checked="checked" onchange="updateFilter()" /> Info</label>
 </form>
 
-<div id="logs"></div>
+<div id="logs">
+  {{$log|smarty:nodefaults}}
+</div>
