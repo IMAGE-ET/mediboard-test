@@ -546,7 +546,7 @@ var Calendar = {
     else {
       elementView.observe('click', Event.stop).observe('focus', function(e){
         datepicker.show.bind(datepicker)(e);
-        (function(){$(datepicker.datepicker.element).unoverflow()}).defer();
+        $(datepicker.datepicker.element).unoverflow();
       });
     }
     
@@ -556,9 +556,9 @@ var Calendar = {
       elementView.value = DateFormat.format(date, datepicker.options.currentFormat) || '';
     }
     
-    if (datepicker.icon && !options.noView) {
+    if (datepicker.icon) {
       datepicker.icon.observe("click", function(){
-        (function(){$(datepicker.datepicker.element).unoverflow()}).defer();
+        $(datepicker.datepicker.element).unoverflow();
       });
     }
     
