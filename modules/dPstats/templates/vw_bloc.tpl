@@ -24,16 +24,25 @@ function zoomGraphIntervention(date){
 
 var graphs = {{$graphs|@json}};
 Main.add(function(){
-	graphs.each(function(g, i){
-		Flotr.draw($('graph-'+i), g.series, g.options);
-	});
+  drawGraphs(true);
+});
+
+function drawGraphs(showLegend){
+  var zoomSelect = $("graph-activite-zoom-date");
+  $("graph-0").insert({before: zoomSelect});
   
-  graphs.first().options.xaxis.ticks.each(function(tick){
-    $("graph-activite-zoom-date").insert(new Element('option', {value: tick[1]}).update(tick[1]));
+  graphs.each(function(g, i){
+    Flotr.draw($('graph-'+i), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
   });
   
-  $('graph-0').select('.flotr-tabs-group').first().insert($("graph-activite-zoom-date").show());
-});
+  if (zoomSelect.options.length == 1) {
+    graphs[0].options.xaxis.ticks.each(function(tick){
+      zoomSelect.insert(new Element('option', {value: tick[1]}).update(tick[1]));
+    });
+  }
+  
+  $('graph-0').select('.flotr-tabs-group').first().insert(zoomSelect.show());
+}
 </script>
 
 <form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
@@ -120,7 +129,10 @@ Main.add(function(){
     </td>
   </tr>
   <tr>
-    <td colspan="6" class="button"><button class="search" type="submit">Afficher</button></td>
+    <td colspan="6" class="button">
+      <button class="search" type="submit">Afficher</button>
+      <label><input type="checkbox" onclick="drawGraphs(this.checked)" checked="checked" /> Légende</label>
+    </td>
   </tr>
 </table>
 </form>
