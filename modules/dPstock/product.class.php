@@ -77,7 +77,7 @@ class CProduct extends CMbObject {
     $specs['packaging']     = 'str';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['code_lpp']      = 'numchar length|7';
-    $specs['cancelled']     = 'bool notNull default|0';
+    $specs['cancelled']     = 'bool default|0';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';
