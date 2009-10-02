@@ -36,6 +36,16 @@ ActesNGAP = {
 	  this.submit();
 	},
 	
+	changeExecutant: function(acte_ngap_id, executant_id){
+	  var oForm = document.changeExecutant;
+	  $V(oForm.acte_ngap_id, acte_ngap_id); 
+		$V(oForm.executant_id, executant_id);
+		
+		submitFormAjax(oForm, 'systemMsg', { 
+      onComplete: ActesNGAP.refreshList
+    } );
+	},
+	
 	submit: function() {
 	  var oForm = document.editNGAP;
 		submitFormAjax(oForm, 'systemMsg', { 
@@ -133,10 +143,21 @@ ActesNGAP = {
       </td>
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
-      <td> 
-        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+			<td>
+				{{if !$object->_coded}}
+				<select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant_id" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$acte_ngap->_list_executants item=_executant}}
+          <option class="mediuser" {{if $executant == $_executant->_view}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}" {{if $acte_ngap->executant_id == $_executant->user_id}} selected="selected" {{/if}}>
+            {{$_executant}}
+          </option>
+          {{/foreach}}
+        </select>
+				{{else}}
+				<div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
          {{$executant}}
         </div>
+				{{/if}}
       </td>
 
       {{if !$object->_coded}}
@@ -149,6 +170,15 @@ ActesNGAP = {
    </tr>
    {{/foreach}}
  </table>
+</form>
+
+
+<form name="changeExecutant" method="post" action=""> 
+  <input type="hidden" name="acte_ngap_id" value="" />
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
+	
+	<input type="hidden" name="executant_id" value="" />
 </form>
 
 <script type="text/javascript">
