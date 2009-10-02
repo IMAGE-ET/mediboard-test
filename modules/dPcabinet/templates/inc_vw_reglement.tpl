@@ -60,29 +60,9 @@ printActes = function(){
 }
 
 checkActe = function(button) {
-	{{if array_key_exists('sigems', $modules)}}
-	  button.disabled = "disabled";
-	  $(button).setOpacity(0.5);
-	  var url = new Url('sigems', 'ajax_check_actes');
-	  url.addParam("sejour_id", button.form.sejour_id.value);
-	  $('systemMsg').show().update('<div class="loading">Recherche des actes. Veuillez patienter.</div>');
-	  url.requestJSON(checkSigemsActes);
-	{{else}}
-	  button.form.du_tiers.value = 0; 
-	  button.form.du_patient.value = 0; 
-	  cancelTarif();
-	{{/if}}
-}
-
-checkSigemsActes = function(actes) {
-	if (!actes) {
-    getForm('tarifFrm').du_tiers.value = 0; 
-    getForm('tarifFrm').du_patient.value = 0; 
-    cancelTarif();
-  } else {
-	  $('systemMsg').show().update('<div class="error">Des actes ont été validés par la facturation, vous ne pouvez pas modifier votre cotation.</div>'); 
-  }
-	$('buttonCheckActe').setOpacity(1).disabled = false;
+  button.form.du_tiers.value = 0; 
+  button.form.du_patient.value = 0; 
+  cancelTarif();
 }
 
 Main.add( function(){

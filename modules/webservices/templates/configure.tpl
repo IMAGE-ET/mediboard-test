@@ -40,7 +40,7 @@
 	    </th>
 	    <td>
 	      <select class="str" name="{{$m}}[{{$var}}]">
-	        <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
+	        <option value="CWebservice" {{if "CWebservice" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
 	        <option value="CSigems" {{if "CSigems" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Sigems</option>
 	      </select>
 	    </td>

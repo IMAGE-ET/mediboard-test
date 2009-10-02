@@ -18,7 +18,8 @@ $now             = mbDate();
 $_date_min       = mbGetValueFromGetOrSession('_date_min');
 $_date_max       = mbGetValueFromGetOrSession('_date_max');
 
-$web_service    = mbGetValueFromGetOrSession("web_service"); 
+$web_service     = mbGetValueFromGetOrSession("web_service"); 
+$fonction        = mbGetValueFromGetOrSession("fonction"); 
 
 $doc_errors_msg = $doc_errors_ack = "";
 
@@ -42,6 +43,9 @@ $where = array();
 if ($_date_min && $_date_max) {
 	$where['date_echange'] = " = ' BETWEEN ".$_date_min." AND ".$_date_max."' "; 
 }
+if ($fonction) {
+	$where['function_name'] = " = '".$fonction."'";
+}
 
 $where["web_service_name"] = $web_service ? " = '".$web_service."'" : "IS NULL";
 
@@ -61,8 +65,16 @@ foreach($listEchangeSoap as &$curr_echange_soap) {
   $curr_echange_soap->destinataire = $url['host'];
 }
 
-$functions = array();
-
+$methods = array();
+if(!$echange_soap->_id) {
+	$webservice = CAppUI::conf("webservices webservice");
+	$webservice_class = new $webservice(null, false);
+	foreach ($webservice_class->getServicesClasses($webservice) as $_service) {
+		$service_class = new $_service(false);
+		if ($service_class->service)
+		  $methods[$service_class->service] = $webservice_class->getClassMethods($_service, $webservice);
+	}
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -74,7 +86,8 @@ $smarty->assign("total_pages"        , $total_pages);
 $smarty->assign("page"               , $page);
 
 $smarty->assign("web_service"        , $web_service);
-$smarty->assign("functions"          , $functions);
+$smarty->assign("fonction"           , $fonction);
+$smarty->assign("methods"            , $methods);
 
 $smarty->display("vw_idx_echange_soap.tpl");
 ?>

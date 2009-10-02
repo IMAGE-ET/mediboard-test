@@ -9,7 +9,14 @@
 *}}
 
 <script type="text/javascript">
-
+	var methods = {{$methods|@json}};
+	function fillSelect(source, dest) {
+	  var selected = $V(source);
+		dest.update();
+		methods[selected].each(function(v){
+		  dest.insert(new Element('option', {value: v}).update(v));
+		});
+	}
 </script>
 
 <table class="main">
@@ -45,11 +52,11 @@
           <tr>
             <th>Types de services</th>
             <td>
-              <select class="str" name="web_service">
+              <select class="str" name="web_service" onchange="fillSelect(this, this.form.elements.fonction)">
                 <option value="">&mdash; Liste des web services </option>
-                {{foreach from=$dPconfig.webservices.webservice|static:"services" key=_service_name item=_service_libelle}}
+                {{foreach from=$methods key=_service_name item=_methods}}
 								  <option value="{{$_service_name}}" {{if $web_service == $_service_name}}selected="selected"{{/if}}>
-                    {{$_service_libelle}}
+                    {{tr}}{{$_service_name}}{{/tr}}
                   </option>
 								{{/foreach}}
               </select>
@@ -60,7 +67,11 @@
             <td>
             	<select class="str" name="fonction">
                 <option value="">&mdash; Liste des fonctions </option>
-                
+							  {{foreach from=$methods[$web_service] item=_method}}
+                  <option value="{{$_method}}" {{if $fonction == $_method}}selected="selected"{{/if}}>
+                    {{$_method}}
+                  </option>
+                {{/foreach}}
               </select>
 						</td>
 				  </tr>

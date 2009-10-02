@@ -72,6 +72,11 @@ class CMbSOAPClient extends SoapClient {
   }
   
   static public function make($rooturl, $login = null, $password = null, $type = null, $options = null) {
+  	if (!url_exists($rooturl)) {
+  		trigger_error("Impossible d'établir la connexion avec le serveur : ".$rooturl, E_USER_ERROR);
+  		return;
+  	}
+
   	if ($login && $password) {
   		if (preg_match('#\%u#', $rooturl)) 
         $rooturl = str_replace('%u', $login, $rooturl);

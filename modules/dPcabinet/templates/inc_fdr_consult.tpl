@@ -83,4 +83,10 @@
     </td>
   </tr>
   {{/if}}
+	{{if array_key_exists("sigems", $modules)}}
+    <!-- Inclusion de la gestion du système de facturation -->
+    {{mb_include module=sigems template=check_actes_reels}}
+  {{/if}}
 </table>
+
+
