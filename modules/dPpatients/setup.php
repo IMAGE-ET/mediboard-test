@@ -1063,7 +1063,11 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `constantes_medicales` ADD `glycemie` FLOAT UNSIGNED";
     $this->addQuery($query);
 		
-    $this->mod_version = "0.89";
+		$this->makeRevision("0.89");
+		$query = "ALTER TABLE `medecin` CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','autre')";
+		$this->addQuery($query);
+
+    $this->mod_version = "0.90";
   }
 }
 

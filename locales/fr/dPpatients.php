@@ -937,4 +937,9 @@ $locales['CPatient-_age-court'] = 'Âge';
 $locales['CPatient-_age-desc'] = 'Âge';
 $locales['config-dPpatients-CPatient-adult_age'] = 'Age de passage d\'un enfant en adulte';
 $locales['config-dPpatients-CPatient-adult_age-desc'] = 'Age de passage d\'un enfant en adulte';
+$locales['CMedecin.type.autre'] = 'Autre';
+$locales['CMedecin.type.dentiste'] = 'Dentiste';
+$locales['CPatient-_age_assure'] = '';
+$locales['CPatient-_age_assure-court'] = '';
+$locales['CPatient-_age_assure-desc'] = '';
 ?>
