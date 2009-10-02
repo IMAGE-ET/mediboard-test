@@ -23,7 +23,9 @@ $droitFiche = !$fiche->load($fiche_ei_id);
 $droitFiche = $droitFiche || (!$can->edit && $fiche->user_id != $AppUI->user_id);
 $droitFiche = $droitFiche || ($can->edit && !$can->admin && $fiche->user_id != $AppUI->user_id && $fiche->service_valid_user_id != $AppUI->user_id);
 
-$listCategories = array();
+// Liste des Catégories d'EI
+$listCategories = new CEiCategorie;
+$listCategories = $listCategories->loadList(null, "nom");
 
 if($droitFiche){
   // Cette fiche n'est pas valide
@@ -35,10 +37,6 @@ else {
   $fiche->loadRefsFwd();
   $fiche->loadRefItems();
   
-  // Liste des Catégories d'EI
-  $listCategories = new CEiCategorie;
-  $listCategories = $listCategories->loadList(null, "nom");
-
   foreach($listCategories as $keyCat => $valueCat){
     foreach($fiche->_ref_items as $keyItem => $valueItem){
       if($fiche->_ref_items[$keyItem]->ei_categorie_id == $keyCat){
