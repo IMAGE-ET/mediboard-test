@@ -11,6 +11,18 @@
     <th class="category" colspan="10">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
+  {{assign var="var" value="upload_directory"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>  
+		
   <tr>
     {{assign var=var value=nb_upload_files}}
     <th>

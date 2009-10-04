@@ -309,6 +309,9 @@ $dPconfig["dPfiles"] = array (
   "upload_max_filesize" => "2M",
   "system_sender" => "",
   "rooturl" => "",
+  "CFile" => array(
+    "upload_directory" => "files",
+  ),
   "CFilesCategory" => array(
     "show_empty" => "1",
   ),
