@@ -109,7 +109,9 @@ Main.add(function () {
     <td style="width: 220px;" id="listplages"></td>
     <td>
     {{if $selOp->_id}}
-		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || $check_list->_id && $check_list->validator_id}}
+		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || 
+           $date < $smarty.now|date_format:"%Y-%m-%d" || 
+           $check_list->_id && $check_list->validator_id}}
         {{include file=inc_operation.tpl}}
 			{{else}}
         {{include file=inc_edit_check_list.tpl personnel=$listPersAideOp}}

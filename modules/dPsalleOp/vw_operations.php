@@ -182,7 +182,7 @@ $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
 // Vérification de la check list journalière
-$check_list = CDailyCheckList::getTodaysList('CSalle', $salle_id);
+$check_list = CDailyCheckList::getTodaysList('CSalle', $salle_id, $date);
 $check_list->loadItemTypes();
 $check_list->loadBackRefs('items');
 
@@ -207,7 +207,7 @@ $smarty->assign("currUser"               , $currUser);
 $smarty->assign("listAnesthType"         , $listAnesthType);
 $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("listChirs"              , $listChirs);
-$smarty->assign("modeDAS"                , $dPconfig["dPsalleOp"]["CDossierMedical"]["DAS"]);
+$smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedical DAS"));
 $smarty->assign("selOp"                  , $selOp);
 $smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);

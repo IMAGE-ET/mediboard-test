@@ -111,9 +111,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 		}
 	}
 	
-	static function getTodaysList($object_class, $object_id){
+	static function getTodaysList($object_class, $object_id, $date = null){
     $todays_list = new self;
-    $todays_list->date = mbDate();
+    $todays_list->date = $date ? $date : mbDate();
     $todays_list->object_class = $object_class;
     $todays_list->object_id = $object_id;
     $todays_list->loadMatchingObject();

@@ -34,7 +34,9 @@ refreshOpsPanels = function() {
 
 </script>
 
-{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || $check_list->_id && $check_list->validator_id}}
+{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
+     $date < $smarty.now|date_format:"%Y-%m-%d" || 
+     $check_list->_id && $check_list->validator_id}}
 
 <table class="tbl">
   <tr>

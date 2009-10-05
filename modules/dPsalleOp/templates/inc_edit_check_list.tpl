@@ -16,7 +16,7 @@ Main.add(function(){
   <input type="hidden" name="daily_check_list_id" value="{{$check_list->_id}}" />
   <input type="hidden" name="object_class" value="{{$check_list->object_class}}" />
   <input type="hidden" name="object_id" value="{{$check_list->object_id}}" />
-  <input type="hidden" name="date" value="now" />
+  <input type="hidden" name="date" value="{{$check_list->date}}" />
   
   <input type="hidden" name="del" value="0" />
 

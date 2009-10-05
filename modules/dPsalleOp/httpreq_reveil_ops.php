@@ -81,7 +81,7 @@ if(Cmodule::getActive("dPpersonnel")) {
 }
 
 // Vérification de la check list journalière
-$check_list = CDailyCheckList::getTodaysList('CBlocOperatoire', $bloc_id);
+$check_list = CDailyCheckList::getTodaysList('CBlocOperatoire', $bloc_id, $date);
 $check_list->loadItemTypes();
 $check_list->loadBackRefs('items');
 
