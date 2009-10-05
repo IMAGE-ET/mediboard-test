@@ -212,6 +212,9 @@ class CPlageOp extends CMbObject {
  * returns collision message, null for no collision
  */
   function hasCollisions() {
+    $this->completeField("salle_id");
+    $this->completeField("date");
+    
     // Get all other plages the same day
     $where = array();
     $where["salle_id"]   = "= '$this->salle_id'";
