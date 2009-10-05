@@ -50,6 +50,9 @@ if($op_reveil->_id) {
   $op_reveil->loadRefs();
   $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$op_reveil->_ref_plageop->actes_locked);
   $sejour =& $op_reveil->_ref_sejour;
+	
+	$modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$sejour->facture);
+	
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->_ref_dossier_medical->loadRefsBack();

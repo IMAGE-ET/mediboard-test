@@ -68,6 +68,9 @@ if ($op) {
 //  $actesup = $selOp->_ref_actes_ccam->_ref_exec
 
   $sejour =& $selOp->_ref_sejour;
+	
+	$modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$sejour->facture);
+
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->_ref_dossier_medical->loadRefsBack();

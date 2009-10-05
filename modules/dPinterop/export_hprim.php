@@ -57,7 +57,10 @@ switch ($typeObject) {
 		    return;
 		  }
 		  $doc->generateFromOperation($mbObject);
-		  $doc_valid = $doc->schemaValidate();
+			if ($doc_valid = $doc->schemaValidate()) {
+				$mbSejour->facture = true;
+				$mbSejour->store();
+			}
 		}
 		break;
   case "sej" :
@@ -78,6 +81,10 @@ switch ($typeObject) {
 		  }
 		  $doc->generateFromSejour($mbObject);
 		  $doc_valid = $doc->schemaValidate();
+			if ($doc_valid = $doc->schemaValidate()) {
+        $mbObject->facture = true;
+        $mbObject->store();
+      }
 		}
     break;
 }

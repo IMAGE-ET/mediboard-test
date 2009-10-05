@@ -52,14 +52,12 @@
       </label>    
     </th>
     <td>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="never" {{if $dPconfig.$m.$class.$var == "never"}}checked="checked"{{/if}}/>
-      <label for="{{$m}}[{{$class}}][{{$var}}]_never">Jamais</label>
-      <br />
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="oneday" {{if $dPconfig.$m.$class.$var == "oneday"}}checked="checked"{{/if}}/>
-      <label for="{{$m}}[{{$class}}][{{$var}}]_oneday">Le lendemain</label>
-      <br />
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="button" {{if $dPconfig.$m.$class.$var == "button"}}checked="checked"{{/if}}/>
-      <label for="{{$m}}[{{$class}}][{{$var}}]_button">Par bouton</label>
+    	<select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
+        <option value="never" {{if $dPconfig.$m.$class.$var == "never"}}selected="selected"{{/if}}>Jamais</option>
+        <option value="oneday" {{if $dPconfig.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>Le lendemain</option>
+        <option value="button" {{if $dPconfig.$m.$class.$var == "button"}}selected="selected"{{/if}}>Par bouton</option>
+				<option value="facturation" {{if $dPconfig.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>Envoyé en facturation</option>
+      </select>
     </td>             
   </tr>
 

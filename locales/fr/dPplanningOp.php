@@ -894,4 +894,7 @@ $locales['CEtabExterne-back-'] = 'Séjours';
 $locales['CSejour-etablissement_entree_transfert_id'] = 'Etablissement de transfert d\'entrée';
 $locales['CSejour-etablissement_entree_transfert_id-court'] = 'Transfert d\'entrée';
 $locales['CSejour-etablissement_entree_transfert_id-desc'] = 'Etablissement de transfert du patient après son entrée';
+$locales['CSejour-facture'] = 'Facturé';
+$locales['CSejour-facture-court'] = 'Facturé';
+$locales['CSejour-facture-desc'] = 'Facture émise pour le séjour';
 ?>

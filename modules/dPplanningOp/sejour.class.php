@@ -64,6 +64,8 @@ class CSejour extends CCodable {
   var $adresse_par_prat_id = null;
   var $adresse_par_etab_id = null;
   var $libelle            = null;  
+	
+	var $facture            = null; // Séjour facturé ou non
   
   // Form Fields
   var $_entree             = null;
@@ -218,6 +220,7 @@ class CSejour extends CCodable {
     $specs["adresse_par_prat_id"] = "num";
     $specs["adresse_par_etab_id"] = "num";
     $specs["libelle"]             = "str seekable";
+		$specs["facture"]             = "bool default|0";
     
     $specs["_entree"]         = "dateTime";
     $specs["_sortie"] 		    = "dateTime";
