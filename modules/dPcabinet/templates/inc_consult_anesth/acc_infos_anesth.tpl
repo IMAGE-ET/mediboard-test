@@ -73,8 +73,9 @@ function reloadListTech() {
       {{else}}
       <br />
       <br />
-       <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
-       
+				{{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
+	        <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+	      {{/if}}
       {{/if}}
       
       

@@ -82,7 +82,7 @@ Main.add(function () {
   <li><a href="#anesth_tab">Anesth.</a></li>
   <li><a href="#antecedents">Atcd.</a></li>
 
-  {{if $isPrescriptionInstalled}}
+  {{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
 	{{/if}}
   
