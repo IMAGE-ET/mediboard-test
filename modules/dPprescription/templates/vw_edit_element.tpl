@@ -8,6 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+	
+toggleCancelled = function(){
+	$$(".cancelled").invoke("toggle");
+}
+	
+</script>
+
 <table class="main">
   <tr>    
     <td>
@@ -47,14 +55,19 @@
     <td class="halfPane">
 		  <table class="tbl">
 	      <tr>
-	        <th colspan="2">Elements de la catégorie {{$category->_view}}</th>
+	        <th colspan="2">
+	          <span style="float: right">
+              Afficher les annulés <input type="checkbox" id="show_canceled" onclick="toggleCancelled();" />
+            </span>	
+						Elements de la catégorie {{$category->_view}}
+          </th>
 	      </tr>
 	      <tr>
 	        <th>Libelle</th>
 	        <th>Description</th>
 	      </tr>
 	      {{foreach from=$elements_prescription item=_element}}
-	        <tr>
+	        <tr {{if $_element->cancelled}}class="cancelled" style="display: none; opacity: 0.5"{{/if}}>
 	          <td>
 	            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id={{$_element->_id}}">
 	              {{$_element->libelle}}
@@ -99,12 +112,13 @@
 		 </td>
 		 {{else}}
 		 <td class="halfPane">
-		     <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+		   <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 		     <input type="hidden" name="dosql" value="do_element_prescription_aed" />
-		    <input type="hidden" name="element_prescription_id" value="{{$element_prescription->_id}}" />
+		     <input type="hidden" name="element_prescription_id" value="{{$element_prescription->_id}}" />
 		     <input type="hidden" name="category_prescription_id" value="{{$category_id}}" />
 		     <input type="hidden" name="del" value="0" />
-		     <table class="form">
+				 <input type="hidden" name="cancelled" value="{{$element_prescription->cancelled}}" />
+         <table class="form">
 		       <tr>
 		         <th class="category" colspan="2">
 		         {{if $element_prescription->_id}}
@@ -132,7 +146,16 @@
 		           <button class="modify" type="submit" name="modify">
 		             {{tr}}Modify{{/tr}}
 		           </button>
-		           <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'element',objName:'{{$element_prescription->libelle|smarty:nodefaults|JSAttribute}}'})">
+							 {{if $element_prescription->cancelled}}
+							   <button class="tick" type="submit" name="restore" onclick="$V(this.form.cancelled, '0');">
+                   {{tr}}Restore{{/tr}}
+                 </button>
+							 {{else}}
+			           <button class="cancel" type="submit" name="cancel" onclick="$V(this.form.cancelled, '1');">
+	                 {{tr}}Cancel{{/tr}}
+	               </button>
+					     {{/if}}
+							 <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'element',objName:'{{$element_prescription->libelle|smarty:nodefaults|JSAttribute}}'})">
 		             {{tr}}Delete{{/tr}}
 		           </button>
 		         {{else}}

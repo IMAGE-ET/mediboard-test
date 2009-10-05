@@ -25,6 +25,7 @@ $element_prescription = new CElementPrescription();
 $where = array();
 $where["category_prescription_id"] = $ds->prepareIn(array_keys($categories));
 $where["libelle"] = "LIKE '%$libelle%'";
+$where["cancelled"] = " = '0'";
 $elements = $element_prescription->loadList($where);
 foreach($elements as &$element){
 	$element->loadRefCategory();

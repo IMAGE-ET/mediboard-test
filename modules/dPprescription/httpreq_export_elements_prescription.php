@@ -29,12 +29,14 @@ foreach ($categories_par_chapitre as $chapitre => $categories) {
     $domCategorie = $doc->addElement($domChapitre, "categorie");
     $doc->addElement($domCategorie, "nom"        , $categorie->nom);
     $doc->addElement($domCategorie, "description", $categorie->description);
-    $count_elements_prescription += count($categorie->_ref_elements_prescription);
     
     foreach ($categorie->_ref_elements_prescription as $element) {
-      $domElement = $doc->addElement($domCategorie, "element");
-      $doc->addElement($domElement, "libelle"    , $element->libelle);
-      $doc->addElement($domElement, "description", $element->description);
+    	if(!$element->cancelled){
+    		$count_elements_prescription++;
+	      $domElement = $doc->addElement($domCategorie, "element");
+	      $doc->addElement($domElement, "libelle"    , $element->libelle);
+	      $doc->addElement($domElement, "description", $element->description);
+			}
     }
   }
 

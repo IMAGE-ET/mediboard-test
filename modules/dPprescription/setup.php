@@ -1375,7 +1375,12 @@ class CSetupdPprescription extends CSetup {
 					  ADD INDEX (`category_prescription_id`);";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.90";
+		$this->makeRevision("0.90");
+		$sql = "ALTER TABLE `element_prescription` 
+            ADD `cancelled` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.91";
   }  
 }
 

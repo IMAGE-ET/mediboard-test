@@ -20,6 +20,7 @@ class CElementPrescription extends CMbObject {
   var $category_prescription_id = null;
   var $libelle                  = null;
   var $description              = null;
+	var $cancelled                = null;
   
   // FwdRefs
   var $_ref_category_prescription = null;
@@ -36,6 +37,7 @@ class CElementPrescription extends CMbObject {
     $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
     $specs["libelle"]      = "str notNull seekable";
     $specs["description"]  = "text";
+		$specs["cancelled"]    = "bool default|0";
     return $specs;
   }
   
