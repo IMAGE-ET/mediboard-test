@@ -153,7 +153,7 @@ if ($del) {
 $complete_msg = implode(" - ", $header);
 if ($body_msg) {
   // Uncomment for more verbose
-  // $complete_msg .= $body_msg; 
+  $complete_msg .= $body_msg; 
 }
 
 if( $otherm = dPgetParam($_POST, "otherm", 0) )
