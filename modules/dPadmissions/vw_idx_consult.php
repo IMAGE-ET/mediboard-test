@@ -74,7 +74,6 @@ foreach($listPlages as &$element) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("cabinet_id"    ,$cabinet_id);
 $smarty->assign("consult"       ,$consult);
 $smarty->assign("listPlages"    ,$listPlages);
 $smarty->assign("date"          ,$date);
