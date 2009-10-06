@@ -799,52 +799,42 @@ Dom = {
     }
   },
   
-  cloneElemById : function(id,withChildNodes){
-    var elem = $(id).cloneNode(withChildNodes);
-    elem.removeAttribute("id");
-    return elem;
+  cloneElemById : function(id, withChildNodes){
+    return $(id).clone(withChildNodes);
   },
   
   createTd : function(sClassname, sColspan){
-    var oTd = document.createElement("td");
-    if(sClassname){
-      oTd.className = sClassname;
-    }
-    if(sColspan){
-      oTd.setAttribute("colspan" , sColspan); 
-    }
-    return oTd;
+    return new Element('td', {
+      className: sClassname,
+      colspan: sColspan
+    });
   },
   
   createTh : function(sClassname, sColspan){
-    var oTh = document.createElement("th");
-    if(sClassname){
-      oTh.className = sClassname;
-    }
-    if(sColspan){
-      oTh.setAttribute("colspan" , sColspan); 
-    }
-    return oTh;
+    return new Element('th', {
+      className: sClassname,
+      colspan: sColspan
+    });
   },
   
   createImg : function(sSrc){
-    var oImg = document.createElement("img");
-    oImg.setAttribute("src", sSrc);
-    return oImg;
+    return new Element('img', {
+      src: sSrc
+    });
   },
   
   createInput : function(sType, sName, sValue){
-    var oInput = document.createElement("input");
-    oInput.setAttribute("type"  , sType);
-    oInput.setAttribute("name"  , sName);
-    oInput.setAttribute("value" , sValue);
-    return oInput;
+    return new Element('input', {
+      type: sType,
+      name: sName,
+      value: sValue
+    });
   },
   
   createSelect : function(sName){
-    var oSelect = document.createElement("select");
-    oSelect.setAttribute("name"  , sName);
-    return oSelect;
+    return new Element('select', {
+      name: sName
+    });
   },
   
   createOptSelect : function(sValue, sName, selected, oInsertInto){

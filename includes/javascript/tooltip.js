@@ -88,7 +88,7 @@ var ObjectTooltip = Class.create({
     var dim = eTrigger.getDimensions();
     
     eDiv.show()
-        .setStyle({marginTop: '0', marginLeft: '0'})
+        .setStyle({marginTop: 0, marginLeft: 0})
         .clonePosition(eTrigger, {offsetTop: dim.height, offsetLeft: Math.min(dim.width, 20), setWidth: false, setHeight: false})
         .unoverflow();
   },
@@ -126,7 +126,7 @@ var ObjectTooltip = Class.create({
   createDiv: function() {
     var eTrigger = $(this.sTrigger);
     
-    var eDiv  = Dom.cloneElemById("tooltipTpl",true);
+    var eDiv  = $("tooltipTpl").clone(true);
     eDiv.hide()
         .addClassName(this.mode.sClass)
         .removeAttribute("_extended");
