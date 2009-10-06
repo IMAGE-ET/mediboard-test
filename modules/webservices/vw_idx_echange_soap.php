@@ -58,11 +58,11 @@ $limit = ($page == 1) ? 0 : $page * 10;
 $order = "date_echange DESC";
 $listEchangeSoap = $itemEchangeSoap->loadList($where, $order, intval($limit).',20');
   
-foreach($listEchangeSoap as &$curr_echange_soap) {
-  $curr_echange_soap->loadRefs();
+foreach($listEchangeSoap as &$_echange_soap) {
+  $_echange_soap->loadRefs();
   
-  $url = parse_url($curr_echange_soap->destinataire);
-  $curr_echange_soap->destinataire = $url['host'];
+  $url = parse_url($_echange_soap->destinataire);
+  $_echange_soap->destinataire = $url['host'];
 }
 
 $methods = array();
