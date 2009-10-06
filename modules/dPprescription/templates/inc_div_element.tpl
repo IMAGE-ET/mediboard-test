@@ -64,6 +64,7 @@ Main.add( function(){
     <th class="category" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
+  	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
     <td>
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
@@ -98,6 +99,7 @@ Main.add( function(){
 			  </script>
 			</form>
     </td>
+		{{/if}}
     <td>
 		  {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
       {{if $readonly}}
