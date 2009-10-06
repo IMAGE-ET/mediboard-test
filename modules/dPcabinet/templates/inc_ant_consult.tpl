@@ -488,15 +488,28 @@ Main.add(function () {
   
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicamentTP = function(selected) {
-    resetEditLineTP();
+	  // Submit du formulaire avant de faire le selection d'un nouveau produit
+		if(oFormTP.code_cip.value){
+		  submitFormAjax(oFormTP, "systemMsg", { onComplete: function() { 
+			  updateTP(selected);
+				DossierMedical.reloadDossiersMedicaux();
+			} } );
+		} else {
+		  updateTP(selected);
+		}
+			
+  }
+  	
+  updateTP = function(selected){
+	  resetEditLineTP();
     Element.cleanWhitespace(selected);
     var dn = selected.childElements();
     $V(oFormTP.code_cip, dn[0].innerHTML);
-    $("_libelle").insert("<a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
+    $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
     $V(oFormTP.produit, '');
     $('button_submit_traitement').focus();
-  }
-  
+	}  
+
   // Autocomplete des medicaments
   var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
   urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
