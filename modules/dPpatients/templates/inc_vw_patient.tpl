@@ -317,20 +317,14 @@ Document.refreshList = function(){
         {{/if}}
       </a>
     </td>
-    {{if $curr_sejour->annule}}
-    <td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
-      <strong>SEJOUR ANNULE</strong>
-    </td>
-    {{else}}
     {{if $curr_sejour->group_id == $g}}
-    <td>
+    <td {{if $curr_sejour->annule}}class="cancelled"{{/if}}>
       Dr {{$curr_sejour->_ref_praticien->_view}}
     </td>
     {{else}}
     <td style="background-color:#afa">
       {{$curr_sejour->_ref_group->text|upper}}
     </td>
-    {{/if}}
     {{/if}}
   </tr>
   
@@ -362,20 +356,14 @@ Document.refreshList = function(){
       </li>
       </ul>
     </td>
-    {{if $curr_op->annulee}}
-    <td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
-      <strong>OPERATION ANNULEE</strong>
+    {{if $curr_sejour->group_id == $g}}
+    <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
+      Dr {{$curr_op->_ref_chir->_view}}
     </td>
     {{else}}
-    {{if $curr_sejour->group_id != $g}}
     <td style="background-color:#afa">
       {{$curr_sejour->_ref_group->_view|upper}}
     </td>
-    {{else}}
-    <td>
-      Dr {{$curr_op->_ref_chir->_view}}
-    </td>
-    {{/if}}
     {{/if}}
   </tr>
   {{/foreach}}
@@ -402,11 +390,9 @@ Document.refreshList = function(){
       </a>
     </td>
 
-    {{if $curr_consult->annule}}
-    <td class="cancelled">[Consult annulée]</td>
-    {{else}}
-    <td>Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</td>
-    {{/if}}
+    <td {{if $curr_consult->annule}}class="cancelled"{{/if}}>
+      Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+    </td>
   </tr>
 
   {{/foreach}}
