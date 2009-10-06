@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPqualite
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can;
 $can->needsRead();
@@ -13,8 +14,11 @@ $can->needsRead();
 $fiche_ei_id         = mbGetValueFromGetOrSession("fiche_ei_id",null);
 $ficheAnnuleVisible  = mbGetValueFromGetOrSession("ficheAnnuleVisible" , 0);
 $ficheTermineVisible = mbGetValueFromGetOrSession("ficheTermineVisible" , 0);
+
 $selected_user_id    = mbGetValueFromGetOrSession("selected_user_id");
-$first               = mbGetValueFromGetOrSession("first");
+$selected_service_valid_user_id = mbGetValueFromGetOrSession("selected_service_valid_user_id");
+$elem_concerne     = mbGetValueFromGetOrSession("elem_concerne");
+$evenements        = mbGetValueFromGetOrSession("evenements");
 
 $catFiche = array();
 $fiche = new CFicheEi();
@@ -49,62 +53,41 @@ else {
   }
 }
 
-// Chargement pour Administration
+$listUsersTermine = new CMediusers;
+$listUsersTermine = $listUsersTermine->loadListFromType();
+
+// Chargement de la liste des Chef de services / utilisateur
+$module = CModule::getInstalled("dPqualite");
+$perm = new CPermModule;
+
 $listUsersEdit = new CMediusers;
-if($can->admin){
-  // Chargement de la liste des Chef de services / utilisateur
-  $module = CModule::getInstalled("dPqualite");
-  $permUserEdit = new CPermModule;
-  
-  if (!$fiche->date_validation && !$fiche->annulee) {
-	  $listUsersEdit = $listUsersEdit->loadListFromType(null, PERM_READ);
-	  foreach($listUsersEdit as $keyUser => $infoUser){
-	    if(!$permUserEdit->getInfoModule("permission", $module->mod_id, PERM_EDIT, $keyUser)){
-	      unset($listUsersEdit[$keyUser]);
-	    }
-	  }
+$listUsersEdit = $listUsersEdit->loadListFromType(null, PERM_READ);
+foreach($listUsersEdit as $keyUser => $infoUser){
+  if(!$perm->getInfoModule("permission", $module->mod_id, PERM_EDIT, $keyUser)){
+    unset($listUsersEdit[$keyUser]);
   }
 }
 
 $selectedUser = new CMediusers();
 $selectedUser->load($selected_user_id);
 
-$listCounts = array();
-$listCounts["AUTHOR"]      = 0;
-$listCounts["VALID_FICHE"] = 0;
-$listCounts["ATT_CS"]      = 0;
-$listCounts["ATT_QUALITE"] = 0;
-$listCounts["ATT_VERIF"]   = 0;
-$listCounts["ATT_CTRL"]    = 0;
-$listCounts["ALL_TERM"]    = 0;
-$listCounts["ANNULE"]      = 0;
-
-foreach ($listCounts as $type => &$count) {
-  $user_id = null;
-  $where = null;
-  if($type == "AUTHOR" || ($can->edit && !$can->admin)){
-    $user_id = $AppUI->user_id;
-  }
-  
-  if($type == "ALL_TERM" && $can->admin){
-    $where = array();
-    if($selected_user_id){
-      $where["fiches_ei.user_id"] = "= '$selected_user_id'";
-    }
-  }
-  $count = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, true);
-}
+$filterFiche = new CFicheEi;
+$filterFiche->elem_concerne = $elem_concerne;
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("catFiche"         , $catFiche);
 $smarty->assign("fiche"            , $fiche);
-$smarty->assign("filterFiche"      , new CFicheEi);
-$smarty->assign("first"            , $first);
+
+$smarty->assign("filterFiche"      , $filterFiche);
+$smarty->assign("selected_user_id", $selected_user_id);
+$smarty->assign("selected_service_valid_user_id", $selected_service_valid_user_id);
+$smarty->assign("evenements", $evenements);
+
 $smarty->assign("today"            , mbDate());
 $smarty->assign("listUsersEdit"    , $listUsersEdit);
-$smarty->assign("listCounts"       , $listCounts);
+$smarty->assign("listUsersTermine" , $listUsersTermine);
 $smarty->assign("selectedUser"     , $selectedUser);
 $smarty->assign("selected_fiche_id", $fiche_ei_id);
 $smarty->assign("listCategories"   , $listCategories);

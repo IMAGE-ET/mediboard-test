@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{*1er niveau*}}
 {{foreach from=$chapitres item=_chapitre}}
 <option style="padding-left: 0em;" value="{{$_chapitre->_id}}" {{if $chapitre_id == $_chapitre->_id}}selected="selected"{{/if}} >

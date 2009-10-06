@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <div class="pagination">
 {{foreach from=$pages item=page key=number}}
   <a class="page {{if $first == $page}}active{{/if}}" href="#1" onclick="$V(document.forms['filter-procedures'].first, {{$page}})">{{$number+1}}</a>

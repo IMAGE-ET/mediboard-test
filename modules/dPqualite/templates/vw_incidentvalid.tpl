@@ -1,9 +1,19 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <script type="text/javascript">
 {{if $can->admin}}
 function filterAllEi(field){
-  if (field.name == "selected_user_id") {
+  /*if (field.name == "selected_user_id") {
     $("tab-incident").select('a[href="#ALL_TERM"] span.user')[0].update(field.options[field.selectedIndex].text);
-  }
+  }*/
   
   var url = new Url("dPqualite", "httpreq_vw_allEi");
   url.addElement(field);
@@ -49,9 +59,13 @@ function filterFiches() {
   $$("#tab-incident a").each(function(a){
     var id = Url.parse(a.href).fragment;
     $(id).update();
-    $("tab-incident").select('a[href="#'+id+'"] span').last().update("?");
+    a.select('span').last().update("?");
   });
-  loadListFiches(tab.activeContainer);
+  loadListFiches(tab.activeContainer.id);
+  $$("#tab-incident a").each(function(a){
+    var id = Url.parse(a.href).fragment;
+    loadListFiches(id);
+  });
   return false;
 }
 
@@ -64,7 +78,7 @@ function printIncident(ficheId){
 var tab;
 Main.add(function() {
   tab = Control.Tabs.create('tab-incident', true);
-  loadListFiches(tab.activeContainer, '{{$first}}');
+  filterFiches();//loadListFiches(tab.activeContainer);
 });
 </script>
 
@@ -77,8 +91,28 @@ Main.add(function() {
         <select name="evenements" onchange="this.form.onsubmit()">
           <option value=""> &ndash; Catégorie</option>
           {{foreach from=$listCategories item=category}}
-            <option value="{{$category->_id}}">{{$category}}</option>
+            <option value="{{$category->_id}}" {{if $category->_id==$evenements}}selected="selected"{{/if}}>
+              {{$category}}
+            </option>
           {{/foreach}}
+        </select>
+        
+        <select name="selected_user_id" onchange="this.form.onsubmit()">
+        <option value="">&mdash; {{tr}}_CFicheEi_allusers{{/tr}}</option>
+        {{foreach from=$listUsersTermine item=curr_user}}
+          <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id==$selected_user_id}}selected="selected"{{/if}}>
+            {{$curr_user->_view}}
+          </option>
+        {{/foreach}}
+        </select>
+        
+        <select name="selected_service_valid_user_id" onchange="this.form.onsubmit()">
+        <option value="">&mdash; {{tr}}CFicheEi-service_valid_user_id{{/tr}}</option>
+        {{foreach from=$listUsersEdit item=curr_user}}
+          <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id==$selected_service_valid_user_id}}selected="selected"{{/if}}>
+            {{$curr_user->_view}}
+          </option>
+        {{/foreach}}
         </select>
         
         <button class="search">{{tr}}Filter{{/tr}}</button>
@@ -86,28 +120,28 @@ Main.add(function() {
       
       <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin && $can->edit}}
-        <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} (<span></span>)</a></li>
         {{elseif $can->admin}}
-        <li onmouseup="loadListFiches('VALID_FICHE')"><a href="#VALID_FICHE">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} (<span>{{$listCounts.VALID_FICHE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('VALID_FICHE')"><a href="#VALID_FICHE">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} (<span>{{$listCounts.ATT_CS}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_CS')"><a href="#ATT_CS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} (<span>{{$listCounts.ATT_QUALITE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_QUALITE')"><a href="#ATT_QUALITE">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ATT_VERIF')"><a href="#ATT_VERIF">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} (<span>{{$listCounts.ATT_VERIF}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_VERIF')"><a href="#ATT_VERIF">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ATT_CTRL')"><a href="#ATT_CTRL">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} (<span>{{$listCounts.ATT_CTRL}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ATT_CTRL')"><a href="#ATT_CTRL">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}CFicheEi.all{{/tr}} <span class="user">{{if $selectedUser->_id}}pour {{$selectedUser->_view}}{{/if}}</span> (<span>{{$listCounts.ALL_TERM}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ALL_TERM')"><a href="#ALL_TERM">{{tr}}CFicheEi.all{{/tr}} (<span></span>)</a></li>
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('ANNULE')"><a href="#ANNULE">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} (<span>{{$listCounts.ANNULE}}</span>)</a></li>
+        <li onmouseup="loadListFiches('ANNULE')"><a href="#ANNULE">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} (<span></span>)</a></li>
         {{/if}}
         <li class="linebreak"></li>
-        <li onmouseup="loadListFiches('AUTHOR')"><a href="#AUTHOR">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} (<span>{{$listCounts.AUTHOR}}</span>)</a></li>
+        <li onmouseup="loadListFiches('AUTHOR')"><a href="#AUTHOR">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} (<span></span>)</a></li>
       </ul>
       <hr class="control_tabs" />
       

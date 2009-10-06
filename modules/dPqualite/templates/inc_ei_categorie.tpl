@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $categorie->ei_categorie_id}}
 <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
   {{tr}}CEiCategorie.create{{/tr}}

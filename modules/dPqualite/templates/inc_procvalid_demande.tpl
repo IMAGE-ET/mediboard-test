@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var="info_proc" value=$docGed->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
 <table class="form">
   <tr>          

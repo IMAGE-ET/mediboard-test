@@ -1,3 +1,13 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPqualite
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <script type="text/javascript">
   Main.add(function() {
     var list = $("tab-incident").select('a[href="#{{$type}}"] span');
@@ -25,34 +35,8 @@
   <tr>
     <th class="category">#</th>
     <th class="category">{{tr}}Date{{/tr}}</th>
-    <th class="category">
-      {{if $type=="ALL_TERM" && $can->admin}}
-        <select name="selected_user_id" onchange="filterAllEi(this)">
-        <option value="">&mdash; {{tr}}_CFicheEi_allusers{{/tr}}</option>
-        {{foreach from=$listUsersTermine item=curr_user}}
-          <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id==$selected_user_id}}selected="selected"{{/if}}>
-            {{$curr_user->_view}}
-          </option>
-        {{/foreach}}
-        </select>
-      {{else}}
-        {{tr}}CFicheEi-user_id-court{{/tr}}
-      {{/if}}
-    </th>
-    <th class="category">
-      {{if $type=="ALL_TERM" && $can->admin}}
-        <select name="selected_service_valid_user_id" onchange="filterAllEi(this)">
-        <option value="">&mdash; {{tr}}CFicheEi-service_valid_user_id{{/tr}}</option>
-        {{foreach from=$list_service_valid_users item=curr_user}}
-          <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id==$selected_service_valid_user_id}}selected="selected"{{/if}}>
-            {{$curr_user->_view}}
-          </option>
-        {{/foreach}}
-        </select>
-      {{else}}
-        {{tr}}CFicheEi-service_valid_user_id-court{{/tr}}
-      {{/if}}
-    </th>
+    <th class="category">{{tr}}CFicheEi-user_id-court{{/tr}}</th>
+    <th class="category">{{tr}}CFicheEi-service_valid_user_id-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-degre_urgence-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-_criticite-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-qualite_date_verification-court{{/tr}}</th>
