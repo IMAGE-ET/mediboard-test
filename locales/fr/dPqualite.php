@@ -530,4 +530,5 @@ $locales['CFicheEi-_incident_date-desc'] = 'Date à laquelle s\'est produit l\'év
 $locales['CGroups-back-chapitres_qualite'] = '';
 $locales['CGroups-back-themes_qualite'] = '';
 $locales['CMediusers-back-suivis__ged'] = '';
+$locales['CFicheEi.elem_concerne.autre'] = 'Autre';
 ?>

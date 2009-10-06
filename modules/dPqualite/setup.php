@@ -229,7 +229,11 @@ class CSetupdPqualite extends CSetup {
     $sql = "ALTER TABLE `doc_ged` CHANGE `num_ref` `num_ref` DECIMAL(5,1) NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.19";
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `fiches_ei` CHANGE `elem_concerne` `elem_concerne` ENUM ('pat','vis','pers','med','mat','autre') NOT NULL";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.20";
     
   }
 }

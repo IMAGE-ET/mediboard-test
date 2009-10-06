@@ -83,7 +83,7 @@ class CFicheEi extends CMbObject {
     $specs["evenements"]                 = "str notNull maxLength|255";
     $specs["lieu"]                       = "str notNull maxLength|50";
     $specs["type_incident"]              = "enum notNull list|inc|ris";
-    $specs["elem_concerne"]              = "enum notNull list|pat|vis|pers|med|mat";
+    $specs["elem_concerne"]              = "enum notNull list|pat|vis|pers|med|mat|autre";
     $specs["elem_concerne_detail"]       = "text notNull";
     $specs["autre"]                      = "text";
     $specs["descr_faits"]                = "text notNull";
