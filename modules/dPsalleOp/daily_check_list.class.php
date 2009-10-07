@@ -90,7 +90,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 				$check_item->list_id = $this->_id;
 				$check_item->item_type_id = $type->_id;
 				$check_item->loadMatchingObject();
-				$check_item->checked = in_array($type->_id, $items) ? 1 : 0;
+				$check_item->checked = (in_array($type->_id, $items) ? 1 : 0);
 				if ($msg = $check_item->store()) return $msg;
 			}
 			

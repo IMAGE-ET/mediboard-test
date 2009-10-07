@@ -41,7 +41,7 @@ Main.add(function(){
       {{/if}}
 		  <tr>
 		  	<td style="text-align: center;">
-				  <input type="checkbox" name="_items[]" value="{{$curr_type->_id}}" {{if @$curr_type->_checked}}checked="checked"{{/if}} />
+				  <input type="checkbox" name="_items[{{$curr_type->_id}}]" value="{{$curr_type->_id}}" {{if @$curr_type->_checked}}checked="checked"{{/if}} />
 			  </td>
 		  	<td>
 		  		<strong>{{mb_value object=$curr_type field=title}}</strong><br />
