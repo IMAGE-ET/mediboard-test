@@ -148,8 +148,8 @@ ActesNGAP = {
 				<select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$acte_ngap->_list_executants item=_executant}}
-          <option class="mediuser" {{if !$executant && ($acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}}{{if $executant == $_executant->_view}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
-            {{$_executant}}
+          <option class="mediuser" {{if ($_acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
+            {{$executant}}
           </option>
           {{/foreach}}
         </select>
