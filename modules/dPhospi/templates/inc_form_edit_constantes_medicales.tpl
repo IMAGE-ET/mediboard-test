@@ -30,15 +30,10 @@ calculImcVst = function(form) {
 }
 
 Main.add(function () {
-  var oForm = getForm('edit-constantes-medicales'),
-      cookie = new CookieJar();
+  var oForm = getForm('edit-constantes-medicales');
 
-  // Recuperation de la valeur du cookie, on masque les graphs qui ne sont pas selectionnés  
   $H(data).each(function(d){
-    oForm["checkbox-constantes-medicales-"+d.key].checked = 
-      cookie.getValue('graphsToShow', 'constantes-medicales-'+d.key) ||
-      d.value.series.first().data.length;
-      
+    oForm["checkbox-constantes-medicales-"+d.key].checked = !!d.value.series.first().data.length;
     $('constantes-medicales-'+d.key).setVisible(oForm["checkbox-constantes-medicales-"+d.key].checked);
   });
   

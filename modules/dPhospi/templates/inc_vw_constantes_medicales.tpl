@@ -176,10 +176,7 @@ drawGraph = function() {
 
 toggleGraph = function(id){
   $(id).toggle();
-  checkbox = document.forms['edit-constantes-medicales'].elements['checkbox-'+id];
-  var cookie = new CookieJar();
-  cookie.setValue('graphsToShow', id, checkbox.checked);
-}
+};
 
 Main.add(function () {
   var oForm = document.forms['edit-constantes-medicales'];
@@ -187,25 +184,10 @@ Main.add(function () {
   prepareForm(oForm);
   drawGraph();
   
-  var cookie = new CookieJar();
-
-  // Si le cookie n'existe pas, on affiche seulement les 4 principaux graphs
-  if(!cookie.get('graphsToShow')){
-    cookie.setValue('graphsToShow', 'constantes-medicales-ta', true);
-    cookie.setValue('graphsToShow', 'constantes-medicales-pouls', true);
-    cookie.setValue('graphsToShow', 'constantes-medicales-temperature', true);
-    cookie.setValue('graphsToShow', 'constantes-medicales-spo2', true);
-  }
-  
-  // Recuperation de la valeur du cookie, on masque les graphs qui ne sont pas selectionnés
   {{foreach from=$data item=curr_data key=key}}
-    oForm["checkbox-constantes-medicales-{{$key}}"].checked = 
-      cookie.getValue('graphsToShow', 'constantes-medicales-{{$key}}') ||
-      data.{{$key}}.series.first().data.length;
-      
+    oForm["checkbox-constantes-medicales-{{$key}}"].checked = !!data.{{$key}}.series.first().data.length;
     $('constantes-medicales-{{$key}}').setVisible(oForm["checkbox-constantes-medicales-{{$key}}"].checked);
   {{/foreach}}
-
 });
 
 loadConstantesMedicales  = function(context_guid) {
