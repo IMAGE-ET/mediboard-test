@@ -48,6 +48,7 @@ function popMateriel() {
 		  <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
 		  <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
 		  <td class="text">
+		    <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
         {{if $curr_op->libelle}}
         <em>[{{$curr_op->libelle}}]</em>
         <br />
@@ -56,6 +57,7 @@ function popMateriel() {
         {{$curr_code->code}} : <em>{{$curr_code->libelleLong}}</em><br />
         {{/foreach}}
         (Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}})
+        </a>
       </td>
 		  <td class="text">{{$curr_op->materiel|nl2br}}</td>
 		  <td>

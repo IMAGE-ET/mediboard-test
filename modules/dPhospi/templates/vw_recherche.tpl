@@ -45,7 +45,7 @@ Main.add(function () {
   {{if $typeVue == 0}}
   <tr>
     <th class="title" colspan="4">
-      {{$date_recherche|date_format:"%A %d %B %Y à %Hh%M"}} : {{$libre|@count}} lit(s) disponible(s)
+      {{$date_recherche|date_format:$dPconfig.datetime}} : {{$libre|@count}} lit(s) disponible(s)
     </th>
   </tr>
   <tr>
@@ -68,7 +68,7 @@ Main.add(function () {
       {{if $selPrat}}
         Dr {{$listPrat.$selPrat->_view}} -
       {{/if}}
-      {{$date_recherche|date_format:$dPconfig.longdate}} : {{$listAff|@count}} patient(s)
+      {{$date_recherche|date_format:$dPconfig.datetime}} : {{$listAff|@count}} patient(s)
     </th>
   </tr>
   <tr>

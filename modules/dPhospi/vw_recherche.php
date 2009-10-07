@@ -79,7 +79,7 @@ if($typeVue == 0) {
 //
 else if ($typeVue == 1) {
   // Recherche des patients du praticien
-  $date = mbDate(null, $date_recherche);
+  $date_recherche;
   
   if($selPrat) {
     $wherePrat = "AND sejour.praticien_id = '$selPrat'";
@@ -93,8 +93,8 @@ else if ($typeVue == 1) {
 					LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
 					LEFT JOIN service ON service.service_id = chambre.service_id
 					LEFT JOIN sejour ON sejour.sejour_id = affectation.sejour_id
-					WHERE affectation.entree < '$date 23:59:59'
-					AND affectation.sortie > '$date 00:00:00'
+					WHERE affectation.entree < '$date_recherche'
+					AND affectation.sortie > '$date_recherche'
 					$whereService
 			    $wherePrat
 			    AND sejour.group_id = '$g'
