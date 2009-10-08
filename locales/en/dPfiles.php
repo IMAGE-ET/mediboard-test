@@ -131,4 +131,17 @@ $locales['config-dPfiles-rooturl'] = '';
 $locales['config-dPfiles-rooturl-desc'] = '';
 $locales['config-dPfiles-upload_max_filesize-desc'] = '';
 $locales['CDocumentSender-alert_problem'] = '';
+$locales['CFile-_count'] = '';
+$locales['CFile-_extensioned'] = '';
+$locales['CFile-_extensioned-court'] = '';
+$locales['CFile-_extensioned-desc'] = '';
+$locales['CFile-_send_problem'] = '';
+$locales['CFile-_send_problem-court'] = '';
+$locales['CFile-_send_problem-desc'] = '';
+$locales['config-dPfiles-CFile-upload_directory'] = '';
+$locales['config-dPfiles-CFile-upload_directory-desc'] = '';
+$locales['mod-dPfiles-tab-send_documents'] = '';
+$locales['mod-dPfiles-tab-vw_stats'] = '';
+$locales['CFile-_total_weight'] = '';
+$locales['CFile-_average_weight'] = '';
 ?>

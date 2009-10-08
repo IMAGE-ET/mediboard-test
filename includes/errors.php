@@ -124,6 +124,8 @@ function processLog($export, $label = null, $log = false) {
 
 /**
  * Traces variable using preformated text prefixed with a label
+ * @param any $var The variable you want to trace the value of
+ * @param string $label Prefix with a label
  * @return string|int The processed log or the size of the data written in the log file 
  **/
 function mbTrace($var, $label = null, $log = false) {

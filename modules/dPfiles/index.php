@@ -13,4 +13,5 @@ $module->registerTab("vw_files"       , null, TAB_READ);
 $module->registerTab("vw_category"    , null, TAB_ADMIN);
 $module->registerTab("files_integrity", null, TAB_ADMIN);
 $module->registerTab("send_documents" , null, TAB_EDIT);
+$module->registerTab("vw_stats"       , null, TAB_ADMIN);
 ?>

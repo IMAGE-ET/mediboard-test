@@ -866,19 +866,19 @@ function mbConvertDecaBinary($number) {
   $kbytes = $bytes / 1024;
   if ($kbytes >= 1) {
     $value = $kbytes;
-    $prefix = "K";
+    $prefix = "Ki";
   }
 
   $mbytes = $kbytes / 1024;
   if ($mbytes >= 1) {
     $value = $mbytes;
-    $prefix = "M";
+    $prefix = "Mi";
   }
 
   $gbytes = $mbytes / 1024;
   if ($gbytes >= 1) {
     $value = $gbytes;
-    $prefix = "G";
+    $prefix = "Gi";
   }
   
   // Value with 3 significant digits, thent the unit
