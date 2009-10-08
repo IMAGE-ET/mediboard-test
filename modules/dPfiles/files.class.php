@@ -7,7 +7,9 @@
 * @author Romain Ollivier
 */
 global $filesDir;
-$filesDir = realpath(CAppUI::conf("dPfiles CFile upload_directory"));
+
+// We have to replace the backslashes with slashes because of PHPthumb on Windows
+$filesDir = str_replace('\\', '/', realpath(CAppUI::conf("dPfiles CFile upload_directory")));
 
 class CFile extends CDocumentItem {
   // DB Table key
