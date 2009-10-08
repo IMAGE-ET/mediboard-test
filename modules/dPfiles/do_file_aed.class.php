@@ -90,7 +90,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
 
         if ($msg = $this->_obj->store()) {
-          $AppUI->setMsg("Fichier non enregistré", UI_MSG_ERROR);
+          $AppUI->setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
           continue;
         }
 
