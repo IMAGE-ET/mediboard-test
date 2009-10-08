@@ -164,6 +164,21 @@
     </td>             
   </tr>
   
+  {{assign var="var" value="sortie_prevue"}} 
+  <tr>
+   <th>
+     <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+       {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+     </label>  
+   </th>
+   <td>
+     <select name="{{$m}}[{{$var}}]">
+       <option value="sameday" {{if "sameday" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-sameday{{/tr}}</option>
+       <option value="h24" {{if "h24" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-h24{{/tr}}</option>
+     </select>
+   </td>
+  </tr>
+  
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

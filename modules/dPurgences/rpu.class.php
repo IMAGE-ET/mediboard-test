@@ -262,11 +262,9 @@ class CRPU extends CMbObject {
     $sejour->type = "urg";
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
-    $sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
-    $sejour->annule        = $this->_annule;
-    
+    $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
+    $sejour->annule        = $this->_annule;    
     $sejour->service_id    = $this->_service_id;
-    
     $sejour->etablissement_entree_transfert_id = $this->_etablissement_entree_transfert_id;
 
     // Le patient est souvent chargé à vide ce qui pose problème

@@ -293,4 +293,11 @@ $locales['config-dPurgences-programme_rpu_view'] = 'Affichage du programme de co
 $locales['config-dPurgences-programme_rpu_view-desc'] = 'Affichage du programme de consultation';
 $locales['config-dPurgences-diag_prat_view'] = 'Afficher diagnostic d\'examen du praticien';
 $locales['config-dPurgences-diag_prat_view-desc'] = 'Afficher diagnostic d\'examen du praticien';
+$locales['config-dPurgences-cacher_dossier_annule'] = '';
+$locales['config-dPurgences-cacher_dossier_annule-desc'] = '';
+$locales['config-dPurgences-sortie_prevue'] = 'Initialiser la sortie prévue';
+$locales['config-dPurgences-sortie_prevue-desc'] = 'Initialiser la sortie prévue';
+$locales['config-dPurgences-sortie_prevue-sameday'] = 'Le même jour (23h59)';
+$locales['config-dPurgences-default_view-0'] = '';
+$locales['config-dPurgences-sortie_prevue-h24'] = 'H +24';
 ?>
