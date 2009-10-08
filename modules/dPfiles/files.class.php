@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 global $filesDir;
-$filesDir = CAppUI::conf("dPfiles CFile upload_directory");
+$filesDir = realpath(CAppUI::conf("dPfiles CFile upload_directory"));
 
 class CFile extends CDocumentItem {
   // DB Table key
