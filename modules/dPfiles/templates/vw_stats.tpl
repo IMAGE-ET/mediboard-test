@@ -4,9 +4,15 @@
     <th>{{tr}}CFile-_total_weight{{/tr}}</th>
     <th>{{tr}}CFile-_average_weight{{/tr}}</th>
 		<th>{{tr}}CMediusers{{/tr}}</th>
-		
 	</tr>
 	
+  <tr style="font-weight: bold;">
+    <td style="text-align: right;">{{$total.files_count}}</td>
+    <td style="text-align: right;">{{$total._files_weight}}</td>
+    <td style="text-align: right;">{{$total._file_average_weight}}</td>
+    <td>{{tr}}Total{{/tr}}
+  </tr>
+
   {{foreach from=$stats item=_stat}}
   <tr>
     <td style="text-align: right;">{{$_stat.files_count}}</td>

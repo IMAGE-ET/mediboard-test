@@ -18,9 +18,19 @@ $query = "SELECT COUNT(`file_id`) AS files_count, SUM(`file_size`) AS files_weig
 	GROUP BY `file_owner`
 	ORDER BY `files_weight` DESC";
 $stats = $ds->loadList($query);
+
+$total = array(
+  "files_weight" => 0,
+  "files_count" => 0,
+);
+
 foreach($stats as &$_stat) {
-	$_stat["_file_average_weight"] = mbConvertDecaBinary($_stat["files_weight"] / $_stat["files_count"]);
-  $_stat["_files_weight"] = mbConvertDecaBinary($_stat["files_weight"]);
+  $total["files_weight"] += $_stat["files_weight"];
+  $total["files_count"]  += $_stat["files_count"];
+
+	$_stat["_file_average_weight"] = $_stat["files_weight"] / $_stat["files_count"];
+  $_stat["_file_average_weight"] = mbConvertDecaBinary($_stat["_file_average_weight"]);
+  $_stat["_files_weight"]        = mbConvertDecaBinary($_stat["files_weight"]);
 	if (CModule::getActive("mediusers")) {
 		$user = new CMediusers;
 		$user->load($_stat["file_owner"]);
@@ -29,9 +39,14 @@ foreach($stats as &$_stat) {
 	}
 }
 
+$total["_file_average_weight"] = $total["files_weight"] / $total["files_count"];
+$total["_file_average_weight"] = mbConvertDecaBinary($total["_file_average_weight"]);
+$total["_files_weight"]        = mbConvertDecaBinary($total["files_weight"]);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("stats", $stats);
+$smarty->assign("total", $total);
 $smarty->display("vw_stats.tpl");
 
 ?>
