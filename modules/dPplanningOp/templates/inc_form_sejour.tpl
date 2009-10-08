@@ -248,24 +248,22 @@ Main.add( function(){
 
 <input type="hidden" name="adresse_par_prat_id" value="{{$sejour->adresse_par_prat_id}}" />
 {{if !$mode_operation}}
-  {{mb_field object=$sejour field="sejour_id" hidden=1 prop=""}}
+  {{mb_key object=$sejour}}
 {{/if}}
-
 
 <table class="form">
 
 <tr>
   <th class="category" colspan="4">
-    {{if $mode_operation && $sejour->sejour_id}}
+    {{if $mode_operation && $sejour->_id}}
+
+    {{mb_include module=system template=inc_object_idsante400 object=$sejour}}
+    {{mb_include module=system template=inc_object_history object=$sejour}}
     
-    <div class="idsante400" id="CSejour-{{$sejour->sejour_id}}"></div>
-  
-    <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
-      <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
-    </a>
-    <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
+    <div style="float:left;" class="noteDiv {{$sejour->_guid}}">
       <img src="images/icons/note_grey.png" alt="Ecrire une note" />
     </div>
+
     <a class="action" style="float: right"  title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
       <img src="images/icons/edit.png" alt="modifier" />
      </a>
@@ -289,7 +287,7 @@ Main.add( function(){
   </th>
   <td colspan="3" id="selectSejours">
     <select name="sejour_id" onchange="reloadSejour(this.value)">
-      <option value="" {{if !$sejour->sejour_id}} selected="selected" {{/if}}>
+      <option value="" {{if !$sejour->_id}} selected="selected" {{/if}}>
         &mdash; Créer un nouveau séjour
       </option>
       {{foreach from=$sejours item=curr_sejour}}
@@ -318,17 +316,22 @@ Main.add( function(){
 
 <tr>
   <th>
-    {{mb_label object=$sejour field="praticien_id"}}
+    {{mb_label object=$sejour field=praticien_id}}
   </th>
   <td colspan="3">
+  	{{if $sejour->praticien_id && !array_key_exists($sejour->praticien_id, $listPraticiens)}}
+    {{mb_field object=$sejour field=praticien_id hidden=1}}
+    {{mb_value object=$sejour field=praticien_id}}
+		{{else}} 
     <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="max-width: 150px;">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
       <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-        {{$curr_praticien->_view}}
+        {{$curr_praticien}}
       </option>
       {{/foreach}}
     </select>
+		{{/if}}
   </td>
 </tr>
 
