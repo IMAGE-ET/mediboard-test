@@ -140,12 +140,9 @@ Main.add(function () {
       </div>
       {{/if}}
       
-      <div class="idsante400" id="CPatient-{{$patient->_id}}"></div>
-          
-      <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
-      Modification du dossier de {{$patient->_view}} 
+      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
+      {{mb_include module=system template=inc_object_history object=$patient}}
+      Modification du dossier de {{$patient}} 
       {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>

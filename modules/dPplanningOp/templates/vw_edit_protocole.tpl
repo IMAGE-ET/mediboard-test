@@ -175,11 +175,10 @@ Main.add(function () {
   {{/if}}
 
   <tr>
-    {{if $protocole->protocole_id}}
+    {{if $protocole->_id}}
     <th colspan="2" class="title modify">
-      <a style="float:right;" href="#" onclick="view_log('CProtocole',{{$protocole->protocole_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$protocole}}
+      {{mb_include module=system template=inc_object_history object=$protocole}}
       Modification du {{$protocole->_view}}
     </th>
     {{else}}

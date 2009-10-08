@@ -297,7 +297,8 @@ class CHprim21Patient extends CHprim21Object {
   }
   
   function updateFormFields() {
-    $this->_view = $this->civilite." ".$this->nom." ".$this->prenom." [".$this->external_id."]";
+  	parent::updateFormFields();
+    $this->_view = "$this->civilite $this->nom $this->prenom [$this->external_id]";
   }
   
   function loadRefsFwd(){

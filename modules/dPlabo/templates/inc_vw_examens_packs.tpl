@@ -19,9 +19,8 @@ Object.extend(Droppables, {
 <table class="tbl" id="drop-listpacks-{{$pack->_id}}">
   <tr>
     <th class="title" colspan="6">
-      <a style="float:right;" href="#nothing" onclick="view_log('{{$pack->_class_name}}', {{$pack->_id}})">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-      </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$pack}}
+      {{mb_include module=system template=inc_object_history object=$pack}}
       {{$pack->_view}}
       <script type="text/javascript">
         Droppables.addPack({{$pack->_id}});

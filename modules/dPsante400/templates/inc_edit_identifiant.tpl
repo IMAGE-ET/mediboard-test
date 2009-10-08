@@ -10,9 +10,7 @@
 <tr>
   <th class="category" colspan="2">
   {{if $idSante400->_id}}
-    <a style="float:right;" href="#" onclick="view_log('CIDSante400',{{$idSante400->_id}})">
-      <img src="images/icons/history.gif" alt="historique" />
-    </a>
+    {{mb_include module=system template=inc_object_history object=$idSante400}}
     {{tr}}CIdSante400-title-modify{{/tr}} &lsquo;{{$idSante400->_view}}&rsquo;
   {{else}}
     {{tr}}CIdSante400-title-create{{/tr}}

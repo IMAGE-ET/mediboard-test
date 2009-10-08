@@ -45,16 +45,13 @@ Main.add(function () {
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
-          {{if $etabExterne->etab_id}}
-          
-           <div class="idsante400" id="CEtabExterne-{{$etabExterne->etab_id}}"></div>
-           
-            <a style="float:right;" href="#" onclick="view_log('CEtabExterne',{{$etabExterne->etab_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
+          {{if $etabExterne->_id}}
+          <th class="category modify" colspan="2">
+			      {{mb_include module=system template=inc_object_idsante400 object=$etabExterne}}
+			      {{mb_include module=system template=inc_object_history object=$etabExterne}}
             Modification de l'établissement &lsquo;{{$etabExterne->nom}}&rsquo;
           {{else}}
+          <th class="category" colspan="2">
             Création d'un établissement externe
           {{/if}}
           </th>
@@ -103,7 +100,7 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$etabExterne field="ape"}}</th>
           <td>{{mb_field object=$etabExterne field="ape"}}</td>
- 		</tr>
+ 		    </tr>
         <tr>
           <td class="button" colspan="2">
           {{if $etabExterne->_id}}

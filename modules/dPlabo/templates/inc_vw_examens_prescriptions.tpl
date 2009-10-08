@@ -33,9 +33,8 @@ Object.extend(Droppables, {
 <table class="tbl" id="drop-listprescriptions-{{$prescription->_id}}">
   <tr>
     <th class="title" colspan="100">
-      <a style="float:right;" href="#nothing" onclick="view_log('{{$prescription->_class_name}}', {{$prescription->_id}})">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-      </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$prescription}}
+      {{mb_include module=system template=inc_object_history object=$prescription}}
       {{$prescription->_view}}
       <script type="text/javascript">
         Droppables.addPrescription({{$prescription->_id}});

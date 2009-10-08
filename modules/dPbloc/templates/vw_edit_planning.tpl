@@ -91,9 +91,8 @@ Main.add(function(){
         <tr>
           {{if $plagesel->plageop_id}}
           <th class="category modify" colspan="6">
-            <a style="float:right;" href="#" onclick="view_log('CPlageOp',{{$plagesel->plageop_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
+				    {{mb_include module=system template=inc_object_idsante400 object=$plagesel}}
+				    {{mb_include module=system template=inc_object_history object=$plagesel}}
             {{tr}}CPlageOp-title-modify{{/tr}}
           {{else}}
           <th class="category" colspan="6">
@@ -211,7 +210,6 @@ Main.add(function(){
         <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
         <th>{{mb_label object=$plagesel field="delay_repl"}}</th>
         <td>{{mb_field object=$plagesel field="delay_repl" size=1 increment=true form="editFrm" min=0}} jours</td>
-        <td></td>
       </tr>
       <tr>
         <td colspan="2" />

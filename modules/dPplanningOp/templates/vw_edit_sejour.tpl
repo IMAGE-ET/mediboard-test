@@ -54,11 +54,10 @@ function toggleMode() {
   <tr>
     {{if $sejour->_id}}
     <th colspan="2" class="title modify">
-      <div class="idsante400" id="CSejour-{{$sejour->sejour_id}}"></div>
-      <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
-      <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
+      {{mb_include module=system template=inc_object_idsante400 object=$sejour}}
+      {{mb_include module=system template=inc_object_history object=$sejour}}
+
+      <div style="float:left;" class="noteDiv {{$sejour->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
       

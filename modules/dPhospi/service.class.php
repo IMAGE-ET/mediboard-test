@@ -56,7 +56,8 @@ class CService extends CMbObject {
     return $specs;
   }
   
-  function updateFormFields(){
+  function updateFormFields() {
+  	parent::updateFormFields();
     $this->_view = $this->nom;
   }
   

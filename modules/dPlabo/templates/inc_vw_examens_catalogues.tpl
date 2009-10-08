@@ -8,9 +8,7 @@
         </form>
           <button class="search notext" onclick="search()">Recherche</button>
       </div>
-      <a style="float:right;" href="#nothing" onclick="view_log('{{$catalogue->_class_name}}', {{$catalogue->_id}})">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-      </a>
+      {{mb_include module=system template=inc_object_history object=$catalogue}}
       {{if $search}}
         {{$listExams|@count}}
         {{if $listExams|@count != $countExams}}/{{$countExams}}{{/if}} 

@@ -155,11 +155,11 @@ Main.add(function () {
       <tr id="editplage-trigger">
         {{if !$plageSel->plageconsult_id}}
         <th class="category" colspan="4">Créer une plage</th>
+
         {{else}}
         <th class="category modify" colspan="4">
-          <a style="float:right;" href="#" onclick="view_log('CPlageconsult',{{$plageSel->plageconsult_id}})">
-            <img src="images/icons/history.gif" alt="historique" />
-          </a>
+		      {{mb_include module=system template=inc_object_idsante400 object=$plageSel}}
+		      {{mb_include module=system template=inc_object_history object=$plageSel}}
           Modifier cette plage
         </th>
         {{/if}}
@@ -170,8 +170,10 @@ Main.add(function () {
           <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
           <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
           <input type='hidden' name='del' value='0' />
+					
           {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
-          <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
+          
+					<input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
           <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
           <input type='hidden' name='_lastconsult_time' value='{{$_lastconsult_time}}' />
           <table class="form">

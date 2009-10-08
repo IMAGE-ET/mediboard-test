@@ -65,10 +65,8 @@ Main.add(function () {
     <tr>
       {{if $chambreSel->_id}}
       <th class="title modify" colspan="2">
-        <div class="idsante400" id="{{$chambreSel->_class_name}}-{{$chambreSel->_id}}"></div>
-        <a style="float:right;" href="#" onclick="view_log('{{$chambreSel->_class_name}}',{{$chambreSel->_id}})">
-          <img src="images/icons/history.gif" alt="historique" />
-        </a>
+	      {{mb_include module=system template=inc_object_idsante400 object=$chambreSel}}
+	      {{mb_include module=system template=inc_object_history object=$chambreSel}}
         Modification de la chambre &lsquo;{{$chambreSel->nom}}&rsquo;
       {{else}}
       <th class="title" colspan="2">
@@ -133,7 +131,10 @@ Main.add(function () {
     {{foreach from=$chambreSel->_ref_lits item=curr_lit}}
     <tr>
       <th>Lit</th>
-      <td><div class="idsante400" id="{{$curr_lit->_class_name}}-{{$curr_lit->_id}}"></div><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a></td>
+      <td>
+	      {{mb_include module=system template=inc_object_idsante400 object=$curr_lit}}
+	      {{mb_include module=system template=inc_object_history object=$curr_lit}}
+				<a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a></td>
     </tr>
 	  {{/foreach}}
     <tr>

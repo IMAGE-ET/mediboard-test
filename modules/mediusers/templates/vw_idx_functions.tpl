@@ -59,18 +59,14 @@ ColorSelector.init = function(){
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $userfunction->function_id}}
+          {{if $userfunction->_id}}
           <th class="title modify" colspan="2">
-            <a style="float:right;" href="#" onclick="view_log('CFunctions',{{$userfunction->function_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
-            Modification de la fonction &lsquo;{{$userfunction->text}}&rsquo;
+			      {{mb_include module=system template=inc_object_idsante400 object=$userfunction}}
+			      {{mb_include module=system template=inc_object_history object=$userfunction}}
+            Modification de la fonction &lsquo;{{$userfunction}}&rsquo;
           </th>
           {{else}}
           <th class="title" colspan="2">
-            <a style="float:right;" href="#" onclick="view_log('CFunctions',{{$userfunction->function_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
             {{tr}}Création d'une fonction{{/tr}}
           </th>
           {{/if}}
@@ -159,12 +155,12 @@ ColorSelector.init = function(){
     <td>
       <ul id="tab_user" class="control_tabs">
         <li>
-          <a href="#list-primary-users" id="list-primary-users-title">
+          <a {{if !$userfunction->_back.users|@count}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
             Utilisateurs principaux <small>({{$userfunction->_back.users|@count}})</small>
           </a>
         </li>
         <li>
-          <a href="#list-secondary-users" id="list-secondary-users-title">
+          <a {{if !$userfunction->_back.secondary_functions|@count}}class="empty"{{/if}} href="#list-secondary-users" id="list-secondary-users-title">
             Utilisateurs secondaires <small>({{$userfunction->_back.secondary_functions|@count}})</small>
           </a>
         </li>

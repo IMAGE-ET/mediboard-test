@@ -18,12 +18,10 @@ function editPatient() {
 <table class="form">
   <tr>
     <th class="category" colspan="2">
+      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
+      {{mb_include module=system template=inc_object_history object=$patient}}
 
-      <a style="float:right;" href="#" onclick="view_log('CHprim21Patient',{{$patient->_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
-
-      <div style="float:left;" class="noteDiv {{$patient->_class_name}}-{{$patient->_id}}">
+      <div style="float:left;" class="noteDiv {{$patient->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 

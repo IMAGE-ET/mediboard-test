@@ -60,12 +60,10 @@ CCAMSelector.init = function(){
   <tr>
     <th class="category" colspan="3">
       {{if $op->operation_id}}
-      <div class="idsante400" id="COperation-{{$op->operation_id}}"></div>
-      
-      <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
-        <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
-      </a>
-      <div style="float:left;" class="noteDiv {{$op->_class_name}}-{{$op->_id}}">
+      {{mb_include module=system template=inc_object_idsante400 object=$op}}
+      {{mb_include module=system template=inc_object_history object=$op}}
+
+      <div style="float:left;" class="noteDiv {{$op->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
       {{/if}}

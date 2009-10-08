@@ -49,14 +49,13 @@
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
           {{if $category->_id}}
-            <div class="idsante400" id="CCategoryPrescription-{{$category->_id}}"></div>
-            <a style="float:right;" href="#" onclick="view_log('CCategoryPrescription',{{$category->_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
-            Modification de la catégorie &lsquo;{{$category->nom}}&rsquo;
+          <th class="category modify" colspan="2">
+			      {{mb_include module=system template=inc_object_idsante400 object=$category}}
+			      {{mb_include module=system template=inc_object_history object=$category}}
+            Modification de la catégorie &lsquo;{{$category}}&rsquo;
           {{else}}
+          <th class="category" colspan="2">
             Création d'une catégorie
           {{/if}}
           </th>

@@ -46,20 +46,17 @@ Main.add(function () {
     <td class="halfPane">
       <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_groups_aed" />
-	  <input type="hidden" name="group_id" value="{{$usergroup->group_id}}" />
+   	  <input type="hidden" name="group_id" value="{{$usergroup->group_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
           {{if $usergroup->group_id}}
-          
-           <div class="idsante400" id="CGroups-{{$usergroup->group_id}}"></div>
-           
-            <a style="float:right;" href="#" onclick="view_log('CGroups',{{$usergroup->group_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
+          <th class="category modify" colspan="2">
+		      {{mb_include module=system template=inc_object_idsante400 object=$usergroup}}
+		      {{mb_include module=system template=inc_object_history object=$usergroup}}
             Modification de l'établissement &lsquo;{{$usergroup->text}}&rsquo;
           {{else}}
+          <th class="category" colspan="2">
             Création d'un établissement
           {{/if}}
           </th>

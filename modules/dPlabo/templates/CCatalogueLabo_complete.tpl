@@ -28,12 +28,8 @@ var oDragOptions = {
 <table class="tbl">
   <tr>
     <th class="title" colspan="6">
-     
-     <div class="idsante400" id="{{$object->_class_name}}-{{$object->_id}}"></div>
-     
-      <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-      </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$object}}
+      {{mb_include module=system template=inc_object_history object=$object}}
       {{$object->_view}}
     </th>
   </tr>

@@ -211,12 +211,12 @@
     {{foreach from=$list1 item=curr_op}}
     <tr>
       <td style="width: 40%; white-space: nowrap;">
-        <a style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
-          <img src="images/icons/history.gif" alt="historique" />
-        </a>
+        {{mb_include module=system template=inc_object_history object=$curr_op}}
+
         <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
           {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
-        </a><br />
+        </a>
+				<br />
         Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
         <br />
         Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
@@ -292,13 +292,11 @@
   </td>
   <td class="halfPane">
     <table class="tbl">
-      <tr><th colspan="3">Ordre des interventions</th></tr>
+      <tr><th colspan="3"">Ordre des interventions</th></tr>
     {{foreach from=$list2 item=curr_op}}
     <tr>
-      <td style="width: 40%; white-space: nowrap;">
-        <a id="op{{$curr_op->operation_id}}" style="float:right;" href="#nothing" onclick="view_log('COperation',{{$curr_op->operation_id}})">
-          <img src="images/icons/history.gif" alt="historique" />
-        </a>
+      <td style="width: 40%;">
+        {{mb_include module=system template=inc_object_history object=$curr_op}}
         <form name="edit-pause-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />

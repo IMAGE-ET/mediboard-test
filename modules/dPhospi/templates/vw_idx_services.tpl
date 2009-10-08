@@ -36,10 +36,8 @@
     <tr>
       {{if $serviceSel->_id}}
       <th class="title modify" colspan="2">
-        <div class="idsante400" id="{{$serviceSel->_class_name}}-{{$serviceSel->_id}}"></div>
-        <a style="float:right;" href="#" onclick="view_log('{{$serviceSel->_class_name}}',{{$serviceSel->_id}})">
-          <img src="images/icons/history.gif" alt="historique" />
-        </a>
+		    {{mb_include module=system template=inc_object_idsante400 object=$serviceSel}}
+		    {{mb_include module=system template=inc_object_history object=$serviceSel}}
         Modification du service &lsquo;{{$serviceSel->_view}}&rsquo;
       </th>
       {{else}}

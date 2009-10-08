@@ -52,10 +52,8 @@ Main.add(function () {
         <tr>
           {{if $catalogue->_id}}
           <th class="title modify" colspan="10">
-            <div class="idsante400" id="{{$catalogue->_class_name}}-{{$catalogue->_id}}" ></div>
-            <a style="float:right;" href="#nothing" onclick="view_log('{{$catalogue->_class_name}}', {{$catalogue->_id}})">
-              <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-            </a>
+			      {{mb_include module=system template=inc_object_idsante400 object=$catalogue}}
+			      {{mb_include module=system template=inc_object_history object=$catalogue}}
             Modification du catalogue {{$catalogue->_view}}
           </th>
           {{else}}

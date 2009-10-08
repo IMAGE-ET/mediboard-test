@@ -214,15 +214,15 @@ Main.add(function () {
         </tr>
         {{/if}}
         <tr>
+          {{if $medecin->_id}}
+          <th class="category modify" colspan="2">
+			      {{mb_include module=system template=inc_object_idsante400 object=$medecin}}
+			      {{mb_include module=system template=inc_object_history object=$medecin}}
+            Modification de la fiche de {{$medecin->_view}}
+          {{else}}
           <th class="category" colspan="2">
-            {{if $medecin->_id}}
-	            <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->_id}})">
-                <img src="images/icons/history.gif" alt="historique" />
-              </a>
-              Modification de la fiche de {{$medecin->_view}}
-            {{else}}
-              Création d'une fiche
-            {{/if}}
+            Création d'une fiche
+          {{/if}}
           </th>
         </tr>
 

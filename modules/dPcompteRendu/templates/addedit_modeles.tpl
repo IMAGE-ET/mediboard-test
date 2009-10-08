@@ -116,9 +116,8 @@ Main.add(function () {
         <tr>
           <th class="category" colspan="2">
             {{if $compte_rendu->_id}}
-            <a style="float:right;" href="#" onclick="view_log('CCompteRendu',{{$compte_rendu->_id}})">
-            <img src="images/icons/history.gif" alt="historique" />
-            </a>
+			      {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
+			      {{mb_include module=system template=inc_object_history object=$compte_rendu}}
             {{/if}}
             Informations sur le modèle
           </th>

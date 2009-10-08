@@ -28,12 +28,11 @@ function printRapport() {
       {{/if}}
       <table class="form">
         <tr>
-          {{if $gestioncab->gestioncab_id}}
-          <th class="title modify" colspan="4">
-            <a style="float:right;" href="#" onclick="view_log('CGestionCab',{{$gestioncab->gestioncab_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
-            Modification de la fiche {{$gestioncab->_view}}
+          {{if $gestioncab->_id}}
+          <th class="title modify" colspan="2">
+			      {{mb_include module=system template=inc_object_idsante400 object=$gestioncab}}
+			      {{mb_include module=system template=inc_object_history object=$gestioncab}}
+            Modification de la fiche '{{$gestioncab}}'
           </th>
           {{else}}
           <th class="title" colspan="2">Création d'une nouvelle fiche</th>

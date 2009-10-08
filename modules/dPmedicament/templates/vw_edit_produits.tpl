@@ -74,14 +74,13 @@ function updateUniteDispensation(element){
         
           <table class="form">
             <tr>
-		          <th class="category" colspan="2">
 		          {{if $produit->_id}}
-		            <div class="idsante400" id="CProduitPrescription-{{$produit->_id}}"></div>
-		            <a style="float:right;" href="#" onclick="view_log('CProduitPrescription',{{$produit->_id}})">
-		              <img src="images/icons/history.gif" alt="historique" />
-		            </a>
+              <th class="category modify" colspan="2">
+					      {{mb_include module=system template=inc_object_idsante400 object=$produit}}
+					      {{mb_include module=system template=inc_object_history object=$produit}}
 		            Modification du produit
 						  {{else}}
+              <th class="category" colspan="2">
 		            Création d'un produit
 		          {{/if}}
 		          </th>

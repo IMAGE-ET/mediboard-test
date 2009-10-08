@@ -30,10 +30,9 @@
    <tr>
      {{if $banque->_id}}
      <th class="title modify" colspan="2">
-       <div class="idsante400" id="{{$banque->_class_name}}-{{$banque->_id}}"></div>
-       <a style="float:right;" href="#nothing" onclick="view_log('{{$banque->_class_name}}',{{$banque->_id}})">
-       <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-       </a>
+       {{mb_include module=system template=inc_object_idsante400 object=$banque}}
+       {{mb_include module=system template=inc_object_history object=$banque}}
+     	
        Modification de la banque &lsquo;{{$banque->nom}}&rsquo;
      </th>
      {{else}}

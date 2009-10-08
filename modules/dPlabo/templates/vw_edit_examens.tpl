@@ -70,10 +70,8 @@ Main.add(function () {
         <tr>
           {{if $examen->_id}}
           <th class="title modify" colspan="2">
-            <div class="idsante400" id="{{$examen->_class_name}}-{{$examen->_id}}" ></div>
-            <a style="float:right;" href="#nothing" onclick="view_log('{{$examen->_class_name}}', {{$examen->_id}})">
-              <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-            </a>
+			      {{mb_include module=system template=inc_object_idsante400 object=$examen}}
+			      {{mb_include module=system template=inc_object_history object=$examen}}
             Modification de l'examen {{$examen->_view}}
           </th>
           {{else}}

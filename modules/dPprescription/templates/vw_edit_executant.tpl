@@ -96,10 +96,8 @@ function removeFunction(function_category_id){
 		       <tr>
 		         <th class="category" colspan="2">
 		         {{if $executant_prescription_line->_id}}
-		           <div class="idsante400" id="CExecutantPrescriptionLine-{{$executant_prescription_line->_id}}"></div>
-		           <a style="float:right;" href="#" onclick="view_log('CExecutantPrescriptionLine',{{$executant_prescription_line->_id}})">
-		             <img src="images/icons/history.gif" alt="historique" />
-		           </a>
+	  			     {{mb_include module=system template=inc_object_idsante400 object=$executant_prescription_line}}
+ 				       {{mb_include module=system template=inc_object_history object=$executant_prescription_line}}
 		           Modification de l'executant &lsquo;{{$executant_prescription_line->nom}}&rsquo;
 		         {{else}}
 		           Création d'un exécutant

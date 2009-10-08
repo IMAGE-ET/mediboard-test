@@ -65,19 +65,19 @@ Main.add(function () {
     <td>
       <form name="addPlage" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <table class="form">
-        {{if $plage->plageressource_id}}
+        {{if $plage->_id}}
         <tr>
           <td colspan="4">
             <a class="button new" href="?m={{$m}}&amp;plage_id=0">Créer de nouvelles plages</a>
           </td>
         </tr>
         <tr>
-          <th colspan="4" class="category">
-	        <a style="float:right;" href="#" onclick="view_log('CPlageressource',{{$plage->plageressource_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
-            Modifier la plage du {{$plage->date|date_format:"%d/%m/%Y"}}
-            ({{$plage->debut|date_format:"%H"}}h-{{$plage->fin|date_format:"%H"}}h)
+          <th colspan="4" class="category modify">
+			      {{mb_include module=system template=inc_object_idsante400 object=$plage}}
+			      {{mb_include module=system template=inc_object_history object=$plage}}
+            Modifier la plage du 
+						{{mb_value object=$plage field=date}}
+            ({{mb_value object=$plage field=debut}}-{{mb_value object=$plage field=fin}})
           </th>
         </tr>
         {{else}}

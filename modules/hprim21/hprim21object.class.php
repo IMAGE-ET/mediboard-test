@@ -26,6 +26,7 @@ class CHprim21Object extends CMbObject {
   }
   
   function updateFormFields() {
+  	parent::updateFormFields();
     $this->_view = $this->emetteur_id." : ".$this->external_id;
   }
   

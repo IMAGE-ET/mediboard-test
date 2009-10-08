@@ -34,7 +34,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 <table class="form">
   <tr>
     <th class="category">
-      <div style="float:left;" class="noteDiv CPatient-{{$consult->patient_id}}">
+      <div style="float:left;" class="noteDiv {{$patient->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 			{{if $patient->_id_vitale}}
@@ -48,10 +48,8 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
     	Correspondants
     	</th>
     <th class="category">
-	    <div class="idsante400" id="{{$consult->_class_name}}-{{$consult->_id}}"></div>
-      <a style="float:right;" href="#" onclick="view_log('{{$consult->_class_name}}',{{$consult->_id}})">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$consult}}
+      {{mb_include module=system template=inc_object_history object=$consult}}
       Historique
     </th>
     <th class="category">Planification</th>

@@ -120,14 +120,13 @@ toggleCancelled = function(){
 				 <input type="hidden" name="cancelled" value="{{$element_prescription->cancelled}}" />
          <table class="form">
 		       <tr>
-		         <th class="category" colspan="2">
 		         {{if $element_prescription->_id}}
-		           <div class="idsante400" id="CElementPrescription-{{$element_prescription->_id}}"></div>
-		           <a style="float:right;" href="#" onclick="view_log('CElementPrescription',{{$element_prescription->_id}})">
-		             <img src="images/icons/history.gif" alt="historique" />
-		           </a>
+             <th class="category modify" colspan="2">
+				       {{mb_include module=system template=inc_object_idsante400 object=$element_prescription}}
+				       {{mb_include module=system template=inc_object_history object=$element_prescription}}
 		           Modification de l'element &lsquo;{{$element_prescription->libelle}}&rsquo;
 		         {{else}}
+             <th class="category" colspan="2">
 		           Création d'un libellé
 		         {{/if}}
 		         </th>
