@@ -15,8 +15,6 @@ Main.add(function () {
 });
 </script>
 
-<h2>Administration des modules</h2>
-
 {{if $coreModules|@count}}
   <div class="big-warning">
     Un ou plusieurs des modules de base ne sont pas à jour.<br />
@@ -26,8 +24,10 @@ Main.add(function () {
 	{{include file="inc_module.tpl" object=$coreModules}}
 {{else}}
 	<ul id="tabs-modules" class="control_tabs">
-	  <li><a {{if !$mbmodules.installe|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installe|@count}})</a></li>
+	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installe|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installe|@count}})</a></li>
 	  <li><a {{if !$mbmodules.aInstaller|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.aInstaller|@count}})</a></li>
+    <li><a class="empty" href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
+    <li><a {{if !$majLibs|@count}}class="empty"{{/if}} {{if $majLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} ({{$majLibs|@count}})</a></li>
 	</ul>
 	
 	<hr class="control_tabs" />
@@ -39,63 +39,95 @@ Main.add(function () {
 	<div id="notInstalled" style="display: none;">
 	  {{include file="inc_module.tpl" object=$mbmodules.aInstaller}}
 	</div>
+  
+  <div id="cache" style="display: none;">
+    <script type="text/javascript">
+      function updateControlTabs() {
+        var tab = $$('a[href="#cache"]').first();
+        if ($(this.id).select('.error').length)
+          tab.addClassName('wrong');
+        else 
+          tab.removeClassName('wrong');
+      }
+      
+      var Templates = {
+        id: "Templates",
+        
+        empty: function() {
+          var url = new Url("system", "httpreq_do_empty_templates");
+          url.requestUpdate(this.id);
+        }
+      }
+      
+      var SharedMemory = {
+        id : "SharedMemory", 
+        
+        empty: function(ie) {
+          var url = new Url("system", "httpreq_do_empty_shared_memory");
+          url.requestUpdate(this.id, {onComplete: updateControlTabs.bind(this)} );
+        },
+        
+        check: function(ie) {
+          var url = new Url("system", "httpreq_check_shared_memory");
+          url.requestUpdate(this.id, {onComplete: updateControlTabs.bind(this)} );
+        }
+      }
+      
+      Main.add(function () {
+        SharedMemory.check("SharedMemory");
+      });
+      
+      </script>
+      
+      <table class="tbl">
+        <tr>
+          <th>Action</th>
+          <th>Status</th>
+        </tr>
+        <tr>
+          <td>
+            <button class="cancel" onclick="Templates.empty()">
+              Vider les caches template Smarty
+            </button>
+          </td>
+          <td id="Templates" />
+        </tr>
+        <tr>
+          <td>
+            <button class="cancel" onclick="SharedMemory.empty(); ">
+              Vider les variables de la mémoire partagée
+            </button>
+          </td>
+          <td id="SharedMemory" />
+        </tr>
+      </table>
+  </div>
+  
+  <div id="libs" style="display: none;">
+    <table class="tbl">
+      <tr>
+        <th>Action</th>
+        <th>Status</th>
+      </tr>
+      <tr>
+        <td>
+          <button class="cancel" onclick="document.location.href='install/install.php'">
+            Mettre à jour les bibliothèques externes
+          </button>
+        </td>
+        <td>
+          {{if $majLibs|@count}}
+          <div class='error'>
+            {{$majLibs|@count}} bibliothèques à mettre à jour <br />
+            {{foreach from=$majLibs item=_lib}}
+              - {{$_lib}} <br />
+            {{/foreach}}
+          </div>
+         {{else}} 
+           <div class='message'>Bibliothèques externes à jour</div>
+         {{/if}}
+        </td>
+      </tr>
+    </table>
+  </div>
 {{/if}}
-
-<h2>Nettoyage du cache</h2>
-
-<script type="text/javascript">
-
-var Templates = {
-  id: "Templates",
-  
-  empty: function() {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_do_empty_templates");
-    url.requestUpdate(this.id);
-  }
-}
-
-var SharedMemory = {
-  id : "SharedMemory", 
-  
-  empty: function(ie) {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_do_empty_shared_memory");
-    url.requestUpdate(this.id);
-  },
-  
-  check: function(ie) {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_check_shared_memory");
-    url.requestUpdate(this.id);
-  }
-}
-
-Main.add(function () {
-  SharedMemory.check("SharedMemory");
-});
-
-</script>
-
-<table class="tbl">
-  <tr>
-    <th>Action</th>
-    <th>Status</th>
-  </tr>
-  <tr>
-    <td>
-      <button class="cancel" onclick="Templates.empty()">
-        Vider les caches template Smarty
-      </button>
-    </td>
-    <td id="Templates" />
-  </tr>
-  <tr>
-    <td>
-      <button class="cancel" onclick="SharedMemory.empty(); ">
-        Vider les variables de la mémoire partagée
-      </button>
-    </td>
-    <td id="SharedMemory" />
-  </tr>
-</table>

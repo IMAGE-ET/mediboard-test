@@ -396,4 +396,10 @@ $locales['config-appareils_antecedents-5-desc'] = '';
 $locales['CUser-back-owned_logs'] = '';
 $locales['mod-system-tab-about'] = '';
 $locales['CModule-modules-notInstalled'] = '';
+$locales['module-system-libs'] = '';
+$locales['config-object_handlers-CSigemsObjectHandler'] = '';
+$locales['config-object_handlers-CSigemsObjectHandler-desc'] = '';
+$locales['config-system-website_url'] = '';
+$locales['config-system-website_url-desc'] = '';
+$locales['module-system-cache'] = '';
 ?>

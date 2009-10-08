@@ -149,7 +149,7 @@ $locales['mod-system-tab-view_access_logs'] = 'Logs d\'accès';
 $locales['mod-system-tab-view_history'] = 'Historique';
 $locales['mod-system-tab-view_install'] = 'Installation';
 $locales['mod-system-tab-view_messages'] = 'Messagerie';
-$locales['mod-system-tab-view_modules'] = 'Modules';
+$locales['mod-system-tab-view_modules'] = 'Installation';
 $locales['mod-system-tab-view_translate'] = 'Traduction';
 $locales['CModule'] = 'Module';
 $locales['CModule-mod_active-0'] = 'Désactivé';
@@ -400,4 +400,6 @@ $locales['config-object_handlers-CSigemsObjectHandler'] = '';
 $locales['config-object_handlers-CSigemsObjectHandler-desc'] = '';
 $locales['config-system-website_url'] = 'URL du logo de la page d\'accueil';
 $locales['config-system-website_url-desc'] = 'URL du logo de la page d\'accueil';
+$locales['module-system-libs'] = 'Bibliothèques externes';
+$locales['module-system-cache'] = 'Cache';
 ?>
