@@ -26,8 +26,8 @@ Main.add(function () {
 	<ul id="tabs-modules" class="control_tabs">
 	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installe|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installe|@count}})</a></li>
 	  <li><a {{if !$mbmodules.aInstaller|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.aInstaller|@count}})</a></li>
-    <li><a class="empty" href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
-    <li><a {{if !$majLibs|@count}}class="empty"{{/if}} {{if $majLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $majLibs|@count}}({{$majLibs|@count}}){{/if}}</a></li>
+    <li><a href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
+    <li><a {{if $majLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $majLibs|@count}}({{$majLibs|@count}}){{/if}}</a></li>
 	</ul>
 	
 	<hr class="control_tabs" />
