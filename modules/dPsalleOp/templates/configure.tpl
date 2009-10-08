@@ -53,10 +53,10 @@
     </th>
     <td>
     	<select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="never" {{if $dPconfig.$m.$class.$var == "never"}}selected="selected"{{/if}}>Jamais</option>
-        <option value="oneday" {{if $dPconfig.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>Le lendemain</option>
-        <option value="button" {{if $dPconfig.$m.$class.$var == "button"}}selected="selected"{{/if}}>Par bouton</option>
-				<option value="facturation" {{if $dPconfig.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>Envoyé en facturation</option>
+        <option value="never" {{if $dPconfig.$m.$class.$var == "never"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-never{{/tr}}</option>
+        <option value="oneday" {{if $dPconfig.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-oneday{{/tr}}</option>
+        <option value="button" {{if $dPconfig.$m.$class.$var == "button"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-button{{/tr}}</option>
+				<option value="facturation" {{if $dPconfig.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-facturation{{/tr}}</option>
       </select>
     </td>             
   </tr>

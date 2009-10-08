@@ -21,6 +21,19 @@ signerActes = function(object_id, object_class){
      </td>
   </tr> 
   {{/if}}
+  
+  {{if !($can->edit || $modif_operation)}}
+  <tr>
+    <td colspan="10" class="text">
+      <div class="small-info">
+        Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$dPconfig.dPsalleOp.COperation.modif_actes}}{{/tr}}
+        <br />
+        Veuillez contacter le PMSI pour toute modification.
+      </div>
+    </td>
+  </tr>
+  {{/if}}
+
   <tr>
     <td class="text">
       <!-- Gestion des codes -->

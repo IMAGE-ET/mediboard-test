@@ -287,4 +287,8 @@ $locales['config-dPsalleOp-CDailyCheckList-active_salle_reveil-desc'] = 'Utilisa
 $locales['CDailyCheckList-comments'] = 'Commentaires';
 $locales['CDailyCheckList-comments-court'] = 'Comm.';
 $locales['CDailyCheckList-comments-desc'] = 'Remarques et suppléments d\'information';
+$locales['config-dPsalleOp-COperation-modif_actes-never'] = 'Jamais';
+$locales['config-dPsalleOp-COperation-modif_actes-oneday'] = 'Jour calendaire passé';
+$locales['config-dPsalleOp-COperation-modif_actes-button'] = 'Verrou sur la plage opératoire';
+$locales['config-dPsalleOp-COperation-modif_actes-facturation'] = 'Envoyé en facturation';
 ?>

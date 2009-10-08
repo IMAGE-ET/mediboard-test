@@ -24,7 +24,7 @@
   </tr>
   
   <tr>
-    <td colspan="2">
+    <td colspan="2" class="text">
       <div class="small-info">Les fiches d'examen ont été déplacées dans l'onglet "Examen" ou "Exam. Clinique"</div>
     </td>
   </tr>
