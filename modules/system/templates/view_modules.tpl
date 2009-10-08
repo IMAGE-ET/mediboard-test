@@ -44,7 +44,7 @@ Main.add(function () {
     <script type="text/javascript">
       function updateControlTabs() {
         var tab = $$('a[href="#cache"]').first();
-        if ($(this.id).select('.error').length)
+        if ($(this.id).select('.error, .warning').length)
           tab.addClassName('wrong');
         else 
           tab.removeClassName('wrong');
