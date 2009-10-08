@@ -40,11 +40,11 @@ if($selPraticien->isAnesth()) {
              "service"     => "service.service_id = chambre.service_id",
            );
   $whereAmbu = array(
-                 "plagesop.date" => "= '$date'",
+                 "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'ambu'",
                );
   $whereHospi = array(
-                 "plagesop.date" => "= '$date'",
+                 "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'comp'",
                );
   $whereUrg   = array(
