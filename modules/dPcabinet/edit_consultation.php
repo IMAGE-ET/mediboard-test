@@ -28,7 +28,7 @@ $prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens();
+$listChirs = $listChirs->loadPraticiens(null);
 
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
