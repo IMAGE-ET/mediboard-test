@@ -3,21 +3,23 @@
   * A ne pas confondre avec inc_list_actes_ccam.
   *}}
 
-<table class="tbl">
+<table class="form">
 	<tr>
-	  <th>
+	  <th class="category">
 	  	{{mb_title class=CActeCCAM field=code_acte    }}
 	  	{{mb_title class=CActeCCAM field=code_activite}}
 	    {{mb_title class=CActeCCAM field=code_phase   }}
 	  </th>
 	  
-	  <th>{{mb_title class=CActeCCAM field=executant_id       }}</th>
-	  <th>{{mb_title class=CActeCCAM field=modificateurs      }}</th>
-	  <th>{{mb_title class=CActeCCAM field=code_association   }}</th>
-	  <th>{{mb_title class=CActeCCAM field=execution          }}</th>
-    <th>{{mb_title class=CActeCCAM field=montant_base       }}</th>
-    <th>{{mb_title class=CActeCCAM field=montant_depassement}}</th>
-    <th>{{mb_title class=CActeCCAM field=_montant_facture   }}</th>
+	  <th class="category">{{mb_title class=CActeCCAM field=executant_id       }}</th>
+	  <th class="category">{{mb_title class=CActeCCAM field=modificateurs      }}</th>
+	  <th class="category">{{mb_title class=CActeCCAM field=code_association   }}</th>
+	  <th class="category">{{mb_title class=CActeCCAM field=execution          }}</th>
+    {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
+    <th class="category">{{mb_title class=CActeCCAM field=montant_base       }}</th>
+    <th class="category">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
+    <th class="category">{{mb_title class=CActeCCAM field=_montant_facture   }}</th>
+    {{/if}}
 	</tr>
 
 	{{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
@@ -42,10 +44,12 @@
 	      {{/if}}
 	      <td>{{$acte->modificateurs}}</td>
 	      <td>{{$acte->code_association}}</td>
-	      <td>{{mb_value object=$acte field=execution          }}</td>
-	      <td style="text-align: right">{{mb_value object=$acte field=montant_base       }}</td>
-	      <td style="text-align: right">{{mb_value object=$acte field=montant_depassement}}</td>
-	      <td style="text-align: right">{{mb_value object=$acte field=_montant_facture   }}</td>
+	      <td>{{mb_value object=$acte field=execution}}</td>
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
+  	      <td style="text-align: right">{{mb_value object=$acte field=montant_base       }}</td>
+  	      <td style="text-align: right">{{mb_value object=$acte field=montant_depassement}}</td>
+  	      <td style="text-align: right">{{mb_value object=$acte field=_montant_facture   }}</td>
+        {{/if}}
 	    </tr> 
 	    {{/foreach}}
 	  {{/foreach}}

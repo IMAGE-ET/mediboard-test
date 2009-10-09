@@ -37,7 +37,7 @@ signerActes = function(object_id, object_class){
   <tr>
     <td class="text">
       <!-- Gestion des codes -->
-      {{if $subject->_coded != "1"}}
+      {{if !$subject->_coded}}
         {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
       {{/if}}
     </td>
@@ -50,10 +50,14 @@ signerActes = function(object_id, object_class){
   <tr>
     <td class="text">
       <!-- Codage des actes -->
-      {{if $subject->_coded == "1"}}
+      {{if $subject->_coded}}
         {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
       {{else}}
-        {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
+        {{if $can->edit || $modif_operation}}
+          {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
+        {{else}}
+          {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
+        {{/if}}
       {{/if}}
     </td>
   </tr>

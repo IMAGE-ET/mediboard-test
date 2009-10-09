@@ -76,6 +76,18 @@ ActesNGAP = {
     </tr> 
     {{/if}}
     
+    {{if !($can->edit || $modif_operation)}}
+    <tr>
+      <td colspan="10" class="text">
+        <div class="small-info">
+          Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$dPconfig.dPsalleOp.COperation.modif_actes}}{{/tr}}
+          <br />
+          Veuillez contacter le PMSI pour toute modification.
+        </div>
+      </td>
+    </tr>
+    {{/if}}
+    
     <tr>
       <th class="category" colspan="10">Codages des actes NGAP</th>
     </tr>
@@ -85,45 +97,51 @@ ActesNGAP = {
       <th class="category">{{mb_title object=$acte_ngap field=code}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=coefficient}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=demi}}</th>
+      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
       <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
+      {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
-      <th class="category">Action</th>
+        {{if ($can->edit || $modif_operation)}}
+           <th class="category">Action</th>
+        {{/if}}
       {{/if}}
     </tr>
     
     {{if !$object->_coded}}
-    <tr>
-      <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()"}}</td>
-      <td>
-        {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
-        <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
-      </td>
-      <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()"}}</td>
-      <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()"}}</td>
-      <td id="tarifActe">
-        {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl" tarif=0}}
-      </td>
-      <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
-      <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
-      <td>
-        <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$acte_ngap->_list_executants item=curr_executant}}
-          <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $acte_ngap->executant_id == $curr_executant->user_id}} selected="selected" {{/if}}>
-            {{$curr_executant->_view}}
-          </option>
-          {{/foreach}}
-        </select>
-      </td>
-      <td>
-        <button type="button" class="new" onclick="ActesNGAP.submit()">
-          {{tr}}Create{{/tr}}
-        </button>
-      </td>     
-    </tr>
+      {{if ($can->edit || $modif_operation)}}
+        <tr>
+          <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()"}}</td>
+          <td>
+            {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
+            <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
+          </td>
+          <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()"}}</td>
+          <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()"}}</td>
+          <td id="tarifActe">
+            {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl" tarif=0}}
+          </td>
+          <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
+          <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
+          <td>
+            <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{foreach from=$acte_ngap->_list_executants item=curr_executant}}
+              <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $acte_ngap->executant_id == $curr_executant->user_id}} selected="selected" {{/if}}>
+                {{$curr_executant->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+          <td>
+            <button type="button" class="new" onclick="ActesNGAP.submit()">
+              {{tr}}Create{{/tr}}
+            </button>
+          </td>     
+        </tr>
+      {{/if}}
     {{/if}}
     
     {{foreach from=$object->_ref_actes_ngap item="_acte_ngap"}}
@@ -132,8 +150,10 @@ ActesNGAP = {
       <td>{{mb_value object=$_acte_ngap field="code"}}</td>
       <td>{{mb_value object=$_acte_ngap field="coefficient"}}</td>
       <td>{{mb_value object=$_acte_ngap field="demi"}}</td>
+      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
       <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
       <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
+      {{/if}}
       <td>
         {{if $_acte_ngap->complement}}
           {{mb_value object=$_acte_ngap field="complement"}}
@@ -145,14 +165,20 @@ ActesNGAP = {
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
 			<td>
 				{{if !$object->_coded}}
-				<select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$acte_ngap->_list_executants item=_executant}}
-          <option class="mediuser" {{if ($_acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
-            {{$executant}}
-          </option>
-          {{/foreach}}
-        </select>
+          {{if ($can->edit || $modif_operation)}}
+    				<select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{foreach from=$acte_ngap->_list_executants item=_executant}}
+              <option class="mediuser" {{if ($_acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
+                {{$executant}}
+              </option>
+              {{/foreach}}
+            </select>
+          {{else}}
+            <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+             {{$executant}}
+            </div>
+          {{/if}}
 				{{else}}
 				<div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
          {{$executant}}
@@ -161,11 +187,13 @@ ActesNGAP = {
       </td>
 
       {{if !$object->_coded}}
-      <td>
-       	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
-          {{tr}}Delete{{/tr}}
-		 	  </button>
-      </td>
+        {{if ($can->edit || $modif_operation)}}
+          <td>
+           	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
+              {{tr}}Delete{{/tr}}
+    		 	  </button>
+          </td>
+        {{/if}}
       {{/if}}
    </tr>
    {{/foreach}}
