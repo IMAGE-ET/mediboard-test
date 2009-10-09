@@ -33,11 +33,11 @@ Main.add(function () {
 	<hr class="control_tabs" />
 	
 	<div id="installed" style="display: none;">
-		{{include file="inc_module.tpl" object=$mbmodules.installe}}
+		{{include file="inc_module.tpl" object=$mbmodules.installe installe=true}}
 	</div>
 	
 	<div id="notInstalled" style="display: none;">
-	  {{include file="inc_module.tpl" object=$mbmodules.aInstaller}}
+	  {{include file="inc_module.tpl" object=$mbmodules.aInstaller installe=false}}
 	</div>
   
   <div id="cache" style="display: none;">
@@ -111,7 +111,7 @@ Main.add(function () {
       </tr>
       <tr>
         <td>
-          <button class="cancel" onclick="document.location.href='install/install.php'">
+          <button class="change" onclick="document.location.href='install/install.php'">
             Mettre à jour les bibliothèques externes
           </button>
         </td>
