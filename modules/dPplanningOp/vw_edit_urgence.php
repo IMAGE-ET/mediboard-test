@@ -65,7 +65,8 @@ if($sejour_id && !$operation_id) {
 
 // On récupère l'opération
 $op = new COperation;
-if ($operation_id) {
+$op->load($operation_id);
+if ($op->_id) {
   $op->load($operation_id);
 
   // On vérifie que l'utilisateur a les droits sur l'operation
@@ -75,6 +76,10 @@ if ($operation_id) {
   }
 
   $op->loadRefs();
+  foreach($op->_ref_actes_ccam as $acte) {
+    $acte->loadRefExecutant();
+  }	
+	
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();
   $sejour->makeCancelAlerts($op->_id);
