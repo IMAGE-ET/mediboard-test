@@ -1,15 +1,15 @@
 <?php
 $locales['mod-dPdeveloppement-tab-launch_tests'] = 'Tests fonctionnels';
 $locales['mod-dPdeveloppement-tab-echantillonnage'] = 'Echantillonnage';
-$locales['mod-dPdeveloppement-tab-mnt_backref_classes'] = 'Maintenance Classes';
-$locales['mod-dPdeveloppement-tab-mnt_table_classes'] = 'Maintenance Table';
-$locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Maintenance Traduction';
+$locales['mod-dPdeveloppement-tab-mnt_backref_classes'] = 'Backrefs';
+$locales['mod-dPdeveloppement-tab-mnt_table_classes'] = 'Tables';
+$locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Traduction';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Logs système';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Métrique';
 $locales['mod-dPdeveloppement-tab-form_tester'] = 'Testeur de formulaires';
 $locales['module-dPdeveloppement-court'] = 'Outils';
-$locales['module-dPdeveloppement-long'] = 'Outils';
-$locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Testeur de Mutex';
+$locales['module-dPdeveloppement-long'] = 'Outils de développement';
+$locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Testeur de mutex';
 $locales['mutex_tester-title'] = 'Tester les capacité d\'exclusion mutielle de Mediboard';
 $locales['test_mutex-try'] = 'Essai de l\'action \'%s\'';
 $locales['test_mutex-process'] = 'Processus du test : \'%d\'';
@@ -26,5 +26,6 @@ $locales['mutex_teste-desc'] = '';
 $locales['mutex_tester-desc'] = '';
 $locales['mutex_tester-info3'] = 'Attention : Apache n\'alloue d\'ordinaire qu\'un seul processus à la fois par navigateur. Pour tester cette page il faut donc utiliser deux navigateurs de nature différente !';
 $locales['mod-dPdeveloppement-tab-check_zombie_objects'] = 'Objet Zombies';
-$locales['mod-dPdeveloppement-tab-mnt_module_actions'] = 'Maintenance documentation';
+$locales['mod-dPdeveloppement-tab-mnt_module_actions'] = 'Documentation';
+$locales['mod-dPdeveloppement-tab-css_test'] = 'Testeur de CSS';
 ?>
