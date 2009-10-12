@@ -38,6 +38,10 @@ function refusMesures(oForm){
   }
 }
 
+function unvalidate(form){
+  $(form).insert(new Element('input', {name: "date_validation", type: "hidden", value: ""})).submit();
+}
+
 function saveVerifControle(oForm){
   oForm._validation.value= 1;
   oForm.submit();
@@ -348,6 +352,9 @@ Main.add(function() {
             {{else}}
             <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
               {{tr}}Print{{/tr}}
+            </button>
+            <button class="change" type="button" onclick="unvalidate(this.form);">
+              Dé-valider
             </button>
             {{/if}}
           </td>
