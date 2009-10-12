@@ -13,8 +13,7 @@ $can->needsRead();
 
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
-$object_class = mbGetValueFromGetOrSession('object_class');
-$object_id = mbGetValueFromGetOrSession('object_id');
+$object_guid = mbGetValueFromGetOrSession('object_guid');
 $check_list_id = mbGetValueFromGetOrSession('check_list_id');
 
 $check_list = new CDailyCheckList;
@@ -26,6 +25,8 @@ if ($check_list->_back['items']) {
 		$item->loadRefsFwd();
 	}
 }
+
+list($object_class, $object_id) = explode('-', $object_guid);
 
 $where = array();
 if ($object_class) {
@@ -48,9 +49,24 @@ $check_list_filter->_date_min = $date_min;
 $check_list_filter->_date_max = $date_max;
 $check_list_filter->loadRefsFwd();
 
+
+$list_rooms = array(
+  "CSalle" => array(),
+  "CBlocOperatoire" => array()
+);
+
+foreach($list_rooms as $class => &$list) {
+  $room = new $class;
+  $list = $room->loadList();
+  $empty = new $class;
+  $empty->updateFormFields();
+  array_unshift($list, $empty);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("list_check_lists", $list_check_lists);
+$smarty->assign("list_rooms", $list_rooms);
 $smarty->assign("check_list", $check_list);
 $smarty->assign("check_list_filter", $check_list_filter);
 $smarty->display("vw_daily_check_traceability.tpl");
