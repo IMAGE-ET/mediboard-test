@@ -21,33 +21,26 @@ function showIcon(frame) {
 }
 
 function updateListConsults() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
-
+  var url = new Url("dPcabinet", "httpreq_vw_list_consult");
   url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("vue2"      , "{{$vue}}");
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
-
   url.requestUpdate("consultations", { waitingText: null } );
 }
 
 function updateListOperations() {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
-
+  var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
-
   url.requestUpdate("operations", { waitingText: null } );
 }
 
 function updateListPatients() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_list_patients");
+  var url = new Url("dPpatients", "httpreq_list_patients");
   
   var oForm = document.find;
   if(oForm) {
@@ -57,33 +50,26 @@ function updateListPatients() {
     url.addElement(oForm.Date_Day);
     url.addElement(oForm.Date_Month);
     url.addElement(oForm.Date_Year);
-    url.addParam("jeuneFille", oForm.jeuneFille.value);
-    url.addParam("patient_ipp", oForm.patient_ipp.value);
+    url.addParam("jeuneFille", $V(oForm.jeuneFille));
+    url.addParam("patient_ipp", $V(oForm.patient_ipp));
   }
   url.addParam("board"   , "1");
-
   url.requestUpdate("patients", { waitingText: null } );
 }
 
 function updateListHospi() {
-  var url = new Url;
-  url.setModuleAction("dPboard", "httpreq_vw_hospi");
-
+  var url = new Url("dPboard", "httpreq_vw_hospi");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
-
   url.requestUpdate("hospi", { waitingText: null } );
 }
 
 function updateSemainier() {
-  var url = new Url;
-  url.setModuleAction("dPboard", "httpreq_semainier");
-
+  var url = new Url("dPboard", "httpreq_semainier");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
-
   url.requestUpdate("semainier", { waitingText: null } );
 }
 

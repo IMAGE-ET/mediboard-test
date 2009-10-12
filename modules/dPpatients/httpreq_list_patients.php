@@ -7,8 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m, $g, $dPconfig;
+/// @todo: Ce fichier ressemble beaucoup à vw_idx_patient.php, il faudrait factoriser
 
+global $can, $g;
 $can->needsRead();
 
 $board = mbGetValueFromGet("board", 0);
@@ -16,17 +17,18 @@ $board = mbGetValueFromGet("board", 0);
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 
 // Patients
-$patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
-$patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
-$patient_jeuneFille= mbGetValueFromGetOrSession("jeuneFille"  , ""       );
+$patient_nom       = mbGetValueFromGetOrSession("nom"       , "");
+$patient_prenom    = mbGetValueFromGetOrSession("prenom"    , "");
+$patient_jeuneFille= mbGetValueFromGetOrSession("jeuneFille", "");
 
-$patient_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
-$patient_ville     = mbGetValueFromGetOrSession("ville"     , ""       );
-$patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
-$patient_day       = mbGetValueFromGetOrSession("Date_Day"  , date("d"));
-$patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
-$patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
+$patient_useNaissance = mbGetValueFromGetOrSession("useNaissance" , "off");
+$patient_ville     = mbGetValueFromGetOrSession("ville"     , "");
+$patient_cp        = mbGetValueFromGetOrSession("cp"        , "");
+$patient_day       = mbGetValueFromGetOrSession("Date_Day"  , "");
+$patient_month     = mbGetValueFromGetOrSession("Date_Month", "");
+$patient_year      = mbGetValueFromGetOrSession("Date_Year" , "");
 $patient_ipp       = mbGetValueFromGet("patient_ipp");
+$patient_naissance = null;
 $useVitale         = mbGetValueFromGet("useVitale");
 
 $patVitale = new CPatient;
@@ -49,8 +51,8 @@ if ($useVitale) {
   $patient_prenom = $patVitale->prenom;
   mbSetValueToSession("nom", $patVitale->nom);
   mbSetValueToSession("prenom", $patVitale->prenom);
-  $patient_naissance = "on";
-  mbSetValueToSession("naissance", "on");
+  $patient_useNaissance = "on";
+  mbSetValueToSession("useNaissance", "on");
   $patVitale->loadFromIdVitale();
 }
 
@@ -64,7 +66,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   $patientsSoundexCount = 0;
   
   $idsante = new CIdSante400();
-  $idsante->tag = str_replace('$g',$g, $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]);
+  $idsante->tag = str_replace('$g', $g, CAppUI::conf("dPpatients CPatient tag_ipp"));
   $idsante->id400 = $patient_ipp;
   $idsante->object_class = "CPatient";
   $idsante->loadMatchingObject();
@@ -79,43 +81,40 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	$whereSoundex = array();
 	$soundexObj   = new soundex2();
 	
-	if ($patient_nom) {
-	  $patient_nom = trim($patient_nom);
+	if ($patient_nom = trim($patient_nom)) {
 	  $where["nom"]                 = "LIKE '$patient_nom%'";
 	  $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
 	}
-	if ($patient_prenom) {
-	  $patient_prenom = trim($patient_prenom);
+	if ($patient_prenom = trim($patient_prenom)) {
 	  $where["prenom"]                 = "LIKE '$patient_prenom%'";
 	  $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
 	}
-	if ($patient_jeuneFille) {
-	  $patient_jeuneFille = trim($patient_jeuneFille);
+	if ($patient_jeuneFille = trim($patient_jeuneFille)) {
 	  $where["nom_jeune_fille"]        = "LIKE '$patient_jeuneFille%'";
 	  $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
 	}
 	
-	
-	if(($patient_year) || ($patient_month) || ($patient_day)){
-		$patient_naissance = "on";
-	}
-	
-	if ($patient_naissance == "on"){
-	  $year =($patient_year)?"$patient_year-":"%-";
-	  $month =($patient_month)?"$patient_month-":"%-";
-	  $day =($patient_day)?"$patient_day":"%";
-	  if ($day!="%") {
-	    $day = str_pad($day,2,"0",STR_PAD_LEFT);
-	  }
-	  $naissance = $year.$month.$day;
-	}
-	  
 	if($patient_year || $patient_month || $patient_day){
-	  $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
+		$patient_useNaissance = "on";
 	}
 	
-	if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "= '$patient_ville'";
-	if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]        = "= '$patient_cp'";
+  if ($patient_useNaissance == "on"){
+    if($patient_year || $patient_month || $patient_day){
+      $year  = $patient_year  ? "$patient_year-"  : "%-";
+      $month = $patient_month ? "$patient_month-" : "%-";
+      $day   = $patient_day   ? "$patient_day"    : "%";
+      if ($day != "%") {
+        $day = str_pad($day, 2, "0", STR_PAD_LEFT);
+      }
+      
+      $patient_naissance = $year.$month.$day;
+    
+      $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
+    }
+  }
+	
+  if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
+  if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "= '$patient_cp'";
 	
 	$patients        = array();
 	$patientsSoundex = array();
@@ -135,21 +134,23 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 $smarty = new CSmartyDP();
 
 $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
-$smarty->assign("patient_ipp"    , $patient_ipp                               );
-$smarty->assign("board"          , $board                                     );
-$smarty->assign("nom"            , $patient_nom                               );
-$smarty->assign("prenom"         , $patient_prenom                            );
-$smarty->assign("naissance"      , $patient_naissance                         );
-$smarty->assign("ville"          , $patient_ville                             );
-$smarty->assign("cp"             , $patient_cp                                );
-$smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
-$smarty->assign("useVitale"      , $useVitale                                 );
-$smarty->assign("patVitale"      , $patVitale                                 );
-$smarty->assign("patients"       , $patients                                  );
-$smarty->assign("patientsCount"  , count($patients)                           );
-$smarty->assign("patientsSoundexCount", count($patientsSoundex)               );
-$smarty->assign("jeuneFille"     , $patient_jeuneFille                        );
-$smarty->assign("patientsSoundex", $patientsSoundex                           );
-$smarty->assign("patient"        , $patient                                   );
+$smarty->assign("patient_ipp"    , $patient_ipp                );
+$smarty->assign("board"          , $board                      );
+
+$smarty->assign("nom"            , $patient_nom                );
+$smarty->assign("prenom"         , $patient_prenom             );
+$smarty->assign("jeuneFille"     , $patient_jeuneFille         );
+$smarty->assign("useNaissance"   , $patient_useNaissance       );
+$smarty->assign("ville"          , $patient_ville              );
+$smarty->assign("cp"             , $patient_cp                 );
+$smarty->assign("naissance"      , $patient_naissance          );
+
+$smarty->assign("useVitale"      , $useVitale                  );
+$smarty->assign("patVitale"      , $patVitale                  );
+$smarty->assign("patients"       , $patients                   );
+$smarty->assign("patientsCount"  , count($patients)            );
+$smarty->assign("patientsSoundexCount", count($patientsSoundex));
+$smarty->assign("patientsSoundex", $patientsSoundex            );
+$smarty->assign("patient"        , $patient                    );
 
 $smarty->display("inc_list_patient.tpl");
