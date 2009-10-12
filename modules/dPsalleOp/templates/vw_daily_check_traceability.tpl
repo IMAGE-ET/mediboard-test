@@ -12,36 +12,22 @@
 						<td class="date">{{mb_field object=$check_list_filter field=_date_min register=true form="filter-check-lists"}}</td>
             <th>{{mb_label object=$check_list_filter field=_date_max}}</th>
             <td class="date">{{mb_field object=$check_list_filter field=_date_max register=true form="filter-check-lists"}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$check_list_filter field=object_class}}</th>
-            <td>
-              {{mb_field object=$check_list_filter field=object_class form="filter-check-lists"}}
-            </td>
+
             <th>{{mb_label object=$check_list_filter field=object_id}}</th>
             <td>
-              {{mb_field object=$check_list_filter field=object_id hidden=true onchange="if (!this.value) \$V(this.form._object_view, '')"}}
-              <input type="text" name="_object_view" value="{{$check_list_filter->_ref_object}}" readonly="readonly" ondblclick="ObjectSelector.init()" />
-              <button type="button" class="search notext" onclick="ObjectSelector.init()">
-                Chercher un objet
-              </button>
-              <button type="button" class="cancel notext" onclick="$V(this.form.object_id, '')">
-                Pas d'objet
-              </button>
-              <script type="text/javascript">
-                ObjectSelector.init = function(){  
-                  this.sForm     = "filter-check-lists";
-                  this.sId       = "object_id";
-                  this.sView     = "_object_view";
-                  this.sClass    = "object_class";
-                  this.onlyclass = "true";
-                  this.pop();
-                }
-               </script>
+              <select name="object_guid">
+                {{foreach from=$list_rooms item=list key=class}}
+                  <optgroup label="{{if $class == "CBlocOperatoire"}}Salle de réveil{{else}}{{tr}}{{$class}}{{/tr}}{{/if}}">
+                    {{foreach from=$list item=room}}
+                      <option value="{{$room->_guid}}">{{if $room->_id}}{{$room}}{{else}}Toutes{{/if}}</option>
+                    {{/foreach}}
+                  </optgroup>
+                {{/foreach}}
+              </select>
             </td>
 					</tr>
 					<tr>
-						<td colspan="4" class="button">
+						<td colspan="8" class="button">
               <button type="submit" class="submit">{{tr}}Filter{{/tr}}</button>
               Seules les 30 dernières checklists sont affichées
             </td>
