@@ -28,6 +28,7 @@ Main.add(function () {
 	  <li><a {{if !$mbmodules.aInstaller|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.aInstaller|@count}})</a></li>
     <li><a href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
     <li><a {{if $majLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $majLibs|@count}}({{$majLibs|@count}}){{/if}}</a></li>
+    <li><a  href="#assistant">{{tr}}module-system-assistant{{/tr}}</a></li>
 	</ul>
 	
 	<hr class="control_tabs" />
@@ -129,5 +130,9 @@ Main.add(function () {
         </td>
       </tr>
     </table>
+  </div>
+  
+  <div id="assistant" style="display: none;">
+    {{include file="view_install.tpl"}} 
   </div>
 {{/if}}

@@ -16,7 +16,6 @@ $module->registerTab("object_merger"       , null, TAB_READ);
 $module->registerTab("view_history"        , null, TAB_READ);
 $module->registerTab("view_access_logs"    , null, TAB_READ);
 $module->registerTab("view_ressources_logs", null, TAB_READ);
-$module->registerTab("view_install"        , null, TAB_READ);
 $module->registerTab("about"               , null, TAB_READ);
 
 ?>

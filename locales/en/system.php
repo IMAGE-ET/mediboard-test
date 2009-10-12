@@ -402,4 +402,5 @@ $locales['config-object_handlers-CSigemsObjectHandler-desc'] = '';
 $locales['config-system-website_url'] = '';
 $locales['config-system-website_url-desc'] = '';
 $locales['module-system-cache'] = '';
+$locales['module-system-assistant'] = '';
 ?>

@@ -402,4 +402,5 @@ $locales['config-system-website_url'] = 'URL du logo de la page d\'accueil';
 $locales['config-system-website_url-desc'] = 'URL du logo de la page d\'accueil';
 $locales['module-system-libs'] = 'Bibliothèques externes';
 $locales['module-system-cache'] = 'Cache';
+$locales['module-system-assistant'] = 'Assistant';
 ?>
