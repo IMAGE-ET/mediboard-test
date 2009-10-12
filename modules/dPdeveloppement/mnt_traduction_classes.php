@@ -187,8 +187,10 @@ if ($module == "system") {
 CAppUI::requireModuleFile($module, "index");
 addLocale("Module", "Module", "module-$module-court");
 addLocale("Module", "Module", "module-$module-long");
-foreach (CModule::getInstalled($module)->_tabs as $_tab) {
-  addLocale("Module", "Tabs", "mod-$module-tab-" . $_tab[0]);
+if (!empty(CModule::getInstalled($module)->_tabs)) {
+  foreach (CModule::getInstalled($module)->_tabs as $_tab) {
+    addLocale("Module", "Tabs", "mod-$module-tab-" . $_tab[0]);
+  }
 }
 
 // Création du template
