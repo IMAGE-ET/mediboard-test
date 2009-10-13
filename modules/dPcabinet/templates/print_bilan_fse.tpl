@@ -1,19 +1,5 @@
 <!-- $Id$ -->
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
-<script type="text/javascript">
-
-Consultation = {
-  show: function(consult_id) {
-    var url = new Url;
-    url.setModuleTab("dPcabinet", "edit_consultation");
-    url.addParam("selConsult", consult_id);
-    url.redirectOpener();
-  }
-}
-
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -58,6 +44,7 @@ Consultation = {
   <tr>
     <td colspan="2"><strong>{{$_day|date_format:$dPconfig.longdate}}</strong></td>
   </tr>
+	
   <tr>
     <td colspan="2">
       <table class="tbl">
@@ -118,6 +105,7 @@ Consultation = {
           {{/if}}
         </tr>
         {{/foreach}}
+				
         <tr>
           <td colspan="5" style="font-weight:bold; text-align:right">Total pour {{$cumuls.$_day.count}} FSE</td>
           <td style="font-weight:bold;">{{$cumuls.$_day.S_FSE_TOTAL_FACTURE|string_format:"%.2f"}}{{$dPconfig.currency_symbol}}</td>

@@ -9,13 +9,10 @@
   <tr>
     {{if $category->_id}}
     <th class="title modify" colspan="2">
-       <div class="idsante400" id="{{$category->_guid}}"></div>
-
-       <a style="float: right;" href="#" onclick="guid_log('{{$category->_guid}}')">
-         <img src="images/icons/history.gif" alt="historique">
-       </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$category}}
+      {{mb_include module=system template=inc_object_history object=$category }}
        
-    	{{tr}}CFilesCategory-title-modify{{/tr}} '{{$category->_view}}'
+    	{{tr}}CFilesCategory-title-modify{{/tr}} '{{$category}}'
     </th>
     {{else}}
     <th class="title" colspan="2">{{tr}}CFilesCategory-title-create{{/tr}}</th>

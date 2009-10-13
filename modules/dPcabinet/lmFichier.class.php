@@ -27,9 +27,13 @@ class CLmFichier extends CLmObject {
   // References
   var $_ref_id = null;
   
-  // Distant field
+	// Behaviour fields
+	var $_fix_resend = null;
+  
+	// Distant field
   var $_consult_id = null;
-
+	var $_resend_fixable = null;
+	
 	function updateFormFields() {
 	  parent::updateFormFields();
 	  $this->_annule = $this->S_FIC_ETAT == "?";
@@ -56,10 +60,9 @@ class CLmFichier extends CLmObject {
     $specs["S_FIC_NB_FSE"]        = "num";
     $specs["S_FIC_NB_TRANS"]      = "num";
 
-    // Filter Fields
-    $specs["_date_min"] = "date";
-    $specs["_date_max"] = "date moreThan|_date_min";
-    
+    // Distant Fields
+    $specs["_resend_fixable"] = "bool";
+
     return $specs;
   }
 
@@ -68,6 +71,31 @@ class CLmFichier extends CLmObject {
     $backProps["lots"] = "CLmLot S_LOT_FIC";
     return $backProps;
   }
+	
+	/**
+	 * Redefined store for behaviour fields
+	 * @return string Store-like message
+	 */
+	function store() {
+		if ($this->_fix_resend) {
+			$this->S_FIC_DATE_EMISSION = "";
+			$this->S_FIC_NB_TRANS = "0";
+      $this->S_FIC_ETAT = "2";
+		}
+		
+		if ($msg = parent::store()) {
+			return $msg;
+		}
+		
+		foreach($this->loadBackRefs("lots") as $lot) {
+			$lot->S_LOT_ETAT = 4;
+			$lot->S_LOT_NB_TRANS = 0;
+			if ($msg = $lot->store()) {
+				return $msg;
+			}
+			CAppUI::setMsg("$lot->_class_name-msg-modify");
+		}
+	}
 }
 
 ?>

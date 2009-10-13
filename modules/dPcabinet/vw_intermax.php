@@ -90,15 +90,20 @@ foreach($prats as $_prat) {
 }
   
 // Chargement des FSE trouvées
-$filter = @new CLmFSE();
-$filter->S_FSE_MODE_SECURISATION = mbGetValueFromGet("S_FSE_MODE_SECURISATION");
-$filter->_date_min = mbDate();
-$filter->_date_max = mbDate("+ 1 day");
+$fse = @new CLmFSE();
+$fse->S_FSE_MODE_SECURISATION = mbGetValueFromGet("S_FSE_MODE_SECURISATION");
+$fse->_date_min = mbDate();
+$fse->_date_max = mbDate("+ 1 day");
+
+$lot = @new CLmLot();
+$lot->_date_min = mbDate();
+$lot->_date_max = mbDate("+ 1 day");
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("intermaxFunctions", $intermaxFunctions);
 $smarty->assign("prats", $prats);
-$smarty->assign("filter", $filter);
+$smarty->assign("fse", $fse);
+$smarty->assign("lot", $lot);
 $smarty->display("vw_intermax.tpl");
 

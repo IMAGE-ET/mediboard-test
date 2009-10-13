@@ -1,11 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage dPcabinet
+ * @version $Revision$
+ * @author Thomas Despoix
+ */
 
 CAppUI::requireModuleClass("dPcabinet", "lmObject");
 

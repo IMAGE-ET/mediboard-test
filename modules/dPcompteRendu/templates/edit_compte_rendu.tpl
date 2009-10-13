@@ -53,17 +53,14 @@ document.observe('keydown', function(e){
   <tr>
     <th class="category">
       {{if $compte_rendu->_id}}
-      <div class="idsante400" id="{{$compte_rendu->_guid}}"></div>
-    
-	    <a style="float:right;" href="#" onclick="guid_log('{{$compte_rendu->_guid}}')">
-	      <img src="images/icons/history.gif" alt="historique" />
-	    </a>
+      {{mb_include module=system template=inc_object_idsante400 object=$compte_rendu}}
+      {{mb_include module=system template=inc_object_history object=$compte_rendu}}
 			{{/if}}
 
-      <strong>Nom du document :</strong>
-      <input name="nom" size="50" value="{{$compte_rendu->nom}}" />
+      {{mb_label object=$compte_rendu field=nom}}
+      {{mb_field object=$compte_rendu field=nom}}
       &mdash;
-      <strong>Catégorie :</strong>
+      {{mb_label object=$compte_rendu field=file_category_id}}
       <select name="file_category_id">
       <option value=""{{if !$compte_rendu->file_category_id}} selected="selected"{{/if}}>&mdash; Aucune Catégorie</option>
       {{foreach from=$listCategory item=currCat}}
