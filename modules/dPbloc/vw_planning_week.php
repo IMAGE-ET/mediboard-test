@@ -90,8 +90,10 @@ foreach($listDays as $keyDate => $valDate){
   
   
   foreach($listPlages[$keyDate] as $plage){
+    $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
+    $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
     $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
-    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
+    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageOp::$minutes_interval." minutes", $time) ){
       $affichages["$keyDate-s$plage->salle_id-$time"] = "full";
     } 
     $affichages["$keyDate-s$plage->salle_id-$plage->debut"] = $plage->_id;

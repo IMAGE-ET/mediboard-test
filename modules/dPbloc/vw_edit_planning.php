@@ -35,12 +35,13 @@ $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
 if($plagesel->_id){
   $arrKeySalle = array_keys($listSalles);
-  if(!in_array($plagesel->salle_id,$arrKeySalle) || $plagesel->date!=$date) {
+  if(!in_array($plagesel->salle_id, $arrKeySalle) || $plagesel->date != $date) {
     $plageop_id = 0;
     $plagesel = new CPlageOp;
   }
 }
-else {
+
+if(!$plagesel->_id) {
   $plagesel->debut = CPlageOp::$hours_start.":00:00";
   $plagesel->fin = CPlageOp::$hours_start.":00:00";
 }
@@ -55,8 +56,6 @@ foreach($specs as $key => $spec) {
 // Liste des Anesthésistes
 $mediuser = new CMediusers;
 $anesths = $mediuser->loadAnesthesistes();
-
-$_temps_inter_op = range(0,59,15);
 
 // Récupération des plages pour le jour demandé
 $listPlage = new CPlageOp();
@@ -101,11 +100,13 @@ foreach($listSalles as $keySalle=>$valSalle){
 
 // Remplissage du tableau de visualisation
 foreach($listPlages[$date] as &$plage){
-    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
-    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
-      $affichages["$date-s$plage->salle_id-$time"] = "full";
-    } 
-    $affichages["$date-s$plage->salle_id-$plage->debut"] = $plage->_id;
+  $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
+  $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
+  $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
+  for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageOp::$minutes_interval." minutes", $time) ){
+    $affichages["$date-s$plage->salle_id-$time"] = "full";
+  } 
+  $affichages["$date-s$plage->salle_id-$plage->debut"] = $plage->_id;
 }
 
 // Liste des Spécialités
@@ -116,7 +117,6 @@ $listSpec = $listSpec->loadSpecialites();
 $smarty = new CSmartyDP();
 
 $smarty->assign("listPlages"     , $listPlages        );
-$smarty->assign("_temps_inter_op", $_temps_inter_op   );
 $smarty->assign("bloc"           , $bloc              );
 $smarty->assign("listBlocs"      , $listBlocs         );
 $smarty->assign("listSalles"     , $listSalles        );
