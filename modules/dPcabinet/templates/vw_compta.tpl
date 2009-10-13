@@ -12,7 +12,6 @@ function checkRapport(){
   var url = new Url();
   url.setModuleAction("dPcabinet", oForm.a.value);
   url.addParam("compta", compta);
-  url.addElement(oForm._date_min);
   url.addElement(oForm.a);
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
@@ -37,6 +36,26 @@ function changeDate(sDebut, sFin){
   oForm._date_min_da.value = Date.fromDATE(sDebut).toLocaleDate();
   oForm._date_max_da.value = Date.fromDATE(sFin).toLocaleDate();  
 }
+
+function viewActes(){
+  var oForm = document.printFrm;
+  
+  if(!oForm.chir.value) {
+    alert('Vous devez choisir un praticien');
+    return false;
+  }
+
+  var url = new Url();
+  url.setModuleAction("dPplanningOp", "vw_actes_realises");
+  url.addElement(oForm._date_min);
+  url.addElement(oForm._date_max);
+  url.addElement(oForm.chir);
+  url.addElement(oForm.typeVue);
+  url.popup(950, 550, "Rapport des actes réalisés");
+  
+  return false;
+}
+
 </script>
 
 
@@ -48,10 +67,11 @@ function changeDate(sDebut, sFin){
       <input type="hidden" name="dialog" value="1" />
       <table class="form">
         <tr>
-          <th class="title" colspan="3">Edition de rapports</th>
+          <th class="title" colspan="4">Edition de rapports</th>
         </tr>
         <tr>
           <th class="category" colspan="3">Choix de la periode</th>
+          <th class="category">{{mb_label object=$filter field="_prat_id"}}</th>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
@@ -80,18 +100,7 @@ function changeDate(sDebut, sFin){
               </tr>
             </table>
           </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_date_max"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
-        </tr> 
-        
-        <tr>
-          <th class="category" colspan="3">Critères d'affichage</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_prat_id"}}</th>
-          <td>
+          <td rowspan="2">
             <select name="chir">
               {{if $listPrat|@count > 1}}
               <option value="">&mdash; Tous</option>
@@ -101,27 +110,36 @@ function changeDate(sDebut, sFin){
               {{/foreach}}
             </select>
           </td>
-          <td rowspan="3" class="text">
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_date_max"}}</th>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
+        </tr> 
+        
+        <tr>
+          <th class="category" colspan="4">Comptabilité "Consultations"</th>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter_reglement field="mode"}}</th>
+          <td>{{mb_field object=$filter_reglement field="mode" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td> 
+          <td colspan="2" rowspan="3" class="text">
             <div class="big-info">
               Affichage des règlements effectués, en fonction de la date de paiement.
             </div>
-          </td>
-        <tr>
-          <th>{{mb_label object=$filter_reglement field="mode"}}</th>
-          <td>{{mb_field object=$filter_reglement field="mode" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
+          </td>   
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_type_affichage"}}</th>
           <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>     
         </tr>
         <tr>
-          <td class="button" colspan="3">
+          <td class="button" colspan="2">
             <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';">Impression compta</button>
             <button class="print" type="submit" onclick="document.printFrm.a.value='print_bordereau';">Impression bordereau</button>
           </td>
         </tr>
         <tr>
-          <td class="button" colspan="3">
+          <td class="button" colspan="4">
             <hr />
           </td>
         </tr>
@@ -131,7 +149,7 @@ function changeDate(sDebut, sFin){
             Oui<input type="radio" name="cs" value="1" checked="checked"/>
             Non<input type="radio" name="cs" value="0" />
           </td>
-          <td rowspan="3" class="text">
+          <td colspan="2" rowspan="4" class="text">
             <div class="big-info">
               Affichage de l'état des paiements, en fonction des dates de consultation.
               Permet de rentrer de nouveaux paiements.
@@ -147,11 +165,35 @@ function changeDate(sDebut, sFin){
           <td>{{mb_field object=$filter field="_etat_reglement_tiers" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
-          <td class="button" colspan="3">
+          <td class="button" colspan="2">
             <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
             {{if $app->user_prefs.GestionFSE}}
               <button class="search" type="submit" onclick="document.printFrm.a.value='print_noemie';">Rapprochements Noemie</button>
             {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th class="category" colspan="4">Comptabilité "Interventions"</th>
+        </tr>
+        <tr>
+          <th>
+            <label for="typeVue">Type d'affichage</label>
+          </th>
+          <td>
+            <select name="typeVue">
+            <option value="1">Liste complète</option>
+            <option value="2">Totaux</option>
+            </select>
+          </td>
+          <td colspan="2" rowspan="2" class="text">
+            <div class="big-info">
+              Affichage de l'état des règlements de la liste des actes réalisé aux blocs.
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <button type="button" class="search" onclick="viewActes();">Validation paiements</button>
           </td>
         </tr>
       </table>

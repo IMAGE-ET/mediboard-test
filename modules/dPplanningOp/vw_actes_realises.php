@@ -11,22 +11,21 @@ set_time_limit(180);
 
 $_date_min = mbGetValueFromGetOrSession("_date_min");
 $_date_max = mbGetValueFromGetOrSession("_date_max");
-$chir_id = mbGetValueFromGetOrSession("chir_id");
+$_prat_id = mbGetValueFromGetOrSession("chir");
 $typeVue = mbGetValueFromGetOrSession("typeVue");
-$etatReglement = mbGetValueFromGetOrSession("etatReglement");
 
 $nbActes = array();
 $montantSejour = array();
 $tabSejours = array();
 
 $praticien = new CMediusers();
-$praticien->load($chir_id);
+$praticien->load($_prat_id);
 
 // Parcours des actes CCAM
 $acte_ccam = new CActeCCAM();
 $order = "execution ASC";
 $where = array();
-$where["executant_id"] = " = '$chir_id'";
+$where["executant_id"] = " = '$_prat_id'";
 $where["execution"] = "BETWEEN '$_date_min' AND '$_date_max'";
 
 //$where[] = "(object_class <> 'CConsultation' OR consultation.sejour_id IS NOT NULL AND consultation.consultation_id = object_id)"; 

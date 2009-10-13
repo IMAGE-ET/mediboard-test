@@ -185,7 +185,12 @@ class CSetupdPsalleOp extends CSetup {
     $query = "ALTER TABLE `daily_check_list` ADD `comments` TEXT";
     $this->addQuery($query);
     
-    $this->mod_version = "0.30";
+    $this->makerevision("0.30");
+    $sql = "ALTER TABLE `acte_ccam`
+            ADD `regle_dh` ENUM('0','1') DEFAULT 0 AFTER `regle`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.31";
   }
 }
 ?>

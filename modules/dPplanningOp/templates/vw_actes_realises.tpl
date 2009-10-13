@@ -1,6 +1,12 @@
 <script type="text/javascript">
 
-var submitActeCCAM = function(oForm, acte_ccam_id){
+var submitActeCCAM = function(oForm, acte_ccam_id, sField){
+  if(oForm[sField].value == 1) {
+    $V(oForm[sField], 0);
+  } else {
+    $V(oForm[sField], 1);
+  }
+  $(sField + '-' + acte_ccam_id).toggleClassName('cancel').toggleClassName('tick');
   submitFormAjax(oForm, 'systemMsg', {onComplete: function() { reloadActeCCAM(acte_ccam_id) } }); 
 }
 
@@ -72,72 +78,61 @@ var viewCCAM = function(codeacte) {
     </td>
   </tr>
   
-{{if $typeVue == 1}}
-<!-- Parcours de jours -->
-{{foreach from=$sejours key="key" item="jour"}}
+  {{if $typeVue == 1}}
+  <!-- Parcours de jours -->
+  {{foreach from=$sejours key="key" item="jour"}}
   <tr>
     <td colspan="2">
       <table>
-       <tr> 
-         <td>
-           <strong>Sortie réelle le {{$key|date_format:$dPconfig.longdate}}</strong>
-         </td>
-       </tr>
-     </table>
-     <table class="tbl">
-  <tr>
-    <th style="width: 20%">Patient</th>
-    <th style="width: 05%">Total Séjour</th>
-    <th style="width: 20%">Type</th>
-    <th style="width: 05%">Code</th>
-    <th style="width: 05%">Act.</th>
-    <th style="width: 05%">Phase</th>
-    <th style="width: 05%">Mod</th>
-    <th style="width: 05%">ANP</th>
-    <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_base}}</th>
-    <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
-    <th style="width: 05%">{{mb_title class=CActeCCAM field=_montant_facture}}</th>
-    <th style="width: 05%">Réglement</th>
-  </tr>
-  
-  <!-- Parcours des sejours -->
-  {{foreach from=$jour item="sejour"}}
-    {{assign var="sejour_id" value=$sejour->_id}}
-    
-   <tbody class="hoverable">
-   <tr>
-    <td rowspan="{{$nbActes.$sejour_id}}">{{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}} ans){{/if}}</td>
-    <td rowspan="{{$nbActes.$sejour_id}}">
-      {{$montantSejour.$sejour_id|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
-    </td>
-    
-    {{include file=inc_acte_realise.tpl codable=$sejour}}
+        <tr> 
+          <td>
+            <strong>Sortie réelle le {{$key|date_format:$dPconfig.longdate}}</strong>
+          </td>
+        </tr>
+      </table>
+      <table class="tbl">
+        <tr>
+          <th style="width: 20%">Patient</th>
+          <th style="width: 05%">Total Séjour</th>
+          <th style="width: 20%">Type</th>
+          <th style="width: 05%">Code</th>
+          <th style="width: 05%">Act.</th>
+          <th style="width: 05%">Phase</th>
+          <th style="width: 05%">Mod</th>
+          <th style="width: 05%">ANP</th>
+          <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_base}}</th>
+          <th style="width: 05%">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
+          <th style="width: 05%">{{mb_title class=CActeCCAM field=_montant_facture}}</th>
+        </tr>
         
-    {{if $sejour->_ref_operations}}
-      {{foreach from=$sejour->_ref_operations item=operation}}
-	    {{include file=inc_acte_realise.tpl codable=$operation}}
-      {{/foreach}}
-    {{/if}}
+        <!-- Parcours des sejours -->
+        {{foreach from=$jour item="sejour"}}
+        {{assign var="sejour_id" value=$sejour->_id}}
+        <tbody class="hoverable">
+        <tr>
+          <td rowspan="{{$nbActes.$sejour_id}}">{{$sejour->_ref_patient->_view}} {{if $sejour->_ref_patient->_age}}({{$sejour->_ref_patient->_age}} ans){{/if}}</td>
+          <td rowspan="{{$nbActes.$sejour_id}}">
+            {{$montantSejour.$sejour_id|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
+          </td>
+          {{include file=inc_acte_realise.tpl codable=$sejour}}
+          {{if $sejour->_ref_operations}}
+            {{foreach from=$sejour->_ref_operations item=operation}}
+	            {{include file=inc_acte_realise.tpl codable=$operation}}
+            {{/foreach}}
+          {{/if}}
   
-  
-  
-  {{if $sejour->_ref_consultations}}
-    {{foreach from=$sejour->_ref_consultations item=consult}}
-    {{include file=inc_acte_realise.tpl codable=$consult}}
-    {{/foreach}}
-  {{/if}}
-  
+          {{if $sejour->_ref_consultations}}
+            {{foreach from=$sejour->_ref_consultations item=consult}}
+              {{include file=inc_acte_realise.tpl codable=$consult}}
+            {{/foreach}}
+          {{/if}}
+        </tr>
+        </tbody>
+        {{/foreach}}
+      </table>
+    </td>
+  </tr>
   {{/foreach}}
-  
-  </tbody>
-  </table>
-</td>
-</tr>
-
-{{/foreach}}
-
-{{/if}}
-
-
+  {{/if}}
 </table>
 

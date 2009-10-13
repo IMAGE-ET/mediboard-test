@@ -35,6 +35,7 @@ class CActeCCAM extends CActe {
   var $rembourse           = null;
   var $charges_sup         = null;
   var $regle               = null;
+  var $regle_dh            = null;
   var $signe               = null;
   
   // Form fields
@@ -74,7 +75,8 @@ class CActeCCAM extends CActe {
     $specs["code_association"]    = "enum list|1|2|3|4|5";
     $specs["rembourse"]           = "bool default|1";
     $specs["charges_sup"]         = "bool";
-    $specs["regle"]               = "bool";
+    $specs["regle"]               = "bool default|0";
+    $specs["regle_dh"]            = "bool default|0";
     $specs["signe"]               = "bool default|0";
 
     $specs["_rembex"]             = "bool";
