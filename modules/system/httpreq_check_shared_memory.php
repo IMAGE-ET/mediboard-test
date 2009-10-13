@@ -25,14 +25,14 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   
   $path = "./tmp/locales.$localeName.js";
   if (!is_file($path)) {
-    echo "<div class='message'>Fichier de locales JS '$localeName' absent</div>";
+    echo "<div class='warning'>Fichier de locales JS '$localeName' absent</div>";
     continue;
   }
   
   $fp = fopen($path, 'r');
   preg_match('#^//(\d+)#', fgets($fp), $v);
   if ($v[1] < $version['build']) {
-    echo "<div class='message'>Fichier de locales JS '$localeName' perimé</div>";
+    echo "<div class='warning'>Fichier de locales JS '$localeName' perimé</div>";
     continue;
   }
 
