@@ -23,7 +23,7 @@ $filterSejour->_date_min_stat = mbDate("-$rectif DAYS", $filterSejour->_date_min
 $filterSejour->_date_max_stat =  mbGetValueFromGetOrSession("_date_max_stat",  mbDate());
 $rectif = mbTransformTime("+0 DAY", $filterSejour->_date_max_stat, "%d") - 1;
 $filterSejour->_date_max_stat = mbDate("-$rectif DAYS", $filterSejour->_date_max_stat);
-$filterSejour->_date_max_stat = mbDate("+ 1 MONTH", $filterSejour->_date_max_stat);
+$filterSejour->_date_max_stat = mbDate("+1 MONTH", $filterSejour->_date_max_stat);
 $filterSejour->_date_max_stat = mbDate("-1 DAY", $filterSejour->_date_max_stat);
 
 

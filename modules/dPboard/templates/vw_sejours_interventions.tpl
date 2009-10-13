@@ -24,6 +24,8 @@ Main.add(function(){
 <form name="filters" action="?" method="get" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPboard" />
+<input type="hidden" name="_chir" value="{{$prat->_id}}" />
+<input type="hidden" name="_class_name" value="" />
 
 <table class="main form">
 
@@ -54,7 +56,7 @@ Main.add(function(){
     <td>{{mb_label object=$filterOperation field="codes_ccam"}}</td>
     <td>
       {{mb_field object=$filterOperation field="codes_ccam" canNull="true" size="20"}}
-      <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>   
+      <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>   
       <script type="text/javascript">
         CCAMSelector.init = function(){
           this.sForm = "filters";
@@ -64,12 +66,13 @@ Main.add(function(){
           this.pop();
         }
       </script>
-      
     </td>
   </tr>
 
   <tr>
-    <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
+    <td colspan="4" class="button">
+      <button type="submit" class="search">Afficher</button>
+    </td>
   </tr>
   
 </table>
