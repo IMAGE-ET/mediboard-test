@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $mbpath, $AppUI, $dPconfig, $can, $m, $tab;
+global $mbpath, $dPconfig, $can;
 
 $can->needsAdmin();
 
@@ -21,13 +21,13 @@ $ajax = CMbArray::extract($_POST, "ajax");
 $mbConfig = new CMbConfig;
 $mbConfig->update($_POST);
 $mbConfig->load();
-$AppUI->setMsg("Configuration modifiée");
+CAppUI::setMsg("Configuration modifiée");
 
 $dPconfig = $mbConfig->values;
 
 // Cas Ajax
 if ($ajax) {
-  echo $AppUI->getMsg();
+  echo CAppUI::getMsg();
   CApp::rip();
 }
 

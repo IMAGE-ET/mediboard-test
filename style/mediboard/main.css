@@ -2374,15 +2374,15 @@ td.listeChoixCR select {
 }
 
 /* Installation wizard */
-
-div.wizard {
+.wizard {
   padding: 40px; 
+  width: auto;
   margin: 80px; 
   background: #eee; 
   border: 2px solid #8c8; 
 }
 
-div.wizard div.toc {
+.wizard .toc {
   position: fixed;
   right: 15px;
   top: 15px;
@@ -2393,22 +2393,22 @@ div.wizard div.toc {
   opacity: .7;
 }
 
-div.wizard div.toc ol {
+.wizard .toc ol {
   margin: 0px;
-  padding-left: 20px
+  padding-left: 20px;
 }
 
-div.wizard div.toc a {
+.wizard .toc a {
   display: block;
   color: #000;
 }
 
-div.wizard-navigation {
+.wizard .navigation {
   text-align: center;
   margin: 20px;
 }
 
-div.wizard-navigation a {
+.wizard .navigation a {
   text-decoration: none;
   border: 1px black solid;
   font-weight: bold;
@@ -2418,7 +2418,7 @@ div.wizard-navigation a {
   padding: 2px 5px;
 }
 
-div.wizard-navigation a:hover {
+.wizard .navigation a:hover {
   background: #bbb;
 }
 

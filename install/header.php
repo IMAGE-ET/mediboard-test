@@ -58,8 +58,7 @@ function showHeader() {
   <link rel="stylesheet" type="text/css" href="../style/e-cap/main.css" />
 </head>
 
-<body>
-<div class="wizard">
+<body class="wizard">
 
 <div class="toc">
   <ol>
@@ -77,7 +76,7 @@ function showHeader() {
 
 <h1>Installation de Mediboard <?php echo $version["string"]; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?>  </h1>
 <?php 
-} 
+}
 
 function showFooter() {
   global $stepsText, $currentStepKey, $currentStep, $steps, $chrono;
@@ -87,7 +86,7 @@ function showFooter() {
   $nextStep = $currentStepKey+1 != count($steps) ? $steps[$currentStepKey+1] : null;
 ?>
 <hr />
-<div class="wizard-navigation">
+<div class="navigation">
   <?php if ($prevStep) { ?><a href="<?php echo $prevStep; ?>.php">&lt;&lt; <?php echo $stepsText[$prevStep]; ?></a><?php } ?>
   <?php if ($nextStep) { ?><a href="<?php echo $nextStep; ?>.php"><?php echo $stepsText[$nextStep]; ?> &gt;&gt;</a><?php } ?>
 </div>
@@ -96,7 +95,6 @@ function showFooter() {
   Page générée en <?php printf("%.3f", $chrono->total); ?> secondes.
 </div>
 
-</div>
 </body>
 
 </html>

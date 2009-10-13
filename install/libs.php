@@ -326,6 +326,4 @@ $library->versionString = "define('GESHI_VERSION', '1.0.8.3')";
 
 CLibrary::$all[$library->name] = $library;
 
-$install = @$_POST['install'];
-
 ?>

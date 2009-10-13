@@ -29,6 +29,11 @@ $dPconfig["timezone"] = "Europe/Paris";
 $dPconfig["graph_engine"] = "jpgraph";
 $dPconfig["graph_svg"] = "non";
 
+// PHP config
+$dPconfig["php"] = array(
+  "memory_limit" => "128M"
+);
+
 // Standard database config
 $dPconfig["db"]["std"] = array(
   "dbtype" => "mysql",      // Change to use another dbms

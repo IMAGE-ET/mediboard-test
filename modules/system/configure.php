@@ -24,12 +24,35 @@ foreach ($zones as $zone) {
   }
 }
 
+$php_config = ini_get_all();
+$php_config_important = array(
+  "memory_limit",
+  "default_socket_timeout",
+  "max_execution_time",
+  "mysql.connect_timeout",
+  "session.cache_expire",
+);
+$php_config_tree = array(
+  "general" => array()
+);
+foreach($php_config as $key => $value) {
+  $parts = explode(".", $key, 2);
+  $value["user"] = $value["access"] & 1;
+  if (count($parts) == 1) {
+    $php_config_tree["general"][$key] = $value;
+  }
+  else {
+    if (!isset($php_config_tree[$parts[0]])) 
+      $php_config_tree[$parts[0]] = array();
+    $php_config_tree[$parts[0]][$key] = $value;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("now", mbDateTime());
 $smarty->assign("timezones", $timezones);
-
+$smarty->assign("php_config", $php_config_tree);
+$smarty->assign("php_config_important", $php_config_important);
 $smarty->display("configure.tpl");
 
 ?>

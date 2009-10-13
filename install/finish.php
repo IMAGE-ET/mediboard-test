@@ -142,7 +142,7 @@ désactiver ou les masquer du menu principal (<em>cf.</em> Administration des mod
   qu'administatreur pour pouvoir configurer les modules.
 </p>
 
-<div class="wizard-navigation">
+<div class="navigation">
   <a href="../index.php?m=system&amp;tab=view_modules">
     Me rendre à la page d'administration des modules
   </a>

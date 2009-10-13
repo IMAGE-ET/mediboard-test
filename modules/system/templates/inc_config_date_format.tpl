@@ -16,6 +16,6 @@
   </th>
   <td>
     <input type="text" name="{{$var}}" value="{{$dPconfig.$var}}" />
-    {{$now|date_format:$dPconfig.$var}}
+    {{$smarty.now|date_format:$dPconfig.$var}}
   </td>
 </tr>

@@ -9,10 +9,10 @@
  */
 
 require_once("checkauth.php");
-
-require_once ("../classes/mbpath.class.php");
-
+require_once("../classes/mbpath.class.php");
 require_once("libs.php");
+
+$install = @$_POST['install'];
 
 showHeader(); 
 

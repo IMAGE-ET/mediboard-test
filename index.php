@@ -10,22 +10,24 @@
 
 require("./includes/magic_quotes_gpc.php");
 
-$dPconfig = array();
 $performance = array();
 
 if (!is_file("./includes/config.php")) {
-  header("location: install/");
+  header("Location: install/");
   die("Redirection vers l'assistant d'installation");
 }
-
-// PHP Configuration
-ini_set("memory_limit", "128M");
 
 require("./includes/config_dist.php");
 require("./includes/config.php");
 require("./includes/version.php");
 require("./includes/compat.php");
 require("./classes/sharedmemory.class.php");
+
+// PHP Configuration
+foreach($dPconfig["php"] as $key => $value) {
+  if ($value === "") continue;
+  ini_set($key, $value);
+}
 
 if ($dPconfig["offline"]) {
   header("Location: offline.php");
