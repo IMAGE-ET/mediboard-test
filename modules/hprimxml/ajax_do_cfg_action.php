@@ -13,16 +13,23 @@ global $AppUI, $can, $m;
 $action = mbGetValueFromGet("action");
 
 switch ($action) {
-  case "extractFiles":
-    extractFiles("evenementPatient" , "schemaHprimXmlEvenementPatientV1_05.zip");
+  case "evenementsServeurActes":
+    extractFiles("evenementsServeurActes" , "schemaServeurActe_v101.zip");
+    break;
+  
+  case "evenementsPmsi":
+    extractFiles("evenementsPmsi", "schemaPMSI_v101.zip" );
+    
+  case "evenementsPatients":
+    extractFiles("evenementsPatients" , "schemaEvenementPatient_v105.zip");
     break;
 
   default:
-    echo "<div class'error'>Action '$action' inconnue</div>";
+    echo "<div class='error'>Action '$action' inconnue</div>";
 }
 
 function extractFiles($schemaDir, $schemaFile) {
-  $baseDir = "modules/sip/hprim";
+  $baseDir = "modules/hprimxml/xsd";
   $destinationDir = "$baseDir/$schemaDir";
   $archivePath = "$baseDir/$schemaFile";
   if (false != $nbFiles = CMbPath::extract($archivePath, $destinationDir)) {

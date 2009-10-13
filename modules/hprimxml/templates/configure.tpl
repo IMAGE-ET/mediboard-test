@@ -27,23 +27,23 @@ function doAction(sAction) {
     <th class="category">Status</th>
   </tr>
   <tr>
-    <td onclick="doAction('extractFiles');">
-      <button class="tick">Installation HPRIM 'EvementPatient'</button>
+    <td onclick="doAction('evenementsServeurActes');">
+      <button class="tick">Installation HPRIM XML 'Evénements Serveurs Actes'</button>
     </td>
-    <td class="text" id="extractFiles" />
+    <td class="text" id="evenementsServeurActes"></td>
+  </tr>
+  <tr>
+    <td onclick="doAction('evenementsPmsi');">
+      <button class="tick">Installation HPRIM XML 'Evénements PMSI'</button>
+    </td>
+    <td class="text" id="evenementsPmsi"></td>
+  </tr>
+  <tr>
+    <td onclick="doAction('evenementsPatients');">
+      <button class="tick">Installation HPRIM XML 'Evénements Patients'</button>
+    </td>
+    <td class="text" id="evenementsPatients"></td>
   </tr>
 </table>
-
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_configure" />
-  <input type="hidden" name="m" value="system" />
-  <table class="form"> 
-    <tr>
-      <td class="button" colspan="10">
-        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-      </td>
-    </tr>
-  </table>
-</form>
 
 <hr />
