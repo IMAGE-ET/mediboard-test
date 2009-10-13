@@ -364,9 +364,8 @@ abstract class CSQLDataSource {
    * @return array the query result
    **/
   function loadList($query, $maxrows = null) {
-    global $AppUI;
     if (null == $cur = $this->exec($query)) {
-      $AppUI->setMsg($this->error(), UI_MSG_ERROR);
+      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
     
@@ -389,9 +388,8 @@ abstract class CSQLDataSource {
    * @return array the query result
    **/
   function loadColumn($query, $maxrows = null) {
-    global $AppUI;
     if (null == $cur = $this->exec($query)) {
-      $AppUI->setMsg($this->error(), UI_MSG_ERROR);
+      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
     

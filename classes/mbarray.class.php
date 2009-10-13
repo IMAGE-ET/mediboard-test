@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CMbArray {
+abstract class CMbArray {
   /**
    * Compares the content of two arrays
    * @return an associative array with values 

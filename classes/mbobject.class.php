@@ -345,7 +345,7 @@ class CMbObject {
    * @return boolean
    */
   function getPerm($permType) {
-    return(CPermObject::getPermObject($this, $permType));
+    return CPermObject::getPermObject($this, $permType);
   }
   
   function canRead() {
@@ -353,7 +353,7 @@ class CMbObject {
   }
   
   function canEdit() {
-    return $this->_canEdit = $this->getPerm(PERM_EDIT);;
+    return $this->_canEdit = $this->getPerm(PERM_EDIT);
   }
 
   function canDo(){
@@ -819,8 +819,6 @@ class CMbObject {
    * Prepare the user log before object persistence (store or delete)
    */
   function prepareLog() {
-  	global $AppUI;
-  	
     // Si object non loggable
     if (!$this->_spec->loggable || $this->_purge) {
       return;
@@ -861,7 +859,7 @@ class CMbObject {
     }
     
     $log = new CUserLog;
-    $log->user_id = $AppUI->user_id;
+    $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class_name;
     $log->type = $type;

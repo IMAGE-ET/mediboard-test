@@ -37,9 +37,8 @@ function setClose(modele_id, object_id) {
     </option>
   {{/foreach}}
 </select>
-{{/if}}
-
 </form>
+{{/if}}
 
 {{if $praticien->_can->edit}}
 	<!-- Choix du modèle praticien -->

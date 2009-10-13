@@ -20,7 +20,7 @@ class CCanDo {
   var $setValues  = null;
   
   function redirect($a = "access_denied", $params = null){
-    global $AppUI, $actionType;
+    global $actionType;
     
     // on passa a null soit "tab" soit "a" selon ou l'on se trouve
     mbSetValueToSession($actionType);
@@ -38,7 +38,7 @@ class CCanDo {
     $dialog = mbGetValueFromGet("dialog");
     $suppressHeaders = mbGetValueFromGet("suppressHeaders");
     $ajax = mbGetValueFromGet("ajax");
-    $AppUI->redirect("m=system&a=$a&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
+    CAppUI::redirect("m=system&a=$a&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
   }
   
   function needsRead($setValues = null) {

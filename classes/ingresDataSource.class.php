@@ -41,8 +41,7 @@ class CIngresDataSource extends CSQLDataSource {
   }
   
   function loadTable($table) {
-    $query = "SELECT * FROM iitables".
-      "\nWHERE table_name = %";
+    $query = "SELECT * FROM iitables WHERE table_name = %";
             
     $values = array (
       $table,
@@ -51,10 +50,8 @@ class CIngresDataSource extends CSQLDataSource {
     return $this->loadResult($this->prepare($query, $values));
   }
 
-
   function loadTables($table = null) {
-    $query = "SELECT * FROM iitables".
-      "\nWHERE table_name = %";
+    $query = "SELECT * FROM iitables WHERE table_name = %";
             
     $values = array (
       "$table%",
@@ -62,10 +59,11 @@ class CIngresDataSource extends CSQLDataSource {
     
     return $this->loadColumn($this->prepare($query, $values));
   }
+  
   function loadField($table, $field) {
-    $query = "SELECT column_name FROM iiocolumns".
-      "\nWHERE table_name = %".
-      "\nAND column_name = %";
+    $query = "SELECT column_name FROM iiocolumns
+      WHERE table_name = %
+      AND column_name = %";
             
     $values = array (
       $table,

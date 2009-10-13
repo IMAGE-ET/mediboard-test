@@ -55,7 +55,7 @@ if($indexFile){
   $smartyStyle->cache_dir    = "style/$uistyle/cache/";
   
   $smartyStyle->assign("offline"              , true);
-  $smartyStyle->assign("localeCharSet"        , $locale_char_set);
+  $smartyStyle->assign("localeInfo"           , $locale_info);
   $smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
   $smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all",1));
   $smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));

@@ -112,7 +112,6 @@ class CAideSaisie extends CMbObject {
     $this->_ref_user->load($this->user_id);
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
-    
   }
   
   function getPerm($permType) {

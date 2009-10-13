@@ -18,6 +18,7 @@ class CMbObjectSpec {
   public $key                 = null;
   public $measureable         = false;
   public $uniques             = array();
+  public $xor                 = array();
   
   // Derivate fields
   public $ds = null;
@@ -29,5 +30,3 @@ class CMbObjectSpec {
     $this->ds = CSQLDataSource::get($this->dsn);
   }
 }
-
-?>

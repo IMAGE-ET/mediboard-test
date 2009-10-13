@@ -75,7 +75,7 @@ function loadCategory(value) {
 function submitCompteRendu(){
   (function(){
     var form = getForm("editFrm");
-    if(checkForm(form) && window.userId) {
+    if(checkForm(form) && User.id) {
       form.submit();
     }
   }).defer();

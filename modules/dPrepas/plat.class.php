@@ -31,26 +31,24 @@ class CPlat extends CMbObject {
   }
   
   function getBackProps() {
-      $backProps = parent::getBackProps();
-      $backProps["repas1"] = "CRepas plat1";
-      $backProps["repas2"] = "CRepas plat2";
-      $backProps["repas3"] = "CRepas plat3";
-      $backProps["repas4"] = "CRepas plat4";
-      $backProps["repas5"] = "CRepas plat5";
-      $backProps["repas_boisson"] = "CRepas boisson";
-      $backProps["repas_pain"] = "CRepas pain";
-     return $backProps;
+   $backProps = parent::getBackProps();
+   $backProps["repas1"] = "CRepas plat1";
+   $backProps["repas2"] = "CRepas plat2";
+   $backProps["repas3"] = "CRepas plat3";
+   $backProps["repas4"] = "CRepas plat4";
+   $backProps["repas5"] = "CRepas plat5";
+   $backProps["repas_boisson"] = "CRepas boisson";
+   $backProps["repas_pain"] = "CRepas pain";
+   return $backProps;
   }
   
   function getProps() {
-  	$specsParent = parent::getProps();
-    $specs = array (
-      "nom"       => "str notNull",
-      "group_id"  => "ref notNull class|CGroups",
-      "type"      => "enum notNull list|plat1|plat2|plat3|plat4|plat5|boisson|pain",
-      "typerepas" => "ref notNull class|CTypeRepas"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getProps();
+    $specs["nom"]       = "str notNull";
+    $specs["group_id"]  = "ref notNull class|CGroups";
+    $specs["type"]      = "enum notNull list|plat1|plat2|plat3|plat4|plat5|boisson|pain";
+    $specs["typerepas"] = "ref notNull class|CTypeRepas";
+    return $specs;
   }
   
   function loadRefsFwd() {
@@ -63,16 +61,12 @@ class CPlat extends CMbObject {
     $this->_view = $this->nom;
   }
     
+  //  @todo: refactor this !
   function canDeleteEx() {
-    global $AppUI;
-    $select       = "\nSELECT COUNT(DISTINCT repas.repas_id) AS number";
-    $from        = "\nFROM repas ";
-    $sql_where   = "\nWHERE (`$this->type` IS NOT NULL AND `$this->type` = '$this->plat_id')";
-    
-    $sql = $select . $from . $sql_where;
+    $query       = "SELECT COUNT(DISTINCT repas.repas_id) AS number
+                    FROM repas WHERE (`$this->type` IS NOT NULL AND `$this->type` = '$this->plat_id')";
     $obj = null;
-    
-    if (!$this->_spec->ds->loadObject($sql, $obj)) {
+    if (!$this->_spec->ds->loadObject($query, $obj)) {
       return $this->_spec->ds->error();
     }
     if ($obj->number) {

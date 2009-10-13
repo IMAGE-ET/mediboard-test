@@ -669,7 +669,7 @@ th.title {
 
 table.tbl {
   width: 100%;
-  border: 1px solid #999;
+  border: 1px solid #eee;
   border-spacing: 0;
   border-collapse: collapse;
   background-color: #777;
@@ -1024,10 +1024,9 @@ input.autocomplete.throbbing {
 
 .textarea-helped .toolbar {
   position: absolute;
-  top: 0;
+  bottom: 8px;
   right: 4px;
   padding: 4px;
-  width: 60px;
   vertical-align: top;
   text-align: right;
 }
@@ -1766,8 +1765,8 @@ table.print th {
   vertical-align: top;
   text-align: right;
   font-weight: bold;
-	border-right: #aaa 1px solid;
-	padding-right : 0.5em;
+  border-right: #eee 1px solid;
+  padding-right : 0.5em;
 }
 
 table.print th.title {
@@ -3010,7 +3009,6 @@ table.tbl th.element a{
   color: #000;
 }
 
-
 .div_signature {
   position: absolute;
   right: 25px;
@@ -3123,7 +3121,6 @@ ul.select-tree .highlight {
   border: 2px solid #000;
 }
 
-
 /** Flotr */
 .flotr-datagrid-container {
   border: 1px solid #999;
@@ -3213,7 +3210,6 @@ ul li a.chapitre_non_signe:hover{
   color: #000;
 }
 
-
 ul li a.chapitre_non_signe.active{
   background-color: #FFF2AA;
   color: #000;
@@ -3228,7 +3224,6 @@ ul li a.chapitre_signe:hover{
   background-color: #54FF54;
   color: #000;
 }
-
 
 ul li a.chapitre_signe.active{
   background-color: #C5FFC1;

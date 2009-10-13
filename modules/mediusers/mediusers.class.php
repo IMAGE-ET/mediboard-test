@@ -56,6 +56,7 @@ class CMediusers extends CMbObject {
   var $_is_infirmiere        = null;
   var $_user_password_weak   = null;
   var $_user_password_strong = null;
+  var $_basic_info = null;
   
   // Distant fields
   var $_group_id = null;
@@ -796,7 +797,7 @@ class CMediusers extends CMbObject {
     $this->updateFormFields();
     $this->loadRefFunction();
     $this->_ref_function->loadRefGroup();
-    return array(
+    return $this->_basic_info = array(
       'id' => $this->_id,
       'view' => $this->_view,
       'function' => array(

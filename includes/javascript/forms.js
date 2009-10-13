@@ -8,50 +8,36 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function addHelp(sClass, oField, sName, sDepend1, sDepend2) {
-  var url = new Url("dPcompteRendu", "edit_aide");
-  url.addParam("class"       , sClass);
-  url.addParam("field"       , sName || oField.name);
-  url.addParam("text"        , oField.value);
-  url.addParam("depend_value_1", sDepend1 || null);
-  url.addParam("depend_value_2", sDepend2 || null);
-  url.popup(600, 300, "AidesSaisie");
-}
-
 function confirmDeletion(oForm, oOptions, oOptionsAjax) {
-  var oDefaultOptions = {
+  oOptions = Object.extend({
     typeName: "",
     objName : "",
     msg     : "Voulez-vous réellement supprimer ",
     ajax    : 0,
     target  : "systemMsg"
-  };
+  }, oOptions);
   
-  Object.extend(oDefaultOptions, oOptions);
-  
-  if (oDefaultOptions.objName.length) oDefaultOptions.objName = " '" + oDefaultOptions.objName + "'";
-  if (confirm(oDefaultOptions.msg + oDefaultOptions.typeName + " " + oDefaultOptions.objName + " ?" )) {
-  	oForm.del.value = 1;
-  	if(oDefaultOptions.ajax)
-  	  submitFormAjax(oForm, oDefaultOptions.target, oOptionsAjax);
-  	else
-  	  oForm.submit();
+  if (oOptions.objName.length) oOptions.objName = " '" + oOptions.objName + "'";
+  if (confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
+    oForm.del.value = 1;
+    if(oOptions.ajax)
+      submitFormAjax(oForm, oOptions.target, oOptionsAjax);
+    else
+      oForm.submit();
   }
 }
 
-function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
-  var oDefaultOptions = {
+function confirmDeletionOffline(oForm, oFct, oOptions) {
+  oOptions = Object.extend({
     typeName: "",
     objName : "",
     msg     : "Voulez-vous réellement supprimer ",
     ajax    : 0,
     target  : "systemMsg"
-  };
+  }, oOptions);
   
-  Object.extend(oDefaultOptions, oOptions);
-  
-  if (oDefaultOptions.objName.length) oDefaultOptions.objName = " '" + oDefaultOptions.objName + "'";
-  if (confirm(oDefaultOptions.msg + oDefaultOptions.typeName + " " + oDefaultOptions.objName + " ?" )) {
+  if (oOptions.objName.length) oOptions.objName = " '" + oOptions.objName + "'";
+  if (confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
     oForm.del.value = 1;
     oFct();
   }
@@ -143,50 +129,6 @@ function $V (element, value, fire) {
   return;
 }
 
-function pasteHelperContent(oHelpElement) {
-  var aFound = oHelpElement.name.match(/_helpers_(.*)/);
-  Assert.that(aFound.length == 2, "Helper element '%s' is not of the form '_helpers_propname'", oHelpElement.name);
-  
-  var sPropName = aFound[1].split("-")[0];
-  var oAreaField = $(oHelpElement.form.elements[sPropName]);
-  var sValue = oHelpElement.value;
-  
-  oHelpElement.value = "";
-  var caret = oAreaField.caret();
-  oAreaField.caret(caret.begin, caret.end, sValue + '\n');
-  oAreaField.caret(oAreaField.value.length);
-  oAreaField.scrollTop = oAreaField.scrollHeight;
-}
-
-function putHelperContent(oElem, sFieldSelect) {
-  var oForm      = oElem.form;
-  var sDependsOn = $V(oElem);
-
-  // Search for helpers elements in same form
-  for (var i=0; i< oForm.elements.length; i++) {
-    var element = oForm.elements[i];
-    
-    // Filter helper elements
-    var aFound = element.name.match(/_helpers_(.*)/);
-    if (!aFound) continue;
-    
-    Assert.that(aFound.length == 2, "Helper field name '%s' incorrect", element.name);
-    Assert.that(element.nodeName == "SELECT", "Helper field name '%s' should be a select", element.name);
-    
-    // Check correspondance
-		var aHelperParts = aFound[1].split("-");
-		Assert.that(aHelperParts[0] == sFieldSelect, "Helper Field '%s' should target '%s' field",  element.name, sFieldSelect);
-    
-    // Show/Hide helpers
-    var sHelperDependsOn = aHelperParts[1]; 
-    if (sHelperDependsOn == "no_enum") {
-    	sHelperDependsOn = "";
-    }
-    
-    $(element).setVisible(sHelperDependsOn == sDependsOn);
-  }
-}
-
 function notNullOK(oEvent) {
   var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
   if (oLabel = oElement.getLabel()) {
@@ -222,14 +164,14 @@ var FormObserver = {
 };
 
 function isKeyAllowed(event, allowed){
-	var key = Event.key(event);
-	console.debug(key);
-	if (!(key >= 48 && key <= 90 || 
-	      key >= 96 && key <= 111 || 
-				key >= 186 && key <= 222)) return true;
-	
-	var c = String.fromCharCode(key);
-	if (allowed.test(c)) return c;
+  var key = Event.key(event);
+  console.debug(key);
+  if (!(key >= 48 && key <= 90 || 
+        key >= 96 && key <= 111 || 
+        key >= 186 && key <= 222)) return true;
+  
+  var c = String.fromCharCode(key);
+  if (allowed.test(c)) return c;
 }
 
 Element.addMethods({
@@ -300,7 +242,7 @@ Element.addMethods({
       }
     }
   }
-} );
+});
 
 function prepareForm(oForm, bForcePrepare) {
   if (typeof oForm == "string") {
@@ -310,72 +252,71 @@ function prepareForm(oForm, bForcePrepare) {
   var sFormName;
   
   if (oForm) {
-		// If this form hasn't been prepared yet
-		if (!oForm.hasClassName("prepared") || bForcePrepare) {
-		
-		  // Event Observer
-		  if(oForm.hasClassName("watched")) {
-		    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
-		  }
-		  
-		  // Form preparation
-		  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute hg
-		  	sFormName = oForm.cloneNode(false).getAttribute("name");
-		  else
-		  	sFormName = oForm.getAttribute("name");
+    // If this form hasn't been prepared yet
+    if (!oForm.hasClassName("prepared") || bForcePrepare) {
+    
+      // Event Observer
+      if(oForm.hasClassName("watched")) {
+        new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
+      }
+      
+      // Form preparation
+      if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
+        sFormName = oForm.cloneNode(false).getAttribute("name");
+      else
+        sFormName = oForm.getAttribute("name");
 
-		  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
-		
-		  // Build label targets
-		  var aLabels = oForm.select("label"),
-          oLabel = null,
-          sFor = null, i = 0;
-		  while (oLabel = aLabels[i++]) {
-		    if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
-		      oLabel.htmlFor = sFormName + "_" + sFor;
-		    }
-		  }
-		
-		  // For each element
-		  var iElement = 0;
-		  var oElement = null;
-		  while (oElement = $(oForm.elements[iElement++])) {
-		  	var sElementName = oElement.getAttribute("name");
-		  	var props = oElement.getProperties();
-		
-		  	// Locked object
-		  	if (oForm.lockAllFields) {
-		  		oElement.disabled = true;
-		  	}
-		  	
-		    // Create id for each element if id is null
-		    if (!oElement.id && sElementName) {
-		      oElement.id = sFormName + "_" + sElementName;
-		      if (oElement.type === "radio") {
-		        oElement.id += "_" + oElement.value;
-		      }
-		    }
-		
-		    // If the element has a mask and other properties, they may conflict
-		    if (Preferences.INFOSYSTEM && props.mask) {
-		      Assert.that(!(
-		        props.min || props.max || props.bool || props.ref || props.pct || props.num
-		      ), "'"+oElement.id+"' mask may conflit with other props");
-		    }
+      oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
+    
+      // Build label targets
+      var aLabels = oForm.select("label"),
+          oLabel, sFor, i = 0;
+          
+      while (oLabel = aLabels[i++]) {
+        if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
+          oLabel.htmlFor = sFormName + "_" + sFor;
+        }
+      }
+    
+      // For each element
+      var i = 0, oElement;
+      while (oElement = $(oForm.elements[i++])) {
+        var sElementName = oElement.getAttribute("name");
+        var props = oElement.getProperties();
+    
+        // Locked object
+        if (oForm.lockAllFields) {
+          oElement.disabled = true;
+        }
         
-            // Can null
-            if (props.canNull) {
-              oElement.observe("change", canNullOK)
-                      .observe("keyup",  canNullOK)
-                      .observe("ui:change", canNullOK);
-            }
+        // Create id for each element if id is null
+        if (!oElement.id && sElementName) {
+          oElement.id = sFormName + "_" + sElementName;
+          if (oElement.type === "radio") {
+            oElement.id += "_" + oElement.value;
+          }
+        }
+    
+        // If the element has a mask and other properties, they may conflict
+        if (Preferences.INFOSYSTEM && props.mask) {
+          Assert.that(!(
+            props.min || props.max || props.bool || props.ref || props.pct || props.num
+          ), "'"+oElement.id+"' mask may conflit with other props");
+        }
         
-            // Not null
-            if (props.notNull) {
-              oElement.observe("change", notNullOK)
-                      .observe("keyup",  notNullOK)
-                      .observe("ui:change", notNullOK);
-            }
+        // Can null
+        if (props.canNull) {
+          oElement.observe("change", canNullOK)
+                  .observe("keyup",  canNullOK)
+                  .observe("ui:change", canNullOK);
+        }
+    
+        // Not null
+        if (props.notNull) {
+          oElement.observe("change", notNullOK)
+                  .observe("keyup",  notNullOK)
+                  .observe("ui:change", notNullOK);
+        }
 
         // XOR
         if (props.xor) {
@@ -397,20 +338,20 @@ function prepareForm(oForm, bForcePrepare) {
         // because fire doesn't work with native events 
         oElement.fire("ui:change");
 
-		    // Select tree
-		    if (props["select-tree"] && Prototype.Browser.Gecko) {
-		      oElement.buildTree();
-		    }
-		
-		    if (mask = props.mask) {
-		      mask = mask.gsub('S', ' ').gsub('P', '|');
-		      oElement.mask(mask);
-		    }
-		    
-		    // Default autocomplete deactivation
-		    if (oElement.type === "text") {
-		    	oElement.writeAttribute("autocomplete", "off");
-		    }
+        // Select tree
+        if (props["select-tree"] && Prototype.Browser.Gecko) {
+          oElement.buildTree();
+        }
+    
+        if (mask = props.mask) {
+          mask = mask.gsub('S', ' ').gsub('P', '|');
+          oElement.mask(mask);
+        }
+        
+        // Default autocomplete deactivation
+        if (oElement.type === "text") {
+          oElement.writeAttribute("autocomplete", "off");
+        }
         
         // Won't make it resizable on IE
         if ((Prototype.Browser.Gecko || Prototype.Browser.Opera) && 
@@ -418,9 +359,9 @@ function prepareForm(oForm, bForcePrepare) {
             oElement.id !== "htmlarea") {
           oElement.setResizable({autoSave: true, step: 'font-size'});
         }
-		    
-		    // Focus on first text input
-		    if (bGiveFormFocus && oElement.clientWidth > 0 && 
+        
+        // Focus on first text input
+        if (bGiveFormFocus && oElement.clientWidth > 0 && 
             !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
             oElement.type === "text") {
           
@@ -446,32 +387,29 @@ function prepareForm(oForm, bForcePrepare) {
             waitForApplet();
           }
           else oElement.focus();
-		      bGiveFormFocus = false;
-		    }
-		    
-		    // We mark this form as prepared
-		    oForm.addClassName("prepared");
-		  }
-		}
+          bGiveFormFocus = false;
+        }
+        
+        // We mark this form as prepared
+        oForm.addClassName("prepared");
+      }
+    }
   }
 }
 
 function prepareForms() {
   // For each form
-  var i = 0, form = null;
+  var i = 0, form;
   while (form = document.forms[i++]) {
     prepareForm(form);
   }
 }
 
 function submitFormAjax(oForm, ioTarget, oOptions) {
-  if (oForm.attributes.onsubmit) {
-    if (oForm.attributes.onsubmit.nodeValue) {        // this second test is only for IE
-      if (!oForm.onsubmit()) {
-        return;
-      }
-    }  
-  }
+  // the second test is only for IE
+  if (oForm.attributes.onsubmit &&
+      oForm.attributes.onsubmit.nodeValue &&
+      !oForm.onsubmit()) return;
 
   var url = new Url, i = 0, oElement;
   while (oElement = oForm.elements[i++]) {
@@ -493,20 +431,18 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
  * @param oForm Form element
  * @return false to prevent page reloading
  */
-function onSubmitFormAjax(oForm, oUserOptions) {
-  var oOptions = {
+function onSubmitFormAjax(oForm, oOptions) {
+  oOptions = Object.extend({
     method : oForm.method,
     check  : checkForm
-  };
-  
-  Object.extend(oOptions, oUserOptions);
+  }, oOptions);
   
   // Check the form
   if (!oOptions.check(oForm)) {
     return false;
   }
 
-	// Build url
+  // Build url
   var url = new Url, i = 0, oElement;
   while (oElement = oForm.elements[i++]) {
     if (!oElement.disabled && ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked)) {
@@ -514,7 +450,7 @@ function onSubmitFormAjax(oForm, oUserOptions) {
     }
   }
 
-	// Launch
+  // Launch
   url.requestUpdate(SystemMessage.id, oOptions);
   
   // return
@@ -523,13 +459,10 @@ function onSubmitFormAjax(oForm, oUserOptions) {
 
 
 function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
-  if (oForm.attributes.onsubmit) {
-    if (oForm.attributes.onsubmit.nodeValue) {        // this second test is only for IE
-      if (!oForm.onsubmit()) {
-        return;
-      }
-    }  
-  }
+  // the second test is only for IE
+  if (oForm.attributes.onsubmit &&
+      oForm.attributes.onsubmit.nodeValue &&
+      !oForm.onsubmit()) return;
   
   var url = new Url, i = 0, oElement;
   while (oElement = oForm.elements[i++]) {
@@ -551,11 +484,8 @@ Object.extend(Form, {
     var oDataForm = {};
     //  Récupération des données du formualaire
     aFieldsForm.each(function (value) {
-      var sNameElement  = value["name"];
-      var sValueElement = $V(value);
-      oDataForm[sNameElement] = sValueElement;
-      }
-    );
+      oDataForm[value.name] = $V(value);
+    });
     return oDataForm;
   },
   fromObject: function(oForm, oObject){
@@ -792,8 +722,8 @@ Element.addMethods('select', {
     
     tree.highlight = function () {
       var selected = tree.select('.selected'),
-			    val = $V(select);
-					
+          val = $V(select);
+          
       selected.each(function(s) {
         s.removeClassName('selected');
       });
@@ -810,7 +740,7 @@ Element.addMethods('select', {
     list.navigate = function (e) {
       if (search.value) {
         var keycode = Event.key(e),
-				    focused = list.select('.focused');
+            focused = list.select('.focused');
         
         switch (keycode) {
           case 37:
@@ -847,9 +777,9 @@ Element.addMethods('select', {
       var li, text;
       list.update();
       if (s && s.length > 1) {
-				s = s.toLowerCase();
+        s = s.toLowerCase();
         select.select('option').each(function (c) {
-					text = c.text.toLowerCase();
+          text = c.text.toLowerCase();
           if (text.indexOf(s) != -1) {
             li = new Element('li').update(c.text.replace(new RegExp(s, "gi"), function($1){return '<span class="highlight">'+$1+'</span>'}));
             li.observe('click', function() {
@@ -930,10 +860,10 @@ Element.addMethods('select', {
   },
   makeAutocomplete: function(element, options) {
     element = $(element);
-		
-		options = Object.extend({
-			width: '100px'
-		}, options);
+    
+    options = Object.extend({
+      width: '100px'
+    }, options);
     
     var textInput = new Element('input', {type: 'text', className: 'autocomplete', style:'width:'+options.width}).writeAttribute('autocomplete', false),
         list = new Element('div', {className: 'autocomplete'}),
@@ -942,7 +872,7 @@ Element.addMethods('select', {
     element.insert({after: textInput}).insert({after: list}).hide();
     
     $A(element.options).each(function(e){
-			if (e.disabled) return;
+      if (e.disabled) return;
       views.push(e.text);
       viewToValue[e.text] = e.value;
     });
@@ -963,7 +893,7 @@ function getForm (form, prepare) {
   }
   if (prepare) prepareForm(form);
   return form;
-};
+}
 
 // Return the list of the elements, taking in account that ther can be nodelists of fields (like radio buttons)
 Element.addMethods('form', {

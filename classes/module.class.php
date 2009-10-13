@@ -53,6 +53,7 @@ class CModule extends CMbObject {
   // Other collections
   var $_tabs      = null;  // List of tabs with permission
   var $_can       = null;  // Rights
+  var $_canView   = null;
 
   function CModule() {
     parent::__construct();
@@ -152,23 +153,11 @@ class CModule extends CMbObject {
   }
   
   function canView() {
-    $this->_canView = $this->getView(PERM_READ);
-    return $this->_canView;
+    return $this->_canView = $this->getView(PERM_READ);
   }
   
   function canAdmin() {
-    $this->_canEdit = $this->getView(PERM_EDIT);
-    return $this->_canEdit;
-  }
-  
-  function canRead() {
-    $this->_canRead = $this->getPerm(PERM_READ);
-    return $this->_canRead;
-  }
-  
-  function canEdit() {
-    $this->_canEdit = $this->getPerm(PERM_EDIT);
-    return $this->_canEdit;
+    return $this->_canEdit = $this->getView(PERM_EDIT);
   }
   
   function canDo(){
@@ -178,8 +167,7 @@ class CModule extends CMbObject {
       $canDo->edit  = $this->canEdit();
       $canDo->view  = $this->canView();
       $canDo->admin = $this->canAdmin();
-      $this->_can =  $canDo;
-      return $canDo;
+      return $this->_can = $canDo;
   	}
   	return $this->_can;
   }
@@ -219,30 +207,40 @@ class CModule extends CMbObject {
     }
   }
   
+  function getValidTab($tab){
+    if (!$this->checkActive()) {
+      return;
+    }
+    
+    // Try to access wanted tab
+    $tabPath = "./modules/$this->mod_name/$tab.php";
+    if (!is_file($tabPath)) {
+      return $this->_tabs[0][0];
+    }
+    
+    return $tab;
+  }
+  
   function showTabs() {
     if (!$this->checkActive()) {
       return;
     }
     
-    global $uistyle, $AppUI, $tab, $a, $action, $actionType;
+    global $uistyle, $tab, $a, $action, $actionType;
 
     // Add configure tab if exist
     $configPath = "./modules/$this->mod_name/configure.php";
-    if (is_file($configPath) && ($AppUI->user_type == 1)){
+    if (is_file($configPath) && (CAppUI::$instance->user_type == 1)){
       $this->registerTab("configure", "Configure", TAB_ADMIN);
     }
 
     // Try to access wanted tab
     $tabPath = "./modules/$this->mod_name/$tab.php";
     if (!is_file($tabPath)) {
-      $tab = $this->_tabs[0][0];
-      $tabPath = "./modules/$this->mod_name/$tab.php";
-      if (!is_file($tabPath)) {
-        $AppUI->redirect("m=system&a=access_denied");
-      }
+      CAppUI::redirect("m=system&a=access_denied");
     }
     
-    $AppUI->savePlace();
+    CAppUI::savePlace();
     
     // Tab becomes an action if unique
     if (count($this->_tabs) == 1) {
@@ -364,7 +362,6 @@ class CModule extends CMbObject {
     }
     
     $this->store();
-    
     $this->reorder();
     return true;
   }

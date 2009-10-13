@@ -181,8 +181,8 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
 
   // Redirection
   if (!$object || !$object->_id) {
-    global $AppUI, $ajax;
-    $AppUI->redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
+    global $ajax;
+    CAppUI::redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
   }
   
   return $object;
@@ -770,9 +770,9 @@ function mbWriteJSLocalesFile($language = null) {
 }
 
 function mbLoadJSLocales($modeReturn = false) {
-  global $AppUI, $version, $locales;
+  global $version, $locales;
   
-  $language = $AppUI->user_prefs["LOCALE"];
+  $language = CAppUI::pref("LOCALE");
   
   $path = "./tmp/locales.$language.js";
 
@@ -829,6 +829,8 @@ function mbLoadScripts($modeReturn = false) {
   $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/checkForms.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/aideSaisie.js",$modeReturn);
+  //@todo: ASAP supprimer toutes les réferences à l'ancien fichier
   
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/mbmail.js",$modeReturn);

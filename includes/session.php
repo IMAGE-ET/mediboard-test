@@ -24,7 +24,8 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
   $_SESSION["AppUI"] = new CAppUI();
 }
 
-$AppUI =& $_SESSION["AppUI"]; 
+CAppUI::$instance =& $_SESSION["AppUI"];
+$AppUI =& CAppUI::$instance; 
 
 if (!isset($_SESSION["locked"])) $_SESSION["locked"] = false; 
 

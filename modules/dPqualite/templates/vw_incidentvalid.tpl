@@ -353,9 +353,11 @@ Main.add(function() {
             <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
               {{tr}}Print{{/tr}}
             </button>
+            {{if !$fiche->qualite_user_id && !$fiche->qualite_date_validation && !$fiche->qualite_date_verification}}
             <button class="change" type="button" onclick="unvalidate(this.form);">
               Dé-valider
             </button>
+            {{/if}}
             {{/if}}
           </td>
         </tr>

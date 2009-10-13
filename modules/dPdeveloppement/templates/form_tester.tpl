@@ -1,14 +1,16 @@
+{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+
 <script type="text/javascript">
 var form;
 Main.add(function () {
   form = getForm("test");
-  $('dom-creator').insert(
+  /*$('dom-creator').insert(
     DOM.div({className: 'small-info'}, 
       DOM.a({href: 'http://www.mozilla-europe.org', target: '_blank'}, 
         'Cette info est générée par le DOM creator !'
       )
     )
-  );
+  );*/
   
   form.elements.sorted.sortByLabel();
   
@@ -16,75 +18,10 @@ Main.add(function () {
   
   Calendar.regProgressiveField(form.progressive, {container: document.body});
   
-  $$('.textarea-helped').each(function(area){
-    var toolbar = area.select('div.toolbar')[0],
-        textarea = area.select('textarea')[0],
-        autocomplete = area.select('div.autocomplete')[0],
-        throbber = area.select('div.throbber')[0];
-
-    area.
-    observe('mousemove', function(){toolbar.show()}).
-    observe('mouseout',  function(){toolbar.hide()}).
-    observe('click',     function(){toolbar.hide()}).
-    observe('keydown',   function(){toolbar.hide()})
-    ;
-    
-    var url = new Url("dPdeveloppement", "ajax_autocomplete_test");
-    url.autoComplete(textarea, autocomplete, {
-        minChars: 2,
-        frequency: 0.2,
-        tokens: '\n',
-        indicator: throbber
-    } );
-  });
+  new AideSaisie.AutoComplete(form.name, "rques", "type", "appareil", "rques", "CAntecedent", 25);
 });
 
 </script>
-
-<style type="text/css">
-.textarea-helped {
-  position: relative;
-}
-
-.textarea-helped textarea {
-  padding-bottom: 18px;
-}
-
-.textarea-helped .toolbar {
-  position: absolute;
-  bottom: 4px;
-  padding: 4px;
-}
-
-.textarea-helped .toolbar a:hover img {
-  outline: 1px dotted #ccc;
-}
-
-.textarea-helped .throbber {
-  position: absolute;
-  height: 13px;
-  width: 13px;
-  bottom: 6px;
-  margin: 4px;
-  background-image: url(images/icons/throbber.gif);
-  background-position: 100% -20px;
-  background-repeat: no-repeat;
-}
-</style>
-
-<form onsubmit="return false">
-<div class="textarea-helped">
-  <textarea class="autocomplete"></textarea>
-  <div class="throbber" style="display: none;"></div>
-  <div class="toolbar" style="display: none;">
-    <a href="#nothing"><img src="images/icons/downarrow.png" title="Voir tous les choix" /></a>
-    <a href="#nothing"><img src="images/icons/grid.png" title="Mode grille" /></a>
-    <a href="#nothing"><img src="images/icons/new.png" title="Nouvelle aide" /></a>
-    <a href="#nothing"><img src="images/icons/group.png" title="Cette aide appartient à " /></a>
-  </div>
-  <div class="autocomplete" style="display: none; margin-top: -1px;"></div>
-</div>
-</form>
 
 {{if !$dialog}}
 <a href="?m={{$m}}&amp;a={{$tab}}&amp;dialog=1">Lancer cette page sans les menus</a>
@@ -105,10 +42,10 @@ Main.add(function () {
 <a href="http://www.google.fr" onclick="return window.open(this)">Popup</a>
 
 <form name="test" action="?" method="get" onsubmit="if (checkForm(this)) {Console.trace('form.submit()');} return false;" id="form-test-id">
+  <textarea name="rques"></textarea>
+  
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
-  
-
   <input type="hidden" name="progressive" value="2009-0-0" />
   
   <table class="form">
@@ -179,11 +116,13 @@ Main.add(function () {
 
 
 <div>
+  
 <ul id="tab_categories" class="control_tabs_vertical" style="margin-top: 2em;">
   <li><a href="#cat1">cat 1</a></li>
   <li><a href="#cat2">cat 2</a></li>
 </ul>
-<table class="tbl">
+
+<table class="tbl" style="width: auto">
   <tr>
     <th style="width: 50%;">test1</th>
     <th style="width: 50%;">test2</th>
@@ -217,4 +156,5 @@ Main.add(function () {
     </tr>
   </tbody>
 </table>
+
 </div>

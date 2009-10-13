@@ -16,6 +16,12 @@ Main.add(function(){
   var postit = $("tooltipTpl").clone(true).show();
   postit.addClassName("postit").setStyle({marginLeft: '100px'}).select(".content")[0].update("postit");
   
+  var form = getForm("test");
+  Calendar.regField(form.dateTime);
+  Calendar.regField(form.time);
+  Calendar.regField(form.date);
+  Calendar.regField(form.dateInline, null, {inline: true, container: $(form.dateInline).up(), noView: true});
+  
   $("tooltip-container").insert(tooltip).insert(postit);
 });
 </script>
@@ -108,16 +114,15 @@ Main.add(function(){
       <label class="notNull">Title 1</label>
     </th>
     <td>
-      <input type="text" value="text" />
-      <input type="text" value="text" class="autocomplete" />
+      <input type="text" value="text" /><br />
+      <input type="text" value="text" class="autocomplete" /><br />
       <input type="password" value="password" />
     </td>
-    <th>
+    <th rowspan="2">
       <label>Title 2</label>
     </th>
-    <td>
-      <input type="radio" /> 1
-      <input type="radio" /> 2
+    <td rowspan="2">
+      <input type="hidden" class="date" name="dateInline" />
     </td>
   </tr>
   <tr>
@@ -126,13 +131,6 @@ Main.add(function(){
     </th>
     <td>
       <textarea></textarea>
-    </td>
-    <th>
-      <label>Title 4</label>
-    </th>
-    <td>
-      <input type="checkbox" /> 1
-      <input type="checkbox" /> 2
     </td>
   </tr>
   <tr>
@@ -162,13 +160,13 @@ Main.add(function(){
       <label>Title 7</label>
     </th>
     <td>
-      <input type="text" readonly="readonly" class="dateTime" value="readonly dateTime" />
+      <input type="hidden" class="dateTime" name="dateTime" value="{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}" />
     </td>
     <th>
       <label>Title 8</label>
     </th>
     <td>
-      <input type="text" readonly="readonly" class="date" value="readonly date" />
+      <input type="hidden" class="time" name="time" value="{{$smarty.now|@date_format:"%H:%M:%S"}}" />
     </td>
   </tr>
   <tr>
@@ -176,13 +174,17 @@ Main.add(function(){
       <label>Title 7</label>
     </th>
     <td>
-      <input type="text" readonly="readonly" class="time" value="readonly time" />
+      <input type="hidden" class="date" name="date" value="{{$smarty.now|@date_format:"%Y-%m-%d"}}" />
     </td>
     <th>
       <label>Title 8</label>
     </th>
     <td>
-      <input type="text" readonly="readonly" class="date" value="readonly date" />
+      <input type="checkbox" /> 1
+      <input type="checkbox" /> 2
+      <br />
+      <input type="radio" /> 1
+      <input type="radio" /> 2
     </td>
   </tr>
   <tr>
@@ -196,26 +198,24 @@ Main.add(function(){
 
     </td>
     <td>
-      
+
 <div class="small-error">small-error</div>
 <div class="small-warning">small-warning</div>
 <div class="small-info">small-info</div>
+<div class="small-success">small-success</div>
 
 <div class="big-error">big-error</div>
 <div class="big-warning">big-warning</div>
 <div class="big-info">big-info</div>
-   
+<div class="big-success">big-success</div>
+
 <div class="error">error</div>
 <div class="warning">warning</div>
 <div class="message">message</div>
 <div class="loading">loading</div>
-      
+
     </td>
   </tr>
 </table>
-
-
-{{"mbTrace"|mbTrace}}
-{{"mbDump"|mbDump}}
 
 <div id="tooltip-container"></div>

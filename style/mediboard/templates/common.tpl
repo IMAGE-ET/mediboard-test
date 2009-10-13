@@ -1,12 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{$localeInfo.alpha2}}" lang="{{$localeInfo.alpha2}}">
 
 <head>
   <title>
     {{$dPconfig.page_title}} 
     &mdash; {{tr}}module-{{$m}}-court{{/tr}}
+    {{if $a || $tab}}
+      &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
+    {{/if}}
   </title>
-  <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
+  <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}
@@ -25,7 +28,7 @@
     var config = {{$configOffline|@json}};
     {{/if}}
     var Preferences = {{$app->user_prefs|@json}},
-        userId = parseInt({{$app->user_id|@json}}),
+        User = {{if $app->_ref_user}}{{$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}};
     
     {{if $dialog}}
@@ -108,7 +111,6 @@
 </div>
 
 <!-- Javascript Console -->
-
 <div id="console" style="display: none">
   <div id="console-title">
     <div id="console-hide" onclick="Console.hide()"></div>

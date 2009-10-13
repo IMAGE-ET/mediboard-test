@@ -26,10 +26,9 @@ class CMbObjectTest {
   }
   
   function testFunction(&$object, $function_name, $params = array()) {
-    global $AppUI;
     $str_params = implode(",", $params);
     $result = $object->$function_name($str_params);
-    $log = "<div class=\"message\">".get_class($object)."::$function_name($str_params) -> $result</div>".$AppUI->getMsg();
+    $log = "<div class=\"message\">".get_class($object)."::$function_name($str_params) -> $result</div>".CAppUI::getMsg();
     $this->addLog($log);
   }
   

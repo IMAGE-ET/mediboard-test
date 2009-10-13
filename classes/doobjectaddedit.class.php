@@ -66,35 +66,33 @@ class CDoObjectAddEdit {
   }
 
   function doDelete() {
-    global $AppUI;
-
     if ($this->_obj->_purge) {
       set_time_limit(120);
-	    if ($msg = $this->_obj->purge()) {
-	      $AppUI->setMsg($msg, UI_MSG_ERROR );
-	      if ($this->redirectError) {
-	        $this->redirect =& $this->redirectError;
-	      }
-	    }
-	    else {
-	      mbSetValueToSession($this->objectKeyGetVarName);
-	      $AppUI->setMsg(CAppUI::tr("msg-purge"), UI_MSG_ALERT);
-	      if ($this->redirectDelete) {
-	        $this->redirect =& $this->redirectDelete;
-	      }
-	    }
-	    return;
+      if ($msg = $this->_obj->purge()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR );
+        if ($this->redirectError) {
+          $this->redirect =& $this->redirectError;
+        }
+      }
+      else {
+        mbSetValueToSession($this->objectKeyGetVarName);
+        CAppUI::setMsg(CAppUI::tr("msg-purge"), UI_MSG_ALERT);
+        if ($this->redirectDelete) {
+          $this->redirect =& $this->redirectDelete;
+        }
+      }
+      return;
     }
     
     if ($msg = $this->_obj->delete()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR );
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
     } 
     else {
       mbSetValueToSession($this->objectKeyGetVarName);
-      $AppUI->setMsg($this->deleteMsg, UI_MSG_ALERT);
+      CAppUI::setMsg($this->deleteMsg, UI_MSG_ALERT);
       if ($this->redirectDelete) {
         $this->redirect =& $this->redirectDelete;
       }
@@ -102,9 +100,8 @@ class CDoObjectAddEdit {
   }
 
   function doStore() {
-    global $AppUI;
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR );
+      CAppUI::setMsg($msg, UI_MSG_ERROR );
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -113,7 +110,7 @@ class CDoObjectAddEdit {
       $id = $this->objectKeyGetVarName;
       mbSetValueToSession($id, $this->_obj->$id);
       $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
-      $AppUI->setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+      CAppUI::setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
@@ -121,8 +118,6 @@ class CDoObjectAddEdit {
   }
 
   function doRedirect() {
-    global $AppUI;
-  
     if ($this->redirect === null) {
       return;
     }
@@ -132,7 +127,7 @@ class CDoObjectAddEdit {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;
       $callBack = $this->callBack;
-      echo $AppUI->getMsg();
+      echo CAppUI::getMsg();
       if ($callBack) {
         echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
       }
@@ -140,7 +135,7 @@ class CDoObjectAddEdit {
     }
 
     // Cas normal
-    $AppUI->redirect($this->redirect);
+    CAppUI::redirect($this->redirect);
     
   }
 
@@ -159,8 +154,7 @@ class CDoObjectAddEdit {
    * @param string $msg 
    */
   function errorRedirect($msg) {
-    global $AppUI;
-	  $AppUI->setMsg($msg, UI_MSG_ERROR );
+	  CAppUI::setMsg($msg, UI_MSG_ERROR);
 	  $this->redirect =& $this->redirectError;
 	  $this->doRedirect();
   }

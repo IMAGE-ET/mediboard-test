@@ -263,8 +263,7 @@ class CSetup {
    * Should be handled in the template
    */
   function configure() {
-    global $AppUI;
-    $AppUI->redirect("m=$this->mod_name&a=configure" );
+    CAppUI::redirect("m=$this->mod_name&a=configure" );
     return true;
   }  
 }

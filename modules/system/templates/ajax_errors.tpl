@@ -9,10 +9,11 @@
 *}}
 
 <script type="text/javascript">
-  window.userId = parseInt({{$app->user_id|@json}});
   {{if !$app->user_id}}
+    User = {};
     AjaxResponse.onDisconnected();
   {{else}}
+    User = {{$app->_ref_user->_basic_info|@json}};
     AjaxResponse.onPerformances({{$performance|@json}});
   {{/if}}
 </script>

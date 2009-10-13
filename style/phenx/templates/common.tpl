@@ -1,27 +1,28 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{$localeInfo.alpha2}}" lang="{{$localeInfo.alpha2}}">
 
 <head>
   <title>
-    {{$dPconfig.page_title}} &gt; 
-    {{tr}}module-{{$m}}-court{{/tr}}
-    {{if ($a || $tab) && $tab != '1'}}
+    {{$dPconfig.page_title}}
+     &gt; {{tr}}module-{{$m}}-court{{/tr}}
+    {{if $a || $tab}}
       &gt; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
     {{/if}}
   </title>
-  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={{$localeCharSet}}" />
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={{$localeInfo.charset}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{*$mediboardCommonStyle|smarty:nodefaults*}}
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
+  
   <script type="text/javascript">
     {{if $offline}}
     var config = {{$configOffline|@json}};
     {{/if}}
     var Preferences = {{$app->user_prefs|@json}},
-        userId = parseInt({{$app->user_id}}),
+        User = {{if $app->_ref_user}}{{$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}};
     
     {{if $dialog}}
@@ -33,7 +34,6 @@
 <body class="{{if @$app->user_prefs.touchscreen == 1}}touchscreen{{/if}}">
 
 <!-- Loading divs -->
-
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
 
 <div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
@@ -80,7 +80,6 @@
 </div>
 
 <!-- Tooltip div used for dom clonage -->
-
 <div id="tooltipTpl" style="display: none;">
   <table class="decoration" cellspacing="0">
     <tr>

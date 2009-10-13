@@ -10,7 +10,7 @@
 
 global $shm;
 $root_dir = CAppUI::conf("root_dir");
-$locale = $AppUI->user_prefs["LOCALE"];
+$locale = CAppUI::pref("LOCALE");
 $shared_name = "locales-$locale";
 
 // Load from shared memory if possible

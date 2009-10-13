@@ -41,15 +41,15 @@ class CApp {
 
 /**
  * The Application UI weird Class
- * 
- * @TODO Should at least be static
  * @TODO Is being split into CApp et CUI classes
+ * @TODO Should be more like the singleton pattern described here : http://en.wikipedia.org/wiki/Singleton_pattern#PHP
  */
 class CAppUI {
+  static $instance = null;
+  
   var $user_id = 0;
   
   var $_ref_user = null;
-  
   var $_is_intranet = null;
 
   // DEPRECATED Use $_ref_user instead
@@ -107,11 +107,11 @@ class CAppUI {
     }
   }
 
-	/**
-	 * Used to include a php class file from the legacy classes directory
-	 * @param string <b>$name</b> The class file name (excluding .class.php)
-	 * @return string The path to the include file
-	 */
+  /**
+   * Used to include a php class file from the legacy classes directory
+   * @param string <b>$name</b> The class file name (excluding .class.php)
+   * @return string The path to the include file
+   */
   static function requireLegacyClass($name) {
     if ($root = self::conf("root_dir")) {
       return require_once("$root/legacy/$name.class.php");
@@ -124,13 +124,11 @@ class CAppUI {
    */
   static function requireLibraryFile($name) {
     if ($root = self::conf("root_dir")) {
-    	$file = "$root/lib/$name.php";
-    	if (is_file($file)) {
-          return require_once($file);
-    	} else {
-    		global $AppUI;
-    		$AppUI->setMsg("La librairie <b>".ucwords(dirname($name))."</b> n'est pas installée", UI_MSG_ERROR); die;
-    	}
+      $file = "$root/lib/$name.php";
+      if (is_file($file))
+        return require_once($file);
+      else
+        self::setMsg("La librairie <b>".ucwords(dirname($name))."</b> n'est pas installée", UI_MSG_ERROR); die;
     }
   }
   
@@ -206,7 +204,6 @@ class CAppUI {
     return $files;
   }
 
-
 /**
  * Utility function to check whether a file name is "safe"
  *
@@ -215,20 +212,17 @@ class CAppUI {
  * @return array A named array of the files (the key and value are identical).
  */
   static function checkFileName($file) {
-    global $AppUI;
-
     // define bad characters and their replacement
     $bad_chars = ";.\\";
     $bad_replace = "..."; // Needs the same number of chars as $bad_chars
 
     // check whether the filename contained bad characters
     if (strpos(strtr($file, $bad_chars, $bad_replace), ".") !== false) {
-      $AppUI->redirect("m=system&a=access_denied");
+      self::redirect("m=system&a=access_denied");
     }
     else {
       return $file;
     }
-
   }
 
 /**
@@ -239,13 +233,13 @@ class CAppUI {
 	* would be a nonsense in this case.
 	* @param string If not set then the current url query string is used
 	*/
-  function savePlace($query="") {
+  static function savePlace($query = "") {
     if (!$query) {
       $query = @$_SERVER["QUERY_STRING"];
     }
-    if ($query != @$this->state["SAVEDPLACE"]) {
-      $this->state["SAVEDPLACE-1"] = @$this->state["SAVEDPLACE"];
-      $this->state["SAVEDPLACE"] = $query;
+    if ($query != @self::$instance->state["SAVEDPLACE"]) {
+      self::$instance->state["SAVEDPLACE-1"] = @self::$instance->state["SAVEDPLACE"];
+      self::$instance->state["SAVEDPLACE"] = $query;
     }
   }
 
@@ -259,7 +253,7 @@ class CAppUI {
 	* @param string The URL query string to append to the URL
 	* @param string A marker for a historic "place", only -1 or an empty string is valid.
 	*/
-  function redirect($params="", $hist="") {
+  static function redirect($params="", $hist="") {
     $session_id = SID;
 
     session_write_close();
@@ -267,7 +261,7 @@ class CAppUI {
     // are the params empty
     if (!$params) {
     // has a place been saved
-      $params = !empty($this->state["SAVEDPLACE$hist"]) ? $this->state["SAVEDPLACE$hist"] : $this->defaultRedirect;
+      $params = !empty(self::$instance->state["SAVEDPLACE$hist"]) ? self::$instance->state["SAVEDPLACE$hist"] : self::$instance->defaultRedirect;
     }
     
     if (mbGetValueFromGet("dialog")) {
@@ -302,20 +296,19 @@ class CAppUI {
   static function setMsg($msg, $type = UI_MSG_OK) {
     // Formatage
     $args = func_get_args();
-    $args[0] = CAppUI::tr($msg);
+    $args[0] = self::tr($msg);
     unset($args[1]);
     $msg = call_user_func_array("sprintf", $args);
 
     // Ajout
-    global $AppUI;
-    @$AppUI->messages[$type][$msg]++;
+    @self::$instance->messages[$type][$msg]++;
   }
   
-  function isMsgOK() {
-    $errors = 0;
-    $errors += count(@$this->messages[UI_MSG_ALERT]);
-    $errors += count(@$this->messages[UI_MSG_WARNING]);
-    $errors += count(@$this->messages[UI_MSG_ERROR]);
+  static function isMsgOK() {
+    $messages = self::$instance->messages;
+    $errors = count(@$messages[UI_MSG_ALERT]) + 
+              count(@$messages[UI_MSG_WARNING]) +
+              count(@$messages[UI_MSG_ERROR]);
     return $errors == 0;
   }
   
@@ -324,9 +317,9 @@ class CAppUI {
    * @param string $msg résultat de la modification
    * @param string $action message à afficher
    */
-  function displayMsg($msg, $action) {
-    $action = $this->tr($action);
-    $msg ? $this->setMsg("$action: $msg", UI_MSG_ERROR ) : $this->setMsg($action, UI_MSG_OK );
+  static function displayMsg($msg, $action) {
+    $action = self::tr($action);
+    $msg ? self::setMsg("$action: $msg", UI_MSG_ERROR ) : self::setMsg($action, UI_MSG_OK );
   }
 
   /**
@@ -334,19 +327,17 @@ class CAppUI {
    * @param boolean $reset If true the system UI is cleared
    */
   static function getMsg($reset = true) {
-    global $AppUI;
-    
     $return = "";
     
-    ksort($AppUI->messages);
+    ksort(self::$instance->messages);
     
-    foreach ($AppUI->messages as $type => $messages) {
+    foreach (self::$instance->messages as $type => $messages) {
       switch ($type) {
-        case UI_MSG_OK      : $class = "message"; break;
-        case UI_MSG_ALERT   : $class = "message"; break;
-        case UI_MSG_WARNING : $class = "warning"; break;
         case UI_MSG_ERROR   : $class = "error" ; break;
-        default: $class = "message"; break;
+        case UI_MSG_WARNING : $class = "warning"; break;
+        default:
+        case UI_MSG_OK      : 
+        case UI_MSG_ALERT   : $class = "message"; break;
       }
 
       foreach ($messages as $message => $count) {
@@ -356,7 +347,7 @@ class CAppUI {
     }
     
     if ($reset) {
-      $AppUI->messages = array();
+      self::$instance->messages = array();
     }
 
     return $return;
@@ -369,10 +360,10 @@ class CAppUI {
   */
   static function stepMessage($msgType, $msg) {
     switch ($msgType) {
-      case UI_MSG_OK      : $class = "small-message"; break;
-      case UI_MSG_WARNING : $class = "small-warning"; break;
       case UI_MSG_ERROR   : $class = "small-error" ; break;
-      default: $class = "big-message"; break;
+      case UI_MSG_WARNING : $class = "small-warning"; break;
+      default: 
+      case UI_MSG_OK      : $class = "small-message"; break;
     }
     
     $msg = nl2br(self::tr($msg));
@@ -387,18 +378,17 @@ class CAppUI {
   */
   static function stepAjax($msg, $msgType = UI_MSG_OK) {
     switch($msgType) {
-      case UI_MSG_OK      : $class = "message"; break;
-      case UI_MSG_WARNING : $class = "warning"; break;
       case UI_MSG_ERROR   : $class = "error" ; break;
-      default: $class = "message"; break;
+      case UI_MSG_WARNING : $class = "warning"; break;
+      default: 
+      case UI_MSG_OK      : $class = "message"; break;
     }
     
     // Formatage
     $args = func_get_args();
-    $args[0] = CAppUI::tr($msg);
+    $args[0] = self::tr($msg);
     unset($args[1]);
     $msg = call_user_func_array("sprintf", $args);
-    
     $msg = nl2br($msg);
 
     echo "\n<div class='$class'>$msg</div>";
@@ -418,7 +408,6 @@ class CAppUI {
     echo "\n<script type='text/javascript'>$callback($value);</script>";
   }
   
-  
 /**
  * Login function
  *
@@ -430,7 +419,7 @@ class CAppUI {
  * @param string The user password
  * @return boolean True if successful, false if not
  */
-  function login($force_login = false) {
+  static function login($force_login = false) {
   	$ds = CSQLDataSource::get("std");
   	
     // Test login and password validity
@@ -438,8 +427,8 @@ class CAppUI {
     
     // Login as: no need to provide a password for administators
     if ($loginas = mbGetValueFromRequest("loginas")) {
-      if ($this->user_type != 1 && !$force_login) {
-        $this->setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
+      if (self::$instance->user_type != 1 && !$force_login) {
+        self::setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
         return false;
       }
       
@@ -449,55 +438,56 @@ class CAppUI {
     // Standard login
     else {
       if (null == $user->user_username  = trim(mbGetValueFromRequest("username"))) {
-	      $this->setMsg("Auth-failed-nousername", UI_MSG_ERROR);
-	      return false;
+        self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
+        return false;
       }
 
       if (null == $user->_user_password = trim(mbGetValueFromRequest("password"))) {
-	      $this->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
-	      return false;
+        self::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
+        return false;
       }
 
-	    $this->weak_password = $this->checkPasswordWeakness($user);
+      self::$instance->weak_password = self::checkPasswordWeakness($user);
     }
     
     // See CUser::updateDBFields
     $user->loadMatchingObject();
     
-    if (!$this->checkPasswordAttempt($user)) {
+    if (!self::checkPasswordAttempt($user)) {
       return false;
     }
         
     // Put user_group in AppUI
-    $this->user_remote = 1;
+    self::$instance->user_remote = 1;
+    
+    // @todo: is all this stuff necessary ?
     if ($ds->loadTable("users_mediboard") && $ds->loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->_id'";
-      $this->user_remote = $ds->loadResult($sql);
+      self::$instance->user_remote = $ds->loadResult($sql);
 
       $sql = "SELECT `groups_mediboard`.`group_id`
 				FROM `groups_mediboard`, `functions_mediboard`, `users_mediboard`
 				WHERE `groups_mediboard`.`group_id` = `functions_mediboard`.`group_id`
 				AND `functions_mediboard`.`function_id` = `users_mediboard`.`function_id`
 				AND `users_mediboard`.`user_id` = '$user->_id'";
-      $this->user_group = $ds->loadResult($sql);
+      self::$instance->user_group = $ds->loadResult($sql);
     }
     
     // Test if remote connection is allowed
-    $this->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != CAppUI::conf("system reverse_proxy"));
-    if (!$this->_is_intranet && $this->user_remote == 1 && $user->user_type != 1) {
-      $this->setMsg("User has no remote access", UI_MSG_ERROR);
+    self::$instance->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy"));
+    if (!self::$instance->_is_intranet && self::$instance->user_remote == 1 && $user->user_type != 1) {
+      self::setMsg("User has no remote access", UI_MSG_ERROR);
       return false;
     }
 
-    $this->user_id   = $user->_id;
-    
+    self::$instance->user_id = $user->_id;
     
     // DEPRECATED
-    $this->user_first_name = $user->user_first_name;
-    $this->user_last_name  = $user->user_last_name;
-    $this->user_email      = $user->user_email;
-    $this->user_type       = $user->user_type;
-    $this->user_last_login = $user->user_last_login;
+    self::$instance->user_first_name = $user->user_first_name;
+    self::$instance->user_last_name  = $user->user_last_name;
+    self::$instance->user_email      = $user->user_email;
+    self::$instance->user_type       = $user->user_type;
+    self::$instance->user_last_login = $user->user_last_login;
     // END DEPRECATED
     
     // save the last_login dateTime
@@ -509,7 +499,7 @@ class CAppUI {
     }
 
     // load the user preferences
-    $this->loadPrefs($this->user_id);
+    self::loadPrefs(self::$instance->user_id);
     
     return true;
   }
@@ -520,7 +510,7 @@ class CAppUI {
    * @param CUser $user
    * @return bool
    */
-  function checkPasswordWeakness($user) {
+  static function checkPasswordWeakness($user) {
     if (null == $pwd = $user->_user_password) {
       return false;
     }
@@ -561,27 +551,27 @@ class CAppUI {
    * @param CUser $user
    * @return bool
    */
-  function checkPasswordAttempt($user) {
+  static function checkPasswordAttempt($user) {
     $sibling = new CUser;
     $sibling->user_username = $user->user_username;
     $sibling->loadMatchingObject();
     
     if ($sibling->_login_locked) {
-      $this->setMsg("Auth-failed-user-locked", UI_MSG_ERROR);
+      self::setMsg("Auth-failed-user-locked", UI_MSG_ERROR);
       return false;
     }
 
     // Wrong login and/or password
     if (!$user->_id) {
-      $this->setMsg("Auth-failed-combination", UI_MSG_ERROR);
+      self::setMsg("Auth-failed-combination", UI_MSG_ERROR);
 
       // If the user exists, but has given a wrong password let's increment his error count
-	    if ($user->loginErrorsReady() && $sibling->_id) {
-	      $sibling->user_login_errors++;
-	      $sibling->store();
-	      $remainingAttempts = max(0, CAppUI::conf("admin CUser max_login_attempts")-$sibling->user_login_errors);
-	      $this->setMsg("Auth-failed-tried", UI_MSG_ERROR, $sibling->user_login_errors, $remainingAttempts);
-	    }
+      if ($user->loginErrorsReady() && $sibling->_id) {
+        $sibling->user_login_errors++;
+        $sibling->store();
+        $remainingAttempts = max(0, self::conf("admin CUser max_login_attempts")-$sibling->user_login_errors);
+        self::setMsg("Auth-failed-tried", UI_MSG_ERROR, $sibling->user_login_errors, $remainingAttempts);
+      }
       return false;
     } 
 
@@ -596,16 +586,15 @@ class CAppUI {
  * preferences variable.
  * @param int $uid User id number, 0 for default preferences
  */
-  function loadPrefs($uid = 0) {
-  	$ds = CSQLDataSource::get("std");
-    $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
-    $user_prefs = $ds->loadHashList($sql);
-    $this->user_prefs = array_merge($this->user_prefs, $user_prefs);
+  static function loadPrefs($uid = 0) {
+    $query = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
+    $user_prefs = CSQLDataSource::get("std")->loadHashList($query);
+    self::$instance->user_prefs = array_merge(self::$instance->user_prefs, $user_prefs);
   }
   
-  function reloadPrefs() {
-    $this->loadPrefs(0);
-    $this->loadPrefs($this->user_id);
+  static function reloadPrefs() {
+    self::loadPrefs();
+    self::loadPrefs(self::$instance->user_id);
   }
   
   /**
@@ -613,14 +602,11 @@ class CAppUI {
    * @param string $name of the user preference
    * @return string The value
    */
-  static function pref($name) {
-    global $AppUI;
-    return isset($AppUI->user_prefs[$name]) ? $AppUI->user_prefs[$name] : null; 
+  static function pref($name = null) {
+    $prefs = self::$instance->user_prefs;
+    if (!$name) return $prefs;
+    return isset($prefs[$name]) ? $prefs[$name] : null; 
   }
-  
-  /**
-   * Attempt to make AppUI functions static for better use
-   */
 
   /**
    * Translate given statement

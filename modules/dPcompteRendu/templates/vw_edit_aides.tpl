@@ -1,10 +1,7 @@
 <script type="text/javascript">
-function closeWindow(){
-  window.close();
-}
 function submitFormAides(oForm){
   if(checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', { onComplete : closeWindow });
+    submitFormAjax(oForm, 'systemMsg', { onComplete : window.close });
     window.close();
   }
   return false;
@@ -99,9 +96,7 @@ function submitFormAides(oForm){
 
   <tr>
     <th>{{mb_label object=$aide field="text"}}</th>
-    <td>
-      {{mb_field object=$aide field="text" rows="4"}}
-    </td>
+    <td>{{mb_field object=$aide field="text" rows="4"}}</td>
   </tr>
 
   <tr>

@@ -13,7 +13,7 @@ CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.escape");
 CAppUI::requireLibraryFile("json/JSON");
 
 /**
- * Delegates the actual translation to $AppUI framework object
+ * Delegates the actual translation to CAppUI framework object
  */
 function do_translation($params, $content, &$smarty, &$repeat) {
   if (isset($content)) {
@@ -354,7 +354,7 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($rootDir = null) {
-    global $AppUI, $version, $dPconfig, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
+    global $version, $dPconfig, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
     
     $root = $dPconfig["root_dir"];
 
@@ -406,9 +406,9 @@ class CSmartyDP extends Smarty {
     }
     
     // Standard data assignment
-    $this->assign("app", $AppUI);
+    $this->assign("app", CAppUI::$instance);
     $this->assign("dPconfig", $dPconfig);
-    $this->assign("user", $AppUI->user_id); // shouldn't be necessary
+    $this->assign("user", CAppUI::$instance->user_id); // shouldn't be necessary
     $this->assign("version", $version); 
     $this->assign("suppressHeaders", $suppressHeaders);
     $this->assign("can", $can);

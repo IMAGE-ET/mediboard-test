@@ -5,7 +5,10 @@
   {{foreach from=$aidesByDepend2 key=depend2 item=aides }}
   {{foreach from=$aides item=_aide}}
     <li>
-      <span style="float:right">{{mb_value object=$_aide field=_owner}}</span>
+      <img style="float:right;" 
+           src="images/icons/{{if $_aide->_owner == "user"}}user{{else}}user-function{{/if}}.png" 
+           title="{{mb_value object=$_aide field=_owner}}" />
+           
       <div class="depend" style="display:none">{{$depend1}}</div>
       <div class="depend2" style="display:none">{{$depend2}}</div>
       <strong>
@@ -15,7 +18,12 @@
 		
       <span>{{$_aide->name|lower|replace:$needle:"<em>$needle</em>"}}</span>
       <br/>
-      <small class="text" style="color: #666;">{{$_aide->text|lower|replace:$needle:"<em>$needle</em>"}}</small>
+      
+<!-- The carriage return is here to append a carriage return 
+at the end of the selected element in the textareas. DO NOT REMOVE. -->
+<small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|lower|replace:$needle:"<em>$needle</em>"}}
+</small>
+
     </li>
   {{/foreach}}
   {{/foreach}}
