@@ -21,7 +21,7 @@ $modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never")
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();
-$currUser->load($AppUI->user_id);
+$currUser->load(CAppUI::$instance->user_id);
 $currUser->isAnesth();
 
 // Chargement des praticiens
