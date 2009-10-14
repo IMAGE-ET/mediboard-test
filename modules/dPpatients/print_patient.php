@@ -13,24 +13,27 @@ $can->needsRead();
 
 $today = date("d/m/Y");
 
-$patient_id = mbGetValueFromGet("patient_id", 0);
+$patient_id = mbGetValueFromGet("patient_id");
 
-//Création du patient
+// Création du patient
 $patient = new CPatient();
 $patient->load($patient_id);
-$patient->loadRefs();
 
-foreach($patient->_ref_sejours as $key => $sejour) {
-  $patient->_ref_sejours[$key]->loadRefsFwd();
-  $patient->_ref_sejours[$key]->loadRefsOperations();
-  foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
-    $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+$patient->loadRefsSejours();
+foreach ($patient->_ref_sejours as $sejour) {
+  $sejour->loadRefsOperations();
+  foreach($sejour->_ref_operations as $operation) {
+    $operation->loadRefPlageOp();
+		$operation->loadRefChir();
   }
 }
-foreach($patient->_ref_consultations as $key => $value) {
-  $patient->_ref_consultations[$key]->loadRefsFwd();
-  $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
+
+$patient->loadRefsConsultations();
+foreach($patient->_ref_consultations as $consultation) {
+  $consultation->loadRefPlageConsult();
 }
+
+$patient->loadRefsCorrespondants();
 
 // Création du template
 $smarty = new CSmartyDP();

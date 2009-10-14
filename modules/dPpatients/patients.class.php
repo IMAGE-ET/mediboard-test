@@ -889,10 +889,6 @@ class CPatient extends CMbObject {
 
   // Forward references
   function loadRefsFwd() {
-    // medecin_traitant
-    $this->_ref_medecin_traitant = new CMedecin();
-    $this->_ref_medecin_traitant->load($this->medecin_traitant);
-
     $this->loadRefsCorrespondants();
     $this->loadIdVitale();
   }
@@ -1033,13 +1029,16 @@ class CPatient extends CMbObject {
   }
   
   function loadRefsCorrespondants() {
-    $this->_ref_medecins_correspondants = array();
-  	if ($this->_id) {
-  	  $this->_ref_medecins_correspondants = $this->loadBackRefs("correspondants");
-  	  foreach ($this->_ref_medecins_correspondants as &$corresp) {
-  	  	$corresp->loadRefsFwd();
-  	  }
-  	}
+    // Médecin traitant
+    $this->_ref_medecin_traitant = new CMedecin();
+    $this->_ref_medecin_traitant->load($this->medecin_traitant);
+		
+		// Autres correspondant
+    $this->_ref_medecins_correspondants = $this->loadBackRefs("correspondants");
+	  foreach ($this->_ref_medecins_correspondants as &$corresp) {
+	  	$corresp->loadRefsFwd();
+	  }
+
   	return $this->_ref_medecins_correspondants;
   }
 
