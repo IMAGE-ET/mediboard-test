@@ -17,12 +17,7 @@ $widget_id = mbGetValueFromGet("widget_id");
 $patient = new CPatient();
 $patient->load($patient_id);
 if ($patient->_id) {
-	$patient->loadRefs();
-	$patient->loadRefsCorrespondants();
-	foreach ($patient->_ref_medecins_correspondants as &$corr) {
-		$corr->loadRefs();
-		$corr->_ref_medecin->updateFormFields();
-	}
+	$patient->loadRefsFwd();
 }
 
 // Création du template

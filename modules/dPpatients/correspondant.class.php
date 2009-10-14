@@ -38,10 +38,6 @@ class CCorrespondant extends CMbObject {
     return $specs;
   }
     
-  function updateFormFields() {
-    parent::updateFormFields();
-  }
-	 
   function loadRefsFwd() {
     $patient = new CPatient();
     $this->_ref_patient = $patient->getCached($this->patient_id);

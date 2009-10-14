@@ -1035,11 +1035,9 @@ class CPatient extends CMbObject {
   function loadRefsCorrespondants() {
     $this->_ref_medecins_correspondants = array();
   	if ($this->_id) {
-	  	$correspondant = new CCorrespondant();
-	  	$correspondant->patient_id = $this->_id;
-  	  $this->_ref_medecins_correspondants = $correspondant->loadMatchingList();
+  	  $this->_ref_medecins_correspondants = $this->loadBackRefs("correspondants");
   	  foreach ($this->_ref_medecins_correspondants as &$corresp) {
-  	  	$corresp->loadRefs();
+  	  	$corresp->loadRefsFwd();
   	  }
   	}
   	return $this->_ref_medecins_correspondants;
