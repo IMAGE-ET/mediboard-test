@@ -266,7 +266,7 @@ function setToNow(element) {
               
               <strong>
               {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
-                &mdash; {{$acte->_tarif}} {{$dPconfig.currency_symbol}}
+                &mdash; {{$acte->_tarif|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
               {{/if}}
               </strong>
       

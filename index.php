@@ -121,7 +121,7 @@ require("./locales/core.php");
 if (empty($locale_info["names"])){
   $locale_info["names"] = array();
 }
-setlocale(LC_ALL, $locale_info["names"]);
+setlocale(LC_TIME, $locale_info["names"]);
 
 if (empty($locale_info["charset"])){
   $locale_info["charset"] = "UTF-8";
@@ -203,7 +203,7 @@ $a     = CAppUI::checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = CAppUI::checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = CAppUI::checkFileName(mbGetValueFromPost("dosql", ""));
 
-$tab = $a == "index"  ? 
+$tab = $a == "index" ? 
   mbGetValueFromGetOrSession("tab", 1) : 
   mbGetValueFromGet("tab");
 
@@ -237,6 +237,9 @@ ob_start();
 foreach (CModule::getActive() as $module) {
   require("./modules/$module->mod_name/index.php");
 }
+
+$currentModule->addConfigureTab();
+
 if (!$a || $a === "index")
   $tab = $currentModule->getValidTab($tab);
 
