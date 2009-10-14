@@ -21,7 +21,8 @@ $patient->load($patient_id);
 
 $patient->loadRefsSejours();
 foreach ($patient->_ref_sejours as $sejour) {
-  $sejour->loadRefsOperations();
+  $sejour->loadRefPraticien();
+	$sejour->loadRefsOperations();
   foreach($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
 		$operation->loadRefChir();

@@ -650,12 +650,11 @@ class COperation extends CCodable {
     $this->_ref_consult_anesth->_ref_consultation->countDocItems();
     $this->_ref_consult_anesth->_ref_consultation->canRead();
     $this->_ref_consult_anesth->_ref_consultation->canEdit();
-    $this->loadRefChir($cache);
     $this->loadRefPlageOp($cache);
     $this->loadExtCodesCCAM();
-    $this->loadRefSejour($cache);
-    $this->_ref_sejour->loadRefsFwd($cache);
-    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
+		
+    $this->loadRefChir($cache);
+    $this->loadRefPatient($cache);
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
   }
   
