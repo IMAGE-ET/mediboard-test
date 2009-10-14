@@ -51,6 +51,8 @@ foreach ($lots as &$_lot) {
   $days[$fichiers[$_lot->S_LOT_FIC]->S_FIC_DATE][$_lot->S_LOT_FIC] = $fichiers[$_lot->S_LOT_FIC];
 }
 
+ksort($days);
+
 // Chargement du praticien 
 $prat = new CMediusers();
 $prat->loadFromIdCPS($filter->S_LOT_CPS);
