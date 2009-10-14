@@ -121,4 +121,34 @@ if (!defined('PHP_INT_MAX')) {
 	define('PHP_INT_MAX', pow(2, 31)-1);
 }
 
-?>
+/**
+ * (PHP 4, PHP 5)
+ * bcmod Get modulus of an arbitrary precision number
+ * 
+ * cf. http://php.net/bcmod
+ */
+if (!function_exists('bcmod')) {
+  function bcmod($left_operand, $modulus) {
+    // how many numbers to take at once? carefull not to exceed (int)
+    $take = 5;    
+    $mod = '';
+    do {
+      $a = (int) $mod.substr($left_operand, 0, $take);
+      $left_operand = substr($left_operand, $take);
+      $mod = $a % $modulus;   
+    } while (strlen($left_operand));
+    return (int) $mod;
+  }
+}
+
+/**
+ * (PHP 5 >= 5.1.0)
+ * date_default_timezone_set Sets the default timezone used by all date/time functions in a script 
+ * @param object $timezone_identifier
+ * @return 
+ */
+if(!function_exists("date_default_timezone_set")) {
+  function date_default_timezone_set($timezone_identifier) {
+    // void
+  }
+}
