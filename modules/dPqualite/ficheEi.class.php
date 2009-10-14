@@ -53,12 +53,11 @@ class CFicheEi extends CMbObject {
   var $_ref_qualite_valid   = null;
 
   // Form fields
-  var $_incident_date       = null;
-  var $_incident_heure      = null;
   var $_ref_evenement       = null;
   var $_ref_items           = null;
   var $_etat_actuel         = null;
   var $_criticite           = null;
+  var $_unvalidate          = null;
   
   static $criticite_matrice = array(
     1 => array(1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
@@ -117,10 +116,6 @@ class CFicheEi extends CMbObject {
     $specs["qualite_date_validation"]    = "dateTime";
     $specs["qualite_date_verification"]  = "date";
     $specs["qualite_date_controle"]      = "date";
-    
-    // Form fields
-    $specs["_incident_heure"]            = "time notNull";
-    $specs["_incident_date"]             = "date notNull";
     return $specs;
   }
   
@@ -158,11 +153,6 @@ class CFicheEi extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    if($this->date_incident){
-      $this->_incident_heure = substr($this->date_incident, 11, 5);
-      $this->_incident_date  = substr($this->date_incident, 0, 10);
-    }
-    
     if($this->evenements){
       $this->_ref_evenement = explode('|', $this->evenements);
     }
@@ -186,18 +176,25 @@ class CFicheEi extends CMbObject {
     $this->_view = sprintf("%03d - %s", $this->fiche_ei_id, mbDateToLocale(substr($this->date_fiche, 0, 10)));
   }
   
+  function store(){
+    if ($this->_unvalidate) {
+      $this->valid_user_id = "";
+      $this->date_validation = "";
+      $this->service_valid_user_id = "";
+      $this->service_date_validation = "";
+      $this->qualite_user_id = "";
+      $this->qualite_date_validation = "";
+      $this->_unvalidate = null;
+    }
+    return parent::store();
+  }
+  
   function loadRefItems() {
     $this->_ref_items = array();
     foreach ($this->_ref_evenement as $evenement) {
       $ext_item = new CEiItem();
       $ext_item->load($evenement);
       $this->_ref_items[] = $ext_item;
-    }
-  }
-  
-  function updateDBFields() {
-    if($this->_incident_date !== null && $this->_incident_heure !== null){
-      $this->date_incident = "$this->_incident_date $this->_incident_heure:00";
     }
   }
   

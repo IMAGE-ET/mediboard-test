@@ -39,7 +39,7 @@ function refusMesures(oForm){
 }
 
 function unvalidate(form){
-  $(form).insert(new Element('input', {name: "date_validation", type: "hidden", value: ""})).submit();
+  $(form).insert(new Element('input', {name: "_unvalidate", type: "hidden", value: "1"})).submit();
 }
 
 function saveVerifControle(oForm){
@@ -346,18 +346,18 @@ Main.add(function() {
         <tr>
           <td colspan="2" class="button">
             {{if $fiche->annulee}}
-            <button class="change" type="button" onclick="annuleFiche(this.form,0);" title="{{tr}}button-CFicheEi-retablir{{/tr}}">
-              {{tr}}button-CFicheEi-retablir{{/tr}}
-            </button>
+              <button class="change" type="button" onclick="annuleFiche(this.form,0);" title="{{tr}}button-CFicheEi-retablir{{/tr}}">
+                {{tr}}button-CFicheEi-retablir{{/tr}}
+              </button>
             {{else}}
-            <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
-              {{tr}}Print{{/tr}}
-            </button>
-            {{if !$fiche->qualite_user_id && !$fiche->qualite_date_validation && !$fiche->qualite_date_verification}}
-            <button class="change" type="button" onclick="unvalidate(this.form);">
-              Dé-valider
-            </button>
-            {{/if}}
+              <button class="print" type="button" onclick="printIncident({{$fiche->fiche_ei_id}});">
+                {{tr}}Print{{/tr}}
+              </button>
+              {{if $can->admin && !$fiche->qualite_user_id && !$fiche->qualite_date_validation && !$fiche->qualite_date_verification}}
+              <button class="change" type="button" onclick="unvalidate(this.form);">
+                Dé-valider
+              </button>
+              {{/if}}
             {{/if}}
           </td>
         </tr>
