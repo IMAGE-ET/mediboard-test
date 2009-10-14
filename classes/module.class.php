@@ -221,18 +221,20 @@ class CModule extends CMbObject {
     return $tab;
   }
   
+  function addConfigureTab() {
+    // Add configure tab if exist
+    $configPath = "./modules/$this->mod_name/configure.php";
+    if (is_file($configPath) && (CAppUI::$instance->user_type == 1)){
+      $this->registerTab("configure", "Configure", TAB_ADMIN);
+    }
+  }
+  
   function showTabs() {
     if (!$this->checkActive()) {
       return;
     }
     
     global $uistyle, $tab, $a, $action, $actionType;
-
-    // Add configure tab if exist
-    $configPath = "./modules/$this->mod_name/configure.php";
-    if (is_file($configPath) && (CAppUI::$instance->user_type == 1)){
-      $this->registerTab("configure", "Configure", TAB_ADMIN);
-    }
 
     // Try to access wanted tab
     $tabPath = "./modules/$this->mod_name/$tab.php";
