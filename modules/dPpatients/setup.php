@@ -1066,8 +1066,12 @@ class CSetupdPpatients extends CSetup {
 		$this->makeRevision("0.89");
 		$query = "ALTER TABLE `medecin` CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','autre')";
 		$this->addQuery($query);
+		
+		$this->makeRevision("0.90");
+		$query = "ALTER TABLE `medecin` CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue','autre');";
+		$this->addQuery($query);
 
-    $this->mod_version = "0.90";
+    $this->mod_version = "0.91";
   }
 }
 

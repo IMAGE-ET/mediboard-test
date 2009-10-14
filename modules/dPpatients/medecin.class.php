@@ -63,7 +63,7 @@ class CMedecin extends CMbObject {
     $specs["disciplines"]     = "text confidential seekable";
     $specs["orientations"]    = "text confidential";
     $specs["complementaires"] = "text confidential";
-    $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier|dentiste|autre default|medecin";
+    $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|autre default|medecin";
     $specs["adeli"]           = "numchar length|9 confidential mask|99S9S99999S9";
     return $specs;
   }

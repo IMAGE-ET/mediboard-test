@@ -942,4 +942,5 @@ $locales['CMedecin.type.dentiste'] = 'Dentiste';
 $locales['CPatient-_age_assure'] = '';
 $locales['CPatient-_age_assure-court'] = '';
 $locales['CPatient-_age_assure-desc'] = '';
+$locales['CMedecin.type.podologue'] = 'Podologue';
 ?>
