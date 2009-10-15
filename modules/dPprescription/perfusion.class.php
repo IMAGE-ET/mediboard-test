@@ -159,6 +159,7 @@ class CPerfusion extends CMbObject {
     $this->_view .= ($this->type) ? " ".CAppUI::tr("CPerfusion.type.$this->type").", " : "";
     $this->_view .= $this->voie;
     $this->_view .= ($this->vitesse) ? " à $this->vitesse ml/h" : "";
+    $this->_view .= ($this->nb_tous_les) ? " toutes les $this->nb_tous_les h" : "";
     
     if($this->vitesse){
       $this->_frequence = "à $this->vitesse ml/h";

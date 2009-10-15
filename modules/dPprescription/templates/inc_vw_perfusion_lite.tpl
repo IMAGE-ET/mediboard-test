@@ -76,7 +76,9 @@
 		   -
 		 {{/if}}
   </td>
-  <td style="width: 5%;" class="text">{{mb_value object=$_perfusion field=vitesse}} ml/h</td>
+  <td style="width: 5%;" class="text">
+	{{$_perfusion->_frequence}}
+	</td>
   <td style="width: 15%;" class="text">{{mb_value object=$_perfusion field=voie}}</td>
 	{{if !$_perfusion->_protocole}}
   <td style="width: 10%;" class="text">
