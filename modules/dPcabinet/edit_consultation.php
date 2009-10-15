@@ -114,6 +114,7 @@ if ($consult->_id) {
     	$consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
+      $consultAnesth->_ref_sejour->loadRefPraticien();
     }
   }
   
