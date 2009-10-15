@@ -327,10 +327,10 @@
                     <br />
                   {{/if}}
                   {{if $consult->_ref_consult_anesth->ht}}
-                    Ht&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->na}}&nbsp;%
+                    Ht&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->ht}}&nbsp;%
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->ht}}
+                  {{if $consult->_ref_consult_anesth->ht_final}}
                     Ht&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->ht_final}}&nbsp;%
                     <br />
                   {{/if}}
@@ -343,7 +343,7 @@
                 </td>
                 <td style="width: 50%">
                   {{if $consult->_ref_consult_anesth->creatinine}}
-                    Créatinine&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->na}}&nbsp;mg/l
+                    Créatinine&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->creatinine}}&nbsp;mg/l
                     <br />
                   {{/if}}
                   {{if $consult->_ref_consult_anesth->_clairance}}
