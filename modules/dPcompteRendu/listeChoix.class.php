@@ -36,14 +36,15 @@ class CListeChoix extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'liste_choix';
     $spec->key   = 'liste_choix_id';
+    $spec->xor["owner"] = array("chir_id", "function_id", "group_id");
     return $spec;
   }
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chir_id"]         = "ref xor|function_id|group_id class|CMediusers";
-    $specs["function_id"]     = "ref xor|chir_id|group_id class|CFunctions";
-    $specs["group_id"]        = "ref xor|chir_id|function_id class|CGroups";
+    $specs["chir_id"]         = "ref class|CMediusers";
+    $specs["function_id"]     = "ref class|CFunctions";
+    $specs["group_id"]        = "ref class|CGroups";
     $specs["nom"]             = "str notNull";
     $specs["valeurs"]         = "text confidential";
     $specs["compte_rendu_id"] = "ref class|CCompteRendu";

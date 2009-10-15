@@ -36,7 +36,9 @@ document.observe('keydown', function(e){
 });
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;">
+<form name="editFrm" action="?m={{$m}}" method="post" 
+  onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;" 
+  class="{{$compte_rendu->_spec}}">
 
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="del" value="0" />

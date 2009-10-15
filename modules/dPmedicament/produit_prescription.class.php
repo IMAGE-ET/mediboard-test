@@ -15,35 +15,36 @@ class CProduitPrescription extends CMbObject {
   // DB Table key
   var $produit_prescription_id = null;
   var $code_cip                = null;
-	var $code_ucd                = null;
-	var $code_cis                = null;
-	var $libelle                 = null;
-	var $quantite                = null;
-	var $unite_prise             = null;
-	var $unite_dispensation      = null;
-	var $nb_presentation         = null;
-	var $voie                    = null;
+  var $code_ucd                = null;
+  var $code_cis                = null;
+  var $libelle                 = null;
+  var $quantite                = null;
+  var $unite_prise             = null;
+  var $unite_dispensation      = null;
+  var $nb_presentation         = null;
+  var $voie                    = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'produit_prescription';
     $spec->key   = 'produit_prescription_id';
-		$spec->uniques["libelle"] = array("libelle");
-	  $spec->uniques["code_cip"] = array("code_cip");
-		$spec->uniques["code_ucd"] = array("code_ucd");
+    $spec->uniques["libelle"] = array("libelle");
+    $spec->uniques["code_cip"] = array("code_cip");
+    $spec->uniques["code_ucd"] = array("code_ucd");
     $spec->uniques["code_cis"] = array("code_cis");
+    $spec->xor["code"] = array("code_ucd", "code_cis", "code_cip");
     return $spec;
   }
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["code_cip"] = "numchar xor|code_ucd|code_cis length|7";
-    $specs["code_ucd"] = "numchar xor|code_cip|code_cis length|7";
-    $specs["code_cis"] = "numchar xor|code_ucd|code_cip length|8";
+    $specs["code_cip"] = "numchar length|7";
+    $specs["code_ucd"] = "numchar length|7";
+    $specs["code_cis"] = "numchar length|8";
     $specs["libelle"] = "str notNull";
     $specs["quantite"] = "float notNull";
     $specs["unite_prise"] = "str notNull";
-		$specs["unite_dispensation"] = "str notNull";
+    $specs["unite_dispensation"] = "str notNull";
     $specs["nb_presentation"] = "num notNull";
     $specs["voie"] = "str";
     return $specs;

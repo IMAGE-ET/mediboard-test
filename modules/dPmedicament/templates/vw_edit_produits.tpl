@@ -65,7 +65,7 @@ function updateUniteDispensation(element){
     <!-- Modification de la fiche ATC sélectionnée -->
     <td>
         <!-- Affichage de la fiche ATC -->
-        <form name="addEditProduit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <form name="addEditProduit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$produit->_spec}}">
           <input type="hidden" name="m" value="dPmedicament" />
           <input type="hidden" name="dosql" value="do_produit_prescription_aed" />
           <input type="hidden" name="del" value="0" />

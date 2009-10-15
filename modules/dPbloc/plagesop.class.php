@@ -60,6 +60,7 @@ class CPlageOp extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'plagesop';
     $spec->key   = 'plageop_id';
+    $spec->xor["owner"] = array("spec_id", "chir_id");
     return $spec;
   }
   
@@ -71,9 +72,9 @@ class CPlageOp extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chir_id"]          = "ref xor|spec_id class|CMediusers";
+    $specs["chir_id"]          = "ref class|CMediusers";
     $specs["anesth_id"]        = "ref class|CMediusers";
-    $specs["spec_id"]          = "ref xor|chir_id class|CFunctions";
+    $specs["spec_id"]          = "ref class|CFunctions";
     $specs["salle_id"]         = "ref notNull class|CSalle";
     $specs["spec_repl_id"]     = "ref class|CFunctions";
     $specs["date"]             = "date notNull";

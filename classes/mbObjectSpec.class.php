@@ -29,4 +29,16 @@ class CMbObjectSpec {
   public function init() {
     $this->ds = CSQLDataSource::get($this->dsn);
   }
+  
+  /**
+   * toString method to be used in the HTML for the form className
+   * @return string The spec as string
+   */
+  function __toString(){
+    $specs = array();
+    foreach($this->xor as $xor) {
+      $specs[] = "xor|".implode("|", $xor);
+    }
+    return implode(" ", $specs);
+  }
 }

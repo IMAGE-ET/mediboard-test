@@ -26,10 +26,14 @@ function toggleInput(input, value) {
 }
 
 function toggleType(type, value) {
-  $$('tr.'+type).invoke('setVisible', value);
+  $$('#php-config tr.'+type).invoke('setVisible', value);
+  
   $$('#php-config-tabs a').each(function(a){
-    var id = Url.parse(a.href).fragment;
-    a.select('small')[0].update("("+$(id).select("tr.edit-value").findAll(function(el){return el.visible()}).length+")");
+    var id = Url.parse(a.href).fragment,
+        count = $(id).select("tr.edit-value").findAll(function(el){return el.visible()}).length;
+        
+    a.select('small')[0].update("("+count+")");
+    a[count == 0 ? "addClassName" : "removeClassName"]("empty");
   });
 }
 </script>
@@ -276,7 +280,7 @@ Utilisez cet outil avec une grande prudence, une mauvaise configuration peut avo
             {{assign var=access value=$value.user}}
             <tr class="edit-value {{if !$access}}locked{{/if}} {{if in_array($key, $php_config_important)}}important{{else}}minor{{/if}}">
               <th>{{$key}}</th>
-              <td>{{$value.global_value}}</td>
+              <td class="text">{{$value.global_value}}</td>
               <td>
                 {{if $access}}
                   <input type="text" name="php[{{$key}}]" value="{{$value.local_value}}" disabled="disabled" style="opacity: 0.5" />

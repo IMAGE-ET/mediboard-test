@@ -2,7 +2,7 @@
 {{foreach from=$salle->_ref_plages item=_plage}}
 <hr />
 
-<form name="anesth{{$_plage->_id}}" action="?" method="post">
+<form name="anesth{{$_plage->_id}}" action="?" method="post" class="{{$_plage->_spec}}">
 
 <input type="hidden" name="m" value="dPbloc" />
 <input type="hidden" name="otherm" value="{{$m}}" />

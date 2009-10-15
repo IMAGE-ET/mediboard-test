@@ -78,22 +78,22 @@ Main.add(function () {
 				<tr>
 				  <td colspan="10">
 			      {{if $completions.$class.percent == 0}}
-			      <div class="big-error">
+			      <div class="small-error">
 						  <strong>Attention...</strong>
 						  <p>Cette classe n'est absolument pas traduite, on ne peut garantir un affichage utilisable pour cette classe. Merci d'y remédier au plus vite.</p>
 						</div>
 			      {{elseif $completions.$class.percent < 50}}
-			      <div class="big-warning">
+			      <div class="small-warning">
 						  <strong>Important</strong>
 						  <p>Cette classe est peu traduite, cela va probablement poser des problèmes d'affichage.</p>
 						</div>
 			      {{elseif $completions.$class.percent < 100}}
-			      <div class="big-info">
+			      <div class="small-info">
 						  <strong>Important</strong>
 						  <p>Cette classe est en cours de traduction, c'est un bon début, il reste encore des efforts à faire !</p>
 						</div>
 			      {{else}}
-			      <div class="big-success">
+			      <div class="small-success">
 						  <strong>Félicitations !</strong>
 						  <p>Cette classe est totalement traduite, ce qui est un gage de qualité manifeste !</p>
 						</div>
@@ -132,7 +132,7 @@ Main.add(function () {
        </table>
 
        {{foreachelse}}
-       <div class="big-info">Aucune classe à traduire pour ce module</div>
+       <div class="small-info">Aucune classe à traduire pour ce module</div>
        {{/foreach}}
 	  </td>
   </tr>

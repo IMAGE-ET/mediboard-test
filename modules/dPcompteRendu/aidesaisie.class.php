@@ -36,13 +36,14 @@ class CAideSaisie extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'aide_saisie';
     $spec->key   = 'aide_id';
+    $spec->xor["owner"] = array("function_id", "user_id");
     return $spec;
   }
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["user_id"]      = "ref xor|function_id class|CMediusers";
-    $specs["function_id"]  = "ref xor|user_id class|CFunctions";
+    $specs["user_id"]      = "ref class|CMediusers";
+    $specs["function_id"]  = "ref class|CFunctions";
     $specs["class"]        = "str notNull";
     $specs["field"]        = "str notNull";
     $specs["name"]         = "str notNull";

@@ -8,7 +8,7 @@ function submitFormAides(oForm){
 }
 </script>
 
-<form name="editAides" action="?m=dPcompteRendu" method="post">
+<form name="editAides" action="?m=dPcompteRendu" method="post" class="{{$aide->_spec}}">
 <input type="hidden" name="dosql" value="do_aide_aed" />
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="aide_id" value="" />
@@ -102,7 +102,7 @@ function submitFormAides(oForm){
   <tr>
     <td class="button" colspan="2">
       <button class="submit" type="button" onclick="submitFormAides(this.form)">
-        Créer et Fermer
+        Créer et fermer
       </button>
     </td>
   </tr>

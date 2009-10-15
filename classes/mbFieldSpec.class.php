@@ -24,7 +24,6 @@ class CMbFieldSpec {
   var $notContaining  = null;
   var $notNear        = null;
   var $alphaAndNum    = null;
-  var $xor            = null;
   var $mask           = null;
   var $format         = null;
   var $autocomplete   = null;
@@ -83,7 +82,6 @@ class CMbFieldSpec {
       'notContaining' => 'field',
       'notNear'       => 'field',
       'alphaAndNum'   => 'bool',
-      'xor'           => 'field_list',
       'mask'          => 'str',
       'format'        => 'str',
       'autocomplete'  => 'bool',
@@ -123,34 +121,6 @@ class CMbFieldSpec {
     // NotNull
     if($this->notNull && !$this->default && ($propValue === null || $propValue === "")){
       return "Ne pas peut pas avoir une valeur nulle";
-    }
-
-    // xor
-    if($this->xor){
-      $fields = explode("|", $this->xor);
-      $otherfields = "";
-      foreach($fields as $field) {
-        if($msg = $this->checkTargetPropValue($object, $field)){
-          return $msg;
-        }
-        $targetPropValue[$field] = $object->$field;
-        $otherfields .= ", '$field'";
-      }
-      $noValue  = !$propValue;
-      $nbValues = ($propValue !== "");
-      foreach($targetPropValue as $key => $value) {
-        if ($value === null) {
-          return "La valeur du champ '$key' impliqué dans un xor dans la classe '$this->className' n'est pas présente dans le formulaire";
-        }
-        $noValue  &= !$value;
-        $nbValues += ($value !== "");
-      }
-      if ($noValue) {
-        return "Merci de choisir un de ces champs : '$fieldName', '$otherfields'";
-      }
-      if ($nbValues > 1) {
-        return "Vous ne devez choisir qu'un seul de ces champs : '$fieldName''$otherfields'";
-      }
     }
 
     if ($propValue === null || $propValue === ""){

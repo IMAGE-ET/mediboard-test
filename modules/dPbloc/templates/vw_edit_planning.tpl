@@ -82,7 +82,7 @@ Main.add(function(){
       </a>
       {{/if}}
       {{if $can->edit}}
-      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()">
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkPlage()" class="{{$plagesel->_spec}}">
       <input type="hidden" name="dosql" value="do_plagesop_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" />
@@ -239,7 +239,7 @@ Main.add(function(){
     </form>
 
     {{if $plagesel->plageop_id}}
-      <form name="removeFrm" action="?m={{$m}}" method="post">
+      <form name="removeFrm" action="?m={{$m}}" method="post" class="{{$plagesel->_spec}}">
       <input type="hidden" name="dosql" value="do_plagesop_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" /> 

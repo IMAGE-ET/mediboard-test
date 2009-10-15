@@ -9,7 +9,7 @@
  */
 
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id", $AppUI->user_id);
+$praticien_id = mbGetValueFromGetOrSession("praticien_id", CAppUI::$instance->user_id);
 $function_id = mbGetValueFromGetOrSession("function_id");
 
 $pack_id = mbGetValueFromGet("pack_id");

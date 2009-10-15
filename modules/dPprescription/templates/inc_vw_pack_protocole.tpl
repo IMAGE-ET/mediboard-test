@@ -80,7 +80,7 @@
 		  </tr>
 		 <tr>
 		   <td>
-		  <form name="createPack" action="?" method="post" onsubmit="Protocole.addPack();">
+		  <form name="createPack" action="?" method="post" onsubmit="Protocole.addPack();" class="{{$pack->_spec}}">
 		    <input type="hidden" name="m" value="dPprescription" />
 		    <input type="hidden" name="dosql" value="do_prescription_protocole_pack_aed" />
 		    <input type="hidden" name="prescription_protocole_pack_id" value="" />

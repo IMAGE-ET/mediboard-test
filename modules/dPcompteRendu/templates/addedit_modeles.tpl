@@ -97,7 +97,9 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;">
+<form name="editFrm" action="?m={{$m}}" method="post" 
+ onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;"
+ class="{{$compte_rendu->_spec}}">
 
 <table class="main">
   <tr>
@@ -289,7 +291,7 @@ Main.add(function () {
             <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
             <td>
               <select name="file_category_id" class="{{$compte_rendu->_props.file_category_id}}">
-              <option value="">&mdash; Aucune Catégorie</option>
+                <option value="">&mdash; Aucune Catégorie</option>
               </select>
             </td>
           </tr>

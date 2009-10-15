@@ -45,6 +45,7 @@ class CCompteRendu extends CDocumentItem {
     $spec->table = 'compte_rendu';
     $spec->key   = 'compte_rendu_id';
     $spec->measureable = true;
+    $spec->xor["owner"] = array("chir_id", "function_id", "group_id", "object_id");
     return $spec;
   }
   
@@ -58,10 +59,10 @@ class CCompteRendu extends CDocumentItem {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["chir_id"]          = "ref class|CMediusers xor|function_id|group_id|object_id purgeable";
-    $specs["function_id"]      = "ref class|CFunctions xor|chir_id|group_id|object_id purgeable";
-    $specs["group_id"]         = "ref class|CGroups xor|chir_id|function_id|object_id purgeable";
-    $specs["object_id"]        = "ref class|CMbObject meta|object_class xor|function_id|chir_id|group_id purgeable";
+    $specs["chir_id"]          = "ref class|CMediusers purgeable";
+    $specs["function_id"]      = "ref class|CFunctions purgeable";
+    $specs["group_id"]         = "ref class|CGroups purgeable";
+    $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable";
     $specs["object_class"]     = "enum notNull class";
     $specs["nom"]              = "str notNull";
     $specs["type"]             = "enum list|header|body|footer default|body";
@@ -309,11 +310,6 @@ class CCompteRendu extends CDocumentItem {
     if ($msg = parent::handleSend()) {
       return $msg;
     }
-    
-    // Xor check...
-    $this->function_id = "";
-    $this->chir_id = "";
-    $this->group_id = "";
   }
 	
   static function getTemplatedClasses() {

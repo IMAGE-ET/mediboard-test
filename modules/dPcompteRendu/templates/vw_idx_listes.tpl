@@ -115,12 +115,12 @@ Main.add(function () {
       {{/foreach}}
     </tbody>
     </table>
-
+   </form>
   </td>
   
   <td class="pane">
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$liste->_spec}}">
 
     <input type="hidden" name="dosql" value="do_liste_aed" />
     {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
@@ -215,7 +215,8 @@ Main.add(function () {
             {{/foreach}}
           </optgroup>
         </select>
-
+      </td>
+    </tr>
     <tr>
       <td class="button" colspan="2">
         {{if $liste->liste_choix_id}}

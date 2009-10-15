@@ -2,6 +2,7 @@
 Main.add(function(){
   var buttonClasses = $w("edit hslip trash submit new print cancel modify search lock tick down "+
                       "up change add remove stop send send-cancel send-again send-problem send-auto");
+                      
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){
     buttonsContainers[0].insert('<button class="'+c+' notext">'+c+'</button><br />');
@@ -27,6 +28,10 @@ Main.add(function(){
 </script>
 
 <button class="change" onclick="$$('body')[0].toggleClassName('touchscreen')">Touchscreen</button>
+
+<h1>header 1</h1>
+<h2>header 2</h2>
+<h3>header 3</h3>
 
 <ul class="control_tabs">
   <li><a href="#tab1">normal</a></li>

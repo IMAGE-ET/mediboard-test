@@ -9,11 +9,11 @@
  */
 
 // Javascript error logging
-// TODO needs testing (doesn't throw console.error every time)
-/*window.onerror = function(errorMsg, url, lineNumber, exception) {
+function errorHandler(errorMsg, url, lineNumber, exception) {
   try {
+    exception = exception || new Error(errorMsg, url, lineNumber);
     try {
-      console.error(new Error(errorMsg, url, lineNumber) || exception);
+      console.error(exception);
     } catch (e) {}
     
     new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
@@ -27,7 +27,10 @@
     });
   } catch (e) {}
   return true;
-};*/
+};
+
+// TODO needs testing (doesn't throw console.error every time)
+//window.onerror = errorHandler;
 
 function main() {
   try {
@@ -39,8 +42,7 @@ function main() {
     Main.init();
   }
   catch (e) {
-    console.error(exception);
-    //window.onerror(e.extMessage || e.message, e.fileName, e.lineNumber, e);
+    errorHandler(e.extMessage || e.message || e.description , e.fileName, e.lineNumber, e);
   }
 }
 
@@ -446,7 +448,8 @@ var Console = {
 
 // If there is no console object, it uses the Mediboard Console
 if (typeof console === "undefined") {
-	window.console = Console;
+  window.console = Console;
+  Console.log = Console.debug;
 }
 
 /**

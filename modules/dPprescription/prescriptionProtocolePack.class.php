@@ -29,13 +29,14 @@ class CPrescriptionProtocolePack extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'prescription_protocole_pack';
     $spec->key   = 'prescription_protocole_pack_id';
+    $spec->xor["owner"] = array("function_id", "praticien_id");
     return $spec;
   }
     
   function getProps() {
   	$specs = parent::getProps();
-    $specs["praticien_id"]  = "ref xor|function_id class|CMediusers";
-    $specs["function_id"]   = "ref xor|praticien_id class|CFunctions";  
+    $specs["praticien_id"]  = "ref class|CMediusers";
+    $specs["function_id"]   = "ref class|CFunctions";  
     $specs["libelle"]       = "str notNull";
     $specs["object_class"]  = "enum notNull list|CSejour|CConsultation";
     return $specs;

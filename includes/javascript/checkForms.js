@@ -136,30 +136,6 @@ Object.extend(ElementChecker, {
         this.addError("notNull", "Ne doit pas être vide");
     },
     
-    // xor
-    xor: function () {
-      var sTargetElement = this.assertMultipleArgs("xor");
-      var iNbElements = this.sValue != "";
-      var sListElements = this.sLabel;
-      var message = "";
-  
-      this.oProperties["xor"].each(function(sTargetElement) {
-        var oTargetElement = this.oForm.elements[sTargetElement];
-        if (!oTargetElement) {
-          message += printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-        }
-        else {
-          var oTargetLabel = getLabelFor(oTargetElement);
-          var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
-          iNbElements += (oTargetElement.value != "");
-          sListElements += ", " + sTargetLabel;
-        }
-      }, this);
-      this.addError("xor", message);
-      if (iNbElements != 1) 
-        this.addError("xor", printf("Vous devez choisir une et une seule valeur parmi '%s", sListElements));  
-    },
-    
     // moreThan
     moreThan: function () {
       sTargetElement = this.assertSingleArg("moreThan");
@@ -526,7 +502,7 @@ function checkForm(oForm) {
     
     // Element checker preparing and error checking
     ElementChecker.prepare(oElement);
-    var sMsgFailed = ElementChecker.sLabel ? ElementChecker.sLabel : printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
+    var sMsgFailed = ElementChecker.sLabel || printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
     var oErrors = ElementChecker.checkElement();
     var oLabel = oFirstElement.getLabel();
     
@@ -537,7 +513,7 @@ function checkForm(oForm) {
         element: oFirstElement.name, 
         errors: oErrors
       });
-      if (!oElementFirstFailed) oElementFirstFailed = oFirstElement;
+      if (!oElementFirstFailed && (oFirstElement.type != "hidden") && !oFirstElement.readonly && !oFirstElement.disabled) oElementFirstFailed = oFirstElement;
       if (oLabel) oLabel.addClassName('error');
     }
     else {
@@ -545,14 +521,37 @@ function checkForm(oForm) {
     }
   });
   
+  // Check for form-level errors (xor)
+  var xorFields, re = /xor(?:\|(\S+))+/g;
+  while (xorFields = re.exec(oForm.className)) {
+    xorFields = xorFields[1].split("|");
+    
+    var n = 0, xorFieldsInForm = 0; listLabels = [];
+    xorFields.each(function(xorField){
+      var element = $(oForm.elements[xorField]);
+      if (!element) return;
+      xorFieldsInForm++;
+      var label = element.getLabel();
+      listLabels.push(label ? label.innerHTML : xorField);
+      if ($V(element)) n++;
+    });
+    if (n != 1 && xorFieldsInForm > 0) {
+      oFormErrors.push({
+        title: "Vous devez choisir une et une seule valeur parmi",
+        element: "Formulaire", 
+        errors: listLabels
+      });
+    }
+  }
+  
   if (oFormErrors.length) {
     var sMsg = "Merci de remplir/corriger les champs suivants : \n";
     oFormErrors.each(function (formError) {
-      var oElement = oForm[formError.element];
+      var oElement = oForm.elements[formError.element];
       
       sMsg += "  "+String.fromCharCode(8226)+" "+formError.title.strip()+":\n";
       formError.errors.each(function (error) {
-        sMsg += "     - "+error.message.strip()+"\n";
+        sMsg += "     - " + (error.message || error).strip() + "\n";
       });
     });
     alert(sMsg);

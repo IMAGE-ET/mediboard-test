@@ -56,7 +56,7 @@ Main.add(function () {
     </td>
     
     <td>
-      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$tarif->_spec}}">
       <input type="hidden" name="dosql" value="do_tarif_aed" />
       <input type="hidden" name="del" value="0" />
       {{mb_field object=$tarif field="tarif_id" hidden=1 prop=""}}

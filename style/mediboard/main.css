@@ -730,9 +730,9 @@ div.tree-header {
   border: 1px solid #999;
 }
 
-table.tbl tr:nth-of-type(2n+1) {
+/*table.tbl tr:nth-of-type(2n+1) td {
   background-color: #eee;
-}
+}*/
 
 table.tbl td.error,
 table.tbl tr:hover td.error,

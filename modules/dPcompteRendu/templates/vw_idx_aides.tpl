@@ -183,7 +183,7 @@ Main.add(function () {
   
   <td class="pane">
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$aide->_spec}}">
 
     <input type="hidden" name="dosql" value="do_aide_aed" />
     {{mb_field object=$aide field="aide_id" hidden=1 prop=""}}

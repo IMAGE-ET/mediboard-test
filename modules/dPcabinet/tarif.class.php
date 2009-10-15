@@ -47,12 +47,13 @@ class CTarif extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'tarifs';
     $spec->key   = 'tarif_id';
+    $spec->xor["owner"] = array("function_id", "chir_id");
     return $spec;
   }
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chir_id"]     = "ref class|CMediusers xor|function_id";
+    $specs["chir_id"]     = "ref class|CMediusers";
     $specs["function_id"] = "ref class|CFunctions";
     $specs["description"] = "str notNull confidential seekable";
     $specs["secteur1"]    = "currency notNull min|0";

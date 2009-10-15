@@ -801,8 +801,23 @@ class CMbObject {
 	    $other->loadMatchingObject();
 	
 	    if ($other->_id && $this->_id != $other->_id) {
-	      return "$this->_class_name-failed-$unique";
+	      return CAppUI::tr("$this->_class_name-failed-$unique");
 	    }
+    }
+    
+    // Class-level xor checking
+    foreach ($this->_spec->xor as $xor => $propNames) {
+      $n = 0;
+      $fields = array();
+      foreach($propNames as $propName) {
+        $this->completeField($propName);
+        $fields[] = CAppUI::tr("$this->_class_name-$propName");
+        if ($this->$propName) $n++;
+      }
+  
+      if ($n != 1) {
+        return CAppUI::tr("$this->_class_name-xorFailed-$xor")." (".implode(", ", $fields).")";
+      }
     }
     
     return $msg;

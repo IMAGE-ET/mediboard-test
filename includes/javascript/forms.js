@@ -254,7 +254,6 @@ function prepareForm(oForm, bForcePrepare) {
   if (oForm) {
     // If this form hasn't been prepared yet
     if (!oForm.hasClassName("prepared") || bForcePrepare) {
-    
       // Event Observer
       if(oForm.hasClassName("watched")) {
         new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
@@ -276,6 +275,31 @@ function prepareForm(oForm, bForcePrepare) {
         if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
           oLabel.htmlFor = sFormName + "_" + sFor;
         }
+      }
+      
+      // XOR modifications
+      var xorFields, re = /xor(?:\|(\S+))+/g;
+      while (xorFields = re.exec(oForm.className)) {
+      console.log(xorFields);
+        xorFields = xorFields[1].split("|");
+        xorFields.each(function(xorField){
+          var element = $(oForm.elements[xorField]);
+          if (!element) return;
+          
+          element.xorElementNames = xorFields.without(xorField);
+          
+          var checkXOR = (function(){
+            if ($V(this)) {
+              this.xorElementNames.each(function(e){
+                $V(this.form.elements[e], '');
+              }, this);
+            }
+          }).bindAsEventListener(element);
+          
+          element.observe("change", checkXOR)
+                 .observe("keyup", checkXOR)
+                 .observe("ui:change", checkXOR);
+        });
       }
     
       // For each element
@@ -316,22 +340,6 @@ function prepareForm(oForm, bForcePrepare) {
           oElement.observe("change", notNullOK)
                   .observe("keyup",  notNullOK)
                   .observe("ui:change", notNullOK);
-        }
-
-        // XOR
-        if (props.xor) {
-          oElement.xorElementNames = [props.xor].flatten();
-          var checkXOR = (function(){
-            if ($V(this)) {
-              this.xorElementNames.each(function(e){
-                $V(this.form.elements[e], '');
-              }, this);
-            }
-          }).bindAsEventListener(oElement);
-          
-          oElement.observe("change", checkXOR)
-                  .observe("keyup", checkXOR)
-                  .observe("ui:change", checkXOR);
         }
         
         // ui:change is a custom event fired on the native onchange throwed by $V, 

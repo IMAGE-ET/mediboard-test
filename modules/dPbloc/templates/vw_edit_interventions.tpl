@@ -11,7 +11,7 @@
 <table class="main">
   <tr>
     <th colspan="2">
-      <form name="editPlageTiming" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editPlageTiming" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$plage->_spec}}">
         <input type="hidden" name="m" value="dPbloc" />
         <input type="hidden" name="dosql" value="do_plagesop_aed" />
         <input type="hidden" name="del" value="0" />
@@ -74,7 +74,7 @@
         <tr>
           <td>
             <!-- liste déroulante de choix de l'anesthesiste  et du personnel de bloc -->
-            <form name="editPlage" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editPlage" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$plage->_spec}}">
             <input type="hidden" name="m" value="dPbloc" />
             <input type="hidden" name="dosql" value="do_plagesop_aed" />
             <input type="hidden" name="del" value="0" />
