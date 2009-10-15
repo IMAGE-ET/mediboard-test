@@ -25,7 +25,7 @@ function popMateriel() {
   url.setModuleAction("dPbloc", "print_materiel");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
-  url.popup(700, 550, 'Materiel');
+  url.popup(900, 750, 'Materiel');
 }
 </script>
 

@@ -541,8 +541,8 @@ class COperation extends CCodable {
       $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
     }
     else {
-	    $this->_ref_salle = new CSalle;
-	    $this->_ref_salle->load($this->salle_id);
+	    $salle = new CSalle;
+	    $this->_ref_salle = $salle->getCached($this->salle_id);
     }
   }
   

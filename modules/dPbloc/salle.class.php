@@ -84,9 +84,8 @@ class CSalle extends CMbObject {
   
   function loadRefBloc(){
   	if (!$this->_ref_bloc) {
-	    // Chargement du bloc correspondant
-	    $this->_ref_bloc = new CBlocOperatoire();
-	    $this->_ref_bloc->load($this->bloc_id);
+	    $bloc = new CBlocOperatoire();
+	    $this->_ref_bloc = $bloc->getCached($this->bloc_id);
     }
   }
   

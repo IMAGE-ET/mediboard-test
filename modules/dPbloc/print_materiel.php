@@ -13,7 +13,7 @@ $can->needsRead();
 
 $now = mbDate();
 
-$filter = new CMateriel;
+$filter = new COperation;
 $filter->_date_min = mbGetValueFromGet("_date_min", $now);
 $filter->_date_max = mbGetValueFromGet("_date_max", $now);
 
@@ -36,24 +36,26 @@ $order = "plagesop.date, rank";
 $operation = new COperation();
 
 $where["commande_mat"] = "!= '1'";
-$operations1 = $operation->loadList($where, $order, null, null, $ljoin);
-foreach($operations1 as &$op1) {
-  $op1->loadRefsFwd();
-  $op1->_ref_sejour->loadRefsFwd();
-}
+$operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
 
 $where["commande_mat"] = "!= '0'";
-$operations2 = $operation->loadList($where, $order, null, null, $ljoin);
-foreach($operations2 as &$op2) {
-  $op2->loadRefsFwd();
-  $op2->_ref_sejour->loadRefsFwd();
+$operations["1"] = $operation->loadList($where, $order, null, null, $ljoin);
+
+foreach($operations as &$_operations) {
+	foreach($_operations as $_operation) {
+	  $_operation->loadRefPatient(1);
+	  $_operation->loadRefChir(1);
+	  $_operation->_ref_chir->loadRefFunction();
+	  $_operation->loadRefPlageOp(1);
+	  $_operation->loadExtCodesCCAM();
+	}
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("op1", $operations1);
-$smarty->assign("op2", $operations2);
+$smarty->assign("filter", $filter);
+$smarty->assign("operations", $operations);
 
 $smarty->display("print_materiel.tpl");
 
