@@ -104,7 +104,7 @@ $unites = array();
 $unites["hb"]         = array("nom"=>"Hb","unit"=>"g/dl");
 $unites["ht"]         = array("nom"=>"Ht","unit"=>"%");
 $unites["ht_final"]   = array("nom"=>"Ht final","unit"=>"%");
-$unites["plaquettes"] = array("nom"=>"Plaquettes","unit"=>"");
+$unites["plaquettes"] = array("nom"=>"Plaquettes","unit"=>"(x1000) /mm3");
 $unites["creatinine"] = array("nom"=>"Créatinine","unit"=>"mg/l");
 $unites["_clairance"] = array("nom"=>"Clairance de Créatinine","unit"=>"ml/min");
 $unites["na"]         = array("nom"=>"Na+","unit"=>"mmol/l");
@@ -113,6 +113,7 @@ $unites["tp"]         = array("nom"=>"TP","unit"=>"%");
 $unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
 $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
+
 
 // Création du template
 $smarty = new CSmartyDP();

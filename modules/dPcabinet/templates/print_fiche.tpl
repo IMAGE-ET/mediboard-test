@@ -326,6 +326,16 @@
             {{/if}}
           </td>
         </tr>
+				
+				<tr>
+          <th style="font-weight: normal;">Examen cardiovasculaire</th>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenCardio}}</td>
+        </tr>
+        <tr>
+          <th style="font-weight: normal;">Examen pulmonaire</th>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenPulmo}}</td>
+        </tr>
+				
         {{if $consult->examen}}
         <tr>
           <th style="font-weight: normal;">Examens</th>
@@ -398,18 +408,9 @@
 					</td>
         </tr>
         <tr>
-          <th style="font-weight: normal;">Examen cardiovasculaire</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenCardio}}</td>
-        </tr>
-        <tr>
-          <th style="font-weight: normal;">Examen pulmonaire</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenPulmo}}</td>
-        </tr>
-        <tr>
           <th style="font-weight: normal;">Conclusion</th>
           <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->conclusion}}</td>
         </tr>
-        
         <tr>
         {{if $consult->_ref_consult_anesth->_intub_difficile}}
           <td colspan="3" style="font-weight: bold; text-align:center; color:#F00;">
