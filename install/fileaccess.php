@@ -48,7 +48,7 @@ $pathAccess->description = "Répertoire du fichier de configuration du système";
 $pathAccesses[] = $pathAccess;
 
 $pathAccess = new CPathAccess;
-$pathAccess->path = "modules/dPinterop/hprim";
+$pathAccess->path = "modules/hprimxml/xsd";
 $pathAccess->description = "Répertoire des schemas HPRIM";
 
 $pathAccesses[] = $pathAccess;
