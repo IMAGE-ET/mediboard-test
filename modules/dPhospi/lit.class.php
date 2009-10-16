@@ -70,6 +70,7 @@ class CLit extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
+    $this->_short_view = $this->nom;
   }
   
   function loadCompleteView() {
@@ -79,6 +80,7 @@ class CLit extends CMbObject {
     $chambre->loadRefsFwd();
     
     $this->_view = "{$chambre->_ref_service->nom} - $chambre->nom - $this->nom";
+    $this->_short_view = $this->nom;
   }
   
   function loadRefChambre() {

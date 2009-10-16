@@ -77,6 +77,7 @@ if ($op) {
   $sejour->loadRefsConsultAnesth();
   $sejour->loadRefsPrescriptions();
   $sejour->_ref_consult_anesth->loadRefsFwd();
+  $sejour->loadRefCurrAffectation();
 
   // Chargement des consultation d'anesthésie pour les associations a posteriori
   $patient =& $sejour->_ref_patient;
