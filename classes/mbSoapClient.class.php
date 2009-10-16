@@ -33,8 +33,10 @@ class CMbSOAPClient extends SoapClient {
       trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
       return;
     }
-        
-    parent::__construct($this->wsdl, $options + array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
+    
+    $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
+    
+    parent::__construct($this->wsdl, $options);
   }
   
   public function __call($function_name, $arguments) {
@@ -47,7 +49,7 @@ class CMbSOAPClient extends SoapClient {
   	$echange_soap->emetteur = CAppUI::conf("mb_id");
   	$echange_soap->destinataire = $this->wsdl;
   	$echange_soap->type = $this->type_echange_soap;
-		
+
 		$url = parse_url($this->wsdl);
 		$path = explode("/",$url['path']);
   	$echange_soap->web_service_name = end($path);
@@ -71,18 +73,19 @@ class CMbSOAPClient extends SoapClient {
   	return $output;
   }
   
-  static public function make($rooturl, $login = null, $password = null, $type = null, $options = null) {
+  static public function make($rooturl, $login = null, $password = null, $type = null, $options = array()) {
   	if (!url_exists($rooturl)) {
   		trigger_error("Impossible d'établir la connexion avec le serveur : ".$rooturl, E_USER_ERROR);
   		return;
   	}
 
-  	if ($login && $password) {
+  	if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
+
   		if (preg_match('#\%u#', $rooturl)) 
-        $rooturl = str_replace('%u', $login, $rooturl);
+        $rooturl = str_replace('%u', $login ? $login : $options['login'], $rooturl);
     
 	    if (preg_match('#\%p#', $rooturl)) 
-	      $rooturl = str_replace('%p', $password, $rooturl);
+	      $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
   	}
     
     if (!$client = new CMbSOAPClient($rooturl, $type, $options)) {
