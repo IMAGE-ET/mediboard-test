@@ -44,7 +44,8 @@ class CPerfusionLine extends CMbObject {
   var $_can_vw_generique = null;
   
   var $_ref_administrations = null;
-  
+  var $_view_unite_prise = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'perfusion_line';
@@ -77,15 +78,28 @@ class CPerfusionLine extends CMbObject {
     $this->_debut = $this->_ref_perfusion->_debut;
     $this->_fin = $this->_ref_perfusion->_fin;
     
+		// Suppression de l'equivalence entre unite de prise à l'affichage
+    if(!$this->_view_unite_prise){
+      if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite, $matches)){
+        $_quant = end($matches);
+        $nb = $this->quantite * $_quant;
+        $this->_view_unite_prise = str_replace($_quant, $nb, $this->unite);
+      }
+    }
+		
     $this->loadRefProduit();
     $this->_forme_galenique = $this->_ref_produit->forme;
     $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
     $this->_view = "$this->_ucd_view $this->_forme_galenique";
     if($this->quantite){
-      $this->_posologie =  "$this->quantite $this->unite";
+    	if($this->_view_unite_prise){
+    	  $this->_posologie =  "$this->quantite $this->_view_unite_prise";
+      } else {
+        $this->_posologie =  "$this->quantite $this->unite";
+			}
       $this->_view .= " ($this->_posologie)";
     }
-    
+
     // Affichage de l'icone Livret Therapeutique
     if(!$this->_ref_produit->inLivret){
       $this->_can_vw_livret_therapeutique = 1;

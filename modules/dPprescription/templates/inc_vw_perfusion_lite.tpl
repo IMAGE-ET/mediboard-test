@@ -45,9 +45,11 @@
       <a href="#produit{{$_perf_line->_id}}" onclick="Prescription.viewProduit(null,'{{$_perf_line->code_ucd}}','{{$_perf_line->code_cis}}');" style="font-weight: bold; display: inline;">
         {{$_perf_line->_ucd_view}}
         
-        {{if $_perf_line->quantite}}
-	      ({{mb_value object=$_perf_line field=quantite size=4}} {{mb_value object=$_perf_line field=unite size=4}})
-		    {{/if}}
+				
+				{{if $_perf_line->_posologie}}
+				({{$_perf_line->_posologie}})
+				{{/if}}
+				 
 		    <span style="font-size: 0.8em; opacity: 0.7">
          ({{$_perf_line->_forme_galenique}})
         </span>
@@ -89,7 +91,9 @@
   </td>
   <td style="width: 10%;" class="text">
     <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$_perfusion->_guid}}');"></button>
-    {{mb_value object=$_perfusion field=duree}} heures
+    {{if $_perfusion->duree}}
+		  {{mb_value object=$_perfusion field=duree}} heures
+		{{/if}}
   </td>  
 	{{else}}
 	<td style="width: 20%" class="text">

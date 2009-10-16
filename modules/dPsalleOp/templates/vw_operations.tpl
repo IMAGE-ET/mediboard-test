@@ -36,6 +36,9 @@ function submitAnesth(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
   	onComplete: function() {
       reloadAnesth(oForm.operation_id.value);
+			if(document.visiteAnesth && document.visiteAnesth.date_visite_anesth.value == 'current'){
+			  $V(document.visiteAnesth.prat_visite_anesth_id, oForm.anesth_id.value);
+			}
   	}
   });
 }

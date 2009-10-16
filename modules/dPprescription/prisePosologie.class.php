@@ -42,6 +42,8 @@ class CPrisePosologie extends CMbMetaObject {
   var $_quantite_dispensation = null;
   var $_quantite_administrable = null; // Quantité de produit en unité d'administration
   var $_urgent = null;
+	var $_equivalence_unite_prise = null;
+	var $_view_unite_prise = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -75,15 +77,32 @@ class CPrisePosologie extends CMbMetaObject {
     return $backProps;
   }
  
+  function updateFormFields(){
+  	parent::updateFormFields();
+		
+		// Suppression de l'equivalence entre unite de prise à l'affichage
+    if(!$this->_view_unite_prise){
+			if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite_prise, $matches)){
+				$_quant = end($matches);
+				$nb = $this->quantite * $_quant;
+				$this->_view_unite_prise = str_replace($_quant, $nb, $this->unite_prise);
+	    }
+		}
+  }
+	
+	
   function loadRefsFwd() {
     parent::loadRefsFwd();
-    //$this->loadRefMoment();
     $this->_view = $this->quantite;
 
     if($this->object_class == "CPrescriptionLineElement"){
       $this->_view .= " ".$this->_ref_object->_unite_prise;
     } else {
-      $this->_view .= " ".$this->unite_prise;	
+    	if($this->_view_unite_prise){
+        $this->_view .= " ".$this->_view_unite_prise; 
+    	} else {
+        $this->_view .= " ".$this->unite_prise; 
+    	}
     }
     
     if($this->urgence_datetime){
