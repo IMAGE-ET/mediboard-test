@@ -39,7 +39,7 @@ SUB_DIR=$2
       SUB_PATH="style/*/templates_c/"
     else
       BASE_PATH="*"
-      SUB_PATH="lib/ tmp/ files/ includes/ modules/*/templates_c/ style/*/templates_c/ modules/dPinterop/hprim/ locales/*/"
+      SUB_PATH="lib/ tmp/ files/ includes/ modules/*/templates_c/ style/*/templates_c/ modules/hprimxml/xsd/ locales/*/"
     fi
   fi
 
