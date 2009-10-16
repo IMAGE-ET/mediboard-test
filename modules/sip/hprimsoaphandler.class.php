@@ -17,7 +17,11 @@ class CHprimSoapHandler extends CSoapHandler {
 
   static $paramSpecs = array(
     "evenementPatient" => array ( 
-      "messagePatient" => "string")
+      "messagePatient" => "string"),
+    "calculatorAuth" => array ( 
+      "operation" => "string",
+      "entier1"   => "int",
+      "entier2"   => "int")
   );
 
   static $codes = array(
@@ -148,8 +152,22 @@ class CHprimSoapHandler extends CSoapHandler {
     return $messageAcquittement;
   }
   
-  function calculatorAuth() {
+  function calculatorAuth($operation, $entier1, $entier2) {
+    $result = 0;
+    if (($operation != "add") || ($operation != "subtract")) {
+      return "Veuillez utiliser une méthode d'opération valable (add/subtract).";
+    } 
+    if (!$entier1 || !$entier2) {
+      return "Veuillez indiquer 2 entiers.";
+    } 
+    if ($operation == "add") {
+      $result = $entier1 + $entier2;
+    }
+    if ($operation == "subtract") {
+      $result = $entier1 -$entier2;
+    }
     
+    return $result;
   }
 }
 ?>
