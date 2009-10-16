@@ -165,7 +165,6 @@ var FormObserver = {
 
 function isKeyAllowed(event, allowed){
   var key = Event.key(event);
-  console.debug(key);
   if (!(key >= 48 && key <= 90 || 
         key >= 96 && key <= 111 || 
         key >= 186 && key <= 222)) return true;
@@ -280,7 +279,6 @@ function prepareForm(oForm, bForcePrepare) {
       // XOR modifications
       var xorFields, re = /xor(?:\|(\S+))+/g;
       while (xorFields = re.exec(oForm.className)) {
-      console.log(xorFields);
         xorFields = xorFields[1].split("|");
         xorFields.each(function(xorField){
           var element = $(oForm.elements[xorField]);

@@ -42,7 +42,7 @@ function main() {
     Main.init();
   }
   catch (e) {
-    errorHandler(e.extMessage || e.message || e.description , e.fileName, e.lineNumber, e);
+    errorHandler(e.extMessage || e.message || e.description || e, e.fileName, e.lineNumber, e);
   }
 }
 
