@@ -11,8 +11,17 @@
 global $can;
 $can->needsAdmin();
 
+$status = 0;
+$evenements = array(
+  'evt_serveuractes' => array("1.01", "1.05"),
+  'evt_pmsi'         => array("1.01", "1.05"),
+  'evt_patients'     => array("1.05"),
+);
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->display("configure.tpl");
+$smarty->assign("status"    , $status);
+$smarty->assign("evenements", $evenements);
 
+$smarty->display("configure.tpl");
 ?>

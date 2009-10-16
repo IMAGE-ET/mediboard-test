@@ -639,6 +639,22 @@ $dPconfig["webservices"] = array (
 	"webservice" => "",
 );
 
+$dPconfig["hprimxml"] = array (
+  "evt_serveuractes" => array(
+    "validation" => "0",
+    "version" => "1.01",
+  ),
+  "evt_pmsi" => array(
+    "validation" => "0",
+    "version" => "1.05",
+  ),
+  "evt_patients" => array(
+    "validation" => "0",
+    "version" => "1.05",
+  )
+);
+
+
 // Inclusion des fichiers de config de chaque module
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {

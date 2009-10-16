@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-
 class CWsdlDocument extends CMbXMLDocument {
   private $xsd = array("string"=>"string", "bool"=>"boolean", "boolean"=>"boolean",
                        "int"=>"integer", "integer"=>"integer", "double"=>"double", "float"=>"float", "number"=>"float",

@@ -7,12 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-
-if (!class_exists("CMbXMLDocument")) {
-  return;
-}
-
 global $aTypesAnesth;
 
 // tableau associatif pour les types d'anesthésie

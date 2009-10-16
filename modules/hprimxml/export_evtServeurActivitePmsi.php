@@ -7,11 +7,6 @@
 * @author Thomas Despoix
 */
 
-if (!class_exists("DOMDocument")) {
-  trigger_error("sorry, DOMDocument is needed");
-  return;
-}
-
 global $can, $m, $dPconfig;
 $can->needsRead();
 

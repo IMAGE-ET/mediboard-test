@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
+ * @subpackage hprimxml
  * @version $Revision: 6153 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -10,22 +10,34 @@
 
 global $AppUI, $can, $m;
 
-$action = mbGetValueFromGet("action");
+$evenement = mbGetValueFromGet("evenement");
+$version = CAppUI::conf("hprimxml $evenement version");
 
-switch ($action) {
-  case "evenementsServeurActes":
-    extractFiles("evenementsServeurActes" , "schemaServeurActe_v101.zip");
+switch ($evenement) {
+  case "evt_serveuractes":
+  	if ($version == "1.01") {
+  	  extractFiles("evenementsServeurActes" , "schemaServeurActe_v101.zip");
+  	} else if ($version == "1.05") {
+  	  extractFiles("evenementsServeurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+  	}
     break;
   
-  case "evenementsPmsi":
-    extractFiles("evenementsPmsi", "schemaPMSI_v101.zip" );
+  case "evt_pmsi":
+  	if ($version == "1.01") {
+      extractFiles("evenementsPmsi", "schemaPMSI_v101.zip" );
+    } else if ($version == "1.05") {
+      extractFiles("evenementsServeurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+    }
     
-  case "evenementsPatients":
-    extractFiles("evenementsPatients" , "schemaEvenementPatient_v105.zip");
+    
+  case "evt_patients":
+  	if ($version == "1.05") {
+      extractFiles("evenementsPatients" , "schemaEvenementPatient_v105.zip");
+    }
     break;
-
+   
   default:
-    echo "<div class='error'>Action '$action' inconnue</div>";
+    echo "<div class='error'>Action '$evenement' inconnue</div>";
 }
 
 function extractFiles($schemaDir, $schemaFile) {

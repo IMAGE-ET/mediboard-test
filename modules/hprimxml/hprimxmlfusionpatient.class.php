@@ -2,13 +2,13 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
- * @version $Revision: 6153 $
+ * @subpackage hprimxml
+ * @version $Revision:$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("sip", "hprimxmlevenementspatients");
+CAppUI::requireModuleClass("hprimxml", "hprimxmlevenementspatients");
 
 class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients { 
   function __construct() {            

@@ -7,14 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-CAppUI::requireModuleClass("dPinterop", "mbxmlschema");
-
-if (!class_exists("CMbXMLDocument") || !class_exists("CMbXMLSchema")) {
-  return;
-}
-
 class CEGateXMLSchema extends CMbXMLSchema {  
   function __construct() {
     parent::__construct();

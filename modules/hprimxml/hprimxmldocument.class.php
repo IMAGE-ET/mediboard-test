@@ -1,17 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-
-if (!class_exists("CMbXMLDocument")) {
-  return;
-}
+ * @package Mediboard
+ * @subpackage hprimxml
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 class CHPrimXMLDocument extends CMbXMLDocument {
   var $finalpath = "files/hprim";
@@ -26,16 +21,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $_destinataire          = null;
   var $_destinataire_libelle  = null;
    
-  function __construct($schemaname, $schemafilename = null, $module = null) {
+  function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
     
-    $this->patharchiveschema = $module ? "modules/".$module."/hprim" : "modules/dPinterop/hprim";
-    $this->schemapath = "$this->patharchiveschema/$schemaname";
+    $this->patharchiveschema = "modules/hprimxml/xsd";
+    $this->schemapath = "$this->patharchiveschema/$dirschemaname";
     $this->schemafilename = ($schemafilename) ? "$this->schemapath/$schemafilename.xsd" : "$this->schemapath/schema.xml";
     $this->documentfilename = "$this->schemapath/document.xml";
-    $this->finalpath .= "/$schemaname";
+    $this->finalpath .= "/$dirschemaname";
     
     $this->now = time();
+  }
+  
+  function schemaValidate($filename = null, $returnErrors = false) {
+    if (!CAppUI::conf("hprimxml evt_serveuractes validation") || 
+        !CAppUI::conf("hprimxml evt_pmi validation") ||
+        !CAppUI::conf("hprimxml evt_patients validation")) {
+      return true;
+    }
+    return parent::schemaValidate($filename, $returnErrors);
   }
   
   function checkSchema() {
@@ -43,7 +47,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       trigger_error("ServeurActe schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
       return false;
     }
-    
     
     if (!is_file($this->schemafilename)) {
       $schema = new CHPrimXMLSchema();
@@ -191,7 +194,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $acteCCAM;
   }
   
-  function addPatient($elParent, $mbPatient, $addPat = null, $referent = null) {
+  function addPatient($elParent, $mbPatient, $addPat = null, $referent = null, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     $pat = $addPat ? "pat" : "";
     
@@ -207,10 +210,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }  
     
     // Ajout typePersonnePhysique
-    $this->addPersonnePhysique($elParent, $mbPatient);
+    $this->addPersonnePhysique($elParent, $mbPatient, $light);
   }
   
-  function addPersonnePhysique($elParent, $mbPatient) {
+  function addPersonnePhysique($elParent, $mbPatient, $light = false) {
     $personnePhysique = $this->addElement($elParent, "personnePhysique");
     
     $sexeConversion = array (
@@ -221,7 +224,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
     
     // Ajout typePersonne
-    $this->addPersonne($personnePhysique, $mbPatient);
+    $this->addPersonne($personnePhysique, $mbPatient ,$light);
     
     $dateNaissance = $this->addElement($personnePhysique, "dateNaissance");
     $this->addElement($dateNaissance, "date", $mbPatient->naissance);
@@ -232,7 +235,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
   }
   
-  function addPersonne($elParent, $mbPersonne) {
+  function addPersonnePhysiqueLight($elParent, $mbPatient) {
+    
+  }
+  
+  function addPersonne($elParent, $mbPersonne, $light = false) {
     $personne = array();
     $civiliteHprimConversion = array (
       "mme"   => "mme",
@@ -253,18 +260,24 @@ class CHPrimXMLDocument extends CMbXMLDocument {
           }
         }
       }
-      $personne['civilite'] = $mbPersonne->civilite;
+      if (!$light) {
+        $personne['civilite'] = $mbPersonne->civilite;
+      }
       $personne['ligne'] = $mbPersonne->adresse;
       $personne['ville'] = $mbPersonne->ville;
       $personne['pays'] = $mbPersonne->pays_insee;
       $personne['codePostal'] = $mbPersonne->cp;
       $personne['tel'] = $mbPersonne->tel;
       $personne['tel2'] = $mbPersonne->tel2;
-      $personne['email'] = $mbPersonne->email;
+      if (!$light) {
+        $personne['email'] = $mbPersonne->email;
+      }
     } else if ($mbPersonne instanceof CMedecin) {
       $personne['nom'] = $mbPersonne->nom;
       $personne['nomNaissance'] = $mbPersonne->jeunefille;
-      $personne['civilite'] = "";
+      if (!$light) {
+        $personne['civilite'] = "";
+      }
       $personne['prenoms'][] = $mbPersonne->prenom;
       $personne['ligne'] = $mbPersonne->adresse;
       $personne['ville'] = $mbPersonne->ville;
@@ -272,11 +285,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $personne['pays'] = "";
       $personne['tel'] = $mbPersonne->tel;
       $personne['tel2'] = $mbPersonne->portable;
-      $personne['email'] = $mbPersonne->email;
+      if (!$light) {
+        $personne['email'] = $mbPersonne->email;
+      }
     } else if ($mbPersonne instanceof CMediusers) {
       $personne['nom'] = $mbPersonne->_user_last_name;
       $personne['nomNaissance'] = "";
-      $personne['civilite'] = "";
+      if (!$light) {
+        $personne['civilite'] = "";
+      }
       $personne['prenoms'][] = $mbPersonne->_user_first_name;
       $personne['ligne'] = $mbPersonne->_user_adresse;
       $personne['ville'] = $mbPersonne->_user_ville;
@@ -284,7 +301,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $personne['pays'] = "";
       $personne['tel'] = $mbPersonne->_user_phone;
       $personne['tel2'] = "";
-      $personne['email'] = $mbPersonne->_user_email;
+      if (!$light) {
+        $personne['email'] = $mbPersonne->_user_email;
+      }
     }
     
     $this->addTexte($elParent, "nomUsuel", $personne['nom']);
@@ -293,9 +312,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     foreach ($personne['prenoms'] as $prenom) {
       $this->addTexte($prenoms, "prenom", $prenom);
     }
-    if ($personne['civilite']) {
-      $civiliteHprim = $this->addElement($elParent, "civiliteHprim");
-      $this->addAttribute($civiliteHprim, "valeur", $civiliteHprimConversion[$personne['civilite']]);    
+    if (!$light) {
+      if ($personne['civilite']) {
+        $civiliteHprim = $this->addElement($elParent, "civiliteHprim");
+        $this->addAttribute($civiliteHprim, "valeur", $civiliteHprimConversion[$personne['civilite']]);    
+      }
     }
     $adresses = $this->addElement($elParent, "adresses");
     $adresse = $this->addElement($adresses, "adresse");
@@ -308,8 +329,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($telephones, "telephone", $personne['tel']);
     $this->addElement($telephones, "telephone", $personne['tel2']);
     
-    $emails = $this->addElement($elParent, "emails");
-    $this->addElement($emails, "email", $personne['email']);
+    if (!$light) {
+      $emails = $this->addElement($elParent, "emails");
+      $this->addElement($emails, "email", $personne['email']);
+    }
   }
   
   function addErreurAvertissement($elParent, $statut, $code, $libelle, $commentaires = null, $mbObject = null) {

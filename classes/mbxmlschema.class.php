@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 class CMbXMLSchema extends CMbXMLDocument {
   function addSchemaPart($filePath) {

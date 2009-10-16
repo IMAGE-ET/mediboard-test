@@ -1,28 +1,27 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-
-if (!class_exists("CHPrimXMLDocument")) {
-  return;
-}
+ * @package Mediboard
+ * @subpackage hprimxml
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 class CHPrimXMLServeurActes extends CHPrimXMLDocument {
   function __construct() {
-    parent::__construct("serveurActes", "msgEvenementsServeurActes101", "dPinterop");
+    $version = CAppUI::conf('hprimxml evt_pmsi version');
+    if ($version == "1.01") {
+      parent::__construct("evenementsServeurActes", "msgEvenementsServeurActes101");
+    } else if ($version == "1.05") {
+      parent::__construct("evenementsServeurActivitePmsi", "msgEvenementsPmsi105");
+    }
     global $AppUI, $g;
         
     $evenementsServeurActes = $this->addElement($this, "evenementsServeurActes", null, "http://www.hprim.org/hprimXML");
-    $this->addAttribute($evenementsServeurActes, "version", "1.01");
+    $this->addAttribute($evenementsServeurActes, "version", $version);
 
     $enteteMessage = $this->addElement($evenementsServeurActes, "enteteMessage");
-    $this->addAttribute($enteteMessage, "modeTraitement", "test"); // A supprimer pour un utilisation réelle
     $this->addElement($enteteMessage, "identifiantMessage", "ES{$this->now}");
     $this->addDateTimeElement($enteteMessage, "dateHeureProduction");
     
@@ -54,7 +53,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     // Ajout du patient
     $mbPatient =& $mbOp->_ref_sejour->_ref_patient;
     $patient = $this->addElement($evenementServeurActe, "patient");
-    $this->addPatient($patient, $mbPatient, true);
+    $this->addPatient($patient, $mbPatient, true, null, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $mbSejour =& $mbOp->_ref_sejour;
@@ -85,11 +84,11 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbSortie);
     
-    $placement = $this->addElement($venue, "Placement");
+    /*$placement = $this->addElement($venue, "Placement");
     $modePlacement = $this->addElement($placement, "modePlacement");
     $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbSejour->modalite);
     $datePlacement = $this->addElement($placement, "datePlacement");
-    $this->addDateHeure($datePlacement, $mbEntree);
+    $this->addDateHeure($datePlacement, $mbEntree);*/
     
     // Ajout de l'intervention
     $intervention = $this->addElement($evenementServeurActe, "intervention");
@@ -144,7 +143,5 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
 }
-
 ?>

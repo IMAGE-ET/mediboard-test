@@ -1,28 +1,27 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-
-if (!class_exists("CHPrimXMLDocument")) {
-  return;
-}
+ * @package Mediboard
+ * @subpackage hprimxml
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
   function __construct() {
-    parent::__construct("evenementPmsi", "msgEvenementsPmsi101", "dPinterop");
+    $version = CAppUI::conf('hprimxml evt_pmsi version');
+    if ($version == "1.01") {
+      parent::__construct("evenementsPmsi", "msgEvenementsPmsi101");
+    } else if ($version == "1.05") {
+      parent::__construct("evenementsServeurActivitePmsi", "msgEvenementsPmsi105");
+    }   
     global $AppUI, $g;
         
     $evenementsPMSI = $this->addElement($this, "evenementsPMSI", null, "http://www.hprim.org/hprimXML");
-    $this->addAttribute($evenementsPMSI, "version", "1.01");
+    $this->addAttribute($evenementsPMSI, "version", $version);
 
     $enteteMessage = $this->addElement($evenementsPMSI, "enteteMessage");
-    $this->addAttribute($enteteMessage, "modeTraitement", "test"); // A supprimer pour un utilisation réelle
     $this->addElement($enteteMessage, "identifiantMessage", "EP{$this->now}");
     $this->addDateTimeElement($enteteMessage, "dateHeureProduction");
     
@@ -30,13 +29,13 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $agents = $this->addElement($emetteur, "agents");
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
-    $this->addAgent($agents, "système", $group->text, $group->text);
+    $this->addAgent($agents, "système", $group->_id, $group->text);
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
     $this->addAgent($agents, "application", "SANTEcom", "Siemens Health Services: S@NTE.com");
-    $this->addAgent($agents, "système", $group->text, $group->text);
+    $this->addAgent($agents, "système", $group->_id, $group->text);
   }
   
   function setFinalPrefix($mbSej) {
@@ -54,7 +53,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $mbPatient =& $mbSej->_ref_patient;
     
     $patient = $this->addElement($evenementPMSI, "patient");
-    $this->addPatient($patient, $mbPatient, true);
+    $this->addPatient($patient, $mbPatient, true, null, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementPMSI, "venue");
@@ -84,11 +83,11 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbSortie);
     
-    $placement = $this->addElement($venue, "Placement");
+    /*$placement = $this->addElement($venue, "Placement");
     $modePlacement = $this->addElement($placement, "modePlacement");
     $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbSej->modalite);
     $datePlacement = $this->addElement($placement, "datePlacement");
-    $this->addDateHeure($datePlacement, $mbEntree);
+    $this->addDateHeure($datePlacement, $mbEntree);*/
     
     // Ajout de la saisie délocalisée
     $saisie = $this->addElement($evenementPMSI, "saisieDelocalisee");
@@ -132,7 +131,5 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
 }
-
 ?>

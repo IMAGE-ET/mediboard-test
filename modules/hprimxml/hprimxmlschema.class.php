@@ -1,18 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Thomas Despoix
-*/
-
-CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
-CAppUI::requireModuleClass("dPinterop", "mbxmlschema");
-
-if (!class_exists("CMbXMLDocument") || !class_exists("CMbXMLSchema")) {
-  return;
-}
+ * @package Mediboard
+ * @subpackage hprimxml
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 class CHPrimXMLSchema extends CMbXMLSchema {
   function __construct() {

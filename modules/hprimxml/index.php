@@ -10,4 +10,6 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
+$module->registerTab("export_evtServeurActivitePmsi", null, TAB_READ);
+
 ?>

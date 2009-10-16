@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("sip", "hprimxmlevenementspatients");
+CAppUI::requireModuleClass("hprimxml", "hprimxmlevenementspatients");
 
 class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients { 
   function __construct() {            

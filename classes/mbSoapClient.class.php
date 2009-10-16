@@ -87,7 +87,7 @@ class CMbSOAPClient extends SoapClient {
 	    if (preg_match('#\%p#', $rooturl)) 
 	      $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
   	}
-    
+
     if (!$client = new CMbSOAPClient($rooturl, $type, $options)) {
       trigger_error("Instanciation du SoapClient impossible.");
     }

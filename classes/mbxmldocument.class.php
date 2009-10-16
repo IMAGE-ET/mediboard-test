@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage classes
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 if (!class_exists("DOMDocument")) {
   return;
@@ -113,10 +114,6 @@ class CMbXMLDocument extends DOMDocument {
    * @return boolean  
    */
   function schemaValidate($filename = null, $returnErrors = false) {
-    if (!CAppUI::conf("dPinterop hprim_export validation")) {
-      return true;
-    }
-    
     if (!$filename) {
       $filename = $this->schemafilename;
     }

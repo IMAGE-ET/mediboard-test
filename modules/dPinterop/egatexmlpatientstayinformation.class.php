@@ -7,12 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-CAppUI::requireModuleClass("dPinterop", "egatexmldocument");
-
-if (!class_exists("CEGateXMLDocument")) {
-  return;
-}
-
 class CEGateXMLPatientStayInformation extends CEGateXMLDocument {
   function __construct() {
     parent::__construct("patientstayinformation");

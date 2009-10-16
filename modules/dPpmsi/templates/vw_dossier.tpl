@@ -53,7 +53,7 @@ function exporterHPRIM(object_id, typeObject, oOptions) {
   Object.extend(oDefaultOptions, oOptions);
   
   var url = new Url();
-  url.setModuleAction("dPinterop", "export_hprim");
+  url.setModuleAction("hprimxml", "export_evtServeurActivitePmsi");
   url.addParam("object_id", object_id);
   url.addParam("typeObject", typeObject);
   url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
