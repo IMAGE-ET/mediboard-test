@@ -15,13 +15,11 @@
  */
 
 class CNote extends CMbMetaObject {
-
   // DB Table key
   var $note_id = null;	
   
   // DB Fields
   var $user_id      = null;
-  
   var $public       = null;
   var $degre        = null;
   var $date         = null;
@@ -65,16 +63,15 @@ class CNote extends CMbMetaObject {
       $this->_ref_object->getPerm($perm) && $this->_ref_user->getPerm($perm);
   }
   
-  function loadNotesForObject($object, $perm = PERM_READ) {
-    $key = $object->_spec->key;
-    $where["object_class"]     = "= '".get_class($object)."'";
-    $where["object_id"] = "= '".$object->$key."'";
+  static function loadNotesForObject($object, $perm = PERM_READ) {
+    $where = array(
+      "object_class" => "= '$object->_class_name'",
+      "object_id"    => "= '$object->_id'",
+    );
     $order = "degre DESC, date DESC";
-    $listNote = new CNote();
-    $listNote = $listNote->loadListWithPerms($perm, $where, $order);
-    return $listNote;
+    $note = new CNote();
+    return $note->loadListWithPerms($perm, $where, $order);
   }
-  
 }
 
 ?>

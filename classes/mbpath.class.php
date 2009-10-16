@@ -12,7 +12,7 @@
 require_once ("Archive/Tar.php");
 require_once ("Archive/Zip.php");
 
-class CMbPath {
+abstract class CMbPath {
   /**
    * Ensures a directory exists by building all tree sub-diriectories if possible
    * @param string $dir directory path
@@ -29,7 +29,7 @@ class CMbPath {
       return true;
     }
     
-    if (CMbPath::forceDir(dirname($dir))) {
+    if (self::forceDir(dirname($dir))) {
       return mkdir($dir, $mode);
     }
   
@@ -69,12 +69,12 @@ class CMbPath {
     while ($node = readdir($dh)) {
       $path = "$dir/$node";
       if (is_dir($path) and $node != "." and $node != "..") {
-        $removedDirsCount += CMbPath::purgeEmptySubdirs($path);
+        $removedDirsCount += self::purgeEmptySubdirs($path);
       }
     }
     closedir($dh);
     
-    if (CMbPath::isEmptyDir($dir)) {
+    if (self::isEmptyDir($dir)) {
       if (rmdir($dir)) {
         mbTrace($dir, "Removed directory");
         $removedDirsCount++;
@@ -99,13 +99,13 @@ class CMbPath {
       return false;
     }
     
-    if (!CMbPath::forceDir($destinationDir)) {
+    if (!self::forceDir($destinationDir)) {
       trigger_error("Destination directory not existing", E_USER_WARNING);
       return false;
     }
     
     $nbFiles = 0;
-    switch (CMbPath::getExtension($archivePath)) {
+    switch (self::getExtension($archivePath)) {
       case "gz"  :
       case "tgz" : 
       $archive = new Archive_Tar($archivePath);
@@ -136,7 +136,7 @@ class CMbPath {
 	  }
 	  
 	  while (false !== $item = $dir->read()) {
-	    if ($item != '.' && $item != '..' && !CMbPath::remove($dir->path . DIRECTORY_SEPARATOR . $item)) {
+	    if ($item !== '.' && $item !== '..' && !self::remove($dir->path . DIRECTORY_SEPARATOR . $item)) {
 	      $dir->close();
 	      return false;
 	    }
@@ -155,7 +155,7 @@ class CMbPath {
 	  }
 	  
 	  if (is_dir ($path)) {
-	    if (CMbPath::emptyDir($path)) {
+	    if (self::emptyDir($path)) {
 	      return rmdir ($path);
 	    }
 	    return false;

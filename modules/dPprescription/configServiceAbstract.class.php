@@ -20,13 +20,11 @@ class CConfigServiceAbstract extends CMbObject {
   }
   
   function setConfigService($name, $config){
-    global $shm;
-		$shm->put($name, $config);
+		SHM::put($name, $config);
   }  
   
   function getConfigService($name){
-    global $shm;
-    return $shm->get($name);
+    return SHM::get($name);
   }
 }
 

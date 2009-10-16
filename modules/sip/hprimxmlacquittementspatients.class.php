@@ -23,8 +23,6 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
 
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
-    global $AppUI, $g, $m;
-
     $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
     $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");

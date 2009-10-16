@@ -19,6 +19,9 @@ if (!is_file("./includes/config.php")) {
 
 require("./includes/config_dist.php");
 require("./includes/config.php");
+
+$rootName = basename($dPconfig["root_dir"]);
+
 require("./includes/version.php");
 require("./includes/compat.php");
 require("./classes/sharedmemory.class.php");

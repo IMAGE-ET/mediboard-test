@@ -9,7 +9,7 @@
  */
  
 // Load AppUI from session
-$rootName = basename(CAppUI::conf("root_dir"));
+global $rootName;
 
 // Manage the session variable(s)
 session_name("$rootName-session");

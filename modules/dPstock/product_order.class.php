@@ -216,12 +216,10 @@ class CProductOrder extends CMbObject {
   }
   
   function getUniqueNumber() {
-  	global $AppUI;
-  	
-  	$format = $AppUI->conf('dPstock CProductOrder order_number_format');
+  	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
   	
   	if (!preg_match('#\%id#', $format)) {
-  		$AppUI->setMsg('format de numéro de serie incorrect');
+  		CAppUI::setMsg('format de numéro de serie incorrect');
   		return;
   	}
   	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);
@@ -304,8 +302,6 @@ class CProductOrder extends CMbObject {
 	}
 	
 	function delete() {
-		global $AppUI;
-		
 		$this->updateFormFields();
 		if ((count($this->_ref_order_items) == 0) || !$this->date_ordered) {
 			return parent::delete();

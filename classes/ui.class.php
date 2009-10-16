@@ -602,10 +602,10 @@ class CAppUI {
    * @param string $name of the user preference
    * @return string The value
    */
-  static function pref($name = null) {
+  static function pref($name = null, $default = null) {
     $prefs = self::$instance->user_prefs;
     if (!$name) return $prefs;
-    return isset($prefs[$name]) ? $prefs[$name] : null; 
+    return isset($prefs[$name]) ? $prefs[$name] : $default; 
   }
 
   /**

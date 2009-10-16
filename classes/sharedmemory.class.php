@@ -9,7 +9,7 @@
  */
 
 // Use $dPconfig for both application and install wizard to use it
-global $dPconfig;
+global $dPconfig, $rootName;
 require_once "{$dPconfig['root_dir']}/classes/mbpath.class.php";
 
 /**
@@ -51,9 +51,8 @@ interface ISharedMemory {
   //function clear();
 }
 
-
 class DiskSharedMemory implements ISharedMemory {
-  var $dir = null;
+  private $dir = null;
 
   function __construct() {
     global $dPconfig;
@@ -61,7 +60,11 @@ class DiskSharedMemory implements ISharedMemory {
   }
 
   function isReady() {
-    return CMbPath::forceDir($this->dir);
+    if (!CMbPath::forceDir($this->dir)) {
+      trigger_error("Shared memory could not be initialized, ensure that '$this->dir' is writable");
+      CApp::rip();
+    }
+    return true;
   }
 
   function get($key) {
@@ -93,7 +96,7 @@ class DiskSharedMemory implements ISharedMemory {
   	echo "<div class='message'>Entrée <i>$filename</i> supprimée</div>";
   	}
   	return $ok;
-  	}*/
+  }*/
 }
 
 
@@ -101,7 +104,6 @@ class DiskSharedMemory implements ISharedMemory {
  * EAccelerator based Memory class
  */
 class EAcceleratorSharedMemory implements ISharedMemory {
-
   function isReady() {
     return (function_exists('eaccelerator_get') &&
     function_exists('eaccelerator_put') &&
@@ -109,55 +111,30 @@ class EAcceleratorSharedMemory implements ISharedMemory {
   }
 
   function get($key) {
-    global $rootName;
-    $key = "$rootName-$key";
-
-    if (function_exists('eaccelerator_get')) {
-      if ($get = eaccelerator_get($key)) {
-        return unserialize($get);
-      }
+    if ($get = eaccelerator_get($key)) {
+      return unserialize($get);
     }
-
-    return null;
+    return false;
   }
 
   function put($key, $value) {
-    global $rootName;
-    $key = "$rootName-$key";
-
-    if (function_exists('eaccelerator_put')) {
-      return eaccelerator_put($key, serialize($value));
-    }
-
-    return false;
+    return eaccelerator_put($key, serialize($value));
   }
 
   function rem($key) {
-    global $rootName;
-    $key = "$rootName-$key";
-
-    if (function_exists('eaccelerator_rm')) {
-      return eaccelerator_rm($key);
-    }
-
-    return false;
+    return eaccelerator_rm($key);
   }
 
   /*function clear() {
-   if (function_exists('eaccelerator_clear')) {
-   eaccelerator_clear();
-   return true;
-   }
-   return false;
-   }*/
+  eaccelerator_clear();
+    return true;
+  }*/
 }
-
 
 /**
  * Alternative PHP Cache (APC) based Memory class
  */
 class APCSharedMemory implements ISharedMemory {
-
   function isReady() {
     return (function_exists('apc_fetch') &&
     function_exists('apc_store') &&
@@ -165,65 +142,56 @@ class APCSharedMemory implements ISharedMemory {
   }
 
   function get($key) {
-    global $rootName;
-    $key = "$rootName-$key";
-
-    if (function_exists('apc_fetch')) {
-      return apc_fetch($key);
-    }
-
-    return false;
+    return apc_fetch($key);
   }
 
   function put($key, $value) {
-    global $rootName;
-    $key = "$rootName-$key";
-
-    if (function_exists('apc_store')) {
-      return apc_store($key, $value);
-    }
-
-    return false;
+    return apc_store($key, $value);
   }
 
   function rem($key) {
-    global $rootName;
-    $key = "$rootName-$key";
-
-    if (function_exists('apc_delete')) {
-      return apc_delete($key);
-    }
-
-    return false;
+    return apc_delete($key);
   }
 
   /*function clear() {
-  	if (function_exists('apc_clear_cache')) {
   	return apc_clear_cache('user');
-  	}
-  	return false;
-  	}*/
+  }*/
 }
 
+/** Shared memory container */
+abstract class SHM {
+  static private $engine = null;
+  static private $prefix = null;
+  static $availableEngines = array(
+    "disk"         => "DiskSharedMemory",
+    "eaccelerator" => "EAcceleratorSharedMemory",
+    "apc"          => "APCSharedMemory",
+  );
+  
+  static function init($engine = "disk", $prefix = "") {
+    if (!isset(self::$availableEngines[$engine])) {
+      $engine = "disk";
+    }
+    $engine = new self::$availableEngines[$engine];
+    if (!$engine->isReady()) {
+      $engine = new self::$availableEngines["disk"];
+    }
 
-// Shared Memory instance factory
-switch ($dPconfig['shared_memory']) {
-  case 'none' :
-    $shm = new DiskSharedMemory;
-    break;
-
-  case 'eaccelerator' :
-    $shm = new EAcceleratorSharedMemory;
-    break;
-
-  case 'apc' :
-    $shm = new APCSharedMemory;
-    break;
-
-  default:
-    trigger_error('Mode de mémoire partagée non reconnu', E_USER_ERROR);
-    $shm = new DiskSharedMemory;
+    self::$prefix = "$prefix-";
+    self::$engine = $engine;
+  }
+  
+  static function get($key) {
+    return self::$engine->get(self::$prefix.$key);
+  }
+  
+  static function put($key, $value) {
+    return self::$engine->put(self::$prefix.$key, $value);
+  }
+  
+  static function rem($key) {
+    return self::$engine->rem(self::$prefix.$key);
+  }
 }
 
-
-?>
+SHM::init($dPconfig['shared_memory'], $rootName);

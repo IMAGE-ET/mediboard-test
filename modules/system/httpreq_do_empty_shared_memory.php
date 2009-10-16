@@ -10,7 +10,7 @@
 
 // This script has to be launched via installer
 // DO NOT USE $AppUI facilities
-global $shm, $can;
+global $can;
 
 // Only check permissions when connected to mediboard, not to the installer
 if ($can) {
@@ -22,12 +22,12 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $sharedName = "locales-$localeName";
   
-  if (!$shm->get($sharedName)) {
+  if (!SHM::get($sharedName)) {
     echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
     continue;
   } 
   
-  if (!$shm->rem($sharedName)) {
+  if (!SHM::rem($sharedName)) {
     echo "<div class='error'>Impossible de supprimer la table pour langage '$localeName'</div>";
     continue;
   }
@@ -36,12 +36,12 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
 }
 
 // Remove class paths
-if (!$shm->get("class-paths")) {
+if (!SHM::get("class-paths")) {
   echo "<div class='message'>Table des classes absente en mémoire</div>";
   return;
-}      
+}
   
-if (!$shm->rem("class-paths")) {
+if (!SHM::rem("class-paths")) {
   echo "<div class='error'>Impossible de supprimer la table des classes</div>";
   return;
 }

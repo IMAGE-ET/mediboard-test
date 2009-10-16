@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $shm, $version;
+global $AppUI, $can, $m, $version;
 
 $can->needsEdit();
 
@@ -36,7 +36,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     continue;
   }
 
-  if (null == $sharedLocale = $shm->get("locales-$localeName")) {
+  if (null == $sharedLocale = SHM::get("locales-$localeName")) {
     echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
     continue;
   }      
@@ -57,7 +57,7 @@ foreach($classNames as $className) {
   $classPaths[$className] = $class->getFileName();
 }
 
-if (null == $sharedClassPaths = $shm->get("class-paths")) {
+if (null == $sharedClassPaths = SHM::get("class-paths")) {
   echo "<div class='message'>Table des classes absente en mémoire</div>";
   return;
 }      

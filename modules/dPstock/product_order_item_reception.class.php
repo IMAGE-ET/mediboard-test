@@ -81,7 +81,7 @@ class CProductOrderItemReception extends CMbObject {
       $stock->quantity += $this->quantity * $product->_unit_quantity;
     }
     else {
-      global $AppUI, $g;
+      global $g;
       $qty = $this->quantity * $product->_unit_quantity;
       $stock = new CProductStockGroup();
       $stock->product_id = $product->_id;
@@ -89,7 +89,7 @@ class CProductOrderItemReception extends CMbObject {
       $stock->quantity = $qty;
       $stock->order_threshold_min = $qty;
       $stock->order_threshold_max = $qty * 2;
-      $AppUI->setMsg('Un nouveau stock pour ['.$product->_view.'] a été créé', UI_MSG_OK);
+      CAppUI::setMsg('Un nouveau stock pour ['.$product->_view.'] a été créé', UI_MSG_OK);
     }
     if ($msg = $stock->store()) {
       return $msg;

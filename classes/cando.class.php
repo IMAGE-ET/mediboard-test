@@ -21,8 +21,8 @@ class CCanDo {
   
   function redirect($a = "access_denied", $params = null){
     global $actionType;
-    
-    // on passa a null soit "tab" soit "a" selon ou l'on se trouve
+
+    // on passe a null soit "tab" soit "a" selon ou l'on se trouve
     mbSetValueToSession($actionType);
     
     if($this->setValues){

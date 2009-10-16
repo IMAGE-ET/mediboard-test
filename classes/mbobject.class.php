@@ -178,14 +178,13 @@ class CMbObject {
    */
   function loadRefsNotes($perm = PERM_READ) {
     $this->_ref_notes = array();
-	  $this->_high_notes = "0";
+	  $this->_high_notes = false;
     
     if ($this->_id) {
-      $note = new CNote();
-      $this->_ref_notes = $note->loadNotesForObject($this, $perm);
+      $this->_ref_notes = CNote::loadNotesForObject($this, $perm);
       foreach($this->_ref_notes as $_note) {
-        if ($_note->degre == "high") {
-	        $this->_high_notes = "1";
+        if ($_note->degre === "high") {
+	        $this->_high_notes = true;
 	        break;
         }
       }

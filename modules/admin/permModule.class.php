@@ -64,15 +64,13 @@ class CPermModule extends CMbObject {
   // Chargement des droits du user
   static function loadExactPerms($user_id = null){
     $perm = new CPermModule;
-    $listPermsModules = array();
-    $where = array();
-    $where["user_id"] = "= '$user_id'";
-    return $listPermsModules = $perm->loadList($where);
+    $where = array(
+      "user_id" => "= '$user_id'"
+    );
+    return $perm->loadList($where);
   }
   
-  
   static function loadUserPerms($user_id = null) {
-    
     global $AppUI, $userPermsModules, $permissionSystemeDown;
     
     if($permissionSystemeDown) {
@@ -103,17 +101,16 @@ class CPermModule extends CMbObject {
     
     // Creation du tableau de droit de permsSelf
     foreach($permsSelf as $key => $value){
-      $tabModSelf["mod_".$value->mod_id] = $value;
+      $tabModSelf["mod_$value->mod_id"] = $value;
     }
     
     // Creation du tableau de droit de permsProfil
     foreach($permsProfil as $key => $value){
-      $tabModProfil["mod_".$value->mod_id] = $value;
+      $tabModProfil["mod_$value->mod_id"] = $value;
     }
     
     // Fusion des deux tableaux de droits
     $tabModFinal = array_merge($tabModProfil, $tabModSelf);
-    
     
     // Creation du tableau de fusion des droits
     foreach($tabModFinal as $mod => $value){
@@ -148,11 +145,11 @@ class CPermModule extends CMbObject {
   }
   
   static function getPermModule($mod_id, $permType, $user_id = null) {
-    return (CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id));
+    return CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id);
   }
   
   static function getViewModule($mod_id, $permType, $user_id = null) {
-    return(CPermModule::getInfoModule("view", $mod_id, $permType, $user_id));
+    return CPermModule::getInfoModule("view", $mod_id, $permType, $user_id);
   }
   
   static function getInfoModule($field, $mod_id, $permType, $user_id = null) {

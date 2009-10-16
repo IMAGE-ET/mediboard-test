@@ -128,8 +128,6 @@ class CProductOrderItem extends CMbObject {
   }
 
   function store() {
-    global $AppUI;
-    
     $this->loadRefsFwd();
     
     if($this->order_id && $this->reference_id && !$this->_id) {
@@ -151,7 +149,7 @@ class CProductOrderItem extends CMbObject {
     if ($stock = $this->getStock()) {
       $stock->loadRefOrders();
       if ($stock->_zone_future > 2) {
-        $AppUI->setMsg('Attention : le stock optimum risque d\'être dépassé', UI_MSG_WARNING);
+        CAppUI::setMsg('Attention : le stock optimum risque d\'être dépassé', UI_MSG_WARNING);
       }
     }
     

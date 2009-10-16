@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $locale_char_set, $uistyle, $messages, $dPconfig, $version;
+global $can, $m, $uistyle, $messages, $dPconfig, $version;
 
 $can->needsRead();
 
@@ -61,9 +61,9 @@ if($indexFile){
   $smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all",1));
   $smartyStyle->assign("mediboardScript"      , mbLoadScripts(1));
   $smartyStyle->assign("messages"             , $messages);
-  $smartyStyle->assign("debugMode"            , @$AppUI->user_prefs["INFOSYSTEM"]);
+  $smartyStyle->assign("debugMode"            , CAppUI::pref("INFOSYSTEM"));
   $smartyStyle->assign("configOffline"        , $configOffline);
-  $smartyStyle->assign("errorMessage"         , $AppUI->getMsg());
+  $smartyStyle->assign("errorMessage"         , CAppUI::getMsg());
   $smartyStyle->assign("uistyle"              , $uistyle);
   
   ob_start();

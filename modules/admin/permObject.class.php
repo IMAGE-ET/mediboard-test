@@ -9,9 +9,9 @@
  */
 
 if(!defined("PERM_DENY")) {
-  define("PERM_DENY" , "0");
-  define("PERM_READ" , "1");
-  define("PERM_EDIT" , "2");
+  define("PERM_DENY" , 0);
+  define("PERM_READ" , 1);
+  define("PERM_EDIT" , 2);
 }
 
 /**
@@ -39,7 +39,7 @@ class CPermObject extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["user_id"]      = "ref notNull class|CUser cascade";
     $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
     $specs["object_class"] = "str notNull";
@@ -65,10 +65,10 @@ class CPermObject extends CMbObject {
   // Chargement des droits du user
   static function loadExactPermsObject($user_id = null){
     $perm = new CPermObject;
-    $listPermsObjects = array();
-    $where = array();
-    $where["user_id"] = "= '$user_id'";
-    return $listPermsObject = $perm->loadList($where);
+    $where = array(
+      "user_id" => "= '$user_id'"
+    );
+    return $perm->loadList($where);
   }
   
   // Those functions are statics
@@ -87,28 +87,24 @@ class CPermObject extends CMbObject {
     }
 
     //Declaration des tableaux de droits 
-    $permsObjectProfil = array();
-    $permsObjectSelf = array();
     $permsObjectFinal = array();
     
     // Declaration des tableaux de droits
     $tabObjectProfil = array();
     $tabObjectSelf = array();
-    $tabObjectFinal = array();
     
     //Chargement des droits
-    
     $permsObjectSelf = CPermObject::loadExactPermsObject($user->user_id);
     
     // Creation du tableau de droits du user
     foreach($permsObjectSelf as $key => $value){
-      $tabObjectSelf["obj_".$value->object_id.$value->object_class] = $value;
+      $tabObjectSelf["obj_$value->object_id$value->object_class"] = $value;
     }
     
     // Creation du tableau de droits du profil
     $permsObjectProfil = CPermObject::loadExactPermsObject($user->profile_id);
     foreach($permsObjectProfil as $key => $value){
-      $tabObjectProfil["obj_".$value->object_id.$value->object_class] = $value;
+      $tabObjectProfil["obj_$value->object_id$value->object_class"] = $value;
     }
     
     // Fusion des deux tableaux de droits
@@ -133,13 +129,14 @@ class CPermObject extends CMbObject {
     return $userPermsObjects;
   }
   
-  static function getPermObject($object, $permType) {
+  static function getPermObject(CMbObject $object, $permType) {
     global $userPermsObjects, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
     }
+
     $result = PERM_DENY;
-    $object_class = get_class($object);
+    $object_class = $object->_class_name;
     $object_id    = $object->_id;
     if(isset($userPermsObjects[$object_class][0]) || isset($userPermsObjects[$object_class][$object_id])) {
       if(isset($userPermsObjects[$object_class][0])) {
@@ -155,14 +152,15 @@ class CPermObject extends CMbObject {
   }
   
   function check() {
-    // Data checking
     $msg = null;
+    $ds = $this->_spec->ds;
+    
     if(!$this->perm_object_id) {
       $where = array();
-      $where["user_id"]      = $this->_spec->ds->prepare("= %",$this->user_id);
-      $where["object_class"] = $this->_spec->ds->prepare("= %",$this->object_class);
+      $where["user_id"]      = $ds->prepare("= %",$this->user_id);
+      $where["object_class"] = $ds->prepare("= %",$this->object_class);
       if($this->object_id){
-        $where["object_id"]    = $this->_spec->ds->prepare("= %",$this->object_id);
+        $where["object_id"]    = $ds->prepare("= %",$this->object_id);
       }else{
         $where["object_id"]    = "IS NULL";
       }
@@ -172,7 +170,7 @@ class CPermObject extends CMbObject {
       $sql->addTable("perm_object");
       $sql->addWhere($where);
       
-      $nb_result = $this->_spec->ds->loadResult($sql->getRequest());
+      $nb_result = $ds->loadResult($sql->getRequest());
       
       if($nb_result){
         $msg.= "Une permission sur cet objet existe déjà.<br />";
