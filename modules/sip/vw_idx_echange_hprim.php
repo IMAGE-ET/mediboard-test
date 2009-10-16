@@ -18,8 +18,8 @@ $statut_acquittement = mbGetValueFromGetOrSession("statut_acquittement");
 $type_evenement      = mbGetValueFromGetOrSession("type_evenement");
 $page                = mbGetValueFromGet('page', 1);
 $now                 = mbDate();
-$_date_min           = mbGetValueFromGetOrSession('_date_min');
-$_date_max           = mbGetValueFromGetOrSession('_date_max');
+$_date_min           = mbGetValueFromGetOrSession('_date_min', "");
+$_date_max           = mbGetValueFromGetOrSession('_date_max', "");
 
 $observations = array();
 
@@ -35,8 +35,8 @@ $doc_errors_msg = $doc_errors_ack = "";
 
 // Chargement de l'échange HPRIM demandé
 $echange_hprim = new CEchangeHprim();
-$echange_hprim->_date_min = $_date_min ? $_date_min : $now;
-$echange_hprim->_date_max = $_date_max ? $_date_max : $now;
+$echange_hprim->_date_min = $_date_min;
+$echange_hprim->_date_max = $_date_max;
 
 $echange_hprim->load($echange_hprim_id);
 if($echange_hprim->_id) {

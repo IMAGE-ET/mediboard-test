@@ -147,5 +147,9 @@ class CHprimSoapHandler extends CSoapHandler {
     
     return $messageAcquittement;
   }
+  
+  function calculatorAuth() {
+    
+  }
 }
 ?>
