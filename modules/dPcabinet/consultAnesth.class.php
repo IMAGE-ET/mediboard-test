@@ -54,6 +54,7 @@ class CConsultAnesth extends CMbObject {
   var $ht_final       = null;
   var $premedication  = null;
   var $prepa_preop    = null;
+	var $date_analyse   = null;
 
   // Form fields
   var $_date_consult    = null;
@@ -125,6 +126,7 @@ class CConsultAnesth extends CMbObject {
     $specs["ht_final"]         = "float min|0 max|100";
     $specs["premedication"]    = "text helped";
     $specs["prepa_preop"]      = "text helped";
+		$specs["date_analyse"]     = "date";
 
     // Champs pour les conditions d'intubation
     $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";

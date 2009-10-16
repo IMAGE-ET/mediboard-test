@@ -139,12 +139,10 @@ function reloadListExamComp() {
           <th colspan="4" class="category">Résultats d'analyse</th>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
+          <th>{{mb_label object=$consult_anesth field="date_analyse"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
-            /
-            {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
-          </td>
+            {{mb_field object=$consult_anesth field="date_analyse" form="editExamCompFrm" register="true" onchange="submitForm(this.form)"}}
+          </td>      
           <th>{{mb_label object=$consult_anesth field="creatinine"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="creatinine" tabindex="108" size="4" onchange="calculClairance();submitForm(this.form);"}}
@@ -152,9 +150,11 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="rai"}}</th>
+          <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
+            /
+            {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
           </td>
           <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
           <td>
@@ -163,10 +163,9 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="hb"}}</th>
+          <th>{{mb_label object=$consult_anesth field="rai"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
-            g/dl
+            {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
           </td>
           <th>{{mb_label object=$consult_anesth field="na"}}</th>
           <td>
@@ -175,10 +174,10 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr> 
-          <th>{{mb_label object=$consult_anesth field="ht"}}</th>
+          <th>{{mb_label object=$consult_anesth field="hb"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
-            %
+            {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
+            g/dl
           </td>
           <th>{{mb_label object=$consult_anesth field="k"}}</th>
           <td>
@@ -187,9 +186,9 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="ht_final"}}</th>
+          <th>{{mb_label object=$consult_anesth field="ht"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
+            {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
             %
           </td>
           <th>{{mb_label object=$consult_anesth field="tp"}}</th>
@@ -199,10 +198,10 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
+          <th>{{mb_label object=$consult_anesth field="ht_final"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
-            ml/GR
+            {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
+            %
           </td>
           <th>{{mb_label object=$consult_anesth field="tca" defaultFor="tca_temoin"}}</th>
           <td>
@@ -213,9 +212,10 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
+          <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
+            {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
+            ml/GR
           </td>
           <th>{{mb_label object=$consult_anesth field="tsivy" defaultFor="_min_tsivy"}}</th>
           <td>
@@ -226,7 +226,10 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
-          <td colspan="2"></td>
+          <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
+          </td>
           <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}

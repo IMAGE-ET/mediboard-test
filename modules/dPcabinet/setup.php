@@ -1219,7 +1219,12 @@ class CSetupdPcabinet extends CSetup {
             ADD `concerne_ALD` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
     
-		$this->mod_version = "1.14";
+		$this->makeRevision("1.14");
+		$sql = "ALTER TABLE `consultation_anesth` 
+            ADD `date_analyse` DATE;";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "1.15";
   }
 }
 ?>

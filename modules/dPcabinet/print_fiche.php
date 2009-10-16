@@ -77,7 +77,7 @@ if ($consultation_id) {
 
 // Affichage des données
 $listChamps = array(
-                1=>array("hb","ht","ht_final","plaquettes"),
+                1=>array("date_analyse","hb","ht","ht_final","plaquettes"),
                 2=>array("creatinine","_clairance","na","k"),
                 3=>array("tp","tca","tsivy","ecbu")
                 );
@@ -113,6 +113,7 @@ $unites["tp"]         = array("nom"=>"TP","unit"=>"%");
 $unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
 $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
+$unites["date_analyse"] = array("nom"=>"Date","unit"=>"");
 
 
 // Création du template

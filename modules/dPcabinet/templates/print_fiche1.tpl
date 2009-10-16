@@ -314,6 +314,10 @@
             <table>
               <tr>
                 <td style="width: 50%">
+                  {{if $consult->_ref_consult_anesth->date_analyse}}
+                    {{mb_label object=$consult->_ref_consult_anesth field=date_analyse}} {{mb_value object=$consult->_ref_consult_anesth field=date_analyse}}
+                    <br />
+                  {{/if}}
                   {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
                     Groupe sanguin&nbsp;:&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}}&nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}
                     <br />

@@ -446,7 +446,9 @@
                     {{$consult->_ref_consult_anesth->tsivy|date_format:"%Mm%Ss"}}
                   {{elseif $champ=="ecbu"}}
                     {{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
-                  {{else}}
+                  {{elseif $champ == "date_analyse"}}
+									  {{mb_value object=$consult->_ref_consult_anesth field=date_analyse}}
+									{{else}}
                     {{$consult->_ref_consult_anesth->$champ}}
                   {{/if}}
                   {{$donnees.unit}}

@@ -1768,4 +1768,10 @@ $locales['config-dPcabinet-CConsultation-show_histoire_maladie-desc'] = 'Affiche
 $locales['CConsultation-concerne_ALD'] = 'Concerne ALD';
 $locales['CConsultation-concerne_ALD-court'] = 'ALD';
 $locales['CConsultation-concerne_ALD-desc'] = 'Concerne ALD';
+$locales['CConsultAnesth-date_analyse'] = 'Date';
+$locales['CConsultAnesth-date_analyse-court'] = 'Date';
+$locales['CConsultAnesth-date_analyse-desc'] = 'Date de l\'analyse';
+$locales['CLmFichier-_resend_fixable'] = '';
+$locales['CLmFichier-_resend_fixable-court'] = '';
+$locales['CLmFichier-_resend_fixable-desc'] = '';
 ?>
