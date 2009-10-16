@@ -35,7 +35,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function schemaValidate($filename = null, $returnErrors = false) {
     if (!CAppUI::conf("hprimxml evt_serveuractes validation") || 
-        !CAppUI::conf("hprimxml evt_pmi validation") ||
+        !CAppUI::conf("hprimxml evt_pmsi validation") ||
         !CAppUI::conf("hprimxml evt_patients validation")) {
       return true;
     }

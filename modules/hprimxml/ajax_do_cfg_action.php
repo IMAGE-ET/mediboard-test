@@ -28,7 +28,7 @@ switch ($evenement) {
     } else if ($version == "1.05") {
       extractFiles("evenementsServeurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
     }
-    
+    break;
     
   case "evt_patients":
   	if ($version == "1.05") {

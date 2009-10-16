@@ -14,7 +14,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     if ($version == "1.01") {
       parent::__construct("evenementsServeurActes", "msgEvenementsServeurActes101");
     } else if ($version == "1.05") {
-      parent::__construct("evenementsServeurActivitePmsi", "msgEvenementsPmsi105");
+      parent::__construct("evenementsServeurActivitePmsi", "msgEvenementsServeurActes105");
     }
     global $AppUI, $g;
         

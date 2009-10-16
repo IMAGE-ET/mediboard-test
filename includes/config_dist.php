@@ -636,7 +636,7 @@ $dPconfig["sip"] = array (
 
 $dPconfig["webservices"] = array (
   "connection_timeout" => 5,
-	"webservice" => "",
+	"webservice" => "CWebservice",
 );
 
 $dPconfig["hprimxml"] = array (
@@ -646,7 +646,7 @@ $dPconfig["hprimxml"] = array (
   ),
   "evt_pmsi" => array(
     "validation" => "0",
-    "version" => "1.05",
+    "version" => "1.01",
   ),
   "evt_patients" => array(
     "validation" => "0",
