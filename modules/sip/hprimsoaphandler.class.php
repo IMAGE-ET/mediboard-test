@@ -154,8 +154,9 @@ class CHprimSoapHandler extends CSoapHandler {
   
   function calculatorAuth($operation, $entier1, $entier2) {
     $result = 0;
-    if (($operation != "add") || ($operation != "subtract")) {
-      return "Veuillez utiliser une méthode d'opération valable (add/subtract).";
+
+    if (($operation != "add") && ($operation != "subtract")) {
+      return "Veuillez utiliser une methode d'operation valable (add/subtract).";
     } 
     if (!$entier1 || !$entier2) {
       return "Veuillez indiquer 2 entiers.";
