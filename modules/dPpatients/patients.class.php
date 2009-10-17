@@ -1213,8 +1213,9 @@ class CPatient extends CMbObject {
   
   function fillTemplate(&$template) {
     $this->fillLimitedTemplate($template);
-    $this->loadRefDossierMedical();
+
     // Dossier médical
+    $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->fillTemplate($template);
   }
   

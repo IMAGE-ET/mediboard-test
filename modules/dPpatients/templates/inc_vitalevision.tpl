@@ -16,4 +16,4 @@
   {{/if}}
 </applet>
 
-{{mb_include_script path="includes/javascript/vitalevision.js"}}
+{{mb_include_script script=vitalevision}}

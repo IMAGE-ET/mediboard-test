@@ -76,7 +76,7 @@ Main.add(function () {
 </script>
 
 <!-- Script won't be evaled in Ajax inclusion. Need to force it -->
-{{mb_include_script path="includes/javascript/intermax.js"}}
+{{mb_include_script script=intermax}}
 
 <table class="main">
   <tr>

@@ -244,5 +244,12 @@ Class.extend(String, {
     var t = this;
     while(t.length < length) t = (right ? t+ch : ch+t);
     return t;
+  },
+	
+	unslash: function() {
+    return this
+      .replace(/\\n/g, "\n")
+      .replace(/\\t/g, "\t")
+			;
   }
 });

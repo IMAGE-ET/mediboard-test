@@ -150,7 +150,8 @@ table.tbl tr.selected td.cancelled,
 table.tbl tbody.hoverable td.cancelled,
 th.cancelled,
 th.category.cancelled,
-table.form th.category.cancelled {
+table.form th.category.cancelled,
+div.cancelled {
   color: #fff;
   background-color: #f00;
 	text-transform: uppercase;
@@ -480,8 +481,9 @@ option[value=""] {
   font-style: italic;
 }
 
-label:hover {
-  border-bottom: 1px dotted #888;
+label:hover,
+*[onmouseover] {
+  border-bottom: 1px dotted #bbb;
   cursor: help;
 }
 

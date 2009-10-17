@@ -29,7 +29,7 @@ var Intermax = {
     var sLogicMaxError = sError != "0" ? "\n\n[Code LogicMax "+sError+"]" : "";
 
     // Actual alert
-    sErrorMessage = Intermax.errors[sError] || "Description non traduite";
+    sErrorMessage = $T("Intermax.error." + sError).unslash() || "Description non traduite";
     alert(sLogicMaxFonction + "\n\n" + sErrorMessage + sExtraInfo + sLogicMaxError);
   },
   

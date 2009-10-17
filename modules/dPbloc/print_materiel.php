@@ -35,11 +35,12 @@ $order = "plagesop.date, rank";
 
 $operation = new COperation();
 
-$where["commande_mat"] = "!= '1'";
-$operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
-
 $where["commande_mat"] = "!= '0'";
 $operations["1"] = $operation->loadList($where, $order, null, null, $ljoin);
+
+$where["commande_mat"] = "!= '1'";
+$where["annulee"]      = "!= '1'";
+$operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
 
 foreach($operations as &$_operations) {
 	foreach($_operations as $_operation) {

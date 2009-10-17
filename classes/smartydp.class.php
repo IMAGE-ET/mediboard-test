@@ -303,26 +303,29 @@ function smarty_function_mb_colonne($params, &$smarty) {
   }
 }
 
+/**
+ * Javascript HTML inclusion
+ * @param array params 
+ * - path   : Direct script file path with extension
+ * - script : Script name, without extension, supersedes 'path' and depends on 'module'
+ * - module : Module name to find script, if not provided, use global includes
+ * @return HTML script node
+ */
 function smarty_function_mb_include_script($params, &$smarty) {
+  // Path provided
+  $path = CMbArray::extract($params, "path");
+	
+	// Script name providied
+  if ($script = CMbArray::extract($params, "script")) {
+  	$module = CMbArray::extract($params, "module");
+		$dir = $module ? "modules/$module/javascript" : "includes/javascript";
+  	$path = "$dir/$script.js";
+	}
+	
+	// Render HTML with build version
   global $version;
   $version_build = $version['build'];
-  
-  // Dans le cas ou le path est fourni
-  $path   = CMbArray::extract($params, "path"  );
-  $module = CMbArray::extract($params, "module");
-  $script = CMbArray::extract($params, "script");
-    
-  if($path){
-    $path = "$path?build=$version_build";
-  }
-  if($module XOR $script){
-    trigger_error("Module: $module Script: $script");
-  }
-  if($module && $script){
-    $path = "modules/$module/javascript/$script.js?build=$version_build";  
-  }
-  
-  return "<script type='text/javascript' src='$path'></script>";
+  return "<script type='text/javascript' src='$path?build=$version_build'></script>";
 }
 
 function smarty_function_mb_include($params, &$smarty) {
