@@ -97,9 +97,16 @@ ActesNGAP = {
       <th class="category">{{mb_title object=$acte_ngap field=code}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=coefficient}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=demi}}</th>
-      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
-      <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
-      <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
+      {{if !$object->_coded}}
+        {{if ($can->edit || $modif_operation)}}
+          <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
+          <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
+        {{/if}}
+      {{else}}
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
+          <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
+          <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
+        {{/if}}
       {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
@@ -150,9 +157,16 @@ ActesNGAP = {
       <td>{{mb_value object=$_acte_ngap field="code"}}</td>
       <td>{{mb_value object=$_acte_ngap field="coefficient"}}</td>
       <td>{{mb_value object=$_acte_ngap field="demi"}}</td>
-      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
-      <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
-      <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
+      {{if !$object->_coded}}
+        {{if ($can->edit || $modif_operation)}}
+        <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
+        <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
+        {{/if}}
+      {{else}}
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
+        <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
+        <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
+        {{/if}}
       {{/if}}
       <td>
         {{if $_acte_ngap->complement}}
