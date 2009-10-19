@@ -4,7 +4,7 @@
       <th>{{mb_title class=CModule field=_view}}</th>
       <th>{{mb_title class=CModule field=mod_type}}</th>
       <th>{{tr}}Action{{/tr}}</th>
-      {{if $installe}}
+      {{if $installed}}
       <th>{{mb_title class=CModule field=_dsns}}</th>
       <th>{{mb_title class=CModule field=_configable}}</th>
       <th>{{mb_title class=CModule field=mod_version}}</th>
@@ -44,9 +44,10 @@
     </tr>
   
     {{else}}
+    
     {{assign var=module_id value=$mbmodule->_id}}
     {{assign var=cmd value="?m=system&a=domodsql&mod_id=$module_id&cmd"}}
-    <tr> 
+    <tr {{if $mbmodule->_files_missing}}style="outline: 1px solid red;" title="Fichiers du module absents"{{/if}}> 
       <td>
         <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height: 18px; width: 18px; float: right;" alt="?" />
         <strong>{{$mbmodule->mod_name}}</strong>
@@ -74,7 +75,7 @@
         {{/if}}
       </td>
       
-      {{if $installe}}
+      {{if $installed}}
         <td>
           {{if count($mbmodule->_dsns)}}
           {{foreach from=$mbmodule->_dsns item=dsns_by_status key=status}}

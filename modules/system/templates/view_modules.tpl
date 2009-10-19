@@ -24,21 +24,21 @@ Main.add(function () {
 	{{include file="inc_module.tpl" object=$coreModules}}
 {{else}}
 	<ul id="tabs-modules" class="control_tabs">
-	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installe|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installe|@count}})</a></li>
-	  <li><a {{if !$mbmodules.aInstaller|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.aInstaller|@count}})</a></li>
+	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installed|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installed|@count}})</a></li>
+	  <li><a {{if !$mbmodules.notInstalled|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.notInstalled|@count}})</a></li>
     <li><a href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
-    <li><a {{if $majLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $majLibs|@count}}({{$majLibs|@count}}){{/if}}</a></li>
+    <li><a {{if $obsoleteLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $obsoleteLibs|@count}}({{$obsoleteLibs|@count}}){{/if}}</a></li>
     <li><a  href="#assistant">{{tr}}module-system-assistant{{/tr}}</a></li>
 	</ul>
 	
 	<hr class="control_tabs" />
 	
 	<div id="installed" style="display: none;">
-		{{include file="inc_module.tpl" object=$mbmodules.installe installe=true}}
+		{{include file="inc_module.tpl" object=$mbmodules.installed installed=true}}
 	</div>
 	
 	<div id="notInstalled" style="display: none;">
-	  {{include file="inc_module.tpl" object=$mbmodules.aInstaller installe=false}}
+	  {{include file="inc_module.tpl" object=$mbmodules.notInstalled installed=false}}
 	</div>
   
   <div id="cache" style="display: none;">
@@ -117,10 +117,10 @@ Main.add(function () {
           </button>
         </td>
         <td>
-          {{if $majLibs|@count}}
+          {{if $obsoleteLibs|@count}}
           <div class='error'>
-            {{$majLibs|@count}} bibliothèques à mettre à jour <br />
-            {{foreach from=$majLibs item=_lib}}
+            {{$obsoleteLibs|@count}} bibliothèques à mettre à jour <br />
+            {{foreach from=$obsoleteLibs item=_lib}}
               - {{$_lib}} <br />
             {{/foreach}}
           </div>

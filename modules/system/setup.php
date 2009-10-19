@@ -133,6 +133,16 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.0.15");
     $this->addPrefQuery("showLastUpdate", "0");
 
+    //@todo : decommenter ceci pour le prochain upgrade : 
+    /*
+    $sql = "ALTER TABLE `modules` 
+      DROP `mod_directory`,
+      DROP `mod_setup_class`,
+      DROP `mod_ui_name`,
+      DROP `mod_ui_icon`,
+      DROP `mod_description`";
+    $this->addQuery($sql);
+     */
     $this->mod_version = "1.0.16";
   }
 }

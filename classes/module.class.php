@@ -28,8 +28,9 @@ if(!defined("PERM_DENY")) {
 class CModule extends CMbObject {
   // Static Collections
   static $installed = array();
-	static $active    = array();
-	static $visible   = array();
+  static $active    = array();
+  static $visible   = array();
+  static $absent    = array();
  
   // primary key
   var $mod_id;
@@ -46,6 +47,7 @@ class CModule extends CMbObject {
   var $_latest     = null;
   var $_upgradable = null;
   var $_configable = null;
+  var $_files_missing = null;
   
   // Other fields
   var $_dsns = null;
@@ -134,6 +136,11 @@ class CModule extends CMbObject {
     }
   }
   
+  function checkModuleFiles(){
+    $this->_files_missing = !is_dir("./modules/$this->mod_name");
+    return !$this->_files_missing;
+  }
+  
   function updateFormFields() {
     $this->_view = CAppUI::tr("module-$this->mod_name-court");
   }
@@ -174,15 +181,18 @@ class CModule extends CMbObject {
 
   static function loadModules() {
     $modules = new CModule;
-    $order = "mod_ui_order";
-    $modules = $modules->loadList(null, $order);    
+    $modules = $modules->loadList(null, "mod_ui_order");    
     foreach ($modules as &$module) {
+      $module->checkModuleFiles();
       self::$installed[$module->mod_name] =& $module;
       if($module->mod_active == 1) {
         self::$active[$module->mod_name] =& $module;  
       } 
       if($module->mod_ui_active == 1) {
         self::$visible[$module->mod_name] =& $module;
+      }
+      if($module->_files_missing) {
+        self::$absent[$module->mod_name] =& $module;
       }
     }
   }

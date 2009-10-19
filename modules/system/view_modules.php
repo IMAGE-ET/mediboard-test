@@ -8,26 +8,30 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
 $can->needsEdit();
 
 require_once("install/libs.php");
 
 CAppUI::getAllClasses();
+CModule::loadModules();
+
 $setupClasses = getChildClasses("CSetup");
 $mbmodules = array();
 $coreModules = array();
 $upgradable = false;
+
 foreach($setupClasses as $setupClass) {
   $setup = new $setupClass;
   $mbmodule = new CModule();
   $mbmodule->compareToSetup($setup);
 	
   if ($mbmodule->mod_ui_order == 100) {
-    $mbmodules["aInstaller"][] = $mbmodule;
-  } else {
-    $mbmodules["installe"][] = $mbmodule;
+    $mbmodules["notInstalled"][] = $mbmodule;
+  } 
+  else {
+    $mbmodules["installed"][] = $mbmodule;
     if ($mbmodule->_upgradable) {
       $upgradable = true;
     }
@@ -37,12 +41,17 @@ foreach($setupClasses as $setupClass) {
   }
 }
 
-array_multisort(CMbArray::pluck($mbmodules["installe"], "mod_ui_order"), SORT_ASC, $mbmodules["installe"]);
+// Ajout des modules installés dont les fichiers ne sont pas présents
+if (count(CModule::$absent)) {
+  $mbmodules["installed"] += CModule::$absent;
+}
 
-$majLibs = array();
+array_multisort(CMbArray::pluck($mbmodules["installed"], "mod_ui_order"), SORT_ASC, $mbmodules["installed"]);
+
+$obsoleteLibs = array();
 foreach(CLibrary::$all as $library) { 
   if ($library->getUpdateState() != 1) {
-    $majLibs[]=$library->name;
+    $obsoleteLibs[] = $library->name;
   }
 }
 
@@ -52,8 +61,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("upgradable"  , $upgradable);
 $smarty->assign("mbmodules"   , $mbmodules);
 $smarty->assign("coreModules" , $coreModules);
-
-$smarty->assign("majLibs"     , $majLibs);
+$smarty->assign("obsoleteLibs", $obsoleteLibs);
 
 $smarty->display("view_modules.tpl");
 
