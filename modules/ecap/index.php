@@ -14,5 +14,6 @@ $module->registerTab("vw_identifiants", null, TAB_EDIT);
 $module->registerTab("vw_soap_services", null, TAB_EDIT);
 $module->registerTab("export_documents", null, TAB_EDIT);
 $module->registerTab("manage_categories", null, TAB_EDIT);
+$module->registerTab("export_egate", null, TAB_READ);
 
 ?>

@@ -16,4 +16,9 @@ $locales['mod-ecap-tab-export_documents'] = 'Envoi de documents';
 $locales['mod-ecap-tab-manage_categories'] = 'Catégories de documents';
 $locales['CEcDocumentSender'] = 'Base e-Cap';
 $locales['CMedinetSender'] = 'Base SISRA';
+$locales['config-ecap-dhe-rooturl-desc'] = 'URL racine DHE';
+$locales['config-ecap-soap-pass-desc'] = 'Mot de passe service web';
+$locales['config-ecap-soap-rooturl-desc'] = 'URL racine Services web';
+$locales['config-ecap-soap-user-desc'] = 'Utilisateur service web';
+$locales['mod-ecap-tab-export_egate'] = 'Export EGATE';
 ?>

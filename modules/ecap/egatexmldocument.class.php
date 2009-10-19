@@ -18,7 +18,7 @@ $aTypesAnesth = array("7" => "4",
                        "1" => "0");
 
 class CEGateXMLDocument extends CMbXMLDocument {
-  var $pmsipath               = "modules/dPinterop/egate";
+  var $pmsipath               = "modules/ecap/egate";
   var $finalpath              = "files/egate";
   var $schemapath             = null;
   var $schemafilename         = null;
@@ -173,11 +173,5 @@ class CEGateXMLDocument extends CMbXMLDocument {
     }
   }
 }
-
-
-
-
-
-
 
 ?>
