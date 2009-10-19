@@ -32,11 +32,12 @@ if (!isset($_SESSION["locked"])) $_SESSION["locked"] = false;
 if (!isset($_SESSION['browser'])) {
   /** Basic browser detection */ 
   $browser = array(
-    'version' => '0.0.0',
-    'majorver' => 0,
-    'minorver' => 0,
-    'build' => 0,
-    'name' => 'unknown'
+    'version'   => '0.0.0',
+    'majorver'  => 0,
+    'minorver'  => 0,
+    'build'     => 0,
+    'name'      => 'unknown',
+    'useragent' => ''
   );
   
   $browsers = array(
@@ -45,7 +46,8 @@ if (!isset($_SESSION['browser'])) {
   );
   
   if (isset($_SERVER['HTTP_USER_AGENT'])) {
-    $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    $browser['useragent'] = $_SERVER['HTTP_USER_AGENT'];
+    $user_agent = strtolower($browser['useragent']);
     foreach($browsers as $_browser) {
       if (preg_match("/($_browser)[\/ ]?([0-9.]*)/", $user_agent, $match)) {
         $browser['name'] = $match[1];

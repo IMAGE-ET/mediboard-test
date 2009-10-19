@@ -238,7 +238,7 @@ ob_start();
 
 // Feed modules with tabs
 foreach (CModule::getActive() as $module) {
-  require("./modules/$module->mod_name/index.php");
+  include("./modules/$module->mod_name/index.php");
 }
 
 $currentModule->addConfigureTab();
