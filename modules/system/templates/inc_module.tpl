@@ -47,7 +47,13 @@
     
     {{assign var=module_id value=$mbmodule->_id}}
     {{assign var=cmd value="?m=system&a=domodsql&mod_id=$module_id&cmd"}}
-    <tr {{if $mbmodule->_files_missing}}style="outline: 1px solid red;" title="Fichiers du module absents"{{/if}}> 
+    <tr> 
+			{{if $mbmodule->_files_missing}}
+			<td colspan="3" class="cancelled">
+				Module '{{$mbmodule->mod_name}}' missing
+			</td>
+
+      {{else}}
       <td>
         <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height: 18px; width: 18px; float: right;" alt="?" />
         <strong>{{$mbmodule->mod_name}}</strong>
@@ -60,6 +66,7 @@
       </td>
   
       <td>{{mb_value object=$mbmodule field=mod_type}}</td>
+      {{/if}}   
   
       <!-- Actions -->
       <td>
