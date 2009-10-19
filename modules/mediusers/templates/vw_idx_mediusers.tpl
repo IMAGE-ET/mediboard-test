@@ -122,7 +122,7 @@ function changeRemote(o) {
 	          
 	          <td>{{$curr_user->_ref_profile->user_username}}</td>
 	          
-	          <td>
+	          <td{{if !$curr_user->actif}} class="cancelled"{{/if}}>
 	            {{if $curr_user->_user_last_login}}
 	            <label title="{{mb_value object=$curr_user field=_user_last_login}}">
 	              {{mb_value object=$curr_user field=_user_last_login format=relative}}
