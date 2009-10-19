@@ -168,14 +168,15 @@ var Url = Class.create({
     this.oWindow.focus();
   },
   
-  autoComplete: function(idInput, idPopulate, oUserOptions) {
-    var oOptions = {
+  autoComplete: function(idInput, idPopulate, oOptions) {
+    oOptions = Object.extend({
 	    minChars: 3,
 	    frequency: 0.5,
+      dropdown: false,
 	    
 	    // Allows bigger width than input
 			onShow: function(element, update) { 
-        if(!update.style.position || update.style.position=='absolute') {
+        if(!update.style.position || update.style.position == 'absolute') {
           update.style.position = 'absolute';
           Position.clone(element, update, {
             setWidth: !parseFloat(update.getStyle('width')), // In order to make the list as wide as the input if the style contains width:0
@@ -185,16 +186,16 @@ var Url = Class.create({
         }
         Effect.Appear(update,{duration:0.25});
       }
-    };
+    }, oOptions || {});
     
-    var input = $(idInput);
-    Object.extend(oOptions, oUserOptions);
+    var input = $(idInput).addClassName("autocomplete");
 
     // Autocomplete
-    this.addParam("ajax", "1");
-    this.addParam("suppressHeaders", "1");
+    this.addParam("ajax", 1);
+    this.addParam("suppressHeaders", 1);
     
     var autocompleter = new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
+    
     autocompleter.startIndicator = function(){
       if(this.options.indicator) Element.show(this.options.indicator);
       input.addClassName("throbbing");
@@ -203,6 +204,29 @@ var Url = Class.create({
       if(this.options.indicator) Element.hide(this.options.indicator);
       input.removeClassName("throbbing");
     };
+    
+    // Drop down button, like <select> tags
+    if (oOptions.dropdown) {
+      var container = new Element("div", {style: "border:none;margin:0;padding:0;position:relative;", className: "dropdown"});
+      var height = input.getHeight()-4;
+      var margin = parseInt(input.getStyle("marginTop"))+1;
+
+      input.wrap(
+        container.setStyle({paddingRight: (height+5)+'px'}).
+                  clonePosition(input, {setLeft: false, setTop: false})
+      );
+      container.insert($(idPopulate));
+      
+      var dropdown = new Element("div", {
+        style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;", 
+        className: "dropdown-trigger"
+      });
+      
+      dropdown.observe("click", function(){
+        autocompleter.activate.bind(autocompleter)();
+      });
+      container.insert(dropdown);
+    }
     
     return autocompleter;
   },

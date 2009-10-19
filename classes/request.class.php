@@ -20,20 +20,6 @@ class CRequest {
   var $group  = array();
   var $order  = array();
   var $limit  = "";
-    
-  function CRequest() {
-  }
-  
-  function resetParams() {
-    $this->select = array();
-    $this->ljoin  = array();
-    $this->rjoin  = array();
-    $this->where  = array();
-    $this->group  = array();
-    $this->order  = array();
-    $this->limit  = "";
-  }
-  
   
   function addSelect($select) {
     if(is_array($select)) {

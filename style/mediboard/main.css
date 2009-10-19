@@ -972,7 +972,7 @@ div.autocomplete {
   overflow-x: hidden;
   background-color:white;
   border:1px solid #999;
-  margin:0px;
+  margin-top:-1px;
   padding:0px;
   z-index: 30;
 }
@@ -980,7 +980,7 @@ div.autocomplete {
 div.autocomplete ul {
   list-style-type:none;
   margin:0px;
-  padding:2px;
+  padding:0px;
 }
 
 div.autocomplete ul em {
@@ -1018,6 +1018,21 @@ input.autocomplete:focus {
 
 input.autocomplete.throbbing {
   background-position: 100% -19px;
+}
+
+div.dropdown-trigger {
+  background: url(images/buttons/dropdown.png) center center;
+  border: 1px solid #eee;
+  outline: 1px solid #999;
+}
+
+div.dropdown-trigger:hover {
+  outline: 1px solid #333;
+}
+
+div.dropdown div.autocomplete ul li.selected { 
+	background-color: #666;
+	color: white;
 }
 
 .textarea-helped {

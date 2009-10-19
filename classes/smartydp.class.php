@@ -370,11 +370,7 @@ class CSmartyDP extends Smarty {
     $this->compile_dir  = "$rootDir/templates_c/";
     $this->config_dir   = "$rootDir/configs/";
     $this->cache_dir    = "$rootDir/cache/";
-    
-    // Debugginf directives
-    $this->debug_tpl = "classes/smarty_debug.tpl";
-    $this->debugging = false;
-    
+
     // Delimiter definition
     $this->left_delimiter = "{{";
     $this->right_delimiter = "}}";
