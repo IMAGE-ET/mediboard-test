@@ -177,9 +177,8 @@ if($prescription->_id){
 						 $_line_med->_ref_produit->loadVoies();
 						 $_line_med->isPerfusable();
 					 } else {
-					 	$_line_med->_unites_prise[] = $_line_med->_ref_produit_prescription->unite_prise;
-						$_line_med->_ref_produit->voies[] = $_line_med->_ref_produit_prescription->voie;
-					 	//mbTrace($_line_med->_ref_produit_prescription);
+					 	 $_line_med->_unites_prise[] = $_line_med->_ref_produit_prescription->unite_prise;
+						 $_line_med->_ref_produit->voies[] = $_line_med->_ref_produit_prescription->voie;
 					 }
 	  	    }
 	  	  }
@@ -442,6 +441,14 @@ if(isset($operation->_ref_anesth->_id)){
 }
 if(isset($prescription->_ref_current_praticien->_id)){
   unset($listPrats[$prescription->_ref_current_praticien->_id]);
+}
+
+// Classement des lignes par ordre alphabetique
+function compareMed($line1, $line2){
+  return strcmp($line1->_ucd_view, $line2->_ucd_view);
+}
+if(isset($prescription->_ref_lines_med_comments["med"])){
+  usort($prescription->_ref_lines_med_comments["med"], "compareMed");
 }
 
 // Création du template

@@ -1183,7 +1183,9 @@ class CPrescription extends CMbObject {
   	}
     $where["prescription_id"] = " = '$this->_id'";
     if(!$order){
-      $order = "prescription_line_element_id DESC";
+      $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
+			$ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
+      $order = "category_prescription.nom , element_prescription.libelle";
     }
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     
