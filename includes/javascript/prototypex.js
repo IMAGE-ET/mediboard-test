@@ -245,11 +245,13 @@ Class.extend(String, {
     while(t.length < length) t = (right ? t+ch : ch+t);
     return t;
   },
-	
-	unslash: function() {
+  unslash: function() {
     return this
       .replace(/\\n/g, "\n")
-      .replace(/\\t/g, "\t")
-			;
+      .replace(/\\t/g, "\t");
   }
 });
+
+document.observeOnce = function(event_name, outer_callback){
+  $(document.documentElement).observeOnce(event_name, outer_callback);
+};

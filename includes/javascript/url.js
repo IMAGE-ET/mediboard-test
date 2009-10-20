@@ -16,7 +16,6 @@
 window.children = {};
 
 var Url = Class.create({
-  // Constructor
   initialize: function(sModule, sAction) {
     this.oParams = {};
     this.oWindow = null;
@@ -71,9 +70,7 @@ var Url = Class.create({
   },
   
   addElement: function(oElement, sParamName) {
-    if (!oElement) {
-      return;
-    }
+    if (!oElement) return;
   
     if (!sParamName) {
       sParamName = oElement.name;
@@ -101,7 +98,7 @@ var Url = Class.create({
   },
   
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix) {
-    this.addParam("dialog", "1");
+    this.addParam("dialog", 1);
   
     var iLeft = 50;
     iWidth = iWidth || 800;
@@ -168,7 +165,7 @@ var Url = Class.create({
     this.oWindow.focus();
   },
   
-  autoComplete: function(idInput, idPopulate, oOptions) {
+  autoComplete: function(input, populate, oOptions) {
     oOptions = Object.extend({
 	    minChars: 3,
 	    frequency: 0.5,
@@ -186,15 +183,15 @@ var Url = Class.create({
         }
         Effect.Appear(update,{duration:0.25});
       }
-    }, oOptions || {});
+    }, oOptions);
     
-    var input = $(idInput).addClassName("autocomplete");
+    var input = $(input).addClassName("autocomplete");
 
     // Autocomplete
     this.addParam("ajax", 1);
     this.addParam("suppressHeaders", 1);
     
-    var autocompleter = new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
+    var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
     
     autocompleter.startIndicator = function(){
       if(this.options.indicator) Element.show(this.options.indicator);
@@ -207,23 +204,32 @@ var Url = Class.create({
     
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
-      var container = new Element("div", {style: "border:none;margin:0;padding:0;position:relative;", className: "dropdown"});
+      var container = new Element("div", {
+        style: "border:none;margin:0;padding:0;position:relative;", 
+        className: "dropdown"
+      });
       var height = input.getHeight()-4;
       var margin = parseInt(input.getStyle("marginTop"))+1;
-
-      input.wrap(
-        container.setStyle({paddingRight: (height+5)+'px'}).
-                  clonePosition(input, {setLeft: false, setTop: false})
-      );
-      container.insert($(idPopulate));
+      
+      container.setStyle({paddingRight: (height+5)+'px'}).
+                clonePosition(input, {setLeft: false, setTop: false});
+                
+      input.wrap(container);
+      container.insert($(populate));
       
       var dropdown = new Element("div", {
         style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;", 
         className: "dropdown-trigger"
       });
       
-      dropdown.observe("click", function(){
+      var hideAutocomplete = function(e){
+        autocompleter.onBlur(e);
+      }.bindAsEventListener(this);
+      
+      dropdown.observe("mousedown", function(e){
         autocompleter.activate.bind(autocompleter)();
+        Event.stop(e);
+        document.observeOnce("mousedown", hideAutocomplete);
       });
       container.insert(dropdown);
     }
@@ -238,10 +244,10 @@ var Url = Class.create({
   },
   
   requestUpdate: function(ioTarget, oOptions) {
-    this.addParam("suppressHeaders", "1");
-    this.addParam("ajax", "1");
+    this.addParam("suppressHeaders", 1);
+    this.addParam("ajax", 1);
   
-    var oDefaultOptions = {
+    oOptions = Object.extend({
       waitingText: "Chargement",
       urlBase: "",
       method: "get",
@@ -250,31 +256,25 @@ var Url = Class.create({
       evalScripts: true,
       getParameters: null,
       onFailure: function(){$(ioTarget).update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
-    };
-  
-    Object.extend(oDefaultOptions, oOptions);
+    }, oOptions);
     
-    AjaxResponse.onAfterEval = oDefaultOptions.onAfterEval;
-    
-    if (oDefaultOptions.waitingText) {
-      $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
+    if (oOptions.waitingText) {
+      $(ioTarget).innerHTML = "<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>";
 	    if (ioTarget == SystemMessage.id) {
 		    SystemMessage.doEffect();
 	    }
     }
-    else {
-      WaitingMessage.cover(ioTarget);
-    }  
+    else WaitingMessage.cover(ioTarget);
   	
-    var getParams = oDefaultOptions.getParameters ? "?" + $H(oDefaultOptions.getParameters).toQueryString() : '';
-    new Ajax.Updater(ioTarget, oDefaultOptions.urlBase + "index.php" + getParams, oDefaultOptions);
+    var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
+    new Ajax.Updater(ioTarget, oOptions.urlBase + "index.php" + getParams, oOptions);
   },
   
   requestJSON: function(fCallback, oOptions) {
-    this.addParam("suppressHeaders", "1");
+    this.addParam("suppressHeaders", 1);
     this.addParam("ajax", "");
   
-    var oDefaultOptions = {
+    oOptions = Object.extend({
       waitingText: null,
       urlBase: "",
       method: "get",
@@ -283,13 +283,12 @@ var Url = Class.create({
       evalScripts: true,
       evalJSON: 'force',
       getParameters: null
-    };
-  
-    Object.extend(oDefaultOptions, oOptions);
-    oDefaultOptions.onSuccess = function(transport){fCallback(transport.responseJSON)};
+    }, oOptions);
+    
+    oOptions.onSuccess = function(transport){fCallback(transport.responseJSON)};
   	
-    var getParams = oDefaultOptions.getParameters ? "?" + $H(oDefaultOptions.getParameters).toQueryString() : '';
-    new Ajax.Request(oDefaultOptions.urlBase + "index.php" + getParams, oDefaultOptions);
+    var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
+    new Ajax.Request(oOptions.urlBase + "index.php" + getParams, oOptions);
   },
   
   requestUpdateOffline: function(ioTarget, oOptions) {
@@ -297,44 +296,39 @@ var Url = Class.create({
       netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
     }
     
-    this.addParam("_syncroOffline", "1");
+    this.addParam("_syncroOffline", 1);
     if(config.date_synchro){
       this.addParam("_synchroDatetime" , config.date_synchro);
     }
     
-    var oDefaultOptions = {
-        urlBase: config.urlMediboard
-    };
-  
-    Object.extend(oDefaultOptions, oOptions);
-  		
-//    References.clean(ioTarget);
-    this.requestUpdate(ioTarget, oDefaultOptions);
+    oOptions = Object.extend({
+      urlBase: config.urlMediboard
+    }, oOptions);
+
+    this.requestUpdate(ioTarget, oOptions);
   },
   
   periodicalUpdate: function(ioTarget, oOptions) {
-    this.addParam("suppressHeaders", "1");
-    this.addParam("ajax", "1");
-  
-    var oDefaultOptions = {
+    this.addParam("suppressHeaders", 1);
+    this.addParam("ajax", 1);
+
+    oOptions = Object.extend({
       waitingText: "Chargement",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
       asynchronous: true,
       evalScripts: true
-    };
-  
-    Object.extend(oDefaultOptions, oOptions);
+    }, oOptions);
     
-    if(oDefaultOptions.waitingText)
-      $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
+    if(oOptions.waitingText)
+      $(ioTarget).innerHTML = "<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>";
     
-    return new Ajax.PeriodicalUpdater(ioTarget, "index.php", oDefaultOptions);
+    return new Ajax.PeriodicalUpdater(ioTarget, "index.php", oOptions);
   },
   
   ViewFilePopup: function(objectClass, objectId, elementClass, elementId, sfn){
     this.setModuleAction("dPfiles", "preview_files");
-    this.addParam("popup", "1");
+    this.addParam("popup", 1);
     this.addParam("objectClass", objectClass);
     this.addParam("objectId", objectId);
     this.addParam("elementClass", elementClass);
@@ -371,8 +365,8 @@ Url.buildPopupFeatures = function(features) {
  */
 Url.ping = function(options) {
   var url = new Url("system", "ajax_ping");
-  url.addParam("suppressHeaders", "1");
-  url.addParam("ajax", "1");
+  url.addParam("suppressHeaders", 1);
+  url.addParam("ajax", 1);
   url.requestUpdate("systemMsg", options);
 };
 
