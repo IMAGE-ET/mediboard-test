@@ -48,6 +48,8 @@ if (!is_file($translateModule->targetPath)) {
 
 $error = $translateModule->update($tableau, true);
 
+SHM::rem("locales-$language");
+
 if ($error instanceof PEAR_Error) {
   $AppUI->setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);
 } else {

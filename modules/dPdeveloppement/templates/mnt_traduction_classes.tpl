@@ -43,7 +43,6 @@ Main.add(function () {
 <input type="hidden" name="m" value="dPdeveloppement" />
 <input type="hidden" name="tab" value="mnt_traduction_classes" />
 <input type="hidden" name="module" value="{{$module}}" />
-<input type="hidden" name="trans[]" value="{{$trans}}" />
 <input type="hidden" name="language" value="{{$language}}" />
 <input type="hidden" name="dosql" value="do_translate_aed" />
 
