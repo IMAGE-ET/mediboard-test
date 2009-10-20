@@ -115,7 +115,7 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
     $ftp->close();
   }
 }
-mbTrace($doc);die;
+
 // Récupération de tous les fichiers produits
 $doc->getSentFiles();
 		
