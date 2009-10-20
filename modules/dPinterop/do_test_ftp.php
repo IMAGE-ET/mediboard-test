@@ -17,7 +17,7 @@ $ftp->username = mbGetValueFromGet("username", "user");
 $ftp->userpass = mbGetValueFromGet("userpass", "pass");
 $ftp->port     = mbGetValueFromGet("port"    , 21);
 $ftp->timeout  = mbGetValueFromGet("timeout" , 5);
-$root_dir      = mbGetValueFromGet("root_dir" , CAppUI::conf('root_dir')."/files/hprim/serveurActes/");
+$root_dir      = mbGetValueFromGet("root_dir" , CFile::$directory ."/hprim/serveurActes/");
 $file          = mbGetValueFromGet("file");
 $passif_mode   = mbGetValueFromGet("passive" , false);
 

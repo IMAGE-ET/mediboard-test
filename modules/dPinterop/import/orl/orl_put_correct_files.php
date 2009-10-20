@@ -52,11 +52,10 @@ foreach($listImport as $key => $value) {
     if(!count($result)) {
       $noconsult++;
     } else {
-      //mbTrace($file, "avant : files/consultations/".$result[0]["consultation_id"]);
-      rename("files/consultations/".$file->file_consultation, "files/consultations/".$result[0]["consultation_id"]);
-      $file->file_consultation = $result[0]["consultation_id"];
+			$file->object_class = "CConsultation";
+			$file->object_id = $result[0]["consultation_id"];
       $file->store();
-      //mbTrace($file, "après : files/consultations/".$file->file_consultation);
+			$file->moveTemp("files/consultations/".$file->file_consultation);
       $modif++;
     }
   }

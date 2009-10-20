@@ -15,34 +15,9 @@ set_time_limit(300);
 
 $show = mbGetValueFromGet("show", 50);
 
-// Search document without files
-$stepSize = 1000;
-$step = 0;
-
-$docsWithoutFileTruncated = array();
-$docsCount = 0;
-$docsWithoutFileCount = 0;
-do {
-  $offset = $step * $stepSize;  
-  
-  $limit = "$offset, $stepSize";
-  $docs = new CFile();
-  $docs = $docs->loadList(null, null, $limit);
-  foreach($docs as $keyDoc => $valDoc) {
-    $doc =& $docs[$keyDoc];
-    $docsCount++;
-    if (!is_file($doc->_file_path)) {
-      $docsWithoutFileCount++;
-      if (count($docsWithoutFileTruncated) < $show) {
-        $docsWithoutFileTruncated[$keyDoc] =& $doc;
-      }
-    }
-  }
-  $step++;
-} while (count($docs));
-
 // Search files without documents
-$files = glob("files/*/*/*/*");
+$files = glob(CFile::$directory . "/*/*/*/*");
+
 $filesCount = 0;
 $filesWithoutDocCount = 0;
 $filesWithoutDocTruncated = array();
@@ -86,9 +61,33 @@ foreach($files as $filePath) {
       }
     }
   }
-
 }
 
+// Search document without files
+$stepSize = 1000;
+$step = 0;
+
+$docsWithoutFileTruncated = array();
+$docsCount = 0;
+$docsWithoutFileCount = 0;
+do {
+  $offset = $step * $stepSize;  
+  
+  $limit = "$offset, $stepSize";
+  $docs = new CFile();
+  $docs = $docs->loadList(null, null, $limit);
+  foreach($docs as $keyDoc => $valDoc) {
+    $doc =& $docs[$keyDoc];
+    $docsCount++;
+    if (!is_file($doc->_file_path)) {
+      $docsWithoutFileCount++;
+      if (count($docsWithoutFileTruncated) < $show) {
+        $docsWithoutFileTruncated[$keyDoc] =& $doc;
+      }
+    }
+  }
+  $step++;
+} while (count($docs));
 
 // Création du template
 $smarty = new CSmartyDP();

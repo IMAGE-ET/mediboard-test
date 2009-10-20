@@ -76,20 +76,19 @@ foreach($listImport as $key => $value) {
     }
     else {
       $consult = $result[0];
-      $file->file_consultation = $consult["consultation_id"];
       $file->file_size = filesize("modules/dPinterop/courriers/".$file->file_name);
-      $totalSize += $file->file_size;
-      if(!file_exists("files/consultations/".$file->file_consultation))
-        mkdir("files/consultations/".$file->file_consultation, 0777);
-      copy("modules/dPinterop/courriers/".$file->file_name, "files/consultations/".$file->file_consultation."/".$file->file_real_filename);
-      chmod ("files/consultations/".$file->file_consultation."/".$file->file_real_filename, 0777); 
+      $file->object_class = "CConsultation";
+      $file->object_id = $consult["consultation_id"];
       $file->store();
+      $file->moveTemp("modules/dPinterop/courriers/".$file->file_name);
+			
       $sql = "UPDATE import_courriers" .
             "\nSET mb_id = '".$file->file_id."'" .
             "\nWHERE nom = '".$value["nom"]."'";
       $ds->exec($sql);
-      //mbTrace($file);
+
       $new++;
+      $totalSize += $file->file_size;
     }
   } else {
     $sql = "UPDATE import_courriers" .

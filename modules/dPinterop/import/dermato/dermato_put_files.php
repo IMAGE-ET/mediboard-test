@@ -72,19 +72,17 @@ foreach($listImport as $key => $value) {
     }
     else {
       $consult = $result[0];
-      $file->file_consultation = $consult["consultation_id"];
+      $file->object_class = "CConsultation";
+      $file->object_id = $consult["consultation_id"];
       $file->file_size = filesize("modules/dPinterop/doc_recus/".$file->file_name);
-      $totalSize += $file->file_size;
-      if(!file_exists("files/consultations/".$file->file_consultation))
-        mkdir("files/consultations/".$file->file_consultation, 0777);
-      copy("modules/dPinterop/doc_recus/".$file->file_name, "files/consultations/".$file->file_consultation."/".$file->file_real_filename);
-      chmod ("files/consultations/".$file->file_consultation."/".$file->file_real_filename, 0777); 
+			$file->moveFile("modules/dPinterop/doc_recus/$file->file_name");
       $file->store();
       $sql = "UPDATE dermato_import_fichiers" .
             "\nSET mb_id = '".$file->file_id."'" .
             "\nWHERE nom = '".$value["nom"]."'";
       $ds->exec($sql);
-      //mbTrace($file);
+
+      $totalSize += $file->file_size;
       $new++;
     }
   } else {

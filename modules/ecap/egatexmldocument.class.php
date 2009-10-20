@@ -19,7 +19,7 @@ $aTypesAnesth = array("7" => "4",
 
 class CEGateXMLDocument extends CMbXMLDocument {
   var $pmsipath               = "modules/ecap/egate";
-  var $finalpath              = "files/egate";
+  var $finalpath              = null;
   var $schemapath             = null;
   var $schemafilename         = null;
   var $documentfilename       = null;
@@ -35,7 +35,7 @@ class CEGateXMLDocument extends CMbXMLDocument {
     $this->schemapath = "$this->pmsipath/$schemaname";
     $this->schemafilename   = "$this->schemapath/schema.xml"  ;
     $this->documentfilename = "$this->schemapath/document.xml";
-    $this->finalpath .= "/$schemaname";
+    $this->finalpath = CFile::$directory . "/egate/$schemaname";
 
     $this->now = time();
   }

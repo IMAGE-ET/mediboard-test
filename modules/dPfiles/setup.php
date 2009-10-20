@@ -74,47 +74,6 @@ class CSetupdPfiles extends CSetup {
       $this->addQuery($sql);
       $sql = "ALTER TABLE `files_mediboard` ADD UNIQUE (`file_real_filename`);";
       $this->addQuery($sql);
-      function setup_install(){
-        // Move all files from former to latter strategy
-        $dirsToPurge = array(
-          "consultations"  => "CConsultation",
-          "consultations2" => "CConsultation",
-          "operations" => "COperation",
-        );
-        foreach(glob("files/*/*/*") as $filePath) {
-          $fileFragment = $filePath;
-          $filePathOld = $fileFragment;
-          $fileRealName = basename($fileFragment);
-          $fileFragment = dirname($fileFragment);
-          $fileObjectId = basename($fileFragment);
-          $fileFragment = dirname($fileFragment);
-          $fileDir = basename($fileFragment);
-
-          $fileObjectClass = @$dirsToPurge[$fileDir];
-          if (!$fileObjectClass) {
-            continue;
-          }
-                    
-          $fileDirHash = intval($fileObjectId / 1000);
-          $filePathNew = "files/$fileObjectClass/$fileDirHash/$fileObjectId/$fileRealName";
-
-          CMbPath::forceDir(dirname($filePathNew));
-          if (!rename($filePathOld, $filePathNew)) {
-            trigger_error("Impossible to move '$filePathOld' to '$filePathNew'", E_USER_ERROR);
-            return false;
-          }
-        }
-        
-        foreach($dirsToPurge as $dirName => $objectClass) {
-          $dir = "files/$dirName";
-          if (is_dir($dir)) {
-            CMbPath::purgeEmptySubdirs($dir);
-          }
-        }
-        return true;
-      }
-      $this->addFunction("setup_install");
-      
     }else{
       $this->addTable("files_mediboard");
       $this->addTable("files_index_mediboard");

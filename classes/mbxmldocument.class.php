@@ -200,7 +200,7 @@ class CMbXMLDocument extends DOMDocument {
     $file->file_date          = mbDateTime();
     $file->file_real_filename = uniqid(rand());
     $file->file_owner         = $AppUI->user_id;
-    if (!$file->moveFile($this->documentfilename)) {
+     if (!$file->moveFile($this->documentfilename)) {
       return "error-CFile-move-file";
     }
 

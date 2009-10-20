@@ -9,7 +9,7 @@
  */
 
 class CHPrimXMLDocument extends CMbXMLDocument {
-  var $finalpath = "files/hprim";
+  var $finalpath = null;
   var $documentfinalprefix    = null;
   var $documentfinalfilename  = null;
   var $sentFiles = array();
@@ -28,7 +28,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->schemapath = "$this->patharchiveschema/$dirschemaname";
     $this->schemafilename = ($schemafilename) ? "$this->schemapath/$schemafilename.xsd" : "$this->schemapath/schema.xml";
     $this->documentfilename = "$this->schemapath/document.xml";
-    $this->finalpath .= "/$dirschemaname";
+    $this->finalpath = CFile::$directory . "/hprim/$dirschemaname";
     
     $this->now = time();
   }
@@ -81,6 +81,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function getSentFiles() {
     $pattern = "$this->finalpath/$this->documentfinalprefix-*.xml";
+		mbTrace($this->finalpath);
     foreach(glob($pattern) as $sentFile) {
       $baseName = basename($sentFile);
       $matches = null;

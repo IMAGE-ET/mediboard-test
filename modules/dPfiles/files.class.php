@@ -6,12 +6,10 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
-global $filesDir;
-
-// We have to replace the backslashes with slashes because of PHPthumb on Windows
-$filesDir = str_replace('\\', '/', realpath(CAppUI::conf("dPfiles CFile upload_directory")));
 
 class CFile extends CDocumentItem {
+	static $directory = null;
+	
   // DB Table key
   var $file_id = null;
   
@@ -55,6 +53,12 @@ class CFile extends CDocumentItem {
     $specs["file_owner"]         = "ref notNull class|CMediusers";
     $specs["file_type"]          = "str";
     $specs["file_name"]          = "str notNull";
+
+    // Form Fields
+    $specs["_sub_dir"]      = "str";
+    $specs["_absolute_dir"] = "str";
+    $specs["_file_path"]    = "str";
+		
     return $specs;
   }
   
@@ -76,19 +80,14 @@ class CFile extends CDocumentItem {
     parent::updateFormFields();
     
     $this->_extensioned = $this->file_name;
-    
-    global $filesDir;
     $this->_file_size = mbConvertDecaBinary($this->file_size);    
 
+    // Computes complete file path
     if ($this->object_id) {
-    
-      // Computes complete file path
       $this->_sub_dir = "$this->object_class";
       $this->_sub_dir .= "/".intval($this->object_id / 1000);
-      
-      $this->_absolute_dir = "$filesDir/$this->_sub_dir/$this->object_id";
-
-      $this->_file_path = "$filesDir/$this->_sub_dir/$this->object_id/$this->file_real_filename";
+      $this->_absolute_dir = self::$directory . "/$this->_sub_dir/$this->object_id";
+      $this->_file_path    = $this->_absolute_dir . "/$this->file_real_filename";
     }
     
     $this->_shortview = $this->file_name;
@@ -128,21 +127,18 @@ class CFile extends CDocumentItem {
    * @return boolean job-done
    */ 
   function moveTemp($upload) {
-    global $filesDir;
     $this->updateFormFields();
     
     // Check global directory
-    if (!CMbPath::forceDir($filesDir)) {
-      trigger_error("Files directory '$filesDir' is not writable", E_USER_WARNING);
+    if (!CMbPath::forceDir(self::$directory)) {
+      trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
       return false;
     }
     
     // Checks complete file directory
-    $fileDirComp = "$filesDir/$this->_sub_dir/$this->object_id";
-    CMbPath::forceDir($fileDirComp);
-    
-    // Moves temp file to specific directory
-    $this->_file_path = "$fileDirComp/$this->file_real_filename";
+    CMbPath::forceDir($this->_absolute_dir);
+
+    // Actually move uploaded file
     return move_uploaded_file($upload["tmp_name"], $this->_file_path);
   }
   
@@ -151,85 +147,20 @@ class CFile extends CDocumentItem {
    * @return boolean job-done
    */
   function moveFile($filename) {
-    global $filesDir;
     $this->updateFormFields();
     
     // Check global directory
-    if (!CMbPath::forceDir($filesDir)) {
-      trigger_error("Files directory '$filesDir' is not writable", E_USER_WARNING);
+    if (!CMbPath::forceDir(self::$directory)) {
+      trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
       return false;
     }
     
     // Checks complete file directory
-    $fileDirComp = "$filesDir/$this->_sub_dir/$this->object_id";
-    CMbPath::forceDir($fileDirComp);
-    
-    // Moves temp file to specific directory
-    $this->_file_path = "$fileDirComp/$this->file_real_filename";
-    return rename($filename, $this->_file_path);
-  }
+    CMbPath::forceDir($this->_absolute_dir);
 
-  /**
-   * Parse file for indexing
-   */
-  function indexStrings() {
-
-    // Get the parser application
-    $parser = CAppUI::conf("ft $this->file_type");
-    if (!$parser) {
-      return false;
-    }
-    
-    // Buffer the file
-    $fp = fopen($this->_file_path, "rb");
-    $x = fread($fp, $this->file_size);
-    fclose($fp);
-
-    // Parse it
-    $parser = $parser . " " . $this->_file_path;
-    $pos = strpos($parser, "/pdf");
-    if (false !== $pos) {
-      $x = `$parser -`;
-    } else {
-      $x = `$parser`;
-    }
-
-    // if nothing, return
-    if (strlen($x) < 1) {
-      return 0;
-    }
   
-    // remove punctuation and parse the strings
-    $x = str_replace(array(".", ",", "!", "@", "(", ")"), " ", $x);
-    $warr = split("[[:space:]]", $x);
-
-    $wordarr = array();
-    $nwords = count($warr);
-    for($x=0; $x < $nwords; $x++) {
-      $newword = $warr[$x];
-      if(!ereg("[[:punct:]]", $newword)
-        && strlen(trim($newword)) > 2
-        && !ereg("[[:digit:]]", $newword)) {
-        $wordarr[] = array("word" => $newword, "wordplace" => $x);
-      }
-    }
-    $this->_spec->ds->exec("LOCK TABLES files_index_mediboard WRITE");
-    
-    // filter out common strings
-    $ignore = array();
-    include CAppUI::conf("root_dir") ."/modules/dPcabinet/file_index_ignore.php";
-    foreach ($ignore as $w) {
-      unset($wordarr[$w]);
-    }
-    
-    // insert the strings into the table
-    while(list($key, $val) = each($wordarr)) {
-      $sql = "INSERT INTO files_index_mediboard VALUES ('" . $this->file_id . "', '" . $wordarr[$key]["word"] . "', '" . $wordarr[$key]["wordplace"] . "')";
-      $this->_spec->ds->exec($sql);
-    }
-
-    $this->_spec->ds->exec("UNLOCK TABLES;");
-    return $nwords;
+    // Actually move any file
+    return rename($filename, $this->_file_path);
   }
   
   function loadFilesForObject($object){
@@ -371,4 +302,8 @@ class CFile extends CDocumentItem {
     return parent::handleSend();
   }
 }
+
+// We have to replace the backslashes with slashes because of PHPthumb on Windows
+CFile::$directory = str_replace('\\', '/', realpath(CAppUI::conf("dPfiles CFile upload_directory")));
+
 ?>
