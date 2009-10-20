@@ -81,7 +81,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function getSentFiles() {
     $pattern = "$this->finalpath/$this->documentfinalprefix-*.xml";
-		mbTrace($this->finalpath);
     foreach(glob($pattern) as $sentFile) {
       $baseName = basename($sentFile);
       $matches = null;
