@@ -18,7 +18,10 @@ CAppUI::getAllClasses();
 CModule::loadModules();
 
 $setupClasses = getChildClasses("CSetup");
-$mbmodules = array();
+$mbmodules = array(
+  "notInstalled" => array(),
+  "installed" => array(),
+);
 $coreModules = array();
 $upgradable = false;
 

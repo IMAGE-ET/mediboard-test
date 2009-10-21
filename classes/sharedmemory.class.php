@@ -170,6 +170,7 @@ abstract class SHM {
     $engine = new self::$availableEngines[$engine];
     if (!$engine->isReady()) {
       $engine = new self::$availableEngines["disk"];
+      $engine->isReady();
     }
 
     self::$prefix = "$prefix-";

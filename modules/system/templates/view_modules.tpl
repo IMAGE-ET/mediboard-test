@@ -21,7 +21,7 @@ Main.add(function () {
     Des erreurs risquent de s'afficher et le système ne fonctionnera pas correctement.<br />
     Veuillez les mettre à jour afin de supprimer ces erreurs résultantes et avoir accès aux autres modules
   </div>
-	{{include file="inc_module.tpl" object=$coreModules}}
+	{{include file="inc_module.tpl" object=$coreModules installed=true}}
 {{else}}
 	<ul id="tabs-modules" class="control_tabs">
 	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installed|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installed|@count}})</a></li>

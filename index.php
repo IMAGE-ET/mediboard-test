@@ -175,9 +175,9 @@ ini_set("display_errors", CAppUI::pref("INFOSYSTEM"));
 $user = new CMediusers();
 if ($user->isInstalled()) {
   $user->load(CAppUI::$instance->user_id);
+  $user->getBasicInfo();
   CAppUI::$instance->_ref_user = $user;
 }
-CAppUI::$instance->_ref_user->getBasicInfo();
 
 // Set the module and action from the url
 if (null == $m = CAppUI::checkFileName(mbGetValueFromGet("m", 0))) {
