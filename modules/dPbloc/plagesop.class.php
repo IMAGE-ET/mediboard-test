@@ -163,7 +163,7 @@ class CPlageOp extends CMbObject {
     $this->makeView();
   }
   
-  function loadRefsBack($annulee = 1, $order = "rank, horaire_voulu") {
+  function loadRefsOperations($annulee = 1, $order = "rank, horaire_voulu") {
     $where = array();
     $where["plageop_id"] = "= '$this->plageop_id'";
     if(!$annulee) {
@@ -174,6 +174,10 @@ class CPlageOp extends CMbObject {
     foreach ($this->_ref_operations as &$operation) {
       $operation->_ref_plageop =& $this;
     }
+  }
+
+  function loadRefsBack($annulee = 1, $order = "rank, horaire_voulu") {
+  	$this->loadRefsOperations($annulee, $order);
   }
   
 	/** Mise à jour des horaires en fonction de l'ordre des operations, 

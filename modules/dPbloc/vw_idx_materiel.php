@@ -33,8 +33,6 @@ $where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salles));
 
 $where["materiel"] = "!= ''";
 $where["operations.plageop_id"] = "IS NOT NULL";
-//$where["commande_mat"] = $typeAff ? "= '1'" : "!= '1'";
-//$where["annulee"]      = $typeAff ? "= '1'" : "!= '1'";
 
 $order = "plagesop.date, rank";
 

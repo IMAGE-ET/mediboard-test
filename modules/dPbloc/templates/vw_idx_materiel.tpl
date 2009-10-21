@@ -10,41 +10,30 @@
 
 <script type="text/javascript">
 function checkFormPrint() {
-  var form = document.paramFrm;
+  var form = document.PrintFilter;
     
   if(!(checkForm(form))){
     return false;
   }
   
-  popMateriel();
-}
-
-function popMateriel() {
-  form = document.paramFrm;
   var url = new Url("dPbloc", "print_materiel");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.popup(900, 750, 'Materiel');
 }
+
 </script>
 
-<form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
+<form name="PrintFilter" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
 
 <table class="form">
   <tr>
-    <th colspan="2" class="category">Imprimer l'historique</th>
-  </tr>
-  <tr>
-    <td>{{mb_label object=$filter field="_date_min"}}</td>
-    <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" register=true}} </td>
-  </tr>
-  <tr>
-    <td>{{mb_label object=$filter field="_date_max"}}</td>
-    <td class="date" >{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" register=true}}</td>
-  </tr>
-  <tr>
-    <td colspan="2" class="button">
-      <button type="button" onclick="checkFormPrint()" class="search">Afficher</button>
+    <th>{{mb_label object=$filter field="_date_min"}}</th>
+    <td class="date">{{mb_field object=$filter field="_date_min" form="PrintFilter" canNull="false" register=true}} </td>
+    <th>{{mb_label object=$filter field="_date_max"}}</th>
+    <td class="date" >{{mb_field object=$filter field="_date_max" form="PrintFilter" canNull="false" register=true}}</td>
+    <td class="button">
+      <button type="button" onclick="checkFormPrint()" class="search">Afficher l'historique</button>
     </td>
   </tr>
 </table>

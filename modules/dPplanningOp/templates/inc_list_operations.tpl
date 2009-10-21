@@ -39,11 +39,11 @@
     </th>
   </tr>
   
-  {{foreach from=$curr_plage->_ref_operations item=curr_op}}
+  {{foreach from=$curr_plage->_ref_operations item=_operation}}
   <tbody class="hoverable">
   
   <tr>
-    {{assign var=patient value=$curr_op->_ref_sejour->_ref_patient}}
+    {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
     <td class="text" {{if !$board}}rowspan="2"{{/if}}>
     
       <a href="{{$patient->_dossier_cabinet_url}}"
@@ -54,67 +54,47 @@
     </td>
     
     <td class="text">
-      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
-        {{if $curr_op->libelle}}
-          <em>[{{$curr_op->libelle}}]</em>
-        {{/if}}
-
-	    	{{if $app->user_prefs.dPplanningOp_listeCompacte}}
-	        {{foreach from=$curr_op->_ext_codes_ccam item=_code name=codes}}
-	        <strong>{{$_code->code}}</strong>
-	        {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
-	        {{/foreach}}
-	      {{else}}
-	        {{foreach from=$curr_op->_ext_codes_ccam item=_code}}
-	        <br />
-	        <strong>{{$_code->code}}</strong>
-	        {{if !$board}}
-		        : {{$_code->libelleLong}}
-	        {{/if}}
-	        {{if $boardItem}}
-		        : {{$_code->libelleLong|truncate:50:"...":false}}
-	        {{/if}}
-	        {{/foreach}}
-	      {{/if}}
+      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+        {{mb_include template=inc_vw_operation}}   
       </a>
     </td>
 
-    {{if $curr_op->annulee}}
+    {{if $_operation->annulee}}
     <td class="cancelled" colspan="2">
       [ANNULEE]
     </td>
 
     {{else}}
     <td style="text-align: center;">
-      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
-        {{if $curr_op->time_operation != "00:00:00"}}
+      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+        {{if $_operation->time_operation != "00:00:00"}}
           Validé pour 
           {{if !$app->user_prefs.dPplanningOp_listeCompacte}}<br />{{/if}}
-          {{$curr_op->time_operation|date_format:$dPconfig.time}}
+          {{$_operation->time_operation|date_format:$dPconfig.time}}
         {{else}}
           Non validé
         {{/if}}
         <br />
-        {{if $curr_op->horaire_voulu}}
+        {{if $_operation->horaire_voulu}}
         souhaité pour 
         {{if !$app->user_prefs.dPplanningOp_listeCompacte}}<br />{{/if}}
-        {{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
+        {{$_operation->horaire_voulu|date_format:$dPconfig.time}}
         {{/if}}
       </a>
     </td>
     <td style="text-align: center;">
-      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->temp_operation|date_format:$dPconfig.time}}
+      <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+        {{$_operation->temp_operation|date_format:$dPconfig.time}}
       </a>
     </td>
     {{/if}}
   </tr>
   
   {{if !$board}}
-  {{if !$curr_op->annulee}}
+  {{if !$_operation->annulee}}
 	<tr>
     <td colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$curr_op preloaded=true}}
+      {{include file=inc_documents_operation.tpl operation=$_operation preloaded=true}}
     </td>
   </tr>
   {{/if}}
@@ -130,11 +110,11 @@
   </tr>
   {{/if}}
   
-  {{foreach from=$listUrgences item=curr_op}}
+  {{foreach from=$listUrgences item=_operation}}
   <tbody class="hoverable">
 
   <tr>
-    {{assign var=patient value=$curr_op->_ref_sejour->_ref_patient}}
+    {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
     <td class="text" {{if !$board}}rowspan="2"{{/if}}>
       <a href="{{$patient->_dossier_cabinet_url}}"
         class="tooltip-trigger"
@@ -144,44 +124,24 @@
     </td>
     
     <td class="text">
-      <a href="?m={{$m}}&amp;tab=w_edit_urgence&amp;operation_id={{$curr_op->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
-      	{{if $curr_op->salle_id}}Déplacé en salle {{$curr_op->_ref_salle}}{{/if}}
-        {{if $curr_op->libelle}}
-          <em>[{{$curr_op->libelle}}]</em>
-        {{/if}}
-
-	    	{{if $app->user_prefs.dPplanningOp_listeCompacte}}
-	        {{foreach from=$curr_op->_ext_codes_ccam item=_code name=codes}}
-	        <strong>{{$_code->code}}</strong>
-	        {{if !$smarty.foreach.codes.last}}&mdash;{{/if}}
-	        {{/foreach}}
-	      {{else}}
-	        {{foreach from=$curr_op->_ext_codes_ccam item=_code}}
-	        <br />
-	        <strong>{{$_code->code}}</strong>
-	        {{if !$board}}
-		        : {{$_code->libelleLong}}
-	        {{/if}}
-	        {{if $boardItem}}
-		        : {{$_code->libelleLong|truncate:50:"...":false}}
-	        {{/if}}
-	        {{/foreach}}
-	      {{/if}}
+      <a href="?m={{$m}}&amp;tab=w_edit_urgence&amp;operation_id={{$_operation->_id}}">
+      	{{if $_operation->salle_id}}Déplacé en salle {{$_operation->_ref_salle}}{{/if}}
+        {{mb_include template=inc_vw_operation}}   
       </a>
     </td>
 
-    <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled"{{/if}}>
-      {{if $curr_op->annulee}}
+    <td style="text-align: center;" {{if $_operation->annulee}}class="cancelled"{{/if}}>
+      {{if $_operation->annulee}}
         [ANNULEE]
       {{else}}
-      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{mb_value object=$curr_op field=_datetime}}
+      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
+        {{mb_value object=$_operation field=_datetime}}
       </a>
       {{/if}}
     </td>
     <td style="text-align: center;">
-      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-        {{$curr_op->temp_operation|date_format:$dPconfig.time}}
+      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
+        {{$_operation->temp_operation|date_format:$dPconfig.time}}
       </a>
     </td>
   </tr>
@@ -189,7 +149,7 @@
   {{if !$board}}
 	<tr>
     <td colspan="10">
-      {{include file=inc_documents_operation.tpl operation=$curr_op preloaded=true}}
+      {{include file=inc_documents_operation.tpl operation=$_operation preloaded=true}}
     </td>
   </tr>
   {{/if}}

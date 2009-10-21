@@ -45,16 +45,10 @@
     <td class="text">
     	{{if !$dialog}}
 			<a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
-    	{{/if}}
- 
-      {{if $_operation->libelle}}
-      <strong>[{{$_operation->libelle}}]</strong>
-      <br />
       {{/if}}
-      {{foreach from=$_operation->_ext_codes_ccam item=_code}}
-      {{$_code->code}} : <em>{{$_code->libelleLong}}</em><br />
-      {{/foreach}}
-			
+
+      {{mb_include module=dPplanningOp template=inc_vw_operation _operation=$_operation}}
+
       {{if !$dialog}}
       </a>
       {{/if}}

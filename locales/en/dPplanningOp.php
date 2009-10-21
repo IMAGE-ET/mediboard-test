@@ -889,4 +889,14 @@ $locales['CSejour-_adresse_par_prat'] = '';
 $locales['CSejour-_adresse_par_prat-court'] = '';
 $locales['CSejour-_adresse_par_prat-desc'] = '';
 $locales['CService-back-'] = '';
+$locales['COperation-urgences'] = '';
+$locales['CEtabExterne-back-'] = '';
+$locales['CSejour-etablissement_entree_transfert_id'] = '';
+$locales['CSejour-etablissement_entree_transfert_id-court'] = '';
+$locales['CSejour-etablissement_entree_transfert_id-desc'] = '';
+$locales['CSejour-facture'] = '';
+$locales['CSejour-facture-court'] = '';
+$locales['CSejour-facture-desc'] = '';
+$locales['pref-dPplanningOp_listeCompacte-info'] = '';
+$locales['COperation-operations'] = '';
 ?>

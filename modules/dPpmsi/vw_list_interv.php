@@ -19,43 +19,63 @@ $listSalles = $listSalles->loadGroupList();
 
 $totalOp = 0;
 
+$counts = array (
+  "operations" => array (
+	  "total" => 0,
+    "facturees" => 0,
+	),
+  "urgences" => array (
+    "total" => 0,
+    "facturees" => 1,
+	),
+);
+
 $plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
 $where["salle_id"] = $plages->_spec->ds->prepareIn(array_keys($listSalles));
 $order = "debut";
 $plages = $plages->loadList($where, $order);
-foreach($plages as &$curr_plage) {
-  $curr_plage->loadRefs(0);
-  foreach($curr_plage->_ref_operations as $key_op => &$curr_op) {
-    if($curr_op->annulee) {
-      unset($curr_plage[$key_op]);
-    } else {
-      $curr_op->loadRefsFwd();
-      $curr_op->_ref_sejour->loadNumDossier();
-      $curr_op->_ref_sejour->loadRefPatient();
-      $curr_op->_ref_sejour->_ref_patient->loadIPP();
-      $curr_op->loadExtCodesCCAM();
-      $curr_op->loadHprimFiles();
-    }
+foreach($plages as &$_plage) {
+  $_plage->loadRefsOperations(0);
+  foreach($_plage->_ref_operations as $_operation) {
+    $_operation->loadRefChir();
+    $_operation->loadRefSejour();
+    $_operation->_ref_sejour->loadNumDossier();
+    $_operation->_ref_sejour->loadRefPatient();
+    $_operation->_ref_sejour->_ref_patient->loadIPP();
+    $_operation->loadExtCodesCCAM();
+    $_operation->loadHprimFiles();
+
+		$counts["operations"]["total"]++; 
+		if (count($_operation->_ref_hprim_files)) {
+      $counts["operations"]["facturees"]++; 
+		}
   }
-  $totalOp += count($curr_plage->_ref_operations);
+  $totalOp += count($_plage->_ref_operations);
 }
 
 $operation = new COperation;
 $where = array();
 $where["date"]     = "= '$date'";
 $where["salle_id"] = $operation->_spec->ds->prepareIn(array_keys($listSalles));
+$where["annulee"]  = "= '0'";
 $order = "chir_id";
 $urgences = $operation->loadList($where, $order);
 $totalOp += count($urgences);
-foreach($urgences as &$curr_op) {
-  $curr_op->loadRefsFwd();
-  $curr_op->_ref_sejour->loadNumDossier();
-  $curr_op->_ref_sejour->loadRefPatient();
-  $curr_op->_ref_sejour->_ref_patient->loadIPP();
-  $curr_op->loadExtCodesCCAM();
-  $curr_op->loadHprimFiles();
+foreach($urgences as $_operation) {
+  $_operation->loadRefChir();
+  $_operation->loadRefSejour();
+  $_operation->_ref_sejour->loadNumDossier();
+  $_operation->_ref_sejour->loadRefPatient();
+  $_operation->_ref_sejour->_ref_patient->loadIPP();
+  $_operation->loadExtCodesCCAM();
+  $_operation->loadHprimFiles();
+	
+  $counts["urgences"]["total"]++; 
+  if (count($_operation->_ref_hprim_files)) {
+    $counts["urgences"]["facturees"]++; 
+  }
 }
 
 // Création du template
@@ -65,6 +85,7 @@ $smarty->assign("date"     , $date);
 $smarty->assign("operation", $operation);
 $smarty->assign("plages"   , $plages);
 $smarty->assign("urgences" , $urgences);
+$smarty->assign("counts"   , $counts);
 $smarty->assign("totalOp"  , $totalOp);
 
 $smarty->display("vw_list_interv.tpl");
