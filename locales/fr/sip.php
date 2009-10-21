@@ -134,7 +134,18 @@ $locales['CEchangeHprim-_date_max'] = 'Jusqu\'au';
 $locales['CEchangeHprim-_date_max-court'] = 'Jusqu\'au';
 $locales['CEchangeHprim-_date_max-desc'] = 'Date de fin de la recherche.';
 $locales['CEchangeHprim-_date_min'] = 'Depuis le';
-$locales['CEchangeHprim-_date_min-court'] = 'Depuis le
-';
+$locales['CEchangeHprim-_date_min-court'] = 'Depuis le';
 $locales['CEchangeHprim-_date_min-desc'] = 'Date de début de la recherche.';
+$locales['config-sip-transport_layer-ftp'] = 'FTP';
+$locales['config-sip-transport_layer-soap'] = 'SOAP';
+$locales['config-sip-transport_layer'] = 'Couche de transport';
+$locales['config-sip-transport_layer-desc'] = 'Couche de transport';
+$locales['config-sip-transport'] = 'Configuration mode de transport';
+$locales['config-sip-fileextension'] = 'Extension du fichier';
+$locales['config-sip-fileextension-desc'] = 'Extension du fichier';
+$locales['config-sip-filenbroll'] = 'Permutation circulaire';
+$locales['config-sip-filenbroll-desc'] = 'Nombre de chiffres de la permutation circulaire';
+$locales['config-sip-fileprefix'] = 'Préfix du fichier';
+$locales['config-sip-fileprefix-desc'] = 'Préfix du fichier';
+$locales['config-sip-export'] = 'Configuration de l\'export';
 ?>

@@ -1,25 +1,23 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage hprimxml
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
-global $can, $m, $dPconfig;
+global $can;
 $can->needsRead();
 
 // HPRIM export FTP settings
-$HPrimConfig = $dPconfig["dPinterop"]["hprim_export"];
-$fileprefix    = dPgetParam($_POST, "fileprefix", $HPrimConfig["fileprefix"]);
-$filenbroll    = dPgetParam($_POST, "filenbroll", $HPrimConfig["filenbroll"]);
-$fileextension = dPgetParam($_POST, "fileextension", $HPrimConfig["fileextension"]);
+$fileprefix    = CAppUI::conf("sip fileprefix");
+$filenbroll    = CAppUI::conf("sip filenbroll");
+$fileextension = CAppUI::conf("sip fileextension");
 
-$ftp = new CFTP;
-$ftp->hostname = dPgetParam($_POST, "hostname", $HPrimConfig["hostname"]);
-$ftp->username = dPgetParam($_POST, "username", $HPrimConfig["username"]);
-$ftp->userpass = dPgetParam($_POST, "userpass", $HPrimConfig["userpass"]);
+$ftp = new CFTP();
+$ftp->init("SIP");
 
 $ajax = mbGetValueFromGet("ajax");
 

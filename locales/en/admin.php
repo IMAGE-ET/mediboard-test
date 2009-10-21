@@ -199,4 +199,6 @@ $locales['config-admin-CUser-max_login_attempts-desc'] = '';
 $locales['config-admin-CUser-strong_password-desc'] = '';
 $locales['CUser-back-profiled_users'] = '';
 $locales['module-common-court'] = '';
+$locales['config-admin-ftpsn'] = '';
+$locales['config-admin-ftpsn-test'] = '';
 ?>

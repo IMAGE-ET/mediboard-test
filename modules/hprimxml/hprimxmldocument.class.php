@@ -94,6 +94,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
   }
   
+  function addEnteteMsg($elParent, $nodeName) {
+    
+  }
+  
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
     $elValue = substr($elValue, 0, $elMaxSize);
     return $this->addElement($elParent, $elName, $elValue);
@@ -233,10 +237,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($lieuNaissance, "ville", $mbPatient->lieu_naissance);
     $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
-  }
-  
-  function addPersonnePhysiqueLight($elParent, $mbPatient) {
-    
   }
   
   function addPersonne($elParent, $mbPersonne, $light = false) {

@@ -1,5 +1,5 @@
 <script type="text/javascript">
- // Main.add(window.print);
+  Main.add(window.print);
 </script>
 
 <button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>

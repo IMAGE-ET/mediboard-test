@@ -403,4 +403,17 @@ $locales['config-system-website_url-desc'] = 'URL du logo de la page d\'accueil'
 $locales['module-system-libs'] = 'Bibliothèques externes';
 $locales['module-system-cache'] = 'Cache';
 $locales['module-system-assistant'] = 'Assistant';
+$locales['config-ftp'] = 'Couche de transport FTP';
+$locales['config-ftp-ftphost'] = 'Hôte';
+$locales['config-ftp-ftpuser'] = 'Utilisateur';
+$locales['config-ftp-ftppass'] = 'Mot de passe';
+$locales['config-ftp-port'] = 'Port';
+$locales['config-ftp-timeout'] = 'Timeout';
+$locales['config-ftp-pasv'] = 'Mode passif';
+$locales['config-ftp-pasv-0'] = 'Actif';
+$locales['config-ftp-pasv-1'] = 'Passif';
+$locales['config-ftp-mode'] = 'Mode de transport';
+$locales['config-ftp-mode-FTP_ASCII'] = 'FTP_ASCII';
+$locales['config-ftp-mode-FTP_BINARY'] = 'FTP_BINARY';
+
 ?>

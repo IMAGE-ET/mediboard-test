@@ -10,7 +10,7 @@
 
 class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument { 
   static function getHPrimXMLEvenementsPatients($messagePatient) {
-    $hprimxmldoc = new CHPrimXMLDocument("evenementPatient", "msgEvenementsPatients105");
+    $hprimxmldoc = new CHPrimXMLDocument("patient", "msgEvenementsPatients105");
     // Récupération des informations du message XML
     $hprimxmldoc->loadXML(utf8_decode($messagePatient));
     
@@ -32,7 +32,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function __construct() {            
-    parent::__construct("evenementsPatients", "msgEvenementsPatients105");
+    parent::__construct("patients", "msgEvenementsPatients105");
   }
   
   function generateEnteteMessageEvenementsPatients() {

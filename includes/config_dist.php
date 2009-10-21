@@ -88,15 +88,6 @@ $dPconfig["db"]["Transit"] = array(
   "dbuser" => "TransitAdmin",
   "dbpass" => "AdminTransit",
 );
-
-// Sherpa
-$dPconfig["db"]["sherpa"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "CPTransit",
-  "dbuser" => "CPTAdmin",
-  "dbpass" => "AdminCPT",
-);
   
 // BCB
 $dPconfig["db"]["bcb1"] = array(
@@ -177,17 +168,6 @@ $dPconfig["ft"] = array(
 /********* 
  * Mediboard module-specific active configuration settings
  */
-
-// HPRIM export FTP settings
-$dPconfig["dPinterop"]["hprim_export"] = array (
-  "validation"     => 1,
-  "hostname"       => "",
-  "username"       => "",
-  "userpass"       => "",
-  "fileprefix"     => "",
-  "fileextension"  => "XML",
-  "filenbroll"     => 2,
-);
 
 $dPconfig["dPadmissions"] = array (
   "fiche_admission" => "a4",
@@ -524,12 +504,6 @@ $dPconfig["system"] = array(
 	"website_url"    => "http://www.mediboard.org",
 );
 
-$dPconfig["sherpa"] = array (
-  "import_segment" => "100",
-  "import_id_min" => "",
-  "import_id_max" => "",
-);
-
 $dPconfig["dPqualite"] = array (
   "CDocGed" => array(
     "_reference_doc" => 0,
@@ -632,6 +606,10 @@ $dPconfig["sip"] = array (
   "export_id_min" => "",
   "export_id_max" => "",
   "batch_count" => "10",
+  "transport_layer" => "",
+  "fileprefix" => "",
+  "fileextension" => "XML",
+  "filenbroll" => "2",
 );
 
 $dPconfig["webservices"] = array (
@@ -654,6 +632,26 @@ $dPconfig["hprimxml"] = array (
   )
 );
 
+// you can add as much ftp as you want by using
+//$dPconfig["ftp"]["ftpsn"] = array(
+//  "ftphost" => "ftphost",
+//  "ftpuser" => "ftpuser",
+//  "ftppass" => "ftppass",
+//  "port"    => "21",
+//  "timeout" => "90",
+//  "pasv"    => "false",
+//  "mode"    => "FTP_ASCII",
+//);
+
+$dPconfig["ftp"]["SIP"] = array(
+  "ftphost"  => "ftphost",
+  "ftpuser"  => "ftpuser",
+  "ftppass"  => "ftppass",
+  "port"     => "21",
+  "timeout"  => "90",
+  "pasv"     => "0",
+  "mode"     => "FTP_ASCII",
+);
 
 // Inclusion des fichiers de config de chaque module
 $config_files = glob("./modules/*/config.php");

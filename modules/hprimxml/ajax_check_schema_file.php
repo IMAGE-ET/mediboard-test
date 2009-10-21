@@ -17,23 +17,23 @@ $racine = "modules/hprimxml/xsd/";
 
 if ($evenement == "evt_serveuractes") {
   if ($version == "1.01") {
-    $file = $racine."evenementsServeurActes/msgEvenementsServeurActes101.xsd";
+    $file = $racine."serveurActes/msgEvenementsServeurActes101.xsd";
   } else if ($version == "1.05") {
-    $file = $racine."evenementsServeurActivitePmsi/msgEvenementsServeurActes105.xsd";
+    $file = $racine."serveurActivitePmsi/msgEvenementsServeurActes105.xsd";
   }
 }
 
 if ($evenement == "evt_pmsi") {
   if ($version == "1.01") {
-    $file = $racine."evenementsPmsi/msgEvenementsPmsi101.xsd";
+    $file = $racine."evenementPmsi/msgEvenementsPmsi101.xsd";
   } else if ($version == "1.05") {
-    $file = $racine."evenementsServeurActivitePmsi/msgEvenementsPmsi105.xsd";
+    $file = $racine."serveurActivitePmsi/msgEvenementsPmsi105.xsd";
   }
 }
 
 if ($evenement == "evt_patients") {
   if ($version == "1.05") {
-   $file = $racine."evenementsPatients/msgEvenementsPatients105.xsd";
+   $file = $racine."patients/msgEvenementsPatients105.xsd";
   }
 }
 

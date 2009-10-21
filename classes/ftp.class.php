@@ -9,14 +9,16 @@
  */
  
 class CFTP {
-  var $hostname  = null;
-  var $username  = null;
-  var $userpass  = null;
-  var $connexion = null;
-  var $port      = 21;
-  var $timeout   = 90;
-  var $logs      = array();
-  
+  var $ftpsn       = null;
+  var $hostname    = null;
+  var $username    = null;
+  var $userpass    = null;
+  var $connexion   = null;
+  var $port        = 21;
+  var $timeout     = 90;
+  var $passif_mode = false;
+  var $mode        = null;
+  var $logs        = array();
   
   function logError($log) {
     $this->logs[] = "<strong>Erreur : </strong>$log";
@@ -26,17 +28,28 @@ class CFTP {
     $this->logs[] = "Etape : $log";
   }
   
+  function init($ftpsn) {
+    $this->ftpsn = $ftpsn;
+    $this->config = CAppUI::conf("ftp $ftpsn");
+    
+    $this->hostname    = $this->config["ftphost"];
+    $this->username    = $this->config["ftpuser"];
+    $this->userpass    = $this->config["ftppass"];
+    $this->port        = $this->config["port"];
+    $this->timeout     = $this->config["timeout"];
+    $this->passif_mode = $this->config["pasv"];
+    $this->mode        = $this->config["mode"];
+  }
+  
   function testSocket() {
     $fp = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
     if (!$fp) {
-      $this->logError("hote : $this->hostname, port : $this->port > $errstr ($errno)");
       return false;
     }
-    $this->logStep("Connecté au serveur $this->hostname sur le port $this->port");
     return true;
   }
   
-  function connect($passif_mode = false) {
+  function connect() {
     if(!function_exists("ftp_connect")) {
       $this->logError("Fonctions FTP non disponibles");
       return false;
@@ -45,26 +58,21 @@ class CFTP {
     // Set up basic connection
     $this->connexion = ftp_connect($this->hostname, $this->port, $this->timeout);
     if (!$this->connexion) {
-      $this->logError("Impossible de se connecter au serveur $this->hostname");
       return false;
     }
-    if($passif_mode) {
+    if($this->passif_mode) {
       $passif = ftp_pasv($conn_id, true);
       if (!$passif) {
-        $this->logError("Impossible de passer en mode passif");
         return false;
       }
     }
-    $this->logStep("Connecté au serveur $this->hostname");
 
     // Login with username and password
     $login_result = ftp_login($this->connexion, $this->username, $this->userpass);
     if (!$login_result) {
-      $this->logError("Impossible de s'authentifier en tant que $this->username");
       return false;
     } 
     
-    $this->logStep("Authentifié en tant que $this->username");
     return true;
   }
   
@@ -88,26 +96,17 @@ class CFTP {
   }
   
   function delFile($file) {
-    
     if(!$this->connexion) {
-      $this->logError("Non connecté au serveur, impossible de supprimer le fichier source $file");
       return false;
     }
-    
-    $delete = ftp_delete($this->connexion, $file);
-    
-    if(!$delete) {
-      $this->logError("Impossible de supprimer le fichier $file");
+       
+    if(!ftp_delete($this->connexion, $file)) {
       return false;
     }
-    
-    $this->logStep("Fichier $file supprimé");
-    
     return true;
-    
   }
   
-  function getFile($source_file, $destination_file = null, $mode = FTP_BINARY) {
+  function getFile($source_file, $destination_file = null) {
     
     $source_base = basename($source_file);
     
@@ -118,38 +117,30 @@ class CFTP {
     CMbPath::forceDir($destination_info["dirname"]);
     
     if(!$this->connexion) {
-      $this->logError("Non connecté au serveur, impossible de récupérer le fichier source $source_base");
       return false;
     }
     
     // Download the file
-    $upload = ftp_get($this->connexion, $destination_file, $source_file, $mode);
+    $upload = ftp_get($this->connexion, $destination_file, $source_file, constant($this->mode));
     if (!$upload) {
-      $this->logError("Impossible de récupérer le fichier source $source_base en fichier cible $destination_file");
       return false;
     } 
     
-    $this->logStep("Fichier source $source_base récupéré en fichier cible $destination_file");
     return $destination_file;
   }
   
-  function sendFile($source_file, $destination_file, $mode = FTP_BINARY) {
-    
+  function sendFile($source_file, $destination_file) {
     if(!$this->connexion) {
-      $this->logError("Non connecté au serveur, impossible de copier le fichier source $source_base");
       return false;
     }
-    
+
     $source_base = basename($source_file);
-    
     // Upload the file
-    $upload = ftp_put($this->connexion, $destination_file, $source_file, $mode);
+    $upload = ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode));
     if (!$upload) {
-      $this->logError("Impossible de copier le fichier source $source_base en fichier cible $destination_file");
       return false;
     } 
     
-    $this->logStep("Fichier source $source_base copié en fichier cible $destination_file");
     return true;
   }
   

@@ -12,9 +12,9 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
   function __construct() {
     $version = CAppUI::conf('hprimxml evt_pmsi version');
     if ($version == "1.01") {
-      parent::__construct("evenementsPmsi", "msgEvenementsPmsi101");
+      parent::__construct("evenementPmsi", "msgEvenementsPmsi101");
     } else if ($version == "1.05") {
-      parent::__construct("evenementsServeurActivitePmsi", "msgEvenementsPmsi105");
+      parent::__construct("serveurActivitePmsi", "msgEvenementsPmsi105");
     }   
     global $AppUI, $g;
         

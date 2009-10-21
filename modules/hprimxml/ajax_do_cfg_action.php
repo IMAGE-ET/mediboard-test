@@ -16,23 +16,23 @@ $version = CAppUI::conf("hprimxml $evenement version");
 switch ($evenement) {
   case "evt_serveuractes":
   	if ($version == "1.01") {
-  	  extractFiles("evenementsServeurActes" , "schemaServeurActe_v101.zip");
+  	  extractFiles("serveurActes" , "schemaServeurActe_v101.zip");
   	} else if ($version == "1.05") {
-  	  extractFiles("evenementsServeurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+  	  extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
   	}
     break;
   
   case "evt_pmsi":
   	if ($version == "1.01") {
-      extractFiles("evenementsPmsi", "schemaPMSI_v101.zip" );
+      extractFiles("evenementPmsi", "schemaPMSI_v101.zip" );
     } else if ($version == "1.05") {
-      extractFiles("evenementsServeurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+      extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
     }
     break;
     
   case "evt_patients":
   	if ($version == "1.05") {
-      extractFiles("evenementsPatients" , "schemaEvenementPatient_v105.zip");
+      extractFiles("patients" , "schemaEvenementPatient_v105.zip");
     }
     break;
    
