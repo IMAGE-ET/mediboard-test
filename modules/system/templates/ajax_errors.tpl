@@ -13,7 +13,7 @@
     User = {};
     AjaxResponse.onDisconnected();
   {{else}}
-    User = {{$app->_ref_user->_basic_info|@json}};
+    User = {{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}};
     AjaxResponse.onPerformances({{$performance|@json}});
   {{/if}}
 </script>

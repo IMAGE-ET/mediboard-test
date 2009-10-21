@@ -365,7 +365,7 @@ table.tbl {
 }
 
 table.tbl tr {
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid #eee;
 }
 
 table.tbl td,table.tbl th {
@@ -380,6 +380,10 @@ table.tbl td button {
 table.tbl a {
   display: block;
   margin: 0;
+}
+
+table.tbl tr:nth-of-type(2n+1) td {
+  background-color: #f3f3f3;
 }
 
 a.actionPat {

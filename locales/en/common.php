@@ -171,4 +171,5 @@ $locales['FormObserver-msg-confirm'] = '';
 $locales['Latest update'] = '';
 $locales['pref-showLastUpdate'] = '';
 $locales['pref-showLastUpdate-desc'] = '';
+$locales['New'] = '';
 ?>

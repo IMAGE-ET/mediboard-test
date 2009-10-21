@@ -18,8 +18,8 @@ $tableau = mbGetValueFromPost("tableau", null);
 $language = mbGetValueFromPost("language", null);
 
 if(!$module || !$tableau || !is_array($tableau)){
-  $AppUI->setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
-  $AppUI->redirect();
+  CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
+  CAppUI::redirect();
 }
 
 foreach ($tableau as $key => $valChaine){
@@ -51,10 +51,10 @@ $error = $translateModule->update($tableau, true);
 SHM::rem("locales-$language");
 
 if ($error instanceof PEAR_Error) {
-  $AppUI->setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);
+  CAppUI::setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);
 } else {
-  $AppUI->setMsg( "Locales file saved", UI_MSG_OK );
-  $AppUI->redirect();
+  CAppUI::setMsg( "Locales file saved", UI_MSG_OK );
+  CAppUI::redirect();
 }
 
 ?>

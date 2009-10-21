@@ -19,8 +19,8 @@ $trans  = mbGetValueFromPost("trans" , null);
 $chaine = mbGetValueFromPost("chaine", null);
 
 if(!$module || !$trans || !$chaine || !is_array($trans) || !is_array($chaine)){
-  $AppUI->setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
-  $AppUI->redirect();
+  CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
+  CAppUI::redirect();
 }
 
 // If the locale files are in the module's "locales" directory
@@ -36,7 +36,7 @@ if ($in_module) {
   }
 }
 else {
-  $localesDirs = $AppUI->readDirs("locales");
+  $localesDirs = CAppUI::readDirs("locales");
   CMbArray::removeValue(".svn",$localesDirs);
 }
 
@@ -55,8 +55,9 @@ foreach($localesDirs as $locale){
   $translateModule->options = array("name" => "locales");
   $translateModule->targetPath = ($in_module ? "modules/$module/locales/$locale.php" : "locales/$locale/$module.php");
   $translateModule->update($translation, true);
+  
+  SHM::rem("locales-$locale");
 }
 
-$AppUI->setMsg( "Locales file saved", UI_MSG_OK );
-$AppUI->redirect();
-?>
+CAppUI::setMsg( "Locales file saved", UI_MSG_OK );
+CAppUI::redirect();
