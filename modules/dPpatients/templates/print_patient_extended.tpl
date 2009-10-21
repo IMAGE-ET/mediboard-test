@@ -30,7 +30,7 @@ function toggleList(list, button) {
   
   <tr>
   	<th>Nom - Prénom</th>
-		<td>{{$patient->_view}}</td>
+		<td><strong>{{$patient->_view}}</strong> {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}</td>
 		
     <th rowspan="2">{{mb_label object=$patient field=adresse}}</th>
     <td rowspan="2">{{$patient->adresse|nl2br}} <br /> {{$patient->cp}} {{$patient->ville}}</td>
@@ -260,9 +260,10 @@ function toggleList(list, button) {
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr class="sejour">
     <th>Dr {{$curr_sejour->_ref_praticien}}</th>
-    <td colspan="3">
+    <td colspan="3"> {{if $curr_sejour->_num_dossier}}[{{$curr_sejour->_num_dossier}}]{{/if}}
       Du {{mb_value object=$curr_sejour field=entree_prevue}}
       au {{mb_value object=$curr_sejour field=sortie_prevue}}
+      - ({{mb_value object=$curr_sejour field=type}})
       <ul>
       {{foreach from=$curr_sejour->_ref_operations item="curr_op"}}
         <li>

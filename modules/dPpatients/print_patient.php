@@ -23,6 +23,7 @@ $patient->loadRefsSejours();
 foreach ($patient->_ref_sejours as $sejour) {
   $sejour->loadRefPraticien();
 	$sejour->loadRefsOperations();
+  $sejour->loadNumDossier();
   foreach($sejour->_ref_operations as $operation) {
     $operation->loadRefPlageOp();
 		$operation->loadRefChir();
@@ -35,6 +36,7 @@ foreach($patient->_ref_consultations as $consultation) {
 }
 
 $patient->loadRefsCorrespondants();
+$patient->loadIPP();
 
 // Création du template
 $smarty = new CSmartyDP();
