@@ -20,7 +20,7 @@ class CPhpSpec extends CMbFieldSpec {
     return "MEDIUMTEXT";
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     $propValue = (!empty($params['export']) ? var_export($propValue, true) : $propValue);
     

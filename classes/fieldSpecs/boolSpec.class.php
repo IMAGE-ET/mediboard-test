@@ -29,7 +29,7 @@ class CBoolSpec extends CMbFieldSpec {
     return "ENUM('0','1')";
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     return CAppUI::tr("bool.".$object->{$this->fieldName});
   }
   

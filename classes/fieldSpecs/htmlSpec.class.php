@@ -19,7 +19,7 @@ class CHtmlSpec extends CMbFieldSpec {
     return "MEDIUMTEXT";
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     return $object->{$this->fieldName};
   }
   

@@ -25,7 +25,7 @@ class CBirthDateSpec extends CMbFieldSpec {
     return "CHAR(10)";
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
     if (!$propValue || $propValue === "0000-00-00") {

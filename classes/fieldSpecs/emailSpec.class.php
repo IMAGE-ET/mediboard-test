@@ -20,7 +20,7 @@ class CEmailSpec extends CMbFieldSpec {
     return "VARCHAR(50)";
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
     return ($propValue !== null && $propValue !== "") ? 

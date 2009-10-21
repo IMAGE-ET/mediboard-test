@@ -27,7 +27,7 @@ class CDateSpec extends CMbFieldSpec {
     );
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     if ($smarty) require_once $smarty->_get_plugin_filepath('modifier', 'date_format');
     $propValue = $object->{$this->fieldName};
     $format = mbGetValue(@$params["format"], CAppUI::conf("date"));

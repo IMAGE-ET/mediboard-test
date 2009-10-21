@@ -24,7 +24,7 @@ class CXmlSpec extends CMbFieldSpec {
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $geshi = new Geshi($object->{$this->fieldName}, "xml");
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
     $geshi->set_overall_style("max-height: 100%;");

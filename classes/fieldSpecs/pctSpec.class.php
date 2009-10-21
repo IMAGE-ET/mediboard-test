@@ -32,7 +32,7 @@ class CPctSpec extends CMbFieldSpec {
     return null;
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $decimals = CMbArray::extract($params, "decimals");
     return number_format($object->{$this->fieldName}, ($decimals ? $decimals : 2), ',', ' ').' %';
   }

@@ -23,7 +23,7 @@ class CTextSpec extends CMbFieldSpec {
     return null;
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     return '<p>'.nl2br(htmlspecialchars($object->{$this->fieldName})).'</p>';
   }
   

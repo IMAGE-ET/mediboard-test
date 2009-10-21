@@ -15,7 +15,7 @@ class CCurrencySpec extends CFloatSpec {
     return("currency");
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
     $decimals = CMbArray::extract($params, "decimals");

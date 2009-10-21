@@ -104,7 +104,7 @@ class CMbFieldSpec {
     return false;
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
     if ($propValue && $this->mask) {

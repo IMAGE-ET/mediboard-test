@@ -79,23 +79,17 @@ class DiskSharedMemory implements ISharedMemory {
   }
 
   function rem($key) {
-    return unlink($this->dir.$key);
+    if (is_writable($this->dir.$key))
+      return unlink($this->dir.$key);
+    return false;
   }
 
   /*function clear() {
   	$files = glob($this->dir);
   	$ok = true;
   	 
-  	foreach ($files as $file) {
-  	$filename = basename($file);
-  	 
-  	if (!unlink($file)) {
-  	echo "<div class='error'>Impossible de supprimer l'entréee <i>$filename</i></div>";
-  	$ok = false;
-  	} else
-  	echo "<div class='message'>Entrée <i>$filename</i> supprimée</div>";
-  	}
-  	return $ok;
+  	foreach ($files as $file)
+  	  unlink($file);
   }*/
 }
 
@@ -126,7 +120,8 @@ class EAcceleratorSharedMemory implements ISharedMemory {
   }
 
   /*function clear() {
-  eaccelerator_clear();
+    eaccelerator_list_keys();
+    eaccelerator_clear();
     return true;
   }*/
 }

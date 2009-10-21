@@ -20,7 +20,7 @@ class CDateTimeSpec extends CMbFieldSpec {
     return "DATETIME";
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     if ($smarty) require_once $smarty->_get_plugin_filepath('modifier','date_format');
     
     $propValue = $object->{$this->fieldName};

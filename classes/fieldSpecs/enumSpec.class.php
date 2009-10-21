@@ -54,7 +54,7 @@ class CEnumSpec extends CMbFieldSpec {
     );
   }
   
-  function getValue($object, $smarty = null, $params = null) {
+  function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     if ($this->class) 
