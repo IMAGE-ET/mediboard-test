@@ -29,14 +29,13 @@ function toggleList(list, button) {
   <tr><th class="title" colspan="10">Fiche Patient ({{$today}})</th></tr>
   
   <tr>
-  	<th>Nom - Prénom</th>
-		<td><strong>{{$patient->_view}}</strong> {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}</td>
-		
+  	<th>{{mb_label object=$patient field=nom}} - {{mb_label object=$patient field=prenom}}</th>
+		<td><strong>{{$patient->_view}}</strong> {{if $patient->_IPP && $patient->_IPP != "-"}}[{{$patient->_IPP}}]{{/if}}</td>
     <th rowspan="2">{{mb_label object=$patient field=adresse}}</th>
     <td rowspan="2">{{$patient->adresse|nl2br}} <br /> {{$patient->cp}} {{$patient->ville}}</td>
 	</tr>
   <tr>
-  	<th>Naissance - Sexe</th>
+  	<th>{{mb_label object=$patient field=naissance}} - {{mb_label object=$patient field=sexe}}</th>
 		<td>né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}</td>
 	</tr>
   <tr>
@@ -152,11 +151,9 @@ function toggleList(list, button) {
       {{mb_value object=$patient field="prevenir_nom"}}
       {{mb_value object=$patient field="prevenir_prenom"}}
     </td>
-    
     <th>{{mb_label object=$patient field="employeur_nom"}}</th>
     <td>{{mb_value object=$patient field="employeur_nom"}}</td>
   </tr>
-
   <tr>
     <th>{{mb_label object=$patient field="prevenir_adresse"}}</th>
     <td>
@@ -164,7 +161,6 @@ function toggleList(list, button) {
       {{mb_value object=$patient field="prevenir_cp"}}
       {{mb_value object=$patient field="prevenir_ville"}}
     </td>
-    
     <th>{{mb_label object=$patient field="employeur_adresse"}}</th>
     <td>
       {{mb_value object=$patient field="employeur_adresse"}}<br />
@@ -172,26 +168,21 @@ function toggleList(list, button) {
       {{mb_value object=$patient field="employeur_ville"}}
     </td>
   </tr>
-
   <tr>
     <th>{{mb_label object=$patient field="prevenir_tel"}}</th>
     <td>{{mb_value object=$patient field="prevenir_tel"}}</td>
-    
     <th>{{mb_label object=$patient field="employeur_tel"}}</th>
     <td>{{mb_value object=$patient field="employeur_tel"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="prevenir_parente"}}</th>
     <td>{{mb_value object=$patient field="prevenir_parente"}}</td>
-    
     <th>{{mb_label object=$patient field="employeur_urssaf"}}</th>
     <td>{{mb_value object=$patient field="employeur_urssaf"}}</td>
   </tr>
-	
-	
   <tr><th class="category" colspan="10">Assuré social</th></tr>
   <tr>
-    <th>Nom / prénom</th>
+    <th>{{mb_label object=$patient field=assure_nom}} / {{mb_label object=$patient field=assure_prenom}}</th>
     <td>
     	{{mb_value object=$patient field="assure_civilite"}}
     	{{mb_value object=$patient field="assure_nom"}} 
@@ -260,7 +251,7 @@ function toggleList(list, button) {
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr class="sejour">
     <th>Dr {{$curr_sejour->_ref_praticien}}</th>
-    <td colspan="3"> {{if $curr_sejour->_num_dossier}}[{{$curr_sejour->_num_dossier}}]{{/if}}
+    <td colspan="3"> {{if $curr_sejour->_num_dossier && $curr_sejour->_num_dossier != '-'}}[{{$curr_sejour->_num_dossier}}]{{/if}}
       Du {{mb_value object=$curr_sejour field=entree_prevue}}
       au {{mb_value object=$curr_sejour field=sortie_prevue}}
       - ({{mb_value object=$curr_sejour field=type}})
@@ -293,5 +284,4 @@ function toggleList(list, button) {
   </tr>
   {{/foreach}}
   {{/if}}
-
 </table>
