@@ -1,5 +1,26 @@
 <script type="text/javascript">
-	Main.add(window.print);
+//Main.add(window.print);
+
+var lists = {
+  sejour: {
+    labels: ["Dernier séjour", "Séjours"],
+    all: true
+  },
+  consultation: {
+    labels: ["Dernière consultation", "Consultations"],
+    all: true
+  },
+};
+
+function toggleList(list, button) {
+  var lines = $$('.'+list),
+      data = lists[list];
+      
+  lines.invoke('toggle');
+  lines.first().show();
+  data.all = !data.all;
+  button.up().select('span')[0].update(data.labels[data.all ? 1 : 0]);
+}
 </script>
 
 <button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
@@ -230,9 +251,14 @@
   </tr>
   
   {{if $patient->_ref_sejours|@count}}
-  <tr><th class="category" colspan="10">Séjours précédents</th></tr>
-  {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
+    <th class="category" colspan="10">
+      <button class="change not-printable" style="float:right;" onclick="toggleList('sejour', this)">Seulement le dernier</button>
+      <span>Séjours</span>
+    </th>
+  </tr>
+  {{foreach from=$patient->_ref_sejours item=curr_sejour}}
+  <tr class="sejour">
     <th>Dr {{$curr_sejour->_ref_praticien}}</th>
     <td colspan="3">
       Du {{mb_value object=$curr_sejour field=entree_prevue}}
@@ -253,9 +279,14 @@
   {{/if}}
   
   {{if $patient->_ref_consultations|@count}}
-  <tr><th class="category" colspan="10">Consultations</th></tr>
-  {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
+    <th class="category" colspan="10">
+      <button class="change not-printable" style="float:right;" onclick="toggleList('consultation', this)">Seulement la dernière</button>
+      <span>Consultations</span>
+    </th>
+  </tr>
+  {{foreach from=$patient->_ref_consultations item=curr_consult}}
+  <tr class="consultation">
     <th>Dr {{$curr_consult->_ref_plageconsult->_ref_chir}}</th>
     <td colspan="3">le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}</td>
   </tr>
