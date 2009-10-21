@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0) {
+function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $type_data = "prevue") {
 	if (!$debut) $debut = mbDate("-1 YEAR");
 	if (!$fin) $fin = mbDate();
 	
@@ -56,16 +56,20 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 		);
 		
 	  $query = "SELECT COUNT(sejour.sejour_id) AS total, sejour.type,
-	    DATE_FORMAT(sejour.entree_prevue, '%m/%Y') AS mois,
-	    DATE_FORMAT(sejour.entree_prevue, '%Y%m') AS orderitem
+	    DATE_FORMAT(sejour.entree_$type_data, '%m/%Y') AS mois,
+	    DATE_FORMAT(sejour.entree_$type_data, '%Y%m') AS orderitem
 	    FROM sejour
 	    INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
-	    WHERE 
-			  sejour.entree_prevue BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND 
-				sejour.group_id = '".CGroups::loadCurrent()->_id."' AND 
-				sejour.type = '$key' AND 
+	    LEFT JOIN affectation ON sejour.sejour_id = affectation.sejour_id
+	    LEFT JOIN lit ON affectation.lit_id = lit.lit_id
+	    LEFT JOIN chambre ON lit.chambre_id = chambre.chambre_id
+	    LEFT JOIN service ON chambre.service_id = service.service_id
+	    WHERE
+			  sejour.entree_$type_data BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND
+				sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
+				sejour.type = '$key' AND
 				sejour.annule = '0'";
-				
+	  if($service_id)    $query .= "\nAND service.service_id = '$service_id'";
 	  if($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
 	  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
 		
@@ -94,7 +98,7 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	if($discipline_id) $subtitle .= " - $discipline->_view";
 	
 	$options = array(
-		'title' => utf8_encode("Nombre d'admissions par type d'hospitalisation"),
+		'title' => utf8_encode("Nombre d'admissions par type d'hospitalisation - $type_data"),
 		'subtitle' => utf8_encode($subtitle),
 		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
 		'yaxis' => array('autoscaleMargin' => 1),

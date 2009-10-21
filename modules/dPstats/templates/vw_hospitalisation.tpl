@@ -81,6 +81,18 @@ Main.add(function(){
       </select>
     </td>
   </tr>
+  
+  <tr>
+    <th><label for="type_data" title="Type de données prises en compte">Type de données</th>
+    <td>
+      <select name="type_data">
+        <option value="prevue" {{if $type_data == "prevue"}}selected="selected"{{/if}}>Prévues</option>
+        <option value="reelle" {{if $type_data == "reelle"}}selected="selected"{{/if}}>Réelles</option>
+      </select>
+    </td>
+    <th />
+    <td />
+  </tr>
 
   <tr>
     <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
@@ -88,6 +100,30 @@ Main.add(function(){
 </table>
 
 </form>
+
+<table class="tbl">
+  <tr>
+    <th colspan="2">Qualité de l'information</th>
+  </tr>
+  <tr>
+    <td style="text-align: right;">
+      <label title="Nombre total de séjours disponibles selon les filtres utilisés">Séjours disponibles</label>
+    </td>
+    <td style="width: 100%;">{{$qualite.total}} séjours</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">
+      <label title="Les séjours non placés n'apparaitront pas dans les graphiques 'par service'">Séjours comportant un de placement dans un lit</label>
+    </td>
+    <td>{{$qualite.places.total}} séjours ({{$qualite.places.pct|string_format:"%.2f"}} %)</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">
+      <label title="Ce facteur sera pris en compte selon le type de données choisi">Séjours comportant une entrée et une sortie réelle</label>
+    </td>
+    <td>{{$qualite.reels.total}} séjours ({{$qualite.reels.pct|string_format:"%.2f"}} %)</td>
+  </tr>
+</table>
 
 {{foreach from=$graphs item=graph key=key}}
 	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
