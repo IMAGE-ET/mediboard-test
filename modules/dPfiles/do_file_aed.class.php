@@ -17,7 +17,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     
     $this->redirect = "m=$m"; 
     
-    if ($dialog = dPgetParam($_POST, "dialog")) {
+    if ($dialog = mbGetValueFromPost("dialog")) {
       $this->redirect      .= "&a=upload_file&dialog=1";
       $this->redirectStore = "m=$m&a=upload_file&dialog=1&uploadok=1";
     }

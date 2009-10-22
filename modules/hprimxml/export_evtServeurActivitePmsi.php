@@ -32,8 +32,8 @@ switch ($typeObject) {
 		$doc = new CHPrimXMLServeurActes();
 		
 		// Chargement de l'opération et génération du document
-		$mb_operation_id = dPgetParam($_POST, "mb_operation_id", mbGetValueFromGetOrSession("object_id"));
-		if ($mbObject->load($mb_operation_id)) {
+		$operation_id = mbGetValueFromPost("mb_operation_id", mbGetValueFromGetOrSession("object_id"));
+		if ($mbObject->load($operation_id)) {
 		  $mbObject->loadRefs();
 		  foreach ($mbObject->_ref_actes_ccam as $acte_ccam) {
 		    $acte_ccam->loadRefsFwd();
@@ -51,8 +51,8 @@ switch ($typeObject) {
 		  }
 		  $doc->generateFromOperation($mbObject);
 			if ($doc_valid = $doc->schemaValidate()) {
-				$mbSejour->facture = true;
-				$mbSejour->store();
+			  $mbObject->facture = true;
+				$mbObject->store();
 			}
 		}
 		break;
@@ -61,8 +61,8 @@ switch ($typeObject) {
 		$doc = new CHPrimXMLEvenementPmsi();
 				
 		// Chargement du séjour et génération du document
-		$mb_sejour_id = dPgetParam($_POST, "mb_sejour_id", mbGetValueFromGetOrSession("object_id"));
-		if ($mbObject->load($mb_sejour_id)) {
+		$sejour_id = mbGetValueFromPost("mb_sejour_id", mbGetValueFromGetOrSession("object_id"));
+		if ($mbObject->load($sejour_id)) {
 		  $mbObject->loadRefs();
 		  $mbObject->loadRefDossierMedical();
 		  $mbObject->loadNumDossier();

@@ -57,7 +57,7 @@ if ($mediuser->isFromType(array("Anesthésiste"))) {
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;
-if(dPgetParam($_GET, "new", 0)) {
+if(mbGetValueFromGet("new", 0)) {
   $patient->load(NULL);
   mbSetValueToSession("id", null);
 } else {

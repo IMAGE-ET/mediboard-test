@@ -13,7 +13,7 @@ class CDoPatientMerge extends CDoObjectAddEdit {
   function CDoPatientMerge() {
     $this->CDoObjectAddEdit("CPatient", "patient_id");
     
-    if ($dialog = dPgetParam($_POST, "dialog")) {
+    if ($dialog = mbGetValueFromPost("dialog")) {
       $this->redirectDelete .= $this->redirect."&a=pat_selector&dialog=1";
       $this->redirectStore  .= $this->redirect."&a=vw_edit_patients&dialog=1";
     }
@@ -28,8 +28,8 @@ class CDoPatientMerge extends CDoObjectAddEdit {
   function doStore() {
     parent::doStore();
     
-    $dialog = dPgetParam($_POST, "dialog");
-    $isNew = !dPgetParam($_POST, "patient_id");
+    $dialog = mbGetValueFromPost("dialog");
+    $isNew = !mbGetValueFromPost("patient_id");
     $patient_id = $this->_obj->patient_id;
     
     if ($isNew)
@@ -55,7 +55,7 @@ if (!$patient2->load($patient2_id)) {
   $do->errorRedirect("Patient 2 n'existe pas ou plus");
 }
 
-if (intval(dPgetParam($_POST, "del"))) {
+if (intval(mbGetValueFromPost("del"))) {
   $do->errorRedirect("Fusion en mode suppression impossible");
 }
 

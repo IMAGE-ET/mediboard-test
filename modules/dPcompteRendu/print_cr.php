@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 // Récupération du compte-rendu
-$compte_rendu_id = dPgetParam($_GET, "compte_rendu_id", 0);
+$compte_rendu_id = mbGetValueFromGet("compte_rendu_id", 0);
 
 $compteRendu = new CCompteRendu;
 $compteRendu->load($compte_rendu_id);

@@ -76,6 +76,31 @@ class CMbConfig {
     @$config->parseConfig($this->values, $this->configType, $this->options);
     return @$config->writeConfig($this->targetPath, $this->configType, $this->options);
   }
+  
+  function set($path, $value) {
+    $conf = $this->values;
+    $values = &$conf;
+    
+    $items = explode(' ', $path);
+    foreach ($items as $part) {
+      if (!array_key_exists($part, $conf))
+        $conf[$part] = array();
+      $conf = &$conf[$part];
+    }
+    $conf = $value;
+    
+    $this->values = $values;
+  }
+  
+  function get($path) {
+    $conf = $this->values;
+    
+    $items = explode(' ', $path);
+    foreach ($items as $part) {
+      $conf = $conf[$part];
+    }
+    return $conf;
+  }
 }
 
 ?>

@@ -1223,8 +1223,13 @@ class CSetupdPcabinet extends CSetup {
 		$sql = "ALTER TABLE `consultation_anesth` 
             ADD `date_analyse` DATE;";
 		$this->addQuery($sql);
-		
-		$this->mod_version = "1.15";
+		    
+    $this->makeRevision("1.15");
+    $sql = "ALTER TABLE `consultation` 
+              ADD `facture` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);  
+    
+    $this->mod_version = "1.16";
   }
 }
 ?>

@@ -11,9 +11,9 @@
 $obj = new CPlageressource();
 $obj->bind($_POST);
 
-$del = dPgetParam( $_POST, 'del', 0 );
-$repeat = dPgetParam( $_POST, '_repeat', 1 );
-$double = dPgetParam( $_POST, '_double', 0 );
+$del = mbGetValueFromPost( 'del', 0 );
+$repeat = mbGetValueFromPost( '_repeat', 1 );
+$double = mbGetValueFromPost( '_double', 0 );
 
 $body_msg = null;
 $header = array();

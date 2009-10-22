@@ -12,9 +12,9 @@
 $obj = new CPlageOp();
 $obj->bind($_POST);
 
-$del         = dPgetParam( $_POST, "del", 0);
-$repeat      = dPgetParam( $_POST, "_repeat", 0);
-$type_repeat = dPgetParam( $_POST, "_type_repeat", 1);
+$del         = mbGetValueFromPost("del", 0);
+$repeat      = mbGetValueFromPost("_repeat", 0);
+$type_repeat = mbGetValueFromPost("_type_repeat", 1);
 
 
 // si l'id de l'objet est nul => creation
@@ -156,7 +156,7 @@ if ($body_msg) {
   $complete_msg .= $body_msg; 
 }
 
-if( $otherm = dPgetParam($_POST, "otherm", 0) )
+if( $otherm = mbGetValueFromPost("otherm", 0) )
   $m = $otherm;
 
 $AppUI->setMsg($complete_msg, $msgNo);

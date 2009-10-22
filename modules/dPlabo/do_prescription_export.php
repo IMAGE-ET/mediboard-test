@@ -34,7 +34,7 @@ if (!$doc->checkSchema()) {
 $mbPrescription = new CPrescriptionLabo();
 
 // Chargement de la prescription
-$mb_prescription_id = dPgetParam($_POST, "prescription_labo_id", null);
+$mb_prescription_id = mbGetValueFromPost("prescription_labo_id", null);
 if(!$mb_prescription_id) {
   $AppUI->setMsg("Veuillez spécifier une prescription", UI_MSG_ERROR );
   redirect();

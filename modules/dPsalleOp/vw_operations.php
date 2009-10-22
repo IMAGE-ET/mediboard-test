@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPsalleOp
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m, $g, $dPconfig;
 
@@ -65,12 +66,14 @@ if ($op) {
   
   $selOp->loadRefs();
   $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$selOp->_ref_plageop->actes_locked);
+  
 //  $actesup = $selOp->_ref_actes_ccam->_ref_exec
 
   $sejour =& $selOp->_ref_sejour;
-	
-	$modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$sejour->facture);
 
+  // Codable facturé
+  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$selOp->facture);
+ 
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->_ref_dossier_medical->loadRefsBack();

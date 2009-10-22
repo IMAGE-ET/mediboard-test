@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-if ($chir_id = dPgetParam($_POST, "chir_id")) {
+if ($chir_id = mbGetValueFromPost("chir_id")) {
   mbSetValueToSession("chir_id", $chir_id);
 }
 

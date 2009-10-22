@@ -160,6 +160,7 @@ class CConsultation extends CCodable {
     $specs["histoire_maladie"]  = "text helped seekable";
     $specs["conclusion"]        = "text helped seekable";
     
+    $specs["facture"]           = "bool default|0";
     
     $specs["premiere"]          = "bool";
     $specs["adresse"]           = "bool";

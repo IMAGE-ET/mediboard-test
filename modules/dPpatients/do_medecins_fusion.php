@@ -18,7 +18,7 @@ $do = new CDoObjectAddEdit("CMedecin", "medecin_id");
 $do->doBind();
 
 // Création du nouveau medecin
-if (intval(dPgetParam($_POST, "del"))) {
+if (intval(mbGetValueFromPost("del"))) {
   $do->doDelete();
 } else {
   $do->doStore();

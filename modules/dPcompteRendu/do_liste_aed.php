@@ -9,7 +9,7 @@
 
 $do = new CDoObjectAddEdit("CListeChoix", "liste_choix_id");
 $do->doBind();
-if (intval(dPgetParam($_POST, 'del'))) {
+if (intval(mbGetValueFromPost('del'))) {
   $do->doDelete();
   $do->redirect = "m=dPcompteRendu&liste_id=0";
 } else {

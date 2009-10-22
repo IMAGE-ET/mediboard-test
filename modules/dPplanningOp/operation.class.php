@@ -199,6 +199,8 @@ class COperation extends CCodable {
     $specs["rques_visite_anesth"]   = "text helped";
     $specs["autorisation_anesth"]   = "bool default|0";
 
+    $specs["facture"]                 = "bool default|0";
+
     $specs["_date_min"]               = "date";
     $specs["_date_max"]               = "date moreEquals|_date_min";
     $specs["_plage"]                  = "bool";

@@ -11,7 +11,7 @@ $obj = new CPack();
 $obj->bind($_POST);
 
 // detect if a delete operation has to be processed
-$del = dPgetParam( $_POST, 'del', 0 );
+$del = mbGetValueFromPost('del', 0 );
 if ($del) {
 	// check canDelete
 	if ($msg = $obj->canDeleteEx()) {	

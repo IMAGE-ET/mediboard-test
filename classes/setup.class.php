@@ -27,6 +27,7 @@ class CSetup {
   var $timeLimit    = array();
   var $tables       = array();
   var $datasources  = array();
+  var $config_moves = array();
   
   function __construct() {
   	$this->ds = CSQLDataSource::get("std");
@@ -46,6 +47,7 @@ class CSetup {
     $this->queries     [$revision] = array();
     $this->functions   [$revision] = array();
     $this->dependencies[$revision] = array();
+    $this->config_moves[$revision] = array();
     $this->timeLimit   [$revision] = null;
     end($this->revisions);
   }
@@ -184,8 +186,8 @@ class CSetup {
       return;
     }
 
-    if (!array_key_exists($oldRevision, $this->queries)) {
-      CAppUI::setMsg("No queries for '$this->mod_name' setup at revision '$oldRevision'", UI_MSG_ERROR);
+    if (!array_key_exists($oldRevision, $this->queries) && !array_key_exists($oldRevision, $this->config_moves)) {
+      CAppUI::setMsg("No queries or config moves for '$this->mod_name' setup at revision '$oldRevision'", UI_MSG_ERROR);
       return;
     }
     
@@ -229,6 +231,15 @@ class CSetup {
           return $currRevision;
         }
       }
+      
+      $mbConfig = new CMbConfig;
+      $mbConfig->load();
+      // Move conf
+      foreach ($this->config_moves[$currRevision] as $config) {
+        $mbConfig->set($config[1], $mbConfig->get($config[0]));
+        $mbConfig->set($config[0], null); 
+      }
+      $mbConfig->update($mbConfig->values);
 
     } while ($currRevision = next($this->revisions));
 
@@ -265,6 +276,15 @@ class CSetup {
   function configure() {
     CAppUI::redirect("m=$this->mod_name&a=configure" );
     return true;
-  }  
+  } 
+  
+  /**
+   * Move the configuration setting for a given path in a new configuration
+   * @param $old_conf string Tokenized path, eg "module class var";
+   * @param $new_conf string Tokenized path, eg "module class var";
+   */
+  function moveConf($old_path, $new_path) {
+    $this->config_moves[current($this->revisions)][] = array($old_path, $new_path);
+  } 
 }
 ?>

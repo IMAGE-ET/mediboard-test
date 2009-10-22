@@ -12,6 +12,7 @@ class CCodable extends CMbObject {
 	
   // DB Fields
   var $codes_ccam          = null;
+  var $facture             = null; // Séjour facturé ou non
   
   // Form fields
   var $_acte_execution     = null;
@@ -183,8 +184,9 @@ class CCodable extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-  	$specs["codes_ccam"] = "str";
-  	$specs["_codes_ccam"] = "";
+  	$specs["codes_ccam"]   = "str";
+    $specs["facture"]     = "bool default|0";
+  	$specs["_codes_ccam"]  = "";
   	$specs["_count_actes"] = "num min|0";
   	return $specs;
   }

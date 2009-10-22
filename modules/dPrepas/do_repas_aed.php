@@ -120,7 +120,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
        }
     }
 
-    if (intval(dPgetParam($_POST, 'del'))) {
+    if (intval(mbGetValueFromPost('del'))) {
       $this->doDelete();
     } else {
       $this->doStore();

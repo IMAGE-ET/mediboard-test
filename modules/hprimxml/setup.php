@@ -15,8 +15,11 @@ class CSetuphprimxml extends CSetup {
     
       $this->mod_name = "hprimxml";
       $this->makeRevision("all");
+      $this->makeRevision("0.10");
      
-      $this->mod_version = "0.10";
+      $this->addDependency("sip", "0.15");
+      
+      $this->mod_version = "0.11";
   }
 }
 

@@ -23,13 +23,12 @@ Main.add(function () {
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
+    {{mb_include module=system template=configure_handler class_handler=CSipObjectHandler}}
+    
     {{assign var="mod" value="sip"}}
     <tr>
       <th class="category" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
     </tr>
-    
-    {{mb_include module=system template=configure_handler class_handler=CSipObjectHandler}}
-    
     {{mb_include module=system template=inc_config_bool var=server}}
     
     {{assign var="var" value="transport_layer"}}

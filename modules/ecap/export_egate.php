@@ -16,7 +16,7 @@ if (!class_exists("DOMDocument")) {
 
 $can->needsRead();
 
-$mb_sejour_id = dPgetParam($_POST, "mb_sejour_id", mbGetValueFromGetOrSession("sejour_id"));
+$mb_sejour_id = mbGetValueFromPost("mb_sejour_id", mbGetValueFromGetOrSession("sejour_id"));
 
 $msgError = null;
 $mbSejour = new CSejour();

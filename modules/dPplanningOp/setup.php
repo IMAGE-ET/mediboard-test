@@ -814,12 +814,17 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`etablissement_entree_transfert_id`);";
     $this->addQuery($sql);    
     
-		 $this->makeRevision("0.98");
+		$this->makeRevision("0.98");
     $sql = "ALTER TABLE `sejour` 
               ADD `facture` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);  
-		
-    $this->mod_version = "0.99";
+		    
+    $this->makeRevision("0.99");
+    $sql = "ALTER TABLE `operations` 
+              ADD `facture` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);  
+    
+    $this->mod_version = "1.00";
   }
 }
 ?>

@@ -14,6 +14,6 @@ $exam_audio->load(mbGetValueFromGetOrSession("examaudio_id"));
 
 CAppUI::requireModuleFile($m, "inc_graph_audio_tympan");
 
-$side = dPgetParam($_GET, "side");
+$side = mbGetValueFromGet("side");
 
 AudiogrammeTympano::${$side}->Stroke();
