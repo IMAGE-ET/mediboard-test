@@ -300,4 +300,6 @@ $locales['config-dPurgences-sortie_prevue-desc'] = 'Initialiser la sortie prévue
 $locales['config-dPurgences-sortie_prevue-sameday'] = 'Le même jour (23h59)';
 $locales['config-dPurgences-default_view-0'] = '';
 $locales['config-dPurgences-sortie_prevue-h24'] = 'H +24';
+$locales['config-dPurgences-only_prat_reponsable'] = 'Responsable praticien';
+$locales['config-dPurgences-only_prat_reponsable-desc'] = 'Choix d\'un praticien (et non un infirmier) pour le RPU';
 ?>

@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<h1>Configuration du module {{tr}}module-{{$m}}-court{{/tr}}</h1>
+<hr />
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
@@ -35,6 +38,10 @@
     </td>
   </tr>
   
+  <tr>
+    <th class="category" colspan="100">Niveau d'alerte de sortie des patients</th>
+  </tr>
+  
   {{assign var="var" value="rpu_warning_time"}}
   <tr>
     <th>
@@ -59,6 +66,10 @@
     </td>
   </tr>
   
+  <tr>
+    <th class="category" colspan="100">Réglage d'affichage</th>
+  </tr>
+  
   {{assign var=var value=default_view}} 
   <tr>
    <th>
@@ -72,22 +83,7 @@
        <option value="presents" {{if "presents" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-presents{{/tr}}</option>
      </select>
    </td>
-  </tr>
-  
-  {{assign var="var" value="allow_change_patient"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  </tr>  
 
  {{assign var="var" value="motif_rpu_view"}}
   <tr>
@@ -164,6 +160,25 @@
     </td>             
   </tr>
   
+  <tr>
+    <th class="category" colspan="100">Configuration des urgences</th>
+  </tr>
+  
+  {{assign var="var" value="allow_change_patient"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td>
+      <label for="{{$m}}[{{$var}}]_1">Oui</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$var}}]_0">Non</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+  
   {{assign var="var" value="sortie_prevue"}} 
   <tr>
    <th>
@@ -177,6 +192,21 @@
        <option value="h24" {{if "h24" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-h24{{/tr}}</option>
      </select>
    </td>
+  </tr>
+  
+  {{assign var="var" value="only_prat_reponsable"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td>
+      <label for="{{$m}}[{{$var}}]_1">Oui</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$var}}]_0">Non</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
   </tr>
   
   <tr>

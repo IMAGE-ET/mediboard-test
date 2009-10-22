@@ -14,8 +14,12 @@ $can->needsRead();
 
 $group = CGroups::loadCurrent();
 $user = new CMediusers();
-$listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);
-$listPrats        = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+if (CAppUI::conf("dPurgences only_prat_reponsable")) {
+  $listResponsables = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+} else {
+  $listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);
+}
+$listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $rpu    = new CRPU;
 $rpu_id = mbGetValueFromGetOrSession("rpu_id");

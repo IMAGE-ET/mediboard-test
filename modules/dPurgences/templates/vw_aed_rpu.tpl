@@ -167,7 +167,8 @@ Main.add(function () {
   <tr>
     <th>{{mb_label object=$rpu field="_responsable_id"}}</th>
     <td>
-      <select name="_responsable_id">
+      <select name="_responsable_id" class="{{$rpu->_props._responsable_id}}">
+        <option value="">&mdash; Choisir un responsable</option>
         {{foreach from=$listResponsables item=curr_user}}
         <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
           {{$curr_user->_view}}

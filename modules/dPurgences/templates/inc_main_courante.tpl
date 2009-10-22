@@ -122,14 +122,16 @@
           [{{$curr_sejour->_num_dossier}}]
         {{/if}}
       </a>
-      <div style="clear: both; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-      {{if $rpu->radio_debut}}
-      	<div>{{tr}}CRPU-{{mb_ternary test=$rpu->radio_fin value=radio_fin other=radio_debut}}{{/tr}}</div>
+      {{if ($rpu->radio_debut || $rpu->bio_depart)}}
+        <div style="clear: both; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+        {{if $rpu->radio_debut}}
+        	<div>{{tr}}CRPU-{{mb_ternary test=$rpu->radio_fin value=radio_fin other=radio_debut}}{{/tr}}</div>
+        {{/if}}
+        {{if $rpu->bio_depart}}
+        	<div>{{tr}}CRPU-{{mb_ternary test=$rpu->bio_retour value=bio_retour other=bio_depart}}{{/tr}}</div>
+        {{/if}}
+      	</div>
       {{/if}}
-      {{if $rpu->bio_depart}}
-      	<div>{{tr}}CRPU-{{mb_ternary test=$rpu->bio_retour value=bio_retour other=bio_depart}}{{/tr}}</div>
-      {{/if}}
-    	</div>
       
     </td>
     

@@ -300,4 +300,6 @@ $locales['config-dPurgences-responsable_rpu_view-desc'] = '';
 $locales['config-dPurgences-sortie_prevue'] = '';
 $locales['config-dPurgences-sortie_prevue-desc'] = '';
 $locales['config-dPurgences-sortie_prevue-h24'] = '';
+$locales['config-dPurgences-reponsable_id_notNull'] = '';
+$locales['config-dPurgences-reponsable_id_notNull-desc'] = '';
 ?>
