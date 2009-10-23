@@ -334,3 +334,5 @@
   </tr>
 </table>
 </form>
+
+{{include file=inc_configure_actions.tpl}}

@@ -342,7 +342,6 @@ Document.refreshList = function(){
       </a>
       <a class="tooltip-trigger"
          href="{{$curr_op->_link_editor}}"
-         class="tooltip-trigger"
          onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
       >
       {{else}}
