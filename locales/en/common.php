@@ -172,4 +172,5 @@ $locales['Latest update'] = '';
 $locales['pref-showLastUpdate'] = '';
 $locales['pref-showLastUpdate-desc'] = '';
 $locales['New'] = '';
+$locales['Preview'] = 'Preview';
 ?>

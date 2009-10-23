@@ -1,10 +1,6 @@
 {{if @$object->_aides_all_depends.$property}}
 
 <script type="text/javascript">
-function validate(title, text) {
-  console.debug(title, text);
-}
-  
 Main.add(function(){
   Control.Tabs.create("tabs-aides-depend");
   Control.Tabs.create("tabs-aides-depend2");
@@ -21,7 +17,7 @@ Main.add(function(){
       <ul class="control_tabs_vertical" id="tabs-aides-depend">
       {{foreach from=$aidesByDepend1 key=depend1 item=aidesByDepend2}}
         <li>
-          <a href="#{{$depend1}}">{{tr}}{{$object->_class_name}}.{{$depend_field_1}}.{{$depend1}}{{/tr}} 
+          <a href="#{{$object->_class_name}}-{{$depend1}}">{{tr}}{{$object->_class_name}}.{{$depend_field_1}}.{{$depend1}}{{/tr}} 
             <small>({{$aidesByDepend2|@count}})</small>
           </a>
         </li>
@@ -31,17 +27,16 @@ Main.add(function(){
       
     <td>
       {{foreach from=$aidesByDepend1 key=depend1 item=aidesByDepend2}}
-        <div id="{{$depend1}}" style="display: none;">
+        <div id="{{$object->_class_name}}-{{$depend1}}" style="display: none;">
           <ul class="control_tabs" id="tabs-aides-depend2">
           {{foreach from=$aidesByDepend2 key=depend2 item=aides}}
-            <li><a href="#{{$depend2}}">{{tr}}{{$object->_class_name}}.{{$depend_field_2}}.{{$depend2}}{{/tr}} <small>({{$aides|@count}})</small></a></li>
+            <li><a href="#{{$object->_class_name}}-{{$depend1}}-{{if $depend2}}{{$depend2}}{{else}}all{{/if}}">{{tr}}{{$object->_class_name}}.{{$depend_field_2}}.{{$depend2}}{{/tr}} <small>({{$aides|@count}})</small></a></li>
           {{/foreach}}
           </ul>
           <hr class="control_tabs" />
           
-          
           {{foreach from=$aidesByDepend2 key=depend2 item=aides}}
-            <table id="{{$depend2}}" class="main tbl">
+            <table id="{{$object->_class_name}}-{{$depend1}}-{{if $depend2}}{{$depend2}}{{else}}all{{/if}}" class="main tbl">
               <tr>
               {{foreach from=$aides item=_aide name=_aides}}
               {{assign var=i value=$smarty.foreach._aides.index}}
@@ -51,7 +46,7 @@ Main.add(function(){
                          title="{{mb_value object=$_aide field=_owner}}" />
                   
                     <label>
-                      <button type="button" class="tick notext" onclick='validate("{{$_aide->name}}","{{$_aide->text}}")'"></button>
+                      <button type="button" class="tick notext" onclick='applyHelper("{{$_aide->name}}","{{$_aide->text}}")'"></button>
                       {{$_aide->name}}
                     </label>
                   </td>

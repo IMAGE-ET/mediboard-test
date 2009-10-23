@@ -5,35 +5,43 @@ function popFile(objectClass, objectId, elementClass, elementId, sfn){
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function copie(oForm) {
-  oForm = oForm || document.editFrm;
-  
-  {{if $droit}}
-    if(confirm('Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?')){
+var Modele = {
+  copy: function (oForm) {
+    oForm = oForm || document.editFrm;
+    
+    {{if $droit}}
+      if(confirm('Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?')){
+        oForm.compte_rendu_id.value = "";
+        
+        {{if $isPraticien}}
+        oForm.chir_id.value = "{{$user_id}}";
+        oForm.function_id.value = "";
+        {{/if}}
+        
+        oForm.nom.value = "Copie de "+oForm.nom.value;
+        oForm.onsubmit(); 
+      }
+    {{else}}
       oForm.compte_rendu_id.value = "";
-      
-      {{if $isPraticien}}
       oForm.chir_id.value = "{{$user_id}}";
-      oForm.function_id.value = "";
-      {{/if}}
-      
       oForm.nom.value = "Copie de "+oForm.nom.value;
-      oForm.onsubmit(); 
-    }
-  {{else}}
-    oForm.compte_rendu_id.value = "";
-    oForm.chir_id.value = "{{$user_id}}";
-    oForm.nom.value = "Copie de "+oForm.nom.value;
-    oForm.onsubmit();
-  {{/if}}
-}
-
-function nouveau() {
-  var url = new Url;
-  url.setModuleTab("dPcompteRendu", "addedit_modeles");
-  url.addParam("compte_rendu_id", "0");
-  url.redirect();
-}
+      oForm.onsubmit();
+    {{/if}}
+  },
+  
+  create: function() {
+    var url = new Url;
+    url.setModuleTab("dPcompteRendu", "addedit_modeles");
+    url.addParam("compte_rendu_id", "0");
+    url.redirect();
+  },
+  
+  preview: function(id) {
+    var url = new Url("dPcompteRendu", "print_cr");
+    url.addParam("compte_rendu_id", id);
+    url.popup(800, 800);
+  }
+};
 
 // Taleau des categories en fonction de la classe du compte rendu
 var listObjectClass = {{$listObjectClass|@json}};
@@ -110,7 +118,7 @@ Main.add(function () {
       {{mb_key object=$compte_rendu}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
       {{if $compte_rendu->compte_rendu_id}}
-      <button class="new" type="button" onclick="nouveau()">
+      <button class="new" type="button" onclick="Modele.create()">
         Créer un modèle
       </button>
       {{/if}}
@@ -317,7 +325,8 @@ Main.add(function () {
           
           <tr>
             <td class="button" colspan="2">
-               <button type="button" class="add" onclick="copie(this.form)">{{tr}}Duplicate{{/tr}}</button>
+               <button type="button" class="add" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
+               <button type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
             </td>
           </tr>
           
