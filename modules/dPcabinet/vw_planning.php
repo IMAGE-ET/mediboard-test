@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m;
 
 $can->needsRead();
 

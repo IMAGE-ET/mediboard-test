@@ -10,7 +10,7 @@
 
 
 
-global $AppUI, $can;
+global $can;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
@@ -19,7 +19,7 @@ $ds = CSQLDataSource::get("std");
 $chir_id   = mbGetValueFromGet("chir_id");
 $date      = mbGetValueFromGet("date", mbDate());
 $nb_months = mbGetValueFromGet("nb_months", 3);
-$period    = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
+$period    = mbGetValueFromGet("period", CAppUI::pref("DefaultPeriod"));
 
 // Récupération des plages de consultation disponibles
 $plage = new CPlageconsult;

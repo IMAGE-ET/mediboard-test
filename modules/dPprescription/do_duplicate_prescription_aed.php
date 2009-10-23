@@ -118,7 +118,7 @@ foreach($lines as $cat => $lines_by_type){
 	}
 }
 
-$lite = $AppUI->user_prefs['mode_readonly'] ? 0 : 1;
+$lite = CAppUI::pref('mode_readonly') ? 0 : 1;
 
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, $prescription->object_id, null, null, null, null, null, true, $lite,'');</script>";
 echo $AppUI->getMsg();

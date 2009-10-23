@@ -167,7 +167,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 	}
 }
 
-$lite = $AppUI->user_prefs['mode_readonly'] ? 0 : 1;
+$lite = !CAppUI::pref('mode_readonly') ? 0 : 1;
 
 // Reload en full mode
 if($mode_protocole || $mode_pharma){

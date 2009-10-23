@@ -959,7 +959,6 @@ class CConsultation extends CCodable {
   }
   
   static function getExamFields() {
-    global $AppUI;
     $fields = array();
     $fields[] = "motif";
     $fields[] = "rques";

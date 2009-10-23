@@ -89,8 +89,6 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   function updateDBFields() {
-    global $AppUI;
-    
     parent::updateDBFields();
     if(!$listCodesCim = $this->codes_cim) {
       $oldDossier = new CDossierMedical();
@@ -100,7 +98,7 @@ class CDossierMedical extends CMbMetaObject {
     if($this->_added_code_cim) {
       $da = new CCodeCIM10($this->_added_code_cim, 1);
       if(!$da->exist){
-        $AppUI->setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
+        CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
       }
       if($listCodesCim && $da->exist) {
         $this->codes_cim = "$listCodesCim|$this->_added_code_cim";

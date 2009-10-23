@@ -8,15 +8,14 @@
 */
 
 
-global $AppUI, $can, $m, $g, $dPconfig;
+global $AppUI, $can, $m;
 
 $can->needsEdit();
-$vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
 
-$date         = mbGetValueFromGetOrSession("date", mbDate());
-$vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
-$today        = mbDate();
-$hour         = mbTime(null);
+$date  = mbGetValueFromGetOrSession("date", mbDate());
+$vue   = mbGetValueFromGetOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
+$today = mbDate();
+$hour  = mbTime(null);
 
 $now = mbDateTime();
 
@@ -37,8 +36,8 @@ $consult = new CConsultation();
 
 if($current_m == "dPurgences"){
   if (!$selConsult) {
-    $AppUI->setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
-    $AppUI->redirect("m=dPurgences&tab=0");
+    CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
+    CAppUI::redirect("m=dPurgences&tab=0");
   }
 }
 
@@ -86,8 +85,8 @@ $canUserSel = $userSel->canDo();
 $listChir = $userSel->loadPraticiens(PERM_EDIT);
 
 if ((!$userSel->isPraticien()) && ($current_m != "dPurgences")) {
-  $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
+  CAppUI::setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
+  CAppUI::redirect("m=dPcabinet&tab=0");
 }
 
 $canUserSel->needsEdit(array("chirSel"=>0));
@@ -279,8 +278,7 @@ if($consult->_is_anesth) {
 	$smarty->assign("consult_anesth"        , $consultAnesth);
 	$smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
 } else {
-    $vue_accord = isset($AppUI->user_prefs["MODCONSULT"]) ? $AppUI->user_prefs["MODCONSULT"] : 0 ;
-  if($vue_accord){
+  if(CAppUI::pref("MODCONSULT")){
     $smarty->display("../../dPcabinet/templates/edit_consultation_accord.tpl");
   } else{  
     $smarty->display("../../dPcabinet/templates/edit_consultation_classique.tpl");

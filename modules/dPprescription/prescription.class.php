@@ -267,14 +267,14 @@ class CPrescription extends CMbObject {
     
 	    if(!$mode_preview){
 	      $msg = $_line->store();
-	      $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+	      CAppUI::displayMsg($msg, "CPerfusion-msg-create");
 	    }
 	    foreach($_line->_ref_lines as $_line_perf){
 	      $_line_perf->_id = "";
 	      $_line_perf->perfusion_id = $_line->_id;
 	      if(!$mode_preview){
 	        $msg = $_line_perf->store();
-			    $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+			    CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
 	      }
 	    } 
     } else {
@@ -392,7 +392,7 @@ class CPrescription extends CMbObject {
 			  }
 	
 		    $msg = $_line->store();
-		    $AppUI->displayMsg($msg, "{$_line->_class_name}-msg-create");  
+		    CAppUI::displayMsg($msg, "{$_line->_class_name}-msg-create");  
 		  }
 		 	
 			// Parcours des prises
@@ -412,7 +412,7 @@ class CPrescription extends CMbObject {
 					}
 				  if(!$mode_preview){
 					  $msg = $prise->store();
-				    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  
+				    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  
 				  }	
 				}	  
 	    }
@@ -537,7 +537,7 @@ class CPrescription extends CMbObject {
 			$line_comment->creator_id = $AppUI->user_id;
 			if(!$mode_preview){
 			  $msg = $line_comment->store();
-			  $AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
+			  CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-create");
 			}
 		}
 	

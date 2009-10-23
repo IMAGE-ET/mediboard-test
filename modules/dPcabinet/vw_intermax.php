@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-$can->edit &= $AppUI->user_prefs["GestionFSE"];
+$can->edit &= CAppUI::pref("GestionFSE");
 $can->needsEdit();
 
 if ($can->admin) {

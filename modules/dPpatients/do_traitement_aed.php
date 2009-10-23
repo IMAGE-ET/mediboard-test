@@ -7,13 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
-$autoadd_default = isset($AppUI->user_prefs["AUTOADDSIGN"]) ? $AppUI->user_prefs["AUTOADDSIGN"] : 1 ;
+$autoadd_default = CAppUI::pref("AUTOADDSIGN", true);
 
 // Sejour
 // si on a un sejour et que l'option d'ajout automatique est activée
-if(isset($_POST["_sejour_id"]) && ($autoadd_default == 1) && ($_POST["_sejour_id"] != "")){
+if(isset($_POST["_sejour_id"]) && $autoadd_default && ($_POST["_sejour_id"] != "")){
   $doSejour = new CDoObjectAddEdit("CTraitement", "traitement_id");
  
   // Ajout du traitement dans le sejour

@@ -357,7 +357,6 @@ function reloadPrescription(prescription_id){
 	</table>
 </div>
 
-{{mb_include_script module=dPcompteRendu script=aideSaisie}}
 <div id="antecedents" style="display:none"></div>
 
 {{if $isPrescriptionInstalled}}

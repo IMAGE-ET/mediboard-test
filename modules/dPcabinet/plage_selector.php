@@ -19,7 +19,7 @@ $chir_id         = mbGetValueFromGet("chir_id");
 $function_id     = mbGetValueFromGet("function_id");
 $date            = mbGetValueFromGet("date", mbDate());
 $hide_finished   = mbGetValueFromGet("hide_finished", true);
-$period          = mbGetValueFromGet("period", $AppUI->user_prefs["DefaultPeriod"]);
+$period          = mbGetValueFromGet("period", CAppUI::pref("DefaultPeriod"));
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;

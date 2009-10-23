@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-global $can, $AppUI;
+global $can;
 
 $can->needsEdit();
 
@@ -40,7 +40,7 @@ if (!$patient_id) {
 }
 
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
-if ($useVitale && $AppUI->user_prefs['GestionFSE'] && !$AppUI->user_prefs['VitaleVision']) {
+if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
   $patVitale = new CPatient();
   $patVitale->getValuesFromVitale();
   $patVitale->nullifyEmptyFields();

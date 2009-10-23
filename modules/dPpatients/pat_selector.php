@@ -45,7 +45,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 } else {
 
   // Gestion du cas vitale
-  if ($useVitale && $AppUI->user_prefs['GestionFSE'] && !$AppUI->user_prefs['VitaleVision']) {
+  if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
     $patVitale = new CPatient();  
     $patVitale->loadFromIdVitale();
     $patVitale->getValuesFromVitale();

@@ -50,11 +50,10 @@ class CBcbObject {
     }  
 
     // Connexion a la base BCB Gestion
-    if(!self::$objDatabaseGestion) { 
-      global $AppUI;
+    if(!self::$objDatabaseGestion) {
       // Test de connexion a bcbges
       if (!CSQLDataSource::get("bcbges")) {
-        $AppUI->stepAjax("Connexion vers la DSN bcbges échouée", UI_MSG_ERROR);
+        CAppUI::stepAjax("Connexion vers la DSN bcbges échouée", UI_MSG_ERROR);
       }
       
       // Connexion a la base BCB Gestion

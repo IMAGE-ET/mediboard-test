@@ -13,10 +13,7 @@ CAppUI::requireModuleFile("dPboard", "inc_board");
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $prec = mbDate("-1 week", $date);
 $suiv = mbDate("+1 week", $date);
-
-// Consultations
-$vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
-$vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
+$vue  = mbGetValueFromGetOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
 
 global $smarty;
 

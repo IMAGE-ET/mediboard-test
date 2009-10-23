@@ -76,8 +76,6 @@ class CMedinetSender extends CDocumentSender {
   }
   
   function send($docItem) {
-    global $AppUI;
-    
     $this->initClientSOAP();
     
     $docItem->loadTargetObject();
@@ -219,7 +217,7 @@ class CMedinetSender extends CDocumentSender {
     $invalidation = 0;
 
     if ($messages = $this->checkParameters($object)) {
-      $AppUI->setMsg($messages, UI_MSG_ERROR);
+      CAppUI::setMsg($messages, UI_MSG_ERROR);
       return;
     }
     
@@ -280,9 +278,9 @@ class CMedinetSender extends CDocumentSender {
     $status = $status->getStatusResult;
     
     if(isset(CMedinetSender::$descriptifStatus[$status])) {
-      $AppUI->setMsg(CMedinetSender::$descriptifStatus[$status]);
+      CAppUI::setMsg(CMedinetSender::$descriptifStatus[$status]);
     } else {
-      $AppUI->setMsg("Aucun statut n'a été transmis", UI_MSG_ALERT);
+      CAppUI::setMsg("Aucun statut n'a été transmis", UI_MSG_ALERT);
     }
     
     // Création de l'identifiant externe 
@@ -387,8 +385,6 @@ class CMedinetSender extends CDocumentSender {
   }
   
   function checkParameters($object) {
-  	global $AppUI;
-  	
   	$messages = null;
   	
     $patient = $object->_ref_patient;

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can;
+global $can;
 $can->needsRead();
 
 $dialog     = mbGetValueFromGet("dialog");
@@ -27,7 +27,7 @@ else if ($medecin->load($medecin_id)) {
   $medecin->countPatients();
 }
 
-$code_default = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
+$code_default = str_pad(CAppUI::pref("DEPARTEMENT"), 2, "0", STR_PAD_LEFT);
 
 // Récuperation des médecins recherchés
 if($dialog) {

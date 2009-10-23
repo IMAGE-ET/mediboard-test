@@ -326,7 +326,7 @@ if(!$mode_pharma){
 $prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescription->_id;
 
 if($chapitre == "all"){
-  $lite = $AppUI->user_prefs['mode_readonly'] ? 0 : 1;
+  $lite = CAppUI::pref('mode_readonly') ? 0 : 1;
   if($mediuser->_is_praticien){
      // Dans le cas de la signature directement dans la prescription 
      echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite);</script>";  

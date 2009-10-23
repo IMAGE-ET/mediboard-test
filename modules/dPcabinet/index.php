@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_planning"      , null , TAB_READ);
@@ -23,7 +21,7 @@ $module->registerTab("vw_categories"    , null , TAB_EDIT);
 $module->registerTab("vw_banques"       , null , TAB_ADMIN);
 $module->registerTab("offline_programme_consult", null , TAB_ADMIN);
 
-if (@$AppUI->user_prefs["GestionFSE"]) {
+if (CAppUI::pref("GestionFSE")) {
   $module->registerTab("vw_intermax", null , TAB_EDIT);
 }
 

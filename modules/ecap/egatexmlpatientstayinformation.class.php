@@ -10,8 +10,6 @@
 class CEGateXMLPatientStayInformation extends CEGateXMLDocument {
   function __construct() {
     parent::__construct("patientstayinformation");
-    global $AppUI;
-
     $patientStayInfo = $this->addElement($this, "PatientStayInformation", null, "http://www.capio.com");
     
     $header = $this->addElement($patientStayInfo, "Header");

@@ -7,13 +7,13 @@
 * @author Fabien Ménager
 */
 
-global $can, $AppUI;
+global $can;
 
 $keywords = mbGetValueFromPost("_view");
 
 if($can->read && $keywords) {
   $medecin = new CMedecin();
-  $default_cp = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
+  $default_cp = str_pad(CAppUI::pref("DEPARTEMENT"), 2, "0", STR_PAD_LEFT);
   $where = array();
   $where['cp'] = "LIKE '".$default_cp."___'";
   $where[] = "nom LIKE '$keywords%' OR prenom LIKE '$keywords%'";
@@ -28,4 +28,3 @@ if($can->read && $keywords) {
 
   $smarty->display("httpreq_do_medecins_autocomplete.tpl");
 }
-?>

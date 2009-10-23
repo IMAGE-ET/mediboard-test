@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g, $dPconfig;
+global $AppUI, $can;
 
 $can->needsRead();
 
@@ -55,9 +55,7 @@ if($view == "day"){
   $suiv = mbDate("+1 week", $date);
 }
 
-// Consultations
-$vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
-$vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
+$vue  = mbGetValueFromGetOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
 
 // Création du template
 $smarty = new CSmartyDP();

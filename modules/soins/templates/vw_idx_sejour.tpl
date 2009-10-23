@@ -17,7 +17,6 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module="dPcompteRendu" script="aideSaisie"}}
 
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}

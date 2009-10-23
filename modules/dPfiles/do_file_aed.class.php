@@ -63,7 +63,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
         
         if ($file["error"] != 0) {
-          $AppUI->setMsg(CAppUI::tr("CFile-msg-upload-error-". $file["error"]), UI_MSG_ERROR);
+          CAppUI::setMsg(CAppUI::tr("CFile-msg-upload-error-". $file["error"]), UI_MSG_ERROR);
           continue;
         }
         
@@ -80,7 +80,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         $this->_obj->file_real_filename = uniqid(rand());
             
         if (false == $res = $this->_obj->moveTemp($file)) {
-          $AppUI->setMsg("Fichier non envoyé", UI_MSG_ERROR);
+          CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
           continue;
         } 
 
@@ -90,11 +90,11 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
 
         if ($msg = $this->_obj->store()) {
-          $AppUI->setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
+          CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
           continue;
         }
 
-        $AppUI->setMsg("Fichier enregistré", UI_MSG_OK);
+        CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
       }
       
       // Redaction du message et renvoi
@@ -112,20 +112,19 @@ class CFileAddEdit extends CDoObjectAddEdit {
   }  
   
   function doRedirect() {
-    global $AppUI, $_POST;
     $cat_id   = intval(mbGetValueFromPost("file_category_id"));
     if ($this->ajax) {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;
       $callBack = $this->callBack;
-      echo $AppUI->getMsg();
+      echo CAppUI::getMsg();
       if ($callBack) {
         echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
       }
       CApp::rip();
     }     
     if ($this->redirect !== null) {
-      $AppUI->redirect($this->redirect);
+      CAppUI::redirect($this->redirect);
     }
   }
 }

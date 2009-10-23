@@ -43,7 +43,7 @@ if($pratSel_id){
 	
 // Gestion du mode d'affichage
 $readonly            = mbGetValueFromGetOrSession("readonly", 1);
-$lite                = mbGetValueFromGetOrSession("lite", $AppUI->user_prefs["mode_readonly"] ? 0 : 1);
+$lite                = mbGetValueFromGetOrSession("lite", CAppUI::pref('mode_readonly') ? 0 : 1);
 $full_line_guid      = mbGetValueFromGetOrSession("full_line_guid"); 
 $praticien_sortie_id = mbGetValueFromGetOrSession("praticien_sortie_id");
 
