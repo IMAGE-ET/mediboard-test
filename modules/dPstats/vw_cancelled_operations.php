@@ -34,7 +34,7 @@ $list = array();
 
 foreach($salles as $salle) {
   $query = "SELECT DISTINCT(operations.operation_id) AS op_id,
-              DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+              DATE_FORMAT(plagesop.date, '%Y - %m') AS mois,
               DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
             FROM operations
             INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
