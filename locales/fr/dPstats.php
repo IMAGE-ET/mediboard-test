@@ -123,4 +123,5 @@ $locales['mod-dPstats-tab-vw_bloc2'] = 'Journée opératoire';
 $locales['mod-dPstats-tab-vw_time_op'] = 'Durée opératoire';
 $locales['mod-dPstats-tab-vw_personnel_salle'] = 'Personnel en salle';
 $locales['mod-dPstats-tab-vw_users'] = 'Présence utilisateur';
+$locales['mod-dPstats-tab-vw_cancelled_operations'] = 'Interventions annulées';
 ?>

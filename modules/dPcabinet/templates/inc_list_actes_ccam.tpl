@@ -100,8 +100,8 @@ viewCode = function(code, object_class){
     	Activité {{$_actvite->numero}} : {{$_actvite->phases.0->tarif}}{{$dPconfig.currency_symbol}}
     	{{if !$smarty.foreach.tarif.last}}&mdash;{{/if}}
     	{{/foreach}}
-	    {{/if}}
 	    )</em>
+      {{/if}}
 	  </td>
 	</tr>
 	{{/foreach}}
