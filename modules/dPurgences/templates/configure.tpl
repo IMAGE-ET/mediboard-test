@@ -194,7 +194,7 @@
    </td>
   </tr>
   
-  {{assign var="var" value="only_prat_reponsable"}}
+  {{assign var="var" value="only_prat_responsable"}}
   <tr>
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">

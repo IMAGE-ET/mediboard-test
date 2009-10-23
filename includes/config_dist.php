@@ -550,7 +550,7 @@ $dPconfig["dPurgences"] = array (
   "programme_rpu_view" => "1",
   "diag_prat_view" => "0",
   "sortie_prevue" => "sameday",
-  "only_prat_reponsable" => "0"
+  "only_prat_responsable" => "0"
 );
 
 $dPconfig["dPstock"] = array (

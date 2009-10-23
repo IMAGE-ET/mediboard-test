@@ -14,7 +14,7 @@ $can->needsRead();
 
 $group = CGroups::loadCurrent();
 $user = new CMediusers();
-if (CAppUI::conf("dPurgences only_prat_reponsable")) {
+if (CAppUI::conf("dPurgences only_prat_responsable")) {
   $listResponsables = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 } else {
   $listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);

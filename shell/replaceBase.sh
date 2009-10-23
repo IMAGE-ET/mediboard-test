@@ -9,14 +9,15 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Mediboard replace base"
 
-if [ "$#" -lt 5 ]
+if [ "$#" -lt 6 ]
 then 
-  echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> <port>"
+  echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> <with_restart> (<safe>) (<port>)"
   echo " <source_location>  is the remote location, ie root@oxmytto.homelinux.com"
   echo " <source_directory> is the remote directory, /var/backup/mediboard"
   echo " <source_database>  is the source database name, ie mediboard"
   echo " <target_directory> is the target directory location, /var/backup/"
   echo " <target_database>  is the target database name, ie target_mediboard"
+  echo " <with_restart>     is restart the Mysql server (Warning)"
   echo " <safe> (optionnal) is the copy source database "
   echo " <port> (optionnal) is the ssh port af the target remote location, 22"
   exit 1
@@ -37,12 +38,17 @@ then
 else
   target_database=mediboard
 fi
-safe=$6
-if [ $7 ]
+with_restart=$6
+safe=$7
+if [ $8 ]
 then
-  port=$7
+  port=$8
 else
   port=22
+fi
+
+if [ $with_restart ]
+echo "Warning !!!!!!!!!!!! This will restart the MySQL server"
 fi
 
 # Mysql Path
@@ -65,12 +71,14 @@ tar -xvf $archive
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
+if [ $with_restart ]
 "$mysql_path" stop
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
+fi
 
 dir_target=/var/lib/mysql/$target_database
 
-if [ $5 ]
+if [ $safe ]
 then
   DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
   # Copy database
@@ -99,8 +107,10 @@ chgrp mysql *
 check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 
 # Start mysql
+if [ $with_restart ]
 "$mysql_path" start
 check_errs $? "Failed to start mysql" "Succesfully start mysql"
+fi
 
 rm -rf $target_directory/$source_database
 rm $target_directory/$archive
