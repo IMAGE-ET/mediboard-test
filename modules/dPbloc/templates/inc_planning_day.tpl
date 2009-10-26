@@ -70,7 +70,7 @@
                   <div id="plage-{{$plage->_id}}" class="tooltip" style="display: none; width: 200px;">
                     <table class="tbl">
                       <tr>
-                        <th>Aides opératoires</th>
+                        <th>{{tr}}CPersonnel.emplacement.op{{/tr}}</th>
                       </tr>
                       {{foreach from=$plage->_ref_affectations_personnel.op item=curr_aff}}
                       <tr>
@@ -80,11 +80,11 @@
                       </tr>
                       {{foreachelse}}
                       <tr>
-                        <td>Pas d'aide opératoire</td>
+                        <td><em>{{tr}}None{{/tr}}</em></td>
                       </tr>
                       {{/foreach}}
                       <tr>
-                        <th>Panseuses</th>
+                        <th>{{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</th>
                       </tr>
                       {{foreach from=$plage->_ref_affectations_personnel.op_panseuse item=curr_aff}}
                       <tr>
@@ -94,7 +94,7 @@
                       </tr>
                       {{foreachelse}}
                       <tr>
-                        <td>Pas de panseuse</td>
+                        <td><em>{{tr}}None{{/tr}}</em></td>
                       </tr>
                       {{/foreach}}
                     </table>

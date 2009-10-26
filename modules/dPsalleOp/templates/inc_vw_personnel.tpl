@@ -26,7 +26,7 @@ function submitPersonnel(oForm){
       <input type="hidden" name="realise" value="0" />
     
       <select name="personnel_id" onchange="submitPersonnel(this.form)">
-        <option value="">&mdash; Aide opératoire</option>
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
         {{foreach from=$listPersAideOp item="pers"}}
         <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
@@ -44,7 +44,7 @@ function submitPersonnel(oForm){
       <input type="hidden" name="realise" value="0" />
     
       <select name="personnel_id" onchange="submitPersonnel(this.form)">
-        <option value="">&mdash; Panseuse</option>
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
         {{foreach from=$listPersPanseuse item="pers"}}
         <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}

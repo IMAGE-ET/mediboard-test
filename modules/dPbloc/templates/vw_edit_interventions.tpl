@@ -106,7 +106,7 @@
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id">
-              <option value="">&mdash; Aide opératoire</option>
+              <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
               {{foreach from=$listPersAideOp item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}
@@ -127,7 +127,7 @@
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id">
-              <option value="">&mdash; Panseuse</option>
+              <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_penseuse{{/tr}}</option>
               {{foreach from=$listPersPanseuse item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}

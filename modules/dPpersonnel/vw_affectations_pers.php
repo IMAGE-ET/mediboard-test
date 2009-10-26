@@ -111,6 +111,7 @@ $smarty->assign("user_id", $user_id);
 $smarty->assign("listAffectations", $listAffectations);
 $smarty->assign("affectation", $affectation);
 $smarty->assign("personnels", $personnels);
+$smarty->assign("personnel", $personnel);
 $smarty->assign("filter", $filter);
 $smarty->assign("classes",$classes);
 $smarty->display("vw_affectations_pers.tpl");

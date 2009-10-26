@@ -22,13 +22,16 @@ Main.add(function () {
 <input type="hidden" name="m" value="dPstats" />
 <table class="main form">
   <tr>
-    <th colspan="6" class="category">Récapitulatif des aides opératoires</th>
+    <th colspan="6" class="category">
+    	Bilan pour le personnel :
+			{{tr}}CPersonnel.emplacement.op{{/tr}}
+			</th>
   </tr>
   <tr>
     <th>Praticien</th>
     <td>
       <select name="prat_personnel">
-        <option value="">&mdash; Veuillez choisir un praticien</option>
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listPrats item=curr_prat}}
         <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_personnel}}selected="selected"{{/if}}>
           {{$curr_prat->_view}}

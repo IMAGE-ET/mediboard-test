@@ -16,7 +16,7 @@
           <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
           <td>
             <select name="chir_id" onchange="this.form.submit()">
-              <option value="" >&mdash; Tous les chirurgiens</option>
+              <option value="" >&mdash; Tous les praticiens</option>
               {{foreach from=$listPrat item=curr_prat}}
               {{if $curr_prat->_ref_protocoles|@count}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>

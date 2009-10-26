@@ -1,11 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPpmsi
-* @version $Revision: $
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage dPpmsi
+ * @version $Revision: $
+ * @author Thomas Despoix
+ */
 
 global $can;
 $can->needsAdmin();

@@ -45,14 +45,15 @@ function printAdmission(id) {
 	  
 	  {{assign var="plageOp_id" value=$curr_plageop->_id}}
 	  {{if $affectations_plage.$plageOp_id.op}}
-	    - Aide-opératoires:
+	    - {{tr}}CPersonnel.emplacement.op{{/tr}} :
+
 	    {{foreach from=$affectations_plage.$plageOp_id.op item=_personnel}}
       {{$_personnel->_ref_personnel->_ref_user->_view}};
       {{/foreach}}
 	  {{/if}}
 	  
 	  {{if $affectations_plage.$plageOp_id.op_panseuse}}
-	    - Panseuses:
+	    - {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}} :
 	    {{foreach from=$affectations_plage.$plageOp_id.op_panseuse item=_personnel}}
       {{$_personnel->_ref_personnel->_ref_user->_view}};
       {{/foreach}}	  

@@ -163,10 +163,13 @@ Main.add(function () {
                 <tr>
                 <td></td>
                  <td>
-                    <input class="tag" type="checkbox" name="list[op]" disabled="disabled" value="" /><label for="filterFrm_list[op]" title="Aide operatoire">Aide opératoire</label><br />
-                    <input class="tag" type="checkbox" name="list[op_panseuse]" disabled="disabled" value="" /><label for="filterFrm_list[op_panseuse]" title="Panseuse">Panseuse</label><br />
-                    <input class="tag" type="checkbox" name="list[reveil]" disabled="disabled" value="" /><label for="filterFrm_list[reveil]" title="Reveil">Réveil</label><br />
-                    <input class="tag" type="checkbox" name="list[service]" disabled="disabled" value="" /><label for="filterFrm_list[service]" title="Service">Service</label>
+                 	  {{foreach from=$personnel->_specs.emplacement->_list item=emplacement}}
+                    <input class="tag" type="checkbox" name="list[{{$emplacement}}]" disabled="disabled" value="" />
+										  <label for="filterFrm_list[{{$emplacement}}]" title="{{tr}}CPersonnel.emplacement.{{$emplacement}}{{/tr}}">
+										  	{{tr}}CPersonnel.emplacement.{{$emplacement}}{{/tr}}
+										  </label>
+											<br />
+                 	  {{/foreach}}
                   </td>
                   <td>
                     {{mb_label object=$filter field="object_id"}}
@@ -291,11 +294,12 @@ Main.add(function () {
       <tr>
         <td></td>
         <td colspan="2">
-          <input type="radio" name="_tag" value="op" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_op" title="">Aide opératoire</label><br />
-          <input type="radio" name="_tag" value="op_panseuse" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_op_panseuse" title="">Panseuse</label><br />
-          <input type="radio" name="_tag" value="reveil" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_reveil" title="">Réveil</label><br />
-          <input type="radio" name="_tag" value="service" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_service" title="">Service</label>
-          <input type="hidden" name="personnel_id" value="{{$affectation->personnel_id}}" />
+          {{foreach from=$personnel->_specs.emplacement->_list item=emplacement}}
+          <input type="radio" name="_tag" value="{{$emplacement}}" onclick="savePersonnel(this.form.user_id.value, this.value)" />
+					<label for="editAffectation__tag_{{$emplacement}}" title="{{tr}}CPersonnel.emplacement.{{$emplacement}}{{/tr}}">
+						{{tr}}CPersonnel.emplacement.{{$emplacement}}{{/tr}}
+					</label><br />
+          {{/foreach}}
         </td>
       </tr>
       <tr>
@@ -304,18 +308,18 @@ Main.add(function () {
       </tr>
       <tr>
         <th>{{mb_label object=$affectation field="debut"}}</th>
-        <td class="date">{{mb_field object=$affectation field="debut" form="editAffectation" register=true}}</td>
+        <td>{{mb_field object=$affectation field="debut" form="editAffectation" register=true}}</td>
       </tr>
       <tr>  
         <th>{{mb_label object=$affectation field="fin"}}</th>
-        <td class="date">{{mb_field object=$affectation field="fin" form="editAffectation" register=true}}</td>
+        <td>{{mb_field object=$affectation field="fin" form="editAffectation" register=true}}</td>
       </tr>
       <tr>
         <td colspan="2" style="text-align: center">
         {{if $affectation->_id}}
           <button class="modify" type="submit">valider</button>
           <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'affectation ',objName:'{{$affectation->_id|smarty:nodefaults|JSAttribute}}'})">
-		    Supprimer
+		      {{tr}}Delete{{/tr}}
           </button>
         {{else}}
           <button class="submit" type="submit" name="envoyer">{{tr}}Create{{/tr}}</button>
