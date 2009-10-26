@@ -48,7 +48,7 @@ $today   = mbDate()." 01:00:00";
 $endWeek = mbDateTime("+7 days", $today);
 $where = array(
   "entree_prevue" => "BETWEEN '$today' AND '$endWeek'",
-  "type" => "!= 'exte'",
+  "type" => "NOT IN ('exte', 'urg', 'seances')",
   "annule" => "= '0'"
 );
 $where["sejour.group_id"] = "= '$g'";
@@ -90,7 +90,7 @@ if ($can->edit) {
   $dayBefore = mbDate("-1 days", $date);
   $where = array(
     "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'",
-    "type" => "!= 'exte'",
+    "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
   $where[] = $whereFilter;
@@ -101,7 +101,7 @@ if ($can->edit) {
   // Admissions du matin
   $where = array(
     "entree_prevue" => "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
-    "type" => "!= 'exte'",
+    "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
   $where[] = $whereFilter;
@@ -112,7 +112,7 @@ if ($can->edit) {
   // Admissions du soir
   $where = array(
     "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
-    "type" => "!= 'exte'",
+    "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
   $where[] = $whereFilter;
@@ -125,9 +125,8 @@ if ($can->edit) {
   $where = array(
     "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
     "sortie_prevue" => ">= '$date 00:00:00'",
-    //"'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
     "annule" => "= '0'",
-    "type" => "!= 'exte'"
+    "type" => "NOT IN ('exte', 'urg', 'seances')",
   );
   $where[] = $whereFilter;
   $order = $orderTri;
