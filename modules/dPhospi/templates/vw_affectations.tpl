@@ -74,7 +74,7 @@ Main.add(function () {
       <table class="affectations">
         <tr>
         {{foreach from=$services item=curr_service}}
-          <td class="fullService" id="service{{$curr_service->service_id}}">
+          <td style="width: 1%" class="fullService" id="service{{$curr_service->service_id}}">
           {{include file="inc_affectations_services.tpl"}}
           </td>
         {{/foreach}}
