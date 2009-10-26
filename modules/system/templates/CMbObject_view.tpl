@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl tooltip">
+<table class="tbl">
   <tr>
     <th>{{$object}}</th>
   </tr>

@@ -1269,6 +1269,10 @@ div.tooltip table.decoration td.right {
   background: url(images/pictures/right.png) top left no-repeat;
 }
 
+div.tooltip table.tbl td{
+  vertical-align: top;
+}
+
 div.tooltip table.decoration td.content {
   white-space: nowrap;
   background: #fff;
