@@ -14,7 +14,7 @@
         <li>
           <img style="float:right;" 
                src="images/icons/{{$owner_icon}}.png" 
-               title="{{mb_value object=$_aide field=_owner}}" />
+               title="{{$_aide->_ref_owner}}" />
                
           <div class="depend" style="display:none">{{$depend1}}</div>
           <div class="depend2" style="display:none">{{$depend2}}</div>

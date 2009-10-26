@@ -33,6 +33,7 @@ class CAideSaisie extends CMbObject {
   var $_ref_user          = null;
   var $_ref_function      = null;
   var $_ref_group         = null;
+  var $_ref_owner         = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -115,14 +116,29 @@ class CAideSaisie extends CMbObject {
     }
   }
   
-  function loadRefUser(){
-    return $this->_ref_user = $this->loadFwdRef("user_id");
+  function loadRefUser($cached = true){
+    return $this->_ref_user = $this->loadFwdRef("user_id", $cached);
+  }
+  
+  function loadRefFunction($cached = true){
+    return $this->_ref_function = $this->loadFwdRef("function_id", $cached);
+  }
+  
+  function loadRefGroup($cached = true){
+    return $this->_ref_group = $this->loadFwdRef("group_id", $cached);
   }
   
   function loadRefsFwd() {
-    $this->loadRefUser();
-    $this->_ref_function = $this->loadFwdRef("function_id");
-    $this->_ref_group = $this->loadFwdRef("group_id");
+    $this->loadRefUser(true);
+    $this->loadRefFunction(true);
+    $this->loadRefGroup(true);
+  }
+  
+  function loadRefOwner(){
+    $this->loadRefsFwd();
+    if ($this->user_id)     return $this->_ref_owner = $this->_ref_user;
+    if ($this->function_id) return $this->_ref_owner = $this->_ref_function;
+    if ($this->group_id)    return $this->_ref_owner = $this->_ref_group;
   }
   
   function getPerm($permType) {

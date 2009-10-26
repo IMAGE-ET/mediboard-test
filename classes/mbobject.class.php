@@ -1743,7 +1743,8 @@ class CMbObject {
   function orderAides($aides, $depend_value_1 = null, $depend_value_2 = null) {
     foreach ($aides as $aide) { 
       $owner = CAppUI::tr("CAideSaisie._owner.$aide->_owner");
-			
+      $aide->loadRefOwner();
+      
       // si on filtre seulement sur depend_value_1, il faut afficher les resultats suivant depend_value_2
       if ($depend_value_1) {
         $depend_field_2 = $aide->_depend_field_2;

@@ -50,7 +50,7 @@ Main.add(function(){
                   <td title="{{$_aide->text}}" style="width: {{$width}}%;">
                     <img style="float:right; clear: both; opacity: 0.3;" 
                          src="images/icons/{{$owner_icon}}.png" 
-                         title="{{mb_value object=$_aide field=_owner}}" />
+                         title="{{$_aide->_ref_owner}}" />
                   
                     <label>
                       <button type="button" class="tick notext" onclick='applyHelper("{{$_aide->name}}","{{$_aide->text}}")'"></button>
