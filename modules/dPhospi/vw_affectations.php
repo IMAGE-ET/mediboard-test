@@ -114,7 +114,7 @@ if ($can->edit) {
     "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
-  );
+  );  
   $where[] = $whereFilter;
   $order = $orderTri;
   
