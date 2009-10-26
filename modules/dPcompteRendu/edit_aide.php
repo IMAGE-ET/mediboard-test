@@ -24,6 +24,8 @@ $listPrat = $listPrat->loadUsers(PERM_EDIT);
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
+$listEtab = CGroups::loadGroups(PERM_EDIT);
+
 // Objet ciblé
 $object = new $class;
 $dependValues = array();

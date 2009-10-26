@@ -338,8 +338,18 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `liste_choix` ADD INDEX (`group_id`)";
     $this->addQuery($sql);
+        
+    $this->makeRevision("0.46");
+    $sql = "ALTER TABLE `aide_saisie` ADD `group_id` INT (11) UNSIGNED AFTER `function_id`";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.46";
+    $sql = "ALTER TABLE `aide_saisie` 
+              ADD INDEX (`user_id`),
+              ADD INDEX (`function_id`),
+              ADD INDEX (`group_id`)";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.47";
   }
 }
 ?>

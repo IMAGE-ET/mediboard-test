@@ -1707,6 +1707,7 @@ class CMbObject {
     // Chargement de l'utilisateur courant
     $user = new CMediusers();
     $user->load($user_id);
+    $user->loadRefFunction();
     
     // Préparation du chargement des aides
     $ds =& $this->_spec->ds;
@@ -1714,7 +1715,10 @@ class CMbObject {
     // Construction du Where
     $where = array();
 
-    $where[] = "user_id = '$user_id' OR function_id = '$user->function_id'";
+    $where[] = "user_id = '$user_id' OR 
+                function_id = '$user->function_id' OR 
+                group_id = '{$user->_ref_function->group_id}'";
+                
     $where["class"]   = $ds->prepare("= %", $this->_class_name);
 
     if ($depend_value_1){
@@ -1738,7 +1742,7 @@ class CMbObject {
   
   function orderAides($aides, $depend_value_1 = null, $depend_value_2 = null) {
     foreach ($aides as $aide) { 
-		  $owner = CAppUI::tr("CAideSaisie._owner.".$aide->_owner);
+      $owner = CAppUI::tr("CAideSaisie._owner.$aide->_owner");
 			
       // si on filtre seulement sur depend_value_1, il faut afficher les resultats suivant depend_value_2
       if ($depend_value_1) {

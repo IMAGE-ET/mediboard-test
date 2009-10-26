@@ -50,15 +50,17 @@ class CMedecin extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
     $specs["nom"]             = "str notNull confidential seekable|begin";
     $specs["prenom"]          = "str notNull confidential seekable|begin";
     $specs["jeunefille"]      = "str confidential";
     $specs["adresse"]         = "text confidential";
     $specs["ville"]           = "str confidential seekable";
     $specs["cp"]              = "numchar maxLength|5 confidential";
-    $specs["tel"]             = "numchar length|10 confidential mask|99S99S99S99S99";
-    $specs["fax"]             = "numchar length|10 confidential mask|99S99S99S99S99";
-    $specs["portable"]        = "numchar length|10 confidential mask|99S99S99S99S99";
+    $specs["tel"]             = "numchar length|10 confidential mask|$phone_number_format";
+    $specs["fax"]             = "numchar length|10 confidential mask|$phone_number_format";
+    $specs["portable"]        = "numchar length|10 confidential mask|$phone_number_format";
     $specs["email"]           = "str confidential";
     $specs["disciplines"]     = "text confidential seekable";
     $specs["orientations"]    = "text confidential";

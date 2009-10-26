@@ -39,10 +39,17 @@ Main.add(function(){
             <table id="{{$object->_class_name}}-{{$depend1}}-{{if $depend2}}{{$depend2}}{{else}}all{{/if}}" class="main tbl">
               <tr>
               {{foreach from=$aides item=_aide name=_aides}}
-              {{assign var=i value=$smarty.foreach._aides.index}}
+                {{assign var=i value=$smarty.foreach._aides.index}}
+                {{if $_aide->_owner == "user"}}
+                  {{assign var=owner_icon value="user"}}
+                {{elseif $_aide->_owner == "func"}}
+                  {{assign var=owner_icon value="user-function"}}
+                {{else}}
+                  {{assign var=owner_icon value="group"}}
+                {{/if}}
                   <td title="{{$_aide->text}}" style="width: {{$width}}%;">
                     <img style="float:right; clear: both; opacity: 0.3;" 
-                         src="images/icons/{{if $_aide->_owner == "user"}}user{{else}}user-function{{/if}}.png" 
+                         src="images/icons/{{$owner_icon}}.png" 
                          title="{{mb_value object=$_aide field=_owner}}" />
                   
                     <label>

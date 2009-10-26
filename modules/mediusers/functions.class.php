@@ -66,6 +66,8 @@ class CFunctions extends CMbObject {
 	
   function getProps() {
   	$specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
     $specs["group_id"]        = "ref notNull class|CGroups";
     $specs["type"]            = "enum notNull list|administratif|cabinet";
     $specs["text"]            = "str notNull confidential seekable";
@@ -73,8 +75,8 @@ class CFunctions extends CMbObject {
     $specs["adresse"]         = "text";
     $specs["cp"]              = "numchar length|5";
     $specs["ville"]           = "str maxLength|50";
-    $specs["tel"]             = "numchar length|10 mask|99S99S99S99S99";
-    $specs["fax"]             = "numchar length|10 mask|99S99S99S99S99";
+    $specs["tel"]             = "numchar length|10 mask|$phone_number_format";
+    $specs["fax"]             = "numchar length|10 mask|$phone_number_format";
     $specs["soustitre"]       = "text";
     $specs["compta_partagee"] = "bool notNull";
     return $specs;

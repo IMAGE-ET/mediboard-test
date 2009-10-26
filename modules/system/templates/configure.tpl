@@ -165,7 +165,7 @@ tr.important th {
     </td>
   </tr>
 
-  {{assign var="var" value="type_telephone"}}
+  {{assign var="var" value="phone_number_format"}}
   <tr>
     <th>
       <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
@@ -173,10 +173,8 @@ tr.important th {
       </label>  
     </th>
     <td>
-      <select name="{{$m}}[{{$var}}]">
-        <option value="france" {{if $dPconfig.$m.$var == "france"}} selected="selected" {{/if}}>France</option>
-        <option value="suisse" {{if $dPconfig.$m.$var == "suisse"}} selected="selected" {{/if}}>Suisse</option>
-      </select>
+      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" maxlength="14" />
+      Le format ne doit contenir que des "9" et des espaces. Il doit y avoir au maximum 10 fois "9". Un "9" correspond à un numéro de 0 à 9.
     </td>
   </tr>
 

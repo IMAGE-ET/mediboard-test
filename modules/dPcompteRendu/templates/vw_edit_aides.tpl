@@ -24,13 +24,28 @@ function submitFormAides(oForm){
   </tr>
   
   <tr>
+    <th>{{mb_label object=$aide field="user_id"}}</th>
+    <td>
+      <select name="user_id" class="{{$aide->_props.user_id}}">
+        <option value="">&mdash; Associer à un utilisateur &mdash;</option>
+        {{foreach from=$listPrat item=curr_prat}}
+          <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
+            {{$curr_prat}}
+          </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  
+  <tr>
     <th>{{mb_label object=$aide field="function_id"}}</th>
     <td>
       <select name="function_id" class="{{$aide->_props.function_id}}">
         <option value="">&mdash; Associer à une fonction &mdash;</option>
         {{foreach from=$listFunc item=curr_func}}
-          <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
-            {{$curr_func->_view}}
+          <option class="mediuser" style="border-color: #{{$curr_func->color}};" 
+                  value="{{$curr_func->_id}}" {{if $curr_func->_id == $aide->function_id}}selected="selected"{{/if}}>
+            {{$curr_func}}
           </option>
         {{/foreach}}
       </select>
@@ -38,13 +53,13 @@ function submitFormAides(oForm){
   </tr>
 
   <tr>
-    <th>{{mb_label object=$aide field="user_id"}}</th>
+    <th>{{mb_label object=$aide field="group_id"}}</th>
     <td>
-      <select name="user_id" class="{{$aide->_props.user_id}}">
-        <option value="">&mdash; Associer à un utilisateur &mdash;</option>
-        {{foreach from=$listPrat item=curr_prat}}
-          <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
-            {{$curr_prat->_view}}
+      <select name="group_id" class="{{$aide->_props.group_id}}">
+        <option value="">&mdash; Associer à un établissement &mdash;</option>
+        {{foreach from=$listEtab item=curr_etab}}
+          <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $aide->group_id}}selected="selected"{{/if}}>
+            {{$curr_etab}}
           </option>
         {{/foreach}}
       </select>

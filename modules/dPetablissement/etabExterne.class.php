@@ -10,10 +10,10 @@
 
 class CEtabExterne extends CMbObject {
   // DB Table key
-	var $etab_id       = null;	
+  var $etab_id       = null;	
 
   // DB Fields
-	var $nom            = null;
+  var $nom            = null;
   var $raison_sociale = null;
   var $adresse        = null;
   var $cp             = null;
@@ -39,13 +39,15 @@ class CEtabExterne extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
     $specs["nom"]            = "str notNull confidential seekable";
     $specs["raison_sociale"] = "str maxLength|50";
     $specs["adresse"]        = "text confidential";
     $specs["cp"]             = "numchar length|5";
     $specs["ville"]          = "str maxLength|50 confidential";
-    $specs["tel"]            = "numchar length|10 mask|99S99S99S99S99";
-    $specs["fax"]            = "numchar length|10 mask|99S99S99S99S99";
+    $specs["tel"]            = "numchar length|10 mask|$phone_number_format";
+    $specs["fax"]            = "numchar length|10 mask|$phone_number_format";
     $specs["finess"]         = "numchar length|9";
     $specs["siret"]          = "str length|14";
     $specs["ape"]            = "str maxLength|6 confidential";

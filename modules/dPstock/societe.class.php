@@ -50,8 +50,8 @@ class CSociete extends CMbObject {
     $specs['address']         = 'str';
     $specs['postal_code']     = 'numchar minLength|4 maxLength|5';
     $specs['city']            = 'str seekable';
-    $specs['phone']           = 'numchar length|10 mask|99S99S99S99S99';
-    $specs['fax']             = 'numchar length|10 mask|99S99S99S99S99';
+    $specs['phone']           = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    $specs['fax']             = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs['siret']           = 'code siret';
     $specs['email']           = 'email';
     $specs['contact_name']    = 'str maxLength|50 seekable';

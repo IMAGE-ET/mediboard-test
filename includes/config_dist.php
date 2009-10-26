@@ -220,8 +220,8 @@ $dPconfig["dPsalleOp"] = array(
   "CDossierMedical" => array (
     "DAS" => "0",
   ),
-  "CReveil"	=> array (
-  	"multi_tabs_reveil" => "1",
+  "CReveil"  => array (
+    "multi_tabs_reveil" => "1",
   ),
   "CDailyCheckList" => array(
     "active" => "0",
@@ -234,33 +234,33 @@ $dPconfig["dPhospi"]["pathologies"] = 1;
 $dPconfig["dPcabinet"] = array(
   "keepchir" => 1,
   "CPlageconsult" => array (
-	  "hours_start"      => "8",
-	  "hours_stop"       => "20",
-	  "minutes_interval" => "15",
-	),
-	"CConsultation" => array(
-	  "show_examen"           => 1,
-	  "show_histoire_maladie" => 0,
-	  "show_conclusion"       => 0,
-	),
-	"CConsultAnesth" => array(
-	  "feuille_anesthesie" => "print_fiche",
-	  /* Format des champs auto :
-	   * %N - Nom praticien interv
-	   * %P - Prénom praticien interv
-	   * %S - Initiales praticien interv
-	   * %L - Libellé intervention
-	   * %I - Jour intervention
-	   * %i - Heure intervention
-	   * %E - Jour d'entrée
-	   * %e - Heure d'entrée
-	   * %T - Type de séjour (A, O, E...)
-	   */
+    "hours_start"      => "8",
+    "hours_stop"       => "20",
+    "minutes_interval" => "15",
+  ),
+  "CConsultation" => array(
+    "show_examen"           => 1,
+    "show_histoire_maladie" => 0,
+    "show_conclusion"       => 0,
+  ),
+  "CConsultAnesth" => array(
+    "feuille_anesthesie" => "print_fiche",
+    /* Format des champs auto :
+     * %N - Nom praticien interv
+     * %P - Prénom praticien interv
+     * %S - Initiales praticien interv
+     * %L - Libellé intervention
+     * %I - Jour intervention
+     * %i - Heure intervention
+     * %E - Jour d'entrée
+     * %e - Heure d'entrée
+     * %T - Type de séjour (A, O, E...)
+     */
     "format_auto_motif" => "Pré-anésth. %I %L %S",
     "format_auto_rques" => "%T %E %e",
     "view_premedication" => "0"
-	),
-	"CPrescription" => array (
+  ),
+  "CPrescription" => array (
     "view_prescription" => "0"
   )
 );
@@ -274,9 +274,9 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "locked"           => "1",
   "days_locked"      => "0",
   "planning" => array (
-  	"col1" => "interv",
-		"col2" => "sejour",
-		"col3" => "patient"
+    "col1" => "interv",
+    "col2" => "sejour",
+    "col3" => "patient"
   ),
   "chambre_operation" => "0",
   "impression_suivi"  => "0",
@@ -307,8 +307,8 @@ $dPconfig["dPpatients"] = array (
     "tag_ipp" => "",
     "identitovigilence" => "nodate",
     "merge_only_admin" => "0",
-		"extended_print" => "0",
-		"adult_age" => "15",
+    "extended_print" => "0",
+    "adult_age" => "15",
   ),
   
   "CAntecedent" => array (
@@ -499,9 +499,9 @@ $dPconfig["dPprescription"] = array (
 );
 
 $dPconfig["system"] = array(
-  "type_telephone" => "france",
+  "phone_number_format" => "99 99 99 99 99",
   "reverse_proxy"  => "0.0.0.0",
-	"website_url"    => "http://www.mediboard.org",
+  "website_url"    => "http://www.mediboard.org",
 );
 
 $dPconfig["dPqualite"] = array (
@@ -601,7 +601,7 @@ $dPconfig["dmi"] = array (
 );
 
 $dPconfig["sip"] = array (
-	"wsdl_mode" => 1,
+  "wsdl_mode" => 1,
   "server" => 0,
   "export_segment" => "100",
   "export_id_min" => "",
@@ -615,7 +615,7 @@ $dPconfig["sip"] = array (
 
 $dPconfig["webservices"] = array (
   "connection_timeout" => 5,
-	"webservice" => "CWebservice",
+  "webservice" => "CWebservice",
 );
 
 $dPconfig["hprimxml"] = array (

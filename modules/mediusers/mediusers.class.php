@@ -88,6 +88,7 @@ class CMediusers extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
 
     // Note: notamment utile pour les seeks
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
@@ -112,7 +113,7 @@ class CMediusers extends CMbObject {
     $specs["_user_first_name"] = "str";
     $specs["_user_last_name"]  = "str notNull confidential";
     $specs["_user_email"]      = "str confidential";
-    $specs["_user_phone"]      = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["_user_phone"]      = "numchar confidential length|10 mask|$phone_number_format";
     $specs["_user_adresse"]    = "str confidential";
     $specs["_user_last_login"] = "dateTime";
     $specs["_user_cp"]         = "num length|5 confidential";

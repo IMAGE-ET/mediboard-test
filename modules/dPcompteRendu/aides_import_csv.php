@@ -17,16 +17,12 @@ $owner = null;
 
 $owner = CMbObject::loadFromGuid($owner_guid);
 if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
+  $user_id = $function_id = $group_id = '';
+  
   switch($owner->_class_name) {
-    case 'CMediusers': 
-      $function_id = '';
-      $user_id     = $owner->_id; 
-    break;
-    
-    case 'CFunctions':
-      $function_id = $owner->_id;
-      $user_id     = ''; 
-    break;
+    case 'CMediusers': $user_id = $owner->_id; break;
+    case 'CFunctions': $function_id = $owner->_id; break;
+    case 'CGroups':    $group_id = $owner->_id; break;
   }
   
   // Object columns on the first line
@@ -39,8 +35,9 @@ if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
       $aide->$field = $line[$index];
     }
     
-    $aide->user_id = $user_id;
+    $aide->user_id     = $user_id;
     $aide->function_id = $function_id;
+    $aide->group_id    = $group_id;
     
     if ($msg = $aide->store()) {
       CAppUI::setMsg($msg);

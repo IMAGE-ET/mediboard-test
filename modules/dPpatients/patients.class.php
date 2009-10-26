@@ -180,6 +180,7 @@ class CPatient extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["nom"]               = "str notNull confidential seekable|begin";
     $specs["prenom"]            = "str notNull seekable|begin";
@@ -202,8 +203,8 @@ class CPatient extends CMbObject {
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential seekable";
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
-    $specs["tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
-    $specs["tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["tel"]               = "numchar confidential length|10 mask|$phone_number_format";
+    $specs["tel2"]              = "numchar confidential length|10 mask|$phone_number_format";
     $specs["email"]             = "str confidential";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
@@ -241,7 +242,7 @@ class CPatient extends CMbObject {
     $specs["employeur_adresse"] = "text";
     $specs["employeur_cp"]      = "numchar length|5";
     $specs["employeur_ville"]   = "str confidential";
-    $specs["employeur_tel"]     = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["employeur_tel"]     = "numchar confidential length|10 mask|$phone_number_format";
     $specs["employeur_urssaf"]  = "numchar length|11 confidential";
 
     $specs["prevenir_nom"]      = "str confidential";
@@ -249,7 +250,7 @@ class CPatient extends CMbObject {
     $specs["prevenir_adresse"]  = "text";
     $specs["prevenir_cp"]       = "numchar length|5";
     $specs["prevenir_ville"]    = "str confidential";
-    $specs["prevenir_tel"]      = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["prevenir_tel"]      = "numchar confidential length|10 mask|$phone_number_format";
     $specs["prevenir_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
     
     $specs["assure_nom"]                  = "str confidential";
@@ -264,8 +265,8 @@ class CPatient extends CMbObject {
     $specs["assure_adresse"]              = "text confidential";
     $specs["assure_ville"]                = "str confidential";
     $specs["assure_cp"]                   = "numchar minLength|4 maxLength|5 confidential";
-    $specs["assure_tel"]                  = "numchar confidential length|10 mask|99S99S99S99S99";
-    $specs["assure_tel2"]                 = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["assure_tel"]                  = "numchar confidential length|10 mask|$phone_number_format";
+    $specs["assure_tel2"]                 = "numchar confidential length|10 mask|$phone_number_format";
     $specs["assure_pays"]                 = "str";
     $specs["assure_pays_insee"]           = "str";
     $specs["assure_lieu_naissance"]       = "str";

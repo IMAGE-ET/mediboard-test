@@ -80,14 +80,16 @@ class CUser extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
     $specs["user_username"]   = "str notNull maxLength|20";
     $specs["user_password"]   = "str";
     $specs["user_type"]       = "num notNull min|0 max|20";
     $specs["user_first_name"] = "str maxLength|50 seekable|begin";
     $specs["user_last_name"]  = "str notNull maxLength|50 confidential seekable|begin";
     $specs["user_email"]      = "str maxLength|255";
-    $specs["user_phone"]      = "str maxLength|30 mask|99S99S99S99S99";
-    $specs["user_mobile"]     = "str maxLength|30 mask|99S99S99S99S99";
+    $specs["user_phone"]      = "str maxLength|30 mask|$phone_number_format";
+    $specs["user_mobile"]     = "str maxLength|30 mask|$phone_number_format";
     $specs["user_address1"]   = "str maxLength|50";
     $specs["user_city"]       = "str maxLength|30";
     $specs["user_zip"]        = "str maxLength|11";

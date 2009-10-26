@@ -49,12 +49,17 @@ CMbArray::removeValue(array(), $classes);
 // Liste des users accessibles
 $listPrat = new CMediusers();
 $listFct = $listPrat->loadFonctions(PERM_EDIT);
+
 $where = array();
 $where["users_mediboard.function_id"] = $ds->prepareIn(array_keys($listFct));
+
 $ljoin = array();
 $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
+
 $order = "`users`.`user_last_name`, `users`.`user_first_name`";
+
 $listPrat = $listPrat->loadList($where, $order, null, null, $ljoin);
+
 foreach ($listPrat as $keyUser => $mediuser) {
   $mediuser->_ref_function =& $listFct[$mediuser->function_id];
 }
@@ -62,6 +67,7 @@ foreach ($listPrat as $keyUser => $mediuser) {
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
+$listEtab = CGroups::loadGroups(PERM_EDIT);
 
 // Utilisateur sélectionné ou utilisateur courant
 $filter_user_id = mbGetValueFromGetOrSession("filter_user_id");
@@ -71,6 +77,7 @@ $aide_id        = mbGetValueFromGetOrSession("aide_id");
 $userSel = new CMediusers;
 $userSel->load($filter_user_id ? $filter_user_id : $AppUI->user_id);
 $userSel->loadRefs();
+$userSel->_ref_function->loadRefGroup();
 
 if ($userSel->isPraticien()) {
   mbSetValueToSession("filter_user_id", $userSel->user_id);
@@ -82,29 +89,33 @@ if ($filter_class) {
   $where["class"] = "= '$filter_class'";
 }
 
-$order = array("user_id", "class", "depend_value_1", "field", "name");
+$order = array("group_id", "function_id", "user_id", "class", "depend_value_1", "field", "name");
 
 // Liste des aides pour le praticien
 $aidesPrat = array();
-if ($userSel->user_id) {
-  $where["user_id"] = "= '$userSel->user_id'";
-  // $where["user_id"] = "= '$filter_user_id'";
-  $aidesPrat = new CAideSaisie();
-  $aidesPrat = $aidesPrat->loadlist($where, $order);
-  foreach($aidesPrat as $key => $aide) {
-    $aidesPrat[$key]->loadRefsFwd();
-  }
-  unset($where["user_id"]);
-}
-
-// Liste des aides pour la fonction du praticien
 $aidesFunc = array();
+$aidesEtab = array();
+
 if ($userSel->user_id) {
-  $where["function_id"] = "= '$userSel->function_id'";
-  $aidesFunc = new CAideSaisie();
-  $aidesFunc = $aidesFunc->loadlist($where, $order);
-  foreach($aidesFunc as $key => $aide) {
-    $aidesFunc[$key]->loadRefsFwd();
+  $userSel->loadRefFunction();
+  $_aide = new CAideSaisie();
+  
+  $where = array("user_id" => "= '$userSel->user_id'");
+  $aidesPrat = $_aide->loadlist($where, $order);
+  foreach($aidesPrat as $aide) {
+    $aide->loadRefsFwd();
+  }
+
+  $where = array("function_id" => "= '$userSel->function_id'");
+  $aidesFunc = $_aide->loadlist($where, $order);
+  foreach($aidesFunc as $aide) {
+    $aide->loadRefsFwd();
+  }
+
+  $where = array("group_id" => "= '{$userSel->_ref_function->group_id}'");
+  $aidesEtab = $_aide->loadlist($where, $order);
+  foreach($aidesEtab as $aide) {
+    $aide->loadRefsFwd();
   }
 }
 
@@ -123,10 +134,12 @@ $smarty = new CSmartyDP();
 $smarty->assign("userSel"         , $userSel);
 $smarty->assign("listPrat"        , $listPrat);
 $smarty->assign("listFunc"        , $listFunc);
+$smarty->assign("listEtab"        , $listEtab);
 $smarty->assign("classes"         , $classes);
 $smarty->assign("aide"            , $aide);
-$smarty->assign("aidesFunc"       , $aidesFunc);
 $smarty->assign("aidesPrat"       , $aidesPrat);
+$smarty->assign("aidesFunc"       , $aidesFunc);
+$smarty->assign("aidesEtab"       , $aidesEtab);
 $smarty->assign("filter_class"    , $filter_class);
 $smarty->assign("filter_user_id"  , $filter_user_id);
 $smarty->assign("listTraductions" , $listTraductions);

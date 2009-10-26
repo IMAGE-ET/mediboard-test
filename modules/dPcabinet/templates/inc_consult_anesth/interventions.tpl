@@ -40,7 +40,7 @@
     <br />
     <button class="tick" onclick="selectSejour('{{$nextSejourAndOperation.CSejour->_id}}'); modalWindow.close();">Oui</button>
   {{/if}}
-  <button class="cancel" onclick="modalWindow.close();">Annuler</button>
+  <button class="cancel" onclick="modalWindow.close();">Non</button>
 </div>
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}

@@ -2,9 +2,9 @@
 
 <script type="text/javascript">
 
-var aTraduction = new Array();
+var aTraduction = {};
 {{foreach from=$listTraductions key=key item=currClass}}
-aTraduction["{{$key}}"] = "{{$currClass}}";
+  aTraduction["{{$key}}"] = "{{$currClass}}";
 {{/foreach}}
 
 var classes = {{$classes|@json}};
@@ -107,6 +107,7 @@ function popupImport(owner_guid){
 }
 
 Main.add(function () {
+  Control.Tabs.create('tabs-owner', true);
   loadClasses('{{$aide->class}}');
   loadFields('{{$aide->field}}');
   loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
@@ -155,17 +156,11 @@ Main.add(function () {
     </table>
 
     </form>
-    
-
-<script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tabs-owner', true);
-});
-</script>
 
 <ul id="tabs-owner" class="control_tabs">
   <li><a href="#aides-user">Aides de '{{$userSel}}' <small>({{$aidesPrat|@count}})</small></a></li>
   <li><a href="#aides-func">Aides de '{{$userSel->_ref_function}}' <small>({{$aidesFunc|@count}})</small></a></li>
+  <li><a href="#aides-etab">Aides de '{{$userSel->_ref_function->_ref_group}}' <small>({{$aidesEtab|@count}})</small></a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -178,16 +173,18 @@ Main.add(function () {
   {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aidesFunc}}
 </div>
 
+<div id="aides-etab" style="display: none;">
+  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function->_ref_group aides=$aidesEtab}}
+</div>
     
   </td>
-  
-  <td class="pane">
+  <td>
 
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$aide->_spec}}">
 
     <input type="hidden" name="dosql" value="do_aide_aed" />
-    {{mb_field object=$aide field="aide_id" hidden=1 prop=""}}
     <input type="hidden" name="del" value="0" />
+    {{mb_key object=$aide}}
 
     <table class="form">
 
@@ -199,6 +196,20 @@ Main.add(function () {
         Création d'une aide
       {{/if}}
       </th>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$aide field="user_id"}}</th>
+      <td>
+        <select name="user_id" class="{{$aide->_props.user_id}}">
+          <option value="">&mdash; Associer à un utilisateur &mdash;</option>
+          {{foreach from=$listPrat item=curr_prat}}
+            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
+              {{$curr_prat->_view}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
     </tr>
   
     <tr>
@@ -216,13 +227,13 @@ Main.add(function () {
     </tr>
 
     <tr>
-      <th>{{mb_label object=$aide field="user_id"}}</th>
+      <th>{{mb_label object=$aide field="group_id"}}</th>
       <td>
-        <select name="user_id" class="{{$aide->_props.user_id}}">
-          <option value="">&mdash; Associer à un utilisateur &mdash;</option>
-          {{foreach from=$listPrat item=curr_prat}}
-            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
-              {{$curr_prat->_view}}
+        <select name="group_id" class="{{$aide->_props.group_id}}">
+          <option value="">&mdash; Associer à un établissement &mdash;</option>
+          {{foreach from=$listEtab item=curr_etab}}
+            <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $aide->group_id}} selected="selected" {{/if}}>
+              {{$curr_etab}}
             </option>
           {{/foreach}}
         </select>
@@ -233,7 +244,7 @@ Main.add(function () {
       <th>{{mb_label object=$aide field="class"}}</th>
       <td>
         <select name="class" class="{{$aide->_props.class}}" onchange="loadFields()">
-          <option value="">&mdash; Choisir un objet</option>
+          <option value="">&mdash; Choisir un type objet</option>
         </select>
       </td>
     </tr>
@@ -265,17 +276,14 @@ Main.add(function () {
       </td>
     </tr>
     
-
     <tr>
       <th>{{mb_label object=$aide field="name"}}</th>
       <td>{{mb_field object=$aide field="name"}}</td>
     </tr>
     
     <tr>
-      <th>{{mb_label object=$aide field=text"}}</th>
-      <td>
-        {{mb_field object=$aide field="text"}}
-      </td>
+      <th>{{mb_label object=$aide field="text"}}</th>
+      <td>{{mb_field object=$aide field="text"}}</td>
     </tr>
 
     <tr>

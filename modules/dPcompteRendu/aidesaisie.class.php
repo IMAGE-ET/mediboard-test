@@ -14,6 +14,7 @@ class CAideSaisie extends CMbObject {
   // DB References
   var $user_id            = null;
   var $function_id        = null;
+  var $group_id           = null;
 
   // DB fields
   var $class              = null;
@@ -31,19 +32,22 @@ class CAideSaisie extends CMbObject {
   // Referenced objects
   var $_ref_user          = null;
   var $_ref_function      = null;
+  var $_ref_group         = null;
   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'aide_saisie';
     $spec->key   = 'aide_id';
-    $spec->xor["owner"] = array("function_id", "user_id");
+    $spec->xor["owner"] = array("user_id", "function_id", "group_id");
     return $spec;
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["user_id"]      = "ref class|CMediusers";
     $specs["function_id"]  = "ref class|CFunctions";
+    $specs["group_id"]     = "ref class|CGroups";
+    
     $specs["class"]        = "str notNull";
     $specs["field"]        = "str notNull";
     $specs["name"]         = "str notNull";
@@ -59,16 +63,18 @@ class CAideSaisie extends CMbObject {
   }
   
   function check() {
-    $msg = null;
+    $msg = "";
     
     $ds = $this->_spec->ds;
     
     $where = array();
-    if($this->user_id){
+    if ($this->user_id)
       $where["user_id"] = $ds->prepare("= %",$this->user_id);
-    }else{
+    else if ($this->function_id)
       $where["function_id"] = $ds->prepare("= %",$this->function_id);
-    }
+    else
+      $where["group_id"] = $ds->prepare("= %",$this->group_id);
+      
     $where["class"]          = $ds->prepare("= %",$this->class);
     $where["field"]          = $ds->prepare("= %",$this->field);
     $where["depend_value_1"] = $ds->prepare("= %",$this->depend_value_1);
@@ -84,7 +90,7 @@ class CAideSaisie extends CMbObject {
     $nb_result = $ds->loadResult($sql->getRequest());
     
     if($nb_result){
-      $msg.= "Cette aide existe déjà<br />";
+      $msg .= "Cette aide existe déjà<br />";
     }
     
     return $msg . parent::check();
@@ -98,6 +104,7 @@ class CAideSaisie extends CMbObject {
     // Owner
     if ($this->user_id    ) $this->_owner = "user";
     if ($this->function_id) $this->_owner = "func";
+    if ($this->group_id)    $this->_owner = "etab";
 
     // Depend fields
     if ($this->class) {
@@ -108,18 +115,21 @@ class CAideSaisie extends CMbObject {
     }
   }
   
+  function loadRefUser(){
+    return $this->_ref_user = $this->loadFwdRef("user_id");
+  }
+  
   function loadRefsFwd() {
-    $this->_ref_user = new CMediusers;
-    $this->_ref_user->load($this->user_id);
-    $this->_ref_function = new CFunctions;
-    $this->_ref_function->load($this->function_id);
+    $this->loadRefUser();
+    $this->_ref_function = $this->loadFwdRef("function_id");
+    $this->_ref_group = $this->loadFwdRef("group_id");
   }
   
   function getPerm($permType) {
     if(!$this->_ref_user) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_user->getPerm($permType));
+    return $this->_ref_user->getPerm($permType);
   }
 }
 

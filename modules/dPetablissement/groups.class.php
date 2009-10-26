@@ -57,18 +57,19 @@ class CGroups extends CMbObject {
     $backProps["types_repas"]             = "CTypeRepas group_id";
     $backProps["modeles"]                 = "CCompteRendu group_id";
     $backProps["listes_choix"]            = "CListeChoix group_id";
-	  $backProps["chapitres_qualite"]       = "CChapitreDoc group_id";
-	  $backProps["themes_qualite"]          = "CThemeDoc group_id";
-	  $backProps["prestations"]             = "CPrestation group_id";
-	  $backProps["product_orders"]          = "CProductOrder group_id";
-	  $backProps["product_stocks"]          = "CProductStockGroup group_id";
-	  $backProps["protocoles_prescription"] = "CPrescription group_id";
-	  $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
+    $backProps["aides_saisie"]            = "CAideSaisie group_id";
+    $backProps["chapitres_qualite"]       = "CChapitreDoc group_id";
+    $backProps["themes_qualite"]          = "CThemeDoc group_id";
+    $backProps["prestations"]             = "CPrestation group_id";
+    $backProps["product_orders"]          = "CProductOrder group_id";
+    $backProps["product_stocks"]          = "CProductStockGroup group_id";
+    $backProps["protocoles_prescription"] = "CPrescription group_id";
+    $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
     $backProps["dmi_categories"]          = "CDMICategory group_id";
     $backProps["categories_prescription"] = "CCategoryPrescription group_id";
-	  $backProps["category_DM"]             = "CCategoryDM group_id";
-	  $backProps["config_moment"]           = "CConfigMomentUnitaire group_id";
-	  $backProps["config_service"]          = "CConfigService group_id";
+    $backProps["category_DM"]             = "CCategoryDM group_id";
+    $backProps["config_moment"]           = "CConfigMomentUnitaire group_id";
+    $backProps["config_service"]          = "CConfigService group_id";
     $backProps["check_item_types"]        = "CDailyCheckItemType group_id";
     $backProps["product_stock_locations"] = "CProductStockLocation group_id";
     return $backProps;
@@ -76,14 +77,16 @@ class CGroups extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
+    $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    
     $specs["text"]                = "str notNull confidential seekable";
     $specs["raison_sociale"]      = "str maxLength|50";
     $specs["adresse"]             = "text confidential";
     $specs["cp"]                  = "numchar length|5";
     $specs["ville"]               = "str maxLength|50 confidential";
-    $specs["tel"]                 = "numchar length|10 mask|99S99S99S99S99";
-    $specs["fax"]                 = "numchar length|10 mask|99S99S99S99S99";
-    $specs["tel_anesth"]          = "numchar length|10 mask|99S99S99S99S99";
+    $specs["tel"]                 = "numchar length|10 mask|$phone_number_format";
+    $specs["fax"]                 = "numchar length|10 mask|$phone_number_format";
+    $specs["tel_anesth"]          = "numchar length|10 mask|$phone_number_format";
     $specs["service_urgences_id"] = "ref class|CFunctions";
     $specs["directeur"]           = "str maxLength|50";
     $specs["domiciliation"]       = "str maxLength|9";
