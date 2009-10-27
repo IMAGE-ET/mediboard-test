@@ -146,7 +146,7 @@ function changeDateCal(){
           <th>{{mb_label object=$filter field="_bloc_id"}}</th>
           <td>
             <select name="_bloc_id">
-              <option value="0">&mdash; Touts les blocs &mdash;</option>
+              <option value="0">&mdash; Tous les blocs &mdash;</option>
               {{foreach from=$listBlocs item=curr_bloc}}
                 <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $filter->_bloc_id}}selected="selected"{{/if}}>
                   {{$curr_bloc->_view}}

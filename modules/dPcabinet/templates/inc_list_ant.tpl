@@ -50,25 +50,7 @@ Traitement = {
   }
 };
 
-// Transfert de la ligne du dossier medical vers la prescription de sejour
-transfertLineTP = function(line_id, sejour_id){
-  var oForm = document.transfert_line_TP;
-  $V(oForm.prescription_line_medicament_id, line_id);
-  $V(oForm.sejour_id, sejour_id);
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-    DossierMedical.reloadDossierSejour();
-  } } );
-}
-
 </script>
-
-<form name="transfert_line_TP" action="?" method="post">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
-  <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="sejour_id" value="" />
-	<input type="hidden" name="user_id" value="{{$app->user_id}}" />
-</form>
 
 {{if $dossier_medical->_count_cancelled_antecedents}}
 <button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
@@ -135,11 +117,6 @@ transfertLineTP = function(line_id, sejour_id){
 	      <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
 	        {{tr}}delete{{/tr}}
 	      </button>
-	      {{if $_is_anesth && $sejour->_id && ($user->_is_praticien || $can->admin)}}
-	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="transfertLineTP('{{$_line->_id}}','{{$sejour->_id}}');">
-	        {{tr}}Add{{/tr}}
-	      </button>
-	      {{/if}}       
 	      
 	      {{if $_line->fin}}
 		      Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :

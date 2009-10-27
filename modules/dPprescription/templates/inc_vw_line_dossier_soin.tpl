@@ -27,9 +27,9 @@
       <!-- Cas d'une ligne de medicament -->
       <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
           onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
-	      <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
+	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
             <a href="#1">{{$libelle_ATC|smarty:nodefaults}}</a>
-          </div>
+          </span>
           <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
   		      <ul>
@@ -60,9 +60,9 @@
         <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
             rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
             onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-          <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
+          <span class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
             <a href="#1">{{$categorie->nom}}</a>
-          </div>
+          </span>
           <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
   		      <ul>
@@ -95,7 +95,7 @@
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
 	  <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
+	    <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 	        {{$line->_ucd_view}}  - <span style="font-size: 0.8em">{{$line->_forme_galenique}}</span>
 	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
@@ -103,7 +103,7 @@
 	      {{else}}
 	        {{$line->_view}}
 	      {{/if}} 
-	    </a>
+	    </span>
 	   
 	  </div>
 	  <small>

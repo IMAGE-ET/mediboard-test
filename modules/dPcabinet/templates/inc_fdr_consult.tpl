@@ -50,7 +50,7 @@
     </td>
 	</tr>
      
-  {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
+  {{if $dPconfig.dPcabinet.CPrescription.view_prescription && !$consult->sejour_id}}
   <tr>
     <th class="category">{{tr}}CPrescription{{/tr}}</th>
   </tr>

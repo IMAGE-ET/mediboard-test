@@ -40,17 +40,8 @@ printFiche = function(consultation_id) {
       <strong>{{tr}}COperation-annulee{{/tr}}</strong>
 		</th>
     {{else}}
-    {{if $can->edit}}
     <td class="text">
-      {{if $_operation->libelle}}
-      <em>[{{$_operation->libelle}}]</em>
-      <br />
-      {{/if}}
-      {{foreach from=$_operation->_ext_codes_ccam item=curr_ext_code}}
-      <strong>{{$curr_ext_code->code}}</strong> :
-      {{$curr_ext_code->libelleLong}}
-       <br />
-      {{/foreach}}
+    	{{mb_include module=dPplanningOp template=inc_vw_operation}}
     </td>
     <td style="width: 1%;">
       {{if $_operation->_ref_consult_anesth->_id}}
@@ -58,10 +49,8 @@ printFiche = function(consultation_id) {
       {{/if}}
     </td>
     {{/if}}
-    {{/if}}
   </tr>
   {{/foreach}}
-
 </table>
  
 {{else}}

@@ -73,7 +73,23 @@ Main.add( function(){
   }
 {{/if}}  
 
+transfertLineTP = function(line_id, sejour_id){
+  var oForm = getForm("transfert_line_TP");
+  $V(oForm.prescription_line_medicament_id, line_id);
+  $V(oForm.sejour_id, sejour_id);
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+    Prescription.reloadPrescSejour('{{$prescription->_id}}','{{$prescription->_ref_object->_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
+  } } );
+}
+
 </script>
+
+<form name="transfert_line_TP" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="sejour_id" value="" />
+</form>
 
 <!-- Cas normal -->
 <!-- Formulaire d'ajout de ligne dans la prescription -->
@@ -98,11 +114,13 @@ Main.add( function(){
   {{if $prescription->object_id}}
   <input type="hidden" name="_most_used_poso" value="1" />
   {{/if}}
+	<input type="hidden" name="traitement_personnel" value="0" />
+	<!-- Champs permettant de gerer les elements relatifs -->
+	<input type="hidden" name="jour_decalage" value="" />
+  <input type="hidden" name="decalage_line" value="" />
+  <input type="hidden" name="unite_decalage" value="" />
+	<input type="hidden" name="operation_id" value="" />
 </form>
-
-
-
-
 
 <table class="form">
 {{if $prescription->_score_prescription >= 1}}
@@ -120,7 +138,6 @@ Main.add( function(){
 		      {{/if}}
 	      </strong>
       </div>
-      
       <div id="tooltip-content-alertes-{{$prescription->_id}}" style="display: none;">
       <ul>
       {{foreach from=$prescription->_scores key=type item=scores_by_type}}
@@ -153,18 +170,24 @@ Main.add( function(){
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 			    
 					<!-- Affichage des produits les plus utilises -->
-				  <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this);">
+				  <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 120px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
 				 	  <option value="">&mdash; les plus utilisés</option>
 					</select>
 					
+					{{if $prescription->object_class == "CSejour"}}
+					<select name="tp" onchange="transfertLineTP(this.value, '{{$prescription->_ref_object->_id}}'); this.value = '';" style="width: 120px;" onclick="updateSelectTP('{{$prescription->_ref_object->patient_id}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
+						<option value="">&mdash; Traitements perso</option>
+					</select>
+					{{/if}}
+					
 			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
-			    <input type="text" name="produit" value="" size="20" class="autocomplete" />
+			    <input type="text" name="produit" value="" size="20" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
 			    Livret Thérap.
 			    
 			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
-			    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
+			    <button type="button" class="search" onclick="MedSelector.init('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>
 			    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 			
 			    <script type="text/javascript">

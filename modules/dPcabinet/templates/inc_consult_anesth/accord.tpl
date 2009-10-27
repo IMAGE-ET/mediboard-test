@@ -47,25 +47,20 @@ Main.add(function () {
     {{/if}}
   </a></li>
   {{/if}}
-  
   <li onclick="DossierMedical.reloadDossierSejour();"><a href="#AntTrait">Antécédents</a></li>
-  
-  {{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
-  <li onclick="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
-  	<a href="#prescription_sejour">Trait. et prescription</a>
-  </li>
-  {{/if}}
-  
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>
-  
   {{if $app->user_prefs.ccam_consultation == 1}}
   <li><a href="#Actes">Actes</a></li>
   {{/if}}
-  
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
   <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
+	{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
+	  <li onclick="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
+	    <a href="#prescription_sejour">Trait. et prescription</a>
+	  </li>
+  {{/if}}
   <li><a href="#fdrConsult">Docs. et Réglements</a></li>
 </ul>
 <hr class="control_tabs" />
@@ -77,9 +72,6 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl" sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
-{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
-<div id="prescription_sejour" style="display: none"></div>
-{{/if}}
 
 <div id="Constantes" style="display: none;">
   <!-- We put a fake form for the ExamCompFrm form, before we insert the real one -->
@@ -127,4 +119,9 @@ Main.add(function () {
 
 <div id="ExamsComp" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_complementaire.tpl"}}</div>
 <div id="InfoAnesth" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}</div>
+
+{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
+<div id="prescription_sejour" style="display: none"></div>
+{{/if}}
+
 <div id="fdrConsult" style="display: none;">{{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}</div>

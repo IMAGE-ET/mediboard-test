@@ -1873,7 +1873,7 @@ ul.control_tabs li a,
 ul.control_tabs_vertical li a {
   display: block;
   border: 1px solid #458;
-  -moz-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
   background-color: #6688CC;
   font-size: 1.1em;
   padding: 3px 8px;
@@ -1953,7 +1953,7 @@ ul.control_tabs_vertical li {
 }
 
 ul.control_tabs_vertical li a {
-  -moz-border-radius: 4px 0 0 4px;
+  -moz-border-radius: 3px 0 0 3px;
   padding: 3px 8px;
   margin-bottom: 2px;
 }
@@ -1964,6 +1964,11 @@ ul.control_tabs_vertical li a.active {
   border-bottom: 1px solid #458;
 }
 
+ul.control_tabs.small li a {
+	font-size: 1em; 
+	padding: 2px 8px;
+	font-weight: normal;
+}
 
 /* Chambres */
 table.chambrecollapse,

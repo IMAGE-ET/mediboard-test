@@ -93,9 +93,6 @@
       {{if $line->commentaire}}
         , {{mb_value object=$line field="commentaire"}}
       {{/if}}
-      {{if $line->emplacement}}
-        ({{mb_value object=$line field="emplacement"}})
-      {{/if}}
     </td>
   </tr>
   <tr>

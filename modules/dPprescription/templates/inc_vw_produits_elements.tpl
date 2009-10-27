@@ -37,6 +37,15 @@ updateFavoris = function (praticien_id, chapitre, select){
   var url = new Url("dPprescription", "httpreq_vw_favoris_prescription");
   url.addParam("praticien_id", praticien_id);
   url.addParam("chapitre", chapitre);
+	url.addParam("prescription_id", '{{$prescription->_id}}');
+  url.requestUpdate(select, { waitingText: null });
+}
+
+updateSelectTP = function(patient_id, select){
+  // Suppression du onclick du select
+  select.onclick="";
+  var url = new Url("dPprescription", "httpreq_vw_select_tp_patient");
+  url.addParam("patient_id", patient_id);
   url.requestUpdate(select, { waitingText: null });
 }
 
@@ -415,6 +424,13 @@ toggleTypePerfusion = function(oForm){
   <input type="hidden" name="callback" value="" />
   <input type="hidden" name="element_prescription_id" value=""/>
   <input type="hidden" name="_chapitre" value="" />
+	
+	 <!-- Champs permettant de gerer les elements relatifs -->
+  <input type="hidden" name="jour_decalage" value="" />
+  <input type="hidden" name="decalage_line" value="" />
+  <input type="hidden" name="unite_decalage" value="" />
+  <input type="hidden" name="operation_id" value="" />
+	
 </form>
 
 <!-- Tabulations -->

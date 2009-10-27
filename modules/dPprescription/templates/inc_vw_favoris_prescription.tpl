@@ -1,5 +1,14 @@
+{{* $Id:  $ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPprescription
+ * @version $Revision: $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{if $chapitre == "med"}}
-	
 	  <option value="">&mdash; les plus utilisés</option>
 	  <optgroup label="Produits les plus utilisés"></optgroup>
 	  {{if array_key_exists("medicament", $favoris)}}
@@ -17,7 +26,6 @@
 	  </option>
 	  {{/foreach}}
 	  {{/if}}
-
 {{else}}
 		<option value="">&mdash; les plus utilisés</option>
 		{{if array_key_exists($chapitre, $favoris)}}
@@ -27,5 +35,4 @@
 		</option>
 		{{/foreach}}
 		{{/if}}
- 
 {{/if}}

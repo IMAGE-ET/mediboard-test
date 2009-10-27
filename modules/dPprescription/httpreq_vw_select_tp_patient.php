@@ -1,36 +1,35 @@
-<?php /* $Id$ */
+<?php /* $Id: $ */
 
 /**
  * @package Mediboard
  * @subpackage dPprescription
- * @version $Revision$
+ * @version $Revision:  $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$patient_id = mbGetValueFromGet("patient_id");
 
-$prescription_id = mbGetValueFromGet("prescription_id");
-$prescription = new CPrescription();
-$prescription->load($prescription_id);
-
-$patient_id = $prescription->_ref_object->patient_id;
-
+$traitements = array();
 $patient = new CPatient();
 $patient->load($patient_id);
+
 $patient->loadRefDossierMedical();
 $dossier_medical =& $patient->_ref_dossier_medical;
-
 if($dossier_medical->_id){
   $dossier_medical->loadRefPrescription();
   if($dossier_medical->_ref_prescription->_id){
-    $dossier_medical->_ref_prescription->loadRefsLinesMed();
+    $prescription =& $dossier_medical->_ref_prescription;
+		$prescription->loadRefsLinesMed();
+    foreach($prescription->_ref_prescription_lines as $_line){
+      $traitements[$_line->_id] = $_line->_ref_produit;
+    }
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("dossier_medical", $dossier_medical);
-$smarty->display("inc_dossier_medical_patient.tpl");
+$smarty->assign("traitements", $traitements);
+$smarty->display("inc_vw_select_tp_patient.tpl");
 
 ?>

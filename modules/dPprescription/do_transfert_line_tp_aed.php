@@ -13,7 +13,6 @@ global $AppUI, $can;
 
 $prescription_line_medicament_id = mbGetValueFromPost("prescription_line_medicament_id");
 $sejour_id = mbGetValueFromPost("sejour_id");
-$user_id = mbGetValueFromPost("user_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -53,7 +52,7 @@ $line->loadRefsPrises();
 $line->_id = "";
 $line->traitement_personnel = 1;
 $line->prescription_id = $prescription_sejour->_id;
-$line->praticien_id = $can->admin ? $sejour->praticien_id : $user_id;
+$line->praticien_id = $can->admin ? $sejour->praticien_id : $AppUI->user_id;
 $line->debut = mbDate($sejour->_entree);
 $msg = $line->store();
 $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");

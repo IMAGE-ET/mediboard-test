@@ -14,16 +14,13 @@
 {{else}}
   {{foreach from=$_operation->_ext_codes_ccam item=_code}}
   {{$_code->code}}
-	<em>
   {{if !@$board}}
-    : {{$_code->libelleLong}}
+    :<em> {{$_code->libelleLong}}</em>
   {{/if}}
   {{if @$boardItem}}
-    : {{$_code->libelleLong|truncate:50:"...":false}}
+    :<em> {{$_code->libelleLong|truncate:50:"...":false}}</em>
   {{/if}}
-	</em>
  <br />
   {{/foreach}}
 {{/if}}
-
 </div>

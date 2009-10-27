@@ -23,15 +23,27 @@ var Prescription = {
     var oForm     = document.forms.addLine;
     var oFormDate = document.forms.selDateLine;
     
-    if(oFormDate && oFormDate.debut.value){
-      oForm.debut.value = oFormDate.debut.value;  
-    }
-    if(oFormDate && oFormDate.time_debut){
-      oForm.time_debut.value = oFormDate.time_debut.value;
-    }
-  
+    if(oFormDate){
+			if(oFormDate.debut && oFormDate.debut.value){
+			  $V(oForm.debut, oFormDate.debut.value);  
+			}
+			if(oFormDate.time_debut && oFormDate.time_debut.value){
+			  $V(oForm.time_debut, oFormDate.time_debut.value);
+			}
+			if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
+        $V(oForm.jour_decalage, oFormDate.jour_decalage.value);
+			}
+      if(oFormDate.decalage_line && oFormDate.decalage_line.value){
+			  $V(oForm.decalage_line, oFormDate.decalage_line.value);
+			}
+			if(oFormDate.unite_decalage && oFormDate.unite_decalage.value){
+			  $V(oForm.unite_decalage, oFormDate.unite_decalage.value);
+		  }
+			if(oFormDate.operation_id && oFormDate.operation_id.value){
+        $V(oForm.operation_id, oFormDate.operation_id.value);
+      }
+		}
     oForm.code_cip.value = code;
-    
     var mode_pharma = oForm.mode_pharma.value;
 
     submitFormAjax(oForm, 'systemMsg', { 
@@ -45,14 +57,28 @@ var Prescription = {
     // Formulaire contenant la categorie courante
     var oForm     = document.forms.addLineElement;
     var oFormDate = document.forms.selDateLine;
-    
-    if(oFormDate && oFormDate.debut.value){
-      oForm.debut.value = oFormDate.debut.value;
+
+		if(oFormDate){
+      if(oFormDate.debut && oFormDate.debut.value){
+        $V(oForm.debut, oFormDate.debut.value);  
+      }
+      if(oFormDate.time_debut && oFormDate.time_debut.value){
+        $V(oForm.time_debut, oFormDate.time_debut.value);
+      }
+      if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
+        $V(oForm.jour_decalage, oFormDate.jour_decalage.value);
+      }
+      if(oFormDate.decalage_line && oFormDate.decalage_line.value){
+        $V(oForm.decalage_line, oFormDate.decalage_line.value);
+      }
+      if(oFormDate.unite_decalage && oFormDate.unite_decalage.value){
+        $V(oForm.unite_decalage, oFormDate.unite_decalage.value);
+      }
+      if(oFormDate.operation_id && oFormDate.operation_id.value){
+        $V(oForm.operation_id, oFormDate.operation_id.value);
+      }
     }
-    if(oFormDate && oFormDate.time_debut){
-      oForm.time_debut.value = oFormDate.time_debut.value;  
-    }
-    
+		
     if(debut){
       oForm.debut.value = debut;
     }
@@ -341,17 +367,17 @@ var Prescription = {
  		link = $('prescription_tab_group').select("a[href=#"+tabName+"]")[0];
 
     if(lineCountNonSignee > 0){
-      link.addClassName("chapitre_non_signe");
+      link.addClassName("wrong");
     } else {
-      link.removeClassName("chapitre_non_signe");
+      link.removeClassName("wrong");
     }
     
-    if((lineCount > 0) && lineCountNonSignee == 0){
-      link.addClassName("chapitre_signe");
-    } else {
-      link.removeClassName("chapitre_signe");
-    }
-    
+		if(lineCount == 0){
+		  link.addClassName("empty");
+		} else {
+		  link.removeClassName("empty");
+		}
+		
     if (tab = tab[0]) {
       // On recupere le nom de l'onglet
       tabSplit = tab.innerHTML.split(" ");
@@ -393,6 +419,9 @@ var Prescription = {
   },
   popup: function(prescription_id, type){
     switch (type) {
+			case 'traitement':
+			  Prescription.popupDossierMedPatient(prescription_id);
+			break;
       case 'printPrescription':
         Prescription.printPrescription(prescription_id);
         break;
@@ -410,6 +439,12 @@ var Prescription = {
         break;
     }
   }, 
+	popupDossierMedPatient: function(prescription_id){
+	  var url = new Url;
+	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_medical_patient");
+	  url.addParam("prescription_id", prescription_id);
+	  url.popup(700, 500, "Traitements du patient");
+  },
   viewSubstitutionLines: function(object_id, object_class, mode_pack){
     var url = new Url("dPprescription", "httpreq_add_substitution_line");
     url.addParam("object_id", object_id);

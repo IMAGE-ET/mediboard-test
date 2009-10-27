@@ -715,14 +715,14 @@ class CSejour extends CCodable {
     
     $this->_ref_suivi_medical = array();
 
-    if(array_key_exists("observations", $this->_back)){
+    if(isset($this->_back["observations"])){
 	    foreach($this->_back["observations"] as $curr_obs) {
 	      $curr_obs->loadRefsFwd();
 	      $curr_obs->_ref_user->loadRefFunction();
 	      $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
 	    }
     }
-    if(array_key_exists("transmissions", $this->_back)){
+    if(isset($this->_back["transmissions"])){
     	foreach($this->_back["transmissions"] as $curr_trans) {
 	      $curr_trans->loadRefsFwd();    
 	      if($curr_trans->_ref_object instanceof CAdministration){

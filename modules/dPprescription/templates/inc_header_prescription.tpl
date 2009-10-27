@@ -59,6 +59,8 @@ Main.add( function(){
   } else {
     refreshSelectProtocoles('{{$prescription->_ref_current_praticien->_id}}', '{{$prescription->_id}}');
   }
+	
+	headerPrescriptionTabs = Control.Tabs.create('header_prescription', false);
 } );
 
 submitProtocole = function(){
@@ -73,8 +75,6 @@ submitProtocole = function(){
    oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
   }
   submitFormAjax(oForm, 'systemMsg');
-  //oForm.pack_protocole_id.value = '';
-  //$V(oForm.debut, '');
 }
 
 popupTransmission = function(sejour_id){
@@ -86,16 +86,46 @@ popupTransmission = function(sejour_id){
   url.popup(700, 500, "Transmissions et Observations");
 }
 
-popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_dossier_medical_patient");
-  url.addParam("patient_id", patient_id);
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("prescription_sejour_id", prescription_sejour_id);
-	if(document.selPraticienLine){
-	  url.addParam("praticien_id", document.selPraticienLine.praticien_id.value);
+changeManualDate = function(){
+  var oForm = getForm('selDateLine'); 
+	oForm.debut_da.value = new String;
+  oForm.debut.value = '';
+
+  if($V(oForm.debut_date) == 'other') { 
+	  $('manualDate').show(); 
+		$('relativeDate').hide(); 
+	} else {
+	  var decalage = $V(oForm.debut_date).split('_');
+		var jour_decalage = decalage[0];
+	  var dateTime = decalage[1];
+		var operation_id;
+		
+		if(jour_decalage != "I"){
+	    $V(oForm.unite_decalage,"jour");
+	    oForm.unite_decalage.disabled = "disabled";
+	  } else {
+	    oForm.unite_decalage.disabled = "";
+	  }
+		
+		if(jour_decalage == "I" && decalage[2]){
+		  operation_id = decalage[2];
+			$V(oForm.operation_id, operation_id);
+		}
+		
+		$V(oForm.jour_decalage, jour_decalage);
+	  
+		var dDebut = Date.fromDATETIME(dateTime);  
+		if($V(oForm.unite_decalage) == "jour"){
+		  dDebut.addDays(parseInt(oForm.decalage_line.value));
+      $V(oForm.debut, dDebut.toDATE());
+		} else {
+		  dDebut.addHours(parseInt(oForm.decalage_line.value));
+	    $V(oForm.debut, dDebut.toDATE());
+	    $V(oForm.time_debut, dDebut.toTIME());
+    }
+		$('manualDate').hide();
+		$('relativeDate').show();
 	}
-  url.popup(700, 500, "Traitements du patient");
 }
 
 </script>
@@ -195,16 +225,7 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
     <th class="title text" colspan="3">
       <!-- Selection du praticien prescripteur de la ligne -->
        <div style="float: right">
-       	{{if !$mode_protocole && $prescription->type == "sejour"}}
-					<span style="float: right;">
-					  <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
-						<button type="button" class="search" onclick="popupDossierMedPatient('{{$prescription->_ref_patient->_id}}','{{$prescription->object_id}}','{{$prescription->_id}}');">Traitements du patient</button>
-					</span>
-			  {{/if}}
-			  
-        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma)}}  
-        <br />
-        Praticien:    
+        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma)}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} refreshSelectProtocoles(this.value, '{{$prescription->_id}}')">
 						<optgroup label="Responsables">
@@ -229,14 +250,18 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 				  </select>
 				</form>
 				{{/if}}
-       </div>
-			
+				<br />
+				  <div id="antecedent_allergie" style="float: right">
+            {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+            {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+            {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+          </div>   
+        </div>
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
         <div style="float:left; padding-right: 5px; " class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
           <img alt="Ecrire une note" src="images/icons/note_grey.png" />
         </div>
       {{/if}}
-      
       {{if !$mode_protocole}}
         {{if $prescription->type == "externe"}}
          <span style="float: left">
@@ -248,7 +273,6 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
          </a>
        {{/if}}
       {{/if}}
-      
       {{if !$mode_protocole}}
         {{if $prescription->type == "externe"}}
           {{$prescription->_ref_patient->_view}}   
@@ -258,100 +282,139 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
         {{if $prescription->_ref_patient->_age}}
            <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
-	       <div id="antecedent_allergie">
-			     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-			     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-			     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-				 </div>   
 	    {{/if}}
     </th>
   </tr>
   {{/if}}
   
   <tr>
-    {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
-      <th class="category">Protocoles</th>
-    {{/if}}
-    {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
-      <th class="category">Date d'ajout de lignes</th>
-    {{/if}}
-    <th class="category">Outils</th>
+  	<td colspan="3">
+			<ul id="header_prescription" class="control_tabs small">
+				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
+				<li><a href="#div_protocoles">Protocoles</a></li>
+				{{/if}}
+				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
+				<li><a href="#div_ajout_lignes">Paramètres d'ajout de lignes</a></li>
+				{{/if}}
+				<li><a href="#div_outils">Outils</a></li>
+				<li style="float: right; button">		
+					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+		        {{if !$mode_pharma}}
+		          {{if $is_praticien}}
+		            <form name="signaturePrescription" method="post" action="">
+		              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+		              <input type="hidden" name="m" value="dPprescription" />
+		              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+		              <input type="hidden" name="chapitre" value="all" />
+		              <input type="hidden" name="del" value="0" />
+		              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+		              <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg');" style="margin:0px">Tout signer</button>
+		            </form>
+		          
+		            <form name="removeSignaturePrescription" method="post" action="">
+		              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+		              <input type="hidden" name="m" value="dPprescription" />
+		              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+		              <input type="hidden" name="chapitre" value="all" />
+		              <input type="hidden" name="annulation" value="1" />
+		              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+		              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg');" style="margin:0px">Annuler signatures</button>
+		            </form>
+								
+							  <form name="removeLines" method="post" action="">
+	                <input type="hidden" name="dosql" value="do_remove_lines" />
+	                <input type="hidden" name="m" value="dPprescription" />
+	                <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+	                <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+	                <button type="button" class="trash" style="margin:0px" onclick="if(confirm('Etes vous sur de vouloir supprimer vos lignes non signées ?')){
+	                  submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}',null, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); } } )
+	                }">Supprimer</button>
+               </form>
+		          {{else}}
+		            <!-- Validation de la prescription -->
+		            <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');" style="margin:0px">
+		              Tout signer
+		            </button>
+		            <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')" style="margin:0px">Annuler signatures</button>
+		          {{/if}}
+		        {{/if}}
+		      {{/if}}			
+				</li>
+			</ul>
+			<hr class="control_tabs" />
+		</td>
   </tr>
   <tr>
   {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
-   <td class="date" style="text-align: right;">
+   <td class="date" id="div_protocoles" colspan="3">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
-	      <table class="form">
-	        <tr>
-		        <td>
-			        <input type="hidden" name="m" value="dPprescription" />
-			        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
-			        <input type="hidden" name="del" value="0" />
-			        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			        <input type="hidden" name="pratSel_id" value="" />
-							<span id="select_protocole"></span>
-							<br />
-				 				{{if $prescription->type != "externe"}}
-				 				  {{if $prescription->_dates_dispo}}
-					 				  Intervention
-					 				  <select name="operation_id">
-					 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
-					 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
-					 				    {{/foreach}}
-	 									</select>
- 									{{/if}}
-				 				{{else}}
-				 				  <!-- Prescription externe -->
-									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
-					 				<script type="text/javascript">
-					 				  dates = {
-									    current: {
-									      start: "{{$today}}",
-									      stop: ""
-									    }
-									  }
-					 				  Main.add( function(){
-					            Calendar.regField(getForm("applyProtocole").debut, dates);
-					          } );
-					 				</script>				 				
-				 				{{/if}}
-			          <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
-		        </td>
-	        </tr>
-	      </table>
+	      <input type="hidden" name="m" value="dPprescription" />
+	      <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+	      <input type="hidden" name="pratSel_id" value="" />
+				<span id="select_protocole"></span>
+	
+	 				{{if $prescription->type != "externe"}}
+	 				  {{if $prescription->_dates_dispo}}
+		 				  Intervention
+		 				  <select name="operation_id">
+		 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
+		 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
+		 				    {{/foreach}}
+								</select>
+							{{/if}}
+	 				{{else}}
+	 				  <!-- Prescription externe -->
+						{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
+		 				<script type="text/javascript">
+		 				  dates = {
+						    current: {
+						      start: "{{$today}}",
+						      stop: ""
+						    }
+						  }
+		 				  Main.add( function(){
+		            Calendar.regField(getForm("applyProtocole").debut, dates);
+		          } );
+		 				</script>				 				
+	 				{{/if}}
+	        <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
       </form>
     </td>  
   {{/if}}
   
   {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
-      <td class="date">
-        <form name="selDateLine" action="?" method="get"> 
-      
-        {{if $prescription->type != "externe"}}   
-	        <select name="debut_date" 
-					        onchange="getForm('selDateLine').debut_da.value = new String;
-	 				                    this.form.debut.value = '';
-	 				          				  if(this.value == 'other') { $('calendarProt').show(); } 
-	 				          				  else { this.form.debut.value = this.value; $('calendarProt').hide();}">
+      <td class="date" id="div_ajout_lignes" colspan="3" style="display: none;">
+		    <form name="selDateLine" action="?" method="get"> 
+        {{if $prescription->type != "externe"}} 
+	        <select name="debut_date" onchange="changeManualDate();">
 				    <option value="other">Autre date</option>
+            <optgroup label="Intervention">
+            {{foreach from=$prescription->_dates_dispo key=_operation_id item=_date_operation}}
+              <option value="I_{{$_date_operation}}_{{$_operation_id}}">Intervention - {{$_date_operation|date_format:$dPconfig.datetime}}</option>
+            {{/foreach}}
+            </optgroup>
 				    <optgroup label="Séjour">
-				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
-				      <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+				      <option value="E_{{$prescription->_ref_object->_entree}}">Entrée - {{$prescription->_ref_object->_entree|date_format:$dPconfig.datetime}}</option>
+				      <option value="S_{{$prescription->_ref_object->_sortie}}">Sortie - {{$prescription->_ref_object->_sortie|date_format:$dPconfig.datetime}}</option>
 				    </optgroup>
-				    <optgroup label="Intervention">
-				    {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
-				      <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
-				    {{/foreach}}
-						</optgroup>
 				  </select>		 				
-				  <!-- Prescription externe -->
-				  <div id="calendarProt" style="border:none; margin-right: 60px">
+					<!-- Selection manuelle de la date -->
+				  <span id="manualDate" style="border:none; margin-right: 60px">
 				    {{mb_field object=$filter_line field="debut" form=selDateLine}}
-				    {{mb_field object=$filter_line field="time_debut" form=selDateLine}}      
-				  </div>
-        {{else}}
+				    {{mb_field object=$filter_line field="time_debut" form=selDateLine}}
+				  </span>
+					<!-- Selection relative de la date -->
+					<span id='relativeDate' style="border:none; margin-right: 60px; display: none;">
+					  {{mb_field object=$filter_line field="decalage_line" form=selDateLine showPlus=1 increment=1 size="3" onchange="changeManualDate()"}}
+						{{mb_field object=$filter_line field="unite_decalage" onchange="changeManualDate()"}}
+					</span>
+					<input type="hidden" name="jour_decalage" value="" />
+					<input type="hidden" name="operation_id" value="" />
+				{{else}}
            {{mb_field object=$filter_line field="debut" form="selDateLine"}}
         {{/if}}
         
@@ -362,9 +425,9 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
         </script>	
 	    </form>
 	    </td>
-	  {{/if}} 
- 
-    <td style="text-align: left;">
+	  {{/if}}
+		
+    <td colspan="3" id="div_outils" style="display: none;">
       <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
         <option value="">&mdash; Action</option>
         <optgroup label="Afficher">
@@ -372,6 +435,9 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
       		{{if $prescription->object_id}}
       		<option value="viewHistorique">Historique</option>
       		<option value="viewSubstitutions">Substitutions</option>
+					{{if !$mode_protocole && $prescription->type == "sejour"}}
+          <option value="traitement">Traitements du patient</option>
+          {{/if}}
       	  {{/if}}
         </optgroup>
         {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin) && $prescription->type != "externe"}}
@@ -381,58 +447,13 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
 	        </optgroup>
         {{/if}}
       </select>
-
-			{{if !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+      {{if !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
         <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
-        {{if $prescription->object_id}}
-          {{if $is_praticien}}
-            <form name="removeLines" method="post" action="">
-              <input type="hidden" name="dosql" value="do_remove_lines" />
-              <input type="hidden" name="m" value="dPprescription" />
-              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-              <button type="button" class="trash" onclick="if(confirm('Etes vous sur de vouloir supprimer vos lignes non signées ?')){
-                submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}',null, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); } } )
-              }">Supprimer</button>
-             </form>
-          {{/if}}
-        {{/if}}
       {{/if}}
-      <button type="button" class="print notext" onclick="Prescription.printPrescription('{{$prescription->_id}}');"/></button>
-      <br />
-      {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
-        {{if !$mode_pharma}}
-	        {{if $is_praticien}}
-	          <form name="signaturePrescription" method="post" action="">
-              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
-              <input type="hidden" name="m" value="dPprescription" />
-              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-              <input type="hidden" name="chapitre" value="all" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-              <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg');">Tout signer</button>
-            </form>
-	        
-					  <form name="removeSignaturePrescription" method="post" action="">
-              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
-              <input type="hidden" name="m" value="dPprescription" />
-              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-              <input type="hidden" name="chapitre" value="all" />
-              <input type="hidden" name="annulation" value="1" />
-              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg');">Annuler signatures</button>
-            </form>
-					{{else}}
-		        <!-- Validation de la prescription -->
-			      <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');">
-			        Tout signer
-			      </button>
-			      {{if $operation_id}}
-              <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')">Annuler signatures</button>
-            {{/if}}
-		      {{/if}}
-        {{/if}}
-      {{/if}}
+			{{if !$mode_protocole && $prescription->type == "sejour"}}
+        <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
+			{{/if}}			
+			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
     </td>
   </tr>  
   {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}
@@ -441,4 +462,4 @@ popupDossierMedPatient = function(patient_id, sejour_id, prescription_sejour_id)
   </tr>
   {{/if}}
 </table>
-<hr />
+<hr class="control_tabs" />

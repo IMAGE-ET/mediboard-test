@@ -123,8 +123,6 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 	          if($_line->jour_decalage == "I"){
 	             $signe_debut = ($_line->decalage_line >= 0) ? "+" : "";
 	             if($_line->unite_decalage == "heure"){  
-	  	            //$_line->debut = $date_operation;
-	                //$_line->time_debut = mbTime("$signe_debut $_line->decalage_line HOURS", $hour_operation);   
 	                $date_time_debut = mbDateTime("$signe_debut $_line->decalage_line HOURS", "$date_operation $hour_operation");
 	                $_line->debut = mbDate($date_time_debut);
 	                $_line->time_debut = mbTime($date_time_debut);
@@ -137,8 +135,6 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 	            if($_line->jour_decalage_fin == "I"){
 	              $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
 	              if($_line->unite_decalage_fin == "heure"){
-	                //$date_fin = $date_operation;
-	                //$_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $hour_operation);   
 	                $date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_operation $hour_operation");
 	                $date_fin = mbDate($date_time_fin);
 	                $_line->time_fin = mbTime($date_time_fin);

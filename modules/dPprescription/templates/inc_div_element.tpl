@@ -21,9 +21,7 @@ Main.add( function(){
   if(document.selPraticienLine){
 	  changePraticienElt(document.selPraticienLine.praticien_id.value, '{{$element}}');
   }
-  
   Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$element}}{{else}}0{{/if}}');
-  
   if(document.search{{$element}}){
     // Autocomplete
     prepareForm(document.search{{$element}});
@@ -36,7 +34,6 @@ Main.add( function(){
     } );
   }
 } );
-
 
 {{if $prescription->_praticiens|@count}}
   if(document.selPratForPresc){
@@ -53,7 +50,6 @@ Main.add( function(){
 		 });
 	 }
 {{/if}}
-
 </script>
 
 <table class="form">
@@ -68,22 +64,21 @@ Main.add( function(){
     <td>
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
-			  
 			  <!-- Affichage des produits les plus utilises -->
-        <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" style="width: 140px;" onclick="updateFavoris('{{$favoris_praticien_id}}','{{$element}}', this);">
+        <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" 
+				        style="width: 140px;" onclick="updateFavoris('{{$favoris_praticien_id}}','{{$element}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
           <option value="">&mdash; les plus utilisés</option>
         </select>
 				
-				
 			  <!-- Boutons d'ajout d'elements et de commentaires -->
 			  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
-			  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément');">Ajouter élément</button>
+			  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Ajouter élément</button>
 			  {{/if}}
 			  <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_{{$element}}'), 'commentaire');" type="button">Ajouter commentaire</button>
 			 <br />
 			 
 			  <!-- Selecteur d'elements -->
-			  <input type="text" name="{{$element}}" value="" class="autocomplete" />
+			  <input type="text" name="{{$element}}" value="" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
 			  <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
 			  <button class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>

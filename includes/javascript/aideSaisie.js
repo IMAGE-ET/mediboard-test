@@ -51,7 +51,7 @@ var AideSaisie = {
       var oDiv = new Element("div", {
         id: oSearchField.id + "_auto_complete"
       }).addClassName("autocomplete").setStyle({
-        width: "600px"
+        width: "400px"
       }).hide();
       
       oSearchField.insert({after: oDiv});

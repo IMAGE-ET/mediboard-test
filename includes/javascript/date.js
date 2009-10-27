@@ -639,7 +639,12 @@ Class.extend(Date, {
     
     return printf("%04d-%02d-%02d", y, m, d);
   },
-  
+	toTIME: function(){
+    var h = this.getHours();
+    var m = this.getMinutes();
+    var s = this.getSeconds();
+		return printf("%02d:%02d:%02d", h, m, s);		
+	},
   toDATETIME: function(useSpace) {
     var h = this.getHours();
     var m = this.getMinutes();
@@ -668,5 +673,8 @@ Class.extend(Date, {
   
   addDays: function(iDays) {
     this.setDate(this.getDate() + iDays);
+  },
+	addHours: function(iHours) {
+    this.setHours(this.getHours() + iHours);
   }
 } );
