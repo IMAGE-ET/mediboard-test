@@ -107,26 +107,27 @@ class CMediusers extends CMbObject {
     $specs["spec_cpam_id"]     = "ref class|CSpecCPAM";
     $specs["compte"]           = "code rib confidential mask|99999S99999S99999999999S99";
     $specs["banque_id"]        = "ref class|CBanque";
-		
-    $specs["_user_username"]   = "str notNull minLength|4";
-    $specs["_user_password2"]  = "password sameAs|_user_password";
-    $specs["_user_first_name"] = "str";
-    $specs["_user_last_name"]  = "str notNull confidential";
-    $specs["_user_email"]      = "str confidential";
-    $specs["_user_phone"]      = "numchar confidential length|10 mask|$phone_number_format";
-    $specs["_user_adresse"]    = "str confidential";
-    $specs["_user_last_login"] = "dateTime";
-    $specs["_user_cp"]         = "num length|5 confidential";
-    $specs["_user_ville"]      = "str confidential";
-    $specs["_profile_id"]      = "num";
-    $specs["_user_type"]       = "num notNull min|0 max|20";
+    
     $specs["_group_id"]        = "ref notNull class|CGroups";
+		
+    $specs["_user_username"]   = "str notNull minLength|4 reported";
+    $specs["_user_password2"]  = "password sameAs|_user_password reported";
+    $specs["_user_first_name"] = "str reported";
+    $specs["_user_last_name"]  = "str notNull confidential reported";
+    $specs["_user_email"]      = "str confidential reported";
+    $specs["_user_phone"]      = "numchar confidential length|10 mask|$phone_number_format reported";
+    $specs["_user_adresse"]    = "str confidential reported";
+    $specs["_user_last_login"] = "dateTime reported";
+    $specs["_user_cp"]         = "num length|5 confidential reported";
+    $specs["_user_ville"]      = "str confidential reported";
+    $specs["_profile_id"]      = "num reported";
+    $specs["_user_type"]       = "num notNull min|0 max|20 reported";
     
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";
     $specs["_user_password_strong"] = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
 
-    $specs["_user_password"] = $specs["_user_password_weak"];
+    $specs["_user_password"] = $specs["_user_password_weak"]." reported";
 
     return $specs;
   }

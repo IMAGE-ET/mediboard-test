@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $m;
+global $m;
 
 $objects_id    = mbGetValueFromGet('objects_id'); // array
 $objects_class = mbGetValueFromGet('objects_class');
@@ -23,7 +23,7 @@ if (class_exists($objects_class) && count($objects_id)) {
     
     // the CMbObject is loaded
     if (!$object->load($object_id)){
-      $AppUI->setMsg("Chargement impossible de l'objet [$object_id]", UI_MSG_ERROR);
+      CAppUI::setMsg("Chargement impossible de l'objet [$object_id]", UI_MSG_ERROR);
       continue;
     }
 

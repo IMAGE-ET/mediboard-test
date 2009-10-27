@@ -104,6 +104,9 @@ var Url = Class.create({
     iWidth = iWidth || 800;
     iHeight = iHeight || 600;
     sWindowName = sWindowName || "";
+    sBaseUrl = sBaseUrl || "";
+    
+    var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
   
     // Pefixed window collection
     if (sPrefix && this.oPrefixed[sPrefix]) {
@@ -114,13 +117,10 @@ var Url = Class.create({
       // Purge closed windows
       iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
     }
-    
-    var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
   
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
-    var sTargetUrl = sBaseUrl || "";
-    this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, sFeatures);  
+    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);  
     window.children[sWindowName] = this.oWindow;
 		
     if (!this.oWindow)
@@ -136,11 +136,12 @@ var Url = Class.create({
   },
   
   popDirect: function(iWidth, iHeight, sWindowName, sBaseUrl) {
-    var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
-  
     iWidth = iWidth || 800;
     iHeight = iHeight || 600;
     sWindowName = sWindowName || "";
+    sBaseUrl = sBaseUrl || "";
+    
+    var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
 		
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");

@@ -14,8 +14,8 @@ class CMbFieldSpec {
   var $className      = null; // @TODO: rename to $owner
   var $fieldName      = null; // @TODO: rename to $field
   var $prop           = null;
+  
   var $default        = null;
-
   var $notNull        = null;
   var $confidential   = null;
   var $moreThan       = null;
@@ -29,6 +29,7 @@ class CMbFieldSpec {
   var $autocomplete   = null;
   var $helped         = null;
   var $seekable       = null;
+  var $reported       = null;
 
   static $chars  = array();
   static $nums   = array();
@@ -87,6 +88,7 @@ class CMbFieldSpec {
       'autocomplete'  => 'bool',
       'helped'        => 'bool',
       'seekable'      => 'bool',
+      'reported'      => 'bool',
     );
   }
 
