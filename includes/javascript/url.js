@@ -119,7 +119,8 @@ var Url = Class.create({
   
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
-    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);  
+    var sTargetUrl = sBaseUrl || "";
+    this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, sFeatures);  
     window.children[sWindowName] = this.oWindow;
 		
     if (!this.oWindow)
