@@ -97,7 +97,7 @@ class CMedecin extends CMbObject {
     $medecin->nom    = $this->nom;
     $medecin->prenom = $this->prenom;
     $medecin->cp     = $this->cp;
-    $medecin->escapeDBFields();
+    $medecin->escapeValues();
 
     $siblings = $medecin->loadMatchingList();
     unset($siblings[$this->_id]);

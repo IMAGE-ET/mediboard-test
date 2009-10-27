@@ -1,4 +1,4 @@
-{{* $total, $current, $step = 20 *}}
+{{* $change_page, $total, $current, $step = 20 *}}
 
 {{if !isset($step|smarty:nodefaults)}}
   {{assign var="step" value=20}}

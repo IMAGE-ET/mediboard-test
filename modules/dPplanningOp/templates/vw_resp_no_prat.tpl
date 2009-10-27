@@ -9,7 +9,7 @@
 *}}
 
 <script type="text/javascript">
-  
+
 Main.add(function () {
   var tabs = Control.Tabs.create('tabs-prat');
 });
@@ -23,6 +23,13 @@ Main.add(function () {
           {{assign var=_sejour value=$_sejours.0 }}
           <li><a href="#prat-{{$_responsable_id}}">{{$_sejour->_ref_praticien}} ({{$_sejours|@count}})</a></li>
         {{/foreach}}
+          <li>
+            <form name="repairSejour" action="?m={{$m}}&amp;a=vw_resp_no_prat&amp;dialog=1" method="post">
+              <input type="hidden" name="repair" value="1" />
+              <br />
+              <button type="button" class="tick" onclick="this.form.submit()">Corriger tous les séjours valide</button>
+            </form>
+          </li>
       </ul>
     </td>
     <td>
@@ -32,7 +39,7 @@ Main.add(function () {
         <tr>
           <td>
             <a class="tooltip-trigger" onclick="window.opener.location.href='?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$_sejour->_id}}'" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-              {{$_sejour}}
+              <div class="{{if ($_sejour->_ref_consult_atu->_ref_chir->_id)}}message{{else}}error{{/if}}">[{{$_sejour->_num_dossier}}] - {{$_sejour}} ({{$_sejour->_ref_consult_atu->_ref_chir}})</div>
             </a>
           </td>
         </tr>

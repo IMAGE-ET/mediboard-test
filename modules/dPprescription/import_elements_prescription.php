@@ -58,7 +58,7 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
 		} else {
 		  $where["group_id"] = " = '$group_id'";
 		}
-    $categorie->escapeDBFields();
+    $categorie->escapeValues();
     $categorie->loadObject($where);
     
     // si la categorie n'existe pas, on la crée
@@ -70,7 +70,7 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
       }
     }
     
-    $categorie->unescapeDBFields();
+    $categorie->unescapeValues();
         
     $categorie_id = $categorie->_id;
     $categorie->description = utf8_decode((string) $domCategorie->description[0]);

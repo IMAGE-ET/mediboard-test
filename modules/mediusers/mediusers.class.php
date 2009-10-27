@@ -812,6 +812,11 @@ class CMediusers extends CMbObject {
       )
     );
   }
+  
+  function makeUsername($first_name, $last_name, $id) {
+    $length = 20 - strlen($id);
+    $this->_user_username = substr(str_replace(" ", "", strtolower($first_name ? $first_name[0] : ''.$last_name)),0,$length) . $id;
+  }
 }
 
 ?>

@@ -12,8 +12,7 @@ global $can, $m;
 
 $can->needsAdmin();
 
-$group = CGroups::loadCurrent();
-
+$repair = mbGetValueFromPost('repair', 0);
 
 $sejour_no_prat = array();
 $sejour = new CSejour();
@@ -27,9 +26,27 @@ $where["users.user_type"] = " != '13' AND users.user_type != '3' AND users.user_
 
 $order = "sejour.sortie_reelle DESC";
 
+if ($repair) {
+  $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+  foreach ($sejours as $_sejour) {
+    $_sejour->loadRefPraticien();
+    $_sejour->loadNumDossier();
+    $_sejour->loadRefsConsultations();
+    $consult_atu = $_sejour->_ref_consult_atu;
+    $consult_atu->loadRefPlageConsult();
+    if ($consult_atu->_ref_chir->_id) {
+      $_sejour->praticien_id = $consult_atu->_ref_chir->_id;
+      $_sejour->store();
+    }
+  }
+}
+
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach ($sejours as $_sejour) {
+  $_sejour->loadNumDossier();
   $_sejour->loadRefPraticien();
+  $_sejour->loadRefsConsultations();
+  $_sejour->_ref_consult_atu->loadRefPlageConsult();
   $sejour_no_prat[$_sejour->_ref_praticien->_id][] = $_sejour;
 }
 

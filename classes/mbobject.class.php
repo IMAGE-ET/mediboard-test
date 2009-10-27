@@ -1536,12 +1536,12 @@ class CMbObject {
   }
   
   /**
-   * Escape DB Fields for SQL queries
+   * Escape Value for SQL queries
    * @return void
    */
-  function escapeDBFields() {
-  	$db_fields = $this->getDBFields();
-    foreach ($db_fields as $propName => $propValue) {
+  function escapeValues() {
+  	$values = $this->getValues();
+    foreach ($values as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = addslashes($propValue);
       }
@@ -1549,12 +1549,12 @@ class CMbObject {
   }
   
   /**
-   * Unescape DB Fields for SQL queries
+   * Unescape Value for SQL queries
    * @return void
    */
-  function unescapeDBFields() {
-  	$db_fields = $this->getDBFields();
-    foreach ($db_fields as $propName => $propValue) {
+  function unescapeValues() {
+  	$values = $this->getValues();
+    foreach ($values as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = stripslashes($propValue);
       }

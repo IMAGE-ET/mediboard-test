@@ -66,6 +66,7 @@ class CUser extends CMbObject {
     $spec->table = 'users';
     $spec->key   = 'user_id';
     $spec->measureable = true;
+    $spec->uniques["username"] = array("user_username");
     return $spec;
   }
 
@@ -176,15 +177,6 @@ class CUser extends CMbObject {
   }
 
   function check() {
-    // username has to be unique
-    $this->completeField("user_username");
-    $where["user_id"]       = "!= '$this->_id'";
-    $where["user_username"] = "= '$this->user_username'";
-    $siblings = $this->loadList($where);
-    if (count($siblings)) {
-      return "Nom d'utilisateur déjà existant'"; 
-    }
-    
     // Chargement des specs des attributs du mediuser
     $this->updateSpecs();
     
@@ -234,6 +226,30 @@ class CUser extends CMbObject {
   	$this->updateSpecs();
   	return parent::store();
   }
+  
+  function merge($objects) {
+     foreach ($objects as $object) {
+      $object->removePerms();
+    }
+    return parent::merge($objects);
+  }
+
+  function removePerms() {
+    $this->completeField("user_id");
+    $perm = new CPermModule;
+    $perm->user_id = $this->user_id;
+    $perms = $perm->loadMatchingList();
+    foreach ($perms as $_perm) {
+      $_perm->delete();
+    }
+
+    $perm = new CPermObject;
+    $perm->user_id = $this->user_id;
+    $perms = $perm->loadMatchingList();
+    foreach ($perms as $_perm) {
+      $_perm->delete();
+    }
+  }
 
   /**
    * @return string error message when necessary, null otherwise
@@ -253,17 +269,7 @@ class CUser extends CMbObject {
 
     // Delete existing permissions
     if ($delExistingPerms) {
-      $perm = new CPermModule;
-      $perm->user_id = $this->user_id;
-      foreach ($perm->loadMatchingList() as $_perm) {
-        $_perm->delete();
-      }
-
-      $perm = new CPermObject;
-      $perm->user_id = $this->user_id;
-      foreach ($perm->loadMatchingList() as $_perm) {
-        $_perm->delete();
-      }
+      $this->removePerms();
     }
 
     // Get other user's permissions

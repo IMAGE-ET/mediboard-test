@@ -43,7 +43,7 @@ class CSpecCPAM extends CMbObject {
   
   function updateFormFields () {
     parent::updateFormFields();
-    $this->_view = strtolower($this->text);
+    $this->_view = $this->_id.' - '.strtolower($this->text);
     $this->_shortview = truncate($this->_view);
   }
     

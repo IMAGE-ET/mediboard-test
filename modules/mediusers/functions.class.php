@@ -71,7 +71,7 @@ class CFunctions extends CMbObject {
     $specs["group_id"]        = "ref notNull class|CGroups";
     $specs["type"]            = "enum notNull list|administratif|cabinet";
     $specs["text"]            = "str notNull confidential seekable";
-    $specs["color"]           = "str notNull length|6";
+    $specs["color"]           = "str notNull length|6 default|ffffff";
     $specs["adresse"]         = "text";
     $specs["cp"]              = "numchar length|5";
     $specs["ville"]           = "str maxLength|50";
