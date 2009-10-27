@@ -899,4 +899,7 @@ $locales['CSejour-facture-court'] = 'Fact.';
 $locales['CSejour-facture-desc'] = 'Facture émise pour le séjour';
 $locales['COperation-urgences'] = 'Interventions non planifiées';
 $locales['COperation-operations'] = 'Interventions planifiées';
+$locales['COperation-facture'] = 'Facturé';
+$locales['COperation-facture-court'] = 'Fact.';
+$locales['COperation-facture-desc'] = 'Actes envoyés pour l\'intervention';
 ?>

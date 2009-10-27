@@ -18,9 +18,9 @@
 	
   <td class="text">
     {{assign var=patient value=$sejour->_ref_patient}}
-		[{{$patient->_IPP}}] 
-    <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}">
+    <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"> 
 			{{$patient}}
+			[{{$patient->_IPP}}]
     </a>
   </td>
 

@@ -17,12 +17,12 @@ Main.add(function () {
     </th>
   </tr>
   <tr>
-    <th>Traité</th>
-    <th>Dossier</th>
-    <th>Praticien</th>
-    <th>Patient</th>
-    <th>Entrée</th>
-    <th>Sortie</th>
+    <th>{{mb_title class=CSejour field=facture}}</th>
+    <th>{{mb_title class=CSejour field=_num_dossier}}</th>
+    <th>{{mb_title class=CSejour field=praticien_id}}</th>
+    <th>{{mb_title class=CSejour field=patient_id}}</th>
+    <th>{{mb_title class=CSejour field=_entree}}</th>
+    <th>{{mb_title class=CSejour field=_sortie}}</th>
     <th>GHM</th>
     <th>Bornes</th>
   </tr>
@@ -37,25 +37,28 @@ Main.add(function () {
       {{/if}}
     </td>
     <td>
-      [{{$curr_sejour->_num_dossier}}]
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}')">
+        [{{$curr_sejour->_num_dossier}}]
+      </span>
     </td>
     <td class="text">
       Dr {{$curr_sejour->_ref_praticien->_view}}
     </td>
 
     <td class="text">
-      <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_sejour->patient_id}}">
-        {{$curr_sejour->_ref_patient->_view}}
-        [{{$curr_sejour->_ref_patient->_IPP}}]
+      {{assign var=patient value=$curr_sejour->_ref_patient}}
+      <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+        {{$patient}}
+        [{{$patient->_IPP}}]
       </a>
     </td>
 
     <td class="text">
-      {{$curr_sejour->entree_prevue|date_format:$dPconfig.datetime}}
+      {{$curr_sejour->_entree|date_format:$dPconfig.datetime}}
     </td>
 
     <td class="text">
-      {{$curr_sejour->sortie_prevue|date_format:$dPconfig.datetime}}
+      {{$curr_sejour->_sortie|date_format:$dPconfig.datetime}}
     </td>
     
     <td class="text" {{if !$GHM->_CM}}style="background-color:#fdd"{{/if}}>
