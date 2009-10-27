@@ -626,7 +626,10 @@ class CAppUI {
       return $locales[$str];
     }
     
-    return nl2br(sprintf(self::$locale_mask, call_user_func_array("sprintf", func_get_args())));
+    // DO NOT REMOVE THIS ASSIGNATION or else, there will be a fatal error in PHP < 5.3
+    // Fatal error: func_get_args(): Can't be used as a function parameter
+    $args = func_get_args();
+    return nl2br(sprintf(self::$locale_mask, call_user_func_array("sprintf", $args)));
   }
 
   /**
