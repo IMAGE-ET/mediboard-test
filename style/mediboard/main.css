@@ -3271,7 +3271,7 @@ table.active {
   border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
-	background: #eee;
+	background-color: #eee;
 }
 
 .modal h1 {

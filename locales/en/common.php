@@ -173,4 +173,10 @@ $locales['pref-showLastUpdate'] = '';
 $locales['pref-showLastUpdate-desc'] = '';
 $locales['New'] = '';
 $locales['Preview'] = 'Preview';
+$locales['browser.msie'] = 'Microsoft Internet Explorer';
+$locales['browser.firefox'] = 'Mozilla Firefox';
+$locales['browser.opera'] = 'Opera';
+$locales['browser.chrome'] = 'Google Chrome';
+$locales['browser.safari'] = 'Apple safari';
+$locales['browser.mozilla'] = 'Mozilla';
 ?>

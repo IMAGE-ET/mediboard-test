@@ -109,7 +109,7 @@ var Url = Class.create({
     if (sPrefix && this.oPrefixed[sPrefix]) {
       this.oPrefixed[sPrefix] = this.oPrefixed[sPrefix].reject(function(oWindow) {
         return oWindow.closed;
-      } );
+      });
           
       // Purge closed windows
       iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
@@ -119,10 +119,12 @@ var Url = Class.create({
   
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
-    var sTargetUrl = sBaseUrl || "";
-    this.oWindow = window.open(sTargetUrl + this.make(), sWindowName, sFeatures);  
+    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);  
     window.children[sWindowName] = this.oWindow;
 		
+    if (!this.oWindow)
+      return this.showPopupBlockerAlert(sWindowName);
+    
     // Prefixed window collection
     if (sPrefix) {
       if (!this.oPrefixed[sPrefix]) {
@@ -141,9 +143,11 @@ var Url = Class.create({
 		
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
-    
     this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);
     window.children[sWindowName] = this.oWindow;
+    
+    if (!this.oWindow)
+      this.showPopupBlockerAlert(sWindowName);
   },
   
   popunder: function(iWidth, iHeight, sWindowName) {
@@ -159,10 +163,17 @@ var Url = Class.create({
     if (sPrefix) {
       (this.oPrefixed[sPrefix] || []).each(function (oWindow) { 
         oWindow.focus();
-      } );
+      });
     }
-    
-    this.oWindow.focus();
+
+    if (this.oWindow)
+      this.oWindow.focus();
+    else 
+      this.showPopupBlockerAlert(sWindowName);
+  },
+  
+  showPopupBlockerAlert: function(popupName){
+    Modal.alert($T("Popup blocker alert", popupName));
   },
   
   autoComplete: function(input, populate, oOptions) {

@@ -625,8 +625,8 @@ class CAppUI {
     if (!empty($locales[$str])) {
       return $locales[$str];
     }
-
-    return nl2br(sprintf(self::$locale_mask, $str));
+    
+    return nl2br(sprintf(self::$locale_mask, call_user_func_array("sprintf", func_get_args())));
   }
 
   /**

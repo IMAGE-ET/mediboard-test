@@ -173,4 +173,11 @@ $locales['FormObserver-msg-confirm'] = 'Vous avez modifié certaines informations
 $locales['New'] = 'Nouveau';
 $locales['Preview'] = 'Aperçu';
 $locales['About'] = '';
+$locales['browser.msie'] = 'Microsoft Internet Explorer';
+$locales['browser.firefox'] = 'Mozilla Firefox';
+$locales['browser.opera'] = 'Opera';
+$locales['browser.chrome'] = 'Google Chrome';
+$locales['browser.safari'] = 'Apple safari';
+$locales['browser.mozilla'] = 'Mozilla';
+$locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué la popup "%s", veuillez la débloquer.'
 ?>

@@ -999,10 +999,12 @@ DOM.tags.each(function (tag) {
   DOM.defineTag (tag);
 });
 
-
 /** l10n functions */
-function $T(key) {
-  return window.locales ? (window.locales[key] || key) : key;
+function $T() {
+  var args = $A(arguments),
+      key = args[0];
+  args[0] = (window.locales ? (window.locales[key] || key) : key);
+  return printf.apply(null, args);
 }
 
 // Replacements for the javascript alert() and confirm()
