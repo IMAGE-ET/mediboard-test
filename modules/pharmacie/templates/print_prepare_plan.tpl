@@ -17,13 +17,16 @@ Main.add(window.print);
   {{$date_max|date_format:$dPconfig.datetime}} le 
   {{$smarty.now|date_format:$dPconfig.datetime}}</h1>
 
-<h2>Délivrances globales</h2>
+<h2>Délivrances {{if $nominatif}}nominatives{{else}}globales{{/if}}</h2>
 <table class="main tbl">
   <colgroup>
     <col span="5" style="width: 0.1%;" />
   </colgroup>
   
   <tr>
+  	{{if $nominatif}}
+		<th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}CProduct-code{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDeliveryTrace-quantity{{/tr}}</th>
@@ -37,6 +40,9 @@ Main.add(window.print);
   </tr>
   {{foreach from=$curr_list item=disp}}
   <tr>
+  	{{if $disp->patient_id}}
+  	<td>{{$disp->_ref_patient->_view}}</td>
+		{{/if}}
     <td>{{$disp->_ref_stock->_ref_product->code}}</td>
     <td>{{$disp->_ref_stock->_ref_product->name}}</td>
     <td>{{$disp->quantity}}</td>

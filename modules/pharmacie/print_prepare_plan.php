@@ -14,6 +14,8 @@ $can->needsRead();
 // Calcul de date_max et date_min
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
+$nominatif = mbGetValueFromGetOrSession("nominatif");
+
 mbSetValueToSession('_date_min', $date_min);
 mbSetValueToSession('_date_max', $date_max);
 
@@ -25,9 +27,14 @@ $order_by = 'product_stock_location.position ASC, product.name ASC';
 $where = array (
   "product_delivery.date_dispensation BETWEEN '$date_min' AND '$date_max'",
   'product_delivery.quantity' => " > 0",
-  'product_delivery.order' => " != '1'",
-  'product_delivery.patient_id' => "IS NULL",
+  'product_delivery.order = 0 OR product_delivery.order IS NULL'
 );
+
+if($nominatif){
+  $where["patient_id"] = " IS NOT NULL";
+} else {
+  $where["patient_id"] = " IS NULL";
+}
 
 $ljoin = array(
   'product_stock_group' => 'product_stock_group.stock_id = product_delivery.stock_id',
@@ -40,7 +47,7 @@ $list_services = $list_services->loadGroupList();
 
 $deliveries = array();
 foreach ($list_services as $service) {
-  $where['service_id'] = " = $service->_id";
+  $where['service_id'] = " = '$service->_id'";
   $delivery = new CProductDelivery();
 	
 	$where['product_stock_location.position'] = "IS NOT NULL";
@@ -48,9 +55,9 @@ foreach ($list_services as $service) {
 	
 	$where['product_stock_location.position'] = "IS NULL";
   $all_deliveries_not_located = $delivery->loadList($where, $order_by, null, null, $ljoin);
-	
+
   $all_deliveries = array_merge($all_deliveries_located, $all_deliveries_not_located);
-  
+
   foreach($all_deliveries as $_delivery){
     if (!$_delivery->isDelivered()) {
       $_delivery->loadRefsFwd();
@@ -58,8 +65,9 @@ foreach ($list_services as $service) {
       $_delivery->_ref_stock->loadRefsFwd();
       $_delivery->loadRefService();
       
-      if (!isset($deliveries[$_delivery->service_id]))
+      if (!isset($deliveries[$_delivery->service_id])){
         $deliveries[$_delivery->service_id] = array();
+			}
       $deliveries[$_delivery->service_id][] = $_delivery;
     }
   }
@@ -67,13 +75,11 @@ foreach ($list_services as $service) {
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign('date_min', $date_min);
-$smarty->assign('date_max', $date_max);
-
+$smarty->assign('date_min'     , $date_min);
+$smarty->assign('date_max'     , $date_max);
 $smarty->assign('list_services', $list_services);
-$smarty->assign('deliveries', $deliveries);
-
+$smarty->assign('deliveries'   , $deliveries);
+$smarty->assign('nominatif'    , $nominatif);
 $smarty->display('print_prepare_plan.tpl');
 
 ?>

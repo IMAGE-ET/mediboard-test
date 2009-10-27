@@ -32,21 +32,9 @@ function refreshLists() {
 function printPreparePlan(nominatif) {
   var form = getForm("filter");
   var url = new Url;
-  
-  if (nominatif) {
-    url.setModuleAction("dPhospi", "vw_bilan_service");
-    url.addParam("token_cat", "med");
-    url.addParam("do", 1);
-    url.addParam("_dateTime_min", $V(form._date_min)+' 00:00:00');
-    url.addParam("_dateTime_max", $V(form._date_max)+' 23:59:59');
-    url.addParam("service_id", $V(form.service_id));
-    url.addParam("hide_filters", 1);
-  }
-  else {
-    url.setModuleAction("pharmacie", "print_prepare_plan");
-    url.addObjectParam(form.serialize());
-  }
-  
+  url.setModuleAction("pharmacie", "print_prepare_plan");
+  url.addObjectParam(form.serialize());
+  url.addParam("nominatif", nominatif);
   url.pop(800, 600, 'Plan de cueillette');
 }
 
@@ -68,7 +56,33 @@ function deliverAll(container) {
 }
 </script>
 
-{{include file=inc_filter_delivrances.tpl}}
+<script type="text/javascript">
+var tabs;
+Main.add(function () {
+  tabs = Control.Tabs.create('tab_delivrances', true);
+  refreshLists();
+});
+</script>
+
+<form name="filter" action="?" method="get" onsubmit="if(window.loadSuivi) loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <table class="form">
+    <tr>
+      <th>{{mb_label object=$delivrance field=_date_min}}</th>
+      <td>{{mb_field object=$delivrance field=_date_min form=filter register=1}}</td>
+      <th>{{mb_label object=$delivrance field=_date_max}}</th>
+      <td>{{mb_field object=$delivrance field=_date_max form=filter register=1}}</td>
+      <td>
+        <select name="service_id" onchange="this.form.onsubmit();">
+        {{foreach from=$list_services item=curr_service}}
+          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+        {{/foreach}}
+        </select>
+      </td>
+      <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
+    </tr>
+  </table>
+</form>
 
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-globales">Globales <small>(0)</small></a></li>
