@@ -59,6 +59,7 @@ $smarty->assign("aide"     , $aide);
 $smarty->assign("dependValues", $dependValues);
 $smarty->assign("listFunc" , $listFunc);
 $smarty->assign("listPrat" , $listPrat);
+$smarty->assign("listEtab" , $listEtab);
 
 $smarty->display("vw_edit_aides.tpl");
 ?>
