@@ -10,20 +10,21 @@
 
 global $prat;
 
-$ds   = CSQLDataSource::get("std");
 $date_interv = mbGetValueFromGetOrSession("date_interv", mbDate());
 
 // Chargement des plages du mois
 $plage = new CPlageOp();
 $where = array(
-  "date" => "= '". $date_interv . "'",
+  "date"    => "= '". $date_interv . "'",
   "chir_id" => "= '" . $prat->_id . "'");
 $order = "date, debut";
+
 $listPlages = $plage->loadList($where, $order);
 
 $interv = new COperation();
 $where = array();
-$where[] = "(plageop_id " . $ds->prepareIn(array_keys($listPlages)) . " OR (operations.date = '$date_interv' AND operations.chir_id = '" . $prat->_id . "'))";
+$where[] = "(plageop_id " . CSQLDataSource::prepareIn(array_keys($listPlages)) . " OR (operations.date = '$date_interv' AND operations.chir_id = '" . $prat->_id . "'))";
+
 $listIntervs = $interv->loadList($where);
 
 foreach($listIntervs as &$_interv) {

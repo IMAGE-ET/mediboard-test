@@ -24,7 +24,7 @@ $ds = CSQLDataSource::get("std");
 if($type) {
   $where["type"] = $ds->prepare("= %", $type);
 }
-$where["praticien_id"] = $ds->prepareIn(array_keys($listPrats), $prat_id);
+$where["praticien_id"] = CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
 
 if($codeCCAM) {
   $codeCCAM     = trim($codeCCAM);

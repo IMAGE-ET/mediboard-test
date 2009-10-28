@@ -9,8 +9,6 @@
 
 global $AppUI, $can, $m;
 
-$ds = CSQLDataSource::get("std");
-
 // Récupération des paramètres
 $filter = new CPlageconsult();
 
@@ -31,7 +29,7 @@ $ljoin["plageconsult"]                      = "consultation.plageconsult_id = pl
 $where["consultation.du_tiers"]             = "> 0";
 $where["consultation.tiers_date_reglement"] = "IS NULL";
 $where["plageconsult.date"]                 = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-$where["plageconsult.chir_id"]              = $ds->prepareIn(array_keys($listPrat), $chir_id);
+$where["plageconsult.chir_id"]              = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
 $order = "plageconsult.date";
 
 $listConsults = $consult->loadList($where, $order, null, null, $ljoin);

@@ -178,9 +178,9 @@ class CCompteRendu extends CDocumentItem {
       $where = array();
       if($horsCat){
         $resultCategory[0] = "";
-        $where[] = "file_category_id IS NULL OR file_category_id ".$ds->prepareIn(array_keys($resultCategory));
+        $where[] = "file_category_id IS NULL OR file_category_id ".CSQLDataSource::prepareIn(array_keys($resultCategory));
       } else {
-        $where["file_category_id"] = $ds->prepareIn(array_keys($resultCategory));
+        $where["file_category_id"] = CSQLDataSource::prepareIn(array_keys($resultCategory));
       }
       $where["object_id"] = " IS NULL";
       if($where1){

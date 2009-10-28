@@ -40,7 +40,7 @@ $plages = $plages->loadList($where);
 // Listes des opérations
 $listOps = new COperation;
 $where = array();
-$where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
+$where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date_suivi')";
 $where["annulee"] = "= '0'";
 $order = "time_operation";
 $listOps = $listOps->loadList($where,$order);

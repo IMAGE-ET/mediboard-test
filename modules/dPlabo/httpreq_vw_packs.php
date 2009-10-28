@@ -10,7 +10,6 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 
@@ -28,7 +27,7 @@ $pack->load($pack_examens_labo_id);
 $pack->loadRefs();
 
 //Chargement de tous les packs
-$where = array("function_id IS NULL OR function_id ".$ds->prepareIn(array_keys($listFunctions)));
+$where = array("function_id IS NULL OR function_id ".CSQLDataSource::prepareIn(array_keys($listFunctions)));
 $where["obsolete"] = " = '0'";
 
 $order = "libelle";

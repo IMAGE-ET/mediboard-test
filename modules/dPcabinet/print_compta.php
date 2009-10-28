@@ -10,7 +10,6 @@
 // !! Attention, régression importante si ajout de type de paiement
 global $AppUI, $can, $m;
 
-$ds = CSQLDataSource::get("std");
 $today = mbDate();
 
 // Récupération des paramètres
@@ -74,7 +73,7 @@ if($is_admin) {
 } else {
   $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $mediuser->function_id);
 }
-$where["plageconsult.chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
+$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
 $reglements = $reglement->loadList($where, "reglement.date, plageconsult.chir_id", null, null, $ljoin);
 $listReglements = array();
 $listConsults = array();

@@ -52,7 +52,7 @@ $prescripteurs = $ds->loadHashList("SELECT medecin_id, COUNT(*) AS nb_patients
 // Chargement des medecins trouvés
 $medecin = new CMedecin();
 $where = array();
-$where["medecin_id"] = $ds->prepareIn(array_keys($prescripteurs));
+$where["medecin_id"] = CSQLDataSource::prepareIn(array_keys($prescripteurs));
 $medecins = $medecin->loadList($where);
 
 // Variables de templates

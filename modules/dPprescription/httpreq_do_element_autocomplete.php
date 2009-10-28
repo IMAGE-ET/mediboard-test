@@ -20,10 +20,9 @@ $where[] = "group_id = '$g' OR group_id IS NULL";
 $categories = $category_prescription->loadList($where);
 
 // Chargement des elements des categories precedements chargées
-$ds = CSQLDataSource::get("std");
 $element_prescription = new CElementPrescription();
 $where = array();
-$where["category_prescription_id"] = $ds->prepareIn(array_keys($categories));
+$where["category_prescription_id"] = CSQLDataSource::prepareIn(array_keys($categories));
 $where["libelle"] = "LIKE '%$libelle%'";
 $where["cancelled"] = " = '0'";
 $elements = $element_prescription->loadList($where);

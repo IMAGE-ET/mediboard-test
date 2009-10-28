@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
+
 // Type d'affichage
 $vue       = mbGetValueFromGetOrSession("vue"      , 0);
 $typeOrder = mbGetValueFromGetOrSession("typeOrder", 1);
@@ -44,7 +44,7 @@ $ljoin["service"]  = "service.service_id = chambre.service_id";
 $where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
-//$where["service.service_id"] = $ds->prepareIn(array_keys($services));
+//$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
 
 $whereDeplacement = $where;
 $whereSortie = $where;

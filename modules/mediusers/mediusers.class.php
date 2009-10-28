@@ -557,7 +557,7 @@ class CMediusers extends CMbObject {
     }
 
     $where = array();
-    $where["users_mediboard.function_id"] = $this->_spec->ds->prepareIn(array_keys($functions));
+    $where["users_mediboard.function_id"] = CSQLDataSource::prepareIn(array_keys($functions));
     $where["users_mediboard.actif"] = "= '1'";
 
     // Filters on users values
@@ -574,7 +574,7 @@ class CMediusers extends CMbObject {
         $user_types[$key] = $utypes_flip[$value];
       }
 
-      $where["users.user_type"] = $this->_spec->ds->prepareIn($user_types);
+      $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
     }
 
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";

@@ -31,7 +31,7 @@ $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 // Where permettant de trier suivant les services
-$whereService = "AND service.service_id  " .$ds->prepareIn(array_keys($services));
+$whereService = "AND service.service_id  " .CSQLDataSource::prepareIn(array_keys($services));
 if($selService){
   $whereService = "AND service.service_id  = '$selService'";
 }
@@ -84,7 +84,7 @@ else if ($typeVue == 1) {
   if($selPrat) {
     $wherePrat = "AND sejour.praticien_id = '$selPrat'";
   } else {
-    $wherePrat = "AND sejour.praticien_id  " .$ds->prepareIn(array_keys($listPrat));
+    $wherePrat = "AND sejour.praticien_id  " .CSQLDataSource::prepareIn(array_keys($listPrat));
   }
 
   $sql = "SELECT affectation.*

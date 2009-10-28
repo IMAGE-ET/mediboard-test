@@ -36,7 +36,7 @@ $where = array();
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $function_id);
 
-$where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
 
 // Filtres
 if ($hour) {

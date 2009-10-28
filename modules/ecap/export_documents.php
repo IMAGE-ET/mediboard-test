@@ -16,8 +16,7 @@ $max = mbGetValueFromGetOrSession("max", 20);
 
 $classes = array("CPatient", "CSejour", "CIntervention");
 $file = new CFile();
-$ds =  $file->_spec->ds;
-$where["object_class"] = $ds->prepareIn($classes);
+$where["object_class"] = CSQLDataSource::prepareIn($classes);
 $order = "file_date";
 $limit = "0, $max";
 $files = $file->loadList($where, $order, $limit);

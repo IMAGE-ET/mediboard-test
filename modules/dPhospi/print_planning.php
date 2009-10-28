@@ -12,7 +12,7 @@ global $AppUI, $can, $m, $g;
 CAppUI::requireModuleFile($m, "inc_vw_affectations");
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
+
 $filter = new CSejour();
 $filter->_date_min     = mbGetValueFromGet("_date_min", mbDate() ." 06:00:00");
 $filter->_date_max     = mbGetValueFromGet("_date_max", mbDate() ." 21:00:00");
@@ -47,7 +47,7 @@ $sejourReq->addWhereClause("sejour.type", "!= 'urg'");
 if ($filter->_specialite or $filter->praticien_id) {
   $speChirs = new CMediusers;
   $speChirs = $speChirs->loadList(array ("function_id" => "= '$filter->_specialite'"));
-  $sejourReq->addWhereClause("sejour.praticien_id", $ds->prepareIn(array_keys($speChirs), $filter->praticien_id));
+  $sejourReq->addWhereClause("sejour.praticien_id", CSQLDataSource::prepareIn(array_keys($speChirs), $filter->praticien_id));
 }
 
 if ($filter->_filter_type) {

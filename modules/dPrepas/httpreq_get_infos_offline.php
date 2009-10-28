@@ -10,7 +10,6 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
@@ -26,7 +25,7 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 // Récupération des services
 $order = "group_id, nom";
 $where = array();
-$where["group_id"] = $ds->prepareIn(array_keys($etablissements));
+$where["group_id"] = CSQLDataSource::prepareIn(array_keys($etablissements));
 $services = new CService;
 $services = $services->loadList($where, $order);
 

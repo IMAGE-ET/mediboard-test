@@ -33,7 +33,7 @@ $counts = array (
 $plages = new CPlageOp;
 $where = array();
 $where["date"] = "= '$date'";
-$where["salle_id"] = $plages->_spec->ds->prepareIn(array_keys($listSalles));
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $order = "debut";
 $plages = $plages->loadList($where, $order);
 foreach($plages as &$_plage) {
@@ -58,7 +58,7 @@ foreach($plages as &$_plage) {
 $operation = new COperation;
 $where = array();
 $where["date"]     = "= '$date'";
-$where["salle_id"] = $operation->_spec->ds->prepareIn(array_keys($listSalles));
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $where["annulee"]  = "= '0'";
 $order = "chir_id";
 $urgences = $operation->loadList($where, $order);

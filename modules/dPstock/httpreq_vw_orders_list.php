@@ -11,8 +11,6 @@
 global $can, $g;
 $can->needsRead();
 
-$ds = CSQLDataSource::get('std');
-
 $type     = mbGetValueFromGetOrSession('type');
 $keywords = mbGetValueFromGetOrSession('keywords');
 
@@ -37,7 +35,7 @@ if ($keywords) {
 	foreach($order->getSeekables() as $field => $spec) {
 	  $where_or[] = "product_order.$field LIKE '%$keywords%'";
 	}
-	$where_or[] = 'product_order.societe_id ' . $ds->prepareIn(array_keys($societe->loadList($where_societe)));
+	$where_or[] = 'product_order.societe_id ' . CSQLDataSource::prepareIn(array_keys($societe->loadList($where_societe)));
 	$where[] = implode(' OR ', $where_or);
 }
 

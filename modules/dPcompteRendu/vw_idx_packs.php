@@ -29,7 +29,7 @@ $users = $users->loadPraticiens(PERM_EDIT);
 // Filtres sur la liste des packs
 $where["chir_id"] = $userSel->user_id ? 
   "= '$userSel->user_id'" : 
-  $ds->prepareIn(array_keys($users));
+  CSQLDataSource::prepareIn(array_keys($users));
 
 $packs = new CPack();
 $packs = $packs->loadList($where);

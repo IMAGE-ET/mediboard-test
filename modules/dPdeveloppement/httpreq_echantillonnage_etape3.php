@@ -8,7 +8,6 @@
 */
 
 global $AppUI, $m;
-$ds = CSQLDataSource::get("std");
 $fct_selected = mbGetValueFromGet("fct_selected", null);
 $_nb_anesth   = mbGetValueFromGet("_nb_anesth"  , 0);
 $_nb_cab      = mbGetValueFromGet("_nb_cab"     , 0);
@@ -20,7 +19,7 @@ if($fct_selected && is_array($fct_selected)){
   $listPrat = new CMediusers;
   $where = array();
   $ljoin = array();
-  $where["function_id"] = $ds->prepareIn($fct_selected);
+  $where["function_id"] = CSQLDataSource::prepareIn($fct_selected);
   $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
   $order = "`users`.`user_last_name`, `users`.`user_first_name`";
   $listPrat = $listPrat->loadList($where, $order, null, null, $ljoin);

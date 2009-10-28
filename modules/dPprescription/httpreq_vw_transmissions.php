@@ -9,7 +9,7 @@
  */
 
 global $AppUI;
-$ds = CSQLDataSource::get("std");
+
 // Charge toutes les transmissions liées a un sejour si un sejour_id est passé
 // Sinon, charge les transmissions des dernieres 24 heures pour le praticien_id
 $datetime = mbDateTime();
@@ -42,7 +42,7 @@ if($praticien_id && !$sejour_id){
 	$where["sejour.praticien_id"] = " = '$praticien_id'";
 	$sejours = $sejour->loadList($where, null, null, null, $ljoin);
 
-	$whereTrans["sejour_id"] = $ds->prepareIn(array_keys($sejours));
+	$whereTrans["sejour_id"] = CSQLDataSource::prepareIn(array_keys($sejours));
 	$whereTrans["date"] = "BETWEEN '$date_min' and '$date_max'";
 } elseif ($sejour_id) {
   $whereTrans["sejour_id"] = " = '$sejour_id'";

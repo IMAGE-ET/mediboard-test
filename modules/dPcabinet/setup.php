@@ -306,7 +306,7 @@ class CSetupdPcabinet extends CSetup {
       $sql = "SELECT consultation.consultation_id FROM consultation" .
              "\nLEFT JOIN consultation_anesth ON consultation.consultation_id = consultation_anesth.consultation_id" .
              "\nLEFT JOIN plageconsult ON consultation.plageconsult_id = plageconsult.plageconsult_id" .
-             "\nWHERE plageconsult.chir_id " . $ds->prepareIn($listAnesthid) .
+             "\nWHERE plageconsult.chir_id " . CSQLDataSource::prepareIn($listAnesthid) .
              "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
       $result = $ds->loadList($sql);
 
@@ -505,7 +505,7 @@ class CSetupdPcabinet extends CSetup {
         return false;
       }
       if(count($aKeyxAnesth)) {
-        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".$ds->prepareIn($aKeyxAnesth).")";
+        $sql = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".CSQLDataSource::prepareIn($aKeyxAnesth).")";
         if (!$ds->exec($sql)) {
           return false;
         }

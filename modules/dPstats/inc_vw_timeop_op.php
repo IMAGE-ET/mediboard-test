@@ -23,8 +23,7 @@ $total["duree_somme"] = 0;
 $listTemps = new CTempsOp;
 
 $where = array();
-$ds = CSQLDataSource::get("std");
-$where["chir_id"] = $ds->prepareIn(array_keys($listPrats), $prat_id);
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
 
 if($codeCCAM) {
   $codeCCAM = trim($codeCCAM);

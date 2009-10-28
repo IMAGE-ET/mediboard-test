@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
+
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
 // Liste des modèles
@@ -21,14 +21,14 @@ $order = "nom";
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-$where["chir_id"] = $ds->prepareIn(array_keys($listPrat));
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 $modele = new CCompteRendu();
 $listModelePrat = $modele->loadlist($where, $order);
 unset($where["chir_id"]);
 
 $listFct = new CMediusers();
 $listFct = $listFct->loadFonctions(PERM_EDIT);
-$where["function_id"] = $ds->prepareIn(array_keys($listFct));
+$where["function_id"] = CSQLDataSource::prepareIn(array_keys($listFct));
 $modele = new CCompteRendu();
 $listModeleFct = $modele->loadlist($where, $order);
 unset($where["function_id"]);

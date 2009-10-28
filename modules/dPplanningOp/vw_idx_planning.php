@@ -134,7 +134,7 @@ if($selPraticien->isAnesth()) {
       "\nAND operations.annulee = '0'" .
       "\nLEFT JOIN functions_mediboard" .
       "\nON functions_mediboard.function_id = plagesop.spec_id" .
-      "\nWHERE (plagesop.chir_id = '$selPratLogin' OR plagesop.spec_id = '$specialite' OR plagesop.spec_id ".$ds->prepareIn(array_keys($secondary_specs)).")" .
+      "\nWHERE (plagesop.chir_id = '$selPratLogin' OR plagesop.spec_id = '$specialite' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs)).")" .
       "\nAND plagesop.date LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'" .
       "\nGROUP BY plagesop.plageop_id" .
       "\nORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";

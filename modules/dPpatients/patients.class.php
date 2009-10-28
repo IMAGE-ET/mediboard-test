@@ -322,7 +322,7 @@ class CPatient extends CMbObject {
   	// Load the matching CDossierMedical objects 
   	$where = array(
   	  'object_class' => "='$this->_class_name'",
-  	  'object_id' => $this->_spec->ds->prepareIn(CMbArray::pluck($objects, 'patient_id'))
+  	  'object_id'    => CSQLDataSource::prepareIn(CMbArray::pluck($objects, 'patient_id'))
   	);
   	$dossier_medical = new CDossierMedical();
   	$list = $dossier_medical->loadList($where);
@@ -834,7 +834,7 @@ class CPatient extends CMbObject {
   function loadRefsAffectations() {
     $this->loadRefsSejours();
     // Affectation actuelle et prochaine affectation
-    $where["sejour_id"] = $this->_spec->ds->prepareIn(array_keys($this->_ref_sejours));
+    $where["sejour_id"] = CSQLDataSource::prepareIn(array_keys($this->_ref_sejours));
     $order = "entree";
     $now = mbDateTime();
     

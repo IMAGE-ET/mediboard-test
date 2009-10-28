@@ -109,10 +109,6 @@ foreach($listPlages[$date] as &$plage){
   $affichages["$date-s$plage->salle_id-$plage->debut"] = $plage->_id;
 }
 
-// Liste des Spécialités
-$listSpec = new CFunctions();
-$listSpec = $listSpec->loadSpecialites();
-
 //Création du template
 $smarty = new CSmartyDP();
 
@@ -125,7 +121,7 @@ $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );
 $smarty->assign("affichages"     , $affichages        );
 $smarty->assign("date"           , $date              );
-$smarty->assign("listSpec"       , $listSpec          );
+$smarty->assign("listSpec"       , $specs             );
 $smarty->assign("plagesel"       , $plagesel          );
 $smarty->assign("specs"          , $specs             );
 $smarty->assign("anesths"        , $anesths           );

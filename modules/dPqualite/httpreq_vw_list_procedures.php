@@ -20,8 +20,6 @@ $sort_way     = mbGetValueFromGetOrSession("sort_way", "DESC");
 $keywords     = mbGetValueFromGet("keywords");
 $first        = intval(mbGetValueFromGet("first", 0));
 
-$ds = CSQLDataSource::get("std");
-
 // Procédure active et non annulée
 $where = array();
 $where[] = "annule = '0' OR annule IS NULL";
@@ -34,7 +32,7 @@ if($chapitre_id){
   $chapitre = new CChapitreDoc();
   $chapitre->load($chapitre_id);
   $chapitre->loadChapsDeep();
-  $where["doc_chapitre_id"] = $ds->prepareIn($chapitre->_chaps_and_subchaps);
+  $where["doc_chapitre_id"] = CSQLDataSource::prepareIn($chapitre->_chaps_and_subchaps);
 }
 if($keywords){
   $where["doc_ged.titre"] = "LIKE '%$keywords%'";

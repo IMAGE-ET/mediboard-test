@@ -20,7 +20,7 @@ $listPers = array();
 // Recuperation du user selectionné
 $user_id = mbGetValueFromGetOrSession("user_id");
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
+
 // Récupération de la liste des classes disponibles
 $classes = getInstalledClasses();
 
@@ -78,7 +78,7 @@ if($object_class){
   $where["object_class"] = " = '$object_class'";
 }
 if($list){
-  $where["personnel_id"] = $ds->prepareIn($list);
+  $where["personnel_id"] = CSQLDataSource::prepareIn($list);
 }
 
 // Chargement des 50 dernieres affectations de personnel

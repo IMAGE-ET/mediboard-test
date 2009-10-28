@@ -50,10 +50,10 @@ if($filter->_prat_id) {
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
 $salle = new CSalle;
-$whereSalle = array('bloc_id' => $ds->prepareIn(array_keys($listBlocs)));
+$whereSalle = array('bloc_id' => CSQLDataSource::prepareIn(array_keys($listBlocs)));
 $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 
-$where["salle_id"] = $ds->prepareIn(array_keys($listSalles), $filter->salle_id);
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles), $filter->salle_id);
 
 $plagesop = $plagesop->loadList($where, $order);
 $plagesop["urgences"] = new CPlageOp();

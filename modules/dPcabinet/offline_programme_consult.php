@@ -30,7 +30,7 @@ $where = array();
 $praticien = new CMediusers;
 $listPrat = $praticien->loadPraticiens(PERM_EDIT);
 
-$where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
 
 $order = "date, debut";
 

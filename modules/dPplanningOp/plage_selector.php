@@ -46,7 +46,7 @@ foreach($mediChir->_back["secondary_functions"] as $curr_sec_func) {
 
 $listPlages = new CPlageOp;
 $where = array();
-$selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".$ds->prepareIn($secondary_functions).")";
+$selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn($secondary_functions).")";
 $where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
 $where["date"] = "LIKE '".mbTransformTime(null, $date, "%Y-%m-__")."'";
 $order = "date, debut";

@@ -51,7 +51,7 @@ $listPrat = new CMediusers();
 $listFct = $listPrat->loadFonctions(PERM_EDIT);
 
 $where = array();
-$where["users_mediboard.function_id"] = $ds->prepareIn(array_keys($listFct));
+$where["users_mediboard.function_id"] = CSQLDataSource::prepareIn(array_keys($listFct));
 
 $ljoin = array();
 $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";

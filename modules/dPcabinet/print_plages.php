@@ -10,8 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
-$now       = mbDate();
+$now = mbDate();
 
 $filter = new CConsultation;
 $filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
@@ -29,7 +28,7 @@ $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 // Liste des praticiens
 $mediusers = new CMediusers();
 $listPrat = $mediusers->loadPraticiens(PERM_EDIT);
-$where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
 
 $order = array();
 $order[] = "date";

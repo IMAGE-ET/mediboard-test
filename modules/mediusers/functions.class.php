@@ -122,13 +122,30 @@ class CFunctions extends CMbObject {
   
   // @todo : ameliorer le choix des spécialités
   // (loadfunction($groupe, $permtype) par exemple)
-  function loadSpecialites($perm_type = null) {
-    global $g;
+  function loadSpecialites($perm_type = null, $include_empty = 0) {
+    $group_id = CGroups::loadCurrent()->_id;
     $where = array(
-      "type" => "= 'cabinet'",
-      "group_id" => "= '$g'"
+      "functions_mediboard.type" => "= 'cabinet'",
+      "functions_mediboard.group_id" => "= '$group_id'"
     );
-    return $this->loadListWithPerms($perm_type, $where, "text");
+    $ljoin = array();
+    if(!$include_empty) {
+      // Fonctions secondaires actives
+      $sec_function = new CSecondaryFunction();
+      $where_secondary = array();
+      $ljoin_secondary = array();
+      $ljoin_secondary["functions_mediboard"] = "functions_mediboard.type = 'cabinet'
+                                                 AND functions_mediboard.group_id = '$group_id'
+                                                 AND functions_mediboard.function_id = secondary_functions.secondary_function_id";
+      $ljoin_secondary["users_mediboard"]     = "users_mediboard.actif = '1' AND users_mediboard.function_id = secondary_functions.secondary_function_id";
+      $group = "secondary_function.function_id";
+      $sec_functions = $sec_function->loadListWithPerms($perm_type, $where_secondary, null, null, $group, $ljoin);
+      $in_functions = CSQLDataSource::prepareIn(CMbArray::pluck($sec_functions, "function_id"));
+      
+      $ljoin["users_mediboard"] = "users_mediboard.actif = '1' AND users_mediboard.function_id = functions_mediboard.function_id";
+      $where[] = "users_mediboard.user_id IS NOT NULL OR functions_mediboard.function_id $in_functions";
+    }
+    return $this->loadListWithPerms($perm_type, $where, "text", null, null, $ljoin);
   }
   
   function fillTemplate(&$template) {

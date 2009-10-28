@@ -34,7 +34,7 @@ if($catalogue->_id && $catalogue->getPerm(PERM_EDIT)) {
 // Chargement de tous les catalogues
 $where = array();
 $where["pere_id"] = "IS NULL";
-$where[] = "function_id IS NULL OR function_id ".$catalogue->_spec->ds->prepareIn(array_keys($functions));
+$where[] = "function_id IS NULL OR function_id ".CSQLDataSource::prepareIn(array_keys($functions));
 
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);

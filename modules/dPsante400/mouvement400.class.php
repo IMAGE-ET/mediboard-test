@@ -110,7 +110,7 @@ class CMouvement400 extends CRecordSante400 {
 	    $where["done"] = "= '0'";
       $where["mark"] = "!= '========'";
       $marks = $mark->loadList($where);
-      $clause = "\n WHERE $this->idField " . $mark->_spec->ds->prepareIn(CMbArray::pluck($marks, "trigger_number"));
+      $clause = "\n WHERE $this->idField " . CSQLDataSource::prepareIn(CMbArray::pluck($marks, "trigger_number"));
     }
     else {
 	    $mark->loadMatchingObject("trigger_number DESC");
