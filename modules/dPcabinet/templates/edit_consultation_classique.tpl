@@ -35,13 +35,8 @@ function submitAll() {
   submitFormAjax(oForm, 'systemMsg');
 }
 
-
 Main.add(function () {
   ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
-  
-  {{if $m == "dPurgences" && !$dPconfig.dPurgences.programme_rpu_view}}
-  ListConsults.hide();
-  {{/if}}
 } );
 
 </script>
