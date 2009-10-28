@@ -249,13 +249,13 @@ button.notext, a.notext {
 .numericField .arrows div.up {
   -moz-border-radius: 3px 3px 0 0;
   top: -1px;
-  background-image: url(../../images/buttons/up.gif);
+  background-image: url(../../images/buttons/up-small.gif);
 }
 
 .numericField .arrows div.down {
   -moz-border-radius: 0 0 3px 3px;
   bottom: -1px;
-  background-image: url(../../images/buttons/down.gif);
+  background-image: url(../../images/buttons/down-small.gif);
 }
 
 .numericField .arrows div:hover {

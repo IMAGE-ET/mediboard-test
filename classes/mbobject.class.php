@@ -1422,7 +1422,7 @@ class CMbObject {
     }
 
     // Make sure delete won't log
-    $this->_purge = "1";
+    $this->_purge = true;
     return $this->delete();
   }
   
@@ -1440,7 +1440,6 @@ class CMbObject {
   
   /**
    * Retrieve seekable specs from object
-   *
    */
   function getSeekables() {
     $seekables = array();

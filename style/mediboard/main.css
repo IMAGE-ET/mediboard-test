@@ -1026,18 +1026,21 @@ input.autocomplete.throbbing {
 }
 
 div.dropdown-trigger {
-  background: url(images/buttons/dropdown.png) center center;
-  border: 1px solid #eee;
-  outline: 1px solid #999;
+  background: url(images/buttons/dropdown.png) center center repeat-x;
+  border: 1px solid #999;
 }
 
 div.dropdown-trigger:hover {
-  outline: 1px solid #333;
+  border: 1px solid #333;
+}
+
+div.dropdown-trigger div {
+  background: url(../../images/buttons/down.gif) center center no-repeat;
+  border: 1px solid #eee;
 }
 
 div.dropdown div.autocomplete ul li.selected { 
-	background-color: #666;
-	color: white;
+	background-color: #ccc;
 }
 
 .textarea-helped {
@@ -2891,13 +2894,13 @@ table.tbl td.ccmu-P{
 .numericField .arrows div.up {
   -moz-border-radius: 3px 3px 0 0;
   top: -1px;
-  background-image: url(../../images/buttons/up.gif);
+  background-image: url(../../images/buttons/up-small.gif);
 }
 
 .numericField .arrows div.down {
   -moz-border-radius: 0 0 3px 3px;
   bottom: -1px;
-  background-image: url(../../images/buttons/down.gif);
+  background-image: url(../../images/buttons/down-small.gif);
 }
 
 .numericField .arrows div:hover {

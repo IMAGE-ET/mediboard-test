@@ -14,7 +14,7 @@ Main.add(function () {
   
   Calendar.regProgressiveField(form.progressive, {container: document.body});
   
-  new AideSaisie.Autocomplete(form.elements.rques, {
+  new AideSaisie.AutoComplete(form.elements.rques, {
     dependField1: form.elements.type, 
     dependField2: form.elements.appareil, 
     objectClass: "CAntecedent", 

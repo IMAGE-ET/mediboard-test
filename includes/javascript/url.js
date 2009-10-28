@@ -222,31 +222,33 @@ var Url = Class.create({
         style: "border:none;margin:0;padding:0;position:relative;display:inline-block", 
         className: "dropdown"
       }),
-          height = input.getHeight()-4,
-          margin = parseInt(input.getStyle("marginTop"))+1;
+          height = input.getHeight()-2,
+          margin = parseInt(input.getStyle("marginTop"));
       
-      container.setStyle({paddingRight: (height+5)+'px'}).
+      container.setStyle({paddingRight: (height+3)+'px'}).
                 clonePosition(input, {setLeft: false, setTop: false});
                 
       input.wrap(container);
       container.insert(populate);
       
-      var dropdown = new Element("div", {
+      var trigger = new Element("div", {
         style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;", 
         className: "dropdown-trigger"
       });
+      trigger.insert(new Element("div", {style: "position:absolute;right:0;top:0;left:0;bottom:0;"}));
       
       var hideAutocomplete = function(e){
         autocompleter.onBlur(e);
       }.bindAsEventListener(this);
       
-      dropdown.observe("mousedown", function(e){
+      trigger.observe("mousedown", function(e){
+        $V(input, '');
         autocompleter.activate.bind(autocompleter)();
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
       });
       populate.observe("mousedown", Event.stop);
-      container.insert(dropdown);
+      container.insert(trigger);
     }
     
     return autocompleter;
