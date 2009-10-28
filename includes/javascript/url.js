@@ -328,6 +328,7 @@ var Url = Class.create({
     this.addParam("ajax", 1);
 
     oOptions = Object.extend({
+			onCreate: function() { WaitingMessage.cover(ioTarget); },
       waitingText: "Chargement",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 

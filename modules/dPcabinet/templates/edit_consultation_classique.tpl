@@ -2,6 +2,7 @@
 {{mb_include_script module="dPprescription" script="prescription_editor"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_include_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
 function printAllDocs() {
@@ -34,29 +35,14 @@ function submitAll() {
   submitFormAjax(oForm, 'systemMsg');
 }
 
-function updateList() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
-
-  url.addParam("selConsult", "{{$consult->consultation_id}}");
-  url.addParam("prat_id", "{{$userSel->user_id}}");
-  url.addParam("date", "{{$date}}");
-  url.addParam("vue2", "{{$vue}}");
-
-  url.periodicalUpdate('listConsult', { frequency: 90 });
-}
 
 Main.add(function () {
-  updateList();
-  
-  {{if $consult->consultation_id}}
-  new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
-  {{/if}}
+  ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
   
   {{if $m == "dPurgences" && !$dPconfig.dPurgences.programme_rpu_view}}
-    $('listConsult').hide();
+  ListConsults.hide();
   {{/if}}
-});
+} );
 
 </script>
 

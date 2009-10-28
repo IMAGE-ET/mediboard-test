@@ -27,7 +27,7 @@ Main.add( function () {
   <input type="hidden" name="tab" value="{{$tab}}" />
   <table class="form">
     <tr>
-      <td colspan="6" style="text-align: center; width: 100%; font-weight: bold;">
+      <td colspan="6" style="text-align: left; width: 100%; font-weight: bold; height: 20px;">
         <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
         {{$date|date_format:$dPconfig.longdate}}
         {{if $canCabinet->view}}

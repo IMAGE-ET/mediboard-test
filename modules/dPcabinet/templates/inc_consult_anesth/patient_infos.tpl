@@ -1,7 +1,9 @@
 <table class="form">
   <tr>
     <th class="category">
-      <button class="hslip notext" id="listConsult-trigger" style="float:left">Programme</button>
+      <button type="button" class="hslip notext" style="float:left" onclick="ListConsults.toggle();">
+        {{tr}}Programme{{/tr}}
+      </button>
       Patient
     </th>
     <th class="category">Intervention</th>

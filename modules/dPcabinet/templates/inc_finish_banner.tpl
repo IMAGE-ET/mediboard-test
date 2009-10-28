@@ -37,7 +37,7 @@ function reloadFinishBanner() {
         Imprimer les documents
       </button>      
       {{else}}
-      <button class="hslip notext" id="listConsult-trigger" type="button" style="float:left">
+      <button type="button" class="hslip notext" style="float:left" onclick="ListConsults.toggle();">
         {{tr}}Programme{{/tr}}
       </button>
       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$consult->_ref_patient->_id}}"'>

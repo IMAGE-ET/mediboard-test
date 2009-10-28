@@ -5,6 +5,7 @@
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
+{{mb_include_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
 
@@ -46,28 +47,11 @@ function submitAll() {
   submitFormAjax(oForm, 'systemMsg');
 }
 
-function updateList() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
-
-  url.addParam("selConsult", "{{$consult->consultation_id}}");
-  url.addParam("prat_id", "{{$userSel->user_id}}");
-  url.addParam("date", "{{$date}}");
-  url.addParam("vue2", "{{$vue}}");
-  url.addParam("current_m", "{{$current_m}}");
-
-  url.periodicalUpdate('listConsult', { frequency: 90 });
-}
-
 Main.add(function () {
-  updateList();
+  ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
   
-  {{if $consult->_id}}
-  new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
-  {{/if}}
-
   {{if $m == "dPurgences" && !$dPconfig.dPurgences.programme_rpu_view}}
-    $('listConsult').hide();
+  ListConsults.hide();
   {{/if}}
     
   if (document.editAntFrm){
@@ -83,8 +67,8 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td id="listConsult" style="width: 200px; vertical-align: top;" />
-    <td class="greedyPane">
+    <td id="listConsult" style="{{if $app->user_prefs.dPcabinet_show_program}}width: 240px;{{/if}}"></td>
+    <td>
 			{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 			
       {{if $consult->_id}}

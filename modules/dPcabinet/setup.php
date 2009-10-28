@@ -1229,7 +1229,10 @@ class CSetupdPcabinet extends CSetup {
               ADD `facture` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);  
     
-    $this->mod_version = "1.16";
+    $this->makeRevision("1.16");
+    $this->addPrefQuery("dPcabinet_show_program", "1");
+
+    $this->mod_version = "1.17";
   }
 }
 ?>

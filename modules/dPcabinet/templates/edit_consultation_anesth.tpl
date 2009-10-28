@@ -2,6 +2,7 @@
 {{mb_include_script module="dPprescription" script="prescription_editor"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_include_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
 
@@ -60,15 +61,6 @@ function printAllDocs() {
   url.popup(700, 500, "printDocuments");
 }
 
-function updateList() {
-  var url = new Url("dPcabinet", "httpreq_vw_list_consult");
-  url.addParam("selConsult", "{{$consult->consultation_id}}");
-  url.addParam("prat_id", "{{$userSel->user_id}}");
-  url.addParam("date", "{{$date}}");
-  url.addParam("vue2", "{{$vue}}");
-  url.periodicalUpdate('listConsult', { frequency: 90 });
-}
-
 function reloadConsultAnesth() {
   var sejour_id = tabSejour[document.addOpFrm.operation_id.value];
   if (!sejour_id) {
@@ -97,17 +89,11 @@ function reloadConsultAnesth() {
 }
 
 Main.add(function () {
-
-  //rafraichissement de la liste des consultations
-  updateList();  
+  ListConsults.init("{{$consult->_id}}", "{{$userSel->_id}}", "{{$date}}", "{{$vue}}", "{{$current_m}}");
   
   // Chargement pour le sejour
   DossierMedical.reloadDossierSejour();
   
-  {{if $consult->consultation_id}}
-  new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
-  {{/if}}
-
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
   }
