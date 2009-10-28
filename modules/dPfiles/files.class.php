@@ -80,14 +80,16 @@ class CFile extends CDocumentItem {
     parent::updateFormFields();
     
     $this->_extensioned = $this->file_name;
-    $this->_file_size = mbConvertDecaBinary($this->file_size);    
+    $this->_file_size = mbConvertDecaBinary($this->file_size);
+    
+    $this->completeField("object_id");
 
     // Computes complete file path
     if ($this->object_id) {
-      $this->_sub_dir = "$this->object_class";
-      $this->_sub_dir .= "/".intval($this->object_id / 1000);
+      $this->completeField("file_real_filename");
+      $this->_sub_dir      = "$this->object_class/" . intval($this->object_id / 1000);
       $this->_absolute_dir = self::$directory . "/$this->_sub_dir/$this->object_id";
-      $this->_file_path    = $this->_absolute_dir . "/$this->file_real_filename";
+      $this->_file_path    = "$this->_absolute_dir/$this->file_real_filename";
     }
     
     $this->_shortview = $this->file_name;
@@ -107,6 +109,14 @@ class CFile extends CDocumentItem {
     return $objectPerm;
   }
   
+  function store() {
+    if ($this->_id && ($this->fieldModified("object_id") || $this->fieldModified("object_class"))) {
+      $this->_old->updateFormFields();
+      $this->moveFile($this->_old->_file_path);
+    }
+    return parent::store();
+  }
+  
   function delete() {
     if ($msg = parent::delete()) {
       return $msg;
@@ -116,8 +126,8 @@ class CFile extends CDocumentItem {
     @unlink($this->_file_path);
 
     // Delete any index entries
-    $sql = "DELETE FROM files_index_mediboard WHERE file_id = '$this->_id'";
-    if (!$this->_spec->ds->exec($sql)) {
+    $query = "DELETE FROM files_index_mediboard WHERE file_id = '$this->_id'";
+    if (!$this->_spec->ds->exec($query)) {
       return $this->_spec->ds->error();
     }
   }
@@ -126,27 +136,18 @@ class CFile extends CDocumentItem {
    * move a file from a temporary (uploaded) location to the file system
    * @return boolean job-done
    */ 
-  function moveTemp($upload) {
-    $this->updateFormFields();
-    
-    // Check global directory
-    if (!CMbPath::forceDir(self::$directory)) {
-      trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
-      return false;
-    }
-    
-    // Checks complete file directory
-    CMbPath::forceDir($this->_absolute_dir);
-
-    // Actually move uploaded file
-    return move_uploaded_file($upload["tmp_name"], $this->_file_path);
+  function moveTemp($file) {
+    return $this->moveFile($file, true);
   }
   
   /**
-   * Move a file from a location to the file system
+   * Move a file from a location to the file system or from the PHP temp directory
    * @return boolean job-done
    */
-  function moveFile($filename) {
+  function moveFile($file, $uploaded = false) {
+    if (!$uploaded && !is_file($file))
+      return false;
+      
     $this->updateFormFields();
     
     // Check global directory
@@ -157,20 +158,20 @@ class CFile extends CDocumentItem {
     
     // Checks complete file directory
     CMbPath::forceDir($this->_absolute_dir);
-
   
     // Actually move any file
-    return rename($filename, $this->_file_path);
+    if ($uploaded)
+      return move_uploaded_file($file["tmp_name"], $this->_file_path);
+    else 
+      return rename($file, $this->_file_path);
   }
   
-  function loadFilesForObject($object){
-    $key = $object->_spec->key;
-    $where["object_class"]     = "= '".get_class($object)."'";
-    $where["object_id"] = "= '".$object->$key."'";
+  static function loadFilesForObject(CMbObject $object){
     $listFile = new CFile();
-    $listFile = $listFile->loadList($where);
+    $listFile->setObject($object);
+    $listFile = $listFile->loadMatchingList();
     
-    foreach($listFile as $keyFile=>$currFile) {
+    foreach($listFile as $keyFile => $currFile) {
       $listFile[$keyFile]->canRead();
       if(!$listFile[$keyFile]->_canRead){
         unset($listFile[$keyFile]);
@@ -179,30 +180,32 @@ class CFile extends CDocumentItem {
     return $listFile;
   }
   
-  function loadNbFilesByCategory($object){
-    $key = $object->_spec->key;
-    
+  static function loadNbFilesByCategory(CMbObject $object){
     // Liste des Category pour les fichiers de cet objet
-    $listCategory = CFilesCategory::listCatClass(get_class($object));
+    $listCategory = CFilesCategory::listCatClass($object->_class_name);
     
     // Création du tableau de catégorie initialisé à 0
-    $affichageNbFile = array();
-    $affichageNbFile[0]["name"] = "Aucune Catégorie";
-    $affichageNbFile[0]["nb"]   = 0;
+    $affichageNbFile = array(
+      array(
+        "name" => CAppUI::tr("CFilesCategory.none"),
+        "nb"   => 0
+      )
+    );
+    
     foreach($listCategory as $keyCat => $currCat){
-      $affichageNbFile[$keyCat] = array();
-      $affichageNbFile[$keyCat]["name"] = $currCat->nom;
-      $affichageNbFile[$keyCat]["nb"]   = 0;
+      $affichageNbFile[$keyCat] = array(
+        "name" => $currCat->nom,
+        "nb"   => 0
+      );
     }
    
     // S'il objet valide
-    if($object->$key){
+    if($object->_id){
       foreach($object->_ref_files as $keyFile => $curr_file){
-        if($curr_file->file_category_id){
-          $affichageNbFile[$curr_file->file_category_id]["nb"] ++;
-        }else{
-          $affichageNbFile[0]["nb"] ++;
-        }
+        if($curr_file->file_category_id)
+          $affichageNbFile[$curr_file->file_category_id]["nb"]++;
+        else
+          $affichageNbFile[0]["nb"]++;
       }
     }
     return $affichageNbFile;
@@ -214,16 +217,17 @@ class CFile extends CDocumentItem {
       $string_recherche = "/Count";
       $dataFile = file_get_contents($this->_file_path);
       $nb_count = substr_count($dataFile, $string_recherche);
-      if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count>=2){
+      
+      if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
         // Fichier PDF 1.4 avec plusieurs occurence
-        $splitFile = preg_split("/obj\r<</",$dataFile);
+        $splitFile = preg_split("/obj\r<</", $dataFile);
+        
         foreach($splitFile as $splitval){
           if(!$this->_nb_pages){
-            $splitval =ereg_replace("\r","",$splitval);
-            $splitval =ereg_replace("\n","",$splitval);
+            $splitval = str_replace(array("\r", "\n"), "", $splitval);
             $position_fin = stripos($splitval, ">>");
             if($position_fin !== false){
-              $splitval = substr($splitval,0,$position_fin);
+              $splitval = substr($splitval, 0, $position_fin);
               if(strpos($splitval, "/Title") === false
                  && strpos($splitval, "/Parent") === false
                  && strpos($splitval, "/Pages") !== false
@@ -237,16 +241,17 @@ class CFile extends CDocumentItem {
           }
         }
         
-      }elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count==1){
+      }
+      elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count == 1){
         // Fichier PDF 1.3 ou 1 seule occurence
         $position_count = strripos($dataFile, $string_recherche) + strlen($string_recherche);
-        $nombre_temp = explode (" ", trim(substr($dataFile,$position_count,strlen($dataFile)-$position_count)) , 2 );
+        $nombre_temp = explode (" ", trim(substr($dataFile,$position_count, strlen($dataFile)-$position_count)), 2);
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
     }
   }
   
-  static function loadDocItemsByObject($object) {
+  static function loadDocItemsByObject(CMbObject $object) {
     if (!$object->_ref_files){
       $object->loadRefsFiles();
     }
@@ -255,13 +260,18 @@ class CFile extends CDocumentItem {
     }
     
     //Création du tableau des catégorie pour l'affichage
-    $affichageFile = array();
-    $affichageFile[0] = array();
-    $affichageFile[0]["name"] = "Aucune Catégorie";
-    $affichageFile[0]["items"] = array();
-    foreach (CFilesCategory::listCatClass($object->_class_name) as $keyCat => $_cat) {
-      $affichageFile[$_cat->_id]["name"] = $_cat->nom;
-      $affichageFile[$_cat->_id]["items"] = array();
+    $affichageFile = array(
+      array(
+        "name" => CAppUI::tr("CFilesCategory.none"),
+        "items" => array(),
+      )
+    );
+    
+    foreach (CFilesCategory::listCatClass($object->_class_name) as $_cat) {
+      $affichageFile[$_cat->_id] = array(
+        "name" => $_cat->nom,
+        "items" => array(),
+      );
     }
     
     //Ajout des fichiers dans le tableau

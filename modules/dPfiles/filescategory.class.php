@@ -63,7 +63,6 @@ class CFilesCategory extends CMbObject {
     
     $document = new CCompteRendu();
     $this->_count_unsent_documents = $document->countList($where);
-    
     $this->_count_unsent_doc_items = $this->_count_unsent_documents + $this->_count_unsent_files;
   }
   
@@ -78,14 +77,12 @@ class CFilesCategory extends CMbObject {
     return $catsByClass;
   }
     
-  static function listCatClass($paramclass = null) {
+  static function listCatClass($class = null) {
     $instance = new CFilesCategory;
-    $where = array();
-    $where[] = $instance->_spec->ds->prepare("`class` IS NULL OR `class` = %", $paramclass);
-    
-    $listCat = new CFilesCategory;
-    return $listCat->loadList($where);
-    
+    $where = array(
+      $instance->_spec->ds->prepare("`class` IS NULL OR `class` = %", $class)
+    );
+    return $instance->loadList($where);
   }
   
   function updateFormFields(){

@@ -62,7 +62,10 @@ if($filter->type) {
 $query .= "\nGROUP BY group_field";
 $sejour = new CSejour;
 $result = $sejour->_spec->ds->loadlist($query);
-$qualite["total"] = $result[0]["total"];
+
+$qualite["total"] = 0;
+if (count($result))
+  $qualite["total"] = $result[0]["total"];
 
 // 1. Patients placés
 $query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
@@ -89,8 +92,14 @@ if($filter->type) {
 $query .= "\nGROUP BY group_field";
 $sejour = new CSejour;
 $result = $sejour->_spec->ds->loadlist($query);
-$qualite["places"]["total"] = $result[0]["total"];
-$qualite["places"]["pct"]   = $result[0]["total"] / $qualite["total"] * 100;
+
+$qualite["places"]["total"] = 0;
+$qualite["places"]["pct"]   = 0;
+
+if (count($result)) {
+  $qualite["places"]["total"] = $result[0]["total"];
+  $qualite["places"]["pct"]   = $result[0]["total"] / $qualite["total"] * 100;
+}
 
 // 2. Séjours sans entrées ou sorties réelles
 $query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
@@ -118,8 +127,14 @@ if($filter->type) {
 $query .= "\nGROUP BY group_field";
 $sejour = new CSejour;
 $result = $sejour->_spec->ds->loadlist($query);
-$qualite["reels"]["total"] = $result[0]["total"];
-$qualite["reels"]["pct"]   = $result[0]["total"] / $qualite["total"] * 100;
+
+$qualite["reels"]["total"] = 0;
+$qualite["reels"]["pct"]   = 0;
+  
+if (count($result)) {
+  $qualite["reels"]["total"] = $result[0]["total"];
+  $qualite["reels"]["pct"]   = $result[0]["total"] / $qualite["total"] * 100;
+}
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);

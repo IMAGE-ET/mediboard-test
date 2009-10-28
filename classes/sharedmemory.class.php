@@ -18,10 +18,11 @@ require_once "{$dPconfig['root_dir']}/classes/mbpath.class.php";
 interface ISharedMemory {
 
   /**
+   * Initialize the shared memory
    * Returns true if shared memory is available
    * @return bool
    */
-  function isReady();
+  function init();
 
   /**
    * Get a variable from shared memory
@@ -59,7 +60,7 @@ class DiskSharedMemory implements ISharedMemory {
     $this->dir = "{$dPconfig['root_dir']}/tmp/shared/";
   }
 
-  function isReady() {
+  function init() {
     if (!CMbPath::forceDir($this->dir)) {
       trigger_error("Shared memory could not be initialized, ensure that '$this->dir' is writable");
       CApp::rip();
@@ -98,7 +99,7 @@ class DiskSharedMemory implements ISharedMemory {
  * EAccelerator based Memory class
  */
 class EAcceleratorSharedMemory implements ISharedMemory {
-  function isReady() {
+  function init() {
     return (function_exists('eaccelerator_get') &&
     function_exists('eaccelerator_put') &&
     function_exists('eaccelerator_rm'));
@@ -130,7 +131,7 @@ class EAcceleratorSharedMemory implements ISharedMemory {
  * Alternative PHP Cache (APC) based Memory class
  */
 class APCSharedMemory implements ISharedMemory {
-  function isReady() {
+  function init() {
     return (function_exists('apc_fetch') &&
     function_exists('apc_store') &&
     function_exists('apc_delete'));
@@ -168,9 +169,9 @@ abstract class SHM {
       $engine = "disk";
     }
     $engine = new self::$availableEngines[$engine];
-    if (!$engine->isReady()) {
+    if (!$engine->init()) {
       $engine = new self::$availableEngines["disk"];
-      $engine->isReady();
+      $engine->init();
     }
 
     self::$prefix = "$prefix-";

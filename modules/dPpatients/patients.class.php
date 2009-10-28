@@ -210,7 +210,7 @@ class CPatient extends CMbObject {
     $specs["ATNC"]              = "bool";
     
     $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
-    if($conf == "date" || $conf == "doublons"){
+    if($conf === "date" || $conf === "doublons"){
       $specs["naissance"]       = "birthDate notNull mask|99/99/9999 format|$3-$2-$1";
     } else {
       $specs["naissance"]       = "birthDate mask|99/99/9999 format|$3-$2-$1";  
@@ -469,7 +469,7 @@ class CPatient extends CMbObject {
     $this->rang_naissance = $vitale["VIT_RANG_GEMELLAIRE"];
     
     // Adresse
-    $this->adresse = trim(join("\n", array(
+    $this->adresse = trim(implode("\n", array(
       $vitale["VIT_ADRESSE_1"],
       $vitale["VIT_ADRESSE_2"],
       $vitale["VIT_ADRESSE_3"],
@@ -477,15 +477,13 @@ class CPatient extends CMbObject {
     ));
     
     // CP et ville
-    $cpville = split(" ", $vitale["VIT_ADRESSE_5"], 2);
-    $this->cp = @$cpville[0];
-    $this->ville = @$cpville[1];
+    @list($this->cp, $this->ville) = explode(" ", $vitale["VIT_ADRESSE_5"], 2);
     
     // Matricules
-    $this->assure_matricule = join("", array($vitale["VIT_NUMERO_SS"], $vitale["VIT_CLE_SS"]));
+    $this->assure_matricule = $vitale["VIT_NUMERO_SS"].$vitale["VIT_CLE_SS"];
     $this->matricule = $this->assure_matricule;
-    if ($vitale["VIT_NUMERO_SS_INDIV"]) {
-      $this->matricule = join("", array($vitale["VIT_NUMERO_SS_INDIV"], $vitale["VIT_CLE_SS_INDIV"]));
+    if (dPgetParam($vitale, "VIT_NUMERO_SS_INDIV")) {
+      $this->matricule = $vitale["VIT_NUMERO_SS_INDIV"].$vitale["VIT_CLE_SS_INDIV"];
     }
     
     $sexeMatrix = array (
@@ -507,7 +505,7 @@ class CPatient extends CMbObject {
     $this->code_regime  = $vitale["VIT_CODE_REGIME"];
     $this->caisse_gest  = $vitale["VIT_CAISSE_GEST"];
     $this->centre_gest  = $vitale["VIT_CENTRE_GEST"];
-    $this->regime_sante = $vitale["VIT_NOM_AMO"];
+    $this->regime_sante = dPgetParam($vitale, "VIT_NOM_AMO");
     
     // Rang bénéficiaire
     $codeRangMatrix = array(
@@ -541,7 +539,7 @@ class CPatient extends CMbObject {
       }
     }
     
-    $this->regime_am = $vitale["VIT_REGIME_AM"];
+    $this->regime_am = dPgetParam($vitale, "VIT_REGIME_AM");
   }
   
   function updateFormFields() {
@@ -562,14 +560,14 @@ class CPatient extends CMbObject {
     $this->evalAge();
 		
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
-    if ($this->civilite == "enf") {
-      $this->_civilite_long = $this->sexe == "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
+    if ($this->civilite === "enf") {
+      $this->_civilite_long = $this->sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
     } else {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }
     
-    $this->_view     = $this->_civilite." $this->nom $this->prenom";
-    $this->_longview = $this->_civilite_long." $this->nom $this->prenom";
+    $this->_view     = "$this->_civilite $this->nom $this->prenom";
+    $this->_longview = "$this->_civilite_long $this->nom $this->prenom";
 		
    // Navigation fields
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
@@ -618,7 +616,7 @@ class CPatient extends CMbObject {
    */
   function evalAgeJours($date = null){
     $date = $date ? $date : mbDate();
-    if ($this->naissance == "0000-00-00" || !$this->naissance) {
+    if (!$this->naissance || $this->naissance === "0000-00-00") {
       return 0;
     }
     return mbDaysRelative($this->naissance, $date);
@@ -643,7 +641,7 @@ class CPatient extends CMbObject {
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
     
-    if ($this->cp == "00000") {
+    if ($this->cp === "00000") {
       $this->cp = "";
     }
   	
@@ -659,7 +657,7 @@ class CPatient extends CMbObject {
       $this->assure_prenom = ucwords(strtolower($this->assure_prenom));
     }
   	
-    if ($this->assure_cp == "00000") {
+    if ($this->assure_cp === "00000") {
       $this->assure_cp = "";
     }
     
@@ -680,17 +678,17 @@ class CPatient extends CMbObject {
     }
 		
 		// Détermine la civilité du patient automatiquement (utile en cas d'import)
-		if ($this->civilite == "guess") {
+		if ($this->civilite === "guess") {
       $this->evalAge();
 			$this->civilite = ($this->_age < CAppUI::conf("dPpatients CPatient adult_age")) ?
-	      "enf" : (($this->sexe == "m") ? "m" : "mme");
+	      "enf" : (($this->sexe === "m") ? "m" : "mme");
 		}
 		
     // Détermine la civilité de l'assure automatiquement (utile en cas d'import)
-		if ($this->assure_civilite == "guess") {
+		if ($this->assure_civilite === "guess") {
       $this->evalAgeAssure();
       $this->assure_civilite = ($this->_age_assure < CAppUI::conf("dPpatients CPatient adult_age")) ?
-        "enf" : (($this->sexe == "m") ? "m" : "mme");
+        "enf" : (($this->sexe === "m") ? "m" : "mme");
     }
   }
   
@@ -1106,22 +1104,22 @@ class CPatient extends CMbObject {
     $ds =& $this->_spec->ds;
 
     $where = array (
-      "nom"    => $ds->prepare(" = %", $this->nom   ),
+      "nom"    => $ds->prepare(" = %", $this->nom),
       "prenom" => $ds->prepare(" = %", $this->prenom),
       "patient_id" => "!= '$this->_id'",
     );
 	  $siblings = $this->loadList($where);
     
-    if ($this->naissance != "0000-00-00") {
+    if ($this->naissance !== "0000-00-00") {
 	    $where = array (
-	      "nom"       => $ds->prepare(" = %", $this->nom      ),
+	      "nom"       => $ds->prepare(" = %", $this->nom),
 	      "naissance" => $ds->prepare(" = %", $this->naissance),
         "patient_id" => "!= '$this->_id'",
       );
 	    $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
 
 	    $where = array (
-	      "prenom"    => $ds->prepare(" = %", $this->prenom   ),
+	      "prenom"    => $ds->prepare(" = %", $this->prenom),
 	      "naissance" => $ds->prepare(" = %", $this->naissance),
         "patient_id" => "!= '$this->_id'",
 	    );
@@ -1161,7 +1159,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - profession"        , $this->profession );
     $template->addProperty("Patient - IPP"               , $this->_IPP       );
     
-    if ($this->sexe == "m"){
+    if ($this->sexe === "m"){
       $template->addProperty("Patient - il/elle"         , "il"              );
       $template->addProperty("Patient - le/la"           , "le"              );
       $template->addProperty("Patient - accord genre"    , ""                );
@@ -1241,7 +1239,7 @@ class CPatient extends CMbObject {
   }
   
   function checkAnonymous() {
-  	return $this->nom == "ANONYME" && $this->prenom == "Anonyme";
+  	return $this->nom === "ANONYME" && $this->prenom === "Anonyme";
   }
 }
 

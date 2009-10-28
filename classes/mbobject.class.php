@@ -200,7 +200,7 @@ class CMbObject {
   function loadRefsFiles() {
     $file = new CFile();
     if ($file->_ref_module && $this->_id) {
-      $this->_ref_files = $file->loadFilesForObject($this);
+      $this->_ref_files = CFile::loadFilesForObject($this);
       return count($this->_ref_files);
     }
   }
