@@ -218,7 +218,7 @@ var Url = Class.create({
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
       var container = new Element("div", {
-        style: "border:none;margin:0;padding:0;position:relative;", 
+        style: "border:none;margin:0;padding:0;position:relative;display:inline-block", 
         className: "dropdown"
       });
       var height = input.getHeight()-4;
