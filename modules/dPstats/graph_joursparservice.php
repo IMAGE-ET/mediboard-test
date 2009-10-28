@@ -112,13 +112,13 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
   
   $series[] = $serie_total;
   
-  $subtitle = "$total jours";
+  $subtitle = "$total nuits";
 	if($prat_id)       $subtitle .= " - Dr $prat->_view";
 	if($discipline_id) $subtitle .= " - $discipline->_view";
 	if($type_adm)      $subtitle .= " - ".$listHospis[$type_adm];
 	
 	$options = array(
-		'title' => utf8_encode("Nombre de journées par service - $type_data"),
+		'title' => utf8_encode("Nombre de nuits par service - $type_data"),
 		'subtitle' => utf8_encode($subtitle),
 		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
 		'yaxis' => array('autoscaleMargin' => 1),

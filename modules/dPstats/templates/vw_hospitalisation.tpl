@@ -113,7 +113,7 @@ Main.add(function(){
   </tr>
   <tr>
     <td style="text-align: right;">
-      <label title="Les séjours non placés n'apparaitront pas dans les graphiques 'par service'">Séjours comportant un de placement dans un lit</label>
+      <label title="Les séjours non placés n'apparaitront pas dans les graphiques 'par service'">Séjours comportant un placement dans un lit</label>
     </td>
     <td>{{$qualite.places.total}} séjours ({{$qualite.places.pct|string_format:"%.2f"}} %)</td>
   </tr>
