@@ -22,7 +22,8 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
       $H({
         errorMsg: errorMsg,
         url: url,
-        lineNumber: lineNumber
+        lineNumber: lineNumber,
+        stack: exception.stack || exception.stacktrace
       }).toQueryString()
     });
   } catch (e) {}

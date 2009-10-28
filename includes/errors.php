@@ -150,7 +150,7 @@ function print_infos($var, $name = '') {
  * Custom herror handler with backtrace
  * @return null
  */
-function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
+function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $backTrace = null) {
   global $divClasses, $errorTypes, $errorCategories, $AppUI, $performance;
   
 // See ALL errors
@@ -168,7 +168,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine) {
   $errorType = isset($errorTypes[$errorCode]) ? $errorTypes[$errorCode] : null;
   
   // Contextes 
-  $contexts = debug_backtrace();
+  $contexts = $backTrace ? $backTrace : debug_backtrace();
   foreach($contexts as &$ctx) {
     unset($ctx['args']);
     unset($ctx['object']);
