@@ -220,9 +220,9 @@ var Url = Class.create({
       var container = new Element("div", {
         style: "border:none;margin:0;padding:0;position:relative;display:inline-block", 
         className: "dropdown"
-      });
-      var height = input.getHeight()-4;
-      var margin = parseInt(input.getStyle("marginTop"))+1;
+      }),
+          height = input.getHeight()-4,
+          margin = parseInt(input.getStyle("marginTop"))+1;
       
       container.setStyle({paddingRight: (height+5)+'px'}).
                 clonePosition(input, {setLeft: false, setTop: false});
@@ -244,6 +244,7 @@ var Url = Class.create({
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
       });
+      populate.observe("mousedown", Event.stop);
       container.insert(dropdown);
     }
     
