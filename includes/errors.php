@@ -150,7 +150,7 @@ function print_infos($var, $name = '') {
  * Custom herror handler with backtrace
  * @return null
  */
-function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $backTrace = null) {
+function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContext, $backTrace = null) {
   global $divClasses, $errorTypes, $errorCategories, $AppUI, $performance;
   
 // See ALL errors

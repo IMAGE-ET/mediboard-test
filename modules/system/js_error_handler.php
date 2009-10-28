@@ -20,8 +20,10 @@ foreach($stack as $trace) {
 	if (preg_match("/(?<function>.*)\((?<args>.*)\)@(?<file>.*):(?<line>.*)/", $trace, $matches)) {
 		if (empty($matches["function"]))
 		  $matches["function"] = "[anonymous]";
+			
+		mbTrace($matches);
 		$stackTrace[] = $matches;
 	}
 }
 
-errorHandler(E_JS_ERROR, $errorMsg, $url, $lineNumber, $stackTrace);
+errorHandler(E_JS_ERROR, $errorMsg, $url, $lineNumber, null, $stackTrace);
