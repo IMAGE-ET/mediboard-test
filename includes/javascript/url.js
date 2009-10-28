@@ -198,6 +198,7 @@ var Url = Class.create({
       }
     }, oOptions);
     
+    populate = $(populate);
     var input = $(input).addClassName("autocomplete");
 
     // Autocomplete
@@ -228,7 +229,7 @@ var Url = Class.create({
                 clonePosition(input, {setLeft: false, setTop: false});
                 
       input.wrap(container);
-      container.insert($(populate));
+      container.insert(populate);
       
       var dropdown = new Element("div", {
         style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;", 
