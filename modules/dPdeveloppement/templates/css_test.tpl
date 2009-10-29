@@ -33,6 +33,8 @@ Main.add(function(){
 <h2>header 2</h2>
 <h3>header 3</h3>
 
+<hr />
+
 <ul class="control_tabs">
   <li><a href="#tab1">normal</a></li>
   <li><a href="#tab2" class="active">active</a></li>

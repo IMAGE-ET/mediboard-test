@@ -23,16 +23,17 @@ class CMbBackSpec {
   	if (!class_exists($class)) return null;
 
   	$backObject = new $class;
+    $backObjectSpec = $backObject->_specs[$field];
   	
   	$backSpec = new CMbBackSpec();
     $backSpec->owner = $owner;
     $backSpec->name  = $name;
     $backSpec->class = $class;
     $backSpec->field = $field;
-    $backSpec->_initiator = $backObject->_specs[$field]->class;
-    $backSpec->_notNull   = $backObject->_specs[$field]->notNull;
-    $backSpec->_purgeable = $backObject->_specs[$field]->purgeable;
-    $backSpec->_cascade   = $backObject->_specs[$field]->cascade;
+    $backSpec->_initiator = $backObjectSpec->class;
+    $backSpec->_notNull   = $backObjectSpec->notNull;
+    $backSpec->_purgeable = $backObjectSpec->purgeable;
+    $backSpec->_cascade   = $backObjectSpec->cascade;
     
     return $backSpec;
   }

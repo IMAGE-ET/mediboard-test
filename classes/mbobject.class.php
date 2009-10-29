@@ -1241,13 +1241,13 @@ class CMbObject {
     if ($spec instanceof CRefSpec) {
       $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
       $fwd = new $class;
-      if ($cached) {
+      
+      if ($cached)
         $fwd = $fwd->getCached($this->$field);
-      }
-      else {
+      else
   	    $fwd->load($this->$field);
-      }
-	    return $this->_fwd[$field] = $fwd;
+
+      return $this->_fwd[$field] = $fwd;
     }
   }
     
@@ -1377,7 +1377,7 @@ class CMbObject {
     
     // Actually delete record
     $sql = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
-    		 
+    
     if (!$this->_spec->ds->exec($sql)) {
       return $this->_spec->ds->error();
     }
