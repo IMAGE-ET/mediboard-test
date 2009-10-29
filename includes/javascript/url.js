@@ -199,7 +199,7 @@ var Url = Class.create({
     }, oOptions);
     
     populate = $(populate);
-    var input = $(input).addClassName("autocomplete");
+    input = $(input).addClassName("autocomplete");
 
     // Autocomplete
     this.addParam("ajax", 1);
@@ -218,10 +218,7 @@ var Url = Class.create({
     
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
-      var container = new Element("div", {
-        style: "border:none;margin:0;padding:0;position:relative;display:inline-block", 
-        className: "dropdown"
-      }),
+      var container = new Element("div", {style: "border:none;margin:0;padding:0;position:relative;display:inline-block"}).addClassName("dropdown"),
           height = input.getHeight()-2,
           margin = parseInt(input.getStyle("marginTop"));
       
@@ -232,22 +229,27 @@ var Url = Class.create({
       container.insert(populate);
       
       var trigger = new Element("div", {
-        style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;", 
-        className: "dropdown-trigger"
-      });
+        style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;"
+      }).addClassName("dropdown-trigger");
+      
       trigger.insert(new Element("div", {style: "position:absolute;right:0;top:0;left:0;bottom:0;"}));
       
       var hideAutocomplete = function(e){
         autocompleter.onBlur(e);
       }.bindAsEventListener(this);
       
-      trigger.observe("mousedown", function(e){
-        $V(input, '');
+      var showAutocomplete = function(e, dontClear){
+        if (!dontClear) $V(input, '');
+        input.focus();
         autocompleter.activate.bind(autocompleter)();
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
-      });
+      };
+      
+      trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
+      input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       populate.observe("mousedown", Event.stop);
+      
       container.insert(trigger);
     }
     
@@ -263,6 +265,7 @@ var Url = Class.create({
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
+    ioTarget = $(ioTarget);
   
     oOptions = Object.extend({
       waitingText: "Chargement",
@@ -272,12 +275,12 @@ var Url = Class.create({
       asynchronous: true,
       evalScripts: true,
       getParameters: null,
-      onFailure: function(){$(ioTarget).update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
+      onFailure: function(){ioTarget.update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
     }, oOptions);
     
     if (oOptions.waitingText) {
-      $(ioTarget).innerHTML = "<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>";
-	    if (ioTarget == SystemMessage.id) {
+      ioTarget.update("<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>");
+	    if (ioTarget.id == SystemMessage.id) {
 		    SystemMessage.doEffect();
 	    }
     }
@@ -328,6 +331,7 @@ var Url = Class.create({
   periodicalUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
+    ioTarget = $(ioTarget);
 
     oOptions = Object.extend({
 			onCreate: function() { WaitingMessage.cover(ioTarget); },
@@ -339,7 +343,7 @@ var Url = Class.create({
     }, oOptions);
     
     if(oOptions.waitingText)
-      $(ioTarget).innerHTML = "<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>";
+      ioTarget.update("<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>");
     
     return new Ajax.PeriodicalUpdater(ioTarget, "index.php", oOptions);
   },
@@ -351,7 +355,7 @@ var Url = Class.create({
     this.addParam("objectId", objectId);
     this.addParam("elementClass", elementClass);
     this.addParam("elementId", elementId);
-    if(sfn!=0){
+    if(sfn != 0){
       this.addParam("sfn", sfn);
     }
     this.popup(750, 550, "Fichier");
@@ -406,8 +410,3 @@ Url.parse = function(url) {
 
   return c;
 };
-
-function popChgPwd() {
-  var url = new Url("admin", "chpwd");
-  url.popup(400, 300, "ChangePassword");
-}

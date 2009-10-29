@@ -772,6 +772,11 @@ function uploadFile(object_class, object_id, file_category_id, file_rename){
   url.popup(600, 200, "uploadfile");
 }
 
+function popChgPwd() {
+  var url = new Url("admin", "chpwd");
+  url.popup(400, 300, "ChangePassword");
+}
+
 var Note = Class.create({
   initialize: function() {
     this.url = new Url("system", "edit_note");
@@ -870,7 +875,6 @@ Dom = {
 };
 
 /** Levenstein function **/
-
 function levenshtein( str1, str2 ) {
   // http://kevin.vanzonneveld.net
   // +   original by: Carlos R. L. Rodrigues
@@ -911,7 +915,6 @@ function luhn (code) {
   return ((sum % 10) == 0);
 }
 
-
 /* Control tabs creation. It saves selected tab into a cookie name TabState */
 Object.extend (Control.Tabs, {
   storeTab: function (tabName, tab) {
@@ -937,7 +940,6 @@ Object.extend (Control.Tabs, {
   }
 });
 
-
 Class.extend (Control.Tabs, {
   changeTabAndFocus: function(iIntexTab, oField) {
     this.setActiveTab(iIntexTab);
@@ -954,7 +956,7 @@ Class.extend (Control.Tabs, {
 
 window.getInnerDimensions = function() {
   return {width: document.documentElement.clientWidth, height: document.documentElement.clientHeight};
-}
+};
 
 /** DOM element creator for Prototype by Fabien Ménager
  *  Inspired from Michael Geary 
