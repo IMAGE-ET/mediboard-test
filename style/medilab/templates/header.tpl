@@ -20,11 +20,7 @@ var Menu = {
   
 {{if !$dialog}}
 
-{{foreach from=$messages item=currMsg}}
-  <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
-    <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
-  </div>
-{{/foreach}}
+{{include file="../../mediboard/templates/message.tpl"}}
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">

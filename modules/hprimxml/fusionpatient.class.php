@@ -11,13 +11,15 @@
 CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients { 
-  function __construct() {            
+  function __construct() {        
+  	$this->sous_type = "fusionPatient";
+  	    
     parent::__construct();
   }
   
   function generateFromOperation($mbPatient, $referent) {  
     $evenementsPatients = $this->documentElement;
-    $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
+    $evenementPatient   = $this->addElement($evenementsPatients, "evenementPatient");
     
     $fusionPatient = $this->addElement($evenementPatient, "fusionPatient");
     $this->addAttribute($fusionPatient, "action", "fusion");
@@ -36,38 +38,6 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         
     // Traitement final
     $this->purgeEmptyElements();
-  }
-  
-  function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
-    $echg_hprim = new CEchangeHprim();
-    $this->date_production = $echg_hprim->date_production = mbDateTime();
-    $echg_hprim->emetteur = $this->emetteur;
-    $echg_hprim->destinataire = $this->destinataire;
-    $echg_hprim->type = "evenementsPatients";
-    $echg_hprim->sous_type = "fusionPatient";
-    $echg_hprim->message = utf8_encode($this->saveXML());
-    if ($initiateur) {
-      $echg_hprim->initiateur_id = $initiateur;
-    }
-    
-    $echg_hprim->store();
-    
-    $this->identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
-            
-    $this->generateEnteteMessageEvenementsPatients();
-    $this->generateFromOperation($mbObject, $referent);
-    
-    $doc_valid = $this->schemaValidate();
-    $echg_hprim->message_valide = $doc_valid ? 1 : 0;
-
-    $this->saveTempFile();
-    $msgFusionPatient = utf8_encode($this->saveXML()); 
-    
-    $echg_hprim->message = $msgFusionPatient;
-    
-    $echg_hprim->store();
-    
-    return $msgFusionPatient;
   }
   
   function getFusionPatientXML() {

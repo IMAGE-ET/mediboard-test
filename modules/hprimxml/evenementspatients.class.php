@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument { 
+class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   static function getHPrimXMLEvenementsPatients($messagePatient) {
     $hprimxmldoc = new CHPrimXMLDocument("patient", "msgEvenementsPatients105");
     // Récupération des informations du message XML
@@ -26,6 +26,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       case "venuePatient" :
         return new CHPrimXMLVenuePatient();
         break;
+      case "fusionVenue" :
+        return new CHPrimXMLFusionVenue();
+        break;
       default;
         return new CHPrimXMLEvenementsPatients();
     }
@@ -33,33 +36,18 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
   function __construct() {
     $this->evenement = "evt_patients";
+    $this->destinataire_libelle = "";
+    $this->type = "patients";
                 
     parent::__construct("patients", "msgEvenementsPatients105");
   }
 
   function generateEnteteMessageEvenementsPatients() {
-    global $AppUI, $g, $m;
-
     $evenementsPatients = $this->addElement($this, "evenementsPatients", null, "http://www.hprim.org/hprimXML");
     // Retourne un message d'acquittement par le récepteur
     $this->addAttribute($evenementsPatients, "acquittementAttendu", "oui");
     
-    $enteteMessage = $this->addElement($evenementsPatients, "enteteMessage");
-    $this->addElement($enteteMessage, "identifiantMessage", $this->identifiant);
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->date_production);
-    
-    $emetteur = $this->addElement($enteteMessage, "emetteur");
-    $agents = $this->addElement($emetteur, "agents");
-    $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
-    $group = CGroups::loadCurrent();
-    $group->loadLastId400();
-    $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    $this->addAgent($agents, "système", $this->emetteur, $group->text);
-    
-    $destinataire = $this->addElement($enteteMessage, "destinataire");
-    $agents = $this->addElement($destinataire, "agents");
-    $this->destinataire = "MediBoard";
-    $this->addAgent($agents, "application", $this->destinataire, "Gestion des Etablissements de Santé");
+    $this->addEnteteMessage($evenementsPatients);
   }
   
   function getIdSource($node) {

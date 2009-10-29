@@ -65,7 +65,7 @@ function changePage(page) {
             <td>
               <select class="str" name="msg_evenement">
                 <option value="">&mdash; Liste des messages </option>
-                <option value="patient" {{if $msg_evenement == "patient"}}selected="selected"{{/if}}>
+                <option value="patients" {{if $msg_evenement == "patients"}}selected="selected"{{/if}}>
                   Message patients
                 </option>
                 <option value="pmsi" {{if $msg_evenement == "pmsi"}}selected="selected"{{/if}}>

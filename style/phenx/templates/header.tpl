@@ -57,11 +57,7 @@
     </td>
     {{/if}}
     <td id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
-      {{foreach from=$messages item=currMsg}}
-        <div style="{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}">
-          <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
-        </div>
-      {{/foreach}}
+      {{include file="../../mediboard/templates/message.tpl"}}
       
     	<div id="systemMsg">
     	  {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}

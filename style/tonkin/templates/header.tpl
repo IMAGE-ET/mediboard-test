@@ -3,11 +3,7 @@
 {{if !$dialog}}
 
 {{if !$offline}}
-{{foreach from=$messages item=currMsg}}
-  <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
-    <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
-  </div>
-{{/foreach}}
+{{include file="../../mediboard/templates/message.tpl"}}
 {{/if}}
 
 <table id="header" cellspacing="0">

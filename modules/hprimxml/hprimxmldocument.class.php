@@ -21,7 +21,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $identifiant_emetteur  = null;
   var $destinataire          = null;
   var $destinataire_libelle  = null;
-   
+  
+  var $type                  = null;
+  var $sous_type             = null;
+  
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
     
@@ -112,6 +115,37 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $agents = $this->addElement($destinataire, "agents");
     $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
     $this->addAgent($agents, "système", $group->_id, $group->text);
+  }
+  
+  function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
+    $echg_hprim = new CEchangeHprim();
+    $this->date_production    = $echg_hprim->date_production = mbDateTime();
+    $echg_hprim->emetteur     = $this->emetteur;
+    $echg_hprim->destinataire = $this->destinataire;
+    $echg_hprim->type         = $this->type;
+    $echg_hprim->sous_type    = $this->sous_type;
+    $echg_hprim->message      = utf8_encode($this->saveXML());
+    if ($initiateur) {
+      $echg_hprim->initiateur_id = $initiateur;
+    }
+    
+    $echg_hprim->store();
+    
+    $this->identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
+            
+    $this->generateEnteteMessageEvenementsPatients();
+    $this->generateFromOperation($mbObject, $referent);
+    
+    $doc_valid = $this->schemaValidate();
+    $echg_hprim->message_valide = $doc_valid ? 1 : 0;
+
+    $this->saveTempFile();
+    $msgPatient = utf8_encode($this->saveXML()); 
+    
+    $echg_hprim->message = $msgPatient;
+    $echg_hprim->store();
+    
+    return $msgPatient;
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {

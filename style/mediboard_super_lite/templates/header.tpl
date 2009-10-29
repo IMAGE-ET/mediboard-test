@@ -2,11 +2,7 @@
 
 {{if !$offline && !$dialog}}
 
-{{foreach from=$messages item=currMsg}}
-  <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
-    <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
-  </div>
-{{/foreach}}
+{{include file="../../mediboard/templates/message.tpl"}}
 
 <table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless --> 
   <tr>

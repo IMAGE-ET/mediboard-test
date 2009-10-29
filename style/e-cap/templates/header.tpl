@@ -21,18 +21,14 @@ var Menu = {
     oCNs.load("menubar");
   }
 }
-</script>
 
+</script>
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
   
 {{if !$dialog}}
 
-{{foreach from=$messages item=_message}}
-<div style='{{if $_message->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
-  <strong>{{$_message->titre}}</strong> : {{$_message->corps}}
-</div>
-{{/foreach}}
+{{include file="../../mediboard/templates/message.tpl"}}
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
