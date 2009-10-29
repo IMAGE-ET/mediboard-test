@@ -41,13 +41,6 @@ function submitAll() {
   submitFormAjax(oForm, 'systemMsg');  
 }
 
-function showAll(patient_id) {
-  var url = new Url("dPcabinet", "vw_resume");
-  url.addParam("dialog", 1);
-  url.addParam("patient_id", patient_id);
-  url.popup(800, 500, "Resume");
-}
-
 function printFiche() {
   var url = new Url("dPcabinet", "print_fiche"); 
   url.addElement(document.editFrmFinish.consultation_id);
@@ -108,12 +101,12 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td id="listConsult" style="{{if $app->user_prefs.dPcabinet_show_program}}width: 240px;{{/if}}"></td>
-    <td class="greedyPane" id="tdConsultation">
+    <td id="listConsult" style="width: 240px;"></td>
+    <td>
     
     {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
     
-    {{if $consult->consultation_id}}
+    {{if $consult->_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
       {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}
       <div id="finishBanner">

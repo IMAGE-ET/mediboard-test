@@ -66,7 +66,7 @@ Main.add( function () {
   </tr>
 
   <tr>
-    <th>Heure</th>
+    <th style="width: 50px; ">Heure</th>
     <th colspan="2">Patient / Motif</th>
   </tr>
   
@@ -81,7 +81,9 @@ Main.add( function () {
   </tr>
   {{/if}}
   {{foreach from=$_plage->_ref_consultations item=_consult}}
-  {{if !$_consult->patient_id}}
+  {{assign var=patient value=$_consult->_ref_patient}}
+	
+  {{if !$patient->_id}}
     {{assign var="style" value="background: #ffa;"}}          
   {{elseif $_consult->premiere}} 
     {{assign var="style" value="background: #faa;"}}
@@ -91,8 +93,9 @@ Main.add( function () {
     {{assign var="style" value=""}}
   {{/if}}
   <tbody class="hoverable">
+
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td style="width: 42px; {{if $_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
+    <td style="{{if $_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" alt="modifier" />
@@ -101,8 +104,7 @@ Main.add( function () {
         <a href="#nowhere" title="Impossible de modifier le RDV"></a>
       {{/if}}
       
-      
-      {{if $_consult->patient_id}}
+      {{if $patient->_id}}
       {{if $canCabinet->view}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}" style="margin-bottom: 4px;">
       {{else}}
@@ -113,12 +115,12 @@ Main.add( function () {
       {{else}}
         {{$_consult->heure|truncate:5:"":true}}
       {{/if}}
-      {{if $_consult->patient_id}}
+      {{if $patient->_id}}
         {{if ($_consult->chrono == $_consult|const:'PLANIFIE')}}
 		      <form name="etatFrm{{$_consult->_id}}" action="?m={{$current_m}}" method="post">
 			      <input type="hidden" name="m" value="dPcabinet" />
 			      <input type="hidden" name="dosql" value="do_consultation_aed" />
-			      {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
+            {{mb_key object=$_consult}}
 			      <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
 			      <input type="hidden" name="arrivee" value="" />
 		      </form>
@@ -132,16 +134,18 @@ Main.add( function () {
         {{/if}}
       {{/if}}
     </td>
-    <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
-      {{if $_consult->patient_id}}
+    <td class="text" style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
+      {{if $patient->_id}}
       {{if $canCabinet->view}}
       <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
       {{else}}
       <a href=#nowhere title="Impossible de modifier le RDV">
       {{/if}}
-        {{$_consult->_ref_patient->_view|truncate:30:"...":true}}
-        {{if $_consult->_ref_patient->_age != "??"}}
-          ({{$_consult->_ref_patient->_age}}&nbsp;ans)
+			  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+	        {{$patient->_view|truncate:30:"...":true}}
+	        {{if $patient->_age != "??"}}
+	          ({{$patient->_age}}&nbsp;ans)
+			  </span>
       </a>
       {{/if}}
       {{else}}
@@ -156,17 +160,21 @@ Main.add( function () {
     </td>
   </tr>
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
-      {{if $_consult->patient_id}}
+    <td class="text" style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
+      {{if $patient->_id}}
       {{if $canCabinet->view}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
       {{else}}
         <a href="#nowhere" title="Impossible de modifier le RDV">
       {{/if}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
           {{$_consult->motif|truncate:40:"...":true}}
+					</span>
         </a>
       {{else}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
         {{$_consult->motif|truncate:40:"...":true}}
+        </span>
       {{/if}}
             
       {{assign var=prat_id value=$_plage->chir_id}}

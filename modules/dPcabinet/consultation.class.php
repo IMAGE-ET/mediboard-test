@@ -819,7 +819,7 @@ class CConsultation extends CCodable {
     
     if ($this->_nb_files_docs) {
       $this->getEtat();
-      $this->_etat .= " ($this->_nb_files_docs Doc)";
+      $this->_etat .= " ($this->_nb_files_docs)";
     }
   }
   

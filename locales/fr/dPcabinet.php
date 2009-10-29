@@ -1774,4 +1774,7 @@ $locales['CConsultAnesth-date_analyse-desc'] = 'Date de l\'analyse';
 $locales['CLmFichier-_resend_fixable'] = '';
 $locales['CLmFichier-_resend_fixable-court'] = '';
 $locales['CLmFichier-_resend_fixable-desc'] = '';
+$locales['CConsultation-facture'] = 'Facturée';
+$locales['CConsultation-facture-court'] = 'Facturée';
+$locales['CConsultation-facture-desc'] = 'Consultation facturée';
 ?>

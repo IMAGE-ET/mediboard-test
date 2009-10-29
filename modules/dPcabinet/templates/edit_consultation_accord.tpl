@@ -25,23 +25,6 @@ function printAllDocs() {
   return;
 }
 
-function showAll(patient_id) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "vw_resume");
-  url.addParam("dialog", 1);
-  url.addParam("patient_id", patient_id);
-  url.popup(800, 500, "Resume");
-}
-
-function pasteText(formName) {
-  var oForm = document.editFrmExams;
-  var aide = oForm["_aide_"+formName];
-  var area = $(oForm[formName]);
-  var caret = area.caret();
-  area.caret(caret.begin, caret.end, aide.value + '\n');
-  aide.value = 0;
-}
-
 function submitAll() {
   var oForm = document.editFrmExams;
   submitFormAjax(oForm, 'systemMsg');
@@ -63,8 +46,8 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td id="listConsult" style="{{if $app->user_prefs.dPcabinet_show_program}}width: 240px;{{/if}}"></td>
-    <td class="greedyPane" id="tdConsultation">
+    <td id="listConsult" style="width: 240px;"></td>
+    <td>
 			{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 			
       {{if $consult->_id}}

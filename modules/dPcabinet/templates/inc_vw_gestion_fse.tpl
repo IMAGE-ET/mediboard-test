@@ -229,7 +229,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         <button class="search" type="button" onclick="Intermax.trigger('Lire CPS');">
           Lire CPS
         </button>
-        <button class="change intermax-result" type="button" onclick="Intermax.result('Lire CPS');">
+        <button class="change notext intermax-result" type="button" onclick="Intermax.result('Lire CPS');">
           Associer CPS
         </button>
       {{/if}}
@@ -245,7 +245,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
           Lire Vitale
         </button>
-        <button class="change intermax-result" type="button" onclick="Intermax.result();">
+        <button class="change notext intermax-result" type="button" onclick="Intermax.result();">
           Associer Vitale
         </button>
       {{/if}}

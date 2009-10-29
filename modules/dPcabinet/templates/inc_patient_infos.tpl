@@ -1,5 +1,7 @@
+
+<!-- Dossier complet -->
 <button class="edit notext" type="button" onclick="window.location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}'">
-  Modifier
+  {{tr}}Modify{{/tr}}
 </button>
 {{$patient->_view}}
 <br />
@@ -8,7 +10,19 @@ Age : {{$patient->_age}} ans
 <a class="button search" href="{{$patient->_dossier_cabinet_url}}">
   Dossier complet
 </a>
+
+<!-- Dossier résumé -->
 <br />
-<button class="search" onclick="showAll({{$patient->_id}})">
-  Résumé
+<script type="text/javascript">
+	
+function showSummary(patient_id) {
+  var url = new Url("dPcabinet", "vw_resume");
+  url.addParam("patient_id", patient_id);
+  url.popup(800, 500, "Resume");
+}
+
+</script>
+
+<button class="search" onclick="showSummary('{{$patient->_id}}')">
+  {{tr}}Summary{{/tr}}
 </button>

@@ -6,14 +6,14 @@
       </button>
       Patient
     </th>
-    <th class="category">Intervention</th>
+    <th class="category">{{tr}}COperation{{/tr}}</th>
     <th class="category">
-      <a style="float:right;" href="#" onclick="view_history_consult({{$consult->consultation_id}})">
+      <a style="float:right;" href="#" onclick="view_history_consult({{$consult->_id}})">
         <img src="images/icons/history.gif" alt="historique" />
       </a>
       Historique
     </th>
-    <th class="category">Correspondants</th>
+    <th class="category">{{tr}}CPatient-back-correspondants{{/tr}}</th>
   </tr>
   <tr>
     <td class="text">

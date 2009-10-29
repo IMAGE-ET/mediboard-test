@@ -31,12 +31,12 @@
       {{if $object->_ref_consultation->motif}}
         <br />
         <strong>Motif:</strong>
-        <i>{{$object->_ref_consultation->motif|nl2br|truncate:50}}</i>
+        <i>{{$object->_ref_consultation->motif|nl2br|truncate}}</i>
       {{/if}}      
       {{if $object->_ref_consultation->rques}}
         <br />
         <strong>Remarques:</strong>
-        <i>{{$object->_ref_consultation->rques|nl2br|truncate:50}}</i>
+        <i>{{$object->_ref_consultation->rques|nl2br|truncate}}</i>
       {{/if}}
       
 			{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=view}}
