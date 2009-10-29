@@ -13,8 +13,8 @@ var ListConsults = {
     url.addParam("current_m", current_m);
     this.request = url.periodicalUpdate(this.target, { frequency: 90, waitingText: null } );
 
-    if (!consult_id || Preferences.dPcabinet_show_program == "0") {
-      $(this.hide());    
+    if (consult_id && Preferences.dPcabinet_show_program == "0") {
+      this.hide();    
     }
   },
   

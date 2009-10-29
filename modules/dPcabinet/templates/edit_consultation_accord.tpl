@@ -64,7 +64,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td id="listConsult" style="{{if $app->user_prefs.dPcabinet_show_program}}width: 240px;{{/if}}"></td>
-    <td>
+    <td class="greedyPane" id="tdConsultation">
 			{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 			
       {{if $consult->_id}}
