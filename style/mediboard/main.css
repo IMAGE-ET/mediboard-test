@@ -421,6 +421,7 @@ button.intermax-result {
 
 input, select, textarea, button {
   margin: 1px;
+  vertical-align: middle;
 }
 
 .control {
