@@ -176,10 +176,6 @@ class CRequest {
 
     // MbObject binding
     if ($obj) {
-    // Removed for performance tests
-    //  if (!$obj instanceof CMbObject)) {
-    //    trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
-    //  }
       if (count($this->select)) {
         trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
       }
@@ -230,6 +226,15 @@ class CRequest {
     // Table clauses
     $table = implode(', ', $arrayTable);
     return $sql . $this->getRequestFrom($table);
+  }
+
+  /**
+   * returns the SQL string that count the number of rows
+   * @param CMbObject $object Object concerned
+   */
+  function getIdsRequest($object) {
+    $query = "SELECT `{$object->_spec->key}`";
+    return $query . $this->getRequestFrom($object->_spec->table);
   }
 }
 ?>

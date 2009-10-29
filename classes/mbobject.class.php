@@ -89,7 +89,6 @@ class CMbObject {
   	return $this->_view;
   }
   
-  
   function CMbObject() {
 
     $class = get_class($this);
@@ -569,6 +568,31 @@ class CMbObject {
   }
 
   /**
+   * Object list by a request constructor
+   * @param $where array Array of where clauses
+   * @param $order array Array of order fields
+   * @param $limit string MySQL limit clause
+   * @param $group array Array of group by clauses
+   * @param $leftjoin array Array of left join clauses
+   * @return array[CMbObject] List of found objects, null if module is not installed
+   */
+  function loadIds($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    if (!$this->_ref_module) {
+      return null;
+    }
+    
+    $request = new CRequest();
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+
+    $ds = $this->_spec->ds;
+    return $ds->loadColumn($request->getIdsRequest($this));
+  }
+
+  /**
    * Object count of a list by a request constructor
    */
   function countList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
@@ -583,10 +607,8 @@ class CMbObject {
     $request->addOrder($order);
     $request->setLimit($limit);
 
-    $result = $this->_spec->ds->exec($request->getCountRequest($this));
-    $row = $this->_spec->ds->fetchArray($result);
-    
-    return $row["total"];
+    $ds = $this->_spec->ds;
+    return $ds->loadResult($request->getCountRequest($this));
   }
   
   function loadListByReq($request) {
@@ -1424,7 +1446,7 @@ class CMbObject {
     }
 
     // Make sure delete won't log
-    $this->_purge = true;
+    $this->_purge = "1";
     return $this->delete();
   }
   
@@ -1442,6 +1464,7 @@ class CMbObject {
   
   /**
    * Retrieve seekable specs from object
+   *
    */
   function getSeekables() {
     $seekables = array();

@@ -16,7 +16,12 @@ $operation->facture = "1";
 $count = $operation->countMatchingList();
 CAppUI::stepAjax("'%s' opérations facturées trouvées", UI_MSG_OK, $count);
 $operation->facture = "0";
-$ids = $operation->loadIds();
+$count = $operation->countMatchingList();
 CAppUI::stepAjax("'%s' opérations non facturées trouvées", UI_MSG_OK, $count);
 
+$where["facture"] = "= '0'";
+foreach ($operation->loadIds($where) as $id) {
+	
+}
+mbTrace($count);
 ?>
