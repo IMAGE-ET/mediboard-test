@@ -3264,6 +3264,24 @@ ul li a.chapitre_signe.active{
   color: #000;
 }
 
+ul li.user {
+	background-image: url(../../images/icons/user.png);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+ul li.function {
+  background-image: url(../../images/icons/user-function.png);
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+ul li.group {
+  background-image: url(../../images/icons/group.png);
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
 table.active {
   outline: 2px solid #6688CC;
 }

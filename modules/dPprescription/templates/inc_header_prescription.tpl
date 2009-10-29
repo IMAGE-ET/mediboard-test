@@ -25,18 +25,6 @@ refreshListProtocole = function(oForm){
   }
 }
 
-// refresh du select de protocole en fonction du praticien selectionne
-refreshSelectProtocoles = function(praticien_id, prescription_id){
-	if($('select_protocole')){
-	  var url = new Url;
-	  url.setModuleAction("dPprescription", "httpreq_vw_select_protocole");
-	  url.addParam("praticien_id", praticien_id);
-	  url.addParam("prescription_id", prescription_id);
-	  url.requestUpdate("select_protocole", { waitingText: null } );
-	}
-}
-
-
 changePraticien = function(praticien_id){
   var oFormAddLine = document.addLine;
   var oFormAddLineCommentMed = document.addLineCommentMed;
@@ -46,22 +34,6 @@ changePraticien = function(praticien_id){
   oFormAddLineCommentMed.praticien_id.value = praticien_id;
   oFormAddLineElement.praticien_id.value = praticien_id;
 }
-
-// On met à jour les valeurs de praticien_id
-Main.add( function(){
-  initPuces();
-  if(document.selPraticienLine){
-    {{if $praticien_for_prot_id}}
-      document.selPraticienLine.praticien_id.value = {{$praticien_for_prot_id}};   
-    {{/if}}
-    changePraticien(document.selPraticienLine.praticien_id.value);
-    refreshSelectProtocoles(document.selPraticienLine.praticien_id.value, '{{$prescription->_id}}');
-  } else {
-    refreshSelectProtocoles('{{$prescription->_ref_current_praticien->_id}}', '{{$prescription->_id}}');
-  }
-	
-	headerPrescriptionTabs = Control.Tabs.create('header_prescription', false);
-} );
 
 submitProtocole = function(){
   var oForm = document.forms.applyProtocole;
@@ -127,6 +99,45 @@ changeManualDate = function(){
 		$('relativeDate').show();
 	}
 }
+
+updateProtocole = function(selected){
+  var oFormProtocole = getForm("applyProtocole");
+  oFormProtocole.pack_protocole_id.value = selected.select('.protocole_id')[0].innerHTML;
+	$V(oFormProtocole.libelle_protocole, selected.select('.libelle_prot')[0].innerHTML.stripTags().strip(), false);
+}
+
+Main.add( function(){
+  var oFormProtocole = getForm("applyProtocole");
+  var praticien_id;
+  initPuces();
+  if(document.selPraticienLine){
+    praticien_id = document.selPraticienLine.praticien_id.value;
+		{{if $praticien_for_prot_id}}
+      document.selPraticienLine.praticien_id.value = {{$praticien_for_prot_id}};   
+    {{/if}}
+    changePraticien(praticien_id);
+  } else {
+    praticien_id = '{{$prescription->_ref_current_praticien->_id}}';
+  }
+  headerPrescriptionTabs = Control.Tabs.create('header_prescription', false);
+
+  if(oFormProtocole){
+	  var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+	  url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
+		  dropdown: true,
+	    minChars: 0,
+	    updateElement: updateProtocole,
+	    callback: 
+	      function(input, queryString){
+				  if(document.selPraticienLine){
+	          return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id="+$V(document.selPraticienLine.praticien_id)); 
+					} else {
+					  return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id="+praticien_id); 
+	        }
+	      }
+	  } );	
+  }
+} );
 
 </script>
 
@@ -227,7 +238,7 @@ changeManualDate = function(){
        <div style="float: right">
         {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma)}}
 				<form name="selPraticienLine" action="?" method="get">
-				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} refreshSelectProtocoles(this.value, '{{$prescription->_id}}')">
+				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
 						<optgroup label="Responsables">
 				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
 						          value="{{$prescription->_ref_current_praticien->_id}}"
@@ -355,33 +366,38 @@ changeManualDate = function(){
 	      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	      <input type="hidden" name="pratSel_id" value="" />
-				<span id="select_protocole"></span>
+				<input type="hidden" name="pack_protocole_id" value="" />
+				<!-- sur le onclick de la fleche, declencher le onfocus --> 
+			  <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" size="20" class="autocomplete" 
+				       onchange="if(this.value == '') { $V(this.form.pack_protocole_id, ''); }" 
+							 onfocus="this.value=''; this.onchange();" />
+				<div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
 	
-	 				{{if $prescription->type != "externe"}}
-	 				  {{if $prescription->_dates_dispo}}
-		 				  Intervention
-		 				  <select name="operation_id">
-		 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
-		 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
-		 				    {{/foreach}}
-								</select>
-							{{/if}}
-	 				{{else}}
-	 				  <!-- Prescription externe -->
-						{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
-		 				<script type="text/javascript">
-		 				  dates = {
-						    current: {
-						      start: "{{$today}}",
-						      stop: ""
-						    }
-						  }
-		 				  Main.add( function(){
-		            Calendar.regField(getForm("applyProtocole").debut, dates);
-		          } );
-		 				</script>				 				
-	 				{{/if}}
-	        <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
+ 				{{if $prescription->type != "externe"}}
+ 				  {{if $prescription->_dates_dispo}}
+	 				  Intervention
+	 				  <select name="operation_id">
+	 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
+	 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
+	 				    {{/foreach}}
+							</select>
+						{{/if}}
+ 				{{else}}
+ 				  <!-- Prescription externe -->
+					{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
+	 				<script type="text/javascript">
+	 				  dates = {
+					    current: {
+					      start: "{{$today}}",
+					      stop: ""
+					    }
+					  }
+	 				  Main.add( function(){
+	            Calendar.regField(getForm("applyProtocole").debut, dates);
+	          } );
+	 				</script>				 				
+ 				{{/if}}
+        <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
       </form>
     </td>  
   {{/if}}

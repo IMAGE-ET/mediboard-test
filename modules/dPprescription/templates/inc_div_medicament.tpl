@@ -42,9 +42,6 @@ Main.add( function(){
     var urlAuto = new Url();
     urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
     urlAuto.addParam("produit_max", 40);
-    
-    // callback => methode pour ajouter en post des parametres
-    // Faire un mini framework pour rajouter des elements du meme formulaire
     urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
       minChars: 3,
       updateElement: updateFieldsMedicament,
@@ -174,7 +171,7 @@ transfertLineTP = function(line_id, sejour_id){
 				 	  <option value="">&mdash; les plus utilisés</option>
 					</select>
 					
-					{{if $prescription->object_class == "CSejour"}}
+					{{if $prescription->object_class == "CSejour" && $prescription->object_id}}
 					<select name="tp" onchange="transfertLineTP(this.value, '{{$prescription->_ref_object->_id}}'); this.value = '';" style="width: 120px;" onclick="updateSelectTP('{{$prescription->_ref_object->patient_id}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
 						<option value="">&mdash; Traitements perso</option>
 					</select>

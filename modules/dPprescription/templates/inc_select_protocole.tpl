@@ -8,27 +8,26 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
- Protocoles de <strong>{{$praticien->_view}}</strong>
- <select name="pack_protocole_id" style="width: 80px;">
-  <option value="">&mdash; Sélection</option>
-  {{if $protocoles_praticien|@count || $packs_praticien|@count}}
-   <optgroup label="Praticien">
-    {{foreach from=$protocoles_praticien item=_protocole_praticien}}
-    <option value="prot-{{$_protocole_praticien->_id}}">{{$_protocole_praticien->libelle}}</option>
-    {{/foreach}}
-   {{foreach from=$packs_praticien item=_pack_praticien}}
-   <option value="pack-{{$_pack_praticien->_id}}" style="font-weight: bold">{{$_pack_praticien->_view}}</option>
-   {{/foreach}}
-   </optgroup>
-  {{/if}}
-  {{if $protocoles_function|@count || $packs_function|@count}}
-    <optgroup label="Cabinet">
-      {{foreach from=$protocoles_function item=_protocole_function}}
-      <option value="prot-{{$_protocole_function->_id}}">{{$_protocole_function->libelle}}</option>
-      {{/foreach}}
-      {{foreach from=$packs_function item=_pack_function}}
-     <option value="pack-{{$_pack_function->_id}}" style="font-weight: bold">{{$_pack_function->_view}}</option>
-     {{/foreach}}
-    </optgroup>
-  {{/if}}
-</select>
+<ul>
+	{{foreach from=$list key=type item=prots}}
+		 {{foreach from=$prots item=_prot}}
+	    <li class="{{if $_prot->praticien_id}}user{{elseif $_prot->function_id}}function{{else}}group{{/if}}">
+	      <small style="display: none;" class="protocole_id">{{$type}}-{{$_prot->_id}}</small>
+	      {{if $type == "prot"}}Protocole{{else}}Pack{{/if}}:
+        <strong>
+				<span class="libelle_prot">
+	      	{{$_prot->libelle|upper|replace:$token_search:$token_replace}}
+			  </span>
+				</strong>
+	      <br />
+	      <span style="opacity: 0.5; font-size: 0.8em; padding-left: 1em;">
+	      {{foreach from=$_prot->_counts_by_chapitre key=chapitre item=_count_chapitre name=chapitres}}
+	      {{if $_count_chapitre}}
+	        {{$_count_chapitre}} {{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}}{{if !$smarty.foreach.chapitres.last}}, {{/if}}
+	      {{/if}}
+	      {{/foreach}}
+	      </span>
+	    </li>
+	  {{/foreach}}
+	{{/foreach}}
+</ul>

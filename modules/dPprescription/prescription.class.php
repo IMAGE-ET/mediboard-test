@@ -706,11 +706,6 @@ class CPrescription extends CMbObject {
     if($with_child != 1){
       $where["next_perf_id"] = "IS NULL";
     }
-    /*
-    if($emplacement){
-      $where[] = "emplacement = '$emplacement' OR emplacement = 'service_bloc'";
-    }
-    */
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '$with_subst_active'";
     
@@ -896,7 +891,6 @@ class CPrescription extends CMbObject {
   	$this->_counts_by_chapitre_non_signee["med"] = $line_med->countList($whereMed);
   	$this->_counts_by_chapitre_non_signee["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
   	
-  	
   	$perfusion_line  = new CPerfusionLine();
   	$ljoinPerf["perfusion"] = "perfusion_line.perfusion_id = perfusion.perfusion_id";
   	$wherePerf["perfusion.prescription_id"] = " = '$this->_id'";
@@ -905,7 +899,6 @@ class CPrescription extends CMbObject {
   	$this->_counts_by_chapitre["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
   	$wherePerf["signature_prat"] = " = '0'";
   	$this->_counts_by_chapitre_non_signee["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
-  	
   	
   	// Count sur les elements
   	$ljoin_element["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";

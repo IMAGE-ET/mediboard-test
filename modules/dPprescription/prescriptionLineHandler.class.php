@@ -63,8 +63,6 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
       }
     }
     
-    
-    
    // On charge toutes les lignes qui sont définies en fonction de l'entree du sejour
    if($mbObject->_class_name == "COperation"){
      $mbObject->loadRefSejour();

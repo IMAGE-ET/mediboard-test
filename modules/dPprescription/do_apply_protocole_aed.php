@@ -13,13 +13,14 @@ global $AppUI, $can;
 
 $can->needsRead();
 
-$prescription_id = mbGetValueFromPost("prescription_id");
-$pack_protocole_id    = mbGetValueFromPost("pack_protocole_id");
+$prescription_id   = mbGetValueFromPost("prescription_id");
+$pack_protocole_id = mbGetValueFromPost("pack_protocole_id");
 
 $date_sel        = mbGetValueFromPost("debut", mbDate());
 $praticien_id    = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 $operation_id    = mbGetValueFromPost("operation_id");
 $pratSel_id      = mbGetValueFromPost("pratSel_id");
+
 // Si aucun pack/protocole selectionne, on ne fait rien
 if (!$pack_protocole_id){
   CApp::rip();
@@ -35,11 +36,9 @@ if ($prescription_id) {
   $prescription->object_class = 'CSejour';
   $prescription->object_id = $operation->sejour_id;
   $prescription->type = 'sejour';
-
   if ($msg = $prescription->store()) {
 	  $AppUI->setMsg($msg, UI_MSG_ERROR);
 	}
-
 }
 
 // On applique le protocole ou le pack
@@ -51,5 +50,5 @@ $lite = CAppUI::pref('mode_readonly') ? 0 : 1;
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite, null, '$pratSel_id', null, '$praticien_id')</script>";
 echo $AppUI->getMsg();
 CApp::rip();
-?>
 
+?>
