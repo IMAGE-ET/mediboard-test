@@ -79,6 +79,7 @@ class CMbObject {
   // Behaviour fields
   var $_merging = null;
   var $_purge = null;
+  var $_forwardRefMerging = null;
   
   function __construct() {
     return $this->CMbObject();
@@ -1218,6 +1219,7 @@ class CMbObject {
 	        $transferer = new $backObject->_class_name;
 	        $transferer->_id = $backObject->_id;
           $transferer->$backField = $this->_id;
+          $transferer->_forwardRefMerging = true;
           
           // Cas des meta objects
 			    if ($backMeta) {

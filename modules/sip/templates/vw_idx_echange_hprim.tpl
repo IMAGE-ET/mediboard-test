@@ -27,6 +27,10 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   url.requestUpdate("echange_"+echange_hprim_id , { waitingText: null });
 }
 
+function changePage(page) {
+  $V(getForm('filterEchange').page,page);
+}
+
 </script>
 
 <table class="main">
@@ -56,8 +60,25 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
 	        <tr>
 	          <th class="category" colspan="2">Critères de filtres</th>
 	        </tr>
+          <tr>
+            <th>Type de message d'événement</th>
+            <td>
+              <select class="str" name="msg_evenement">
+                <option value="">&mdash; Liste des messages </option>
+                <option value="patient" {{if $msg_evenement == "patient"}}selected="selected"{{/if}}>
+                  Message patients
+                </option>
+                <option value="pmsi" {{if $msg_evenement == "pmsi"}}selected="selected"{{/if}}>
+                  Message PMSI
+                </option>
+                <option value="serveurActes" {{if $msg_evenement == "serveurActes"}}selected="selected"{{/if}}>
+                  Message serveur actes
+                </option>
+              </select>
+            </td>
+          </tr> 
 	        <tr>
-            <th>Types d'événements patients</th>
+            <th>Types d'événements</th>
             <td>
               <select class="str" name="type_evenement">
                 <option value="">&mdash; Liste des événements </option>
@@ -98,35 +119,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
           </tr>
         </table>
           {{if $total_echange_hprim != 0}}
-		        <div style="font-weight:bold;padding-top:10px"> 
-		          {{$total_echange_hprim}} {{tr}}results{{/tr}}
-		        </div>
-		        <div class="pagination">
-		          {{if ($page == 1)}}
-		            {{$page}}
-				      {{else}}
-				        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$page-1}})"> < Précédent </a> |
-		            <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, 1)"> 1 </a> | 
-		            {{$page}} 
-				      {{/if}}
-				      {{if $page != $total_pages}}
-				        | <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$total_pages}})"> {{$total_pages}} </a> | 
-				        <a href="#1" onclick="$V(document.forms.filterEchange.elements.page, {{$page+1}})"> Suivant > </a>
-		          {{/if}}
-		        </div>
-		        <div>
-			        <select name="listpageechangehprim" onchange="$V(this.form.elements.page, $V(this))">
-			          <option value="">&mdash; Page</option>
-			          {{if $total_pages < 4}}
-			            {{assign var="step" value=1}}
-			          {{else}}
-			            {{assign var="step" value=4}}
-			          {{/if}}
-		            {{foreach from=1|range:$total_pages:$step item=curr_page}}
-		              <option value="{{$curr_page}}" {{if $curr_page == $page}}selected="selected"{{/if}}>{{$curr_page}}</option>
-		            {{/foreach}}
-			        </select>
-		        </div>
+            {{mb_include module=system template=inc_pagination total=$total_echange_hprim current=$page change_page='changePage'}}
 	        {{/if}}
       </form>
     </td>
@@ -135,7 +128,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="14">ECHANGES HPRIM</th>
+          <th class="title" colspan="14">ECHANGES HPRIM - {{$msg_evenement}}</th>
         </tr>
         <tr>
           <th></th>
