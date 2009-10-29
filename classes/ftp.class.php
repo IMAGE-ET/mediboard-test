@@ -14,8 +14,8 @@ class CFTP {
   var $username    = null;
   var $userpass    = null;
   var $connexion   = null;
-  var $port        = 21;
-  var $timeout     = 90;
+  var $port        = null;
+  var $timeout     = null;
   var $passif_mode = false;
   var $mode        = null;
   var $logs        = array();
@@ -35,10 +35,10 @@ class CFTP {
     $this->hostname    = $this->config["ftphost"];
     $this->username    = $this->config["ftpuser"];
     $this->userpass    = $this->config["ftppass"];
-    $this->port        = $this->config["port"];
-    $this->timeout     = $this->config["timeout"];
+    $this->port        = $this->config["port"] ? $this->config["port"] : "21";
+    $this->timeout     = $this->config["timeout"] ? $this->config["timeout"] : "90";
     $this->passif_mode = $this->config["pasv"];
-    $this->mode        = $this->config["mode"];
+    $this->mode        = $this->config["mode"] ? $this->config["mode"] : "FTP_ASCII";
   }
   
   function testSocket() {
