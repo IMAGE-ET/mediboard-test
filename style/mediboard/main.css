@@ -465,6 +465,10 @@ optgroup, option {
   background: #fff;
 }
 
+option {
+  padding-top: 1px;
+}
+
 optgroup {
   font-weight: bold;
 }
@@ -1022,7 +1026,7 @@ input.autocomplete:focus {
 }
 
 input.autocomplete.throbbing {
-  background-position: 100% -19px;
+  background-position: 100% -18px;
 }
 
 div.dropdown-trigger {
