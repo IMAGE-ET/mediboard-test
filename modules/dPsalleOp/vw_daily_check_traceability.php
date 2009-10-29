@@ -26,7 +26,7 @@ if ($check_list->_back['items']) {
 	}
 }
 
-list($object_class, $object_id) = explode('-', $object_guid);
+@list($object_class, $object_id) = explode('-', $object_guid);
 
 $where = array();
 if ($object_class) {
