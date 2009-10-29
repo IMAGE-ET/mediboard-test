@@ -248,6 +248,7 @@ var Url = Class.create({
       
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       input.observe("click", showAutocomplete.bindAsEventListener(this, true));
+      input.observe("focus", function(){input.select()});
       populate.observe("mousedown", Event.stop);
       
       container.insert(trigger);

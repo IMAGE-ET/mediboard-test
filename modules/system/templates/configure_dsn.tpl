@@ -125,16 +125,14 @@ var DSN = {
   create: function (sDSN) {
     var oForm = document.forms["CreateDSN-" + sDSN];
     
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_create_dsn");
+    var url = new Url("system", "httpreq_create_dsn");
     url.addParam("dsn", sDSN);
     url.addElement(oForm.master_user);
     url.addElement(oForm.master_pass);
     url.requestUpdate("config-dsn-create-" + sDSN);
   },
   test: function (sDSN) {
-    var url = new Url;
-    url.setModuleAction("system", "httpreq_test_dsn");
+    var url = new Url("system", "httpreq_test_dsn");
     url.addParam("dsn", sDSN);
     url.requestUpdate("config-dsn-test-" + sDSN);
   }

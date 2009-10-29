@@ -12,8 +12,7 @@
 
 function startSyncProducts(category_id, object_class){
   if (category_id) {
-    var url = new Url;
-    url.setModuleAction("dmi", "httpreq_do_sync_products");
+    var url = new Url("dmi", "httpreq_do_sync_products");
     url.addParam("category_id", category_id);
     url.addParam("object_class", object_class);
     url.requestUpdate("do_sync_products_"+object_class);

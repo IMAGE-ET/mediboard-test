@@ -9,8 +9,7 @@ var ColorSelector = {
   },
   
   pop: function() {
-    var url = new Url();
-    url.setModuleAction("mediusers", "color_selector");
+    var url = new Url("mediusers", "color_selector");
     url.addParam("color", $V(document.forms[this.sForm][this.sColor]));
     url.popup(this.options.width, this.options.height, "Color selector");
   },

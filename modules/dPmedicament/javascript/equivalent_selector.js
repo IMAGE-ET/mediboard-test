@@ -24,8 +24,7 @@ var EquivSelector = {
 
   pop: function() {
     var oForm = document[this.sForm];
-    this.oUrl = new Url();
-    this.oUrl.setModuleAction("dPmedicament", "vw_equivalents");
+    this.oUrl = new Url("dPmedicament", "vw_equivalents");
     this.oUrl.addParam("code_cip", this.sCodeCIP);
     this.oUrl.addParam("line_id", this.sLine);
     this.oUrl.addParam("inLivret", this.sInLivret);

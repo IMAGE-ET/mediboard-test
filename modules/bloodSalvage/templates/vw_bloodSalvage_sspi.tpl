@@ -14,14 +14,13 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  var url = new Url;
-  url.setModuleAction("bloodSalvage", "httpreq_liste_patients_bs");
+  var url = new Url("bloodSalvage", "httpreq_liste_patients_bs");
   url.addParam("date","{{$date}}");
   url.periodicalUpdate('listRSPO', { frequency: 90 });
   {{if $selOp->_id}}
-      url.setModuleAction("bloodSalvage","httpreq_vw_sspi_bs");
-      url.addParam("date","{{$date}}");
-      url.requestUpdate("bloodSalvageSSPI", {waitingText: null});
+    url.setModuleAction("bloodSalvage","httpreq_vw_sspi_bs");
+    url.addParam("date","{{$date}}");
+    url.requestUpdate("bloodSalvageSSPI", {waitingText: null});
   {{/if}}  
 });
 </script>
@@ -33,7 +32,7 @@ Main.add(function () {
  	{{if $selOp->_id}}
     <div id="bloodSalvageSSPI"></div>
 	{{else}}
-	  <div class="big-info">Veuillez sélectionner un patient.</div>
+	  <div class="small-info">Veuillez sélectionner un patient.</div>
 	{{/if}}
 	</td>
 </tr>

@@ -14,8 +14,7 @@ var Reglement = {
 	  } );
   }, 
   reload: function(){
-    var url = new Url;
-    url.setModuleAction("dPcabinet", "httpreq_vw_reglement");
+    var url = new Url("dPcabinet", "httpreq_vw_reglement");
     url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
 	  url.requestUpdate('reglement', { waitingText : null });
     
@@ -26,20 +25,18 @@ var Reglement = {
     }
   },
   effectuer: function(){
-    var oForm = document.tarifFrm;
+    var oForm = getForm("tarifFrm");
     $V(oForm.patient_date_reglement, new Date().toDATE());
     Reglement.submit(oForm);
   },
   register: function(){
     document.write('<div id="reglement"></div>');
-    
     Main.add( function() {
       Reglement.reload();
     } );
   },
-  
   cancel: function (reglement_id) {
-    var oForm = document.forms['reglement-delete'];
+    var oForm = getForm('reglement-delete');
     $V(oForm.reglement_id, reglement_id);
     confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, { onComplete : Reglement.reload } );
     return false;

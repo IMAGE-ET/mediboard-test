@@ -17,25 +17,23 @@ function submitStartTiming(oForm) {
 }
 
 function reloadStartTiming(blood_salvage_id){ 
-    var url = new Url();
-    url.setModuleAction("bloodSalvage", "httpreq_vw_recuperation_start_timing");
-    url.addParam("blood_salvage_id", blood_salvage_id);
-    url.requestUpdate("start-timing", { waitingText: null } );
+  var url = new Url("bloodSalvage", "httpreq_vw_recuperation_start_timing");
+  url.addParam("blood_salvage_id", blood_salvage_id);
+  url.requestUpdate("start-timing", { waitingText: null } );
 }
 
 function reloadInfos(blood_salvage_id) {
-  var url = new Url(); 
-    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage_infos");
-    url.addParam("blood_salvage_id", blood_salvage_id);
-    url.requestUpdate('cell-saver-infos', { waitingText: null } );
+  var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage_infos");
+  url.addParam("blood_salvage_id", blood_salvage_id);
+  url.requestUpdate('cell-saver-infos', { waitingText: null } );
 }
 
 function submitFSEI(oForm) {
   if(oForm.type_ei_id.value) {
     submitFormAjax(
       oForm,'systemMsg', { 
-      onComplete : function() {
-        doFiche(oForm.blood_salvage_id.value, oForm.type_ei_id.value);
+        onComplete : function() {
+          doFiche(oForm.blood_salvage_id.value, oForm.type_ei_id.value);
         }
       }
     );
@@ -45,12 +43,10 @@ function submitFSEI(oForm) {
 }
 
 function doFiche(blood_salvage_id,type_ei_id) {
-  var url = new Url;
-  url.setModuleAction("dPqualite","vw_incident");
+  var url = new Url("dPqualite","vw_incident");
   url.addParam("type_ei_id",type_ei_id);
   url.addParam("blood_salvage_id",blood_salvage_id);
   url.popup(750,500,"fsei");
-  return;
 }
 
 function submitNurse(oForm){
@@ -62,11 +58,9 @@ function submitNurse(oForm){
 }
 
 function printRapport() {
-  var url = new Url;
-  url.setModuleAction("bloodSalvage", "print_rapport"); 
+  var url = new Url("bloodSalvage", "print_rapport"); 
   url.addElement(document.rapport.blood_salvage_id);
   url.popup(700, 500, "printRapport");
-  return;
 }
 
 function submitBloodSalvageTiming(oForm) {
@@ -76,26 +70,22 @@ function submitBloodSalvageTiming(oForm) {
     } 
   });
 }
-
  
 function reloadTotalTime(blood_salvage_id) {
-  var url = new Url();
-  url.setModuleAction("bloodSalvage", "httpreq_total_time");
+  var url = new Url("bloodSalvage", "httpreq_total_time");
   url.addParam("blood_salvage_id", blood_salvage_id);
   url.requestUpdate("totaltime", { waitingText: null } );
 }
 
 function reloadBloodSalvageTiming(blood_salvage_id){ 
-  var url = new Url();
-  url.setModuleAction("bloodSalvage", "httpreq_vw_bs_sspi_timing");
+  var url = new Url("bloodSalvage", "httpreq_vw_bs_sspi_timing");
   url.addParam("blood_salvage_id", blood_salvage_id);
   url.requestUpdate("timing", { waitingText: null } );
   reloadTotalTime(blood_salvage_id);  
 }
 
 function reloadNurse(blood_salvage_id){
-  var url = new Url;
-  url.setModuleAction("bloodSalvage", "httpreq_vw_blood_salvage_personnel");
+  var url = new Url("bloodSalvage", "httpreq_vw_blood_salvage_personnel");
   url.addParam("blood_salvage_id", blood_salvage_id);
   url.requestUpdate("listNurse", {
     waitingText: null
@@ -104,17 +94,14 @@ function reloadNurse(blood_salvage_id){
 
 submitNewBloodSalvage = function(oForm) {
 	submitFormAjax(oForm,'systemMsg',{ onComplete: function() {
-	    var url = new Url;
-	    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage");
+	  var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
 	    url.requestUpdate("bloodSalvage_tab");
 	  }
 	});
 }
 
 viewRSPO = function(operation_id) {
-  var url = new Url;
-  url.setModuleAction("bloodSalvage","httpreq_vw_sspi_bs");
+  var url = new Url("bloodSalvage","httpreq_vw_sspi_bs");
   url.addParam("op",operation_id);
   url.popup(800,600,"bloodSalvage_sspi");
 }
-

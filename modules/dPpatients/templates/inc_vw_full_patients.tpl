@@ -21,8 +21,7 @@ var ViewFullPatient = {
 }
 
 function popEtatSejour(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "vw_parcours");
+  var url = new Url("dPhospi", "vw_parcours");
   url.addParam("sejour_id",sejour_id);
   url.pop(1000, 550, 'Etat du Séjour');
 }

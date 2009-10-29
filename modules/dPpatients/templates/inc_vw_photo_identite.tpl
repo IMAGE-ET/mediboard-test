@@ -1,8 +1,7 @@
 {{if @$mode == "edit"}}
 <script type="text/javascript">
   reloadAfterUploadFile = function() {
-    var url = new Url;
-    url.setModuleAction("dPpatients", "httpreq_vw_photo_identite");
+    var url = new Url("dPpatients", "httpreq_vw_photo_identite");
     url.addParam("patient_id", "{{$patient->_id}}");
     url.addParam("mode", "edit");
     url.requestUpdate("{{$patient->_guid}}-identity", {waitingText: null});

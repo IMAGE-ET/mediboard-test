@@ -14,9 +14,8 @@ var PlageConsultSelector = {
   },
 
   pop: function() {
-    var oForm = document[this.sForm];
-    var url = new Url();
-    url.setModuleAction("dPcabinet", "plage_selector");
+    var oForm = getForm(this.sForm);
+    var url = new Url("dPcabinet", "plage_selector");
     url.addParam("chir_id", oForm[this.sChir_id].value);
     url.addParam("function_id", oForm[this.sFunction_id].value);
     url.addParam("plageconsult_id", oForm[this.sPlageconsult_id].value);
@@ -24,11 +23,11 @@ var PlageConsultSelector = {
   },
 
   set: function(heure, id, date, freq, chir_id, chirname) {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     $V(oForm[this.sChir_id]        , chir_id);
     $V(oForm[this.sHeure]          , heure);
     $V(oForm[this.sDate]           , date);
     $V(oForm[this.sDuree]          , freq);
     $V(oForm[this.sPlageconsult_id], id, true);
   }
-}
+};

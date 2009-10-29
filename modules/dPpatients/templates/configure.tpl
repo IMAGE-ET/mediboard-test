@@ -1,8 +1,7 @@
 <script type="text/javascript">
 
 function startINSEE() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_do_add_insee");
+  var url = new Url("dPpatients", "httpreq_do_add_insee");
   url.requestUpdate("INSEE");
 }
 
@@ -237,8 +236,7 @@ Main.add(function () {
 <script type="text/javascript">
 
 function startINSEE() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_do_add_insee");
+  var url = new Url("dPpatients", "httpreq_do_add_insee");
   url.requestUpdate("INSEE");
 }
 

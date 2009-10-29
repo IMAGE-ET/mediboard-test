@@ -22,11 +22,9 @@ var ObjectSelector = {
    
   pop: function() {
     var oForm = document[this.sForm];
-    var url = new Url();
-    url.setModuleAction("system", "object_selector");
+    var url = new Url("system", "object_selector");
     url.addParam("onlyclass", this.onlyclass);
     url.addParam("selClass", oForm[this.sClass].value);
-    
     url.popup(this.options.width, this.options.height, "Object Selector");
   },
   

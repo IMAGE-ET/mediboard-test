@@ -9,14 +9,12 @@ var IconeSelector = {
   },
 
   pop: function() {
-    var oForm = document[this.sForm];
-    var url = new Url();
-    url.setModuleAction("dPcabinet", "icone_selector");
+    var url = new Url("dPcabinet", "icone_selector");
     url.popup(this.options.width, this.options.height, "Icone");
   },
 
   set: function(view) {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     
     // Champs text qui contient le nom de l'icone
     $V(oForm[this.sView], view);
@@ -24,4 +22,4 @@ var IconeSelector = {
     // Affichage de l'icone
     $('iconeBackground').src = "./modules/dPcabinet/images/categories/"+view;
   }
-}
+};

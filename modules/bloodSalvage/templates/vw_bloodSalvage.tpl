@@ -15,8 +15,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  var url = new Url;
-  url.setModuleAction("bloodSalvage", "httpreq_liste_plages");
+  var url = new Url("bloodSalvage", "httpreq_liste_plages");
   url.addParam("date", "{{$date}}");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.periodicalUpdate('listplages', { frequency: 90 });
@@ -37,7 +36,7 @@ Main.add(function () {
 			  {{include file=inc_bloodSalvage_header.tpl}}
 			  <div id="bloodSalvage"></div>
 			{{else}}
-				<div class="big-info">
+				<div class="small-info">
 					Veuillez sélectionner une intervention dans la liste.
 				</div>
 			{{/if}}

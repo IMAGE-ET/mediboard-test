@@ -18,8 +18,7 @@ SiblingsChecker = {
 	  this.running = true;
 	  this.formName = oForm.name;
 	
-	  var url = new Url;
-	  url.setModuleAction("dPpatients", "httpreq_get_siblings");
+	  var url = new Url("dPpatients", "httpreq_get_siblings");
 	  
 	  url.addElement(oForm.patient_id);
 	  url.addElement(oForm.nom);
@@ -37,14 +36,13 @@ SiblingsChecker = {
   
   // Ask confirmation before sending, when necessary
   alert: function() {
-	confirmed = true;
-	confirmed &= !this.textMatching  || alert(this.textMatching);
-	confirmed &= !this.textSiblings || confirm(this.textSiblings);
-	
+    confirmed = true;
+    confirmed &= !this.textMatching  || alert(this.textMatching);
+    confirmed &= !this.textSiblings || confirm(this.textSiblings);
+
     if (confirmed) {
       document.forms[this.formName].submit();
-    } 
-    
+    }
     this.running = false;
   },
   

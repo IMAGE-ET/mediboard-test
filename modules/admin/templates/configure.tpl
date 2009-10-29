@@ -60,13 +60,10 @@
 <h2>Actions</h2>
 
 <script type="text/javascript">
-
 function checkSiblings() {
-  var CCAMUrl = new Url;
-  CCAMUrl.setModuleAction("admin", "check_siblings");
+  var CCAMUrl = new Url("admin", "check_siblings");
   CCAMUrl.requestUpdate("check_siblings");
 }
-
 </script>
 
 <table class="tbl">

@@ -19,12 +19,10 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
   name="intermaxTrigger"
   code="org.yoplet.Yoplet.class" 
   archive="includes/applets/yoplet.jar?build={{$version.build}}" 
-  {{if $debug=="true"}}
   width="400" 
   height="200"
-  {{else}}
-  width="0" 
-  height="0"
+  {{if $debug != "true"}}
+  style="display:none;"
   {{/if}}
 >
 
@@ -41,12 +39,10 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
   name="intermaxResult"
   code="org.yoplet.Yoplet.class" 
   archive="includes/applets/yoplet.jar?build={{$version.build}}" 
-  {{if $debug=="true"}}
   width="400" 
   height="200"
-  {{else}}
-  width="0" 
-  height="0"
+  {{if $debug != "true"}}
+  style="display:none;"
   {{/if}}
 >
   <param name="action" value="sleep" />

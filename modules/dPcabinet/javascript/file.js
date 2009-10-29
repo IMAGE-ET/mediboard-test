@@ -13,13 +13,13 @@ var File = {
   },
   
   remove: function(oButton, object_id, object_class){
-    oOptions = {
+    var oOptions = {
       typeName: 'le fichier',
       objName: oButton.form._view.value,
       ajax: 1,
       target: 'systemMsg'
     }
-    oAjaxOptions = {
+    var oAjaxOptions = {
       onComplete: function() { File.refresh(object_id, object_class) } 
     }
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);

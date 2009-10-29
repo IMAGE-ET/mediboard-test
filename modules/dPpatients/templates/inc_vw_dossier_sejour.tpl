@@ -2,8 +2,7 @@
 
 refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
-    var url = new Url;
-    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.addParam("readonly", true);
     url.requestUpdate("constantes", { waitingText: null } );

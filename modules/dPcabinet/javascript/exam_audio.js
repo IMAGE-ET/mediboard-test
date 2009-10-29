@@ -284,8 +284,7 @@ function reloadAllGraphs() {
 
 function reloadBilan(){
   var oForm = document.editFrm;
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_bilan");
+  var url = new Url("dPcabinet", "httpreq_vw_examaudio_bilan");
   url.addParam("examaudio_id", oForm.examaudio_id.value);
   url.requestUpdate('td_bilan', { waitingText : null });
 }
@@ -293,8 +292,7 @@ function reloadBilan(){
 function reloadGraphTonale(sCote){
   var oForm = document.editFrm;
   if(typeof(sCote)=="string" && (sCote=="droite" || sCote=="gauche")){
-    var url = new Url;
-    url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tonal");
+    var url = new Url("dPcabinet", "httpreq_vw_examaudio_tonal");
     url.addParam("side", sCote);
     url.addParam("examaudio_id", oForm.examaudio_id.value);
     url.requestUpdate('td_graph_tonal_'+sCote, { waitingText : null });
@@ -316,8 +314,7 @@ function reloadGraphTonalegauche(){
 function reloadGraphTympan(sCote){
   var oForm = document.editFrm;
   if(typeof(sCote)=="string" && (sCote=="droite" || sCote=="gauche")){
-    var url = new Url;
-    url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_tympan");
+    var url = new Url("dPcabinet", "httpreq_vw_examaudio_tympan");
     url.addParam("side", sCote);
     url.addParam("examaudio_id", oForm.examaudio_id.value);
     url.requestUpdate('td_graph_tympan_'+sCote, { waitingText : null });
@@ -336,8 +333,7 @@ function reloadGraphTympangauche(){
 
 function reloadGraphVocale(){
   var oForm = document.editFrm;
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_examaudio_vocale");
+  var url = new Url("dPcabinet", "httpreq_vw_examaudio_vocale");
   url.addParam("examaudio_id", oForm.examaudio_id.value);
   url.requestUpdate('td_graph_vocal', { waitingText : null });
 }

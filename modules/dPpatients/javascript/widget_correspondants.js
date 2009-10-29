@@ -37,16 +37,14 @@ var Correspondants = Correspondants || Class.create({
   },
   
   /*popup: function() {
-    var url = new Url;
-    url.setModuleAction(this.module, this.action);
+    var url = new Url(this.module, this.action);
     url.addParam("patient_id", this.patient_id);
     url.addParam("widget_id", this.widget_id);
     url.popup(600, 400, "Correspondants");  
   },*/
   
   refresh: function() {
-    var url = new Url;
-    url.setModuleAction(this.module, this.action);
+    var url = new Url(this.module, this.action);
     url.addParam("patient_id", this.patient_id);
     url.addParam("widget_id", this.widget_id);
     url.requestUpdate(this.widget_id, { waitingText : null });
