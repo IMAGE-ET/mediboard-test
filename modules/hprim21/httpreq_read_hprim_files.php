@@ -16,6 +16,9 @@ $ftp = new CFTP();
 $ftp->hostname = $dPconfig["hprim21"]["CHprim21Reader"]["hostname"];
 $ftp->username = $dPconfig["hprim21"]["CHprim21Reader"]["username"];
 $ftp->userpass = $dPconfig["hprim21"]["CHprim21Reader"]["userpass"];
+$ftp->mode     = "FTP_ASCII";
+$ftp->timeout  = "0";
+$ftp->timeout  = "90";
 $ftp->connect();
 $list = $ftp->getListFiles("./");
 
