@@ -46,6 +46,7 @@ class CApp {
  */
 class CAppUI {
   static $instance = null;
+  static $user = null;
   
   var $user_id = 0;
   
@@ -79,6 +80,12 @@ class CAppUI {
   
   /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
+
+  private function __construct(){}
+
+  static function init(){
+  	return self::$instance = new CAppUI;
+  }
 
   static function getAllClasses() {
     $rootDir = self::conf("root_dir");

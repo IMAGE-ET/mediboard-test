@@ -176,7 +176,8 @@ $user = new CMediusers();
 if ($user->isInstalled()) {
   $user->load(CAppUI::$instance->user_id);
   $user->getBasicInfo();
-  CAppUI::$instance->_ref_user = $user;
+  CAppUI::$user = $user;
+  CAppUI::$instance->_ref_user =& CAppUI::$user;
 }
 
 // Set the module and action from the url
