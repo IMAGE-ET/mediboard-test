@@ -47,13 +47,13 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (CAppUI::conf('sip server')) {
         $listDest = $dest_hprim->loadList();
   
-        foreach ($listDest as $_curr_dest) {
+        foreach ($listDest as $_dest) {
           // Recherche si le patient possède un identifiant externe sur le SIP
           $id400 = new CIdSante400();
           //Paramétrage de l'id 400
           $id400->object_id = $mbObject->_id;
           $id400->object_class = "CPatient";
-          $id400->tag = $_curr_dest->destinataire;
+          $id400->tag = $_dest->destinataire;
   
           if($id400->loadMatchingObject())
             $mbObject->_id400 = $id400->id400;
@@ -73,7 +73,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           
           $domEvenement = new CHPrimXMLEnregistrementPatient();
           $domEvenement->emetteur = CAppUI::conf('mb_id');
-          $domEvenement->destinataire = $_curr_dest->destinataire;
+          $domEvenement->destinataire = $_dest->destinataire;
           $domEvenement->destinataire_libelle = " ";
   
           $echange_hprim = new CEchangeHprim();
@@ -81,7 +81,7 @@ class CSipObjectHandler extends CMbObjectHandler {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
           }
   
-          $initiateur = ($_curr_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
+          $initiateur = ($_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
   
           $domEvenement->generateTypeEvenement($mbObject, true, $initiateur);
         }
@@ -118,7 +118,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         }
         
         $echange_hprim = new CEchangeHprim();
-        $echange_hprim->load($domEvenement->_identifiant);
+        $echange_hprim->load($domEvenement->identifiant);
         $echange_hprim->date_echange = mbDateTime();
         
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients();

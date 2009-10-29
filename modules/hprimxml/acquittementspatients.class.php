@@ -14,6 +14,8 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   var $_codes_erreurs = null;
 
   function __construct() {
+    $this->evenement = "evt_patients";
+     
     parent::__construct("patients", "msgAcquittementsPatients105");
   }
 
