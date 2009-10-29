@@ -9,17 +9,18 @@
  */
 
 class CHPrimXMLDocument extends CMbXMLDocument {
-  var $finalpath = null;
+  var $evenement              = null;
+  var $finalpath              = null;
   var $documentfinalprefix    = null;
   var $documentfinalfilename  = null;
-  var $sentFiles = array();
+  var $sentFiles              = array();
   
-  var $_identifiant           = null;
-  var $_date_production       = null;
-  var $_emetteur              = null;
-  var $_identifiant_emetteur  = null;
-  var $_destinataire          = null;
-  var $_destinataire_libelle  = null;
+  var $identifiant           = null;
+  var $date_production       = null;
+  var $emetteur              = null;
+  var $identifiant_emetteur  = null;
+  var $destinataire          = null;
+  var $destinataire_libelle  = null;
    
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
@@ -34,9 +35,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function schemaValidate($filename = null, $returnErrors = false) {
-    if (!CAppUI::conf("hprimxml evt_serveuractes validation") || 
-        !CAppUI::conf("hprimxml evt_pmsi validation") ||
-        !CAppUI::conf("hprimxml evt_patients validation")) {
+    if (!CAppUI::conf("hprimxml ".$this->evenement." validation")) {
       return true;
     }
     return parent::schemaValidate($filename, $returnErrors);
@@ -94,8 +93,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
   }
   
-  function addEnteteMsg($elParent, $nodeName) {
+  function addEnteteMessage($elParent) {
+    global $AppUI;
+
+    $enteteMessage = $this->addElement($elParent, "enteteMessage");
+    $this->addElement($enteteMessage, "identifiantMessage", $this->identifiant ? $this->identifiant : "ES{$this->now}");
+    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->date_production ? $this->date_production : mbDateTime());
     
+    $emetteur = $this->addElement($enteteMessage, "emetteur");
+    $agents = $this->addElement($emetteur, "agents");
+    $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
+    $group = CGroups::loadCurrent();
+    $group->loadLastId400();
+    $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
+    $this->addAgent($agents, "système", $this->emetteur ? $this->emetteur : CAppUI::conf('mb_id'), $group->text);
+    
+    $destinataire = $this->addElement($enteteMessage, "destinataire");
+    $agents = $this->addElement($destinataire, "agents");
+    $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
+    $this->addAgent($agents, "système", $group->_id, $group->text);
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
@@ -133,6 +149,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
   function addUniteFonctionnelle($elParent, $mbOp) {
     $this->addCodeLibelle($elParent, "uniteFonctionnelle", $mbOp->code_uf, $mbOp->libelle_uf);
+  }
+  
+  function addUniteFonctionnelleResponsable($elParent, $mbOp) {
+    $this->addCodeLibelle($elParent, "uniteFonctionnelleResponsable", $mbOp->code_uf, $mbOp->libelle_uf);
   }
   
   function addProfessionnelSante($elParent, $mbMediuser) {

@@ -21,5 +21,6 @@ $module->registerTab("css_test"           		, null, TAB_READ);
 $module->registerTab("form_tester"            , null, TAB_READ);
 $module->registerTab("mutex_tester"           , null, TAB_READ);
 $module->registerTab("check_zombie_objects"   , null, TAB_READ);
+$module->registerTab("benchmark"              , null, TAB_READ);
 
 ?>

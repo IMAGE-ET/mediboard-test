@@ -16,26 +16,15 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     } else if ($version == "1.05") {
       parent::__construct("serveurActivitePmsi", "msgEvenementsPmsi105");
     }   
-    global $AppUI, $g;
+    
+    $this->evenement            = "evt_pmsi";
+    $this->destinataire         = "SANTEcom";
+    $this->destinataire_libelle = "Siemens Health Services: S@NTE.com";
         
     $evenementsPMSI = $this->addElement($this, "evenementsPMSI", null, "http://www.hprim.org/hprimXML");
     $this->addAttribute($evenementsPMSI, "version", $version);
-
-    $enteteMessage = $this->addElement($evenementsPMSI, "enteteMessage");
-    $this->addElement($enteteMessage, "identifiantMessage", "EP{$this->now}");
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction");
     
-    $emetteur = $this->addElement($enteteMessage, "emetteur");
-    $agents = $this->addElement($emetteur, "agents");
-    $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
-    $group = CGroups::loadCurrent();
-    $this->addAgent($agents, "système", $group->_id, $group->text);
-    $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    
-    $destinataire = $this->addElement($enteteMessage, "destinataire");
-    $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", "SANTEcom", "Siemens Health Services: S@NTE.com");
-    $this->addAgent($agents, "système", $group->_id, $group->text);
+    $this->addEnteteMessage($evenementsPMSI);
   }
   
   function setFinalPrefix($mbSej) {
@@ -104,7 +93,8 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     //$uniteMedicale = $this->addElement($saisie, "uniteMedicale");
     //$codeUniteMedicale = $this->addElement($uniteMedicale, "code");
     $mbOp = reset($mbSej->_ref_operations);
-    $this->addUniteFonctionnelle($saisie, $mbOp);
+    $this->addUniteFonctionnelleResponsable($saisie, $mbOp);
+    
     // Médecin responsable
     $medecinResponsable = $this->addElement($saisie, "medecinResponsable");
     $this->addElement($medecinResponsable, "numeroAdeli", $mbPraticien->adeli);

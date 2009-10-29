@@ -48,7 +48,7 @@ class CMbXMLDocument extends DOMDocument {
 	  
 	  // Validation
 	  if ($this->checkSchema() && !$this->schemaValidate()) {
-	    return "Catalogue d'élements de prescriptions invalide";
+	    return "Document invalide";
 	  }
 	  
 	  return null;

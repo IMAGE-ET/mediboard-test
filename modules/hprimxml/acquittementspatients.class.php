@@ -25,7 +25,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
-    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->_identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->identifiant);
     $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
 
     $emetteur = $this->addElement($enteteMessageAcquittement, "emetteur");
@@ -33,13 +33,13 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, "système", $this->_emetteur, $group->text);
+    $this->addAgent($agents, "système", $this->emetteur, $group->text);
 
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $this->_destinataire, $this->_destinataire_libelle);
+    $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
 
-    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->identifiant);
     
     if ($statut == "OK") {
       if (is_array($codes)) {
@@ -70,8 +70,8 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
 
   function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
-    $this->_emetteur = CAppUI::conf('mb_id');
-    $this->_date_production = mbDateTime();
+    $this->emetteur = CAppUI::conf('mb_id');
+    $this->date_production = mbDateTime();
 
     if ($statut != "OK") {
       $this->generateEnteteMessageAcquittement($statut);

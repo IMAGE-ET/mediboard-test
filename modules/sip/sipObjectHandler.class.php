@@ -72,9 +72,9 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenement = new CHPrimXMLEnregistrementPatient();
-          $domEvenement->_emetteur = CAppUI::conf('mb_id');
-          $domEvenement->_destinataire = $_curr_dest->destinataire;
-          $domEvenement->_destinataire_libelle = " ";
+          $domEvenement->emetteur = CAppUI::conf('mb_id');
+          $domEvenement->destinataire = $_curr_dest->destinataire;
+          $domEvenement->destinataire_libelle = " ";
   
           $echange_hprim = new CEchangeHprim();
           if (isset($mbObject->_hprim_initiator_id)) {
@@ -103,8 +103,8 @@ class CSipObjectHandler extends CMbObjectHandler {
         }
   
         $domEvenement = (!$mbObject->_merging) ? new CHPrimXMLEnregistrementPatient() : new CHPrimXMLFusionPatient();
-        $domEvenement->_emetteur = CAppUI::conf('mb_id');
-        $domEvenement->_destinataire = $dest_hprim->destinataire;
+        $domEvenement->emetteur = CAppUI::conf('mb_id');
+        $domEvenement->destinataire = $dest_hprim->destinataire;
         
         $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject);
           
@@ -154,8 +154,8 @@ class CSipObjectHandler extends CMbObjectHandler {
         $mbObject->loadRefsConsultAnesth();
                 
         $domEvenementVenue = new CHPrimXMLVenuePatient();
-        $domEvenementVenue->_emetteur = CAppUI::conf('mb_id');
-        $domEvenementVenue->_destinataire = $dest_hprim->destinataire;
+        $domEvenementVenue->emetteur = CAppUI::conf('mb_id');
+        $domEvenementVenue->destinataire = $dest_hprim->destinataire;
         
         $msgEvtVenuePatient = $domEvenementVenue->generateTypeEvenement($mbObject);
         

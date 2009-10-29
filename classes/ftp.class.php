@@ -35,10 +35,10 @@ class CFTP {
     $this->hostname    = $this->config["ftphost"];
     $this->username    = $this->config["ftpuser"];
     $this->userpass    = $this->config["ftppass"];
-    $this->port        = "21";
-    $this->timeout     = "90";
+    $this->port        = $this->config["port"];
+    $this->timeout     = $this->config["timeout"];
     $this->passif_mode = $this->config["pasv"];
-    $this->mode        = "FTP_ASCII";
+    $this->mode        = $this->config["mode"];
   }
   
   function testSocket() {

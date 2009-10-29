@@ -21,4 +21,9 @@ $locales['config-hprimxml-evt_serveuractes-validation-desc'] = 'Validation des é
 $locales['config-hprimxml-evt_serveuractes-version'] = 'Version des événements serveurs actes';
 $locales['config-hprimxml-evt_serveuractes-version-desc'] = 'Version des événements serveurs actes';
 $locales['mod-hprimxml-tab-export_evtServeurActivitePmsi'] = 'Export Serveur Activite Pmsi';
+$locales['config-hprimxml-evt_mvtStock-validation'] = 'Validation des mouvements du stock';
+$locales['config-hprimxml-evt_mvtStock-validation-desc'] = 'Validation des mouvements du stock';
+$locales['config-hprimxml-evt_mvtStock-version'] = 'Version des mouvements du stock';
+$locales['config-hprimxml-evt_mvtStock-version-desc'] = 'Version des mouvements du stock';
+$locales['config-hprimxml-evt_mvtStock'] = 'H\'XML Evénements Mouvements Stock';
 ?>

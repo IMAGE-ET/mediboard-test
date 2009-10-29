@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprimxml", "hprimxmlevenementspatients");
+CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients { 
   function __construct() {            
@@ -37,9 +37,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
   
   function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
     $echg_hprim = new CEchangeHprim();
-    $this->_date_production = $echg_hprim->date_production = mbDateTime();
-    $echg_hprim->emetteur = $this->_emetteur;
-    $echg_hprim->destinataire = $this->_destinataire;
+    $this->date_production = $echg_hprim->date_production = mbDateTime();
+    $echg_hprim->emetteur = $this->emetteur;
+    $echg_hprim->destinataire = $this->destinataire;
     $echg_hprim->type = "evenementsPatients";
     $echg_hprim->sous_type = "enregistrementPatient";
     $echg_hprim->message = utf8_encode($this->saveXML());
@@ -49,7 +49,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     
     $echg_hprim->store();
     
-    $this->_identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
+    $this->identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
             
     $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);

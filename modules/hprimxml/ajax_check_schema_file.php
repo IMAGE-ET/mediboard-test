@@ -37,6 +37,12 @@ if ($evenement == "evt_patients") {
   }
 }
 
+if ($evenement == "evt_mvtStock") {
+  if ($version == "1.01") {
+   $file = $racine."mvtStock/msgEvenementsMvtStocks101.xsd";
+  }
+}
+
 if (file_exists($file)) {
   $status = 1; 
 }

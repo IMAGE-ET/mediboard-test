@@ -35,6 +35,12 @@ switch ($evenement) {
       extractFiles("patients" , "schemaEvenementPatient_v105.zip");
     }
     break;
+    
+  case "evt_mvtStock":
+    if ($version == "1.01") {
+      extractFiles("mvtStock" , "schemaEvenementMvtStock_v101.zip");
+    }
+    break;
    
   default:
     echo "<div class='error'>Action '$evenement' inconnue</div>";

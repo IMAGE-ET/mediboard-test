@@ -31,10 +31,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     }
   }
   
-  function __construct() {            
+  function __construct() {
+    $this->evenement = "evt_patients";
+                
     parent::__construct("patients", "msgEvenementsPatients105");
   }
-  
+
   function generateEnteteMessageEvenementsPatients() {
     global $AppUI, $g, $m;
 
@@ -43,8 +45,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->addAttribute($evenementsPatients, "acquittementAttendu", "oui");
     
     $enteteMessage = $this->addElement($evenementsPatients, "enteteMessage");
-    $this->addElement($enteteMessage, "identifiantMessage", $this->_identifiant);
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->_date_production);
+    $this->addElement($enteteMessage, "identifiantMessage", $this->identifiant);
+    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->date_production);
     
     $emetteur = $this->addElement($enteteMessage, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
@@ -52,12 +54,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    $this->addAgent($agents, "système", $this->_emetteur, $group->text);
+    $this->addAgent($agents, "système", $this->emetteur, $group->text);
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
     $this->destinataire = "MediBoard";
-    $this->addAgent($agents, "application", $this->_destinataire, "Gestion des Etablissements de Santé");
+    $this->addAgent($agents, "application", $this->destinataire, "Gestion des Etablissements de Santé");
   }
   
   function getIdSource($node) {

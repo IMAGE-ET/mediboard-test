@@ -105,9 +105,9 @@ class CHprimSoapHandler extends CSoapHandler {
     
     $data = $domGetEvenement->getEvenementPatientXML();
     
-    $domAcquittement->_identifiant = $data['identifiantMessage'];
-    $domAcquittement->_destinataire = $data['idClient'];
-    $domAcquittement->_destinataire_libelle = $data['libelleClient'];
+    $domAcquittement->identifiant = $data['identifiantMessage'];
+    $domAcquittement->destinataire = $data['idClient'];
+    $domAcquittement->destinataire_libelle = $data['libelleClient'];
 
     // Récupère l'initiateur du message s'il existe
     if (CAppUI::conf('sip server')) {

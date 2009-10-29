@@ -10,32 +10,21 @@
 
 class CHPrimXMLServeurActes extends CHPrimXMLDocument {
   function __construct() {
-    $version = CAppUI::conf('hprimxml evt_pmsi version');
+   $version = CAppUI::conf('hprimxml evt_serveuractes version');
     if ($version == "1.01") {
       parent::__construct("serveurActes", "msgEvenementsServeurActes101");
     } else if ($version == "1.05") {
       parent::__construct("serveurActivitePmsi", "msgEvenementsServeurActes105");
     }
-    global $AppUI, $g;
+    
+    $this->evenement            = "evt_serveuractes";
+    $this->destinataire         = "SANTEcom";
+    $this->destinataire_libelle = "Siemens Health Services: S@NTE.com";
         
     $evenementsServeurActes = $this->addElement($this, "evenementsServeurActes", null, "http://www.hprim.org/hprimXML");
     $this->addAttribute($evenementsServeurActes, "version", $version);
-
-    $enteteMessage = $this->addElement($evenementsServeurActes, "enteteMessage");
-    $this->addElement($enteteMessage, "identifiantMessage", "ES{$this->now}");
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction");
     
-    $emetteur = $this->addElement($enteteMessage, "emetteur");
-    $agents = $this->addElement($emetteur, "agents");
-    $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
-    $group = CGroups::loadCurrent();
-    $this->addAgent($agents, "système", $group->_id, $group->text);
-    $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    
-    $destinataire = $this->addElement($enteteMessage, "destinataire");
-    $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", "SANTEcom", "Siemens Health Services: S@NTE.com");
-    $this->addAgent($agents, "système", $group->_id, $group->text);
+    $this->addEnteteMessage($evenementsServeurActes);
   }
   
   function setFinalPrefix($mbOp) {

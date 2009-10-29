@@ -629,6 +629,10 @@ $dPconfig["hprimxml"] = array (
   "evt_patients" => array(
     "validation" => "0",
     "version" => "1.05",
+  ),
+  "evt_mvtStock" => array(
+    "validation" => "0",
+    "version" => "1.01",
   )
 );
 
