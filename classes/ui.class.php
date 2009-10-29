@@ -386,9 +386,8 @@ class CAppUI {
     
     // Formatage
     $args = func_get_args();
-    $args[0] = self::tr($msg);
     unset($args[1]);
-    $msg = call_user_func_array("sprintf", $args);
+    $msg = call_user_func_array(array("CAppUI", "tr"), $args);
     $msg = nl2br($msg);
 
     echo "\n<div class='$class'>$msg</div>";
