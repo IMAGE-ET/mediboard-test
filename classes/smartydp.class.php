@@ -496,7 +496,7 @@ class CSmartyDP extends Smarty {
     $vars     = $params["smarty_include_vars"];
     
     // Only at debug time
-    if (!CAppUI::conf("debug") || 
+    if (!CAppUI::pref("INFOSYSTEM") || 
         isset($params["smarty_include_vars"]['nodebug']) ||
         in_array(basename($tpl_file), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::_smarty_include($params);
@@ -519,7 +519,7 @@ class CSmartyDP extends Smarty {
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
     // Only at debug time
-    if (!CAppUI::conf("debug") || 
+    if (!CAppUI::pref("INFOSYSTEM") || 
         isset($this->_tpl_vars['nodebug']) ||
         in_array(basename($resource_name), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::display($resource_name, $cache_id, $compile_id);
