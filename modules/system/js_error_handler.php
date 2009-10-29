@@ -20,10 +20,11 @@ foreach($stack as $trace) {
 	if (preg_match("/(?<function>.*)\((?<args>.*)\)@(?<file>.*):(?<line>.*)/", $trace, $matches)) {
 		if (empty($matches["function"]))
 		  $matches["function"] = "[anonymous]";
-			
-		mbTrace($matches);
 		$stackTrace[] = $matches;
 	}
 }
+
+if (!count($stackTrace))
+	$errorMsg .= " Extended message: ".implode(" -- \n", $stack);
 
 errorHandler(E_JS_ERROR, $errorMsg, $url, $lineNumber, null, $stackTrace);
