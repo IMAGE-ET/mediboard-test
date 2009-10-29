@@ -1,5 +1,5 @@
 <?php
-$locales['module-dPbloc-court'] = 'Planning bloc';
+$locales['module-dPbloc-court'] = 'Bloc opératoire';
 $locales['module-dPbloc-long'] = 'Planning du bloc opératoire';
 $locales['config-dPbloc-CPlageOp-hours_start'] = 'Heure de début';
 $locales['config-dPbloc-CPlageOp-hours_stop'] = 'Heure de fin';
