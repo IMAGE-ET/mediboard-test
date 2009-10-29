@@ -83,6 +83,15 @@ Main.add(function(){
     <th>Title 3</th>
     <th>Title 4</th>
   </tr>
+  <tr >
+    <td colspan="4" class="ok">ok</td>
+  </tr>
+  <tr >
+    <td colspan="4" class="warning">warning</td>
+  </tr> 
+  <tr >
+    <td colspan="4" class="error">error</td>
+  </tr>  
   <tr>
     <td>Cell 1 - 1</td>
     <td>Cell 1 - 2</td>
