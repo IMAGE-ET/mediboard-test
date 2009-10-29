@@ -8,6 +8,8 @@ sMbPluginsPath = sMbPath + "modules/dPcompteRendu/fcke_plugins/" ;
 FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$version.build}}";
 FCKConfig.EnterMode = 'br';
 FCKConfig.Debug = false;
+FCKConfig.FirefoxSpellChecker = true;
+FCKConfig.BrowserContextMenuOnCtrl = true;
 
 {{if $templateManager->printMode}}
 FCKConfig.ToolbarSets["Default"] = [
