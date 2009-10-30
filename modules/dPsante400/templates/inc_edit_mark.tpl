@@ -9,14 +9,12 @@
 
 <tr>
   {{if $mark->_id}}
-  <th class="category modify" colspan="2">
-    <a style="float:right;" href="#" onclick="guid_log('{{$mark->_guid}}')">
-      <img src="images/icons/history.gif" alt="historique" />
-    </a>
+  <th class="title modify" colspan="2">
+    {{mb_include module=system template=inc_object_history object=$mark}}
     {{tr}}CTriggerMark-title-modify{{/tr}} '{{$mark}}'
   </th>
   {{else}}
-  <th class="category" colspan="2">
+  <th class="title" colspan="2">
     {{tr}}CTriggerMark-title-create{{/tr}}
   </th>
   {{/if}}

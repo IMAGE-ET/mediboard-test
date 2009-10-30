@@ -317,13 +317,10 @@ class COperation extends CCodable {
       $this->_pause_min  = intval(substr($this->pause, 3, 2)); 
     }
       
-    if ($this->type_anesth != null) {
-      $this->_ref_type_anesth = new CTypeAnesth;
-      $this->_ref_type_anesth->load($this->type_anesth);;
-      $this->_lu_type_anesth = $this->_ref_type_anesth->name;
-    }
+    $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
+    $this->_lu_type_anesth = $this->_ref_type_anesth->name;
     
-    if($this->debut_op && $this->fin_op && $this->fin_op>$this->debut_op){
+    if($this->debut_op && $this->fin_op && $this->fin_op > $this->debut_op){
       $this->_duree_interv = mbSubTime($this->debut_op,$this->fin_op);
     }
     if($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle){

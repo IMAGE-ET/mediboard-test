@@ -147,9 +147,8 @@ Main.add(function () {
   <tr>
     {{if $consult->_id}}
       <th class="title modify" colspan="5">
-        <a style="float:right;" href="#" onclick="guid_log('{{$consult->_guid}}')">
-          <img src="images/icons/history.gif" alt="historique" />
-        </a>
+        {{mb_include module=system template=inc_object_idsante400 object=$consult}}
+        {{mb_include module=system template=inc_object_history object=$consult}}
         {{tr}}CConsultation-title-modify{{/tr}}
         {{if $pat->_id}}de {{$pat->_view}}{{/if}}
         par le Dr {{$chir}}

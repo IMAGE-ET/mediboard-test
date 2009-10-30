@@ -25,10 +25,8 @@
       {{$object->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
       
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
-			
-      <a style="float:right;" href="#nothing" onclick="guid_log('{{$object->_guid}}')">
-        <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
-      </a>
+      {{mb_include module=system template=inc_object_history object=$object}}
+
       <a style="float:right" class="action" title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
        <img src="images/icons/edit.png" alt="modifier" />
       </a>

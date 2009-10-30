@@ -17,15 +17,14 @@
 <table class="form">
 
 <tr>
-  <th class="category" colspan="2">
   {{if $message->_id}}
+  <th class="title modify" colspan="2">
     {{mb_include module=system template=inc_object_idsante400 object=$message}}
+    {{mb_include module=system template=inc_object_history object=$message}}
 
-    <a style="float:right;" href="#historique" onclick="guid_log('{{$message->_guid}}')">
-       <img src="images/icons/history.gif" alt="historique" />
-    </a>
     {{tr}}CMessage-title-modify{{/tr}} '{{$message}}'
   {{else}}
+  <th class="title" colspan="2">
     {{tr}}CMessage-title-create{{/tr}}
   {{/if}}
   </th>

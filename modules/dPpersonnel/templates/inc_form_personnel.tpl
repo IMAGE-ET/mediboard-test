@@ -21,9 +21,7 @@
   {{if $personnel->_id}}
     <th class="title modify" colspan="2">
       {{mb_include module=system template=inc_object_idsante400 object=$personnel}}
-      <a style="float:right;" href="#nothing" onclick="guid_log('{{$personnel->_guid}}')">
-      <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-      </a>
+      {{mb_include module=system template=inc_object_history object=$personnel}}
       {{tr}}CPersonnel-title-modify{{/tr}} '{{$personnel}}'
     </th>
     {{else}}
