@@ -17,7 +17,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     parent::__construct();
   }
   
-  function generateFromOperation($mbSejour, $referent) {  
+  function generateFromOperation($mbVenue, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -27,33 +27,33 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       "store"  => "modification",
       "delete" => "suppression"
     );
-    $this->addAttribute($venuePatient, "action", $actionConversion[$mbSejour->_ref_last_log->type]);
+    $this->addAttribute($venuePatient, "action", $actionConversion[$mbVenue->_ref_last_log->type]);
     
     $patient = $this->addElement($venuePatient, "patient");
     // Ajout du patient   
-    $this->addPatient($patient, $mbSejour->_ref_patient, null, $referent);
+    $this->addPatient($patient, $mbVenue->_ref_patient, null, $referent);
     
     $venue = $this->addElement($venuePatient, "venue"); 
     // Ajout de la venue   
-    $this->addVenue($venue, $mbSejour, null, $referent);
+    $this->addVenue($venue, $mbVenue, null, $referent);
     
     // Ajout des attributs du séjour
     $this->addAttribute($venue, "confidentiel", "non");
     
     // Etat d'une venue : encours, clôturée ou préadmission
-    if (!$mbSejour->entree_reelle && !$mbSejour->sortie_reelle) {
+    if (!$mbVenue->entree_reelle && !$mbVenue->sortie_reelle) {
       $etat = "préadmission";
     }
-    else if ($mbSejour->entree_reelle && !$mbSejour->sortie_reelle) {
+    else if ($mbVenue->entree_reelle && !$mbVenue->sortie_reelle) {
       $etat = "encours";
     }
-    else if ($mbSejour->entree_reelle && $mbSejour->sortie_reelle) {
+    else if ($mbVenue->entree_reelle && $mbVenue->sortie_reelle) {
       $etat = "clôturée";
     }
     $this->addAttribute($venue, "etat", $etat);
     
-    $this->addAttribute($venue, "facturable", ($mbSejour->facturable)  ? "oui" : "non");
-    $this->addAttribute($venue, "declarationMedecinTraitant", ($mbSejour->_adresse_par_prat)  ? "oui" : "non");
+    $this->addAttribute($venue, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
+    $this->addAttribute($venue, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
         
     // Traitement final
     $this->purgeEmptyElements();

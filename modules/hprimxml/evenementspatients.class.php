@@ -225,7 +225,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function mappingVenue($node, $mbVenue) {    
-    $mbVenue = $this->getAttributesVenue($node, $mbVenue);
     $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = $this->getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
@@ -237,13 +236,28 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   function getAttributesVenue($node, $mbVenue) {
   	$xpath = new CMbXPath($this, true);
     
-    $xpath->queryAttributNode($query, $node, "action"); 
+    $attributes = array();
+    $attributes['confidentiel'] = $xpath->queryAttributNode($query, $node, "confidentiel"); 
+    $attributes['etat'] = $xpath->queryAttributNode($query, $node, "etat"); 
+    $attributes['facturable'] = $xpath->queryAttributNode($query, $node, "facturable"); 
+    $attributes['declarationMedecinTraitant'] = $xpath->queryAttributNode($query, $node, "declarationMedecinTraitant"); 
+    
+    return $attributes;
   }
   
   function getNatureVenue($node, $mbVenue) {
     $xpath = new CMbXPath($this, true);
     
+    $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
     
+    $attrNatureVenueHprim = array (
+      "hsp"  => "CSejour",
+      "cslt" => "CConsultation",
+    );
+    
+    return $mbVenue;
+    $this->addAttribute($natureVenueHprim, "valeur", (($mbVenue->_class_name == "CSejour") && ($mbVenue->type == "seances")) ? "sc" : $attrNatureVenueHprim[$mbVenue->_class_name]);
+     
   }
   
   function getEntree($node, $mbVenue) {
