@@ -100,23 +100,26 @@ if ($userSel->user_id) {
   $userSel->loadRefFunction();
   $_aide = new CAideSaisie();
   
-  $where = array("user_id" => "= '$userSel->user_id'");
+  $where["user_id"] = "= '$userSel->user_id'";
   $aidesPrat = $_aide->loadlist($where, $order);
   foreach($aidesPrat as $aide) {
     $aide->loadRefsFwd();
   }
+  unset($where["user_id"]);
 
-  $where = array("function_id" => "= '$userSel->function_id'");
+  $where["function_id"] = "= '$userSel->function_id'";
   $aidesFunc = $_aide->loadlist($where, $order);
   foreach($aidesFunc as $aide) {
     $aide->loadRefsFwd();
   }
+  unset($where["function_id"]);
 
-  $where = array("group_id" => "= '{$userSel->_ref_function->group_id}'");
+  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
   $aidesEtab = $_aide->loadlist($where, $order);
   foreach($aidesEtab as $aide) {
     $aide->loadRefsFwd();
   }
+  unset($where["group_id"]);
 }
 
 // Aide sélectionnée
