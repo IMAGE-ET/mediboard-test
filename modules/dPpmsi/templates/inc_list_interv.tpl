@@ -9,7 +9,7 @@
   
 	<td>
   	{{assign var=sejour value=$_operation->_ref_sejour}}
-    [{{$sejour->_num_dossier}}]
+    <strong>[{{$sejour->_num_dossier}}]</strong>
   </td>
   
 	<td class="text">
@@ -19,8 +19,8 @@
   <td class="text">
     {{assign var=patient value=$sejour->_ref_patient}}
     <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"> 
-			{{$patient}}
 			[{{$patient->_IPP}}]
+      {{$patient}}
     </a>
   </td>
 
