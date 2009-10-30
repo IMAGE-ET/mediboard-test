@@ -435,7 +435,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
             $newPatient->loadLogs();
             $modified_fields = "";
-            if ($newPatient->_ref_last_log) {
+            if (is_array($newPatient->_ref_last_log->_fields)) {
               foreach ($newPatient->_ref_last_log->_fields as $field) {
                 $modified_fields .= "$field \n";
               }

@@ -84,7 +84,7 @@ if (isset($t["acquittement_valide"])) {
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);
 
-$order = "date_echange DESC";
+$order = "date_production DESC";
 $listEchangeHprim    = $itemEchangeHprim->loadList($where, $order, "$page, 20");
   
 foreach($listEchangeHprim as $_echange_hprim) {

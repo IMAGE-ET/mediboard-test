@@ -433,7 +433,12 @@ class CSetupmediusers extends CSetup {
 							 ADD INDEX (`spec_cpam_id`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.31";
+     $this->makeRevision("0.31");
+      
+     $sql = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES(80,'SANTE PUBLIQUE ET MEDECINE SOCIALE','');";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.32";
   }
 }
 ?>
