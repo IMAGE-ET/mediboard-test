@@ -17,9 +17,10 @@ $stackTrace = array();
 $stack = explode("\n", $stack);
 
 foreach($stack as $trace) {
-	if (preg_match("/(?<function>.*)\((?<args>.*)\)@(?<file>.*):(?<line>.*)/", $trace, $matches)) {
-		if (empty($matches["function"]))
+	if (preg_match("/(?P<function>.*)\((?P<args>.*)\)@(?P<file>.*):(?P<line>.*)/", $trace, $matches)) {
+		if (empty($matches["function"])) {
 		  $matches["function"] = "[anonymous]";
+    }
 		$stackTrace[] = $matches;
 	}
 }
