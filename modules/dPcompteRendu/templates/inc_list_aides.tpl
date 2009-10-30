@@ -1,5 +1,5 @@
 {{if $can->admin}}
-  <a href="?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}{{foreach from=$aides item=_aide}}&amp;id[]={{$_aide->_id}}{{/foreach}}" 
+  <a href="?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}{{foreach from=$aides item=_aide}}&amp;id[]={{$_aide->_id}}{{/foreach}}" 
      target="_blank"
      class="button hslip">Exporter au format CSV</a>
   

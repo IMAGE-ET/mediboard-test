@@ -13,10 +13,11 @@ $can->needsRead();
 
 $list  = mbGetValueFromGet('id', array());
 $owner = mbGetValueFromGet('owner');
+$object_class = mbGetValueFromGet('object_class');
 
 $out = fopen('php://output', 'w');
 header('Content-Type: application/csv');
-header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - $owner" : '') .'.csv"');
+header('Content-Disposition: attachment; filename="Aides saisie'. ($owner ? " - $owner" : '') . ($object_class ? " - ".CAppUI::tr($object_class) : '') . '.csv"');
 
 $aide = new CAideSaisie();
 fputcsv($out, array_keys($aide->getCSVFields()));
