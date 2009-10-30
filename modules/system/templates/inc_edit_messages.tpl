@@ -19,7 +19,7 @@
 <tr>
   <th class="category" colspan="2">
   {{if $message->_id}}
-    <div class="idsante400" id="{{$message->_guid}}"></div>
+    {{mb_include module=system template=inc_object_idsante400 object=$message}}
 
     <a style="float:right;" href="#historique" onclick="guid_log('{{$message->_guid}}')">
        <img src="images/icons/history.gif" alt="historique" />

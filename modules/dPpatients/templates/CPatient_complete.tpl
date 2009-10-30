@@ -2,7 +2,7 @@
   <tr>
     <th class="title" colspan="2">
     
-      <div class="idsante400" id="CPatient-{{$object->_id}}"></div>
+      {{mb_include module=system template=inc_object_idsante400 object=$object}}
      
       <a style="float:right;" href="#nothing" onclick="view_history_patient({{$object->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
@@ -18,7 +18,7 @@
       </a>
       {{/if}}
       
-      <div style="float:left;" class="noteDiv CPatient-{{$object->_id}}">
+      <div style="float:left;" class="noteDiv {{$object->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 

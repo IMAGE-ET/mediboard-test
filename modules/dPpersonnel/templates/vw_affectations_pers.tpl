@@ -236,7 +236,7 @@ Main.add(function () {
       <tr>
         {{if $affectation->_id}}
 	    <th class="title modify" colspan="2">
-	      <div class="idsante400" id="{{$affectation->_guid}}"></div>
+        {{mb_include module=system template=inc_object_idsante400 object=$affectation}}
 	      <a style="float:right;" href="#nothing" onclick="guid_log('{{$affectation->_guid}}')">
 		    <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
 		  </a>

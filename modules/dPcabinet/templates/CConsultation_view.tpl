@@ -1,19 +1,7 @@
-<script type="text/javascript">
-
-function newExam(sAction, consultation_id) {
-  if (sAction) {
-    var url = new Url;
-    url.setModuleAction("dPcabinet", sAction);
-    url.addParam("consultation_id", consultation_id);
-    url.popup(900, 600, "Examen");  
-  }
-}
-
-</script>
 
 <table class="tbl tooltip">
   <tr>
-    <th>
+    <th class="text">
       {{$object->_view}}
     </th>
   </tr>
@@ -21,7 +9,7 @@ function newExam(sAction, consultation_id) {
     <td>
       <strong>Date:</strong>
       <em>
-      	le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}}
+      	le {{$object->_ref_plageconsult->date|date_format:$dPconfig.longdate}}
       	à {{mb_value object=$object field=heure}} 
       </em>
       <br />
@@ -30,26 +18,40 @@ function newExam(sAction, consultation_id) {
       {{if $object->motif}}
         <br />
         <strong>Motif:</strong>
-        <em>{{$object->motif|nl2br|truncate}}</em>
+        <em>{{$object->motif|truncate}}</em>
       {{/if}}
       {{if $object->rques}}
         <br />
         <strong>Remarques:</strong>
-        <em>{{$object->rques|nl2br|truncate}}</em>
+        <em>{{$object->rques|truncate}}</em>
       {{/if}}
       {{if $object->examen}}
         <br />
         <strong>Examens:</strong>
-        <em>{{$object->examen|nl2br|truncate}}</em>
+        <em>{{$object->examen|truncate}}</em>
       {{/if}}
       {{if $object->traitement}}
         <br />
         <strong>Traitement:</strong>
-        <em>{{$object->traitement|nl2br|truncate}}</em>
+        <em>{{$object->traitement|truncate}}</em>
       {{/if}}
-      {{if $object->_ref_examaudio->examaudio_id}}
+
+      {{assign var=examaudio value=$object->_ref_examaudio}}
+      {{if $examaudio->_id}}
+			<script type="text/javascript">
+			
+			newExam = function(sAction, consultation_id) {
+				if (sAction) {
+					var url = new Url("dPcabinet", sAction);
+					url.addParam("consultation_id", consultation_id);
+					url.popup(900, 600, "Examen");  
+				}
+			}
+			
+			</script>
+
         <br />
-        <a href="#" onclick="newExam('exam_audio', {{$object->consultation_id}})">
+        <a href="#{{$examaudio->_guid}}" onclick="newExam('exam_audio', {{$object->consultation_id}})">
           <strong>Audiogramme</strong>
         </a>
       {{/if}}

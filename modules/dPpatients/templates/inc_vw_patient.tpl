@@ -58,13 +58,13 @@ Document.refreshList = function(){
       </div>
       {{/if}}
 
-      <div class="idsante400" id="{{$patient->_class_name}}-{{$patient->_id}}"></div>
+      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
 
       <a style="float:right;" href="#" onclick="view_history_patient({{$patient->_id}})">
         <img src="images/icons/history.gif" alt="historique" />
       </a>
 
-      <div style="float:left;" class="noteDiv {{$patient->_class_name}}-{{$patient->_id}}">
+      <div style="float:left;" class="noteDiv {{$patient->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 
@@ -74,7 +74,9 @@ Document.refreshList = function(){
   </tr>
 
   <tr>
-    <td rowspan="3" style="width: 0.1%;">{{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="64"}}</td>
+    <td rowspan="3" style="width: 0.1%;">
+		  {{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="64"}}
+		</td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
     <th>{{mb_label object=$patient field="adresse"}}</th>
