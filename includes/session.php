@@ -21,7 +21,7 @@ session_register("AppUI");
   
 // Check if session has previously been initialised
 if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
-  $_SESSION["AppUI"] = new CAppUI();
+  $_SESSION["AppUI"] = CAppUI::init();
 }
 
 CAppUI::$instance =& $_SESSION["AppUI"];
