@@ -179,5 +179,7 @@ $locales['browser.opera'] = 'Opera';
 $locales['browser.chrome'] = 'Google Chrome';
 $locales['browser.safari'] = 'Apple safari';
 $locales['browser.mozilla'] = 'Mozilla';
-$locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué la popup "%s", veuillez la débloquer.'
+$locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué la popup "%s", veuillez la débloquer.';
+$locales['Export'] = 'Exporter';
+$locales['Import'] = 'Importer';
 ?>

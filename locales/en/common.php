@@ -179,4 +179,7 @@ $locales['browser.opera'] = 'Opera';
 $locales['browser.chrome'] = 'Google Chrome';
 $locales['browser.safari'] = 'Apple safari';
 $locales['browser.mozilla'] = 'Mozilla';
+$locales['Export'] = 'Export';
+$locales['Popup blocker alert'] = '';
+$locales['Import'] = 'Import';
 ?>

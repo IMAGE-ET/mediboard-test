@@ -147,7 +147,7 @@ var WaitingMessage = {
     element = $(element);
     
     var cover = new Element("div").addClassName('ajax-loading').hide(),
-		    descendant = $(element).down();
+		    descendant = element.down();
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     if (descendant && descendant.tagName.match(/^tr$/i)) {
@@ -187,9 +187,9 @@ var AjaxResponse = {
     if (window.children['login'] && window.children['login'].closed) window.children['login'] = null;
 
     if (!window.children['login']) {
-      loginUrl = new Url;
-      loginUrl.addParam("dialog", 1);
-      loginUrl.pop(610, 300, "login");
+      var url = new Url;
+      url.addParam("dialog", 1);
+      url.pop(610, 300, "login");
     }
   },
   
@@ -326,19 +326,17 @@ var Console = {
   
     sLabel = sLabel || "Value";
 
-    var oDefault = {
+    oOptions = Object.extend({
       level: 1,
       current: 0
-    };
-      
-    Object.extend(oDefault, oOptions);
+    }, oOptions);
   
-    if (oDefault.current > oDefault.level) {
+    if (oOptions.current > oOptions.level) {
       return;
     }
             
     try {
-      this.trace(sLabel + ": ", "key", oDefault.current);
+      this.trace(sLabel + ": ", "key", oOptions.current);
       
       if (oValue === null) {
         this.trace("null", "value");
@@ -351,16 +349,16 @@ var Console = {
           break;
         
         case "object":
-          oDefault.current++;
+          oOptions.current++;
           if (oValue instanceof Array) {
             this.trace("[Array]", "value");
             oValue.each(function(value) { 
-              Console.debug(value, "", oDefault);
+              Console.debug(value, "", oOptions);
             } );
           } else {
             this.trace(oValue, "value");
             $H(oValue).each(function(pair) {
-              Console.debug(pair.value, pair.key, oDefault);
+              Console.debug(pair.value, pair.key, oOptions);
               
             } );
           }
@@ -387,31 +385,29 @@ var Console = {
   debugElement: function(oElement, sLabel, oOptions) {
     sLabel = sLabel || "Element";
     
-    var oDefault = {
+    oOptions = Object.extend({
       level: 1,
       current: 0
-    };
-      
-    Object.extend(oDefault, oOptions);
+    }, oOptions);
     
     oElement = $(oElement);
     
     var oNoRecursion = { 
-      level: oDefault.current, 
-      current: oDefault.current
+      level: oOptions.current, 
+      current: oOptions.current
     };
     
     this.debug(oElement, sLabel, oNoRecursion);
 
-    oDefault.current++;
+    oOptions.current++;
 
-    if (oDefault.current > oDefault.level) {
+    if (oOptions.current > oOptions.level) {
       return;
     }
             
     oNoRecursion = { 
-      level: oDefault.current, 
-      current: oDefault.current
+      level: oOptions.current, 
+      current: oOptions.current
     };
 
     // Text nodes don't have tagName
@@ -424,11 +420,11 @@ var Console = {
     }
     
     $A(oElement.attributes).each( function(oAttribute) {
-      Console.debug(oAttribute.nodeValue, "Attributes." + oAttribute.nodeName, oDefault);
+      Console.debug(oAttribute.nodeValue, "Attributes." + oAttribute.nodeName, oOptions);
     } );
 
     $A(oElement.childNodes).each( function(oElement) {
-      Console.debugElement(oElement, "Element", oDefault)
+      Console.debugElement(oElement, "Element", oOptions)
     } );
   },
   
@@ -672,7 +668,7 @@ var ViewPort = {
  */
 var TokenField = Class.create({
   initialize: function(element, options) {
-    this.element = element;
+    this.element = $(element);
     
     this.options = Object.extend({
       onChange: Prototype.emptyFunction,
@@ -798,8 +794,8 @@ var Note = Class.create({
 // *******
 var notWhitespace   = /\S/;
 Dom = {
-  writeElem : function(elem_replace_id,elemReplace){
-    elem = $(elem_replace_id);
+  writeElem : function(elem, elemReplace){
+    elem = $(elem);
     while (elem.firstChild) {
       elem.removeChild(elem.firstChild);
     }
