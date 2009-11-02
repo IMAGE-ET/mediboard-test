@@ -251,8 +251,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   static function getNatureVenue($node, $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    $attributes = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
-    mbTrace($attributes, "attributes", true);
+    $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
+
     $attrNatureVenueHprim = array (
       "hsp"  => "comp",
       "cslt" => "consult",
@@ -300,7 +300,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     } else if ($attributes['etat'] == "clôturée") {
       $mbVenue->sortie_reelle = "$date $heure";
     }
-    
+    mbTrace($attributes, "attributs", true);
     
     return $mbVenue;
   }
