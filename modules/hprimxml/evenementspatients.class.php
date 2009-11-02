@@ -90,7 +90,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $mbPatient->sexe = $sexeConversion[$sexe];
     
     // Récupération du typePersonne
-    $mbPatient = $this->getPersonne($personnePhysique,$mbPatient);
+    $mbPatient = self::getPersonne($personnePhysique,$mbPatient);
     
     $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
     $mbPatient->naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
@@ -175,7 +175,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbPatient;
   }
   
-  static function checkSimilarPatient($mbPatient, $xmlPatient) {
+  function checkSimilarPatient($mbPatient, $xmlPatient) {
     $xpath = new CMbXPath($this, true);
         
     // Création de l'element personnePhysique
@@ -187,7 +187,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbPatient->checkSimilar($nom, $prenom);
   }
   
-  static function getIPPPatient($query) { 
+  function getIPPPatient($query) { 
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $query_evt = "/hprim:evenementsPatients/hprim:evenementPatient";
@@ -202,6 +202,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
   function getEvenementPatientXML() { 
     $xpath = new CMbXPath($this, true);
+    
+    $data = array();
     
     $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
 
