@@ -228,6 +228,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = $this->getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
+    $mbVenue = $this->getPlacement($node, $mbVenue);
     $mbVenue = $this->getSortie($node, $mbVenue);
     
     return $mbVenue;
@@ -248,28 +249,58 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   function getNatureVenue($node, $mbVenue) {
     $xpath = new CMbXPath($this, true);
     
-    $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
-    
+    $attributes = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
+    mbTrace($attributes, "attributes", true);
     $attrNatureVenueHprim = array (
-      "hsp"  => "CSejour",
-      "cslt" => "CConsultation",
+      "hsp"  => "comp",
+      "cslt" => "consult",
+      "sc" => "seances",
     );
     
+    $mbVenue->type =  $attrNatureVenueHprim[$nature];
+    
     return $mbVenue;
-    $this->addAttribute($natureVenueHprim, "valeur", (($mbVenue->_class_name == "CSejour") && ($mbVenue->type == "seances")) ? "sc" : $attrNatureVenueHprim[$mbVenue->_class_name]);
-     
   }
   
   function getEntree($node, $mbVenue) {
+    $xpath = new CMbXPath($this, true);
     
+    $entree = $xpath->queryUniqueNode("hprim:entree", $node);
+  
+    $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $node);
+    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $node);
+    $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
+    
+    $mbVenue->entree_prevue = "$date $heure";
+    
+    return $mbVenue;
   }
   
   function getMedecins($node, $mbVenue) {
     
   }
   
-  function getSortie($node, $mbVenue) {
+  function getPlacement($node, $mbVenue) {
     
+  }
+  
+  function getSortie($node, $mbVenue) {
+    $xpath = new CMbXPath($this, true);
+    
+    $entree = $xpath->queryUniqueNode("hprim:sortie", $node);
+  
+    $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $node);
+    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $node);
+    
+    $attributes = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
+    if (($attributes['etat'] == "préadmission") || ($attributes['etat'] == "encours")) {
+      $mbVenue->sortie_prevue = "$date $heure";
+    } else if ($attributes['etat'] == "clôturée") {
+      $mbVenue->sortie_reelle = "$date $heure";
+    }
+    
+    
+    return $mbVenue;
   }
 }
 ?>

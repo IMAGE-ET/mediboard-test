@@ -182,7 +182,7 @@ class CSejour extends CCodable {
     $specs["patient_id"]          = "ref notNull class|CPatient seekable";
     $specs["praticien_id"]        = "ref notNull class|CMediusers seekable";
     $specs["group_id"]            = "ref notNull class|CGroups";
-    $specs["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg default|ambu";
+    $specs["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
     $specs["modalite"]            = "enum notNull list|office|libre|tiers default|libre";
     $specs["annule"]              = "bool";
     $specs["chambre_seule"]       = "bool";

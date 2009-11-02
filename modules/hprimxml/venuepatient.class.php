@@ -197,9 +197,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $newSejour, $data) {
-    $mutex = new CMbSemaphore("sip-ipp");
-    
+  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {    
     // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
     if (!$data['idSource'] && !$data['idCible'] && !$data['idSourceVenue'] && !$data['idCibleVenue']) {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
@@ -213,18 +211,21 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       
       return $messageAcquittement;
     }
-    // Traitement du patient
     
-    // Mapping du patient
-    $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-    mbTrace($newPatient, "Patient", true);
-    //$msgPatient = $newPatient->store();
-    //$newPatient->loadLogs();
+    // Traitement du patient
+    $enregistrementPatient = new CHPrimXMLEnregistrementPatient();
+    $enregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    mbTrace($echange_hprim, "echange", true);
     
     // Traitement de la venue
-    // Mapping du patient
-    $newSejour = $this->mappingVenue($data['venue'], $newSejour);
-    mbTrace($newSejour, "Sejour", true);
+    $newVenue = CSejour();
+    
+    // Si CIP
+    if (!CAppUI::conf('sip server')) {
+      
+    }
+    $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+    mbTrace($newVenue, "Traitement venue", true);
   }
 }
 

@@ -902,4 +902,5 @@ $locales['COperation-operations'] = 'Interventions planifiées';
 $locales['COperation-facture'] = 'Facturé';
 $locales['COperation-facture-court'] = 'Fact.';
 $locales['COperation-facture-desc'] = 'Actes envoyés pour l\'intervention';
+$locales['CSejour.type.consult'] = 'Consultation';
 ?>

@@ -298,6 +298,10 @@ $locales['config-dPurgences-sortie_prevue-desc'] = 'Initialiser la sortie prévue
 $locales['config-dPurgences-sortie_prevue-sameday'] = 'Le même jour (23h59)';
 $locales['config-dPurgences-default_view-0'] = '';
 $locales['config-dPurgences-sortie_prevue-h24'] = 'H +24';
-$locales['config-dPurgences-only_prat_reponsable'] = 'Responsable praticien';
-$locales['config-dPurgences-only_prat_reponsable-desc'] = 'Choix d\'un praticien (et non un infirmier) pour le RPU';
+$locales['config-dPurgences-only_prat_responsable'] = 'Responsable praticien';
+$locales['config-dPurgences-only_prat_responsable-desc'] = 'Choix d\'un praticien (et non un infirmier) pour le RPU';
+$locales['config-dPurgences-programme_rpu_view'] = '';
+$locales['config-dPurgences-programme_rpu_view-desc'] = '';
+$locales['config-dPurgences-reponsable_id_notNull'] = '';
+$locales['config-dPurgences-reponsable_id_notNull-desc'] = '';
 ?>
