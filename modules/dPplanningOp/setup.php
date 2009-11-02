@@ -824,7 +824,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD `facture` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);  
     
-    $this->mod_version = "1.00";
+     $this->makeRevision("1.00");
+    $sql = "ALTER TABLE `sejour` 
+              CHANGE `type` `type` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult') NOT NULL;";
+    $this->addQuery($sql);  
+
+    $this->mod_version = "1.01";
   }
 }
 ?>

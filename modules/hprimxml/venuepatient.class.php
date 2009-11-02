@@ -70,7 +70,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $data['action'] = $this->getActionEvenement("hprim:venuePatient", $evenementPatient);
 
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $venuePatient);
-    $data['venue'] = $xpath->queryUniqueNode("hprim:voletMedical", $venuePatient);
+    $data['venue'] = $xpath->queryUniqueNode("hprim:venue", $venuePatient);
 
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible'] = $this->getIdCible($data['patient']);
@@ -214,6 +214,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     // Traitement du patient
     $enregistrementPatient = new CHPrimXMLEnregistrementPatient();
+    mbTrace($data, "data", true);
     $enregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
     mbTrace($echange_hprim, "echange", true);
     
