@@ -294,7 +294,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $node);
     $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $node);
     
-    $attributes = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
+    $attributes = self::getAttributesVenue($node, $mbVenue);
     if (($attributes['etat'] == "préadmission") || ($attributes['etat'] == "encours")) {
       $mbVenue->sortie_prevue = "$date $heure";
     } else if ($attributes['etat'] == "clôturée") {

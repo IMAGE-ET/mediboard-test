@@ -213,20 +213,21 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
     
     // Traitement du patient
-    $enregistrementPatient = new CHPrimXMLEnregistrementPatient();
-    mbTrace($data, "data", true);
-    $enregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
-    mbTrace($echange_hprim, "echange", true);
+    $domEnregistrentPatient = new CHPrimXMLEnregistrementPatient();
+    $messageAcquittement = $domEnregistrentPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    if ($echange_hprim->statut_acquittement != "OK") {
+      return $messageAcquittement;
+    }
     
     // Traitement de la venue
-    $newVenue = CSejour();
-    
+    $newVenue = new CSejour();
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       
     }
+    mbTrace($newVenue, "Traitement venue avant", true);
     $newVenue = $this->mappingVenue($data['venue'], $newVenue);
-    mbTrace($newVenue, "Traitement venue", true);
+    mbTrace($newVenue, "Traitement venue après", true);
   }
 }
 
