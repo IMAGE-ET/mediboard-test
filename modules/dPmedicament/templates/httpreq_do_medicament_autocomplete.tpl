@@ -27,9 +27,9 @@
 			{{/if}}
 			</strong>
 			<br />
-			{{if !$search_libelle_long && $search_by_cis}}
-			<small><span style="opacity: 0.5">{{$produit->forme_galenique}}</span></small>
-			{{/if}}
+			{{* if !$search_libelle_long && $search_by_cis *}}
+			<small><span style="opacity: 0.5">{{if $produit->dci}}DCI: {{$produit->dci|upper|replace:$token_search:$token_replace}} - {{/if}}{{$produit->forme_galenique}}</span></small>
+			{{* /if *}}
 			{{if $produit->Commentaire}}
 			<div style="padding-left: 1em">
 			  ({{$produit->Commentaire|replace:$token_search:$token_replace}}

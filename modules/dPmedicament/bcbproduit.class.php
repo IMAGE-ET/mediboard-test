@@ -64,7 +64,8 @@ class CBcbProduit extends CBcbObject {
   var $_ref_ATC_2_code    = null;
 
   var $_prises = null;
-
+  var $_libelle_dci = null;
+	
 	static $loaded = array();
 	static $useCount = 0;
     
@@ -132,13 +133,8 @@ class CBcbProduit extends CBcbObject {
 	    $this->isInT2A();
 	    $this->getGenerique();
 	    $this->getReferent();
-
-	    //$this->loadRefPosologies();
-	    //$this->loadLibellePresentation();
-      //$this->loadUnitePresentation();
     }
     $this->isInLivret();
-    //$this->loadVoies();
   }
   
   
@@ -160,8 +156,7 @@ class CBcbProduit extends CBcbObject {
 		$query .= ", PRODUITS_IFP.Produit_supprime, PRODUITS_IFP.Hospitalier, 
 										 IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_FORMES_GALENIQUES.LIBELLE_FORME_GALENIQUE, IDENT_PRODUITS.CODECIS, produits_codes_acl.CODE_FICHE ";
 		$query .= " FROM (PRODUITS_IFP, IDENT_FORMES_GALENIQUES ";
-		
-		
+
 		if ($this->distObj->LivretTherapeutique > 0){
 		  $query .= ", LivretTherapeutique) ";
 		} else {
@@ -243,6 +238,7 @@ class CBcbProduit extends CBcbObject {
 				$Temp->forme_galenique = $row[9];
 				$Temp->code_cis = $row[10];
 				$Temp->code_fiche = $row[11];
+				$Temp->dci = "";
 				$key = (($search_by_cis == 1) && ($Temp->code_cis || $Temp->CodeUCD)) ? ($Temp->code_cis ? $Temp->code_cis : "_$Temp->CodeUCD" ) : $Temp->CodeCIP;
 				$this->distObj->TabProduit[$key] = $Temp;
 				$nbr--;
@@ -584,15 +580,6 @@ class CBcbProduit extends CBcbObject {
     global $g;
     
     $ds = CBcbObject::getDataSource();
-    /*
-    $query = "SELECT * 
-              FROM `IDENT_PRODUITS`
-							LEFT JOIN PRODUITS_IFP ON IDENT_PRODUITS.CODE_CIP = PRODUITS_IFP.CODE_CIP
-							LEFT JOIN LIVRETTHERAPEUTIQUE ON IDENT_PRODUITS.CODE_CIP = LivretTherapeutique.CODECIP
-							WHERE `CODECIS` = '$code_cis'
-							AND PRODUITS_IFP.Produit_supprime is NULL 
-			        AND LivretTherapeutique.CodeEtablissement='$g'";
-*/
     $query = "SELECT * 
               FROM `IDENT_PRODUITS`, LIVRETTHERAPEUTIQUE, PRODUITS_IFP
 							WHERE `CODECIS` = '$code_cis'
@@ -619,11 +606,7 @@ class CBcbProduit extends CBcbObject {
     if($livretTherapeutique){
       $this->distObj->LivretTherapeutique = $g;  
     }
-    //if($search_libelle_long){
-      $this->SearchEx($text, 0, $nb_max, 0, $search_by_cis, $hors_specialite);
-    //} else {
-    //  $this->distObj->Search($text, 0, $nb_max, 0);
-    //}
+    $this->SearchEx($text, 0, $nb_max, 0, $search_by_cis, $hors_specialite);
     return $this->distObj->TabProduit;
   }
   
@@ -631,13 +614,8 @@ class CBcbProduit extends CBcbObject {
   // Chargement de toutes les posologies d'un produit
   function loadRefPosologies(){
     $ds = CBcbObject::getDataSource();
-    $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
-    /*
-    $query = "SELECT * FROM `POSO_PRODUITS` 
-              LEFT JOIN IDENT_PRODUITS ON  IDENT_PRODUITS.CODE_CIP = POSO_PRODUITS.CODE_CIP
-              WHERE IDENT_PRODUITS.CODECIS = '$this->code_cis' ORDER BY `NO_POSO` ASC;";
-*/    
-$posologies = $ds->loadList($query);
+    $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;"; 
+    $posologies = $ds->loadList($query);
     
     // Chargement de chaque posologie
     $this->_ref_posologies = array();
@@ -650,7 +628,6 @@ $posologies = $ds->loadList($query);
       }
       $view_poso[] = $mbposologie->_view;
     }
-    //$this->loadConditionnement();
     return $this->_ref_posologies;
   }
   

@@ -23,6 +23,7 @@ dates = {
   }
 }
 
+
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){
@@ -42,7 +43,7 @@ Main.add( function(){
     var urlAuto = new Url();
     urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
     urlAuto.addParam("produit_max", 40);
-    urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+    window.ac = urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
       minChars: 3,
       updateElement: updateFieldsMedicament,
       callback: 
@@ -180,7 +181,7 @@ transfertLineTP = function(line_id, sejour_id){
 			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
 			    <input type="text" name="produit" value="" size="20" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
-			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
+			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
 			    Livret Thérap.
 			    
 			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>

@@ -18,7 +18,33 @@ $search_by_cis = mbGetValueFromPost("search_by_cis", "1");
 $mbProduit = new CBcbProduit();
 
 // Recherche dans la bcb
-$produits = $mbProduit->searchProduitAutocomplete($produit, $produit_max, $inLivret, $search_libelle_long, $hors_specialite, $search_by_cis);
+$search_by_name = $mbProduit->searchProduitAutocomplete($produit, $produit_max, $inLivret, $search_libelle_long, $hors_specialite, $search_by_cis);
+
+// Recherche des produits en se basant sur les DCI
+$dci = new CBcbDCI();
+
+if($inLivret){
+	$dci->distObj->LivretTherapeutique = CGroups::loadCurrent()->_id;
+}
+$search_by_dci = $dci->searchProduits($produit, 100, $search_by_cis);
+
+$produits = array();
+foreach($search_by_name as $key => $_produit){
+	$produits[$key] = $_produit;
+}
+foreach($search_by_dci as $key => $_produit){
+  $produits[$key] = $_produit;
+}
+
+
+// Classement des lignes par ordre alphabetique
+function compareMed($produit1, $produit2){
+  return strcmp($produit1->Libelle, $produit2->Libelle);
+}
+if(isset($produits)){
+  usort($produits, "compareMed");
+}
+
 
 // Tableau de tokens permettant de les mettre en evidence dans l'autocomplete
 $_tokens = explode(" ", $produit);

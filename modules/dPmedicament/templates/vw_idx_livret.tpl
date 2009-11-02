@@ -24,9 +24,8 @@ function updateFieldsProduitLivret(selected) {
 }
 
 Main.add(function () {
-
   $('_list_produits').hide();
-  
+ 
   // Initialisation des onglets du menu
   Control.Tabs.create('tabs-livret', false);
   
@@ -170,12 +169,6 @@ function printLivret(){
             this.selfClose = false;
             this.pop();
           }
-          /*
-       	  MedSelector.doSet = function(){
-            var oForm = document[MedSelector.sForm];
-            $V(oForm[MedSelector.sView], MedSelector.prepared.nom);
-            Livret.addProduit(MedSelector.prepared.code);
-          }*/
         </script>
       </form>
     </td>
