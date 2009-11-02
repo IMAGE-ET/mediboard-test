@@ -241,7 +241,11 @@ var Prescription = {
 	      } else {
 	        if(chapitre){
 	          if (window[chapitre+'Loaded'] || chapitre == "medicament") {
-	            urlPrescription.requestUpdate("div_"+chapitre, { waitingText: null } );
+	            urlPrescription.requestUpdate("div_"+chapitre, { waitingText: null , onComplete: function(){
+							  if(window.viewListPrescription){
+						      viewListPrescription();
+						    }
+							}} );
 	          } else {
 	            urlPrescription.requestUpdate("div_"+chapitre);
 	          }
@@ -302,7 +306,11 @@ var Prescription = {
     url.addParam("mode_sejour", mode_sejour);
     url.addParam("pratSel_id", pratSel_id);
     url.addParam("praticien_for_prot_id", praticien_for_prot_id);
-    url.requestUpdate("prescription_sejour", { waitingText: null } );
+    url.requestUpdate("prescription_sejour", { waitingText: null, onComplete: function(){
+		  if(window.viewListPrescription){
+				viewListPrescription();
+			}
+		} } );
   },
   reloadPrescPharma: function(prescription_id, readonly, lite){
     var url = new Url("dPprescription", "httpreq_vw_prescription");

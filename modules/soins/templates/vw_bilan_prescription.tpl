@@ -8,6 +8,27 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+
+viewListPrescription = function(){
+  var url = new Url("soins", "httpreq_vw_bilan_list_prescriptions");
+	var oFilterForm = getForm("bilanPrescriptions");
+  url.addParam('type', $V(oFilterForm.type));
+	url.addParam('signee', $V(oFilterForm.signee));
+  url.addParam('praticien_id', $V(oFilterForm.praticien_id));
+  url.addParam('_date_min', $V(oFilterForm._date_min));
+  url.addParam('_date_max', $V(oFilterForm._date_max));
+  url.requestUpdate("list_prescriptions", { waitingText: null } );
+}
+	
+
+Main.add(function () {
+  viewListPrescription();
+});
+
+</script>
+
+
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
@@ -17,9 +38,6 @@
   <tr>
     <td colspan="2">
       <form name="bilanPrescriptions" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="vw_bilan_prescription" />
-         
 	      <table class="form">
 	        <tr>
 	          <th class="category" colspan="6">Critères de recherche</th>
@@ -59,9 +77,8 @@
 	            jusqu'au
 	            {{mb_field object=$sejour field="_date_max" form="bilanPrescriptions" register="true" canNull=false}}
 	          </td>
-	          
 	          <td>
-	            <button class="button tick" type="submit">Filtrer</button>
+	            <button class="button tick" type="button" onclick="viewListPrescription();">Filtrer</button>
 	          </td>
 	        </tr>
 	      </table>
@@ -69,27 +86,10 @@
     </td>
   </tr>
   <tr>
-    <td style="width: 150px">
-      <table class="tbl">
-        <tr>
-          <th>Prescriptions ({{$prescriptions|@count}})</th>
-        </tr>
-      {{foreach from=$prescriptions item=_prescription}}
-        <tr>
-          <td class="text">
-            <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescSejour('{{$_prescription->_id}}','','','','','','',true,{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}})">
-            {{$_prescription->_ref_patient->_view}}
-            </a>
-          </td>
-        </tr>
-      {{/foreach}}
-      </table>
-    </td>
-    <td>
-      <div id="prescription_sejour">
-        <div class="big-info">
-          Selectionnez une prescription sur la gauche pour la visualiser 
-        </div>
+    <td style="width: 150px" id="list_prescriptions"></td>
+    <td id="prescription_sejour">
+      <div class="big-info">
+        Selectionnez une prescription sur la gauche pour la visualiser 
       </div>
     </td>
   </tr>
