@@ -200,8 +200,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $this->getIdSource($patient);
   }
   
-  static function getEvenementPatientXML() { 
-    $xpath = new CMbXPath($node->document, true);
+  function getEvenementPatientXML() { 
+    $xpath = new CMbXPath($this, true);
     
     $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
 
