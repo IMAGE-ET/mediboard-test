@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("mbFieldSpec");
+CAppUI::requireSystemClass("fieldSpecs/floatSpec");
 
-class CPctSpec extends CMbFieldSpec {
+class CPctSpec extends CFloatSpec {
   
   function getSpecType() {
     return("pct");
@@ -39,7 +39,7 @@ class CPctSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     CMbArray::defaultValue($params, "size", 6);
-    return $this->getFormElementText($object, $params, $value, $className)."%";
+    return parent::getFormHtmlElement($object, $params, $value, $className)."%";
   }
   
   function sample(&$object, $consistent = true) {
