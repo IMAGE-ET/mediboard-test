@@ -201,4 +201,6 @@ $locales['CUser-back-profiled_users'] = '';
 $locales['module-common-court'] = '';
 $locales['config-admin-ftpsn'] = '';
 $locales['config-admin-ftpsn-test'] = '';
+$locales['CUserLog.more'] = '';
+$locales['CUser-failed-username'] = '';
 ?>

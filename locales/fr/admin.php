@@ -202,4 +202,5 @@ $locales['module-common-court'] = 'Tous modules';
 $locales['config-admin-ftpsn'] = 'Connectivité au FTP';
 $locales['config-admin-ftpsn-test'] = 'Test de la connexion';
 $locales['CUser-failed-username'] = 'Nom d\'utilisateur déjà existant';
+$locales['CUserLog.more'] = 'modifications supplémentaires...';
 ?>
