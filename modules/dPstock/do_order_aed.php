@@ -13,17 +13,17 @@ global $AppUI, $g;
 $do = new CDoObjectAddEdit('CProductOrder', 'order_id');
 
 // New order
-if (mbGetValueFromPost('order_id') == 0) {
+if (CValue::post('order_id') == 0) {
 	$order = new CProductOrder();
 	$order->group_id     = $g;
-	$order->societe_id   = mbGetValueFromPost('societe_id');
-	$order->order_number = mbGetValueFromPost('order_number');
+	$order->societe_id   = CValue::post('societe_id');
+	$order->order_number = CValue::post('order_number');
 	$order->locked       = 0;
 	$order->cancelled    = 0;
 	if ($msg = $order->store()) {
 		$AppUI->setMsg($msg);
 	} else {
-	  if (mbGetValueFromPost('_autofill') == 1) {
+	  if (CValue::post('_autofill') == 1) {
 	    $order->autofill();
 	  }
 		$AppUI->setMsg($do->createMsg);

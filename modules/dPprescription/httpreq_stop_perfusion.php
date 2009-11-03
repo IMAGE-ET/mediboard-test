@@ -11,7 +11,7 @@
 
 global $AppUI, $can, $m;
 
-$perfusion_id = mbGetValueFromGet("perfusion_id");
+$perfusion_id = CValue::get("perfusion_id");
 
 // Chargement de la perfusion
 $perfusion = new CPerfusion();

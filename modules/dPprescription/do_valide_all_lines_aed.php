@@ -95,11 +95,11 @@ function insertMedElts($lines, $prescription, $sejour){
 global $AppUI;
 
 // Dans le cas de la validation de la totalite des prescriptions
-$prescription_id = mbGetValueFromPost("prescription_id");
-$prescription_reelle_id = mbGetValueFromPost("prescription_reelle_id");
-$mode_pharma = mbGetValueFromPost("mode_pharma");
-$chapitre = mbGetValueFromPost("chapitre", "medicament");
-$annulation = mbGetValueFromRequest("annulation", "0");
+$prescription_id = CValue::post("prescription_id");
+$prescription_reelle_id = CValue::post("prescription_reelle_id");
+$mode_pharma = CValue::post("mode_pharma");
+$chapitre = CValue::post("chapitre", "medicament");
+$annulation = CValue::request("annulation", "0");
 $search_value = $annulation ? 1 : 0;
 $new_value = $annulation ? 0 : 1;
 
@@ -113,8 +113,8 @@ if(!$mode_pharma){
 	  $praticien_id = $AppUI->user_id;  
 	} else {
 	  // Sinon, on controle son password
-	  $praticien_id = mbGetValueFromPost("praticien_id");
-	  $password = mbGetValueFromPost("password");
+	  $praticien_id = CValue::post("praticien_id");
+	  $password = CValue::post("password");
 	  
 	  $praticien = new CMediusers();
 	  $praticien->load($praticien_id);
@@ -144,7 +144,7 @@ if($prescription_id){
 }
 
 // Pour la validation d'une ligne precise
-$prescription_line_id = mbGetValueFromPost("prescription_line_id");
+$prescription_line_id = CValue::post("prescription_line_id");
 
 $medicaments = array();
 $elements = array();

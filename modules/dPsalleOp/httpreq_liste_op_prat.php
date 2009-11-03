@@ -11,9 +11,9 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$operation_id = mbGetValueFromGetOrSession("operation_id");
-$hide_finished = mbGetValueFromGetOrSession("hide_finished", 0);
+$date  = CValue::getOrSession("date", mbDate());
+$operation_id = CValue::getOrSession("operation_id");
+$hide_finished = CValue::getOrSession("hide_finished", 0);
 
 // Selection des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
@@ -48,7 +48,7 @@ asort($listPrats);
 
 // Selection des plages opératoires de la journée
 $praticien = new CMediusers;
-if ($praticien->load(mbGetValueFromGetOrSession("praticien_id"))) {
+if ($praticien->load(CValue::getOrSession("praticien_id"))) {
   $praticien->loadRefsForDay($date); 
 }
 

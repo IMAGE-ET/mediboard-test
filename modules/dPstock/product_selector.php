@@ -11,7 +11,7 @@
 global $can;
 $can->needsRead();
 
-$product_id  = mbGetValueFromGetOrSession('product_id', null);
+$product_id  = CValue::getOrSession('product_id', null);
 
 $product = new CProduct();
 $category_id = 0;

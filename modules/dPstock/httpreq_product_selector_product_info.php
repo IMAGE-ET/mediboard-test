@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-$product_id = mbGetValueFromGet('product_id');
+$product_id = CValue::get('product_id');
 
 $product = new CProduct();
 if ($product_id) {

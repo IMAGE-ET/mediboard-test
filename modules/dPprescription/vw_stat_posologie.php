@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$code_cip = mbGetValueFromGet("code_cip");
-$praticien_id = mbGetValueFromGet("praticien_id");
+$code_cip = CValue::get("code_cip");
+$praticien_id = CValue::get("praticien_id");
 
 $praticien = new CMediusers();
 $praticien->load($praticien_id);

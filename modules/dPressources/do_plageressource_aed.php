@@ -11,9 +11,9 @@
 $obj = new CPlageressource();
 $obj->bind($_POST);
 
-$del = mbGetValueFromPost( 'del', 0 );
-$repeat = mbGetValueFromPost( '_repeat', 1 );
-$double = mbGetValueFromPost( '_double', 0 );
+$del = CValue::post( 'del', 0 );
+$repeat = CValue::post( '_repeat', 1 );
+$double = CValue::post( '_double', 0 );
 
 $body_msg = null;
 $header = array();
@@ -58,7 +58,7 @@ if ($del) {
   
   $msgNo = $deleted ? UI_MSG_ALERT : UI_MSG_ERROR;
 
-  mbSetValueToSession("plage_id");
+  CValue::setSession("plage_id");
 } else {
   $created = 0;
   $updated = 0;

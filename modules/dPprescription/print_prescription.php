@@ -12,14 +12,14 @@ global $AppUI, $can;
 
 $can->needsRead();
 
-$praticien_sortie_id = mbGetValueFromGet("praticien_sortie_id");
-$print = mbGetValueFromGet("print", 0);
+$praticien_sortie_id = CValue::get("praticien_sortie_id");
+$print = CValue::get("print", 0);
 $linesDMI = array();
 
 // Chargement de l'etablissement
 $etablissement = CGroups::loadCurrent();
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$prescription_id = CValue::getOrSession("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsFwd();

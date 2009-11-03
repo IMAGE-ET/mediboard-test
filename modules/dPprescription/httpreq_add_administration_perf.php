@@ -8,13 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$perfusion_id = mbGetValueFromGet("perfusion_id");
-$date = mbGetValueFromGet("date");
-$hour = mbGetValueFromGet("hour");
-$time_prevue = mbGetValueFromGet("time_prevue");
-$mode_dossier = mbGetValueFromGet("mode_dossier");
-$sejour_id = mbGetValueFromGet("sejour_id");
-$date_sel  = mbGetValueFromGet("date_sel");
+$perfusion_id = CValue::get("perfusion_id");
+$date = CValue::get("date");
+$hour = CValue::get("hour");
+$time_prevue = CValue::get("time_prevue");
+$mode_dossier = CValue::get("mode_dossier");
+$sejour_id = CValue::get("sejour_id");
+$date_sel  = CValue::get("date_sel");
 
 $perfusion = new CPerfusion();
 $perfusion->load($perfusion_id);

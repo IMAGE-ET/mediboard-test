@@ -11,7 +11,7 @@
 global $can;
 $can->needsRead();
 
-$code = mbGetValueFromGetOrSession('code');
+$code = CValue::getOrSession('code');
 
 $codes = array();
 $products = array();

@@ -11,12 +11,12 @@
 global $can;
 $can->needsRead();
 
-$category_id = mbGetValueFromGet('category_id');
-$societe_id  = mbGetValueFromGet('societe_id');
-$keywords    = mbGetValueFromGet('keywords');
-$order_id    = mbGetValueFromGet('order_id');
-$limit       = mbGetValueFromGet('limit');
-$hide_societes = mbGetValueFromGet('hidden_column');
+$category_id = CValue::get('category_id');
+$societe_id  = CValue::get('societe_id');
+$keywords    = CValue::get('keywords');
+$order_id    = CValue::get('order_id');
+$limit       = CValue::get('limit');
+$hide_societes = CValue::get('hidden_column');
 
 $where = array();
 if ($category_id) {

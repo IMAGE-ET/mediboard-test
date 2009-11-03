@@ -13,12 +13,12 @@ $can->needsRead();
 
 set_time_limit(90);
 
-$indexFile  = mbGetValueFromPost("indexFile"  , 0);
-$style      = mbGetValueFromPost("style"      , 0);
-$image      = mbGetValueFromPost("image"      , 0);
-$javascript = mbGetValueFromPost("javascript" , 0);
-$lib        = mbGetValueFromPost("lib"        , 0);
-$typeArch   = mbGetValueFromPost("typeArch"   , "zip");
+$indexFile  = CValue::post("indexFile"  , 0);
+$style      = CValue::post("style"      , 0);
+$image      = CValue::post("image"      , 0);
+$javascript = CValue::post("javascript" , 0);
+$lib        = CValue::post("lib"        , 0);
+$typeArch   = CValue::post("typeArch"   , "zip");
 
 // Création du fichier Zip
 if(file_exists("tmp/mediboard_repas.zip")){unlink("tmp/mediboard_repas.zip");}

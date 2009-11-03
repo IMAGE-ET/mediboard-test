@@ -14,10 +14,10 @@ $ds = CSQLDataSource::get("std");
 
 //Recuperation des identifiants pour les filtres
 $filter = new CPlageressource;
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min",mbDate());
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max",mbDate());
-$filter->prat_id = mbGetValueFromGetOrSession("prat_id");
-$filter->paye = mbGetValueFromGetOrSession("paye");
+$filter->_date_min = CValue::getOrSession("_date_min",mbDate());
+$filter->_date_max = CValue::getOrSession("_date_max",mbDate());
+$filter->prat_id = CValue::getOrSession("prat_id");
+$filter->paye = CValue::getOrSession("paye");
 // Chargement de la liste des praticiens pour l'historique
 
 $listPrats = new CMediusers;

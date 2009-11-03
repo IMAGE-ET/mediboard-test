@@ -22,12 +22,12 @@ function viewMsg($msg, $action, $redirect = "", $txt = ""){
 
 global $AppUI, $m;
 
-$date = mbGetValueFromPost("date");
-$dialog = mbGetValueFromPost("dialog");
-$praticien_id = mbGetValueFromPost("praticien_id");
-$object_id = mbGetValueFromPost("object_id");
-$object_class = mbGetValueFromPost("object_class");
-$password = mbGetValueFromPost("password");
+$date = CValue::post("date");
+$dialog = CValue::post("dialog");
+$praticien_id = CValue::post("praticien_id");
+$object_id = CValue::post("object_id");
+$object_class = CValue::post("object_class");
+$password = CValue::post("password");
 
 if($dialog){
   $redirectUrl = "m=dPsalleOp&a=vw_signature_actes&object_id=$object_id&object_class=$object_class&dialog=1";

@@ -9,9 +9,9 @@
  */
  
 // Recuperation des variables
-$prescription_id = mbGetValueFromGet("prescription_id");
-$chapitre        = mbGetValueFromGet("chapitre", "");
-$_date_plan_soin = mbGetValueFromGet("_date_plan_soin");
+$prescription_id = CValue::get("prescription_id");
+$chapitre        = CValue::get("chapitre", "");
+$_date_plan_soin = CValue::get("_date_plan_soin");
 
 if(!$_date_plan_soin){
   $_date_plan_soin = mbdate();

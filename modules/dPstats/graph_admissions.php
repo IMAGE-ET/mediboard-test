@@ -13,10 +13,10 @@ global $AppUI, $can, $m;
 CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
 CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
 
-$debut    = mbGetValueFromGet("debut"       , mbDate("-1 YEAR"));
-$fin      = mbGetValueFromGet("fin"         , mbDate()         );
-$prat_id  = mbGetValueFromGet("prat_id"     , 0                );
-$service_id = mbGetValueFromGet("service_id", 0                );
+$debut    = CValue::get("debut"       , mbDate("-1 YEAR"));
+$fin      = CValue::get("fin"         , mbDate()         );
+$prat_id  = CValue::get("prat_id"     , 0                );
+$service_id = CValue::get("service_id", 0                );
 
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);

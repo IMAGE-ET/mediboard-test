@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$operation_id  = mbGetValueFromGetOrSession("operation_id", null);
+$operation_id  = CValue::getOrSession("operation_id", null);
 
 $operation = new COperation;
 if($operation->load($operation_id)) {

@@ -16,13 +16,13 @@ $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 // Plage selectionnée
-$plage_id = mbGetValueFromGetOrSession("plage_id", null);
+$plage_id = CValue::getOrSession("plage_id", null);
 $plage = new CPlageressource;
 $plage->load($plage_id);
 
 // Période
 $today = mbDate();
-$debut = mbGetValueFromGetOrSession("debut", $today);
+$debut = CValue::getOrSession("debut", $today);
 $debut = mbDate("last sunday", $debut);
 $fin   = mbDate("next sunday", $debut);
 $debut = mbDate("+1 day", $debut);

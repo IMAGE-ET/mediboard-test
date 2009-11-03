@@ -11,7 +11,7 @@
 global $can;
 $can->needsAdmin();
 
-$category_id = mbGetValueFromGetOrSession('category_id');
+$category_id = CValue::getOrSession('category_id');
 
 // Loads the expected Category
 $category = new CProductCategory();

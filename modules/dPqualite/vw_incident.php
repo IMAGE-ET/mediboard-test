@@ -12,11 +12,11 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$fiche_ei_id = mbGetValueFromGet("fiche_ei_id",0);
+$fiche_ei_id = CValue::get("fiche_ei_id",0);
 
 //Récupération du type de fiche à générer et de la RSPO concernée.
-$type_ei_id = mbGetValueFromGet("type_ei_id");
-$blood_salvage_id = mbGetValueFromGet("blood_salvage_id");
+$type_ei_id = CValue::get("type_ei_id");
+$blood_salvage_id = CValue::get("blood_salvage_id");
 
 $fiche  = new CFicheEi();
 $listFct = new CFunctions();

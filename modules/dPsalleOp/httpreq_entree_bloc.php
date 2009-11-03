@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $hour = mbTime(null);
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;

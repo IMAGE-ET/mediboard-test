@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$praticien_id = mbGetValueFromGet("praticien_id");
-$function_id  = mbGetValueFromGet("function_id");
-$group_id     = mbGetValueFromGet("group_id");
-$protocoleSel_id = mbGetValueFromGet("protocoleSel_id");
+$praticien_id = CValue::get("praticien_id");
+$function_id  = CValue::get("function_id");
+$group_id     = CValue::get("group_id");
+$protocoleSel_id = CValue::get("protocoleSel_id");
 
 $protocoles = array();
 $protocole = new CPrescription();

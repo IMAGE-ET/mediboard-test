@@ -10,8 +10,8 @@
 
 global $AppUI;
 
-$prescription_id = mbGetValueFromPost("prescription_id");
-$praticien_id    = mbGetValueFromPost("praticien_id");
+$prescription_id = CValue::post("prescription_id");
+$praticien_id    = CValue::post("praticien_id");
 
 $lines = array();
 

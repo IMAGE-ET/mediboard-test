@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$praticien_id      = mbGetValueFromPost("praticien_id");
-$prescription_id   = mbGetValueFromPost("prescription_id");
-$libelle_protocole = mbGetValueFromPost("libelle_protocole");
+$praticien_id      = CValue::post("praticien_id");
+$prescription_id   = CValue::post("prescription_id");
+$libelle_protocole = CValue::post("libelle_protocole");
 
 $_tokens = explode(" ", $libelle_protocole);
 

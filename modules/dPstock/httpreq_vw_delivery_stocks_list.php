@@ -11,8 +11,8 @@
 global $can, $g;
 $can->needsRead();
 
-$category_id         = mbGetValueFromGet('category_id');
-$keywords            = mbGetValueFromGet('keywords');
+$category_id         = CValue::get('category_id');
+$keywords            = CValue::get('keywords');
 
 $where = array();
 if ($category_id) {

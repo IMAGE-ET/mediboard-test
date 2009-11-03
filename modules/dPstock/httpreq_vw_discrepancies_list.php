@@ -11,9 +11,9 @@
 global $can;
 $can->needsEdit();
 
-$service_id  = mbGetValueFromGet('service_id');
-$keywords    = mbGetValueFromGet('keywords');
-$limit       = mbGetValueFromGet('limit');
+$service_id  = CValue::get('service_id');
+$keywords    = CValue::get('keywords');
+$limit       = CValue::get('limit');
 
 // Service's stocks
 $where = array();

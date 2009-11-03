@@ -11,7 +11,7 @@
 global $can, $g;
 $can->needsAdmin();
 
-$item_type_id = mbGetValueFromGetOrSession('item_type_id');
+$item_type_id = CValue::getOrSession('item_type_id');
 
 $item_type = new CDailyCheckItemType;
 $item_type->load($item_type_id);

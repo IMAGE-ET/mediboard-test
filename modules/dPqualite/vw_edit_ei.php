@@ -12,9 +12,9 @@ global $AppUI, $can, $m;
 
 $can->needsAdmin();
 
-$ei_categorie_id = mbGetValueFromGetOrSession("ei_categorie_id",0);
-$ei_item_id      = mbGetValueFromGetOrSession("ei_item_id",0);
-$vue_item        = mbGetValueFromGetOrSession("vue_item",0);
+$ei_categorie_id = CValue::getOrSession("ei_categorie_id",0);
+$ei_item_id      = CValue::getOrSession("ei_item_id",0);
+$vue_item        = CValue::getOrSession("vue_item",0);
 
 
 // Catégorie demandée
@@ -22,7 +22,7 @@ $categorie = new CEiCategorie;
 if(!$categorie->load($ei_categorie_id)){
   // Cette catégorie n'est pas valide
   $ei_categorie_id = null;
-  mbSetValueToSession("ei_categorie_id");
+  CValue::setSession("ei_categorie_id");
   $categorie = new CEiCategorie;
 }else{
   $categorie->loadRefsBack();
@@ -33,7 +33,7 @@ $item = new CEiItem;
 if(!$item->load($ei_item_id)){
   // Cet item n'est pas valide
   $ei_item_id = null;
-  mbSetValueToSession("ei_item_id");
+  CValue::setSession("ei_item_id");
   $item = new CEiItem;
 }else{
   $item->loadRefsFwd();

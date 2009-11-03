@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-$category_id      = mbGetValueFromGet('category_id');
-$keywords         = mbGetValueFromGet('keywords');
-$selected_product = mbGetValueFromGet('selected_product');
+$category_id      = CValue::get('category_id');
+$keywords         = CValue::get('keywords');
+$selected_product = CValue::get('selected_product');
 
 $product = new CProduct();
 $category = new CProductCategory();

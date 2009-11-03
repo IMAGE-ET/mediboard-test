@@ -11,9 +11,9 @@
 global $can;
 $can->needsRead();
 
-$date         = mbGetValueFromGetOrSession("date", mbDate());
-$bloc_id      = mbGetValueFromGetOrSession("bloc_id");
-$op_reveil_id = mbGetValueFromGetOrSession("op_reveil_id");
+$date         = CValue::getOrSession("date", mbDate());
+$bloc_id      = CValue::getOrSession("bloc_id");
+$op_reveil_id = CValue::getOrSession("op_reveil_id");
 
 $date_now        = mbDate();
 $modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = mbGetValueFromGetOrSession("service_id");
+$service_id = CValue::getOrSession("service_id");
 
 // Chargement des moments unitaires
 $moments = CMomentUnitaire::loadAllMoments();

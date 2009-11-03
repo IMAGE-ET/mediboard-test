@@ -12,9 +12,9 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$deb_personnel  = mbGetValueFromGetOrSession("deb_personnel" , mbDate("-1 WEEK"));
-$fin_personnel  = mbGetValueFromGetOrSession("fin_personnel" , mbDate(""));
-$prat_personnel = mbGetValueFromGetOrSession("prat_personnel", null);
+$deb_personnel  = CValue::getOrSession("deb_personnel" , mbDate("-1 WEEK"));
+$fin_personnel  = CValue::getOrSession("fin_personnel" , mbDate(""));
+$prat_personnel = CValue::getOrSession("prat_personnel", null);
 
 $user = new CMediusers();
 $user->load($AppUI->user_id);

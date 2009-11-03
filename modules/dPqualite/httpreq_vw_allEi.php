@@ -11,19 +11,19 @@
 global $can, $AppUI;
 $can->needsRead();
 
-$type              = mbGetValueFromGet("type");
-$first             = mbGetValueFromGet("first");
-$selected_user_id  = mbGetValueFromGet("selected_user_id");
-$selected_service_valid_user_id = mbGetValueFromGet("selected_service_valid_user_id");
-$elem_concerne     = mbGetValueFromGet("elem_concerne");
-$evenements        = mbGetValueFromGet("evenements");
+$type              = CValue::get("type");
+$first             = CValue::get("first");
+$selected_user_id  = CValue::get("selected_user_id");
+$selected_service_valid_user_id = CValue::get("selected_service_valid_user_id");
+$elem_concerne     = CValue::get("elem_concerne");
+$evenements        = CValue::get("evenements");
 
-mbSetValueToSession("selected_user_id", $selected_user_id);
-mbSetValueToSession("selected_service_valid_user_id", $selected_service_valid_user_id);
-mbSetValueToSession("elem_concerne", $elem_concerne);
-mbSetValueToSession("evenements", $evenements);
+CValue::setSession("selected_user_id", $selected_user_id);
+CValue::setSession("selected_service_valid_user_id", $selected_service_valid_user_id);
+CValue::setSession("elem_concerne", $elem_concerne);
+CValue::setSession("evenements", $evenements);
 
-$selected_fiche_id = mbGetValueFromGetOrSession("selected_fiche_id");
+$selected_fiche_id = CValue::getOrSession("selected_fiche_id");
 
 $where = array();
 if ($elem_concerne) {

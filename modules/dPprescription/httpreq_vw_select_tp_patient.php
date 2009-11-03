@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$patient_id = mbGetValueFromGet("patient_id");
+$patient_id = CValue::get("patient_id");
 
 $traitements = array();
 $patient = new CPatient();

@@ -11,7 +11,7 @@
 global $can;
 $can->needsAdmin();
 
-$societe_id = mbGetValueFromGetOrSession('societe_id');
+$societe_id = CValue::getOrSession('societe_id');
 
 // Loads the expected Societe
 $societe = new CSociete();

@@ -12,7 +12,7 @@ global $m, $can, $g;
 $can->needsAdmin();
 
 $schemaPath = "modules/$m/xml/elementsPrescription.xsd";
-$group_id = mbGetValueFromPost("group_id");
+$group_id = CValue::post("group_id");
 
 // Chargement des etablissements
 $group = new CGroups();

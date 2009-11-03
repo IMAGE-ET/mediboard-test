@@ -10,9 +10,9 @@
 
 global $AppUI, $can, $m, $g;
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$anesth_id = mbGetValueFromGetOrSession("anesth_id");
-$all_prot = mbGetValueFromGetOrSession("all_prot");
+$praticien_id = CValue::getOrSession("praticien_id");
+$anesth_id = CValue::getOrSession("anesth_id");
+$all_prot = CValue::getOrSession("all_prot");
 
 $mediuser =& $AppUI->_ref_user;
 

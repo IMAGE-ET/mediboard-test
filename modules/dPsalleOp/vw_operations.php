@@ -18,12 +18,12 @@ $listPersAideOp = array();
 $listPersPanseuse = array();
 
 // Ne pas supprimer, utilisé pour mettre le particien en session
-$praticien_id    = mbGetValueFromGetOrSession("praticien_id");
-$hide_finished   = mbGetValueFromGetOrSession("hide_finished", 0);
-$salle_id        = mbGetValueFromGetOrSession("salle");
-$bloc_id         = mbGetValueFromGetOrSession("bloc_id");
-$op              = mbGetValueFromGetOrSession("op");
-$date            = mbGetValueFromGetOrSession("date", mbDate());
+$praticien_id    = CValue::getOrSession("praticien_id");
+$hide_finished   = CValue::getOrSession("hide_finished", 0);
+$salle_id        = CValue::getOrSession("salle");
+$bloc_id         = CValue::getOrSession("bloc_id");
+$op              = CValue::getOrSession("op");
+$date            = CValue::getOrSession("date", mbDate());
 $date_now        = mbDate();
 $modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
                    ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
@@ -52,7 +52,7 @@ $timingAffect = array();
 // Sauvegarde en session du bloc (pour preselectionner dans la salle de reveil)
 $salle = new CSalle;
 $salle->load($salle_id);
-mbSetValueToSession("bloc_id", $salle->bloc_id);
+CValue::setSession("bloc_id", $salle->bloc_id);
 
 // Opération selectionnée
 $selOp = new COperation;

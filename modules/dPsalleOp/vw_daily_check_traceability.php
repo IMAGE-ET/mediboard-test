@@ -11,10 +11,10 @@
 global $can;
 $can->needsRead();
 
-$date_min = mbGetValueFromGetOrSession('_date_min');
-$date_max = mbGetValueFromGetOrSession('_date_max');
-$object_guid = mbGetValueFromGetOrSession('object_guid');
-$check_list_id = mbGetValueFromGetOrSession('check_list_id');
+$date_min = CValue::getOrSession('_date_min');
+$date_max = CValue::getOrSession('_date_max');
+$object_guid = CValue::getOrSession('object_guid');
+$check_list_id = CValue::getOrSession('check_list_id');
 
 $check_list = new CDailyCheckList;
 $check_list->load($check_list_id);

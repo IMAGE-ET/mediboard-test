@@ -12,9 +12,9 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$category_id = mbGetValueFromGetOrSession("category_id");
-$element_prescription_id = mbGetValueFromGetOrSession("element_prescription_id");
-$mode_duplication = mbGetValueFromGet("mode_duplication", "0");
+$category_id = CValue::getOrSession("category_id");
+$element_prescription_id = CValue::getOrSession("element_prescription_id");
+$mode_duplication = CValue::get("mode_duplication", "0");
 $elements_prescription = array();
 $element_prescription = new CElementPrescription();
 

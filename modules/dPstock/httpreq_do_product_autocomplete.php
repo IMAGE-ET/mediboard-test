@@ -10,8 +10,8 @@
 
 global $can, $AppUI;
 
-$keywords = mbGetValueFromPost("_view");
-$category_id = mbGetValueFromPost("category_id");
+$keywords = CValue::post("_view");
+$category_id = CValue::post("category_id");
 
 if($keywords) {
 	$product = new CProduct();

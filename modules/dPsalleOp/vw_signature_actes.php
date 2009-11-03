@@ -10,9 +10,9 @@
 
 global $AppUI, $a, $can, $m, $g;
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$dialog = mbGetValueFromGet("dialog");
+$praticien_id = CValue::getOrSession("praticien_id");
+$date = CValue::getOrSession("date", mbDate());
+$dialog = CValue::get("dialog");
 $tabOperations = array();
 $tabOp = array();
 
@@ -29,8 +29,8 @@ if($dialog){
   $salle_id = "";
 }
 
-$object_id = mbGetValueFromGet("object_id");
-$object_class = mbGetValueFromGet("object_class");
+$object_id = CValue::get("object_id");
+$object_class = CValue::get("object_class");
 
 $praticien = new CMediusers();
 $listPraticien = $praticien->loadPraticiens();

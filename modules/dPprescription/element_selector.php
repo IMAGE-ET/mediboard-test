@@ -11,8 +11,8 @@
 
 global $AppUI, $can, $m, $g;
 
-$type = mbGetValueFromGet("type");
-$libelle = mbGetValueFromGet("libelle");
+$type = CValue::get("type");
+$libelle = CValue::get("libelle");
 
 if(!$libelle){
   $libelle = '%';

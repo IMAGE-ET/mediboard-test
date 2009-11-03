@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$debut    = mbGetValueFromGet("debut", mbDate("-1 YEAR"));
-$fin      = mbGetValueFromGet("fin", mbDate());
-$prat_id  = mbGetValueFromGet("prat_id");
-$salle_id = mbGetValueFromGet("salle_id");
-$bloc_id  = mbGetValueFromGet("bloc_id");
-$codeCCAM = mbGetValueFromGet("codeCCAM");
+$debut    = CValue::get("debut", mbDate("-1 YEAR"));
+$fin      = CValue::get("fin", mbDate());
+$prat_id  = CValue::get("prat_id");
+$salle_id = CValue::get("salle_id");
+$bloc_id  = CValue::get("bloc_id");
+$codeCCAM = CValue::get("codeCCAM");
 
 $prat = new CMediusers;
 $prat->load($prat_id);

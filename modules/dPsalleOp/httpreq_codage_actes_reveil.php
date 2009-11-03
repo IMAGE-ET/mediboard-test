@@ -9,9 +9,9 @@
 
 global $AppUI, $can, $m, $g;
 
-$operation_id = mbGetValueFromGetOrSession("operation_id");
+$operation_id = CValue::getOrSession("operation_id");
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", mbDate());
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 

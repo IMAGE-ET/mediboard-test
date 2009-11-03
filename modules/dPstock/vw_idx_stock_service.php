@@ -12,9 +12,9 @@ global $can, $g;
 
 $can->needsEdit();
 
-$stock_service_id = mbGetValueFromGetOrSession('stock_service_id');
-$category_id      = mbGetValueFromGetOrSession('category_id');
-$service_id       = mbGetValueFromGetOrSession('service_id');
+$stock_service_id = CValue::getOrSession('stock_service_id');
+$category_id      = CValue::getOrSession('category_id');
+$service_id       = CValue::getOrSession('service_id');
 
 // Loads the stock 
 $stock = new CProductStockService();

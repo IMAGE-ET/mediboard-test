@@ -13,8 +13,8 @@ $can->needsRead();
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
-$service_id = mbGetValueFromGet("service_id" , null);
-$date       = mbGetValueFromGet("date"       , mbDate());
+$service_id = CValue::get("service_id" , null);
+$date       = CValue::get("date"       , mbDate());
 
 $service = null;
 
@@ -46,7 +46,7 @@ $order = "nom";
 $aPlats = $plats->loadList(null,$order);
 
 if(!$service_id || !array_key_exists($service_id,$services)){
-  mbSetValueToSession("service_id", null);
+  CValue::setSession("service_id", null);
   $service_id = null ;
 }else{
   $service =& $services[$service_id].

@@ -10,8 +10,8 @@
 global $can;
 $can->needsRead();
 
-$date    = mbGetValueFromGetOrSession("date", mbDate());
-$bloc_id = mbGetValueFromGetOrSession("bloc_id");
+$date    = CValue::getOrSession("date", mbDate());
+$bloc_id = CValue::getOrSession("bloc_id");
 
 $modif_operation = $date >= mbDate();
 

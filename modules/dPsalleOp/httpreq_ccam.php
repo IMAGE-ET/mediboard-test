@@ -1,12 +1,12 @@
 <?php
 
-$object_class    = mbGetValueFromGetOrSession("object_class");
-$object_id       = mbGetValueFromGetOrSession("object_id");
-$module          = mbGetValueFromGetOrSession("module");
-$do_subject_aed  = mbGetValueFromGetOrSession("do_subject_aed");
-$chir_id         = mbGetValueFromGetOrSession("chir_id");
+$object_class    = CValue::getOrSession("object_class");
+$object_id       = CValue::getOrSession("object_id");
+$module          = CValue::getOrSession("module");
+$do_subject_aed  = CValue::getOrSession("do_subject_aed");
+$chir_id         = CValue::getOrSession("chir_id");
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", mbDate());
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 

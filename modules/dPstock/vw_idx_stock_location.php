@@ -11,7 +11,7 @@
 global $can;
 $can->needsAdmin();
 
-$stock_location_id = mbGetValueFromGetOrSession('stock_location_id');
+$stock_location_id = CValue::getOrSession('stock_location_id');
 
 $stock_location = new CProductStockLocation();
 $stock_location->load($stock_location_id);

@@ -15,14 +15,14 @@ global $AppUI;
 $datetime = mbDateTime();
 $date_max = $datetime;
 $date_min = mbDateTime("-1 DAY", $date_max);
-$addTrans = mbGetValueFromGet("addTrans", false);
+$addTrans = CValue::get("addTrans", false);
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
-$praticien_id = mbGetValueFromGet("praticien_id");
-$order_col = mbGetValueFromGet("order_col", "date");
-$order_way = mbGetValueFromGet("order_way", "DESC");
+$sejour_id = CValue::getOrSession("sejour_id");
+$praticien_id = CValue::get("praticien_id");
+$order_col = CValue::get("order_col", "date");
+$order_way = CValue::get("order_way", "DESC");
 
-$with_filter = mbGetValueFromGet("with_filter", '1');
+$with_filter = CValue::get("with_filter", '1');
 
 // Initialisation
 $transmissions = array();

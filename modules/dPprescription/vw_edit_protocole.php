@@ -10,10 +10,10 @@
 
 global $AppUI;
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$function_id = mbGetValueFromGetOrSession("function_id");
-$group_id = mbGetValueFromGetOrSession("group_id");
-$protocole_id = mbGetValueFromGet("prescription_id");
+$praticien_id = CValue::getOrSession("praticien_id");
+$function_id = CValue::getOrSession("function_id");
+$group_id = CValue::getOrSession("group_id");
+$protocole_id = CValue::get("prescription_id");
 
 // Initialisations
 $protocole = new CPrescription();

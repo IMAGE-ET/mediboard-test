@@ -11,16 +11,16 @@
 global $can;
 $can->needsRead();
 
-$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
-$date         = mbGetValueFromGetOrSession("date");
-$nb_decalage  = mbGetValueFromGet("nb_decalage", 2);
-$line_type    = mbGetValueFromGet("line_type", "service");  // Bloc en salle d'op / service en hospi
-$mode_bloc    = mbGetValueFromGet("mode_bloc", 0);
-$mode_dossier = mbGetValueFromGet("mode_dossier", "administration");
-$chapitre     = mbGetValueFromGet("chapitre"); // Chapitre a rafraichir
-$object_id    = mbGetValueFromGet("object_id");
-$object_class = mbGetValueFromGet("object_class");
-$unite_prise  = mbGetValueFromGet("unite_prise");
+$sejour_id    = CValue::getOrSession("sejour_id");
+$date         = CValue::getOrSession("date");
+$nb_decalage  = CValue::get("nb_decalage", 2);
+$line_type    = CValue::get("line_type", "service");  // Bloc en salle d'op / service en hospi
+$mode_bloc    = CValue::get("mode_bloc", 0);
+$mode_dossier = CValue::get("mode_dossier", "administration");
+$chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
+$object_id    = CValue::get("object_id");
+$object_class = CValue::get("object_class");
+$unite_prise  = CValue::get("unite_prise");
 
 // Initialisations
 $operation = new COperation();

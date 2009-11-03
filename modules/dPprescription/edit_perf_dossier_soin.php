@@ -9,11 +9,11 @@
  */
 
 
-$perfusion_id = mbGetValueFromGet("perfusion_id");
-$date         = mbGetValueFromGet("date");
-$mode_dossier = mbGetValueFromGet("mode_dossier");
-$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
-$mode_refresh = mbGetValueFromGet("mode_refresh");
+$perfusion_id = CValue::get("perfusion_id");
+$date         = CValue::get("date");
+$mode_dossier = CValue::get("mode_dossier");
+$sejour_id    = CValue::getOrSession("sejour_id");
+$mode_refresh = CValue::get("mode_refresh");
 
 // Chargement de la perfusion
 $perfusion = new CPerfusion();

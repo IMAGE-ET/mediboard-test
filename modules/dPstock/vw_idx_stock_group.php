@@ -11,9 +11,9 @@
 global $can;
 $can->needsAdmin();
 
-$stock_id            = mbGetValueFromGetOrSession('stock_id');
-$product_id          = mbGetValueFromGetOrSession('product_id');
-$category_id         = mbGetValueFromGetOrSession('category_id');
+$stock_id            = CValue::getOrSession('stock_id');
+$product_id          = CValue::getOrSession('product_id');
+$category_id         = CValue::getOrSession('category_id');
 
 // Loads the stock in function of the stock ID or the product ID
 $stock = new CProductStockGroup();

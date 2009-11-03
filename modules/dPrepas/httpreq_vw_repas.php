@@ -11,9 +11,9 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$type       = mbGetValueFromGetOrSession("type"       , null);
-$service_id = mbGetValueFromGetOrSession("service_id" , null);
-$date       = mbGetValueFromGetOrSession("date"       , mbDate());
+$type       = CValue::getOrSession("type"       , null);
+$service_id = CValue::getOrSession("service_id" , null);
+$date       = CValue::getOrSession("date"       , mbDate());
 
 $service = null;
 
@@ -30,7 +30,7 @@ $typeRepas->load($type);
 $typeRepas_id =& $typeRepas->_id;
 
 if(!$service_id || !array_key_exists($service_id,$services)){
-  mbSetValueToSession("service_id", null);
+  CValue::setSession("service_id", null);
   $service_id = null ;
 }else{
   $service =& $services[$service_id].

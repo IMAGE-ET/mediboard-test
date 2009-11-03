@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m, $g;
 
-$_validation   = mbGetValueFromPost("_validation", null);
+$_validation   = CValue::post("_validation", null);
 
 class CDoFicheEiAddEdit extends CDoObjectAddEdit {
   function CDoFicheEiAddEdit() {

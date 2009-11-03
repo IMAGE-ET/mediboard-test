@@ -10,9 +10,9 @@
 
 global $AppUI;
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$function_id = mbGetValueFromGetOrSession("function_id");
-$pack_id = mbGetValueFromGet("pack_id");
+$praticien_id = CValue::getOrSession("praticien_id");
+$function_id = CValue::getOrSession("function_id");
+$pack_id = CValue::get("pack_id");
 
 $pack = new CPrescriptionProtocolePack();
 $pack->load($pack_id);

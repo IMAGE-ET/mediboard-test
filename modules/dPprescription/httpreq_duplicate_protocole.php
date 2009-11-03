@@ -11,7 +11,7 @@
 
 global $AppUI;
 
-$protocole_id = mbGetValueFromGet("protocole_id");
+$protocole_id = CValue::get("protocole_id");
 
 // Chargement du protocole
 $protocole = new CPrescription();

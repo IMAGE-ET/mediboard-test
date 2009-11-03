@@ -12,19 +12,19 @@
 global $can;
 $can->needsAdmin();
 
-$marked = mbGetValueFromGet("marked");
+$marked = CValue::get("marked");
 
-$type = mbGetValueFromGet("type");
+$type = CValue::get("type");
 $types = $type == "all" ? CMouvFactory::getTypes() : array($type);
 
-$marked = mbGetValueFromGet("marked");
+$marked = CValue::get("marked");
 $marked = $marked == "all" ? array("0", "1") : array($marked);
 
 foreach ($types as $_type) {
   foreach ($marked as $_marked) {
 	  $mouv = CMouvFactory::create($_type);
 	   
-		switch (mbGetValueFromGet("action")) {
+		switch (CValue::get("action")) {
 			case "count":
 			$count = $mouv->count($_marked);
 			CAppUI::stepAjax("%s - %s : %s disponibles ", UI_MSG_OK, 

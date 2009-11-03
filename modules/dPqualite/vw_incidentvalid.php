@@ -11,14 +11,14 @@
 global $AppUI, $can;
 $can->needsRead();
 
-$fiche_ei_id         = mbGetValueFromGetOrSession("fiche_ei_id",null);
-$ficheAnnuleVisible  = mbGetValueFromGetOrSession("ficheAnnuleVisible" , 0);
-$ficheTermineVisible = mbGetValueFromGetOrSession("ficheTermineVisible" , 0);
+$fiche_ei_id         = CValue::getOrSession("fiche_ei_id",null);
+$ficheAnnuleVisible  = CValue::getOrSession("ficheAnnuleVisible" , 0);
+$ficheTermineVisible = CValue::getOrSession("ficheTermineVisible" , 0);
 
-$selected_user_id    = mbGetValueFromGetOrSession("selected_user_id");
-$selected_service_valid_user_id = mbGetValueFromGetOrSession("selected_service_valid_user_id");
-$elem_concerne     = mbGetValueFromGetOrSession("elem_concerne");
-$evenements        = mbGetValueFromGetOrSession("evenements");
+$selected_user_id    = CValue::getOrSession("selected_user_id");
+$selected_service_valid_user_id = CValue::getOrSession("selected_service_valid_user_id");
+$elem_concerne     = CValue::getOrSession("elem_concerne");
+$evenements        = CValue::getOrSession("evenements");
 
 $catFiche = array();
 $fiche = new CFicheEi();
@@ -34,7 +34,7 @@ $listCategories = $listCategories->loadList(null, "nom");
 if($droitFiche){
   // Cette fiche n'est pas valide
   $fiche_ei_id = null;
-  mbSetValueToSession("fiche_ei_id");
+  CValue::setSession("fiche_ei_id");
   $fiche = new CFicheEi;
 }
 else {

@@ -10,21 +10,21 @@
 
 global $AppUI;
 
-$line_id              = mbGetValueFromGet("line_id");
-$object_class         = mbGetValueFromGet("object_class");
-$quantite             = mbGetValueFromGet("quantite");
-$key_tab              = mbGetValueFromGet("key_tab");
-$date                 = mbGetValueFromGet("date");
-$heure                = mbGetValueFromGet("heure");
+$line_id              = CValue::get("line_id");
+$object_class         = CValue::get("object_class");
+$quantite             = CValue::get("quantite");
+$key_tab              = CValue::get("key_tab");
+$date                 = CValue::get("date");
+$heure                = CValue::get("heure");
 $quantite             = is_numeric($quantite) ? $quantite : '';
 $prise_id             = is_numeric($key_tab) ? $key_tab : '';
 $unite_prise          = !is_numeric($key_tab) ? utf8_decode($key_tab) : '';
-$date_sel             = mbGetValueFromGet("date_sel");
-$mode_plan            = mbGetValueFromGet("mode_plan", false);
-$prescription_id      = mbGetValueFromGet("prescription_id");
-$list_administrations = mbGetValueFromGet("administrations");
-$planification_id       = mbGetValueFromGet("planification_id");
-$mode_dossier = mbGetValueFromGet("mode_dossier");
+$date_sel             = CValue::get("date_sel");
+$mode_plan            = CValue::get("mode_plan", false);
+$prescription_id      = CValue::get("prescription_id");
+$list_administrations = CValue::get("administrations");
+$planification_id       = CValue::get("planification_id");
+$mode_dossier = CValue::get("mode_dossier");
 $administrations      = array();
 $planification = new CAdministration();
 

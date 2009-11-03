@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
+$sejour_id = CValue::getOrSession("sejour_id");
 
 // Chargement du séjour
 $sejour = new CSejour();

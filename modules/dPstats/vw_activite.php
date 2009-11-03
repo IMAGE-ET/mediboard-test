@@ -12,8 +12,8 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$debutact      = mbGetValueFromGetOrSession("debutact", mbDate());
-$finact        = mbGetValueFromGetOrSession("finact", mbDate());
+$debutact      = CValue::getOrSession("debutact", mbDate());
+$finact        = CValue::getOrSession("finact", mbDate());
 
 // Création du template
 $smarty = new CSmartyDP();

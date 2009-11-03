@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$codeCCAM   = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
-$prat_id    = mbGetValueFromGetOrSession("prat_id", 0);
+$codeCCAM   = strtoupper(CValue::getOrSession("codeCCAM", ""));
+$prat_id    = CValue::getOrSession("prat_id", 0);
 
 $total["nbInterventions"] = 0;
 $total["estim_moy"] = 0;

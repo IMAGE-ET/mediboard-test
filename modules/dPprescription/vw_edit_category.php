@@ -26,7 +26,7 @@ $group = new CGroups();
 $groups = $group->loadList();
 
 // Chargement de la category
-$category_id = mbGetValueFromGetOrSession("category_id");
+$category_id = CValue::getOrSession("category_id");
 $category->load($category_id);
 
 // Création du template

@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$prescription_id = CValue::getOrSession("prescription_id");
 
 // Liste des alertes
 $alertesAllergies    = array();

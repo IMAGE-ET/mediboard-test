@@ -10,7 +10,7 @@
 
 global $AppUI;
 
-$prescription_id = mbGetValueFromGet("prescription_id");
+$prescription_id = CValue::get("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 

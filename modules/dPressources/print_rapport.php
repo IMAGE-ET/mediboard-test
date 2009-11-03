@@ -13,19 +13,19 @@ $can->needsRead();
 
 //Recuperation des identifiants pour les filtres
 $filter = new CPlageressource;
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min",mbDate());
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max",mbDate());
-$filter->prat_id = mbGetValueFromGetOrSession("prat_id");
-$filter->paye = mbGetValueFromGetOrSession("type");
+$filter->_date_min = CValue::getOrSession("_date_min",mbDate());
+$filter->_date_max = CValue::getOrSession("_date_max",mbDate());
+$filter->prat_id = CValue::getOrSession("prat_id");
+$filter->paye = CValue::getOrSession("type");
 
-$prat_id = mbGetValueFromGet("prat_id", 0);
+$prat_id = CValue::get("prat_id", 0);
 if(!$prat_id) {
   echo "Vous devez choisir un praticien valide";
   CApp::rip();
 }
 if($filter->_date_max > mbDate())
  $filter->_date_max = mbDate();
-$filter->paye = mbGetValueFromGet("type", 0);
+$filter->paye = CValue::get("type", 0);
 $total = 0;
 
 // Chargement du praticien

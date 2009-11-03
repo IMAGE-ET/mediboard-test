@@ -11,8 +11,8 @@
 
 global $AppUI, $can;
 
-$prescription_line_medicament_id = mbGetValueFromPost("prescription_line_medicament_id");
-$sejour_id = mbGetValueFromPost("sejour_id");
+$prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
+$sejour_id = CValue::post("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);

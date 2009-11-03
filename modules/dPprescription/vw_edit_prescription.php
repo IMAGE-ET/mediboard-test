@@ -12,9 +12,9 @@ global $AppUI, $can, $dialog;
 $can->needsRead();
 
 $filter = new CPrescription();
-$filter->object_class    = mbGetValueFromGet("object_class", "CSejour");
-$filter->object_id       = mbGetValueFromGet("object_id");
-$prescription_id    = mbGetValueFromGet("prescription_id");
+$filter->object_class    = CValue::get("object_class", "CSejour");
+$filter->object_id       = CValue::get("object_id");
+$prescription_id    = CValue::get("prescription_id");
 
 // Initialisation
 $patient = new CPatient();

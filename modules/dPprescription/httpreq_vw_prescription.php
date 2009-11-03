@@ -12,29 +12,29 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
-$object_class    = mbGetValueFromGet("object_class");
-$object_id       = mbGetValueFromGet("object_id");
-$mode_pharma     = mbGetValueFromGet("mode_pharma", 0);
-$refresh_pharma  = mbGetValueFromGet("refresh_pharma", 0);
-$mode_protocole  = mbGetValueFromGetOrSession("mode_protocole", 0);
-$full_mode       = mbGetValueFromGet("full_mode", 0);
-$sejour_id       = mbGetValueFromGetOrSession("sejour_id");
-$chir_id         = mbGetValueFromGetOrSession("chir_id");
-$anesth_id       = mbGetValueFromGetOrSession("anesth_id");
-$operation_id    = mbGetValueFromGetOrSession("operation_id");
-$type            = mbGetValueFromGetOrSession("type");
-$element_id      = mbGetValueFromGetOrSession("element_id");
-$chapitre        = mbGetValueFromGetOrSession("chapitre", "medicament");
-$mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
-$pratSel_id      = mbGetValueFromGetOrSession("pratSel_id");
-$mode_sejour     = mbGetValueFromGetOrSession("mode_sejour", false);
-$praticien_for_prot_id = mbGetValueFromGetOrSession("praticien_for_prot_id");
+$prescription_id = CValue::getOrSession("prescription_id");
+$object_class    = CValue::get("object_class");
+$object_id       = CValue::get("object_id");
+$mode_pharma     = CValue::get("mode_pharma", 0);
+$refresh_pharma  = CValue::get("refresh_pharma", 0);
+$mode_protocole  = CValue::getOrSession("mode_protocole", 0);
+$full_mode       = CValue::get("full_mode", 0);
+$sejour_id       = CValue::getOrSession("sejour_id");
+$chir_id         = CValue::getOrSession("chir_id");
+$anesth_id       = CValue::getOrSession("anesth_id");
+$operation_id    = CValue::getOrSession("operation_id");
+$type            = CValue::getOrSession("type");
+$element_id      = CValue::getOrSession("element_id");
+$chapitre        = CValue::getOrSession("chapitre", "medicament");
+$mode_anesth     = CValue::getOrSession("mode_anesth");
+$pratSel_id      = CValue::getOrSession("pratSel_id");
+$mode_sejour     = CValue::getOrSession("mode_sejour", false);
+$praticien_for_prot_id = CValue::getOrSession("praticien_for_prot_id");
 
 // Recuperation de l'operation_id stocké en session en salle d'op
 if(!$operation_id && !$mode_sejour){
   $operation_id = @$_SESSION["dPsalleOp"]["operation_id"];
-  mbSetValueToSession("operation_id", $operation_id);
+  CValue::setSession("operation_id", $operation_id);
 }
 
 if($pratSel_id){
@@ -42,10 +42,10 @@ if($pratSel_id){
 }
 	
 // Gestion du mode d'affichage
-$readonly            = mbGetValueFromGetOrSession("readonly", 1);
-$lite                = mbGetValueFromGetOrSession("lite", CAppUI::pref('mode_readonly') ? 0 : 1);
-$full_line_guid      = mbGetValueFromGetOrSession("full_line_guid"); 
-$praticien_sortie_id = mbGetValueFromGetOrSession("praticien_sortie_id");
+$readonly            = CValue::getOrSession("readonly", 1);
+$lite                = CValue::getOrSession("lite", CAppUI::pref('mode_readonly') ? 0 : 1);
+$full_line_guid      = CValue::getOrSession("full_line_guid"); 
+$praticien_sortie_id = CValue::getOrSession("praticien_sortie_id");
 
 // Initialisations
 $protocoles_praticien = array();

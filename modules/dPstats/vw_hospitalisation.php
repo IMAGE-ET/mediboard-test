@@ -18,22 +18,22 @@ CAppUI::requireModuleFile('dPstats', 'graph_joursparservice');
 
 $filter = new CSejour();
 
-$filter->_date_min_stat = mbGetValueFromGetOrSession("_date_min_stat", mbDate("-1 YEAR"));
+$filter->_date_min_stat = CValue::getOrSession("_date_min_stat", mbDate("-1 YEAR"));
 $rectif = mbTransformTime("+0 DAY", $filter->_date_min_stat, "%d")-1;
 $filter->_date_min_stat = mbDate("-$rectif DAYS", $filter->_date_min_stat);
 
-$filter->_date_max_stat = mbGetValueFromGetOrSession("_date_max_stat",  mbDate());
+$filter->_date_max_stat = CValue::getOrSession("_date_max_stat",  mbDate());
 $rectif = mbTransformTime("+0 DAY", $filter->_date_max_stat, "%d")-1;
 $filter->_date_max_stat = mbDate("-$rectif DAYS", $filter->_date_max_stat);
 $filter->_date_max_stat = mbDate("+ 1 MONTH", $filter->_date_max_stat);
 $filter->_date_max_stat = mbDate("-1 DAY", $filter->_date_max_stat);
 
-$filter->_service = mbGetValueFromGetOrSession("service_id", 0);
-$filter->type = mbGetValueFromGetOrSession("type", 1);
-$filter->praticien_id = mbGetValueFromGetOrSession("prat_id", 0);
-$filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
+$filter->_service = CValue::getOrSession("service_id", 0);
+$filter->type = CValue::getOrSession("type", 1);
+$filter->praticien_id = CValue::getOrSession("prat_id", 0);
+$filter->_specialite = CValue::getOrSession("discipline_id", 0);
 
-$type_data = mbGetValueFromGetOrSession("type_data", "prevue");
+$type_data = CValue::getOrSession("type_data", "prevue");
 
 // Qualité de l'information
 $qualite = array();

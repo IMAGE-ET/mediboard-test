@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$chapitre = mbGetValueFromGet("chapitre");
-$praticien_id = mbGetValueFromGet("praticien_id");
+$chapitre = CValue::get("chapitre");
+$praticien_id = CValue::get("praticien_id");
 
 $favoris = CPrescription::getFavorisPraticien($praticien_id, $chapitre);
 

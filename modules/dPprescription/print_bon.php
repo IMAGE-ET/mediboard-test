@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$prescription_id = mbGetValueFromGet("prescription_id");
-$sel_chapitre = mbGetValueFromGet("sel_chapitre");
-$debut = mbGetValueFromGet("debut", mbDate());
+$prescription_id = CValue::get("prescription_id");
+$sel_chapitre = CValue::get("sel_chapitre");
+$debut = CValue::get("debut", mbDate());
 
 $prescription = new CPrescription();
 $prescription->load($prescription_id);

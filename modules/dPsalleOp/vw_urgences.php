@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", mbDate());
 
 // Listes des interventions hors plage
 $operation = new COperation;

@@ -10,8 +10,8 @@
 
 global $AppUI;
 
-$del = mbGetValueFromPost("del");
-$moment_unitaire_id = mbGetValueFromPost("moment_unitaire_id");
+$del = CValue::post("del");
+$moment_unitaire_id = CValue::post("moment_unitaire_id");
 $mode_checkbox = false;
 
 //Traitement specifique pour la gestion des checkBox
@@ -23,10 +23,10 @@ foreach($list_checkbox as $_checkbox){
 	  $moment_unitaire->loadMatchingObject();
 	  
 	  $prise_poso = new CPrisePosologie();
-	  $prise_poso->object_id = mbGetValueFromPost("object_id");
-	  $prise_poso->object_class = mbGetValueFromPost("object_class");
-	  $prise_poso->unite_prise = mbGetValueFromPost("unite_prise");
-	  $prise_poso->quantite = mbGetValueFromPost("quantite");
+	  $prise_poso->object_id = CValue::post("object_id");
+	  $prise_poso->object_class = CValue::post("object_class");
+	  $prise_poso->unite_prise = CValue::post("unite_prise");
+	  $prise_poso->quantite = CValue::post("quantite");
 	  $prise_poso->moment_unitaire_id = $moment_unitaire->_id;
 	  $msg = $prise_poso->store();
 	  $mode_checkbox = true;
@@ -35,10 +35,10 @@ foreach($list_checkbox as $_checkbox){
 
 if(isset($_POST["_urgent"])){
   $prise_poso = new CPrisePosologie();
-	$prise_poso->object_id = mbGetValueFromPost("object_id");
-	$prise_poso->object_class = mbGetValueFromPost("object_class");
-	$prise_poso->quantite = mbGetValueFromPost("quantite");
-	$prise_poso->unite_prise = mbGetValueFromPost("unite_prise");
+	$prise_poso->object_id = CValue::post("object_id");
+	$prise_poso->object_class = CValue::post("object_class");
+	$prise_poso->quantite = CValue::post("quantite");
+	$prise_poso->unite_prise = CValue::post("unite_prise");
 	$prise_poso->urgence_datetime = mbDateTime();
 	$msg = $prise_poso->store();
   $mode_checkbox = true;
@@ -62,13 +62,13 @@ if($_moment_explode[0] == "unitaire"){
 	$do->doIt();
 } else {
 	// On recupere toutes les valeurs passées
-  $object_id = mbGetValueFromPost("object_id");
-  $object_class = mbGetValueFromPost("object_class");
-  $quantite = mbGetValueFromPost("quantite");
-  $unite_prise = mbGetValueFromPost("unite_prise");
-  $nb_tous_les = mbGetValueFromPost("nb_tous_les");
-  $unite_tous_les = mbGetValueFromPost("unite_tous_les");
-  $decalage_prise = mbGetValueFromPost("decalage_prise");
+  $object_id = CValue::post("object_id");
+  $object_class = CValue::post("object_class");
+  $quantite = CValue::post("quantite");
+  $unite_prise = CValue::post("unite_prise");
+  $nb_tous_les = CValue::post("nb_tous_les");
+  $unite_tous_les = CValue::post("unite_tous_les");
+  $decalage_prise = CValue::post("decalage_prise");
   
   // Si moment complexe, chargement des moments unitaires correspondants
   $moment = new CBcbMoment();

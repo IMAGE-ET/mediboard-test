@@ -10,10 +10,10 @@
 
 global $AppUI;
 
-$object_id    = mbGetValueFromGet("object_id");
-$object_class = mbGetValueFromGet("object_class");
+$object_id    = CValue::get("object_id");
+$object_class = CValue::get("object_class");
 
-$mode_pack = mbGetValueFromGet("mode_pack", "0");
+$mode_pack = CValue::get("mode_pack", "0");
 
 $object = new $object_class;
 $object->load($object_id);

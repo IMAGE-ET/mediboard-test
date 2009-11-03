@@ -11,8 +11,8 @@
 global $can, $g;
 $can->needsRead();
 
-$type     = mbGetValueFromGetOrSession('type');
-$keywords = mbGetValueFromGetOrSession('keywords');
+$type     = CValue::getOrSession('type');
+$keywords = CValue::getOrSession('keywords');
 
 $order = new CProductOrder();
 $societe = new CSociete();

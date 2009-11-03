@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$code_cip = mbGetValueFromGet("code_cip");
+$code_cip = CValue::get("code_cip");
 
 $produit = new CBcbProduit();
 if($code_cip && is_numeric($code_cip)){

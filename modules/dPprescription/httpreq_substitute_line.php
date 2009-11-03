@@ -11,10 +11,10 @@
 
 global $AppUI;
 
-$code_cip    = mbGetValueFromGet("code_cip");
-$line_id     = mbGetValueFromGet("line_id");
-$mode_pharma = mbGetValueFromGet("mode_pharma"); 
-$mode_protocole = mbGetValueFromGet("mode_protocole");
+$code_cip    = CValue::get("code_cip");
+$line_id     = CValue::get("line_id");
+$mode_pharma = CValue::get("mode_pharma"); 
+$mode_protocole = CValue::get("mode_protocole");
 
 // Chargement de la ligne à substituer
 $line = new CPrescriptionLineMedicament();

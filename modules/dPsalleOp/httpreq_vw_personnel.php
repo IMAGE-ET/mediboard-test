@@ -11,12 +11,12 @@ global $can, $m;
 
 CAppUI::requireModuleFile("dPsalleOp", "inc_personnel");
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", mbDate());
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 
 // Chargement de l'operation selectionnee
-$operation_id = mbGetValueFromGetOrSession("operation_id");
+$operation_id = CValue::getOrSession("operation_id");
 $selOp = new COperation();
 $selOp->load($operation_id);
 $selOp->loadRefPlageOp();

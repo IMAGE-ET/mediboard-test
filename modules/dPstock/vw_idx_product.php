@@ -12,9 +12,9 @@ global $can;
 $can->needsAdmin();
 
 // Gets objects ID from Get or Session
-$product_id  = mbGetValueFromGetOrSession('product_id', null);
-$societe_id  = mbGetValueFromGetOrSession('societe_id');
-$category_id = mbGetValueFromGetOrSession('category_id');
+$product_id  = CValue::getOrSession('product_id', null);
+$societe_id  = CValue::getOrSession('societe_id');
+$category_id = CValue::getOrSession('category_id');
 
 // Loads the required Product and its References
 $product = new CProduct();

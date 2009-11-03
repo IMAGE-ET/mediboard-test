@@ -12,21 +12,21 @@ global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
 
-$doc_ged_id = mbGetValueFromGetOrSession("doc_ged_id",0);
+$doc_ged_id = CValue::getOrSession("doc_ged_id",0);
 $fileSel = new CFile;
 
 $docGed = new CDocGed;
 if(!$docGed->load($doc_ged_id) || $docGed->etat!=0){
   // Ce document n'est pas valide ou n'est pas un modèle
   $doc_ged_id = null;
-  mbSetValueToSession("doc_ged_id");
+  CValue::setSession("doc_ged_id");
   $docGed = new CDocGed;
 }else{
   $docGed->loadLastEntry();
   if(!$docGed->_lastentry->doc_ged_suivi_id){
     // Ce document n'a pas de modèle
     $doc_ged_id = null;
-    mbSetValueToSession("doc_ged_id");
+    CValue::setSession("doc_ged_id");
     $docGed = new CDocGed;  
   }else{
     $docGed->_lastentry->loadFile();

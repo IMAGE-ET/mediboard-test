@@ -18,19 +18,19 @@ $listClasses = getInstalledClasses();
 
 // Chargement de l'IdSante400 courant
 $idSante400 = new CIdSante400;
-$idSante400->load(mbGetValueFromGet("id_sante400_id"));
+$idSante400->load(CValue::get("id_sante400_id"));
 $idSante400->loadRefs();
 
 // Chargement de la liste des id4Sante400 pour le filtre
 $filter = new CIdSante400;
-$filter->object_id    = mbGetValueFromGet("object_id"   );
-$filter->object_class = mbGetValueFromGet("object_class");
-$filter->tag          = mbGetValueFromGet("tag"         );
-$filter->id400        = mbGetValueFromGet("id400");
+$filter->object_id    = CValue::get("object_id"   );
+$filter->object_class = CValue::get("object_class");
+$filter->tag          = CValue::get("tag"         );
+$filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
 
 // Rester sur le même filtre en mode dialogue
-$dialog = mbGetValueFromGet("dialog");
+$dialog = CValue::get("dialog");
 if ($dialog && $idSante400->_id) {
   $filter->object_class = $idSante400->object_class;
   $filter->object_id    = $idSante400->object_id   ;
@@ -45,7 +45,7 @@ if ($filter->object_id && $filter->object_class) {
 
 // Requête du filtre
 $order = "last_update DESC";
-$max = mbGetValueFromGet("max", 30);
+$max = CValue::get("max", 30);
 $limit = "0, $max";
 
 $list_idSante400 = $filter->loadMatchingList($order, $limit);
@@ -54,7 +54,7 @@ foreach ($list_idSante400 as &$_idSante400) {
   $_idSante400->loadRefs();
 }
 
-$filter->last_update = mbGetValue($idSante400->last_update, mbDateTime());
+$filter->last_update = CValue::first($idSante400->last_update, mbDateTime());
 
 // Prendre exemple sur le fitre pour la création
 if (!$idSante400->_id) {

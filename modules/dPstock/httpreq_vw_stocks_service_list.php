@@ -11,12 +11,12 @@
 global $can;
 $can->needsEdit();
 
-$category_id = mbGetValueFromGet('category_id');
-$service_id  = mbGetValueFromGet('service_id');
-$keywords    = mbGetValueFromGet('keywords');
-$limit       = mbGetValueFromGet('limit');
+$category_id = CValue::get('category_id');
+$service_id  = CValue::get('service_id');
+$keywords    = CValue::get('keywords');
+$limit       = CValue::get('limit');
 
-mbSetValueToSession('category_id', $category_id);
+CValue::setSession('category_id', $category_id);
 
 $where = array();
 if ($service_id) {

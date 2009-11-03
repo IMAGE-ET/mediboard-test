@@ -12,8 +12,8 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$category_id = mbGetValueFromGetOrSession("category_id");
-$executant_prescription_line_id = mbGetValueFromGet("executant_prescription_line_id");
+$category_id = CValue::getOrSession("category_id");
+$executant_prescription_line_id = CValue::get("executant_prescription_line_id");
 
 $executants = array();
 $functions_cat = array();

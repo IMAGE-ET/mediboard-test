@@ -13,11 +13,11 @@ global $AppUI, $can, $m;
 CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
 CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
 
-$user_id = mbGetValueFromGet("user_id", $AppUI->user_id);
+$user_id = CValue::get("user_id", $AppUI->user_id);
 $user = new CMediusers;
 $user->load($user_id);
-$debut = mbGetValueFromGet("debut", mbDate("-1 WEEK"));
-$fin = mbGetValueFromGet("fin", mbDate());
+$debut = CValue::get("debut", mbDate("-1 WEEK"));
+$fin = CValue::get("fin", mbDate());
 
 $sql = "SELECT COUNT(user_log.user_log_id) AS total," .
     "\nDATE_FORMAT(user_log.date, '%Y-%m-%d') AS day" .

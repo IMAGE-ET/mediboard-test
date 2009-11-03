@@ -12,7 +12,7 @@ global $AppUI, $can, $m, $g;
 
 $doc_ged_id = 0;
 $file_id = null;
-$_firstModeleGed  = mbGetValueFromPost("_firstModeleGed", null);
+$_firstModeleGed  = CValue::post("_firstModeleGed", null);
 $erreur_file=null;
 
 class CDoDocGedAddEdit extends CDoObjectAddEdit {
@@ -28,9 +28,9 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
   function doBind() {
     global $AppUI;
     
-    $this->ajax = mbGetValueFromPost("ajax");
-    $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
-    $this->callBack = mbGetValueFromPost("callback");
+    $this->ajax = CValue::post("ajax");
+    $this->suppressHeaders = CValue::post("suppressHeaders");
+    $this->callBack = CValue::post("callback");
     unset($_POST["ajax"]);
     unset($_POST["suppressHeaders"]);
     unset($_POST["callback"]);
@@ -90,9 +90,9 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   function doBind() {
     global $AppUI;
     
-    $this->ajax = mbGetValueFromPost("ajax");
-    $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
-    $this->callBack = mbGetValueFromPost("callback");
+    $this->ajax = CValue::post("ajax");
+    $this->suppressHeaders = CValue::post("suppressHeaders");
+    $this->callBack = CValue::post("callback");
     unset($_POST["ajax"]);
     unset($_POST["suppressHeaders"]);
     unset($_POST["callback"]);

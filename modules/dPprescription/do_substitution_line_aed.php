@@ -11,7 +11,7 @@
 
 global $AppUI;
 
-$object_guid = mbGetValueFromPost("object_guid");
+$object_guid = CValue::post("object_guid");
 
 // Chargement de la ligne à rendre active
 $line = CMbObject::loadFromGuid($object_guid);

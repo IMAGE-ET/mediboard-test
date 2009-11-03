@@ -12,13 +12,13 @@ global $can, $g;
 
 $can->needsRead();
 
-$doc_ged_id   = mbGetValueFromGetOrSession("doc_ged_id");
-$theme_id     = mbGetValueFromGetOrSession("theme_id");
-$chapitre_id  = mbGetValueFromGetOrSession("chapitre_id");
-$sort_by      = mbGetValueFromGetOrSession("sort_by", "date");
-$sort_way     = mbGetValueFromGetOrSession("sort_way", "DESC");
-$keywords     = mbGetValueFromGet("keywords");
-$first        = intval(mbGetValueFromGet("first", 0));
+$doc_ged_id   = CValue::getOrSession("doc_ged_id");
+$theme_id     = CValue::getOrSession("theme_id");
+$chapitre_id  = CValue::getOrSession("chapitre_id");
+$sort_by      = CValue::getOrSession("sort_by", "date");
+$sort_way     = CValue::getOrSession("sort_way", "DESC");
+$keywords     = CValue::get("keywords");
+$first        = intval(CValue::get("first", 0));
 
 // Procédure active et non annulée
 $where = array();

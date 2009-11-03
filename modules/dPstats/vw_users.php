@@ -12,15 +12,15 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
+$user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 $user    = new CMediusers;
 $user->load($user_id);
 $listUsers = $user->loadListFromType();
-$debutlog  = mbGetValueFromGetOrSession("debutlog", mbDate("-1 WEEK"));
-$finlog    = mbGetValueFromGetOrSession("finlog", mbDate());
+$debutlog  = CValue::getOrSession("debutlog", mbDate("-1 WEEK"));
+$finlog    = CValue::getOrSession("finlog", mbDate());
 
-$debutact      = mbGetValueFromGetOrSession("debutact", mbDate());
-$finact        = mbGetValueFromGetOrSession("finact", mbDate());
+$debutact      = CValue::getOrSession("debutact", mbDate());
+$finact        = CValue::getOrSession("finact", mbDate());
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -11,11 +11,11 @@
 global $can, $g;
 $can->needsAdmin();
 
-$months_count    = mbGetValueFromGetOrSession("months_count", 12);
-$months_relative = mbGetValueFromGetOrSession("months_relative", 0);
-$filters         = mbGetValueFromGetOrSession("filters", array());
-$evts            = mbGetValueFromGet("evenements");
-$comparison      = mbGetValueFromGetOrSession("comparison", array("elem_concerne", "_criticite", "evenements"));
+$months_count    = CValue::getOrSession("months_count", 12);
+$months_relative = CValue::getOrSession("months_relative", 0);
+$filters         = CValue::getOrSession("filters", array());
+$evts            = CValue::get("evenements");
+$comparison      = CValue::getOrSession("comparison", array("elem_concerne", "_criticite", "evenements"));
 
 $graphs = array();
 

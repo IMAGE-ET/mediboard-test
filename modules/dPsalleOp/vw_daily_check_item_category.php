@@ -11,7 +11,7 @@
 global $can;
 $can->needsAdmin();
 
-$item_category_id = mbGetValueFromGetOrSession('item_category_id');
+$item_category_id = CValue::getOrSession('item_category_id');
 
 $item_category = new CDailyCheckItemCategory;
 $item_category->load($item_category_id);

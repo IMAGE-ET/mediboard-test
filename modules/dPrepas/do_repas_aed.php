@@ -22,9 +22,9 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     $this->redirect  = "m=$m&tab=vw_planning_repas";
     
     // Synchronisation Offline
-    $this->synchro         = mbGetValueFromPost("_syncroOffline"  , false);
-    $this->synchroConfirm  = mbGetValueFromPost("_synchroConfirm" , null);
-    $this->synchroDatetime = mbGetValueFromPost("_synchroDatetime", null);
+    $this->synchro         = CValue::post("_syncroOffline"  , false);
+    $this->synchroConfirm  = CValue::post("_synchroConfirm" , null);
+    $this->synchroDatetime = CValue::post("_synchroDatetime", null);
     $this->ds = CSQLDataSource::get("std");
     
   }
@@ -38,8 +38,8 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
       $callBack = $this->callBack;
       
       if($this->synchro){
-        $del          = mbGetValueFromPost("del", 0);
-        $tmp_repas_id = mbGetValueFromPost("_tmp_repas_id", 0);
+        $del          = CValue::post("del", 0);
+        $tmp_repas_id = CValue::post("_tmp_repas_id", 0);
         $msgSystem    = $AppUI->getMsg();
 
         $smarty       = new CSmartyDP("modules/dPrepas");
@@ -120,7 +120,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
        }
     }
 
-    if (intval(mbGetValueFromPost('del'))) {
+    if (intval(CValue::post('del'))) {
       $this->doDelete();
     } else {
       $this->doStore();

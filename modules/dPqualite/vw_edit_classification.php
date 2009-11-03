@@ -12,8 +12,8 @@ global $can, $g;
 
 $can->needsAdmin();
 
-$typeVue       = mbGetValueFromGetOrSession("typeVue"      , 0);
-$etablissement = mbGetValueFromGetOrSession("etablissement", $g);
+$typeVue       = CValue::getOrSession("typeVue"      , 0);
+$etablissement = CValue::getOrSession("etablissement", $g);
 
 // Liste des établissements
 $etablissements = new CMediusers();
@@ -27,7 +27,7 @@ $smarty->assign("typeVue"       , $typeVue       );
 
 if($typeVue){
   // Liste des Themes
-  $doc_theme_id = mbGetValueFromGetOrSession("doc_theme_id", null);
+  $doc_theme_id = CValue::getOrSession("doc_theme_id", null);
   // Chargement du theme demandé
   $theme=new CThemeDoc;
   $theme->load($doc_theme_id);
@@ -45,12 +45,12 @@ if($typeVue){
 }else{
   $maxDeep = CAppUI::conf("dPqualite CChapitreDoc profondeur") - 2;
   // Chargement du chapitre demandé
-  $doc_chapitre_id = mbGetValueFromGetOrSession("doc_chapitre_id", null);
+  $doc_chapitre_id = CValue::getOrSession("doc_chapitre_id", null);
   $chapitre = new CChapitreDoc;
   $chapitre->load($doc_chapitre_id);
   $chapitre->loadRefsFwd();
   // Chargement du chapitre de navigation
-  $nav_chapitre_id = mbGetValueFromGetOrSession("nav_chapitre_id", null);
+  $nav_chapitre_id = CValue::getOrSession("nav_chapitre_id", null);
   $nav_chapitre = new CChapitreDoc;
   $nav_chapitre->load($nav_chapitre_id);
   $nav_chapitre->loadRefsFwd();

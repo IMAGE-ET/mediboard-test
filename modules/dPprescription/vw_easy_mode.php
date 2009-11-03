@@ -18,10 +18,10 @@ foreach($chapitres as &$categories){
 	}
 }
 
-$prescription_id = mbGetValueFromGet("prescription_id");
-$mode_protocole  = mbGetValueFromGet("mode_protocole");
-$mode_pharma     = mbGetValueFromGet("mode_pharma");
-$chapitre        = mbGetValueFromGet("chapitre");
+$prescription_id = CValue::get("prescription_id");
+$mode_protocole  = CValue::get("mode_protocole");
+$mode_pharma     = CValue::get("mode_pharma");
+$chapitre        = CValue::get("chapitre");
 
 
 // chargement de la prescription

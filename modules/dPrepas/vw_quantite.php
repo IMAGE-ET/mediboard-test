@@ -11,9 +11,9 @@ global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
 $ds = CSQLDataSource::get("std");
-$service_id = mbGetValueFromGetOrSession("service_id" , null);
-$type       = mbGetValueFromGetOrSession("type"       , null);
-$date       = mbGetValueFromGetOrSession("date"       , mbDate());
+$service_id = CValue::getOrSession("service_id" , null);
+$type       = CValue::getOrSession("type"       , null);
+$date       = CValue::getOrSession("date"       , mbDate());
 
 $listRepas   = new CRepas;
 $where = array();

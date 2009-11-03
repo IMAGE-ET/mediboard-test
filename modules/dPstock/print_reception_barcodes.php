@@ -11,9 +11,9 @@
 global $can;
 $can->needsRead();
 
-$order_id    = mbGetValueFromGet('order_id');
-$force_print = mbGetValueFromGet('force_print');
-$receptions_list = mbGetValueFromGet('receptions_list');
+$order_id    = CValue::get('order_id');
+$force_print = CValue::get('force_print');
+$receptions_list = CValue::get('receptions_list');
 
 $order = new CProductOrder();
 $order->load($order_id);

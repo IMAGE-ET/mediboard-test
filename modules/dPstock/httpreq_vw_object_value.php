@@ -12,9 +12,9 @@ global $can;
 
 $can->needsRead();
 
-$class = mbGetValueFromGet('class');
-$id    = mbGetValueFromGet('id');
-$field = mbGetValueFromGet('field');
+$class = CValue::get('class');
+$id    = CValue::get('id');
+$field = CValue::get('field');
 
 // Loads the expected Object
 if (class_exists($class)) {

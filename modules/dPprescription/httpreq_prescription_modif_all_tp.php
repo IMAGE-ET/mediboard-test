@@ -10,12 +10,12 @@
 
 global $AppUI;
 
-$prescription_id = mbGetValueFromGet("prescription_id");
-$praticien_id    = mbGetValueFromGet("praticien_id", $AppUI->user_id);
-$date            = mbGetValueFromGet("date", mbDate());
-$time            = mbGetValueFromGet("time_debut");
-$actionType      = mbGetValueFromGet("actionType", "stop");
-$mode_pharma     = mbGetValueFromGet("mode_pharma");
+$prescription_id = CValue::get("prescription_id");
+$praticien_id    = CValue::get("praticien_id", $AppUI->user_id);
+$date            = CValue::get("date", mbDate());
+$time            = CValue::get("time_debut");
+$actionType      = CValue::get("actionType", "stop");
+$mode_pharma     = CValue::get("mode_pharma");
 
 // Chargement des traitements perso
 $traitement_perso = new CPrescriptionLineMedicament();

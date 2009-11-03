@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$codeCCAM = strtoupper(mbGetValueFromGetOrSession("codeCCAM", ""));
-$prat_id  = mbGetValueFromGetOrSession("prat_id", 0);
-$type     = mbGetValueFromGetOrSession("type", "ambu");
+$codeCCAM = strtoupper(CValue::getOrSession("codeCCAM", ""));
+$prat_id  = CValue::getOrSession("prat_id", 0);
+$type     = CValue::getOrSession("type", "ambu");
 
 $total["nbSejours"] = 0;
 $total["duree_moy"] = 0;

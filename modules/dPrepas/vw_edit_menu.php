@@ -11,10 +11,10 @@ global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
 $ds = CSQLDataSource::get("std");
-$menu_id      = mbGetValueFromGetOrSession("menu_id", null);
-$plat_id      = mbGetValueFromGetOrSession("plat_id", null);
-$typerepas_id = mbGetValueFromGetOrSession("typerepas_id", null);
-$typeVue      = mbGetValueFromGetOrSession("typeVue", 0);
+$menu_id      = CValue::getOrSession("menu_id", null);
+$plat_id      = CValue::getOrSession("plat_id", null);
+$typerepas_id = CValue::getOrSession("typerepas_id", null);
+$typeVue      = CValue::getOrSession("typeVue", 0);
 
 // Liste des Type de Repas
 $listTypeRepas = new CTypeRepas;
@@ -35,7 +35,7 @@ if($typeVue == 2){
   if($typeRepas->group_id != $g){
     $typeRepas = new CTypeRepas;
     $typerepas_id = null;
-    mbSetValueToSession("typerepas_id", null);
+    CValue::setSession("typerepas_id", null);
   }
   
   $listHours = array();
@@ -54,7 +54,7 @@ if($typeVue == 2){
   if($plat->group_id != $g){
     $plat = new CPlat;
     $plat_id = null;
-    mbSetValueToSession("plat_id", null);
+    CValue::setSession("plat_id", null);
   }else{
     $plat->loadRefsFwd();
   }
@@ -75,7 +75,7 @@ if($typeVue == 2){
   if($menu->group_id != $g){
     $menu = new CMenu;
     $menu_id = null;
-    mbSetValueToSession("menu_id", null);
+    CValue::setSession("menu_id", null);
   }
   
   // Liste des menus

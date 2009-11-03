@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$code_moment_id = mbGetValueFromGetOrSession("code_moment_id");
+$code_moment_id = CValue::getOrSession("code_moment_id");
 
 // Chargement du moment selectionné
 $moment = new CBcbMoment();

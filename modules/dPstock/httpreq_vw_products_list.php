@@ -11,10 +11,10 @@
 global $can;
 $can->needsRead();
 
-$category_id = mbGetValueFromGetOrSession('category_id');
-$societe_id  = mbGetValueFromGetOrSession('societe_id');
-$limit       = mbGetValueFromGet('limit');
-$keywords    = mbGetValueFromGet('keywords');
+$category_id = CValue::getOrSession('category_id');
+$societe_id  = CValue::getOrSession('societe_id');
+$limit       = CValue::get('limit');
+$keywords    = CValue::get('keywords');
 
 $where = array();
 if ($category_id) {

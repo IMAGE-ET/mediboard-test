@@ -14,12 +14,12 @@ $can->needsEdit();
 //set_time_limit(180);
 //ini_set("memory_limit", "512M");
 
-$mode = mbGetValueFromGet("mode", "html");
+$mode = CValue::get("mode", "html");
 
-$deblist = mbGetValueFromGetOrSession("deblistbloc", mbDate("-1 DAY"));
+$deblist = CValue::getOrSession("deblistbloc", mbDate("-1 DAY"));
 $finlist = $deblist;
-$finlist = max(mbGetValueFromGet("finlistbloc", $deblist), $deblist);
-$bloc_id = mbGetValueFromGetOrSession("bloc_id");
+$finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
+$bloc_id = CValue::getOrSession("bloc_id");
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);

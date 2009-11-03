@@ -12,7 +12,7 @@ global $m, $can;
 $can->needsAdmin();
 
 $doc = new CMbXMLDocument();
-$group_id = mbGetValueFromGet("group_id");
+$group_id = CValue::get("group_id");
 
 $domElementsPrescriptions = $doc->addElement($doc, "elementsPrescriptions");
 

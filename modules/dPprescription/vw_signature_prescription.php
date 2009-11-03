@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$prescription_id = mbGetValueFromGet("prescription_id");
-$annulation = mbGetValueFromGet("annulation", "0");
-$praticien_id = mbGetValueFromGet("praticien_id");
+$prescription_id = CValue::get("prescription_id");
+$annulation = CValue::get("annulation", "0");
+$praticien_id = CValue::get("praticien_id");
 
 // Chargement des praticiens
 $praticien = new CMediusers();

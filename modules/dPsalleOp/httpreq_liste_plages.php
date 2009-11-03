@@ -10,11 +10,11 @@
 global $can, $g;
 $can->needsRead();
 
-$salle_id     = mbGetValueFromGetOrSession("salle");
-$bloc_id      = mbGetValueFromGetOrSession("bloc_id");
-$date         = mbGetValueFromGetOrSession("date", mbDate());
-$operation_id = mbGetValueFromGetOrSession("operation_id");
-$hide_finished = mbGetValueFromGetOrSession("hide_finished", 0);
+$salle_id     = CValue::getOrSession("salle");
+$bloc_id      = CValue::getOrSession("bloc_id");
+$date         = CValue::getOrSession("date", mbDate());
+$operation_id = CValue::getOrSession("operation_id");
+$hide_finished = CValue::getOrSession("hide_finished", 0);
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;

@@ -8,14 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$fiche_ei_id = mbGetValueFromGetOrSession("fiche_ei_id",null);
+$fiche_ei_id = CValue::getOrSession("fiche_ei_id",null);
 $catFiche = array();
 
 $fiche = new CFicheEi;
 if(!$fiche->load($fiche_ei_id)){
   // Cette fiche n'est pas valide
   $fiche_ei_id = null;
-  mbSetValueToSession("fiche_ei_id");
+  CValue::setSession("fiche_ei_id");
   $fiche = new CFicheEi;
 }else{
   $fiche->loadRefsFwd();

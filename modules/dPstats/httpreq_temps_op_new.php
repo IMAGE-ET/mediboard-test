@@ -24,7 +24,7 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
   $joinedFields = join(", ", $queryFields);
   
   // Intervale de temps
-	$intervalle = mbGetValueFromGet("intervalle");
+	$intervalle = CValue::get("intervalle");
 	
 	switch ($intervalle) {
 	  case "month" : $deb = mbDate("-1 month");

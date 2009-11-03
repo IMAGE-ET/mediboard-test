@@ -13,8 +13,8 @@ global $AppUI, $can, $m, $g;
 $can->needsAdmin();
 
 
-$doc_ged_id        = mbGetValueFromGetOrSession("doc_ged_id",0);
-$procAnnuleVisible = mbGetValueFromGetOrSession("procAnnuleVisible" , 0);
+$doc_ged_id        = CValue::getOrSession("doc_ged_id",0);
+$procAnnuleVisible = CValue::getOrSession("procAnnuleVisible" , 0);
 $lastactif         = mbGetvalueFromGet("lastactif", 0);
 
 $docGed = new CDocGed;
@@ -24,7 +24,7 @@ $listChapitres  = array();
 if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
   // Ce document n'est pas valide
   $doc_ged_id = null;
-  mbSetValueToSession("doc_ged_id");
+  CValue::setSession("doc_ged_id");
   $docGed = new CDocGed;
 }else{
   $docGed->loadLastActif();

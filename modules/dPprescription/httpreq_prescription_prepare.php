@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$no_poso = mbGetValueFromGet("no_poso");
-$line_id_for_poso = mbGetValueFromGet("line_id_for_poso");
-$code_cip = mbGetValueFromGet("code_cip");
-$prescription_line_id = mbGetValueFromGet("prescription_line_id");
+$no_poso = CValue::get("no_poso");
+$line_id_for_poso = CValue::get("line_id_for_poso");
+$code_cip = CValue::get("code_cip");
+$prescription_line_id = CValue::get("prescription_line_id");
 
 // Chargement de la ligne de prescription
 $prescription_line = new CPrescriptionLineMedicament();

@@ -11,7 +11,7 @@
 global $AppUI, $can, $m, $g;
 
 // Chargement de la prescription
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$prescription_id = CValue::getOrSession("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 

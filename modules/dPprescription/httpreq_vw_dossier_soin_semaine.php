@@ -11,8 +11,8 @@
 global $can;
 $can->needsRead();
 
-$date = mbGetValueFromGet("date");
-$prescription_id = mbGetValueFromGet("prescription_id");
+$date = CValue::get("date");
+$prescription_id = CValue::get("prescription_id");
 
 // Initialisations
 $sejour = new CSejour();

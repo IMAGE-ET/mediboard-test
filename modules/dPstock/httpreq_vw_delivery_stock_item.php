@@ -12,7 +12,7 @@ global $can;
 
 $can->needsRead();
 
-$stock_id = mbGetValueFromGetOrSession('stock_id');
+$stock_id = CValue::getOrSession('stock_id');
 
 // Loads the stock in function of the stock ID or the product ID
 $stock = new CProductStockGroup();

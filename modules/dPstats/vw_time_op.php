@@ -14,7 +14,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$typeVue = mbGetValueFromGetOrSession("typeVue", 2);
+$typeVue = CValue::getOrSession("typeVue", 2);
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);

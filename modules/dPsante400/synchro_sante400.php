@@ -13,20 +13,20 @@ $can->needsEdit();
 
 set_time_limit(90);
 
-CRecordSante400::$verbose = mbGetValueFromGet("verbose");
+CRecordSante400::$verbose = CValue::get("verbose");
 
 $types = CMouvFactory::getTypes();
-$type = mbGetValueFromGetOrSession("type", reset($types));
+$type = CValue::getOrSession("type", reset($types));
 
-$marked = mbGetValueFromGetOrSession("marked", "1");
-$max = mbGetValueFromGet("max", CAppUI::conf("dPsante400 nb_rows"));
+$marked = CValue::getOrSession("marked", "1");
+$max = CValue::get("max", CAppUI::conf("dPsante400 nb_rows"));
 
 // Load mouvements
-$class = mbGetValueFromGet("class");
+$class = CValue::get("class");
 $mouv =  $class ? new $class : CMouvFactory::create($type);
 $count = $mouv->count($marked);
 $mouvs = array();
-if ($rec = mbGetValueFromGet("rec")) {
+if ($rec = CValue::get("rec")) {
   try {
     $mouv->load($rec);
     $mouvs = array($mouv);

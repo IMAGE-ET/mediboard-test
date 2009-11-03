@@ -11,7 +11,7 @@
 global $can;
 $can->needsRead();
 
-$order_id = mbGetValueFromGet('order_id');
+$order_id = CValue::get('order_id');
 
 // Loads the expected Order
 $order = new CProductOrder();

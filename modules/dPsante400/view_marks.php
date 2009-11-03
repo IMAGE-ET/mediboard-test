@@ -15,24 +15,24 @@ $trigger_classes = CMouvFactory::getClasses();
 
 // Selected mark
 $mark = new CTriggerMark();
-$mark->load(mbGetValueFromGetOrSession("mark_id"));
+$mark->load(CValue::getOrSession("mark_id"));
 
 // filtered marks
 $filter = new CTriggerMark();
 $where = array();
-if ($filter->trigger_class = mbGetValueFromGetOrSession("trigger_class")) {
+if ($filter->trigger_class = CValue::getOrSession("trigger_class")) {
   $where["trigger_class"] = "LIKE '$filter->trigger_class%'"; 
 }
 
-if ($filter->trigger_number = mbGetValueFromGetOrSession("trigger_number")) {
+if ($filter->trigger_number = CValue::getOrSession("trigger_number")) {
   $where["trigger_number"] = "LIKE '$filter->trigger_number%'"; 
 }
 
-if ($filter->mark = mbGetValueFromGetOrSession("mark")) {
+if ($filter->mark = CValue::getOrSession("mark")) {
   $where["mark"] = "LIKE '$filter->mark%'"; 
 }
 
-if ("" !== $filter->done = mbGetValueFromGetOrSession("done", "")) {
+if ("" !== $filter->done = CValue::getOrSession("done", "")) {
   $where["done"] = "= '$filter->done'"; 
 }
 

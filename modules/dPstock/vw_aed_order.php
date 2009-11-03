@@ -11,10 +11,10 @@
 global $can;
 $can->needsEdit();
 
-$order_id    = mbGetValueFromGetOrSession('order_id');
-$category_id = mbGetValueFromGetOrSession('category_id');
-$societe_id  = mbGetValueFromGetOrSession('societe_id');
-$_autofill   = mbGetValueFromGet('_autofill');
+$order_id    = CValue::getOrSession('order_id');
+$category_id = CValue::getOrSession('category_id');
+$societe_id  = CValue::getOrSession('societe_id');
+$_autofill   = CValue::get('_autofill');
 
 // Loads the expected Order
 $order = new CProductOrder();

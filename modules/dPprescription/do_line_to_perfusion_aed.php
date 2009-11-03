@@ -10,13 +10,13 @@
 
 global $AppUI;
 
-$prescription_id = mbGetValueFromPost("prescription_id");
-$prescription_line_medicament_id = mbGetValueFromPost("prescription_line_medicament_id");
-$perfusion_id = mbGetValueFromPost("perfusion_id");
-$type = mbGetValueFromPost("type");
+$prescription_id = CValue::post("prescription_id");
+$prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
+$perfusion_id = CValue::post("perfusion_id");
+$type = CValue::post("type");
 
-$substitute_for_id = mbGetValueFromPost("substitute_for_id");
-$substitute_for_class = mbGetValueFromPost("substitute_for_class");
+$substitute_for_id = CValue::post("substitute_for_id");
+$substitute_for_class = CValue::post("substitute_for_class");
 
 // Chargement de la ligne de medicament
 $line_med = new CPrescriptionLineMedicament();

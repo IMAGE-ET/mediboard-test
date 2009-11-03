@@ -11,8 +11,8 @@
 
 global $AppUI;
 
-$category_id = mbGetValueFromPost("category_id");
-$category_dest_id = mbGetValueFromPost("category_dest_id");
+$category_id = CValue::post("category_id");
+$category_dest_id = CValue::post("category_dest_id");
 
 // Chargement des elements de la categorie selectionnée
 $element = new CElementPrescription();

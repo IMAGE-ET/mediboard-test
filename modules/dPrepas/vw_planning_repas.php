@@ -14,8 +14,8 @@ $can->needsRead();
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 
-$service_id = mbGetValueFromGetOrSession("service_id" , null);
-$date       = mbGetValueFromGetOrSession("date"       , mbDate());
+$service_id = CValue::getOrSession("service_id" , null);
+$date       = CValue::getOrSession("date"       , mbDate());
 
 $service = null;
 
@@ -34,7 +34,7 @@ $order = "debut, fin, nom";
 $listTypeRepas = $listTypeRepas->loadList(null,$order);
       
 if(!$service_id || !array_key_exists($service_id,$services)){
-  mbSetValueToSession("service_id", null);
+  CValue::setSession("service_id", null);
   $service_id = null ;
 }else{
   $service =& $services[$service_id].

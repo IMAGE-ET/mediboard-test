@@ -14,7 +14,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$intervalle = mbGetValueFromGet("intervalle", "none");
+$intervalle = CValue::get("intervalle", "none");
 
 // Liste des Praticiens
 $user = new CMediusers;

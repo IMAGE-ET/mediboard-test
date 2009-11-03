@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$adm = mbGetValueFromGet("adm");
+$adm = CValue::get("adm");
 $list_administrations = array();
-$mode_dossier = mbGetValueFromGet("mode_dossier");
+$mode_dossier = CValue::get("mode_dossier");
 
 $sejour = new CSejour();
 $date_sel = null;

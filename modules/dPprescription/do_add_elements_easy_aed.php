@@ -10,28 +10,28 @@
 
 global $AppUI;
 
-$token_elt          = mbGetValueFromPost("token_elt");
-$prescription_id    = mbGetValueFromPost("prescription_id");
-$debut              = mbGetValueFromPost("debut");
-$time_debut         = mbGetValueFromPost("time_debut");
-$duree              = mbGetValueFromPost("duree");
-$unite_duree        = mbGetValueFromPost("unite_duree", "jour");
-$quantite           = mbGetValueFromPost("quantite");
-$nb_fois            = mbGetValueFromPost("nb_fois");
-$unite_fois         = mbGetValueFromPost("unite_fois");
-$moment_unitaire_id = mbGetValueFromPost("moment_unitaire_id");
-$nb_tous_les        = mbGetValueFromPost("nb_tous_les");
-$unite_tous_les     = mbGetValueFromPost("unite_tous_les");
-$jour_decalage      = mbGetValueFromPost("jour_decalage");
-$decalage_line      = mbGetValueFromPost("decalage_line");
-$mode_protocole     = mbGetValueFromPost("mode_protocole","0");
-$mode_pharma        = mbGetValueFromPost("mode_pharma","0");
-$jour_decalage_fin  = mbGetValueFromPost("jour_decalage_fin");
-$decalage_line_fin  = mbGetValueFromPost("decalage_line_fin");
-$time_fin           = mbGetValueFromPost("time_fin"); 
-$decalage_prise     = mbGetValueFromPost("decalage_prise");
-$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
-$commentaire = mbGetValueFromPost("commentaire");
+$token_elt          = CValue::post("token_elt");
+$prescription_id    = CValue::post("prescription_id");
+$debut              = CValue::post("debut");
+$time_debut         = CValue::post("time_debut");
+$duree              = CValue::post("duree");
+$unite_duree        = CValue::post("unite_duree", "jour");
+$quantite           = CValue::post("quantite");
+$nb_fois            = CValue::post("nb_fois");
+$unite_fois         = CValue::post("unite_fois");
+$moment_unitaire_id = CValue::post("moment_unitaire_id");
+$nb_tous_les        = CValue::post("nb_tous_les");
+$unite_tous_les     = CValue::post("unite_tous_les");
+$jour_decalage      = CValue::post("jour_decalage");
+$decalage_line      = CValue::post("decalage_line");
+$mode_protocole     = CValue::post("mode_protocole","0");
+$mode_pharma        = CValue::post("mode_pharma","0");
+$jour_decalage_fin  = CValue::post("jour_decalage_fin");
+$decalage_line_fin  = CValue::post("decalage_line_fin");
+$time_fin           = CValue::post("time_fin"); 
+$decalage_prise     = CValue::post("decalage_prise");
+$praticien_id = CValue::post("praticien_id", $AppUI->user_id);
+$commentaire = CValue::post("commentaire");
 
 // Initialisation des tableaux
 $lines = array();

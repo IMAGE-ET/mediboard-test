@@ -11,9 +11,9 @@ global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
 
-$date           = mbGetValueFromGetOrSession("date"           , mbDate());
-$typerepas_id   = mbGetValueFromGetOrSession("typerepas_id"   , null);
-$affectation_id = mbGetValueFromGetOrSession("affectation_id" , null);
+$date           = CValue::getOrSession("date"           , mbDate());
+$typerepas_id   = CValue::getOrSession("typerepas_id"   , null);
+$affectation_id = CValue::getOrSession("affectation_id" , null);
 
 $affectation = new CAffectation;
 $listRepas   = new CMenu;
@@ -22,7 +22,7 @@ $repas       = new CRepas;
 
 if (!$affectation->load($affectation_id) || !$typeRepas->load($typerepas_id)){
   // Pas d'affectation
-  mbSetValueToSession("affectation_id", null);
+  CValue::setSession("affectation_id", null);
   $AppUI->setMsg("Veuillez sélectionner une affectation", UI_MSG_ALERT);
   $AppUI->redirect("m=dPrepas&tab=vw_planning_repas");
 }else{
@@ -33,7 +33,7 @@ if (!$affectation->load($affectation_id) || !$typeRepas->load($typerepas_id)){
   
   if(!$canAffectation->read || !$affectation->_ref_sejour->sejour_id || $affectation->_ref_sejour->type == "ambu"){
     // Droit Interdit ou Ambulatoire
-    mbSetValueToSession("affectation_id", null);
+    CValue::setSession("affectation_id", null);
     $affectation_id = null ;
     if(!$affectation->_canRead){
       $msg = "Vous n'avez pas les droit suffisant pour cette affectation";

@@ -11,7 +11,7 @@
 global $can, $g;
 $can->needsEdit();
 
-$category_id = mbGetValueFromGetOrSession('category_id');
+$category_id = CValue::getOrSession('category_id');
 
 // Loads the required Category the complete list
 $category = new CProductCategory();

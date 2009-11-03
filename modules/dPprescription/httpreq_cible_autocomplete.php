@@ -9,7 +9,7 @@
  */
 
 
-$libelle_cible = mbGetValueFromPost("cible");
+$libelle_cible = CValue::post("cible");
 
 // Recherche dans les noms de categories
 $category = new CCategoryPrescription();

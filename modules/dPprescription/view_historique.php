@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$prescription_id = mbGetValueFromGet("prescription_id");
-$type = mbGetValueFromGet("type");
+$prescription_id = CValue::get("prescription_id");
+$type = CValue::get("type");
 
 $prescription = new CPrescription();
 $prescription->load($prescription_id);

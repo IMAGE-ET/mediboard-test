@@ -12,8 +12,8 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
-$op    = mbGetValueFromGetOrSession("op");
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$op    = CValue::getOrSession("op");
+$date  = CValue::getOrSession("date", mbDate());
 
 $consultAnesth  = new CConsultAnesth;
 $consult        = new CConsultation;

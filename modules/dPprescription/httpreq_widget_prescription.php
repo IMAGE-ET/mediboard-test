@@ -10,10 +10,10 @@
 
 global $AppUI;
 
-$object_id = mbGetValueFromGet("object_id");
-$object_class = mbGetValueFromGet("object_class");
-$praticien_id = mbGetValueFromGet("praticien_id", $AppUI->user_id);
-$suffixe = mbGetValueFromGet("suffixe");
+$object_id = CValue::get("object_id");
+$object_class = CValue::get("object_class");
+$praticien_id = CValue::get("praticien_id", $AppUI->user_id);
+$suffixe = CValue::get("suffixe");
 
 $prescription = new CPrescription();
 

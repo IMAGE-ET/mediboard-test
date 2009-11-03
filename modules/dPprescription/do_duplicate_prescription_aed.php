@@ -10,10 +10,10 @@
 
 global $AppUI;
 
-$prescription_id = mbGetValueFromPost("prescription_id");
-$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
-$type = mbGetValueFromPost("type");
-$ajax = mbGetValueFromPost("ajax");
+$prescription_id = CValue::post("prescription_id");
+$praticien_id = CValue::post("praticien_id", $AppUI->user_id);
+$type = CValue::post("type");
+$ajax = CValue::post("ajax");
 
 // Chargement de la prescription à dupliquer
 $prescription = new CPrescription();

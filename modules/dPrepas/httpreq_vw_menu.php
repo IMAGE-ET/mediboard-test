@@ -12,8 +12,8 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
-$menu_id  = mbGetValueFromGetOrSession("menu_id" , null);
-$repas_id = mbGetValueFromGet("repas_id" , null);
+$menu_id  = CValue::getOrSession("menu_id" , null);
+$repas_id = CValue::get("repas_id" , null);
 if($menu_id == ""){
   $menu_id = null;
 }

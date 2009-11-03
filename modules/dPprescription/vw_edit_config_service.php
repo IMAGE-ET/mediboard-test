@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = mbGetValueFromGetOrSession("service_id");
+$service_id = CValue::getOrSession("service_id");
 $group_id = CGroups::loadCurrent()->_id;
 
 // Chargement des services de l'etablissement courant

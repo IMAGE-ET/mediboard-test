@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$name = mbGetValueFromGet("name");
-$action = mbGetValueFromGet("action", "check");
+$name = CValue::get("name");
+$action = CValue::get("action", "check");
 $etat = "ko";
 switch($name){
   case 'conf-service':

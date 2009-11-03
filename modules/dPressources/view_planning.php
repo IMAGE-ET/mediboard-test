@@ -14,7 +14,7 @@ $ds = CSQLDataSource::get("std");
 
 // Période
 $today = mbDate();
-$debut = mbGetValueFromGetOrSession("debut", $today);
+$debut = CValue::getOrSession("debut", $today);
 $debut = mbDate("last sunday", $debut);
 $fin   = mbDate("next sunday", $debut);
 $debut = mbDate("+1 day", $debut);

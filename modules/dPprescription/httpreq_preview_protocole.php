@@ -11,11 +11,11 @@
 
 global $AppUI, $can, $m;
 
-$protocole_id = mbGetValueFromGet("protocole_id");
-$pack_id      = mbGetValueFromGet("pack_id");
-$_entree      = mbGetValueFromGet("_entree");
-$_sortie      = mbGetValueFromGet("_sortie");
-$_datetime    = mbGetValueFromGet("_datetime");
+$protocole_id = CValue::get("protocole_id");
+$pack_id      = CValue::get("pack_id");
+$_entree      = CValue::get("_entree");
+$_sortie      = CValue::get("_sortie");
+$_datetime    = CValue::get("_datetime");
 
 // Chargement des categories
 $categories = CCategoryPrescription::loadCategoriesByChap();

@@ -11,8 +11,8 @@
 global $can, $g;
 $can->needsEdit();
 
-$service_id  = mbGetValueFromGetOrSession('service_id');
-$category_id = mbGetValueFromGetOrSession('category_id');
+$service_id  = CValue::getOrSession('service_id');
+$category_id = CValue::getOrSession('category_id');
 
 // Services list
 $service = new CService();

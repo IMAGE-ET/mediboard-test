@@ -11,7 +11,7 @@
 global $can;
 $can->needsRead();
 
-$order_id    = mbGetValueFromGetOrSession('order_id');
+$order_id    = CValue::getOrSession('order_id');
 
 // Loads the expected Order
 $order = new CProductOrder();

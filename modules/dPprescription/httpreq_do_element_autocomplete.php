@@ -10,8 +10,8 @@
 
 global $g;
 
-$category = mbGetValueFromGet("category");
-$libelle = mbGetValueFromPost($category, "aaa");
+$category = CValue::get("category");
+$libelle = CValue::post($category, "aaa");
 
 // Chargement de la liste des categories
 $category_prescription = new CCategoryPrescription();

@@ -11,10 +11,10 @@
 global $can;
 $can->needsAdmin();
 
-$reference_id = mbGetValueFromGetOrSession('reference_id');
-$societe_id   = mbGetValueFromGetOrSession('societe_id');
-$category_id  = mbGetValueFromGetOrSession('category_id');
-$product_id   = mbGetValueFromGetOrSession('product_id');
+$reference_id = CValue::getOrSession('reference_id');
+$societe_id   = CValue::getOrSession('societe_id');
+$category_id  = CValue::getOrSession('category_id');
+$product_id   = CValue::getOrSession('product_id');
 
 // Loads the expected Reference
 $reference = new CProductReference();

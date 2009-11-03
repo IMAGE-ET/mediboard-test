@@ -10,17 +10,17 @@
 
 global $m, $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
 
-$debutact      = mbGetValueFromGet("debut", mbDate("-1 YEAR"));
+$debutact      = CValue::get("debut", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $debutact, "%d")-1;
 $debutact      = mbDate("-$rectif DAYS", $debutact);
 
-$finact        = mbGetValueFromGet("fin", mbDate());
+$finact        = CValue::get("fin", mbDate());
 $rectif        = mbTransformTime("+0 DAY", $finact, "%d")-1;
 $finact        = mbDate("-$rectif DAYS", $finact);
 $finact        = mbDate("+ 1 MONTH", $finact);
 $finact        = mbDate("-1 DAY", $finact);
 
-$prat_id       = mbGetValueFromGet("prat_id");
+$prat_id       = CValue::get("prat_id");
 
 CAppUI::requireSystemClass("mbGraph");
 

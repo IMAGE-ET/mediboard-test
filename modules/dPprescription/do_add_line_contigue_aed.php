@@ -17,11 +17,11 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$prescription_line_id = mbGetValueFromPost("prescription_line_id");
-$prescription_id = mbGetValueFromPost("prescription_id");
-$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
+$prescription_line_id = CValue::post("prescription_line_id");
+$prescription_id = CValue::post("prescription_id");
+$praticien_id = CValue::post("praticien_id", $AppUI->user_id);
 
-$mode_pharma = mbGetValueFromPost("mode_pharma");
+$mode_pharma = CValue::post("mode_pharma");
 
 $prescriptionLine = new CPrescriptionLineMedicament();
 $prescriptionLine->load($prescription_line_id);

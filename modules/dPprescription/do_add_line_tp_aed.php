@@ -11,17 +11,17 @@
 
 global $AppUI;
 
-$code_cip = mbGetValueFromPost("code_cip");
+$code_cip = CValue::post("code_cip");
 if(!$code_cip){
   CApp::rip();
 }
 
-$token_poso = mbGetValueFromPost("token_poso");
-$_patient_id = mbGetValueFromPost("_patient_id");
-$debut = mbGetValueFromPost("debut");
-$fin = mbGetValueFromPost("fin");
-$commentaire = mbGetValueFromPost("commentaire");
-$praticien_id = mbGetValueFromPost("praticien_id");
+$token_poso = CValue::post("token_poso");
+$_patient_id = CValue::post("_patient_id");
+$debut = CValue::post("debut");
+$fin = CValue::post("fin");
+$commentaire = CValue::post("commentaire");
+$praticien_id = CValue::post("praticien_id");
 
 // Recuperation du dossier medical du patient et creation s'il n'existe pas
 $dossier_medical_id = CDossierMedical::dossierMedicalId($_patient_id,"CPatient");

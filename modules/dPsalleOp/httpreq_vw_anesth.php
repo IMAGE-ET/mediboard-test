@@ -11,8 +11,8 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$operation_id = mbGetValueFromGetOrSession("operation_id");
-$date         = mbGetValueFromGetOrSession("date", mbDate());
+$operation_id = CValue::getOrSession("operation_id");
+$date         = CValue::getOrSession("date", mbDate());
 $date_now     = mbDate();
 $modif_operation = $date>=$date_now;
 

@@ -19,7 +19,7 @@ $where["group_id"] = " = '$group_id'";
 $cat_groups = $cat_group->loadList($where, "libelle");
 
 // Chargement du groupe selectionné
-$cat_group_id = mbGetValueFromGetOrSession("prescription_category_group_id");
+$cat_group_id = CValue::getOrSession("prescription_category_group_id");
 $cat_group->load($cat_group_id);
 
 // Chargement des elements du groupe selectionné

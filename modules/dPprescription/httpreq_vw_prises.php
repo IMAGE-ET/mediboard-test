@@ -12,8 +12,8 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$prescription_line_id = mbGetValueFromGetOrSession("prescription_line_id");
-$typeDate = mbGetValueFromGetOrSession("chapitre");
+$prescription_line_id = CValue::getOrSession("prescription_line_id");
+$typeDate = CValue::getOrSession("chapitre");
 
 // Chargement de la ligne de prescription
 if($typeDate == "Med"){
