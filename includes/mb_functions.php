@@ -11,6 +11,7 @@
 /**
  * Utility function to return a value from a named array or a specified default
  * array should always be passed by reference
+ * DEPRECATED : use CValue::read instead
  * @param array $arr The array containing the values
  * @param string $name The key of the value to get
  * @param mixed $def The value if the key's value doesn't exist
@@ -22,6 +23,7 @@ function dPgetParam(&$arr, $name, $def = null) {
 
 /**
  * Returns the first arguments that do not evaluate to null (0, null, "")
+ * DEPRECATED : use CValue::first instead
  * @return mixed The first value evaluated to TRUE
  */
 function mbGetValue() {
@@ -34,6 +36,7 @@ function mbGetValue() {
 
 /**
  * Returns a value from the client's cookies, with at least a default value
+ * DEPRECATED : use CValue::cookie instead
  * @access public
  * @param string $valName The key of the value to get from the cookies
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -46,6 +49,7 @@ function mbGetValueFromCookie($valName, $valDefault = null) {
 /**
  * Returns the value of a variable retreived from HTTP GET, with at least a
  * default value
+ * DEPRECATED : use CValue::get instead
  * @access public
  * @param string $valName The key of the value to get from HTTP GET
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -58,6 +62,7 @@ function mbGetValueFromGet($valName, $valDefault = null) {
 /**
  * Returns the value of a variable retreived from HTTP POST, with at least a
  * default value
+ * DEPRECATED : use CValue::post instead
  * @access public
  * @param string $valName The key of the value to get from HTTP POST
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -70,6 +75,7 @@ function mbGetValueFromPost($valName, $valDefault = null) {
 /**
  * Returns the value of a variable retreived from HTTP REQUEST (POST or GET), with at least a
  * default value
+ * DEPRECATED : use CValue::request instead
  * @access public
  * @param string $valName The key of the value to get from HTTP REQUEST (POST or GET)
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -83,6 +89,7 @@ function mbGetValueFromRequest($valName, $valDefault = null) {
  * Returns the value of a variable retreived from HTTP GET or Session, relative 
  * to a module ($m), with at least a default value. Stores it in $_SESSION in all 
  * cases, with at least a default value.
+ * DEPRECATED : use CValue::getOrSession instead
  * @access public
  * @param string $valName The key of the value to get from HTTP GET or Session
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -101,6 +108,7 @@ function mbGetValueFromGetOrSession($valName, $valDefault = null) {
 /**
  * Returns the value of a variable retreived from HTTP GET or Session, with at least a
  * default value. Stores it in $_SESSION in all cases, with at least a default value.
+ * DEPRECATED : use CValue::getOrSessionAbs instead
  * @access public
  * @param string $valName The key of the value to get from HTTP GET or Session
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -118,6 +126,7 @@ function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
  * Returns the value of a variable retreived from HTTP POST or Session, relative 
  * to a module ($m), with at least a default value. Stores it in $_SESSION in all 
  * cases, with at least a default value.
+ * DEPRECATED : use CValue::postOrSession instead
  * @access public
  * @param string $valName The key of the value to get from HTTP POST or Session
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -136,6 +145,7 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
 /**
  * Returns the value of a variable retreived from HTTP POST or Session, with at least a
  * default value. Stores it in $_SESSION in all cases, with at least a default value.
+ * DEPRECATED : use CValue::postOrSessionAbs instead
  * @access public
  * @param string $valName The key of the value to get from HTTP POST or Session
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -151,6 +161,7 @@ function mbGetAbsValueFromPostOrSession($key, $default = null) {
 /**
  * Returns the value of a variable retreived from Session, with at least a
  * default value
+ * DEPRECATED : use CValue::session instead
  * @access public
  * @param string $valName The key of the value to get from Session
  * @param string $valDefault The default value in the key's value doesn't exist
@@ -190,6 +201,7 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
 
 /**
  * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
+ * DEPRECATED : use CValue::setSession instead
  * @access public
  * @param string $key The key to store in the session
  * @param mixed $value The value to store
@@ -202,6 +214,7 @@ function mbSetValueToSession($key, $value = null) {
 
 /**
  * Sets a value to the session. Very useful to nullify object ids after deletion
+ * DEPRECATED : use CValue::setSessionAbs instead
  * @access public
  * @param string $key The key to store in the session
  * @param mixed $value The value to store

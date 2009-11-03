@@ -13,6 +13,7 @@ set_time_limit(180);
 $mbpath = "../";
 
 require_once($mbpath."classes/mbarray.class.php");
+require_once($mbpath."classes/value.class.php");
 require_once($mbpath."includes/mb_functions.php");
 require_once($mbpath."includes/version.php");
 require_once($mbpath."classes/chrono.class.php");
