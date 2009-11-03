@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 CAppUI::requireModuleClass("dPsalleOp", "acteccam");
 
-$class = mbGetValueFromGet("class","");
+$class = CValue::get("class","");
 
 $can->needsRead();
 $list = array();

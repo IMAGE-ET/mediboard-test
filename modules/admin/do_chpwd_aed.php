@@ -11,9 +11,9 @@
 global $AppUI;
 $ds = CSQLDataSource::get("std");
 
-$old_pwd  = mbGetValueFromPost("old_pwd"  , null);
-$new_pwd1 = mbGetValueFromPost("new_pwd1" , null);
-$new_pwd2 = mbGetValueFromPost("new_pwd2" , null);
+$old_pwd  = CValue::post("old_pwd"  , null);
+$new_pwd1 = CValue::post("new_pwd1" , null);
+$new_pwd2 = CValue::post("new_pwd2" , null);
 
 // Vérification du mot de passe actuel de l'utilisateur courant
 $user = new CUser;

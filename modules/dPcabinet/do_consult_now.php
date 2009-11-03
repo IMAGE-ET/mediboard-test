@@ -14,10 +14,10 @@ global $AppUI, $m;
 //$canModule = $module->canDo();
 //$canModule->needsEdit();
 
-$sejour_id = mbGetValueFromPost("sejour_id");
-$prat_id = mbGetValueFromPost("prat_id");
-$patient_id = mbGetValueFromPost("patient_id");
-$_operation_id = mbGetValueFromPost("_operation_id");
+$sejour_id = CValue::post("sejour_id");
+$prat_id = CValue::post("prat_id");
+$patient_id = CValue::post("patient_id");
+$_operation_id = CValue::post("_operation_id");
 
 // Cas des urgences 
 if ($sejour_id) {
@@ -106,7 +106,7 @@ $consult->heure = $time_now;
 $consult->arrivee = $day_now." ".$time_now;
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
-$consult->accident_travail = mbGetValueFromPost("accident_travail");
+$consult->accident_travail = CValue::post("accident_travail");
 
 // Cas des urgences
 if ($sejour_id) {
@@ -141,7 +141,7 @@ if($ajax) {
   echo $AppUI->getMsg();
   CApp::rip();
 }
-if($current_m = mbGetValueFromPost("_m_redirect")) {
+if($current_m = CValue::post("_m_redirect")) {
   $AppUI->redirect("m=$current_m");
 } else {
   $current_m = $sejour_id ? "dPurgences" : "dPcabinet";

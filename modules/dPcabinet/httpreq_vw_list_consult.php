@@ -9,18 +9,18 @@
 
 global $AppUI, $can, $m;
  
-$current_m = mbGetValueFromGet("current_m", $m);
+$current_m = CValue::get("current_m", $m);
 
 $can->needsEdit();
 $ds = CSQLDataSource::get("std");
-$date      = mbGetValueFromGetOrSession("date", mbDate());
+$date      = CValue::getOrSession("date", mbDate());
 $hour      = mbTime();
-$board     = mbGetValueFromGet("board", 0);
-$boardItem = mbGetValueFromGet("boardItem", 0);
-$plageconsult_id = mbGetValueFromGet("plageconsult_id");
+$board     = CValue::get("board", 0);
+$boardItem = CValue::get("boardItem", 0);
+$plageconsult_id = CValue::get("plageconsult_id");
 
-$prat_id    = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
-$selConsult = mbGetValueFromGetOrSession("selConsult");
+$prat_id    = CValue::getOrSession("chirSel", $AppUI->user_id);
+$selConsult = CValue::getOrSession("selConsult");
 
 $consult = new CConsultation;
 
@@ -29,16 +29,16 @@ if (isset($_GET["selConsult"])) {
   if($consult->load($selConsult)) {
     $consult->loadRefPlageConsult(1);
     $prat_id = $consult->_ref_plageconsult->chir_id;
-    mbSetValueToSession("chirSel", $prat_id);
+    CValue::setSession("chirSel", $prat_id);
   } else {
-    mbSetValueToSession("selConsult");
+    CValue::setSession("selConsult");
   }
 } else {
   if ($consult->load($selConsult)) {
     $consult->loadRefsFwd(1);
     if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
-      mbSetValueToSession("selConsult");
+      CValue::setSession("selConsult");
     }
   }
 }
@@ -59,7 +59,7 @@ $canUserSel->needsEdit(array("chirSel"=>0));
 
 if($consult->consultation_id) {
   $date = $consult->_ref_plageconsult->date;
-  mbSetValueToSession("date", $date);
+  CValue::setSession("date", $date);
 }
 
 // Récupération des plages de consultation du jour et chargement des références
@@ -73,7 +73,7 @@ if($plageconsult_id && $boardItem){
 $order = "debut";
 $listPlage = $listPlage->loadList($where, $order);
 
-$vue = mbGetValueFromGetOrSession("vue2", 0);
+$vue = CValue::getOrSession("vue2", 0);
 
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;

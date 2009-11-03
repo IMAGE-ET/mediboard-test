@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$type_ei_id = mbGetValueFromGetOrSession("type_ei_id");
+$type_ei_id = CValue::getOrSession("type_ei_id");
 
 $type_ei = new CTypeEi();
 

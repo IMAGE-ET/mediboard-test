@@ -8,8 +8,8 @@
 */
 
 // Sets the values to the session too
-mbGetAbsValueFromPostOrSession("_conduction");
-mbGetAbsValueFromPostOrSession("_oreille");
+CValue::postOrSessionAbs("_conduction");
+CValue::postOrSessionAbs("_oreille");
 
 $do = new CDoObjectAddEdit("CExamAudio", "examaudio_id");
 $do->doIt();

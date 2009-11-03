@@ -12,11 +12,11 @@ global $AppUI, $can, $m;
 $date = mbDate();
 
 // Dates selectionnees
-$date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
-$date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
+$date_min = CValue::getOrSession("_date_min", mbDate());
+$date_max = CValue::getOrSession("_date_max", mbDate());
 
 // Id du praticien selectionné
-$prat = mbGetValueFromGetOrSession("chir");
+$prat = CValue::getOrSession("chir");
 
 // Chargement du praticien
 $praticien = new CMediusers();

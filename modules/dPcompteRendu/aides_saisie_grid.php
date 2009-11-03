@@ -11,9 +11,9 @@
 global $can;
 $can->needsRead();
 
-$object_class = mbGetValueFromGet("object_class");
-$user_id      = mbGetValueFromGet("user_id");
-$property     = mbGetValueFromGet("property");
+$object_class = CValue::get("object_class");
+$user_id      = CValue::get("user_id");
+$property     = CValue::get("property");
 
 $object = new $object_class;
 $object->loadAides($user_id);

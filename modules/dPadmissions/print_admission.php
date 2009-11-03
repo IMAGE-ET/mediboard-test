@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m;
 
-$id = mbGetValueFromGetOrSession("id");
+$id = CValue::getOrSession("id");
 
 $admission = new CSejour();
 $admission->load($id);

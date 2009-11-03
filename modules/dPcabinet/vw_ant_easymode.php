@@ -13,8 +13,8 @@ global $can;
 // En l'état on ne peut pas vérifier les droits sur dPcabinet
 //$can->needsRead();
 
-$user_id = mbGetValueFromGetOrSession("user_id");
-$patient_id = mbGetValueFromGet("patient_id");
+$user_id = CValue::getOrSession("user_id");
+$patient_id = CValue::get("patient_id");
 
 // On charge le praticien
 $user = new CMediusers;

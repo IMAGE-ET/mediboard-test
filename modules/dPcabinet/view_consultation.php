@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$consultation_id = mbGetValueFromGet("consultation_id");
+$consultation_id = CValue::get("consultation_id");
 
 $consultation = new CConsultation;
 $consultation->load($consultation_id);

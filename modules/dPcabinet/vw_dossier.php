@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$pat_id = mbGetValueFromGetOrSession("patSel");
+$pat_id = CValue::getOrSession("patSel");
 
 // Liste des Praticiens
 $listPrat = new CMediusers();

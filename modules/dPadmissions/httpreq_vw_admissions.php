@@ -15,14 +15,14 @@ $can->needsRead();
 // Initialisation de variables
 
 // Type d'admission
-$type = mbGetValueFromGetOrSession("type");
+$type = CValue::getOrSession("type");
 
-$selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
-$selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
-$order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
-$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
-$selTri    = mbGetValueFromGetOrSession("selTri", "nom");
-$date      = mbGetValueFromGetOrSession("date", mbDate());
+$selAdmis  = CValue::getOrSession("selAdmis", "0");
+$selSaisis = CValue::getOrSession("selSaisis", "0");
+$order_col = CValue::getOrSession("order_col", "_nomPatient");
+$order_way = CValue::getOrSession("order_way", "ASC");
+$selTri    = CValue::getOrSession("selTri", "nom");
+$date      = CValue::getOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
 
 $date_actuelle = mbDateTime("00:00:00");

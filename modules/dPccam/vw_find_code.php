@@ -14,35 +14,35 @@ $can->needsRead();
 
 $ds = CSQLDataSource::get("ccamV2");
 
-$object_class    = mbGetValueFromGetOrSession("object_class");
-$clefs           = mbGetValueFromGetOrSession("clefs");
-$code            = mbGetValueFromGetOrSession("code");
-$selacces        = mbGetValueFromGetOrSession("selacces");
-$seltopo1        = mbGetValueFromGetOrSession("seltopo1");
-$seltopo2        = mbGetValueFromGetOrSession("seltopo2");
+$object_class    = CValue::getOrSession("object_class");
+$clefs           = CValue::getOrSession("clefs");
+$code            = CValue::getOrSession("code");
+$selacces        = CValue::getOrSession("selacces");
+$seltopo1        = CValue::getOrSession("seltopo1");
+$seltopo2        = CValue::getOrSession("seltopo2");
 
-$chap1old        = mbGetValueFromSession("chap1");
-$chap1           = mbGetValueFromGetOrSession("chap1");
+$chap1old        = CValue::session("chap1");
+$chap1           = CValue::getOrSession("chap1");
 if($chap1 && $chap1 == $chap1old) {
-  $chap2old = mbGetValueFromSession("chap2");
-  $chap2    = mbGetValueFromGetOrSession("chap2");
+  $chap2old = CValue::session("chap2");
+  $chap2    = CValue::getOrSession("chap2");
 } else {
   $chap2 = "";
-  mbSetValueToSession("chap2");
+  CValue::setSession("chap2");
 }
 if($chap2 && $chap2 == $chap2old) {
-  $chap3old = mbGetValueFromSession("chap3");
-  $chap3    = mbGetValueFromGetOrSession("chap3");
+  $chap3old = CValue::session("chap3");
+  $chap3    = CValue::getOrSession("chap3");
 } else {
   $chap3 = "";
-  mbSetValueToSession("chap3");
+  CValue::setSession("chap3");
 }
 if($chap3 && $chap3 == $chap3old) {
-  $chap4old = mbGetValueFromSession("chap4");
-  $chap4    = mbGetValueFromGetOrSession("chap4");
+  $chap4old = CValue::session("chap4");
+  $chap4    = CValue::getOrSession("chap4");
 } else {
   $chap4 = "";
-  mbSetValueToSession("chap4");
+  CValue::setSession("chap4");
 }
 
 // On récupère les voies d'accès

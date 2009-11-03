@@ -91,7 +91,7 @@ foreach($prats as $_prat) {
   
 // Chargement des FSE trouvées
 $fse = @new CLmFSE();
-$fse->S_FSE_MODE_SECURISATION = mbGetValueFromGet("S_FSE_MODE_SECURISATION");
+$fse->S_FSE_MODE_SECURISATION = CValue::get("S_FSE_MODE_SECURISATION");
 $fse->_date_min = mbDate();
 $fse->_date_max = mbDate("+ 1 day");
 

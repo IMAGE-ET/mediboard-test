@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
+$user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 
 if(!$user_id) {
   $AppUI->setMsg("Vous devez selectionner un utilisateur");

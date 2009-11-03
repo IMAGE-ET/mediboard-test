@@ -10,8 +10,8 @@
 
 global $AppUI, $can, $m, $g;
 
-$date    = mbGetValueFromGet("date", mbDate());
-$bloc_id = mbGetValueFromGet("bloc_id");
+$date    = CValue::get("date", mbDate());
+$bloc_id = CValue::get("bloc_id");
 
 $date = mbDate("last sunday", $date);
 $fin  = mbDate("next sunday", $date);

@@ -12,19 +12,19 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$lang   = mbGetValueFromGetOrSession("lang", CCodeCIM10::LANG_FR);
-$code   = mbGetValueFromGetOrSession("code", "");
-$keys   = mbGetValueFromGetOrSession("keys", "");
-$level1 = mbGetValueFromGetOrSession("level1", "");
-$level2 = mbGetValueFromGetOrSession("level2", "");
+$lang   = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
+$code   = CValue::getOrSession("code", "");
+$keys   = CValue::getOrSession("keys", "");
+$level1 = CValue::getOrSession("level1", "");
+$level2 = CValue::getOrSession("level2", "");
 
-if(mbGetValueFromSession("code") || mbGetValueFromSession("keys")) {
+if(CValue::session("code") || CValue::session("keys")) {
   $level1 = "";
-  mbSetValueToSession("level1");
+  CValue::setSession("level1");
 }
 if(!$level1) {
   $level2 = "";
-  mbSetValueToSession("level2");
+  CValue::setSession("level2");
 }
 
 $cim10 = new CCodeCIM10();

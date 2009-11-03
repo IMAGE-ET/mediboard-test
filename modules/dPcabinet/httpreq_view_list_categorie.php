@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
   
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+$praticien_id = CValue::getOrSession("praticien_id");
 $prat = new CMediusers();
 $prat->load($praticien_id);
 

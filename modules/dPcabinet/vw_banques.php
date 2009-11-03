@@ -13,7 +13,7 @@ $can->needsAdmin();
 
 // Creation d'une banque
 $banque = new CBanque();
-$banque_id = mbGetValueFromGetOrSession("banque_id");
+$banque_id = CValue::getOrSession("banque_id");
 
 $order = "nom ASC";
 $banques = $banque->loadList(null, $order);

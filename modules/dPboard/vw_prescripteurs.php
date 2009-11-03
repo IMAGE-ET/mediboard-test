@@ -9,7 +9,7 @@
  */
 
 global $prat;
-$max = mbGetValueFromGetOrSession("max", 30);
+$max = CValue::getOrSession("max", 30);
 
 $ds = CSQLDataSource::get("std");
 

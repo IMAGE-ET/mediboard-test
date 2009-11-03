@@ -18,9 +18,9 @@ $praticiens = $user->loadUsers(PERM_EDIT);
 
 // Filtres
 $filtre = new CCompteRendu();
-$filtre->chir_id      = mbGetValueFromGetOrSession("chir_id", $AppUI->user_id);
-$filtre->object_class = mbGetValueFromGetOrSession("object_class");
-$filtre->type         = mbGetValueFromGetOrSession("type");
+$filtre->chir_id      = CValue::getOrSession("chir_id", $AppUI->user_id);
+$filtre->object_class = CValue::getOrSession("object_class");
+$filtre->type         = CValue::getOrSession("type");
 
 $user = new CMediusers;
 $user->load($filtre->chir_id);
@@ -28,7 +28,7 @@ $user->loadRefFunction();
 $user->_ref_function->loadRefGroup();
 
 if ($user->isPraticien()) {
-  mbSetValueToSession("prat_id", $user->user_id);
+  CValue::setSession("prat_id", $user->user_id);
 }
 
 $modeles = CCompteRendu::loadAllModelesFor($filtre->chir_id, 'prat', $filtre->object_class, $filtre->type);

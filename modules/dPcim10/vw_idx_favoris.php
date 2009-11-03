@@ -14,7 +14,7 @@ $can->needsRead();
 
 $user = $AppUI->user_id;
 
-$lang = mbGetValueFromGetOrSession("lang", CCodeCIM10::LANG_FR);
+$lang = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
 
 // Recherche des codes favoris
 

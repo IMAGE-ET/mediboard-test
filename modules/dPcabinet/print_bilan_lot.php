@@ -12,10 +12,10 @@ global $can;
 $can->needsEdit();
 
 $filter = new CLmLot();
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate("+1 day"));
-$filter->S_LOT_CPS  = mbGetValueFromGetOrSession("S_LOT_CPS", -1);
-$filter->S_LOT_ETAT = mbGetValueFromGetOrSession("S_LOT_ETAT");
+$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
+$filter->_date_max = CValue::getOrSession("_date_max", mbDate("+1 day"));
+$filter->S_LOT_CPS  = CValue::getOrSession("S_LOT_CPS", -1);
+$filter->S_LOT_ETAT = CValue::getOrSession("S_LOT_ETAT");
 
 // Chargement des lots
 $where = array();

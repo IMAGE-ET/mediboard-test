@@ -10,7 +10,7 @@
 global $can, $m, $exam_audio;
 
 $exam_audio = new CExamAudio;
-$exam_audio->load(mbGetValueFromGetOrSession("examaudio_id"));
+$exam_audio->load(CValue::getOrSession("examaudio_id"));
 
 CAppUI::requireModuleFile($m, "inc_graph_audio_vocal");
 

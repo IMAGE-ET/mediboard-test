@@ -11,7 +11,7 @@
 global  $can;
 $can->needsRead();
 
-$cell_saver_id = mbGetValueFromGetOrSession("cell_saver_id");
+$cell_saver_id = CValue::getOrSession("cell_saver_id");
 
 $cell_saver = new CCellSaver();
 $cell_saver_list = $cell_saver->loadList(); 

@@ -12,9 +12,9 @@ global $can, $m, $g;
 
 $can->needsRead();
 
-$blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$timing  = mbGetValueFromGetOrSession("timing");
+$blood_salvage_id = CValue::getOrSession("blood_salvage_id");
+$date  = CValue::getOrSession("date", mbDate());
+$timing  = CValue::getOrSession("timing");
 $modif_operation    = $date>=mbDate();
 
 

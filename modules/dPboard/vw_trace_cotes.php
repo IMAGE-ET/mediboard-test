@@ -10,7 +10,7 @@
 
 global $prat;
 
-$date_interv = mbGetValueFromGetOrSession("date_interv", mbDate());
+$date_interv = CValue::getOrSession("date_interv", mbDate());
 
 // Chargement des plages du mois
 $plage = new CPlageOp();

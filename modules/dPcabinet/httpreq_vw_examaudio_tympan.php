@@ -10,8 +10,8 @@
 global $m;
 global $frequences, $pressions, $exam_audio, $reloadGraph;
 
-$examaudio_id = mbGetValueFromGetOrSession("examaudio_id");
-$side         = mbGetValueFromGetOrSession("side");
+$examaudio_id = CValue::getOrSession("examaudio_id");
+$side         = CValue::getOrSession("side");
 $reloadGraph  = $side;
 
 $exam_audio = new CExamAudio;

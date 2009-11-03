@@ -12,9 +12,9 @@ global $can, $g;
 
 $can->needsRead();
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$operation_id = mbGetValueFromGetOrSession("operation_id");
-$salle_id = mbGetValueFromGetOrSession("salle");
+$date  = CValue::getOrSession("date", mbDate());
+$operation_id = CValue::getOrSession("operation_id");
+$salle_id = CValue::getOrSession("salle");
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;

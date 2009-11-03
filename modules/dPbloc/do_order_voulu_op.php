@@ -10,7 +10,7 @@
 
 global $AppUI, $m;
 
-$plageop_id = mbGetValueFromPost("plageop_id");
+$plageop_id = CValue::post("plageop_id");
 
 $plageop = new CPlageOp();
 $plageop->load($plageop_id);

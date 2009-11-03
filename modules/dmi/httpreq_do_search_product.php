@@ -11,8 +11,8 @@
 global $AppUI, $can, $m, $g;
 $can->needsRead();
 
-$product_code = mbGetValueFromGet('code');
-$product_code_lot = mbGetValueFromGet('code_lot');
+$product_code = CValue::get('code');
+$product_code_lot = CValue::get('code_lot');
 
 //chargement produit
 $product = new CProduct();

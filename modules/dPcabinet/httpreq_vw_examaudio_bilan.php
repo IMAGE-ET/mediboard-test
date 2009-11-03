@@ -9,7 +9,7 @@
 
 global $AppUI, $m, $frequences;
 
-$examaudio_id = mbGetValueFromGetOrSession("examaudio_id");
+$examaudio_id = CValue::getOrSession("examaudio_id");
 
 $exam_audio = new CExamAudio;
 $exam_audio->load($examaudio_id);

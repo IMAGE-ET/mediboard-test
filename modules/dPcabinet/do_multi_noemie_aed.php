@@ -10,10 +10,10 @@
 // Récupération des paramètres
 $filter = new CPlageconsult();
 
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
+$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 
-$chir_id = mbGetValueFromGetOrSession("chir", null);
+$chir_id = CValue::getOrSession("chir", null);
 $chirSel = new CMediusers;
 $chirSel->load($chir_id);
 $listPrat = $chirSel->loadPraticiens(PERM_EDIT);

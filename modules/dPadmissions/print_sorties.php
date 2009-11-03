@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$date = mbGetValueFromGet("date", mbDate());
+$date = CValue::get("date", mbDate());
 
 $sejour = new CSejour;
 $where = array();

@@ -12,10 +12,10 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$blood_salvage_id = CValue::getOrSession("blood_salvage_id");
+$date  = CValue::getOrSession("date", mbDate());
 $modif_operation    = $date>=mbDate();
-$timing  = mbGetValueFromGetOrSession("timing");
+$timing  = CValue::getOrSession("timing");
 
 
 $blood_salvage = new CBloodSalvage();

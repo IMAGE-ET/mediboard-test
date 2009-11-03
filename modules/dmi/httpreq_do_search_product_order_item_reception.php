@@ -11,7 +11,7 @@
 global $AppUI, $can;
 $can->needsRead();
 
-$product_id = mbGetValueFromGet('product_id');
+$product_id = CValue::get('product_id');
 
 $product = new CProduct();
 $product->load($product_id);

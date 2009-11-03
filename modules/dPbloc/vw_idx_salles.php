@@ -11,7 +11,7 @@
 global $can;
 $can->needsEdit();
 
-$salle_id = mbGetValueFromGetOrSession("salle_id");
+$salle_id = CValue::getOrSession("salle_id");
 
 // Récupération des salles
 $blocs_list = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);

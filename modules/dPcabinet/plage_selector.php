@@ -13,13 +13,13 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-$plageconsult_id = mbGetValueFromGet("plageconsult_id");
-$hour            = mbGetValueFromGet("hour");
-$chir_id         = mbGetValueFromGet("chir_id");
-$function_id     = mbGetValueFromGet("function_id");
-$date            = mbGetValueFromGet("date", mbDate());
-$hide_finished   = mbGetValueFromGet("hide_finished", true);
-$period          = mbGetValueFromGet("period", CAppUI::pref("DefaultPeriod"));
+$plageconsult_id = CValue::get("plageconsult_id");
+$hour            = CValue::get("hour");
+$chir_id         = CValue::get("chir_id");
+$function_id     = CValue::get("function_id");
+$date            = CValue::get("date", mbDate());
+$hide_finished   = CValue::get("hide_finished", true);
+$period          = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;

@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $can->needsEdit();
 
 // Utilisateur sélectionné ou utilisateur courant
-$prat_id = mbGetValueFromGetOrSession("chirSel", 0);
+$prat_id = CValue::getOrSession("chirSel", 0);
 
 $userSel = new CMediusers;
 $userSel->load($prat_id ? $prat_id : $AppUI->user_id);
@@ -29,10 +29,10 @@ if (!$userSel->isPraticien()) {
 
 $canUserSel->needsEdit();
 
-$selConsult = mbGetValueFromGetOrSession("selConsult", 0);
+$selConsult = CValue::getOrSession("selConsult", 0);
 if (isset($_GET["date"])) {
   $selConsult = null;
-  mbSetValueToSession("selConsult", 0);
+  CValue::setSession("selConsult", 0);
 }
 
 $anesth = new CTypeAnesth;

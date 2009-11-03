@@ -12,8 +12,8 @@ global $AppUI, $can, $m;
 $can->needsEdit();
 
 // Utilisateur sélectionné ou utilisateur courant
-$prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
-$selConsult   = mbGetValueFromGetOrSession("selConsult", null);
+$prat_id      = CValue::getOrSession("chirSel", 0);
+$selConsult   = CValue::getOrSession("selConsult", null);
 
 // Chargement des banques
 $orderBanque = "nom ASC";
@@ -27,11 +27,11 @@ if(isset($_GET["selConsult"])) {
   if($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
     $prat_id = $consult->_ref_plageconsult->chir_id;
-    mbSetValueToSession("chirSel", $prat_id);
+    CValue::setSession("chirSel", $prat_id);
   } else {
     $consult = new CConsultation();
     $selConsult = null;
-    mbSetValueToSession("selConsult");
+    CValue::setSession("selConsult");
   }
 } else {
   if($consult->load($selConsult) && $consult->patient_id) {
@@ -39,7 +39,7 @@ if(isset($_GET["selConsult"])) {
     if($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       $selConsult = null;
-      mbSetValueToSession("selConsult");
+      CValue::setSession("selConsult");
     }
   }
 }

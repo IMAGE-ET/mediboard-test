@@ -70,9 +70,9 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 $listEtab = CGroups::loadGroups(PERM_EDIT);
 
 // Utilisateur sélectionné ou utilisateur courant
-$filter_user_id = mbGetValueFromGetOrSession("filter_user_id");
-$filter_class   = mbGetValueFromGetOrSession("filter_class");
-$aide_id        = mbGetValueFromGetOrSession("aide_id");
+$filter_user_id = CValue::getOrSession("filter_user_id");
+$filter_class   = CValue::getOrSession("filter_class");
+$aide_id        = CValue::getOrSession("aide_id");
 
 $userSel = new CMediusers;
 $userSel->load($filter_user_id ? $filter_user_id : $AppUI->user_id);
@@ -80,7 +80,7 @@ $userSel->loadRefs();
 $userSel->_ref_function->loadRefGroup();
 
 if ($userSel->isPraticien()) {
-  mbSetValueToSession("filter_user_id", $userSel->user_id);
+  CValue::setSession("filter_user_id", $userSel->user_id);
   $filter_user_id = $userSel->user_id;
 }
 

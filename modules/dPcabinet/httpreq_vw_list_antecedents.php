@@ -12,9 +12,9 @@ global $can, $AppUI;
 $canPatient = CModule::getCanDo("dPpatients");
 $canPatient->needsEdit();
 
-$patient_id  = mbGetValueFromGetOrSession("patient_id", 0);
-$_is_anesth  = mbGetValueFromGetOrSession("_is_anesth", null);
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
+$patient_id  = CValue::getOrSession("patient_id", 0);
+$_is_anesth  = CValue::getOrSession("_is_anesth", null);
+$sejour_id = CValue::getOrSession("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);

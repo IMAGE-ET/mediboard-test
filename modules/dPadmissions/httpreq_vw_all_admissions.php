@@ -14,12 +14,12 @@ $ds = CSQLDataSource::get("std");
 $can->needsRead();
 
 // Initialisation de variables
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $month = mbTransformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
-$selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
-$selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
+$selAdmis = CValue::getOrSession("selAdmis", "0");
+$selSaisis = CValue::getOrSession("selSaisis", "0");
 
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);

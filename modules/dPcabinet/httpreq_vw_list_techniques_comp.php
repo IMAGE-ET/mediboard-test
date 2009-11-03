@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
   
 $can->needsEdit();
 
-$selConsult  = mbGetValueFromGetOrSession("selConsult", 0);
+$selConsult  = CValue::getOrSession("selConsult", 0);
 
 $consult = new CConsultation();
 $consult->load($selConsult);

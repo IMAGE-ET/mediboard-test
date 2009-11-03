@@ -13,8 +13,8 @@ global $can, $g;
 $can->needsRead();
 
 // Récupération des dates
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$service_id = mbGetValueFromGetOrSession("service_id");
+$date = CValue::getOrSession("date", mbDate());
+$service_id = CValue::getOrSession("service_id");
 
 // Initialisation
 $sejour = new CSejour();

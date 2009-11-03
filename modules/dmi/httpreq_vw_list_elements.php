@@ -12,7 +12,7 @@ global $can, $g;
 $can->needsRead();
 
 // Recuperation des categories
-$category_class = mbGetValueFromGetOrSession("category_class");
+$category_class = CValue::getOrSession("category_class");
 $category = new $category_class;
 $category->group_id = $g;
 $categories = $category->loadMatchingList();

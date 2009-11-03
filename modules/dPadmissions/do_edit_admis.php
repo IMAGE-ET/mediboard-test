@@ -12,11 +12,11 @@
 global $AppUI, $m;
 $ds = CSQLDataSource::get("std");
  
-$ajax  = mbGetValueFromPost("ajax", 0);
-$m     = mbGetValueFromPost("m", 0);
-$mode  = mbGetValueFromPost("mode", 0);
-$value = mbGetValueFromPost("value", 1);
-$id    = mbGetValueFromPost("id", 0);
+$ajax  = CValue::post("ajax", 0);
+$m     = CValue::post("m", 0);
+$mode  = CValue::post("mode", 0);
+$value = CValue::post("value", 1);
+$id    = CValue::post("id", 0);
 
 $dateTime = mbDateTime();
 

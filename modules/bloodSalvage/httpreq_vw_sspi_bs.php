@@ -13,8 +13,8 @@ CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 
 $blood_salvage      = new CBloodSalvage();
-$date               = mbGetValueFromGetOrSession("date", mbDate());
-$op                 = mbGetValueFromGetOrSession("op");
+$date               = CValue::getOrSession("date", mbDate());
+$op                 = CValue::getOrSession("op");
 $totaltime          = "00:00:00";
 $modif_operation    = $date>=mbDate();
 $timing             = array();

@@ -23,14 +23,14 @@ if ($mediuser->isPraticien()) {
 }
 
 // Type de vue
-$vue = mbGetValueFromGetOrSession("vue1");
+$vue = CValue::getOrSession("vue1");
 
 // Praticien selectionné
-$chirSel = mbGetValueFromGetOrSession("chirSel", $chir ? $chir->user_id : null);
+$chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
 // Période
 $today = mbDate();
-$debut = mbGetValueFromGetOrSession("debut", $today);
+$debut = CValue::getOrSession("debut", $today);
 $debut = mbDate("last sunday", $debut);
 $fin   = mbDate("next sunday", $debut);
 $debut = mbDate("+1 day", $debut);
@@ -41,7 +41,7 @@ $prec = mbDate("-1 week", $debut);
 $suiv = mbDate("+1 week", $debut);
 
 // Plage de consultation selectionnée
-$plageconsult_id = mbGetValueFromGetOrSession("plageconsult_id", null);
+$plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
 if(($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = mbTime();
@@ -85,7 +85,7 @@ if ($plageSel->chir_id != $chirSel) {
   $plageSel = new CPlageconsult();
 }
 
-mbSetValueToSession("plageconsult_id", $plageconsult_id);
+CValue::setSession("plageconsult_id", $plageconsult_id);
 
 // Liste des chirurgiens
 $mediusers = new CMediusers();

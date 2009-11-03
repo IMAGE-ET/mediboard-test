@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Recuperation de l'id de la consultation du passage en urgence
-$consult_urgence_id = mbGetValueFromGet("consult_urgence_id");
+$consult_urgence_id = CValue::get("consult_urgence_id");
 
 $consult = new CConsultation();
 $chir = new CMediusers;
@@ -34,8 +34,8 @@ $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 $function       = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
-$consultation_id = mbGetValueFromGetOrSession("consultation_id");
-$plageconsult_id = mbGetValueFromGet("plageconsult_id", null);
+$consultation_id = CValue::getOrSession("consultation_id");
+$plageconsult_id = CValue::get("plageconsult_id", null);
 
 // Nouvelle consultation
 if (!$consultation_id) {
@@ -45,13 +45,13 @@ if (!$consultation_id) {
   } 
   else {
     // A t'on fourni l'id du praticien
-    $chir_id = CAppUI::conf("dPcabinet keepchir") ? mbGetValueFromGetOrSession("chir_id") : mbGetValueFromGet("chir_id");
+    $chir_id = CAppUI::conf("dPcabinet keepchir") ? CValue::getOrSession("chir_id") : CValue::get("chir_id");
     if ($chir_id) {
       $chir->load($chir_id);
     }
 
     // A t'on fourni l'id du patient
-    if ($pat_id = mbGetValueFromGet("pat_id")) {
+    if ($pat_id = CValue::get("pat_id")) {
       $pat->load($pat_id);
     }
   }

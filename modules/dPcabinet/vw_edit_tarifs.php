@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 $can->needsEdit();
 
 // Edite t'on un tarif ?
-$tarif_id = mbGetValueFromGetOrSession("tarif_id");
+$tarif_id = CValue::getOrSession("tarif_id");
 $tarif = new CTarif;
 $tarif->load($tarif_id);
 if (!$tarif->getPerm(PERM_EDIT)) {
@@ -38,12 +38,12 @@ if ($user->isPraticien()) {
 }
 
 if ($user->isSecretaire()) {
-  $prat_id = mbGetValueFromGetOrSession("prat_id");
+  $prat_id = CValue::getOrSession("prat_id");
   
   // Toujours choisir le praticien du tarif choisi
   if ($tarif->_id && $tarif->chir_id) {
     $prat_id = $tarif->chir_id;
-    mbSetValueToSession("prat_id", $prat_id);
+    CValue::setSession("prat_id", $prat_id);
   }
   
   if ($prat_id) {

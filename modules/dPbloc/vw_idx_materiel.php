@@ -14,10 +14,10 @@ $can->needsRead();
 $now       = mbDate();
 
 $filter = new CMateriel;
-$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
-$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+$filter->_date_min = CValue::get("_date_min"    , "$now");
+$filter->_date_max = CValue::get("_date_max"    , "$now");
 
-$typeAff = mbGetValueFromGetOrSession("typeAff");
+$typeAff = CValue::getOrSession("typeAff");
 
 // Récupération des salles
 $salle = new CSalle();

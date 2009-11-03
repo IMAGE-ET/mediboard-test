@@ -14,13 +14,13 @@ $can->needsRead();
 
 // Initialisation de variables
 
-$selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
-$selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
-$selTri = mbGetValueFromGetOrSession("selTri", "nom");
-$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
-$order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$type = mbGetValueFromGetOrSession("type");
+$selAdmis = CValue::getOrSession("selAdmis", "0");
+$selSaisis = CValue::getOrSession("selSaisis", "0");
+$selTri = CValue::getOrSession("selTri", "nom");
+$order_way = CValue::getOrSession("order_way", "ASC");
+$order_col = CValue::getOrSession("order_col", "_nomPatient");
+$date = CValue::getOrSession("date", mbDate());
+$type = CValue::getOrSession("type");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");

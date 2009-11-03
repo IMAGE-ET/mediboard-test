@@ -13,11 +13,11 @@ global $AppUI, $can;
 $ds = CSQLDataSource::get("std");
 
 // Utilisateur demandé
-$user_id = mbGetValueFromGet("user_id" , 0);
+$user_id = CValue::get("user_id" , 0);
 
 // Vérification des droit
 if ($can->edit){
-  $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
+  $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
   $user_id = intval($user_id);
 }
 else{

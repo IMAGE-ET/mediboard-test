@@ -11,9 +11,9 @@
 global $can;
 $can->needsRead();
 
-$list  = mbGetValueFromGet('id', array());
-$owner = mbGetValueFromGet('owner');
-$object_class = mbGetValueFromGet('object_class');
+$list  = CValue::get('id', array());
+$owner = CValue::get('owner');
+$object_class = CValue::get('object_class');
 
 $out = fopen('php://output', 'w');
 header('Content-Type: application/csv');

@@ -10,11 +10,11 @@
 global $AppUI, $can;
 $can->needsRead();
 
-$field        = mbGetValueFromGet("field");
-$text         = utf8_decode(mbGetValueFromGet("text" ));
-$class        = mbGetValueFromGet("class");
-$depend_value_1 = mbGetValueFromGet("depend_value_1");
-$depend_value_2 = mbGetValueFromGet("depend_value_2");
+$field        = CValue::get("field");
+$text         = utf8_decode(CValue::get("text" ));
+$class        = CValue::get("class");
+$depend_value_1 = CValue::get("depend_value_1");
+$depend_value_2 = CValue::get("depend_value_2");
 
 // Liste des users accessibles
 $listPrat = new CMediusers();

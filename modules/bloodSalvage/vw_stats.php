@@ -11,9 +11,9 @@
 global  $can;
 $can->needsRead();
 
-$filters         = mbGetValueFromGetOrSession('filters', array());
-$months_count    = mbGetValueFromGetOrSession('months_count', 12);
-$months_relative = mbGetValueFromGetOrSession('months_relative', 0);
+$filters         = CValue::getOrSession('filters', array());
+$months_count    = CValue::getOrSession('months_count', 12);
+$months_relative = CValue::getOrSession('months_relative', 0);
 
 $possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa');
 foreach ($possible_filters as $n) {

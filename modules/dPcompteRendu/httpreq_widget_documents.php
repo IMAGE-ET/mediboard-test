@@ -11,14 +11,14 @@ global $can, $AppUI;
 $can->needsEdit();
 
 // Chargement de l'objet cible
-$object_class = mbGetValueFromGetOrSession("object_class");
+$object_class = CValue::getOrSession("object_class");
 $object = new $object_class;
 if (!$object instanceof CMbObject) {
 	trigger_error("object_class should be an CMbObject", E_USER_WARNING);
 	return;
 }
 
-$object_id = mbGetValueFromGetOrSession("object_id");
+$object_id = CValue::getOrSession("object_id");
 $object->load($object_id);
 if (!$object->_id) {
 	trigger_error("object of class '$object_class' could not be loaded with id '$object_id'", E_USER_WARNING);
@@ -36,7 +36,7 @@ if ($AppUI->_ref_user->isPraticien()) {
 }
 else {
 	$praticien = new CMediusers();
-	$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
+	$praticien->load(CValue::getOrSession("praticien_id"));
 }
 
 $praticien->loadRefFunction();
@@ -63,7 +63,7 @@ $smarty->assign("modelesByOwner", $modelesByOwner);
 $smarty->assign("packs"         , $packs);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("object"        , $object);
-$smarty->assign("mode"          , mbGetValueFromGet("mode"));
+$smarty->assign("mode"          , CValue::get("mode"));
 $smarty->assign("notext"        , "notext");
 $smarty->display("inc_widget_documents.tpl");
 

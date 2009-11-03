@@ -7,18 +7,18 @@
 * @author Romain Ollivier
 */
 
-if ($chir_id = mbGetValueFromPost("chir_id")) {
-  mbSetValueToSession("chir_id", $chir_id);
+if ($chir_id = CValue::post("chir_id")) {
+  CValue::setSession("chir_id", $chir_id);
 }
 
 $do = new CDoObjectAddEdit("CConsultation", "consultation_id");
 $do->doBind();
 
-if (intval(mbGetValueFromPost("del"))) {
+if (intval(CValue::post("del"))) {
     $do->doDelete();
     if(!$do->_obj->consultation_id){
       $selConsult = null;
-      mbSetValueToSession("selConsult");
+      CValue::setSession("selConsult");
     }
 } 
 else {

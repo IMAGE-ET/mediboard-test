@@ -21,9 +21,9 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 $listEtab = array(CGroups::loadCurrent());
 
 // Liste des comptes-rendus persos
-$user_id = mbGetValueFromGetOrSession("filter_user_id", $AppUI->user_id);
+$user_id = CValue::getOrSession("filter_user_id", $AppUI->user_id);
 if(!$user_id){
-	mbSetValueToSession("filter_user_id", $AppUI->user_id);
+	CValue::setSession("filter_user_id", $AppUI->user_id);
   $user_id = $AppUI->user_id;
 }
 
@@ -95,7 +95,7 @@ if($user_id){
 }
 
 // liste sélectionnée
-$liste_id = mbGetValueFromGetOrSession("liste_id");
+$liste_id = CValue::getOrSession("liste_id");
 $liste = new CListeChoix();
 $liste->load($liste_id); 
 $liste->loadRefsFwd();

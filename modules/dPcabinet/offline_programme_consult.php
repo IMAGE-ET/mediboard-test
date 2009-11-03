@@ -16,10 +16,10 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-$chir_id   = mbGetValueFromGet("chir_id");
-$date      = mbGetValueFromGet("date", mbDate());
-$nb_months = mbGetValueFromGet("nb_months", 3);
-$period    = mbGetValueFromGet("period", CAppUI::pref("DefaultPeriod"));
+$chir_id   = CValue::get("chir_id");
+$date      = CValue::get("date", mbDate());
+$nb_months = CValue::get("nb_months", 3);
+$period    = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 
 // Récupération des plages de consultation disponibles
 $plage = new CPlageconsult;

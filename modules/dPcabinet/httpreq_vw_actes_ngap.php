@@ -8,13 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$object_id = mbGetValueFromGetOrSession("object_id");
-$object_class = mbGetValueFromGetOrSession("object_class");
+$object_id = CValue::getOrSession("object_id");
+$object_class = CValue::getOrSession("object_class");
 // Chargement de la consultation
 $object = new $object_class;
 $object->load($object_id);
 $object->loadRefsActesNGAP();
-$date            = mbGetValueFromGetOrSession("date", mbDate());
+$date            = CValue::getOrSession("date", mbDate());
 $date_now        = mbDate();
 $modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
                    ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));

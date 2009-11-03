@@ -12,7 +12,7 @@ global $can, $g;
 $can->needsRead();
 
 // Recuperation de la classe de la categorie
-$category_class = mbGetValueFromGetOrSession("category_class");
+$category_class = CValue::getOrSession("category_class");
 
 // Chargement de toutes les categories de l'etablissement
 $category = new $category_class;

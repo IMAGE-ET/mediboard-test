@@ -9,9 +9,9 @@
 
 $ds = CSQLDataSource::get("ccamV2");
 
-$object_id = mbGetValueFromGet("object_id");
-$object_class = mbGetValueFromGet("object_class");
-$code = mbGetValueFromPost("code");
+$object_id = CValue::get("object_id");
+$object_class = CValue::get("object_class");
+$code = CValue::post("code");
 
 // Chargement de l'object
 $object = new $object_class;

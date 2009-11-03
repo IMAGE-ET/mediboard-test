@@ -10,8 +10,8 @@
  
 global $AppUI;
 
-$username = trim(mbGetValueFromPost('username'));
-$password = trim(mbGetValueFromPost('password'));
+$username = trim(CValue::post('username'));
+$password = trim(CValue::post('password'));
 
 if (!$username) {
   $AppUI->setMsg("Auth-failed-nousername", UI_MSG_ERROR);

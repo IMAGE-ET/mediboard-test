@@ -13,7 +13,7 @@ $can->needsRead();
 
 // Chargement su séjour s'il y en a un
 $sejour = new CSejour();
-$sejour->load(mbGetValueFromGet("sejour_id"));
+$sejour->load(CValue::get("sejour_id"));
 $etabSelected = $sejour->etablissement_transfert_id;
 
 // Chargement des etablissements externes

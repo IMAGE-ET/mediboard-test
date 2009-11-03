@@ -10,8 +10,8 @@
  
 global $AppUI;
 
-$password = trim(mbGetValueFromPost('password'));
-$lock = mbGetValueFromPost('lock');
+$password = trim(CValue::post('password'));
+$lock = CValue::post('lock');
 
 if ($lock) {
   $_SESSION['locked'] = true;

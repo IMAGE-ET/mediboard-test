@@ -12,9 +12,9 @@ global $can;
 
 $can->needsRead();
 
-$lang = mbGetValueFromGetOrSession("lang", CCodeCIM10::LANG_FR);
+$lang = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
 
-$code = mbGetValueFromGetOrSession("code", "(A00-B99)");
+$code = CValue::getOrSession("code", "(A00-B99)");
 $cim10 = new CCodeCIM10($code);
 $cim10->load($lang);
 $cim10->loadRefs();

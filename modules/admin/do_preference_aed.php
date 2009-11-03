@@ -11,7 +11,7 @@
 global $AppUI;
 
 $ds = CSQLDataSource::get("std");
-$a = mbGetValueFromGet("a",null);
+$a = CValue::get("a",null);
 $del = isset($_POST["del"]) ? $_POST["del"] : 0;
 
 $obj = new CPreferences();

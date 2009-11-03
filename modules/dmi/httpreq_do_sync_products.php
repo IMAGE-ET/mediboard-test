@@ -14,8 +14,8 @@ $can->needsAdmin();
 set_time_limit(360);
 ini_set('memory_limit', '128M');
 
-$category_id  = mbGetValueFromGet('category_id');
-$object_class = mbGetValueFromGet('object_class');
+$category_id  = CValue::get('category_id');
+$object_class = CValue::get('object_class');
 
 $category = new CProductCategory();
 if (!$category->load($category_id)) {

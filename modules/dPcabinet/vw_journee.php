@@ -15,14 +15,14 @@ $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 
 //Initialisations des variables
-$cabinet_id   = mbGetValueFromGetOrSession("cabinet_id", $mediuser->function_id);
-$date         = mbGetValueFromGetOrSession("date", mbDate());
-$closed       = mbGetValueFromGetOrSession("closed", true);
-$mode_urgence = mbGetValueFromGet("mode_urgence", false);
+$cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
+$date         = CValue::getOrSession("date", mbDate());
+$closed       = CValue::getOrSession("closed", true);
+$mode_urgence = CValue::get("mode_urgence", false);
 
 $hour         = mbTime(null);
-$board        = mbGetValueFromGet("board", 1);
-$boardItem    = mbGetValueFromGet("boardItem", 1);
+$board        = CValue::get("board", 1);
+$boardItem    = CValue::get("boardItem", 1);
 $consult      = new CConsultation();
 
 $cabinets = CMediusers::loadFonctions(PERM_EDIT, $g, "cabinet");
@@ -40,7 +40,7 @@ if ($cabinet_id) {
 
 if ($consult->_id) {
   $date = $consult->_ref_plageconsult->date;
-  mbSetValueToSession("date", $date);
+  CValue::setSession("date", $date);
 }
 
 // Récupération des plages de consultation du jour et chargement des références

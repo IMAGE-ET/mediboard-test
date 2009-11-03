@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$consultation_id = mbGetValueFromGetOrSession("consultation_id");
+$consultation_id = CValue::getOrSession("consultation_id");
 
 // Chargement de la consultation
 $consult = new CConsultation();

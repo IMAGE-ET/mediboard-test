@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$code = mbGetValueFromGet("code");
+$code = CValue::get("code");
 
 $cim10 = new CCodeCIM10($code);
 $cim10->load();

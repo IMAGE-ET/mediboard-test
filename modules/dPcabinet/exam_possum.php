@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 //$can->needsEdit();
 
-$consultation_id = mbGetValueFromGetOrSession("consultation_id");
+$consultation_id = CValue::getOrSession("consultation_id");
 
 $where = array("consultation_id" => "= '$consultation_id'");
 $exam_possum = new CExamPossum;

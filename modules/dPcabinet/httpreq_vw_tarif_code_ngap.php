@@ -10,10 +10,10 @@
 global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("ccamV2");
 
-$quantite = mbGetValueFromGetOrSession("quantite");
-$coefficient = mbGetValueFromGetOrSession("coefficient");
-$demi = mbGetValueFromGetOrSession("demi", 0);
-$complement = mbGetValueFromGetOrSession("complement");
+$quantite = CValue::getOrSession("quantite");
+$coefficient = CValue::getOrSession("coefficient");
+$demi = CValue::getOrSession("demi", 0);
+$complement = CValue::getOrSession("complement");
 
 if($quantite == ""){
   $quantite = 1;
@@ -23,7 +23,7 @@ if($coefficient == ""){
   $coefficient = 1;
 }
 
-$code = mbGetValueFromGetOrSession("code");
+$code = CValue::getOrSession("code");
 
 $sql = "SELECT `tarif` FROM `codes_ngap` WHERE `code` = '$code' ";
 $tarif = $ds->loadList($sql, null);

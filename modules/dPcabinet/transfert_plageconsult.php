@@ -17,15 +17,15 @@ $praticiens = $mediuser->loadPraticiens(PERM_EDIT);
 // Filtre
 $filter = new CPlageconsult();
 
-if ($filter->chir_id =  mbGetValueFromGetOrSession("chir_id")) {
+if ($filter->chir_id =  CValue::getOrSession("chir_id")) {
   $where["chir_id"] = "= '$filter->chir_id'";
 }
 
-if ($filter->_date_min = mbGetValueFromGetOrSession("_date_min")) {
+if ($filter->_date_min = CValue::getOrSession("_date_min")) {
   $where[] = "date >= '$filter->_date_min'";
 }
 
-if ($filter->_date_max = mbGetValueFromGetOrSession("_date_max")) {
+if ($filter->_date_max = CValue::getOrSession("_date_max")) {
   $where[] = "date <= '$filter->_date_max'";
 }
 

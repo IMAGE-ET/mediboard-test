@@ -10,9 +10,9 @@
 
 global $AppUI, $can, $m, $g;
 
-$date       = mbGetValueFromGetOrSession("date", mbDate());
-$plageop_id = mbGetValueFromGetOrSession("plageop_id");
-$bloc_id    = mbGetValueFromGetOrSession("bloc_id");
+$date       = CValue::getOrSession("date", mbDate());
+$plageop_id = CValue::getOrSession("plageop_id");
+$bloc_id    = CValue::getOrSession("bloc_id");
 
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 $listSalles = array();

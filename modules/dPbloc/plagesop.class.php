@@ -397,9 +397,9 @@ class CPlageOp extends CMbObject {
 
 $pcConfig = CAppUI::conf("dPbloc CPlageOp");
 
-CPlageOp::$hours_start = str_pad(mbGetValue($pcConfig["hours_start"], "08"),2,"0",STR_PAD_LEFT);
-CPlageOp::$hours_stop  = str_pad(mbGetValue($pcConfig["hours_stop"], "20"),2,"0",STR_PAD_LEFT);
-CPlageOp::$minutes_interval = mbGetValue($pcConfig["minutes_interval"],"15");
+CPlageOp::$hours_start = str_pad(CValue::first($pcConfig["hours_start"], "08"),2,"0",STR_PAD_LEFT);
+CPlageOp::$hours_stop  = str_pad(CValue::first($pcConfig["hours_stop"], "20"),2,"0",STR_PAD_LEFT);
+CPlageOp::$minutes_interval = CValue::first($pcConfig["minutes_interval"],"15");
 
 $listHours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 $listMins  = range(0, 59, CPlageOp::$minutes_interval);

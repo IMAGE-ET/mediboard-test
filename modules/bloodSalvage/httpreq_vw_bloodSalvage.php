@@ -13,9 +13,9 @@ $can->needsRead();
 /*
  * Récupération des variables en session et ou issues des formulaires.
  */
-$salle            = mbGetValueFromGetOrSession("salle");
-$op               = mbGetValueFromGetOrSession("op");
-$date             = mbGetValueFromGetOrSession("date", mbDate());
+$salle            = CValue::getOrSession("salle");
+$op               = CValue::getOrSession("op");
+$date             = CValue::getOrSession("date", mbDate());
 
 
 $blood_salvage = new CBloodSalvage();

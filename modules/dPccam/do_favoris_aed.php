@@ -11,7 +11,7 @@
 $do = new CDoObjectAddEdit("CFavoriCCAM", "favoris_id");
 
 // Amélioration des textes
-if ($favori_user = mbGetValueFromPost("favoris_user")) {
+if ($favori_user = CValue::post("favoris_user")) {
 	$user = new CMediusers;
 	$user->load($favori_user);
 	$for = " pour $user->_view";

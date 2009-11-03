@@ -24,7 +24,7 @@ if(CAppUI::conf("dPplanningOp COperation verif_cote")) {
   $stats[] = "vw_trace_cotes";
 }
 
-$stat = mbGetValueFromPostOrSession("stat", "vw_sejours_interventions");
+$stat = CValue::postOrSession("stat", "vw_sejours_interventions");
 
 if (!in_array($stat, $stats)) {
   trigger_error("Unknown stat view '$stat'", E_USER_WARNING);

@@ -15,7 +15,7 @@ $datetime = mbDateTime();
 $date_max = $datetime;
 $date_min = mbDateTime("-1 DAY", $date_max);
 
-$praticien_id = mbGetValueFromGet("praticien_id", $AppUI->user_id);
+$praticien_id = CValue::get("praticien_id", $AppUI->user_id);
 
 // Chargement des praticiens
 $mediuser = new CMediusers();

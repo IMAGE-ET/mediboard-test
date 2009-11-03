@@ -14,7 +14,7 @@ $user = new CUser;
 $user->load($AppUI->user_id);
 $user->updateSpecs();
 
-$forceChange = mbGetValueFromRequest("forceChange");
+$forceChange = CValue::request("forceChange");
 
 if ($forceChange) {
 $message = '<strong>Votre mot de passe ne correspond pas aux critères de sécurité de Mediboard</strong>. Vous ne pourrez

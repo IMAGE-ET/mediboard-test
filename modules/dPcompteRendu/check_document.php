@@ -17,8 +17,8 @@ $where = array(
   
 set_time_limit(300);
 
-$loops = mbGetValueFromGet("loops", 100);
-$trunk = mbGetValueFromGet("trunk", 100);
+$loops = CValue::get("loops", 100);
+$trunk = CValue::get("trunk", 100);
 
 mbTrace($loops, "loops");
 mbTrace($trunk, "trunk");

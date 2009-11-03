@@ -12,8 +12,8 @@ global $can, $m, $g;
 
 $blood_salvage      = new CBloodSalvage();
 
-$operation_id       = mbGetValueFromGetOrSession("operation_id");
-$date               = mbGetValueFromGetOrSession("date", mbDate());
+$operation_id       = CValue::getOrSession("operation_id");
+$date               = CValue::getOrSession("date", mbDate());
 $hour               = mbTime();
 $totaltime          = "00:00:00";
 

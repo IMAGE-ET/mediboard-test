@@ -8,7 +8,7 @@
 */
 
 // Récupération du compte-rendu
-$compte_rendu_id = mbGetValueFromGet("compte_rendu_id", 0);
+$compte_rendu_id = CValue::get("compte_rendu_id", 0);
 
 $compte_rendu = new CCompteRendu;
 $compte_rendu->load($compte_rendu_id);

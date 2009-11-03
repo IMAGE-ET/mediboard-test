@@ -10,9 +10,9 @@
 
 global $AppUI;
 
-$tempUserName    = mbGetValueFromPost("temp_user_name", "");
-$permission_user = mbGetValueFromPost("permission_user", "");
-$delPermissions  = mbGetValueFromPost("delPerms", false);
+$tempUserName    = CValue::post("temp_user_name", "");
+$permission_user = CValue::post("permission_user", "");
+$delPermissions  = CValue::post("delPerms", false);
 
 // pull user_id for unique user_username (templateUser)
 $tempUser = new CUser;

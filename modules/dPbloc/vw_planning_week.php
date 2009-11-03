@@ -10,8 +10,8 @@
 
 global $AppUI, $can, $m, $g;
 
-$date    = mbGetValueFromGetOrSession("date", mbDate());
-$bloc_id = mbGetValueFromGetOrSession("bloc_id");
+$date    = CValue::getOrSession("date", mbDate());
+$bloc_id = CValue::getOrSession("bloc_id");
 
 $date = mbDate("last sunday", $date);
 $fin  = mbDate("next sunday", $date);

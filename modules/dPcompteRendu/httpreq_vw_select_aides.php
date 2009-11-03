@@ -9,12 +9,12 @@
 
 global $AppUI;
 
-$object_class   = mbGetValueFromGet("object_class");
-$field          = mbGetValueFromGet("field");
-$depend_value_1 = mbGetValueFromGet("depend_value_1");
-$depend_value_2 = mbGetValueFromGet("depend_value_2");
-$user_id        = mbGetValueFromGet("user_id");
-$no_enum        = mbGetValueFromGet("no_enum");
+$object_class   = CValue::get("object_class");
+$field          = CValue::get("field");
+$depend_value_1 = CValue::get("depend_value_1");
+$depend_value_2 = CValue::get("depend_value_2");
+$user_id        = CValue::get("user_id");
+$no_enum        = CValue::get("no_enum");
 
 // Chargement des aides
 $object = new $object_class;

@@ -12,9 +12,9 @@ global $AppUI, $can;
 
 $can->needsRead();
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$view = mbGetValueFromGetOrSession("view", "week");
-$praticien_id = mbGetValueFromPostOrSession("praticien_id");
+$date = CValue::getOrSession("date", mbDate());
+$view = CValue::getOrSession("view", "week");
+$praticien_id = CValue::postOrSession("praticien_id");
 $prat = false;
 
 // Chargement de l'utilisateur courant
@@ -55,7 +55,7 @@ if($view == "day"){
   $suiv = mbDate("+1 week", $date);
 }
 
-$vue  = mbGetValueFromGetOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
+$vue  = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
 
 // Création du template
 $smarty = new CSmartyDP();

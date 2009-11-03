@@ -14,10 +14,10 @@ if(!CModule::getCanDo('dPcabinet')->edit && !CModule::getCanDo('soins')->read){
 }
 //$can->needsEdit();
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $today = mbDate();
 
-$consultation_id = mbGetValueFromGet("consultation_id");
+$consultation_id = CValue::get("consultation_id");
 
 // Consultation courante
 $consult = new CConsultation();

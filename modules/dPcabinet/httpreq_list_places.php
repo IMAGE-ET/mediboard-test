@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 // Initialisation des variables
-$plageconsult_id = mbGetValueFromGet("plageconsult_id");
+$plageconsult_id = CValue::get("plageconsult_id");
 
 // Récupération des consultations de la plage séléctionnée
 $plage = new CPlageconsult;
@@ -20,7 +20,7 @@ if ($plageconsult_id) {
   $plage->load($plageconsult_id);
   $date  = $plage->date;
 } else {
-  $date  = mbGetValueFromGet("date", mbDate());
+  $date  = CValue::get("date", mbDate());
 }
 
 // Chargement des places disponibles

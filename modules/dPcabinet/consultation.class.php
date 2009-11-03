@@ -493,7 +493,7 @@ class CConsultation extends CCodable {
     // Prevents recursion
     $this->_bind_fse = false;
     
-    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
     

@@ -12,7 +12,7 @@ global $AppUI, $m;
 $AppUI->requireModuleFile("bloodSalvage", "inc_personnel");
 
 $anticoag ="";
-$blood_salvage_id = mbGetValueFromGet("blood_salvage_id");
+$blood_salvage_id = CValue::get("blood_salvage_id");
 $blood_salvage = new CBloodSalvage();
 
 if($blood_salvage_id) {

@@ -13,19 +13,19 @@ $can->needsRead();
 
 // Chargement du user
 $user = new CMediusers;
-$user->load(mbGetValueFromGetOrSession("user_id", $AppUI->user_id));
+$user->load(CValue::getOrSession("user_id", $AppUI->user_id));
 $user->loadRefs();
 
 // Chargement du pack
 $pack = new CPack();
-if ($pack->load(mbGetValueFromGetOrSession("pack_id"))) {
+if ($pack->load(CValue::getOrSession("pack_id"))) {
   $pack->loadRefsFwd();
 } else {
   $pack->chir_id = $user->user_id;
 }
 
 // Modèles de l'utilisateur
-$object_class = mbGetValueFromGetOrSession("object_class");
+$object_class = CValue::getOrSession("object_class");
 $modeles = CCompteRendu::loadAllModelesFor($user->_id);
 
 // Création du template

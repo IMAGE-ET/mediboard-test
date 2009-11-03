@@ -13,12 +13,12 @@ $can->needsRead();
 $now = mbDate();
 
 $filter = new CConsultation;
-$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
-$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
-$filter->_coordonnees = mbGetValueFromGet("_coordonnees");
-$filter->_plages_vides = mbGetValueFromGet("_plages_vides");
+$filter->_date_min = CValue::get("_date_min"    , "$now");
+$filter->_date_max = CValue::get("_date_max"    , "$now");
+$filter->_coordonnees = CValue::get("_coordonnees");
+$filter->_plages_vides = CValue::get("_plages_vides");
 
-$chir = mbGetValueFromGetOrSession("chir");
+$chir = CValue::getOrSession("chir");
 
 // On selectionne les plages
 $listPlage = new CPlageconsult;

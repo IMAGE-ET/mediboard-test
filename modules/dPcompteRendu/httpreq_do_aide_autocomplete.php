@@ -7,9 +7,9 @@
 * @author Thomas Despoix
 */
 
-$object_class = mbGetValueFromGet("object_class");
-$user_id      = mbGetValueFromGet("user_id");
-$property     = mbGetValueFromGet("property");
+$object_class = CValue::get("object_class");
+$user_id      = CValue::get("user_id");
+$property     = CValue::get("property");
 
 // In order to take the first value (the key may change, but there is always only one pair)
 $needle       = reset($_POST); 

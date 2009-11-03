@@ -14,7 +14,7 @@ $ds = CSQLDataSource::get("std");
 $do = new CDoObjectAddEdit("CUser", "user_id");
 $do->doBind();
     
-if (intval(mbGetValueFromPost("del"))) {
+if (intval(CValue::post("del"))) {
   $do->doDelete();
 } else {
   // Verification de la non existence d'un utilisateur avec le même login

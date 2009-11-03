@@ -12,8 +12,8 @@ global $can, $g;
 
 $can->needsRead();
 
-$blood_salvage_id = mbGetValueFromGet("blood_salvage_id");
-$totaltime = mbGetValueFromGetOrSession("totaltime","00:00:00");
+$blood_salvage_id = CValue::get("blood_salvage_id");
+$totaltime = CValue::getOrSession("totaltime","00:00:00");
 $blood_salvage = new CBloodSalvage();
 $timeleft = "06:00:00";
 if ($blood_salvage_id) {

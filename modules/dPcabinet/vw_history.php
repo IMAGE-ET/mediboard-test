@@ -13,7 +13,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Définition des variables
-$consultation_id = mbGetValueFromGet("consultation_id", 0);
+$consultation_id = CValue::get("consultation_id", 0);
 
 $consult = new CConsultation;
 $consult->load($consultation_id);

@@ -10,7 +10,7 @@
 global $AppUI, $can, $m;
 
 $can->needsEdit();
-$consultation_id = mbGetValueFromGet("consultation_id");
+$consultation_id = CValue::get("consultation_id");
 
 // Consultation courante
 $consult = new CConsultation();

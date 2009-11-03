@@ -12,14 +12,14 @@
 global $AppUI, $can, $m;
 
 // Récupération des paramètres
-$operation_id = mbGetValueFromGet("operation_id", null);
+$operation_id = CValue::get("operation_id", null);
 $op = new COperation;
 $op->load($operation_id);
 $op->loadRefsFwd();
 $op->_ref_sejour->loadRefsFwd();
 $patient =& $op->_ref_sejour->_ref_patient;
 
-$pack_id = mbGetValueFromGet("pack_id", null);
+$pack_id = CValue::get("pack_id", null);
 
 $pack = new CPack;
 $pack->load($pack_id);

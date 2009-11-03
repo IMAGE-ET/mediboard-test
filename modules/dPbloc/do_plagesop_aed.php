@@ -12,9 +12,9 @@
 $obj = new CPlageOp();
 $obj->bind($_POST);
 
-$del         = mbGetValueFromPost("del", 0);
-$repeat      = mbGetValueFromPost("_repeat", 0);
-$type_repeat = mbGetValueFromPost("_type_repeat", 1);
+$del         = CValue::post("del", 0);
+$repeat      = CValue::post("_repeat", 0);
+$type_repeat = CValue::post("_type_repeat", 1);
 
 
 // si l'id de l'objet est nul => creation
@@ -156,7 +156,7 @@ if ($body_msg) {
   $complete_msg .= $body_msg; 
 }
 
-if( $otherm = mbGetValueFromPost("otherm", 0) )
+if( $otherm = CValue::post("otherm", 0) )
   $m = $otherm;
 
 $AppUI->setMsg($complete_msg, $msgNo);

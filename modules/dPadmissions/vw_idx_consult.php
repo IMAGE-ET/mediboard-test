@@ -13,11 +13,11 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 //Initialisations des variables
-$date         = mbGetValueFromGetOrSession("date", mbDate());
+$date         = CValue::getOrSession("date", mbDate());
 $today        = mbDate();
 $hour         = mbTime(null);
-$board        = mbGetValueFromGet("board", 1);
-$boardItem    = mbGetValueFromGet("boardItem", 1);
+$board        = CValue::get("board", 1);
+$boardItem    = CValue::get("boardItem", 1);
 $consult      = new CConsultation;
 
 
@@ -31,7 +31,7 @@ $anesthesistes = $mediuser->loadAnesthesistes(PERM_READ);
 
 if($consult->consultation_id) {
   $date = $consult->_ref_plageconsult->date;
-  mbSetValueToSession("date", $date);
+  CValue::setSession("date", $date);
 }
 
 

@@ -12,7 +12,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$blood_salvage_id = mbGetValueFromPostOrSession("blood_salvage_id");
+$blood_salvage_id = CValue::postOrSession("blood_salvage_id");
 
 $blood_salvage = new CBloodSalvage();
 if($blood_salvage_id){

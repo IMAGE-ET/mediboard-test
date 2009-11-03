@@ -12,7 +12,7 @@ $ds = CSQLDataSource::get("std");
 $can->needsRead();
 
 // Utilisateur sélectionné ou utilisateur courant
-$user_id = mbGetValueFromGetOrSession("filter_user_id", $AppUI->user_id);
+$user_id = CValue::getOrSession("filter_user_id", $AppUI->user_id);
 
 $userSel = new CMediusers;
 $userSel->load($user_id ? $user_id : $AppUI->user_id);
@@ -62,7 +62,7 @@ if ($userSel->user_id) {
 }
 
 // pack sélectionné
-$pack_id = mbGetValueFromGetOrSession("pack_id");
+$pack_id = CValue::getOrSession("pack_id");
 $pack = new CPack();
 $pack->load($pack_id);
 if($pack_id) {

@@ -11,11 +11,11 @@
 $chir_id = $_POST['_old_chir_id'];
 $where["chir_id"] = "= '$chir_id'";
 
-if ($date_min = mbGetValueFromPost("_date_min")) {
+if ($date_min = CValue::post("_date_min")) {
   $where[] = "date >= '$date_min'";
 }
 
-if ($date_max = mbGetValueFromPost("_date_max")) {
+if ($date_max = CValue::post("_date_max")) {
   $where[] = "date <= '$date_max'";
 }
 

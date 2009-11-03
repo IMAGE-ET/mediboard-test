@@ -27,11 +27,11 @@ $filter = new CConsultation;
 $filter->_date_min = mbDate();
 $filter->_date_max = mbDate("+ 0 day");
 
-$filter->_etat_paiement = mbGetValueFromGetOrSession("_etat_paiement", 0);
-$filter->_type_affichage = mbGetValueFromGetOrSession("_type_affichage", 0);
+$filter->_etat_paiement = CValue::getOrSession("_etat_paiement", 0);
+$filter->_type_affichage = CValue::getOrSession("_type_affichage", 0);
 
 $filter_reglement = new CReglement();
-$filter_reglement->mode = mbGetValueFromGetOrSession("mode", 0);
+$filter_reglement->mode = CValue::getOrSession("mode", 0);
 
 // L'utilisateur est-il praticien ?
 $mediuser = new CMediusers();

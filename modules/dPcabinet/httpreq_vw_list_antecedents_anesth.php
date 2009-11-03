@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
   
 $can->needsEdit();
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id", 0);
+$sejour_id = CValue::getOrSession("sejour_id", 0);
 
 // Chargement du sejour
 $sejour = new CSejour();

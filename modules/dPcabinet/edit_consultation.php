@@ -12,19 +12,19 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$vue   = mbGetValueFromGetOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
+$date  = CValue::getOrSession("date", mbDate());
+$vue   = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
 $today = mbDate();
 $hour  = mbTime(null);
 
 $now = mbDateTime();
 
 if(!isset($current_m)){
-  $current_m = mbGetValueFromGet("current_m", $m);
+  $current_m = CValue::get("current_m", $m);
 }
 
-$prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
-$selConsult   = mbGetValueFromGetOrSession("selConsult", null);
+$prat_id      = CValue::getOrSession("chirSel", $AppUI->user_id);
+$selConsult   = CValue::getOrSession("selConsult", null);
 
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(null);
@@ -50,7 +50,7 @@ $banques = $banque->loadList(null,$orderBanque);
 
 if(isset($_GET["date"])) {
   $selConsult = null;
-  mbSetValueToSession("selConsult", null);
+  CValue::setSession("selConsult", null);
 }
 
 // Test compliqué afin de savoir quelle consultation charger
@@ -58,11 +58,11 @@ if (isset($_GET["selConsult"])) {
   if($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
     $prat_id = $consult->_ref_plageconsult->chir_id;
-    mbSetValueToSession("chirSel", $prat_id);
+    CValue::setSession("chirSel", $prat_id);
   } else {
     $consult = new CConsultation();
     $selConsult = null;
-    mbSetValueToSession("selConsult");
+    CValue::setSession("selConsult");
   }
 } else {
   if($consult->load($selConsult) && $consult->patient_id) {
@@ -70,7 +70,7 @@ if (isset($_GET["selConsult"])) {
     if($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       $selConsult = null;
-      mbSetValueToSession("selConsult");
+      CValue::setSession("selConsult");
     }
   }
 }

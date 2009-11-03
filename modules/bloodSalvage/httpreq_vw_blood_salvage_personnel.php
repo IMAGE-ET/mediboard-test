@@ -10,10 +10,10 @@
 
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
-$blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");
+$blood_salvage_id = CValue::getOrSession("blood_salvage_id");
 $blood_salvage = new CBloodSalvage();
 
-$date  = mbGetValueFromGetOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", mbDate());
 
 $modif_operation = $date>=mbDate();
 

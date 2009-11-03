@@ -12,19 +12,19 @@ global $can;
 $can->needsRead();
 
 // Recuperation de la classe de la categorie
-$element_class = mbGetValueFromGetOrSession("element_class");
-$element_id = mbGetValueFromGetOrSession("element_id");
+$element_class = CValue::getOrSession("element_class");
+$element_id = CValue::getOrSession("element_id");
 
 // Chargement de l'element selectionné
 $element = new $element_class;
 $element->load($element_id);
 
-$generate_code = mbGetValueFromGet("generate_code", false);
+$generate_code = CValue::get("generate_code", false);
 if($generate_code){
-	$element->category_dm_id = mbGetValueFromGet("category_dm_id");
-	$element->nom = mbGetValueFromGet("nom");
-	$element->description = mbGetValueFromGet("description");
-	$element->in_livret = mbGetValueFromGet("in_livret");
+	$element->category_dm_id = CValue::get("category_dm_id");
+	$element->nom = CValue::get("nom");
+	$element->description = CValue::get("description");
+	$element->in_livret = CValue::get("in_livret");
 	
 	// Recherche des DM dont le code commence par DM
   $dm = new CDM();

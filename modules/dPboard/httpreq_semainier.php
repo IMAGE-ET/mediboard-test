@@ -13,8 +13,8 @@ global $AppUI, $can, $g, $m, $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$M
 $can->needsRead();
 
 // Récupération des paramètres
-$chirSel   = mbGetValueFromGetOrSession("chirSel", 25);
-$date      = mbGetValueFromGetOrSession("date", mbDate());
+$chirSel   = CValue::getOrSession("chirSel", 25);
+$date      = CValue::getOrSession("date", mbDate());
 $debut = mbDate("last sunday", $date);
 $debut = mbDate("+1 day", $debut);
 

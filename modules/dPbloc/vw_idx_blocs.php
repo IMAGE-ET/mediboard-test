@@ -11,7 +11,7 @@
 global $can;
 $can->needsEdit();
 
-$bloc_id = mbGetValueFromGetOrSession("bloc_id", 0);
+$bloc_id = CValue::getOrSession("bloc_id", 0);
 
 // Récupération des blocs de l'etablissement
 $blocs_list = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);

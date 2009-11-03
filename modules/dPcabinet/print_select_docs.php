@@ -9,8 +9,8 @@
 
 global $AppUI, $can, $m;
 
-$consultation_id = mbGetValueFromGet("consultation_id");
-$sejour_id = mbGetValueFromGet("sejour_id");
+$consultation_id = CValue::get("consultation_id");
+$sejour_id = CValue::get("sejour_id");
 
 // Chargement de la prescription de pre-admission
 $prescription_preadm = new CPrescription();

@@ -9,8 +9,8 @@
 
 global $AppUI, $can, $m;
 
-$consultation_id = mbGetValueFromPost("consultation_id");
-$nbDoc           = mbGetValueFromPost("nbDoc");
+$consultation_id = CValue::post("consultation_id");
+$nbDoc           = CValue::post("nbDoc");
 $documents       = array();
 
 // Consultation courante

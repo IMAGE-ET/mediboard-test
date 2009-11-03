@@ -11,7 +11,7 @@
 global $can, $AppUI;
 $can->needsRead();
 
-$owner_guid = mbGetValueFromGet('owner_guid');
+$owner_guid = CValue::get('owner_guid');
 $file = isset($_FILES['import']) ? $_FILES['import'] : null;
 $owner = null;
 

@@ -12,10 +12,10 @@ global $can;
 $can->needsEdit();
 
 $filter = new CLmFSE();
-$filter->_date_min = mbGetValueFromGet("_date_min", mbDate());
-$filter->_date_max = mbGetValueFromGet("_date_max", mbDate("+1 day"));
-$filter->S_FSE_CPS = mbGetValueFromGet("S_FSE_CPS", -1);
-$filter->S_FSE_ETAT = mbGetValueFromGet("S_FSE_ETAT");
+$filter->_date_min = CValue::get("_date_min", mbDate());
+$filter->_date_max = CValue::get("_date_max", mbDate("+1 day"));
+$filter->S_FSE_CPS = CValue::get("S_FSE_CPS", -1);
+$filter->S_FSE_ETAT = CValue::get("S_FSE_ETAT");
 
 
 // Chargement des FSE

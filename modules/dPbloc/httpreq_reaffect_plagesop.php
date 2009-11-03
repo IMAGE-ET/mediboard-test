@@ -13,7 +13,7 @@
 
 global $AppUI, $can;
 
-$mode_real = mbGetValueFromGet("mode_real", 1);
+$mode_real = CValue::get("mode_real", 1);
 
 $can->needsAdmin();
 

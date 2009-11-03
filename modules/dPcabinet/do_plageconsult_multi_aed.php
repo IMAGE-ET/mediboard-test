@@ -11,9 +11,9 @@
 $obj = new CPlageconsult();
 $obj->bind($_POST);
 
-$del         = mbGetValueFromPost("del", 0 );
-$repeat      = mbGetValueFromPost("_repeat", 0 );
-$type_repeat = mbGetValueFromPost("_type_repeat", 1 );
+$del         = CValue::post("del", 0 );
+$repeat      = CValue::post("_repeat", 0 );
+$type_repeat = CValue::post("_type_repeat", 1 );
    
 if ($del) {
   // Suppression
@@ -35,7 +35,7 @@ if ($del) {
     $obj->becomeNext();
   }
   
-  mbSetValueToSession("plageconsult_id");
+  CValue::setSession("plageconsult_id");
 
 } else {
   // Modification des plages

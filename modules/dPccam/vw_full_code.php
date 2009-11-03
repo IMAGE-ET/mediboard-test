@@ -12,9 +12,9 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$codeacte     = mbGetValueFromGetOrSession("codeacte");
-$object_class = mbGetValueFromGet("object_class");
-$hideSelect   = mbGetValueFromGet("hideSelect", 0);
+$codeacte     = CValue::getOrSession("codeacte");
+$object_class = CValue::get("object_class");
+$hideSelect   = CValue::get("hideSelect", 0);
 
 $code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
 

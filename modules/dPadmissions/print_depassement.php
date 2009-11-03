@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$id = mbGetValueFromGetOrSession("id");
+$id = CValue::getOrSession("id");
 
 $admission = new COperation();
 $admission->load($id);

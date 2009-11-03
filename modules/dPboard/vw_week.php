@@ -10,10 +10,10 @@
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $prec = mbDate("-1 week", $date);
 $suiv = mbDate("+1 week", $date);
-$vue  = mbGetValueFromGetOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
+$vue  = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
 
 global $smarty;
 

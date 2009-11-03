@@ -13,9 +13,9 @@ global $AppUI, $can, $m;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 // Récupération des paramètres
-$chirSel   = mbGetValueFromGetOrSession("chirSel");
-$date      = mbGetValueFromGetOrSession("date", mbDate());
-$board     = mbGetValueFromGet("board", 0);
+$chirSel   = CValue::getOrSession("chirSel");
+$date      = CValue::getOrSession("date", mbDate());
+$board     = CValue::get("board", 0);
 
 $where = array();
 $where["praticien_id"] = "= '$chirSel'";

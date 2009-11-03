@@ -13,18 +13,18 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Type de tri
-$selTri = mbGetValueFromGetOrSession("selTri", "nom");
-$order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
-$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
+$selTri = CValue::getOrSession("selTri", "nom");
+$order_col = CValue::getOrSession("order_col", "_nomPatient");
+$order_way = CValue::getOrSession("order_way", "ASC");
 
 // Mode => ambu ou comp
-$mode = mbGetValueFromGetOrSession("mode");
+$mode = CValue::getOrSession("mode");
 
 // Type d'affichage
-$vue = mbGetValueFromGetOrSession("vue", 0);
+$vue = CValue::getOrSession("vue", 0);
 
 // Récupération des dates
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");

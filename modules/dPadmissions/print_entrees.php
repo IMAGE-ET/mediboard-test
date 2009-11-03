@@ -13,8 +13,8 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $listByPrat = array();
-$date = mbGetValueFromGet("date", mbDate());
-$type = mbGetValueFromGet("type");
+$date = CValue::get("date", mbDate());
+$type = CValue::get("type");
 $sejour = new CSejour;
 $where = array();
 $where[] = "DATE(sejour.entree_prevue) = '". $date ."'";

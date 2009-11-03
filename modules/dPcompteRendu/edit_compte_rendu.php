@@ -11,14 +11,14 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$compte_rendu_id = mbGetValueFromGet("compte_rendu_id"   , 0);
-$modele_id       = mbGetValueFromGet("modele_id"         , 0);
-$praticien_id    = mbGetValueFromGet("praticien_id"      , 0);
-$type            = mbGetValueFromGet("type"              , 0);
-$pack_id         = mbGetValueFromGet("pack_id"           , 0);
-$object_id       = mbGetValueFromGet("object_id"         , 0);
-$target_id       = mbGetValueFromGet("target_id");
-$target_class    = mbGetValueFromGet("target_class");
+$compte_rendu_id = CValue::get("compte_rendu_id"   , 0);
+$modele_id       = CValue::get("modele_id"         , 0);
+$praticien_id    = CValue::get("praticien_id"      , 0);
+$type            = CValue::get("type"              , 0);
+$pack_id         = CValue::get("pack_id"           , 0);
+$object_id       = CValue::get("object_id"         , 0);
+$target_id       = CValue::get("target_id");
+$target_class    = CValue::get("target_class");
 
 // Faire ici le test des différentes variables dont on a besoin
 

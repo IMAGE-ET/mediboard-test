@@ -7,8 +7,8 @@
  *  @author Alexis Granger
  */
 
-$codeacte = mbGetValueFromGetOrSession("code");
-$callback = mbGetValueFromGetOrSession("callback");
+$codeacte = CValue::getOrSession("code");
+$callback = CValue::getOrSession("callback");
 
 // Chargement du code
 $code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);

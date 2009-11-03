@@ -12,8 +12,8 @@ global $can;
 $can->needsRead();
 
 // Recuperation de la classe de la categorie
-$category_class = mbGetValueFromGetOrSession("category_class");
-$category_id = mbGetValueFromGetOrSession("category_id");
+$category_class = CValue::getOrSession("category_class");
+$category_id = CValue::getOrSession("category_id");
 
 // Chargement de la categorie selectionnee
 $category = new $category_class;

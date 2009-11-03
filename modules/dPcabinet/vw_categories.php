@@ -13,7 +13,7 @@ $user = new CMediusers();
 $user->load($AppUI->user_id);
 $user->loadRefFunction();
 
-$selCabinet = mbGetValueFromGetOrSession("selCabinet", $user->function_id);
+$selCabinet = CValue::getOrSession("selCabinet", $user->function_id);
 $droit = true;
 
 // si on affecte a selCabinet le function_id du user, on verifie si le user a le droit de creer des categories
@@ -37,7 +37,7 @@ $listFunctions = $function->loadSpecialites(PERM_EDIT);
 
 // Creation d'une categorie
 $categorie = new CConsultationCategorie();
-$categorie_id = mbGetValueFromGetOrSession("categorie_id");
+$categorie_id = CValue::getOrSession("categorie_id");
 
 // Chargement des categories pour le cabinet selectionné ou pour le cabinet auquel appartient le user
 if($selCabinet){

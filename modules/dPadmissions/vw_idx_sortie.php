@@ -13,12 +13,12 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Type d'affichage
-$vue = mbGetValueFromGetOrSession("vue", 0);
+$vue = CValue::getOrSession("vue", 0);
 
 // Récupération des dates
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$order_col = mbGetValueFromGetOrSession("order_col","_nomPatient");
-$order_way = mbGetValueFromGetOrSession("order_way","ASC");
+$date = CValue::getOrSession("date", mbDate());
+$order_col = CValue::getOrSession("order_col","_nomPatient");
+$order_way = CValue::getOrSession("order_way","ASC");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");

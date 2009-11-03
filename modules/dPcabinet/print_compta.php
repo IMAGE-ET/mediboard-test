@@ -15,12 +15,12 @@ $today = mbDate();
 // Récupération des paramètres
 $filter = new CPlageconsult();
 
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
+$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 
-$filter->_mode_reglement = mbGetValueFromGetOrSession("mode", 0);
+$filter->_mode_reglement = CValue::getOrSession("mode", 0);
 
-$filter->_type_affichage  = mbGetValueFromGetOrSession("_type_affichage" , 1);
+$filter->_type_affichage  = CValue::getOrSession("_type_affichage" , 1);
 //Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
 if($filter->_type_affichage == "complete") {
 	$filter->_type_affichage = 1;
@@ -32,7 +32,7 @@ $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
 $mediuser->loadRefFunction();
 
-$chir = mbGetValueFromGetOrSession("chir");
+$chir = CValue::getOrSession("chir");
 $chirSel = new CMediusers;
 $chirSel->load($chir);
 

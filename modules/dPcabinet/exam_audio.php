@@ -12,10 +12,10 @@ global $frequences, $pressions, $exam_audio;
 
 $can->needsEdit();
 
-$_conduction = mbGetValueFromGetOrSession("_conduction", "aerien");
-$_oreille = mbGetValueFromGetOrSession("_oreille", "gauche");
+$_conduction = CValue::getOrSession("_conduction", "aerien");
+$_oreille = CValue::getOrSession("_oreille", "gauche");
 
-$consultation_id = mbGetValueFromGetOrSession("consultation_id");
+$consultation_id = CValue::getOrSession("consultation_id");
 $where = array("consultation_id" => "= '$consultation_id'");
 $exam_audio = new CExamAudio;
 $exam_audio->loadObject($where);

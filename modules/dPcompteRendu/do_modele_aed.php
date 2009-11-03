@@ -91,7 +91,7 @@ if (isset($_POST["source"])) {
 }
 
 $do->doBind();
-if (intval(mbGetValueFromPost("del"))) {
+if (intval(CValue::post("del"))) {
   $do->doDelete();
 } else {
   $do->doStore();
@@ -111,7 +111,7 @@ if($do->ajax){
 
 else {
   // Si c'est un compte rendu
-  if($do->_obj->object_id && !intval(mbGetValueFromPost("del"))) {
+  if($do->_obj->object_id && !intval(CValue::post("del"))) {
     $do->redirect = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
   } 
   // Si c'est un modèle de compte rendu

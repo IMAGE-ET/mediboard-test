@@ -11,8 +11,8 @@ global $AppUI, $can;
 
 $can->needsRead();
 
-$prat_id         = mbGetValueFromGetOrSession("selPrat");
-$compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
+$prat_id         = CValue::getOrSession("selPrat");
+$compte_rendu_id = CValue::getOrSession("compte_rendu_id");
 
 $group = CGroups::loadCurrent();
 $listEtab = array($group);
@@ -36,7 +36,7 @@ if (!$prat_id) {
 
   if ($mediuser->isPraticien()) {
     $prat_id = $AppUI->user_id;
-    mbSetValueToSession("selPrat", $prat_id);
+    CValue::setSession("selPrat", $prat_id);
   }
 }
 

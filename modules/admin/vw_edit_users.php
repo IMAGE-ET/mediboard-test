@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
+$user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 
 // Récuperation de l'utilisateur sélectionné
 $user = new CUser;
@@ -20,11 +20,11 @@ $user->load($user_id);
 $user->loadRefMediuser();
 
 // Récuperation des utilisateurs recherchés
-$user_last_name  = mbGetValueFromGetOrSession("user_last_name" , "");
-$user_first_name = mbGetValueFromGetOrSession("user_first_name", "");
-$user_username   = mbGetValueFromGetOrSession("user_username"  , "");
-$user_type       = mbGetValueFromGetOrSession("user_type"      , 0);
-$template        = mbGetValueFromGetOrSession("template"       , "");
+$user_last_name  = CValue::getOrSession("user_last_name" , "");
+$user_first_name = CValue::getOrSession("user_first_name", "");
+$user_username   = CValue::getOrSession("user_username"  , "");
+$user_type       = CValue::getOrSession("user_type"      , 0);
+$template        = CValue::getOrSession("template"       , "");
 
 $where = null;
 if ($user_last_name ) $where["user_last_name"]  = "LIKE '".addslashes($user_last_name )."%'";
