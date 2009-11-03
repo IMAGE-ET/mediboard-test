@@ -50,8 +50,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->addEnteteMessage($evenementsPatients);
   }
   
-  static function getIdSource($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+  function getIdSource($node) {
+    $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
     $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant);
@@ -60,7 +60,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   static function getIdCible($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
     $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
@@ -189,7 +189,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function getIPPPatient($query) { 
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CMbXPath($this, true);
     
     $query_evt = "/hprim:evenementsPatients/hprim:evenementPatient";
 
@@ -227,7 +227,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $xpath->queryAttributNode($query, $node, "action");    
   }
   
-  function mappingVenue($node, $mbVenue) {    
+  function mappingVenue($node, $mbVenue) {   
     $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = $this->getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);

@@ -199,8 +199,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    **/
   function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {   
     // Traitement du patient
-    $domEnregistrentPatient = new CHPrimXMLEnregistrementPatient();
-    $messageAcquittement = $domEnregistrentPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+    $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
     if ($echange_hprim->statut_acquittement != "OK") {
       return $messageAcquittement;
     }
@@ -214,6 +214,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       $newVenue = new CSejour();
+      $newVenue->patient_id = $newPatient->_id; 
       
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
