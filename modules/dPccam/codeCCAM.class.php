@@ -22,6 +22,7 @@ class CCodeCCAM {
   var $assos         = array(); // Associabilite
   var $procedure     = null; // Procedure
   var $remboursement = null; // Remboursement
+  var $couleur       = null; // Couleur du code par rapport à son chapitre
   
   // Variable calculées
   var $_code7 = null; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
