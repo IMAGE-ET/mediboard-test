@@ -633,7 +633,8 @@ $dPconfig["hprimxml"] = array (
   "evt_mvtStock" => array(
     "validation" => "0",
     "version" => "1.01",
-  )
+  ),
+  "functionPratImport" => "Import",
 );
 
 // you can add as much ftp as you want by using

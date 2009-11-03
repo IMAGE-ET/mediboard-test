@@ -295,10 +295,50 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     $medecin = $medecins->childNodes;
     foreach ($medecin as $_med) {
-       mbTrace($child->tagName, "medecin", true);
+      mbTrace($_med->tagName, "medecin", true);
+   	  $code = $xpath->queryUniqueNode("hprim:identification/hprim:code", $_med);
+   	  $mediuser = new CMediusers();
+   	  $id400 = new CIdSante400();
+   	  //Paramétrage de l'id 400
+      $id400->object_class = "CMediusers";
+      $id400->tag = $this->destinataire;
+   	  $id400->id400 = $code;
+   	  $id400->loadMatchingObject();
+   	  if ($id400->_id) {
+   	  	$mediuser->_id = $id400->object_id;
+   	  } else {
+   	  	$functions = new CFunctions();
+	    $functions->text = CAppUI::conf("hprimxml functionPratImport");
+	    $functions->loadMatchingObject();
+	    $mediuser->function_id = $functions->_id;
+	    /*$mediuser->_user_first_name = $this->prenom;
+		$mediuser->_user_last_name  = $this->nom;
+		$mediuser->_user_username   = substr(str_replace(" ", "", strtolower($this->prenom[0].$this->nom)),0,20);
+		$mediuser->_user_password   = substr(str_replace(" ", "", strtolower($this->prenom[0].$this->nom)),0,20);
+		$mediuser->_user_type       = 4; // Chirurgien
+		$mediuser->_user_email      = $this->email;
+		$mediuser->_user_phone      = $this->telephone;
+		$mediuser->_user_adresse    = $this->adresse1.$this->adresse2;
+		$mediuser->_user_cp         = $this->codePostal;
+		$mediuser->_user_ville      = $this->ville;
+		$mediuser->actif            = 0; // Non actif*/
+   	  }
+   	  
+   	  
+	  $functions = new CFunctions();
+	$functions->text = CAppUI::conf("sigems nomPratImport");
+	$functions->loadMatchingObject();
+	$mediuser->function_id = $functions->_id;
+	$mediuser = $_praticien->mapFrom($mediuser);
+   	  // Récupération du typePersonne
+      $mbPatient = self::getPersonne($personnePhysique,$mbPatient); 
     } 
     
     return $mbVenue;
+  }
+  
+  function addMediuser() {
+  	
   }
   
   static function getPlacement($node, $mbVenue) {
