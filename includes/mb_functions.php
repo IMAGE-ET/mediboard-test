@@ -9,6 +9,159 @@
  */
 
 /**
+ * Utility function to return a value from a named array or a specified default
+ * array should always be passed by reference
+ * @param array $arr The array containing the values
+ * @param string $name The key of the value to get
+ * @param mixed $def The value if the key's value doesn't exist
+ * @return mixed The value correponding to $name in $arr
+ */
+function dPgetParam(&$arr, $name, $def = null) {
+  return isset( $arr[$name] ) ? $arr[$name] : $def;
+}
+
+/**
+ * Returns the first arguments that do not evaluate to null (0, null, "")
+ * @return mixed The first value evaluated to TRUE
+ */
+function mbGetValue() {
+  foreach(func_get_args() as $arg) {
+    if ($arg) {
+      return $arg;
+    }
+  }
+}
+
+/**
+ * Returns a value from the client's cookies, with at least a default value
+ * @access public
+ * @param string $valName The key of the value to get from the cookies
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the cookies
+ **/
+function mbGetValueFromCookie($valName, $valDefault = null) {
+  return isset($_COOKIE[$valName]) ? $_COOKIE[$valName] : $valDefault;
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP GET, with at least a
+ * default value
+ * @access public
+ * @param string $valName The key of the value to get from HTTP GET
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP GET
+ **/
+function mbGetValueFromGet($valName, $valDefault = null) {
+  return isset($_GET[$valName]) ? $_GET[$valName] : $valDefault;
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP POST, with at least a
+ * default value
+ * @access public
+ * @param string $valName The key of the value to get from HTTP POST
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP POST
+ **/
+function mbGetValueFromPost($valName, $valDefault = null) {
+  return isset($_POST[$valName]) ? $_POST[$valName] : $valDefault;
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP REQUEST (POST or GET), with at least a
+ * default value
+ * @access public
+ * @param string $valName The key of the value to get from HTTP REQUEST (POST or GET)
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP REQUEST (POST or GET)
+ **/
+function mbGetValueFromRequest($valName, $valDefault = null) {
+  return isset($_REQUEST[$valName]) ? $_REQUEST[$valName] : $valDefault;
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP GET or Session, relative 
+ * to a module ($m), with at least a default value. Stores it in $_SESSION in all 
+ * cases, with at least a default value.
+ * @access public
+ * @param string $valName The key of the value to get from HTTP GET or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP GET or Session
+ **/
+function mbGetValueFromGetOrSession($valName, $valDefault = null) {
+  global $m;
+
+  if (isset($_GET[$valName])) {
+    $_SESSION[$m][$valName] = $_GET[$valName];
+  }
+  
+  return dPgetParam($_SESSION[$m], $valName, $valDefault);
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP GET or Session, with at least a
+ * default value. Stores it in $_SESSION in all cases, with at least a default value.
+ * @access public
+ * @param string $valName The key of the value to get from HTTP GET or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP GET or Session
+ **/
+function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
+  if (isset($_GET[$valName])) {
+    $_SESSION[$valName] = $_GET[$valName];
+  }
+  
+  return dPgetParam($_SESSION, $valName, $valDefault);
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP POST or Session, relative 
+ * to a module ($m), with at least a default value. Stores it in $_SESSION in all 
+ * cases, with at least a default value.
+ * @access public
+ * @param string $valName The key of the value to get from HTTP POST or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP POST or Session
+ **/
+function mbGetValueFromPostOrSession($valName, $valDefault = null) {
+  global $m;
+
+  if (isset($_POST[$valName])) {
+    $_SESSION[$m][$valName] = $_POST[$valName];
+  }
+  
+  return dPgetParam($_SESSION[$m], $valName, $valDefault);
+}
+
+/**
+ * Returns the value of a variable retreived from HTTP POST or Session, with at least a
+ * default value. Stores it in $_SESSION in all cases, with at least a default value.
+ * @access public
+ * @param string $valName The key of the value to get from HTTP POST or Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the HTTP POST or Session
+ **/
+function mbGetAbsValueFromPostOrSession($key, $default = null) {
+  if (isset($_POST[$key])) {
+    $_SESSION[$key] = $_POST[$key];
+  }
+  return dPgetParam($_SESSION, $key, $default);
+}
+
+/**
+ * Returns the value of a variable retreived from Session, with at least a
+ * default value
+ * @access public
+ * @param string $valName The key of the value to get from Session
+ * @param string $valDefault The default value in the key's value doesn't exist
+ * @return mixed The value associated to $valName in the Session
+ **/
+function mbGetValueFromSession($key, $default = null) {
+  global $m;
+  return dPgetParam($_SESSION[$m], $key, $default);
+}
+
+/**
  * Returns the CMbObject with given GET params keys, if it doesn't exist, a redirect is made
  * @param string $class_key The class name of the object
  * @param string $id_key The object ID
@@ -16,12 +169,12 @@
  * @return CMbObject The object loaded or nothing
  **/
 function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
-  $object_class = CValue::get($class_key);
-  $object_id    = CValue::get($id_key);
+  $object_class = mbGetValueFromGet($class_key);
+  $object_id    = mbGetValueFromGet($id_key);
   $object_guid  = "$object_class-$object_id";
 
   if ($guid_key) {
-    $object_guid = CValue::get($guid_key, $object_guid);
+    $object_guid = mbGetValueFromGet($guid_key, $object_guid);
   }
 
   $object = CMbObject::loadFromGuid($object_guid);
@@ -33,6 +186,29 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
   }
   
   return $object;
+}
+
+/**
+ * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
+ * @access public
+ * @param string $key The key to store in the session
+ * @param mixed $value The value to store
+ * @return void
+ **/
+function mbSetValueToSession($key, $value = null) {
+  global $m;
+  $_SESSION[$m][$key] = $value;
+}
+
+/**
+ * Sets a value to the session. Very useful to nullify object ids after deletion
+ * @access public
+ * @param string $key The key to store in the session
+ * @param mixed $value The value to store
+ * @return void
+ **/
+function mbSetAbsValueToSession($key, $value = null) {
+  $_SESSION[$key] = $value;
 }
 
 function toBool($value) {
