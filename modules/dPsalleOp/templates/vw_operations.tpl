@@ -117,7 +117,7 @@ Main.add(function () {
            $check_list->_id && $check_list->validator_id}}
         {{include file=inc_operation.tpl}}
 			{{else}}
-        {{include file=inc_edit_check_list.tpl personnel=$listPersAideOp}}
+        {{include file=inc_edit_check_list.tpl personnel=$listValidateurs}}
       {{/if}}
     {{else}}
       <div class="big-info">

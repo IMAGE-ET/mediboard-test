@@ -222,6 +222,7 @@ $smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("tabPersonnel"           , $tabPersonnel);
 $smarty->assign("listPersAideOp"         , $listPersAideOp);
 $smarty->assign("listPersPanseuse"       , $listPersPanseuse);
+$smarty->assign("listValidateurs"        , CPersonnel::loadListPers("op"));
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
