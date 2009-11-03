@@ -10,7 +10,7 @@
 
 {{if $chapitre == "med"}}
 	  <option value="">&mdash; les plus utilisés</option>
-	  <optgroup label="Produits les plus utilisés"></optgroup>
+	  <optgroup label="Produits les plus utilisés">
 	  {{if array_key_exists("medicament", $favoris)}}
 	  {{foreach from=$favoris.medicament item=curr_prod}}
 	  <option value="{{$curr_prod->code_cip}}">
@@ -18,7 +18,8 @@
 	  </option>
 	  {{/foreach}}
 	  {{/if}}
-	  <optgroup label="Injectables les plus utilisés"></optgroup>
+		</optgroup>
+	  <optgroup label="Injectables les plus utilisés">
 	  {{if array_key_exists("injectable", $favoris)}}
 	  {{foreach from=$favoris.injectable item=curr_inj}}
 	  <option value="{{$curr_inj->code_cip}}">
@@ -26,6 +27,7 @@
 	  </option>
 	  {{/foreach}}
 	  {{/if}}
+		</optgroup>
 {{else}}
 		<option value="">&mdash; les plus utilisés</option>
 		{{if array_key_exists($chapitre, $favoris)}}
