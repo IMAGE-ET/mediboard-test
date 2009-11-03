@@ -180,9 +180,10 @@ var Url = Class.create({
   
   autoComplete: function(input, populate, oOptions) {
     oOptions = Object.extend({
-	    minChars: 3,
-	    frequency: 0.5,
+      minChars: 2,
+      frequency: 0.5,
       dropdown: false,
+      valueElement: null,
 	    
 	    // Allows bigger width than input
 			onShow: function(element, update) { 
@@ -204,6 +205,20 @@ var Url = Class.create({
     // Autocomplete
     this.addParam("ajax", 1);
     this.addParam("suppressHeaders", 1);
+    
+    if (oOptions.valueElement) {
+      oOptions.afterUpdateElement = function(input, selected) {
+        var valueElement = selected.select(".value")[0];
+        var value = valueElement ? valueElement.innerHTML.strip() : selected.innerHTML.stripTags().strip();
+        $V(oOptions.valueElement, value);
+      }
+      
+      input.observe("change", function(){
+        if ($V(input) == "") {
+          $V(oOptions.valueElement, "");
+        }
+      });
+    }
     
     var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
     
@@ -228,16 +243,19 @@ var Url = Class.create({
       input.wrap(container);
       container.insert(populate);
       
+      // The trigger button
       var trigger = new Element("div", {
         style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;"
       }).addClassName("dropdown-trigger");
       
       trigger.insert(new Element("div", {style: "position:absolute;right:0;top:0;left:0;bottom:0;"}));
       
+      // Hide the list
       var hideAutocomplete = function(e){
         autocompleter.onBlur(e);
       }.bindAsEventListener(this);
       
+      // Show the list
       var showAutocomplete = function(e, dontClear){
         if (!dontClear) $V(input, '');
         input.focus();
@@ -246,6 +264,7 @@ var Url = Class.create({
         document.observeOnce("mousedown", hideAutocomplete);
       };
       
+      // Bind the events
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("focus", function(){input.select()});

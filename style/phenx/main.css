@@ -2562,31 +2562,6 @@ ul.select-tree .highlight {
   color: #ccc;
 }
 
-.perennity {
-  border-left: solid 12px transparent;
-  padding-left: 6px;
-}
-select.perennity {
-  padding-left: 0px;
-  border-left-width: 4px;
-  border-left-color: #000;
-}
-.perennity.level-1 {
-  border-left-color: #A80000;
-}
-.perennity.level-2 {
-  border-left-color: #30CD14;
-}
-.perennity.level-3 {
-  border-left-color: #FFEE00;
-}
-.perennity.level-4 {
-  border-left-color: #FFA100;
-}
-.perennity.level-5 {
-  border-left-color: #E40000;
-}
-
 #control_overlay {
   background-color: #000;
 }
