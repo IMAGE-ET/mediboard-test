@@ -135,6 +135,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     } else if ($mbObject instanceof CSejour) {
       $mbObject->loadRefPraticien();
       $mbObject->loadRefPatient();
+      $mbObject->_ref_patient->loadIPP();
       $mbObject->loadRefsPrescripteurs();
       $mbObject->loadRefAdresseParPraticien();
       $mbObject->_ref_patient->loadRefsFwd();

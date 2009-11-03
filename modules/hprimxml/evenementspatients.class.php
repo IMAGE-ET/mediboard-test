@@ -59,7 +59,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $xpath->queryTextNode("hprim:valeur", $emetteur);
   }
   
-  static function getIdCible($node) {
+  function getIdCible($node) {
     $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);

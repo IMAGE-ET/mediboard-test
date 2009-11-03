@@ -97,10 +97,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
     $attrNatureVenueHprim = array (
-      "CSejour" => "hsp",
-      "CConsultation" => "cslt",
+      "comp" => "hsp",
+      "consult" => "cslt",
+      "seances" => "sc"
     );
-    $this->addAttribute($natureVenueHprim, "valeur", (($mbVenue->_class_name == "CSejour") && ($mbVenue->type == "seances")) ? "sc" : $attrNatureVenueHprim[$mbVenue->_class_name]);
+    $this->addAttribute($natureVenueHprim, "valeur", $attrNatureVenueHprim[$mbVenue->type]);
     
     $entree = $this->addElement($elParent, "entree");
     
