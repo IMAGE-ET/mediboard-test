@@ -80,7 +80,7 @@ class CFile extends CDocumentItem {
     parent::updateFormFields();
     
     $this->_extensioned = $this->file_name;
-    $this->_file_size = mbConvertDecaBinary($this->file_size);
+    $this->_file_size = CMbString::toDecaBinary($this->file_size);
     
     $this->completeField("object_id");
 

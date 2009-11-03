@@ -39,7 +39,7 @@ switch ($action = CValue::get("action")) {
     CAppUI::stepAjax("BCBScripts-download_ko", UI_MSG_ERROR);
   }
 
-  CAppUI::stepAjax("BCBScripts-download_ok", UI_MSG_OK, mbConvertDecaBinary(strlen($content)));
+  CAppUI::stepAjax("BCBScripts-download_ok", UI_MSG_OK, CMbString::toDecaBinary(strlen($content)));
   
   CMbPath::forceDir($libDir);
   if (!CMbPath::emptyDir($libDir)) {

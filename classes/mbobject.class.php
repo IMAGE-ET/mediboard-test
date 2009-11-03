@@ -801,7 +801,7 @@ class CMbObject {
           if(($propValue !== null) || (!$this->_id)) {
             $msgProp = $this->checkProperty($propName);
             
-            $value = truncate($propValue);
+            $value = CMbString::truncate($propValue);
             $debugInfo = $debug ? "(val:\"$value\", spec:\"$propSpec\")" : "(valeur: \"$value\")";
             $fieldName = CAppUI::tr("$this->_class_name-$propName");
             $msg .= $msgProp ? "<br/> - <strong title='$propName'>$fieldName</strong> : $msgProp $debugInfo" : null;

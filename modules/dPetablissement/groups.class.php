@@ -100,7 +100,7 @@ class CGroups extends CMbObject {
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->text;
-    $this->_shortview = truncate($this->text);
+    $this->_shortview = CMbString::truncate($this->text);
   }
   
   function loadRefLivretTherapeutique($lettre = "%", $limit = 50, $full_mode = true){

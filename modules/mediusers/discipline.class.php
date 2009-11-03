@@ -112,7 +112,7 @@ class CDiscipline extends CMbObject {
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = strtolower($this->text);
-    $this->_shortview = truncate($this->_view);
+    $this->_shortview = CMbString::truncate($this->_view);
   }
     
   // Backward references

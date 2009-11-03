@@ -576,31 +576,6 @@ function mbEcartType($array) {
 }
 
 /**
- * Remove accents from a string
- **/
-
-function removeAccent($string) {
-  $string = htmlentities($string);
-  $string = preg_replace("/&(.)(acute|cedil|circ|ring|tilde|uml|grave);/", "$1", $string);
-  $string = html_entity_decode($string);
-  return $string;
-}
-
-/** Extended function to be able to remove diacritics only on upper case letters */
-function removeDiacritics($str, $only_upper_case = false) {
-  if ($only_upper_case) {
-    $find = "ÀÁÂÃÄÅÒÓÔÕÖØÈÉÊËÇÌÍÎÏÙÚÛÜÑ";
-    $repl = "AAAAAAOOOOOOEEEECIIIIUUUUN";
-  }
-  else {
-    $find = "ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ";
-    $repl = "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn";
-  }
-  
-  return strtr($str, $find, $repl);
-}
-
-/**
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
  * in dPinterop
@@ -868,56 +843,10 @@ function mbLoadScriptsStorage($modeReturn){
     return $affichageScript;
 }
 
-/**
- * Convert a byte number to the deca-binary equivalent
- * @return string Mediboard version 
- */
-function mbConvertDecaBinary($number) {
-  $bytes = $number;
-  $value = $number;
-  $prefix = "";
-  $unit = "o";
-
-  $kbytes = $bytes / 1024;
-  if ($kbytes >= 1) {
-    $value = $kbytes;
-    $prefix = "Ki";
-  }
-
-  $mbytes = $kbytes / 1024;
-  if ($mbytes >= 1) {
-    $value = $mbytes;
-    $prefix = "Mi";
-  }
-
-  $gbytes = $mbytes / 1024;
-  if ($gbytes >= 1) {
-    $value = $gbytes;
-    $prefix = "Gi";
-  }
-  
-  // Value with 3 significant digits, thent the unit
-  $value = round($value, $value > 99 ? 0 : $value >  9 ? 1 : 2);
-  return "$value $prefix$unit";
-}
-
-/** Used to get bytes from a string like "64M" */
-function toBytes($val) {
-  $val = trim($val);
-  $last = strtolower($val[strlen($val)-1]);
-  switch($last) {
-    case 't': $val *= 1024;     
-    case 'g': $val *= 1024;
-    case 'm': $val *= 1024;
-    case 'k': $val *= 1024;
-  }
-  return $val;
-}
-
 /** Must be like "64M" */ 
 function set_min_memory_limit($min) {
-  $actual = toBytes(ini_get('memory_limit'));
-  $new    = toBytes($min);
+  $actual = CMbString::fromDecaBinary(ini_get('memory_limit'));
+  $new    = CMbString::fromDecaBinary($min);
   if ($new > $actual) {
     ini_set('memory_limit', $min);
   }
@@ -993,16 +922,6 @@ function getInstalledClasses($properties = array()) {
   }
   
   return $classes;
-}
-
-/**
- * Check if a class has a default constructor (ie with 0 paramater)
- * @return bool
- */
-function has_default_constructor($classname) {
-  $class = new ReflectionClass($classname);
-  $constructor = $class->getConstructor();
-  return ($constructor->getNumberOfParameters() == 0);
 }
 
 /**
@@ -1181,17 +1100,4 @@ function in_array_recursive($needle, $haystack, $strict = false) {
     if (is_array($v) && in_array_recursive($needle, $v, $strict)) return true;
   }
   return false;
-}
-
-/**
- * Truncates a string to a given maximum length
- * @param string $string The string to truncate
- * @param int $max [optional] The max length of the resulting string
- * @param string $replacement [optional] The string that replaces the characters removed
- * @return string The truncated string
- */
-function truncate($string, $max = 25, $replacement = '...'){
-  if(strlen($string) > $max)
-    return substr($string, 0, $max - strlen($replacement)).$replacement;
-  return $string;
 }

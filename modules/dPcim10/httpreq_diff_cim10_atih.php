@@ -92,7 +92,7 @@ foreach($list_diff as $diff) {
     else $offset++; 
   }
   
-  $label = str_replace("'", "\\'", removeDiacritics($diff[3], true));
+  $label = str_replace("'", "\\'", CMbString::removeDiacritics($diff[3], CMbString::UPPERCASE));
   
   // Insertion des libellés dans toutes les langues
   $query = "INSERT into libelle (
