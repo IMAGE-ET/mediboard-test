@@ -204,7 +204,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {   
+  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
@@ -212,11 +212,17 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       return $messageAcquittement;
     }
     
+    $domAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domAcquittement->identifiant = $data['identifiantMessage'];
+    $domAcquittement->destinataire = $data['idClient'];
+    $domAcquittement->destinataire_libelle = $data['libelleClient'];
+    
     // Traitement de la venue
     $mutexSej = new CMbSemaphore("sip-numdos"); 
     
      // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgNumDossier = "";
+    $_code_Venue = false;
     
     // Si CIP
     if (!CAppUI::conf('sip server')) {
@@ -308,7 +314,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $num_dossier->last_update = mbDateTime();
         $msgNumDossier = $num_dossier->store();
         
-        $codes = array ($msgVenue ? ($_code_Patient ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), $msgNumDossier ? "A105" : $_code_NumDos);
+        $codes = array ($msgVenue ? ($_code_Venue ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), $msgNumDossier ? "A105" : $_code_NumDos);
         
         if ($msgVenue || $msgNumDossier) {
           $avertissement = $msgVenue." ".$msgNumDossier;

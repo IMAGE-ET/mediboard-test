@@ -227,7 +227,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $xpath->queryAttributNode($query, $node, "action");    
   }
   
-  function mappingVenue($node, $mbVenue) {   
+  function mappingVenue($node, $mbVenue) {  
+  mbTrace("map", "2", true); 
     $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = $this->getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
@@ -292,7 +293,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
-        
+    $medecin = $medecins->childNodes;
+    foreach ($medecin as $_med) {
+       mbTrace($child->tagName, "medecin", true);
+    } 
+    
     return $mbVenue;
   }
   
