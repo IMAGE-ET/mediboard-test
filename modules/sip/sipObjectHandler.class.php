@@ -147,9 +147,52 @@ class CSipObjectHandler extends CMbObjectHandler {
       $mbObject->loadLogs();
       $mbObject->loadRefsConsultations();
       $mbObject->loadRefsConsultAnesth();
-
+      
+      // Si Serveur
+      if (CAppUI::conf('sip server')) {
+        $listDest = $dest_hprim->loadList();
+  
+        foreach ($listDest as $_dest) {
+          // Recherche si le séjour possède un identifiant externe sur le SIP
+          $id400 = new CIdSante400();
+          //Paramétrage de l'id 400
+          $id400->object_id = $mbObject->_id;
+          $id400->object_class = "CSejour";
+          $id400->tag = $_dest->destinataire;
+  
+          if($id400->loadMatchingObject())
+            $mbObject->_id400 = $id400->id400;
+          else
+            $mbObject->_id400 = null;
+  
+          if (!$mbObject->_num_dossier) {
+            $num_dossier = new CIdSante400();
+            //Paramétrage de l'id 400
+            $num_dossier->object_class = "CSejour";
+            $num_dossier->object_id = $mbObject->_id;
+            $num_dossier->tag = CAppUI::conf("mb_id");
+            $num_dossier->loadMatchingObject();
+  
+            $mbObject->_num_dossier = $num_dossier->id400;
+          }
+          
+          $domEvenement = new CHPrimXMLVenuePatient();
+          $domEvenement->emetteur = CAppUI::conf('mb_id');
+          $domEvenement->destinataire = $_dest->destinataire;
+          $domEvenement->destinataire_libelle = " ";
+  
+          $echange_hprim = new CEchangeHprim();
+          if (isset($mbObject->_hprim_initiator_id)) {
+            $echange_hprim->load($mbObject->_hprim_initiator_id);
+          }
+  
+          $initiateur = ($_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
+  
+          $domEvenement->generateTypeEvenement($mbObject, true, $initiateur);
+        }
+      }
        // Si Client
-      if (!CAppUI::conf('sip server')) {
+      else {
         $dest_hprim->type = "sip";
         $dest_hprim->loadMatchingObject();
   
