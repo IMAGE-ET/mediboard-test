@@ -32,7 +32,7 @@
 			{{* /if *}}
 			{{if $produit->Commentaire}}
 			<div style="padding-left: 1em">
-			  ({{$produit->Commentaire|replace:$token_search:$token_replace}}
+			  ({{$produit->Commentaire|replace:$token_search:$token_replace}})
 			</div>
 			{{/if}}
     </li>
