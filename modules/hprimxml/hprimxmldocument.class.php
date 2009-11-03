@@ -427,6 +427,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $medecin = $this->addElement($elParent, "medecin");
     $this->addAttribute($medecin, "lien", $lien);
     $this->addElement($medecin, "numeroAdeli", $praticien->adeli);
+    $identification = $this->addElement($medecin, "identification");
+    $this->addElement($identification, "code", $praticien->_id);
+    $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addPersonne($personne, $praticien);
   }

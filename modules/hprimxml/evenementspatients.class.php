@@ -109,12 +109,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $civilite = $xpath->queryAttributNode("hprim:civiliteHprim", $node, "valeur");
     $civiliteHprimConversion = array (
       "mme"   => "mme",
-      "melle" => "mlle",
-      "mr"     => "m",
+      "mlle"  => "melle",
+      "mr"    => "m",
       "dr"    => "dr",
       "pr"    => "pr",
       "enf"   => "enf",
     );
+    
     $mbPatient->civilite = $civiliteHprimConversion[$civilite];    
     
     $mbPatient->nom = $xpath->queryTextNode("hprim:nomUsuel", $node);
@@ -236,8 +237,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbVenue;
   }
   
-  static function getAttributesVenue($node, $mbVenue) {
-  	$xpath = new CMbXPath($node->ownerDocument, true);
+  static function getAttributesVenue($node) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
         
     $attributes = array();
     $attributes['confidentiel'] = $xpath->getValueAttributNode($node, "confidentiel"); 
@@ -248,17 +249,21 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $attributes;
   }
   
+  static function getEtatVenue($node) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+    
+    return $xpath->getValueAttributNode($node, "etat"); 
+  }
+  
   static function getNatureVenue($node, $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
-
     $attrNatureVenueHprim = array (
       "hsp"  => "comp",
       "cslt" => "consult",
       "sc" => "seances",
     );
-    
     $mbVenue->type =  $attrNatureVenueHprim[$nature];
     
     return $mbVenue;
@@ -269,38 +274,52 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $entree = $xpath->queryUniqueNode("hprim:entree", $node);
   
-    $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $node);
-    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $node);
+    $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $entree);
+    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $entree);
     $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
     
-    $mbVenue->entree_prevue = "$date $heure";
-    
+    $etat = self::getEtatVenue($node);
+    if ($etat == "préadmission") {
+      $mbVenue->entree_prevue = "$date $heure";
+    } else if (($etat == "encours") || ($etat == "clôturée")) {
+      $mbVenue->entree_reelle = "$date $heure";
+    }
+       
     return $mbVenue;
   }
   
   static function getMedecins($node, $mbVenue) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
     
+    $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
+        
+    return $mbVenue;
   }
   
   static function getPlacement($node, $mbVenue) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
     
+    $placement = $xpath->queryUniqueNode("hprim:Placement", $node);
+    
+    $mbVenue->modalite = $xpath->queryAttributNode("hprim:modePlacement", $placement, "modaliteHospitalisation");
+    
+    return $mbVenue;
   }
   
   static function getSortie($node, $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    $entree = $xpath->queryUniqueNode("hprim:sortie", $node);
+    $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
   
-    $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $node);
-    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $node);
+    $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
+    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie);
     
-    $attributes = self::getAttributesVenue($node, $mbVenue);
-    if (($attributes['etat'] == "préadmission") || ($attributes['etat'] == "encours")) {
+    $etat = self::getEtatVenue($node);
+    if (($etat == "préadmission") || ($etat == "encours")) {
       $mbVenue->sortie_prevue = "$date $heure";
-    } else if ($attributes['etat'] == "clôturée") {
+    } else if ($etat == "clôturée") {
       $mbVenue->sortie_reelle = "$date $heure";
     }
-    mbTrace($attributes, "attributs", true);
     
     return $mbVenue;
   }

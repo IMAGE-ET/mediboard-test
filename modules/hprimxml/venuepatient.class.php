@@ -185,7 +185,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $this->addElement($modePlacement, "libelle", substr($mbVenue->_view, 0, 80));   
     
     $datePlacement = $this->addElement($placement, "datePlacement");
-    $this->addElement($datePlacement, "date", mbDate($mbVenue->_ref_first_log->date));
+    $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
   }
   
   /**
@@ -197,21 +197,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {    
-    // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
-    if (!$data['idSource'] && !$data['idCible'] && !$data['idSourceVenue'] && !$data['idCibleVenue']) {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-      $echange_hprim->message = $messagePatient;
-      $echange_hprim->acquittement = $messageAcquittement;
-      $echange_hprim->statut_acquittement = "erreur";
-      $echange_hprim->store();
-      
-      return $messageAcquittement;
-    }
-    
+  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {   
     // Traitement du patient
     $domEnregistrentPatient = new CHPrimXMLEnregistrementPatient();
     $messageAcquittement = $domEnregistrentPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
@@ -220,14 +206,169 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
     
     // Traitement de la venue
-    $newVenue = new CSejour();
+    $mutexSej = new CMbSemaphore("sip-numdos"); 
+    
+     // Traitement du message des erreurs
+    $avertissement = $msgID400 = $msgNumDossier = "";
+    
     // Si CIP
     if (!CAppUI::conf('sip server')) {
+      $newVenue = new CSejour();
       
+      // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
+      if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
+        $doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          
+        $echange_hprim->message = $messagePatient;
+        $echange_hprim->acquittement = $messageAcquittement;
+        $echange_hprim->statut_acquittement = "erreur";
+        $echange_hprim->store();
+        
+        return $messageAcquittement;
+      }
+      
+      $num_dossier = new CIdSante400();
+      //Paramétrage de l'id 400
+      $num_dossier->object_class = "CSejour";
+      $num_dossier->tag = $data['idClient'];
+      $num_dossier->id400 = $data['idSourceVenue'];
+      
+      // idSource non connu
+      if(!$num_dossier->loadMatchingObject()) {
+        // idCible fourni
+        if ($data['idCible']) {
+          if ($newVenue->load($data['idCibleVenue'])) {
+            // Mapping du séjour
+            $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+        
+            // Evite de passer dans le sip handler
+            $newVenue->_coms_from_hprim = 1;
+            $msgVenue = $newVenue->store();
+        
+            $newVenue->loadLogs();
+            $modified_fields = "";
+            if ($newVenue->_ref_last_log) {
+              foreach ($newVenue->_ref_last_log->_fields as $field) {
+                $modified_fields .= "$field \n";
+              }
+            }
+            $_code_NumDos = "I121";
+            $_code_Venue = true; 
+            $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+          } else {
+            $_code_NumDos = "I120";
+          }
+        } else {
+          $_code_NumDos = "I122";  
+        }
+        // Mapping du séjour
+        $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+           
+        if (!$newVenue->_id) {
+          if ($newVenue->loadMatchingSejour()) {
+            // Evite de passer dans le sip handler
+            $newVenue->_coms_from_hprim = 1;
+            $msgVenue = $newVenue->store();
+        
+            $newVenue->loadLogs();
+            $modified_fields = "";
+            if (is_array($newVenue->_ref_last_log->_fields)) {
+              foreach ($newVenue->_ref_last_log->_fields as $field) {
+                $modified_fields .= "$field \n";
+              }
+            }
+            $_code_NumDos = "A121";
+            $_code_Venue = true;
+            $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
+          }
+        }
+                
+        if (!$newVenue->_id) {
+          // Mapping du séjour
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+        
+          // Evite de passer dans le sip handler
+          $newVenue->_coms_from_hprim = 1;
+          $msgVenue = $newVenue->store();
+          
+          $commentaire = "Séjour créé : $newVenue->_id. ";
+        }
+          
+        $num_dossier->object_id = $newVenue->_id;
+        $num_dossier->last_update = mbDateTime();
+        $msgNumDossier = $num_dossier->store();
+        
+        $codes = array ($msgVenue ? ($_code_Patient ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), $msgNumDossier ? "A105" : $_code_NumDos);
+        
+        if ($msgVenue || $msgNumDossier) {
+          $avertissement = $msgVenue." ".$msgNumDossier;
+        } else {
+          $commentaire .= "Numéro dossier créé : $num_dossier->id400.";
+        }
+      } 
+      // idSource connu
+      else {
+        $newVenue->load($num_dossier->object_id);
+        // Mapping du séjour
+        $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+                        
+        // idCible non fourni
+        if (!$data['idCibleVenue']) {
+          $_code_NumDos = "I123"; 
+        } else {
+          $tmpVenue = new CSejour();
+          // idCible connu
+          if ($tmpVenue->load($data['idCibleVenue'])) {
+            if ($tmpVenue->_id != $num_dossier->object_id) {
+              $commentaire = "L'identifiant source fait référence au séjour : $num_dossier->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
+              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
+              $doc_valid = $domAcquittement->schemaValidate();
+              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+              $echange_hprim->acquittement = $messageAcquittement;
+              $echange_hprim->statut_acquittement = "erreur";
+              $echange_hprim->store();
+              return $messageAcquittement;
+            }
+            $_code_NumDos = "I124"; 
+          }
+          // idCible non connu
+          else {
+            $_code_NumDos = "A120";
+          }
+        }
+        // Evite de passer dans le sip handler
+        $newVenue->_coms_from_hprim = 1;
+        $msgVenue = $newVenue->store();
+        
+        $newVenue->loadLogs();
+        $modified_fields = "";
+        if ($newVenue->_ref_last_log) {
+          foreach ($newVenue->_ref_last_log->_fields as $field) {
+            $modified_fields .= "$field \n";
+          }
+        }
+        $codes = array ($msgVenue ? "A103" : "I102", $_code_IPP);
+        
+        if ($msgVenue) {
+          $avertissement = $msgVenue." ";
+        } else {
+          $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro dossier associé : $num_dossier->id400.";
+        }
+      }
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    mbTrace($newVenue, "Traitement venue avant", true);
-    $newVenue = $this->mappingVenue($data['venue'], $newVenue);
-    mbTrace($newVenue, "Traitement venue après", true);
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->store();
+
+    return $messageAcquittement;
   }
 }
 
