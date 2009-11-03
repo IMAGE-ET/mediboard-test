@@ -271,15 +271,15 @@ class CAppUI {
       $params = !empty(self::$instance->state["SAVEDPLACE$hist"]) ? self::$instance->state["SAVEDPLACE$hist"] : self::$instance->defaultRedirect;
     }
     
-    if (mbGetValueFromGet("dialog")) {
+    if (CValue::get("dialog")) {
       $params .= "&dialog=1";
     }
     
-    if (mbGetValueFromGet("ajax")) {
+    if (CValue::get("ajax")) {
       $params .= "&ajax=1";
     }
     
-    if (mbGetValueFromGet("suppressHeaders")) {
+    if (CValue::get("suppressHeaders")) {
       $params .= "&suppressHeaders=1";
     }
     
@@ -432,7 +432,7 @@ class CAppUI {
     $user = new CUser;
     
     // Login as: no need to provide a password for administators
-    if ($loginas = mbGetValueFromRequest("loginas")) {
+    if ($loginas = CValue::request("loginas")) {
       if (self::$instance->user_type != 1 && !$force_login) {
         self::setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
         return false;
@@ -443,12 +443,12 @@ class CAppUI {
     } 
     // Standard login
     else {
-      if (null == $user->user_username  = trim(mbGetValueFromRequest("username"))) {
+      if (null == $user->user_username  = trim(CValue::request("username"))) {
         self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
         return false;
       }
 
-      if (null == $user->_user_password = trim(mbGetValueFromRequest("password"))) {
+      if (null == $user->_user_password = trim(CValue::request("password"))) {
         self::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
         return false;
       }

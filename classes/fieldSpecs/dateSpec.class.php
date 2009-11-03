@@ -30,7 +30,7 @@ class CDateSpec extends CMbFieldSpec {
   function getValue($object, $smarty = null, $params = array()) {
     if ($smarty) require_once $smarty->_get_plugin_filepath('modifier', 'date_format');
     $propValue = $object->{$this->fieldName};
-    $format = mbGetValue(@$params["format"], CAppUI::conf("date"));
+    $format = CValue::first(@$params["format"], CAppUI::conf("date"));
     return ($propValue && $propValue != "0000-00-00") ? 
       ($this->progressive ? $this->progressiveFormat($propValue) : smarty_modifier_date_format($propValue, $format)) :
       "";

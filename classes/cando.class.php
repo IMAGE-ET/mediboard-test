@@ -23,21 +23,21 @@ class CCanDo {
     global $actionType;
 
     // on passe a null soit "tab" soit "a" selon ou l'on se trouve
-    mbSetValueToSession($actionType);
+    CValue::setSession($actionType);
     
     if($this->setValues){
       if(is_scalar($this->setValues)){
-        mbSetValueToSession($this->setValues);
+        CValue::setSession($this->setValues);
       }else{
         foreach($this->setValues as $key => $value){
-          mbSetValueToSession($key, $value);
+          CValue::setSession($key, $value);
         }
       }
     }
     
-    $dialog = mbGetValueFromGet("dialog");
-    $suppressHeaders = mbGetValueFromGet("suppressHeaders");
-    $ajax = mbGetValueFromGet("ajax");
+    $dialog = CValue::get("dialog");
+    $suppressHeaders = CValue::get("suppressHeaders");
+    $ajax = CValue::get("ajax");
     CAppUI::redirect("m=system&a=$a&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
   }
   

@@ -80,18 +80,18 @@ if (!CAppUI::$instance->user_id) {
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
-$suppressHeaders = mbGetValueFromRequest("suppressHeaders");
+$suppressHeaders = CValue::request("suppressHeaders");
 
 // Output the charset header in case of an ajax request
-$ajax = mbGetValueFromRequest("ajax", false);
+$ajax = CValue::request("ajax", false);
 
 // Check if we are in the dialog mode
-$dialog = mbGetValueFromRequest("dialog");
+$dialog = CValue::request("dialog");
 
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
   require("./locales/core.php");
-  $redirect = mbGetValueFromRequest("redirect");
+  $redirect = CValue::request("redirect");
 
   $ok = CAppUI::login();
   if (!$ok) {
@@ -137,7 +137,7 @@ if (!$suppressHeaders || $ajax) {
 
 // check if we are logged in
 if (!CAppUI::$instance->user_id) {
-  $redirect = mbGetValueFromGet("logout") ?  "" : @$_SERVER["QUERY_STRING"]; 
+  $redirect = CValue::get("logout") ?  "" : @$_SERVER["QUERY_STRING"]; 
   $_SESSION["locked"] = null;
   
   // Ajax login alert
@@ -181,7 +181,7 @@ if ($user->isInstalled()) {
 }
 
 // Set the module and action from the url
-if (null == $m = CAppUI::checkFileName(mbGetValueFromGet("m", 0))) {
+if (null == $m = CAppUI::checkFileName(CValue::get("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
   if ($pref_module = CAppUI::pref("DEFMODULE")) {
     if (CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
@@ -203,13 +203,13 @@ if (null == $currentModule = CModule::getInstalled($m)) {
 // these can be further modified by the included action files
 $can = $currentModule->canDo();
 
-$a     = CAppUI::checkFileName(mbGetValueFromGet("a"     , "index"));
-$u     = CAppUI::checkFileName(mbGetValueFromGet("u"     , ""));
-$dosql = CAppUI::checkFileName(mbGetValueFromPost("dosql", ""));
+$a     = CAppUI::checkFileName(CValue::get("a"     , "index"));
+$u     = CAppUI::checkFileName(CValue::get("u"     , ""));
+$dosql = CAppUI::checkFileName(CValue::post("dosql", ""));
 
 $tab = $a == "index" ? 
-  mbGetValueFromGetOrSession("tab", 1) : 
-  mbGetValueFromGet("tab");
+  CValue::getOrSession("tab", 1) : 
+  CValue::get("tab");
 
 // Check whether the password is strong enough
 if (CAppUI::$instance->weak_password && 
@@ -219,19 +219,19 @@ if (CAppUI::$instance->weak_password &&
 }
 
 // set the group in use, put the user group if not allowed
-$g = mbGetAbsValueFromGetOrSession("g", CAppUI::$instance->user_group);
+$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
 $indexGroup = new CGroups;
 $indexGroup->load($g);
 if ($indexGroup->_id) {
 	if (!$indexGroup->canRead()) {
     $g = CAppUI::$instance->user_group;
-	  mbSetAbsValueToSession("g", $g);
+	  CValue::setSessionAbs("g", $g);
 	}
 }
 
 // do some db work if dosql is set
 if ($dosql) {
-  $mDo = mbGetValueFromPost("m", $m);
+  $mDo = CValue::post("m", $m);
   require("./modules/$mDo/$dosql.php");
 }
 

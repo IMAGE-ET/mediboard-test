@@ -75,7 +75,7 @@ class CDoObjectAddEdit {
         }
       }
       else {
-        mbSetValueToSession($this->objectKeyGetVarName);
+        CValue::setSession($this->objectKeyGetVarName);
         CAppUI::setMsg(CAppUI::tr("msg-purge"), UI_MSG_ALERT);
         if ($this->redirectDelete) {
           $this->redirect =& $this->redirectDelete;
@@ -91,7 +91,7 @@ class CDoObjectAddEdit {
       }
     } 
     else {
-      mbSetValueToSession($this->objectKeyGetVarName);
+      CValue::setSession($this->objectKeyGetVarName);
       CAppUI::setMsg($this->deleteMsg, UI_MSG_ALERT);
       if ($this->redirectDelete) {
         $this->redirect =& $this->redirectDelete;
@@ -108,7 +108,7 @@ class CDoObjectAddEdit {
     } 
     else {
       $id = $this->objectKeyGetVarName;
-      mbSetValueToSession($id, $this->_obj->$id);
+      CValue::setSession($id, $this->_obj->$id);
       $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
       CAppUI::setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
@@ -141,7 +141,7 @@ class CDoObjectAddEdit {
 
   function doIt() {
     $this->doBind();
-    if (intval(dPgetParam($this->refTab, 'del'))) {
+    if (intval(CValue::read($this->refTab, 'del'))) {
       $this->doDelete();
     } else {
       $this->doStore();

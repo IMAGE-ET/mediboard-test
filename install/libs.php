@@ -122,7 +122,7 @@ class CLibrary {
   }
 }
 
-$libSel = mbGetValueFromPost("libSel","");
+$libSel = CValue::post("libSel","");
 
 $library = new CLibrary;
 $library->name = "Smarty";

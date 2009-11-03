@@ -156,7 +156,7 @@ class CNumSpec extends CMbFieldSpec {
   	$increment = CMbArray::extract($params, "increment");
   	$showPlus  = CMbArray::extract($params, "showPlus");
   	$field     = htmlspecialchars($this->fieldName);
-    $maxLength = mbGetValue($this->length, $this->maxLength, 11);
+    $maxLength = CValue::first($this->length, $this->maxLength, 11);
     $fieldId = $form.'_'.$field;
     
     $min = CMbArray::extract($params, "min");

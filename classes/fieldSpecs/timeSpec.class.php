@@ -36,7 +36,7 @@ class CTimeSpec extends CMbFieldSpec {
   function getValue($object, $smarty = null, $params = array()) {
     require_once $smarty->_get_plugin_filepath('modifier','date_format');
     $propValue = $object->{$this->fieldName};
-    $format = mbGetValue(@$params["format"], CAppUI::conf("time"));
+    $format = CValue::first(@$params["format"], CAppUI::conf("time"));
     return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
   }
 
