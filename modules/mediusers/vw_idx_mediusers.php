@@ -58,7 +58,7 @@ foreach($profiles as $key => $profil){
 // (mis en dernier car interferences avec le chargement 
 // des autres users car utilisation d'une spec commune)
 $mediuserSel = new CMediusers;
-$mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
+$mediuserSel->load(CValue::getOrSession("user_id"));
 
 // Création du template
 $smarty = new CSmartyDP();

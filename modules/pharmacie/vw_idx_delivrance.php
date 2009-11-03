@@ -11,7 +11,7 @@
 global $can, $g;
 $can->needsRead();
 
-$service_id = mbGetValueFromGetOrSession('service_id');
+$service_id = CValue::getOrSession('service_id');
 
 // Services list
 $service = new CService();
@@ -20,11 +20,11 @@ $list_services = $service->loadGroupList();
 $date = mbDate();
 $delivrance = new CProductDelivery();
 
-$date_min = mbGetValueFromGetOrSession('_date_min', $date);
-$date_max = mbGetValueFromGetOrSession('_date_max', $date);
+$date_min = CValue::getOrSession('_date_min', $date);
+$date_max = CValue::getOrSession('_date_max', $date);
 
-mbSetValueToSession('_date_min', $date_min);
-mbSetValueToSession('_date_max', $date_max);
+CValue::setSession('_date_min', $date_min);
+CValue::setSession('_date_max', $date_max);
 
 $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;

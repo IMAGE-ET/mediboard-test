@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$object_class = mbGetValueFromGet("object_class");
-$object_id    = mbGetValueFromGet("object_id");
+$object_class = CValue::get("object_class");
+$object_id    = CValue::get("object_id");
 
 if (!$object_class || !$object_id) return;
 

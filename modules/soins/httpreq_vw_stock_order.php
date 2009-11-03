@@ -11,15 +11,15 @@
 global $can;
 $can->needsRead();
 
-$service_id = mbGetValueFromGetOrSession('service_id');
-$start = intval(mbGetValueFromGetOrSession('start', 0));
-$only_service_stocks = mbGetValueFromGetOrSession('only_service_stocks', 1);
+$service_id = CValue::getOrSession('service_id');
+$start = intval(CValue::getOrSession('start', 0));
+$only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
 
 // Calcul de date_max et date_min
-$date_min = mbGetValueFromGetOrSession('_date_min');
-$date_max = mbGetValueFromGetOrSession('_date_max');
-mbSetValueToSession('_date_min', $date_min);
-mbSetValueToSession('_date_max', $date_max);
+$date_min = CValue::getOrSession('_date_min');
+$date_max = CValue::getOrSession('_date_max');
+CValue::setSession('_date_min', $date_min);
+CValue::setSession('_date_max', $date_max);
 
 if ($only_service_stocks == 1) {
   $ljoin = array(

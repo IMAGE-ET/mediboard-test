@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-$patient_id    = mbGetValueFromGet("patient_id");
+$patient_id    = CValue::get("patient_id");
 $patient = new CPatient;
 if($patient_id) {
   $patient->load($patient_id);
@@ -24,13 +24,13 @@ if($patient->naissance) {
   //$findday   = mbTransformTime(null, $patient->naissance, "%d");
 }
 
-$name          = mbGetValueFromGet("name"      , $patient->nom);
-$firstName     = mbGetValueFromGet("firstName" , $patient->prenom);
-$nomjf         = mbGetValueFromGet("nomjf"     , $patient->nom_jeune_fille);
-$patient_year  = mbGetValueFromGet("Date_Year" , $findyear);
-$patient_month = mbGetValueFromGet("Date_Month", $findmonth);
-$patient_day   = mbGetValueFromGet("Date_Day"  , $findday);
-$IPP           = mbGetValueFromGet("IPP"       , $patient->_ref_IPP ? $patient->_ref_IPP->id400 : null);
+$name          = CValue::get("name"      , $patient->nom);
+$firstName     = CValue::get("firstName" , $patient->prenom);
+$nomjf         = CValue::get("nomjf"     , $patient->nom_jeune_fille);
+$patient_year  = CValue::get("Date_Year" , $findyear);
+$patient_month = CValue::get("Date_Month", $findmonth);
+$patient_day   = CValue::get("Date_Day"  , $findday);
+$IPP           = CValue::get("IPP"       , $patient->_ref_IPP ? $patient->_ref_IPP->id400 : null);
 
 $showCount = 30;
 

@@ -22,10 +22,10 @@ if (CAppUI::conf("dPurgences only_prat_responsable")) {
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $rpu    = new CRPU;
-$rpu_id = mbGetValueFromGetOrSession("rpu_id");
+$rpu_id = CValue::getOrSession("rpu_id");
 
 // Création d'un RPU pour un séjour existant
-if ($sejour_id = mbGetValueFromGet("sejour_id")) {
+if ($sejour_id = CValue::get("sejour_id")) {
   $rpu_id = null;
   $rpu->sejour_id = $sejour_id;
   $rpu->updateFormFields();

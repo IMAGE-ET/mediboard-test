@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$discipline_id = mbGetValueFromGetOrSession("discipline_id");
+$discipline_id = CValue::getOrSession("discipline_id");
 
 $g = CGroups::loadCurrent();
 

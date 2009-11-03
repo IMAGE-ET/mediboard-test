@@ -13,14 +13,14 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 // Type d'affichage
-$selAffichage = mbGetValueFromPostOrSession("selAffichage","tous");
+$selAffichage = CValue::postOrSession("selAffichage","tous");
 
 // Parametre de tri
-$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
-$order_col = mbGetValueFromGetOrSession("order_col", "_pec_transport");
+$order_way = CValue::getOrSession("order_way", "ASC");
+$order_col = CValue::getOrSession("order_col", "_pec_transport");
 
 // Selection de la date
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $today = mbDate();
 
 

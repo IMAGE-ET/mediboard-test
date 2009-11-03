@@ -10,9 +10,9 @@
 
 global $AppUI, $can, $m;
 
-$note_id      = mbGetValueFromGet("note_id", null);
-$object_class = mbGetValueFromGet("object_class", null);
-$object_id    = mbGetValueFromGet("object_id", null);
+$note_id      = CValue::get("note_id", null);
+$object_class = CValue::get("object_class", null);
+$object_id    = CValue::get("object_id", null);
 
 $note = new CNote;
 if($note_id) {

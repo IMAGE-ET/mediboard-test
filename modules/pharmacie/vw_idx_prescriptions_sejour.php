@@ -20,17 +20,17 @@ $service = new CService();
 $services = $service->loadGroupList();
 
 // Recuperation des valeurs
-$praticien_id  = mbGetValueFromGet("praticien_id");
-$service_id    = mbGetValueFromGet("service_id");
-$valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulement les prescriptions contenant des lignes non validees
+$praticien_id  = CValue::get("praticien_id");
+$service_id    = CValue::get("service_id");
+$valide_pharma = CValue::get("valide_pharma", 0);  // Par defaut, seulement les prescriptions contenant des lignes non validees
 
 $date = mbDate();
 $filter_sejour = new CSejour();
-$filter_sejour->_date_entree = mbGetValueFromGet('_date_entree', mbGetValueFromSession('_date_min', $date));
-$filter_sejour->_date_sortie = mbGetValueFromGet('_date_sortie', mbGetValueFromSession('_date_max', $date));
+$filter_sejour->_date_entree = CValue::get('_date_entree', CValue::session('_date_min', $date));
+$filter_sejour->_date_sortie = CValue::get('_date_sortie', CValue::session('_date_max', $date));
 
-mbSetValueToSession('_date_min', $filter_sejour->_date_entree);
-mbSetValueToSession('_date_max', $filter_sejour->_date_sortie);
+CValue::setSession('_date_min', $filter_sejour->_date_entree);
+CValue::setSession('_date_max', $filter_sejour->_date_sortie);
 
 // Initialisations
 $lines_medicament = array();

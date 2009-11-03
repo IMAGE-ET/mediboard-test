@@ -12,15 +12,15 @@ global $can;
 
 $can->needsRead();
 
-$echange_hprim_id    = mbGetValueFromGet("echange_hprim_id");
-$t                   = mbGetValueFromGetOrSession('types', array());
-$statut_acquittement = mbGetValueFromGetOrSession("statut_acquittement");
-$msg_evenement       = mbGetValueFromGetOrSession("msg_evenement");
-$type_evenement      = mbGetValueFromGetOrSession("type_evenement");
-$page                = mbGetValueFromGet('page', 0);
+$echange_hprim_id    = CValue::get("echange_hprim_id");
+$t                   = CValue::getOrSession('types', array());
+$statut_acquittement = CValue::getOrSession("statut_acquittement");
+$msg_evenement       = CValue::getOrSession("msg_evenement");
+$type_evenement      = CValue::getOrSession("type_evenement");
+$page                = CValue::get('page', 0);
 $now                 = mbDate();
-$_date_min           = mbGetValueFromGetOrSession('_date_min');
-$_date_max           = mbGetValueFromGetOrSession('_date_max');
+$_date_min           = CValue::getOrSession('_date_min');
+$_date_max           = CValue::getOrSession('_date_max');
 
 $observations = array();
 

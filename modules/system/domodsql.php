@@ -13,9 +13,9 @@ global $can;
 
 $can->needsAdmin();
 
-$cmd      = mbGetValueFromGet("cmd");
-$mod_id   = mbGetValueFromGet("mod_id");
-$mod_name = mbGetValueFromGet("mod_name");
+$cmd      = CValue::get("cmd");
+$mod_id   = CValue::get("mod_id");
+$mod_name = CValue::get("mod_name");
 
 $module = new CModule();
 if ($mod_id) {

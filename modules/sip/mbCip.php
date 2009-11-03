@@ -46,8 +46,8 @@ die;
 CAppUI::requireModuleClass("sip", "hprimxmlevenementspatients");
 CAppUI::requireModuleClass("sip", "hprimxmlacquittementspatients");
 
-$username = mbGetValueFromPost('username');
-$password = mbGetValueFromPost('_user_password');
+$username = CValue::post('username');
+$password = CValue::post('_user_password');
 
 $domEvenement = new CHPrimXMLAcquittementsPatients();
 $domEvenement->generateFromOperation($mbObject);

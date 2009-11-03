@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m, $g;
 
-$date = mbGetValueFromGetOrSession("date");
+$date = CValue::getOrSession("date");
 
 // Chargement des rpu de la main courante
 $sejour = new CSejour;

@@ -310,7 +310,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
       
       // Codage
       $acte->code_acte     = $acteECap->consume("CDAC");
-      $acte->code_activite = mbGetValue($acteECap->consume("CACT"), 1);
+      $acte->code_activite = CValue::first($acteECap->consume("CACT"), 1);
       $acte->code_phase    = $acteECap->consume("CPHA");
       $acte->modificateurs = $acteECap->consume("CMOD");
       $acte->montant_depassement = $acteECap->consume("MDEP");

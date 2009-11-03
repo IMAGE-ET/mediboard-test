@@ -12,11 +12,11 @@ global $can, $m, $AppUI;
 
 $can->needsRead();
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id" , $AppUI->user_id);
-$signee       = mbGetValueFromGetOrSession("signee"       , 0);  // par default les non signees
-$date_min     = mbGetValueFromGetOrSession("_date_min"     , mbDateTime("00:00:00"));  // par default, date du jour
-$date_max     = mbGetValueFromGetOrSession("_date_max"     , mbDateTime("23:59:59"));
-$type         = mbGetValueFromGetOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante
+$praticien_id = CValue::getOrSession("praticien_id" , $AppUI->user_id);
+$signee       = CValue::getOrSession("signee"       , 0);  // par default les non signees
+$date_min     = CValue::getOrSession("_date_min"     , mbDateTime("00:00:00"));  // par default, date du jour
+$date_max     = CValue::getOrSession("_date_max"     , mbDateTime("23:59:59"));
+$type         = CValue::getOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante
 
 // Chargement de la liste des praticiens
 $mediuser = new CMediusers();

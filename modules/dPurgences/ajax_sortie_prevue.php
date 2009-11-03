@@ -12,8 +12,8 @@ global $can;
 
 $can->needsRead();
 
-$sejour_id  = mbGetValueFromGet("sejour_id");
-$consult_id = mbGetValueFromGet("consult_id");
+$sejour_id  = CValue::get("sejour_id");
+$consult_id = CValue::get("consult_id");
 
 $now = mbDateTime();
 

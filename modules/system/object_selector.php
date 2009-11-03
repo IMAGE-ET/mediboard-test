@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$selClass  = mbGetValueFromGet("selClass");
-$onlyclass = mbGetValueFromGet("onlyclass");
-$keywords  = mbGetValueFromGet("keywords");
-$object_id = mbGetValueFromGet("object_id");
+$selClass  = CValue::get("selClass");
+$onlyclass = CValue::get("onlyclass");
+$keywords  = CValue::get("keywords");
+$object_id = CValue::get("object_id");
 
 // Liste des classes
 $classes = array();

@@ -23,7 +23,7 @@ function viewMsg($msg, $action, $txt = ""){
 global $AppUI;
 
 // Récupération du rpu
-$rpu_id = mbGetValueFromPost("rpu_id");
+$rpu_id = CValue::post("rpu_id");
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 $rpu->loadRefSejour();

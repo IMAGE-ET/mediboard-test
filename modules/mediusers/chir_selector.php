@@ -11,8 +11,8 @@ global $AppUI, $can, $m;
 
 // get all authorized praticians
 
-$spe  = mbGetValueFromGet("spe" , 0  );
-$name = mbGetValueFromGet("name", "" );
+$spe  = CValue::get("spe" , 0  );
+$name = CValue::get("name", "" );
 
 $prats = new CMediusers;
 $prats = $prats->loadPraticiens(PERM_EDIT, $spe, $name);

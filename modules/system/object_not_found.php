@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-list ($object_class, $object_id) = explode("-", mbGetValueFromGet("object_guid"));
+list ($object_class, $object_id) = explode("-", CValue::get("object_guid"));
 
 // Création du template
 $smarty = new CSmartyDP();

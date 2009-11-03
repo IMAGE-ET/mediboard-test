@@ -10,12 +10,12 @@
 
 global $g;
 
-$service_id = mbGetValueFromGetOrSession('service_id');
-$_selected_cis   = mbGetValueFromGet("_selected_cis");
+$service_id = CValue::getOrSession('service_id');
+$_selected_cis   = CValue::get("_selected_cis");
 
 // Calcul de date_max et date_min
-$date_min = mbGetValueFromGetOrSession('_date_min');
-$date_max = mbGetValueFromGetOrSession('_date_max');
+$date_min = CValue::getOrSession('_date_min');
+$date_max = CValue::getOrSession('_date_max');
 
 $date_min_orig = $date_min;
 $date_max_orig = $date_max;

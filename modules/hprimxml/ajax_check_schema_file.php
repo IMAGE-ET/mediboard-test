@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-$evenement = mbGetValueFromGet("evenement");
+$evenement = CValue::get("evenement");
 $version = CAppUI::conf("hprimxml $evenement version");
 
 $status = 0;

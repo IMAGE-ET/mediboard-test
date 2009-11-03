@@ -30,7 +30,7 @@ else {
 
 mbTrace($idExt->getValues(), "Id e-Cap");
 
-if (null == $ajax = mbGetValueFromPost("ajax")) {
+if (null == $ajax = CValue::post("ajax")) {
 //  $AppUI->redirect();
 }
 

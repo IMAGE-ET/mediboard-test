@@ -36,7 +36,7 @@ class CTriggerMarkImporter {
 		  self::storeMark($mouv);
 		  
 		  // Import marked triggers
-      $max = mbGetValueFromGetOrSession("max", 100);
+      $max = CValue::getOrSession("max", 100);
 		  $mouvs = $mouv->loadListWithFormerMark($max);
 		  CAppUI::stepAjax("Marked triggers count for class '%s' is '%s'", UI_MSG_OK, get_class($mouv), count($mouvs));
 		  foreach ($mouvs as $_mouv) {

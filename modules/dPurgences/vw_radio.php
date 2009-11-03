@@ -13,7 +13,7 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 // Selection de la date
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $today = mbDate();
 
 // Chargement des urgences prises en charge

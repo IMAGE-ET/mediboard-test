@@ -9,7 +9,7 @@
  */
 
 // Chargement du rpu
-$rpu_id = mbGetValueFromGetOrSession("rpu_id");
+$rpu_id = CValue::getOrSession("rpu_id");
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 

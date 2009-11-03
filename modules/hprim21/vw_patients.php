@@ -12,19 +12,19 @@ global $AppUI, $can, $m, $dPconfig, $g;
 $showCount = 30;
 
 // Chargement du patient sélectionné
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 $patient = new CHprim21Patient();
 $patient->load($patient_id);
 
 // Récuperation des patients recherchés
-$patient_nom         = mbGetValueFromGetOrSession("nom"         , ""       );
-$patient_prenom      = mbGetValueFromGetOrSession("prenom"      , ""       );
-$patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
-$patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
-$patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
-$patient_day         = mbGetValueFromGet("Date_Day"    , "");
-$patient_month       = mbGetValueFromGet("Date_Month"  , "");
-$patient_year        = mbGetValueFromGet("Date_Year"   , "");
+$patient_nom         = CValue::getOrSession("nom"         , ""       );
+$patient_prenom      = CValue::getOrSession("prenom"      , ""       );
+$patient_jeuneFille  = CValue::getOrSession("jeuneFille"  , ""       );
+$patient_ville       = CValue::getOrSession("ville"       , ""       );
+$patient_cp          = CValue::getOrSession("cp"          , ""       );
+$patient_day         = CValue::get("Date_Day"    , "");
+$patient_month       = CValue::get("Date_Month"  , "");
+$patient_year        = CValue::get("Date_Year"   , "");
 $patient_naissance   = null;
 
 $where        = array();

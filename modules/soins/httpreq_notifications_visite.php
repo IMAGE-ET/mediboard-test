@@ -9,7 +9,7 @@
  */
 
 global $AppUI;
-$sejours = mbGetValueFromGet("sejours");
+$sejours = CValue::get("sejours");
 
 foreach($sejours as $_sejour_id){
   $observation = new CObservationMedicale();

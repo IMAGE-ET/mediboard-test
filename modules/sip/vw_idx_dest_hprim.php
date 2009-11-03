@@ -12,7 +12,7 @@ global $can;
 
 $can->needsRead();
 
-$dest_hprim_id = mbGetValueFromGetOrSession("dest_hprim_id");
+$dest_hprim_id = CValue::getOrSession("dest_hprim_id");
 
 // Chargement du destinataire HPRIM demandé
 $dest_hprim = new CDestinataireHprim();

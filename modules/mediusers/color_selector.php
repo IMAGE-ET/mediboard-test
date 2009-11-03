@@ -15,7 +15,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("hex",   $hexa_values);
 $smarty->assign("range", $range);
-$smarty->assign("color", mbGetValueFromGet("color"));
+$smarty->assign("color", CValue::get("color"));
 
 $smarty->display("color_selector.tpl");
 

@@ -14,9 +14,9 @@ global $AppUI, $can, $m;
 $can->edit |= ($AppUI->user_type != 1);
 $can->needsEdit();
 
-$module = mbGetValueFromPost("module", null);
-$trans  = mbGetValueFromPost("trans" , null);
-$chaine = mbGetValueFromPost("chaine", null);
+$module = CValue::post("module", null);
+$trans  = CValue::post("trans" , null);
+$chaine = CValue::post("chaine", null);
 
 if(!$module || !$trans || !$chaine || !is_array($trans) || !is_array($chaine)){
   CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );

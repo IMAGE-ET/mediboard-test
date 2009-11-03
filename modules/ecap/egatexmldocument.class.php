@@ -90,7 +90,7 @@ class CEGateXMLDocument extends CMbXMLDocument {
       if($operation->type_anesth && array_key_exists($operation->type_anesth ,$aTypesAnesth)){
         $this->addAttribute($surgery, "TypeOfAnesthesiaID" , $aTypesAnesth[$operation->type_anesth]);
       }
-      $mbSalle_id = mbGetValue(
+      $mbSalle_id = CValue::first(
         $operation->_ref_plageop->salle_id,
         $operation->salle_id
       );

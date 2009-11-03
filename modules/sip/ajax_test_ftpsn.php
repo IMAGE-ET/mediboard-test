@@ -13,7 +13,7 @@ global $can;
 $can->needsAdmin();
 
 // Check params
-if (null == $ftpsn = mbGetValueFromGet("ftpsn")) {
+if (null == $ftpsn = CValue::get("ftpsn")) {
   CAppUI::stepAjax("Aucun FTPSN spécifié", UI_MSG_ERROR);
 }
 

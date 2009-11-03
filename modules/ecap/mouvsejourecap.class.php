@@ -259,7 +259,7 @@ class CMouvSejourEcap extends CMouvementEcap {
       $praticien->_user_last_name  = $prat400->consume("ZNOM");
       $praticien->_user_first_name = $prat400->consume("ZPRE");
       $praticien->_user_email      = $prat400->consume("MAIL");
-      $praticien->_user_phone      = mbGetValue(
+      $praticien->_user_phone      = CValue::first(
         $prat400->consume("ZTL1"), 
         $prat400->consume("ZTL2"), 
         $prat400->consume("ZTL3"));
@@ -381,7 +381,7 @@ class CMouvSejourEcap extends CMouvementEcap {
 
     $this->patient = new CPatient;
     $this->patient->nom              = $pat400->consume("ZNOM");
-    $this->patient->prenom           = mbGetValue($pat400->consume("ZPRE"), "Inconnu");
+    $this->patient->prenom           = CValue::first($pat400->consume("ZPRE"), "Inconnu");
     
     $this->patient->_specs["naissance"]->mask = null;
     $this->patient->naissance        = $pat400->consumeDate("DNAI");
@@ -571,7 +571,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     switch ($sejECap->consume("PRES")) {
       case "0": // Prévu
       $this->sejour->entree_prevue = $entree;
-      $this->sejour->sortie_prevue = mbGetValue($sortie, mbDateTime("+ 1 days", $this->sejour->entree_prevue));
+      $this->sejour->sortie_prevue = CValue::first($sortie, mbDateTime("+ 1 days", $this->sejour->entree_prevue));
       break;
     
       case "1": // Présent

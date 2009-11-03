@@ -10,11 +10,11 @@
 
 global $can;
 
-$date     = mbGetValueFromGetOrSession("date"    , mbDate());
-$groupres = mbGetValueFromGetOrSession("groupres", 1);
-$element  = mbGetValueFromGetOrSession("element" , "duration");
-$interval = mbGetValueFromGetOrSession("interval", "day");
-$numelem  = mbGetValueFromGetOrSession("numelem" , 4);
+$date     = CValue::getOrSession("date"    , mbDate());
+$groupres = CValue::getOrSession("groupres", 1);
+$element  = CValue::getOrSession("element" , "duration");
+$interval = CValue::getOrSession("interval", "day");
+$numelem  = CValue::getOrSession("numelem" , 4);
 
 CAppUI::requireModuleFile('dPstats', 'graph_ressourceslog');
 

@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m;
 
-$evenement = mbGetValueFromGet("evenement");
+$evenement = CValue::get("evenement");
 $version = CAppUI::conf("hprimxml $evenement version");
 
 switch ($evenement) {

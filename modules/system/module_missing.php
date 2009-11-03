@@ -11,7 +11,7 @@
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("module", mbGetValueFromGet("module"));
+$smarty->assign("module", CValue::get("module"));
 
 $smarty->display("module_missing.tpl");
 ?>

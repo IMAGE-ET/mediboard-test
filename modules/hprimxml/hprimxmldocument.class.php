@@ -217,7 +217,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
     $this->addElement($acteCCAM, "codePhase", $mbActeCCAM->code_phase);
 
-    $mbOpDebut = mbGetValue(
+    $mbOpDebut = CValue::first(
       $mbOp->debut_op, 
       $mbOp->entree_salle, 
       $mbOp->time_operation

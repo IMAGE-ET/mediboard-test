@@ -14,12 +14,12 @@ CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 $can->needsRead();
 
 // Filtres
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $datetime = mbDateTime(); 
-$mode = mbGetValueFromGetOrSession("mode", 0);
-$service_id   = mbGetValueFromGetOrSession("service_id");
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$_active_tab  = mbGetValueFromGet("_active_tab");
+$mode = CValue::getOrSession("mode", 0);
+$service_id   = CValue::getOrSession("service_id");
+$praticien_id = CValue::getOrSession("praticien_id");
+$_active_tab  = CValue::get("_active_tab");
 $tab_sejour = array();
 
 // Chargement de l'utilisateur courant
@@ -45,14 +45,14 @@ $services = $praticien_id ?
   $service->loadList($where, $order) :
   $service->loadListWithPerms(PERM_READ, $where, $order);
   
-$changeSejour = mbGetValueFromGet("service_id") || mbGetValueFromGet("praticien_id");
+$changeSejour = CValue::get("service_id") || CValue::get("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
 
 if($changeSejour) {
   $sejour_id = null;
-  mbSetValueToSession("sejour_id");
+  CValue::setSession("sejour_id");
 } else {
-  $sejour_id = mbGetValueFromGetOrSession("sejour_id");
+  $sejour_id = CValue::getOrSession("sejour_id");
 }  
 
 // Récupération du service à ajouter/éditer

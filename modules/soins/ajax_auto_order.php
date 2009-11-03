@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = mbGetValueFromGet('service_id');
-$date_min = mbGetValueFromGet('date_min');
-$date_max = mbGetValueFromGet('date_max');
+$service_id = CValue::get('service_id');
+$date_min = CValue::get('date_min');
+$date_max = CValue::get('date_max');
 
 $service = new CService;
 $orders = array();

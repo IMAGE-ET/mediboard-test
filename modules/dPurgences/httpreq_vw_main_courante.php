@@ -13,14 +13,14 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Type d'affichage
-$selAffichage = mbGetValueFromPostOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
+$selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
 
 // Parametre de tri
-$order_way = mbGetValueFromGetOrSession("order_way", "DESC");
-$order_col = mbGetValueFromGetOrSession("order_col", "ccmu");
+$order_way = CValue::getOrSession("order_way", "DESC");
+$order_col = CValue::getOrSession("order_col", "ccmu");
 
 // Selection de la date
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $today = mbDate();
 
 // L'utilisateur doit-il voir les informations médicales

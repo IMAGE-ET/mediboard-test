@@ -12,14 +12,14 @@ global $can;
 
 $can->needsRead();
 
-$echange_soap_id = mbGetValueFromGet("echange_soap_id");
-$page            = mbGetValueFromGet('page', 1);
+$echange_soap_id = CValue::get("echange_soap_id");
+$page            = CValue::get('page', 1);
 $now             = mbDate();
-$_date_min       = mbGetValueFromGetOrSession('_date_min');
-$_date_max       = mbGetValueFromGetOrSession('_date_max');
+$_date_min       = CValue::getOrSession('_date_min');
+$_date_max       = CValue::getOrSession('_date_max');
 
-$web_service     = mbGetValueFromGetOrSession("web_service"); 
-$fonction        = mbGetValueFromGetOrSession("fonction"); 
+$web_service     = CValue::getOrSession("web_service"); 
+$fonction        = CValue::getOrSession("fonction"); 
 
 $doc_errors_msg = $doc_errors_ack = "";
 

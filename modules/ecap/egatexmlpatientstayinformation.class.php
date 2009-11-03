@@ -58,11 +58,11 @@ class CEGateXMLPatientStayInformation extends CEGateXMLDocument {
     $this->addAttribute($patient, "AcceptCall"  , "0");
     
     // StayTime
-    $mbSejourDebut = mbGetValue(
+    $mbSejourDebut = CValue::first(
       $mbSejour->entree_reelle, 
       $mbSejour->entree_prevue
     );
-    $mbSejourFin = mbGetValue(
+    $mbSejourFin = CValue::first(
       $mbSejour->sortie_reelle, 
       $mbSejour->sortie_prevue
     );

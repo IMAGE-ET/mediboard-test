@@ -343,7 +343,7 @@ class CMediusers extends CMbObject {
    * @return string Store-like message
    */
   function bindCPS() {
-    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
 
@@ -401,7 +401,7 @@ class CMediusers extends CMbObject {
    * @return void
    */
   function getValuesFromCPS() {
-    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
 
@@ -628,7 +628,7 @@ class CMediusers extends CMbObject {
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
     $group = CGroups::loadCurrent(); 
     $functions = new CFunctions;
-    $functions->group_id = mbGetValue($group_id, $group->_id);
+    $functions->group_id = CValue::first($group_id, $group->_id);
 
     if ($type) {
       $functions->type = $type;

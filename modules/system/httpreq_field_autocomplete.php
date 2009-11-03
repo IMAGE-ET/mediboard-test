@@ -8,14 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$class       = mbGetValueFromGet('class');
-$field       = mbGetValueFromGet('field');
-$view_field  = mbGetValueFromGet('view_field', $field);
-$show_view   = mbGetValueFromGet('show_view', 'false') == 'true';
-$input_field = mbGetValueFromGet('input_field', $view_field);
-$input       = mbGetValueFromGet($input_field);
-$limit       = mbGetValueFromGet('limit', 15);
-$wholeString = mbGetValueFromGet('wholeString', 'false') == 'true';
+$class       = CValue::get('class');
+$field       = CValue::get('field');
+$view_field  = CValue::get('view_field', $field);
+$show_view   = CValue::get('show_view', 'false') == 'true';
+$input_field = CValue::get('input_field', $view_field);
+$input       = CValue::get($input_field);
+$limit       = CValue::get('limit', 15);
+$wholeString = CValue::get('wholeString', 'false') == 'true';
 
 $search = $wholeString ? "%$input%" : "$input%";
 

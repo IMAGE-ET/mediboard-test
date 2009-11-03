@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$errorMsg   = mbGetValueFromPost('errorMsg');
-$url        = mbGetValueFromPost('url');
-$lineNumber = mbGetValueFromPost('lineNumber');
-$stack      = mbGetValueFromPost('stack');
+$errorMsg   = CValue::post('errorMsg');
+$url        = CValue::post('url');
+$lineNumber = CValue::post('lineNumber');
+$stack      = CValue::post('stack');
 
 $stackTrace = array();
 $stack = explode("\n", $stack);

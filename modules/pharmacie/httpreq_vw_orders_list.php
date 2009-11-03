@@ -11,13 +11,13 @@
 global $can;
 $can->needsRead();
 
-$service_id = mbGetValueFromGetOrSession('service_id');
+$service_id = CValue::getOrSession('service_id');
 
 // Calcul de date_max et date_min
-$date_min = mbGetValueFromGetOrSession('_date_min');
-$date_max = mbGetValueFromGetOrSession('_date_max');
-mbSetValueToSession('_date_min', $date_min);
-mbSetValueToSession('_date_max', $date_max);
+$date_min = CValue::getOrSession('_date_min');
+$date_max = CValue::getOrSession('_date_max');
+CValue::setSession('_date_min', $date_min);
+CValue::setSession('_date_max', $date_max);
 
 $order_by = 'date_dispensation DESC';
 $where = array (

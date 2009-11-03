@@ -29,10 +29,10 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
     } 
     else {
       // Keep trace for redirections
-      mbSetValueToSession($this->objectKeyGetVarName, $this->_obj->_id);
+      CValue::setSession($this->objectKeyGetVarName, $this->_obj->_id);
       
       // si modifDroit = 0, pas le droit de les modifier
-      $modifDroit = mbGetAbsValueFromPostOrSession("modifDroit", "1");
+      $modifDroit = CValue::postOrSessionAbs("modifDroit", "1");
       
       // Insert new group and function permission
       if($modifDroit){

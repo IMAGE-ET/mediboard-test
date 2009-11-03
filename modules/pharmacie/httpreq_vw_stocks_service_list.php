@@ -10,8 +10,8 @@
 
 global $g;
 
-$service_id = mbGetValueFromGetOrSession('service_id');
-$patient_id = mbGetValueFromGet('patient_id');
+$service_id = CValue::getOrSession('service_id');
+$patient_id = CValue::get('patient_id');
 
 // Services' stocks
 $list_stocks_service = new CProductStockService();

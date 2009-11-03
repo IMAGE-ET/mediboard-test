@@ -10,8 +10,8 @@
 
 $objects = array();
 
-$object_class = mbGetValueFromGet("object_class");
-$object_ids = mbGetValueFromGet("object_ids");
+$object_class = CValue::get("object_class");
+$object_ids = CValue::get("object_ids");
 
 // Load compared Object
 $max = 10;

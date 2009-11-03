@@ -12,9 +12,9 @@ $can->needsRead();
 
 $mbmail = new CMbMail();
 $mbmail->from    = $AppUI->user_id;
-$mbmail->to      = mbGetValueFromGet("to");
-$mbmail->subject = mbGetValueFromGet("subject");
-$mbmail->load(mbGetValueFromGetOrSession("mbmail_id"));
+$mbmail->to      = CValue::get("to");
+$mbmail->subject = CValue::get("subject");
+$mbmail->load(CValue::getOrSession("mbmail_id"));
 $mbmail->loadRefsFwd();
 
 // Vérifiction de la première lecture par le destinataire

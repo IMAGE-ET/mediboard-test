@@ -11,8 +11,8 @@
 global $can, $m;
 $can->needsEdit();
 
-$objects_id    = mbGetValueFromPost('_objects_id'); // array
-$objects_class = mbGetValueFromPost('_objects_class');
+$objects_id    = CValue::post('_objects_id'); // array
+$objects_class = CValue::post('_objects_class');
 
 
 $objects = array();
@@ -22,7 +22,7 @@ if (class_exists($objects_class)) {
   $do = new CDoObjectAddEdit($objects_class, $result->_spec->key);
   
   // Création du nouveau patient
-  if (intval(mbGetValueFromPost("del"))) {
+  if (intval(CValue::post("del"))) {
     $do->errorRedirect("Fusion en mode suppression impossible");
   }
   
@@ -41,7 +41,7 @@ if (class_exists($objects_class)) {
   $do->doBind();
 
   // the objects are merged with the result
-  if ($msg = $do->_obj->merge($objects,  mbGetValueFromPost("fast"))) {
+  if ($msg = $do->_obj->merge($objects,  CValue::post("fast"))) {
     $do->errorRedirect($msg);
   }
 

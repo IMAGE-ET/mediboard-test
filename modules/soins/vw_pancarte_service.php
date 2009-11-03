@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = mbGetValueFromGetOrSession("service_id");
-$date = mbGetValueFromGetOrSession("date_pancarte", mbDate());
+$service_id = CValue::getOrSession("service_id");
+$date = CValue::getOrSession("date_pancarte", mbDate());
 
 // Chargement du service
 $service = new CService();

@@ -10,19 +10,19 @@
 
 global $AppUI, $can, $m;
 
-$dialog = mbGetValueFromGet("dialog");
+$dialog = CValue::get("dialog");
 
 if (!$can->read && !$dialog) {
   $can->redirect();
 }
 
 $filter = new CUserLog();
-$filter->_date_min    = mbGetValueFromGetOrSession("_date_min");
-$filter->_date_max    = mbGetValueFromGetOrSession("_date_max");
-$filter->user_id      = mbGetValueFromGetOrSession("user_id");
-$filter->object_id    = mbGetValueFromGetOrSession("object_id");
-$filter->object_class = mbGetValueFromGetOrSession("object_class");
-$filter->type         = mbGetValueFromGetOrSession("type");
+$filter->_date_min    = CValue::getOrSession("_date_min");
+$filter->_date_max    = CValue::getOrSession("_date_max");
+$filter->user_id      = CValue::getOrSession("user_id");
+$filter->object_id    = CValue::getOrSession("object_id");
+$filter->object_class = CValue::getOrSession("object_class");
+$filter->type         = CValue::getOrSession("type");
 
 // Récupération de la liste des classes disponibles
 $AppUI->getAllClasses();

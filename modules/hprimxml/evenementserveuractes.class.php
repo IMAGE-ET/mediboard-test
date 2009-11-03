@@ -53,7 +53,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addIdentifiantPart($identifiant, "recepteur", $mbSejour->_num_dossier);
     
     // Entrée de séjour
-    $mbEntree = mbGetValue($mbSejour->entree_reelle, $mbSejour->entree_prevue);
+    $mbEntree = CValue::first($mbSejour->entree_reelle, $mbSejour->entree_prevue);
     $entree = $this->addElement($venue, "entree");
     $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbEntree);
@@ -68,7 +68,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addCodeLibelle($medecin, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
     
     // Sortie de séjour
-    $mbSortie = mbGetValue($mbSejour->sortie_reelle, $mbSejour->sortie_prevue);
+    $mbSortie = CValue::first($mbSejour->sortie_reelle, $mbSejour->sortie_prevue);
     $sortie = $this->addElement($venue, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbSortie);
@@ -84,7 +84,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $identifiant = $this->addElement($intervention, "identifiant");
     $emetteur = $this->addElement($identifiant, "emetteur", "op$mbOp->operation_id");
     
-    $mbOpDebut = mbGetValue(
+    $mbOpDebut = CValue::first(
       $mbOp->debut_op, 
       $mbOp->entree_salle, 
       $mbOp->time_operation
@@ -94,7 +94,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addElement($debut, "date", $mbOp->_ref_plageop->date);
     $this->addElement($debut, "heure", $mbOpDebut);
     
-    $mbOpFin   = mbGetValue(
+    $mbOpFin   = CValue::first(
       $mbOp->fin_op, 
       $mbOp->sortie_salle, 
       mbAddTime($mbOp->temp_operation, $mbOp->time_operation)

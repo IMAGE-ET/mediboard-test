@@ -10,10 +10,10 @@
 
 $patients = array();
 $sejours = array();
-$patient_id = mbGetValueFromGetOrSession('patient_id');
-$service_id = mbGetValueFromGetOrSession('service_id');
-$date_min = mbGetValueFromGetOrSession('_date_min').' 00:00:00';
-$date_max = mbGetValueFromGetOrSession('_date_max').' 23:59:59';
+$patient_id = CValue::getOrSession('patient_id');
+$service_id = CValue::getOrSession('service_id');
+$date_min = CValue::getOrSession('_date_min').' 00:00:00';
+$date_max = CValue::getOrSession('_date_max').' 23:59:59';
 
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();

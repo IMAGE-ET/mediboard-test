@@ -13,7 +13,7 @@ global $AppUI, $can, $dPconfig;
 $can->needsAdmin();
 
 // Check params
-if (null == $dsn = mbGetValueFromGet("dsn")) {
+if (null == $dsn = CValue::get("dsn")) {
   $AppUI->stepAjax("Aucun DSN spécifié", UI_MSG_ERROR);
 }
 
@@ -31,8 +31,8 @@ $user = $dsConfig["dbuser"];
 $pass = $dsConfig["dbpass"];
 $name = $dsConfig["dbname"];
 
-$dsConfig["dbuser"] = mbGetValueFromGet("master_user");
-$dsConfig["dbpass"] = mbGetValueFromGet("master_pass");
+$dsConfig["dbuser"] = CValue::get("master_user");
+$dsConfig["dbpass"] = CValue::get("master_pass");
 $dsConfig["dbname"] = "";
 
 if (null == $ds = CSQLDataSource::get($dsn)) {

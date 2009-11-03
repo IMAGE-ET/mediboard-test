@@ -16,7 +16,7 @@ if (!class_exists("DOMDocument")) {
 
 $can->needsRead();
 
-$mb_sejour_id = mbGetValueFromPost("mb_sejour_id", mbGetValueFromGetOrSession("sejour_id"));
+$mb_sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("sejour_id"));
 
 $msgError = null;
 $mbSejour = new CSejour();

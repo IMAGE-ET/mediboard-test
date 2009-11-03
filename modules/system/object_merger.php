@@ -10,9 +10,9 @@
 
 global $m;
 
-$objects_id    = mbGetValueFromGet('objects_id'); // array
-$objects_class = mbGetValueFromGet('objects_class');
-$readonly_class = mbGetValueFromGet('readonly_class');
+$objects_id    = CValue::get('objects_id'); // array
+$objects_class = CValue::get('objects_class');
+$readonly_class = CValue::get('readonly_class');
 
 $objects = $unequal = array();
 $result = $checkMerge = null;

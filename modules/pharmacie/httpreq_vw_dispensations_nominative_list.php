@@ -8,13 +8,13 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id      = mbGetValueFromGetOrSession('service_id');
-$patient_id      = mbGetValueFromGetOrSession('patient_id');
-$prescription_id = mbGetValueFromGetOrSession('prescription_id');
-$_selected_cis   = mbGetValueFromGet("_selected_cis");
+$service_id      = CValue::getOrSession('service_id');
+$patient_id      = CValue::getOrSession('patient_id');
+$prescription_id = CValue::getOrSession('prescription_id');
+$_selected_cis   = CValue::get("_selected_cis");
 
-$date_min = mbGetValueFromGetOrSession('_date_min');
-$date_max = mbGetValueFromGetOrSession('_date_max');
+$date_min = CValue::getOrSession('_date_min');
+$date_max = CValue::getOrSession('_date_max');
 
 $date_min_orig = $date_min;
 $date_max_orig = $date_max;
@@ -384,8 +384,8 @@ $smarty->assign('stocks_pharmacie'   , $stocks_pharmacie);
 $smarty->assign('service_id'         , $service_id);
 $smarty->assign('prescription'       , $prescription);
 $smarty->assign('mode_nominatif'     , "1");
-$smarty->assign("date_min", mbDate(mbGetValueFromGetOrSession('_date_min')));
-$smarty->assign("date_max", mbDate(mbGetValueFromGetOrSession('_date_max')));
+$smarty->assign("date_min", mbDate(CValue::getOrSession('_date_min')));
+$smarty->assign("date_max", mbDate(CValue::getOrSession('_date_max')));
 $smarty->assign("now", mbDate());
 
 if($_selected_cis){

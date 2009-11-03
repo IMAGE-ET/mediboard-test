@@ -14,7 +14,7 @@ $can->needsRead();
 
 CAppUI::requireModuleClass("sip", "hprimsoaphandler");
 
-$wsdl = mbGetValueFromGet('wsdl');
+$wsdl = CValue::get('wsdl');
 
 // première étape : désactiver le cache lors de la phase de test
 ini_set("soap.wsdl_cache_enabled", "0");
@@ -23,8 +23,8 @@ ini_set("soap.wsdl_cache_enabled", "0");
 if(isset($wsdl)) {
   header('Content-Type: application/xml; charset=UTF-8');
 
-  $username = mbGetValueFromGet('username');
-  $password = mbGetValueFromGet('password');
+  $username = CValue::get('username');
+  $password = CValue::get('password');
   
   $functions = CHprimSoapHandler::$paramSpecs;
   
@@ -38,8 +38,8 @@ if(isset($wsdl)) {
   
   echo $wsdlFile->saveXML();
 } else {
-	$username = mbGetValueFromGet('username');
-	$password = mbGetValueFromGet('password');
+	$username = CValue::get('username');
+	$password = CValue::get('password');
 
 	// on indique au serveur à quel fichier de description il est lié
 	try {

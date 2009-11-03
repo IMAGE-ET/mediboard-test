@@ -9,10 +9,10 @@
  */
 
 $patient = new CPatient();
-$patient->load(mbGetValueFromGetOrSession("patient_id"));
+$patient->load(CValue::getOrSession("patient_id"));
 
 $praticien = new CMediusers();
-$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
+$praticien->load(CValue::getOrSession("praticien_id"));
 
 // Modules obligatoires
 if (!CModule::getActive("ecap")) {

@@ -11,8 +11,8 @@
 global $can;
 $can->needsRead();
 
-$do = mbGetValueFromGet("do");
-$max = mbGetValueFromGetOrSession("max", 20);
+$do = CValue::get("do");
+$max = CValue::getOrSession("max", 20);
 
 $classes = array("CPatient", "CSejour", "CIntervention");
 $file = new CFile();

@@ -13,7 +13,7 @@ global $AppUI, $can;
 $can->needsAdmin();
 
 // Check params
-if (null == $dsn = mbGetValueFromGet("dsn")) {
+if (null == $dsn = CValue::get("dsn")) {
   $AppUI->stepAjax("Aucun DSN spécifié", UI_MSG_ERROR);
 }
 

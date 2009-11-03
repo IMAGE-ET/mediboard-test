@@ -25,7 +25,7 @@ foreach($listGroups as $key => $value) {
 
 // Récupération de la fonction selectionnée
 $userfunction = new CFunctions;
-$userfunction->load(mbGetValueFromGetOrSession("function_id", 0));
+$userfunction->load(CValue::getOrSession("function_id", 0));
 if($userfunction->_id) {
   $userfunction->loadRefsFwd();
   $userfunction->loadBackRefs("users");

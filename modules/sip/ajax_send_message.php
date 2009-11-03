@@ -10,8 +10,8 @@
 
 global $AppUI;
 
-$echange_hprim_id         = mbGetValueFromGet("echange_hprim_id");
-$echange_hprim_classname  = mbGetValueFromGet("echange_hprim_classname");
+$echange_hprim_id         = CValue::get("echange_hprim_id");
+$echange_hprim_classname  = CValue::get("echange_hprim_classname");
 
 $where = '';
 if (!$echange_hprim_id) {

@@ -14,7 +14,7 @@ global $AppUI, $can, $m;
 $can->edit |= ($AppUI->user_type != 1);
 $can->needsEdit();
 
-$module = mbGetValueFromGetOrSession("module" , "admin");
+$module = CValue::getOrSession("module" , "admin");
 
 // liste des dossiers modules + common et styles
 $modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));

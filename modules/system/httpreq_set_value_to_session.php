@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$module = mbGetValueFromGet("module");
-$name = mbGetValueFromGet("name");
-$value = mbGetValueFromGet("value");
+$module = CValue::get("module");
+$name = CValue::get("name");
+$value = CValue::get("value");
 
 // Ajout de la valeur en session
 $_SESSION[$module][$name] = $value;

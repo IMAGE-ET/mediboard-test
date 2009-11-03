@@ -15,12 +15,12 @@ $can->needsRead();
 // Récupération du message à ajouter/éditer
 $message = new CMessage;
 $message->deb = mbDateTime();
-$message->load(mbGetValueFromGetOrSession("message_id"));
+$message->load(CValue::getOrSession("message_id"));
 $message->loadRefs();
 
 // Récupération de la liste des messages
 $filter = new CMessage;
-$filter->_status = mbGetValueFromGetOrSession("_status");
+$filter->_status = CValue::getOrSession("_status");
 $messages = $filter->loadPublications($filter->_status);
 foreach ($messages as $_message) {
 	$_message->loadRefs();

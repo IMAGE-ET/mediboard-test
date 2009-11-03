@@ -14,7 +14,7 @@ $can->needsRead();
 
 $today = date("d/m/Y");
 
-$rpu_id = mbGetValueFromGet("rpu_id", 0);
+$rpu_id = CValue::get("rpu_id", 0);
 
 //Création du rpu
 $rpu = new CRPU();

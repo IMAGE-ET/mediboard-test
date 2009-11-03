@@ -12,21 +12,21 @@ global $can, $dPconfig, $AppUI, $g;
 
 $can->needsAdmin();
 
-$class = mbGetValueFromGet("class");
+$class = CValue::get("class");
 
 // Filtre sur les enregistrements
 $patient = new CPatient();
-$action = mbGetValueFromGet("action", "start");
+$action = CValue::get("action", "start");
 
 // Tous les départs possibles
 $idMins = array(
   "start"    => "000000",
-  "continue" => mbGetValueFromGetOrSession("idContinue"),
-  "retry"    => mbGetValueFromGetOrSession("idRetry"),
+  "continue" => CValue::getOrSession("idContinue"),
+  "retry"    => CValue::getOrSession("idRetry"),
 );
 
-$idMin = mbGetValue(@$idMins[$action], "000000");
-mbSetValueToSession("idRetry", $idMin);
+$idMin = CValue::first(@$idMins[$action], "000000");
+CValue::setSession("idRetry", $idMin);
 
 // Requêtes
 $where = array();
@@ -87,7 +87,7 @@ foreach ($patients as $patient) {
 
 // Enregistrement du dernier identifiant dans la session
 if (@$patient->_id) {
-  mbSetValueToSession("idContinue", $patient->_id);
+  CValue::setSession("idContinue", $patient->_id);
   $AppUI->stepAjax("Dernier ID traité : '$patient->_id'", UI_MSG_OK);
 }
 

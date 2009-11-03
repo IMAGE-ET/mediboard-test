@@ -52,7 +52,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $this->addIdentifiantPart($identifiant, "recepteur", $mbSej->_num_dossier);
     
     // Entrée de séjour
-    $mbEntree = mbGetValue($mbSej->entree_reelle, $mbSej->entree_prevue);
+    $mbEntree = CValue::first($mbSej->entree_reelle, $mbSej->entree_prevue);
     $entree = $this->addElement($venue, "entree");
     $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbEntree);
@@ -67,7 +67,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $this->addCodeLibelle($medecin, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
     
     // Sortie de séjour
-    $mbSortie = mbGetValue($mbSej->sortie_reelle, $mbSej->sortie_prevue);
+    $mbSortie = CValue::first($mbSej->sortie_reelle, $mbSej->sortie_prevue);
     $sortie = $this->addElement($venue, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbSortie);

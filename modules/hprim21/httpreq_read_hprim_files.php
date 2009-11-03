@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-$extension = mbGetValueFromGet("fileextension", $dPconfig["hprim21"]["CHprim21Reader"]["fileextension"]);
+$extension = CValue::get("fileextension", $dPconfig["hprim21"]["CHprim21Reader"]["fileextension"]);
 
 $list = array();
 $ftp = new CFTP();

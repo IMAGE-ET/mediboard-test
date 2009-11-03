@@ -8,17 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = mbGetValueFromGet("service_id");
-$date       = mbGetValueFromGet("date");
-$date_min   = mbGetValueFromGet("date_min");
-$user_id    = mbGetValueFromGet("user_id");
-$degre      = mbGetValueFromGet("degre");
-$load_transmissions = mbGetValueFromGet("transmissions");
-$load_observations = mbGetValueFromGet("observations");
-$refresh = mbGetValueFromGet("refresh");
+$service_id = CValue::get("service_id");
+$date       = CValue::get("date");
+$date_min   = CValue::get("date_min");
+$user_id    = CValue::get("user_id");
+$degre      = CValue::get("degre");
+$load_transmissions = CValue::get("transmissions");
+$load_observations = CValue::get("observations");
+$refresh = CValue::get("refresh");
 
-$order_col = mbGetValueFromGet("order_col", "date");
-$order_way = mbGetValueFromGet("order_way", "DESC");
+$order_col = CValue::get("order_col", "date");
+$order_way = CValue::get("order_way", "DESC");
 
 // Chargement du service
 $service = new CService();

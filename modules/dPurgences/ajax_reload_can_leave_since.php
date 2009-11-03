@@ -12,7 +12,7 @@ global $can;
 
 $can->needsRead();
 
-$rpus = mbGetValueFromGet("rpus", array());
+$rpus = CValue::get("rpus", array());
 
 $listRpu = array();
 
