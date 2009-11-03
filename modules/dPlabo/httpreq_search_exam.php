@@ -10,7 +10,7 @@
 $listExams = array();
 
 // Récuperation du mot recherché
-$recherche = mbGetValueFromGet("recherche");
+$recherche = CValue::get("recherche");
 
 // Chargements des analyses correspondantes
 $exam = new CExamenLabo();

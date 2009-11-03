@@ -13,18 +13,18 @@ $can->needsRead();
 $now = mbDate();
 
 $filter = new COperation;
-$filter->_date_min     = mbGetValueFromGet("_date_min", $now);
-$filter->_date_max     = mbGetValueFromGet("_date_max", $now);
-$filter->_prat_id      = mbGetValueFromGetOrSession("_prat_id");
-$filter->salle_id      = mbGetValueFromGetOrSession("salle_id");
-$filter->_plage        = mbGetValueFromGetOrSession("_plage");
-$filter->_intervention = mbGetValueFromGetOrSession("_intervention");
-$filter->_specialite   = mbGetValueFromGetOrSession("_specialite");
-$filter->_codes_ccam   = mbGetValueFromGetOrSession("_codes_ccam");
-$filter->_ccam_libelle = mbGetValueFromGetOrSession("_ccam_libelle");
+$filter->_date_min     = CValue::get("_date_min", $now);
+$filter->_date_max     = CValue::get("_date_max", $now);
+$filter->_prat_id      = CValue::getOrSession("_prat_id");
+$filter->salle_id      = CValue::getOrSession("salle_id");
+$filter->_plage        = CValue::getOrSession("_plage");
+$filter->_intervention = CValue::getOrSession("_intervention");
+$filter->_specialite   = CValue::getOrSession("_specialite");
+$filter->_codes_ccam   = CValue::getOrSession("_codes_ccam");
+$filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle");
 
 $filterSejour = new CSejour;
-$filterSejour->type = mbGetValueFromGetOrSession("type");
+$filterSejour->type = CValue::getOrSession("type");
 
 $yesterday  = mbDate("-1 day", $now);
 

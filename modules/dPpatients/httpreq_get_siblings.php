@@ -11,14 +11,14 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$patient_id      = mbGetValueFromGet("patient_id", null);
-$nom             = mbGetValueFromGet("nom"       , null);
-$nom_jeune_fille = mbGetValueFromGet("nom_jeune_fille", null);
-$prenom          = mbGetValueFromGet("prenom"    , null);
-$prenom_2        = mbGetValueFromGet("prenom_2"  , null);
-$prenom_3        = mbGetValueFromGet("prenom_3"  , null);
-$prenom_4        = mbGetValueFromGet("prenom_4"  , null);
-$naissance       = mbGetValueFromGet("naissance" , "0000-00-00");
+$patient_id      = CValue::get("patient_id", null);
+$nom             = CValue::get("nom"       , null);
+$nom_jeune_fille = CValue::get("nom_jeune_fille", null);
+$prenom          = CValue::get("prenom"    , null);
+$prenom_2        = CValue::get("prenom_2"  , null);
+$prenom_3        = CValue::get("prenom_3"  , null);
+$prenom_4        = CValue::get("prenom_4"  , null);
+$naissance       = CValue::get("naissance" , "0000-00-00");
 
 $textDifferent = null;
 if($patient_id) {

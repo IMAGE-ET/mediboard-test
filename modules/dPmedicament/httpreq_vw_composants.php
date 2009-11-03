@@ -8,11 +8,11 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$composant = mbGetValueFromGet("composant", "");
-$code = mbGetValueFromGet("code", "");
-$libelle = mbGetValueFromGet("libelle", "");
+$composant = CValue::get("composant", "");
+$code = CValue::get("code", "");
+$libelle = CValue::get("libelle", "");
 
-$rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant");
+$rechercheLivretComposant = CValue::get("rechercheLivretComposant");
 $rechercheLivretComposant = ($rechercheLivretComposant == "true") ? "1" : "0";
 
 // Chargement des compositions qui contienne le composant recherche

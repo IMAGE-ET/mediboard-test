@@ -11,14 +11,14 @@ global $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
-$chir         = mbGetValueFromGet("chir"         , 0);
-$date         = mbGetValueFromGet("date"         , mbDate());
-$month        = mbGetValueFromGet("month"        , date("m"));
-$year         = mbGetValueFromGet("year"         , date("Y"));
-$group_id     = mbGetValueFromGet("group_id"     , $g);
-$operation_id = mbGetValueFromGet("operation_id" , null);
-$curr_op_hour = mbGetValueFromGet("curr_op_hour" , "25");
-$curr_op_min  = mbGetValueFromGet("curr_op_min"  , "00");
+$chir         = CValue::get("chir"         , 0);
+$date         = CValue::get("date"         , mbDate());
+$month        = CValue::get("month"        , date("m"));
+$year         = CValue::get("year"         , date("Y"));
+$group_id     = CValue::get("group_id"     , $g);
+$operation_id = CValue::get("operation_id" , null);
+$curr_op_hour = CValue::get("curr_op_hour" , "25");
+$curr_op_min  = CValue::get("curr_op_min"  , "00");
 
 $date_min = mbDate("+ ".CAppUI::conf("dPbloc CPlageOp days_locked")." DAYS");
 

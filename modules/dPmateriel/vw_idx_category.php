@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$category_id = mbGetValueFromGetOrSession("category_id");
+$category_id = CValue::getOrSession("category_id");
 
 // Chargement de la catégorie demandé
 $category=new CCategory;

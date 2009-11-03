@@ -8,9 +8,9 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$code_cip = mbGetValueFromGet("code_cip");
-$line_id  = mbGetValueFromGet("line_id");
-$inLivret = mbGetValueFromGet("inLivret");
+$code_cip = CValue::get("code_cip");
+$line_id  = CValue::get("line_id");
+$inLivret = CValue::get("inLivret");
 
 // Initialisations
 $classe_ATC = new CBcbClasseATC();  

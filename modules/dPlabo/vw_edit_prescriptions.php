@@ -11,11 +11,11 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
-$typeListe  = mbGetValueFromGetOrSession("typeListe");
+$patient_id = CValue::getOrSession("patient_id");
+$typeListe  = CValue::getOrSession("typeListe");
 
 // Permettre de le remettre à null lors d'un changement de patient
-mbGetValueFromGetOrSession("prescription_labo_id");
+CValue::getOrSession("prescription_labo_id");
 
 // Chargement du patient
 

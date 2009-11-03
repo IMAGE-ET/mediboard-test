@@ -20,26 +20,26 @@ $canPlanningOp = CModule::getCanDo("dPplanningOp");
 $user_id = $AppUI->user_id;
 
 // Récupération des critères de recherche
-$antecedent_patient      = mbGetValueFromGetOrSession("antecedent_patient"          );
-$traitement_patient      = mbGetValueFromGetOrSession("traitement_patient"          );
-$diagnostic_patient      = mbGetValueFromGetOrSession("diagnostic_patient"          );
-$motif_consult           = mbGetValueFromGetOrSession("motif_consult"               );
-$remarque_consult        = mbGetValueFromGetOrSession("remarque_consult"            );
-$examen_consult          = mbGetValueFromGetOrSession("examen_consult"              );
-$traitement_consult      = mbGetValueFromGetOrSession("traitement_consult"          );
-$typeAdmission_sejour    = mbGetValueFromGetOrSession("typeAdmission_sejour"        );
-$convalescence_sejour    = mbGetValueFromGetOrSession("convalescence_sejour"        );
-$remarque_sejour         = mbGetValueFromGetOrSession("remarque_sejour"             );
-$materiel_intervention   = mbGetValueFromGetOrSession("materiel_intervention"       );
-$examen_intervention     = mbGetValueFromGetOrSession("examen_intervention"         );
-$remarque_intervention   = mbGetValueFromGetOrSession("remarque_intervention"       );
-$libelle_intervention    = mbGetValueFromGetOrSession("libelle_intervention"        );
-$ccam_intervention       = mbGetValueFromGetOrSession("ccam_intervention"           );
+$antecedent_patient      = CValue::getOrSession("antecedent_patient"          );
+$traitement_patient      = CValue::getOrSession("traitement_patient"          );
+$diagnostic_patient      = CValue::getOrSession("diagnostic_patient"          );
+$motif_consult           = CValue::getOrSession("motif_consult"               );
+$remarque_consult        = CValue::getOrSession("remarque_consult"            );
+$examen_consult          = CValue::getOrSession("examen_consult"              );
+$traitement_consult      = CValue::getOrSession("traitement_consult"          );
+$typeAdmission_sejour    = CValue::getOrSession("typeAdmission_sejour"        );
+$convalescence_sejour    = CValue::getOrSession("convalescence_sejour"        );
+$remarque_sejour         = CValue::getOrSession("remarque_sejour"             );
+$materiel_intervention   = CValue::getOrSession("materiel_intervention"       );
+$examen_intervention     = CValue::getOrSession("examen_intervention"         );
+$remarque_intervention   = CValue::getOrSession("remarque_intervention"       );
+$libelle_intervention    = CValue::getOrSession("libelle_intervention"        );
+$ccam_intervention       = CValue::getOrSession("ccam_intervention"           );
 
 
-$recherche_consult       = mbGetValueFromGetOrSession("recherche_consult","or"      );
-$recherche_sejour        = mbGetValueFromGetOrSession("recherche_sejour","or"       );
-$recherche_intervention  = mbGetValueFromGetOrSession("recherche_intervention","or" );
+$recherche_consult       = CValue::getOrSession("recherche_consult","or"      );
+$recherche_sejour        = CValue::getOrSession("recherche_sejour","or"       );
+$recherche_intervention  = CValue::getOrSession("recherche_intervention","or" );
 
 
 

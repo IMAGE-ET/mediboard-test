@@ -9,14 +9,14 @@
 
 global $dPconfig;
 
-$verouillee = mbGetValueFromPost("verouillee");
+$verouillee = CValue::post("verouillee");
 
 // Si la prescription est verouillée, un id externe est créé pour identifier la prescription 
 if($verouillee){
 	
   $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
   
-  $prescription_labo_id = mbGetValueFromPost("prescription_labo_id");
+  $prescription_labo_id = CValue::post("prescription_labo_id");
   $prescription = new CPrescriptionLabo();
   $prescription->load($prescription_labo_id);
   if(!$prescription->verouillee) {

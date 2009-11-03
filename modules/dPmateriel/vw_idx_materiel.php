@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$materiel_id = mbGetValueFromGetOrSession("materiel_id", null);
+$materiel_id = CValue::getOrSession("materiel_id", null);
 
 // Chargement du matériel demandé
 $materiel=new CMateriel;

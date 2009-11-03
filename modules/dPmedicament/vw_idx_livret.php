@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$lettre = mbGetValueFromGet("lettre");
+$lettre = CValue::get("lettre");
 
 $listProduits = array();
 
@@ -21,7 +21,7 @@ $etablissement->loadRefLivretTherapeutique();
 $tabLettre = range('A', 'Z');
 
 // --- Chargement de l'arbre ATC ---
-$codeATC     = mbGetValueFromGet("codeATC");
+$codeATC     = CValue::get("codeATC");
 $classeATC   = new CBcbClasseATC();
 $chapitreATC = $codeATC ? $classeATC->getLibelle($codeATC) : ''; // Nom du chapitre selectionné
 $arbreATC    = $classeATC->loadArbre($codeATC); // Chargements des sous chapitres

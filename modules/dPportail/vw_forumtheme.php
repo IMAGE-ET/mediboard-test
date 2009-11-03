@@ -10,7 +10,7 @@
 global $can;
 $can->needsRead();
 
-$forum_theme_id = mbGetValueFromGetOrSession('forum_theme_id');
+$forum_theme_id = CValue::getOrSession('forum_theme_id');
 
 // Chargement du theme demandé
 $forum_theme = new CForumTheme();

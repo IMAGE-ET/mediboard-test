@@ -8,12 +8,12 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$produit = mbGetValueFromPost("produit", "aaa");
-$inLivret = mbGetValueFromPost("inLivret", 0);
-$produit_max = mbGetValueFromPost("produit_max", 10);
-$search_libelle_long = mbGetValueFromPost("search_libelle_long", false);
-$hors_specialite = mbGetValueFromPost("hors_specialite", "0");
-$search_by_cis = mbGetValueFromPost("search_by_cis", "1");
+$produit = CValue::post("produit", "aaa");
+$inLivret = CValue::post("inLivret", 0);
+$produit_max = CValue::post("produit_max", 10);
+$search_libelle_long = CValue::post("search_libelle_long", false);
+$hors_specialite = CValue::post("hors_specialite", "0");
+$search_by_cis = CValue::post("search_by_cis", "1");
 
 $mbProduit = new CBcbProduit();
 

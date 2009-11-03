@@ -17,10 +17,10 @@ $etablissements = CMediusers::loadEtablissements(PERM_READ);
 // Chargement des prestations
 $prestations = CPrestation::loadCurrentList();
 
-$operation_id = mbGetValueFromGetOrSession("operation_id");
-$chir_id      = mbGetValueFromGetOrSession("chir_id");
-$sejour_id    = mbGetValueFromGet("sejour_id");
-$patient_id   = mbGetValueFromGet("pat_id");
+$operation_id = CValue::getOrSession("operation_id");
+$chir_id      = CValue::getOrSession("chir_id");
+$sejour_id    = CValue::get("sejour_id");
+$patient_id   = CValue::get("pat_id");
 $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
 
@@ -96,7 +96,7 @@ if ($op->_id){
   }
 }
 
-mbSetValueToSession("chir_id", $chir->_id);
+CValue::setSession("chir_id", $chir->_id);
 
 $sejour->makeDatesOperations();
 

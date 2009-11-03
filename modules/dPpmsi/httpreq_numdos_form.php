@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsEdit();
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
+$sejour_id = CValue::getOrSession("sejour_id");
 
 
 // Chargement du dossier patient

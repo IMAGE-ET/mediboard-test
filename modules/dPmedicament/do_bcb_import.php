@@ -12,7 +12,7 @@ global $AppUI, $g;
 
 set_time_limit(360);
 
-$type_import = mbGetValueFromPost("type_import");
+$type_import = CValue::post("type_import");
 
 // Recuperation du fichier
 $file = $_FILES['datafile'];

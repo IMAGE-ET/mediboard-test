@@ -9,9 +9,9 @@
  */
 
 // Recuperation du CIP du produit
-$code_cip = mbGetValueFromGet("code_cip");
-$code_ucd = mbGetValueFromGet("code_ucd");
-$code_cis = mbGetValueFromGet("code_cis");
+$code_cip = CValue::get("code_cip");
+$code_ucd = CValue::get("code_ucd");
+$code_cis = CValue::get("code_cis");
 
 // Chargement de tous les produits correspondants au CIS ou a l'UCD
 $produits = array();

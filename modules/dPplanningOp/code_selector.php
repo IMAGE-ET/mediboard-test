@@ -13,12 +13,12 @@ CAppUI::requireModuleClass("dPsalleOp", "acteccam");
 
 $ds = CSQLDataSource::get("std");
 
-$type         = mbGetValueFromGet("type");
-$mode         = mbGetValueFromGet("mode", "stats");
-$order        = mbGetValueFromGet("order", "taux");
-$chir         = mbGetValueFromGet("chir");
-$anesth       = mbGetValueFromGet("anesth");
-$object_class = mbGetValueFromGet("object_class");
+$type         = CValue::get("type");
+$mode         = CValue::get("mode", "stats");
+$order        = CValue::get("order", "taux");
+$chir         = CValue::get("chir");
+$anesth       = CValue::get("anesth");
+$object_class = CValue::get("object_class");
 
 $profiles = array (
   "chir"   => $chir,

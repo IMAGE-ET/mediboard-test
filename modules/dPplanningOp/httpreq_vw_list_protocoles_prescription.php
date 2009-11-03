@@ -7,9 +7,9 @@
 * @author Fabien Ménager
 */
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id", 0);
-$selected_id = mbGetValueFromGetOrSession("selected_id", 0);
-$without_pack = mbGetValueFromGet("without_pack");
+$praticien_id = CValue::getOrSession("praticien_id", 0);
+$selected_id = CValue::getOrSession("selected_id", 0);
+$without_pack = CValue::get("without_pack");
 
 // Chargement du praticien
 $praticien = new CMediusers;

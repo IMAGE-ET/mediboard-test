@@ -10,9 +10,9 @@
 
 global $g;
 
-$lettre = mbGetValueFromGet("lettre");
-$codeATC = mbGetValueFromGet("codeATC");
-$code_cip = mbGetValueFromGet("code_cip");
+$lettre = CValue::get("lettre");
+$codeATC = CValue::get("codeATC");
+$code_cip = CValue::get("code_cip");
 
 // Chargement du produit
 $produit_livret = new CBcbProduitLivretTherapeutique();

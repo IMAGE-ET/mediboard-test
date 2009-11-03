@@ -11,15 +11,15 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$examen_labo_id = mbGetValueFromGetOrSession("examen_labo_id");
+$examen_labo_id = CValue::getOrSession("examen_labo_id");
 
 // Chargement de l'examen demandé
 $examen = new CExamenLabo;
 
 // Chargement du catalogue demandé
-if(mbGetValueFromGet("catalogue_labo_id")) {
+if(CValue::get("catalogue_labo_id")) {
   $examen_labo_id = null;
-  mbSetValueToSession("examen_labo_id");
+  CValue::setSession("examen_labo_id");
 }
 if($examen_labo_id) {
   $examen->load($examen_labo_id);
@@ -32,7 +32,7 @@ if($examen_labo_id) {
   $examen->loadClassification();
   $catalogue =& $examen->_ref_catalogue_labo;
 } else {
-  $catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
+  $catalogue_labo_id = CValue::getOrSession("catalogue_labo_id");
   $catalogue = new CCatalogueLabo;
   $catalogue->load($catalogue_labo_id);
   $examen->catalogue_labo_id = $catalogue->_id;

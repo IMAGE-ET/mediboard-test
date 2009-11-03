@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$sejour_id = mbGetValueFromGet("sejour_id");
+$sejour_id = CValue::get("sejour_id");
 
 // Chargement du sejour
 $sejour = new CSejour();

@@ -12,7 +12,7 @@ global $can, $m;
 
 $can->needsAdmin();
 
-$repair = mbGetValueFromPost('repair', 0);
+$repair = CValue::post('repair', 0);
 
 $sejour_no_prat = array();
 $sejour = new CSejour();

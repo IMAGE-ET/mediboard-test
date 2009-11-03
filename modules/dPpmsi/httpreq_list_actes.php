@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$operation_id = mbGetValueFromGetOrSession("operation_id");
+$operation_id = CValue::getOrSession("operation_id");
 $operation = new COperation;
 $operation->load($operation_id);
 $operation->loadRefsActesCCAM();

@@ -23,30 +23,30 @@ $chir = $mediuser->isFromType(array("Chirurgien")) ? $mediuser : null;
 $anesth = $mediuser->isFromType(array("Anesthésiste")) ? $mediuser : null;
 
 // Chargement du patient sélectionné
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 $patient = new CPatient;
-if ($new = mbGetValueFromGet("new")) {
+if ($new = CValue::get("new")) {
   $patient->load(null);
-  mbSetValueToSession("patient_id", null);
-  mbSetValueToSession("selClass", null);
-  mbSetValueToSession("selKey", null);
+  CValue::setSession("patient_id", null);
+  CValue::setSession("selClass", null);
+  CValue::setSession("selKey", null);
 } else {
   $patient->load($patient_id);
 }
 
 // Récuperation des patients recherchés
-$patient_nom         = mbGetValueFromGetOrSession("nom"        , "");
-$patient_prenom      = mbGetValueFromGetOrSession("prenom"     , "");
-$patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille" , "");
-$patient_ville       = mbGetValueFromGetOrSession("ville"      , "");
-$patient_cp          = mbGetValueFromGetOrSession("cp"         , "");
-$patient_day         = mbGetValueFromGet("Date_Day"  , "");
-$patient_month       = mbGetValueFromGet("Date_Month", "");
-$patient_year        = mbGetValueFromGet("Date_Year" , "");
+$patient_nom         = CValue::getOrSession("nom"        , "");
+$patient_prenom      = CValue::getOrSession("prenom"     , "");
+$patient_jeuneFille  = CValue::getOrSession("jeuneFille" , "");
+$patient_ville       = CValue::getOrSession("ville"      , "");
+$patient_cp          = CValue::getOrSession("cp"         , "");
+$patient_day         = CValue::get("Date_Day"  , "");
+$patient_month       = CValue::get("Date_Month", "");
+$patient_year        = CValue::get("Date_Year" , "");
 $patient_useNaissance= null;
 $patient_naissance   = null;
-$patient_ipp         = mbGetValueFromGet("patient_ipp");
-$useVitale           = mbGetValueFromGet("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
+$patient_ipp         = CValue::get("patient_ipp");
+$useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
 
 $patVitale = new CPatient();
   
@@ -67,7 +67,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   if ($idsante->object_id){
     $patient = new CPatient();
     $patient->load($idsante->object_id);
-    mbSetValueToSession("patient_id", $patient->_id);
+    CValue::setSession("patient_id", $patient->_id);
     $patients[$patient->_id] = $patient; 
   }
 } 
@@ -78,10 +78,10 @@ else {
 	  $patVitale->updateFormFields();
 	  $patient_nom    = $patVitale->nom;
 	  $patient_prenom = $patVitale->prenom;
-	  mbSetValueToSession("nom", $patVitale->nom);
-	  mbSetValueToSession("prenom", $patVitale->prenom);
+	  CValue::setSession("nom", $patVitale->nom);
+	  CValue::setSession("prenom", $patVitale->prenom);
 	  $patient_useNaissance = "on";
-	  mbSetValueToSession("naissance", "on");
+	  CValue::setSession("naissance", "on");
 	  $patVitale->loadFromIdVitale();
 	}
 	

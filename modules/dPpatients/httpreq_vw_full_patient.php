@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id", 0);
+$patient_id = CValue::getOrSession("patient_id", 0);
 
 if(!$patient_id) {
   $AppUI->setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);

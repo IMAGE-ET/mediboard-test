@@ -11,13 +11,13 @@ global $can;
 
 $can->needsEdit();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
-$name       = mbGetValueFromGet("name");
-$firstName  = mbGetValueFromGet("firstName");
-$naissance_day   = mbGetValueFromGet("naissance_day");
-$naissance_month = mbGetValueFromGet("naissance_month");
-$naissance_year  = mbGetValueFromGet("naissance_year");
-$useVitale  = mbGetValueFromGet("useVitale");
+$patient_id = CValue::getOrSession("patient_id");
+$name       = CValue::get("name");
+$firstName  = CValue::get("firstName");
+$naissance_day   = CValue::get("naissance_day");
+$naissance_month = CValue::get("naissance_month");
+$naissance_year  = CValue::get("naissance_year");
+$useVitale  = CValue::get("useVitale");
 
 $patient = new CPatient;
 $patient->load($patient_id);

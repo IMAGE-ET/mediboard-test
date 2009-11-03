@@ -10,14 +10,14 @@
 global $can, $g, $AppUI;
 $can->needsRead();
 
-$name          = mbGetValueFromGet("name"       );
-$firstName     = mbGetValueFromGet("firstName"  );
-$nomjf         = mbGetValueFromGet("nomjf"      );
-$patient_year  = mbGetValueFromGet("Date_Year"  );
-$patient_month = mbGetValueFromGet("Date_Month" );
-$patient_day   = mbGetValueFromGet("Date_Day"   );
-$patient_ipp   = mbGetValueFromGet("patient_ipp");
-$useVitale     = mbGetValueFromGet("useVitale"  ); 
+$name          = CValue::get("name"       );
+$firstName     = CValue::get("firstName"  );
+$nomjf         = CValue::get("nomjf"      );
+$patient_year  = CValue::get("Date_Year"  );
+$patient_month = CValue::get("Date_Month" );
+$patient_day   = CValue::get("Date_Day"   );
+$patient_ipp   = CValue::get("patient_ipp");
+$useVitale     = CValue::get("useVitale"  ); 
 
 $patVitale = null;
 

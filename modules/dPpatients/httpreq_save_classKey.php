@@ -9,6 +9,6 @@
 
 global $AppUI, $m;
 
-mbGetValueFromGetOrSession("selClass");
-mbGetValueFromGetOrSession("selKey");
+CValue::getOrSession("selClass");
+CValue::getOrSession("selKey");
 ?>

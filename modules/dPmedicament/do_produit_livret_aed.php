@@ -12,16 +12,16 @@ global $AppUI, $g;
 
 $livret = new CBcbProduitLivretTherapeutique();
 
-$group_id          = mbGetValueFromPost("group_id");
-$code_cip          = mbGetValueFromPost("code_cip");
-$prix_hopital      = mbGetValueFromPost("prix_hopital");
-$date_prix_hopital = mbGetValueFromPost("date_prix_hopital");
-$prix_ville        = mbGetValueFromPost("prix_ville");
-$date_prix_ville   = mbGetValueFromPost("date_prix_ville");
-$code_interne      = mbGetValueFromPost("code_interne");
-$commentaire       = mbGetValueFromPost("commentaire");
+$group_id          = CValue::post("group_id");
+$code_cip          = CValue::post("code_cip");
+$prix_hopital      = CValue::post("prix_hopital");
+$date_prix_hopital = CValue::post("date_prix_hopital");
+$prix_ville        = CValue::post("prix_ville");
+$date_prix_ville   = CValue::post("date_prix_ville");
+$code_interne      = CValue::post("code_interne");
+$commentaire       = CValue::post("commentaire");
 
-$del = mbGetValueFromPost("del");
+$del = CValue::post("del");
 
 if($del == 1){ 
   // Suppression du produit

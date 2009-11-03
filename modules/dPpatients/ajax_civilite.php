@@ -14,7 +14,7 @@ $patient = new CPatient;
 $fields = array("civilite", "assure_civilite");
 
 foreach ($fields as $_field) {
-  switch ($mode = mbGetValueFromGet("mode")) {
+  switch ($mode = CValue::get("mode")) {
     case "check":
     $ds = $patient->_spec->ds;
     $query = "SELECT `$_field`, COUNT( * ) AS  `counts`
@@ -34,7 +34,7 @@ foreach ($fields as $_field) {
 	  $where = array();
     $where["$_field"] = "IS NULL";
     $repaired = 0;
-		$max = mbGetValueFromGet("max", 1000);
+		$max = CValue::get("max", 1000);
     $limit = "0, $max";
     CAppUI::stepAjax("Patients détectés pour une correction de '%s' : %s trouvés.", 
 		  UI_MSG_OK,

@@ -14,11 +14,11 @@ $can->needsAdmin();
 $libDir = "lib/bcb";
 $libPath = "$libDir/bcb.zip";
 $user = "mediboard";
-$pass = mbGetValueFromGet("password");
+$pass = CValue::get("password");
 
 $libURL = "http://$user:$pass@www.mediboard.org/bcb/objet-bcb-php-v1-92.zip";
 
-switch ($action = mbGetValueFromGet("action")) {
+switch ($action = CValue::get("action")) {
   // Test BCB Scripts existence
   case "test":
   CAppUI::stepAjax("BCBScripts-running_ok", UI_MSG_OK, $action);

@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$fiche_ATC_id = mbGetValueFromGetOrSession("fiche_ATC_id");
+$fiche_ATC_id = CValue::getOrSession("fiche_ATC_id");
 
 // Chargement de la fiche selectionnee
 $fiche_ATC = new CFicheATC();

@@ -16,7 +16,7 @@ $object = mbGetObjectFromGet(null, null, "object_guid");
 
 $affectation = new CAffectationPersonnel();
 $affectation->setObject($object);
-$affectation->personnel_id = mbGetValueFromGet("personnel_id");
+$affectation->personnel_id = CValue::get("personnel_id");
 $affectation->loadRefPersonnel();
 
 $_multiple["object"]       = $affectation->_ref_object;

@@ -9,9 +9,9 @@
  */
 
 // Cas d'ajout de produit, affichage de la bonne lettre
-$lettre = mbGetValueFromGet("lettre");
-$code_cip = mbGetValueFromGetOrSession("code_cip");
-$type = mbGetValueFromGet("type");
+$lettre = CValue::get("lettre");
+$code_cip = CValue::getOrSession("code_cip");
+$type = CValue::get("type");
 $produits_livret = array();
 
 // Chargement du produit ajouté

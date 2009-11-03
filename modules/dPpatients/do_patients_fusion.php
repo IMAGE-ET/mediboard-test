@@ -13,7 +13,7 @@ class CDoPatientMerge extends CDoObjectAddEdit {
   function CDoPatientMerge() {
     $this->CDoObjectAddEdit("CPatient", "patient_id");
     
-    if ($dialog = mbGetValueFromPost("dialog")) {
+    if ($dialog = CValue::post("dialog")) {
       $this->redirectDelete .= $this->redirect."&a=pat_selector&dialog=1";
       $this->redirectStore  .= $this->redirect."&a=vw_edit_patients&dialog=1";
     }
@@ -28,8 +28,8 @@ class CDoPatientMerge extends CDoObjectAddEdit {
   function doStore() {
     parent::doStore();
     
-    $dialog = mbGetValueFromPost("dialog");
-    $isNew = !mbGetValueFromPost("patient_id");
+    $dialog = CValue::post("dialog");
+    $isNew = !CValue::post("patient_id");
     $patient_id = $this->_obj->patient_id;
     
     if ($isNew)
@@ -41,8 +41,8 @@ class CDoPatientMerge extends CDoObjectAddEdit {
 
 $do = new CDoPatientMerge;
 
-$patient1_id = mbGetValueFromPost("patient1_id");
-$patient2_id = mbGetValueFromPost("patient2_id");
+$patient1_id = CValue::post("patient1_id");
+$patient2_id = CValue::post("patient2_id");
 
 // Erreur sur les ID du patient
 $patient1 = new CPatient;
@@ -55,7 +55,7 @@ if (!$patient2->load($patient2_id)) {
   $do->errorRedirect("Patient 2 n'existe pas ou plus");
 }
 
-if (intval(mbGetValueFromPost("del"))) {
+if (intval(CValue::post("del"))) {
   $do->errorRedirect("Fusion en mode suppression impossible");
 }
 

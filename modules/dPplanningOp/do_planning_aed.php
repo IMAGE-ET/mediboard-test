@@ -12,8 +12,8 @@ global $can, $m;
 $do = new CDoObjectAddEdit("COperation", "operation_id");
 $do->doBind();
 
-if(intval(mbGetValueFromPost("del", null))) {
-  mbSetValueToSession("operation_id");
+if(intval(CValue::post("del", null))) {
+  CValue::setSession("operation_id");
   $do->redirectDelete = "m=$m&tab=vw_edit_planning&operation_id=0";
   $do->doDelete();
 } else {
@@ -27,7 +27,7 @@ if(intval(mbGetValueFromPost("del", null))) {
     $plageop->spec_id = "";
     $plageop->store();
   }
-  $m = mbGetValueFromPost("otherm", $m);
+  $m = CValue::post("otherm", $m);
   if($m == "dPhospi") {
     $do->redirectStore = "m=$m#operation".$do->_obj->operation_id;
   }

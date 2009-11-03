@@ -13,7 +13,7 @@ $can->needsRead();
 
 $today = date("d/m/Y");
 
-$patient_id = mbGetValueFromGet("patient_id");
+$patient_id = CValue::get("patient_id");
 
 // Création du patient
 $patient = new CPatient();

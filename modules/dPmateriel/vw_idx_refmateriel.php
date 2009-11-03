@@ -11,12 +11,12 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$reference_id = mbGetValueFromGetOrSession("reference_id");
+$reference_id = CValue::getOrSession("reference_id");
 
 // Chargement de la reference demandé
 $reference=new CRefMateriel;
 $reference->load($reference_id);
-if($fournisseur_id = mbGetValueFromGet("fournisseur_id")){
+if($fournisseur_id = CValue::get("fournisseur_id")){
   $reference->fournisseur_id = $fournisseur_id;
 }
 

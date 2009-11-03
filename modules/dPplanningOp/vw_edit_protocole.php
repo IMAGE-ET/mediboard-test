@@ -11,8 +11,8 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsEdit();
 
-$protocole_id = mbGetValueFromGetOrSession("protocole_id", 0);
-$chir_id      = mbGetValueFromGetOrSession("chir_id"     , 0);
+$protocole_id = CValue::getOrSession("protocole_id", 0);
+$chir_id      = CValue::getOrSession("chir_id"     , 0);
 
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;

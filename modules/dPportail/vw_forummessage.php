@@ -13,7 +13,7 @@ $can->needsRead();
 /** Chargement du message demandé **/
 // s'il est indiqué dans le GET ou la session on charge l'objet
 $forum_message = new CForumMessage();
-$forum_message->load(mbGetValueFromGetOrSession('forum_message_id'));
+$forum_message->load(CValue::getOrSession('forum_message_id'));
 if($forum_message->_id) {
     $forum_message->loadRefs();
 } else { // sinon on en crée un nouveau
@@ -28,7 +28,7 @@ if ($forum_message->forum_thread_id) {
     $forum_thread = $forum_message->_ref_forum_thread;
 } else {
 	$forum_thread = new CForumThread();
-	$forum_thread->load(mbGetValueFromGetOrSession('forum_thread_id'));
+	$forum_thread->load(CValue::getOrSession('forum_thread_id'));
 	if($forum_thread->_id) {
 	    $forum_thread->loadRefs();
 	}

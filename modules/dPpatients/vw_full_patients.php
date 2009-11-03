@@ -11,12 +11,12 @@ global $dPconfig, $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id", 0);
+$patient_id = CValue::getOrSession("patient_id", 0);
 
 // recuperation des id dans le cas d'une recherche de dossiers cliniques 
-$consultation_id = mbGetValueFromGet("consultation_id", 0);
-$sejour_id       = mbGetValueFromGet("sejour_id", 0);
-$operation_id    = mbGetValueFromGet("operation_id", 0);
+$consultation_id = CValue::get("consultation_id", 0);
+$sejour_id       = CValue::get("sejour_id", 0);
+$operation_id    = CValue::get("operation_id", 0);
 
 if(!$patient_id) {
   $AppUI->setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);

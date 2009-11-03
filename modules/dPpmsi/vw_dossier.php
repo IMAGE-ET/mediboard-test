@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsEdit();
 
-$pat_id = mbGetValueFromGetOrSession("pat_id");
+$pat_id = CValue::getOrSession("pat_id");
 
 // Chargement des praticiens
 $listPrat = new CMediusers;

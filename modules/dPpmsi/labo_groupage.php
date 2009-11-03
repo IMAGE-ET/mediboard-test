@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$sejour_id  = mbGetValueFromGetOrSession("sejour_id", null);
+$sejour_id  = CValue::getOrSession("sejour_id", null);
 
 if(!$sejour_id) {
   $AppUI->setMsg("Vous devez selectionner un séjour", UI_MSG_ERROR);

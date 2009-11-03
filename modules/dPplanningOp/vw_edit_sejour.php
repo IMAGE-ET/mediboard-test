@@ -12,9 +12,9 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 
 $can->needsRead();
 
-$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
-$patient_id   = mbGetValueFromGet("patient_id");
-$praticien_id = mbGetValueFromGet("praticien_id");
+$sejour_id    = CValue::getOrSession("sejour_id");
+$patient_id   = CValue::get("patient_id");
+$praticien_id = CValue::get("praticien_id");
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();

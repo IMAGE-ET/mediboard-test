@@ -11,7 +11,7 @@ global $AppUI, $can;
 $can->needsRead();
 
 // Chargement du thread demandé
-$forum_thread_id = mbGetValueFromGetOrSession('forum_thread_id');
+$forum_thread_id = CValue::getOrSession('forum_thread_id');
 $forum_thread = new CForumThread();
 $forum_thread->load($forum_thread_id);
 if($forum_thread->_id) {
@@ -23,7 +23,7 @@ if($forum_thread->_id) {
 
 
 // Chargement du theme demandé
-$forum_theme_id = mbGetValueFromGet('forum_theme_id');
+$forum_theme_id = CValue::get('forum_theme_id');
 if (!$forum_theme_id) {
 	$forum_theme_id = $forum_thread->forum_theme_id;
 }

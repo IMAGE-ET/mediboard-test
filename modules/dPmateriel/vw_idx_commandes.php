@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$commande_id = mbGetValueFromGetOrSession("commande_materiel_id");
+$commande_id = CValue::getOrSession("commande_materiel_id");
 
 // Chargement de la commande demandé
 $commande = new CCommandeMateriel();

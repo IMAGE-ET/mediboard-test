@@ -13,7 +13,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Définition des variables
-$patient_id = mbGetValueFromGet("patient_id", 0);
+$patient_id = CValue::get("patient_id", 0);
 
 //Récupération du dossier complet patient
 $patient = new CPatient;

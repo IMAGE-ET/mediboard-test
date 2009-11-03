@@ -18,7 +18,7 @@ $do = new CDoObjectAddEdit("CMedecin", "medecin_id");
 $do->doBind();
 
 // Création du nouveau medecin
-if (intval(mbGetValueFromPost("del"))) {
+if (intval(CValue::post("del"))) {
   $do->doDelete();
 } else {
   $do->doStore();

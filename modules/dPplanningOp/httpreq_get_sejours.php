@@ -10,7 +10,7 @@
 global $can;
 $can->needsRead();
 
-$patient_id = mbGetValueFromGet("patient_id");
+$patient_id = CValue::get("patient_id");
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();

@@ -9,9 +9,9 @@
 
 global $AppUI, $can, $m, $tab, $dPconfig;
 
-$mode_operation = mbGetValueFromGet("mode_operation", 0);
-$sejour_id      = mbGetValueFromGet("sejour_id"     , 0);
-$patient_id     = mbGetValueFromGet("patient_id"    , 0);
+$mode_operation = CValue::get("mode_operation", 0);
+$sejour_id      = CValue::get("sejour_id"     , 0);
+$patient_id     = CValue::get("patient_id"    , 0);
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();

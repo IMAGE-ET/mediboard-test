@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
+$catalogue_labo_id = CValue::getOrSession("catalogue_labo_id");
 
 // Chargement du catalogue demandé
 $catalogue = new CCatalogueLabo;

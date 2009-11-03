@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-if ($praticien_id = mbGetValueFromPost("praticien_id")) {
-  mbSetValueToSession("praticien_id", $praticien_id);
+if ($praticien_id = CValue::post("praticien_id")) {
+  CValue::setSession("praticien_id", $praticien_id);
 }
 
 $do = new CDoObjectAddEdit("CSejour", "sejour_id");

@@ -16,7 +16,7 @@ class CDoCopyAntecedent extends CDoObjectAddEdit {
     parent::doBind();
     
     // recuperation du sejour_id
-    $_sejour_id = mbGetValueFromPost("_sejour_id"  , null);
+    $_sejour_id = CValue::post("_sejour_id"  , null);
 
     // si pas de sejour_id, redirection
     if (!$_sejour_id){

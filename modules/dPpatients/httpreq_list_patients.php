@@ -12,33 +12,33 @@
 global $can, $g;
 $can->needsRead();
 
-$board = mbGetValueFromGet("board", 0);
+$board = CValue::get("board", 0);
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 
 // Patients
-$patient_nom       = mbGetValueFromGetOrSession("nom"       , "");
-$patient_prenom    = mbGetValueFromGetOrSession("prenom"    , "");
-$patient_jeuneFille= mbGetValueFromGetOrSession("jeuneFille", "");
+$patient_nom       = CValue::getOrSession("nom"       , "");
+$patient_prenom    = CValue::getOrSession("prenom"    , "");
+$patient_jeuneFille= CValue::getOrSession("jeuneFille", "");
 
-$patient_useNaissance = mbGetValueFromGetOrSession("useNaissance" , "off");
-$patient_ville     = mbGetValueFromGetOrSession("ville"     , "");
-$patient_cp        = mbGetValueFromGetOrSession("cp"        , "");
-$patient_day       = mbGetValueFromGetOrSession("Date_Day"  , "");
-$patient_month     = mbGetValueFromGetOrSession("Date_Month", "");
-$patient_year      = mbGetValueFromGetOrSession("Date_Year" , "");
-$patient_ipp       = mbGetValueFromGet("patient_ipp");
+$patient_useNaissance = CValue::getOrSession("useNaissance" , "off");
+$patient_ville     = CValue::getOrSession("ville"     , "");
+$patient_cp        = CValue::getOrSession("cp"        , "");
+$patient_day       = CValue::getOrSession("Date_Day"  , "");
+$patient_month     = CValue::getOrSession("Date_Month", "");
+$patient_year      = CValue::getOrSession("Date_Year" , "");
+$patient_ipp       = CValue::get("patient_ipp");
 $patient_naissance = null;
-$useVitale         = mbGetValueFromGet("useVitale");
+$useVitale         = CValue::get("useVitale");
 
 $patVitale = new CPatient;
 
 $patient = new CPatient;
-if ($new = mbGetValueFromGet("new")) {
+if ($new = CValue::get("new")) {
   $patient->load(null);
-  mbSetValueToSession("patient_id", null);
-  mbSetValueToSession("selClass", null);
-  mbSetValueToSession("selKey", null);
+  CValue::setSession("patient_id", null);
+  CValue::setSession("selClass", null);
+  CValue::setSession("selKey", null);
 } else {
   $patient->load($patient_id);
 }
@@ -49,10 +49,10 @@ if ($useVitale) {
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
   $patient_prenom = $patVitale->prenom;
-  mbSetValueToSession("nom", $patVitale->nom);
-  mbSetValueToSession("prenom", $patVitale->prenom);
+  CValue::setSession("nom", $patVitale->nom);
+  CValue::setSession("prenom", $patVitale->prenom);
   $patient_useNaissance = "on";
-  mbSetValueToSession("useNaissance", "on");
+  CValue::setSession("useNaissance", "on");
   $patVitale->loadFromIdVitale();
 }
 

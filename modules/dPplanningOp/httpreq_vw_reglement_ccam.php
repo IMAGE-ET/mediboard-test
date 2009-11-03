@@ -8,7 +8,7 @@
  */
 
 // Recuperation de l'id de l'acte CCAM
-$acte_ccam_id = mbGetValueFromGetOrSession("acte_ccam_id");
+$acte_ccam_id = CValue::getOrSession("acte_ccam_id");
 
 // Chargement de l'acte CCAM
 $acte = new CActeCCAM();

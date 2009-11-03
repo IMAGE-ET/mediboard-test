@@ -11,11 +11,11 @@ global $can, $AppUI;
 
 $can->needsRead();
 
-$typeListe = mbGetValueFromGetOrSession("typeListe");
+$typeListe = CValue::getOrSession("typeListe");
 
 // Chargement de l'item choisi
 $prescriptionItem = new CPrescriptionLaboExamen;
-$prescriptionItem->load(mbGetValueFromGetOrSession("prescription_labo_examen_id"));
+$prescriptionItem->load(CValue::getOrSession("prescription_labo_examen_id"));
 $prescriptionItem->loadAides($AppUI->user_id);
 if ($prescriptionItem->_id) {
   $prescriptionItem->date = mbDate();

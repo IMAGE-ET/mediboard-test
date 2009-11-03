@@ -11,7 +11,7 @@ global $can;
 
 $can->needsEdit();
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$prescription_id = CValue::getOrSession("prescription_id");
 
 $prescription = new CPrescription();
 $prescription->load($prescription_id);

@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-$patient_id = mbGetValueFromGet("patient_id");
-$sejour_id  = mbGetValueFromGet("sejour_id");
+$patient_id = CValue::get("patient_id");
+$sejour_id  = CValue::get("sejour_id");
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);

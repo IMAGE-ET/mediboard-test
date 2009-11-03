@@ -9,9 +9,9 @@
 
 global $AppUI, $can, $m, $tab;
 
-$chir_id = mbGetValueFromGet("chir_id" , 0 );
-$codes   = mbGetValueFromGet("codes"   , "");
-$javascript = mbGetValueFromGet("javascript" , true);
+$chir_id = CValue::get("chir_id" , 0 );
+$codes   = CValue::get("codes"   , "");
+$javascript = CValue::get("javascript" , true);
 
 $arrayCodes = explode("|", $codes);
 $result = CTempsOp::getTime($chir_id, $arrayCodes);

@@ -13,12 +13,12 @@ $can->needsRead();
 
 getChildClasses();
 
-$stock_id = mbGetValueFromGetOrSession("stock_id");
+$stock_id = CValue::getOrSession("stock_id");
 
 // Récupération des données pour le stock choisi 
 $stock = new CStock;
 $stock->load($stock_id);
-if($materiel_id = mbGetValueFromGet("materiel_id")){
+if($materiel_id = CValue::get("materiel_id")){
   $stock->materiel_id = $materiel_id;
 }
 

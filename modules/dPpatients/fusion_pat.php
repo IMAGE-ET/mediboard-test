@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-$patients_id = mbGetValueFromGet('patients_id');
+$patients_id = CValue::get('patients_id');
 
 if(count($patients_id) < 2) {
   $AppUI->setMsg("Veuillez selectionner deux patients", UI_MSG_ALERT);

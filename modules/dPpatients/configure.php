@@ -15,7 +15,7 @@ $appareils_antecedents_active = explode('|', CAppUI::conf("dPpatients CAnteceden
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("pass", mbGetValueFromGet("pass"));
+$smarty->assign("pass", CValue::get("pass"));
 $smarty->assign("types_antecedents", CAntecedent::$types);
 $smarty->assign("types_antecedents_active", $types_antecedents_active);
 $smarty->assign("appareils_antecedents", CAntecedent::$appareils);

@@ -12,7 +12,7 @@ $can->needsAdmin();
 $ds = CSQLDataSource::get("std");
 global $sourcePath, $targetDir, $regCim10, $regCCAM, $alnum, $alpha;
 
-$type = mbGetValueFromGet("type");
+$type = CValue::get("type");
 
 $sourcePath = "modules/dPpmsi/ghm/ghm.tar.gz";
 $targetDir = "tmp/ghm";

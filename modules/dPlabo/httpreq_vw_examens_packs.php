@@ -14,7 +14,7 @@ $can->needsRead();
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 
-$pack_examens_labo_id = mbGetValueFromGetOrSession("pack_examens_labo_id");
+$pack_examens_labo_id = CValue::getOrSession("pack_examens_labo_id");
 
 // Chargement du pack demandé
 $pack = new CPackExamensLabo;

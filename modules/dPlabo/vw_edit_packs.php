@@ -20,7 +20,7 @@ $listFunctions = $function->loadListWithPerms(PERM_EDIT);
 
 // Chargement du pack demandé
 $pack = new CPackExamensLabo;
-$pack->load(mbGetValueFromGetOrSession("pack_examens_labo_id"));
+$pack->load(CValue::getOrSession("pack_examens_labo_id"));
 if($pack->_id && $pack->getPerm(PERM_EDIT)) {
   $pack->loadRefs();
 } else {

@@ -10,7 +10,7 @@
 global $uistyle;
 
 // Recuperation de l'id de la prescription
-$prescription_id = mbGetValueFromGet("prescription_id");
+$prescription_id = CValue::get("prescription_id");
 
 // Chargement de la prescription selectionnée
 $prescription = new CPrescriptionLabo();

@@ -11,12 +11,12 @@ global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsRead();
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$pratSel = mbGetValueFromGetOrSession("pratSel", $AppUI->user_id);
+$date = CValue::getOrSession("date", mbDate());
+$pratSel = CValue::getOrSession("pratSel", $AppUI->user_id);
 $userSel = new CMediusers;
 $userSel->load($pratSel);
-$board = mbGetValueFromGet("board", 0);
-$boardItem = mbGetValueFromGet("boardItem", 0);
+$board = CValue::get("board", 0);
+$boardItem = CValue::get("boardItem", 0);
 
 // Urgences du jour
 $listUrgences = array();
@@ -56,7 +56,7 @@ if ($AppUI->_ref_user->isPraticien()) {
 }
 else {
   $praticien = new CMediusers();
-  $praticien->load(mbGetValueFromGetOrSession("pratSel", mbGetValueFromGetOrSession("praticien_id")));
+  $praticien->load(CValue::getOrSession("pratSel", CValue::getOrSession("praticien_id")));
 }
 
 $praticien->loadRefFunction();

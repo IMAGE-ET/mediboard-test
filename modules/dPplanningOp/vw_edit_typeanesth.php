@@ -11,7 +11,7 @@ global $can;
 
 $can->needsAdmin();
 
-$type_anesth_id = mbGetValueFromGetOrSession("type_anesth_id");
+$type_anesth_id = CValue::getOrSession("type_anesth_id");
 
 // Chargement du type d'anesthésie demandé
 $type_anesth = new CTypeAnesth;

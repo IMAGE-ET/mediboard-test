@@ -9,10 +9,10 @@
 
 set_time_limit(180);
 
-$_date_min = mbGetValueFromGetOrSession("_date_min");
-$_date_max = mbGetValueFromGetOrSession("_date_max");
-$_prat_id = mbGetValueFromGetOrSession("chir");
-$typeVue = mbGetValueFromGetOrSession("typeVue");
+$_date_min = CValue::getOrSession("_date_min");
+$_date_max = CValue::getOrSession("_date_max");
+$_prat_id = CValue::getOrSession("chir");
+$typeVue = CValue::getOrSession("typeVue");
 
 $nbActes = array();
 $montantSejour = array();

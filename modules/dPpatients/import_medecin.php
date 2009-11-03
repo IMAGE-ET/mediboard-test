@@ -16,7 +16,7 @@ if (!class_exists("DOMDocument")) {
   return;
 }
 
-if (null == $pass = mbGetValueFromGet("pass")) {
+if (null == $pass = CValue::get("pass")) {
   $AppUI->stepAjax("Fonctionnalité désactivée car trop instable.", UI_MSG_WARNING);
   return;
 }
@@ -29,8 +29,8 @@ if (md5($pass) != "aa450aff6d0f4974711ff4c5536ed4cb") {
 $chrono = new Chronometer;
 $chrono->start();
 
-$segment = mbGetValueFromGet("segment", 1000);
-$step = mbGetValueFromGet("step", 1);
+$segment = CValue::get("segment", 1000);
+$step = CValue::get("step", 1);
 $from = $step > 1 ? 100 + $segment  * ($step-2) : 0;
 $to   = $step > 1 ? 100 + ($step-1) * $segment  : 100;
 
@@ -40,7 +40,7 @@ $xmlpath = "tmp/ordre/medecin$padded.xml";
 $csvpath = "tmp/ordre/medecin$padded.csv";
 CMbPath::forceDir(dirname($htmpath));
 
-$mode = mbGetValueFromGet("mode");
+$mode = CValue::get("mode");
 
 // Step 1: Emulates an HTTP request
 if ($mode == "get") {
@@ -229,7 +229,7 @@ $AppUI->stepAjax("Etape $step \n$errors erreurs d'enregistrements", $errors ? UI
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("verbose", mbGetValueFromGet("verbose"));
+$smarty->assign("verbose", CValue::get("verbose"));
 
 $smarty->assign("xpath_screwed" , $xpath_screwed);
 $smarty->assign("step"          , $step);

@@ -20,8 +20,8 @@ $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 
 $chir_id   = $mediuser->isPraticien() ? $mediuser->user_id : null;
-$chir_id   = mbGetValueFromGetOrSession("chir_id", $chir_id);
-$code_ccam = mbGetValueFromGetOrSession("code_ccam");
+$chir_id   = CValue::getOrSession("chir_id", $chir_id);
+$code_ccam = CValue::getOrSession("code_ccam");
 
 // Praticiens et protocoles disponibles
 $listPrat   = new CMediusers();
@@ -57,7 +57,7 @@ array_unique($listCodes);
 
 // Protocole selectionné
 $protSel = new CProtocole;
-if ($protocole_id = mbGetValueFromGetOrSession("protocole_id")) {
+if ($protocole_id = CValue::getOrSession("protocole_id")) {
   $protSel->load($protocole_id);
   $protSel->loadRefs();
 }

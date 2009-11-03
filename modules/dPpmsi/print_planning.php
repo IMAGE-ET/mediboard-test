@@ -14,18 +14,18 @@ $can->needsRead();
 
 $now       = mbDate();
 $filter = new COperation;
-$filter->_date_min     = mbGetValueFromGet("_date_min", $now);
-$filter->_date_max     = mbGetValueFromGet("_date_max", $now);
-$filter->_prat_id      = mbGetValueFromGet("_prat_id");
-$filter->salle_id      = mbGetValueFromGet("salle_id");
-$filter->_plage        = mbGetValueFromGet("_plage");
-$filter->_intervention = mbGetValueFromGet("_intervention");
-$filter->_specialite   = mbGetValueFromGet("_specialite");
-$filter->_codes_ccam   = mbGetValueFromGet("_codes_ccam");
-$filter->_ccam_libelle = mbGetValueFromGet("_ccam_libelle", 1);
+$filter->_date_min     = CValue::get("_date_min", $now);
+$filter->_date_max     = CValue::get("_date_max", $now);
+$filter->_prat_id      = CValue::get("_prat_id");
+$filter->salle_id      = CValue::get("salle_id");
+$filter->_plage        = CValue::get("_plage");
+$filter->_intervention = CValue::get("_intervention");
+$filter->_specialite   = CValue::get("_specialite");
+$filter->_codes_ccam   = CValue::get("_codes_ccam");
+$filter->_ccam_libelle = CValue::get("_ccam_libelle", 1);
 
 $filterSejour = new CSejour;
-$filterSejour->type = mbGetValueFromGet("type");
+$filterSejour->type = CValue::get("type");
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
@@ -37,7 +37,7 @@ $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter-
 
 $order = "date, salle_id, debut";
 
-$chir_id = mbGetValueFromGet("chir");
+$chir_id = CValue::get("chir");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 

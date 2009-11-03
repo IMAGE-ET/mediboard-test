@@ -10,9 +10,9 @@
 
 global $AppUI, $can, $m, $g, $dPconfig, $dialog;
 
-$search_by_cis = mbGetValueFromGet("search_by_cis", 1);
-$gestion_produits = mbGetValueFromGet("gestion_produits", 0);
-$_recherche_livret = mbGetValueFromGet("_recherche_livret");
+$search_by_cis = CValue::get("search_by_cis", 1);
+$gestion_produits = CValue::get("gestion_produits", 0);
+$_recherche_livret = CValue::get("_recherche_livret");
 
 if($_recherche_livret){
   // Si selecteur de medicament en mode sejour, on recherche par default dans le livret
@@ -20,9 +20,9 @@ if($_recherche_livret){
   $rechercheLivretComposant = 1;
   $rechercheLivretDCI = 1;
 } else {
-	$rechercheLivret = mbGetValueFromGet("rechercheLivret", 0);
-  $rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant", 0);
-  $rechercheLivretDCI = mbGetValueFromGet("rechercheLivretDCI", 0);
+	$rechercheLivret = CValue::get("rechercheLivret", 0);
+  $rechercheLivretComposant = CValue::get("rechercheLivretComposant", 0);
+  $rechercheLivretDCI = CValue::get("rechercheLivretDCI", 0);
 }
 
 // Onglet ouvert par défaut
@@ -31,10 +31,10 @@ $modes_recherche = array("produit"   => "one",
                          "composant" => "three",
                          "DC_search" => "four");
                          
-$onglet_recherche = $modes_recherche[mbGetValueFromGet("onglet_recherche", "produit")];
+$onglet_recherche = $modes_recherche[CValue::get("onglet_recherche", "produit")];
 
-$produit   = mbGetValueFromGet("produit");
-$composant = mbGetValueFromGet("composant");
+$produit   = CValue::get("produit");
+$composant = CValue::get("composant");
 
 $composition = new CBcbComposition();
 if($composant){
@@ -42,7 +42,7 @@ if($composant){
 }
 
 $DCI = new CBcbDCI();
-$DC_search = mbGetValueFromGet("DC_search");
+$DC_search = CValue::get("DC_search");
 $tabDCI = array();
 
 if($DC_search){
@@ -51,18 +51,18 @@ if($DC_search){
 
 // --- RECHERCHE PRODUITS ---
 // Par default, recherche par nom
-$type_recherche = mbGetValueFromGet("type_recherche", "nom");
+$type_recherche = CValue::get("type_recherche", "nom");
 
 // Texte recherché (nom, cip, ucd)
-$dialog = mbGetValueFromGet("dialog");
+$dialog = CValue::get("dialog");
 
 // Recherche des elements supprimés
-$supprime = mbGetValueFromGet("supprime", 0);
-$hors_specialite = mbGetValueFromGet("hors_specialite", 0);
+$supprime = CValue::get("supprime", 0);
+$hors_specialite = CValue::get("hors_specialite", 0);
 
 // Parametres de recherche
 switch($type_recherche) {
-	case "nom": $param_recherche = mbGetValueFromGet("position_text", "debut"); break;
+	case "nom": $param_recherche = CValue::get("position_text", "debut"); break;
 	case "cip": $param_recherche = '1'; break;
 	case "ucd": $param_recherche = '2'; break;
 }

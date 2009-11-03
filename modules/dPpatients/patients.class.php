@@ -371,7 +371,7 @@ class CPatient extends CMbObject {
     }
     
     // Make id400
-    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
     
@@ -436,7 +436,7 @@ class CPatient extends CMbObject {
    * Load exact patient associated with id vitale
    */
   function loadFromIdVitale() {
-    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
     
@@ -457,7 +457,7 @@ class CPatient extends CMbObject {
   }
   
   function getValuesFromVitale() {
-    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
     
@@ -482,7 +482,7 @@ class CPatient extends CMbObject {
     // Matricules
     $this->assure_matricule = $vitale["VIT_NUMERO_SS"].$vitale["VIT_CLE_SS"];
     $this->matricule = $this->assure_matricule;
-    if (dPgetParam($vitale, "VIT_NUMERO_SS_INDIV")) {
+    if (CValue::read($vitale, "VIT_NUMERO_SS_INDIV")) {
       $this->matricule = $vitale["VIT_NUMERO_SS_INDIV"].$vitale["VIT_CLE_SS_INDIV"];
     }
     
@@ -505,7 +505,7 @@ class CPatient extends CMbObject {
     $this->code_regime  = $vitale["VIT_CODE_REGIME"];
     $this->caisse_gest  = $vitale["VIT_CAISSE_GEST"];
     $this->centre_gest  = $vitale["VIT_CENTRE_GEST"];
-    $this->regime_sante = dPgetParam($vitale, "VIT_NOM_AMO");
+    $this->regime_sante = CValue::read($vitale, "VIT_NOM_AMO");
     
     // Rang bénéficiaire
     $codeRangMatrix = array(
@@ -527,7 +527,7 @@ class CPatient extends CMbObject {
     foreach ($intermax as $category => $periode) {
       if (preg_match("/PERIODE_AMO_(\d)+/i", $category)) {
         $deb_amo = mbDateFromLocale($periode["PER_AMO_DEBUT"]);
-        $fin_amo = mbGetValue(mbDateFromLocale($periode["PER_AMO_FIN"]), "2015-01-01");
+        $fin_amo = CValue::first(mbDateFromLocale($periode["PER_AMO_FIN"]), "2015-01-01");
         if (in_range(mbDate(), $deb_amo, $fin_amo)) {
           $this->deb_amo  = $deb_amo;
           $this->fin_amo  = $fin_amo;
@@ -539,7 +539,7 @@ class CPatient extends CMbObject {
       }
     }
     
-    $this->regime_am = dPgetParam($vitale, "VIT_REGIME_AM");
+    $this->regime_am = CValue::read($vitale, "VIT_REGIME_AM");
   }
   
   function updateFormFields() {

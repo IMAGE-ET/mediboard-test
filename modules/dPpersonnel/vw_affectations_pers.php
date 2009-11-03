@@ -10,21 +10,21 @@
 
 global $can;
 
-$object_id = mbGetValueFromGetOrSession("object_id");
-$object_class = mbGetValueFromGetOrSession("object_class");
-$list = mbGetValueFromGetOrSession("list","");
+$object_id = CValue::getOrSession("object_id");
+$object_class = CValue::getOrSession("object_class");
+$list = CValue::getOrSession("list","");
 
 $listUsers = array();
 $listPers = array();
 
 // Recuperation du user selectionné
-$user_id = mbGetValueFromGetOrSession("user_id");
+$user_id = CValue::getOrSession("user_id");
 $can->needsRead();
 
 // Récupération de la liste des classes disponibles
 $classes = getInstalledClasses();
 
-$affect_id = mbGetValueFromGetOrSession("affect_id", 0);
+$affect_id = CValue::getOrSession("affect_id", 0);
 // Chargement de l'affectation sélectionnée
 $affectation = new CAffectationPersonnel();
 

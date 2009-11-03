@@ -10,8 +10,8 @@
 global $can;
 $can->needsAdmin();
 
-$pratId    = mbGetValueFromGetOrSession("object_id");
-$pratId400 = mbGetValueFromGetOrSession("id400");
+$pratId    = CValue::getOrSession("object_id");
+$pratId400 = CValue::getOrSession("id400");
 $date      = mbDateTime();
 
 //Création d'un nouvel id400 pour le laboratoire

@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 $ds = CSQLDataSource::get("std");
-$date      = mbGetValueFromGetOrSession("date", mbDate());
+$date      = CValue::getOrSession("date", mbDate());
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
@@ -20,7 +20,7 @@ $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 $listPrat = $mediuser->loadPraticiens(PERM_EDIT);
 
-$selPrat = mbGetValueFromGetOrSession("selPrat", $mediuser->isPraticien() ? $mediuser->user_id : null);
+$selPrat = CValue::getOrSession("selPrat", $mediuser->isPraticien() ? $mediuser->user_id : null);
 
 $selPraticien = new CMediusers();
 $selPraticien->load($selPrat);

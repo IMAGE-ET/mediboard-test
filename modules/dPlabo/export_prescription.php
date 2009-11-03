@@ -28,7 +28,7 @@ if (!$doc->checkSchema()) {
 }
 
 // Chargement de la prescription
-$mb_prescription_id = mbGetValueFromPost("mb_prescription_id", 2);
+$mb_prescription_id = CValue::post("mb_prescription_id", 2);
 if ($mbPrescription->load($mb_prescription_id)) {
   $mbPrescription->loadRefs();
 }

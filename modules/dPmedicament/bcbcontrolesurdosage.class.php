@@ -160,7 +160,7 @@ class CBcbControleSurdosage {
   
   function controleDureeMax($line) {
     $debut_reel = mbDate(null, $line->_debut_reel);
-    $fin_reelle = mbGetValue(mbDate(null, $line->_fin_reelle));
+    $fin_reelle = CValue::first(mbDate(null, $line->_fin_reelle));
     if($fin_reelle) {
       $duree = mbDaysRelative($debut_reel, $fin_reelle) + 1;
       if($this->duree_maxi_toxique && $duree >= $this->duree_maxi_toxique) {

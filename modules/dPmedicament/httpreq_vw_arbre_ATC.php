@@ -8,8 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$codeATC = mbGetValueFromGet("codeATC");
-$dialog = mbGetValueFromGet("dialog");
+$codeATC = CValue::get("codeATC");
+$dialog = CValue::get("dialog");
 $classeATC = new CBcbClasseATC();
 
 // Nom du chapitre selectionne

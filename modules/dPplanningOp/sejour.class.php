@@ -460,8 +460,8 @@ class CSejour extends CCodable {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_entree = mbGetValue($this->entree_reelle, $this->entree_prevue);
-    $this->_sortie = mbGetValue($this->sortie_reelle, $this->sortie_prevue);
+    $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
     
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);

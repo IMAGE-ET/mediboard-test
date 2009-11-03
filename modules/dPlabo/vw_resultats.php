@@ -12,13 +12,13 @@ $can->needsRead();
 
 // Chargement de la prescription
 $prescription = new CPrescriptionLabo;
-if ($prescription->load(mbGetValueFromGetOrSession("prescription_id"))) {
+if ($prescription->load(CValue::getOrSession("prescription_id"))) {
   $prescription->loadRefsBack();
   $prescription->loadClassification();
 }
 
 // Chargement du patient
-$patient_id = mbGetValue($prescription->patient_id, mbGetValueFromGetOrSession("patient_id"));
+$patient_id = CValue::first($prescription->patient_id, CValue::getOrSession("patient_id"));
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsPrescriptions(PERM_EDIT);

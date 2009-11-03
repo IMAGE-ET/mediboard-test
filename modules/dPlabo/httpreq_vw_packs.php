@@ -13,9 +13,9 @@ $can->needsRead();
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 
-$pack_examens_labo_id = mbGetValueFromGetOrSession("pack_examens_labo_id");
-$typeListe            = mbGetValueFromGetOrSession("typeListe");
-$dragPacks            = mbGetValueFromGet("dragPacks", 0);
+$pack_examens_labo_id = CValue::getOrSession("pack_examens_labo_id");
+$typeListe            = CValue::getOrSession("typeListe");
+$dragPacks            = CValue::get("dragPacks", 0);
 
 // Chargement des fontions
 $function = new CFunctions;

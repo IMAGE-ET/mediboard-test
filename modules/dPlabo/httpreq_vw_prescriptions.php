@@ -14,9 +14,9 @@ $can->needsRead();
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 
-$prescription_labo_id = mbGetValueFromGetOrSession("prescription_labo_id");
+$prescription_labo_id = CValue::getOrSession("prescription_labo_id");
 
 if (!$patient_id) {
   return;

@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$fournisseur_id = mbGetValueFromGetOrSession("fournisseur_id");
+$fournisseur_id = CValue::getOrSession("fournisseur_id");
 
 // Chargement du fournisseur demandé
 $fournisseur=new CFournisseur;

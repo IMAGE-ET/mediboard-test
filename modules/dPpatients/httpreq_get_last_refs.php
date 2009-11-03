@@ -9,8 +9,8 @@
 
 global $AppUI, $can, $m;
 
-$patient_id = mbGetValueFromGet("patient_id", 0);
-$consultation_id = mbGetValueFromGet("consultation_id", 0);
+$patient_id = CValue::get("patient_id", 0);
+$consultation_id = CValue::get("consultation_id", 0);
 
 $patient = new CPatient;
 $patient->load($patient_id);

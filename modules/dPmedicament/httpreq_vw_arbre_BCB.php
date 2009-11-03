@@ -8,8 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$codeBCB = mbGetValueFromGet("codeBCB");
-$dialog = mbGetValueFromGet("dialog");
+$codeBCB = CValue::get("codeBCB");
+$dialog = CValue::get("dialog");
 
 $classeBCB = new CBcbClasseTherapeutique();
 

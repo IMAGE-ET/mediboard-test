@@ -9,7 +9,7 @@
 
 global $can;
 
-$keywords = mbGetValueFromPost("_view");
+$keywords = CValue::post("_view");
 
 if($can->read && $keywords) {
   $medecin = new CMedecin();

@@ -12,8 +12,8 @@ global $g;
 
 $listCodeATC = array();
 
-$codeATC  = mbGetValueFromGet("codeATC");
-$code_cip = mbGetValueFromGet("code_cip");
+$codeATC  = CValue::get("codeATC");
+$code_cip = CValue::get("code_cip");
 
 if($code_cip){
   $produit = new CBcbProduit();

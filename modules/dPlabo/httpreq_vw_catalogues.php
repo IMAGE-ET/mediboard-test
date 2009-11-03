@@ -11,8 +11,8 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
-$typeListe  = mbGetValueFromGetOrSession("typeListe");
+$catalogue_labo_id = CValue::getOrSession("catalogue_labo_id");
+$typeListe  = CValue::getOrSession("typeListe");
 
 // Liste des fonctions disponibles
 $functions = new CFunctions();

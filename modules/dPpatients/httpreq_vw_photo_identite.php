@@ -7,8 +7,8 @@
 * @author Fabien Ménager
 */
 
-$patient_id = mbGetValueFromGet('patient_id');
-$mode = mbGetValueFromGet('mode', 'read');
+$patient_id = CValue::get('patient_id');
+$mode = CValue::get('mode', 'read');
 
 $patient = new CPatient();
 $patient->load($patient_id);

@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m, $g, $dPconfig;
 
-$operation_id= mbGetValueFromGet("operation_id");
+$operation_id= CValue::get("operation_id");
 
 $operation = new COperation();
 $operation->load($operation_id);

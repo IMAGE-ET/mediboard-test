@@ -11,8 +11,8 @@
 global $can;  
 $can->needsEdit();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
-$widget_id = mbGetValueFromGet("widget_id");
+$patient_id = CValue::getOrSession("patient_id");
+$widget_id = CValue::get("widget_id");
 
 $patient = new CPatient();
 $patient->load($patient_id);

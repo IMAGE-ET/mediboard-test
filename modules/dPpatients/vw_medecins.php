@@ -10,18 +10,18 @@
 global $can;
 $can->needsRead();
 
-$dialog     = mbGetValueFromGet("dialog");
-$medecin_id = mbGetValueFromGetOrSession("medecin_id");
+$dialog     = CValue::get("dialog");
+$medecin_id = CValue::getOrSession("medecin_id");
 
 // Parametre de tri
-$order_way = mbGetValueFromGetOrSession("order_way", "DESC");
-$order_col = mbGetValueFromGetOrSession("order_col", "ccmu");
+$order_way = CValue::getOrSession("order_way", "DESC");
+$order_col = CValue::getOrSession("order_col", "ccmu");
 
 // Récuperation du medecin sélectionné
 $medecin = new CMedecin();
-if(mbGetValueFromGet("new", 0) || $dialog) {
+if(CValue::get("new", 0) || $dialog) {
   $medecin->load(null);
-  mbSetValueToSession("medecin_id", null);
+  CValue::setSession("medecin_id", null);
 }
 else if ($medecin->load($medecin_id)) {
   $medecin->countPatients();
@@ -31,15 +31,15 @@ $code_default = str_pad(CAppUI::pref("DEPARTEMENT"), 2, "0", STR_PAD_LEFT);
 
 // Récuperation des médecins recherchés
 if($dialog) {
-  $medecin_nom    = mbGetValueFromGet("medecin_nom"   , ""  );
-  $medecin_prenom = mbGetValueFromGet("medecin_prenom", ""  );
-  $medecin_dept   = mbGetValueFromGet("medecin_dept"  , $code_default);
-  $medecin_type   = mbGetValueFromGet("medecin_type"  , "medecin");
+  $medecin_nom    = CValue::get("medecin_nom"   , ""  );
+  $medecin_prenom = CValue::get("medecin_prenom", ""  );
+  $medecin_dept   = CValue::get("medecin_dept"  , $code_default);
+  $medecin_type   = CValue::get("medecin_type"  , "medecin");
 } else {
-  $medecin_nom    = mbGetValueFromGetOrSession("medecin_nom");
-  $medecin_prenom = mbGetValueFromGetOrSession("medecin_prenom");
-  $medecin_dept   = mbGetValueFromGetOrSession("medecin_dept", $code_default);
-  $medecin_type   = mbGetValueFromGetOrSession("medecin_type", "medecin");
+  $medecin_nom    = CValue::getOrSession("medecin_nom");
+  $medecin_prenom = CValue::getOrSession("medecin_prenom");
+  $medecin_dept   = CValue::getOrSession("medecin_dept", $code_default);
+  $medecin_type   = CValue::getOrSession("medecin_type", "medecin");
 }
 
 $where = array();

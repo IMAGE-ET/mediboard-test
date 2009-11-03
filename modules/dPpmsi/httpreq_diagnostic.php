@@ -9,8 +9,8 @@
 
 global $AppUI, $can, $m, $g;
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
-$modeDAS   = mbGetValueFromGetOrSession("modeDAS", 1);
+$sejour_id = CValue::getOrSession("sejour_id");
+$modeDAS   = CValue::getOrSession("modeDAS", 1);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);

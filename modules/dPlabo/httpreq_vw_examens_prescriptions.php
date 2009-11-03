@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$prescription_labo_id = mbGetValueFromGetOrSession("prescription_labo_id");
+$prescription_labo_id = CValue::getOrSession("prescription_labo_id");
 
 // Tableau permettant de stocker la liste des presriptions
 $tab_prescription = array();

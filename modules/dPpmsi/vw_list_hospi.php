@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $next = mbDate("+1 day", $date);
 
 $sejour = new CSejour;

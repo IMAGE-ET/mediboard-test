@@ -19,9 +19,9 @@ $fileextension = CAppUI::conf("sip fileextension");
 $ftp = new CFTP();
 $ftp->init("SIP");
 
-$ajax = mbGetValueFromGet("ajax");
+$ajax = CValue::get("ajax");
 
-if (null == $typeObject = mbGetValueFromGet("typeObject")) {
+if (null == $typeObject = CValue::get("typeObject")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");
   return;
 }
@@ -32,7 +32,7 @@ switch ($typeObject) {
 		$doc = new CHPrimXMLServeurActes();
 		
 		// Chargement de l'opération et génération du document
-		$operation_id = mbGetValueFromPost("mb_operation_id", mbGetValueFromGetOrSession("object_id"));
+		$operation_id = CValue::post("mb_operation_id", CValue::getOrSession("object_id"));
 		if ($mbObject->load($operation_id)) {
 		  $mbObject->loadRefs();
 		  foreach ($mbObject->_ref_actes_ccam as $acte_ccam) {
@@ -61,7 +61,7 @@ switch ($typeObject) {
 		$doc = new CHPrimXMLEvenementPmsi();
 				
 		// Chargement du séjour et génération du document
-		$sejour_id = mbGetValueFromPost("mb_sejour_id", mbGetValueFromGetOrSession("object_id"));
+		$sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));
 		if ($mbObject->load($sejour_id)) {
 		  $mbObject->loadRefs();
 		  $mbObject->loadRefDossierMedical();
@@ -87,7 +87,7 @@ switch ($typeObject) {
 $doc->saveTempFile();
 
 // Connexion FTP
- $sent_files = mbGetValueFromGet("sent_files");
+ $sent_files = CValue::get("sent_files");
 if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   // Compte le nombre de fichiers déjà générés
   CMbPath::forceDir($doc->finalpath);

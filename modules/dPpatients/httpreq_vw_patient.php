@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id", 0);
+$patient_id = CValue::getOrSession("patient_id", 0);
 
 // Liste des modèles
 $where = array();
@@ -57,9 +57,9 @@ if ($mediuser->isFromType(array("Anesthésiste"))) {
 
 // Récuperation du patient sélectionné
 $patient = new CPatient;
-if(mbGetValueFromGet("new", 0)) {
+if(CValue::get("new", 0)) {
   $patient->load(NULL);
-  mbSetValueToSession("id", null);
+  CValue::setSession("id", null);
 } else {
   $patient->load($patient_id);
 }

@@ -10,7 +10,7 @@ global $AppUI, $can, $m;
 
 $can->needsAdmin();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 
 // Patient à analyser
 $patient = new CPatient();

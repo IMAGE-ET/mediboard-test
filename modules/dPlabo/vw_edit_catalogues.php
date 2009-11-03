@@ -23,7 +23,7 @@ $functions = $functions->loadListWithPerms(PERM_EDIT, null, $order);
 
 // Chargement du catalogue demandé
 $catalogue = new CCatalogueLabo;
-$catalogue->load(mbGetValueFromGetOrSession("catalogue_labo_id"));
+$catalogue->load(CValue::getOrSession("catalogue_labo_id"));
 if($catalogue->_id && $catalogue->getPerm(PERM_EDIT)) {
   $catalogue->loadRefs();
   $function_id = $catalogue->function_id;

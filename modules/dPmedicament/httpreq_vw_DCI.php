@@ -8,12 +8,12 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$DC_search = mbGetValueFromGet("DC_search", "");
-$DCI_code = mbGetValueFromGet("DCI_code", "");
-$dialog = mbGetValueFromGet("dialog");
-$forme = mbGetValueFromGet("forme");
-$dosage = mbGetValueFromGet("dosage");
-$rechercheLivretDCI = mbGetValueFromGet("rechercheLivretDCI", 0);
+$DC_search = CValue::get("DC_search", "");
+$DCI_code = CValue::get("DCI_code", "");
+$dialog = CValue::get("dialog");
+$forme = CValue::get("forme");
+$dosage = CValue::get("dosage");
+$rechercheLivretDCI = CValue::get("rechercheLivretDCI", 0);
 
 
 $DCI = new CBcbDCI();

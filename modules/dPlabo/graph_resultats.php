@@ -12,10 +12,10 @@ global $can;
 $can->needsRead();
 
 $examen = new CExamenLabo;
-$examen->load(mbGetValueFromGet("examen_id"));
+$examen->load(CValue::get("examen_id"));
 
 $patient = new CPatient;
-$patient->load(mbGetValueFromGet("patient_id"));
+$patient->load(CValue::get("patient_id"));
 
 $item = new CPrescriptionLaboExamen;
 $resultats = $item->loadResults($patient->_id, $examen->_id, 20);

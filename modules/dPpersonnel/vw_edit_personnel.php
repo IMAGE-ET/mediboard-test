@@ -12,13 +12,13 @@ global $can;
 
 $can->needsRead();
 
-$emplacement = mbGetValueFromGetOrSession("emplacement");
-$_user_last_name = mbGetValueFromGetOrSession("_user_last_name");
-$_user_first_name = mbGetValueFromGetOrSession("_user_first_name");
+$emplacement = CValue::getOrSession("emplacement");
+$_user_last_name = CValue::getOrSession("_user_last_name");
+$_user_first_name = CValue::getOrSession("_user_first_name");
 
 
 // Chargement du personnel selectionné
-$personnel_id = mbGetValueFromGetOrSession("personnel_id");
+$personnel_id = CValue::getOrSession("personnel_id");
 $personnel = new CPersonnel();
 $personnel->load($personnel_id);
 $personnel->loadRefs($personnel_id);

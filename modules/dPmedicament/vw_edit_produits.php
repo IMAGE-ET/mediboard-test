@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$produit_id = mbGetValueFromGetOrSession("produit_prescription_id");
+$produit_id = CValue::getOrSession("produit_prescription_id");
 
 // Chargement du produit selectionné
 $produit = new CProduitPrescription();
