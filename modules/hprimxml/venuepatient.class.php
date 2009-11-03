@@ -84,10 +84,16 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   function addVenue($elParent, $mbVenue, $referent = null) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
-    $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
-    if ($mbVenue->_num_dossier != "-") {
-      $this->addIdentifiantPart($identifiant, "recepteur",  $mbVenue->_num_dossier, $referent);
-    }
+    if(!$referent) {
+      $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
+      if($mbVenue->_num_dossier)
+        $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_num_dossier, $referent);
+    } else {
+      $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->_num_dossier, $referent);
+      
+      if(isset($mbPatient->_id400))
+        $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_id400, $referent);
+    }  
     
     $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
     $attrNatureVenueHprim = array (
