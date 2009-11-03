@@ -15,7 +15,7 @@ $can->needsAdmin();
 
 $doc_ged_id        = CValue::getOrSession("doc_ged_id",0);
 $procAnnuleVisible = CValue::getOrSession("procAnnuleVisible" , 0);
-$lastactif         = mbGetvalueFromGet("lastactif", 0);
+$lastactif         = CValue::get("lastactif", 0);
 
 $docGed = new CDocGed;
 $listCategories = array();

@@ -13,7 +13,7 @@ $can->needsAdmin();
 
 set_time_limit(360);
 
-$do_delete = mbGetValueFromget('do_delete');
+$do_delete = CValue::get('do_delete');
 
 $cim = new CCodeCIM10();
 $ds = $cim->_spec->ds;
