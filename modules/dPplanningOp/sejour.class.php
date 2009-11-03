@@ -875,6 +875,40 @@ class CSejour extends CCodable {
     $this->_ref_patient->loadRefPhotoIdentite();
   }
 
+
+/**
+   * Charge le sejour ayant les traits suivants :
+   * - Meme patient
+   * - Meme praticien si praticien connu
+   * - Date de d'entree et de sortie équivalentes
+   * @return Nombre d'occurences trouvées 
+   */
+  function loadMatchingSejour($strict = null) {
+  	if ($strict && $this->_id) {
+      $where["sejour_id"] = " != '$this->_id'";
+    } 
+		$where["patient_id"] = " = '$this->patient_id'";
+		if($this->praticien_id){
+		  $where["praticien_id"] = " = '$this->praticien_id'";
+		}
+		
+		$this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+		
+		if($this->_entree){
+			$date_entree = mbDate($this->_entree); 
+		  $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
+    }
+    if($this->_sortie){
+      $date_sortie = mbDate($this->_sortie); 
+      $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
+    }
+		
+    $this->loadObject($where);
+    return $this->countList($where);
+  }
+	
+	
   function loadNumDossier() {
     // Aucune configuration de numéro de dossier
     if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
