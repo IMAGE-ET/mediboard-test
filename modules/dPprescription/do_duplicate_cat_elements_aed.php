@@ -11,12 +11,12 @@
 
 global $AppUI;
 
-$category_id = CValue::post("category_id");
+$category_prescription_id = CValue::post("category_prescription_id");
 $category_dest_id = CValue::post("category_dest_id");
 
 // Chargement des elements de la categorie selectionnée
 $element = new CElementPrescription();
-$element->category_prescription_id = $category_id;
+$element->category_prescription_id = $category_prescription_id;
 $elements = $element->loadMatchingList();
 
 foreach($elements as $element){
@@ -25,8 +25,5 @@ foreach($elements as $element){
   $msg = $element->store();
   $AppUI->displayMsg($msg, "CElementPrescription-msg-create");
 }
-
-// Redirection vers la categorie de destination
-$AppUI->redirect("m=dPprescription&tab=vw_edit_element&category_id=$category_dest_id");
 
 ?>

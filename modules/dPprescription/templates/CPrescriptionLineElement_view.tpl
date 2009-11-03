@@ -107,4 +107,10 @@
     <td>Contexte:</td>
     <td colspan="2">{{$line->_ref_prescription->_ref_object->_view}}</td>
   </tr>
+	{{if $line->_ref_element_prescription->description}}
+	<tr>
+		<td>{{mb_label object=$line->_ref_element_prescription field=description}}</td>
+		<td colspan="2" class="text">{{mb_value object=$line->_ref_element_prescription field=description}}</td>
+	</tr>
+	{{/if}}
 </table>

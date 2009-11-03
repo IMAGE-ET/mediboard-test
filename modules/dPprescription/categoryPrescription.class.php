@@ -21,6 +21,7 @@ class CCategoryPrescription extends CMbObject {
   
   // BackRefs
   var $_ref_elements_prescription = null;
+	var $_count_elements_prescription = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -64,6 +65,10 @@ class CCategoryPrescription extends CMbObject {
     $this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription","libelle");
   }
   
+	function countElementsPrescription() {
+    $this->_count_elements_prescription = $this->countBackRefs("elements_prescription","libelle");
+  }
+	
   /**
    * Charge toutes les categories triées par chapitre
    * @param $chapitre string Permet de restreindre à un seul chapitre
