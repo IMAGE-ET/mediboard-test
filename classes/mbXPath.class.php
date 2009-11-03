@@ -88,6 +88,18 @@ class CMbXPath extends DOMXPath {
     }
     return $array;
   }
+  
+  function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "") {
+    $text = "";
+    if ($att = $node->getAttributeNode($attName)) {
+      $text = utf8_decode($att->value);
+      $text = str_replace(str_split($purgeChars), "", $text);
+      $text = trim($text);
+      $text = addslashes($text);
+    }
+    
+    return $text;
+  }
 }
 
 ?>

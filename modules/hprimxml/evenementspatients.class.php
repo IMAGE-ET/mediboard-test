@@ -238,12 +238,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
   static function getAttributesVenue($node, $mbVenue) {
   	$xpath = new CMbXPath($node->ownerDocument, true);
-    
+        
     $attributes = array();
-    $attributes['confidentiel'] = $xpath->queryAttributNode($query, $node, "confidentiel"); 
-    $attributes['etat'] = $xpath->queryAttributNode($query, $node, "etat"); 
-    $attributes['facturable'] = $xpath->queryAttributNode($query, $node, "facturable"); 
-    $attributes['declarationMedecinTraitant'] = $xpath->queryAttributNode($query, $node, "declarationMedecinTraitant"); 
+    $attributes['confidentiel'] = $xpath->getValueAttributNode($node, "confidentiel"); 
+    $attributes['etat'] = $xpath->getValueAttributNode($node, "etat"); 
+    $attributes['facturable'] = $xpath->getValueAttributNode($node, "facturable"); 
+    $attributes['declarationMedecinTraitant'] = $xpath->getValueAttributNode($node, "declarationMedecinTraitant"); 
     
     return $attributes;
   }
