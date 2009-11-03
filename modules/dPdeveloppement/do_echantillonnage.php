@@ -95,30 +95,30 @@ class CEchantillonnage {
 }
 
 // Récupération des données
-$etablissement     = mbGetValueFromPost("etablissement"     ,"Etablissement Test");
-$_create_group     = mbGetValueFromPost("_create_group"     , 0);
-$groups_selected   = mbGetValueFromPost("groups_selected"   , null);
-$debut             = mbGetValueFromPost("debut"             , date("Y-m-d"));
-$duree             = mbGetValueFromPost("duree"             , 1);
+$etablissement     = CValue::post("etablissement"     ,"Etablissement Test");
+$_create_group     = CValue::post("_create_group"     , 0);
+$groups_selected   = CValue::post("groups_selected"   , null);
+$debut             = CValue::post("debut"             , date("Y-m-d"));
+$duree             = CValue::post("duree"             , 1);
 
-$_nb_cab           = mbGetValueFromPost("_nb_cab"           , 1);
-$_nb_anesth        = mbGetValueFromPost("_nb_anesth"        , 1);
-$_nb_salles        = mbGetValueFromPost("_nb_salles"        , 1);
-$_nb_services      = mbGetValueFromPost("_nb_services"      , 1);
-$services_selected = mbGetValueFromPost("services_selected" , array());
-$fct_selected      = mbGetValueFromPost("fct_selected"      , array());
-$salles_selected   = mbGetValueFromPost("salles_selected"   , array());
+$_nb_cab           = CValue::post("_nb_cab"           , 1);
+$_nb_anesth        = CValue::post("_nb_anesth"        , 1);
+$_nb_salles        = CValue::post("_nb_salles"        , 1);
+$_nb_services      = CValue::post("_nb_services"      , 1);
+$services_selected = CValue::post("services_selected" , array());
+$fct_selected      = CValue::post("fct_selected"      , array());
+$salles_selected   = CValue::post("salles_selected"   , array());
 
-$_nb_pat           = mbGetValueFromPost("_nb_pat"           , 1);
-$_nb_prat          = mbGetValueFromPost("_nb_prat"          , 1);
-$prat_selected     = mbGetValueFromPost("prat_selected"     , array());
+$_nb_pat           = CValue::post("_nb_pat"           , 1);
+$_nb_prat          = CValue::post("_nb_prat"          , 1);
+$prat_selected     = CValue::post("prat_selected"     , array());
 
-$_nb_plages        = mbGetValueFromPost("_nb_plages"        , 1);
-$_nb_consult       = mbGetValueFromPost("_nb_consult"       , 1);
-$_nb_plagesop      = mbGetValueFromPost("_nb_plagesop"      , 1);
-$_nb_interv        = mbGetValueFromPost("_nb_interv"        , 1);
-$_nb_chambre       = mbGetValueFromPost("_nb_chambre"       , 1);
-$_nb_lit           = mbGetValueFromPost("_nb_lit"           , 1);
+$_nb_plages        = CValue::post("_nb_plages"        , 1);
+$_nb_consult       = CValue::post("_nb_consult"       , 1);
+$_nb_plagesop      = CValue::post("_nb_plagesop"      , 1);
+$_nb_interv        = CValue::post("_nb_interv"        , 1);
+$_nb_chambre       = CValue::post("_nb_chambre"       , 1);
+$_nb_lit           = CValue::post("_nb_lit"           , 1);
 
 $aNomFamille = array("ADAM" ,"ALBERT" ,"ALEXANDRE" ,"ANDRE" ,"ANTOINE" ,"ARNAUD" ,"AUBERT" ,"AUBRY" ,"BAILLY" ,"BARBE" ,"BARBIER" ,"BARON" ,"BARRE" ,"BARTHELEMY" ,"BENARD" ,"BENOIT" ,"BERGER" ,"BERNARD" ,"BERTIN" ,"BERTRAND" ,"BESNARD" ,"BESSON" ,"BIGOT" ,"BLANC" ,"BLANCHARD" ,"BLANCHET" ,"BONNET" ,"BOUCHER" ,"BOUCHET" ,"BOULANGER" ,"BOURGEOIS" ,"BOUSQUET" ,"BOUVIER" ,"BOYER" ,"BRETON" ,"BRIAND" ,"BRUN" ,"BRUNEL" ,"BRUNET" ,"BUISSON" ,"CAMUS" ,"CARLIER" ,"CARON" ,"CARPENTIER" ,"CARRE" ,"CHARLES" ,"CHARPENTIER" ,"CHARRIER" ,"CHAUVIN" ,"CHEVALIER" ,"CHEVALLIER" ,"CLEMENT" ,"COLAS" ,"COLIN" ,"COLLET" ,"COLLIN" ,"CORDIER" ,"COSTE" ,"COULON" ,"COURTOIS" ,"COUSIN" ,"DA SILVA" ,"DANIEL" ,"DAVID" ,"DELATTRE" ,"DELAUNAY" ,"DELMAS" ,"DENIS" ,"DESCHAMPS" ,"DEVAUX" ,"DIDIER" ,"DUBOIS" ,"DUFOUR" ,"DUMAS" ,"DUMONT" ,"DUPONT" ,"DUPUIS" ,"DUPUY" ,"DURAND" ,"DUVAL" ,"ETIENNE" ,"FABRE" ,"FAURE" ,"FERNANDEZ" ,"FERRAND" ,"FLEURY" ,"FONTAINE" ,"FOURNIER" ,"FRANCOIS" ,"GAILLARD" ,"GARCIA" ,"GARNIER" ,"GAUDIN" ,"GAUTHIER" ,"GAUTIER" ,"GAY" ,"GEORGES" ,"GERARD" ,"GERMAIN" ,"GILBERT" ,"GILLET" ,"GIRARD" ,"GIRAUD" ,"GONZALEZ" ,"GREGOIRE" ,"GRONDIN" ,"GROS" ,"GUERIN" ,"GUICHARD" ,"GUILLAUME" ,"GUILLET" ,"GUILLON" ,"GUILLOT" ,"GUILLOU" ,"GUYOT" ,"HAMON" ,"HARDY" ,"HEBERT" ,"HENRY" ,"HERVE" ,"HOARAU" ,"HUBERT" ,"HUET" ,"HUMBERT" ,"IMBERT" ,"JACOB" ,"JACQUES" ,"JACQUET" ,"JEAN" ,"JOLY" ,"JOUBERT" ,"JULIEN" ,"KLEIN" ,"LACROIX" ,"LAMBERT" ,"LAMY" ,"LANGLOIS" ,"LAPORTE" ,"LAUNAY" ,"LAURENT" ,"LE GALL" ,"LE GOFF" ,"LE ROUX" ,"LEBLANC" ,"LEBON" ,"LEBRETON" ,"LEBRUN" ,"LECLERC" ,"LECLERCQ" ,"LECOMTE" ,"LEDUC" ,"LEFEBVRE" ,"LEFEVRE" ,"LEGER" ,"LEGRAND" ,"LEGROS" ,"LEJEUNE" ,"LELIEVRE" ,"LEMAIRE" ,"LEMAITRE" ,"LEMOINE" ,"LEROUX" ,"LEROY" ,"LESAGE" ,"LEVEQUE" ,"LOPEZ" ,"LOUIS" ,"LUCAS" ,"MAHE" ,"MAILLARD" ,"MAILLOT" ,"MALLET" ,"MARCHAL" ,"MARCHAND" ,"MARECHAL" ,"MARIE" ,"MARTEL" ,"MARTIN" ,"MARTINEZ" ,"MARTY" ,"MASSE" ,"MASSON" ,"MATHIEU" ,"MAURY" ,"MENARD" ,"MERCIER" ,"MEUNIER" ,"MEYER" ,"MICHAUD" ,"MICHEL" ,"MILLET" ,"MONNIER" ,"MOREAU" ,"MOREL" ,"MORIN" ,"MORVAN" ,"MOULIN" ,"MULLER" ,"NICOLAS" ,"NOEL" ,"OLIVIER" ,"OLLIVIER" ,"PARIS" ,"PASCAL" ,"PASQUIER" ,"PAUL" ,"PAYET" ,"PELLETIER" ,"PEREZ" ,"PERRET" ,"PERRIER" ,"PERRIN" ,"PERROT" ,"PETIT" ,"PHILIPPE" ,"PICARD" ,"PICHON" ,"PIERRE" ,"PINEAU" ,"POIRIER" ,"PONS" ,"POULAIN" ,"PREVOST" ,"RAYMOND" ,"RAYNAUD" ,"REGNIER" ,"REMY" ,"RENARD" ,"RENAUD" ,"RENAULT" ,"REY" ,"REYNAUD" ,"RICHARD" ,"RIVIERE" ,"ROBERT" ,"ROBIN" ,"ROCHE" ,"RODRIGUEZ" ,"ROGER" ,"ROLLAND" ,"ROUSSEAU" ,"ROUSSEL" ,"ROUX" ,"ROY" ,"ROYER" ,"SANCHEZ" ,"SAUVAGE" ,"SCHMITT" ,"SCHNEIDER" ,"SIMON" ,"TANGUY" ,"TESSIER" ,"THOMAS" ,"VALLEE" ,"VASSEUR" ,"VERDIER" ,"VIDAL" ,"VINCENT" ,"VOISIN" ,"WEBER" );
 $aPrenom_h   = array("Enzo" ,"Hugo" ,"Lucas" ,"Théo" ,"Mathéo" ,"Thomas" ,"Baptiste" ,"Clément" ,"Louis" ,"Nathan" ,"Alexandre" ,"Quentin" ,"Romain" ,"Tomas" ,"Mattéo" ,"Maxime" ,"Antoine" ,"Benjamin" ,"Mathis" ,"Valentin" ,"Robin" ,"Nicolas" ,"Paul" ,"Arthur" ,"Martin" ,"Éthan" ,"Julien" ,"Noah" ,"Victor" ,"Gabriel" );

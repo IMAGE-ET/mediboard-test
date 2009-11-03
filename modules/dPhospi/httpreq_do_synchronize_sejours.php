@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $g;
 
 $affectation = new CAffectation;
-$dateMin = mbGetValueFromGet("dateMin", "YYYY-MM-JJ");
+$dateMin = CValue::get("dateMin", "YYYY-MM-JJ");
 $where = array();
 if($dateMin != "YYYY-MM-JJ") {
   $where["sortie"] = ">= '$dateMin 00:00:00'";

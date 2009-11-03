@@ -13,7 +13,7 @@ global $can;
 $can->needsRead();
 
 // Recuperation de l'id de l'etablissement externe
-$etab_id = mbGetValueFromGetOrSession("etab_id");
+$etab_id = CValue::getOrSession("etab_id");
 
 // Récupération des etablissements externes
 $etabExterne = new CEtabExterne();

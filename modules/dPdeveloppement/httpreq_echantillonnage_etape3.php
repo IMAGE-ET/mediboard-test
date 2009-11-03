@@ -8,9 +8,9 @@
 */
 
 global $AppUI, $m;
-$fct_selected = mbGetValueFromGet("fct_selected", null);
-$_nb_anesth   = mbGetValueFromGet("_nb_anesth"  , 0);
-$_nb_cab      = mbGetValueFromGet("_nb_cab"     , 0);
+$fct_selected = CValue::get("fct_selected", null);
+$_nb_anesth   = CValue::get("_nb_anesth"  , 0);
+$_nb_cab      = CValue::get("_nb_cab"     , 0);
 
 $creation_prat = intval($_nb_anesth) + intval($_nb_cab);
 $listPrat = null;

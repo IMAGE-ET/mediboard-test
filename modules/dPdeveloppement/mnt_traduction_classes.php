@@ -14,10 +14,10 @@ global $AppUI, $can, $m;
 $can->edit |= ($AppUI->user_type != 1);
 $can->needsEdit();
 
-$module = mbGetValueFromGetOrSession("module" , "system");
+$module = CValue::getOrSession("module" , "system");
 $classes = CModule::getClassesFor($module);
 global $language;
-$language = mbGetValueFromGetOrSession("language",'fr');
+$language = CValue::getOrSession("language",'fr');
 
 // Hack to have CModule in system locale file
 if ($module == "system") {

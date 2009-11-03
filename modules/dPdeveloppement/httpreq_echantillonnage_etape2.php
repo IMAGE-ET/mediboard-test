@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-$group_id = mbGetValueFromGet("group_id", null);
+$group_id = CValue::get("group_id", null);
 
 $listCab       = array();
 $salles        = array();

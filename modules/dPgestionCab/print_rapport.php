@@ -14,16 +14,16 @@ $ds = CSQLDataSource::get("std");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-$libelle          = mbGetValueFromGetOrSession("libelle"          , "");
-$rubrique_id      = mbGetValueFromGetOrSession("rubrique_id"      , 0);
-$mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id" , 0);
+$libelle          = CValue::getOrSession("libelle"          , "");
+$rubrique_id      = CValue::getOrSession("rubrique_id"      , 0);
+$mode_paiement_id = CValue::getOrSession("mode_paiement_id" , 0);
 
 $filter = new CGestionCab;
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min");
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max");
-$filter->libelle = mbGetValueFromGetOrSession("libelle");
-$filter->rubrique_id = mbGetValueFromGetOrSession("rubrique_id");
-$filter->mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id");
+$filter->_date_min = CValue::getOrSession("_date_min");
+$filter->_date_max = CValue::getOrSession("_date_max");
+$filter->libelle = CValue::getOrSession("libelle");
+$filter->rubrique_id = CValue::getOrSession("rubrique_id");
+$filter->mode_paiement_id = CValue::getOrSession("mode_paiement_id");
 
 $where             = array();
 $where[]           = "function_id IS NULL OR function_id = '$user->function_id'";

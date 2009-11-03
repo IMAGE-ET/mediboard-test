@@ -16,8 +16,8 @@ if(!$user->isPraticien()) {
   $can->needsRead();
 }
 
-$sejour_id = mbGetValueFromGet("sejour_id", 0);
-$user_id = mbGetValueFromGet("user_id");
+$sejour_id = CValue::get("sejour_id", 0);
+$user_id = CValue::get("user_id");
 
 // Chargement de la prescription
 $prescription = new CPrescription();

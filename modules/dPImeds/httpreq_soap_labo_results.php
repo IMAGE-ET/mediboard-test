@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-$list_sejours = explode("-", mbGetValueFromGet("list_sejours"));
-$date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
-$date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
+$list_sejours = explode("-", CValue::get("list_sejours"));
+$date_debut   = CValue::get("date_debut"  , mbDate("-1 day"));
+$date_fin     = CValue::get("date_fin"    , mbDate());
 
 // Chargement de l'etablissement courant
 $etab = CGroups::loadCurrent();

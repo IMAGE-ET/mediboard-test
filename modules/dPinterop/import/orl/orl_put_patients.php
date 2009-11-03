@@ -15,9 +15,9 @@ set_time_limit( 1800 );
 
 $step = 100;
 
-$current = mbGetValueFromGet("current", 0);
-$new = mbGetValueFromGet("new", 0);
-$link = mbGetValueFromGet("link", 0);
+$current = CValue::get("current", 0);
+$new = CValue::get("new", 0);
+$link = CValue::get("link", 0);
 
 $sql = "SELECT * FROM import_patients LIMIT ".($current*$step).", $step";
 $listImport = $ds->loadlist($sql);

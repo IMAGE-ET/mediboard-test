@@ -18,10 +18,10 @@ ignore_user_abort( 1 );
 
 $step = 200;
 
-$current = mbGetValueFromGet("current", 0);
-$total = mbGetValueFromGet("total", 0);
-$modif = mbGetValueFromGet("modif", 0);
-$noconsult = mbGetValueFromGet("noconsult", 0);
+$current = CValue::get("current", 0);
+$total = CValue::get("total", 0);
+$modif = CValue::get("modif", 0);
+$noconsult = CValue::get("noconsult", 0);
 
 $sql = "SELECT * FROM import_fichiers" .
       "\nWHERE mb_id IS NOT NULL" .

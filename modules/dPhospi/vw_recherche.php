@@ -13,11 +13,11 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Récupération des paramètres
-$typeVue = mbGetValueFromGetOrSession("typeVue");
-$selPrat = mbGetValueFromGetOrSession("selPrat");
-$selService = mbGetValueFromGetOrSession("selService");
+$typeVue = CValue::getOrSession("typeVue");
+$selPrat = CValue::getOrSession("selPrat");
+$selService = CValue::getOrSession("selService");
 
-$date_recherche = mbGetValueFromGetOrSession("date_recherche", mbDateTime());
+$date_recherche = CValue::getOrSession("date_recherche", mbDateTime());
 
 // Liste des chirurgiens
 $listPrat = new CMediusers();

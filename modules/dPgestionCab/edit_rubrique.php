@@ -18,7 +18,7 @@ $user->_ref_function->loadRefsFwd();
 
 $etablissement = $user->_ref_function->_ref_group->text;
 
-$rubrique_id = mbGetValueFromGet("rubrique_id");
+$rubrique_id = CValue::get("rubrique_id");
  
 $rubrique = new CRubrique();
 $rubrique->load($rubrique_id);

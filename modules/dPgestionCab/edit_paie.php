@@ -14,8 +14,8 @@ $can->needsRead();
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-$employecab_id = mbGetValueFromGetOrSession("employecab_id", null);
-$fiche_paie_id = mbGetValueFromGetOrSession("fiche_paie_id", null);
+$employecab_id = CValue::getOrSession("employecab_id", null);
+$fiche_paie_id = CValue::getOrSession("fiche_paie_id", null);
 
 $employe = new CEmployeCab;
 $where = array();

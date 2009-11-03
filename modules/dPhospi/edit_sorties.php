@@ -12,11 +12,11 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 // Type d'affichage
-$vue       = mbGetValueFromGetOrSession("vue"      , 0);
-$typeOrder = mbGetValueFromGetOrSession("typeOrder", 1);
+$vue       = CValue::getOrSession("vue"      , 0);
+$typeOrder = CValue::getOrSession("typeOrder", 1);
 
-$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
-$order_col = mbGetValueFromGetOrSession("order_col", "_patient");
+$order_way = CValue::getOrSession("order_way", "ASC");
+$order_col = CValue::getOrSession("order_col", "_patient");
 
 // Liste des services
 $services = new CService;
@@ -28,7 +28,7 @@ $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 // Récupération de la journée à afficher
-$date  = mbGetValueFromGetOrSession("date" , mbDate());
+$date  = CValue::getOrSession("date" , mbDate());
 
 $where = array();
 $ljoin = array();

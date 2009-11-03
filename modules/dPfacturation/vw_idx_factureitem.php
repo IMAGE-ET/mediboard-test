@@ -17,8 +17,8 @@ $libelleItem = new CFactureItem;
 $libelleItem->loadAides($AppUI->user_id);
 
 // Reception de l'id de la facture a partir de l'url
-$facture_id = mbGetValueFromGetOrSession("facture_id");
-$factureitem_id = mbGetValueFromGet("factureitem_id");
+$facture_id = CValue::getOrSession("facture_id");
+$factureitem_id = CValue::get("factureitem_id");
 
 
 // Chargement de la facture demandé

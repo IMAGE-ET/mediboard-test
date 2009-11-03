@@ -7,9 +7,9 @@
 * @author Alexis Granger
 */
 
-$user_id = mbGetValueFromGet("user_id");
-$tag = mbGetValueFromGet("tag");
-$type = mbGetValueFromGet("type");
+$user_id = CValue::get("user_id");
+$tag = CValue::get("tag");
+$type = CValue::get("type");
 
 // Chargement du mediuser
 $mediuser = new CMediusers();

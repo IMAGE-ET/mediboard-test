@@ -10,7 +10,7 @@
 global $can;
 $can->needsRead();
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$prescription_id = CValue::getOrSession("prescription_id");
 $prescription = new CPrescriptionLabo();
 $prescription->load($prescription_id);
 $idPresc = $prescription->getIdExterne();

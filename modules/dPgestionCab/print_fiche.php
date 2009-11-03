@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$fiche_paie_id = mbGetValueFromGetOrSession("fiche_paie_id", null);
+$fiche_paie_id = CValue::getOrSession("fiche_paie_id", null);
 
 $fichePaie = new CFichePaie();
 $fichePaie->load($fiche_paie_id);

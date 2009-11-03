@@ -10,7 +10,7 @@
 global $can;
 $can->needsRead();
 
-$action = mbGetValueFromGet("action");
+$action = CValue::get("action");
 CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);
 
 $mutex = new CMbSemaphore("test");

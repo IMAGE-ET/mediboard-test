@@ -18,10 +18,10 @@ $ds = CSQLDataSource::get("std");
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
 
-$date      = mbGetValueFromGetOrSession("date", mbDate()); 
-$mode      = mbGetValueFromGetOrSession("mode", 0); 
-$filterAdm = mbGetValueFromGetOrSession("filterAdm", "tout");
-$triAdm    = mbGetValueFromGetOrSession("triAdm", "praticien");
+$date      = CValue::getOrSession("date", mbDate()); 
+$mode      = CValue::getOrSession("mode", 0); 
+$filterAdm = CValue::getOrSession("filterAdm", "tout");
+$triAdm    = CValue::getOrSession("triAdm", "praticien");
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -34,7 +34,7 @@ $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 // Chargment des services
-$fullService = mbGetValueFromCookie("fullService");
+$fullService = CValue::cookie("fullService");
 foreach ($services as &$service) {
   $service->_vwService = !preg_match("/service$service->_id-trigger:triggerShow/i", $fullService);
   if ($service->_vwService) {

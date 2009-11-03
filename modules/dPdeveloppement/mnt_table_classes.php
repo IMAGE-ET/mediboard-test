@@ -14,10 +14,10 @@ $can->needsRead();
 $ds = CSQLDataSource::get('std');
 
 // Nom de la classe à prendre en compte
-$class_name = mbGetValueFromGetOrSession('class_name', null);
+$class_name = CValue::getOrSession('class_name', null);
 
 // Tableau des erreurs a prendre en compte
-$t          = mbGetValueFromGetOrSession('types');
+$t          = CValue::getOrSession('types');
 
 // Liste des noms des classes installées
 $list_class_names = getInstalledClasses();
@@ -33,7 +33,7 @@ if(array_search($class_name, $list_class_names) == false) {
 else {
   $list_selected_classes[] = $class_name;
 }
-mbSetValueToSession('class_name', $class_name);
+CValue::setSession('class_name', $class_name);
 
 // Types d'erreurs qu'on peut prendre en compte
 $error_types = array('type', 'params', 'unsigned', 'zerofill', 'null', 'default', 'index', 'extra');

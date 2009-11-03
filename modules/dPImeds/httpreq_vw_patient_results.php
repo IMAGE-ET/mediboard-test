@@ -10,7 +10,7 @@
 global $can;
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadIPP();

@@ -10,14 +10,14 @@
 class CFileAddEdit extends CDoObjectAddEdit {
   function CFileAddEdit() {
     global $m;    
-    $selKey   = intval(mbGetValueFromPost("object_id", 0));
-    $selClass = mbGetValueFromPost("object_class"    , "");
+    $selKey   = intval(CValue::post("object_id", 0));
+    $selClass = CValue::post("object_class"    , "");
     
     $this->CDoObjectAddEdit("CFile", "file_id");
     
     $this->redirect = "m=$m"; 
     
-    if ($dialog = mbGetValueFromPost("dialog")) {
+    if ($dialog = CValue::post("dialog")) {
       $this->redirect      .= "&a=upload_file&dialog=1";
       $this->redirectStore = "m=$m&a=upload_file&dialog=1&uploadok=1";
     }
@@ -35,7 +35,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     if (isset($_FILES["formfile"])) {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
-      $_file_category_id = mbGetValueFromPost("_file_category_id");
+      $_file_category_id = CValue::post("_file_category_id");
       if (is_array($upload["name"])) {
         // Plusieurs fichiers
         $multifiles = true;
@@ -112,7 +112,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
   }  
   
   function doRedirect() {
-    $cat_id   = intval(mbGetValueFromPost("file_category_id"));
+    $cat_id   = intval(CValue::post("file_category_id"));
     if ($this->ajax) {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;

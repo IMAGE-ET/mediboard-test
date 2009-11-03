@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsAdmin();
 
-$file_category_id = mbGetValueFromGetOrSession("file_category_id");
+$file_category_id = CValue::getOrSession("file_category_id");
 
 // Chargement de la catégorie demandé
 $category = new CFilesCategory;

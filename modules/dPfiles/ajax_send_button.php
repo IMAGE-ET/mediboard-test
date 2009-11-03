@@ -15,7 +15,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("notext", "");
 $smarty->assign("_doc_item", mbGetObjectFromGet(null, null, "item_guid"));
-$smarty->assign("onComplete", mbGetValueFromGet("onComplete"));
+$smarty->assign("onComplete", CValue::get("onComplete"));
 
 $smarty->display("inc_file_send_button.tpl");
 

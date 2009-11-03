@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-$limitConsult = mbGetValueFromGetOrSession("limitConsult", 0);
+$limitConsult = CValue::getOrSession("limitConsult", 0);
 $ds = CSQLDataSource::get("std");
 if ($limitConsult == -1) {
   return;	
@@ -121,6 +121,6 @@ mbTrace($nbConsultationsCreees, "nbConsultationsCreees");
 mbTrace($nbConsultationsChargees, "nbConsultationsChargees");
 
 $limitConsult = count($consults) ? $limitConsult + 1000 : -1;
-mbSetValueToSession("limitConsult", $limitConsult);
+CValue::setSession("limitConsult", $limitConsult);
 header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_consult' );
 ?>

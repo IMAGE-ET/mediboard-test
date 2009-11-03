@@ -9,12 +9,12 @@
 
 global $AppUI, $can, $m, $g;
 
-$affichage_patho = mbGetValueFromGetOrSession("affichage_patho");
-$date = mbGetValueFromGetOrSession("date", mbDate()); 
+$affichage_patho = CValue::getOrSession("affichage_patho");
+$date = CValue::getOrSession("date", mbDate()); 
 $pathos = new CDiscipline();
 
 // Recuperation de l'id du sejour
-$sejour_id = mbGetValueFromGet("sejour_id");
+$sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);

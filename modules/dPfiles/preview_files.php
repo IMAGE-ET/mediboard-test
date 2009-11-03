@@ -10,13 +10,13 @@
 global $AppUI, $can, $m;
 
 // Récupération des variables
-$objectClass  = mbGetValueFromGet("objectClass"  , null);
-$objectId     = mbGetValueFromGet("objectId"     , null);
-$elementClass = mbGetValueFromGet("elementClass" , null);
-$elementId    = mbGetValueFromGet("elementId"    , null);
-$popup        = mbGetValueFromGet("popup"        , 0);
-$nonavig      = mbGetValueFromGet("nonavig"      , null);
-$sfn          = mbGetValueFromGet("sfn"          , 0);
+$objectClass  = CValue::get("objectClass"  , null);
+$objectId     = CValue::get("objectId"     , null);
+$elementClass = CValue::get("elementClass" , null);
+$elementId    = CValue::get("elementId"    , null);
+$popup        = CValue::get("popup"        , 0);
+$nonavig      = CValue::get("nonavig"      , null);
+$sfn          = CValue::get("sfn"          , 0);
 
 // Déclaration de variables
 $object           = null;

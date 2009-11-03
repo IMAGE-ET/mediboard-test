@@ -9,11 +9,11 @@
 
 global $can;
 
-$object_class     = mbGetValueFromGetOrSession("object_class");
-$object_id        = mbGetValueFromGetOrSession("object_id");
-$file_category_id = mbGetValueFromGetOrSession("file_category_id", null);
-$file_rename      = mbGetValueFromGetOrSession("file_rename", null);
-$uploadok         = mbGetValueFromGet("uploadok", 0);
+$object_class     = CValue::getOrSession("object_class");
+$object_id        = CValue::getOrSession("object_id");
+$file_category_id = CValue::getOrSession("file_category_id", null);
+$file_rename      = CValue::getOrSession("file_rename", null);
+$uploadok         = CValue::get("uploadok", 0);
 
 $nb_files_upload = CMbArray::createRange(1, ($file_rename ? 1 : CAppUI::conf("dPfiles nb_upload_files")) ,true);
 

@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-$limit = mbGetValueFromGetOrSession("limit", 0);
+$limit = CValue::getOrSession("limit", 0);
 $ds = CSQLDataSource::get("std");
 if ($limit == -1) {
   return;	
@@ -118,6 +118,6 @@ mbTrace($nbConsultationsCreees, "nbConsultationsCreees");
 mbTrace($nbConsultationsChargees, "nbConsultationsChargees");
 
 $limit = count($consults) ? $limit + 1000 : -1;
-mbSetValueToSession("limit", $limit);
+CValue::setSession("limit", $limit);
 header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&a=put_consult' );
 ?>

@@ -13,18 +13,18 @@ global $can;
 $can->read &= (CModule::getInstalled("dPsante400") != null);
 $can->needsRead();
 
-$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient_id = CValue::getOrSession("patient_id");
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadIPP();
 $patient->loadRefsSejours();
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
+$sejour_id = CValue::getOrSession("sejour_id");
 if($sejour_id) {
   if(isset($patient->_ref_sejours[$sejour_id])) {
     $sejour =& $patient->_ref_sejours[$sejour_id];
   } else {
-    mbSetValueToSession("sejour_id");
+    CValue::setSession("sejour_id");
     $sejour = new CSejour;
   }
 } else {

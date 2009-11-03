@@ -11,7 +11,7 @@ global $can;
 
 $can->needsRead();
 
-$hash = mbGetValueFromGet('hash');
+$hash = CValue::get('hash');
 
 if($hash == 'clean') {
   $content = "<h2>Log de Mediboard ré-initialisé depuis ".date("Y-m-d H:i:s")."</h2>";

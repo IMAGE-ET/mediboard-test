@@ -9,9 +9,9 @@
 
 global $can;
 
-$const_id = mbGetValueFromGet('const_id', 0);
-$context_guid = mbGetValueFromGet('context_guid');
-$readonly = mbGetValueFromGet('readonly');
+$const_id = CValue::get('const_id', 0);
+$context_guid = CValue::get('context_guid');
+$readonly = CValue::get('readonly');
 
 $constantes = new CConstantesMedicales();
 $constantes->load($const_id);

@@ -18,7 +18,7 @@ $user->_ref_function->loadRefsFwd();
 
 $etablissement = $user->_ref_function->_ref_group->text;
 
-$mode_paiement_id = mbGetValueFromGet("mode_paiement_id");
+$mode_paiement_id = CValue::get("mode_paiement_id");
 
 $modePaiement = new CModePaiement();
 $modePaiement->load($mode_paiement_id);

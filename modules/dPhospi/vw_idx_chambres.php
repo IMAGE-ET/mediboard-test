@@ -12,10 +12,10 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
-$prestation_id = mbGetValueFromGetOrSession("prestation_id", 0);
-$chambre_id    = mbGetValueFromGetOrSession("chambre_id", 0);
-$lit_id        = mbGetValueFromGetOrSession("lit_id", 0);
-$service_id    = mbGetValueFromGetOrSession("service_id", 0);
+$prestation_id = CValue::getOrSession("prestation_id", 0);
+$chambre_id    = CValue::getOrSession("chambre_id", 0);
+$lit_id        = CValue::getOrSession("lit_id", 0);
+$service_id    = CValue::getOrSession("service_id", 0);
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
@@ -27,7 +27,7 @@ $chambreSel->load($chambre_id);
 $chambreSel->loadRefs();
 
 if(!$chambreSel->_id) {
-  mbSetValueToSession("lit_id", 0);
+  CValue::setSession("lit_id", 0);
 }
 
 // Chargement du lit à ajouter/editer

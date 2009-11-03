@@ -10,9 +10,9 @@
 
 global $AppUI, $can, $m, $g;
 
-$date = mbGetValueFromGetOrSession("date");
+$date = CValue::getOrSession("date");
 
-$reel = mbGetValueFromGetOrSession("rapport_reel", 1);
+$reel = CValue::getOrSession("rapport_reel", 1);
 if($reel) {
   $champ_entree = "entree_reelle";
   $champ_sortie = "sortie_reelle";

@@ -11,7 +11,7 @@ global $can;
 $can->needsRead();
 
 $sejour = new CSejour();
-$sejour->load(mbGetValueFromGet("sejour_id"));
+$sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefsOperations();
 foreach ($sejour->_ref_operations as $_operation) {
 	$_operation->loadRefPlageOp();

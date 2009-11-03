@@ -19,15 +19,15 @@ $user->_ref_function->loadRefsFwd();
 $etablissement = $user->_ref_function->_ref_group->text;
 $fonction = $user->_ref_function->text;
 
-$gestioncab_id    = mbGetValueFromGetOrSession("gestioncab_id");
+$gestioncab_id    = CValue::getOrSession("gestioncab_id");
 
 //Recuperation des identifiants pour les filtres
 $filter = new CGestionCab;
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min");
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max");
-$filter->libelle = mbGetValueFromGetOrSession("libelle");
-$filter->rubrique_id = mbGetValueFromGetOrSession("rubrique_id");
-$filter->mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id");
+$filter->_date_min = CValue::getOrSession("_date_min");
+$filter->_date_max = CValue::getOrSession("_date_max");
+$filter->libelle = CValue::getOrSession("libelle");
+$filter->rubrique_id = CValue::getOrSession("rubrique_id");
+$filter->mode_paiement_id = CValue::getOrSession("mode_paiement_id");
 
 $gestioncab = new CGestionCab;
 $gestioncab->load($gestioncab_id);

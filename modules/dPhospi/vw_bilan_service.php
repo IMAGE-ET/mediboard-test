@@ -22,17 +22,17 @@ function getCurrentChambre($sejour, $_date, $_hour, &$chambres, &$affectations){
   return $chambre;
 }			            
 			            
-$date         = mbGetValueFromGetOrSession("date", mbDate());
-$dateTime_min = mbGetValueFromGetOrSession("_dateTime_min", "$date 00:00:00");
-$dateTime_max = mbGetValueFromGetOrSession("_dateTime_max", "$date 23:59:59");
-$hide_filters = mbGetValueFromGet("hide_filters", '') == '1';
-$periode      = mbGetValueFromGet("periode");
+$date         = CValue::getOrSession("date", mbDate());
+$dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
+$dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
+$hide_filters = CValue::get("hide_filters", '') == '1';
+$periode      = CValue::get("periode");
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
 
 // Filtres du sejour
-$token_cat = mbGetValueFromGet("token_cat","");
+$token_cat = CValue::get("token_cat","");
 $elts = $cats = explode("|",$token_cat);
 
 CMbArray::removeValue("med", $elts);
@@ -44,7 +44,7 @@ $do_medicaments = (in_array("med", $cats));
 $do_injections = (in_array("inj", $cats));
 $do_perfusions = (in_array("perf", $cats));
 
-$service_id = mbGetValueFromGetOrSession("service_id");
+$service_id = CValue::getOrSession("service_id");
 
 // Filtres sur l'heure des prises
 $time_min = mbTime($dateTime_min, "00:00:00");
@@ -64,7 +64,7 @@ $list_lines = array();
 $chambres = array();
 $affectations = array();
 
-if (mbGetValueFromGet("do")) {
+if (CValue::get("do")) {
 	// Chargement de toutes les prescriptions
 	$where = array();
 	$ljoin = array();

@@ -12,9 +12,9 @@
 global $AppUI, $can, $m, $g;
 CAppUI::requireModuleFile($m, "inc_vw_affectations");
 
-$affichage_patho = mbGetValueFromPostOrSession("affichage_patho","non_complet"); 
+$affichage_patho = CValue::postOrSession("affichage_patho","non_complet"); 
 
-$date = mbGetValueFromGetOrSession("date", mbDate()); 
+$date = CValue::getOrSession("date", mbDate()); 
 $pathos = new CDiscipline();
 $heureLimit = "16:00:00";
 

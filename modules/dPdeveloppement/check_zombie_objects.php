@@ -7,8 +7,8 @@
  * @author Fabien Ménager
  */
 
-$class_name = mbGetValueFromGetOrSession('class_name', 'CPatient');
-$objects_count = mbGetValueFromGetOrSession('objects_count', 20);
+$class_name = CValue::getOrSession('class_name', 'CPatient');
+$objects_count = CValue::getOrSession('objects_count', 20);
 
 $count = 0;
 $zombies = array();

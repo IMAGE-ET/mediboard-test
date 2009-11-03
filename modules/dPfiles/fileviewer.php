@@ -12,7 +12,7 @@ CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 //trigger_error("Source is $file->_file");
 
 // Direct acces needs Administrator rights
-$file_path = mbGetValueFromGet("file_path");
+$file_path = CValue::get("file_path");
 if ($file_path) {
   $file_size = filesize($file_path);
   $file_type = "text/xml";
@@ -41,7 +41,7 @@ if ($file_path) {
   }
 }
 
-if($file_id = mbGetValueFromGet("file_id")) {
+if($file_id = CValue::get("file_id")) {
   $file = new CFile();
   $file->load($file_id);
   $file->loadRefsFwd();
@@ -53,15 +53,15 @@ if($file_id = mbGetValueFromGet("file_id")) {
     return;
   }
   
-  if(mbGetValueFromGet("phpThumb")) {
-    $w  = mbGetValueFromGet("w" , "");
-    $h  = mbGetValueFromGet("h" , "");
-    $hp = mbGetValueFromGet("hp", "");
-    $wl = mbGetValueFromGet("wl", "");
-    $f  = mbGetValueFromGet("f" , "jpg");
-    $q  = mbGetValueFromGet("q" , 100);
-    $dpi  = mbGetValueFromGet("dpi" , 150);
-    $sfn  = mbGetValueFromGet("sfn" , 0);
+  if(CValue::get("phpThumb")) {
+    $w  = CValue::get("w" , "");
+    $h  = CValue::get("h" , "");
+    $hp = CValue::get("hp", "");
+    $wl = CValue::get("wl", "");
+    $f  = CValue::get("f" , "jpg");
+    $q  = CValue::get("q" , 100);
+    $dpi  = CValue::get("dpi" , 150);
+    $sfn  = CValue::get("sfn" , 0);
     //creation fin URL
     $finUrl="";
     if($f){ $finUrl.="&f=$f";}    

@@ -62,8 +62,8 @@ ksort($wanted);
 //mbTrace($wanted);
 
 // Checking out the result
-$class_name = mbGetValueFromGet("class_name");
-$show       = mbGetValueFromGet("show", "all");
+$class_name = CValue::get("class_name");
+$show       = CValue::get("show", "all");
 
 $reports = array();
 foreach ($classes as $class) {

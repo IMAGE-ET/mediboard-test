@@ -11,8 +11,8 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 $today = mbDateTime();
-$sejour_id 		= mbGetValueFromGetOrSession("sejour_id",0);
-$operation_id = mbGetValueFromGetOrSession("operation_id",0);
+$sejour_id 		= CValue::getOrSession("sejour_id",0);
+$operation_id = CValue::getOrSession("operation_id",0);
 
 function cmp_dateDesc($arrA, $arrB)
 {

@@ -14,17 +14,17 @@ CAppUI::requireModuleFile($m, "inc_vw_affectations");
 $can->needsRead();
 
 $filter = new CSejour();
-$filter->_date_min     = mbGetValueFromGet("_date_min", mbDate() ." 06:00:00");
-$filter->_date_max     = mbGetValueFromGet("_date_max", mbDate() ." 21:00:00");
-$filter->_horodatage   = mbGetValueFromGet("_horodatage", "entree_prevue");
-$filter->_service      = mbGetValueFromGet("_service", 0);
-$filter->_filter_type  = mbGetValueFromGet("_filter_type", 0);
-$filter->praticien_id  = mbGetValueFromGet("praticien_id", 0);
-$filter->_specialite   = mbGetValueFromGet("_specialite", 0);
-$filter->convalescence = mbGetValueFromGet("convalescence", 0);
-$filter->_admission    = mbGetValueFromGet("_admission", "heure");
-$filter->_ccam_libelle = mbGetValueFromGet("_ccam_libelle", "1");
-$filter->_coordonnees  = mbGetValueFromGet("_coordonnees", 0);
+$filter->_date_min     = CValue::get("_date_min", mbDate() ." 06:00:00");
+$filter->_date_max     = CValue::get("_date_max", mbDate() ." 21:00:00");
+$filter->_horodatage   = CValue::get("_horodatage", "entree_prevue");
+$filter->_service      = CValue::get("_service", 0);
+$filter->_filter_type  = CValue::get("_filter_type", 0);
+$filter->praticien_id  = CValue::get("praticien_id", 0);
+$filter->_specialite   = CValue::get("_specialite", 0);
+$filter->convalescence = CValue::get("convalescence", 0);
+$filter->_admission    = CValue::get("_admission", "heure");
+$filter->_ccam_libelle = CValue::get("_ccam_libelle", "1");
+$filter->_coordonnees  = CValue::get("_coordonnees", 0);
 
 $total   = 0;
 

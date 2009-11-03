@@ -17,13 +17,13 @@ set_time_limit( 1800 );
 
 $step = 10;
 
-$current = mbGetValueFromGet("current", 0);
-$new = mbGetValueFromGet("new", 0);
-$link = mbGetValueFromGet("link", 0);
-$nofile = mbGetValueFromGet("nofile", 0);
-$noconsult = mbGetValueFromGet("noconsult", 0);
-$totalSize = mbGetValueFromGet("totalSize", 0);
-$total = mbGetValueFromGet("total", 0);
+$current = CValue::get("current", 0);
+$new = CValue::get("new", 0);
+$link = CValue::get("link", 0);
+$nofile = CValue::get("nofile", 0);
+$noconsult = CValue::get("noconsult", 0);
+$totalSize = CValue::get("totalSize", 0);
+$total = CValue::get("total", 0);
 
 $sql = "SELECT * FROM dermato_import_fichiers" .
       "\nLIMIT ".($current*$step).", $step";

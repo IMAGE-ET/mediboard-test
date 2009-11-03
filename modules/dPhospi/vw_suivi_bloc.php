@@ -11,8 +11,8 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
-$service_id = mbGetValueFromGetOrSession("service_id", 0); 
-$date_suivi = mbGetValueFromGetOrSession("date_suivi", mbDate());
+$service_id = CValue::getOrSession("service_id", 0); 
+$date_suivi = CValue::getOrSession("date_suivi", mbDate());
 $listOps = array();
 
 // Liste des services
@@ -25,7 +25,7 @@ $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 if($service_id!=0 && array_key_exists($service_id,$services)){
   $listService = array($service_id);
 }else{
-  mbSetValueToSession("service_id", 0);
+  CValue::setSession("service_id", 0);
   $service_id = 0;
   $listService = array_keys($services);
 }

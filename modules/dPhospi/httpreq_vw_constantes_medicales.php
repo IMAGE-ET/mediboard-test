@@ -18,10 +18,10 @@ if(!$user->isPraticien()) {
   }
 }
 
-$context_guid = mbGetValueFromGet('context_guid');
-$selected_context_guid = mbGetValueFromGet('selected_context_guid', $context_guid);
-$patient_id = mbGetValueFromGet('patient_id');
-$readonly = mbGetValueFromGet('readonly');
+$context_guid = CValue::get('context_guid');
+$selected_context_guid = CValue::get('selected_context_guid', $context_guid);
+$patient_id = CValue::get('patient_id');
+$readonly = CValue::get('readonly');
 
 $context = null;
 $patient = null;

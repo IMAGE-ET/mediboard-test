@@ -13,7 +13,7 @@ $can->needsEdit();
 
 set_time_limit(300);
 
-$show = mbGetValueFromGet("show", 50);
+$show = CValue::get("show", 50);
 
 // Search files without documents
 $files = glob(CFile::$directory . "/*/*/*/*");

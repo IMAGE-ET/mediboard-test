@@ -10,7 +10,7 @@
 global $can;
 $can->needsRead();
 
-$page = mbGetValueFromGet("page");
+$page = CValue::get("page");
 $url = "http://www.mediboard.org/public/$page";
 $headers = get_headers($url);
 $header = $headers[0];

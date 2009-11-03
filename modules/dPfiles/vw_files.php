@@ -11,13 +11,13 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$keywords      = mbGetValueFromGetOrSession("keywords", null);
-$selClass      = mbGetValueFromGetOrSession("selClass", null);
-$selKey        = mbGetValueFromGetOrSession("selKey"  , null);
-$selView       = mbGetValueFromGetOrSession("selView" , null);
-$typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
-$file_id       = mbGetValueFromGet("file_id"          , null);
-$accordDossier = mbGetValueFromGet("accordDossier"    , 0);
+$keywords      = CValue::getOrSession("keywords", null);
+$selClass      = CValue::getOrSession("selClass", null);
+$selKey        = CValue::getOrSession("selKey"  , null);
+$selView       = CValue::getOrSession("selView" , null);
+$typeVue       = CValue::getOrSession("typeVue" , 0);
+$file_id       = CValue::get("file_id"          , null);
+$accordDossier = CValue::get("accordDossier"    , 0);
 $reloadlist    = 0;
 $canFile       = new CCanDo;
 

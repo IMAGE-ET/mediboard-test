@@ -11,9 +11,9 @@
 global $can;
 $can->needsEdit();
 
-$max_sent = mbGetValueFromGet("max_sent", 10);
-$max_loaded = mbGetValueFromGet("max_loaded", 1000);
-$do = mbGetValueFromGet("do", "0");
+$max_sent = CValue::get("max_sent", 10);
+$max_loaded = CValue::get("max_loaded", 1000);
+$do = CValue::get("do", "0");
 
 // Auto send categories
 $category = new CFilesCategory();

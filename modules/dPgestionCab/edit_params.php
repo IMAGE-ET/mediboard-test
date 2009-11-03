@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$employecab_id = mbGetValueFromGetOrSession("employecab_id", null);
+$employecab_id = CValue::getOrSession("employecab_id", null);
 
 $user = new CMediusers;
 $user->load($AppUI->user_id);

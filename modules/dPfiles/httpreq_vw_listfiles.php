@@ -11,10 +11,10 @@ global $AppUI, $can, $m;
 
 //$can->needsRead();
 $ds = CSQLDataSource::get("std");
-$selClass      = mbGetValueFromGetOrSession("selClass", null);
-$selKey        = mbGetValueFromGetOrSession("selKey"  , null);
-$typeVue       = mbGetValueFromGetOrSession("typeVue" , 0);
-$accordDossier = mbGetValueFromGet("accordDossier"    , 0);
+$selClass      = CValue::getOrSession("selClass", null);
+$selKey        = CValue::getOrSession("selKey"  , null);
+$typeVue       = CValue::getOrSession("typeVue" , 0);
+$accordDossier = CValue::get("accordDossier"    , 0);
 $reloadlist = 1;
 
 // Liste des Class

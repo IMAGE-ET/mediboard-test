@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-$_nb_services = mbGetValueFromGet("_nb_services", null);
+$_nb_services = CValue::get("_nb_services", null);
 
 $list_5 = CMbArray::createRange(1,5, true);
 $list_14 = CMbArray::createRange(1,14, true);
