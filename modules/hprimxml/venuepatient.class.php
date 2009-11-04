@@ -91,7 +91,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     } else {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->_num_dossier, $referent);
       
-      if(isset($mbPatient->_id400))
+      if(isset($mbVenue->_id400))
         $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_id400, $referent);
     }  
     
@@ -228,7 +228,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     if (!CAppUI::conf('sip server')) {
       $newVenue = new CSejour();
       $newVenue->patient_id = $newPatient->_id; 
-      
+      $newVenue->group_id = CGroups::loadCurrent()->_id;
+
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
@@ -252,7 +253,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       // idSource non connu
       if(!$num_dossier->loadMatchingObject()) {
         // idCible fourni
-        if ($data['idCible']) {
+        if ($data['idCibleVenue']) {
           if ($newVenue->load($data['idCibleVenue'])) {
             // Mapping du séjour
             $newVenue = $this->mappingVenue($data['venue'], $newVenue);
@@ -263,7 +264,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
             $newVenue->loadLogs();
             $modified_fields = "";
-            if ($newVenue->_ref_last_log) {
+            if ($newVenue->_ref_last_log->_fields) {
               foreach ($newVenue->_ref_last_log->_fields as $field) {
                 $modified_fields .= "$field \n";
               }
@@ -277,15 +278,16 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         } else {
           $_code_NumDos = "I122";  
         }
-        // Mapping du séjour
-        $newVenue = $this->mappingVenue($data['venue'], $newVenue);
-           
         if (!$newVenue->_id) {
+          // Mapping du séjour
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+          // Evite de passer dans le sip handler
+          $newVenue->_coms_from_hprim = 1;
+          
+          // Séjour retrouvé
           if ($newVenue->loadMatchingSejour()) {
-            // Evite de passer dans le sip handler
-            $newVenue->_coms_from_hprim = 1;
             $msgVenue = $newVenue->store();
-        
+
             $newVenue->loadLogs();
             $modified_fields = "";
             if (is_array($newVenue->_ref_last_log->_fields)) {
@@ -296,18 +298,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $_code_NumDos = "A121";
             $_code_Venue = true;
             $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
+          } else {
+            $msgVenue = $newVenue->store();
+            $commentaire = "Séjour créé : $newVenue->_id. ";
           }
-        }
-                
-        if (!$newVenue->_id) {
-          // Mapping du séjour
-          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
-        
-          // Evite de passer dans le sip handler
-          $newVenue->_coms_from_hprim = 1;
-          $msgVenue = $newVenue->store();
-          
-          $commentaire = "Séjour créé : $newVenue->_id. ";
         }
           
         $num_dossier->object_id = $newVenue->_id;
@@ -359,12 +353,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
         $newVenue->loadLogs();
         $modified_fields = "";
-        if ($newVenue->_ref_last_log) {
+        if (is_array($newVenue->_ref_last_log->_fields)) {
           foreach ($newVenue->_ref_last_log->_fields as $field) {
             $modified_fields .= "$field \n";
           }
         }
-        $codes = array ($msgVenue ? "A103" : "I102", $_code_IPP);
+        $codes = array ($msgVenue ? "A103" : "I102", $_code_NumDos);
         
         if ($msgVenue) {
           $avertissement = $msgVenue." ";

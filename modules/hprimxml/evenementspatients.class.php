@@ -68,7 +68,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $xpath->queryTextNode("hprim:valeur", $recepteur);
   }
   
-  function mappingPatient($node, $mbPatient) {    
+  function mappingPatient($node, CPatient $mbPatient) {    
     $mbPatient = $this->getPersonnePhysique($node, $mbPatient);
     $mbPatient = $this->getActiviteSocioProfessionnelle($node, $mbPatient);
     //$mbPatient = $this->getPersonnesPrevenir($node, $mbPatient);
@@ -76,7 +76,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbPatient;
   }
   
-  static function getPersonnePhysique($node, $mbPatient) {
+  static function getPersonnePhysique($node, CPatient $mbPatient) {
     $xpath = new CMbXPath($node->ownerDocument, true);
 
     // Création de l'element personnePhysique
@@ -103,7 +103,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbPatient;
   }
   
-  static function getPersonne($node, $mbPatient) {
+  static function getPersonne($node, CMbObject $mbPersonne) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $civilite = $xpath->queryAttributNode("hprim:civiliteHprim", $node, "valeur");
@@ -115,35 +115,45 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       "pr"    => "pr",
       "enf"   => "enf",
     );
-    
-    $mbPatient->civilite = $civiliteHprimConversion[$civilite];    
-    
-    $mbPatient->nom = $xpath->queryTextNode("hprim:nomUsuel", $node);
-    $mbPatient->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
+    $nom = $xpath->queryTextNode("hprim:nomUsuel", $node);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $node);
-    $mbPatient->prenom = $prenoms[0];
-    $mbPatient->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
-    $mbPatient->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
-    
     $adresses = $xpath->queryUniqueNode("hprim:adresses", $node);
     $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
-    $mbPatient->adresse = $xpath->queryTextNode("hprim:ligne", $adresse);
-    $mbPatient->ville = $xpath->queryTextNode("hprim:ville", $adresse);
-    $mbPatient->pays_insee = $xpath->queryTextNode("hprim:pays", $adresse);
-    $pays = new CPaysInsee();
-    $pays->numerique = $mbPatient->pays_insee;
-    $pays->loadMatchingObject();
-    $mbPatient->pays = $pays->nom_fr;
-    $mbPatient->cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
-    
+    $ligne = $xpath->queryTextNode("hprim:ligne", $adresse);
+    $ville = $xpath->queryTextNode("hprim:ville", $adresse);
+    $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
-    $mbPatient->tel = isset($telephones[0]) ? $telephones[0] : "";
-    $mbPatient->tel2 = isset($telephones[1]) ? $telephones[1] : "";
+    $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);    
     
-    $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);
-    $mbPatient->email = isset($emails[0]) ? $emails[0] : "";
+    if ($mbPersonne instanceof CPatient) {
+      $mbPersonne->civilite = $civiliteHprimConversion[$civilite];    
+      $mbPersonne->nom = $nom;
+      $mbPersonne->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
+      $mbPersonne->prenom = $prenoms[0];
+      $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
+      $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
+      $mbPersonne->adresse = $ligne;
+      $mbPersonne->ville = $ville;
+      $mbPersonne->pays_insee = $xpath->queryTextNode("hprim:pays", $adresse);
+      $pays = new CPaysInsee();
+      $pays->numerique = $mbPersonne->pays_insee;
+      $pays->loadMatchingObject();
+      $mbPersonne->pays = $pays->nom_fr;
+      $mbPersonne->cp = $cp;
+      $mbPersonne->tel = isset($telephones[0]) ? $telephones[0] : "";
+      $mbPersonne->tel2 = isset($telephones[1]) ? $telephones[1] : "";
+      $mbPersonne->email = isset($emails[0]) ? $emails[0] : "";
+    } elseif ($mbPersonne instanceof CMediusers) {
+      $mbPersonne->_user_last_name  = $nom;
+      $mbPersonne->_user_first_name = $prenoms[0];
+      $mbPersonne->_user_email      = isset($emails[0]) ? $emails[0] : "";
+      $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : "";
+      $mbPersonne->_user_adresse    = $ligne;
+      $mbPersonne->_user_cp         = $cp;
+      $mbPersonne->_user_ville      = $ville;
+    }
     
-    return $mbPatient;
+    return $mbPersonne;
   }
   
   static function getActiviteSocioProfessionnelle($node, $mbPatient) {
@@ -205,17 +215,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $xpath = new CMbXPath($this, true);
     
     $data = array();
-    
     $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
 
     $query = "/hprim:evenementsPatients/hprim:enteteMessage";
-
     $entete = $xpath->queryUniqueNode($query);
 
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
     $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
-    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
+    $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
     
     return $data;
@@ -228,13 +236,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function mappingVenue($node, $mbVenue) {  
-  mbTrace("map", "2", true); 
     $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = $this->getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
     $mbVenue = $this->getPlacement($node, $mbVenue);
     $mbVenue = $this->getSortie($node, $mbVenue);
-    
+
     return $mbVenue;
   }
   
@@ -289,14 +296,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbVenue;
   }
   
-  static function getMedecins($node, $mbVenue) {
+  function getMedecins($node, $mbVenue) {
+    global $g;
+    
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     $medecin = $medecins->childNodes;
     foreach ($medecin as $_med) {
-      mbTrace($_med->tagName, "medecin", true);
-   	  $code = $xpath->queryUniqueNode("hprim:identification/hprim:code", $_med);
+   	  $code = $xpath->queryTextNode("hprim:identification/hprim:code", $_med);
    	  $mediuser = new CMediusers();
    	  $id400 = new CIdSante400();
    	  //Paramétrage de l'id 400
@@ -308,39 +316,37 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
    	  	$mediuser->_id = $id400->object_id;
    	  } else {
    	  	$functions = new CFunctions();
-	    $functions->text = CAppUI::conf("hprimxml functionPratImport");
-	    $functions->loadMatchingObject();
-	    $mediuser->function_id = $functions->_id;
-	    /*$mediuser->_user_first_name = $this->prenom;
-		$mediuser->_user_last_name  = $this->nom;
-		$mediuser->_user_username   = substr(str_replace(" ", "", strtolower($this->prenom[0].$this->nom)),0,20);
-		$mediuser->_user_password   = substr(str_replace(" ", "", strtolower($this->prenom[0].$this->nom)),0,20);
-		$mediuser->_user_type       = 4; // Chirurgien
-		$mediuser->_user_email      = $this->email;
-		$mediuser->_user_phone      = $this->telephone;
-		$mediuser->_user_adresse    = $this->adresse1.$this->adresse2;
-		$mediuser->_user_cp         = $this->codePostal;
-		$mediuser->_user_ville      = $this->ville;
-		$mediuser->actif            = 0; // Non actif*/
+	      $functions->text = CAppUI::conf("hprimxml functionPratImport");
+	      $functions->loadMatchingObject();
+        if (!$functions->loadMatchingObject()) {
+          $functions->group_id = CGroups::loadCurrent()->_id;
+          $functions->type = "cabinet";
+          $functions->compta_partagee = 0;
+          $functions->store();
+        }
+	      $mediuser->function_id = $functions->_id;
+        // Récupération du typePersonne
+        $personne =  $xpath->queryUniqueNode("hprim:personne", $_med);
+        $mediuser = self::getPersonne($personne, $mediuser);
+        $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
+        $mediuser->_user_type = 13; // Medecin
+        $mediuser->actif = 0; // Non actif	
+        if (!$mediuser->loadMatchingObject()) {
+          $mediuser->store();
+        }
+        $id400->object_id = $mediuser->_id;
+        $id400->last_update = mbDateTime();
+        $id400->store(); 
    	  }
-   	  
-   	  
-	  $functions = new CFunctions();
-	$functions->text = CAppUI::conf("sigems nomPratImport");
-	$functions->loadMatchingObject();
-	$mediuser->function_id = $functions->_id;
-	$mediuser = $_praticien->mapFrom($mediuser);
-   	  // Récupération du typePersonne
-      $mbPatient = self::getPersonne($personnePhysique,$mbPatient); 
+      $lien = $xpath->getValueAttributNode($_med, "lien");
+      if ($lien == "rsp") {
+        $mbVenue->praticien_id = $mediuser->_id;
+      }
     } 
     
     return $mbVenue;
   }
-  
-  function addMediuser() {
-  	
-  }
-  
+
   static function getPlacement($node, $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     

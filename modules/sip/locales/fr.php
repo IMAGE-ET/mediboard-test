@@ -169,6 +169,7 @@ $locales['sip-hprim-error-A21'] = 'IPP non connu, IC non fourni. Patient retrouv
 $locales['sip-hprim-error-A22'] = 'IPP non connu, IC non connu. Patient retrouvé. Association IPP.';
 $locales['sip-hprim-error-A102'] = 'L\'enregistrement du séjour a échoué.';
 $locales['sip-hprim-error-A103'] = 'Modification du séjour a échoué.';
+$locales['sip-hprim-error-A105'] = 'Création du numéro dossier a échoué.';
 $locales['sip-hprim-error-A120'] = 'Numéro dossier connu, IC non connu. Mauvais IC sur le SIP.';
 $locales['sip-hprim-error-A121'] = 'Numéro dossier non connu, IC non fourni. Séjour retrouvé. Association Numéro dossier.';
 $locales['sip-hprim-error-I01'] = 'L\'enregistrement du patient est terminé.';

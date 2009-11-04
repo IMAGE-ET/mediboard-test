@@ -303,7 +303,7 @@ class CMouvSejourEcap extends CMouvementEcap {
 		// Permettre plusieurs praticiens en doublant avec des CPRT différents
     $nomsPraticien     = split(" ", $praticien->_user_last_name);
     $prenomsPraticiens = split(" ", $praticien->_user_first_name);
-		$pratDefault->makeUsername($prenomsPraticiens[0], join($nomsPraticien, ""), $CPRT);
+		$pratDefault->makeUsernamePassword($prenomsPraticiens[0], join($nomsPraticien, ""), $CPRT);
     
     // Type de mediuser
     if (isset($prat400)) {

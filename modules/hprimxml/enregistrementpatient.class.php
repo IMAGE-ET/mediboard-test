@@ -109,7 +109,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $newPatient->loadLogs();
 
           $modified_fields = "";
-          if ($newPatient->_ref_last_log) {
+          if (is_array($newPatient->_ref_last_log->_fields)) {
             foreach ($newPatient->_ref_last_log->_fields as $field) {
               $modified_fields .= "$field \n";
             }
@@ -202,7 +202,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $newPatient->loadLogs();
 
             $modified_fields = "";
-            if ($newPatient->_ref_last_log) {
+            if (is_array($newPatient->_ref_last_log->_fields)) {
               foreach ($newPatient->_ref_last_log->_fields as $field) {
                 $modified_fields .= "$field \n";
               }
@@ -254,7 +254,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $newPatient->loadLogs();
                
               $modified_fields = "";
-              if ($newPatient->_ref_last_log) {
+              if (is_array($newPatient->_ref_last_log->_fields)) {
                 foreach ($newPatient->_ref_last_log->_fields as $field) {
                   $modified_fields .= "$field \n";
                 }
@@ -410,7 +410,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
             $newPatient->loadLogs();
             $modified_fields = "";
-            if ($newPatient->_ref_last_log) {
+            if (is_array($newPatient->_ref_last_log->_fields)) {
               foreach ($newPatient->_ref_last_log->_fields as $field) {
                 $modified_fields .= "$field \n";
               }
@@ -426,11 +426,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         }
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-           
+        // Evite de passer dans le sip handler
+        $newPatient->_coms_from_hprim = 1;
+        
+        // Patient retrouvé      
         if (!$newPatient->_id) {
           if ($newPatient->loadMatchingPatient()) {
-            // Evite de passer dans le sip handler
-            $newPatient->_coms_from_hprim = 1;
             $msgPatient = $newPatient->store();
         
             $newPatient->loadLogs();
@@ -443,18 +444,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $_code_IPP = "A21";
             $_code_Patient = true; 
             $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
-          }
-        }
-                
-        if (!$newPatient->_id) {
-          // Mapping du patient
-          $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-        
-          // Evite de passer dans le sip handler
-          $newPatient->_coms_from_hprim = 1;
-          $msgPatient = $newPatient->store();
+          } else {
+            $msgPatient = $newPatient->store();
           
-          $commentaire = "Patient créé : $newPatient->_id. ";
+            $commentaire = "Patient créé : $newPatient->_id. ";
+          }
         }
           
         $IPP->object_id = $newPatient->_id;
@@ -506,7 +500,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
         $newPatient->loadLogs();
         $modified_fields = "";
-        if ($newPatient->_ref_last_log) {
+        if (is_array($newPatient->_ref_last_log->_fields)) {
           foreach ($newPatient->_ref_last_log->_fields as $field) {
             $modified_fields .= "$field \n";
           }

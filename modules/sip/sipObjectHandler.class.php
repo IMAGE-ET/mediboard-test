@@ -148,7 +148,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       $mbObject->loadLogs();
       $mbObject->loadRefsConsultations();
       $mbObject->loadRefsConsultAnesth();
-      
+
       // Si Serveur
       if (CAppUI::conf('sip server')) {
         $listDest = $dest_hprim->loadList();
