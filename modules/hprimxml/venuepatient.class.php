@@ -35,7 +35,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     $venue = $this->addElement($venuePatient, "venue"); 
     // Ajout de la venue   
-    $this->addVenue($venue, $mbVenue, null, $referent);
+    $this->addVenue($venue, $mbVenue, $referent);
     
     // Ajout des attributs du séjour
     $this->addAttribute($venue, "confidentiel", "non");
