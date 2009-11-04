@@ -213,6 +213,6 @@
 </table>
 
 <!-- Dossier Médical -->
-{{if @$can_view_dossier_medical}}
+{{if $object->_ref_dossier_medical->_canRead}}
   {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$object->_ref_dossier_medical}}
 {{/if}}

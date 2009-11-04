@@ -55,6 +55,15 @@ class CDossierMedical extends CMbMetaObject {
     $backProps["prescription"] = "CPrescription object_id";
     return $backProps;
   }
+  
+  function getPerm($permType) {
+    $basePerm = CModule::getCanDo('soins')->edit      ||
+                CModule::getCanDo('dPurgences')->edit ||
+                CModule::getCanDo('dPcabinet')->edit  ||
+                CModule::getCanDo('dPbloc')->edit     ||
+                CModule::getCanDo('dPplanningOp')->edit;
+    return $basePerm && parent::getPerm($permType);
+  }
 
   function loadRefsBack() {
     parent::loadRefsBack();

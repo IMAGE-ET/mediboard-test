@@ -47,13 +47,7 @@ foreach($patient->_ref_consultations as $keyConsult => $consult){
   }
 }
 
-$can_view_dossier_medical = 
-  CModule::getCanDo('soins')->edit ||
-  CModule::getCanDo('dPurgences')->edit ||
-  CModule::getCanDo('dPcabinet')->edit ||
-  CModule::getCanDo('dPbloc')->edit ||
-  CModule::getCanDo('dPplanningOp')->edit || 
-  $AppUI->_ref_user->isFromType(array("Infirmière"));
+$patient->_ref_dossier_medical->canRead();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -63,8 +57,6 @@ $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 $smarty->assign("consultation_id"   , $consultation_id    );
 $smarty->assign("sejour_id"         , $sejour_id          );
 $smarty->assign("operation_id"      , $operation_id       );
-
-$smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("patient"           , $patient            );
 $smarty->assign("listPrat"          , $listPrat           );
 $smarty->assign("object"            , $patient            );
