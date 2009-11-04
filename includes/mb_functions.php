@@ -109,7 +109,7 @@ function mbGetValueFromGetOrSession($valName, $valDefault = null) {
     $_SESSION[$m][$valName] = $_GET[$valName];
   }
   
-  return dPgetParam($_SESSION[$m], $valName, $valDefault);
+  return CValue::read($_SESSION[$m], $valName, $valDefault);
 }
 
 /**
@@ -127,7 +127,7 @@ function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
     $_SESSION[$valName] = $_GET[$valName];
   }
   
-  return dPgetParam($_SESSION, $valName, $valDefault);
+  return CValue::read($_SESSION, $valName, $valDefault);
 }
 
 /**
@@ -148,7 +148,7 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
     $_SESSION[$m][$valName] = $_POST[$valName];
   }
   
-  return dPgetParam($_SESSION[$m], $valName, $valDefault);
+  return CValue::read($_SESSION[$m], $valName, $valDefault);
 }
 
 /**
@@ -165,7 +165,7 @@ function mbGetAbsValueFromPostOrSession($key, $default = null) {
   if (isset($_POST[$key])) {
     $_SESSION[$key] = $_POST[$key];
   }
-  return dPgetParam($_SESSION, $key, $default);
+  return CValue::read($_SESSION, $key, $default);
 }
 
 /**
@@ -180,7 +180,7 @@ function mbGetAbsValueFromPostOrSession($key, $default = null) {
 function mbGetValueFromSession($key, $default = null) {
   trigger_error("mbGetValueFromSession is DEPRECATED : use CValue::session instead", E_USER_WARNING);
   global $m;
-  return dPgetParam($_SESSION[$m], $key, $default);
+  return CValue::read($_SESSION[$m], $key, $default);
 }
 
 /**
@@ -191,12 +191,12 @@ function mbGetValueFromSession($key, $default = null) {
  * @return CMbObject The object loaded or nothing
  **/
 function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
-  $object_class = mbGetValueFromGet($class_key);
-  $object_id    = mbGetValueFromGet($id_key);
+  $object_class = CValue::get($class_key);
+  $object_id    = CValue::get($id_key);
   $object_guid  = "$object_class-$object_id";
 
   if ($guid_key) {
-    $object_guid = mbGetValueFromGet($guid_key, $object_guid);
+    $object_guid = CValue::get($guid_key, $object_guid);
   }
 
   $object = CMbObject::loadFromGuid($object_guid);
