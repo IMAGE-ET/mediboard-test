@@ -25,8 +25,8 @@ function getCurrentChambre($sejour, $_date, $_hour, &$chambres, &$affectations){
 $date         = CValue::getOrSession("date", mbDate());
 $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
-$hide_filters = CValue::get("hide_filters", '') == '1';
 $periode      = CValue::get("periode");
+$service_id   = CValue::getOrSession("service_id");
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -44,7 +44,7 @@ $do_medicaments = (in_array("med", $cats));
 $do_injections = (in_array("inj", $cats));
 $do_perfusions = (in_array("perf", $cats));
 
-$service_id = CValue::getOrSession("service_id");
+
 
 // Filtres sur l'heure des prises
 $time_min = mbTime($dateTime_min, "00:00:00");
@@ -113,7 +113,7 @@ if (CValue::get("do")) {
 	  
 	  if($do_medicaments || $do_injections || $do_perfusions){
 	    if($do_perfusions){
-		    // Parcours et stockage des perfusions
+				// Parcours et stockage des perfusions
 		    if($_prescription->_ref_perfusions_for_plan){
 		      foreach($_prescription->_ref_perfusions_for_plan as $_perfusion){
             $list_lines[$_perfusion->_class_name][$_perfusion->_id] = $_perfusion;
@@ -121,6 +121,10 @@ if (CValue::get("do")) {
 		        if(is_array($_perfusion->_prises_prevues)){
 			        foreach($_perfusion->_prises_prevues as $_date => $_prises_prevues_by_hour){
 			          foreach($_prises_prevues_by_hour as $_hour => $_prise_prevue){
+                  $dateTimePrise = "$_date $_hour:00:00";
+                  if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
+                    continue;
+                  }
 			            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 			            if(!$chambre) continue;
 			            foreach($_perfusion->_ref_lines as $_perf_line){
@@ -137,7 +141,11 @@ if (CValue::get("do")) {
 		          if(is_array($_perf_line->_administrations)){
 			          foreach($_perf_line->_administrations as $_date => $_adm_by_hour){
 				          foreach($_adm_by_hour as $_hour => $_adm){
-				            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
+                    $dateTimePrise = "$_date $_hour:00:00";
+                    if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
+                      continue;
+                    }
+									  $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 				            if(!$chambre) continue;			              
 				             $lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
@@ -171,6 +179,10 @@ if (CValue::get("do")) {
 							        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
 							          if(@is_array($prises_prevues_by_date['quantites'])){
 								          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
+								          	$dateTimePrise = "$_date $_hour:00:00";
+														 if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
+	                             continue;
+	                           }
 								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 			                      if(!$chambre) continue;
 								            if($prise_prevue["total"]){
@@ -188,6 +200,10 @@ if (CValue::get("do")) {
 							        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 							          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
 							            if(is_numeric($_hour)){
+						                $dateTimePrise = "$_date $_hour:00:00";
+                            if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
+                               continue;
+                            }
 								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 								            if(!$chambre) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
@@ -228,6 +244,10 @@ if (CValue::get("do")) {
 					        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
 					          if(is_array($prises_prevues_by_date['quantites'])){
 						          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
+			          	     $dateTimePrise = "$_date $_hour:00:00";
+                       if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
+                         continue;
+                       }
 						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 						            if(!$chambre) continue;			  
 						            if($prise_prevue["total"]){
@@ -245,6 +265,11 @@ if (CValue::get("do")) {
 					        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 					          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
 	                    if(is_numeric($_hour)){
+                  	     $dateTimePrise = "$_date $_hour:00:00";
+                         if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
+                           continue;
+                         }
+														 
 						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 						            if(!$chambre) continue;			  
 						            $quantite = @$administrations_by_hour["quantite"];
@@ -319,8 +344,12 @@ foreach($cat_groups as $_cat_group){
   }
 }
 
+// Chargement du service
+$service = new CService();
+$service->load($service_id);
+
 $smarty = new CSmartyDP();
-$smarty->assign("hide_filters", $hide_filters);
+$smarty->assign("service", $service);
 $smarty->assign("periode", $periode);
 $smarty->assign("cat_used", $cat_used);
 $smarty->assign("token_cat", $token_cat);

@@ -1,4 +1,3 @@
-{{if !$hide_filters}}
 <script type="text/javascript">
 
 Main.add( function(){
@@ -92,6 +91,9 @@ selectPeriode = function(element) {
   <input type="hidden" name="dialog" value="1" />
   <input type="hidden" name="do" value="1" />
   <table class="form">
+  	<tr>
+  		<th class="title" colspan="5">Bilan du service {{$service->_view}}</th>
+  	</tr>
     <tr>
       <th class="category" colspan="4">Sélection des horaires</th>
     </tr>
@@ -133,7 +135,7 @@ selectPeriode = function(element) {
          <table>
            <tr>
              <td>
-               <strong>Médicaments</strong>
+               <strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong>
              </td>
              <td>
                <input type="checkbox" value="med" id="med" onclick="oCatField.toggle(this.value, this.checked);" />
@@ -141,7 +143,7 @@ selectPeriode = function(element) {
            </tr>
            <tr>
              <td>
-               <strong>Injections</strong>
+               <strong>{{tr}}CPrescription._chapitres.inj{{/tr}}</strong>
              </td>
              <td>
                <input type="checkbox" value="inj" id="inj" onclick="oCatField.toggle(this.value, this.checked);" />
@@ -149,7 +151,7 @@ selectPeriode = function(element) {
            </tr>
            <tr>
              <td>
-               <strong>Perfusions</strong>
+               <strong>{{tr}}CPrescription._chapitres.perf{{/tr}}</strong>
              </td>
              <td>
                <input type="checkbox" value="perf" id="perf" onclick="oCatField.toggle(this.value, this.checked);" />
@@ -185,32 +187,30 @@ selectPeriode = function(element) {
     </tr>
   </table>
 </form>
-{{/if}}
 
-<table class="tbl">
 {{if $lines_by_patient|@count}}
-<tr>
-  <th colspan="6">Filtres</th>
-</tr>
-<tr>
-  <td colspan="6">
-    Horaires sélectionnées: 
-    <strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong>
-  </td>
-</tr>
-<tr>
-  <td colspan="6" class="text">
-    Catégorie(s) sélectionnée(s):
-    {{foreach from=$cat_used item=_cat_view name=cat}}
-      <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
-    {{/foreach}}
-  </td>
-</tr>
+	<table class="tbl">
+		<tr>
+		  <th colspan="6">Filtres</th>
+		</tr>
+		<tr>
+		  <td colspan="6">
+		    Horaires sélectionnées: 
+		    <strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong>
+		  </td>
+		</tr>
+		<tr>
+		  <td colspan="6" class="text">
+		    Catégorie(s) sélectionnée(s):
+		    {{foreach from=$cat_used item=_cat_view name=cat}}
+		      <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
+		    {{/foreach}}
+		  </td>
+		</tr>
+	</table>
 {{/if}}
-</table>
-<br />
-<table class="tbl">
 
+<table class="tbl">
 {{foreach from=$lines_by_patient key=chambre_id item=_lines_by_patient}}
   {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
     {{assign var=sejour value=$sejours.$sejour_id}}
@@ -229,13 +229,12 @@ selectPeriode = function(element) {
 		    <strong>{{$patient->_view}}</strong>
 		    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
 		    <br />
-
         Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
 		    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
       </th>
     </tr>
 		<tr>
-			<th colspan="2" style="text-align: left" class="text">
+			<th class="element text" colspan="2" style="text-align: left">
         <strong>{{$operation->libelle}}</strong> 
         {{if !$operation->libelle}}
           {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
@@ -249,7 +248,7 @@ selectPeriode = function(element) {
 	  <tr>
 	    <td style="width: 20px; border:none;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
 	    <td colspan="5">
-		    <table class="form">
+		    <table class="tbl">
 		      <tr>
 			      <th style="width: 250px; border:none;">Libellé</th> 
 					  <th style="width: 50px; border:none;">Prévues</th>
@@ -262,7 +261,6 @@ selectPeriode = function(element) {
 	  </tr>
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
 		    {{assign var=_date_time value="$date $hour:00:00"}}
-		  	{{if $_date_time >= $dateTime_min && $_date_time <= $dateTime_max}}
 				  <tr>
 				    <td style="width: 20px">{{$hour}}h</td>
 			      <td style="width: 100%">
@@ -272,71 +270,78 @@ selectPeriode = function(element) {
 						        {{foreach from=$prises key=perfusion_id item=lines}}
 						        {{assign var=perfusion value=$list_lines.$line_class.$perfusion_id}}     
 						        <tr>
-						          <th colspan="5">
-						            {{$perfusion->_view}}
-						          </th>
+						          <td colspan="5" class="text" style="border:none;">
+						            <strong>{{$perfusion->_view}}</strong>
 						          {{foreach from=$lines key=perf_line_id item=_perf}}
 						            {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+											<table class="form">
 							          <tr>
-							            <td style="width: 250px; border:none;">
-							              {{$perf_line->_view}}
+							            <td style="width: 238px; padding-left: 15px;" class="text">
+							              <em>{{$perf_line->_ucd_view}}</em>
 							              {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
 								              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
 								            {{/if}}
 							            </td>
-								          <td style="width: 50px; border:none; text-align: center;">
+								          <td style="width: 50px; text-align: center;">
 									          {{if array_key_exists('prevu', $_perf)}}
 									            {{$_perf.prevu}}
 									          {{/if}}
 								          </td>
-								          <td style="width: 50px; border:none; text-align: center;">
+								          <td style="width: 50px; text-align: center;">
 									          {{if array_key_exists('administre', $_perf)}}
 									          {{$_perf.administre}}
 									          {{/if}}
 							            </td>
-							            <td style="width: 150px; border:none; text-align: center;">
+							            <td style="width: 150px;">
 													  {{if $perf_line->_ref_produit_prescription->_id}}
 														  {{$perf_line->_ref_produit_prescription->unite_prise}}
 														{{else}}
 													    {{$perf_line->_unite_administration}}
 														{{/if}}
 												  </td>
-							            <td />
+							            <td></td>
 							          </tr>
+												</table>  
 						          {{/foreach}}
+											</td>
 						        </tr>
 						        {{/foreach}}
 						      {{else}}
-							      {{foreach from=$prises key=line_id item=quantite}}
-							       {{assign var=line value=$list_lines.$line_class.$line_id}}        
-								      <tr>
-						            <td style="width: 250px; border:none;">{{$line->_view}}
-						            {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
-						              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-						            {{/if}}
-						            </td> 
-								        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
-								        <td style="width: 50px; border:none; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-								        <td style="width: 150px; border:none;" class="text">
-								          {{if $line_class=="CPrescriptionLineMedicament"}}
-													  {{if $line->_ref_produit_prescription->_id}}
-														  {{$line->_ref_produit_prescription->unite_prise}}
-														{{else}}
-								              {{$line->_ref_produit->libelle_unite_presentation}}
-														{{/if}}
-								          {{else}}
-								            {{$line->_unite_prise}}
-								          {{/if}}
-								        </td>
-								        <td class="text" style="border:none;">{{$line->commentaire}}</td>
-								      </tr>
-								    {{/foreach}} 
-							    {{/if}}
+									  <tr>
+									  	<td colspan="5" class="text"  style="border:none;">
+											  <table class="form">
+										      {{foreach from=$prises key=line_id item=quantite}}
+										       {{assign var=line value=$list_lines.$line_class.$line_id}}        
+											      <tr>
+									            <td style="width: 250px;">{{$line->_view}}
+									            {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
+									              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+									            {{/if}}
+									            </td> 
+											        <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+											        <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+											        <td style="width: 150px;" class="text">
+											          {{if $line_class=="CPrescriptionLineMedicament"}}
+																  {{if $line->_ref_produit_prescription->_id}}
+																	  {{$line->_ref_produit_prescription->unite_prise}}
+																	{{else}}
+											              {{$line->_ref_produit->libelle_unite_presentation}}
+																	{{/if}}
+											          {{else}}
+											            {{$line->_unite_prise}}
+											          {{/if}}
+											      </td>
+											      <td class="text">{{$line->commentaire}}</td>
+											    </tr>
+													{{/foreach}} 
+										    </table>
+                      </td>
+                    </tr>
+                  {{/if}}
 					      {{/foreach}}  
 			        </table>
 			      </td>
 				  </tr>
-			  {{/if}}
 	  {{/foreach}}
 	{{/foreach}}
   {{/foreach}}
