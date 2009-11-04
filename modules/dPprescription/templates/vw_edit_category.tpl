@@ -28,7 +28,12 @@ Main.add( function(){
 			</a>
 			<ul class="control_tabs" id="categories_tab">
 			{{foreach from=$categories key=chapitre item=_categories}}
-			   <li><a href="#div_{{$chapitre}}">{{$chapitre}} ({{$_categories|@count}} - {{$countElements.$chapitre}})</a></li>
+			   <li>
+			   	<a href="#div_{{$chapitre}}">
+			   	  {{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}} 
+						<small>({{$_categories|@count}} - {{$countElements.$chapitre}})</small>
+					</a>
+				</li>
 			{{/foreach}}
 			</ul>
 			<hr class="control_tabs" />
@@ -66,12 +71,12 @@ Main.add( function(){
       <table class="form">
         <tr>
           {{if $category->_id}}
-          <th class="category modify" colspan="2">
+          <th class="title modify" colspan="2">
             {{mb_include module=system template=inc_object_idsante400 object=$category}}
             {{mb_include module=system template=inc_object_history object=$category}}
             Modification de la catégorie &lsquo;{{$category}}&rsquo;
           {{else}}
-          <th class="category" colspan="2">
+          <th class="title" colspan="2">
             Création d'une catégorie
           {{/if}}
           </th>
