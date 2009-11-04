@@ -54,22 +54,19 @@ function thumb($params, &$smarty) {
 }
 
 /**
-  * Smarty plugin
-  *
-  * @author   Pablo Dias <pablo at grafia dot com dot br>
-  * @abstract pad a string to a certain length with another string. like php/str_pad
-  *
-  * Example:  {$text|pad:20:'.':'both'}
-  *    will pad $string with dots, in both sides
-  *    until $text length equal to 20 characteres
-  *    (assuming that $text has less than 20 characteres)
-  *
-  * @param string $string The string to be padded
-  * @param int $length Desired string length
-  * @param string $pad_string - string used to pad
-  * @param enum $pad_type - both, left or right
-  */
-
+ * @author   Pablo Dias <pablo at grafia dot com dot br>
+ * @abstract pad a string to a certain length with another string. like php/str_pad
+ *
+ * Example:  {$text|pad:20:'.':'both'}
+ *    will pad $string with dots, in both sides
+ *    until $text length equal to 20 characteres
+ *    (assuming that $text has less than 20 characteres)
+ *
+ * @param string $string The string to be padded
+ * @param int $length Desired string length
+ * @param string $pad_string - string used to pad
+ * @param enum $pad_type - both, left or right
+ */
 function smarty_modifier_pad($string, $length, $pad_string=' ', $pad_type='left') {
   static $pads = array(
     'left' => 0, 
@@ -79,6 +76,12 @@ function smarty_modifier_pad($string, $length, $pad_string=' ', $pad_type='left'
   return str_pad($string, $length ,$pad_string,$pads[$pad_type]);
 } 
 
+/**
+ * @abstract JSON encode an object for Javascript use
+ *
+ * Example:  {$value|json}
+ * @param any $object The object to ge encoded
+ */
 function smarty_modifier_json($object) {
   return json_encode($object);
 }
@@ -127,6 +130,22 @@ function smarty_modifier_stripslashes($string){
   return stripslashes($string);
 }
 
+/**
+ * @abstract Emphasize a text, putting <em> nodes around found tokens
+ *
+ * Example:  {$text|emphasize:$tokens}
+ * @param string $text The text subject
+ * @param array $tokens The string tokens to emphasize
+ */
+function smarty_modifier_emphasize($text, $tokens) {
+	foreach ($tokens as &$token) {
+	  $token = preg_quote($token);
+	  $token = CMbString::allowDiacriticsInRegexp($token);
+	}
+	
+	$regexp = implode("|", $tokens);
+	return preg_replace("/($regexp)/i", "<em>$1</em>", $text);	
+}
 
 /**
  * @param array params tableau des parametres
@@ -397,6 +416,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("static"            , "smarty_modifier_static");
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
+    $this->register_modifier("emphasize"         , "smarty_modifier_emphasize");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     $modules = CModule::getActive();

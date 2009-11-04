@@ -8,12 +8,12 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$produit = CValue::post("produit", "aaa");
-$inLivret = CValue::post("inLivret", 0);
-$produit_max = CValue::post("produit_max", 10);
+$produit             = CValue::post("produit", "aaa");
+$inLivret            = CValue::post("inLivret", 0);
+$produit_max         = CValue::post("produit_max", 10);
 $search_libelle_long = CValue::post("search_libelle_long", false);
-$hors_specialite = CValue::post("hors_specialite", "0");
-$search_by_cis = CValue::post("search_by_cis", "1");
+$hors_specialite     = CValue::post("hors_specialite", "0");
+$search_by_cis       = CValue::post("search_by_cis", "1");
 
 $mbProduit = new CBcbProduit();
 
@@ -41,18 +41,13 @@ foreach($search_by_dci as $key => $_produit){
 function compareMed($produit1, $produit2){
   return strcmp($produit1->Libelle, $produit2->Libelle);
 }
-if(isset($produits)){
+
+if (isset($produits)){
   usort($produits, "compareMed");
 }
 
-
 // Tableau de tokens permettant de les mettre en evidence dans l'autocomplete
-$_tokens = explode(" ", $produit);
-foreach($_tokens as $_token){
-  $_token = strtoupper($_token);
-  $token_search[] = $_token;
-  $token_replace[] = "<em>".$_token."</em>";
-}
+$tokens = explode(" ", $produit);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -61,8 +56,7 @@ $smarty->assign("nodebug", true);
 $smarty->assign("search_libelle_long", $search_libelle_long);
 $smarty->assign("needle", strtoupper($produit));
 $smarty->assign("search_by_cis", $search_by_cis);
-$smarty->assign("token_search", $token_search);
-$smarty->assign("token_replace", $token_replace);
+$smarty->assign("tokens", $tokens);
 $smarty->display("httpreq_do_medicament_autocomplete.tpl");
 
 ?>

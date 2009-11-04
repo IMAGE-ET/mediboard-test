@@ -17,22 +17,29 @@
 			Produit:
 			<strong> 
 			{{if $search_libelle_long}}
-				{{$produit->LibelleLong|replace:$token_search:$token_replace}}
+				{{$produit->LibelleLong|emphasize:$tokens}}
 			{{else}}
 			  {{if $search_by_cis}}
-			    {{$produit->ucd_view|replace:$token_search:$token_replace}}
+			    {{$produit->ucd_view|emphasize:$tokens}}
 			  {{else}}
-			    {{$produit->Libelle|replace:$token_search:$token_replace}}
+			    {{$produit->Libelle|emphasize:$tokens}}
 			  {{/if}}
 			{{/if}}
 			</strong>
 			<br />
 			{{* if !$search_libelle_long && $search_by_cis *}}
-			<small><span style="opacity: 0.5">{{if $produit->dci}}DCI: {{$produit->dci|upper|replace:$token_search:$token_replace}} - {{/if}}{{$produit->forme_galenique}}</span></small>
+			<small>
+				<span style="opacity: 0.5">
+					{{if $produit->dci}}
+					  DCI: {{$produit->dci|upper|emphasize:$tokens}} - 
+					{{/if}}
+					{{$produit->forme_galenique}}
+				</span>
+			</small>
 			{{* /if *}}
 			{{if $produit->Commentaire}}
 			<div style="padding-left: 1em">
-			  ({{$produit->Commentaire|replace:$token_search:$token_replace}})
+			  ({{$produit->Commentaire|emphasize:$tokens}})
 			</div>
 			{{/if}}
     </li>
