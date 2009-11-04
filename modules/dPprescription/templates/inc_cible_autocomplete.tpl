@@ -14,12 +14,12 @@
     {{if $type == "cat"}}
    <li id="{{$cible->_id}}">
      <strong>{{tr}}CPrescription._chapitres.{{$cible->chapitre}}{{/tr}}</strong> :
-     {{$cible->nom|lower|replace:$libelle_cible:"<em>$libelle_cible</em>"}}
+     {{$cible->nom|emphasize:$libelle_cible}}
    </li>
     {{else}}
     <li id="{{$cible.LIBELLE_CLASSE|lower}}" class="text">
      <strong>Classe ATC {{$cible.CODE_CLASSE}}</strong> :<br />
-     {{$cible.LIBELLE_CLASSE|lower|replace:$libelle_cible:"<em>$libelle_cible</em>"}}
+     {{$cible.LIBELLE_CLASSE|emphasize:$libelle_cible}}
    </li>
     {{/if}}
   {{/foreach}}

@@ -23,12 +23,12 @@
             {{if $depend2}}{{tr}}{{$object->_class_name}}.{{$depend_field_2}}.{{$depend2}}{{/tr}} - {{/if}}
           </strong>
     		
-          <span>{{$_aide->name|lower|replace:$needle:"<em>$needle</em>"}}</span>
+          <span>{{$_aide->name|emphasize:$needle}}</span>
           <br/>
           
 <!-- The carriage return is here to append a carriage return 
 at the end of the selected element in the textareas. DO NOT REMOVE. -->
-<small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|lower|replace:$needle:"<em>$needle</em>"}}
+<small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}
 </small>
     
         </li>
