@@ -9,8 +9,7 @@ function view_history_patient(id){
 
 function editPatient() {
   var oForm = document.actionPat;
-  var oTabField = oForm.tab;
-  oTabField.value = "vw_edit_patients";
+  oForm.elements.tab.value = "vw_edit_patients";
   oForm.submit();
 }
 </script>

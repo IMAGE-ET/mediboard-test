@@ -244,7 +244,7 @@ function reloadSejour(sejour_id) {
     sejoursUrl.addParam("mode_operation", 1);
   }
   sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null ,
-	onComplete: initPuces
+	onComplete: initNotes
   } );
 }
 

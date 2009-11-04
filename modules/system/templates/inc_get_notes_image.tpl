@@ -11,17 +11,17 @@
 <span class="tooltip-trigger" style="float: {{$float|default:'left'}};"
   onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}', 'objectNotes')"
 	{{if $mode == "edit"}}
-	  onclick="new Note().create('{{$object->_class_name}}', '{{$object->_id}}');"
+	  onclick="new Note('{{$object->_guid}}')"
   {{/if}}
   >
   
   {{if count($object->_ref_notes)}}
 	  {{if $object->_high_notes}}
-	  <img alt="Ecrire une note" src="images/icons/note_red.png" />
+	  <img src="images/icons/note_red.png" width="16" height="16" />
 	  {{else}}
-	  <img alt="Ecrire une note" src="images/icons/note_green.png" />
+	  <img src="images/icons/note_green.png" width="16" height="16" />
 	  {{/if}}
   {{elseif $mode == "edit"}}
-  <img alt="Ecrire une note" src="images/icons/note_blue.png" />
+    <img src="images/icons/note_blue.png" width="16" height="16" />
   {{/if}}
 </span>

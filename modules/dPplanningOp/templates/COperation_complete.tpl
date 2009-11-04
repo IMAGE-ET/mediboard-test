@@ -7,7 +7,7 @@
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
       {{mb_include module=system template=inc_object_history object=$object}}
     
-      <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
+      <div style="float:left;" class="noteDiv {{$object->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
       {{$operation->_view}}

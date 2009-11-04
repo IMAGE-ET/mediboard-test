@@ -14,7 +14,7 @@
   <tr>
     <th class="title" colspan="2" style="vertical-align:middle;">
 
-      <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
+      <div style="float:left;" class="noteDiv {{$object->_guid}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 			

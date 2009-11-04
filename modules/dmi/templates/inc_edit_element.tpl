@@ -28,8 +28,7 @@ refreshElement = function(element_id){
 {{if $element->_class_name == "CDM"}}
   generateCode = function(){
 	  var oForm = document.forms["editElement-{{$element->_class_name}}"];
-	  var url = new Url;
-	  url.setModuleAction("dmi", "httpreq_edit_element");
+	  var url = new Url("dmi", "httpreq_edit_element");
 	  url.addParam("generate_code", true);
 	  url.addParam("category_dm_id", oForm.category_dm_id.value);	  
 	  url.addParam("nom", oForm.nom.value);
@@ -43,14 +42,13 @@ Main.add(function () {
   var oForm = document.forms["editElement-{{$element->_class_name}}"];
   prepareForm(oForm);
   updateFieldsDM = function(selected) {
-    dn = selected.childElements();
+    var dn = selected.childElements();
     $V(oForm.code, dn[0].innerHTML);
     $V(oForm.nom, dn[3].innerHTML.stripTags().strip());
   }
   if($('produit_auto_complete')){
-	  urlAuto = new Url();
-	  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-	  urlAuto.autoComplete(oForm.produit, "produit_auto_complete", {
+	  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+	  url.autoComplete(oForm.produit, "produit_auto_complete", {
 	    minChars: 3,
 	    updateElement: updateFieldsDM,
       callback: 

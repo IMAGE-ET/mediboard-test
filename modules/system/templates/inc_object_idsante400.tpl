@@ -12,7 +12,7 @@
   <a style="float: right;" href="#nowhere" title=""
   	onclick="guid_ids('{{$object->_guid}}')"  
   	onmouseover="ObjectTooltip.createEx(this,'{{$object->_guid}}', 'identifiers')">
-    <img src="images/icons/sante400.gif" alt="{{tr}}CIdSante400-title-create{{/tr}}"/>   
+    <img src="images/icons/sante400.gif" width="16" height="16" />   
   </a>
 {{/if}}
 	

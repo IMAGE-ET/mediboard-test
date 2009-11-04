@@ -9,14 +9,14 @@
 *}}
 
 <script type="text/javascript">
-function reloadNotes(){
-  window.opener.reloadNotes();
+function initNotes(){
+  window.opener.initNotes();
 }
 function submitNote(){
   var oForm = document.editFrm;
   
   if (checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { reloadNotes(); window.close()} });
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { initNotes(); window.close()} });
     oForm.reset();
   }
 }

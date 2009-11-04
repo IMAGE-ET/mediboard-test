@@ -12,7 +12,7 @@
 	// UpdateFields de l'autocomplete
 	function updateFields(selected) {
 	  Element.cleanWhitespace(selected);
-	  dn = selected.childElements();
+	  var dn = selected.childElements();
     if (dn[1]) {
 	    Livret.addProduit(dn[0].innerHTML, dn[3].innerHTML.strip());
     }
@@ -127,9 +127,8 @@
   prepareForm(document.addProduit);
   prepareForm(document.searchProd);
   // Autocomplete
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.autoComplete("searchProd_produit", "produit_auto_complete", {
       minChars: 3,
       updateElement: updateFields,
       callback: 

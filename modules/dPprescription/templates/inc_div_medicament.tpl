@@ -181,8 +181,10 @@ transfertLineTP = function(line_id, sejour_id){
 			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
 			    <input type="text" name="produit" value="" size="20" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
-			    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
-			    Livret Thérap.
+			    <label>
+			      <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
+			      Livret Thérap.
+			    </label>
 			    
 			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
 			    <button type="button" class="search" onclick="MedSelector.init('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>

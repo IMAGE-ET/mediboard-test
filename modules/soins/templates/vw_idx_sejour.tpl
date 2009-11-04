@@ -36,7 +36,7 @@ function loadPatient(patient_id) {
   url.addParam("object_class","CPatient");
   url.addParam("object_id",patient_id);
   url.requestUpdate('viewPatient', {
-   onComplete: initPuces
+   onComplete: initNotes
   } );
 }
 
@@ -45,7 +45,7 @@ function loadSejour(sejour_id) {
   url.addParam("object_class","CSejour");
   url.addParam("object_id",sejour_id);
   url.requestUpdate('viewSejourHospi', {
-   onComplete: initPuces
+   onComplete: initNotes
   } );
 }
 

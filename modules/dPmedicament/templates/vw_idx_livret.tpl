@@ -32,9 +32,8 @@ Main.add(function () {
   // Preparation du formulaire
   prepareForm(document.searchProdLivret);
   // Autocomplete
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.autoComplete("searchProdLivret_produit", "produit_livret_auto_complete", {
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.autoComplete("searchProdLivret_produit", "produit_livret_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsProduitLivret,
     callback: 
@@ -46,8 +45,7 @@ Main.add(function () {
 
 
 function loadLivretArbreATC(codeATC){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "httpreq_vw_livret_arbre_ATC");
+  var url = new Url("dPmedicament", "httpreq_vw_livret_arbre_ATC");
   if (codeATC !== '') {
     url.addParam("codeATC", codeATC);
   }
@@ -89,8 +87,7 @@ var Livret = {
   },
   
   editProduit: function(code_cip, lettre, codeATC) {
-    this.urlEditProd = new Url;
-    this.urlEditProd.setModuleAction("dPmedicament", "edit_produit_livret");
+    this.urlEditProd = new Url("dPmedicament", "edit_produit_livret");
     this.urlEditProd.addParam("code_cip", code_cip);
     this.urlEditProd.addParam("lettre", lettre);
     this.urlEditProd.addParam("codeATC", codeATC);
@@ -100,8 +97,7 @@ var Livret = {
   // Refresh de la liste des produits dans le livret
   // code permet de rafraichir en fonction du produit ajouté
   reloadAlpha: function(lettre, codeCIP) {
-    var url = new Url;
-    url.setModuleAction("dPmedicament", "httpreq_vw_livret");
+    var url = new Url("dPmedicament", "httpreq_vw_livret");
     url.addParam("lettre", lettre);
     url.addParam("code_cip", codeCIP);
     url.requestUpdate("livret", { waitingText : null });
@@ -110,8 +106,7 @@ var Livret = {
   // Refresh de la liste des produits dans le livret
   // code permet de rafraichir en fonction du produit ajouté
   reloadATC: function(codeATC, codeCIP) {
-    var url = new Url;
-    url.setModuleAction("dPmedicament", "httpreq_vw_livret_arbre_ATC");
+    var url = new Url("dPmedicament", "httpreq_vw_livret_arbre_ATC");
     url.addParam("codeATC", codeATC);
     // code permet de selectionner le bon code dans le cas d'un ajout de produit
     url.addParam("code_cip", codeCIP);
@@ -120,8 +115,7 @@ var Livret = {
 };
 
 function printLivret(){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "print_livret");
+  var url = new Url("dPmedicament", "print_livret");
   url.popup(850, 650, "Livret Thérapeutique");
 }
 

@@ -100,16 +100,10 @@ changeManualDate = function(){
 	}
 }
 
-updateProtocole = function(selected){
-  var oFormProtocole = getForm("applyProtocole");
-  oFormProtocole.pack_protocole_id.value = selected.select('.protocole_id')[0].innerHTML;
-	$V(oFormProtocole.libelle_protocole, selected.select('.libelle_prot')[0].innerHTML.stripTags().strip(), false);
-}
-
 Main.add( function(){
   var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
-  initPuces();
+  initNotes();
   if(document.selPraticienLine){
     praticien_id = document.selPraticienLine.praticien_id.value;
 		{{if $praticien_for_prot_id}}
@@ -125,8 +119,9 @@ Main.add( function(){
 	  var url = new Url("dPprescription", "httpreq_vw_select_protocole");
 	  url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
 		  dropdown: true,
-	    minChars: 0,
-	    updateElement: updateProtocole,
+	    minChars: 1,
+      select: "view",
+      valueElement: oFormProtocole.elements.pack_protocole_id,
 	    callback: 
 	      function(input, queryString){
 				  if(document.selPraticienLine){
@@ -269,7 +264,7 @@ Main.add( function(){
           </div>   
         </div>
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
-        <div style="float:left; padding-right: 5px; " class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
+        <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_guid}}">
           <img alt="Ecrire une note" src="images/icons/note_grey.png" />
         </div>
       {{/if}}
@@ -366,12 +361,10 @@ Main.add( function(){
 	      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	      <input type="hidden" name="pratSel_id" value="" />
-				<input type="hidden" name="pack_protocole_id" value="" />
-				<!-- sur le onclick de la fleche, declencher le onfocus --> 
-			  <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" size="20" class="autocomplete" 
-				       onchange="if(this.value == '') { $V(this.form.pack_protocole_id, ''); }" 
-							 onfocus="this.value=''; this.onchange();" />
-				<div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
+        
+	      <input type="hidden" name="pack_protocole_id" value="" />
+	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" size="20" class="autocomplete" />
+	      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
 	
  				{{if $prescription->type != "externe"}}
  				  {{if $prescription->_dates_dispo}}

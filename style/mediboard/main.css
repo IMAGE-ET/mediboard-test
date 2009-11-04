@@ -2691,18 +2691,12 @@ option.validation {
   background-repeat: no-repeat;
   background-position: center right;
 }
+
 option.modification {
   height: 16px;
   background-image: url(../../images/icons/warning.png);
   background-repeat: no-repeat;
   background-position: center right;
-}
-
-div.idsante400 {
-	height: 16px;
-    width: 18px;
-  	float: right;
-	padding: 0 4px;
 }
 
 table#diagramme {

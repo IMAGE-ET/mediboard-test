@@ -11,7 +11,7 @@ function viewCompleteItem(sClassName, id) {
   url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
   url.requestUpdate("listView", { 
-    onComplete: initPuces
+    onComplete: initNotes
   } );
 }
 
@@ -19,7 +19,7 @@ function viewDossierSejour(sejour_id){
   var url = new Url("dPpatients","httpreq_vw_dossier_sejour");
   url.addParam("sejour_id",sejour_id);
   url.requestUpdate("listView", {
-    onComplete: initPuces
+    onComplete: initNotes
   } );
 }
 

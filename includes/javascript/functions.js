@@ -39,7 +39,7 @@ function main() {
     prepareForms();
     SystemMessage.init();
     WaitingMessage.init();
-    initPuces();
+    initNotes();
     Main.init();
   }
   catch (e) {
@@ -774,12 +774,13 @@ function popChgPwd() {
 }
 
 var Note = Class.create({
-  initialize: function() {
+  initialize: function(object_guid) {
     this.url = new Url("system", "edit_note");
+    if (object_guid)
+      this.create(object_guid);
   },
-  create: function (classe, object_id) {
-    this.url.addParam("object_class", classe);
-    this.url.addParam("object_id", object_id);
+  create: function (object_guid) {
+    this.url.addParam("object_guid", object_guid);
     this.popup();
   },
   edit: function(note_id) {
@@ -1176,7 +1177,7 @@ Element.addMethods({
           skip = 1;
         }
       }
-      else if (element.nodeType == 1 && element.childNodes && !/(script|style)/i.test(element.tagName)) {
+      else if (element.nodeType == 1 && element.childNodes && !/(script|style|textarea|select)/i.test(element.tagName)) {
         for (var i = 0; i < element.childNodes.length; ++i)
           i += innerHighlight(element.childNodes[i], term);
       }

@@ -8,18 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $AppUI, $can;
 
-$note_id      = CValue::get("note_id", null);
-$object_class = CValue::get("object_class", null);
-$object_id    = CValue::get("object_id", null);
+$note_id     = CValue::get("note_id");
+$object_guid = CValue::get("object_guid");
 
 $note = new CNote;
 if($note_id) {
   $note->load($note_id);
 } else {
-  $note->object_class = $object_class;
-  $note->object_id = $object_id;
+  $note->setObject(CMbObject::loadFromGuid($object_guid));
   $note->user_id = $AppUI->user_id;
   $note->date = mbDateTime();
 }
@@ -32,9 +30,7 @@ $can->needsRead();
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("note", $note);
-
 $smarty->display("edit_note.tpl");
 
 ?>

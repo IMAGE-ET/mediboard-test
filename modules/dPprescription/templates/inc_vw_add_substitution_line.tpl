@@ -363,11 +363,10 @@ if(document.addLine && document.searchProd){
   prepareForm(oFormProduit);
   
   // Autocomplete des medicaments
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.addParam("produit_max", 40);
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.addParam("produit_max", 40);
   
-  urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+  url.autoComplete("searchProd_produit", "produit_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsMedicament,
     callback: 

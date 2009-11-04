@@ -208,16 +208,18 @@ var Url = Class.create({
     
     if (oOptions.valueElement) {
       oOptions.afterUpdateElement = function(input, selected) {
-        var valueElement = selected.select(".value")[0];
+        var valueElement = $(selected).down(".value");
         var value = valueElement ? valueElement.innerHTML.strip() : selected.innerHTML.stripTags().strip();
         $V(oOptions.valueElement, value);
-      }
+      };
       
-      input.observe("change", function(){
+      var clearElement = function(){
         if ($V(input) == "") {
           $V(oOptions.valueElement, "");
         }
-      });
+      };
+      
+      input.observe("change", clearElement).observe("ui:change", clearElement);
     }
     
     var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
@@ -257,7 +259,10 @@ var Url = Class.create({
       
       // Show the list
       var showAutocomplete = function(e, dontClear){
-        if (!dontClear) $V(input, '');
+        if (!dontClear) {
+          $V(input, '');
+          input.fire("ui:change");
+        }
         input.focus();
         autocompleter.activate.bind(autocompleter)();
         Event.stop(e);
@@ -267,7 +272,10 @@ var Url = Class.create({
       // Bind the events
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       input.observe("click", showAutocomplete.bindAsEventListener(this, true));
-      input.observe("focus", function(){input.select()});
+      input.observe("focus", function(){
+        $V(input, '');
+        input.fire("ui:change");
+      });
       populate.observe("mousedown", Event.stop);
       
       container.insert(trigger);

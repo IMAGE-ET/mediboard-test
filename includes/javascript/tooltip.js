@@ -224,35 +224,11 @@ Object.extend(ObjectTooltip, {
   }
 });
 
-
 function initNotes(){
-  $$("div.noteDiv").each(function(pair) {
-    var aInfos = pair.className.split(" ")[1].split("-");
-
+  $$("div.noteDiv:not(.initialized)").each(function(element) {
     var url = new Url("system", "httpreq_get_notes_image");
-    url.addParam("object_class" , aInfos[0]);
-    url.addParam("object_id"    , aInfos[1]);
-    url.requestUpdate(pair, { waitingText : null });
-  });
-}
-
-
-function initSante400(){
-  $$("div.idsante400").each(function(element) {
-    var aInfos = element.id.split("-");
-  
-    var url = new Url("system", "httpreq_vw_object_idsante400");
-    url.addParam("object_class" , aInfos[0]);
-    url.addParam("object_id"    , aInfos[1]);
+    url.addParam("object_guid", element.className.split(" ")[1]);
     url.requestUpdate(element, { waitingText : null });
+    element.addClassName("initialized");
   });
-}
-
-function initPuces() {
-  initNotes();
-  initSante400();
-}
-
-function reloadNotes(){
-  initNotes(); 
 }

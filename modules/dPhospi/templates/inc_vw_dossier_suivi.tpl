@@ -1,11 +1,9 @@
 <script type="text/javascript">
 
 delCibleTransmission = function() {
-  oDiv = $('cibleTrans');
-  if(!oDiv) {
-    return;
-  }
-  oForm = document.forms['editTrans'];
+  var oDiv = $('cibleTrans');
+  if(!oDiv) return;
+  var oForm = document.forms['editTrans'];
   $V(oForm.object_class, '');
   $V(oForm.object_id, '');
   $V(oForm.libelle_ATC, '');
@@ -13,7 +11,7 @@ delCibleTransmission = function() {
 }
 
 function updateFieldsCible(selected) {
-  oForm = document.forms['editTrans'];
+  var oForm = document.forms['editTrans'];
   Element.cleanWhitespace(selected);
   if(isNaN(selected.id)){
     $V(oForm.libelle_ATC, selected.id);
@@ -29,9 +27,8 @@ Main.add(function () {
   prepareForm("editObs");
   prepareForm("editTrans");
 
-  urlAuto = new Url();
-  urlAuto.setModuleAction("dPprescription", "httpreq_cible_autocomplete");
-  urlAuto.autoComplete("editTrans_cible", "cible_auto_complete", {
+  var url = new Url("dPprescription", "httpreq_cible_autocomplete");
+  url.autoComplete("editTrans_cible", "cible_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsCible
   } );
