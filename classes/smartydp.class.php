@@ -135,9 +135,13 @@ function smarty_modifier_stripslashes($string){
  *
  * Example:  {$text|emphasize:$tokens}
  * @param string $text The text subject
- * @param array $tokens The string tokens to emphasize
+ * @param array|string $tokens The string tokens to emphasize, space seperated if string
  */
 function smarty_modifier_emphasize($text, $tokens) {
+	if (!is_array($tokens)) {
+		$tokens = explode(" ", $tokens);
+	}
+
 	foreach ($tokens as &$token) {
 	  $token = preg_quote($token);
 	  $token = CMbString::allowDiacriticsInRegexp($token);
