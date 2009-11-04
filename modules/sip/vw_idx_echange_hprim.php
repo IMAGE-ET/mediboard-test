@@ -91,10 +91,10 @@ foreach($listEchangeHprim as $_echange_hprim) {
 	$_echange_hprim->loadRefNotifications();
 	if (!empty($_echange_hprim->_ref_notifications)) {
 		foreach ($_echange_hprim->_ref_notifications as $_ref_notification) {
-	    $domGetIPPPatient = new CHPrimXMLEvenementsPatients();
-	    $domGetIPPPatient->loadXML(utf8_decode($_ref_notification->message));
+	    $domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
+	    $domGetIdSourceObject->loadXML(utf8_decode($_ref_notification->message));
 	
-	    $_ref_notification->_patient_ipp = $domGetIPPPatient->getIPPPatient("hprim:enregistrementPatient");
+	    $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIPPPatient("hprim:enregistrementPatient");
 	   
 	    $id400 = new CIdSante400();
 	    //Paramétrage de l'id 400
@@ -107,23 +107,28 @@ foreach($listEchangeHprim as $_echange_hprim) {
 	    $_ref_notification->_patient_id = ($id400->object_id) ? $id400->object_id : $_ref_notification->_patient_ipp;
 		}
 	} 
-	$domGetIPPPatient = new CHPrimXMLEvenementsPatients();
-	$domGetIPPPatient->loadXML(utf8_decode($_echange_hprim->message));
-
-	$_echange_hprim->_patient_ipp = $domGetIPPPatient->getIPPPatient("hprim:enregistrementPatient");
+	$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
+	$domGetIdSourceObject->loadXML(utf8_decode($_echange_hprim->message));
+  
+  $id400 = new CIdSante400();
+  if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
+    $id400->object_class = "CPatient";
+    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
+  }
+  if ($_echange_hprim->sous_type == "venuePatient" ) {
+    $id400->object_class = "CSejour";
+    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
+  }
 	
-	$id400 = new CIdSante400();
-	//Paramétrage de l'id 400
-	$id400->object_class = "CPatient";
 	$id400->tag = $_echange_hprim->emetteur;
-
-	$id400->id400 = $_echange_hprim->_patient_ipp;
+	$id400->id400 = $_echange_hprim->_object_id_permanent;
 	$id400->loadMatchingObject();
   
 	if (CAppUI::conf('sip server')) {
-		$_echange_hprim->_patient_ipp = $id400->object_id;
+		$_echange_hprim->_object_id_permanent = $id400->object_id;
 	}
-	$_echange_hprim->_patient_id = ($id400->object_id) ? $id400->object_id : $_echange_hprim->_patient_ipp;	
+  $_echange_hprim->_object_class = $id400->object_class;
+	$_echange_hprim->_object_id = ($id400->object_id) ? $id400->object_id : $_echange_hprim->_object_id_permanent;	
 }
 
 // Création du template

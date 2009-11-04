@@ -30,11 +30,10 @@ class CHprimSoapHandler extends CSoapHandler {
    * @return CHPrimXMLAcquittementsPatients messageAcquittement 
    **/
   function evenementPatient($messagePatient) {
-    global $m;
-    
     // Création de l'échange
     $echange_hprim = new CEchangeHprim();
-
+    $messageAcquittement = null;
+    
     // Gestion de l'acquittement
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenementsPatients($messagePatient);
@@ -111,7 +110,7 @@ class CHprimSoapHandler extends CSoapHandler {
     // Fusion d'une venue
     else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
       $data = array_merge($data, $domGetEvenement->getFusionXML());
-      $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data);
+      $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $data);
     }
     // Aucun des six événements retour d'erreur
     else {

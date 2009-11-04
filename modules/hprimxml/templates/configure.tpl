@@ -87,8 +87,20 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
+    {{assign var="var" value="functionPratImport"}}
     <tr>
-      {{assign var="var" value="functionPratImport"}}
+      <th>
+        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+        </label>  
+      </th>
+      <td>
+        <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+      </td>
+    </tr>
+    
+    {{assign var="var" value="tagDossierPA"}}
+    <tr>
       <th>
         <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
           {{tr}}config-{{$m}}-{{$var}}{{/tr}}

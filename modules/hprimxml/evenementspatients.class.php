@@ -198,17 +198,17 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbPatient->checkSimilar($nom, $prenom);
   }
   
-  function getIPPPatient($query) { 
+  function getIdSourceObject($query_evt, $query_type) { 
     $xpath = new CMbXPath($this, true);
     
-    $query_evt = "/hprim:evenementsPatients/hprim:evenementPatient";
+    $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
-    $evenementPatient = $xpath->queryUniqueNode($query_evt);
-    $typeEvenement = $xpath->queryUniqueNode($query, $evenementPatient);
+    $evenementPatient = $xpath->queryUniqueNode($query);
+    $typeEvenement = $xpath->queryUniqueNode($query_evt, $evenementPatient);
     
-    $patient = $xpath->queryUniqueNode("hprim:patient", $typeEvenement);
+    $object = $xpath->queryUniqueNode($query_type, $typeEvenement);
 
-    return $this->getIdSource($patient);
+    return $this->getIdSource($object);
   }
   
   function getEvenementPatientXML() { 

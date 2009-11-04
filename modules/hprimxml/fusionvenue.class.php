@@ -27,7 +27,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $venue = $this->addElement($fusionVenue, "venue");
 
     // Ajout de la venue   
-    $this->addVenue($venue, $mbVenue, null, $referent);
+    $this->addVenue($venue, $mbVenue, $referent);
       
     $venueElimine = $this->addElement($fusionVenue, "venueElimine");
     $mbVenueElimine = new CVenue();
@@ -41,8 +41,6 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
   }
   
   function getFusionVenueXML() {
-    global $m;
-
     $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
@@ -50,9 +48,9 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $evenementPatient = $xpath->queryUniqueNode($query);
     $fusionVenue = $xpath->queryUniqueNode("hprim:fusionVenue", $evenementPatient);
 
-    $data['action']  = $this->getActionEvenement("hprim:fusionPatient", $evenementPatient);
+    $data['action']  = $this->getActionEvenement("hprim:fusionVenue", $evenementPatient);
 	
-    $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $venuePatient);
+    $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $fusionVenue);
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible']  = $this->getIdCible($data['patient']);
     
@@ -61,8 +59,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $data['idCibleVenue']  = $this->getIdCible($data['venue']);
     
     $data['venueElimine'] = $xpath->queryUniqueNode("hprim:venueElimine", $fusionVenue);
-    $data['idSourceVenueEliminee'] = $this->getIdSource($data['venue']);
-    $data['idCibleVenueEliminee']  = $this->getIdCible($data['venue']);
+    $data['idSourceVenueEliminee'] = $this->getIdSource($data['venueElimine']);
+    $data['idCibleVenueEliminee']  = $this->getIdCible($data['venueElimine']);
 		    
     return $data;
   }
@@ -71,13 +69,33 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
    * Fusion and recording a stay with an num_dos in the system
    * @param CHPrimXMLAcquittementsPatients $domAcquittement
    * @param CEchangeHprim $echange_hprim
-   * @param CPatient $newPatient
-   * @param CSejour $newVenue
    * @param array $data
    * @return string acquittement 
    **/
-  function fusionVenue($domAcquittement, $echange_hprim, $newPatient, $newVenue, $data) {
+  function fusionVenue($domAcquittement, $echange_hprim, $data) {
+     // Si CIP
+    if (!CAppUI::conf('sip server')) {
+      // Acquittement d'erreur : identifiants source et cible non fournis pour le venue / venueEliminee
+      if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
+        $doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          
+        $echange_hprim->message = $messagePatient;
+        $echange_hprim->acquittement = $messageAcquittement;
+        $echange_hprim->statut_acquittement = "erreur";
+        $echange_hprim->store();
+        
+        return $messageAcquittement;
+      }
+      
+    }
     
+    $etat = CHPrimXMLEvenementsPatients::getEtatVenue($data['venueElimine']);
+    // Cas de passage d'une pré-admission en admission
+    if ($etat == "préadmission") {
+      
+    }
   }
 }
 ?>

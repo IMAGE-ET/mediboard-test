@@ -26,4 +26,8 @@ $locales['config-hprimxml-evt_mvtStock-validation-desc'] = 'Validation des mouve
 $locales['config-hprimxml-evt_mvtStock-version'] = 'Version des mouvements du stock';
 $locales['config-hprimxml-evt_mvtStock-version-desc'] = 'Version des mouvements du stock';
 $locales['config-hprimxml-evt_mvtStock'] = 'H\'XML Evénements Mouvements Stock';
+$locales['config-hprimxml-functionPratImport'] = 'Fonction praticien d\'import';
+$locales['config-hprimxml-functionPratImport-desc'] = 'Nom de la fonction du praticien d\'import';
+$locales['config-hprimxml-tagDossierPA'] = 'Tag dossier PA';
+$locales['config-hprimxml-tagDossierPA-desc'] = 'Tag du dossier de pré-admission';
 ?>

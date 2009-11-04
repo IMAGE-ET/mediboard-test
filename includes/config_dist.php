@@ -635,6 +635,7 @@ $dPconfig["hprimxml"] = array (
     "version" => "1.01",
   ),
   "functionPratImport" => "Import",
+  "tagDossierPA" => "PA",
 );
 
 // you can add as much ftp as you want by using

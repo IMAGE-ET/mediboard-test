@@ -86,7 +86,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
     return $messageAcquittementPatient;
   }
-  
+   
   function getStatutAcquittementPatient() {
     $xpath = new CMbXPath($this, true);
         

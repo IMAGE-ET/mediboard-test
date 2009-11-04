@@ -134,7 +134,8 @@ function changePage(page) {
           <th></th>
           <th>{{mb_title object=$echange_hprim field="echange_hprim_id"}}</th>
           <th>{{mb_title object=$echange_hprim field="initiateur_id"}}</th>
-          <th>Patient</th>
+          <th>Object Class</th>
+          <th>Object Id</th>
           <th>{{mb_title object=$echange_hprim field="date_production"}}</th>
           <th>{{mb_title object=$echange_hprim field="identifiant_emetteur"}}</th>
           <th>{{mb_title object=$echange_hprim field="destinataire"}}</th>
@@ -165,44 +166,55 @@ function changePage(page) {
     </td>
   </tr>
   {{else}}
+  <script type="text/javascript">
+    Main.add(function () {
+      Control.Tabs.create('tabs-contenu', true);
+    });
+  </script>
   <tr>
-    <th class="title" style="text-transform: uppercase;">{{mb_title object=$echange_hprim field="message"}}</th>
-    {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
-      <th class="title" style="text-transform: uppercase;">{{mb_title object=$echange_hprim field="acquittement"}}</th>
-    {{/if}}
-  </tr>
-  <tr>
-    <td style="height:730px; width:50%">{{mb_value object=$echange_hprim field="message"}}</td>
-    <td style="height:730px;">
-      {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
-	      {{if $echange_hprim->acquittement}}
-	        {{mb_value object=$echange_hprim field="acquittement"}}
-	        
-	        <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error
-	                        {{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning
-	                        {{else}}info{{/if}}">
-	          {{foreach from=$observations item=observation}}
-	            <strong>Code :</strong> {{$observation.code}} <br />
-	            <strong>Libelle :</strong> {{$observation.libelle}} <br />
-	            <strong>Commentaire :</strong> {{$observation.commentaire}} <br />
-	          {{/foreach}}
-	        </div>
-	      {{else}}
-	        <div class="big-info">Aucun acquittement n'a été reçu.</div>
-	      {{/if}}
-      {{else}}
-        <div class="big-error">
-          {{if $doc_errors_msg}}
-            <strong>Erreur validation schéma du message</strong> <br />
-            {{$doc_errors_msg}}
+    <td>
+      <ul id="tabs-contenu" class="control_tabs">
+        <li><a href="#message">{{mb_title object=$echange_hprim field="message"}}</a></li>
+        <li><a href="#ack">{{mb_title object=$echange_hprim field="acquittement"}}</a></li>
+      </ul>
+      
+      <hr class="control_tabs" />
+      
+      <div id="message" style="display: none;">
+        {{mb_value object=$echange_hprim field="message"}}
+      </div>
+      
+      <div id="ack" style="display: none;">
+        {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
+          {{if $echange_hprim->acquittement}}
+            {{mb_value object=$echange_hprim field="acquittement"}}
+            
+            <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error
+                            {{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning
+                            {{else}}info{{/if}}">
+              {{foreach from=$observations item=observation}}
+                <strong>Code :</strong> {{$observation.code}} <br />
+                <strong>Libelle :</strong> {{$observation.libelle}} <br />
+                <strong>Commentaire :</strong> {{$observation.commentaire}} <br />
+              {{/foreach}}
+            </div>
+          {{else}}
+            <div class="big-info">Aucun acquittement n'a été reçu.</div>
           {{/if}}
-          {{if $doc_errors_ack}}
-            <strong>Erreur validation schéma de l'acquittement</strong> <br />
-            {{$doc_errors_ack}}
-          {{/if}}
-        </div>
-      {{/if}}
+        {{else}}
+          <div class="big-error">
+            {{if $doc_errors_msg}}
+              <strong>Erreur validation schéma du message</strong> <br />
+              {{$doc_errors_msg}}
+            {{/if}}
+            {{if $doc_errors_ack}}
+              <strong>Erreur validation schéma de l'acquittement</strong> <br />
+              {{$doc_errors_ack}}
+            {{/if}}
+          </div>
+        {{/if}}
+      </div>
     </td>
-  </tr>
+  </tr> 
   {{/if}}
 </table>
