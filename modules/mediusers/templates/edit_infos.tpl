@@ -2,7 +2,6 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  initInseeFields("editFct", "cp", "ville");
   var tabs = Control.Tabs.create('tab_edit_mediuser', true);
   
   var url = new Url("admin", "edit_prefs");
@@ -66,6 +65,11 @@ Main.add(function () {
     </td>
     
     <td class="halfPane">
+			<script type="text/javascript">
+			Main.add(function () {
+			  InseeFields.initCPVille("editFct", "cp", "ville", "tel");
+			});
+			</script>
       <form name="editFct" action="?m={{$m}}" method="post" onSubmit="return onSubmitFormAjax(this)">
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
@@ -87,17 +91,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$fonction field="cp"}}</th>
-          <td>
-            {{mb_field object=$fonction field="cp"}}
-            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$fonction field="cp"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fonction field="ville"}}</th>
-          <td>
-            {{mb_field object=$fonction field="ville"}}
-            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$fonction field="ville"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fonction field="tel"}}</th>

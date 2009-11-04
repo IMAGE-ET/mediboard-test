@@ -8,14 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPpatients" script="autocomplete"}}
-
-<script type="text/javascript">
-Main.add(function () {
-  initInseeFields("edit_societe", "postal_code", "city");
-});
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
@@ -48,7 +40,15 @@ Main.add(function () {
     </td>
     <td class="halfPane">
       {{if $can->edit}}
+			{{mb_include_script module="dPpatients" script="autocomplete"}}
+			<script type="text/javascript">
+			Main.add(function () {
+			  InseeFields.initCPVille("edit_societe", "postal_code", "city", "phone");
+			});
+			</script>
+
       <form name="edit_societe" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
       <input type="hidden" name="dosql" value="do_societe_aed" />
 	    <input type="hidden" name="societe_id" value="{{$societe->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -70,17 +70,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$societe field="postal_code"}}</th>
-          <td>
-      		{{mb_field object=$societe field="postal_code" size="31" maxlength="5"}}
-      		<div style="display:none;" class="autocomplete" id="postal_code_auto_complete"></div>
-    	  </td>
+          <td>{{mb_field object=$societe field="postal_code"}}</td>
         </tr>
         <tr> 
           <th>{{mb_label object=$societe field="city"}}</th>
-          <td>
-      		{{mb_field object=$societe field="city" size="31"}}
-      		<div style="display:none;" class="autocomplete" id="city_auto_complete"></div>
-    	  </td>
+          <td>{{mb_field object=$societe field="city"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$societe field="phone"}}</th>

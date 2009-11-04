@@ -8,14 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPpatients" script="autocomplete"}}
-
-<script type="text/javascript">
-Main.add(function () {
-  initInseeFields("etabExterne", "cp", "ville");
-});
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -38,10 +30,19 @@ Main.add(function () {
         {{/foreach}}
       </table>
     </td>
+		
     <td class="halfPane">
+
+      {{mb_include_script module="dPpatients" script="autocomplete"}}
+    	<script type="text/javascript">
+			Main.add(function () {
+			  InseeFields.initCPVille("etabExterne", "cp", "ville","tel");
+			});
+			</script>
+
       <form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_etabExterne_aed" />
-	  <input type="hidden" name="etab_id" value="{{$etabExterne->_id}}" />
+	    <input type="hidden" name="etab_id" value="{{$etabExterne->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -68,19 +69,18 @@ Main.add(function () {
           <th>{{mb_label object=$etabExterne field="adresse"}}</th>
           <td>{{mb_field object=$etabExterne field="adresse" tabindex="3"}}</td>
         </tr>
+				
         <tr>
           <th>{{mb_label object=$etabExterne field="cp"}}</th>
-          <td>{{mb_field object=$etabExterne field="cp" tabindex="4"}}
-            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$etabExterne field="cp" tabindex="4"}}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$etabExterne field="ville"}}</th>
-          <td>{{mb_field object=$etabExterne field="ville" tabindex="5"}}
-        	 <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$etabExterne field="ville" tabindex="5"}}</td>
         </tr>
+				
+				
         <tr>
           <th>{{mb_label object=$etabExterne field="tel"}}</th>
 		      <td>{{mb_field object=$etabExterne field="tel" tabindex="6"}}</td>

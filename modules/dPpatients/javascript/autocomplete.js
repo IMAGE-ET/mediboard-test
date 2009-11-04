@@ -1,55 +1,62 @@
 // $Id$
 
-function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
-  Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
-  $V(sFormName + '_' + sFirstField, dn[0].firstChild.firstChild.nodeValue, true);
-
-  if(sSecondField){
-    $V(sFormName + '_' + sSecondField, dn[2].firstChild.nodeValue, true);
-  }
-  
-  if(sFieldFocus){
-    $(sFormName + '_' + sFieldFocus).focus();
-  }
-}
-
-function initInseeFields(sFormName, sFieldCP, sFieldCity, sFieldFocus) {
-  var sFieldId = sFormName + '_' + sFieldCP;
-  var sCompleteId = sFieldCP + '_auto_complete';
-	Assert.that($(sFieldId), "CP field '%s'is missing", sFieldId);
-	Assert.that($(sCompleteId), "CP complete div '%s'is missing", sCompleteId);
-
-  new Ajax.Autocompleter(
-    sFieldId,
-    sCompleteId,
-    '?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete&fieldcp='+sFieldCP, {
-      method: 'get',
-      minChars: 2,
-      frequency: 0.15,
-      updateElement : function(element) { 
-      	updateFields(element, sFormName, sFieldFocus, sFieldCP, sFieldCity) 
+var InseeFields = {
+	initCPVille: function(sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
+  	var oForm = document.forms[sFormName];
+  	
+		// Populate div creation for CP
+    var oField = oForm.elements[sFieldCP];
+		var sPopulateDiv = sFieldCP + "_auto_complete";
+		var oPopulateDiv = DOM.div( {
+			className: "autocomplete", 
+			id: sPopulateDiv, 
+			style: "display: inline; width: 250px;"
+  	} );
+		$(oField).insert( { after: oPopulateDiv } );
+		
+    // Autocomplete for CP
+		var url = new Url("dPpatients", "autocomplete_cp_commune");
+		url.addParam("column", "code_postal");
+		url.autoComplete(oField.id, sPopulateDiv , {
+			minChars: 2,
+			updateElement: function(selected) {
+				InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
+			}
+		} );
+		
+    // Populate div creation for Commune
+    var oField = oForm.elements[sFieldCommune];
+    var sPopulateDiv = sFieldCommune + "_auto_complete";
+    var oPopulateDiv = DOM.div( {
+      className: "autocomplete", 
+      id: sPopulateDiv, 
+      style: "display: inline; width: 250px;"
+    } );
+    $(oField).insert( { after: oPopulateDiv } );
+		
+    // Autocomplete for Commune
+    var url = new Url("dPpatients", "autocomplete_cp_commune");
+    url.addParam("column", "commune");
+    url.autoComplete(oField.id, sPopulateDiv , {
+      minChars: 3,
+      updateElement: function(selected) {
+        InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
       }
-    }
-  );
-  
-  var sFieldId = sFormName + '_' + sFieldCity;
-  var sCompleteId = sFieldCity + '_auto_complete';
-	Assert.that($(sFieldId), "City field '%s'is missing", sFieldId);
-	Assert.that($(sCompleteId), "City complete div '%s'is missing", sCompleteId);
-
-  new Ajax.Autocompleter(
-    sFieldId,
-    sCompleteId,
-    '?m=dPpatients&ajax=1&suppressHeaders=1&a=httpreq_do_insee_autocomplete&fieldcity='+sFieldCity, {
-      method: 'get',
-      minChars: 4,
-      frequency: 0.15,
-      updateElement : function(element) { 
-        updateFields(element, sFormName, sFieldFocus, sFieldCP, sFieldCity) 
-      }
-    }
-  );
+    } );
+	},
+	
+	updateCPVille: function(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
+    var oForm = document.forms[sFormName];
+		
+		// Valuate CP and Commune
+		$V(oForm.elements[sFieldCP     ], selected.select(".cp"     )[0].textContent, true);
+    $V(oForm.elements[sFieldCommune], selected.select(".commune")[0].textContent, true);
+	  
+		// Give focus
+	  if (sFieldFocus){
+	    $(sFormName + '_' + sFieldFocus).focus();
+	  }
+	}
 }
 
 function initPaysField(sFormName, sFieldPays, sFieldFocus){

@@ -8,14 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPpatients" script="autocomplete"}}
-
-<script type="text/javascript">
-Main.add(function () {
-  initInseeFields("group", "cp", "ville");
-});
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -44,6 +36,14 @@ Main.add(function () {
       </table>
     </td>
     <td class="halfPane">
+
+			{{mb_include_script module="dPpatients" script="autocomplete"}}
+			<script type="text/javascript">
+			Main.add(function () {
+			  InseeFields.initCPVille("group", "cp", "ville", "tel");
+			});
+			</script>
+    	
       <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_groups_aed" />
    	  <input type="hidden" name="group_id" value="{{$usergroup->group_id}}" />
@@ -75,31 +75,12 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$usergroup field="cp"}}</th>
-          <td>{{mb_field object=$usergroup field="cp"}}
-            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$usergroup field="cp"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$usergroup field="ville"}}</th>
-          <td>{{mb_field object=$usergroup field="ville"}}
-        	 <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$usergroup field="ville"}}</td>
         </tr>
-        {{if $usergroup->_id}}
-        <tr>
-          <th>{{mb_label object=$usergroup field="service_urgences_id"}}</th>
-          <td>
-            <select name="service_urgences_id">
-              <option value="">&mdash Choisir le service d'urgences</option>
-              {{foreach from=$usergroup->_ref_functions item="curr_fct"}}
-              <option value="{{$curr_fct->_id}}" class="mediuser" style="border-color: #{{$curr_fct->color}}" {{if $curr_fct->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
-                {{$curr_fct->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        {{/if}}
         <tr>
           <th>{{mb_label object=$usergroup field="tel"}}</th>
 		      <td>{{mb_field object=$usergroup field="tel"}}</td>
@@ -135,7 +116,24 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$usergroup field="ape"}}</th>
           <td>{{mb_field object=$usergroup field="ape"}}</td>
- 		</tr>
+     		</tr>
+
+        {{if $usergroup->_id}}
+        <tr>
+          <th>{{mb_label object=$usergroup field="service_urgences_id"}}</th>
+          <td>
+            <select name="service_urgences_id">
+              <option value="">&mdash Choisir le service d'urgences</option>
+              {{foreach from=$usergroup->_ref_functions item="curr_fct"}}
+              <option value="{{$curr_fct->_id}}" class="mediuser" style="border-color: #{{$curr_fct->color}}" {{if $curr_fct->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
+                {{$curr_fct->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        {{/if}}
+
         <tr>
           <td class="button" colspan="2">
           {{if $usergroup->_id}}

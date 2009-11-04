@@ -234,13 +234,13 @@ class CPatient extends CMbObject {
     $specs["pays_insee"]           = "str";
     $specs["nationalite"]          = "enum notNull list|local|etranger default|local";
     $specs["lieu_naissance"]       = "str";
-    $specs["cp_naissance"]         = "str";
+    $specs["cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["pays_naissance_insee"] = "str";
     $specs["profession"]           = "str autocomplete";
       
     $specs["employeur_nom"]     = "str confidential";
     $specs["employeur_adresse"] = "text";
-    $specs["employeur_cp"]      = "numchar length|5";
+    $specs["employeur_cp"]      = "numchar minLength|4 maxLength|5";
     $specs["employeur_ville"]   = "str confidential";
     $specs["employeur_tel"]     = "numchar confidential length|10 mask|$phone_number_format";
     $specs["employeur_urssaf"]  = "numchar length|11 confidential";
@@ -248,7 +248,7 @@ class CPatient extends CMbObject {
     $specs["prevenir_nom"]      = "str confidential";
     $specs["prevenir_prenom"]   = "str";
     $specs["prevenir_adresse"]  = "text";
-    $specs["prevenir_cp"]       = "numchar length|5";
+    $specs["prevenir_cp"]       = "numchar minLength|4 maxLength|5";
     $specs["prevenir_ville"]    = "str confidential";
     $specs["prevenir_tel"]      = "numchar confidential length|10 mask|$phone_number_format";
     $specs["prevenir_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
@@ -272,7 +272,7 @@ class CPatient extends CMbObject {
     $specs["assure_lieu_naissance"]       = "str";
     $specs["assure_nationalite"]          = "enum notNull list|local|etranger default|local";
     $specs["assure_lieu_naissance"]       = "str";
-    $specs["assure_cp_naissance"]         = "str";
+    $specs["assure_cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["assure_pays_naissance_insee"] = "str";
     $specs["assure_profession"]           = "str autocomplete";
     $specs["assure_rques"]                = "text";

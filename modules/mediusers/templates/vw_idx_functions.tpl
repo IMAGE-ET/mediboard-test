@@ -1,12 +1,7 @@
-{{mb_include_script module="dPpatients" script="autocomplete"}}
 {{mb_include_script module="mediusers" script="color_selector"}}
 {{mb_include_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
-Main.add(function () {
-  initInseeFields("editFrm", "cp", "ville");
-});
-
 Main.add(function () {
   Control.Tabs.create('tab_user', true);
 });
@@ -52,7 +47,15 @@ ColorSelector.init = function(){
       </table>
     </td>
     <td class="halfPane" style="height: 1%">
-    <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+		{{mb_include_script module="dPpatients" script="autocomplete"}}
+			<script type="text/javascript">
+			Main.add(function () {
+			  InseeFields.initCPVille("editFrm", "cp", "ville", "tel");
+			});
+			</script>
+
+	    <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+
       <input type="hidden" name="m" value="mediusers" />
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="function_id" value="{{$userfunction->function_id}}" />
@@ -113,17 +116,11 @@ ColorSelector.init = function(){
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="cp"}}</th>
-          <td>
-            {{mb_field object=$userfunction field="cp"}}
-            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$userfunction field="cp"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="ville"}}</th>
-          <td>
-            {{mb_field object=$userfunction field="ville"}}
-            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$userfunction field="ville"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="tel"}}</th>

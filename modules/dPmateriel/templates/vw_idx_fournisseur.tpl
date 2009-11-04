@@ -1,11 +1,3 @@
-{{mb_include_script module="dPpatients" script="autocomplete"}}
-
-<script type="text/javascript">
-Main.add(function () {
-  initInseeFields("editFournisseur", "codepostal", "ville");
-});
-</script>
-
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
@@ -40,9 +32,16 @@ Main.add(function () {
     </td>
     <td class="halfPane">
       {{if $can->edit}}
+			{{mb_include_script module="dPpatients" script="autocomplete"}}
+			<script type="text/javascript">
+			Main.add(function () {
+			  InseeFields.initCPVille("editFournisseur", "codepostal", "ville", "telephone");
+			});
+			</script>
+
       <form name="editFournisseur" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_fournisseur_aed" />
-	  <input type="hidden" name="fournisseur_id" value="{{$fournisseur->_id}}" />
+  	  <input type="hidden" name="fournisseur_id" value="{{$fournisseur->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -62,17 +61,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$fournisseur field="codepostal"}}</th>
-          <td>
-      		{{mb_field object=$fournisseur field="codepostal" size="31" maxlength="5"}}
-      		<div style="display:none;" class="autocomplete" id="codepostal_auto_complete"></div>
-    	  </td>
+          <td>{{mb_field object=$fournisseur field="codepostal"}}</td>
         </tr>
         <tr> 
           <th>{{mb_label object=$fournisseur field="ville"}}</th>
-          <td>
-      		{{mb_field object=$fournisseur field="ville" size="31"}}
-      		<div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-    	  </td>
+          <td>{{mb_field object=$fournisseur field="ville"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fournisseur field="telephone"}}</th>

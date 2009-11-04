@@ -143,17 +143,11 @@ Main.add(function() {
 	</tr>
 	<tr>
     <th>{{mb_label object=$patient field="cp_naissance"}}</th>
-    <td>
-      {{mb_field object=$patient field="cp_naissance" maxlength="5" onchange="copyIdentiteAssureValues(this)" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="cp_naissance_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="cp_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="lieu_naissance"}}</th>
-    <td>
-      {{mb_field object=$patient field="lieu_naissance" onchange="copyIdentiteAssureValues(this)" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="lieu_naissance_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="lieu_naissance" onchange="copyIdentiteAssureValues(this)"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="_pays_naissance_insee"}}</th>
@@ -193,17 +187,11 @@ Main.add(function() {
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="cp"}}</th>
-    <td>
-      {{mb_field object=$patient field="cp" size="31" maxlength="5" onchange="copyAssureValues(this)" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="cp" onchange="copyAssureValues(this)"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="ville"}}</th>
-    <td>
-      {{mb_field object=$patient field="ville" size="31" onchange="copyAssureValues(this)" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="ville" onchange="copyAssureValues(this)"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="pays"}}</th>

@@ -20,17 +20,11 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="prevenir_cp"}}</th>
-    <td>
-      {{mb_field object=$patient field="prevenir_cp" size="31" maxlength="5" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="prevenir_cp_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="prevenir_cp"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="prevenir_ville"}}</th>
-    <td>
-      {{mb_field object=$patient field="prevenir_ville" size="31" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="prevenir_ville_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="prevenir_ville"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="prevenir_tel"}}</th>
@@ -59,17 +53,11 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="employeur_cp"}}</th>
-    <td>
-      {{mb_field object=$patient field="employeur_cp" size="31" maxlength="5" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="employeur_cp_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="employeur_cp"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="employeur_ville"}}</th>
-    <td>
-      {{mb_field object=$patient field="employeur_ville" size="31" class="autocomplete"}}
-      <div style="display:none;" class="autocomplete" id="employeur_ville_auto_complete"></div>
-    </td>
+    <td>{{mb_field object=$patient field="employeur_ville"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="employeur_tel"}}</th>

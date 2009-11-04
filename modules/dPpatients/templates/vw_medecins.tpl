@@ -1,7 +1,5 @@
 {{* $Id$ *}}
 
-{{mb_include_script module="dPpatients" script="autocomplete"}}
-
 <script type="text/javascript">
 function setClose(id, view) {
   window.opener.Medecin.set(id, view);
@@ -37,11 +35,6 @@ function addCorrespondant() {
 	}});
 }
 
-Main.add(function () {
-  if (document.editFrm) {
-    initInseeFields("editFrm", "cp", "ville","tel");
-  }
-});
 </script>
 
 <table class="main">
@@ -203,6 +196,13 @@ Main.add(function () {
     
     {{if !$dialog}}
     <td class="pane">
+      {{mb_include_script module="dPpatients" script="autocomplete"}}
+    	<script type="text/javascript">
+			Main.add(function () {
+		    InseeFields.initCPVille("editFrm", "cp", "ville","tel");
+			});
+    	</script>
+
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_medecins_aed" />
       {{mb_field object=$medecin field="medecin_id" hidden=1 prop=""}}
@@ -243,18 +243,12 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$medecin field="cp"}}</th>
-          <td>
-            {{mb_field object=$medecin field="cp" size="31" maxlength="5"}}
-            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$medecin field="cp"}}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$medecin field="ville"}}</th>
-          <td>
-            {{mb_field object=$medecin field="ville" size="31"}}
-            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-          </td>
+          <td>{{mb_field object=$medecin field="ville"}}</td>
         </tr>
         
         <tr>
@@ -332,6 +326,13 @@ Main.add(function () {
     </td>
     {{else}}
     <td id="addCorres" style="display:none">
+      {{mb_include_script module="dPpatients" script="autocomplete"}}
+      <script type="text/javascript">
+      Main.add(function () {
+        InseeFields.initCPVille("editFrmCorres", "cp", "ville","tel");
+      });
+      </script>
+
       <form name="editFrmCorres" method="post" action="?m={{$m}}" onsubmit="return checkForm(this)">
 	      <input type="hidden" name="dosql" value="do_medecins_aed" />
 	      <input type="hidden" name="m" value="dPpatients" />
@@ -360,18 +361,12 @@ Main.add(function () {
 	        
 	        <tr>
 	          <th>{{mb_label object=$medecin field="cp"}}</th>
-	          <td>
-	            {{mb_field object=$medecin field="cp" size="31" maxlength="5"}}
-	            <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
-	          </td>
+	          <td>{{mb_field object=$medecin field="cp"}}</td>
 	        </tr>
 	        
 	        <tr>
 	          <th>{{mb_label object=$medecin field="ville"}}</th>
-	          <td>
-	            {{mb_field object=$medecin field="ville" size="31"}}
-	            <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
-	          </td>
+	          <td>{{mb_field object=$medecin field="ville"}}</td>
 	        </tr>
 	        
 	        <tr>
