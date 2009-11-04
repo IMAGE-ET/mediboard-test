@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl"}}
+{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
 
 {{if !$dialog}}
 

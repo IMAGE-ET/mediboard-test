@@ -67,13 +67,13 @@ function thumb($params, &$smarty) {
  * @param string $pad_string - string used to pad
  * @param enum $pad_type - both, left or right
  */
-function smarty_modifier_pad($string, $length, $pad_string=' ', $pad_type='left') {
+function smarty_modifier_pad($string, $length, $pad_string = ' ', $pad_type = 'left') {
   static $pads = array(
-    'left' => 0, 
-    'right'=> 1, 
-    'both' => 2
+    'left' => STR_PAD_LEFT, 
+    'right'=> STR_PAD_RIGHT, 
+    'both' => STR_PAD_BOTH
   );
-  return str_pad($string, $length ,$pad_string,$pads[$pad_type]);
+  return str_pad($string, $length, $pad_string, $pads[$pad_type]);
 } 
 
 /**
@@ -123,7 +123,7 @@ function smarty_modifier_cleanField($string){
     return $string;
   }
 
-  return htmlspecialchars($string,ENT_QUOTES);
+  return htmlspecialchars($string, ENT_QUOTES);
 }
 
 function smarty_modifier_stripslashes($string){
@@ -149,6 +149,18 @@ function smarty_modifier_emphasize($text, $tokens) {
 	
 	$regexp = implode("|", $tokens);
 	return preg_replace("/($regexp)/i", "<em>$1</em>", $text);	
+}
+
+/**
+ * A ternary operator
+ * @todo Use this instead of mb_ternary
+ * @param object $value The condition
+ * @param object $option1 the value if the condition evaluates to true
+ * @param object $option2 the value if the condition evaluates to false
+ * @return object $option1 or $option2
+ */
+function smarty_modifier_ternary($value, $option1, $option2) {
+  return $value ? $option1 : $option2;
 }
 
 /**
@@ -421,6 +433,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
     $this->register_modifier("emphasize"         , "smarty_modifier_emphasize");
+    $this->register_modifier("ternary"           , "smarty_modifier_ternary");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     $modules = CModule::getActive();

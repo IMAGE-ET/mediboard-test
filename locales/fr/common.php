@@ -182,4 +182,5 @@ $locales['browser.mozilla'] = 'Mozilla';
 $locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué la popup "%s", veuillez la débloquer.';
 $locales['Export'] = 'Exporter';
 $locales['Import'] = 'Importer';
+$locales['Close'] = 'Fermer';
 ?>

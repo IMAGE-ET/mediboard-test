@@ -57,7 +57,7 @@
     </td>
     {{/if}}
     <td id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
-      {{include file="../../mediboard/templates/message.tpl"}}
+      {{include file="../../mediboard/templates/message.tpl" nodebug=true}}
       
     	<div id="systemMsg">
     	  {{$errorMessage|nl2br|smarty:nodefaults|nl2br}}

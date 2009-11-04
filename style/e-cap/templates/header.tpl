@@ -23,12 +23,15 @@ var Menu = {
 }
 
 </script>
+
+{{if !$dialog}}
+  {{include file="../../mediboard/templates/message.tpl" nodebug=true}}
+{{/if}}
+
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
   
 {{if !$dialog}}
-
-{{include file="../../mediboard/templates/message.tpl"}}
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">

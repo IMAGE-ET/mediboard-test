@@ -2,7 +2,7 @@
 
 {{if !$offline && !$dialog}}
 
-{{include file="message.tpl"}}
+{{include file="message.tpl" nodebug=true}}
 
 <table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless --> 
   <tr>

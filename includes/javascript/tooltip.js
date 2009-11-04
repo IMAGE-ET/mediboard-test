@@ -224,11 +224,14 @@ Object.extend(ObjectTooltip, {
   }
 });
 
-function initNotes(){
-  $$("div.noteDiv:not(.initialized)").each(function(element) {
+function initNotes(refresh){
+  // The first argument of the onComplete callback is the XHR response, we have to filter it
+  var selector = "div.noteDiv" + ((refresh && !refresh.status) ? "" : ":not(.initialized)");
+  
+  $$(selector).each(function(element) {
+    element.addClassName("initialized");
     var url = new Url("system", "httpreq_get_notes_image");
     url.addParam("object_guid", element.className.split(" ")[1]);
     url.requestUpdate(element, { waitingText : null });
-    element.addClassName("initialized");
   });
 }

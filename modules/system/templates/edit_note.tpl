@@ -9,14 +9,11 @@
 *}}
 
 <script type="text/javascript">
-function initNotes(){
-  window.opener.initNotes();
-}
 function submitNote(){
   var oForm = document.editFrm;
   
   if (checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { initNotes(); window.close()} });
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { window.opener.initNotes(true); window.close()} });
     oForm.reset();
   }
 }
@@ -50,9 +47,7 @@ function submitNote(){
   </tr>
   <tr>
     <th>{{mb_label object=$note field="date"}}</th>
-    <td>
-      {{mb_field object=$note field="date" form=editFrm register=true}}
-    </td>
+    <td>{{mb_field object=$note field="date" form=editFrm register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$note field="public"}}</th>
@@ -73,7 +68,7 @@ function submitNote(){
   <tr>
     <td class="button" colspan="2">
       {{if $note->_id}}
-      <button type="button" class="submit">Modifier</button>
+      <button type="submit" class="submit">Modifier</button>
       <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$note->_view|smarty:nodefaults|JSAttribute}}'})">
         Supprimer
       </button>

@@ -26,10 +26,9 @@
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_note_aed" />
-        {{mb_field object=$curr_note field="note_id" hidden=1 prop=""}}
+        {{mb_key object=$curr_note}}
         
-        <button style="float: right;" class="cancel notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1,target:'systemMsg'},{onComplete:initNotes})">
-        </button>
+        <button style="float: right;" class="cancel notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1,target:'systemMsg'},{onComplete: function(){initNotes(true)} })"></button>
         </form>
       {{/if}}
       <strong>
