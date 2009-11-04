@@ -18,6 +18,7 @@
  * @return mixed The value correponding to $name in $arr
  */
 function dPgetParam(&$arr, $name, $def = null) {
+  trigger_error("dPgetParam is DEPRECATED : use CValue::read instead", E_USER_WARNING);
   return isset( $arr[$name] ) ? $arr[$name] : $def;
 }
 
@@ -27,6 +28,7 @@ function dPgetParam(&$arr, $name, $def = null) {
  * @return mixed The first value evaluated to TRUE
  */
 function mbGetValue() {
+  trigger_error("mbGetValue is DEPRECATED : use CValue::first instead", E_USER_WARNING);
   foreach(func_get_args() as $arg) {
     if ($arg) {
       return $arg;
@@ -43,6 +45,7 @@ function mbGetValue() {
  * @return mixed The value associated to $valName in the cookies
  **/
 function mbGetValueFromCookie($valName, $valDefault = null) {
+  trigger_error("mbGetValueFromCookie is DEPRECATED : use CValue::cookie instead", E_USER_WARNING);
   return isset($_COOKIE[$valName]) ? $_COOKIE[$valName] : $valDefault;
 }
 
@@ -56,6 +59,7 @@ function mbGetValueFromCookie($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP GET
  **/
 function mbGetValueFromGet($valName, $valDefault = null) {
+  trigger_error("mbGetValueFromGet is DEPRECATED : use CValue::get instead", E_USER_WARNING);
   return isset($_GET[$valName]) ? $_GET[$valName] : $valDefault;
 }
 
@@ -69,6 +73,7 @@ function mbGetValueFromGet($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP POST
  **/
 function mbGetValueFromPost($valName, $valDefault = null) {
+  trigger_error("mbGetValueFromPost is DEPRECATED : use CValue::post instead", E_USER_WARNING);
   return isset($_POST[$valName]) ? $_POST[$valName] : $valDefault;
 }
 
@@ -82,6 +87,7 @@ function mbGetValueFromPost($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP REQUEST (POST or GET)
  **/
 function mbGetValueFromRequest($valName, $valDefault = null) {
+  trigger_error("mbGetValueFromRequest is DEPRECATED : use CValue::request instead", E_USER_WARNING);
   return isset($_REQUEST[$valName]) ? $_REQUEST[$valName] : $valDefault;
 }
 
@@ -96,6 +102,7 @@ function mbGetValueFromRequest($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP GET or Session
  **/
 function mbGetValueFromGetOrSession($valName, $valDefault = null) {
+  trigger_error("mbGetValueFromGetOrSession is DEPRECATED : use CValue::getOrSession instead", E_USER_WARNING);
   global $m;
 
   if (isset($_GET[$valName])) {
@@ -115,6 +122,7 @@ function mbGetValueFromGetOrSession($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP GET or Session
  **/
 function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
+  trigger_error("mbGetAbsValueFromGetOrSession is DEPRECATED : use CValue::getOrSessionAbs instead", E_USER_WARNING);
   if (isset($_GET[$valName])) {
     $_SESSION[$valName] = $_GET[$valName];
   }
@@ -133,6 +141,7 @@ function mbGetAbsValueFromGetOrSession($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP POST or Session
  **/
 function mbGetValueFromPostOrSession($valName, $valDefault = null) {
+  trigger_error("mbGetValueFromPostOrSession is DEPRECATED : use CValue::postOrSession instead", E_USER_WARNING);
   global $m;
 
   if (isset($_POST[$valName])) {
@@ -152,6 +161,7 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
  * @return mixed The value associated to $valName in the HTTP POST or Session
  **/
 function mbGetAbsValueFromPostOrSession($key, $default = null) {
+  trigger_error("mbGetAbsValueFromPostOrSession is DEPRECATED : use CValue::postOrSessionAbs instead", E_USER_WARNING);
   if (isset($_POST[$key])) {
     $_SESSION[$key] = $_POST[$key];
   }
@@ -168,6 +178,7 @@ function mbGetAbsValueFromPostOrSession($key, $default = null) {
  * @return mixed The value associated to $valName in the Session
  **/
 function mbGetValueFromSession($key, $default = null) {
+  trigger_error("mbGetValueFromSession is DEPRECATED : use CValue::session instead", E_USER_WARNING);
   global $m;
   return dPgetParam($_SESSION[$m], $key, $default);
 }
@@ -208,6 +219,7 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
  * @return void
  **/
 function mbSetValueToSession($key, $value = null) {
+  trigger_error("mbSetValueToSession is DEPRECATED : use CValue::setSession instead", E_USER_WARNING);
   global $m;
   $_SESSION[$m][$key] = $value;
 }
@@ -221,6 +233,7 @@ function mbSetValueToSession($key, $value = null) {
  * @return void
  **/
 function mbSetAbsValueToSession($key, $value = null) {
+  trigger_error("mbSetAbsValueToSession is DEPRECATED : use CValue::setSessionAbs instead", E_USER_WARNING);
   $_SESSION[$key] = $value;
 }
 
