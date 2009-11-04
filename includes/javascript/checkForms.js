@@ -371,6 +371,9 @@ Object.extend(ElementChecker, {
         if (parseInt(values[1]) < 1850) {
           this.addError("birthDate", "L'année est inférieure à 1850");
         }
+        if (this.sValue > new Date().toDATE()) {
+          this.addError("birthDate", "La date de naissance ne doit pas être dans le futur");
+        }
 	      if (parseInt(values[3]) > 31 || parseInt(values[2]) > 12) {
 	        var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
 	          this.sLabel,
