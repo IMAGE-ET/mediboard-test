@@ -1,8 +1,10 @@
 <script type="text/javascript">
 function hideMessage(guid, setCookie) {
-  $(guid).hide();
-  if(setCookie)
-    new CookieJar().setValue("ClosedMessages", guid, true);
+  var msgElement = $(guid);
+  if (msgElement) {
+    msgElement.hide();
+    if (setCookie) new CookieJar().setValue("ClosedMessages", guid, true);
+  }
 }
 
 Main.add(function () {
