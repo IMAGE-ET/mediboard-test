@@ -77,8 +77,13 @@ Main.add(function(){
         {{foreach from=$_list_intervs item=_operation}}
         <tr>
           <td class="text">Dr {{$_operation->_ref_chir->_view}}</td>
-          <td class="text">{{$_operation->_ref_sejour->_ref_patient->_view}}</td>
+          <td class="text">
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+              {{$_operation->_ref_sejour->_ref_patient->_view}}
+            </span>
+          </td>
           <td>
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
             {{if $_operation->libelle}}
               {{$_operation->libelle}}
             {{else}}
@@ -86,21 +91,26 @@ Main.add(function(){
                 {{$curr_code->code}}
               {{/foreach}}
             {{/if}}
+            </span>
           </td>
           <td class="button">{{$_operation->time_operation|date_format:$dPconfig.time}}</td>
           <td class="button">{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
           <td class="text">
             {{if $_operation->_ref_consult_anesth->_id}}
+            <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_operation->_ref_consult_anesth->_ref_consultation->_id}}"
+               class="tooltip-trigger"
+               onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_consult_anesth->_guid}}')">
               Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
+            </a>
             {{else}}
               -
             {{/if}}
           </td>
           <td class="text">
             {{if $_operation->date_visite_anesth}}
-            Le {{$_operation->date_visite_anesth|date_format:$dPconfig.datetime}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
+              Le {{$_operation->date_visite_anesth|date_format:$dPconfig.datetime}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
             {{else}}
-            Visite non effectuée
+              Visite non effectuée
             {{/if}}
           </td>
           <td class="button">
