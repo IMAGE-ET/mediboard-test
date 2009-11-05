@@ -36,8 +36,24 @@ function modifSecteur2(){
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
+function changeOwner(type){
+  var oFormTarif = getForm("editFrm");
+  if(type == "chir"){
+	  $V(oFormTarif.chir_id, "{{$prat->user_id}}");
+		$V(oFormTarif.function_id, "");
+	} else {
+    $V(oFormTarif.chir_id, "");
+    $V(oFormTarif.function_id, "{{$prat->function_id}}");
+	}
+}
+
 Main.add(function () {
+  var oFormTarif = getForm("editFrm");
   refreshTotal();
+	
+	{{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
+	  changeOwner($V(oFormTarif._type));
+	{{/if}}
 });
 
 </script>
@@ -79,7 +95,8 @@ Main.add(function () {
             {{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
 			      {{mb_field object=$prat field="function_id" hidden=1 prop=""}}
 			      <input type="hidden" name="chir_id" value="{{$prat->user_id}}" />
-            <select name="_type">
+						
+            <select name="_type" onchange="changeOwner(this.value);">
               <option value="chir" {{if $tarif->chir_id}} selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
             </select>
