@@ -15,13 +15,8 @@
 {{/if}}
 <ul>
 {{foreach from=$matches item=match}}
-  <li id="{{$match->_id}}">
-  	{{if $show_view}}
-		  {{$match->_view}}
-		{{else}}
-		  {{$match->$f|emphasize:$input}}
-		{{/if}}
-	</li>
+  {{* Do not add carriage returns or it will add whitespace in the input *}}
+  <li id="{{$match->_id}}">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</li>
 {{foreachelse}}
   <li><span class="informal">Aucun résultat</span></li>
 {{/foreach}}
