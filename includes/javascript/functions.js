@@ -35,7 +35,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
 
 function main() {
   try {
-    if (sessionLocked) Session.lock();
+    if (window.sessionLocked) Session.lock();
     prepareForms();
     SystemMessage.init();
     WaitingMessage.init();

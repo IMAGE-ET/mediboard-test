@@ -589,12 +589,12 @@ Element.addMethods('input', {
 
 Element.addMethods('select', {
   buildTree: function (element, options) {
-    var select  = element, // DOM select
-        search  = null, // DOM text input
-        tree    = null, // DOM UL/LI tree representing the select/optgroup
-        list    = null, // DOM UL/LI list for keyword search
-        pos     = null, // DOM select position
-        dim     = null; // DOM select dimensions
+    var select = element, // DOM select
+        search, // DOM text input
+        tree,   // DOM UL/LI tree representing the select/optgroup
+        list,   // DOM UL/LI list for keyword search
+        pos,    // DOM select position
+        dim;    // DOM select dimensions
     
     options = Object.extend({
       className: 'select-tree'
