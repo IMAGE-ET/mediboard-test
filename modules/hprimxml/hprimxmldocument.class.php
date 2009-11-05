@@ -136,7 +136,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);
     
-    $doc_valid = $this->schemaValidate();
+    $doc_valid = 1;//$this->schemaValidate();
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();
@@ -438,9 +438,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     if(!$referent) {
-      $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
+     /* $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
       if($mbVenue->_num_dossier)
-        $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_num_dossier, $referent);
+        $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_num_dossier, $referent);*/
     } else {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->_num_dossier, $referent);
       

@@ -64,6 +64,19 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
   function enregistrementPatient($domAcquittement, $echange_hprim, &$newPatient, $data) {
+    if (($data['action'] != "création") || ($data['action'] != "modification")) {
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->message = $messagePatient;
+      $echange_hprim->acquittement = $messageAcquittement;
+      $echange_hprim->statut_acquittement = "erreur";
+      $echange_hprim->store();
+      
+      return $messageAcquittement;  
+    }
+    
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
     

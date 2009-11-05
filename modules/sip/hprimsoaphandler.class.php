@@ -110,7 +110,7 @@ class CHprimSoapHandler extends CSoapHandler {
     // Fusion d'une venue
     else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
       $data = array_merge($data, $domGetEvenement->getFusionXML());
-      $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $data);
+      $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data);
     }
     // Aucun des six événements retour d'erreur
     else {

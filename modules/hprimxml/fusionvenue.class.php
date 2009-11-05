@@ -73,8 +73,38 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function fusionVenue($domAcquittement, $echange_hprim, $data) {
+    // Seulement le cas d'une fusion
+    if ($data['action'] != "fusion") {
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->message = $messagePatient;
+      $echange_hprim->acquittement = $messageAcquittement;
+      $echange_hprim->statut_acquittement = "erreur";
+      $echange_hprim->store();
+      
+      return $messageAcquittement;
+    }
+    
+    // Traitement du patient
+    $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+    $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    if ($echange_hprim->statut_acquittement != "OK") {
+      return $messageAcquittement;
+    }
+    
+    $domAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domAcquittement->identifiant = $data['identifiantMessage'];
+    $domAcquittement->destinataire = $data['idClient'];
+    $domAcquittement->destinataire_libelle = $data['libelleClient'];
+    
      // Si CIP
     if (!CAppUI::conf('sip server')) {
+      $newVenue = new CSejour();
+      $newVenue->patient_id = $newPatient->_id; 
+      $newVenue->group_id = CGroups::loadCurrent()->_id;
+     
       // Acquittement d'erreur : identifiants source et cible non fournis pour le venue / venueEliminee
       if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
@@ -89,12 +119,25 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         return $messageAcquittement;
       }
       
-    }
-    
-    $etat = CHPrimXMLEvenementsPatients::getEtatVenue($data['venueElimine']);
-    // Cas de passage d'une pré-admission en admission
-    if ($etat == "préadmission") {
-      
+      $etat = CHPrimXMLEvenementsPatients::getEtatVenue($data['venueElimine']);
+      // Cas de passage d'une pré-admission en admission
+      // L'élément venueEliminee comporte le numéro de dossier de pré-admission et l'élément venue le numéro de dossier
+      if ($etat == "préadmission") {
+        $elimneeVenue = new CSejour();
+        
+        $num_dossier = new CIdSante400();
+        //Paramétrage de l'id 400
+        $num_dossier->object_class = "CSejour";
+        $num_dossier->tag = $data['idClient'];
+        $num_dossier->id400 = $data['idSourceVenue'];
+        
+        // idSource non connu
+        if(!$num_dossier->loadMatchingObject()) {
+          
+        } else {
+          
+        }
+      }
     }
   }
 }

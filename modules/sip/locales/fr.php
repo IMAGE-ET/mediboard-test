@@ -156,6 +156,7 @@ $locales['sip-hprim-error-E04'] = 'Disconcordance entre l\'identifiant source et
 $locales['sip-hprim-error-E05'] = 'Identifiants source et cible du patient non fournis';
 $locales['sip-hprim-error-E06'] = 'IPP non fourni';
 $locales['sip-hprim-error-E07'] = 'Le type d\'événement reçu ne correspond pas a un type d\'événement patient du modèle HPRIM';
+$locales['sip-hprim-error-E08'] = 'L\'action pour ce type d\'événement n\'est pas pris en compte par notre système.';
 $locales['sip-hprim-error-E100'] = 'Identifiants source et cible du séjour non fournis';
 $locales['sip-hprim-error-E104'] = 'Disconcordance entre l\'identifiant source et l\'identifiant cible du séjour';
 $locales['sip-hprim-error-A01'] = 'IPP envoyé non existant sur le SIP, attribution IPP forcée.';
