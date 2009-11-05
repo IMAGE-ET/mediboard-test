@@ -15,14 +15,17 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
 </script>
 
 <!-- Yoplet to write Intermax file -->
+<!-- Ne pas mettre "display: none" sinon l'applet ne se lancera pas dans Firefox -->
 <applet 
   name="intermaxTrigger"
   code="org.yoplet.Yoplet.class" 
   archive="includes/applets/yoplet.jar?build={{$version.build}}" 
+  {{if $debug=="true"}}
   width="400" 
   height="200"
-  {{if $debug != "true"}}
-  style="display:none;"
+  {{else}}
+  width="0" 
+  height="0"
   {{/if}}
 >
 
@@ -39,10 +42,12 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
   name="intermaxResult"
   code="org.yoplet.Yoplet.class" 
   archive="includes/applets/yoplet.jar?build={{$version.build}}" 
+  {{if $debug=="true"}}
   width="400" 
   height="200"
-  {{if $debug != "true"}}
-  style="display:none;"
+  {{else}}
+  width="0" 
+  height="0"
   {{/if}}
 >
   <param name="action" value="sleep" />
