@@ -1111,21 +1111,24 @@ class CMbObject {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
+
+    // Cas du module non installé
     $backObject = new $backSpec->class;
+    if (!$backObject->_ref_module) {
+      return null;
+    }
+
     $backField = $backSpec->field;
     $fwdSpec =& $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
 
-    // Cas du module non installé
-    if (!$backObject->_ref_module) {
-      return null;
-    }
     
     // Empty object
     if (!$this->_id) {
       return array();
     }
     
+
     // Vérification de la possibilité de supprimer chaque backref
     $backObject->$backField = $this->_id;
 
@@ -1262,9 +1265,14 @@ class CMbObject {
    * @return CMbObject concrete loaded object 
    */
   function loadFwdRef($field, $cached = false) {
+  	if (isset($this->_fwd[$field])) {
+  		return $this->_fwd[$field];
+  	}
+
     $spec = $this->_specs[$field];
     if ($spec instanceof CRefSpec) {
       $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
+			
       $fwd = new $class;
       
       if ($cached)

@@ -3,11 +3,11 @@
 <script type="text/javascript">
 
 ActesCCAM = {
-  refreshList: function(subject_id, chir_id){
-    // Rafraichissement du inc_fdr
-    if("{{$module}}" == "dPcabinet"){
-      refreshReglement(subject_id);
-    }
+  notifyChange: function(subject_id, chir_id) {
+	  ActesCCAM.refreshList(subject_id, chir_id)
+    if (Reglement) Reglement.reload(false);
+  },
+  refreshList: function(subject_id, chir_id) {
     if($('viewSejourHospi')){
       loadSejour(subject_id);
     }
@@ -25,7 +25,7 @@ ActesCCAM = {
   
   add: function(subject_id, chir_id, oOptions){
     var oDefaultOptions = { 
-      onComplete: function() { ActesCCAM.refreshList(subject_id, chir_id) }
+      onComplete: ActesCCAM.notifyChange.curry(subject_id, chir_id)
     }
     Object.extend(oDefaultOptions, oOptions);
     var oForm = document.manageCodes;
@@ -39,8 +39,9 @@ ActesCCAM = {
   
   remove: function(subject_id, oOptions){
     var oDefaultOptions = { 
-      onComplete: function() { ActesCCAM.refreshList(subject_id) } 
+      onComplete: ActesCCAM.notifyChange.curry(subject_id)
     }
+		
     Object.extend(oDefaultOptions, oOptions);
     var oForm = document.manageCodes;
     var aListActes = null;
@@ -76,19 +77,11 @@ function setCodeTemp(code){
 
 function setAssociation(association, oForm, subject_id, chir_id, oOptions) {
   var oDefaultOptions = { 
-    onComplete: function() { ActesCCAM.refreshList(subject_id, chir_id) } 
+    onComplete: ActesCCAM.notifyChange.curry(subject_id, chir_id)
   }
   Object.extend(oDefaultOptions, oOptions);
   oForm.code_association.value = association;
   submitFormAjax(oForm, 'systemMsg', oDefaultOptions)
-}
-
-function refreshReglement(consult_id) {
-  // reload pour mettre a jour le champ codes_ccam dans la gestion des tarifs
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_reglement");
-  url.addParam("selConsult", consult_id);
-  url.requestUpdate('reglement', { waitingText : null }) ;
 }
 
 </script>

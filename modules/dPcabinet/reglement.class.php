@@ -42,20 +42,18 @@ class CReglement extends CMbObject {
     $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|autre default|cheque';
     return $specs;
   }
+	
+  function loadRefConsultation($cache = 0) {
+    $this->_ref_consultation = $this->loadFwdRef("consultation_id");
+  }
+  
+  function loadRefBanque($cache = 0) {
+    $this->_ref_banque = $this->loadFwdRef("banque_id", 1);
+  }
   
   function loadRefsFwd($cache = 0) {
-    if(!$this->_ref_consultation) {
- 	    $this->_ref_consultation = new CConsultation();
- 	    if($cache) {
-        $this->_ref_consultation = $this->_ref_consultation->getCached($this->consultation_id);
- 	    } else {
- 	      $this->_ref_consultation->load($this->consultation_id);
- 	    }
-    }
-    if(!$this->_ref_banque) {
-      $this->_ref_banque = new CBanque();
-      $this->_ref_banque = $this->_ref_banque->getCached($this->banque_id);
-    }
+    $this->loadRefConsultation($cache);
+		$this->loadRefBanque();
   }
   
   function check () {

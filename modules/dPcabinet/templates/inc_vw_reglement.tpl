@@ -21,7 +21,7 @@ cancelTarif = function(action) {
   $V(oForm.tiers_date_reglement, "");
   $V(oForm.patient_date_reglement, "");
   
-  Reglement.submit(oForm);
+  Reglement.submit(oForm, true);
 }
 
 validTarif = function(){
@@ -32,7 +32,7 @@ validTarif = function(){
   if ($V(oForm.tarif) == ""){
     $V(oForm.tarif, "manuel");
   }
-  Reglement.submit(oForm);
+  Reglement.submit(oForm, true);
 }
 
 modifTotal = function(){
@@ -148,7 +148,7 @@ Main.add( function(){
       	        <tr>
       	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
       	          <td>
-      	            <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload } );">
+      	            <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload.curry(true) } );">
       	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
       	              {{if $tarifsChir|@count}}
         	              <optgroup label="Tarifs praticien">
@@ -321,7 +321,8 @@ Main.add( function(){
                 </form>
                
                 <script type="text/javascript">Main.add( function() { prepareForm(document.forms["reglement-add"]); } );</script>
-                <form name="reglement-add" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload } );">
+								
+                <form name="reglement-add" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload.curry(false) } );">
                  <input type="hidden" name="m" value="dPcabinet" />
                  <input type="hidden" name="del" value="0" />
                  <input type="hidden" name="dosql" value="do_reglement_aed" />
@@ -348,7 +349,10 @@ Main.add( function(){
                         {{mb_value object=$curr_reglement->_ref_banque field=_view}}
                       {{/if}}
                       </td>
-                      <td><label title="{{mb_value object=$curr_reglement field=date}}">{{$curr_reglement->date|date_format:"%d/%m/%Y"}}</td>
+                      <td>
+                      	<label title="{{mb_value object=$curr_reglement field=date}}">
+												{{$curr_reglement->date|date_format:$dPconfig.date}}
+											</td>
                       <td>
                         <a class="button remove notext" href="" onclick="return Reglement.cancel({{$curr_reglement->_id}});"></a>
                       </td>

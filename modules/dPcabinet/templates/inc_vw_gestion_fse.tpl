@@ -48,7 +48,7 @@ Object.extend(Intermax.ResultHandler, {
 			}
     }
 
-    Reglement.submit(document.BindVitale);
+    Reglement.submit(document.BindVitale, false);
   },
   
   "Lire CPS": function() {
@@ -69,16 +69,16 @@ Object.extend(Intermax.ResultHandler, {
     msg += "\n\nVoulez-vous continuer ?";
 
     if (confirm(msg)) {
-      Reglement.submit(document.BindCPS);
+      Reglement.submit(document.BindCPS, false);
     }
   },
 
   "Formater FSE": function() {
-    Reglement.submit(document.BindFSE);
+    Reglement.submit(document.BindFSE, true);
   },
 
   "Annuler FSE": function() {
-    Reglement.reload();
+    Reglement.reload(true);
   }  
 } );
 

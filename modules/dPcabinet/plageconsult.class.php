@@ -118,7 +118,6 @@ class CPlageconsult extends CMbObject {
     $this->_nb_patients = $consultation->countList($where);
   }
   
-  
   function loadRefsBack($withCanceled = true) {
     $this->loadRefsConsultations($withCanceled);
     $this->loadFillRate();
@@ -147,19 +146,16 @@ class CPlageconsult extends CMbObject {
   }
   
   function loadRefsFwd($cache = 0) {
-    $this->_ref_chir = new CMediusers();
-    if($cache) {
-      $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
-    } else {
-      $this->_ref_chir->load($this->chir_id);
-    }
+    $this->_ref_chir = $this->loadFwdRef("chir_id");
   }
   
   function getPerm($permType) {
     if(!$this->_ref_chir) {
       $this->loadRefsFwd(1);
     }
-    return $this->_ref_chir->getPerm($permType) && $this->_ref_module->getPerm($permType);
+		
+    return $this->_ref_chir->getPerm($permType) 
+		  && $this->_ref_module->getPerm($permType);
   }
 
   function checkFrequence() {

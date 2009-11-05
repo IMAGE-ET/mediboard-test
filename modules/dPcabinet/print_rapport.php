@@ -111,7 +111,7 @@ $listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
 $listPlages = array();
 foreach($listConsults as $consult) {
   $consult->loadRefsFwd(1);
-  $consult->loadrefsReglements();
+  $consult->loadRefsReglements();
   $consult->_new_patient_reglement = new CReglement();
   $consult->_new_patient_reglement->mode = "especes";
   $consult->_new_patient_reglement->montant = $consult->_du_patient_restant;
@@ -133,13 +133,13 @@ foreach($listConsults as $consult) {
   $recapReglement["total"]["nb_reglement_tiers"]   += count($consult->_ref_reglements_tiers);
   $recapReglement["total"]["secteur1"]             += $consult->secteur1;
   $recapReglement["total"]["secteur2"]             += $consult->secteur2;
-  foreach($consult->_ref_reglements_patient as $curr_reglement) {
-    $recapReglement[$curr_reglement->mode]["du_patient"]          += $curr_reglement->montant;
-    $recapReglement[$curr_reglement->mode]["nb_reglement_patient"]++;
+  foreach($consult->_ref_reglements_patient as $_reglement) {
+    $recapReglement[$_reglement->mode]["du_patient"]          += $_reglement->montant;
+    $recapReglement[$_reglement->mode]["nb_reglement_patient"]++;
   }
-  foreach($consult->_ref_reglements_tiers as $curr_reglement) {
-    $recapReglement[$curr_reglement->mode]["du_tiers"]          += $curr_reglement->montant;
-    $recapReglement[$curr_reglement->mode]["nb_reglement_tiers"]++;
+  foreach($consult->_ref_reglements_tiers as $_reglement) {
+    $recapReglement[$_reglement->mode]["du_tiers"]          += $_reglement->montant;
+    $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
   }
   if(!isset($listPlages[$consult->plageconsult_id])) {
     $plageConsult = new CPlageconsult();

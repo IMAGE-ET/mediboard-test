@@ -53,8 +53,8 @@ var InseeFields = {
     $V(oForm.elements[sFieldCommune], selected.select(".commune")[0].textContent, true);
 	  
 		// Give focus
-	  if (sFieldFocus){
-	    $(sFormName + '_' + sFieldFocus).focus();
+	  if (sFieldFocus) {
+	    $(oForm.elements[sFieldFocus]).focus();
 	  }
 	}
 }

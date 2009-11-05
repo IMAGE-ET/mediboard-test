@@ -13,15 +13,7 @@ refreshTarif = function(){
   
 ActesNGAP = {
 	refreshList: function() {
-	  
-	  //(refreshFdr || Prototype.emptyFunction)("{{$object->_id}}");
-	  //refreshFdr("{{$object->_id}}") || Prototype.emptyFunction;
-	  
-	  {{if $object->_class_name == "CConsultation"}}
-	    refreshReglement("{{$object->_id}}");
-	  {{/if}}
-	  
-	  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
+    var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("object_id", "{{$object->_id}}");
 	  url.addParam("object_class", "{{$object->_class_name}}");
 	  url.requestUpdate('listActesNGAP', {
@@ -41,15 +33,16 @@ ActesNGAP = {
 	  $V(oForm.acte_ngap_id, acte_ngap_id); 
 		$V(oForm.executant_id, executant_id);
 		
-		submitFormAjax(oForm, 'systemMsg', { 
-      onComplete: ActesNGAP.refreshList
-    } );
+		submitFormAjax(oForm, 'systemMsg');
 	},
 	
 	submit: function() {
 	  var oForm = document.editNGAP;
 		submitFormAjax(oForm, 'systemMsg', { 
-			onComplete: ActesNGAP.refreshList
+			onComplete: function() { 
+			  ActesNGAP.refreshList();
+        if (Reglement) Reglement.reload(false);
+			}
 		} );
 	}
 }
@@ -184,7 +177,7 @@ ActesNGAP = {
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$acte_ngap->_list_executants item=_executant}}
               <option class="mediuser" {{if ($_acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
-                {{$executant}}
+                {{$_executant}}
               </option>
               {{/foreach}}
             </select>

@@ -82,13 +82,13 @@ function setToNow(element) {
               ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
             }
             {{/if}}
-            submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} });">
+            submitFormAjax(this.form, 'systemMsg',{onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) });">
             Coder cet acte
           </button>
       
           {{else}}
           
-          <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
             {{tr}}Delete{{/tr}} cet acte
           </button>
           {{/if}}
@@ -225,9 +225,7 @@ function setToNow(element) {
             <tr>
               <td class="button" colspan="10">
                 <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
-                		onComplete: function() {
-                	    ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})
-                	} 
+                		onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
                 })">
                   {{tr}}Modify{{/tr}} cet acte
                 </button>
@@ -243,9 +241,7 @@ function setToNow(element) {
                 {{if $confCCAM.openline}}
                   <div style="float: right;">
                   <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
-                  		onComplete: function() {
-                  	    ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})
-                  	} 
+                  	    ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
                   })">
                     {{tr}}Modify{{/tr}} cet acte
                   </button>

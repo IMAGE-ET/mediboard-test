@@ -248,8 +248,6 @@ class CConsultation extends CCodable {
     $this->_coded = $this->valide;
     
     $this->_exam_fields = $this->getExamFields();
-    
-    $this->loadRefsReglements();
   }
    
   function updateDBFields() {
@@ -722,30 +720,12 @@ class CConsultation extends CCodable {
   }
   
   function loadRefPatient($cache = 0) {
-    if ($this->_ref_patient) {
-      return;
-    }
-    
-    $this->_ref_patient = new CPatient;
-    if($cache) {
-      $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
-    } else {
-      $this->_ref_patient->load($this->patient_id);
-    }
+    $this->_ref_patient = $this->loadFwdRef("patient_id");
   }
   
   // Chargement du sejour et du RPU dans le cas d'une urgence
   function loadRefSejour($cache = 0){
-    if ($this->_ref_sejour) {
-      return;
-    }
-    
-    $this->_ref_sejour = new CSejour();
-    if($cache) {
-      $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
-    } else {
-      $this->_ref_sejour->load($this->sejour_id);
-    }
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id");
     $this->_ref_sejour->loadRefRPU();
   }
   
@@ -758,21 +738,16 @@ class CConsultation extends CCodable {
       return; 
     }
 
-    $this->_ref_plageconsult = new CPlageconsult;
-    if($cache) {
-      $this->_ref_plageconsult = $this->_ref_plageconsult->getCached($this->plageconsult_id);
-    } else {
-      $this->_ref_plageconsult->load($this->plageconsult_id);
-    }
+    $this->_ref_plageconsult = $this->loadFwdRef("plageconsult_id", $cache);
     $this->_ref_plageconsult->loadRefsFwd($cache);
     
     // Distant fields
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
-    $this->_date = $this->_ref_plageconsult->date;
+    $this->_date     = $this->_ref_plageconsult->date;
     $this->_datetime = mbAddDateTime($this->heure,$this->_date);
     $this->_acte_execution = $this->_datetime;
-    $this->_is_anesth = $this->_ref_chir->isFromType(array("Anesthésiste"));
-    $this->_praticien_id = $this->_ref_plageconsult->_ref_chir->_id;
+    $this->_is_anesth    = $this->_ref_chir->isFromType(array("Anesthésiste"));
+    $this->_praticien_id = $this->_ref_chir->_id;
   }
   
   function loadRefPraticien(){
@@ -901,21 +876,21 @@ class CConsultation extends CCodable {
     $this->_ref_reglements_patient = array();
     $this->_ref_reglements_tiers   = array();
     
-    foreach ($this->_ref_reglements as $curr_reglement) {
-      if($curr_reglement->emetteur == "patient") {
-        $this->_ref_reglements_patient[$curr_reglement->_id] = $curr_reglement;
+    foreach ($this->_ref_reglements as $_reglement) {
+      $_reglement->loadRefBanque(1);
+      if($_reglement->emetteur == "patient") {
+        $this->_ref_reglements_patient[$_reglement->_id] = $_reglement;
       } else {
-        $this->_ref_reglements_tiers[$curr_reglement->_id] = $curr_reglement;
+        $this->_ref_reglements_tiers[$_reglement->_id] = $_reglement;
       }
-      $curr_reglement->loadRefsFwd(1);
     }
     
     // Calcul de la somme du restante du patient
     $this->_du_patient_restant = $this->du_patient;
     $this->_reglements_total_patient = 0;
-    foreach ($this->_ref_reglements_patient as $curr_reglement) {
-      $this->_du_patient_restant -= $curr_reglement->montant;
-      $this->_reglements_total_patient += $curr_reglement->montant;
+    foreach ($this->_ref_reglements_patient as $_reglement) {
+      $this->_du_patient_restant -= $_reglement->montant;
+      $this->_reglements_total_patient += $_reglement->montant;
     }
     $this->_du_patient_restant       = round($this->_du_patient_restant, 2);
     $this->_reglements_total_patient = round($this->_reglements_total_patient, 2);
@@ -923,9 +898,9 @@ class CConsultation extends CCodable {
     // Calcul de la somme du restante du tiers
     $this->_du_tiers_restant = $this->du_tiers;
     $this->_reglements_total_tiers = 0;
-    foreach ($this->_ref_reglements_tiers as $curr_reglement) {
-      $this->_du_tiers_restant -= $curr_reglement->montant;
-      $this->_reglements_total_tiers += $curr_reglement->montant;
+    foreach ($this->_ref_reglements_tiers as $_reglement) {
+      $this->_du_tiers_restant -= $_reglement->montant;
+      $this->_reglements_total_tiers += $_reglement->montant;
     }
     $this->_du_tiers_restant       = round($this->_du_tiers_restant, 2);
     $this->_reglements_total_tiers = round($this->_reglements_total_tiers, 2);
