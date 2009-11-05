@@ -94,24 +94,22 @@ foreach($listEchangeHprim as $_echange_hprim) {
 	    $domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
 	    $domGetIdSourceObject->loadXML(utf8_decode($_ref_notification->message));
 	     
+      $id400 = new CIdSante400();
       if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
+        $id400->object_class = "CPatient";
         $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
       }
       if ($_echange_hprim->sous_type == "venuePatient" ) {
         $id400->object_class = "CSejour";
         $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
       }
-	    
 	   
-	    $id400 = new CIdSante400();
-	    //Paramétrage de l'id 400
-	    $id400->object_class = "CPatient";
 	    $id400->tag = $_ref_notification->emetteur;
 	  
-	    $id400->id400 = $_ref_notification->_patient_ipp;
+	    $id400->id400 = $_ref_notification->_object_id_permanent;
 	    $id400->loadMatchingObject();
 	    
-	    $_ref_notification->_patient_id = ($id400->object_id) ? $id400->object_id : $_ref_notification->_patient_ipp;
+	    $_ref_notification->_object_id = ($id400->object_id) ? $id400->object_id : $_echange_hprim->_object_id_permanent;
 		}
 	} 
 	$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
