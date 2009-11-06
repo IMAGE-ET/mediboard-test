@@ -769,7 +769,7 @@ $locales['config-dPplanningOp-CSejour-locked-desc'] = '';
 $locales['config-dPplanningOp-CSejour-min_intervalle-desc'] = '';
 $locales['config-dPplanningOp-CSejour-modif_SHS-desc'] = '';
 $locales['config-dPplanningOp-CSejour-patient_id-desc'] = '';
-$locales['config-dPplanningOp-CSejour-tag_dossier-desc'] = '';
+$locales['config-dPplanningOp-CSejour-tag_dossier-desc'] = 'Tag numéro de dossier';
 $locales['CProtocole-for_sejour'] = 'Protocole de séjour';
 $locales['CProtocole-for_sejour-court'] = 'Protocole de séjour';
 $locales['CProtocole-for_sejour-desc'] = 'Ce protocole est spécialisé pour les séjours';
@@ -903,4 +903,8 @@ $locales['COperation-facture'] = 'Facturé';
 $locales['COperation-facture-court'] = 'Fact.';
 $locales['COperation-facture-desc'] = 'Actes envoyés pour l\'intervention';
 $locales['CSejour.type.consult'] = 'Consultation';
+$locales['config-dPplanningOp-CSejour-tag_dossier_cancel'] = 'Tag numéro de dossier annulé';
+$locales['config-dPplanningOp-CSejour-tag_dossier_cancel-desc'] = 'Tag numéro de dossier annulé';
+$locales['config-dPplanningOp-CSejour-tag_dossier_pa'] = 'Tag dossier pré-admission';
+$locales['config-dPplanningOp-CSejour-tag_dossier_pa-desc'] = 'Tag dossier pré-admission';
 ?>

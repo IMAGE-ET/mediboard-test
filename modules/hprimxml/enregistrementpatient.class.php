@@ -12,8 +12,8 @@ CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients { 
   function __construct() {   
-  	$this->sous_type = "enregistrementPatient";
-  	         
+    $this->sous_type = "enregistrementPatient";
+             
     parent::__construct();
   }
   
@@ -63,20 +63,21 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function enregistrementPatient($domAcquittement, $echange_hprim, &$newPatient, $data) {
-    if (($data['action'] != "création") || ($data['action'] != "modification")) {
+  function enregistrementPatient($domAcquittement, &$echange_hprim, &$newPatient, $data) {
+    $messageAcquittement = null;
+        
+    if (($data['action'] != "création") && ($data['action'] != "modification")) {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-      $echange_hprim->message = $messagePatient;
       $echange_hprim->acquittement = $messageAcquittement;
       $echange_hprim->statut_acquittement = "erreur";
       $echange_hprim->store();
       
       return $messageAcquittement;  
     }
-    
+
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
     
@@ -90,7 +91,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-        $echange_hprim->message = $messagePatient;
         $echange_hprim->acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = "erreur";
         $echange_hprim->store();

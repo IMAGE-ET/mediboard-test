@@ -196,6 +196,8 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_sortie_autre"  => "8",
   "locked"              => "0",
   "tag_dossier"         => "",
+  "tag_dossier_pa"      => "pa_",
+  "tag_dossier_cancel"  => "cancel_",
   "service_id_notNull"  => "0",
 );
 
@@ -634,8 +636,7 @@ $dPconfig["hprimxml"] = array (
     "validation" => "0",
     "version" => "1.01",
   ),
-  "functionPratImport" => "Import",
-  "tagDossierPA" => "PA",
+  "functionPratImport" => "Import"
 );
 
 // you can add as much ftp as you want by using

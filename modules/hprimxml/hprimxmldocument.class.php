@@ -136,7 +136,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);
     
-    $doc_valid = 1;//$this->schemaValidate();
+    $doc_valid = $this->schemaValidate();
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();

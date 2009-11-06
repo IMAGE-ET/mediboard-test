@@ -110,7 +110,7 @@ foreach($listEchangeHprim as $_echange_hprim) {
 	    $id400->loadMatchingObject();
 	    
       $_ref_notification->_object_class = $id400->object_class;
-	    $_ref_notification->_object_id = ($id400->object_id) ? $id400->object_id : $_echange_hprim->_object_id_permanent;
+	    $_ref_notification->_object_id = ($id400->object_id) ? $id400->object_id : $_ref_notification->_object_id_permanent;
 		}
 	} 
 	$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();

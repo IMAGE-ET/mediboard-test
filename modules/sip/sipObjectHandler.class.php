@@ -43,6 +43,10 @@ class CSipObjectHandler extends CMbObjectHandler {
     
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
+      if ($mbObject->_anonyme || $mbObject->_update_vitale) {
+        return;
+      }
+      
       // Si Serveur
       if (CAppUI::conf('sip server')) {
         $listDest = $dest_hprim->loadList();
@@ -107,7 +111,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         $domEvenement->destinataire = $dest_hprim->destinataire;
         
         $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject);
-          
+           
         if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
           trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
         }
@@ -213,7 +217,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         $domEvenement->destinataire = $dest_hprim->destinataire;
         
         $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
-                  
+                 
         if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
           trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
         }
