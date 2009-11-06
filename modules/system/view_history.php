@@ -8,9 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
 $dialog = CValue::get("dialog");
+$start  = CValue::get("start", 0);
 
 if (!$can->read && !$dialog) {
   $can->redirect();
@@ -25,7 +26,7 @@ $filter->object_class = CValue::getOrSession("object_class");
 $filter->type         = CValue::getOrSession("type");
 
 // Récupération de la liste des classes disponibles
-$AppUI->getAllClasses();
+CAppui::getAllClasses();
 $listClasses = getChildClasses();
 
 // Récupération de la liste des utilisateurs disponibles
@@ -40,20 +41,17 @@ if ($filter->user_id     ) $where["user_id"     ] = "= '$filter->user_id'";
 if ($filter->object_id   ) $where["object_id"   ] = "= '$filter->object_id'";
 if ($filter->object_class) $where["object_class"] = "= '$filter->object_class'";
 if ($filter->type        ) $where["type"        ] = "= '$filter->type'";
-
-if ($filter->_date_min && $filter->_date_max) {
-  $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-}
+if ($filter->_date_min   ) $where[] = "date >= '$filter->_date_min'";
+if ($filter->_date_max   ) $where[] = "date <= '$filter->_date_max'";
 
 $log = new CUserLog;
-$order = "date DESC";
-$list = $log->loadList($where, $order, "0, 100");
+$list = $log->loadList($where, "date DESC", "$start,100");
 $list_count = $log->countList($where);
 $item = "";
 foreach($list as $key => $value) {
   $list[$key]->loadRefsFwd();
-  if($item == "")
-    $item = $list[$key]->_ref_object->_view;
+  if(!$item)
+    $item = $value->_ref_object->_view;
 }
 
 // Création du template
@@ -65,7 +63,8 @@ $smarty->assign("listClasses" , $listClasses );
 $smarty->assign("listUsers"   , $listUsers   );
 $smarty->assign("item"        , $item        );
 $smarty->assign("list"        , $list        );
-$smarty->assign("list_count"  , $list_count);
+$smarty->assign("start"       , $start       );
+$smarty->assign("list_count"  , $list_count  );
 
 $smarty->display("view_history.tpl");
 

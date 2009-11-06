@@ -10,19 +10,29 @@
 
 {{mb_include_script module="system" script="object_selector"}}
 
+<script type="text/javascript">
+function changePage(start) {
+  $V(getForm("filterFrm").start, start);
+}
+
+Main.add(function(){
+  var form = getForm("filterFrm");
+  form.getElements().each(function(e){
+    e.observe("change", function(){
+      $V(form.start, 0);
+    });
+  });
+});
+</script>
+
 <form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="dialog" value="{{$dialog}}" />
+<input type="hidden" name="start" value="{{$start|default:0}}" onchange="this.form.submit()" />
 
 <table class="form">
-  <tr>
-    <th class="category" colspan="10">
-      {{$list_count}} historiques trouvés{{if $list_count > $list|@count }}, seuls les 100 plus récents sont affichés{{/if}}
-    </th>
-  </tr>
-  
   <tr>
     <th>{{mb_label object=$filter field=user_id}}</th>
     <td>
@@ -49,7 +59,7 @@
     </td>
 
     <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_min" form="filterFrm" register=true}}</td>
+    <td>{{mb_field object=$filter field="_date_min" form="filterFrm" register=true}}</td>
 
   </tr>
   <tr>
@@ -72,7 +82,7 @@
        </script>
     </td>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}} </td>
   </tr>
   <tr>
     <td class="button" colspan="10">
@@ -82,3 +92,12 @@
 </table>
 
 </form>
+
+{{if $list_count < 100000}}
+  {{mb_include module=system template=inc_pagination total=$list_count current=$start change_page='changePage'}}
+{{else}}
+  <div class="small-info">
+    <strong>{{$list_count}}</strong> historiques trouvés, seuls les 100 plus récents sont affichés.<br />
+    Veuillez préciser votre recherche pour avoir accès aux historiques plus anciens.
+  </div>
+{{/if}}
