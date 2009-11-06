@@ -7,6 +7,7 @@
 {{assign var="last_page" value=$total-1}}
 {{assign var="last_page" value=$last_page/$step|intval}}
 {{assign var="pagination" value=0|range:$last_page}}
+{{assign var="jumper" value=1}}
 
 <div class="pagination" style="min-height: 1em;">
   <div style="float: right;">{{$total}} {{tr}}results{{/tr}}</div>
@@ -20,9 +21,20 @@
             <a href="#1" onclick="{{$change_page}}({{$page*$step}})" class="page">{{$smarty.foreach.page.iteration}}</a>
           {{/if}}
         {{else}}
-          {{if $page == 5}}... <select onchange="{{$change_page}}($V(this))"><option selected="selected" disabled="disabled">{{$current/$step+1}}</option>{{/if}}
+          {{if $page == 5}}
+					   ... 
+						 <select onchange="{{$change_page}}($V(this))">
+					   	<option selected="selected" disabled="disabled">{{$current/$step+1}}</option>
+					{{/if}}
+            {{if $page+1 % $jumper == 0}}
             <option {{if $page*$step == $current}}selected="selected"{{/if}} value="{{$page*$step}}">{{$page+1}}</option>
-          {{if $page == $pagination|@count-6}}</select> ...{{/if}}
+            {{/if}}
+					  {{if $page+1 % ($jumper*10) == 0}}
+						{{assign var=jumper value=$jumper*10}}
+            {{/if}}
+          {{if $page == $pagination|@count-6}}
+					  </select> ...
+					{{/if}}
         {{/if}}
       {{/foreach}}
     {{else}}

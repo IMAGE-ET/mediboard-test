@@ -93,11 +93,4 @@ Main.add(function(){
 
 </form>
 
-{{if $list_count < 100000}}
-  {{mb_include module=system template=inc_pagination total=$list_count current=$start change_page='changePage'}}
-{{else}}
-  <div class="small-info">
-    <strong>{{$list_count}}</strong> historiques trouvés, seuls les 100 plus récents sont affichés.<br />
-    Veuillez préciser votre recherche pour avoir accès aux historiques plus anciens.
-  </div>
-{{/if}}
+{{mb_include module=system template=inc_pagination total=$list_count current=$start step=100 change_page='changePage'}}
