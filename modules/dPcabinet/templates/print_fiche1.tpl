@@ -2,6 +2,12 @@
   </tr>
 </table>
 
+{{if $print}}
+  <script type="text/javascript">
+  Main.add(window.print);
+  </script> 
+{{/if}}
+
 {{assign var="patient" value=$consult->_ref_patient}}
 {{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}
 {{assign var="sejour" value=$consult_anesth->_ref_operation->_ref_sejour}}

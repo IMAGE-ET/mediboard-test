@@ -1,3 +1,10 @@
+{{if $print}}
+	<script type="text/javascript">
+	Main.add(window.print);
+	</script> 
+{{/if}}
+
+
 {{assign var="patient" value=$consult->_ref_patient}}
 {{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}
     </td>
@@ -43,7 +50,7 @@
             pour <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} nuit(s)</strong>
             <br />
             {{/if}}
-          
+         
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
             par le <strong>Dr {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong>
             <ul>
@@ -55,7 +62,7 @@
               {{/foreach}}
             </ul>
           {{else}}
-            Intervention le <strong>{{$consult_anesth->date_interv->date|date_format:"%A %d/%m/%Y"}}</strong>
+            Intervention le <strong>{{$consult_anesth->date_interv|date_format:"%A %d/%m/%Y"}}</strong>
             par le <strong>Dr {{$consult_anesth->_ref_chir->_view}}</strong>
             <br />
             {{$consult_anesth->libelle_interv}}

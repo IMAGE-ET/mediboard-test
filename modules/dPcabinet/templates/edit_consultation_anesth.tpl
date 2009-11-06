@@ -44,6 +44,7 @@ function submitAll() {
 function printFiche() {
   var url = new Url("dPcabinet", "print_fiche"); 
   url.addElement(document.editFrmFinish.consultation_id);
+	url.addParam("print", true);
   url.popup(700, 500, "printFiche");
 }
 

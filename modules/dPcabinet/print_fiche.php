@@ -15,6 +15,7 @@ if(!CModule::getCanDo('dPcabinet')->edit && !CModule::getCanDo('soins')->read){
 //$can->needsEdit();
 
 $date = CValue::getOrSession("date", mbDate());
+$print = CValue::getOrSession("print", false);
 $today = mbDate();
 
 $consultation_id = CValue::get("consultation_id");
@@ -123,7 +124,7 @@ $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
 $smarty->assign("etatDents" , $sEtatsDents);
-
+$smarty->assign("print", $print);
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 
 $smarty->display($template.".tpl");
