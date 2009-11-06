@@ -54,6 +54,7 @@ class CPatient extends CMbObject {
   var $code_exo         = null;
   var $libelle_exo		= null;
   var $notes_amo        = null;
+  var $notes_amc        = null;
   var $deb_amo          = null;
   var $fin_amo          = null;
   var $code_sit         = null;
@@ -224,6 +225,7 @@ class CPatient extends CMbObject {
     $specs["deb_amo"]           = "date";
     $specs["fin_amo"]           = "date";
     $specs["notes_amo"]         = "text";
+    $specs["notes_amc"]         = "text";
     $specs["rang_beneficiaire"] = "enum list|01|02|09|11|12|13|14|15|16|31";
     $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
     $specs["fin_validite_vitale"] = "date";

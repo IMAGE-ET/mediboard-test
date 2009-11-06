@@ -186,6 +186,8 @@
     <td class="text">
       <strong>{{mb_label object=$object field="notes_amo"}}</strong>
       {{mb_value object=$object field="notes_amo"}}
+      <strong>{{mb_label object=$object field="notes_amc"}}</strong>
+      {{mb_value object=$object field="notes_amc"}}
     </td>
   </tr>
   <tr>

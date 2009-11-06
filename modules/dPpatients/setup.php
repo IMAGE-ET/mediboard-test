@@ -1060,18 +1060,26 @@ class CSetupdPpatients extends CSetup {
     $this->addDatasource("INSEE", $query);
 		
     $this->makeRevision("0.88");
-    $query = "ALTER TABLE `constantes_medicales` ADD `glycemie` FLOAT UNSIGNED";
+    $query = "ALTER TABLE `constantes_medicales` 
+		  ADD `glycemie` FLOAT UNSIGNED";
     $this->addQuery($query);
 		
 		$this->makeRevision("0.89");
-		$query = "ALTER TABLE `medecin` CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','autre')";
+		$query = "ALTER TABLE `medecin` 
+		  CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','autre')";
 		$this->addQuery($query);
 		
 		$this->makeRevision("0.90");
-		$query = "ALTER TABLE `medecin` CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue','autre');";
+		$query = "ALTER TABLE `medecin` 
+		  CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue','autre');";
 		$this->addQuery($query);
 
-    $this->mod_version = "0.91";
+    $this->makeRevision("0.91");
+		$query = "ALTER TABLE `patients` 
+      ADD `notes_amc` TEXT;";
+    $this->addQuery($query);
+		
+    $this->mod_version = "0.92";
   }
 }
 

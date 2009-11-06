@@ -59,6 +59,20 @@ var InseeFields = {
 	}
 }
 
+function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
+  Element.cleanWhitespace(selected);
+  dn = selected.childNodes;
+  $V(sFormName + '_' + sFirstField, dn[0].firstChild.firstChild.nodeValue, true);
+
+  if(sSecondField){
+    $V(sFormName + '_' + sSecondField, dn[2].firstChild.nodeValue, true);
+  }
+  
+  if(sFieldFocus){
+    $(sFormName + '_' + sFieldFocus).focus();
+  }
+}
+
 function initPaysField(sFormName, sFieldPays, sFieldFocus){
   var sFieldId = sFormName + '_' + sFieldPays;
   var sCompleteId = sFieldPays + '_auto_complete';

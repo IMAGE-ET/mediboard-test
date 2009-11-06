@@ -21,6 +21,7 @@
   {{include field="ald"              file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="cmu"              file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="notes_amo"        file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
+  {{include field="notes_amc"        file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="incapable_majeur" file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="ATNC"             file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
 
