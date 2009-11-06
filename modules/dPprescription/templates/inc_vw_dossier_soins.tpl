@@ -375,11 +375,14 @@ refreshTabState = function(){
     window['{{$_chapitre}}SoinLoaded'] = false;
 	{{/foreach}}
 	
-  // Lancement du onclick sur le premier onglet et affichage du premier onglet
-  if($('tab_categories') && $('tab_categories').down()){
-	  $('tab_categories').down().onclick();
-	  tabs.setActiveTab($('tab_categories').down().down().key);
-  }
+	if(tabs.activeLink){
+	  tabs.activeLink.up().onclick();
+	} else {
+	  if($('tab_categories') && $('tab_categories').down()){
+	    $('tab_categories').down().onclick();
+	    tabs.setActiveTab($('tab_categories').down().down().key);
+    }
+	}
 }
 
 Main.add(function () {
