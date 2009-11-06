@@ -11,7 +11,7 @@
 {{assign var="line" value=$object}}
 <table class="tbl">
   <tr>
-    <th colspan="3">{{$line->_view}}</th>
+    <th colspan="3"><a href="#" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">{{$line->_view}}</a></th>
   </tr>
   <tr>
     {{if !$line->fin}}
@@ -110,4 +110,7 @@
     <td>Contexte:</td>
     <td colspan="2">{{$line->_ref_prescription->_ref_object->_view}}</td>
   </tr>
+	<tr>
+		<td colspan="3" class="button"><button class="search" type="button" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}', 'two,posologie');">Posologie et mode d'administration</button></td>
+	</tr>
 </table>

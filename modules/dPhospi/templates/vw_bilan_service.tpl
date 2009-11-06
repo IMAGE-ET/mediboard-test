@@ -1,3 +1,6 @@
+  </td>
+	</tr>
+	</table>
 <script type="text/javascript">
 
 Main.add( function(){
@@ -188,35 +191,30 @@ selectPeriode = function(element) {
   </table>
 </form>
 
-{{if $lines_by_patient|@count}}
-	<table class="tbl">
-		<tr>
-		  <th colspan="6">Filtres</th>
-		</tr>
-		<tr>
-		  <td colspan="6">
-		    Horaires sélectionnées: 
-		    <strong>{{$dateTime_min|date_format:$dPconfig.datetime}}</strong> au <strong>{{$dateTime_max|date_format:$dPconfig.datetime}}</strong>
-		  </td>
-		</tr>
-		<tr>
-		  <td colspan="6" class="text">
-		    Catégorie(s) sélectionnée(s):
-		    {{foreach from=$cat_used item=_cat_view name=cat}}
-		      <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
-		    {{/foreach}}
-		  </td>
-		</tr>
-	</table>
-{{/if}}
 
-<table class="tbl">
-{{foreach from=$lines_by_patient key=chambre_id item=_lines_by_patient}}
+
+{{foreach from=$lines_by_patient key=chap item=_lines_by_chap name=foreach_chapitres}}
+<table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first}}style="page-break-before: always;"{{/if}}>
+    <tr>
+      <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} - 
+			{{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}</th>
+    </tr>
+    <tr>
+      <td colspan="6" class="text">
+        Catégorie(s) sélectionnée(s):
+        {{foreach from=$cat_used.$chap item=_cat_view name=cat}}
+          <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
+        {{/foreach}}
+      </td>
+    </tr>
+
+{{foreach from=$_lines_by_chap key=chambre_id item=_lines_by_patient}}
   {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
     {{assign var=sejour value=$sejours.$sejour_id}}
     {{assign var=patient value=$sejour->_ref_patient}}
 		{{assign var=operation value=$sejour->_ref_last_operation}} 
-    <tr>
+    <tr><td colspan="6"><br /></td></tr>
+		<tr>
       <th colspan="6" class="text">
         <span style="float: left">
           {{assign var=chambre value=$chambres.$chambre_id}}
@@ -234,7 +232,7 @@ selectPeriode = function(element) {
       </th>
     </tr>
 		<tr>
-			<th class="element text" colspan="2" style="text-align: left">
+			<th class="element text" colspan="6" style="text-align: left">
         <strong>{{$operation->libelle}}</strong> 
         {{if !$operation->libelle}}
           {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
@@ -246,104 +244,89 @@ selectPeriode = function(element) {
 		</tr>
   	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
 	  <tr>
-	    <td style="width: 20px; border:none;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
-	    <td colspan="5">
-		    <table class="tbl">
-		      <tr>
-			      <th style="width: 250px; border:none;">Libellé</th> 
-					  <th style="width: 50px; border:none;">Prévues</th>
-					  <th style="width: 50px; border:none;">Effectuées</th>
-					  <th style="width: 150px; border:none;">Unité d'administration</th>
-					  <th style="border:none;">Commentaire</th>
-					</tr>
-	      </table>
-      </td>
+	    <td style="border:none;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+			<th style="width: 250px; border:none;">Libellé</th> 
+			<th style="width: 50px; border:none;">Prévues</th>
+			<th style="width: 50px; border:none;">Effectuées</th>
+			<th style="width: 150px; border:none;">Unité adm.</th>
+			<th style="border:none;">Commentaire</th>
 	  </tr>
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
-		    {{assign var=_date_time value="$date $hour:00:00"}}
-				  <tr>
-				    <td style="width: 20px">{{$hour}}h</td>
-			      <td style="width: 100%">
-			        <table class="form">         
-					      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
-						      {{if $line_class == "CPerfusion"}}
-						        {{foreach from=$prises key=perfusion_id item=lines}}
-						        {{assign var=perfusion value=$list_lines.$line_class.$perfusion_id}}     
-						        <tr>
-						          <td colspan="5" class="text" style="border:none;">
-						            <strong>{{$perfusion->_view}}</strong>
-						          {{foreach from=$lines key=perf_line_id item=_perf}}
-						            {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
-											<table class="form">
-							          <tr>
-							            <td style="width: 238px; padding-left: 15px;" class="text">
-							              <em>{{$perf_line->_ucd_view}}</em>
-							              {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
-								              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-								            {{/if}}
-							            </td>
-								          <td style="width: 50px; text-align: center;">
-									          {{if array_key_exists('prevu', $_perf)}}
-									            {{$_perf.prevu}}
-									          {{/if}}
-								          </td>
-								          <td style="width: 50px; text-align: center;">
-									          {{if array_key_exists('administre', $_perf)}}
-									          {{$_perf.administre}}
-									          {{/if}}
-							            </td>
-							            <td style="width: 150px;">
-													  {{if $perf_line->_ref_produit_prescription->_id}}
-														  {{$perf_line->_ref_produit_prescription->unite_prise}}
-														{{else}}
-													    {{$perf_line->_unite_administration}}
-														{{/if}}
-												  </td>
-							            <td></td>
-							          </tr>
-												</table>  
-						          {{/foreach}}
-											</td>
-						        </tr>
-						        {{/foreach}}
-						      {{else}}
-									  <tr>
-									  	<td colspan="5" class="text"  style="border:none;">
-											  <table class="form">
-										      {{foreach from=$prises key=line_id item=quantite}}
-										       {{assign var=line value=$list_lines.$line_class.$line_id}}        
-											      <tr>
-									            <td style="width: 250px;">{{$line->_view}}
-									            {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
-									              <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-									            {{/if}}
-									            </td> 
-											        <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
-											        <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-											        <td style="width: 150px;" class="text">
-											          {{if $line_class=="CPrescriptionLineMedicament"}}
-																  {{if $line->_ref_produit_prescription->_id}}
-																	  {{$line->_ref_produit_prescription->unite_prise}}
-																	{{else}}
-											              {{$line->_ref_produit->libelle_unite_presentation}}
-																	{{/if}}
-											          {{else}}
-											            {{$line->_unite_prise}}
-											          {{/if}}
-											      </td>
-											      <td class="text">{{$line->commentaire}}</td>
-											    </tr>
-													{{/foreach}} 
-										    </table>
-                      </td>
-                    </tr>
+		  {{assign var=_date_time value="$date $hour:00:00"}}
+      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
+				{{if $line_class == "CPerfusion"}}
+					{{foreach from=$prises key=perfusion_id item=lines}}
+          {{assign var=perfusion value=$list_lines.$line_class.$perfusion_id}}     
+            <tr>
+						  <td>{{$hour}}h</td>
+						 	<td colspan="5"><strong>{{$perfusion->_view}}</strong></td>
+						</tr>
+            {{foreach from=$lines key=perf_line_id item=_perf}}
+              {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+					    <tr>
+					    	<td></td>
+					      <td class="text">
+                  <em>{{$perf_line->_ucd_view}}</em>
+                  {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
+                    <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
                   {{/if}}
-					      {{/foreach}}  
-			        </table>
-			      </td>
-				  </tr>
+                </td>
+                <td style="text-align: center;">
+                  {{if array_key_exists('prevu', $_perf)}}
+                    {{$_perf.prevu}}
+                  {{/if}}
+                </td>
+                <td style="text-align: center;">
+                  {{if array_key_exists('administre', $_perf)}}
+                  {{$_perf.administre}}
+                  {{/if}}
+                </td>
+                <td style="text-align: center;">
+                  {{if $perf_line->_ref_produit_prescription->_id}}
+                    {{$perf_line->_ref_produit_prescription->unite_prise}}
+                  {{else}}
+                    {{$perf_line->_unite_administration}}
+                  {{/if}}
+                </td>
+                <td></td>
+              </tr>
+           {{/foreach}}
+			   {{/foreach}}
+	      {{else}}
+				  {{foreach from=$prises key=line_id item=quantite}}
+           {{assign var=line value=$list_lines.$line_class.$line_id}}        
+            <tr>
+            	<td>{{$hour}}h</td>
+              <td style="width: 250px;">{{$line->_view}}
+              {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
+                <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+              {{/if}}
+              </td> 
+              <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+              <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+              <td style="width: 150px; text-align: center;" class="text">
+                {{if $line_class=="CPrescriptionLineMedicament"}}
+                  {{if $line->_ref_produit_prescription->_id}}
+                    {{$line->_ref_produit_prescription->unite_prise}}
+                  {{else}}
+                    {{$line->_ref_produit->libelle_unite_presentation}}
+                  {{/if}}
+                {{else}}
+                  {{$line->_unite_prise}}
+                {{/if}}
+            </td>
+            <td class="text">{{$line->commentaire}}</td>
+          </tr>
+          {{/foreach}}
+				{{/if}}
+      {{/foreach}}  
 	  {{/foreach}}
 	{{/foreach}}
   {{/foreach}}
 {{/foreach}}
 </table>
+{{/foreach}}
+
+<table>
+	<tr>
+		<td>

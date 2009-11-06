@@ -81,7 +81,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 		    }
 	    }
     }
-    
     $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
     // Calcul de la date de fin de la ligne
     $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
@@ -89,8 +88,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
     }
-    
-    $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
     if($chapitre == "imagerie" || $chapitre == "consult"){
       $this->_debut_reel = "$this->debut 00:00:00";
       $this->_fin_reelle = "$this->debut 23:59:59";
@@ -141,8 +138,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $this->loadRefsTransmissions();
     $this->loadRefPraticien();
     $this->loadRefPrescription();
-    $this->_ref_prescription->loadRefPatient();
-    $this->_ref_prescription->loadRefObject();
+		$prescription =& $this->_ref_prescription;
+		$prescription->loadRefPatient();
+    $prescription->loadRefObject();
   }
   
   /*
@@ -150,7 +148,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
    */
   function loadCompleteView(){
   	$this->loadRefsPrises();
-  	
   	// Si la ligne comportent des prises ==> "à partir du"
   	if(count($this->_ref_prises)){
   		$this->_duree_prise = "";

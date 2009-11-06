@@ -44,8 +44,6 @@ $do_medicaments = (in_array("med", $cats));
 $do_injections = (in_array("inj", $cats));
 $do_perfusions = (in_array("perf", $cats));
 
-
-
 // Filtres sur l'heure des prises
 $time_min = mbTime($dateTime_min, "00:00:00");
 $time_max = mbTime($dateTime_max, "23:59:59");
@@ -127,9 +125,10 @@ if (CValue::get("do")) {
                   }
 			            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 			            if(!$chambre) continue;
-			            foreach($_perfusion->_ref_lines as $_perf_line){
+									
+									foreach($_perfusion->_ref_lines as $_perf_line){
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
-			              $lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration;
+			              $lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration;
 			            }
 			          }
 			        }
@@ -147,7 +146,8 @@ if (CValue::get("do")) {
                     }
 									  $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 				            if(!$chambre) continue;			              
-				             $lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
+				          
+									  $lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
 				        }
 		          }
@@ -186,7 +186,7 @@ if (CValue::get("do")) {
 								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 			                      if(!$chambre) continue;
 								            if($prise_prevue["total"]){
-								              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
+								              @$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 								              $prise_prevue["total"] = 0;
 								            }			            
 								          }
@@ -208,12 +208,12 @@ if (CValue::get("do")) {
 								            if(!$chambre) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
 								            if($quantite){
-								              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
+								              @$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
 								              $administrations_by_hour["quantite"] = 0;
 								            }
 								            $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 								            if($quantite_planifiee){
-								              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
+								              @$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
 								              $administrations_by_hour["quantite_planifiee"] = 0;
 								            }
 							            }
@@ -230,7 +230,7 @@ if (CValue::get("do")) {
 	  }
 		// Parcours des elements du plan de soin
 	  if($_prescription->_ref_lines_elt_for_plan){
-		  foreach($_prescription->_ref_lines_elt_for_plan as &$elements_chap){
+		  foreach($_prescription->_ref_lines_elt_for_plan as $name_chap => &$elements_chap){
 			  foreach($elements_chap as $name_cat => &$elements_cat){
 			    if(!in_array($name_cat, $cats)){
 			      continue;
@@ -251,7 +251,7 @@ if (CValue::get("do")) {
 						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 						            if(!$chambre) continue;			  
 						            if($prise_prevue["total"]){
-						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
+						              @$lines_by_patient[$name_chap][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue = 0;
 						            }
 						          }
@@ -274,12 +274,12 @@ if (CValue::get("do")) {
 						            if(!$chambre) continue;			  
 						            $quantite = @$administrations_by_hour["quantite"];
 						            if($quantite){
-						              @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
+						              @$lines_by_patient[$name_chap][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
 						              $administrations_by_hour["quantite"] = 0;
 						            }
 						          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 							          if($quantite_planifiee){
-							            @$lines_by_patient[$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $quantite_planifiee;
+							            @$lines_by_patient[$name_chap][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $quantite_planifiee;
 							            $administrations_by_hour["quantite_planifiee"] = 0;
 							          }
 	                    }
@@ -296,15 +296,19 @@ if (CValue::get("do")) {
 }
 
 // Tri des lignes
-foreach($lines_by_patient as $chambre_view => &$lines_by_sejour){
-  foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
-    ksort($lines_by_date);
-    foreach($lines_by_date as $date => &$lines_by_hours){
-      ksort($lines_by_hours);
-    }
-  }
+foreach($lines_by_patient as $name_chap => &$lines_by_chap){
+	ksort($lines_by_chap);
+	foreach($lines_by_chap as $chambre_view => &$lines_by_sejour){
+	  foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
+	    ksort($lines_by_date);
+	    foreach($lines_by_date as $date => &$lines_by_hours){
+	      ksort($lines_by_hours);
+			
+	    }
+	  }
+	}
 }
-
+ 
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
 
@@ -319,12 +323,12 @@ $token_cat = implode("|", $cats);
 $cat_used = array();
 foreach($cats as $_cat){
   if($_cat === "med" || $_cat === "inj" || $_cat === "perf"){
-    $cat_used[$_cat] = CAppUI::tr("CPrescription._chapitres.".$_cat);
+    $cat_used["med"][$_cat] = CAppUI::tr("CPrescription._chapitres.".$_cat);
   } else {
     if(!array_key_exists($_cat, $cat_used)){
       $categorie = new CCategoryPrescription();
       $categorie->load($_cat);
-      $cat_used[$categorie->_id] = $categorie->_view;
+      $cat_used[$categorie->chapitre][$categorie->_id] = $categorie->_view;
     } 
   }
 }

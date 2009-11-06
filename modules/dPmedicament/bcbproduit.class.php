@@ -46,7 +46,8 @@ class CBcbProduit extends CBcbObject {
   var $inLivret = null;
   var $inT2A = true;
   var $ucd_view = null;
-  
+  var $libelle_abrege = null;
+	
   // Objects references
   var $_ref_DCI              = null;
   var $_ref_UCD              = null;
