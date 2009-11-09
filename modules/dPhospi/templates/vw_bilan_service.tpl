@@ -102,7 +102,7 @@ selectPeriode = function(element) {
     </tr>
     <tr>
       <th>A partir du</th>
-      <td class="date">
+      <td>
         {{mb_field object=$prescription field="_dateTime_min" canNull="false" form="filter_prescription" register="true"}}
         <label><input type="radio" name="periode" value="matin" onclick="selectPeriode(this)" {{if $periode=='matin'}}checked="checked"{{/if}} /> Matin</label>
         <label><input type="radio" name="periode" value="soir" onclick="selectPeriode(this)" {{if $periode=='soir'}}checked="checked"{{/if}}/> Soir</label>
@@ -110,7 +110,7 @@ selectPeriode = function(element) {
         <label><input type="radio" name="periode" value="today" onclick="selectPeriode(this)" {{if $periode=='today'}}checked="checked"{{/if}}/> Aujourd'hui</label>
       </td>
       <th>Jusqu'au</th>
-      <td class="date">
+      <td>
         {{mb_field object=$prescription field="_dateTime_max" canNull="false" form="filter_prescription" register="true"}}
        </td>
      </tr>

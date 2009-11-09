@@ -60,7 +60,7 @@ function changeDateCal(){
         
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$yesterday_deb}}','{{$yesterday_fin}}');" value="yesterday" /> 
             <label for="select_days_yesterday">Hier</label>
@@ -75,7 +75,7 @@ function changeDateCal(){
 
         <tr>
           <th>{{mb_label object=$filter field="_date_max"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
+          <td>{{mb_field object=$filter field="_date_max" form="paramFrm" register=true canNull="false" onchange="changeDateCal()"}} </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_admission"}}</th>

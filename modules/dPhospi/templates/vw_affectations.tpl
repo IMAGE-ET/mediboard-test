@@ -1,20 +1,10 @@
 {{mb_include_script module=dPhospi script=vw_affectations}}
 
 <script type="text/javascript">
-
 Main.add(function () {
-  // PairEffect.InitGroup can't be used because it scans all DOM nodes
-  {{foreach from=$services item=curr_service}}
-  new PairEffect("service{{$curr_service->service_id}}", {
-    bStartVisible: true,
-    sEffect: "appear",
-    sCookieName: "fullService"
-  } );
-  {{/foreach}}
-
   Calendar.regField(getForm("chgAff").date, null, {noView: true, inline: true, container: $('calendar-container')});
+  initServicesState();
 });
-
 </script>
 
 <table class="main">
@@ -25,7 +15,7 @@ Main.add(function () {
       </div>
       {{if $alerte}}
       <div class="warning">
-        <a href="#" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
+        <a href="#1" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
       </div>
       {{else}}
       <div class="message">
@@ -51,15 +41,14 @@ Main.add(function () {
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 
       {{foreach from=$services item=curr_service}}
+        <label title="Afficher le service {{$curr_service->nom}}">
         <input
           type="checkbox"
           name="service{{$curr_service->_id}}"
-          id="service{{$curr_service->_id}}-trigger"
           value="{{$curr_service->_id}}"
-          onchange="reloadService(this, {{$mode}});"
-          {{if $curr_service->_vwService}}checked="checked"{{/if}}
-        />
-        <label for="service{{$curr_service->service_id}}" title="Afficher le service {{$curr_service->nom}}">
+          checked="checked" 
+          onchange="toggleService(this, {{$mode}})"
+          />
           {{$curr_service->nom}}
         </label>
       {{/foreach}}
@@ -127,12 +116,12 @@ Main.add(function () {
         </td>
         </tr>
         <tr>
-          <td class="date"><em>Entrée</em></td>
-          <td class="date">{{mb_field object=$affectation field="entree" form="addAffectationsejour" register=true}}</td>
+          <td><em>Entrée</em></td>
+          <td>{{mb_field object=$affectation field="entree" form="addAffectationsejour" register=true}}</td>
         </tr>
         <tr>
-          <td class="date"><em>Sortie</em></td>
-          <td class="date">{{mb_field object=$affectation field="sortie" form="addAffectationsejour" register=true}}</td>
+          <td><em>Sortie</em></td>
+          <td>{{mb_field object=$affectation field="sortie" form="addAffectationsejour" register=true}}</td>
       </tr>
       <tr>
         <td class="date highlight" colspan="2">

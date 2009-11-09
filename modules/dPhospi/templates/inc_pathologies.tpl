@@ -40,7 +40,7 @@
   </td>
 </tr>
 <tr>
-  <td class="date" colspan="2">
+  <td colspan="2">
     <em>Entrée</em> : {{$curr_sejour->entree_prevue|date_format:"%A %d %B %Hh%M"}}<br />
     <em>Sortie</em> : {{$curr_sejour->sortie_prevue|date_format:"%A %d %B %Hh%M"}}
   </td>

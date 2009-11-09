@@ -38,7 +38,7 @@
         </td>
       </tr> 
       <tr>
-        <td class="date" colspan="2">
+        <td colspan="2">
           <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
             <img style="float: right;" src="images/icons/planning.png" />
           </a>
@@ -48,18 +48,18 @@
         </td>
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans ({{mb_value object=$curr_sejour->_ref_patient field=naissance}})
+        <td colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans ({{mb_value object=$curr_sejour->_ref_patient field=naissance}})
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Dr {{$curr_sejour->_ref_praticien->_view}}</em></td>
+        <td colspan="2"><em>Dr {{$curr_sejour->_ref_praticien->_view}}</em></td>
       </tr>
       {{if $curr_sejour->prestation_id}}
       <tr>
-        <td class="date" colspan="2"><em>Prestation: </em>{{$curr_sejour->_ref_prestation->_view}}</td>
+        <td colspan="2"><em>Prestation: </em>{{$curr_sejour->_ref_prestation->_view}}</td>
       </tr>
       {{/if}}
       <tr>
-        <td class="date" colspan="2">
+        <td colspan="2">
           {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
             {{if $curr_operation->libelle}}
               <em>[{{$curr_operation->libelle}}]</em>
@@ -72,7 +72,7 @@
         </td>
       </tr>
       <tr>
-        <td class="date" colspan="2">
+        <td colspan="2">
         
         <form name="EditSejour{{$curr_sejour->_id}}" action="?m=dPhospi" method="post">
 
@@ -133,7 +133,7 @@
       </tr>
       {{else}}
       <tr>
-        <td class="date" colspan="2">
+        <td colspan="2">
           <strong>Chambre double</strong>
         </td>
       </tr>

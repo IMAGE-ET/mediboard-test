@@ -174,7 +174,7 @@ Main.add(function () {
       {{if $constantes->datetime}}
       <tr>
         <th>{{mb_label object=$constantes field=datetime}}</th>
-        <td class="date" colspan="3">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
+        <td colspan="3">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
       </tr>
       {{/if}}
       <tr>      

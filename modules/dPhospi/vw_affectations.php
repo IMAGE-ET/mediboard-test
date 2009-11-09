@@ -15,6 +15,7 @@ $pathos = new CDiscipline();
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
+
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
 
@@ -34,13 +35,9 @@ $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 // Chargment des services
-$fullService = CValue::cookie("fullService");
 foreach ($services as &$service) {
-  $service->_vwService = !preg_match("/service$service->_id-trigger:triggerShow/i", $fullService);
-  if ($service->_vwService) {
-    loadServiceComplet($service, $date, $mode);
-    $totalLits += $service->_nb_lits_dispo;
-  } 
+  loadServiceComplet($service, $date, $mode);
+  $totalLits += $service->_nb_lits_dispo;
 }
 
 // Nombre de patients à placer pour la semaine qui vient (alerte)

@@ -98,7 +98,7 @@ Calendar.setupAffectation = function(affectation_id, options) {
     }
   };
 	
-  var form = null;
+  var form;
   
   if (form = getForm("entreeAffectation" + affectation_id)) {
     Calendar.regField(form.entree, dates, {noView: true, icon: 'images/icons/planning.png'});
@@ -146,14 +146,30 @@ function showAlerte() {
   url.popup(500, 250, "Alerte");
 }
 
-function reloadService(oElement, mode) {
-  if (oElement.checked) {
-    var idService = oElement.value;
+function toggleService(trigger, mode) {
+  var cookie = new CookieJar(),
+      service_id = trigger.value,
+      container_id = "service" + service_id;
+      
+  if (trigger.checked) {
     var url = new Url("dPhospi", "httpreq_vw_aff_service");
-    url.addParam("service_id", idService);
+    url.addParam("service_id", service_id);
     url.addParam("mode", mode);
-    url.requestUpdate("service" + idService);
+    url.requestUpdate(container_id);
   }
+  
+  $(container_id).setVisible(trigger.checked);
+  cookie.setValue("fullService", container_id, trigger.checked);
+}
+
+function initServicesState(){
+  var servicesState = new CookieJar().get("fullService"),
+      form = getForm("chgAff");
+  $H(servicesState).each(function(p){
+    var visible = (p.value !== false);
+    form.elements[p.key].checked = visible;
+    $(p.key).setVisible(visible);
+  });
 }
 
 ObjectTooltip.modes.timeHospi = {

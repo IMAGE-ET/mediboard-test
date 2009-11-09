@@ -13,13 +13,13 @@ CAppUI::requireModuleFile($m, "inc_vw_affectations");
 
 $can->needsRead();
 
-$date = CValue::getOrSession("date", mbDate());
-$mode = CValue::getOrSession("mode", 0);
+$date       = CValue::getOrSession("date", mbDate());
+$mode       = CValue::getOrSession("mode", 0);
+$service_id = CValue::get("service_id");
 
 // Chargement du service
 $service = new CService;
-$service->load(CValue::get("service_id"));
-$service->_vwService = 1;
+$service->load($service_id);
 loadServiceComplet($service, $date, $mode);
 
 // Création du template
