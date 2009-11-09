@@ -49,11 +49,10 @@ function refreshListCCAM() {
   var iCode = 0;
   
   while (sCode = aCcam[iCode++]) {
-    var sCodeNode = sCode;
-      sCodeNode += '<button class="cancel notext" type="button" onclick="oCcamField.remove(\'' + sCode + '\')"></button>';
+    var sCodeNode = printf("<button class='remove' type='button' onclick='oCcamField.remove(\"%s\")'>%s<\/button>", sCode, sCode);
     aCodeNodes.push(sCodeNode);
   }
-  oCcamNode.innerHTML = aCodeNodes.join(", ");
+  oCcamNode.innerHTML = aCodeNodes.join("");
 }
 
 function checkFormSejour() {
@@ -235,7 +234,7 @@ Main.add(function () {
           </th>
           <td>
             <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" />
-            <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
+            <button class="add notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
             
           </td>
           <td class="button"><button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
@@ -253,7 +252,7 @@ Main.add(function () {
 
         <tr>
           <th>
-            Liste des codes CCAM:
+            Liste des codes CCAM
             {{mb_field object=$protocole field="codes_ccam" hidden=1 prop=""}}
           </th>
           <td colspan="2" class="text" id="listCodesCcam">

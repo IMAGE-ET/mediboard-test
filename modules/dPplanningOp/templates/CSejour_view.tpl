@@ -2,8 +2,8 @@
 
 <table class="tbl tooltip">
   <tr>
-    <th>
-      {{$sejour->_view}}
+    <th class="title text">
+      {{$sejour}}
     </th>
   </tr>
 

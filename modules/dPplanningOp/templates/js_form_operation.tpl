@@ -13,11 +13,11 @@ function updateTokenCcam(){
 
 
 function refreshListCCAM(mode) {
-  if(mode=="expert"){
-    oCcamNode = $("listCodesCcam");
+  if (mode=="expert") {
+    var oCcamNode = $("listCodesCcam");
   }
-  if(mode=="easy"){
-    oCcamNode = ("listCodesCcamEasy");
+  if (mode=="easy") {
+    var oCcamNode = $("listCodesCcamEasy");
   }
   var oForm = document.editOp;
   var aCcam = oForm.codes_ccam.value.split("|");
@@ -27,14 +27,13 @@ function refreshListCCAM(mode) {
   var aCodeNodes = new Array();
   var iCode = 0;
   while (sCode = aCcam[iCode++]) {
-    var sCodeNode = sCode;
-    if(mode=="expert"){
-      sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
-      sCodeNode += "<\/button>";
-    }
+    var sCodeNode = mode == "expert" ? 
+		 printf("<button class='remove' type='button' onclick='oCcamField.remove(\"%s\")'>%s<\/button>", sCode, sCode) :
+		 sCode;
+		 
     aCodeNodes.push(sCodeNode);
   }
-  oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
+  oCcamNode.innerHTML = aCodeNodes.join(mode == "easy" ? " &mdash; " : "");
   periodicalTimeUpdater.currentlyExecuting = false;
 }
 
