@@ -43,7 +43,7 @@ if(isset($wsdl)) {
 
 	// on indique au serveur à quel fichier de description il est lié
 	try {
-	  $serverSOAP = new SoapServer(CAppui::conf("base_url")."/index.php?login=1&username=".$username."&password=".$password."&m=sip&a=mbSip&suppressHeaders=1&wsdl");
+	  $serverSOAP = new SoapServer("?login=1&username=$username&password=$password&m=sip&a=mbSip&suppressHeaders=1&wsdl");
 	} catch (Exception $e) {
 	  echo $e;
 	}

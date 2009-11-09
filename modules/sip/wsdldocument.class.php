@@ -155,7 +155,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $this->addAttribute($port, "binding", "MediboardBinding");
     
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-    $this->addAttribute($soapaddress, "location", CAppui::conf("base_url")."/index.php?login=1&username=".$username."&password=".$password."&m=sip&a=mbSip&suppressHeaders=1");
+    $this->addAttribute($soapaddress, "location", "?login=1&username=$username&password=$password&m=sip&a=mbSip&suppressHeaders=1");
   }
   
   function saveFileXML() {
