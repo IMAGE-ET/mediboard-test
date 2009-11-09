@@ -105,7 +105,7 @@ foreach($plagesop as &$plage) {
     } else {
      $sejour->loadRefsFwd(1);   
      // On utilise la first_affectation pour contenir l'affectation courante du patient
-     $sejour->_ref_first_affectation = $sejour->getCurrAffectation($operation->_datetime);
+     $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
      $affectation =& $sejour->_ref_first_affectation;
      if ($affectation->_id) {
        $affectation->loadRefsFwd();
