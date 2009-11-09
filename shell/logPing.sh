@@ -20,7 +20,7 @@ host=$1
 
 ## Make the log line
 dt=$(date '+%Y-%m-%dT%H:%M:%S'); 
-ping=$(ping $host -c 4 | tail -n 1); 
+ping=$(ping $host -c 4 | tr -s "\n" | tail -n 1); 
 
 ## Log the line
 dir="/var/log/ping"
