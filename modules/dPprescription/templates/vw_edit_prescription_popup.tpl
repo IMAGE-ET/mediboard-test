@@ -149,9 +149,9 @@ Main.add(function () {
   {{else}}
   <!-- Cas d'une prescription de consultation -->
   <tr>
-    <th style="background-color: #EEF; border: 2px ridge #55A">
-      Prescription Externe
-    </th>
+    <td class="step selected">
+       Prescription {{tr}}CPrescription.type.externe{{/tr}} 
+    </td>
   </tr>
   {{/if}}
   <tr>

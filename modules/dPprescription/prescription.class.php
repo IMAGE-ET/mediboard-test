@@ -732,6 +732,7 @@ class CPrescription extends CMbObject {
       }
     	$this->_ref_current_praticien = $this->_ref_object->_ref_praticien;
     }
+		$this->_ref_current_praticien->loadRefFunction();
     $this->_current_praticien_id = $this->_ref_current_praticien->_id;
   }
   
