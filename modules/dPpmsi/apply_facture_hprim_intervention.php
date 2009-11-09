@@ -19,9 +19,14 @@ $operation->facture = "0";
 $count = $operation->countMatchingList();
 CAppUI::stepAjax("'%s' opérations non facturées trouvées", UI_MSG_OK, $count);
 
-$where["facture"] = "= '0'";
-foreach ($operation->loadIds($where) as $id) {
-	
+$start = 30000;
+$max = 100;
+$limit = "$start, $max";
+
+foreach ($operation->loadMatchingList(null, $limit) as $_operation) {
+	$operation->loadHprimFiles();
+	if ($count = count($_operation->_ref_hprim_files)) {
+    CAppUI::stepAjax("'%s' HPRIM files for operation '%s'", UI_MSG_OK, $count, $_operation->_view);
+	}
 }
-mbTrace($count);
 ?>

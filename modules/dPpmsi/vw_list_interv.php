@@ -26,7 +26,7 @@ $counts = array (
 	),
   "urgences" => array (
     "total" => 0,
-    "facturees" => 1,
+    "facturees" => 0,
 	),
 );
 

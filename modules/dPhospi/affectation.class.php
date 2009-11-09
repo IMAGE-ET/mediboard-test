@@ -63,6 +63,7 @@ class CAffectation extends CMbObject {
     $specs["effectue"]     = "bool";
     $specs["rques"]        = "text";
 
+    $specs["_duree"]       = "num";
     $specs["_mode_sortie"] = "enum list|normal|transfert|deces default|normal";
     return $specs;
   }
@@ -201,21 +202,11 @@ class CAffectation extends CMbObject {
   }
 
   function loadRefLit($cache = 1) {
-    $this->_ref_lit = new CLit();
-    if($cache) {
-      $this->_ref_lit = $this->_ref_lit->getCached($this->lit_id);
-    } else {
-      $this->_ref_lit->load($this->lit_id);
-    }
+    $this->_ref_lit = $this->loadFwdRef("lit_id", $cache);
   }
 
   function loadRefSejour($cache = 1) {
-    $this->_ref_sejour = new CSejour();
-    if($cache) {
-      $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
-    } else {
-      $this->_ref_sejour->load($this->sejour_id);
-    }
+    $this->_ref_sejour =  $this->loadFwdRef("sejour_id", $cache);
   }
 
   function loadRefsFwd($cache = 1) {

@@ -102,14 +102,13 @@ else if ($typeVue == 1) {
   $listAff = new CAffectation;
   $listAff = $listAff->loadQueryList($sql);
   foreach($listAff as &$aff) {
-    $aff->loadRefs();
-    
-    $aff->_ref_sejour->loadRefsFwd();
-    $aff->_ref_sejour->_ref_praticien =& $listPrat[$aff->_ref_sejour->praticien_id] ;
+    $aff->loadRefSejour();
+    $aff->_ref_sejour->loadRefPatient();
+    $aff->_ref_sejour->_ref_praticien =& $listPrat[$aff->_ref_sejour->praticien_id];
     $aff->_ref_sejour->loadRefGHM();
 
-    $aff->_ref_lit->loadRefsFwd();
-    $aff->_ref_lit->_ref_chambre->loadRefsFwd();
+    $aff->loadRefLit();
+    $aff->_ref_lit->loadCompleteView();
   }
 }
 

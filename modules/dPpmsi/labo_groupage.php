@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$sejour_id  = CValue::getOrSession("sejour_id", null);
+$sejour_id  = CValue::getOrSession("sejour_id");
 
 if(!$sejour_id) {
   $AppUI->setMsg("Vous devez selectionner un séjour", UI_MSG_ERROR);
@@ -20,12 +20,11 @@ if(!$sejour_id) {
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
-$sejour->loadRefsFwd();
-$sejour->loadRefsOperations();
-foreach($sejour->_ref_operations as $keyOp => $value) {
-  $sejour->_ref_operations[$keyOp]->loadRefsFwd();
-}
+$sejour->loadRefPatient();
 $sejour->loadRefGHM();
+foreach($sejour->_ref_operations as &$_operation) {
+  $_operation->loadRefsFwd();
+}
 
 // Création du template
 $smarty = new CSmartyDP();

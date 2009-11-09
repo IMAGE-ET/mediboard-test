@@ -4,7 +4,7 @@
       <table class="form">
         <tr>
           <th class="title" style="text-align:left;">
-            <a class="button edit" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}" style="float:right;">
+            <a class="button edit" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}" style="float:right;">
               Modifier le patient
             </a>
             {{$patient->_view}}
@@ -23,7 +23,7 @@
       <table class="form">
         <tr>
           <th class="title" style="text-align:left;">
-            <a class="button search" href="?m=dPpmsi&tab=vw_dossier&amp;pat_id={{$patient->patient_id}}" style="float:right;">
+            <a class="button search" href="?m=dPpmsi&tab=vw_dossier&amp;pat_id={{$patient->_id}}" style="float:right;">
               Voir le dossier
             </a>
             Hospitalisation
@@ -90,10 +90,11 @@
         {{foreach from=$sejour->_ref_operations item=curr_op}}
         <tr>
           <th class="title" colspan="3" style="text-align:left;">
-            <a class="button edit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}" style="float:right;">
+            <a class="button edit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->_id}}" style="float:right;">
               Modifier les actes
             </a>
-            Actes du Dr {{$curr_op->_ref_chir->_view}} le {{$curr_op->_datetime|date_format:"%d %B %Y"}}
+            Actes du Dr {{$curr_op->_ref_chir->_view}} 
+						le {{$curr_op->_datetime|date_format:"%d %B %Y"}}
           </th>
         </tr>
         {{/foreach}}

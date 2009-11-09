@@ -445,14 +445,16 @@ class CActeCCAM extends CActe {
     $DPC  = false;
     $membresDiff = false;
     
-    if($this->object_class == "COperation") {
+    if ($this->object_class == "COperation") {
       $this->loadRefObject();
-      $this->_ref_object->loadRefSejour();
-      if(substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "S" || substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "T") {
+			$operation =& $this->_ref_object;
+			$operation->loadRefSejour();
+			$sejour =& $operation->_ref_sejour;
+      if ($sejour->DP[0] == "S" || $sejour->DP[0] == "T") {
         $DPST = true;
         $membresDiff = true;
       }
-      if(substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "C") {
+      if ($sejour->DP[0] == "C") {
         $DPC = true;
       }
     }

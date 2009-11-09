@@ -1,3 +1,5 @@
+{{if $_sejour->_ref_numdos}}
+
 <script type="text/javascript">
 Main.add(function () {
   prepareForm(document.forms.editNumdos{{$_sejour->_id}});
@@ -30,7 +32,7 @@ Main.add(function () {
       </script>
     </th>
   </tr>
-  {{if $_sejour->_ref_numdos}}
+
   <tr>
     <th>
       <label for="id400" title="Saisir le numéro de dossier">Numéro de dossier</label>
@@ -55,16 +57,13 @@ Main.add(function () {
     <th>Suggestion</th>
     <td>{{$_sejour->_guess_num_dossier}}</td>
   </tr>
-  {{else}}
-  <tr>
-    <td colspan="10" class="text">
-      <div class="big-warning">
-        Il est propable qu'aucun tag ne soit spécifié pour le numéro de dossier, il n'est donc pas possible de manipuler les numéros de dossiers.<br />
-        Allez dans <a href="?m=dPplanningOp&amp;tab=configure">la configuration du module {{tr}}module-dPplanningOp-court{{/tr}}</a>.
-      </div>
-    </td>
-  </tr>
-  {{/if}}
 </table>
 
 </form>
+
+{{else}}
+<div class="big-warning">
+  Il est propable qu'aucun tag ne soit spécifié pour le numéro de dossier, il n'est donc pas possible de manipuler les numéros de dossiers.<br />
+  Allez dans <a href="?m=dPplanningOp&amp;tab=configure">la configuration du module {{tr}}module-dPplanningOp-court{{/tr}}</a>.
+</div>
+{{/if}}

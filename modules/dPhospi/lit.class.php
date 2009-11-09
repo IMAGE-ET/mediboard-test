@@ -84,13 +84,12 @@ class CLit extends CMbObject {
   }
   
   function loadRefChambre() {
-    $this->_ref_chambre = new CChambre();
-  	$this->_ref_chambre = $this->_ref_chambre->getCached($this->chambre_id);	
+    $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);	
+    $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
 
   function loadRefsFwd() {
     $this->loadRefChambre();
-    $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
   }
   
   function getPerm($permType) {

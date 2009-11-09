@@ -7,7 +7,7 @@
  * @author Romain Ollivier
  */
 
-class CGHM  extends CMbObject {
+class CGHM extends CMbObject {
   // DB Table key
   var $ghm_id = null;
   
@@ -100,34 +100,9 @@ class CGHM  extends CMbObject {
   }
   
   function loadRefSejour() {
-    $this->_ref_sejour = new CSejour;
-    $this->_ref_sejour->load($this->sejour_id);
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id");
   }
-  
-  function loadRefsFwd() {
-    $this->loadRefSejour();
-    $this->_ref_sejour->loadRefs();
-    $this->_ref_sejour->loadRefDossierMedical();
     
-    $this->_DASs = array(); 
-    if($this->_ref_sejour->_ref_dossier_medical->_id){
-      foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
-        if(strlen($code) < 4) {
-          $this->_DASs[] = $code;
-        } else {
-          $this->_DASs[] = substr($code, 0, 3).".".substr($code, 3);
-        }
-      }
-    }
-    $this->_ref_actes_ccam = array();
-    $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $this->_ref_sejour->_ref_actes_ccam);
-    foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
-      $this->_ref_sejour->_ref_operations[$keyOp]->loadRefsActesCCAM();
-      $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $this->_ref_sejour->_ref_operations[$keyOp]->_ref_actes_ccam);
-    }
-    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
-  }
-  
   function getPerm($permType) {
     if(!$this->_ref_sejour) {
       $this->loadRefSejour();
@@ -137,6 +112,30 @@ class CGHM  extends CMbObject {
   
   // Liaison à un sejour
   function bindInfos() {
+    // Diagnostics
+    $this->_ref_sejour->loadRefDossierMedical();
+    $this->_DASs = array(); 
+    if ($this->_ref_sejour->_ref_dossier_medical->_id){
+      foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
+        if(strlen($code) < 4) {
+          $this->_DASs[] = $code;
+        } else {
+          $this->_DASs[] = substr($code, 0, 3).".".substr($code, 3);
+        }
+      }
+    }
+    
+    // Actes CCAM
+    $this->_ref_sejour->loadRefsActesCCAM();
+    $this->_ref_actes_ccam = $this->_ref_sejour->_ref_actes_ccam;
+
+    $this->_ref_sejour->loadRefsOperations();
+    foreach($this->_ref_sejour->_ref_operations as $_operation) {
+      $_operation->loadRefsActesCCAM();
+      $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $_operation->_ref_actes_ccam);
+    }
+    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
+
     // Infos patient
     $adm = $this->_ref_sejour->_entree;    
     $anadm = substr($adm, 0, 4);
@@ -152,7 +151,8 @@ class CGHM  extends CMbObject {
     if($moisadm<$moisnais){$this->_age=$this->_age-1;}
     if($jouradm<$journais && $moisadm==$moisnais){$this->_age=$this->_age-1;}
     $this->_age .= "a";
-    $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
+   
+	  $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
     // Infos hospi
     $this->_type_hospi = $this->_ref_sejour->type;
     $this->_duree = $this->_ref_sejour->_duree;
@@ -170,10 +170,10 @@ class CGHM  extends CMbObject {
     $this->_actes = array();
     foreach($this->_ref_actes_ccam as $acte) {
       $this->_actes[] = array(
-                         "code" => $acte->code_acte,
-                         "phase" => $acte->code_phase,
-                         "activite" => $acte->code_activite
-                       );
+        "code" => $acte->code_acte,
+        "phase" => $acte->code_phase,
+        "activite" => $acte->code_activite
+      );
     }
   }
 

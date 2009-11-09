@@ -41,10 +41,12 @@
   </tr>
   {{/if}}
   <tr>
-    <td>
-      <button class="submit" type="button" onclick="submitPatForm(); submitSejourForm({{$sejour->_id}});" >Tout valider</button>
+    <td class="button">
+      <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Export S@nté.com</button>
     </td>
-    <td rowspan="2" class="text">
+  </tr>
+  <tr>
+    <td>
       {{if $sejour->_ref_hprim_files|@count}}
       <div class="small-success">
         Export déjà effectué {{$sejour->_ref_hprim_files|@count}} fois
@@ -54,11 +56,6 @@
         Pas d'export effectué
       </div>
       {{/if}}
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Export S@nté.com</button>
     </td>
   </tr>
   {{else}}

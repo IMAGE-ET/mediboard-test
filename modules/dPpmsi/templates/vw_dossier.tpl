@@ -215,14 +215,14 @@ Main.add(function () {
         {{foreach from=$patient->_ref_sejours item=_sejour}}
         <tr id="sejour{{$_sejour->sejour_id}}-trigger">
           <td colspan="4" style="background-color:#aaf;">
-          	Dr {{$_sejour->_ref_praticien->_view}} -
-          	Séjour du {{$_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}}
-          	au {{$_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}}
+          	Dr {{$_sejour->_ref_praticien->_view}}
+						&mdash;
+						{{mb_include module=system template=inc_interval_datetime from=$_sejour->entree_prevue to=$_sejour->sortie_prevue}}
           </td>
         </tr>
         <tbody class="effectSejour" id="sejour{{$_sejour->sejour_id}}">
         <tr>
-          <td colspan="4" id="Numdos{{$_sejour->sejour_id}}">
+          <td colspan="4" id="Numdos{{$_sejour->sejour_id}}" class="text">
             {{include file="inc_numdos_form.tpl"}}
           </td>
         </tr>

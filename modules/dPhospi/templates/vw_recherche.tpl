@@ -1,9 +1,14 @@
+{{if !$dialog}}
 <script type="text/javascript">
 
-function popPlanning(date) {
-  var url = new Url("dPhospi", "vw_affectations");
-  url.addParam("date", date);
-  url.popup(700, 550, 'Planning');
+function printRecherche() {
+  var form = document.typeVue;
+  var url = new Url("dPhospi", "vw_recherche");
+  url.addElement(form.typeVue);
+  url.addElement(form.selPrat);
+  url.addElement(form.selService);
+  url.addElement(form.date_recherche);
+  url.popup(800, 700, 'Planning');
 }
 
 Main.add(function () {
@@ -17,6 +22,8 @@ Main.add(function () {
   <input type="hidden" name="tab" value="{{$tab}}" />
   
   {{if $typeVue}}
+  <button type="button" class="button print" style="float: right;" onclick="printRecherche()">{{tr}}Print{{/tr}}</button>
+  
   <select name="selPrat" onchange="this.form.submit()" style="float: right;">
     <option value="">&mdash; Tous les praticiens</option>
     {{foreach from=$listPrat item=curr_prat}}
@@ -26,7 +33,6 @@ Main.add(function () {
     {{/foreach}}
   </select>
   {{/if}}
-  
   <select name="typeVue" onchange="this.form.submit()">
     <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Afficher les lits disponibles</option>
     <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Afficher les patients présents</option>
@@ -40,11 +46,12 @@ Main.add(function () {
   </select>
   <input type="hidden" name="date_recherche" class="dateTime" value="{{$date_recherche}}" onchange="this.form.submit()" />
 </form>
+{{/if}}
 
 <table class="tbl main">
   {{if $typeVue == 0}}
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="4"">
       {{$date_recherche|date_format:$dPconfig.datetime}} : {{$libre|@count}} lit(s) disponible(s)
     </th>
   </tr>
@@ -62,6 +69,7 @@ Main.add(function () {
     <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %Hh%M"}}
   </tr>
   {{/foreach}}
+	
   {{else}}
   <tr>
     <th class="title" colspan="8">
@@ -72,14 +80,18 @@ Main.add(function () {
     </th>
   </tr>
   <tr>
-    <th>Patient</th>
-    <th>Praticien</th>
-    <th>Service</th>
-    <th>Chambre</th>
-    <th>Lit</th>
-    <th>Séjour</th>
-    <th>Occupation du lit</th>
-    <th>Bornes GHM</th>
+    <th>{{mb_label class=CSejour field=patient_id}}</th>
+    <th>{{mb_label class=CSejour field=praticien_id}}</th>
+    <th>{{mb_title class=CAffectation field=lit_id}}</th>
+    <th colspan="2">
+  	 {{tr}}CSejour{{/tr}} /
+     {{mb_title class=CSejour field=_duree_prevue}}
+		</th>
+    <th colspan="2">
+     {{tr}}CAffectation{{/tr}} /
+     {{mb_title class=CAffectation field=_duree}}
+		</th>
+    <th>Bornes<br/>GHM</th>
   </tr>
   {{foreach from=$listAff item=curr_aff}}
   {{assign var=sejour value=$curr_aff->_ref_sejour}}
@@ -88,7 +100,7 @@ Main.add(function () {
   {{assign var=GHM value=$sejour->_ref_GHM}}
   <tr>
     <td class="text">
-      {{if $canPlanningOp->read}}
+      {{if $canPlanningOp->read && !$dialog}}
       <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
@@ -96,30 +108,33 @@ Main.add(function () {
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
       {{/if}}
-      {{$patient->_view}}
+			<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+        {{$patient}}
+			</span>
     </td>
     <td class="text">
       <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
         {{$praticien->_view}}
       </div>
     </td>
-    <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
-    <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
-    <td class="text">{{$curr_aff->_ref_lit->nom}}</td>
+    <td class="text">{{$curr_aff->_view}}</td>
     <td class="text">
-      Du {{$sejour->entree_prevue|date_format:$dPconfig.datetime}}
-      au {{$sejour->sortie_prevue|date_format:$dPconfig.datetime}}
-      <br />({{$sejour->_duree_prevue}} jours)
+    	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+        {{mb_include module=system template=inc_interval_datetime from=$sejour->entree_prevue to=$sejour->sortie_prevue}}
+      </span>
     </td>
+    <td>{{$sejour->_duree_prevue}}</td>
     <td class="text">
-      Du {{$curr_aff->entree|date_format:$dPconfig.datetime}}
-      au {{$curr_aff->sortie|date_format:$dPconfig.datetime}}
-      <br />({{$curr_aff->_duree}} jours)
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
+        {{mb_include module=system template=inc_interval_datetime from=$curr_aff->entree to=$curr_aff->sortie}}
+      </span>
     </td>
-    <td>
+    <td>{{$curr_aff->_duree}}</td>
+		
+    <td style="text-align: center;">
       {{if $GHM->_DP}}
         De {{$GHM->_borne_basse}}
-        à {{$GHM->_borne_haute}} jours
+        à {{$GHM->_borne_haute}} nuits
         <br />
         {{if $GHM->_borne_basse > $GHM->_duree}}
         <div class="warning">Séjour trop court</div>
@@ -130,7 +145,7 @@ Main.add(function () {
         <div class="message">Dans les bornes</div>
         {{/if}}
       {{else}}
-      -
+      &mdash;
       {{/if}}
     </td>
   </tr>

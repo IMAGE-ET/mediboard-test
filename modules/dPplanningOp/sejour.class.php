@@ -173,7 +173,8 @@ class CSejour extends CCodable {
 	  $backProps["rpu"]                  = "CRPU sejour_id";
 	  $backProps["rpu_mute"]             = "CRPU mutation_sejour_id";
 	  $backProps["transmissions"]        = "CTransmissionMedicale sejour_id";
-	  $backProps["dossier_medical"]      = "CDossierMedical object_id";
+    $backProps["dossier_medical"]      = "CDossierMedical object_id";
+    $backProps["ghm"]                  = "CGHM sejour_id";
 	  return $backProps;
 	}
 
@@ -1041,15 +1042,13 @@ class CSejour extends CCodable {
   }
   
   function loadRefGHM() {
-    $this->_ref_GHM = new CGHM;
-    $where["sejour_id"] = "= '$this->sejour_id'";
-    $this->_ref_GHM->loadObject($where);
-    if(!$this->_ref_GHM->ghm_id) {
+    $this->_ref_GHM = $this->loadUniqueBackRef("ghm");
+    if (!$this->_ref_GHM->_id) {
       $this->_ref_GHM->sejour_id = $this->sejour_id;
-      $this->_ref_GHM->loadRefsFwd();
-      $this->_ref_GHM->bindInfos();
-      $this->_ref_GHM->getGHM();
     }
+    $this->_ref_GHM->_ref_sejour = $this;
+    $this->_ref_GHM->bindInfos();
+    $this->_ref_GHM->getGHM();
   }
   
   function loadHprimFiles() {
