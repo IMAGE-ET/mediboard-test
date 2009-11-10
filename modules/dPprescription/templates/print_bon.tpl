@@ -39,7 +39,7 @@ Main.add( function(){
 </table>
 
 <style type="text/css">
-{{include file=../../dPcompteRendu/css/print.css header=4 footer=0 nodebug=true}}
+{{include file=../../dPcompteRendu/css/print.css header=7 footer=0 nodebug=true}}
 
 /* decalage du header pour permettre l'insertion de filtres */
 @media screen {
@@ -104,9 +104,18 @@ Main.add( function(){
     Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
     <br />
     {{assign var=operation value=$sejour->_ref_last_operation}}
-    Intervention: {{$operation->libelle}} le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
-  </div>
+    Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
+    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong><br />
+		<strong>{{$operation->libelle}}</strong> 
+    <div style="text-align: left">
+		{{if !$operation->libelle}}
+      {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
+        <strong>{{$curr_ext_code->code}}</strong> :
+        {{$curr_ext_code->libelleLong}}<br />
+        {{/foreach}}
+    {{/if}}
+		</div>
+	</div>
 </div>
 
 <div class="footer">

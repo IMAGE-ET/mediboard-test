@@ -118,7 +118,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		if($line_medicament->child_id){
 			continue;
 		}
-		if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$line_medicament->signee){
+		if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$line_medicament->signee && $prescription->object_id){
 		  continue;
 		}
 	  if($line_medicament->ald){
@@ -149,7 +149,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
 	if($_perfusion->next_perf_id){
 		continue;
 	}
-  if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$_perfusion->signature_prat){
+  if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$_perfusion->signature_prat && $prescription->object_id){
 	  continue;
   }
   $lines["medicaments"]["med"]["no_ald"][] = $_perfusion;
@@ -164,7 +164,7 @@ if(count($prescription->_ref_lines_elements_comments)){
 		foreach($chap_element as $name_cat => $cat_element){
 			foreach($cat_element as $type => $elements){
 				foreach($elements as $element){
-					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
+					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
 					  continue;
 				  }
 				  if($element->_class_name == "CPrescriptionLineElement"){
@@ -195,7 +195,7 @@ if(count($prescription->_ref_lines_elements_comments)){
 					if($element->child_id){
 						continue;
 					}
-					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee){
+					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
 					  continue;
 				  }
 				  $element->loadRefsFwd();

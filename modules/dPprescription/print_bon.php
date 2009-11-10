@@ -24,7 +24,7 @@ $sejour =& $prescription->_ref_object;
 $sejour->loadRefCurrAffectation($debut);
 $sejour->loadRefsOperations();
 $sejour->_ref_last_operation->loadRefPlageOp();
-
+$sejour->_ref_last_operation->loadExtCodesCCAM();
 $bons = array();
 $lines = array();
 
