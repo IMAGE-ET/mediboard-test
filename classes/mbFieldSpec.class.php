@@ -29,6 +29,7 @@ class CMbFieldSpec {
   var $autocomplete   = null;
   var $helped         = null;
   var $seekable       = null;
+  var $show           = null;
   var $reported       = null;
 
   static $chars  = array();

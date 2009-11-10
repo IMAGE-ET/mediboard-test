@@ -113,9 +113,7 @@ Main.add(function () {
 			</span>
     </td>
     <td class="text">
-      <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
-        {{$praticien->_view}}
-      </div>
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
     </td>
     <td class="text">{{$curr_aff->_view}}</td>
     <td class="text">

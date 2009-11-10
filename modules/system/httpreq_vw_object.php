@@ -29,9 +29,6 @@ $template = is_file("modules/$object->_view_template") ?
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
-$smarty->assign("show_views", "0");
-$smarty->assign("show_derived", "0");
-$smarty->assign("show_empty", "0");
 
 $smarty->display("../../$template");
 ?>

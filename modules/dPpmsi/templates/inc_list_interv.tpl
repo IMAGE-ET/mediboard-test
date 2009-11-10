@@ -9,11 +9,13 @@
   
 	<td>
   	{{assign var=sejour value=$_operation->_ref_sejour}}
-    <strong>[{{$sejour->_num_dossier}}]</strong>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+    	<strong>[{{$sejour->_num_dossier}}]</strong>
+    </span>
   </td>
   
 	<td class="text">
-    {{$_operation->_ref_chir}}
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
   </td>
 	
   <td class="text">

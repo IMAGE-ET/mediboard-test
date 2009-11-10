@@ -127,7 +127,7 @@ Main.add(function () {
 			    	{{foreach from=$tarif->_codes_ccam item=_code_ccam}}
 						<div onmouseover="ObjectTooltip.createDOM(this, 'DetailCCAM-{{$_code_ccam}}');">{{$_code_ccam}}</div>
 						<div id="DetailCCAM-{{$_code_ccam}}" style="display: none">
-							{{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ccam show_derived=1}}
+							{{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ccam}}
 						</div>
 			    	{{foreachelse}}
 			    	<em>{{tr}}None{{/tr}}</em>
@@ -141,7 +141,7 @@ Main.add(function () {
          	  {{foreach from=$tarif->_codes_ngap item=_code_ngap}}
 					  <div onmouseover="ObjectTooltip.createDOM(this, 'DetailNGAP-{{$_code_ngap}}');">{{$_code_ngap}}</div>
 					  <div id="DetailNGAP-{{$_code_ngap}}" style="display: none">
-				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap show_derived=1}}
+				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap}}
 			 		  </div>
           	{{foreachelse}}
             <em>{{tr}}None{{/tr}}</em>

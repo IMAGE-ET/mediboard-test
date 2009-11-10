@@ -142,6 +142,7 @@ class CModule extends CMbObject {
   }
   
   function updateFormFields() {
+    parent::updateFormFields();
     $this->_view = CAppUI::tr("module-$this->mod_name-court");
   }
   

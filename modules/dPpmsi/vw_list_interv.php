@@ -40,6 +40,7 @@ foreach($plages as &$_plage) {
   $_plage->loadRefsOperations(0);
   foreach($_plage->_ref_operations as $_operation) {
     $_operation->loadRefChir();
+    $_operation->_ref_chir->loadRefFunction();
     $_operation->loadRefSejour();
     $_operation->_ref_sejour->loadNumDossier();
     $_operation->_ref_sejour->loadRefPatient();
