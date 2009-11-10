@@ -79,7 +79,7 @@ function reloadConsultAnesth() {
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   infosAnesthUrl.requestUpdate('InfoAnesth', { waitingText: null } );
  
-  Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, !Preferences.mode_readonly,'');
+  Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, !Preferences.mode_readonly,'', null, false);
 }
 
 Main.add(function () {
