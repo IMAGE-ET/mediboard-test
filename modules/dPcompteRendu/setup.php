@@ -348,8 +348,14 @@ class CSetupdPcompteRendu extends CSetup {
               ADD INDEX (`function_id`),
               ADD INDEX (`group_id`)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.47");
+    $sql = self::getTemplateReplaceQuery("Opération - personnel prévu - Panseuse", "Opération - personnel prévu - Panseur");
+    $this->addQuery($sql);
+    $sql = self::getTemplateReplaceQuery("Opération - personnel réel - Panseuse", "Opération - personnel réel - Panseur");
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.47";
+    $this->mod_version = "0.48";
   }
 }
 ?>
