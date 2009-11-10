@@ -66,7 +66,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
   function enregistrementPatient($domAcquittement, &$echange_hprim, &$newPatient, $data) {
     $messageAcquittement = null;
         
-    if (($data['action'] != "création") && ($data['action'] != "modification")) {
+    if (($data['action'] != "fusion") && ($data['action'] != "création") && ($data['action'] != "modification")) {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
