@@ -94,6 +94,35 @@ $lines["medicaments"]["med"]["ald"] = array();
 $lines["medicaments"]["med"]["no_ald"] = array();
 $lines["medicaments"]["comment"]["ald"] = array();
 $lines["medicaments"]["comment"]["no_ald"] = array();
+
+$linesElt = array();
+
+// Initialisation du tableau
+if(count($prescription->_ref_lines_elements_comments)){
+  foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
+    foreach($chap_element as $name_cat => $cat_element){
+      foreach($cat_element as $type => $elements){
+        foreach($elements as $element){
+          if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
+            continue;
+          }
+          if($element->_class_name == "CPrescriptionLineElement"){
+            $element->loadCompleteView();
+          }
+          $executant = "aucun";
+          if($element->_ref_executant){
+            $executant = $element->_ref_executant->_guid;
+          }
+          
+          $linesElt[$name_chap][$executant]["ald"] = array();
+          $linesElt[$name_chap][$executant]["no_ald"] = array();  
+        }
+      }
+    }
+  }
+}
+
+
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
 	  $line_medicament->loadRefsFwd();
@@ -126,6 +155,14 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  } else {
 	  	$lines["medicaments"][$key]["no_ald"][] = $line_medicament;
 	  }
+		
+		// Creation d'une ligne de soin pour la prescription des injections
+		if($prescription->type != "sejour"){
+		  if($line_medicament->_is_injectable){
+		  	$ald = $line_medicament->ald ? "ald" : "no_ald";
+	      $linesElt["soin"]["aucun"][$ald]["inj"][] = $line_medicament;
+	    }
+		}
 	}
 }
 
@@ -156,32 +193,6 @@ foreach($prescription->_ref_perfusions as $_perfusion){
 }
 
 
-$linesElt = array();
-
-// Initialisation du tableau
-if(count($prescription->_ref_lines_elements_comments)){
-	foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
-		foreach($chap_element as $name_cat => $cat_element){
-			foreach($cat_element as $type => $elements){
-				foreach($elements as $element){
-					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
-					  continue;
-				  }
-				  if($element->_class_name == "CPrescriptionLineElement"){
-					  $element->loadCompleteView();
-					}
-					$executant = "aucun";
-			    if($element->_ref_executant){
-			      $executant = $element->_ref_executant->_guid;
-			    }
-			    
-		      $linesElt[$name_chap][$executant]["ald"] = array();
-			    $linesElt[$name_chap][$executant]["no_ald"] = array();	
-				}
-			}
-		}
-	}
-}
 
 // Parcours des elements
 if(count($prescription->_ref_lines_elements_comments)){

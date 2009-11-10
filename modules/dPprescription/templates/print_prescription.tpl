@@ -147,7 +147,7 @@ Main.add(window.print);
 			{{/if}}
 		
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
-        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
+        {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
         {{if !$prescription->object_id}}
 	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
 	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPerfusion|@count}}
@@ -223,18 +223,26 @@ Main.add(window.print);
 	     {{foreach from=$elements.ald key=name_cat item=_elements_ald name="foreach_elts_ald"}}  
 	        {{foreach from=$_elements_ald  item=_element_ald name=foreach_elt_ald}}
 	           {{if $smarty.foreach.foreach_elt_ald.first}}
-		           {{assign var=category value=$categories.$name_chap.$name_cat}}
-			         <strong>{{$category->nom}}</strong>
-			         {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
-			         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
-		         {{/if}}
+						   {{if $name_cat != "inj"}}
+			           {{assign var=category value=$categories.$name_chap.$name_cat}}
+				         <strong>{{$category->nom}}</strong>
+				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+		           {{else}}
+							   <strong>Injections</strong>
+							 {{/if}}
+						 {{/if}}
 
-		         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
-	             <!-- Affichage de l'element -->
-	             {{include file="inc_print_element.tpl" elt=$_element_ald nodebug=true}}
-	           {{else}}
-               {{include file="inc_print_commentaire.tpl" comment=$_element_ald nodebug=true}}
-	           {{/if}}
+             {{if $name_cat == "inj"}}
+               {{include file="inc_print_medicament.tpl" med=$_element_ald nodebug=true}}
+             {{else}}
+			         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
+		             <!-- Affichage de l'element -->
+		             {{include file="inc_print_element.tpl" elt=$_element_ald nodebug=true}}
+		           {{else}}
+	               {{include file="inc_print_commentaire.tpl" comment=$_element_ald nodebug=true}}
+		           {{/if}}
+						 {{/if}}
 	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
@@ -246,22 +254,30 @@ Main.add(window.print);
 	       </h3>
 	    {{/if}}
 	     <!-- Affichage des no_ald -->
-	     <ul>
+	    <ul>
 	     {{foreach from=$elements.no_ald key=name_cat item=_elements_no_ald name="foreach_elts_no_ald"}}
 	       {{foreach from=$_elements_no_ald  item=_element_no_ald name=foreach_elt_no_ald}}
 	           {{if $smarty.foreach.foreach_elt_no_ald.first}}
-	           {{assign var=category value=$categories.$name_chap.$name_cat}}
-		         <strong>{{$category->nom}}</strong>
-		         	 {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
-			         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
-			       {{/if}}
+						   {{if $name_cat != "inj"}}
+							   {{assign var=category value=$categories.$name_chap.$name_cat}}
+			           <strong>{{$category->nom}}</strong>
+			         	 {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+			         {{else}}
+							   <strong>Injections</strong>
+							 {{/if}}
+						 {{/if}}
 		
-		         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}
-	             <!-- Affichage de l'element -->
-	             {{include file="inc_print_element.tpl" elt=$_element_no_ald nodebug=true}}
-	           {{else}}
-               {{include file="inc_print_commentaire.tpl" comment=$_element_no_ald nodebug=true}}
-	           {{/if}}
+		         {{if $name_cat == "inj"}}
+						   {{include file="inc_print_medicament.tpl" med=$_element_no_ald nodebug=true}}
+						 {{else}}
+			         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}
+		             <!-- Affichage de l'element -->
+		             {{include file="inc_print_element.tpl" elt=$_element_no_ald nodebug=true}}
+		           {{else}}
+	               {{include file="inc_print_commentaire.tpl" comment=$_element_no_ald nodebug=true}}
+		           {{/if}}
+						 {{/if}}
 	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
