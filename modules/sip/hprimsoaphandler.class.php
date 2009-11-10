@@ -90,7 +90,7 @@ class CHprimSoapHandler extends CSoapHandler {
 
     $newPatient = new CPatient();
     $newPatient->_hprim_initiator_id = $echange_hprim->_id;
-	    
+	  mbTrace($domGetEvenement, "evt", true);  
     // Un événement concernant un patient appartient à l'une des six catégories suivantes
     // Enregistrement d'un patient
     if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
@@ -109,7 +109,7 @@ class CHprimSoapHandler extends CSoapHandler {
     } 
     // Fusion d'une venue
     else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
-      $data = array_merge($data, $domGetEvenement->getFusionXML());
+      $data = array_merge($data, $domGetEvenement->getFusionVenueXML());
       $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data);
     }
     // Aucun des six événements retour d'erreur
