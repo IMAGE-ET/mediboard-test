@@ -127,7 +127,7 @@ class CFloatSpec extends CMbFieldSpec {
         $(document.forms["'.$form.'"]["'.$field.'"]).addSpinner({';
           if ($step)       $sHtml .= "step: $step,";
           if ($this->pos)  $sHtml .= "min: 0,";
-          elseif($min)     $sHtml .= "min: $min,";
+          elseif(isset($min))     $sHtml .= "min: $min,";
           if (isset($max)) $sHtml .= "max: $max,";
           if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
           if ($decimals)   $sHtml .= "decimals: $decimals,";
