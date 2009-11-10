@@ -103,8 +103,6 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $mbVenueEliminee = new CSejour();
       
       $mbVenue = new CSejour();
-      /*$mbVenue->patient_id = $newPatient->_id; 
-      $mbVenue->group_id = CGroups::loadCurrent()->_id;*/
      
       // Acquittement d'erreur : identifiants source et cible non fournis pour le venue / venueEliminee
       if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {
@@ -167,6 +165,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $newVenue = CSejour();
       // Cas 0 : Aucun séjour
       if (!$mbVenue->_id && !$mbVenueEliminee->_id) {
+        $newVenue->patient_id = $newPatient->_id; 
+        $newVenue->group_id   = CGroups::loadCurrent()->_id;
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
       // Cas 1 : 1 séjour
@@ -178,6 +178,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         } else if ($mbVenueEliminee->_id) {
           $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->delete();
         }
+        
+        // Cas 0
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
       // Cas 2 : 2 Séjour
@@ -185,13 +187,36 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         // Suppression des identifiants des séjours trouvés
         $messages['msgNumDosVenue'] = $id400Venue->delete();
         $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->delete();
+        
         // Transfert des backsref
-        
+         $mbVenueEliminee->transferBackRefsFrom($mbVenue);
+         
         // Suppression de la venue a éliminer
+        $msgDelete = $mbVenueEliminee->delete();
         
+        // Cas 0
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
+      
+      $codes = array  ($messages['msgVenue'] ? "I101" : "A102");
+        
+      if ($messages['msgVenue']) {
+        $avertissement = $messages['msgVenue'];
+      } else {
+        $commentaire = "Séjour enregistré : $mbVenue->_id. Numéro dossier associé : $id400Venue->id400. Le séjour $id400VenueEliminee->id400 a été éliminé.";
+      }
+        
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->store();
+
+    return $messageAcquittement;
   }
   
   private function mapAndStoreVenue(&$newVenue, $data, $etatVenueEliminee, &$id400Venue, &$id400VenueEliminee) {
