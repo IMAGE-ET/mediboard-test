@@ -407,8 +407,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addObservation($elParent, $code, $libelle, $commentaires = null) {
     $observation = $this->addElement($elParent, "observation");
     
-    $this->addElement($observation, "code", $code);
-    $this->addElement($observation, "libelle", $libelle);
+    $this->addElement($observation, "code", substr($code, 0, 17));
+    $this->addElement($observation, "libelle", substr($libelle, 0, 80));
     $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
   }
   

@@ -91,7 +91,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
   function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-    if (($data['action'] != "création") || ($data['action'] != "modification")) {
+    if (($data['action'] != "création") && ($data['action'] != "modification")) {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;

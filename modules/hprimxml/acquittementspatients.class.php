@@ -49,7 +49,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
           $_codes .= $code;
           $_libelle_codes .= CAppUI::tr("sip-hprim-error-$code");
         }
-        $this->addObservation($enteteMessageAcquittement, substr($_codes, 0, 17), substr($_libelle_codes, 0, 80), $commentaires);
+        $this->addObservation($enteteMessageAcquittement, $_codes, $_libelle_codes, $commentaires);
       } else {
         $this->addObservation($enteteMessageAcquittement, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires);
       }
