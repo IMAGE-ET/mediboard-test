@@ -68,7 +68,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" onchange="Value.synchronize(this); modifOp();"}}
+      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this); modifOp();"}}
     </td>
   </tr> 
 
