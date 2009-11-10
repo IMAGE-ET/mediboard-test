@@ -68,11 +68,12 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
   /**
    * Fusion and recording a stay with an num_dos in the system
    * @param CHPrimXMLAcquittementsPatients $domAcquittement
-   * @param CEchangeHprim $echange_hprim
+   * @param CEchangeHprim $echange_hprim.
+   * @param CPatient $newPatient
    * @param array $data
    * @return string acquittement 
    **/
-  function fusionVenue($domAcquittement, $echange_hprim, $data) {
+  function fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data) {
     // Seulement le cas d'une fusion
     if ($data['action'] != "fusion") {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
