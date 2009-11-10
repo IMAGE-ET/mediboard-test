@@ -162,7 +162,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
           </div>
         {{/if}}
 	      {{mb_label object=$prise field=quantite}}
-	      {{mb_field object=$prise field=quantite min=1 increment=1 form=addAdministration}}
+	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration}}
 	      
 	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 				  {{if $line->_ref_produit_prescription->_id}}

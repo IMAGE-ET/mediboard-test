@@ -122,10 +122,7 @@ if($object_id && $object_class){
 	  $line->countBackRefs("administration");
 		$line->loadRefsSubstitutionLines();
   }
-  if($line_type != "service"){
-    $_dates = array();
-    $_dates[] = $date;
-  }
+
   foreach($_dates as $curr_date){
     // Refresh d'une ligne de medicament
     if($line->_class_name == "CPrescriptionLineMedicament"){
@@ -236,13 +233,9 @@ else {
 		
     $with_calcul = $chapitre ? true : false; 
 
-	  if($line_type == "service"){
-		  foreach($_dates as $curr_date){
-		    $prescription->calculPlanSoin($curr_date, 0, null, null, null, $with_calcul);
-		  }
-	  } else {
-	    $prescription->calculPlanSoin($date, 0, null, null, null, $with_calcul);
-	  }
+	  foreach($_dates as $curr_date){
+		  $prescription->calculPlanSoin($curr_date, 0, null, null, null, $with_calcul);
+		}
 	  
 	  // Chargement des operations
 	  if($prescription->_ref_object->_class_name == "CSejour"){
