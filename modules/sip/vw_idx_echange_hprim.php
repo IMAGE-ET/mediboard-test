@@ -74,6 +74,8 @@ if ($statut_acquittement) {
 }
 if ($type_evenement) {
   $where["sous_type"] = " = '".$type_evenement."'";
+} else {
+  $where["sous_type"] = "IS NOT NULL";
 }
 if (isset($t["message_valide"])) {
   $where["message_valide"] = " = '1'";
@@ -121,7 +123,7 @@ foreach($listEchangeHprim as $_echange_hprim) {
     $id400->object_class = "CPatient";
     $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
   }
-  if ($_echange_hprim->sous_type == "venuePatient" ) {
+  if ($_echange_hprim->sous_type == "venuePatient") {
     $id400->object_class = "CSejour";
     $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
   }
