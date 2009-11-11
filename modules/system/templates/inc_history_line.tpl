@@ -18,7 +18,12 @@
   	({{$_log->object_id}})
   </td>
   <td>
-    <label onmouseover="ObjectTooltip.createEx(this, '{{$_log->_ref_object->_guid}}');">{{$_log->_ref_object}}</label>
+  	{{assign var=object value=$_log->_ref_object}}
+  	{{if $object->_id}} 
+      <label onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">{{$object}}</label>
+  	{{else}}
+		  {{$object}}
+  	{{/if}}
   </td>
   {{/if}}
   <td style="text-align: center;">{{mb_ditto name=user value=$_log->_ref_user->_view}}</td>
