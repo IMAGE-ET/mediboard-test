@@ -34,6 +34,8 @@ class CUser extends CMbObject {
   var $profile_id       = null;
 
   var $_user_password   = null;
+	var $_user_password_weak = null;
+  var $_user_password_strong = null;
   var $_login_locked    = null;
 
   var $_ref_preferences = null;
@@ -86,7 +88,7 @@ class CUser extends CMbObject {
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["user_username"]   = "str notNull maxLength|20";
-    $specs["user_password"]   = "str";
+    $specs["user_password"]   = "str show|0";
     $specs["user_type"]       = "num notNull min|0 max|20";
     $specs["user_first_name"] = "str maxLength|50 seekable|begin";
     $specs["user_last_name"]  = "str notNull maxLength|50 confidential seekable|begin";
