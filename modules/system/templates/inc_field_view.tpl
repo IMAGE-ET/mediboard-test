@@ -13,7 +13,7 @@
 
 {{if $spec->show !== "0"}} 
 {{if $prop.0 != "_" || $spec->show}}
-{{if $value != "" || $spec->show}}
+{{if $value || $spec->show}}
   <strong>{{mb_label object=$object field=$prop}}</strong> :
 
   {{if $spec instanceof CRefSpec}}
@@ -24,10 +24,14 @@
   {{elseif $spec instanceof CHtmlSpec}}
     {{$value|count_words}} mots
 
+  {{elseif $spec instanceof CTextSpec}}
+    {{$value|truncate|nl2br}}
+	
   {{else}}
     {{mb_value object=$object field=$prop}}
 
   {{/if}}
+	
   <br />
 {{/if}}
 {{/if}}
