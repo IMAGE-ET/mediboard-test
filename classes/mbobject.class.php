@@ -1616,7 +1616,7 @@ class CMbObject {
     return array (
       "_shortview" => "str",
       "_view" => "str",
-      $this->_spec->key => "ref class|$this->_class_name"
+      $this->_spec->key => "ref class|$this->_class_name show|0"
     );
   }
   
