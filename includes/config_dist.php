@@ -636,7 +636,8 @@ $dPconfig["hprimxml"] = array (
     "validation" => "0",
     "version" => "1.01",
   ),
-  "functionPratImport" => "Import"
+  "functionPratImport" => "Import",
+  "mvt_comptet" => "0"
 );
 
 // you can add as much ftp as you want by using

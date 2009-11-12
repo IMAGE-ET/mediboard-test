@@ -29,6 +29,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       case "fusionVenue" :
         return new CHPrimXMLFusionVenue();
         break;
+      case "mouvementPatient" :
+        return new CHPrimXMLMouvementPatient();
+        break;
       default;
         return new CHPrimXMLEvenementsPatients();
     }
@@ -324,9 +327,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     }
     
     return true;
-  }
-  
-  
+  }  
   
   function getMedecins($node, $mbVenue) {    
     $xpath = new CMbXPath($node->ownerDocument, true);
@@ -406,5 +407,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     return $mbVenue;
   }
+  
+  function mappingMouvements($node, $mbVenue) {  
+
+    return $mbVenue;
+  } 
 }
 ?>

@@ -98,6 +98,8 @@
         <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
       </td>
     </tr>
+    
+    {{mb_include module=system template=inc_config_bool var=mvt_comptet}}
    
     <tr>
       <td class="button" colspan="10">

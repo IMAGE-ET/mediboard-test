@@ -92,25 +92,31 @@ class CHprimSoapHandler extends CSoapHandler {
     $newPatient->_hprim_initiator_id = $echange_hprim->_id;
 	  
     // Un événement concernant un patient appartient à l'une des six catégories suivantes
-    // Enregistrement d'un patient
+
+    // Enregistrement d'un patient avec son identifiant (ipp) dans le système
     if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
       $data = array_merge($data, $domGetEvenement->getEnregistrementPatientXML());
       $messageAcquittement = $domGetEvenement->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
     } 
-    // Fusion d'un patient
+    // Fusion de deux ipp
     else if($domGetEvenement instanceof CHPrimXMLFusionPatient) {
       $data = array_merge($data, $domGetEvenement->getFusionPatientXML());
       $messageAcquittement = $domGetEvenement->fusionPatient();
     } 
-    // Venue d'un patient
+    // Venue d'un patient dans l'établissement avec son numéro de venue
     else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
       $data = array_merge($data, $domGetEvenement->getVenuePatientXML());
       $messageAcquittement = $domGetEvenement->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data);
     } 
-    // Fusion d'une venue
+    // Fusion de deux venues
     else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
       $data = array_merge($data, $domGetEvenement->getFusionVenueXML());
       $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data);
+    }
+    // Mouvement du patient dans une unité fonctionnelle ou médicale
+    else if($domGetEvenement instanceof CHPrimXMLMouvementPatient) {
+      $data = array_merge($data, $domGetEvenement->getMouvementPatientXML());
+      $messageAcquittement = $domGetEvenement->mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
     }
     // Aucun des six événements retour d'erreur
     else {
