@@ -51,7 +51,7 @@ $useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && C
 $patVitale = new CPatient();
   
 // Recherche par IPP
-if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
+if($patient_ipp && CModule::getInstalled("dPsante400")){
   // Initialisation dans le cas d'une recherche par IPP
   $patients = array();
   $patientsSoundex = array();
