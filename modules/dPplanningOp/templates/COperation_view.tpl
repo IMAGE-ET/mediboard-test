@@ -18,7 +18,7 @@
       {{/if}}
 
       <script type="text/javascript">
-    	function printIntervention(id) {
+    	printIntervention = function(id) {
 			  var url = new Url("dPplanningOp", "view_planning");
 			  url.addParam("operation_id", id);
 			  url.popup(700, 550, "Admission");
