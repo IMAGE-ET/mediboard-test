@@ -8,7 +8,7 @@ html, body {
 }
 
 body {
-  font-family: tahoma, verdana, arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-size: 11px;  
   background: #ddf;
   margin: 0px;
@@ -1966,11 +1966,6 @@ table.chambreexpand {
   margin: 1px 0;
 }
 
-table.chambrecollapse em,
-table.chambreexpand em {
-  font-weight: bold;
-}
-
 table.chambrecollapse td,
 table.chambrecollapse th,
 table.chambreexpand td,
@@ -2095,13 +2090,16 @@ table.sejournexpand td.patient {
   background: #ddf url(../../images/icons/expand.gif) no-repeat center left;
 }
 
-table.operationexpand td.date,
-table.sejourexpand td.date {
+table.operationcollapse td,
+table.sejourcollapse td {
+  display: none;
 }
 
-table.operationcollapse td.date,
-table.sejourcollapse td.date {
-  display: none;
+table.operationcollapse td.patient,
+table.sejourcollapse td.patient,
+table.operationcollapse td.selectsejour,
+table.sejourcollapse td.selectsejour {
+  display: table-cell;
 }
 
 table#planningBloc {
@@ -2744,6 +2742,7 @@ span.listeCurrent a {
 }
 
 table.tbl td.highlight,
+table.tbl:hover td.highlight,
 td.highlight {
   background-color: #ff5;
 }
