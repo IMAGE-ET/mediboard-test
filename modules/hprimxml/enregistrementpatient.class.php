@@ -80,7 +80,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
-    
+    $_IPP_create = false;
     $mutex = new CMbSemaphore("sip-ipp");
 
     // Si SIP
@@ -177,7 +177,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       $id400->object_class = "CPatient";
       $id400->tag = $data['idClient'];
       $id400->id400 = $data['idSource'];
-
+    
       // Cas 1 : Patient existe sur le SIP
       if($id400->loadMatchingObject()) {
         // Identifiant du patient sur le SIP

@@ -119,20 +119,25 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $node);
     $adresses = $xpath->queryUniqueNode("hprim:adresses", $node);
     $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
-    $ligne = $xpath->queryTextNode("hprim:ligne", $adresse);
+    $ligne = $xpath->getMultipleTextNodes("hprim:ligne", $adresse);
     $ville = $xpath->queryTextNode("hprim:ville", $adresse);
     $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
     $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);    
     
     if ($mbPersonne instanceof CPatient) {
-      $mbPersonne->civilite = $civiliteHprimConversion[$civilite];    
+      if ($civilite)
+        $mbPersonne->civilite = $civiliteHprimConversion[$civilite];    
       $mbPersonne->nom = $nom;
       $mbPersonne->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
       $mbPersonne->prenom = $prenoms[0];
       $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
       $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
-      $mbPersonne->adresse = $ligne;
+      $mbPersonne->adresse  = $ligne[0];
+      if (isset($ligne[1]))
+        $mbPersonne->adresse .= " $ligne[1]";
+      if (isset($ligne[2]))
+        $mbPersonne->adresse .= " $ligne[2]";
       $mbPersonne->ville = $ville;
       $mbPersonne->pays_insee = $xpath->queryTextNode("hprim:pays", $adresse);
       $pays = new CPaysInsee();
@@ -148,7 +153,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbPersonne->_user_first_name = $prenoms[0];
       $mbPersonne->_user_email      = isset($emails[0]) ? $emails[0] : "";
       $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : "";
-      $mbPersonne->_user_adresse    = $ligne;
+      $mbPersonne->_user_adresse    = $ligne[0];
+      if (isset($ligne[1]))
+        $mbPersonne->_user_adresse  .= " $ligne[1]";
+      if (isset($ligne[2]))
+        $mbPersonne->_user_adresse  .= " $ligne[2]";
       $mbPersonne->_user_cp         = $cp;
       $mbPersonne->_user_ville      = $ville;
     }
