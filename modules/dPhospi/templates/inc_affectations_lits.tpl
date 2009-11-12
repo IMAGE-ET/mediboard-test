@@ -71,9 +71,9 @@
 
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
           {{if $sejour->type == "ambu"}}
-          <em>{{$patient->_view}}</em>
+					<strong><em>{{$patient}}</em></strong>
           {{else}}
-          <strong>{{$patient->_view}}</strong>
+          <strong>{{$patient}}</strong>
           {{/if}}
         </span>
 
