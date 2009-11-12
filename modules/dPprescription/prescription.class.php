@@ -402,13 +402,16 @@ class CPrescription extends CMbObject {
 					$prise->object_id = $_line->_id;
 					$prise->object_class = $_line->_class_name;
 					if($prise->decalage_intervention != null){
+						$time_operation = "";
 						if($date_operation){
 		  	      $time_operation = mbTime($date_operation); 
 		  	    } elseif ($operation->_id) {
 			  	    $time_operation = $hour_operation;
 			  	  }
 		  	    $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
-					  $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention HOURS", $time_operation);	  
+						if($time_operation){
+					    $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention HOURS", $time_operation);
+						}
 					}
 				  if(!$mode_preview){
 					  $msg = $prise->store();

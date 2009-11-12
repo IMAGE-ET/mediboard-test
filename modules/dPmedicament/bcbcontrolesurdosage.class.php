@@ -208,11 +208,13 @@ class CBcbControleSurdosage {
   
   function getSurdosage() {
     $this->alertes = array();
-    foreach($this->_ref_prescription->_ref_prescription_lines as $_line) {
-      $this->getPosoMax($_line);
-      $this->controleSurdosage($_line);
-      $this->controleDureeMax($_line);
-    }
+		if($this->_ref_prescription){
+	    foreach($this->_ref_prescription->_ref_prescription_lines as $_line) {
+	      $this->getPosoMax($_line);
+	      $this->controleSurdosage($_line);
+	      $this->controleDureeMax($_line);
+	    }
+		}
     return $this->alertes;
   }
   
