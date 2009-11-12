@@ -93,4 +93,4 @@ Main.add(function(){
 
 </form>
 
-{{mb_include module=system template=inc_pagination total=$list_count current=$start step=100 change_page='changePage'}}
+{{mb_include module=system template=inc_pagination total=$list_count current=$start step=100 change_page='changePage' jumper=1}}
