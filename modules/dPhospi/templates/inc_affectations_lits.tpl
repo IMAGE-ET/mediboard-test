@@ -103,9 +103,9 @@
           <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
         </a>
         {{/if}}
-        <em>Du</em>:
-        {{$curr_affectation->entree|date_format:"%A %d %B %Hh%M"}}
-        ({{$curr_affectation->_entree_relative}} jours)
+        <strong>Du</strong>:
+        {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
+        ({{$curr_affectation->_entree_relative}}j)
       </td>
       <td class="action">
         {{if $can->edit}}
@@ -119,9 +119,9 @@
     </tr>
     <tr class="dates">
       <td class="text">
-        <em>Au</em>:
-        {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
-        ({{$curr_affectation->_sortie_relative}} jours)
+        <strong>Au</strong>:
+        {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
+        ({{$curr_affectation->_sortie_relative}}j)
       </td>
       <td class="action">
         {{if $can->edit}}
@@ -157,13 +157,11 @@
         {{/if}}
         {{if $aff_prev->_id}}
           <em>Déplacé</em> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
-          {{$curr_affectation->entree|date_format:"%A %d %B %Hh%M"}}
-          ({{$curr_affectation->_entree_relative}} jours)
         {{else}}
           <em>Entrée</em>:
-          {{$curr_affectation->entree|date_format:"%A %d %B %Hh%M"}}
-          ({{$curr_affectation->_entree_relative}} jours)
         {{/if}}
+        {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
+        ({{$curr_affectation->_entree_relative}}j)
       </td>
       <td class="action">
         {{if $can->edit}}
@@ -179,8 +177,6 @@
       <td class="text">
         {{if $aff_next->_id}}
         <em>Déplacé</em> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
-        {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
-        ({{$curr_affectation->_sortie_relative}} jours)
         {{else}}
           {{if $can->edit}}
         <form name="splitAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
@@ -197,9 +193,10 @@
         </form>
           {{/if}}
         <em>Sortie</em>:
-        {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
-        ({{$curr_affectation->_sortie_relative}} jours)
         {{/if}}
+
+        {{$curr_affectation->sortie|date_format:"%A %d %b %Hh%M"}}
+        ({{$curr_affectation->_sortie_relative}}j)
       </td>
       <td class="action">
         {{if $can->edit}}
@@ -213,10 +210,14 @@
     </tr>
 
     <tr class="dates">
-      <td colspan="2"><em>Age</em>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})</td>
+      <td colspan="2"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})</td>
     </tr>
     <tr class="dates">
-      <td class="text" colspan="2"><em>Dr {{$sejour->_ref_praticien->_view}}</em></td>
+      <td class="text" colspan="2">
+	      <strong>
+	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
+	      </strong>
+      </td>
     </tr>
 
     {{if $sejour->prestation_id}}
@@ -229,14 +230,8 @@
 
     <tr class="dates">
       <td class="text" colspan="2">
-        {{foreach from=$sejour->_ref_operations item=curr_operation}}
-          {{if $curr_operation->libelle}}
-          <em>[{{$curr_operation->libelle}}]</em>
-          <br />
-          {{/if}}
-          {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-            <em>{{$curr_code->code}}</em> : {{$curr_code->libelleLong}}<br />
-          {{/foreach}}
+        {{foreach from=$sejour->_ref_operations item=_operation}}
+          {{mb_include module=dPplanningOp template=inc_vw_operation operation=$_operation}}
         {{/foreach}}
       </td>
     </tr>
@@ -247,7 +242,7 @@
           <input type="hidden" name="otherm" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_sejour_aed" />
           <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-          <em>Pathologie</em>:
+          <strong>Pathologie</strong>:
           {{$sejour->pathologie}}
           -
           {{if $can->edit}}
@@ -268,7 +263,7 @@
     {{if $sejour->rques != ""}}
     <tr class="dates">
       <td class="text highlight" colspan="2">
-        <em>Séjour</em>: {{$sejour->rques|nl2br}}
+        <strong>Séjour</strong>: {{$sejour->rques|nl2br}}
       </td>
     </tr>
     {{/if}}
@@ -276,7 +271,7 @@
     {{if $curr_operation->rques != ""}}
     <tr class="dates">
       <td class="text highlight" colspan="2">
-        <em>Intervention</em>: {{$curr_operation->rques|nl2br}}
+        <strong>Intervention</strong>: {{$curr_operation->rques|nl2br}}
       </td>
     </tr>
     {{/if}}
@@ -284,7 +279,7 @@
     {{if $patient->rques != ""}}
     <tr class="dates">
       <td class="text highlight" colspan="2">
-        <em>Patient</em>: {{$patient->rques|nl2br}}
+        <strong>Patient</strong>: {{$patient->rques|nl2br}}
       </td>
     </tr>
     {{/if}}
