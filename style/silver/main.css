@@ -86,20 +86,14 @@ table.tabview td.tabox {
 
 /* Bouttons */
 button, 
-a.button,
-input[type=submit],
-input[type=reset],
-input[type=button] {
+a.button {
   background-image: url(../tonkin/images/buttons/button.png);
   background-repeat: repeat-x;
   background-position: left bottom;
 }
 
 button:hover,
-a:hover.button,
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover {
+a:hover.button {
   background-image: url(../tonkin/images/buttons/buttonover.png);
 }
 

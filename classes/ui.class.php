@@ -561,6 +561,12 @@ class CAppUI {
     $sibling = new CUser;
     $sibling->user_username = $user->user_username;
     $sibling->loadMatchingObject();
+    $sibling->loadRefMediuser();
+    
+    if ($sibling->_ref_mediuser->_id && !$sibling->_ref_mediuser->actif) {
+      self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
+      return false;
+    }
     
     if ($sibling->_login_locked) {
       self::setMsg("Auth-failed-user-locked", UI_MSG_ERROR);

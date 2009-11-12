@@ -264,21 +264,6 @@ input {
   border: 1px #a5acb2 solid;
 }
 
-input[type=submit],
-input[type=reset],
-input[type=button] {
-  border-color: black;
-  background: #638cc9;
-  color: #fff;
-}
-
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover {
-  background: #8ae;
-  color: #fff;
-}
-
 select {
   border: 1px #a5acb2 solid;
 }

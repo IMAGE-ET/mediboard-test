@@ -196,10 +196,7 @@ option {
 }
 
 button, 
-a.button,
-input[type=submit],
-input[type=reset],
-input[type=button] {
+a.button {
   background-image: url(./images/buttons/button.png);
   background-repeat: repeat-x;
   background-position: left bottom;
@@ -207,10 +204,7 @@ input[type=button] {
 }
 
 a.button:hover,
-button:hover,
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover {
+button:hover {
   background-image: url(./images/buttons/buttonover.png);
 }
 

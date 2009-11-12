@@ -8,10 +8,10 @@
   <table class="form">
     {{if !$dialog}}
     <tr>
-      <th class="category" colspan="3">{{$dPconfig.company_name}}</th>
+      <th class="category" colspan="10">{{$dPconfig.company_name}}</th>
     </tr>
     <tr>
-      <td class="logo" colspan="3 ">
+      <td class="logo" colspan="10">
         <a href="{{$dPconfig.system.website_url}}">
           <img src="images/pictures/logo.png" alt="MediBoard logo" />
         </a>
@@ -23,7 +23,7 @@
     </tr>
     {{/if}}
     <tr>
-      <th class="category" colspan="2">Connexion</th>
+      <th class="category" colspan="10">Connexion</th>
     </tr>
 
     <tr>
@@ -31,21 +31,21 @@
         <label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label>
       </th>
       <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" /></td>
+      <td rowspan="2">
+        <div id="systemMsg">
+          {{$errorMessage|nl2br|smarty:nodefaults}}
+        </div>
+      </td>
     </tr>
     <tr>
       <th><label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label></th>
       <td><input type="password" class="notNull str" size="25" maxlength="32" name="password" /></td>
     </tr>
     <tr>
-      <td colspan="2" class="button"><button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button></td>
+      <td colspan="10" class="button"><button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button></td>
     </tr>
 	</table>
   </form>
-</div>
-
-<!-- System messages -->
-<div id="systemMsg">
-  {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>
 
 </body>

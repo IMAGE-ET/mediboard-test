@@ -265,21 +265,6 @@ input {
   border: 1px #0f0 dashed;
 }
 
-input[type=submit],
-input[type=reset],
-input[type=button] {
-  border-color: #0f0;
-  background: #0f0;
-  color: #fff;
-}
-
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover {
-  background: #ff0;
-  color: #fff;
-}
-
 select {
   border: 1px #0f0 dashed;
 }

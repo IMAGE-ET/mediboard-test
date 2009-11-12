@@ -440,19 +440,6 @@ input:focus, select:focus, textarea:focus {
   background-color: #fff;
 }
 
-input[type=submit],
-input[type=reset],
-input[type=button] {
-  background: #ddd;
-  margin: 0 10px;
-}
-
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover {
-  background: #bbb;
-}
-
 select {
   padding: 0;
 }
@@ -942,34 +929,20 @@ table.form td.button {
   vertical-align: middle;
 }
 
-div.dateTime,
-div.time,
-div.date {
-  border: 1px dotted;
-  padding: 1px;
-  margin: 1px;
-  min-height: 15px;
-  /*display: inline;*/
-  float: left;
-}
-
 input[readonly],
 input[readonly]:focus {
   border: 1px dotted #333;
   background: none;
 }
 
-div.date,
 input[readonly].date {
   width: 90px;
 }
 
-div.time,
 input[readonly].time {
   width: 60px;
 }
 
-div.dateTime,
 input[readonly].dateTime {
   width: 130px;
 }
@@ -1110,6 +1083,12 @@ div#systemMsg {
   cursor: pointer;
   position: absolute;
   right: 10px;
+}
+
+#login div#systemMsg {
+  cursor: pointer;
+  position: relative;
+  right: 0;
 }
 
 div.warning, div.error, div.message, div.loading {
@@ -1611,8 +1590,8 @@ span.hilite {
   padding-bottom: 1px;
 }
 
-.touchscreen input[type=text],
-.touchscreen input[type=password] {
+.touchscreen input[type="text"],
+.touchscreen input[type="password"] {
   padding: 2px;
   padding-bottom: 0px;
   padding-left: 1px;
@@ -2188,12 +2167,12 @@ table#weeklyPlanning th {
   padding: 4px;
 }
 
-table#weeklyPlanning th[scope=row] {
+table#weeklyPlanning th[scope="row"] {
   border-top: 1px solid #ccc;
   vertical-align: middle;
 }
 
-table#weeklyPlanning th[scope=col] {
+table#weeklyPlanning th[scope="col"] {
   border-left: 1px solid #ccc;
 }
 
@@ -3399,6 +3378,31 @@ span.highlight {
   background-color: transparent;
   text-decoration: underline;
   font-weight: bold;
+}
+
+.ajax-upload {
+  position: relative;
+  width: 8em;
+  height: 20px;
+  overflow: hidden;
+}
+
+.ajax-upload .fakefile {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
+
+.ajax-upload input[type="file"] {
+  position: relative;
+  text-align: right;
+  -moz-opacity: 0;
+  filter: alpha(opacity: 0);
+  -ms-filter: "alpha(opacity: 0)";
+  opacity: 0;
+  z-index: 2;
+  right: 0;
 }
 
 @media print {

@@ -967,20 +967,21 @@ var DOM = {
   },
   
   createNode: function (tag, args) {
-    var e;
+    var e, i, j, arg, length = args.length;
     try {
       e = new Element(tag, args[0]);
-      for (var i = 1; i < args.length; i++) {
-        var arg = args[i];
+      if (Prototype.Browser.IE && args[0] && args[0].className) e.addClassName(args[0].className); // Stupid IE bug
+      for (i = 1; i < length; i++) {
+        arg = args[i];
         if (arg == null) continue;
-        if (!Object.isArray(arg)) e.insert (arg);
+        if (!Object.isArray(arg)) e.insert(arg);
         else {
-          for (var j = 0; j < arg.length; j++) e.insert(arg[j]);
+          for (j = 0; j < arg.length; j++) e.insert(arg[j]);
         }
       }
     }
     catch (ex) {
-      Console.error('Cannot create <' + tag + '> element:\n' + Object.inspect(args) + '\n' + ex.message);
+      console.error('Cannot create <' + tag + '> element:\n' + Object.inspect(args) + '\n' + ex.message);
       e = null;
     }
     return e;
@@ -995,9 +996,7 @@ var DOM = {
   ]
 };
 
-DOM.tags.each(function (tag) {
-  DOM.defineTag (tag);
-});
+DOM.tags.each(DOM.defineTag);
 
 /** l10n functions */
 function $T() {

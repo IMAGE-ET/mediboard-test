@@ -277,11 +277,7 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-button, 
-a.button, 
-input[type=submit],
-input[type=reset],
-input[type=button] {
+button, a.button {
   color: #000;
   text-decoration: none;
   cursor: default;
@@ -298,11 +294,7 @@ input[type=button] {
   height: 18px;
 }
 
-button:hover,
-a.button:hover,
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover {
+button:hover, a.button:hover {
   background-image: url(../tonkin/images/buttons/buttonover.png);
   background-position: left bottom;
 }

@@ -1,1 +1,1 @@
-{{include file="../../mediboard_super_lite/templates/login.tpl"}}
+{{include file="../../mediboard/templates/login.tpl"}}
