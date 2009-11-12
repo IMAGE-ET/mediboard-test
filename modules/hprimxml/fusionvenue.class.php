@@ -12,8 +12,8 @@ CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients { 
   function __construct() {    
-  	$this->sous_type = "fusionVenue";
-  	        
+    $this->sous_type = "fusionVenue";
+            
     parent::__construct();
   }
   
@@ -49,19 +49,19 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $fusionVenue = $xpath->queryUniqueNode("hprim:fusionVenue", $evenementPatient);
 
     $data['action']  = $this->getActionEvenement("hprim:fusionVenue", $evenementPatient);
-	
-    $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $fusionVenue);
+  
+    $data['patient']  = $xpath->queryUniqueNode("hprim:patient", $fusionVenue);
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible']  = $this->getIdCible($data['patient']);
     
-    $data['venue']        = $xpath->queryUniqueNode("hprim:venue", $fusionVenue);
+    $data['venue']         = $xpath->queryUniqueNode("hprim:venue", $fusionVenue);
     $data['idSourceVenue'] = $this->getIdSource($data['venue']);
     $data['idCibleVenue']  = $this->getIdCible($data['venue']);
     
-    $data['venueElimine'] = $xpath->queryUniqueNode("hprim:venueElimine", $fusionVenue);
-    $data['idSourceVenueEliminee'] = $this->getIdSource($data['venueElimine']);
-    $data['idCibleVenueEliminee']  = $this->getIdCible($data['venueElimine']);
-		    
+    $data['venueEliminee']         = $xpath->queryUniqueNode("hprim:venueEliminee", $fusionVenue);
+    $data['idSourceVenueEliminee'] = $this->getIdSource($data['venueEliminee']);
+    $data['idCibleVenueEliminee']  = $this->getIdCible($data['venueEliminee']);
+        
     return $data;
   }
   
@@ -119,7 +119,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       }
       
       $etatVenue         = CHPrimXMLEvenementsPatients::getEtatVenue($data['venue']);
-      $etatVenueEliminee = CHPrimXMLEvenementsPatients::getEtatVenue($data['venueElimine']);
+      $etatVenueEliminee = CHPrimXMLEvenementsPatients::getEtatVenue($data['venueEliminee']);
       
       $id400Venue = new CIdSante400();
       //Paramétrage de l'id 400
@@ -163,7 +163,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       
       $messages = array();
       
-      $newVenue = CSejour();
+      $newVenue = new CSejour();
       // Cas 0 : Aucun séjour
       if (!$mbVenue->_id && !$mbVenueEliminee->_id) {
         $newVenue->patient_id = $newPatient->_id; 
@@ -229,6 +229,11 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     
      // Evite de passer dans le sip handler
     $newVenue->_coms_from_hprim = 1;
+  
+    // Cas de praticien dans la venue  
+    if (!$newVenue->praticien_id) {
+      
+    }
     $messages['msgVenue'] = $newVenue->store();
     
     $id400Venue->object_id = $newVenue->_id;

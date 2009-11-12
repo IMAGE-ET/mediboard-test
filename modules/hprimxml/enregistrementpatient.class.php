@@ -80,7 +80,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
-    $_IPP_create = false;
+    $_IPP_create = $_code_Patient = false;
     $mutex = new CMbSemaphore("sip-ipp");
 
     // Si SIP
