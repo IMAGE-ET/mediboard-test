@@ -82,7 +82,7 @@
         {{/if}}
         </font>
       {{else}}
-        <em>[LIT BLOQUE]</em>
+        <strong><em>[LIT BLOQUE]</em></strong>
       {{/if}}
       </td>
       <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
@@ -137,7 +137,7 @@
     {{if $curr_affectation->rques}}
     <tr class="dates">
       <td class="text highlight" colspan="2">
-        <em>Remarques:</em> {{$curr_affectation->rques|nl2br}}
+        <stong>Remarques:</stong> {{$curr_affectation->rques|nl2br}}
       </td>
     </tr>
     {{/if}}
@@ -156,9 +156,9 @@
         </a>
         {{/if}}
         {{if $aff_prev->_id}}
-          <em>Déplacé</em> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
+          <strong>Déplacé</strong> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
         {{else}}
-          <em>Entrée</em>:
+          <strong>Entrée</strong>:
         {{/if}}
         {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
         ({{$curr_affectation->_entree_relative}}j)
@@ -176,7 +176,7 @@
     <tr class="dates">
       <td class="text">
         {{if $aff_next->_id}}
-        <em>Déplacé</em> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
+        <strong>Déplacé</strong> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
         {{else}}
           {{if $can->edit}}
         <form name="splitAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
@@ -192,7 +192,7 @@
           </span>
         </form>
           {{/if}}
-        <em>Sortie</em>:
+        <strong>Sortie</strong>:
         {{/if}}
 
         {{$curr_affectation->sortie|date_format:"%A %d %b %Hh%M"}}
